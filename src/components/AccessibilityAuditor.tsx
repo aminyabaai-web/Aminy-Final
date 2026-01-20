@@ -109,13 +109,11 @@ export const AccessibilityAuditor: React.FC = () => {
         }
       });
 
-      // Log issues to console in development
-      if (issues.length > 0) {
+      // Log issues to console in development only
+      if (import.meta.env.DEV && issues.length > 0) {
         console.group('♿ Accessibility Issues Detected');
-        issues.forEach((issue, index) => {
-          if (issue.autoFixed) {
-          } else {
-          }
+        issues.forEach((issue) => {
+          console.log(`[${issue.severity}] ${issue.element}: ${issue.issue}`);
         });
         console.groupEnd();
       }

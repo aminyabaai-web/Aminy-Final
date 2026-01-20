@@ -64,11 +64,6 @@ const DeveloperModeHandler = lazy(() =>
 );
 
 // OPTIMIZED LAZY LOADING - With prefetch hints
-const OnboardingFlow5Steps = lazy(() =>
-  import(
-    /* webpackPrefetch: true */ "./components/OnboardingFlow5Steps"
-  ).then((m) => ({ default: m.OnboardingFlow5Steps })),
-);
 const OnboardingEnhanced = lazy(() =>
   import(
     /* webpackPrefetch: true */ "./components/OnboardingEnhanced"
@@ -78,11 +73,6 @@ const Dashboard = lazy(() =>
   import(
     /* webpackPrefetch: true */ "./components/Dashboard10"
   ).then((m) => ({ default: m.Dashboard10 })),
-);
-const DashboardLegacy = lazy(() =>
-  import(
-    /* webpackPrefetch: true */ "./components/DashboardEnhancedClean"
-  ).then((m) => ({ default: m.DashboardEnhanced })),
 );
 const LoginScreen = lazy(() =>
   import(
@@ -357,7 +347,7 @@ const getInitialScreen = (): AppScreen => {
       if (user.hasCompletedOnboarding) {
         // Prefetch dashboard immediately if we know user is logged in
         if (typeof window !== 'undefined') {
-          import(/* webpackPrefetch: true */ "./components/DashboardEnhancedClean").catch(() => {});
+          import(/* webpackPrefetch: true */ "./components/Dashboard10").catch(() => {});
         }
         return "dashboard";
       } else if (user.email) {

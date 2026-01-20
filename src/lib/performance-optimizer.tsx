@@ -223,7 +223,7 @@ export const bundleSplitConfig = {
   
   // Feature-specific bundles
   onboarding: [
-    './components/OnboardingFlowNormalized',
+    './components/OnboardingEnhanced',
     './components/PreferencesStepNew',
     './components/SummaryStepNew'
   ],
