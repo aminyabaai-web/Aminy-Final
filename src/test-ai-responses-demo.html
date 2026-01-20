@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Dynamic Response Demo</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    
+    .header {
+      text-align: center;
+      color: white;
+      margin-bottom: 30px;
+    }
+    
+    .header h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+    
+    .header p {
+      font-size: 1.2em;
+      opacity: 0.9;
+    }
+    
+    .test-card {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    
+    .test-number {
+      display: inline-block;
+      background: #0891b2;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.9em;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    
+    .user-input {
+      background: #f8fafc;
+      padding: 16px;
+      border-radius: 12px;
+      border-left: 4px solid #0891b2;
+      margin: 12px 0;
+      font-family: monospace;
+      color: #1e293b;
+    }
+    
+    .ai-response {
+      background: #ecfdf5;
+      padding: 16px;
+      border-radius: 12px;
+      border-left: 4px solid #10b981;
+      margin: 12px 0;
+    }
+    
+    .ai-response-label {
+      font-weight: 600;
+      color: #059669;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .insight {
+      background: white;
+      padding: 12px;
+      border-radius: 8px;
+      margin: 8px 0;
+      display: flex;
+      align-items: start;
+      gap: 8px;
+    }
+    
+    .insight-icon {
+      color: #0891b2;
+      font-size: 1.2em;
+    }
+    
+    .compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 16px 0;
+    }
+    
+    .compare-item {
+      padding: 12px;
+      border-radius: 8px;
+    }
+    
+    .old-response {
+      background: #fef2f2;
+      border: 2px solid #ef4444;
+    }
+    
+    .new-response {
+      background: #ecfdf5;
+      border: 2px solid #10b981;
+    }
+    
+    .compare-label {
+      font-weight: 600;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .old-response .compare-label {
+      color: #dc2626;
+    }
+    
+    .new-response .compare-label {
+      color: #059669;
+    }
+    
+    .test-instruction {
+      background: #fff7ed;
+      border-left: 4px solid #f59e0b;
+      padding: 16px;
+      border-radius: 8px;
+      margin-top: 12px;
+    }
+    
+    .test-instruction strong {
+      color: #ea580c;
+    }
+    
+    @media (max-width: 768px) {
+      .compare {
+        grid-template-columns: 1fr;
+      }
+      
+      .header h1 {
+        font-size: 1.8em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🤖 AI Dynamic Response Demo</h1>
+      <p>See how the AI now responds specifically to what you type</p>
+    </div>
+
+    <!-- Test Case 1: Age Only -->
+    <div class="test-card">
+      <span class="test-number">Test #1</span>
+      <h3>Age-Only Response</h3>
+      
+      <div class="user-input">
+        👤 You type: <strong>age is 5</strong>
+      </div>
+      
+      <div class="compare">
+        <div class="compare-item old-response">
+          <div class="compare-label">❌ OLD (Random)</div>
+          <p>"Thank you for sharing more—this helps me understand your situation better."</p>
+          <small style="color: #991b1b; margin-top: 8px; display: block;">
+            ⚠️ Generic, doesn't acknowledge the age
+          </small>
+        </div>
+        
+        <div class="compare-item new-response">
+          <div class="compare-label">✅ NEW (Dynamic)</div>
+          <p>"Got it—<strong>5 years old</strong>. That's really helpful to know."</p>
+          <small style="color: #065f46; margin-top: 8px; display: block;">
+            ✓ Mentions the specific age "5"
+          </small>
+        </div>
+      </div>
+      
+      <div class="test-instruction">
+        <strong>Test this yourself:</strong> Type "age is 7" and verify the response says "7 years old"
+      </div>
+    </div>
+
+    <!-- Test Case 2: Name Response -->
+    <div class="test-card">
+      <span class="test-number">Test #2</span>
+      <h3>Name Response</h3>
+      
+      <div class="user-input">
+        👤 You type: <strong>My daughter Emma</strong>
+      </div>
+      
+      <div class="compare">
+        <div class="compare-item old-response">
+          <div class="compare-label">❌ OLD (Random)</div>
+          <p>"I appreciate you taking the time to tell me more about this."</p>
+          <small style="color: #991b1b; margin-top: 8px; display: block;">
+            ⚠️ Doesn't mention the name "Emma"
+          </small>
+        </div>
+        
+        <div class="compare-item new-response">
+          <div class="compare-label">✅ NEW (Dynamic)</div>
+          <p>"Thank you for sharing <strong>Emma's</strong> name—that helps me personalize everything for your family."</p>
+          <small style="color: #065f46; margin-top: 8px; display: block;">
+            ✓ Uses the child's name "Emma"
+          </small>
+        </div>
+      </div>
+      
+      <div class="test-instruction">
+        <strong>Test this yourself:</strong> Type "My son Lucas" and verify the response says "Lucas"
+      </div>
+    </div>
+
+    <!-- Test Case 3: Detailed Story -->
+    <div class="test-card">
+      <span class="test-number">Test #3</span>
+      <h3>Detailed Morning Meltdown Story</h3>
+      
+      <div class="user-input">
+        👤 You type: <strong>My daughter Emma is 5. She has major meltdowns every morning getting dressed. I'm exhausted and need help making mornings smoother and calmer.</strong>
+      </div>
+      
+      <div class="ai-response">
+        <div class="ai-response-label">
+          <span>🤖</span>
+          <span>AI Response (First part)</span>
+        </div>
+        <p>
+          "I hear that things have been really challenging, and I want you to know—what you're feeling is completely valid. Thank you so much for trusting me with <strong>Emma's</strong> story."
+        </p>
+      </div>
+      
+      <div class="ai-response">
+        <div class="ai-response-label">
+          <span>📊</span>
+          <span>Insights Extracted</span>
+        </div>
+        <p><strong>OLD (Generic):</strong></p>
+        <div class="insight" style="background: #fef2f2;">
+          <span class="insight-icon">❌</span>
+          <span>"Morning transitions are challenging"</span>
+        </div>
+        
+        <p style="margin-top: 16px;"><strong>NEW (Specific):</strong></p>
+        <div class="insight">
+          <span class="insight-icon">✅</span>
+          <span>"<strong>Getting dressed</strong> triggers major meltdowns"</span>
+        </div>
+        <div class="insight">
+          <span class="insight-icon">✅</span>
+          <span>"You're feeling <strong>exhausted</strong> and need relief"</span>
+        </div>
+        <div class="insight">
+          <span class="insight-icon">✅</span>
+          <span>"Making daily routines <strong>smoother and calmer</strong>"</span>
+        </div>
+      </div>
+      
+      <div class="test-instruction">
+        <strong>Notice:</strong> The NEW insights use your exact words: "getting dressed", "exhausted", "smoother and calmer"
+      </div>
+    </div>
+
+    <!-- Test Case 4: Short Response -->
+    <div class="test-card">
+      <span class="test-number">Test #4</span>
+      <h3>Short Response</h3>
+      
+      <div class="user-input">
+        👤 You type: <strong>yes</strong>
+      </div>
+      
+      <div class="compare">
+        <div class="compare-item old-response">
+          <div class="compare-label">❌ OLD (Random)</div>
+          <p>"That's really helpful context. Let me create some personalized recommendations for you."</p>
+          <small style="color: #991b1b; margin-top: 8px; display: block;">
+            ⚠️ Says "helpful context" for just "yes"
+          </small>
+        </div>
+        
+        <div class="compare-item new-response">
+          <div class="compare-label">✅ NEW (Dynamic)</div>
+          <p>"Thank you. Let me put together some recommendations based on what you've shared."</p>
+          <small style="color: #065f46; margin-top: 8px; display: block;">
+            ✓ Brief, appropriate for short input
+          </small>
+        </div>
+      </div>
+    </div>
+
+    <!-- How to Test Section -->
+    <div class="test-card" style="background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%); color: white;">
+      <h2 style="margin-bottom: 16px;">🧪 How to Test in the Real App</h2>
+      
+      <ol style="line-height: 2; font-size: 1.1em;">
+        <li><strong>Open the Aminy app</strong></li>
+        <li><strong>Start onboarding</strong> and click an empathy option</li>
+        <li><strong>Try these inputs one by one:</strong>
+          <ul style="margin: 12px 0 12px 24px;">
+            <li>Type: <code style="background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 4px;">age is 7</code></li>
+            <li>Check if response mentions "7 years old" ✅</li>
+          </ul>
+          <ul style="margin: 12px 0 12px 24px;">
+            <li>Type: <code style="background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 4px;">My son Oliver</code></li>
+            <li>Check if response mentions "Oliver" ✅</li>
+          </ul>
+          <ul style="margin: 12px 0 12px 24px;">
+            <li>Type: <code style="background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 4px;">Emma has major meltdowns getting dressed</code></li>
+            <li>Check insights mention "getting dressed" specifically ✅</li>
+          </ul>
+        </li>
+        <li><strong>Verify:</strong> Each response is different and uses YOUR words</li>
+      </ol>
+      
+      <div style="background: rgba(255,255,255,0.1); padding: 16px; border-radius: 8px; margin-top: 16px;">
+        <strong>🚨 Red Flag:</strong> If you type "age is 5" and "My daughter Emma" and get the SAME response both times, the AI is not working dynamically. Report this!
+      </div>
+    </div>
+
+    <!-- Auto-Capitalize Section -->
+    <div class="test-card">
+      <h2 style="margin-bottom: 16px;">📱 Auto-Capitalize Test (Mobile Only)</h2>
+      
+      <div style="background: #fff7ed; padding: 16px; border-radius: 8px; border-left: 4px solid #f59e0b;">
+        <p style="margin-bottom: 12px;"><strong>⚠️ Important:</strong> Auto-capitalize only works on mobile devices (iOS/Android).</p>
+        <p>Desktop browsers do NOT support the <code>autoCapitalize</code> HTML attribute.</p>
+      </div>
+      
+      <h3 style="margin: 20px 0 12px;">iOS Test:</h3>
+      <ol style="line-height: 1.8; margin-left: 20px;">
+        <li>Open app on iPhone/iPad in Safari</li>
+        <li>Start onboarding → get to textarea</li>
+        <li>Type: <code>my daughter</code> (start with lowercase 'm')</li>
+        <li><strong>Expected:</strong> Keyboard should auto-capitalize to "M"</li>
+      </ol>
+      
+      <h3 style="margin: 20px 0 12px;">Android Test:</h3>
+      <ol style="line-height: 1.8; margin-left: 20px;">
+        <li>Open app on Android device in Chrome</li>
+        <li>Start onboarding → get to textarea</li>
+        <li>Type: <code>my son</code> (start with lowercase 'm')</li>
+        <li><strong>Expected:</strong> Keyboard should suggest capital "M"</li>
+      </ol>
+      
+      <div style="background: #ecfdf5; padding: 16px; border-radius: 8px; margin-top: 16px; border-left: 4px solid #10b981;">
+        <p><strong>✅ What we fixed:</strong></p>
+        <ul style="margin: 8px 0 0 20px; line-height: 1.8;">
+          <li>Added <code>autoCapitalize="sentences"</code></li>
+          <li>Added <code>autoCorrect="on"</code></li>
+          <li>Added <code>spellCheck={true}</code></li>
+          <li>Updated TypeScript types to allow these attributes</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

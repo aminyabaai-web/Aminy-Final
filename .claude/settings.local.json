@@ -1,0 +1,36 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(wc:*)",
+      "Bash(npm run build:*)",
+      "Bash(mkdir:*)",
+      "Bash(npm ls:*)",
+      "Bash(npm install:*)",
+      "Bash(curl:*)",
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(chmod:*)",
+      "Bash(./scripts/setup-telehealth.sh:*)",
+      "Bash(brew install:*)",
+      "Bash(sh)",
+      "Bash(npm run test:*)",
+      "Bash(grep:*)",
+      "Bash(git checkout:*)",
+      "Bash(npm run typecheck:*)",
+      "Bash(npx tsc:*)",
+      "Bash(cut:*)",
+      "Bash(xargs sed:*)",
+      "Bash(npm run test:run:*)",
+      "Bash(npm test:*)",
+      "Bash(npm run lint:*)",
+      "Bash(npx eslint:*)",
+      "Bash(xargs basename:*)",
+      "Bash(npx web-push:*)",
+      "Bash(sort:*)",
+      "Bash(find:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
+    ]
+  }
+}

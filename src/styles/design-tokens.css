@@ -1,0 +1,668 @@
+/**
+ * Aminy Design Tokens
+ * ABA-Based Behavioral Wellness Design System
+ * 
+ * Usage: Import in globals.css or main component
+ * These tokens power the calm, intelligent, confidence-building aesthetic
+ */
+
+:root {
+  /* ========================================
+     BRAND COLORS - Aminy Palette
+     "ABA for Everyday Life"
+     ======================================== */
+
+  /* Primary Background - Soft Cream (use everywhere) */
+  --aminy-cream: #F5F5F5;
+  --aminy-neutral: #F5F5F5;
+
+  /* Primary Text - Deep Navy */
+  --aminy-navy: #0D1B2A;
+  --aminy-navy-light: rgba(13, 27, 42, 0.8);
+  --aminy-navy-muted: rgba(13, 27, 42, 0.6);
+
+  /* Accent - Muted Teal */
+  --aminy-teal: #577590;
+  --aminy-accent: #577590;
+  --aminy-accent-hover: #466379;
+  --aminy-accent-light: rgba(87, 117, 144, 0.1);
+
+  /* Legacy gradient colors (soft versions) */
+  --aminy-mint: #C9EAD9;
+  --aminy-amber: #FFE2B6;
+  --aminy-lavender: #E6E0F8;
+  
+  /* AI Gradient - Used for glow effects, active states */
+  --ai-gradient: linear-gradient(120deg, var(--aminy-mint), var(--aminy-amber), var(--aminy-lavender));
+  --ai-gradient-subtle: linear-gradient(120deg, var(--aminy-mint) 0%, var(--aminy-amber) 50%, var(--aminy-lavender) 100%);
+  --ai-gradient-radial: radial-gradient(circle, var(--aminy-mint), var(--aminy-amber), var(--aminy-lavender));
+  
+  /* Tier Colors */
+  --tier-starter: #3B82F6; /* Blue */
+  --tier-core: #0891b2; /* Teal */
+  --tier-plus: #9333EA; /* Purple */
+  
+  /* ========================================
+     SEMANTIC COLORS - Aminy Brand
+     ======================================== */
+
+  /* Success - Calm Progress */
+  --color-success: #4CAF50;
+  --color-success-bg: rgba(76, 175, 80, 0.1);
+  --color-success-border: rgba(76, 175, 80, 0.3);
+
+  /* Warning - Gentle Nudge */
+  --color-warning: #FFC107;
+  --color-warning-bg: rgba(255, 193, 7, 0.1);
+  --color-warning-border: rgba(255, 193, 7, 0.3);
+
+  /* Error - Supportive Alert */
+  --color-error: #F44336;
+  --color-error-bg: rgba(244, 67, 54, 0.1);
+  --color-error-border: rgba(244, 67, 54, 0.3);
+
+  /* Info - Guidance */
+  --color-info: #577590;
+  --color-info-bg: rgba(87, 117, 144, 0.1);
+  --color-info-border: rgba(87, 117, 144, 0.3);
+  
+  /* ========================================
+     TYPOGRAPHY
+     ======================================== */
+  
+  /* Font Families - Inter for warm, premium feel */
+  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-secondary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Code', 'Source Code Pro', monospace;
+  
+  /* Font Sizes - Calm Hierarchy */
+  --text-xs: 0.75rem;      /* 12px - Labels, tooltips */
+  --text-sm: 0.875rem;     /* 14px - Body secondary */
+  --text-base: 1rem;       /* 16px - Body primary */
+  --text-lg: 1.125rem;     /* 18px - Subheadings */
+  --text-xl: 1.25rem;      /* 20px - Section headers */
+  --text-2xl: 1.5rem;      /* 24px - Page headers */
+  --text-3xl: 1.875rem;    /* 30px - Hero secondary */
+  --text-4xl: 2.25rem;     /* 36px - Hero primary */
+  --text-5xl: 3rem;        /* 48px - Marketing hero */
+  
+  /* Line Heights - Breathing Room */
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.75;
+  --leading-loose: 2;
+  
+  /* Letter Spacing */
+  --tracking-tight: -0.025em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.025em;
+  
+  /* ========================================
+     SPACING - Apple-Clean Rhythm
+     ======================================== */
+  
+  --space-1: 0.25rem;   /* 4px */
+  --space-2: 0.5rem;    /* 8px */
+  --space-3: 0.75rem;   /* 12px */
+  --space-4: 1rem;      /* 16px */
+  --space-5: 1.25rem;   /* 20px */
+  --space-6: 1.5rem;    /* 24px */
+  --space-8: 2rem;      /* 32px */
+  --space-10: 2.5rem;   /* 40px */
+  --space-12: 3rem;     /* 48px */
+  --space-16: 4rem;     /* 64px */
+  
+  /* ========================================
+     BORDERS & RADIUS
+     ======================================== */
+  
+  --border-width: 1px;
+  --border-width-thick: 2px;
+  
+  --radius-sm: 0.375rem;   /* 6px - Buttons, badges */
+  --radius-md: 0.5rem;     /* 8px - Cards, inputs */
+  --radius-lg: 0.75rem;    /* 12px - Modals, sheets */
+  --radius-xl: 1rem;       /* 16px - Large cards */
+  --radius-2xl: 1.5rem;    /* 24px - Hero sections */
+  --radius-full: 9999px;   /* Pills, avatars */
+  
+  /* ========================================
+     SHADOWS - Subtle Depth
+     ======================================== */
+  
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  
+  /* AI Gradient Shadow - For glows */
+  --shadow-ai-glow: 0 0 20px rgba(201, 234, 217, 0.3), 0 0 40px rgba(255, 226, 182, 0.2);
+  --shadow-accent-glow: 0 0 15px rgba(8, 145, 178, 0.2);
+  
+  /* ========================================
+     Z-INDEX SCALE
+     ======================================== */
+  
+  --z-base: 0;
+  --z-dropdown: 1000;
+  --z-sticky: 1100;
+  --z-fixed: 1200;
+  --z-modal-backdrop: 1300;
+  --z-modal: 1400;
+  --z-popover: 1500;
+  --z-tooltip: 1600;
+  --z-fab: 1700;        /* Floating Action Button */
+  --z-notification: 1800;
+  
+  /* ========================================
+     ANIMATIONS - Calm & Gentle
+     ======================================== */
+  
+  /* Durations */
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+  
+  /* Easing */
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-calm: cubic-bezier(0.34, 1.56, 0.64, 1); /* Gentle bounce */
+  
+  /* ========================================
+     TONE TOKENS - Messaging Context
+     ======================================== */
+  
+  /* These are semantic class names for typography */
+  --tone-headline-calm: var(--font-primary);
+  --tone-subhead-support: var(--font-secondary);
+  --tone-cta-hope: var(--font-primary);
+  --tone-tooltip-gentle: var(--font-secondary);
+}
+
+/* ========================================
+   KEYFRAME ANIMATIONS
+   ======================================== */
+
+@keyframes calmPulse {
+  0% {
+    opacity: 0.85;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.85;
+  }
+}
+
+@keyframes aiShimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+@keyframes gentleFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+
+/* AI Gradient Background */
+.ai-gradient-bg {
+  background: var(--ai-gradient);
+}
+
+/* AI Gradient Text */
+.ai-gradient-text {
+  background: var(--ai-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* AI Glow Effect */
+.ai-glow {
+  box-shadow: var(--shadow-ai-glow);
+}
+
+/* Calm Pulse Animation */
+.calm-pulse {
+  animation: calmPulse 3s ease-in-out infinite;
+}
+
+/* AI Shimmer Effect */
+.ai-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--aminy-mint) 0%,
+    var(--aminy-amber) 50%,
+    var(--aminy-lavender) 100%
+  );
+  background-size: 200% 100%;
+  animation: aiShimmer 3s linear infinite;
+}
+
+/* Gentle Fade In */
+.gentle-fade-in {
+  animation: gentleFadeIn var(--duration-slow) var(--ease-out) forwards;
+}
+
+/* ========================================
+   TONE TYPOGRAPHY CLASSES
+   ======================================== */
+
+.headline-calm {
+  font-family: var(--tone-headline-calm);
+  font-weight: 600;
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+  color: var(--slate-900);
+}
+
+.subhead-support {
+  font-family: var(--tone-subhead-support);
+  font-weight: 400;
+  line-height: var(--leading-relaxed);
+  color: var(--slate-600);
+}
+
+.cta-hope {
+  font-family: var(--tone-cta-hope);
+  font-weight: 600;
+  letter-spacing: var(--tracking-wide);
+  text-transform: capitalize;
+}
+
+.tooltip-gentle {
+  font-family: var(--tone-tooltip-gentle);
+  font-size: var(--text-xs);
+  font-weight: 400;
+  line-height: var(--leading-normal);
+  color: var(--slate-500);
+}
+
+/* ========================================
+   RESPONSIVE MODIFIERS
+   ======================================== */
+
+@media (max-width: 640px) {
+  :root {
+    --text-4xl: 2rem;      /* 32px on mobile */
+    --text-5xl: 2.5rem;    /* 40px on mobile */
+  }
+}
+
+/* ========================================
+   DARK MODE - Full Theme Support
+   ======================================== */
+
+/* Dark mode via class (for user preference toggle) */
+.dark {
+  /* Background colors */
+  --aminy-neutral: #0f172a;
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-tertiary: #334155;
+
+  /* Text colors */
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+
+  /* Brand colors - slightly adjusted for dark mode visibility */
+  --aminy-mint: #34d399;
+  --aminy-amber: #fbbf24;
+  --aminy-lavender: #a78bfa;
+
+  /* Accent - brighter in dark mode */
+  --aminy-accent: #22d3ee;
+  --aminy-accent-hover: #67e8f9;
+  --aminy-accent-light: rgba(34, 211, 238, 0.15);
+
+  /* Semantic colors - dark mode variants */
+  --color-success: #34d399;
+  --color-success-bg: rgba(52, 211, 153, 0.15);
+  --color-success-border: rgba(52, 211, 153, 0.3);
+
+  --color-warning: #fbbf24;
+  --color-warning-bg: rgba(251, 191, 36, 0.15);
+  --color-warning-border: rgba(251, 191, 36, 0.3);
+
+  --color-error: #f87171;
+  --color-error-bg: rgba(248, 113, 113, 0.15);
+  --color-error-border: rgba(248, 113, 113, 0.3);
+
+  --color-info: #38bdf8;
+  --color-info-bg: rgba(56, 189, 248, 0.15);
+  --color-info-border: rgba(56, 189, 248, 0.3);
+
+  /* Shadows - more subtle in dark mode */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+
+  /* AI Gradient for dark mode */
+  --ai-gradient: linear-gradient(120deg, #34d399, #fbbf24, #a78bfa);
+  --shadow-ai-glow: 0 0 20px rgba(52, 211, 153, 0.2), 0 0 40px rgba(251, 191, 36, 0.15);
+  --shadow-accent-glow: 0 0 15px rgba(34, 211, 238, 0.25);
+
+  /* Card and surface colors */
+  --card-bg: #1e293b;
+  --card-border: #334155;
+  --input-bg: #1e293b;
+  --input-border: #475569;
+}
+
+/* Light mode explicit class */
+.light {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-tertiary: #f1f5f9;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  --card-bg: #ffffff;
+  --card-border: #e2e8f0;
+  --input-bg: #ffffff;
+  --input-border: #e2e8f0;
+}
+
+/* System preference fallback (when no class is set) */
+@media (prefers-color-scheme: dark) {
+  :root:not(.light):not(.dark) {
+    --aminy-neutral: #0f172a;
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --text-primary: #f8fafc;
+    --text-secondary: #cbd5e1;
+    --color-success-bg: rgba(52, 211, 153, 0.15);
+    --color-warning-bg: rgba(251, 191, 36, 0.15);
+    --color-error-bg: rgba(248, 113, 113, 0.15);
+    --color-info-bg: rgba(56, 189, 248, 0.15);
+  }
+}
+
+/* ========================================
+   PRINT STYLES (For Reports)
+   ======================================== */
+
+@media print {
+  .ai-gradient-bg,
+  .ai-glow,
+  .ai-shimmer {
+    background: white !important;
+    box-shadow: none !important;
+  }
+}
+
+/* ========================================
+   ANIMATION UTILITIES - Consistent Motion
+   ======================================== */
+
+/* Slide In Animations */
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+  70% {
+    transform: scale(0.9);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes floatUp {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+/* Animation Classes */
+.animate-slide-up {
+  animation: slideUp var(--duration-normal) var(--ease-out) forwards;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight var(--duration-normal) var(--ease-out) forwards;
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft var(--duration-normal) var(--ease-out) forwards;
+}
+
+.animate-slide-in-down {
+  animation: slideInDown var(--duration-normal) var(--ease-out) forwards;
+}
+
+.animate-bounce-in {
+  animation: bounceIn var(--duration-slow) var(--ease-calm) forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn var(--duration-normal) var(--ease-out) forwards;
+}
+
+.animate-float {
+  animation: floatUp 3s ease-in-out infinite;
+}
+
+/* Stagger animation delays */
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.2s; }
+.stagger-3 { animation-delay: 0.3s; }
+.stagger-4 { animation-delay: 0.4s; }
+.stagger-5 { animation-delay: 0.5s; }
+
+/* Transitions - For hover/focus states */
+.transition-all-smooth {
+  transition: all var(--duration-normal) var(--ease-out);
+}
+
+.transition-transform-smooth {
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.transition-opacity-smooth {
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+/* Hover effects */
+.hover-lift {
+  transition: transform var(--duration-fast) var(--ease-calm), box-shadow var(--duration-fast) var(--ease-out);
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.hover-scale {
+  transition: transform var(--duration-fast) var(--ease-calm);
+}
+
+.hover-scale:hover {
+  transform: scale(1.02);
+}
+
+.hover-glow {
+  transition: box-shadow var(--duration-normal) var(--ease-out);
+}
+
+.hover-glow:hover {
+  box-shadow: var(--shadow-accent-glow);
+}
+
+/* ========================================
+   SPACING UTILITIES - Consistent Layout
+   ======================================== */
+
+/* Container with consistent padding */
+.container-padded {
+  padding-left: var(--space-4);
+  padding-right: var(--space-4);
+}
+
+@media (min-width: 640px) {
+  .container-padded {
+    padding-left: var(--space-6);
+    padding-right: var(--space-6);
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-padded {
+    padding-left: var(--space-8);
+    padding-right: var(--space-8);
+  }
+}
+
+/* Section spacing */
+.section-spacing {
+  padding-top: var(--space-8);
+  padding-bottom: var(--space-8);
+}
+
+@media (min-width: 640px) {
+  .section-spacing {
+    padding-top: var(--space-12);
+    padding-bottom: var(--space-12);
+  }
+}
+
+/* Card consistent spacing */
+.card-padding {
+  padding: var(--space-4);
+}
+
+@media (min-width: 640px) {
+  .card-padding {
+    padding: var(--space-6);
+  }
+}
+
+/* Gap utilities for flex/grid */
+.gap-tight { gap: var(--space-2); }
+.gap-normal { gap: var(--space-4); }
+.gap-relaxed { gap: var(--space-6); }
+.gap-loose { gap: var(--space-8); }
+
+/* ========================================
+   FOCUS STATES - Accessibility
+   ======================================== */
+
+.focus-ring {
+  outline: none;
+}
+
+.focus-ring:focus-visible {
+  outline: 2px solid var(--aminy-accent);
+  outline-offset: 2px;
+}
+
+/* ========================================
+   REDUCED MOTION - Accessibility
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .animate-slide-up,
+  .animate-slide-in-right,
+  .animate-slide-in-left,
+  .animate-slide-in-down,
+  .animate-bounce-in,
+  .animate-scale-in,
+  .animate-float,
+  .gentle-fade-in,
+  .ai-shimmer,
+  .calm-pulse {
+    animation: none !important;
+  }
+}

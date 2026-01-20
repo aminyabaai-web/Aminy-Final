@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
+    <meta name="theme-color" content="#0891b2" />
+    <meta name="description" content="Aminy - Gentle guidance for parents of children with developmental needs" />
+    
+    <!-- Performance hints -->
+    <meta http-equiv="x-dns-prefetch-control" content="on" />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+    <link rel="dns-prefetch" href="https://images.unsplash.com" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
+    
+    <!-- CRITICAL: Preload LCP image FIRST - Aminy logo -->
+    <link rel="preload" as="image" href="/assets/1a7cab1ec1ac856de6b730ac8dd6d69ed7147cf0.png" fetchpriority="high" imagesizes="500px" imagesrcset="/assets/1a7cab1ec1ac856de6b730ac8dd6d69ed7147cf0.png 500w" />
+    
+    <!-- Preload critical JavaScript -->
+    <link rel="modulepreload" href="/src/main.tsx" />
+    <link rel="modulepreload" href="/App.tsx" />
+    
+    <!-- CRITICAL: Inline critical CSS for INSTANT first paint - CLS OPTIMIZED -->
+    <style>
+      /* CSS Reset - Minimal */
+      *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+      
+      /* CRITICAL: Layout shift prevention - scrollbar gutter */
+      html{-webkit-text-size-adjust:100%;overflow-y:scroll;scrollbar-gutter:stable both-edges;height:100%}
+      body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;background:#fff;color:#1e293b;min-height:100vh;overflow-x:hidden;overflow-y:auto;text-rendering:optimizeSpeed}
+      #root{min-height:100vh;display:flex;flex-direction:column;contain:layout style}
+      
+      /* Loading spinner - critical */
+      @keyframes s{to{transform:rotate(360deg)}}
+      .animate-spin{animation:s 1s linear infinite}
+      
+      /* CRITICAL: Layout shift prevention for images */
+      img,svg{display:block;max-width:100%;height:auto;contain:layout}
+      img[fetchpriority="high"]{content-visibility:auto;contain-intrinsic-size:500px 140px;will-change:auto;transform:translateZ(0);backface-visibility:hidden}
+      
+      /* Critical utilities - minified with containment */
+      .min-h-screen{min-height:100vh;contain:layout}
+      .flex{display:flex}
+      .items-center{align-items:center}
+      .justify-center{justify-content:center}
+      .bg-white{background-color:#fff}
+      .w-8{width:2rem;min-width:2rem}
+      .h-8{height:2rem;min-height:2rem}
+      .border-2{border-width:2px}
+      .border-accent{border-color:#0891b2}
+      .border-t-transparent{border-top-color:transparent}
+      .rounded-full{border-radius:9999px}
+      
+      /* SplashScreen critical styles - CLS optimized */
+      .hero{max-width:680px;margin:0 auto;text-align:center;contain:layout style}
+      .hero-positioning{padding-top:112px;contain:layout}
+      @media(min-width:768px){.hero-positioning{padding-top:136px}}
+      .hero-h1-container{font-size:36px;line-height:44px;font-weight:700;letter-spacing:-0.2px;color:#0F172A;margin-bottom:20px;min-height:132px;contain:layout style}
+      @media(min-width:768px){.hero-h1-container{font-size:40px;line-height:48px;min-height:144px}}
+      .hero-cta-final{height:56px;min-height:56px;font-size:16px;font-weight:600;border-radius:14px;min-width:264px;background:#0891b2;color:#fff;border:none;cursor:pointer;contain:layout style}
+      
+      /* CRITICAL: Splash screen logo container - exact space reservation */
+      .splash-screen-hero>div>div:first-child{min-height:232px!important}
+      
+      /* CRITICAL: All buttons get explicit heights */
+      button,[role="button"]{min-height:44px;contain:layout style;cursor:pointer}
+      
+      /* CRITICAL: Prevent modal CLS */
+      [role="dialog"],[role="alertdialog"]{position:fixed!important;contain:layout;will-change:contents}
+      
+      /* Dashboard critical layout - prevent CLS on dashboard load */
+      .dashboard-container{min-height:100vh;background:#fff;contain:layout style}
+      .dashboard-header{min-height:64px;contain:layout}
+      .dashboard-content{padding-bottom:80px;contain:layout}
+      .bottom-nav{height:64px;min-height:64px;position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #e2e8f0;contain:layout;z-index:100}
+      
+      /* CRITICAL: Content visibility for performance */
+      .below-fold{content-visibility:auto;contain-intrinsic-size:auto 500px}
+      
+      /* CRITICAL: System font stack for instant text rendering */
+      body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji"}
+      
+      /* CRITICAL: Force GPU acceleration for all interactive elements */
+      button,a,[role="button"]{transform:translateZ(0);backface-visibility:hidden;will-change:auto}
+      
+      /* CRITICAL: Prevent any text size adjustments that cause CLS */
+      html,body{-webkit-text-size-adjust:100%;-moz-text-size-adjust:100%;text-size-adjust:100%}
+    </style>
+    
+    <!-- Favicon - async -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" media="(prefers-color-scheme: light)" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    
+    <!-- CRITICAL: Initialize viewport height IMMEDIATELY -->
+    <script>
+      !function(){var e=window.innerHeight*.01;document.documentElement.style.setProperty("--vh",e+"px"),window.requestIdleCallback=window.requestIdleCallback||function(e){var t=Date.now();return setTimeout(function(){e({didTimeout:!1,timeRemaining:function(){return Math.max(0,50-(Date.now()-t))}})},1)},window.cancelIdleCallback=window.cancelIdleCallback||function(e){clearTimeout(e)}}();
+    </script>
+    
+    <title>Aminy</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

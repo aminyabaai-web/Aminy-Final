@@ -1,0 +1,155 @@
+{
+  "name": "Transitions Booster",
+  "description": "7 strategies for smooth activity changes",
+  "version": "1.0",
+  "theme": "transitions",
+  "activities": [
+    {
+      "id": "tr001",
+      "title": "Preview the Change",
+      "age_band": "4–8",
+      "level": "beginner",
+      "domain": "routines",
+      "target": "Use visual or verbal preview 5 minutes before transition",
+      "outcome_tags": ["preparation", "predictability", "anxiety reduction"],
+      "prompting_hierarchy": ["adult gives preview", "child repeats preview", "child checks schedule"],
+      "script_parent": "'In 5 minutes, we're cleaning up then eating lunch.' Show visual if helpful. Set timer.",
+      "script_child": "Let me tell you what's happening next so you're ready.",
+      "visuals": ["transition_card", "visual_schedule", "5_min_timer"],
+      "success_criteria": "Transitions more smoothly with preview than without 4/5 times",
+      "mastery_rule": "Comparison to no-preview baseline",
+      "generalization": "All transitions at home and school",
+      "variants": [
+        { "method": "verbal preview", "time": "5 minutes before", "add": "timer" },
+        { "method": "visual schedule point", "time": "before + at transition", "add": "first-then card" },
+        { "method": "written note", "time": "morning of", "add": "verbal reminder" }
+      ]
+    },
+    {
+      "id": "tr002",
+      "title": "2-Minute Countdown",
+      "age_band": "4–8",
+      "level": "beginner",
+      "domain": "routines",
+      "target": "Use visual countdown timer for end of preferred activity",
+      "outcome_tags": ["time awareness", "preparation", "reducing resistance"],
+      "prompting_hierarchy": ["start timer for child", "remind to check timer", "independent timer use"],
+      "script_parent": "'2 more minutes of [activity]!' Set visual timer. When it beeps: 'Timer's done, time to clean up!'",
+      "script_child": "The timer will tell you when it's time to stop.",
+      "visuals": ["visual_timer_2_min", "timer_app"],
+      "success_criteria": "Stops activity when timer ends with 1 reminder or less 4/5 times",
+      "mastery_rule": "80% across 1 week",
+      "generalization": "Screen time, play time, bath time, any preferred activity",
+      "variants": [
+        { "duration": "2 minutes", "activity": "high-interest", "signal": "visual timer" },
+        { "duration": "5 minutes", "activity": "moderate-interest", "signal": "phone timer" },
+        { "duration": "10 minutes", "activity": "winding down", "signal": "timer + verbal" }
+      ]
+    },
+    {
+      "id": "tr003",
+      "title": "Switch Signal",
+      "age_band": "3–6",
+      "level": "beginner",
+      "domain": "routines",
+      "target": "Respond to consistent transition cue (song, bell, phrase)",
+      "outcome_tags": ["predictability", "auditory cue", "routine"],
+      "prompting_hierarchy": ["cue + physical prompt", "cue + verbal", "cue only"],
+      "script_parent": "Choose signal: cleanup song, bell ring, or 'Time to switch!' Use same one always. Then guide transition.",
+      "script_child": "When you hear the [signal], it means time to change activities.",
+      "visuals": ["signal_symbol", "transition_routine_card"],
+      "success_criteria": "Begins transition within 30 sec of signal 4/5 times",
+      "mastery_rule": "80% across 1 week",
+      "generalization": "All activity transitions at home, can adapt for school",
+      "variants": [
+        { "signal": "cleanup song", "context": "toy cleanup", "pair_with": "visual schedule" },
+        { "signal": "bell or chime", "context": "activity changes", "pair_with": "first-then card" },
+        { "signal": "specific phrase", "context": "bedtime/mealtime", "pair_with": "routine visual" }
+      ]
+    },
+    {
+      "id": "tr004",
+      "title": "Pack-and-Move",
+      "age_band": "5–9",
+      "level": "intermediate",
+      "domain": "routines",
+      "target": "Complete 2-step transition (pack up, move to next spot)",
+      "outcome_tags": ["sequencing", "independence", "organization"],
+      "prompting_hierarchy": ["hand-over-hand both steps", "verbal for each step", "independent"],
+      "script_parent": "'First pack up, then go to [next place].' Point to each step. Guide hands if needed. Fade to verbal only.",
+      "script_child": "Pack your things, then move to the next spot.",
+      "visuals": ["pack_move_visual", "two_step_card"],
+      "success_criteria": "Completes both steps with verbal prompt or less 4/5 transitions",
+      "mastery_rule": "80% across 1 week",
+      "generalization": "School transitions, activity changes, leaving places",
+      "variants": [
+        { "step_1": "put toys in bin", "step_2": "sit at table", "context": "play to meal" },
+        { "step_1": "pack backpack", "step_2": "line up", "context": "class to bus" },
+        { "step_1": "put away materials", "step_2": "get new materials", "context": "subject change" }
+      ]
+    },
+    {
+      "id": "tr005",
+      "title": "After-Switch Reward",
+      "age_band": "4–8",
+      "level": "intermediate",
+      "domain": "routines",
+      "target": "Earn small reward for smooth transitions",
+      "outcome_tags": ["motivation", "positive reinforcement", "compliance"],
+      "prompting_hierarchy": ["promise reward before transition", "remind during", "deliver immediately after"],
+      "script_parent": "'When you clean up nicely, you get [small reward].' Remind during. Give it right away if successful!",
+      "script_child": "If you do a nice job switching activities, you get [reward]!",
+      "visuals": ["reward_menu", "token_board"],
+      "success_criteria": "Earns reward 4/5 transitions (meaning smooth transitions 80%)",
+      "mastery_rule": "80% across 2 weeks, then fade rewards",
+      "generalization": "Difficult transitions, can fade once habit forms",
+      "variants": [
+        { "reward": "high-five + praise", "difficulty": "low", "fade": "quickly" },
+        { "reward": "sticker or token", "difficulty": "medium", "fade": "over 2-4 weeks" },
+        { "reward": "2 min extra play", "difficulty": "high resistance", "fade": "gradually" }
+      ]
+    },
+    {
+      "id": "tr006",
+      "title": "Calm First",
+      "age_band": "5–9",
+      "level": "advanced",
+      "domain": "regulation",
+      "target": "Use calming strategy before difficult transition",
+      "outcome_tags": ["self-regulation", "preparation", "coping ahead"],
+      "prompting_hierarchy": ["prompt calming strategy", "offer choice of strategies", "independent use"],
+      "script_parent": "Before hard transition: 'Let's take 3 breaths first.' or 'Choose something from your menu.' Then transition.",
+      "script_child": "Let's get calm before we switch. What will help?",
+      "visuals": ["calming_strategies_menu", "transition_prep_card"],
+      "success_criteria": "Uses calming strategy before transition 3/5 difficult changes",
+      "mastery_rule": "60% across 2 weeks",
+      "generalization": "Leaving preferred activity, going to difficult task, big changes",
+      "variants": [
+        { "strategy": "3 deep breaths", "timing": "right before transition", "transition": "screen time ending" },
+        { "strategy": "stretch or movement", "timing": "1 min before", "transition": "sitting activity to sitting activity" },
+        { "strategy": "choice from menu", "timing": "preview + right before", "transition": "any difficult change" }
+      ]
+    },
+    {
+      "id": "tr007",
+      "title": "End-of-Day Close",
+      "age_band": "6–10",
+      "level": "advanced",
+      "domain": "routines",
+      "target": "Complete 5-step end-of-day routine independently",
+      "outcome_tags": ["independence", "routines", "executive function"],
+      "prompting_hierarchy": ["prompt each step", "point to checklist", "independent with check"],
+      "script_parent": "Routine: 1) Pack tomorrow's backpack, 2) Set out clothes, 3) Brush teeth, 4) Set alarm, 5) Read/quiet time. Use checklist!",
+      "script_child": "Let's close out today and get ready for tomorrow.",
+      "visuals": ["end_of_day_checklist", "routine_visual"],
+      "success_criteria": "Completes 4/5 steps with checklist reference only",
+      "mastery_rule": "80% across 5 nights",
+      "generalization": "Every school night, adapted for weekends",
+      "variants": [
+        { "steps": ["pack bag", "clothes out", "hygiene", "alarm", "quiet time"], "age": "older kids" },
+        { "steps": ["put shoes by door", "pajamas on", "brush teeth", "story", "hug"], "age": "younger kids" },
+        { "steps": ["homework check", "pack bag", "shower", "set clothes", "lights out ritual"], "age": "tweens" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Intake Validation Test</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .test-case {
+      background: white;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 8px;
+      border: 2px solid #e5e5e5;
+    }
+    .test-case.pass {
+      border-color: #10b981;
+      background: #f0fdf4;
+    }
+    .test-case.fail {
+      border-color: #ef4444;
+      background: #fef2f2;
+    }
+    .input {
+      font-family: monospace;
+      background: #f9fafb;
+      padding: 8px 12px;
+      border-radius: 4px;
+      display: inline-block;
+      margin: 8px 0;
+    }
+    .result {
+      margin-top: 12px;
+      padding: 12px;
+      background: #fafafa;
+      border-radius: 4px;
+      border-left: 4px solid #6b7280;
+    }
+    .result.valid {
+      background: #ecfdf5;
+      border-left-color: #10b981;
+    }
+    .result.invalid {
+      background: #fef2f2;
+      border-left-color: #ef4444;
+    }
+    h1 {
+      color: #1e293b;
+    }
+    h2 {
+      color: #0891b2;
+      font-size: 1.2em;
+      margin-top: 0;
+    }
+    .status {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 0.875em;
+      font-weight: 600;
+      margin-left: 10px;
+    }
+    .status.pass {
+      background: #10b981;
+      color: white;
+    }
+    .status.fail {
+      background: #ef4444;
+      color: white;
+    }
+    .emotional-tone {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.875em;
+      background: #e0f2fe;
+      color: #0369a1;
+      margin-right: 8px;
+    }
+    button {
+      background: #0891b2;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1em;
+      margin-top: 20px;
+    }
+    button:hover {
+      background: #0e7490;
+    }
+    .interactive {
+      background: white;
+      padding: 24px;
+      border-radius: 12px;
+      margin-top: 30px;
+      border: 2px solid #0891b2;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 1em;
+      font-family: inherit;
+      margin-top: 8px;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    .output {
+      margin-top: 16px;
+      padding: 16px;
+      border-radius: 8px;
+      background: #f9fafb;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧪 AI Intake Chat - Validation Testing</h1>
+  <p>Testing the validation logic and emotional tone detection for the AIIntakeChat component.</p>
+
+  <div id="test-results"></div>
+
+  <div class="interactive">
+    <h2>🎯 Interactive Test</h2>
+    <p>Try your own inputs to see how the validation and emotional detection work:</p>
+    <textarea id="test-input" placeholder="Type a message like a parent would (e.g., 'My son Emma is 5 and struggling with morning transitions...')"></textarea>
+    <button onclick="runInteractiveTest()">Test This Input</button>
+    <div id="interactive-output"></div>
+  </div>
+
+  <script>
+    // Validation functions (replicated from AIIntakeChat.tsx)
+    function extractStructuredData(text) {
+      const lower = text.toLowerCase();
+      
+      // Extract name
+      let name = '';
+      const namePatterns = [
+        /(?:name is|named|called|this is|meet|he's|she's|my (?:son|daughter|child|kid))\s+([A-Z][a-z]+)/i,
+        /^([A-Z][a-z]+)(?:\s+is|\s+has|\s+struggles|\s+needs)/i,
+        /(?:my|our)\s+(?:son|daughter|child|kid),?\s+([A-Z][a-z]+)/i,
+        /([A-Z][a-z]+)\s+(?:is|has|struggles|needs)/i
+      ];
+      
+      for (const pattern of namePatterns) {
+        const match = text.match(pattern);
+        if (match && match[1] && match[1].length > 1) {
+          const excluded = ['he', 'she', 'we', 'i', 'my', 'the', 'has', 'is', 'it'];
+          if (!excluded.includes(match[1].toLowerCase())) {
+            name = match[1];
+            break;
+          }
+        }
+      }
+      
+      // Extract age with validation
+      let age = '';
+      let ageIsValid = true;
+      const agePatterns = [
+        /(\d+)\s*(?:years?\s*old|year[s-]old|yr[s]?\.?\s*old|y\.?o\.?)/i,
+        /age\s*(?:is|was|:|=)?\s*(\d+)/i,  // age is/was/:/= 5
+        /(?:is|he's|she's|turning)\s+(\d+)/i,
+        /(\d+)\s*year/i
+      ];
+      
+      for (const pattern of agePatterns) {
+        const match = text.match(pattern);
+        if (match && match[1]) {
+          const ageNum = parseInt(match[1]);
+          if (ageNum >= 1 && ageNum <= 18) {
+            age = match[1];
+            break;
+          } else if (ageNum > 0) {
+            ageIsValid = false;
+            break;
+          }
+        }
+      }
+      
+      // Check for invalid age inputs (single letters, gibberish, quotes)
+      const invalidPatterns = [
+        /(?:age|old)\s+(?:is|was|:|=)\s*['"]?([a-zA-Z])['"]?\b/i,  // age is/was 'd' or age is t
+        /(?:age|old)\s+(?:and\s+)?([a-zA-Z])\b/i,  // age and d, old t
+      ];
+      
+      for (const pattern of invalidPatterns) {
+        if (pattern.test(text)) {
+          ageIsValid = false;
+          break;
+        }
+      }
+      
+      return { name, age, ageIsValid };
+    }
+    
+    function validateInput(text) {
+      const trimmed = text.trim();
+      
+      // Check for age-related responses that might need clarification
+      const { age, ageIsValid } = extractStructuredData(trimmed);
+      const hasAgeKeyword = /(?:age|old|years?|yr)/i.test(trimmed);
+      
+      // If they mention age but it's not valid
+      if (hasAgeKeyword && !age && ageIsValid === false) {
+        return {
+          isValid: false,
+          clarification: "Could you let me know how old your child is in years? For example, '5 years old' or just '5'."
+        };
+      }
+      
+      // Only check length for the main story input
+      if (trimmed.length < 2) {
+        return { 
+          isValid: false, 
+          clarification: "I want to make sure I understand you clearly. Could you share a bit more?" 
+        };
+      }
+      
+      return { isValid: true };
+    }
+    
+    function detectEmotionalTone(text) {
+      const lowerInput = text.toLowerCase();
+      const isStressed = /overwhelm|exhaust|struggle|hard|difficult|chaotic|cry|frustrated|stress|anxious/i.test(lowerInput);
+      const isHopeful = /hope|better|improve|progress|help|excited|ready/i.test(lowerInput);
+      
+      if (isStressed && !isHopeful) {
+        return { tone: 'stressed', message: 'I hear that things have been really challenging, and I want you to know—what you\'re feeling is completely valid.' };
+      } else if (isHopeful) {
+        return { tone: 'hopeful', message: 'I can feel your determination and hope coming through, which is such a powerful place to start from.' };
+      }
+      return { tone: 'neutral', message: '' };
+    }
+
+    // Test cases
+    const testCases = [
+      {
+        category: "Age Validation - Valid",
+        tests: [
+          { input: "Emma is 5 years old", expected: { valid: true, age: "5", name: "Emma" } },
+          { input: "My son is 7", expected: { valid: true, age: "7" } },
+          { input: "He's 3 and struggles with transitions", expected: { valid: true, age: "3" } },
+          { input: "Age is 12", expected: { valid: true, age: "12" } },
+          { input: "age = 6", expected: { valid: true, age: "6" } },
+          { input: "age: 8", expected: { valid: true, age: "8" } },
+          { input: "age was 4", expected: { valid: true, age: "4" } },
+        ]
+      },
+      {
+        category: "Age Validation - Invalid",
+        tests: [
+          { input: "age is t", expected: { valid: false, clarification: true } },
+          { input: "age was 'd'", expected: { valid: false, clarification: true } },
+          { input: "age: d", expected: { valid: false, clarification: true } },
+          { input: "My child is 25 years old", expected: { valid: false, clarification: true } },
+          { input: "He is old", expected: { valid: false, clarification: true } },
+          { input: "age a", expected: { valid: false, clarification: true } },
+        ]
+      },
+      {
+        category: "Length Validation",
+        tests: [
+          { input: "a", expected: { valid: false, clarification: true } },
+          { input: "ok", expected: { valid: true } },
+          { input: "My daughter Emma struggles with mornings", expected: { valid: true } },
+        ]
+      },
+      {
+        category: "Emotional Tone Detection",
+        tests: [
+          { input: "I'm so overwhelmed and exhausted every day", expected: { tone: "stressed" } },
+          { input: "We're ready for change and excited to improve", expected: { tone: "hopeful" } },
+          { input: "My son is 5", expected: { tone: "neutral" } },
+          { input: "It's been so hard and chaotic but I'm hopeful", expected: { tone: "hopeful" } },
+        ]
+      },
+      {
+        category: "Name Extraction",
+        tests: [
+          { input: "My daughter Emma is 5", expected: { name: "Emma", age: "5" } },
+          { input: "This is Sarah and she struggles", expected: { name: "Sarah" } },
+          { input: "Called him Max", expected: { name: "Max" } },
+        ]
+      }
+    ];
+
+    function runTests() {
+      const resultsDiv = document.getElementById('test-results');
+      let html = '';
+      let totalTests = 0;
+      let passedTests = 0;
+
+      testCases.forEach(category => {
+        html += `<h2 style="margin-top: 30px;">${category.category}</h2>`;
+        
+        category.tests.forEach((test, index) => {
+          totalTests++;
+          const validation = validateInput(test.input);
+          const extraction = extractStructuredData(test.input);
+          const emotion = detectEmotionalTone(test.input);
+          
+          let passed = true;
+          let details = '';
+          
+          // Check validation
+          if (test.expected.valid !== undefined) {
+            const validMatch = validation.isValid === test.expected.valid;
+            if (!validMatch) passed = false;
+            details += `<div>Validation: ${validation.isValid ? '✓ Valid' : '✗ Invalid'} ${validMatch ? '✓' : '✗'}</div>`;
+            if (!validation.isValid && validation.clarification) {
+              details += `<div style="font-style: italic; color: #6b7280; margin-left: 20px;">→ "${validation.clarification}"</div>`;
+            }
+          }
+          
+          // Check age extraction
+          if (test.expected.age !== undefined) {
+            const ageMatch = extraction.age === test.expected.age;
+            if (!ageMatch) passed = false;
+            details += `<div>Age extracted: "${extraction.age}" ${ageMatch ? '✓' : '✗ Expected: "' + test.expected.age + '"'}</div>`;
+          }
+          
+          // Check name extraction
+          if (test.expected.name !== undefined) {
+            const nameMatch = extraction.name === test.expected.name;
+            if (!nameMatch) passed = false;
+            details += `<div>Name extracted: "${extraction.name}" ${nameMatch ? '✓' : '✗ Expected: "' + test.expected.name + '"'}</div>`;
+          }
+          
+          // Check emotional tone
+          if (test.expected.tone !== undefined) {
+            const toneMatch = emotion.tone === test.expected.tone;
+            if (!toneMatch) passed = false;
+            details += `<div>Emotional tone: <span class="emotional-tone">${emotion.tone}</span> ${toneMatch ? '✓' : '✗ Expected: ' + test.expected.tone}</div>`;
+            if (emotion.message) {
+              details += `<div style="font-style: italic; color: #6b7280; margin-left: 20px;">→ "${emotion.message}"</div>`;
+            }
+          }
+          
+          if (passed) passedTests++;
+          
+          html += `
+            <div class="test-case ${passed ? 'pass' : 'fail'}">
+              <h3 style="margin: 0 0 10px 0;">
+                Test ${index + 1}
+                <span class="status ${passed ? 'pass' : 'fail'}">${passed ? 'PASS' : 'FAIL'}</span>
+              </h3>
+              <div><strong>Input:</strong> <span class="input">"${test.input}"</span></div>
+              <div class="result ${validation.isValid ? 'valid' : 'invalid'}">
+                ${details}
+              </div>
+            </div>
+          `;
+        });
+      });
+
+      html = `
+        <div style="background: #0891b2; color: white; padding: 20px; border-radius: 12px; margin-bottom: 30px;">
+          <h2 style="margin: 0; color: white;">Test Results: ${passedTests}/${totalTests} Passed</h2>
+          <div style="margin-top: 10px; font-size: 1.2em;">
+            ${passedTests === totalTests ? '🎉 All tests passed!' : '⚠️ Some tests failed'}
+          </div>
+        </div>
+      ` + html;
+
+      resultsDiv.innerHTML = html;
+    }
+
+    function runInteractiveTest() {
+      const input = document.getElementById('test-input').value;
+      const outputDiv = document.getElementById('interactive-output');
+      
+      if (!input.trim()) {
+        outputDiv.innerHTML = '<div class="output" style="background: #fef2f2; border-left: 4px solid #ef4444;">Please enter some text to test.</div>';
+        return;
+      }
+      
+      const validation = validateInput(input);
+      const extraction = extractStructuredData(input);
+      const emotion = detectEmotionalTone(input);
+      
+      let html = `<div class="output" style="border-left: 4px solid ${validation.isValid ? '#10b981' : '#ef4444'};">`;
+      html += `<div><strong>Validation:</strong> ${validation.isValid ? '✓ Valid' : '✗ Invalid'}</div>`;
+      if (!validation.isValid && validation.clarification) {
+        html += `<div style="margin: 8px 0; padding: 8px; background: #fef2f2; border-radius: 4px;">📝 Clarification: "${validation.clarification}"</div>`;
+      }
+      html += `<div style="margin-top: 12px;"><strong>Extracted Data:</strong></div>`;
+      html += `<div style="margin-left: 16px;">• Name: <code>${extraction.name || '(not found)'}</code></div>`;
+      html += `<div style="margin-left: 16px;">• Age: <code>${extraction.age || '(not found)'}</code></div>`;
+      html += `<div style="margin-left: 16px;">• Age Valid: <code>${extraction.ageIsValid ? 'yes' : 'no'}</code></div>`;
+      html += `<div style="margin-top: 12px;"><strong>Emotional Tone:</strong> <span class="emotional-tone">${emotion.tone}</span></div>`;
+      if (emotion.message) {
+        html += `<div style="margin: 8px 0; padding: 8px; background: #ecfdf5; border-radius: 4px; font-style: italic;">💙 "${emotion.message}"</div>`;
+      }
+      html += '</div>';
+      
+      outputDiv.innerHTML = html;
+    }
+
+    // Run tests on page load
+    runTests();
+  </script>
+</body>
+</html>

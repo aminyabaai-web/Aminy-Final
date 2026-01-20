@@ -1,0 +1,776 @@
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { Send, Paperclip, Mic, Sparkles, X, Minimize2, Maximize2, Brain, RotateCcw, Copy, MessageSquare, Zap, Volume2, ChevronDown, Plus, ArrowUp } from 'lucide-react';
+import { Button } from './ui/button';
+import { Card } from './ui/card';
+import { Badge } from './ui/badge';
+import { ScrollArea } from './ui/scroll-area';
+import { cn } from '../lib/utils';
+import { useContextEngine } from '../lib/context-engine';
+import { useAnalytics } from '../lib/analytics-engine';
+import { toast } from 'sonner';
+
+interface Message {
+  id: string;
+  content: string;
+  role: 'user' | 'assistant';
+  timestamp: Date;
+  isStreaming?: boolean;
+  contextUsed?: boolean;
+  suggestions?: string[];
+  confidence?: number;
+  tokens?: number;
+}
+
+interface EnhancedAskAminyProps {
+  isOpen: boolean;
+  onToggle: () => void;
+  onClose: () => void;
+  userTier: string;
+  userData: { parentName: string; childName: string };
+  onPaywallTrigger?: () => void;
+  className?: string;
+}
+
+// Enhanced response templates with better context awareness
+const RESPONSE_TEMPLATES = {
+  routine: {
+    responses: [
+      "Routines provide crucial structure for {childName}! Let's create a visual schedule that breaks down each step clearly. Research shows that predictable routines reduce anxiety and improve cooperation.",
+      "Building consistent routines for {childName} is so important. I recommend starting with one specific routine and using visual cues like pictures or timers to help {childName} understand the sequence.",
+      "Great question about routines! For {childName}, consistency paired with flexibility is key. Visual schedules work wonderfully - what time of day or activity would you like to focus on first?"
+    ],
+    followUps: [
+      "Create a visual schedule",
+      "Transition techniques",
+      "Morning routine tips",
+      "Bedtime strategies"
+    ]
+  },
+  behavior: {
+    responses: [
+      "Understanding what triggers challenging behaviors is the first step to supporting {childName}. I can help you identify patterns and develop proactive strategies that work with {childName}'s unique needs.",
+      "Behavior is communication, especially for {childName}. Let's look at what might be behind these behaviors - is it sensory, communication, or environmental? Together we can build a support plan.",
+      "You're asking exactly the right questions about {childName}'s behavior. Prevention is always better than reaction - what situations tend to be most challenging for {childName}?"
+    ],
+    followUps: [
+      "Behavior tracking tools",
+      "Calming strategies",
+      "Prevention techniques",
+      "Environmental modifications"
+    ]
+  },
+  communication: {
+    responses: [
+      "Communication develops at {childName}'s own pace, and there are so many ways to support this journey. What communication goals are you working on together?",
+      "Every child's communication path is unique, including {childName}'s. I can suggest activities and strategies that match {childName}'s current level and interests.",
+      "Communication is about connection, not just words. For {childName}, we can explore various approaches - from visual supports to augmentative communication options."
+    ],
+    followUps: [
+      "Speech activities",
+      "Communication apps",
+      "Visual supports",
+      "Language development games"
+    ]
+  },
+  school: {
+    responses: [
+      "School partnerships are essential for {childName}'s success. I can help you prepare for meetings, understand {childName}'s rights, and develop collaboration strategies with the team.",
+      "Advocating for {childName} at school shows your dedication. Let's discuss specific accommodations, IEP goals, or communication strategies that could help {childName} thrive.",
+      "School can be challenging, but with the right supports, {childName} can succeed. What's your main concern about {childName}'s school experience right now?"
+    ],
+    followUps: [
+      "IEP meeting prep",
+      "Teacher collaboration",
+      "Accommodation ideas",
+      "School communication"
+    ]
+  },
+  sensory: {
+    responses: [
+      "Sensory needs significantly impact {childName}'s daily experiences. Understanding {childName}'s sensory profile helps us create the right environment and support strategies.",
+      "You're recognizing something really important about {childName}'s sensory needs. Let's identify specific triggers and develop a sensory toolkit that works for {childName}.",
+      "Sensory processing affects so much of {childName}'s world. I can help create accommodations and activities that support {childName}'s unique sensory profile."
+    ],
+    followUps: [
+      "Sensory tools",
+      "Environment setup",
+      "Calming techniques",
+      "Sensory activities"
+    ]
+  }
+};
+
+export function EnhancedAskAminy({
+  isOpen,
+  onToggle,
+  onClose,
+  userTier,
+  userData,
+  onPaywallTrigger,
+  className
+}: EnhancedAskAminyProps) {
+  // Core state
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [input, setInput] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(false);
+  const [conversationId] = useState(() => `conv-${Date.now()}`);
+  
+  // Enhanced state
+  const [isStreaming, setIsStreaming] = useState(false);
+  const [streamingMessageId, setStreamingMessageId] = useState<string | null>(null);
+  const [conversationTitle, setConversationTitle] = useState('');
+  const [contextualSuggestions, setContextualSuggestions] = useState<string[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(true);
+  const [streamingText, setStreamingText] = useState('');
+  const [messageQueue, setMessageQueue] = useState<string[]>([]);
+  
+  // Refs
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
+  const streamingIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  
+  // Hooks
+  const { enhancePrompt, generatePrompts, getInsights } = useContextEngine();
+  const { track } = useAnalytics();
+
+  const canSendMessage = true; // Ask Aminy is now unlimited for all tiers
+
+  // Enhanced auto-resize textarea
+  const adjustTextareaHeight = useCallback(() => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = 'auto';
+      const maxHeight = isMinimized ? 48 : 120;
+      const newHeight = Math.min(Math.max(textarea.scrollHeight, 48), maxHeight);
+      textarea.style.height = newHeight + 'px';
+    }
+  }, [isMinimized]);
+
+  // Enhanced message categorization
+  const categorizeMessage = (message: string): keyof typeof RESPONSE_TEMPLATES | 'general' => {
+    const lowerMessage = message.toLowerCase();
+    
+    if (lowerMessage.includes('routine') || lowerMessage.includes('schedule')) return 'routine';
+    if (lowerMessage.includes('behavior') || lowerMessage.includes('meltdown') || lowerMessage.includes('tantrum')) return 'behavior';
+    if (lowerMessage.includes('speech') || lowerMessage.includes('communication') || lowerMessage.includes('talking')) return 'communication';
+    if (lowerMessage.includes('school') || lowerMessage.includes('teacher') || lowerMessage.includes('iep')) return 'school';
+    if (lowerMessage.includes('sensory') || lowerMessage.includes('overwhelmed') || lowerMessage.includes('loud')) return 'sensory';
+    
+    return 'general';
+  };
+
+  // Enhanced response generation with better templates
+  const generateEnhancedResponse = async (userMessage: string, context: Message[] = []) => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    
+    abortControllerRef.current = new AbortController();
+    const signal = abortControllerRef.current.signal;
+
+    try {
+      setIsTyping(true);
+      
+      // Generate conversation title if needed
+      if (messages.length === 0 && !conversationTitle) {
+        const title = userMessage.length > 30 ? userMessage.substring(0, 30) + '...' : userMessage;
+        setConversationTitle(title);
+      }
+
+      // Enhanced delay with thinking simulation
+      await new Promise(resolve => setTimeout(resolve, 1200 + Math.random() * 800));
+      if (signal.aborted) throw new Error('AbortError');
+
+      const category = categorizeMessage(userMessage);
+      let response = '';
+      let suggestions: string[] = [];
+      let contextUsed = false;
+      let confidence = 0.85;
+
+      // Check for follow-up context
+      const isFollowUp = /\b(you said|earlier|previous|before|that|it|more|explain|tell me more|what about|how about|also|and|can you)\b/i.test(userMessage);
+      
+      if (isFollowUp && context.length > 0) {
+        const lastAssistantMessage = context.filter(m => m.role === 'assistant').slice(-1)[0];
+        if (lastAssistantMessage) {
+          response = generateContextualFollowUp(userMessage, lastAssistantMessage);
+          contextUsed = true;
+          confidence = 0.9;
+        }
+      } else if (category !== 'general') {
+        const template = RESPONSE_TEMPLATES[category];
+        const responseIndex = Math.floor(Math.random() * template.responses.length);
+        response = template.responses[responseIndex].replace(/{childName}/g, userData.childName);
+        suggestions = template.followUps;
+        confidence = 0.88;
+      } else {
+        // General response
+        response = `I'm here to help with any aspect of ${userData.childName}'s development and care. Whether it's daily routines, communication, behavior strategies, school support, or understanding evaluations - what would be most helpful to discuss about ${userData.childName} right now?`;
+        suggestions = ['Daily routines', 'Communication help', 'Behavior support', 'School partnership'];
+        confidence = 0.75;
+      }
+
+      setIsTyping(false);
+      return { 
+        response, 
+        contextUsed, 
+        suggestions, 
+        confidence,
+        tokens: Math.floor(response.length * 0.75) // Simulate token usage
+      };
+
+    } catch (error: any) {
+      if (error.message === 'AbortError') {
+        return null;
+      }
+      
+      setIsTyping(false);
+      throw error;
+    }
+  };
+
+  const generateContextualFollowUp = (userMessage: string, lastMessage: Message): string => {
+    const lastContent = lastMessage.content.toLowerCase();
+    
+    if (lastContent.includes('routine')) {
+      return `Building on those routine strategies for ${userData.childName}, consistency combined with flexibility is key. I'd recommend starting with visual cues like pictures or timers. What specific part of the routine feels most challenging right now?`;
+    } else if (lastContent.includes('behavior')) {
+      return `Those behavior strategies can definitely be adapted for ${userData.childName}'s specific needs. The key is understanding the function of the behavior first. Would you like me to help you analyze what might be triggering these behaviors for ${userData.childName}?`;
+    } else if (lastContent.includes('communication')) {
+      return `Great question about communication strategies for ${userData.childName}! Every child's communication journey is unique. What communication goals are you working on with ${userData.childName}, and what seems to motivate them most?`;
+    }
+    
+    return `I understand you'd like to explore that further for ${userData.childName}. Could you help me understand which specific aspect you'd like me to elaborate on? I'm here to provide detailed, personalized guidance.`;
+  };
+
+  // Enhanced realistic streaming with varied speeds
+  const simulateAdvancedStreaming = async (fullResponse: string, messageId: string, suggestions: string[] = [], confidence: number = 0.85) => {
+    const sentences = fullResponse.split(/(?<=[.!?])\s+/);
+    let currentText = '';
+    
+    for (const sentence of sentences) {
+      const words = sentence.split(' ');
+      
+      for (let i = 0; i < words.length; i++) {
+        currentText += (i === 0 ? '' : ' ') + words[i];
+        
+        setMessages(prev => prev.map(msg => 
+          msg.id === messageId 
+            ? { ...msg, content: currentText, isStreaming: true }
+            : msg
+        ));
+
+        // Variable delay based on punctuation and content
+        let delay = 45;
+        if (words[i].endsWith(',')) delay = 150;
+        if (words[i].endsWith('.') || words[i].endsWith('!') || words[i].endsWith('?')) delay = 300;
+        if (words[i].length > 8) delay = 80; // Longer words take more time
+        
+        await new Promise(resolve => setTimeout(resolve, delay + Math.random() * 20));
+      }
+      
+      // Pause between sentences
+      if (sentence.length > 50) {
+        await new Promise(resolve => setTimeout(resolve, 200 + Math.random() * 100));
+      }
+    }
+
+    // Mark streaming as complete
+    setMessages(prev => prev.map(msg => 
+      msg.id === messageId 
+        ? { 
+            ...msg, 
+            content: fullResponse, 
+            isStreaming: false, 
+            suggestions,
+            confidence 
+          }
+        : msg
+    ));
+
+    setStreamingMessageId(null);
+    setIsStreaming(false);
+  };
+
+  // Load conversation from localStorage
+  useEffect(() => {
+    if (!isOpen) return;
+    
+    try {
+      const savedConversation = localStorage.getItem(`aminy-conversation-${conversationId}`);
+      if (savedConversation) {
+        const parsed = JSON.parse(savedConversation);
+        setMessages(parsed.messages || []);
+        setConversationTitle(parsed.title || '');
+      }
+    } catch (error) {
+    }
+  }, [conversationId, isOpen]);
+
+  // Save conversation to localStorage
+  useEffect(() => {
+    if (messages.length > 0) {
+      try {
+        const conversationData = {
+          messages,
+          title: conversationTitle,
+          lastUpdated: new Date().toISOString()
+        };
+        localStorage.setItem(`aminy-conversation-${conversationId}`, JSON.stringify(conversationData));
+      } catch (error) {
+      }
+    }
+  }, [messages, conversationTitle, conversationId]);
+
+  // Generate contextual suggestions
+  useEffect(() => {
+    if (isOpen && messages.length === 0) {
+      const prompts = generatePrompts();
+      const childName = userData.childName;
+      
+      const suggestions = [
+        `Help with ${childName}'s bedtime routine`,
+        `Managing ${childName}'s transitions`,
+        'Communication strategies that work',
+        'Supporting emotional regulation',
+        'IEP goals and school support',
+        'Sensory needs and accommodations'
+      ];
+      
+      const contextualPrompts = prompts.slice(0, 2).map(p => p.prompt);
+      const finalSuggestions = [
+        ...contextualPrompts,
+        ...suggestions.filter(s => !contextualPrompts.some(cp => cp.includes(s.split(' ')[2])))
+      ].slice(0, 4);
+      
+      setContextualSuggestions(finalSuggestions);
+    }
+  }, [isOpen, messages.length, generatePrompts, userData.childName]);
+
+  // Auto-resize textarea
+  useEffect(() => {
+    adjustTextareaHeight();
+  }, [input, adjustTextareaHeight]);
+
+  // Scroll to bottom on new messages
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      const scrollContainer = messagesEndRef.current.closest('.overflow-y-auto');
+      if (scrollContainer) {
+        scrollContainer.scrollTo({
+          top: scrollContainer.scrollHeight,
+          behavior: 'smooth'
+        });
+      }
+    }
+  }, [messages, isStreaming]);
+
+  // Focus textarea when opening
+  useEffect(() => {
+    if (isOpen && !isMinimized && textareaRef.current) {
+      setTimeout(() => textareaRef.current?.focus(), 100);
+    }
+  }, [isOpen, isMinimized]);
+
+  const handleSend = async () => {
+    if (!input.trim()) return;
+    
+    if (!canSendMessage) {
+      onPaywallTrigger?.();
+      return;
+    }
+
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      content: input.trim(),
+      role: 'user',
+      timestamp: new Date()
+    };
+
+    const messageContent = input.trim();
+    setMessages(prev => [...prev, userMessage]);
+    setInput('');
+    setShowSuggestions(false);
+
+    track('ask_aminy_message_sent', {
+      messageLength: messageContent.length,
+      messageCount: messages.length + 1,
+      userTier,
+      hasContext: messages.length > 0
+    });
+
+    try {
+      const result = await generateEnhancedResponse(messageContent, messages);
+      
+      if (result) {
+        const { response, contextUsed, suggestions, confidence, tokens } = result;
+        
+        // Add AI response with streaming
+        const aiMsgId = `msg-${Date.now() + 1}`;
+        const aiMsg: Message = {
+          id: aiMsgId,
+          role: 'assistant',
+          content: '',
+          timestamp: new Date(),
+          isStreaming: true,
+          contextUsed,
+          confidence,
+          tokens
+        };
+        
+        setMessages(prev => [...prev, aiMsg]);
+        setStreamingMessageId(aiMsgId);
+        setIsStreaming(true);
+        
+        // Start enhanced streaming
+        await simulateAdvancedStreaming(response, aiMsgId, suggestions, confidence);
+        
+        track('ask_aminy_response_generated', {
+          responseLength: response.length,
+          contextUsed,
+          suggestionsCount: suggestions.length,
+          confidence,
+          userTier
+        });
+      }
+      
+    } catch (error: any) {
+      console.error('Error generating response:', error);
+      toast.error('Sorry, I encountered an issue. Please try again.');
+      
+      const errorMsg: Message = {
+        id: `msg-${Date.now() + 1}`,
+        role: 'assistant',
+        content: "I apologize, but I'm having trouble processing your request right now. Please try again in a moment.",
+        timestamp: new Date()
+      };
+      
+      setMessages(prev => [...prev, errorMsg]);
+    } finally {
+      setIsTyping(false);
+      setIsStreaming(false);
+      setStreamingMessageId(null);
+    }
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
+
+  const handleSuggestionClick = (suggestion: string) => {
+    setInput(suggestion);
+    setShowSuggestions(false);
+    setTimeout(() => textareaRef.current?.focus(), 100);
+    
+    track('ask_aminy_suggestion_used', {
+      suggestion,
+      suggestionsShown: contextualSuggestions.length,
+      userTier
+    });
+  };
+
+  const handleClearConversation = () => {
+    setMessages([]);
+    setConversationTitle('');
+    setShowSuggestions(true);
+    try {
+      localStorage.removeItem(`aminy-conversation-${conversationId}`);
+      toast.success('Conversation cleared');
+    } catch (error) {
+      console.error('Error clearing conversation:', error);
+    }
+    setTimeout(() => textareaRef.current?.focus(), 100);
+  };
+
+  const handleCopyMessage = async (content: string) => {
+    try {
+      await navigator.clipboard.writeText(content);
+      toast.success('Message copied');
+    } catch (error) {
+      console.error('Failed to copy message:', error);
+      toast.error('Failed to copy message');
+    }
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className={cn(
+      "fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-4",
+      className
+    )}>
+      <Card className={cn(
+        "w-full max-w-4xl bg-white dark:bg-gray-900 border-0 shadow-2xl transition-all duration-300",
+        isMinimized 
+          ? "h-16 rounded-t-2xl sm:rounded-2xl" 
+          : "h-[85vh] max-h-[700px] rounded-t-2xl sm:rounded-2xl",
+        "flex flex-col overflow-hidden"
+      )}>
+        {/* Enhanced Header */}
+        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+          <div className="flex items-center gap-3">
+            <div className={cn(
+              "w-10 h-10 bg-gradient-to-br from-accent/20 to-accent/10 rounded-xl flex items-center justify-center transition-all duration-300",
+              (isStreaming || isTyping) && "animate-pulse from-accent/30 to-accent/20"
+            )}>
+              <Sparkles className="w-5 h-5 text-accent" />
+            </div>
+            <div className="flex-1">
+              <div className="flex items-center gap-2">
+                <h3 className="font-semibold text-gray-900 dark:text-gray-100">Ask Aminy</h3>
+                <Badge className="bg-green-100 text-green-800 border-green-200 text-xs">
+                  Always Available
+                </Badge>
+                {(isStreaming || isTyping) && (
+                  <Badge variant="secondary" className="text-xs animate-pulse">
+                    <Brain className="w-3 h-3 mr-1" />
+                    {isTyping ? 'Thinking...' : 'Responding...'}
+                  </Badge>
+                )}
+              </div>
+              {!isMinimized && (
+                <p className="text-sm text-gray-600 dark:text-gray-400 aminy-ai-subtitle">
+                  {conversationTitle || `Your AI guide for ${userData.childName}'s development and care`}
+                </p>
+              )}
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-1">
+            {messages.length > 0 && !isMinimized && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleClearConversation}
+                disabled={isTyping || isStreaming}
+                className="w-8 h-8 p-0"
+                title="New conversation"
+              >
+                <Plus className="w-4 h-4" />
+              </Button>
+            )}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsMinimized(!isMinimized)}
+              className="w-8 h-8 p-0"
+            >
+              {isMinimized ? <Maximize2 className="w-4 h-4" /> : <Minimize2 className="w-4 h-4" />}
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onClose}
+              className="w-8 h-8 p-0"
+            >
+              <X className="w-4 h-4" />
+            </Button>
+          </div>
+        </div>
+
+        {!isMinimized && (
+          <>
+            {/* Enhanced Messages Area */}
+            <div className="flex-1 flex flex-col overflow-hidden">
+              <ScrollArea className="flex-1 px-4">
+                <div className="space-y-6 py-4">
+                  {messages.length === 0 && showSuggestions && (
+                    <div className="text-center py-8">
+                      <div className="w-16 h-16 bg-gradient-to-br from-accent/20 to-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <Sparkles className="w-8 h-8 text-accent" />
+                      </div>
+                      <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                        How can I help with {userData.childName} today?
+                      </h4>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-6 max-w-md mx-auto">
+                        Ask me anything about development, routines, behaviors, school support, or concerns you have.
+                      </p>
+                      
+                      {/* Contextual Suggestions */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-2xl mx-auto">
+                        {contextualSuggestions.slice(0, 4).map((suggestion, index) => (
+                          <Button
+                            key={index}
+                            variant="outline"
+                            onClick={() => handleSuggestionClick(suggestion)}
+                            className="text-left justify-start h-auto p-3 text-sm hover:bg-accent/5 hover:border-accent/30 transition-all"
+                          >
+                            <div className="flex items-center gap-2">
+                              <Zap className="w-4 h-4 text-accent flex-shrink-0" />
+                              <span className="truncate">{suggestion}</span>
+                            </div>
+                          </Button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {messages.map((message) => (
+                    <div key={message.id} className="group">
+                      <div className={cn(
+                        "flex gap-3",
+                        message.role === 'user' ? "justify-end" : "justify-start"
+                      )}>
+                        {message.role === 'assistant' && (
+                          <div className="w-8 h-8 bg-gradient-to-br from-accent/20 to-accent/10 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                            <Sparkles className="w-4 h-4 text-accent" />
+                          </div>
+                        )}
+                        
+                        <div className={cn(
+                          "max-w-[85%] rounded-2xl px-4 py-3 text-sm relative",
+                          message.role === 'user'
+                            ? "bg-accent text-white"
+                            : "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700"
+                        )}>
+                          {/* Enhanced Message Header */}
+                          <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center gap-2">
+                              <span className={cn(
+                                "text-xs opacity-60",
+                                message.role === 'user' ? "text-white/80" : "text-gray-500 dark:text-gray-400"
+                              )}>
+                                {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                              </span>
+                              {message.contextUsed && (
+                                <Badge variant="secondary" className="text-xs">
+                                  <Brain className="w-2 h-2 mr-1" />
+                                  Context-aware
+                                </Badge>
+                              )}
+                              {message.confidence && message.role === 'assistant' && (
+                                <Badge variant="secondary" className="text-xs">
+                                  {Math.round(message.confidence * 100)}% confidence
+                                </Badge>
+                              )}
+                              {message.isStreaming && (
+                                <div className="flex space-x-1">
+                                  <div className="w-1 h-1 bg-current rounded-full animate-bounce"></div>
+                                  <div className="w-1 h-1 bg-current rounded-full animate-bounce [animation-delay:0.1s]"></div>
+                                  <div className="w-1 h-1 bg-current rounded-full animate-bounce [animation-delay:0.2s]"></div>
+                                </div>
+                              )}
+                            </div>
+                            
+                            {/* Message Actions */}
+                            <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleCopyMessage(message.content)}
+                                className={cn(
+                                  "h-6 w-6 p-0",
+                                  message.role === 'user' 
+                                    ? "hover:bg-white/20 text-white/80" 
+                                    : "hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400"
+                                )}
+                                title="Copy message"
+                              >
+                                <Copy className="w-3 h-3" />
+                              </Button>
+                            </div>
+                          </div>
+                          
+                          {/* Enhanced Message Content */}
+                          <div className="text-sm leading-relaxed">
+                            {message.content}
+                            {message.isStreaming && (
+                              <span className="inline-block w-2 h-4 bg-current ml-1 animate-pulse" />
+                            )}
+                          </div>
+                          
+                          {/* Follow-up Suggestions */}
+                          {message.role === 'assistant' && message.suggestions && message.suggestions.length > 0 && !message.isStreaming && (
+                            <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-600">
+                              <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">Continue the conversation:</p>
+                              <div className="flex flex-wrap gap-2">
+                                {message.suggestions.map((suggestion, suggestionIndex) => (
+                                  <Button
+                                    key={suggestionIndex}
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => handleSuggestionClick(suggestion)}
+                                    className="text-xs h-7 px-2 hover:bg-accent/5 hover:border-accent/30"
+                                  >
+                                    {suggestion}
+                                  </Button>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  
+                  <div ref={messagesEndRef} />
+                </div>
+              </ScrollArea>
+            </div>
+
+            {/* Enhanced Input Area */}
+            <div className="border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+              <div className="p-4">
+                <div className="flex items-end gap-3">
+                  <div className="flex-1 relative">
+                    <textarea
+                      ref={textareaRef}
+                      value={input}
+                      onChange={(e) => setInput(e.target.value)}
+                      onKeyPress={handleKeyPress}
+                      placeholder={`Ask me anything about ${userData.childName}...`}
+                      className="w-full resize-none rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-4 py-3 text-sm focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 aminy-ai-input-field"
+                      style={{ minHeight: '48px', maxHeight: '120px' }}
+                      disabled={isTyping || isStreaming || !canSendMessage}
+                    />
+                  </div>
+                  
+                  <div className="flex items-center gap-2">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="w-10 h-10 p-0 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+                      title="Attach file"
+                      disabled={isTyping || isStreaming}
+                    >
+                      <Paperclip className="w-4 h-4" />
+                    </Button>
+                    
+                    <Button
+                      onClick={handleSend}
+                      disabled={!input.trim() || isTyping || isStreaming || !canSendMessage}
+                      className={cn(
+                        "w-10 h-10 p-0 rounded-lg bg-accent hover:bg-accent/90 text-white transition-all duration-200",
+                        input.trim() && "shadow-lg hover:shadow-xl hover:scale-105"
+                      )}
+                      title="Send message"
+                    >
+                      {isTyping || isStreaming ? (
+                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      ) : (
+                        <ArrowUp className="w-4 h-4" />
+                      )}
+                    </Button>
+                  </div>
+                </div>
+                
+                {/* Helper text */}
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center aminy-ai-helper-text">
+                  {!canSendMessage 
+                    ? 'Upgrade to continue the conversation'
+                    : 'Ask about routines, behaviors, communication, school, or any concerns'
+                  }
+                </p>
+              </div>
+            </div>
+          </>
+        )}
+      </Card>
+    </div>
+  );
+}

@@ -1,0 +1,558 @@
+/**
+ * Dashboard10 - The Perfect 10/10 Dashboard
+ *
+ * Designed per detailed spec:
+ * - Calm UX for parents (reduce mental load, "exhale test")
+ * - Data capture for investors/payers (adherence, outcomes)
+ * - Single-scroll "Calm Hub" design
+ * - Brand colors: #0D1B2A navy, #F5F5F5 cream, #577590 teal accents
+ * - Inter font, 8-12px corners, soft shadows
+ */
+
+import React, { useState, useEffect, useRef } from 'react';
+import { Card } from './ui/card';
+import { Button } from './ui/button';
+import { Badge } from './ui/badge';
+import { Progress } from './ui/progress';
+import {
+  Home,
+  BookOpen,
+  Users,
+  User,
+  Calendar,
+  CheckCircle2,
+  MessageSquare,
+  Sparkles,
+  TrendingUp,
+  Heart,
+  FileText,
+  Video,
+  AlertCircle,
+  ChevronRight,
+  Clock,
+  Award,
+  Zap,
+  Wind,
+  Sun,
+  Moon,
+  Sunset,
+  Star
+} from 'lucide-react';
+import { useConversation } from '../context/ConversationContext';
+
+// Strategic components for viral growth & upgrade conversion
+import { OutcomesDashboardWidget } from './OutcomesDashboardWidget';
+import { QuickShareButton } from './ShareWinFlow';
+import { DifferentiationCallout } from './DifferentiationCallout';
+import { ProactiveNudgeSystem } from './ProactiveNudgeSystem';
+
+// Types
+interface ChildProfile {
+  id: string;
+  name: string;
+  age: number;
+  photoUrl?: string;
+  goals: {
+    name: string;
+    percentMet: number;
+    trend: 'up' | 'down' | 'stable';
+  }[];
+}
+
+interface UpcomingEvent {
+  id: string;
+  title: string;
+  time: string;
+  type: 'telehealth' | 'reminder' | 'appointment' | 'task';
+}
+
+interface DailyTask {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+  completed: boolean;
+  timeEstimate: string;
+}
+
+interface DailyRoutine {
+  timeOfDay: 'morning' | 'afternoon' | 'evening' | 'bedtime';
+  label: string;
+  icon: React.ReactNode;
+  tasks: DailyTask[];
+  completedCount: number;
+}
+
+interface Dashboard10Props {
+  userData: {
+    parentName: string;
+    childName: string;
+  };
+  childProfile?: ChildProfile;
+  onNavigate?: (destination: string) => void;
+  userTier?: string;
+}
+
+// Daily tips that rotate
+const DAILY_TIPS = [
+  "One deep breath can reset the moment.",
+  "Progress isn't always visible, but it's always happening.",
+  "You're showing up, and that's what matters most.",
+  "Small wins today become big changes tomorrow.",
+  "Trust the process. You've got this.",
+];
+
+export function Dashboard10({
+  userData,
+  childProfile,
+  onNavigate,
+  userTier = 'core'
+}: Dashboard10Props) {
+  const [activeRoutine, setActiveRoutine] = useState<'morning' | 'afternoon' | 'evening' | 'bedtime'>('morning');
+  const [showAIChat, setShowAIChat] = useState(false);
+  const [activeTab, setActiveTab] = useState<'home' | 'resources' | 'community' | 'profile'>('home');
+  const [dailyTip] = useState(() => DAILY_TIPS[Math.floor(Math.random() * DAILY_TIPS.length)]);
+  const chatButtonRef = useRef<HTMLButtonElement>(null);
+
+  // Auto-set routine based on time of day
+  useEffect(() => {
+    const hour = new Date().getHours();
+    if (hour >= 5 && hour < 12) setActiveRoutine('morning');
+    else if (hour >= 12 && hour < 17) setActiveRoutine('afternoon');
+    else if (hour >= 17 && hour < 20) setActiveRoutine('evening');
+    else setActiveRoutine('bedtime');
+  }, []);
+
+  // Sample data (would come from API in production)
+  const child: ChildProfile = childProfile || {
+    id: 'child-1',
+    name: userData.childName || 'Alex',
+    age: 5,
+    goals: [
+      { name: 'Communication', percentMet: 70, trend: 'up' },
+      { name: 'Regulation', percentMet: 50, trend: 'stable' },
+    ]
+  };
+
+  const upcomingEvents: UpcomingEvent[] = [
+    { id: '1', title: 'Speech Coaching', time: '10:00 AM', type: 'telehealth' },
+    { id: '2', title: 'Meltdown Prep', time: '3:00 PM', type: 'reminder' },
+  ];
+
+  const dailyRoutines: DailyRoutine[] = [
+    {
+      timeOfDay: 'morning',
+      label: 'Morning',
+      icon: <Sun className="w-4 h-4" />,
+      completedCount: 2,
+      tasks: [
+        { id: '1', title: 'Wake-Up Cue', description: 'Visual schedule', icon: '📋', completed: true, timeEstimate: '2 min' },
+        { id: '2', title: 'Brush Teeth', description: '2 min timer', icon: '🪥', completed: true, timeEstimate: '2 min' },
+        { id: '3', title: 'Breakfast Transition', description: 'Reward badge', icon: '🍳', completed: false, timeEstimate: '10 min' },
+      ]
+    },
+    {
+      timeOfDay: 'afternoon',
+      label: 'Afternoon',
+      icon: <Sunset className="w-4 h-4" />,
+      completedCount: 0,
+      tasks: [
+        { id: '4', title: 'Lunch Routine', description: 'Choice board', icon: '🥗', completed: false, timeEstimate: '15 min' },
+        { id: '5', title: 'Quiet Time', description: 'Sensory break', icon: '🧘', completed: false, timeEstimate: '20 min' },
+      ]
+    },
+    {
+      timeOfDay: 'evening',
+      label: 'Evening',
+      icon: <Moon className="w-4 h-4" />,
+      completedCount: 0,
+      tasks: [
+        { id: '6', title: 'Family Time', description: 'Structured play', icon: '🎮', completed: false, timeEstimate: '30 min' },
+        { id: '7', title: 'Dinner', description: 'Mealtime supports', icon: '🍽️', completed: false, timeEstimate: '20 min' },
+      ]
+    },
+    {
+      timeOfDay: 'bedtime',
+      label: 'Bedtime',
+      icon: <Star className="w-4 h-4" />,
+      completedCount: 0,
+      tasks: [
+        { id: '8', title: 'Bath Time', description: 'Calming routine', icon: '🛁', completed: false, timeEstimate: '15 min' },
+        { id: '9', title: 'Story & Wind Down', description: 'Bedtime cues', icon: '📚', completed: false, timeEstimate: '15 min' },
+      ]
+    },
+  ];
+
+  const currentRoutine = dailyRoutines.find(r => r.timeOfDay === activeRoutine) || dailyRoutines[0];
+  const totalTasks = currentRoutine.tasks.length;
+  const completedTasks = currentRoutine.tasks.filter(t => t.completed).length;
+  const progressPercent = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
+
+  // Streak data
+  const streakDays = 5;
+  const todaysWins = 3;
+
+  // Quick actions
+  const quickActions = [
+    { id: 'plan', label: 'Update Plan', icon: <FileText className="w-5 h-5" />, color: 'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-300' },
+    { id: 'calm', label: 'Calm Tools', icon: <Wind className="w-5 h-5" />, color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300' },
+    { id: 'log', label: 'Log Incident', icon: <AlertCircle className="w-5 h-5" />, color: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300' },
+    { id: 'telehealth', label: 'Telehealth', icon: <Video className="w-5 h-5" />, color: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300' },
+    { id: 'resources', label: 'Resources', icon: <BookOpen className="w-5 h-5" />, color: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300' },
+    { id: 'community', label: 'Community', icon: <Users className="w-5 h-5" />, color: 'bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-300' },
+  ];
+
+  const handleQuickAction = (actionId: string) => {
+    if (!onNavigate) return;
+
+    switch (actionId) {
+      case 'telehealth':
+        onNavigate('telehealth');
+        break;
+      case 'calm':
+        onNavigate('calm-tools');
+        break;
+      case 'log':
+        onNavigate('incident-log');
+        break;
+      case 'plan':
+        onNavigate('care-plan');
+        break;
+      case 'resources':
+        onNavigate('resources');
+        break;
+      case 'community':
+        onNavigate('community');
+        break;
+      default:
+    }
+  };
+
+  const handleTaskToggle = (taskId: string) => {
+    // Would update backend in production
+  };
+
+  return (
+    <div className="min-h-screen bg-[#F5F5F5] dark:bg-slate-900 pb-24">
+      {/* ========================================
+          1. HEADER & TOP NAVIGATION (20%)
+          ======================================== */}
+      <header className="bg-[#0D1B2A] text-white sticky top-0 z-20">
+        <div className="max-w-4xl mx-auto px-4 py-4">
+          {/* Greeting */}
+          <div className="mb-4">
+            <h1 className="text-lg font-semibold text-[#F5F5F5]">
+              Hi {userData.parentName || 'there'}, here's {child.name}'s calm start today.
+            </h1>
+            <p className="text-sm text-gray-400 italic mt-1">{dailyTip}</p>
+          </div>
+
+          {/* Child Profile Snapshot */}
+          <div className="flex items-center gap-4 bg-white/10 rounded-xl p-3">
+            <div className="w-12 h-12 bg-gradient-to-br from-teal-400 to-teal-600 rounded-full flex items-center justify-center text-xl font-bold">
+              {child.name[0]}
+            </div>
+            <div className="flex-1">
+              <div className="flex items-center gap-2">
+                <span className="font-medium">{child.name}</span>
+                <Badge variant="outline" className="text-xs border-white/30 text-white/80">
+                  Age {child.age}
+                </Badge>
+              </div>
+              <div className="flex gap-3 mt-1">
+                {child.goals.slice(0, 2).map((goal) => (
+                  <div key={goal.name} className="text-xs text-gray-300">
+                    {goal.name}: <span className={goal.trend === 'up' ? 'text-green-400' : 'text-gray-400'}>{goal.percentMet}%</span>
+                    {goal.trend === 'up' && ' ↑'}
+                  </div>
+                ))}
+              </div>
+            </div>
+            <ChevronRight className="w-5 h-5 text-gray-400" />
+          </div>
+
+          {/* Upcoming Events Carousel */}
+          {upcomingEvents.length > 0 && (
+            <div className="flex gap-3 mt-4 overflow-x-auto pb-2 -mx-1 px-1">
+              {upcomingEvents.map((event) => (
+                <button
+                  key={event.id}
+                  className="flex-shrink-0 bg-white/10 hover:bg-white/15 rounded-lg px-3 py-2 flex items-center gap-2 transition-colors"
+                >
+                  {event.type === 'telehealth' ? (
+                    <Video className="w-4 h-4 text-teal-400" />
+                  ) : (
+                    <Calendar className="w-4 h-4 text-amber-400" />
+                  )}
+                  <div className="text-left">
+                    <div className="text-sm font-medium">{event.title}</div>
+                    <div className="text-xs text-gray-400">{event.time}</div>
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="max-w-4xl mx-auto px-4 py-6 space-y-6">
+        {/* ========================================
+            PROACTIVE NUDGES - AI that reaches out
+            (This is what ChatGPT CAN'T do)
+            ======================================== */}
+        <ProactiveNudgeSystem
+          childName={child.name}
+          onActionTaken={(nudgeId) => {
+            // Track nudge interaction for analytics
+            if (import.meta.env.DEV) {
+              console.log('Nudge action taken:', nudgeId);
+            }
+            // In production, this would send to analytics
+          }}
+        />
+
+        {/* ========================================
+            2. DAILY FLOW (30%) - Routine Hub
+            ======================================== */}
+        <section>
+          {/* Time of Day Selector */}
+          <div className="flex gap-2 mb-4 overflow-x-auto pb-2">
+            {dailyRoutines.map((routine) => (
+              <button
+                key={routine.timeOfDay}
+                onClick={() => setActiveRoutine(routine.timeOfDay)}
+                className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${
+                  activeRoutine === routine.timeOfDay
+                    ? 'bg-[#577590] text-white shadow-md'
+                    : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700'
+                }`}
+              >
+                {routine.icon}
+                <span className="font-medium text-sm">{routine.label}</span>
+                {routine.completedCount > 0 && (
+                  <Badge className="bg-green-500 text-white text-xs">
+                    {routine.completedCount}/{routine.tasks.length}
+                  </Badge>
+                )}
+              </button>
+            ))}
+          </div>
+
+          {/* Current Routine Card */}
+          <Card className="p-4 bg-white dark:bg-slate-800 shadow-sm border-0">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                {currentRoutine.icon}
+                {currentRoutine.label} Routine
+              </h2>
+              <span className="text-sm text-gray-500 dark:text-gray-400">
+                {completedTasks}/{totalTasks} complete
+              </span>
+            </div>
+
+            {/* Progress Bar */}
+            <Progress value={progressPercent} className="h-2 mb-4" />
+
+            {/* Task List */}
+            <div className="space-y-3">
+              {currentRoutine.tasks.map((task) => (
+                <button
+                  key={task.id}
+                  onClick={() => handleTaskToggle(task.id)}
+                  className={`w-full flex items-center gap-3 p-3 rounded-lg transition-all ${
+                    task.completed
+                      ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800'
+                      : 'bg-gray-50 dark:bg-slate-700/50 hover:bg-gray-100 dark:hover:bg-slate-700'
+                  }`}
+                >
+                  <span className="text-2xl">{task.icon}</span>
+                  <div className="flex-1 text-left">
+                    <div className={`font-medium ${task.completed ? 'text-green-700 dark:text-green-300' : 'text-gray-900 dark:text-white'}`}>
+                      {task.title}
+                    </div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">{task.description}</div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-gray-400">{task.timeEstimate}</span>
+                    {task.completed ? (
+                      <CheckCircle2 className="w-6 h-6 text-green-500" />
+                    ) : (
+                      <div className="w-6 h-6 rounded-full border-2 border-gray-300 dark:border-gray-600" />
+                    )}
+                  </div>
+                </button>
+              ))}
+            </div>
+
+            {/* AI Nudge */}
+            {completedTasks > 0 && completedTasks < totalTasks && (
+              <div className="mt-4 p-3 bg-teal-50 dark:bg-teal-900/20 rounded-lg border border-teal-200 dark:border-teal-800">
+                <p className="text-sm text-teal-800 dark:text-teal-200 flex items-center gap-2">
+                  <Sparkles className="w-4 h-4" />
+                  One task away from completing {currentRoutine.label.toLowerCase()}!
+                </p>
+              </div>
+            )}
+          </Card>
+        </section>
+
+        {/* ========================================
+            3. OUTCOMES DASHBOARD - Measurable Progress
+            Shows real value that makes subscription essential
+            ======================================== */}
+        <section>
+          <OutcomesDashboardWidget
+            onViewDetails={() => onNavigate?.('progress-report')}
+          />
+        </section>
+
+        {/* ========================================
+            DIFFERENTIATION CALLOUT - Why Not ChatGPT
+            Makes the moat explicit
+            ======================================== */}
+        <section>
+          <DifferentiationCallout variant="compact" context="dashboard" />
+        </section>
+
+        {/* ========================================
+            4. WINS & CELEBRATIONS (10%)
+            Easy viral sharing with branded images
+            ======================================== */}
+        <section>
+          <Card className="p-4 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border-0 shadow-sm">
+            <div className="flex items-start gap-4">
+              <div className="p-2 bg-amber-100 dark:bg-amber-800/50 rounded-full">
+                <Award className="w-6 h-6 text-amber-600 dark:text-amber-400" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-semibold text-amber-900 dark:text-amber-100">Today's Wins</h3>
+                <p className="text-sm text-amber-800 dark:text-amber-200 mt-1">
+                  Completed {todaysWins} tasks! {child.name}'s streak: <strong>{streakDays} days</strong>.
+                  You're building consistency — great job!
+                </p>
+              </div>
+              {/* Viral Share Button - generates branded shareable image */}
+              <QuickShareButton
+                variant="compact"
+                win={{
+                  type: 'streak',
+                  title: `${streakDays}-Day Streak!`,
+                  description: `Completed ${todaysWins} tasks today with Aminy. Consistency builds habits!`,
+                  metric: `${streakDays} days`,
+                  date: new Date(),
+                  childName: child.name,
+                }}
+              />
+            </div>
+          </Card>
+        </section>
+
+        {/* ========================================
+            5. QUICK ACTION GRID (15%)
+            ======================================== */}
+        <section>
+          <h2 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+            <Zap className="w-5 h-5 text-[#577590]" />
+            Quick Actions
+          </h2>
+
+          <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
+            {quickActions.map((action) => (
+              <button
+                key={action.id}
+                onClick={() => handleQuickAction(action.id)}
+                className={`flex flex-col items-center gap-2 p-4 rounded-xl transition-all hover:scale-105 active:scale-95 ${action.color}`}
+              >
+                {action.icon}
+                <span className="text-xs font-medium text-center">{action.label}</span>
+              </button>
+            ))}
+          </div>
+        </section>
+      </main>
+
+      {/* ========================================
+          6. PERSISTENT AI COMPANION (Floating)
+          ======================================== */}
+      <button
+        ref={chatButtonRef}
+        onClick={() => setShowAIChat(!showAIChat)}
+        className={`fixed bottom-24 right-4 z-30 w-14 h-14 rounded-full shadow-lg transition-all ${
+          showAIChat
+            ? 'bg-gray-800 text-white'
+            : 'bg-[#577590] text-white hover:bg-[#4a6478] animate-pulse'
+        }`}
+        aria-label="Chat with Aminy"
+      >
+        <MessageSquare className="w-6 h-6 mx-auto" />
+      </button>
+
+      {/* Chat Drawer */}
+      {showAIChat && (
+        <div className="fixed bottom-40 right-4 w-80 bg-white dark:bg-slate-800 rounded-xl shadow-xl z-30 overflow-hidden border border-gray-200 dark:border-slate-700">
+          <div className="p-4 bg-[#0D1B2A] text-white">
+            <h3 className="font-semibold flex items-center gap-2">
+              <Sparkles className="w-4 h-4" />
+              Aminy
+            </h3>
+            <p className="text-xs text-gray-300 mt-1">Your AI companion</p>
+          </div>
+          <div className="p-4 max-h-64 overflow-y-auto">
+            <div className="bg-gray-100 dark:bg-slate-700 rounded-lg p-3 text-sm">
+              <p className="text-gray-700 dark:text-gray-200">
+                Hi {userData.parentName}! Bedtime soon? I can help you prep {child.name}'s routine. What would be most helpful? 💙
+              </p>
+            </div>
+          </div>
+          <div className="p-3 border-t dark:border-slate-700">
+            <div className="flex gap-2">
+              <input
+                type="text"
+                placeholder="Type a message..."
+                className="flex-1 px-3 py-2 text-sm rounded-lg border dark:border-slate-600 dark:bg-slate-700 dark:text-white"
+              />
+              <Button size="sm" className="bg-[#577590] hover:bg-[#4a6478]">
+                Send
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================
+          7. BOTTOM NAVIGATOR TABS (Fixed)
+          ======================================== */}
+      <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 border-t border-gray-200 dark:border-slate-700 z-20 safe-bottom">
+        <div className="max-w-4xl mx-auto flex justify-around py-2">
+          {[
+            { id: 'home', label: 'Home', icon: <Home className="w-5 h-5" /> },
+            { id: 'resources', label: 'Resources', icon: <BookOpen className="w-5 h-5" /> },
+            { id: 'community', label: 'Community', icon: <Users className="w-5 h-5" /> },
+            { id: 'profile', label: 'Profile', icon: <User className="w-5 h-5" /> },
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => {
+                setActiveTab(tab.id as typeof activeTab);
+                if (tab.id !== 'home' && onNavigate) {
+                  onNavigate(tab.id);
+                }
+              }}
+              className={`flex flex-col items-center gap-1 px-4 py-2 rounded-lg transition-colors ${
+                activeTab === tab.id
+                  ? 'text-[#577590]'
+                  : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+              }`}
+            >
+              {tab.icon}
+              <span className="text-xs font-medium">{tab.label}</span>
+            </button>
+          ))}
+        </div>
+      </nav>
+    </div>
+  );
+}
+
+export default Dashboard10;

@@ -1,0 +1,155 @@
+{
+  "name": "Making Friends Booster",
+  "description": "7 skills for peer connection and friendship",
+  "version": "1.0",
+  "theme": "social_skills",
+  "activities": [
+    {
+      "id": "mf001",
+      "title": "Find Common Ground",
+      "age_band": "6–10",
+      "level": "beginner",
+      "domain": "pragmatics",
+      "target": "Ask 3 questions to discover shared interests",
+      "outcome_tags": ["conversation", "interest discovery", "connection"],
+      "prompting_hierarchy": ["model all questions", "prompt each question", "independent"],
+      "script_parent": "Teach questions: 'What do you like to do?' 'Do you like [topic]?' 'What's your favorite [category]?' Practice!",
+      "script_child": "Ask questions to find things you both like.",
+      "visuals": ["question_cards", "common_interests_checklist"],
+      "success_criteria": "Asks 2+ discovery questions in role-play or real interaction 3/5 times",
+      "mastery_rule": "70% across 2 weeks",
+      "generalization": "Meeting new peers, playdates, first days",
+      "variants": [
+        { "questions": ["What do you like?", "Do you like [video games]?", "Favorite show?"] },
+        { "questions": ["What's fun for you?", "Ever play [activity]?", "Like [sport/hobby]?"] },
+        { "questions": ["What do you do for fun?", "What's your thing?", "What are you into?"] }
+      ]
+    },
+    {
+      "id": "mf002",
+      "title": "Compliment + Question",
+      "age_band": "6–10",
+      "level": "intermediate",
+      "domain": "pragmatics",
+      "target": "Give compliment then ask related question to start conversation",
+      "outcome_tags": ["conversation starters", "social initiation", "positive interaction"],
+      "prompting_hierarchy": ["model full script", "prompt compliment + question", "independent"],
+      "script_parent": "Say something nice, then ask about it: 'Cool shoes! Where'd you get them?' Practice combinations!",
+      "script_child": "Say something nice, then ask a question about it.",
+      "visuals": ["compliment_question_examples", "script_cards"],
+      "success_criteria": "Uses compliment + question combo 2/4 initiation opportunities",
+      "mastery_rule": "60% across 2 weeks",
+      "generalization": "School, extracurriculars, neighborhood kids",
+      "variants": [
+        { "compliment": "Cool [item]!", "question": "Where'd you get it?" },
+        { "compliment": "Nice [skill/action]!", "question": "How'd you learn that?" },
+        { "compliment": "I like your [thing]!", "question": "What's it from?" }
+      ]
+    },
+    {
+      "id": "mf003",
+      "title": "Invite to Play",
+      "age_band": "5–9",
+      "level": "beginner",
+      "domain": "pragmatics",
+      "target": "Use direct invitation script with peer",
+      "outcome_tags": ["social initiation", "play skills", "peer interaction"],
+      "prompting_hierarchy": ["full model", "partial model", "cue", "independent"],
+      "script_parent": "Teach: 'Want to play [activity]?' or 'Can I play with you?' Direct and simple! Practice and role-play.",
+      "script_child": "Ask them if they want to play!",
+      "visuals": ["invitation_script_cards"],
+      "success_criteria": "Uses invitation script 2/4 appropriate play opportunities",
+      "mastery_rule": "60% across 2 weeks",
+      "generalization": "Recess, playdates, neighborhood, siblings' friends",
+      "variants": [
+        { "script": "Want to play [specific game]?", "context": "when you have idea" },
+        { "script": "Can I play with you?", "context": "joining existing play" },
+        { "script": "Let's do [activity] together!", "context": "suggesting new activity" }
+      ]
+    },
+    {
+      "id": "mf004",
+      "title": "Share Turn Cues",
+      "age_band": "4–8",
+      "level": "intermediate",
+      "domain": "pragmatics",
+      "target": "Use verbal turn-taking phrases during play",
+      "outcome_tags": ["turn-taking", "play skills", "cooperation"],
+      "prompting_hierarchy": ["model phrases", "verbal prompt", "independent"],
+      "script_parent": "Teach: 'My turn,' 'Your turn now,' 'Can I have a turn?' Practice during games! Make it fun.",
+      "script_child": "Use your turn-taking words during play.",
+      "visuals": ["turn_cards", "my_turn_your_turn_visual"],
+      "success_criteria": "Uses turn phrases 4/6 turn transitions during play",
+      "mastery_rule": "70% across 5 play sessions",
+      "generalization": "Board games, playground, taking turns with toys",
+      "variants": [
+        { "phrases": ["my turn", "your turn"], "activity": "simple back-and-forth" },
+        { "phrases": ["can I have a turn?", "okay, your turn now"], "activity": "sharing item" },
+        { "phrases": ["my turn next", "you go first"], "activity": "games with waiting" }
+      ]
+    },
+    {
+      "id": "mf005",
+      "title": "Fix a Misstep",
+      "age_band": "6–10",
+      "level": "advanced",
+      "domain": "pragmatics",
+      "target": "Apologize and make repair after social mistake",
+      "outcome_tags": ["repair", "apology", "social problem-solving"],
+      "prompting_hierarchy": ["prompt full apology", "prompt sorry + action", "independent"],
+      "script_parent": "Teach: 'Sorry, I didn't mean to.' Then fix it if possible. Practice! Model how to make it right.",
+      "script_child": "Say sorry and try to make it better.",
+      "visuals": ["apology_script", "repair_actions_menu"],
+      "success_criteria": "Apologizes and attempts repair 3/5 social mistakes",
+      "mastery_rule": "60% across 2 weeks",
+      "generalization": "When accidents happen, conflicts arise, mistakes made",
+      "variants": [
+        { "situation": "hurt someone", "script": "Sorry! Are you okay?", "repair": "check on them" },
+        { "situation": "took something", "script": "Sorry, here you go", "repair": "return item" },
+        { "situation": "said something mean", "script": "Sorry, I didn't mean it", "repair": "say something nice" }
+      ]
+    },
+    {
+      "id": "mf006",
+      "title": "Include Someone New",
+      "age_band": "6–10",
+      "level": "intermediate",
+      "domain": "pragmatics",
+      "target": "Invite peer who's alone to join activity",
+      "outcome_tags": ["inclusion", "empathy", "kindness"],
+      "prompting_hierarchy": ["prompt to invite", "remind to look for lonely peers", "independent noticing"],
+      "script_parent": "Notice someone alone? Say: 'Want to play with us?' Model kindness! Praise when they do it.",
+      "script_child": "If you see someone alone, you can invite them!",
+      "visuals": ["inclusion_script", "kindness_examples"],
+      "success_criteria": "Includes someone new (with prompt or independently) 2/5 opportunities observed",
+      "mastery_rule": "Any instances are success! This is advanced empathy.",
+      "generalization": "Recess, lunch, group activities, extracurriculars",
+      "variants": [
+        { "script": "Want to play with us?", "context": "peer sitting alone" },
+        { "script": "You can be on my team!", "context": "peer not picked" },
+        { "script": "Come sit here!", "context": "lunch/seating" }
+      ]
+    },
+    {
+      "id": "mf007",
+      "title": "Say Thanks",
+      "age_band": "4–8",
+      "level": "beginner",
+      "domain": "pragmatics",
+      "target": "Say 'thank you' when peer shares, helps, or is kind",
+      "outcome_tags": ["gratitude", "manners", "social reciprocity"],
+      "prompting_hierarchy": ["model thank you", "verbal prompt", "independent"],
+      "script_parent": "When they share or help: 'Say thank you!' Model it first. Make it habit!",
+      "script_child": "Remember to say thank you!",
+      "visuals": ["thank_you_card", "gratitude_reminder"],
+      "success_criteria": "Says thank you 4/5 appropriate moments with verbal prompt or less",
+      "mastery_rule": "80% across 1 week",
+      "generalization": "Playdates, school, home with siblings, anywhere",
+      "variants": [
+        { "situation": "peer shares", "phrase": "Thanks for sharing!" },
+        { "situation": "peer helps", "phrase": "Thank you for helping!" },
+        { "situation": "peer is kind", "phrase": "Thanks, that was nice!" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1231 @@
+{
+  "name": "Foundation 60",
+  "description": "Core activities for speech, language, and regulation - clinically designed for 3-6 minute sessions",
+  "version": "1.0",
+  "activities": [
+    {
+      "id": "f001",
+      "title": "Pop the P",
+      "age_band": "3–6",
+      "level": "beginner",
+      "domain": "articulation",
+      "target": "/p/ initial isolation → CV",
+      "outcome_tags": ["articulation", "phoneme production", "early sounds"],
+      "prompting_hierarchy": ["model", "tactile (lip press)", "visual mirror", "fade to independent"],
+      "script_parent": "Let's pop like popcorn: p-p-p! Child watches lips, copies.",
+      "script_child": "Make the popping sound! P-p-p like popcorn!",
+      "visuals": ["mirror", "popcorn image"],
+      "success_criteria": "8/10 accurate pops",
+      "mastery_rule": "2 sessions in a row",
+      "generalization": "Words: pea, pie, pop",
+      "variants": [
+        { "context": "animal", "activity": "p-p-pig", "materials": "pig toy/picture" },
+        { "context": "music", "activity": "drum taps with each /p/", "materials": "drum or table" }
+      ]
+    },
+    {
+      "id": "f002",
+      "title": "Big B Bubbles",
+      "age_band": "3–6",
+      "level": "beginner",
+      "domain": "articulation",
+      "target": "/b/ initial CV",
+      "outcome_tags": ["articulation", "phoneme production", "voiced sounds"],
+      "prompting_hierarchy": ["model with voice-on", "hand-over-hand for lips", "fade"],
+      "script_parent": "Blow big b-b-bubbles! Emphasize buzz.",
+      "script_child": "Let's make bubbles! B-b-b!",
+      "visuals": ["bubble wand (imaginary ok)"],
+      "success_criteria": "8/10",
+      "mastery_rule": "2 sessions",
+      "generalization": "ball, bat, bed",
+      "variants": [
+        { "context": "counting", "activity": "bubble popping count", "materials": "bubble pictures" },
+        { "context": "pretend play", "activity": "pretend bath bubbles", "materials": "toy tub" }
+      ]
+    },
+    {
+      "id": "f003",
+      "title": "Tasty T",
+      "age_band": "4–7",
+      "level": "beginner",
+      "domain": "articulation",
+      "target": "/t/ initial; tongue tip placement",
+      "outcome_tags": ["articulation", "tongue placement", "alveolar sounds"],
+      "prompting_hierarchy": ["tongue spot visual", "tap behind teeth"],
+      "script_parent": "Tap your tongue: t-t-tap. Tea, toe, two.",
+      "script_child": "Make the tapping sound! T-t-t!",
+      "visuals": ["tongue placement diagram"],
+      "success_criteria": "8/10",
+      "mastery_rule": "2 sessions",
+      "generalization": "two, top, ten",
+      "variants": [
+        { "context": "rhythm", "activity": "tapping rhythm game", "materials": "table or drum" },
+        { "context": "clock", "activity": "tick-tock clock", "materials": "clock picture" }
+      ]
+    },
+    {
+      "id": "f004",
+      "title": "D Drum Beats",
+      "age_band": "4–7",
+      "level": "beginner",
+      "domain": "articulation",
+      "target": "/d/ initial",
+      "outcome_tags": ["articulation", "voiced alveolar", "rhythm"],
+      "prompting_hierarchy": ["model", "light jaw support", "mirror"],
+      "script_parent": "Drum with d-d-d! do, da, dee",
+      "script_child": "Beat the drum! D-d-d!",
+      "visuals": ["drum", "mirror"],
+      "success_criteria": "8/10",
+      "mastery_rule": "2 sessions",
+      "generalization": "dog, door, doll",
+      "variants": [
+        { "context": "patterns", "activity": "name drum patterns", "materials": "drum or box" },
+        { "context": "doorbell", "activity": "ding-dong", "materials": "doorbell picture" }
+      ]
+    },
+    {
+      "id": "f005",
+      "title": "K Cookie Crunch",
+      "age_band": "4–8",
+      "level": "intermediate",
+      "domain": "articulation",
+      "target": "/k/ back sound initial",
+      "outcome_tags": ["articulation", "velar sounds", "back sounds"],
+      "prompting_hierarchy": ["tongue back cue", "cough start → /k/"],
+      "script_parent": "Crunch k-k-cookie. key, cat, cup",
+      "script_child": "Crunch like eating a cookie! K-k-k!",
+      "visuals": ["cookie image", "throat touch cue"],
+      "success_criteria": "7/10",
+      "mastery_rule": "3 sessions",
+      "generalization": "Final /k/: back, pack",
+      "variants": [
+        { "context": "minimal pairs", "activity": "cupcake vs cookie", "materials": "food pictures" }
+      ]
+    },
+    {
+      "id": "f006",
+      "title": "G Go Go!",
+      "age_band": "4–8",
+      "level": "intermediate",
+      "domain": "articulation",
+      "target": "/g/ initial",
+      "outcome_tags": ["articulation", "voiced velar", "back sounds"],
+      "prompting_hierarchy": ["back-of-tongue cue", "gulp to /g/"],
+      "script_parent": "Go g-g-go! game, gum, go",
+      "script_child": "Ready, set, G-g-go!",
+      "visuals": ["green go sign", "racing flag"],
+      "success_criteria": "7/10",
+      "mastery_rule": "3 sessions",
+      "generalization": "girl, get, good",
+      "variants": [
+        { "context": "color", "activity": "green go", "materials": "traffic light" },
+        { "context": "racing", "activity": "racing game", "materials": "toy cars" }
+      ]
+    },
+    {
+      "id": "f007",
+      "title": "S Snake Sound",
+      "age_band": "4–8",
+      "level": "intermediate",
+      "domain": "articulation",
+      "target": "/s/ initial; airflow",
+      "outcome_tags": ["articulation", "fricatives", "airflow"],
+      "prompting_hierarchy": ["smile cue", "straw for airflow", "fade"],
+      "script_parent": "Ssssnake. see, sun, soup",
+      "script_child": "Be a snake! Ssssss!",
+      "visuals": ["snake picture", "straw", "mirror"],
+      "success_criteria": "7/10",
+      "mastery_rule": "3 sessions",
+      "generalization": "sit, soap, sock",
+      "variants": [
+        { "context": "minimal pairs", "activity": "/s/ vs /th/", "materials": "picture pairs" }
+      ]
+    },
+    {
+      "id": "f008",
+      "title": "Z Zoom!",
+      "age_band": "5–9",
+      "level": "intermediate",
+      "domain": "articulation",
+      "target": "/z/ initial; voiced",
+      "outcome_tags": ["articulation", "voiced fricatives", "airflow"],
+      "prompting_hierarchy": ["hand on throat for buzz"],
+      "script_parent": "Zzz zoom. zoo, zero",
+      "script_child": "Make the buzzing sound! Zzzzz!",
+      "visuals": ["hand on throat", "bee picture"],
+      "success_criteria": "7/10",
+      "mastery_rule": "3 sessions",
+      "generalization": "zip, zebra, zap",
+      "variants": [
+        { "context": "car", "activity": "car race zooms", "materials": "toy cars" },
+        { "context": "bee", "activity": "bee buzz", "materials": "bee picture or toy" }
+      ]
+    },
+    {
+      "id": "f009",
+      "title": "R Rocket Ready",
+      "age_band": "6–10",
+      "level": "advanced",
+      "domain": "articulation",
+      "target": "/r/ initial; bunched or retroflex",
+      "outcome_tags": ["articulation", "r sound", "difficult sounds"],
+      "prompting_hierarchy": ["clinician-selected tongue posture", "mirror"],
+      "script_parent": "Rrr rocket. red, run, rain",
+      "script_child": "Rocket sound! Rrrrr!",
+      "visuals": ["mirror", "tongue diagram", "rocket picture"],
+      "success_criteria": "6/10",
+      "mastery_rule": "4 sessions",
+      "generalization": "read, room, rabbit",
+      "variants": [
+        { "context": "vocalic r", "activity": "er vs ar practice", "materials": "word cards" }
+      ]
+    },
+    {
+      "id": "f010",
+      "title": "L Lemon Licks",
+      "age_band": "4–9",
+      "level": "intermediate",
+      "domain": "articulation",
+      "target": "/l/ initial; tongue tip",
+      "outcome_tags": ["articulation", "liquid sounds", "tongue tip"],
+      "prompting_hierarchy": ["tongue to alveolar ridge"],
+      "script_parent": "L-l-lemon. look, lamp",
+      "script_child": "Lick a lemon! L-l-l!",
+      "visuals": ["lemon picture", "tongue up diagram"],
+      "success_criteria": "7/10",
+      "mastery_rule": "3 sessions",
+      "generalization": "like, leaf, lion",
+      "variants": [
+        { "context": "minimal pairs", "activity": "light, late minimal pairs", "materials": "picture cards" }
+      ]
+    },
+    {
+      "id": "f011",
+      "title": "Touch and Show",
+      "age_band": "2–6",
+      "level": "beginner",
+      "domain": "receptive",
+      "target": "1-step directions with common nouns",
+      "outcome_tags": ["receptive language", "following directions", "object identification"],
+      "prompting_hierarchy": ["model", "gesture", "fade"],
+      "script_parent": "Show me the cup. Touch the ball.",
+      "script_child": "Can you show me the cup?",
+      "visuals": ["3 images/objects"],
+      "success_criteria": "8/10",
+      "mastery_rule": "2 sessions",
+      "generalization": "At home with real objects",
+      "variants": [
+        { "command": "give me", "objects": ["cup", "ball", "book"], "difficulty": "beginner" }
+      ]
+    },
+    {
+      "id": "f012",
+      "title": "Big vs Small",
+      "age_band": "3–7",
+      "level": "beginner",
+      "domain": "receptive",
+      "target": "Size concepts",
+      "outcome_tags": ["concepts", "size", "categorization"],
+      "prompting_hierarchy": ["model", "gesture", "fade"],
+      "script_parent": "Find big. Find small.",
+      "script_child": "Which one is bigger?",
+      "visuals": ["big and small objects"],
+      "success_criteria": "8/10",
+      "mastery_rule": "2 sessions",
+      "generalization": "Compare real objects at home",
+      "variants": [
+        { "concepts": ["long/short"], "objects": ["pencils", "ribbons"] },
+        { "concepts": ["hot/cold"], "visuals": ["non-literal pictures"], "note": "teach with pictures not real hot/cold" }
+      ]
+    },
+    {
+      "id": "f013",
+      "title": "In/On/Under",
+      "age_band": "3–7",
+      "level": "beginner",
+      "domain": "receptive",
+      "target": "Spatial prepositions",
+      "outcome_tags": ["prepositions", "spatial concepts", "following directions"],
+      "prompting_hierarchy": ["full physical", "gesture", "verbal", "independent"],
+      "script_parent": "Put the bear in/on/under the box.",
+      "script_child": "Where should the bear go?",
+      "visuals": ["toy + box"],
+      "success_criteria": "7/10",
+      "mastery_rule": "3 sessions",
+      "generalization": "Practice with different objects and containers",
+      "variants": [
+        { "prepositions": ["behind", "next to"], "objects": ["toys", "furniture"] }
+      ]
+    },
+    {
+      "id": "f014",
+      "title": "Who? What? Where?",
+      "age_band": "4–8",
+      "level": "intermediate",
+      "domain": "receptive",
+      "target": "Wh comprehension",
+      "outcome_tags": ["wh-questions", "comprehension", "answering"],
+      "prompting_hierarchy": ["model answers", "partial prompt", "independent"],
+      "script_parent": "Short picture scene; ask 3 wh-Qs",
+      "script_child": "Who is that? What are they doing? Where are they?",
+      "visuals": ["picture scene cards"],
+      "success_criteria": "6/9",
+      "mastery_rule": "3 sessions",
+      "generalization": "Ask during book reading, TV watching",
+      "variants": [
+        { "questions": ["When?", "Why?"], "difficulty": "advanced", "add_later": true }
+      ]
+    },
+    {
+      "id": "f015",
+      "title": "Follow 2 Steps",
+      "age_band": "4–8",
+      "level": "intermediate",
+      "domain": "receptive",
+      "target": "2-step instructions",
+      "outcome_tags": ["following directions", "working memory", "sequencing"],
+      "prompting_hierarchy": ["break into steps", "gesture", "verbal", "independent"],
+      "script_parent": "Touch the hat then clap.",
+      "script_child": "Listen for two things to do!",
+      "visuals": ["visual sequence cards"],
+      "success_criteria": "7/10",
+      "mastery_rule": "3 sessions",
+      "generalization": "Daily routines, cleanup tasks",
+      "variants": [
+        { "type": "conditional", "format": "If... then...", "example": "If you're done, then put it away" }
+      ]
+    },
+    {
+      "id": "f016",
+      "title": "Function Match",
+      "age_band": "4–8",
+      "level": "intermediate",
+      "domain": "receptive",
+      "target": "Object functions",
+      "outcome_tags": ["concepts", "functions", "associations"],
+      "prompting_hierarchy": ["model", "gesture to choices", "fade"],
+      "script_parent": "Which one is for cutting?",
+      "script_child": "What do we use this for?",
+      "visuals": ["object pictures with functions"],
+      "success_criteria": "7/10",
+      "mastery_rule": "3 sessions",
+      "generalization": "Real objects around house and community",
+      "variants": [
+        { "category": "kitchen", "items": ["knife", "spoon", "cup"] },
+        { "category": "tools", "items": ["hammer", "scissors", "broom"] }
+      ]
+    },
+    {
+      "id": "f017",
+      "title": "Categories",
+      "age_band": "4–8",
+      "level": "intermediate",
+      "domain": "receptive",
+      "target": "Category sorting",
+      "outcome_tags": ["categorization", "concepts", "organization"],
+      "prompting_hierarchy": ["full physical", "gesture", "verbal", "independent"],
+      "script_parent": "Put fruits here, animals here.",
+      "script_child": "Sort these into groups!",
+      "visuals": ["sorting bins", "picture cards"],
+      "success_criteria": "8/10",
+      "mastery_rule": "2 sessions",
+      "generalization": "Sort toys, clothes, groceries",
+      "variants": [
+        { "categories": ["food", "toys"], "items": ["mix of both"] },
+        { "categories": ["vehicles", "animals"], "items": ["mix of both"] }
+      ]
+    },
+    {
+      "id": "f018",
+      "title": "Yes/No Accuracy",
+      "age_band": "3–7",
+      "level": "beginner",
+      "domain": "receptive",
+      "target": "Yes/no semantics",
+      "outcome_tags": ["yes/no", "comprehension", "answering"],
+      "prompting_hierarchy": ["model", "gesture (head nod/shake)", "fade"],
+      "script_parent": "Is a cat a fruit?",
+      "script_child": "Yes or no?",
+      "visuals": ["yes/no cards", "picture prompts"],
+      "success_criteria": "8/10",
+      "mastery_rule": "2 sessions",
+      "generalization": "Use throughout day with real questions",
+      "variants": [
+        { "type": "silly vs real", "examples": ["Is a banana blue?", "Do dogs fly?"] }
+      ]
+    },
+    {
+      "id": "f019",
+      "title": "Point to Body Parts",
+      "age_band": "2–5",
+      "level": "beginner",
+      "domain": "receptive",
+      "target": "Receptive body parts",
+      "outcome_tags": ["body parts", "vocabulary", "receptive language"],
+      "prompting_hierarchy": ["full physical", "gesture", "verbal", "independent"],
+      "script_parent": "Touch your nose! Show me your ears!",
+      "script_child": "Where's your nose?",
+      "visuals": ["mirror", "body parts poster"],
+      "success_criteria": "8/10",
+      "mastery_rule": "2 sessions",
+      "generalization": "During bath, dressing, looking in mirror",
+      "variants": [
+        { "body_parts": ["head", "shoulders", "knees", "toes"], "song": "use song" },
+        { "body_parts": ["eyes", "ears", "mouth", "nose"], "context": "face parts" }
+      ]
+    },
+    {
+      "id": "f020",
+      "title": "One-Step Routines",
+      "age_band": "2–5",
+      "level": "beginner",
+      "domain": "receptive",
+      "target": "Routine following (e.g., 'Put shoes by door')",
+      "outcome_tags": ["routines", "following directions", "independence"],
+      "prompting_hierarchy": ["full physical", "gesture", "verbal", "independent"],
+      "script_parent": "Put shoes by door. Hang coat up.",
+      "script_child": "Can you put your shoes there?",
+      "visuals": ["visual schedule", "photo of location"],
+      "success_criteria": "8/10",
+      "mastery_rule": "2 sessions",
+      "generalization": "All daily routines",
+      "variants": [
+        { "routine": "arrival", "steps": ["shoes by door", "backpack on hook", "wash hands"] },
+        { "routine": "bedtime", "steps": ["pajamas in drawer", "toothbrush in cup"] }
+      ]
+    },
+    {
+      "id": "f021",
+      "title": "Request with Words",
+      "age_band": "2–6",
+      "level": "beginner",
+      "domain": "expressive",
+      "target": "Mands/requests",
+      "outcome_tags": ["requesting", "functional communication", "manding"],
+      "prompting_hierarchy": ["model", "partial", "time delay"],
+      "script_parent": "Say: help me or I want cookie",
+      "script_child": "What do you want? Tell me!",
+      "visuals": ["preferred items"],
+      "success_criteria": "8/10 opportunities",
+      "mastery_rule": "3 sessions",
+      "generalization": "All day - any time child wants something",
+      "variants": [
+        { "format": "I want ___", "items": ["snacks", "toys"] },
+        { "format": "Help me", "context": "difficult tasks" },
+        { "format": "More please", "context": "activities/foods" }
+      ]
+    },
+    {
+      "id": "f022",
+      "title": "Imitation Words",
+      "age_band": "2–6",
+      "level": "beginner",
+      "domain": "expressive",
+      "target": "Echoics",
+      "outcome_tags": ["imitation", "echoics", "verbal imitation"],
+      "prompting_hierarchy": ["full model", "partial model", "sound cue", "independent"],
+      "script_parent": "Say: mama, ball, go, up, eat, more, help, no, yes, bye",
+      "script_child": "Say what I say!",
+      "visuals": ["object/action pictures for each word"],
+      "success_criteria": "8/10",
+      "mastery_rule": "3 sessions",
+      "generalization": "Practice in natural contexts with real objects",
+      "variants": [
+        { "word_type": "functional", "words": ["help", "more", "all done"] },
+        { "word_type": "social", "words": ["hi", "bye", "please", "thank you"] }
+      ]
+    },
+    {
+      "id": "f023",
+      "title": "Comment What You See",
+      "age_band": "3–7",
+      "level": "intermediate",
+      "domain": "expressive",
+      "target": "Tacts/labels",
+      "outcome_tags": ["labeling", "tacts", "vocabulary"],
+      "prompting_hierarchy": ["full model", "partial model", "sound cue", "independent"],
+      "script_parent": "Tell me what you see.",
+      "script_child": "What is this? What do you see?",
+      "visuals": ["varied picture cards or real objects"],
+      "success_criteria": "8 labels",
+      "mastery_rule": "3 sessions",
+      "generalization": "During play, walks, reading books",
+      "variants": [
+        { "context": "toys", "items": ["ball", "car", "doll", "blocks"] },
+        { "context": "food", "items": ["apple", "cookie", "juice"] },
+        { "context": "animals", "items": ["dog", "cat", "bird"] }
+      ]
+    },
+    {
+      "id": "f024",
+      "title": "Expand to 2-Word",
+      "age_band": "3–7",
+      "level": "intermediate",
+      "domain": "expressive",
+      "target": "MLU expansion",
+      "outcome_tags": ["syntax", "MLU", "phrase structure"],
+      "prompting_hierarchy": ["full model", "partial model", "first word cue", "independent"],
+      "script_parent": "dog → big dog",
+      "script_child": "Can you use two words?",
+      "visuals": ["object pictures"],
+      "success_criteria": "8/10",
+      "mastery_rule": "3 sessions",
+      "generalization": "During play and daily activities",
+      "variants": [
+        { "type": "adjective + noun", "examples": ["big ball", "red car", "soft blanket"] },
+        { "type": "noun + verb", "examples": ["baby crying", "dog running", "mommy cooking"] },
+        { "type": "pronoun + noun", "examples": ["my toy", "daddy's keys"] }
+      ]
+    },
+    {
+      "id": "f025",
+      "title": "Pronouns Me/You",
+      "age_band": "3–7",
+      "level": "intermediate",
+      "domain": "expressive",
+      "target": "Personal pronouns",
+      "outcome_tags": ["pronouns", "self-reference", "perspective"],
+      "prompting_hierarchy": ["full model", "partial model", "cue", "independent"],
+      "script_parent": "Who has the ball? I do/You do.",
+      "script_child": "Who has it? Say 'I do' or 'you do'!",
+      "visuals": ["objects to pass back and forth"],
+      "success_criteria": "7/10",
+      "mastery_rule": "3 sessions",
+      "generalization": "Throughout day in natural interactions",
+      "variants": [
+        { "format": "my/your", "context": "possession", "examples": ["my toy", "your turn"] },
+        { "format": "me/you", "context": "giving/receiving", "examples": ["give it to me", "I'll give it to you"] }
+      ]
+    },
+    {
+      "id": "f026",
+      "title": "Past/Present",
+      "age_band": "4–8",
+      "level": "intermediate",
+      "domain": "expressive",
+      "target": "Verb tense",
+      "outcome_tags": ["grammar", "tense", "verbs"],
+      "prompting_hierarchy": ["full model", "partial model", "cue", "independent"],
+      "script_parent": "He is jumping/He jumped.",
+      "script_child": "Tell me - is it happening now or already happened?",
+      "visuals": ["action pictures with time cues"],
+      "success_criteria": "7/10",
+      "mastery_rule": "3 sessions",
+      "generalization": "Describe events throughout day",
+      "variants": [
+        { "tense": "present progressive", "examples": ["is running", "is eating"] },
+        { "tense": "past tense", "examples": ["ran", "ate"] }
+      ]
+    },
+    {
+      "id": "f027",
+      "title": "Functions Speak",
+      "age_band": "4–8",
+      "level": "intermediate",
+      "domain": "expressive",
+      "target": "Expressive function knowledge",
+      "outcome_tags": ["functions", "vocabulary", "concepts"],
+      "prompting_hierarchy": ["full model", "partial model", "sound cue", "independent"],
+      "script_parent": "We ride a... We cut with...",
+      "script_child": "Finish my sentence! We eat with a ___",
+      "visuals": ["object pictures"],
+      "success_criteria": "8/10",
+      "mastery_rule": "2 sessions",
+      "generalization": "During daily activities and pretend play",
+      "variants": [
+        { "category": "kitchen", "prompts": ["We eat with a ___", "We drink from a ___"] },
+        { "category": "transportation", "prompts": ["We ride in a ___", "We fly in a ___"] },
+        { "category": "tools", "prompts": ["We cut with ___", "We brush with ___"] }
+      ]
+    },
+    {
+      "id": "f028",
+      "title": "WH Ask Back",
+      "age_band": "4–8",
+      "level": "intermediate",
+      "domain": "expressive",
+      "target": "Ask 3 wh questions about a picture",
+      "outcome_tags": ["asking questions", "conversation", "wh-questions"],
+      "prompting_hierarchy": ["full model", "partial model", "wh-word cue", "independent"],
+      "script_parent": "Look at this picture. Ask me questions! What? Who? Where?",
+      "script_child": "Ask me questions about what you see!",
+      "visuals": ["interesting picture scenes"],
+      "success_criteria": "Asks 2+ independently",
+      "mastery_rule": "3 sessions",
+      "generalization": "Encourage questions during books, outings, conversations",
+      "variants": [
+        { "picture_type": "action scene", "expected_questions": ["What is happening?", "Who is there?"] },
+        { "picture_type": "location", "expected_questions": ["Where are they?", "What do you see?"] }
+      ]
+    },
+    {
+      "id": "f029",
+      "title": "Sentence Starter",
+      "age_band": "4–8",
+      "level": "intermediate",
+      "domain": "expressive",
+      "target": "Sentence frames",
+      "outcome_tags": ["syntax", "sentence structure", "expressive language"],
+      "prompting_hierarchy": ["full model", "partial model", "starter only", "independent"],
+      "script_parent": "I need... I feel... because...",
+      "script_child": "Finish the sentence! I need ___",
+      "visuals": ["sentence starter cards"],
+      "success_criteria": "6/8",
+      "mastery_rule": "3 sessions",
+      "generalization": "Use throughout day for real needs and feelings",
+      "variants": [
+        { "frame": "I need ___", "context": "requesting help/items" },
+        { "frame": "I feel ___ because ___", "context": "emotion expression" },
+        { "frame": "I want to ___", "context": "activity choice" }
+      ]
+    },
+    {
+      "id": "f030",
+      "title": "Story Retell (Short)",
+      "age_band": "5–9",
+      "level": "advanced",
+      "domain": "expressive",
+      "target": "Narrative retell",
+      "outcome_tags": ["narrative", "sequencing", "complex language"],
+      "prompting_hierarchy": ["full model", "wh-prompts", "independent"],
+      "script_parent": "4-panel story; child retells key events",
+      "script_child": "Tell me what happened in the story!",
+      "visuals": ["4-panel picture sequence"],
+      "success_criteria": "Includes 3 of 4 events",
+      "mastery_rule": "3 sessions",
+      "generalization": "Retell books, movies, daily events",
+      "variants": [
+        { "story_type": "personal event", "prompts": ["First?", "Then?", "Last?"] },
+        { "story_type": "familiar book", "prompts": ["Beginning?", "Middle?", "End?"] }
+      ]
+    },
+    {
+      "id": "f031",
+      "title": "Eye-Look + Point",
+      "age_band": "2–6",
+      "level": "beginner",
+      "domain": "pragmatics",
+      "target": "Joint attention; point + look",
+      "outcome_tags": ["joint attention", "pointing", "eye contact"],
+      "prompting_hierarchy": ["full physical", "gesture", "verbal", "independent"],
+      "script_parent": "Show me with your finger then look at me.",
+      "script_child": "Point to it and look!",
+      "visuals": ["interesting objects or pictures"],
+      "success_criteria": "8/10",
+      "mastery_rule": "3 sessions",
+      "generalization": "Point out things during walks, in books",
+      "variants": [
+        { "context": "requesting", "action": "point to wanted item + look at adult" },
+        { "context": "sharing attention", "action": "point to interesting thing + check if adult is looking" }
+      ]
+    },
+    {
+      "id": "f032",
+      "title": "Take Turns",
+      "age_band": "3–7",
+      "level": "beginner",
+      "domain": "pragmatics",
+      "target": "Turn-taking",
+      "outcome_tags": ["turn-taking", "social skills", "play skills"],
+      "prompting_hierarchy": ["full physical", "gesture", "verbal", "independent"],
+      "script_parent": "My turn/Your turn with tokens",
+      "script_child": "My turn! Now your turn!",
+      "visuals": ["my turn/your turn cards", "tokens or chips"],
+      "success_criteria": "2 turn cycles x 3",
+      "mastery_rule": "3 sessions",
+      "generalization": "Board games, playground, sharing toys",
+      "variants": [
+        { "activity": "rolling ball", "turns": "back and forth" },
+        { "activity": "building blocks", "turns": "add one each" },
+        { "activity": "coloring", "turns": "trade crayon" }
+      ]
+    },
+    {
+      "id": "f033",
+      "title": "Greetings",
+      "age_band": "3–7",
+      "level": "beginner",
+      "domain": "pragmatics",
+      "target": "Social greetings",
+      "outcome_tags": ["greetings", "social skills", "manners"],
+      "prompting_hierarchy": ["full model", "partial model", "gesture", "independent"],
+      "script_parent": "Hi, [Name]! + wave",
+      "script_child": "Say hi and wave!",
+      "visuals": ["hi card", "waving hand visual"],
+      "success_criteria": "8/10",
+      "mastery_rule": "2 sessions",
+      "generalization": "When people arrive, video calls, community",
+      "variants": [
+        { "greeting": "hi", "gesture": "wave", "context": "arrival" },
+        { "greeting": "good morning", "gesture": "smile", "context": "morning routine" },
+        { "greeting": "goodbye", "gesture": "wave", "context": "departure" }
+      ]
+    },
+    {
+      "id": "f034",
+      "title": "Request Help Politely",
+      "age_band": "3–7",
+      "level": "intermediate",
+      "domain": "pragmatics",
+      "target": "Polite help requests",
+      "outcome_tags": ["requesting help", "manners", "functional communication"],
+      "prompting_hierarchy": ["full model", "partial model", "first word", "independent"],
+      "script_parent": "Can you help me please?",
+      "script_child": "Ask for help nicely!",
+      "visuals": ["help card", "please card"],
+      "success_criteria": "5 independent uses/week",
+      "mastery_rule": "2 weeks",
+      "generalization": "When stuck, need assistance, can't reach something",
+      "variants": [
+        { "format": "Help me please", "context": "immediate need" },
+        { "format": "Can you help?", "context": "polite request" },
+        { "format": "I need help with ___", "context": "specific task" }
+      ]
+    },
+    {
+      "id": "f035",
+      "title": "Waiting Game",
+      "age_band": "3–8",
+      "level": "intermediate",
+      "domain": "pragmatics",
+      "target": "Waiting/delayed gratification",
+      "outcome_tags": ["waiting", "self-control", "delayed gratification"],
+      "prompting_hierarchy": ["hold hands", "redirect", "verbal", "independent"],
+      "script_parent": "Timer 10-30s; We wait; then we play.",
+      "script_child": "Can you wait for the timer?",
+      "visuals": ["visual timer", "wait card"],
+      "success_criteria": "Meets target times",
+      "mastery_rule": "3 sessions",
+      "generalization": "Before preferred activities, snack time, transitions",
+      "variants": [
+        { "duration": "10 seconds", "reward": "immediate play" },
+        { "duration": "30 seconds", "reward": "preferred snack" },
+        { "duration": "1 minute", "reward": "screen time" }
+      ]
+    },
+    {
+      "id": "f036",
+      "title": "Perspective Peek",
+      "age_band": "5–9",
+      "level": "intermediate",
+      "domain": "pragmatics",
+      "target": "Theory of mind/perspective-taking",
+      "outcome_tags": ["theory of mind", "emotions", "perspective-taking"],
+      "prompting_hierarchy": ["point to cues", "ask yes/no", "independent"],
+      "script_parent": "How does she feel? Why?",
+      "script_child": "How do you think they feel?",
+      "visuals": ["emotion pictures", "social scenarios"],
+      "success_criteria": "6/8 correct",
+      "mastery_rule": "3 sessions",
+      "generalization": "During books, TV, real social situations",
+      "variants": [
+        { "skill": "emotion recognition", "prompt": "How does he feel?" },
+        { "skill": "cause understanding", "prompt": "Why does she feel that way?" },
+        { "skill": "prediction", "prompt": "What will happen next?" }
+      ]
+    },
+    {
+      "id": "f037",
+      "title": "Conversation Sandwich",
+      "age_band": "6–10",
+      "level": "advanced",
+      "domain": "pragmatics",
+      "target": "Comment-question-comment pattern",
+      "outcome_tags": ["conversation", "social reciprocity", "topic maintenance"],
+      "prompting_hierarchy": ["full model", "prompt each part", "independent"],
+      "script_parent": "Comment-question-comment pattern",
+      "script_child": "Say something, ask something, say something!",
+      "visuals": ["conversation pattern card"],
+      "success_criteria": "2 cycles",
+      "mastery_rule": "3 sessions",
+      "generalization": "Peer conversations, family meals",
+      "variants": [
+        { "topic": "toys", "example": "I like LEGOs. What do you like? LEGOs are fun!" },
+        { "topic": "school", "example": "Math is hard. Do you like math? I wish it was easier." }
+      ]
+    },
+    {
+      "id": "f038",
+      "title": "Repair Strategy",
+      "age_band": "6–10",
+      "level": "advanced",
+      "domain": "pragmatics",
+      "target": "Conversation repair",
+      "outcome_tags": ["repair", "clarification", "conversation skills"],
+      "prompting_hierarchy": ["full model", "partial model", "cue", "independent"],
+      "script_parent": "I didn't catch that—say it again?",
+      "script_child": "If you don't understand, ask them to repeat!",
+      "visuals": ["repair strategy cards"],
+      "success_criteria": "Uses repair 3 times/week",
+      "mastery_rule": "2 weeks",
+      "generalization": "All conversations when confused",
+      "variants": [
+        { "strategy": "repeat request", "phrase": "What did you say?" },
+        { "strategy": "clarification", "phrase": "I didn't hear you" },
+        { "strategy": "specific", "phrase": "Can you say that again?" }
+      ]
+    },
+    {
+      "id": "f039",
+      "title": "60-Second Reset",
+      "age_band": "3–10",
+      "level": "all",
+      "domain": "regulation",
+      "target": "Quick calming routine",
+      "outcome_tags": ["self-regulation", "calming", "coping"],
+      "prompting_hierarchy": ["full physical", "gesture", "verbal", "independent"],
+      "script_parent": "Breathe in 3, out 4; squeeze/relax",
+      "script_child": "Let's reset your body together!",
+      "visuals": ["breathing visual", "squeeze/relax images"],
+      "success_criteria": "Completes sequence; latency to calm < 60s",
+      "mastery_rule": "Can complete routine consistently",
+      "generalization": "Before transitions, after upset, anytime needed",
+      "variants": [
+        { "technique": "belly breathing", "count": "4 breaths" },
+        { "technique": "progressive muscle relaxation", "focus": "hands and shoulders" },
+        { "technique": "combined", "sequence": "breathe + squeeze + breathe" }
+      ]
+    },
+    {
+      "id": "f040",
+      "title": "Feelings Check",
+      "age_band": "3–10",
+      "level": "all",
+      "domain": "regulation",
+      "target": "Identify feelings and choose coping",
+      "outcome_tags": ["emotional awareness", "self-monitoring", "coping"],
+      "prompting_hierarchy": ["offer 2 choices", "offer 3 choices", "independent"],
+      "script_parent": "Choose chip: Great/Okay/Tough, pick coping",
+      "script_child": "How are you feeling? Pick what helps!",
+      "visuals": ["feelings chips", "coping strategy menu"],
+      "success_criteria": "Selects and tries 1 strategy",
+      "mastery_rule": "Can identify feeling and choose coping",
+      "generalization": "Check-ins throughout day",
+      "variants": [
+        { "feelings": ["great", "okay", "tough"], "simple": true },
+        { "feelings": ["happy", "calm", "worried", "upset"], "expanded": true },
+        { "feelings": "emotion wheel", "advanced": true }
+      ]
+    },
+    {
+      "id": "f041",
+      "title": "Turtle Shell",
+      "age_band": "3–8",
+      "level": "beginner",
+      "domain": "regulation",
+      "target": "Calming body position",
+      "outcome_tags": ["self-regulation", "calming", "body awareness"],
+      "prompting_hierarchy": ["full physical", "gesture", "verbal", "independent"],
+      "script_parent": "Arms in, head down, breathe",
+      "script_child": "Make your turtle shell!",
+      "visuals": ["turtle picture", "child demonstrating"],
+      "success_criteria": "After 2 cues → independent",
+      "mastery_rule": "3 sessions",
+      "generalization": "When overwhelmed, before transitions",
+      "variants": [
+        { "name": "turtle shell", "position": "seated" },
+        { "name": "cozy ball", "position": "on floor" },
+        { "name": "quiet cave", "position": "under table/blanket" }
+      ]
+    },
+    {
+      "id": "f042",
+      "title": "Five Senses Scan",
+      "age_band": "4–10",
+      "level": "intermediate",
+      "domain": "regulation",
+      "target": "Grounding technique",
+      "outcome_tags": ["grounding", "mindfulness", "anxiety reduction"],
+      "prompting_hierarchy": ["prompt each sense", "partial prompts", "independent"],
+      "script_parent": "5 see, 4 feel, 3 hear, 2 smell, 1 taste",
+      "script_child": "Let's notice what's around us!",
+      "visuals": ["5 senses poster", "counting card"],
+      "success_criteria": "Completes technique",
+      "mastery_rule": "2 sessions",
+      "generalization": "During anxiety, panic, overwhelm",
+      "variants": [
+        { "version": "full 5-4-3-2-1", "use": "high anxiety" },
+        { "version": "3-2-1 abbreviated", "use": "mild stress" },
+        { "version": "5 things I see", "use": "quick grounding" }
+      ]
+    },
+    {
+      "id": "f043",
+      "title": "Visual Timer Transition",
+      "age_band": "3–8",
+      "level": "beginner",
+      "domain": "regulation",
+      "target": "Using timer for transitions",
+      "outcome_tags": ["transitions", "time awareness", "compliance"],
+      "prompting_hierarchy": ["adult sets timer", "child watches", "child responds", "independent"],
+      "script_parent": "2-min timer + when it's done, we switch",
+      "script_child": "When the timer is done, time to switch!",
+      "visuals": ["visual timer", "first-then card"],
+      "success_criteria": "Transitions with 0-1 prompt",
+      "mastery_rule": "3 sessions",
+      "generalization": "Screen time, play time, any transitions",
+      "variants": [
+        { "duration": "2 minutes", "activity": "high-preference" },
+        { "duration": "5 minutes", "activity": "moderate preference" },
+        { "duration": "1 minute", "activity": "warning only" }
+      ]
+    },
+    {
+      "id": "f044",
+      "title": "Music Reset",
+      "age_band": "3–10",
+      "level": "all",
+      "domain": "regulation",
+      "target": "Using music to regulate",
+      "outcome_tags": ["self-regulation", "sensory", "calming"],
+      "prompting_hierarchy": ["adult selects", "child chooses from 2", "child chooses independently"],
+      "script_parent": "Pick calming track; sway + breathe",
+      "script_child": "Pick your calm music!",
+      "visuals": ["music options with pictures", "movement cards"],
+      "success_criteria": "HR/latency proxy improves",
+      "mastery_rule": "Child uses music as coping strategy",
+      "generalization": "Car rides, bedtime, calm corner, transitions",
+      "variants": [
+        { "type": "classical", "activity": "sway gently" },
+        { "type": "nature sounds", "activity": "breathe with sounds" },
+        { "type": "favorite calm song", "activity": "sing along quietly" }
+      ]
+    },
+    {
+      "id": "f045",
+      "title": "Ask for Break",
+      "age_band": "3–8",
+      "level": "beginner",
+      "domain": "regulation",
+      "target": "Requesting break",
+      "outcome_tags": ["self-advocacy", "communication", "prevention"],
+      "prompting_hierarchy": ["full model", "partial model", "gesture", "independent"],
+      "script_parent": "I need a break.",
+      "script_child": "You can ask for a break when you need one!",
+      "visuals": ["break card", "stop hand"],
+      "success_criteria": "4 uses/week",
+      "mastery_rule": "2 weeks",
+      "generalization": "During work, play, any overwhelming situation",
+      "variants": [
+        { "phrase": "I need a break", "level": "full sentence" },
+        { "phrase": "Break please", "level": "simplified" },
+        { "gesture": "break card", "level": "non-verbal" }
+      ]
+    },
+    {
+      "id": "f046",
+      "title": "First-Then Board",
+      "age_band": "3–8",
+      "level": "beginner",
+      "domain": "regulation",
+      "target": "Delayed gratification with visual support",
+      "outcome_tags": ["waiting", "visual supports", "transitions"],
+      "prompting_hierarchy": ["full physical", "gesture to board", "verbal", "independent"],
+      "script_parent": "First clean up, then puzzle",
+      "script_child": "First this, then that!",
+      "visuals": ["first-then board", "activity pictures"],
+      "success_criteria": "Completes 3 cycles",
+      "mastery_rule": "3 sessions",
+      "generalization": "All transitions throughout day",
+      "variants": [
+        { "first": "work task", "then": "preferred activity" },
+        { "first": "non-preferred food", "then": "preferred food" },
+        { "first": "get dressed", "then": "play" }
+      ]
+    },
+    {
+      "id": "f047",
+      "title": "Morning Steps",
+      "age_band": "3–8",
+      "level": "beginner",
+      "domain": "routines",
+      "target": "Morning routine completion",
+      "outcome_tags": ["routines", "independence", "sequencing"],
+      "prompting_hierarchy": ["full physical", "gesture to schedule", "verbal", "independent"],
+      "script_parent": "2-4 steps; token for completion",
+      "script_child": "Follow your morning routine!",
+      "visuals": ["visual schedule", "checkboxes", "token board"],
+      "success_criteria": "Completes in time",
+      "mastery_rule": "3 sessions",
+      "generalization": "Every morning",
+      "variants": [
+        { "steps": ["get dressed", "eat breakfast", "brush teeth", "pack bag"] },
+        { "steps": ["potty", "get dressed", "breakfast"], "simplified": true },
+        { "steps": ["wake up", "get dressed", "eat", "shoes on", "backpack"], "expanded": true }
+      ]
+    },
+    {
+      "id": "f048",
+      "title": "Backpack Ready",
+      "age_band": "4–9",
+      "level": "beginner",
+      "domain": "routines",
+      "target": "Packing backpack independently",
+      "outcome_tags": ["independence", "organization", "routines"],
+      "prompting_hierarchy": ["hand-over-hand", "gesture to checklist", "verbal", "independent"],
+      "script_parent": "Folder, bottle, snack—check!",
+      "script_child": "Pack your backpack with everything you need!",
+      "visuals": ["backpack checklist", "item pictures"],
+      "success_criteria": "3/3 items",
+      "mastery_rule": "3 sessions",
+      "generalization": "Every school morning",
+      "variants": [
+        { "items": ["folder", "water bottle", "snack"], "basic": true },
+        { "items": ["homework", "lunch", "jacket", "library book"], "expanded": true },
+        { "items": ["permission slip", "show-and-tell item", "lunch"], "special_day": true }
+      ]
+    },
+    {
+      "id": "f049",
+      "title": "Hand Wash Hero",
+      "age_band": "3–8",
+      "level": "beginner",
+      "domain": "routines",
+      "target": "Hand washing routine",
+      "outcome_tags": ["hygiene", "self-care", "health"],
+      "prompting_hierarchy": ["hand-over-hand", "gesture", "verbal", "independent"],
+      "script_parent": "Wet-soap-scrub 20s-rinse-dry",
+      "script_child": "Let's wash hands like a hero!",
+      "visuals": ["handwashing steps poster", "timer"],
+      "success_criteria": "5/6 steps",
+      "mastery_rule": "3 sessions",
+      "generalization": "Before meals, after bathroom, after messy play",
+      "variants": [
+        { "context": "school", "duration": "20 seconds with song" },
+        { "context": "home", "duration": "count to 20" },
+        { "context": "quick", "steps": ["wet", "soap", "rinse", "dry"], "simplified": true }
+      ]
+    },
+    {
+      "id": "f050",
+      "title": "Toothbrush Tune",
+      "age_band": "3–8",
+      "level": "beginner",
+      "domain": "routines",
+      "target": "Tooth brushing routine",
+      "outcome_tags": ["hygiene", "self-care", "dental health"],
+      "prompting_hierarchy": ["hand-over-hand", "gesture", "verbal", "independent"],
+      "script_parent": "2-min song; brush zones",
+      "script_child": "Brush all your teeth while the song plays!",
+      "visuals": ["tooth brushing zones diagram", "timer/song"],
+      "success_criteria": "Completes 5/7 nights",
+      "mastery_rule": "2 weeks",
+      "generalization": "Morning and night brushing",
+      "variants": [
+        { "method": "song", "duration": "2 minutes", "zones": ["top", "bottom", "front", "back"] },
+        { "method": "timer", "duration": "2 minutes", "zones": "circular motions" },
+        { "method": "electric brush", "duration": "built-in timer", "zones": "quadrants" }
+      ]
+    },
+    {
+      "id": "f051",
+      "title": "Dressed in Two",
+      "age_band": "3–7",
+      "level": "beginner",
+      "domain": "routines",
+      "target": "Getting dressed independently",
+      "outcome_tags": ["self-care", "independence", "ADLs"],
+      "prompting_hierarchy": ["hand-over-hand", "partial physical", "verbal", "independent"],
+      "script_parent": "Pick 2 easy garments",
+      "script_child": "Can you put on your shirt and pants?",
+      "visuals": ["clothing items", "dressing steps"],
+      "success_criteria": "Independent with 1 prompt",
+      "mastery_rule": "3 sessions",
+      "generalization": "Every morning, after bath",
+      "variants": [
+        { "garments": ["shirt", "elastic pants"], "easy": true },
+        { "garments": ["pullover", "shorts"], "warm_weather": true },
+        { "garments": ["sweatshirt", "sweatpants"], "easiest": true }
+      ]
+    },
+    {
+      "id": "f052",
+      "title": "Table Time (Short)",
+      "age_band": "4–8",
+      "level": "beginner",
+      "domain": "routines",
+      "target": "Sitting at table for activity",
+      "outcome_tags": ["sitting", "attention", "compliance"],
+      "prompting_hierarchy": ["physical guide", "gesture", "verbal", "independent"],
+      "script_parent": "3-minute sit + activity",
+      "script_child": "Let's sit at the table together!",
+      "visuals": ["visual timer", "activity choices"],
+      "success_criteria": "No elope",
+      "mastery_rule": "3 sessions",
+      "generalization": "Meals, homework, crafts",
+      "variants": [
+        { "duration": "2 minutes", "activity": "simple task" },
+        { "duration": "3 minutes", "activity": "preferred activity" },
+        { "duration": "5 minutes", "activity": "meal time" }
+      ]
+    },
+    {
+      "id": "f053",
+      "title": "Cleanup Race",
+      "age_band": "3–8",
+      "level": "beginner",
+      "domain": "routines",
+      "target": "Cleaning up quickly with timer",
+      "outcome_tags": ["chores", "routines", "compliance"],
+      "prompting_hierarchy": ["hand-over-hand", "gesture", "verbal", "independent"],
+      "script_parent": "Beat the timer 2 min",
+      "script_child": "Let's race to clean up!",
+      "visuals": ["visual timer", "clean room picture"],
+      "success_criteria": "Room zone cleared",
+      "mastery_rule": "3 sessions",
+      "generalization": "After play, before transitions",
+      "variants": [
+        { "game": "beat the timer", "duration": "2 minutes" },
+        { "game": "counting game", "challenge": "pick up 10 things" },
+        { "game": "sorting race", "challenge": "all blocks in bin" }
+      ]
+    },
+    {
+      "id": "f054",
+      "title": "Snack Request Board",
+      "age_band": "3–8",
+      "level": "beginner",
+      "domain": "routines",
+      "target": "Requesting snack appropriately",
+      "outcome_tags": ["requesting", "functional communication", "choice-making"],
+      "prompting_hierarchy": ["model", "partial model", "gesture", "independent"],
+      "script_parent": "Choose snack; state preference",
+      "script_child": "What snack do you want? Ask nicely!",
+      "visuals": ["snack choice board with pictures"],
+      "success_criteria": "I want... please",
+      "mastery_rule": "3 sessions",
+      "generalization": "All snack times",
+      "variants": [
+        { "format": "I want ___ please", "snacks": ["crackers", "fruit", "yogurt"] },
+        { "format": "Can I have ___?", "snacks": "child's preferences" },
+        { "format": "point + word", "simplified": true }
+      ]
+    },
+    {
+      "id": "f055",
+      "title": "Sound Hunt",
+      "age_band": "4–8",
+      "level": "intermediate",
+      "domain": "literacy",
+      "target": "Initial phoneme identification",
+      "outcome_tags": ["phonological awareness", "letter sounds", "pre-reading"],
+      "prompting_hierarchy": ["model examples", "partial prompt", "independent"],
+      "script_parent": "Find things that start with /s/",
+      "script_child": "What starts with the /s/ sound?",
+      "visuals": ["picture cards", "objects around room"],
+      "success_criteria": "5 items",
+      "mastery_rule": "2 sessions",
+      "generalization": "During walks, in books, around house",
+      "variants": [
+        { "sound": "/m/", "items": ["milk", "mouse", "moon"] },
+        { "sound": "/b/", "items": ["ball", "book", "bed"] },
+        { "sound": "/t/", "items": ["toy", "table", "tv"] }
+      ]
+    },
+    {
+      "id": "f056",
+      "title": "Rhyming Pairs",
+      "age_band": "4–8",
+      "level": "intermediate",
+      "domain": "literacy",
+      "target": "Rhyme recognition",
+      "outcome_tags": ["phonological awareness", "rhyming", "pre-reading"],
+      "prompting_hierarchy": ["emphasize rhyming part", "offer 2 choices", "independent"],
+      "script_parent": "Cat—what rhymes?",
+      "script_child": "What sounds like cat?",
+      "visuals": ["rhyming picture cards"],
+      "success_criteria": "6/8",
+      "mastery_rule": "3 sessions",
+      "generalization": "During books, nursery rhymes, making up silly rhymes",
+      "variants": [
+        { "word_family": "-at", "words": ["cat", "bat", "hat", "mat"] },
+        { "word_family": "-an", "words": ["can", "man", "fan", "pan"] },
+        { "word_family": "-op", "words": ["hop", "mop", "top", "pop"] }
+      ]
+    },
+    {
+      "id": "f057",
+      "title": "Syllable Clap",
+      "age_band": "4–8",
+      "level": "beginner",
+      "domain": "literacy",
+      "target": "Syllable segmentation",
+      "outcome_tags": ["phonological awareness", "syllables", "rhythm"],
+      "prompting_hierarchy": ["model with claps", "clap together", "child alone"],
+      "script_parent": "Clap parts of words",
+      "script_child": "Let's clap the word! Ta-ble (clap-clap)",
+      "visuals": ["picture cards", "hands for clapping"],
+      "success_criteria": "8/10",
+      "mastery_rule": "2 sessions",
+      "generalization": "Clap names, objects, anything!",
+      "variants": [
+        { "words": "1 syllable", "examples": ["cat", "dog", "ball"] },
+        { "words": "2 syllables", "examples": ["table", "happy", "running"] },
+        { "words": "3 syllables", "examples": ["elephant", "banana", "computer"] }
+      ]
+    },
+    {
+      "id": "f058",
+      "title": "Working Memory 2",
+      "age_band": "5–9",
+      "level": "intermediate",
+      "domain": "executive_function",
+      "target": "Remember and recall 2 items",
+      "outcome_tags": ["working memory", "attention", "recall"],
+      "prompting_hierarchy": ["show both items", "review once", "test recall"],
+      "script_parent": "Remember 2 items; recall",
+      "script_child": "I'm going to tell you 2 things - can you remember?",
+      "visuals": ["picture cards for items"],
+      "success_criteria": "6/8",
+      "mastery_rule": "3 sessions",
+      "generalization": "Errands (get 2 things), following multi-step directions",
+      "variants": [
+        { "items": "objects", "recall": "name them" },
+        { "items": "actions", "recall": "do them in order" },
+        { "items": "numbers", "recall": "repeat back" }
+      ]
+    },
+    {
+      "id": "f059",
+      "title": "Flex Switch",
+      "age_band": "5–9",
+      "level": "intermediate",
+      "domain": "executive_function",
+      "target": "Cognitive flexibility",
+      "outcome_tags": ["cognitive flexibility", "set-shifting", "executive function"],
+      "prompting_hierarchy": ["model switch", "verbal cue", "independent"],
+      "script_parent": "Sort by color—switch—now by shape",
+      "script_child": "Now we're sorting a different way!",
+      "visuals": ["sorting bins", "color and shape cards"],
+      "success_criteria": "Switches with ≤1 prompt",
+      "mastery_rule": "3 sessions",
+      "generalization": "Games, categorizing tasks, flexible thinking",
+      "variants": [
+        { "sort_1": "color", "sort_2": "size" },
+        { "sort_1": "shape", "sort_2": "color" },
+        { "sort_1": "type", "sort_2": "function" }
+      ]
+    },
+    {
+      "id": "f060",
+      "title": "Plan the Day (Kid)",
+      "age_band": "5–10",
+      "level": "intermediate",
+      "domain": "executive_function",
+      "target": "Planning and choice-making",
+      "outcome_tags": ["planning", "choice-making", "executive function"],
+      "prompting_hierarchy": ["offer all choices", "limit to 3 choices", "independent"],
+      "script_parent": "Pick 1 fun, 1 helpful, 1 calm activity",
+      "script_child": "What do you want to do today? Pick 3 things!",
+      "visuals": ["activity choice board", "daily schedule template"],
+      "success_criteria": "Completes chosen activities",
+      "mastery_rule": "2 weeks",
+      "generalization": "Weekend planning, after-school routine",
+      "variants": [
+        { "categories": ["fun", "helpful", "calm"], "full_version": true },
+        { "categories": ["inside", "outside"], "simplified": true },
+        { "categories": ["active", "quiet", "creative"], "alternative": true }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support Footer Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            background: #f5f5f5;
+        }
+        
+        .content {
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 100px;
+        }
+        
+        #support-footer-slot {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 25;
+            pointer-events: none;
+            display: flex;
+            justify-content: center;
+            padding: 0 16px;
+            margin-bottom: env(safe-area-inset-bottom, 0px);
+        }
+        
+        .support-footer-button {
+            pointer-events: auto;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            padding: 8px 16px;
+            color: #64748b;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            backdrop-filter: blur(8px);
+        }
+        
+        .support-footer-button:hover {
+            color: #0891b2;
+            background: rgba(255, 255, 255, 0.98);
+            border-color: rgba(8, 145, 178, 0.3);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(8, 145, 178, 0.08);
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <h1>Support Footer Test</h1>
+        <p>This is a test page to verify the Support Footer Link component.</p>
+        <p>The support footer should appear at the bottom of the page using a React Portal.</p>
+        <p>Only one instance should be rendered across the entire app.</p>
+        
+        <h2>Guard Test</h2>
+        <p>The global guard prevents multiple instances from rendering simultaneously.</p>
+        
+        <h3>Modal Detection Test</h3>
+        <button onclick="showModal()">Show Modal (should hide footer)</button>
+        <button onclick="hideModal()">Hide Modal (should show footer)</button>
+        
+        <div id="test-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 50; align-items: center; justify-content: center;">
+            <div style="background: white; padding: 20px; border-radius: 8px;">
+                <h3>Test Modal</h3>
+                <p>The support footer should be hidden while this modal is open.</p>
+                <button onclick="hideModal()">Close</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Portal target - this will be created by SupportFooterLink if it doesn't exist -->
+    <!-- <div id="support-footer-slot"></div> -->
+    
+    <script>
+        function showModal() {
+            const modal = document.getElementById('test-modal');
+            modal.style.display = 'flex';
+            modal.setAttribute('role', 'dialog');
+            modal.setAttribute('aria-modal', 'true');
+        }
+        
+        function hideModal() {
+            const modal = document.getElementById('test-modal');
+            modal.style.display = 'none';
+            modal.removeAttribute('role');
+            modal.removeAttribute('aria-modal');
+        }
+        
+        // Test portal target creation
+        console.log('Portal target exists:', !!document.getElementById('support-footer-slot'));
+        
+        // Simulate the button creation (normally done by React)
+        function createTestButton() {
+            const slot = document.getElementById('support-footer-slot') || createPortalTarget();
+            
+            const button = document.createElement('button');
+            button.className = 'support-footer-button';
+            button.innerHTML = `
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M9,9h6v6a3,3 0 0,1-6,0V9z"/>
+                </svg>
+                Support & Safety
+            `;
+            button.onclick = () => alert('Support & Safety clicked!');
+            
+            slot.innerHTML = '';
+            slot.appendChild(button);
+        }
+        
+        function createPortalTarget() {
+            const target = document.createElement('div');
+            target.id = 'support-footer-slot';
+            target.style.cssText = `
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                z-index: 25;
+                pointer-events: none;
+                display: flex;
+                justify-content: center;
+                padding: 0 16px;
+                margin-bottom: env(safe-area-inset-bottom, 0px);
+            `;
+            document.body.appendChild(target);
+            return target;
+        }
+        
+        // Test the button creation
+        createTestButton();
+        
+        console.log('Support Footer Test initialized');
+    </script>
+</body>
+</html>

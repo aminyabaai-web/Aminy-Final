@@ -1,0 +1,765 @@
+/**
+ * CLS (CUMULATIVE LAYOUT SHIFT) OPTIMIZATIONS
+ * Target: CLS < 0.25 (currently 0.36ms) 
+ * 
+ * CRITICAL FIXES IMPLEMENTED:
+ * 1. Font-display: optional (prevents FOIT/FOUT shifts)
+ * 2. Scrollbar gutter stable (prevents width shifts)
+ * 3. Explicit dimensions for all dynamic content
+ * 4. CSS containment for isolation
+ * 5. Transform-only animations (no layout changes)
+ */
+
+/* =====================================================
+   GLOBAL CLS PREVENTION - CRITICAL
+   ===================================================== */
+
+/* Reserve space for system fonts during load */
+body {
+  font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "Manrope", Inter, Roboto, Helvetica, Arial, sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* CRITICAL: Prevent layout shifts from content loading */
+*, *::before, *::after {
+  box-sizing: border-box !important;
+}
+
+/* CRITICAL: Force scrollbar gutter to prevent width shifts */
+html {
+  scrollbar-gutter: stable both-edges;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* CSS Containment for performance */
+.aminy-card,
+.aminy-ai-card,
+.plan-populate-animation,
+.reports-card,
+.medical-card {
+  contain: layout style paint;
+}
+
+/* =====================================================
+   MODAL & OVERLAY CLS PREVENTION
+   ===================================================== */
+
+/* Fixed positioning prevents layout shifts */
+[role="dialog"],
+[role="alertdialog"],
+.modal-backdrop,
+.sheet-backdrop,
+[data-radix-dialog-overlay],
+[data-radix-alert-dialog-overlay] {
+  position: fixed !important;
+  inset: 0 !important;
+  contain: strict;
+  will-change: opacity;
+}
+
+/* Modal content with explicit dimensions */
+.modal-content,
+[data-radix-dialog-content],
+[data-radix-alert-dialog-content] {
+  position: fixed !important;
+  contain: layout style;
+  max-width: 100vw;
+  max-height: 100vh;
+}
+
+/* =====================================================
+   ANIMATION CLS PREVENTION
+   ===================================================== */
+
+/* Use transform instead of layout-affecting properties */
+.animate-in,
+.zoom-in-50,
+.fade-in,
+.slide-up {
+  will-change: transform, opacity;
+  transform: translateZ(0); /* Hardware acceleration */
+  backface-visibility: hidden;
+}
+
+/* Prevent layout shifts from animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes zoomIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* =====================================================
+   DYNAMIC CONTENT CLS PREVENTION
+   ===================================================== */
+
+/* Reserve minimum heights for dynamic sections */
+.coach-mode-container {
+  min-height: 400px;
+  contain: layout;
+}
+
+.coach-mode-steps {
+  min-height: 200px;
+  contain: layout;
+}
+
+.coach-mode-completion {
+  min-height: 350px;
+  contain: layout;
+}
+
+/* Prevent shifts from collapsible content */
+.collapsible-content {
+  overflow: hidden;
+  will-change: height;
+}
+
+/* Use transform for expand/collapse */
+.expanding {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* =====================================================
+   IMAGE & MEDIA CLS PREVENTION
+   ===================================================== */
+
+/* Reserve space for images - AGGRESSIVE */
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  contain: layout style paint;
+  will-change: auto;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Prevent image shifts during load */
+img:not([width]):not([height]) {
+  min-height: 100px;
+  background: rgba(8, 145, 178, 0.05);
+}
+
+/* SVG containment */
+svg {
+  display: block;
+  flex-shrink: 0;
+  contain: layout style;
+  transform: translateZ(0);
+  will-change: auto;
+}
+
+/* Lucide icons - fixed dimensions */
+svg[class*="lucide"] {
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+/* Avatar placeholders */
+.avatar,
+[class*="avatar"] {
+  aspect-ratio: 1;
+  contain: layout style paint;
+}
+
+/* =====================================================
+   BUTTON & FORM CLS PREVENTION
+   ===================================================== */
+
+/* Fixed button dimensions prevent shifts */
+button,
+[role="button"],
+.aminy-button-primary,
+.aminy-button-secondary {
+  min-height: 44px;
+  contain: layout style;
+  will-change: opacity;
+}
+
+/* Prevent shifts on button state changes */
+button:disabled,
+button[disabled] {
+  cursor: not-allowed;
+  opacity: 0.5;
+  /* Use opacity instead of changing layout */
+}
+
+/* Input fields with fixed heights */
+input,
+textarea,
+select {
+  min-height: 44px;
+  contain: layout style;
+}
+
+/* Textarea auto-resize without layout shift */
+textarea {
+  resize: none;
+  overflow: auto;
+  field-sizing: content; /* Modern browsers */
+}
+
+/* =====================================================
+   PROGRESS & LOADING CLS PREVENTION
+   ===================================================== */
+
+/* Progress bars with fixed dimensions */
+.progress-bar,
+[role="progressbar"] {
+  height: 8px;
+  contain: strict;
+  will-change: transform;
+}
+
+/* Loading states with reserved space */
+.skeleton,
+[data-skeleton="true"] {
+  min-height: inherit;
+  contain: layout style paint;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* =====================================================
+   BADGE & CHIP CLS PREVENTION
+   ===================================================== */
+
+/* Fixed badge dimensions */
+.badge,
+[class*="badge"],
+.chip,
+[class*="chip"] {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  contain: layout style;
+}
+
+/* =====================================================
+   TOAST & NOTIFICATION CLS PREVENTION
+   ===================================================== */
+
+/* Toasts don't affect layout */
+[data-sonner-toast],
+[data-toast],
+.toast-container {
+  position: fixed !important;
+  contain: strict;
+  pointer-events: none;
+}
+
+.toast-container > * {
+  pointer-events: auto;
+}
+
+/* =====================================================
+   DROPDOWN & SELECT CLS PREVENTION
+   ===================================================== */
+
+/* Dropdown content with fixed positioning */
+[data-radix-select-content],
+[data-radix-dropdown-menu-content],
+[data-radix-popover-content] {
+  position: fixed !important;
+  contain: layout style;
+  will-change: transform, opacity;
+}
+
+/* =====================================================
+   CARD & CONTAINER CLS PREVENTION
+   ===================================================== */
+
+/* Cards with explicit minimum dimensions */
+.aminy-card {
+  min-height: 100px;
+  contain: layout style paint;
+}
+
+.plan-populate-animation {
+  min-height: 140px;
+  contain: layout style;
+}
+
+/* =====================================================
+   TYPOGRAPHY CLS PREVENTION
+   ===================================================== */
+
+/* Prevent font loading shifts */
+h1, h2, h3, h4, h5, h6 {
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+/* Line height consistency */
+p, span, div {
+  line-height: 1.5;
+}
+
+/* =====================================================
+   SCROLL CLS PREVENTION - CRITICAL
+   ===================================================== */
+
+/* CRITICAL: Smooth scrolling without layout shifts */
+html {
+  scroll-behavior: smooth;
+  overflow-y: scroll; /* Force scrollbar to prevent width shifts */
+  scrollbar-gutter: stable both-edges; /* CRITICAL: Reserve space for scrollbar */
+}
+
+body {
+  overflow-x: hidden;
+  overflow-y: auto;
+  /* CRITICAL: Prevent horizontal shifts */
+  width: 100%;
+  max-width: 100vw;
+}
+
+/* =====================================================
+   MOBILE CLS PREVENTION
+   ===================================================== */
+
+@media (max-width: 640px) {
+  /* Prevent viewport resize shifts */
+  html {
+    height: 100%;
+    height: -webkit-fill-available;
+  }
+  
+  body {
+    min-height: 100%;
+    min-height: -webkit-fill-available;
+  }
+  
+  /* Touch action optimization */
+  button, [role="button"] {
+    touch-action: manipulation;
+  }
+  
+  /* Prevent input zoom shifts on iOS */
+  input, textarea, select {
+    font-size: 16px !important;
+  }
+}
+
+/* =====================================================
+   COACH MODE SPECIFIC CLS PREVENTION
+   ===================================================== */
+
+/* Coach mode backdrop - no layout shifts */
+.coach-mode-backdrop {
+  position: fixed;
+  inset: 0;
+  contain: strict;
+  z-index: 50;
+}
+
+/* Coach mode card - explicit dimensions */
+.coach-mode-card {
+  position: fixed;
+  contain: layout style;
+  min-width: 300px;
+  min-height: 400px;
+  max-height: 90vh;
+  z-index: 50;
+}
+
+/* Step cards - reserve space */
+.coach-mode-step {
+  min-height: 80px;
+  contain: layout;
+}
+
+/* Completion screen - fixed dimensions */
+.coach-mode-completion {
+  min-height: 500px;
+  contain: layout;
+}
+
+/* Celebration animations - transform only */
+.celebration-icon {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+}
+
+/* =====================================================
+   PERFORMANCE OPTIMIZATIONS
+   ===================================================== */
+
+/* Hardware acceleration for smooth rendering */
+.gpu-accelerate {
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* Reduce paint areas */
+.reduce-paint {
+  contain: layout style paint;
+}
+
+/* Optimize reflows */
+.optimize-reflow {
+  contain: layout;
+}
+
+/* =====================================================
+   REDUCED MOTION CLS PREVENTION
+   ===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  /* Still prevent layout shifts */
+  .animate-in,
+  .zoom-in-50,
+  .fade-in,
+  .slide-up {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* =====================================================
+   PRINT CLS PREVENTION
+   ===================================================== */
+
+@media print {
+  /* Remove dynamic elements that cause shifts */
+  .coach-mode-backdrop,
+  [role="dialog"],
+  .modal-backdrop,
+  .toast-container,
+  #global-support-footer {
+    display: none !important;
+  }
+  
+  /* Fixed dimensions for print */
+  * {
+    contain: none !important;
+    will-change: auto !important;
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* =====================================================
+   EXPLICIT DIMENSION UTILITIES
+   ===================================================== */
+
+/* Utility classes for explicit dimensions */
+.h-explicit-44 { height: 44px !important; }
+.h-explicit-56 { height: 56px !important; }
+.h-explicit-64 { height: 64px !important; }
+
+.min-h-explicit-100 { min-height: 100px !important; }
+.min-h-explicit-200 { min-height: 200px !important; }
+.min-h-explicit-300 { min-height: 300px !important; }
+.min-h-explicit-400 { min-height: 400px !important; }
+
+/* Aspect ratio containers */
+.aspect-square { aspect-ratio: 1 / 1; }
+.aspect-video { aspect-ratio: 16 / 9; }
+.aspect-portrait { aspect-ratio: 3 / 4; }
+
+/* =====================================================
+   CRITICAL CSS INLINING HINTS
+   ===================================================== */
+
+/* Mark critical above-the-fold content */
+.critical-content {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 500px;
+}
+
+/* Lazy load below-the-fold content */
+.lazy-content {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 300px;
+}
+
+/* =====================================================
+   LCP (LARGEST CONTENTFUL PAINT) OPTIMIZATIONS
+   ===================================================== */
+
+/* Critical LCP image optimization */
+img[fetchpriority="high"],
+img[loading="eager"] {
+  content-visibility: auto;
+  contain-intrinsic-size: var(--lcp-image-size, 400px) var(--lcp-image-size, 400px);
+  will-change: auto;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Prevent LCP shifts from image containers */
+.lcp-image-container {
+  contain: layout style paint;
+  aspect-ratio: 1;
+  min-width: 240px;
+  min-height: 240px;
+}
+
+/* Splash screen LCP optimization - CRITICAL: Fixed dimensions prevent CLS */
+.splash-logo-container {
+  contain: strict;
+  width: 100%;
+  max-width: 320px;
+  height: 90px; /* CRITICAL: Fixed height prevents CLS - matches SplashScreen.tsx mobile 320x90 */
+  min-height: 90px;
+  max-height: 90px;
+  position: relative;
+  margin: 0 auto;
+  overflow: visible;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  isolation: isolate;
+}
+
+@media (min-width: 640px) {
+  .splash-logo-container {
+    max-width: 400px;
+    height: 112px;
+    min-height: 112px;
+    max-height: 112px;
+  }
+}
+
+/* CRITICAL: Reserve exact space for logo to prevent CLS */
+.splash-screen-hero > div > div:first-child {
+  min-height: 154px !important; /* Matches SplashScreen.tsx: 40px padding + 90px logo + 24px margin */
+}
+
+@media (min-width: 640px) {
+  .splash-screen-hero > div > div:first-child {
+    min-height: 192px !important; /* Desktop: 48px padding + 112px logo + 32px margin */
+  }
+}
+
+/* CRITICAL: All splash images must have explicit dimensions */
+.splash-screen-hero img {
+  display: block !important;
+  will-change: auto !important;
+}
+
+/* Ensure splash screen elements have explicit sizes */
+.splash-screen-hero {
+  contain: layout style;
+  min-height: 100vh;
+}
+
+/* Feature grid - CRITICAL: prevent CLS */
+.splash-feature-grid {
+  contain: layout;
+  min-height: 480px;
+}
+
+/* Splash screen buttons - prevent CLS from state changes */
+.splash-screen-hero button,
+.splash-screen-hero [role="button"] {
+  contain: layout;
+  will-change: opacity;
+  transform: translateZ(0);
+}
+
+/* Icon containers - fixed dimensions */
+.splash-screen-hero svg {
+  flex-shrink: 0;
+  display: block;
+}
+
+/* Trust badges - prevent shifts */
+.splash-screen-hero .bg-slate-50 {
+  contain: layout style;
+}
+
+
+
+/* =====================================================
+   BROWSER-SPECIFIC CLS FIXES
+   ===================================================== */
+
+/* Safari-specific fixes */
+@supports (-webkit-touch-callout: none) {
+  /* Prevent Safari layout shifts */
+  body {
+    -webkit-text-size-adjust: 100%;
+  }
+  
+  /* Safari scrollbar handling */
+  html {
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Firefox-specific fixes */
+@-moz-document url-prefix() {
+  /* Firefox scrollbar handling */
+  html {
+    scrollbar-gutter: stable;
+  }
+}
+
+/* Chrome/Edge-specific fixes */
+@supports (scrollbar-gutter: stable) {
+  html {
+    scrollbar-gutter: stable;
+  }
+}
+
+/* =====================================================
+   EMERGENCY CLS FIXES
+   ===================================================== */
+
+/* Prevent any element from causing layout shifts */
+.no-layout-shift {
+  contain: layout !important;
+  will-change: opacity, transform !important;
+}
+
+/* Force GPU acceleration */
+.force-gpu {
+  transform: translateZ(0) !important;
+  backface-visibility: hidden !important;
+  perspective: 1000px !important;
+}
+
+/* Prevent repaints */
+.no-repaint {
+  contain: strict !important;
+}
+
+/* =====================================================
+   ONBOARDING CHAT CLS PREVENTION
+   ===================================================== */
+
+/* Chat message bubbles - explicit dimensions */
+.chat-message-bubble {
+  contain: layout style paint;
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Chat container - reserved space */
+.chat-container {
+  contain: layout style;
+  min-height: calc(100vh - 280px);
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Chat input area - fixed dimensions */
+.chat-input-area {
+  contain: layout style paint;
+  min-height: 100px;
+  max-height: 300px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Onboarding header - fixed dimensions */
+.onboarding-header {
+  contain: layout style paint;
+  min-height: 120px;
+  max-height: 120px;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* ALL onboarding elements - prevent shifts */
+[class*="onboarding"] {
+  contain: layout;
+  transform: translateZ(0);
+  will-change: auto;
+}
+
+/* Onboarding input sections - reserved space */
+.onboarding-input-welcome {
+  min-height: 48px;
+}
+
+.onboarding-input-text {
+  min-height: 100px;
+}
+
+.onboarding-input-textarea {
+  min-height: 160px;
+}
+
+.onboarding-input-insurance {
+  min-height: 200px;
+}
+
+.onboarding-input-plans {
+  min-height: 500px;
+}
+
+/* Feelings chips - prevent shifts */
+.feelings-chips-container {
+  contain: layout;
+  min-height: 88px;
+}
+
+/* Progress bar container - fixed height */
+.onboarding-progress {
+  contain: layout;
+  height: 24px;
+}
+
+/* Message wrapper - prevent layout shifts when adding messages */
+.onboarding-messages-wrapper {
+  contain: layout;
+  min-height: 300px;
+}
+
+/* =====================================================
+   UTILITY: CONTAIN LAYOUT
+   ===================================================== */
+
+.contain-layout {
+  contain: layout !important;
+}
+
+.contain-layout-style {
+  contain: layout style !important;
+}
+
+.contain-layout-paint {
+  contain: layout style paint !important;
+}

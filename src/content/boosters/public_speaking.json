@@ -1,0 +1,155 @@
+{
+  "name": "Public Speaking Booster",
+  "description": "7 steps to confident speaking and presentations",
+  "version": "1.0",
+  "theme": "communication_confidence",
+  "activities": [
+    {
+      "id": "ps001",
+      "title": "30-Second Talk",
+      "age_band": "6–10",
+      "level": "beginner",
+      "domain": "expressive",
+      "target": "Speak on chosen topic for 30 seconds to 1-2 listeners",
+      "outcome_tags": ["presentation", "speaking", "confidence"],
+      "prompting_hierarchy": ["full script", "outline only", "topic only"],
+      "script_parent": "Pick favorite topic. Practice saying 3 things about it. Set timer for 30 sec. Start with just family!",
+      "script_child": "Tell us about your favorite [topic] for 30 seconds!",
+      "visuals": ["topic_cards", "30_sec_timer", "3_points_outline"],
+      "success_criteria": "Speaks for 25+ seconds on topic with outline or less 3/5 tries",
+      "mastery_rule": "70% across 2 weeks",
+      "generalization": "Family, then small groups, then class",
+      "variants": [
+        { "topic": "favorite animal", "audience": "parent", "support": "3 facts written" },
+        { "topic": "hobby", "audience": "2 family members", "support": "mental outline" },
+        { "topic": "recent event", "audience": "small group", "support": "topic only" }
+      ]
+    },
+    {
+      "id": "ps002",
+      "title": "Posture and Breath",
+      "age_band": "6–10",
+      "level": "beginner",
+      "domain": "pragmatics",
+      "target": "Use power pose and deep breath before speaking",
+      "outcome_tags": ["body language", "confidence", "preparation"],
+      "prompting_hierarchy": ["guide into pose", "verbal reminder", "independent"],
+      "script_parent": "Before you talk: stand tall, shoulders back, take deep breath. Helps you feel strong! Practice together.",
+      "script_child": "Stand up tall and take a big breath. You've got this!",
+      "visuals": ["power_pose_image", "breathing_visual"],
+      "success_criteria": "Uses pose + breath before speaking 4/5 presentations",
+      "mastery_rule": "80% across 2 weeks",
+      "generalization": "Before any speaking situation",
+      "variants": [
+        { "pose": "superhero stance", "breath": "3 deep", "timing": "right before" },
+        { "pose": "feet shoulder-width", "breath": "belly breath", "timing": "while waiting" },
+        { "pose": "hands on hips or sides", "breath": "in through nose/out through mouth", "timing": "countdown from 5" }
+      ]
+    },
+    {
+      "id": "ps003",
+      "title": "Eye-Look Sweep",
+      "age_band": "7–10",
+      "level": "intermediate",
+      "domain": "pragmatics",
+      "target": "Look at different sections of audience (not sustained eye contact)",
+      "outcome_tags": ["eye contact", "audience engagement", "social skills"],
+      "prompting_hierarchy": ["point where to look", "verbal cues", "independent"],
+      "script_parent": "Look at left side, then middle, then right. Or foreheads! Don't stare at one person. Practice with stuffed animals first.",
+      "script_child": "Look around at different people while you talk.",
+      "visuals": ["audience_zones_visual", "forehead_trick"],
+      "success_criteria": "Looks at 2+ different areas during 30-60 sec talk 3/5 times",
+      "mastery_rule": "60% across 2 weeks",
+      "generalization": "Class presentations, talking to groups",
+      "variants": [
+        { "technique": "left-middle-right sweep", "frequency": "every 10 seconds", "alternative": "look at foreheads" },
+        { "technique": "back wall between people", "frequency": "varies", "alternative": "pick friendly faces" },
+        { "technique": "slow pan across room", "frequency": "continuous", "alternative": "look at teacher mostly" }
+      ]
+    },
+    {
+      "id": "ps004",
+      "title": "Cue Cards",
+      "age_band": "7–10",
+      "level": "intermediate",
+      "domain": "executive_function",
+      "target": "Create and use 3 cue cards with key words/images",
+      "outcome_tags": ["organization", "memory aids", "presentation skills"],
+      "prompting_hierarchy": ["adult makes cards", "co-create cards", "independent"],
+      "script_parent": "Write/draw 1-3 words per card for each main point. Hold them! Glance down when needed. Practice with cards.",
+      "script_child": "Your cue cards will help you remember what to say!",
+      "visuals": ["cue_card_examples", "card_template"],
+      "success_criteria": "Creates cards with support and uses them during presentation 3/4 times",
+      "mastery_rule": "75% across 4 presentations",
+      "generalization": "School reports, show-and-tell, any presentations",
+      "variants": [
+        { "format": "3-5 word bullets", "size": "index cards", "use": "glance as needed" },
+        { "format": "images + 1 word", "size": "half-page", "use": "visual anchor" },
+        { "format": "numbered points", "size": "full page", "use": "hold while speaking" }
+      ]
+    },
+    {
+      "id": "ps005",
+      "title": "Open/Close Lines",
+      "age_band": "7–10",
+      "level": "intermediate",
+      "domain": "expressive",
+      "target": "Use practiced opening and closing statement",
+      "outcome_tags": ["presentation structure", "communication", "confidence"],
+      "prompting_hierarchy": ["recite together", "prompt first words", "independent"],
+      "script_parent": "Start: 'Hi, I'm [name] and I'll talk about [topic].' End: 'Thank you for listening!' Practice until automatic.",
+      "script_child": "You'll start with your opening line and end with your closing line.",
+      "visuals": ["opening_closing_script_card"],
+      "success_criteria": "Uses both lines correctly 4/5 presentations",
+      "mastery_rule": "80% across 5 presentations",
+      "generalization": "All presentations, show-and-tell, class participation",
+      "variants": [
+        { "open": "Hi, I'm ___ and today I'll tell you about ___", "close": "Thank you!", "formality": "casual" },
+        { "open": "Good morning. My name is ___ and my topic is ___", "close": "Thank you for your attention.", "formality": "formal" },
+        { "open": "Hey everyone, I'm ___ and I want to share ___", "close": "Thanks for listening! Any questions?", "formality": "friendly" }
+      ]
+    },
+    {
+      "id": "ps006",
+      "title": "Practice With Timer",
+      "age_band": "7–10",
+      "level": "advanced",
+      "domain": "executive_function",
+      "target": "Practice presentation 3 times, staying within time limit",
+      "outcome_tags": ["practice", "time management", "preparation"],
+      "prompting_hierarchy": ["parent sets timer and tracks", "child sets timer", "independent practice"],
+      "script_parent": "Set timer for [required time]. Practice full talk. Check if under/over. Adjust. Do it 3 times before the real thing!",
+      "script_child": "Let's practice with the timer to make sure you're ready.",
+      "visuals": ["practice_tracker", "timer", "time_tips"],
+      "success_criteria": "Completes 3 practice runs within 10% of time limit",
+      "mastery_rule": "Success is being prepared (3 practices done)",
+      "generalization": "Before any timed presentation",
+      "variants": [
+        { "practices": 3, "time": "2 minutes", "adjust": "add or cut content" },
+        { "practices": 5, "time": "1 minute", "adjust": "speed up or slow down" },
+        { "practices": 3, "time": "3-5 minutes", "adjust": "section timing" }
+      ]
+    },
+    {
+      "id": "ps007",
+      "title": "Celebrate the Attempt",
+      "age_band": "6–10",
+      "level": "beginner",
+      "domain": "regulation",
+      "target": "Identify one thing that went well after presenting",
+      "outcome_tags": ["self-reflection", "positive reinforcement", "growth mindset"],
+      "prompting_hierarchy": ["adult states 3 positives", "child picks from list", "independent reflection"],
+      "script_parent": "After presentation: 'What went well?' Help identify: loud voice, stayed on topic, eye contact, finished. Celebrate courage!",
+      "script_child": "You did it! What's one thing you did well?",
+      "visuals": ["reflection_prompts", "celebration_ritual"],
+      "success_criteria": "Identifies 1+ positive after every presentation",
+      "mastery_rule": "100% (always do this!)",
+      "generalization": "After every speaking experience, big or small",
+      "variants": [
+        { "prompts": ["I used a loud voice", "I looked at people", "I finished"], "celebration": "high five" },
+        { "prompts": ["I was brave", "I remembered my points", "I stayed calm"], "celebration": "treat or privilege" },
+        { "prompts": ["I did it even though nervous", "I used my cards", "I smiled"], "celebration": "written praise note" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quick Validation Test</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    
+    .container {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    
+    h1 {
+      color: #1e293b;
+      margin-bottom: 10px;
+      font-size: 2em;
+    }
+    
+    .subtitle {
+      color: #64748b;
+      margin-bottom: 30px;
+    }
+    
+    .test-input {
+      width: 100%;
+      padding: 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: 16px;
+      font-family: inherit;
+      transition: all 0.2s;
+      resize: vertical;
+      min-height: 80px;
+    }
+    
+    .test-input:focus {
+      outline: none;
+      border-color: #0891b2;
+      box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.1);
+    }
+    
+    .button {
+      width: 100%;
+      padding: 16px;
+      background: #0891b2;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 16px;
+    }
+    
+    .button:hover {
+      background: #0e7490;
+      transform: translateY(-1px);
+    }
+    
+    .button:active {
+      transform: translateY(0);
+    }
+    
+    .result {
+      margin-top: 24px;
+      padding: 20px;
+      border-radius: 12px;
+      display: none;
+    }
+    
+    .result.show {
+      display: block;
+    }
+    
+    .result.valid {
+      background: #ecfdf5;
+      border: 2px solid #10b981;
+    }
+    
+    .result.invalid {
+      background: #fef2f2;
+      border: 2px solid #ef4444;
+    }
+    
+    .result-header {
+      font-size: 1.25em;
+      font-weight: 600;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .result.valid .result-header {
+      color: #059669;
+    }
+    
+    .result.invalid .result-header {
+      color: #dc2626;
+    }
+    
+    .result-details {
+      color: #475569;
+      line-height: 1.6;
+    }
+    
+    .result-details strong {
+      color: #1e293b;
+    }
+    
+    .clarification {
+      background: #fff;
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 12px;
+      font-style: italic;
+      color: #1e293b;
+      border-left: 4px solid #f59e0b;
+    }
+    
+    .examples {
+      background: #f8fafc;
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 24px;
+    }
+    
+    .examples h3 {
+      color: #1e293b;
+      margin-bottom: 12px;
+      font-size: 1.1em;
+    }
+    
+    .example-item {
+      padding: 8px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #475569;
+    }
+    
+    .example-item.invalid {
+      color: #dc2626;
+    }
+    
+    .example-item.valid {
+      color: #059669;
+    }
+    
+    .icon {
+      font-size: 1.5em;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🧪 AI Dynamic Response Test</h1>
+    <p class="subtitle">Test that AI responds dynamically to your actual content</p>
+    
+    <textarea 
+      id="testInput" 
+      class="test-input" 
+      placeholder="Type something like: age was 'd' or Emma is 5"
+      autocapitalize="sentences"
+    ></textarea>
+    
+    <button class="button" onclick="test()">Test This Input</button>
+    
+    <div id="result" class="result">
+      <div class="result-header">
+        <span class="icon"></span>
+        <span class="result-text"></span>
+      </div>
+      <div class="result-details"></div>
+    </div>
+    
+    <div class="examples">
+      <h3>Test Dynamic Responses:</h3>
+      <div class="example-item valid">🔹 age is 5</div>
+      <div class="example-item valid">🔹 My daughter Emma</div>
+      <div class="example-item valid">🔹 Emma has major meltdowns getting dressed every morning. I'm exhausted.</div>
+      <div class="example-item valid">🔹 That's correct</div>
+      <div class="example-item invalid">❌ age was 'd'</div>
+      <div class="example-item invalid">❌ age is t</div>
+    </div>
+  </div>
+
+  <script>
+    function extractStructuredData(text) {
+      const lower = text.toLowerCase();
+      
+      // Extract name
+      let name = '';
+      const namePatterns = [
+        /(?:name is|named|called|this is|meet|he's|she's|my (?:son|daughter|child|kid))\s+([A-Z][a-z]+)/i,
+        /^([A-Z][a-z]+)(?:\s+is|\s+has|\s+struggles|\s+needs)/i,
+        /(?:my|our)\s+(?:son|daughter|child|kid),?\s+([A-Z][a-z]+)/i,
+        /([A-Z][a-z]+)\s+(?:is|has|struggles|needs)/i
+      ];
+      
+      for (const pattern of namePatterns) {
+        const match = text.match(pattern);
+        if (match && match[1] && match[1].length > 1) {
+          const excluded = ['he', 'she', 'we', 'i', 'my', 'the', 'has', 'is', 'it'];
+          if (!excluded.includes(match[1].toLowerCase())) {
+            name = match[1];
+            break;
+          }
+        }
+      }
+      
+      // Extract age with validation
+      let age = '';
+      let ageIsValid = true;
+      const agePatterns = [
+        /(\d+)\s*(?:years?\s*old|year[s-]old|yr[s]?\.?\s*old|y\.?o\.?)/i,
+        /age\s*(?:is|was|:|=)?\s*(\d+)/i,  // FIXED: Now handles =, :, was
+        /(?:is|he's|she's|turning)\s+(\d+)/i,
+        /(\d+)\s*year/i
+      ];
+      
+      for (const pattern of agePatterns) {
+        const match = text.match(pattern);
+        if (match && match[1]) {
+          const ageNum = parseInt(match[1]);
+          if (ageNum >= 1 && ageNum <= 18) {
+            age = match[1];
+            break;
+          } else if (ageNum > 0) {
+            ageIsValid = false;
+            break;
+          }
+        }
+      }
+      
+      // FIXED: Check for invalid age inputs (single letters, gibberish, quotes)
+      const invalidPatterns = [
+        /(?:age|old)\s+(?:is|was|:|=)\s*['"]?([a-zA-Z])['"]?\b/i,  // age is/was 'd' or age is t
+        /(?:age|old)\s+(?:and\s+)?([a-zA-Z])\b/i,  // age and d, old t
+      ];
+      
+      for (const pattern of invalidPatterns) {
+        if (pattern.test(text)) {
+          ageIsValid = false;
+          break;
+        }
+      }
+      
+      return { name, age, ageIsValid };
+    }
+    
+    function validateInput(text) {
+      const trimmed = text.trim();
+      
+      // Check for age-related responses that might need clarification FIRST
+      const { age, ageIsValid } = extractStructuredData(trimmed);
+      const hasAgeKeyword = /(?:age|old|years?|yr)/i.test(trimmed);
+      
+      // If they mention age but it's not valid (e.g., "age is t" or "50 years old")
+      if (hasAgeKeyword && !age && ageIsValid === false) {
+        return {
+          isValid: false,
+          clarification: "Could you let me know how old your child is in years? For example, '5 years old' or just '5'."
+        };
+      }
+      
+      // Only check length for the main story input, not super strict
+      if (trimmed.length < 2) {
+        return { 
+          isValid: false, 
+          clarification: "I want to make sure I understand you clearly. Could you share a bit more?" 
+        };
+      }
+      
+      return { isValid: true };
+    }
+    
+    function test() {
+      const input = document.getElementById('testInput').value;
+      const resultDiv = document.getElementById('result');
+      const resultIcon = resultDiv.querySelector('.icon');
+      const resultText = resultDiv.querySelector('.result-text');
+      const resultDetails = resultDiv.querySelector('.result-details');
+      
+      if (!input.trim()) {
+        alert('Please enter some text to test');
+        return;
+      }
+      
+      const validation = validateInput(input);
+      const extraction = extractStructuredData(input);
+      
+      resultDiv.classList.remove('valid', 'invalid');
+      resultDiv.classList.add('show');
+      
+      if (validation.isValid) {
+        resultDiv.classList.add('valid');
+        resultIcon.textContent = '✅';
+        resultText.textContent = 'Valid Input';
+        
+        let details = '<strong>What was extracted:</strong><br>';
+        if (extraction.name) {
+          details += `• Name: <strong>${extraction.name}</strong><br>`;
+        }
+        if (extraction.age) {
+          details += `• Age: <strong>${extraction.age} years old</strong><br>`;
+        }
+        if (!extraction.name && !extraction.age) {
+          details += '• No specific data extracted (that\'s okay for general responses)<br>';
+        }
+        
+        resultDetails.innerHTML = details;
+      } else {
+        resultDiv.classList.add('invalid');
+        resultIcon.textContent = '❌';
+        resultText.textContent = 'Invalid Input';
+        
+        let details = '<strong>Why it was rejected:</strong><br>';
+        details += '• Invalid age format detected<br>';
+        details += `• Extracted age: ${extraction.age || '(none)'}<br>`;
+        details += `• Age is valid: ${extraction.ageIsValid ? 'yes' : 'no'}<br>`;
+        
+        if (validation.clarification) {
+          details += `<div class="clarification">"${validation.clarification}"</div>`;
+        }
+        
+        resultDetails.innerHTML = details;
+      }
+    }
+    
+    // Allow Enter to submit
+    document.getElementById('testInput').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && e.metaKey) {
+        test();
+      }
+    });
+  </script>
+</body>
+</html>

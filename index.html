@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="theme-color" content="#0891b2" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Aminy" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="description" content="Aminy - Your AI companion for supporting your neurodivergent child" />
+    <title>Aminy - ABA Support for Your Family</title>
+
+    <!-- Preconnect to Google Fonts for faster loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Load Manrope font (primary) and Inter (fallback) with display=swap for FOUT -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Inline critical CSS for faster FCP -->
+    <style>
+      /* Prevent layout shift during load */
+      :root {
+        --vh: 1vh;
+        --safe-area-inset-top: env(safe-area-inset-top, 0px);
+        --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+        /* Brand colors */
+        --brand-navy: #0D1B2A;
+        --brand-cream: #F5F5F5;
+        --brand-teal: #577590;
+        --brand-coral: #E07A5F;
+      }
+      html {
+        font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        min-height: calc(var(--vh, 1vh) * 100);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        background-color: var(--brand-cream);
+        color: var(--brand-navy);
+      }
+      /* Prevent FOUC */
+      html { visibility: visible; opacity: 1; }
+      /* Safe area padding */
+      .safe-top { padding-top: var(--safe-area-inset-top); }
+      .safe-bottom { padding-bottom: var(--safe-area-inset-bottom); }
+      /* Loading spinner for initial load */
+      #root:empty {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+      }
+      #root:empty::after {
+        content: '';
+        width: 40px;
+        height: 40px;
+        border: 3px solid var(--brand-cream);
+        border-top-color: var(--brand-teal);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+    </style>
+      <!-- Set viewport height correctly on mobile -->
+      <script>
+        (function() {
+          const vh = window.innerHeight * 0.01;
+          document.documentElement.style.setProperty('--vh', vh + 'px');
+        })();
+      </script>
+    </head>
+
+    <body>
+      <div id="root"></div>
+      <script type="module" src="/src/main.tsx"></script>
+    </body>
+  </html>
+  

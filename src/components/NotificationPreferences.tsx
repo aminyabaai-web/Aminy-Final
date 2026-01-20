@@ -1,0 +1,165 @@
+import React, { useState } from 'react';
+import { Bell, Mail, MessageSquare, Calendar } from 'lucide-react';
+import { Card } from './ui/card';
+import { Switch } from './ui/switch';
+import { Label } from './ui/label';
+
+export function NotificationPreferences() {
+  const [preferences, setPreferences] = useState({
+    email: {
+      dailySummary: true,
+      weeklyReport: true,
+      goalMilestones: true,
+      sessionReminders: true,
+      messages: true
+    },
+    push: {
+      sessionReminders: true,
+      messages: true,
+      urgentAlerts: true,
+      dailyTips: false
+    },
+    sms: {
+      sessionReminders: false,
+      urgentAlerts: true,
+      appointmentConfirm: false
+    }
+  });
+
+  const updatePreference = (category: keyof typeof preferences, key: string, value: boolean) => {
+    setPreferences(prev => ({
+      ...prev,
+      [category]: {
+        ...prev[category],
+        [key]: value
+      }
+    }));
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center gap-2">
+        <Bell className="w-5 h-5 text-accent" />
+        <h2 className="text-xl font-semibold">Notification Preferences</h2>
+      </div>
+
+      {/* Email Notifications */}
+      <Card className="p-4">
+        <div className="flex items-center gap-2 mb-4">
+          <Mail className="w-4 h-4 text-blue-600" />
+          <h3 className="font-semibold">Email Notifications</h3>
+        </div>
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <Label>Daily Summary</Label>
+            <Switch
+              checked={preferences.email.dailySummary}
+              onCheckedChange={(value) => updatePreference('email', 'dailySummary', value)}
+            />
+          </div>
+          <div className="flex items-center justify-between">
+            <Label>Weekly Progress Report</Label>
+            <Switch
+              checked={preferences.email.weeklyReport}
+              onCheckedChange={(value) => updatePreference('email', 'weeklyReport', value)}
+            />
+          </div>
+          <div className="flex items-center justify-between">
+            <Label>Goal Milestones</Label>
+            <Switch
+              checked={preferences.email.goalMilestones}
+              onCheckedChange={(value) => updatePreference('email', 'goalMilestones', value)}
+            />
+          </div>
+          <div className="flex items-center justify-between">
+            <Label>Session Reminders</Label>
+            <Switch
+              checked={preferences.email.sessionReminders}
+              onCheckedChange={(value) => updatePreference('email', 'sessionReminders', value)}
+            />
+          </div>
+          <div className="flex items-center justify-between">
+            <Label>New Messages</Label>
+            <Switch
+              checked={preferences.email.messages}
+              onCheckedChange={(value) => updatePreference('email', 'messages', value)}
+            />
+          </div>
+        </div>
+      </Card>
+
+      {/* Push Notifications */}
+      <Card className="p-4">
+        <div className="flex items-center gap-2 mb-4">
+          <Bell className="w-4 h-4 text-purple-600" />
+          <h3 className="font-semibold">Push Notifications</h3>
+        </div>
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <Label>Session Reminders</Label>
+            <Switch
+              checked={preferences.push.sessionReminders}
+              onCheckedChange={(value) => updatePreference('push', 'sessionReminders', value)}
+            />
+          </div>
+          <div className="flex items-center justify-between">
+            <Label>New Messages</Label>
+            <Switch
+              checked={preferences.push.messages}
+              onCheckedChange={(value) => updatePreference('push', 'messages', value)}
+            />
+          </div>
+          <div className="flex items-center justify-between">
+            <Label>Urgent Alerts</Label>
+            <Switch
+              checked={preferences.push.urgentAlerts}
+              onCheckedChange={(value) => updatePreference('push', 'urgentAlerts', value)}
+            />
+          </div>
+          <div className="flex items-center justify-between">
+            <Label>Daily Tips</Label>
+            <Switch
+              checked={preferences.push.dailyTips}
+              onCheckedChange={(value) => updatePreference('push', 'dailyTips', value)}
+            />
+          </div>
+        </div>
+      </Card>
+
+      {/* SMS Notifications */}
+      <Card className="p-4">
+        <div className="flex items-center gap-2 mb-4">
+          <MessageSquare className="w-4 h-4 text-green-600" />
+          <h3 className="font-semibold">SMS Notifications</h3>
+        </div>
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <Label>Session Reminders</Label>
+            <Switch
+              checked={preferences.sms.sessionReminders}
+              onCheckedChange={(value) => updatePreference('sms', 'sessionReminders', value)}
+            />
+          </div>
+          <div className="flex items-center justify-between">
+            <Label>Urgent Alerts</Label>
+            <Switch
+              checked={preferences.sms.urgentAlerts}
+              onCheckedChange={(value) => updatePreference('sms', 'urgentAlerts', value)}
+            />
+          </div>
+          <div className="flex items-center justify-between">
+            <Label>Appointment Confirmations</Label>
+            <Switch
+              checked={preferences.sms.appointmentConfirm}
+              onCheckedChange={(value) => updatePreference('sms', 'appointmentConfirm', value)}
+            />
+          </div>
+        </div>
+      </Card>
+
+      <p className="text-xs text-muted-foreground text-center">
+        You can update these preferences at any time
+      </p>
+    </div>
+  );
+}

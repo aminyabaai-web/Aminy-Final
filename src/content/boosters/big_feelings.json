@@ -1,0 +1,155 @@
+{
+  "name": "Big Feelings Booster",
+  "description": "7 strategies for managing intense emotions",
+  "version": "1.0",
+  "theme": "emotion_regulation",
+  "activities": [
+    {
+      "id": "bf001",
+      "title": "3 Moves for Anger",
+      "age_band": "5–9",
+      "level": "beginner",
+      "domain": "regulation",
+      "target": "Use 3-step physical release for anger (stomp, push wall, squeeze)",
+      "outcome_tags": ["anger management", "physical regulation", "coping"],
+      "prompting_hierarchy": ["model all 3", "verbal prompts", "independent"],
+      "script_parent": "When mad: 1) Stomp feet 10 times, 2) Push against wall 10 seconds, 3) Squeeze stress ball hard. Then breathe.",
+      "script_child": "Let's get that mad energy out safely!",
+      "visuals": ["stomp_visual", "wall_push", "squeeze_ball"],
+      "success_criteria": "Completes all 3 moves when offered during anger 3/5 times",
+      "mastery_rule": "70% across 2 weeks",
+      "generalization": "At home, school if appropriate space, anywhere safe",
+      "variants": [
+        { "moves": ["stomp", "wall push", "squeeze"], "location": "home" },
+        { "moves": ["chair push-ups", "hand squeezes", "controlled breathing"], "location": "school" },
+        { "moves": ["jumping jacks", "pillow punch", "ice squeeze"], "location": "high intensity" }
+      ]
+    },
+    {
+      "id": "bf002",
+      "title": "Count Down from Panic",
+      "age_band": "6–10",
+      "level": "intermediate",
+      "domain": "regulation",
+      "target": "Use 5-4-3-2-1 grounding technique during panic/overwhelm",
+      "outcome_tags": ["anxiety", "grounding", "mindfulness"],
+      "prompting_hierarchy": ["prompt each sense", "prompt 'next sense'", "independent"],
+      "script_parent": "Say: 5 things you see, 4 you can touch, 3 you hear, 2 you smell, 1 you taste. Slows panic. Do it with them at first.",
+      "script_child": "Let's ground your body. Tell me what you notice.",
+      "visuals": ["5_4_3_2_1_card", "senses_icons"],
+      "success_criteria": "Completes technique with 'next sense' prompts or less 3/5 panic moments",
+      "mastery_rule": "60% across 2 weeks",
+      "generalization": "During anxiety, before tests, in overwhelming situations",
+      "variants": [
+        { "format": "full 5-4-3-2-1", "situation": "high anxiety" },
+        { "format": "simplified 3-2-1", "situation": "moderate stress" },
+        { "format": "5 things you see only", "situation": "quick grounding" }
+      ]
+    },
+    {
+      "id": "bf003",
+      "title": "Comfort Kit",
+      "age_band": "4–8",
+      "level": "beginner",
+      "domain": "regulation",
+      "target": "Create and use personalized comfort kit with 5 sensory items",
+      "outcome_tags": ["sensory regulation", "coping tools", "self-soothing"],
+      "prompting_hierarchy": ["adult offers kit", "child chooses from kit", "child gets kit independently"],
+      "script_parent": "Make kit: soft item, fidget, photo of loved one, stress ball, favorite smell. When upset: 'Use your kit!'",
+      "script_child": "Your comfort kit is here. Pick what helps.",
+      "visuals": ["kit_box_photo", "items_checklist"],
+      "success_criteria": "Uses 2+ items from kit when upset 4/5 opportunities",
+      "mastery_rule": "75% across 2 weeks",
+      "generalization": "At home, portable kit for school/travel",
+      "variants": [
+        { "items": ["soft blanket", "fidget", "photo", "ball", "lavender sachet"], "container": "small box" },
+        { "items": ["squishy", "chewy", "music player", "journal", "calm glitter jar"], "container": "bag" },
+        { "items": ["weighted lap pad", "putty", "headphones", "visual calm card", "gum"], "container": "basket" }
+      ]
+    },
+    {
+      "id": "bf004",
+      "title": "Safe Space Map",
+      "age_band": "5–9",
+      "level": "intermediate",
+      "domain": "regulation",
+      "target": "Identify and go to 3 safe spaces (home, school, community)",
+      "outcome_tags": ["safe space", "self-regulation", "environmental support"],
+      "prompting_hierarchy": ["adult guides to space", "verbal reminder of space", "independent choice"],
+      "script_parent": "Create map together: bedroom calm corner, school counselor, library quiet spot. Practice going to each!",
+      "script_child": "Where can you go when you need a break?",
+      "visuals": ["safe_space_map", "photos_of_each_space"],
+      "success_criteria": "Goes to identified safe space when upset 3/5 times",
+      "mastery_rule": "65% across 2 weeks",
+      "generalization": "Home, school, community locations",
+      "variants": [
+        { "spaces": ["bedroom", "school counselor", "grandma's house"], "access": "always available" },
+        { "spaces": ["calm corner", "library", "quiet outdoor spot"], "access": "needs permission" },
+        { "spaces": ["under desk tent", "resource room", "parent's office"], "access": "during specific times" }
+      ]
+    },
+    {
+      "id": "bf005",
+      "title": "Worry Timer",
+      "age_band": "6–10",
+      "level": "intermediate",
+      "domain": "regulation",
+      "target": "Use 5-minute worry time to contain anxious thoughts",
+      "outcome_tags": ["anxiety management", "thought control", "time-limited processing"],
+      "prompting_hierarchy": ["set timer together", "prompt to stop when timer ends", "independent use"],
+      "script_parent": "Set 5-min timer. 'Worry time!' Talk/write worries. When timer beeps: 'Worry time's over. Let's do something else.'",
+      "script_child": "You have 5 minutes to worry, then we move on.",
+      "visuals": ["visual_timer_5_min", "worry_journal"],
+      "success_criteria": "Uses worry time and stops worrying (or redirects) when timer ends 3/5 times",
+      "mastery_rule": "60% across 2 weeks",
+      "generalization": "Before bed, during high-anxiety periods, as needed",
+      "variants": [
+        { "duration": "3 minutes", "method": "talk to parent", "follow-up": "redirect to activity" },
+        { "duration": "5 minutes", "method": "write in journal", "follow-up": "close journal, move on" },
+        { "duration": "5 minutes", "method": "draw worries", "follow-up": "put away paper, do something fun" }
+      ]
+    },
+    {
+      "id": "bf006",
+      "title": "Talk to a Helper",
+      "age_band": "5–9",
+      "level": "advanced",
+      "domain": "regulation",
+      "target": "Identify and approach trusted adult when emotions are big",
+      "outcome_tags": ["help-seeking", "social support", "communication"],
+      "prompting_hierarchy": ["prompt to tell specific person", "prompt to find helper", "independent"],
+      "script_parent": "Make list of helpers: mom, dad, teacher, counselor. Practice: 'I need help. I feel [emotion].' Respond immediately!",
+      "script_child": "Who can you talk to? Go find them and tell them how you feel.",
+      "visuals": ["helpers_list_with_photos", "help_script_card"],
+      "success_criteria": "Approaches helper and states emotion 3/5 big feeling moments",
+      "mastery_rule": "60% across 2 weeks",
+      "generalization": "At home, school, extended family, community",
+      "variants": [
+        { "helpers": ["mom", "dad", "grandma"], "script": "I need help, I feel ___" },
+        { "helpers": ["teacher", "counselor", "aide"], "script": "I'm feeling ___, can you help?" },
+        { "helpers": ["sibling", "friend's parent", "coach"], "script": "I need to talk, I'm ___" }
+      ]
+    },
+    {
+      "id": "bf007",
+      "title": "Aftercare Plan",
+      "age_band": "6–10",
+      "level": "advanced",
+      "domain": "regulation",
+      "target": "Complete post-meltdown routine (rest, reflect, reconnect)",
+      "outcome_tags": ["recovery", "reflection", "repair"],
+      "prompting_hierarchy": ["guide through all steps", "verbal prompts for each", "independent"],
+      "script_parent": "After big feelings calm: 1) Rest quietly 5 min, 2) Talk about what happened (optional), 3) Hug/reconnect. No punishment, just reset.",
+      "script_child": "Let's help your body and brain recover together.",
+      "visuals": ["aftercare_steps", "reconnection_activities"],
+      "success_criteria": "Completes all 3 steps with verbal prompts 4/5 post-meltdown occasions",
+      "mastery_rule": "75% across occurrences",
+      "generalization": "After any big emotional episode",
+      "variants": [
+        { "steps": ["quiet rest", "optional talk", "physical reconnection"], "duration": "10-15 min total" },
+        { "steps": ["sensory regulation", "brief reflection", "affirmation + hug"], "duration": "varies" },
+        { "steps": ["alone time if needed", "check-in when ready", "together activity"], "duration": "child-led timing" }
+      ]
+    }
+  ]
+}
