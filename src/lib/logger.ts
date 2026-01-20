@@ -50,6 +50,7 @@ export const logger = {
    */
   debug(message: string, ...args: unknown[]): void {
     if (shouldLog('debug')) {
+      console.debug(formatMessage('debug', message), ...args);
     }
   },
 
@@ -58,6 +59,7 @@ export const logger = {
    */
   info(message: string, ...args: unknown[]): void {
     if (shouldLog('info')) {
+      console.info(formatMessage('info', message), ...args);
     }
   },
 
@@ -66,6 +68,7 @@ export const logger = {
    */
   warn(message: string, ...args: unknown[]): void {
     if (shouldLog('warn')) {
+      console.warn(formatMessage('warn', message), ...args);
     }
   },
 
@@ -83,6 +86,7 @@ export const logger = {
    */
   dev(message: string, ...args: unknown[]): void {
     if (import.meta.env.DEV) {
+      console.log(formatMessage('debug', message), ...args);
     }
   },
 
@@ -110,15 +114,19 @@ export const logger = {
 // Export a production-safe console replacement
 export const safeConsole = {
   log: (...args: unknown[]) => {
+    if (import.meta.env.DEV) console.log(...args);
   },
   info: (...args: unknown[]) => {
+    if (import.meta.env.DEV) console.info(...args);
   },
   warn: (...args: unknown[]) => {
+    if (import.meta.env.DEV) console.warn(...args);
   },
   error: (...args: unknown[]) => {
     console.error(...args); // Always show errors
   },
   debug: (...args: unknown[]) => {
+    if (import.meta.env.DEV) console.debug(...args);
   },
 };
 
