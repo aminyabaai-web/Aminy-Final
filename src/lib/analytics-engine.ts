@@ -453,23 +453,37 @@ class AnalyticsEngine {
   }
 
   private async sendEvents(events: AnalyticsEvent[]): Promise<void> {
-    // In production, this would send to your analytics service
-    // For now, we'll store locally and provide export functionality
-    
-    const existingData = localStorage.getItem('aminy_analytics') || '[]';
-    const analyticsData = JSON.parse(existingData);
-    analyticsData.push(...events);
-    
-    // Keep only last 1000 events to prevent storage overflow
-    const trimmedData = analyticsData.slice(-1000);
-    localStorage.setItem('aminy_analytics', JSON.stringify(trimmedData));
-    
-    // In production, replace with:
-    // await fetch('/api/analytics', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({ events, sessionId: this.sessionId })
-    // });
+    // Send to backend analytics endpoint
+    const EDGE_FUNCTION_BASE = `https://qpzsvafwcwyrkdolrjbu.supabase.co/functions/v1/make-server-8a022548`;
+
+    try {
+      // Send to backend for persistent storage
+      await fetch(`${EDGE_FUNCTION_BASE}/analytics/track`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ events, sessionId: this.sessionId })
+      });
+    } catch (error) {
+      // Fallback to localStorage if backend fails
+      console.warn('Analytics backend unavailable, storing locally');
+      const existingData = localStorage.getItem('aminy_analytics') || '[]';
+      const analyticsData = JSON.parse(existingData);
+      analyticsData.push(...events);
+      const trimmedData = analyticsData.slice(-500);
+      localStorage.setItem('aminy_analytics', JSON.stringify(trimmedData));
+    }
+
+    // Also send to Google Analytics if configured
+    const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID;
+    if (GA_MEASUREMENT_ID && typeof window !== 'undefined' && (window as any).gtag) {
+      for (const event of events) {
+        (window as any).gtag('event', event.event, {
+          ...event.properties,
+          user_tier: event.userTier,
+          session_id: event.sessionId,
+        });
+      }
+    }
   }
 
   public exportData(): {

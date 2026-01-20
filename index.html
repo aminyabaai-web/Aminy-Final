@@ -24,6 +24,15 @@
       rel="stylesheet"
     />
 
+    <!-- Google Analytics - Only loads if measurement ID is configured -->
+    <script>
+      // GA4 will be initialized by the app if VITE_GA_MEASUREMENT_ID is set
+      // This is the gtag.js setup that waits for the measurement ID
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    </script>
+
     <!-- Inline critical CSS for faster FCP -->
     <style>
       /* Prevent layout shift during load */

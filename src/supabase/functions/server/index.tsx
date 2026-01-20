@@ -679,6 +679,36 @@ app.get("/make-server-8a022548/ai/usage", async (c) => {
 });
 
 // ============================================================================
+// ANALYTICS ENDPOINTS
+// ============================================================================
+
+// Track analytics events (no auth required for anonymous tracking)
+app.post("/make-server-8a022548/analytics/track", async (c) => {
+  try {
+    const { events, sessionId } = await c.req.json();
+
+    if (!events || !Array.isArray(events)) {
+      return c.json({ error: 'events array required' }, 400);
+    }
+
+    // Store analytics events in KV store by session
+    const analyticsKey = `analytics:${sessionId}:${Date.now()}`;
+    await kv.set(analyticsKey, {
+      events,
+      sessionId,
+      receivedAt: new Date().toISOString(),
+      ip: c.req.header('x-forwarded-for') || 'unknown',
+      userAgent: c.req.header('user-agent') || 'unknown',
+    });
+
+    return c.json({ success: true, received: events.length });
+  } catch (error) {
+    console.error('Analytics track error:', error);
+    return c.json({ error: 'Failed to track analytics' }, 500);
+  }
+});
+
+// ============================================================================
 // OUTCOME AI ENDPOINTS
 // ============================================================================
 
