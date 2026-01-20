@@ -13,6 +13,7 @@ import {
   resumeSubscription,
   createOneTimePayment,
   handleWebhook,
+  validatePromoCode,
 } from "./stripe-routes.ts";
 import {
   createRoom as createVideoRoom,
@@ -38,6 +39,7 @@ import {
   getAvailableSlots,
   verifyProvider,
 } from "./provider-routes.ts";
+import { sanitizeForAI, sanitizeMessages, sanitizeName } from "./sanitize.ts";
 
 const app = new Hono();
 
@@ -197,6 +199,12 @@ app.post("/make-server-8a022548/ai/categorize", async (c) => {
       return c.json({ error: 'userInput is required and must be a string' }, 400);
     }
 
+    // SECURITY: Sanitize user input to prevent prompt injection
+    const sanitizedInput = sanitizeForAI(userInput);
+    if (!sanitizedInput) {
+      return c.json({ error: 'Invalid input after sanitization' }, 400);
+    }
+
     const aiConfig = getAIConfig();
     if (!aiConfig) {
       return c.json({ error: 'AI service not configured. Set OPENAI_API_KEY or ANTHROPIC_API_KEY.' }, 500);
@@ -230,10 +238,13 @@ When the user shares their thoughts, respond with a JSON object:
 
 Keep language simple, warm, and action-oriented. Remember: these parents are overwhelmed—help them focus on ONE thing at a time.`;
 
+    // Also sanitize context if provided
+    const sanitizedContext = context ? sanitizeForAI(context) : '';
+
     const result = await callAI(aiConfig, {
       systemPrompt,
       messages: [
-        { role: 'user', content: `${context ? `Context: ${context}\n\n` : ''}User's thoughts: ${userInput}\n\nRespond ONLY with valid JSON matching the format specified in the system prompt.` }
+        { role: 'user', content: `${sanitizedContext ? `Context: ${sanitizedContext}\n\n` : ''}User's thoughts: ${sanitizedInput}\n\nRespond ONLY with valid JSON matching the format specified in the system prompt.` }
       ],
       maxTokens: 1000,
       temperature: 0.7
@@ -423,6 +434,12 @@ app.post("/make-server-8a022548/ai/chat", async (c) => {
       return c.json({ error: 'messages array is required' }, 400);
     }
 
+    // SECURITY: Sanitize all user messages to prevent prompt injection
+    const sanitizedMessages = sanitizeMessages(messages);
+    if (sanitizedMessages.length === 0) {
+      return c.json({ error: 'No valid messages after sanitization' }, 400);
+    }
+
     // Get AI config (OpenAI preferred, Anthropic fallback)
     const aiConfig = getAIConfig();
     if (!aiConfig) {
@@ -540,8 +557,8 @@ DON'T:
       systemPrompt += `\n\nYou're talking with the parent of ${context.childName}${context.childAge ? `, age ${context.childAge}` : ''}. Always use their child's name naturally in your responses.`;
     }
 
-    // Prepare messages for the AI call
-    const filteredMessages = messages.filter(m => m.role !== 'system');
+    // Prepare messages for the AI call (use sanitized messages)
+    const filteredMessages = sanitizedMessages.filter(m => m.role !== 'system');
 
     // Ensure messages alternate between user and assistant
     const validMessages = [];
@@ -1174,6 +1191,11 @@ app.post("/make-server-8a022548/payments/checkout", async (c) => {
 // Create Stripe checkout session - alternate endpoint for frontend compatibility
 app.post("/make-server-8a022548/payments/create-checkout", async (c) => {
   return createCheckoutSession(c.req.raw);
+});
+
+// Validate promo code (secure server-side validation)
+app.post("/make-server-8a022548/payments/validate-promo", async (c) => {
+  return validatePromoCode(c.req.raw);
 });
 
 // Create Stripe customer portal session - REAL STRIPE INTEGRATION

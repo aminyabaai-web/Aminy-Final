@@ -1097,33 +1097,29 @@ export default function App() {
           );
 
         case "admin-portal":
-          // Secure admin portal - only accessible to admin role
+          // Secure admin portal - server-side role verification only
+          // SECURITY: Removed localStorage 'dev-mode' bypass - was exploitable
+          // Admin access is now strictly controlled via database role field
           if (userData.role !== 'admin') {
-            // In production, show access denied. For pilot, allow with email check
-            const isAdminEmail = userData.email?.endsWith('@aminy.app') ||
-                                  userData.email?.endsWith('@aact.org') ||
-                                  localStorage.getItem('dev-mode') === 'true';
-            if (!isAdminEmail) {
-              return (
-                <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-                  <div className="bg-white rounded-xl shadow-lg p-8 max-w-md text-center">
-                    <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <span className="text-3xl">🔒</span>
-                    </div>
-                    <h1 className="text-xl font-semibold text-gray-900 mb-2">Access Restricted</h1>
-                    <p className="text-gray-600 mb-6">
-                      The admin portal is only available to authorized Aminy administrators.
-                    </p>
-                    <button
-                      onClick={() => navigateToScreen("dashboard")}
-                      className="bg-accent text-white px-6 py-2 rounded-lg hover:bg-accent/90 transition-colors"
-                    >
-                      Return to Dashboard
-                    </button>
+            return (
+              <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+                <div className="bg-white rounded-xl shadow-lg p-8 max-w-md text-center">
+                  <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span className="text-3xl">🔒</span>
                   </div>
+                  <h1 className="text-xl font-semibold text-gray-900 mb-2">Access Restricted</h1>
+                  <p className="text-gray-600 mb-6">
+                    The admin portal is only available to authorized Aminy administrators.
+                  </p>
+                  <button
+                    onClick={() => navigateToScreen("dashboard")}
+                    className="bg-accent text-white px-6 py-2 rounded-lg hover:bg-accent/90 transition-colors"
+                  >
+                    Return to Dashboard
+                  </button>
                 </div>
-              );
-            }
+              </div>
+            );
           }
           return (
             <Suspense fallback={<LoadingSkeleton />}>

@@ -284,6 +284,129 @@ const PRICE_IDS: Record<string, string> = {
   pro_annual: Deno.env.get('STRIPE_PRICE_PRO_ANNUAL') || 'price_pro_annual',
 };
 
+// ============================================================================
+// SECURE PROMO CODE HANDLING (Server-Side Only)
+// ============================================================================
+
+/**
+ * Promo codes are stored server-side for security.
+ * In production, these should be in a database table with:
+ * - code, type, value, description, expiresAt, usageLimit, usageCount
+ */
+const PROMO_CODES: Record<string, {
+  type: 'percent' | 'fixed';
+  value: number;
+  description: string;
+  expiresAt?: string; // ISO date string
+  usageLimit?: number;
+}> = {
+  'WELCOME20': {
+    type: 'percent',
+    value: 20,
+    description: '20% off your first visit',
+  },
+  'FIRST10': {
+    type: 'fixed',
+    value: 1000, // $10 in cents
+    description: '$10 off',
+  },
+  'AMINY50': {
+    type: 'percent',
+    value: 50,
+    description: '50% off (limited time)',
+    expiresAt: '2025-12-31T23:59:59Z',
+  },
+  'AACT25': {
+    type: 'percent',
+    value: 25,
+    description: '25% AACT partner discount',
+  },
+};
+
+/**
+ * Validate and get promo code details
+ * This is the secure backend endpoint - promo codes are NOT exposed to frontend
+ */
+export async function validatePromoCode(req: Request): Promise<Response> {
+  try {
+    const { code, subtotal } = await req.json();
+
+    if (!code || typeof code !== 'string') {
+      return new Response(JSON.stringify({ valid: false, error: 'Invalid code format' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Sanitize and uppercase the code
+    const sanitizedCode = code.toUpperCase().replace(/[^A-Z0-9]/g, '').substring(0, 50);
+
+    const promo = PROMO_CODES[sanitizedCode];
+    if (!promo) {
+      return new Response(JSON.stringify({ valid: false, error: 'Invalid promo code' }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Check expiration
+    if (promo.expiresAt && new Date(promo.expiresAt) < new Date()) {
+      return new Response(JSON.stringify({ valid: false, error: 'Promo code has expired' }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Calculate discount if subtotal provided
+    let discountAmount = 0;
+    if (subtotal && typeof subtotal === 'number') {
+      if (promo.type === 'percent') {
+        discountAmount = Math.round(subtotal * (promo.value / 100));
+      } else {
+        discountAmount = promo.value;
+      }
+    }
+
+    return new Response(JSON.stringify({
+      valid: true,
+      description: promo.description,
+      type: promo.type,
+      value: promo.value,
+      discountAmount,
+    }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  } catch (error) {
+    console.error('Promo validation error:', error);
+    return new Response(JSON.stringify({ valid: false, error: 'Validation failed' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+}
+
+/**
+ * Calculate discount for a promo code (internal use)
+ */
+export function calculatePromoDiscount(code: string, subtotal: number): number {
+  const sanitizedCode = code.toUpperCase().replace(/[^A-Z0-9]/g, '');
+  const promo = PROMO_CODES[sanitizedCode];
+
+  if (!promo) return 0;
+
+  // Check expiration
+  if (promo.expiresAt && new Date(promo.expiresAt) < new Date()) {
+    return 0;
+  }
+
+  if (promo.type === 'percent') {
+    return Math.round(subtotal * (promo.value / 100));
+  }
+
+  return promo.value;
+}
+
 /**
  * Create a Stripe Checkout Session for subscription
  */

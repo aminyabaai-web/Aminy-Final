@@ -344,12 +344,13 @@ export type VisitPriceType = keyof typeof VISIT_PRICES;
 
 /**
  * Calculate visit price with discounts
+ * Note: Now async because promo code validation is server-side
  */
-export function calculateVisitPrice(
+export async function calculateVisitPrice(
   visitType: VisitPriceType,
   isMember: boolean = false,
   promoCode?: string
-): { subtotal: number; discount: number; total: number; breakdown: string[] } {
+): Promise<{ subtotal: number; discount: number; total: number; breakdown: string[] }> {
   const pricing = VISIT_PRICES[visitType];
   const subtotal = pricing.basePrice;
   let discount = 0;
@@ -360,9 +361,9 @@ export function calculateVisitPrice(
     breakdown.push(`Member discount: -$${(pricing.memberDiscount / 100).toFixed(2)}`);
   }
 
-  // Handle promo codes
+  // Handle promo codes (async call to backend)
   if (promoCode) {
-    const promoDiscount = getPromoDiscount(promoCode, subtotal);
+    const promoDiscount = await getPromoDiscount(promoCode, subtotal);
     if (promoDiscount > 0) {
       discount += promoDiscount;
       breakdown.push(`Promo "${promoCode}": -$${(promoDiscount / 100).toFixed(2)}`);
@@ -375,42 +376,52 @@ export function calculateVisitPrice(
 }
 
 /**
- * Get promo code discount
+ * Get promo code discount (calls backend API)
+ * SECURITY: Promo codes are validated server-side only
  */
-function getPromoDiscount(code: string, subtotal: number): number {
-  const promoCodes: Record<string, { type: 'percent' | 'fixed'; value: number }> = {
-    'WELCOME20': { type: 'percent', value: 20 },
-    'FIRST10': { type: 'fixed', value: 1000 }, // $10 off
-    'AMINY50': { type: 'percent', value: 50 },
-    'AACT25': { type: 'percent', value: 25 }, // Partner discount
-  };
-
-  const promo = promoCodes[code.toUpperCase()];
-  if (!promo) return 0;
-
-  if (promo.type === 'percent') {
-    return Math.round(subtotal * (promo.value / 100));
+async function getPromoDiscount(code: string, subtotal: number): Promise<number> {
+  try {
+    const result = await validatePromoCode(code, subtotal);
+    return result.discountAmount || 0;
+  } catch {
+    return 0;
   }
-
-  return promo.value;
 }
 
 /**
- * Validate promo code
+ * Validate promo code (calls backend API)
+ * SECURITY: Promo codes are NOT hardcoded in frontend
  */
-export function validatePromoCode(code: string): { valid: boolean; description?: string } {
-  const promoCodes: Record<string, string> = {
-    'WELCOME20': '20% off your first visit',
-    'FIRST10': '$10 off',
-    'AMINY50': '50% off (limited time)',
-    'AACT25': '25% AACT partner discount',
-  };
+export async function validatePromoCode(
+  code: string,
+  subtotal?: number
+): Promise<{
+  valid: boolean;
+  description?: string;
+  type?: 'percent' | 'fixed';
+  value?: number;
+  discountAmount?: number;
+  error?: string;
+}> {
+  try {
+    const response = await fetch(`${EDGE_FUNCTION_BASE}/payments/validate-promo`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${publicAnonKey}`,
+      },
+      body: JSON.stringify({ code, subtotal }),
+    });
 
-  const description = promoCodes[code.toUpperCase()];
-  return {
-    valid: !!description,
-    description,
-  };
+    if (!response.ok) {
+      return { valid: false, error: 'Validation failed' };
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Promo validation error:', error);
+    return { valid: false, error: 'Network error' };
+  }
 }
 
 /**
