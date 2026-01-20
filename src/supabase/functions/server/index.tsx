@@ -109,13 +109,54 @@ function getAIConfig(): AIConfig | null {
   return null;
 }
 
+// Token cost tracking (approximate costs per 1K tokens as of 2025)
+const TOKEN_COSTS = {
+  'gpt-4o': { input: 0.0025, output: 0.01 }, // $2.50 / $10 per 1M tokens
+  'claude-sonnet-4-20250514': { input: 0.003, output: 0.015 }, // $3 / $15 per 1M tokens
+};
+
+interface AIUsage {
+  inputTokens: number;
+  outputTokens: number;
+  totalTokens: number;
+  estimatedCost: number;
+  model: string;
+}
+
+async function trackTokenUsage(
+  userId: string,
+  usage: AIUsage
+): Promise<void> {
+  try {
+    // Store token usage for cost monitoring
+    const usageKey = `ai_tokens:${userId}:${new Date().toISOString().split('T')[0]}`;
+    const existing = await kv.get(usageKey) || { totalTokens: 0, totalCost: 0, requests: 0 };
+
+    await kv.set(usageKey, {
+      totalTokens: existing.totalTokens + usage.totalTokens,
+      totalCost: existing.totalCost + usage.estimatedCost,
+      requests: existing.requests + 1,
+      lastUpdated: new Date().toISOString(),
+    });
+
+    // Alert if daily cost exceeds threshold (logged for monitoring)
+    const DAILY_COST_ALERT_THRESHOLD = 10; // $10/day per user
+    if (existing.totalCost + usage.estimatedCost > DAILY_COST_ALERT_THRESHOLD) {
+      console.warn(`[COST ALERT] User ${userId} exceeded $${DAILY_COST_ALERT_THRESHOLD}/day AI spend`);
+    }
+  } catch (error) {
+    console.error('Token tracking error:', error);
+  }
+}
+
 async function callAI(config: AIConfig, options: {
   systemPrompt: string;
   messages: Array<{ role: string; content: string }>;
   maxTokens?: number;
   temperature?: number;
-}): Promise<{ text: string; usage?: any }> {
-  const { systemPrompt, messages, maxTokens = 1000, temperature = 0.7 } = options;
+  userId?: string;
+}): Promise<{ text: string; usage?: AIUsage }> {
+  const { systemPrompt, messages, maxTokens = 1000, temperature = 0.7, userId } = options;
 
   if (config.provider === 'openai') {
     // OpenAI API
@@ -142,9 +183,24 @@ async function callAI(config: AIConfig, options: {
     }
 
     const data = await response.json();
+    const model = 'gpt-4o';
+    const costs = TOKEN_COSTS[model];
+    const usage: AIUsage = {
+      inputTokens: data.usage?.prompt_tokens || 0,
+      outputTokens: data.usage?.completion_tokens || 0,
+      totalTokens: data.usage?.total_tokens || 0,
+      estimatedCost: ((data.usage?.prompt_tokens || 0) * costs.input + (data.usage?.completion_tokens || 0) * costs.output) / 1000,
+      model,
+    };
+
+    // Track usage if userId provided
+    if (userId) {
+      await trackTokenUsage(userId, usage);
+    }
+
     return {
       text: data.choices[0].message.content,
-      usage: data.usage
+      usage,
     };
   } else {
     // Anthropic (Claude) API
@@ -173,9 +229,24 @@ async function callAI(config: AIConfig, options: {
     }
 
     const data = await response.json();
+    const model = 'claude-sonnet-4-20250514';
+    const costs = TOKEN_COSTS[model];
+    const usage: AIUsage = {
+      inputTokens: data.usage?.input_tokens || 0,
+      outputTokens: data.usage?.output_tokens || 0,
+      totalTokens: (data.usage?.input_tokens || 0) + (data.usage?.output_tokens || 0),
+      estimatedCost: ((data.usage?.input_tokens || 0) * costs.input + (data.usage?.output_tokens || 0) * costs.output) / 1000,
+      model,
+    };
+
+    // Track usage if userId provided
+    if (userId) {
+      await trackTokenUsage(userId, usage);
+    }
+
     return {
       text: data.content[0].text,
-      usage: data.usage
+      usage,
     };
   }
 }
@@ -247,11 +318,12 @@ Keep language simple, warm, and action-oriented. Remember: these parents are ove
         { role: 'user', content: `${sanitizedContext ? `Context: ${sanitizedContext}\n\n` : ''}User's thoughts: ${sanitizedInput}\n\nRespond ONLY with valid JSON matching the format specified in the system prompt.` }
       ],
       maxTokens: 1000,
-      temperature: 0.7
+      temperature: 0.7,
+      userId, // Track token usage
     });
 
     const aiResponse = JSON.parse(result.text);
-    return c.json(aiResponse);
+    return c.json({ ...aiResponse, usage: result.usage });
   } catch (error) {
     return c.json({ error: 'Failed to process request' }, 500);
   }
@@ -585,9 +657,9 @@ DON'T:
       systemPrompt,
       messages: validMessages,
       maxTokens: 500,
-      temperature: 0.9
+      temperature: 0.9,
+      userId: rateLimitId, // Track token usage
     });
-
 
     // Extract name and age from user's last message if present
     const lastUserMessage = validMessages[validMessages.length - 1]?.content || '';
@@ -662,6 +734,10 @@ app.get("/make-server-8a022548/ai/usage", async (c) => {
     // Get daily usage
     const dailyUsage = await getDailyUsage(supabase, user.id, tier);
 
+    // Get token usage for today
+    const today = new Date().toISOString().split('T')[0];
+    const tokenUsage = await kv.get(`ai_tokens:${user.id}:${today}`) || { totalTokens: 0, totalCost: 0, requests: 0 };
+
     return c.json({
       tier,
       dailyLimit: DAILY_MESSAGE_LIMITS[tier] || DAILY_MESSAGE_LIMITS.default,
@@ -670,6 +746,12 @@ app.get("/make-server-8a022548/ai/usage", async (c) => {
         limit: dailyUsage.messagesLimit,
         remaining: dailyUsage.messagesRemaining,
         resetsAt: dailyUsage.resetsAt,
+      },
+      tokenUsage: {
+        totalTokens: tokenUsage.totalTokens,
+        estimatedCost: tokenUsage.totalCost,
+        requests: tokenUsage.requests,
+        date: today,
       },
     });
   } catch (error) {
