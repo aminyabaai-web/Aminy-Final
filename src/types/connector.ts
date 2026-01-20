@@ -184,9 +184,9 @@ export interface Report {
 }
 
 // Event Bus Types
-export interface ConnectorEvent {
+export interface ConnectorEvent<T = unknown> {
   type: string;
-  payload: any;
+  payload: T;
   timestamp: Date;
   source: string;
 }

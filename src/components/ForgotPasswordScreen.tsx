@@ -48,8 +48,9 @@ export function ForgotPasswordScreen({ onBack, onBackToLogin }: ForgotPasswordSc
       }
 
       setIsSuccess(true);
-    } catch (error: any) {
-      setErrors({ email: error.message || 'Failed to send reset email. Please try again.' });
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to send reset email. Please try again.';
+      setErrors({ email: errorMessage });
     } finally {
       setIsLoading(false);
     }

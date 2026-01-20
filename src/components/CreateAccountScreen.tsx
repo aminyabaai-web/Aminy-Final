@@ -156,9 +156,10 @@ export function CreateAccountScreen({
         }
         onCreateAccount(email);
       }
-    } catch (error: any) {
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Something went wrong. Please try again.";
       setErrors({
-        signup: error.message || "Something went wrong. Please try again."
+        signup: errorMessage
       });
     } finally {
       setIsLoading(false);
@@ -172,7 +173,7 @@ export function CreateAccountScreen({
     setErrors({});
 
     try {
-      const { data, error } = await supabase.auth.signInWithOAuth({
+      const { error } = await supabase.auth.signInWithOAuth({
         provider: provider,
         options: {
           redirectTo: `${window.location.origin}/auth/callback`,
@@ -189,10 +190,11 @@ export function CreateAccountScreen({
 
       // The user will be redirected to the OAuth provider
       // On success, they'll be redirected back to /auth/callback
-    } catch (error: any) {
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : `Unable to sign in with ${provider}. Please try again.`;
       console.error(`${provider} auth error:`, error);
       setErrors({
-        signup: error.message || `Unable to sign in with ${provider}. Please try again.`
+        signup: errorMessage
       });
       setSocialAuthLoading(null);
     }
@@ -546,6 +548,7 @@ export function CreateAccountScreen({
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   disabled={isLoading}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
                   style={{
                     position: 'absolute',
                     right: '14px',
@@ -561,7 +564,7 @@ export function CreateAccountScreen({
                     justifyContent: 'center',
                   }}
                 >
-                  {showPassword ? <EyeOff style={{ width: '18px', height: '18px', strokeWidth: 1.5 }} /> : <Eye style={{ width: '18px', height: '18px', strokeWidth: 1.5 }} />}
+                  {showPassword ? <EyeOff style={{ width: '18px', height: '18px', strokeWidth: 1.5 }} aria-hidden="true" /> : <Eye style={{ width: '18px', height: '18px', strokeWidth: 1.5 }} aria-hidden="true" />}
                 </button>
               </div>
               {errors.password && (
@@ -595,6 +598,7 @@ export function CreateAccountScreen({
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   disabled={isLoading}
+                  aria-label={showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'}
                   style={{
                     position: 'absolute',
                     right: '14px',
@@ -610,7 +614,7 @@ export function CreateAccountScreen({
                     justifyContent: 'center',
                   }}
                 >
-                  {showConfirmPassword ? <EyeOff style={{ width: '18px', height: '18px', strokeWidth: 1.5 }} /> : <Eye style={{ width: '18px', height: '18px', strokeWidth: 1.5 }} />}
+                  {showConfirmPassword ? <EyeOff style={{ width: '18px', height: '18px', strokeWidth: 1.5 }} aria-hidden="true" /> : <Eye style={{ width: '18px', height: '18px', strokeWidth: 1.5 }} aria-hidden="true" />}
                 </button>
               </div>
               {errors.confirmPassword && (

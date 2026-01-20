@@ -704,7 +704,7 @@ export default function App() {
     navigateToScreen("onboarding");
   };
 
-  const handleOnboardingComplete = (data: any) => {
+  const handleOnboardingComplete = (data: Partial<UserData>) => {
     setUserData((prev) => ({
       ...prev,
       ...data,

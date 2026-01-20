@@ -46,8 +46,39 @@ import {
 } from "./ui/tooltip";
 import { SummaryStep } from "./SummaryStepNew";
 
+interface OnboardingFormData {
+  caregiverRole: string;
+  caregiverName: string;
+  email: string;
+  state: string;
+  insurance: string;
+  agreeToTrial: boolean;
+  childName: string;
+  childAge: string;
+  languages: string[];
+  verbalAbility: string;
+  interests: string;
+  triggers: string;
+  tonePreference: string;
+  timeSlots: string[];
+  preferredName: string;
+  pronouns: string;
+  relationshipToChild: string;
+  diagnosis: string;
+  currentFocus: string;
+  anythingElse: string;
+  freeformConcerns: string;
+  needsDomains: string[];
+  additionalNeeds: string;
+  goals: string[];
+  whatMatters: string;
+  whatHelpWith: string;
+  schedule: string;
+  parentName: string;
+}
+
 interface OnboardingFlowProps {
-  onComplete: (carePlanData?: any) => void;
+  onComplete: (carePlanData?: Partial<OnboardingFormData>) => void;
 }
 
 export function OnboardingFlow({
@@ -364,7 +395,12 @@ export function OnboardingFlow({
   );
 }
 
-function PreferencesStep({ formData, setFormData }: any) {
+interface PreferencesStepProps {
+  formData: OnboardingFormData;
+  setFormData: React.Dispatch<React.SetStateAction<OnboardingFormData>>;
+}
+
+function PreferencesStep({ formData, setFormData }: PreferencesStepProps) {
   const toneOptions = [
     { 
       id: "supportive", 

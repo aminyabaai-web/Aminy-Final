@@ -16,8 +16,17 @@ import {
   Share
 } from "lucide-react";
 
+interface SummaryFormData {
+  childName?: string;
+  childAge?: string;
+  needsDomains?: string[];
+  goals?: string[];
+  tonePreference?: string;
+  [key: string]: unknown;
+}
+
 interface SummaryStepProps {
-  formData: any;
+  formData: SummaryFormData;
   onRestart: () => void;
 }
 

@@ -1,7 +1,18 @@
 import React from "react";
 import { Label } from "./ui/label";
 
-function PreferencesStep({ formData, setFormData }: any) {
+interface FormData {
+  tonePreference: string;
+  timeSlots: string[];
+  [key: string]: unknown;
+}
+
+interface PreferencesStepProps {
+  formData: FormData;
+  setFormData: React.Dispatch<React.SetStateAction<FormData>>;
+}
+
+function PreferencesStep({ formData, setFormData }: PreferencesStepProps) {
   const toneOptions = [
     { 
       id: "supportive", 

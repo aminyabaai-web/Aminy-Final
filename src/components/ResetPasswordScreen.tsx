@@ -71,9 +71,10 @@ export function ResetPasswordScreen({ onSuccess, onBack }: ResetPasswordScreenPr
       setTimeout(() => {
         onSuccess();
       }, 2000);
-    } catch (error: any) {
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to update password. Please try again.';
       setErrors({
-        general: error.message || 'Failed to update password. Please try again.',
+        general: errorMessage,
       });
     } finally {
       setIsLoading(false);

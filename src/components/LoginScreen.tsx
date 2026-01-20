@@ -124,9 +124,10 @@ export function LoginScreen({
       if (data.user) {
         onLogin(data.user.email || email);
       }
-    } catch (error: any) {
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "We couldn't find that combination. Double-check and try again.";
       setErrors({
-        signin: error.message || "We couldn't find that combination. Double-check and try again."
+        signin: errorMessage
       });
     } finally {
       setIsLoading(false);
@@ -149,9 +150,10 @@ export function LoginScreen({
         throw new Error(error.message);
       }
       // OAuth will redirect, so we don't need to do anything else
-    } catch (error: any) {
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Apple Sign-In didn't complete. Please try again.";
       setErrors({
-        apple: error.message || "Apple Sign-In didn't complete. Please try again."
+        apple: errorMessage
       });
       setIsLoading(false);
     }
@@ -177,9 +179,10 @@ export function LoginScreen({
         throw new Error(error.message);
       }
       // OAuth will redirect, so we don't need to do anything else
-    } catch (error: any) {
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Google Sign-In didn't complete. Please try again.";
       setErrors({
-        google: error.message || "Google Sign-In didn't complete. Please try again."
+        google: errorMessage
       });
       setIsLoading(false);
     }
@@ -415,8 +418,9 @@ export function LoginScreen({
                     className="absolute right-4 top-1/2 -translate-y-1/2 transition-opacity hover:opacity-70"
                     style={{ color: '#577590' }}
                     disabled={isLoading}
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
                   >
-                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    {showPassword ? <EyeOff className="w-5 h-5" aria-hidden="true" /> : <Eye className="w-5 h-5" aria-hidden="true" />}
                   </button>
                 </div>
                 {errors.password && (

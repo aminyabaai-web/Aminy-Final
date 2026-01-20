@@ -28,8 +28,16 @@ import {
   Zap
 } from "lucide-react";
 
+interface CarePlanFormData {
+  childName?: string;
+  needsDomains?: string[];
+  goals?: string[];
+  tonePreference?: string;
+  [key: string]: unknown;
+}
+
 interface CarePlanGeneratorStepProps {
-  formData: any;
+  formData: CarePlanFormData;
   onComplete: () => void;
 }
 
@@ -183,7 +191,15 @@ export function CarePlanGeneratorStep({ formData, onComplete }: CarePlanGenerato
   const CompletePlan = () => {
     // Generate goals based on user's selected domains
     const generateGoalsForDomains = () => {
-      const goalTemplates: { [key: string]: any } = {
+      interface GoalTemplate {
+        domain: string;
+        goal: string;
+        baseline: string;
+        target: string;
+        timeline: string;
+        strategies: string[];
+      }
+      const goalTemplates: Record<string, GoalTemplate> = {
         speech: {
           domain: "Speech & Communication",
           goal: "Increase functional communication requests",

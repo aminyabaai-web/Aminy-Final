@@ -39,6 +39,7 @@ import {
   formatRemainingTime,
   type DailyRoom,
 } from '../lib/daily-video';
+import type { DailyEvent, DailyCallObject, DailyParticipant } from '../types/video';
 
 interface VideoCallProps {
   sessionId: string;
@@ -78,7 +79,7 @@ export function VideoCall({
   // Refs
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const remoteVideoRef = useRef<HTMLVideoElement>(null);
-  const callObjectRef = useRef<any>(null);
+  const callObjectRef = useRef<DailyCallObject | null>(null);
 
   // State
   const [callState, setCallState] = useState<CallState>('idle');
@@ -151,16 +152,17 @@ export function VideoCall({
       // Join the call
       setCallState('joining');
       await callObject.join();
-    } catch (err: any) {
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to start video call';
       console.error('Failed to initialize call:', err);
-      setError(err.message || 'Failed to start video call');
+      setError(errorMessage);
       setCallState('error');
-      onError?.(err.message);
+      onError?.(errorMessage);
     }
   }, [sessionId, userId, userName, isProvider, sessionType, onError]);
 
   // Handle joined meeting
-  const handleJoinedMeeting = useCallback((event: any) => {
+  const handleJoinedMeeting = useCallback((event: DailyEvent) => {
     setCallState('joined');
 
     // Start session timer
@@ -190,41 +192,41 @@ export function VideoCall({
   }, [onCallEnd]);
 
   // Handle participant joined
-  const handleParticipantJoined = useCallback((event: any) => {
+  const handleParticipantJoined = useCallback((event: DailyEvent) => {
     updateParticipants();
 
     // Set up remote video
-    if (remoteVideoRef.current && event.participant?.videoTrack) {
-      remoteVideoRef.current.srcObject = new MediaStream([event.participant.videoTrack]);
+    if (remoteVideoRef.current && event.participant?.tracks?.video?.persistentTrack) {
+      remoteVideoRef.current.srcObject = new MediaStream([event.participant.tracks.video.persistentTrack]);
     }
   }, []);
 
   // Handle participant left
-  const handleParticipantLeft = useCallback((event: any) => {
+  const handleParticipantLeft = useCallback((_event: DailyEvent) => {
     updateParticipants();
   }, []);
 
   // Handle participant updated
-  const handleParticipantUpdated = useCallback((event: any) => {
+  const handleParticipantUpdated = useCallback((_event: DailyEvent) => {
     updateParticipants();
   }, []);
 
   // Handle call error
-  const handleCallError = useCallback((event: any) => {
+  const handleCallError = useCallback((event: DailyEvent) => {
     console.error('Call error:', event);
-    setError(event.errorMsg || 'An error occurred during the call');
+    setError(event.errorMsg || event.error?.msg || 'An error occurred during the call');
     setCallState('error');
   }, []);
 
   // Handle camera error
-  const handleCameraError = useCallback((event: any) => {
+  const handleCameraError = useCallback((event: DailyEvent) => {
     console.error('Camera error:', event);
     setError('Camera access error. Please check your permissions.');
   }, []);
 
   // Handle track started
-  const handleTrackStarted = useCallback((event: any) => {
-    if (event.participant && !event.participant.local && event.track.kind === 'video') {
+  const handleTrackStarted = useCallback((event: DailyEvent) => {
+    if (event.participant && !event.participant.local && event.track?.kind === 'video') {
       if (remoteVideoRef.current) {
         remoteVideoRef.current.srcObject = new MediaStream([event.track]);
       }
@@ -232,7 +234,7 @@ export function VideoCall({
   }, []);
 
   // Handle track stopped
-  const handleTrackStopped = useCallback((event: any) => {
+  const handleTrackStopped = useCallback((_event: DailyEvent) => {
     updateParticipants();
   }, []);
 
@@ -242,7 +244,7 @@ export function VideoCall({
     if (!callObject) return;
 
     const allParticipants = callObject.participants();
-    const participantList: Participant[] = Object.values(allParticipants).map((p: any) => ({
+    const participantList: Participant[] = Object.values(allParticipants).map((p: DailyParticipant) => ({
       sessionId: p.session_id,
       userId: p.user_id,
       userName: p.user_name,
@@ -506,11 +508,12 @@ export function VideoCall({
             variant={audioEnabled ? 'secondary' : 'destructive'}
             className="rounded-full w-14 h-14"
             onClick={toggleAudio}
+            aria-label={audioEnabled ? 'Mute microphone' : 'Unmute microphone'}
           >
             {audioEnabled ? (
-              <Mic className="w-6 h-6" />
+              <Mic className="w-6 h-6" aria-hidden="true" />
             ) : (
-              <MicOff className="w-6 h-6" />
+              <MicOff className="w-6 h-6" aria-hidden="true" />
             )}
           </Button>
 
@@ -520,11 +523,12 @@ export function VideoCall({
             variant={videoEnabled ? 'secondary' : 'destructive'}
             className="rounded-full w-14 h-14"
             onClick={toggleVideo}
+            aria-label={videoEnabled ? 'Turn off camera' : 'Turn on camera'}
           >
             {videoEnabled ? (
-              <Video className="w-6 h-6" />
+              <Video className="w-6 h-6" aria-hidden="true" />
             ) : (
-              <VideoOff className="w-6 h-6" />
+              <VideoOff className="w-6 h-6" aria-hidden="true" />
             )}
           </Button>
 
@@ -534,11 +538,12 @@ export function VideoCall({
             variant={screenShareEnabled ? 'default' : 'secondary'}
             className={`rounded-full w-14 h-14 ${screenShareEnabled ? 'bg-teal-600' : ''}`}
             onClick={toggleScreenShare}
+            aria-label={screenShareEnabled ? 'Stop screen sharing' : 'Share screen'}
           >
             {screenShareEnabled ? (
-              <MonitorOff className="w-6 h-6" />
+              <MonitorOff className="w-6 h-6" aria-hidden="true" />
             ) : (
-              <Monitor className="w-6 h-6" />
+              <Monitor className="w-6 h-6" aria-hidden="true" />
             )}
           </Button>
 
@@ -548,11 +553,12 @@ export function VideoCall({
             variant="secondary"
             className="rounded-full w-14 h-14"
             onClick={() => setSpeakerEnabled(!speakerEnabled)}
+            aria-label={speakerEnabled ? 'Mute speaker' : 'Unmute speaker'}
           >
             {speakerEnabled ? (
-              <Volume2 className="w-6 h-6" />
+              <Volume2 className="w-6 h-6" aria-hidden="true" />
             ) : (
-              <VolumeX className="w-6 h-6" />
+              <VolumeX className="w-6 h-6" aria-hidden="true" />
             )}
           </Button>
 
@@ -562,11 +568,12 @@ export function VideoCall({
             variant="secondary"
             className="rounded-full w-14 h-14"
             onClick={toggleFullscreen}
+            aria-label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
           >
             {isFullscreen ? (
-              <Minimize2 className="w-6 h-6" />
+              <Minimize2 className="w-6 h-6" aria-hidden="true" />
             ) : (
-              <Maximize2 className="w-6 h-6" />
+              <Maximize2 className="w-6 h-6" aria-hidden="true" />
             )}
           </Button>
 
@@ -576,8 +583,9 @@ export function VideoCall({
             variant="destructive"
             className="rounded-full w-14 h-14 bg-red-600 hover:bg-red-700"
             onClick={leaveCall}
+            aria-label="End call"
           >
-            <PhoneOff className="w-6 h-6" />
+            <PhoneOff className="w-6 h-6" aria-hidden="true" />
           </Button>
         </div>
       </div>

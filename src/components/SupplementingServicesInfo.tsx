@@ -38,7 +38,7 @@ export function SupplementingServicesInfo({
     {
       icon: Clock,
       title: 'Between Sessions',
-      description: 'Guidance for the 160+ hours weekly when therapy isn't happening',
+      description: "Guidance for the 160+ hours weekly when therapy isn't happening",
       example: 'Try this calming activity before bedtime tonight',
     },
     {
@@ -50,26 +50,26 @@ export function SupplementingServicesInfo({
     {
       icon: Calendar,
       title: 'Routine Support',
-      description: 'Visual schedules and transition help that match your family's rhythms',
+      description: "Visual schedules and transition help that match your family's rhythms",
       example: 'Morning routine cards customized for your child',
     },
     {
       icon: MessageCircle,
       title: 'Parent Questions',
       description: 'Get answers to those 2am worries without waiting for the next appointment',
-      example: 'Here's what's normal for meltdowns at this age',
+      example: "Here's what's normal for meltdowns at this age",
     },
     {
       icon: Heart,
       title: 'Self-Care Nudges',
-      description: 'Because you need support too, and burned-out parents can't pour from an empty cup',
+      description: "Because you need support too, and burned-out parents can't pour from an empty cup",
       example: 'Take 5 minutes for yourself today',
     },
     {
       icon: BookOpen,
       title: 'Insurance Navigation',
       description: 'Handle paperwork so you spend less time on hold and more time with your child',
-      example: 'Here's a draft appeal letter ready for your review',
+      example: "Here's a draft appeal letter ready for your review",
     },
   ];
 
@@ -82,7 +82,7 @@ export function SupplementingServicesInfo({
     {
       stat: '40%',
       label: 'of parents',
-      context: 'report feeling isolated. You're not alone in this.',
+      context: "report feeling isolated. You're not alone in this.",
     },
     {
       stat: '3x',
@@ -104,7 +104,7 @@ export function SupplementingServicesInfo({
             </h3>
             <p className="text-sm text-teal-700 mb-3">
               Aminy works alongside your therapy team to support you during the
-              160+ weekly hours when professional help isn't available.
+              160+ weekly hours when professional help isn&apos;t available.
             </p>
             {onLearnMore && (
               <Button
