@@ -11,7 +11,7 @@ Setting up Sign in with Apple for Aminy Onboarding app.
 ### 2. Create Service ID for Web Authentication
 - **Service ID**: `app.aminy.web.auth` (or similar)
 - **Description**: Aminy Web Authentication
-- **Domain**: `aminy.app` (or your domain)
+- **Domain**: `aminy-onboarding.vercel.app`
 - **Return URL**: `https://YOUR_SUPABASE_PROJECT.supabase.co/auth/v1/callback`
 
 ### 3. Create Key (IN PROGRESS)

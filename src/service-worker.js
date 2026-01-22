@@ -36,28 +36,21 @@ const MEDIA_CACHE_PATTERNS = [
 
 // Install event - cache critical resources
 self.addEventListener('install', (event) => {
-  console.log('[SW] Installing service worker');
-  
   event.waitUntil(
     Promise.all([
       caches.open(CACHE_NAME)
         .then((cache) => {
-          console.log('[SW] Caching static assets');
           return cache.addAll(STATIC_ASSETS);
         }),
       // Cache LCP images if any
       LCP_CRITICAL_IMAGES.length > 0
         ? caches.open('lcp-images-v1')
             .then((cache) => {
-              console.log('[SW] Caching LCP-critical images');
-              return cache.addAll(LCP_CRITICAL_IMAGES).catch(() => {
-                console.log('[SW] Could not cache LCP images');
-              });
+              return cache.addAll(LCP_CRITICAL_IMAGES).catch(() => {});
             })
         : Promise.resolve()
     ])
       .then(() => {
-        console.log('[SW] Installation complete');
         return self.skipWaiting();
       })
       .catch((error) => {
@@ -68,22 +61,18 @@ self.addEventListener('install', (event) => {
 
 // Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
-  console.log('[SW] Activating service worker');
-  
   event.waitUntil(
     caches.keys()
       .then((cacheNames) => {
         return Promise.all(
           cacheNames.map((cacheName) => {
             if (cacheName !== CACHE_NAME && cacheName !== DYNAMIC_CACHE) {
-              console.log('[SW] Deleting old cache:', cacheName);
               return caches.delete(cacheName);
             }
           })
         );
       })
       .then(() => {
-        console.log('[SW] Activation complete');
         return self.clients.claim();
       })
   );
@@ -122,33 +111,29 @@ self.addEventListener('fetch', (event) => {
 async function cacheFirst(request) {
   try {
     const cachedResponse = await caches.match(request);
-    
+
     if (cachedResponse) {
-      console.log('[SW] Serving from cache:', request.url);
       return cachedResponse;
     }
 
-    console.log('[SW] Fetching and caching:', request.url);
     const networkResponse = await fetch(request);
-    
+
     if (networkResponse.ok) {
       const cache = await caches.open(CACHE_NAME);
       cache.put(request, networkResponse.clone());
     }
-    
+
     return networkResponse;
   } catch (error) {
-    console.error('[SW] Cache first failed:', error);
-    
     // Return offline fallback
     if (isNavigationRequest(request)) {
       const cache = await caches.open(CACHE_NAME);
       return cache.match('/') || new Response('Offline', { status: 200 });
     }
-    
-    return new Response('Network Error', { 
+
+    return new Response('Network Error', {
       status: 408,
-      statusText: 'Network Error' 
+      statusText: 'Network Error'
     });
   }
 }
@@ -156,25 +141,21 @@ async function cacheFirst(request) {
 // Strategy: Network First (for API calls and navigation)
 async function networkFirst(request) {
   try {
-    console.log('[SW] Network first:', request.url);
     const networkResponse = await fetch(request);
-    
+
     if (networkResponse.ok) {
       const cache = await caches.open(DYNAMIC_CACHE);
       cache.put(request, networkResponse.clone());
     }
-    
+
     return networkResponse;
   } catch (error) {
-    console.log('[SW] Network failed, trying cache:', request.url);
-    
     const cachedResponse = await caches.match(request);
-    
+
     if (cachedResponse) {
-      console.log('[SW] Serving stale content from cache:', request.url);
       return cachedResponse;
     }
-    
+
     // For navigation requests, return cached index
     if (isNavigationRequest(request)) {
       const cache = await caches.open(CACHE_NAME);
@@ -183,12 +164,12 @@ async function networkFirst(request) {
         return fallback;
       }
     }
-    
+
     return new Response(
-      JSON.stringify({ 
-        error: 'Offline', 
-        message: 'This content is not available offline' 
-      }), 
+      JSON.stringify({
+        error: 'Offline',
+        message: 'This content is not available offline'
+      }),
       {
         status: 503,
         statusText: 'Service Unavailable',
@@ -203,7 +184,7 @@ async function staleWhileRevalidate(request) {
   try {
     const cache = await caches.open(DYNAMIC_CACHE);
     const cachedResponse = await caches.match(request);
-    
+
     // Fetch in background to update cache
     const fetchPromise = fetch(request).then((networkResponse) => {
       if (networkResponse.ok) {
@@ -211,20 +192,17 @@ async function staleWhileRevalidate(request) {
       }
       return networkResponse;
     });
-    
+
     // Return cached version immediately if available
     if (cachedResponse) {
-      console.log('[SW] Serving stale content, updating in background:', request.url);
       return cachedResponse;
     }
-    
-    console.log('[SW] No cache, waiting for network:', request.url);
+
     return await fetchPromise;
   } catch (error) {
-    console.error('[SW] Stale while revalidate failed:', error);
-    return new Response('Network Error', { 
+    return new Response('Network Error', {
       status: 408,
-      statusText: 'Network Error' 
+      statusText: 'Network Error'
     });
   }
 }
@@ -256,8 +234,6 @@ function isNavigationRequest(request) {
 
 // Background sync for offline actions
 self.addEventListener('sync', (event) => {
-  console.log('[SW] Background sync triggered:', event.tag);
-  
   if (event.tag === 'background-sync-messages') {
     event.waitUntil(syncMessages());
   } else if (event.tag === 'background-sync-reports') {
@@ -267,9 +243,8 @@ self.addEventListener('sync', (event) => {
 
 async function syncMessages() {
   try {
-    // Retrieve queued messages from IndexedDB
     const queuedMessages = await getQueuedMessages();
-    
+
     for (const message of queuedMessages) {
       try {
         const response = await fetch('/api/messages', {
@@ -277,13 +252,12 @@ async function syncMessages() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(message)
         });
-        
+
         if (response.ok) {
           await removeQueuedMessage(message.id);
-          console.log('[SW] Synced message:', message.id);
         }
       } catch (error) {
-        console.error('[SW] Failed to sync message:', message.id, error);
+        console.error('[SW] Failed to sync message:', error);
       }
     }
   } catch (error) {
@@ -293,9 +267,8 @@ async function syncMessages() {
 
 async function syncReports() {
   try {
-    // Retrieve queued report requests from IndexedDB
     const queuedReports = await getQueuedReports();
-    
+
     for (const report of queuedReports) {
       try {
         const response = await fetch('/api/reports/generate', {
@@ -303,13 +276,12 @@ async function syncReports() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(report)
         });
-        
+
         if (response.ok) {
           await removeQueuedReport(report.id);
-          console.log('[SW] Synced report generation:', report.id);
         }
       } catch (error) {
-        console.error('[SW] Failed to sync report:', report.id, error);
+        console.error('[SW] Failed to sync report:', error);
       }
     }
   } catch (error) {
@@ -323,8 +295,7 @@ self.addEventListener('push', (event) => {
 
   try {
     const data = event.data.json();
-    console.log('[SW] Push notification received:', data);
-    
+
     const options = {
       body: data.body,
       icon: '/icons/icon-192.png',
@@ -346,10 +317,8 @@ self.addEventListener('push', (event) => {
 
 // Notification click handling
 self.addEventListener('notificationclick', (event) => {
-  console.log('[SW] Notification clicked:', event.notification);
-  
   event.notification.close();
-  
+
   event.waitUntil(
     clients.matchAll().then((clientList) => {
       // Focus existing window if available
@@ -358,7 +327,7 @@ self.addEventListener('notificationclick', (event) => {
           return client.focus();
         }
       }
-      
+
       // Open new window
       if (clients.openWindow) {
         const targetUrl = event.notification.data?.url || '/';
@@ -370,8 +339,6 @@ self.addEventListener('notificationclick', (event) => {
 
 // Message handling between SW and main thread
 self.addEventListener('message', (event) => {
-  console.log('[SW] Message received:', event.data);
-  
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
   } else if (event.data && event.data.type === 'GET_CACHE_STATS') {
@@ -387,35 +354,31 @@ self.addEventListener('message', (event) => {
 
 // Utility functions for IndexedDB operations
 async function getQueuedMessages() {
-  // Placeholder for IndexedDB implementation
   return [];
 }
 
 async function removeQueuedMessage(messageId) {
-  // Placeholder for IndexedDB implementation
-  console.log('[SW] Removed queued message:', messageId);
+  // IndexedDB implementation placeholder
 }
 
 async function getQueuedReports() {
-  // Placeholder for IndexedDB implementation
   return [];
 }
 
 async function removeQueuedReport(reportId) {
-  // Placeholder for IndexedDB implementation
-  console.log('[SW] Removed queued report:', reportId);
+  // IndexedDB implementation placeholder
 }
 
 async function getCacheStats() {
   const cacheNames = await caches.keys();
   const stats = {};
-  
+
   for (const cacheName of cacheNames) {
     const cache = await caches.open(cacheName);
     const keys = await cache.keys();
     stats[cacheName] = keys.length;
   }
-  
+
   return stats;
 }
 
@@ -424,7 +387,6 @@ async function clearAllCaches() {
   await Promise.all(
     cacheNames.map(cacheName => caches.delete(cacheName))
   );
-  console.log('[SW] All caches cleared');
 }
 
 // Error handling
@@ -436,5 +398,3 @@ self.addEventListener('unhandledrejection', (event) => {
   console.error('[SW] Unhandled promise rejection:', event.reason);
   event.preventDefault();
 });
-
-console.log('[SW] Service Worker loaded successfully');

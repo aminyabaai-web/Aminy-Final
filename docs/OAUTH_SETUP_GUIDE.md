@@ -33,8 +33,8 @@ This guide walks through setting up Google and Apple OAuth for Aminy.
 | App name | Aminy |
 | User support email | your-email@example.com |
 | App logo | Upload Aminy logo (optional) |
-| App domain | https://aminy.app |
-| Authorized domains | aminy.app, supabase.co |
+| App domain | https://aminy-onboarding.vercel.app |
+| Authorized domains | aminy-onboarding.vercel.app, supabase.co |
 | Developer contact | your-email@example.com |
 
 4. Click **Save and Continue**
@@ -63,7 +63,7 @@ This guide walks through setting up Google and Apple OAuth for Aminy.
 | Field | Value |
 |-------|-------|
 | Name | Aminy Web Client |
-| Authorized JavaScript origins | `http://localhost:5173`, `https://aminy.app` |
+| Authorized JavaScript origins | `http://localhost:5173`, `https://aminy-onboarding.vercel.app` |
 | Authorized redirect URIs | `https://YOUR_PROJECT.supabase.co/auth/v1/callback` |
 
 5. Click **Create**
@@ -118,7 +118,7 @@ This guide walks through setting up Google and Apple OAuth for Aminy.
 | Field | Value |
 |-------|-------|
 | Primary App ID | Select your App ID (com.aminy.app) |
-| Domains | aminy.app |
+| Domains | aminy-onboarding.vercel.app |
 | Return URLs | `https://YOUR_PROJECT.supabase.co/auth/v1/callback` |
 
 8. Click **Next** → **Done** → **Continue** → **Save**
@@ -338,7 +338,7 @@ VITE_SUPABASE_ANON_KEY=your-anon-key
 VITE_SITE_URL=http://localhost:5173
 ```
 
-For production, update `VITE_SITE_URL` to `https://aminy.app`.
+For production, update `VITE_SITE_URL` to `https://aminy-onboarding.vercel.app`.
 
 ---
 
