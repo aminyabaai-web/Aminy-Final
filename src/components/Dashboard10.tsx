@@ -260,21 +260,27 @@ export function Dashboard10({
                 </Badge>
               </div>
               <div className="flex gap-3 mt-1">
-                {child.goals.slice(0, 2).map((goal) => (
-                  <div key={goal.name} className="text-xs text-gray-300">
-                    {goal.name}: <span className={goal.trend === 'up' ? 'text-green-400' : 'text-gray-400'}>{goal.percentMet}%</span>
-                    {goal.trend === 'up' && ' ↑'}
+                {child.goals && child.goals.length > 0 ? (
+                  child.goals.slice(0, 2).map((goal) => (
+                    <div key={goal.name} className="text-xs text-gray-300">
+                      {goal.name}: <span className={goal.trend === 'up' ? 'text-green-400' : 'text-gray-400'}>{goal.percentMet}%</span>
+                      {goal.trend === 'up' && ' ↑'}
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-xs text-gray-400">
+                    No goals set yet • Tap to add
                   </div>
-                ))}
+                )}
               </div>
             </div>
             <ChevronRight className="w-5 h-5 text-gray-400" />
           </div>
 
           {/* Upcoming Events Carousel */}
-          {upcomingEvents.length > 0 && (
-            <div className="flex gap-3 mt-4 overflow-x-auto pb-2 -mx-1 px-1">
-              {upcomingEvents.map((event) => (
+          <div className="flex gap-3 mt-4 overflow-x-auto pb-2 -mx-1 px-1">
+            {upcomingEvents.length > 0 ? (
+              upcomingEvents.map((event) => (
                 <button
                   key={event.id}
                   className="flex-shrink-0 bg-white/10 hover:bg-white/15 rounded-lg px-3 py-2 flex items-center gap-2 transition-colors"
@@ -289,9 +295,13 @@ export function Dashboard10({
                     <div className="text-xs text-gray-400">{event.time}</div>
                   </div>
                 </button>
-              ))}
-            </div>
-          )}
+              ))
+            ) : (
+              <div className="text-sm text-gray-400 py-2">
+                You're all caught up! No upcoming events.
+              </div>
+            )}
+          </div>
         </div>
       </header>
 

@@ -171,10 +171,13 @@ export function StreamingAIChat({
   return (
     <div className={`flex flex-col h-full ${className}`}>
       {/* Chat messages */}
-      <div 
+      <div
         ref={chatContainerRef}
         className="flex-1 overflow-y-auto px-4 py-6 space-y-4"
         style={{ maxHeight: 'calc(100vh - 200px)' }}
+        role="log"
+        aria-live="polite"
+        aria-label="Chat messages"
       >
         {messages.length === 0 && (
           <div className="text-center py-12">
@@ -195,6 +198,8 @@ export function StreamingAIChat({
           <div
             key={index}
             className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+            role="article"
+            aria-label={`Message from ${message.role === 'user' ? 'you' : 'Aminy'}`}
           >
             <div
               className={`max-w-[80%] rounded-2xl px-4 py-3 ${

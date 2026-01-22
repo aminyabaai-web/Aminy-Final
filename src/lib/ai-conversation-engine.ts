@@ -157,6 +157,7 @@ export async function generateAIResponse(
           messages,
           stream: true,
           context,
+          max_tokens: 1000, // Limit response length to control costs
         }),
       }
     );

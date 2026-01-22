@@ -115,16 +115,61 @@ interface OnboardingEnhancedProps {
   onComplete: (data: OnboardingData) => void;
 }
 
+const STORAGE_KEY = 'aminy-onboarding-progress';
+
+// Load saved progress from sessionStorage
+function loadSavedProgress(): { step: number; data: Partial<OnboardingData> } | null {
+  try {
+    const saved = sessionStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      // Validate saved data has expected shape
+      if (typeof parsed.step === 'number' && typeof parsed.data === 'object') {
+        return parsed;
+      }
+    }
+  } catch (error) {
+    console.error('Error loading saved onboarding progress:', error);
+  }
+  return null;
+}
+
+// Save progress to sessionStorage
+function saveProgress(step: number, data: Partial<OnboardingData>) {
+  try {
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify({ step, data, savedAt: new Date().toISOString() }));
+  } catch (error) {
+    console.error('Error saving onboarding progress:', error);
+  }
+}
+
+// Clear saved progress
+export function clearOnboardingProgress() {
+  try {
+    sessionStorage.removeItem(STORAGE_KEY);
+  } catch (error) {
+    console.error('Error clearing onboarding progress:', error);
+  }
+}
+
 export function OnboardingEnhanced({ onComplete }: OnboardingEnhancedProps) {
-  const [step, setStep] = useState(0);
-  const [data, setData] = useState<Partial<OnboardingData>>({
-    tone: 'supportive',
-  });
+  // Load saved progress on mount
+  const savedProgress = loadSavedProgress();
+
+  const [step, setStep] = useState(savedProgress?.step || 0);
+  const [data, setData] = useState<Partial<OnboardingData>>(
+    savedProgress?.data || { tone: 'supportive' }
+  );
   const [showDemo, setShowDemo] = useState(false);
   const [generatingPlan, setGeneratingPlan] = useState(false);
   const [planStep, setPlanStep] = useState(0);
 
   const tone = TONE_STYLES[data.tone || 'supportive'];
+
+  // Save progress whenever step or data changes
+  useEffect(() => {
+    saveProgress(step, data);
+  }, [step, data]);
 
   const updateData = (updates: Partial<OnboardingData>) => {
     setData(prev => ({ ...prev, ...updates }));
@@ -352,7 +397,10 @@ export function OnboardingEnhanced({ onComplete }: OnboardingEnhancedProps) {
         return (
           <CompletionStep
             data={data as OnboardingData}
-            onComplete={() => onComplete(data as OnboardingData)}
+            onComplete={() => {
+              clearOnboardingProgress(); // Clear saved progress on completion
+              onComplete(data as OnboardingData);
+            }}
             onReferFriend={() => {/* TODO: implement referral */}}
             tone={tone}
           />

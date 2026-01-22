@@ -24,6 +24,7 @@ import { ConversationProvider } from "./context/ConversationContext";
 import { ThemeProvider } from "./lib/theme-provider";
 import { supabase } from "./utils/supabase/client";
 import { FeedbackButton } from "./components/FeedbackButton";
+import { verifyAdminAccess } from "./hooks/useSecureSession";
 
 // DEFERRED - Load after first paint
 const SafetyBoundary = lazy(() =>
@@ -216,6 +217,83 @@ const AdminPortal = lazy(() =>
     default: m.AdminPortal,
   })),
 );
+const PrivacyPolicy = lazy(() =>
+  import("./components/PrivacyPolicy").then((m) => ({
+    default: m.PrivacyPolicy,
+  })),
+);
+const TermsOfService = lazy(() =>
+  import("./components/TermsOfService").then((m) => ({
+    default: m.TermsOfService,
+  })),
+);
+
+// Secure Admin Portal Wrapper with server-side verification
+const SecureAdminPortalWrapper = React.memo(function SecureAdminPortalWrapper({
+  userId,
+  onBack,
+  onAccessDenied,
+}: {
+  userId?: string;
+  onBack: () => void;
+  onAccessDenied: () => void;
+}) {
+  const [isVerifying, setIsVerifying] = React.useState(true);
+  const [isAdmin, setIsAdmin] = React.useState(false);
+
+  React.useEffect(() => {
+    async function verifyAccess() {
+      if (!userId) {
+        setIsVerifying(false);
+        onAccessDenied();
+        return;
+      }
+
+      try {
+        const hasAccess = await verifyAdminAccess(userId);
+        setIsAdmin(hasAccess);
+        if (!hasAccess) {
+          onAccessDenied();
+        }
+      } catch (error) {
+        console.error("Admin verification failed:", error);
+        onAccessDenied();
+      } finally {
+        setIsVerifying(false);
+      }
+    }
+
+    verifyAccess();
+  }, [userId, onAccessDenied]);
+
+  if (isVerifying) {
+    return <LoadingSkeleton />;
+  }
+
+  if (!isAdmin) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+        <div className="bg-white rounded-xl shadow-lg p-8 max-w-md text-center">
+          <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span className="text-3xl">🔒</span>
+          </div>
+          <h1 className="text-xl font-semibold text-gray-900 mb-2">Access Restricted</h1>
+          <p className="text-gray-600 mb-6">
+            The admin portal is only available to authorized Aminy administrators.
+          </p>
+          <button
+            onClick={onBack}
+            className="bg-accent text-white px-6 py-2 rounded-lg hover:bg-accent/90 transition-colors"
+          >
+            Return to Dashboard
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return <AdminPortal onBack={onBack} />;
+});
 const OnDemandTelehealth = lazy(() =>
   import("./components/OnDemandTelehealth").then((m) => ({
     default: m.OnDemandTelehealth,
@@ -301,7 +379,9 @@ type AppScreen =
   | "junior"          // Kid-friendly Aminy Jr mode
   | "auth-callback"   // OAuth and password reset callback handler
   | "forgot-password" // Password reset request
-  | "reset-password"; // Set new password after reset
+  | "reset-password"  // Set new password after reset
+  | "privacy-policy"  // Privacy policy page
+  | "terms-of-service"; // Terms of service page
 
 interface ChildProfile {
   id: string;
@@ -335,7 +415,7 @@ const getInitialScreen = (): AppScreen => {
   // Check URL params
   const params = new URLSearchParams(window.location.search);
   const urlScreen = params.get("screen");
-  if (urlScreen && ["login", "create-account", "forgot-password", "reset-password"].includes(urlScreen)) {
+  if (urlScreen && ["login", "create-account", "forgot-password", "reset-password", "privacy-policy", "terms-of-service"].includes(urlScreen)) {
     return urlScreen as AppScreen;
   }
 
@@ -724,8 +804,16 @@ export default function App() {
     );
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    // Sign out from Supabase to clear the session
+    try {
+      await supabase.auth.signOut();
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+    // Clear local storage
     localStorage.removeItem("aminy-user");
+    localStorage.removeItem("aminy-onboarding-progress");
     setUserData({
       parentName: "",
       childName: "",
@@ -1087,34 +1175,17 @@ export default function App() {
           );
 
         case "admin-portal":
-          // Secure admin portal - server-side role verification only
-          // SECURITY: Removed localStorage 'dev-mode' bypass - was exploitable
-          // Admin access is now strictly controlled via database role field
-          if (userData.role !== 'admin') {
-            return (
-              <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-                <div className="bg-white rounded-xl shadow-lg p-8 max-w-md text-center">
-                  <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-3xl">🔒</span>
-                  </div>
-                  <h1 className="text-xl font-semibold text-gray-900 mb-2">Access Restricted</h1>
-                  <p className="text-gray-600 mb-6">
-                    The admin portal is only available to authorized Aminy administrators.
-                  </p>
-                  <button
-                    onClick={() => navigateToScreen("dashboard")}
-                    className="bg-accent text-white px-6 py-2 rounded-lg hover:bg-accent/90 transition-colors"
-                  >
-                    Return to Dashboard
-                  </button>
-                </div>
-              </div>
-            );
-          }
+          // Secure admin portal with server-side verification
+          // SECURITY: Uses database role verification, not localStorage
           return (
             <Suspense fallback={<LoadingSkeleton />}>
-              <AdminPortal
+              <SecureAdminPortalWrapper
+                userId={userData.id}
                 onBack={() => navigateToScreen("dashboard")}
+                onAccessDenied={() => {
+                  toast.error("Admin access denied");
+                  navigateToScreen("dashboard");
+                }}
               />
             </Suspense>
           );
@@ -1210,6 +1281,24 @@ export default function App() {
               <JuniorPageEnhancedPro
                 childName={userData.childName || "Alex"}
                 onBack={() => navigateToScreen("dashboard")}
+              />
+            </Suspense>
+          );
+
+        case "privacy-policy":
+          return (
+            <Suspense fallback={<LoadingSkeleton />}>
+              <PrivacyPolicy
+                onBack={() => navigateToScreen("splash")}
+              />
+            </Suspense>
+          );
+
+        case "terms-of-service":
+          return (
+            <Suspense fallback={<LoadingSkeleton />}>
+              <TermsOfService
+                onBack={() => navigateToScreen("splash")}
               />
             </Suspense>
           );

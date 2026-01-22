@@ -12,6 +12,9 @@
 
 import { projectId, publicAnonKey } from '../utils/supabase/info';
 
+// Edge function base URL for API calls
+const EDGE_FUNCTION_BASE = `https://${projectId}.supabase.co/functions/v1/make-server-8a022548`;
+
 // Stripe Publishable Key (required for frontend)
 export const STRIPE_PUBLISHABLE_KEY = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || '';
 
@@ -48,11 +51,12 @@ export const isStripeConfigured = (): boolean => {
 };
 
 // Tier pricing (display only - actual prices in Stripe)
+// Must match tier-utils.ts pricing
 export const TIER_PRICING = {
   free: { monthly: 0, annual: 0 },
-  starter: { monthly: 4.99, annual: 47.88 }, // ~$4/mo annually
-  core: { monthly: 9.99, annual: 95.88 }, // ~$8/mo annually
-  pro: { monthly: 19.99, annual: 191.88 }, // ~$16/mo annually
+  starter: { monthly: 6.99, annual: 59 }, // ~$4.92/mo annually (25% savings)
+  core: { monthly: 12.99, annual: 119 }, // ~$9.92/mo annually (37% savings)
+  pro: { monthly: 24.99, annual: 229 }, // ~$19.08/mo annually (71% savings)
 } as const;
 
 export type TierType = 'free' | 'starter' | 'core' | 'pro';

@@ -41,7 +41,10 @@
       "Bash(mdfind:*)",
       "Bash(node generate-apple-secret.js:*)",
       "Bash(node:*)",
-      "Bash(git grep:*)"
+      "Bash(git grep:*)",
+      "Bash(git push:*)",
+      "Bash(xargs ls:*)",
+      "Bash(git remote add:*)"
     ]
   }
 }
