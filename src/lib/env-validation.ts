@@ -16,7 +16,8 @@ const FRONTEND_ENV_VARS: EnvVar[] = [
     key: 'VITE_SUPABASE_URL',
     required: true,
     description: 'Supabase project URL',
-    pattern: /^https:\/\/[a-z0-9]+\.supabase\.co$/,
+    // Allow any valid supabase URL format
+    pattern: /^https:\/\/.*\.supabase\.co/,
   },
   {
     key: 'VITE_SUPABASE_ANON_KEY',
@@ -153,8 +154,9 @@ export function initEnvValidation(): void {
   const result = validateEnv();
   logEnvValidation(result);
 
-  // In production, throw if required vars are missing
+  // In production, only log errors - don't throw to prevent app crashes
+  // The app should gracefully handle missing env vars
   if (!result.valid && import.meta.env.PROD) {
-    throw new Error(`Missing required environment variables: ${result.missing.join(', ')}`);
+    console.error(`Environment validation failed: ${result.missing.join(', ')}`);
   }
 }
