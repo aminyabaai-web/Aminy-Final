@@ -143,11 +143,44 @@ async function handleAppointments(
   // POST /appointments - Create appointment
   if (method === "POST" && path === "/appointments") {
     const body = await req.json();
-    const { providerId, slotId, slot, visitType, intake } = body;
+    const {
+      providerId,
+      slot,
+      visitType,
+      visitFormat = 'video',
+      concernId,
+      concernLabel,
+      intake,
+      durationMinutes = 25
+    } = body;
 
-    // Input validation
-    if (!providerId || !slotId || !slot?.startTime || !slot?.endTime || !visitType) {
-      return new Response(JSON.stringify({ error: 'Missing required fields: providerId, slotId, slot, visitType' }), {
+    // Input validation - match database schema requirements
+    if (!providerId || !slot?.startTime || !visitType || !concernId || !concernLabel) {
+      return new Response(JSON.stringify({
+        error: 'Missing required fields: providerId, slot.startTime, visitType, concernId, concernLabel'
+      }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Validate visitType matches schema CHECK constraint
+    const validVisitTypes = ['consult', 'extended', 'follow-up'];
+    if (!validVisitTypes.includes(visitType)) {
+      return new Response(JSON.stringify({
+        error: `Invalid visitType. Must be one of: ${validVisitTypes.join(', ')}`
+      }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Validate visitFormat matches schema CHECK constraint
+    const validFormats = ['video', 'phone', 'in-person'];
+    if (!validFormats.includes(visitFormat)) {
+      return new Response(JSON.stringify({
+        error: `Invalid visitFormat. Must be one of: ${validFormats.join(', ')}`
+      }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -157,7 +190,8 @@ async function handleAppointments(
     const userId = authUser.userId;
 
     // Validate slot is in the future
-    if (new Date(slot.startTime) <= new Date()) {
+    const scheduledTime = new Date(slot.startTime);
+    if (scheduledTime <= new Date()) {
       return new Response(JSON.stringify({ error: 'Cannot book slots in the past' }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -165,12 +199,13 @@ async function handleAppointments(
     }
 
     // Check slot availability (prevent double-booking)
+    // Look for overlapping appointments for this provider at this time
     const { data: existing } = await supabase
       .from("appointments")
       .select("id")
       .eq("provider_id", providerId)
-      .eq("slot_id", slotId)
-      .in("status", ["scheduled", "in_progress"])
+      .eq("scheduled_time", slot.startTime)
+      .in("status", ["scheduled", "confirmed", "in-progress"])
       .single();
 
     if (existing) {
@@ -180,36 +215,62 @@ async function handleAppointments(
       });
     }
 
-    // Create appointment in database
+    // Generate video room name if video format
+    const videoRoomName = visitFormat === 'video' ? `aminy-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` : null;
+    const videoRoomUrl = videoRoomName ? `https://aminy.daily.co/${videoRoomName}` : null;
+
+    // Create appointment in database - matching schema exactly
     const { data: appointment, error } = await supabase
       .from("appointments")
       .insert({
         user_id: userId,
         provider_id: providerId,
-        slot_id: slotId,
-        start_time: slot.startTime,
-        end_time: slot.endTime,
+        concern_id: concernId,
+        concern_label: concernLabel,
         visit_type: visitType,
-        reason_for_visit: intake?.visitReason || '',
+        visit_format: visitFormat,
+        scheduled_time: slot.startTime,
+        duration_minutes: durationMinutes,
         status: "scheduled",
-        video_room_url: `https://aminy.daily.co/apt-${Date.now()}`,
+        video_room_url: videoRoomUrl,
+        video_room_name: videoRoomName,
+        intake_answers: intake || {},
       })
       .select()
       .single();
 
-    if (error) throw error;
+    if (error) {
+      console.error('Appointment creation error:', error);
+      throw error;
+    }
 
     return jsonResponse(appointment, 201, corsHeaders);
   }
 
   // GET /appointments - Get user's own appointments only
   if (method === "GET" && path === "/appointments") {
-    // SECURITY: Only return authenticated user's appointments
-    const { data, error } = await supabase
+    const url = new URL(req.url);
+    const status = url.searchParams.get("status"); // Optional filter: scheduled, completed, cancelled
+    const upcoming = url.searchParams.get("upcoming") === "true"; // Only future appointments
+
+    // SECURITY: Only return authenticated user's appointments with provider details
+    let query = supabase
       .from("appointments")
-      .select("*")
-      .eq("user_id", authUser.userId)
-      .order("start_time", { ascending: true });
+      .select(`
+        *,
+        provider:providers(id, name, credentials, role, specialty, photo)
+      `)
+      .eq("user_id", authUser.userId);
+
+    // Apply optional filters
+    if (status) {
+      query = query.eq("status", status);
+    }
+    if (upcoming) {
+      query = query.gte("scheduled_time", new Date().toISOString());
+    }
+
+    const { data, error } = await query.order("scheduled_time", { ascending: true });
 
     if (error) throw error;
     return jsonResponse(data, 200, corsHeaders);
@@ -220,7 +281,10 @@ async function handleAppointments(
   if (method === "GET" && appointmentIdMatch) {
     const { data, error } = await supabase
       .from("appointments")
-      .select("*")
+      .select(`
+        *,
+        provider:providers(id, name, credentials, role, specialty, photo, bio)
+      `)
       .eq("id", appointmentIdMatch[1])
       .eq("user_id", authUser.userId) // SECURITY: Ensure user owns this appointment
       .single();
@@ -237,10 +301,17 @@ async function handleAppointments(
   // POST /appointments/:id/cancel - Cancel appointment (only if owned by user)
   const cancelMatch = path.match(/^\/appointments\/([^/]+)\/cancel$/);
   if (method === "POST" && cancelMatch) {
+    const body = await req.json().catch(() => ({}));
+    const { reason } = body;
+
     // SECURITY: Verify ownership before canceling
     const { data, error } = await supabase
       .from("appointments")
-      .update({ status: "cancelled", cancelled_at: new Date().toISOString() })
+      .update({
+        status: "cancelled",
+        cancelled_at: new Date().toISOString(),
+        cancellation_reason: reason || null,
+      })
       .eq("id", cancelMatch[1])
       .eq("user_id", authUser.userId) // SECURITY: Only cancel own appointments
       .select()
@@ -252,6 +323,53 @@ async function handleAppointments(
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
+    return jsonResponse(data, 200, corsHeaders);
+  }
+
+  // GET /appointments/:id/summary - Get visit summary for completed appointment
+  const summaryMatch = path.match(/^\/appointments\/([^/]+)\/summary$/);
+  if (method === "GET" && summaryMatch) {
+    // First verify the user owns this appointment
+    const { data: appointment } = await supabase
+      .from("appointments")
+      .select("id")
+      .eq("id", summaryMatch[1])
+      .eq("user_id", authUser.userId)
+      .single();
+
+    if (!appointment) {
+      return new Response(JSON.stringify({ error: 'Appointment not found' }), {
+        status: 404,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Get the visit summary
+    const { data, error } = await supabase
+      .from("visit_summaries")
+      .select(`
+        *,
+        action_items(*)
+      `)
+      .eq("appointment_id", summaryMatch[1])
+      .single();
+
+    if (error && error.code !== 'PGRST116') throw error; // PGRST116 = no rows
+    return jsonResponse(data || null, 200, corsHeaders);
+  }
+
+  // GET /appointments/summaries - Get all visit summaries for user
+  if (method === "GET" && path === "/appointments/summaries") {
+    const { data, error } = await supabase
+      .from("visit_summaries")
+      .select(`
+        *,
+        action_items(*)
+      `)
+      .eq("user_id", authUser.userId)
+      .order("visit_date", { ascending: false });
+
+    if (error) throw error;
     return jsonResponse(data, 200, corsHeaders);
   }
 
@@ -270,10 +388,10 @@ async function handlePayments(
 ): Promise<Response> {
   const method = req.method;
 
-  // POST /payments/create-intent - Create payment intent
+  // POST /payments/create-intent - Create payment intent for appointment
   if (method === "POST" && path === "/payments/create-intent") {
     const body = await req.json();
-    const { amount, currency = "usd", customerId, metadata, description } = body;
+    const { amount, currency = "usd", customerId, appointmentId, metadata, description, promoCode } = body;
 
     // Input validation
     if (!amount || amount <= 0 || amount > 100000) { // Max $1000
@@ -283,24 +401,60 @@ async function handlePayments(
       });
     }
 
+    // Calculate discount if promo code provided
+    let discountAmount = 0;
+    if (promoCode) {
+      // Simple promo code validation (in production, use Stripe coupons)
+      const validPromoCodes: Record<string, number> = {
+        'FIRST10': 1000, // $10 off
+        'AMINY20': 2000, // $20 off
+      };
+      discountAmount = validPromoCodes[promoCode.toUpperCase()] || 0;
+    }
+
+    const finalAmount = Math.max(0, amount - discountAmount);
+
     // Add idempotency key to prevent duplicate charges
-    const idempotencyKey = `pi_${authUser.userId}_${Date.now()}`;
+    const idempotencyKey = `pi_${authUser.userId}_${appointmentId || Date.now()}`;
 
     const paymentIntent = await stripe.paymentIntents.create({
-      amount,
+      amount: finalAmount,
       currency,
       customer: customerId,
-      metadata: { ...metadata, userId: authUser.userId }, // Track user
+      metadata: { ...metadata, userId: authUser.userId, appointmentId }, // Track user
       description,
       automatic_payment_methods: { enabled: true },
     }, {
       idempotencyKey,
     });
 
+    // Store payment record in database
+    const { error: dbError } = await supabase
+      .from("payments")
+      .insert({
+        appointment_id: appointmentId || null,
+        user_id: authUser.userId,
+        stripe_payment_intent_id: paymentIntent.id,
+        stripe_customer_id: customerId,
+        amount: finalAmount,
+        currency,
+        status: 'pending',
+        promo_code: promoCode || null,
+        discount_amount: discountAmount,
+        metadata: { ...metadata, description },
+      });
+
+    if (dbError) {
+      console.error('Failed to store payment record:', dbError);
+      // Don't fail the request - payment was created in Stripe
+    }
+
     return jsonResponse({
       id: paymentIntent.id,
       clientSecret: paymentIntent.client_secret,
-      amount: paymentIntent.amount,
+      amount: finalAmount,
+      originalAmount: amount,
+      discountAmount,
       currency: paymentIntent.currency,
       status: paymentIntent.status,
     }, 200, corsHeaders);
@@ -381,10 +535,72 @@ async function handlePayments(
       reason,
     });
 
+    // Update payment record in database
+    await supabase
+      .from("payments")
+      .update({
+        status: amount ? 'partially_refunded' : 'refunded',
+        refund_amount: amount || refund.amount,
+        refund_reason: reason,
+      })
+      .eq("stripe_payment_intent_id", paymentIntentId);
+
     return jsonResponse({
       id: refund.id,
       status: refund.status,
       amount: refund.amount,
+    }, 200, corsHeaders);
+  }
+
+  // GET /payments/history - Get user's payment history
+  if (method === "GET" && path === "/payments/history") {
+    const { data, error } = await supabase
+      .from("payments")
+      .select(`
+        *,
+        appointment:appointments(id, concern_label, scheduled_time, status)
+      `)
+      .eq("user_id", authUser.userId)
+      .order("created_at", { ascending: false });
+
+    if (error) throw error;
+    return jsonResponse(data, 200, corsHeaders);
+  }
+
+  // POST /payments/confirm - Webhook to confirm payment succeeded
+  if (method === "POST" && path === "/payments/confirm") {
+    const body = await req.json();
+    const { paymentIntentId } = body;
+
+    if (!paymentIntentId) {
+      return new Response(JSON.stringify({ error: 'paymentIntentId required' }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Verify with Stripe
+    const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+
+    if (paymentIntent.status === 'succeeded') {
+      // Update payment record
+      await supabase
+        .from("payments")
+        .update({ status: 'succeeded' })
+        .eq("stripe_payment_intent_id", paymentIntentId);
+
+      // Update appointment to confirmed if linked
+      if (paymentIntent.metadata?.appointmentId) {
+        await supabase
+          .from("appointments")
+          .update({ status: 'confirmed' })
+          .eq("id", paymentIntent.metadata.appointmentId);
+      }
+    }
+
+    return jsonResponse({
+      status: paymentIntent.status,
+      confirmed: paymentIntent.status === 'succeeded',
     }, 200, corsHeaders);
   }
 

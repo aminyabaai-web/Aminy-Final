@@ -927,47 +927,96 @@ app.post("/make-server-8a022548/outcomes/weekly-summary", async (c) => {
     }
 
     const { childId, weekStart, useAI } = await c.req.json();
-    
+
     const weekStartDate = new Date(weekStart);
     const weekEndDate = new Date(weekStartDate);
     weekEndDate.setDate(weekEndDate.getDate() + 7);
 
-    // Fetch week's events
-    const allEvents = await kv.getByPrefix(`event:${user.id}:`);
-    const weekEvents = allEvents.filter(event => {
-      if (event.childId !== childId) return false;
-      const eventDate = new Date(event.timestamp);
-      return eventDate >= weekStartDate && eventDate <= weekEndDate;
-    });
+    // Fetch data from real database tables
+    // Stress logs
+    const { data: stressLogs } = await supabase
+      .from('stress_logs')
+      .select('*')
+      .eq('user_id', user.id)
+      .gte('created_at', weekStartDate.toISOString())
+      .lt('created_at', weekEndDate.toISOString());
 
-    // Generate simple summary (counts)
-    const totalActivities = weekEvents.filter(e => e.eventType === 'activity_completed').length;
-    const sessionsCompleted = weekEvents.filter(e => e.eventType === 'session_completed').length;
-    const milestones = weekEvents
-      .filter(e => e.eventType === 'milestone_reached')
-      .map(e => e.eventData?.milestone || 'Milestone achieved');
-    
-    const goalsProgress = weekEvents.filter(e => e.eventType === 'goal_progress').length;
-    
-    const behaviorInsights = weekEvents
-      .filter(e => e.eventType === 'behavior_logged')
-      .map(e => e.eventData?.behavior || 'Behavior logged')
-      .slice(0, 5); // Top 5
+    // Routine completions
+    const { data: routines } = await supabase
+      .from('routine_completions')
+      .select('*')
+      .eq('user_id', user.id)
+      .gte('scheduled_at', weekStartDate.toISOString())
+      .lt('scheduled_at', weekEndDate.toISOString());
 
-    // Determine trend
-    let trend = 'stable';
-    if (totalActivities > 10 && goalsProgress > 5) trend = 'improving';
-    if (totalActivities < 3 || goalsProgress === 0) trend = 'needs_attention';
+    // Goal achievements
+    const { data: goals } = await supabase
+      .from('goal_achievements')
+      .select('*')
+      .eq('user_id', user.id)
+      .gte('updated_at', weekStartDate.toISOString())
+      .lt('updated_at', weekEndDate.toISOString());
+
+    // Wins journal
+    const { data: wins } = await supabase
+      .from('wins_journal')
+      .select('*')
+      .eq('user_id', user.id)
+      .gte('created_at', weekStartDate.toISOString())
+      .lt('created_at', weekEndDate.toISOString());
+
+    // Calculate metrics
+    const totalRoutinesScheduled = routines?.length || 0;
+    const routinesCompleted = routines?.filter(r => r.completion_status === 'completed').length || 0;
+    const adherenceRate = totalRoutinesScheduled > 0
+      ? Math.round((routinesCompleted / totalRoutinesScheduled) * 100)
+      : 0;
+
+    const goalsAchieved = goals?.filter(g => g.achieved_at).length || 0;
+    const goalsInProgress = goals?.filter(g => !g.achieved_at && g.current_value > 0).length || 0;
+
+    const avgStress = stressLogs && stressLogs.length > 0
+      ? Math.round(stressLogs.reduce((sum, l) => sum + l.stress_level, 0) / stressLogs.length * 10) / 10
+      : null;
+
+    const morningStress = stressLogs?.filter(l => l.context === 'morning');
+    const eveningStress = stressLogs?.filter(l => l.context === 'evening');
+    const avgMorningStress = morningStress && morningStress.length > 0
+      ? Math.round(morningStress.reduce((sum, l) => sum + l.stress_level, 0) / morningStress.length * 10) / 10
+      : null;
+    const avgEveningStress = eveningStress && eveningStress.length > 0
+      ? Math.round(eveningStress.reduce((sum, l) => sum + l.stress_level, 0) / eveningStress.length * 10) / 10
+      : null;
+
+    // Determine trend based on multiple factors
+    let trend: 'improving' | 'stable' | 'needs_attention' = 'stable';
+    if (adherenceRate >= 80 && goalsAchieved >= 1) trend = 'improving';
+    if (adherenceRate < 50 || (avgStress && avgStress >= 7)) trend = 'needs_attention';
+
+    const milestones = wins?.filter(w => w.category === 'milestone').map(w => w.title) || [];
+    const recentWins = wins?.slice(0, 5).map(w => w.title) || [];
 
     const summary = {
       weekStart: weekStart,
       weekEnd: weekEndDate.toISOString(),
       childId,
-      totalActivities,
-      goalsProgress,
-      behaviorInsights,
-      sessionsCompleted,
+      // Routine metrics
+      totalRoutinesScheduled,
+      routinesCompleted,
+      adherenceRate,
+      // Goal metrics
+      goalsAchieved,
+      goalsInProgress,
+      // Stress metrics
+      stressCheckins: stressLogs?.length || 0,
+      avgStress,
+      avgMorningStress,
+      avgEveningStress,
+      // Achievements
       milestones,
+      recentWins,
+      winsCount: wins?.length || 0,
+      // Overall
       trend,
     };
 
@@ -976,17 +1025,18 @@ app.post("/make-server-8a022548/outcomes/weekly-summary", async (c) => {
       const aiConfig = getAIConfig();
       if (aiConfig) {
         try {
-          const aiPrompt = `Based on this week's data for a child:
-- ${totalActivities} activities completed
-- ${sessionsCompleted} therapy sessions
-- ${goalsProgress} goal progress entries
-- Milestones: ${milestones.join(', ') || 'None'}
-- Behaviors: ${behaviorInsights.join(', ') || 'None'}
+          const aiPrompt = `Based on this week's data for a parent:
+- Routine adherence: ${adherenceRate}% (${routinesCompleted}/${totalRoutinesScheduled} completed)
+- Goals achieved: ${goalsAchieved}, in progress: ${goalsInProgress}
+- Average stress level: ${avgStress || 'No data'}/10
+- Stress check-ins: ${stressLogs?.length || 0}
+- Wins logged: ${wins?.length || 0}
+- Recent milestones: ${milestones.join(', ') || 'None'}
 
-Write a brief, encouraging 2-sentence summary for parents highlighting progress and next steps.`;
+Write a brief, encouraging 2-sentence summary highlighting progress and one actionable suggestion for next week.`;
 
           const result = await callAI(aiConfig, {
-            systemPrompt: 'You are Aminy, a supportive AI assistant for parents of neurodivergent children.',
+            systemPrompt: 'You are Aminy, a supportive AI assistant for parents of neurodivergent children. Use ABA principles and focus on positive reinforcement.',
             messages: [{ role: 'user', content: aiPrompt }],
             maxTokens: 200,
             temperature: 0.7
@@ -994,12 +1044,14 @@ Write a brief, encouraging 2-sentence summary for parents highlighting progress 
 
           summary.aiSummary = result.text;
         } catch (aiError) {
+          console.error('AI summary generation failed:', aiError);
         }
       }
     }
 
     return c.json(summary);
   } catch (error) {
+    console.error('Weekly summary error:', error);
     return c.json({ error: 'Failed to generate summary' }, 500);
   }
 });
@@ -1022,41 +1074,112 @@ app.get("/make-server-8a022548/outcomes/trends/:childId", async (c) => {
     const childId = c.req.param('childId');
     const weeks = parseInt(c.req.query('weeks') || '4');
 
-    // Generate summaries for each of the past N weeks
+    // Generate summaries for each of the past N weeks using real database data
     const trends = [];
     const now = new Date();
-    
+
     for (let i = 0; i < weeks; i++) {
       const weekStart = new Date(now);
       weekStart.setDate(now.getDate() - (now.getDay() + 7 * i));
       weekStart.setHours(0, 0, 0, 0);
 
-      // Call weekly summary logic (simplified version)
       const weekEnd = new Date(weekStart);
       weekEnd.setDate(weekEnd.getDate() + 7);
 
-      const allEvents = await kv.getByPrefix(`event:${user.id}:`);
-      const weekEvents = allEvents.filter(event => {
-        if (event.childId !== childId) return false;
-        const eventDate = new Date(event.timestamp);
-        return eventDate >= weekStart && eventDate <= weekEnd;
-      });
+      // Fetch real data from database for this week
+      const [stressResult, routinesResult, goalsResult, winsResult] = await Promise.all([
+        supabase
+          .from('stress_logs')
+          .select('*')
+          .eq('user_id', user.id)
+          .eq('child_id', childId)
+          .gte('created_at', weekStart.toISOString())
+          .lt('created_at', weekEnd.toISOString()),
+        supabase
+          .from('routine_completions')
+          .select('*')
+          .eq('user_id', user.id)
+          .eq('child_id', childId)
+          .gte('scheduled_at', weekStart.toISOString())
+          .lt('scheduled_at', weekEnd.toISOString()),
+        supabase
+          .from('goal_achievements')
+          .select('*')
+          .eq('user_id', user.id)
+          .eq('child_id', childId)
+          .gte('achieved_at', weekStart.toISOString())
+          .lt('achieved_at', weekEnd.toISOString()),
+        supabase
+          .from('wins_journal')
+          .select('*')
+          .eq('user_id', user.id)
+          .eq('child_id', childId)
+          .gte('created_at', weekStart.toISOString())
+          .lt('created_at', weekEnd.toISOString()),
+      ]);
+
+      const stressLogs = stressResult.data || [];
+      const routines = routinesResult.data || [];
+      const goals = goalsResult.data || [];
+      const wins = winsResult.data || [];
+
+      // Calculate metrics
+      const completedRoutines = routines.filter(r => r.completed).length;
+      const totalRoutines = routines.length;
+      const adherenceRate = totalRoutines > 0 ? Math.round((completedRoutines / totalRoutines) * 100) : 0;
+
+      const avgStress = stressLogs.length > 0
+        ? Math.round(stressLogs.reduce((sum, l) => sum + (l.stress_level || 0), 0) / stressLogs.length * 10) / 10
+        : 0;
+
+      // Determine trend based on stress levels
+      let trend: 'improving' | 'stable' | 'declining' = 'stable';
+      if (stressLogs.length >= 2) {
+        const firstHalf = stressLogs.slice(0, Math.floor(stressLogs.length / 2));
+        const secondHalf = stressLogs.slice(Math.floor(stressLogs.length / 2));
+        const firstAvg = firstHalf.reduce((sum, l) => sum + (l.stress_level || 0), 0) / firstHalf.length;
+        const secondAvg = secondHalf.reduce((sum, l) => sum + (l.stress_level || 0), 0) / secondHalf.length;
+        if (secondAvg < firstAvg - 0.5) trend = 'improving';
+        else if (secondAvg > firstAvg + 0.5) trend = 'declining';
+      }
+
+      // Extract behavior insights from stress log notes
+      const behaviorInsights = stressLogs
+        .filter(l => l.notes && l.notes.length > 10)
+        .slice(0, 3)
+        .map(l => l.notes);
+
+      // Extract milestones from goals
+      const milestones = goals.map(g => ({
+        title: g.goal_description || 'Goal achieved',
+        achievedAt: g.achieved_at,
+      }));
 
       trends.push({
         weekStart: weekStart.toISOString(),
         weekEnd: weekEnd.toISOString(),
         childId,
-        totalActivities: weekEvents.filter(e => e.eventType === 'activity_completed').length,
-        goalsProgress: weekEvents.filter(e => e.eventType === 'goal_progress').length,
-        behaviorInsights: [],
-        sessionsCompleted: weekEvents.filter(e => e.eventType === 'session_completed').length,
-        milestones: [],
-        trend: 'stable',
+        totalActivities: completedRoutines,
+        goalsProgress: goals.length,
+        behaviorInsights,
+        sessionsCompleted: wins.length,
+        milestones,
+        trend,
+        metrics: {
+          adherenceRate,
+          avgStress,
+          totalStressLogs: stressLogs.length,
+          totalRoutines,
+          completedRoutines,
+          goalsAchieved: goals.length,
+          winsRecorded: wins.length,
+        },
       });
     }
 
     return c.json(trends.reverse()); // Oldest to newest
   } catch (error) {
+    console.error('Trends fetch error:', error);
     return c.json({ error: 'Failed to fetch trends' }, 500);
   }
 });
@@ -1097,32 +1220,157 @@ app.post("/make-server-8a022548/reports/generate", async (c) => {
     const request = await c.req.json();
     const { childId, reportType, startDate, endDate, watermark } = request;
 
+    // Fetch real data from database for the report period
+    const userId = authCheck.user.userId;
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    // Fetch stress logs
+    const { data: stressLogs } = await supabase
+      .from('stress_logs')
+      .select('*')
+      .eq('user_id', userId)
+      .gte('created_at', start.toISOString())
+      .lte('created_at', end.toISOString())
+      .order('created_at', { ascending: true });
+
+    // Fetch routine completions
+    const { data: routines } = await supabase
+      .from('routine_completions')
+      .select('*')
+      .eq('user_id', userId)
+      .gte('scheduled_at', start.toISOString())
+      .lte('scheduled_at', end.toISOString())
+      .order('scheduled_at', { ascending: true });
+
+    // Fetch goal achievements
+    const { data: goals } = await supabase
+      .from('goal_achievements')
+      .select('*')
+      .eq('user_id', userId)
+      .gte('created_at', start.toISOString())
+      .lte('created_at', end.toISOString());
+
+    // Fetch wins journal
+    const { data: wins } = await supabase
+      .from('wins_journal')
+      .select('*')
+      .eq('user_id', userId)
+      .gte('created_at', start.toISOString())
+      .lte('created_at', end.toISOString())
+      .order('created_at', { ascending: false });
+
+    // Calculate metrics
+    const stressMetrics = {
+      avgMorning: 0,
+      avgEvening: 0,
+      avgOverall: 0,
+      trend: 'stable' as 'improving' | 'stable' | 'worsening',
+      totalCheckins: stressLogs?.length || 0,
+    };
+
+    if (stressLogs && stressLogs.length > 0) {
+      const morningLogs = stressLogs.filter(l => l.context === 'morning');
+      const eveningLogs = stressLogs.filter(l => l.context === 'evening');
+
+      stressMetrics.avgMorning = morningLogs.length > 0
+        ? Math.round(morningLogs.reduce((sum, l) => sum + l.stress_level, 0) / morningLogs.length * 10) / 10
+        : 0;
+      stressMetrics.avgEvening = eveningLogs.length > 0
+        ? Math.round(eveningLogs.reduce((sum, l) => sum + l.stress_level, 0) / eveningLogs.length * 10) / 10
+        : 0;
+      stressMetrics.avgOverall = Math.round(stressLogs.reduce((sum, l) => sum + l.stress_level, 0) / stressLogs.length * 10) / 10;
+
+      // Calculate trend (first half vs second half)
+      const midpoint = Math.floor(stressLogs.length / 2);
+      if (midpoint > 0) {
+        const firstHalf = stressLogs.slice(0, midpoint);
+        const secondHalf = stressLogs.slice(midpoint);
+        const firstAvg = firstHalf.reduce((sum, l) => sum + l.stress_level, 0) / firstHalf.length;
+        const secondAvg = secondHalf.reduce((sum, l) => sum + l.stress_level, 0) / secondHalf.length;
+        if (secondAvg < firstAvg - 0.5) stressMetrics.trend = 'improving';
+        else if (secondAvg > firstAvg + 0.5) stressMetrics.trend = 'worsening';
+      }
+    }
+
+    const routineMetrics = {
+      totalScheduled: routines?.length || 0,
+      completed: routines?.filter(r => r.completion_status === 'completed').length || 0,
+      partial: routines?.filter(r => r.completion_status === 'partial').length || 0,
+      skipped: routines?.filter(r => r.completion_status === 'skipped').length || 0,
+      adherenceRate: 0,
+    };
+    if (routineMetrics.totalScheduled > 0) {
+      routineMetrics.adherenceRate = Math.round(
+        ((routineMetrics.completed + routineMetrics.partial * 0.5) / routineMetrics.totalScheduled) * 100
+      );
+    }
+
+    const goalMetrics = {
+      total: goals?.length || 0,
+      achieved: goals?.filter(g => g.achieved_at).length || 0,
+      inProgress: goals?.filter(g => !g.achieved_at && g.current_value > 0).length || 0,
+    };
+
     // Create bucket if it doesn't exist
     const bucketName = 'make-8a022548-reports';
     const { data: buckets } = await supabase.storage.listBuckets();
     const bucketExists = buckets?.some(bucket => bucket.name === bucketName);
-    
+
     if (!bucketExists) {
       await supabase.storage.createBucket(bucketName, { public: false });
     }
 
-    // Generate simple PDF content (placeholder - would use a PDF library in production)
+    // Generate report content with real data
     const reportContent = `
 AMINY ${reportType.toUpperCase()} REPORT
 ${watermark ? `\n${watermark}\n` : ''}
+=====================================
 
-Child ID: ${childId}
-Period: ${startDate} to ${endDate}
+REPORT PERIOD: ${startDate} to ${endDate}
 Generated: ${new Date().toISOString()}
 
-This is a placeholder report. In production, this would be a formatted PDF with:
-- Child progress data
-- Charts and visualizations
-- Goals and milestones
-- Clinical observations
-- Recommendations
+=====================================
+STRESS & WELLNESS OVERVIEW
+=====================================
+
+Total Check-ins: ${stressMetrics.totalCheckins}
+Average Morning Stress: ${stressMetrics.avgMorning || 'N/A'}/10
+Average Evening Stress: ${stressMetrics.avgEvening || 'N/A'}/10
+Overall Average: ${stressMetrics.avgOverall || 'N/A'}/10
+Trend: ${stressMetrics.trend === 'improving' ? 'Improving' : stressMetrics.trend === 'worsening' ? 'Needs Attention' : 'Stable'}
+
+=====================================
+ROUTINE ADHERENCE
+=====================================
+
+Total Routines Scheduled: ${routineMetrics.totalScheduled}
+Completed: ${routineMetrics.completed}
+Partially Completed: ${routineMetrics.partial}
+Skipped: ${routineMetrics.skipped}
+Adherence Rate: ${routineMetrics.adherenceRate}%
+
+=====================================
+GOALS PROGRESS
+=====================================
+
+Total Goals: ${goalMetrics.total}
+Achieved: ${goalMetrics.achieved}
+In Progress: ${goalMetrics.inProgress}
+
+${wins && wins.length > 0 ? `
+=====================================
+WINS & CELEBRATIONS
+=====================================
+
+${wins.slice(0, 5).map(w => `- ${w.title}${w.category ? ` (${w.category})` : ''}`).join('\n')}
+${wins.length > 5 ? `\n...and ${wins.length - 5} more wins!` : ''}
+` : ''}
+
+=====================================
 
 Report generated by Aminy AI
+Powered by ABA principles for behavioral wellness
     `.trim();
 
     const reportId = `report-${user.id}-${Date.now()}`;
