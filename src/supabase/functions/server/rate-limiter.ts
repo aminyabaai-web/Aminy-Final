@@ -11,12 +11,13 @@ interface RateLimitConfig {
 }
 
 // Daily message limits per tier
+// MUST match tier-utils.ts getAIMessageLimit()
 export const DAILY_MESSAGE_LIMITS: Record<string, number> = {
-  free: 10,       // 10 messages/day
-  starter: 50,    // 50 messages/day
-  core: 300,      // 300 messages/day
-  pro: 1000,      // 1000 messages/day (effectively unlimited)
-  default: 10,    // Default for unknown tiers
+  free: 5,        // 5 messages/day (matches tier-utils.ts)
+  starter: 20,    // 20 messages/day (matches tier-utils.ts)
+  core: 999999,   // Unlimited (null in tier-utils means no limit)
+  pro: 999999,    // Unlimited (null in tier-utils means no limit)
+  default: 5,     // Default for unknown tiers (same as free)
 };
 
 interface RateLimitEntry {

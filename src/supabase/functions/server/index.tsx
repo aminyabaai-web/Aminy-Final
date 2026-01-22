@@ -40,6 +40,15 @@ import {
   verifyProvider,
 } from "./provider-routes.ts";
 import { sanitizeForAI, sanitizeMessages, sanitizeName } from "./sanitize.ts";
+import {
+  verifyAuth,
+  verifyAuthAndFeature,
+  hasTierFeature,
+  unauthorizedResponse,
+  forbiddenResponse,
+  type AuthUser,
+  type TierType,
+} from "./auth-middleware.ts";
 
 const app = new Hono();
 
@@ -254,11 +263,25 @@ async function callAI(config: AIConfig, options: {
 // AI Orchestrator endpoint - categorize and prioritize tasks
 app.post("/make-server-8a022548/ai/categorize", async (c) => {
   try {
-    const { userInput, context, userId, tier } = await c.req.json();
+    const { userInput, context } = await c.req.json();
 
-    // Rate limiting
-    const rateLimitId = userId || c.req.header('x-forwarded-for') || 'anonymous';
-    const rateLimitCheck = await checkAllRateLimits(rateLimitId, tier || 'free', 'ai-categorize');
+    // SECURITY: Verify auth token and get REAL tier from database
+    const authHeader = c.req.header('Authorization');
+    const authResult = await verifyAuth(authHeader);
+
+    let rateLimitId: string;
+    let userTier: TierType;
+
+    if (authResult.authenticated && authResult.user) {
+      rateLimitId = authResult.user.userId;
+      userTier = authResult.user.tier;
+    } else {
+      rateLimitId = c.req.header('x-forwarded-for') || 'anonymous';
+      userTier = 'free';
+    }
+
+    // Rate limiting with verified tier
+    const rateLimitCheck = await checkAllRateLimits(rateLimitId, userTier, 'ai-categorize');
     if (!rateLimitCheck.allowed) {
       return c.json(
         { error: rateLimitCheck.reason, retryAfter: rateLimitCheck.result.retryAfter },
@@ -417,11 +440,25 @@ app.post("/make-server-8a022548/ai/brain", async (c) => {
   try {
     const body = await c.req.json();
 
-    const { userMessage, conversationHistory, systemPrompt, userId, tier } = body;
+    const { userMessage, conversationHistory, systemPrompt } = body;
 
-    // Rate limiting
-    const rateLimitId = userId || c.req.header('x-forwarded-for') || 'anonymous';
-    const rateLimitCheck = await checkAllRateLimits(rateLimitId, tier || 'free', 'ai-brain');
+    // SECURITY: Verify auth token and get REAL tier from database
+    const authHeader = c.req.header('Authorization');
+    const authResult = await verifyAuth(authHeader);
+
+    let rateLimitId: string;
+    let userTier: TierType;
+
+    if (authResult.authenticated && authResult.user) {
+      rateLimitId = authResult.user.userId;
+      userTier = authResult.user.tier;
+    } else {
+      rateLimitId = c.req.header('x-forwarded-for') || 'anonymous';
+      userTier = 'free';
+    }
+
+    // Rate limiting with verified tier
+    const rateLimitCheck = await checkAllRateLimits(rateLimitId, userTier, 'ai-brain');
     if (!rateLimitCheck.allowed) {
       return c.json(
         { error: rateLimitCheck.reason, retryAfter: rateLimitCheck.result.retryAfter },
@@ -469,11 +506,7 @@ app.post("/make-server-8a022548/ai/chat", async (c) => {
   try {
     const body = await c.req.json();
 
-    const { messages, context, userId, tier } = body;
-
-    // Rate limiting - use userId if provided, otherwise use IP
-    const rateLimitId = userId || c.req.header('x-forwarded-for') || c.req.header('x-real-ip') || 'anonymous';
-    const userTier = tier || 'free';
+    const { messages, context } = body;
 
     // Create Supabase client for usage tracking
     const { createClient } = await import('jsr:@supabase/supabase-js@2');
@@ -481,6 +514,24 @@ app.post("/make-server-8a022548/ai/chat", async (c) => {
       Deno.env.get('SUPABASE_URL')!,
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
     );
+
+    // SECURITY: Verify auth token and get REAL tier from database
+    // NEVER trust tier from client - always verify server-side
+    const authHeader = c.req.header('Authorization');
+    const authResult = await verifyAuth(authHeader);
+
+    let rateLimitId: string;
+    let userTier: TierType;
+
+    if (authResult.authenticated && authResult.user) {
+      // Authenticated user - use verified tier from database
+      rateLimitId = authResult.user.userId;
+      userTier = authResult.user.tier;
+    } else {
+      // Anonymous user - use IP and default to free tier
+      rateLimitId = c.req.header('x-forwarded-for') || c.req.header('x-real-ip') || 'anonymous';
+      userTier = 'free';
+    }
 
     // Check both per-minute rate limits AND daily usage limits
     const limitCheck = await checkAllLimits(supabase, rateLimitId, userTier, 'ai-chat', true);
@@ -1017,17 +1068,31 @@ app.get("/make-server-8a022548/outcomes/trends/:childId", async (c) => {
 // Generate a PDF report
 app.post("/make-server-8a022548/reports/generate", async (c) => {
   try {
-    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    // SECURITY: Verify auth and feature access
+    const authHeader = c.req.header('Authorization');
+    const authCheck = await verifyAuthAndFeature(authHeader, 'basic-reports');
+
+    if (!authCheck.authenticated || !authCheck.user) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
+    // Check if user has access to reports feature
+    if (!authCheck.featureAllowed) {
+      return c.json({
+        error: 'Upgrade required to access reports',
+        code: 'FEATURE_GATED',
+        minimumTier: authCheck.minimumTier || 'starter',
+        upgradeRequired: true,
+      }, 403);
+    }
+
     const { createClient } = await import('jsr:@supabase/supabase-js@2');
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL')!,
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
     );
 
-    const { data: { user }, error: authError } = await supabase.auth.getUser(accessToken);
-    if (!user?.id) {
-      return c.json({ error: 'Unauthorized' }, 401);
-    }
+    const user = { id: authCheck.user.userId };
 
     const request = await c.req.json();
     const { childId, reportType, startDate, endDate, watermark } = request;
@@ -1358,15 +1423,50 @@ app.post("/make-server-8a022548/payments/webhook", async (c) => {
 
 // ============================================================================
 // VIDEO / DAILY.CO ENDPOINTS - Real telehealth video calls
+// Requires 'marketplace-access' feature (Core tier or higher)
 // ============================================================================
 
 // Create a video room for a telehealth session
 app.post("/make-server-8a022548/video/create-room", async (c) => {
+  // SECURITY: Verify auth and feature access for marketplace
+  const authHeader = c.req.header('Authorization');
+  const authCheck = await verifyAuthAndFeature(authHeader, 'marketplace-access');
+
+  if (!authCheck.authenticated || !authCheck.user) {
+    return c.json({ error: 'Unauthorized' }, 401);
+  }
+
+  if (!authCheck.featureAllowed) {
+    return c.json({
+      error: 'Upgrade to Core tier to access telehealth features',
+      code: 'FEATURE_GATED',
+      minimumTier: 'core',
+      upgradeRequired: true,
+    }, 403);
+  }
+
   return createVideoRoom(c.req.raw);
 });
 
 // Get a meeting token for joining a room
 app.post("/make-server-8a022548/video/get-token", async (c) => {
+  // SECURITY: Verify auth and feature access for marketplace
+  const authHeader = c.req.header('Authorization');
+  const authCheck = await verifyAuthAndFeature(authHeader, 'marketplace-access');
+
+  if (!authCheck.authenticated || !authCheck.user) {
+    return c.json({ error: 'Unauthorized' }, 401);
+  }
+
+  if (!authCheck.featureAllowed) {
+    return c.json({
+      error: 'Upgrade to Core tier to access telehealth features',
+      code: 'FEATURE_GATED',
+      minimumTier: 'core',
+      upgradeRequired: true,
+    }, 403);
+  }
+
   return getMeetingToken(c.req.raw);
 });
 
@@ -1448,8 +1548,25 @@ app.get("/make-server-8a022548/providers/:providerId/stats", async (c) => {
   return getProviderStats(providerId);
 });
 
-// Schedule a session
+// Schedule a session - requires marketplace-access (Core tier)
 app.post("/make-server-8a022548/providers/:providerId/sessions", async (c) => {
+  // SECURITY: Verify auth and feature access for marketplace
+  const authHeader = c.req.header('Authorization');
+  const authCheck = await verifyAuthAndFeature(authHeader, 'marketplace-access');
+
+  if (!authCheck.authenticated || !authCheck.user) {
+    return c.json({ error: 'Unauthorized' }, 401);
+  }
+
+  if (!authCheck.featureAllowed) {
+    return c.json({
+      error: 'Upgrade to Core tier to book provider sessions',
+      code: 'FEATURE_GATED',
+      minimumTier: 'core',
+      upgradeRequired: true,
+    }, 403);
+  }
+
   const providerId = c.req.param('providerId');
   return scheduleSession(c.req.raw, providerId);
 });
@@ -1559,35 +1676,25 @@ app.get("/make-server-8a022548/payments/referral/info", async (c) => {
 // Check feature access
 app.get("/make-server-8a022548/payments/feature-access", async (c) => {
   try {
-    const accessToken = c.req.header('Authorization')?.split(' ')[1];
-    const { createClient } = await import('jsr:@supabase/supabase-js@2');
-    const supabase = createClient(
-      Deno.env.get('SUPABASE_URL')!,
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
-    );
+    const feature = c.req.query('feature');
 
-    const { data: { user }, error: authError } = await supabase.auth.getUser(accessToken);
-    if (!user?.id) {
+    if (!feature) {
+      return c.json({ error: 'feature query parameter required' }, 400);
+    }
+
+    // SECURITY: Use the auth middleware to verify and get tier from database
+    const authHeader = c.req.header('Authorization');
+    const authCheck = await verifyAuthAndFeature(authHeader, feature);
+
+    if (!authCheck.authenticated || !authCheck.user) {
       return c.json({ error: 'Unauthorized' }, 401);
     }
 
-    const feature = c.req.query('feature');
-    const subscription = await kv.get(`subscription:${user.id}`);
-    const tier = subscription?.tier || 'free';
-
-    // Define feature access per tier
-    const featureAccess = {
-      'ai_coach': ['basic', 'plus', 'premium'],
-      'telehealth': ['plus', 'premium'],
-      'unlimited_vault': ['plus', 'premium'],
-      'pdf_reports': ['premium'],
-      'priority_support': ['premium'],
-    };
-
-    const hasAccess = featureAccess[feature]?.includes(tier) || false;
-    const upgradeRequired = hasAccess ? null : featureAccess[feature]?.[0] || 'premium';
-
-    return c.json({ hasAccess, tier, upgradeRequired });
+    return c.json({
+      hasAccess: authCheck.featureAllowed,
+      tier: authCheck.user.tier,
+      upgradeRequired: authCheck.featureAllowed ? null : authCheck.minimumTier,
+    });
   } catch (error) {
     return c.json({ error: 'Failed to check feature access' }, 500);
   }

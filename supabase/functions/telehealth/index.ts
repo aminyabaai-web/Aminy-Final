@@ -24,14 +24,61 @@ const FROM_EMAIL = Deno.env.get("FROM_EMAIL") || "noreply@aminy.app";
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
 const stripe = new Stripe(STRIPE_SECRET_KEY, { apiVersion: "2023-10-16" });
 
-// CORS headers
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-};
+// CORS headers - restrict to app domain in production
+const ALLOWED_ORIGINS = [
+  'https://aminy.app',
+  'https://www.aminy.app',
+  'https://app.aminy.app',
+  ...(Deno.env.get('ENVIRONMENT') !== 'production' ? ['http://localhost:3000', 'http://localhost:5173'] : []),
+];
+
+function getCorsHeaders(origin: string | null): Record<string, string> {
+  const allowedOrigin = origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+  return {
+    "Access-Control-Allow-Origin": allowedOrigin,
+    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+    "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+    "Access-Control-Allow-Credentials": "true",
+  };
+}
+
+// Authentication helper - verify JWT and extract user
+async function verifyAuth(req: Request): Promise<{ userId: string; email: string } | null> {
+  const authHeader = req.headers.get('Authorization');
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return null;
+  }
+
+  const token = authHeader.replace('Bearer ', '');
+
+  try {
+    // Verify the JWT with Supabase
+    const { data: { user }, error } = await supabase.auth.getUser(token);
+
+    if (error || !user) {
+      console.error('Auth verification failed:', error?.message);
+      return null;
+    }
+
+    return { userId: user.id, email: user.email || '' };
+  } catch (error) {
+    console.error('Auth verification error:', error);
+    return null;
+  }
+}
+
+// Helper for unauthorized response
+function unauthorizedResponse(corsHeaders: Record<string, string>): Response {
+  return new Response(JSON.stringify({ error: 'Unauthorized - valid authentication required' }), {
+    status: 401,
+    headers: { ...corsHeaders, "Content-Type": "application/json" },
+  });
+}
 
 serve(async (req) => {
+  const origin = req.headers.get('origin');
+  const corsHeaders = getCorsHeaders(origin);
+
   // Handle CORS preflight
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
@@ -41,21 +88,27 @@ serve(async (req) => {
   const path = url.pathname.replace("/telehealth", "");
 
   try {
-    // Route requests
+    // SECURITY: Verify authentication for all routes except OPTIONS
+    const authUser = await verifyAuth(req);
+    if (!authUser) {
+      return unauthorizedResponse(corsHeaders);
+    }
+
+    // Route requests - pass authenticated user to handlers
     if (path.startsWith("/appointments")) {
-      return handleAppointments(req, path);
+      return handleAppointments(req, path, authUser, corsHeaders);
     }
     if (path.startsWith("/payments")) {
-      return handlePayments(req, path);
+      return handlePayments(req, path, authUser, corsHeaders);
     }
     if (path.startsWith("/video")) {
-      return handleVideo(req, path);
+      return handleVideo(req, path, authUser, corsHeaders);
     }
     if (path.startsWith("/notifications")) {
-      return handleNotifications(req, path);
+      return handleNotifications(req, path, authUser, corsHeaders);
     }
     if (path.startsWith("/providers")) {
-      return handleProviders(req, path);
+      return handleProviders(req, path, authUser, corsHeaders);
     }
 
     return new Response(JSON.stringify({ error: "Not found" }), {
@@ -64,7 +117,11 @@ serve(async (req) => {
     });
   } catch (error) {
     console.error("Error:", error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    // Don't expose internal error messages in production
+    const errorMessage = Deno.env.get('ENVIRONMENT') === 'production'
+      ? 'An internal error occurred'
+      : error.message;
+    return new Response(JSON.stringify({ error: errorMessage }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
@@ -75,13 +132,53 @@ serve(async (req) => {
 // Appointments Handler
 // =============================================================================
 
-async function handleAppointments(req: Request, path: string): Promise<Response> {
+async function handleAppointments(
+  req: Request,
+  path: string,
+  authUser: { userId: string; email: string },
+  corsHeaders: Record<string, string>
+): Promise<Response> {
   const method = req.method;
 
   // POST /appointments - Create appointment
   if (method === "POST" && path === "/appointments") {
     const body = await req.json();
-    const { userId, providerId, slotId, slot, visitType, intake } = body;
+    const { providerId, slotId, slot, visitType, intake } = body;
+
+    // Input validation
+    if (!providerId || !slotId || !slot?.startTime || !slot?.endTime || !visitType) {
+      return new Response(JSON.stringify({ error: 'Missing required fields: providerId, slotId, slot, visitType' }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // SECURITY: Use authenticated user's ID, not from request body
+    const userId = authUser.userId;
+
+    // Validate slot is in the future
+    if (new Date(slot.startTime) <= new Date()) {
+      return new Response(JSON.stringify({ error: 'Cannot book slots in the past' }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Check slot availability (prevent double-booking)
+    const { data: existing } = await supabase
+      .from("appointments")
+      .select("id")
+      .eq("provider_id", providerId)
+      .eq("slot_id", slotId)
+      .in("status", ["scheduled", "in_progress"])
+      .single();
+
+    if (existing) {
+      return new Response(JSON.stringify({ error: 'This slot is no longer available' }), {
+        status: 409,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
     // Create appointment in database
     const { data: appointment, error } = await supabase
@@ -93,7 +190,7 @@ async function handleAppointments(req: Request, path: string): Promise<Response>
         start_time: slot.startTime,
         end_time: slot.endTime,
         visit_type: visitType,
-        reason_for_visit: intake.visitReason,
+        reason_for_visit: intake?.visitReason || '',
         status: "scheduled",
         video_room_url: `https://aminy.daily.co/apt-${Date.now()}`,
       })
@@ -102,59 +199,75 @@ async function handleAppointments(req: Request, path: string): Promise<Response>
 
     if (error) throw error;
 
-    return jsonResponse(appointment);
+    return jsonResponse(appointment, 201, corsHeaders);
   }
 
-  // GET /appointments?userId=xxx - Get user appointments
+  // GET /appointments - Get user's own appointments only
   if (method === "GET" && path === "/appointments") {
-    const url = new URL(req.url);
-    const userId = url.searchParams.get("userId");
-
+    // SECURITY: Only return authenticated user's appointments
     const { data, error } = await supabase
       .from("appointments")
       .select("*")
-      .eq("user_id", userId)
+      .eq("user_id", authUser.userId)
       .order("start_time", { ascending: true });
 
     if (error) throw error;
-    return jsonResponse(data);
+    return jsonResponse(data, 200, corsHeaders);
   }
 
-  // GET /appointments/:id - Get single appointment
+  // GET /appointments/:id - Get single appointment (only if owned by user)
   const appointmentIdMatch = path.match(/^\/appointments\/([^/]+)$/);
   if (method === "GET" && appointmentIdMatch) {
     const { data, error } = await supabase
       .from("appointments")
       .select("*")
       .eq("id", appointmentIdMatch[1])
+      .eq("user_id", authUser.userId) // SECURITY: Ensure user owns this appointment
       .single();
 
-    if (error) throw error;
-    return jsonResponse(data);
+    if (error || !data) {
+      return new Response(JSON.stringify({ error: 'Appointment not found' }), {
+        status: 404,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    return jsonResponse(data, 200, corsHeaders);
   }
 
-  // POST /appointments/:id/cancel - Cancel appointment
+  // POST /appointments/:id/cancel - Cancel appointment (only if owned by user)
   const cancelMatch = path.match(/^\/appointments\/([^/]+)\/cancel$/);
   if (method === "POST" && cancelMatch) {
+    // SECURITY: Verify ownership before canceling
     const { data, error } = await supabase
       .from("appointments")
-      .update({ status: "cancelled" })
+      .update({ status: "cancelled", cancelled_at: new Date().toISOString() })
       .eq("id", cancelMatch[1])
+      .eq("user_id", authUser.userId) // SECURITY: Only cancel own appointments
       .select()
       .single();
 
-    if (error) throw error;
-    return jsonResponse(data);
+    if (error || !data) {
+      return new Response(JSON.stringify({ error: 'Appointment not found or not authorized' }), {
+        status: 404,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    return jsonResponse(data, 200, corsHeaders);
   }
 
-  return notFound();
+  return notFound(corsHeaders);
 }
 
 // =============================================================================
 // Payments Handler (Stripe)
 // =============================================================================
 
-async function handlePayments(req: Request, path: string): Promise<Response> {
+async function handlePayments(
+  req: Request,
+  path: string,
+  authUser: { userId: string; email: string },
+  corsHeaders: Record<string, string>
+): Promise<Response> {
   const method = req.method;
 
   // POST /payments/create-intent - Create payment intent
@@ -162,13 +275,26 @@ async function handlePayments(req: Request, path: string): Promise<Response> {
     const body = await req.json();
     const { amount, currency = "usd", customerId, metadata, description } = body;
 
+    // Input validation
+    if (!amount || amount <= 0 || amount > 100000) { // Max $1000
+      return new Response(JSON.stringify({ error: 'Invalid amount' }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Add idempotency key to prevent duplicate charges
+    const idempotencyKey = `pi_${authUser.userId}_${Date.now()}`;
+
     const paymentIntent = await stripe.paymentIntents.create({
       amount,
       currency,
       customer: customerId,
-      metadata,
+      metadata: { ...metadata, userId: authUser.userId }, // Track user
       description,
       automatic_payment_methods: { enabled: true },
+    }, {
+      idempotencyKey,
     });
 
     return jsonResponse({
@@ -177,7 +303,7 @@ async function handlePayments(req: Request, path: string): Promise<Response> {
       amount: paymentIntent.amount,
       currency: paymentIntent.currency,
       status: paymentIntent.status,
-    });
+    }, 200, corsHeaders);
   }
 
   // POST /payments/customer - Get or create customer
@@ -192,7 +318,7 @@ async function handlePayments(req: Request, path: string): Promise<Response> {
         id: existing.data[0].id,
         email: existing.data[0].email,
         name: existing.data[0].name,
-      });
+      }, 200, corsHeaders);
     }
 
     // Create new customer
@@ -201,13 +327,21 @@ async function handlePayments(req: Request, path: string): Promise<Response> {
       id: customer.id,
       email: customer.email,
       name: customer.name,
-    });
+    }, 201, corsHeaders);
   }
 
   // POST /payments/create-checkout - Create checkout session
   if (method === "POST" && path === "/payments/create-checkout") {
     const body = await req.json();
     const { amount, description, metadata, successUrl, cancelUrl } = body;
+
+    // Input validation
+    if (!amount || amount <= 0) {
+      return new Response(JSON.stringify({ error: 'Invalid amount' }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
@@ -221,18 +355,25 @@ async function handlePayments(req: Request, path: string): Promise<Response> {
           quantity: 1,
         },
       ],
-      metadata,
+      metadata: { ...metadata, userId: authUser.userId },
       success_url: successUrl,
       cancel_url: cancelUrl,
     });
 
-    return jsonResponse({ url: session.url, sessionId: session.id });
+    return jsonResponse({ url: session.url, sessionId: session.id }, 200, corsHeaders);
   }
 
-  // POST /payments/refund - Process refund
+  // POST /payments/refund - Process refund (admin only in future)
   if (method === "POST" && path === "/payments/refund") {
     const body = await req.json();
     const { paymentIntentId, amount, reason } = body;
+
+    if (!paymentIntentId) {
+      return new Response(JSON.stringify({ error: 'paymentIntentId required' }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
     const refund = await stripe.refunds.create({
       payment_intent: paymentIntentId,
@@ -244,17 +385,22 @@ async function handlePayments(req: Request, path: string): Promise<Response> {
       id: refund.id,
       status: refund.status,
       amount: refund.amount,
-    });
+    }, 200, corsHeaders);
   }
 
-  return notFound();
+  return notFound(corsHeaders);
 }
 
 // =============================================================================
 // Video Handler (Daily.co)
 // =============================================================================
 
-async function handleVideo(req: Request, path: string): Promise<Response> {
+async function handleVideo(
+  req: Request,
+  path: string,
+  authUser: { userId: string; email: string },
+  corsHeaders: Record<string, string>
+): Promise<Response> {
   const method = req.method;
 
   // POST /video/create-room - Create video room
@@ -291,14 +437,15 @@ async function handleVideo(req: Request, path: string): Promise<Response> {
       privacy: room.privacy,
       config: room.config,
       createdAt: room.created_at,
-    });
+    }, 201, corsHeaders);
   }
 
   // POST /video/get-token - Get meeting token
   if (method === "POST" && path === "/video/get-token") {
     const body = await req.json();
-    const { roomName, userId, userName, isProvider } = body;
+    const { roomName, userName, isProvider } = body;
 
+    // SECURITY: Use authenticated user's ID for the token
     const response = await fetch("https://api.daily.co/v1/meeting-tokens", {
       method: "POST",
       headers: {
@@ -308,7 +455,7 @@ async function handleVideo(req: Request, path: string): Promise<Response> {
       body: JSON.stringify({
         properties: {
           room_name: roomName,
-          user_id: userId,
+          user_id: authUser.userId, // Use authenticated user
           user_name: userName,
           is_owner: isProvider,
           enable_screenshare: true,
@@ -323,7 +470,7 @@ async function handleVideo(req: Request, path: string): Promise<Response> {
     return jsonResponse({
       token: data.token,
       expiresAt: new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString(),
-    });
+    }, 200, corsHeaders);
   }
 
   // GET /video/room/:sessionId - Get room by session
@@ -341,7 +488,7 @@ async function handleVideo(req: Request, path: string): Promise<Response> {
     }
 
     const room = await response.json();
-    return jsonResponse(room);
+    return jsonResponse(room, 200, corsHeaders);
   }
 
   // DELETE /video/room/:roomName - Delete room
@@ -351,17 +498,22 @@ async function handleVideo(req: Request, path: string): Promise<Response> {
       headers: { Authorization: `Bearer ${DAILY_API_KEY}` },
     });
 
-    return jsonResponse({ success: true });
+    return jsonResponse({ success: true }, 200, corsHeaders);
   }
 
-  return notFound();
+  return notFound(corsHeaders);
 }
 
 // =============================================================================
 // Notifications Handler (Email + SMS)
 // =============================================================================
 
-async function handleNotifications(req: Request, path: string): Promise<Response> {
+async function handleNotifications(
+  req: Request,
+  path: string,
+  authUser: { userId: string; email: string },
+  corsHeaders: Record<string, string>
+): Promise<Response> {
   const method = req.method;
 
   // POST /notifications/email - Send email
@@ -371,7 +523,7 @@ async function handleNotifications(req: Request, path: string): Promise<Response
 
     if (!SENDGRID_API_KEY) {
       console.log("SendGrid not configured, skipping email");
-      return jsonResponse({ success: true, mock: true });
+      return jsonResponse({ success: true, mock: true }, 200, corsHeaders);
     }
 
     const emailContent = generateEmailContent(template, data);
@@ -393,7 +545,7 @@ async function handleNotifications(req: Request, path: string): Promise<Response
       }),
     });
 
-    return jsonResponse({ success: response.ok });
+    return jsonResponse({ success: response.ok }, 200, corsHeaders);
   }
 
   // POST /notifications/sms - Send SMS
@@ -403,7 +555,7 @@ async function handleNotifications(req: Request, path: string): Promise<Response
 
     if (!TWILIO_ACCOUNT_SID || !TWILIO_AUTH_TOKEN) {
       console.log("Twilio not configured, skipping SMS");
-      return jsonResponse({ success: true, mock: true });
+      return jsonResponse({ success: true, mock: true }, 200, corsHeaders);
     }
 
     const response = await fetch(
@@ -423,7 +575,7 @@ async function handleNotifications(req: Request, path: string): Promise<Response
     );
 
     const result = await response.json();
-    return jsonResponse({ success: response.ok, messageId: result.sid });
+    return jsonResponse({ success: response.ok, messageId: result.sid }, 200, corsHeaders);
   }
 
   // POST /notifications/schedule-reminders - Schedule appointment reminders
@@ -447,28 +599,35 @@ async function handleNotifications(req: Request, path: string): Promise<Response
     );
 
     if (error) throw error;
-    return jsonResponse({ success: true });
+    return jsonResponse({ success: true }, 200, corsHeaders);
   }
 
   // DELETE /notifications/cancel-reminders/:appointmentId
   const cancelMatch = path.match(/^\/notifications\/cancel-reminders\/([^/]+)$/);
   if (method === "DELETE" && cancelMatch) {
+    // SECURITY: Only cancel reminders for user's own appointments
     await supabase
       .from("scheduled_reminders")
       .delete()
-      .eq("appointment_id", cancelMatch[1]);
+      .eq("appointment_id", cancelMatch[1])
+      .eq("user_id", authUser.userId);
 
-    return jsonResponse({ success: true });
+    return jsonResponse({ success: true }, 200, corsHeaders);
   }
 
-  return notFound();
+  return notFound(corsHeaders);
 }
 
 // =============================================================================
 // Providers Handler
 // =============================================================================
 
-async function handleProviders(req: Request, path: string): Promise<Response> {
+async function handleProviders(
+  req: Request,
+  path: string,
+  authUser: { userId: string; email: string },
+  corsHeaders: Record<string, string>
+): Promise<Response> {
   const method = req.method;
 
   // GET /providers - List providers with filters
@@ -489,7 +648,7 @@ async function handleProviders(req: Request, path: string): Promise<Response> {
     const { data, error } = await query;
     if (error) throw error;
 
-    return jsonResponse(data);
+    return jsonResponse(data, 200, corsHeaders);
   }
 
   // GET /providers/:id - Get single provider
@@ -502,7 +661,7 @@ async function handleProviders(req: Request, path: string): Promise<Response> {
       .single();
 
     if (error) throw error;
-    return jsonResponse(data);
+    return jsonResponse(data, 200, corsHeaders);
   }
 
   // GET /providers/:id/slots - Get provider availability slots
@@ -537,24 +696,24 @@ async function handleProviders(req: Request, path: string): Promise<Response> {
       new Date(startDate)
     );
 
-    return jsonResponse(slots);
+    return jsonResponse(slots, 200, corsHeaders);
   }
 
-  return notFound();
+  return notFound(corsHeaders);
 }
 
 // =============================================================================
 // Helper Functions
 // =============================================================================
 
-function jsonResponse(data: any, status = 200): Response {
+function jsonResponse(data: any, status = 200, corsHeaders: Record<string, string>): Response {
   return new Response(JSON.stringify(data), {
     status,
     headers: { ...corsHeaders, "Content-Type": "application/json" },
   });
 }
 
-function notFound(): Response {
+function notFound(corsHeaders: Record<string, string>): Response {
   return new Response(JSON.stringify({ error: "Not found" }), {
     status: 404,
     headers: { ...corsHeaders, "Content-Type": "application/json" },

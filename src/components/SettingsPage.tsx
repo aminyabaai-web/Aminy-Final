@@ -66,9 +66,10 @@ import { ThemeToggle } from './ThemeToggle';
 interface SettingsPageProps {
   onNavigate?: (destination: string) => void;
   userTier?: string | null;
+  accessToken?: string | null;
 }
 
-export function SettingsPage({ onNavigate, userTier = 'core' }: SettingsPageProps) {
+export function SettingsPage({ onNavigate, userTier = 'core', accessToken: propAccessToken }: SettingsPageProps) {
   const [activeSection, setActiveSection] = useState('profile');
   
   // Handle URL parameters for direct section navigation
@@ -597,9 +598,10 @@ export function SettingsPage({ onNavigate, userTier = 'core' }: SettingsPageProp
   );
 
   const renderContent = () => {
-    const accessToken = typeof window !== 'undefined' 
-      ? localStorage.getItem('access_token') || undefined 
-      : undefined;
+    // Prefer prop over localStorage for access token (more secure)
+    const accessToken = propAccessToken || (typeof window !== 'undefined'
+      ? localStorage.getItem('access_token') || undefined
+      : undefined);
 
     switch (activeSection) {
       case 'profile':

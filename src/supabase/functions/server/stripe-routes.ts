@@ -20,6 +20,27 @@ const FROM_EMAIL = 'Aminy <hello@aminy.app>';
 // Initialize Supabase client with service role for admin operations
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
+// Price ID to tier mapping
+// These should match your Stripe product price IDs
+const PRICE_TO_TIER: Record<string, string> = {
+  // Monthly prices
+  [Deno.env.get('STRIPE_PRICE_STARTER_MONTHLY') || 'price_starter_monthly']: 'starter',
+  [Deno.env.get('STRIPE_PRICE_CORE_MONTHLY') || 'price_core_monthly']: 'core',
+  [Deno.env.get('STRIPE_PRICE_PRO_MONTHLY') || 'price_pro_monthly']: 'pro',
+  // Annual prices
+  [Deno.env.get('STRIPE_PRICE_STARTER_ANNUAL') || 'price_starter_annual']: 'starter',
+  [Deno.env.get('STRIPE_PRICE_CORE_ANNUAL') || 'price_core_annual']: 'core',
+  [Deno.env.get('STRIPE_PRICE_PRO_ANNUAL') || 'price_pro_annual']: 'pro',
+};
+
+/**
+ * Get tier from Stripe price ID
+ */
+function getTierFromPriceId(priceId: string | undefined): string | null {
+  if (!priceId) return null;
+  return PRICE_TO_TIER[priceId] || null;
+}
+
 // Email notification service
 async function sendEmail(
   to: string,
@@ -801,7 +822,27 @@ export async function handleWebhook(req: Request): Promise<Response> {
         const customerName = session.customer_details?.name || 'there';
 
         // Store customer ID mapping
-        await storeStripeCustomerId(userId, customerId);
+        if (userId && customerId) {
+          await storeStripeCustomerId(userId, customerId);
+        }
+
+        // CRITICAL: Update user's tier in the database based on subscription
+        if (userId && session.subscription) {
+          try {
+            // Get the subscription to determine the tier from the price
+            const subscription = await stripeRequest(`/subscriptions/${session.subscription}`);
+            const priceId = subscription.items?.data?.[0]?.price?.id;
+
+            // Map price ID to tier
+            const tier = getTierFromPriceId(priceId);
+            if (tier) {
+              await updateUserTier(userId, tier);
+              console.log(`Updated user ${userId} to tier ${tier}`);
+            }
+          } catch (err) {
+            console.error('Failed to update user tier:', err);
+          }
+        }
 
         // Send welcome/confirmation email
         if (customerEmail) {
@@ -848,6 +889,24 @@ export async function handleWebhook(req: Request): Promise<Response> {
 
       case 'customer.subscription.deleted': {
         const subscription = event.data.object;
+        const customerId = subscription.customer;
+
+        // Downgrade user to free tier when subscription ends
+        try {
+          // Find user by customer ID
+          const { data: customerData } = await supabase
+            .from('stripe_customers')
+            .select('user_id')
+            .eq('stripe_customer_id', customerId)
+            .single();
+
+          if (customerData?.user_id) {
+            await updateUserTier(customerData.user_id, 'free');
+            console.log(`Downgraded user ${customerData.user_id} to free tier`);
+          }
+        } catch (err) {
+          console.error('Failed to downgrade user tier:', err);
+        }
         break;
       }
 
