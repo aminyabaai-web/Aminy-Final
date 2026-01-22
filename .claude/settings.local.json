@@ -44,7 +44,9 @@
       "Bash(git grep:*)",
       "Bash(git push:*)",
       "Bash(xargs ls:*)",
-      "Bash(git remote add:*)"
+      "Bash(git remote add:*)",
+      "Bash(git remote set-url:*)",
+      "Bash(git rm:*)"
     ]
   }
 }
