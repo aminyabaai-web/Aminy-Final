@@ -13,7 +13,7 @@ const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || '
 // Initialize Supabase client with service role for admin operations
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
-export type TierType = 'free' | 'starter' | 'core' | 'pro';
+export type TierType = 'free' | 'starter' | 'core' | 'pro' | 'proplus';
 
 export interface AuthUser {
   userId: string;
@@ -87,6 +87,34 @@ const TIER_FEATURES: Record<TierType, Set<string>> = {
     'priority-support',       // Faster response
     'early-access',           // Beta features
     'discounted-sessions',    // 20% off marketplace
+    'live-ai-video-30',       // 30 min/month Live AI Video
+  ]),
+  proplus: new Set([
+    'unlimited-ai-chat',
+    'adaptive-daily-plan',
+    'custom-tasks',
+    'full-calm-tools',
+    'advanced-tracking',
+    'favorites',
+    'reminders',
+    'community-participate',
+    'full-reports',
+    'vault-access',
+    'ai-document-analysis',
+    'multi-child-unlimited',  // Unlimited children
+    'marketplace-access',
+    'care-plan-export',
+    'bcba-consult',           // Monthly BCBA session included
+    'clinical-reports',       // IEP-ready reports
+    'priority-support',       // Faster response
+    'early-access',           // Beta features
+    'discounted-sessions',    // 30% off marketplace
+    'live-ai-video-unlimited',// Unlimited Live AI Video
+    'human-credit-monthly',   // Monthly human consultation credit
+    'expiring-share-links',   // Time-limited secure sharing
+    'advanced-analytics',     // Detailed progress analytics
+    'api-access',             // API access for integrations
+    'dedicated-support',      // Dedicated support channel
   ]),
 };
 
@@ -96,16 +124,17 @@ const TIER_FEATURES: Record<TierType, Set<string>> = {
 function normalizeTier(tier: string | null | undefined): TierType {
   if (!tier) return 'free';
 
-  const normalized = tier.toLowerCase().trim();
+  const normalized = tier.toLowerCase().trim().replace(/\s+/g, '').replace(/-/g, '');
   const mapping: Record<string, TierType> = {
     'free': 'free',
     'starter': 'starter',
     'basic': 'starter',
     'core': 'core',
     'pro': 'pro',
-    'proplus': 'pro',
-    'pro+': 'pro',
-    'premium': 'pro',
+    'proplus': 'proplus',
+    'pro+': 'proplus',
+    'premium': 'proplus',
+    'enterprise': 'proplus',
   };
 
   return mapping[normalized] || 'free';
@@ -197,6 +226,7 @@ export function compareTiers(tier1: TierType, tier2: TierType): boolean {
     starter: 1,
     core: 2,
     pro: 3,
+    proplus: 4,
   };
   return tierLevels[tier1] >= tierLevels[tier2];
 }
@@ -205,7 +235,7 @@ export function compareTiers(tier1: TierType, tier2: TierType): boolean {
  * Get the minimum tier required for a feature
  */
 export function getMinimumTierForFeature(feature: string): TierType | null {
-  const tiers: TierType[] = ['free', 'starter', 'core', 'pro'];
+  const tiers: TierType[] = ['free', 'starter', 'core', 'pro', 'proplus'];
   for (const tier of tiers) {
     if (hasTierFeature(tier, feature)) {
       return tier;

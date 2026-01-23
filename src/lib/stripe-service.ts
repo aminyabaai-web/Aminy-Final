@@ -54,12 +54,13 @@ export const isStripeConfigured = (): boolean => {
 // Must match tier-utils.ts pricing
 export const TIER_PRICING = {
   free: { monthly: 0, annual: 0 },
-  starter: { monthly: 6.99, annual: 59 }, // ~$4.92/mo annually (25% savings)
-  core: { monthly: 12.99, annual: 119 }, // ~$9.92/mo annually (37% savings)
-  pro: { monthly: 24.99, annual: 229 }, // ~$19.08/mo annually (71% savings)
+  starter: { monthly: 6.99, annual: 59 },   // ~30% savings annually
+  core: { monthly: 14.99, annual: 129 },    // ~28% savings annually
+  pro: { monthly: 29.99, annual: 279 },     // ~22% savings annually
+  proplus: { monthly: 49.99, annual: 479 }, // ~20% savings annually
 } as const;
 
-export type TierType = 'free' | 'starter' | 'core' | 'pro';
+export type TierType = 'free' | 'starter' | 'core' | 'pro' | 'proplus';
 export type BillingInterval = 'monthly' | 'annual';
 
 interface CreateCheckoutParams {

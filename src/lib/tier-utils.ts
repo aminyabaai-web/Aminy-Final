@@ -1,14 +1,15 @@
 /**
  * Tier utilities for consistent naming and feature gating across the app
  *
- * Pricing Strategy (per MVP spec):
+ * Pricing Strategy (per McKinsey MVP spec - Updated):
  * - Free: $0 (discovery tier, hooks users)
  * - Starter: $6.99/mo or $59/year (entry empowerment)
- * - Core: $12.99/mo or $119/year (full companion - recommended)
- * - Pro: $24.99/mo or $229/year (premium with BCBA access)
+ * - Core: $14.99/mo or $129/year (full companion - recommended)
+ * - Pro: $29.99/mo or $279/year (premium with BCBA access)
+ * - Pro Plus: $49.99/mo or $479/year (enterprise features + human credit)
  */
 
-export type TierType = 'free' | 'starter' | 'core' | 'pro';
+export type TierType = 'free' | 'starter' | 'core' | 'pro' | 'proplus';
 
 // Map internal tier names to UI-friendly display names
 export const tierDisplayNames: Record<TierType, string> = {
@@ -16,14 +17,16 @@ export const tierDisplayNames: Record<TierType, string> = {
   starter: 'Starter',
   core: 'Core',
   pro: 'Pro',
+  proplus: 'Pro+',
 };
 
 // Pricing configuration
 export const tierPricing: Record<TierType, { monthly: number; yearly: number; savings?: number }> = {
   free: { monthly: 0, yearly: 0 },
-  starter: { monthly: 6.99, yearly: 59, savings: 25 },
-  core: { monthly: 12.99, yearly: 119, savings: 37 },
-  pro: { monthly: 24.99, yearly: 229, savings: 71 },
+  starter: { monthly: 6.99, yearly: 59, savings: 30 },
+  core: { monthly: 14.99, yearly: 129, savings: 28 },
+  pro: { monthly: 29.99, yearly: 279, savings: 22 },
+  proplus: { monthly: 49.99, yearly: 479, savings: 20 },
 };
 
 // Map UI names back to internal tier types
@@ -36,9 +39,10 @@ export function normalizeTierName(tier: string): TierType {
     'basic': 'starter',
     'core': 'core',
     'pro': 'pro',
-    'proplus': 'pro',
-    'pro+': 'pro',
-    'premium': 'pro',
+    'proplus': 'proplus',
+    'pro+': 'proplus',
+    'premium': 'proplus',
+    'enterprise': 'proplus',
   };
 
   return mapping[normalized] || 'free';
@@ -114,7 +118,7 @@ const tierFeatureMap: Record<TierType, string[]> = {
     'full-reports',
     'vault-access',
     'ai-document-analysis',
-    'multi-child',
+    'multi-child',            // Up to 3 children
     'marketplace-access',
     'care-plan-export',
     'bcba-consult',           // Monthly BCBA session included
@@ -122,6 +126,34 @@ const tierFeatureMap: Record<TierType, string[]> = {
     'priority-support',       // Faster response
     'early-access',           // Beta features
     'discounted-sessions',    // 20% off marketplace
+    'live-ai-video-30',       // 30 min/month Live AI Video
+  ],
+  proplus: [
+    'unlimited-ai-chat',
+    'adaptive-daily-plan',
+    'custom-tasks',
+    'full-calm-tools',
+    'advanced-tracking',
+    'favorites',
+    'reminders',
+    'community-participate',
+    'full-reports',
+    'vault-access',
+    'ai-document-analysis',
+    'multi-child-unlimited',  // Unlimited children
+    'marketplace-access',
+    'care-plan-export',
+    'bcba-consult',           // Monthly BCBA session included
+    'clinical-reports',       // IEP-ready reports
+    'priority-support',       // Faster response
+    'early-access',           // Beta features
+    'discounted-sessions',    // 30% off marketplace
+    'live-ai-video-unlimited',// Unlimited Live AI Video
+    'human-credit-monthly',   // Monthly human consultation credit
+    'expiring-share-links',   // Time-limited secure sharing
+    'advanced-analytics',     // Detailed progress analytics
+    'api-access',             // API access for integrations
+    'dedicated-support',      // Dedicated support channel
   ],
 };
 
@@ -143,6 +175,7 @@ export function compareTiers(tier1: TierType | undefined, tier2: TierType): bool
     starter: 1,
     core: 2,
     pro: 3,
+    proplus: 4,
   };
 
   if (!tier1) return false;
@@ -156,6 +189,7 @@ export function getTierLevel(tier: TierType | undefined): number {
     starter: 1,
     core: 2,
     pro: 3,
+    proplus: 4,
   };
   return tier ? tierLevels[tier] : 0;
 }
@@ -189,10 +223,20 @@ export function getTierFeatureDescriptions(tier: TierType): string[] {
     pro: [
       'Everything in Core, plus:',
       'One monthly BCBA consultation included',
+      '30 min/month Live AI Video coaching',
       'Provider-ready clinical reports',
       '20% off all marketplace sessions',
       'Priority support',
-      'Early access to new features',
+    ],
+    proplus: [
+      'Everything in Pro, plus:',
+      'Unlimited Live AI Video coaching',
+      'Monthly human consultation credit',
+      'Unlimited children profiles',
+      '30% off all marketplace sessions',
+      'Time-limited secure sharing links',
+      'Advanced analytics dashboard',
+      'Dedicated support channel',
     ],
   };
 
@@ -204,15 +248,33 @@ export function getAIMessageLimit(tier: TierType | undefined): number | null {
   const limits: Record<TierType, number | null> = {
     free: 5,
     starter: 20,
-    core: null, // unlimited
-    pro: null,  // unlimited
+    core: null,    // unlimited
+    pro: null,     // unlimited
+    proplus: null, // unlimited
   };
   return tier ? limits[tier] : 5;
 }
 
 // Check if tier has unlimited AI
 export function hasUnlimitedAI(tier: TierType | undefined): boolean {
-  return tier === 'core' || tier === 'pro';
+  return tier === 'core' || tier === 'pro' || tier === 'proplus';
+}
+
+// Get Live AI Video limits per tier (minutes per month)
+export function getLiveAIVideoLimit(tier: TierType | undefined): number | null {
+  const limits: Record<TierType, number | null> = {
+    free: 0,       // No Live AI Video
+    starter: 0,    // No Live AI Video
+    core: 0,       // No Live AI Video (pay per use via marketplace)
+    pro: 30,       // 30 minutes/month included
+    proplus: null, // unlimited
+  };
+  return tier ? limits[tier] : 0;
+}
+
+// Check if tier has Live AI Video access
+export function hasLiveAIVideo(tier: TierType | undefined): boolean {
+  return tier === 'pro' || tier === 'proplus';
 }
 
 // Get the recommended tier (for highlighting in UI)
@@ -226,7 +288,37 @@ export function getUpgradePath(currentTier: TierType): TierType | null {
     free: 'starter',
     starter: 'core',
     core: 'pro',
-    pro: null,
+    pro: 'proplus',
+    proplus: null,
   };
   return upgradePaths[currentTier];
+}
+
+// Get marketplace discount percentage by tier
+export function getMarketplaceDiscount(tier: TierType | undefined): number {
+  const discounts: Record<TierType, number> = {
+    free: 0,
+    starter: 0,
+    core: 0,
+    pro: 20,     // 20% off
+    proplus: 30, // 30% off
+  };
+  return tier ? discounts[tier] : 0;
+}
+
+// Check if tier includes BCBA consultation
+export function includesBCBAConsult(tier: TierType | undefined): boolean {
+  return tier === 'pro' || tier === 'proplus';
+}
+
+// Get max children allowed per tier
+export function getMaxChildren(tier: TierType | undefined): number | null {
+  const limits: Record<TierType, number | null> = {
+    free: 1,
+    starter: 1,
+    core: 3,
+    pro: 3,
+    proplus: null, // unlimited
+  };
+  return tier ? limits[tier] : 1;
 }

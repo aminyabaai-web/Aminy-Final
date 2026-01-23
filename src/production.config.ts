@@ -48,32 +48,34 @@ export const productionConfig = {
   },
 
   // Analytics Configuration
+  // SECURITY: Always read from environment variables, never hardcode
   analytics: {
     enabled: true,
     googleAnalytics: {
-      measurementId: process.env.NODE_ENV === 'production' ? 'GA_MEASUREMENT_ID' : '',
-      enabled: process.env.NODE_ENV === 'production'
+      measurementId: import.meta.env.VITE_GA_MEASUREMENT_ID || '',
+      enabled: !!import.meta.env.VITE_GA_MEASUREMENT_ID
     },
     mixpanel: {
-      token: process.env.NODE_ENV === 'production' ? 'MIXPANEL_TOKEN' : '',
-      enabled: process.env.NODE_ENV === 'production'
+      token: import.meta.env.VITE_MIXPANEL_TOKEN || '',
+      enabled: !!import.meta.env.VITE_MIXPANEL_TOKEN
     },
     amplitude: {
-      apiKey: process.env.NODE_ENV === 'production' ? 'AMPLITUDE_API_KEY' : '',
-      enabled: process.env.NODE_ENV === 'production'
+      apiKey: import.meta.env.VITE_AMPLITUDE_API_KEY || '',
+      enabled: !!import.meta.env.VITE_AMPLITUDE_API_KEY
     }
   },
 
   // Error Reporting Configuration
+  // SECURITY: Always read from environment variables, never hardcode
   errorReporting: {
     sentry: {
-      dsn: process.env.NODE_ENV === 'production' ? 'SENTRY_DSN' : '',
-      environment: process.env.NODE_ENV,
-      enabled: process.env.NODE_ENV === 'production'
+      dsn: import.meta.env.VITE_SENTRY_DSN || '',
+      environment: import.meta.env.MODE,
+      enabled: !!import.meta.env.VITE_SENTRY_DSN
     },
     logRocket: {
-      appId: process.env.NODE_ENV === 'production' ? 'LOGROCKET_APP_ID' : '',
-      enabled: process.env.NODE_ENV === 'production'
+      appId: import.meta.env.VITE_LOGROCKET_APP_ID || '',
+      enabled: !!import.meta.env.VITE_LOGROCKET_APP_ID
     }
   },
 

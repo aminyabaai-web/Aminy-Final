@@ -9,6 +9,7 @@
  * - STARTER: 20 messages/day, 30-day memory, basic vault (5 docs)
  * - CORE: Unlimited messages, 90-day memory, full vault (25 docs)
  * - PRO: Unlimited messages, unlimited memory, unlimited vault
+ * - PROPLUS: Unlimited everything + advanced analytics context
  */
 
 import type { TierType } from './tier-utils';
@@ -93,7 +94,7 @@ export const TIER_LIMITS: Record<TierType, {
     canLearnFromVault: true,
     contextTokens: 4000,
   },
-  // Core: Full Companion - $12.99/mo
+  // Core: Full Companion - $14.99/mo
   // MUST MATCH tier-utils.ts getAIMessageLimit()
   core: {
     messagesPerDay: Infinity,     // Unlimited (matches tier-utils.ts null)
@@ -103,7 +104,7 @@ export const TIER_LIMITS: Record<TierType, {
     canLearnFromVault: true,
     contextTokens: 8000,
   },
-  // Pro: Premium Ecosystem - $24.99/mo
+  // Pro: Premium Ecosystem - $29.99/mo
   // MUST MATCH tier-utils.ts getAIMessageLimit()
   pro: {
     messagesPerDay: Infinity,     // Unlimited (matches tier-utils.ts null)
@@ -112,6 +113,16 @@ export const TIER_LIMITS: Record<TierType, {
     maxFacts: Infinity,
     canLearnFromVault: true,
     contextTokens: 16000,
+  },
+  // Pro Plus: Enterprise tier - $49.99/mo
+  // MUST MATCH tier-utils.ts getAIMessageLimit()
+  proplus: {
+    messagesPerDay: Infinity,     // Unlimited (matches tier-utils.ts null)
+    memoryDays: Infinity,         // Unlimited memory
+    maxDocuments: Infinity,       // Unlimited vault
+    maxFacts: Infinity,
+    canLearnFromVault: true,
+    contextTokens: 32000,         // Maximum context for advanced analytics
   },
 };
 

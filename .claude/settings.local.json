@@ -46,7 +46,8 @@
       "Bash(xargs ls:*)",
       "Bash(git remote add:*)",
       "Bash(git remote set-url:*)",
-      "Bash(git rm:*)"
+      "Bash(git rm:*)",
+      "Bash(git -C /Users/estaren/Downloads/Aminy-Onboarding ls-files:*)"
     ]
   }
 }

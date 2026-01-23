@@ -14,6 +14,11 @@ import {
   hasUnlimitedAI,
   getRecommendedTier,
   getUpgradePath,
+  getLiveAIVideoLimit,
+  hasLiveAIVideo,
+  getMarketplaceDiscount,
+  includesBCBAConsult,
+  getMaxChildren,
 } from './tier-utils';
 
 describe('Tier Utilities', () => {
@@ -35,11 +40,16 @@ describe('Tier Utilities', () => {
       expect(normalizeTierName('CORE')).toBe('core');
     });
 
-    it('normalizes pro tier and aliases', () => {
+    it('normalizes pro tier', () => {
       expect(normalizeTierName('pro')).toBe('pro');
-      expect(normalizeTierName('Pro+')).toBe('pro');
-      expect(normalizeTierName('proplus')).toBe('pro');
-      expect(normalizeTierName('premium')).toBe('pro');
+    });
+
+    it('normalizes proplus tier and aliases', () => {
+      expect(normalizeTierName('proplus')).toBe('proplus');
+      expect(normalizeTierName('Pro+')).toBe('proplus');
+      expect(normalizeTierName('pro+')).toBe('proplus');
+      expect(normalizeTierName('premium')).toBe('proplus');
+      expect(normalizeTierName('enterprise')).toBe('proplus');
     });
 
     it('returns free for unknown tiers', () => {
@@ -54,6 +64,7 @@ describe('Tier Utilities', () => {
       expect(getTierDisplayName('starter')).toBe('Starter');
       expect(getTierDisplayName('core')).toBe('Core');
       expect(getTierDisplayName('pro')).toBe('Pro');
+      expect(getTierDisplayName('proplus')).toBe('Pro+');
     });
 
     it('handles undefined input', () => {
@@ -62,7 +73,7 @@ describe('Tier Utilities', () => {
 
     it('normalizes and returns display name', () => {
       expect(getTierDisplayName('basic')).toBe('Starter');
-      expect(getTierDisplayName('premium')).toBe('Pro');
+      expect(getTierDisplayName('premium')).toBe('Pro+');
     });
   });
 
@@ -70,28 +81,31 @@ describe('Tier Utilities', () => {
     it('returns correct monthly prices', () => {
       expect(getTierPrice('free', 'monthly')).toBe(0);
       expect(getTierPrice('starter', 'monthly')).toBe(6.99);
-      expect(getTierPrice('core', 'monthly')).toBe(12.99);
-      expect(getTierPrice('pro', 'monthly')).toBe(24.99);
+      expect(getTierPrice('core', 'monthly')).toBe(14.99);
+      expect(getTierPrice('pro', 'monthly')).toBe(29.99);
+      expect(getTierPrice('proplus', 'monthly')).toBe(49.99);
     });
 
     it('returns correct yearly prices', () => {
       expect(getTierPrice('free', 'yearly')).toBe(0);
       expect(getTierPrice('starter', 'yearly')).toBe(59);
-      expect(getTierPrice('core', 'yearly')).toBe(119);
-      expect(getTierPrice('pro', 'yearly')).toBe(229);
+      expect(getTierPrice('core', 'yearly')).toBe(129);
+      expect(getTierPrice('pro', 'yearly')).toBe(279);
+      expect(getTierPrice('proplus', 'yearly')).toBe(479);
     });
 
     it('defaults to monthly when not specified', () => {
-      expect(getTierPrice('core')).toBe(12.99);
+      expect(getTierPrice('core')).toBe(14.99);
     });
   });
 
   describe('getTierYearlySavings', () => {
-    it('returns correct savings amounts', () => {
+    it('returns correct savings percentages', () => {
       expect(getTierYearlySavings('free')).toBe(0);
-      expect(getTierYearlySavings('starter')).toBe(25);
-      expect(getTierYearlySavings('core')).toBe(37);
-      expect(getTierYearlySavings('pro')).toBe(71);
+      expect(getTierYearlySavings('starter')).toBe(30);
+      expect(getTierYearlySavings('core')).toBe(28);
+      expect(getTierYearlySavings('pro')).toBe(22);
+      expect(getTierYearlySavings('proplus')).toBe(20);
     });
   });
 
@@ -111,6 +125,14 @@ describe('Tier Utilities', () => {
     it('correctly checks pro tier features', () => {
       expect(hasTierFeature('pro', 'bcba-consult')).toBe(true);
       expect(hasTierFeature('pro', 'priority-support')).toBe(true);
+      expect(hasTierFeature('pro', 'live-ai-video-30')).toBe(true);
+    });
+
+    it('correctly checks proplus tier features', () => {
+      expect(hasTierFeature('proplus', 'bcba-consult')).toBe(true);
+      expect(hasTierFeature('proplus', 'live-ai-video-unlimited')).toBe(true);
+      expect(hasTierFeature('proplus', 'human-credit-monthly')).toBe(true);
+      expect(hasTierFeature('proplus', 'multi-child-unlimited')).toBe(true);
     });
 
     it('returns false for undefined tier', () => {
@@ -120,15 +142,18 @@ describe('Tier Utilities', () => {
 
   describe('compareTiers', () => {
     it('correctly compares tier levels', () => {
+      expect(compareTiers('proplus', 'free')).toBe(true);
       expect(compareTiers('pro', 'free')).toBe(true);
       expect(compareTiers('core', 'starter')).toBe(true);
       expect(compareTiers('starter', 'core')).toBe(false);
       expect(compareTiers('free', 'pro')).toBe(false);
+      expect(compareTiers('pro', 'proplus')).toBe(false);
     });
 
     it('returns true for equal tiers', () => {
       expect(compareTiers('core', 'core')).toBe(true);
       expect(compareTiers('free', 'free')).toBe(true);
+      expect(compareTiers('proplus', 'proplus')).toBe(true);
     });
 
     it('handles undefined first tier', () => {
@@ -142,6 +167,7 @@ describe('Tier Utilities', () => {
       expect(getTierLevel('starter')).toBe(1);
       expect(getTierLevel('core')).toBe(2);
       expect(getTierLevel('pro')).toBe(3);
+      expect(getTierLevel('proplus')).toBe(4);
     });
 
     it('returns 0 for undefined', () => {
@@ -155,6 +181,7 @@ describe('Tier Utilities', () => {
       expect(getAIMessageLimit('starter')).toBe(20);
       expect(getAIMessageLimit('core')).toBeNull(); // unlimited
       expect(getAIMessageLimit('pro')).toBeNull(); // unlimited
+      expect(getAIMessageLimit('proplus')).toBeNull(); // unlimited
     });
 
     it('returns 5 for undefined', () => {
@@ -163,9 +190,10 @@ describe('Tier Utilities', () => {
   });
 
   describe('hasUnlimitedAI', () => {
-    it('returns true for core and pro', () => {
+    it('returns true for core, pro, and proplus', () => {
       expect(hasUnlimitedAI('core')).toBe(true);
       expect(hasUnlimitedAI('pro')).toBe(true);
+      expect(hasUnlimitedAI('proplus')).toBe(true);
     });
 
     it('returns false for free and starter', () => {
@@ -175,6 +203,62 @@ describe('Tier Utilities', () => {
 
     it('returns false for undefined', () => {
       expect(hasUnlimitedAI(undefined)).toBe(false);
+    });
+  });
+
+  describe('getLiveAIVideoLimit', () => {
+    it('returns correct limits in minutes', () => {
+      expect(getLiveAIVideoLimit('free')).toBe(0);
+      expect(getLiveAIVideoLimit('starter')).toBe(0);
+      expect(getLiveAIVideoLimit('core')).toBe(0);
+      expect(getLiveAIVideoLimit('pro')).toBe(30);
+      expect(getLiveAIVideoLimit('proplus')).toBeNull(); // unlimited
+    });
+  });
+
+  describe('hasLiveAIVideo', () => {
+    it('returns true for pro and proplus', () => {
+      expect(hasLiveAIVideo('pro')).toBe(true);
+      expect(hasLiveAIVideo('proplus')).toBe(true);
+    });
+
+    it('returns false for lower tiers', () => {
+      expect(hasLiveAIVideo('free')).toBe(false);
+      expect(hasLiveAIVideo('starter')).toBe(false);
+      expect(hasLiveAIVideo('core')).toBe(false);
+    });
+  });
+
+  describe('getMarketplaceDiscount', () => {
+    it('returns correct discount percentages', () => {
+      expect(getMarketplaceDiscount('free')).toBe(0);
+      expect(getMarketplaceDiscount('starter')).toBe(0);
+      expect(getMarketplaceDiscount('core')).toBe(0);
+      expect(getMarketplaceDiscount('pro')).toBe(20);
+      expect(getMarketplaceDiscount('proplus')).toBe(30);
+    });
+  });
+
+  describe('includesBCBAConsult', () => {
+    it('returns true for pro and proplus', () => {
+      expect(includesBCBAConsult('pro')).toBe(true);
+      expect(includesBCBAConsult('proplus')).toBe(true);
+    });
+
+    it('returns false for lower tiers', () => {
+      expect(includesBCBAConsult('free')).toBe(false);
+      expect(includesBCBAConsult('starter')).toBe(false);
+      expect(includesBCBAConsult('core')).toBe(false);
+    });
+  });
+
+  describe('getMaxChildren', () => {
+    it('returns correct limits', () => {
+      expect(getMaxChildren('free')).toBe(1);
+      expect(getMaxChildren('starter')).toBe(1);
+      expect(getMaxChildren('core')).toBe(3);
+      expect(getMaxChildren('pro')).toBe(3);
+      expect(getMaxChildren('proplus')).toBeNull(); // unlimited
     });
   });
 
@@ -189,7 +273,8 @@ describe('Tier Utilities', () => {
       expect(getUpgradePath('free')).toBe('starter');
       expect(getUpgradePath('starter')).toBe('core');
       expect(getUpgradePath('core')).toBe('pro');
-      expect(getUpgradePath('pro')).toBeNull();
+      expect(getUpgradePath('pro')).toBe('proplus');
+      expect(getUpgradePath('proplus')).toBeNull();
     });
   });
 });

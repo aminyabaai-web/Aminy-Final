@@ -27,10 +27,12 @@ const PRICE_TO_TIER: Record<string, string> = {
   [Deno.env.get('STRIPE_PRICE_STARTER_MONTHLY') || 'price_starter_monthly']: 'starter',
   [Deno.env.get('STRIPE_PRICE_CORE_MONTHLY') || 'price_core_monthly']: 'core',
   [Deno.env.get('STRIPE_PRICE_PRO_MONTHLY') || 'price_pro_monthly']: 'pro',
+  [Deno.env.get('STRIPE_PRICE_PROPLUS_MONTHLY') || 'price_proplus_monthly']: 'proplus',
   // Annual prices
   [Deno.env.get('STRIPE_PRICE_STARTER_ANNUAL') || 'price_starter_annual']: 'starter',
   [Deno.env.get('STRIPE_PRICE_CORE_ANNUAL') || 'price_core_annual']: 'core',
   [Deno.env.get('STRIPE_PRICE_PRO_ANNUAL') || 'price_pro_annual']: 'pro',
+  [Deno.env.get('STRIPE_PRICE_PROPLUS_ANNUAL') || 'price_proplus_annual']: 'proplus',
 };
 
 /**

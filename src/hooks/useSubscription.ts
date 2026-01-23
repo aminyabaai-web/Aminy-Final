@@ -12,7 +12,7 @@ const API_BASE = import.meta.env.VITE_SUPABASE_URL
 
 export interface Subscription {
   id?: string;
-  tier: 'free' | 'starter' | 'core' | 'pro';
+  tier: 'free' | 'starter' | 'core' | 'pro' | 'proplus';
   status: 'active' | 'canceled' | 'past_due' | 'trialing' | 'none';
   currentPeriodEnd?: string;
   cancelAtPeriodEnd: boolean;
@@ -120,7 +120,7 @@ export function useSubscription(options: UseSubscriptionOptions = {}) {
   }, [accessToken, apiCall]);
 
   // Create Stripe checkout session for upgrade
-  const upgrade = useCallback(async (targetTier: 'starter' | 'core' | 'pro', annual: boolean = false) => {
+  const upgrade = useCallback(async (targetTier: 'starter' | 'core' | 'pro' | 'proplus', annual: boolean = false) => {
     if (!accessToken) {
       toast.error('Please sign in to upgrade');
       return;
@@ -259,8 +259,9 @@ export function useSubscription(options: UseSubscriptionOptions = {}) {
     resume,
     // Convenience getters
     isActive: subscription?.status === 'active' || subscription?.status === 'trialing',
-    isPro: subscription?.tier === 'pro',
-    isCore: subscription?.tier === 'core',
+    isProPlus: subscription?.tier === 'proplus',
+    isPro: subscription?.tier === 'pro' || subscription?.tier === 'proplus',
+    isCore: subscription?.tier === 'core' || subscription?.tier === 'pro' || subscription?.tier === 'proplus',
     isFree: !subscription || subscription.tier === 'free',
   };
 }
