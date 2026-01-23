@@ -376,10 +376,14 @@ export function LoginScreen({
                     fontFamily: 'Inter, system-ui, sans-serif',
                   }}
                   disabled={isLoading}
+                  required
+                  autoComplete="email"
+                  aria-invalid={!!errors.email}
+                  aria-describedby={errors.email ? 'email-error' : undefined}
                 />
                 {errors.email && (
-                  <p className="mt-1.5 text-sm flex items-center gap-1" style={{ color: '#F44336' }}>
-                    <AlertCircle className="w-3.5 h-3.5" />
+                  <p id="email-error" role="alert" className="mt-1.5 text-sm flex items-center gap-1" style={{ color: '#F44336' }}>
+                    <AlertCircle className="w-3.5 h-3.5" aria-hidden="true" />
                     {errors.email}
                   </p>
                 )}
@@ -411,6 +415,10 @@ export function LoginScreen({
                       fontFamily: 'Inter, system-ui, sans-serif',
                     }}
                     disabled={isLoading}
+                    required
+                    autoComplete="current-password"
+                    aria-invalid={!!errors.password}
+                    aria-describedby={errors.password ? 'password-error' : undefined}
                   />
                   <button
                     type="button"
@@ -424,8 +432,8 @@ export function LoginScreen({
                   </button>
                 </div>
                 {errors.password && (
-                  <p className="mt-1.5 text-sm flex items-center gap-1" style={{ color: '#F44336' }}>
-                    <AlertCircle className="w-3.5 h-3.5" />
+                  <p id="password-error" role="alert" className="mt-1.5 text-sm flex items-center gap-1" style={{ color: '#F44336' }}>
+                    <AlertCircle className="w-3.5 h-3.5" aria-hidden="true" />
                     {errors.password}
                   </p>
                 )}

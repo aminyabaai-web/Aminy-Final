@@ -512,13 +512,17 @@ export function CreateAccountScreen({
                 }}
                 placeholder="you@example.com"
                 disabled={isLoading}
+                required
+                autoComplete="email"
+                aria-invalid={!!errors.email}
+                aria-describedby={errors.email ? 'signup-email-error' : undefined}
                 style={{
                   ...inputStyles,
                   borderColor: errors.email ? 'rgba(180, 90, 90, 0.4)' : 'rgba(17, 24, 39, 0.1)',
                 }}
               />
               {errors.email && (
-                <p style={{ marginTop: '4px', fontSize: '11px', color: 'rgba(180, 90, 90, 0.85)', fontFamily: fontStack }}>
+                <p id="signup-email-error" role="alert" style={{ marginTop: '4px', fontSize: '11px', color: 'rgba(180, 90, 90, 0.85)', fontFamily: fontStack }}>
                   {errors.email}
                 </p>
               )}
@@ -538,6 +542,11 @@ export function CreateAccountScreen({
                   }}
                   placeholder="At least 8 characters"
                   disabled={isLoading}
+                  required
+                  minLength={8}
+                  autoComplete="new-password"
+                  aria-invalid={!!errors.password}
+                  aria-describedby={errors.password ? 'signup-password-error' : undefined}
                   style={{
                     ...inputStyles,
                     paddingRight: '48px',
@@ -568,7 +577,7 @@ export function CreateAccountScreen({
                 </button>
               </div>
               {errors.password && (
-                <p style={{ marginTop: '4px', fontSize: '11px', color: 'rgba(180, 90, 90, 0.85)', fontFamily: fontStack }}>
+                <p id="signup-password-error" role="alert" style={{ marginTop: '4px', fontSize: '11px', color: 'rgba(180, 90, 90, 0.85)', fontFamily: fontStack }}>
                   {errors.password}
                 </p>
               )}
@@ -588,6 +597,10 @@ export function CreateAccountScreen({
                   }}
                   placeholder="Re-enter password"
                   disabled={isLoading}
+                  required
+                  autoComplete="new-password"
+                  aria-invalid={!!errors.confirmPassword}
+                  aria-describedby={errors.confirmPassword ? 'signup-confirm-error' : undefined}
                   style={{
                     ...inputStyles,
                     paddingRight: '48px',
@@ -618,7 +631,7 @@ export function CreateAccountScreen({
                 </button>
               </div>
               {errors.confirmPassword && (
-                <p style={{ marginTop: '4px', fontSize: '11px', color: 'rgba(180, 90, 90, 0.85)', fontFamily: fontStack }}>
+                <p id="signup-confirm-error" role="alert" style={{ marginTop: '4px', fontSize: '11px', color: 'rgba(180, 90, 90, 0.85)', fontFamily: fontStack }}>
                   {errors.confirmPassword}
                 </p>
               )}
