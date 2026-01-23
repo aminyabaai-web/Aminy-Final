@@ -1,108 +1,183 @@
 import React from 'react';
-import { Video, Clock, Star } from 'lucide-react';
+import { Video, Clock, Star, Infinity as InfinityIcon } from 'lucide-react';
 import { Badge } from './ui/badge';
+import { TierType, getLiveAIVideoLimit, hasLiveAIVideo, getTierDisplayName } from '../lib/tier-utils';
 
 interface LiveAIVideoBadgeProps {
-  tier: 'free' | 'core' | 'pro' | 'pro-plus';
-  variant?: 'default' | 'minimal';
+  tier: TierType;
+  variant?: 'default' | 'minimal' | 'compact';
 }
 
+/**
+ * Live AI Video Badge
+ * Displays the user's Live AI Video access level based on tier
+ *
+ * Limits per tier (from tier-utils.ts):
+ * - Free: No access
+ * - Starter: No access
+ * - Core: No included access (pay per use via marketplace)
+ * - Pro: 30 minutes/month included
+ * - Pro+: Unlimited
+ */
 export function LiveAIVideoBadge({ tier, variant = 'default' }: LiveAIVideoBadgeProps) {
-  const badges = {
-    free: {
-      label: 'No Live AI Video',
-      color: 'gray',
-      bgColor: 'bg-gray-50',
-      borderColor: 'border-gray-200',
-      textColor: 'text-gray-600',
-      icon: Video,
-      show: false
-    },
-    core: {
-      label: 'Live AI Video (short bursts)',
-      shortLabel: 'Short sessions',
-      color: 'gray',
-      bgColor: 'bg-gray-50',
-      borderColor: 'border-gray-200',
-      textColor: 'text-gray-700',
-      icon: Video,
-      show: true
-    },
-    pro: {
-      label: 'Live AI Video (up to 10 min)',
-      shortLabel: '10-min sessions',
-      color: 'blue',
-      bgColor: 'bg-blue-50',
-      borderColor: 'border-blue-200',
-      textColor: 'text-blue-700',
-      icon: Video,
-      show: true
-    },
-    'pro-plus': {
-      label: 'Live AI Video (up to 20 min)',
-      shortLabel: '20-min sessions',
-      color: 'purple',
-      bgColor: 'bg-purple-50',
-      borderColor: 'border-purple-200',
-      textColor: 'text-purple-700',
-      icon: Star,
-      show: true
-    }
-  };
+  const limit = getLiveAIVideoLimit(tier);
+  const hasAccess = hasLiveAIVideo(tier);
 
-  const badge = badges[tier] || badges.free;
-  const Icon = badge.icon;
+  if (!hasAccess) {
+    // Show upgrade prompt for non-Pro tiers
+    if (variant === 'compact') return null;
 
-  if (!badge.show) return null;
+    return (
+      <Badge
+        variant="outline"
+        className="bg-gray-50 border-gray-200 text-gray-500 inline-flex items-center gap-1 font-medium"
+      >
+        <Video className="w-3 h-3" />
+        Upgrade to Pro for Live AI Video
+      </Badge>
+    );
+  }
 
-  return (
-    <Badge 
-      variant="outline" 
-      className={`${badge.bgColor} ${badge.borderColor} ${badge.textColor} inline-flex items-center gap-1 font-medium`}
-    >
-      <Icon className="w-3 h-3" />
-      {variant === 'minimal' && 'shortLabel' in badge ? badge.shortLabel : badge.label}
-    </Badge>
-  );
+  // Pro tier: 30 min/month
+  if (tier === 'pro') {
+    return (
+      <Badge
+        variant="outline"
+        className="bg-blue-50 border-blue-200 text-blue-700 inline-flex items-center gap-1 font-medium"
+      >
+        <Video className="w-3 h-3" />
+        {variant === 'minimal' || variant === 'compact'
+          ? '30 min/mo'
+          : 'Live AI Video: 30 min/month'}
+      </Badge>
+    );
+  }
+
+  // Pro+ tier: Unlimited
+  if (tier === 'proplus') {
+    return (
+      <Badge
+        variant="outline"
+        className="bg-purple-50 border-purple-200 text-purple-700 inline-flex items-center gap-1 font-medium"
+      >
+        {variant === 'compact' ? (
+          <InfinityIcon className="w-3 h-3" />
+        ) : (
+          <Star className="w-3 h-3" />
+        )}
+        {variant === 'minimal' || variant === 'compact'
+          ? 'Unlimited Video'
+          : 'Live AI Video: Unlimited'}
+      </Badge>
+    );
+  }
+
+  return null;
 }
 
 interface RemainingMinutesBadgeProps {
-  remainingMinutes: number;
-  totalMinutes: number;
-  tier: 'core' | 'pro' | 'pro-plus';
+  usedMinutes: number;
+  tier: TierType;
 }
 
-export function RemainingMinutesBadge({ 
-  remainingMinutes, 
-  totalMinutes,
-  tier 
-}: RemainingMinutesBadgeProps) {
-  const percentage = (remainingMinutes / totalMinutes) * 100;
-  
-  let color = 'green';
+/**
+ * Remaining Minutes Badge
+ * Shows how many Live AI Video minutes the user has left this month
+ */
+export function RemainingMinutesBadge({ usedMinutes, tier }: RemainingMinutesBadgeProps) {
+  const limit = getLiveAIVideoLimit(tier);
+
+  // No limit tracking for tiers without limits or with unlimited access
+  if (limit === null || limit === 0) {
+    if (tier === 'proplus') {
+      return (
+        <Badge
+          variant="outline"
+          className="bg-purple-50 border-purple-200 text-purple-700 inline-flex items-center gap-1 font-medium"
+        >
+          <InfinityIcon className="w-3 h-3" />
+          Unlimited minutes
+        </Badge>
+      );
+    }
+    return null;
+  }
+
+  const remainingMinutes = Math.max(0, limit - usedMinutes);
+  const percentage = (remainingMinutes / limit) * 100;
+
   let bgColor = 'bg-green-50';
   let borderColor = 'border-green-200';
   let textColor = 'text-green-700';
-  
+
   if (percentage < 25) {
-    color = 'red';
     bgColor = 'bg-red-50';
     borderColor = 'border-red-200';
     textColor = 'text-red-700';
   } else if (percentage < 50) {
-    color = 'amber';
     bgColor = 'bg-amber-50';
     borderColor = 'border-amber-200';
     textColor = 'text-amber-700';
   }
 
   return (
-    <Badge 
-      variant="outline" 
+    <Badge
+      variant="outline"
       className={`${bgColor} ${borderColor} ${textColor} inline-flex items-center gap-1 font-medium`}
     >
       <Clock className="w-3 h-3" />
-      {remainingMinutes} of {totalMinutes} min remaining
+      {remainingMinutes} of {limit} min left
     </Badge>
+  );
+}
+
+interface VideoAccessStatusProps {
+  tier: TierType;
+  usedMinutes?: number;
+  showUpgrade?: boolean;
+  onUpgradeClick?: () => void;
+}
+
+/**
+ * Combined Video Access Status Component
+ * Shows both the tier's video access level and remaining minutes
+ */
+export function VideoAccessStatus({
+  tier,
+  usedMinutes = 0,
+  showUpgrade = true,
+  onUpgradeClick
+}: VideoAccessStatusProps) {
+  const hasAccess = hasLiveAIVideo(tier);
+  const limit = getLiveAIVideoLimit(tier);
+  const isUnlimited = limit === null && hasAccess;
+
+  return (
+    <div className="flex flex-col gap-2">
+      <div className="flex items-center gap-2 flex-wrap">
+        <LiveAIVideoBadge tier={tier} variant="default" />
+        {hasAccess && !isUnlimited && (
+          <RemainingMinutesBadge usedMinutes={usedMinutes} tier={tier} />
+        )}
+      </div>
+
+      {!hasAccess && showUpgrade && onUpgradeClick && (
+        <button
+          onClick={onUpgradeClick}
+          className="text-sm text-[#577590] hover:text-[#4a6478] font-medium transition-colors"
+        >
+          Upgrade to {getTierDisplayName('pro')} for Live AI Video coaching →
+        </button>
+      )}
+
+      {tier === 'pro' && showUpgrade && onUpgradeClick && (
+        <button
+          onClick={onUpgradeClick}
+          className="text-sm text-purple-600 hover:text-purple-700 font-medium transition-colors"
+        >
+          Upgrade to {getTierDisplayName('proplus')} for unlimited video →
+        </button>
+      )}
+    </div>
   );
 }
