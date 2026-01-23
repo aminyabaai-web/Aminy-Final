@@ -828,18 +828,83 @@ export function AIIntakeChat({ onComplete, initialData }: AIIntakeChatProps) {
     });
   };
 
-  // Voice input
-  const handleVoiceInput = () => {
-    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-      setIsListening(true);
-      toast.info('Listening...');
-      
-      setTimeout(() => {
+  // Voice input using Web Speech API
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
+
+  useEffect(() => {
+    // Initialize speech recognition
+    const SpeechRecognition =
+      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+
+    if (SpeechRecognition) {
+      recognitionRef.current = new SpeechRecognition();
+      recognitionRef.current.continuous = false;
+      recognitionRef.current.interimResults = true;
+      recognitionRef.current.lang = 'en-US';
+
+      recognitionRef.current.onresult = (event: any) => {
+        let finalTranscript = '';
+        let interimTranscript = '';
+
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const transcript = event.results[i][0].transcript;
+          if (event.results[i].isFinal) {
+            finalTranscript += transcript;
+          } else {
+            interimTranscript += transcript;
+          }
+        }
+
+        if (finalTranscript) {
+          setCurrentInput((prev) => prev + (prev ? ' ' : '') + finalTranscript);
+          toast.success('Got it!');
+        }
+      };
+
+      recognitionRef.current.onerror = (event: any) => {
         setIsListening(false);
-        toast.success('Got it!');
-      }, 2000);
-    } else {
+        if (event.error === 'no-speech') {
+          toast.info("I didn't hear anything. Try again?");
+        } else if (event.error === 'not-allowed') {
+          toast.error('Please enable microphone access to use voice input.');
+        } else {
+          toast.error("Voice features aren't available right now — but typing works great!");
+        }
+      };
+
+      recognitionRef.current.onend = () => {
+        setIsListening(false);
+      };
+    }
+
+    return () => {
+      if (recognitionRef.current) {
+        try {
+          recognitionRef.current.stop();
+        } catch {
+          // Ignore cleanup errors
+        }
+      }
+    };
+  }, []);
+
+  const handleVoiceInput = () => {
+    if (!recognitionRef.current) {
       toast.error("Voice features aren't available on this device yet — but typing works great!");
+      return;
+    }
+
+    if (isListening) {
+      recognitionRef.current.stop();
+      setIsListening(false);
+    } else {
+      try {
+        recognitionRef.current.start();
+        setIsListening(true);
+        toast.info('Listening... speak now', { duration: 2000 });
+      } catch {
+        toast.error("Couldn't start voice input. Try typing instead.");
+      }
     }
   };
 
