@@ -109,7 +109,8 @@ export function Dashboard10({
   userTier = 'core'
 }: Dashboard10Props) {
   const [activeRoutine, setActiveRoutine] = useState<'morning' | 'afternoon' | 'evening' | 'bedtime'>('morning');
-  const [showAIChat, setShowAIChat] = useState(false);
+  // CHAT-FIRST: Start with chat expanded to make it the primary experience
+  const [showAIChat, setShowAIChat] = useState(true);
   const [activeTab, setActiveTab] = useState<'home' | 'resources' | 'community' | 'profile'>('home');
   const [dailyTip] = useState(() => DAILY_TIPS[Math.floor(Math.random() * DAILY_TIPS.length)]);
   const chatButtonRef = useRef<HTMLButtonElement>(null);
@@ -485,45 +486,82 @@ export function Dashboard10({
       {/* ========================================
           6. PERSISTENT AI COMPANION (Floating)
           ======================================== */}
+      {/* CHAT-FIRST: Toggle button - no longer pulsing since chat starts open */}
       <button
         ref={chatButtonRef}
         onClick={() => setShowAIChat(!showAIChat)}
-        className={`fixed bottom-24 right-4 z-30 w-14 h-14 rounded-full shadow-lg transition-all ${
+        className={`fixed bottom-24 right-4 z-40 w-14 h-14 rounded-full shadow-lg transition-all duration-300 ${
           showAIChat
-            ? 'bg-gray-800 text-white'
-            : 'bg-[#577590] text-white hover:bg-[#4a6478] animate-pulse'
+            ? 'bg-gray-700 text-white rotate-0'
+            : 'bg-[#577590] text-white hover:bg-[#4a6478]'
         }`}
-        aria-label="Chat with Aminy"
+        aria-label={showAIChat ? 'Minimize chat' : 'Open chat with Aminy'}
+        aria-expanded={showAIChat}
       >
-        <MessageSquare className="w-6 h-6 mx-auto" />
+        {showAIChat ? (
+          <ChevronRight className="w-6 h-6 mx-auto rotate-90" aria-hidden="true" />
+        ) : (
+          <MessageSquare className="w-6 h-6 mx-auto" aria-hidden="true" />
+        )}
       </button>
 
-      {/* Chat Drawer */}
+      {/* CHAT-FIRST: Prominent Chat Panel
+          Made larger and positioned for better visibility as the primary experience */}
       {showAIChat && (
-        <div className="fixed bottom-40 left-4 right-4 sm:left-auto sm:right-4 sm:w-80 bg-white dark:bg-slate-800 rounded-xl shadow-xl z-30 overflow-hidden border border-gray-200 dark:border-slate-700">
-          <div className="p-4 bg-[#0D1B2A] text-white">
-            <h3 className="font-semibold flex items-center gap-2">
-              <Sparkles className="w-4 h-4" />
-              Aminy
-            </h3>
-            <p className="text-xs text-gray-300 mt-1">Your AI companion</p>
+        <div className="fixed bottom-28 left-4 right-4 sm:left-auto sm:right-4 sm:w-96 bg-white dark:bg-slate-800 rounded-2xl shadow-2xl z-30 overflow-hidden border border-gray-200 dark:border-slate-700 transition-all duration-300 ease-out">
+          {/* Chat Header - Branded */}
+          <div className="p-4 bg-gradient-to-r from-[#0D1B2A] to-[#1a3a5c] text-white">
+            <div className="flex items-center justify-between">
+              <h3 className="font-semibold flex items-center gap-2 text-lg">
+                <Sparkles className="w-5 h-5 text-[#E07A5F]" />
+                Chat with Aminy
+              </h3>
+              <Badge className="bg-[#577590] text-white text-xs">AI Companion</Badge>
+            </div>
+            <p className="text-xs text-gray-300 mt-1">Your always-on parenting support</p>
           </div>
-          <div className="p-4 max-h-64 overflow-y-auto">
-            <div className="bg-gray-100 dark:bg-slate-700 rounded-lg p-3 text-sm">
-              <p className="text-gray-700 dark:text-gray-200">
-                Hi {userData.parentName}! Bedtime soon? I can help you prep {child.name}'s routine. What would be most helpful? 💙
+
+          {/* Chat Messages - Expanded Height */}
+          <div className="p-4 max-h-80 overflow-y-auto space-y-3">
+            <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-700 dark:to-slate-600 rounded-xl p-4 text-sm shadow-sm">
+              <p className="text-gray-700 dark:text-gray-200 leading-relaxed">
+                Hi {userData.parentName}! 👋 I'm here to help with {child.name}'s day.
+                {activeRoutine === 'morning' && " Ready to start the morning routine? I can suggest activities that work for this time of day."}
+                {activeRoutine === 'afternoon' && " How's the afternoon going? Need help with any activities or transitions?"}
+                {activeRoutine === 'evening' && " Winding down for the evening? Let me help you with calming activities or dinner routines."}
+                {activeRoutine === 'bedtime' && " Bedtime approaching! I can help you prep a smooth bedtime routine."}
               </p>
             </div>
+
+            {/* Quick Actions */}
+            <div className="flex flex-wrap gap-2">
+              <button className="text-xs px-3 py-1.5 rounded-full bg-[#577590]/10 text-[#577590] hover:bg-[#577590]/20 transition-colors">
+                Help with routine
+              </button>
+              <button className="text-xs px-3 py-1.5 rounded-full bg-[#577590]/10 text-[#577590] hover:bg-[#577590]/20 transition-colors">
+                Calm-down tips
+              </button>
+              <button className="text-xs px-3 py-1.5 rounded-full bg-[#577590]/10 text-[#577590] hover:bg-[#577590]/20 transition-colors">
+                Activity ideas
+              </button>
+            </div>
           </div>
-          <div className="p-3 border-t dark:border-slate-700">
+
+          {/* Chat Input - Enhanced */}
+          <div className="p-4 border-t dark:border-slate-700 bg-gray-50 dark:bg-slate-750">
             <div className="flex gap-2">
               <input
                 type="text"
-                placeholder="Type a message..."
-                className="flex-1 px-3 py-2 text-sm rounded-lg border dark:border-slate-600 dark:bg-slate-700 dark:text-white"
+                placeholder="Ask Aminy anything..."
+                className="flex-1 px-4 py-3 text-sm rounded-xl border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:border-[#577590] focus:ring-2 focus:ring-[#577590]/20 transition-all"
+                aria-label="Chat message input"
               />
-              <Button size="sm" className="bg-[#577590] hover:bg-[#4a6478]">
-                Send
+              <Button
+                size="sm"
+                className="bg-[#577590] hover:bg-[#4a6478] px-4 py-3 rounded-xl transition-all"
+                aria-label="Send message"
+              >
+                <MessageSquare className="w-4 h-4" />
               </Button>
             </div>
           </div>
