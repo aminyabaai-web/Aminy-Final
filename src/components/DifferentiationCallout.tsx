@@ -1,6 +1,6 @@
 /**
  * Differentiation Callout Component
- * Makes the ChatGPT differentiation crystal clear throughout the app
+ * Highlights Aminy's unique value proposition through positive differentiation
  * Addresses: "Your defensible business is the workflow + data + healthcare integration"
  */
 
@@ -31,31 +31,31 @@ const DIFFERENTIATORS = [
     icon: BarChart3,
     title: 'Structured Progress Tracking',
     description: 'ABA-style graphs and measurable outcomes, not just conversation logs',
-    chatGptCant: "ChatGPT doesn't track your progress over time",
+    aminyAdvantage: 'Aminy tracks your progress automatically over time',
   },
   {
     icon: FileText,
     title: 'Healthcare Documentation',
     description: 'Payer-ready reports, CPT-aligned records, clinician viewer access',
-    chatGptCant: "ChatGPT can't generate insurance-compliant documentation",
+    aminyAdvantage: 'Generate insurance-ready documentation with one click',
   },
   {
     icon: Bell,
     title: 'Proactive Support',
     description: 'Daily nudges, scheduled check-ins, automatic reminders',
-    chatGptCant: "ChatGPT only responds when you ask—it never reaches out",
+    aminyAdvantage: 'Aminy reaches out to you—never lets you fall through the cracks',
   },
   {
     icon: Users,
     title: 'Care Team Collaboration',
     description: 'Share reports with BCBAs, therapists, and family members',
-    chatGptCant: "ChatGPT conversations stay in your chat—can't share with providers",
+    aminyAdvantage: 'Share insights with your entire care team seamlessly',
   },
   {
     icon: Shield,
     title: 'HIPAA-Ready Infrastructure',
     description: 'Built for healthcare from day one, not retrofitted',
-    chatGptCant: "ChatGPT isn't designed for sensitive health data",
+    aminyAdvantage: 'Built specifically for sensitive health data from day one',
   },
 ];
 
@@ -66,13 +66,13 @@ export function DifferentiationCallout({
   const getContextMessage = () => {
     switch (context) {
       case 'onboarding':
-        return "Here's what makes Aminy different from just asking ChatGPT:";
+        return "Here's what makes Aminy uniquely powerful:";
       case 'paywall':
         return "Why Aminy is worth the subscription:";
       case 'dashboard':
-        return "What you're getting that ChatGPT can't provide:";
+        return "What makes Aminy different:";
       default:
-        return "The parts ChatGPT will never do:";
+        return "Built specifically for your family's journey:";
     }
   };
 
@@ -81,7 +81,7 @@ export function DifferentiationCallout({
       <div className="flex items-center gap-2 text-sm text-gray-600 bg-amber-50 border border-amber-200 rounded-lg p-3">
         <Zap className="w-4 h-4 text-amber-600 flex-shrink-0" />
         <span>
-          <strong>This is tracked automatically.</strong> ChatGPT can't do that.
+          <strong>This is tracked automatically.</strong> Only Aminy does this.
         </span>
       </div>
     );
@@ -116,15 +116,15 @@ export function DifferentiationCallout({
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <Badge className="bg-amber-100 text-amber-800 mb-3">
-          Why Not Just Use ChatGPT?
+        <Badge className="bg-teal-100 text-teal-800 mb-3">
+          Why Aminy Works
         </Badge>
         <h2 className="text-2xl font-bold text-gray-900 mb-2">
           {getContextMessage()}
         </h2>
         <p className="text-gray-600 max-w-xl mx-auto">
-          Yes, you can ask ChatGPT for parenting advice. But here's what it
-          fundamentally cannot do—and why Aminy exists.
+          Aminy isn't just another AI chatbot—it's a complete support system
+          built specifically for families navigating neurodivergence.
         </p>
       </div>
 
@@ -158,10 +158,10 @@ export function DifferentiationCallout({
                       </Badge>
                     </div>
 
-                    <div className="mt-3 flex items-center gap-2 p-2 bg-red-50 rounded-lg">
-                      <X className="w-4 h-4 text-red-500" />
-                      <span className="text-sm text-red-700">
-                        {item.chatGptCant}
+                    <div className="mt-3 flex items-center gap-2 p-2 bg-teal-50 rounded-lg">
+                      <CheckCircle className="w-4 h-4 text-teal-500" />
+                      <span className="text-sm text-teal-700">
+                        {item.aminyAdvantage}
                       </span>
                     </div>
                   </div>
@@ -191,14 +191,20 @@ export function DifferentiationCallout({
 
 /**
  * Quick Differentiator Badge - For use next to features
+ * Shows what makes Aminy unique with positive framing
  */
-export function ChatGptCantBadge({ feature }: { feature: string }) {
+export function AminyAdvantageBadge({ feature }: { feature: string }) {
   return (
-    <div className="inline-flex items-center gap-1 px-2 py-1 bg-amber-50 border border-amber-200 rounded text-xs text-amber-700">
+    <div className="inline-flex items-center gap-1 px-2 py-1 bg-teal-50 border border-teal-200 rounded text-xs text-teal-700">
       <Zap className="w-3 h-3" />
-      <span>ChatGPT can't {feature}</span>
+      <span>Aminy {feature}</span>
     </div>
   );
 }
+
+/**
+ * @deprecated Use AminyAdvantageBadge instead
+ */
+export const ChatGptCantBadge = AminyAdvantageBadge;
 
 export default DifferentiationCallout;

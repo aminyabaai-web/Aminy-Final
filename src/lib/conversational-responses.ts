@@ -1,6 +1,6 @@
 /**
  * Natural Language Response Variations
- * Makes AI conversations feel human with variety like ChatGPT
+ * Makes AI conversations feel human with natural variety
  */
 
 // Helper: Randomly select from array

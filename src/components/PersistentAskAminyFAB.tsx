@@ -192,7 +192,7 @@ export function PersistentAskAminyFAB({
               </Button>
             </div>
             <p className="text-xs text-center text-muted-foreground mt-2">
-              ChatGPT-level quality guidance, always available
+              Expert-quality guidance, always available
             </p>
           </div>
         </Card>

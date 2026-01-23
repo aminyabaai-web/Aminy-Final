@@ -433,6 +433,298 @@ export interface ActionItem {
 }
 
 // ============================================================================
+// SESSION BUNDLES (Discounted packages)
+// ============================================================================
+
+export type BundleType = 'consult-4' | 'consult-8' | 'deep-review-3' | 'deep-review-6' | 'mixed-starter';
+
+export interface SessionBundle {
+  id: BundleType;
+  name: string;
+  description: string;
+  // Sessions included
+  consultSessions: number;
+  deepReviewSessions: number;
+  // Pricing
+  regularPrice: number; // What it would cost buying individually
+  bundlePrice: number;  // Discounted bundle price
+  savingsPercent: number;
+  // Validity
+  validityDays: number; // Days from purchase to use all sessions
+  // Features
+  features: string[];
+  recommended?: boolean;
+  tierRequired?: string; // Optional: require Pro or higher
+}
+
+export const SESSION_BUNDLES: SessionBundle[] = [
+  {
+    id: 'consult-4',
+    name: '4-Session Consult Pack',
+    description: 'Perfect for ongoing support with regular check-ins',
+    consultSessions: 4,
+    deepReviewSessions: 0,
+    regularPrice: 300, // 4 × $75
+    bundlePrice: 255,
+    savingsPercent: 15,
+    validityDays: 90,
+    features: [
+      '4 × 25-minute consults',
+      'Use with any provider',
+      '15% savings',
+      'Valid for 90 days',
+    ],
+  },
+  {
+    id: 'consult-8',
+    name: '8-Session Consult Pack',
+    description: 'Best value for families needing regular guidance',
+    consultSessions: 8,
+    deepReviewSessions: 0,
+    regularPrice: 600, // 8 × $75
+    bundlePrice: 480,
+    savingsPercent: 20,
+    validityDays: 180,
+    features: [
+      '8 × 25-minute consults',
+      'Use with any provider',
+      '20% savings',
+      'Valid for 6 months',
+      'Priority booking',
+    ],
+    recommended: true,
+  },
+  {
+    id: 'deep-review-3',
+    name: '3-Session Deep Review Pack',
+    description: 'For complex challenges requiring thorough support',
+    consultSessions: 0,
+    deepReviewSessions: 3,
+    regularPrice: 450, // 3 × $150
+    bundlePrice: 382,
+    savingsPercent: 15,
+    validityDays: 120,
+    features: [
+      '3 × 50-minute deep reviews',
+      'Use with any provider',
+      '15% savings',
+      'Valid for 4 months',
+    ],
+  },
+  {
+    id: 'deep-review-6',
+    name: '6-Session Deep Review Pack',
+    description: 'Extended support for significant behavioral challenges',
+    consultSessions: 0,
+    deepReviewSessions: 6,
+    regularPrice: 900, // 6 × $150
+    bundlePrice: 720,
+    savingsPercent: 20,
+    validityDays: 180,
+    features: [
+      '6 × 50-minute deep reviews',
+      'Use with any provider',
+      '20% savings',
+      'Valid for 6 months',
+      'Priority booking',
+      'Care plan included',
+    ],
+  },
+  {
+    id: 'mixed-starter',
+    name: 'Starter Bundle',
+    description: 'Try both session types with savings',
+    consultSessions: 2,
+    deepReviewSessions: 1,
+    regularPrice: 300, // 2 × $75 + 1 × $150
+    bundlePrice: 249,
+    savingsPercent: 17,
+    validityDays: 90,
+    features: [
+      '2 × 25-minute consults',
+      '1 × 50-minute deep review',
+      'Use with any provider',
+      '17% savings',
+      'Great for first-time families',
+    ],
+  },
+];
+
+export interface UserBundleCredits {
+  userId: string;
+  bundleId: BundleType;
+  consultCreditsRemaining: number;
+  deepReviewCreditsRemaining: number;
+  purchasedAt: string;
+  expiresAt: string;
+  isActive: boolean;
+}
+
+// ============================================================================
+// INSURANCE VERIFICATION
+// ============================================================================
+
+export type InsuranceVerificationStatus =
+  | 'not-started'
+  | 'pending'
+  | 'verified-covered'
+  | 'verified-not-covered'
+  | 'partial-coverage'
+  | 'error';
+
+export interface InsuranceInfo {
+  providerId: string; // Insurance company
+  planName: string;
+  memberId: string;
+  groupNumber?: string;
+  policyHolderName: string;
+  relationship: 'self' | 'spouse' | 'child' | 'other';
+  effectiveDate?: string;
+  primaryOrSecondary: 'primary' | 'secondary';
+}
+
+export interface InsuranceVerificationResult {
+  id: string;
+  userId: string;
+  insurance: InsuranceInfo;
+  verificationStatus: InsuranceVerificationStatus;
+  // Coverage details (if verified)
+  coveredServices?: string[];
+  copayAmount?: number;
+  deductibleMet?: boolean;
+  deductibleRemaining?: number;
+  outOfPocketMax?: number;
+  outOfPocketSpent?: number;
+  // Notes
+  notes?: string;
+  verifiedAt?: string;
+  verifiedBy?: 'system' | 'manual';
+  // Error info
+  errorMessage?: string;
+}
+
+export interface InsuranceProvider {
+  id: string;
+  name: string;
+  commonNames: string[]; // Aliases like "BCBS", "Blue Cross", etc.
+  logo?: string;
+  supportsElectronicVerification: boolean;
+}
+
+export const COMMON_INSURANCE_PROVIDERS: InsuranceProvider[] = [
+  { id: 'bcbs', name: 'Blue Cross Blue Shield', commonNames: ['BCBS', 'Blue Cross', 'Blue Shield'], supportsElectronicVerification: true },
+  { id: 'aetna', name: 'Aetna', commonNames: ['Aetna', 'CVS Health'], supportsElectronicVerification: true },
+  { id: 'cigna', name: 'Cigna', commonNames: ['Cigna', 'Evernorth'], supportsElectronicVerification: true },
+  { id: 'united', name: 'UnitedHealthcare', commonNames: ['United', 'UHC', 'UnitedHealthcare'], supportsElectronicVerification: true },
+  { id: 'humana', name: 'Humana', commonNames: ['Humana'], supportsElectronicVerification: true },
+  { id: 'kaiser', name: 'Kaiser Permanente', commonNames: ['Kaiser', 'KP'], supportsElectronicVerification: false },
+  { id: 'medicaid', name: 'Medicaid', commonNames: ['Medicaid', 'State Medicaid'], supportsElectronicVerification: false },
+  { id: 'tricare', name: 'TRICARE', commonNames: ['TRICARE', 'Military'], supportsElectronicVerification: true },
+  { id: 'other', name: 'Other', commonNames: [], supportsElectronicVerification: false },
+];
+
+// ============================================================================
+// PROVIDER REVIEWS
+// ============================================================================
+
+export interface ProviderReview {
+  id: string;
+  providerId: string;
+  userId: string;
+  appointmentId: string;
+  // Rating (1-5)
+  overallRating: number;
+  // Category ratings (optional)
+  helpfulnessRating?: number;
+  communicationRating?: number;
+  recommendationLikelihood?: number; // 1-10 NPS-style
+  // Content
+  reviewText?: string;
+  wouldRecommend: boolean;
+  // Response
+  providerResponse?: string;
+  providerRespondedAt?: string;
+  // Moderation
+  isPublic: boolean;
+  moderationStatus: 'pending' | 'approved' | 'rejected';
+  // Timestamps
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ProviderRatingsSummary {
+  providerId: string;
+  totalReviews: number;
+  averageRating: number;
+  ratingDistribution: Record<1 | 2 | 3 | 4 | 5, number>;
+  recommendationRate: number; // % who would recommend
+  recentReviews: ProviderReview[]; // Last 5
+}
+
+// ============================================================================
+// SUPERBILL (For HSA/FSA reimbursement)
+// ============================================================================
+
+export interface SuperbillLineItem {
+  cptCode: string;
+  description: string;
+  units: number;
+  unitCharge: number;
+  totalCharge: number;
+}
+
+export interface Superbill {
+  id: string;
+  userId: string;
+  appointmentId: string;
+  providerId: string;
+  // Patient info
+  patientName: string;
+  patientDOB: string;
+  // Provider info
+  providerName: string;
+  providerCredentials: string;
+  providerNPI?: string;
+  providerTaxId?: string;
+  // Service info
+  dateOfService: string;
+  placeOfService: string; // "02" for telehealth
+  diagnosisCodes: string[]; // ICD-10 codes
+  lineItems: SuperbillLineItem[];
+  // Totals
+  totalBilled: number;
+  amountPaid: number;
+  // Generation
+  generatedAt: string;
+  pdfUrl?: string;
+  // Status
+  status: 'generated' | 'downloaded' | 'submitted';
+}
+
+// Common CPT codes for ABA/behavior services
+export const COMMON_CPT_CODES = {
+  // ABA Assessment
+  '97151': { description: 'Behavior identification assessment', defaultPrice: 175 },
+  '97152': { description: 'Behavior identification supporting assessment', defaultPrice: 150 },
+  // ABA Treatment
+  '97153': { description: 'Adaptive behavior treatment by protocol', defaultPrice: 65 },
+  '97154': { description: 'Group adaptive behavior treatment', defaultPrice: 35 },
+  '97155': { description: 'Adaptive behavior treatment with protocol modification', defaultPrice: 85 },
+  '97156': { description: 'Family adaptive behavior treatment guidance', defaultPrice: 75 },
+  '97157': { description: 'Multiple-family group adaptive behavior treatment', defaultPrice: 45 },
+  '97158': { description: 'Group adaptive behavior treatment with protocol modification', defaultPrice: 55 },
+  // Telehealth modifier
+  '95': { description: 'Synchronous telemedicine service modifier', defaultPrice: 0 },
+  // Family/Parent training
+  'T1027': { description: 'Family training and counseling', defaultPrice: 65 },
+  // General counseling (for non-ABA services)
+  '90832': { description: 'Psychotherapy, 30 min', defaultPrice: 75 },
+  '90834': { description: 'Psychotherapy, 45 min', defaultPrice: 100 },
+  '90837': { description: 'Psychotherapy, 60 min', defaultPrice: 150 },
+  '90847': { description: 'Family psychotherapy with patient', defaultPrice: 150 },
+};
+
+// ============================================================================
 // GET CARE INTAKE
 // ============================================================================
 

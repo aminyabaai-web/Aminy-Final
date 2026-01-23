@@ -1,7 +1,7 @@
 /**
  * Proactive Nudge System
  * Implements the "proactive system" that reaches out to users
- * Addresses: "ChatGPT is reactive; you're building something that reaches out"
+ * Addresses: "Generic AI is reactive; Aminy reaches out proactively"
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
@@ -242,10 +242,10 @@ export function ProactiveNudgeSystem(props: ProactiveNudgeSystemProps) {
                   <h3 className="font-semibold">{topNudge.title}</h3>
                   <p className="text-sm text-white/90 mt-1">{topNudge.message}</p>
 
-                  {/* ChatGPT differentiation */}
+                  {/* Proactive support differentiation */}
                   <div className="flex items-center gap-1 mt-2 text-xs text-white/70">
                     <Zap className="w-3 h-3" />
-                    <span>Aminy reaches out. ChatGPT waits.</span>
+                    <span>Aminy reaches out proactively—you never have to ask.</span>
                   </div>
                 </div>
               </div>
@@ -335,7 +335,7 @@ export function NotificationPermissionRequest({
           </h3>
           <p className="text-sm text-blue-700 mt-1">
             Enable notifications so Aminy can reach out with timely reminders,
-            check-ins, and celebrations. This is what makes us different from ChatGPT.
+            check-ins, and celebrations. This is what makes Aminy uniquely supportive.
           </p>
           <Button
             onClick={requestPermission}

@@ -70,7 +70,7 @@ export const TalkToAminyEnhanced: React.FC<TalkToAminyEnhancedProps> = ({
   const [isTyping, setIsTyping] = useState(false);
   const [useRecords, setUseRecords] = useState(true);
   
-  // Enhanced state for ChatGPT-level experience
+  // Enhanced state for streaming experience
   const [isStreaming, setIsStreaming] = useState(false);
   const [streamingMessageId, setStreamingMessageId] = useState<string | null>(null);
   const [conversationTitle, setConversationTitle] = useState<string>('');

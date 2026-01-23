@@ -6,9 +6,20 @@ import { Badge } from './ui/badge';
 import { Progress } from './ui/progress';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'motion/react';
-import { Send, Mic, Heart, CheckCircle2, ArrowRight } from 'lucide-react';
+import { Send, Mic, Heart, CheckCircle2, ArrowRight, FastForward, Volume2 } from 'lucide-react';
 import * as ConvoResponses from '../lib/conversational-responses';
 import { CompassIcon } from './CompassIcon';
+import { VoiceInputButton } from './VoiceInputButton';
+
+// Progress step definitions for breadcrumbs
+const ONBOARDING_STEPS = [
+  { id: 'welcome', label: 'Welcome', progress: 0 },
+  { id: 'empathy', label: 'How you feel', progress: 15 },
+  { id: 'story', label: 'Your story', progress: 35 },
+  { id: 'insights', label: 'Insights', progress: 65 },
+  { id: 'routines', label: 'Your plan', progress: 85 },
+  { id: 'start', label: 'Get started', progress: 100 },
+];
 
 interface Message {
   id: string;
@@ -37,20 +48,25 @@ interface AIIntakeChatProps {
   }) => void;
   initialData?: {
     email?: string;
+    childName?: string;
+    childAge?: string;
   };
+  isReturningUser?: boolean;
+  onSkipOnboarding?: () => void;
 }
 
-export function AIIntakeChat({ onComplete, initialData }: AIIntakeChatProps) {
+export function AIIntakeChat({ onComplete, initialData, isReturningUser = false, onSkipOnboarding }: AIIntakeChatProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [currentInput, setCurrentInput] = useState('');
   const [step, setStep] = useState<'intro' | 'empathy' | 'conversation' | 'summary' | 'routines' | 'complete'>('intro');
   const [isListening, setIsListening] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [progress, setProgress] = useState(0);
-  
-  // Collected data
-  const [childName, setChildName] = useState('');
-  const [childAge, setChildAge] = useState('');
+  const [useVoiceFirst, setUseVoiceFirst] = useState(false);
+
+  // Collected data - pre-populate from initialData if available
+  const [childName, setChildName] = useState(initialData?.childName || '');
+  const [childAge, setChildAge] = useState(initialData?.childAge || '');
   const [recentChallenges, setRecentChallenges] = useState('');
   const [parentGoals, setParentGoals] = useState('');
   const [conversationHistory, setConversationHistory] = useState('');
@@ -910,9 +926,19 @@ export function AIIntakeChat({ onComplete, initialData }: AIIntakeChatProps) {
 
   const starterRoutines = generateStarterRoutines();
 
+  // Get current step index for breadcrumbs
+  const getCurrentStepIndex = () => {
+    if (step === 'intro') return 0;
+    if (step === 'empathy') return 1;
+    if (step === 'conversation') return 2;
+    if (step === 'summary') return 3;
+    if (step === 'routines') return 4;
+    return 5;
+  };
+
   return (
     <div className="h-screen bg-gradient-to-b from-teal-50 via-white to-blue-50 flex flex-col overflow-hidden">
-      {/* Header */}
+      {/* Header with Progress Breadcrumbs */}
       <div className="bg-white/80 backdrop-blur-sm border-b border-gray-200 px-4 py-4 shrink-0 z-10">
         <div className="max-w-2xl mx-auto">
           <div className="flex items-center justify-between mb-3">
@@ -930,11 +956,54 @@ export function AIIntakeChat({ onComplete, initialData }: AIIntakeChatProps) {
                 </p>
               </div>
             </div>
-            <Badge variant="outline" className="text-teal-600 border-teal-200 text-xs">
-              <Heart className="w-3 h-3 mr-1" />
-              Private & secure
-            </Badge>
+            <div className="flex items-center gap-2">
+              {/* Skip option for returning users */}
+              {isReturningUser && onSkipOnboarding && step !== 'routines' && step !== 'complete' && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={onSkipOnboarding}
+                  className="text-gray-500 hover:text-gray-700 text-xs"
+                >
+                  <FastForward className="w-3 h-3 mr-1" />
+                  Skip to dashboard
+                </Button>
+              )}
+              <Badge variant="outline" className="text-teal-600 border-teal-200 text-xs">
+                <Heart className="w-3 h-3 mr-1" />
+                Private & secure
+              </Badge>
+            </div>
           </div>
+
+          {/* Progress Breadcrumbs */}
+          <div className="flex items-center gap-1 mb-2">
+            {ONBOARDING_STEPS.map((stepDef, index) => {
+              const isActive = index === getCurrentStepIndex();
+              const isComplete = index < getCurrentStepIndex();
+              return (
+                <React.Fragment key={stepDef.id}>
+                  <div
+                    className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs transition-colors ${
+                      isActive
+                        ? 'bg-teal-100 text-teal-700 font-medium'
+                        : isComplete
+                          ? 'text-teal-600'
+                          : 'text-gray-400'
+                    }`}
+                  >
+                    {isComplete && <CheckCircle2 className="w-3 h-3" />}
+                    <span className="hidden sm:inline">{stepDef.label}</span>
+                    <span className="sm:hidden">{index + 1}</span>
+                  </div>
+                  {index < ONBOARDING_STEPS.length - 1 && (
+                    <div className={`w-4 h-0.5 ${isComplete ? 'bg-teal-400' : 'bg-gray-200'}`} />
+                  )}
+                </React.Fragment>
+              );
+            })}
+          </div>
+
           <Progress value={progress} className="h-1.5" />
         </div>
       </div>
@@ -1122,57 +1191,114 @@ export function AIIntakeChat({ onComplete, initialData }: AIIntakeChatProps) {
       {step === 'conversation' && (
         <div className="bg-white border-t border-gray-200 px-4 py-4 pb-safe shrink-0 z-20 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
           <div className="max-w-2xl mx-auto">
-            <div className="flex items-end gap-2">
-              <div className="flex-1 relative">
-                <Textarea
-                  value={currentInput}
-                  onChange={(e) => {
-                    let value = e.target.value;
-                    // Auto-capitalize first letter
-                    if (value.length > 0 && currentInput.length === 0) {
-                      value = value.charAt(0).toUpperCase() + value.slice(1);
-                    }
-                    setCurrentInput(value);
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                      e.preventDefault();
-                      handleSendMessage();
-                    }
-                  }}
-                  placeholder={conversationTurn === 0
-                    ? "Tell me about your child and what's been on your mind..."
-                    : "Share more details..."}
-                  className="pr-12 resize-none"
-                  rows={3}
-                  autoFocus
-                  autoCapitalize="sentences"
-                  autoCorrect="on"
-                  spellCheck={true}
-                />
+            {/* Voice-first toggle */}
+            {conversationTurn === 0 && !currentInput && (
+              <div className="flex items-center justify-center gap-4 mb-3">
                 <button
-                  onClick={handleVoiceInput}
-                  className={`absolute right-2 bottom-2 p-2 rounded-lg transition-colors ${
-                    isListening
-                      ? 'bg-red-100 text-red-600'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  onClick={() => setUseVoiceFirst(false)}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm transition-colors ${
+                    !useVoiceFirst
+                      ? 'bg-teal-100 text-teal-700 font-medium'
+                      : 'text-gray-500 hover:text-gray-700'
                   }`}
-                  title="Voice input"
                 >
-                  <Mic className="w-4 h-4" />
+                  <Send className="w-4 h-4" />
+                  Type
+                </button>
+                <button
+                  onClick={() => setUseVoiceFirst(true)}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm transition-colors ${
+                    useVoiceFirst
+                      ? 'bg-teal-100 text-teal-700 font-medium'
+                      : 'text-gray-500 hover:text-gray-700'
+                  }`}
+                >
+                  <Volume2 className="w-4 h-4" />
+                  Speak
                 </button>
               </div>
-              <Button
-                onClick={handleSendMessage}
-                disabled={!currentInput.trim() || isTyping}
-                className="bg-teal-500 hover:bg-teal-600 text-white h-[88px] px-6"
-              >
-                <Send className="w-5 h-5" />
-              </Button>
-            </div>
-            <p className="text-xs text-gray-500 text-center mt-2">
-              🔒 Everything you share helps me build your personalized plan
-            </p>
+            )}
+
+            {/* Voice-first mode */}
+            {useVoiceFirst && conversationTurn === 0 ? (
+              <div className="flex flex-col items-center gap-3">
+                <VoiceInputButton
+                  variant="floating"
+                  size="lg"
+                  onTranscript={(transcript, isFinal) => {
+                    if (isFinal && transcript.trim()) {
+                      setCurrentInput(transcript);
+                      setUseVoiceFirst(false);
+                      // Auto-submit after voice
+                      setTimeout(() => {
+                        handleSendMessage();
+                      }, 500);
+                    }
+                  }}
+                  placeholder="Tap and tell me about your child..."
+                />
+                <button
+                  onClick={() => setUseVoiceFirst(false)}
+                  className="text-sm text-gray-500 hover:text-gray-700 underline"
+                >
+                  I'd rather type
+                </button>
+              </div>
+            ) : (
+              <>
+                <div className="flex items-end gap-2">
+                  <div className="flex-1 relative">
+                    <Textarea
+                      value={currentInput}
+                      onChange={(e) => {
+                        let value = e.target.value;
+                        // Auto-capitalize first letter
+                        if (value.length > 0 && currentInput.length === 0) {
+                          value = value.charAt(0).toUpperCase() + value.slice(1);
+                        }
+                        setCurrentInput(value);
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                          e.preventDefault();
+                          handleSendMessage();
+                        }
+                      }}
+                      placeholder={conversationTurn === 0
+                        ? "Tell me about your child and what's been on your mind..."
+                        : "Share more details..."}
+                      className="pr-12 resize-none"
+                      rows={3}
+                      autoFocus
+                      autoCapitalize="sentences"
+                      autoCorrect="on"
+                      spellCheck={true}
+                    />
+                    <button
+                      onClick={handleVoiceInput}
+                      className={`absolute right-2 bottom-2 p-2 rounded-lg transition-colors ${
+                        isListening
+                          ? 'bg-red-100 text-red-600'
+                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      }`}
+                      title="Voice input"
+                    >
+                      <Mic className="w-4 h-4" />
+                    </button>
+                  </div>
+                  <Button
+                    onClick={handleSendMessage}
+                    disabled={!currentInput.trim() || isTyping}
+                    className="bg-teal-500 hover:bg-teal-600 text-white h-[88px] px-6"
+                  >
+                    <Send className="w-5 h-5" />
+                  </Button>
+                </div>
+                <p className="text-xs text-gray-500 text-center mt-2">
+                  🔒 Everything you share helps me build your personalized plan
+                </p>
+              </>
+            )}
           </div>
         </div>
       )}

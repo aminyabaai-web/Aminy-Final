@@ -1,7 +1,7 @@
 /**
  * Share With Provider Button
  * Generates and shares a PDF report with healthcare providers
- * Key differentiator: "ChatGPT conversations stay in your chat—can't share with providers"
+ * Key differentiator: Aminy enables seamless care team collaboration
  */
 
 import React, { useState } from 'react';
@@ -225,8 +225,8 @@ www.aminy.app
             <p className="text-sm text-blue-700 mt-1">
               Generate a provider-ready report to share with your BCBA, therapist, or doctor.
             </p>
-            <Badge className="mt-2 bg-amber-100 text-amber-700">
-              ChatGPT can't do this
+            <Badge className="mt-2 bg-teal-100 text-teal-700">
+              Only with Aminy
             </Badge>
           </div>
           <Button onClick={() => setIsOpen(true)} className="bg-blue-600 hover:bg-blue-700">

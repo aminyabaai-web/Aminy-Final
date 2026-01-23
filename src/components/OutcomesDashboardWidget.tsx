@@ -225,7 +225,7 @@ export function OutcomesDashboardWidget({
             </div>
             <div className="flex-1">
               <p className="font-medium text-amber-900">
-                What ChatGPT can't do
+                Why Aminy works
               </p>
               <p className="text-sm text-amber-700 mt-1">
                 We track your real progress automatically—no manual logging needed.

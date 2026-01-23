@@ -10,6 +10,7 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
@@ -36,7 +37,10 @@ import {
   Sun,
   Moon,
   Sunset,
-  Star
+  Star,
+  Maximize2,
+  Minimize2,
+  X,
 } from 'lucide-react';
 import { useConversation } from '../context/ConversationContext';
 
@@ -102,6 +106,44 @@ const DAILY_TIPS = [
   "Trust the process. You've got this.",
 ];
 
+// Contextual chat prompts based on time of day and situation
+const CONTEXTUAL_PROMPTS: Record<string, string[]> = {
+  morning: [
+    'Help with morning transitions',
+    'Wake-up routine tips',
+    'Breakfast strategies',
+    'Getting ready for school',
+  ],
+  afternoon: [
+    'Post-school decompression',
+    'Homework support ideas',
+    'Healthy snack transitions',
+    'Managing afternoon energy',
+  ],
+  evening: [
+    'Dinner time strategies',
+    'Screen time boundaries',
+    'Family activity ideas',
+    'Wind-down preparations',
+  ],
+  bedtime: [
+    'Calming bedtime routine',
+    'Sleep transition tips',
+    'Managing bedtime anxiety',
+    'Story time suggestions',
+  ],
+  progress: [
+    'Celebrate recent wins',
+    'Next milestone planning',
+    'Progress report insights',
+  ],
+  challenges: [
+    'Meltdown prevention',
+    'Sensory regulation help',
+    'Communication strategies',
+  ],
+};
+
 export function Dashboard10({
   userData,
   childProfile,
@@ -111,8 +153,10 @@ export function Dashboard10({
   const [activeRoutine, setActiveRoutine] = useState<'morning' | 'afternoon' | 'evening' | 'bedtime'>('morning');
   // CHAT-FIRST: Start with chat expanded to make it the primary experience
   const [showAIChat, setShowAIChat] = useState(true);
+  const [isFullScreenChat, setIsFullScreenChat] = useState(false);
   const [activeTab, setActiveTab] = useState<'home' | 'resources' | 'community' | 'profile'>('home');
   const [dailyTip] = useState(() => DAILY_TIPS[Math.floor(Math.random() * DAILY_TIPS.length)]);
+  const [showStreakCelebration, setShowStreakCelebration] = useState(false);
   const chatButtonRef = useRef<HTMLButtonElement>(null);
 
   // Auto-set routine based on time of day
@@ -193,6 +237,24 @@ export function Dashboard10({
   const streakDays = 5;
   const todaysWins = 3;
 
+  // Get contextual prompts based on time of day and child progress
+  const getContextualPrompts = () => {
+    const timePrompts = CONTEXTUAL_PROMPTS[activeRoutine] || CONTEXTUAL_PROMPTS.morning;
+    const progressPrompts = child.goals.some(g => g.percentMet >= 70) ? CONTEXTUAL_PROMPTS.progress : CONTEXTUAL_PROMPTS.challenges;
+    // Mix time-based and progress-based prompts
+    return [...timePrompts.slice(0, 2), ...progressPrompts.slice(0, 1)];
+  };
+
+  // Celebrate milestone streaks (5, 7, 14, 21, 30 days)
+  useEffect(() => {
+    const milestones = [5, 7, 14, 21, 30, 60, 90];
+    if (milestones.includes(streakDays)) {
+      setShowStreakCelebration(true);
+      const timer = setTimeout(() => setShowStreakCelebration(false), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [streakDays]);
+
   // Quick actions
   const quickActions = [
     { id: 'plan', label: 'Update Plan', icon: <FileText className="w-5 h-5" />, color: 'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-300' },
@@ -235,6 +297,47 @@ export function Dashboard10({
 
   return (
     <div className="min-h-screen bg-[#F5F5F5] dark:bg-slate-900 pb-24">
+      {/* ========================================
+          STREAK CELEBRATION OVERLAY
+          Animated celebration for milestone streaks
+          ======================================== */}
+      {showStreakCelebration && (
+        <div className="fixed inset-0 z-50 pointer-events-none flex items-center justify-center">
+          <motion.div
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
+            className="bg-gradient-to-br from-amber-500 to-orange-600 text-white p-8 rounded-3xl shadow-2xl pointer-events-auto"
+          >
+            <div className="text-center">
+              <motion.div
+                initial={{ rotate: 0 }}
+                animate={{ rotate: [0, -10, 10, -10, 10, 0] }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                className="text-6xl mb-4"
+              >
+                🎉
+              </motion.div>
+              <h2 className="text-2xl font-bold mb-2">
+                {streakDays}-Day Streak!
+              </h2>
+              <p className="text-amber-100">
+                Amazing consistency, {userData.parentName}!
+              </p>
+              <p className="text-sm text-amber-200 mt-2">
+                {child.name} is building great habits thanks to you.
+              </p>
+              <button
+                onClick={() => setShowStreakCelebration(false)}
+                className="mt-4 px-6 py-2 bg-white/20 hover:bg-white/30 rounded-full text-sm transition-colors"
+              >
+                Keep Going! 💪
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
+
       {/* ========================================
           1. HEADER & TOP NAVIGATION (20%)
           ======================================== */}
@@ -310,7 +413,7 @@ export function Dashboard10({
       <main className="max-w-4xl mx-auto px-4 py-6 space-y-6">
         {/* ========================================
             PROACTIVE NUDGES - AI that reaches out
-            (This is what ChatGPT CAN'T do)
+            (Aminy's unique proactive support)
             ======================================== */}
         <ProactiveNudgeSystem
           childName={child.name}
@@ -419,7 +522,7 @@ export function Dashboard10({
         </section>
 
         {/* ========================================
-            DIFFERENTIATION CALLOUT - Why Not ChatGPT
+            DIFFERENTIATION CALLOUT - Why Aminy Works
             Makes the moat explicit
             ======================================== */}
         <section>
@@ -487,86 +590,123 @@ export function Dashboard10({
           6. PERSISTENT AI COMPANION (Floating)
           ======================================== */}
       {/* CHAT-FIRST: Toggle button - no longer pulsing since chat starts open */}
-      <button
-        ref={chatButtonRef}
-        onClick={() => setShowAIChat(!showAIChat)}
-        className={`fixed bottom-24 right-4 z-40 w-14 h-14 rounded-full shadow-lg transition-all duration-300 ${
-          showAIChat
-            ? 'bg-gray-700 text-white rotate-0'
-            : 'bg-[#577590] text-white hover:bg-[#4a6478]'
-        }`}
-        aria-label={showAIChat ? 'Minimize chat' : 'Open chat with Aminy'}
-        aria-expanded={showAIChat}
-      >
-        {showAIChat ? (
-          <ChevronRight className="w-6 h-6 mx-auto rotate-90" aria-hidden="true" />
-        ) : (
-          <MessageSquare className="w-6 h-6 mx-auto" aria-hidden="true" />
-        )}
-      </button>
-
-      {/* CHAT-FIRST: Prominent Chat Panel
-          Made larger and positioned for better visibility as the primary experience */}
-      {showAIChat && (
-        <div className="fixed bottom-28 left-4 right-4 sm:left-auto sm:right-4 sm:w-96 bg-white dark:bg-slate-800 rounded-2xl shadow-2xl z-30 overflow-hidden border border-gray-200 dark:border-slate-700 transition-all duration-300 ease-out">
-          {/* Chat Header - Branded */}
-          <div className="p-4 bg-gradient-to-r from-[#0D1B2A] to-[#1a3a5c] text-white">
-            <div className="flex items-center justify-between">
-              <h3 className="font-semibold flex items-center gap-2 text-lg">
-                <Sparkles className="w-5 h-5 text-[#E07A5F]" />
-                Chat with Aminy
-              </h3>
-              <Badge className="bg-[#577590] text-white text-xs">AI Companion</Badge>
-            </div>
-            <p className="text-xs text-gray-300 mt-1">Your always-on parenting support</p>
-          </div>
-
-          {/* Chat Messages - Expanded Height */}
-          <div className="p-4 max-h-80 overflow-y-auto space-y-3">
-            <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-700 dark:to-slate-600 rounded-xl p-4 text-sm shadow-sm">
-              <p className="text-gray-700 dark:text-gray-200 leading-relaxed">
-                Hi {userData.parentName}! 👋 I'm here to help with {child.name}'s day.
-                {activeRoutine === 'morning' && " Ready to start the morning routine? I can suggest activities that work for this time of day."}
-                {activeRoutine === 'afternoon' && " How's the afternoon going? Need help with any activities or transitions?"}
-                {activeRoutine === 'evening' && " Winding down for the evening? Let me help you with calming activities or dinner routines."}
-                {activeRoutine === 'bedtime' && " Bedtime approaching! I can help you prep a smooth bedtime routine."}
-              </p>
-            </div>
-
-            {/* Quick Actions */}
-            <div className="flex flex-wrap gap-2">
-              <button className="text-xs px-3 py-1.5 rounded-full bg-[#577590]/10 text-[#577590] hover:bg-[#577590]/20 transition-colors">
-                Help with routine
-              </button>
-              <button className="text-xs px-3 py-1.5 rounded-full bg-[#577590]/10 text-[#577590] hover:bg-[#577590]/20 transition-colors">
-                Calm-down tips
-              </button>
-              <button className="text-xs px-3 py-1.5 rounded-full bg-[#577590]/10 text-[#577590] hover:bg-[#577590]/20 transition-colors">
-                Activity ideas
-              </button>
-            </div>
-          </div>
-
-          {/* Chat Input - Enhanced */}
-          <div className="p-4 border-t dark:border-slate-700 bg-gray-50 dark:bg-slate-750">
-            <div className="flex gap-2">
-              <input
-                type="text"
-                placeholder="Ask Aminy anything..."
-                className="flex-1 px-4 py-3 text-sm rounded-xl border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:border-[#577590] focus:ring-2 focus:ring-[#577590]/20 transition-all"
-                aria-label="Chat message input"
-              />
-              <Button
-                size="sm"
-                className="bg-[#577590] hover:bg-[#4a6478] px-4 py-3 rounded-xl transition-all"
-                aria-label="Send message"
-              >
-                <MessageSquare className="w-4 h-4" />
-              </Button>
-            </div>
-          </div>
-        </div>
+      {!isFullScreenChat && (
+        <button
+          ref={chatButtonRef}
+          onClick={() => setShowAIChat(!showAIChat)}
+          className={`fixed bottom-24 right-4 z-40 w-14 h-14 rounded-full shadow-lg transition-all duration-300 ${
+            showAIChat
+              ? 'bg-gray-700 text-white rotate-0'
+              : 'bg-[#577590] text-white hover:bg-[#4a6478]'
+          }`}
+          aria-label={showAIChat ? 'Minimize chat' : 'Open chat with Aminy'}
+          aria-expanded={showAIChat}
+        >
+          {showAIChat ? (
+            <ChevronRight className="w-6 h-6 mx-auto rotate-90" aria-hidden="true" />
+          ) : (
+            <MessageSquare className="w-6 h-6 mx-auto" aria-hidden="true" />
+          )}
+        </button>
       )}
+
+      {/* CHAT-FIRST: Prominent Chat Panel with Full-Screen Option
+          Made larger and positioned for better visibility as the primary experience */}
+      <AnimatePresence>
+        {showAIChat && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            className={`fixed bg-white dark:bg-slate-800 shadow-2xl z-30 overflow-hidden border border-gray-200 dark:border-slate-700 transition-all duration-300 ease-out ${
+              isFullScreenChat
+                ? 'inset-0 rounded-none'
+                : 'bottom-28 left-4 right-4 sm:left-auto sm:right-4 sm:w-96 rounded-2xl'
+            }`}
+          >
+            {/* Chat Header - Branded with Full-Screen Toggle */}
+            <div className="p-4 bg-gradient-to-r from-[#0D1B2A] to-[#1a3a5c] text-white">
+              <div className="flex items-center justify-between">
+                <h3 className="font-semibold flex items-center gap-2 text-lg">
+                  <Sparkles className="w-5 h-5 text-[#E07A5F]" />
+                  Chat with Aminy
+                </h3>
+                <div className="flex items-center gap-2">
+                  <Badge className="bg-[#577590] text-white text-xs">AI Companion</Badge>
+                  <button
+                    onClick={() => setIsFullScreenChat(!isFullScreenChat)}
+                    className="p-1.5 hover:bg-white/20 rounded-lg transition-colors"
+                    aria-label={isFullScreenChat ? 'Exit full screen' : 'Enter full screen'}
+                  >
+                    {isFullScreenChat ? (
+                      <Minimize2 className="w-4 h-4" />
+                    ) : (
+                      <Maximize2 className="w-4 h-4" />
+                    )}
+                  </button>
+                  {isFullScreenChat && (
+                    <button
+                      onClick={() => {
+                        setIsFullScreenChat(false);
+                        setShowAIChat(false);
+                      }}
+                      className="p-1.5 hover:bg-white/20 rounded-lg transition-colors"
+                      aria-label="Close chat"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
+              </div>
+              <p className="text-xs text-gray-300 mt-1">Your always-on parenting support</p>
+            </div>
+
+            {/* Chat Messages - Responsive Height */}
+            <div className={`p-4 overflow-y-auto space-y-3 ${isFullScreenChat ? 'h-[calc(100vh-180px)]' : 'max-h-80'}`}>
+              <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-700 dark:to-slate-600 rounded-xl p-4 text-sm shadow-sm">
+                <p className="text-gray-700 dark:text-gray-200 leading-relaxed">
+                  Hi {userData.parentName}! 👋 I'm here to help with {child.name}'s day.
+                  {activeRoutine === 'morning' && " Ready to start the morning routine? I can suggest activities that work for this time of day."}
+                  {activeRoutine === 'afternoon' && " How's the afternoon going? Need help with any activities or transitions?"}
+                  {activeRoutine === 'evening' && " Winding down for the evening? Let me help you with calming activities or dinner routines."}
+                  {activeRoutine === 'bedtime' && " Bedtime approaching! I can help you prep a smooth bedtime routine."}
+                </p>
+              </div>
+
+              {/* Contextual Quick Actions */}
+            <div className="flex flex-wrap gap-2">
+              {getContextualPrompts().map((prompt, index) => (
+                <button
+                  key={index}
+                  className="text-xs px-3 py-1.5 rounded-full bg-[#577590]/10 text-[#577590] hover:bg-[#577590]/20 transition-colors"
+                >
+                  {prompt}
+                </button>
+              ))}
+            </div>
+          </div>
+
+            {/* Chat Input - Enhanced */}
+            <div className="p-4 border-t dark:border-slate-700 bg-gray-50 dark:bg-slate-750">
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  placeholder="Ask Aminy anything..."
+                  className="flex-1 px-4 py-3 text-sm rounded-xl border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:border-[#577590] focus:ring-2 focus:ring-[#577590]/20 transition-all"
+                  aria-label="Chat message input"
+                />
+                <Button
+                  size="sm"
+                  className="bg-[#577590] hover:bg-[#4a6478] px-4 py-3 rounded-xl transition-all"
+                  aria-label="Send message"
+                >
+                  <MessageSquare className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* ========================================
           7. BOTTOM NAVIGATOR TABS (Fixed)

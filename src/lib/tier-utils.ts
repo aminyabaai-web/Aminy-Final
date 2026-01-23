@@ -1,12 +1,14 @@
 /**
  * Tier utilities for consistent naming and feature gating across the app
  *
- * Pricing Strategy (per McKinsey MVP spec - Updated):
- * - Free: $0 (discovery tier, hooks users)
- * - Starter: $6.99/mo or $59/year (entry empowerment)
- * - Core: $14.99/mo or $129/year (full companion - recommended)
+ * Pricing Strategy (Simplified per McKinsey 10/10 recommendation):
+ * - Free: $0 (discovery tier, hooks users with 7-day trial of Core)
+ * - Core: $14.99/mo or $129/year (full companion - recommended, 7-day free trial)
  * - Pro: $29.99/mo or $279/year (premium with BCBA access)
- * - Pro Plus: $49.99/mo or $479/year (enterprise features + human credit)
+ * - Pro+ Family Plan: $49.99/mo or $479/year (unlimited children, enterprise features)
+ *
+ * NOTE: Starter tier removed for conversion clarity. Free → Core → Pro path is cleaner.
+ * Legacy 'starter' type maintained for backward compatibility but maps to 'core'.
  */
 
 export type TierType = 'free' | 'starter' | 'core' | 'pro' | 'proplus';
@@ -14,20 +16,245 @@ export type TierType = 'free' | 'starter' | 'core' | 'pro' | 'proplus';
 // Map internal tier names to UI-friendly display names
 export const tierDisplayNames: Record<TierType, string> = {
   free: 'Free',
-  starter: 'Starter',
+  starter: 'Core', // Legacy: Starter now maps to Core
   core: 'Core',
   pro: 'Pro',
-  proplus: 'Pro+',
+  proplus: 'Family Plan', // Rebranded from Pro+ to Family Plan
 };
 
-// Pricing configuration
-export const tierPricing: Record<TierType, { monthly: number; yearly: number; savings?: number }> = {
-  free: { monthly: 0, yearly: 0 },
-  starter: { monthly: 6.99, yearly: 59, savings: 30 },
-  core: { monthly: 14.99, yearly: 129, savings: 28 },
-  pro: { monthly: 29.99, yearly: 279, savings: 22 },
-  proplus: { monthly: 49.99, yearly: 479, savings: 20 },
+// Trial configuration
+export const TRIAL_CONFIG = {
+  durationDays: 7,
+  trialTier: 'core' as TierType,
+  requiresCreditCard: false,
+  features: [
+    'Full Core tier access',
+    'Unlimited AI chat',
+    'Adaptive daily plans',
+    'Document analysis',
+    'No credit card required',
+  ],
 };
+
+// Pricing configuration (simplified - Starter removed)
+export const tierPricing: Record<TierType, { monthly: number; yearly: number; savings?: number; hasTrial?: boolean }> = {
+  free: { monthly: 0, yearly: 0 },
+  starter: { monthly: 14.99, yearly: 129, savings: 28, hasTrial: true }, // Legacy: same as Core
+  core: { monthly: 14.99, yearly: 129, savings: 28, hasTrial: true },
+  pro: { monthly: 29.99, yearly: 279, savings: 22, hasTrial: true },
+  proplus: { monthly: 49.99, yearly: 479, savings: 20, hasTrial: true },
+};
+
+// HSA/FSA eligibility configuration
+export const HSA_FSA_CONFIG = {
+  eligible: true,
+  eligibleTiers: ['core', 'pro', 'proplus'] as TierType[],
+  eligibilityNote: 'Aminy may be eligible for HSA/FSA reimbursement as a health-related expense. Consult your plan administrator.',
+  letterOfMedicalNecessityAvailable: true,
+};
+
+// Professional/Organization tier configuration (for schools, clinics, etc.)
+export type ProfessionalAccountType = 'school' | 'clinic' | 'practice' | 'agency';
+
+export interface ProfessionalTierConfig {
+  type: ProfessionalAccountType;
+  displayName: string;
+  description: string;
+  minSeats: number;
+  pricePerSeatMonthly: number;
+  pricePerSeatYearly: number;
+  features: string[];
+  includesProviderPortal: boolean;
+  includesStudentMode: boolean;
+  includesCarePlanSharing: boolean;
+  supportsMultipleLocations: boolean;
+}
+
+export const PROFESSIONAL_TIERS: Record<ProfessionalAccountType, ProfessionalTierConfig> = {
+  school: {
+    type: 'school',
+    displayName: 'School Edition',
+    description: 'For teachers and school support staff',
+    minSeats: 5,
+    pricePerSeatMonthly: 9.99,
+    pricePerSeatYearly: 89,
+    features: [
+      'Classroom mode for multiple students',
+      'Teacher dashboard with progress views',
+      'IEP goal tracking',
+      'Parent communication portal',
+      'Behavior incident logging',
+      'Progress reports for IEP meetings',
+      'Admin console for school-wide analytics',
+    ],
+    includesProviderPortal: false,
+    includesStudentMode: true,
+    includesCarePlanSharing: true,
+    supportsMultipleLocations: true,
+  },
+  clinic: {
+    type: 'clinic',
+    displayName: 'Clinic Edition',
+    description: 'For ABA clinics and therapy centers',
+    minSeats: 3,
+    pricePerSeatMonthly: 19.99,
+    pricePerSeatYearly: 179,
+    features: [
+      'Provider portal with caseload management',
+      'Client progress dashboards',
+      'Session notes integration',
+      'Care plan templates',
+      'Family communication portal',
+      'Outcome tracking and reporting',
+      'Billing code suggestions',
+      'Multi-location support',
+    ],
+    includesProviderPortal: true,
+    includesStudentMode: false,
+    includesCarePlanSharing: true,
+    supportsMultipleLocations: true,
+  },
+  practice: {
+    type: 'practice',
+    displayName: 'Private Practice',
+    description: 'For independent BCBAs and therapists',
+    minSeats: 1,
+    pricePerSeatMonthly: 24.99,
+    pricePerSeatYearly: 229,
+    features: [
+      'Provider portal',
+      'Client caseload management',
+      'Care plan creation and sharing',
+      'Progress tracking for families',
+      'Session preparation with AI',
+      'Outcome reports for insurance',
+      'Superbill generation',
+    ],
+    includesProviderPortal: true,
+    includesStudentMode: false,
+    includesCarePlanSharing: true,
+    supportsMultipleLocations: false,
+  },
+  agency: {
+    type: 'agency',
+    displayName: 'Agency/Enterprise',
+    description: 'For large organizations and state agencies',
+    minSeats: 25,
+    pricePerSeatMonthly: 7.99,
+    pricePerSeatYearly: 69,
+    features: [
+      'All Clinic Edition features',
+      'Custom branding',
+      'SSO integration',
+      'Dedicated success manager',
+      'Custom reporting',
+      'API access',
+      'SLA guarantee',
+      'HIPAA BAA included',
+    ],
+    includesProviderPortal: true,
+    includesStudentMode: true,
+    includesCarePlanSharing: true,
+    supportsMultipleLocations: true,
+  },
+};
+
+/**
+ * Check if a tier supports classroom/school mode
+ */
+export function hasSchoolMode(tier: TierType | undefined): boolean {
+  // Only Pro+ (Family Plan) has multi-child which could support school mode
+  // Professional accounts have dedicated school mode
+  return tier === 'proplus';
+}
+
+// ============================================================================
+// PAID PARENT CAREGIVER / MEDICAID WAIVER SUPPORT
+// ============================================================================
+
+/**
+ * Configuration for paid parent caregiver features
+ * Supports CDPAP, self-directed Medicaid waivers, and fiscal agent integration
+ */
+export interface PaidCaregiverConfig {
+  enabled: boolean;
+  fiscalAgentId?: string;
+  participantId?: string;
+  serviceAuthorizationNumber?: string;
+  approvedServices: string[];
+  weeklyAuthorizedHours: number;
+  evvRequired: boolean;
+}
+
+export const WAIVER_SERVICE_CODES: Record<string, { code: string; description: string; hourlyRange: [number, number] }> = {
+  'respite': { code: 'S5150', description: 'Respite care services', hourlyRange: [15, 35] },
+  'parent-training': { code: 'T1027', description: 'Family training and counseling', hourlyRange: [20, 50] },
+  'community-living': { code: 'T2025', description: 'Community living supports', hourlyRange: [15, 30] },
+  'habilitation': { code: 'T2017', description: 'Habilitation - residential', hourlyRange: [12, 25] },
+  'companion': { code: 'S5135', description: 'Companion services', hourlyRange: [12, 20] },
+  'personal-care': { code: 'T1019', description: 'Personal care services', hourlyRange: [15, 30] },
+};
+
+export const FISCAL_AGENTS = [
+  { id: 'acumen', name: 'Acumen Fiscal Agent', states: ['AZ', 'CO', 'FL', 'GA', 'IN', 'KS', 'MI', 'NC', 'NV', 'OH', 'OR', 'PA', 'SC', 'TN', 'TX', 'VA', 'WI'] },
+  { id: 'ppl', name: 'Public Partnerships LLC (PPL)', states: ['CA', 'CT', 'DC', 'FL', 'IL', 'KY', 'LA', 'MA', 'MD', 'MN', 'NJ', 'NY', 'OH', 'PA', 'RI', 'TX', 'WA'] },
+  { id: 'gt-independence', name: 'GT Independence', states: ['AZ', 'CO', 'MI', 'MO', 'NJ', 'OH', 'PA', 'TX'] },
+  { id: 'palco', name: 'Palco', states: ['AL', 'AR', 'CA', 'CO', 'GA', 'IA', 'ID', 'IN', 'KY', 'LA', 'MI', 'MO', 'MS', 'NC', 'NM', 'OK', 'OR', 'SC', 'TN', 'WA'] },
+  { id: 'consumer-direct', name: 'Consumer Direct Care Network', states: ['AK', 'CO', 'MT', 'NV', 'SD', 'WA', 'WY'] },
+];
+
+/**
+ * Check if state has self-directed waiver programs
+ */
+export function getAvailableFiscalAgents(state: string): typeof FISCAL_AGENTS {
+  return FISCAL_AGENTS.filter(agent => agent.states.includes(state));
+}
+
+/**
+ * Feature flag for paid caregiver mode
+ */
+export function hasPaidCaregiverFeatures(tier: TierType | undefined): boolean {
+  // Available to Core and above
+  return tier === 'core' || tier === 'pro' || tier === 'proplus';
+}
+
+/**
+ * Get caregiver auto-report frequency options based on tier
+ */
+export function getCaregiverReportOptions(tier: TierType | undefined): {
+  frequencies: ('daily' | 'weekly' | 'monthly')[];
+  maxRecipients: number;
+  includesCustomization: boolean;
+} {
+  const normalized = normalizeTierName(tier || 'free');
+
+  switch (normalized) {
+    case 'proplus':
+      return {
+        frequencies: ['daily', 'weekly', 'monthly'],
+        maxRecipients: 10,
+        includesCustomization: true,
+      };
+    case 'pro':
+      return {
+        frequencies: ['weekly', 'monthly'],
+        maxRecipients: 5,
+        includesCustomization: true,
+      };
+    case 'core':
+      return {
+        frequencies: ['weekly'],
+        maxRecipients: 3,
+        includesCustomization: false,
+      };
+    default:
+      return {
+        frequencies: [],
+        maxRecipients: 0,
+        includesCustomization: false,
+      };
+  }
+}
 
 // Map UI names back to internal tier types
 export function normalizeTierName(tier: string): TierType {
@@ -35,12 +262,14 @@ export function normalizeTierName(tier: string): TierType {
 
   const mapping: Record<string, TierType> = {
     'free': 'free',
-    'starter': 'starter',
-    'basic': 'starter',
+    'starter': 'core',    // Legacy: Starter maps to Core
+    'basic': 'core',      // Legacy: Basic maps to Core
     'core': 'core',
     'pro': 'pro',
     'proplus': 'proplus',
     'pro+': 'proplus',
+    'familyplan': 'proplus',
+    'family': 'proplus',
     'premium': 'proplus',
     'enterprise': 'proplus',
   };
@@ -195,6 +424,7 @@ export function getTierLevel(tier: TierType | undefined): number {
 }
 
 // Get human-readable feature descriptions for paywall/marketing
+// Updated: Simplified tier structure (no Starter), Family Plan branding
 export function getTierFeatureDescriptions(tier: TierType): string[] {
   const descriptions: Record<TierType, string[]> = {
     free: [
@@ -202,45 +432,72 @@ export function getTierFeatureDescriptions(tier: TierType): string[] {
       '5 AI chat messages per day',
       'Basic calm tools for stressful moments',
       'Track daily progress',
+      '7-day free trial of Core included',
     ],
-    starter: [
-      'Everything in Free, plus:',
-      '20 AI chat messages per day',
-      'Create custom tasks and routines',
-      'All calm tools with reminders',
-      'Weekly progress summaries',
-      'Join the parent community',
-    ],
-    core: [
-      'Everything in Starter, plus:',
+    starter: [ // Legacy: Same as Core
+      '7-day free trial included',
       'Unlimited AI chat (text & voice)',
       'AI reads your IEPs & medical records',
       'Adaptive plans that learn what works',
       'Book BCBA/RBT sessions (pay per use)',
       'Support up to 3 children',
       'Export care plans for providers',
+      'HSA/FSA eligible',
+    ],
+    core: [
+      '7-day free trial included',
+      'Unlimited AI chat (text & voice)',
+      'AI reads your IEPs & medical records',
+      'Adaptive plans that learn what works',
+      'Book BCBA/RBT sessions (pay per use)',
+      'Support up to 3 children',
+      'Export care plans for providers',
+      'HSA/FSA eligible',
     ],
     pro: [
       'Everything in Core, plus:',
       'One monthly BCBA consultation included',
-      '30 min/month Live AI Video coaching',
+      'Live Expert Video Sessions (with AI notes)',
       'Provider-ready clinical reports',
       '20% off all marketplace sessions',
       'Priority support',
+      'HSA/FSA eligible',
     ],
     proplus: [
       'Everything in Pro, plus:',
-      'Unlimited Live AI Video coaching',
-      'Monthly human consultation credit',
       'Unlimited children profiles',
+      'Unlimited expert video sessions',
+      'Monthly human consultation credit',
       '30% off all marketplace sessions',
       'Time-limited secure sharing links',
       'Advanced analytics dashboard',
       'Dedicated support channel',
+      'Perfect for families with multiple children',
     ],
   };
 
   return descriptions[tier] || descriptions.free;
+}
+
+// Check if tier has free trial available
+export function hasFreeTrialAvailable(tier: TierType): boolean {
+  return tierPricing[tier]?.hasTrial === true;
+}
+
+// Get trial duration in days
+export function getTrialDurationDays(): number {
+  return TRIAL_CONFIG.durationDays;
+}
+
+// Check if tier is HSA/FSA eligible
+export function isHSAFSAEligible(tier: TierType | undefined): boolean {
+  if (!tier) return false;
+  return HSA_FSA_CONFIG.eligibleTiers.includes(tier);
+}
+
+// Get HSA/FSA eligibility note
+export function getHSAFSANote(): string {
+  return HSA_FSA_CONFIG.eligibilityNote;
 }
 
 // Get AI message limits per tier
@@ -282,11 +539,11 @@ export function getRecommendedTier(): TierType {
   return 'core';
 }
 
-// Get upgrade path from current tier
+// Get upgrade path from current tier (simplified: Free → Core → Pro → Family Plan)
 export function getUpgradePath(currentTier: TierType): TierType | null {
   const upgradePaths: Record<TierType, TierType | null> = {
-    free: 'starter',
-    starter: 'core',
+    free: 'core',      // Skip Starter, go directly to Core
+    starter: 'core',   // Legacy: Starter → Core (effectively same tier now)
     core: 'pro',
     pro: 'proplus',
     proplus: null,
@@ -315,10 +572,38 @@ export function includesBCBAConsult(tier: TierType | undefined): boolean {
 export function getMaxChildren(tier: TierType | undefined): number | null {
   const limits: Record<TierType, number | null> = {
     free: 1,
-    starter: 1,
+    starter: 3,    // Legacy: same as Core
     core: 3,
     pro: 3,
-    proplus: null, // unlimited
+    proplus: null, // unlimited (Family Plan)
   };
   return tier ? limits[tier] : 1;
+}
+
+// Alias for hasTierFeature (used in many components)
+export function hasFeature(tier: TierType | undefined, feature: string): boolean {
+  return hasTierFeature(tier, feature);
+}
+
+// Get active tiers for pricing display (excludes deprecated Starter)
+export function getActiveTiers(): TierType[] {
+  return ['free', 'core', 'pro', 'proplus'];
+}
+
+// Get tier marketing tagline
+export function getTierTagline(tier: TierType): string {
+  const taglines: Record<TierType, string> = {
+    free: 'Get started free',
+    starter: 'Start your journey', // Legacy
+    core: 'Most popular',
+    pro: 'For serious progress',
+    proplus: 'Perfect for families',
+  };
+  return taglines[tier] || '';
+}
+
+// Check if tier qualifies for trial
+export function qualifiesForTrial(tier: TierType | undefined): boolean {
+  // Only Free tier users qualify for the 7-day trial
+  return tier === 'free' || !tier;
 }

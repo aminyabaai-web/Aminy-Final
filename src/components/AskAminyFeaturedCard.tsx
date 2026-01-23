@@ -32,7 +32,7 @@ export function AskAminyFeaturedCard({
       {/* Premium Badge */}
       <div className="absolute top-4 right-4 flex items-center gap-1 px-3 py-1 bg-accent/10 rounded-full text-xs font-medium text-accent">
         <Zap className="w-3 h-3" />
-        ChatGPT-Level
+        Advanced AI
       </div>
 
       {/* Header */}
@@ -76,7 +76,7 @@ export function AskAminyFeaturedCard({
       <div className="mb-4 p-3 bg-accent/5 rounded-lg border border-accent/10">
         <div className="flex items-center gap-2 mb-2">
           <Sparkles className="w-4 h-4 text-accent" />
-          <span className="text-sm font-medium text-accent">ChatGPT-Level Features:</span>
+          <span className="text-sm font-medium text-accent">Advanced AI Features:</span>
         </div>
         <div className="flex flex-wrap gap-2 text-xs">
           <span className="bg-accent/10 text-accent px-2 py-1 rounded-full">Real-time streaming</span>
@@ -134,7 +134,7 @@ export function useAskAminyFeatured() {
 
   const getFeatureLevel = () => {
     if (isEnabled('contextDetection')) return 'full-ai';
-    if (isFullyEnhanced()) return 'chatgpt-level';
+    if (isFullyEnhanced()) return 'advanced';
     if (isEnabled('enhancedFloatingButton')) return 'enhanced';
     return 'basic';
   };

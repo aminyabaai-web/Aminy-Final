@@ -70,7 +70,7 @@ export function AskAminyPromotion({
       {isEnhanced && (
         <div className="absolute top-4 right-4 flex items-center gap-1 px-2 py-1 bg-accent/10 rounded-full text-xs font-medium text-accent">
           <Zap className="w-3 h-3" />
-          {hasAdvancedFeatures ? 'ChatGPT-Level' : 'Enhanced'}
+          {hasAdvancedFeatures ? 'Advanced AI' : 'Enhanced'}
         </div>
       )}
 
@@ -184,7 +184,7 @@ export function useAskAminyPromotion() {
 
   const getPromotionLevel = () => {
     if (isEnabled('contextDetection')) return 'full-ai';
-    if (isEnabled('advancedStreaming') || isEnabled('contextAwareResponses')) return 'chatgpt-level';
+    if (isEnabled('advancedStreaming') || isEnabled('contextAwareResponses')) return 'advanced';
     if (isEnabled('enhancedFloatingButton')) return 'enhanced';
     return 'basic';
   };

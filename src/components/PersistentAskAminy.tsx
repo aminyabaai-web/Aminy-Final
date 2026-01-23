@@ -45,7 +45,7 @@ export function PersistentAskAminy({
   const [isMinimized, setIsMinimized] = useState(false);
   const [conversationId] = useState(() => `conv-${Date.now()}`);
   
-  // Enhanced state for ChatGPT-level experience
+  // Enhanced state for streaming experience
   const [isStreaming, setIsStreaming] = useState(false);
   const [streamingMessageId, setStreamingMessageId] = useState<string | null>(null);
   const [conversationTitle, setConversationTitle] = useState('');

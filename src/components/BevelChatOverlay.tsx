@@ -1,6 +1,6 @@
 /**
  * Bevel-Style Chat Overlay - Bottom sheet with blurred background
- * ChatGPT-style scrolling with fixed input at bottom
+ * Modern chat scrolling with fixed input at bottom
  */
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -224,7 +224,7 @@ Respond naturally, showing you understand where they are in the app. Be brief (2
               </div>
             </div>
 
-            {/* Messages Area - ChatGPT Style Scrolling */}
+            {/* Messages Area - Modern Chat Scrolling */}
             <div className="flex-1 overflow-y-auto px-6 py-6 space-y-4">
               {messages.length === 0 && (
                 <div className="flex flex-col items-center justify-center h-full text-center px-4">

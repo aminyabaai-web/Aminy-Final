@@ -29,10 +29,11 @@ describe('Tier Utilities', () => {
       expect(normalizeTierName('Free')).toBe('free');
     });
 
-    it('normalizes starter tier and aliases', () => {
-      expect(normalizeTierName('starter')).toBe('starter');
-      expect(normalizeTierName('basic')).toBe('starter');
-      expect(normalizeTierName('STARTER')).toBe('starter');
+    it('normalizes starter tier and aliases to core (legacy migration)', () => {
+      // Starter has been deprecated and maps to Core
+      expect(normalizeTierName('starter')).toBe('core');
+      expect(normalizeTierName('basic')).toBe('core');
+      expect(normalizeTierName('STARTER')).toBe('core');
     });
 
     it('normalizes core tier', () => {
@@ -61,10 +62,10 @@ describe('Tier Utilities', () => {
   describe('getTierDisplayName', () => {
     it('returns correct display names', () => {
       expect(getTierDisplayName('free')).toBe('Free');
-      expect(getTierDisplayName('starter')).toBe('Starter');
+      expect(getTierDisplayName('starter')).toBe('Core'); // Starter now maps to Core
       expect(getTierDisplayName('core')).toBe('Core');
       expect(getTierDisplayName('pro')).toBe('Pro');
-      expect(getTierDisplayName('proplus')).toBe('Pro+');
+      expect(getTierDisplayName('proplus')).toBe('Family Plan'); // Rebranded
     });
 
     it('handles undefined input', () => {
@@ -72,15 +73,15 @@ describe('Tier Utilities', () => {
     });
 
     it('normalizes and returns display name', () => {
-      expect(getTierDisplayName('basic')).toBe('Starter');
-      expect(getTierDisplayName('premium')).toBe('Pro+');
+      expect(getTierDisplayName('basic')).toBe('Core'); // Basic maps to Core
+      expect(getTierDisplayName('premium')).toBe('Family Plan'); // Premium maps to Family Plan
     });
   });
 
   describe('getTierPrice', () => {
     it('returns correct monthly prices', () => {
       expect(getTierPrice('free', 'monthly')).toBe(0);
-      expect(getTierPrice('starter', 'monthly')).toBe(6.99);
+      expect(getTierPrice('starter', 'monthly')).toBe(14.99); // Starter now same as Core
       expect(getTierPrice('core', 'monthly')).toBe(14.99);
       expect(getTierPrice('pro', 'monthly')).toBe(29.99);
       expect(getTierPrice('proplus', 'monthly')).toBe(49.99);
@@ -88,7 +89,7 @@ describe('Tier Utilities', () => {
 
     it('returns correct yearly prices', () => {
       expect(getTierPrice('free', 'yearly')).toBe(0);
-      expect(getTierPrice('starter', 'yearly')).toBe(59);
+      expect(getTierPrice('starter', 'yearly')).toBe(129); // Starter now same as Core
       expect(getTierPrice('core', 'yearly')).toBe(129);
       expect(getTierPrice('pro', 'yearly')).toBe(279);
       expect(getTierPrice('proplus', 'yearly')).toBe(479);
@@ -102,7 +103,7 @@ describe('Tier Utilities', () => {
   describe('getTierYearlySavings', () => {
     it('returns correct savings percentages', () => {
       expect(getTierYearlySavings('free')).toBe(0);
-      expect(getTierYearlySavings('starter')).toBe(30);
+      expect(getTierYearlySavings('starter')).toBe(28); // Starter now same as Core
       expect(getTierYearlySavings('core')).toBe(28);
       expect(getTierYearlySavings('pro')).toBe(22);
       expect(getTierYearlySavings('proplus')).toBe(20);
@@ -255,10 +256,10 @@ describe('Tier Utilities', () => {
   describe('getMaxChildren', () => {
     it('returns correct limits', () => {
       expect(getMaxChildren('free')).toBe(1);
-      expect(getMaxChildren('starter')).toBe(1);
+      expect(getMaxChildren('starter')).toBe(3); // Starter now same as Core
       expect(getMaxChildren('core')).toBe(3);
       expect(getMaxChildren('pro')).toBe(3);
-      expect(getMaxChildren('proplus')).toBeNull(); // unlimited
+      expect(getMaxChildren('proplus')).toBeNull(); // unlimited (Family Plan)
     });
   });
 
@@ -269,9 +270,9 @@ describe('Tier Utilities', () => {
   });
 
   describe('getUpgradePath', () => {
-    it('returns correct upgrade paths', () => {
-      expect(getUpgradePath('free')).toBe('starter');
-      expect(getUpgradePath('starter')).toBe('core');
+    it('returns correct upgrade paths (simplified: Free → Core → Pro → Family Plan)', () => {
+      expect(getUpgradePath('free')).toBe('core'); // Skip Starter, go to Core
+      expect(getUpgradePath('starter')).toBe('core'); // Legacy: same tier
       expect(getUpgradePath('core')).toBe('pro');
       expect(getUpgradePath('pro')).toBe('proplus');
       expect(getUpgradePath('proplus')).toBeNull();

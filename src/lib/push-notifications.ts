@@ -1,6 +1,6 @@
 /**
  * Push Notifications Infrastructure
- * Enables true "proactive outreach" - the key ChatGPT differentiator
+ * Enables true "proactive outreach" - Aminy's key differentiator
  *
  * Architecture:
  * 1. Web Push API for browser notifications

@@ -48,7 +48,7 @@ export interface FeatureFlags {
 // Ask Aminy Centerpiece Configuration - Premium experience for all users
 const DEFAULT_FLAGS: FeatureFlags = {
   enhancedFloatingButton: true,  // Always enhanced
-  contextAwareResponses: true,   // ChatGPT-level responses
+  contextAwareResponses: true,   // Advanced AI responses
   advancedStreaming: true,       // Real-time streaming
   conversationPersistence: true, // Persistent conversations
   analyticsTracking: true,       // Smart insights
@@ -176,7 +176,7 @@ class FeatureFlagManager {
   enablePhase3() {
     this.enable('contextAwareResponses');
     this.enable('advancedStreaming');
-    devLog('Ask Aminy Phase 3 (ChatGPT-Level) enabled');
+    devLog('Ask Aminy Phase 3 (Advanced AI) enabled');
   }
 
   enablePhase4() {

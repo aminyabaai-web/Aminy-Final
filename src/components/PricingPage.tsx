@@ -4,16 +4,15 @@ import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Check, X, Sparkles, Target, Stethoscope, Heart, Shield, MessageCircle, BarChart3, FileText, Bell, Users } from 'lucide-react';
 
-// ChatGPT vs Aminy comparison data
-const CHATGPT_COMPARISON = [
-  { feature: 'Remembers your child over time', aminy: true, chatgpt: false },
-  { feature: 'Tracks progress automatically', aminy: true, chatgpt: false },
-  { feature: 'Creates payer-ready reports', aminy: true, chatgpt: false },
-  { feature: 'Reaches out proactively', aminy: true, chatgpt: false },
-  { feature: 'Shares with care team (BCBA, therapists)', aminy: true, chatgpt: false },
-  { feature: 'HIPAA-ready infrastructure', aminy: true, chatgpt: false },
-  { feature: 'Visual routines for kids (Jr mode)', aminy: true, chatgpt: false },
-  { feature: 'General AI chat', aminy: true, chatgpt: true },
+// Aminy's unique advantages - what makes us different
+const AMINY_ADVANTAGES = [
+  { icon: Heart, feature: 'Remembers your child over time', description: 'Builds a complete picture of your child\'s journey' },
+  { icon: BarChart3, feature: 'Tracks progress automatically', description: 'ABA-style data collection without manual logging' },
+  { icon: FileText, feature: 'Creates payer-ready reports', description: 'Insurance-compliant documentation with one click' },
+  { icon: Bell, feature: 'Reaches out proactively', description: 'Daily nudges and scheduled check-ins' },
+  { icon: Users, feature: 'Shares with care team', description: 'Connect BCBAs, therapists, and family members' },
+  { icon: Shield, feature: 'HIPAA-ready infrastructure', description: 'Built for sensitive health data from day one' },
+  { icon: Sparkles, feature: 'Visual routines for kids', description: 'Aminy Jr mode with token boards and rewards' },
 ];
 
 interface PricingPageProps {
@@ -209,69 +208,38 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
           })}
         </div>
 
-        {/* ChatGPT Comparison Section */}
+        {/* Why Aminy Works Section */}
         <div className="mb-12">
           <div className="text-center mb-6">
+            <Badge className="bg-teal-100 text-teal-800 mb-3">Why Aminy Works</Badge>
             <h2 className="text-2xl font-semibold text-slate-900 mb-2">
-              Why not just use ChatGPT?
+              Built specifically for your family's journey
             </h2>
             <p className="text-slate-600">
-              Here's what Aminy does that ChatGPT fundamentally cannot:
+              Aminy isn't just AI chat—it's a complete support system designed for families navigating neurodivergence.
             </p>
           </div>
 
-          <Card className="overflow-hidden max-w-3xl mx-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="bg-slate-50 border-b">
-                  <th className="text-left p-4 font-semibold text-slate-900">Feature</th>
-                  <th className="p-4 font-semibold text-accent text-center">
-                    <div className="flex items-center justify-center gap-2">
-                      <Heart className="w-4 h-4" />
-                      Aminy
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
+            {AMINY_ADVANTAGES.map((item, index) => {
+              const Icon = item.icon;
+              return (
+                <Card key={index} className="p-4 hover:shadow-md transition-shadow">
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Icon className="w-5 h-5 text-teal-600" />
                     </div>
-                  </th>
-                  <th className="p-4 font-semibold text-slate-500 text-center">
-                    <div className="flex items-center justify-center gap-2">
-                      <MessageCircle className="w-4 h-4" />
-                      ChatGPT
+                    <div>
+                      <h3 className="font-medium text-slate-900 text-sm">{item.feature}</h3>
+                      <p className="text-xs text-slate-500 mt-1">{item.description}</p>
                     </div>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {CHATGPT_COMPARISON.map((row, index) => (
-                  <tr key={index} className="border-b last:border-0">
-                    <td className="p-4 text-sm text-slate-700">{row.feature}</td>
-                    <td className="p-4 text-center">
-                      {row.aminy ? (
-                        <span className="inline-flex items-center justify-center w-6 h-6 bg-green-100 rounded-full">
-                          <Check className="w-4 h-4 text-green-600" />
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center justify-center w-6 h-6 bg-slate-100 rounded-full">
-                          <X className="w-4 h-4 text-slate-400" />
-                        </span>
-                      )}
-                    </td>
-                    <td className="p-4 text-center">
-                      {row.chatgpt ? (
-                        <span className="inline-flex items-center justify-center w-6 h-6 bg-green-100 rounded-full">
-                          <Check className="w-4 h-4 text-green-600" />
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center justify-center w-6 h-6 bg-red-50 rounded-full">
-                          <X className="w-4 h-4 text-red-400" />
-                        </span>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </Card>
+                  </div>
+                </Card>
+              );
+            })}
+          </div>
 
-          <p className="text-center text-sm text-slate-500 mt-4 max-w-xl mx-auto">
+          <p className="text-center text-sm text-slate-500 mt-6 max-w-xl mx-auto">
             The companion is the hook. The clinical utility is the moat. We're building the system of record that clinics and payers want to integrate with.
           </p>
         </div>
