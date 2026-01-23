@@ -4,19 +4,19 @@ import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { Progress } from './ui/progress';
-import { 
-  BarChart3, 
-  TrendingUp, 
-  TrendingDown, 
-  Calendar, 
-  Target, 
-  Brain, 
-  Activity, 
-  Clock, 
-  Award, 
-  Download, 
-  Share2, 
-  Filter, 
+import {
+  BarChart3,
+  TrendingUp,
+  TrendingDown,
+  Calendar,
+  Target,
+  Brain,
+  Activity,
+  Clock,
+  Award,
+  Download,
+  Share2,
+  Filter,
   Sparkles,
   ChevronRight,
   FileText,
@@ -34,8 +34,11 @@ import {
   ArrowDown,
   Lock,
   Crown,
-  Shield
+  Shield,
+  Infinity
 } from 'lucide-react';
+import { TierType, hasFeature, getTierDisplayName, compareTiers } from '../lib/tier-utils';
+
 // Mock date functions for demo purposes
 const format = (date: Date, formatStr: string) => date.toLocaleDateString();
 const subDays = (date: Date, days: number) => new Date(date.getTime() - days * 24 * 60 * 60 * 1000);
@@ -47,7 +50,7 @@ interface ReportsTabProps {
     parentName?: string;
     childName?: string;
   };
-  userTier: string;
+  userTier: TierType;
   connectorData?: any;
   onPaywallTrigger?: () => void;
 }
@@ -215,24 +218,33 @@ export function ReportsTab({ userData, userTier, connectorData, onPaywallTrigger
     setIsGenerating(false);
   };
 
-  const getTierBadge = (requiredTier: string) => {
-    const tierColors = {
+  const getTierBadge = (requiredTier: TierType) => {
+    const tierColors: Record<TierType, string> = {
+      free: 'bg-gray-100 text-gray-700 border-gray-200',
+      starter: 'bg-green-100 text-green-700 border-green-200',
       core: 'bg-blue-100 text-blue-700 border-blue-200',
-      pro: 'bg-gradient-to-r from-teal-100 to-cyan-100 text-teal-700 border-teal-200'
+      pro: 'bg-gradient-to-r from-teal-100 to-cyan-100 text-teal-700 border-teal-200',
+      proplus: 'bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 border-purple-200'
     };
 
     return (
-      <Badge className={`ml-2 ${tierColors[requiredTier as keyof typeof tierColors]} flex items-center gap-1`}>
-        <Crown className="w-3 h-3" />
-        {requiredTier.charAt(0).toUpperCase() + requiredTier.slice(1)}
+      <Badge className={`ml-2 ${tierColors[requiredTier]} flex items-center gap-1`}>
+        {requiredTier === 'proplus' ? <Infinity className="w-3 h-3" /> : <Crown className="w-3 h-3" />}
+        {getTierDisplayName(requiredTier)}
       </Badge>
     );
   };
 
-  const isFeatureAvailable = (requiredTier: string) => {
-    const tierHierarchy = { starter: 0, core: 1, pro: 2 };
-    return tierHierarchy[userTier as keyof typeof tierHierarchy] >= tierHierarchy[requiredTier as keyof typeof tierHierarchy];
+  // Check tier access using tier-utils
+  const isFeatureAvailable = (requiredTier: TierType) => {
+    return compareTiers(userTier, requiredTier);
   };
+
+  // Check specific features
+  const hasFullReports = hasFeature(userTier, 'full-reports');
+  const hasClinicalReports = hasFeature(userTier, 'clinical-reports');
+  const hasVaultAccess = hasFeature(userTier, 'vault-access');
+  const hasExpiringShareLinks = hasFeature(userTier, 'expiring-share-links');
 
   return (
     <div className="space-y-6">
@@ -575,13 +587,13 @@ export function ReportsTab({ userData, userTier, connectorData, onPaywallTrigger
           {/* Export Options */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Core Tier Export */}
-            <Card className="export-card p-6">
+            <Card className={`export-card p-6 ${!hasFullReports ? 'opacity-75' : ''}`}>
               <div className="flex items-center gap-3 mb-4">
                 <div className="export-icon-parent p-2 rounded-lg">
                   <FileText className="w-6 h-6" />
                 </div>
                 <h3 className="font-semibold text-gray-900">Weekly Outcomes PDF</h3>
-                {getTierBadge('core')}
+                {!hasFullReports && getTierBadge('core')}
               </div>
               <p className="text-gray-600 text-sm mb-4">
                 Polished PDF with charts and plain-language narrative perfect for sharing with family.
@@ -600,27 +612,27 @@ export function ReportsTab({ userData, userTier, connectorData, onPaywallTrigger
                   <span>Watermarked, expires in 7 days</span>
                 </div>
               </div>
-              <Button 
-                className="w-full" 
-                onClick={() => isFeatureAvailable('core') ? handleExport('core', 'pdf') : onPaywallTrigger?.()}
-                disabled={isGenerating || !isFeatureAvailable('core')}
-                variant={!isFeatureAvailable('core') ? 'outline' : 'default'}
+              <Button
+                className="w-full"
+                onClick={() => hasFullReports ? handleExport('core', 'pdf') : onPaywallTrigger?.()}
+                disabled={isGenerating || !hasFullReports}
+                variant={!hasFullReports ? 'outline' : 'default'}
               >
-                {!isFeatureAvailable('core') && <Lock className="w-4 h-4 mr-2" />}
+                {!hasFullReports && <Lock className="w-4 h-4 mr-2" />}
                 <Download className="w-4 h-4 mr-2" />
-                Weekly Outcomes PDF (Core)
+                {hasFullReports ? 'Download Weekly Outcomes PDF' : `Upgrade to ${getTierDisplayName('core')}`}
               </Button>
             </Card>
 
             {/* Pro/Pro Plus Export */}
-            <Card className={`export-card p-6 ${!isFeatureAvailable('pro') ? 'export-card-disabled' : ''}`}>
+            <Card className={`export-card p-6 ${!hasClinicalReports ? 'export-card-disabled' : ''}`}>
               <div className="flex items-center gap-3 mb-4">
                 <div className="export-icon-clinical p-2 rounded-lg">
                   <Stethoscope className="w-6 h-6" />
                 </div>
                 <h3 className="font-semibold text-gray-900 flex items-center gap-2">
                   Provider-ready packet
-                  {!isFeatureAvailable('pro') && getTierBadge('pro')}
+                  {!hasClinicalReports && getTierBadge('pro')}
                 </h3>
               </div>
               <p className="text-gray-600 text-sm mb-4">
@@ -644,18 +656,52 @@ export function ReportsTab({ userData, userTier, connectorData, onPaywallTrigger
                   <span>Watermarked, expires in 7 days</span>
                 </div>
               </div>
-              <Button 
-                className="w-full" 
-                onClick={() => isFeatureAvailable('pro') ? handleExport('pro', 'pdf') : onPaywallTrigger?.()}
-                disabled={isGenerating || !isFeatureAvailable('pro')}
-                variant={!isFeatureAvailable('pro') ? 'outline' : 'default'}
+              <Button
+                className="w-full"
+                onClick={() => hasClinicalReports ? handleExport('pro', 'pdf') : onPaywallTrigger?.()}
+                disabled={isGenerating || !hasClinicalReports}
+                variant={!hasClinicalReports ? 'outline' : 'default'}
               >
-                {!isFeatureAvailable('pro') && <Lock className="w-4 h-4 mr-2" />}
+                {!hasClinicalReports && <Lock className="w-4 h-4 mr-2" />}
                 <Download className="w-4 h-4 mr-2" />
-                Provider-ready packet (Pro/Pro Plus)
+                Provider-ready packet (Pro/Pro+)
               </Button>
             </Card>
           </div>
+
+          {/* Pro Plus Exclusive - Expiring Share Links */}
+          {userTier === 'proplus' && (
+            <Card className="p-6 border-purple-200 bg-gradient-to-r from-purple-50 to-pink-50">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-2 rounded-lg bg-purple-100">
+                  <Shield className="w-6 h-6 text-purple-600" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-purple-900 flex items-center gap-2">
+                    Secure Expiring Share Links
+                    <Badge className="bg-purple-100 text-purple-700 border-purple-200">
+                      <Infinity className="w-3 h-3 mr-1" />
+                      Pro+
+                    </Badge>
+                  </h3>
+                  <p className="text-sm text-purple-700">
+                    Share reports with time-limited access links for maximum security
+                  </p>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <Button variant="outline" className="border-purple-200 text-purple-700 hover:bg-purple-100">
+                  24-hour Link
+                </Button>
+                <Button variant="outline" className="border-purple-200 text-purple-700 hover:bg-purple-100">
+                  7-day Link
+                </Button>
+                <Button variant="outline" className="border-purple-200 text-purple-700 hover:bg-purple-100">
+                  Custom Expiry
+                </Button>
+              </div>
+            </Card>
+          )}
 
           {/* Coverage Clarity Summaries */}
           {savedCoverageSummaries.length > 0 && (
@@ -688,7 +734,7 @@ export function ReportsTab({ userData, userTier, connectorData, onPaywallTrigger
           )}
 
           {/* Share Bar */}
-          {isFeatureAvailable('core') && (
+          {hasVaultAccess && (
             <Card className="reports-card p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
                 <Share2 className="w-5 h-5" />
@@ -712,7 +758,7 @@ export function ReportsTab({ userData, userTier, connectorData, onPaywallTrigger
           )}
 
           {/* Sharing Options */}
-          {isFeatureAvailable('core') && (
+          {hasVaultAccess && (
             <Card className="reports-card p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
                 <Share2 className="w-5 h-5" />
@@ -741,8 +787,8 @@ export function ReportsTab({ userData, userTier, connectorData, onPaywallTrigger
             </Card>
           )}
 
-          {/* Tier Upgrade Prompt for Starter */}
-          {userTier === 'starter' && (
+          {/* Tier Upgrade Prompt for Free/Starter */}
+          {(userTier === 'free' || userTier === 'starter') && (
             <Card className="tier-upgrade-card p-6">
               <div className="flex items-start gap-4">
                 <div className="tier-upgrade-icon p-2 rounded-lg">
@@ -751,10 +797,35 @@ export function ReportsTab({ userData, userTier, connectorData, onPaywallTrigger
                 <div className="flex-1">
                   <h3 className="font-semibold text-amber-900 mb-2">Unlock Advanced Reporting</h3>
                   <p className="text-amber-800 mb-4">
-                    Upgrade to Core or Pro for unlimited exports, CSV data downloads, and professional sharing features.
+                    Upgrade to {getTierDisplayName('core')} for weekly outcome PDFs, or {getTierDisplayName('pro')} for clinical reports and provider-ready packets.
                   </p>
-                  <Button onClick={onPaywallTrigger} className="bg-amber-600 hover:bg-amber-700">
-                    View Upgrade Options
+                  <div className="flex flex-wrap gap-2">
+                    <Button onClick={onPaywallTrigger} className="bg-amber-600 hover:bg-amber-700">
+                      View Upgrade Options
+                    </Button>
+                    <Badge variant="outline" className="text-amber-700 border-amber-300">
+                      {getTierDisplayName('core')} from $14.99/mo
+                    </Badge>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          )}
+
+          {/* Core users - prompt for Pro/Pro+ */}
+          {userTier === 'core' && (
+            <Card className="p-6 border-teal-200 bg-gradient-to-r from-teal-50 to-cyan-50">
+              <div className="flex items-start gap-4">
+                <div className="p-2 rounded-lg bg-teal-100">
+                  <Stethoscope className="w-6 h-6 text-teal-600" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-teal-900 mb-2">Unlock Clinical Reports</h3>
+                  <p className="text-teal-800 mb-4">
+                    Upgrade to {getTierDisplayName('pro')} for IEP-ready clinical reports, provider packets, and statistical analysis.
+                  </p>
+                  <Button onClick={onPaywallTrigger} className="bg-teal-600 hover:bg-teal-700 text-white">
+                    Upgrade to {getTierDisplayName('pro')}
                   </Button>
                 </div>
               </div>
