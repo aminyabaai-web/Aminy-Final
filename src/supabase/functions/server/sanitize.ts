@@ -179,3 +179,135 @@ export function sanitizePromoCode(code: string): string {
   // Allow only alphanumeric and common separators
   return code.toUpperCase().replace(/[^A-Z0-9\-_]/g, '').substring(0, 50);
 }
+
+/**
+ * Scrub PII from error messages before returning to client
+ * SECURITY: Prevents leaking sensitive data in error responses
+ */
+export function scrubPIIFromError(error: string | Error | unknown): string {
+  if (!error) {
+    return 'An unexpected error occurred';
+  }
+
+  let errorMessage = '';
+  if (error instanceof Error) {
+    errorMessage = error.message;
+  } else if (typeof error === 'string') {
+    errorMessage = error;
+  } else {
+    errorMessage = 'An unexpected error occurred';
+  }
+
+  // Scrub common PII patterns
+  let scrubbed = errorMessage
+    // Scrub email addresses
+    .replace(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g, '[email]')
+    // Scrub phone numbers (various formats)
+    .replace(/(\+?\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}/g, '[phone]')
+    // Scrub SSN patterns
+    .replace(/\b\d{3}[-]?\d{2}[-]?\d{4}\b/g, '[ssn]')
+    // Scrub credit card numbers (basic pattern)
+    .replace(/\b\d{4}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}\b/g, '[card]')
+    // Scrub UUIDs (often user IDs)
+    .replace(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/gi, '[id]')
+    // Scrub JWT tokens
+    .replace(/eyJ[a-zA-Z0-9_-]+\.eyJ[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+/g, '[token]')
+    // Scrub API keys that start with common prefixes
+    .replace(/\b(sk_|pk_|api_|key_|secret_)[a-zA-Z0-9_-]{20,}/g, '[api_key]')
+    // Scrub IP addresses
+    .replace(/\b(?:\d{1,3}\.){3}\d{1,3}\b/g, '[ip]')
+    // Scrub file paths that might contain usernames
+    .replace(/\/Users\/[^\/]+\//g, '/Users/[user]/')
+    .replace(/C:\\Users\\[^\\]+\\/gi, 'C:\\Users\\[user]\\');
+
+  // Truncate long error messages
+  if (scrubbed.length > 200) {
+    scrubbed = scrubbed.substring(0, 200) + '...';
+  }
+
+  return scrubbed;
+}
+
+/**
+ * Create safe error response with PII scrubbed
+ * SECURITY: Always use this for client-facing error responses
+ */
+export function createSafeErrorResponse(
+  error: string | Error | unknown,
+  code: string = 'ERROR',
+  status: number = 500
+): Response {
+  const safeMessage = scrubPIIFromError(error);
+
+  return new Response(
+    JSON.stringify({
+      error: safeMessage,
+      code,
+    }),
+    {
+      status,
+      headers: { 'Content-Type': 'application/json' },
+    }
+  );
+}
+
+/**
+ * Detect potential prompt injection attacks
+ * SECURITY: Returns true if suspicious patterns detected
+ */
+export function detectPromptInjection(input: string): {
+  suspicious: boolean;
+  patterns: string[];
+} {
+  if (!input || typeof input !== 'string') {
+    return { suspicious: false, patterns: [] };
+  }
+
+  const patterns: string[] = [];
+
+  // Check for role impersonation
+  if (/^(system|assistant|human):/im.test(input)) {
+    patterns.push('role_impersonation');
+  }
+
+  // Check for instruction override attempts
+  if (/ignore (all |previous |prior |above )?(instructions|rules|guidelines)/i.test(input)) {
+    patterns.push('instruction_override');
+  }
+
+  // Check for system prompt extraction
+  if (/what (are |is )?(your|the) (system |initial )?(prompt|instructions)/i.test(input)) {
+    patterns.push('prompt_extraction');
+  }
+
+  // Check for context delimiter injection
+  if (/\[SYSTEM\]|\[INST\]|<<SYS>>|<<\/SYS>>/i.test(input)) {
+    patterns.push('context_delimiter');
+  }
+
+  // Check for jailbreak keywords
+  if (/(DAN|do anything now|jailbreak|developer mode|unrestricted)/i.test(input)) {
+    patterns.push('jailbreak_attempt');
+  }
+
+  // Check for excessive special characters (possible obfuscation)
+  const specialCharRatio = (input.match(/[^\w\s.,!?'"()-]/g) || []).length / input.length;
+  if (specialCharRatio > 0.3) {
+    patterns.push('high_special_char_ratio');
+  }
+
+  // Check for Base64 encoded content (possible encoded injection)
+  if (/^[A-Za-z0-9+/]{50,}={0,2}$/.test(input.trim())) {
+    patterns.push('base64_content');
+  }
+
+  // Check for Unicode homograph attacks
+  if (/[\u0400-\u04FF\u0500-\u052F]/.test(input)) {
+    patterns.push('cyrillic_chars');
+  }
+
+  return {
+    suspicious: patterns.length > 0,
+    patterns,
+  };
+}

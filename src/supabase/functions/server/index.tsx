@@ -39,7 +39,7 @@ import {
   getAvailableSlots,
   verifyProvider,
 } from "./provider-routes.ts";
-import { sanitizeForAI, sanitizeMessages, sanitizeName } from "./sanitize.ts";
+import { sanitizeForAI, sanitizeMessages, sanitizeName, scrubPIIFromError, detectPromptInjection } from "./sanitize.ts";
 import {
   verifyAuth,
   verifyAuthAndFeature,
@@ -497,7 +497,9 @@ app.post("/make-server-8a022548/ai/brain", async (c) => {
       provider: aiConfig.provider
     });
   } catch (error) {
-    return c.json({ error: `Failed to process request: ${error.message || error}` }, 500);
+    // SECURITY: Scrub PII from error messages before returning to client
+    const safeError = scrubPIIFromError(error);
+    return c.json({ error: safeError, code: 'AI_PROCESSING_ERROR' }, 500);
   }
 });
 
@@ -555,6 +557,23 @@ app.post("/make-server-8a022548/ai/chat", async (c) => {
 
     if (!messages || !Array.isArray(messages)) {
       return c.json({ error: 'messages array is required' }, 400);
+    }
+
+    // SECURITY: Detect potential prompt injection attempts
+    // Log suspicious activity for security monitoring
+    for (const msg of messages) {
+      if (msg.role === 'user' && msg.content) {
+        const injectionCheck = detectPromptInjection(msg.content);
+        if (injectionCheck.suspicious) {
+          console.warn(`SECURITY: Potential prompt injection detected from ${rateLimitId}`, {
+            patterns: injectionCheck.patterns,
+            contentPreview: msg.content.substring(0, 100) + '...',
+            timestamp: new Date().toISOString(),
+          });
+          // Continue processing - sanitization will handle it
+          // But log for security monitoring
+        }
+      }
     }
 
     // SECURITY: Sanitize all user messages to prevent prompt injection
@@ -753,7 +772,9 @@ DON'T:
       },
     });
   } catch (error) {
-    return c.json({ error: `Failed to process request: ${error.message || error}` }, 500);
+    // SECURITY: Scrub PII from error messages before returning to client
+    const safeError = scrubPIIFromError(error);
+    return c.json({ error: safeError, code: 'AI_CHAT_ERROR' }, 500);
   }
 });
 
