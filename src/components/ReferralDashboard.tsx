@@ -1,0 +1,490 @@
+/**
+ * Referral Dashboard Component
+ * Shows referral code, tracking, rewards, and tier progress
+ */
+
+import React, { useState, useEffect } from 'react';
+import { motion } from 'motion/react';
+import { Card } from './ui/card';
+import { Button } from './ui/button';
+import { Badge } from './ui/badge';
+import { Progress } from './ui/progress';
+import {
+  Share2,
+  Copy,
+  Check,
+  Gift,
+  Users,
+  Trophy,
+  Clock,
+  ChevronRight,
+  Sparkles,
+  Star,
+  Crown,
+  Mail,
+  MessageCircle,
+  Link2,
+  QrCode,
+  CheckCircle,
+  AlertCircle,
+} from 'lucide-react';
+import {
+  Referral,
+  ReferralSummary,
+  ReferralTier,
+  REFERRAL_TIERS,
+  REFERRAL_PROGRAM_CONFIG,
+  getOrCreateReferralCode,
+  getUserReferrals,
+  getReferralSummary,
+  getReferralShareMessage,
+  getReferralQualificationDays,
+  generateMockReferrals,
+} from '../lib/referral-program';
+
+interface ReferralDashboardProps {
+  userId: string;
+  userName: string;
+  onShare?: (method: 'copy' | 'email' | 'sms' | 'qr') => void;
+}
+
+export function ReferralDashboard({
+  userId,
+  userName,
+  onShare,
+}: ReferralDashboardProps) {
+  const [referralCode, setReferralCode] = useState<string>('');
+  const [referrals, setReferrals] = useState<Referral[]>([]);
+  const [summary, setSummary] = useState<ReferralSummary | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [copied, setCopied] = useState(false);
+  const [showShareOptions, setShowShareOptions] = useState(false);
+
+  // Load referral data
+  useEffect(() => {
+    async function loadData() {
+      setLoading(true);
+      try {
+        // Get or create referral code
+        const codeData = await getOrCreateReferralCode(userId);
+        setReferralCode(codeData.code);
+
+        // Get referrals (use mock for demo)
+        const userReferrals = generateMockReferrals(userId);
+        setReferrals(userReferrals);
+
+        // Calculate summary
+        const referralSummary = getReferralSummary(userReferrals, codeData.code);
+        setSummary(referralSummary);
+      } catch (error) {
+        console.error('Error loading referral data:', error);
+      }
+      setLoading(false);
+    }
+
+    loadData();
+  }, [userId]);
+
+  // Copy referral link
+  const handleCopy = async () => {
+    const { url } = getReferralShareMessage(referralCode, userName);
+    await navigator.clipboard.writeText(url);
+    setCopied(true);
+    onShare?.('copy');
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  // Share via email
+  const handleEmailShare = () => {
+    const { title, body, url } = getReferralShareMessage(referralCode, userName);
+    const mailtoUrl = `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(body + '\n\n' + url)}`;
+    window.open(mailtoUrl);
+    onShare?.('email');
+  };
+
+  // Share via SMS
+  const handleSmsShare = () => {
+    const { body, url } = getReferralShareMessage(referralCode, userName);
+    const smsUrl = `sms:?body=${encodeURIComponent(body + ' ' + url)}`;
+    window.open(smsUrl);
+    onShare?.('sms');
+  };
+
+  if (loading) {
+    return (
+      <Card className="p-6 animate-pulse">
+        <div className="h-8 bg-gray-200 rounded w-1/2 mb-4" />
+        <div className="h-4 bg-gray-200 rounded w-3/4 mb-2" />
+        <div className="h-4 bg-gray-200 rounded w-1/2" />
+      </Card>
+    );
+  }
+
+  const getTierIcon = (tier: ReferralTier | null) => {
+    if (!tier) return <Star className="w-5 h-5" />;
+    switch (tier.name) {
+      case 'Ambassador':
+        return <Crown className="w-5 h-5" />;
+      case 'Champion':
+        return <Trophy className="w-5 h-5" />;
+      default:
+        return <Star className="w-5 h-5" />;
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+            <Gift className="w-6 h-6 text-teal-600" />
+            Refer & Earn
+          </h2>
+          <p className="text-sm text-gray-600">
+            Share Aminy with friends and earn rewards
+          </p>
+        </div>
+      </div>
+
+      {/* Referral Code Card */}
+      <Card className="p-5 bg-gradient-to-br from-teal-500 to-blue-600 text-white">
+        <div className="text-center mb-4">
+          <p className="text-teal-100 text-sm mb-2">Your Referral Code</p>
+          <div className="font-mono text-2xl font-bold tracking-wider">
+            {referralCode}
+          </div>
+        </div>
+
+        <div className="flex gap-2">
+          <Button
+            onClick={handleCopy}
+            variant="secondary"
+            className="flex-1 bg-white/20 hover:bg-white/30 text-white border-0"
+          >
+            {copied ? (
+              <>
+                <Check className="w-4 h-4 mr-2" />
+                Copied!
+              </>
+            ) : (
+              <>
+                <Copy className="w-4 h-4 mr-2" />
+                Copy Link
+              </>
+            )}
+          </Button>
+          <Button
+            onClick={() => setShowShareOptions(!showShareOptions)}
+            variant="secondary"
+            className="bg-white/20 hover:bg-white/30 text-white border-0"
+          >
+            <Share2 className="w-4 h-4" />
+          </Button>
+        </div>
+
+        {/* Share Options */}
+        {showShareOptions && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            className="mt-4 pt-4 border-t border-white/20"
+          >
+            <div className="grid grid-cols-3 gap-2">
+              <button
+                onClick={handleEmailShare}
+                className="flex flex-col items-center p-3 bg-white/10 rounded-lg hover:bg-white/20"
+              >
+                <Mail className="w-5 h-5 mb-1" />
+                <span className="text-xs">Email</span>
+              </button>
+              <button
+                onClick={handleSmsShare}
+                className="flex flex-col items-center p-3 bg-white/10 rounded-lg hover:bg-white/20"
+              >
+                <MessageCircle className="w-5 h-5 mb-1" />
+                <span className="text-xs">Text</span>
+              </button>
+              <button
+                onClick={() => onShare?.('qr')}
+                className="flex flex-col items-center p-3 bg-white/10 rounded-lg hover:bg-white/20"
+              >
+                <QrCode className="w-5 h-5 mb-1" />
+                <span className="text-xs">QR Code</span>
+              </button>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Reward Info */}
+        <div className="mt-4 p-3 bg-white/10 rounded-lg">
+          <div className="flex items-center gap-2 text-sm">
+            <Sparkles className="w-4 h-4 text-yellow-300" />
+            <span>
+              You get <strong>{REFERRAL_PROGRAM_CONFIG.referrerReward.description}</strong>
+            </span>
+          </div>
+          <div className="flex items-center gap-2 text-sm mt-1">
+            <Gift className="w-4 h-4 text-pink-300" />
+            <span>
+              Friend gets <strong>{REFERRAL_PROGRAM_CONFIG.referredReward.description}</strong>
+            </span>
+          </div>
+        </div>
+      </Card>
+
+      {/* Stats Grid */}
+      {summary && (
+        <div className="grid grid-cols-3 gap-3">
+          <Card className="p-3 text-center">
+            <Users className="w-5 h-5 mx-auto mb-1 text-blue-500" />
+            <div className="text-2xl font-bold text-gray-900">
+              {summary.totalReferrals}
+            </div>
+            <div className="text-xs text-gray-500">Total Referrals</div>
+          </Card>
+          <Card className="p-3 text-center">
+            <CheckCircle className="w-5 h-5 mx-auto mb-1 text-green-500" />
+            <div className="text-2xl font-bold text-gray-900">
+              {summary.qualifiedReferrals}
+            </div>
+            <div className="text-xs text-gray-500">Qualified</div>
+          </Card>
+          <Card className="p-3 text-center">
+            <Gift className="w-5 h-5 mx-auto mb-1 text-purple-500" />
+            <div className="text-2xl font-bold text-gray-900">
+              {summary.totalRewardsEarned}
+            </div>
+            <div className="text-xs text-gray-500">Free Months</div>
+          </Card>
+        </div>
+      )}
+
+      {/* Tier Progress */}
+      {summary && (
+        <Card className="p-4">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              {getTierIcon(summary.currentTier)}
+              <span className="font-semibold text-gray-900">
+                {summary.currentTier?.name || 'Getting Started'}
+              </span>
+              {summary.currentTier && (
+                <Badge
+                  className="text-white"
+                  style={{ backgroundColor: summary.currentTier.badgeColor }}
+                >
+                  {summary.currentTier.badgeIcon}
+                </Badge>
+              )}
+            </div>
+            {summary.nextTier && (
+              <span className="text-sm text-gray-500">
+                {summary.referralsToNextTier} to {summary.nextTier.name}
+              </span>
+            )}
+          </div>
+
+          {summary.nextTier && (
+            <>
+              <Progress
+                value={
+                  ((summary.qualifiedReferrals - (summary.currentTier?.minReferrals || 0)) /
+                    (summary.nextTier.minReferrals - (summary.currentTier?.minReferrals || 0))) *
+                  100
+                }
+                className="h-2 mb-3"
+              />
+              <div className="flex justify-between text-xs text-gray-500">
+                <span>{summary.qualifiedReferrals} referrals</span>
+                <span>{summary.nextTier.minReferrals} for {summary.nextTier.name}</span>
+              </div>
+            </>
+          )}
+
+          {/* Current Tier Perks */}
+          {summary.currentTier && (
+            <div className="mt-4 pt-4 border-t">
+              <p className="text-sm font-medium text-gray-700 mb-2">Your Perks:</p>
+              <div className="space-y-1">
+                {summary.currentTier.perks.map((perk, i) => (
+                  <div key={i} className="flex items-center gap-2 text-sm text-gray-600">
+                    <Check className="w-4 h-4 text-green-500" />
+                    {perk}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </Card>
+      )}
+
+      {/* Tier Roadmap */}
+      <Card className="p-4">
+        <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+          <Trophy className="w-5 h-5 text-amber-500" />
+          Tier Roadmap
+        </h3>
+        <div className="space-y-3">
+          {REFERRAL_TIERS.map((tier, index) => {
+            const isCurrentTier = summary?.currentTier?.name === tier.name;
+            const isUnlocked = summary?.qualifiedReferrals
+              ? summary.qualifiedReferrals >= tier.minReferrals
+              : false;
+
+            return (
+              <div
+                key={tier.name}
+                className={`p-3 rounded-lg border ${
+                  isCurrentTier
+                    ? 'border-teal-500 bg-teal-50'
+                    : isUnlocked
+                    ? 'border-green-200 bg-green-50'
+                    : 'border-gray-200 bg-gray-50'
+                }`}
+              >
+                <div className="flex items-center justify-between mb-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">{tier.badgeIcon}</span>
+                    <span className="font-medium text-gray-900">{tier.name}</span>
+                    {isCurrentTier && (
+                      <Badge className="bg-teal-500 text-white text-xs">Current</Badge>
+                    )}
+                    {isUnlocked && !isCurrentTier && (
+                      <CheckCircle className="w-4 h-4 text-green-500" />
+                    )}
+                  </div>
+                  <span className="text-sm text-gray-500">
+                    {tier.minReferrals}+ referrals
+                  </span>
+                </div>
+                <p className="text-xs text-gray-600">
+                  {tier.perks[tier.perks.length - 1]}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      </Card>
+
+      {/* Recent Referrals */}
+      <Card className="p-4">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="font-semibold text-gray-900">Recent Referrals</h3>
+          <Button variant="ghost" size="sm">
+            View All
+            <ChevronRight className="w-4 h-4 ml-1" />
+          </Button>
+        </div>
+
+        {referrals.length === 0 ? (
+          <div className="text-center py-6">
+            <Users className="w-10 h-10 mx-auto mb-2 text-gray-300" />
+            <p className="text-sm text-gray-500">
+              No referrals yet. Share your code to get started!
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-2">
+            {referrals.slice(0, 5).map((referral) => {
+              const daysRemaining = getReferralQualificationDays(referral);
+
+              return (
+                <div
+                  key={referral.id}
+                  className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                >
+                  <div className="flex items-center gap-3">
+                    <div
+                      className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                        referral.status === 'rewarded'
+                          ? 'bg-green-100'
+                          : referral.status === 'qualified'
+                          ? 'bg-blue-100'
+                          : 'bg-gray-200'
+                      }`}
+                    >
+                      {referral.status === 'rewarded' ? (
+                        <Gift className="w-4 h-4 text-green-600" />
+                      ) : referral.status === 'qualified' ? (
+                        <CheckCircle className="w-4 h-4 text-blue-600" />
+                      ) : (
+                        <Clock className="w-4 h-4 text-gray-500" />
+                      )}
+                    </div>
+                    <div>
+                      <div className="font-medium text-sm text-gray-900">
+                        Friend joined via your link
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        {new Date(referral.createdAt).toLocaleDateString()}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="text-right">
+                    {referral.status === 'rewarded' ? (
+                      <Badge className="bg-green-100 text-green-700">
+                        +1 month earned
+                      </Badge>
+                    ) : referral.status === 'qualified' ? (
+                      <Badge className="bg-blue-100 text-blue-700">
+                        Qualified
+                      </Badge>
+                    ) : (
+                      <Badge className="bg-amber-100 text-amber-700">
+                        {daysRemaining}d to qualify
+                      </Badge>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </Card>
+
+      {/* How It Works */}
+      <Card className="p-4 bg-blue-50 border-blue-200">
+        <h3 className="font-semibold text-blue-900 mb-3">How It Works</h3>
+        <div className="space-y-3">
+          <div className="flex items-start gap-3">
+            <div className="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm flex-shrink-0">
+              1
+            </div>
+            <div>
+              <p className="font-medium text-blue-900">Share your code</p>
+              <p className="text-sm text-blue-700">
+                Send your unique link to friends with neurodivergent children
+              </p>
+            </div>
+          </div>
+          <div className="flex items-start gap-3">
+            <div className="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm flex-shrink-0">
+              2
+            </div>
+            <div>
+              <p className="font-medium text-blue-900">Friend joins</p>
+              <p className="text-sm text-blue-700">
+                They sign up for a paid plan using your code and get ${REFERRAL_PROGRAM_CONFIG.referredReward.value} credit
+              </p>
+            </div>
+          </div>
+          <div className="flex items-start gap-3">
+            <div className="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm flex-shrink-0">
+              3
+            </div>
+            <div>
+              <p className="font-medium text-blue-900">You earn</p>
+              <p className="text-sm text-blue-700">
+                After {REFERRAL_PROGRAM_CONFIG.qualificationPeriodDays} days, you get 1 free month
+              </p>
+            </div>
+          </div>
+        </div>
+      </Card>
+    </div>
+  );
+}
+
+export default ReferralDashboard;

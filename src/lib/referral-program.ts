@@ -195,3 +195,183 @@ export function getReferralSummary(
     referralCode,
   };
 }
+
+// ============================================================================
+// PERSISTENCE LAYER (Local Storage for MVP, would be Supabase in production)
+// ============================================================================
+
+const STORAGE_KEYS = {
+  REFERRAL_CODES: 'aminy_referral_codes',
+  REFERRALS: 'aminy_referrals',
+};
+
+function getFromStorage<T>(key: string): T[] {
+  if (typeof window === 'undefined') return [];
+  const data = localStorage.getItem(key);
+  return data ? JSON.parse(data) : [];
+}
+
+function saveToStorage<T>(key: string, data: T[]): void {
+  if (typeof window === 'undefined') return;
+  localStorage.setItem(key, JSON.stringify(data));
+}
+
+/**
+ * Create or get existing referral code for user
+ */
+export async function getOrCreateReferralCode(userId: string): Promise<ReferralCode> {
+  const codes = getFromStorage<ReferralCode>(STORAGE_KEYS.REFERRAL_CODES);
+
+  // Check for existing code
+  const existingCode = codes.find(c => c.userId === userId && c.isActive);
+  if (existingCode) {
+    return existingCode;
+  }
+
+  // Create new code
+  const newCode: ReferralCode = {
+    code: generateReferralCode(userId),
+    userId,
+    createdAt: new Date().toISOString(),
+    currentUses: 0,
+    isActive: true,
+  };
+
+  codes.push(newCode);
+  saveToStorage(STORAGE_KEYS.REFERRAL_CODES, codes);
+
+  return newCode;
+}
+
+/**
+ * Track a new referral
+ */
+export async function trackReferral(
+  referrerCode: string,
+  referredUserId: string
+): Promise<Referral | null> {
+  const codes = getFromStorage<ReferralCode>(STORAGE_KEYS.REFERRAL_CODES);
+  const referrals = getFromStorage<Referral>(STORAGE_KEYS.REFERRALS);
+
+  // Find the referral code
+  const codeData = codes.find(c => c.code === referrerCode && c.isActive);
+  if (!codeData) {
+    return null; // Invalid code
+  }
+
+  // Check if this user was already referred
+  const existingReferral = referrals.find(r => r.referredUserId === referredUserId);
+  if (existingReferral) {
+    return existingReferral; // Already referred
+  }
+
+  // Create new referral
+  const newReferral: Referral = {
+    id: `ref-${Date.now()}`,
+    referrerUserId: codeData.userId,
+    referredUserId,
+    referralCode: referrerCode,
+    status: 'pending',
+    createdAt: new Date().toISOString(),
+  };
+
+  referrals.push(newReferral);
+  saveToStorage(STORAGE_KEYS.REFERRALS, referrals);
+
+  // Increment code usage
+  const codeIndex = codes.findIndex(c => c.code === referrerCode);
+  if (codeIndex !== -1) {
+    codes[codeIndex].currentUses++;
+    saveToStorage(STORAGE_KEYS.REFERRAL_CODES, codes);
+  }
+
+  return newReferral;
+}
+
+/**
+ * Get all referrals for a user (as referrer)
+ */
+export async function getUserReferrals(userId: string): Promise<Referral[]> {
+  const referrals = getFromStorage<Referral>(STORAGE_KEYS.REFERRALS);
+  return referrals
+    .filter(r => r.referrerUserId === userId)
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+}
+
+/**
+ * Mark a referral as qualified (after 14 days on paid plan)
+ */
+export async function qualifyReferral(referralId: string): Promise<Referral | null> {
+  const referrals = getFromStorage<Referral>(STORAGE_KEYS.REFERRALS);
+  const index = referrals.findIndex(r => r.id === referralId);
+
+  if (index === -1) return null;
+
+  referrals[index] = {
+    ...referrals[index],
+    status: 'qualified',
+    qualificationDate: new Date().toISOString(),
+  };
+
+  saveToStorage(STORAGE_KEYS.REFERRALS, referrals);
+  return referrals[index];
+}
+
+/**
+ * Apply rewards for a qualified referral
+ */
+export async function applyReferralRewards(referralId: string): Promise<Referral | null> {
+  const referrals = getFromStorage<Referral>(STORAGE_KEYS.REFERRALS);
+  const index = referrals.findIndex(r => r.id === referralId);
+
+  if (index === -1 || referrals[index].status !== 'qualified') return null;
+
+  const now = new Date().toISOString();
+
+  referrals[index] = {
+    ...referrals[index],
+    status: 'rewarded',
+    rewardedAt: now,
+    referrerReward: {
+      ...REFERRAL_PROGRAM_CONFIG.referrerReward,
+      appliedAt: now,
+    },
+    referredReward: {
+      ...REFERRAL_PROGRAM_CONFIG.referredReward,
+      appliedAt: now,
+    },
+  };
+
+  saveToStorage(STORAGE_KEYS.REFERRALS, referrals);
+  return referrals[index];
+}
+
+/**
+ * Generate mock referrals for demo
+ */
+export function generateMockReferrals(userId: string): Referral[] {
+  const statuses: Referral['status'][] = ['pending', 'pending', 'qualified', 'rewarded', 'rewarded'];
+  const names = ['Alex M.', 'Jamie T.', 'Morgan K.', 'Casey L.', 'Taylor P.'];
+
+  return statuses.map((status, i) => {
+    const createdAt = new Date();
+    createdAt.setDate(createdAt.getDate() - (i * 7));
+
+    return {
+      id: `mock-ref-${i}`,
+      referrerUserId: userId,
+      referredUserId: `referred-user-${i}`,
+      referralCode: `AMINY-${userId.slice(0, 4).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`,
+      status,
+      qualificationDate: status !== 'pending' ? createdAt.toISOString() : undefined,
+      rewardedAt: status === 'rewarded' ? createdAt.toISOString() : undefined,
+      referrerReward: status === 'rewarded' ? {
+        type: 'free-month' as const,
+        value: 1,
+        description: '1 free month',
+        appliedAt: createdAt.toISOString(),
+      } : undefined,
+      createdAt: createdAt.toISOString(),
+    };
+  });
+}

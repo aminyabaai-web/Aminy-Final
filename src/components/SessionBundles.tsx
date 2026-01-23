@@ -18,25 +18,93 @@ import {
   Sparkles,
   Users,
   ChevronRight,
+  Loader2,
+  CreditCard,
 } from 'lucide-react';
 import { SESSION_BUNDLES, SessionBundle } from '../types/telehealth';
 
+// Stripe Price IDs (would be environment variables in production)
+const BUNDLE_STRIPE_PRICES: Record<string, string> = {
+  'consult-4': 'price_consult4_bundle',
+  'consult-8': 'price_consult8_bundle',
+  'deep-review-3': 'price_deepreview3_bundle',
+  'deep-review-6': 'price_deepreview6_bundle',
+  'mixed-starter': 'price_mixed_starter_bundle',
+};
+
 interface SessionBundlesProps {
   onSelectBundle: (bundle: SessionBundle) => void;
+  onPurchaseBundle?: (bundle: SessionBundle) => Promise<void>;
+  userId?: string;
   userTier?: string;
   showCompact?: boolean;
 }
 
 export function SessionBundles({
   onSelectBundle,
+  onPurchaseBundle,
+  userId,
   userTier,
   showCompact = false,
 }: SessionBundlesProps) {
   const [selectedBundle, setSelectedBundle] = useState<string | null>(null);
+  const [purchasingBundle, setPurchasingBundle] = useState<string | null>(null);
 
   const handleSelect = (bundle: SessionBundle) => {
     setSelectedBundle(bundle.id);
     onSelectBundle(bundle);
+  };
+
+  // Handle Stripe checkout
+  const handlePurchase = async (bundle: SessionBundle) => {
+    if (!userId) {
+      // Redirect to login/signup
+      alert('Please sign in to purchase a bundle');
+      return;
+    }
+
+    setPurchasingBundle(bundle.id);
+
+    try {
+      if (onPurchaseBundle) {
+        await onPurchaseBundle(bundle);
+      } else {
+        // Default Stripe checkout flow
+        const response = await fetch('/api/stripe/create-bundle-checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            bundleId: bundle.id,
+            priceId: BUNDLE_STRIPE_PRICES[bundle.id],
+            userId,
+            bundlePrice: bundle.bundlePrice,
+            consultCredits: bundle.consultSessions,
+            deepReviewCredits: bundle.deepReviewSessions,
+            validityDays: bundle.validityDays,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to create checkout session');
+        }
+
+        const { checkoutUrl } = await response.json();
+
+        // Redirect to Stripe checkout
+        if (checkoutUrl) {
+          window.location.href = checkoutUrl;
+        } else {
+          // For demo, show success message
+          alert(`Bundle "${bundle.name}" purchased successfully! In production, this would redirect to Stripe checkout.`);
+          setSelectedBundle(bundle.id);
+        }
+      }
+    } catch (error) {
+      console.error('Error purchasing bundle:', error);
+      alert('Failed to initiate checkout. Please try again.');
+    } finally {
+      setPurchasingBundle(null);
+    }
   };
 
   if (showCompact) {
@@ -191,13 +259,28 @@ export function SessionBundles({
 
                 {/* CTA */}
                 <Button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handlePurchase(bundle);
+                  }}
+                  disabled={purchasingBundle === bundle.id}
                   className={`w-full ${
                     bundle.recommended
                       ? 'bg-purple-600 hover:bg-purple-700'
                       : 'bg-teal-600 hover:bg-teal-700'
                   }`}
                 >
-                  Select Bundle
+                  {purchasingBundle === bundle.id ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Processing...
+                    </>
+                  ) : (
+                    <>
+                      <CreditCard className="w-4 h-4 mr-2" />
+                      Purchase Bundle
+                    </>
+                  )}
                 </Button>
               </Card>
             </motion.div>

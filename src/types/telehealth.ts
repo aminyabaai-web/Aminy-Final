@@ -701,28 +701,108 @@ export interface Superbill {
   status: 'generated' | 'downloaded' | 'submitted';
 }
 
-// Common CPT codes for ABA/behavior services
+// Common CPT codes for clinical services
 export const COMMON_CPT_CODES = {
+  // ============================================================================
+  // ABA (Applied Behavior Analysis) - Requires BCBA/RBT
+  // ============================================================================
   // ABA Assessment
-  '97151': { description: 'Behavior identification assessment', defaultPrice: 175 },
-  '97152': { description: 'Behavior identification supporting assessment', defaultPrice: 150 },
+  '97151': { description: 'Behavior identification assessment', defaultPrice: 175, category: 'ABA', requiresLicense: 'BCBA' },
+  '97152': { description: 'Behavior identification supporting assessment', defaultPrice: 150, category: 'ABA', requiresLicense: 'BCBA/RBT' },
   // ABA Treatment
-  '97153': { description: 'Adaptive behavior treatment by protocol', defaultPrice: 65 },
-  '97154': { description: 'Group adaptive behavior treatment', defaultPrice: 35 },
-  '97155': { description: 'Adaptive behavior treatment with protocol modification', defaultPrice: 85 },
-  '97156': { description: 'Family adaptive behavior treatment guidance', defaultPrice: 75 },
-  '97157': { description: 'Multiple-family group adaptive behavior treatment', defaultPrice: 45 },
-  '97158': { description: 'Group adaptive behavior treatment with protocol modification', defaultPrice: 55 },
-  // Telehealth modifier
-  '95': { description: 'Synchronous telemedicine service modifier', defaultPrice: 0 },
-  // Family/Parent training
-  'T1027': { description: 'Family training and counseling', defaultPrice: 65 },
-  // General counseling (for non-ABA services)
-  '90832': { description: 'Psychotherapy, 30 min', defaultPrice: 75 },
-  '90834': { description: 'Psychotherapy, 45 min', defaultPrice: 100 },
-  '90837': { description: 'Psychotherapy, 60 min', defaultPrice: 150 },
-  '90847': { description: 'Family psychotherapy with patient', defaultPrice: 150 },
+  '97153': { description: 'Adaptive behavior treatment by protocol', defaultPrice: 65, category: 'ABA', requiresLicense: 'RBT' },
+  '97154': { description: 'Group adaptive behavior treatment', defaultPrice: 35, category: 'ABA', requiresLicense: 'RBT' },
+  '97155': { description: 'Adaptive behavior treatment with protocol modification', defaultPrice: 85, category: 'ABA', requiresLicense: 'BCBA' },
+  '97156': { description: 'Family adaptive behavior treatment guidance', defaultPrice: 75, category: 'ABA', requiresLicense: 'BCBA' },
+  '97157': { description: 'Multiple-family group adaptive behavior treatment', defaultPrice: 45, category: 'ABA', requiresLicense: 'BCBA' },
+  '97158': { description: 'Group adaptive behavior treatment with protocol modification', defaultPrice: 55, category: 'ABA', requiresLicense: 'BCBA' },
+
+  // ============================================================================
+  // SPEECH-LANGUAGE PATHOLOGY - Requires SLP (CCC-SLP)
+  // ============================================================================
+  '92507': { description: 'Treatment of speech, language, voice, communication, and/or auditory processing disorder', defaultPrice: 125, category: 'Speech Therapy', requiresLicense: 'SLP' },
+  '92521': { description: 'Evaluation of speech fluency', defaultPrice: 175, category: 'Speech Therapy', requiresLicense: 'SLP' },
+  '92522': { description: 'Evaluation of speech sound production', defaultPrice: 150, category: 'Speech Therapy', requiresLicense: 'SLP' },
+  '92523': { description: 'Evaluation of speech sound production with language comprehension and expression', defaultPrice: 200, category: 'Speech Therapy', requiresLicense: 'SLP' },
+  '92524': { description: 'Behavioral and qualitative analysis of voice and resonance', defaultPrice: 165, category: 'Speech Therapy', requiresLicense: 'SLP' },
+  '92526': { description: 'Treatment of swallowing dysfunction and/or oral function for feeding', defaultPrice: 125, category: 'Speech Therapy', requiresLicense: 'SLP' },
+  '92609': { description: 'Therapeutic services for use of speech-generating device', defaultPrice: 150, category: 'Speech Therapy', requiresLicense: 'SLP' },
+  '92610': { description: 'Evaluation of oral and pharyngeal swallowing function', defaultPrice: 185, category: 'Speech Therapy', requiresLicense: 'SLP' },
+
+  // ============================================================================
+  // OCCUPATIONAL THERAPY - Requires OT/OTR
+  // ============================================================================
+  '97165': { description: 'Occupational therapy evaluation, low complexity (30 min)', defaultPrice: 125, category: 'Occupational Therapy', requiresLicense: 'OT' },
+  '97166': { description: 'Occupational therapy evaluation, moderate complexity (45 min)', defaultPrice: 165, category: 'Occupational Therapy', requiresLicense: 'OT' },
+  '97167': { description: 'Occupational therapy evaluation, high complexity (60 min)', defaultPrice: 200, category: 'Occupational Therapy', requiresLicense: 'OT' },
+  '97168': { description: 'Occupational therapy re-evaluation', defaultPrice: 100, category: 'Occupational Therapy', requiresLicense: 'OT' },
+  '97530': { description: 'Therapeutic activities, direct one-on-one (15 min)', defaultPrice: 50, category: 'Occupational Therapy', requiresLicense: 'OT' },
+  '97533': { description: 'Sensory integrative techniques (15 min)', defaultPrice: 55, category: 'Occupational Therapy', requiresLicense: 'OT' },
+  '97535': { description: 'Self-care/home management training (15 min)', defaultPrice: 50, category: 'Occupational Therapy', requiresLicense: 'OT' },
+  '97542': { description: 'Wheelchair management/propulsion training (15 min)', defaultPrice: 50, category: 'Occupational Therapy', requiresLicense: 'OT' },
+
+  // ============================================================================
+  // PHYSICAL THERAPY - Requires PT/DPT
+  // ============================================================================
+  '97161': { description: 'Physical therapy evaluation, low complexity (20 min)', defaultPrice: 100, category: 'Physical Therapy', requiresLicense: 'PT' },
+  '97162': { description: 'Physical therapy evaluation, moderate complexity (30 min)', defaultPrice: 135, category: 'Physical Therapy', requiresLicense: 'PT' },
+  '97163': { description: 'Physical therapy evaluation, high complexity (45 min)', defaultPrice: 175, category: 'Physical Therapy', requiresLicense: 'PT' },
+  '97164': { description: 'Physical therapy re-evaluation', defaultPrice: 85, category: 'Physical Therapy', requiresLicense: 'PT' },
+  '97110': { description: 'Therapeutic exercises (15 min)', defaultPrice: 45, category: 'Physical Therapy', requiresLicense: 'PT' },
+  '97112': { description: 'Neuromuscular reeducation (15 min)', defaultPrice: 50, category: 'Physical Therapy', requiresLicense: 'PT' },
+  '97116': { description: 'Gait training therapy (15 min)', defaultPrice: 50, category: 'Physical Therapy', requiresLicense: 'PT' },
+  '97140': { description: 'Manual therapy techniques (15 min)', defaultPrice: 55, category: 'Physical Therapy', requiresLicense: 'PT' },
+  '97150': { description: 'Therapeutic procedure, group (per patient)', defaultPrice: 30, category: 'Physical Therapy', requiresLicense: 'PT' },
+
+  // ============================================================================
+  // MENTAL HEALTH / PSYCHOTHERAPY - Requires Licensed Therapist
+  // ============================================================================
+  '90832': { description: 'Psychotherapy, 30 min', defaultPrice: 75, category: 'Mental Health', requiresLicense: 'LCSW/LMFT/PhD' },
+  '90834': { description: 'Psychotherapy, 45 min', defaultPrice: 100, category: 'Mental Health', requiresLicense: 'LCSW/LMFT/PhD' },
+  '90837': { description: 'Psychotherapy, 60 min', defaultPrice: 150, category: 'Mental Health', requiresLicense: 'LCSW/LMFT/PhD' },
+  '90846': { description: 'Family psychotherapy without patient', defaultPrice: 140, category: 'Mental Health', requiresLicense: 'LCSW/LMFT/PhD' },
+  '90847': { description: 'Family psychotherapy with patient', defaultPrice: 150, category: 'Mental Health', requiresLicense: 'LCSW/LMFT/PhD' },
+  '90853': { description: 'Group psychotherapy', defaultPrice: 50, category: 'Mental Health', requiresLicense: 'LCSW/LMFT/PhD' },
+  '96156': { description: 'Health behavior assessment/reassessment', defaultPrice: 125, category: 'Mental Health', requiresLicense: 'LCSW/LMFT/PhD' },
+  '96158': { description: 'Health behavior intervention, individual (first 30 min)', defaultPrice: 85, category: 'Mental Health', requiresLicense: 'LCSW/LMFT/PhD' },
+
+  // ============================================================================
+  // WAIVER SERVICES - Parent/Caregiver Billable (Self-Directed)
+  // ============================================================================
+  'S5150': { description: 'Unskilled respite care, 15 min', defaultPrice: 10, category: 'Waiver Services', requiresLicense: 'None - Parent/Caregiver' },
+  'T1027': { description: 'Family training and counseling', defaultPrice: 65, category: 'Waiver Services', requiresLicense: 'None - Parent/Caregiver' },
+  'T2025': { description: 'Residential habilitation, waiver, per diem', defaultPrice: 200, category: 'Waiver Services', requiresLicense: 'None - Parent/Caregiver' },
+  'T2017': { description: 'Habilitation, residential, per 15 min', defaultPrice: 8, category: 'Waiver Services', requiresLicense: 'None - Parent/Caregiver' },
+  'S5135': { description: 'Companion services, per 15 min', defaultPrice: 6, category: 'Waiver Services', requiresLicense: 'None - Parent/Caregiver' },
+  'T1019': { description: 'Personal care services, per 15 min', defaultPrice: 8, category: 'Waiver Services', requiresLicense: 'None - Parent/Caregiver' },
+
+  // ============================================================================
+  // MODIFIERS
+  // ============================================================================
+  '95': { description: 'Synchronous telemedicine service modifier', defaultPrice: 0, category: 'Modifier', requiresLicense: 'N/A' },
+  'GT': { description: 'Interactive audio and video telecommunications', defaultPrice: 0, category: 'Modifier', requiresLicense: 'N/A' },
+  'GO': { description: 'Services delivered under an outpatient OT plan', defaultPrice: 0, category: 'Modifier', requiresLicense: 'N/A' },
+  'GP': { description: 'Services delivered under an outpatient PT plan', defaultPrice: 0, category: 'Modifier', requiresLicense: 'N/A' },
+  'GN': { description: 'Services delivered under an outpatient SLP plan', defaultPrice: 0, category: 'Modifier', requiresLicense: 'N/A' },
 };
+
+// Helper to get CPT codes by category
+export function getCPTCodesByCategory(category: string): Array<{ code: string; description: string; defaultPrice: number; requiresLicense: string }> {
+  return Object.entries(COMMON_CPT_CODES)
+    .filter(([_, value]) => value.category === category)
+    .map(([code, value]) => ({ code, ...value }));
+}
+
+// Categories available
+export const CPT_CATEGORIES = [
+  'ABA',
+  'Speech Therapy',
+  'Occupational Therapy',
+  'Physical Therapy',
+  'Mental Health',
+  'Waiver Services',
+  'Modifier',
+] as const;
 
 // ============================================================================
 // GET CARE INTAKE
