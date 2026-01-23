@@ -306,51 +306,22 @@ const PRICE_IDS: Record<string, string> = {
 };
 
 // ============================================================================
-// SECURE PROMO CODE HANDLING (Server-Side Only)
+// SECURE PROMO CODE HANDLING (Server-Side Only - Database-Backed)
 // ============================================================================
 
 /**
- * Promo codes are stored server-side for security.
- * In production, these should be in a database table with:
- * - code, type, value, description, expiresAt, usageLimit, usageCount
- */
-const PROMO_CODES: Record<string, {
-  type: 'percent' | 'fixed';
-  value: number;
-  description: string;
-  expiresAt?: string; // ISO date string
-  usageLimit?: number;
-}> = {
-  'WELCOME20': {
-    type: 'percent',
-    value: 20,
-    description: '20% off your first visit',
-  },
-  'FIRST10': {
-    type: 'fixed',
-    value: 1000, // $10 in cents
-    description: '$10 off',
-  },
-  'AMINY50': {
-    type: 'percent',
-    value: 50,
-    description: '50% off (limited time)',
-    expiresAt: '2025-12-31T23:59:59Z',
-  },
-  'AACT25': {
-    type: 'percent',
-    value: 25,
-    description: '25% AACT partner discount',
-  },
-};
-
-/**
- * Validate and get promo code details
+ * Validate and get promo code details using database
  * This is the secure backend endpoint - promo codes are NOT exposed to frontend
+ * Uses the can_use_promo_code() database function for validation with:
+ * - Per-user limits
+ * - Global usage limits
+ * - Expiration checking
+ * - First-purchase-only restrictions
+ * - Context restrictions (subscription, telehealth, marketplace)
  */
-export async function validatePromoCode(req: Request): Promise<Response> {
+export async function validatePromoCode(req: Request, supabase?: any): Promise<Response> {
   try {
-    const { code, subtotal } = await req.json();
+    const { code, subtotal, userId, context = 'telehealth' } = await req.json();
 
     if (!code || typeof code !== 'string') {
       return new Response(JSON.stringify({ valid: false, error: 'Invalid code format' }), {
@@ -362,8 +333,24 @@ export async function validatePromoCode(req: Request): Promise<Response> {
     // Sanitize and uppercase the code
     const sanitizedCode = code.toUpperCase().replace(/[^A-Z0-9]/g, '').substring(0, 50);
 
-    const promo = PROMO_CODES[sanitizedCode];
-    if (!promo) {
+    // Create Supabase client if not provided
+    if (!supabase) {
+      const { createClient } = await import('jsr:@supabase/supabase-js@2');
+      supabase = createClient(
+        Deno.env.get('SUPABASE_URL')!,
+        Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+      );
+    }
+
+    // First, get the promo code from database
+    const { data: promo, error: promoError } = await supabase
+      .from('promo_codes')
+      .select('*')
+      .eq('code', sanitizedCode)
+      .eq('is_active', true)
+      .single();
+
+    if (promoError || !promo) {
       return new Response(JSON.stringify({ valid: false, error: 'Invalid promo code' }), {
         status: 200,
         headers: { 'Content-Type': 'application/json' },
@@ -371,28 +358,85 @@ export async function validatePromoCode(req: Request): Promise<Response> {
     }
 
     // Check expiration
-    if (promo.expiresAt && new Date(promo.expiresAt) < new Date()) {
+    if (promo.expires_at && new Date(promo.expires_at) < new Date()) {
       return new Response(JSON.stringify({ valid: false, error: 'Promo code has expired' }), {
         status: 200,
         headers: { 'Content-Type': 'application/json' },
       });
     }
 
+    // Check context restriction
+    if (promo.context_restriction && !promo.context_restriction.includes(context)) {
+      return new Response(JSON.stringify({ valid: false, error: 'Promo code is not valid for this purchase type' }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    // If userId provided, check per-user and first-purchase restrictions
+    if (userId) {
+      // Check global max uses
+      if (promo.max_uses) {
+        const { count: totalUses } = await supabase
+          .from('promo_redemptions')
+          .select('*', { count: 'exact', head: true })
+          .eq('promo_code', sanitizedCode);
+
+        if (totalUses >= promo.max_uses) {
+          return new Response(JSON.stringify({ valid: false, error: 'Promo code has reached maximum uses' }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+          });
+        }
+      }
+
+      // Check per-user limit
+      if (promo.per_user_limit) {
+        const { count: userUses } = await supabase
+          .from('promo_redemptions')
+          .select('*', { count: 'exact', head: true })
+          .eq('promo_code', sanitizedCode)
+          .eq('user_id', userId);
+
+        if (userUses >= promo.per_user_limit) {
+          return new Response(JSON.stringify({ valid: false, error: 'You have already used this promo code' }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+          });
+        }
+      }
+
+      // Check first purchase only
+      if (promo.first_purchase_only) {
+        const { count: previousPurchases } = await supabase
+          .from('promo_redemptions')
+          .select('*', { count: 'exact', head: true })
+          .eq('user_id', userId);
+
+        if (previousPurchases > 0) {
+          return new Response(JSON.stringify({ valid: false, error: 'Promo code is only valid for first-time purchases' }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+          });
+        }
+      }
+    }
+
     // Calculate discount if subtotal provided
     let discountAmount = 0;
     if (subtotal && typeof subtotal === 'number') {
-      if (promo.type === 'percent') {
-        discountAmount = Math.round(subtotal * (promo.value / 100));
+      if (promo.discount_type === 'percent') {
+        discountAmount = Math.round(subtotal * (promo.discount_value / 100));
       } else {
-        discountAmount = promo.value;
+        discountAmount = promo.discount_value;
       }
     }
 
     return new Response(JSON.stringify({
       valid: true,
       description: promo.description,
-      type: promo.type,
-      value: promo.value,
+      type: promo.discount_type,
+      value: promo.discount_value,
       discountAmount,
     }), {
       status: 200,
@@ -408,24 +452,87 @@ export async function validatePromoCode(req: Request): Promise<Response> {
 }
 
 /**
- * Calculate discount for a promo code (internal use)
+ * Calculate discount for a promo code (internal use - async for database lookup)
  */
-export function calculatePromoDiscount(code: string, subtotal: number): number {
+export async function calculatePromoDiscount(
+  code: string,
+  subtotal: number,
+  supabase?: any
+): Promise<number> {
   const sanitizedCode = code.toUpperCase().replace(/[^A-Z0-9]/g, '');
-  const promo = PROMO_CODES[sanitizedCode];
 
-  if (!promo) return 0;
+  // Create Supabase client if not provided
+  if (!supabase) {
+    const { createClient } = await import('jsr:@supabase/supabase-js@2');
+    supabase = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+    );
+  }
+
+  // Get promo from database
+  const { data: promo, error } = await supabase
+    .from('promo_codes')
+    .select('*')
+    .eq('code', sanitizedCode)
+    .eq('is_active', true)
+    .single();
+
+  if (error || !promo) return 0;
 
   // Check expiration
-  if (promo.expiresAt && new Date(promo.expiresAt) < new Date()) {
+  if (promo.expires_at && new Date(promo.expires_at) < new Date()) {
     return 0;
   }
 
-  if (promo.type === 'percent') {
-    return Math.round(subtotal * (promo.value / 100));
+  if (promo.discount_type === 'percent') {
+    return Math.round(subtotal * (promo.discount_value / 100));
   }
 
-  return promo.value;
+  return promo.discount_value;
+}
+
+/**
+ * Record a promo code redemption (for tracking and abuse prevention)
+ */
+export async function recordPromoRedemption(
+  supabase: any,
+  userId: string,
+  code: string,
+  context: 'subscription' | 'telehealth' | 'marketplace',
+  discountAmount: number,
+  originalAmount: number,
+  finalAmount: number,
+  paymentId?: string,
+  appointmentId?: string,
+  ipAddress?: string,
+  userAgent?: string
+): Promise<void> {
+  const sanitizedCode = code.toUpperCase().replace(/[^A-Z0-9]/g, '');
+
+  // Get promo to check if it's percentage-based
+  const { data: promo } = await supabase
+    .from('promo_codes')
+    .select('discount_type, discount_value')
+    .eq('code', sanitizedCode)
+    .single();
+
+  await supabase.from('promo_redemptions').insert({
+    user_id: userId,
+    promo_code: sanitizedCode,
+    context,
+    discount_amount: discountAmount,
+    discount_percent: promo?.discount_type === 'percent' ? promo.discount_value : null,
+    original_amount: originalAmount,
+    final_amount: finalAmount,
+    payment_id: paymentId || null,
+    appointment_id: appointmentId || null,
+    ip_address: ipAddress || null,
+    user_agent: userAgent || null,
+  });
+
+  // Update current_uses in promo_codes table
+  await supabase.rpc('increment_promo_uses', { p_code: sanitizedCode });
 }
 
 /**
@@ -456,7 +563,8 @@ export async function createCheckoutSession(req: Request): Promise<Response> {
       'cancel_url': cancelUrl,
       'allow_promotion_codes': 'true',
       'billing_address_collection': 'auto',
-      'subscription_data[trial_period_days]': tier === 'core' ? '7' : '0', // 7-day trial for Core
+      // 7-day trial for Starter and Core only - Pro includes BCBA session, so no trial
+      'subscription_data[trial_period_days]': (tier === 'starter' || tier === 'core') ? '7' : '0',
       'subscription_data[metadata][userId]': userId,
       'subscription_data[metadata][tier]': tier,
     });

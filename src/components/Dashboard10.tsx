@@ -278,7 +278,7 @@ export function Dashboard10({
           </div>
 
           {/* Upcoming Events Carousel */}
-          <div className="flex gap-3 mt-4 overflow-x-auto pb-2 -mx-1 px-1">
+          <div className="flex gap-2 sm:gap-3 mt-4 overflow-x-auto pb-2 -mx-1 px-1 scrollbar-hide">
             {upcomingEvents.length > 0 ? (
               upcomingEvents.map((event) => (
                 <button
@@ -500,7 +500,7 @@ export function Dashboard10({
 
       {/* Chat Drawer */}
       {showAIChat && (
-        <div className="fixed bottom-40 right-4 w-80 bg-white dark:bg-slate-800 rounded-xl shadow-xl z-30 overflow-hidden border border-gray-200 dark:border-slate-700">
+        <div className="fixed bottom-40 left-4 right-4 sm:left-auto sm:right-4 sm:w-80 bg-white dark:bg-slate-800 rounded-xl shadow-xl z-30 overflow-hidden border border-gray-200 dark:border-slate-700">
           <div className="p-4 bg-[#0D1B2A] text-white">
             <h3 className="font-semibold flex items-center gap-2">
               <Sparkles className="w-4 h-4" />

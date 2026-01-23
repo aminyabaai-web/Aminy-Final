@@ -1849,7 +1849,7 @@ app.post("/make-server-8a022548/sessions/:sessionId/notes", async (c) => {
   return submitSessionNotes(c.req.raw, sessionId);
 });
 
-// Apply referral credit
+// Apply referral credit on signup (uses database-backed referral system)
 app.post("/make-server-8a022548/payments/referral/apply", async (c) => {
   try {
     const accessToken = c.req.header('Authorization')?.split(' ')[1];
@@ -1866,28 +1866,37 @@ app.post("/make-server-8a022548/payments/referral/apply", async (c) => {
 
     const { referralCode } = await c.req.json();
 
-    // Find referrer by code
-    const referralData = await kv.get(`referral:code:${referralCode}`);
-    if (!referralData) {
-      return c.json({ error: 'Invalid referral code' }, 400);
+    // Get IP and user agent for fraud detection
+    const ipAddress = c.req.header('x-forwarded-for')?.split(',')[0] || c.req.header('x-real-ip') || 'unknown';
+    const userAgent = c.req.header('user-agent') || 'unknown';
+
+    // Use database function for referral processing with fraud detection
+    const { data: result, error } = await supabase.rpc('process_referral_signup', {
+      p_new_user_id: user.id,
+      p_referral_code: referralCode.toUpperCase(),
+      p_ip_address: ipAddress,
+      p_user_agent: userAgent,
+    });
+
+    if (error || !result?.success) {
+      return c.json({ error: result?.error || 'Invalid referral code' }, 400);
     }
 
-    // Add credits to both users
-    const creditsAdded = 10; // $10 credit
-
-    const subscription = await kv.get(`subscription:${user.id}`);
-    if (subscription) {
-      subscription.referralCredits += creditsAdded;
-      await kv.set(`subscription:${user.id}`, subscription);
-    }
-
-    return c.json({ creditsAdded });
+    return c.json({
+      success: true,
+      creditsAdded: result.credited ? 10 : 0, // $10 credit if not flagged
+      referrerId: result.referrer_id,
+      message: result.credited
+        ? 'Welcome! You received $10 in credits!'
+        : 'Referral recorded. Credits will be applied after verification.',
+    });
   } catch (error) {
+    console.error('Referral apply error:', error);
     return c.json({ error: 'Failed to apply referral credit' }, 500);
   }
 });
 
-// Get referral info
+// Get referral info (uses database-backed referral system)
 app.get("/make-server-8a022548/payments/referral/info", async (c) => {
   try {
     const accessToken = c.req.header('Authorization')?.split(' ')[1];
@@ -1902,22 +1911,71 @@ app.get("/make-server-8a022548/payments/referral/info", async (c) => {
       return c.json({ error: 'Unauthorized' }, 401);
     }
 
-    // Get or create referral code
-    let referralInfo = await kv.get(`referral:${user.id}`);
-    if (!referralInfo) {
-      const code = `AMINY${user.id.substring(0, 6).toUpperCase()}`;
-      referralInfo = {
-        code,
+    // Use database function to get stats (auto-generates code if needed)
+    const { data: stats, error } = await supabase.rpc('get_referral_stats', {
+      p_user_id: user.id,
+    });
+
+    if (error) {
+      console.error('Referral stats error:', error);
+      // Fallback to basic info
+      return c.json({
+        code: `AMINY${user.id.substring(0, 6).toUpperCase()}`,
         totalReferrals: 0,
         creditsEarned: 0,
-      };
-      await kv.set(`referral:${user.id}`, referralInfo);
-      await kv.set(`referral:code:${code}`, { userId: user.id });
+      });
     }
 
-    return c.json(referralInfo);
+    // Also get user's referral credits from profile
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('referral_credits')
+      .eq('id', user.id)
+      .single();
+
+    return c.json({
+      code: stats.code,
+      totalReferrals: stats.total_referrals || 0,
+      pendingReferrals: stats.pending_referrals || 0,
+      creditedReferrals: stats.credited_referrals || 0,
+      creditsEarned: (stats.total_credits_earned || 0) / 100, // Convert cents to dollars
+      currentCredits: (profile?.referral_credits || 0) / 100, // Current spendable credits
+    });
   } catch (error) {
+    console.error('Referral info error:', error);
     return c.json({ error: 'Failed to fetch referral info' }, 500);
+  }
+});
+
+// Credit referrer when referred user subscribes to a paid plan
+app.post("/make-server-8a022548/payments/referral/credit-referrer", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    const { createClient } = await import('jsr:@supabase/supabase-js@2');
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+    );
+
+    const { data: { user }, error: authError } = await supabase.auth.getUser(accessToken);
+    if (!user?.id) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
+    // Credit the referrer when this user subscribes
+    const { data: result, error } = await supabase.rpc('credit_referrer_on_subscription', {
+      p_referred_user_id: user.id,
+    });
+
+    if (error) {
+      console.error('Credit referrer error:', error);
+      return c.json({ success: false, error: 'Failed to credit referrer' }, 500);
+    }
+
+    return c.json(result || { success: false, error: 'No pending referral found' });
+  } catch (error) {
+    console.error('Credit referrer error:', error);
+    return c.json({ error: 'Failed to credit referrer' }, 500);
   }
 });
 
@@ -1965,15 +2023,147 @@ app.post("/make-server-8a022548/payments/trial/expire", async (c) => {
 
     const subscription = await kv.get(`subscription:${user.id}`);
     if (subscription && subscription.status === 'trialing') {
-      subscription.status = 'active';
-      subscription.tier = 'free'; // Downgrade to free
+      // Trial expired without payment - downgrade to free
+      subscription.status = 'none'; // No active subscription
+      subscription.tier = 'free';   // Downgrade to free tier
       delete subscription.trialEndsAt;
       await kv.set(`subscription:${user.id}`, subscription);
+
+      // Also update the user's profile tier in database
+      await supabase
+        .from('profiles')
+        .update({ tier: 'free', updated_at: new Date().toISOString() })
+        .eq('id', user.id);
     }
 
     return c.json({ success: true });
   } catch (error) {
     return c.json({ error: 'Failed to expire trial' }, 500);
+  }
+});
+
+// ============================================================================
+// INSURANCE VERIFICATION ENDPOINTS
+// ============================================================================
+
+// Request insurance eligibility verification
+app.post("/make-server-8a022548/insurance/verify", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    const { createClient } = await import('jsr:@supabase/supabase-js@2');
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+    );
+
+    const { data: { user }, error: authError } = await supabase.auth.getUser(accessToken);
+    if (!user?.id) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
+    const {
+      payerId,
+      memberId,
+      groupNumber,
+      subscriberName,
+      subscriberDob,
+      patientName,
+      patientDob,
+      patientRelationship,
+      serviceType,
+      serviceCodes,
+    } = await c.req.json();
+
+    // Validate required fields
+    if (!payerId || !memberId || !subscriberName || !subscriberDob) {
+      return c.json({ error: 'Missing required insurance information' }, 400);
+    }
+
+    // Use database function to create verification request
+    const { data: result, error } = await supabase.rpc('request_insurance_verification', {
+      p_user_id: user.id,
+      p_payer_id: payerId,
+      p_member_id: memberId,
+      p_group_number: groupNumber || null,
+      p_subscriber_name: subscriberName,
+      p_subscriber_dob: subscriberDob,
+      p_patient_name: patientName || subscriberName,
+      p_patient_dob: patientDob || subscriberDob,
+      p_patient_relationship: patientRelationship || 'self',
+      p_service_type: serviceType || 'ABA',
+      p_service_codes: serviceCodes || ['97153', '97155', '97156', '97151'],
+    });
+
+    if (error) {
+      console.error('Insurance verification error:', error);
+      return c.json({ error: 'Failed to submit verification request' }, 500);
+    }
+
+    return c.json(result);
+  } catch (error) {
+    console.error('Insurance verification error:', error);
+    return c.json({ error: 'Failed to process verification request' }, 500);
+  }
+});
+
+// Get user's insurance verifications
+app.get("/make-server-8a022548/insurance/verifications", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    const { createClient } = await import('jsr:@supabase/supabase-js@2');
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+    );
+
+    const { data: { user }, error: authError } = await supabase.auth.getUser(accessToken);
+    if (!user?.id) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
+    const { data: verifications, error } = await supabase
+      .from('insurance_verifications')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false })
+      .limit(10);
+
+    if (error) {
+      console.error('Fetch verifications error:', error);
+      return c.json({ error: 'Failed to fetch verifications' }, 500);
+    }
+
+    return c.json({ verifications: verifications || [] });
+  } catch (error) {
+    console.error('Fetch verifications error:', error);
+    return c.json({ error: 'Failed to fetch verifications' }, 500);
+  }
+});
+
+// Get list of supported payers
+app.get("/make-server-8a022548/insurance/payers", async (c) => {
+  try {
+    const { createClient } = await import('jsr:@supabase/supabase-js@2');
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+    );
+
+    const { data: payers, error } = await supabase
+      .from('payers')
+      .select('payer_id, name, supports_270_271, supports_278')
+      .eq('is_active', true)
+      .order('name');
+
+    if (error) {
+      console.error('Fetch payers error:', error);
+      return c.json({ error: 'Failed to fetch payers' }, 500);
+    }
+
+    return c.json({ payers: payers || [] });
+  } catch (error) {
+    console.error('Fetch payers error:', error);
+    return c.json({ error: 'Failed to fetch payers' }, 500);
   }
 });
 

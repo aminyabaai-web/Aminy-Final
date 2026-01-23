@@ -114,8 +114,8 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, navigate }: 
       role="navigation"
       aria-label="Main navigation"
     >
-      <div className="max-w-md mx-auto px-4 py-3">
-        <div className="grid grid-cols-6 gap-1">
+      <div className="max-w-lg mx-auto px-2 sm:px-4 py-2 sm:py-3">
+        <div className="grid grid-cols-6 gap-0.5 sm:gap-1">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isCareActive = tab.id === 'care' && window.location.pathname.startsWith('/care');

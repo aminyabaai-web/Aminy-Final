@@ -1,14 +1,67 @@
 /**
  * Stripe Service Tests
+ *
+ * Note: Promo code validation now requires database access.
+ * Tests mock the API response to test frontend logic.
  */
 
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import {
   calculateVisitPrice,
   validatePromoCode,
   formatPrice,
   VISIT_PRICES,
 } from '../lib/stripe-service';
+
+// Mock promo codes for testing (simulates what database would return)
+const MOCK_PROMO_RESPONSES: Record<string, any> = {
+  WELCOME20: { valid: true, description: '20% off your first visit', type: 'percent', value: 20 },
+  FIRST10: { valid: true, description: '$10 off', type: 'fixed', value: 1000 },
+  AACT25: { valid: true, description: '25% AACT partner discount', type: 'percent', value: 25 },
+  AMINY50: { valid: true, description: '50% off (limited time)', type: 'percent', value: 50 },
+};
+
+// Mock fetch for promo code validation
+const mockFetch = vi.fn();
+global.fetch = mockFetch;
+
+beforeEach(() => {
+  mockFetch.mockImplementation(async (url: string, options: any) => {
+    // Only intercept promo validation calls
+    if (url.includes('/payments/validate-promo')) {
+      const body = JSON.parse(options.body);
+      const code = body.code?.toUpperCase()?.replace(/[^A-Z0-9]/g, '') || '';
+      const subtotal = body.subtotal || 0;
+
+      const promo = MOCK_PROMO_RESPONSES[code];
+      if (promo) {
+        let discountAmount = 0;
+        if (subtotal && promo.type === 'percent') {
+          discountAmount = Math.round(subtotal * (promo.value / 100));
+        } else if (promo.type === 'fixed') {
+          discountAmount = promo.value;
+        }
+
+        return {
+          ok: true,
+          json: async () => ({ ...promo, discountAmount }),
+        };
+      }
+
+      return {
+        ok: true,
+        json: async () => ({ valid: false, error: 'Invalid promo code' }),
+      };
+    }
+
+    // Pass through other requests
+    return { ok: false, json: async () => ({}) };
+  });
+});
+
+afterEach(() => {
+  vi.clearAllMocks();
+});
 
 describe('Stripe Service', () => {
   describe('calculateVisitPrice', () => {

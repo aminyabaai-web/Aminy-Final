@@ -238,9 +238,9 @@ export function AnalyticsDashboard({ isOpen, onClose }: AnalyticsDashboardProps)
 
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white dark:bg-slate-900 rounded-2xl w-full max-w-6xl h-[90vh] flex flex-col">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl w-full max-w-6xl h-[90vh] sm:h-[85vh] max-h-[calc(100vh-2rem)] flex flex-col overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-slate-700">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 sm:p-6 border-b border-gray-200 dark:border-slate-700 gap-3">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
               <BarChart3 className="w-5 h-5 text-blue-600 dark:text-blue-400" />

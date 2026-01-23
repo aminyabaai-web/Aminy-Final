@@ -4,10 +4,10 @@
  * Comprehensive AI memory management with tier-based limits.
  * Enables the AI to "remember" across conversations and learn from documents.
  *
- * Memory Tiers:
- * - FREE: 10 messages/day, 7-day memory, no vault learning
- * - STARTER: 50 messages/day, 30-day memory, basic vault (5 docs)
- * - CORE: 200 messages/day, 90-day memory, full vault (25 docs)
+ * Memory Tiers (MUST match tier-utils.ts):
+ * - FREE: 5 messages/day, 0-day memory, no vault learning
+ * - STARTER: 20 messages/day, 30-day memory, basic vault (5 docs)
+ * - CORE: Unlimited messages, 90-day memory, full vault (25 docs)
  * - PRO: Unlimited messages, unlimited memory, unlimited vault
  */
 
@@ -74,35 +74,39 @@ export const TIER_LIMITS: Record<TierType, {
   contextTokens: number;
 }> = {
   // Free: Discovery tier - risk-free intro, builds habit/trust
+  // MUST MATCH tier-utils.ts getAIMessageLimit()
   free: {
-    messagesPerDay: 10,           // 5-10 queries/day per spec
+    messagesPerDay: 5,            // 5 messages/day (matches tier-utils.ts)
     memoryDays: 0,                // No context memory - generic responses
     maxDocuments: 0,              // No vault access
     maxFacts: 10,                 // Minimal facts for basic personalization
     canLearnFromVault: false,
     contextTokens: 1500,          // Limited context
   },
-  // Starter: Entry Empowerment - $4.99-7.99/mo
+  // Starter: Entry Empowerment - $6.99/mo
+  // MUST MATCH tier-utils.ts getAIMessageLimit()
   starter: {
-    messagesPerDay: 100,          // "Unlimited" basic per spec (but capped for profitability)
+    messagesPerDay: 20,           // 20 messages/day (matches tier-utils.ts)
     memoryDays: 30,               // Short context memory
     maxDocuments: 5,              // Basic vault
     maxFacts: 100,
     canLearnFromVault: true,
     contextTokens: 4000,
   },
-  // Core: Full Companion - $9.99-14.99/mo
+  // Core: Full Companion - $12.99/mo
+  // MUST MATCH tier-utils.ts getAIMessageLimit()
   core: {
-    messagesPerDay: 300,          // Priority responses
+    messagesPerDay: Infinity,     // Unlimited (matches tier-utils.ts null)
     memoryDays: 90,               // Full context (multi-session memory)
     maxDocuments: 25,             // Full vault access
     maxFacts: 500,
     canLearnFromVault: true,
     contextTokens: 8000,
   },
-  // Pro: Premium Ecosystem - $19.99-29.99/mo
+  // Pro: Premium Ecosystem - $24.99/mo
+  // MUST MATCH tier-utils.ts getAIMessageLimit()
   pro: {
-    messagesPerDay: Infinity,     // Deep adaptation
+    messagesPerDay: Infinity,     // Unlimited (matches tier-utils.ts null)
     memoryDays: Infinity,         // Unlimited memory
     maxDocuments: Infinity,       // Unlimited vault
     maxFacts: Infinity,
