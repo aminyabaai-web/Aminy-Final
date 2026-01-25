@@ -411,3 +411,48 @@ export const selectors = {
     return state.user.tier === 'complete';
   },
 };
+
+// ============================================================================
+// ONBOARDING COMPLETION HANDLER
+// ============================================================================
+
+/**
+ * Call this when onboarding completes to trigger retention/engagement flows
+ */
+export async function handleOnboardingComplete(
+  userId: string,
+  email: string,
+  childName: string,
+  parentName: string
+): Promise<void> {
+  // Import dynamically to avoid circular dependencies
+  const { triggerOnboardingSequence, scheduleRetentionNotifications } = await import('./retention-engine');
+  const { requestNotificationPermission, subscribeToPush } = await import('./push-notifications');
+
+  // Mark onboarding as complete in store
+  const store = useAminyStore.getState();
+  if (store.user) {
+    store.setUser({
+      ...store.user,
+      onboardingComplete: true,
+    });
+  }
+
+  try {
+    // 1. Trigger email onboarding sequence
+    await triggerOnboardingSequence(userId, email, childName);
+
+    // 2. Request push notification permission
+    const permission = await requestNotificationPermission();
+    if (permission === 'granted') {
+      // Subscribe to push and schedule all retention notifications
+      await subscribeToPush(userId);
+      await scheduleRetentionNotifications(userId, childName, '09:00'); // 9 AM default
+    }
+
+    console.log('Onboarding complete: All retention flows activated');
+  } catch (error) {
+    console.error('Error setting up retention flows:', error);
+    // Don't block onboarding completion on retention setup errors
+  }
+}

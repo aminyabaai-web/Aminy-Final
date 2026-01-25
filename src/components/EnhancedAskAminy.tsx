@@ -13,6 +13,7 @@ import {
   sendMessage as sendAIMessage,
   type ConversationMessage as AIConversationMessage,
 } from '../lib/ai-engine';
+import { memoryManager, type TierType } from '../lib/memory-system';
 
 interface Message {
   id: string;
@@ -141,7 +142,11 @@ export function EnhancedAskAminy({
   const { enhancePrompt, generatePrompts, getInsights } = useContextEngine();
   const { track } = useAnalytics();
 
-  const canSendMessage = true; // Ask Aminy is now unlimited for all tiers
+  // Rate limiting based on tier - check if user can send message
+  const state = useAminyStore.getState();
+  const childId = state.user?.id || 'default';
+  const canSendMessage = memoryManager.canSendMessage(childId, userTier as TierType);
+  const messagesRemaining = memoryManager.getMessagesRemaining(childId, userTier as TierType);
 
   // Enhanced auto-resize textarea
   const adjustTextareaHeight = useCallback(() => {

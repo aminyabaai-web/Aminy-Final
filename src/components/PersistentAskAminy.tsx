@@ -8,6 +8,7 @@ import { cn } from '../lib/utils';
 import { useContextEngine } from '../lib/context-engine';
 import { useAnalytics } from '../lib/analytics-engine';
 import { toast } from 'sonner';
+import { memoryManager, type TierType } from '../lib/memory-system';
 
 interface Message {
   id: string;
@@ -62,7 +63,10 @@ export function PersistentAskAminy({
   const { enhancePrompt, generatePrompts, getInsights } = useContextEngine();
   const { track } = useAnalytics();
 
-  const canSendMessage = true; // Ask Aminy is now unlimited for all tiers
+  // Rate limiting based on tier - check if user can send message
+  const childId = 'default'; // Would come from user profile
+  const canSendMessage = memoryManager.canSendMessage(childId, userTier as TierType);
+  const messagesRemaining = memoryManager.getMessagesRemaining(childId, userTier as TierType);
 
   // Auto-resize textarea with improved logic
   const adjustTextareaHeight = useCallback(() => {

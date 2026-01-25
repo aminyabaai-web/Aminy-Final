@@ -982,6 +982,285 @@ export function getAllLocalGroups(): LocalCommunityGroup[] {
 }
 
 // ============================================================================
+// CRUD OPERATIONS - Persist posts, comments, and likes
+// ============================================================================
+
+// In-memory storage (localStorage-backed for persistence)
+const POSTS_STORAGE_KEY = 'aminy_community_posts';
+const COMMENTS_STORAGE_KEY = 'aminy_community_comments';
+const LIKES_STORAGE_KEY = 'aminy_community_likes';
+
+// Initialize storage with seed posts
+function initializeStorage() {
+  if (typeof window === 'undefined') return;
+
+  const existingPosts = localStorage.getItem(POSTS_STORAGE_KEY);
+  if (!existingPosts) {
+    localStorage.setItem(POSTS_STORAGE_KEY, JSON.stringify(SEED_POSTS));
+  }
+  if (!localStorage.getItem(COMMENTS_STORAGE_KEY)) {
+    localStorage.setItem(COMMENTS_STORAGE_KEY, JSON.stringify({}));
+  }
+  if (!localStorage.getItem(LIKES_STORAGE_KEY)) {
+    localStorage.setItem(LIKES_STORAGE_KEY, JSON.stringify({}));
+  }
+}
+
+// Get all posts from storage
+function getStoredPosts(): CommunityPost[] {
+  if (typeof window === 'undefined') return SEED_POSTS;
+  initializeStorage();
+  try {
+    const stored = localStorage.getItem(POSTS_STORAGE_KEY);
+    return stored ? JSON.parse(stored) : SEED_POSTS;
+  } catch {
+    return SEED_POSTS;
+  }
+}
+
+// Get all comments from storage
+function getStoredComments(): Record<string, CommunityComment[]> {
+  if (typeof window === 'undefined') return {};
+  initializeStorage();
+  try {
+    const stored = localStorage.getItem(COMMENTS_STORAGE_KEY);
+    return stored ? JSON.parse(stored) : {};
+  } catch {
+    return {};
+  }
+}
+
+// Get all likes from storage (postId -> userId[])
+function getStoredLikes(): Record<string, string[]> {
+  if (typeof window === 'undefined') return {};
+  initializeStorage();
+  try {
+    const stored = localStorage.getItem(LIKES_STORAGE_KEY);
+    return stored ? JSON.parse(stored) : {};
+  } catch {
+    return {};
+  }
+}
+
+/**
+ * Create a new community post
+ */
+export async function createPost(
+  post: Omit<CommunityPost, 'id' | 'likeCount' | 'commentCount' | 'shareCount' | 'bookmarkCount' | 'isModerated' | 'moderationStatus' | 'createdAt' | 'updatedAt'>
+): Promise<CommunityPost> {
+  // Run AI moderation on the content
+  const moderationResult = await moderateContent(`${post.title} ${post.body}`);
+
+  const newPost: CommunityPost = {
+    ...post,
+    id: `post-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+    likeCount: 0,
+    commentCount: 0,
+    shareCount: 0,
+    bookmarkCount: 0,
+    isModerated: true,
+    moderationStatus: moderationResult.approved ? 'approved' : 'pending',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+
+  // Store the post
+  const posts = getStoredPosts();
+  posts.unshift(newPost); // Add to beginning (newest first)
+  localStorage.setItem(POSTS_STORAGE_KEY, JSON.stringify(posts));
+
+  return newPost;
+}
+
+/**
+ * Like or unlike a post
+ */
+export async function likePost(postId: string, userId: string): Promise<CommunityPost> {
+  const posts = getStoredPosts();
+  const likes = getStoredLikes();
+
+  const postIndex = posts.findIndex(p => p.id === postId);
+  if (postIndex === -1) {
+    throw new Error('Post not found');
+  }
+
+  // Initialize likes array for this post if needed
+  if (!likes[postId]) {
+    likes[postId] = [];
+  }
+
+  // Toggle like
+  const userLikeIndex = likes[postId].indexOf(userId);
+  if (userLikeIndex === -1) {
+    // Add like
+    likes[postId].push(userId);
+    posts[postIndex].likeCount++;
+  } else {
+    // Remove like
+    likes[postId].splice(userLikeIndex, 1);
+    posts[postIndex].likeCount = Math.max(0, posts[postIndex].likeCount - 1);
+  }
+
+  // Save changes
+  localStorage.setItem(POSTS_STORAGE_KEY, JSON.stringify(posts));
+  localStorage.setItem(LIKES_STORAGE_KEY, JSON.stringify(likes));
+
+  return posts[postIndex];
+}
+
+/**
+ * Add a comment to a post
+ */
+export async function addComment(
+  postId: string,
+  comment: Omit<CommunityComment, 'id' | 'postId' | 'likeCount' | 'createdAt'>
+): Promise<CommunityComment> {
+  // Run moderation on comment
+  const moderationResult = await moderateContent(comment.body);
+
+  if (!moderationResult.approved && moderationResult.suggestedAction === 'escalate') {
+    throw new Error('Comment flagged for review. Please revise and try again.');
+  }
+
+  const newComment: CommunityComment = {
+    ...comment,
+    id: `comment-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+    postId,
+    likeCount: 0,
+    createdAt: new Date().toISOString(),
+  };
+
+  // Store comment
+  const comments = getStoredComments();
+  if (!comments[postId]) {
+    comments[postId] = [];
+  }
+  comments[postId].push(newComment);
+  localStorage.setItem(COMMENTS_STORAGE_KEY, JSON.stringify(comments));
+
+  // Update post comment count
+  const posts = getStoredPosts();
+  const postIndex = posts.findIndex(p => p.id === postId);
+  if (postIndex !== -1) {
+    posts[postIndex].commentCount++;
+    posts[postIndex].updatedAt = new Date().toISOString();
+    localStorage.setItem(POSTS_STORAGE_KEY, JSON.stringify(posts));
+  }
+
+  return newComment;
+}
+
+/**
+ * Get comments for a post
+ */
+export function getComments(postId: string): CommunityComment[] {
+  const comments = getStoredComments();
+  return comments[postId] || [];
+}
+
+/**
+ * Check if user has liked a post
+ */
+export function hasUserLiked(postId: string, userId: string): boolean {
+  const likes = getStoredLikes();
+  return likes[postId]?.includes(userId) || false;
+}
+
+/**
+ * Get all posts (with optional filters)
+ */
+export function getPosts(options?: {
+  category?: PostCategory;
+  limit?: number;
+  offset?: number;
+}): CommunityPost[] {
+  let posts = getStoredPosts();
+
+  // Filter by category if specified
+  if (options?.category) {
+    posts = posts.filter(p => p.category === options.category);
+  }
+
+  // Only show approved posts
+  posts = posts.filter(p => p.moderationStatus === 'approved');
+
+  // Sort by date (newest first)
+  posts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
+  // Apply pagination
+  const offset = options?.offset || 0;
+  const limit = options?.limit || 20;
+
+  return posts.slice(offset, offset + limit);
+}
+
+/**
+ * Get a single post by ID
+ */
+export function getPost(postId: string): CommunityPost | null {
+  const posts = getStoredPosts();
+  return posts.find(p => p.id === postId) || null;
+}
+
+/**
+ * Delete a post (soft delete by setting status to removed)
+ */
+export async function deletePost(postId: string, userId: string): Promise<boolean> {
+  const posts = getStoredPosts();
+  const postIndex = posts.findIndex(p => p.id === postId);
+
+  if (postIndex === -1) return false;
+
+  // Only allow author to delete
+  if (posts[postIndex].userId !== userId) {
+    throw new Error('You can only delete your own posts');
+  }
+
+  posts[postIndex].moderationStatus = 'removed';
+  posts[postIndex].updatedAt = new Date().toISOString();
+  localStorage.setItem(POSTS_STORAGE_KEY, JSON.stringify(posts));
+
+  return true;
+}
+
+/**
+ * Bookmark a post
+ */
+export async function bookmarkPost(postId: string, userId: string): Promise<CommunityPost> {
+  const posts = getStoredPosts();
+  const postIndex = posts.findIndex(p => p.id === postId);
+
+  if (postIndex === -1) {
+    throw new Error('Post not found');
+  }
+
+  // Increment bookmark count
+  posts[postIndex].bookmarkCount++;
+  posts[postIndex].updatedAt = new Date().toISOString();
+  localStorage.setItem(POSTS_STORAGE_KEY, JSON.stringify(posts));
+
+  // Store in user's bookmarks (separate storage)
+  const bookmarksKey = `aminy_bookmarks_${userId}`;
+  const userBookmarks = JSON.parse(localStorage.getItem(bookmarksKey) || '[]');
+  if (!userBookmarks.includes(postId)) {
+    userBookmarks.push(postId);
+    localStorage.setItem(bookmarksKey, JSON.stringify(userBookmarks));
+  }
+
+  return posts[postIndex];
+}
+
+/**
+ * Get user's bookmarked posts
+ */
+export function getUserBookmarks(userId: string): CommunityPost[] {
+  const bookmarksKey = `aminy_bookmarks_${userId}`;
+  const bookmarkIds = JSON.parse(localStorage.getItem(bookmarksKey) || '[]');
+  const posts = getStoredPosts();
+  return posts.filter(p => bookmarkIds.includes(p.id));
+}
+
+// ============================================================================
 // EXPORTS
 // ============================================================================
 
@@ -996,6 +1275,18 @@ export default {
   getSeedPosts,
   generateMockPosts,
   flagForModeration,
+
+  // CRUD Operations
+  createPost,
+  likePost,
+  addComment,
+  getComments,
+  hasUserLiked,
+  getPosts,
+  getPost,
+  deletePost,
+  bookmarkPost,
+  getUserBookmarks,
 
   // AI Moderation
   moderateContent,
