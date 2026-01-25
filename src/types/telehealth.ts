@@ -606,9 +606,11 @@ export interface InsuranceVerificationResult {
   // Notes
   notes?: string;
   verifiedAt?: string;
-  verifiedBy?: 'system' | 'manual';
+  verifiedBy?: 'system' | 'manual' | 'availity' | 'waystar';
   // Error info
   errorMessage?: string;
+  // Clearinghouse response (for reference/debugging)
+  clearinghouseResponse?: unknown;
 }
 
 export interface InsuranceProvider {
