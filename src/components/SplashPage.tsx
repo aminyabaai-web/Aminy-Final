@@ -262,7 +262,7 @@ export function SplashPage({
               rowGap: '8px',
             }}
           >
-            {['Built by parents', 'Backed by ABA experts', 'HIPAA-conscious', 'Private by design'].map((text) => (
+            {['Built by Parents', 'Backed by ABA Experts', 'HIPAA-Conscious', 'Private by Design'].map((text) => (
               <span
                 key={text}
                 style={{
@@ -282,6 +282,67 @@ export function SplashPage({
                 {text}
               </span>
             ))}
+          </motion.div>
+
+          {/* Value Proposition - Forta Differentiation */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.2, delay: 1.1 }}
+            style={{
+              marginTop: '40px',
+              textAlign: 'center',
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                justifyContent: 'center',
+                gap: '20px',
+              }}
+            >
+              {[
+                { icon: '⚡', text: 'Start Today', subtext: 'No waitlist' },
+                { icon: '🌙', text: '24/7 Support', subtext: 'Always there' },
+                { icon: '✓', text: 'No Diagnosis', subtext: 'Required' },
+              ].map((item) => (
+                <div
+                  key={item.text}
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: '4px',
+                  }}
+                >
+                  <span style={{ fontSize: '18px' }}>{item.icon}</span>
+                  <span
+                    style={{
+                      color: 'rgba(17, 24, 39, 0.55)',
+                      fontFamily: fontStack,
+                      fontSize: '11px',
+                      fontWeight: 500,
+                      letterSpacing: '0.01em',
+                      ...fontSmoothing,
+                    }}
+                  >
+                    {item.text}
+                  </span>
+                  <span
+                    style={{
+                      color: 'rgba(17, 24, 39, 0.35)',
+                      fontFamily: fontStack,
+                      fontSize: '10px',
+                      fontWeight: 400,
+                      ...fontSmoothing,
+                    }}
+                  >
+                    {item.subtext}
+                  </span>
+                </div>
+              ))}
+            </div>
           </motion.div>
 
         </div>

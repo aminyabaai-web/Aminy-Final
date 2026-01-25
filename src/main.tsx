@@ -3,6 +3,8 @@ import App from "./App.tsx";
 import "./index.css";
 import { initEnvValidation } from "./lib/env-validation.ts";
 import { initSentry } from "./lib/sentry.ts";
+// Initialize i18n for internationalization
+import "./i18n";
 
 // Initialize Sentry first (before anything can error)
 initSentry();

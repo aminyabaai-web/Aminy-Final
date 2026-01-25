@@ -1,0 +1,180 @@
+{
+  "app": {
+    "name": "Aminy",
+    "tagline": "Tu compañero de IA para criar niños neurodivergentes"
+  },
+
+  "nav": {
+    "home": "Inicio",
+    "plan": "Plan",
+    "chat": "Chat",
+    "progress": "Progreso",
+    "settings": "Configuración",
+    "getCare": "Obtener Atención",
+    "community": "Comunidad",
+    "reports": "Informes"
+  },
+
+  "onboarding": {
+    "welcome": {
+      "title": "Bienvenido a Aminy",
+      "subtitle": "Vamos a conocer a tu familia",
+      "start": "Comencemos"
+    },
+    "empathy": {
+      "title": "¿Cómo te sientes hoy?",
+      "stressed": "Estresado o abrumado",
+      "calm": "Tranquilo y listo",
+      "hopeful": "Esperanzado",
+      "skip": "Omitir este paso"
+    },
+    "child": {
+      "nameLabel": "¿Cómo se llama tu hijo/a?",
+      "namePlaceholder": "Ingresa el nombre",
+      "ageLabel": "¿Cuántos años tiene?",
+      "challengesLabel": "¿Qué desafíos enfrentas?",
+      "challengesPlaceholder": "Cuéntanos qué tienes en mente..."
+    },
+    "complete": {
+      "title": "¡Todo listo!",
+      "subtitle": "Comencemos este camino juntos",
+      "continue": "Continuar al Panel"
+    }
+  },
+
+  "dashboard": {
+    "greeting": {
+      "morning": "Buenos días",
+      "afternoon": "Buenas tardes",
+      "evening": "Buenas noches"
+    },
+    "todaysPlan": "Plan de Hoy",
+    "askAminy": "Pregunta a Aminy",
+    "quickActions": "Acciones Rápidas",
+    "outcomes": "Resultados",
+    "streak": "{{count}} días seguidos",
+    "noStreak": "¡Comienza tu racha hoy!"
+  },
+
+  "chat": {
+    "placeholder": "Escribe tu mensaje...",
+    "voiceInput": "Entrada de voz",
+    "send": "Enviar",
+    "thinking": "Aminy está pensando...",
+    "suggestions": {
+      "title": "Intenta preguntar sobre:",
+      "meltdowns": "Ayuda con crisis",
+      "bedtime": "Estrategias para dormir",
+      "transitions": "Consejos de transición",
+      "behavior": "Entender comportamientos"
+    },
+    "disclaimer": "Aminy es un asistente de IA y no reemplaza el consejo médico profesional."
+  },
+
+  "progress": {
+    "title": "Tu Progreso",
+    "thisWeek": "Esta Semana",
+    "thisMonth": "Este Mes",
+    "allTime": "Todo el Tiempo",
+    "goals": "Metas",
+    "routinesCompleted": "Rutinas Completadas",
+    "streakDays": "Días de Racha",
+    "achievements": "Logros"
+  },
+
+  "getCare": {
+    "title": "Obtener Atención",
+    "subtitle": "Conéctate con expertos",
+    "bookVisit": "Reservar una Cita",
+    "askAminy": "Pregunta a Aminy (Gratis)",
+    "browseProviders": "Ver Proveedores",
+    "urgentConcern": "¿Preocupación Urgente?",
+    "crisisLine": "Llama al 988 para apoyo inmediato"
+  },
+
+  "settings": {
+    "title": "Configuración",
+    "account": "Cuenta",
+    "notifications": "Notificaciones",
+    "language": "Idioma",
+    "privacy": "Privacidad",
+    "support": "Soporte",
+    "about": "Acerca de",
+    "signOut": "Cerrar Sesión",
+    "subscription": "Suscripción",
+    "manageChildren": "Administrar Hijos",
+    "caregivers": "Cuidadores"
+  },
+
+  "subscription": {
+    "free": "Gratis",
+    "core": "Básico",
+    "pro": "Pro",
+    "family": "Plan Familiar",
+    "currentPlan": "Plan Actual",
+    "upgrade": "Mejorar",
+    "trialDays": "{{days}} días de prueba restantes",
+    "perMonth": "/mes",
+    "perYear": "/año",
+    "hsaEligible": "Elegible para HSA/FSA",
+    "startTrial": "Comenzar Prueba Gratis"
+  },
+
+  "common": {
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "continue": "Continuar",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "done": "Listo",
+    "close": "Cerrar",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "confirm": "Confirmar",
+    "loading": "Cargando...",
+    "error": "Algo salió mal",
+    "retry": "Intentar de nuevo",
+    "success": "¡Éxito!",
+    "learnMore": "Más Información",
+    "seeAll": "Ver Todo",
+    "today": "Hoy",
+    "yesterday": "Ayer",
+    "tomorrow": "Mañana"
+  },
+
+  "errors": {
+    "generic": "Algo salió mal. Por favor, intenta de nuevo.",
+    "network": "No se puede conectar. Por favor, verifica tu conexión a internet.",
+    "unauthorized": "Por favor, inicia sesión para continuar.",
+    "notFound": "Contenido no encontrado.",
+    "validation": "Por favor, verifica tu entrada e intenta de nuevo."
+  },
+
+  "disclaimers": {
+    "clinical": "Aminy NO es un reemplazo para terapia, atención médica o diagnóstico profesional. Siempre consulta con proveedores de salud calificados.",
+    "ai": "Aminy usa IA para proporcionar sugerencias. Los resultados pueden variar y deben discutirse con tu equipo de atención.",
+    "crisis": "Si tú o tu hijo está en peligro inmediato, por favor llama al 911 o ve a la sala de emergencias más cercana."
+  },
+
+  "waiver": {
+    "title": "Servicios de Exención de Medicaid",
+    "clockIn": "Registrar Entrada",
+    "clockOut": "Registrar Salida",
+    "currentSession": "Sesión Actual",
+    "sessionDuration": "Duración",
+    "serviceType": "Tipo de Servicio",
+    "locationVerified": "Ubicación Verificada",
+    "submitHours": "Enviar Horas",
+    "weeklyHours": "Horas Semanales",
+    "authorizedHours": "Horas Autorizadas"
+  },
+
+  "time": {
+    "morning": "Mañana",
+    "afternoon": "Tarde",
+    "evening": "Noche",
+    "minutes": "{{count}} min",
+    "hours": "{{count}} hr",
+    "hoursMinutes": "{{hours}}h {{minutes}}m"
+  }
+}

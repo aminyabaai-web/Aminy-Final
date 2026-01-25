@@ -4,7 +4,7 @@
  * "Your child is in the 75th percentile for progress"
  */
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
@@ -19,12 +19,14 @@ import {
   Info,
   ChevronRight,
   Sparkles,
+  Loader2,
 } from 'lucide-react';
 import {
   BenchmarkData,
   ChildBenchmarks,
   BENCHMARK_DISPLAY,
   getBenchmarkSummary,
+  calculateRealBenchmarks,
   generateMockBenchmarks,
 } from '../lib/outcome-benchmarks';
 
@@ -43,8 +45,37 @@ export function OutcomeBenchmarks({
   daysOnPlatform,
   onViewDetails,
 }: OutcomeBenchmarksProps) {
-  // In production, this would fetch from API
-  const benchmarks = generateMockBenchmarks(childId, childAge, daysOnPlatform);
+  const [benchmarks, setBenchmarks] = useState<ChildBenchmarks | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadBenchmarks() {
+      setLoading(true);
+      try {
+        // Use real benchmark calculation with actual progress data
+        const data = await calculateRealBenchmarks(childId, childAge, daysOnPlatform);
+        setBenchmarks(data);
+      } catch (error) {
+        console.error('Failed to calculate benchmarks:', error);
+        // Fall back to mock data if calculation fails
+        setBenchmarks(generateMockBenchmarks(childId, childAge, daysOnPlatform));
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadBenchmarks();
+  }, [childId, childAge, daysOnPlatform]);
+
+  if (loading || !benchmarks) {
+    return (
+      <Card className="p-5 bg-gradient-to-br from-white to-slate-50">
+        <div className="flex items-center justify-center py-8">
+          <Loader2 className="w-6 h-6 animate-spin text-teal-600" />
+          <span className="ml-2 text-gray-600">Loading benchmarks...</span>
+        </div>
+      </Card>
+    );
+  }
 
   const getTrendIcon = (trend: 'improving' | 'stable' | 'needs-attention') => {
     switch (trend) {

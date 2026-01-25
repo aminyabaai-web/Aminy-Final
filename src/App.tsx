@@ -227,6 +227,23 @@ const TermsOfService = lazy(() =>
     default: m.TermsOfService,
   })),
 );
+const ReferralLanding = lazy(() =>
+  import("./components/ReferralLanding").then((m) => ({
+    default: m.ReferralLanding,
+  })),
+);
+
+// One Medical-inspired components
+const MyAppointments = lazy(() =>
+  import("./components/MyAppointments").then((m) => ({
+    default: m.MyAppointments,
+  })),
+);
+const ConversationalBooking = lazy(() =>
+  import("./components/ConversationalBooking").then((m) => ({
+    default: m.ConversationalBooking,
+  })),
+);
 
 // Secure Admin Portal Wrapper with server-side verification
 const SecureAdminPortalWrapper = React.memo(function SecureAdminPortalWrapper({
@@ -381,7 +398,10 @@ type AppScreen =
   | "forgot-password" // Password reset request
   | "reset-password"  // Set new password after reset
   | "privacy-policy"  // Privacy policy page
-  | "terms-of-service"; // Terms of service page
+  | "terms-of-service" // Terms of service page
+  | "join" // Referral landing page (/join?ref=CODE)
+  | "my-appointments" // Appointment management dashboard
+  | "conversational-booking"; // AI-driven booking flow
 
 interface ChildProfile {
   id: string;
@@ -412,10 +432,15 @@ const getInitialScreen = (): AppScreen => {
     return "auth-callback";
   }
 
+  // Check for referral landing page (/join?ref=CODE)
+  if (pathname === '/join' || pathname.includes('/join')) {
+    return "join";
+  }
+
   // Check URL params
   const params = new URLSearchParams(window.location.search);
   const urlScreen = params.get("screen");
-  if (urlScreen && ["login", "create-account", "forgot-password", "reset-password", "privacy-policy", "terms-of-service"].includes(urlScreen)) {
+  if (urlScreen && ["login", "create-account", "forgot-password", "reset-password", "privacy-policy", "terms-of-service", "join"].includes(urlScreen)) {
     return urlScreen as AppScreen;
   }
 
@@ -872,9 +897,9 @@ export default function App() {
     }
   };
 
-  // Show FAB on dashboard and feature screens (but NOT on Junior - kids don't need Ask Aminy)
+  // Show FAB on feature screens (but NOT on Dashboard since it has its own integrated chat)
+  // Also NOT on Junior - kids don't need Ask Aminy
   const showFAB =
-    currentScreen === "dashboard" ||
     currentScreen === "benefits" ||
     currentScreen === "telehealth" ||
     currentScreen === "caregivers" ||
@@ -1006,7 +1031,8 @@ export default function App() {
                     "telehealth", "caregivers", "vault", "bcba-portal", "marketplace",
                     "provider-portal", "insight-report", "outcomes", "on-demand-telehealth",
                     "settings", "calm-tools", "incident-log", "care-plan", "resources",
-                    "community", "profile", "benefits", "junior"
+                    "community", "profile", "benefits", "junior", "my-appointments",
+                    "conversational-booking"
                   ];
                   if (validScreens.includes(destination as AppScreen)) {
                     navigateToScreen(destination as AppScreen);
@@ -1299,6 +1325,41 @@ export default function App() {
             <Suspense fallback={<LoadingSkeleton />}>
               <TermsOfService
                 onBack={() => navigateToScreen("splash")}
+              />
+            </Suspense>
+          );
+
+        case "join":
+          return (
+            <Suspense fallback={<LoadingSkeleton />}>
+              <ReferralLanding
+                onNavigateToSignup={() => navigateToScreen("create-account")}
+                onNavigateToLogin={() => navigateToScreen("login")}
+              />
+            </Suspense>
+          );
+
+        case "my-appointments":
+          return (
+            <Suspense fallback={<LoadingSkeleton />}>
+              <MyAppointments
+                onBack={() => navigateToScreen("dashboard")}
+                onBookNew={() => navigateToScreen("conversational-booking")}
+                onNavigateToProvider={() => navigateToScreen("marketplace")}
+              />
+            </Suspense>
+          );
+
+        case "conversational-booking":
+          return (
+            <Suspense fallback={<LoadingSkeleton />}>
+              <ConversationalBooking
+                onBack={() => navigateToScreen("telehealth")}
+                onComplete={() => {
+                  navigateToScreen("my-appointments");
+                  toast.success("Session booked! You'll receive a confirmation email.");
+                }}
+                childName={userData.childName || "your child"}
               />
             </Suspense>
           );

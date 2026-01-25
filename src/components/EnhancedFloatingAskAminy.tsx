@@ -1,8 +1,86 @@
-import React, { useState, useEffect } from 'react';
-import { Sparkles, MessageCircle, Zap, Brain } from 'lucide-react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { Sparkles, MessageCircle, Zap, Brain, Sun, Moon, Coffee, Sunset } from 'lucide-react';
 import { EnhancedAskAminy } from './EnhancedAskAminy';
 import { cn } from '../lib/utils';
 import { useAnalytics } from '../lib/analytics-engine';
+
+// Time-based contextual prompts
+const TIME_BASED_PROMPTS = {
+  morning: {
+    icon: Coffee,
+    label: 'Morning',
+    prompts: [
+      (childName: string) => `Help with ${childName}'s morning routine`,
+      () => 'Getting ready without meltdowns',
+    ]
+  },
+  afternoon: {
+    icon: Sun,
+    label: 'Afternoon',
+    prompts: [
+      () => 'After-school decompression help',
+      (childName: string) => `Supporting ${childName} with homework`,
+    ]
+  },
+  evening: {
+    icon: Sunset,
+    label: 'Evening',
+    prompts: [
+      (childName: string) => `Help with ${childName}'s bedtime`,
+      () => 'Wind-down activities that work',
+    ]
+  },
+  night: {
+    icon: Moon,
+    label: 'Night',
+    prompts: [
+      () => 'Processing today\'s challenges',
+      () => 'Sleep strategies that help',
+    ]
+  }
+};
+
+function getTimeOfDay(): 'morning' | 'afternoon' | 'evening' | 'night' {
+  const hour = new Date().getHours();
+  if (hour >= 5 && hour < 12) return 'morning';
+  if (hour >= 12 && hour < 17) return 'afternoon';
+  if (hour >= 17 && hour < 21) return 'evening';
+  return 'night';
+}
+
+interface TimeAwarePromptsProps {
+  userData: { parentName: string; childName: string };
+  onAskAminyClick: () => void;
+}
+
+function TimeAwarePrompts({ userData, onAskAminyClick }: TimeAwarePromptsProps) {
+  const timeOfDay = useMemo(() => getTimeOfDay(), []);
+  const config = TIME_BASED_PROMPTS[timeOfDay];
+  const TimeIcon = config.icon;
+
+  return (
+    <div className="mb-4">
+      <div className="flex items-center gap-1.5 text-xs text-gray-500 mb-2">
+        <TimeIcon className="w-3 h-3" />
+        <span>{config.label} suggestions</span>
+      </div>
+      <div className="grid grid-cols-1 gap-2">
+        {config.prompts.map((promptFn, index) => (
+          <button
+            key={index}
+            className="text-left p-2.5 bg-gray-50 hover:bg-gray-100 rounded-lg text-sm transition-colors border border-transparent hover:border-gray-200"
+            onClick={(e) => {
+              e.stopPropagation();
+              onAskAminyClick();
+            }}
+          >
+            {promptFn(userData.childName)}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 interface EnhancedFloatingAskAminyProps {
   userTier: string;
@@ -308,27 +386,8 @@ export function EnhancedAskAminyHomeCard({
         </div>
       )}
 
-      {/* Suggested Prompts */}
-      <div className="grid grid-cols-2 gap-2 mb-4">
-        <button 
-          className="text-left p-2 bg-gray-50 hover:bg-gray-100 rounded-lg text-sm transition-colors"
-          onClick={(e) => {
-            e.stopPropagation();
-            onAskAminyClick();
-          }}
-        >
-          Help with {userData.childName}'s routine
-        </button>
-        <button 
-          className="text-left p-2 bg-gray-50 hover:bg-gray-100 rounded-lg text-sm transition-colors"
-          onClick={(e) => {
-            e.stopPropagation();
-            onAskAminyClick();
-          }}
-        >
-          Communication strategies
-        </button>
-      </div>
+      {/* Time-Aware Suggested Prompts */}
+      <TimeAwarePrompts userData={userData} onAskAminyClick={onAskAminyClick} />
 
       {/* CTA */}
       <button className="w-full bg-accent text-white py-3 rounded-xl font-medium hover:bg-accent/90 transition-colors">

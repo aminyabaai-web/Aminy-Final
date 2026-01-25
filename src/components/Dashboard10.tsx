@@ -618,10 +618,10 @@ export function Dashboard10({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
-            className={`fixed bg-white dark:bg-slate-800 shadow-2xl z-30 overflow-hidden border border-gray-200 dark:border-slate-700 transition-all duration-300 ease-out ${
+            className={`fixed bg-white dark:bg-slate-800 shadow-2xl z-50 overflow-hidden border border-gray-200 dark:border-slate-700 transition-all duration-300 ease-out ${
               isFullScreenChat
                 ? 'inset-0 rounded-none'
-                : 'bottom-28 left-4 right-4 sm:left-auto sm:right-4 sm:w-96 rounded-2xl'
+                : 'bottom-20 right-4 w-[calc(100%-2rem)] max-w-sm sm:w-96 rounded-2xl'
             }`}
           >
             {/* Chat Header - Branded with Full-Screen Toggle */}

@@ -1,0 +1,180 @@
+{
+  "app": {
+    "name": "Aminy",
+    "tagline": "Your AI companion for raising neurodivergent children"
+  },
+
+  "nav": {
+    "home": "Home",
+    "plan": "Plan",
+    "chat": "Chat",
+    "progress": "Progress",
+    "settings": "Settings",
+    "getCare": "Get Care",
+    "community": "Community",
+    "reports": "Reports"
+  },
+
+  "onboarding": {
+    "welcome": {
+      "title": "Welcome to Aminy",
+      "subtitle": "Let's get to know your family",
+      "start": "Let's Get Started"
+    },
+    "empathy": {
+      "title": "How are you feeling today?",
+      "stressed": "Stressed or overwhelmed",
+      "calm": "Calm and ready",
+      "hopeful": "Hopeful",
+      "skip": "Skip this step"
+    },
+    "child": {
+      "nameLabel": "What's your child's name?",
+      "namePlaceholder": "Enter name",
+      "ageLabel": "How old are they?",
+      "challengesLabel": "What challenges are you facing?",
+      "challengesPlaceholder": "Tell us what's on your mind..."
+    },
+    "complete": {
+      "title": "You're all set!",
+      "subtitle": "Let's start your journey together",
+      "continue": "Continue to Dashboard"
+    }
+  },
+
+  "dashboard": {
+    "greeting": {
+      "morning": "Good morning",
+      "afternoon": "Good afternoon",
+      "evening": "Good evening"
+    },
+    "todaysPlan": "Today's Plan",
+    "askAminy": "Ask Aminy",
+    "quickActions": "Quick Actions",
+    "outcomes": "Outcomes",
+    "streak": "{{count}} day streak",
+    "noStreak": "Start your streak today!"
+  },
+
+  "chat": {
+    "placeholder": "Type your message...",
+    "voiceInput": "Voice input",
+    "send": "Send",
+    "thinking": "Aminy is thinking...",
+    "suggestions": {
+      "title": "Try asking about:",
+      "meltdowns": "Help with meltdowns",
+      "bedtime": "Bedtime strategies",
+      "transitions": "Transition tips",
+      "behavior": "Understanding behavior"
+    },
+    "disclaimer": "Aminy is an AI assistant and not a replacement for professional medical advice."
+  },
+
+  "progress": {
+    "title": "Your Progress",
+    "thisWeek": "This Week",
+    "thisMonth": "This Month",
+    "allTime": "All Time",
+    "goals": "Goals",
+    "routinesCompleted": "Routines Completed",
+    "streakDays": "Streak Days",
+    "achievements": "Achievements"
+  },
+
+  "getCare": {
+    "title": "Get Care",
+    "subtitle": "Connect with experts",
+    "bookVisit": "Book a Visit",
+    "askAminy": "Ask Aminy (Free)",
+    "browseProviders": "Browse Providers",
+    "urgentConcern": "Urgent Concern?",
+    "crisisLine": "Call 988 for immediate support"
+  },
+
+  "settings": {
+    "title": "Settings",
+    "account": "Account",
+    "notifications": "Notifications",
+    "language": "Language",
+    "privacy": "Privacy",
+    "support": "Support",
+    "about": "About",
+    "signOut": "Sign Out",
+    "subscription": "Subscription",
+    "manageChildren": "Manage Children",
+    "caregivers": "Caregivers"
+  },
+
+  "subscription": {
+    "free": "Free",
+    "core": "Core",
+    "pro": "Pro",
+    "family": "Family Plan",
+    "currentPlan": "Current Plan",
+    "upgrade": "Upgrade",
+    "trialDays": "{{days}} days left in trial",
+    "perMonth": "/month",
+    "perYear": "/year",
+    "hsaEligible": "HSA/FSA Eligible",
+    "startTrial": "Start Free Trial"
+  },
+
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "continue": "Continue",
+    "back": "Back",
+    "next": "Next",
+    "done": "Done",
+    "close": "Close",
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "retry": "Try again",
+    "success": "Success!",
+    "learnMore": "Learn More",
+    "seeAll": "See All",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "tomorrow": "Tomorrow"
+  },
+
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "network": "Unable to connect. Please check your internet connection.",
+    "unauthorized": "Please sign in to continue.",
+    "notFound": "Content not found.",
+    "validation": "Please check your input and try again."
+  },
+
+  "disclaimers": {
+    "clinical": "Aminy is NOT a replacement for therapy, medical care, or professional diagnosis. Always consult with qualified healthcare providers.",
+    "ai": "Aminy uses AI to provide suggestions. Results may vary and should be discussed with your care team.",
+    "crisis": "If you or your child is in immediate danger, please call 911 or go to your nearest emergency room."
+  },
+
+  "waiver": {
+    "title": "Medicaid Waiver Services",
+    "clockIn": "Clock In",
+    "clockOut": "Clock Out",
+    "currentSession": "Current Session",
+    "sessionDuration": "Duration",
+    "serviceType": "Service Type",
+    "locationVerified": "Location Verified",
+    "submitHours": "Submit Hours",
+    "weeklyHours": "Weekly Hours",
+    "authorizedHours": "Authorized Hours"
+  },
+
+  "time": {
+    "morning": "Morning",
+    "afternoon": "Afternoon",
+    "evening": "Evening",
+    "minutes": "{{count}} min",
+    "hours": "{{count}} hr",
+    "hoursMinutes": "{{hours}}h {{minutes}}m"
+  }
+}

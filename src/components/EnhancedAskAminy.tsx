@@ -324,27 +324,71 @@ export function EnhancedAskAminy({
     }
   }, [messages, conversationTitle, conversationId]);
 
-  // Generate contextual suggestions
+  // Generate time-aware contextual suggestions
   useEffect(() => {
     if (isOpen && messages.length === 0) {
       const prompts = generatePrompts();
       const childName = userData.childName;
-      
-      const suggestions = [
-        `Help with ${childName}'s bedtime routine`,
+
+      // Get current time of day for contextual prompts
+      const hour = new Date().getHours();
+      let timeOfDay: 'morning' | 'afternoon' | 'evening' | 'night';
+      if (hour >= 5 && hour < 12) timeOfDay = 'morning';
+      else if (hour >= 12 && hour < 17) timeOfDay = 'afternoon';
+      else if (hour >= 17 && hour < 21) timeOfDay = 'evening';
+      else timeOfDay = 'night';
+
+      // Time-based contextual prompts
+      const TIME_PROMPTS: Record<string, string[]> = {
+        morning: [
+          `Help with ${childName}'s morning routine`,
+          'Getting ready for school without meltdowns',
+          'Breakfast time strategies',
+          'Morning transition tips'
+        ],
+        afternoon: [
+          'After-school decompression help',
+          `Supporting ${childName} with homework`,
+          'Snack time and afternoon routines',
+          'Managing post-school energy'
+        ],
+        evening: [
+          `Help with ${childName}'s bedtime routine`,
+          'Wind-down activities that work',
+          'Dinner time strategies',
+          'Evening transition tips'
+        ],
+        night: [
+          'Sleep strategies that help',
+          'Calming nighttime routines',
+          'Processing today\'s challenges',
+          'Planning for tomorrow'
+        ]
+      };
+
+      // General always-relevant prompts
+      const generalSuggestions = [
         `Managing ${childName}'s transitions`,
         'Communication strategies that work',
         'Supporting emotional regulation',
+        'Dealing with a meltdown right now',
         'IEP goals and school support',
         'Sensory needs and accommodations'
       ];
-      
-      const contextualPrompts = prompts.slice(0, 2).map(p => p.prompt);
+
+      // Get time-based prompts
+      const timePrompts = TIME_PROMPTS[timeOfDay];
+
+      // Combine time-based (priority) with general
+      const contextualPrompts = prompts.slice(0, 1).map(p => p.prompt);
       const finalSuggestions = [
-        ...contextualPrompts,
-        ...suggestions.filter(s => !contextualPrompts.some(cp => cp.includes(s.split(' ')[2])))
+        ...timePrompts.slice(0, 2), // 2 time-based prompts
+        ...contextualPrompts, // 1 context-engine prompt
+        ...generalSuggestions.filter(s =>
+          !timePrompts.some(tp => tp.includes(s.split(' ')[2]))
+        ).slice(0, 1) // 1 general prompt
       ].slice(0, 4);
-      
+
       setContextualSuggestions(finalSuggestions);
     }
   }, [isOpen, messages.length, generatePrompts, userData.childName]);

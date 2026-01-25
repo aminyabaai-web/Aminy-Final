@@ -22,15 +22,7 @@ import {
   CreditCard,
 } from 'lucide-react';
 import { SESSION_BUNDLES, SessionBundle } from '../types/telehealth';
-
-// Stripe Price IDs (would be environment variables in production)
-const BUNDLE_STRIPE_PRICES: Record<string, string> = {
-  'consult-4': 'price_consult4_bundle',
-  'consult-8': 'price_consult8_bundle',
-  'deep-review-3': 'price_deepreview3_bundle',
-  'deep-review-6': 'price_deepreview6_bundle',
-  'mixed-starter': 'price_mixed_starter_bundle',
-};
+import { createBundleCheckoutSession, BUNDLE_STRIPE_PRICES } from '../lib/stripe-service';
 
 interface SessionBundlesProps {
   onSelectBundle: (bundle: SessionBundle) => void;
@@ -69,33 +61,27 @@ export function SessionBundles({
       if (onPurchaseBundle) {
         await onPurchaseBundle(bundle);
       } else {
-        // Default Stripe checkout flow
-        const response = await fetch('/api/stripe/create-bundle-checkout', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            bundleId: bundle.id,
-            priceId: BUNDLE_STRIPE_PRICES[bundle.id],
-            userId,
-            bundlePrice: bundle.bundlePrice,
-            consultCredits: bundle.consultSessions,
-            deepReviewCredits: bundle.deepReviewSessions,
-            validityDays: bundle.validityDays,
-          }),
+        // Get user email from localStorage or context
+        const userEmail = localStorage.getItem('user_email') || 'user@example.com';
+
+        // Use the centralized Stripe service
+        const { url } = await createBundleCheckoutSession({
+          userId,
+          email: userEmail,
+          bundleId: bundle.id,
+          bundlePrice: bundle.bundlePrice,
+          consultCredits: bundle.consultSessions,
+          deepReviewCredits: bundle.deepReviewSessions,
+          validityDays: bundle.validityDays,
         });
 
-        if (!response.ok) {
-          throw new Error('Failed to create checkout session');
-        }
-
-        const { checkoutUrl } = await response.json();
-
         // Redirect to Stripe checkout
-        if (checkoutUrl) {
-          window.location.href = checkoutUrl;
+        if (url) {
+          window.location.href = url;
         } else {
-          // For demo, show success message
-          alert(`Bundle "${bundle.name}" purchased successfully! In production, this would redirect to Stripe checkout.`);
+          // For demo/dev mode without real Stripe
+          console.log('Demo mode: Would redirect to Stripe checkout for bundle:', bundle.id);
+          alert(`Bundle "${bundle.name}" selected! In production with Stripe configured, this would redirect to checkout.`);
           setSelectedBundle(bundle.id);
         }
       }

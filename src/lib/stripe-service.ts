@@ -474,6 +474,176 @@ export function formatPrice(cents: number): string {
   return `$${(cents / 100).toFixed(2)}`;
 }
 
+// ============================================================================
+// Session Bundle Payment Functions
+// ============================================================================
+
+/**
+ * Session bundle price IDs (map to Stripe products)
+ * These must match the bundle IDs in SESSION_BUNDLES
+ */
+export const BUNDLE_STRIPE_PRICES: Record<string, string> = {
+  'consult-4': import.meta.env.VITE_PRICE_BUNDLE_CONSULT_4 || 'price_consult4_bundle',
+  'consult-8': import.meta.env.VITE_PRICE_BUNDLE_CONSULT_8 || 'price_consult8_bundle',
+  'deep-review-3': import.meta.env.VITE_PRICE_BUNDLE_DEEP_3 || 'price_deepreview3_bundle',
+  'deep-review-6': import.meta.env.VITE_PRICE_BUNDLE_DEEP_6 || 'price_deepreview6_bundle',
+  'mixed-starter': import.meta.env.VITE_PRICE_BUNDLE_MIXED || 'price_mixed_starter_bundle',
+};
+
+/**
+ * Create checkout session for session bundle purchase
+ */
+export async function createBundleCheckoutSession({
+  userId,
+  email,
+  bundleId,
+  bundlePrice,
+  consultCredits,
+  deepReviewCredits,
+  validityDays,
+  successUrl = `${window.location.origin}/telehealth?bundle=success`,
+  cancelUrl = `${window.location.origin}/telehealth/bundles?bundle=cancelled`,
+}: {
+  userId: string;
+  email: string;
+  bundleId: string;
+  bundlePrice: number;
+  consultCredits: number;
+  deepReviewCredits: number;
+  validityDays: number;
+  successUrl?: string;
+  cancelUrl?: string;
+}): Promise<CheckoutResponse> {
+  const accessToken = getAccessToken();
+  const priceId = BUNDLE_STRIPE_PRICES[bundleId];
+
+  if (!priceId) {
+    throw new Error(`Unknown bundle ID: ${bundleId}`);
+  }
+
+  const response = await fetch(
+    `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/payments/create-bundle-checkout`,
+    {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userId,
+        email,
+        bundleId,
+        priceId,
+        bundlePrice: Math.round(bundlePrice * 100), // Convert to cents
+        consultCredits,
+        deepReviewCredits,
+        validityDays,
+        successUrl,
+        cancelUrl,
+        metadata: {
+          type: 'session_bundle',
+          bundleId,
+          consultCredits: String(consultCredits),
+          deepReviewCredits: String(deepReviewCredits),
+          validityDays: String(validityDays),
+        },
+      }),
+    }
+  );
+
+  if (!response.ok) {
+    const error = await response.text();
+    throw new Error(`Failed to create bundle checkout session: ${error}`);
+  }
+
+  return response.json();
+}
+
+/**
+ * Get user's current bundle credits
+ */
+export async function getBundleCredits(userId: string): Promise<{
+  consultCredits: number;
+  deepReviewCredits: number;
+  expiresAt: string | null;
+  bundleId: string | null;
+}> {
+  const accessToken = getAccessToken();
+
+  try {
+    const response = await fetch(
+      `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/payments/bundle-credits/${userId}`,
+      {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    if (!response.ok) {
+      // No credits found
+      return {
+        consultCredits: 0,
+        deepReviewCredits: 0,
+        expiresAt: null,
+        bundleId: null,
+      };
+    }
+
+    return response.json();
+  } catch {
+    return {
+      consultCredits: 0,
+      deepReviewCredits: 0,
+      expiresAt: null,
+      bundleId: null,
+    };
+  }
+}
+
+/**
+ * Use a bundle credit for a session
+ */
+export async function useBundleCredit({
+  userId,
+  creditType,
+  providerId,
+  sessionId,
+}: {
+  userId: string;
+  creditType: 'consult' | 'deep-review';
+  providerId: string;
+  sessionId: string;
+}): Promise<{ success: boolean; remainingCredits: number }> {
+  const accessToken = getAccessToken();
+
+  const response = await fetch(
+    `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/payments/use-bundle-credit`,
+    {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userId,
+        creditType,
+        providerId,
+        sessionId,
+      }),
+    }
+  );
+
+  if (!response.ok) {
+    const error = await response.text();
+    throw new Error(`Failed to use bundle credit: ${error}`);
+  }
+
+  return response.json();
+}
+
 export default {
   createCheckoutSession,
   createPortalSession,
@@ -485,7 +655,11 @@ export default {
   calculateVisitPrice,
   validatePromoCode,
   formatPrice,
+  createBundleCheckoutSession,
+  getBundleCredits,
+  useBundleCredit,
   STRIPE_PRICES,
   TIER_PRICING,
   VISIT_PRICES,
+  BUNDLE_STRIPE_PRICES,
 };

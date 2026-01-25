@@ -616,7 +616,7 @@ function NameCollectionStep({
         <Button
           type="submit"
           disabled={!name.trim()}
-          className="w-full bg-accent hover:bg-accent/90"
+          className="w-full min-h-[48px] bg-accent hover:bg-accent/90"
           size="lg"
         >
           Continue
@@ -711,7 +711,7 @@ function ChildBasicsStep({
         <Button
           type="submit"
           disabled={!name.trim() || !age}
-          className="w-full bg-accent hover:bg-accent/90"
+          className="w-full min-h-[48px] bg-accent hover:bg-accent/90"
           size="lg"
         >
           Continue
@@ -794,7 +794,7 @@ function PrimaryConcernStep({
       <Button
         onClick={onNext}
         disabled={!concern}
-        className="w-full bg-accent hover:bg-accent/90"
+        className="w-full min-h-[48px] bg-accent hover:bg-accent/90"
         size="lg"
       >
         Continue
@@ -803,7 +803,7 @@ function PrimaryConcernStep({
 
       <button
         onClick={onBack}
-        className="w-full mt-4 py-2 text-sm text-muted-foreground hover:text-primary"
+        className="w-full mt-4 py-2 min-h-[44px] text-sm text-muted-foreground hover:text-primary"
       >
         <ArrowLeft className="w-4 h-4 inline mr-1" />
         Back
@@ -859,7 +859,7 @@ function QuickWinStep({
       <div className="mt-6 space-y-3">
         <Button
           onClick={onNext}
-          className="w-full bg-accent hover:bg-accent/90"
+          className="w-full min-h-[48px] bg-accent hover:bg-accent/90"
           size="lg"
         >
           {tone.celebrate} Let's build my full plan
@@ -869,7 +869,7 @@ function QuickWinStep({
 
       <button
         onClick={onBack}
-        className="w-full mt-4 py-2 text-sm text-muted-foreground hover:text-primary"
+        className="w-full mt-4 py-2 min-h-[44px] text-sm text-muted-foreground hover:text-primary"
       >
         <ArrowLeft className="w-4 h-4 inline mr-1" />
         Back
@@ -963,7 +963,7 @@ function ToneSelectionStep({
 
       <Button
         onClick={onNext}
-        className="w-full bg-accent hover:bg-accent/90"
+        className="w-full min-h-[48px] bg-accent hover:bg-accent/90"
         size="lg"
       >
         Continue
@@ -972,7 +972,7 @@ function ToneSelectionStep({
 
       <button
         onClick={onBack}
-        className="w-full mt-4 py-2 text-sm text-muted-foreground hover:text-primary"
+        className="w-full mt-4 py-2 min-h-[44px] text-sm text-muted-foreground hover:text-primary"
       >
         <ArrowLeft className="w-4 h-4 inline mr-1" />
         Back
@@ -1096,7 +1096,7 @@ function DiagnosisStep({
       <Button
         onClick={handleNext}
         disabled={!commLevel}
-        className="w-full bg-accent hover:bg-accent/90"
+        className="w-full min-h-[48px] bg-accent hover:bg-accent/90"
         size="lg"
       >
         Continue
@@ -1195,7 +1195,7 @@ function FocusAreasStep({
         <Button
           onClick={handleNext}
           disabled={selected.length === 0}
-          className="w-full bg-accent hover:bg-accent/90"
+          className="w-full min-h-[48px] bg-accent hover:bg-accent/90"
           size="lg"
         >
           Continue
@@ -1205,7 +1205,7 @@ function FocusAreasStep({
 
       <button
         onClick={onBack}
-        className="w-full mt-4 py-2 text-sm text-muted-foreground hover:text-primary"
+        className="w-full mt-4 py-2 min-h-[44px] text-sm text-muted-foreground hover:text-primary"
       >
         <ArrowLeft className="w-4 h-4 inline mr-1" />
         Back
@@ -1305,7 +1305,7 @@ function AccountStep({
         <Button
           onClick={handleNext}
           disabled={!emailValue || !emailValue.includes('@')}
-          className="w-full bg-accent hover:bg-accent/90"
+          className="w-full min-h-[48px] bg-accent hover:bg-accent/90"
           size="lg"
         >
           Create my plan
@@ -1315,7 +1315,7 @@ function AccountStep({
 
       <button
         onClick={onBack}
-        className="w-full mt-4 py-2 text-sm text-muted-foreground hover:text-primary"
+        className="w-full mt-4 py-2 min-h-[44px] text-sm text-muted-foreground hover:text-primary"
       >
         <ArrowLeft className="w-4 h-4 inline mr-1" />
         Back
@@ -1384,7 +1384,7 @@ function CompletionStep({
       <div className="mt-6 space-y-3">
         <Button
           onClick={onComplete}
-          className="w-full bg-accent hover:bg-accent/90"
+          className="w-full min-h-[48px] bg-accent hover:bg-accent/90"
           size="lg"
         >
           See {data.childName}'s Plan
@@ -1667,7 +1667,7 @@ function DemoOverlay({
           ) : (
             <Button
               onClick={onGetStarted}
-              className="w-full bg-accent hover:bg-accent/90"
+              className="w-full min-h-[48px] bg-accent hover:bg-accent/90"
               size="lg"
             >
               Get Started Now

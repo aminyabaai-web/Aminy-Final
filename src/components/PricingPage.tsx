@@ -2,7 +2,17 @@ import React, { useState } from 'react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
-import { Check, X, Sparkles, Target, Stethoscope, Heart, Shield, MessageCircle, BarChart3, FileText, Bell, Users } from 'lucide-react';
+import { Check, X, Sparkles, Target, Stethoscope, Heart, Shield, MessageCircle, BarChart3, FileText, Bell, Users, Wallet, CreditCard } from 'lucide-react';
+import {
+  tierPricing,
+  getTierFeatureDescriptions,
+  getTierDisplayName,
+  getTierTagline,
+  getRecommendedTier,
+  isHSAFSAEligible,
+  TRIAL_CONFIG,
+  type TierType
+} from '../lib/tier-utils';
 
 // Aminy's unique advantages - what makes us different
 const AMINY_ADVANTAGES = [
@@ -16,81 +26,87 @@ const AMINY_ADVANTAGES = [
 ];
 
 interface PricingPageProps {
-  onSelectTier: (tier: 'starter' | 'core' | 'pro') => void;
+  onSelectTier: (tier: TierType) => void;
   currentTier?: string;
 }
 
 export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
-  const [selectedTier, setSelectedTier] = useState<'starter' | 'core' | 'pro'>('core');
+  const [selectedTier, setSelectedTier] = useState<TierType>('core');
+  const recommendedTier = getRecommendedTier();
 
+  // Aligned with tier-utils.ts (source of truth)
   const tiers = [
     {
-      id: 'starter' as const,
-      name: 'Starter',
-      price: 29,
+      id: 'free' as TierType,
+      name: getTierDisplayName('free'),
+      price: tierPricing.free.monthly,
+      yearlyPrice: tierPricing.free.yearly,
       period: 'month',
-      description: 'Start calm routines at home.',
+      description: 'Discover Aminy with a 7-day Core trial.',
       icon: Heart,
-      features: [
-        'AI-personalized daily plan',
-        '2 activities per day',
-        'Basic progress tracking',
-        'Aminy Jr: 2 games',
-        'Community access'
-      ],
-      cta: 'Start with Starter',
-      gradient: 'from-blue-50 to-blue-100',
-      borderColor: 'border-blue-200',
-      accentColor: 'text-blue-600',
-      buttonClass: 'bg-blue-600 hover:bg-blue-700'
+      hsaEligible: false,
+      features: getTierFeatureDescriptions('free'),
+      cta: 'Start Free with 7-Day Trial',
+      trialNote: `Includes ${TRIAL_CONFIG.durationDays}-day Core trial`,
+      gradient: 'from-slate-50 to-slate-100',
+      borderColor: 'border-slate-200',
+      accentColor: 'text-slate-600',
+      buttonClass: 'bg-slate-600 hover:bg-slate-700'
     },
     {
-      id: 'core' as const,
-      name: 'Core',
-      price: 99,
+      id: 'core' as TierType,
+      name: getTierDisplayName('core'),
+      price: tierPricing.core.monthly,
+      yearlyPrice: tierPricing.core.yearly,
+      savings: tierPricing.core.savings,
       period: 'month',
       description: 'Build calm, connect daily.',
       icon: Target,
-      features: [
-        'Everything in Starter, plus:',
-        'Unlimited AI chat coach',
-        'Auto-adapting calm plan',
-        'All Aminy Jr modules',
-        'Complete activity library',
-        'Weekly progress reports',
-        'Priority email support'
-      ],
-      cta: 'Start Free 7-Day Core Trial',
+      hsaEligible: isHSAFSAEligible('core'),
+      features: getTierFeatureDescriptions('core'),
+      cta: `Start Free ${TRIAL_CONFIG.durationDays}-Day Trial`,
       trialNote: 'No credit card needed',
-      recommended: true,
+      recommended: recommendedTier === 'core',
       gradient: 'from-accent/10 to-teal-100',
       borderColor: 'border-accent',
       accentColor: 'text-accent',
       buttonClass: 'bg-accent hover:bg-accent/90'
     },
     {
-      id: 'pro' as const,
-      name: 'Plus',
-      price: 229,
+      id: 'pro' as TierType,
+      name: getTierDisplayName('pro'),
+      price: tierPricing.pro.monthly,
+      yearlyPrice: tierPricing.pro.yearly,
+      savings: tierPricing.pro.savings,
       period: 'month',
       description: 'Full support with BCBA guidance.',
       icon: Stethoscope,
-      features: [
-        'Everything in Core, plus:',
-        'Live telehealth sessions (4/mo)',
-        'BCBA notes & documentation',
-        'Insurance authorization letters',
-        'Provider-ready reports',
-        'IEP support materials',
-        'Dedicated care coordinator',
-        'Priority phone support'
-      ],
-      cta: 'Start Free 7-Day Plus Trial',
+      hsaEligible: isHSAFSAEligible('pro'),
+      features: getTierFeatureDescriptions('pro'),
+      cta: `Start Free ${TRIAL_CONFIG.durationDays}-Day Trial`,
       trialNote: 'No credit card needed',
       gradient: 'from-purple-50 to-purple-100',
       borderColor: 'border-purple-200',
       accentColor: 'text-purple-600',
       buttonClass: 'bg-purple-600 hover:bg-purple-700'
+    },
+    {
+      id: 'proplus' as TierType,
+      name: getTierDisplayName('proplus'),
+      price: tierPricing.proplus.monthly,
+      yearlyPrice: tierPricing.proplus.yearly,
+      savings: tierPricing.proplus.savings,
+      period: 'month',
+      description: 'Perfect for families with multiple children.',
+      icon: Users,
+      hsaEligible: isHSAFSAEligible('proplus'),
+      features: getTierFeatureDescriptions('proplus'),
+      cta: `Start Free ${TRIAL_CONFIG.durationDays}-Day Trial`,
+      trialNote: 'No credit card needed',
+      gradient: 'from-amber-50 to-amber-100',
+      borderColor: 'border-amber-200',
+      accentColor: 'text-amber-600',
+      buttonClass: 'bg-amber-600 hover:bg-amber-700'
     }
   ];
 
@@ -118,19 +134,60 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
           </p>
         </div>
 
+        {/* Forta Differentiator Banner - VC-informed positioning */}
+        <div className="bg-gradient-to-r from-teal-50 to-emerald-50 border border-teal-200 rounded-xl p-6 mb-8 max-w-4xl mx-auto">
+          <div className="flex items-start gap-4">
+            <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center flex-shrink-0">
+              <Sparkles className="w-6 h-6 text-teal-600" />
+            </div>
+            <div className="flex-1">
+              <h3 className="font-semibold text-teal-900 mb-2">Start Today, Not in 90 Days</h3>
+              <p className="text-sm text-teal-800 mb-3">
+                Unlike traditional ABA services with long waitlists and diagnosis requirements, Aminy gives you immediate support.
+              </p>
+              <div className="grid sm:grid-cols-2 gap-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-5 h-5 bg-teal-200 rounded-full flex items-center justify-center">
+                    <Check className="w-3 h-3 text-teal-700" />
+                  </div>
+                  <span className="text-sm text-teal-700">No waitlist — instant AI access</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-5 h-5 bg-teal-200 rounded-full flex items-center justify-center">
+                    <Check className="w-3 h-3 text-teal-700" />
+                  </div>
+                  <span className="text-sm text-teal-700">No diagnosis required</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-5 h-5 bg-teal-200 rounded-full flex items-center justify-center">
+                    <Check className="w-3 h-3 text-teal-700" />
+                  </div>
+                  <span className="text-sm text-teal-700">Works for any family, any child</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-5 h-5 bg-teal-200 rounded-full flex items-center justify-center">
+                    <Check className="w-3 h-3 text-teal-700" />
+                  </div>
+                  <span className="text-sm text-teal-700">Expert sessions available within days</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Pricing Cards */}
-        <div className="grid md:grid-cols-3 gap-6 lg:gap-8 mb-12">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-12">
           {tiers.map((tier) => {
             const Icon = tier.icon;
             const isSelected = selectedTier === tier.id;
             const isCurrent = currentTier === tier.id;
             
             return (
-              <Card 
+              <Card
                 key={tier.id}
-                className={`relative p-6 transition-all ${
-                  tier.recommended 
-                    ? `border-2 ${tier.borderColor} shadow-lg scale-105` 
+                className={`relative p-4 transition-all flex flex-col ${
+                  tier.recommended
+                    ? `border-2 ${tier.borderColor} shadow-lg md:scale-105 z-10`
                     : `border ${tier.borderColor} hover:shadow-md`
                 }`}
               >
@@ -153,22 +210,43 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
                 )}
 
                 {/* Header */}
-                <div className={`bg-gradient-to-br ${tier.gradient} rounded-lg p-4 mb-6`}>
-                  <div className="flex items-center justify-between mb-3">
-                    <div className={`w-10 h-10 rounded-full bg-white flex items-center justify-center`}>
-                      <Icon className={`w-5 h-5 ${tier.accentColor}`} />
+                <div className={`bg-gradient-to-br ${tier.gradient} rounded-lg p-4 mb-4`}>
+                  <div className="flex items-center justify-between mb-2">
+                    <div className={`w-8 h-8 rounded-full bg-white flex items-center justify-center`}>
+                      <Icon className={`w-4 h-4 ${tier.accentColor}`} />
                     </div>
-                    <h3 className="text-2xl font-semibold text-slate-900">{tier.name}</h3>
+                    <h3 className="text-xl font-semibold text-slate-900">{tier.name}</h3>
                   </div>
-                  
-                  <p className="text-sm text-slate-600 mb-4">{tier.description}</p>
-                  
+
+                  <p className="text-xs text-slate-600 mb-3">{tier.description}</p>
+
                   <div className="flex items-baseline gap-1">
-                    <span className="text-4xl font-bold text-slate-900">${tier.price}</span>
-                    <span className="text-slate-500">/{tier.period}</span>
+                    {tier.price === 0 ? (
+                      <span className="text-3xl font-bold text-slate-900">Free</span>
+                    ) : (
+                      <>
+                        <span className="text-3xl font-bold text-slate-900">${tier.price}</span>
+                        <span className="text-slate-500 text-sm">/{tier.period}</span>
+                      </>
+                    )}
                   </div>
-                  
-                  {tier.trialNote && (
+
+                  {/* Yearly savings */}
+                  {tier.savings && tier.savings > 0 && (
+                    <p className="text-xs text-slate-500 mt-1">
+                      or ${tier.yearlyPrice}/year (save {tier.savings}%)
+                    </p>
+                  )}
+
+                  {/* HSA/FSA Eligibility Badge */}
+                  {tier.hsaEligible && (
+                    <div className="mt-2 inline-flex items-center gap-1.5 px-2 py-0.5 bg-green-100 text-green-800 rounded-full text-xs font-medium">
+                      <Wallet className="w-3 h-3" />
+                      <span>HSA/FSA Eligible</span>
+                    </div>
+                  )}
+
+                  {tier.trialNote && tier.price > 0 && (
                     <p className="text-xs text-slate-500 mt-2">
                       Then ${tier.price}/mo • Cancel anytime
                     </p>
@@ -176,11 +254,11 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
                 </div>
 
                 {/* Features */}
-                <ul className="space-y-3 mb-6">
+                <ul className="space-y-2 mb-4 flex-1">
                   {tier.features.map((feature, idx) => (
                     <li key={idx} className="flex items-start gap-2">
-                      <Check className={`w-4 h-4 ${tier.accentColor} mt-0.5 flex-shrink-0`} />
-                      <span className="text-sm text-slate-700">{feature}</span>
+                      <Check className={`w-3 h-3 ${tier.accentColor} mt-1 flex-shrink-0`} />
+                      <span className="text-xs text-slate-700">{feature}</span>
                     </li>
                   ))}
                 </ul>
@@ -303,9 +381,29 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
             <Card className="p-4">
               <h4 className="font-semibold text-slate-900 mb-2">Is my insurance accepted?</h4>
               <p className="text-sm text-slate-600">
-                Most plans cover ABA services under behavioral health. Plus tier includes insurance 
+                Most plans cover ABA services under behavioral health. Plus tier includes insurance
                 authorization letters and BCBA documentation to maximize your benefits.
               </p>
+            </Card>
+
+            <Card className="p-4 border-green-200 bg-green-50/50">
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Wallet className="w-4 h-4 text-green-700" />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-slate-900 mb-2">Can I use my HSA or FSA?</h4>
+                  <p className="text-sm text-slate-600 mb-2">
+                    <strong className="text-green-700">Yes!</strong> All Aminy plans are eligible for HSA/FSA reimbursement.
+                    Aminy qualifies as a behavioral health and wellness expense under IRS guidelines.
+                  </p>
+                  <ul className="text-xs text-slate-500 space-y-1">
+                    <li>• Pay directly with your HSA/FSA debit card</li>
+                    <li>• Or submit receipts for reimbursement</li>
+                    <li>• We provide itemized receipts for all payments</li>
+                  </ul>
+                </div>
+              </div>
             </Card>
 
             <Card className="p-4">
