@@ -245,6 +245,20 @@ const ConversationalBooking = lazy(() =>
   })),
 );
 
+// Provider-Parent Messaging (HIPAA-compliant)
+const SecureMessaging = lazy(() =>
+  import("./components/messaging/SecureMessaging").then((m) => ({
+    default: m.SecureMessaging,
+  })),
+);
+
+// Provider Access Request Management
+const ProviderAccessRequests = lazy(() =>
+  import("./components/ProviderAccessRequests").then((m) => ({
+    default: m.ProviderAccessRequests,
+  })),
+);
+
 // Secure Admin Portal Wrapper with server-side verification
 const SecureAdminPortalWrapper = React.memo(function SecureAdminPortalWrapper({
   userId,
@@ -401,7 +415,9 @@ type AppScreen =
   | "terms-of-service" // Terms of service page
   | "join" // Referral landing page (/join?ref=CODE)
   | "my-appointments" // Appointment management dashboard
-  | "conversational-booking"; // AI-driven booking flow
+  | "conversational-booking" // AI-driven booking flow
+  | "messages" // Provider-parent secure messaging
+  | "access-requests"; // Provider access request management
 
 interface ChildProfile {
   id: string;
@@ -1032,7 +1048,7 @@ export default function App() {
                     "provider-portal", "insight-report", "outcomes", "on-demand-telehealth",
                     "settings", "calm-tools", "incident-log", "care-plan", "resources",
                     "community", "profile", "benefits", "junior", "my-appointments",
-                    "conversational-booking"
+                    "conversational-booking", "messages", "access-requests"
                   ];
                   if (validScreens.includes(destination as AppScreen)) {
                     navigateToScreen(destination as AppScreen);
@@ -1360,6 +1376,29 @@ export default function App() {
                   toast.success("Session booked! You'll receive a confirmation email.");
                 }}
                 childName={userData.childName || "your child"}
+              />
+            </Suspense>
+          );
+
+        case "messages":
+          return (
+            <Suspense fallback={<LoadingSkeleton />}>
+              <SecureMessaging
+                currentUserId={userData.id || "parent-1"}
+                currentUserRole="parent"
+                onBack={() => navigateToScreen("dashboard")}
+              />
+            </Suspense>
+          );
+
+        case "access-requests":
+          return (
+            <Suspense fallback={<LoadingSkeleton />}>
+              <ProviderAccessRequests
+                parentId={userData.id || "parent-1"}
+                childId={userData.childId || "child-1"}
+                childName={userData.childName || "your child"}
+                onBack={() => navigateToScreen("dashboard")}
               />
             </Suspense>
           );
