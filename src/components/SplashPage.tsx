@@ -128,8 +128,8 @@ export function SplashPage({
               ...fontSmoothing,
             }}
           >
-            Your always-there AI companion<br />
-            for neurodivergent family life.
+            Your AI companion for raising<br />
+            a neurodivergent child.
           </motion.h1>
 
           {/* Context line */}
@@ -152,7 +152,7 @@ export function SplashPage({
               ...fontSmoothing,
             }}
           >
-            Designed for families navigating autism, ADHD, anxiety, and related neurodivergent needs.
+            ABA-informed strategies, expert provider network, all in one place. Get started in 12 weeks or less.
           </motion.p>
 
           {/* Primary CTA */}

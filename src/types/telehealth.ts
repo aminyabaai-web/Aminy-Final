@@ -218,11 +218,15 @@ export type ProviderRole =
   | 'family-therapist'
   | 'slp'
   | 'ot'
+  | 'pt'
   | 'feeding-specialist'
   | 'education-advocate'
   | 'behavior-consultant'
   | 'crisis-specialist'
-  | 'care-coordinator';
+  | 'care-coordinator'
+  | 'dbp'
+  | 'psychologist'
+  | 'neuropsychologist';
 
 export type ProviderOrganization = 'independent' | 'aact' | 'rise' | 'sensato';
 
@@ -266,11 +270,15 @@ export const PROVIDER_ROLE_DISPLAY: Record<ProviderRole, string> = {
   'family-therapist': 'Family Therapist',
   'slp': 'Speech-Language Pathologist',
   'ot': 'Occupational Therapist',
+  'pt': 'Physical Therapist',
   'feeding-specialist': 'Feeding Specialist',
   'education-advocate': 'Education Advocate',
   'behavior-consultant': 'Behavior Consultant',
   'crisis-specialist': 'Crisis Specialist',
-  'care-coordinator': 'Care Coordinator / Navigator'
+  'care-coordinator': 'Care Coordinator / Navigator',
+  'dbp': 'Developmental-Behavioral Pediatrician',
+  'psychologist': 'Licensed Psychologist',
+  'neuropsychologist': 'Neuropsychologist'
 };
 
 // ============================================================================

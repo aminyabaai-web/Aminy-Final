@@ -102,12 +102,13 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, navigate }: 
       icon: Shield,
       description: 'Insurance and benefits navigator'
     },
-    {
-      id: 'junior',
-      label: 'Jr Mode',
-      icon: Sparkles,
-      description: 'Kid mode activities and games'
-    },
+    // Jr Mode paused for now
+    // {
+    //   id: 'junior',
+    //   label: 'Jr Mode',
+    //   icon: Sparkles,
+    //   description: 'Kid mode activities and games'
+    // },
     {
       id: 'settings',
       label: 'Settings',
@@ -136,7 +137,7 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, navigate }: 
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id ||
-              (tab.id === 'more' && ['benefits', 'junior', 'telehealth', 'settings', 'profile', 'reports', 'document-vault', 'care'].includes(activeTab));
+              (tab.id === 'more' && ['benefits', 'telehealth', 'settings', 'profile', 'reports', 'document-vault', 'care'].includes(activeTab));
             const isDisabled = !tab.enabled;
 
             // Center AI button gets special treatment

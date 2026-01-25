@@ -134,10 +134,10 @@ export async function generateAIResponse(
     // Build context-rich system prompt
     const systemPrompt = buildSystemPrompt(context);
 
-    // Prepare messages for AI
+    // Prepare messages for AI (increased to 20 messages for better context)
     const messages = [
       { role: 'system', content: systemPrompt },
-      ...conversationHistory.slice(-10).map(m => ({ // Last 10 messages for context
+      ...conversationHistory.slice(-20).map(m => ({ // Last 20 messages for context
         role: m.role === 'assistant' ? 'assistant' : 'user',
         content: m.content
       })),
