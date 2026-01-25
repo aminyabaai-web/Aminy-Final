@@ -1,0 +1,548 @@
+/**
+ * Conversation Memory System for Aminy
+ *
+ * Persists conversations to Supabase with semantic search capability
+ * Enables long-term memory and context retrieval for better AI responses
+ */
+
+import { projectId, publicAnonKey } from '../../utils/supabase/info';
+
+// Types
+export interface ConversationMessage {
+  id: string;
+  role: 'user' | 'assistant';
+  content: string;
+  timestamp: string;
+  metadata?: {
+    topic?: string;
+    sentiment?: 'positive' | 'neutral' | 'negative' | 'concerned';
+    hasActionItems?: boolean;
+    confidence?: number;
+  };
+}
+
+export interface Conversation {
+  id: string;
+  userId: string;
+  childId: string;
+  title: string;
+  messages: ConversationMessage[];
+  summary?: string;
+  topics: string[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface MemoryFact {
+  id: string;
+  userId: string;
+  childId: string;
+  category: MemoryCategory;
+  content: string;
+  source: MemorySource;
+  confidence: number;
+  createdAt: string;
+  expiresAt?: string | null;
+}
+
+export type MemoryCategory =
+  | 'preference'
+  | 'trigger'
+  | 'strength'
+  | 'challenge'
+  | 'milestone'
+  | 'strategy'
+  | 'medical'
+  | 'educational'
+  | 'routine'
+  | 'relationship';
+
+export type MemorySource =
+  | 'conversation'
+  | 'onboarding'
+  | 'vault'
+  | 'provider'
+  | 'manual'
+  | 'inferred';
+
+// Backend URL
+const getBackendUrl = () => `https://${projectId}.supabase.co/functions/v1/make-server-8a022548`;
+
+/**
+ * Save a conversation to the database
+ */
+export async function saveConversation(
+  userId: string,
+  childId: string,
+  conversation: Partial<Conversation>
+): Promise<string | null> {
+  try {
+    const response = await fetch(`${getBackendUrl()}/conversation/save`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${publicAnonKey}`,
+        'X-User-Id': userId,
+      },
+      body: JSON.stringify({
+        userId,
+        childId,
+        ...conversation,
+        updatedAt: new Date().toISOString(),
+      }),
+    });
+
+    if (!response.ok) {
+      console.error('Failed to save conversation:', await response.text());
+      return null;
+    }
+
+    const data = await response.json();
+    return data.id || conversation.id || null;
+  } catch (error) {
+    console.error('Error saving conversation:', error);
+    return null;
+  }
+}
+
+/**
+ * Load recent conversations for a user
+ */
+export async function loadRecentConversations(
+  userId: string,
+  limit: number = 10
+): Promise<Conversation[]> {
+  try {
+    const response = await fetch(
+      `${getBackendUrl()}/conversation/load`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${publicAnonKey}`,
+          'X-User-Id': userId,
+        },
+        body: JSON.stringify({ userId, limit }),
+      }
+    );
+
+    if (!response.ok) {
+      return [];
+    }
+
+    const data = await response.json();
+    return data.conversations || [];
+  } catch (error) {
+    console.error('Error loading conversations:', error);
+    return [];
+  }
+}
+
+/**
+ * Load a specific conversation by ID
+ */
+export async function loadConversation(
+  conversationId: string,
+  userId: string
+): Promise<Conversation | null> {
+  try {
+    const response = await fetch(
+      `${getBackendUrl()}/conversation/${conversationId}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${publicAnonKey}`,
+          'X-User-Id': userId,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      return null;
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error loading conversation:', error);
+    return null;
+  }
+}
+
+/**
+ * Store a memory fact for long-term retention
+ */
+export async function storeMemoryFact(
+  userId: string,
+  childId: string,
+  fact: {
+    category: MemoryCategory;
+    content: string;
+    source?: MemorySource;
+    confidence?: number;
+  }
+): Promise<boolean> {
+  try {
+    const response = await fetch(`${getBackendUrl()}/memory/store`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${publicAnonKey}`,
+        'X-User-Id': userId,
+      },
+      body: JSON.stringify({
+        userId,
+        childId,
+        category: fact.category,
+        content: fact.content,
+        source: fact.source || 'conversation',
+        confidence: fact.confidence || 0.8,
+      }),
+    });
+
+    return response.ok;
+  } catch (error) {
+    console.error('Error storing memory fact:', error);
+    return false;
+  }
+}
+
+/**
+ * Get relevant memory facts for context
+ */
+export async function getRelevantMemories(
+  userId: string,
+  childId: string,
+  query?: string,
+  categories?: MemoryCategory[],
+  limit: number = 20
+): Promise<MemoryFact[]> {
+  try {
+    const params = new URLSearchParams({
+      limit: limit.toString(),
+    });
+
+    if (query) params.append('query', query);
+    if (categories) params.append('categories', categories.join(','));
+
+    const response = await fetch(
+      `${getBackendUrl()}/memory/recent?${params.toString()}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${publicAnonKey}`,
+          'X-User-Id': userId,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      return [];
+    }
+
+    const data = await response.json();
+    return data.memories || [];
+  } catch (error) {
+    console.error('Error getting memories:', error);
+    return [];
+  }
+}
+
+/**
+ * Search memories using semantic similarity (if vector search is enabled)
+ */
+export async function searchMemoriesSemantic(
+  userId: string,
+  query: string,
+  limit: number = 10
+): Promise<MemoryFact[]> {
+  try {
+    const response = await fetch(`${getBackendUrl()}/memory/search`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${publicAnonKey}`,
+        'X-User-Id': userId,
+      },
+      body: JSON.stringify({ query, limit }),
+    });
+
+    if (!response.ok) {
+      // Fall back to basic search if semantic search fails
+      return getRelevantMemories(userId, '', query, undefined, limit);
+    }
+
+    const data = await response.json();
+    return data.memories || [];
+  } catch (error) {
+    console.error('Error searching memories:', error);
+    return [];
+  }
+}
+
+/**
+ * Extract and store facts from a conversation
+ */
+export async function extractAndStoreFacts(
+  userId: string,
+  childId: string,
+  messages: ConversationMessage[]
+): Promise<void> {
+  // Extract facts from the conversation
+  const extractedFacts = extractFactsFromMessages(messages);
+
+  // Store each fact
+  for (const fact of extractedFacts) {
+    await storeMemoryFact(userId, childId, fact);
+  }
+}
+
+/**
+ * Extract facts from conversation messages
+ */
+function extractFactsFromMessages(
+  messages: ConversationMessage[]
+): Array<{ category: MemoryCategory; content: string; confidence: number }> {
+  const facts: Array<{ category: MemoryCategory; content: string; confidence: number }> = [];
+  const userMessages = messages.filter(m => m.role === 'user');
+
+  for (const message of userMessages) {
+    const content = message.content.toLowerCase();
+
+    // Extract preferences
+    if (/\b(likes?|loves?|enjoys?|prefers?|favorite)\b/.test(content)) {
+      facts.push({
+        category: 'preference',
+        content: message.content,
+        confidence: 0.8,
+      });
+    }
+
+    // Extract triggers
+    if (/\b(triggers?|upset|meltdown|tantrum|freaks? out|can'?t handle)\b/.test(content)) {
+      facts.push({
+        category: 'trigger',
+        content: message.content,
+        confidence: 0.85,
+      });
+    }
+
+    // Extract strengths
+    if (/\b(good at|strength|excels?|amazing at|talented)\b/.test(content)) {
+      facts.push({
+        category: 'strength',
+        content: message.content,
+        confidence: 0.8,
+      });
+    }
+
+    // Extract challenges
+    if (/\b(struggles?|difficult|hard|challenge|problem|issue)\b/.test(content)) {
+      facts.push({
+        category: 'challenge',
+        content: message.content,
+        confidence: 0.85,
+      });
+    }
+
+    // Extract milestones
+    if (/\b(first time|finally|milestone|achieved|accomplished|learned to)\b/.test(content)) {
+      facts.push({
+        category: 'milestone',
+        content: message.content,
+        confidence: 0.9,
+      });
+    }
+
+    // Extract successful strategies
+    if (/\b(worked|helped|success|tried and|effective)\b/.test(content)) {
+      facts.push({
+        category: 'strategy',
+        content: message.content,
+        confidence: 0.75,
+      });
+    }
+
+    // Extract routine information
+    if (/\b(routine|schedule|every (day|morning|night)|usually|always)\b/.test(content)) {
+      facts.push({
+        category: 'routine',
+        content: message.content,
+        confidence: 0.7,
+      });
+    }
+  }
+
+  return facts;
+}
+
+/**
+ * Generate a summary of a conversation
+ */
+export async function generateConversationSummary(
+  messages: ConversationMessage[]
+): Promise<string> {
+  try {
+    const response = await fetch(`${getBackendUrl()}/ai/summarize`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${publicAnonKey}`,
+      },
+      body: JSON.stringify({ messages }),
+    });
+
+    if (!response.ok) {
+      // Fallback summary
+      const topics = extractTopicsFromMessages(messages);
+      return `Conversation about ${topics.join(', ') || 'child development and support'}`;
+    }
+
+    const data = await response.json();
+    return data.summary || 'Conversation about child development and support';
+  } catch (error) {
+    console.error('Error generating summary:', error);
+    return 'Conversation about child development and support';
+  }
+}
+
+/**
+ * Extract topics from messages
+ */
+function extractTopicsFromMessages(messages: ConversationMessage[]): string[] {
+  const topics = new Set<string>();
+  const topicPatterns = [
+    { pattern: /routine|schedule/i, topic: 'routines' },
+    { pattern: /behavior|meltdown|tantrum/i, topic: 'behavior' },
+    { pattern: /speech|communication|talk/i, topic: 'communication' },
+    { pattern: /school|iep|teacher/i, topic: 'school' },
+    { pattern: /sensory|overwhelm/i, topic: 'sensory' },
+    { pattern: /sleep|bedtime/i, topic: 'sleep' },
+    { pattern: /eating|food|meal/i, topic: 'feeding' },
+    { pattern: /anxiety|worry/i, topic: 'anxiety' },
+    { pattern: /social|friends/i, topic: 'social skills' },
+    { pattern: /therapy|aba|ot/i, topic: 'therapy' },
+  ];
+
+  for (const message of messages) {
+    for (const { pattern, topic } of topicPatterns) {
+      if (pattern.test(message.content)) {
+        topics.add(topic);
+      }
+    }
+  }
+
+  return Array.from(topics);
+}
+
+/**
+ * Build context string from memories for AI prompt
+ */
+export function buildMemoryContextString(memories: MemoryFact[]): string {
+  if (memories.length === 0) return '';
+
+  const grouped: Record<MemoryCategory, string[]> = {
+    preference: [],
+    trigger: [],
+    strength: [],
+    challenge: [],
+    milestone: [],
+    strategy: [],
+    medical: [],
+    educational: [],
+    routine: [],
+    relationship: [],
+  };
+
+  for (const memory of memories) {
+    grouped[memory.category]?.push(memory.content);
+  }
+
+  const parts: string[] = [];
+
+  if (grouped.preference.length > 0) {
+    parts.push(`PREFERENCES: ${grouped.preference.slice(0, 3).join('; ')}`);
+  }
+  if (grouped.trigger.length > 0) {
+    parts.push(`TRIGGERS TO WATCH: ${grouped.trigger.slice(0, 3).join('; ')}`);
+  }
+  if (grouped.strength.length > 0) {
+    parts.push(`STRENGTHS: ${grouped.strength.slice(0, 3).join('; ')}`);
+  }
+  if (grouped.challenge.length > 0) {
+    parts.push(`CURRENT CHALLENGES: ${grouped.challenge.slice(0, 3).join('; ')}`);
+  }
+  if (grouped.strategy.length > 0) {
+    parts.push(`STRATEGIES THAT WORK: ${grouped.strategy.slice(0, 3).join('; ')}`);
+  }
+  if (grouped.milestone.length > 0) {
+    parts.push(`RECENT MILESTONES: ${grouped.milestone.slice(0, 2).join('; ')}`);
+  }
+  if (grouped.routine.length > 0) {
+    parts.push(`ROUTINE INFO: ${grouped.routine.slice(0, 2).join('; ')}`);
+  }
+
+  return parts.join('\n');
+}
+
+/**
+ * Local conversation storage (for offline/fallback)
+ */
+const STORAGE_KEY_PREFIX = 'aminy_conversation_';
+
+export function saveConversationLocally(
+  conversationId: string,
+  conversation: Partial<Conversation>
+): void {
+  try {
+    const key = `${STORAGE_KEY_PREFIX}${conversationId}`;
+    localStorage.setItem(key, JSON.stringify({
+      ...conversation,
+      updatedAt: new Date().toISOString(),
+    }));
+  } catch (error) {
+    console.error('Error saving conversation locally:', error);
+  }
+}
+
+export function loadConversationLocally(conversationId: string): Conversation | null {
+  try {
+    const key = `${STORAGE_KEY_PREFIX}${conversationId}`;
+    const data = localStorage.getItem(key);
+    return data ? JSON.parse(data) : null;
+  } catch (error) {
+    console.error('Error loading conversation locally:', error);
+    return null;
+  }
+}
+
+export function listLocalConversations(): string[] {
+  const keys: string[] = [];
+  try {
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key?.startsWith(STORAGE_KEY_PREFIX)) {
+        keys.push(key.replace(STORAGE_KEY_PREFIX, ''));
+      }
+    }
+  } catch (error) {
+    console.error('Error listing local conversations:', error);
+  }
+  return keys;
+}
+
+export default {
+  saveConversation,
+  loadRecentConversations,
+  loadConversation,
+  storeMemoryFact,
+  getRelevantMemories,
+  searchMemoriesSemantic,
+  extractAndStoreFacts,
+  generateConversationSummary,
+  buildMemoryContextString,
+  saveConversationLocally,
+  loadConversationLocally,
+  listLocalConversations,
+};

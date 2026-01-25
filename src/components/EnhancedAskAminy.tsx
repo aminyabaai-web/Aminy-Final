@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Send, Paperclip, Mic, Sparkles, X, Minimize2, Maximize2, Brain, RotateCcw, Copy, MessageSquare, Zap, Volume2, ChevronDown, Plus, ArrowUp } from 'lucide-react';
+import { Send, Paperclip, Mic, Sparkles, X, Minimize2, Maximize2, Brain, RotateCcw, Copy, MessageSquare, Zap, Volume2, ChevronDown, Plus, ArrowUp, AlertTriangle } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
@@ -8,6 +8,11 @@ import { cn } from '../lib/utils';
 import { useContextEngine } from '../lib/context-engine';
 import { useAnalytics } from '../lib/analytics-engine';
 import { toast } from 'sonner';
+import { useAminyStore } from '../lib/store';
+import {
+  sendMessage as sendAIMessage,
+  type ConversationMessage as AIConversationMessage,
+} from '../lib/ai-engine';
 
 interface Message {
   id: string;
@@ -19,6 +24,7 @@ interface Message {
   suggestions?: string[];
   confidence?: number;
   tokens?: number;
+  isCrisisResponse?: boolean;
 }
 
 interface EnhancedAskAminyProps {
@@ -161,73 +167,117 @@ export function EnhancedAskAminy({
     return 'general';
   };
 
-  // Enhanced response generation with better templates
+  // Enhanced response generation using real Claude AI
   const generateEnhancedResponse = async (userMessage: string, context: Message[] = []) => {
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
     }
-    
+
     abortControllerRef.current = new AbortController();
-    const signal = abortControllerRef.current.signal;
 
     try {
       setIsTyping(true);
-      
+
+      // Get user/child IDs from store
+      const state = useAminyStore.getState();
+      const userId = state.user?.id || 'anonymous';
+      const childId = 'default'; // Child ID comes from user profile
+
       // Generate conversation title if needed
       if (messages.length === 0 && !conversationTitle) {
         const title = userMessage.length > 30 ? userMessage.substring(0, 30) + '...' : userMessage;
         setConversationTitle(title);
       }
 
-      // Enhanced delay with thinking simulation
-      await new Promise(resolve => setTimeout(resolve, 1200 + Math.random() * 800));
-      if (signal.aborted) throw new Error('AbortError');
+      // Convert messages to AI format
+      const conversationHistory: AIConversationMessage[] = context.map(m => ({
+        id: m.id,
+        role: m.role as 'user' | 'assistant',
+        content: m.content,
+        timestamp: m.timestamp.toISOString(),
+      }));
 
+      // Track response text for streaming
+      let streamedResponse = '';
+      let suggestions: string[] = [];
+      let crisisDetected = false;
+
+      // Create a promise that will resolve when streaming is complete
+      const aiResponse = await sendAIMessage(
+        userMessage,
+        conversationHistory,
+        {
+          userId,
+          childId,
+          conversationId,
+          enableMemory: true,
+          maxTokens: 1024,
+        },
+        {
+          onToken: (token) => {
+            streamedResponse += token;
+            // Update streaming text state for real-time display
+            setStreamingText(streamedResponse);
+          },
+          onComplete: (fullResponse) => {
+            streamedResponse = fullResponse;
+          },
+          onError: (error) => {
+            console.error('AI streaming error:', error);
+          },
+        }
+      );
+
+      suggestions = aiResponse.suggestions || [];
+      crisisDetected = aiResponse.crisisDetected || false;
+
+      // Update conversation title if provided
+      if (aiResponse.title && !conversationTitle) {
+        setConversationTitle(aiResponse.title);
+      }
+
+      setIsTyping(false);
+
+      // Determine confidence based on memory usage
+      const confidence = aiResponse.memoryFactsUsed && aiResponse.memoryFactsUsed > 0
+        ? 0.92
+        : 0.85;
+
+      return {
+        response: aiResponse.content || streamedResponse,
+        contextUsed: (aiResponse.memoryFactsUsed || 0) > 0,
+        suggestions,
+        confidence,
+        tokens: Math.floor((aiResponse.content || streamedResponse).length * 0.25),
+        crisisDetected,
+      };
+
+    } catch (error: any) {
+      console.error('AI response error:', error);
+
+      // Fall back to template-based response if AI fails
       const category = categorizeMessage(userMessage);
       let response = '';
       let suggestions: string[] = [];
-      let contextUsed = false;
-      let confidence = 0.85;
 
-      // Check for follow-up context
-      const isFollowUp = /\b(you said|earlier|previous|before|that|it|more|explain|tell me more|what about|how about|also|and|can you)\b/i.test(userMessage);
-      
-      if (isFollowUp && context.length > 0) {
-        const lastAssistantMessage = context.filter(m => m.role === 'assistant').slice(-1)[0];
-        if (lastAssistantMessage) {
-          response = generateContextualFollowUp(userMessage, lastAssistantMessage);
-          contextUsed = true;
-          confidence = 0.9;
-        }
-      } else if (category !== 'general') {
+      if (category !== 'general') {
         const template = RESPONSE_TEMPLATES[category];
         const responseIndex = Math.floor(Math.random() * template.responses.length);
         response = template.responses[responseIndex].replace(/{childName}/g, userData.childName);
         suggestions = template.followUps;
-        confidence = 0.88;
       } else {
-        // General response
-        response = `I'm here to help with any aspect of ${userData.childName}'s development and care. Whether it's daily routines, communication, behavior strategies, school support, or understanding evaluations - what would be most helpful to discuss about ${userData.childName} right now?`;
+        response = `I'm here to help with ${userData.childName}'s development and care. What would you like to discuss?`;
         suggestions = ['Daily routines', 'Communication help', 'Behavior support', 'School partnership'];
-        confidence = 0.75;
       }
 
       setIsTyping(false);
-      return { 
-        response, 
-        contextUsed, 
-        suggestions, 
-        confidence,
-        tokens: Math.floor(response.length * 0.75) // Simulate token usage
+      return {
+        response,
+        contextUsed: false,
+        suggestions,
+        confidence: 0.7,
+        tokens: Math.floor(response.length * 0.75)
       };
-
-    } catch (error: any) {
-      if (error.message === 'AbortError') {
-        return null;
-      }
-      
-      setIsTyping(false);
-      throw error;
     }
   };
 
@@ -420,7 +470,7 @@ export function EnhancedAskAminy({
 
   const handleSend = async () => {
     if (!input.trim()) return;
-    
+
     if (!canSendMessage) {
       onPaywallTrigger?.();
       return;
@@ -437,6 +487,7 @@ export function EnhancedAskAminy({
     setMessages(prev => [...prev, userMessage]);
     setInput('');
     setShowSuggestions(false);
+    setStreamingText(''); // Reset streaming text
 
     track('ask_aminy_message_sent', {
       messageLength: messageContent.length,
@@ -446,56 +497,74 @@ export function EnhancedAskAminy({
     });
 
     try {
-      const result = await generateEnhancedResponse(messageContent, messages);
-      
+      // Add placeholder AI message for streaming
+      const aiMsgId = `msg-${Date.now() + 1}`;
+      const aiMsg: Message = {
+        id: aiMsgId,
+        role: 'assistant',
+        content: '',
+        timestamp: new Date(),
+        isStreaming: true,
+        contextUsed: false,
+        confidence: 0,
+        tokens: 0
+      };
+
+      setMessages(prev => [...prev, aiMsg]);
+      setStreamingMessageId(aiMsgId);
+      setIsStreaming(true);
+
+      const result = await generateEnhancedResponse(messageContent, messages.slice(0, -1)); // Exclude the just-added user message
+
       if (result) {
-        const { response, contextUsed, suggestions, confidence, tokens } = result;
-        
-        // Add AI response with streaming
-        const aiMsgId = `msg-${Date.now() + 1}`;
-        const aiMsg: Message = {
-          id: aiMsgId,
-          role: 'assistant',
-          content: '',
-          timestamp: new Date(),
-          isStreaming: true,
-          contextUsed,
-          confidence,
-          tokens
-        };
-        
-        setMessages(prev => [...prev, aiMsg]);
-        setStreamingMessageId(aiMsgId);
-        setIsStreaming(true);
-        
-        // Start enhanced streaming
-        await simulateAdvancedStreaming(response, aiMsgId, suggestions, confidence);
-        
+        const { response, contextUsed, suggestions, confidence, tokens, crisisDetected } = result;
+
+        // Update the AI message with final content
+        setMessages(prev => prev.map(msg =>
+          msg.id === aiMsgId
+            ? {
+                ...msg,
+                content: response,
+                isStreaming: false,
+                contextUsed,
+                confidence,
+                tokens,
+                suggestions,
+                isCrisisResponse: crisisDetected,
+              }
+            : msg
+        ));
+
         track('ask_aminy_response_generated', {
           responseLength: response.length,
           contextUsed,
-          suggestionsCount: suggestions.length,
+          suggestionsCount: suggestions?.length || 0,
           confidence,
-          userTier
+          userTier,
+          crisisDetected,
+          usingRealAI: true,
         });
       }
-      
+
     } catch (error: any) {
       console.error('Error generating response:', error);
       toast.error('Sorry, I encountered an issue. Please try again.');
-      
-      const errorMsg: Message = {
-        id: `msg-${Date.now() + 1}`,
-        role: 'assistant',
-        content: "I apologize, but I'm having trouble processing your request right now. Please try again in a moment.",
-        timestamp: new Date()
-      };
-      
-      setMessages(prev => [...prev, errorMsg]);
+
+      // Update the streaming message with error
+      setMessages(prev => prev.map(msg =>
+        msg.id === streamingMessageId
+          ? {
+              ...msg,
+              content: "I apologize, but I'm having trouble processing your request right now. Please try again in a moment.",
+              isStreaming: false,
+            }
+          : msg
+      ));
     } finally {
       setIsTyping(false);
       setIsStreaming(false);
       setStreamingMessageId(null);
+      setStreamingText('');
     }
   };
 
@@ -567,8 +636,9 @@ export function EnhancedAskAminy({
             <div className="flex-1">
               <div className="flex items-center gap-2">
                 <h3 className="font-semibold text-gray-900 dark:text-gray-100">Ask Aminy</h3>
-                <Badge className="bg-green-100 text-green-800 border-green-200 text-xs">
-                  Always Available
+                <Badge className="bg-gradient-to-r from-violet-100 to-purple-100 text-violet-800 border-violet-200 text-xs">
+                  <Sparkles className="w-3 h-3 mr-1" />
+                  Powered by AI
                 </Badge>
                 {(isStreaming || isTyping) && (
                   <Badge variant="secondary" className="text-xs animate-pulse">
@@ -687,9 +757,10 @@ export function EnhancedAskAminy({
                                   Context-aware
                                 </Badge>
                               )}
-                              {message.confidence && message.role === 'assistant' && (
-                                <Badge variant="secondary" className="text-xs">
-                                  {Math.round(message.confidence * 100)}% confidence
+                              {message.contextUsed && message.role === 'assistant' && (
+                                <Badge variant="secondary" className="text-xs bg-violet-100 text-violet-700">
+                                  <Brain className="w-2 h-2 mr-1" />
+                                  Memory-enhanced
                                 </Badge>
                               )}
                               {message.isStreaming && (
@@ -720,9 +791,22 @@ export function EnhancedAskAminy({
                             </div>
                           </div>
                           
+                          {/* Crisis Response Warning */}
+                          {message.isCrisisResponse && (
+                            <div className="flex items-center gap-2 mb-2 p-2 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
+                              <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                              <span className="text-xs text-amber-700 dark:text-amber-300 font-medium">
+                                Support resources included
+                              </span>
+                            </div>
+                          )}
+
                           {/* Enhanced Message Content */}
-                          <div className="text-sm leading-relaxed">
-                            {message.content}
+                          <div className="text-sm leading-relaxed whitespace-pre-wrap">
+                            {/* Show streaming text in real-time for the currently streaming message */}
+                            {message.isStreaming && message.id === streamingMessageId
+                              ? (streamingText || 'Thinking...')
+                              : message.content}
                             {message.isStreaming && (
                               <span className="inline-block w-2 h-4 bg-current ml-1 animate-pulse" />
                             )}
