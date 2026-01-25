@@ -5,6 +5,8 @@ import { initEnvValidation } from "./lib/env-validation.ts";
 import { initSentry } from "./lib/sentry.ts";
 // Initialize i18n for internationalization
 import "./i18n";
+// Mobile safe area support
+import { injectSafeAreaStyles } from "./lib/mobile-safe-areas.ts";
 
 // Initialize Sentry first (before anything can error)
 initSentry();
@@ -31,5 +33,8 @@ if (GA_MEASUREMENT_ID) {
 
 // Validate environment variables on startup
 initEnvValidation();
+
+// Inject mobile safe area styles for iOS/Android
+injectSafeAreaStyles();
 
 createRoot(document.getElementById("root")!).render(<App />);

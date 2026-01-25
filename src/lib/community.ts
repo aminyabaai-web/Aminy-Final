@@ -506,3 +506,507 @@ export function generateMockPosts(count: number = 10): CommunityPost[] {
   // Sort by recency
   return posts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 }
+
+// ============================================================================
+// AI-POWERED MODERATION SYSTEM
+// ============================================================================
+
+export interface ModerationResult {
+  approved: boolean;
+  score: number; // 0-1, higher = more problematic
+  flags: ModerationFlag[];
+  suggestedAction: 'approve' | 'flag' | 'remove' | 'escalate';
+  reason?: string;
+}
+
+export interface ModerationFlag {
+  type: 'crisis' | 'medical_advice' | 'privacy' | 'spam' | 'harassment' | 'solicitation' | 'misinformation';
+  severity: 'low' | 'medium' | 'high' | 'critical';
+  matchedContent: string;
+  context: string;
+}
+
+// Moderation patterns with severity
+const MODERATION_PATTERNS: Array<{
+  pattern: RegExp;
+  type: ModerationFlag['type'];
+  severity: ModerationFlag['severity'];
+  description: string;
+}> = [
+  // Crisis patterns - CRITICAL priority
+  {
+    pattern: /\b(suicide|suicidal|kill (myself|my child)|end (my|it all)|want to die)\b/i,
+    type: 'crisis',
+    severity: 'critical',
+    description: 'Crisis/self-harm language detected'
+  },
+  {
+    pattern: /\b(abuse|being abused|hitting me|violence at home)\b/i,
+    type: 'crisis',
+    severity: 'critical',
+    description: 'Potential abuse situation'
+  },
+  // Medical advice - HIGH priority
+  {
+    pattern: /\b(prescribe|dosage|mg|milligrams|stop taking|increase|decrease).*(medication|medicine|drug)/i,
+    type: 'medical_advice',
+    severity: 'high',
+    description: 'Specific medication advice'
+  },
+  {
+    pattern: /\b(you should (give|try|use)|give (your|the) child).*(medication|medicine|supplement)/i,
+    type: 'medical_advice',
+    severity: 'high',
+    description: 'Medical recommendation'
+  },
+  // Privacy concerns - HIGH priority
+  {
+    pattern: /\b(full name is|lives at|goes to .* school|phone number is|email is)\b/i,
+    type: 'privacy',
+    severity: 'high',
+    description: 'Personal identifying information'
+  },
+  {
+    pattern: /\b(ssn|social security|insurance number|member id)\b/i,
+    type: 'privacy',
+    severity: 'high',
+    description: 'Sensitive information'
+  },
+  // Solicitation - MEDIUM priority
+  {
+    pattern: /\b(dm me|private message|contact me|text me at|call me at)\b/i,
+    type: 'solicitation',
+    severity: 'medium',
+    description: 'Off-platform contact request'
+  },
+  {
+    pattern: /\b(for sale|selling|buy|purchase|discount code|use code|affiliate)\b/i,
+    type: 'solicitation',
+    severity: 'medium',
+    description: 'Commercial promotion'
+  },
+  // Spam patterns - MEDIUM priority
+  {
+    pattern: /\b(click (here|this)|free download|limited time|act now|urgent)\b/i,
+    type: 'spam',
+    severity: 'medium',
+    description: 'Spam language'
+  },
+  {
+    pattern: /(http|www\.).*(\.ru|\.cn|bit\.ly|tinyurl)/i,
+    type: 'spam',
+    severity: 'medium',
+    description: 'Suspicious link'
+  },
+  // Misinformation - MEDIUM priority
+  {
+    pattern: /\b(vaccines? cause|cure for autism|autism is caused by|bleach|mms|chelation)\b/i,
+    type: 'misinformation',
+    severity: 'medium',
+    description: 'Potential misinformation'
+  },
+  // Harassment - varies by pattern
+  {
+    pattern: /\b(stupid|idiot|moron|bad parent|terrible mother|worst)\b/i,
+    type: 'harassment',
+    severity: 'low',
+    description: 'Potentially hurtful language'
+  },
+];
+
+/**
+ * AI-powered content moderation
+ * Analyzes content for safety issues and returns moderation decision
+ */
+export async function moderateContent(
+  content: string,
+  context?: { userId?: string; postType?: string }
+): Promise<ModerationResult> {
+  const flags: ModerationFlag[] = [];
+  let totalScore = 0;
+
+  // Run through all patterns
+  for (const pattern of MODERATION_PATTERNS) {
+    const match = content.match(pattern.pattern);
+    if (match) {
+      const severityScore = {
+        low: 0.1,
+        medium: 0.3,
+        high: 0.6,
+        critical: 1.0
+      }[pattern.severity];
+
+      totalScore = Math.max(totalScore, severityScore);
+
+      flags.push({
+        type: pattern.type,
+        severity: pattern.severity,
+        matchedContent: match[0],
+        context: pattern.description
+      });
+    }
+  }
+
+  // Determine suggested action based on flags
+  let suggestedAction: ModerationResult['suggestedAction'] = 'approve';
+  let reason: string | undefined;
+
+  if (flags.some(f => f.severity === 'critical')) {
+    suggestedAction = 'escalate';
+    const criticalFlag = flags.find(f => f.severity === 'critical');
+    reason = `Critical content detected: ${criticalFlag?.context}. Human review required.`;
+  } else if (flags.some(f => f.severity === 'high')) {
+    suggestedAction = 'flag';
+    reason = 'High-severity content flagged for review.';
+  } else if (totalScore > 0.5) {
+    suggestedAction = 'flag';
+    reason = 'Multiple moderate concerns detected.';
+  } else if (flags.length > 0) {
+    suggestedAction = 'approve';
+    reason = 'Minor concerns noted but approved.';
+  }
+
+  return {
+    approved: suggestedAction === 'approve',
+    score: totalScore,
+    flags,
+    suggestedAction,
+    reason
+  };
+}
+
+/**
+ * Get crisis resources for escalated content
+ */
+export function getCrisisResources(): Array<{ name: string; contact: string; description: string }> {
+  return [
+    {
+      name: '988 Suicide & Crisis Lifeline',
+      contact: 'Call or text 988',
+      description: '24/7 support for emotional distress'
+    },
+    {
+      name: 'Crisis Text Line',
+      contact: 'Text HOME to 741741',
+      description: 'Free, 24/7 text-based support'
+    },
+    {
+      name: 'National Domestic Violence Hotline',
+      contact: '1-800-799-7233',
+      description: 'Support for abuse situations'
+    },
+    {
+      name: 'Childhelp National Child Abuse Hotline',
+      contact: '1-800-422-4453',
+      description: '24/7 support for child abuse concerns'
+    }
+  ];
+}
+
+// ============================================================================
+// FAMILY MATCHING SYSTEM
+// ============================================================================
+
+export interface FamilyProfile {
+  userId: string;
+  displayName: string;
+  childAges: number[];
+  childDiagnoses: string[];
+  primaryConcerns: string[];
+  location?: { city: string; state: string };
+  memberSince: string;
+  isDiscoverable: boolean;
+  matchingPreferences: {
+    wantsSimilarAge: boolean;
+    wantsSimilarDiagnosis: boolean;
+    wantsLocalMatches: boolean;
+    maxDistance?: number; // miles
+  };
+}
+
+export interface FamilyMatch {
+  profileId: string;
+  displayName: string;
+  matchScore: number; // 0-100
+  matchReasons: string[];
+  anonymizedProfile: {
+    childAgeRange: string;
+    primaryConcerns: string[];
+    memberDuration: string;
+    location?: string; // "Phoenix area" not full address
+  };
+}
+
+/**
+ * Calculate match score between two family profiles
+ */
+export function calculateMatchScore(
+  profile1: FamilyProfile,
+  profile2: FamilyProfile
+): { score: number; reasons: string[] } {
+  let score = 0;
+  const reasons: string[] = [];
+
+  // Age matching (up to 30 points)
+  const ageDiffs = profile1.childAges.flatMap(age1 =>
+    profile2.childAges.map(age2 => Math.abs(age1 - age2))
+  );
+  const minAgeDiff = Math.min(...ageDiffs);
+  if (minAgeDiff <= 1) {
+    score += 30;
+    reasons.push('Children are similar ages');
+  } else if (minAgeDiff <= 2) {
+    score += 20;
+    reasons.push('Children are close in age');
+  } else if (minAgeDiff <= 4) {
+    score += 10;
+    reasons.push('Children are within a few years of age');
+  }
+
+  // Diagnosis matching (up to 30 points)
+  const sharedDiagnoses = profile1.childDiagnoses.filter(d =>
+    profile2.childDiagnoses.includes(d)
+  );
+  if (sharedDiagnoses.length > 0) {
+    score += Math.min(30, sharedDiagnoses.length * 15);
+    reasons.push(`Both families navigating ${sharedDiagnoses.join(', ')}`);
+  }
+
+  // Concerns matching (up to 25 points)
+  const sharedConcerns = profile1.primaryConcerns.filter(c =>
+    profile2.primaryConcerns.includes(c)
+  );
+  if (sharedConcerns.length > 0) {
+    score += Math.min(25, sharedConcerns.length * 10);
+    reasons.push(`Similar concerns: ${sharedConcerns.join(', ')}`);
+  }
+
+  // Location matching (up to 15 points)
+  if (profile1.location && profile2.location) {
+    if (profile1.location.state === profile2.location.state) {
+      score += 10;
+      if (profile1.location.city === profile2.location.city) {
+        score += 5;
+        reasons.push('Same city');
+      } else {
+        reasons.push('Same state');
+      }
+    }
+  }
+
+  return { score: Math.min(100, score), reasons };
+}
+
+/**
+ * Find matching families for a user
+ */
+export async function findFamilyMatches(
+  userProfile: FamilyProfile,
+  candidateProfiles: FamilyProfile[],
+  limit: number = 5
+): Promise<FamilyMatch[]> {
+  // Filter to only discoverable profiles
+  const discoverable = candidateProfiles.filter(
+    p => p.isDiscoverable && p.userId !== userProfile.userId
+  );
+
+  // Calculate match scores
+  const matches = discoverable.map(profile => {
+    const { score, reasons } = calculateMatchScore(userProfile, profile);
+    return {
+      profileId: profile.userId,
+      displayName: profile.displayName,
+      matchScore: score,
+      matchReasons: reasons,
+      anonymizedProfile: {
+        childAgeRange: getAgeRange(profile.childAges),
+        primaryConcerns: profile.primaryConcerns.slice(0, 3),
+        memberDuration: getMemberDuration(profile.memberSince),
+        location: profile.location ? `${profile.location.city} area` : undefined
+      }
+    };
+  });
+
+  // Sort by score and return top matches
+  return matches
+    .filter(m => m.matchScore >= 20) // Minimum 20% match
+    .sort((a, b) => b.matchScore - a.matchScore)
+    .slice(0, limit);
+}
+
+/**
+ * Get age range description
+ */
+function getAgeRange(ages: number[]): string {
+  if (ages.length === 0) return 'Unknown';
+  const min = Math.min(...ages);
+  const max = Math.max(...ages);
+  if (min === max) {
+    if (min < 3) return 'Toddler';
+    if (min < 6) return 'Preschooler';
+    if (min < 13) return 'School-age';
+    return 'Teen';
+  }
+  return `${min}-${max} years old`;
+}
+
+/**
+ * Get member duration string
+ */
+function getMemberDuration(memberSince: string): string {
+  const months = Math.floor(
+    (Date.now() - new Date(memberSince).getTime()) / (30 * 24 * 60 * 60 * 1000)
+  );
+  if (months < 1) return 'New member';
+  if (months < 6) return `${months} month${months > 1 ? 's' : ''} member`;
+  if (months < 12) return '6+ months member';
+  return '1+ year member';
+}
+
+// ============================================================================
+// LOCAL COMMUNITY GROUPS
+// ============================================================================
+
+export interface LocalCommunityGroup {
+  id: string;
+  name: string;
+  description: string;
+  location: {
+    city: string;
+    state: string;
+    radius: number; // miles
+  };
+  memberCount: number;
+  topics: string[];
+  isPrivate: boolean;
+  createdAt: string;
+  admins: string[];
+  rules: string[];
+}
+
+// Pre-seeded local groups for major metros
+export const LOCAL_COMMUNITY_GROUPS: LocalCommunityGroup[] = [
+  {
+    id: 'phoenix-autism',
+    name: 'Phoenix Autism Families',
+    description: 'Connect with other autism families in the Phoenix metro area',
+    location: { city: 'Phoenix', state: 'AZ', radius: 50 },
+    memberCount: 234,
+    topics: ['autism', 'local-resources', 'sensory-friendly-events'],
+    isPrivate: false,
+    createdAt: '2024-01-15',
+    admins: ['aminy-team'],
+    rules: getCommunityGuidelines()
+  },
+  {
+    id: 'la-special-needs',
+    name: 'LA Special Needs Parents',
+    description: 'Support network for special needs parents in Los Angeles',
+    location: { city: 'Los Angeles', state: 'CA', radius: 30 },
+    memberCount: 456,
+    topics: ['special-needs', 'iep-advocacy', 'local-therapists'],
+    isPrivate: false,
+    createdAt: '2024-01-10',
+    admins: ['aminy-team'],
+    rules: getCommunityGuidelines()
+  },
+  {
+    id: 'nyc-neurodivergent',
+    name: 'NYC Neurodivergent Families',
+    description: 'Navigating neurodivergent parenting in NYC',
+    location: { city: 'New York', state: 'NY', radius: 20 },
+    memberCount: 678,
+    topics: ['neurodivergent', 'city-living', 'school-advocacy'],
+    isPrivate: false,
+    createdAt: '2024-01-05',
+    admins: ['aminy-team'],
+    rules: getCommunityGuidelines()
+  },
+  {
+    id: 'chicago-autism',
+    name: 'Chicago Area Autism Support',
+    description: 'Chicago-area families supporting each other',
+    location: { city: 'Chicago', state: 'IL', radius: 40 },
+    memberCount: 345,
+    topics: ['autism', 'aba-therapy', 'sensory-activities'],
+    isPrivate: false,
+    createdAt: '2024-02-01',
+    admins: ['aminy-team'],
+    rules: getCommunityGuidelines()
+  },
+  {
+    id: 'dallas-special-needs',
+    name: 'DFW Special Needs Community',
+    description: 'Dallas-Fort Worth special needs family network',
+    location: { city: 'Dallas', state: 'TX', radius: 50 },
+    memberCount: 289,
+    topics: ['special-needs', 'texas-resources', 'family-events'],
+    isPrivate: false,
+    createdAt: '2024-02-15',
+    admins: ['aminy-team'],
+    rules: getCommunityGuidelines()
+  },
+];
+
+/**
+ * Find local community groups near a location
+ */
+export function findLocalGroups(
+  userState: string,
+  userCity?: string
+): LocalCommunityGroup[] {
+  // Filter to groups in user's state
+  const stateGroups = LOCAL_COMMUNITY_GROUPS.filter(
+    g => g.location.state.toLowerCase() === userState.toLowerCase()
+  );
+
+  // If city matches, prioritize those
+  if (userCity) {
+    return stateGroups.sort((a, b) => {
+      const aMatch = a.location.city.toLowerCase() === userCity.toLowerCase();
+      const bMatch = b.location.city.toLowerCase() === userCity.toLowerCase();
+      if (aMatch && !bMatch) return -1;
+      if (!aMatch && bMatch) return 1;
+      return b.memberCount - a.memberCount;
+    });
+  }
+
+  return stateGroups.sort((a, b) => b.memberCount - a.memberCount);
+}
+
+/**
+ * Get all available local groups
+ */
+export function getAllLocalGroups(): LocalCommunityGroup[] {
+  return LOCAL_COMMUNITY_GROUPS;
+}
+
+// ============================================================================
+// EXPORTS
+// ============================================================================
+
+export default {
+  // Configuration
+  COMMUNITY_CONFIG,
+  POST_CATEGORIES,
+  COMMUNITY_BADGES,
+  getCommunityGuidelines,
+
+  // Posts
+  getSeedPosts,
+  generateMockPosts,
+  flagForModeration,
+
+  // AI Moderation
+  moderateContent,
+  getCrisisResources,
+
+  // Family Matching
+  calculateMatchScore,
+  findFamilyMatches,
+
+  // Local Groups
+  findLocalGroups,
+  getAllLocalGroups,
+  LOCAL_COMMUNITY_GROUPS,
+};

@@ -17,10 +17,18 @@
  * Instead, we use clearinghouses that speak their language (EDI X12).
  */
 
+import { projectId, publicAnonKey } from '../utils/supabase/info';
+
 // Environment configuration
 const AVAILITY_API_KEY = import.meta.env.VITE_AVAILITY_API_KEY || '';
 const AVAILITY_API_URL = import.meta.env.VITE_AVAILITY_API_URL || 'https://api.availity.com';
 const WAYSTAR_API_KEY = import.meta.env.VITE_WAYSTAR_API_KEY || '';
+
+// Supabase Edge Function URL for secure clearinghouse operations
+const CLEARINGHOUSE_FUNCTION_URL = `https://${projectId}.supabase.co/functions/v1/clearinghouse`;
+
+// Use edge function in production (keeps API keys secure)
+const USE_EDGE_FUNCTION = import.meta.env.PROD || import.meta.env.VITE_USE_EDGE_FUNCTIONS === 'true';
 
 // ============================================================================
 // Types
@@ -669,6 +677,37 @@ export async function checkEligibilityWaystar(
 }
 
 // ============================================================================
+// Edge Function API (Production - keeps API keys secure)
+// ============================================================================
+
+/**
+ * Call clearinghouse edge function
+ */
+async function callClearinghouseFunction(
+  action: 'eligibility' | 'submit_claim' | 'claim_status',
+  data: Record<string, unknown>
+): Promise<Record<string, unknown>> {
+  const token = localStorage.getItem('supabase.auth.token');
+  const authToken = token ? JSON.parse(token)?.access_token : publicAnonKey;
+
+  const response = await fetch(CLEARINGHOUSE_FUNCTION_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${authToken}`,
+    },
+    body: JSON.stringify({ action, ...data }),
+  });
+
+  if (!response.ok) {
+    const error = await response.text();
+    throw new Error(`Clearinghouse function error: ${response.status} - ${error}`);
+  }
+
+  return response.json();
+}
+
+// ============================================================================
 // High-Level API
 // ============================================================================
 
@@ -678,7 +717,18 @@ export async function checkEligibilityWaystar(
 export async function verifyInsuranceEligibility(
   request: EligibilityRequest
 ): Promise<EligibilityResponse> {
-  // Try Availity first (largest network)
+  // Use edge function in production for security
+  if (USE_EDGE_FUNCTION) {
+    try {
+      const result = await callClearinghouseFunction('eligibility', request as unknown as Record<string, unknown>);
+      return result as unknown as EligibilityResponse;
+    } catch (error) {
+      console.warn('Edge function eligibility check failed:', error);
+      // Fall through to local implementation
+    }
+  }
+
+  // Try Availity first (largest network) - direct API (development only)
   if (isAvailityConfigured()) {
     try {
       return await checkEligibilityAvaility(request);
@@ -707,6 +757,16 @@ export async function verifyInsuranceEligibility(
 export async function submitInsuranceClaim(
   claim: ClaimSubmission
 ): Promise<ClaimResponse> {
+  // Use edge function in production for security
+  if (USE_EDGE_FUNCTION) {
+    try {
+      const result = await callClearinghouseFunction('submit_claim', claim as unknown as Record<string, unknown>);
+      return result as unknown as ClaimResponse;
+    } catch (error) {
+      console.warn('Edge function claim submission failed:', error);
+    }
+  }
+
   if (isAvailityConfigured()) {
     return submitClaimAvaility(claim);
   }
@@ -720,6 +780,16 @@ export async function submitInsuranceClaim(
 export async function getClaimStatus(
   request: ClaimStatusRequest
 ): Promise<ClaimStatusResponse> {
+  // Use edge function in production for security
+  if (USE_EDGE_FUNCTION) {
+    try {
+      const result = await callClearinghouseFunction('claim_status', request as unknown as Record<string, unknown>);
+      return result as unknown as ClaimStatusResponse;
+    } catch (error) {
+      console.warn('Edge function claim status check failed:', error);
+    }
+  }
+
   if (isAvailityConfigured()) {
     return checkClaimStatusAvaility(request);
   }
@@ -762,10 +832,56 @@ export function formatHCBSClaim(
   };
 }
 
+/**
+ * Check if clearinghouse is configured (either via edge function or direct API)
+ */
+export function isClearinghouseConfigured(): boolean {
+  return USE_EDGE_FUNCTION || isAvailityConfigured() || isWaystarConfigured();
+}
+
+/**
+ * Get clearinghouse health status
+ */
+export async function getClearinghouseHealth(): Promise<{
+  status: 'ok' | 'degraded' | 'down';
+  availity: boolean;
+  waystar: boolean;
+  edgeFunction: boolean;
+}> {
+  const health = {
+    status: 'down' as 'ok' | 'degraded' | 'down',
+    availity: isAvailityConfigured(),
+    waystar: isWaystarConfigured(),
+    edgeFunction: false,
+  };
+
+  if (USE_EDGE_FUNCTION) {
+    try {
+      const response = await fetch(`${CLEARINGHOUSE_FUNCTION_URL}/health`, {
+        headers: { 'Authorization': `Bearer ${publicAnonKey}` },
+      });
+      if (response.ok) {
+        health.edgeFunction = true;
+        health.status = 'ok';
+      }
+    } catch {
+      // Edge function not available
+    }
+  }
+
+  if (health.availity || health.waystar) {
+    health.status = health.edgeFunction ? 'ok' : 'degraded';
+  }
+
+  return health;
+}
+
 export default {
   // Configuration checks
   isAvailityConfigured,
   isWaystarConfigured,
+  isClearinghouseConfigured,
+  getClearinghouseHealth,
 
   // High-level API
   verifyInsuranceEligibility,
