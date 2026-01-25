@@ -751,16 +751,10 @@ export function EnhancedAskAminy({
                               )}>
                                 {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                               </span>
-                              {message.contextUsed && (
-                                <Badge variant="secondary" className="text-xs">
-                                  <Brain className="w-2 h-2 mr-1" />
-                                  Context-aware
-                                </Badge>
-                              )}
                               {message.contextUsed && message.role === 'assistant' && (
-                                <Badge variant="secondary" className="text-xs bg-violet-100 text-violet-700">
-                                  <Brain className="w-2 h-2 mr-1" />
-                                  Memory-enhanced
+                                <Badge variant="secondary" className="text-xs bg-gradient-to-r from-violet-100 to-purple-100 text-violet-700 border border-violet-200 animate-pulse-subtle">
+                                  <Brain className="w-3 h-3 mr-1" />
+                                  Aminy remembers
                                 </Badge>
                               )}
                               {message.isStreaming && (
@@ -797,6 +791,16 @@ export function EnhancedAskAminy({
                               <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400" />
                               <span className="text-xs text-amber-700 dark:text-amber-300 font-medium">
                                 Support resources included
+                              </span>
+                            </div>
+                          )}
+
+                          {/* Aminy Remembers Callout - shows value of memory */}
+                          {message.contextUsed && message.role === 'assistant' && !message.isStreaming && (
+                            <div className="flex items-center gap-2 mb-3 p-2 bg-gradient-to-r from-violet-50 to-purple-50 dark:from-violet-900/20 dark:to-purple-900/20 rounded-lg border border-violet-200 dark:border-violet-800">
+                              <Brain className="w-4 h-4 text-violet-600 dark:text-violet-400" />
+                              <span className="text-xs text-violet-700 dark:text-violet-300 font-medium">
+                                Personalized based on what I know about {userData.childName}
                               </span>
                             </div>
                           )}
