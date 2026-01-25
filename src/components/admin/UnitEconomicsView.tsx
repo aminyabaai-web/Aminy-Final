@@ -4,7 +4,7 @@
  * Shows CAC, LTV, churn, retention - all the numbers investors want to see
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion } from 'motion/react';
 import {
   TrendingUp,
@@ -20,6 +20,7 @@ import {
   PieChart,
   RefreshCw,
 } from 'lucide-react';
+import { getRetentionMetrics, getConversionFunnel, type RetentionMetrics, type ConversionFunnel } from '../../lib/analytics-engine';
 
 interface UnitEconomicsViewProps {
   onBack?: () => void;
@@ -149,6 +150,50 @@ const TIER_BREAKDOWN = [
 export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
   const [timeframe, setTimeframe] = useState<'30d' | '90d' | '12m' | 'all'>('90d');
   const [selectedCohort, setSelectedCohort] = useState<string | null>(null);
+  const [retentionData, setRetentionData] = useState<RetentionMetrics | null>(null);
+  const [funnelData, setFunnelData] = useState<ConversionFunnel | null>(null);
+
+  // Load real analytics data
+  useEffect(() => {
+    const retention = getRetentionMetrics();
+    const funnel = getConversionFunnel();
+    setRetentionData(retention);
+    setFunnelData(funnel);
+  }, [timeframe]);
+
+  // Compute metrics from real data where available, fall back to mock
+  const computedMetrics = useMemo(() => {
+    const baseMetrics = [...MOCK_METRICS];
+
+    // Override churn rate if we have real data
+    if (retentionData) {
+      const churnIndex = baseMetrics.findIndex(m => m.title === 'Monthly Churn Rate');
+      if (churnIndex >= 0) {
+        baseMetrics[churnIndex] = {
+          ...baseMetrics[churnIndex],
+          value: `${retentionData.churnRate.toFixed(1)}%`,
+        };
+      }
+    }
+
+    return baseMetrics;
+  }, [retentionData]);
+
+  // Convert real retention cohorts to display format
+  const cohortData = useMemo(() => {
+    if (retentionData && retentionData.cohorts.length > 0) {
+      return retentionData.cohorts.slice(0, 6).map(c => ({
+        month: new Date(c.cohortDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }),
+        users: c.cohortSize,
+        d1: Math.round(c.d1),
+        d7: Math.round(c.d7),
+        d30: Math.round(c.d30),
+        d60: Math.round(c.d60),
+        d90: Math.round(c.d90),
+      }));
+    }
+    return MOCK_COHORTS;
+  }, [retentionData]);
 
   const totalRevenue = TIER_BREAKDOWN.reduce((sum, t) => sum + t.revenue, 0);
   const totalPaidUsers = TIER_BREAKDOWN.filter(t => t.tier !== 'Free').reduce((sum, t) => sum + t.users, 0);
@@ -189,7 +234,7 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
       <div className="p-6 space-y-6">
         {/* Key Metrics Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-          {MOCK_METRICS.map((metric, index) => (
+          {computedMetrics.map((metric, index) => (
             <motion.div
               key={metric.title}
               initial={{ opacity: 0, y: 20 }}
@@ -324,7 +369,7 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
                 </tr>
               </thead>
               <tbody>
-                {MOCK_COHORTS.map((cohort) => (
+                {cohortData.map((cohort) => (
                   <tr
                     key={cohort.month}
                     className="border-b border-gray-100 hover:bg-gray-50 cursor-pointer"
