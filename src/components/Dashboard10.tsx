@@ -49,6 +49,7 @@ import { OutcomesDashboardWidget } from './OutcomesDashboardWidget';
 import { QuickShareButton } from './ShareWinFlow';
 import { DifferentiationCallout } from './DifferentiationCallout';
 import { ProactiveNudgeSystem } from './ProactiveNudgeSystem';
+import { MorningMission, useMorningMission } from './MorningMission';
 
 // Types
 interface ChildProfile {
@@ -158,6 +159,9 @@ export function Dashboard10({
   const [dailyTip] = useState(() => DAILY_TIPS[Math.floor(Math.random() * DAILY_TIPS.length)]);
   const [showStreakCelebration, setShowStreakCelebration] = useState(false);
   const chatButtonRef = useRef<HTMLButtonElement>(null);
+
+  // Morning mission state
+  const { shouldShow: showMorningMission, isCompleted: missionCompleted } = useMorningMission();
 
   // Auto-set routine based on time of day
   useEffect(() => {
@@ -425,6 +429,27 @@ export function Dashboard10({
             // In production, this would send to analytics
           }}
         />
+
+        {/* ========================================
+            MORNING MISSION - Daily engagement anchor
+            Shows prominently in morning to drive DAU
+            ======================================== */}
+        {showMorningMission && (
+          <MorningMission
+            childName={child.name}
+            parentName={userData.parentName || 'there'}
+            streakDays={streakDays}
+            onComplete={() => {
+              // Track mission completion for analytics
+              if (import.meta.env.DEV) {
+                console.log('Morning mission completed');
+              }
+            }}
+            onOpenChat={() => setShowAIChat(true)}
+            onViewPlan={() => onNavigate?.('care-plan')}
+            className="mb-4"
+          />
+        )}
 
         {/* ========================================
             2. DAILY FLOW (30%) - Routine Hub

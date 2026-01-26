@@ -19,6 +19,7 @@ const SplashPage = lazy(() =>
 import { CLSOptimizer } from "./components/CLSOptimizer";
 import { toast } from "sonner";
 import { TierType, getTierDisplayName } from "./lib/tier-utils";
+import { handleOnboardingComplete as triggerRetentionFlow } from "./lib/store";
 import { AIProvider } from "./context/AIContext";
 import { ConversationProvider } from "./context/ConversationContext";
 import { ThemeProvider } from "./lib/theme-provider";
@@ -816,12 +817,30 @@ export default function App() {
   };
 
   const handleOnboardingComplete = (data: Partial<UserData>) => {
+    const updatedData = {
+      ...userData,
+      ...data,
+      hasCompletedOnboarding: true,
+      tier: "free" as TierType, // Start as free, paywall will handle upgrade
+    };
+
     setUserData((prev) => ({
       ...prev,
       ...data,
       hasCompletedOnboarding: true,
       tier: "free", // Start as free, paywall will handle upgrade
     }));
+
+    // Trigger retention flows: email sequences, push notification scheduling
+    if (updatedData.email && updatedData.childName && updatedData.parentName) {
+      const userId = updatedData.email; // Use email as userId until Supabase auth provides one
+      triggerRetentionFlow(
+        userId,
+        updatedData.email,
+        updatedData.childName,
+        updatedData.parentName
+      ).catch(err => console.error('Failed to trigger retention flow:', err));
+    }
 
     // Best practice: Show paywall immediately after onboarding
     // 60%+ of purchases happen before users ever use the app

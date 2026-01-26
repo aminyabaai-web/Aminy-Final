@@ -12,12 +12,12 @@
  * - Quick access to patient profiles
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Input } from './ui/input';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
+import { Textarea } from './ui/textarea';
 import { Logo } from './Logo';
 import {
   Users,
@@ -50,10 +50,16 @@ import {
   UserCheck,
   Play,
   Pause,
-  ExternalLink
+  ExternalLink,
+  Loader2,
+  RefreshCw,
+  Plus,
+  Save,
+  X
 } from 'lucide-react';
 import type { ProviderType } from '../lib/child-profiles';
 import { brandColors } from '../lib/brand-system';
+import { supabase } from '../utils/supabase/client';
 
 interface Patient {
   id: string;
@@ -104,114 +110,307 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
   const [sessions, setSessions] = useState<Session[]>([]);
   const [provider, setProvider] = useState<ProviderProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
+  const [showSessionNotes, setShowSessionNotes] = useState<string | null>(null);
+  const [sessionNotes, setSessionNotes] = useState({ subjective: '', objective: '', assessment: '', plan: '' });
+  const [isSavingNotes, setIsSavingNotes] = useState(false);
+  const [earnings, setEarnings] = useState<{ thisMonth: number; lastMonth: number; pending: number; ytd: number }>({
+    thisMonth: 0, lastMonth: 0, pending: 0, ytd: 0
+  });
+
+  // Load provider data from Supabase
+  const loadProviderData = useCallback(async () => {
+    setIsRefreshing(true);
+    console.log('[ProviderPortal] Loading data for provider:', providerId);
+
+    try {
+      // Fetch provider profile
+      const { data: providerData, error: providerError } = await supabase
+        .from('provider_profiles')
+        .select('*')
+        .eq('id', providerId)
+        .single();
+
+      if (providerError && providerError.code !== 'PGRST116') {
+        console.error('[ProviderPortal] Error fetching provider:', providerError);
+      }
+
+      // If no provider found in DB, use fallback mock data for demo
+      if (providerData) {
+        setProvider({
+          id: providerData.id,
+          name: providerData.name,
+          credentials: providerData.credentials,
+          type: providerData.provider_type as ProviderType,
+          photo: providerData.photo_url,
+          specialties: providerData.specialties || [],
+          rating: providerData.rating || 0,
+          reviewCount: providerData.review_count || 0,
+          totalPatients: 0, // Will be calculated from patients
+          sessionsThisMonth: 0,
+          earningsThisMonth: 0,
+        });
+      } else {
+        // Fallback for demo
+        setProvider({
+          id: providerId,
+          name: 'Dr. Sarah Mitchell',
+          credentials: 'BCBA, LBA',
+          type: 'bcba',
+          specialties: ['Autism Spectrum', 'Early Intervention', 'Parent Training'],
+          rating: 4.9,
+          reviewCount: 127,
+          totalPatients: 0,
+          sessionsThisMonth: 0,
+          earningsThisMonth: 0
+        });
+      }
+
+      // Fetch provider's patients
+      const { data: patientsData, error: patientsError } = await supabase
+        .from('provider_patients')
+        .select(`
+          id,
+          child_id,
+          parent_user_id,
+          profile_access,
+          total_sessions,
+          next_session_at,
+          created_at
+        `)
+        .eq('provider_id', providerId);
+
+      if (patientsError) {
+        console.error('[ProviderPortal] Error fetching patients:', patientsError);
+      }
+
+      // Get child profiles for patient details
+      const patientsList: Patient[] = [];
+      if (patientsData && patientsData.length > 0) {
+        for (const pp of patientsData) {
+          // Fetch child profile
+          const { data: childData } = await supabase
+            .from('child_profiles')
+            .select('name, date_of_birth, diagnoses')
+            .eq('id', pp.child_id)
+            .single();
+
+          // Fetch parent profile
+          const { data: parentData } = await supabase
+            .from('profiles')
+            .select('name')
+            .eq('id', pp.parent_user_id)
+            .single();
+
+          if (childData) {
+            const birthDate = childData.date_of_birth ? new Date(childData.date_of_birth) : null;
+            const age = birthDate ? Math.floor((Date.now() - birthDate.getTime()) / (365.25 * 24 * 60 * 60 * 1000)) : 0;
+
+            patientsList.push({
+              id: pp.id,
+              childName: childData.name || 'Unknown',
+              parentName: parentData?.name || 'Unknown',
+              age,
+              conditions: childData.diagnoses || [],
+              profileAccess: pp.profile_access as 'granted' | 'pending' | 'revoked',
+              nextSession: pp.next_session_at ? new Date(pp.next_session_at) : undefined,
+              totalSessions: pp.total_sessions || 0,
+            });
+          }
+        }
+      }
+
+      // If no patients in DB, use demo data
+      if (patientsList.length === 0) {
+        patientsList.push(
+          {
+            id: '1',
+            childName: 'Emma Thompson',
+            parentName: 'Jennifer Thompson',
+            age: 6,
+            conditions: ['Autism Level 1', 'Sensory Processing'],
+            profileAccess: 'granted',
+            nextSession: new Date(Date.now() + 2 * 60 * 60 * 1000),
+            totalSessions: 12,
+            lastSessionNotes: 'Excellent progress with turn-taking. Continue reinforcing joint attention activities.'
+          },
+          {
+            id: '2',
+            childName: 'Liam Chen',
+            parentName: 'David Chen',
+            age: 4,
+            conditions: ['Autism Level 2', 'Speech Delay'],
+            profileAccess: 'granted',
+            nextSession: new Date(Date.now() + 24 * 60 * 60 * 1000),
+            totalSessions: 8,
+          },
+          {
+            id: '3',
+            childName: 'Sofia Rodriguez',
+            parentName: 'Maria Rodriguez',
+            age: 7,
+            conditions: ['ADHD Combined', 'Anxiety'],
+            profileAccess: 'pending',
+            totalSessions: 0
+          }
+        );
+      }
+
+      setPatients(patientsList);
+
+      // Fetch provider's sessions
+      const { data: sessionsData, error: sessionsError } = await supabase
+        .from('provider_sessions')
+        .select(`
+          id,
+          patient_id,
+          scheduled_at,
+          duration_minutes,
+          session_type,
+          status,
+          fee_cents,
+          paid
+        `)
+        .eq('provider_id', providerId)
+        .gte('scheduled_at', new Date().toISOString())
+        .order('scheduled_at', { ascending: true });
+
+      if (sessionsError) {
+        console.error('[ProviderPortal] Error fetching sessions:', sessionsError);
+      }
+
+      const sessionsList: Session[] = [];
+      if (sessionsData && sessionsData.length > 0) {
+        for (const sess of sessionsData) {
+          const patient = patientsList.find(p => p.id === sess.patient_id);
+          sessionsList.push({
+            id: sess.id,
+            patientId: sess.patient_id,
+            patientName: patient?.childName || 'Unknown',
+            parentName: patient?.parentName || 'Unknown',
+            scheduledAt: new Date(sess.scheduled_at),
+            duration: sess.duration_minutes || 50,
+            type: sess.session_type === 'telehealth' ? 'Telehealth Session' : 'In-Person Session',
+            status: sess.status === 'scheduled' || sess.status === 'confirmed' ? 'upcoming' : sess.status as 'in-progress' | 'completed' | 'cancelled',
+            hasInsightAccess: patient?.profileAccess === 'granted',
+          });
+        }
+      }
+
+      // If no sessions in DB, use demo data
+      if (sessionsList.length === 0) {
+        sessionsList.push(
+          {
+            id: 's1',
+            patientId: '1',
+            patientName: 'Emma Thompson',
+            parentName: 'Jennifer Thompson',
+            scheduledAt: new Date(Date.now() + 2 * 60 * 60 * 1000),
+            duration: 50,
+            type: 'Parent Consultation',
+            status: 'upcoming',
+            hasInsightAccess: true
+          },
+          {
+            id: 's2',
+            patientId: '2',
+            patientName: 'Liam Chen',
+            parentName: 'David Chen',
+            scheduledAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
+            duration: 50,
+            type: 'Follow-up Session',
+            status: 'upcoming',
+            hasInsightAccess: true
+          }
+        );
+      }
+
+      setSessions(sessionsList);
+
+      // Fetch earnings
+      const now = new Date();
+      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+      const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+      const startOfYear = new Date(now.getFullYear(), 0, 1);
+
+      const { data: earningsData } = await supabase
+        .from('provider_earnings')
+        .select('net_amount_cents, status, created_at')
+        .eq('provider_id', providerId);
+
+      if (earningsData) {
+        let thisMonth = 0, lastMonth = 0, pending = 0, ytd = 0;
+        earningsData.forEach(e => {
+          const created = new Date(e.created_at);
+          const amount = e.net_amount_cents || 0;
+
+          if (e.status === 'pending') pending += amount;
+          if (created >= startOfYear) ytd += amount;
+          if (created >= startOfMonth) thisMonth += amount;
+          else if (created >= startOfLastMonth) lastMonth += amount;
+        });
+
+        setEarnings({
+          thisMonth: Math.round(thisMonth / 100),
+          lastMonth: Math.round(lastMonth / 100),
+          pending: Math.round(pending / 100),
+          ytd: Math.round(ytd / 100),
+        });
+      } else {
+        // Demo earnings
+        setEarnings({ thisMonth: 4158, lastMonth: 3856, pending: 594, ytd: 28420 });
+      }
+
+      // Update provider stats
+      setProvider(prev => prev ? {
+        ...prev,
+        totalPatients: patientsList.length,
+        sessionsThisMonth: sessionsData?.length || sessionsList.length,
+        earningsThisMonth: earnings.thisMonth || 4158,
+      } : null);
+
+    } catch (error) {
+      console.error('[ProviderPortal] Error loading data:', error);
+    } finally {
+      setIsLoading(false);
+      setIsRefreshing(false);
+    }
+  }, [providerId]);
 
   useEffect(() => {
     loadProviderData();
-  }, [providerId]);
+  }, [loadProviderData]);
 
-  const loadProviderData = async () => {
-    setIsLoading(true);
-    await new Promise(resolve => setTimeout(resolve, 600));
+  // Save session notes
+  const handleSaveSessionNotes = async (sessionId: string) => {
+    setIsSavingNotes(true);
+    try {
+      // Find the session to get provider_id
+      const session = sessions.find(s => s.id === sessionId);
+      if (!session) return;
 
-    // Mock provider data
-    setProvider({
-      id: providerId,
-      name: 'Dr. Sarah Mitchell',
-      credentials: 'BCBA, LBA',
-      type: 'bcba',
-      specialties: ['Autism Spectrum', 'Early Intervention', 'Parent Training'],
-      rating: 4.9,
-      reviewCount: 127,
-      totalPatients: 24,
-      sessionsThisMonth: 42,
-      earningsThisMonth: 4158
-    });
+      const { error } = await supabase.from('session_notes').insert({
+        session_id: sessionId,
+        provider_id: providerId,
+        note_type: 'progress',
+        subjective: sessionNotes.subjective || null,
+        objective: sessionNotes.objective || null,
+        assessment: sessionNotes.assessment || null,
+        plan: sessionNotes.plan || null,
+        shared_with_parent: false,
+      });
 
-    // Mock patients
-    setPatients([
-      {
-        id: '1',
-        childName: 'Emma Thompson',
-        parentName: 'Jennifer Thompson',
-        age: 6,
-        conditions: ['Autism Level 1', 'Sensory Processing'],
-        profileAccess: 'granted',
-        nextSession: new Date(Date.now() + 2 * 60 * 60 * 1000),
-        totalSessions: 12,
-        lastSessionNotes: 'Excellent progress with turn-taking. Continue reinforcing joint attention activities.'
-      },
-      {
-        id: '2',
-        childName: 'Liam Chen',
-        parentName: 'David Chen',
-        age: 4,
-        conditions: ['Autism Level 2', 'Speech Delay'],
-        profileAccess: 'granted',
-        nextSession: new Date(Date.now() + 24 * 60 * 60 * 1000),
-        totalSessions: 8,
-        lastSessionNotes: 'Working on requesting using PECS. Good engagement with preferred items.'
-      },
-      {
-        id: '3',
-        childName: 'Sofia Rodriguez',
-        parentName: 'Maria Rodriguez',
-        age: 7,
-        conditions: ['ADHD Combined', 'Anxiety'],
-        profileAccess: 'pending',
-        totalSessions: 0
-      },
-      {
-        id: '4',
-        childName: 'Noah Williams',
-        parentName: 'James Williams',
-        age: 5,
-        conditions: ['Autism Level 1', 'ADHD'],
-        profileAccess: 'granted',
-        nextSession: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
-        totalSessions: 15
-      }
-    ]);
+      if (error) throw error;
 
-    // Mock sessions
-    setSessions([
-      {
-        id: 's1',
-        patientId: '1',
-        patientName: 'Emma Thompson',
-        parentName: 'Jennifer Thompson',
-        scheduledAt: new Date(Date.now() + 2 * 60 * 60 * 1000),
-        duration: 50,
-        type: 'Parent Consultation',
-        status: 'upcoming',
-        hasInsightAccess: true
-      },
-      {
-        id: 's2',
-        patientId: '2',
-        patientName: 'Liam Chen',
-        parentName: 'David Chen',
-        scheduledAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
-        duration: 50,
-        type: 'Follow-up Session',
-        status: 'upcoming',
-        hasInsightAccess: true
-      },
-      {
-        id: 's3',
-        patientId: '4',
-        patientName: 'Noah Williams',
-        parentName: 'James Williams',
-        scheduledAt: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
-        duration: 50,
-        type: 'Parent Consultation',
-        status: 'upcoming',
-        hasInsightAccess: true
-      }
-    ]);
-
-    setIsLoading(false);
+      setShowSessionNotes(null);
+      setSessionNotes({ subjective: '', objective: '', assessment: '', plan: '' });
+    } catch (err) {
+      console.error('[ProviderPortal] Error saving session notes:', err);
+    } finally {
+      setIsSavingNotes(false);
+    }
   };
 
   const formatTimeUntil = (date: Date) => {
@@ -284,6 +483,14 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
             </div>
 
             <div className="flex items-center gap-4">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => loadProviderData()}
+                disabled={isRefreshing}
+              >
+                <RefreshCw className={`w-5 h-5 text-neutral-600 dark:text-slate-400 ${isRefreshing ? 'animate-spin' : ''}`} />
+              </Button>
               <Button variant="ghost" size="sm" className="relative">
                 <Bell className="w-5 h-5 text-neutral-600 dark:text-slate-400" />
                 <span className="absolute -top-1 -right-1 w-4 h-4 bg-rose-500 text-white text-xs rounded-full flex items-center justify-center">
@@ -720,10 +927,10 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
             {/* Earnings Summary */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               {[
-                { label: 'This Month', value: `$${provider.earningsThisMonth.toLocaleString()}`, trend: '+12%', color: 'teal' },
-                { label: 'Last Month', value: '$3,856', color: 'neutral' },
-                { label: 'Pending', value: '$594', color: 'amber' },
-                { label: 'YTD Total', value: '$28,420', trend: '+18%', color: 'green' }
+                { label: 'This Month', value: `$${earnings.thisMonth.toLocaleString()}`, trend: '+12%', color: 'teal' },
+                { label: 'Last Month', value: `$${earnings.lastMonth.toLocaleString()}`, color: 'neutral' },
+                { label: 'Pending', value: `$${earnings.pending.toLocaleString()}`, color: 'amber' },
+                { label: 'YTD Total', value: `$${earnings.ytd.toLocaleString()}`, trend: '+18%', color: 'green' }
               ].map((stat, i) => (
                 <Card key={i} className="p-5">
                   <p className="text-sm text-neutral-500 mb-1">{stat.label}</p>

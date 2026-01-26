@@ -256,6 +256,29 @@ class MemoryManager {
     return Math.max(0, limits.messagesPerDay - used);
   }
 
+  /**
+   * Get time until daily message reset (midnight local time)
+   * Returns an object with hours, minutes, and a formatted string
+   */
+  getTimeUntilReset(): { hours: number; minutes: number; formatted: string } {
+    const now = new Date();
+    const midnight = new Date(now);
+    midnight.setHours(24, 0, 0, 0);
+
+    const msUntilReset = midnight.getTime() - now.getTime();
+    const hours = Math.floor(msUntilReset / (1000 * 60 * 60));
+    const minutes = Math.floor((msUntilReset % (1000 * 60 * 60)) / (1000 * 60));
+
+    let formatted: string;
+    if (hours > 0) {
+      formatted = `${hours}h ${minutes}m`;
+    } else {
+      formatted = `${minutes}m`;
+    }
+
+    return { hours, minutes, formatted };
+  }
+
   // ============================================
   // FACT MANAGEMENT
   // ============================================
@@ -544,4 +567,8 @@ export function useCanSendMessage(childId: string, tier: TierType) {
 
 export function useMessagesRemaining(childId: string, tier: TierType) {
   return memoryManager.getMessagesRemaining(childId, tier);
+}
+
+export function useTimeUntilReset() {
+  return memoryManager.getTimeUntilReset();
 }

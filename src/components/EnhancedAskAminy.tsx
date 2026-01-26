@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Send, Paperclip, Mic, Sparkles, X, Minimize2, Maximize2, Brain, RotateCcw, Copy, MessageSquare, Zap, Volume2, ChevronDown, Plus, ArrowUp, AlertTriangle } from 'lucide-react';
+import { Send, Paperclip, Mic, Sparkles, X, Minimize2, Maximize2, Brain, RotateCcw, Copy, MessageSquare, Zap, Volume2, ChevronDown, Plus, ArrowUp, AlertTriangle, Clock } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
@@ -896,13 +896,36 @@ export function EnhancedAskAminy({
                   </div>
                 </div>
                 
-                {/* Helper text */}
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center aminy-ai-helper-text">
-                  {!canSendMessage 
-                    ? 'Upgrade to continue the conversation'
-                    : 'Ask about routines, behaviors, communication, school, or any concerns'
-                  }
-                </p>
+                {/* Helper text / Reset timer */}
+                {!canSendMessage ? (
+                  <div className="mt-3 p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg text-center">
+                    <div className="flex items-center justify-center gap-2 mb-1">
+                      <Clock className="w-4 h-4 text-amber-600" />
+                      <span className="text-sm font-medium text-amber-700 dark:text-amber-400">
+                        Messages reset in {memoryManager.getTimeUntilReset().formatted}
+                      </span>
+                    </div>
+                    <p className="text-xs text-amber-600 dark:text-amber-500">
+                      You've used your daily messages. Upgrade for unlimited chat!
+                    </p>
+                    <Button
+                      onClick={onPaywallTrigger}
+                      size="sm"
+                      className="mt-2 bg-amber-600 hover:bg-amber-700 text-white"
+                    >
+                      Upgrade Now
+                    </Button>
+                  </div>
+                ) : (
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center aminy-ai-helper-text">
+                    Ask about routines, behaviors, communication, school, or any concerns
+                    {messagesRemaining !== Infinity && messagesRemaining < 10 && (
+                      <span className="ml-1 text-amber-600">
+                        ({messagesRemaining} messages left today)
+                      </span>
+                    )}
+                  </p>
+                )}
               </div>
             </div>
           </>

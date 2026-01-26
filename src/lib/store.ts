@@ -282,21 +282,54 @@ export const useAminyStore = create<AminyStore>()(
       setFocusTask: (task) => set({ focusTask: task }),
       
       // Streaks
-      updateStreak: (updates) => set((state) => ({
-        streaks: { ...state.streaks, ...updates },
-      })),
-      
-      incrementStreak: () => set((state) => {
+      updateStreak: (updates) => {
+        set((state) => ({
+          streaks: { ...state.streaks, ...updates },
+        }));
+        // Sync to Supabase in background
+        const user = get().user;
+        if (user?.id) {
+          import('./streak-service').then(({ saveStreak }) => {
+            const streaks = get().streaks;
+            saveStreak({
+              userId: user.id,
+              currentStreak: streaks.current,
+              longestStreak: streaks.longest,
+              lastActivityDate: streaks.lastActivityDate || null,
+              isPaused: streaks.isPaused,
+              pauseReason: streaks.pauseReason,
+            });
+          });
+        }
+      },
+
+      incrementStreak: () => {
+        const user = get().user;
+        const state = get();
         const newCurrent = state.streaks.current + 1;
-        return {
-          streaks: {
-            ...state.streaks,
-            current: newCurrent,
-            longest: Math.max(newCurrent, state.streaks.longest),
-            lastActivityDate: new Date().toISOString(),
-          },
+        const newStreaks = {
+          ...state.streaks,
+          current: newCurrent,
+          longest: Math.max(newCurrent, state.streaks.longest),
+          lastActivityDate: new Date().toISOString(),
         };
-      }),
+
+        set({ streaks: newStreaks });
+
+        // Sync to Supabase in background
+        if (user?.id) {
+          import('./streak-service').then(({ saveStreak }) => {
+            saveStreak({
+              userId: user.id,
+              currentStreak: newStreaks.current,
+              longestStreak: newStreaks.longest,
+              lastActivityDate: newStreaks.lastActivityDate || null,
+              isPaused: newStreaks.isPaused,
+              pauseReason: newStreaks.pauseReason,
+            });
+          });
+        }
+      },
       
       // Wins
       addWin: (win) => set((state) => {
@@ -439,8 +472,8 @@ export async function handleOnboardingComplete(
   }
 
   try {
-    // 1. Trigger email onboarding sequence
-    await triggerOnboardingSequence(userId, email, childName);
+    // 1. Trigger email onboarding sequence (welcome email sent immediately)
+    await triggerOnboardingSequence(userId, email, childName, parentName);
 
     // 2. Request push notification permission
     const permission = await requestNotificationPermission();
@@ -454,5 +487,41 @@ export async function handleOnboardingComplete(
   } catch (error) {
     console.error('Error setting up retention flows:', error);
     // Don't block onboarding completion on retention setup errors
+  }
+}
+
+// ============================================================================
+// STREAK SYNC
+// ============================================================================
+
+/**
+ * Sync streaks from Supabase on app load
+ * Call this after user authentication to restore streak from cloud
+ */
+export async function syncStreaksFromCloud(userId: string): Promise<void> {
+  try {
+    const { syncStreakFromCloud } = await import('./streak-service');
+    const store = useAminyStore.getState();
+
+    const cloudStreak = await syncStreakFromCloud(userId, {
+      current: store.streaks.current,
+      longest: store.streaks.longest,
+      lastActivityDate: store.streaks.lastActivityDate,
+      isPaused: store.streaks.isPaused,
+    });
+
+    // Update local store with synced data
+    store.updateStreak({
+      current: cloudStreak.currentStreak,
+      longest: cloudStreak.longestStreak,
+      lastActivityDate: cloudStreak.lastActivityDate || undefined,
+      isPaused: cloudStreak.isPaused,
+      pauseReason: cloudStreak.pauseReason,
+    });
+
+    console.log('[Store] Streaks synced from cloud:', cloudStreak);
+  } catch (error) {
+    console.error('[Store] Error syncing streaks:', error);
+    // Keep local streaks on error
   }
 }

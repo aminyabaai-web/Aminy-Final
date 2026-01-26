@@ -982,34 +982,60 @@ export function getAllLocalGroups(): LocalCommunityGroup[] {
 }
 
 // ============================================================================
-// CRUD OPERATIONS - Persist posts, comments, and likes
+// CRUD OPERATIONS - Supabase-backed with localStorage fallback
 // ============================================================================
 
-// In-memory storage (localStorage-backed for persistence)
+import { supabase } from '../utils/supabase/client';
+
+// localStorage keys for fallback
 const POSTS_STORAGE_KEY = 'aminy_community_posts';
 const COMMENTS_STORAGE_KEY = 'aminy_community_comments';
 const LIKES_STORAGE_KEY = 'aminy_community_likes';
 
-// Initialize storage with seed posts
-function initializeStorage() {
-  if (typeof window === 'undefined') return;
-
-  const existingPosts = localStorage.getItem(POSTS_STORAGE_KEY);
-  if (!existingPosts) {
-    localStorage.setItem(POSTS_STORAGE_KEY, JSON.stringify(SEED_POSTS));
-  }
-  if (!localStorage.getItem(COMMENTS_STORAGE_KEY)) {
-    localStorage.setItem(COMMENTS_STORAGE_KEY, JSON.stringify({}));
-  }
-  if (!localStorage.getItem(LIKES_STORAGE_KEY)) {
-    localStorage.setItem(LIKES_STORAGE_KEY, JSON.stringify({}));
-  }
+// Helper to convert DB row to CommunityPost
+function dbRowToPost(row: any): CommunityPost {
+  return {
+    id: row.id,
+    userId: row.user_id,
+    userDisplayName: row.user_display_name,
+    userTier: row.user_tier || 'free',
+    userBadge: row.user_badge,
+    category: row.category,
+    title: row.title,
+    body: row.body,
+    imageUrls: row.image_urls || [],
+    tags: row.tags || [],
+    ageGroup: row.age_group,
+    concernTags: row.concern_tags || [],
+    likeCount: row.like_count || 0,
+    commentCount: row.comment_count || 0,
+    shareCount: row.share_count || 0,
+    bookmarkCount: row.bookmark_count || 0,
+    isModerated: row.is_moderated || false,
+    moderationStatus: row.moderation_status || 'approved',
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+  };
 }
 
-// Get all posts from storage
-function getStoredPosts(): CommunityPost[] {
+// Helper to convert DB row to CommunityComment
+function dbRowToComment(row: any): CommunityComment {
+  return {
+    id: row.id,
+    postId: row.post_id,
+    userId: row.user_id,
+    userDisplayName: row.user_display_name,
+    body: row.body,
+    likeCount: row.like_count || 0,
+    isFromProvider: row.is_from_provider,
+    providerCredentials: row.provider_credentials,
+    createdAt: row.created_at,
+  };
+}
+
+// localStorage fallback functions
+function getLocalPosts(): CommunityPost[] {
   if (typeof window === 'undefined') return SEED_POSTS;
-  initializeStorage();
   try {
     const stored = localStorage.getItem(POSTS_STORAGE_KEY);
     return stored ? JSON.parse(stored) : SEED_POSTS;
@@ -1018,10 +1044,8 @@ function getStoredPosts(): CommunityPost[] {
   }
 }
 
-// Get all comments from storage
-function getStoredComments(): Record<string, CommunityComment[]> {
+function getLocalComments(): Record<string, CommunityComment[]> {
   if (typeof window === 'undefined') return {};
-  initializeStorage();
   try {
     const stored = localStorage.getItem(COMMENTS_STORAGE_KEY);
     return stored ? JSON.parse(stored) : {};
@@ -1030,10 +1054,8 @@ function getStoredComments(): Record<string, CommunityComment[]> {
   }
 }
 
-// Get all likes from storage (postId -> userId[])
-function getStoredLikes(): Record<string, string[]> {
+function getLocalLikes(): Record<string, string[]> {
   if (typeof window === 'undefined') return {};
-  initializeStorage();
   try {
     const stored = localStorage.getItem(LIKES_STORAGE_KEY);
     return stored ? JSON.parse(stored) : {};
@@ -1044,68 +1066,126 @@ function getStoredLikes(): Record<string, string[]> {
 
 /**
  * Create a new community post
+ * Uses Supabase with localStorage fallback
  */
 export async function createPost(
   post: Omit<CommunityPost, 'id' | 'likeCount' | 'commentCount' | 'shareCount' | 'bookmarkCount' | 'isModerated' | 'moderationStatus' | 'createdAt' | 'updatedAt'>
 ): Promise<CommunityPost> {
   // Run AI moderation on the content
   const moderationResult = await moderateContent(`${post.title} ${post.body}`);
+  const moderationStatus = moderationResult.approved ? 'approved' : 'pending';
 
-  const newPost: CommunityPost = {
-    ...post,
-    id: `post-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-    likeCount: 0,
-    commentCount: 0,
-    shareCount: 0,
-    bookmarkCount: 0,
-    isModerated: true,
-    moderationStatus: moderationResult.approved ? 'approved' : 'pending',
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  };
+  try {
+    // Try Supabase first
+    const { data, error } = await supabase
+      .from('community_posts')
+      .insert({
+        user_id: post.userId,
+        user_display_name: post.userDisplayName,
+        user_tier: post.userTier,
+        user_badge: post.userBadge,
+        category: post.category,
+        title: post.title,
+        body: post.body,
+        image_urls: post.imageUrls || [],
+        tags: post.tags || [],
+        age_group: post.ageGroup,
+        concern_tags: post.concernTags || [],
+        is_moderated: true,
+        moderation_status: moderationStatus,
+      })
+      .select()
+      .single();
 
-  // Store the post
-  const posts = getStoredPosts();
-  posts.unshift(newPost); // Add to beginning (newest first)
-  localStorage.setItem(POSTS_STORAGE_KEY, JSON.stringify(posts));
+    if (error) throw error;
 
-  return newPost;
+    console.log('[Community] Post created in Supabase:', data.id);
+    return dbRowToPost(data);
+  } catch (err) {
+    console.warn('[Community] Supabase error, using localStorage fallback:', err);
+
+    // Fallback to localStorage
+    const newPost: CommunityPost = {
+      ...post,
+      id: `post-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      likeCount: 0,
+      commentCount: 0,
+      shareCount: 0,
+      bookmarkCount: 0,
+      isModerated: true,
+      moderationStatus,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    const posts = getLocalPosts();
+    posts.unshift(newPost);
+    localStorage.setItem(POSTS_STORAGE_KEY, JSON.stringify(posts));
+    return newPost;
+  }
 }
 
 /**
  * Like or unlike a post
  */
 export async function likePost(postId: string, userId: string): Promise<CommunityPost> {
-  const posts = getStoredPosts();
-  const likes = getStoredLikes();
+  try {
+    // Check if already liked
+    const { data: existingLike } = await supabase
+      .from('community_likes')
+      .select('id')
+      .eq('post_id', postId)
+      .eq('user_id', userId)
+      .single();
 
-  const postIndex = posts.findIndex(p => p.id === postId);
-  if (postIndex === -1) {
-    throw new Error('Post not found');
+    if (existingLike) {
+      // Unlike - remove the like
+      await supabase
+        .from('community_likes')
+        .delete()
+        .eq('post_id', postId)
+        .eq('user_id', userId);
+    } else {
+      // Like - add new like
+      await supabase
+        .from('community_likes')
+        .insert({ post_id: postId, user_id: userId });
+    }
+
+    // Fetch updated post
+    const { data: post, error } = await supabase
+      .from('community_posts')
+      .select('*')
+      .eq('id', postId)
+      .single();
+
+    if (error) throw error;
+    return dbRowToPost(post);
+  } catch (err) {
+    console.warn('[Community] Supabase error in likePost, using localStorage:', err);
+
+    // Fallback to localStorage
+    const posts = getLocalPosts();
+    const likes = getLocalLikes();
+    const postIndex = posts.findIndex(p => p.id === postId);
+
+    if (postIndex === -1) throw new Error('Post not found');
+
+    if (!likes[postId]) likes[postId] = [];
+
+    const userLikeIndex = likes[postId].indexOf(userId);
+    if (userLikeIndex === -1) {
+      likes[postId].push(userId);
+      posts[postIndex].likeCount++;
+    } else {
+      likes[postId].splice(userLikeIndex, 1);
+      posts[postIndex].likeCount = Math.max(0, posts[postIndex].likeCount - 1);
+    }
+
+    localStorage.setItem(POSTS_STORAGE_KEY, JSON.stringify(posts));
+    localStorage.setItem(LIKES_STORAGE_KEY, JSON.stringify(likes));
+    return posts[postIndex];
   }
-
-  // Initialize likes array for this post if needed
-  if (!likes[postId]) {
-    likes[postId] = [];
-  }
-
-  // Toggle like
-  const userLikeIndex = likes[postId].indexOf(userId);
-  if (userLikeIndex === -1) {
-    // Add like
-    likes[postId].push(userId);
-    posts[postIndex].likeCount++;
-  } else {
-    // Remove like
-    likes[postId].splice(userLikeIndex, 1);
-    posts[postIndex].likeCount = Math.max(0, posts[postIndex].likeCount - 1);
-  }
-
-  // Save changes
-  localStorage.setItem(POSTS_STORAGE_KEY, JSON.stringify(posts));
-  localStorage.setItem(LIKES_STORAGE_KEY, JSON.stringify(likes));
-
-  return posts[postIndex];
 }
 
 /**
@@ -1122,142 +1202,264 @@ export async function addComment(
     throw new Error('Comment flagged for review. Please revise and try again.');
   }
 
-  const newComment: CommunityComment = {
-    ...comment,
-    id: `comment-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-    postId,
-    likeCount: 0,
-    createdAt: new Date().toISOString(),
-  };
+  try {
+    const { data, error } = await supabase
+      .from('community_comments')
+      .insert({
+        post_id: postId,
+        user_id: comment.userId,
+        user_display_name: comment.userDisplayName,
+        body: comment.body,
+        is_from_provider: comment.isFromProvider,
+        provider_credentials: comment.providerCredentials,
+      })
+      .select()
+      .single();
 
-  // Store comment
-  const comments = getStoredComments();
-  if (!comments[postId]) {
-    comments[postId] = [];
+    if (error) throw error;
+
+    console.log('[Community] Comment created in Supabase:', data.id);
+    return dbRowToComment(data);
+  } catch (err) {
+    console.warn('[Community] Supabase error in addComment, using localStorage:', err);
+
+    // Fallback to localStorage
+    const newComment: CommunityComment = {
+      ...comment,
+      id: `comment-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      postId,
+      likeCount: 0,
+      createdAt: new Date().toISOString(),
+    };
+
+    const comments = getLocalComments();
+    if (!comments[postId]) comments[postId] = [];
+    comments[postId].push(newComment);
+    localStorage.setItem(COMMENTS_STORAGE_KEY, JSON.stringify(comments));
+
+    // Update post comment count in localStorage
+    const posts = getLocalPosts();
+    const postIndex = posts.findIndex(p => p.id === postId);
+    if (postIndex !== -1) {
+      posts[postIndex].commentCount++;
+      posts[postIndex].updatedAt = new Date().toISOString();
+      localStorage.setItem(POSTS_STORAGE_KEY, JSON.stringify(posts));
+    }
+
+    return newComment;
   }
-  comments[postId].push(newComment);
-  localStorage.setItem(COMMENTS_STORAGE_KEY, JSON.stringify(comments));
-
-  // Update post comment count
-  const posts = getStoredPosts();
-  const postIndex = posts.findIndex(p => p.id === postId);
-  if (postIndex !== -1) {
-    posts[postIndex].commentCount++;
-    posts[postIndex].updatedAt = new Date().toISOString();
-    localStorage.setItem(POSTS_STORAGE_KEY, JSON.stringify(posts));
-  }
-
-  return newComment;
 }
 
 /**
  * Get comments for a post
  */
-export function getComments(postId: string): CommunityComment[] {
-  const comments = getStoredComments();
-  return comments[postId] || [];
+export async function getComments(postId: string): Promise<CommunityComment[]> {
+  try {
+    const { data, error } = await supabase
+      .from('community_comments')
+      .select('*')
+      .eq('post_id', postId)
+      .order('created_at', { ascending: true });
+
+    if (error) throw error;
+    return (data || []).map(dbRowToComment);
+  } catch (err) {
+    console.warn('[Community] Supabase error in getComments, using localStorage:', err);
+    const comments = getLocalComments();
+    return comments[postId] || [];
+  }
 }
 
 /**
  * Check if user has liked a post
  */
-export function hasUserLiked(postId: string, userId: string): boolean {
-  const likes = getStoredLikes();
-  return likes[postId]?.includes(userId) || false;
+export async function hasUserLiked(postId: string, userId: string): Promise<boolean> {
+  try {
+    const { data, error } = await supabase
+      .from('community_likes')
+      .select('id')
+      .eq('post_id', postId)
+      .eq('user_id', userId)
+      .single();
+
+    if (error && error.code !== 'PGRST116') throw error; // PGRST116 = no rows
+    return !!data;
+  } catch (err) {
+    console.warn('[Community] Supabase error in hasUserLiked, using localStorage:', err);
+    const likes = getLocalLikes();
+    return likes[postId]?.includes(userId) || false;
+  }
 }
 
 /**
  * Get all posts (with optional filters)
  */
-export function getPosts(options?: {
+export async function getPosts(options?: {
   category?: PostCategory;
   limit?: number;
   offset?: number;
-}): CommunityPost[] {
-  let posts = getStoredPosts();
+}): Promise<CommunityPost[]> {
+  try {
+    let query = supabase
+      .from('community_posts')
+      .select('*')
+      .eq('moderation_status', 'approved')
+      .order('created_at', { ascending: false });
 
-  // Filter by category if specified
-  if (options?.category) {
-    posts = posts.filter(p => p.category === options.category);
+    if (options?.category) {
+      query = query.eq('category', options.category);
+    }
+
+    const limit = options?.limit || 20;
+    const offset = options?.offset || 0;
+    query = query.range(offset, offset + limit - 1);
+
+    const { data, error } = await query;
+
+    if (error) throw error;
+
+    console.log(`[Community] Fetched ${data?.length || 0} posts from Supabase`);
+    return (data || []).map(dbRowToPost);
+  } catch (err) {
+    console.warn('[Community] Supabase error in getPosts, using localStorage:', err);
+
+    // Fallback to localStorage
+    let posts = getLocalPosts();
+
+    if (options?.category) {
+      posts = posts.filter(p => p.category === options.category);
+    }
+
+    posts = posts.filter(p => p.moderationStatus === 'approved');
+    posts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
+    const offset = options?.offset || 0;
+    const limit = options?.limit || 20;
+    return posts.slice(offset, offset + limit);
   }
-
-  // Only show approved posts
-  posts = posts.filter(p => p.moderationStatus === 'approved');
-
-  // Sort by date (newest first)
-  posts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-
-  // Apply pagination
-  const offset = options?.offset || 0;
-  const limit = options?.limit || 20;
-
-  return posts.slice(offset, offset + limit);
 }
 
 /**
  * Get a single post by ID
  */
-export function getPost(postId: string): CommunityPost | null {
-  const posts = getStoredPosts();
-  return posts.find(p => p.id === postId) || null;
+export async function getPost(postId: string): Promise<CommunityPost | null> {
+  try {
+    const { data, error } = await supabase
+      .from('community_posts')
+      .select('*')
+      .eq('id', postId)
+      .single();
+
+    if (error) throw error;
+    return data ? dbRowToPost(data) : null;
+  } catch (err) {
+    console.warn('[Community] Supabase error in getPost, using localStorage:', err);
+    const posts = getLocalPosts();
+    return posts.find(p => p.id === postId) || null;
+  }
 }
 
 /**
  * Delete a post (soft delete by setting status to removed)
  */
 export async function deletePost(postId: string, userId: string): Promise<boolean> {
-  const posts = getStoredPosts();
-  const postIndex = posts.findIndex(p => p.id === postId);
+  try {
+    const { error } = await supabase
+      .from('community_posts')
+      .update({ moderation_status: 'removed', updated_at: new Date().toISOString() })
+      .eq('id', postId)
+      .eq('user_id', userId);
 
-  if (postIndex === -1) return false;
+    if (error) throw error;
+    return true;
+  } catch (err) {
+    console.warn('[Community] Supabase error in deletePost, using localStorage:', err);
 
-  // Only allow author to delete
-  if (posts[postIndex].userId !== userId) {
-    throw new Error('You can only delete your own posts');
+    const posts = getLocalPosts();
+    const postIndex = posts.findIndex(p => p.id === postId);
+
+    if (postIndex === -1) return false;
+    if (posts[postIndex].userId !== userId) {
+      throw new Error('You can only delete your own posts');
+    }
+
+    posts[postIndex].moderationStatus = 'removed';
+    posts[postIndex].updatedAt = new Date().toISOString();
+    localStorage.setItem(POSTS_STORAGE_KEY, JSON.stringify(posts));
+    return true;
   }
-
-  posts[postIndex].moderationStatus = 'removed';
-  posts[postIndex].updatedAt = new Date().toISOString();
-  localStorage.setItem(POSTS_STORAGE_KEY, JSON.stringify(posts));
-
-  return true;
 }
 
 /**
  * Bookmark a post
  */
 export async function bookmarkPost(postId: string, userId: string): Promise<CommunityPost> {
-  const posts = getStoredPosts();
-  const postIndex = posts.findIndex(p => p.id === postId);
+  try {
+    // Increment bookmark count in Supabase
+    const { data, error } = await supabase
+      .from('community_posts')
+      .update({
+        bookmark_count: supabase.rpc('increment_bookmark', { row_id: postId })
+      })
+      .eq('id', postId)
+      .select()
+      .single();
 
-  if (postIndex === -1) {
-    throw new Error('Post not found');
+    // Also store in user's local bookmarks for quick access
+    const bookmarksKey = `aminy_bookmarks_${userId}`;
+    const userBookmarks = JSON.parse(localStorage.getItem(bookmarksKey) || '[]');
+    if (!userBookmarks.includes(postId)) {
+      userBookmarks.push(postId);
+      localStorage.setItem(bookmarksKey, JSON.stringify(userBookmarks));
+    }
+
+    if (error) throw error;
+    return dbRowToPost(data);
+  } catch (err) {
+    console.warn('[Community] Supabase error in bookmarkPost, using localStorage:', err);
+
+    const posts = getLocalPosts();
+    const postIndex = posts.findIndex(p => p.id === postId);
+
+    if (postIndex === -1) throw new Error('Post not found');
+
+    posts[postIndex].bookmarkCount++;
+    posts[postIndex].updatedAt = new Date().toISOString();
+    localStorage.setItem(POSTS_STORAGE_KEY, JSON.stringify(posts));
+
+    const bookmarksKey = `aminy_bookmarks_${userId}`;
+    const userBookmarks = JSON.parse(localStorage.getItem(bookmarksKey) || '[]');
+    if (!userBookmarks.includes(postId)) {
+      userBookmarks.push(postId);
+      localStorage.setItem(bookmarksKey, JSON.stringify(userBookmarks));
+    }
+
+    return posts[postIndex];
   }
-
-  // Increment bookmark count
-  posts[postIndex].bookmarkCount++;
-  posts[postIndex].updatedAt = new Date().toISOString();
-  localStorage.setItem(POSTS_STORAGE_KEY, JSON.stringify(posts));
-
-  // Store in user's bookmarks (separate storage)
-  const bookmarksKey = `aminy_bookmarks_${userId}`;
-  const userBookmarks = JSON.parse(localStorage.getItem(bookmarksKey) || '[]');
-  if (!userBookmarks.includes(postId)) {
-    userBookmarks.push(postId);
-    localStorage.setItem(bookmarksKey, JSON.stringify(userBookmarks));
-  }
-
-  return posts[postIndex];
 }
 
 /**
  * Get user's bookmarked posts
  */
-export function getUserBookmarks(userId: string): CommunityPost[] {
+export async function getUserBookmarks(userId: string): Promise<CommunityPost[]> {
   const bookmarksKey = `aminy_bookmarks_${userId}`;
-  const bookmarkIds = JSON.parse(localStorage.getItem(bookmarksKey) || '[]');
-  const posts = getStoredPosts();
-  return posts.filter(p => bookmarkIds.includes(p.id));
+  const bookmarkIds = JSON.parse(localStorage.getItem(bookmarksKey) || '[]') as string[];
+
+  if (bookmarkIds.length === 0) return [];
+
+  try {
+    const { data, error } = await supabase
+      .from('community_posts')
+      .select('*')
+      .in('id', bookmarkIds);
+
+    if (error) throw error;
+    return (data || []).map(dbRowToPost);
+  } catch (err) {
+    console.warn('[Community] Supabase error in getUserBookmarks, using localStorage:', err);
+    const posts = getLocalPosts();
+    return posts.filter(p => bookmarkIds.includes(p.id));
+  }
 }
 
 // ============================================================================

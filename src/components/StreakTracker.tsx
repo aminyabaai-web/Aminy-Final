@@ -1,5 +1,5 @@
-import React from 'react';
-import { Flame, Calendar, TrendingUp } from 'lucide-react';
+import React, { useMemo } from 'react';
+import { Flame, Calendar, TrendingUp, AlertTriangle, Clock } from 'lucide-react';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
 
@@ -7,15 +7,56 @@ interface StreakTrackerProps {
   currentStreak: number;
   longestStreak: number;
   isPaused: boolean;
+  lastCheckIn?: string; // ISO date string of last check-in
   onViewDetails?: () => void;
+  onQuickCheckIn?: () => void;
 }
 
-export function StreakTracker({ 
-  currentStreak, 
-  longestStreak, 
+// Calculate hours until midnight
+function getHoursUntilMidnight(): number {
+  const now = new Date();
+  const midnight = new Date(now);
+  midnight.setHours(24, 0, 0, 0);
+  return Math.floor((midnight.getTime() - now.getTime()) / (1000 * 60 * 60));
+}
+
+// Check if user has checked in today
+function hasCheckedInToday(lastCheckIn?: string): boolean {
+  if (!lastCheckIn) return false;
+  const lastDate = new Date(lastCheckIn);
+  const today = new Date();
+  return (
+    lastDate.getFullYear() === today.getFullYear() &&
+    lastDate.getMonth() === today.getMonth() &&
+    lastDate.getDate() === today.getDate()
+  );
+}
+
+export function StreakTracker({
+  currentStreak,
+  longestStreak,
   isPaused,
-  onViewDetails 
+  lastCheckIn,
+  onViewDetails,
+  onQuickCheckIn
 }: StreakTrackerProps) {
+  // Calculate streak warning state
+  const streakWarning = useMemo(() => {
+    if (isPaused || currentStreak === 0) return null;
+    if (hasCheckedInToday(lastCheckIn)) return null;
+
+    const hoursLeft = getHoursUntilMidnight();
+
+    if (hoursLeft <= 2) {
+      return { level: 'critical', hoursLeft, message: 'Your streak expires soon!' };
+    } else if (hoursLeft <= 6) {
+      return { level: 'warning', hoursLeft, message: 'Don\'t forget to check in' };
+    } else if (hoursLeft <= 12) {
+      return { level: 'gentle', hoursLeft, message: 'Check in when you\'re ready' };
+    }
+    return null;
+  }, [currentStreak, isPaused, lastCheckIn]);
+
   return (
     <Card className="p-4">
       <div className="flex items-start justify-between mb-4">
@@ -77,6 +118,55 @@ export function StreakTracker({
         })}
       </div>
 
+      {/* Streak Warning Banner */}
+      {streakWarning && (
+        <div
+          className={`p-3 rounded-lg mb-3 flex items-center justify-between ${
+            streakWarning.level === 'critical'
+              ? 'bg-red-50 border border-red-200'
+              : streakWarning.level === 'warning'
+              ? 'bg-amber-50 border border-amber-200'
+              : 'bg-blue-50 border border-blue-200'
+          }`}
+        >
+          <div className="flex items-center gap-2">
+            {streakWarning.level === 'critical' ? (
+              <AlertTriangle className="w-4 h-4 text-red-600 animate-pulse" />
+            ) : (
+              <Clock className="w-4 h-4 text-amber-600" />
+            )}
+            <div>
+              <p
+                className={`text-sm font-medium ${
+                  streakWarning.level === 'critical'
+                    ? 'text-red-700'
+                    : streakWarning.level === 'warning'
+                    ? 'text-amber-700'
+                    : 'text-blue-700'
+                }`}
+              >
+                {streakWarning.message}
+              </p>
+              <p className="text-xs text-muted-foreground">
+                {streakWarning.hoursLeft}h left today
+              </p>
+            </div>
+          </div>
+          {onQuickCheckIn && (
+            <button
+              onClick={onQuickCheckIn}
+              className={`px-3 py-1.5 text-sm font-medium rounded-lg transition-colors ${
+                streakWarning.level === 'critical'
+                  ? 'bg-red-600 text-white hover:bg-red-700'
+                  : 'bg-amber-600 text-white hover:bg-amber-700'
+              }`}
+            >
+              Check in
+            </button>
+          )}
+        </div>
+      )}
+
       {/* Encouraging Message */}
       {isPaused ? (
         <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
@@ -84,10 +174,22 @@ export function StreakTracker({
             Taking a breather today. I'll keep things light.
           </p>
         </div>
-      ) : (
+      ) : hasCheckedInToday(lastCheckIn) ? (
         <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
           <p className="text-sm text-green-700">
             You kept at it this week—small steps count.
+          </p>
+        </div>
+      ) : currentStreak > 0 && !streakWarning ? (
+        <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
+          <p className="text-sm text-green-700">
+            Great progress! Keep the momentum going.
+          </p>
+        </div>
+      ) : (
+        <div className="p-3 bg-gray-50 border border-gray-200 rounded-lg">
+          <p className="text-sm text-gray-600">
+            Start your streak today with a quick check-in.
           </p>
         </div>
       )}

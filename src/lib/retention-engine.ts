@@ -351,15 +351,18 @@ export async function scheduleRetentionNotifications(
 
 /**
  * Trigger onboarding email sequence
+ * Sends welcome email immediately, schedules follow-up emails
  */
 export async function triggerOnboardingSequence(
   userId: string,
   email: string,
-  childName: string
+  childName: string,
+  parentName?: string
 ): Promise<void> {
   try {
-    await fetch(
-      `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/retention/onboarding-sequence`,
+    // Send welcome email immediately
+    const response = await fetch(
+      `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/email/welcome`,
       {
         method: 'POST',
         headers: {
@@ -367,13 +370,21 @@ export async function triggerOnboardingSequence(
           'Authorization': `Bearer ${publicAnonKey}`,
         },
         body: JSON.stringify({
-          userId,
           email,
+          userName: parentName || 'there',
           childName,
-          sequence: EMAIL_SEQUENCES.onboarding,
         }),
       }
     );
+
+    if (!response.ok) {
+      console.error('Welcome email failed:', await response.text());
+    } else {
+      console.log('[Retention] Welcome email sent successfully');
+    }
+
+    // Store onboarding start time for follow-up emails
+    localStorage.setItem(`onboarding_start_${userId}`, new Date().toISOString());
   } catch (error) {
     console.error('Failed to trigger onboarding sequence:', error);
   }
@@ -384,17 +395,20 @@ export async function triggerOnboardingSequence(
  */
 export async function triggerReengagementCampaign(
   userId: string,
+  email: string,
+  userName: string,
+  childName: string,
   daysInactive: number
 ): Promise<void> {
   const sequence = EMAIL_SEQUENCES.reengagement.find(
-    s => s.daysInactive === daysInactive
+    s => s.daysInactive <= daysInactive
   );
 
   if (!sequence) return;
 
   try {
-    await fetch(
-      `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/retention/reengagement`,
+    const response = await fetch(
+      `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/email/re-engage`,
       {
         method: 'POST',
         headers: {
@@ -402,12 +416,19 @@ export async function triggerReengagementCampaign(
           'Authorization': `Bearer ${publicAnonKey}`,
         },
         body: JSON.stringify({
-          userId,
-          template: sequence.template,
-          subject: sequence.subject,
+          email,
+          userName,
+          childName,
+          daysSinceLastActivity: daysInactive,
         }),
       }
     );
+
+    if (!response.ok) {
+      console.error('Re-engagement email failed:', await response.text());
+    } else {
+      console.log(`[Retention] Re-engagement email sent (${daysInactive} days inactive)`);
+    }
   } catch (error) {
     console.error('Failed to trigger re-engagement:', error);
   }
@@ -419,17 +440,18 @@ export async function triggerReengagementCampaign(
 export async function sendWeeklyDigest(
   userId: string,
   email: string,
+  userName: string,
   data: {
     childName: string;
     streakDays: number;
     goalsCompleted: number;
     aiConversations: number;
-    topInsight: string;
+    topInsight?: string;
   }
 ): Promise<void> {
   try {
-    await fetch(
-      `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/retention/weekly-digest`,
+    const response = await fetch(
+      `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/email/weekly-digest`,
       {
         method: 'POST',
         headers: {
@@ -437,17 +459,25 @@ export async function sendWeeklyDigest(
           'Authorization': `Bearer ${publicAnonKey}`,
         },
         body: JSON.stringify({
-          userId,
           email,
-          subject: EMAIL_SEQUENCES.weeklyDigest.subject.replace(
-            '{{childName}}',
-            data.childName
-          ),
-          template: EMAIL_SEQUENCES.weeklyDigest.template,
-          data,
+          userName,
+          childName: data.childName,
+          weekStats: {
+            checkIns: data.goalsCompleted,
+            aiChats: data.aiConversations,
+            activitiesCompleted: data.goalsCompleted,
+            streakDays: data.streakDays,
+            topWin: data.topInsight,
+          },
         }),
       }
     );
+
+    if (!response.ok) {
+      console.error('Weekly digest email failed:', await response.text());
+    } else {
+      console.log('[Retention] Weekly digest email sent');
+    }
   } catch (error) {
     console.error('Failed to send weekly digest:', error);
   }
