@@ -1,5 +1,8 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Send, Paperclip, Mic, Sparkles, X, Minimize2, Maximize2, Brain, RotateCcw, Copy, MessageSquare, Zap, Volume2 } from 'lucide-react';
+import { Send, Paperclip, Mic, Sparkles, X, Minimize2, Maximize2, Brain, RotateCcw, Copy, MessageSquare, Zap, Volume2, Clock } from 'lucide-react';
+import { ChatHistory } from './ChatHistory';
+import { AttachmentPicker } from './AttachmentPicker';
+import { VoiceInput } from './VoiceInput';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
@@ -53,6 +56,8 @@ export function PersistentAskAminy({
   const [contextualSuggestions, setContextualSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(true);
   const [lastActivity, setLastActivity] = useState<Date>(new Date());
+  const [showChatHistory, setShowChatHistory] = useState(false);
+  const [showAttachmentPicker, setShowAttachmentPicker] = useState(false);
   
   // Refs
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -405,19 +410,19 @@ export function PersistentAskAminy({
 
   const handleRegenerateResponse = async () => {
     if (messages.length < 2) return;
-    
+
     const lastUserMessage = messages.filter(m => m.role === 'user').slice(-1)[0];
     if (!lastUserMessage) return;
-    
+
     // Remove the last assistant message
-    setMessages(prev => prev.filter(msg => 
+    setMessages(prev => prev.filter(msg =>
       !(msg.role === 'assistant' && msg.timestamp > lastUserMessage.timestamp)
     ));
-    
+
     // Regenerate response
     try {
       const result = await generateEnhancedResponse(lastUserMessage.content, messages.slice(0, -2));
-      
+
       if (result) {
         const { response, contextUsed, suggestions } = result;
         const aiMsgId = `msg-${Date.now()}`;
@@ -429,7 +434,7 @@ export function PersistentAskAminy({
           isStreaming: true,
           contextUsed
         };
-        
+
         setMessages(prev => [...prev, aiMsg]);
         setStreamingMessageId(aiMsgId);
         await simulateStreaming(response, aiMsgId, suggestions);
@@ -438,6 +443,45 @@ export function PersistentAskAminy({
       console.error('Error regenerating response:', error);
       toast.error('Failed to regenerate response');
     }
+  };
+
+  // Handle selecting a conversation from history
+  const handleSelectConversation = (selectedConversationId: string) => {
+    try {
+      const savedConversation = localStorage.getItem(`aminy-conversation-${selectedConversationId}`);
+      if (savedConversation) {
+        const parsed = JSON.parse(savedConversation);
+        setMessages(parsed.messages || []);
+        setConversationTitle(parsed.title || '');
+      }
+    } catch (error) {
+      console.error('Failed to load conversation:', error);
+      toast.error('Failed to load conversation');
+    }
+    setShowChatHistory(false);
+  };
+
+  // Handle attachment selection
+  const handleAttachmentSelected = async (file: File, type: 'photo' | 'image' | 'pdf') => {
+    // For MVP, we'll create a message that mentions the attachment
+    // In production, this would upload to Supabase Storage and include the URL
+    const attachmentMessage = type === 'pdf'
+      ? `[Attached PDF: ${file.name}]`
+      : `[Attached image: ${file.name}]`;
+
+    toast.success(`${file.name} attached`, {
+      description: 'Attachment ready to send with your message'
+    });
+
+    // Add to input or send directly
+    setInput(prev => prev ? `${prev}\n${attachmentMessage}` : attachmentMessage);
+  };
+
+  // Handle voice input transcript
+  const handleVoiceTranscript = (text: string) => {
+    setInput(prev => prev ? `${prev} ${text}` : text);
+    // Focus the textarea
+    textareaRef.current?.focus();
   };
 
   if (!isOpen) return null;
@@ -485,6 +529,18 @@ export function PersistentAskAminy({
           </div>
           
           <div className="flex items-center gap-1">
+            {/* Chat History Button - Always visible */}
+            {!isMinimized && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowChatHistory(true)}
+                className="w-8 h-8 p-0"
+                title="Chat history"
+              >
+                <Clock className="w-4 h-4" />
+              </Button>
+            )}
             {messages.length > 0 && !isMinimized && (
               <>
                 <Button
@@ -710,19 +766,15 @@ export function PersistentAskAminy({
                     size="sm"
                     className="w-8 h-8 p-0 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-400 transition-all duration-200"
                     disabled={!canSendMessage || isTyping || isStreaming}
-                    title="Attach file (coming soon)"
+                    onClick={() => setShowAttachmentPicker(true)}
+                    title="Attach file"
                   >
                     <Paperclip className="w-4 h-4" />
                   </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="w-8 h-8 p-0 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-400 transition-all duration-200"
-                    disabled={!canSendMessage || isTyping || isStreaming}
-                    title="Voice input (coming soon)"
-                  >
-                    <Mic className="w-4 h-4" />
-                  </Button>
+                  <VoiceInput
+                    onTranscript={handleVoiceTranscript}
+                    className="w-8 h-8"
+                  />
                   <Button
                     onClick={handleSend}
                     disabled={!input.trim() || !canSendMessage || isTyping || isStreaming}
@@ -774,6 +826,21 @@ export function PersistentAskAminy({
           </>
         )}
       </Card>
+
+      {/* Chat History Modal */}
+      <ChatHistory
+        isOpen={showChatHistory}
+        onClose={() => setShowChatHistory(false)}
+        onSelectConversation={handleSelectConversation}
+        currentConversationId={conversationId}
+      />
+
+      {/* Attachment Picker */}
+      <AttachmentPicker
+        isOpen={showAttachmentPicker}
+        onClose={() => setShowAttachmentPicker(false)}
+        onAttachmentSelected={handleAttachmentSelected}
+      />
     </div>
   );
 }

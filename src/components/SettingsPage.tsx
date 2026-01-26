@@ -62,6 +62,7 @@ import {
   Loader2
 } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
+import { DeleteAccount } from './DeleteAccount';
 
 interface SettingsPageProps {
   onNavigate?: (destination: string) => void;
@@ -88,6 +89,7 @@ export function SettingsPage({ onNavigate, userTier = 'core', accessToken: propA
   const [showEditChildModal, setShowEditChildModal] = useState(false);
   const [showPlanComparisonModal, setShowPlanComparisonModal] = useState(false);
   const [selectedChildId, setSelectedChildId] = useState<string | null>(null);
+  const [showDeleteAccount, setShowDeleteAccount] = useState(false);
   
   // Form states
   const [isVerifyingEmail, setIsVerifyingEmail] = useState(false);
@@ -626,6 +628,86 @@ export function SettingsPage({ onNavigate, userTier = 'core', accessToken: propA
             <p className="text-slate-600">Control your privacy settings and data sharing preferences.</p>
           </div>
         );
+      case 'data':
+        return (
+          <div className="space-y-6">
+            {/* Export Section */}
+            <Card className="p-6">
+              <h3 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+                <Download className="w-5 h-5" />
+                Export Your Data
+              </h3>
+              <p className="text-sm text-slate-600 mb-4">
+                Download a copy of your data including chat history, care plans, and session notes.
+              </p>
+              <div className="flex gap-3">
+                <Button variant="outline" className="flex items-center gap-2">
+                  <Download className="w-4 h-4" />
+                  Export All Data
+                </Button>
+                <Button variant="outline" className="flex items-center gap-2">
+                  <FileText className="w-4 h-4" />
+                  Export Care Plan
+                </Button>
+              </div>
+            </Card>
+
+            {/* Storage Usage */}
+            <Card className="p-6">
+              <h3 className="text-lg font-semibold text-slate-900 mb-4">Storage Usage</h3>
+              <div className="space-y-3">
+                <div className="flex justify-between text-sm">
+                  <span className="text-slate-600">Chat History</span>
+                  <span className="text-slate-900">2.3 MB</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-slate-600">Attachments</span>
+                  <span className="text-slate-900">15.7 MB</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-slate-600">Care Documents</span>
+                  <span className="text-slate-900">8.1 MB</span>
+                </div>
+                <div className="h-2 bg-slate-200 rounded-full mt-4">
+                  <div className="h-2 bg-teal-500 rounded-full" style={{ width: '26%' }} />
+                </div>
+                <p className="text-xs text-slate-500">26.1 MB of 100 MB used</p>
+              </div>
+            </Card>
+
+            {/* Danger Zone */}
+            <Card className="p-6 border-red-200">
+              <h3 className="text-lg font-semibold text-red-600 mb-4 flex items-center gap-2">
+                <AlertCircle className="w-5 h-5" />
+                Danger Zone
+              </h3>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between p-3 bg-red-50 rounded-lg">
+                  <div>
+                    <p className="font-medium text-slate-900">Clear Chat History</p>
+                    <p className="text-sm text-slate-600">Delete all your AI chat conversations</p>
+                  </div>
+                  <Button variant="outline" className="text-red-600 border-red-300 hover:bg-red-50">
+                    Clear
+                  </Button>
+                </div>
+                <div className="flex items-center justify-between p-3 bg-red-50 rounded-lg">
+                  <div>
+                    <p className="font-medium text-slate-900">Delete Account</p>
+                    <p className="text-sm text-slate-600">Permanently delete your account and data</p>
+                  </div>
+                  <Button
+                    variant="outline"
+                    className="text-red-600 border-red-300 hover:bg-red-50"
+                    onClick={() => setShowDeleteAccount(true)}
+                  >
+                    Delete Account
+                  </Button>
+                </div>
+              </div>
+            </Card>
+          </div>
+        );
       default:
         return (
           <div className="text-center py-12">
@@ -636,6 +718,19 @@ export function SettingsPage({ onNavigate, userTier = 'core', accessToken: propA
         );
     }
   };
+
+  // If showing delete account page, render it fullscreen
+  if (showDeleteAccount) {
+    return (
+      <DeleteAccount
+        onBack={() => setShowDeleteAccount(false)}
+        onMessageSupport={() => {
+          toast.success('Opening secure messaging...');
+          // In production, this would navigate to the secure messaging feature
+        }}
+      />
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
