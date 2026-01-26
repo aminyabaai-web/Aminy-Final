@@ -5,7 +5,7 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { Gift, ArrowRight, Sparkles, Heart } from 'lucide-react';
+import { Gift, ArrowRight, Sparkles, Heart, Bot, BarChart3, UserCircle, ClipboardList } from 'lucide-react';
 import { trackReferral } from '../lib/referral-program';
 
 interface ReferralLandingProps {
@@ -170,28 +170,34 @@ export function ReferralLanding({ onNavigateToSignup, onNavigateToLogin }: Refer
         <div className="space-y-3">
           {[
             {
-              emoji: '🤖',
+              Icon: Bot,
               title: 'AI Companion',
               desc: '24/7 support that remembers your child',
+              color: 'text-teal-500',
             },
             {
-              emoji: '📊',
+              Icon: BarChart3,
               title: 'Progress Tracking',
               desc: 'See real improvement over time',
+              color: 'text-blue-500',
             },
             {
-              emoji: '👩‍⚕️',
+              Icon: UserCircle,
               title: 'Expert Access',
               desc: 'Connect with BCBAs, SLPs, and more',
+              color: 'text-purple-500',
             },
             {
-              emoji: '📋',
+              Icon: ClipboardList,
               title: 'Clinical Reports',
               desc: 'Share with schools and providers',
+              color: 'text-amber-500',
             },
           ].map((item, i) => (
             <div key={i} className="flex items-start gap-3 bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-              <span className="text-2xl">{item.emoji}</span>
+              <div className={`w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center`}>
+                <item.Icon className={`w-5 h-5 ${item.color}`} />
+              </div>
               <div>
                 <p className="font-medium text-[#0D1B2A]">{item.title}</p>
                 <p className="text-sm text-gray-600">{item.desc}</p>

@@ -22,6 +22,11 @@ body {
   transform: translateZ(0) !important;
   backface-visibility: hidden !important;
   overflow-x: hidden !important;
+  /* Font rendering optimizations for crisp text */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "kern" 1, "liga" 1;
 }
 
 /* Prevent ALL layout shifts from dynamic content */

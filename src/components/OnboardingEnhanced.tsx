@@ -246,19 +246,14 @@ export function OnboardingEnhanced({ onComplete }: OnboardingEnhancedProps) {
           />
         );
 
-      // STEP 3: Primary concern (the ONE thing) + QUICK WIN (Fix #5)
+      // STEP 3: Primary concern (the ONE thing) - NO quick win yet, need more context
       case 3:
         return (
           <PrimaryConcernStep
             concern={data.primaryConcern || ''}
             childName={data.childName || ''}
             onUpdate={(concern) => {
-              const quickWin = generateQuickWin(
-                data.childName || 'your child',
-                data.childAge || 5,
-                concern
-              );
-              updateData({ primaryConcern: concern, quickWinTip: quickWin });
+              updateData({ primaryConcern: concern });
             }}
             onNext={nextStep}
             onBack={prevStep}
@@ -266,20 +261,8 @@ export function OnboardingEnhanced({ onComplete }: OnboardingEnhancedProps) {
           />
         );
 
-      // STEP 4: QUICK WIN REVEAL - Value before more questions (Fix #5)
+      // STEP 4: Tone selection (moved earlier, before collecting more data)
       case 4:
-        return (
-          <QuickWinStep
-            tip={data.quickWinTip || ''}
-            childName={data.childName || ''}
-            onNext={nextStep}
-            onBack={prevStep}
-            tone={tone}
-          />
-        );
-
-      // STEP 5: Tone preference (Fix #4 - enables personalization)
-      case 5:
         return (
           <ToneSelectionStep
             currentTone={data.tone || 'supportive'}
@@ -290,8 +273,8 @@ export function OnboardingEnhanced({ onComplete }: OnboardingEnhancedProps) {
           />
         );
 
-      // STEP 6: Diagnosis + communication (with validation wow moment)
-      case 6:
+      // STEP 5: Diagnosis + communication (with validation wow moment)
+      case 5:
         return (
           <DiagnosisStep
             diagnoses={data.diagnoses || []}
@@ -307,13 +290,37 @@ export function OnboardingEnhanced({ onComplete }: OnboardingEnhancedProps) {
           />
         );
 
-      // STEP 7: Focus areas (with why-it-matters wow moment)
-      case 7:
+      // STEP 6: Focus areas (with why-it-matters wow moment)
+      case 6:
         return (
           <FocusAreasStep
             focusAreas={data.focusAreas || []}
             childName={data.childName || ''}
             onUpdate={(areas) => updateData({ focusAreas: areas })}
+            onNext={nextStep}
+            onBack={prevStep}
+            tone={tone}
+          />
+        );
+
+      // STEP 7: QUICK WIN REVEAL - Now shown AFTER we have context (diagnoses, communication, focus areas)
+      case 7:
+        // Generate quick win now that we have full context
+        if (!data.quickWinTip && data.primaryConcern) {
+          const quickWin = generateQuickWin(
+            data.childName || 'your child',
+            data.childAge || 5,
+            data.primaryConcern
+          );
+          updateData({ quickWinTip: quickWin });
+        }
+        return (
+          <QuickWinStep
+            tip={data.quickWinTip || ''}
+            childName={data.childName || ''}
+            diagnoses={data.diagnoses || []}
+            communicationLevel={data.communicationLevel || ''}
+            focusAreas={data.focusAreas || []}
             onNext={nextStep}
             onBack={prevStep}
             tone={tone}
@@ -355,7 +362,31 @@ export function OnboardingEnhanced({ onComplete }: OnboardingEnhancedProps) {
         );
 
       // STEP 10: Email (needed for account) + Optional state/insurance
+      // Skip this step if email was already captured during signup
       case 10:
+        // If email already exists, skip straight to plan generation
+        if (data.email && data.email.includes('@')) {
+          setGeneratingPlan(true);
+          nextStep();
+          // Start plan generation timer
+          let planStepCount = 0;
+          const interval = setInterval(() => {
+            planStepCount++;
+            setPlanStep(planStepCount);
+            if (planStepCount >= 5) {
+              clearInterval(interval);
+              setTimeout(() => {
+                setGeneratingPlan(false);
+              }, 500);
+            }
+          }, 800);
+          return (
+            <PlanGeneratingStep
+              childName={data.childName || ''}
+              planStep={planStep}
+            />
+          );
+        }
         return (
           <AccountStep
             email={data.email || ''}
@@ -384,8 +415,9 @@ export function OnboardingEnhanced({ onComplete }: OnboardingEnhancedProps) {
           />
         );
 
-      // STEP 11: Plan generation with progress visualization
+      // STEP 11: Plan generation with progress visualization OR Completion
       case 11:
+        // Always show generating step while generating
         if (generatingPlan) {
           return (
             <PlanGeneratingStep
@@ -394,9 +426,21 @@ export function OnboardingEnhanced({ onComplete }: OnboardingEnhancedProps) {
             />
           );
         }
+        // Show completion step - ensure data is complete
         return (
           <CompletionStep
-            data={data as OnboardingData}
+            data={{
+              parentName: data.parentName || 'Friend',
+              childName: data.childName || 'your child',
+              childAge: data.childAge || 5,
+              primaryConcern: data.primaryConcern || 'general support',
+              tone: data.tone || 'supportive',
+              email: data.email || '',
+              diagnoses: data.diagnoses || [],
+              communicationLevel: data.communicationLevel || 'conversational',
+              focusAreas: data.focusAreas || [],
+              ...data
+            } as OnboardingData}
             onComplete={() => {
               clearOnboardingProgress(); // Clear saved progress on completion
               onComplete(data as OnboardingData);
@@ -749,14 +793,14 @@ function PrimaryConcernStep({
   tone: typeof TONE_STYLES['supportive'];
 }) {
   const concerns = [
-    { id: 'meltdowns', label: 'Meltdowns & tantrums', icon: '😤' },
-    { id: 'communication', label: 'Communication & speech', icon: '💬' },
-    { id: 'behavior', label: 'Challenging behaviors', icon: '🔄' },
-    { id: 'social', label: 'Social skills & friendships', icon: '👥' },
-    { id: 'anxiety', label: 'Anxiety & worry', icon: '😰' },
-    { id: 'focus', label: 'Focus & attention', icon: '🎯' },
-    { id: 'sleep', label: 'Sleep issues', icon: '😴' },
-    { id: 'sensory', label: 'Sensory sensitivities', icon: '🔊' },
+    { id: 'meltdowns', label: 'Meltdowns & tantrums', Icon: Zap },
+    { id: 'communication', label: 'Communication & speech', Icon: MessageCircle },
+    { id: 'behavior', label: 'Challenging behaviors', Icon: Target },
+    { id: 'social', label: 'Social skills & friendships', Icon: Users },
+    { id: 'anxiety', label: 'Anxiety & worry', Icon: Heart },
+    { id: 'focus', label: 'Focus & attention', Icon: Brain },
+    { id: 'sleep', label: 'Sleep issues', Icon: Sun },
+    { id: 'sensory', label: 'Sensory sensitivities', Icon: Shield },
   ];
 
   return (
@@ -785,8 +829,11 @@ function PrimaryConcernStep({
                 : "border-gray-200 hover:border-accent/50"
             )}
           >
-            <span className="text-2xl mb-2 block">{c.icon}</span>
-            <span className="text-sm font-medium text-primary">{c.label}</span>
+            <c.Icon className={cn(
+              "w-6 h-6 mb-2",
+              concern === c.id ? "text-accent" : "text-gray-400"
+            )} />
+            <span className="text-sm font-medium text-primary block">{c.label}</span>
           </button>
         ))}
       </div>
@@ -813,21 +860,68 @@ function PrimaryConcernStep({
 }
 
 /**
- * Step 4: QUICK WIN - Immediate value (Fix #5)
+ * Step 7: QUICK WIN - Now shown AFTER we have full context
+ * This is the "wow moment" where parents feel truly understood
  */
 function QuickWinStep({
   tip,
   childName,
+  diagnoses,
+  communicationLevel,
+  focusAreas,
   onNext,
   onBack,
   tone,
 }: {
   tip: string;
   childName: string;
+  diagnoses?: string[];
+  communicationLevel?: string;
+  focusAreas?: string[];
   onNext: () => void;
   onBack: () => void;
   tone: typeof TONE_STYLES['supportive'];
 }) {
+  // Generate a personalized context message based on what we learned
+  const getContextMessage = () => {
+    const parts: string[] = [];
+
+    if (diagnoses && diagnoses.length > 0) {
+      const diagList = diagnoses.slice(0, 2).join(' and ');
+      parts.push(`understanding ${diagList}`);
+    }
+
+    if (communicationLevel) {
+      const commMap: Record<string, string> = {
+        'nonverbal': 'non-verbal communication support',
+        'emerging': 'emerging speech development',
+        'conversational': 'conversational skills',
+      };
+      if (commMap[communicationLevel]) {
+        parts.push(commMap[communicationLevel]);
+      }
+    }
+
+    if (focusAreas && focusAreas.length > 0) {
+      const areaMap: Record<string, string> = {
+        'communication': 'communication',
+        'social': 'social skills',
+        'emotional': 'emotional regulation',
+        'sensory': 'sensory needs',
+        'routines': 'daily routines',
+        'behavior': 'behavior support',
+      };
+      const areas = focusAreas.slice(0, 2).map(a => areaMap[a] || a).join(' and ');
+      parts.push(areas);
+    }
+
+    if (parts.length > 0) {
+      return `Based on ${childName}'s ${parts.join(', ')}, here's a strategy that often works:`;
+    }
+
+    return `Based on what you shared about ${childName}, try this:`;
+  };
+
   return (
     <div className="max-w-md mx-auto">
       <div className="text-center mb-6">
@@ -840,10 +934,10 @@ function QuickWinStep({
           <Zap className="w-8 h-8 text-amber-500" />
         </motion.div>
         <h2 className="text-2xl font-bold text-primary mb-2">
-          Here's your first win! 🎉
+          Your First Personalized Tip
         </h2>
-        <p className="text-muted-foreground">
-          Based on what you shared, try this with {childName}:
+        <p className="text-muted-foreground text-sm px-4">
+          {getContextMessage()}
         </p>
       </div>
 
@@ -852,7 +946,7 @@ function QuickWinStep({
       </Card>
 
       <EmpathyMoment
-        message={`This is just a taste. Your full plan will have daily activities personalized for ${childName}.`}
+        message={`This is personalized for ${childName}. Your full plan will include daily activities, tracking, and 24/7 AI support.`}
         type="validation"
       />
 
@@ -862,7 +956,7 @@ function QuickWinStep({
           className="w-full min-h-[48px] bg-accent hover:bg-accent/90"
           size="lg"
         >
-          {tone.celebrate} Let's build my full plan
+          {tone.celebrate} Continue to my plan
           <ArrowRight className="w-4 h-4 ml-2" />
         </Button>
       </div>
@@ -900,21 +994,21 @@ function ToneSelectionStep({
       label: 'Warm & Supportive',
       description: 'Gentle encouragement and lots of validation',
       preview: '"You\'re doing amazingly. Let\'s take this one step at a time."',
-      emoji: '🤗',
+      Icon: Heart,
     },
     {
       id: 'direct' as ToneType,
       label: 'Clear & Direct',
       description: 'Straight to the point with actionable advice',
       preview: '"Here\'s what to do: Step 1, Step 2, Step 3. Let\'s go."',
-      emoji: '🎯',
+      Icon: Target,
     },
     {
       id: 'playful' as ToneType,
       label: 'Fun & Playful',
       description: 'Light-hearted with humor and celebration',
-      preview: '"Woohoo! You crushed it! Ready for the next adventure? 🚀"',
-      emoji: '🎉',
+      preview: '"Woohoo! You crushed it! Ready for the next adventure?"',
+      Icon: Sparkles,
     },
   ];
 
@@ -945,7 +1039,15 @@ function ToneSelectionStep({
             )}
           >
             <div className="flex items-start gap-3">
-              <span className="text-2xl">{t.emoji}</span>
+              <div className={cn(
+                "w-10 h-10 rounded-full flex items-center justify-center",
+                currentTone === t.id ? "bg-accent/20" : "bg-gray-100"
+              )}>
+                <t.Icon className={cn(
+                  "w-5 h-5",
+                  currentTone === t.id ? "text-accent" : "text-gray-400"
+                )} />
+              </div>
               <div className="flex-1">
                 <p className="font-semibold text-primary">{t.label}</p>
                 <p className="text-sm text-muted-foreground mb-2">{t.description}</p>
@@ -1115,7 +1217,7 @@ function DiagnosisStep({
 }
 
 /**
- * Step 7: Focus Areas
+ * Step 6: Focus Areas - Now with clear explanations
  */
 function FocusAreasStep({
   focusAreas,
@@ -1135,12 +1237,42 @@ function FocusAreasStep({
   const [selected, setSelected] = useState<string[]>(focusAreas);
 
   const areas = [
-    { id: 'communication', label: 'Communication', icon: MessageCircle },
-    { id: 'social', label: 'Social Skills', icon: Users },
-    { id: 'emotional', label: 'Emotional Regulation', icon: Heart },
-    { id: 'sensory', label: 'Sensory Needs', icon: Zap },
-    { id: 'routines', label: 'Daily Routines', icon: Calendar },
-    { id: 'behavior', label: 'Behavior Support', icon: Target },
+    {
+      id: 'communication',
+      label: 'Communication',
+      icon: MessageCircle,
+      description: 'Speech, language, AAC support'
+    },
+    {
+      id: 'social',
+      label: 'Social Skills',
+      icon: Users,
+      description: 'Friendships, play, interactions'
+    },
+    {
+      id: 'emotional',
+      label: 'Emotional Regulation',
+      icon: Heart,
+      description: 'Managing big feelings, calm-down'
+    },
+    {
+      id: 'sensory',
+      label: 'Sensory Needs',
+      icon: Zap,
+      description: 'Over/under-sensitivity, sensory diet'
+    },
+    {
+      id: 'routines',
+      label: 'Daily Routines',
+      icon: Calendar,
+      description: 'Morning, meals, bedtime'
+    },
+    {
+      id: 'behavior',
+      label: 'Behavior Support',
+      icon: Target,
+      description: 'Reducing challenging behaviors'
+    },
   ];
 
   const toggle = (id: string) => {
@@ -1156,12 +1288,15 @@ function FocusAreasStep({
 
   return (
     <div className="max-w-md mx-auto">
-      <div className="text-center mb-6">
+      <div className="text-center mb-4">
         <h2 className="text-2xl font-bold text-primary mb-2">
-          What should we focus on with {childName}?
+          What matters most for {childName}?
         </h2>
-        <p className="text-muted-foreground">
-          Select 1-3 priority areas
+        <p className="text-muted-foreground mb-2">
+          These areas will personalize your daily activities
+        </p>
+        <p className="text-xs text-accent">
+          Pick 1-3 priorities • You can change these anytime
         </p>
       </div>
 
@@ -1171,20 +1306,28 @@ function FocusAreasStep({
             key={area.id}
             onClick={() => toggle(area.id)}
             className={cn(
-              "p-4 rounded-xl border-2 text-center transition-all",
+              "p-4 rounded-xl border-2 text-left transition-all",
               selected.includes(area.id)
                 ? "border-accent bg-accent/5"
                 : "border-gray-200 hover:border-accent/50"
             )}
           >
             <area.icon className={cn(
-              "w-6 h-6 mx-auto mb-2",
+              "w-5 h-5 mb-2",
               selected.includes(area.id) ? "text-accent" : "text-gray-400"
             )} />
-            <span className="text-sm font-medium text-primary">{area.label}</span>
+            <span className="text-sm font-medium text-primary block">{area.label}</span>
+            <span className="text-xs text-muted-foreground">{area.description}</span>
           </button>
         ))}
       </div>
+
+      {/* Selection feedback */}
+      {selected.length === 0 && (
+        <p className="text-center text-sm text-muted-foreground mb-4">
+          Tap the areas you want to focus on
+        </p>
+      )}
 
       {/* Focus area validation */}
       {selected.length > 0 && (

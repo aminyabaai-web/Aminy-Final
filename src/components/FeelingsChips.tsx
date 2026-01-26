@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
+import { Smile, Meh, Frown } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 
 interface Feeling {
-  emoji: string;
+  Icon: LucideIcon;
   label: string;
+  color: string;
 }
 
 const feelings: Feeling[] = [
-  { emoji: '😊', label: 'Great' },
-  { emoji: '😐', label: 'Okay' },
-  { emoji: '😔', label: 'Tough' }
+  { Icon: Smile, label: 'Great', color: 'text-green-500' },
+  { Icon: Meh, label: 'Okay', color: 'text-amber-500' },
+  { Icon: Frown, label: 'Tough', color: 'text-red-400' }
 ];
 
 interface FeelingsChipsProps {
@@ -40,7 +43,7 @@ export function FeelingsChips({ onFeelingSelected }: FeelingsChipsProps) {
               }
             `}
           >
-            <span className="text-lg">{feeling.emoji}</span>
+            <feeling.Icon className={`w-5 h-5 ${selected === feeling.label ? 'text-accent' : feeling.color}`} />
             <span className="text-xs font-medium">{feeling.label}</span>
           </button>
         ))}

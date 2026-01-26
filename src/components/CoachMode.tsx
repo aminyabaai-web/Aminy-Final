@@ -3,7 +3,7 @@ import { Button } from './ui/button';
 import { Progress } from './ui/progress';
 import { Badge } from './ui/badge';
 import { toast } from 'sonner';
-import { 
+import {
   X,
   Play,
   Pause,
@@ -14,7 +14,10 @@ import {
   ChevronRight,
   CheckCircle,
   Sparkles,
-  AlertCircle
+  AlertCircle,
+  Smile,
+  Meh,
+  Frown
 } from 'lucide-react';
 
 /**
@@ -661,7 +664,7 @@ export function CoachMode({ activity, onClose, onComplete, nextActivity }: Coach
                         : 'border-gray-200 hover:border-green-300'
                     }`}
                   >
-                    <div className="text-4xl mb-2">😊</div>
+                    <Smile className={`w-10 h-10 mx-auto mb-2 ${reflection === 'great' ? 'text-green-500' : 'text-green-400'}`} />
                     <div className="font-medium text-sm">Great</div>
                   </button>
                   <button
@@ -672,7 +675,7 @@ export function CoachMode({ activity, onClose, onComplete, nextActivity }: Coach
                         : 'border-gray-200 hover:border-gray-300'
                     }`}
                   >
-                    <div className="text-4xl mb-2">😐</div>
+                    <Meh className={`w-10 h-10 mx-auto mb-2 ${reflection === 'okay' ? 'text-gray-500' : 'text-gray-400'}`} />
                     <div className="font-medium text-sm">Okay</div>
                   </button>
                   <button
@@ -683,7 +686,7 @@ export function CoachMode({ activity, onClose, onComplete, nextActivity }: Coach
                         : 'border-gray-200 hover:border-orange-300'
                     }`}
                   >
-                    <div className="text-4xl mb-2">😞</div>
+                    <Frown className={`w-10 h-10 mx-auto mb-2 ${reflection === 'challenging' ? 'text-orange-500' : 'text-orange-400'}`} />
                     <div className="font-medium text-sm">Challenging</div>
                   </button>
                 </div>
