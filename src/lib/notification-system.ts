@@ -13,7 +13,7 @@ export interface NotificationPayload {
   icon?: string;
   timestamp: string;
   read: boolean;
-  type: 'system' | 'progress' | 'reminder' | 'achievement' | 'coach';
+  type: 'system' | 'progress' | 'reminder' | 'achievement' | 'coach' | 'engagement';
 }
 
 /**
@@ -658,6 +658,91 @@ export function createTelehealthNotification(
   };
 }
 
+// ============================================================================
+// Community Notification Helpers
+// ============================================================================
+
+export type CommunityNotificationType =
+  | 'like'
+  | 'comment'
+  | 'reply'
+  | 'mention'
+  | 'badge_earned'
+  | 'post_featured';
+
+/**
+ * Create and save a community engagement notification
+ */
+export async function createCommunityNotification(
+  type: CommunityNotificationType,
+  data: {
+    recipientUserId: string;
+    actorName: string;
+    postId?: string;
+    postTitle?: string;
+    commentPreview?: string;
+    badgeName?: string;
+  }
+): Promise<NotificationPayload> {
+  const templates: Record<CommunityNotificationType, { title: string; body: string }> = {
+    like: {
+      title: 'New Like',
+      body: `${data.actorName} liked your post${data.postTitle ? `: "${data.postTitle.substring(0, 40)}${data.postTitle.length > 40 ? '...' : ''}"` : ''}`,
+    },
+    comment: {
+      title: 'New Comment',
+      body: `${data.actorName} commented on your post${data.commentPreview ? `: "${data.commentPreview.substring(0, 50)}${data.commentPreview.length > 50 ? '...' : ''}"` : ''}`,
+    },
+    reply: {
+      title: 'New Reply',
+      body: `${data.actorName} replied to your comment`,
+    },
+    mention: {
+      title: 'You Were Mentioned',
+      body: `${data.actorName} mentioned you in a post`,
+    },
+    badge_earned: {
+      title: 'Badge Earned! 🎉',
+      body: `You earned the "${data.badgeName}" badge! Keep up the great work.`,
+    },
+    post_featured: {
+      title: 'Your Post Was Featured! ✨',
+      body: `Your post "${data.postTitle?.substring(0, 40) || 'post'}" was featured in the community`,
+    },
+  };
+
+  const template = templates[type];
+
+  const notification: NotificationPayload = {
+    id: `community-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+    title: template.title,
+    body: template.body,
+    timestamp: new Date().toISOString(),
+    read: false,
+    type: 'engagement',
+    deepLink: data.postId ? `/community/post/${data.postId}` : '/community',
+    icon: type === 'like' ? '❤️' : type === 'comment' ? '💬' : type === 'badge_earned' ? '🏅' : '✨',
+  };
+
+  // Save to IndexedDB
+  await notificationDB.saveNotification(notification);
+
+  // Show local notification if permitted
+  if (Notification.permission === 'granted') {
+    showLocalNotification(notification.title, notification.body, {
+      icon: notification.icon,
+      tag: `community-${type}-${data.postId || Date.now()}`,
+      onClick: () => {
+        if (notification.deepLink) {
+          window.location.hash = notification.deepLink;
+        }
+      },
+    });
+  }
+
+  return notification;
+}
+
 export default {
   registerServiceWorker,
   requestPushPermission,
@@ -675,4 +760,5 @@ export default {
   cancelAppointmentReminders,
   showLocalNotification,
   createTelehealthNotification,
+  createCommunityNotification,
 };

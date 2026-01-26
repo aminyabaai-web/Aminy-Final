@@ -10,6 +10,7 @@ import { Send, Mic, Heart, CheckCircle2, ArrowRight, FastForward, Volume2 } from
 import * as ConvoResponses from '../lib/conversational-responses';
 import { CompassIcon } from './CompassIcon';
 import { VoiceInputButton } from './VoiceInputButton';
+import { useKeyboardHeight } from '../hooks/useKeyboardHeight';
 
 // Progress step definitions for breadcrumbs
 const ONBOARDING_STEPS = [
@@ -80,6 +81,9 @@ export function AIIntakeChat({ onComplete, initialData, isReturningUser = false,
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
+  // Keyboard avoidance for iOS
+  const { isKeyboardOpen, keyboardHeight } = useKeyboardHeight();
+
   // Auto-scroll with smooth behavior - ensures messages are always visible above input
   const scrollToBottom = (behavior: ScrollBehavior = 'smooth') => {
     // Use double requestAnimationFrame for better reliability
@@ -99,6 +103,16 @@ export function AIIntakeChat({ onComplete, initialData, isReturningUser = false,
     }, 150);
     return () => clearTimeout(timer);
   }, [messages, isTyping]);
+
+  // Scroll to bottom when keyboard opens to keep input visible
+  useEffect(() => {
+    if (isKeyboardOpen) {
+      const timer = setTimeout(() => {
+        scrollToBottom();
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [isKeyboardOpen]);
 
   // Add message helpers
   const addAminyMessage = (content: string | React.ReactNode, delay = 800) => {
@@ -937,18 +951,18 @@ export function AIIntakeChat({ onComplete, initialData, isReturningUser = false,
   };
 
   return (
-    <div className="h-screen bg-gradient-to-b from-teal-50 via-white to-blue-50 flex flex-col overflow-hidden">
+    <div className="h-screen bg-gradient-to-b from-teal-50 via-white to-blue-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 flex flex-col overflow-hidden">
       {/* Header with Progress Breadcrumbs */}
-      <div className="bg-white/80 backdrop-blur-sm border-b border-gray-200 px-4 py-4 shrink-0 z-10">
+      <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border-b border-gray-200 dark:border-slate-700 px-4 py-4 shrink-0 z-10">
         <div className="max-w-2xl mx-auto">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-teal-100 rounded-full flex items-center justify-center">
+              <div className="w-10 h-10 bg-teal-100 dark:bg-teal-900 rounded-full flex items-center justify-center">
                 <CompassIcon className="w-5 h-5" />
               </div>
               <div>
-                <h1 className="text-lg font-semibold text-gray-900">Building Your Plan</h1>
-                <p className="text-xs text-gray-500">
+                <h1 className="text-lg font-semibold text-gray-900 dark:text-white">Building Your Plan</h1>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
                   {step === 'intro' || step === 'empathy' ? 'Let\'s get started' :
                    step === 'conversation' ? 'Learning about your family' :
                    step === 'routines' ? 'Your personalized strategies' :
@@ -963,7 +977,7 @@ export function AIIntakeChat({ onComplete, initialData, isReturningUser = false,
                   variant="ghost"
                   size="sm"
                   onClick={onSkipOnboarding}
-                  className="text-gray-500 hover:text-gray-700 text-xs"
+                  className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 text-xs"
                 >
                   <FastForward className="w-3 h-3 mr-1" />
                   Skip to dashboard
@@ -989,7 +1003,7 @@ export function AIIntakeChat({ onComplete, initialData, isReturningUser = false,
                         ? 'bg-teal-100 text-teal-700 font-medium'
                         : isComplete
                           ? 'text-teal-600'
-                          : 'text-gray-400'
+                          : 'text-gray-400 dark:text-gray-500'
                     }`}
                   >
                     {isComplete && <CheckCircle2 className="w-3 h-3" />}
@@ -1036,14 +1050,14 @@ export function AIIntakeChat({ onComplete, initialData, isReturningUser = false,
                   <div
                     className={`flex-1 rounded-2xl px-4 py-3 ${
                       message.type === 'aminy'
-                        ? 'bg-white border border-gray-200 shadow-sm'
+                        ? 'bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 shadow-sm'
                         : 'bg-teal-500 text-white'
                     }`}
                   >
                     {typeof message.content === 'string' ? (
                       message.content === 'empathy-buttons' ? (
                         <div className="space-y-2">
-                          <p className="text-sm text-gray-600">Before we start, how are you feeling right now?</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">Before we start, how are you feeling right now?</p>
                           <div className="flex flex-wrap gap-2 mt-3">
                             <Button
                               size="sm"
@@ -1095,7 +1109,7 @@ export function AIIntakeChat({ onComplete, initialData, isReturningUser = false,
                 <div className="w-6 h-6 bg-teal-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                   <CompassIcon className="w-3.5 h-3.5" />
                 </div>
-                <div className="bg-white border border-gray-200 shadow-sm rounded-2xl px-4 py-3">
+                <div className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 shadow-sm rounded-2xl px-4 py-3">
                   <div className="flex items-center gap-1.5">
                     <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
                     <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
@@ -1113,9 +1127,9 @@ export function AIIntakeChat({ onComplete, initialData, isReturningUser = false,
               animate={{ opacity: 1, y: 0 }}
               className="space-y-4 pt-4"
             >
-              <Card className="p-5 border-teal-200 bg-white/80">
-                <h3 className="font-medium text-gray-900 mb-2">Here are three routines made for {childName || 'your family'}:</h3>
-                <p className="text-sm text-gray-600 mb-4">Each one is designed around what you shared{childName ? ` about ${childName}` : ''}. Choose what feels right to start.</p>
+              <Card className="p-5 border-teal-200 dark:border-teal-800 bg-white/80 dark:bg-slate-800/80">
+                <h3 className="font-medium text-gray-900 dark:text-white mb-2">Here are three routines made for {childName || 'your family'}:</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">Each one is designed around what you shared{childName ? ` about ${childName}` : ''}. Choose what feels right to start.</p>
                 
                 <div className="space-y-3">
                   {starterRoutines.map((routine) => (
@@ -1124,14 +1138,14 @@ export function AIIntakeChat({ onComplete, initialData, isReturningUser = false,
                       className={`w-full p-4 rounded-xl border-2 transition-all ${
                         selectedRoutines.includes(routine.id)
                           ? 'border-teal-500 bg-teal-50'
-                          : 'border-gray-200 bg-white hover:border-gray-300'
+                          : 'border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-gray-300 dark:hover:border-slate-600'
                       }`}
                     >
                       <div className="flex items-start gap-3 mb-3">
                         <div className="text-3xl">{routine.icon}</div>
                         <div className="flex-1">
-                          <h4 className="font-medium text-gray-900 mb-1">{routine.title}</h4>
-                          <p className="text-sm text-gray-600 mb-2">{routine.description}</p>
+                          <h4 className="font-medium text-gray-900 dark:text-white mb-1">{routine.title}</h4>
+                          <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{routine.description}</p>
                           <div className="flex flex-wrap gap-1">
                             {routine.goals.map((goal, i) => (
                               <Badge key={i} variant="secondary" className="text-xs">
@@ -1173,7 +1187,7 @@ export function AIIntakeChat({ onComplete, initialData, isReturningUser = false,
                   Continue with {selectedRoutines.length} routine{selectedRoutines.length !== 1 ? 's' : ''}
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
-                <p className="text-xs text-center text-gray-500 mt-2">
+                <p className="text-xs text-center text-gray-500 dark:text-gray-400 mt-2">
                   You can change these anytime
                 </p>
               </Card>
@@ -1187,9 +1201,17 @@ export function AIIntakeChat({ onComplete, initialData, isReturningUser = false,
         </div>
       </div>
 
-      {/* Input Area - Pinned to bottom of container */}
+      {/* Input Area - Pinned to bottom with keyboard avoidance */}
       {step === 'conversation' && (
-        <div className="bg-white border-t border-gray-200 px-4 py-4 pb-safe shrink-0 z-20 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
+        <div
+          className="bg-white dark:bg-slate-900 border-t border-gray-200 dark:border-slate-700 px-4 py-4 shrink-0 z-20 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]"
+          style={{
+            paddingBottom: isKeyboardOpen
+              ? `${Math.max(16, keyboardHeight - 100)}px` // Subtract some for system chrome
+              : 'max(16px, env(safe-area-inset-bottom))',
+            transition: 'padding-bottom 0.15s ease-out',
+          }}
+        >
           <div className="max-w-2xl mx-auto">
             {/* Voice-first toggle */}
             {conversationTurn === 0 && !currentInput && (
@@ -1199,7 +1221,7 @@ export function AIIntakeChat({ onComplete, initialData, isReturningUser = false,
                   className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm transition-colors ${
                     !useVoiceFirst
                       ? 'bg-teal-100 text-teal-700 font-medium'
-                      : 'text-gray-500 hover:text-gray-700'
+                      : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
                   }`}
                 >
                   <Send className="w-4 h-4" />
@@ -1210,7 +1232,7 @@ export function AIIntakeChat({ onComplete, initialData, isReturningUser = false,
                   className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm transition-colors ${
                     useVoiceFirst
                       ? 'bg-teal-100 text-teal-700 font-medium'
-                      : 'text-gray-500 hover:text-gray-700'
+                      : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
                   }`}
                 >
                   <Volume2 className="w-4 h-4" />
@@ -1239,7 +1261,7 @@ export function AIIntakeChat({ onComplete, initialData, isReturningUser = false,
                 />
                 <button
                   onClick={() => setUseVoiceFirst(false)}
-                  className="text-sm text-gray-500 hover:text-gray-700 underline"
+                  className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 underline"
                 >
                   I'd rather type
                 </button>
@@ -1279,7 +1301,7 @@ export function AIIntakeChat({ onComplete, initialData, isReturningUser = false,
                       className={`absolute right-2 bottom-2 p-2 rounded-lg transition-colors ${
                         isListening
                           ? 'bg-red-100 text-red-600'
-                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                          : 'bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600'
                       }`}
                       title="Voice input"
                     >
@@ -1294,7 +1316,7 @@ export function AIIntakeChat({ onComplete, initialData, isReturningUser = false,
                     <Send className="w-5 h-5" />
                   </Button>
                 </div>
-                <p className="text-xs text-gray-500 text-center mt-2">
+                <p className="text-xs text-gray-500 dark:text-gray-400 text-center mt-2">
                   🔒 Everything you share helps me build your personalized plan
                 </p>
               </>

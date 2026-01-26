@@ -48,8 +48,10 @@ import {
   ArrowRight,
   Info,
   Bookmark,
-  Play
+  Play,
+  UserSearch
 } from 'lucide-react';
+import { EmptyProviders, EmptySearchResults } from './ui/empty-state';
 import { providerTypes, type ProviderType, type ProviderTypeInfo } from '../lib/child-profiles';
 import { brandColors, getColorForProvider } from '../lib/brand-system';
 
@@ -559,6 +561,15 @@ export function ProviderMarketplace({
               </Card>
             ))}
           </div>
+        ) : filteredProviders.length === 0 ? (
+          searchQuery ? (
+            <EmptySearchResults
+              searchTerm={searchQuery}
+              onClear={() => setSearchQuery('')}
+            />
+          ) : (
+            <EmptyProviders />
+          )
         ) : (
           <div className="space-y-4">
             {filteredProviders.map(renderProviderCard)}

@@ -137,7 +137,7 @@ export function SplashScreen({ onGetStarted, onLogin }: SplashScreenProps) {
             </Button>
             {/* Trial subtext - below CTA button */}
             <p className="text-xs text-slate-600 text-center max-w-[280px] mt-3">
-              No credit card needed. After 7 days, automatically moves to Starter tier unless you upgrade.
+              No credit card needed. Cancel anytime during your trial.
             </p>
           </div>
 
@@ -202,7 +202,7 @@ export function SplashScreen({ onGetStarted, onLogin }: SplashScreenProps) {
             </Button>
             {/* Trial subtext - below CTA button */}
             <p className="text-xs text-slate-600 text-center max-w-[320px] mt-3">
-              No credit card needed. After 7 days, automatically moves to Starter tier unless you upgrade.
+              No credit card needed. Cancel anytime during your trial.
             </p>
           </div>
 

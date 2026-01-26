@@ -547,3 +547,419 @@ export function ScreeningTools({ childName, childAge, onComplete }: ScreeningToo
 }
 
 export default ScreeningTools;
+
+// ============================================================================
+// GAD-7 ANXIETY SCREENING
+// Generalized Anxiety Disorder 7-item Scale
+// A validated self-report questionnaire for anxiety screening
+// ============================================================================
+
+interface GAD7Question {
+  id: string;
+  text: string;
+}
+
+interface GAD7Result {
+  totalScore: number;
+  severityLevel: 'minimal' | 'mild' | 'moderate' | 'severe';
+  interpretation: string;
+  recommendation: string;
+}
+
+// GAD-7 Questions - Validated questionnaire
+const GAD7_QUESTIONS: GAD7Question[] = [
+  {
+    id: 'gad1',
+    text: 'Feeling nervous, anxious, or on edge',
+  },
+  {
+    id: 'gad2',
+    text: 'Not being able to stop or control worrying',
+  },
+  {
+    id: 'gad3',
+    text: 'Worrying too much about different things',
+  },
+  {
+    id: 'gad4',
+    text: 'Trouble relaxing',
+  },
+  {
+    id: 'gad5',
+    text: 'Being so restless that it\'s hard to sit still',
+  },
+  {
+    id: 'gad6',
+    text: 'Becoming easily annoyed or irritable',
+  },
+  {
+    id: 'gad7',
+    text: 'Feeling afraid, as if something awful might happen',
+  },
+];
+
+// Response options with scores
+const GAD7_RESPONSES = [
+  { label: 'Not at all', score: 0 },
+  { label: 'Several days', score: 1 },
+  { label: 'More than half the days', score: 2 },
+  { label: 'Nearly every day', score: 3 },
+];
+
+interface GAD7ScreeningProps {
+  userName: string;
+  onComplete?: (result: GAD7Result) => void;
+  forCaregiver?: boolean; // If true, screening is for the caregiver; otherwise for context about home environment
+}
+
+export function GAD7Screening({ userName, onComplete, forCaregiver = true }: GAD7ScreeningProps) {
+  const [currentScreen, setCurrentScreen] = useState<'intro' | 'questions' | 'results'>('intro');
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [answers, setAnswers] = useState<Record<string, number>>({});
+  const [result, setResult] = useState<GAD7Result | null>(null);
+
+  // Calculate GAD-7 score
+  const calculateResults = (finalAnswers: Record<string, number>): GAD7Result => {
+    const totalScore = Object.values(finalAnswers).reduce((sum, score) => sum + score, 0);
+
+    let severityLevel: GAD7Result['severityLevel'];
+    let interpretation: string;
+    let recommendation: string;
+
+    if (totalScore <= 4) {
+      severityLevel = 'minimal';
+      interpretation = 'Your responses indicate minimal anxiety symptoms.';
+      recommendation = 'Continue practicing self-care and monitoring your well-being. If you notice symptoms increasing, consider reaching out for support.';
+    } else if (totalScore <= 9) {
+      severityLevel = 'mild';
+      interpretation = 'Your responses indicate mild anxiety symptoms.';
+      recommendation = 'Consider incorporating stress-management techniques into your routine. Aminy\'s calm tools can help. If symptoms persist or worsen, consider talking to a healthcare provider.';
+    } else if (totalScore <= 14) {
+      severityLevel = 'moderate';
+      interpretation = 'Your responses indicate moderate anxiety symptoms.';
+      recommendation = 'We recommend discussing these results with a healthcare provider. Anxiety at this level can be effectively managed with proper support and treatment.';
+    } else {
+      severityLevel = 'severe';
+      interpretation = 'Your responses indicate severe anxiety symptoms.';
+      recommendation = 'We strongly recommend speaking with a healthcare provider or mental health professional as soon as possible. You don\'t have to manage this alone.';
+    }
+
+    return {
+      totalScore,
+      severityLevel,
+      interpretation,
+      recommendation,
+    };
+  };
+
+  // Handle answer selection
+  const handleAnswer = (score: number) => {
+    const question = GAD7_QUESTIONS[currentQuestionIndex];
+    const newAnswers = { ...answers, [question.id]: score };
+    setAnswers(newAnswers);
+
+    if (currentQuestionIndex < GAD7_QUESTIONS.length - 1) {
+      setCurrentQuestionIndex(prev => prev + 1);
+    } else {
+      // Calculate results
+      const calculatedResult = calculateResults(newAnswers);
+      setResult(calculatedResult);
+      setCurrentScreen('results');
+      if (onComplete) {
+        onComplete(calculatedResult);
+      }
+    }
+  };
+
+  // Go back to previous question
+  const handleBack = () => {
+    if (currentQuestionIndex > 0) {
+      setCurrentQuestionIndex(prev => prev - 1);
+    }
+  };
+
+  // Progress percentage
+  const progress = ((currentQuestionIndex + 1) / GAD7_QUESTIONS.length) * 100;
+
+  // Render intro screen
+  if (currentScreen === 'intro') {
+    return (
+      <Card className="max-w-2xl mx-auto p-8">
+        <div className="text-center mb-8">
+          <div className="w-16 h-16 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center mx-auto mb-4">
+            <HelpCircle className="w-8 h-8 text-purple-600 dark:text-purple-400" />
+          </div>
+          <h1 className="text-2xl font-bold text-neutral-900 dark:text-white mb-2">
+            Caregiver Wellness Check
+          </h1>
+          <p className="text-neutral-600 dark:text-neutral-400">
+            GAD-7 Anxiety Screening
+          </p>
+        </div>
+
+        <div className="space-y-4 mb-8">
+          <div className="bg-purple-50 dark:bg-purple-900/30 rounded-lg p-4">
+            <h3 className="font-semibold text-purple-900 dark:text-purple-100 mb-2">
+              Why We Ask
+            </h3>
+            <p className="text-sm text-purple-800 dark:text-purple-200">
+              Caring for a child with developmental needs can be demanding. This brief screening helps us understand how you're doing so we can provide better support. Your answers are confidential.
+            </p>
+          </div>
+
+          <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg p-4">
+            <h3 className="font-semibold text-neutral-900 dark:text-white mb-2 flex items-center gap-2">
+              <Clock className="w-4 h-4" />
+              About This Screening
+            </h3>
+            <ul className="text-sm text-neutral-600 dark:text-neutral-400 space-y-2">
+              <li className="flex items-start gap-2">
+                <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                <span>7 simple questions about the past 2 weeks</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                <span>Takes about 2-3 minutes to complete</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                <span>Validated screening tool used by healthcare providers</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                <span>Not a diagnosis - a helpful conversation starter</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-3">
+          <Button
+            onClick={() => setCurrentScreen('questions')}
+            className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+            size="lg"
+          >
+            Begin Wellness Check
+            <ChevronRight className="w-5 h-5 ml-2" />
+          </Button>
+        </div>
+
+        <p className="text-xs text-neutral-500 dark:text-neutral-400 text-center mt-4">
+          This screening is for informational purposes only and is not a substitute for professional medical advice.
+        </p>
+      </Card>
+    );
+  }
+
+  // Render questions
+  if (currentScreen === 'questions') {
+    const currentQuestion = GAD7_QUESTIONS[currentQuestionIndex];
+    const currentAnswer = answers[currentQuestion.id];
+
+    return (
+      <Card className="max-w-2xl mx-auto p-8">
+        {/* Progress bar */}
+        <div className="mb-6">
+          <div className="flex justify-between items-center mb-2">
+            <span className="text-sm text-neutral-600 dark:text-neutral-400">
+              Question {currentQuestionIndex + 1} of {GAD7_QUESTIONS.length}
+            </span>
+            <span className="text-sm font-medium text-purple-600 dark:text-purple-400">
+              {Math.round(progress)}%
+            </span>
+          </div>
+          <div className="h-2 bg-neutral-200 dark:bg-neutral-700 rounded-full overflow-hidden">
+            <div
+              className="h-full bg-purple-600 transition-all duration-300 rounded-full"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+        </div>
+
+        {/* Question */}
+        <div className="mb-8">
+          <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-2">
+            Over the <strong>last 2 weeks</strong>, how often have you been bothered by:
+          </p>
+          <h2 className="text-xl font-semibold text-neutral-900 dark:text-white">
+            {currentQuestion.text}
+          </h2>
+        </div>
+
+        {/* Response options */}
+        <div className="space-y-3 mb-8">
+          {GAD7_RESPONSES.map((response) => (
+            <button
+              key={response.score}
+              onClick={() => handleAnswer(response.score)}
+              className={`w-full p-4 text-left rounded-lg border-2 transition-all ${
+                currentAnswer === response.score
+                  ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/30 dark:border-purple-400'
+                  : 'border-neutral-200 dark:border-neutral-700 hover:border-purple-300 dark:hover:border-purple-600 hover:bg-neutral-50 dark:hover:bg-neutral-800'
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <div
+                  className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                    currentAnswer === response.score
+                      ? 'border-purple-500 bg-purple-500 dark:border-purple-400 dark:bg-purple-400'
+                      : 'border-neutral-300 dark:border-neutral-600'
+                  }`}
+                >
+                  {currentAnswer === response.score && (
+                    <div className="w-2 h-2 bg-white rounded-full" />
+                  )}
+                </div>
+                <span
+                  className={`font-medium ${
+                    currentAnswer === response.score
+                      ? 'text-purple-900 dark:text-purple-100'
+                      : 'text-neutral-700 dark:text-neutral-300'
+                  }`}
+                >
+                  {response.label}
+                </span>
+              </div>
+            </button>
+          ))}
+        </div>
+
+        {/* Navigation */}
+        <div className="flex justify-between">
+          <Button
+            variant="outline"
+            onClick={handleBack}
+            disabled={currentQuestionIndex === 0}
+          >
+            <ChevronLeft className="w-4 h-4 mr-2" />
+            Back
+          </Button>
+        </div>
+      </Card>
+    );
+  }
+
+  // Render results
+  if (currentScreen === 'results' && result) {
+    const severityColors = {
+      minimal: { bg: 'bg-green-50 dark:bg-green-900/30', text: 'text-green-700 dark:text-green-300', icon: CheckCircle },
+      mild: { bg: 'bg-yellow-50 dark:bg-yellow-900/30', text: 'text-yellow-700 dark:text-yellow-300', icon: AlertCircle },
+      moderate: { bg: 'bg-orange-50 dark:bg-orange-900/30', text: 'text-orange-700 dark:text-orange-300', icon: AlertTriangle },
+      severe: { bg: 'bg-red-50 dark:bg-red-900/30', text: 'text-red-700 dark:text-red-300', icon: AlertTriangle },
+    };
+
+    const { bg, text, icon: Icon } = severityColors[result.severityLevel];
+
+    return (
+      <Card className="max-w-2xl mx-auto p-8">
+        <div className="text-center mb-8">
+          <div className={`w-16 h-16 ${bg} rounded-full flex items-center justify-center mx-auto mb-4`}>
+            <Icon className={`w-8 h-8 ${text}`} />
+          </div>
+          <h1 className="text-2xl font-bold text-neutral-900 dark:text-white mb-2">
+            Your Results
+          </h1>
+          <Badge className={`${bg} ${text} capitalize`}>
+            {result.severityLevel} anxiety
+          </Badge>
+        </div>
+
+        {/* Score display */}
+        <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg p-6 mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <span className="text-sm text-neutral-600 dark:text-neutral-400">
+              GAD-7 Score
+            </span>
+            <span className="text-2xl font-bold text-neutral-900 dark:text-white">
+              {result.totalScore} / 21
+            </span>
+          </div>
+          <div className="h-3 bg-neutral-200 dark:bg-neutral-700 rounded-full overflow-hidden">
+            <div
+              className={`h-full rounded-full ${
+                result.severityLevel === 'minimal'
+                  ? 'bg-green-500'
+                  : result.severityLevel === 'mild'
+                  ? 'bg-yellow-500'
+                  : result.severityLevel === 'moderate'
+                  ? 'bg-orange-500'
+                  : 'bg-red-500'
+              }`}
+              style={{ width: `${(result.totalScore / 21) * 100}%` }}
+            />
+          </div>
+          <div className="flex justify-between mt-2 text-xs text-neutral-500 dark:text-neutral-400">
+            <span>0-4 Minimal</span>
+            <span>5-9 Mild</span>
+            <span>10-14 Moderate</span>
+            <span>15+ Severe</span>
+          </div>
+        </div>
+
+        {/* Interpretation */}
+        <div className={`${bg} rounded-lg p-6 mb-6`}>
+          <h3 className={`font-semibold ${text} mb-2`}>
+            What This Means
+          </h3>
+          <p className={`text-sm ${text}`}>
+            {result.interpretation}
+          </p>
+        </div>
+
+        {/* Recommendation */}
+        <div className="bg-purple-50 dark:bg-purple-900/30 rounded-lg p-6 mb-6">
+          <h3 className="font-semibold text-purple-900 dark:text-purple-100 mb-2">
+            Our Recommendation
+          </h3>
+          <p className="text-sm text-purple-800 dark:text-purple-200">
+            {result.recommendation}
+          </p>
+        </div>
+
+        {/* Crisis resources if needed */}
+        {result.severityLevel === 'severe' && (
+          <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-6">
+            <h4 className="font-semibold text-red-900 dark:text-red-100 mb-2 flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4" />
+              Need Support Now?
+            </h4>
+            <ul className="text-sm text-red-800 dark:text-red-200 space-y-2">
+              <li>
+                <strong>988 Suicide & Crisis Lifeline:</strong> Call or text 988
+              </li>
+              <li>
+                <strong>Crisis Text Line:</strong> Text HOME to 741741
+              </li>
+              <li>
+                <strong>SAMHSA Helpline:</strong> 1-800-662-4357
+              </li>
+            </ul>
+          </div>
+        )}
+
+        {/* Actions */}
+        <div className="flex flex-col gap-3">
+          <Button
+            onClick={() => {
+              setCurrentScreen('intro');
+              setCurrentQuestionIndex(0);
+              setAnswers({});
+              setResult(null);
+            }}
+            variant="outline"
+            className="w-full"
+          >
+            Take Again
+          </Button>
+        </div>
+
+        <p className="text-xs text-neutral-500 dark:text-neutral-400 text-center mt-6">
+          The GAD-7 is a screening tool, not a diagnostic instrument.
+          Please consult with a healthcare professional for proper evaluation and treatment.
+        </p>
+      </Card>
+    );
+  }
+
+  return null;
+}

@@ -294,8 +294,11 @@ Respond naturally, showing you understand where they are in the app. Be brief (2
               <div ref={messagesEndRef} />
             </div>
 
-            {/* Fixed Input Area - Bevel Style */}
-            <div className="shrink-0 px-4 py-4 bg-gradient-to-t from-white via-white to-transparent border-t border-slate-100">
+            {/* Fixed Input Area - Bevel Style with safe area */}
+            <div
+              className="shrink-0 px-4 py-4 bg-gradient-to-t from-white via-white to-transparent border-t border-slate-100"
+              style={{ paddingBottom: 'max(16px, env(safe-area-inset-bottom))' }}
+            >
               <div className="flex items-end gap-2">
                 {/* Plus Button */}
                 <button

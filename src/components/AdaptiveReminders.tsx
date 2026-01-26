@@ -429,8 +429,11 @@ function ReminderNotification({ childName, tone, onClose }: ReminderNotification
         onClick={onClose}
       />
 
-      {/* Notification Card */}
-      <div className="fixed top-4 left-1/2 -translate-x-1/2 w-full max-w-md mx-4 bg-white rounded-lg shadow-2xl z-50 border border-gray-200">
+      {/* Notification Card - with safe area for notched devices */}
+      <div
+        className="fixed left-1/2 -translate-x-1/2 w-full max-w-md mx-4 bg-white dark:bg-slate-900 rounded-lg shadow-2xl z-50 border border-gray-200 dark:border-slate-700"
+        style={{ top: 'max(16px, env(safe-area-inset-top))' }}
+      >
         <div className="p-6 space-y-4">
           {/* Message */}
           <div className="flex items-start gap-3">
@@ -532,11 +535,14 @@ export function AdaptiveRemindersExample() {
       </div>
 
       {showSettings && (
-        <div className="fixed inset-0 bg-white z-50 overflow-y-auto">
-          <div className="sticky top-0 bg-white border-b border-gray-200 p-4 flex items-center gap-3">
+        <div className="fixed inset-0 bg-white dark:bg-slate-900 z-50 overflow-y-auto">
+          <div
+            className="sticky top-0 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-700 p-4 flex items-center gap-3"
+            style={{ paddingTop: 'max(16px, env(safe-area-inset-top))' }}
+          >
             <button
               onClick={() => setShowSettings(false)}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
             >
               ← Back
             </button>

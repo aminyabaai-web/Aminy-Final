@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
@@ -13,6 +13,12 @@ import {
   TRIAL_CONFIG,
   type TierType
 } from '../lib/tier-utils';
+import {
+  trackPaywallShown,
+  trackTierSelected,
+  trackCheckoutStarted,
+  trackUpgradeClicked,
+} from '../lib/analytics-engine';
 
 // Aminy's unique advantages - what makes us different
 const AMINY_ADVANTAGES = [
@@ -33,6 +39,16 @@ interface PricingPageProps {
 export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
   const [selectedTier, setSelectedTier] = useState<TierType>('core');
   const recommendedTier = getRecommendedTier();
+  const pageViewTime = useRef<number>(Date.now());
+
+  // Track pricing page view on mount
+  useEffect(() => {
+    pageViewTime.current = Date.now();
+    trackPaywallShown({
+      location: 'pricing_page',
+      previousTier: currentTier,
+    });
+  }, [currentTier]);
 
   // Aligned with tier-utils.ts (source of truth)
   const tiers = [
@@ -266,6 +282,20 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
                 {/* CTA */}
                 <Button
                   onClick={() => {
+                    // Track tier selection and checkout start
+                    trackTierSelected(tier.id, {
+                      location: 'pricing_page',
+                      previousTier: currentTier,
+                    });
+
+                    if (tier.price > 0) {
+                      trackCheckoutStarted(tier.id, tier.price, {
+                        location: 'pricing_page',
+                        tier: tier.id,
+                        previousTier: currentTier,
+                      });
+                    }
+
                     setSelectedTier(tier.id);
                     onSelectTier(tier.id);
                   }}
@@ -365,8 +395,8 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
             <Card className="p-4">
               <h4 className="font-semibold text-slate-900 mb-2">What happens after my free trial?</h4>
               <p className="text-sm text-slate-600">
-                After 7 days, Core and Plus trials automatically move to the Starter tier ($29/mo) unless you 
-                choose to continue your paid plan. You'll receive reminders before any charges.
+                After your 7-day trial, you'll continue on your chosen plan (Core $14.99/mo, Pro $29.99/mo, or Pro+ $49.99/mo).
+                You'll receive reminder emails at days 4 and 6, and can cancel anytime before the trial ends.
               </p>
             </Card>
 

@@ -6,6 +6,77 @@
 
 import { store } from './store';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
+import { extractAndStoreFacts, ConversationMessage as MemoryMessage } from './ai-engine/conversation-memory';
+
+/**
+ * Utility: Sleep for ms
+ */
+function sleep(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+/**
+ * Fetch with timeout and retry support
+ * Implements 30-second timeout and exponential backoff
+ */
+async function fetchWithTimeoutAndRetry(
+  url: string,
+  options: RequestInit,
+  config: {
+    timeout?: number;
+    maxRetries?: number;
+    baseDelay?: number;
+  } = {}
+): Promise<Response> {
+  const { timeout = 30000, maxRetries = 3, baseDelay = 1000 } = config;
+
+  let lastError: Error | null = null;
+
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+    try {
+      const response = await fetch(url, {
+        ...options,
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeoutId);
+
+      // Don't retry on client errors (4xx), only server errors (5xx) or network issues
+      if (response.ok || (response.status >= 400 && response.status < 500)) {
+        return response;
+      }
+
+      // Server error - may be worth retrying
+      lastError = new Error(`Server error: ${response.status} ${response.statusText}`);
+    } catch (error) {
+      clearTimeout(timeoutId);
+
+      if (error instanceof Error) {
+        if (error.name === 'AbortError') {
+          lastError = new Error(`Request timed out after ${timeout}ms`);
+        } else {
+          lastError = error;
+        }
+      } else {
+        lastError = new Error('Unknown fetch error');
+      }
+    }
+
+    // Don't wait after the last attempt
+    if (attempt < maxRetries - 1) {
+      // Exponential backoff: 1s, 2s, 4s...
+      const delay = baseDelay * Math.pow(2, attempt);
+      // Add jitter to prevent thundering herd
+      const jitter = Math.random() * 500;
+      await sleep(delay + jitter);
+    }
+  }
+
+  throw lastError || new Error('Fetch failed after retries');
+}
 
 export interface ConversationMessage {
   role: 'user' | 'assistant' | 'system';
@@ -27,11 +98,21 @@ export interface ConversationThread {
   summary?: string;
 }
 
+export interface DailyUsageInfo {
+  used: number;
+  limit: number;
+  remaining: number;
+  resetsAt: string;
+}
+
 export interface StreamingOptions {
   onToken?: (token: string) => void;
   onComplete?: (fullResponse: string) => void;
   onError?: (error: Error) => void;
+  onUsageUpdate?: (usage: DailyUsageInfo) => void; // Called with updated usage info
   humanPacing?: boolean; // Add natural pauses
+  extractMemory?: boolean; // Auto-extract memory facts from conversation
+  childId?: string; // Required for memory extraction
 }
 
 export interface ConversationContext {
@@ -67,8 +148,8 @@ export function getConversationKey(userId: string): string {
 export async function loadConversationHistory(userId: string): Promise<ConversationMessage[]> {
   try {
     const threadKey = getConversationKey(userId);
-    
-    const response = await fetch(
+
+    const response = await fetchWithTimeoutAndRetry(
       `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/conversation/load`,
       {
         method: 'POST',
@@ -77,7 +158,8 @@ export async function loadConversationHistory(userId: string): Promise<Conversat
           'Authorization': `Bearer ${publicAnonKey}`,
         },
         body: JSON.stringify({ userId, threadKey }),
-      }
+      },
+      { timeout: 15000, maxRetries: 2 } // Shorter timeout for load, fewer retries
     );
 
     if (!response.ok) {
@@ -101,8 +183,8 @@ export async function saveMessageToHistory(
 ): Promise<void> {
   try {
     const threadKey = getConversationKey(userId);
-    
-    await fetch(
+
+    await fetchWithTimeoutAndRetry(
       `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/conversation/save`,
       {
         method: 'POST',
@@ -111,7 +193,8 @@ export async function saveMessageToHistory(
           'Authorization': `Bearer ${publicAnonKey}`,
         },
         body: JSON.stringify({ userId, threadKey, message }),
-      }
+      },
+      { timeout: 10000, maxRetries: 3 } // Quick timeout, more retries for save
     );
   } catch (error) {
     console.error('Error saving message:', error);
@@ -134,18 +217,18 @@ export async function generateAIResponse(
     // Build context-rich system prompt
     const systemPrompt = buildSystemPrompt(context);
 
-    // Prepare messages for AI (increased to 20 messages for better context)
+    // Prepare messages for AI (increased to 50 messages for better context retention)
     const messages = [
       { role: 'system', content: systemPrompt },
-      ...conversationHistory.slice(-20).map(m => ({ // Last 20 messages for context
+      ...conversationHistory.slice(-50).map(m => ({ // Last 50 messages for context
         role: m.role === 'assistant' ? 'assistant' : 'user',
         content: m.content
       })),
       { role: 'user', content: userMessage }
     ];
 
-    // Call AI with streaming
-    const response = await fetch(
+    // Call AI with streaming - 30 second timeout, 3 retries with exponential backoff
+    const response = await fetchWithTimeoutAndRetry(
       `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/ai/chat`,
       {
         method: 'POST',
@@ -159,7 +242,8 @@ export async function generateAIResponse(
           context,
           max_tokens: 1000, // Limit response length to control costs
         }),
-      }
+      },
+      { timeout: 30000, maxRetries: 3, baseDelay: 1000 } // 30s timeout, 3 retries
     );
 
     if (!response.ok) {
@@ -167,7 +251,26 @@ export async function generateAIResponse(
     }
 
     // Handle streaming response
-    return await handleStreamingResponse(response, options);
+    const fullResponse = await handleStreamingResponse(response, options);
+
+    // Auto-extract memory facts if enabled
+    if (options?.extractMemory && options?.childId) {
+      // Run in background to not block response
+      extractMemoryFactsAsync(
+        userId,
+        options.childId,
+        userMessage,
+        fullResponse,
+        conversationHistory
+      );
+    }
+
+    // Fetch and report updated usage if callback provided
+    if (options?.onUsageUpdate) {
+      fetchAndReportUsage(options.onUsageUpdate);
+    }
+
+    return fullResponse;
   } catch (error) {
     console.error('Error generating AI response:', error);
     options?.onError?.(error as Error);
@@ -312,20 +415,13 @@ function getErrorFallback(context: ConversationContext): string {
 }
 
 /**
- * Utility: Sleep for ms
- */
-function sleep(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-/**
  * Get conversation summary for memory compression (for 30-day expiry)
  */
 export async function generateConversationSummary(
   messages: ConversationMessage[]
 ): Promise<string> {
   try {
-    const response = await fetch(
+    const response = await fetchWithTimeoutAndRetry(
       `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/ai/summarize`,
       {
         method: 'POST',
@@ -334,7 +430,8 @@ export async function generateConversationSummary(
           'Authorization': `Bearer ${publicAnonKey}`,
         },
         body: JSON.stringify({ messages }),
-      }
+      },
+      { timeout: 20000, maxRetries: 2 } // Summarization can take a bit, 2 retries
     );
 
     if (!response.ok) {
@@ -355,4 +452,77 @@ export async function generateConversationSummary(
 export function needsSummaryCompression(lastActive: string): boolean {
   const daysSinceActive = (Date.now() - new Date(lastActive).getTime()) / (1000 * 60 * 60 * 24);
   return daysSinceActive >= 30;
+}
+
+/**
+ * Fetch current usage and report to callback
+ */
+async function fetchAndReportUsage(
+  onUsageUpdate: (usage: DailyUsageInfo) => void
+): Promise<void> {
+  try {
+    const response = await fetchWithTimeoutAndRetry(
+      `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/ai/usage`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${publicAnonKey}`,
+        },
+      },
+      { timeout: 5000, maxRetries: 1 }
+    );
+
+    if (response.ok) {
+      const data = await response.json();
+      if (data.dailyUsage) {
+        onUsageUpdate(data.dailyUsage);
+      }
+    }
+  } catch (error) {
+    // Silent fail - usage update is not critical
+    console.error('Failed to fetch usage:', error);
+  }
+}
+
+/**
+ * Extract memory facts asynchronously (fire and forget)
+ * Converts conversation history + new messages to MemoryMessage format
+ */
+async function extractMemoryFactsAsync(
+  userId: string,
+  childId: string,
+  userMessage: string,
+  assistantResponse: string,
+  conversationHistory: ConversationMessage[]
+): Promise<void> {
+  try {
+    // Convert to MemoryMessage format and include the latest exchange
+    const messagesForExtraction: MemoryMessage[] = [
+      ...conversationHistory.slice(-10).map((m) => ({
+        id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+        role: m.role as 'user' | 'assistant',
+        content: m.content,
+        timestamp: m.timestamp,
+      })),
+      {
+        id: `user-${Date.now()}`,
+        role: 'user' as const,
+        content: userMessage,
+        timestamp: new Date().toISOString(),
+      },
+      {
+        id: `assistant-${Date.now()}`,
+        role: 'assistant' as const,
+        content: assistantResponse,
+        timestamp: new Date().toISOString(),
+      },
+    ];
+
+    // Extract and store facts (runs in background)
+    await extractAndStoreFacts(userId, childId, messagesForExtraction);
+  } catch (error) {
+    // Silent fail - memory extraction is not critical
+    console.error('Memory extraction failed:', error);
+  }
 }

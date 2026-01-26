@@ -59,6 +59,7 @@ export function EmotionTracker({ userId }: { userId: string }) {
       }
     } catch (error) {
       console.error('Error loading emotion history:', error);
+      toast.error('Unable to load your emotion history. Please try again.');
     }
     setLoading(false);
   }

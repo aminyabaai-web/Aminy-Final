@@ -12,6 +12,8 @@ import { useContextEngine } from '../lib/context-engine';
 import { useAnalytics } from '../lib/analytics-engine';
 import { toast } from 'sonner';
 import { memoryManager, type TierType } from '../lib/memory-system';
+import { RateLimitBadge } from './RateLimitBadge';
+import { useRateLimitStore, hasReachedLimit } from '../lib/rate-limit-store';
 
 interface Message {
   id: string;
@@ -70,8 +72,19 @@ export function PersistentAskAminy({
 
   // Rate limiting based on tier - check if user can send message
   const childId = 'default'; // Would come from user profile
-  const canSendMessage = memoryManager.canSendMessage(childId, userTier as TierType);
-  const messagesRemaining = memoryManager.getMessagesRemaining(childId, userTier as TierType);
+  const { dailyUsage, fetchUsage, setDailyUsage } = useRateLimitStore();
+
+  // Use backend usage if available, fall back to local memory manager
+  const isBackendRateLimited = dailyUsage && hasReachedLimit(dailyUsage);
+  const canSendMessage = !isBackendRateLimited && memoryManager.canSendMessage(childId, userTier as TierType);
+  const messagesRemaining = dailyUsage?.remaining ?? memoryManager.getMessagesRemaining(childId, userTier as TierType);
+
+  // Fetch usage on mount
+  useEffect(() => {
+    if (isOpen) {
+      fetchUsage();
+    }
+  }, [isOpen]);
 
   // Auto-resize textarea with improved logic
   const adjustTextareaHeight = useCallback(() => {
@@ -799,28 +812,11 @@ export function PersistentAskAminy({
                   </span>
                 </div>
                 
-                {userTier === 'starter' && (
-                  <div className="flex items-center gap-2">
-                    {messages.length >= 8 && (
-                      <Badge variant={messages.length >= 10 ? "destructive" : "secondary"} className="text-xs">
-                        {messages.length >= 10 
-                          ? "Limit reached"
-                          : `${10 - messages.length} remaining`
-                        }
-                      </Badge>
-                    )}
-                    {messages.length >= 10 && onPaywallTrigger && (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={onPaywallTrigger}
-                        className="text-xs h-6 px-2"
-                      >
-                        Upgrade
-                      </Button>
-                    )}
-                  </div>
-                )}
+                {/* Rate limit badge - shows for free/starter tiers */}
+                <RateLimitBadge
+                  variant="compact"
+                  onUpgradeClick={onPaywallTrigger}
+                />
               </div>
             </div>
           </>

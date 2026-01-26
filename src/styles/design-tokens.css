@@ -21,11 +21,11 @@
   --aminy-navy-light: rgba(13, 27, 42, 0.8);
   --aminy-navy-muted: rgba(13, 27, 42, 0.6);
 
-  /* Accent - Muted Teal */
-  --aminy-teal: #577590;
-  --aminy-accent: #577590;
-  --aminy-accent-hover: #466379;
-  --aminy-accent-light: rgba(87, 117, 144, 0.1);
+  /* Accent - Teal (consolidated to #0891b2 for brand consistency) */
+  --aminy-teal: #0891b2;
+  --aminy-accent: #0891b2;
+  --aminy-accent-hover: #0780a0;
+  --aminy-accent-light: rgba(8, 145, 178, 0.1);
 
   /* Legacy gradient colors (soft versions) */
   --aminy-mint: #C9EAD9;
@@ -61,10 +61,10 @@
   --color-error-bg: rgba(244, 67, 54, 0.1);
   --color-error-border: rgba(244, 67, 54, 0.3);
 
-  /* Info - Guidance */
-  --color-info: #577590;
-  --color-info-bg: rgba(87, 117, 144, 0.1);
-  --color-info-border: rgba(87, 117, 144, 0.3);
+  /* Info - Guidance (teal for brand consistency) */
+  --color-info: #0891b2;
+  --color-info-bg: rgba(8, 145, 178, 0.1);
+  --color-info-border: rgba(8, 145, 178, 0.3);
   
   /* ========================================
      TYPOGRAPHY

@@ -99,6 +99,8 @@ export function NotificationCenter({ onNotificationClick }: NotificationCenterPr
         return '🔔';
       case 'coach':
         return '💙';
+      case 'engagement':
+        return '💬';
       default:
         return '✨';
     }

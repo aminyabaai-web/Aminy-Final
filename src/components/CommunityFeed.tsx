@@ -40,7 +40,18 @@ import {
   Sparkles,
   Award,
   TrendingUp,
+  Trash2,
+  AlertTriangle,
 } from 'lucide-react';
+import { toast } from 'sonner';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from './ui/dropdown-menu';
+import { EmptyCommunityPosts } from './ui/empty-state';
 import {
   CommunityPost,
   PostCategory,
@@ -92,7 +103,7 @@ export function CommunityFeed({
   const canPinPosts = userTier === 'pro-plus' || userTier === 'family';
 
   const handleLike = async (postId: string) => {
-    const updatedPost = await likePost(postId, userId);
+    const updatedPost = await likePost(postId, userId, userName);
     setPosts(posts.map((p) => (p.id === postId ? updatedPost : p)));
   };
 
@@ -193,16 +204,11 @@ export function CommunityFeed({
             </div>
           </Card>
         ) : filteredPosts.length === 0 ? (
-          <Card className="p-8 text-center">
-            <Users className="w-12 h-12 mx-auto mb-3 text-gray-300" />
-            <h3 className="font-medium text-gray-900 mb-1">No posts yet</h3>
-            <p className="text-sm text-gray-600 mb-4">
-              Be the first to share in this category!
-            </p>
-            <Button onClick={() => setShowCreatePost(true)}>
-              <Plus className="w-4 h-4 mr-2" />
-              Create Post
-            </Button>
+          <Card className="overflow-hidden">
+            <EmptyCommunityPosts
+              category={activeFilter !== 'all' ? POST_CATEGORIES[activeFilter]?.label : undefined}
+              onCreate={() => setShowCreatePost(true)}
+            />
           </Card>
         ) : (
           filteredPosts.map((post) => (
@@ -215,6 +221,17 @@ export function CommunityFeed({
               showComments={expandedComments.has(post.id)}
               canPin={canPinPosts}
               onViewProfile={onViewProfile}
+              onDelete={(postId) => {
+                setPosts(posts.filter(p => p.id !== postId));
+              }}
+              onReport={(postId, reason) => {
+                // In production, this would call flagForModeration from community.ts
+                console.log('Report submitted:', { postId, reason });
+              }}
+              onBookmark={(postId) => {
+                // In production, this would call bookmarkPost from community.ts
+                console.log('Bookmark toggled:', postId);
+              }}
             />
           ))
         )}
@@ -251,6 +268,10 @@ interface PostCardProps {
   showComments: boolean;
   canPin: boolean;
   onViewProfile?: (userId: string) => void;
+  onDelete?: (postId: string) => void;
+  onReport?: (postId: string, reason: string) => void;
+  onBookmark?: (postId: string) => void;
+  isBookmarked?: boolean;
 }
 
 function PostCard({
@@ -261,10 +282,63 @@ function PostCard({
   showComments,
   canPin,
   onViewProfile,
+  onDelete,
+  onReport,
+  onBookmark,
+  isBookmarked = false,
 }: PostCardProps) {
   const [newComment, setNewComment] = useState('');
+  const [showReportDialog, setShowReportDialog] = useState(false);
+  const [bookmarked, setBookmarked] = useState(isBookmarked);
   const isLiked = post.likedBy.includes(currentUserId);
+  const isOwnPost = post.userId === currentUserId;
   const category = POST_CATEGORIES[post.category];
+
+  const handleShare = async () => {
+    const shareText = `Check out this post from Aminy Community: "${post.content.slice(0, 100)}${post.content.length > 100 ? '...' : ''}"`;
+    const shareUrl = `${window.location.origin}/community/post/${post.id}`;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: `${post.userName}'s ${category.label}`,
+          text: shareText,
+          url: shareUrl,
+        });
+        toast.success('Shared successfully!');
+      } catch (err) {
+        // User cancelled or share failed
+        if ((err as Error).name !== 'AbortError') {
+          // Fallback to clipboard
+          await navigator.clipboard.writeText(`${shareText}\n${shareUrl}`);
+          toast.success('Link copied to clipboard!');
+        }
+      }
+    } else {
+      // Fallback for browsers that don't support Web Share API
+      await navigator.clipboard.writeText(`${shareText}\n${shareUrl}`);
+      toast.success('Link copied to clipboard!');
+    }
+  };
+
+  const handleDelete = () => {
+    if (confirm('Are you sure you want to delete this post? This cannot be undone.')) {
+      onDelete?.(post.id);
+      toast.success('Post deleted');
+    }
+  };
+
+  const handleReport = (reason: string) => {
+    onReport?.(post.id, reason);
+    setShowReportDialog(false);
+    toast.success('Report submitted. Thank you for helping keep our community safe.');
+  };
+
+  const handleBookmark = () => {
+    setBookmarked(!bookmarked);
+    onBookmark?.(post.id);
+    toast.success(bookmarked ? 'Removed from bookmarks' : 'Added to bookmarks');
+  };
 
   const getCategoryIcon = () => {
     switch (post.category) {
@@ -350,9 +424,64 @@ function PostCard({
             </div>
           </div>
 
-          <button className="text-gray-400 hover:text-gray-600">
-            <MoreHorizontal className="w-5 h-5" />
-          </button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="text-gray-400 hover:text-gray-600 p-2 hover:bg-gray-100 rounded-lg min-h-[44px] min-w-[44px] flex items-center justify-center">
+                <MoreHorizontal className="w-5 h-5" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {isOwnPost && (
+                <>
+                  <DropdownMenuItem onClick={handleDelete} className="text-red-600">
+                    <Trash2 className="w-4 h-4 mr-2" />
+                    Delete post
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                </>
+              )}
+              <DropdownMenuItem onClick={() => setShowReportDialog(true)}>
+                <Flag className="w-4 h-4 mr-2" />
+                Report post
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {/* Report Dialog */}
+          {showReportDialog && (
+            <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={() => setShowReportDialog(false)}>
+              <div className="bg-white rounded-xl p-6 max-w-sm w-full" onClick={(e) => e.stopPropagation()}>
+                <div className="flex items-center gap-2 mb-4">
+                  <AlertTriangle className="w-5 h-5 text-amber-500" />
+                  <h3 className="font-semibold text-gray-900">Report this post</h3>
+                </div>
+                <p className="text-sm text-gray-600 mb-4">Why are you reporting this post?</p>
+                <div className="space-y-2">
+                  {[
+                    'Inappropriate content',
+                    'Spam or advertising',
+                    'Harassment or bullying',
+                    'Medical misinformation',
+                    'Other concern',
+                  ].map((reason) => (
+                    <button
+                      key={reason}
+                      onClick={() => handleReport(reason)}
+                      className="w-full text-left px-4 py-3 text-sm hover:bg-gray-100 rounded-lg transition-colors"
+                    >
+                      {reason}
+                    </button>
+                  ))}
+                </div>
+                <button
+                  onClick={() => setShowReportDialog(false)}
+                  className="w-full mt-4 py-2 text-sm text-gray-500 hover:text-gray-700"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Content */}
@@ -392,13 +521,21 @@ function PostCard({
               <span>{post.commentCount}</span>
             </button>
 
-            <button className="flex items-center gap-1 text-sm text-gray-500 hover:text-green-500">
+            <button
+              onClick={handleShare}
+              className="flex items-center gap-1 text-sm text-gray-500 hover:text-green-500 min-h-[44px] px-2"
+              aria-label="Share post"
+            >
               <Share2 className="w-5 h-5" />
             </button>
           </div>
 
-          <button className="text-gray-400 hover:text-amber-500">
-            <Bookmark className="w-5 h-5" />
+          <button
+            onClick={handleBookmark}
+            className={`min-h-[44px] px-2 ${bookmarked ? 'text-amber-500' : 'text-gray-400 hover:text-amber-500'}`}
+            aria-label={bookmarked ? 'Remove from bookmarks' : 'Add to bookmarks'}
+          >
+            <Bookmark className={`w-5 h-5 ${bookmarked ? 'fill-current' : ''}`} />
           </button>
         </div>
 

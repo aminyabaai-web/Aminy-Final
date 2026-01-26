@@ -90,6 +90,20 @@ const ANALYTICS_CONFIG = {
     'subscription_started',
     'subscription_completed',
     'subscription_cancelled',
+
+    // Upgrade Funnel Analytics
+    'paywall_shown',
+    'paywall_dismissed',
+    'upgrade_clicked',
+    'upgrade_tier_selected',
+    'upgrade_checkout_started',
+    'upgrade_completed',
+    'upgrade_abandoned',
+    'trial_started',
+    'trial_converted',
+    'trial_expired',
+    'price_comparison_viewed',
+    'feature_gated_click',
     
     // Engagement Patterns
     'deep_engagement_started', // 5+ minutes continuous usage
@@ -539,6 +553,159 @@ export function useAnalytics() {
     exportData: analytics.exportData.bind(analytics),
   };
 }
+
+// ============================================================================
+// UPGRADE FUNNEL ANALYTICS
+// ============================================================================
+
+export interface UpgradeFunnelContext {
+  location: string; // e.g., 'chat_limit', 'feature_gate', 'settings', 'pricing_page'
+  tier?: string; // Target tier
+  variant?: string; // A/B test variant
+  feature?: string; // Gated feature that triggered paywall
+  previousTier?: string;
+}
+
+/**
+ * Track when a paywall/upgrade prompt is shown
+ */
+export function trackPaywallShown(context: UpgradeFunnelContext) {
+  analytics.track('paywall_shown', {
+    location: context.location,
+    targetTier: context.tier,
+    variant: context.variant,
+    gatedFeature: context.feature,
+    previousTier: context.previousTier,
+    timestamp: Date.now(),
+  });
+}
+
+/**
+ * Track when user dismisses paywall without taking action
+ */
+export function trackPaywallDismissed(context: UpgradeFunnelContext, timeViewed: number) {
+  analytics.track('paywall_dismissed', {
+    location: context.location,
+    timeViewedMs: timeViewed,
+    variant: context.variant,
+  });
+}
+
+/**
+ * Track when user clicks upgrade button
+ */
+export function trackUpgradeClicked(context: UpgradeFunnelContext) {
+  analytics.track('upgrade_clicked', {
+    location: context.location,
+    targetTier: context.tier,
+    variant: context.variant,
+    source: context.feature || 'direct',
+  });
+}
+
+/**
+ * Track when user selects a specific tier
+ */
+export function trackTierSelected(tier: string, context: UpgradeFunnelContext) {
+  analytics.track('upgrade_tier_selected', {
+    selectedTier: tier,
+    location: context.location,
+    previousTier: context.previousTier,
+    variant: context.variant,
+  });
+}
+
+/**
+ * Track when checkout flow is initiated
+ */
+export function trackCheckoutStarted(
+  tier: string,
+  price: number,
+  context: UpgradeFunnelContext
+) {
+  analytics.track('upgrade_checkout_started', {
+    tier,
+    price,
+    location: context.location,
+    variant: context.variant,
+    timestamp: Date.now(),
+  });
+}
+
+/**
+ * Track successful upgrade completion
+ */
+export function trackUpgradeCompleted(
+  tier: string,
+  price: number,
+  context: UpgradeFunnelContext
+) {
+  analytics.track('upgrade_completed', {
+    newTier: tier,
+    price,
+    location: context.location,
+    previousTier: context.previousTier,
+    variant: context.variant,
+    timestamp: Date.now(),
+  });
+
+  // Also track as conversion
+  analytics.trackConversion('upgrade', price);
+}
+
+/**
+ * Track when user abandons upgrade flow
+ */
+export function trackUpgradeAbandoned(
+  stage: 'tier_selection' | 'checkout' | 'payment',
+  context: UpgradeFunnelContext,
+  timeSpent: number
+) {
+  analytics.track('upgrade_abandoned', {
+    abandonedStage: stage,
+    location: context.location,
+    targetTier: context.tier,
+    timeSpentMs: timeSpent,
+    variant: context.variant,
+  });
+}
+
+/**
+ * Track when a gated feature is clicked by a user who doesn't have access
+ */
+export function trackFeatureGated(feature: string, requiredTier: string, userTier: string) {
+  analytics.track('feature_gated_click', {
+    feature,
+    requiredTier,
+    userTier,
+    timestamp: Date.now(),
+  });
+}
+
+/**
+ * Get upgrade funnel metrics for a time period
+ */
+export function getUpgradeFunnelMetrics(): {
+  impressions: number;
+  clicks: number;
+  checkouts: number;
+  completions: number;
+  conversionRate: number;
+} {
+  // This would aggregate from the analytics backend
+  // For now, return structure for frontend integration
+  return {
+    impressions: 0,
+    clicks: 0,
+    checkouts: 0,
+    completions: 0,
+    conversionRate: 0,
+  };
+}
+
+// ============================================================================
+// UTILITY FUNCTIONS
+// ============================================================================
 
 // Utility Functions
 export function trackPageView(page: string, properties?: Record<string, any>) {

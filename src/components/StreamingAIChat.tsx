@@ -15,12 +15,18 @@ import {
   ConversationContext,
 } from '../lib/ai-conversation-engine';
 import { store } from '../lib/store';
+import { useRateLimitStore, hasReachedLimit } from '../lib/rate-limit-store';
+import { RateLimitInline } from './RateLimitBadge';
 
 interface StreamingAIChatProps {
   context: ConversationContext;
   placeholder?: string;
   className?: string;
   onConversionPrompt?: () => void; // Called when AI suggests trial
+  childId?: string; // Child ID for memory extraction
+  enableMemoryExtraction?: boolean; // Auto-extract memory facts from conversation
+  onUpgradeClick?: () => void; // Called when user wants to upgrade
+  showRateLimitIndicator?: boolean; // Show remaining messages indicator
 }
 
 export function StreamingAIChat({
@@ -28,6 +34,10 @@ export function StreamingAIChat({
   placeholder = "Ask Aminy anything...",
   className = "",
   onConversionPrompt,
+  childId,
+  enableMemoryExtraction = true, // Enabled by default
+  onUpgradeClick,
+  showRateLimitIndicator = true,
 }: StreamingAIChatProps) {
   const [messages, setMessages] = useState<ConversationMessage[]>([]);
   const [input, setInput] = useState('');
@@ -36,6 +46,15 @@ export function StreamingAIChat({
   const [isLoadingHistory, setIsLoadingHistory] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
+
+  // Rate limit tracking
+  const { dailyUsage, setDailyUsage, fetchUsage } = useRateLimitStore();
+  const isRateLimited = dailyUsage && hasReachedLimit(dailyUsage);
+
+  // Fetch usage on mount
+  useEffect(() => {
+    fetchUsage();
+  }, []);
 
   // Load conversation history on mount
   useEffect(() => {
@@ -141,6 +160,9 @@ export function StreamingAIChat({
             setMessages(prev => [...prev, errorMessage]);
           },
           humanPacing: true, // Natural pauses at sentence boundaries
+          extractMemory: enableMemoryExtraction && !!childId,
+          childId,
+          onUsageUpdate: setDailyUsage, // Update rate limit store
         }
       );
     } catch (error) {
@@ -248,21 +270,26 @@ export function StreamingAIChat({
         <div ref={messagesEndRef} />
       </div>
 
+      {/* Rate limit indicator */}
+      {showRateLimitIndicator && (
+        <RateLimitInline onUpgradeClick={onUpgradeClick} />
+      )}
+
       {/* Input area */}
-      <div className="border-t border-slate-200 bg-white px-4 py-4">
+      <div className="border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-4">
         <div className="flex items-end gap-2 max-w-4xl mx-auto">
           <Textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyPress}
-            placeholder={placeholder}
+            placeholder={isRateLimited ? "Daily limit reached - upgrade for unlimited messages" : placeholder}
             className="flex-1 resize-none min-h-[44px] max-h-[120px]"
             rows={1}
-            disabled={isStreaming}
+            disabled={isStreaming || isRateLimited}
           />
           <Button
             onClick={handleSend}
-            disabled={!input.trim() || isStreaming}
+            disabled={!input.trim() || isStreaming || isRateLimited}
             size="lg"
             className="bg-accent hover:bg-accent/90 text-white h-[44px] px-4"
             aria-label="Send message"

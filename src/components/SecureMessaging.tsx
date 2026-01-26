@@ -16,6 +16,7 @@ import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
+import { useKeyboardHeight } from '../hooks/useKeyboardHeight';
 import {
   MessageSquare,
   Send,
@@ -113,6 +114,9 @@ export function SecureMessaging({ userId, userType, userName }: SecureMessagingP
   const [attachments, setAttachments] = useState<File[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Keyboard avoidance for iOS
+  const { isKeyboardOpen, keyboardHeight } = useKeyboardHeight();
 
   // Load threads
   const loadThreads = useCallback(async () => {
@@ -661,8 +665,16 @@ export function SecureMessaging({ userId, userType, userName }: SecureMessagingP
             </div>
           )}
 
-          {/* Input Area */}
-          <div className="p-4 border-t border-neutral-200 bg-white">
+          {/* Input Area - with keyboard avoidance */}
+          <div
+            className="p-4 border-t border-neutral-200 dark:border-slate-700 bg-white dark:bg-slate-900"
+            style={{
+              paddingBottom: isKeyboardOpen
+                ? `${Math.max(16, keyboardHeight - 100)}px`
+                : 'max(16px, env(safe-area-inset-bottom))',
+              transition: 'padding-bottom 0.15s ease-out',
+            }}
+          >
             <div className="flex items-end gap-2">
               <div className="flex gap-1">
                 <Button

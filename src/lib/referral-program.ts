@@ -23,7 +23,7 @@ export interface Referral {
   referredUserId: string;
   referralCode: string;
   status: 'pending' | 'qualified' | 'rewarded' | 'expired';
-  // Qualification: referred user must be on paid tier for 14+ days
+  // Qualification: referred user must be on paid tier for 7+ days
   qualificationDate?: string;
   rewardedAt?: string;
   referrerReward?: ReferralReward;
@@ -66,10 +66,10 @@ export const REFERRAL_PROGRAM_CONFIG: ReferralProgramConfig = {
     value: 25, // $25 credit
     description: '$25 credit toward your first expert session',
   },
-  qualificationPeriodDays: 14, // Friend must stay on paid plan for 14 days
+  qualificationPeriodDays: 7, // Friend must stay on paid plan for 7 days (reduced from 14 for better viral coefficient)
   requiredTier: 'core', // Minimum tier for qualification
   maxReferralsPerUser: 20, // Max 20 referrals per user
-  maxRewardsPerMonth: 5, // Max 5 free months per month
+  maxRewardsPerMonth: 15, // Max 15 free months per month (increased to encourage power referrers)
 };
 
 // Premium referral tiers (for power referrers)

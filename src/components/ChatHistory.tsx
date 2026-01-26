@@ -10,6 +10,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Clock, Search, Trash2, MessageSquare, ChevronRight, X } from 'lucide-react';
+import { EmptyConversations, EmptySearchResults } from './ui/empty-state';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { ScrollArea } from './ui/scroll-area';
@@ -176,15 +177,16 @@ export function ChatHistory({
               Loading conversations...
             </div>
           ) : filteredConversations.length === 0 ? (
-            <div className="p-8 text-center">
-              <MessageSquare className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-3" />
-              <p className="text-gray-500 dark:text-gray-400">
-                {searchQuery ? 'No conversations match your search' : 'No conversations yet'}
-              </p>
-              <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">
-                Start chatting with Aminy to see your history here
-              </p>
-            </div>
+            searchQuery ? (
+              <EmptySearchResults
+                searchTerm={searchQuery}
+                onClear={() => setSearchQuery('')}
+              />
+            ) : (
+              <EmptyConversations
+                onStartChat={onClose}
+              />
+            )
           ) : (
             <div className="divide-y divide-gray-100 dark:divide-slate-800">
               {filteredConversations.map(conversation => (

@@ -486,7 +486,7 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
             {isMobile && (
               <button
                 onClick={handleBackToThreads}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                 aria-label="Back to Messages"
               >
                 <ArrowLeft className="w-5 h-5 text-gray-600" />
@@ -522,7 +522,7 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
           
           <div className="flex items-center gap-2">
             <button
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
               aria-label="Emergency Resources"
             >
               <AlertTriangle className="w-5 h-5 text-gray-600" />
@@ -884,7 +884,7 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
             <div className="flex items-center gap-3 mb-6">
               <button
                 onClick={handleBackToDashboard}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                 aria-label="Back to dashboard"
               >
                 <ArrowLeft className="w-5 h-5 text-gray-600" />
@@ -926,7 +926,7 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
           <div className="flex items-center gap-3 mb-6">
             <button
               onClick={handleBackToDashboard}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors lg:hidden"
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors lg:hidden min-h-[44px] min-w-[44px] flex items-center justify-center"
               aria-label="Back to dashboard"
             >
               <ArrowLeft className="w-5 h-5 text-gray-600" />
@@ -953,10 +953,13 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
         </div>
       </div>
       
-      {/* Footer Disclaimer */}
-      <div className="fixed bottom-0 left-0 right-0 bg-gray-50 border-t border-gray-200 p-3">
+      {/* Footer Disclaimer - with safe area for notched devices */}
+      <div
+        className="fixed bottom-0 left-0 right-0 bg-gray-50 dark:bg-slate-900 border-t border-gray-200 dark:border-slate-700 p-3"
+        style={{ paddingBottom: 'max(12px, env(safe-area-inset-bottom))' }}
+      >
         <div className="max-w-4xl mx-auto text-center">
-          <p className="text-xs text-gray-600">
+          <p className="text-xs text-gray-600 dark:text-gray-400">
             For emergencies, call 911. This is educational guidance, not medical treatment.
           </p>
         </div>

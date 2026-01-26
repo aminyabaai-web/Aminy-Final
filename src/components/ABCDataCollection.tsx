@@ -347,30 +347,30 @@ export function ABCDataCollection({
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-neutral-50 to-white flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-b from-neutral-50 to-white dark:from-slate-950 dark:to-slate-900 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-8 h-8 text-teal-600 animate-spin mx-auto mb-3" />
-          <p className="text-neutral-600">Loading ABC data...</p>
+          <p className="text-neutral-600 dark:text-neutral-400">Loading ABC data...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-neutral-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-neutral-50 to-white dark:from-slate-950 dark:to-slate-900">
       {/* Header */}
-      <header className="bg-white border-b border-neutral-200 sticky top-0 z-10">
+      <header className="bg-white dark:bg-slate-900 border-b border-neutral-200 dark:border-slate-700 sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               {onBack && (
-                <button onClick={onBack} className="p-2 hover:bg-neutral-100 rounded-lg">
+                <button onClick={onBack} className="p-2 hover:bg-neutral-100 rounded-lg min-h-[44px] min-w-[44px] flex items-center justify-center">
                   <ArrowLeft className="w-5 h-5 text-neutral-600" />
                 </button>
               )}
               <div>
-                <h1 className="text-lg font-semibold text-neutral-900">ABC Data Collection</h1>
-                <p className="text-sm text-neutral-500">{childName}</p>
+                <h1 className="text-lg font-semibold text-neutral-900 dark:text-white">ABC Data Collection</h1>
+                <p className="text-sm text-neutral-500 dark:text-neutral-400">{childName}</p>
               </div>
             </div>
 
@@ -393,14 +393,14 @@ export function ABCDataCollection({
       </header>
 
       {/* Tabs & Filters */}
-      <div className="bg-white border-b border-neutral-100">
+      <div className="bg-white dark:bg-slate-900 border-b border-neutral-100 dark:border-slate-800">
         <div className="max-w-4xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             <div className="flex gap-1">
               <button
                 onClick={() => setView('list')}
                 className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
-                  view === 'list' ? 'bg-teal-100 text-teal-700' : 'text-neutral-600 hover:bg-neutral-100'
+                  view === 'list' ? 'bg-teal-100 text-teal-700' : 'text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-slate-800'
                 }`}
               >
                 <FileText className="w-4 h-4 inline mr-1.5" />
@@ -409,7 +409,7 @@ export function ABCDataCollection({
               <button
                 onClick={() => setView('stats')}
                 className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
-                  view === 'stats' ? 'bg-teal-100 text-teal-700' : 'text-neutral-600 hover:bg-neutral-100'
+                  view === 'stats' ? 'bg-teal-100 text-teal-700' : 'text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-slate-800'
                 }`}
               >
                 <BarChart3 className="w-4 h-4 inline mr-1.5" />
@@ -425,7 +425,7 @@ export function ABCDataCollection({
                   className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${
                     dateFilter === range
                       ? 'bg-neutral-900 text-white'
-                      : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
+                      : 'bg-neutral-100 dark:bg-slate-800 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-200 dark:hover:bg-slate-700'
                   }`}
                 >
                   {range === '7d' ? '7 Days' : range === '30d' ? '30 Days' : 'All Time'}
@@ -443,8 +443,8 @@ export function ABCDataCollection({
             {entries.length === 0 ? (
               <Card className="p-12 text-center">
                 <FileText className="w-12 h-12 mx-auto mb-4 text-neutral-300" />
-                <h3 className="text-lg font-medium text-neutral-900 mb-2">No entries yet</h3>
-                <p className="text-neutral-500 mb-4">
+                <h3 className="text-lg font-medium text-neutral-900 dark:text-white mb-2">No entries yet</h3>
+                <p className="text-neutral-500 dark:text-neutral-400 mb-4">
                   Start logging incidents to track behavior patterns
                 </p>
                 <Button onClick={() => setShowForm(true)} className="bg-teal-600 hover:bg-teal-700">
@@ -472,10 +472,10 @@ export function ABCDataCollection({
                           {SETTING_OPTIONS.find(s => s.value === entry.setting)?.icon} {entry.setting}
                         </Badge>
                       </div>
-                      <p className="font-medium text-neutral-900 line-clamp-1">
+                      <p className="font-medium text-neutral-900 dark:text-white line-clamp-1">
                         {entry.behavior}
                       </p>
-                      <p className="text-sm text-neutral-500 mt-1">
+                      <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
                         <Clock className="w-3.5 h-3.5 inline mr-1" />
                         {new Date(entry.occurredAt).toLocaleString()}
                         {entry.durationSeconds && (
@@ -491,7 +491,7 @@ export function ABCDataCollection({
                           e.stopPropagation();
                           if (confirm('Delete this entry?')) handleDelete(entry.id);
                         }}
-                        className="p-2 text-neutral-400 hover:text-red-500 transition-colors"
+                        className="p-2 text-neutral-400 hover:text-red-500 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                       >
                         <X className="w-4 h-4" />
                       </button>
@@ -504,11 +504,11 @@ export function ABCDataCollection({
                   </div>
 
                   {expandedEntry === entry.id && (
-                    <div className="mt-4 pt-4 border-t border-neutral-100 space-y-3">
+                    <div className="mt-4 pt-4 border-t border-neutral-100 dark:border-slate-800 space-y-3">
                       <div className="grid grid-cols-3 gap-4">
                         <div>
-                          <p className="text-xs font-medium text-neutral-500 uppercase mb-1">Antecedent</p>
-                          <p className="text-sm text-neutral-700">
+                          <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase mb-1">Antecedent</p>
+                          <p className="text-sm text-neutral-700 dark:text-neutral-300">
                             <Badge className="mr-2 text-xs bg-blue-50 text-blue-600">
                               {ANTECEDENT_OPTIONS.find(a => a.value === entry.antecedentCategory)?.label}
                             </Badge>
@@ -516,12 +516,12 @@ export function ABCDataCollection({
                           </p>
                         </div>
                         <div>
-                          <p className="text-xs font-medium text-neutral-500 uppercase mb-1">Behavior</p>
-                          <p className="text-sm text-neutral-700">{entry.behavior}</p>
+                          <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase mb-1">Behavior</p>
+                          <p className="text-sm text-neutral-700 dark:text-neutral-300">{entry.behavior}</p>
                         </div>
                         <div>
-                          <p className="text-xs font-medium text-neutral-500 uppercase mb-1">Consequence</p>
-                          <p className="text-sm text-neutral-700">
+                          <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase mb-1">Consequence</p>
+                          <p className="text-sm text-neutral-700 dark:text-neutral-300">
                             <Badge className="mr-2 text-xs bg-purple-50 text-purple-600">
                               {CONSEQUENCE_OPTIONS.find(c => c.value === entry.consequenceCategory)?.label}
                             </Badge>
@@ -531,8 +531,8 @@ export function ABCDataCollection({
                       </div>
                       {entry.notes && (
                         <div>
-                          <p className="text-xs font-medium text-neutral-500 uppercase mb-1">Notes</p>
-                          <p className="text-sm text-neutral-700">{entry.notes}</p>
+                          <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase mb-1">Notes</p>
+                          <p className="text-sm text-neutral-700 dark:text-neutral-300">{entry.notes}</p>
                         </div>
                       )}
                     </div>
@@ -547,32 +547,32 @@ export function ABCDataCollection({
             {/* Summary Cards */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <Card className="p-4 text-center">
-                <p className="text-3xl font-bold text-neutral-900">{entries.length}</p>
-                <p className="text-sm text-neutral-500">Total Incidents</p>
+                <p className="text-3xl font-bold text-neutral-900 dark:text-white">{entries.length}</p>
+                <p className="text-sm text-neutral-500 dark:text-neutral-400">Total Incidents</p>
               </Card>
               <Card className="p-4 text-center">
-                <p className="text-3xl font-bold text-neutral-900">
+                <p className="text-3xl font-bold text-neutral-900 dark:text-white">
                   {(entries.length / (dateFilter === '7d' ? 7 : dateFilter === '30d' ? 30 : 1)).toFixed(1)}
                 </p>
-                <p className="text-sm text-neutral-500">Per Day Avg</p>
+                <p className="text-sm text-neutral-500 dark:text-neutral-400">Per Day Avg</p>
               </Card>
               <Card className="p-4 text-center">
                 <p className="text-3xl font-bold text-amber-600">
                   {entries.filter(e => e.intensity === 'high').length}
                 </p>
-                <p className="text-sm text-neutral-500">High Intensity</p>
+                <p className="text-sm text-neutral-500 dark:text-neutral-400">High Intensity</p>
               </Card>
               <Card className="p-4 text-center">
                 <p className="text-3xl font-bold text-teal-600">
                   {stats.likelyFunction ? CONSEQUENCE_OPTIONS.find(c => c.value === stats.likelyFunction[0])?.label : 'N/A'}
                 </p>
-                <p className="text-sm text-neutral-500">Likely Function</p>
+                <p className="text-sm text-neutral-500 dark:text-neutral-400">Likely Function</p>
               </Card>
             </div>
 
             {/* Top Behaviors */}
             <Card className="p-6">
-              <h3 className="font-semibold text-neutral-900 mb-4">Most Common Behaviors</h3>
+              <h3 className="font-semibold text-neutral-900 dark:text-white mb-4">Most Common Behaviors</h3>
               <div className="space-y-3">
                 {stats.topBehaviors.map(([behavior, count], i) => (
                   <div key={behavior} className="flex items-center gap-3">
@@ -582,9 +582,9 @@ export function ABCDataCollection({
                         <Badge className={getBehaviorColor(behavior as BehaviorCategory)}>
                           {BEHAVIOR_OPTIONS.find(b => b.value === behavior)?.label || behavior}
                         </Badge>
-                        <span className="text-sm text-neutral-600">{count} ({Math.round((count / entries.length) * 100)}%)</span>
+                        <span className="text-sm text-neutral-600 dark:text-neutral-400">{count} ({Math.round((count / entries.length) * 100)}%)</span>
                       </div>
-                      <div className="h-2 bg-neutral-100 rounded-full overflow-hidden">
+                      <div className="h-2 bg-neutral-100 dark:bg-slate-700 rounded-full overflow-hidden">
                         <div
                           className="h-full bg-teal-500 rounded-full"
                           style={{ width: `${(count / entries.length) * 100}%` }}
@@ -598,7 +598,7 @@ export function ABCDataCollection({
 
             {/* Top Antecedents */}
             <Card className="p-6">
-              <h3 className="font-semibold text-neutral-900 mb-4">Most Common Triggers</h3>
+              <h3 className="font-semibold text-neutral-900 dark:text-white mb-4">Most Common Triggers</h3>
               <div className="space-y-3">
                 {stats.topAntecedents.map(([antecedent, count], i) => (
                   <div key={antecedent} className="flex items-center gap-3">
@@ -608,9 +608,9 @@ export function ABCDataCollection({
                         <span className="text-sm font-medium text-neutral-700">
                           {ANTECEDENT_OPTIONS.find(a => a.value === antecedent)?.label || antecedent}
                         </span>
-                        <span className="text-sm text-neutral-600">{count}</span>
+                        <span className="text-sm text-neutral-600 dark:text-neutral-400">{count}</span>
                       </div>
-                      <div className="h-2 bg-neutral-100 rounded-full overflow-hidden">
+                      <div className="h-2 bg-neutral-100 dark:bg-slate-700 rounded-full overflow-hidden">
                         <div
                           className="h-full bg-blue-500 rounded-full"
                           style={{ width: `${(count / entries.length) * 100}%` }}
@@ -623,9 +623,9 @@ export function ABCDataCollection({
             </Card>
 
             {/* Function Analysis */}
-            <Card className="p-6 bg-gradient-to-br from-violet-50 to-purple-50 border-violet-200">
-              <h3 className="font-semibold text-neutral-900 mb-2">Function Analysis</h3>
-              <p className="text-neutral-600 text-sm mb-4">
+            <Card className="p-6 bg-gradient-to-br from-violet-50 to-purple-50 dark:from-violet-950 dark:to-purple-950 border-violet-200 dark:border-violet-800">
+              <h3 className="font-semibold text-neutral-900 dark:text-white mb-2">Function Analysis</h3>
+              <p className="text-neutral-600 dark:text-neutral-400 text-sm mb-4">
                 Based on the consequences that most often follow behaviors, the likely function appears to be:
               </p>
               <div className="flex flex-wrap gap-2">
@@ -633,12 +633,12 @@ export function ABCDataCollection({
                   .sort((a, b) => b[1] - a[1])
                   .slice(0, 3)
                   .map(([consequence, count]) => (
-                    <Badge key={consequence} className="bg-white text-violet-700 border border-violet-200">
+                    <Badge key={consequence} className="bg-white dark:bg-slate-800 text-violet-700 dark:text-violet-400 border border-violet-200 dark:border-violet-700">
                       {CONSEQUENCE_OPTIONS.find(c => c.value === consequence)?.label}: {count}
                     </Badge>
                   ))}
               </div>
-              <p className="text-xs text-neutral-500 mt-4">
+              <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-4">
                 Note: This is a preliminary analysis. Consult with your BCBA for a comprehensive functional behavior assessment.
               </p>
             </Card>
@@ -649,11 +649,11 @@ export function ABCDataCollection({
       {/* Add Entry Modal */}
       {showForm && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 overflow-y-auto">
-          <Card className="max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6 border-b border-neutral-100 sticky top-0 bg-white">
+          <Card className="max-w-2xl w-full max-h-[90vh] overflow-y-auto dark:bg-slate-900 dark:border-slate-700">
+            <div className="p-6 border-b border-neutral-100 dark:border-slate-800 sticky top-0 bg-white dark:bg-slate-900">
               <div className="flex items-center justify-between">
-                <h2 className="text-lg font-semibold text-neutral-900">Log Incident</h2>
-                <button onClick={() => setShowForm(false)} className="p-2 hover:bg-neutral-100 rounded-lg">
+                <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">Log Incident</h2>
+                <button onClick={() => setShowForm(false)} className="p-2 hover:bg-neutral-100 rounded-lg min-h-[44px] min-w-[44px] flex items-center justify-center">
                   <X className="w-5 h-5 text-neutral-500" />
                 </button>
               </div>
@@ -663,7 +663,7 @@ export function ABCDataCollection({
               {/* When & Where */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-1.5">When did it happen?</label>
+                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">When did it happen?</label>
                   <Input
                     type="datetime-local"
                     value={formData.occurredAt}
@@ -671,7 +671,7 @@ export function ABCDataCollection({
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-1.5">Where?</label>
+                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">Where?</label>
                   <div className="flex flex-wrap gap-2">
                     {SETTING_OPTIONS.map(setting => (
                       <button
@@ -680,7 +680,7 @@ export function ABCDataCollection({
                         className={`px-3 py-2 text-sm rounded-lg border transition-colors ${
                           formData.setting === setting.value
                             ? 'bg-teal-100 border-teal-300 text-teal-700'
-                            : 'bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50'
+                            : 'bg-white dark:bg-slate-800 border-neutral-200 dark:border-slate-700 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-slate-700'
                         }`}
                       >
                         {setting.icon} {setting.label}
@@ -692,7 +692,7 @@ export function ABCDataCollection({
 
               {/* Antecedent */}
               <div>
-                <label className="block text-sm font-medium text-neutral-700 mb-1.5">
+                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
                   What happened RIGHT BEFORE? (Antecedent)
                 </label>
                 <div className="flex flex-wrap gap-2 mb-2">
@@ -703,7 +703,7 @@ export function ABCDataCollection({
                       className={`px-3 py-1.5 text-sm rounded-lg border transition-colors ${
                         formData.antecedentCategory === option.value
                           ? 'bg-blue-100 border-blue-300 text-blue-700'
-                          : 'bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50'
+                          : 'bg-white dark:bg-slate-800 border-neutral-200 dark:border-slate-700 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-slate-700'
                       }`}
                     >
                       {option.label}
@@ -720,7 +720,7 @@ export function ABCDataCollection({
 
               {/* Behavior */}
               <div>
-                <label className="block text-sm font-medium text-neutral-700 mb-1.5">
+                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
                   What behavior occurred?
                 </label>
                 <div className="flex flex-wrap gap-2 mb-2">
@@ -731,7 +731,7 @@ export function ABCDataCollection({
                       className={`px-3 py-1.5 text-sm rounded-lg border transition-colors ${
                         formData.behaviorCategory === option.value
                           ? option.color + ' border-current'
-                          : 'bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50'
+                          : 'bg-white dark:bg-slate-800 border-neutral-200 dark:border-slate-700 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-slate-700'
                       }`}
                     >
                       {option.label}
@@ -748,7 +748,7 @@ export function ABCDataCollection({
 
               {/* Consequence */}
               <div>
-                <label className="block text-sm font-medium text-neutral-700 mb-1.5">
+                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
                   What happened AFTER? (Consequence)
                 </label>
                 <div className="flex flex-wrap gap-2 mb-2">
@@ -759,7 +759,7 @@ export function ABCDataCollection({
                       className={`px-3 py-1.5 text-sm rounded-lg border transition-colors ${
                         formData.consequenceCategory === option.value
                           ? 'bg-purple-100 border-purple-300 text-purple-700'
-                          : 'bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50'
+                          : 'bg-white dark:bg-slate-800 border-neutral-200 dark:border-slate-700 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-slate-700'
                       }`}
                     >
                       {option.label}
@@ -777,7 +777,7 @@ export function ABCDataCollection({
               {/* Duration & Intensity */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-1.5">
+                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
                     Duration (optional)
                   </label>
                   <div className="flex items-center gap-2">
@@ -788,11 +788,11 @@ export function ABCDataCollection({
                       onChange={(e) => setFormData({ ...formData, durationSeconds: parseInt(e.target.value) || undefined })}
                       className="w-24"
                     />
-                    <span className="text-neutral-500">seconds</span>
+                    <span className="text-neutral-500 dark:text-neutral-400">seconds</span>
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-1.5">
+                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
                     Intensity
                   </label>
                   <div className="flex gap-2">
@@ -803,7 +803,7 @@ export function ABCDataCollection({
                         className={`flex-1 px-3 py-2 text-sm rounded-lg border transition-colors capitalize ${
                           formData.intensity === level
                             ? getIntensityColor(level) + ' border-current'
-                            : 'bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50'
+                            : 'bg-white dark:bg-slate-800 border-neutral-200 dark:border-slate-700 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-slate-700'
                         }`}
                       >
                         {level}
@@ -815,7 +815,7 @@ export function ABCDataCollection({
 
               {/* Notes */}
               <div>
-                <label className="block text-sm font-medium text-neutral-700 mb-1.5">
+                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
                   Additional Notes (optional)
                 </label>
                 <Textarea
@@ -827,7 +827,7 @@ export function ABCDataCollection({
               </div>
             </div>
 
-            <div className="p-6 border-t border-neutral-100 flex gap-3">
+            <div className="p-6 border-t border-neutral-100 dark:border-slate-800 flex gap-3">
               <Button variant="outline" className="flex-1" onClick={() => setShowForm(false)}>
                 Cancel
               </Button>

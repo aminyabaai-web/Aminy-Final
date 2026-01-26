@@ -41,6 +41,8 @@ import {
   getReferralQualificationDays,
   generateMockReferrals,
 } from '../lib/referral-program';
+import { EmptyReferrals } from './ui/empty-state';
+import { toast } from 'sonner';
 
 interface ReferralDashboardProps {
   userId: string;
@@ -78,6 +80,7 @@ export function ReferralDashboard({
         setSummary(referralSummary);
       } catch (error) {
         console.error('Error loading referral data:', error);
+        toast.error('Unable to load your referral data. Please try again.');
       }
       setLoading(false);
     }
@@ -87,11 +90,17 @@ export function ReferralDashboard({
 
   // Copy referral link
   const handleCopy = async () => {
-    const { url } = getReferralShareMessage(referralCode, userName);
-    await navigator.clipboard.writeText(url);
-    setCopied(true);
-    onShare?.('copy');
-    setTimeout(() => setCopied(false), 2000);
+    try {
+      const { url } = getReferralShareMessage(referralCode, userName);
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      toast.success('Referral link copied!');
+      onShare?.('copy');
+      setTimeout(() => setCopied(false), 2000);
+    } catch (error) {
+      console.error('Error copying link:', error);
+      toast.error('Failed to copy link');
+    }
   };
 
   // Share via email
@@ -378,12 +387,9 @@ export function ReferralDashboard({
         </div>
 
         {referrals.length === 0 ? (
-          <div className="text-center py-6">
-            <Users className="w-10 h-10 mx-auto mb-2 text-gray-300" />
-            <p className="text-sm text-gray-500">
-              No referrals yet. Share your code to get started!
-            </p>
-          </div>
+          <EmptyReferrals
+            onInvite={() => setShowShareOptions(true)}
+          />
         ) : (
           <div className="space-y-2">
             {referrals.slice(0, 5).map((referral) => {

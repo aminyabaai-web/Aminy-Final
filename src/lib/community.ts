@@ -986,6 +986,7 @@ export function getAllLocalGroups(): LocalCommunityGroup[] {
 // ============================================================================
 
 import { supabase } from '../utils/supabase/client';
+import { createCommunityNotification } from './notification-system';
 
 // localStorage keys for fallback
 const POSTS_STORAGE_KEY = 'aminy_community_posts';
@@ -1100,6 +1101,12 @@ export async function createPost(
     if (error) throw error;
 
     console.log('[Community] Post created in Supabase:', data.id);
+
+    // Check for new badges in background (don't block post creation)
+    checkAndAwardBadges(post.userId).catch(err =>
+      console.warn('[Community] Badge check failed:', err)
+    );
+
     return dbRowToPost(data);
   } catch (err) {
     console.warn('[Community] Supabase error, using localStorage fallback:', err);
@@ -1128,7 +1135,7 @@ export async function createPost(
 /**
  * Like or unlike a post
  */
-export async function likePost(postId: string, userId: string): Promise<CommunityPost> {
+export async function likePost(postId: string, userId: string, userName?: string): Promise<CommunityPost> {
   try {
     // Check if already liked
     const { data: existingLike } = await supabase
@@ -1137,6 +1144,8 @@ export async function likePost(postId: string, userId: string): Promise<Communit
       .eq('post_id', postId)
       .eq('user_id', userId)
       .single();
+
+    const isNewLike = !existingLike;
 
     if (existingLike) {
       // Unlike - remove the like
@@ -1160,7 +1169,24 @@ export async function likePost(postId: string, userId: string): Promise<Communit
       .single();
 
     if (error) throw error;
-    return dbRowToPost(post);
+
+    const updatedPost = dbRowToPost(post);
+
+    // Send notification to post author (only for new likes, not unlikes)
+    if (isNewLike && updatedPost.userId !== userId) {
+      try {
+        await createCommunityNotification('like', {
+          recipientUserId: updatedPost.userId,
+          actorName: userName || 'Someone',
+          postId: updatedPost.id,
+          postTitle: updatedPost.title,
+        });
+      } catch (notifError) {
+        console.warn('[Community] Failed to send like notification:', notifError);
+      }
+    }
+
+    return updatedPost;
   } catch (err) {
     console.warn('[Community] Supabase error in likePost, using localStorage:', err);
 
@@ -1174,9 +1200,25 @@ export async function likePost(postId: string, userId: string): Promise<Communit
     if (!likes[postId]) likes[postId] = [];
 
     const userLikeIndex = likes[postId].indexOf(userId);
-    if (userLikeIndex === -1) {
+    const isNewLike = userLikeIndex === -1;
+
+    if (isNewLike) {
       likes[postId].push(userId);
       posts[postIndex].likeCount++;
+
+      // Send notification for new likes (localStorage fallback)
+      if (posts[postIndex].userId !== userId) {
+        try {
+          await createCommunityNotification('like', {
+            recipientUserId: posts[postIndex].userId,
+            actorName: userName || 'Someone',
+            postId: posts[postIndex].id,
+            postTitle: posts[postIndex].title,
+          });
+        } catch (notifError) {
+          console.warn('[Community] Failed to send like notification:', notifError);
+        }
+      }
     } else {
       likes[postId].splice(userLikeIndex, 1);
       posts[postIndex].likeCount = Math.max(0, posts[postIndex].likeCount - 1);
@@ -1219,7 +1261,31 @@ export async function addComment(
     if (error) throw error;
 
     console.log('[Community] Comment created in Supabase:', data.id);
-    return dbRowToComment(data);
+    const newComment = dbRowToComment(data);
+
+    // Fetch post to get author ID for notification
+    const { data: postData } = await supabase
+      .from('community_posts')
+      .select('user_id, title')
+      .eq('id', postId)
+      .single();
+
+    // Send notification to post author (unless they're commenting on their own post)
+    if (postData && postData.user_id !== comment.userId) {
+      try {
+        await createCommunityNotification('comment', {
+          recipientUserId: postData.user_id,
+          actorName: comment.userDisplayName,
+          postId: postId,
+          postTitle: postData.title,
+          commentPreview: comment.body,
+        });
+      } catch (notifError) {
+        console.warn('[Community] Failed to send comment notification:', notifError);
+      }
+    }
+
+    return newComment;
   } catch (err) {
     console.warn('[Community] Supabase error in addComment, using localStorage:', err);
 
@@ -1244,6 +1310,21 @@ export async function addComment(
       posts[postIndex].commentCount++;
       posts[postIndex].updatedAt = new Date().toISOString();
       localStorage.setItem(POSTS_STORAGE_KEY, JSON.stringify(posts));
+
+      // Send notification to post author (localStorage fallback)
+      if (posts[postIndex].userId !== comment.userId) {
+        try {
+          await createCommunityNotification('comment', {
+            recipientUserId: posts[postIndex].userId,
+            actorName: comment.userDisplayName,
+            postId: postId,
+            postTitle: posts[postIndex].title,
+            commentPreview: comment.body,
+          });
+        } catch (notifError) {
+          console.warn('[Community] Failed to send comment notification:', notifError);
+        }
+      }
     }
 
     return newComment;
@@ -1463,6 +1544,207 @@ export async function getUserBookmarks(userId: string): Promise<CommunityPost[]>
 }
 
 // ============================================================================
+// BADGE EARNING SYSTEM
+// ============================================================================
+
+export interface UserBadgeStats {
+  totalPosts: number;
+  totalComments: number;
+  helpfulVotes: number;
+  winsShared: number;
+  memberSinceDays: number;
+  badges: CommunityBadge[];
+}
+
+/**
+ * Get user's community stats for badge calculation
+ */
+export async function getUserBadgeStats(userId: string): Promise<UserBadgeStats> {
+  try {
+    // Try to get from Supabase first
+    const { data: posts } = await supabase
+      .from('community_posts')
+      .select('id, category, like_count, created_at')
+      .eq('user_id', userId);
+
+    const { data: comments } = await supabase
+      .from('community_comments')
+      .select('id, like_count')
+      .eq('user_id', userId);
+
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('created_at, community_badges')
+      .eq('id', userId)
+      .single();
+
+    const totalPosts = posts?.length || 0;
+    const totalComments = comments?.length || 0;
+    const helpfulVotes = (comments?.reduce((sum, c) => sum + (c.like_count || 0), 0) || 0) +
+                         (posts?.reduce((sum, p) => sum + (p.like_count || 0), 0) || 0);
+    const winsShared = posts?.filter(p => p.category === 'wins').length || 0;
+
+    const memberSinceDays = profile?.created_at
+      ? Math.floor((Date.now() - new Date(profile.created_at).getTime()) / (1000 * 60 * 60 * 24))
+      : 0;
+
+    const badges = (profile?.community_badges || []) as CommunityBadge[];
+
+    return {
+      totalPosts,
+      totalComments,
+      helpfulVotes,
+      winsShared,
+      memberSinceDays,
+      badges,
+    };
+  } catch (error) {
+    console.error('Error getting badge stats:', error);
+    // Fallback to localStorage
+    const posts = getLocalPosts().filter(p => p.userId === userId);
+    return {
+      totalPosts: posts.length,
+      totalComments: 0,
+      helpfulVotes: posts.reduce((sum, p) => sum + p.likeCount, 0),
+      winsShared: posts.filter(p => p.category === 'wins').length,
+      memberSinceDays: 0,
+      badges: [],
+    };
+  }
+}
+
+/**
+ * Check which badges a user has earned
+ */
+export function calculateEarnedBadges(stats: UserBadgeStats): CommunityBadge[] {
+  const earnedBadges: CommunityBadge[] = [];
+  const now = new Date().toISOString();
+
+  // First Steps - Made first post
+  if (stats.totalPosts >= 1) {
+    earnedBadges.push({
+      ...COMMUNITY_BADGES.find(b => b.id === 'first-post')!,
+      earnedAt: now,
+    });
+  }
+
+  // Helpful Heart - 10 helpful votes
+  if (stats.helpfulVotes >= 10) {
+    earnedBadges.push({
+      ...COMMUNITY_BADGES.find(b => b.id === 'helpful')!,
+      earnedAt: now,
+    });
+  }
+
+  // Storyteller - 5 wins shared
+  if (stats.winsShared >= 5) {
+    earnedBadges.push({
+      ...COMMUNITY_BADGES.find(b => b.id === 'storyteller')!,
+      earnedAt: now,
+    });
+  }
+
+  // Mentor - 20 helpful responses (comments that got likes)
+  if (stats.totalComments >= 20 && stats.helpfulVotes >= 20) {
+    earnedBadges.push({
+      ...COMMUNITY_BADGES.find(b => b.id === 'mentor')!,
+      earnedAt: now,
+    });
+  }
+
+  // Veteran - 6+ months member
+  if (stats.memberSinceDays >= 180) {
+    earnedBadges.push({
+      ...COMMUNITY_BADGES.find(b => b.id === 'veteran')!,
+      earnedAt: now,
+    });
+  }
+
+  return earnedBadges;
+}
+
+/**
+ * Check and award any new badges to a user
+ * Returns newly earned badges (not previously awarded)
+ */
+export async function checkAndAwardBadges(userId: string): Promise<CommunityBadge[]> {
+  const stats = await getUserBadgeStats(userId);
+  const earnedBadges = calculateEarnedBadges(stats);
+
+  // Find badges that are new (not in current badges)
+  const currentBadgeIds = stats.badges.map(b => b.id);
+  const newBadges = earnedBadges.filter(b => !currentBadgeIds.includes(b.id));
+
+  if (newBadges.length > 0) {
+    // Save new badges to user profile
+    try {
+      const updatedBadges = [...stats.badges, ...newBadges];
+      await supabase
+        .from('profiles')
+        .update({ community_badges: updatedBadges })
+        .eq('id', userId);
+
+      // Create notification for each new badge
+      for (const badge of newBadges) {
+        try {
+          const { createCommunityNotification } = await import('./notification-system');
+          await createCommunityNotification('badge_earned', {
+            recipientUserId: userId,
+            actorName: 'Aminy',
+            badgeName: badge.name,
+          });
+        } catch (notifError) {
+          console.warn('Could not create badge notification:', notifError);
+        }
+      }
+    } catch (error) {
+      console.error('Error saving badges:', error);
+    }
+  }
+
+  return newBadges;
+}
+
+/**
+ * Get a user's primary badge for display
+ * Returns the most prestigious badge or null if none
+ */
+export function getPrimaryBadge(badges: CommunityBadge[]): CommunityBadge | null {
+  // Priority order: veteran > mentor > storyteller > helpful > first-post
+  const priority = ['veteran', 'mentor', 'storyteller', 'helpful', 'first-post'];
+
+  for (const badgeId of priority) {
+    const badge = badges.find(b => b.id === badgeId);
+    if (badge) return badge;
+  }
+
+  return null;
+}
+
+/**
+ * Get display badge string for a user (shown next to name)
+ */
+export function getUserBadgeDisplay(badges: CommunityBadge[], memberSinceDays: number): string {
+  // If they have earned badges, show the primary one
+  const primary = getPrimaryBadge(badges);
+  if (primary) return primary.name;
+
+  // Otherwise show membership duration
+  if (memberSinceDays >= 365) {
+    const years = Math.floor(memberSinceDays / 365);
+    return `${years}-year member`;
+  } else if (memberSinceDays >= 30) {
+    const months = Math.floor(memberSinceDays / 30);
+    return `${months}-month member`;
+  } else if (memberSinceDays >= 7) {
+    const weeks = Math.floor(memberSinceDays / 7);
+    return `${weeks}-week member`;
+  }
+
+  return 'New member';
+}
+
+// ============================================================================
 // EXPORTS
 // ============================================================================
 
@@ -1502,4 +1784,11 @@ export default {
   findLocalGroups,
   getAllLocalGroups,
   LOCAL_COMMUNITY_GROUPS,
+
+  // Badge System
+  getUserBadgeStats,
+  calculateEarnedBadges,
+  checkAndAwardBadges,
+  getPrimaryBadge,
+  getUserBadgeDisplay,
 };
