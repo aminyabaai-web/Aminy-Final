@@ -1544,6 +1544,335 @@ export async function getUserBookmarks(userId: string): Promise<CommunityPost[]>
 }
 
 // ============================================================================
+// FOLLOW SYSTEM
+// ============================================================================
+
+const FOLLOWS_STORAGE_KEY = 'aminy_community_follows';
+
+export interface FollowRelationship {
+  followerId: string;
+  followingId: string;
+  createdAt: string;
+}
+
+/**
+ * Get local follows from localStorage (for offline/fallback support)
+ */
+function getLocalFollows(): FollowRelationship[] {
+  if (typeof window === 'undefined') return [];
+  const stored = localStorage.getItem(FOLLOWS_STORAGE_KEY);
+  return stored ? JSON.parse(stored) : [];
+}
+
+/**
+ * Save follows to localStorage
+ */
+function saveLocalFollows(follows: FollowRelationship[]): void {
+  if (typeof window === 'undefined') return;
+  localStorage.setItem(FOLLOWS_STORAGE_KEY, JSON.stringify(follows));
+}
+
+/**
+ * Follow a user
+ */
+export async function followUser(followerId: string, followingId: string): Promise<boolean> {
+  if (followerId === followingId) {
+    throw new Error("You cannot follow yourself");
+  }
+
+  try {
+    const { error } = await supabase
+      .from('community_follows')
+      .insert({
+        follower_id: followerId,
+        following_id: followingId,
+        created_at: new Date().toISOString(),
+      });
+
+    if (error) {
+      // Handle unique constraint violation (already following)
+      if (error.code === '23505') {
+        return true; // Already following, treat as success
+      }
+      throw error;
+    }
+
+    // Create notification for the followed user
+    try {
+      const { createCommunityNotification } = await import('./notification-system');
+
+      // Get follower's display name
+      const { data: followerProfile } = await supabase
+        .from('profiles')
+        .select('display_name')
+        .eq('id', followerId)
+        .single();
+
+      await createCommunityNotification('new_follower', {
+        recipientUserId: followingId,
+        actorName: followerProfile?.display_name || 'Someone',
+        actorUserId: followerId,
+      });
+    } catch (notifError) {
+      console.warn('Could not create follow notification:', notifError);
+    }
+
+    return true;
+  } catch (err) {
+    console.warn('[Community] Supabase error in followUser, using localStorage:', err);
+
+    // Fallback to localStorage
+    const follows = getLocalFollows();
+    const existingFollow = follows.find(
+      f => f.followerId === followerId && f.followingId === followingId
+    );
+
+    if (existingFollow) return true; // Already following
+
+    follows.push({
+      followerId,
+      followingId,
+      createdAt: new Date().toISOString(),
+    });
+
+    saveLocalFollows(follows);
+    return true;
+  }
+}
+
+/**
+ * Unfollow a user
+ */
+export async function unfollowUser(followerId: string, followingId: string): Promise<boolean> {
+  try {
+    const { error } = await supabase
+      .from('community_follows')
+      .delete()
+      .eq('follower_id', followerId)
+      .eq('following_id', followingId);
+
+    if (error) throw error;
+    return true;
+  } catch (err) {
+    console.warn('[Community] Supabase error in unfollowUser, using localStorage:', err);
+
+    // Fallback to localStorage
+    const follows = getLocalFollows();
+    const filteredFollows = follows.filter(
+      f => !(f.followerId === followerId && f.followingId === followingId)
+    );
+
+    saveLocalFollows(filteredFollows);
+    return true;
+  }
+}
+
+/**
+ * Check if user A follows user B
+ */
+export async function isFollowing(followerId: string, followingId: string): Promise<boolean> {
+  try {
+    const { data, error } = await supabase
+      .from('community_follows')
+      .select('id')
+      .eq('follower_id', followerId)
+      .eq('following_id', followingId)
+      .single();
+
+    if (error && error.code !== 'PGRST116') throw error; // PGRST116 = no rows
+    return !!data;
+  } catch (err) {
+    console.warn('[Community] Supabase error in isFollowing, using localStorage:', err);
+    const follows = getLocalFollows();
+    return follows.some(f => f.followerId === followerId && f.followingId === followingId);
+  }
+}
+
+/**
+ * Get list of users that a user follows
+ */
+export async function getFollowing(userId: string): Promise<string[]> {
+  try {
+    const { data, error } = await supabase
+      .from('community_follows')
+      .select('following_id')
+      .eq('follower_id', userId);
+
+    if (error) throw error;
+    return (data || []).map(row => row.following_id);
+  } catch (err) {
+    console.warn('[Community] Supabase error in getFollowing, using localStorage:', err);
+    const follows = getLocalFollows();
+    return follows
+      .filter(f => f.followerId === userId)
+      .map(f => f.followingId);
+  }
+}
+
+/**
+ * Get list of users who follow a user
+ */
+export async function getFollowers(userId: string): Promise<string[]> {
+  try {
+    const { data, error } = await supabase
+      .from('community_follows')
+      .select('follower_id')
+      .eq('following_id', userId);
+
+    if (error) throw error;
+    return (data || []).map(row => row.follower_id);
+  } catch (err) {
+    console.warn('[Community] Supabase error in getFollowers, using localStorage:', err);
+    const follows = getLocalFollows();
+    return follows
+      .filter(f => f.followingId === userId)
+      .map(f => f.followerId);
+  }
+}
+
+/**
+ * Get follower and following counts for a user
+ */
+export async function getFollowCounts(userId: string): Promise<{ followers: number; following: number }> {
+  try {
+    const [followersResult, followingResult] = await Promise.all([
+      supabase
+        .from('community_follows')
+        .select('id', { count: 'exact', head: true })
+        .eq('following_id', userId),
+      supabase
+        .from('community_follows')
+        .select('id', { count: 'exact', head: true })
+        .eq('follower_id', userId),
+    ]);
+
+    return {
+      followers: followersResult.count || 0,
+      following: followingResult.count || 0,
+    };
+  } catch (err) {
+    console.warn('[Community] Supabase error in getFollowCounts, using localStorage:', err);
+    const follows = getLocalFollows();
+    return {
+      followers: follows.filter(f => f.followingId === userId).length,
+      following: follows.filter(f => f.followerId === userId).length,
+    };
+  }
+}
+
+/**
+ * Get posts from users that the current user follows (feed)
+ */
+export async function getFollowingFeed(
+  userId: string,
+  options?: { limit?: number; offset?: number }
+): Promise<CommunityPost[]> {
+  const followingIds = await getFollowing(userId);
+
+  if (followingIds.length === 0) {
+    return []; // No one followed, empty feed
+  }
+
+  try {
+    const limit = options?.limit || 20;
+    const offset = options?.offset || 0;
+
+    const { data, error } = await supabase
+      .from('community_posts')
+      .select('*')
+      .in('user_id', followingIds)
+      .eq('moderation_status', 'approved')
+      .order('created_at', { ascending: false })
+      .range(offset, offset + limit - 1);
+
+    if (error) throw error;
+    return (data || []).map(dbRowToPost);
+  } catch (err) {
+    console.warn('[Community] Supabase error in getFollowingFeed, using localStorage:', err);
+
+    const posts = getLocalPosts();
+    return posts
+      .filter(p => followingIds.includes(p.userId) && p.moderationStatus === 'approved')
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      .slice(options?.offset || 0, (options?.offset || 0) + (options?.limit || 20));
+  }
+}
+
+/**
+ * Get suggested users to follow based on activity and shared interests
+ */
+export async function getSuggestedUsersToFollow(
+  userId: string,
+  limit: number = 5
+): Promise<{ userId: string; displayName: string; reason: string }[]> {
+  try {
+    // Get current following
+    const following = await getFollowing(userId);
+
+    // Get users who have interacted with the same posts
+    const { data: userPosts } = await supabase
+      .from('community_posts')
+      .select('id')
+      .eq('user_id', userId);
+
+    const postIds = (userPosts || []).map(p => p.id);
+
+    // Get users who commented on or liked the same posts
+    const { data: engagers } = await supabase
+      .from('community_comments')
+      .select('user_id, user_display_name')
+      .in('post_id', postIds)
+      .neq('user_id', userId)
+      .limit(limit * 2);
+
+    // Filter out already-followed users and dedupe
+    const suggestions: { userId: string; displayName: string; reason: string }[] = [];
+    const seenUserIds = new Set([userId, ...following]);
+
+    for (const engager of engagers || []) {
+      if (seenUserIds.has(engager.user_id)) continue;
+      seenUserIds.add(engager.user_id);
+
+      suggestions.push({
+        userId: engager.user_id,
+        displayName: engager.user_display_name,
+        reason: 'Commented on posts like yours',
+      });
+
+      if (suggestions.length >= limit) break;
+    }
+
+    // If not enough, get active posters
+    if (suggestions.length < limit) {
+      const { data: activePosts } = await supabase
+        .from('community_posts')
+        .select('user_id, user_display_name')
+        .eq('moderation_status', 'approved')
+        .order('created_at', { ascending: false })
+        .limit(20);
+
+      for (const post of activePosts || []) {
+        if (seenUserIds.has(post.user_id)) continue;
+        seenUserIds.add(post.user_id);
+
+        suggestions.push({
+          userId: post.user_id,
+          displayName: post.user_display_name,
+          reason: 'Active community member',
+        });
+
+        if (suggestions.length >= limit) break;
+      }
+    }
+
+    return suggestions;
+  } catch (err) {
+    console.warn('[Community] Supabase error in getSuggestedUsersToFollow:', err);
+    return [];
+  }
+}
+
+// ============================================================================
 // BADGE EARNING SYSTEM
 // ============================================================================
 
@@ -1784,6 +2113,16 @@ export default {
   findLocalGroups,
   getAllLocalGroups,
   LOCAL_COMMUNITY_GROUPS,
+
+  // Follow System
+  followUser,
+  unfollowUser,
+  isFollowing,
+  getFollowing,
+  getFollowers,
+  getFollowCounts,
+  getFollowingFeed,
+  getSuggestedUsersToFollow,
 
   // Badge System
   getUserBadgeStats,

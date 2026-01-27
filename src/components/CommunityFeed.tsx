@@ -42,6 +42,9 @@ import {
   TrendingUp,
   Trash2,
   AlertTriangle,
+  UserPlus,
+  UserMinus,
+  UserCheck,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import {
@@ -62,6 +65,11 @@ import {
   likePost,
   addComment,
   generateMockPosts,
+  followUser,
+  unfollowUser,
+  isFollowing,
+  getFollowingFeed,
+  getSuggestedUsersToFollow,
 } from '../lib/community';
 
 interface CommunityFeedProps {
@@ -84,6 +92,12 @@ export function CommunityFeed({
   const [showCreatePost, setShowCreatePost] = useState(false);
   const [loading, setLoading] = useState(true);
   const [expandedComments, setExpandedComments] = useState<Set<string>>(new Set());
+
+  // Follow system state
+  const [feedMode, setFeedMode] = useState<'all' | 'following'>('all');
+  const [followingUserIds, setFollowingUserIds] = useState<Set<string>>(new Set());
+  const [followLoading, setFollowLoading] = useState<Set<string>>(new Set());
+  const [suggestedUsers, setSuggestedUsers] = useState<{ userId: string; displayName: string; reason: string }[]>([]);
 
   // Load posts
   useEffect(() => {
@@ -116,6 +130,65 @@ export function CommunityFeed({
     }
     setExpandedComments(newExpanded);
   };
+
+  // Handle follow/unfollow
+  const handleFollow = async (targetUserId: string) => {
+    if (targetUserId === userId) return; // Can't follow yourself
+
+    setFollowLoading(prev => new Set(prev).add(targetUserId));
+    try {
+      if (followingUserIds.has(targetUserId)) {
+        await unfollowUser(userId, targetUserId);
+        setFollowingUserIds(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(targetUserId);
+          return newSet;
+        });
+        toast.success('Unfollowed');
+      } else {
+        await followUser(userId, targetUserId);
+        setFollowingUserIds(prev => new Set(prev).add(targetUserId));
+        toast.success('Following');
+      }
+    } catch (error) {
+      console.error('Follow error:', error);
+      toast.error('Failed to update follow status');
+    } finally {
+      setFollowLoading(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(targetUserId);
+        return newSet;
+      });
+    }
+  };
+
+  // Load following feed when switching modes
+  useEffect(() => {
+    if (feedMode === 'following') {
+      setLoading(true);
+      getFollowingFeed(userId)
+        .then(followedPosts => {
+          setPosts(followedPosts);
+        })
+        .catch(err => {
+          console.error('Error loading following feed:', err);
+          toast.error('Failed to load followed posts');
+        })
+        .finally(() => setLoading(false));
+    } else {
+      setLoading(true);
+      const mockPosts = generateMockPosts(10);
+      setPosts(mockPosts);
+      setLoading(false);
+    }
+  }, [feedMode, userId]);
+
+  // Load suggested users to follow
+  useEffect(() => {
+    getSuggestedUsersToFollow(userId, 3)
+      .then(setSuggestedUsers)
+      .catch(console.error);
+  }, [userId]);
 
   return (
     <div className="space-y-4">
@@ -164,6 +237,73 @@ export function CommunityFeed({
         </Card>
       </div>
 
+      {/* Feed Mode Toggle */}
+      <div className="flex gap-2">
+        <button
+          onClick={() => setFeedMode('all')}
+          className={`flex-1 py-2 rounded-lg text-sm font-medium transition-colors ${
+            feedMode === 'all'
+              ? 'bg-teal-600 text-white'
+              : 'bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-slate-300 hover:bg-gray-200 dark:hover:bg-slate-700'
+          }`}
+        >
+          <Users className="w-4 h-4 inline mr-1.5" />
+          All Posts
+        </button>
+        <button
+          onClick={() => setFeedMode('following')}
+          className={`flex-1 py-2 rounded-lg text-sm font-medium transition-colors ${
+            feedMode === 'following'
+              ? 'bg-teal-600 text-white'
+              : 'bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-slate-300 hover:bg-gray-200 dark:hover:bg-slate-700'
+          }`}
+        >
+          <UserCheck className="w-4 h-4 inline mr-1.5" />
+          Following
+        </button>
+      </div>
+
+      {/* Suggested Users to Follow (shown when following feed is empty or on all) */}
+      {suggestedUsers.length > 0 && feedMode === 'all' && (
+        <Card className="p-4 bg-gradient-to-r from-teal-50 to-blue-50 dark:from-slate-800 dark:to-slate-800 border-teal-200 dark:border-slate-700">
+          <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+            <UserPlus className="w-4 h-4 text-teal-600" />
+            People to Follow
+          </h3>
+          <div className="space-y-2">
+            {suggestedUsers.slice(0, 3).map((user) => (
+              <div key={user.userId} className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">{user.displayName}</p>
+                  <p className="text-xs text-gray-500 dark:text-slate-400">{user.reason}</p>
+                </div>
+                <Button
+                  size="sm"
+                  variant={followingUserIds.has(user.userId) ? 'outline' : 'default'}
+                  onClick={() => handleFollow(user.userId)}
+                  disabled={followLoading.has(user.userId)}
+                  className="h-7 text-xs"
+                >
+                  {followLoading.has(user.userId) ? (
+                    '...'
+                  ) : followingUserIds.has(user.userId) ? (
+                    <>
+                      <UserMinus className="w-3 h-3 mr-1" />
+                      Unfollow
+                    </>
+                  ) : (
+                    <>
+                      <UserPlus className="w-3 h-3 mr-1" />
+                      Follow
+                    </>
+                  )}
+                </Button>
+              </div>
+            ))}
+          </div>
+        </Card>
+      )}
+
       {/* Category Filter */}
       <div className="flex gap-2 overflow-x-auto pb-2">
         <button
@@ -171,7 +311,7 @@ export function CommunityFeed({
           className={`px-3 py-1.5 rounded-full text-sm whitespace-nowrap transition-colors ${
             activeFilter === 'all'
               ? 'bg-teal-600 text-white'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              : 'bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-slate-300 hover:bg-gray-200 dark:hover:bg-slate-700'
           }`}
         >
           All Posts
@@ -232,6 +372,9 @@ export function CommunityFeed({
                 // In production, this would call bookmarkPost from community.ts
                 console.log('Bookmark toggled:', postId);
               }}
+              onFollow={handleFollow}
+              isFollowing={followingUserIds.has(post.userId)}
+              isFollowLoading={followLoading.has(post.userId)}
             />
           ))
         )}
@@ -272,6 +415,9 @@ interface PostCardProps {
   onReport?: (postId: string, reason: string) => void;
   onBookmark?: (postId: string) => void;
   isBookmarked?: boolean;
+  onFollow?: (userId: string) => void;
+  isFollowing?: boolean;
+  isFollowLoading?: boolean;
 }
 
 function PostCard({
@@ -286,6 +432,9 @@ function PostCard({
   onReport,
   onBookmark,
   isBookmarked = false,
+  onFollow,
+  isFollowing = false,
+  isFollowLoading = false,
 }: PostCardProps) {
   const [newComment, setNewComment] = useState('');
   const [showReportDialog, setShowReportDialog] = useState(false);
@@ -412,6 +561,36 @@ function PostCard({
                     </Badge>
                   );
                 })}
+                {/* Follow button - only show for other users */}
+                {!isOwnPost && !post.isAnonymous && onFollow && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onFollow(post.userId);
+                    }}
+                    disabled={isFollowLoading}
+                    className={`px-2 py-0.5 rounded-full text-xs font-medium transition-colors min-h-[24px] flex items-center gap-1 ${
+                      isFollowing
+                        ? 'bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-600'
+                        : 'bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-400 hover:bg-teal-200 dark:hover:bg-teal-900/50'
+                    }`}
+                    title={isFollowing ? 'Unfollow' : 'Follow'}
+                  >
+                    {isFollowLoading ? (
+                      '...'
+                    ) : isFollowing ? (
+                      <>
+                        <UserCheck className="w-3 h-3" />
+                        Following
+                      </>
+                    ) : (
+                      <>
+                        <UserPlus className="w-3 h-3" />
+                        Follow
+                      </>
+                    )}
+                  </button>
+                )}
               </div>
               <div className="flex items-center gap-2 text-xs text-gray-500">
                 <span>{formatTimeAgo(new Date(post.createdAt))}</span>

@@ -668,7 +668,8 @@ export type CommunityNotificationType =
   | 'reply'
   | 'mention'
   | 'badge_earned'
-  | 'post_featured';
+  | 'post_featured'
+  | 'new_follower';
 
 /**
  * Create and save a community engagement notification
@@ -682,6 +683,7 @@ export async function createCommunityNotification(
     postTitle?: string;
     commentPreview?: string;
     badgeName?: string;
+    actorUserId?: string; // For follow notifications
   }
 ): Promise<NotificationPayload> {
   const templates: Record<CommunityNotificationType, { title: string; body: string }> = {
@@ -709,6 +711,10 @@ export async function createCommunityNotification(
       title: 'Your Post Was Featured! ✨',
       body: `Your post "${data.postTitle?.substring(0, 40) || 'post'}" was featured in the community`,
     },
+    new_follower: {
+      title: 'New Follower',
+      body: `${data.actorName} started following you`,
+    },
   };
 
   const template = templates[type];
@@ -720,8 +726,12 @@ export async function createCommunityNotification(
     timestamp: new Date().toISOString(),
     read: false,
     type: 'engagement',
-    deepLink: data.postId ? `/community/post/${data.postId}` : '/community',
-    icon: type === 'like' ? '❤️' : type === 'comment' ? '💬' : type === 'badge_earned' ? '🏅' : '✨',
+    deepLink: type === 'new_follower' && data.actorUserId
+      ? `/community/profile/${data.actorUserId}`
+      : data.postId
+        ? `/community/post/${data.postId}`
+        : '/community',
+    icon: type === 'like' ? '❤️' : type === 'comment' ? '💬' : type === 'badge_earned' ? '🏅' : type === 'new_follower' ? '👤' : '✨',
   };
 
   // Save to IndexedDB
