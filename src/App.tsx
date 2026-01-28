@@ -260,6 +260,25 @@ const ProviderAccessRequests = lazy(() =>
   })),
 );
 
+// Provider Landing and Application
+const ProviderLanding = lazy(() =>
+  import("./components/ProviderLanding").then((m) => ({
+    default: m.ProviderLanding,
+  })),
+);
+const ProviderApplication = lazy(() =>
+  import("./components/ProviderApplication").then((m) => ({
+    default: m.ProviderApplication,
+  })),
+);
+
+// Medication Tracking
+const MedicationTracker = lazy(() =>
+  import("./components/MedicationTracker").then((m) => ({
+    default: m.MedicationTracker,
+  })),
+);
+
 // Secure Admin Portal Wrapper with server-side verification
 const SecureAdminPortalWrapper = React.memo(function SecureAdminPortalWrapper({
   userId,
@@ -418,7 +437,10 @@ type AppScreen =
   | "my-appointments" // Appointment management dashboard
   | "conversational-booking" // AI-driven booking flow
   | "messages" // Provider-parent secure messaging
-  | "access-requests"; // Provider access request management
+  | "access-requests" // Provider access request management
+  | "provider-landing" // Provider marketing landing page
+  | "provider-apply" // Provider application form
+  | "medications"; // Medication tracking for children
 
 interface ChildProfile {
   id: string;
@@ -452,6 +474,16 @@ const getInitialScreen = (): AppScreen => {
   // Check for referral landing page (/join?ref=CODE)
   if (pathname === '/join' || pathname.includes('/join')) {
     return "join";
+  }
+
+  // Check for provider landing page (/providers)
+  if (pathname === '/providers' || pathname === '/for-providers') {
+    return "provider-landing";
+  }
+
+  // Check for provider application (/providers/apply)
+  if (pathname === '/providers/apply' || pathname.includes('/providers/apply')) {
+    return "provider-apply";
   }
 
   // Check URL params
@@ -1422,6 +1454,45 @@ export default function App() {
             </Suspense>
           );
 
+        case "provider-landing":
+          return (
+            <Suspense fallback={<LoadingSkeleton />}>
+              <ProviderLanding
+                onApply={() => navigateToScreen("provider-apply")}
+                onLogin={() => navigateToScreen("login")}
+                onBack={() => navigateToScreen("splash")}
+              />
+            </Suspense>
+          );
+
+        case "provider-apply":
+          return (
+            <Suspense fallback={<LoadingSkeleton />}>
+              <ProviderApplication
+                onBack={() => navigateToScreen("provider-landing")}
+                onSuccess={() => {
+                  toast.success("Application submitted! We'll review your credentials.");
+                  navigateToScreen("dashboard");
+                }}
+                userEmail={userData.email}
+                userName={userData.parentName}
+              />
+            </Suspense>
+          );
+
+        case "medications":
+          return (
+            <Suspense fallback={<LoadingSkeleton />}>
+              <div className="min-h-screen bg-gradient-to-b from-neutral-50 to-white dark:from-slate-900 dark:to-slate-800 p-4 sm:p-6">
+                <MedicationTracker
+                  childId={userData.childId || "child-1"}
+                  childName={userData.childName || "your child"}
+                  onClose={() => navigateToScreen("dashboard")}
+                />
+              </div>
+            </Suspense>
+          );
+
         default:
           return (
             <Suspense fallback={<LoadingSkeleton />}>
@@ -1514,6 +1585,12 @@ export default function App() {
                       navigateToScreen("outcomes");
                     } else if (screen === "admin-portal") {
                       navigateToScreen("admin-portal");
+                    } else if (screen === "provider-landing") {
+                      navigateToScreen("provider-landing");
+                    } else if (screen === "provider-apply") {
+                      navigateToScreen("provider-apply");
+                    } else if (screen === "medications") {
+                      navigateToScreen("medications");
                     } else if (screen === "on-demand-telehealth") {
                       navigateToScreen("on-demand-telehealth");
                     }
