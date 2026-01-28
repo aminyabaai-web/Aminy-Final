@@ -169,89 +169,14 @@ export function UserManagement() {
           }, 0),
         });
       } else {
-        // Demo data if no real data
-        const demoUsers: ManagedUser[] = [
-          {
-            id: '1',
-            email: 'jennifer.t@email.com',
-            name: 'Jennifer Thompson',
-            tier: 'core',
-            status: 'active',
-            createdAt: '2024-01-15T10:00:00Z',
-            lastActiveAt: new Date().toISOString(),
-            childCount: 2,
-            totalSessions: 45,
-            totalSpent: 224.85,
-            subscriptionStatus: 'active',
-            flags: ['high_engagement'],
-          },
-          {
-            id: '2',
-            email: 'david.c@email.com',
-            name: 'David Chen',
-            tier: 'pro',
-            status: 'active',
-            createdAt: '2024-02-01T10:00:00Z',
-            lastActiveAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-            childCount: 1,
-            totalSessions: 32,
-            totalSpent: 359.88,
-            subscriptionStatus: 'active',
-            flags: [],
-          },
-          {
-            id: '3',
-            email: 'sarah.m@email.com',
-            name: 'Sarah Martinez',
-            tier: 'free',
-            status: 'trial',
-            createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
-            lastActiveAt: new Date().toISOString(),
-            childCount: 1,
-            totalSessions: 3,
-            totalSpent: 0,
-            subscriptionStatus: 'trialing',
-            flags: ['conversion_candidate'],
-          },
-          {
-            id: '4',
-            email: 'michael.j@email.com',
-            name: 'Michael Johnson',
-            tier: 'starter',
-            status: 'active',
-            createdAt: '2024-01-20T10:00:00Z',
-            lastActiveAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-            childCount: 1,
-            totalSessions: 12,
-            totalSpent: 48.93,
-            subscriptionStatus: 'active',
-            flags: ['at_risk'],
-          },
-          {
-            id: '5',
-            email: 'emily.w@email.com',
-            name: 'Emily Wilson',
-            tier: 'core',
-            status: 'churned',
-            createdAt: '2023-11-01T10:00:00Z',
-            lastActiveAt: new Date(Date.now() - 45 * 24 * 60 * 60 * 1000).toISOString(),
-            childCount: 1,
-            totalSessions: 28,
-            totalSpent: 179.88,
-            subscriptionStatus: 'canceled',
-            flags: ['winback_candidate'],
-          },
-        ];
-        setUsers(demoUsers);
-        setFilteredUsers(demoUsers);
+        // No users found - show empty state
+        setUsers([]);
+        setFilteredUsers([]);
         setStats({
-          totalUsers: demoUsers.length,
-          activeUsers: demoUsers.filter(u => u.status === 'active' || u.status === 'trial').length,
-          paidUsers: demoUsers.filter(u => u.tier !== 'free').length,
-          mrr: demoUsers.reduce((sum, u) => {
-            const prices = { free: 0, starter: 6.99, core: 14.99, pro: 29.99, proplus: 49.99 };
-            return sum + (prices[u.tier] || 0);
-          }, 0),
+          totalUsers: 0,
+          activeUsers: 0,
+          paidUsers: 0,
+          mrr: 0,
         });
       }
     } catch (error) {

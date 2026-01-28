@@ -155,18 +155,19 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
           earningsThisMonth: 0,
         });
       } else {
-        // Fallback for demo
+        // No provider profile found - show setup prompt
         setProvider({
           id: providerId,
-          name: 'Dr. Sarah Mitchell',
-          credentials: 'BCBA, LBA',
+          name: 'Complete Your Profile',
+          credentials: '',
           type: 'bcba',
-          specialties: ['Autism Spectrum', 'Early Intervention', 'Parent Training'],
-          rating: 4.9,
-          reviewCount: 127,
+          specialties: [],
+          rating: 0,
+          reviewCount: 0,
           totalPatients: 0,
           sessionsThisMonth: 0,
-          earningsThisMonth: 0
+          earningsThisMonth: 0,
+          needsSetup: true,
         });
       }
 
@@ -224,42 +225,7 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
         }
       }
 
-      // If no patients in DB, use demo data
-      if (patientsList.length === 0) {
-        patientsList.push(
-          {
-            id: '1',
-            childName: 'Emma Thompson',
-            parentName: 'Jennifer Thompson',
-            age: 6,
-            conditions: ['Autism Level 1', 'Sensory Processing'],
-            profileAccess: 'granted',
-            nextSession: new Date(Date.now() + 2 * 60 * 60 * 1000),
-            totalSessions: 12,
-            lastSessionNotes: 'Excellent progress with turn-taking. Continue reinforcing joint attention activities.'
-          },
-          {
-            id: '2',
-            childName: 'Liam Chen',
-            parentName: 'David Chen',
-            age: 4,
-            conditions: ['Autism Level 2', 'Speech Delay'],
-            profileAccess: 'granted',
-            nextSession: new Date(Date.now() + 24 * 60 * 60 * 1000),
-            totalSessions: 8,
-          },
-          {
-            id: '3',
-            childName: 'Sofia Rodriguez',
-            parentName: 'Maria Rodriguez',
-            age: 7,
-            conditions: ['ADHD Combined', 'Anxiety'],
-            profileAccess: 'pending',
-            totalSessions: 0
-          }
-        );
-      }
-
+      // Set patients - empty list if no patients found (no demo data)
       setPatients(patientsList);
 
       // Fetch provider's sessions
@@ -361,8 +327,8 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
           ytd: Math.round(ytd / 100),
         });
       } else {
-        // Demo earnings
-        setEarnings({ thisMonth: 4158, lastMonth: 3856, pending: 594, ytd: 28420 });
+        // No earnings data - show zeros
+        setEarnings({ thisMonth: 0, lastMonth: 0, pending: 0, ytd: 0 });
       }
 
       // Update provider stats
@@ -370,7 +336,7 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
         ...prev,
         totalPatients: patientsList.length,
         sessionsThisMonth: sessionsData?.length || sessionsList.length,
-        earningsThisMonth: earnings.thisMonth || 4158,
+        earningsThisMonth: earnings.thisMonth || 0,
       } : null);
 
     } catch (error) {
