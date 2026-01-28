@@ -61,6 +61,7 @@ import type { ProviderType } from '../lib/child-profiles';
 import { brandColors } from '../lib/brand-system';
 import { supabase } from '../utils/supabase/client';
 import { CredentialBadge, VerifiedBadge } from './provider/CredentialBadge';
+import { PatientAISummary } from './provider/PatientAISummary';
 
 interface Patient {
   id: string;
@@ -106,7 +107,7 @@ interface ProviderPortalProps {
 }
 
 export function ProviderPortal({ providerId }: ProviderPortalProps) {
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'patients' | 'sessions' | 'earnings' | 'settings'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'patients' | 'sessions' | 'earnings' | 'settings' | 'ai-summaries'>('dashboard');
   const [patients, setPatients] = useState<Patient[]>([]);
   const [sessions, setSessions] = useState<Session[]>([]);
   const [provider, setProvider] = useState<ProviderProfile | null>(null);
@@ -523,6 +524,7 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
             {[
               { id: 'dashboard', label: 'Dashboard', icon: Home },
               { id: 'patients', label: 'Patients', icon: Users },
+              { id: 'ai-summaries', label: 'AI Summaries', icon: Brain },
               { id: 'sessions', label: 'Sessions', icon: Calendar },
               { id: 'earnings', label: 'Earnings', icon: DollarSign },
               { id: 'settings', label: 'Settings', icon: Settings }
@@ -934,6 +936,84 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
                   </p>
                 </Card>
               )}
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'ai-summaries' && (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-xl font-semibold text-neutral-900 dark:text-white">AI Patient Summaries</h2>
+                <p className="text-neutral-500 dark:text-slate-400 mt-1">
+                  AI-generated insights for your patients. Submit care plan suggestions that parents can approve.
+                </p>
+              </div>
+            </div>
+
+            {/* Patient selector for AI summaries */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Patient list sidebar */}
+              <Card className="p-4 lg:col-span-1">
+                <h3 className="font-semibold text-neutral-900 dark:text-white mb-4">Select Patient</h3>
+                <div className="space-y-2">
+                  {patients
+                    .filter(p => p.profileAccess === 'granted')
+                    .map(patient => (
+                      <button
+                        key={patient.id}
+                        onClick={() => setSelectedPatient(patient)}
+                        className={`w-full text-left p-3 rounded-lg transition-colors ${
+                          selectedPatient?.id === patient.id
+                            ? 'bg-teal-100 border-teal-300 dark:bg-teal-900/30'
+                            : 'bg-neutral-50 hover:bg-neutral-100 dark:bg-slate-800 dark:hover:bg-slate-700'
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-violet-100 to-purple-100 flex items-center justify-center">
+                            <span className="text-sm font-semibold text-violet-700">
+                              {patient.childName.split(' ').map(n => n[0]).join('')}
+                            </span>
+                          </div>
+                          <div>
+                            <p className="font-medium text-neutral-900 dark:text-white">{patient.childName}</p>
+                            <p className="text-sm text-neutral-500 dark:text-slate-400">{patient.age} years old</p>
+                          </div>
+                        </div>
+                      </button>
+                    ))}
+                  {patients.filter(p => p.profileAccess === 'granted').length === 0 && (
+                    <div className="text-center py-8 text-neutral-500">
+                      <Lock className="w-8 h-8 mx-auto mb-2 text-neutral-300" />
+                      <p>No patients with granted access</p>
+                      <p className="text-sm mt-1">Request access from patients' parents first</p>
+                    </div>
+                  )}
+                </div>
+              </Card>
+
+              {/* AI Summary panel */}
+              <div className="lg:col-span-2">
+                {selectedPatient && selectedPatient.profileAccess === 'granted' ? (
+                  <PatientAISummary
+                    patientId={selectedPatient.id}
+                    childName={selectedPatient.childName}
+                    parentId="parent-123"
+                    providerId={providerId}
+                  />
+                ) : (
+                  <Card className="p-12 text-center">
+                    <Brain className="w-16 h-16 mx-auto mb-4 text-neutral-200 dark:text-slate-600" />
+                    <h3 className="text-lg font-medium text-neutral-900 dark:text-white mb-2">
+                      Select a Patient
+                    </h3>
+                    <p className="text-neutral-500 dark:text-slate-400 max-w-md mx-auto">
+                      Choose a patient from the list to view their AI-generated summary,
+                      behavior patterns, progress highlights, and submit care plan suggestions.
+                    </p>
+                  </Card>
+                )}
+              </div>
             </div>
           </div>
         )}

@@ -41,6 +41,7 @@ import { CohortAnalysis } from './admin/CohortAnalysis';
 import { ViralMetricsDashboard } from './admin/ViralMetricsDashboard';
 import { UserManagement } from './admin/UserManagement';
 import { ModerationDashboard } from './admin/ModerationDashboard';
+import { AIInsights } from './admin/AIInsights';
 import { getAggregatedMetrics, getRetentionMetrics } from '../lib/outcomes-tracking';
 
 interface AdminPortalProps {
@@ -183,7 +184,7 @@ const getStatusIcon = (value: number, target: number, isInverse = false) => {
 };
 
 export function AdminPortal({ onBack }: AdminPortalProps) {
-  const [activeSection, setActiveSection] = useState<'overview' | 'engagement' | 'ai' | 'clinical' | 'marketplace' | 'b2b' | 'users' | 'moderation' | 'revenue'>('overview');
+  const [activeSection, setActiveSection] = useState<'overview' | 'engagement' | 'ai' | 'clinical' | 'marketplace' | 'b2b' | 'users' | 'moderation' | 'revenue' | 'insights'>('overview');
   const [dateRange, setDateRange] = useState<'7d' | '30d' | 'all'>('all');
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -677,6 +678,7 @@ export function AdminPortal({ onBack }: AdminPortalProps) {
               { id: 'overview', label: 'Overview', icon: Activity },
               { id: 'users', label: 'Users', icon: Users },
               { id: 'revenue', label: 'Revenue', icon: CreditCard },
+              { id: 'insights', label: 'AI Insights', icon: Star },
               { id: 'engagement', label: 'Engagement', icon: TrendingUp },
               { id: 'ai', label: 'AI Usage', icon: MessageSquare },
               { id: 'clinical', label: 'Clinical', icon: Heart },
@@ -1170,6 +1172,10 @@ export function AdminPortal({ onBack }: AdminPortalProps) {
 
         {activeSection === 'moderation' && (
           <ModerationDashboard />
+        )}
+
+        {activeSection === 'insights' && (
+          <AIInsights />
         )}
 
         {activeSection === 'revenue' && (
