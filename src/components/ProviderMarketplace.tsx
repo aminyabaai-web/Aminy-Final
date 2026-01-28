@@ -974,88 +974,151 @@ export function ProviderMarketplace({
         )}
       </div>
 
-      {/* Session Types Reference */}
+      {/* Session Types - Clean, Parent-Friendly Display */}
       <div className="max-w-4xl mx-auto px-4 pb-8">
-        <Card className="p-4 sm:p-5 md:p-6">
-          <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <Info className="w-5 h-5 text-gray-400" />
-            Session Types & Pricing
-          </h3>
-          <div className="grid md:grid-cols-3 gap-3 sm:gap-4 sm:gap-6">
-            {/* Behavioral */}
-            <div>
-              <h4 className="font-medium text-teal-700 mb-3 flex items-center gap-2">
-                <Brain className="w-4 h-4" />
-                Behavioral Team
-              </h4>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span>BCBA Consultation (50min)</span>
-                  <span className="font-medium">$99</span>
+        <Card className="p-5 sm:p-6 bg-gradient-to-br from-white to-gray-50">
+          <div className="text-center mb-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              Expert Support for Your Family
+            </h3>
+            <p className="text-sm text-gray-600 max-w-xl mx-auto">
+              Every session includes a video call, written summary, personalized recommendations, and follow-up support.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* Behavioral Support */}
+            <div className="bg-white rounded-xl p-4 border border-gray-100">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="p-2 bg-teal-100 rounded-lg">
+                  <Brain className="w-4 h-4 text-teal-600" />
                 </div>
-                <div className="flex justify-between">
-                  <span>BCBA Assessment (90min)</span>
-                  <span className="font-medium">$175</span>
+                <h4 className="font-medium text-gray-900">Behavioral Support</h4>
+              </div>
+              <div className="space-y-3">
+                <div className="flex justify-between items-center py-2 border-b border-gray-50">
+                  <div>
+                    <p className="font-medium text-gray-800 text-sm">ABA Specialist Consultation</p>
+                    <p className="text-xs text-gray-500">Up to 60 min with a BCBA</p>
+                  </div>
+                  <span className="font-semibold text-teal-600">$149</span>
                 </div>
-                <div className="flex justify-between">
-                  <span>RBT Check-in (30min)</span>
-                  <span className="font-medium">$49</span>
+                <div className="flex justify-between items-center py-2 border-b border-gray-50">
+                  <div>
+                    <p className="font-medium text-gray-800 text-sm">ABA Assessment</p>
+                    <p className="text-xs text-gray-500">Up to 90 min comprehensive review</p>
+                  </div>
+                  <span className="font-semibold text-teal-600">$269</span>
                 </div>
-                <div className="flex justify-between">
-                  <span>RBT Session (45min)</span>
-                  <span className="font-medium">$69</span>
+                <div className="flex justify-between items-center py-2 border-b border-gray-50">
+                  <div>
+                    <p className="font-medium text-gray-800 text-sm">ABA Coaching Session</p>
+                    <p className="text-xs text-gray-500">Up to 30 min skill-building</p>
+                  </div>
+                  <span className="font-semibold text-teal-600">$49</span>
+                </div>
+                <div className="flex justify-between items-center py-2">
+                  <div>
+                    <p className="font-medium text-gray-800 text-sm">ABA Extended Coaching</p>
+                    <p className="text-xs text-gray-500">Up to 60 min deeper practice</p>
+                  </div>
+                  <span className="font-semibold text-teal-600">$89</span>
                 </div>
               </div>
             </div>
 
-            {/* Therapy */}
-            <div>
-              <h4 className="font-medium text-violet-700 mb-3 flex items-center gap-2">
-                <Heart className="w-4 h-4" />
-                Therapy Team
-              </h4>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span>LPC/LCSW Session (50min)</span>
-                  <span className="font-medium">$99</span>
+            {/* Therapy & Wellness */}
+            <div className="bg-white rounded-xl p-4 border border-gray-100">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="p-2 bg-violet-100 rounded-lg">
+                  <Heart className="w-4 h-4 text-violet-600" />
                 </div>
-                <div className="flex justify-between">
-                  <span>Speech Session (45min)</span>
-                  <span className="font-medium">$89</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>OT Session (45min)</span>
-                  <span className="font-medium">$99</span>
-                </div>
+                <h4 className="font-medium text-gray-900">Therapy & Wellness</h4>
               </div>
-            </div>
-
-            {/* Medical */}
-            <div>
-              <h4 className="font-medium text-red-700 mb-3 flex items-center gap-2">
-                <Stethoscope className="w-4 h-4" />
-                Medical Team
-              </h4>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span>Psych Initial (60min)</span>
-                  <span className="font-medium">$275</span>
+              <div className="space-y-3">
+                <div className="flex justify-between items-center py-2 border-b border-gray-50">
+                  <div>
+                    <p className="font-medium text-gray-800 text-sm">Family Therapy</p>
+                    <p className="text-xs text-gray-500">Up to 45 min with licensed therapist</p>
+                  </div>
+                  <span className="font-semibold text-violet-600">$129</span>
                 </div>
-                <div className="flex justify-between">
-                  <span>Psych Follow-up (25min)</span>
-                  <span className="font-medium">$150</span>
+                <div className="flex justify-between items-center py-2 border-b border-gray-50">
+                  <div>
+                    <p className="font-medium text-gray-800 text-sm">Extended Therapy Session</p>
+                    <p className="text-xs text-gray-500">Up to 60 min for complex needs</p>
+                  </div>
+                  <span className="font-semibold text-violet-600">$149</span>
                 </div>
-                <div className="flex justify-between">
-                  <span>Dev Ped Eval (90min)</span>
-                  <span className="font-medium">$350</span>
+                <div className="flex justify-between items-center py-2 border-b border-gray-50">
+                  <div>
+                    <p className="font-medium text-gray-800 text-sm">Speech Therapy</p>
+                    <p className="text-xs text-gray-500">Up to 45 min communication support</p>
+                  </div>
+                  <span className="font-semibold text-violet-600">$139</span>
+                </div>
+                <div className="flex justify-between items-center py-2">
+                  <div>
+                    <p className="font-medium text-gray-800 text-sm">Occupational Therapy</p>
+                    <p className="text-xs text-gray-500">Up to 45 min sensory & motor skills</p>
+                  </div>
+                  <span className="font-semibold text-violet-600">$139</span>
                 </div>
               </div>
             </div>
           </div>
 
-          <p className="text-xs text-gray-400 mt-4 text-center">
-            All sessions are caregiver-mediated telehealth. Pro members receive 20% off.
-          </p>
+          {/* Evaluations */}
+          <div className="mt-6 bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl p-4 border border-amber-100">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="p-2 bg-amber-100 rounded-lg">
+                <Sparkles className="w-4 h-4 text-amber-600" />
+              </div>
+              <div>
+                <h4 className="font-medium text-gray-900">Diagnostic Evaluations</h4>
+                <p className="text-xs text-gray-600">Skip the 12-month waitlist. Get answers in days.</p>
+              </div>
+            </div>
+            <div className="grid sm:grid-cols-3 gap-3">
+              <div className="bg-white rounded-lg p-3 text-center">
+                <p className="font-medium text-gray-800 text-sm">ADHD Evaluation</p>
+                <p className="text-xs text-gray-500 mb-1">Up to 60 min</p>
+                <span className="font-semibold text-amber-600 text-lg">$299</span>
+              </div>
+              <div className="bg-white rounded-lg p-3 text-center">
+                <p className="font-medium text-gray-800 text-sm">Autism Evaluation</p>
+                <p className="text-xs text-gray-500 mb-1">Up to 90 min</p>
+                <span className="font-semibold text-amber-600 text-lg">$799</span>
+              </div>
+              <div className="bg-white rounded-lg p-3 text-center">
+                <p className="font-medium text-gray-800 text-sm">Combined Evaluation</p>
+                <p className="text-xs text-gray-500 mb-1">Up to 120 min</p>
+                <span className="font-semibold text-amber-600 text-lg">$999</span>
+              </div>
+            </div>
+          </div>
+
+          {/* What's Included */}
+          <div className="mt-5 pt-5 border-t border-gray-100">
+            <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-gray-500">
+              <span className="flex items-center gap-1">
+                <Check className="w-3.5 h-3.5 text-green-500" />
+                Video session from home
+              </span>
+              <span className="flex items-center gap-1">
+                <Check className="w-3.5 h-3.5 text-green-500" />
+                Written summary & recommendations
+              </span>
+              <span className="flex items-center gap-1">
+                <Check className="w-3.5 h-3.5 text-green-500" />
+                Follow-up messaging included
+              </span>
+              <span className="flex items-center gap-1">
+                <Check className="w-3.5 h-3.5 text-green-500" />
+                Superbill for insurance
+              </span>
+            </div>
+          </div>
         </Card>
       </div>
 
