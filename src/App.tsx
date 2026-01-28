@@ -1072,9 +1072,7 @@ export default function App() {
             <Suspense fallback={<LoadingSkeleton />}>
               <OnboardingStreamlined
                 onComplete={handleOnboardingComplete}
-                initialData={{
-                  email: userData.email || "",
-                }}
+                initialEmail={userData.email || ""}
               />
             </Suspense>
           );

@@ -50,6 +50,8 @@ import { QuickShareButton } from './ShareWinFlow';
 import { DifferentiationCallout } from './DifferentiationCallout';
 import { ProactiveNudgeSystem } from './ProactiveNudgeSystem';
 import { MorningMission, useMorningMission } from './MorningMission';
+import { ActionItems } from './ActionItems';
+import { supabase } from '../utils/supabase/client';
 
 // Types
 interface ChildProfile {
@@ -158,10 +160,18 @@ export function Dashboard10({
   const [activeTab, setActiveTab] = useState<'home' | 'resources' | 'community' | 'profile'>('home');
   const [dailyTip] = useState(() => DAILY_TIPS[Math.floor(Math.random() * DAILY_TIPS.length)]);
   const [showStreakCelebration, setShowStreakCelebration] = useState(false);
+  const [userId, setUserId] = useState<string | null>(null);
   const chatButtonRef = useRef<HTMLButtonElement>(null);
 
   // Morning mission state
   const { shouldShow: showMorningMission, isCompleted: missionCompleted } = useMorningMission();
+
+  // Get user ID from Supabase
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (user) setUserId(user.id);
+    });
+  }, []);
 
   // Auto-set routine based on time of day
   useEffect(() => {
@@ -609,6 +619,25 @@ export function Dashboard10({
             ))}
           </div>
         </section>
+
+        {/* ========================================
+            6. ACTION ITEMS - Organic Data Collection
+            Check-ins and screenings via conversational AI
+            ======================================== */}
+        {userId && (
+          <section>
+            <ActionItems
+              userId={userId}
+              childId={child.id}
+              childName={child.name}
+              childAge={child.age}
+              parentName={userData.parentName}
+              onItemComplete={(item) => {
+                // Could trigger celebration or update streak
+              }}
+            />
+          </section>
+        )}
       </main>
 
       {/* ========================================
