@@ -143,31 +143,113 @@ export function getConversationKey(userId: string): string {
 }
 
 /**
- * Load conversation history from Supabase
+ * Current conversation ID cache
  */
-export async function loadConversationHistory(userId: string): Promise<ConversationMessage[]> {
-  try {
-    const threadKey = getConversationKey(userId);
+let currentConversationId: string | null = null;
 
-    const response = await fetchWithTimeoutAndRetry(
-      `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/conversation/load`,
+/**
+ * Get or create a conversation for the user
+ */
+async function getOrCreateConversation(userId: string): Promise<string | null> {
+  // Return cached ID if available
+  if (currentConversationId) {
+    return currentConversationId;
+  }
+
+  try {
+    // First, try to get the most recent conversation
+    const listResponse = await fetchWithTimeoutAndRetry(
+      `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/conversations/list`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${publicAnonKey}`,
+          'X-User-Id': userId,
+        },
+      },
+      { timeout: 10000, maxRetries: 2 }
+    );
+
+    if (listResponse.ok) {
+      const data = await listResponse.json();
+      const conversations = data.conversations || [];
+      if (conversations.length > 0) {
+        currentConversationId = conversations[0].id;
+        return currentConversationId;
+      }
+    }
+
+    // No existing conversation, create a new one
+    const createResponse = await fetchWithTimeoutAndRetry(
+      `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/conversations/create`,
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${publicAnonKey}`,
+          'X-User-Id': userId,
         },
-        body: JSON.stringify({ userId, threadKey }),
+        body: JSON.stringify({
+          userId,
+          title: `Conversation ${new Date().toLocaleDateString()}`,
+        }),
       },
-      { timeout: 15000, maxRetries: 2 } // Shorter timeout for load, fewer retries
+      { timeout: 10000, maxRetries: 2 }
+    );
+
+    if (createResponse.ok) {
+      const data = await createResponse.json();
+      currentConversationId = data.id || data.conversationId;
+      return currentConversationId;
+    }
+
+    return null;
+  } catch (error) {
+    console.error('Error getting/creating conversation:', error);
+    return null;
+  }
+}
+
+/**
+ * Load conversation history from Supabase
+ */
+export async function loadConversationHistory(userId: string): Promise<ConversationMessage[]> {
+  try {
+    const conversationId = await getOrCreateConversation(userId);
+    if (!conversationId) {
+      console.warn('No conversation ID available');
+      return [];
+    }
+
+    const response = await fetchWithTimeoutAndRetry(
+      `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/conversations/${conversationId}/messages`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${publicAnonKey}`,
+          'X-User-Id': userId,
+        },
+      },
+      { timeout: 15000, maxRetries: 2 }
     );
 
     if (!response.ok) {
+      console.error('Failed to load messages:', response.status);
       return [];
     }
 
     const data = await response.json();
-    return data.messages || [];
+    const messages = data.messages || [];
+
+    // Transform to ConversationMessage format
+    return messages.map((msg: any) => ({
+      role: msg.role,
+      content: msg.content,
+      timestamp: msg.created_at || msg.timestamp || new Date().toISOString(),
+      metadata: msg.metadata,
+    }));
   } catch (error) {
     console.error('Error loading conversation history:', error);
     return [];
@@ -182,23 +264,68 @@ export async function saveMessageToHistory(
   message: ConversationMessage
 ): Promise<void> {
   try {
-    const threadKey = getConversationKey(userId);
+    const conversationId = await getOrCreateConversation(userId);
+    if (!conversationId) {
+      console.error('Cannot save message: no conversation ID');
+      return;
+    }
 
     await fetchWithTimeoutAndRetry(
-      `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/conversation/save`,
+      `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/conversations/${conversationId}/messages`,
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${publicAnonKey}`,
+          'X-User-Id': userId,
         },
-        body: JSON.stringify({ userId, threadKey, message }),
+        body: JSON.stringify({
+          role: message.role,
+          content: message.content,
+          metadata: message.metadata,
+        }),
       },
-      { timeout: 10000, maxRetries: 3 } // Quick timeout, more retries for save
+      { timeout: 10000, maxRetries: 3 }
     );
   } catch (error) {
     console.error('Error saving message:', error);
   }
+}
+
+/**
+ * Clear conversation ID cache (call on logout or conversation switch)
+ */
+export function clearConversationCache(): void {
+  currentConversationId = null;
+}
+
+/**
+ * Start a new conversation (archives current and creates fresh)
+ */
+export async function startNewConversation(userId: string): Promise<void> {
+  if (currentConversationId) {
+    // Archive the current conversation
+    try {
+      await fetchWithTimeoutAndRetry(
+        `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/conversations/${currentConversationId}/archive`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${publicAnonKey}`,
+            'X-User-Id': userId,
+          },
+        },
+        { timeout: 5000, maxRetries: 1 }
+      );
+    } catch (e) {
+      console.warn('Failed to archive conversation:', e);
+    }
+  }
+
+  // Clear cache to force new conversation creation
+  currentConversationId = null;
+  await getOrCreateConversation(userId);
 }
 
 /**

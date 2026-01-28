@@ -29,8 +29,8 @@ import { generateSlots, holdSlot, confirmSlot, releaseHold } from './availabilit
 const API_BASE_URL = import.meta.env.VITE_API_URL ||
   `https://${projectId}.supabase.co/functions/v1/telehealth`;
 
-// Use mock data in development unless explicitly disabled
-const USE_MOCK_DATA = import.meta.env.VITE_USE_MOCK_DATA !== 'false';
+// Only use mock data if explicitly enabled (default to real API in production)
+const USE_MOCK_DATA = import.meta.env.VITE_USE_MOCK_DATA === 'true';
 
 // ============================================================================
 // Auth Helpers
@@ -69,7 +69,7 @@ export async function createAppointment(params: CreateAppointmentParams): Promis
     return createMockAppointment(params);
   }
 
-  const response = await fetch(`${API_BASE_URL}/telehealth/appointments`, {
+  const response = await fetch(`${API_BASE_URL}/appointments`, {
     method: 'POST',
     headers: getAuthHeaders(),
     body: JSON.stringify(params),
@@ -91,7 +91,7 @@ export async function getAppointment(appointmentId: string): Promise<Appointment
     return getMockAppointment(appointmentId);
   }
 
-  const response = await fetch(`${API_BASE_URL}/telehealth/appointments/${appointmentId}`, {
+  const response = await fetch(`${API_BASE_URL}/appointments/${appointmentId}`, {
     headers: getAuthHeaders(),
   });
 
@@ -111,7 +111,7 @@ export async function getUserAppointments(userId: string): Promise<Appointment[]
     return getMockUserAppointments(userId);
   }
 
-  const response = await fetch(`${API_BASE_URL}/telehealth/appointments?userId=${userId}`, {
+  const response = await fetch(`${API_BASE_URL}/appointments?userId=${userId}`, {
     headers: getAuthHeaders(),
   });
 
@@ -148,7 +148,7 @@ export async function cancelAppointment(
     return updateMockAppointmentStatus(appointmentId, 'cancelled');
   }
 
-  const response = await fetch(`${API_BASE_URL}/telehealth/appointments/${appointmentId}/cancel`, {
+  const response = await fetch(`${API_BASE_URL}/appointments/${appointmentId}/cancel`, {
     method: 'POST',
     headers: getAuthHeaders(),
     body: JSON.stringify({ reason }),
@@ -173,7 +173,7 @@ export async function rescheduleAppointment(
     return rescheduleMockAppointment(appointmentId, newSlot);
   }
 
-  const response = await fetch(`${API_BASE_URL}/telehealth/appointments/${appointmentId}/reschedule`, {
+  const response = await fetch(`${API_BASE_URL}/appointments/${appointmentId}/reschedule`, {
     method: 'POST',
     headers: getAuthHeaders(),
     body: JSON.stringify({ slotId: newSlotId, slot: newSlot }),
@@ -194,7 +194,7 @@ export async function completeAppointment(appointmentId: string): Promise<Appoin
     return updateMockAppointmentStatus(appointmentId, 'completed');
   }
 
-  const response = await fetch(`${API_BASE_URL}/telehealth/appointments/${appointmentId}/complete`, {
+  const response = await fetch(`${API_BASE_URL}/appointments/${appointmentId}/complete`, {
     method: 'POST',
     headers: getAuthHeaders(),
   });
@@ -227,7 +227,7 @@ export async function getProviders(filters?: {
   if (filters?.specialty) params.set('specialty', filters.specialty);
   if (filters?.role) params.set('role', filters.role);
 
-  const response = await fetch(`${API_BASE_URL}/telehealth/providers?${params}`, {
+  const response = await fetch(`${API_BASE_URL}/providers?${params}`, {
     headers: getAuthHeaders(),
   });
 
@@ -246,7 +246,7 @@ export async function getProvider(providerId: string): Promise<Provider | null> 
     return MOCK_PROVIDERS.find(p => p.id === providerId) || null;
   }
 
-  const response = await fetch(`${API_BASE_URL}/telehealth/providers/${providerId}`, {
+  const response = await fetch(`${API_BASE_URL}/providers/${providerId}`, {
     headers: getAuthHeaders(),
   });
 
@@ -286,7 +286,7 @@ export async function getProviderSlots(
   });
 
   const response = await fetch(
-    `${API_BASE_URL}/telehealth/providers/${providerId}/slots?${params}`,
+    `${API_BASE_URL}/providers/${providerId}/slots?${params}`,
     { headers: getAuthHeaders() }
   );
 
@@ -312,7 +312,7 @@ export async function holdSlotForCheckout(
     };
   }
 
-  const response = await fetch(`${API_BASE_URL}/telehealth/slots/${slotId}/hold`, {
+  const response = await fetch(`${API_BASE_URL}/slots/${slotId}/hold`, {
     method: 'POST',
     headers: getAuthHeaders(),
     body: JSON.stringify({ userId }),
@@ -334,7 +334,7 @@ export async function releaseSlotHold(slotId: string, userId: string): Promise<v
     return;
   }
 
-  await fetch(`${API_BASE_URL}/telehealth/slots/${slotId}/release`, {
+  await fetch(`${API_BASE_URL}/slots/${slotId}/release`, {
     method: 'POST',
     headers: getAuthHeaders(),
     body: JSON.stringify({ userId }),
@@ -353,7 +353,7 @@ export async function getVisitSummaries(userId: string): Promise<VisitSummary[]>
     return getMockVisitSummaries(userId);
   }
 
-  const response = await fetch(`${API_BASE_URL}/telehealth/summaries?userId=${userId}`, {
+  const response = await fetch(`${API_BASE_URL}/summaries?userId=${userId}`, {
     headers: getAuthHeaders(),
   });
 
@@ -372,7 +372,7 @@ export async function getVisitSummary(summaryId: string): Promise<VisitSummary |
     return getMockVisitSummary(summaryId);
   }
 
-  const response = await fetch(`${API_BASE_URL}/telehealth/summaries/${summaryId}`, {
+  const response = await fetch(`${API_BASE_URL}/summaries/${summaryId}`, {
     headers: getAuthHeaders(),
   });
 
@@ -395,7 +395,7 @@ export async function createVisitSummary(
     return createMockVisitSummary(appointmentId, summary);
   }
 
-  const response = await fetch(`${API_BASE_URL}/telehealth/summaries`, {
+  const response = await fetch(`${API_BASE_URL}/summaries`, {
     method: 'POST',
     headers: getAuthHeaders(),
     body: JSON.stringify({ appointmentId, ...summary }),
@@ -420,7 +420,7 @@ export async function getActionItems(userId: string): Promise<ActionItem[]> {
     return getMockActionItems(userId);
   }
 
-  const response = await fetch(`${API_BASE_URL}/telehealth/action-items?userId=${userId}`, {
+  const response = await fetch(`${API_BASE_URL}/action-items?userId=${userId}`, {
     headers: getAuthHeaders(),
   });
 
@@ -442,7 +442,7 @@ export async function toggleActionItem(
     return toggleMockActionItem(actionItemId, completed);
   }
 
-  const response = await fetch(`${API_BASE_URL}/telehealth/action-items/${actionItemId}`, {
+  const response = await fetch(`${API_BASE_URL}/action-items/${actionItemId}`, {
     method: 'PATCH',
     headers: getAuthHeaders(),
     body: JSON.stringify({ completed, completedAt: completed ? new Date().toISOString() : null }),
@@ -476,7 +476,7 @@ export async function joinWaitlist(
     return { success: true, position: Math.floor(Math.random() * 10) + 1 };
   }
 
-  const response = await fetch(`${API_BASE_URL}/telehealth/waitlist`, {
+  const response = await fetch(`${API_BASE_URL}/waitlist`, {
     method: 'POST',
     headers: getAuthHeaders(),
     body: JSON.stringify({ userId, providerId, preferences }),

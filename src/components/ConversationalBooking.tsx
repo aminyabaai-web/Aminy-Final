@@ -22,9 +22,13 @@ import {
   HelpCircle,
   Video,
   Phone,
-  MapPin
+  MapPin,
+  Loader2
 } from 'lucide-react';
 import { AvailabilityPicker, TimeSlot } from './AvailabilityPicker';
+import { supabase } from '../utils/supabase/client';
+import { toast } from 'sonner';
+import { SESSION_PRICING } from '../lib/pricing';
 
 // Types
 type BookingStep = 'concern' | 'history' | 'provider-pref' | 'time-select' | 'details' | 'confirm';
@@ -114,8 +118,8 @@ const CONCERN_OPTIONS: ConcernType[] = [
   },
 ];
 
-// Mock Providers
-const MOCK_PROVIDERS: Provider[] = [
+// Fallback providers (only used if database is empty)
+const FALLBACK_PROVIDERS: Provider[] = [
   {
     id: 'bcba-1',
     name: 'Dr. Sarah Chen',
@@ -126,32 +130,78 @@ const MOCK_PROVIDERS: Provider[] = [
     nextAvailable: 'Tomorrow',
     isAssigned: true,
   },
-  {
-    id: 'bcba-2',
-    name: 'Dr. Michael Torres',
-    title: 'BCBA',
-    specialty: 'Early Intervention',
-    rating: 4.8,
-    reviewCount: 32,
-    nextAvailable: 'Today',
-  },
-  {
-    id: 'slp-1',
-    name: 'Dr. Emily Watson',
-    title: 'SLP-CCC',
-    specialty: 'Speech-Language Pathology',
-    rating: 4.9,
-    reviewCount: 56,
-    nextAvailable: 'Wednesday',
-  },
 ];
 
-// Mock Goals
-const MOCK_GOALS: Goal[] = [
-  { id: '1', title: 'Morning routine transitions', status: 'active' },
-  { id: '2', title: 'Reduce mealtime difficulties', status: 'active' },
-  { id: '3', title: 'Improve sibling interactions', status: 'active' },
-];
+/**
+ * Calculate session price based on provider type and duration
+ */
+function getSessionPrice(providerType: string, duration: number = 60): { price: number; providerPay: number } {
+  // Map provider type to session pricing
+  const typeMap: Record<string, string> = {
+    'bcba': duration <= 60 ? 'bcba_consult' : 'bcba_assessment',
+    'bcba-d': duration <= 60 ? 'bcba_consult' : 'bcba_assessment',
+    'rbt': duration <= 30 ? 'rbt_session' : 'rbt_extended',
+    'lpc': duration <= 45 ? 'therapist_45' : 'therapist_60',
+    'lcsw': duration <= 45 ? 'therapist_45' : 'therapist_60',
+    'slp': 'slp_session',
+    'ot': 'ot_session',
+  };
+
+  const sessionType = typeMap[providerType.toLowerCase()] || 'bcba_consult';
+  const pricing = SESSION_PRICING[sessionType as keyof typeof SESSION_PRICING];
+
+  return pricing ? { price: pricing.price, providerPay: pricing.providerPay } : { price: 149, providerPay: 60 };
+}
+
+/**
+ * Save booking to database
+ */
+async function saveBookingToDatabase(booking: {
+  userId: string;
+  providerId: string;
+  childId?: string;
+  sessionType: string;
+  scheduledAt: string;
+  concern: string;
+  notes?: string;
+  visitType: 'video' | 'phone';
+  price: number;
+  providerPay: number;
+}): Promise<{ success: boolean; bookingId?: string; error?: string }> {
+  try {
+    const platformFee = booking.price - booking.providerPay;
+
+    const { data, error } = await supabase
+      .from('marketplace_bookings')
+      .insert({
+        user_id: booking.userId,
+        provider_id: booking.providerId,
+        child_id: booking.childId || null,
+        session_type: booking.sessionType,
+        session_duration_minutes: 60,
+        scheduled_at: booking.scheduledAt,
+        concern: booking.concern,
+        notes: booking.notes,
+        status: 'confirmed',
+        price: booking.price,
+        provider_payout: booking.providerPay,
+        platform_fee: platformFee,
+        payment_status: 'pending',
+      })
+      .select('id')
+      .single();
+
+    if (error) {
+      console.error('Error saving booking:', error);
+      return { success: false, error: error.message };
+    }
+
+    return { success: true, bookingId: data.id };
+  } catch (e: any) {
+    console.error('Booking save failed:', e);
+    return { success: false, error: e.message };
+  }
+}
 
 // Chat Message Component
 function ChatMessage({
@@ -265,13 +315,97 @@ function ProviderCardMini({
 // Main Component
 export function ConversationalBooking({
   childName,
-  assignedProvider = MOCK_PROVIDERS[0],
-  childGoals = MOCK_GOALS,
+  assignedProvider: propAssignedProvider,
+  childGoals: propChildGoals,
   onComplete,
-  onCancel
-}: ConversationalBookingProps) {
+  onCancel,
+  userId,
+  childId
+}: ConversationalBookingProps & { userId?: string; childId?: string }) {
   const [state, setState] = useState<BookingState>({ step: 'concern' });
+  const [providers, setProviders] = useState<Provider[]>([]);
+  const [childGoals, setChildGoals] = useState<Goal[]>(propChildGoals || []);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
+
+  // Load providers from database
+  useEffect(() => {
+    async function loadProviders() {
+      try {
+        const { data, error } = await supabase
+          .from('provider_profiles')
+          .select(`
+            id,
+            user_id,
+            full_name,
+            credentials,
+            specialty,
+            bio,
+            rating,
+            review_count,
+            status
+          `)
+          .eq('status', 'active')
+          .limit(20);
+
+        if (error) {
+          console.error('Error loading providers:', error);
+          setProviders(FALLBACK_PROVIDERS);
+        } else if (data && data.length > 0) {
+          setProviders(data.map(p => ({
+            id: p.id,
+            name: p.full_name,
+            title: p.credentials || 'Provider',
+            specialty: p.specialty || 'General',
+            rating: p.rating || 4.8,
+            reviewCount: p.review_count || 0,
+            nextAvailable: 'Soon',
+            isAssigned: false,
+          })));
+        } else {
+          setProviders(FALLBACK_PROVIDERS);
+        }
+      } catch (e) {
+        console.error('Failed to load providers:', e);
+        setProviders(FALLBACK_PROVIDERS);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    loadProviders();
+  }, []);
+
+  // Load goals if we have a child ID
+  useEffect(() => {
+    async function loadGoals() {
+      if (!childId) return;
+
+      try {
+        const { data } = await supabase
+          .from('goals')
+          .select('id, title, status')
+          .eq('child_id', childId)
+          .eq('status', 'active')
+          .limit(10);
+
+        if (data && data.length > 0) {
+          setChildGoals(data.map(g => ({
+            id: g.id,
+            title: g.title,
+            status: g.status as 'active' | 'completed',
+          })));
+        }
+      } catch (e) {
+        console.error('Failed to load goals:', e);
+      }
+    }
+
+    loadGoals();
+  }, [childId]);
+
+  const assignedProvider = propAssignedProvider || providers[0] || FALLBACK_PROVIDERS[0];
 
   // Scroll to bottom on new messages
   useEffect(() => {
@@ -320,17 +454,68 @@ export function ConversationalBooking({
     updateState({ visitType, notes, step: 'confirm' });
   };
 
-  const handleConfirm = () => {
-    onComplete(state);
+  const handleConfirm = async () => {
+    if (!state.selectedProvider || !state.selectedSlot) {
+      toast.error('Please select a provider and time slot');
+      return;
+    }
+
+    setIsSaving(true);
+
+    try {
+      // Get current user if not provided
+      let currentUserId = userId;
+      if (!currentUserId) {
+        const { data: { user } } = await supabase.auth.getUser();
+        currentUserId = user?.id;
+      }
+
+      if (!currentUserId) {
+        toast.error('Please sign in to book a session');
+        setIsSaving(false);
+        return;
+      }
+
+      // Calculate pricing based on provider type
+      const { price, providerPay } = getSessionPrice(state.selectedProvider.title, 60);
+
+      // Save to database
+      const result = await saveBookingToDatabase({
+        userId: currentUserId,
+        providerId: state.selectedProvider.id,
+        childId: childId,
+        sessionType: state.visitType || 'video',
+        scheduledAt: state.selectedSlot.startTime,
+        concern: state.concern?.label || 'General consultation',
+        notes: state.notes,
+        visitType: state.visitType || 'video',
+        price,
+        providerPay,
+      });
+
+      if (result.success) {
+        toast.success('Session booked successfully! You will receive a confirmation email.');
+        onComplete({ ...state, bookingId: result.bookingId } as any);
+      } else {
+        toast.error(result.error || 'Failed to book session. Please try again.');
+      }
+    } catch (e: any) {
+      console.error('Booking failed:', e);
+      toast.error('An error occurred. Please try again.');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   // Get recommended providers based on concern
   const getRecommendedProviders = () => {
-    if (!state.concern) return MOCK_PROVIDERS;
-    return MOCK_PROVIDERS.filter(p => {
+    const availableProviders = providers.length > 0 ? providers : FALLBACK_PROVIDERS;
+    if (!state.concern) return availableProviders;
+    return availableProviders.filter(p => {
       if (state.concern?.mapsTo === 'any') return true;
-      if (state.concern?.mapsTo === 'bcba') return p.specialty.includes('Behavior');
-      if (state.concern?.mapsTo === 'slp') return p.specialty.includes('Speech');
+      if (state.concern?.mapsTo === 'bcba') return p.specialty.toLowerCase().includes('behavior') || p.title.toLowerCase().includes('bcba');
+      if (state.concern?.mapsTo === 'slp') return p.specialty.toLowerCase().includes('speech') || p.title.toLowerCase().includes('slp');
+      if (state.concern?.mapsTo === 'ot') return p.specialty.toLowerCase().includes('occupational') || p.title.toLowerCase().includes('ot');
       return true;
     });
   };
