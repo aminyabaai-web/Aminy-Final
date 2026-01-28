@@ -60,6 +60,7 @@ import {
 import type { ProviderType } from '../lib/child-profiles';
 import { brandColors } from '../lib/brand-system';
 import { supabase } from '../utils/supabase/client';
+import { CredentialBadge, VerifiedBadge } from './provider/CredentialBadge';
 
 interface Patient {
   id: string;
@@ -503,7 +504,10 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
                   {provider.name.split(' ').map(n => n[0]).join('')}
                 </div>
                 <div className="hidden sm:block">
-                  <p className="text-sm font-medium text-neutral-900 dark:text-white">{provider.name}</p>
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-medium text-neutral-900 dark:text-white">{provider.name}</p>
+                    <VerifiedBadge status="verified" />
+                  </div>
                   <p className="text-xs text-neutral-500 dark:text-slate-400">{provider.credentials}</p>
                 </div>
               </div>
@@ -1043,6 +1047,14 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
                   <Input defaultValue="$99/session" />
                 </div>
               </div>
+            </Card>
+
+            <Card className="p-4 sm:p-5 md:p-6">
+              <h3 className="font-semibold text-neutral-900 dark:text-white mb-4">Credentials & Verification</h3>
+              <p className="text-neutral-600 dark:text-slate-400 mb-4 text-sm">
+                Verified credentials build trust with families and enable insurance billing
+              </p>
+              <CredentialBadge providerId={providerId} showDetails={true} />
             </Card>
 
             <Card className="p-4 sm:p-5 md:p-6">

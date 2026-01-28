@@ -114,6 +114,111 @@ export function AIIntakeChat({ onComplete, initialData, isReturningUser = false,
     }
   }, [isKeyboardOpen]);
 
+  // Onboarding state persistence - save progress for abandoned sessions
+  const ONBOARDING_STORAGE_KEY = 'aminy_onboarding_progress';
+
+  // Save onboarding progress to localStorage
+  useEffect(() => {
+    if (step !== 'intro' && step !== 'complete') {
+      const progressData = {
+        step,
+        childName,
+        childAge,
+        recentChallenges,
+        parentGoals,
+        conversationHistory,
+        extractedInsights,
+        empathyDetected,
+        conversationTurn,
+        progress,
+        savedAt: new Date().toISOString(),
+      };
+      try {
+        localStorage.setItem(ONBOARDING_STORAGE_KEY, JSON.stringify(progressData));
+      } catch (e) {
+        console.log('[Onboarding] Could not save progress:', e);
+      }
+    }
+  }, [step, childName, childAge, recentChallenges, parentGoals, conversationHistory, extractedInsights, empathyDetected, conversationTurn, progress]);
+
+  // Restore onboarding progress on mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(ONBOARDING_STORAGE_KEY);
+      if (saved) {
+        const data = JSON.parse(saved);
+        const savedTime = new Date(data.savedAt);
+        const now = new Date();
+        const hoursSinceSave = (now.getTime() - savedTime.getTime()) / (1000 * 60 * 60);
+
+        // Only restore if saved within last 72 hours and not complete
+        if (hoursSinceSave < 72 && data.step !== 'complete') {
+          // Show resume prompt instead of auto-restoring
+          setShowResumePrompt(true);
+          setSavedProgress(data);
+        } else {
+          // Clear old data
+          localStorage.removeItem(ONBOARDING_STORAGE_KEY);
+        }
+      }
+    } catch (e) {
+      console.log('[Onboarding] Could not restore progress:', e);
+    }
+  }, []);
+
+  // State for resume prompt
+  const [showResumePrompt, setShowResumePrompt] = useState(false);
+  const [savedProgress, setSavedProgress] = useState<{
+    step: typeof step;
+    childName: string;
+    childAge: string;
+    recentChallenges: string;
+    parentGoals: string;
+    conversationHistory: string;
+    extractedInsights: string[];
+    empathyDetected: typeof empathyDetected;
+    conversationTurn: number;
+    progress: number;
+  } | null>(null);
+
+  // Resume from saved progress
+  const handleResumeProgress = () => {
+    if (savedProgress) {
+      setStep(savedProgress.step);
+      setChildName(savedProgress.childName);
+      setChildAge(savedProgress.childAge);
+      setRecentChallenges(savedProgress.recentChallenges);
+      setParentGoals(savedProgress.parentGoals);
+      setConversationHistory(savedProgress.conversationHistory);
+      setExtractedInsights(savedProgress.extractedInsights);
+      setEmpathyDetected(savedProgress.empathyDetected);
+      setConversationTurn(savedProgress.conversationTurn);
+      setProgress(savedProgress.progress);
+
+      // Add welcome back message
+      addAminyMessage(
+        <div className="space-y-2">
+          <p className="font-medium">Welcome back! 💙</p>
+          <p>I remember you were telling me about {savedProgress.childName || 'your child'}. Let's continue where we left off.</p>
+        </div>,
+        500
+      );
+    }
+    setShowResumePrompt(false);
+  };
+
+  // Start fresh
+  const handleStartFresh = () => {
+    localStorage.removeItem(ONBOARDING_STORAGE_KEY);
+    setSavedProgress(null);
+    setShowResumePrompt(false);
+  };
+
+  // Clear progress on complete
+  const clearOnboardingProgress = () => {
+    localStorage.removeItem(ONBOARDING_STORAGE_KEY);
+  };
+
   // Add message helpers
   const addAminyMessage = (content: string | React.ReactNode, delay = 800) => {
     setIsTyping(true);
@@ -228,8 +333,67 @@ export function AIIntakeChat({ onComplete, initialData, isReturningUser = false,
     }, 300);
   };
 
-  // DYNAMIC insight extraction - extracts from actual user content
+  // DYNAMIC insight extraction - uses AI with regex fallback
   const extractInsightsFromConversation = async (text: string): Promise<string[]> => {
+    // Try AI extraction first for better accuracy
+    try {
+      const aiInsights = await extractInsightsWithAI(text);
+      if (aiInsights.length > 0) {
+        console.log('[Onboarding] AI extracted insights:', aiInsights);
+        return aiInsights;
+      }
+    } catch (e) {
+      console.log('[Onboarding] AI extraction failed, using regex fallback');
+    }
+
+    // Fallback to regex-based extraction
+    return extractInsightsRegex(text);
+  };
+
+  // AI-powered insight extraction
+  const extractInsightsWithAI = async (text: string): Promise<string[]> => {
+    if (text.length < 20) return [];
+
+    try {
+      const response = await fetch(`https://${import.meta.env.VITE_SUPABASE_PROJECT_ID || 'pohnhzxqorelllbfnqyj'}.supabase.co/functions/v1/make-server-8a022548/ai/extract-insights`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY || ''}`,
+        },
+        body: JSON.stringify({
+          text,
+          prompt: `Analyze this parent's message about their child and extract 2-3 key insights.
+
+Focus on:
+1. What specific challenges the child faces
+2. How the parent is feeling (emotional state)
+3. What goals or hopes they have
+
+Return insights as short, specific phrases (10-15 words max each) that show understanding.
+
+Examples of good insights:
+- "Managing intense morning meltdowns during getting ready"
+- "You're feeling exhausted and overwhelmed by daily battles"
+- "Building independence with self-care routines"
+
+Return as JSON array of strings.`,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        return data.insights || [];
+      }
+    } catch (e) {
+      console.error('[Onboarding] AI insight extraction error:', e);
+    }
+
+    return [];
+  };
+
+  // Regex-based insight extraction (fallback)
+  const extractInsightsRegex = (text: string): string[] => {
     const insights: string[] = [];
     const combined = text.toLowerCase();
     

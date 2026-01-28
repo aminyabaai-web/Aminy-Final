@@ -6,6 +6,8 @@
  */
 
 import { projectId, publicAnonKey } from '../../utils/supabase/info';
+import { getConfigForMessage, type AIConfig, type QueryClassification } from '../ai-config';
+import { detectCrisis as advancedCrisisDetection, generateCrisisResponse, type CrisisDetectionResult } from '../crisis-detection';
 
 // Types
 export interface ClaudeMessage {
@@ -134,9 +136,16 @@ export async function sendMessageToClaudeStreaming(
   callbacks: StreamingCallbacks,
   options: ClaudeRequestOptions = {}
 ): Promise<string> {
+  // Get dynamic config based on message content
+  const lastUserMessage = messages.filter(m => m.role === 'user').pop()?.content || '';
+  const { config: dynamicConfig, classification } = getConfigForMessage(lastUserMessage);
+
+  // Log query classification for analytics (can be sent to Supabase)
+  console.log('[AI Config] Query classified as:', classification.type, 'confidence:', classification.confidence);
+
   const {
-    maxTokens = 1024,
-    temperature = 0.7,
+    maxTokens = dynamicConfig.maxTokens,
+    temperature = dynamicConfig.temperature,
     systemPrompt = buildAminySystemPrompt(context),
   } = options;
 
@@ -184,9 +193,15 @@ export async function sendMessageToClaude(
   context: ConversationContext,
   options: ClaudeRequestOptions = {}
 ): Promise<string> {
+  // Get dynamic config based on message content
+  const lastUserMessage = messages.filter(m => m.role === 'user').pop()?.content || '';
+  const { config: dynamicConfig, classification } = getConfigForMessage(lastUserMessage);
+
+  console.log('[AI Config] Query classified as:', classification.type, 'confidence:', classification.confidence);
+
   const {
-    maxTokens = 1024,
-    temperature = 0.7,
+    maxTokens = dynamicConfig.maxTokens,
+    temperature = dynamicConfig.temperature,
     systemPrompt = buildAminySystemPrompt(context),
   } = options;
 
@@ -310,21 +325,29 @@ export function generateConversationTitle(firstMessage: string): string {
 
 /**
  * Detect if user message indicates a crisis situation
+ * Uses advanced multi-layer detection system
  */
-export function detectCrisis(message: string): { isCrisis: boolean; type?: string } {
-  const lowerMessage = message.toLowerCase();
+export function detectCrisis(message: string): { isCrisis: boolean; type?: string; result?: CrisisDetectionResult } {
+  // Use advanced crisis detection system
+  const result = advancedCrisisDetection(message);
 
-  const crisisPatterns = [
-    { pattern: /\b(suicide|suicidal|end (my|it all)|kill myself)\b/i, type: 'suicidal' },
-    { pattern: /\b(self[- ]?harm|cutting|hurt myself)\b/i, type: 'self-harm' },
-    { pattern: /\b(can'?t (take|do) (this|it) anymore|give up|hopeless)\b/i, type: 'despair' },
-    { pattern: /\b(abuse|being hurt|hitting me|violence)\b/i, type: 'abuse' },
-  ];
+  if (result.isCrisis) {
+    // Map new types to legacy types for backwards compatibility
+    const typeMapping: Record<string, string> = {
+      'suicidal_ideation': 'suicidal',
+      'self_harm': 'self-harm',
+      'caregiver_burnout': 'despair',
+      'domestic_violence': 'abuse',
+      'child_safety': 'abuse',
+      'mental_health_crisis': 'despair',
+      'medical_emergency': 'medical',
+    };
 
-  for (const { pattern, type } of crisisPatterns) {
-    if (pattern.test(lowerMessage)) {
-      return { isCrisis: true, type };
-    }
+    return {
+      isCrisis: true,
+      type: result.type ? typeMapping[result.type] || result.type : 'unknown',
+      result, // Include full result for advanced handling
+    };
   }
 
   return { isCrisis: false };
@@ -332,15 +355,16 @@ export function detectCrisis(message: string): { isCrisis: boolean; type?: strin
 
 /**
  * Get crisis response if needed
+ * Enhanced with medical emergency support and better formatting
  */
 export function getCrisisResponse(type: string): string {
   const responses: Record<string, string> = {
     suicidal: `I hear you, and I'm so grateful you're sharing this with me. What you're feeling is real and valid, and you don't have to face it alone.
 
-Please reach out right now:
-• 988 Suicide & Crisis Lifeline: Call or text 988
-• Crisis Text Line: Text HOME to 741741
-• If you're in immediate danger, please call 911
+**Please reach out right now:**
+• **988 Suicide & Crisis Lifeline**: Call or text **988** (24/7)
+• **Crisis Text Line**: Text **HOME to 741741**
+• If you're in immediate danger, please call **911**
 
 You matter. Your child needs you. Help is available right now, and reaching out is a sign of strength, not weakness.
 
@@ -348,25 +372,37 @@ I'm here with you. Would you like to talk about what's been overwhelming you?`,
 
     'self-harm': `I'm so sorry you're going through something this painful. Reaching out takes courage, and I want you to know you're not alone.
 
-If you're in crisis, please contact:
-• 988 Suicide & Crisis Lifeline: Call or text 988
-• Crisis Text Line: Text HOME to 741741
+**If you're hurting right now, please contact:**
+• **988 Suicide & Crisis Lifeline**: Call or text **988** (24/7)
+• **Crisis Text Line**: Text **HOME to 741741**
 
 Your pain is valid, and there are people who specialize in helping during these moments. Would you like to talk about what's been building up?`,
 
     despair: `I can hear how exhausted and overwhelmed you are. Caring for a child with special needs is incredibly hard, and feeling like you can't go on doesn't make you a bad parent—it makes you human.
 
-If these feelings are intense, please reach out:
-• 988 Suicide & Crisis Lifeline: Call or text 988
-• Crisis Text Line: Text HOME to 741741
+**If these feelings are intense, please reach out:**
+• **988 Suicide & Crisis Lifeline**: Call or text **988** (24/7)
+• **Crisis Text Line**: Text **HOME to 741741**
+• **Caregiver Action Network**: **1-855-227-3640**
 
 You deserve support too. What would help most right now?`,
 
-    abuse: `Your safety matters. If you or your child are in danger, please reach out for help:
-• National Domestic Violence Hotline: 1-800-799-7233
-• If in immediate danger, call 911
+    abuse: `Your safety matters. If you or your child are in danger, please reach out for help immediately.
+
+**Please contact:**
+• **National Domestic Violence Hotline**: **1-800-799-7233** (24/7)
+• **Text**: **START to 88788**
+• If in immediate danger, call **911**
 
 You deserve to be safe, and there are people ready to help. Would you like to talk about what's happening?`,
+
+    medical: `This sounds like it could be a medical emergency.
+
+**Please seek immediate help:**
+• **Call 911** for medical emergencies
+• **Poison Control**: **1-800-222-1222** (if poisoning is suspected)
+
+If you can, please call for help right now. Is there someone with you who can assist?`,
   };
 
   return responses[type] || responses.despair;
