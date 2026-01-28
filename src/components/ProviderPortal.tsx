@@ -771,6 +771,25 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
             </div>
 
             {/* Patient Grid */}
+            {filteredPatients.length === 0 ? (
+              <Card className="p-8 sm:p-12 text-center">
+                <Users className="w-12 h-12 text-neutral-300 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-neutral-900 mb-2">
+                  {searchQuery ? 'No patients found' : 'No patients yet'}
+                </h3>
+                <p className="text-neutral-500 max-w-md mx-auto mb-6">
+                  {searchQuery
+                    ? 'Try adjusting your search terms'
+                    : 'Share your provider link with families to start building your patient roster. Parents can connect and grant you access to their Insight Navigator profiles.'}
+                </p>
+                {!searchQuery && (
+                  <Button className="bg-teal-600 hover:bg-teal-700">
+                    <Plus className="w-4 h-4 mr-2" />
+                    Get Your Provider Link
+                  </Button>
+                )}
+              </Card>
+            ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
               {filteredPatients.map(patient => (
                 <Card
@@ -841,6 +860,7 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
                 </Card>
               ))}
             </div>
+            )}
           </div>
         )}
 

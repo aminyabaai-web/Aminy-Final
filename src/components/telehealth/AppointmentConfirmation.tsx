@@ -80,8 +80,9 @@ export function AppointmentConfirmationScreen({
   const visitConfig = VISIT_TYPES[visitType];
 
   // Calculate price with discounts
+  // Check membership from intake data (intake contains user subscription info)
   const priceType: VisitPriceType = visitType === 'consult' ? 'consult' : 'extended';
-  const isMember = true; // TODO: Get from user context
+  const isMember = intake?.userTier && intake.userTier !== 'free';
   const pricing = calculateVisitPrice(priceType, isMember, promoApplied || undefined);
   const price = pricing.total / 100; // Convert from cents to dollars
 
