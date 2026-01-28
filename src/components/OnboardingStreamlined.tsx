@@ -172,7 +172,8 @@ function generatePersonalizedPlan(data: OnboardingData): string[] {
 
 export function OnboardingStreamlined({ onComplete, initialEmail = '' }: OnboardingStreamlinedProps) {
   const [step, setStep] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); // Start loading to check auth
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const [data, setData] = useState<OnboardingData>({
@@ -190,6 +191,29 @@ export function OnboardingStreamlined({ onComplete, initialEmail = '' }: Onboard
   const updateData = (updates: Partial<OnboardingData>) => {
     setData(prev => ({ ...prev, ...updates }));
   };
+
+  // Check if user is already authenticated on mount
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          // User is already logged in - skip step 1
+          setIsAuthenticated(true);
+          updateData({
+            email: user.email || '',
+            parentName: user.user_metadata?.full_name || user.user_metadata?.name || '',
+          });
+          setStep(2); // Start at step 2 (child info)
+        }
+      } catch (e) {
+        console.error('Auth check error:', e);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    checkAuth();
+  }, []);
 
   // Generate insight when moving to step 3
   useEffect(() => {
@@ -263,7 +287,7 @@ export function OnboardingStreamlined({ onComplete, initialEmail = '' }: Onboard
           await supabase.from('profiles').upsert({
             id: user.id,
             name: data.parentName,
-            onboarding_completed: true,
+            has_completed_onboarding: true,
             onboarding_data: {
               childName: data.childName,
               childAge: data.childAge,
@@ -298,11 +322,27 @@ export function OnboardingStreamlined({ onComplete, initialEmail = '' }: Onboard
   };
 
   const handleBack = () => {
-    if (step > 1) setStep(step - 1);
+    // Don't go back to step 1 if user is already authenticated
+    const minStep = isAuthenticated ? 2 : 1;
+    if (step > minStep) setStep(step - 1);
   };
 
-  // Progress bar
-  const progress = (step / 5) * 100;
+  // Progress bar - for authenticated users, steps 2-5 become steps 1-4
+  const totalSteps = isAuthenticated ? 4 : 5;
+  const currentStep = isAuthenticated ? step - 1 : step;
+  const progress = (currentStep / totalSteps) * 100;
+
+  // Show loading while checking auth
+  if (isLoading && step === 1 && !isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-teal-50 via-white to-white flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="w-8 h-8 animate-spin text-teal-500 mx-auto mb-4" />
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-teal-50 via-white to-white flex flex-col">
@@ -318,14 +358,14 @@ export function OnboardingStreamlined({ onComplete, initialEmail = '' }: Onboard
 
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-        {step > 1 ? (
+        {(isAuthenticated ? step > 2 : step > 1) ? (
           <button onClick={handleBack} className="p-2 hover:bg-gray-100 rounded-lg">
             <ArrowLeft className="w-5 h-5 text-gray-600" />
           </button>
         ) : (
           <div className="w-9" />
         )}
-        <span className="text-sm text-gray-500">Step {step} of 5</span>
+        <span className="text-sm text-gray-500">Step {currentStep} of {totalSteps}</span>
         <div className="w-9" />
       </div>
 
