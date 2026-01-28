@@ -13,7 +13,9 @@ import {
   Shield,
   Gift,
   Zap,
-  Crown
+  Crown,
+  Users,
+  Share2
 } from 'lucide-react';
 import {
   TierType,
@@ -421,6 +423,35 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
                 <p className="font-medium text-green-900">30-Day Money Back Guarantee</p>
                 <p className="text-sm text-green-700">Not happy? Get a full refund, no questions asked.</p>
               </div>
+            </div>
+          </Card>
+        </div>
+
+        {/* Referral CTA */}
+        <div className="mt-6">
+          <Card className="p-4 bg-gradient-to-r from-violet-50 to-purple-50 dark:from-violet-900/20 dark:to-purple-900/20 border-violet-200 dark:border-violet-800">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-violet-100 dark:bg-violet-900/50 rounded-full">
+                  <Users className="w-5 h-5 text-violet-600 dark:text-violet-400" />
+                </div>
+                <div>
+                  <p className="font-medium text-violet-900 dark:text-violet-300">Know another family?</p>
+                  <p className="text-sm text-violet-700 dark:text-violet-400">Invite a friend & both get 1 month free</p>
+                </div>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                className="border-violet-300 text-violet-700 hover:bg-violet-100 dark:border-violet-700 dark:text-violet-300 dark:hover:bg-violet-900/50"
+                onClick={() => {
+                  navigator.clipboard.writeText(`${window.location.origin}/join?ref=AMINY`);
+                  toast.success('Referral link copied!');
+                }}
+              >
+                <Share2 className="w-4 h-4 mr-1" />
+                Share
+              </Button>
             </div>
           </Card>
         </div>

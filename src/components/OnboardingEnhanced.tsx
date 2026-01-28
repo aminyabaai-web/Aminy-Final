@@ -42,6 +42,7 @@ import { Input } from './ui/input';
 import { Progress } from './ui/progress';
 import { triggerHaptic } from '../lib/haptics';
 import { cn } from '../lib/utils';
+import { toast } from 'sonner';
 
 // Import new enhancement components
 import { ChildMentalHealthScreen } from './ChildMentalHealthScreen';
@@ -445,7 +446,11 @@ export function OnboardingEnhanced({ onComplete }: OnboardingEnhancedProps) {
               clearOnboardingProgress(); // Clear saved progress on completion
               onComplete(data as OnboardingData);
             }}
-            onReferFriend={() => {/* TODO: implement referral */}}
+            onReferFriend={() => {
+              const referralUrl = `${window.location.origin}/join?ref=AMINY-${Date.now().toString(36).toUpperCase()}`;
+              navigator.clipboard.writeText(referralUrl);
+              toast.success('Referral link copied! Share it with a friend.');
+            }}
             tone={tone}
           />
         );
