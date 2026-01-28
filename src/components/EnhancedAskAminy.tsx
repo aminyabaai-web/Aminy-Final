@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Send, Paperclip, Mic, Sparkles, X, Minimize2, Maximize2, Brain, RotateCcw, Copy, MessageSquare, Zap, Volume2, ChevronDown, Plus, ArrowUp, AlertTriangle, Clock } from 'lucide-react';
+import { Send, Paperclip, Mic, Sparkles, X, Minimize2, Maximize2, Brain, RotateCcw, Copy, MessageSquare, Zap, Volume2, ChevronDown, Plus, ArrowUp, AlertTriangle, Clock, Share2 } from 'lucide-react';
+import { ShareInsightInline } from './ShareInsight';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
@@ -820,7 +821,21 @@ export function EnhancedAskAminy({
                               <span className="inline-block w-2 h-4 bg-current ml-1 animate-pulse" />
                             )}
                           </div>
-                          
+
+                          {/* Share Button - Only for assistant messages that aren't streaming */}
+                          {message.role === 'assistant' && !message.isStreaming && (
+                            <div className="mt-2 pt-2 border-t border-gray-100 dark:border-gray-700">
+                              <ShareInsightInline
+                                insight={message.content}
+                                childName={userData.childName}
+                                onShare={(platform) => {
+                                  // Track share for analytics
+                                  console.log(`Shared insight via ${platform}`);
+                                }}
+                              />
+                            </div>
+                          )}
+
                           {/* Follow-up Suggestions */}
                           {message.role === 'assistant' && message.suggestions && message.suggestions.length > 0 && !message.isStreaming && (
                             <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-600">

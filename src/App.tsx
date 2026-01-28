@@ -87,8 +87,8 @@ const CreateAccountScreen = lazy(() =>
   ).then((m) => ({ default: m.CreateAccountScreen })),
 );
 const PaywallScreen = lazy(() =>
-  import("./components/PaywallScreen").then((m) => ({
-    default: m.PaywallScreen,
+  import("./components/PaywallSimplified").then((m) => ({
+    default: m.PaywallSimplified,
   })),
 );
 const BenefitsNavigatorScreen = lazy(() =>
@@ -874,10 +874,11 @@ export default function App() {
       ).catch(err => console.error('Failed to trigger retention flow:', err));
     }
 
-    // Best practice: Show paywall immediately after onboarding
-    // 60%+ of purchases happen before users ever use the app
-    // 82% of trial starts happen on Day 0
-    navigateToScreen("paywall");
+    // NEW STRATEGY: Let users experience the magic first
+    // Go to dashboard with free trial - show paywall after they've had
+    // 3-5 meaningful AI conversations and experienced the memory/personalization
+    navigateToScreen("dashboard");
+    toast.success(`Welcome! Let's help ${updatedData.childName} thrive.`);
   };
 
   const handlePaywallTrigger = () => {
@@ -1166,9 +1167,7 @@ export default function App() {
               <PaywallScreen
                 onSubscribe={handleSubscribe}
                 onClose={() => navigateToScreen("dashboard")}
-                currentTier={userData.tier}
                 childName={userData.childName}
-                isPostOnboarding={userData.hasCompletedOnboarding && userData.tier === 'free'}
               />
             </Suspense>
           );

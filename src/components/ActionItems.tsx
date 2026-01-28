@@ -31,6 +31,7 @@ import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { supabase } from '../utils/supabase/client';
 import { sendMessageToClaude, type ClaudeMessage, type ConversationContext } from '../lib/ai-engine/claude-client';
+import { ShareInsightInline } from './ShareInsight';
 
 // Action item types
 export interface ActionItem {
@@ -643,6 +644,16 @@ You're starting this check-in now. Begin with a warm greeting and your first que
                       }`}
                     >
                       <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
+                      {/* Share button for assistant messages */}
+                      {msg.role === 'assistant' && (
+                        <div className="mt-2 pt-2 border-t border-gray-200">
+                          <ShareInsightInline
+                            insight={msg.content}
+                            childName={childName}
+                            onShare={(platform) => console.log(`Shared via ${platform}`)}
+                          />
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))}
