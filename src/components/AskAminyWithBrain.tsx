@@ -219,8 +219,9 @@ export function AskAminyWithBrain({
                     Context-Aware AI
                   </Badge>
                 </div>
-                <p className="text-xs text-muted-foreground">
-                  Your child's AI companion
+                <p className="text-xs text-muted-foreground flex items-center gap-1">
+                  <Brain className="w-3 h-3 text-accent" />
+                  <span>I remember {userData.childName}'s journey</span>
                 </p>
               </div>
             </div>

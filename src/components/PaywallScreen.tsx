@@ -58,16 +58,6 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
       iconColor: 'text-gray-600',
     },
     {
-      id: 'starter',
-      name: 'Starter',
-      subtitle: 'Build daily habits',
-      icon: Heart,
-      popular: false,
-      gradient: 'from-rose-50 to-pink-50',
-      iconBg: 'bg-rose-100',
-      iconColor: 'text-rose-600',
-    },
-    {
       id: 'core',
       name: 'Core',
       subtitle: 'The full companion',

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MessageSquare, X, Send, Mic } from 'lucide-react';
+import { MessageSquare, X, Send, Mic, Brain } from 'lucide-react';
 import { Button } from './ui/button';
 import { Textarea } from './ui/textarea';
 import { Card } from './ui/card';
@@ -10,13 +10,15 @@ interface PersistentAskAminyFABProps {
   messagesLeft?: number;
   onPaywallTrigger?: () => void;
   position?: 'bottom-right' | 'bottom-left';
+  childName?: string;
 }
 
 export function PersistentAskAminyFAB({
   tier = 'core',
   messagesLeft = 10,
   onPaywallTrigger,
-  position = 'bottom-right'
+  position = 'bottom-right',
+  childName = 'your child'
 }: PersistentAskAminyFABProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
@@ -82,20 +84,23 @@ export function PersistentAskAminyFAB({
           className={`fixed bottom-20 sm:bottom-6 ${positionClasses} z-50 w-[90vw] sm:w-96 max-h-[70vh] flex flex-col shadow-2xl`}
         >
           {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b border-gray-200">
+          <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-slate-700">
             <div className="flex items-center gap-2">
               <div className="p-2 bg-accent/10 rounded-lg">
-                <MessageSquare className="w-4 h-4 text-accent" />
+                <Brain className="w-4 h-4 text-accent" />
               </div>
               <div>
-                <h3 className="font-semibold">Ask Aminy</h3>
-                {tier === 'core' && (
-                  <p className="text-xs text-muted-foreground">
+                <h3 className="font-semibold dark:text-white">Ask Aminy</h3>
+                <p className="text-xs text-muted-foreground flex items-center gap-1">
+                  <span>I remember {childName}'s journey</span>
+                </p>
+                {tier === 'free' && (
+                  <p className="text-[10px] text-muted-foreground">
                     {messagesLeft} messages left
                   </p>
                 )}
-                {tier !== 'core' && (
-                  <Badge variant="outline" className="text-xs bg-accent/10 text-accent border-accent/20">
+                {tier !== 'free' && (
+                  <Badge variant="outline" className="text-[10px] mt-0.5 bg-accent/10 text-accent border-accent/20">
                     Unlimited
                   </Badge>
                 )}
@@ -141,7 +146,7 @@ export function PersistentAskAminyFAB({
                   className={`max-w-[80%] px-4 py-2 rounded-2xl ${
                     message.isUser
                       ? 'bg-accent text-white'
-                      : 'bg-gray-100 text-gray-900'
+                      : 'bg-gray-100 dark:bg-slate-800 text-gray-900 dark:text-white'
                   }`}
                 >
                   <p className="text-sm">{message.text}</p>

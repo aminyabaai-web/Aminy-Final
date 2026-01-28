@@ -16,13 +16,14 @@
  * - Recommended providers based on child's conditions
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Input } from './ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { Logo } from './Logo';
+import { supabase } from '../utils/supabase/client';
 import {
   Search,
   Filter,
@@ -129,16 +130,80 @@ export function ProviderMarketplace({
   const [showFilters, setShowFilters] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    loadProviders();
+  // Load providers from Supabase with fallback to mock data
+  const loadProviders = useCallback(async () => {
+    setIsLoading(true);
+    console.log('[Marketplace] Loading providers from Supabase...');
+
+    try {
+      // Build query based on category filter
+      let query = supabase
+        .from('provider_profiles')
+        .select('*')
+        .eq('is_active', true)
+        .eq('is_accepting_patients', true);
+
+      // Filter by category
+      if (selectedCategory !== 'all') {
+        const categoryTypes: Record<string, string[]> = {
+          behavioral: ['bcba', 'rbt'],
+          therapy: ['lpc', 'lcsw', 'slp', 'ot'],
+          medical: ['psychiatrist', 'pediatrician']
+        };
+        const types = categoryTypes[selectedCategory] || [];
+        if (types.length > 0) {
+          query = query.in('provider_type', types);
+        }
+      }
+
+      // Execute query
+      const { data, error } = await query.order('rating', { ascending: false });
+
+      if (error) {
+        console.error('[Marketplace] Supabase error:', error);
+        throw error;
+      }
+
+      if (data && data.length > 0) {
+        console.log(`[Marketplace] Found ${data.length} providers from DB`);
+        // Transform DB data to component format
+        const dbProviders: MarketplaceProvider[] = data.map((p: any) => ({
+          id: p.id,
+          name: p.name,
+          credentials: p.credentials,
+          type: p.provider_type as ProviderType,
+          photoUrl: p.photo_url,
+          rating: p.rating || 4.5,
+          reviewCount: p.review_count || 0,
+          yearsExperience: p.years_experience || 5,
+          specialties: p.specialties || [],
+          conditions: p.conditions || [],
+          languages: p.languages || ['English'],
+          bio: p.bio || '',
+          approach: p.approach || '',
+          availability: generateAvailability(), // Generate dynamic availability
+          nextAvailable: 'Check schedule',
+          isBookmarked: false,
+          badges: p.badges || []
+        }));
+        setProviders(dbProviders);
+      } else {
+        // Fallback to mock data if no DB providers
+        console.log('[Marketplace] No DB providers, using mock data');
+        setProviders(generateMockProviders());
+      }
+    } catch (error) {
+      console.error('[Marketplace] Failed to load providers:', error);
+      // Use mock data as fallback
+      setProviders(generateMockProviders());
+    } finally {
+      setIsLoading(false);
+    }
   }, [selectedCategory]);
 
-  const loadProviders = async () => {
-    setIsLoading(true);
-    await new Promise(resolve => setTimeout(resolve, 500));
-    setProviders(generateMockProviders());
-    setIsLoading(false);
-  };
+  useEffect(() => {
+    loadProviders();
+  }, [loadProviders]);
 
   const generateMockProviders = (): MarketplaceProvider[] => [
     // BEHAVIORAL TEAM
