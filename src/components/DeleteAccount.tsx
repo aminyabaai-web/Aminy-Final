@@ -49,7 +49,7 @@ export function DeleteAccount({
       {/* Content */}
       <div className="px-6 py-8 max-w-md mx-auto">
         {/* Illustration - Person on bike */}
-        <div className="flex justify-center mb-6">
+        <div className="flex justify-center mb-4 sm:mb-6">
           <div className="w-40 h-40 relative">
             {/* Simple SVG illustration of person on bike */}
             <svg
@@ -129,12 +129,12 @@ export function DeleteAccount({
         </div>
 
         {/* Header */}
-        <h2 className="text-2xl font-bold text-accent text-center mb-4">
+        <h2 className="text-xl sm:text-2xl font-bold text-accent text-center mb-4">
           We're sorry to see you go
         </h2>
 
         {/* Description */}
-        <div className="space-y-4 text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
+        <div className="space-y-3 sm:space-y-4 text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
           <p>
             If you wish to delete your account, please contact our Member Technical Support team
             (select 'Tech Support' in secure messaging recipient list, or email{' '}

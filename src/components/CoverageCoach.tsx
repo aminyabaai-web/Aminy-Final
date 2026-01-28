@@ -376,12 +376,12 @@ export function CoverageCoach({
       <div className="px-4 py-6 sm:px-6 max-w-7xl mx-auto">
         {/* AI-Powered Coverage Chat CTA */}
         <Card className="mb-8 p-6 bg-gradient-to-br from-teal-50 to-white border-2 border-teal-200">
-          <div className="flex items-start gap-4">
+          <div className="flex items-start gap-3 sm:gap-4">
             <div className="w-12 h-12 bg-teal-500 rounded-full flex items-center justify-center flex-shrink-0">
               <Sparkles className="w-6 h-6 text-white" />
             </div>
             <div className="flex-1">
-              <h2 className="text-xl font-semibold text-slate-900 mb-2">Get Your Coverage Clarity Summary</h2>
+              <h2 className="text-lg sm:text-xl font-semibold text-slate-900 mb-2">Get Your Coverage Clarity Summary</h2>
               <p className="text-slate-700 mb-4">
                 Answer a few quick questions and I'll create a personalized report showing exactly what's covered, 
                 estimated costs, and your next steps — all in plain language.
@@ -406,36 +406,36 @@ export function CoverageCoach({
         </Card>
 
         {/* Coverage Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <Card className="p-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 sm:gap-6 mb-8">
+          <Card className="p-4 sm:p-5 md:p-6">
             <div className="flex items-center gap-3 mb-2">
               <TrendingUp className="w-5 h-5 text-green-600" />
               <span className="font-medium text-slate-900 dark:text-slate-100">Coverage Rate</span>
             </div>
-            <div className="text-3xl font-bold text-green-600 mb-1">{coveragePercentage}%</div>
+            <div className="text-2xl sm:text-3xl font-bold text-green-600 mb-1">{coveragePercentage}%</div>
             <div className="text-sm text-slate-600 dark:text-slate-400">
               {coveredBenefits} of {totalBenefits} benefits covered
             </div>
             <Progress value={coveragePercentage} className="mt-3" />
           </Card>
 
-          <Card className="p-6">
+          <Card className="p-4 sm:p-5 md:p-6">
             <div className="flex items-center gap-3 mb-2">
               <DollarSign className="w-5 h-5 text-blue-600" />
               <span className="font-medium text-slate-900 dark:text-slate-100">Est. Monthly Cost</span>
             </div>
-            <div className="text-3xl font-bold text-blue-600 mb-1">$340</div>
+            <div className="text-2xl sm:text-3xl font-bold text-blue-600 mb-1">$340</div>
             <div className="text-sm text-slate-600 dark:text-slate-400">
               Based on current coverage
             </div>
           </Card>
 
-          <Card className="p-6">
+          <Card className="p-4 sm:p-5 md:p-6">
             <div className="flex items-center gap-3 mb-2">
               <Calendar className="w-5 h-5 text-purple-600" />
               <span className="font-medium text-slate-900 dark:text-slate-100">Next Review</span>
             </div>
-            <div className="text-3xl font-bold text-purple-600 mb-1">30</div>
+            <div className="text-2xl sm:text-3xl font-bold text-purple-600 mb-1">30</div>
             <div className="text-sm text-slate-600 dark:text-slate-400">
               Days until open enrollment
             </div>
@@ -444,7 +444,7 @@ export function CoverageCoach({
 
         {/* Insurance Provider Info */}
         <Card className="mb-8">
-          <div className="p-6">
+          <div className="p-4 sm:p-5 md:p-6">
             <div className="flex items-center gap-3 mb-4">
               <Building className="w-5 h-5 text-blue-600" />
               <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
@@ -452,8 +452,8 @@ export function CoverageCoach({
               </h2>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
+              <div className="space-y-3 sm:space-y-4">
                 <div>
                   <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Provider</label>
                   <div className="text-lg font-semibold text-slate-900 dark:text-slate-100">
@@ -512,8 +512,8 @@ export function CoverageCoach({
 
         {/* Benefits Status */}
         <Card className="mb-8">
-          <div className="p-6">
-            <div className="flex items-center justify-between mb-6">
+          <div className="p-4 sm:p-5 md:p-6">
+            <div className="flex items-center justify-between mb-4 sm:mb-6">
               <div className="flex items-center gap-3">
                 <Shield className="w-5 h-5 text-green-600" />
                 <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
@@ -533,7 +533,7 @@ export function CoverageCoach({
               )}
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {benefits.slice(0, userTier === 'starter' ? 3 : benefits.length).map((benefit) => (
                 <div
                   key={benefit.id}
@@ -662,12 +662,12 @@ export function CoverageCoach({
 
         {/* Quick Actions */}
         <Card>
-          <div className="p-6">
+          <div className="p-4 sm:p-5 md:p-6">
             <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
               Quick Actions
             </h2>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
               <Button variant="outline" className="h-auto p-4 justify-start">
                 <Upload className="w-4 h-4 mr-3" />
                 <div className="text-left">

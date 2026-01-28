@@ -219,8 +219,9 @@ export function AskAminyWithBrain({
                     Context-Aware AI
                   </Badge>
                 </div>
-                <p className="text-xs text-muted-foreground">
-                  Your child's AI companion
+                <p className="text-xs text-muted-foreground flex items-center gap-1">
+                  <Brain className="w-3 h-3 text-accent" />
+                  <span>I remember {userData.childName}'s journey</span>
                 </p>
               </div>
             </div>
@@ -254,7 +255,7 @@ export function AskAminyWithBrain({
                 <Badge variant="outline" className="text-[10px]">Context Loaded</Badge>
                 <span className="text-muted-foreground">AI knows:</span>
               </div>
-              <div className="grid grid-cols-2 gap-2 text-[10px]">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[10px]">
                 <div className="flex items-center gap-1">
                   <span className="text-green-600">✓</span>
                   <span>{aiContext.child.name}, age {aiContext.child.age}</span>
@@ -277,7 +278,7 @@ export function AskAminyWithBrain({
 
           {/* Messages */}
           <ScrollArea ref={scrollRef} className="flex-1 p-4">
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {messages.map((message) => (
                 <div
                   key={message.id}

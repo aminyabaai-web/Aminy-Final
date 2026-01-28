@@ -334,9 +334,9 @@ export function SettingsPage({ onNavigate, userTier = 'core', accessToken: propA
   ];
 
   const renderProfile = () => (
-    <div className="space-y-6">
-      <Card className="p-6">
-        <div className="flex items-center justify-between mb-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
+      <Card className="p-4 sm:p-5 md:p-6">
+        <div className="flex items-center justify-between mb-4 sm:mb-6">
           <h2 className="text-xl text-slate-900">Profile</h2>
           <Button 
             variant="outline" 
@@ -348,7 +348,7 @@ export function SettingsPage({ onNavigate, userTier = 'core', accessToken: propA
           </Button>
         </div>
 
-        <div className="space-y-6">
+        <div className="space-y-3 sm:space-y-4 sm:space-y-6">
           {/* Profile Photo */}
           <div className="flex items-center space-x-4">
             <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center">
@@ -368,7 +368,7 @@ export function SettingsPage({ onNavigate, userTier = 'core', accessToken: propA
           </div>
 
           {/* Profile Fields */}
-          <div className="grid gap-4">
+          <div className="grid gap-3 sm:gap-4">
             <div>
               <label className="text-sm text-slate-700 block mb-2">Parent Name</label>
               <Input 
@@ -455,9 +455,9 @@ export function SettingsPage({ onNavigate, userTier = 'core', accessToken: propA
       </Card>
 
       {/* Security Settings */}
-      <Card className="p-6">
+      <Card className="p-4 sm:p-5 md:p-6">
         <h3 className="text-lg text-slate-900 mb-4">Security</h3>
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-slate-900">Change Password</p>
@@ -497,7 +497,7 @@ export function SettingsPage({ onNavigate, userTier = 'core', accessToken: propA
   );
 
   const renderChildren = () => (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-xl text-slate-900">Child Profiles</h2>
         <Button size="sm" onClick={() => setShowAddChildModal(true)}>
@@ -507,7 +507,7 @@ export function SettingsPage({ onNavigate, userTier = 'core', accessToken: propA
       </div>
 
       {childProfiles.map((child) => (
-        <Card key={child.id} className="p-6">
+        <Card key={child.id} className="p-4 sm:p-5 md:p-6">
           <div className="flex items-start space-x-4">
             <div className="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center">
               <span className="text-lg text-teal-700">{child.avatar}</span>
@@ -630,9 +630,9 @@ export function SettingsPage({ onNavigate, userTier = 'core', accessToken: propA
         );
       case 'data':
         return (
-          <div className="space-y-6">
+          <div className="space-y-3 sm:space-y-4 sm:space-y-6">
             {/* Export Section */}
-            <Card className="p-6">
+            <Card className="p-4 sm:p-5 md:p-6">
               <h3 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
                 <Download className="w-5 h-5" />
                 Export Your Data
@@ -653,7 +653,7 @@ export function SettingsPage({ onNavigate, userTier = 'core', accessToken: propA
             </Card>
 
             {/* Storage Usage */}
-            <Card className="p-6">
+            <Card className="p-4 sm:p-5 md:p-6">
               <h3 className="text-lg font-semibold text-slate-900 mb-4">Storage Usage</h3>
               <div className="space-y-3">
                 <div className="flex justify-between text-sm">
@@ -681,7 +681,7 @@ export function SettingsPage({ onNavigate, userTier = 'core', accessToken: propA
                 <AlertCircle className="w-5 h-5" />
                 Danger Zone
               </h3>
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 <div className="flex items-center justify-between p-3 bg-red-50 rounded-lg">
                   <div>
                     <p className="font-medium text-slate-900">Clear Chat History</p>
@@ -746,7 +746,7 @@ export function SettingsPage({ onNavigate, userTier = 'core', accessToken: propA
 
       {/* Content */}
       <div className="px-4 py-6 sm:px-6 max-w-4xl mx-auto">
-        <div className="grid gap-6 lg:grid-cols-4">
+        <div className="grid gap-3 sm:gap-4 sm:gap-6 lg:grid-cols-4">
           {/* Sidebar */}
           <div className="lg:col-span-1">
             <div className="bg-white rounded-lg border border-gray-200 p-4">
@@ -785,7 +785,7 @@ export function SettingsPage({ onNavigate, userTier = 'core', accessToken: propA
               We've sent a verification code to {profileData.email}. Enter the code below to verify your email address.
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             <Input
               placeholder="Enter 6-digit code"
               value={verificationCode}
@@ -813,7 +813,7 @@ export function SettingsPage({ onNavigate, userTier = 'core', accessToken: propA
               Enter your current password and choose a new one.
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             <Input
               type="password"
               placeholder="Current password"
@@ -853,7 +853,7 @@ export function SettingsPage({ onNavigate, userTier = 'core', accessToken: propA
               Create a profile for your child to personalize their Aminy experience.
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             <Input
               placeholder="Child's name"
               value={newChildForm.name}
@@ -894,7 +894,7 @@ export function SettingsPage({ onNavigate, userTier = 'core', accessToken: propA
               Update your child's profile information.
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             <Input
               placeholder="Child's name"
               value={newChildForm.name}

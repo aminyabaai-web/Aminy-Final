@@ -155,7 +155,7 @@ export const SpeechProgressTracker: React.FC<SpeechProgressTrackerProps> = ({
   return (
     <div className="bg-white rounded-2xl shadow-sm border overflow-hidden">
       {/* Header */}
-      <div className="bg-gradient-to-r from-green-600 to-teal-600 text-white px-6 py-4">
+      <div className="bg-gradient-to-r from-green-600 to-teal-600 text-white px-4 sm:px-6 py-3 sm:py-4">
         <div className="flex items-center gap-3">
           <MessageSquare className="w-6 h-6" />
           <div>
@@ -190,18 +190,18 @@ export const SpeechProgressTracker: React.FC<SpeechProgressTrackerProps> = ({
       </div>
 
       {/* Content */}
-      <div className="p-6">
+      <div className="p-4 sm:p-5 md:p-6">
         {/* Overview Tab */}
         {activeTab === 'overview' && (
-          <div className="space-y-6">
+          <div className="space-y-3 sm:space-y-4 sm:space-y-6">
             {/* Domain Summary Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
               <div className="p-4 bg-purple-50 rounded-xl">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm font-medium text-purple-700">Articulation</span>
                   {renderTrendIcon(articulationSummary.trend)}
                 </div>
-                <div className="text-2xl font-bold text-purple-900">
+                <div className="text-xl sm:text-2xl font-bold text-purple-900">
                   {articulationSummary.averageAccuracy}%
                 </div>
                 <div className="text-xs text-purple-600 mt-1">
@@ -214,7 +214,7 @@ export const SpeechProgressTracker: React.FC<SpeechProgressTrackerProps> = ({
                   <span className="text-sm font-medium text-blue-700">Expressive</span>
                   {renderTrendIcon(expressiveSummary.trend)}
                 </div>
-                <div className="text-2xl font-bold text-blue-900">
+                <div className="text-xl sm:text-2xl font-bold text-blue-900">
                   {expressiveSummary.averageAccuracy}%
                 </div>
                 <div className="text-xs text-blue-600 mt-1">
@@ -227,7 +227,7 @@ export const SpeechProgressTracker: React.FC<SpeechProgressTrackerProps> = ({
                   <span className="text-sm font-medium text-teal-700">Receptive</span>
                   {renderTrendIcon(receptiveSummary.trend)}
                 </div>
-                <div className="text-2xl font-bold text-teal-900">
+                <div className="text-xl sm:text-2xl font-bold text-teal-900">
                   {receptiveSummary.averageAccuracy}%
                 </div>
                 <div className="text-xs text-teal-600 mt-1">
@@ -284,7 +284,7 @@ export const SpeechProgressTracker: React.FC<SpeechProgressTrackerProps> = ({
 
         {/* Articulation Tab */}
         {activeTab === 'articulation' && (
-          <div className="space-y-6">
+          <div className="space-y-3 sm:space-y-4 sm:space-y-6">
             {!articulationProfile ? (
               <div className="text-center py-8">
                 <Volume2 className="w-12 h-12 mx-auto mb-3 text-gray-300" />
@@ -358,7 +358,7 @@ export const SpeechProgressTracker: React.FC<SpeechProgressTrackerProps> = ({
 
                           {expandedSounds.has(sound.sound) && (
                             <div className="px-4 pb-4 pt-0 border-t">
-                              <div className="grid grid-cols-2 gap-4 mt-3">
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mt-3">
                                 <div>
                                   <label className="text-xs text-gray-500">Level</label>
                                   <div className="font-medium capitalize">{sound.level}</div>
@@ -412,8 +412,8 @@ export const SpeechProgressTracker: React.FC<SpeechProgressTrackerProps> = ({
 
         {/* Language Tab */}
         {activeTab === 'language' && (
-          <div className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-3 sm:space-y-4 sm:space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
               {/* Receptive */}
               <div>
                 <h3 className="font-medium text-gray-700 mb-3 flex items-center gap-2">
@@ -459,7 +459,7 @@ export const SpeechProgressTracker: React.FC<SpeechProgressTrackerProps> = ({
 
         {/* AAC Tab */}
         {activeTab === 'aac' && (
-          <div className="space-y-6">
+          <div className="space-y-3 sm:space-y-4 sm:space-y-6">
             <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
               <h3 className="font-medium text-blue-800 mb-2">
                 Augmentative & Alternative Communication
@@ -513,7 +513,7 @@ export const SpeechProgressTracker: React.FC<SpeechProgressTrackerProps> = ({
 
         {/* Sessions Tab */}
         {activeTab === 'sessions' && (
-          <div className="space-y-6">
+          <div className="space-y-3 sm:space-y-4 sm:space-y-6">
             <div className="flex justify-between items-center">
               <h3 className="font-medium text-gray-700">Session History</h3>
               <button className="flex items-center gap-1 px-3 py-1.5 bg-green-600 text-white rounded-lg text-sm hover:bg-green-700 transition-colors">

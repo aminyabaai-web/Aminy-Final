@@ -140,14 +140,14 @@ export function SessionBundles({
 
   // Full view
   return (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       {/* Header */}
       <div className="text-center">
         <Badge className="bg-purple-100 text-purple-800 mb-3">
           <Sparkles className="w-3 h-3 mr-1" />
           Save with Bundles
         </Badge>
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
           Session Packages
         </h2>
         <p className="text-gray-600 max-w-xl mx-auto">
@@ -157,7 +157,7 @@ export function SessionBundles({
       </div>
 
       {/* Bundle Grid */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
         {SESSION_BUNDLES.map((bundle, index) => {
           const isSelected = selectedBundle === bundle.id;
 
@@ -199,7 +199,7 @@ export function SessionBundles({
                 </div>
 
                 {/* Sessions included */}
-                <div className="flex items-center gap-4 mb-4 text-sm">
+                <div className="flex items-center gap-3 sm:gap-4 mb-4 text-sm">
                   {bundle.consultSessions > 0 && (
                     <div className="flex items-center gap-1 text-gray-700">
                       <Clock className="w-4 h-4 text-blue-500" />
@@ -216,7 +216,7 @@ export function SessionBundles({
 
                 {/* Pricing */}
                 <div className="flex items-end gap-2 mb-4">
-                  <span className="text-3xl font-bold text-gray-900">
+                  <span className="text-2xl sm:text-3xl font-bold text-gray-900">
                     ${bundle.bundlePrice}
                   </span>
                   <span className="text-sm text-gray-400 line-through mb-1">
@@ -325,13 +325,13 @@ export function BundleCredits({
         )}
       </div>
 
-      <div className="grid grid-cols-2 gap-3 mb-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
         <div className="bg-white p-3 rounded-lg border border-teal-200">
           <div className="flex items-center gap-2 mb-1">
             <Clock className="w-4 h-4 text-blue-500" />
             <span className="text-sm text-gray-600">25-min Consults</span>
           </div>
-          <div className="text-2xl font-bold text-gray-900">
+          <div className="text-xl sm:text-2xl font-bold text-gray-900">
             {consultCredits}
           </div>
           <Button
@@ -349,7 +349,7 @@ export function BundleCredits({
             <Users className="w-4 h-4 text-green-500" />
             <span className="text-sm text-gray-600">50-min Reviews</span>
           </div>
-          <div className="text-2xl font-bold text-gray-900">
+          <div className="text-xl sm:text-2xl font-bold text-gray-900">
             {deepReviewCredits}
           </div>
           <Button

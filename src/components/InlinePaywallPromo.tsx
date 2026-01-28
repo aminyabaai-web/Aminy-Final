@@ -92,7 +92,7 @@ export function InlinePaywallPromo({
             Recommended for you
           </Badge>
         </div>
-        <h3 className="text-xl font-semibold text-primary mb-2">
+        <h3 className="text-lg sm:text-xl font-semibold text-primary mb-2">
           {reason || `Unlock everything I can do for ${childName}`}
         </h3>
         <p className="text-sm text-muted-foreground max-w-md mx-auto">
@@ -101,7 +101,7 @@ export function InlinePaywallPromo({
       </div>
 
       {/* Quick Tier Preview */}
-      <div className="grid grid-cols-3 gap-3 mb-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mb-5">
         {Object.entries(tiers).map(([key, tier]) => {
           const TierIcon = tier.icon;
           const isHighlighted = key === highlightTier;

@@ -177,11 +177,11 @@ export function ReferralShare({
             </Button>
           )}
 
-          <div className="text-center mb-6">
+          <div className="text-center mb-4 sm:mb-6">
             <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4">
               <Heart className="w-8 h-8 text-accent" />
             </div>
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">
               Help Other Families
             </h2>
             <p className="text-gray-600">
@@ -190,7 +190,7 @@ export function ReferralShare({
           </div>
 
           {/* Share buttons */}
-          <div className="grid grid-cols-3 gap-3 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mb-4 sm:mb-6">
             <Button
               variant="outline"
               onClick={handleSMSShare}
@@ -232,13 +232,13 @@ export function ReferralShare({
           </div>
 
           {/* Stats */}
-          <div className="flex items-center justify-center gap-6 pt-4 border-t border-gray-200">
+          <div className="flex items-center justify-center gap-3 sm:gap-4 sm:gap-6 pt-4 border-t border-gray-200">
             <div className="text-center">
-              <p className="text-2xl font-bold text-accent">{referralsCount}</p>
+              <p className="text-xl sm:text-2xl font-bold text-accent">{referralsCount}</p>
               <p className="text-xs text-gray-500">Friends joined</p>
             </div>
             <div className="text-center">
-              <p className="text-2xl font-bold text-green-600">${referralCredits}</p>
+              <p className="text-xl sm:text-2xl font-bold text-green-600">${referralCredits}</p>
               <p className="text-xs text-gray-500">Credits earned</p>
             </div>
           </div>
@@ -249,14 +249,14 @@ export function ReferralShare({
 
   // Full variant (default)
   return (
-    <Card className="p-6">
+    <Card className="p-4 sm:p-5 md:p-6">
       {/* Header */}
-      <div className="flex items-start gap-4 mb-6">
+      <div className="flex items-start gap-3 sm:gap-4 mb-4 sm:mb-6">
         <div className="p-3 bg-gradient-to-br from-accent/20 to-purple-500/20 rounded-xl">
           <Heart className="w-8 h-8 text-accent" />
         </div>
         <div>
-          <h2 className="text-xl font-semibold text-gray-900 mb-1">
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-1">
             Help Other Families Find Support
           </h2>
           <p className="text-gray-600">
@@ -266,7 +266,7 @@ export function ReferralShare({
       </div>
 
       {/* Incentive banner */}
-      <div className="p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg border border-green-200 mb-6">
+      <div className="p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg border border-green-200 mb-4 sm:mb-6">
         <div className="flex items-center gap-3">
           <Gift className="w-6 h-6 text-green-600" />
           <div>
@@ -281,7 +281,7 @@ export function ReferralShare({
       </div>
 
       {/* Share buttons */}
-      <div className="space-y-3 mb-6">
+      <div className="space-y-3 mb-4 sm:mb-6">
         <Button
           onClick={handleNativeShare}
           className="w-full bg-accent hover:bg-accent/90 h-12"
@@ -290,7 +290,7 @@ export function ReferralShare({
           Share with a Friend
         </Button>
 
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
           <Button
             variant="outline"
             onClick={handleSMSShare}
@@ -321,7 +321,7 @@ export function ReferralShare({
       </div>
 
       {/* Copy link section */}
-      <div className="p-4 bg-gray-50 rounded-lg mb-6">
+      <div className="p-4 bg-gray-50 rounded-lg mb-4 sm:mb-6">
         <p className="text-sm font-medium text-gray-700 mb-2">Or copy your referral link:</p>
         <div className="flex gap-2">
           <Input
@@ -383,13 +383,13 @@ export function ReferralShare({
       )}
 
       {/* Referral stats */}
-      <div className="mt-6 pt-6 border-t border-gray-200">
+      <div className="mt-4 sm:mt-6 pt-6 border-t border-gray-200">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Users className="w-5 h-5 text-gray-400" />
             <span className="text-sm text-gray-600">Your referral impact</span>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 sm:gap-4">
             <div className="text-center">
               <p className="text-xl font-bold text-accent">{referralsCount}</p>
               <p className="text-xs text-gray-500">Friends joined</p>

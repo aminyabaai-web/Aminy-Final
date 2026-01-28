@@ -153,12 +153,12 @@ export const JrSetupWizard: React.FC<JrSetupWizardProps> = ({
   };
 
   const renderStep1 = () => (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <div className="text-center">
         <div className="p-3 bg-blue-100 rounded-full inline-flex mb-4">
           <Smartphone className="w-6 h-6 text-blue-600" />
         </div>
-        <h3 className="text-xl font-semibold text-primary mb-2">Choose Device</h3>
+        <h3 className="text-lg sm:text-xl font-semibold text-primary mb-2">Choose Device</h3>
         <p className="text-muted-foreground">
           Where will {profile.childNickname} use Aminy Junior?
         </p>
@@ -199,18 +199,18 @@ export const JrSetupWizard: React.FC<JrSetupWizardProps> = ({
   );
 
   const renderStep2 = () => (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <div className="text-center">
         <div className="p-3 bg-purple-100 rounded-full inline-flex mb-4">
           <Shield className="w-6 h-6 text-purple-600" />
         </div>
-        <h3 className="text-xl font-semibold text-primary mb-2">Kid Profile & Safety</h3>
+        <h3 className="text-lg sm:text-xl font-semibold text-primary mb-2">Kid Profile & Safety</h3>
         <p className="text-muted-foreground">
           Set up your child's Jr Mode experience.
         </p>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         <div>
           <Label htmlFor="childNickname" className="text-sm font-medium text-primary">
             Child's Nickname
@@ -324,12 +324,12 @@ export const JrSetupWizard: React.FC<JrSetupWizardProps> = ({
   const renderStep3 = () => {
     if (profile.deviceType === 'another-device') {
       return (
-        <div className="space-y-6">
+        <div className="space-y-3 sm:space-y-4 sm:space-y-6">
           <div className="text-center">
             <div className="p-3 bg-green-100 rounded-full inline-flex mb-4">
               <QrCode className="w-6 h-6 text-green-600" />
             </div>
-            <h3 className="text-xl font-semibold text-primary mb-2">Pair Another Device</h3>
+            <h3 className="text-lg sm:text-xl font-semibold text-primary mb-2">Pair Another Device</h3>
             <p className="text-muted-foreground">
               Use the QR code or pairing code on your child's device.
             </p>
@@ -369,12 +369,12 @@ export const JrSetupWizard: React.FC<JrSetupWizardProps> = ({
     }
 
     return (
-      <div className="space-y-6">
+      <div className="space-y-3 sm:space-y-4 sm:space-y-6">
         <div className="text-center">
           <div className="p-3 bg-green-100 rounded-full inline-flex mb-4">
             <Gamepad2 className="w-6 h-6 text-green-600" />
           </div>
-          <h3 className="text-xl font-semibold text-primary mb-2">Calibration Mini-Game</h3>
+          <h3 className="text-lg sm:text-xl font-semibold text-primary mb-2">Calibration Mini-Game</h3>
           <p className="text-muted-foreground">
             Quick activity to personalize {profile.childNickname}'s experience.
           </p>

@@ -238,7 +238,7 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
 
       <div className="max-w-6xl mx-auto px-4 py-6">
         {/* Time Range Selector */}
-        <div className="flex items-center gap-2 mb-6">
+        <div className="flex items-center gap-2 mb-4 sm:mb-6">
           <span className="text-sm text-slate-600 mr-2">Time Range:</span>
           <Button
             variant={timeRange === '7d' ? 'default' : 'outline'}
@@ -267,11 +267,11 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
         </div>
 
         {/* Metrics Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
           {metrics.map((metric, idx) => {
             const Icon = metric.icon;
             return (
-              <Card key={idx} className="p-6">
+              <Card key={idx} className="p-4 sm:p-5 md:p-6">
                 <div className="flex items-start justify-between mb-3">
                   <div className="w-10 h-10 bg-accent/10 rounded-lg flex items-center justify-center">
                     <Icon className="w-5 h-5 text-accent" />
@@ -292,7 +292,7 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
 
         {/* Detailed Analytics */}
         <Tabs defaultValue="overview" className="w-full" onValueChange={setActiveTab}>
-          <TabsList className={`grid w-full mb-6 ${hasAdvancedAccess ? 'grid-cols-6' : 'grid-cols-4'}`}>
+          <TabsList className={`grid w-full mb-4 sm:mb-6 ${hasAdvancedAccess ? 'grid-cols-6' : 'grid-cols-4'}`}>
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="engagement">Engagement</TabsTrigger>
             {hasAdvancedAccess && (
@@ -311,8 +311,8 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
             <TabsTrigger value="outcomes">Outcomes</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="overview" className="space-y-4">
-            <Card className="p-6">
+          <TabsContent value="overview" className="space-y-3 sm:space-y-4">
+            <Card className="p-4 sm:p-5 md:p-6">
               <h3 className="text-slate-900 mb-4 flex items-center gap-2">
                 <BarChart3 className="w-5 h-5 text-accent" />
                 Usage Overview
@@ -338,10 +338,10 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
             </Card>
           </TabsContent>
 
-          <TabsContent value="engagement" className="space-y-4">
-            <Card className="p-6">
+          <TabsContent value="engagement" className="space-y-3 sm:space-y-4">
+            <Card className="p-4 sm:p-5 md:p-6">
               <h3 className="text-slate-900 mb-4">Feature Usage</h3>
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 <div>
                   <div className="flex justify-between text-sm mb-2">
                     <span className="text-slate-600">Ask Aminy (AI Chat)</span>
@@ -391,8 +391,8 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
             </Card>
           </TabsContent>
 
-          <TabsContent value="ai" className="space-y-4">
-            <Card className="p-6">
+          <TabsContent value="ai" className="space-y-3 sm:space-y-4">
+            <Card className="p-4 sm:p-5 md:p-6">
               <h3 className="text-slate-900 mb-4 flex items-center gap-2">
                 <Sparkles className="w-5 h-5 text-accent" />
                 AI Interaction Insights
@@ -417,7 +417,7 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
               </div>
             </Card>
 
-            <Card className="p-6">
+            <Card className="p-4 sm:p-5 md:p-6">
               <h4 className="text-slate-900 mb-3">Top AI Queries</h4>
               <div className="space-y-2">
                 {[
@@ -436,8 +436,8 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
             </Card>
           </TabsContent>
 
-          <TabsContent value="outcomes" className="space-y-4">
-            <Card className="p-6">
+          <TabsContent value="outcomes" className="space-y-3 sm:space-y-4">
+            <Card className="p-4 sm:p-5 md:p-6">
               <h3 className="text-slate-900 mb-4 flex items-center gap-2">
                 <Target className="w-5 h-5 text-accent" />
                 Goal & Progress Metrics
@@ -495,9 +495,9 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
 
           {/* Conversion Funnel Tab - Admin/Investor Only */}
           {hasAdvancedAccess && (
-            <TabsContent value="funnel" className="space-y-4">
-              <Card className="p-6">
-                <div className="flex items-center justify-between mb-6">
+            <TabsContent value="funnel" className="space-y-3 sm:space-y-4">
+              <Card className="p-4 sm:p-5 md:p-6">
+                <div className="flex items-center justify-between mb-4 sm:mb-6">
                   <div>
                     <h3 className="text-slate-900 flex items-center gap-2">
                       <Filter className="w-5 h-5 text-accent" />
@@ -534,7 +534,7 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
                     <RefreshCw className="w-6 h-6 animate-spin text-accent" />
                   </div>
                 ) : funnelData ? (
-                  <div className="space-y-6">
+                  <div className="space-y-3 sm:space-y-4 sm:space-y-6">
                     {/* Funnel Visualization */}
                     <div className="relative">
                       {funnelData.stages.map((stage, idx) => {
@@ -591,21 +591,21 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
                     </div>
 
                     {/* Summary Stats */}
-                    <div className="grid grid-cols-3 gap-4 pt-4 border-t border-slate-200">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 pt-4 border-t border-slate-200">
                       <div className="text-center">
-                        <div className="text-2xl font-bold text-slate-900">
+                        <div className="text-xl sm:text-2xl font-bold text-slate-900">
                           {funnelData.totalUsers.toLocaleString()}
                         </div>
                         <div className="text-xs text-slate-500">Total Users</div>
                       </div>
                       <div className="text-center">
-                        <div className="text-2xl font-bold text-green-600">
+                        <div className="text-xl sm:text-2xl font-bold text-green-600">
                           {funnelData.overallConversionRate.toFixed(1)}%
                         </div>
                         <div className="text-xs text-slate-500">Overall Conversion</div>
                       </div>
                       <div className="text-center">
-                        <div className="text-2xl font-bold text-slate-900">
+                        <div className="text-xl sm:text-2xl font-bold text-slate-900">
                           {funnelData.stages[funnelData.stages.length - 1]?.count || 0}
                         </div>
                         <div className="text-xs text-slate-500">Subscribers</div>
@@ -621,7 +621,7 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
 
               {/* Drop-off Analysis */}
               {funnelData && (
-                <Card className="p-6">
+                <Card className="p-4 sm:p-5 md:p-6">
                   <h4 className="text-slate-900 font-medium mb-4">Drop-off Analysis</h4>
                   <div className="space-y-3">
                     {funnelData.stages
@@ -652,9 +652,9 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
 
           {/* Retention Tab - Admin/Investor Only */}
           {hasAdvancedAccess && retentionData && (
-            <TabsContent value="retention" className="space-y-4">
-              <Card className="p-6">
-                <div className="flex items-center justify-between mb-6">
+            <TabsContent value="retention" className="space-y-3 sm:space-y-4">
+              <Card className="p-4 sm:p-5 md:p-6">
+                <div className="flex items-center justify-between mb-4 sm:mb-6">
                   <div>
                     <h3 className="text-slate-900 flex items-center gap-2">
                       <RefreshCw className="w-5 h-5 text-accent" />
@@ -665,29 +665,29 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
                 </div>
 
                 {retentionData ? (
-                  <div className="space-y-6">
+                  <div className="space-y-3 sm:space-y-4 sm:space-y-6">
                     {/* Summary Cards */}
-                    <div className="grid grid-cols-4 gap-4">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
                       <Card className="p-4 bg-slate-50">
-                        <div className="text-2xl font-bold text-slate-900">
+                        <div className="text-xl sm:text-2xl font-bold text-slate-900">
                           {retentionData.averageD1.toFixed(1)}%
                         </div>
                         <div className="text-xs text-slate-500">D1 Retention</div>
                       </Card>
                       <Card className="p-4 bg-slate-50">
-                        <div className="text-2xl font-bold text-slate-900">
+                        <div className="text-xl sm:text-2xl font-bold text-slate-900">
                           {retentionData.averageD7.toFixed(1)}%
                         </div>
                         <div className="text-xs text-slate-500">D7 Retention</div>
                       </Card>
                       <Card className="p-4 bg-slate-50">
-                        <div className="text-2xl font-bold text-slate-900">
+                        <div className="text-xl sm:text-2xl font-bold text-slate-900">
                           {retentionData.averageD30.toFixed(1)}%
                         </div>
                         <div className="text-xs text-slate-500">D30 Retention</div>
                       </Card>
                       <Card className="p-4 bg-red-50">
-                        <div className="text-2xl font-bold text-red-600">
+                        <div className="text-xl sm:text-2xl font-bold text-red-600">
                           {retentionData.churnRate.toFixed(1)}%
                         </div>
                         <div className="text-xs text-slate-500">Monthly Churn</div>
@@ -695,7 +695,7 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
                     </div>
 
                     {/* Active Users */}
-                    <div className="grid grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
                       <Card className="p-4 border-l-4 border-l-green-500">
                         <div className="text-xl font-bold text-slate-900">
                           {retentionData.rollingActiveUsers.daily.toLocaleString()}
@@ -766,7 +766,7 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
                     {/* Industry Benchmarks */}
                     <Card className="p-4 bg-blue-50 border-blue-200">
                       <h4 className="text-slate-900 font-medium mb-2">Industry Benchmarks</h4>
-                      <div className="grid grid-cols-3 gap-4 text-sm">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 text-sm">
                         <div>
                           <span className="text-slate-600">D1 (Industry):</span>
                           <span className="ml-2 font-medium">40-60%</span>

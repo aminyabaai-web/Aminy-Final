@@ -247,7 +247,7 @@ export function ReportsTab({ userData, userTier, connectorData, onPaywallTrigger
   const hasExpiringShareLinks = hasFeature(userTier, 'expiring-share-links');
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       {/* Header Section */}
       <div className="flex items-center justify-between">
         <div>
@@ -295,10 +295,10 @@ export function ReportsTab({ userData, userTier, connectorData, onPaywallTrigger
         </TabsList>
 
         {/* Dashboard View */}
-        <TabsContent value="dashboard" className="space-y-6">
+        <TabsContent value="dashboard" className="space-y-3 sm:space-y-4 sm:space-y-6">
           {/* AI Narrative Summary */}
           <Card className="ai-insights-card p-6">
-            <div className="flex items-start gap-4">
+            <div className="flex items-start gap-3 sm:gap-4">
               <div className="ai-insights-icon p-2 rounded-lg">
                 <Brain className="w-6 h-6" />
               </div>
@@ -313,7 +313,7 @@ export function ReportsTab({ userData, userTier, connectorData, onPaywallTrigger
                   decreased from 5 to 2 per week. Token board effectiveness remains high with 
                   consistent engagement in preferred activities.
                 </p>
-                <div className="mt-4 flex items-center gap-4 text-sm">
+                <div className="mt-4 flex items-center gap-3 sm:gap-4 text-sm">
                   <div className="flex items-center gap-1 text-green-600">
                     <CheckCircle className="w-4 h-4" />
                     <span className="font-medium">What's Working</span>
@@ -328,7 +328,7 @@ export function ReportsTab({ userData, userTier, connectorData, onPaywallTrigger
           </Card>
 
           {/* Snapshot Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             {snapshotMetrics.map((metric) => (
               <Card key={metric.id} className="snapshot-metric-card p-4">
                 <div className="flex items-center justify-between mb-3">
@@ -356,7 +356,7 @@ export function ReportsTab({ userData, userTier, connectorData, onPaywallTrigger
               <FileText className="w-5 h-5" />
               Recent Reports
             </h3>
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {recentReports.map((report) => (
                 <div key={report.id} className={`flex items-center justify-between p-4 bg-gray-50 rounded-lg ${isGenerating ? 'report-generating' : ''}`}>
                   <div className="flex-1">
@@ -424,14 +424,14 @@ export function ReportsTab({ userData, userTier, connectorData, onPaywallTrigger
         </TabsContent>
 
         {/* Progress View */}
-        <TabsContent value="progress" className="space-y-6">
+        <TabsContent value="progress" className="space-y-3 sm:space-y-4 sm:space-y-6">
           {/* Skills Progress */}
           <Card className="reports-card p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <Target className="w-5 h-5" />
               Skills & Goals Progress
             </h3>
-            <div className="space-y-6">
+            <div className="space-y-3 sm:space-y-4 sm:space-y-6">
               {skillsProgress.map((skill) => (
                 <div key={skill.domain}>
                   <div className="flex items-center justify-between mb-2">
@@ -503,14 +503,14 @@ export function ReportsTab({ userData, userTier, connectorData, onPaywallTrigger
         </TabsContent>
 
         {/* Behavior View */}
-        <TabsContent value="behavior" className="space-y-6">
+        <TabsContent value="behavior" className="space-y-3 sm:space-y-4 sm:space-y-6">
           {/* Behavior Trends */}
           <Card className="reports-card p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <Activity className="w-5 h-5" />
               Behavior Analysis
             </h3>
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {behaviorData.map((behavior, idx) => (
                 <div key={idx} className="behavior-analysis-card flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                   <div className="flex-1">
@@ -526,7 +526,7 @@ export function ReportsTab({ userData, userTier, connectorData, onPaywallTrigger
                         {behavior.improvement}% improvement
                       </Badge>
                     </div>
-                    <div className="flex items-center gap-4 text-sm text-gray-600">
+                    <div className="flex items-center gap-3 sm:gap-4 text-sm text-gray-600">
                       <span>Frequency: {behavior.frequency}/week</span>
                       <span className={`flex items-center gap-1 ${
                         behavior.trend === 'down' ? 'text-green-600' : 'text-gray-600'
@@ -548,7 +548,7 @@ export function ReportsTab({ userData, userTier, connectorData, onPaywallTrigger
           <Card className="reports-card p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">ABC Analysis Heatmap</h3>
             <div className="abc-heatmap p-4 rounded-lg">
-              <div className="grid grid-cols-3 gap-4 text-center">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 text-center">
                 <div>
                   <h4 className="font-medium text-red-700 mb-2">Antecedents</h4>
                   <div className="space-y-2">
@@ -576,7 +576,7 @@ export function ReportsTab({ userData, userTier, connectorData, onPaywallTrigger
         </TabsContent>
 
         {/* Exports View */}
-        <TabsContent value="exports" className="space-y-6">
+        <TabsContent value="exports" className="space-y-3 sm:space-y-4 sm:space-y-6">
           {/* Parity Note */}
           <Card className="reports-card p-4 bg-accent/5 border-accent/20">
             <p className="text-sm text-center text-gray-700">
@@ -585,7 +585,7 @@ export function ReportsTab({ userData, userTier, connectorData, onPaywallTrigger
           </Card>
 
           {/* Export Options */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
             {/* Core Tier Export */}
             <Card className={`export-card p-6 ${!hasFullReports ? 'opacity-75' : ''}`}>
               <div className="flex items-center gap-3 mb-4">
@@ -740,7 +740,7 @@ export function ReportsTab({ userData, userTier, connectorData, onPaywallTrigger
                 <Share2 className="w-5 h-5" />
                 Share Actions
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
                 <Button variant="outline" className="w-full">
                   <Share2 className="w-4 h-4 mr-2" />
                   Copy link
@@ -764,7 +764,7 @@ export function ReportsTab({ userData, userTier, connectorData, onPaywallTrigger
                 <Share2 className="w-5 h-5" />
                 Secure Sharing
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
                 <div className="share-key-card p-4 bg-blue-50 rounded-lg">
                   <h4 className="font-medium text-blue-900 mb-2">Share Keys</h4>
                   <p className="text-blue-700 text-sm mb-3">
@@ -790,7 +790,7 @@ export function ReportsTab({ userData, userTier, connectorData, onPaywallTrigger
           {/* Tier Upgrade Prompt for Free/Starter */}
           {(userTier === 'free' || userTier === 'starter') && (
             <Card className="tier-upgrade-card p-6">
-              <div className="flex items-start gap-4">
+              <div className="flex items-start gap-3 sm:gap-4">
                 <div className="tier-upgrade-icon p-2 rounded-lg">
                   <Crown className="w-6 h-6" />
                 </div>
@@ -815,7 +815,7 @@ export function ReportsTab({ userData, userTier, connectorData, onPaywallTrigger
           {/* Core users - prompt for Pro/Pro+ */}
           {userTier === 'core' && (
             <Card className="p-6 border-teal-200 bg-gradient-to-r from-teal-50 to-cyan-50">
-              <div className="flex items-start gap-4">
+              <div className="flex items-start gap-3 sm:gap-4">
                 <div className="p-2 rounded-lg bg-teal-100">
                   <Stethoscope className="w-6 h-6 text-teal-600" />
                 </div>

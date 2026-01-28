@@ -131,7 +131,7 @@ export function ProviderReadyPacket({
   };
 
   return (
-    <Card className="p-6">
+    <Card className="p-4 sm:p-5 md:p-6">
       <div className="flex items-start justify-between mb-4">
         <div>
           <div className="flex items-center gap-2 mb-2">

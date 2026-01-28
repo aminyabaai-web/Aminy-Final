@@ -109,7 +109,7 @@ export function AuthCallback({ onAuthSuccess, onPasswordReset, onError }: AuthCa
         </div>
 
         {status === 'processing' && (
-          <div className="flex flex-col items-center gap-4">
+          <div className="flex flex-col items-center gap-3 sm:gap-4">
             <div
               className="w-10 h-10 border-3 rounded-full animate-spin"
               style={{
@@ -127,7 +127,7 @@ export function AuthCallback({ onAuthSuccess, onPasswordReset, onError }: AuthCa
         )}
 
         {status === 'success' && (
-          <div className="flex flex-col items-center gap-4">
+          <div className="flex flex-col items-center gap-3 sm:gap-4">
             <div
               className="w-16 h-16 rounded-full flex items-center justify-center"
               style={{ backgroundColor: 'rgba(76, 175, 80, 0.1)' }}
@@ -152,7 +152,7 @@ export function AuthCallback({ onAuthSuccess, onPasswordReset, onError }: AuthCa
         )}
 
         {status === 'error' && (
-          <div className="flex flex-col items-center gap-4">
+          <div className="flex flex-col items-center gap-3 sm:gap-4">
             <div
               className="w-16 h-16 rounded-full flex items-center justify-center"
               style={{ backgroundColor: 'rgba(244, 67, 54, 0.1)' }}

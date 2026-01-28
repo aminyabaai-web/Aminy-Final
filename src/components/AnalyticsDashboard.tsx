@@ -246,7 +246,7 @@ export function AnalyticsDashboard({ isOpen, onClose }: AnalyticsDashboardProps)
               <BarChart3 className="w-5 h-5 text-blue-600 dark:text-blue-400" />
             </div>
             <div>
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">
                 Analytics Dashboard
               </h2>
               <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -304,44 +304,44 @@ export function AnalyticsDashboard({ isOpen, onClose }: AnalyticsDashboardProps)
 
               <div className="flex-1 overflow-y-auto p-6">
                 {/* Overview Tab */}
-                <TabsContent value="overview" className="space-y-6">
+                <TabsContent value="overview" className="space-y-3 sm:space-y-4 sm:space-y-6">
                   {/* Summary Cards */}
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <Card className="p-4">
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-3 sm:gap-4">
+                    <Card className="p-3 sm:p-4">
                       <div className="flex items-center justify-between">
                         <div>
                           <p className="text-sm text-gray-500">Total Events</p>
-                          <p className="text-2xl font-bold">{dashboardData.summary?.totalEvents || 0}</p>
+                          <p className="text-xl sm:text-2xl font-bold">{dashboardData.summary?.totalEvents || 0}</p>
                         </div>
                         <Activity className="w-8 h-8 text-blue-500" />
                       </div>
                     </Card>
                     
-                    <Card className="p-4">
+                    <Card className="p-3 sm:p-4">
                       <div className="flex items-center justify-between">
                         <div>
                           <p className="text-sm text-gray-500">Session Duration</p>
-                          <p className="text-2xl font-bold">{dashboardData.summary?.sessionDuration || 0}m</p>
+                          <p className="text-xl sm:text-2xl font-bold">{dashboardData.summary?.sessionDuration || 0}m</p>
                         </div>
                         <Clock className="w-8 h-8 text-green-500" />
                       </div>
                     </Card>
                     
-                    <Card className="p-4">
+                    <Card className="p-3 sm:p-4">
                       <div className="flex items-center justify-between">
                         <div>
                           <p className="text-sm text-gray-500">Features Used</p>
-                          <p className="text-2xl font-bold">{dashboardData.summary?.featuresUsed || 0}</p>
+                          <p className="text-xl sm:text-2xl font-bold">{dashboardData.summary?.featuresUsed || 0}</p>
                         </div>
                         <Target className="w-8 h-8 text-purple-500" />
                       </div>
                     </Card>
                     
-                    <Card className="p-4">
+                    <Card className="p-3 sm:p-4">
                       <div className="flex items-center justify-between">
                         <div>
                           <p className="text-sm text-gray-500">Context Score</p>
-                          <p className="text-2xl font-bold">{dashboardData.summary?.contextRichness || 0}%</p>
+                          <p className="text-xl sm:text-2xl font-bold">{dashboardData.summary?.contextRichness || 0}%</p>
                         </div>
                         <Brain className="w-8 h-8 text-orange-500" />
                       </div>
@@ -349,14 +349,14 @@ export function AnalyticsDashboard({ isOpen, onClose }: AnalyticsDashboardProps)
                   </div>
 
                   {/* NEW METRIC: Calm Cue Engagement */}
-                  <Card className="p-6">
+                  <Card className="p-4 sm:p-5 md:p-6">
                     <div className="flex items-center justify-between mb-4">
                       <div>
                         <h3 className="text-lg font-semibold">Calm Cue Engagement</h3>
                         <p className="text-sm text-gray-500">Average responses per user / week</p>
                       </div>
                       <div className="text-right">
-                        <p className="text-3xl font-bold text-cyan-600">
+                        <p className="text-2xl sm:text-3xl font-bold text-cyan-600">
                           {dashboardData.summary?.avgCalmCuesPerWeek || 0}
                         </p>
                         <p className="text-xs text-gray-500">cues/week</p>
@@ -374,7 +374,7 @@ export function AnalyticsDashboard({ isOpen, onClose }: AnalyticsDashboardProps)
                   </Card>
 
                   {/* Trends Chart */}
-                  <Card className="p-6">
+                  <Card className="p-4 sm:p-5 md:p-6">
                     <h3 className="text-lg font-semibold mb-4">Activity Trends (24h)</h3>
                     <div className="h-64 flex items-end space-x-2">
                       {dashboardData.trends?.hourlyActivity?.map((hour: any, index: number) => (
@@ -396,13 +396,13 @@ export function AnalyticsDashboard({ isOpen, onClose }: AnalyticsDashboardProps)
                 </TabsContent>
 
                 {/* Performance Tab */}
-                <TabsContent value="performance" className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <Card className="p-4">
+                <TabsContent value="performance" className="space-y-3 sm:space-y-4 sm:space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
+                    <Card className="p-3 sm:p-4">
                       <div className="flex items-center justify-between">
                         <div>
                           <p className="text-sm text-gray-500">Performance Score</p>
-                          <p className="text-2xl font-bold">{dashboardData.summary?.performanceScore || 0}</p>
+                          <p className="text-xl sm:text-2xl font-bold">{dashboardData.summary?.performanceScore || 0}</p>
                           <Badge className={
                             (dashboardData.summary?.performanceScore || 0) > 80 
                               ? "bg-green-100 text-green-800" 
@@ -418,21 +418,21 @@ export function AnalyticsDashboard({ isOpen, onClose }: AnalyticsDashboardProps)
                       </div>
                     </Card>
                     
-                    <Card className="p-4">
+                    <Card className="p-3 sm:p-4">
                       <div className="flex items-center justify-between">
                         <div>
                           <p className="text-sm text-gray-500">Avg Response Time</p>
-                          <p className="text-2xl font-bold">{dashboardData.summary?.avgResponseTime || 0}ms</p>
+                          <p className="text-xl sm:text-2xl font-bold">{dashboardData.summary?.avgResponseTime || 0}ms</p>
                         </div>
                         <Activity className="w-8 h-8 text-blue-500" />
                       </div>
                     </Card>
                     
-                    <Card className="p-4">
+                    <Card className="p-3 sm:p-4">
                       <div className="flex items-center justify-between">
                         <div>
                           <p className="text-sm text-gray-500">Error Count</p>
-                          <p className="text-2xl font-bold">{dashboardData.summary?.errorCount || 0}</p>
+                          <p className="text-xl sm:text-2xl font-bold">{dashboardData.summary?.errorCount || 0}</p>
                           <Badge className={
                             (dashboardData.summary?.errorCount || 0) === 0 
                               ? "bg-green-100 text-green-800" 
@@ -447,9 +447,9 @@ export function AnalyticsDashboard({ isOpen, onClose }: AnalyticsDashboardProps)
                   </div>
 
                   {/* Core Web Vitals */}
-                  <Card className="p-6">
+                  <Card className="p-4 sm:p-5 md:p-6">
                     <h3 className="text-lg font-semibold mb-4">Core Web Vitals</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
                       {Object.entries(dashboardData.performance?.coreWebVitals || {}).map(([metric, value]: any) => (
                         metric !== 'ratings' && (
                           <div key={metric} className="text-center p-4 border rounded-lg">
@@ -472,10 +472,10 @@ export function AnalyticsDashboard({ isOpen, onClose }: AnalyticsDashboardProps)
                 </TabsContent>
 
                 {/* User Journey Tab */}
-                <TabsContent value="user-journey" className="space-y-6">
-                  <Card className="p-6">
+                <TabsContent value="user-journey" className="space-y-3 sm:space-y-4 sm:space-y-6">
+                  <Card className="p-4 sm:p-5 md:p-6">
                     <h3 className="text-lg font-semibold mb-4">User Journey Flow</h3>
-                    <div className="space-y-4">
+                    <div className="space-y-3 sm:space-y-4">
                       {Object.entries(dashboardData.userJourney?.journeyMap || {}).map(([step, count]: any) => (
                         <div key={step} className="flex items-center justify-between p-3 border rounded-lg">
                           <span className="font-medium">{step}</span>
@@ -495,10 +495,10 @@ export function AnalyticsDashboard({ isOpen, onClose }: AnalyticsDashboardProps)
                 </TabsContent>
 
                 {/* Features Tab */}
-                <TabsContent value="features" className="space-y-6">
-                  <Card className="p-6">
+                <TabsContent value="features" className="space-y-3 sm:space-y-4 sm:space-y-6">
+                  <Card className="p-4 sm:p-5 md:p-6">
                     <h3 className="text-lg font-semibold mb-4">Feature Engagement</h3>
-                    <div className="space-y-4">
+                    <div className="space-y-3 sm:space-y-4">
                       {dashboardData.featureEngagement?.map((feature: any, index: number) => (
                         <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
                           <div>
@@ -522,11 +522,11 @@ export function AnalyticsDashboard({ isOpen, onClose }: AnalyticsDashboardProps)
                 </TabsContent>
 
                 {/* AI Context Tab */}
-                <TabsContent value="context" className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <Card className="p-6">
+                <TabsContent value="context" className="space-y-3 sm:space-y-4 sm:space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
+                    <Card className="p-4 sm:p-5 md:p-6">
                       <h3 className="text-lg font-semibold mb-4">Context Richness</h3>
-                      <div className="space-y-4">
+                      <div className="space-y-3 sm:space-y-4">
                         <div className="flex items-center justify-between">
                           <span>Overall Score</span>
                           <Badge className="bg-blue-100 text-blue-800">
@@ -546,7 +546,7 @@ export function AnalyticsDashboard({ isOpen, onClose }: AnalyticsDashboardProps)
                       </div>
                     </Card>
 
-                    <Card className="p-6">
+                    <Card className="p-4 sm:p-5 md:p-6">
                       <h3 className="text-lg font-semibold mb-4">Personalization Opportunities</h3>
                       <div className="space-y-2">
                         {dashboardData.context?.insights?.personalizationOpportunities?.map((opportunity: string, index: number) => (

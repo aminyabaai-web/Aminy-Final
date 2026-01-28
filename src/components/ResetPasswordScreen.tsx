@@ -92,7 +92,7 @@ export function ResetPasswordScreen({ onSuccess, onBack }: ResetPasswordScreenPr
 
         <div className="flex-1 flex items-center justify-center px-6 py-8">
           <div className="w-full max-w-md text-center">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full mb-6">
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full mb-4 sm:mb-6">
               <CheckCircle className="w-10 h-10 text-green-600" />
             </div>
 
@@ -109,7 +109,7 @@ export function ResetPasswordScreen({ onSuccess, onBack }: ResetPasswordScreenPr
             </h1>
 
             <p
-              className="text-muted-foreground mb-6"
+              className="text-muted-foreground mb-4 sm:mb-6"
               style={{
                 fontSize: 'clamp(16px, 2.5vw, 18px)',
                 fontWeight: 450,
@@ -167,7 +167,7 @@ export function ResetPasswordScreen({ onSuccess, onBack }: ResetPasswordScreenPr
           </div>
 
           {errors.general && (
-            <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200">
+            <div className="mb-4 sm:mb-6 p-4 rounded-xl bg-red-50 border border-red-200">
               <div className="flex items-start gap-3">
                 <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
                 <p className="text-sm text-red-600">{errors.general}</p>
@@ -175,7 +175,7 @@ export function ResetPasswordScreen({ onSuccess, onBack }: ResetPasswordScreenPr
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4 sm:space-y-6">
             <div>
               <Label
                 htmlFor="new-password"

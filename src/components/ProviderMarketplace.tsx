@@ -16,13 +16,14 @@
  * - Recommended providers based on child's conditions
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Input } from './ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { Logo } from './Logo';
+import { supabase } from '../utils/supabase/client';
 import {
   Search,
   Filter,
@@ -129,16 +130,80 @@ export function ProviderMarketplace({
   const [showFilters, setShowFilters] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    loadProviders();
+  // Load providers from Supabase with fallback to mock data
+  const loadProviders = useCallback(async () => {
+    setIsLoading(true);
+    console.log('[Marketplace] Loading providers from Supabase...');
+
+    try {
+      // Build query based on category filter
+      let query = supabase
+        .from('provider_profiles')
+        .select('*')
+        .eq('is_active', true)
+        .eq('is_accepting_patients', true);
+
+      // Filter by category
+      if (selectedCategory !== 'all') {
+        const categoryTypes: Record<string, string[]> = {
+          behavioral: ['bcba', 'rbt'],
+          therapy: ['lpc', 'lcsw', 'slp', 'ot'],
+          medical: ['psychiatrist', 'pediatrician']
+        };
+        const types = categoryTypes[selectedCategory] || [];
+        if (types.length > 0) {
+          query = query.in('provider_type', types);
+        }
+      }
+
+      // Execute query
+      const { data, error } = await query.order('rating', { ascending: false });
+
+      if (error) {
+        console.error('[Marketplace] Supabase error:', error);
+        throw error;
+      }
+
+      if (data && data.length > 0) {
+        console.log(`[Marketplace] Found ${data.length} providers from DB`);
+        // Transform DB data to component format
+        const dbProviders: MarketplaceProvider[] = data.map((p: any) => ({
+          id: p.id,
+          name: p.name,
+          credentials: p.credentials,
+          type: p.provider_type as ProviderType,
+          photoUrl: p.photo_url,
+          rating: p.rating || 4.5,
+          reviewCount: p.review_count || 0,
+          yearsExperience: p.years_experience || 5,
+          specialties: p.specialties || [],
+          conditions: p.conditions || [],
+          languages: p.languages || ['English'],
+          bio: p.bio || '',
+          approach: p.approach || '',
+          availability: generateAvailability(), // Generate dynamic availability
+          nextAvailable: 'Check schedule',
+          isBookmarked: false,
+          badges: p.badges || []
+        }));
+        setProviders(dbProviders);
+      } else {
+        // Fallback to mock data if no DB providers
+        console.log('[Marketplace] No DB providers, using mock data');
+        setProviders(generateMockProviders());
+      }
+    } catch (error) {
+      console.error('[Marketplace] Failed to load providers:', error);
+      // Use mock data as fallback
+      setProviders(generateMockProviders());
+    } finally {
+      setIsLoading(false);
+    }
   }, [selectedCategory]);
 
-  const loadProviders = async () => {
-    setIsLoading(true);
-    await new Promise(resolve => setTimeout(resolve, 500));
-    setProviders(generateMockProviders());
-    setIsLoading(false);
-  };
+  useEffect(() => {
+    loadProviders();
+  }, [loadProviders]);
 
   const generateMockProviders = (): MarketplaceProvider[] => [
     // BEHAVIORAL TEAM
@@ -370,7 +435,7 @@ export function ProviderMarketplace({
         className="p-5 hover:shadow-lg transition-all duration-300 cursor-pointer group"
         onClick={() => setSelectedProvider(provider)}
       >
-        <div className="flex items-start gap-4">
+        <div className="flex items-start gap-3 sm:gap-4">
           {/* Avatar */}
           <div className={`w-16 h-16 rounded-2xl ${colorClasses.bg} flex items-center justify-center flex-shrink-0`}>
             {provider.photoUrl ? (
@@ -406,7 +471,7 @@ export function ProviderMarketplace({
             </div>
 
             {/* Quick info */}
-            <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
+            <div className="flex items-center gap-3 sm:gap-4 text-sm text-gray-600 mb-3">
               <span className="flex items-center gap-1">
                 <Clock className="w-3.5 h-3.5" />
                 {provider.yearsExperience}+ years
@@ -465,7 +530,7 @@ export function ProviderMarketplace({
               <Users className="w-6 h-6" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold">Find Your Guide</h1>
+              <h1 className="text-xl sm:text-2xl font-bold">Find Your Guide</h1>
               <p className="text-teal-100">
                 Expert providers to support {childName ? `${childName}'s` : 'your family\'s'} journey
               </p>
@@ -547,10 +612,10 @@ export function ProviderMarketplace({
         </div>
 
         {isLoading ? (
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {[1, 2, 3].map(i => (
               <Card key={i} className="p-6 animate-pulse">
-                <div className="flex gap-4">
+                <div className="flex gap-3 sm:gap-4">
                   <div className="w-16 h-16 bg-gray-200 rounded-2xl" />
                   <div className="flex-1 space-y-3">
                     <div className="h-4 bg-gray-200 rounded w-1/3" />
@@ -571,7 +636,7 @@ export function ProviderMarketplace({
             <EmptyProviders />
           )
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {filteredProviders.map(renderProviderCard)}
           </div>
         )}
@@ -579,12 +644,12 @@ export function ProviderMarketplace({
 
       {/* Session Types Reference */}
       <div className="max-w-4xl mx-auto px-4 pb-8">
-        <Card className="p-6">
+        <Card className="p-4 sm:p-5 md:p-6">
           <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
             <Info className="w-5 h-5 text-gray-400" />
             Session Types & Pricing
           </h3>
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-3 gap-3 sm:gap-4 sm:gap-6">
             {/* Behavioral */}
             <div>
               <h4 className="font-medium text-teal-700 mb-3 flex items-center gap-2">
@@ -665,7 +730,7 @@ export function ProviderMarketplace({
       {/* Trust Footer */}
       <div className="bg-white border-t border-gray-200 py-6">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-500">
+          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 sm:gap-6 text-sm text-gray-500">
             <span className="flex items-center gap-2">
               <Shield className="w-4 h-4 text-green-500" />
               HIPAA Compliant
@@ -694,12 +759,12 @@ export function ProviderMarketplace({
  */
 export function ProviderTeamExplainer() {
   return (
-    <Card className="p-6">
+    <Card className="p-4 sm:p-5 md:p-6">
       <h3 className="font-semibold text-gray-900 mb-4">Understanding Your Care Team</h3>
-      <p className="text-gray-600 mb-6">
+      <p className="text-gray-600 mb-4 sm:mb-6">
         Think of your child's care team like building a house:
       </p>
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         <div className="flex items-start gap-3 p-4 bg-teal-50 rounded-xl">
           <GraduationCap className="w-6 h-6 text-teal-600 mt-1" />
           <div>

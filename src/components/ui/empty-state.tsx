@@ -81,7 +81,7 @@ export function EmptyState({
       {/* Description */}
       <p
         className={cn(
-          'text-gray-500 dark:text-slate-400 max-w-sm mb-6',
+          'text-gray-500 dark:text-slate-400 max-w-sm mb-4 sm:mb-6',
           isCompact ? 'text-sm' : 'text-base'
         )}
       >
@@ -221,6 +221,97 @@ export function EmptyData({
       icon={require('lucide-react').BarChart3}
       headline={title}
       description={message}
+      variant="compact"
+    />
+  );
+}
+
+export function EmptyVault({
+  onUpload,
+}: {
+  onUpload?: () => void;
+}) {
+  return (
+    <EmptyState
+      icon={require('lucide-react').FolderOpen}
+      headline="Your vault is empty"
+      description="Upload IEPs, evaluations, and medical records. Aminy will read them to give you personalized guidance."
+      actionLabel="Upload document"
+      onAction={onUpload}
+    />
+  );
+}
+
+export function EmptyAppointments({
+  onBook,
+}: {
+  onBook?: () => void;
+}) {
+  return (
+    <EmptyState
+      icon={require('lucide-react').Calendar}
+      headline="No upcoming appointments"
+      description="Book a session with a BCBA or specialist from our marketplace."
+      actionLabel="Browse providers"
+      onAction={onBook}
+    />
+  );
+}
+
+export function EmptyGoals({
+  onCreateGoal,
+}: {
+  onCreateGoal?: () => void;
+}) {
+  return (
+    <EmptyState
+      icon={require('lucide-react').Target}
+      headline="No goals set yet"
+      description="Set developmental goals to track progress and get personalized activity recommendations."
+      actionLabel="Add first goal"
+      onAction={onCreateGoal}
+    />
+  );
+}
+
+export function EmptyRoutines({
+  onCreateRoutine,
+}: {
+  onCreateRoutine?: () => void;
+}) {
+  return (
+    <EmptyState
+      icon={require('lucide-react').ListChecks}
+      headline="No routines created"
+      description="Build visual routines for morning, bedtime, or transitions. Kids thrive with predictability!"
+      actionLabel="Create routine"
+      onAction={onCreateRoutine}
+    />
+  );
+}
+
+export function EmptyMessages({
+  onCompose,
+}: {
+  onCompose?: () => void;
+}) {
+  return (
+    <EmptyState
+      icon={require('lucide-react').Mail}
+      headline="No messages"
+      description="Your secure messages with providers will appear here."
+      actionLabel={onCompose ? "Start a conversation" : undefined}
+      onAction={onCompose}
+    />
+  );
+}
+
+export function EmptyActivityLog() {
+  return (
+    <EmptyState
+      icon={require('lucide-react').ClipboardList}
+      headline="No incidents logged"
+      description="Track behaviors and triggers here to identify patterns and share insights with your care team."
       variant="compact"
     />
   );

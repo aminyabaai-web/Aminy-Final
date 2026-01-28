@@ -286,9 +286,9 @@ export function SuperbillGenerator({
   return (
     <div className="max-w-4xl mx-auto p-4">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-4 sm:mb-6">
         <div>
-          <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-2">
+          <h2 className="text-lg sm:text-xl font-semibold text-slate-900 flex items-center gap-2">
             <FileText className="w-5 h-5 text-accent" />
             Generate Superbill
           </h2>
@@ -303,7 +303,7 @@ export function SuperbillGenerator({
       </div>
 
       {/* HSA/FSA Info Banner */}
-      <Card className="p-4 bg-blue-50 border-blue-200 mb-6">
+      <Card className="p-4 bg-blue-50 border-blue-200 mb-4 sm:mb-6">
         <div className="flex items-start gap-3">
           <Info className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
           <div className="text-sm">
@@ -317,14 +317,14 @@ export function SuperbillGenerator({
       </Card>
 
       {step === 'form' && (
-        <div className="space-y-6">
+        <div className="space-y-3 sm:space-y-4 sm:space-y-6">
           {/* Patient Information */}
-          <Card className="p-4">
+          <Card className="p-3 sm:p-4">
             <h3 className="font-medium text-slate-900 mb-4 flex items-center gap-2">
               <User className="w-4 h-4 text-accent" />
               Patient Information
             </h3>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div>
                 <label className="block text-sm text-slate-600 mb-1">Patient Name</label>
                 <input
@@ -362,7 +362,7 @@ export function SuperbillGenerator({
                   className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm"
                 />
               </div>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 <div>
                   <label className="block text-sm text-slate-600 mb-1">State</label>
                   <input
@@ -388,12 +388,12 @@ export function SuperbillGenerator({
           </Card>
 
           {/* Provider Information */}
-          <Card className="p-4">
+          <Card className="p-3 sm:p-4">
             <h3 className="font-medium text-slate-900 mb-4 flex items-center gap-2">
               <Stethoscope className="w-4 h-4 text-accent" />
               Provider Information
             </h3>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div>
                 <label className="block text-sm text-slate-600 mb-1">Provider Name</label>
                 <input
@@ -437,12 +437,12 @@ export function SuperbillGenerator({
           </Card>
 
           {/* Service Date & Payment */}
-          <Card className="p-4">
+          <Card className="p-3 sm:p-4">
             <h3 className="font-medium text-slate-900 mb-4 flex items-center gap-2">
               <Calendar className="w-4 h-4 text-accent" />
               Service & Payment
             </h3>
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
               <div>
                 <label className="block text-sm text-slate-600 mb-1">Date of Service</label>
                 <input
@@ -481,10 +481,10 @@ export function SuperbillGenerator({
           </Card>
 
           {/* Diagnosis Codes */}
-          <Card className="p-4">
+          <Card className="p-3 sm:p-4">
             <h3 className="font-medium text-slate-900 mb-4">Diagnosis Codes (ICD-10)</h3>
             <p className="text-xs text-slate-500 mb-3">Select all that apply to this visit</p>
-            <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-48 overflow-y-auto">
               {COMMON_DIAGNOSIS_CODES.map(diagnosis => (
                 <label
                   key={diagnosis.code}
@@ -519,7 +519,7 @@ export function SuperbillGenerator({
           </Card>
 
           {/* CPT Codes by Category */}
-          <Card className="p-4">
+          <Card className="p-3 sm:p-4">
             <h3 className="font-medium text-slate-900 mb-4">Service Codes (CPT)</h3>
             <p className="text-xs text-slate-500 mb-3">Select the services rendered</p>
             <div className="space-y-2">
@@ -607,7 +607,7 @@ export function SuperbillGenerator({
               </div>
               <div className="text-right">
                 <p className="text-sm text-slate-500">Total Billed</p>
-                <p className="text-2xl font-bold text-slate-900">${calculateTotal().toFixed(2)}</p>
+                <p className="text-xl sm:text-2xl font-bold text-slate-900">${calculateTotal().toFixed(2)}</p>
               </div>
             </div>
             <div className="flex gap-3">
@@ -629,14 +629,14 @@ export function SuperbillGenerator({
       )}
 
       {step === 'preview' && (
-        <div className="space-y-4">
-          <Card className="p-6">
-            <div className="text-center mb-6">
+        <div className="space-y-3 sm:space-y-4">
+          <Card className="p-4 sm:p-5 md:p-6">
+            <div className="text-center mb-4 sm:mb-6">
               <h3 className="text-xl font-bold">SUPERBILL</h3>
               <p className="text-sm text-slate-500">For HSA/FSA Reimbursement</p>
             </div>
 
-            <div className="grid grid-cols-2 gap-6 mb-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 sm:gap-6 mb-4 sm:mb-6">
               <div>
                 <h4 className="font-medium text-slate-700 mb-2">Provider</h4>
                 <p className="text-sm">{formData.providerName}, {formData.providerCredentials}</p>
@@ -649,13 +649,13 @@ export function SuperbillGenerator({
               </div>
             </div>
 
-            <div className="mb-6">
+            <div className="mb-4 sm:mb-6">
               <h4 className="font-medium text-slate-700 mb-2">Date of Service</h4>
               <p className="text-sm">{formData.dateOfService}</p>
               <p className="text-xs text-slate-500">Place of Service: 02 (Telehealth)</p>
             </div>
 
-            <div className="mb-6">
+            <div className="mb-4 sm:mb-6">
               <h4 className="font-medium text-slate-700 mb-2">Diagnosis Codes</h4>
               <div className="flex flex-wrap gap-2">
                 {formData.diagnosisCodes.map(code => {
@@ -669,7 +669,7 @@ export function SuperbillGenerator({
               </div>
             </div>
 
-            <div className="mb-6">
+            <div className="mb-4 sm:mb-6">
               <h4 className="font-medium text-slate-700 mb-2">Services</h4>
               <table className="w-full text-sm">
                 <thead>
@@ -723,8 +723,8 @@ export function SuperbillGenerator({
           <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <CheckCircle className="w-8 h-8 text-green-600" />
           </div>
-          <h3 className="text-xl font-semibold text-slate-900 mb-2">Superbill Downloaded!</h3>
-          <p className="text-slate-600 mb-6">
+          <h3 className="text-lg sm:text-xl font-semibold text-slate-900 mb-2">Superbill Downloaded!</h3>
+          <p className="text-slate-600 mb-4 sm:mb-6">
             Your superbill has been saved. You can submit it to your HSA/FSA administrator
             or insurance provider for reimbursement.
           </p>

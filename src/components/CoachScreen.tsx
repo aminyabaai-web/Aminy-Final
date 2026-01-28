@@ -46,7 +46,7 @@ export function CoachScreen({ title, subtitle, userTier, onBookSession, onStartC
       </div>
 
       <div className="max-w-md mx-auto px-4 py-6">
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           {/* Coach Services Overview */}
           <Card className="p-6 aminy-card">
             <div className="flex items-center gap-3 mb-4">
@@ -158,7 +158,7 @@ export function CoachScreen({ title, subtitle, userTier, onBookSession, onStartC
           )}
 
           {/* Coach Disclaimer */}
-          <div className="mt-6">
+          <div className="mt-4 sm:mt-6">
             <GlobalDisclaimer variant="card" showIcon={true} />
           </div>
         </div>

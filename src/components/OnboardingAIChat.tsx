@@ -241,26 +241,26 @@ Generate a personalized summary for this parent.`,
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex flex-col">
       {/* Header */}
-      <div className="p-4 border-b bg-white/80 backdrop-blur-sm sticky top-0 z-10">
-        <div className="flex items-center justify-between max-w-lg mx-auto">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center">
-              <Sparkles className="w-4 h-4 text-teal-600" />
+      <div className="p-3 sm:p-4 border-b bg-white/80 backdrop-blur-sm sticky top-0 z-10">
+        <div className="flex items-center justify-between max-w-lg mx-auto px-1 sm:px-0">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-teal-100 rounded-full flex items-center justify-center">
+              <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-teal-600" />
             </div>
             <div>
-              <p className="font-medium text-gray-900">Aminy</p>
+              <p className="font-medium text-sm sm:text-base text-gray-900">Aminy</p>
               <p className="text-xs text-gray-500">Getting to know you</p>
             </div>
           </div>
-          <Button variant="ghost" size="sm" onClick={onSkip}>
+          <Button variant="ghost" size="sm" onClick={onSkip} className="text-xs sm:text-sm">
             Skip for now
           </Button>
         </div>
       </div>
 
       {/* Chat Messages */}
-      <div className="flex-1 overflow-y-auto p-4">
-        <div className="max-w-lg mx-auto space-y-4">
+      <div className="flex-1 overflow-y-auto p-3 sm:p-4 md:p-6">
+        <div className="max-w-lg mx-auto space-y-3 sm:space-y-3 sm:space-y-4">
           {messages.map((message, index) => (
             <motion.div
               key={index}
@@ -270,13 +270,13 @@ Generate a personalized summary for this parent.`,
               className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
             >
               <div
-                className={`max-w-[85%] rounded-2xl px-4 py-3 ${
+                className={`max-w-[90%] sm:max-w-[85%] md:max-w-[80%] rounded-2xl px-3 sm:px-4 py-2.5 sm:py-3 ${
                   message.role === 'user'
                     ? 'bg-teal-600 text-white rounded-br-md'
                     : 'bg-white border shadow-sm rounded-bl-md'
                 }`}
               >
-                <p className="text-sm whitespace-pre-line">{message.content}</p>
+                <p className="text-sm sm:text-base whitespace-pre-line leading-relaxed">{message.content}</p>
               </div>
             </motion.div>
           ))}
@@ -318,7 +318,7 @@ Generate a personalized summary for this parent.`,
       </div>
 
       {/* Input Area */}
-      <div className="p-4 border-t bg-white sticky bottom-0">
+      <div className="p-3 sm:p-4 border-t bg-white sticky bottom-0 safe-area-inset-bottom">
         <div className="max-w-lg mx-auto">
           {conversationStep < 3 ? (
             <div className="flex gap-2">
@@ -328,16 +328,16 @@ Generate a personalized summary for this parent.`,
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="Type your response..."
-                className="resize-none min-h-[44px] max-h-32"
+                className="resize-none min-h-[44px] max-h-32 text-base"
                 rows={1}
                 disabled={isTyping}
               />
               <Button
                 onClick={handleSend}
                 disabled={!input.trim() || isTyping}
-                className="bg-teal-600 hover:bg-teal-700"
+                className="bg-teal-600 hover:bg-teal-700 h-11 w-11 sm:h-auto sm:w-auto sm:px-4"
               >
-                <Send className="w-4 h-4" />
+                <Send className="w-4 h-4 sm:w-5 sm:h-5" />
               </Button>
             </div>
           ) : (
@@ -348,7 +348,7 @@ Generate a personalized summary for this parent.`,
               <Button
                 onClick={handleComplete}
                 disabled={isTyping || isGeneratingSummary}
-                className="w-full bg-teal-600 hover:bg-teal-700 py-6"
+                className="w-full bg-teal-600 hover:bg-teal-700 py-4 sm:py-5 md:py-6 text-sm sm:text-base"
               >
                 {isGeneratingSummary ? (
                   <>
@@ -366,11 +366,11 @@ Generate a personalized summary for this parent.`,
           )}
 
           {/* Progress indicator */}
-          <div className="flex justify-center gap-1.5 mt-4">
+          <div className="flex justify-center gap-1.5 sm:gap-2 mt-3 sm:mt-4">
             {[0, 1, 2].map((i) => (
               <div
                 key={i}
-                className={`w-2 h-2 rounded-full transition-colors ${
+                className={`w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full transition-colors ${
                   i <= conversationStep ? 'bg-teal-600' : 'bg-gray-200'
                 }`}
               />

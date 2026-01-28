@@ -76,7 +76,7 @@ export function ForgotPasswordScreen({ onBack, onBackToLogin }: ForgotPasswordSc
         <div className="flex-1 flex items-center justify-center px-6 py-8">
           <div className="w-full max-w-md text-center">
             {/* Success Icon */}
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full mb-6">
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full mb-4 sm:mb-6">
               <CheckCircle className="w-10 h-10 text-green-600" />
             </div>
 
@@ -184,7 +184,7 @@ export function ForgotPasswordScreen({ onBack, onBackToLogin }: ForgotPasswordSc
           </div>
 
           {/* Reset Form */}
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4 sm:space-y-6">
             {/* Email Field */}
             <div>
               <Label htmlFor="reset-email" className="block text-sm font-medium text-foreground mb-2">
@@ -227,7 +227,7 @@ export function ForgotPasswordScreen({ onBack, onBackToLogin }: ForgotPasswordSc
           </form>
 
           {/* Footer Link */}
-          <div className="mt-6 text-center">
+          <div className="mt-4 sm:mt-6 text-center">
             <button
               onClick={onBackToLogin}
               disabled={isLoading}

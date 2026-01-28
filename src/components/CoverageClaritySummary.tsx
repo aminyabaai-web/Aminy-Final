@@ -264,9 +264,9 @@ export function CoverageClaritySummary({
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 py-6 space-y-6">
+      <div className="max-w-4xl mx-auto px-4 py-6 space-y-3 sm:space-y-4 sm:space-y-6">
         {/* Quick Actions */}
-        <Card className="p-4">
+        <Card className="p-3 sm:p-4">
           <div className="flex flex-wrap gap-3">
             <Button onClick={handleDownload} className="gap-2">
               <Download className="w-4 h-4" />
@@ -322,10 +322,10 @@ export function CoverageClaritySummary({
 
         {/* Personalized Recommendations */}
         <div>
-          <h2 className="text-xl font-semibold text-slate-900 mb-4">Your Personalized Coverage Recommendations</h2>
-          <div className="space-y-4">
+          <h2 className="text-lg sm:text-xl font-semibold text-slate-900 mb-4">Your Personalized Coverage Recommendations</h2>
+          <div className="space-y-3 sm:space-y-4">
             {recommendations.map((rec, index) => (
-              <Card key={index} className="p-6">
+              <Card key={index} className="p-4 sm:p-5 md:p-6">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">

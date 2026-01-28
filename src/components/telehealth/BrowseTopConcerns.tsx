@@ -106,7 +106,7 @@ export function BrowseTopConcerns({
             <h2 className="text-sm font-medium text-gray-500 mb-3">
               {filteredConcerns.length} result{filteredConcerns.length !== 1 ? 's' : ''} for "{searchQuery}"
             </h2>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {filteredConcerns.map((concern) => (
                 <ConcernTile
                   key={concern.id}
@@ -144,7 +144,7 @@ export function BrowseTopConcerns({
                     </h2>
                     <p className="text-sm text-gray-500">{categoryInfo.description}</p>
                   </div>
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {concerns.map((concern) => (
                       <ConcernTile
                         key={concern.id}
@@ -183,7 +183,7 @@ export function BrowseTopConcerns({
         </div>
 
         {/* Emergency disclaimer */}
-        <div className="mt-6 p-4 bg-red-50 rounded-xl border border-red-100">
+        <div className="mt-4 sm:mt-6 p-4 bg-red-50 rounded-xl border border-red-100">
           <div className="flex gap-3">
             <AlertTriangle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
             <div>

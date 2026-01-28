@@ -245,7 +245,7 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
 
   // Render enhanced provider calendar
   const renderProviderCalendar = () => (
-    <Card className="p-6">
+    <Card className="p-4 sm:p-5 md:p-6">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-semibold">Schedule with {currentProvider?.name}</h3>
         <Badge variant="outline" className="text-xs">
@@ -254,7 +254,7 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
       </div>
 
       {/* Insurance status card */}
-      <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+      <div className="mb-4 sm:mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
         <div className="flex items-center gap-3 mb-2">
           <Shield className="h-5 w-5 text-green-600" />
           <div>
@@ -277,7 +277,7 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
               month: 'short', 
               day: 'numeric' 
             })}</h5>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {['9:00 AM', '10:30 AM', '2:00 PM', '3:30 PM'].map((time) => (
                 <Button
                   key={time}
@@ -310,7 +310,7 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-6">
+        <div className="space-y-3 sm:space-y-4 sm:space-y-6">
           {/* Completion progress */}
           <div className="bg-slate-50 p-4 rounded-lg">
             <div className="flex items-center justify-between mb-2">
@@ -397,7 +397,7 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-6">
+        <div className="space-y-3 sm:space-y-4 sm:space-y-6">
           {/* Session rating */}
           <div>
             <label className="block text-sm font-medium mb-2">How was today's session?</label>
@@ -500,7 +500,7 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
               ))}
             </div>
             <p className="text-sm text-teal-700">{currentProvider?.specialty || 'Registered Behavior Technician'}</p>
-            <div className="flex items-center gap-4 mt-2 text-xs text-teal-600">
+            <div className="flex items-center gap-3 sm:gap-4 mt-2 text-xs text-teal-600">
               <span className="flex items-center gap-1">
                 <div className="w-2 h-2 bg-green-500 rounded-full" />
                 Available today
@@ -609,16 +609,16 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
 
   // Render appointment management
   const renderAppointmentManagement = () => (
-    <Card className="p-6">
+    <Card className="p-4 sm:p-5 md:p-6">
       <h3 className="text-lg font-semibold mb-4">Upcoming Appointments</h3>
       
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         {/* Next appointment */}
         <div className="border rounded-lg p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
           <div className="flex items-start justify-between">
             <div>
               <h4 className="font-medium text-blue-900">50-min Comprehensive Session</h4>
-              <div className="flex items-center gap-4 mt-1 text-sm text-blue-700">
+              <div className="flex items-center gap-3 sm:gap-4 mt-1 text-sm text-blue-700">
                 <span className="flex items-center gap-1">
                   <Calendar className="h-4 w-4" />
                   Thursday, Dec 18
@@ -663,7 +663,7 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
   );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       {/* Provider info card */}
       {renderProviderInfoCard()}
       
@@ -695,11 +695,11 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
               Select a new time for your session
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             <p className="text-sm text-slate-600">
               Current appointment: Thursday, Dec 18 at 2:00 PM
             </p>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <Button variant="outline" onClick={() => {
                 setShowRescheduleModal(false);
                 toast.success('Reschedule request sent to provider');

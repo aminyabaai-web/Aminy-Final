@@ -48,9 +48,9 @@ export function RBTQuickActions({
   ];
 
   return (
-    <Card className="p-4">
+    <Card className="p-3 sm:p-4">
       <h3 className="font-semibold mb-4">RBT Quick Actions</h3>
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {actions.map((action) => {
           const Icon = action.icon;
           return (

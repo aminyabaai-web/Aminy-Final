@@ -202,10 +202,10 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
+      <div className="bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-semibold text-gray-900">Unit Economics</h1>
+            <h1 className="text-lg sm:text-xl font-semibold text-gray-900">Unit Economics</h1>
             <p className="text-sm text-gray-500 mt-1">Investor-grade metrics dashboard</p>
           </div>
           <div className="flex items-center gap-3">
@@ -231,9 +231,9 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
         </div>
       </div>
 
-      <div className="p-6 space-y-6">
+      <div className="p-6 space-y-3 sm:space-y-4 sm:space-y-6">
         {/* Key Metrics Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
           {computedMetrics.map((metric, index) => (
             <motion.div
               key={metric.title}
@@ -284,7 +284,7 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
 
         {/* Revenue by Tier */}
         <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between mb-4 sm:mb-6">
             <div>
               <h2 className="text-lg font-semibold text-gray-900">Revenue by Tier</h2>
               <p className="text-sm text-gray-500">Monthly recurring revenue breakdown</p>
@@ -295,9 +295,9 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
             </div>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {TIER_BREAKDOWN.filter(t => t.tier !== 'Free').map((tier) => (
-              <div key={tier.tier} className="flex items-center gap-4">
+              <div key={tier.tier} className="flex items-center gap-3 sm:gap-4">
                 <div className="w-20 text-sm font-medium text-gray-700">{tier.tier}</div>
                 <div className="flex-1">
                   <div className="h-8 bg-gray-100 rounded-lg overflow-hidden relative">
@@ -327,7 +327,7 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
             ))}
           </div>
 
-          <div className="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between">
+          <div className="mt-4 sm:mt-6 pt-4 border-t border-gray-100 flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-500">Blended ARPU (Paid Users)</p>
               <p className="text-lg font-semibold text-gray-900">${blendedArpu.toFixed(2)}/mo</p>
@@ -347,7 +347,7 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
 
         {/* Cohort Retention Table */}
         <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between mb-4 sm:mb-6">
             <div>
               <h2 className="text-lg font-semibold text-gray-900">Cohort Retention</h2>
               <p className="text-sm text-gray-500">User retention by signup month</p>
@@ -427,7 +427,7 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
             </table>
           </div>
 
-          <div className="mt-4 flex items-center gap-6 text-xs text-gray-500">
+          <div className="mt-4 flex items-center gap-3 sm:gap-4 sm:gap-6 text-xs text-gray-500">
             <span className="flex items-center gap-2">
               <div className="w-3 h-3 rounded" style={{ backgroundColor: getRetentionColor(80) }} />
               Excellent (70%+)
@@ -445,7 +445,7 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
 
         {/* Acquisition Channels */}
         <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between mb-4 sm:mb-6">
             <div>
               <h2 className="text-lg font-semibold text-gray-900">Acquisition Channels</h2>
               <p className="text-sm text-gray-500">CAC and LTV by marketing channel</p>
@@ -513,7 +513,7 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
         {/* VC Summary */}
         <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl p-6 text-white">
           <h2 className="text-lg font-semibold mb-4">Investor Summary</h2>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 sm:gap-6">
             <div>
               <p className="text-indigo-200 text-sm">Runway</p>
               <p className="text-2xl font-semibold">18 months</p>

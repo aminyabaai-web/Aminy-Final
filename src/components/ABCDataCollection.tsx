@@ -439,7 +439,7 @@ export function ABCDataCollection({
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 py-6">
         {view === 'list' ? (
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {entries.length === 0 ? (
               <Card className="p-12 text-center">
                 <FileText className="w-12 h-12 mx-auto mb-4 text-neutral-300" />
@@ -505,7 +505,7 @@ export function ABCDataCollection({
 
                   {expandedEntry === entry.id && (
                     <div className="mt-4 pt-4 border-t border-neutral-100 dark:border-slate-800 space-y-3">
-                      <div className="grid grid-cols-3 gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
                         <div>
                           <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase mb-1">Antecedent</p>
                           <p className="text-sm text-neutral-700 dark:text-neutral-300">
@@ -543,27 +543,27 @@ export function ABCDataCollection({
           </div>
         ) : (
           // Stats View
-          <div className="space-y-6">
+          <div className="space-y-3 sm:space-y-4 sm:space-y-6">
             {/* Summary Cards */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
               <Card className="p-4 text-center">
-                <p className="text-3xl font-bold text-neutral-900 dark:text-white">{entries.length}</p>
+                <p className="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-white">{entries.length}</p>
                 <p className="text-sm text-neutral-500 dark:text-neutral-400">Total Incidents</p>
               </Card>
               <Card className="p-4 text-center">
-                <p className="text-3xl font-bold text-neutral-900 dark:text-white">
+                <p className="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-white">
                   {(entries.length / (dateFilter === '7d' ? 7 : dateFilter === '30d' ? 30 : 1)).toFixed(1)}
                 </p>
                 <p className="text-sm text-neutral-500 dark:text-neutral-400">Per Day Avg</p>
               </Card>
               <Card className="p-4 text-center">
-                <p className="text-3xl font-bold text-amber-600">
+                <p className="text-2xl sm:text-3xl font-bold text-amber-600">
                   {entries.filter(e => e.intensity === 'high').length}
                 </p>
                 <p className="text-sm text-neutral-500 dark:text-neutral-400">High Intensity</p>
               </Card>
               <Card className="p-4 text-center">
-                <p className="text-3xl font-bold text-teal-600">
+                <p className="text-2xl sm:text-3xl font-bold text-teal-600">
                   {stats.likelyFunction ? CONSEQUENCE_OPTIONS.find(c => c.value === stats.likelyFunction[0])?.label : 'N/A'}
                 </p>
                 <p className="text-sm text-neutral-500 dark:text-neutral-400">Likely Function</p>
@@ -571,7 +571,7 @@ export function ABCDataCollection({
             </div>
 
             {/* Top Behaviors */}
-            <Card className="p-6">
+            <Card className="p-4 sm:p-5 md:p-6">
               <h3 className="font-semibold text-neutral-900 dark:text-white mb-4">Most Common Behaviors</h3>
               <div className="space-y-3">
                 {stats.topBehaviors.map(([behavior, count], i) => (
@@ -597,7 +597,7 @@ export function ABCDataCollection({
             </Card>
 
             {/* Top Antecedents */}
-            <Card className="p-6">
+            <Card className="p-4 sm:p-5 md:p-6">
               <h3 className="font-semibold text-neutral-900 dark:text-white mb-4">Most Common Triggers</h3>
               <div className="space-y-3">
                 {stats.topAntecedents.map(([antecedent, count], i) => (
@@ -659,9 +659,9 @@ export function ABCDataCollection({
               </div>
             </div>
 
-            <div className="p-6 space-y-6">
+            <div className="p-6 space-y-3 sm:space-y-4 sm:space-y-6">
               {/* When & Where */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">When did it happen?</label>
                   <Input
@@ -775,7 +775,7 @@ export function ABCDataCollection({
               </div>
 
               {/* Duration & Intensity */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
                     Duration (optional)

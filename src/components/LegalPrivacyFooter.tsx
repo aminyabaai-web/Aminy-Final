@@ -49,7 +49,7 @@ export function LegalPrivacyFooter({
   return (
     <div className={`border-t border-slate-200 bg-slate-50 py-8 px-6 ${className}`}>
       <div className="max-w-7xl mx-auto">
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid md:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
           
           {/* Legal Disclaimer */}
           <Card className="p-5 bg-white border-slate-200">
@@ -131,8 +131,8 @@ export function LegalPrivacyFooter({
         </div>
 
         {/* Footer Links */}
-        <div className="mt-6 pt-6 border-t border-slate-200 text-center">
-          <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-slate-500">
+        <div className="mt-4 sm:mt-6 pt-6 border-t border-slate-200 text-center">
+          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-xs text-slate-500">
             <a href="/about" className="hover:text-accent transition-colors">About Aminy</a>
             <span>•</span>
             <a href="/privacy" className="hover:text-accent transition-colors">Privacy Policy</a>

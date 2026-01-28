@@ -179,7 +179,7 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
   return (
     <div className="bg-white rounded-2xl shadow-lg max-w-2xl w-full max-h-[90vh] overflow-hidden">
       {/* Header */}
-      <div className="bg-gradient-to-r from-teal-600 to-teal-700 text-white px-6 py-4">
+      <div className="bg-gradient-to-r from-teal-600 to-teal-700 text-white px-4 sm:px-6 py-3 sm:py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Share2 className="w-6 h-6" />
@@ -240,7 +240,7 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
       <div className="p-6 overflow-y-auto max-h-[60vh]">
         {/* Create Link Tab */}
         {activeTab === 'share' && (
-          <div className="space-y-6">
+          <div className="space-y-3 sm:space-y-4 sm:space-y-6">
             {/* Success state - show new link */}
             {newLink && (
               <div className="bg-green-50 border border-green-200 rounded-xl p-4">
@@ -427,7 +427,7 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
 
         {/* Active Links Tab */}
         {activeTab === 'links' && (
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {existingLinks.length === 0 ? (
               <div className="text-center py-8 text-gray-500">
                 <Link className="w-12 h-12 mx-auto mb-3 opacity-50" />
@@ -479,7 +479,7 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
                         </button>
                       </div>
                     </div>
-                    <div className="mt-2 flex items-center gap-4 text-xs text-gray-500">
+                    <div className="mt-2 flex items-center gap-3 sm:gap-4 text-xs text-gray-500">
                       <span className="flex items-center gap-1">
                         <Clock className="w-3 h-3" />
                         Expires in {formatExpiry(link.expiresAt)}
@@ -505,13 +505,13 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
 
         {/* Export Tab */}
         {activeTab === 'export' && (
-          <div className="space-y-6">
+          <div className="space-y-3 sm:space-y-4 sm:space-y-6">
             {/* Format Selection */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Export Format
               </label>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <button
                   onClick={() => setExportFormat('fhir')}
                   className={`p-4 border rounded-xl text-left transition-colors ${
@@ -615,7 +615,7 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
       </div>
 
       {/* Footer */}
-      <div className="border-t px-6 py-4 bg-gray-50">
+      <div className="border-t px-4 sm:px-6 py-3 sm:py-4 bg-gray-50">
         <div className="flex items-center gap-2 text-xs text-gray-500">
           <Shield className="w-4 h-4" />
           <span>

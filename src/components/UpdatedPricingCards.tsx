@@ -104,14 +104,14 @@ export function UpdatedPricingCards({ onSubscribe, currentTier }: UpdatedPricing
     <div className="w-full max-w-6xl mx-auto px-4 py-8">
       {/* Header */}
       <div className="text-center mb-12">
-        <h1 className="text-3xl font-bold mb-4">Choose Your Plan</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold mb-4">Choose Your Plan</h1>
         <p className="text-lg text-muted-foreground">
           Professional support that fits your family
         </p>
       </div>
 
       {/* Main Subscription Tiers */}
-      <div className="grid md:grid-cols-3 gap-6 mb-12">
+      <div className="grid md:grid-cols-3 gap-3 sm:gap-4 sm:gap-6 mb-12">
         {tiers.map((tier) => (
           <Card
             key={tier.id}
@@ -126,8 +126,8 @@ export function UpdatedPricingCards({ onSubscribe, currentTier }: UpdatedPricing
               </Badge>
             )}
 
-            <div className="text-center mb-6">
-              <h3 className="text-2xl font-bold mb-2">{tier.name}</h3>
+            <div className="text-center mb-4 sm:mb-6">
+              <h3 className="text-xl sm:text-2xl font-bold mb-2">{tier.name}</h3>
               <div className="flex items-baseline justify-center gap-1">
                 <span className="text-4xl font-bold">${tier.price}</span>
                 <span className="text-muted-foreground">{tier.period}</span>
@@ -139,7 +139,7 @@ export function UpdatedPricingCards({ onSubscribe, currentTier }: UpdatedPricing
               </div>
             </div>
 
-            <ul className="space-y-3 mb-6">
+            <ul className="space-y-3 mb-4 sm:mb-6">
               {tier.features.map((feature, index) => (
                 <li key={index} className="flex items-start gap-2">
                   {feature.startsWith('Everything') ? (
@@ -165,7 +165,7 @@ export function UpdatedPricingCards({ onSubscribe, currentTier }: UpdatedPricing
 
       {/* Jr-Only Tier */}
       <div className="mb-12">
-        <h2 className="text-2xl font-bold text-center mb-6">Kid-Focused Option</h2>
+        <h2 className="text-xl sm:text-2xl font-bold text-center mb-4 sm:mb-6">Kid-Focused Option</h2>
         <Card className="max-w-md mx-auto p-6 border-purple-200">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center">
@@ -179,7 +179,7 @@ export function UpdatedPricingCards({ onSubscribe, currentTier }: UpdatedPricing
             </div>
           </div>
 
-          <ul className="space-y-2 mb-6">
+          <ul className="space-y-2 mb-4 sm:mb-6">
             {jrOnlyTier.features.map((feature, index) => (
               <li key={index} className="flex items-start gap-2">
                 <Check className="w-4 h-4 text-purple-600 flex-shrink-0 mt-0.5" />
@@ -199,9 +199,9 @@ export function UpdatedPricingCards({ onSubscribe, currentTier }: UpdatedPricing
 
       {/* A La Carte Pricing */}
       <div className="mb-12">
-        <h2 className="text-2xl font-bold text-center mb-6">A La Carte Sessions</h2>
+        <h2 className="text-xl sm:text-2xl font-bold text-center mb-4 sm:mb-6">A La Carte Sessions</h2>
         <Card className="max-w-4xl mx-auto p-6">
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-3 gap-3 sm:gap-4 sm:gap-6">
             {/* RBT */}
             <div>
               <h3 className="font-bold mb-3 flex items-center gap-2">
@@ -245,7 +245,7 @@ export function UpdatedPricingCards({ onSubscribe, currentTier }: UpdatedPricing
             </div>
           </div>
 
-          <div className="mt-6 p-4 bg-accent/5 rounded-lg text-center">
+          <div className="mt-4 sm:mt-6 p-4 bg-accent/5 rounded-lg text-center">
             <p className="text-sm font-medium text-accent">
               💡 {aLaCarte.fourPacks}
             </p>

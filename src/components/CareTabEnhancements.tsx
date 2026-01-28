@@ -54,7 +54,7 @@ export const SessionPrepModal = ({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-6">
+        <div className="space-y-3 sm:space-y-4 sm:space-y-6">
           {/* Progress indicator */}
           <Card className="p-4 bg-gradient-to-r from-teal-50 to-cyan-50 border-teal-200">
             <div className="flex items-center justify-between mb-2">
@@ -146,7 +146,7 @@ export const ProviderInfoCard = ({
             ))}
           </div>
           <p className="text-sm text-teal-700">{provider.specialty}</p>
-          <div className="flex items-center gap-4 mt-2 text-xs text-teal-600">
+          <div className="flex items-center gap-3 sm:gap-4 mt-2 text-xs text-teal-600">
             <span className="flex items-center gap-1">
               <div className="w-2 h-2 bg-green-500 rounded-full" />
               {provider.availability}
@@ -202,7 +202,7 @@ export const AppointmentCard = ({
           </Badge>
         </div>
         
-        <div className="flex items-center gap-4 mt-1 text-sm text-slate-600">
+        <div className="flex items-center gap-3 sm:gap-4 mt-1 text-sm text-slate-600">
           <span className="flex items-center gap-1">
             <Calendar className="h-4 w-4" />
             {new Date(appointment.date).toLocaleDateString('en-US', { 
@@ -305,7 +305,7 @@ export const PostSessionModal = ({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-6">
+        <div className="space-y-3 sm:space-y-4 sm:space-y-6">
           {/* Rating */}
           <div>
             <label className="block text-sm font-medium mb-2">How was today's session?</label>
@@ -398,7 +398,7 @@ export const InsuranceStatusBanner = ({
   provider?: string;
   planType?: string;
 }) => (
-  <Card className={`p-4 mb-6 ${
+  <Card className={`p-4 mb-4 sm:mb-6 ${
     status === 'verified' ? 'bg-gradient-to-r from-emerald-50 to-teal-50 border-emerald-200' :
     status === 'pending' ? 'bg-gradient-to-r from-amber-50 to-yellow-50 border-amber-200' :
     'bg-gradient-to-r from-red-50 to-pink-50 border-red-200'

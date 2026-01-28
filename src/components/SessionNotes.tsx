@@ -332,7 +332,7 @@ export function SessionNotes({
         </div>
 
         {/* Template Selector */}
-        <div className="px-6 py-4 bg-neutral-50 border-b border-neutral-100">
+        <div className="px-4 sm:px-6 py-3 sm:py-4 bg-neutral-50 border-b border-neutral-100">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <Sparkles className="w-5 h-5 text-teal-600" />
@@ -352,7 +352,7 @@ export function SessionNotes({
           </div>
 
           {showTemplates && (
-            <div className="mt-3 grid grid-cols-2 gap-2">
+            <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
               {templates.map(template => (
                 <button
                   key={template.id}
@@ -372,7 +372,7 @@ export function SessionNotes({
         </div>
 
         {/* Note Content */}
-        <div className="p-6 space-y-6">
+        <div className="p-6 space-y-3 sm:space-y-4 sm:space-y-6">
           {/* Subjective */}
           <div>
             <label className="flex items-center gap-2 text-sm font-medium text-neutral-700 mb-2">

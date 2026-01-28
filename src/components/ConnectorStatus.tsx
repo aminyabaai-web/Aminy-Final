@@ -1046,13 +1046,13 @@ export function ConnectorStatus({
               aria-modal="true"
               aria-labelledby="care-upsell-title"
             >
-              <div className="p-6">
+              <div className="p-4 sm:p-5 md:p-6">
                 {/* Header */}
-                <div className="text-center mb-6">
+                <div className="text-center mb-4 sm:mb-6">
                   <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Stethoscope className="w-6 h-6 text-accent" />
                   </div>
-                  <h2 id="care-upsell-title" className="text-xl font-semibold text-primary mb-2">
+                  <h2 id="care-upsell-title" className="text-lg sm:text-xl font-semibold text-primary mb-2">
                     Care is a Pro feature
                   </h2>
                 </div>
@@ -1143,7 +1143,7 @@ export function ConnectorStatus({
           <span className="text-xs text-muted-foreground">Loading...</span>
         </div>
         
-        <div className="grid grid-cols-2 gap-2 mb-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-3">
           {/* Fallback pills */}
           {['Jr Device', 'Insight', 'Benefits', 'Find Care'].map((label) => (
             <button

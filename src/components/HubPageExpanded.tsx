@@ -220,17 +220,17 @@ export function HubPageExpanded({ userData, weekProgress = [] }: HubPageExpanded
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-slate-50 pb-20">
       {/* Header */}
-      <div className="bg-white border-b border-slate-200 px-6 py-6">
+      <div className="bg-white border-b border-slate-200 px-4 sm:px-6 py-4 sm:py-6">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-3xl font-semibold text-slate-900 mb-2">Hub</h1>
           <p className="text-slate-600">Connect, learn, and grow together</p>
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-6 py-6">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
         {/* AI Nudge Banner */}
         {weekProgress.length > 0 && (
-          <Card className="mb-6 p-4 bg-gradient-to-r from-accent/10 to-teal-50 border-accent/20">
+          <Card className="mb-4 sm:mb-6 p-4 bg-gradient-to-r from-accent/10 to-teal-50 border-accent/20">
             <div className="flex items-start gap-3">
               <Sparkles className="w-5 h-5 text-accent mt-0.5" />
               <div>
@@ -246,7 +246,7 @@ export function HubPageExpanded({ userData, weekProgress = [] }: HubPageExpanded
         )}
 
         {/* Search & Filter */}
-        <div className="mb-6 space-y-3">
+        <div className="mb-4 sm:mb-6 space-y-3">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
             <Input
@@ -285,7 +285,7 @@ export function HubPageExpanded({ userData, weekProgress = [] }: HubPageExpanded
         </div>
 
         {/* Tabs */}
-        <Tabs defaultValue="tips" className="space-y-6">
+        <Tabs defaultValue="tips" className="space-y-3 sm:space-y-4 sm:space-y-6">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="tips">Daily Tips</TabsTrigger>
             <TabsTrigger value="stories">Parent Stories</TabsTrigger>
@@ -293,7 +293,7 @@ export function HubPageExpanded({ userData, weekProgress = [] }: HubPageExpanded
           </TabsList>
 
           {/* Daily Tips Tab */}
-          <TabsContent value="tips" className="space-y-4">
+          <TabsContent value="tips" className="space-y-3 sm:space-y-4">
             <div className="flex items-center justify-between mb-4">
               <p className="text-sm text-slate-600">
                 {dailyTips.length} micro-lessons available
@@ -334,7 +334,7 @@ export function HubPageExpanded({ userData, weekProgress = [] }: HubPageExpanded
           </TabsContent>
 
           {/* Parent Stories Tab */}
-          <TabsContent value="stories" className="space-y-4">
+          <TabsContent value="stories" className="space-y-3 sm:space-y-4">
             <div className="flex items-center justify-between mb-4">
               <p className="text-sm text-slate-600">
                 Join a supportive community of parents
@@ -361,7 +361,7 @@ export function HubPageExpanded({ userData, weekProgress = [] }: HubPageExpanded
 
             {parentStories.map(story => (
               <Card key={story.id} className="p-5 hover:shadow-md transition-all">
-                <div className="flex items-start gap-4 mb-3">
+                <div className="flex items-start gap-3 sm:gap-4 mb-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-accent to-teal-500 rounded-full flex items-center justify-center text-white font-semibold">
                     {story.author.charAt(0)}
                   </div>
@@ -384,7 +384,7 @@ export function HubPageExpanded({ userData, weekProgress = [] }: HubPageExpanded
                       </div>
                     )}
 
-                    <div className="flex items-center gap-4 text-sm">
+                    <div className="flex items-center gap-3 sm:gap-4 text-sm">
                       <Button 
                         variant="ghost" 
                         size="sm" 
@@ -409,10 +409,10 @@ export function HubPageExpanded({ userData, weekProgress = [] }: HubPageExpanded
           </TabsContent>
 
           {/* Resources Tab */}
-          <TabsContent value="resources" className="space-y-4">
+          <TabsContent value="resources" className="space-y-3 sm:space-y-4">
             {/* AI Suggested Section */}
             {resources.filter(r => r.aiSuggested).length > 0 && (
-              <div className="mb-6">
+              <div className="mb-4 sm:mb-6">
                 <div className="flex items-center gap-2 mb-4">
                   <Sparkles className="w-5 h-5 text-accent" />
                   <h3 className="font-semibold text-slate-900">Suggested for You</h3>
@@ -477,7 +477,7 @@ function ResourceCard({
 
   return (
     <Card className={`p-4 hover:shadow-md transition-all ${resource.aiSuggested ? 'border-accent/30 bg-accent/5' : ''}`}>
-      <div className="flex items-start gap-4">
+      <div className="flex items-start gap-3 sm:gap-4">
         <div className={`w-12 h-12 rounded-lg ${getTypeColor()} flex items-center justify-center flex-shrink-0`}>
           {getIcon()}
         </div>

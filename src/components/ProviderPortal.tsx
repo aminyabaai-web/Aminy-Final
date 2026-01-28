@@ -472,7 +472,7 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
       <header className="bg-white dark:bg-slate-900 border-b border-neutral-200 dark:border-slate-700 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3 sm:gap-4">
               <Logo size={32} showText={false} />
               <div className="flex items-center gap-2">
                 <span className="text-lg font-semibold text-neutral-900 dark:text-white">Provider Portal</span>
@@ -482,7 +482,7 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
               </div>
             </div>
 
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3 sm:gap-4">
               <Button
                 variant="ghost"
                 size="sm"
@@ -545,12 +545,12 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
         {activeTab === 'dashboard' && (
           <div className="space-y-8">
             {/* Welcome & Next Session */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 sm:gap-6">
               {/* Welcome Card */}
               <Card className="lg:col-span-2 p-6 bg-gradient-to-br from-teal-50 to-cyan-50 border-teal-200/60">
                 <div className="flex items-start justify-between">
                   <div>
-                    <h1 className="text-2xl font-bold text-neutral-900">
+                    <h1 className="text-xl sm:text-2xl font-bold text-neutral-900">
                       Welcome back, {provider.name.split(' ')[0]}
                     </h1>
                     <p className="text-neutral-600 mt-1">
@@ -565,9 +565,9 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
                 </div>
 
                 {nextSession && (
-                  <div className="mt-6 p-4 bg-white rounded-xl border border-teal-200/60">
+                  <div className="mt-4 sm:mt-6 p-4 bg-white rounded-xl border border-teal-200/60">
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-3 sm:gap-4">
                         <div className="w-12 h-12 rounded-full bg-gradient-to-br from-violet-100 to-purple-100 flex items-center justify-center">
                           <span className="text-lg font-semibold text-violet-700">
                             {nextSession.patientName.split(' ').map(n => n[0]).join('')}
@@ -612,9 +612,9 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
               </Card>
 
               {/* Stats Card */}
-              <Card className="p-6">
+              <Card className="p-4 sm:p-5 md:p-6">
                 <h3 className="font-semibold text-neutral-900 mb-4">This Month</h3>
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
@@ -649,9 +649,9 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
             </div>
 
             {/* Quick Access - Patients Needing Attention */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
               {/* Pending Profile Access */}
-              <Card className="p-6">
+              <Card className="p-4 sm:p-5 md:p-6">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="font-semibold text-neutral-900">Pending Profile Access</h3>
                   <Badge className="bg-amber-100 text-amber-700">
@@ -690,7 +690,7 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
               </Card>
 
               {/* Upcoming Sessions This Week */}
-              <Card className="p-6">
+              <Card className="p-4 sm:p-5 md:p-6">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="font-semibold text-neutral-900">This Week's Sessions</h3>
                   <Button variant="ghost" size="sm" onClick={() => setActiveTab('sessions')}>
@@ -728,7 +728,7 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
             {/* Insight Navigator CTA */}
             <Card className="p-6 bg-gradient-to-r from-violet-50 to-purple-50 border-violet-200/60">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3 sm:gap-4">
                   <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center">
                     <Brain className="w-7 h-7 text-white" />
                   </div>
@@ -752,9 +752,9 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
         )}
 
         {activeTab === 'patients' && (
-          <div className="space-y-6">
+          <div className="space-y-3 sm:space-y-4 sm:space-y-6">
             {/* Search & Filters */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3 sm:gap-4">
               <div className="flex-1 relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
                 <Input
@@ -771,7 +771,26 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
             </div>
 
             {/* Patient Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {filteredPatients.length === 0 ? (
+              <Card className="p-8 sm:p-12 text-center">
+                <Users className="w-12 h-12 text-neutral-300 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-neutral-900 mb-2">
+                  {searchQuery ? 'No patients found' : 'No patients yet'}
+                </h3>
+                <p className="text-neutral-500 max-w-md mx-auto mb-6">
+                  {searchQuery
+                    ? 'Try adjusting your search terms'
+                    : 'Share your provider link with families to start building your patient roster. Parents can connect and grant you access to their Insight Navigator profiles.'}
+                </p>
+                {!searchQuery && (
+                  <Button className="bg-teal-600 hover:bg-teal-700">
+                    <Plus className="w-4 h-4 mr-2" />
+                    Get Your Provider Link
+                  </Button>
+                )}
+              </Card>
+            ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
               {filteredPatients.map(patient => (
                 <Card
                   key={patient.id}
@@ -783,7 +802,7 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
                   onClick={() => setSelectedPatient(patient)}
                 >
                   <div className="flex items-start justify-between">
-                    <div className="flex items-start gap-4">
+                    <div className="flex items-start gap-3 sm:gap-4">
                       <div className="w-14 h-14 rounded-full bg-gradient-to-br from-violet-100 to-purple-100 flex items-center justify-center">
                         <span className="text-lg font-semibold text-violet-700">
                           {patient.childName.split(' ').map(n => n[0]).join('')}
@@ -841,24 +860,25 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
                 </Card>
               ))}
             </div>
+            )}
           </div>
         )}
 
         {activeTab === 'sessions' && (
-          <div className="space-y-6">
+          <div className="space-y-3 sm:space-y-4 sm:space-y-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold text-neutral-900">Upcoming Sessions</h2>
+              <h2 className="text-lg sm:text-xl font-semibold text-neutral-900">Upcoming Sessions</h2>
               <Button className="bg-teal-600 hover:bg-teal-700">
                 <Calendar className="w-4 h-4 mr-2" />
                 Manage Availability
               </Button>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {upcomingSessions.map(session => (
                 <Card key={session.id} className="p-5">
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-3 sm:gap-4">
                       <div className="w-14 h-14 rounded-full bg-gradient-to-br from-teal-100 to-cyan-100 flex items-center justify-center">
                         <span className="text-lg font-semibold text-teal-700">
                           {session.patientName.split(' ').map(n => n[0]).join('')}
@@ -915,9 +935,9 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
         )}
 
         {activeTab === 'earnings' && (
-          <div className="space-y-6">
+          <div className="space-y-3 sm:space-y-4 sm:space-y-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold text-neutral-900">Earnings Overview</h2>
+              <h2 className="text-lg sm:text-xl font-semibold text-neutral-900">Earnings Overview</h2>
               <Button variant="outline">
                 <DollarSign className="w-4 h-4 mr-2" />
                 Request Payout
@@ -925,7 +945,7 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
             </div>
 
             {/* Earnings Summary */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-3 sm:gap-4">
               {[
                 { label: 'This Month', value: `$${earnings.thisMonth.toLocaleString()}`, trend: '+12%', color: 'teal' },
                 { label: 'Last Month', value: `$${earnings.lastMonth.toLocaleString()}`, color: 'neutral' },
@@ -935,7 +955,7 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
                 <Card key={i} className="p-5">
                   <p className="text-sm text-neutral-500 mb-1">{stat.label}</p>
                   <div className="flex items-end justify-between">
-                    <p className="text-2xl font-bold text-neutral-900">{stat.value}</p>
+                    <p className="text-xl sm:text-2xl font-bold text-neutral-900">{stat.value}</p>
                     {stat.trend && (
                       <span className={`text-sm font-medium ${stat.color === 'teal' ? 'text-teal-600' : 'text-green-600'}`}>
                         <TrendingUp className="w-3.5 h-3.5 inline mr-1" />
@@ -948,7 +968,7 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
             </div>
 
             {/* Recent Transactions */}
-            <Card className="p-6">
+            <Card className="p-4 sm:p-5 md:p-6">
               <h3 className="font-semibold text-neutral-900 mb-4">Recent Sessions</h3>
               <div className="space-y-3">
                 {[
@@ -983,12 +1003,12 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
         )}
 
         {activeTab === 'settings' && (
-          <div className="max-w-2xl space-y-6">
-            <h2 className="text-xl font-semibold text-neutral-900">Settings</h2>
+          <div className="max-w-2xl space-y-3 sm:space-y-4 sm:space-y-6">
+            <h2 className="text-lg sm:text-xl font-semibold text-neutral-900">Settings</h2>
 
-            <Card className="p-6">
+            <Card className="p-4 sm:p-5 md:p-6">
               <h3 className="font-semibold text-neutral-900 mb-4">Profile</h3>
-              <div className="flex items-center gap-4 mb-6">
+              <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
                 <div className="w-20 h-20 rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center text-white text-2xl font-semibold">
                   {provider.name.split(' ').map(n => n[0]).join('')}
                 </div>
@@ -1001,7 +1021,7 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
                 </div>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-neutral-700 mb-1.5">
                     Specialties
@@ -1025,7 +1045,7 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
               </div>
             </Card>
 
-            <Card className="p-6">
+            <Card className="p-4 sm:p-5 md:p-6">
               <h3 className="font-semibold text-neutral-900 mb-4">Availability</h3>
               <p className="text-neutral-600 mb-4">
                 Set your available hours for patient bookings
@@ -1036,7 +1056,7 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
               </Button>
             </Card>
 
-            <Card className="p-6">
+            <Card className="p-4 sm:p-5 md:p-6">
               <h3 className="font-semibold text-neutral-900 mb-4">Notifications</h3>
               <div className="space-y-3">
                 {[
@@ -1062,14 +1082,14 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
           <Card className="max-w-2xl w-full max-h-[85vh] overflow-y-auto">
             <div className="p-6 border-b border-neutral-100 sticky top-0 bg-white">
               <div className="flex items-start justify-between">
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3 sm:gap-4">
                   <div className="w-16 h-16 rounded-full bg-gradient-to-br from-violet-100 to-purple-100 flex items-center justify-center">
-                    <span className="text-xl font-semibold text-violet-700">
+                    <span className="text-lg sm:text-xl font-semibold text-violet-700">
                       {selectedPatient.childName.split(' ').map(n => n[0]).join('')}
                     </span>
                   </div>
                   <div>
-                    <h2 className="text-xl font-semibold text-neutral-900">
+                    <h2 className="text-lg sm:text-xl font-semibold text-neutral-900">
                       {selectedPatient.childName}
                     </h2>
                     <p className="text-neutral-500">
@@ -1083,7 +1103,7 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
               </div>
             </div>
 
-            <div className="p-6 space-y-6">
+            <div className="p-6 space-y-3 sm:space-y-4 sm:space-y-6">
               {/* Access Status */}
               <div className={`p-4 rounded-xl ${
                 selectedPatient.profileAccess === 'granted'

@@ -282,7 +282,7 @@ function ReviewCard({
       )}
 
       {/* Actions */}
-      <div className="flex items-center gap-4 mt-3">
+      <div className="flex items-center gap-3 sm:gap-4 mt-3">
         <button
           onClick={() => onMarkHelpful?.(review.id)}
           className={`flex items-center gap-1.5 text-sm ${
@@ -340,9 +340,9 @@ export function ProviderReviews({
     <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
       {/* Header with Stats */}
       <div className="p-4 sm:p-6 bg-gradient-to-r from-gray-50 to-white">
-        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 sm:gap-4">
           {/* Overall Rating */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 sm:gap-4">
             <div className="text-center">
               <div className="text-4xl font-bold text-gray-900">{stats.averageRating.toFixed(1)}</div>
               <StarRating rating={stats.averageRating} size="md" />
@@ -374,7 +374,7 @@ export function ProviderReviews({
           {/* Recommend Rate & CTA */}
           <div className="flex flex-col items-end gap-3">
             <div className="text-right">
-              <div className="text-2xl font-bold text-teal-600">{stats.recommendRate}%</div>
+              <div className="text-xl sm:text-2xl font-bold text-teal-600">{stats.recommendRate}%</div>
               <p className="text-sm text-gray-500">would recommend</p>
             </div>
 
@@ -451,7 +451,7 @@ export function ProviderReviews({
 
       {/* Show More Button */}
       {!compact && filteredReviews.length > 5 && !showAllReviews && (
-        <div className="px-4 sm:px-6 py-4 border-t border-gray-100">
+        <div className="px-4 sm:px-4 sm:px-6 py-3 sm:py-4 border-t border-gray-100">
           <button
             onClick={() => setShowAllReviews(true)}
             className="w-full py-2 text-teal-600 font-medium hover:bg-teal-50 rounded-lg transition-colors"

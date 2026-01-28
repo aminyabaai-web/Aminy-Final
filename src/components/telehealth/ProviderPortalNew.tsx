@@ -150,7 +150,7 @@ export function ProviderPortalNew({ providerId, onLogout }: ProviderPortalProps)
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Top Bar */}
-      <header className="bg-white border-b border-gray-200 px-6 py-4">
+      <header className="bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-gradient-to-br from-[#577590] to-[#466379] rounded-full flex items-center justify-center text-white font-semibold">
@@ -273,11 +273,11 @@ function ProfileTab({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-6">Profile Information</h2>
+        <h2 className="text-lg font-semibold text-gray-900 mb-4 sm:mb-6">Profile Information</h2>
 
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">First Name</label>
             <input
@@ -350,7 +350,7 @@ function ProfileTab({
         </div>
 
         {showStateSelector ? (
-          <div className="grid grid-cols-4 gap-2 max-h-64 overflow-y-auto">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 max-h-64 overflow-y-auto">
             {US_STATES.map((state) => (
               <label
                 key={state.code}
@@ -390,9 +390,9 @@ function ProfileTab({
 
       {/* Pricing & Services */}
       <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-6">Pricing & Services</h2>
+        <h2 className="text-lg font-semibold text-gray-900 mb-4 sm:mb-6">Pricing & Services</h2>
 
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <label className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
             <div className="flex items-center gap-3">
               <input
@@ -488,9 +488,9 @@ function AvailabilityTab({
   }, {} as Record<number, AvailabilityBlock[]>);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-4 sm:mb-6">
           <div>
             <h2 className="text-lg font-semibold text-gray-900">Weekly Availability</h2>
             <p className="text-sm text-gray-500">Set your recurring weekly schedule</p>
@@ -504,12 +504,12 @@ function AvailabilityTab({
           </button>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           {DAYS_OF_WEEK.map(({ value, label }) => {
             const dayBlocks = byDay[value] || [];
 
             return (
-              <div key={value} className="flex items-start gap-4 p-4 bg-gray-50 rounded-lg">
+              <div key={value} className="flex items-start gap-3 sm:gap-4 p-4 bg-gray-50 rounded-lg">
                 <div className="w-28 flex-shrink-0">
                   <p className="font-medium text-gray-900">{label}</p>
                 </div>
@@ -585,12 +585,12 @@ function AppointmentsTab({ appointments }: { appointments: Appointment[] }) {
 
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-6">
-      <h2 className="text-lg font-semibold text-gray-900 mb-6">Upcoming Appointments</h2>
+      <h2 className="text-lg font-semibold text-gray-900 mb-4 sm:mb-6">Upcoming Appointments</h2>
 
       {appointments.length > 0 ? (
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           {appointments.map((apt) => (
-            <div key={apt.id} className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
+            <div key={apt.id} className="flex items-center gap-3 sm:gap-4 p-4 bg-gray-50 rounded-lg">
               <div className="w-12 h-12 bg-[#577590]/10 rounded-full flex items-center justify-center">
                 <Video className="w-6 h-6 text-[#577590]" />
               </div>
@@ -628,12 +628,12 @@ function AppointmentsTab({ appointments }: { appointments: Appointment[] }) {
 function SummariesTab({ appointments }: { appointments: Appointment[] }) {
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-6">
-      <h2 className="text-lg font-semibold text-gray-900 mb-6">Visit Summaries to Complete</h2>
+      <h2 className="text-lg font-semibold text-gray-900 mb-4 sm:mb-6">Visit Summaries to Complete</h2>
 
       {appointments.length > 0 ? (
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           {appointments.map((apt) => (
-            <div key={apt.id} className="flex items-center gap-4 p-4 bg-amber-50 rounded-lg border border-amber-200">
+            <div key={apt.id} className="flex items-center gap-3 sm:gap-4 p-4 bg-amber-50 rounded-lg border border-amber-200">
               <div className="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center">
                 <FileText className="w-6 h-6 text-amber-600" />
               </div>

@@ -452,7 +452,7 @@ export function TreatmentPlanEditor({
       </header>
 
       <main className="max-w-5xl mx-auto px-4 py-6">
-        <div className="flex gap-6">
+        <div className="flex gap-3 sm:gap-4 sm:gap-6">
           {/* Plan List Sidebar */}
           <div className="w-64 flex-shrink-0">
             <div className="space-y-2">
@@ -507,12 +507,12 @@ export function TreatmentPlanEditor({
           {/* Plan Detail */}
           <div className="flex-1">
             {selectedPlan ? (
-              <div className="space-y-6">
+              <div className="space-y-3 sm:space-y-4 sm:space-y-6">
                 {/* Plan Header */}
-                <Card className="p-6">
+                <Card className="p-4 sm:p-5 md:p-6">
                   <div className="flex items-start justify-between mb-4">
                     <div>
-                      <h2 className="text-xl font-semibold text-neutral-900">{selectedPlan.title}</h2>
+                      <h2 className="text-lg sm:text-xl font-semibold text-neutral-900">{selectedPlan.title}</h2>
                       {selectedPlan.description && (
                         <p className="text-neutral-600 mt-1">{selectedPlan.description}</p>
                       )}
@@ -542,7 +542,7 @@ export function TreatmentPlanEditor({
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-4 gap-4 text-sm">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4 text-sm">
                     <div>
                       <p className="text-neutral-500">Start Date</p>
                       <p className="font-medium">{selectedPlan.startDate || 'Not set'}</p>
@@ -572,7 +572,7 @@ export function TreatmentPlanEditor({
                 </Card>
 
                 {/* Progress Overview */}
-                <Card className="p-6">
+                <Card className="p-4 sm:p-5 md:p-6">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="font-semibold text-neutral-900">Progress Overview</h3>
                     <Badge className="bg-teal-100 text-teal-700">
@@ -590,7 +590,7 @@ export function TreatmentPlanEditor({
                       </Button>
                     </div>
                   ) : (
-                    <div className="grid grid-cols-3 gap-4 mb-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 mb-4">
                       {DOMAIN_OPTIONS.filter(d =>
                         selectedPlan.goals.some(g => g.domain === d.value)
                       ).map(domain => {
@@ -655,9 +655,9 @@ export function TreatmentPlanEditor({
                           )}
                         </div>
 
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-3 sm:gap-4">
                           <div className="text-right">
-                            <p className="text-2xl font-bold text-neutral-900">{goal.currentProgress}%</p>
+                            <p className="text-xl sm:text-2xl font-bold text-neutral-900">{goal.currentProgress}%</p>
                             <div className="w-24 h-2 bg-neutral-200 rounded-full overflow-hidden">
                               <div
                                 className={`h-full ${getProgressColor(goal.currentProgress)} rounded-full`}
@@ -674,8 +674,8 @@ export function TreatmentPlanEditor({
                       </div>
 
                       {expandedGoal === goal.id && (
-                        <div className="mt-4 pt-4 border-t border-neutral-100 space-y-4">
-                          <div className="grid grid-cols-3 gap-4">
+                        <div className="mt-4 pt-4 border-t border-neutral-100 space-y-3 sm:space-y-4">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
                             <div>
                               <p className="text-xs font-medium text-neutral-500 uppercase mb-1">Baseline</p>
                               <p className="text-sm text-neutral-700">{goal.baseline || 'Not set'}</p>
@@ -836,7 +836,7 @@ export function TreatmentPlanEditor({
               </div>
             </div>
 
-            <div className="p-6 space-y-4">
+            <div className="p-6 space-y-3 sm:space-y-4">
               <div>
                 <label className="block text-sm font-medium text-neutral-700 mb-1.5">Plan Title *</label>
                 <Input
@@ -856,7 +856,7 @@ export function TreatmentPlanEditor({
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <label className="block text-sm font-medium text-neutral-700 mb-1.5">Start Date</label>
                   <Input
@@ -934,7 +934,7 @@ export function TreatmentPlanEditor({
               </div>
             </div>
 
-            <div className="p-6 space-y-4">
+            <div className="p-6 space-y-3 sm:space-y-4">
               <div>
                 <label className="block text-sm font-medium text-neutral-700 mb-1.5">Goal Title *</label>
                 <Input
@@ -973,7 +973,7 @@ export function TreatmentPlanEditor({
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <label className="block text-sm font-medium text-neutral-700 mb-1.5">Baseline</label>
                   <Input

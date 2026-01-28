@@ -692,7 +692,7 @@ export function AIIntakeChat({ onComplete, initialData, isReturningUser = false,
             setExtractedInsights(insights);
 
             addAminyMessage(
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 <div>
                   <p className="font-medium text-gray-900 mb-2">What I heard about {childRef}{ageContext}:</p>
                   <ul className="space-y-2">
@@ -788,7 +788,7 @@ export function AIIntakeChat({ onComplete, initialData, isReturningUser = false,
 
     setTimeout(() => {
       addAminyMessage(
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <div className="bg-gradient-to-r from-teal-500 to-blue-500 text-white p-5 rounded-xl">
             <p className="font-semibold text-lg mb-3">Here's what happens next:</p>
             <ul className="space-y-2 text-sm">
@@ -828,7 +828,7 @@ export function AIIntakeChat({ onComplete, initialData, isReturningUser = false,
               Start My 7-Day Free Trial
               <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
-            <div className="flex items-center justify-center gap-4 mt-3 text-xs text-gray-500">
+            <div className="flex items-center justify-center gap-3 sm:gap-4 mt-3 text-xs text-gray-500">
               <span>✓ No credit card</span>
               <span>✓ Cancel anytime</span>
               <span>✓ Full access</span>
@@ -1030,7 +1030,7 @@ export function AIIntakeChat({ onComplete, initialData, isReturningUser = false,
           scrollBehavior: 'smooth'
         }}
       >
-        <div className="max-w-2xl mx-auto space-y-4">
+        <div className="max-w-2xl mx-auto space-y-3 sm:space-y-4">
           <AnimatePresence>
             {messages.map((message) => (
               <motion.div
@@ -1125,7 +1125,7 @@ export function AIIntakeChat({ onComplete, initialData, isReturningUser = false,
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="space-y-4 pt-4"
+              className="space-y-3 sm:space-y-4 pt-4"
             >
               <Card className="p-5 border-teal-200 dark:border-teal-800 bg-white/80 dark:bg-slate-800/80">
                 <h3 className="font-medium text-gray-900 dark:text-white mb-2">Here are three routines made for {childName || 'your family'}:</h3>
@@ -1215,7 +1215,7 @@ export function AIIntakeChat({ onComplete, initialData, isReturningUser = false,
           <div className="max-w-2xl mx-auto">
             {/* Voice-first toggle */}
             {conversationTurn === 0 && !currentInput && (
-              <div className="flex items-center justify-center gap-4 mb-3">
+              <div className="flex items-center justify-center gap-3 sm:gap-4 mb-3">
                 <button
                   onClick={() => setUseVoiceFirst(false)}
                   className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm transition-colors ${

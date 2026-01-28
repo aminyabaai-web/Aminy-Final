@@ -343,7 +343,7 @@ const RecordRow: React.FC<RecordRowProps> = ({
                 </div>
               </div>
               
-              <div className="flex items-center gap-4 text-sm text-muted-foreground mb-2">
+              <div className="flex items-center gap-3 sm:gap-4 text-sm text-muted-foreground mb-2">
                 <span>Source: {record.source}</span>
                 <span>•</span>
                 <span>{new Date(record.date).toLocaleDateString()}</span>
@@ -426,7 +426,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ record, isOpen, onClose, userTi
           </DialogDescription>
         </DialogHeader>
         
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <div>
             <Label>Expires in</Label>
             <Select value={expiresIn} onValueChange={setExpiresIn}>
@@ -583,7 +583,7 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
     <div className="fixed inset-0 bg-background z-50 flex flex-col">
       {/* Header */}
       <div className="sticky top-0 z-10 bg-background border-b">
-        <div className="p-6">
+        <div className="p-4 sm:p-5 md:p-6">
           <div className="flex items-center justify-between mb-4">
             <div>
               <div className="flex items-center gap-2 mb-1">
@@ -595,7 +595,7 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
                 >
                   <X className="w-4 h-4" />
                 </Button>
-                <h1 className="text-xl font-semibold">Records Vault</h1>
+                <h1 className="text-lg sm:text-xl font-semibold">Records Vault</h1>
                 <Badge variant="outline" className="text-xs">
                   <Shield className="w-3 h-3 mr-1" />
                   PHI encrypted
@@ -634,7 +634,7 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
                     </SheetDescription>
                   </SheetHeader>
                   
-                  <div className="mt-6 space-y-4">
+                  <div className="mt-4 sm:mt-6 space-y-3 sm:space-y-4">
                     <div>
                       <Label htmlFor="title">Title *</Label>
                       <Input 
@@ -736,7 +736,7 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
       {/* Storage and Capabilities */}
       <div className="px-6 py-3 bg-muted/30">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 sm:gap-4">
             <div className="flex items-center gap-2">
               <Progress value={(usedGB / totalGB) * 100} className="w-32 h-2" />
               <span className="text-sm text-muted-foreground">
@@ -758,7 +758,7 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
 
       {/* Filters */}
       <div className="px-6 py-3 border-b">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3 sm:gap-4">
           <div className="flex items-center gap-2">
             <Label className="text-sm">Sort:</Label>
             <Select value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
@@ -807,7 +807,7 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
 
       {/* Records List */}
       <div className="flex-1 overflow-auto">
-        <div className="p-6">
+        <div className="p-4 sm:p-5 md:p-6">
           {sortedRecords.length > 0 ? (
             <div className="space-y-3">
               <div className="flex items-center gap-2 mb-4">
@@ -910,7 +910,7 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
               </DialogDescription>
             </DialogHeader>
             
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               <div className="flex items-center gap-2">
                 <Badge variant="secondary">{viewRecord.type}</Badge>
                 <Badge variant="outline">

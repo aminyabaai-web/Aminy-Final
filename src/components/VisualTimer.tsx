@@ -193,10 +193,10 @@ export function VisualTimer({
         animate={{ scale: 1, opacity: 1 }}
         className="text-center p-8"
       >
-        <div className="w-24 h-24 mx-auto mb-6 bg-green-100 rounded-full flex items-center justify-center">
+        <div className="w-24 h-24 mx-auto mb-4 sm:mb-6 bg-green-100 rounded-full flex items-center justify-center">
           <Check className="w-12 h-12 text-green-600" />
         </div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
           {childFriendly ? 'Amazing job! 🎉' : 'Time complete!'}
         </h2>
         {rewardCoins > 0 && (
@@ -205,7 +205,7 @@ export function VisualTimer({
             <span className="font-medium">+{rewardCoins} Calm Coins earned!</span>
           </div>
         )}
-        <p className="text-gray-600 mb-6">
+        <p className="text-gray-600 mb-4 sm:mb-6">
           {childFriendly
             ? "You did it! That wasn't so hard, was it?"
             : 'Timer finished successfully.'}
@@ -235,7 +235,7 @@ export function VisualTimer({
       />
 
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-4 sm:mb-6">
         <h2 className="text-lg font-semibold text-gray-900">{label}</h2>
         <div className="flex items-center gap-2">
           <button
@@ -313,7 +313,7 @@ export function VisualTimer({
 
       {/* Preset times */}
       {showPresets && !isRunning && (
-        <div className="flex flex-wrap justify-center gap-2 mb-6">
+        <div className="flex flex-wrap justify-center gap-2 mb-4 sm:mb-6">
           {PRESET_TIMES.map((preset) => (
             <button
               key={preset.minutes}
@@ -332,7 +332,7 @@ export function VisualTimer({
       )}
 
       {/* Controls */}
-      <div className="flex justify-center gap-4">
+      <div className="flex justify-center gap-3 sm:gap-4">
         {!isRunning ? (
           <Button
             onClick={handleStart}
@@ -357,7 +357,7 @@ export function VisualTimer({
 
       {/* Encouragement for kids */}
       {childFriendly && !isRunning && remainingSeconds === totalSeconds && (
-        <div className="mt-6 text-center">
+        <div className="mt-4 sm:mt-6 text-center">
           <p className="text-sm text-gray-600">
             Ready to wait? You'll earn{' '}
             <span className="font-medium text-amber-600">
@@ -382,7 +382,7 @@ export function QuickTimer({
   onComplete?: () => void;
 }) {
   return (
-    <Card className="p-4">
+    <Card className="p-3 sm:p-4">
       <VisualTimer
         initialMinutes={minutes}
         label={`${minutes} minute timer`}

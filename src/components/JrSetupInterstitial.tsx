@@ -41,7 +41,7 @@ export const JrSetupInterstitial: React.FC<JrSetupInterstitialProps> = ({
         {/* Centered Interstitial Card */}
         <Card className="p-8 text-center aminy-card">
           {/* Icon */}
-          <div className="p-4 bg-green-100 rounded-full inline-flex mb-6">
+          <div className="p-4 bg-green-100 rounded-full inline-flex mb-4 sm:mb-6">
             <Gamepad2 className="w-8 h-8 text-green-600" />
           </div>
 
@@ -51,7 +51,7 @@ export const JrSetupInterstitial: React.FC<JrSetupInterstitialProps> = ({
           </h2>
 
           {/* Subtitle */}
-          <p className="text-muted-foreground mb-6 leading-relaxed">
+          <p className="text-muted-foreground mb-4 sm:mb-6 leading-relaxed">
             Your child's companion for practice & play. You can skip and set it up later.
           </p>
 
@@ -98,7 +98,7 @@ export const JrSetupInterstitial: React.FC<JrSetupInterstitialProps> = ({
           </div>
 
           {/* Reassurance */}
-          <p className="text-xs text-muted-foreground mt-6 opacity-80">
+          <p className="text-xs text-muted-foreground mt-4 sm:mt-6 opacity-80">
             You can always set up Aminy Junior later from your profile or Junior tab.
           </p>
         </Card>

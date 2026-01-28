@@ -354,7 +354,7 @@ export function PreCallSetup({
           )}
         </CardHeader>
 
-        <CardContent className="space-y-6">
+        <CardContent className="space-y-3 sm:space-y-4 sm:space-y-6">
           {/* Error Alert */}
           {error && (
             <Alert variant="destructive">
@@ -478,7 +478,7 @@ export function PreCallSetup({
           </div>
 
           {/* Device Selection */}
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-3 sm:gap-4 md:grid-cols-2">
             <div className="space-y-2">
               <label className="text-sm font-medium">Camera</label>
               <Select value={selectedCamera} onValueChange={setSelectedCamera}>

@@ -366,7 +366,7 @@ export function CoachMode({ activity, onClose, onComplete, nextActivity }: Coach
             </div>
 
             {/* Progress Bar */}
-            <div className="px-6 py-4 border-b border-gray-100">
+            <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-100">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm font-medium text-muted-foreground">
                   Step {currentStep} of {activity.totalSteps}
@@ -379,7 +379,7 @@ export function CoachMode({ activity, onClose, onComplete, nextActivity }: Coach
             </div>
 
             {/* Steps List */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-4">
+            <div className="flex-1 overflow-y-auto p-6 space-y-3 sm:space-y-4">
               {activity.steps.map((step, index) => (
                 <div
                   key={step.id}
@@ -471,7 +471,7 @@ export function CoachMode({ activity, onClose, onComplete, nextActivity }: Coach
             </div>
 
             {/* Progress Bar */}
-            <div className="px-6 py-4 border-b border-gray-100">
+            <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-100">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm font-medium text-accent">
                   Step {currentStep} of {activity.totalSteps}
@@ -650,7 +650,7 @@ export function CoachMode({ activity, onClose, onComplete, nextActivity }: Coach
             </div>
 
             {/* Reflection Section */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-6">
+            <div className="flex-1 overflow-y-auto p-6 space-y-3 sm:space-y-4 sm:space-y-6">
               <div>
                 <h3 className="text-lg font-semibold text-primary mb-3">
                   How did it go?

@@ -501,11 +501,11 @@ export function ChildMentalHealthScreen({
       <div className="min-h-screen bg-gradient-to-b from-rose-50 to-white p-4">
         <div className="max-w-md mx-auto pt-8">
           <Card className="p-6 border-rose-200">
-            <div className="text-center mb-6">
+            <div className="text-center mb-4 sm:mb-6">
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-rose-100 mb-4">
                 <Heart className="w-8 h-8 text-rose-500" />
               </div>
-              <h2 className="text-2xl font-bold text-primary mb-2">
+              <h2 className="text-xl sm:text-2xl font-bold text-primary mb-2">
                 {childName} deserves support
               </h2>
               <p className="text-muted-foreground">
@@ -514,7 +514,7 @@ export function ChildMentalHealthScreen({
               </p>
             </div>
 
-            <div className="bg-rose-50 border border-rose-200 rounded-xl p-4 mb-6">
+            <div className="bg-rose-50 border border-rose-200 rounded-xl p-4 mb-4 sm:mb-6">
               <div className="flex items-start gap-3">
                 <AlertTriangle className="w-5 h-5 text-rose-500 mt-0.5 flex-shrink-0" />
                 <div>
@@ -529,7 +529,7 @@ export function ChildMentalHealthScreen({
               </div>
             </div>
 
-            <div className="space-y-3 mb-6">
+            <div className="space-y-3 mb-4 sm:mb-6">
               {resources.map((resource, i) => (
                 <Card key={i} className="p-4 border-rose-100">
                   <div className="flex items-start gap-3">
@@ -576,8 +576,8 @@ export function ChildMentalHealthScreen({
     return (
       <div className="min-h-screen bg-gradient-to-b from-white to-accent/5 p-4">
         <div className="max-w-md mx-auto pt-8">
-          <Card className="p-6">
-            <div className="text-center mb-6">
+          <Card className="p-4 sm:p-5 md:p-6">
+            <div className="text-center mb-4 sm:mb-6">
               <div className={cn(
                 "inline-flex items-center justify-center w-16 h-16 rounded-full mb-4",
                 result.overallRisk === 'low' ? "bg-green-100" :
@@ -592,7 +592,7 @@ export function ChildMentalHealthScreen({
                   <Heart className="w-8 h-8 text-rose-500" />
                 )}
               </div>
-              <h2 className="text-2xl font-bold text-primary mb-2">
+              <h2 className="text-xl sm:text-2xl font-bold text-primary mb-2">
                 Thank you for sharing
               </h2>
               <p className="text-muted-foreground">
@@ -602,7 +602,7 @@ export function ChildMentalHealthScreen({
 
             {result.concerns.length > 0 && (
               <div className={cn(
-                "rounded-xl p-4 mb-6",
+                "rounded-xl p-4 mb-4 sm:mb-6",
                 result.overallRisk === 'critical' || result.overallRisk === 'high'
                   ? "bg-rose-50 border border-rose-200"
                   : result.overallRisk === 'moderate'
@@ -625,7 +625,7 @@ export function ChildMentalHealthScreen({
             )}
 
             {result.needsProfessional && (
-              <div className="bg-accent/10 rounded-xl p-4 mb-6">
+              <div className="bg-accent/10 rounded-xl p-4 mb-4 sm:mb-6">
                 <h4 className="font-semibold text-primary mb-2 flex items-center gap-2">
                   <Sparkles className="w-4 h-4 text-accent" />
                   Our recommendation
@@ -656,7 +656,7 @@ export function ChildMentalHealthScreen({
     <div className="min-h-screen bg-gradient-to-b from-white to-accent/5 p-4">
       <div className="max-w-md mx-auto pt-8">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-4 sm:mb-6">
           {onBack && currentQuestion === 0 ? (
             <button
               onClick={onBack}
@@ -702,7 +702,7 @@ export function ChildMentalHealthScreen({
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-6 p-4 bg-accent/5 rounded-xl border border-accent/10"
+            className="mb-4 sm:mb-6 p-4 bg-accent/5 rounded-xl border border-accent/10"
           >
             <div className="flex items-start gap-3">
               <Heart className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" />
@@ -727,7 +727,7 @@ export function ChildMentalHealthScreen({
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
           >
-            <Card className="p-6">
+            <Card className="p-4 sm:p-5 md:p-6">
               {currentQ.isSafety && (
                 <div className="flex items-center gap-2 mb-4 text-rose-500">
                   <Shield className="w-4 h-4" />
@@ -735,7 +735,7 @@ export function ChildMentalHealthScreen({
                 </div>
               )}
 
-              <h3 className="text-lg font-semibold text-primary mb-6">
+              <h3 className="text-lg font-semibold text-primary mb-4 sm:mb-6">
                 {currentQ.question.replace('{childName}', childName)}
               </h3>
 
@@ -769,7 +769,7 @@ export function ChildMentalHealthScreen({
         </AnimatePresence>
 
         {/* Help text */}
-        <p className="text-center text-sm text-muted-foreground mt-6">
+        <p className="text-center text-sm text-muted-foreground mt-4 sm:mt-6">
           <HelpCircle className="w-4 h-4 inline mr-1" />
           Your answers are private and help personalize {childName}'s support
         </p>

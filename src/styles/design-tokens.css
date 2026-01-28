@@ -1004,6 +1004,12 @@
   100% { background-position: -200% 0; }
 }
 
+/* Shimmer animation for loading states */
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
 .dark .premium-skeleton {
   background: linear-gradient(
     90deg,

@@ -158,14 +158,14 @@ export function ErrorDisplay({
     return (
       <div className={`min-h-screen bg-gray-50 flex items-center justify-center p-4 ${className}`}>
         <div className="text-center max-w-md">
-          <div className={`w-16 h-16 mx-auto mb-6 ${colors.bg} rounded-full flex items-center justify-center`}>
+          <div className={`w-16 h-16 mx-auto mb-4 sm:mb-6 ${colors.bg} rounded-full flex items-center justify-center`}>
             <Icon className={`w-8 h-8 ${colors.icon}`} />
           </div>
 
-          <h2 className="text-xl font-semibold text-gray-900 mb-3">{displayTitle}</h2>
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3">{displayTitle}</h2>
 
           {displaySecondary && (
-            <p className="text-gray-600 mb-6">{displaySecondary}</p>
+            <p className="text-gray-600 mb-4 sm:mb-6">{displaySecondary}</p>
           )}
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -186,7 +186,7 @@ export function ErrorDisplay({
           </div>
 
           {/* Support link */}
-          <div className="mt-6 pt-6 border-t border-gray-200">
+          <div className="mt-4 sm:mt-6 pt-6 border-t border-gray-200">
             <p className="text-sm text-gray-500">
               Need help?{' '}
               <a href="mailto:support@aminy.app" className="text-accent hover:underline">

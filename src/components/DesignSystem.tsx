@@ -130,7 +130,7 @@ export function DesignSystem() {
                 <Heart className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-semibold text-slate-900 dark:text-white">
+                <h1 className="text-lg sm:text-xl font-semibold text-slate-900 dark:text-white">
                   Aminy Design System
                 </h1>
                 <p className="text-sm text-slate-500 dark:text-slate-400">
@@ -188,13 +188,13 @@ export function DesignSystem() {
                   <h2 className="text-2xl font-semibold text-slate-900 dark:text-white mb-4">
                     Design System Overview
                   </h2>
-                  <p className="text-slate-600 dark:text-slate-400 mb-6">
+                  <p className="text-slate-600 dark:text-slate-400 mb-4 sm:mb-6">
                     A comprehensive design system built for stressed caregivers supporting children with developmental needs. 
                     Featuring calm, accessible colors and intuitive components optimized for mobile-first experiences.
                   </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 sm:gap-6">
                   <div className="bg-white dark:bg-slate-800 p-6 rounded-lg border border-slate-200 dark:border-slate-700">
                     <div className="w-12 h-12 bg-teal-100 dark:bg-teal-900 rounded-lg flex items-center justify-center mb-4">
                       <Palette className="w-6 h-6 text-teal-600 dark:text-teal-400" />
@@ -240,7 +240,7 @@ export function DesignSystem() {
                     390×844 mobile viewport with 16pt margins and 4-column grid system, optimized for one-handed use.
                   </p>
                   
-                  <div className="grid grid-cols-4 gap-2 max-w-sm">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 max-w-sm">
                     {Array.from({ length: 4 }).map((_, i) => (
                       <div key={i} className="bg-teal-200 dark:bg-teal-700 h-8 rounded flex items-center justify-center text-xs font-medium text-teal-800 dark:text-teal-200">
                         {i + 1}
@@ -257,7 +257,7 @@ export function DesignSystem() {
                   <h2 className="text-2xl font-semibold text-slate-900 dark:text-white mb-4">
                     Color Tokens
                   </h2>
-                  <p className="text-slate-600 dark:text-slate-400 mb-6">
+                  <p className="text-slate-600 dark:text-slate-400 mb-4 sm:mb-6">
                     Carefully chosen colors that prioritize accessibility and emotional well-being for stressed caregivers.
                   </p>
                 </div>
@@ -267,7 +267,7 @@ export function DesignSystem() {
                     <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 capitalize">
                       {category} Colors
                     </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                       {Object.entries(tokens).map(([tokenName, token]) =>
                         renderTokenCard(tokenName, token, 'colors')
                       )}
@@ -283,12 +283,12 @@ export function DesignSystem() {
                   <h2 className="text-2xl font-semibold text-slate-900 dark:text-white mb-4">
                     Typography Scale
                   </h2>
-                  <p className="text-slate-600 dark:text-slate-400 mb-6">
+                  <p className="text-slate-600 dark:text-slate-400 mb-4 sm:mb-6">
                     Mobile-first typography designed for clarity and readability in stressful moments.
                   </p>
                 </div>
 
-                <div className="space-y-6">
+                <div className="space-y-3 sm:space-y-4 sm:space-y-6">
                   {Object.entries(typeTokens).map(([tokenName, token]) => (
                     <div key={tokenName} className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-6">
                       <div className="flex items-start justify-between mb-4">
@@ -336,12 +336,12 @@ export function DesignSystem() {
                   <h2 className="text-2xl font-semibold text-slate-900 dark:text-white mb-4">
                     Spacing System
                   </h2>
-                  <p className="text-slate-600 dark:text-slate-400 mb-6">
+                  <p className="text-slate-600 dark:text-slate-400 mb-4 sm:mb-6">
                     8pt-based spacing system for consistent, harmonious layouts across all screen sizes.
                   </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
                   {Object.entries(spacingTokens).map(([tokenName, token]) => (
                     <div key={tokenName} className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-6">
                       <div className="flex items-start justify-between mb-4">
@@ -360,7 +360,7 @@ export function DesignSystem() {
                         </button>
                       </div>
                       
-                      <div className="flex items-center gap-4 mb-3">
+                      <div className="flex items-center gap-3 sm:gap-4 mb-3">
                         <div 
                           className="bg-teal-200 dark:bg-teal-700 h-8 rounded"
                           style={{ width: token.value }}
@@ -377,7 +377,7 @@ export function DesignSystem() {
                   ))}
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
                   {Object.entries(radiusTokens).map(([tokenName, token]) => (
                     <div key={tokenName} className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-6">
                       <div className="flex items-start justify-between mb-4">
@@ -396,7 +396,7 @@ export function DesignSystem() {
                         </button>
                       </div>
                       
-                      <div className="flex items-center gap-4 mb-3">
+                      <div className="flex items-center gap-3 sm:gap-4 mb-3">
                         <div 
                           className="bg-teal-200 dark:bg-teal-700 w-16 h-16"
                           style={{ borderRadius: token.value }}
@@ -421,16 +421,16 @@ export function DesignSystem() {
                   <h2 className="text-2xl font-semibold text-slate-900 dark:text-white mb-4">
                     Component Library
                   </h2>
-                  <p className="text-slate-600 dark:text-slate-400 mb-6">
+                  <p className="text-slate-600 dark:text-slate-400 mb-4 sm:mb-6">
                     Touch-friendly components designed for stressed caregivers with enhanced accessibility and child-safe interactions.
                   </p>
                 </div>
 
                 {/* Buttons */}
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Buttons</h3>
                   <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-6">
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
                       <div className="space-y-3">
                         <h4 className="text-sm font-medium text-slate-700 dark:text-slate-300">Primary</h4>
                         <button className="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200">
@@ -466,11 +466,11 @@ export function DesignSystem() {
                 </div>
 
                 {/* Inputs */}
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Form Elements</h3>
                   <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-6">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                      <div className="space-y-4">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
+                      <div className="space-y-3 sm:space-y-4">
                         <div>
                           <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                             Text Input
@@ -494,7 +494,7 @@ export function DesignSystem() {
                         </div>
                       </div>
                       
-                      <div className="space-y-4">
+                      <div className="space-y-3 sm:space-y-4">
                         <div>
                           <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                             Select
@@ -526,9 +526,9 @@ export function DesignSystem() {
                 </div>
 
                 {/* Cards */}
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Cards</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 sm:gap-6">
                     <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-6 hover:shadow-lg transition-shadow">
                       <div className="w-12 h-12 bg-teal-100 dark:bg-teal-900 rounded-lg flex items-center justify-center mb-4">
                         <Heart className="w-6 h-6 text-teal-600 dark:text-teal-400" />
@@ -551,7 +551,7 @@ export function DesignSystem() {
                     
                     <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden">
                       <div className="h-32 bg-gradient-to-r from-teal-400 to-blue-500"></div>
-                      <div className="p-6">
+                      <div className="p-4 sm:p-5 md:p-6">
                         <h4 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">Media Card</h4>
                         <p className="text-slate-600 dark:text-slate-400 text-sm">
                           Card with image header and content section.
@@ -562,10 +562,10 @@ export function DesignSystem() {
                 </div>
 
                 {/* Status Badges */}
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Status Badges</h3>
                   <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-6">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
                       <div className="space-y-3">
                         <h4 className="text-sm font-medium text-slate-700 dark:text-slate-300">Success</h4>
                         <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs font-medium rounded-full">
@@ -602,10 +602,10 @@ export function DesignSystem() {
                 </div>
 
                 {/* Navigation */}
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Navigation</h3>
                   <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-6">
-                    <div className="space-y-6">
+                    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
                       <div>
                         <h4 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Tab Navigation</h4>
                         <div className="flex space-x-1 bg-slate-100 dark:bg-slate-700 p-1 rounded-lg">
@@ -649,10 +649,10 @@ export function DesignSystem() {
                 </div>
 
                 {/* Chips */}
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Chips</h3>
                   <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-6">
-                    <div className="space-y-4">
+                    <div className="space-y-3 sm:space-y-4">
                       <div>
                         <h4 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Filter Chips</h4>
                         <div className="flex flex-wrap gap-2">

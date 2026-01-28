@@ -208,7 +208,7 @@ export function DevicePairingFlow({
   };
 
   const renderStartScreen = () => (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <div className="text-center">
         <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
           <Wifi className="w-8 h-8 text-blue-600 dark:text-blue-400" />
@@ -222,9 +222,9 @@ export function DevicePairingFlow({
       </div>
 
       {/* Pairing Options */}
-      <div className="grid gap-4 max-w-md mx-auto">
+      <div className="grid gap-3 sm:gap-4 max-w-md mx-auto">
         <Card className="p-6 hover:shadow-md transition-all duration-200 cursor-pointer" onClick={handleScanQR}>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 sm:gap-4">
             <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
               <QrCode className="w-6 h-6 text-blue-600 dark:text-blue-400" />
             </div>
@@ -247,7 +247,7 @@ export function DevicePairingFlow({
           className="p-6 hover:shadow-md transition-all duration-200 cursor-pointer" 
           onClick={() => setCurrentStep('manual')}
         >
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 sm:gap-4">
             <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
               <Settings className="w-6 h-6 text-purple-600 dark:text-purple-400" />
             </div>
@@ -268,7 +268,7 @@ export function DevicePairingFlow({
           <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-4">Connected Devices</h3>
           <div className="space-y-3">
             {pairedDevices.map((device) => (
-              <Card key={device.id} className="p-4">
+              <Card key={device.id} className="p-3 sm:p-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-slate-100 dark:bg-slate-700 rounded-lg flex items-center justify-center">
@@ -304,9 +304,9 @@ export function DevicePairingFlow({
 
       {/* Benefits */}
       <Card className="max-w-2xl mx-auto">
-        <div className="p-6">
+        <div className="p-4 sm:p-5 md:p-6">
           <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-4">Benefits of Device Pairing</h3>
-          <div className="grid gap-4">
+          <div className="grid gap-3 sm:gap-4">
             <div className="flex items-start gap-3">
               <Shield className="w-5 h-5 text-green-600 mt-0.5" />
               <div>
@@ -341,7 +341,7 @@ export function DevicePairingFlow({
   );
 
   const renderScanningScreen = () => (
-    <div className="space-y-6 text-center max-w-md mx-auto">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6 text-center max-w-md mx-auto">
       <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-2xl flex items-center justify-center mx-auto">
         {isScanning ? (
           <RefreshCw className="w-8 h-8 text-blue-600 dark:text-blue-400 animate-spin" />
@@ -387,7 +387,7 @@ export function DevicePairingFlow({
   );
 
   const renderManualScreen = () => (
-    <div className="space-y-6 max-w-md mx-auto">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6 max-w-md mx-auto">
       <div className="text-center">
         <div className="w-16 h-16 bg-purple-100 dark:bg-purple-900/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
           <Settings className="w-8 h-8 text-purple-600 dark:text-purple-400" />
@@ -400,8 +400,8 @@ export function DevicePairingFlow({
         </p>
       </div>
 
-      <Card className="p-6">
-        <div className="space-y-4">
+      <Card className="p-4 sm:p-5 md:p-6">
+        <div className="space-y-3 sm:space-y-4">
           <div>
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
               Pairing Code
@@ -432,7 +432,7 @@ export function DevicePairingFlow({
           </div>
 
           <Card className="bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
-            <div className="p-4">
+            <div className="p-3 sm:p-4">
               <div className="flex items-start gap-3">
                 <HelpCircle className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5" />
                 <div>
@@ -471,7 +471,7 @@ export function DevicePairingFlow({
   );
 
   const renderPairingScreen = () => (
-    <div className="space-y-6 text-center max-w-md mx-auto">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6 text-center max-w-md mx-auto">
       <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-2xl flex items-center justify-center mx-auto">
         <RefreshCw className="w-8 h-8 text-green-600 dark:text-green-400 animate-spin" />
       </div>
@@ -491,7 +491,7 @@ export function DevicePairingFlow({
   );
 
   const renderSuccessScreen = () => (
-    <div className="space-y-6 text-center max-w-md mx-auto">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6 text-center max-w-md mx-auto">
       <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-2xl flex items-center justify-center mx-auto">
         <CheckCircle className="w-8 h-8 text-green-600 dark:text-green-400" />
       </div>

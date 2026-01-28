@@ -192,7 +192,7 @@ export function ShopPageExpanded({ userData, userTier, childGoals = [] }: ShopPa
       {/* Header with Calm Coins Wallet */}
       <div className="bg-gradient-to-r from-accent/10 to-teal-50 border-b border-accent/20 px-6 py-8">
         <div className="max-w-7xl mx-auto">
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between mb-4 sm:mb-6">
             <div>
               <h1 className="text-3xl font-semibold text-slate-900 mb-2">Shop</h1>
               <p className="text-slate-600">Science-backed calm tools for home</p>
@@ -256,14 +256,14 @@ export function ShopPageExpanded({ userData, userTier, childGoals = [] }: ShopPa
           <div className="mb-8">
             <div className="flex items-center gap-2 mb-4">
               <Sparkles className="w-5 h-5 text-accent" />
-              <h2 className="text-xl font-semibold text-slate-900">Suggested for {userData.childName}</h2>
+              <h2 className="text-lg sm:text-xl font-semibold text-slate-900">Suggested for {userData.childName}</h2>
               <Badge className="bg-accent/10 text-accent border-accent/20">AI Powered</Badge>
             </div>
             <p className="text-sm text-slate-600 mb-4">
               Based on your current calm plan goals and progress
             </p>
             
-            <div className="grid md:grid-cols-3 gap-4">
+            <div className="grid md:grid-cols-3 gap-3 sm:gap-4">
               {aiSuggestedItems.slice(0, 3).map(item => (
                 <Card key={item.id} className="p-5 hover:shadow-lg transition-all border-accent/20 bg-gradient-to-br from-accent/5 to-teal-50">
                   <div className="flex items-start justify-between mb-3">
@@ -276,7 +276,7 @@ export function ShopPageExpanded({ userData, userTier, childGoals = [] }: ShopPa
                   
                   <div className="flex items-center justify-between">
                     <div>
-                      <span className="text-2xl font-bold text-accent">${item.price}</span>
+                      <span className="text-xl sm:text-2xl font-bold text-accent">${item.price}</span>
                     </div>
                     <Button
                       onClick={() => handlePurchase(item)}
@@ -293,7 +293,7 @@ export function ShopPageExpanded({ userData, userTier, childGoals = [] }: ShopPa
         )}
 
         {/* Tabbed Shop */}
-        <Tabs defaultValue="all" className="space-y-6">
+        <Tabs defaultValue="all" className="space-y-3 sm:space-y-4 sm:space-y-6">
           <TabsList className="grid w-full grid-cols-5 gap-2">
             <TabsTrigger value="all">All Items</TabsTrigger>
             <TabsTrigger value="kits">Calm Kits</TabsTrigger>
@@ -304,7 +304,7 @@ export function ShopPageExpanded({ userData, userTier, childGoals = [] }: ShopPa
 
           {/* All Items */}
           <TabsContent value="all">
-            <div className="grid md:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-3 gap-3 sm:gap-4 sm:gap-6">
               {shopItems.map(item => (
                 <ShopItemCard
                   key={item.id}
@@ -319,7 +319,7 @@ export function ShopPageExpanded({ userData, userTier, childGoals = [] }: ShopPa
 
           {/* Calm Kits */}
           <TabsContent value="kits">
-            <div className="grid md:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-3 gap-3 sm:gap-4 sm:gap-6">
               {calmKits.map(item => (
                 <ShopItemCard
                   key={item.id}
@@ -334,7 +334,7 @@ export function ShopPageExpanded({ userData, userTier, childGoals = [] }: ShopPa
 
           {/* Printables */}
           <TabsContent value="printables">
-            <div className="grid md:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-3 gap-3 sm:gap-4 sm:gap-6">
               {printables.map(item => (
                 <ShopItemCard
                   key={item.id}
@@ -363,7 +363,7 @@ export function ShopPageExpanded({ userData, userTier, childGoals = [] }: ShopPa
               </div>
             </div>
             
-            <div className="grid md:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-3 gap-3 sm:gap-4 sm:gap-6">
               {jrAddons.map(item => (
                 <ShopItemCard
                   key={item.id}
@@ -392,7 +392,7 @@ export function ShopPageExpanded({ userData, userTier, childGoals = [] }: ShopPa
               </div>
             </div>
             
-            <div className="grid md:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-3 gap-3 sm:gap-4 sm:gap-6">
               {shopItems.filter(item => item.category === 'premium').map(item => (
                 <ShopItemCard
                   key={item.id}
@@ -481,7 +481,7 @@ function ShopItemCard({
       
       <div className="flex items-center justify-between pt-4 border-t border-slate-200">
         <div>
-          <span className="text-2xl font-bold text-slate-900">${item.price}</span>
+          <span className="text-xl sm:text-2xl font-bold text-slate-900">${item.price}</span>
         </div>
         <div className="flex gap-2">
           <Button
@@ -531,17 +531,17 @@ function CheckoutModal({
           <SheetTitle>Complete Purchase</SheetTitle>
         </SheetHeader>
 
-        <div className="mt-6 space-y-6">
+        <div className="mt-4 sm:mt-6 space-y-3 sm:space-y-4 sm:space-y-6">
           {/* Item Summary */}
           <Card className="p-4 bg-slate-50">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3 sm:gap-4">
               <div className="text-4xl">{item.image}</div>
               <div className="flex-1">
                 <h3 className="font-semibold text-slate-900">{item.name}</h3>
                 <p className="text-sm text-slate-600">{item.category}</p>
               </div>
               <div className="text-right">
-                <p className="text-2xl font-bold text-slate-900">${item.price}</p>
+                <p className="text-xl sm:text-2xl font-bold text-slate-900">${item.price}</p>
               </div>
             </div>
           </Card>
@@ -549,7 +549,7 @@ function CheckoutModal({
           {/* Payment Method */}
           <div>
             <h4 className="font-medium text-slate-900 mb-3">Payment Method</h4>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <Card 
                 onClick={() => setPaymentMethod('card')}
                 className={`p-4 cursor-pointer transition-all ${

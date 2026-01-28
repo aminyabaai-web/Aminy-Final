@@ -188,10 +188,10 @@ export function DeveloperModePanel({ onNavigate, onTierChange }: DeveloperModePa
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <div className="flex items-center gap-2">
         <Code className="w-5 h-5 text-purple-600" />
-        <h2 className="text-xl font-semibold">Developer Mode</h2>
+        <h2 className="text-lg sm:text-xl font-semibold">Developer Mode</h2>
         <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200">
           Advanced
         </Badge>
@@ -209,12 +209,12 @@ export function DeveloperModePanel({ onNavigate, onTierChange }: DeveloperModePa
       </div>
 
       {/* Quick Navigation */}
-      <Card className="p-4">
+      <Card className="p-3 sm:p-4">
         <h3 className="font-semibold mb-4 flex items-center gap-2">
           <Zap className="w-4 h-4 text-blue-600" />
           Quick Jump To
         </h3>
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           <Button 
             variant="outline" 
             size="sm" 
@@ -345,7 +345,7 @@ export function DeveloperModePanel({ onNavigate, onTierChange }: DeveloperModePa
             </Badge>
             <span className="text-xs text-slate-500">BCBA Coach Portal & Analytics</span>
           </div>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <Button 
               variant="outline" 
               size="sm" 
@@ -399,12 +399,12 @@ export function DeveloperModePanel({ onNavigate, onTierChange }: DeveloperModePa
       </Card>
 
       {/* Tier Management */}
-      <Card className="p-4">
+      <Card className="p-3 sm:p-4">
         <h3 className="font-semibold mb-4 flex items-center gap-2">
           <Crown className="w-4 h-4 text-yellow-600" />
           Tier Management
         </h3>
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <div>
             <label className="text-sm font-medium mb-2 block">Current Tier</label>
             <Select value={currentTier} onValueChange={handleTierChange}>
@@ -443,12 +443,12 @@ export function DeveloperModePanel({ onNavigate, onTierChange }: DeveloperModePa
       </Card>
 
       {/* Entitlements */}
-      <Card className="p-4">
+      <Card className="p-3 sm:p-4">
         <h3 className="font-semibold mb-4 flex items-center gap-2">
           <Shield className="w-4 h-4 text-green-600" />
           Entitlements
         </h3>
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <MessageSquare className="w-4 h-4 text-blue-600" />
@@ -512,12 +512,12 @@ export function DeveloperModePanel({ onNavigate, onTierChange }: DeveloperModePa
       </Card>
 
       {/* Usage Caps */}
-      <Card className="p-4">
+      <Card className="p-3 sm:p-4">
         <h3 className="font-semibold mb-4 flex items-center gap-2">
           <BarChart3 className="w-4 h-4 text-orange-600" />
           Usage Caps
         </h3>
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <div>
             <div className="flex justify-between items-center mb-2">
               <label className="text-sm font-medium">Chat Messages Left</label>
@@ -566,9 +566,9 @@ export function DeveloperModePanel({ onNavigate, onTierChange }: DeveloperModePa
       </Card>
 
       {/* Debug Settings */}
-      <Card className="p-4">
+      <Card className="p-3 sm:p-4">
         <h3 className="font-semibold mb-4">Debug Settings</h3>
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <div className="flex items-center justify-between">
             <div>
               <p className="font-medium text-sm">Debug Mode</p>
@@ -620,7 +620,7 @@ export function DeveloperModePanel({ onNavigate, onTierChange }: DeveloperModePa
       </Card>
 
       {/* Data Management */}
-      <Card className="p-4">
+      <Card className="p-3 sm:p-4">
         <h3 className="font-semibold mb-4 flex items-center gap-2">
           <Database className="w-4 h-4 text-blue-600" />
           Data Management
@@ -653,12 +653,12 @@ export function DeveloperModePanel({ onNavigate, onTierChange }: DeveloperModePa
       </Card>
 
       {/* Performance Metrics */}
-      <Card className="p-4">
+      <Card className="p-3 sm:p-4">
         <h3 className="font-semibold mb-4 flex items-center gap-2">
           <Zap className="w-4 h-4 text-yellow-600" />
           Performance Metrics
         </h3>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           <div className="p-3 bg-gray-50 rounded-lg">
             <p className="text-xs text-muted-foreground mb-1">Screen Size</p>
             <p className="text-sm font-bold">{window.innerWidth}x{window.innerHeight}</p>
@@ -683,7 +683,7 @@ export function DeveloperModePanel({ onNavigate, onTierChange }: DeveloperModePa
       </Card>
 
       {/* Feature Flags */}
-      <Card className="p-4">
+      <Card className="p-3 sm:p-4">
         <h3 className="font-semibold mb-4 flex items-center gap-2">
           <FileText className="w-4 h-4 text-indigo-600" />
           Feature Flags

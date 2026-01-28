@@ -309,7 +309,7 @@ export function FiscalAgentSubmissionFlow({
         </div>
       </div>
 
-      <div className="p-4">
+      <div className="p-3 sm:p-4">
         <AnimatePresence mode="wait">
           {/* Step 1: Select Entries */}
           {step === 1 && (
@@ -317,7 +317,7 @@ export function FiscalAgentSubmissionFlow({
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
-              className="space-y-4"
+              className="space-y-3 sm:space-y-4"
             >
               {/* Summary Card */}
               <Card className="p-4 bg-gradient-to-r from-teal-50 to-blue-50 border-teal-200">
@@ -487,9 +487,9 @@ export function FiscalAgentSubmissionFlow({
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
-              className="space-y-4"
+              className="space-y-3 sm:space-y-4"
             >
-              <Card className="p-4">
+              <Card className="p-3 sm:p-4">
                 <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
                   <ClipboardCheck className="w-5 h-5 text-teal-600" />
                   Hours Summary
@@ -546,7 +546,7 @@ export function FiscalAgentSubmissionFlow({
               </Card>
 
               {/* Submission Method */}
-              <Card className="p-4">
+              <Card className="p-3 sm:p-4">
                 <h3 className="font-semibold text-gray-900 mb-3">How do you want to submit?</h3>
                 <div className="space-y-2">
                   {/* Clearinghouse submission - NEW & RECOMMENDED */}
@@ -679,7 +679,7 @@ export function FiscalAgentSubmissionFlow({
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
-              className="space-y-4"
+              className="space-y-3 sm:space-y-4"
             >
               <Card className="p-4 bg-green-50 border-green-200">
                 <div className="flex items-center gap-3 mb-3">
@@ -694,7 +694,7 @@ export function FiscalAgentSubmissionFlow({
               </Card>
 
               {/* Generated Documents */}
-              <Card className="p-4">
+              <Card className="p-3 sm:p-4">
                 <h3 className="font-semibold text-gray-900 mb-3">Generated Documents</h3>
                 <div className="space-y-2">
                   <button
@@ -810,12 +810,12 @@ export function FiscalAgentSubmissionFlow({
               <h3 className="text-xl font-bold text-gray-900 mb-2">
                 Hours Submitted!
               </h3>
-              <p className="text-gray-600 mb-6">
+              <p className="text-gray-600 mb-4 sm:mb-6">
                 Your {formatDuration(submission.totalHours)} have been marked as submitted
                 to {fiscalAgent?.name || 'your fiscal agent'}.
               </p>
 
-              <Card className="p-4 bg-gray-50 text-left mb-6">
+              <Card className="p-4 bg-gray-50 text-left mb-4 sm:mb-6">
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span className="text-gray-500">Submission ID:</span>

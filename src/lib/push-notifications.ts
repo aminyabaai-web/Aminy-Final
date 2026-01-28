@@ -372,3 +372,56 @@ export function usePushNotifications(userId: string | null) {
 
 // Need to import useState and useEffect for the hook
 import { useState, useEffect } from 'react';
+
+/**
+ * Test push notification system (for development verification)
+ * Call from browser console: window.testPushNotifications()
+ */
+export async function testPushNotifications(): Promise<{ success: boolean; message: string }> {
+  console.log('[Push Test] Starting push notification verification...');
+
+  // Step 1: Check support
+  if (!isPushSupported()) {
+    return { success: false, message: 'Push notifications not supported in this browser' };
+  }
+  console.log('[Push Test] ✓ Push notifications supported');
+
+  // Step 2: Check service worker
+  const registration = await navigator.serviceWorker.ready;
+  if (!registration) {
+    return { success: false, message: 'Service worker not registered' };
+  }
+  console.log('[Push Test] ✓ Service worker ready');
+
+  // Step 3: Check permission
+  const permission = getNotificationPermission();
+  if (permission === 'denied') {
+    return { success: false, message: 'Notification permission denied. Enable in browser settings.' };
+  }
+  if (permission === 'default') {
+    console.log('[Push Test] Permission not yet granted. Requesting...');
+    const newPermission = await requestNotificationPermission();
+    if (newPermission !== 'granted') {
+      return { success: false, message: 'User declined notification permission' };
+    }
+  }
+  console.log('[Push Test] ✓ Permission granted');
+
+  // Step 4: Test local notification
+  try {
+    sendLocalNotification(
+      'Aminy Push Test ✓',
+      'Push notifications are working! You\'re all set to receive updates.',
+      { test: true }
+    );
+    console.log('[Push Test] ✓ Local notification sent');
+    return { success: true, message: 'Push notifications verified! Check your notification.' };
+  } catch (error) {
+    return { success: false, message: `Failed to send test notification: ${error}` };
+  }
+}
+
+// Expose test function to window for easy console testing
+if (typeof window !== 'undefined') {
+  (window as any).testPushNotifications = testPushNotifications;
+}

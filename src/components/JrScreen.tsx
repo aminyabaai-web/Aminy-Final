@@ -363,9 +363,9 @@ export const JrScreen: React.FC<JrScreenProps> = ({
         
         <div className="max-w-md mx-auto px-4 py-8">
           <Card className="p-8 text-center">
-            <div className="text-4xl mb-6">🚀</div>
-            <h2 className="text-xl font-semibold text-primary mb-4">Welcome to Aminy Junior!</h2>
-            <p className="text-muted-foreground mb-6 leading-relaxed">
+            <div className="text-4xl mb-4 sm:mb-6">🚀</div>
+            <h2 className="text-lg sm:text-xl font-semibold text-primary mb-4">Welcome to Aminy Junior!</h2>
+            <p className="text-muted-foreground mb-4 sm:mb-6 leading-relaxed">
               Let's set up {childName}'s personalized learning experience with speech practice, social skills, and fun activities.
             </p>
             <Button 
@@ -478,7 +478,7 @@ export const JrScreen: React.FC<JrScreenProps> = ({
         </div>
 
         <div className="max-w-md mx-auto px-4 py-6">
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {/* Profile Card */}
             <Card className="p-6 aminy-card">
               <div className="flex items-center gap-3 mb-4">
@@ -544,7 +544,7 @@ export const JrScreen: React.FC<JrScreenProps> = ({
                 </div>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 {/* Voice Mode */}
                 <div>
                   <div className="flex items-center gap-2 mb-2">
@@ -803,7 +803,7 @@ export const JrScreen: React.FC<JrScreenProps> = ({
           </div>
           
           {/* Aminy Junior Disclaimer */}
-          <div className="mt-6">
+          <div className="mt-4 sm:mt-6">
             <GlobalDisclaimer variant="card" showIcon={true} />
           </div>
         </div>
@@ -812,7 +812,7 @@ export const JrScreen: React.FC<JrScreenProps> = ({
         {showPinModal && (
           <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
             <Card className="max-w-sm w-full p-6">
-              <div className="text-center mb-6">
+              <div className="text-center mb-4 sm:mb-6">
                 <div className="p-3 bg-accent/10 rounded-full inline-flex mb-4">
                   <Lock className="w-6 h-6 text-accent" />
                 </div>
@@ -824,7 +824,7 @@ export const JrScreen: React.FC<JrScreenProps> = ({
                 </p>
               </div>
               
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 <div>
                   <Input
                     type="text"
@@ -868,7 +868,7 @@ export const JrScreen: React.FC<JrScreenProps> = ({
         {showPairDevice && (
           <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
             <Card className="max-w-md w-full p-6">
-              <div className="text-center mb-6">
+              <div className="text-center mb-4 sm:mb-6">
                 <QrCode className="w-16 h-16 bg-gray-100 border-2 border-gray-300 rounded-lg mx-auto mb-4 p-4 text-gray-400" />
                 <h3 className="text-lg font-semibold text-primary mb-2">Pair New Device</h3>
                 <div className="text-lg font-mono font-bold text-primary mb-2">
@@ -922,7 +922,7 @@ export const JrScreen: React.FC<JrScreenProps> = ({
         {showCalibration && (
           <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
             <Card className="max-w-md w-full p-6">
-              <div className="text-center mb-6">
+              <div className="text-center mb-4 sm:mb-6">
                 <div className="p-3 bg-purple-100 rounded-full inline-flex mb-4">
                   <Gamepad2 className="w-6 h-6 text-purple-600" />
                 </div>
@@ -1006,7 +1006,7 @@ export const JrScreen: React.FC<JrScreenProps> = ({
               </div>
               <p className="text-center text-lg font-medium">{preferences.difficulty}/5 - {getDifficultyBand(preferences.difficulty)}</p>
               
-              <div className="mt-6 p-4 bg-blue-50 rounded-lg">
+              <div className="mt-4 sm:mt-6 p-4 bg-blue-50 rounded-lg">
                 <p className="text-sm text-blue-700">
                   <Info className="w-4 h-4 inline mr-1" />
                   Affects game prompts and timing. Changes take effect immediately.
@@ -1046,7 +1046,7 @@ export const JrScreen: React.FC<JrScreenProps> = ({
               </SheetDescription>
             </SheetHeader>
             
-            <div className="py-6 space-y-6">
+            <div className="py-6 space-y-3 sm:space-y-4 sm:space-y-6">
               {/* ABA Coach Tips Toggle */}
               <div className="space-y-3">
                 <Label className="text-sm font-medium">Coaching Tips</Label>
@@ -1105,7 +1105,7 @@ export const JrScreen: React.FC<JrScreenProps> = ({
               </SheetDescription>
             </SheetHeader>
             
-            <div className="py-6 space-y-4">
+            <div className="py-6 space-y-3 sm:space-y-4">
               <div>
                 <Label htmlFor="current-pin" className="text-sm font-medium">Current PIN</Label>
                 <Input

@@ -158,9 +158,9 @@ export function UnloadMindModal({ isOpen, onClose, onTasksCreated }: UnloadMindM
         </div>
 
         {/* Content */}
-        <div className="p-6">
+        <div className="p-4 sm:p-5 md:p-6">
           {step === 'input' && (
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               <div>
                 <label htmlFor="mind-dump" className="block text-sm text-slate-700 mb-2">
                   What's on your mind? (No filters, just type)
@@ -237,7 +237,7 @@ export function UnloadMindModal({ isOpen, onClose, onTasksCreated }: UnloadMindM
           )}
 
           {step === 'results' && (
-            <div className="space-y-6">
+            <div className="space-y-3 sm:space-y-4 sm:space-y-6">
               {/* Encouragement */}
               {encouragement && (
                 <div className="p-4 bg-accent/5 rounded-xl border border-accent/10">

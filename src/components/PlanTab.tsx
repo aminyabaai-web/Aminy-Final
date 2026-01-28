@@ -299,7 +299,7 @@ export function PlanTab({ userData, userTier, connectorData, publishEvent, onCon
   ];
 
   const renderOverview = () => (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       {/* Plan Header */}
       <div className="text-center">
         <div className="flex items-center justify-center mb-4">
@@ -320,7 +320,7 @@ export function PlanTab({ userData, userTier, connectorData, publishEvent, onCon
       </div>
 
       {/* Quick Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
         <Card className="p-4 text-center">
           <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-2">
             <Target className="w-4 h-4 text-blue-600" />
@@ -357,9 +357,9 @@ export function PlanTab({ userData, userTier, connectorData, publishEvent, onCon
       </div>
 
       {/* Recent Progress */}
-      <Card className="p-6">
+      <Card className="p-4 sm:p-5 md:p-6">
         <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-4">Recent Progress</h3>
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           {goals.slice(0, 2).map((goal) => (
             <div key={goal.id}>
               <div className="flex items-center justify-between mb-2">
@@ -380,7 +380,7 @@ export function PlanTab({ userData, userTier, connectorData, publishEvent, onCon
 
       {/* Next Steps Recommendations */}
       <Card className="p-6 bg-gradient-to-r from-teal-50 to-blue-50 dark:from-teal-900/20 dark:to-blue-900/20 border-teal-200 dark:border-teal-800">
-        <div className="flex items-start gap-4">
+        <div className="flex items-start gap-3 sm:gap-4">
           <div className="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center flex-shrink-0">
             <Zap className="w-5 h-5 text-teal-600" />
           </div>
@@ -417,7 +417,7 @@ export function PlanTab({ userData, userTier, connectorData, publishEvent, onCon
   );
 
   const renderGoals = () => (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-xl text-slate-900 dark:text-slate-100">Development Goals</h2>
@@ -429,9 +429,9 @@ export function PlanTab({ userData, userTier, connectorData, publishEvent, onCon
         </Button>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         {goals.map((goal) => (
-          <Card key={goal.id} className="p-6">
+          <Card key={goal.id} className="p-4 sm:p-5 md:p-6">
             <div className="flex items-start justify-between mb-4">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-2">
@@ -449,7 +449,7 @@ export function PlanTab({ userData, userTier, connectorData, publishEvent, onCon
                 <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-1">{goal.title}</h3>
                 <p className="text-slate-600 dark:text-slate-400 mb-4">{goal.description}</p>
                 
-                <div className="flex items-center gap-4 mb-4">
+                <div className="flex items-center gap-3 sm:gap-4 mb-4">
                   <div className="flex-1">
                     <div className="flex items-center justify-between mb-1">
                       <span className="text-sm text-slate-600 dark:text-slate-400">Progress</span>
@@ -494,7 +494,7 @@ export function PlanTab({ userData, userTier, connectorData, publishEvent, onCon
   );
 
   const renderRoutines = () => (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-xl text-slate-900 dark:text-slate-100">Daily Routines</h2>
@@ -506,9 +506,9 @@ export function PlanTab({ userData, userTier, connectorData, publishEvent, onCon
         </Button>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         {routines.map((routine) => (
-          <Card key={routine.id} className="p-6">
+          <Card key={routine.id} className="p-4 sm:p-5 md:p-6">
             <div className="flex items-start justify-between mb-4">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-2">
@@ -563,7 +563,7 @@ export function PlanTab({ userData, userTier, connectorData, publishEvent, onCon
   );
 
   const renderStrategies = () => (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-xl text-slate-900 dark:text-slate-100">Strategies & Techniques</h2>
@@ -575,9 +575,9 @@ export function PlanTab({ userData, userTier, connectorData, publishEvent, onCon
         </Button>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         {strategies.map((strategy) => (
-          <Card key={strategy.id} className="p-6">
+          <Card key={strategy.id} className="p-4 sm:p-5 md:p-6">
             <div className="flex items-start justify-between mb-4">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-2">
@@ -635,16 +635,16 @@ export function PlanTab({ userData, userTier, connectorData, publishEvent, onCon
   );
 
   const renderTracking = () => (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <div>
         <h2 className="text-xl text-slate-900 dark:text-slate-100">Data & Tracking</h2>
         <p className="text-slate-600 dark:text-slate-400">Monitor progress with data-driven insights</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card className="p-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
+        <Card className="p-4 sm:p-5 md:p-6">
           <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-4">Progress Tracking</h3>
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             <div className="flex items-center justify-between">
               <span className="text-sm text-slate-600 dark:text-slate-400">Daily Goals Met</span>
               <span className="text-sm text-slate-900 dark:text-slate-100">85%</span>
@@ -659,7 +659,7 @@ export function PlanTab({ userData, userTier, connectorData, publishEvent, onCon
           </div>
         </Card>
 
-        <Card className="p-6">
+        <Card className="p-4 sm:p-5 md:p-6">
           <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-4">Data Collection</h3>
           <div className="space-y-3">
             <Button variant="outline" className="w-full justify-start">
@@ -678,7 +678,7 @@ export function PlanTab({ userData, userTier, connectorData, publishEvent, onCon
         </Card>
       </div>
 
-      <Card className="p-6">
+      <Card className="p-4 sm:p-5 md:p-6">
         <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-4">Quick Data Entry</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           <Button variant="outline" size="sm">😊 Great Day</Button>
@@ -691,14 +691,14 @@ export function PlanTab({ userData, userTier, connectorData, publishEvent, onCon
   );
 
   const renderRewards = () => (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <div>
         <h2 className="text-xl text-slate-900 dark:text-slate-100">Motivation & Rewards</h2>
         <p className="text-slate-600 dark:text-slate-400">Celebrate progress and maintain motivation</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card className="p-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
+        <Card className="p-4 sm:p-5 md:p-6">
           <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-4">Current Motivators</h3>
           <div className="space-y-3">
             <div className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
@@ -729,7 +729,7 @@ export function PlanTab({ userData, userTier, connectorData, publishEvent, onCon
           </Button>
         </Card>
 
-        <Card className="p-6">
+        <Card className="p-4 sm:p-5 md:p-6">
           <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-4">Celebration Ideas</h3>
           <div className="space-y-3">
             <div className="p-3 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-lg border border-green-200 dark:border-green-800">
@@ -757,9 +757,9 @@ export function PlanTab({ userData, userTier, connectorData, publishEvent, onCon
         </Card>
       </div>
 
-      <Card className="p-6">
+      <Card className="p-4 sm:p-5 md:p-6">
         <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-4">Progress Rewards</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
           <div className="text-center p-4 bg-slate-50 dark:bg-slate-800 rounded-lg">
             <div className="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-2">
               <Star className="w-6 h-6 text-amber-600" />
@@ -790,16 +790,16 @@ export function PlanTab({ userData, userTier, connectorData, publishEvent, onCon
   );
 
   const renderInsights = () => (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <div>
         <h2 className="text-xl text-slate-900 dark:text-slate-100">Insights & Analytics</h2>
         <p className="text-slate-600 dark:text-slate-400">Data-driven patterns and recommendations</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card className="p-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
+        <Card className="p-4 sm:p-5 md:p-6">
           <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-4">Progress Trends</h3>
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <ArrowUpCircle className="w-4 h-4 text-green-600" />
@@ -824,7 +824,7 @@ export function PlanTab({ userData, userTier, connectorData, publishEvent, onCon
           </div>
         </Card>
 
-        <Card className="p-6">
+        <Card className="p-4 sm:p-5 md:p-6">
           <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-4">Time Insights</h3>
           <div className="space-y-3">
             <div className="flex items-center gap-2">
@@ -852,9 +852,9 @@ export function PlanTab({ userData, userTier, connectorData, publishEvent, onCon
         </Card>
       </div>
 
-      <Card className="p-6">
+      <Card className="p-4 sm:p-5 md:p-6">
         <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-4">Aminy Junior AI Insights</h3>
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
             <div className="flex items-start gap-3">
               <Brain className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
@@ -888,14 +888,14 @@ export function PlanTab({ userData, userTier, connectorData, publishEvent, onCon
   );
 
   const renderLibrary = () => (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <div>
         <h2 className="text-xl text-slate-900 dark:text-slate-100">Resource Library</h2>
         <p className="text-slate-600 dark:text-slate-400">Activities, tools, and educational content</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="p-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 sm:gap-6">
+        <Card className="p-4 sm:p-5 md:p-6">
           <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
             <Video className="w-6 h-6 text-blue-600" />
           </div>
@@ -909,7 +909,7 @@ export function PlanTab({ userData, userTier, connectorData, publishEvent, onCon
           <Button variant="outline" className="w-full mt-4">Browse Videos</Button>
         </Card>
 
-        <Card className="p-6">
+        <Card className="p-4 sm:p-5 md:p-6">
           <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4">
             <Gamepad2 className="w-6 h-6 text-green-600" />
           </div>
@@ -923,7 +923,7 @@ export function PlanTab({ userData, userTier, connectorData, publishEvent, onCon
           <Button variant="outline" className="w-full mt-4">Explore Activities</Button>
         </Card>
 
-        <Card className="p-6">
+        <Card className="p-4 sm:p-5 md:p-6">
           <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-4">
             <FileText className="w-6 h-6 text-purple-600" />
           </div>
@@ -938,9 +938,9 @@ export function PlanTab({ userData, userTier, connectorData, publishEvent, onCon
         </Card>
       </div>
 
-      <Card className="p-6">
+      <Card className="p-4 sm:p-5 md:p-6">
         <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-4">Recommended for {childShort}</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
           <div className="flex items-start gap-3 p-4 bg-slate-50 dark:bg-slate-800 rounded-lg">
             <Puzzle className="w-8 h-8 text-indigo-500 flex-shrink-0" />
             <div>
@@ -960,7 +960,7 @@ export function PlanTab({ userData, userTier, connectorData, publishEvent, onCon
         </div>
       </Card>
 
-      <Card className="p-6">
+      <Card className="p-4 sm:p-5 md:p-6">
         <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-4">Learning Modules</h3>
         <div className="space-y-3">
           <div className="flex items-center justify-between p-3 border border-slate-200 dark:border-slate-700 rounded-lg">
@@ -999,14 +999,14 @@ export function PlanTab({ userData, userTier, connectorData, publishEvent, onCon
   );
 
   const renderSharing = () => (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <div>
         <h2 className="text-xl text-slate-900 dark:text-slate-100">Share & Export</h2>
         <p className="text-slate-600 dark:text-slate-400">Share your plan with team members and export data</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card className="p-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
+        <Card className="p-4 sm:p-5 md:p-6">
           <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-4">Export Options</h3>
           <div className="space-y-3">
             <Button variant="outline" className="w-full justify-start">
@@ -1028,9 +1028,9 @@ export function PlanTab({ userData, userTier, connectorData, publishEvent, onCon
           </div>
         </Card>
 
-        <Card className="p-6">
+        <Card className="p-4 sm:p-5 md:p-6">
           <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-4">Team Sharing</h3>
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             <div>
               <label className="text-sm text-slate-900 dark:text-slate-100 mb-2 block">Share with team members:</label>
               <div className="flex gap-2">
@@ -1073,9 +1073,9 @@ export function PlanTab({ userData, userTier, connectorData, publishEvent, onCon
         </Card>
       </div>
 
-      <Card className="p-6">
+      <Card className="p-4 sm:p-5 md:p-6">
         <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-4">Quick Share</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
           <Button variant="outline" className="flex flex-col items-center p-4 h-auto">
             <Mail className="w-6 h-6 mb-2 text-blue-500" />
             <span className="text-sm">Email Report</span>
@@ -1092,7 +1092,7 @@ export function PlanTab({ userData, userTier, connectorData, publishEvent, onCon
       </Card>
 
       <Card className="p-6 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border-amber-200 dark:border-amber-800">
-        <div className="flex items-start gap-4">
+        <div className="flex items-start gap-3 sm:gap-4">
           <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center flex-shrink-0">
             <Settings className="w-5 h-5 text-amber-600" />
           </div>
@@ -1162,7 +1162,7 @@ export function PlanTab({ userData, userTier, connectorData, publishEvent, onCon
 
       {/* Main Content */}
       <div className="flex-1 overflow-auto">
-        <div className="p-6">
+        <div className="p-4 sm:p-5 md:p-6">
           {renderActiveSection()}
         </div>
       </div>

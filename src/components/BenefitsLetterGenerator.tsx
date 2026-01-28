@@ -19,7 +19,7 @@ export function BenefitsLetterGenerator() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold">Benefits Letter Generator</h3>
         <Badge variant="outline" className="flex items-center gap-1">
@@ -32,7 +32,7 @@ export function BenefitsLetterGenerator() {
         Generate a letter requesting ABA coverage from your insurance
       </p>
 
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         <div>
           <Label>Insurance Provider</Label>
           <select

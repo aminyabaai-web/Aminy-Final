@@ -170,7 +170,7 @@ export function ShareWinFlow({ win, onClose, isOpen = true }: ShareWinFlowProps)
             </div>
 
             {/* Shareable Card Preview */}
-            <div className="p-4">
+            <div className="p-3 sm:p-4">
               <div
                 ref={cardRef}
                 className={`p-6 rounded-xl ${template.bgColor} border-2 border-gray-100`}
@@ -193,7 +193,7 @@ export function ShareWinFlow({ win, onClose, isOpen = true }: ShareWinFlowProps)
                     {win.title}
                   </h3>
                   {win.metric && (
-                    <p className="text-2xl font-bold text-teal-600 mb-2">
+                    <p className="text-xl sm:text-2xl font-bold text-teal-600 mb-2">
                       {win.metric}
                     </p>
                   )}
@@ -216,7 +216,7 @@ export function ShareWinFlow({ win, onClose, isOpen = true }: ShareWinFlowProps)
                 Share your progress and inspire other parents
               </p>
 
-              <div className="grid grid-cols-4 gap-3 mb-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 mb-4">
                 <Button
                   variant="outline"
                   className="flex flex-col items-center gap-1 h-auto py-3"

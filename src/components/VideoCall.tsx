@@ -340,23 +340,23 @@ export function VideoCall({
           <div className="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <Video className="w-8 h-8 text-teal-600" />
           </div>
-          <h2 className="text-xl font-semibold text-slate-900 mb-2">
+          <h2 className="text-lg sm:text-xl font-semibold text-slate-900 mb-2">
             Ready to Join?
           </h2>
-          <p className="text-slate-600 mb-6">
+          <p className="text-slate-600 mb-4 sm:mb-6">
             {isProvider
               ? `Session with ${childName}'s family`
               : `Session with ${providerName || 'your provider'}`}
           </p>
 
-          <div className="bg-slate-50 rounded-lg p-4 mb-6">
+          <div className="bg-slate-50 rounded-lg p-4 mb-4 sm:mb-6">
             <div className="flex items-center justify-center gap-2 text-sm text-slate-600">
               <Clock className="w-4 h-4" />
               <span>{sessionType === '50min' ? '50 minute' : '25 minute'} session</span>
             </div>
           </div>
 
-          <Alert className="mb-6 bg-blue-50 border-blue-200">
+          <Alert className="mb-4 sm:mb-6 bg-blue-50 border-blue-200">
             <AlertCircle className="w-4 h-4 text-blue-600" />
             <AlertDescription className="text-sm text-blue-900">
               Make sure your camera and microphone are working before joining.
@@ -398,10 +398,10 @@ export function VideoCall({
           <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <AlertCircle className="w-8 h-8 text-red-600" />
           </div>
-          <h2 className="text-xl font-semibold text-slate-900 mb-2">
+          <h2 className="text-lg sm:text-xl font-semibold text-slate-900 mb-2">
             Connection Error
           </h2>
-          <p className="text-slate-600 mb-6">
+          <p className="text-slate-600 mb-4 sm:mb-6">
             {error || 'Unable to connect to the video call.'}
           </p>
           <div className="flex gap-3">
@@ -439,7 +439,7 @@ export function VideoCall({
           </span>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3 sm:gap-4">
           {/* Timer */}
           <div className={`flex items-center gap-2 px-3 py-1 rounded-full ${
             elapsedSeconds > sessionDuration * 0.9 ? 'bg-red-500' : 'bg-slate-700'
@@ -501,7 +501,7 @@ export function VideoCall({
 
       {/* Controls */}
       <div className="bg-slate-800 px-4 py-4">
-        <div className="max-w-lg mx-auto flex items-center justify-center gap-4">
+        <div className="max-w-lg mx-auto flex items-center justify-center gap-3 sm:gap-4">
           {/* Mic toggle */}
           <Button
             size="lg"

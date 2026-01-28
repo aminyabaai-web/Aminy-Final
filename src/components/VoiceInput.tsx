@@ -245,7 +245,7 @@ export function VoiceInput({
             </p>
 
             {/* Privacy note */}
-            <div className="bg-gray-50 dark:bg-slate-800 rounded-lg p-3 mb-6">
+            <div className="bg-gray-50 dark:bg-slate-800 rounded-lg p-3 mb-4 sm:mb-6">
               <p className="text-xs text-gray-600 dark:text-gray-300">
                 <strong>From Aminy:</strong> For this app, your voice and speech data will not be sent to external servers. We will convert your speech to text directly on your device to protect your information.
               </p>

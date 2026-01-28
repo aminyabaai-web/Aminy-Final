@@ -281,11 +281,11 @@ export function OutcomesTracking({
   // CAREGIVER VIEW
   if (view === 'caregiver' && caregiverMetrics) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-3 sm:space-y-4 sm:space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-semibold text-gray-900">Progress & Outcomes</h2>
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Progress & Outcomes</h2>
             <p className="text-gray-600">See how far you've come together</p>
           </div>
           <div className="flex gap-2">
@@ -308,7 +308,7 @@ export function OutcomesTracking({
             <Star className="w-5 h-5 text-amber-500" />
             <h3 className="font-medium text-gray-900">Recent Wins</h3>
           </div>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {caregiverMetrics.recentWins.map((win, idx) => (
               <div key={idx} className="flex items-start gap-2 p-2 bg-white/60 rounded-lg text-sm">
                 <CheckCircle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
@@ -319,7 +319,7 @@ export function OutcomesTracking({
         </Card>
 
         {/* Progress Overview */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
           <MetricCard
             icon={Target}
             label="Goals Achieved"
@@ -353,12 +353,12 @@ export function OutcomesTracking({
         </div>
 
         {/* Improvement Areas */}
-        <Card className="p-4">
+        <Card className="p-3 sm:p-4">
           <h3 className="font-medium text-gray-900 mb-4 flex items-center gap-2">
             <TrendingUp className="w-4 h-4 text-green-500" />
             Skill Progress
           </h3>
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {caregiverMetrics.childProgress.improvementAreas.map((area, idx) => (
               <div key={idx}>
                 <div className="flex items-center justify-between mb-1">
@@ -383,14 +383,14 @@ export function OutcomesTracking({
         </Card>
 
         {/* Parent Wellbeing */}
-        <Card className="p-4">
+        <Card className="p-3 sm:p-4">
           <h3 className="font-medium text-gray-900 mb-4 flex items-center gap-2">
             <Heart className="w-4 h-4 text-pink-500" />
             Your Wellbeing
           </h3>
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
             <div className="text-center p-4 bg-gray-50 rounded-lg">
-              <div className={`text-2xl font-bold ${
+              <div className={`text-xl sm:text-2xl font-bold ${
                 caregiverMetrics.parentWellbeing.stressLevel === 'low' ? 'text-green-600' :
                 caregiverMetrics.parentWellbeing.stressLevel === 'moderate' ? 'text-amber-600' :
                 'text-red-600'
@@ -407,13 +407,13 @@ export function OutcomesTracking({
               )}
             </div>
             <div className="text-center p-4 bg-gray-50 rounded-lg">
-              <div className="text-2xl font-bold text-teal-600">
+              <div className="text-xl sm:text-2xl font-bold text-teal-600">
                 {caregiverMetrics.parentWellbeing.confidenceScore}%
               </div>
               <div className="text-sm text-gray-600">Confidence Score</div>
             </div>
             <div className="text-center p-4 bg-gray-50 rounded-lg">
-              <div className="text-2xl font-bold text-violet-600">
+              <div className="text-xl sm:text-2xl font-bold text-violet-600">
                 {caregiverMetrics.parentWellbeing.supportSessions}
               </div>
               <div className="text-sm text-gray-600">Support Sessions</div>
@@ -427,11 +427,11 @@ export function OutcomesTracking({
   // PAYER VIEW
   if (view === 'payer' && payerMetrics) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-3 sm:space-y-4 sm:space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-semibold text-gray-900">Outcomes Dashboard</h2>
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Outcomes Dashboard</h2>
             <p className="text-gray-600">Aminy Program Performance</p>
           </div>
           <div className="flex gap-2">
@@ -461,7 +461,7 @@ export function OutcomesTracking({
         </Card>
 
         {/* Cost Savings */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
           <MetricCard
             icon={DollarSign}
             label="Savings/Member"
@@ -493,10 +493,10 @@ export function OutcomesTracking({
         </div>
 
         {/* Utilization & Outcomes */}
-        <div className="grid md:grid-cols-2 gap-6">
-          <Card className="p-4">
+        <div className="grid md:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
+          <Card className="p-3 sm:p-4">
             <h3 className="font-medium text-gray-900 mb-4">Utilization Metrics</h3>
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               <MetricRow
                 label="Member Engagement Rate"
                 value={`${payerMetrics.utilization.memberEngagementRate}%`}
@@ -520,9 +520,9 @@ export function OutcomesTracking({
             </div>
           </Card>
 
-          <Card className="p-4">
+          <Card className="p-3 sm:p-4">
             <h3 className="font-medium text-gray-900 mb-4">Clinical Outcomes</h3>
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               <MetricRow
                 label="Behavior Improvement"
                 value={`${payerMetrics.clinicalOutcomes.behaviorImprovementRate}%`}
@@ -557,11 +557,11 @@ export function OutcomesTracking({
   // INVESTOR VIEW
   if (view === 'investor' && investorMetrics) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-3 sm:space-y-4 sm:space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-semibold text-gray-900">Investor Dashboard</h2>
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Investor Dashboard</h2>
             <p className="text-gray-600">Key Performance Metrics</p>
           </div>
           <div className="flex gap-2">
@@ -599,7 +599,7 @@ export function OutcomesTracking({
         </Card>
 
         {/* Growth Metrics */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
           <MetricCard
             icon={Users}
             label="Total Users"
@@ -632,9 +632,9 @@ export function OutcomesTracking({
         </div>
 
         {/* Detailed Metrics */}
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-3 gap-3 sm:gap-4 sm:gap-6">
           {/* Retention */}
-          <Card className="p-4">
+          <Card className="p-3 sm:p-4">
             <h3 className="font-medium text-gray-900 mb-4 flex items-center gap-2">
               <Users className="w-4 h-4 text-blue-500" />
               Retention
@@ -656,7 +656,7 @@ export function OutcomesTracking({
           </Card>
 
           {/* Engagement */}
-          <Card className="p-4">
+          <Card className="p-3 sm:p-4">
             <h3 className="font-medium text-gray-900 mb-4 flex items-center gap-2">
               <Activity className="w-4 h-4 text-teal-500" />
               Engagement
@@ -678,7 +678,7 @@ export function OutcomesTracking({
           </Card>
 
           {/* Revenue Mix */}
-          <Card className="p-4">
+          <Card className="p-3 sm:p-4">
             <h3 className="font-medium text-gray-900 mb-4 flex items-center gap-2">
               <DollarSign className="w-4 h-4 text-green-500" />
               Revenue Mix
@@ -706,27 +706,27 @@ export function OutcomesTracking({
             <Heart className="w-4 h-4 text-pink-500" />
             Impact Metrics
           </h3>
-          <div className="grid grid-cols-4 gap-4 text-center">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4 text-center">
             <div>
-              <div className="text-2xl font-bold text-pink-600">
+              <div className="text-xl sm:text-2xl font-bold text-pink-600">
                 {investorMetrics.impact.familiesHelped.toLocaleString()}
               </div>
               <p className="text-sm text-gray-600">Families Helped</p>
             </div>
             <div>
-              <div className="text-2xl font-bold text-pink-600">
+              <div className="text-xl sm:text-2xl font-bold text-pink-600">
                 {investorMetrics.impact.goalsAchieved.toLocaleString()}
               </div>
               <p className="text-sm text-gray-600">Goals Achieved</p>
             </div>
             <div>
-              <div className="text-2xl font-bold text-pink-600">
+              <div className="text-xl sm:text-2xl font-bold text-pink-600">
                 {investorMetrics.impact.crisisesAverted.toLocaleString()}
               </div>
               <p className="text-sm text-gray-600">Crises Averted</p>
             </div>
             <div>
-              <div className="text-2xl font-bold text-pink-600">
+              <div className="text-xl sm:text-2xl font-bold text-pink-600">
                 {(investorMetrics.impact.parentHoursReclaimed / 1000).toFixed(1)}K
               </div>
               <p className="text-sm text-gray-600">Parent Hours Saved</p>
@@ -771,7 +771,7 @@ function MetricCard({
   const isPositive = isNegativeGood ? (trend && trend < 0) : (trend && trend > 0);
 
   return (
-    <Card className="p-4">
+    <Card className="p-3 sm:p-4">
       <div className="flex items-center gap-2 mb-2">
         <div className={`p-1.5 rounded-lg ${colorClasses[color]}`}>
           <Icon className="w-4 h-4" />
@@ -779,7 +779,7 @@ function MetricCard({
         <span className="text-sm text-gray-600">{label}</span>
       </div>
       <div className="flex items-end gap-2">
-        <span className="text-2xl font-bold text-gray-900">{value}</span>
+        <span className="text-xl sm:text-2xl font-bold text-gray-900">{value}</span>
         {suffix && <span className="text-sm text-gray-500 mb-1">{suffix}</span>}
       </div>
       {trend !== undefined && (
@@ -835,7 +835,7 @@ export function OutcomesWidget({
   onViewDetails?: () => void;
 }) {
   return (
-    <Card className="p-4">
+    <Card className="p-3 sm:p-4">
       <div className="flex items-center justify-between mb-3">
         <h3 className="font-medium text-gray-900">Your Progress</h3>
         {onViewDetails && (
@@ -844,7 +844,7 @@ export function OutcomesWidget({
           </Button>
         )}
       </div>
-      <div className="grid grid-cols-3 gap-3 text-center">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-center">
         <div className="p-2 bg-teal-50 rounded-lg">
           <div className="text-lg font-bold text-teal-600">
             {goalsAchieved}/{totalGoals}

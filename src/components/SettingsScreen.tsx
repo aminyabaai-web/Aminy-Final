@@ -50,7 +50,7 @@ export function SettingsScreen({ onBack, onLogout }: SettingsScreenProps) {
         </div>
       </div>
 
-      <div className="max-w-2xl mx-auto px-4 py-6 space-y-6">
+      <div className="max-w-2xl mx-auto px-4 py-6 space-y-3 sm:space-y-4 sm:space-y-6">
         {/* Privacy Section */}
         <div>
           <h2 className="font-semibold mb-4 flex items-center gap-2">
@@ -59,7 +59,7 @@ export function SettingsScreen({ onBack, onLogout }: SettingsScreenProps) {
           </h2>
 
           {/* Insurance Information Card */}
-          <Card className="p-4">
+          <Card className="p-3 sm:p-4">
             <div className="flex items-start gap-3 mb-4">
               <CreditCard className="w-5 h-5 text-accent mt-0.5" />
               <div className="flex-1">
@@ -157,7 +157,7 @@ export function SettingsScreen({ onBack, onLogout }: SettingsScreenProps) {
             <Palette className="w-5 h-5 text-accent" />
             Appearance
           </h2>
-          <Card className="p-4">
+          <Card className="p-3 sm:p-4">
             <ThemeSelector />
           </Card>
         </div>
@@ -165,7 +165,7 @@ export function SettingsScreen({ onBack, onLogout }: SettingsScreenProps) {
         {/* Account Section */}
         <div>
           <h2 className="font-semibold mb-4">Account</h2>
-          <Card className="p-4">
+          <Card className="p-3 sm:p-4">
             <div className="space-y-3">
               <button className="w-full text-left text-sm py-2 hover:text-accent transition-colors">
                 Email preferences

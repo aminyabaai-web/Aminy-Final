@@ -353,7 +353,7 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
   };
 
   const renderTopActions = () => (
-    <div className="flex gap-3 mb-6 overflow-x-auto">
+    <div className="flex gap-3 mb-4 sm:mb-6 overflow-x-auto">
       <Button
         onClick={() => setShowBookingModal(true)}
         className="flex items-center gap-2 whitespace-nowrap"
@@ -381,7 +381,7 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
   );
 
   const renderSectionTabs = () => (
-    <div className="flex gap-1 mb-6 bg-gray-100 p-1 rounded-lg">
+    <div className="flex gap-1 mb-4 sm:mb-6 bg-gray-100 dark:bg-slate-800 p-1 rounded-lg">
       {[
         { id: 'messages', label: 'Messages', icon: MessageCircle },
         { id: 'schedule', label: 'Schedule', icon: Calendar },
@@ -393,8 +393,8 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
           onClick={() => setActiveView(id as CareView)}
           className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-md text-sm font-medium transition-colors ${
             activeView === id
-              ? 'bg-white text-gray-900 shadow-sm'
-              : 'text-gray-600 hover:text-gray-900'
+              ? 'bg-white dark:bg-slate-700 text-gray-900 dark:text-white shadow-sm'
+              : 'text-gray-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white'
           }`}
         >
           <Icon className="w-4 h-4" />
@@ -407,7 +407,7 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
   const renderThreadList = () => (
     <div className="space-y-2">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="font-semibold text-gray-900">Conversations</h3>
+        <h3 className="font-semibold text-gray-900 dark:text-white">Conversations</h3>
         <Button variant="ghost" size="sm">
           <Search className="w-4 h-4" />
         </Button>
@@ -417,8 +417,8 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
         <button
           key={thread.id}
           onClick={() => handleThreadSelect(thread.id)}
-          className={`w-full p-4 rounded-lg border text-left transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-            selectedThreadId === thread.id ? 'border-blue-500 bg-blue-50' : 'border-gray-200'
+          className={`w-full p-4 rounded-lg border text-left transition-colors hover:bg-gray-50 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+            selectedThreadId === thread.id ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'border-gray-200 dark:border-slate-700'
           }`}
           aria-label={`Conversation with ${thread.patientName}`}
           tabIndex={0}
@@ -435,7 +435,7 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
             
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between mb-1">
-                <h4 className="font-medium text-gray-900 truncate">{thread.patientName}</h4>
+                <h4 className="font-medium text-gray-900 dark:text-white truncate">{thread.patientName}</h4>
                 <span className="text-xs text-gray-500">{thread.timestamp}</span>
               </div>
               
@@ -454,7 +454,7 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
               <p className="text-sm text-gray-600 truncate">{thread.lastMessage}</p>
               
               <div className="flex items-center gap-1 mt-2">
-                <div className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-100 text-gray-700">
+                <div className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-slate-300">
                   Avg response: 24-48h
                 </div>
                 {thread.unread && (
@@ -480,52 +480,52 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
     if (!currentThread) return null;
     
     return (
-      <div className="msgsHeader bg-white border-b border-gray-100 p-4 sticky top-0 z-10">
+      <div className="msgsHeader bg-white dark:bg-slate-900 border-b border-gray-100 dark:border-slate-800 p-4 sticky top-0 z-10">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             {isMobile && (
               <button
                 onClick={handleBackToThreads}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+                className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                 aria-label="Back to Messages"
               >
-                <ArrowLeft className="w-5 h-5 text-gray-600" />
+                <ArrowLeft className="w-5 h-5 text-gray-600 dark:text-slate-400" />
               </button>
             )}
-            
+
             <div className="relative">
-              <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                <span className="text-sm font-semibold text-blue-700">{currentThread.avatarInitials}</span>
+              <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
+                <span className="text-sm font-semibold text-blue-700 dark:text-blue-400">{currentThread.avatarInitials}</span>
               </div>
-              <div className={`absolute -bottom-1 -right-1 w-3 h-3 border-2 border-white rounded-full ${
+              <div className={`absolute -bottom-1 -right-1 w-3 h-3 border-2 border-white dark:border-slate-900 rounded-full ${
                 currentThread.status === 'online' ? 'bg-green-500' : 'bg-gray-400'
               }`} />
             </div>
-            
+
             <div>
-              <h3 className="font-semibold text-gray-900">{currentThread.patientName}</h3>
+              <h3 className="font-semibold text-gray-900 dark:text-white">{currentThread.patientName}</h3>
               <div className="flex items-center gap-2 mb-2">
-                <div className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-gray-100 text-gray-700" style={{ height: '24px' }}>
+                <div className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-slate-300" style={{ height: '24px' }}>
                   <Clock className="w-3 h-3" />
                   Office hours: 9-6p PST
                 </div>
-                <div className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-blue-50 text-blue-700" style={{ height: '24px' }}>
+                <div className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400" style={{ height: '24px' }}>
                   <CheckCircle className="w-3 h-3" />
                   Avg response: 24-48h
                 </div>
               </div>
-              <div className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-purple-50 text-purple-700" style={{ height: '20px' }}>
+              <div className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400" style={{ height: '20px' }}>
                 BCBA Licensed
               </div>
             </div>
           </div>
-          
+
           <div className="flex items-center gap-2">
             <button
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+              className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
               aria-label="Emergency Resources"
             >
-              <AlertTriangle className="w-5 h-5 text-gray-600" />
+              <AlertTriangle className="w-5 h-5 text-gray-600 dark:text-slate-400" />
             </button>
           </div>
         </div>
@@ -564,10 +564,10 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
     }, [] as Array<{ sender: 'coach' | 'patient'; messages: Message[] }>);
 
     return (
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 overflow-y-auto p-4 space-y-3 sm:space-y-4">
         {/* Date separator */}
         <div className="flex items-center justify-center my-4">
-          <div className="px-3 py-1 bg-gray-100 rounded-full text-xs text-gray-500">
+          <div className="px-3 py-1 bg-gray-100 dark:bg-slate-800 rounded-full text-xs text-gray-500 dark:text-slate-400">
             Today
           </div>
         </div>
@@ -581,7 +581,7 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
                     className={`px-4 py-3 rounded-2xl ${
                       group.sender === 'patient'
                         ? 'bg-blue-600 text-white'
-                        : 'bg-white border border-gray-200 text-gray-900'
+                        : 'bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-gray-900 dark:text-white'
                     }`}
                   >
                     <p className="text-sm leading-relaxed">{message.content}</p>
@@ -722,7 +722,7 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
     
     // Desktop layout
     return (
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[calc(100vh-240px)]">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 sm:gap-6 h-[calc(100vh-240px)]">
         <div className="lg:col-span-1 bg-white border border-gray-200 rounded-lg p-4 overflow-y-auto">
           {renderThreadList()}
         </div>
@@ -748,14 +748,14 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
   };
 
   const renderSchedule = () => (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <div className="bg-white rounded-lg border border-gray-200 p-6">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold text-gray-900">Book a Session</h3>
           <div className="text-sm text-gray-500">Dr. Sarah Chen, BCBA</div>
         </div>
         
-        <div className="grid grid-cols-2 gap-4 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-6">
           <button
             onClick={() => setSelectedDuration(25)}
             className={`p-4 rounded-lg border-2 transition-colors ${
@@ -765,7 +765,7 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
             }`}
           >
             <div className="text-center">
-              <div className="text-2xl font-bold text-gray-900">25 min</div>
+              <div className="text-xl sm:text-2xl font-bold text-gray-900">25 min</div>
               <div className="text-sm text-gray-600">Focus Session</div>
             </div>
           </button>
@@ -778,7 +778,7 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
             }`}
           >
             <div className="text-center">
-              <div className="text-2xl font-bold text-gray-900">50 min</div>
+              <div className="text-xl sm:text-2xl font-bold text-gray-900">50 min</div>
               <div className="text-sm text-gray-600">Deep Dive</div>
             </div>
           </button>
@@ -806,20 +806,20 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
   );
 
   const renderMinutes = () => (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg border border-purple-200 p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Minutes Wallet</h3>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
           <div className="text-center">
-            <div className="text-2xl font-bold text-purple-600">200</div>
+            <div className="text-xl sm:text-2xl font-bold text-purple-600">200</div>
             <div className="text-sm text-gray-600">Included</div>
           </div>
           <div className="text-center">
-            <div className="text-2xl font-bold text-green-600">{remainingMinutes}</div>
+            <div className="text-xl sm:text-2xl font-bold text-green-600">{remainingMinutes}</div>
             <div className="text-sm text-gray-600">Remaining</div>
           </div>
           <div className="text-center">
-            <div className="text-2xl font-bold text-blue-600">{usedMinutes}</div>
+            <div className="text-xl sm:text-2xl font-bold text-blue-600">{usedMinutes}</div>
             <div className="text-sm text-gray-600">Used</div>
           </div>
         </div>
@@ -827,7 +827,7 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
       
       <div className="bg-white rounded-lg border border-gray-200 p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Buy Additional Minutes</h3>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           <div className="p-4 border border-gray-200 rounded-lg text-center">
             <div className="text-xl font-bold">25 min</div>
             <div className="text-lg font-semibold text-blue-600">$49</div>
@@ -848,10 +848,10 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
   );
 
   const renderPastSessions = () => (
-    <div className="space-y-4">
+    <div className="space-y-3 sm:space-y-4">
       <div className="bg-white rounded-lg border border-gray-200 p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Session History</h3>
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <div className="p-4 border border-gray-200 rounded-lg">
             <div className="flex items-center justify-between mb-2">
               <div className="font-medium">Dr. Sarah Chen, BCBA</div>
@@ -878,36 +878,36 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
 
   if (!isPro) {
     return (
-      <div className="min-h-screen bg-gray-50 pb-20">
-        <div className="p-4">
+      <div className="min-h-screen bg-gray-50 dark:bg-slate-900 pb-20">
+        <div className="p-3 sm:p-4">
           <div className="max-w-md mx-auto">
-            <div className="flex items-center gap-3 mb-6">
+            <div className="flex items-center gap-3 mb-4 sm:mb-6">
               <button
                 onClick={handleBackToDashboard}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+                className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                 aria-label="Back to dashboard"
               >
-                <ArrowLeft className="w-5 h-5 text-gray-600" />
+                <ArrowLeft className="w-5 h-5 text-gray-600 dark:text-slate-400" />
               </button>
               <div>
-                <h1 className="text-xl font-semibold text-gray-900">Professional Care</h1>
-                <p className="text-sm text-gray-500">Direct messaging with your care team</p>
+                <h1 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">Professional Care</h1>
+                <p className="text-sm text-gray-500 dark:text-slate-400">Direct messaging with your care team</p>
               </div>
             </div>
 
-            <div className="bg-white rounded-xl border border-gray-200 p-6 text-center">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <MessageCircle className="w-8 h-8 text-blue-600" />
+            <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 p-6 text-center">
+              <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                <MessageCircle className="w-8 h-8 text-blue-600 dark:text-blue-400" />
               </div>
-              
-              <h2 className="text-lg font-semibold text-gray-900 mb-2">
+
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
                 Upgrade to Pro for Full Care Access
               </h2>
-              
-              <p className="text-gray-600 mb-6">
+
+              <p className="text-gray-600 dark:text-slate-400 mb-4 sm:mb-6">
                 Get unlimited messaging, session booking, and personalized care coordination.
               </p>
-              
+
               <Button className="w-full">
                 Upgrade to Pro
               </Button>
@@ -919,21 +919,21 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 pb-20">
       <div className="p-4 lg:p-6">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
-          <div className="flex items-center gap-3 mb-6">
+          <div className="flex items-center gap-3 mb-4 sm:mb-6">
             <button
               onClick={handleBackToDashboard}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors lg:hidden min-h-[44px] min-w-[44px] flex items-center justify-center"
+              className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition-colors lg:hidden min-h-[44px] min-w-[44px] flex items-center justify-center"
               aria-label="Back to dashboard"
             >
-              <ArrowLeft className="w-5 h-5 text-gray-600" />
+              <ArrowLeft className="w-5 h-5 text-gray-600 dark:text-slate-400" />
             </button>
             <div>
-              <h1 className="text-xl lg:text-2xl font-semibold text-gray-900">Professional Care</h1>
-              <p className="text-sm text-gray-500">Secure messaging and session management</p>
+              <h1 className="text-xl lg:text-2xl font-semibold text-gray-900 dark:text-white">Professional Care</h1>
+              <p className="text-sm text-gray-500 dark:text-slate-400">Secure messaging and session management</p>
             </div>
           </div>
           

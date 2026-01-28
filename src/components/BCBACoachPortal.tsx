@@ -316,20 +316,20 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach" }: BCBACoachPo
         {/* Tabs */}
         <div className="max-w-4xl mx-auto px-4">
           <Tabs defaultValue="overview" className="w-full">
-            <TabsList className="grid w-full grid-cols-4 mb-6">
+            <TabsList className="grid w-full grid-cols-4 mb-4 sm:mb-6">
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="goals">Goals</TabsTrigger>
               <TabsTrigger value="reports">Reports</TabsTrigger>
               <TabsTrigger value="notes">Notes</TabsTrigger>
             </TabsList>
 
-            <TabsContent value="overview" className="space-y-4">
-              <Card className="p-6">
+            <TabsContent value="overview" className="space-y-3 sm:space-y-4">
+              <Card className="p-4 sm:p-5 md:p-6">
                 <h3 className="text-slate-900 mb-4 flex items-center gap-2">
                   <Activity className="w-5 h-5 text-accent" />
                   Progress Overview
                 </h3>
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   <div>
                     <div className="flex justify-between text-sm mb-2">
                       <span className="text-slate-600">Overall Progress</span>
@@ -342,7 +342,7 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach" }: BCBACoachPo
                       />
                     </div>
                   </div>
-                  <div className="grid grid-cols-3 gap-4 pt-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 pt-4">
                     <div className="text-center">
                       <div className="text-2xl text-slate-900 mb-1">{selectedFamily.activeGoals}</div>
                       <div className="text-xs text-slate-600">Active Goals</div>
@@ -360,9 +360,9 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach" }: BCBACoachPo
               </Card>
             </TabsContent>
 
-            <TabsContent value="goals" className="space-y-4">
+            <TabsContent value="goals" className="space-y-3 sm:space-y-4">
               {goals.map(goal => (
-                <Card key={goal.id} className="p-6">
+                <Card key={goal.id} className="p-4 sm:p-5 md:p-6">
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex-1">
                       <h4 className="text-slate-900 mb-1">{goal.title}</h4>
@@ -397,7 +397,7 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach" }: BCBACoachPo
               ))}
             </TabsContent>
 
-            <TabsContent value="reports" className="space-y-4">
+            <TabsContent value="reports" className="space-y-3 sm:space-y-4">
               <Card className="p-6 text-center">
                 <FileText className="w-12 h-12 text-slate-300 mx-auto mb-3" />
                 <p className="text-slate-600 mb-4">Reports integration coming soon</p>
@@ -408,8 +408,8 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach" }: BCBACoachPo
               </Card>
             </TabsContent>
 
-            <TabsContent value="notes" className="space-y-4">
-              <Card className="p-6">
+            <TabsContent value="notes" className="space-y-3 sm:space-y-4">
+              <Card className="p-4 sm:p-5 md:p-6">
                 <h4 className="text-slate-900 mb-3">Add New Note</h4>
                 <Textarea
                   value={newNote}
@@ -424,7 +424,7 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach" }: BCBACoachPo
               </Card>
 
               {notes.map(note => (
-                <Card key={note.id} className="p-6">
+                <Card key={note.id} className="p-4 sm:p-5 md:p-6">
                   <div className="flex items-center gap-2 mb-2">
                     <Calendar className="w-4 h-4 text-slate-400" />
                     <span className="text-sm text-slate-600">{note.date}</span>
@@ -468,7 +468,7 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach" }: BCBACoachPo
 
       <div className="max-w-4xl mx-auto px-4 py-6">
         {/* Search */}
-        <div className="mb-6">
+        <div className="mb-4 sm:mb-6">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <Input
@@ -481,18 +481,18 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach" }: BCBACoachPo
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-4 mb-6">
-          <Card className="p-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
+          <Card className="p-3 sm:p-4">
             <div className="text-2xl text-slate-900 mb-1">{families.length}</div>
             <div className="text-sm text-slate-600">Active Families</div>
           </Card>
-          <Card className="p-4">
+          <Card className="p-3 sm:p-4">
             <div className="text-2xl text-slate-900 mb-1">
               {families.reduce((sum, f) => sum + f.activeGoals, 0)}
             </div>
             <div className="text-sm text-slate-600">Total Goals</div>
           </Card>
-          <Card className="p-4">
+          <Card className="p-3 sm:p-4">
             <div className="text-2xl text-slate-900 mb-1">
               {Math.round(families.reduce((sum, f) => sum + f.progress, 0) / families.length)}%
             </div>
@@ -531,7 +531,7 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach" }: BCBACoachPo
                     <ChevronRight className="w-5 h-5 text-slate-400" />
                   </div>
 
-                  <div className="grid grid-cols-3 gap-3 mb-3 text-sm">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mb-3 text-sm">
                     <div>
                       <span className="text-slate-600">Goals: </span>
                       <span className="text-slate-900">{family.activeGoals}</span>

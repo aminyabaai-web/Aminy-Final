@@ -249,12 +249,12 @@ export function ParentWellnessCheck({
           >
             {/* Intro Step */}
             {step === 'intro' && (
-              <div className="p-6">
-                <div className="text-center mb-6">
+              <div className="p-4 sm:p-5 md:p-6">
+                <div className="text-center mb-4 sm:mb-6">
                   <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-rose-100 to-pink-100 mb-4">
                     <HandHeart className="w-8 h-8 text-rose-500" />
                   </div>
-                  <h2 className="text-2xl font-bold text-primary mb-2">
+                  <h2 className="text-xl sm:text-2xl font-bold text-primary mb-2">
                     How are YOU doing, {parentName}?
                   </h2>
                   <p className="text-muted-foreground">
@@ -262,7 +262,7 @@ export function ParentWellnessCheck({
                   </p>
                 </div>
 
-                <div className="bg-gradient-to-r from-rose-50 to-pink-50 rounded-xl p-4 mb-6">
+                <div className="bg-gradient-to-r from-rose-50 to-pink-50 rounded-xl p-4 mb-4 sm:mb-6">
                   <div className="flex items-start gap-3">
                     <Shield className="w-5 h-5 text-rose-500 mt-0.5 flex-shrink-0" />
                     <div className="text-sm">
@@ -274,7 +274,7 @@ export function ParentWellnessCheck({
                   </div>
                 </div>
 
-                <div className="space-y-3 mb-6">
+                <div className="space-y-3 mb-4 sm:mb-6">
                   <div className="flex items-center gap-3 text-sm text-muted-foreground">
                     <CheckCircle className="w-4 h-4 text-green-500" />
                     <span>Takes less than 2 minutes</span>
@@ -313,9 +313,9 @@ export function ParentWellnessCheck({
 
             {/* Question Steps (PHQ-2 and PHQ-9) */}
             {(step === 'phq2' || step === 'phq9') && currentQ && (
-              <div className="p-6">
+              <div className="p-4 sm:p-5 md:p-6">
                 {/* Progress */}
-                <div className="mb-6">
+                <div className="mb-4 sm:mb-6">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm text-muted-foreground">
                       Question {currentQuestionNumber} of {totalQuestions}
@@ -343,7 +343,7 @@ export function ParentWellnessCheck({
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
                 >
-                  <h3 className="text-lg font-semibold text-primary mb-6">
+                  <h3 className="text-lg font-semibold text-primary mb-4 sm:mb-6">
                     {currentQ.text}
                   </h3>
 
@@ -377,12 +377,12 @@ export function ParentWellnessCheck({
 
             {/* Crisis Step */}
             {step === 'crisis' && (
-              <div className="p-6">
-                <div className="text-center mb-6">
+              <div className="p-4 sm:p-5 md:p-6">
+                <div className="text-center mb-4 sm:mb-6">
                   <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-100 mb-4">
                     <Heart className="w-8 h-8 text-red-500" />
                   </div>
-                  <h2 className="text-2xl font-bold text-primary mb-2">
+                  <h2 className="text-xl sm:text-2xl font-bold text-primary mb-2">
                     We're here for you
                   </h2>
                   <p className="text-muted-foreground">
@@ -390,7 +390,7 @@ export function ParentWellnessCheck({
                   </p>
                 </div>
 
-                <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6">
+                <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-4 sm:mb-6">
                   <div className="flex items-start gap-3">
                     <AlertTriangle className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" />
                     <div>
@@ -404,7 +404,7 @@ export function ParentWellnessCheck({
                   </div>
                 </div>
 
-                <div className="space-y-3 mb-6">
+                <div className="space-y-3 mb-4 sm:mb-6">
                   {CRISIS_RESOURCES.filter(r => r.type === 'crisis').map((resource) => (
                     <Card key={resource.name} className="p-4 border-2 border-red-200">
                       <h4 className="font-semibold text-primary mb-1">{resource.name}</h4>
@@ -447,8 +447,8 @@ export function ParentWellnessCheck({
 
             {/* Result Step */}
             {step === 'result' && (
-              <div className="p-6">
-                <div className="text-center mb-6">
+              <div className="p-4 sm:p-5 md:p-6">
+                <div className="text-center mb-4 sm:mb-6">
                   <div className={cn(
                     "inline-flex items-center justify-center w-16 h-16 rounded-full mb-4",
                     getSeverity() === 'none'
@@ -466,7 +466,7 @@ export function ParentWellnessCheck({
                     )}
                   </div>
 
-                  <h2 className="text-2xl font-bold text-primary mb-2">
+                  <h2 className="text-xl sm:text-2xl font-bold text-primary mb-2">
                     {getSeverity() === 'none'
                       ? "You're doing great!"
                       : getSeverity() === 'mild'
@@ -485,7 +485,7 @@ export function ParentWellnessCheck({
 
                 {getSeverity() !== 'none' && (
                   <>
-                    <div className="bg-gradient-to-r from-rose-50 to-pink-50 rounded-xl p-4 mb-6">
+                    <div className="bg-gradient-to-r from-rose-50 to-pink-50 rounded-xl p-4 mb-4 sm:mb-6">
                       <h4 className="font-semibold text-rose-700 mb-2 flex items-center gap-2">
                         <Sparkles className="w-4 h-4" />
                         What Aminy can do for you
@@ -644,7 +644,7 @@ export function WellnessCheckWidget({
       )}
       onClick={onStartCheck}
     >
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3 sm:gap-4">
         <div className={cn(
           "p-3 rounded-xl",
           shouldPrompt ? "bg-rose-100" : "bg-gray-100"

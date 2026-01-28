@@ -264,7 +264,7 @@ export function DailyNudge({
           "p-4 text-white bg-gradient-to-r",
           content.gradient
         )}>
-          <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center justify-between gap-3 sm:gap-4">
             <div className="flex items-center gap-3 min-w-0">
               <Icon className="w-5 h-5 flex-shrink-0" />
               <div className="min-w-0">

@@ -124,7 +124,7 @@ export function DeveloperModeHandler({ onNavigate, onTierChange }: DeveloperMode
         <div className="p-4 pt-3 border-t bg-gray-50 space-y-2 shrink-0">
           <div className="p-2 bg-white border rounded-lg">
             <h4 className="text-xs font-semibold mb-1.5">Keyboard Shortcuts</h4>
-            <div className="grid grid-cols-3 gap-x-3 gap-y-1 text-xs">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-3 gap-y-1 text-xs">
               <div className="flex items-center justify-between">
                 <kbd className="px-1.5 py-0.5 bg-gray-100 rounded text-xs">Shift+D</kbd>
                 <span className="text-muted-foreground text-xs">Toggle</span>

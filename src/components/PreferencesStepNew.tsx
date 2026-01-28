@@ -61,7 +61,7 @@ function PreferencesStep({ formData, setFormData }: PreferencesStepProps) {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       {/* Tone Selection */}
       <div>
         <Label className="mb-3 block">
@@ -93,7 +93,7 @@ function PreferencesStep({ formData, setFormData }: PreferencesStepProps) {
         <Label className="mb-3 block">
           When would you like support? (select all that apply)
         </Label>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {timeSlots.map((slot) => {
             const isSelected = (formData.timeSlots || []).includes(slot.id);
             return (

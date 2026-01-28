@@ -107,10 +107,10 @@ export function ALaCarteMenu({ onBookSession, userTier = 'free', isProUser = fal
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       {/* Header */}
       <div className="text-center">
-        <h2 className="text-xl font-semibold text-gray-900 mb-2">Book a Session</h2>
+        <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">Book a Session</h2>
         <p className="text-gray-600 text-sm max-w-md mx-auto">
           Cash-pay telehealth sessions with verified behavioral health experts.
           All sessions include a summary added to your care plan.
@@ -123,7 +123,7 @@ export function ALaCarteMenu({ onBookSession, userTier = 'free', isProUser = fal
       </div>
 
       {/* Session Cards */}
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         {sessions.map((session) => {
           const IconComponent = session.icon;
           const displayPrice = isProUser ? session.proPrice : session.price;
@@ -144,7 +144,7 @@ export function ALaCarteMenu({ onBookSession, userTier = 'free', isProUser = fal
                 </Badge>
               )}
 
-              <div className="flex items-start gap-4">
+              <div className="flex items-start gap-3 sm:gap-4">
                 {/* Icon */}
                 <div className={`p-2 rounded-lg ${session.color} flex-shrink-0`}>
                   <IconComponent className="w-5 h-5" />
@@ -207,7 +207,7 @@ export function ALaCarteMenu({ onBookSession, userTier = 'free', isProUser = fal
 
       {/* Trust Badge */}
       <div className="text-center pt-4 border-t border-gray-100">
-        <div className="flex items-center justify-center gap-4 text-xs text-gray-500">
+        <div className="flex items-center justify-center gap-3 sm:gap-4 text-xs text-gray-500">
           <span className="flex items-center gap-1">
             <Check className="w-3 h-3 text-green-500" />
             BHCOE Accredited

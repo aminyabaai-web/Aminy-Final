@@ -456,7 +456,11 @@ export function SecureMessaging({ userId, userType, userName }: SecureMessagingP
                 <div className="flex items-start gap-3">
                   <div className="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center flex-shrink-0">
                     {thread.providerPhoto ? (
-                      <img src={thread.providerPhoto} alt="" className="w-10 h-10 rounded-full" />
+                      <img
+                        src={thread.providerPhoto}
+                        alt={`${userType === 'parent' ? thread.providerName : thread.parentName}'s profile photo`}
+                        className="w-10 h-10 rounded-full object-cover"
+                      />
                     ) : (
                       <User className="w-5 h-5 text-teal-600" />
                     )}
@@ -545,7 +549,7 @@ export function SecureMessaging({ userId, userType, userName }: SecureMessagingP
           </div>
 
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-neutral-50">
+          <div className="flex-1 overflow-y-auto p-4 space-y-3 sm:space-y-4 bg-neutral-50">
             {messages.map(message => {
               const isOwn = message.senderId === userId;
               return (

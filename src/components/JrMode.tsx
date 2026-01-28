@@ -174,13 +174,13 @@ export function JrMode({ childName, onExit, userTier }: JrModeProps) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-blue-50 to-purple-50 flex flex-col items-center justify-center p-4">
         <div className="max-w-md mx-auto text-center">
-          <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+          <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
             <Heart className="w-12 h-12 text-blue-500 animate-pulse" />
           </div>
           <h1 className="text-2xl font-semibold text-primary mb-4">
             Take a Calm Break, {childName}
           </h1>
-          <p className="text-muted-foreground mb-6 leading-relaxed">
+          <p className="text-muted-foreground mb-4 sm:mb-6 leading-relaxed">
             Let's take some deep breaths together. You're doing such a great job learning!
           </p>
           <div className="w-full bg-blue-100 rounded-full h-3 mb-4">
@@ -223,7 +223,7 @@ export function JrMode({ childName, onExit, userTier }: JrModeProps) {
         
         {/* Session Status */}
         {isActive && (
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 mb-6 border border-green-200">
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 mb-4 sm:mb-6 border border-green-200">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
@@ -253,9 +253,9 @@ export function JrMode({ childName, onExit, userTier }: JrModeProps) {
 
         {/* Current Activity */}
         {isActive && currentActivity && (
-          <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 mb-6 border border-blue-200">
+          <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 mb-4 sm:mb-6 border border-blue-200">
             <div className="text-center mb-4">
-              <h2 className="text-xl font-semibold text-primary mb-2">
+              <h2 className="text-lg sm:text-xl font-semibold text-primary mb-2">
                 {currentActivity.title}
               </h2>
               <p className="text-muted-foreground leading-relaxed">
@@ -264,7 +264,7 @@ export function JrMode({ childName, onExit, userTier }: JrModeProps) {
             </div>
             
             {/* Sample Interactive Buttons */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {currentActivity.expectedResponses.slice(0, 4).map((response, index) => (
                 <button
                   key={index}
@@ -316,7 +316,7 @@ export function JrMode({ childName, onExit, userTier }: JrModeProps) {
 
         {/* Encouragement */}
         {!isActive && (
-          <div className="mt-6 text-center">
+          <div className="mt-4 sm:mt-6 text-center">
             <p className="text-muted-foreground text-sm leading-relaxed">
               Ready to play and learn together? Tap start when you're ready! 🎈
             </p>
@@ -325,7 +325,7 @@ export function JrMode({ childName, onExit, userTier }: JrModeProps) {
 
         {/* Session Stats Preview */}
         {!isActive && sessionTargets.length > 0 && (
-          <div className="mt-6 bg-white/70 backdrop-blur-sm rounded-2xl p-4 border border-gray-200">
+          <div className="mt-4 sm:mt-6 bg-white/70 backdrop-blur-sm rounded-2xl p-4 border border-gray-200">
             <h3 className="text-sm font-semibold text-primary mb-2">Last Session</h3>
             <div className="flex items-center justify-between text-sm">
               <span className="text-muted-foreground">Activities completed</span>

@@ -23,8 +23,8 @@ export function ComprehensiveDesignSystem() {
 
   // BUTTON COMPONENTS
   const ButtonShowcase = () => (
-    <div className="space-y-6">
-      <h3 className="text-xl font-semibold text-primary">Buttons</h3>
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
+      <h3 className="text-lg sm:text-xl font-semibold text-primary">Buttons</h3>
       
       {/* Primary Buttons */}
       <div className="space-y-3">
@@ -81,8 +81,8 @@ export function ComprehensiveDesignSystem() {
 
   // INPUT COMPONENTS
   const InputShowcase = () => (
-    <div className="space-y-6">
-      <h3 className="text-xl font-semibold text-primary">Inputs</h3>
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
+      <h3 className="text-lg sm:text-xl font-semibold text-primary">Inputs</h3>
       
       {/* Text Input */}
       <div className="space-y-2">
@@ -185,8 +185,8 @@ export function ComprehensiveDesignSystem() {
 
   // CARD COMPONENTS
   const CardShowcase = () => (
-    <div className="space-y-6">
-      <h3 className="text-xl font-semibold text-primary">Cards</h3>
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
+      <h3 className="text-lg sm:text-xl font-semibold text-primary">Cards</h3>
       
       {/* Activity Card */}
       <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
@@ -250,8 +250,8 @@ export function ComprehensiveDesignSystem() {
 
   // BADGE COMPONENTS
   const BadgeShowcase = () => (
-    <div className="space-y-6">
-      <h3 className="text-xl font-semibold text-primary">Badges</h3>
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
+      <h3 className="text-lg sm:text-xl font-semibold text-primary">Badges</h3>
       
       {/* Trust Badges */}
       <div className="space-y-3">
@@ -303,8 +303,8 @@ export function ComprehensiveDesignSystem() {
 
   // NAVIGATION COMPONENTS
   const NavigationShowcase = () => (
-    <div className="space-y-6">
-      <h3 className="text-xl font-semibold text-primary">Navigation</h3>
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
+      <h3 className="text-lg sm:text-xl font-semibold text-primary">Navigation</h3>
       
       {/* Bottom Nav */}
       <div className="space-y-3">
@@ -333,7 +333,7 @@ export function ComprehensiveDesignSystem() {
       {/* Tabs */}
       <div className="space-y-3">
         <h4 className="text-sm font-medium text-muted-foreground">Tabs (Underline Style)</h4>
-        <div className="flex gap-6 border-b border-gray-200">
+        <div className="flex gap-3 sm:gap-4 sm:gap-6 border-b border-gray-200">
           <button className="pb-2 text-sm font-medium text-accent border-b-2 border-accent">
             Active Tab
           </button>
@@ -371,8 +371,8 @@ export function ComprehensiveDesignSystem() {
 
   // FEEDBACK COMPONENTS
   const FeedbackShowcase = () => (
-    <div className="space-y-6">
-      <h3 className="text-xl font-semibold text-primary">Feedback</h3>
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
+      <h3 className="text-lg sm:text-xl font-semibold text-primary">Feedback</h3>
       
       {/* Modal Trigger */}
       <div className="space-y-3">
@@ -415,8 +415,8 @@ export function ComprehensiveDesignSystem() {
 
   // DESIGN TOKENS
   const TokensShowcase = () => (
-    <div className="space-y-6">
-      <h3 className="text-xl font-semibold text-primary">Design Tokens</h3>
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
+      <h3 className="text-lg sm:text-xl font-semibold text-primary">Design Tokens</h3>
       
       {/* Colors */}
       <div className="space-y-3">
@@ -444,9 +444,9 @@ export function ComprehensiveDesignSystem() {
       {/* Typography */}
       <div className="space-y-3">
         <h4 className="text-sm font-medium text-muted-foreground">Typography</h4>
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <div>
-            <h1 className="text-3xl font-bold mb-1">H1: 28-32px / Bold</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold mb-1">H1: 28-32px / Bold</h1>
             <p className="text-xs text-gray-500">Large headings</p>
           </div>
           <div>
@@ -454,7 +454,7 @@ export function ComprehensiveDesignSystem() {
             <p className="text-xs text-gray-500">Section headings</p>
           </div>
           <div>
-            <h3 className="text-xl font-semibold mb-1">H3: 18-20px / Semibold</h3>
+            <h3 className="text-lg sm:text-xl font-semibold mb-1">H3: 18-20px / Semibold</h3>
             <p className="text-xs text-gray-500">Subsection headings</p>
           </div>
           <div>
@@ -509,7 +509,7 @@ export function ComprehensiveDesignSystem() {
       {/* Shadows */}
       <div className="space-y-3">
         <h4 className="text-sm font-medium text-muted-foreground">Shadows</h4>
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
           <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
             <p className="text-xs font-medium">Small</p>
           </div>
@@ -547,7 +547,7 @@ export function ComprehensiveDesignSystem() {
                 <Heart className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-semibold text-primary">
+                <h1 className="text-lg sm:text-xl font-semibold text-primary">
                   Aminy Design System
                 </h1>
                 <p className="text-xs text-gray-500">
@@ -562,7 +562,7 @@ export function ComprehensiveDesignSystem() {
       {/* Tab Navigation */}
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex gap-6 overflow-x-auto">
+          <div className="flex gap-3 sm:gap-4 sm:gap-6 overflow-x-auto">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
@@ -592,7 +592,7 @@ export function ComprehensiveDesignSystem() {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 backdrop-blur-sm">
           <div className="bg-white rounded-xl p-6 max-w-md w-full shadow-xl">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl font-semibold text-primary">Modal Example</h3>
+              <h3 className="text-lg sm:text-xl font-semibold text-primary">Modal Example</h3>
               <button
                 onClick={() => setShowModal(false)}
                 className="p-1 hover:bg-gray-100 rounded-lg transition-colors"
@@ -600,7 +600,7 @@ export function ComprehensiveDesignSystem() {
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <p className="text-gray-600 mb-6">
+            <p className="text-gray-600 mb-4 sm:mb-6">
               This is a centered overlay modal with a backdrop blur effect.
             </p>
             <div className="flex gap-3">

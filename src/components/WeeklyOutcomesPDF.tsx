@@ -299,7 +299,7 @@ export function WeeklyOutcomesPDF({ data, tier = 'free', onUpgrade }: WeeklyOutc
   const stressTrend = getStressTrend();
 
   return (
-    <Card className="p-6">
+    <Card className="p-4 sm:p-5 md:p-6">
       <div className="flex items-start justify-between mb-4">
         <div>
           <div className="flex items-center gap-2 mb-2">
@@ -339,24 +339,24 @@ export function WeeklyOutcomesPDF({ data, tier = 'free', onUpgrade }: WeeklyOutc
       </div>
 
       {/* Preview Metrics */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
         <div className="p-4 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg">
-          <p className="text-2xl font-bold text-blue-700">
+          <p className="text-xl sm:text-2xl font-bold text-blue-700">
             {reportData.activitiesCompleted}/{reportData.activitiesPlanned}
           </p>
           <p className="text-sm text-blue-600">Activities Completed</p>
         </div>
         <div className="p-4 bg-gradient-to-br from-green-50 to-green-100 rounded-lg">
-          <p className="text-2xl font-bold text-green-700">{reportData.routineAdherence}%</p>
+          <p className="text-xl sm:text-2xl font-bold text-green-700">{reportData.routineAdherence}%</p>
           <p className="text-sm text-green-600">Routine Adherence</p>
         </div>
         <div className="p-4 bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg">
-          <p className="text-2xl font-bold text-purple-700">{reportData.goalsAchieved}</p>
+          <p className="text-xl sm:text-2xl font-bold text-purple-700">{reportData.goalsAchieved}</p>
           <p className="text-sm text-purple-600">Goals Achieved</p>
         </div>
         <div className="p-4 bg-gradient-to-br from-amber-50 to-amber-100 rounded-lg">
           <div className="flex items-center gap-1">
-            <p className="text-2xl font-bold text-amber-700">{reportData.stressLevelAvg.toFixed(1)}</p>
+            <p className="text-xl sm:text-2xl font-bold text-amber-700">{reportData.stressLevelAvg.toFixed(1)}</p>
             {stressTrend && (
               <stressTrend.icon className={`w-4 h-4 ${stressTrend.color}`} />
             )}

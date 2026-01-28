@@ -148,9 +148,9 @@ export function CommunityComposer({ onPost, onCancel }: CommunityComposerProps) 
   const canPost = body.trim().length > 0 && selectedTags.length > 0 && !isOverLimit;
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
-      <Card className="p-6">
-        <h2 className="text-xl font-semibold text-slate-900 mb-4">Share with the Community</h2>
+    <div className="max-w-2xl mx-auto space-y-3 sm:space-y-4 sm:space-y-6">
+      <Card className="p-4 sm:p-5 md:p-6">
+        <h2 className="text-lg sm:text-xl font-semibold text-slate-900 mb-4">Share with the Community</h2>
         
         {/* Draft notification */}
         {hasDraft && (
@@ -180,7 +180,7 @@ export function CommunityComposer({ onPost, onCancel }: CommunityComposerProps) 
           </div>
         )}
         
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           {/* Title (optional) */}
           <div>
             <Label htmlFor="post-title" className="text-sm font-medium text-slate-700 mb-2 block">

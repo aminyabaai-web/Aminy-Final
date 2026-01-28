@@ -335,7 +335,7 @@ export function OnDemandTelehealth({
             </Card>
           ) : (
             // Provider list
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               <div className="flex items-center justify-between">
                 <h2 className="font-medium text-gray-900">Available Now</h2>
                 <Button variant="ghost" size="sm" onClick={() => setLoading(true)}>
@@ -354,9 +354,9 @@ export function OnDemandTelehealth({
                   }`}
                   onClick={() => provider.availabilityStatus === 'available' && handleSelectProvider(provider)}
                 >
-                  <div className="flex items-start gap-4">
+                  <div className="flex items-start gap-3 sm:gap-4">
                     {/* Provider avatar */}
-                    <div className="w-14 h-14 bg-gradient-to-br from-accent/20 to-purple-500/20 rounded-full flex items-center justify-center text-xl font-semibold text-accent">
+                    <div className="w-14 h-14 bg-gradient-to-br from-accent/20 to-purple-500/20 rounded-full flex items-center justify-center text-lg sm:text-xl font-semibold text-accent">
                       {provider.name.split(' ').map(n => n[0]).join('')}
                     </div>
 
@@ -418,7 +418,7 @@ export function OnDemandTelehealth({
           )}
 
           {/* AI fallback option */}
-          <Card className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-cyan-50 border-blue-200">
+          <Card className="mt-4 sm:mt-6 p-4 bg-gradient-to-r from-blue-50 to-cyan-50 border-blue-200">
             <div className="flex items-start gap-3">
               <div className="p-2 bg-blue-100 rounded-lg">
                 <Brain className="w-5 h-5 text-blue-600" />
@@ -455,10 +455,10 @@ export function OnDemandTelehealth({
           </div>
         </div>
 
-        <div className="max-w-2xl mx-auto px-4 py-6 space-y-6">
+        <div className="max-w-2xl mx-auto px-4 py-6 space-y-3 sm:space-y-4 sm:space-y-6">
           {/* Provider summary */}
-          <Card className="p-4">
-            <div className="flex items-center gap-4">
+          <Card className="p-3 sm:p-4">
+            <div className="flex items-center gap-3 sm:gap-4">
               <div className="w-16 h-16 bg-gradient-to-br from-accent/20 to-purple-500/20 rounded-full flex items-center justify-center text-2xl font-semibold text-accent">
                 {selectedProvider.name.split(' ').map(n => n[0]).join('')}
               </div>
@@ -476,7 +476,7 @@ export function OnDemandTelehealth({
           {/* Duration selection */}
           <div>
             <h3 className="font-medium text-gray-900 mb-3">Session Length</h3>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <button
                 onClick={() => setSelectedDuration(15)}
                 className={`p-4 rounded-lg border-2 text-left transition-all ${
@@ -531,7 +531,7 @@ export function OnDemandTelehealth({
           </Card>
 
           {/* What to expect */}
-          <Card className="p-4">
+          <Card className="p-3 sm:p-4">
             <h3 className="font-medium text-gray-900 mb-3">What to Expect</h3>
             <ul className="space-y-2 text-sm text-gray-600">
               <li className="flex items-start gap-2">
@@ -611,14 +611,14 @@ export function OnDemandTelehealth({
     return (
       <div className="min-h-screen bg-white flex items-center justify-center p-4">
         <div className="text-center max-w-sm">
-          <div className="w-20 h-20 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-6">
+          <div className="w-20 h-20 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
             <Video className="w-10 h-10 text-accent animate-pulse" />
           </div>
 
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">
             Connecting to {selectedProvider?.name}...
           </h2>
-          <p className="text-gray-600 mb-6">
+          <p className="text-gray-600 mb-4 sm:mb-6">
             Please stay on this screen. We're setting up your secure session.
           </p>
 
@@ -643,7 +643,7 @@ export function OnDemandTelehealth({
               setStep('browse');
               setConnectionProgress(0);
             }}
-            className="mt-6 text-gray-500"
+            className="mt-4 sm:mt-6 text-gray-500"
           >
             Cancel
           </Button>
@@ -691,7 +691,7 @@ export function OnDemandTelehealth({
             </div>
 
             {/* Control buttons */}
-            <div className="flex items-center justify-center gap-4">
+            <div className="flex items-center justify-center gap-3 sm:gap-4">
               <button className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center text-white hover:bg-white/20 transition-colors">
                 <MessageSquare className="w-5 h-5" />
               </button>
@@ -721,20 +721,20 @@ export function OnDemandTelehealth({
           </div>
         </div>
 
-        <div className="max-w-2xl mx-auto px-4 py-6 space-y-6">
+        <div className="max-w-2xl mx-auto px-4 py-6 space-y-3 sm:space-y-4 sm:space-y-6">
           {/* Success message */}
           <div className="text-center py-6">
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <CheckCircle className="w-8 h-8 text-green-600" />
             </div>
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">Great session!</h2>
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">Great session!</h2>
             <p className="text-gray-600">
               Your session with {session.provider.name} has ended.
             </p>
           </div>
 
           {/* Session details */}
-          <Card className="p-4">
+          <Card className="p-3 sm:p-4">
             <h3 className="font-medium text-gray-900 mb-3">Session Details</h3>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
@@ -767,7 +767,7 @@ export function OnDemandTelehealth({
           </div>
 
           {/* Rate provider */}
-          <Card className="p-4">
+          <Card className="p-3 sm:p-4">
             <h3 className="font-medium text-gray-900 mb-3">How was your session?</h3>
             <div className="flex items-center justify-center gap-2">
               {[1, 2, 3, 4, 5].map((rating) => (

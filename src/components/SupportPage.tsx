@@ -282,7 +282,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
   const renderHome = () => (
     <div className="space-y-8">
       {/* Hero Search */}
-      <div className="text-center space-y-4">
+      <div className="text-center space-y-3 sm:space-y-4">
         <h1 className="text-2xl font-semibold text-slate-900">How can we help you?</h1>
         <div className="relative max-w-lg mx-auto">
           <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
@@ -301,10 +301,10 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
       </div>
 
       {/* Quick Tiles */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-3 sm:gap-4 md:grid-cols-2 lg:grid-cols-3">
         {quickTiles.map((tile) => (
           <Card key={tile.id} className="p-6 hover:shadow-lg transition-shadow cursor-pointer">
-            <div className="flex items-start gap-4">
+            <div className="flex items-start gap-3 sm:gap-4">
               <div className="w-10 h-10 bg-accent/10 rounded-lg flex items-center justify-center text-accent">
                 {tile.icon}
               </div>
@@ -324,7 +324,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
       </div>
 
       {/* AI Assistant */}
-      <Card className="p-6">
+      <Card className="p-4 sm:p-5 md:p-6">
         <div className="flex items-center gap-3 mb-4">
           <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
             <Brain className="w-4 h-4 text-white" />
@@ -333,7 +333,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
           <Badge className="bg-accent/10 text-accent text-xs">Instant Help</Badge>
         </div>
         
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <p className="text-sm text-slate-600">Describe your issue and get instant solutions with in-app fixes.</p>
           
           <div className="relative">
@@ -370,7 +370,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
 
         {/* AI Response */}
         {aiResponse && (
-          <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+          <div className="mt-4 sm:mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
             <div className="flex items-start gap-3 mb-3">
               <div className="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center">
                 <Brain className="w-3 h-3 text-white" />
@@ -460,8 +460,8 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
       const step = troubleshooter.steps[currentStep];
       
       return (
-        <div className="space-y-6">
-          <div className="flex items-center gap-4">
+        <div className="space-y-3 sm:space-y-4 sm:space-y-6">
+          <div className="flex items-center gap-3 sm:gap-4">
             <Button 
               variant="ghost" 
               onClick={() => {
@@ -494,17 +494,17 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
 
           {/* Current Step */}
           <Card className="p-8">
-            <div className="text-center space-y-4">
+            <div className="text-center space-y-3 sm:space-y-4">
               <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center mx-auto">
-                <span className="text-2xl font-bold text-accent">{currentStep + 1}</span>
+                <span className="text-xl sm:text-2xl font-bold text-accent">{currentStep + 1}</span>
               </div>
               
-              <h2 className="text-xl font-semibold text-slate-900">{step.title}</h2>
+              <h2 className="text-lg sm:text-xl font-semibold text-slate-900">{step.title}</h2>
               <p className="text-slate-600 max-w-md mx-auto">{step.instruction}</p>
               
               {step.id === 'code' && (
                 <div className="bg-gray-50 rounded-lg p-4 my-4">
-                  <div className="flex items-center justify-center gap-4">
+                  <div className="flex items-center justify-center gap-3 sm:gap-4">
                     <QrCode className="w-16 h-16 text-slate-400" />
                     <div className="text-center">
                       <p className="text-sm font-medium text-slate-900">Sample QR Code</p>
@@ -526,7 +526,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
               )}
             </div>
             
-            <div className="flex justify-center gap-4 mt-8">
+            <div className="flex justify-center gap-3 sm:gap-4 mt-8">
               <Button 
                 className="bg-green-600 hover:bg-green-700 text-white min-w-[120px]"
                 onClick={() => handleStepResult(step.id, 'worked')}
@@ -549,14 +549,14 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
     }
 
     return (
-      <div className="space-y-6">
+      <div className="space-y-3 sm:space-y-4 sm:space-y-6">
         <h1 className="text-2xl font-semibold text-slate-900">Guided Troubleshooters</h1>
         <p className="text-slate-600">Step-by-step solutions with automatic diagnostics collection</p>
         
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-3 sm:gap-4 md:grid-cols-2">
           {troubleshooters.map((troubleshooter) => (
             <Card key={troubleshooter.id} className="p-6 hover:shadow-lg transition-shadow cursor-pointer">
-              <div className="flex items-center gap-4 mb-4">
+              <div className="flex items-center gap-3 sm:gap-4 mb-4">
                 <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center text-red-600">
                   {troubleshooter.icon}
                 </div>
@@ -603,11 +603,11 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
   };
 
   const renderContact = () => (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <h1 className="text-2xl font-semibold text-slate-900">Contact Us</h1>
       
-      <Card className="p-6">
-        <div className="space-y-6">
+      <Card className="p-4 sm:p-5 md:p-6">
+        <div className="space-y-3 sm:space-y-4 sm:space-y-6">
           {/* Triage Form */}
           <div>
             <label className="text-sm font-medium text-slate-700 block mb-3">What do you need help with?</label>
@@ -673,7 +673,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
           {/* Contact Preference */}
           <div>
             <label className="text-sm font-medium text-slate-700 block mb-3">Preferred contact method</label>
-            <div className="flex gap-4">
+            <div className="flex gap-3 sm:gap-4">
               <label className="flex items-center gap-2">
                 <input type="radio" name="contact" value="email" defaultChecked />
                 <span className="text-sm text-slate-700">Email (default)</span>
@@ -705,12 +705,12 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
   );
 
   const renderOrderBilling = () => (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <h1 className="text-2xl font-semibold text-slate-900">Order & Billing Support</h1>
       
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-3 sm:gap-4 sm:gap-6 md:grid-cols-2">
         {/* Common Actions */}
-        <Card className="p-6">
+        <Card className="p-4 sm:p-5 md:p-6">
           <h2 className="font-semibold text-slate-900 mb-4">Quick Actions</h2>
           <div className="space-y-3">
             <Button 
@@ -737,7 +737,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
         </Card>
 
         {/* Refund Policy */}
-        <Card className="p-6">
+        <Card className="p-4 sm:p-5 md:p-6">
           <h2 className="font-semibold text-slate-900 mb-4">Refund Policy</h2>
           <div className="space-y-3 text-sm text-slate-600">
             <div className="flex items-start gap-2">
@@ -761,7 +761,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
       </div>
 
       {/* Billing History */}
-      <Card className="p-6">
+      <Card className="p-4 sm:p-5 md:p-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="font-semibold text-slate-900">Recent Charges</h2>
           <Button variant="outline" size="sm" onClick={() => onNavigate?.('settings')}>
@@ -793,12 +793,12 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
   );
 
   const renderSafety = () => (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <h1 className="text-2xl font-semibold text-slate-900">Safety & Urgent Guidance</h1>
       
       {/* Emergency Notice */}
       <div className="bg-red-50 border-2 border-red-200 rounded-lg p-6">
-        <div className="flex items-start gap-4">
+        <div className="flex items-start gap-3 sm:gap-4">
           <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
             <Shield className="w-6 h-6 text-red-600" />
           </div>
@@ -826,8 +826,8 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
       </div>
 
       {/* Non-Emergency Resources */}
-      <div className="grid gap-4 md:grid-cols-2">
-        <Card className="p-6">
+      <div className="grid gap-3 sm:gap-4 md:grid-cols-2">
+        <Card className="p-4 sm:p-5 md:p-6">
           <h3 className="font-semibold text-slate-900 mb-4">Child Development Resources</h3>
           <div className="space-y-3">
             <Button variant="outline" className="w-full justify-between">
@@ -845,7 +845,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
           </div>
         </Card>
 
-        <Card className="p-6">
+        <Card className="p-4 sm:p-5 md:p-6">
           <h3 className="font-semibold text-slate-900 mb-4">Parent Support</h3>
           <div className="space-y-3">
             <Button variant="outline" className="w-full justify-between">
@@ -865,9 +865,9 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
       </div>
 
       {/* Safety Guidelines */}
-      <Card className="p-6">
+      <Card className="p-4 sm:p-5 md:p-6">
         <h2 className="font-semibold text-slate-900 mb-4">Safety Guidelines</h2>
-        <div className="space-y-4 text-sm text-slate-600">
+        <div className="space-y-3 sm:space-y-4 text-sm text-slate-600">
           <div className="flex items-start gap-2">
             <Shield className="w-4 h-4 text-green-600 mt-0.5" />
             <p><strong>Data Protection:</strong> All information shared with Aminy is encrypted and handled according to HIPAA-conscious practices.</p>
@@ -886,12 +886,12 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
   );
 
   const renderSystemStatus = () => (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <h1 className="text-2xl font-semibold text-slate-900">System Status & Updates</h1>
       
       {/* Overall Status */}
-      <Card className="p-6">
-        <div className="flex items-center gap-4 mb-4">
+      <Card className="p-4 sm:p-5 md:p-6">
+        <div className="flex items-center gap-3 sm:gap-4 mb-4">
           <div className={`w-3 h-3 rounded-full ${
             systemStatus.overall === 'operational' ? 'bg-green-500' :
             systemStatus.overall === 'degraded' ? 'bg-yellow-500' :
@@ -941,13 +941,13 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
       </Card>
 
       {/* Release Notes */}
-      <Card className="p-6">
+      <Card className="p-4 sm:p-5 md:p-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-slate-900">Latest Updates</h2>
           <Badge className="bg-blue-100 text-blue-700">Version 1.2.4</Badge>
         </div>
         
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           {[
             { date: 'Feb 10, 2024', title: 'Enhanced AI Recommendations', type: 'feature' },
             { date: 'Feb 5, 2024', title: 'Improved Junior Pairing', type: 'improvement' },
@@ -980,7 +980,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
       </Card>
 
       {/* Beta Features */}
-      <Card className="p-6">
+      <Card className="p-4 sm:p-5 md:p-6">
         <div className="flex items-center gap-3 mb-4">
           <Zap className="w-5 h-5 text-amber-500" />
           <h2 className="text-lg font-semibold text-slate-900">Beta Features</h2>
@@ -1004,18 +1004,18 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
   );
 
   const renderFeedback = () => (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <h1 className="text-2xl font-semibold text-slate-900">Feedback & Requests</h1>
       
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-3 sm:gap-4 sm:gap-6 md:grid-cols-2">
         {/* Feature Requests */}
-        <Card className="p-6">
+        <Card className="p-4 sm:p-5 md:p-6">
           <div className="flex items-center gap-3 mb-4">
             <Lightbulb className="w-5 h-5 text-yellow-500" />
             <h2 className="text-lg font-semibold text-slate-900">Suggest a Feature</h2>
           </div>
           
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             <div>
               <label className="text-sm font-medium text-slate-700 block mb-2">Which area?</label>
               <select className="w-full border rounded-lg px-3 py-2">
@@ -1042,13 +1042,13 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
         </Card>
 
         {/* Bug Reports */}
-        <Card className="p-6">
+        <Card className="p-4 sm:p-5 md:p-6">
           <div className="flex items-center gap-3 mb-4">
             <Bug className="w-5 h-5 text-red-500" />
             <h2 className="text-lg font-semibold text-slate-900">Report a Bug</h2>
           </div>
           
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             <div className="bg-gray-50 rounded-lg p-3">
               <h3 className="text-sm font-medium text-slate-900 mb-2">Device Info</h3>
               <div className="space-y-1 text-xs text-slate-600">
@@ -1073,7 +1073,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
       </div>
 
       {/* Share Your Story */}
-      <Card className="p-6">
+      <Card className="p-4 sm:p-5 md:p-6">
         <div className="flex items-center gap-3 mb-4">
           <Heart className="w-5 h-5 text-pink-500" />
           <h2 className="text-lg font-semibold text-slate-900">Share Your Story</h2>
@@ -1123,7 +1123,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
                     <HelpCircle className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <h1 className="text-xl font-semibold text-slate-900">Support</h1>
+                    <h1 className="text-lg sm:text-xl font-semibold text-slate-900">Support</h1>
                     <p className="text-sm text-slate-600">Frictionless help, fast resolution</p>
                   </div>
                 </div>

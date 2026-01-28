@@ -128,10 +128,10 @@ export function OutcomesDashboardWidget({
 
   if (loading) {
     return (
-      <Card className="p-6">
-        <div className="animate-pulse space-y-4">
+      <Card className="p-4 sm:p-5 md:p-6">
+        <div className="animate-pulse space-y-3 sm:space-y-4">
           <div className="h-6 bg-gray-200 rounded w-1/3"></div>
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
             <div className="h-24 bg-gray-200 rounded"></div>
             <div className="h-24 bg-gray-200 rounded"></div>
             <div className="h-24 bg-gray-200 rounded"></div>
@@ -184,8 +184,8 @@ export function OutcomesDashboardWidget({
       </div>
 
       {/* Metrics Grid */}
-      <div className="p-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="p-3 sm:p-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
           {metrics.map((metric, index) => {
             const Icon = metric.icon;
             return (
@@ -202,7 +202,7 @@ export function OutcomesDashboardWidget({
                 </div>
 
                 <div className="flex items-baseline gap-1">
-                  <span className="text-2xl font-bold text-gray-900">
+                  <span className="text-xl sm:text-2xl font-bold text-gray-900">
                     {metric.value}
                   </span>
                   <span className="text-sm text-gray-500">{metric.unit}</span>

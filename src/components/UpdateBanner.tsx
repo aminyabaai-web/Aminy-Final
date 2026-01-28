@@ -43,7 +43,7 @@ export function UpdateBanner() {
       role="alert"
       aria-live="polite"
     >
-      <div className="flex items-center justify-between gap-4 max-w-4xl mx-auto">
+      <div className="flex items-center justify-between gap-3 sm:gap-4 max-w-4xl mx-auto">
         <div className="flex items-center gap-2 flex-1">
           <RefreshCw className="w-5 h-5 text-blue-600" />
           <p className="text-sm font-medium text-blue-900">

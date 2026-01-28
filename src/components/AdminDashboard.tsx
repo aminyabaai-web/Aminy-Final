@@ -87,7 +87,7 @@ export function AdminDashboard() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900">Admin Dashboard</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">Admin Dashboard</h1>
             <p className="text-slate-600 mt-1">Monitor app usage and user engagement</p>
           </div>
 
@@ -110,14 +110,14 @@ export function AdminDashboard() {
         </div>
 
         {/* KPI Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 sm:gap-6 mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Avg Coins/Day</CardTitle>
               <BarChart3 className="h-4 w-4 text-slate-600" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{summary?.avgCoinsPerDay || 0}</div>
+              <div className="text-xl sm:text-2xl font-bold">{summary?.avgCoinsPerDay || 0}</div>
               <p className="text-xs text-slate-600 mt-1">
                 Calm Coins earned daily
               </p>
@@ -130,7 +130,7 @@ export function AdminDashboard() {
               <TrendingUp className="h-4 w-4 text-slate-600" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">
+              <div className="text-xl sm:text-2xl font-bold">
                 {summary?.retention?.d7 || 0}%
               </div>
               <p className="text-xs text-slate-600 mt-1">
@@ -145,7 +145,7 @@ export function AdminDashboard() {
               <Users className="h-4 w-4 text-slate-600" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">
+              <div className="text-xl sm:text-2xl font-bold">
                 {summary?.retention?.d30 || 0}%
               </div>
               <p className="text-xs text-slate-600 mt-1">
@@ -160,7 +160,7 @@ export function AdminDashboard() {
               <Clock className="h-4 w-4 text-slate-600" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">
+              <div className="text-xl sm:text-2xl font-bold">
                 {Math.round((summary?.retention?.avgSessionDuration || 0) / 60)}m
               </div>
               <p className="text-xs text-slate-600 mt-1">
@@ -170,7 +170,7 @@ export function AdminDashboard() {
           </Card>
         </div>
 
-        <Tabs defaultValue="modules" className="space-y-6">
+        <Tabs defaultValue="modules" className="space-y-3 sm:space-y-4 sm:space-y-6">
           <TabsList>
             <TabsTrigger value="modules">Module Usage</TabsTrigger>
             <TabsTrigger value="events">Top Events</TabsTrigger>
@@ -178,8 +178,8 @@ export function AdminDashboard() {
           </TabsList>
 
           {/* Module Usage Tab */}
-          <TabsContent value="modules" className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <TabsContent value="modules" className="space-y-3 sm:space-y-4 sm:space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
               {/* Module Visits Bar Chart */}
               <Card>
                 <CardHeader>
@@ -235,9 +235,9 @@ export function AdminDashboard() {
                 <CardDescription>Percentage of total app usage by module</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   {summary?.moduleUsage?.map((item: any, index: number) => (
-                    <div key={item.module} className="flex items-center gap-4">
+                    <div key={item.module} className="flex items-center gap-3 sm:gap-4">
                       <div className="flex-1">
                         <div className="flex items-center justify-between mb-1">
                           <span className="text-sm font-medium text-slate-900">

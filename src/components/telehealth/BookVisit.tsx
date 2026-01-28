@@ -326,7 +326,7 @@ export function BookVisitScreen({
       </div>
 
       {/* Provider List */}
-      <div className="px-4 py-6 pb-24 space-y-4">
+      <div className="px-4 py-6 pb-24 space-y-3 sm:space-y-4">
         {/* 72-Hour Availability Status Banner */}
         {telehealthAvailability.hasAvailabilityWithin72Hours && (
           <div className="bg-green-50 border border-green-200 rounded-xl p-3 flex items-center gap-3">
@@ -409,7 +409,7 @@ function ProviderCard({
   return (
     <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
       {/* Provider Info */}
-      <div className="p-4 flex gap-4">
+      <div className="p-4 flex gap-3 sm:gap-4">
         {/* Avatar */}
         <div className="relative flex-shrink-0">
           <div className="w-16 h-16 rounded-full bg-gray-200 overflow-hidden">
@@ -420,7 +420,7 @@ function ProviderCard({
                 className="w-full h-full object-cover"
               />
             ) : (
-              <div className="w-full h-full bg-gradient-to-br from-[#577590] to-[#466379] flex items-center justify-center text-white text-xl font-semibold">
+              <div className="w-full h-full bg-gradient-to-br from-[#577590] to-[#466379] flex items-center justify-center text-white text-lg sm:text-xl font-semibold">
                 {provider.firstName[0]}{provider.lastName[0]}
               </div>
             )}
@@ -550,7 +550,7 @@ function NoProvidersCard({
           We don't currently have providers licensed in {userState} with availability in the next 72 hours.
         </p>
         {/* Reassurance copy per requirement */}
-        <p className="text-sm text-[#577590] font-medium mb-6">
+        <p className="text-sm text-[#577590] font-medium mb-4 sm:mb-6">
           We'll support you at home while you wait.
         </p>
 

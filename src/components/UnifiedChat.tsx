@@ -148,7 +148,7 @@ export function UnifiedChat({
     <div className={`flex flex-col ${embedded ? 'h-full' : 'h-screen max-w-4xl mx-auto'}`}>
       {/* Header */}
       {!embedded && (
-        <div className="bg-white border-b border-gray-200 px-6 py-4">
+        <div className="bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-accent/10 rounded-lg">
@@ -171,8 +171,8 @@ export function UnifiedChat({
       )}
 
       {/* Messages */}
-      <ScrollArea className="flex-1 px-6 py-4">
-        <div className="space-y-4">
+      <ScrollArea className="flex-1 px-4 sm:px-6 py-3 sm:py-4">
+        <div className="space-y-3 sm:space-y-4">
           {messages.length === 0 && !loading && (
             <div className="text-center py-12">
               <div className="p-4 bg-teal-50 rounded-full inline-block mb-4">
@@ -272,7 +272,7 @@ export function UnifiedChat({
       </ScrollArea>
 
       {/* Input */}
-      <div className="bg-white border-t border-gray-200 px-6 py-4">
+      <div className="bg-white border-t border-gray-200 px-4 sm:px-6 py-3 sm:py-4">
         <div className="flex gap-3">
           <Textarea
             value={input}

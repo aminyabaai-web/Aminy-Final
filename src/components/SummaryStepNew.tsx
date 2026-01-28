@@ -72,7 +72,7 @@ export function SummaryStep({ formData }: SummaryStepProps) {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       {/* Plan Created Success Indicator */}
       <div className="flex items-center justify-center gap-2 text-green-600 mb-4">
         <CheckCircle className="w-5 h-5" />
@@ -109,7 +109,7 @@ export function SummaryStep({ formData }: SummaryStepProps) {
       </div>
 
       {/* Goals & Outcomes */}
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         <div className="flex items-center gap-2">
           <Target className="w-4 h-4 text-accent" />
           <h3 className="font-semibold text-primary">What we'll work on</h3>
@@ -131,7 +131,7 @@ export function SummaryStep({ formData }: SummaryStepProps) {
       </div>
 
       {/* Daily Structure */}
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         <div className="flex items-center gap-2">
           <Clock className="w-4 h-4 text-accent" />
           <h3 className="font-semibold text-primary">Daily Structure</h3>
@@ -155,7 +155,7 @@ export function SummaryStep({ formData }: SummaryStepProps) {
       </div>
 
       {/* Progress Tracking */}
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         <div className="flex items-center gap-2">
           <TrendingUp className="w-4 h-4 text-accent" />
           <h3 className="font-semibold text-primary">Progress Tracking</h3>
@@ -178,7 +178,7 @@ export function SummaryStep({ formData }: SummaryStepProps) {
       </div>
 
       {/* Support Network */}
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         <div className="flex items-center gap-2">
           <Heart className="w-4 h-4 text-accent" />
           <h3 className="font-semibold text-primary">Support Network</h3>
@@ -201,7 +201,7 @@ export function SummaryStep({ formData }: SummaryStepProps) {
       </div>
 
       {/* Living Plan */}
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         <div className="flex items-center gap-2">
           <Star className="w-4 h-4 text-accent" />
           <h3 className="font-semibold text-primary">Living Plan</h3>
@@ -221,7 +221,7 @@ export function SummaryStep({ formData }: SummaryStepProps) {
 
       {/* Trust Badges */}
       <div className="pt-4 border-t border-gray-100">
-        <div className="flex items-center justify-center gap-4 mb-3">
+        <div className="flex items-center justify-center gap-3 sm:gap-4 mb-3">
           <div className="flex items-center gap-1">
             <UserCheck className="w-3 h-3 text-accent" />
             <span className="text-xs text-muted-foreground">Parent-Tested</span>

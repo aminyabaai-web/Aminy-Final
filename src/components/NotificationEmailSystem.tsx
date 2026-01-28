@@ -282,11 +282,11 @@ export function NotificationEmailSystem({ userData }: NotificationEmailSystemPro
             <SheetTitle>Notification Preferences</SheetTitle>
           </SheetHeader>
 
-          <div className="mt-6 space-y-6">
+          <div className="mt-4 sm:mt-6 space-y-3 sm:space-y-4 sm:space-y-6">
             {/* Push Notifications */}
             <div>
               <h3 className="font-medium text-slate-900 mb-4">Push Notifications</h3>
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-slate-900">Morning Cue</p>
@@ -336,7 +336,7 @@ export function NotificationEmailSystem({ userData }: NotificationEmailSystemPro
             {/* Email Preferences */}
             <div className="pt-6 border-t border-slate-200">
               <h3 className="font-medium text-slate-900 mb-4">Email Digest</h3>
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-slate-900">Weekly Calm Progress Summary</p>
@@ -415,11 +415,11 @@ export function NotificationEmailSystem({ userData }: NotificationEmailSystemPro
               Stay connected to your calm plan
             </h2>
             
-            <p className="text-slate-600 mb-6 max-w-md mx-auto">
+            <p className="text-slate-600 mb-4 sm:mb-6 max-w-md mx-auto">
               Get gentle reminders, celebrate milestones, and stay on track with {userData.childName}'s progress.
             </p>
 
-            <div className="space-y-3 mb-6 text-left max-w-sm mx-auto">
+            <div className="space-y-3 mb-4 sm:mb-6 text-left max-w-sm mx-auto">
               <div className="flex items-start gap-3">
                 <CheckCircle className="w-5 h-5 text-green-600 mt-0.5" />
                 <div>
@@ -488,17 +488,17 @@ export function WeeklyEmailDigestPreview({
         <div className="w-16 h-16 bg-white rounded-full mx-auto mb-4 flex items-center justify-center">
           <Heart className="w-8 h-8 text-accent" />
         </div>
-        <h1 className="text-2xl font-bold mb-2">Weekly Calm Progress Summary</h1>
+        <h1 className="text-xl sm:text-2xl font-bold mb-2">Weekly Calm Progress Summary</h1>
         <p className="text-teal-100">
           {userData.parentName}, here's how {userData.childName} did this week
         </p>
       </div>
 
       {/* Content */}
-      <div className="p-8 space-y-6">
+      <div className="p-8 space-y-3 sm:space-y-4 sm:space-y-6">
         {/* Section 1: Highlights */}
         <div>
-          <h2 className="text-xl font-semibold text-slate-900 mb-4">🌟 This Week's Highlights</h2>
+          <h2 className="text-lg sm:text-xl font-semibold text-slate-900 mb-4">🌟 This Week's Highlights</h2>
           <ul className="space-y-2">
             {weekHighlights.map((highlight, idx) => (
               <li key={idx} className="flex items-start gap-2">
@@ -511,7 +511,7 @@ export function WeeklyEmailDigestPreview({
 
         {/* Section 2: Next Goals */}
         <div className="bg-accent/5 rounded-lg p-6">
-          <h2 className="text-xl font-semibold text-slate-900 mb-4">🎯 Next Week's Goals</h2>
+          <h2 className="text-lg sm:text-xl font-semibold text-slate-900 mb-4">🎯 Next Week's Goals</h2>
           <ul className="space-y-2">
             {nextGoals.map((goal, idx) => (
               <li key={idx} className="flex items-start gap-2">

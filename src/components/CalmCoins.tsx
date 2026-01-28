@@ -235,7 +235,7 @@ export function CalmCoins({
   const progressToMilestone = ((currentBalance % 25) / 25) * 100;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       {/* Balance Display */}
       <Card className="p-6 bg-gradient-to-r from-amber-50 to-yellow-50 border-amber-200">
         <div className="flex items-center justify-between mb-4">
@@ -246,7 +246,7 @@ export function CalmCoins({
             <div>
               <p className="text-sm text-amber-700">Calm Coins</p>
               <div className="flex items-baseline gap-1">
-                <span className="text-3xl font-bold text-amber-900">
+                <span className="text-2xl sm:text-3xl font-bold text-amber-900">
                   {currentBalance}
                 </span>
                 <span className="text-amber-600 text-sm">coins</span>
@@ -288,7 +288,7 @@ export function CalmCoins({
               >
                 <Star className="w-10 h-10 text-amber-600 fill-amber-400" />
               </motion.div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
                 +{earnAmount} Calm Coins!
               </h2>
               <p className="text-gray-600">Great job! 🎉</p>
@@ -323,7 +323,7 @@ export function CalmCoins({
 
       {/* Earn Tab */}
       {activeTab === 'earn' && (
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <h3 className="font-semibold text-gray-900">Ways to Earn</h3>
           {EARNING_OPPORTUNITIES.map((opportunity) => (
             <Card
@@ -331,7 +331,7 @@ export function CalmCoins({
               className="p-4 hover:shadow-md transition-shadow cursor-pointer"
               onClick={() => earnCoins(opportunity.coins, opportunity.name)}
             >
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3 sm:gap-4">
                 <div className="w-12 h-12 bg-teal-100 rounded-xl flex items-center justify-center">
                   <opportunity.icon className="w-6 h-6 text-teal-600" />
                 </div>
@@ -348,7 +348,7 @@ export function CalmCoins({
 
           {/* Recent Earnings */}
           {recentEarnings.length > 0 && (
-            <div className="mt-6">
+            <div className="mt-4 sm:mt-6">
               <h3 className="font-semibold text-gray-900 mb-3">Recent Earnings</h3>
               <div className="space-y-2">
                 {recentEarnings.slice(0, 5).map((earning) => (
@@ -370,9 +370,9 @@ export function CalmCoins({
 
       {/* Spend Tab */}
       {activeTab === 'spend' && (
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <h3 className="font-semibold text-gray-900">Rewards Shop</h3>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             {rewards.map((reward) => {
               const canAfford = currentBalance >= reward.cost;
               return (

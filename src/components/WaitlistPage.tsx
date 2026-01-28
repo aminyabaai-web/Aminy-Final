@@ -128,11 +128,11 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
           className="max-w-md w-full text-center"
         >
           <Card className="p-8">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
               <CheckCircle className="w-8 h-8 text-green-600" />
             </div>
 
-            <h2 className="text-2xl font-bold text-gray-900 mb-3">
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3">
               You're on the list!
             </h2>
 
@@ -142,7 +142,7 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
               </p>
             )}
 
-            <div className="bg-teal-50 rounded-xl p-4 mb-6">
+            <div className="bg-teal-50 rounded-xl p-4 mb-4 sm:mb-6">
               <p className="text-sm text-teal-800">
                 We'll email you when it's your turn. In the meantime,
                 check your inbox for a few helpful resources.
@@ -168,7 +168,7 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
             </div>
 
             {onClose && (
-              <Button variant="ghost" onClick={onClose} className="mt-6">
+              <Button variant="ghost" onClick={onClose} className="mt-4 sm:mt-6">
                 Close
               </Button>
             )}
@@ -187,11 +187,11 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <Badge className="bg-teal-100 text-teal-800 mb-6">
+            <Badge className="bg-teal-100 text-teal-800 mb-4 sm:mb-6">
               Coming Soon
             </Badge>
 
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 sm:mb-6 leading-tight">
               Gentle guidance for
               <br />
               <span className="text-teal-600">calmer parenting days</span>
@@ -247,11 +247,11 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
       {/* Benefits Grid */}
       <section className="py-16 px-4 bg-white">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold text-center text-gray-900 mb-12">
+          <h2 className="text-xl sm:text-2xl font-bold text-center text-gray-900 mb-12">
             What makes Aminy different
           </h2>
 
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid md:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
             {benefits.map((benefit, index) => (
               <motion.div
                 key={index}
@@ -279,11 +279,11 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
       {/* Social Proof */}
       <section className="py-16 px-4 bg-gray-50">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold text-center text-gray-900 mb-12">
+          <h2 className="text-xl sm:text-2xl font-bold text-center text-gray-900 mb-12">
             Families like yours are waiting
           </h2>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-3 gap-3 sm:gap-4 sm:gap-6">
             {testimonials.map((testimonial, index) => (
               <motion.div
                 key={index}
@@ -338,7 +338,7 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
       {/* Final CTA */}
       <section className="py-16 px-4 bg-gradient-to-b from-teal-600 to-teal-700 text-white">
         <div className="max-w-xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-4">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-4">
             Ready to start your journey?
           </h2>
           <p className="text-teal-100 mb-8">

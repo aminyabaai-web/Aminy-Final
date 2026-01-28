@@ -263,7 +263,7 @@ export function TierComparisonNudge({ currentTier, onSelectTier }: TierCompariso
   ];
 
   return (
-    <div className="grid md:grid-cols-3 gap-4">
+    <div className="grid md:grid-cols-3 gap-3 sm:gap-4">
       {tiers.map((tier) => (
         <Card
           key={tier.id}
@@ -275,7 +275,7 @@ export function TierComparisonNudge({ currentTier, onSelectTier }: TierCompariso
             </Badge>
           )}
           <h3 className="font-semibold text-lg text-gray-900">{tier.name}</h3>
-          <p className="text-2xl font-bold text-gray-900 mt-2">{tier.price}</p>
+          <p className="text-xl sm:text-2xl font-bold text-gray-900 mt-2">{tier.price}</p>
           <ul className="mt-4 space-y-2">
             {tier.features.map((feature, i) => (
               <li key={i} className="flex items-center gap-2 text-sm text-gray-600">
@@ -311,7 +311,7 @@ export function ProgressCelebration({ milestone, description, currentTier, onUpg
   return (
     <div className="p-6 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl border border-green-200 text-center">
       <div className="text-4xl mb-3">🎉</div>
-      <h3 className="text-xl font-semibold text-green-900 mb-2">{milestone}</h3>
+      <h3 className="text-lg sm:text-xl font-semibold text-green-900 mb-2">{milestone}</h3>
       <p className="text-green-700 mb-4">{description}</p>
 
       {currentTier === 'free' && onUpgrade && (

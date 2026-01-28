@@ -202,7 +202,7 @@ Respond naturally, showing you remember their journey. Be brief (2-3 sentences) 
             }}
           >
             {/* Header */}
-            <div className="px-6 py-4 border-b border-slate-100 shrink-0">
+            <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-100 shrink-0">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
                   <div className="relative">
@@ -240,13 +240,13 @@ Respond naturally, showing you remember their journey. Be brief (2-3 sentences) 
             </div>
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
+            <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-3 sm:py-4 space-y-3 sm:space-y-4">
               {messages.length === 0 && (
                 <div className="text-center pt-12">
                   <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-cyan-50 to-violet-50 flex items-center justify-center">
                     <Sparkles className="w-8 h-8 text-cyan-600" />
                   </div>
-                  <p className="text-slate-600 mb-6">
+                  <p className="text-slate-600 mb-4 sm:mb-6">
                     I'm here to help. What's on your mind?
                   </p>
 
@@ -356,7 +356,7 @@ Respond naturally, showing you remember their journey. Be brief (2-3 sentences) 
             </AnimatePresence>
 
             {/* Input */}
-            <div className="px-6 py-4 border-t border-slate-100 shrink-0">
+            <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-slate-100 shrink-0">
               <div className="flex gap-2">
                 <Textarea
                   value={input}

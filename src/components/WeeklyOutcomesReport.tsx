@@ -342,7 +342,7 @@ export function WeeklyOutcomesReport({ onShare, onClose }: WeeklyOutcomesReportP
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       {/* Header with Week Navigation */}
       <div className="flex items-center justify-between">
         <Button
@@ -371,15 +371,15 @@ export function WeeklyOutcomesReport({ onShare, onClose }: WeeklyOutcomesReportP
       </div>
 
       {/* Stress Metrics */}
-      <Card className="p-4">
+      <Card className="p-3 sm:p-4">
         <div className="flex items-center gap-2 mb-4">
           <Heart className="w-5 h-5 text-pink-500" />
           <h3 className="font-semibold text-slate-900">Stress & Wellness</h3>
         </div>
 
-        <div className="grid grid-cols-2 gap-4 mb-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4">
           <div>
-            <p className="text-3xl font-bold text-slate-900">
+            <p className="text-2xl sm:text-3xl font-bold text-slate-900">
               {reportData.stressMetrics.currentAvg.toFixed(1)}
             </p>
             <p className="text-sm text-slate-500">Average this week</p>
@@ -413,7 +413,7 @@ export function WeeklyOutcomesReport({ onShare, onClose }: WeeklyOutcomesReportP
       </Card>
 
       {/* Routine Metrics */}
-      <Card className="p-4">
+      <Card className="p-3 sm:p-4">
         <div className="flex items-center gap-2 mb-4">
           <CheckCircle className="w-5 h-5 text-green-500" />
           <h3 className="font-semibold text-slate-900">Routine Adherence</h3>
@@ -421,7 +421,7 @@ export function WeeklyOutcomesReport({ onShare, onClose }: WeeklyOutcomesReportP
 
         <div className="mb-4">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-3xl font-bold text-slate-900">
+            <span className="text-2xl sm:text-3xl font-bold text-slate-900">
               {reportData.routineMetrics.adherencePercent}%
             </span>
             <div className="flex items-center gap-1">
@@ -440,28 +440,28 @@ export function WeeklyOutcomesReport({ onShare, onClose }: WeeklyOutcomesReportP
       </Card>
 
       {/* Goals Metrics */}
-      <Card className="p-4">
+      <Card className="p-3 sm:p-4">
         <div className="flex items-center gap-2 mb-4">
           <Target className="w-5 h-5 text-purple-500" />
           <h3 className="font-semibold text-slate-900">Goals Progress</h3>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3 sm:gap-4">
           <div className="flex items-center gap-2">
             <Award className="w-8 h-8 text-yellow-500" />
             <div>
-              <p className="text-2xl font-bold text-slate-900">{reportData.goalsMetrics.achieved}</p>
+              <p className="text-xl sm:text-2xl font-bold text-slate-900">{reportData.goalsMetrics.achieved}</p>
               <p className="text-sm text-slate-500">Achieved</p>
             </div>
           </div>
           <div className="h-12 w-px bg-slate-200"></div>
           <div>
-            <p className="text-2xl font-bold text-slate-900">{reportData.goalsMetrics.total}</p>
+            <p className="text-xl sm:text-2xl font-bold text-slate-900">{reportData.goalsMetrics.total}</p>
             <p className="text-sm text-slate-500">Active Goals</p>
           </div>
           <div className="h-12 w-px bg-slate-200"></div>
           <div>
-            <p className="text-2xl font-bold text-slate-900">+{reportData.goalsMetrics.newGoals}</p>
+            <p className="text-xl sm:text-2xl font-bold text-slate-900">+{reportData.goalsMetrics.newGoals}</p>
             <p className="text-sm text-slate-500">New This Week</p>
           </div>
         </div>

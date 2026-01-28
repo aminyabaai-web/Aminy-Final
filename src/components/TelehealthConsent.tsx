@@ -113,7 +113,7 @@ export function TelehealthConsent({
             Sessions booked through Aminy are <strong>parent coaching and wellness support services</strong>
             based on the principles of Applied Behavior Analysis (ABA).
           </p>
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="grid md:grid-cols-2 gap-3 sm:gap-4">
             <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
               <p className="font-medium text-green-900 mb-2">Services MAY include:</p>
               <ul className="space-y-1 text-green-800 text-xs">
@@ -219,7 +219,7 @@ export function TelehealthConsent({
             <p className="text-red-800 mb-3">
               If you or your child are in immediate danger or experiencing a mental health crisis:
             </p>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="p-2 bg-white rounded border border-red-200">
                 <p className="font-bold text-red-900">Emergency: 911</p>
                 <p className="text-xs text-red-700">Immediate danger</p>
@@ -335,17 +335,17 @@ export function TelehealthConsent({
   if (variant === 'abbreviated') {
     return (
       <Card className="p-6 max-w-lg mx-auto">
-        <div className="text-center mb-6">
+        <div className="text-center mb-4 sm:mb-6">
           <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <Video className="w-6 h-6 text-teal-600" />
           </div>
-          <h2 className="text-xl font-semibold text-gray-900">Confirm Your Session</h2>
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Confirm Your Session</h2>
           {providerName && (
             <p className="text-gray-600 mt-1">with {providerName}</p>
           )}
         </div>
 
-        <div className="space-y-4 mb-6">
+        <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
           <div className="flex items-start gap-3">
             <Checkbox
               id="confirm-consent"
@@ -415,11 +415,11 @@ export function TelehealthConsent({
   return (
     <div className="max-w-2xl mx-auto">
       {/* Header */}
-      <div className="text-center mb-6 p-6 bg-gradient-to-br from-teal-50 to-cyan-50 rounded-xl">
+      <div className="text-center mb-4 sm:mb-6 p-6 bg-gradient-to-br from-teal-50 to-cyan-50 rounded-xl">
         <div className="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <FileText className="w-8 h-8 text-teal-600" />
         </div>
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
           Telehealth Informed Consent
         </h1>
         <p className="text-gray-600">
@@ -435,7 +435,7 @@ export function TelehealthConsent({
 
       {/* Consent Sections */}
       <ScrollArea className="h-[50vh] pr-4">
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           {consentSections.map((section) => {
             const Icon = section.icon;
             const isExpanded = expandedSections.has(section.id);
@@ -497,7 +497,7 @@ export function TelehealthConsent({
       </ScrollArea>
 
       {/* Progress & Submit */}
-      <div className="mt-6 pt-6 border-t border-gray-200">
+      <div className="mt-4 sm:mt-6 pt-6 border-t border-gray-200">
         <div className="flex items-center justify-between mb-4">
           <span className="text-sm text-gray-600">
             {acceptedSections.size} of {requiredSections.length} required sections acknowledged

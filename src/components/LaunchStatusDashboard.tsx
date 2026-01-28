@@ -192,13 +192,13 @@ export function LaunchStatusDashboard({ onBack }: LaunchStatusDashboardProps) {
 
       <div className="max-w-4xl mx-auto px-4 py-6">
         {/* Overall Progress */}
-        <Card className="p-6 mb-6 border-2 border-accent/20">
+        <Card className="p-6 mb-4 sm:mb-6 border-2 border-accent/20">
           <div className="flex items-center gap-3 mb-4">
             <Sparkles className="w-6 h-6 text-accent" />
             <h2 className="text-slate-900">Overall Launch Readiness</h2>
           </div>
           <Progress value={overallCompletion} className="h-3 mb-4" />
-          <div className="grid grid-cols-3 gap-4 text-center">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 text-center">
             <div>
               <div className="text-2xl text-slate-900 mb-1">{completedModules}</div>
               <div className="text-sm text-slate-600">Completed</div>
@@ -215,7 +215,7 @@ export function LaunchStatusDashboard({ onBack }: LaunchStatusDashboardProps) {
         </Card>
 
         {/* Key Achievements */}
-        <Card className="p-6 mb-6 bg-green-50 border-green-200">
+        <Card className="p-6 mb-4 sm:mb-6 bg-green-50 border-green-200">
           <h3 className="text-slate-900 mb-4 flex items-center gap-2">
             <CheckCircle className="w-5 h-5 text-green-600" />
             Phase 2 Achievements
@@ -245,10 +245,10 @@ export function LaunchStatusDashboard({ onBack }: LaunchStatusDashboardProps) {
         </Card>
 
         {/* Detailed Status */}
-        <div className="space-y-4 mb-6">
+        <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
           <h2 className="text-slate-900">Module Status</h2>
           {statusData.map(item => (
-            <Card key={item.id} className="p-6">
+            <Card key={item.id} className="p-4 sm:p-5 md:p-6">
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-start gap-3">
                   {getStatusIcon(item.status)}

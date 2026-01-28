@@ -121,7 +121,7 @@ export function TierComparisonTable({ compact = false }: TierComparisonTableProp
 
   return (
     <div className="w-full">
-      <div className="text-center mb-6">
+      <div className="text-center mb-4 sm:mb-6">
         <h2 className="text-2xl font-semibold text-primary mb-2">Compare All Features</h2>
         <p className="text-sm text-muted-foreground">
           See exactly what you get with each tier
@@ -135,7 +135,7 @@ export function TierComparisonTable({ compact = false }: TierComparisonTableProp
               <th className="text-left py-4 px-4 font-medium text-muted-foreground">Features</th>
               <th className="text-center py-4 px-4">
                 <div className="font-semibold text-primary">Starter</div>
-                <div className="text-2xl font-bold text-primary mt-1">$19</div>
+                <div className="text-xl sm:text-2xl font-bold text-primary mt-1">$19</div>
                 <div className="text-xs text-muted-foreground">/month</div>
               </th>
               <th className="text-center py-4 px-4 bg-teal-50/50 relative">
@@ -143,12 +143,12 @@ export function TierComparisonTable({ compact = false }: TierComparisonTableProp
                   Most Popular
                 </Badge>
                 <div className="font-semibold text-teal-700 mt-2">Core</div>
-                <div className="text-2xl font-bold text-teal-700 mt-1">$69</div>
+                <div className="text-xl sm:text-2xl font-bold text-teal-700 mt-1">$69</div>
                 <div className="text-xs text-teal-600">/month</div>
               </th>
               <th className="text-center py-4 px-4">
                 <div className="font-semibold text-primary">Pro Plus</div>
-                <div className="text-2xl font-bold text-primary mt-1">$229</div>
+                <div className="text-xl sm:text-2xl font-bold text-primary mt-1">$229</div>
                 <div className="text-xs text-muted-foreground">/month</div>
               </th>
             </tr>
@@ -175,7 +175,7 @@ export function TierComparisonTable({ compact = false }: TierComparisonTableProp
         </table>
       </div>
 
-      <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg text-center">
+      <div className="mt-4 sm:mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg text-center">
         <p className="text-sm text-blue-800">
           <strong>All plans include:</strong> 7-day free trial • No credit card required • Cancel anytime • No diagnosis required
         </p>

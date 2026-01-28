@@ -317,8 +317,8 @@ export function Phase2TestHarness({ onBack, onNavigate }: Phase2TestHarnessProps
       <div className="max-w-4xl mx-auto px-4 py-6">
         {/* Summary */}
         {completedTests > 0 && (
-          <Card className="p-6 mb-6 border-2 border-accent/20">
-            <div className="grid grid-cols-4 gap-4 text-center">
+          <Card className="p-6 mb-4 sm:mb-6 border-2 border-accent/20">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4 text-center">
               <div>
                 <div className="text-2xl text-slate-900 mb-1">{totalTests}</div>
                 <div className="text-sm text-slate-600">Total Tests</div>
@@ -343,7 +343,7 @@ export function Phase2TestHarness({ onBack, onNavigate }: Phase2TestHarnessProps
 
         {/* Test Suites */}
         <Tabs defaultValue={testSuites[0].id} className="w-full">
-          <TabsList className="grid w-full grid-cols-3 lg:grid-cols-6 mb-6">
+          <TabsList className="grid w-full grid-cols-3 lg:grid-cols-6 mb-4 sm:mb-6">
             {testSuites.map(suite => {
               const Icon = suite.icon;
               const suiteTests = suite.tests.map(t => t.id);
@@ -367,8 +367,8 @@ export function Phase2TestHarness({ onBack, onNavigate }: Phase2TestHarnessProps
           {testSuites.map(suite => {
             const Icon = suite.icon;
             return (
-              <TabsContent key={suite.id} value={suite.id} className="space-y-4">
-                <Card className="p-6">
+              <TabsContent key={suite.id} value={suite.id} className="space-y-3 sm:space-y-4">
+                <Card className="p-4 sm:p-5 md:p-6">
                   <h3 className="text-slate-900 mb-4 flex items-center gap-2">
                     <Icon className="w-5 h-5 text-accent" />
                     {suite.name}
@@ -411,7 +411,7 @@ export function Phase2TestHarness({ onBack, onNavigate }: Phase2TestHarnessProps
         </Tabs>
 
         {/* Quick Navigation */}
-        <Card className="p-6 mt-6 bg-blue-50 border-blue-200">
+        <Card className="p-6 mt-4 sm:mt-6 bg-blue-50 border-blue-200">
           <h4 className="text-slate-900 mb-3">Quick Feature Access</h4>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             <Button

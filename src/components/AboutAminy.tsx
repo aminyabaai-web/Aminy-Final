@@ -13,7 +13,7 @@ export function AboutAminy({ variant = 'full', showLegal = true }: AboutAminyPro
   if (variant === 'compact') {
     return (
       <Card className="p-6 bg-gradient-to-br from-accent/5 to-teal-50">
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <div className="flex items-start gap-3">
             <div className="w-10 h-10 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0">
               <Heart className="w-5 h-5 text-accent" />
@@ -44,7 +44,7 @@ export function AboutAminy({ variant = 'full', showLegal = true }: AboutAminyPro
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       {/* Header */}
       <div className="text-center pb-6 border-b border-slate-200">
         <h1 className="text-3xl font-semibold text-slate-900 mb-3">About {BRAND_IDENTITY.name}</h1>
@@ -55,12 +55,12 @@ export function AboutAminy({ variant = 'full', showLegal = true }: AboutAminyPro
 
       {/* Positioning Statement */}
       <Card className="p-6 bg-gradient-to-br from-accent/5 to-teal-50 border-accent/20">
-        <div className="flex items-start gap-4">
+        <div className="flex items-start gap-3 sm:gap-4">
           <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0">
             <Sparkles className="w-6 h-6 text-accent" />
           </div>
           <div>
-            <h2 className="text-xl font-semibold text-slate-900 mb-3">What is {BRAND_IDENTITY.name}?</h2>
+            <h2 className="text-lg sm:text-xl font-semibold text-slate-900 mb-3">What is {BRAND_IDENTITY.name}?</h2>
             <p className="text-slate-700 leading-relaxed mb-4">
               {POSITIONING_STATEMENT}
             </p>
@@ -78,7 +78,7 @@ export function AboutAminy({ variant = 'full', showLegal = true }: AboutAminyPro
       </Card>
 
       {/* Core Value Pillars */}
-      <div className="grid md:grid-cols-3 gap-4">
+      <div className="grid md:grid-cols-3 gap-3 sm:gap-4">
         <Card className="p-5 hover:shadow-lg transition-shadow">
           <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mb-3">
             <Shield className="w-5 h-5 text-blue-600" />
@@ -111,13 +111,13 @@ export function AboutAminy({ variant = 'full', showLegal = true }: AboutAminyPro
       </div>
 
       {/* Our Approach - ABA + AI */}
-      <Card className="p-6">
+      <Card className="p-4 sm:p-5 md:p-6">
         <div className="flex items-start gap-3 mb-4">
           <div className="w-10 h-10 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
             <Brain className="w-5 h-5 text-purple-600" />
           </div>
           <div>
-            <h2 className="text-xl font-semibold text-slate-900">Our Approach: ABA + AI</h2>
+            <h2 className="text-lg sm:text-xl font-semibold text-slate-900">Our Approach: ABA + AI</h2>
           </div>
         </div>
         

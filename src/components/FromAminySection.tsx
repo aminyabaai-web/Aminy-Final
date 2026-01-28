@@ -57,7 +57,7 @@ export function FromAminySection() {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3 sm:space-y-4">
       <div className="flex items-center gap-2 mb-4">
         <Lightbulb className="w-5 h-5 text-accent" />
         <h3 className="text-lg font-semibold">From Aminy</h3>
@@ -71,7 +71,7 @@ export function FromAminySection() {
             className="p-4 hover:shadow-md transition-all cursor-pointer group"
             onClick={() => handleCardClick(card.id)}
           >
-            <div className="flex items-start gap-4">
+            <div className="flex items-start gap-3 sm:gap-4">
               <div className={`p-2 ${card.iconBg} rounded-lg flex-shrink-0`}>
                 <Icon className={`w-5 h-5 ${card.iconColor}`} />
               </div>

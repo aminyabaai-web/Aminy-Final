@@ -239,7 +239,7 @@ export function WinsJournal({ userId }: { userId: string }) {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       {/* Quick Add Calm Moment */}
       <Card className="border-accent/20 bg-accent/5">
         <CardContent className="pt-6">
@@ -254,7 +254,7 @@ export function WinsJournal({ userId }: { userId: string }) {
               <DialogHeader>
                 <DialogTitle>What made this moment special?</DialogTitle>
               </DialogHeader>
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 <Textarea
                   value={newMomentContent}
                   onChange={(e) => setNewMomentContent(e.target.value)}
@@ -306,7 +306,7 @@ export function WinsJournal({ userId }: { userId: string }) {
               </div>
             </div>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-3 sm:space-y-4">
             <div className="p-4 bg-slate-50 rounded-lg">
               <p className="text-sm text-slate-700 leading-relaxed">
                 {weeklySummary.generatedSummary}

@@ -165,10 +165,10 @@ export function DocumentVaultPage({ userTier, onNavigate }: DocumentVaultPagePro
       </div>
 
       <div className="px-4 py-6 sm:px-6 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-3 sm:gap-4 sm:gap-6">
           
           {/* Sidebar */}
-          <div className="lg:col-span-1 space-y-6">
+          <div className="lg:col-span-1 space-y-3 sm:space-y-4 sm:space-y-6">
             
             {/* Storage Stats Card */}
             <Card className="p-4 border-0 shadow-sm dark:bg-slate-800 dark:border-slate-700">
@@ -285,7 +285,7 @@ export function DocumentVaultPage({ userTier, onNavigate }: DocumentVaultPagePro
 
             {/* AI Chat Integration */}
             {stats.aiSearchEnabled && vaultRecords.length > 0 && (
-              <div className="mt-6">
+              <div className="mt-4 sm:mt-6">
                 <TalkToAminyEnhanced
                   vaultRecords={vaultRecords}
                   userTier={userTier}

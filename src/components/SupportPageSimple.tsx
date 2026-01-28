@@ -89,7 +89,7 @@ export function SupportPageSimple({ onNavigate, userTier = 'core' }: SupportPage
   const renderHome = () => (
     <div className="space-y-8">
       {/* Hero Search */}
-      <div className="text-center space-y-4">
+      <div className="text-center space-y-3 sm:space-y-4">
         <h1 className="text-2xl font-semibold text-slate-900">How can we help you?</h1>
         <div className="relative max-w-lg mx-auto">
           <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
@@ -103,10 +103,10 @@ export function SupportPageSimple({ onNavigate, userTier = 'core' }: SupportPage
       </div>
 
       {/* Quick Tiles */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-3 sm:gap-4 md:grid-cols-2 lg:grid-cols-3">
         {quickTiles.map((tile) => (
           <Card key={tile.id} className="p-6 hover:shadow-lg transition-shadow cursor-pointer">
-            <div className="flex items-start gap-4">
+            <div className="flex items-start gap-3 sm:gap-4">
               <div className="w-10 h-10 bg-accent/10 rounded-lg flex items-center justify-center text-accent">
                 {tile.icon}
               </div>
@@ -139,11 +139,11 @@ export function SupportPageSimple({ onNavigate, userTier = 'core' }: SupportPage
   );
 
   const renderContact = () => (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <h1 className="text-2xl font-semibold text-slate-900">Contact Us</h1>
       
-      <Card className="p-6">
-        <div className="space-y-6">
+      <Card className="p-4 sm:p-5 md:p-6">
+        <div className="space-y-3 sm:space-y-4 sm:space-y-6">
           {/* Triage Form */}
           <div>
             <label className="text-sm font-medium text-slate-700 block mb-3">What do you need help with?</label>
@@ -195,12 +195,12 @@ export function SupportPageSimple({ onNavigate, userTier = 'core' }: SupportPage
   );
 
   const renderSafety = () => (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <h1 className="text-2xl font-semibold text-slate-900">Safety & Urgent Guidance</h1>
       
       {/* Emergency Notice */}
       <div className="bg-red-50 border-2 border-red-200 rounded-lg p-6">
-        <div className="flex items-start gap-4">
+        <div className="flex items-start gap-3 sm:gap-4">
           <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
             <Shield className="w-6 h-6 text-red-600" />
           </div>
@@ -246,7 +246,7 @@ export function SupportPageSimple({ onNavigate, userTier = 'core' }: SupportPage
                     <HelpCircle className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <h1 className="text-xl font-semibold text-slate-900">Support</h1>
+                    <h1 className="text-lg sm:text-xl font-semibold text-slate-900">Support</h1>
                     <p className="text-sm text-slate-600">Frictionless help, fast resolution</p>
                   </div>
                 </div>

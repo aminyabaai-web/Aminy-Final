@@ -142,7 +142,7 @@ export function ReferralDashboard({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -160,7 +160,7 @@ export function ReferralDashboard({
       <Card className="p-5 bg-gradient-to-br from-teal-500 to-blue-600 text-white">
         <div className="text-center mb-4">
           <p className="text-teal-100 text-sm mb-2">Your Referral Code</p>
-          <div className="font-mono text-2xl font-bold tracking-wider">
+          <div className="font-mono text-xl sm:text-2xl font-bold tracking-wider">
             {referralCode}
           </div>
         </div>
@@ -199,7 +199,7 @@ export function ReferralDashboard({
             animate={{ opacity: 1, height: 'auto' }}
             className="mt-4 pt-4 border-t border-white/20"
           >
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
               <button
                 onClick={handleEmailShare}
                 className="flex flex-col items-center p-3 bg-white/10 rounded-lg hover:bg-white/20"
@@ -244,24 +244,24 @@ export function ReferralDashboard({
 
       {/* Stats Grid */}
       {summary && (
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
           <Card className="p-3 text-center">
             <Users className="w-5 h-5 mx-auto mb-1 text-blue-500" />
-            <div className="text-2xl font-bold text-gray-900">
+            <div className="text-xl sm:text-2xl font-bold text-gray-900">
               {summary.totalReferrals}
             </div>
             <div className="text-xs text-gray-500">Total Referrals</div>
           </Card>
           <Card className="p-3 text-center">
             <CheckCircle className="w-5 h-5 mx-auto mb-1 text-green-500" />
-            <div className="text-2xl font-bold text-gray-900">
+            <div className="text-xl sm:text-2xl font-bold text-gray-900">
               {summary.qualifiedReferrals}
             </div>
             <div className="text-xs text-gray-500">Qualified</div>
           </Card>
           <Card className="p-3 text-center">
             <Gift className="w-5 h-5 mx-auto mb-1 text-purple-500" />
-            <div className="text-2xl font-bold text-gray-900">
+            <div className="text-xl sm:text-2xl font-bold text-gray-900">
               {summary.totalRewardsEarned}
             </div>
             <div className="text-xs text-gray-500">Free Months</div>
@@ -271,7 +271,7 @@ export function ReferralDashboard({
 
       {/* Tier Progress */}
       {summary && (
-        <Card className="p-4">
+        <Card className="p-3 sm:p-4">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
               {getTierIcon(summary.currentTier)}
@@ -329,7 +329,7 @@ export function ReferralDashboard({
       )}
 
       {/* Tier Roadmap */}
-      <Card className="p-4">
+      <Card className="p-3 sm:p-4">
         <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
           <Trophy className="w-5 h-5 text-amber-500" />
           Tier Roadmap
@@ -377,7 +377,7 @@ export function ReferralDashboard({
       </Card>
 
       {/* Recent Referrals */}
-      <Card className="p-4">
+      <Card className="p-3 sm:p-4">
         <div className="flex items-center justify-between mb-3">
           <h3 className="font-semibold text-gray-900">Recent Referrals</h3>
           <Button variant="ghost" size="sm">

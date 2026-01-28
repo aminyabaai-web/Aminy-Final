@@ -110,7 +110,7 @@ export class SafetyBoundary extends Component<Props, State> {
               Oops! Something went wrong
             </h2>
             
-            <p className="text-sm text-muted-foreground mb-6">
+            <p className="text-sm text-muted-foreground mb-4 sm:mb-6">
               We encountered an unexpected error. This has been automatically reported to our team.
             </p>
 
@@ -153,7 +153,7 @@ export class SafetyBoundary extends Component<Props, State> {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 bg-primary rounded-lg"></div>
-              <h1 className="text-xl font-semibold text-foreground">Aminy</h1>
+              <h1 className="text-lg sm:text-xl font-semibold text-foreground">Aminy</h1>
             </div>
           </div>
         </div>
@@ -161,7 +161,7 @@ export class SafetyBoundary extends Component<Props, State> {
         {/* Main Content */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="bg-card border border-border rounded-xl p-8 text-center">
-            <div className="w-20 h-20 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
+            <div className="w-20 h-20 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
               <AlertTriangle className="w-10 h-10 text-amber-600 dark:text-amber-400" />
             </div>
             
@@ -174,7 +174,7 @@ export class SafetyBoundary extends Component<Props, State> {
               Our team has been notified and is working on a fix.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-sm mx-auto">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center max-w-sm mx-auto">
               <button
                 onClick={this.handleRetry}
                 className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"

@@ -36,14 +36,14 @@ export function LiveAIVideoSheet({
             </SheetDescription>
           </SheetHeader>
 
-          <div className="mt-6 space-y-4">
+          <div className="mt-4 sm:mt-6 space-y-3 sm:space-y-4">
             {/* Video Preview */}
             <div className="aspect-video bg-gray-900 rounded-lg flex items-center justify-center">
               <Video className="w-12 h-12 text-gray-400" />
             </div>
 
             {/* Controls */}
-            <div className="flex items-center justify-center gap-4">
+            <div className="flex items-center justify-center gap-3 sm:gap-4">
               <Button variant="outline" size="lg" className="rounded-full w-14 h-14">
                 <Mic className="w-5 h-5" />
               </Button>

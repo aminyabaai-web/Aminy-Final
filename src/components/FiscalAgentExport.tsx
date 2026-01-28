@@ -340,11 +340,11 @@ export function FiscalAgentExport({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-semibold text-neutral-900">Fiscal Agent Export</h2>
+          <h2 className="text-lg sm:text-xl font-semibold text-neutral-900">Fiscal Agent Export</h2>
           <p className="text-neutral-500">Generate timesheets for {config.name}</p>
         </div>
         <Badge className="bg-teal-100 text-teal-700">
@@ -354,11 +354,11 @@ export function FiscalAgentExport({
       </div>
 
       {/* Info Card */}
-      <Card className="p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-4">
+      <Card className="p-4 sm:p-5 md:p-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
+          <div className="space-y-3 sm:space-y-4">
             <h3 className="font-medium text-neutral-900">Participant Information</h3>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div>
                 <label className="block text-sm text-neutral-500 mb-1">Participant Name</label>
                 <p className="font-medium">{childName}</p>
@@ -387,9 +387,9 @@ export function FiscalAgentExport({
             </div>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             <h3 className="font-medium text-neutral-900">Date Range</h3>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div>
                 <label className="block text-sm text-neutral-500 mb-1">Start Date</label>
                 <Input
@@ -412,7 +412,7 @@ export function FiscalAgentExport({
       </Card>
 
       {/* Service Entries */}
-      <Card className="p-6">
+      <Card className="p-4 sm:p-5 md:p-6">
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-medium text-neutral-900">Service Entries</h3>
           <Button onClick={() => setShowAddEntry(true)} size="sm">
@@ -532,20 +532,20 @@ export function FiscalAgentExport({
       </Card>
 
       {/* Totals & Export */}
-      <Card className="p-6">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <Card className="p-4 sm:p-5 md:p-6">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4">
           <div className="flex gap-8">
             <div>
               <p className="text-sm text-neutral-500">Total Units</p>
-              <p className="text-2xl font-bold text-neutral-900">{totalUnits}</p>
+              <p className="text-xl sm:text-2xl font-bold text-neutral-900">{totalUnits}</p>
             </div>
             <div>
               <p className="text-sm text-neutral-500">Total Hours</p>
-              <p className="text-2xl font-bold text-neutral-900">{totalHours.toFixed(2)}</p>
+              <p className="text-xl sm:text-2xl font-bold text-neutral-900">{totalHours.toFixed(2)}</p>
             </div>
             <div>
               <p className="text-sm text-neutral-500">Total Amount</p>
-              <p className="text-2xl font-bold text-teal-600">${totalAmount.toFixed(2)}</p>
+              <p className="text-xl sm:text-2xl font-bold text-teal-600">${totalAmount.toFixed(2)}</p>
             </div>
           </div>
 
@@ -576,7 +576,7 @@ export function FiscalAgentExport({
       </Card>
 
       {/* Service Code Reference */}
-      <Card className="p-6">
+      <Card className="p-4 sm:p-5 md:p-6">
         <button
           onClick={() => document.getElementById('service-codes')?.classList.toggle('hidden')}
           className="flex items-center justify-between w-full text-left"
@@ -585,7 +585,7 @@ export function FiscalAgentExport({
           <ChevronDown className="w-5 h-5 text-neutral-400" />
         </button>
         <div id="service-codes" className="hidden mt-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
             {SERVICE_CODES.map(service => (
               <div key={service.code} className="flex items-center justify-between p-3 bg-neutral-50 rounded-lg">
                 <div>

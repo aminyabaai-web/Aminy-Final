@@ -166,11 +166,11 @@ export function SkylightIntegration({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 flex items-center gap-2">
             <Smartphone className="w-5 h-5 text-teal-600" />
             Skylight Display
           </h2>
@@ -272,7 +272,7 @@ export function SkylightIntegration({
 
       {/* Routines List */}
       {connected && displayMode === 'list' && (
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <h3 className="font-semibold text-gray-900">
             Select Routines to Display
           </h3>
@@ -356,7 +356,7 @@ export function SkylightIntegration({
 
       {/* Display Preview */}
       {connected && displayMode === 'preview' && (
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <h3 className="font-semibold text-gray-900">Display Preview</h3>
           <p className="text-sm text-gray-500">
             This is how your routines will appear on the Skylight display
@@ -369,7 +369,7 @@ export function SkylightIntegration({
 
             <div className="relative z-10">
               {/* Time & Date */}
-              <div className="text-white mb-6">
+              <div className="text-white mb-4 sm:mb-6">
                 <div className="text-4xl font-light">
                   {new Date().toLocaleTimeString([], {
                     hour: '2-digit',

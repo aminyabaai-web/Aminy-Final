@@ -61,13 +61,13 @@ export function ApproveScreen({ onApprove, onSimplify, onNotNow }: ApproveScreen
       </div>
 
       {/* Approval Items */}
-      <div className="flex-1 px-4 py-6 space-y-4">
+      <div className="flex-1 px-4 py-6 space-y-3 sm:space-y-4">
         {items.map((item) => {
           const Icon = item.icon;
           return (
             <div
               key={item.id}
-              className="flex items-start gap-4 p-4 border border-gray-200 rounded-lg"
+              className="flex items-start gap-3 sm:gap-4 p-4 border border-gray-200 rounded-lg"
             >
               <Switch
                 checked={item.enabled}

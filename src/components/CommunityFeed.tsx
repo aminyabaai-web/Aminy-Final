@@ -64,12 +64,16 @@ import {
   createPost,
   likePost,
   addComment,
-  generateMockPosts,
+  getPosts,
   followUser,
   unfollowUser,
   isFollowing,
   getFollowingFeed,
   getSuggestedUsersToFollow,
+  getFollowing,
+  bookmarkPost,
+  deletePost as deleteCommunityPost,
+  flagForModeration,
 } from '../lib/community';
 
 interface CommunityFeedProps {
@@ -99,14 +103,37 @@ export function CommunityFeed({
   const [followLoading, setFollowLoading] = useState<Set<string>>(new Set());
   const [suggestedUsers, setSuggestedUsers] = useState<{ userId: string; displayName: string; reason: string }[]>([]);
 
-  // Load posts
+  // Load posts from database
   useEffect(() => {
-    setLoading(true);
-    // In production, this would fetch from API
-    const mockPosts = generateMockPosts(10);
-    setPosts(mockPosts);
-    setLoading(false);
+    const loadPosts = async () => {
+      setLoading(true);
+      try {
+        const fetchedPosts = await getPosts({ limit: 20 });
+        setPosts(fetchedPosts);
+      } catch (error) {
+        console.error('Error loading posts:', error);
+        toast.error('Failed to load community posts');
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadPosts();
   }, []);
+
+  // Load user's following list
+  useEffect(() => {
+    const loadFollowing = async () => {
+      try {
+        const following = await getFollowing(userId);
+        setFollowingUserIds(new Set(following));
+      } catch (error) {
+        console.error('Error loading following:', error);
+      }
+    };
+    if (userId) {
+      loadFollowing();
+    }
+  }, [userId]);
 
   // Filter posts
   const filteredPosts = activeFilter === 'all'
@@ -164,23 +191,24 @@ export function CommunityFeed({
 
   // Load following feed when switching modes
   useEffect(() => {
-    if (feedMode === 'following') {
+    const loadFeed = async () => {
       setLoading(true);
-      getFollowingFeed(userId)
-        .then(followedPosts => {
+      try {
+        if (feedMode === 'following') {
+          const followedPosts = await getFollowingFeed(userId);
           setPosts(followedPosts);
-        })
-        .catch(err => {
-          console.error('Error loading following feed:', err);
-          toast.error('Failed to load followed posts');
-        })
-        .finally(() => setLoading(false));
-    } else {
-      setLoading(true);
-      const mockPosts = generateMockPosts(10);
-      setPosts(mockPosts);
-      setLoading(false);
-    }
+        } else {
+          const allPosts = await getPosts({ limit: 20 });
+          setPosts(allPosts);
+        }
+      } catch (err) {
+        console.error('Error loading feed:', err);
+        toast.error('Failed to load posts');
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadFeed();
   }, [feedMode, userId]);
 
   // Load suggested users to follow
@@ -191,15 +219,15 @@ export function CommunityFeed({
   }, [userId]);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3 sm:space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
             <Users className="w-6 h-6 text-teal-600" />
             Parent Community
           </h2>
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-gray-600 dark:text-slate-400">
             Connect with families on similar journeys
           </p>
         </div>
@@ -213,27 +241,27 @@ export function CommunityFeed({
       </div>
 
       {/* Quick Stats */}
-      <div className="grid grid-cols-3 gap-3">
-        <Card className="p-3 text-center bg-gradient-to-br from-green-50 to-emerald-50 border-green-200">
-          <Trophy className="w-5 h-5 mx-auto mb-1 text-green-600" />
-          <div className="text-lg font-bold text-green-700">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+        <Card className="p-3 text-center bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-green-200 dark:border-green-800">
+          <Trophy className="w-5 h-5 mx-auto mb-1 text-green-600 dark:text-green-400" />
+          <div className="text-lg font-bold text-green-700 dark:text-green-400">
             {posts.filter((p) => p.category === 'wins').length}
           </div>
-          <div className="text-xs text-green-600">Wins Shared</div>
+          <div className="text-xs text-green-600 dark:text-green-500">Wins Shared</div>
         </Card>
-        <Card className="p-3 text-center bg-gradient-to-br from-amber-50 to-yellow-50 border-amber-200">
-          <Lightbulb className="w-5 h-5 mx-auto mb-1 text-amber-600" />
-          <div className="text-lg font-bold text-amber-700">
+        <Card className="p-3 text-center bg-gradient-to-br from-amber-50 to-yellow-50 dark:from-amber-900/20 dark:to-yellow-900/20 border-amber-200 dark:border-amber-800">
+          <Lightbulb className="w-5 h-5 mx-auto mb-1 text-amber-600 dark:text-amber-400" />
+          <div className="text-lg font-bold text-amber-700 dark:text-amber-400">
             {posts.filter((p) => p.category === 'tips').length}
           </div>
-          <div className="text-xs text-amber-600">Tips Posted</div>
+          <div className="text-xs text-amber-600 dark:text-amber-500">Tips Posted</div>
         </Card>
-        <Card className="p-3 text-center bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
-          <HelpCircle className="w-5 h-5 mx-auto mb-1 text-blue-600" />
-          <div className="text-lg font-bold text-blue-700">
+        <Card className="p-3 text-center bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-blue-200 dark:border-blue-800">
+          <HelpCircle className="w-5 h-5 mx-auto mb-1 text-blue-600 dark:text-blue-400" />
+          <div className="text-lg font-bold text-blue-700 dark:text-blue-400">
             {posts.filter((p) => p.category === 'questions').length}
           </div>
-          <div className="text-xs text-blue-600">Questions</div>
+          <div className="text-xs text-blue-600 dark:text-blue-500">Questions</div>
         </Card>
       </div>
 
@@ -324,7 +352,7 @@ export function CommunityFeed({
               className={`px-3 py-1.5 rounded-full text-sm whitespace-nowrap transition-colors flex items-center gap-1 ${
                 activeFilter === key
                   ? 'bg-teal-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  : 'bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-slate-300 hover:bg-gray-200 dark:hover:bg-slate-700'
               }`}
             >
               <span>{category.icon}</span>
@@ -335,7 +363,7 @@ export function CommunityFeed({
       </div>
 
       {/* Posts Feed */}
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         {loading ? (
           <Card className="p-8 text-center">
             <div className="animate-pulse">
@@ -361,16 +389,38 @@ export function CommunityFeed({
               showComments={expandedComments.has(post.id)}
               canPin={canPinPosts}
               onViewProfile={onViewProfile}
-              onDelete={(postId) => {
-                setPosts(posts.filter(p => p.id !== postId));
+              onDelete={async (postId) => {
+                try {
+                  await deleteCommunityPost(postId, userId);
+                  setPosts(posts.filter(p => p.id !== postId));
+                  toast.success('Post deleted');
+                } catch (error) {
+                  console.error('Error deleting post:', error);
+                  toast.error('Failed to delete post');
+                }
               }}
-              onReport={(postId, reason) => {
-                // In production, this would call flagForModeration from community.ts
-                console.log('Report submitted:', { postId, reason });
+              onReport={async (postId, reason) => {
+                try {
+                  // Flag the content for moderation
+                  const post = posts.find(p => p.id === postId);
+                  if (post) {
+                    const shouldFlag = flagForModeration(`${post.title} ${post.body}`);
+                    console.log('Report submitted:', { postId, reason, flagged: shouldFlag });
+                    toast.success('Report submitted. Thank you for keeping our community safe.');
+                  }
+                } catch (error) {
+                  console.error('Error reporting post:', error);
+                  toast.error('Failed to submit report');
+                }
               }}
-              onBookmark={(postId) => {
-                // In production, this would call bookmarkPost from community.ts
-                console.log('Bookmark toggled:', postId);
+              onBookmark={async (postId) => {
+                try {
+                  await bookmarkPost(postId, userId);
+                  toast.success('Post bookmarked');
+                } catch (error) {
+                  console.error('Error bookmarking post:', error);
+                  toast.error('Failed to bookmark post');
+                }
               }}
               onFollow={handleFollow}
               isFollowing={followingUserIds.has(post.userId)}
@@ -544,7 +594,7 @@ function PostCard({
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-medium text-gray-900">
+                <span className="font-medium text-gray-900 dark:text-white">
                   {post.isAnonymous ? 'Anonymous Parent' : post.userName}
                 </span>
                 {/* Badges */}
@@ -605,7 +655,7 @@ function PostCard({
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="text-gray-400 hover:text-gray-600 p-2 hover:bg-gray-100 rounded-lg min-h-[44px] min-w-[44px] flex items-center justify-center">
+              <button className="text-gray-400 hover:text-gray-600 dark:hover:text-slate-300 p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg min-h-[44px] min-w-[44px] flex items-center justify-center">
                 <MoreHorizontal className="w-5 h-5" />
               </button>
             </DropdownMenuTrigger>
@@ -629,12 +679,12 @@ function PostCard({
           {/* Report Dialog */}
           {showReportDialog && (
             <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={() => setShowReportDialog(false)}>
-              <div className="bg-white rounded-xl p-6 max-w-sm w-full" onClick={(e) => e.stopPropagation()}>
+              <div className="bg-white dark:bg-slate-900 rounded-xl p-6 max-w-sm w-full" onClick={(e) => e.stopPropagation()}>
                 <div className="flex items-center gap-2 mb-4">
                   <AlertTriangle className="w-5 h-5 text-amber-500" />
-                  <h3 className="font-semibold text-gray-900">Report this post</h3>
+                  <h3 className="font-semibold text-gray-900 dark:text-white">Report this post</h3>
                 </div>
-                <p className="text-sm text-gray-600 mb-4">Why are you reporting this post?</p>
+                <p className="text-sm text-gray-600 dark:text-slate-400 mb-4">Why are you reporting this post?</p>
                 <div className="space-y-2">
                   {[
                     'Inappropriate content',
@@ -646,7 +696,7 @@ function PostCard({
                     <button
                       key={reason}
                       onClick={() => handleReport(reason)}
-                      className="w-full text-left px-4 py-3 text-sm hover:bg-gray-100 rounded-lg transition-colors"
+                      className="w-full text-left px-4 py-3 text-sm text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
                     >
                       {reason}
                     </button>
@@ -654,7 +704,7 @@ function PostCard({
                 </div>
                 <button
                   onClick={() => setShowReportDialog(false)}
-                  className="w-full mt-4 py-2 text-sm text-gray-500 hover:text-gray-700"
+                  className="w-full mt-4 py-2 text-sm text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-300"
                 >
                   Cancel
                 </button>
@@ -665,7 +715,7 @@ function PostCard({
 
         {/* Content */}
         <div className="mb-3">
-          <p className="text-gray-900 whitespace-pre-wrap">{post.content}</p>
+          <p className="text-gray-900 dark:text-white whitespace-pre-wrap">{post.content}</p>
         </div>
 
         {/* Tags */}
@@ -681,7 +731,7 @@ function PostCard({
 
         {/* Actions */}
         <div className="flex items-center justify-between pt-3 border-t">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 sm:gap-4">
             <button
               onClick={onLike}
               className={`flex items-center gap-1 text-sm ${
@@ -732,19 +782,19 @@ function PostCard({
                 <div className="space-y-3 mb-4">
                   {post.comments.slice(0, 3).map((comment) => (
                     <div key={comment.id} className="flex gap-2">
-                      <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 text-sm font-medium flex-shrink-0">
+                      <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-slate-700 flex items-center justify-center text-gray-600 dark:text-slate-300 text-sm font-medium flex-shrink-0">
                         {comment.userName.charAt(0)}
                       </div>
-                      <div className="flex-1 bg-gray-50 rounded-lg p-2">
+                      <div className="flex-1 bg-gray-50 dark:bg-slate-800 rounded-lg p-2">
                         <div className="flex items-center gap-2">
-                          <span className="font-medium text-sm text-gray-900">
+                          <span className="font-medium text-sm text-gray-900 dark:text-white">
                             {comment.userName}
                           </span>
-                          <span className="text-xs text-gray-500">
+                          <span className="text-xs text-gray-500 dark:text-slate-400">
                             {formatTimeAgo(new Date(comment.createdAt))}
                           </span>
                         </div>
-                        <p className="text-sm text-gray-700">{comment.content}</p>
+                        <p className="text-sm text-gray-700 dark:text-slate-300">{comment.content}</p>
                       </div>
                     </div>
                   ))}
@@ -765,7 +815,7 @@ function PostCard({
                   value={newComment}
                   onChange={(e) => setNewComment(e.target.value)}
                   placeholder="Add a supportive comment..."
-                  className="flex-1 px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                  className="flex-1 px-3 py-2 text-sm border border-gray-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                   onKeyPress={(e) => e.key === 'Enter' && handleSubmitComment()}
                 />
                 <Button
@@ -850,21 +900,21 @@ function CreatePostModal({
         initial={{ y: '100%' }}
         animate={{ y: 0 }}
         exit={{ y: '100%' }}
-        className="bg-white rounded-t-xl sm:rounded-xl w-full max-w-lg max-h-[90vh] overflow-y-auto"
+        className="bg-white dark:bg-slate-900 rounded-t-xl sm:rounded-xl w-full max-w-lg max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="sticky top-0 bg-white p-4 border-b flex items-center justify-between">
-          <h3 className="text-lg font-bold text-gray-900">Share with Community</h3>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+        <div className="sticky top-0 bg-white dark:bg-slate-900 p-4 border-b border-gray-200 dark:border-slate-700 flex items-center justify-between">
+          <h3 className="text-lg font-bold text-gray-900 dark:text-white">Share with Community</h3>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 dark:hover:text-slate-300">
             <X className="w-6 h-6" />
           </button>
         </div>
 
-        <div className="p-4 space-y-4">
+        <div className="p-4 space-y-3 sm:space-y-4">
           {/* Category Selection */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
               What are you sharing?
             </label>
             <div className="flex flex-wrap gap-2">
@@ -876,7 +926,7 @@ function CreatePostModal({
                     className={`px-3 py-2 rounded-lg text-sm transition-colors ${
                       category === key
                         ? `${cat.color} border-2`
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        : 'bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-slate-300 hover:bg-gray-200 dark:hover:bg-slate-700'
                     }`}
                   >
                     {cat.icon} {cat.label}
@@ -903,21 +953,21 @@ function CreatePostModal({
                   : "Share a helpful resource..."
               }
               rows={5}
-              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 resize-none"
+              className="w-full p-3 border border-gray-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500 resize-none"
             />
           </div>
 
           {/* Anonymous Toggle */}
-          <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+          <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-800 rounded-lg">
             <div className="flex items-center gap-2">
               {isAnonymous ? (
-                <EyeOff className="w-5 h-5 text-gray-500" />
+                <EyeOff className="w-5 h-5 text-gray-500 dark:text-slate-400" />
               ) : (
-                <Eye className="w-5 h-5 text-gray-500" />
+                <Eye className="w-5 h-5 text-gray-500 dark:text-slate-400" />
               )}
               <div>
-                <span className="font-medium text-gray-900">Post anonymously</span>
-                <p className="text-xs text-gray-500">
+                <span className="font-medium text-gray-900 dark:text-white">Post anonymously</span>
+                <p className="text-xs text-gray-500 dark:text-slate-400">
                   Your name won't be shown on this post
                 </p>
               </div>
@@ -937,14 +987,14 @@ function CreatePostModal({
           </div>
 
           {/* Community Guidelines */}
-          <div className="p-3 bg-blue-50 rounded-lg text-sm text-blue-800">
+          <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg text-sm text-blue-800 dark:text-blue-300">
             <strong>Community Guidelines:</strong> Be supportive and respectful. Share experiences,
             not medical advice. Protect privacy—avoid sharing identifying details about your child.
           </div>
         </div>
 
         {/* Footer */}
-        <div className="sticky bottom-0 bg-white p-4 border-t flex gap-2">
+        <div className="sticky bottom-0 bg-white dark:bg-slate-900 p-4 border-t border-gray-200 dark:border-slate-700 flex gap-2">
           <Button variant="outline" onClick={onClose} className="flex-1">
             Cancel
           </Button>

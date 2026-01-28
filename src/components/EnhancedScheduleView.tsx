@@ -100,15 +100,15 @@ export const EnhancedScheduleView: React.FC<EnhancedScheduleViewProps> = ({
 
   return (
     <div className="h-full p-6">
-      <div className="mb-6">
-        <h2 className="text-xl font-semibold text-slate-900 mb-2">Schedule</h2>
+      <div className="mb-4 sm:mb-6">
+        <h2 className="text-lg sm:text-xl font-semibold text-slate-900 mb-2">Schedule</h2>
         <p className="text-slate-600">Manage your appointments and session bookings</p>
       </div>
 
       {/* Insurance Status Banner */}
       <InsuranceStatusBanner />
 
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         {mockAppointments.map((appointment) => (
           <AppointmentCard
             key={appointment.id}
@@ -151,7 +151,7 @@ export const EnhancedScheduleView: React.FC<EnhancedScheduleViewProps> = ({
               Select a new time for your session
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             <p className="text-sm text-slate-600">
               Current appointment: Thursday, Dec 18 at 2:00 PM
             </p>
@@ -159,7 +159,7 @@ export const EnhancedScheduleView: React.FC<EnhancedScheduleViewProps> = ({
             {/* Available reschedule times */}
             <div className="space-y-2">
               <p className="font-medium text-slate-900">Available Times</p>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {['Dec 19, 10:00 AM', 'Dec 19, 2:00 PM', 'Dec 20, 9:00 AM', 'Dec 20, 3:00 PM'].map((time) => (
                   <Button
                     key={time}

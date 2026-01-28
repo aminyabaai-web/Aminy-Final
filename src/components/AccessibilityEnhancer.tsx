@@ -217,7 +217,7 @@ export const AccessibilityToolbar: React.FC = () => {
           </DialogDescription>
         </DialogHeader>
         
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           {/* Visual Preferences */}
           <div>
             <h3 className="font-medium text-gray-900 mb-2">Visual</h3>
@@ -322,7 +322,7 @@ export const AccessibilityToolbar: React.FC = () => {
           </div>
         </div>
 
-        <div className="mt-6 flex justify-between">
+        <div className="mt-4 sm:mt-6 flex justify-between">
           <Button variant="outline" onClick={() => setIsOpen(false)}>
             Close
           </Button>
@@ -513,7 +513,7 @@ export const KeyboardNavigationHelper: React.FC = () => {
           <DialogTitle>Keyboard Navigation Help</DialogTitle>
         </DialogHeader>
         
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <div>
             <h3 className="font-medium text-gray-900 mb-2">Navigation</h3>
             <ul className="text-sm text-gray-600 space-y-1">
@@ -546,7 +546,7 @@ export const KeyboardNavigationHelper: React.FC = () => {
           </div>
         </div>
         
-        <div className="flex justify-end mt-6">
+        <div className="flex justify-end mt-4 sm:mt-6">
           <Button onClick={() => setShowHelper(false)}>
             Close
           </Button>
