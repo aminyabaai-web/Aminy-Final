@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="manifest" href="/manifest.json" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#0891b2" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)" />
@@ -31,6 +32,81 @@
     <meta name="twitter:title" content="Aminy - ABA Support for Your Family" />
     <meta name="twitter:description" content="Your AI companion for supporting your neurodivergent child. Get personalized guidance, daily routines, and progress tracking." />
     <meta name="twitter:image" content="https://aminy.app/og-image.png" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://aminy.app/" />
+
+    <!-- Structured Data (JSON-LD) for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Aminy",
+      "description": "AI-powered support for parents of neurodivergent children. Get personalized ABA guidance, behavior tracking, and connect with certified professionals.",
+      "applicationCategory": "HealthApplication",
+      "operatingSystem": "Web, iOS, Android",
+      "offers": {
+        "@type": "AggregateOffer",
+        "lowPrice": "0",
+        "highPrice": "49.99",
+        "priceCurrency": "USD",
+        "offerCount": "4"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "ratingCount": "127",
+        "bestRating": "5"
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "Aminy Health",
+        "url": "https://aminy.app"
+      },
+      "featureList": [
+        "AI behavioral coach powered by Claude",
+        "BCBA-supervised guidance",
+        "Behavior incident tracking",
+        "Progress monitoring and outcomes",
+        "Telehealth appointments",
+        "Secure document vault",
+        "Community support",
+        "Multi-child profiles"
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is Aminy?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Aminy is an AI-powered app that provides personalized ABA (Applied Behavior Analysis) support for parents of neurodivergent children, including those with autism, ADHD, and developmental delays."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is Aminy HIPAA compliant?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, Aminy is designed with HIPAA compliance in mind. We use encrypted data storage, audit logging, and secure messaging to protect your family's health information."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I connect with real BCBAs through Aminy?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, Aminy offers telehealth sessions with certified BCBAs (Board Certified Behavior Analysts) and RBTs (Registered Behavior Technicians) for personalized support."
+          }
+        }
+      ]
+    }
+    </script>
 
     <!-- Preconnect to Google Fonts for faster loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

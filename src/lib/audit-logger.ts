@@ -5,6 +5,11 @@
  * Immutable log storage - entries cannot be modified or deleted
  */
 
+import { supabase } from '../utils/supabase/client';
+
+// Environment check for production logging
+const IS_PRODUCTION = import.meta.env.PROD || import.meta.env.VITE_USE_MOCK_DATA === 'false';
+
 // Audit action types
 export type AuditAction =
   | 'view'
@@ -129,17 +134,43 @@ function loadAuditLog(): AuditEvent[] {
 
 /**
  * Save audit log to storage (append-only)
+ * In production, persists to Supabase for HIPAA compliance
  */
-function saveAuditEvent(event: AuditEvent): void {
+async function saveAuditEvent(event: AuditEvent): Promise<void> {
   try {
+    // Always save to localStorage as backup
     const log = loadAuditLog();
     log.push(event);
-
-    // Keep last 10,000 events in local storage (production would use database)
     const trimmedLog = log.slice(-10000);
     localStorage.setItem(AUDIT_LOG_KEY, JSON.stringify(trimmedLog));
 
-    // Also log to console in development
+    // In production, also persist to Supabase for HIPAA compliance
+    if (IS_PRODUCTION) {
+      const { error } = await supabase.from('audit_log').insert({
+        id: event.id,
+        timestamp: event.timestamp,
+        user_id: event.userId,
+        user_role: event.userRole,
+        action: event.action,
+        resource_type: event.resourceType,
+        resource_id: event.resourceId,
+        details: event.details,
+        ip_address: event.ipAddress,
+        user_agent: event.userAgent,
+        session_id: event.sessionId,
+        child_id: event.childId,
+        provider_id: event.providerId,
+        success: event.success,
+        error_message: event.errorMessage
+      });
+
+      if (error) {
+        console.error('[AUDIT] Failed to persist to Supabase:', error);
+        // Event is still in localStorage as backup
+      }
+    }
+
+    // Log to console in development
     if (import.meta.env.DEV) {
       console.log('[AUDIT]', {
         action: event.action,
@@ -167,10 +198,8 @@ export async function logAuditEvent(input: AuditEventInput): Promise<AuditEvent>
     sessionId: input.sessionId || getSessionId()
   };
 
-  saveAuditEvent(event);
-
-  // In production, also send to Supabase
-  // await supabase.from('audit_log').insert(event);
+  // Save to localStorage and Supabase (in production)
+  await saveAuditEvent(event);
 
   return event;
 }
