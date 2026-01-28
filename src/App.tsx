@@ -66,10 +66,10 @@ const DeveloperModeHandler = lazy(() =>
 );
 
 // OPTIMIZED LAZY LOADING - With prefetch hints
-const OnboardingEnhanced = lazy(() =>
+const OnboardingStreamlined = lazy(() =>
   import(
-    /* webpackPrefetch: true */ "./components/OnboardingEnhanced"
-  ).then((m) => ({ default: m.OnboardingEnhanced })),
+    /* webpackPrefetch: true */ "./components/OnboardingStreamlined"
+  ).then((m) => ({ default: m.OnboardingStreamlined })),
 );
 const Dashboard = lazy(() =>
   import(
@@ -1070,7 +1070,7 @@ export default function App() {
         case "onboarding":
           return (
             <Suspense fallback={<LoadingSkeleton />}>
-              <OnboardingEnhanced
+              <OnboardingStreamlined
                 onComplete={handleOnboardingComplete}
                 initialData={{
                   email: userData.email || "",
