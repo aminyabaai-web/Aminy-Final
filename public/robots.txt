@@ -1,0 +1,19 @@
+# Aminy - Robots.txt
+# https://aminy.app
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://aminy.app/sitemap.xml
+
+# Disallow sensitive paths
+Disallow: /api/
+Disallow: /auth/
+Disallow: /?screen=admin-portal
+Disallow: /?screen=provider-portal
+
+# Allow search engines to crawl public pages
+Allow: /?screen=privacy-policy
+Allow: /?screen=terms-of-service
+Allow: /join

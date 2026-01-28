@@ -283,25 +283,32 @@ export async function searchMemoriesSemantic(
 
 /**
  * Extract and store facts from a conversation
+ * Uses AI-powered extraction when available for better accuracy
  */
 export async function extractAndStoreFacts(
   userId: string,
   childId: string,
-  messages: ConversationMessage[]
-): Promise<void> {
-  // Extract facts from the conversation
-  const extractedFacts = extractFactsFromMessages(messages);
+  messages: ConversationMessage[],
+  useAI: boolean = true
+): Promise<{ stored: number; extracted: number }> {
+  // Extract facts from the conversation (AI with regex fallback)
+  const extractedFacts = await extractFactsEnhanced(messages, useAI);
 
   // Store each fact
+  let stored = 0;
   for (const fact of extractedFacts) {
-    await storeMemoryFact(userId, childId, fact);
+    const success = await storeMemoryFact(userId, childId, fact);
+    if (success) stored++;
   }
+
+  console.log(`[Memory] Stored ${stored}/${extractedFacts.length} facts`);
+  return { stored, extracted: extractedFacts.length };
 }
 
 /**
- * Extract facts from conversation messages
+ * Extract facts from conversation messages (regex fallback)
  */
-function extractFactsFromMessages(
+function extractFactsFromMessagesRegex(
   messages: ConversationMessage[]
 ): Array<{ category: MemoryCategory; content: string; confidence: number }> {
   const facts: Array<{ category: MemoryCategory; content: string; confidence: number }> = [];
@@ -375,6 +382,175 @@ function extractFactsFromMessages(
   }
 
   return facts;
+}
+
+/**
+ * AI-powered fact extraction from conversation messages
+ * Uses AI to extract structured facts with higher accuracy than regex
+ */
+async function extractFactsWithAI(
+  messages: ConversationMessage[]
+): Promise<Array<{ category: MemoryCategory; content: string; confidence: number }>> {
+  try {
+    const conversationText = messages
+      .filter(m => m.role === 'user')
+      .map(m => m.content)
+      .join('\n\n');
+
+    if (conversationText.length < 20) {
+      return []; // Not enough content to extract
+    }
+
+    const response = await fetch(`${getBackendUrl()}/ai/extract-facts`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${publicAnonKey}`,
+      },
+      body: JSON.stringify({
+        conversation: conversationText,
+        extractionPrompt: FACT_EXTRACTION_PROMPT,
+      }),
+    });
+
+    if (!response.ok) {
+      console.log('[Memory] AI extraction failed, falling back to regex');
+      return extractFactsFromMessagesRegex(messages);
+    }
+
+    const data = await response.json();
+    const facts = data.facts || [];
+
+    // Validate and normalize the facts
+    return facts.map((fact: { category: string; content: string; confidence: number }) => ({
+      category: normalizeCategory(fact.category),
+      content: fact.content.substring(0, 500), // Limit content length
+      confidence: Math.min(Math.max(fact.confidence || 0.7, 0), 1), // Clamp 0-1
+    }));
+  } catch (error) {
+    console.error('[Memory] AI fact extraction error:', error);
+    return extractFactsFromMessagesRegex(messages);
+  }
+}
+
+/**
+ * Normalize category string to valid MemoryCategory
+ */
+function normalizeCategory(category: string): MemoryCategory {
+  const normalized = category.toLowerCase().trim();
+  const validCategories: MemoryCategory[] = [
+    'preference', 'trigger', 'strength', 'challenge',
+    'milestone', 'strategy', 'medical', 'educational',
+    'routine', 'relationship'
+  ];
+
+  if (validCategories.includes(normalized as MemoryCategory)) {
+    return normalized as MemoryCategory;
+  }
+
+  // Map common variations
+  const categoryMap: Record<string, MemoryCategory> = {
+    'like': 'preference',
+    'likes': 'preference',
+    'love': 'preference',
+    'enjoy': 'preference',
+    'fear': 'trigger',
+    'anxiety': 'trigger',
+    'worry': 'trigger',
+    'meltdown': 'trigger',
+    'skill': 'strength',
+    'ability': 'strength',
+    'talent': 'strength',
+    'difficulty': 'challenge',
+    'struggle': 'challenge',
+    'problem': 'challenge',
+    'achievement': 'milestone',
+    'progress': 'milestone',
+    'success': 'milestone',
+    'technique': 'strategy',
+    'approach': 'strategy',
+    'method': 'strategy',
+    'diagnosis': 'medical',
+    'medication': 'medical',
+    'therapy': 'medical',
+    'school': 'educational',
+    'iep': 'educational',
+    'learning': 'educational',
+    'schedule': 'routine',
+    'habit': 'routine',
+    'family': 'relationship',
+    'sibling': 'relationship',
+    'friend': 'relationship',
+  };
+
+  return categoryMap[normalized] || 'challenge'; // Default to challenge
+}
+
+/**
+ * Prompt for AI fact extraction
+ */
+const FACT_EXTRACTION_PROMPT = `You are analyzing a conversation between a parent and an AI assistant about their child with developmental needs.
+
+Extract specific, actionable facts about the child and family. Return a JSON array of facts.
+
+CATEGORIES TO EXTRACT:
+- preference: Things the child likes, enjoys, is interested in
+- trigger: Things that upset the child, cause meltdowns, or should be avoided
+- strength: Skills, abilities, things the child is good at
+- challenge: Current difficulties, struggles, areas needing support
+- milestone: Recent achievements, progress, first-time accomplishments
+- strategy: Techniques that worked, helpful approaches
+- medical: Diagnoses, medications, health information
+- educational: School-related info, IEP details, learning styles
+- routine: Daily schedules, habits, regular activities
+- relationship: Family dynamics, social connections
+
+For each fact:
+1. Extract the SPECIFIC information (not the full sentence)
+2. Assign confidence (0.6-0.95 based on how clearly stated)
+3. Choose the most appropriate category
+
+Example output:
+[
+  {"category": "preference", "content": "Loves trains and anything transportation-related", "confidence": 0.9},
+  {"category": "trigger", "content": "Loud sudden noises cause meltdowns", "confidence": 0.85},
+  {"category": "strategy", "content": "Visual timer helps with transitions", "confidence": 0.8}
+]
+
+Only extract facts that are clearly stated. Do not infer or assume. Be concise.`;
+
+/**
+ * Extract facts from conversation - uses AI with regex fallback
+ */
+function extractFactsFromMessages(
+  messages: ConversationMessage[]
+): Array<{ category: MemoryCategory; content: string; confidence: number }> {
+  // For synchronous use, fall back to regex
+  return extractFactsFromMessagesRegex(messages);
+}
+
+/**
+ * Enhanced fact extraction that tries AI first
+ */
+export async function extractFactsEnhanced(
+  messages: ConversationMessage[],
+  useAI: boolean = true
+): Promise<Array<{ category: MemoryCategory; content: string; confidence: number }>> {
+  if (useAI) {
+    try {
+      const aiFacts = await extractFactsWithAI(messages);
+      if (aiFacts.length > 0) {
+        console.log(`[Memory] AI extracted ${aiFacts.length} facts`);
+        return aiFacts;
+      }
+    } catch (e) {
+      console.log('[Memory] AI extraction failed, using regex fallback');
+    }
+  }
+
+  const regexFacts = extractFactsFromMessagesRegex(messages);
+  console.log(`[Memory] Regex extracted ${regexFacts.length} facts`);
+  return regexFacts;
 }
 
 /**
@@ -540,6 +716,7 @@ export default {
   getRelevantMemories,
   searchMemoriesSemantic,
   extractAndStoreFacts,
+  extractFactsEnhanced,
   generateConversationSummary,
   buildMemoryContextString,
   saveConversationLocally,

@@ -111,11 +111,10 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
         return;
       }
 
-      // Check if Stripe is configured
+      // Check if Stripe is configured - require real payment in production
       if (!isStripeConfigured()) {
-        // Fallback for demo mode - just update tier locally
-        toast.info('Payment processing is being set up. Activating trial mode.');
-        onSubscribe(tierId);
+        console.error('[Payment] Stripe not configured - check VITE_STRIPE_PUBLISHABLE_KEY');
+        toast.error('Payment system is temporarily unavailable. Please try again later or contact support.');
         setIsLoading(null);
         return;
       }

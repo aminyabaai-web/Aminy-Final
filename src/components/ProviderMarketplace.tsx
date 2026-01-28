@@ -33,6 +33,7 @@ import {
   Video,
   ChevronRight,
   ChevronDown,
+  ChevronUp,
   MapPin,
   Heart,
   Shield,
@@ -50,7 +51,12 @@ import {
   Info,
   Bookmark,
   Play,
-  UserSearch
+  UserSearch,
+  X,
+  DollarSign,
+  Globe,
+  CreditCard,
+  SlidersHorizontal
 } from 'lucide-react';
 import { EmptyProviders, EmptySearchResults } from './ui/empty-state';
 import { providerTypes, type ProviderType, type ProviderTypeInfo } from '../lib/child-profiles';
@@ -91,6 +97,59 @@ interface ProviderMarketplaceProps {
   onViewProvider?: (providerId: string) => void;
 }
 
+// Filter state interface
+interface MarketplaceFilters {
+  state: string;
+  languages: string[];
+  insurances: string[];
+  minRating: number;
+  maxPrice: number;
+  availableThisWeek: boolean;
+  acceptingNewPatients: boolean;
+  specialties: string[];
+  conditions: string[];
+}
+
+// US States for filter dropdown
+const US_STATES = [
+  'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut',
+  'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa',
+  'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan',
+  'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire',
+  'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio',
+  'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota',
+  'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia',
+  'Wisconsin', 'Wyoming'
+];
+
+// Common insurance providers
+const INSURANCE_PROVIDERS = [
+  'Aetna', 'Anthem', 'Blue Cross Blue Shield', 'Cigna', 'Humana',
+  'Kaiser Permanente', 'Medicaid', 'Medicare', 'Tricare', 'UnitedHealthcare',
+  'Self-Pay', 'Out-of-Network'
+];
+
+// Common languages
+const LANGUAGES = [
+  'English', 'Spanish', 'Mandarin', 'Cantonese', 'Korean', 'Vietnamese',
+  'Tagalog', 'Arabic', 'French', 'Portuguese', 'Russian', 'Hindi', 'ASL'
+];
+
+// All specialties across provider types
+const ALL_SPECIALTIES = [
+  'Early Intervention', 'Parent Training', 'Teen Services', 'Social Skills',
+  'Transition Planning', 'Play-Based Learning', 'Daily Routines', 'Anxiety',
+  'Emotional Regulation', 'Family Therapy', 'System Navigation', 'IEP Advocacy',
+  'AAC', 'Social Communication', 'Feeding', 'Sensory Processing', 'Fine Motor',
+  'Self-Care Skills', 'Medication Management', 'Complex Diagnoses', 'Diagnostic Evaluations'
+];
+
+// Conditions
+const ALL_CONDITIONS = [
+  'Autism', 'ADHD', 'Anxiety', 'Developmental Delay', 'Depression', 'OCD',
+  'Sensory Processing', 'Speech Delay', 'Learning Disability'
+];
+
 // Icon mapping for provider types
 const providerIcons: Record<ProviderType, React.ElementType> = {
   bcba: GraduationCap,
@@ -129,6 +188,58 @@ export function ProviderMarketplace({
   const [selectedProvider, setSelectedProvider] = useState<MarketplaceProvider | null>(null);
   const [showFilters, setShowFilters] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Advanced filters state
+  const [filters, setFilters] = useState<MarketplaceFilters>({
+    state: '',
+    languages: [],
+    insurances: [],
+    minRating: 0,
+    maxPrice: 500,
+    availableThisWeek: false,
+    acceptingNewPatients: false,
+    specialties: [],
+    conditions: []
+  });
+
+  // Track active filter count
+  const activeFilterCount = [
+    filters.state !== '',
+    filters.languages.length > 0,
+    filters.insurances.length > 0,
+    filters.minRating > 0,
+    filters.maxPrice < 500,
+    filters.availableThisWeek,
+    filters.acceptingNewPatients,
+    filters.specialties.length > 0,
+    filters.conditions.length > 0
+  ].filter(Boolean).length;
+
+  // Reset filters
+  const resetFilters = () => {
+    setFilters({
+      state: '',
+      languages: [],
+      insurances: [],
+      minRating: 0,
+      maxPrice: 500,
+      availableThisWeek: false,
+      acceptingNewPatients: false,
+      specialties: [],
+      conditions: []
+    });
+  };
+
+  // Toggle array filter
+  const toggleArrayFilter = (key: keyof MarketplaceFilters, value: string) => {
+    setFilters(prev => {
+      const arr = prev[key] as string[];
+      if (arr.includes(value)) {
+        return { ...prev, [key]: arr.filter(v => v !== value) };
+      }
+      return { ...prev, [key]: [...arr, value] };
+    });
+  };
 
   // Load providers from Supabase with fallback to mock data
   const loadProviders = useCallback(async () => {
@@ -414,8 +525,33 @@ export function ProviderMarketplace({
         const matchesName = prov.name.toLowerCase().includes(query);
         const matchesSpecialty = prov.specialties.some(s => s.toLowerCase().includes(query));
         const matchesCondition = prov.conditions.some(c => c.toLowerCase().includes(query));
-        return matchesName || matchesSpecialty || matchesCondition;
+        if (!(matchesName || matchesSpecialty || matchesCondition)) return false;
       }
+
+      // Advanced filters
+      // Rating filter
+      if (filters.minRating > 0 && prov.rating < filters.minRating) return false;
+
+      // Language filter
+      if (filters.languages.length > 0) {
+        const hasLanguage = filters.languages.some(lang => prov.languages.includes(lang));
+        if (!hasLanguage) return false;
+      }
+
+      // Specialty filter
+      if (filters.specialties.length > 0) {
+        const hasSpecialty = filters.specialties.some(spec => prov.specialties.includes(spec));
+        if (!hasSpecialty) return false;
+      }
+
+      // Condition filter
+      if (filters.conditions.length > 0) {
+        const hasCondition = filters.conditions.some(cond => prov.conditions.includes(cond));
+        if (!hasCondition) return false;
+      }
+
+      // Available this week filter
+      if (filters.availableThisWeek && prov.availability.length === 0) return false;
 
       return true;
     });
@@ -605,11 +741,207 @@ export function ProviderMarketplace({
           <p className="text-gray-600">
             {filteredProviders.length} provider{filteredProviders.length !== 1 ? 's' : ''} available
           </p>
-          <Button variant="outline" size="sm" onClick={() => setShowFilters(!showFilters)}>
-            <Filter className="w-4 h-4 mr-2" />
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setShowFilters(!showFilters)}
+            className={activeFilterCount > 0 ? 'border-teal-500 text-teal-600' : ''}
+          >
+            <SlidersHorizontal className="w-4 h-4 mr-2" />
             Filters
+            {activeFilterCount > 0 && (
+              <Badge className="ml-2 bg-teal-500 text-white text-xs px-1.5 py-0.5">
+                {activeFilterCount}
+              </Badge>
+            )}
+            {showFilters ? (
+              <ChevronUp className="w-4 h-4 ml-1" />
+            ) : (
+              <ChevronDown className="w-4 h-4 ml-1" />
+            )}
           </Button>
         </div>
+
+        {/* Advanced Filter Panel */}
+        {showFilters && (
+          <Card className="p-4 mb-6 border-teal-200 bg-gradient-to-br from-teal-50/50 to-cyan-50/50">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-semibold text-gray-900 flex items-center gap-2">
+                <Filter className="w-4 h-4 text-teal-600" />
+                Filter Providers
+              </h3>
+              {activeFilterCount > 0 && (
+                <Button variant="ghost" size="sm" onClick={resetFilters} className="text-gray-500 hover:text-gray-700">
+                  <X className="w-4 h-4 mr-1" />
+                  Clear All
+                </Button>
+              )}
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {/* State Filter */}
+              <div>
+                <label className="text-sm font-medium text-gray-700 mb-1 block flex items-center gap-1">
+                  <MapPin className="w-3.5 h-3.5" />
+                  Licensed State
+                </label>
+                <select
+                  value={filters.state}
+                  onChange={(e) => setFilters(prev => ({ ...prev, state: e.target.value }))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                >
+                  <option value="">All States</option>
+                  {US_STATES.map(state => (
+                    <option key={state} value={state}>{state}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Min Rating Filter */}
+              <div>
+                <label className="text-sm font-medium text-gray-700 mb-1 block flex items-center gap-1">
+                  <Star className="w-3.5 h-3.5" />
+                  Minimum Rating
+                </label>
+                <select
+                  value={filters.minRating}
+                  onChange={(e) => setFilters(prev => ({ ...prev, minRating: Number(e.target.value) }))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                >
+                  <option value={0}>Any Rating</option>
+                  <option value={4.5}>4.5+ Stars</option>
+                  <option value={4.7}>4.7+ Stars</option>
+                  <option value={4.9}>4.9+ Stars</option>
+                </select>
+              </div>
+
+              {/* Availability Filter */}
+              <div>
+                <label className="text-sm font-medium text-gray-700 mb-1 block flex items-center gap-1">
+                  <Calendar className="w-3.5 h-3.5" />
+                  Availability
+                </label>
+                <div className="flex items-center gap-2 h-[38px]">
+                  <button
+                    onClick={() => setFilters(prev => ({ ...prev, availableThisWeek: !prev.availableThisWeek }))}
+                    className={`px-3 py-1.5 rounded-lg text-sm border transition-colors ${
+                      filters.availableThisWeek
+                        ? 'bg-teal-100 border-teal-300 text-teal-700'
+                        : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
+                    }`}
+                  >
+                    <Check className={`w-3.5 h-3.5 inline mr-1 ${filters.availableThisWeek ? 'opacity-100' : 'opacity-0'}`} />
+                    Available This Week
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Languages */}
+            <div className="mt-4">
+              <label className="text-sm font-medium text-gray-700 mb-2 block flex items-center gap-1">
+                <Globe className="w-3.5 h-3.5" />
+                Languages
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {LANGUAGES.slice(0, 8).map(lang => (
+                  <button
+                    key={lang}
+                    onClick={() => toggleArrayFilter('languages', lang)}
+                    className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+                      filters.languages.includes(lang)
+                        ? 'bg-teal-100 border-teal-300 text-teal-700 border'
+                        : 'bg-white border-gray-200 text-gray-600 border hover:bg-gray-50'
+                    }`}
+                  >
+                    {lang}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Conditions */}
+            <div className="mt-4">
+              <label className="text-sm font-medium text-gray-700 mb-2 block flex items-center gap-1">
+                <Brain className="w-3.5 h-3.5" />
+                Experience With
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {ALL_CONDITIONS.map(cond => (
+                  <button
+                    key={cond}
+                    onClick={() => toggleArrayFilter('conditions', cond)}
+                    className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+                      filters.conditions.includes(cond)
+                        ? 'bg-violet-100 border-violet-300 text-violet-700 border'
+                        : 'bg-white border-gray-200 text-gray-600 border hover:bg-gray-50'
+                    }`}
+                  >
+                    {cond}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Specialties */}
+            <div className="mt-4">
+              <label className="text-sm font-medium text-gray-700 mb-2 block flex items-center gap-1">
+                <Sparkles className="w-3.5 h-3.5" />
+                Specialties
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {ALL_SPECIALTIES.slice(0, 12).map(spec => (
+                  <button
+                    key={spec}
+                    onClick={() => toggleArrayFilter('specialties', spec)}
+                    className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+                      filters.specialties.includes(spec)
+                        ? 'bg-cyan-100 border-cyan-300 text-cyan-700 border'
+                        : 'bg-white border-gray-200 text-gray-600 border hover:bg-gray-50'
+                    }`}
+                  >
+                    {spec}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Insurance */}
+            <div className="mt-4">
+              <label className="text-sm font-medium text-gray-700 mb-2 block flex items-center gap-1">
+                <CreditCard className="w-3.5 h-3.5" />
+                Insurance Accepted
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {INSURANCE_PROVIDERS.slice(0, 8).map(ins => (
+                  <button
+                    key={ins}
+                    onClick={() => toggleArrayFilter('insurances', ins)}
+                    className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+                      filters.insurances.includes(ins)
+                        ? 'bg-green-100 border-green-300 text-green-700 border'
+                        : 'bg-white border-gray-200 text-gray-600 border hover:bg-gray-50'
+                    }`}
+                  >
+                    {ins}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Active Filters Summary */}
+            {activeFilterCount > 0 && (
+              <div className="mt-4 pt-4 border-t border-teal-200">
+                <div className="flex items-center gap-2 text-sm text-teal-700">
+                  <Check className="w-4 h-4" />
+                  <span>{activeFilterCount} filter{activeFilterCount !== 1 ? 's' : ''} applied</span>
+                  <span className="text-gray-400">·</span>
+                  <span>{filteredProviders.length} matching provider{filteredProviders.length !== 1 ? 's' : ''}</span>
+                </div>
+              </div>
+            )}
+          </Card>
+        )}
 
         {isLoading ? (
           <div className="space-y-3 sm:space-y-4">
@@ -642,88 +974,151 @@ export function ProviderMarketplace({
         )}
       </div>
 
-      {/* Session Types Reference */}
+      {/* Session Types - Clean, Parent-Friendly Display */}
       <div className="max-w-4xl mx-auto px-4 pb-8">
-        <Card className="p-4 sm:p-5 md:p-6">
-          <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <Info className="w-5 h-5 text-gray-400" />
-            Session Types & Pricing
-          </h3>
-          <div className="grid md:grid-cols-3 gap-3 sm:gap-4 sm:gap-6">
-            {/* Behavioral */}
-            <div>
-              <h4 className="font-medium text-teal-700 mb-3 flex items-center gap-2">
-                <Brain className="w-4 h-4" />
-                Behavioral Team
-              </h4>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span>BCBA Consultation (50min)</span>
-                  <span className="font-medium">$99</span>
+        <Card className="p-5 sm:p-6 bg-gradient-to-br from-white to-gray-50">
+          <div className="text-center mb-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              Expert Support for Your Family
+            </h3>
+            <p className="text-sm text-gray-600 max-w-xl mx-auto">
+              Every session includes a video call, written summary, personalized recommendations, and follow-up support.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* Behavioral Support */}
+            <div className="bg-white rounded-xl p-4 border border-gray-100">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="p-2 bg-teal-100 rounded-lg">
+                  <Brain className="w-4 h-4 text-teal-600" />
                 </div>
-                <div className="flex justify-between">
-                  <span>BCBA Assessment (90min)</span>
-                  <span className="font-medium">$175</span>
+                <h4 className="font-medium text-gray-900">Behavioral Support</h4>
+              </div>
+              <div className="space-y-3">
+                <div className="flex justify-between items-center py-2 border-b border-gray-50">
+                  <div>
+                    <p className="font-medium text-gray-800 text-sm">ABA Specialist Consultation</p>
+                    <p className="text-xs text-gray-500">Up to 60 min with a BCBA</p>
+                  </div>
+                  <span className="font-semibold text-teal-600">$149</span>
                 </div>
-                <div className="flex justify-between">
-                  <span>RBT Check-in (30min)</span>
-                  <span className="font-medium">$49</span>
+                <div className="flex justify-between items-center py-2 border-b border-gray-50">
+                  <div>
+                    <p className="font-medium text-gray-800 text-sm">ABA Assessment</p>
+                    <p className="text-xs text-gray-500">Up to 90 min comprehensive review</p>
+                  </div>
+                  <span className="font-semibold text-teal-600">$269</span>
                 </div>
-                <div className="flex justify-between">
-                  <span>RBT Session (45min)</span>
-                  <span className="font-medium">$69</span>
+                <div className="flex justify-between items-center py-2 border-b border-gray-50">
+                  <div>
+                    <p className="font-medium text-gray-800 text-sm">ABA Coaching Session</p>
+                    <p className="text-xs text-gray-500">Up to 30 min skill-building</p>
+                  </div>
+                  <span className="font-semibold text-teal-600">$49</span>
+                </div>
+                <div className="flex justify-between items-center py-2">
+                  <div>
+                    <p className="font-medium text-gray-800 text-sm">ABA Extended Coaching</p>
+                    <p className="text-xs text-gray-500">Up to 60 min deeper practice</p>
+                  </div>
+                  <span className="font-semibold text-teal-600">$89</span>
                 </div>
               </div>
             </div>
 
-            {/* Therapy */}
-            <div>
-              <h4 className="font-medium text-violet-700 mb-3 flex items-center gap-2">
-                <Heart className="w-4 h-4" />
-                Therapy Team
-              </h4>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span>LPC/LCSW Session (50min)</span>
-                  <span className="font-medium">$99</span>
+            {/* Therapy & Wellness */}
+            <div className="bg-white rounded-xl p-4 border border-gray-100">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="p-2 bg-violet-100 rounded-lg">
+                  <Heart className="w-4 h-4 text-violet-600" />
                 </div>
-                <div className="flex justify-between">
-                  <span>Speech Session (45min)</span>
-                  <span className="font-medium">$89</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>OT Session (45min)</span>
-                  <span className="font-medium">$99</span>
-                </div>
+                <h4 className="font-medium text-gray-900">Therapy & Wellness</h4>
               </div>
-            </div>
-
-            {/* Medical */}
-            <div>
-              <h4 className="font-medium text-red-700 mb-3 flex items-center gap-2">
-                <Stethoscope className="w-4 h-4" />
-                Medical Team
-              </h4>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span>Psych Initial (60min)</span>
-                  <span className="font-medium">$275</span>
+              <div className="space-y-3">
+                <div className="flex justify-between items-center py-2 border-b border-gray-50">
+                  <div>
+                    <p className="font-medium text-gray-800 text-sm">Family Therapy</p>
+                    <p className="text-xs text-gray-500">Up to 45 min with licensed therapist</p>
+                  </div>
+                  <span className="font-semibold text-violet-600">$129</span>
                 </div>
-                <div className="flex justify-between">
-                  <span>Psych Follow-up (25min)</span>
-                  <span className="font-medium">$150</span>
+                <div className="flex justify-between items-center py-2 border-b border-gray-50">
+                  <div>
+                    <p className="font-medium text-gray-800 text-sm">Extended Therapy Session</p>
+                    <p className="text-xs text-gray-500">Up to 60 min for complex needs</p>
+                  </div>
+                  <span className="font-semibold text-violet-600">$149</span>
                 </div>
-                <div className="flex justify-between">
-                  <span>Dev Ped Eval (90min)</span>
-                  <span className="font-medium">$350</span>
+                <div className="flex justify-between items-center py-2 border-b border-gray-50">
+                  <div>
+                    <p className="font-medium text-gray-800 text-sm">Speech Therapy</p>
+                    <p className="text-xs text-gray-500">Up to 45 min communication support</p>
+                  </div>
+                  <span className="font-semibold text-violet-600">$139</span>
+                </div>
+                <div className="flex justify-between items-center py-2">
+                  <div>
+                    <p className="font-medium text-gray-800 text-sm">Occupational Therapy</p>
+                    <p className="text-xs text-gray-500">Up to 45 min sensory & motor skills</p>
+                  </div>
+                  <span className="font-semibold text-violet-600">$139</span>
                 </div>
               </div>
             </div>
           </div>
 
-          <p className="text-xs text-gray-400 mt-4 text-center">
-            All sessions are caregiver-mediated telehealth. Pro members receive 20% off.
-          </p>
+          {/* Evaluations */}
+          <div className="mt-6 bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl p-4 border border-amber-100">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="p-2 bg-amber-100 rounded-lg">
+                <Sparkles className="w-4 h-4 text-amber-600" />
+              </div>
+              <div>
+                <h4 className="font-medium text-gray-900">Diagnostic Evaluations</h4>
+                <p className="text-xs text-gray-600">Skip the 12-month waitlist. Get answers in days.</p>
+              </div>
+            </div>
+            <div className="grid sm:grid-cols-3 gap-3">
+              <div className="bg-white rounded-lg p-3 text-center">
+                <p className="font-medium text-gray-800 text-sm">ADHD Evaluation</p>
+                <p className="text-xs text-gray-500 mb-1">Up to 60 min</p>
+                <span className="font-semibold text-amber-600 text-lg">$299</span>
+              </div>
+              <div className="bg-white rounded-lg p-3 text-center">
+                <p className="font-medium text-gray-800 text-sm">Autism Evaluation</p>
+                <p className="text-xs text-gray-500 mb-1">Up to 90 min</p>
+                <span className="font-semibold text-amber-600 text-lg">$799</span>
+              </div>
+              <div className="bg-white rounded-lg p-3 text-center">
+                <p className="font-medium text-gray-800 text-sm">Combined Evaluation</p>
+                <p className="text-xs text-gray-500 mb-1">Up to 120 min</p>
+                <span className="font-semibold text-amber-600 text-lg">$999</span>
+              </div>
+            </div>
+          </div>
+
+          {/* What's Included */}
+          <div className="mt-5 pt-5 border-t border-gray-100">
+            <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-gray-500">
+              <span className="flex items-center gap-1">
+                <Check className="w-3.5 h-3.5 text-green-500" />
+                Video session from home
+              </span>
+              <span className="flex items-center gap-1">
+                <Check className="w-3.5 h-3.5 text-green-500" />
+                Written summary & recommendations
+              </span>
+              <span className="flex items-center gap-1">
+                <Check className="w-3.5 h-3.5 text-green-500" />
+                Follow-up messaging included
+              </span>
+              <span className="flex items-center gap-1">
+                <Check className="w-3.5 h-3.5 text-green-500" />
+                Superbill for insurance
+              </span>
+            </div>
+          </div>
         </Card>
       </div>
 

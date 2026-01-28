@@ -4,7 +4,7 @@
  * Shows upcoming/past appointments with actions
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Calendar,
@@ -23,8 +23,10 @@ import {
   AlertCircle,
   Plus,
   CalendarPlus,
-  ArrowRight
+  ArrowRight,
+  Loader2
 } from 'lucide-react';
+import { supabase } from '../utils/supabase/client';
 
 // Types
 export interface Appointment {
@@ -69,94 +71,135 @@ interface MyAppointmentsProps {
   childName?: string;
 }
 
-// Mock Data
-export const MOCK_APPOINTMENTS: Appointment[] = [
-  {
-    id: '1',
-    provider: {
-      id: 'bcba-1',
-      name: 'Dr. Sarah Chen',
-      title: 'BCBA-D',
-      specialty: 'Behavior Analysis',
-    },
-    scheduledAt: new Date(Date.now() + 2 * 60 * 60 * 1000), // 2 hours from now
-    duration: 30,
-    sessionType: 'BCBA Consultation',
-    status: 'upcoming',
-    visitType: 'video',
-    videoCallUrl: 'https://meet.aminy.app/session/abc123',
-    concern: 'Morning routine transitions',
-    preVisitQuestionnaire: {
-      completed: false,
-      url: '/questionnaire/abc123',
-    },
-    canReschedule: true,
-    canCancel: true,
-    cancellationDeadline: new Date(Date.now() + 1 * 60 * 60 * 1000),
-  },
-  {
-    id: '2',
-    provider: {
-      id: 'slp-1',
-      name: 'Dr. Emily Watson',
-      title: 'SLP-CCC',
-      specialty: 'Speech-Language Pathology',
-    },
-    scheduledAt: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000), // 5 days from now
-    duration: 45,
-    sessionType: 'Speech Evaluation',
-    status: 'upcoming',
-    visitType: 'video',
-    concern: 'Language development',
-    preVisitQuestionnaire: {
-      completed: true,
-      url: '/questionnaire/def456',
-    },
-    canReschedule: true,
-    canCancel: true,
-  },
-  {
-    id: '3',
-    provider: {
-      id: 'bcba-1',
-      name: 'Dr. Sarah Chen',
-      title: 'BCBA-D',
-      specialty: 'Behavior Analysis',
-    },
-    scheduledAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), // 3 days ago
-    duration: 30,
-    sessionType: 'Parent Coaching',
-    status: 'completed',
-    visitType: 'video',
-    concern: 'Bedtime routine',
-    postVisitReview: {
-      submitted: false,
-    },
-    sessionNotes: 'Discussed visual schedule implementation for bedtime. Parent to track progress over next week.',
-    canReschedule: false,
-    canCancel: false,
-  },
-  {
-    id: '4',
-    provider: {
-      id: 'bcba-2',
-      name: 'Dr. Michael Torres',
-      title: 'BCBA',
-      specialty: 'Early Intervention',
-    },
-    scheduledAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000), // 2 weeks ago
-    duration: 30,
-    sessionType: 'Initial Assessment',
-    status: 'completed',
-    visitType: 'video',
-    postVisitReview: {
-      submitted: true,
-      rating: 5,
-    },
-    canReschedule: false,
-    canCancel: false,
-  },
-];
+// Fallback data (only used if database is empty or unavailable)
+const FALLBACK_APPOINTMENTS: Appointment[] = [];
+
+/**
+ * Hook to load appointments from the database
+ */
+export function useAppointments(userId?: string): {
+  appointments: Appointment[];
+  isLoading: boolean;
+  error: string | null;
+  refetch: () => void;
+} {
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchAppointments = async () => {
+    if (!userId) {
+      // Try to get current user
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        setIsLoading(false);
+        return;
+      }
+      userId = user.id;
+    }
+
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const { data, error: fetchError } = await supabase
+        .from('marketplace_bookings')
+        .select(`
+          id,
+          session_type,
+          scheduled_at,
+          session_duration_minutes,
+          status,
+          concern,
+          notes,
+          video_room_url,
+          rating,
+          review,
+          provider:provider_profiles(
+            id,
+            full_name,
+            credentials,
+            specialty
+          )
+        `)
+        .eq('user_id', userId)
+        .order('scheduled_at', { ascending: false })
+        .limit(50);
+
+      if (fetchError) {
+        console.error('Error loading appointments:', fetchError);
+        setError(fetchError.message);
+        setAppointments(FALLBACK_APPOINTMENTS);
+      } else if (data && data.length > 0) {
+        const now = new Date();
+        setAppointments(data.map((booking: any) => {
+          const scheduledAt = new Date(booking.scheduled_at);
+          const isPast = scheduledAt < now;
+          const hoursUntil = (scheduledAt.getTime() - now.getTime()) / (1000 * 60 * 60);
+
+          let status: Appointment['status'] = booking.status;
+          if (booking.status === 'confirmed' && !isPast) {
+            status = 'upcoming';
+          } else if (booking.status === 'confirmed' && isPast) {
+            status = 'completed';
+          }
+
+          return {
+            id: booking.id,
+            provider: {
+              id: booking.provider?.id || 'unknown',
+              name: booking.provider?.full_name || 'Provider',
+              title: booking.provider?.credentials || '',
+              specialty: booking.provider?.specialty || '',
+            },
+            scheduledAt,
+            duration: booking.session_duration_minutes || 60,
+            sessionType: booking.session_type || 'Consultation',
+            status,
+            visitType: 'video' as const,
+            videoCallUrl: booking.video_room_url,
+            concern: booking.concern,
+            preVisitQuestionnaire: {
+              completed: true,
+              url: '',
+            },
+            postVisitReview: booking.rating ? {
+              submitted: true,
+              rating: booking.rating,
+            } : {
+              submitted: false,
+            },
+            sessionNotes: booking.notes,
+            canReschedule: !isPast && hoursUntil > 24,
+            canCancel: !isPast && hoursUntil > 24,
+          };
+        }));
+      } else {
+        setAppointments(FALLBACK_APPOINTMENTS);
+      }
+    } catch (e: any) {
+      console.error('Failed to load appointments:', e);
+      setError(e.message);
+      setAppointments(FALLBACK_APPOINTMENTS);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAppointments();
+  }, [userId]);
+
+  return {
+    appointments,
+    isLoading,
+    error,
+    refetch: fetchAppointments,
+  };
+}
+
+// Keep MOCK_APPOINTMENTS export for backwards compatibility (deprecated)
+export const MOCK_APPOINTMENTS: Appointment[] = FALLBACK_APPOINTMENTS;
 
 // Helper Functions
 function formatDateTime(date: Date): string {

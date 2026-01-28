@@ -520,6 +520,39 @@ export function useProviderVerification(providerId: string | null) {
   };
 }
 
+/**
+ * Initiate verification for a specific credential
+ * Triggers the verification process and updates status
+ */
+export async function initiateVerification(credentialId: string): Promise<VerificationResult> {
+  try {
+    // Get the credential details
+    const { data: credential, error } = await supabase
+      .from('provider_credentials')
+      .select('*')
+      .eq('id', credentialId)
+      .single();
+
+    if (error || !credential) {
+      return {
+        success: false,
+        status: 'failed',
+        message: 'Credential not found',
+      };
+    }
+
+    // Verify based on credential type
+    return await verifyCredential(credential.credential_type, credential.credential_number);
+  } catch (error) {
+    console.error('Verification initiation error:', error);
+    return {
+      success: false,
+      status: 'manual_review',
+      message: 'Verification failed. Flagged for manual review.',
+    };
+  }
+}
+
 export default {
   verifyCredential,
   verifyBACBCredential,
@@ -528,5 +561,6 @@ export default {
   getProviderCredentials,
   isProviderVerified,
   getVerificationBadge,
+  initiateVerification,
   useProviderVerification
 };

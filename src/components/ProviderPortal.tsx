@@ -60,6 +60,8 @@ import {
 import type { ProviderType } from '../lib/child-profiles';
 import { brandColors } from '../lib/brand-system';
 import { supabase } from '../utils/supabase/client';
+import { CredentialBadge, VerifiedBadge } from './provider/CredentialBadge';
+import { PatientAISummary } from './provider/PatientAISummary';
 
 interface Patient {
   id: string;
@@ -105,7 +107,7 @@ interface ProviderPortalProps {
 }
 
 export function ProviderPortal({ providerId }: ProviderPortalProps) {
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'patients' | 'sessions' | 'earnings' | 'settings'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'patients' | 'sessions' | 'earnings' | 'settings' | 'ai-summaries'>('dashboard');
   const [patients, setPatients] = useState<Patient[]>([]);
   const [sessions, setSessions] = useState<Session[]>([]);
   const [provider, setProvider] = useState<ProviderProfile | null>(null);
@@ -153,18 +155,19 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
           earningsThisMonth: 0,
         });
       } else {
-        // Fallback for demo
+        // No provider profile found - show setup prompt
         setProvider({
           id: providerId,
-          name: 'Dr. Sarah Mitchell',
-          credentials: 'BCBA, LBA',
+          name: 'Complete Your Profile',
+          credentials: '',
           type: 'bcba',
-          specialties: ['Autism Spectrum', 'Early Intervention', 'Parent Training'],
-          rating: 4.9,
-          reviewCount: 127,
+          specialties: [],
+          rating: 0,
+          reviewCount: 0,
           totalPatients: 0,
           sessionsThisMonth: 0,
-          earningsThisMonth: 0
+          earningsThisMonth: 0,
+          needsSetup: true,
         });
       }
 
@@ -222,42 +225,7 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
         }
       }
 
-      // If no patients in DB, use demo data
-      if (patientsList.length === 0) {
-        patientsList.push(
-          {
-            id: '1',
-            childName: 'Emma Thompson',
-            parentName: 'Jennifer Thompson',
-            age: 6,
-            conditions: ['Autism Level 1', 'Sensory Processing'],
-            profileAccess: 'granted',
-            nextSession: new Date(Date.now() + 2 * 60 * 60 * 1000),
-            totalSessions: 12,
-            lastSessionNotes: 'Excellent progress with turn-taking. Continue reinforcing joint attention activities.'
-          },
-          {
-            id: '2',
-            childName: 'Liam Chen',
-            parentName: 'David Chen',
-            age: 4,
-            conditions: ['Autism Level 2', 'Speech Delay'],
-            profileAccess: 'granted',
-            nextSession: new Date(Date.now() + 24 * 60 * 60 * 1000),
-            totalSessions: 8,
-          },
-          {
-            id: '3',
-            childName: 'Sofia Rodriguez',
-            parentName: 'Maria Rodriguez',
-            age: 7,
-            conditions: ['ADHD Combined', 'Anxiety'],
-            profileAccess: 'pending',
-            totalSessions: 0
-          }
-        );
-      }
-
+      // Set patients - empty list if no patients found (no demo data)
       setPatients(patientsList);
 
       // Fetch provider's sessions
@@ -359,8 +327,8 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
           ytd: Math.round(ytd / 100),
         });
       } else {
-        // Demo earnings
-        setEarnings({ thisMonth: 4158, lastMonth: 3856, pending: 594, ytd: 28420 });
+        // No earnings data - show zeros
+        setEarnings({ thisMonth: 0, lastMonth: 0, pending: 0, ytd: 0 });
       }
 
       // Update provider stats
@@ -368,7 +336,7 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
         ...prev,
         totalPatients: patientsList.length,
         sessionsThisMonth: sessionsData?.length || sessionsList.length,
-        earningsThisMonth: earnings.thisMonth || 4158,
+        earningsThisMonth: earnings.thisMonth || 0,
       } : null);
 
     } catch (error) {
@@ -503,7 +471,10 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
                   {provider.name.split(' ').map(n => n[0]).join('')}
                 </div>
                 <div className="hidden sm:block">
-                  <p className="text-sm font-medium text-neutral-900 dark:text-white">{provider.name}</p>
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-medium text-neutral-900 dark:text-white">{provider.name}</p>
+                    <VerifiedBadge status="verified" />
+                  </div>
                   <p className="text-xs text-neutral-500 dark:text-slate-400">{provider.credentials}</p>
                 </div>
               </div>
@@ -519,6 +490,7 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
             {[
               { id: 'dashboard', label: 'Dashboard', icon: Home },
               { id: 'patients', label: 'Patients', icon: Users },
+              { id: 'ai-summaries', label: 'AI Summaries', icon: Brain },
               { id: 'sessions', label: 'Sessions', icon: Calendar },
               { id: 'earnings', label: 'Earnings', icon: DollarSign },
               { id: 'settings', label: 'Settings', icon: Settings }
@@ -934,6 +906,84 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
           </div>
         )}
 
+        {activeTab === 'ai-summaries' && (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-xl font-semibold text-neutral-900 dark:text-white">AI Patient Summaries</h2>
+                <p className="text-neutral-500 dark:text-slate-400 mt-1">
+                  AI-generated insights for your patients. Submit care plan suggestions that parents can approve.
+                </p>
+              </div>
+            </div>
+
+            {/* Patient selector for AI summaries */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Patient list sidebar */}
+              <Card className="p-4 lg:col-span-1">
+                <h3 className="font-semibold text-neutral-900 dark:text-white mb-4">Select Patient</h3>
+                <div className="space-y-2">
+                  {patients
+                    .filter(p => p.profileAccess === 'granted')
+                    .map(patient => (
+                      <button
+                        key={patient.id}
+                        onClick={() => setSelectedPatient(patient)}
+                        className={`w-full text-left p-3 rounded-lg transition-colors ${
+                          selectedPatient?.id === patient.id
+                            ? 'bg-teal-100 border-teal-300 dark:bg-teal-900/30'
+                            : 'bg-neutral-50 hover:bg-neutral-100 dark:bg-slate-800 dark:hover:bg-slate-700'
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-violet-100 to-purple-100 flex items-center justify-center">
+                            <span className="text-sm font-semibold text-violet-700">
+                              {patient.childName.split(' ').map(n => n[0]).join('')}
+                            </span>
+                          </div>
+                          <div>
+                            <p className="font-medium text-neutral-900 dark:text-white">{patient.childName}</p>
+                            <p className="text-sm text-neutral-500 dark:text-slate-400">{patient.age} years old</p>
+                          </div>
+                        </div>
+                      </button>
+                    ))}
+                  {patients.filter(p => p.profileAccess === 'granted').length === 0 && (
+                    <div className="text-center py-8 text-neutral-500">
+                      <Lock className="w-8 h-8 mx-auto mb-2 text-neutral-300" />
+                      <p>No patients with granted access</p>
+                      <p className="text-sm mt-1">Request access from patients' parents first</p>
+                    </div>
+                  )}
+                </div>
+              </Card>
+
+              {/* AI Summary panel */}
+              <div className="lg:col-span-2">
+                {selectedPatient && selectedPatient.profileAccess === 'granted' ? (
+                  <PatientAISummary
+                    patientId={selectedPatient.id}
+                    childName={selectedPatient.childName}
+                    parentId="parent-123"
+                    providerId={providerId}
+                  />
+                ) : (
+                  <Card className="p-12 text-center">
+                    <Brain className="w-16 h-16 mx-auto mb-4 text-neutral-200 dark:text-slate-600" />
+                    <h3 className="text-lg font-medium text-neutral-900 dark:text-white mb-2">
+                      Select a Patient
+                    </h3>
+                    <p className="text-neutral-500 dark:text-slate-400 max-w-md mx-auto">
+                      Choose a patient from the list to view their AI-generated summary,
+                      behavior patterns, progress highlights, and submit care plan suggestions.
+                    </p>
+                  </Card>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
         {activeTab === 'earnings' && (
           <div className="space-y-3 sm:space-y-4 sm:space-y-6">
             <div className="flex items-center justify-between">
@@ -1043,6 +1093,14 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
                   <Input defaultValue="$99/session" />
                 </div>
               </div>
+            </Card>
+
+            <Card className="p-4 sm:p-5 md:p-6">
+              <h3 className="font-semibold text-neutral-900 dark:text-white mb-4">Credentials & Verification</h3>
+              <p className="text-neutral-600 dark:text-slate-400 mb-4 text-sm">
+                Verified credentials build trust with families and enable insurance billing
+              </p>
+              <CredentialBadge providerId={providerId} showDetails={true} />
             </Card>
 
             <Card className="p-4 sm:p-5 md:p-6">

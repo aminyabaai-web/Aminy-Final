@@ -76,13 +76,14 @@ export const TIER_LIMITS: Record<TierType, {
 }> = {
   // Free: Discovery tier - risk-free intro, builds habit/trust
   // MUST MATCH tier-utils.ts getAIMessageLimit()
+  // NOTE: Free tier MUST have memory to feel personal - otherwise users churn immediately
   free: {
     messagesPerDay: 5,            // 5 messages/day (matches tier-utils.ts)
-    memoryDays: 0,                // No context memory - generic responses
-    maxDocuments: 0,              // No vault access
-    maxFacts: 10,                 // Minimal facts for basic personalization
+    memoryDays: 7,                // 7-day memory for personalization (critical for activation)
+    maxDocuments: 0,              // No vault access (upgrade incentive)
+    maxFacts: 25,                 // Basic facts for personalization
     canLearnFromVault: false,
-    contextTokens: 1500,          // Limited context
+    contextTokens: 2500,          // Enough context for helpful responses
   },
   // Starter: Entry Empowerment - $6.99/mo
   // MUST MATCH tier-utils.ts getAIMessageLimit()
