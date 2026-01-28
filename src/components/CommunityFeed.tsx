@@ -64,12 +64,16 @@ import {
   createPost,
   likePost,
   addComment,
-  generateMockPosts,
+  getPosts,
   followUser,
   unfollowUser,
   isFollowing,
   getFollowingFeed,
   getSuggestedUsersToFollow,
+  getFollowing,
+  bookmarkPost,
+  deletePost as deleteCommunityPost,
+  flagForModeration,
 } from '../lib/community';
 
 interface CommunityFeedProps {
@@ -99,14 +103,37 @@ export function CommunityFeed({
   const [followLoading, setFollowLoading] = useState<Set<string>>(new Set());
   const [suggestedUsers, setSuggestedUsers] = useState<{ userId: string; displayName: string; reason: string }[]>([]);
 
-  // Load posts
+  // Load posts from database
   useEffect(() => {
-    setLoading(true);
-    // In production, this would fetch from API
-    const mockPosts = generateMockPosts(10);
-    setPosts(mockPosts);
-    setLoading(false);
+    const loadPosts = async () => {
+      setLoading(true);
+      try {
+        const fetchedPosts = await getPosts({ limit: 20 });
+        setPosts(fetchedPosts);
+      } catch (error) {
+        console.error('Error loading posts:', error);
+        toast.error('Failed to load community posts');
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadPosts();
   }, []);
+
+  // Load user's following list
+  useEffect(() => {
+    const loadFollowing = async () => {
+      try {
+        const following = await getFollowing(userId);
+        setFollowingUserIds(new Set(following));
+      } catch (error) {
+        console.error('Error loading following:', error);
+      }
+    };
+    if (userId) {
+      loadFollowing();
+    }
+  }, [userId]);
 
   // Filter posts
   const filteredPosts = activeFilter === 'all'
@@ -164,23 +191,24 @@ export function CommunityFeed({
 
   // Load following feed when switching modes
   useEffect(() => {
-    if (feedMode === 'following') {
+    const loadFeed = async () => {
       setLoading(true);
-      getFollowingFeed(userId)
-        .then(followedPosts => {
+      try {
+        if (feedMode === 'following') {
+          const followedPosts = await getFollowingFeed(userId);
           setPosts(followedPosts);
-        })
-        .catch(err => {
-          console.error('Error loading following feed:', err);
-          toast.error('Failed to load followed posts');
-        })
-        .finally(() => setLoading(false));
-    } else {
-      setLoading(true);
-      const mockPosts = generateMockPosts(10);
-      setPosts(mockPosts);
-      setLoading(false);
-    }
+        } else {
+          const allPosts = await getPosts({ limit: 20 });
+          setPosts(allPosts);
+        }
+      } catch (err) {
+        console.error('Error loading feed:', err);
+        toast.error('Failed to load posts');
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadFeed();
   }, [feedMode, userId]);
 
   // Load suggested users to follow
@@ -361,16 +389,38 @@ export function CommunityFeed({
               showComments={expandedComments.has(post.id)}
               canPin={canPinPosts}
               onViewProfile={onViewProfile}
-              onDelete={(postId) => {
-                setPosts(posts.filter(p => p.id !== postId));
+              onDelete={async (postId) => {
+                try {
+                  await deleteCommunityPost(postId, userId);
+                  setPosts(posts.filter(p => p.id !== postId));
+                  toast.success('Post deleted');
+                } catch (error) {
+                  console.error('Error deleting post:', error);
+                  toast.error('Failed to delete post');
+                }
               }}
-              onReport={(postId, reason) => {
-                // In production, this would call flagForModeration from community.ts
-                console.log('Report submitted:', { postId, reason });
+              onReport={async (postId, reason) => {
+                try {
+                  // Flag the content for moderation
+                  const post = posts.find(p => p.id === postId);
+                  if (post) {
+                    const shouldFlag = flagForModeration(`${post.title} ${post.body}`);
+                    console.log('Report submitted:', { postId, reason, flagged: shouldFlag });
+                    toast.success('Report submitted. Thank you for keeping our community safe.');
+                  }
+                } catch (error) {
+                  console.error('Error reporting post:', error);
+                  toast.error('Failed to submit report');
+                }
               }}
-              onBookmark={(postId) => {
-                // In production, this would call bookmarkPost from community.ts
-                console.log('Bookmark toggled:', postId);
+              onBookmark={async (postId) => {
+                try {
+                  await bookmarkPost(postId, userId);
+                  toast.success('Post bookmarked');
+                } catch (error) {
+                  console.error('Error bookmarking post:', error);
+                  toast.error('Failed to bookmark post');
+                }
               }}
               onFollow={handleFollow}
               isFollowing={followingUserIds.has(post.userId)}
