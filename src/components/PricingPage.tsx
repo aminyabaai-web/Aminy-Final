@@ -152,7 +152,7 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
 
         {/* Forta Differentiator Banner - VC-informed positioning */}
         <div className="bg-gradient-to-r from-teal-50 to-emerald-50 border border-teal-200 rounded-xl p-6 mb-8 max-w-4xl mx-auto">
-          <div className="flex items-start gap-4">
+          <div className="flex items-start gap-3 sm:gap-4">
             <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center flex-shrink-0">
               <Sparkles className="w-6 h-6 text-teal-600" />
             </div>
@@ -192,7 +192,7 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
         </div>
 
         {/* Pricing Cards */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-12">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-3 sm:gap-4 sm:gap-6 mb-12">
           {tiers.map((tier) => {
             const Icon = tier.icon;
             const isSelected = selectedTier === tier.id;
@@ -231,17 +231,17 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
                     <div className={`w-8 h-8 rounded-full bg-white flex items-center justify-center`}>
                       <Icon className={`w-4 h-4 ${tier.accentColor}`} />
                     </div>
-                    <h3 className="text-xl font-semibold text-slate-900">{tier.name}</h3>
+                    <h3 className="text-lg sm:text-xl font-semibold text-slate-900">{tier.name}</h3>
                   </div>
 
                   <p className="text-xs text-slate-600 mb-3">{tier.description}</p>
 
                   <div className="flex items-baseline gap-1">
                     {tier.price === 0 ? (
-                      <span className="text-3xl font-bold text-slate-900">Free</span>
+                      <span className="text-2xl sm:text-3xl font-bold text-slate-900">Free</span>
                     ) : (
                       <>
-                        <span className="text-3xl font-bold text-slate-900">${tier.price}</span>
+                        <span className="text-2xl sm:text-3xl font-bold text-slate-900">${tier.price}</span>
                         <span className="text-slate-500 text-sm">/{tier.period}</span>
                       </>
                     )}
@@ -318,7 +318,7 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
 
         {/* Why Aminy Works Section */}
         <div className="mb-12">
-          <div className="text-center mb-6">
+          <div className="text-center mb-4 sm:mb-6">
             <Badge className="bg-teal-100 text-teal-800 mb-3">Why Aminy Works</Badge>
             <h2 className="text-2xl font-semibold text-slate-900 mb-2">
               Built specifically for your family's journey
@@ -328,7 +328,7 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 max-w-4xl mx-auto">
             {AMINY_ADVANTAGES.map((item, index) => {
               const Icon = item.icon;
               return (
@@ -347,14 +347,14 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
             })}
           </div>
 
-          <p className="text-center text-sm text-slate-500 mt-6 max-w-xl mx-auto">
+          <p className="text-center text-sm text-slate-500 mt-4 sm:mt-6 max-w-xl mx-auto">
             The companion is the hook. The clinical utility is the moat. We're building the system of record that clinics and payers want to integrate with.
           </p>
         </div>
 
         {/* Guarantee Section */}
         <div className="bg-gradient-to-r from-accent/5 to-teal-50 border border-accent/20 rounded-xl p-6 mb-8">
-          <div className="flex items-start gap-4">
+          <div className="flex items-start gap-3 sm:gap-4">
             <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0">
               <Shield className="w-6 h-6 text-accent" />
             </div>
@@ -372,27 +372,27 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
         </div>
 
         {/* Trust Indicators */}
-        <div className="grid sm:grid-cols-3 gap-6 mb-8">
+        <div className="grid sm:grid-cols-3 gap-3 sm:gap-4 sm:gap-6 mb-8">
           <div className="text-center">
-            <div className="text-3xl font-bold text-accent mb-1">7 days</div>
+            <div className="text-2xl sm:text-3xl font-bold text-accent mb-1">7 days</div>
             <p className="text-sm text-slate-600">Free trial period</p>
           </div>
           <div className="text-center">
-            <div className="text-3xl font-bold text-accent mb-1">No card</div>
+            <div className="text-2xl sm:text-3xl font-bold text-accent mb-1">No card</div>
             <p className="text-sm text-slate-600">Required to start</p>
           </div>
           <div className="text-center">
-            <div className="text-3xl font-bold text-accent mb-1">Cancel</div>
+            <div className="text-2xl sm:text-3xl font-bold text-accent mb-1">Cancel</div>
             <p className="text-sm text-slate-600">Anytime, 1-click</p>
           </div>
         </div>
 
         {/* FAQ Section */}
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-2xl font-semibold text-slate-900 mb-6 text-center">Common Questions</h2>
+          <h2 className="text-2xl font-semibold text-slate-900 mb-4 sm:mb-6 text-center">Common Questions</h2>
           
-          <div className="space-y-4">
-            <Card className="p-4">
+          <div className="space-y-3 sm:space-y-4">
+            <Card className="p-3 sm:p-4">
               <h4 className="font-semibold text-slate-900 mb-2">What happens after my free trial?</h4>
               <p className="text-sm text-slate-600">
                 After your 7-day trial, you'll continue on your chosen plan (Core $14.99/mo, Pro $29.99/mo, or Pro+ $49.99/mo).
@@ -400,7 +400,7 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
               </p>
             </Card>
 
-            <Card className="p-4">
+            <Card className="p-3 sm:p-4">
               <h4 className="font-semibold text-slate-900 mb-2">Can I switch plans later?</h4>
               <p className="text-sm text-slate-600">
                 Absolutely! You can upgrade or downgrade anytime from your account settings. 
@@ -408,7 +408,7 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
               </p>
             </Card>
 
-            <Card className="p-4">
+            <Card className="p-3 sm:p-4">
               <h4 className="font-semibold text-slate-900 mb-2">Is my insurance accepted?</h4>
               <p className="text-sm text-slate-600">
                 Most plans cover ABA services under behavioral health. Plus tier includes insurance
@@ -436,7 +436,7 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
               </div>
             </Card>
 
-            <Card className="p-4">
+            <Card className="p-3 sm:p-4">
               <h4 className="font-semibold text-slate-900 mb-2">What's included in "ABA principles"?</h4>
               <p className="text-sm text-slate-600">
                 Applied Behavior Analysis (ABA) includes positive reinforcement, visual cues, 

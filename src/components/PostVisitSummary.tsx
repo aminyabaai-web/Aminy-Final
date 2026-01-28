@@ -20,7 +20,7 @@ export function PostVisitSummary({
   actionItems 
 }: PostVisitSummaryProps) {
   return (
-    <Card className="p-6">
+    <Card className="p-4 sm:p-5 md:p-6">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-semibold">Visit Summary</h3>
         <Badge>AI-Generated</Badge>

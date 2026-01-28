@@ -230,7 +230,7 @@ export function VideoRoom({
           <p className="text-sm text-white/60 mt-2">{callState.error}</p>
           <button
             onClick={onEnd}
-            className="mt-6 px-6 py-2 bg-white text-gray-900 rounded-lg font-medium"
+            className="mt-4 sm:mt-6 px-6 py-2 bg-white text-gray-900 rounded-lg font-medium"
           >
             Return to Dashboard
           </button>
@@ -345,7 +345,7 @@ export function VideoRoom({
 
       {/* Controls */}
       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 pb-8">
-        <div className="flex items-center justify-center gap-4">
+        <div className="flex items-center justify-center gap-3 sm:gap-4">
           {/* Mute */}
           <button
             onClick={handleToggleAudio}
@@ -418,7 +418,7 @@ export function VideoRoom({
               </p>
             </div>
 
-            <div className="flex gap-3 mt-6">
+            <div className="flex gap-3 mt-4 sm:mt-6">
               <button
                 onClick={() => setShowEndConfirm(false)}
                 className="flex-1 py-3 px-4 border border-gray-200 rounded-xl font-medium text-gray-700 hover:bg-gray-50 transition-colors"

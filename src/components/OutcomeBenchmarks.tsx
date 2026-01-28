@@ -129,7 +129,7 @@ export function OutcomeBenchmarks({
       </div>
 
       {/* Overall Percentile Hero */}
-      <div className="mb-6 p-4 bg-gradient-to-r from-teal-50 to-blue-50 rounded-xl border border-teal-200">
+      <div className="mb-4 sm:mb-6 p-4 bg-gradient-to-r from-teal-50 to-blue-50 rounded-xl border border-teal-200">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm text-teal-700 mb-1">Overall Progress</p>
@@ -155,7 +155,7 @@ export function OutcomeBenchmarks({
       </div>
 
       {/* Category Breakdown */}
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         <h4 className="font-medium text-gray-700 flex items-center gap-2">
           <Target className="w-4 h-4 text-teal-600" />
           Progress by Area
@@ -307,7 +307,7 @@ export function BenchmarkWidget({
             {childName}'s Progress
           </p>
           <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-teal-900">
+            <span className="text-xl sm:text-2xl font-bold text-teal-900">
               {overallPercentile}
             </span>
             <span className="text-sm text-teal-600">percentile</span>

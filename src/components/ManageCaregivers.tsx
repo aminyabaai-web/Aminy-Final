@@ -178,7 +178,7 @@ export function ManageCaregivers({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -346,7 +346,7 @@ export function ManageCaregivers({
           <Card className="w-full max-w-md p-6">
             <h3 className="text-lg font-semibold mb-4">Invite Caregiver</h3>
 
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               <div>
                 <label className="text-sm font-medium block mb-1">Email Address</label>
                 <input

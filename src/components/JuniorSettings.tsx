@@ -32,7 +32,7 @@ export function JuniorSettings({ onBack, childName }: JuniorSettingsProps) {
     <div className="min-h-screen bg-white pb-24">
       {/* Header */}
       <div className="sticky top-0 z-10 bg-white border-b border-gray-200">
-        <div className="flex items-center gap-4 px-4 py-4">
+        <div className="flex items-center gap-3 sm:gap-4 px-4 py-4">
           <Button
             variant="ghost"
             size="sm"
@@ -50,10 +50,10 @@ export function JuniorSettings({ onBack, childName }: JuniorSettingsProps) {
       </div>
 
       {/* Content */}
-      <div className="p-4 space-y-6 max-w-2xl mx-auto">
+      <div className="p-4 space-y-3 sm:space-y-4 sm:space-y-6 max-w-2xl mx-auto">
         {/* Junior Mode Status */}
         <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-6 border border-purple-100">
-          <div className="flex items-start justify-between gap-4">
+          <div className="flex items-start justify-between gap-3 sm:gap-4">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
                 <Shield className="w-5 h-5 text-purple-600" />
@@ -75,7 +75,7 @@ export function JuniorSettings({ onBack, childName }: JuniorSettingsProps) {
 
         {/* Activity Notifications */}
         <div className="bg-white rounded-xl p-6 border border-gray-200">
-          <div className="flex items-start justify-between gap-4 mb-4">
+          <div className="flex items-start justify-between gap-3 sm:gap-4 mb-4">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
                 <Bell className="w-5 h-5 text-blue-600" />
@@ -98,7 +98,7 @@ export function JuniorSettings({ onBack, childName }: JuniorSettingsProps) {
 
         {/* Time Limits */}
         <div className="bg-white rounded-xl p-6 border border-gray-200">
-          <div className="mb-6">
+          <div className="mb-4 sm:mb-6">
             <div className="flex items-center gap-2 mb-2">
               <Clock className="w-5 h-5 text-teal-600" />
               <Label className="font-semibold">Daily Time Limit</Label>
@@ -108,9 +108,9 @@ export function JuniorSettings({ onBack, childName }: JuniorSettingsProps) {
             </p>
           </div>
           
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-2xl font-bold text-accent">{settings.timeLimit}</span>
+              <span className="text-xl sm:text-2xl font-bold text-accent">{settings.timeLimit}</span>
               <span className="text-sm text-muted-foreground">minutes per day</span>
             </div>
             <Slider
@@ -132,8 +132,8 @@ export function JuniorSettings({ onBack, childName }: JuniorSettingsProps) {
 
         {/* Content Restrictions */}
         <div className="bg-white rounded-xl p-6 border border-gray-200">
-          <div className="space-y-4">
-            <div className="flex items-start justify-between gap-4">
+          <div className="space-y-3 sm:space-y-4">
+            <div className="flex items-start justify-between gap-3 sm:gap-4">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-2">
                   <Eye className="w-5 h-5 text-green-600" />
@@ -155,7 +155,7 @@ export function JuniorSettings({ onBack, childName }: JuniorSettingsProps) {
 
             <div className="h-px bg-gray-200" />
 
-            <div className="flex items-start justify-between gap-4">
+            <div className="flex items-start justify-between gap-3 sm:gap-4">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-2">
                   <Lock className="w-5 h-5 text-amber-600" />
@@ -179,7 +179,7 @@ export function JuniorSettings({ onBack, childName }: JuniorSettingsProps) {
 
         {/* Activity Tracking */}
         <div className="bg-blue-50 rounded-xl p-6 border border-blue-100">
-          <div className="flex items-start justify-between gap-4">
+          <div className="flex items-start justify-between gap-3 sm:gap-4">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
                 <Shield className="w-5 h-5 text-blue-600" />

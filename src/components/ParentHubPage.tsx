@@ -291,7 +291,7 @@ export function ParentHubPage({ onNavigate, userTier }: ParentHubPageProps) {
   const renderWelcomeStrip = () => (
     <Card className="p-6 bg-gradient-to-r from-accent/5 to-accent/10 border-accent/20">
       <div className="text-center space-y-3">
-        <h2 className="text-xl font-semibold text-slate-900">Parent Hub — practical support from families and experts.</h2>
+        <h2 className="text-lg sm:text-xl font-semibold text-slate-900">Parent Hub — practical support from families and experts.</h2>
         <p className="text-sm text-slate-600">Keep it kind. No medical advice is provided on Aminy.</p>
         <div className="flex flex-wrap justify-center gap-2">
           <Button 
@@ -324,9 +324,9 @@ export function ParentHubPage({ onNavigate, userTier }: ParentHubPageProps) {
   );
 
   const renderCommunityHighlights = () => (
-    <Card className="p-6">
+    <Card className="p-4 sm:p-5 md:p-6">
       <h3 className="text-lg font-semibold text-slate-900 mb-4">Community Highlights</h3>
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         {communityHighlights.slice(0, 4).map((post) => (
           <div key={post.id} className="border-b border-gray-100 last:border-0 pb-4 last:pb-0">
             <div className="flex items-start space-x-3">
@@ -378,7 +378,7 @@ export function ParentHubPage({ onNavigate, userTier }: ParentHubPageProps) {
   );
 
   const renderUpcomingEvents = () => (
-    <Card className="p-6">
+    <Card className="p-4 sm:p-5 md:p-6">
       <h3 className="text-lg font-semibold text-slate-900 mb-4">Upcoming Events</h3>
       <div className="space-y-3">
         {upcomingEvents.map((event) => (
@@ -410,7 +410,7 @@ export function ParentHubPage({ onNavigate, userTier }: ParentHubPageProps) {
   );
 
   const renderExpertPicks = () => (
-    <Card className="p-6">
+    <Card className="p-4 sm:p-5 md:p-6">
       <h3 className="text-lg font-semibold text-slate-900 mb-4">Expert Picks</h3>
       <div className="space-y-3">
         {expertPicks.map((resource) => (
@@ -443,7 +443,7 @@ export function ParentHubPage({ onNavigate, userTier }: ParentHubPageProps) {
   );
 
   const renderQuickActions = () => (
-    <Card className="p-6">
+    <Card className="p-4 sm:p-5 md:p-6">
       <h3 className="text-lg font-semibold text-slate-900 mb-4">Quick Actions</h3>
       <div className="space-y-3">
         <Button 
@@ -473,7 +473,7 @@ export function ParentHubPage({ onNavigate, userTier }: ParentHubPageProps) {
   );
 
   const renderCommunityStats = () => (
-    <Card className="p-6">
+    <Card className="p-4 sm:p-5 md:p-6">
       <div className="text-center space-y-3">
         <h3 className="text-lg font-semibold text-slate-900">Community</h3>
         <div className="text-xs text-slate-600">
@@ -484,11 +484,11 @@ export function ParentHubPage({ onNavigate, userTier }: ParentHubPageProps) {
   );
 
   const renderAskShare = () => (
-    <div className="max-w-2xl mx-auto space-y-6">
+    <div className="max-w-2xl mx-auto space-y-3 sm:space-y-4 sm:space-y-6">
       {/* Post Composer */}
-      <Card className="p-6">
-        <h2 className="text-xl font-semibold text-slate-900 mb-4">Ask & Share</h2>
-        <div className="space-y-4">
+      <Card className="p-4 sm:p-5 md:p-6">
+        <h2 className="text-lg sm:text-xl font-semibold text-slate-900 mb-4">Ask & Share</h2>
+        <div className="space-y-3 sm:space-y-4">
           <div>
             <Input 
               placeholder="Title (optional but encouraged for questions)"
@@ -579,7 +579,7 @@ export function ParentHubPage({ onNavigate, userTier }: ParentHubPageProps) {
       </Card>
 
       {/* Feed */}
-      <Card className="p-6">
+      <Card className="p-4 sm:p-5 md:p-6">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold text-slate-900">Recent Discussions</h3>
           <div className="flex space-x-2">
@@ -590,7 +590,7 @@ export function ParentHubPage({ onNavigate, userTier }: ParentHubPageProps) {
           </div>
         </div>
         
-        <div className="space-y-6">
+        <div className="space-y-3 sm:space-y-4 sm:space-y-6">
           {communityHighlights.map((post) => (
             <div key={post.id} className="border-b border-gray-100 last:border-0 pb-6 last:pb-0">
               <div className="flex items-start space-x-3">
@@ -644,7 +644,7 @@ export function ParentHubPage({ onNavigate, userTier }: ParentHubPageProps) {
   );
 
   const renderExpertLibrary = () => (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="max-w-4xl mx-auto space-y-3 sm:space-y-4 sm:space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-semibold text-slate-900">Expert Library</h2>
         <div className="flex items-center space-x-2">
@@ -660,9 +660,9 @@ export function ParentHubPage({ onNavigate, userTier }: ParentHubPageProps) {
         </div>
       </div>
 
-      <div className="grid gap-6">
+      <div className="grid gap-3 sm:gap-4 sm:gap-6">
         {expertLibraryShelves.map((shelf) => (
-          <Card key={shelf.id} className="p-6">
+          <Card key={shelf.id} className="p-4 sm:p-5 md:p-6">
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h3 className="text-lg font-semibold text-slate-900">{shelf.title}</h3>
@@ -721,7 +721,7 @@ export function ParentHubPage({ onNavigate, userTier }: ParentHubPageProps) {
   );
 
   const renderEvents = () => (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="max-w-4xl mx-auto space-y-3 sm:space-y-4 sm:space-y-6">
       <h2 className="text-2xl font-semibold text-slate-900">Events</h2>
       
       <Tabs defaultValue="virtual" className="w-full">
@@ -730,9 +730,9 @@ export function ParentHubPage({ onNavigate, userTier }: ParentHubPageProps) {
           <TabsTrigger value="local">Local</TabsTrigger>
         </TabsList>
         
-        <TabsContent value="virtual" className="space-y-4">
+        <TabsContent value="virtual" className="space-y-3 sm:space-y-4">
           {upcomingEvents.filter(event => event.type === 'virtual').map((event) => (
-            <Card key={event.id} className="p-6">
+            <Card key={event.id} className="p-4 sm:p-5 md:p-6">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center space-x-2 mb-2">
@@ -759,9 +759,9 @@ export function ParentHubPage({ onNavigate, userTier }: ParentHubPageProps) {
           ))}
         </TabsContent>
         
-        <TabsContent value="local" className="space-y-4">
+        <TabsContent value="local" className="space-y-3 sm:space-y-4">
           {upcomingEvents.filter(event => event.type === 'local').map((event) => (
-            <Card key={event.id} className="p-6">
+            <Card key={event.id} className="p-4 sm:p-5 md:p-6">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center space-x-2 mb-2">
@@ -796,7 +796,7 @@ export function ParentHubPage({ onNavigate, userTier }: ParentHubPageProps) {
   );
 
   const renderDocumentVault = () => (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="max-w-4xl mx-auto space-y-3 sm:space-y-4 sm:space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-semibold text-slate-900">Document Vault</h2>
         <Button variant="outline" onClick={() => onNavigate?.('vault')}>
@@ -804,7 +804,7 @@ export function ParentHubPage({ onNavigate, userTier }: ParentHubPageProps) {
         </Button>
       </div>
       
-      <Card className="p-6">
+      <Card className="p-4 sm:p-5 md:p-6">
         <h3 className="text-lg font-semibold text-slate-900 mb-4">Recently saved to your Vault</h3>
         <div className="space-y-3">
           <div className="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
@@ -857,16 +857,16 @@ export function ParentHubPage({ onNavigate, userTier }: ParentHubPageProps) {
   );
 
   const renderHubHome = () => (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       {renderWelcomeStrip()}
       
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 space-y-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 sm:gap-6">
+        <div className="lg:col-span-2 space-y-3 sm:space-y-4 sm:space-y-6">
           {renderCommunityHighlights()}
           {renderExpertPicks()}
         </div>
         
-        <div className="space-y-6">
+        <div className="space-y-3 sm:space-y-4 sm:space-y-6">
           {renderUpcomingEvents()}
           {renderQuickActions()}
           {renderCommunityStats()}
@@ -896,7 +896,7 @@ export function ParentHubPage({ onNavigate, userTier }: ParentHubPageProps) {
                     <Users className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <h1 className="text-xl font-semibold text-slate-900">Parent Hub</h1>
+                    <h1 className="text-lg sm:text-xl font-semibold text-slate-900">Parent Hub</h1>
                     <p className="text-sm text-slate-600">Practical guidance from families and experts—safe, kind, and moderated.</p>
                   </div>
                 </div>

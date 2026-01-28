@@ -502,7 +502,7 @@ export function SessionPrepDigest({
   if (isLoading) {
     return (
       <Card className="p-8">
-        <div className="flex flex-col items-center justify-center gap-4">
+        <div className="flex flex-col items-center justify-center gap-3 sm:gap-4">
           <div className="relative">
             <Brain className="w-12 h-12 text-teal-600" />
             <Sparkles className="w-6 h-6 text-yellow-500 absolute -top-1 -right-1 animate-pulse" />
@@ -540,16 +540,16 @@ export function SessionPrepDigest({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       {/* Header */}
       <Card className="p-6 bg-gradient-to-br from-teal-50 to-cyan-50 dark:from-teal-900/20 dark:to-cyan-900/20 border-teal-200 dark:border-teal-800">
         <div className="flex items-start justify-between">
-          <div className="flex items-start gap-4">
+          <div className="flex items-start gap-3 sm:gap-4">
             <div className="w-12 h-12 bg-teal-100 dark:bg-teal-900/50 rounded-full flex items-center justify-center">
               <Brain className="w-6 h-6 text-teal-600" />
             </div>
             <div>
-              <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
+              <h1 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">
                 Session Prep for {digest.childProfile.name}
               </h1>
               <p className="text-gray-600 dark:text-slate-400 flex items-center gap-2 mt-1">
@@ -583,21 +583,21 @@ export function SessionPrepDigest({
         </div>
 
         {/* Quick stats */}
-        <div className="grid grid-cols-3 gap-4 mt-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 mt-4 sm:mt-6">
           <div className="text-center">
-            <p className="text-2xl font-bold text-gray-900 dark:text-white">
+            <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
               {digest.sessionContext.sessionsThisMonth}
             </p>
             <p className="text-xs text-gray-500 dark:text-slate-400">Sessions this month</p>
           </div>
           <div className="text-center">
-            <p className="text-2xl font-bold text-gray-900 dark:text-white">
+            <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
               {digest.behaviorSummary.incidentsLast7Days}
             </p>
             <p className="text-xs text-gray-500 dark:text-slate-400">Incidents (7 days)</p>
           </div>
           <div className="text-center">
-            <p className="text-2xl font-bold text-gray-900 dark:text-white">
+            <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
               {digest.sessionContext.attendanceRate}%
             </p>
             <p className="text-xs text-gray-500 dark:text-slate-400">Attendance rate</p>
@@ -644,7 +644,7 @@ export function SessionPrepDigest({
         expanded={expandedSections.has('behavior')}
         onToggle={() => toggleSection('behavior')}
       >
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid md:grid-cols-2 gap-3 sm:gap-4">
           <div>
             <p className="text-sm font-medium text-gray-500 dark:text-slate-400 mb-2">Top Behaviors</p>
             <div className="space-y-2">
@@ -684,7 +684,7 @@ export function SessionPrepDigest({
         expanded={expandedSections.has('goals')}
         onToggle={() => toggleSection('goals')}
       >
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           {digest.goalProgress.map((goal, i) => (
             <div key={i} className="p-3 bg-gray-50 dark:bg-slate-800 rounded-lg">
               <div className="flex items-center justify-between mb-2">
@@ -803,7 +803,7 @@ export function SessionPrepDigest({
         expanded={expandedSections.has('profile')}
         onToggle={() => toggleSection('profile')}
       >
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid md:grid-cols-2 gap-3 sm:gap-4">
           <div>
             <p className="text-sm text-gray-500 dark:text-slate-400">Communication</p>
             <p className="font-medium text-gray-900 dark:text-white capitalize">
@@ -875,7 +875,7 @@ function CollapsibleCard({
           <ChevronRight className="w-5 h-5 text-gray-400" />
         )}
       </button>
-      {expanded && <div className="p-4">{children}</div>}
+      {expanded && <div className="p-3 sm:p-4">{children}</div>}
     </Card>
   );
 }

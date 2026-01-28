@@ -231,14 +231,14 @@ export function TransformationSection() {
   return (
     <div className="py-16 px-4 bg-gray-50">
       <div className="max-w-4xl mx-auto">
-        <h2 className="text-2xl md:text-3xl font-bold text-center text-primary mb-4">
+        <h2 className="text-2xl md:text-2xl sm:text-3xl font-bold text-center text-primary mb-4">
           Life Before vs. After Aminy
         </h2>
         <p className="text-center text-muted-foreground mb-12 max-w-lg mx-auto">
           Real transformations from parents just like you
         </p>
 
-        <div className="space-y-6">
+        <div className="space-y-3 sm:space-y-4 sm:space-y-6">
           {AHA_MOMENTS.map((moment, i) => (
             <motion.div
               key={i}
@@ -286,11 +286,11 @@ export function StatsSection() {
   return (
     <div className="py-16 px-4 bg-gradient-to-b from-white to-accent/5">
       <div className="max-w-4xl mx-auto">
-        <h2 className="text-2xl md:text-3xl font-bold text-center text-primary mb-12">
+        <h2 className="text-2xl md:text-2xl sm:text-3xl font-bold text-center text-primary mb-12">
           Real Results for Real Families
         </h2>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 sm:gap-6">
           {TRANSFORMATION_STATS.map((stat, i) => (
             <motion.div
               key={i}
@@ -337,7 +337,7 @@ export function DemoTeaser({ onTryDemo }: { onTryDemo?: () => void }) {
     <div className="py-16 px-4 bg-white">
       <div className="max-w-2xl mx-auto">
         <div className="text-center mb-8">
-          <h2 className="text-2xl md:text-3xl font-bold text-primary mb-4">
+          <h2 className="text-2xl md:text-2xl sm:text-3xl font-bold text-primary mb-4">
             See Aminy in Action
           </h2>
           <p className="text-muted-foreground">
@@ -355,7 +355,7 @@ export function DemoTeaser({ onTryDemo }: { onTryDemo?: () => void }) {
               }}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="w-full py-12 flex flex-col items-center gap-4 text-accent hover:text-accent/80 transition-colors"
+              className="w-full py-12 flex flex-col items-center gap-3 sm:gap-4 text-accent hover:text-accent/80 transition-colors"
             >
               <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center">
                 <Play className="w-8 h-8 fill-current" />
@@ -363,7 +363,7 @@ export function DemoTeaser({ onTryDemo }: { onTryDemo?: () => void }) {
               <span className="font-semibold text-lg">Watch Demo</span>
             </motion.button>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {/* User message */}
               <div className="flex justify-end">
                 <div className="bg-accent text-white px-4 py-3 rounded-2xl rounded-br-md max-w-[80%]">
@@ -395,7 +395,7 @@ export function DemoTeaser({ onTryDemo }: { onTryDemo?: () => void }) {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="text-center mt-6"
+            className="text-center mt-4 sm:mt-6"
           >
             <Button
               onClick={() => {
@@ -420,7 +420,7 @@ export function DemoTeaser({ onTryDemo }: { onTryDemo?: () => void }) {
 export function TrustStrip() {
   return (
     <div className="bg-accent/5 py-6 px-4">
-      <div className="max-w-4xl mx-auto flex flex-wrap justify-center items-center gap-6 md:gap-12">
+      <div className="max-w-4xl mx-auto flex flex-wrap justify-center items-center gap-3 sm:gap-4 sm:gap-6 md:gap-12">
         <div className="flex items-center gap-2 text-sm">
           <Shield className="w-5 h-5 text-accent" />
           <span className="font-medium text-primary">HIPAA Conscious</span>

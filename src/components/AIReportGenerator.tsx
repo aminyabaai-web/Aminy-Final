@@ -114,7 +114,7 @@ export function AIReportGenerator({ childName, userTier }: AIReportGeneratorProp
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3 sm:space-y-4">
       <div>
         <h3 className="font-semibold mb-1">AI-Generated Reports</h3>
         <p className="text-sm text-muted-foreground">
@@ -129,7 +129,7 @@ export function AIReportGenerator({ childName, userTier }: AIReportGeneratorProp
           const isGenerating = generatingType === option.type;
 
           return (
-            <Card key={option.type} className="p-4">
+            <Card key={option.type} className="p-3 sm:p-4">
               <div className="flex items-start gap-3">
                 <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
                   hasAccess ? 'bg-accent/10 text-accent' : 'bg-slate-100 text-slate-400'

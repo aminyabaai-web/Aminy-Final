@@ -276,7 +276,7 @@ export function QASessionsHub({
 
       {/* Tabs */}
       <div className="bg-white border-b border-gray-100 px-4 py-2">
-        <div className="flex gap-4">
+        <div className="flex gap-3 sm:gap-4">
           <button
             onClick={() => setActiveTab('upcoming')}
             className={`pb-2 text-sm font-medium border-b-2 transition-colors ${
@@ -301,7 +301,7 @@ export function QASessionsHub({
       </div>
 
       {/* Content */}
-      <div className="px-4 py-6 pb-24 space-y-4">
+      <div className="px-4 py-6 pb-24 space-y-3 sm:space-y-4">
         {activeTab === 'upcoming' ? (
           upcomingSessions.length > 0 ? (
             upcomingSessions.map(session => (
@@ -389,7 +389,7 @@ function UpcomingSessionCard({
       </div>
 
       {/* Content */}
-      <div className="p-4">
+      <div className="p-3 sm:p-4">
         <h3 className="font-semibold text-gray-900 text-lg mb-2">{session.title}</h3>
         <p className="text-sm text-gray-600 mb-4">{session.description}</p>
 
@@ -522,7 +522,7 @@ function ReplayCard({ session, onWatch, formatDate }: ReplayCardProps) {
       </div>
 
       {/* Content */}
-      <div className="p-4">
+      <div className="p-3 sm:p-4">
         <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
           <Calendar className="w-3 h-3" />
           <span>{formatDate(session.date)}</span>

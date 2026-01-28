@@ -37,19 +37,19 @@ export function NotificationPreferences() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <div className="flex items-center gap-2">
         <Bell className="w-5 h-5 text-accent" />
-        <h2 className="text-xl font-semibold">Notification Preferences</h2>
+        <h2 className="text-lg sm:text-xl font-semibold">Notification Preferences</h2>
       </div>
 
       {/* Email Notifications */}
-      <Card className="p-4">
+      <Card className="p-3 sm:p-4">
         <div className="flex items-center gap-2 mb-4">
           <Mail className="w-4 h-4 text-blue-600" />
           <h3 className="font-semibold">Email Notifications</h3>
         </div>
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <div className="flex items-center justify-between">
             <Label>Daily Summary</Label>
             <Switch
@@ -89,12 +89,12 @@ export function NotificationPreferences() {
       </Card>
 
       {/* Push Notifications */}
-      <Card className="p-4">
+      <Card className="p-3 sm:p-4">
         <div className="flex items-center gap-2 mb-4">
           <Bell className="w-4 h-4 text-purple-600" />
           <h3 className="font-semibold">Push Notifications</h3>
         </div>
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <div className="flex items-center justify-between">
             <Label>Session Reminders</Label>
             <Switch
@@ -127,12 +127,12 @@ export function NotificationPreferences() {
       </Card>
 
       {/* SMS Notifications */}
-      <Card className="p-4">
+      <Card className="p-3 sm:p-4">
         <div className="flex items-center gap-2 mb-4">
           <MessageSquare className="w-4 h-4 text-green-600" />
           <h3 className="font-semibold">SMS Notifications</h3>
         </div>
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <div className="flex items-center justify-between">
             <Label>Session Reminders</Label>
             <Switch

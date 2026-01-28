@@ -156,7 +156,7 @@ const BrandedLoader: React.FC<{ message?: string }> = ({ message }) => (
       </div>
 
       {/* Progress dots */}
-      <div className="flex justify-center gap-1 mt-6">
+      <div className="flex justify-center gap-1 mt-4 sm:mt-6">
         <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
         <div className="w-2 h-2 bg-primary rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
         <div className="w-2 h-2 bg-primary rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
@@ -178,7 +178,7 @@ const SkeletonLoader: React.FC = () => (
       </div>
 
       {/* Cards skeleton */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 sm:gap-6 mb-8">
         {[1, 2, 3].map((i) => (
           <div key={i} className="bg-card border border-border rounded-xl p-6">
             <div className="flex items-center gap-3 mb-4">

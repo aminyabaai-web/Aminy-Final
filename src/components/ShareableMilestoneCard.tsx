@@ -300,7 +300,7 @@ export function ShareableMilestoneCard({
                   </motion.div>
 
                   {/* Title */}
-                  <h2 className="text-3xl font-bold mb-2 drop-shadow-lg">
+                  <h2 className="text-2xl sm:text-3xl font-bold mb-2 drop-shadow-lg">
                     {displayTitle}
                   </h2>
 
@@ -334,7 +334,7 @@ export function ShareableMilestoneCard({
                 </div>
 
                 {/* Branding */}
-                <div className="mt-6 pt-4 border-t border-white/20 flex items-center justify-center gap-2">
+                <div className="mt-4 sm:mt-6 pt-4 border-t border-white/20 flex items-center justify-center gap-2">
                   <Sparkles className="w-4 h-4" />
                   <span className="font-medium text-sm">Tracked with Aminy</span>
                 </div>
@@ -342,7 +342,7 @@ export function ShareableMilestoneCard({
             </div>
 
             {/* Action Buttons */}
-            <div className="mt-6 flex gap-3">
+            <div className="mt-4 sm:mt-6 flex gap-3">
               <Button
                 onClick={handleDownload}
                 disabled={isGenerating}
@@ -372,7 +372,7 @@ export function ShareableMilestoneCard({
                   className="mt-4 bg-white rounded-xl p-4"
                 >
                   <h4 className="font-semibold text-primary mb-3 text-center">Share to...</h4>
-                  <div className="grid grid-cols-4 gap-3">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                     <button
                       onClick={() => {
                         handleCopyLink();

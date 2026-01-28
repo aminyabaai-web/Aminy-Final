@@ -20,9 +20,9 @@ export function OutcomeSignatureTiles({
   const tooltipText = "I estimate these from your plan activity, fidelity taps, and Calm Corner sessions.";
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
       {/* Minutes Saved Tile */}
-      <Card className="p-6">
+      <Card className="p-4 sm:p-5 md:p-6">
         <div className="flex items-start justify-between mb-2">
           <div className="p-2 bg-blue-50 rounded-lg">
             <Clock className="w-5 h-5 text-blue-600" />
@@ -41,7 +41,7 @@ export function OutcomeSignatureTiles({
           </TooltipProvider>
         </div>
 
-        <p className="text-3xl font-bold text-slate-900 mb-1">
+        <p className="text-2xl sm:text-3xl font-bold text-slate-900 mb-1">
           {minutesSaved}
           <span className="text-lg text-muted-foreground ml-1">min</span>
         </p>
@@ -53,7 +53,7 @@ export function OutcomeSignatureTiles({
       </Card>
 
       {/* De-escalations Shortened Tile */}
-      <Card className="p-6">
+      <Card className="p-4 sm:p-5 md:p-6">
         <div className="flex items-start justify-between mb-2">
           <div className="p-2 bg-purple-50 rounded-lg">
             <TrendingDown className="w-5 h-5 text-purple-600" />
@@ -72,7 +72,7 @@ export function OutcomeSignatureTiles({
           </TooltipProvider>
         </div>
 
-        <p className="text-3xl font-bold text-slate-900 mb-1">
+        <p className="text-2xl sm:text-3xl font-bold text-slate-900 mb-1">
           -{deescalationsShortened}
           <span className="text-lg text-muted-foreground ml-1">min</span>
         </p>

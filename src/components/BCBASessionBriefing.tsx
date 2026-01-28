@@ -219,7 +219,7 @@ export function BCBASessionBriefing({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       {/* Header */}
       <Card className="p-6 bg-gradient-to-br from-teal-50 to-cyan-50 border-teal-200">
         <div className="flex items-start justify-between mb-4">
@@ -228,7 +228,7 @@ export function BCBASessionBriefing({
               <Brain className="w-6 h-6 text-teal-600" />
             </div>
             <div>
-              <h2 className="text-xl font-semibold text-gray-900">
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
                 Session Briefing: {childName}
               </h2>
               <p className="text-sm text-gray-600">
@@ -283,12 +283,12 @@ export function BCBASessionBriefing({
       </Card>
 
       {/* Progress At A Glance */}
-      <Card className="p-4">
+      <Card className="p-3 sm:p-4">
         <h3 className="font-medium text-gray-900 mb-4 flex items-center gap-2">
           <TrendingUp className="w-4 h-4 text-teal-600" />
           Recent Progress
         </h3>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {briefing.recentProgress.map((item, idx) => (
             <div
               key={idx}

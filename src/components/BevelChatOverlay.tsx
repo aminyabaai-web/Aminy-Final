@@ -200,7 +200,7 @@ Respond naturally, showing you understand where they are in the app. Be brief (2
             }}
           >
             {/* Header */}
-            <div className="shrink-0 px-6 py-4 border-b border-slate-100">
+            <div className="shrink-0 px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-100">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-50 to-violet-50 flex items-center justify-center">
@@ -225,7 +225,7 @@ Respond naturally, showing you understand where they are in the app. Be brief (2
             </div>
 
             {/* Messages Area - Modern Chat Scrolling */}
-            <div className="flex-1 overflow-y-auto px-6 py-6 space-y-4">
+            <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-4 sm:py-6 space-y-3 sm:space-y-4">
               {messages.length === 0 && (
                 <div className="flex flex-col items-center justify-center h-full text-center px-4">
                   <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-cyan-50 via-emerald-50 to-violet-50 flex items-center justify-center">

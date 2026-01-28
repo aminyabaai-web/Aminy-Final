@@ -370,7 +370,7 @@ export function SecureMessaging({ userId, userRole, onBack }: SecureMessagingPro
                   </button>
                 )}
                 <div>
-                  <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
+                  <h1 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">
                     Messages
                   </h1>
                   {totalUnread > 0 && (
@@ -562,7 +562,7 @@ export function SecureMessaging({ userId, userRole, onBack }: SecureMessagingPro
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 py-4">
-        <div className="max-w-2xl mx-auto space-y-4">
+        <div className="max-w-2xl mx-auto space-y-3 sm:space-y-4">
           {messages.map((message, index) => {
             const isOwn = message.senderType === userRole;
             const showAvatar = index === 0 || messages[index - 1].senderId !== message.senderId;

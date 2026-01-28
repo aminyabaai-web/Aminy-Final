@@ -268,7 +268,7 @@ function AppointmentCard({
       className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
     >
       {/* Card Header */}
-      <div className="p-4">
+      <div className="p-3 sm:p-4">
         <div className="flex items-start justify-between gap-3">
           {/* Provider Info */}
           <div className="flex items-center gap-3">
@@ -471,7 +471,7 @@ export function MyAppointments({
       </div>
 
       {/* Appointment List */}
-      <div className="p-4 space-y-4">
+      <div className="p-4 space-y-3 sm:space-y-4">
         <AnimatePresence mode="wait">
           {displayedAppointments.length > 0 ? (
             <motion.div
@@ -479,7 +479,7 @@ export function MyAppointments({
               initial={{ opacity: 0, x: activeTab === 'upcoming' ? -20 : 20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: activeTab === 'upcoming' ? 20 : -20 }}
-              className="space-y-4"
+              className="space-y-3 sm:space-y-4"
             >
               {displayedAppointments.map((appointment) => (
                 <AppointmentCard
@@ -505,7 +505,7 @@ export function MyAppointments({
               <h3 className="text-lg font-medium text-gray-900 mb-2">
                 {activeTab === 'upcoming' ? 'No upcoming appointments' : 'No past appointments'}
               </h3>
-              <p className="text-gray-500 mb-6">
+              <p className="text-gray-500 mb-4 sm:mb-6">
                 {activeTab === 'upcoming'
                   ? 'Book a session with one of our experts'
                   : 'Your completed sessions will appear here'

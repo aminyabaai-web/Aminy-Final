@@ -468,7 +468,7 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
           </div>
         </div>
 
-        <div className="max-w-4xl mx-auto px-4 py-6 space-y-6">
+        <div className="max-w-4xl mx-auto px-4 py-6 space-y-3 sm:space-y-4 sm:space-y-6">
           {/* Settings Panel */}
           {showSettings && (
             <motion.div
@@ -482,7 +482,7 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
                   Accessibility Settings
                 </h3>
 
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   <div>
                     <Label className="text-sm text-gray-700 mb-2">Visual Intensity</Label>
                     <Slider
@@ -506,7 +506,7 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
 
                   <div>
                     <Label className="text-sm text-gray-700 mb-2">Ambient Sound</Label>
-                    <div className="grid grid-cols-2 gap-2 mt-2">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
                       {ambientSounds.map(sound => (
                         <button
                           key={sound.id}
@@ -559,7 +559,7 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
           </Card>
 
           {/* Tools Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
             {tools.map(tool => (
               <button
                 key={tool.id}
@@ -568,7 +568,7 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
               >
                 <div className={`absolute inset-0 bg-gradient-to-br ${tool.color} opacity-10 group-hover:opacity-20 transition-opacity`} />
                 <div className="relative p-6">
-                  <div className="flex items-center gap-4 mb-3">
+                  <div className="flex items-center gap-3 sm:gap-4 mb-3">
                     <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${tool.color} flex items-center justify-center text-white`}>
                       {tool.icon}
                     </div>
@@ -687,7 +687,7 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
                     }}
                   />
                 ))}
-                <div className="absolute top-1/2 left-1/2 w-12 h-12 -ml-6 -mt-6 rounded-full bg-gray-800 border-4 border-white" />
+                <div className="absolute top-1/2 left-1/2 w-12 h-12 -ml-6 -mt-4 sm:mt-6 rounded-full bg-gray-800 border-4 border-white" />
               </div>
             </motion.div>
             <p className="text-lg text-gray-300">Tap to spin!</p>

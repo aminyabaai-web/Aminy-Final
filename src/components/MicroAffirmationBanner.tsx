@@ -55,7 +55,7 @@ export function MicroAffirmationBanner({ parentName }: MicroAffirmationBannerPro
 
   return (
     <Card className="relative overflow-hidden border-teal-100 bg-gradient-to-r from-teal-50/50 to-white">
-      <div className="p-4">
+      <div className="p-3 sm:p-4">
         <button
           onClick={() => setDismissed(true)}
           className="absolute top-2 right-2 p-1 rounded-full hover:bg-teal-100 transition-colors"

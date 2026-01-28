@@ -191,7 +191,7 @@ export function CommunityFeed({
   }, [userId]);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3 sm:space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -213,7 +213,7 @@ export function CommunityFeed({
       </div>
 
       {/* Quick Stats */}
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
         <Card className="p-3 text-center bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-green-200 dark:border-green-800">
           <Trophy className="w-5 h-5 mx-auto mb-1 text-green-600 dark:text-green-400" />
           <div className="text-lg font-bold text-green-700 dark:text-green-400">
@@ -335,7 +335,7 @@ export function CommunityFeed({
       </div>
 
       {/* Posts Feed */}
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         {loading ? (
           <Card className="p-8 text-center">
             <div className="animate-pulse">
@@ -681,7 +681,7 @@ function PostCard({
 
         {/* Actions */}
         <div className="flex items-center justify-between pt-3 border-t">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 sm:gap-4">
             <button
               onClick={onLike}
               className={`flex items-center gap-1 text-sm ${
@@ -861,7 +861,7 @@ function CreatePostModal({
           </button>
         </div>
 
-        <div className="p-4 space-y-4">
+        <div className="p-4 space-y-3 sm:space-y-4">
           {/* Category Selection */}
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">

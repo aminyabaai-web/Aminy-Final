@@ -68,9 +68,9 @@ export function ActivityLog({ activities, maxItems = 10 }: ActivityLogProps) {
   };
 
   return (
-    <Card className="p-4">
+    <Card className="p-3 sm:p-4">
       <h3 className="font-semibold mb-4">Recent Activity</h3>
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         {displayedActivities.map((activity) => {
           const Icon = getIcon(activity.type);
           const colorClass = getColor(activity.type);

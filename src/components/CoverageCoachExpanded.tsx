@@ -208,7 +208,7 @@ export function CoverageCoachExpanded({ userData, onSaveReport }: CoverageCoachE
       {/* Header */}
       <div className="bg-gradient-to-r from-accent/10 to-teal-50 border-b border-accent/20 px-6 py-8">
         <div className="max-w-3xl mx-auto">
-          <div className="flex items-start gap-4 mb-4">
+          <div className="flex items-start gap-3 sm:gap-4 mb-4">
             <div className="w-12 h-12 bg-accent rounded-full flex items-center justify-center">
               <Shield className="w-6 h-6 text-white" />
             </div>
@@ -234,10 +234,10 @@ export function CoverageCoachExpanded({ userData, onSaveReport }: CoverageCoachE
         </div>
       </div>
 
-      <div className="max-w-3xl mx-auto px-6 py-6">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
         {/* Progress Indicator */}
         {currentStep !== 'welcome' && currentStep !== 'report' && (
-          <Card className="p-4 mb-6 bg-slate-50">
+          <Card className="p-4 mb-4 sm:mb-6 bg-slate-50">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium text-slate-700">
                 {currentStep === 'provider' && 'Step 1 of 4: Insurance Provider'}
@@ -266,7 +266,7 @@ export function CoverageCoachExpanded({ userData, onSaveReport }: CoverageCoachE
         )}
 
         {/* Chat Messages */}
-        <div className="space-y-4 mb-6">
+        <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
           {currentStep === 'welcome' && (
             <>
               <AIMessage>
@@ -316,10 +316,10 @@ export function CoverageCoachExpanded({ userData, onSaveReport }: CoverageCoachE
 
         {/* Generated Report */}
         {generatedReport && (
-          <Card className="p-6 mb-6 border-2 border-accent/30 bg-gradient-to-br from-accent/5 to-teal-50">
+          <Card className="p-6 mb-4 sm:mb-6 border-2 border-accent/30 bg-gradient-to-br from-accent/5 to-teal-50">
             <div className="flex items-center gap-3 mb-4">
               <FileText className="w-6 h-6 text-accent" />
-              <h2 className="text-xl font-semibold text-slate-900">Coverage Clarity Report</h2>
+              <h2 className="text-lg sm:text-xl font-semibold text-slate-900">Coverage Clarity Report</h2>
             </div>
 
             {/* Insurance Summary */}
@@ -344,7 +344,7 @@ export function CoverageCoachExpanded({ userData, onSaveReport }: CoverageCoachE
             {/* Coverage Summary */}
             <div className="bg-white rounded-lg p-4 mb-4">
               <h3 className="font-medium text-slate-900 mb-3">What's Likely Covered</h3>
-              <div className="space-y-4 text-sm">
+              <div className="space-y-3 sm:space-y-4 text-sm">
                 <div>
                   <p className="font-medium text-slate-800 mb-1">ABA Services</p>
                   <p className="text-slate-600 leading-relaxed">{generatedReport.coverageSummary.abaServices}</p>

@@ -30,7 +30,7 @@ export function ConversationalPrompt({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       {/* AI Prompt */}
       <div className="text-center">
         <div className="inline-flex items-center justify-center w-12 h-12 bg-accent/10 rounded-full mb-4">
@@ -61,7 +61,7 @@ export function ConversationalPrompt({
 
       {/* Voice Input */}
       {inputMode === 'voice' && (
-        <div className="flex flex-col items-center gap-4">
+        <div className="flex flex-col items-center gap-3 sm:gap-4">
           <button
             onClick={handleVoiceInput}
             className={`

@@ -194,10 +194,10 @@ export function TelehealthScreen({
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 py-6 space-y-6">
+      <div className="max-w-4xl mx-auto px-4 py-6 space-y-3 sm:space-y-4 sm:space-y-6">
         {/* Urgent Help Card - On-demand sessions */}
         <Card className="p-4 bg-gradient-to-r from-amber-50 to-orange-50 border-amber-200">
-          <div className="flex items-start gap-4">
+          <div className="flex items-start gap-3 sm:gap-4">
             <div className="p-2 bg-amber-100 rounded-lg">
               <Zap className="w-6 h-6 text-amber-600" />
             </div>
@@ -246,7 +246,7 @@ export function TelehealthScreen({
         )}
 
         {activeView === 'history' && (
-          <Card className="p-6">
+          <Card className="p-4 sm:p-5 md:p-6">
             <h3 className="text-lg text-slate-900 mb-2">Progress Report Integration</h3>
             <p className="text-sm text-slate-600 mb-4">
               All telehealth session notes are automatically included in your AI-generated progress reports, 

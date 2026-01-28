@@ -46,7 +46,7 @@ export function AIContextViewer() {
 
   if (loading) {
     return (
-      <Card className="p-6">
+      <Card className="p-4 sm:p-5 md:p-6">
         <div className="flex items-center gap-2 text-muted-foreground">
           <Brain className="w-5 h-5 animate-pulse" />
           <span>Loading AI context...</span>
@@ -57,7 +57,7 @@ export function AIContextViewer() {
 
   if (!context) {
     return (
-      <Card className="p-6">
+      <Card className="p-4 sm:p-5 md:p-6">
         <p className="text-muted-foreground">No AI context available</p>
       </Card>
     );
@@ -71,7 +71,7 @@ export function AIContextViewer() {
       count: Object.keys(context.child).length,
       content: (
         <div className="space-y-3">
-          <div className="grid grid-cols-2 gap-3 text-sm">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
             <div>
               <span className="text-muted-foreground">Name:</span>
               <p className="font-medium">{context.child.name}</p>
@@ -155,7 +155,7 @@ export function AIContextViewer() {
       count: Object.values(context.vault).flat().length,
       content: (
         <div className="space-y-2 text-sm">
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <div className="flex items-center justify-between p-2 bg-slate-50 rounded">
               <span className="text-muted-foreground">Evaluations:</span>
               <Badge>{context.vault.evaluations.length}</Badge>
@@ -254,7 +254,7 @@ export function AIContextViewer() {
       count: context.juniorMode.gamesPlayed.length,
       content: (
         <div className="space-y-2 text-sm">
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <div className="flex items-center justify-between p-2 bg-slate-50 rounded">
               <span className="text-muted-foreground">Sessions:</span>
               <Badge>{context.juniorMode.gamesPlayed.length}</Badge>
@@ -282,7 +282,7 @@ export function AIContextViewer() {
   ];
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3 sm:space-y-4">
       {/* Header */}
       <Card className="p-4 bg-gradient-to-r from-accent/5 to-accent/10 border-accent/20">
         <div className="flex items-start gap-3">

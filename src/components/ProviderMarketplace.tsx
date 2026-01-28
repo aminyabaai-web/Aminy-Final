@@ -435,7 +435,7 @@ export function ProviderMarketplace({
         className="p-5 hover:shadow-lg transition-all duration-300 cursor-pointer group"
         onClick={() => setSelectedProvider(provider)}
       >
-        <div className="flex items-start gap-4">
+        <div className="flex items-start gap-3 sm:gap-4">
           {/* Avatar */}
           <div className={`w-16 h-16 rounded-2xl ${colorClasses.bg} flex items-center justify-center flex-shrink-0`}>
             {provider.photoUrl ? (
@@ -471,7 +471,7 @@ export function ProviderMarketplace({
             </div>
 
             {/* Quick info */}
-            <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
+            <div className="flex items-center gap-3 sm:gap-4 text-sm text-gray-600 mb-3">
               <span className="flex items-center gap-1">
                 <Clock className="w-3.5 h-3.5" />
                 {provider.yearsExperience}+ years
@@ -530,7 +530,7 @@ export function ProviderMarketplace({
               <Users className="w-6 h-6" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold">Find Your Guide</h1>
+              <h1 className="text-xl sm:text-2xl font-bold">Find Your Guide</h1>
               <p className="text-teal-100">
                 Expert providers to support {childName ? `${childName}'s` : 'your family\'s'} journey
               </p>
@@ -612,10 +612,10 @@ export function ProviderMarketplace({
         </div>
 
         {isLoading ? (
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {[1, 2, 3].map(i => (
               <Card key={i} className="p-6 animate-pulse">
-                <div className="flex gap-4">
+                <div className="flex gap-3 sm:gap-4">
                   <div className="w-16 h-16 bg-gray-200 rounded-2xl" />
                   <div className="flex-1 space-y-3">
                     <div className="h-4 bg-gray-200 rounded w-1/3" />
@@ -636,7 +636,7 @@ export function ProviderMarketplace({
             <EmptyProviders />
           )
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {filteredProviders.map(renderProviderCard)}
           </div>
         )}
@@ -644,12 +644,12 @@ export function ProviderMarketplace({
 
       {/* Session Types Reference */}
       <div className="max-w-4xl mx-auto px-4 pb-8">
-        <Card className="p-6">
+        <Card className="p-4 sm:p-5 md:p-6">
           <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
             <Info className="w-5 h-5 text-gray-400" />
             Session Types & Pricing
           </h3>
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-3 gap-3 sm:gap-4 sm:gap-6">
             {/* Behavioral */}
             <div>
               <h4 className="font-medium text-teal-700 mb-3 flex items-center gap-2">
@@ -730,7 +730,7 @@ export function ProviderMarketplace({
       {/* Trust Footer */}
       <div className="bg-white border-t border-gray-200 py-6">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-500">
+          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 sm:gap-6 text-sm text-gray-500">
             <span className="flex items-center gap-2">
               <Shield className="w-4 h-4 text-green-500" />
               HIPAA Compliant
@@ -759,12 +759,12 @@ export function ProviderMarketplace({
  */
 export function ProviderTeamExplainer() {
   return (
-    <Card className="p-6">
+    <Card className="p-4 sm:p-5 md:p-6">
       <h3 className="font-semibold text-gray-900 mb-4">Understanding Your Care Team</h3>
-      <p className="text-gray-600 mb-6">
+      <p className="text-gray-600 mb-4 sm:mb-6">
         Think of your child's care team like building a house:
       </p>
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         <div className="flex items-start gap-3 p-4 bg-teal-50 rounded-xl">
           <GraduationCap className="w-6 h-6 text-teal-600 mt-1" />
           <div>

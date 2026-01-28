@@ -404,7 +404,7 @@ export function AvailabilityPicker({
       </div>
 
       {/* Time Slots */}
-      <div className="p-4">
+      <div className="p-3 sm:p-4">
         {selectedDayAvailability ? (
           <>
             <div className="text-sm text-gray-500 mb-4 flex items-center gap-2">

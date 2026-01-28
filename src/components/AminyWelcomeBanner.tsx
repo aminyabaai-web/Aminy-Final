@@ -21,7 +21,7 @@ export function AminyWelcomeBanner({
   return (
     <Card className="overflow-hidden border-2 border-accent/20 bg-gradient-to-br from-white to-accent/5">
       <div className="p-5">
-        <div className="flex items-start gap-4">
+        <div className="flex items-start gap-3 sm:gap-4">
           <div className="w-12 h-12 bg-gradient-to-br from-accent to-accent/80 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg">
             <Brain className="w-6 h-6 text-white" />
           </div>

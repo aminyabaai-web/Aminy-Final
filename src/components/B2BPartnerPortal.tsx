@@ -233,7 +233,7 @@ export function B2BPartnerPortal({
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
             {content.subheadline}
           </p>
-          <div className="flex flex-wrap gap-4 justify-center">
+          <div className="flex flex-wrap gap-3 sm:gap-4 justify-center">
             <Button
               className="bg-blue-600 hover:bg-blue-700"
               onClick={onContactSales}
@@ -252,10 +252,10 @@ export function B2BPartnerPortal({
       {/* Benefits Grid */}
       <section className="py-16 px-4 bg-white">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-2xl font-bold text-center text-gray-900 mb-12">
+          <h2 className="text-xl sm:text-2xl font-bold text-center text-gray-900 mb-12">
             Why Partner With Aminy
           </h2>
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid md:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
             {content.benefits.map((benefit, index) => (
               <motion.div
                 key={index}
@@ -264,7 +264,7 @@ export function B2BPartnerPortal({
                 transition={{ delay: index * 0.1 }}
               >
                 <Card className="p-6 h-full hover:shadow-lg transition-shadow">
-                  <div className="flex items-start gap-4">
+                  <div className="flex items-start gap-3 sm:gap-4">
                     <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
                       <benefit.icon className="w-6 h-6 text-blue-600" />
                     </div>
@@ -297,15 +297,15 @@ export function B2BPartnerPortal({
               <Badge className="bg-green-100 text-green-800 mb-4">
                 Case Study
               </Badge>
-              <h2 className="text-2xl font-bold text-gray-900">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
                 {fiscalIntermediaryContent.caseStudy.title}
               </h2>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 sm:gap-6 mb-8">
               {fiscalIntermediaryContent.caseStudy.stats.map((stat, index) => (
                 <Card key={index} className="p-4 text-center">
-                  <div className="text-3xl font-bold text-blue-600 mb-1">
+                  <div className="text-2xl sm:text-3xl font-bold text-blue-600 mb-1">
                     {stat.value}
                   </div>
                   <div className="text-sm font-medium text-gray-900 mb-1">
@@ -333,11 +333,11 @@ export function B2BPartnerPortal({
       {/* Integration Features */}
       <section className="py-16 px-4 bg-white">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold text-center text-gray-900 mb-12">
+          <h2 className="text-xl sm:text-2xl font-bold text-center text-gray-900 mb-12">
             Enterprise-Ready Integration
           </h2>
 
-          <div className="grid md:grid-cols-3 gap-4">
+          <div className="grid md:grid-cols-3 gap-3 sm:gap-4">
             {integrationFeatures.map((feature, index) => (
               <div
                 key={index}
@@ -357,14 +357,14 @@ export function B2BPartnerPortal({
       {/* Pricing */}
       <section className="py-16 px-4 bg-gray-50">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-2xl font-bold text-center text-gray-900 mb-4">
+          <h2 className="text-xl sm:text-2xl font-bold text-center text-gray-900 mb-4">
             Simple, Scalable Pricing
           </h2>
           <p className="text-center text-gray-600 mb-12 max-w-xl mx-auto">
             Volume discounts that grow with you. No setup fees. No long-term contracts required.
           </p>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-3 gap-3 sm:gap-4 sm:gap-6">
             {pricingTiers.map((tier, index) => (
               <Card
                 key={index}
@@ -381,10 +381,10 @@ export function B2BPartnerPortal({
                 <p className="text-sm text-gray-500 mb-4">
                   {tier.families}
                 </p>
-                <div className="text-3xl font-bold text-gray-900 mb-6">
+                <div className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-6">
                   {tier.price}
                 </div>
-                <ul className="space-y-3 mb-6">
+                <ul className="space-y-3 mb-4 sm:mb-6">
                   {tier.features.map((feature, i) => (
                     <li key={i} className="flex items-center gap-2 text-sm">
                       <CheckCircle className="w-4 h-4 text-green-600" />
@@ -432,14 +432,14 @@ export function B2BPartnerPortal({
       {/* CTA */}
       <section className="py-16 px-4 bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-4">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-4">
             Ready to partner?
           </h2>
           <p className="text-blue-100 mb-8 max-w-xl mx-auto">
             Join leading organizations in supporting autism families.
             Schedule a demo to see how Aminy can work for your organization.
           </p>
-          <div className="flex flex-wrap gap-4 justify-center">
+          <div className="flex flex-wrap gap-3 sm:gap-4 justify-center">
             <Button
               className="bg-white text-blue-700 hover:bg-blue-50"
               onClick={onContactSales}

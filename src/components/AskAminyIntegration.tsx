@@ -75,7 +75,7 @@ export function AskAminyComparison({
   }
 
   return (
-    <div className="fixed bottom-4 right-4 flex flex-col gap-4 z-30">
+    <div className="fixed bottom-4 right-4 flex flex-col gap-3 sm:gap-4 z-30">
       <div className="relative">
         <div className="absolute -top-8 right-0 text-xs bg-black text-white px-2 py-1 rounded">
           Enhanced

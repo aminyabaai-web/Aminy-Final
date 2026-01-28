@@ -218,7 +218,7 @@ export function InsuranceVerification({
         </div>
       </div>
 
-      <div className="p-4">
+      <div className="p-3 sm:p-4">
         <AnimatePresence mode="wait">
           {/* Intro Step */}
           {step === 'intro' && (
@@ -226,7 +226,7 @@ export function InsuranceVerification({
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="space-y-4"
+              className="space-y-3 sm:space-y-4"
             >
               <Card className="p-4 bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
                 <div className="flex items-start gap-3">
@@ -245,7 +245,7 @@ export function InsuranceVerification({
                 </div>
               </Card>
 
-              <Card className="p-4">
+              <Card className="p-3 sm:p-4">
                 <h3 className="font-semibold text-gray-900 mb-3">What you'll need:</h3>
                 <div className="space-y-3">
                   <div className="flex items-center gap-3">
@@ -269,7 +269,7 @@ export function InsuranceVerification({
                 </div>
               </Card>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="text-center p-4 border rounded-lg">
                   <div className="text-2xl mb-1">2 min</div>
                   <div className="text-sm text-gray-500">to complete</div>
@@ -303,7 +303,7 @@ export function InsuranceVerification({
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="space-y-4"
+              className="space-y-3 sm:space-y-4"
             >
               <div className="text-center mb-4">
                 <Badge className="bg-blue-100 text-blue-800 mb-2">Step 1 of 3</Badge>
@@ -380,7 +380,7 @@ export function InsuranceVerification({
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="space-y-4"
+              className="space-y-3 sm:space-y-4"
             >
               <div className="text-center mb-4">
                 <Badge className="bg-blue-100 text-blue-800 mb-2">Step 2 of 3</Badge>
@@ -504,7 +504,7 @@ export function InsuranceVerification({
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="space-y-4"
+              className="space-y-3 sm:space-y-4"
             >
               <div className="text-center mb-4">
                 <Badge className="bg-green-100 text-green-800 mb-2">
@@ -528,7 +528,7 @@ export function InsuranceVerification({
                 </Card>
               )}
 
-              <Card className="p-4 space-y-4">
+              <Card className="p-4 space-y-3 sm:space-y-4">
                 {/* Insurance Provider */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -622,7 +622,7 @@ export function InsuranceVerification({
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="space-y-4"
+              className="space-y-3 sm:space-y-4"
             >
               <div className="text-center py-4">
                 <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -665,7 +665,7 @@ export function InsuranceVerification({
               </Card>
 
               {/* Covered Services */}
-              <Card className="p-4">
+              <Card className="p-3 sm:p-4">
                 <h4 className="font-semibold text-gray-900 mb-3">Covered Services</h4>
                 <div className="space-y-2">
                   {verificationResult.coveredServices?.map((service, i) => (

@@ -123,7 +123,7 @@ export function NPSSurveyModal({
         >
           <Card className="w-full max-w-md p-6 bg-white dark:bg-slate-900">
             {/* Header */}
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center justify-between mb-4 sm:mb-6">
               <div className="flex items-center gap-2">
                 <div className="w-10 h-10 bg-gradient-to-br from-teal-400 to-cyan-500 rounded-full flex items-center justify-center">
                   <Heart className="w-5 h-5 text-white" />
@@ -143,7 +143,7 @@ export function NPSSurveyModal({
 
             {/* Step 1: Score Selection */}
             {step === 'score' && (
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 <p className="text-center text-gray-700 dark:text-slate-300">
                   How likely are you to recommend Aminy to a friend with a child like {childName}?
                 </p>
@@ -192,7 +192,7 @@ export function NPSSurveyModal({
 
             {/* Step 2: Feedback */}
             {step === 'feedback' && (
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 <div className="text-center">
                   <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium mb-2 ${
                     score !== null && score <= 6 ? 'bg-red-100 text-red-700' :

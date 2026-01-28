@@ -122,7 +122,7 @@ export function ParentCapacityCheck({
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-rose-100 to-pink-100 mb-4">
                 <HandHeart className="w-8 h-8 text-rose-500" />
               </div>
-              <h2 className="text-2xl font-bold text-primary mb-2">
+              <h2 className="text-xl sm:text-2xl font-bold text-primary mb-2">
                 Now let's talk about YOU, {parentName}
               </h2>
               <p className="text-muted-foreground max-w-sm mx-auto">
@@ -132,7 +132,7 @@ export function ParentCapacityCheck({
             </div>
 
             <Card className="p-6 bg-gradient-to-r from-rose-50 to-pink-50 border-rose-100">
-              <div className="flex items-start gap-4">
+              <div className="flex items-start gap-3 sm:gap-4">
                 <Sparkles className="w-6 h-6 text-rose-500 flex-shrink-0 mt-1" />
                 <div>
                   <p className="font-medium text-rose-700 mb-2">
@@ -269,7 +269,7 @@ export function ParentCapacityCheck({
                       : "border-gray-200"
                   )}
                 >
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-3 sm:gap-4">
                     <div className={cn(
                       "p-2 rounded-lg",
                       availableMinutes === option.value ? "bg-accent/20" : "bg-gray-100"
@@ -358,7 +358,7 @@ export function ParentCapacityCheck({
                       : "border-gray-200"
                   )}
                 >
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-3 sm:gap-4">
                     <div className={cn(
                       "p-2 rounded-lg",
                       supportLevel === option.value ? "bg-accent/20" : "bg-gray-100"
@@ -402,7 +402,7 @@ export function ParentCapacityCheck({
             <h3 className="text-lg font-semibold text-primary mb-2 text-center">
               What's your biggest concern right now about {childName}?
             </h3>
-            <p className="text-sm text-muted-foreground text-center mb-6">
+            <p className="text-sm text-muted-foreground text-center mb-4 sm:mb-6">
               What keeps you up at night? (Optional, but helps us prioritize)
             </p>
 
@@ -436,11 +436,11 @@ export function ParentCapacityCheck({
             <h3 className="text-lg font-semibold text-primary mb-2 text-center">
               Have you tried strategies before?
             </h3>
-            <p className="text-sm text-muted-foreground text-center mb-6">
+            <p className="text-sm text-muted-foreground text-center mb-4 sm:mb-6">
               This helps us avoid suggesting what already didn't work
             </p>
 
-            <div className="space-y-6">
+            <div className="space-y-3 sm:space-y-4 sm:space-y-6">
               <div>
                 <label className="block text-sm font-medium text-primary mb-2">
                   What has worked (even a little)?
@@ -488,7 +488,7 @@ export function ParentCapacityCheck({
     <div className="min-h-screen bg-gradient-to-b from-white to-rose-50/30 p-4">
       <div className="max-w-md mx-auto pt-8">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-4 sm:mb-6">
           <button
             onClick={prevStep}
             className="p-2 hover:bg-gray-100 rounded-lg transition-colors"

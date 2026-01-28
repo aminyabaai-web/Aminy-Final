@@ -253,7 +253,7 @@ export function CarePlanTabScreen({
       <div className="px-4 py-6 pb-24">
         {activeTab === 'summaries' ? (
           /* Visit Summaries Tab */
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {MOCK_VISIT_SUMMARIES.length === 0 ? (
               <EmptyVisitSummaries onBookVisit={onBookFollowUp} />
             ) : (
@@ -270,7 +270,7 @@ export function CarePlanTabScreen({
           </div>
         ) : (
           /* Action Items Tab */
-          <div className="space-y-6">
+          <div className="space-y-3 sm:space-y-4 sm:space-y-6">
             {/* Pending Actions */}
             {pendingActions.length > 0 ? (
               <section>

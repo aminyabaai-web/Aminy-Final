@@ -506,7 +506,7 @@ export function PlaybooksLibrary({
       </div>
 
       {/* Playbook List */}
-      <div className="px-4 py-6 pb-24 space-y-4">
+      <div className="px-4 py-6 pb-24 space-y-3 sm:space-y-4">
         {filteredPlaybooks.length > 0 ? (
           filteredPlaybooks.map(playbook => (
             <PlaybookCard
@@ -576,7 +576,7 @@ function PlaybookCard({ playbook, onSelect, onToggleBookmark }: PlaybookCardProp
             <p className="text-sm text-gray-600 line-clamp-2 mb-3">{playbook.description}</p>
 
             {/* Meta */}
-            <div className="flex items-center gap-4 text-xs text-gray-500">
+            <div className="flex items-center gap-3 sm:gap-4 text-xs text-gray-500">
               <div className="flex items-center gap-1">
                 <Clock className="w-3 h-3" />
                 {playbook.readTimeMinutes} min read

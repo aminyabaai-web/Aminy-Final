@@ -19,10 +19,10 @@ export function TelehealthScheduling() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <h3 className="text-lg font-semibold">Schedule Telehealth Session</h3>
 
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         <div>
           <Label>Session Type</Label>
           <select

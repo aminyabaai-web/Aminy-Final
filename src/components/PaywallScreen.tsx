@@ -206,7 +206,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
               </button>
             )}
             <div className="flex-1 text-center">
-              <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
+              <h1 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">
                 {isPostOnboarding && childName
                   ? `${childName}'s Plan is Ready!`
                   : 'Choose Your Plan'}
@@ -265,7 +265,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
         </div>
 
         {/* Pricing Cards */}
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           {pricingTiers.map((tier) => {
             const IconComponent = tier.icon;
             const price = getPrice(tier.id);
@@ -301,7 +301,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
                   </div>
                 )}
 
-                <div className="flex items-start gap-4">
+                <div className="flex items-start gap-3 sm:gap-4">
                   {/* Icon */}
                   <div className={`p-3 rounded-xl ${tier.iconBg} flex-shrink-0`}>
                     <IconComponent className={`w-6 h-6 ${tier.iconColor}`} />
@@ -313,10 +313,10 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
                       <h3 className="text-lg font-semibold text-gray-900">{tier.name}</h3>
                       <div className="text-right">
                         {price === 0 ? (
-                          <span className="text-2xl font-bold text-gray-900">Free</span>
+                          <span className="text-xl sm:text-2xl font-bold text-gray-900">Free</span>
                         ) : (
                           <>
-                            <span className="text-2xl font-bold text-gray-900">
+                            <span className="text-xl sm:text-2xl font-bold text-gray-900">
                               ${price.toFixed(2)}
                             </span>
                             <span className="text-sm text-gray-500">
@@ -397,7 +397,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
         </div>
 
         {/* Trust Signals */}
-        <div className="mt-6 flex flex-wrap justify-center gap-4">
+        <div className="mt-4 sm:mt-6 flex flex-wrap justify-center gap-3 sm:gap-4">
           <div className="flex items-center gap-2 text-sm text-gray-500">
             <Shield className="w-4 h-4" />
             <span>Cancel anytime</span>
@@ -428,7 +428,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
         </div>
 
         {/* Referral CTA */}
-        <div className="mt-6">
+        <div className="mt-4 sm:mt-6">
           <Card className="p-4 bg-gradient-to-r from-violet-50 to-purple-50 dark:from-violet-900/20 dark:to-purple-900/20 border-violet-200 dark:border-violet-800">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">

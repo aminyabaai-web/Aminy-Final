@@ -213,10 +213,10 @@ export function AppointmentConfirmationScreen({
         </header>
 
         {/* Content */}
-        <div className="px-4 py-6 pb-32 space-y-4">
+        <div className="px-4 py-6 pb-32 space-y-3 sm:space-y-4">
           {/* Provider Card */}
           <div className="bg-white rounded-2xl border border-gray-100 p-4">
-            <div className="flex gap-4">
+            <div className="flex gap-3 sm:gap-4">
               {/* Avatar */}
               <div className="w-14 h-14 rounded-full bg-gray-200 overflow-hidden flex-shrink-0">
                 {provider.avatarUrl ? (
@@ -242,7 +242,7 @@ export function AppointmentConfirmationScreen({
           </div>
 
           {/* Appointment Details */}
-          <div className="bg-white rounded-2xl border border-gray-100 p-4 space-y-4">
+          <div className="bg-white rounded-2xl border border-gray-100 p-4 space-y-3 sm:space-y-4">
             <h4 className="font-medium text-gray-900">Appointment Details</h4>
 
             <div className="space-y-3">
@@ -390,7 +390,7 @@ export function AppointmentConfirmationScreen({
         </header>
 
         {/* Content */}
-        <div className="px-4 py-6 pb-32 space-y-4">
+        <div className="px-4 py-6 pb-32 space-y-3 sm:space-y-4">
           {/* Amount */}
           <div className="bg-white rounded-2xl border border-gray-100 p-4 text-center">
             <p className="text-gray-500 mb-1">Amount due</p>
@@ -398,7 +398,7 @@ export function AppointmentConfirmationScreen({
           </div>
 
           {/* Mock Payment Form */}
-          <div className="bg-white rounded-2xl border border-gray-100 p-4 space-y-4">
+          <div className="bg-white rounded-2xl border border-gray-100 p-4 space-y-3 sm:space-y-4">
             <h4 className="font-medium text-gray-900 flex items-center gap-2">
               <CreditCard className="w-5 h-5" />
               Card Details
@@ -414,7 +414,7 @@ export function AppointmentConfirmationScreen({
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-sm text-gray-600 mb-1">Expiry</label>
                   <input
@@ -498,7 +498,7 @@ export function AppointmentConfirmationScreen({
           <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce-in">
             <CheckCircle className="w-12 h-12 text-green-600" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">You're booked!</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">You're booked!</h1>
           <p className="text-gray-600">
             Confirmation sent to your email
           </p>
@@ -589,7 +589,7 @@ export function AppointmentConfirmationScreen({
         </div>
 
         {/* Quick Intake Prompt */}
-        <div className="mt-6 p-4 bg-[#577590]/10 rounded-xl">
+        <div className="mt-4 sm:mt-6 p-4 bg-[#577590]/10 rounded-xl">
           <h4 className="font-medium text-[#577590] mb-1">Complete Quick Intake</h4>
           <p className="text-sm text-gray-600 mb-3">
             Help your provider prepare by answering a few questions (2 minutes).
@@ -601,7 +601,7 @@ export function AppointmentConfirmationScreen({
         </div>
 
         {/* Reminder Info */}
-        <div className="mt-6 p-4 bg-gray-50 rounded-xl text-sm text-gray-600">
+        <div className="mt-4 sm:mt-6 p-4 bg-gray-50 rounded-xl text-sm text-gray-600">
           <p className="font-medium text-gray-700 mb-2">We'll remind you:</p>
           <ul className="space-y-1">
             <li>• 24 hours before your visit</li>

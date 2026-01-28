@@ -167,7 +167,7 @@ export function BrandAuditChecker() {
         
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="flex items-center justify-center gap-3 mb-6">
+          <div className="flex items-center justify-center gap-3 mb-4 sm:mb-6">
             <div className="w-16 h-16 bg-gradient-to-br from-accent to-teal-500 rounded-full flex items-center justify-center">
               <Eye className="w-8 h-8 text-white" />
             </div>
@@ -184,7 +184,7 @@ export function BrandAuditChecker() {
 
         {/* Overall Score */}
         <Card className="p-8 mb-8 bg-gradient-to-r from-accent/5 to-teal-50 border-accent/20">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-3 sm:gap-4 sm:gap-6">
             <div className="flex-1 text-center md:text-left">
               <h2 className="text-2xl font-semibold text-slate-900 mb-2">Overall Brand Score</h2>
               <p className="text-slate-600">Compliance with ABA wellness framework</p>
@@ -211,7 +211,7 @@ export function BrandAuditChecker() {
         {/* Audit Criteria */}
         <Card className="p-6 mb-8">
           <h3 className="font-semibold text-slate-900 mb-4">Audit Criteria</h3>
-          <div className="grid md:grid-cols-4 gap-4 text-sm">
+          <div className="grid md:grid-cols-4 gap-3 sm:gap-4 text-sm">
             <div className="flex items-start gap-2">
               <Sparkles className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" />
               <div>
@@ -244,12 +244,12 @@ export function BrandAuditChecker() {
         </Card>
 
         {/* Individual Screen Results */}
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <h2 className="text-2xl font-semibold text-slate-900 mb-4">Screen-by-Screen Analysis</h2>
           
           {auditResults.map((result, index) => (
-            <Card key={index} className="p-6">
-              <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
+            <Card key={index} className="p-4 sm:p-5 md:p-6">
+              <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-3 sm:gap-4 mb-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
                     <h3 className="text-lg font-semibold text-slate-900">{result.screen}</h3>
@@ -353,7 +353,7 @@ export function BrandAuditChecker() {
         </div>
 
         {/* Action Buttons */}
-        <div className="mt-8 flex flex-wrap gap-4 justify-center">
+        <div className="mt-8 flex flex-wrap gap-3 sm:gap-4 justify-center">
           <Button 
             onClick={performAudit}
             className="bg-accent hover:bg-accent/90 gap-2"
@@ -372,22 +372,22 @@ export function BrandAuditChecker() {
         {/* Summary */}
         <Card className="mt-8 p-6 bg-slate-50">
           <h3 className="font-semibold text-slate-900 mb-3">Audit Summary</h3>
-          <div className="grid md:grid-cols-3 gap-4 text-sm">
+          <div className="grid md:grid-cols-3 gap-3 sm:gap-4 text-sm">
             <div>
               <p className="text-slate-600 mb-1">Screens Passing</p>
-              <p className="text-2xl font-bold text-green-600">
+              <p className="text-xl sm:text-2xl font-bold text-green-600">
                 {auditResults.filter(r => r.score >= 90).length} / {auditResults.length}
               </p>
             </div>
             <div>
               <p className="text-slate-600 mb-1">Total Issues</p>
-              <p className="text-2xl font-bold text-amber-600">
+              <p className="text-xl sm:text-2xl font-bold text-amber-600">
                 {auditResults.reduce((sum, r) => sum + r.issues.length, 0)}
               </p>
             </div>
             <div>
               <p className="text-slate-600 mb-1">Compliance Rate</p>
-              <p className="text-2xl font-bold text-accent">
+              <p className="text-xl sm:text-2xl font-bold text-accent">
                 {overallScore}%
               </p>
             </div>

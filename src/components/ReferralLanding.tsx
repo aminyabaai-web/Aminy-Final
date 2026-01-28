@@ -121,7 +121,7 @@ export function ReferralLanding({ onNavigateToSignup, onNavigateToLogin }: Refer
           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-[#43AA8B] to-[#577590] rounded-2xl mb-4">
             <Gift className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-2xl font-bold text-[#0D1B2A] mb-2">
+          <h1 className="text-xl sm:text-2xl font-bold text-[#0D1B2A] mb-2">
             You've Been Invited!
           </h1>
           <p className="text-gray-600">
@@ -138,13 +138,13 @@ export function ReferralLanding({ onNavigateToSignup, onNavigateToLogin }: Refer
               <Sparkles className="w-6 h-6" />
               <span className="text-lg font-semibold">Your Welcome Gift</span>
             </div>
-            <div className="text-3xl font-bold mb-1">$25 Credit</div>
+            <div className="text-2xl sm:text-3xl font-bold mb-1">$25 Credit</div>
             <p className="text-white/80 text-sm">
               Toward your first expert session
             </p>
           </div>
 
-          <div className="p-6">
+          <div className="p-4 sm:p-5 md:p-6">
             <div className="flex items-center gap-3 text-gray-600 mb-4">
               <Heart className="w-5 h-5 text-[#E07A5F]" />
               <span className="text-sm">

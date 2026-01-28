@@ -177,7 +177,7 @@ function CancelFlowButton({ onCancel, tierName }: CancelFlowButtonProps) {
                 </DialogDescription>
               </DialogHeader>
 
-              <div className="py-4 space-y-4">
+              <div className="py-4 space-y-3 sm:space-y-4">
                 <Card className="p-4 border-2 border-purple-200 bg-purple-50/50">
                   <div className="flex items-start gap-3">
                     <div className="p-2 bg-purple-100 rounded-lg">
@@ -354,7 +354,7 @@ export function SubscriptionManagement({ accessToken }: SubscriptionManagementPr
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       {/* Current Plan Card */}
       <Card className="p-6 bg-gradient-to-br from-white via-teal-50/20 to-white border-accent/20">
         <div className="flex items-start justify-between mb-4">
@@ -424,7 +424,7 @@ export function SubscriptionManagement({ accessToken }: SubscriptionManagementPr
         </div>
 
         {/* Action Buttons */}
-        <div className="flex gap-3 mt-6">
+        <div className="flex gap-3 mt-4 sm:mt-6">
           {currentTier !== 'free' && (
             <Button
               onClick={manageSubscription}
@@ -466,7 +466,7 @@ export function SubscriptionManagement({ accessToken }: SubscriptionManagementPr
       {/* Referral Card */}
       {referralInfo && (
         <Card className="p-6 bg-gradient-to-br from-purple-50 to-pink-50 border-purple-200">
-          <div className="flex items-start gap-4">
+          <div className="flex items-start gap-3 sm:gap-4">
             <div className="p-3 bg-purple-100 rounded-xl">
               <Gift className="w-6 h-6 text-purple-600" />
             </div>
@@ -509,7 +509,7 @@ export function SubscriptionManagement({ accessToken }: SubscriptionManagementPr
 
       {/* Plan Comparison */}
       {currentTier !== 'pro' && (
-        <Card className="p-6">
+        <Card className="p-4 sm:p-5 md:p-6">
           <h3 className="font-semibold text-primary mb-4">Why upgrade?</h3>
           <div className="space-y-3">
             {currentTier === 'free' || currentTier === 'starter' ? (

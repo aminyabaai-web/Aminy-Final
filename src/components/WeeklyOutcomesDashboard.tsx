@@ -122,7 +122,7 @@ export function WeeklyOutcomesDashboard({
   return (
     <Card className="p-6 bg-gradient-to-br from-white via-teal-50/10 to-white border-accent/10 hover:shadow-lg transition-shadow">
       {/* Header */}
-      <div className="flex items-start justify-between mb-6">
+      <div className="flex items-start justify-between mb-4 sm:mb-6">
         <div>
           <div className="flex items-center gap-3 mb-2">
             <div className="p-2 bg-accent/10 rounded-lg">
@@ -147,7 +147,7 @@ export function WeeklyOutcomesDashboard({
 
       {/* AI Summary */}
       {summary.aiSummary && (
-        <div className="mb-6 p-4 bg-teal-50 border border-teal-100 rounded-lg">
+        <div className="mb-4 sm:mb-6 p-4 bg-teal-50 border border-teal-100 rounded-lg">
           <div className="flex items-start gap-3">
             <Sparkles className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
             <p className="text-sm text-primary leading-relaxed italic">
@@ -158,7 +158,7 @@ export function WeeklyOutcomesDashboard({
       )}
 
       {/* Quick Stats Grid */}
-      <div className="grid grid-cols-2 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-6">
         {/* Activities */}
         <div className="p-4 bg-white border border-gray-100 rounded-lg">
           <div className="flex items-center gap-2 mb-2">

@@ -74,7 +74,7 @@ export function Shimmer({
     case 'card':
       return (
         <div className={cn('rounded-xl border bg-card p-6 shadow-sm', className)}>
-          <div className="flex items-center gap-4 mb-4">
+          <div className="flex items-center gap-3 sm:gap-4 mb-4">
             <ShimmerBase className="h-12 w-12 rounded-full" />
             <div className="flex-1 space-y-2">
               <ShimmerBase className="h-4 w-3/4" />
@@ -136,7 +136,7 @@ export function Shimmer({
 // Pre-built shimmer layouts for common screens
 export function ShimmerDashboard() {
   return (
-    <div className="space-y-6 p-6 animate-in fade-in duration-300">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6 p-6 animate-in fade-in duration-300">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="space-y-2">
@@ -147,14 +147,14 @@ export function ShimmerDashboard() {
       </div>
 
       {/* Stats row */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
         {[1, 2, 3, 4].map(i => (
           <Shimmer key={i} variant="stat" />
         ))}
       </div>
 
       {/* Main content */}
-      <div className="grid md:grid-cols-2 gap-6">
+      <div className="grid md:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
         <Shimmer variant="card" />
         <Shimmer variant="chart" />
       </div>
@@ -162,7 +162,7 @@ export function ShimmerDashboard() {
       {/* List */}
       <div className="space-y-3">
         {[1, 2, 3].map(i => (
-          <div key={i} className="flex items-center gap-4 p-4 rounded-lg border bg-card">
+          <div key={i} className="flex items-center gap-3 sm:gap-4 p-4 rounded-lg border bg-card">
             <ShimmerBase className="h-12 w-12 rounded-lg" />
             <div className="flex-1 space-y-2">
               <ShimmerBase className="h-4 w-3/4" />
@@ -180,7 +180,7 @@ export function ShimmerChat() {
   return (
     <div className="flex flex-col h-full animate-in fade-in duration-300">
       {/* Messages */}
-      <div className="flex-1 p-4 space-y-4">
+      <div className="flex-1 p-4 space-y-3 sm:space-y-4">
         {/* Bot message */}
         <div className="flex items-start gap-3">
           <ShimmerBase className="h-8 w-8 rounded-full flex-shrink-0" />
@@ -219,9 +219,9 @@ export function ShimmerChat() {
 
 export function ShimmerProfile() {
   return (
-    <div className="space-y-6 p-6 animate-in fade-in duration-300">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6 p-6 animate-in fade-in duration-300">
       {/* Header */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3 sm:gap-4">
         <ShimmerBase className="h-20 w-20 rounded-full" />
         <div className="space-y-2">
           <ShimmerBase className="h-6 w-40" />
@@ -230,7 +230,7 @@ export function ShimmerProfile() {
       </div>
 
       {/* Info cards */}
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         {[1, 2, 3].map(i => (
           <div key={i} className="p-4 rounded-lg border bg-card">
             <ShimmerBase className="h-3 w-20 mb-2" />
@@ -250,8 +250,8 @@ export function ShimmerProfile() {
 
 export function ShimmerGoals() {
   return (
-    <div className="space-y-4 p-6 animate-in fade-in duration-300">
-      <div className="flex items-center justify-between mb-6">
+    <div className="space-y-3 sm:space-y-4 p-6 animate-in fade-in duration-300">
+      <div className="flex items-center justify-between mb-4 sm:mb-6">
         <ShimmerBase className="h-6 w-32" />
         <ShimmerBase className="h-9 w-28 rounded-lg" />
       </div>
@@ -280,7 +280,7 @@ export function ShimmerTable({ rows = 5, cols = 4 }: { rows?: number; cols?: num
     <div className="rounded-lg border overflow-hidden animate-in fade-in duration-300">
       {/* Header */}
       <div className="bg-slate-50 dark:bg-slate-800/50 p-4 border-b">
-        <div className="flex gap-4">
+        <div className="flex gap-3 sm:gap-4">
           {Array.from({ length: cols }).map((_, i) => (
             <ShimmerBase key={i} className="h-4 flex-1" />
           ))}
@@ -291,7 +291,7 @@ export function ShimmerTable({ rows = 5, cols = 4 }: { rows?: number; cols?: num
       {Array.from({ length: rows }).map((_, rowIdx) => (
         <div
           key={rowIdx}
-          className="p-4 border-b last:border-b-0 flex gap-4"
+          className="p-4 border-b last:border-b-0 flex gap-3 sm:gap-4"
         >
           {Array.from({ length: cols }).map((_, colIdx) => (
             <ShimmerBase

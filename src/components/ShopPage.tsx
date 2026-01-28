@@ -510,7 +510,7 @@ export function ShopPage({ onNavigate, userTier = 'starter' }: ShopPageProps) {
   const renderPersonalizedHome = () => (
     <div className="space-y-8">
       {/* Hero Section */}
-      <div className="text-center space-y-4">
+      <div className="text-center space-y-3 sm:space-y-4">
         <h1 className="text-2xl font-semibold text-slate-900">Handpicked for {mockChildData.name}</h1>
         <div className="inline-flex items-center gap-2 px-3 py-1 bg-accent/10 rounded-full">
           <Brain className="w-4 h-4 text-accent" />
@@ -519,9 +519,9 @@ export function ShopPage({ onNavigate, userTier = 'starter' }: ShopPageProps) {
       </div>
 
       {/* Smart Bundles */}
-      <div className="space-y-4">
-        <h2 className="text-xl font-semibold text-slate-900">Smart Bundles</h2>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="space-y-3 sm:space-y-4">
+        <h2 className="text-lg sm:text-xl font-semibold text-slate-900">Smart Bundles</h2>
+        <div className="grid gap-3 sm:gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
           {smartBundles.map((bundle) => (
             <Card key={bundle.id} className="p-6 hover:shadow-lg transition-shadow">
               <div className="flex items-start justify-between mb-4">
@@ -586,14 +586,14 @@ export function ShopPage({ onNavigate, userTier = 'starter' }: ShopPageProps) {
       </div>
 
       {/* Personalized Recommendations */}
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-semibold text-slate-900">Recommended for You</h2>
+          <h2 className="text-lg sm:text-xl font-semibold text-slate-900">Recommended for You</h2>
           <Button variant="ghost" size="sm" onClick={() => setActiveView('categories')}>
             View All <ChevronRight className="w-4 h-4 ml-1" />
           </Button>
         </div>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-3 sm:gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
           {personalizedProducts.slice(0, 3).map((product) => (
             <ProductCard
               key={product.id}
@@ -608,9 +608,9 @@ export function ShopPage({ onNavigate, userTier = 'starter' }: ShopPageProps) {
       </div>
 
       {/* Quick Wins Under $25 */}
-      <div className="space-y-4">
-        <h2 className="text-xl font-semibold text-slate-900">Quick Wins Under $25</h2>
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+      <div className="space-y-3 sm:space-y-4">
+        <h2 className="text-lg sm:text-xl font-semibold text-slate-900">Quick Wins Under $25</h2>
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-3 sm:gap-4">
           {quickWins.map((item) => (
             <Card key={item.id} className="p-4 text-center hover:shadow-md transition-shadow">
               <div className="text-2xl mb-2">{item.image}</div>
@@ -629,9 +629,9 @@ export function ShopPage({ onNavigate, userTier = 'starter' }: ShopPageProps) {
       </div>
 
       {/* Try Printable First */}
-      <div className="space-y-4">
-        <h2 className="text-xl font-semibold text-slate-900">Try Printable First</h2>
-        <div className="grid gap-4 md:grid-cols-3">
+      <div className="space-y-3 sm:space-y-4">
+        <h2 className="text-lg sm:text-xl font-semibold text-slate-900">Try Printable First</h2>
+        <div className="grid gap-3 sm:gap-4 md:grid-cols-3">
           {expertPicks.map((pick) => (
             <Card key={pick.id} className="p-4 hover:shadow-md transition-shadow">
               <div className="flex items-center gap-3 mb-3">
@@ -670,7 +670,7 @@ export function ShopPage({ onNavigate, userTier = 'starter' }: ShopPageProps) {
       </div>
 
       {/* Personalization Knobs - NEW */}
-      <div className="flex flex-wrap gap-3 justify-center mb-6">
+      <div className="flex flex-wrap gap-3 justify-center mb-4 sm:mb-6">
         <Button variant="outline" size="sm" className="border-accent text-accent hover:bg-accent/10">
           <Brain className="w-4 h-4 mr-2" />
           Narrow to: Sensory Calming
@@ -712,13 +712,13 @@ export function ShopPage({ onNavigate, userTier = 'starter' }: ShopPageProps) {
   );
 
   const renderCategories = () => (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <h1 className="text-2xl font-semibold text-slate-900">Browse Categories</h1>
       
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-3 sm:gap-4 md:grid-cols-2 lg:grid-cols-3">
         {categories.filter(cat => cat.id !== 'all').map((category) => (
           <Card key={category.id} className="p-6 hover:shadow-lg transition-shadow cursor-pointer">
-            <div className="flex items-center gap-4 mb-4">
+            <div className="flex items-center gap-3 sm:gap-4 mb-4">
               <div className="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center text-accent">
                 {category.icon}
               </div>
@@ -759,7 +759,7 @@ export function ShopPage({ onNavigate, userTier = 'starter' }: ShopPageProps) {
   );
 
   const renderSearch = () => (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <h1 className="text-2xl font-semibold text-slate-900">Search & Filter</h1>
       
       {/* Search Bar */}
@@ -799,9 +799,9 @@ export function ShopPage({ onNavigate, userTier = 'starter' }: ShopPageProps) {
 
       {/* Filter Panel */}
       {showFilters && (
-        <Card className="p-6 space-y-4">
+        <Card className="p-6 space-y-3 sm:space-y-4">
           <h3 className="font-semibold text-slate-900">Filters</h3>
-          <div className="grid gap-4 md:grid-cols-3">
+          <div className="grid gap-3 sm:gap-4 md:grid-cols-3">
             <div>
               <label className="text-sm font-medium text-slate-700 block mb-2">Age Range</label>
               <select className="w-full border rounded-lg px-3 py-2">
@@ -852,7 +852,7 @@ export function ShopPage({ onNavigate, userTier = 'starter' }: ShopPageProps) {
       )}
 
       {/* Search Results */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-3 sm:gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
         {personalizedProducts.map((product) => (
           <ProductCard
             key={product.id}
@@ -868,10 +868,10 @@ export function ShopPage({ onNavigate, userTier = 'starter' }: ShopPageProps) {
   );
 
   const renderLearn = () => (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <h1 className="text-2xl font-semibold text-slate-900">Learn & Resources</h1>
       
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-3 sm:gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
         {expertPicks.map((pick) => (
           <Card key={pick.id} className="p-6 hover:shadow-md transition-shadow">
             <div className="flex items-center gap-3 mb-4">
@@ -907,7 +907,7 @@ export function ShopPage({ onNavigate, userTier = 'starter' }: ShopPageProps) {
   );
 
   const renderOrders = () => (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <h1 className="text-2xl font-semibold text-slate-900">Orders & Saved Items</h1>
       
       <Tabs defaultValue="orders" className="w-full">
@@ -917,18 +917,18 @@ export function ShopPage({ onNavigate, userTier = 'starter' }: ShopPageProps) {
           <TabsTrigger value="tracking">Order Tracking</TabsTrigger>
         </TabsList>
         
-        <TabsContent value="orders" className="mt-6">
-          <div className="space-y-4">
+        <TabsContent value="orders" className="mt-4 sm:mt-6">
+          <div className="space-y-3 sm:space-y-4">
             <p className="text-slate-600">No recent orders. Start shopping to see your order history here!</p>
           </div>
         </TabsContent>
         
-        <TabsContent value="saved" className="mt-6">
-          <div className="space-y-4">
+        <TabsContent value="saved" className="mt-4 sm:mt-6">
+          <div className="space-y-3 sm:space-y-4">
             {savedItems.length === 0 ? (
               <p className="text-slate-600">No saved items. Click the heart icon on any product to save it for later!</p>
             ) : (
-              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              <div className="grid gap-3 sm:gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {savedItems.map((itemId) => {
                   const product = personalizedProducts.find(p => p.id === itemId);
                   return product ? (
@@ -947,8 +947,8 @@ export function ShopPage({ onNavigate, userTier = 'starter' }: ShopPageProps) {
           </div>
         </TabsContent>
         
-        <TabsContent value="tracking" className="mt-6">
-          <div className="space-y-4">
+        <TabsContent value="tracking" className="mt-4 sm:mt-6">
+          <div className="space-y-3 sm:space-y-4">
             <p className="text-slate-600">No active shipments to track.</p>
           </div>
         </TabsContent>
@@ -959,7 +959,7 @@ export function ShopPage({ onNavigate, userTier = 'starter' }: ShopPageProps) {
   const renderCart = () => {
     if (checkoutStep === 'cart') {
       return (
-        <div className="space-y-6">
+        <div className="space-y-3 sm:space-y-4 sm:space-y-6">
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-semibold text-slate-900">Shopping Cart</h1>
             <Button variant="ghost" size="sm" onClick={() => setActiveView('home')}>
@@ -978,11 +978,11 @@ export function ShopPage({ onNavigate, userTier = 'starter' }: ShopPageProps) {
               </Button>
             </div>
           ) : (
-            <div className="space-y-6">
-              <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4 sm:space-y-6">
+              <div className="space-y-3 sm:space-y-4">
                 {cartItems.map((item) => (
-                  <Card key={item.id} className="p-4">
-                    <div className="flex items-center gap-4">
+                  <Card key={item.id} className="p-3 sm:p-4">
+                    <div className="flex items-center gap-3 sm:gap-4">
                       <div className="text-2xl">{item.image}</div>
                       <div className="flex-1">
                         <h3 className="font-medium text-slate-900">{item.title}</h3>
@@ -1041,17 +1041,17 @@ export function ShopPage({ onNavigate, userTier = 'starter' }: ShopPageProps) {
 
     if (checkoutStep === 'shipping') {
       return (
-        <div className="space-y-6">
-          <div className="flex items-center gap-4">
+        <div className="space-y-3 sm:space-y-4 sm:space-y-6">
+          <div className="flex items-center gap-3 sm:gap-4">
             <Button variant="ghost" size="sm" onClick={() => setCheckoutStep('cart')}>
               <ArrowLeft className="w-4 h-4" />
             </Button>
             <h1 className="text-2xl font-semibold text-slate-900">Shipping Information</h1>
           </div>
           
-          <Card className="p-6">
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+          <Card className="p-4 sm:p-5 md:p-6">
+            <div className="space-y-3 sm:space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">First Name</label>
                   <Input
@@ -1085,7 +1085,7 @@ export function ShopPage({ onNavigate, userTier = 'starter' }: ShopPageProps) {
                 />
               </div>
               
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">City</label>
                   <Input
@@ -1134,18 +1134,18 @@ export function ShopPage({ onNavigate, userTier = 'starter' }: ShopPageProps) {
 
     if (checkoutStep === 'payment') {
       return (
-        <div className="space-y-6">
-          <div className="flex items-center gap-4">
+        <div className="space-y-3 sm:space-y-4 sm:space-y-6">
+          <div className="flex items-center gap-3 sm:gap-4">
             <Button variant="ghost" size="sm" onClick={() => setCheckoutStep('shipping')}>
               <ArrowLeft className="w-4 h-4" />
             </Button>
             <h1 className="text-2xl font-semibold text-slate-900">Payment Method</h1>
           </div>
           
-          <Card className="p-6">
-            <div className="space-y-4">
+          <Card className="p-4 sm:p-5 md:p-6">
+            <div className="space-y-3 sm:space-y-4">
               {paymentMethods.map((method) => (
-                <label key={method.id} className="flex items-center gap-4 p-4 border rounded-lg cursor-pointer hover:bg-gray-50">
+                <label key={method.id} className="flex items-center gap-3 sm:gap-4 p-4 border rounded-lg cursor-pointer hover:bg-gray-50">
                   <input
                     type="radio"
                     name="payment"
@@ -1166,7 +1166,7 @@ export function ShopPage({ onNavigate, userTier = 'starter' }: ShopPageProps) {
             </div>
           </Card>
           
-          <Card className="p-6">
+          <Card className="p-4 sm:p-5 md:p-6">
             <h3 className="font-semibold mb-4">Order Summary</h3>
             <div className="space-y-2">
               {cartItems.map((item) => (
@@ -1197,7 +1197,7 @@ export function ShopPage({ onNavigate, userTier = 'starter' }: ShopPageProps) {
 
     if (checkoutStep === 'confirmation') {
       return (
-        <div className="space-y-6 text-center">
+        <div className="space-y-3 sm:space-y-4 sm:space-y-6 text-center">
           <div className="flex justify-center">
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
               <Check className="w-8 h-8 text-green-600" />
@@ -1416,7 +1416,7 @@ export function ShopPage({ onNavigate, userTier = 'starter' }: ShopPageProps) {
                     <ShoppingBag className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <h1 className="text-xl font-semibold text-slate-900">Shop</h1>
+                    <h1 className="text-lg sm:text-xl font-semibold text-slate-900">Shop</h1>
                     <p className="text-sm text-slate-600">AI-guided product discovery</p>
                   </div>
                 </div>
@@ -1525,7 +1525,7 @@ export function ShopPage({ onNavigate, userTier = 'starter' }: ShopPageProps) {
       {/* Enhanced Disclaimer Footer */}
       <div className="mt-12 bg-blue-50 border-t border-blue-200">
         <div className="px-4 py-6 sm:px-6 max-w-6xl mx-auto">
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             <div className="flex items-start gap-3">
               <Shield className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
               <div className="text-sm text-blue-900">

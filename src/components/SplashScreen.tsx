@@ -154,7 +154,7 @@ export function SplashScreen({ onGetStarted, onLogin }: SplashScreenProps) {
 
           {/* Features Grid - MOBILE: Below the fold, DESKTOP: After description */}
           <div 
-            className="splash-feature-grid grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 lg:gap-10 mb-10 sm:mb-16 px-2"
+            className="splash-feature-grid grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 sm:gap-6 sm:gap-8 lg:gap-10 mb-10 sm:mb-16 px-2"
             role="region"
             aria-label="Key features"
           >
@@ -249,7 +249,7 @@ export function SplashScreen({ onGetStarted, onLogin }: SplashScreenProps) {
             </div>
             
             {/* Mobile Layout - 2×2 Grid */}
-            <div className="md:hidden grid grid-cols-2 gap-x-3 gap-y-4 max-w-sm mx-auto">
+            <div className="md:hidden grid grid-cols-1 sm:grid-cols-2 gap-x-3 gap-y-4 max-w-sm mx-auto">
               <div className="flex items-center gap-2 px-3 py-2 bg-slate-50 rounded-full">
                 <Users className="w-3 h-3" style={{ color: '#90A3B3' }} aria-hidden="true" />
                 <span className="font-medium text-xs" style={{ color: '#2E3B4E' }}>Parent-tested</span>

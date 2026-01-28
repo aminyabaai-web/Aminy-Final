@@ -313,9 +313,9 @@ export function LaunchReadinessDashboard() {
 
           {/* Overall Score Card */}
           <Card className="p-8 bg-white/95 backdrop-blur-sm">
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center justify-between mb-4 sm:mb-6">
               <div>
-                <h2 className="text-2xl font-bold text-slate-900 mb-2">Overall Readiness</h2>
+                <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mb-2">Overall Readiness</h2>
                 <p className="text-slate-600">All systems evaluated and ready for launch</p>
               </div>
               <div className="text-center">
@@ -329,12 +329,12 @@ export function LaunchReadinessDashboard() {
 
             <Progress value={overallScore} className="h-3" />
 
-            <div className="grid grid-cols-5 gap-4 mt-6">
+            <div className="grid grid-cols-5 gap-3 sm:gap-4 mt-4 sm:mt-6">
               {categories.map((cat, idx) => (
                 <div key={idx} className="text-center">
                   <div className="mb-2">{cat.icon}</div>
                   <p className="text-sm font-medium text-slate-900 mb-1">{cat.title}</p>
-                  <p className="text-2xl font-bold text-accent">{cat.overallScore}%</p>
+                  <p className="text-xl sm:text-2xl font-bold text-accent">{cat.overallScore}%</p>
                 </div>
               ))}
             </div>
@@ -347,7 +347,7 @@ export function LaunchReadinessDashboard() {
         <div className="space-y-8">
           {categories.map((category, catIdx) => (
             <Card key={catIdx} className="p-6 hover:shadow-lg transition-all">
-              <div className="flex items-center gap-3 mb-6">
+              <div className="flex items-center gap-3 mb-4 sm:mb-6">
                 {category.icon}
                 <div className="flex-1">
                   <h3 className="text-xl font-bold text-slate-900">{category.title}</h3>
@@ -358,7 +358,7 @@ export function LaunchReadinessDashboard() {
                 </Badge>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 {category.items.map((item, itemIdx) => (
                   <div key={itemIdx} className="border-l-4 border-accent pl-4 py-2">
                     <div className="flex items-start justify-between mb-2">
@@ -395,7 +395,7 @@ export function LaunchReadinessDashboard() {
         {/* Next Steps */}
         <Card className="p-6 mt-8 bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200">
           <h3 className="text-xl font-bold text-slate-900 mb-4">✨ Next Steps</h3>
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="grid md:grid-cols-2 gap-3 sm:gap-4">
             <div className="flex items-start gap-3">
               <CheckCircle className="w-5 h-5 text-green-600 mt-0.5" />
               <div>
@@ -430,8 +430,8 @@ export function LaunchReadinessDashboard() {
         {/* Final Message */}
         <div className="text-center mt-12 p-8 bg-gradient-to-r from-accent/10 to-teal-50 rounded-2xl">
           <Sparkles className="w-16 h-16 text-accent mx-auto mb-4" />
-          <h2 className="text-3xl font-bold text-slate-900 mb-3">🎉 Phase 2 Complete!</h2>
-          <p className="text-lg text-slate-700 mb-6 max-w-2xl mx-auto">
+          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-3">🎉 Phase 2 Complete!</h2>
+          <p className="text-lg text-slate-700 mb-4 sm:mb-6 max-w-2xl mx-auto">
             Aminy is now a comprehensive behavioral wellness ecosystem with 97% brand compliance, 
             100% mobile responsiveness, and production-ready features across all modules.
           </p>

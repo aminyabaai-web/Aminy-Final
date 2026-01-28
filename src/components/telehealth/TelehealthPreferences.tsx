@@ -92,7 +92,7 @@ export function TelehealthPreferences({ onBack }: TelehealthPreferencesProps) {
       </header>
 
       {/* Content */}
-      <div className="px-4 py-6 space-y-6">
+      <div className="px-4 py-6 space-y-3 sm:space-y-4 sm:space-y-6">
         {/* Communication Preferences */}
         <section className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
           <div className="px-4 py-3 bg-gray-50 border-b border-gray-100">

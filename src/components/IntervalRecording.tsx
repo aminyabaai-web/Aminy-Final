@@ -435,7 +435,7 @@ export function IntervalRecording({
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-slate-900 p-4 pb-24">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-4 sm:mb-6">
         <div className="flex items-center gap-3">
           {onBack && (
             <button
@@ -483,7 +483,7 @@ export function IntervalRecording({
 
       {/* Settings Panel */}
       {showSettings && (
-        <Card className="p-5 mb-6 dark:bg-slate-800 dark:border-slate-700">
+        <Card className="p-5 mb-4 sm:mb-6 dark:bg-slate-800 dark:border-slate-700">
           <h2 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
             <Settings className="w-5 h-5 text-teal-600" />
             Session Configuration
@@ -612,7 +612,7 @@ export function IntervalRecording({
       {!showSettings && (
         <>
           {/* Timer Display */}
-          <Card className="p-6 mb-6 dark:bg-slate-800 dark:border-slate-700">
+          <Card className="p-6 mb-4 sm:mb-6 dark:bg-slate-800 dark:border-slate-700">
             <div className="text-center mb-4">
               <div className="text-4xl font-bold text-gray-900 dark:text-white font-mono">
                 {formatTime(sessionStartTime ? Date.now() - sessionStartTime : 0)}
@@ -662,7 +662,7 @@ export function IntervalRecording({
           </Card>
 
           {/* Behavior Buttons */}
-          <Card className="p-5 mb-6 dark:bg-slate-800 dark:border-slate-700">
+          <Card className="p-5 mb-4 sm:mb-6 dark:bg-slate-800 dark:border-slate-700">
             <h3 className="font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
               <AlertCircle className="w-5 h-5 text-teal-600" />
               Record Behaviors
@@ -673,7 +673,7 @@ export function IntervalRecording({
               {recordingMethod === 'momentary' && 'At the beep, tap if behavior is currently occurring'}
             </p>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {behaviors.map(behavior => (
                 <button
                   key={behavior.id}

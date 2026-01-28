@@ -270,7 +270,7 @@ export function DeviceManagement({
       </div>
 
       <div className="px-4 py-6 sm:px-6 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 sm:gap-6">
           
           {/* Device List */}
           <div className="lg:col-span-1">
@@ -330,7 +330,7 @@ export function DeviceManagement({
             {/* Tier Notice */}
             {userTier === 'starter' && (
               <Card className="mt-4 border-amber-200 bg-amber-50 dark:bg-amber-900/20">
-                <div className="p-4">
+                <div className="p-3 sm:p-4">
                   <div className="flex items-center gap-3">
                     <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400" />
                     <div className="flex-1">
@@ -355,18 +355,18 @@ export function DeviceManagement({
           </div>
 
           {/* Device Details */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-3 sm:space-y-4 sm:space-y-6">
             {selectedDeviceData && (
               <>
                 {/* Device Overview */}
-                <Card className="p-6">
-                  <div className="flex items-center justify-between mb-6">
-                    <div className="flex items-center gap-4">
+                <Card className="p-4 sm:p-5 md:p-6">
+                  <div className="flex items-center justify-between mb-4 sm:mb-6">
+                    <div className="flex items-center gap-3 sm:gap-4">
                       <div className="w-16 h-16 bg-slate-100 dark:bg-slate-700 rounded-xl flex items-center justify-center">
                         {getDeviceIcon(selectedDeviceData.type)}
                       </div>
                       <div>
-                        <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">
+                        <h2 className="text-lg sm:text-xl font-semibold text-slate-900 dark:text-slate-100">
                           {selectedDeviceData.name}
                         </h2>
                         <p className="text-slate-600 dark:text-slate-400">
@@ -380,23 +380,23 @@ export function DeviceManagement({
                     </Button>
                   </div>
 
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
                     <div className="text-center">
-                      <div className={`text-2xl font-bold ${getBatteryColor(selectedDeviceData.battery)}`}>
+                      <div className={`text-xl sm:text-2xl font-bold ${getBatteryColor(selectedDeviceData.battery)}`}>
                         {selectedDeviceData.battery}%
                       </div>
                       <div className="text-sm text-slate-600 dark:text-slate-400">Battery</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-green-600">{selectedDeviceData.wifiStrength}%</div>
+                      <div className="text-xl sm:text-2xl font-bold text-green-600">{selectedDeviceData.wifiStrength}%</div>
                       <div className="text-sm text-slate-600 dark:text-slate-400">WiFi Signal</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-blue-600">{selectedDeviceData.screenTime.split(' ')[0]}</div>
+                      <div className="text-xl sm:text-2xl font-bold text-blue-600">{selectedDeviceData.screenTime.split(' ')[0]}</div>
                       <div className="text-sm text-slate-600 dark:text-slate-400">Screen Time</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-purple-600 capitalize">
+                      <div className="text-xl sm:text-2xl font-bold text-purple-600 capitalize">
                         {selectedDeviceData.status}
                       </div>
                       <div className="text-sm text-slate-600 dark:text-slate-400">Status</div>
@@ -405,7 +405,7 @@ export function DeviceManagement({
                 </Card>
 
                 {/* Remote Actions */}
-                <Card className="p-6">
+                <Card className="p-4 sm:p-5 md:p-6">
                   <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
                     Remote Actions
                   </h3>
@@ -453,12 +453,12 @@ export function DeviceManagement({
                 </Card>
 
                 {/* Device Settings */}
-                <Card className="p-6">
+                <Card className="p-4 sm:p-5 md:p-6">
                   <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
                     Device Settings
                   </h3>
                   
-                  <div className="space-y-6">
+                  <div className="space-y-3 sm:space-y-4 sm:space-y-6">
                     <div>
                       <h4 className="font-medium text-slate-900 dark:text-slate-100 mb-3">General</h4>
                       <div className="space-y-3">

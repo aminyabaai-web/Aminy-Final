@@ -58,7 +58,7 @@ export function StreakTracker({
   }, [currentStreak, isPaused, lastCheckIn]);
 
   return (
-    <Card className="p-4">
+    <Card className="p-3 sm:p-4">
       <div className="flex items-start justify-between mb-4">
         <div>
           <h3 className="font-semibold mb-1">Gentle Streak</h3>
@@ -74,12 +74,12 @@ export function StreakTracker({
       </div>
 
       {/* Current Streak */}
-      <div className="flex items-center gap-4 mb-4">
+      <div className="flex items-center gap-3 sm:gap-4 mb-4">
         <div className="p-3 bg-gradient-to-br from-orange-100 to-amber-100 rounded-xl">
           <Flame className="w-8 h-8 text-orange-600" />
         </div>
         <div>
-          <p className="text-3xl font-bold text-slate-900">{currentStreak}</p>
+          <p className="text-2xl sm:text-3xl font-bold text-slate-900">{currentStreak}</p>
           <p className="text-sm text-muted-foreground">
             {currentStreak === 1 ? 'day' : 'days'} this week
           </p>

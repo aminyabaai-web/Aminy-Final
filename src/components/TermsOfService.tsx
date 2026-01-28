@@ -19,12 +19,12 @@ export function TermsOfService({ onBack }: TermsOfServiceProps) {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white border-b sticky top-0 z-10">
-        <div className="max-w-3xl mx-auto px-4 py-4 flex items-center gap-4">
+        <div className="max-w-3xl mx-auto px-4 py-4 flex items-center gap-3 sm:gap-4">
           <Button variant="ghost" size="icon" onClick={onBack}>
             <ArrowLeft className="w-5 h-5" />
           </Button>
           <div>
-            <h1 className="text-xl font-semibold text-gray-900">Terms of Service</h1>
+            <h1 className="text-lg sm:text-xl font-semibold text-gray-900">Terms of Service</h1>
             <p className="text-sm text-gray-500">Last updated: {lastUpdated}</p>
           </div>
         </div>
@@ -39,7 +39,7 @@ export function TermsOfService({ onBack }: TermsOfServiceProps) {
               <div className="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center">
                 <FileText className="w-5 h-5 text-teal-600" />
               </div>
-              <h2 className="text-xl font-semibold text-gray-900">Agreement to Terms</h2>
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Agreement to Terms</h2>
             </div>
             <p className="text-gray-600 leading-relaxed">
               Welcome to Aminy! These Terms of Service ("Terms") govern your use of the Aminy mobile
@@ -56,7 +56,7 @@ export function TermsOfService({ onBack }: TermsOfServiceProps) {
 
           {/* Service Description */}
           <section>
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Description of Service</h2>
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">Description of Service</h2>
             <p className="text-gray-600 leading-relaxed">
               Aminy is an AI-powered behavioral wellness companion designed to help parents and caregivers
               support children's development using principles of Applied Behavior Analysis (ABA). The Service provides:
@@ -76,7 +76,7 @@ export function TermsOfService({ onBack }: TermsOfServiceProps) {
               <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
                 <AlertTriangle className="w-5 h-5 text-red-600" />
               </div>
-              <h2 className="text-xl font-semibold text-gray-900">Important Medical Disclaimer</h2>
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Important Medical Disclaimer</h2>
             </div>
             <div className="bg-red-50 border border-red-200 rounded-lg p-4">
               <p className="text-gray-700 leading-relaxed">
@@ -98,7 +98,7 @@ export function TermsOfService({ onBack }: TermsOfServiceProps) {
               <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
                 <Users className="w-5 h-5 text-blue-600" />
               </div>
-              <h2 className="text-xl font-semibold text-gray-900">User Accounts</h2>
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900">User Accounts</h2>
             </div>
             <p className="text-gray-600 leading-relaxed">
               To use certain features of the Service, you must create an account. You agree to:
@@ -122,7 +122,7 @@ export function TermsOfService({ onBack }: TermsOfServiceProps) {
               <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
                 <CreditCard className="w-5 h-5 text-green-600" />
               </div>
-              <h2 className="text-xl font-semibold text-gray-900">Subscriptions and Payments</h2>
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Subscriptions and Payments</h2>
             </div>
             <h3 className="font-medium text-gray-900 mt-4 mb-2">Subscription Plans</h3>
             <p className="text-gray-600 leading-relaxed">
@@ -159,7 +159,7 @@ export function TermsOfService({ onBack }: TermsOfServiceProps) {
 
           {/* Acceptable Use */}
           <section>
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Acceptable Use</h2>
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">Acceptable Use</h2>
             <p className="text-gray-600 leading-relaxed">
               You agree NOT to:
             </p>
@@ -178,7 +178,7 @@ export function TermsOfService({ onBack }: TermsOfServiceProps) {
 
           {/* Intellectual Property */}
           <section>
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Intellectual Property</h2>
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">Intellectual Property</h2>
             <p className="text-gray-600 leading-relaxed">
               The Service and its original content (excluding user-provided content) are and will remain
               the exclusive property of Aminy Inc. and its licensors. The Service is protected by
@@ -196,7 +196,7 @@ export function TermsOfService({ onBack }: TermsOfServiceProps) {
               <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center">
                 <Scale className="w-5 h-5 text-amber-600" />
               </div>
-              <h2 className="text-xl font-semibold text-gray-900">Limitation of Liability</h2>
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Limitation of Liability</h2>
             </div>
             <p className="text-gray-600 leading-relaxed">
               TO THE MAXIMUM EXTENT PERMITTED BY LAW:
@@ -211,7 +211,7 @@ export function TermsOfService({ onBack }: TermsOfServiceProps) {
 
           {/* Dispute Resolution */}
           <section>
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Dispute Resolution</h2>
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">Dispute Resolution</h2>
             <p className="text-gray-600 leading-relaxed">
               Any disputes arising from these Terms or the Service shall be resolved through:
             </p>
@@ -228,7 +228,7 @@ export function TermsOfService({ onBack }: TermsOfServiceProps) {
 
           {/* Changes to Terms */}
           <section>
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Changes to Terms</h2>
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">Changes to Terms</h2>
             <p className="text-gray-600 leading-relaxed">
               We reserve the right to modify these Terms at any time. We will provide notice of
               material changes through the app or by email. Your continued use of the Service
@@ -242,7 +242,7 @@ export function TermsOfService({ onBack }: TermsOfServiceProps) {
               <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
                 <MessageSquare className="w-5 h-5 text-purple-600" />
               </div>
-              <h2 className="text-xl font-semibold text-gray-900">Contact Us</h2>
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Contact Us</h2>
             </div>
             <p className="text-gray-600 leading-relaxed">
               If you have questions about these Terms, please contact us:

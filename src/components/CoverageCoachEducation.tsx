@@ -145,7 +145,7 @@ export function CoverageCoachEducation({ onBack, userState = 'AZ' }: CoverageCoa
 // Overview Section
 function OverviewSection({ sections, onSelectSection }: { sections: any[]; onSelectSection: (id: string) => void }) {
   return (
-    <div className="space-y-4">
+    <div className="space-y-3 sm:space-y-4">
       <Card className="p-4 bg-gradient-to-r from-accent/10 to-teal-50 border-accent/20">
         <div className="flex items-start gap-3">
           <HelpCircle className="w-6 h-6 text-accent flex-shrink-0 mt-0.5" />
@@ -165,7 +165,7 @@ function OverviewSection({ sections, onSelectSection }: { sections: any[]; onSel
             className="p-4 cursor-pointer hover:shadow-md transition-all hover:border-accent/30"
             onClick={() => onSelectSection(section.id)}
           >
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3 sm:gap-4">
               <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${section.color}`}>
                 <section.icon className="w-6 h-6" />
               </div>
@@ -236,7 +236,7 @@ function InsuranceQuestionsSection({ onCopy, copiedItem }: { onCopy: (text: stri
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <Card className="p-4 bg-blue-50 border-blue-200">
         <p className="text-sm text-blue-800">
           <strong>Pro tip:</strong> Call the number on the back of your insurance card and ask for the "Behavioral Health Benefits" department. Keep notes of who you spoke with and when.
@@ -244,7 +244,7 @@ function InsuranceQuestionsSection({ onCopy, copiedItem }: { onCopy: (text: stri
       </Card>
 
       {questions.map((category, idx) => (
-        <Card key={idx} className="p-4">
+        <Card key={idx} className="p-3 sm:p-4">
           <div className="flex items-center gap-2 mb-4">
             <category.icon className="w-5 h-5 text-accent" />
             <h3 className="font-semibold text-slate-900">{category.category}</h3>
@@ -322,7 +322,7 @@ function CPTCodesSection({ expandedItems, toggleExpand }: { expandedItems: Set<s
   ];
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3 sm:space-y-4">
       <Card className="p-4 bg-purple-50 border-purple-200">
         <p className="text-sm text-purple-800">
           <strong>What are CPT codes?</strong> CPT (Current Procedural Terminology) codes are standardized codes that healthcare providers use to bill insurance for specific services. Understanding these helps you verify what your plan covers.
@@ -335,7 +335,7 @@ function CPTCodesSection({ expandedItems, toggleExpand }: { expandedItems: Set<s
           <Card key={cpt.code} className="overflow-hidden">
             <button
               onClick={() => toggleExpand(cpt.code)}
-              className="w-full p-4 flex items-start gap-4 text-left hover:bg-slate-50 transition-colors"
+              className="w-full p-4 flex items-start gap-3 sm:gap-4 text-left hover:bg-slate-50 transition-colors"
             >
               <div className="w-16 h-16 bg-purple-100 rounded-xl flex items-center justify-center flex-shrink-0">
                 <span className="text-lg font-bold text-purple-700">{cpt.code}</span>
@@ -355,7 +355,7 @@ function CPTCodesSection({ expandedItems, toggleExpand }: { expandedItems: Set<s
               <div className="px-4 pb-4 border-t border-slate-100">
                 <div className="mt-4 space-y-3">
                   <p className="text-sm text-slate-700">{cpt.details}</p>
-                  <div className="grid grid-cols-2 gap-4 mt-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mt-3">
                     <div className="bg-slate-50 p-3 rounded-lg">
                       <p className="text-xs font-medium text-slate-500 mb-1">Who Provides</p>
                       <p className="text-sm text-slate-800">{cpt.whoProvides}</p>
@@ -424,7 +424,7 @@ Sincerely,
 Enclosures: [List all attachments]`;
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3 sm:space-y-4">
       <Card className="p-4 bg-amber-50 border-amber-200">
         <div className="flex items-start gap-2">
           <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
@@ -437,7 +437,7 @@ Enclosures: [List all attachments]`;
         </div>
       </Card>
 
-      <Card className="p-4">
+      <Card className="p-3 sm:p-4">
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-semibold text-slate-900">Insurance Appeal Letter Template</h3>
           <Button
@@ -466,7 +466,7 @@ Enclosures: [List all attachments]`;
         </div>
       </Card>
 
-      <Card className="p-4">
+      <Card className="p-3 sm:p-4">
         <h3 className="font-semibold text-slate-900 mb-3">Appeal Tips</h3>
         <ul className="space-y-2">
           {[
@@ -534,16 +534,16 @@ function SingleCaseAgreementSection() {
   ];
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3 sm:space-y-4">
       <Card className="p-4 bg-green-50 border-green-200">
         <p className="text-sm text-green-800">
           <strong>What is a Single-Case Agreement?</strong> It's a contract between your insurance and an out-of-network provider that allows them to be paid at or near in-network rates for your specific case.
         </p>
       </Card>
 
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         {steps.map((step, idx) => (
-          <Card key={idx} className="p-4">
+          <Card key={idx} className="p-3 sm:p-4">
             <div className="flex items-start gap-3">
               <span className="w-8 h-8 bg-accent text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
                 {idx + 1}
@@ -598,7 +598,7 @@ function MedicaidWaiverSection() {
   ];
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3 sm:space-y-4">
       <Card className="p-4 bg-teal-50 border-teal-200">
         <p className="text-sm text-teal-800">
           <strong>What are Medicaid Waivers?</strong> They allow states to provide services not typically covered by Medicaid, enabling care in homes and communities. Wait lists can be long (years in some states), so apply early.
@@ -606,7 +606,7 @@ function MedicaidWaiverSection() {
       </Card>
 
       {waiverTypes.map((waiver, idx) => (
-        <Card key={idx} className="p-4">
+        <Card key={idx} className="p-3 sm:p-4">
           <h3 className="font-semibold text-slate-900 mb-2">{waiver.name}</h3>
           <p className="text-sm text-slate-600 mb-3">{waiver.description}</p>
 
@@ -693,7 +693,7 @@ function StateWaiversSection({ userState, expandedItems, toggleExpand }: { userS
   const currentStateData = stateWaivers[userState] || stateWaivers['AZ'];
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3 sm:space-y-4">
       {/* Current State Highlight */}
       <Card className="p-4 bg-indigo-50 border-indigo-200">
         <div className="flex items-center gap-2 mb-3">
@@ -723,7 +723,7 @@ function StateWaiversSection({ userState, expandedItems, toggleExpand }: { userS
       </Card>
 
       {/* Other States */}
-      <h3 className="font-semibold text-slate-900 mt-6 mb-3">Other States</h3>
+      <h3 className="font-semibold text-slate-900 mt-4 sm:mt-6 mb-3">Other States</h3>
       {Object.entries(stateWaivers).filter(([state]) => state !== userState).map(([state, data]) => {
         const isExpanded = expandedItems.has(state);
         return (

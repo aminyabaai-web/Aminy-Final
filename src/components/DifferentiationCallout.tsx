@@ -114,12 +114,12 @@ export function DifferentiationCallout({
 
   // Full variant
   return (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <div className="text-center">
         <Badge className="bg-teal-100 text-teal-800 mb-3">
           Why Aminy Works
         </Badge>
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
           {getContextMessage()}
         </h2>
         <p className="text-gray-600 max-w-xl mx-auto">
@@ -128,7 +128,7 @@ export function DifferentiationCallout({
         </p>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         {DIFFERENTIATORS.map((item, index) => {
           const Icon = item.icon;
           return (
@@ -138,8 +138,8 @@ export function DifferentiationCallout({
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: index * 0.1 }}
             >
-              <Card className="p-4">
-                <div className="flex items-start gap-4">
+              <Card className="p-3 sm:p-4">
+                <div className="flex items-start gap-3 sm:gap-4">
                   <div className="w-10 h-10 bg-teal-100 rounded-xl flex items-center justify-center flex-shrink-0">
                     <Icon className="w-5 h-5 text-teal-600" />
                   </div>

@@ -147,7 +147,7 @@ export function EmotionTracker({ userId }: { userId: string }) {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       {/* Weekly Check-in */}
       <Card>
         <CardHeader>
@@ -156,7 +156,7 @@ export function EmotionTracker({ userId }: { userId: string }) {
             Your feelings matter. Let's notice the patterns together.
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-6">
+        <CardContent className="space-y-3 sm:space-y-4 sm:space-y-6">
           <div className="text-center">
             <div className="text-4xl mb-2">
               {currentFeeling === 1 && '😰'}
@@ -232,7 +232,7 @@ export function EmotionTracker({ userId }: { userId: string }) {
               Patterns that might be helping
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-3 sm:space-y-4">
             {insights.map((insight, index) => (
               <div
                 key={index}

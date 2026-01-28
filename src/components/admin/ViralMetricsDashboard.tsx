@@ -95,7 +95,7 @@ export function ViralMetricsDashboard({ className }: ViralMetricsDashboardProps)
 
   return (
     <Card className={`p-6 ${className}`}>
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-4 sm:mb-6">
         <h3 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
           <Zap className="w-5 h-5 text-yellow-500" />
           Viral Growth Metrics
@@ -114,7 +114,7 @@ export function ViralMetricsDashboard({ className }: ViralMetricsDashboardProps)
       </div>
 
       {/* K-Factor Hero */}
-      <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-800 dark:to-slate-700 rounded-xl p-6 mb-6">
+      <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-800 dark:to-slate-700 rounded-xl p-6 mb-4 sm:mb-6">
         <div className="text-center">
           <p className="text-sm text-gray-500 dark:text-slate-400 mb-1">Viral Coefficient (K-Factor)</p>
           <div className="flex items-center justify-center gap-3">
@@ -135,13 +135,13 @@ export function ViralMetricsDashboard({ className }: ViralMetricsDashboardProps)
       </div>
 
       {/* K-Factor Components */}
-      <div className="grid grid-cols-2 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-6">
         <div className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-4">
           <div className="flex items-center gap-2 mb-1">
             <Share2 className="w-4 h-4 text-blue-500" />
             <span className="text-xs text-gray-500 dark:text-slate-400">Avg Invites/User</span>
           </div>
-          <p className="text-2xl font-bold text-gray-900 dark:text-white">
+          <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
             {metrics.avgInvitesSent.toFixed(2)}
           </p>
         </div>
@@ -150,14 +150,14 @@ export function ViralMetricsDashboard({ className }: ViralMetricsDashboardProps)
             <Target className="w-4 h-4 text-green-500" />
             <span className="text-xs text-gray-500 dark:text-slate-400">Conversion Rate</span>
           </div>
-          <p className="text-2xl font-bold text-gray-900 dark:text-white">
+          <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
             {metrics.conversionRate.toFixed(1)}%
           </p>
         </div>
       </div>
 
       {/* Referral Funnel */}
-      <div className="mb-6">
+      <div className="mb-4 sm:mb-6">
         <h4 className="text-sm font-medium text-gray-700 dark:text-slate-300 mb-3">Referral Funnel</h4>
         <div className="flex items-center justify-between gap-2">
           {/* Invites Sent */}
@@ -194,7 +194,7 @@ export function ViralMetricsDashboard({ className }: ViralMetricsDashboardProps)
       </div>
 
       {/* Additional Stats */}
-      <div className="grid grid-cols-2 gap-3 text-sm">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
         <div className="flex items-center gap-2 p-3 bg-gray-50 dark:bg-slate-800 rounded-lg">
           <Users className="w-4 h-4 text-gray-400" />
           <div>
@@ -235,7 +235,7 @@ export function ViralMetricsDashboard({ className }: ViralMetricsDashboardProps)
       </div>
 
       {/* K-Factor Target */}
-      <div className="mt-6 p-4 bg-teal-50 dark:bg-teal-900/20 border border-teal-200 dark:border-teal-800 rounded-lg">
+      <div className="mt-4 sm:mt-6 p-4 bg-teal-50 dark:bg-teal-900/20 border border-teal-200 dark:border-teal-800 rounded-lg">
         <div className="flex items-start gap-3">
           <Target className="w-5 h-5 text-teal-600 dark:text-teal-400 mt-0.5" />
           <div>

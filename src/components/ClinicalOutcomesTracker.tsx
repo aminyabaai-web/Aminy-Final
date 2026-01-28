@@ -461,15 +461,15 @@ export function ClinicalOutcomesTracker({
       </div>
 
       {/* Main Content */}
-      <main className="max-w-4xl mx-auto px-4 py-6 space-y-6">
+      <main className="max-w-4xl mx-auto px-4 py-6 space-y-3 sm:space-y-4 sm:space-y-6">
         {/* Summary Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
           <Card className="p-4 text-center">
-            <p className="text-3xl font-bold text-neutral-900">{outcomes.length}</p>
+            <p className="text-2xl sm:text-3xl font-bold text-neutral-900">{outcomes.length}</p>
             <p className="text-sm text-neutral-500">Total Assessments</p>
           </Card>
           <Card className="p-4 text-center">
-            <p className="text-3xl font-bold text-green-600">
+            <p className="text-2xl sm:text-3xl font-bold text-green-600">
               {trendsByType.filter(t => {
                 const isInverted = ['behavioral_checklist', 'parent_stress'].includes(t.type);
                 return isInverted ? t.trend === 'down' : t.trend === 'up';
@@ -478,13 +478,13 @@ export function ClinicalOutcomesTracker({
             <p className="text-sm text-neutral-500">Improving</p>
           </Card>
           <Card className="p-4 text-center">
-            <p className="text-3xl font-bold text-amber-600">
+            <p className="text-2xl sm:text-3xl font-bold text-amber-600">
               {trendsByType.filter(t => t.trend === 'stable').length}
             </p>
             <p className="text-sm text-neutral-500">Stable</p>
           </Card>
           <Card className="p-4 text-center">
-            <p className="text-3xl font-bold text-red-600">
+            <p className="text-2xl sm:text-3xl font-bold text-red-600">
               {trendsByType.filter(t => {
                 const isInverted = ['behavioral_checklist', 'parent_stress'].includes(t.type);
                 return isInverted ? t.trend === 'up' : t.trend === 'down';
@@ -498,13 +498,13 @@ export function ClinicalOutcomesTracker({
         {trendsByType.length > 0 && (
           <div>
             <h3 className="font-semibold text-neutral-900 mb-3">Trends</h3>
-            <div className="grid md:grid-cols-2 gap-4">
+            <div className="grid md:grid-cols-2 gap-3 sm:gap-4">
               {trendsByType.map((trend, i) => {
                 const config = ASSESSMENT_CONFIGS.find(c => c.type === trend.type);
                 const Icon = config?.icon || Activity;
 
                 return (
-                  <Card key={i} className="p-4">
+                  <Card key={i} className="p-3 sm:p-4">
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-3">
                         <div className={`p-2 rounded-lg ${config?.color || 'bg-neutral-100 text-neutral-600'}`}>
@@ -572,7 +572,7 @@ export function ClinicalOutcomesTracker({
                 const Icon = config?.icon || Activity;
 
                 return (
-                  <Card key={outcome.id} className="p-4">
+                  <Card key={outcome.id} className="p-3 sm:p-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <div className={`p-2 rounded-lg ${config?.color || 'bg-neutral-100 text-neutral-600'}`}>
@@ -590,7 +590,7 @@ export function ClinicalOutcomesTracker({
                       </div>
                       <div className="text-right">
                         <div className="flex items-center gap-2">
-                          <span className="text-2xl font-bold text-neutral-900">
+                          <span className="text-xl sm:text-2xl font-bold text-neutral-900">
                             {outcome.rawScore}
                           </span>
                           {outcome.changeFromPrevious !== null && outcome.changeFromPrevious !== undefined && (
@@ -641,11 +641,11 @@ export function ClinicalOutcomesTracker({
               </div>
             </div>
 
-            <div className="p-6 space-y-4">
+            <div className="p-6 space-y-3 sm:space-y-4">
               {/* Assessment Type */}
               <div>
                 <label className="block text-sm font-medium text-neutral-700 mb-2">Assessment Type</label>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {ASSESSMENT_CONFIGS.map(config => {
                     const Icon = config.icon;
                     return (
@@ -692,7 +692,7 @@ export function ClinicalOutcomesTracker({
                 <label className="block text-sm font-medium text-neutral-700 mb-1.5">
                   Score
                 </label>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3 sm:gap-4">
                   <Input
                     type="number"
                     value={newAssessment.score}

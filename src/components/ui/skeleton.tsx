@@ -79,7 +79,7 @@ function SkeletonCard({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       className={cn(
-        "rounded-xl border border-gray-200 dark:border-slate-700 p-4 space-y-4",
+        "rounded-xl border border-gray-200 dark:border-slate-700 p-4 space-y-3 sm:space-y-4",
         className
       )}
       {...props}

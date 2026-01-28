@@ -115,7 +115,7 @@ export function AdaptiveReminders({ childName = 'Eddie', onClose }: AdaptiveRemi
     <div className="min-h-screen bg-gray-50 p-4">
       <div className="max-w-2xl mx-auto">
         {/* Header */}
-        <div className="mb-6">
+        <div className="mb-4 sm:mb-6">
           <h1 className="text-3xl font-semibold text-primary mb-2">
             Reminder Settings
           </h1>
@@ -125,7 +125,7 @@ export function AdaptiveReminders({ childName = 'Eddie', onClose }: AdaptiveRemi
         </div>
 
         {/* Settings Card */}
-        <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-6 space-y-6">
+        <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-6 space-y-3 sm:space-y-4 sm:space-y-6">
           {/* Main Toggle */}
           <div className="flex items-center justify-between pb-6 border-b border-gray-100">
             <div className="flex items-center gap-3">
@@ -215,7 +215,7 @@ export function AdaptiveReminders({ childName = 'Eddie', onClose }: AdaptiveRemi
                 <Label className="text-base font-medium mb-3 block">
                   Reminder tone
                 </Label>
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                   <ToneButton
                     tone="gentle"
                     label="Gentle"
@@ -434,7 +434,7 @@ function ReminderNotification({ childName, tone, onClose }: ReminderNotification
         className="fixed left-1/2 -translate-x-1/2 w-full max-w-md mx-4 bg-white dark:bg-slate-900 rounded-lg shadow-2xl z-50 border border-gray-200 dark:border-slate-700"
         style={{ top: 'max(16px, env(safe-area-inset-top))' }}
       >
-        <div className="p-6 space-y-4">
+        <div className="p-6 space-y-3 sm:space-y-4">
           {/* Message */}
           <div className="flex items-start gap-3">
             <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
@@ -456,7 +456,7 @@ function ReminderNotification({ childName, tone, onClose }: ReminderNotification
               Start now
             </Button>
 
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
               <button
                 onClick={() => handleSnooze('30 minutes')}
                 className="px-3 py-3 border-2 border-gray-300 text-gray-700 font-medium rounded-lg hover:border-accent hover:bg-accent/5 transition-all focus:ring-2 focus:ring-accent focus:ring-offset-2"
@@ -513,7 +513,7 @@ export function AdaptiveRemindersExample() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-4">
-      <div className="max-w-md mx-auto space-y-4">
+      <div className="max-w-md mx-auto space-y-3 sm:space-y-4">
         <h1 className="text-2xl font-semibold mb-4">Adaptive Reminders Demo</h1>
 
         <Button

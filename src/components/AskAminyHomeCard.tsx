@@ -119,8 +119,8 @@ export function AskAminyHomeCard({
       
       {/* Content */}
       <div className="relative z-10">
-        <div className="flex items-start justify-between mb-6">
-          <div className="flex items-center gap-4">
+        <div className="flex items-start justify-between mb-4 sm:mb-6">
+          <div className="flex items-center gap-3 sm:gap-4">
             <div className={cn(
               "w-16 h-16 bg-gradient-to-br from-accent/20 to-accent/10 rounded-2xl flex items-center justify-center transition-all duration-300",
               isHovered && "scale-110 from-accent/30 to-accent/20 shadow-lg"

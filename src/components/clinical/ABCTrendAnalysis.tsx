@@ -366,12 +366,12 @@ export function ABCTrendAnalysis({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       {/* Summary Header */}
       <Card className="p-6 bg-gradient-to-br from-teal-50 to-cyan-50 dark:from-teal-900/20 dark:to-cyan-900/20 border-teal-200 dark:border-teal-800">
         <div className="flex items-start justify-between">
           <div>
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-1">
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-1">
               Trend Analysis for {childName}
             </h2>
             <p className="text-gray-600 dark:text-slate-400">
@@ -383,14 +383,14 @@ export function ABCTrendAnalysis({
       </Card>
 
       {/* Trend Cards */}
-      <div className="grid md:grid-cols-2 gap-4">
-        <Card className="p-4">
+      <div className="grid md:grid-cols-2 gap-3 sm:gap-4">
+        <Card className="p-3 sm:p-4">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm text-gray-500 dark:text-slate-400">Frequency Trend</span>
             {getTrendIcon(analytics.frequencyTrend.trend)}
           </div>
           <div className="flex items-baseline gap-2">
-            <span className="text-3xl font-bold text-gray-900 dark:text-white">
+            <span className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
               {analytics.frequencyTrend.current}
             </span>
             <span className={`text-sm ${getTrendColor(analytics.frequencyTrend.trend)}`}>
@@ -402,13 +402,13 @@ export function ABCTrendAnalysis({
           </p>
         </Card>
 
-        <Card className="p-4">
+        <Card className="p-3 sm:p-4">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm text-gray-500 dark:text-slate-400">High Intensity</span>
             {getTrendIcon(analytics.intensityTrend.trend)}
           </div>
           <div className="flex items-baseline gap-2">
-            <span className="text-3xl font-bold text-gray-900 dark:text-white">
+            <span className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
               {analytics.intensityTrend.current}
             </span>
             <span className={`text-sm ${getTrendColor(analytics.intensityTrend.trend)}`}>
@@ -422,13 +422,13 @@ export function ABCTrendAnalysis({
       </div>
 
       {/* Peak Times */}
-      <Card className="p-6">
+      <Card className="p-4 sm:p-5 md:p-6">
         <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
           <Clock className="w-5 h-5 text-teal-600" />
           Peak Times
         </h3>
 
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid md:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
           {/* Hourly Distribution */}
           <div>
             <p className="text-sm text-gray-500 dark:text-slate-400 mb-3">By Hour</p>
@@ -496,7 +496,7 @@ export function ABCTrendAnalysis({
         {analytics.likelyFunction && (
           <div className="mb-4">
             <div className="flex items-center gap-3 mb-2">
-              <div className="text-3xl font-bold text-violet-700 dark:text-violet-400">
+              <div className="text-2xl sm:text-3xl font-bold text-violet-700 dark:text-violet-400">
                 {analytics.likelyFunction.function}
               </div>
               <Badge className="bg-violet-100 text-violet-700 dark:bg-violet-900/50 dark:text-violet-300">
@@ -524,13 +524,13 @@ export function ABCTrendAnalysis({
       </Card>
 
       {/* Top Patterns (Correlations) */}
-      <Card className="p-6">
+      <Card className="p-4 sm:p-5 md:p-6">
         <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
           <Brain className="w-5 h-5 text-teal-600" />
           Pattern Analysis & Insights
         </h3>
 
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           {analytics.correlations.map((corr, index) => (
             <div
               key={index}
@@ -572,9 +572,9 @@ export function ABCTrendAnalysis({
       </Card>
 
       {/* Top Triggers & Behaviors */}
-      <div className="grid md:grid-cols-2 gap-6">
+      <div className="grid md:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
         {/* Top Antecedents */}
-        <Card className="p-6">
+        <Card className="p-4 sm:p-5 md:p-6">
           <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Top Triggers</h3>
           <div className="space-y-3">
             {analytics.topAntecedents.map((a, i) => (
@@ -602,7 +602,7 @@ export function ABCTrendAnalysis({
         </Card>
 
         {/* Top Behaviors */}
-        <Card className="p-6">
+        <Card className="p-4 sm:p-5 md:p-6">
           <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Top Behaviors</h3>
           <div className="space-y-3">
             {analytics.topBehaviors.map((b, i) => (

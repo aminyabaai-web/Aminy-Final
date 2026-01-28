@@ -243,7 +243,7 @@ export function InsightNavigator({
 
       <div className="px-4 py-6 sm:px-6 max-w-7xl mx-auto">
         {/* Action Bar */}
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+        <div className="flex flex-wrap items-center justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
           <div className="flex items-center gap-2">
             <Badge variant="secondary" className="bg-blue-50 text-blue-700 border-blue-200">
               <Sparkles className="w-3 h-3 mr-1" />
@@ -287,8 +287,8 @@ export function InsightNavigator({
 
         {/* Tier Notice for Starter Users */}
         {userTier === 'starter' && (
-          <Card className="mb-6 border-amber-200 bg-amber-50 dark:bg-amber-900/20">
-            <div className="p-4">
+          <Card className="mb-4 sm:mb-6 border-amber-200 bg-amber-50 dark:bg-amber-900/20">
+            <div className="p-3 sm:p-4">
               <div className="flex items-center gap-3">
                 <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400" />
                 <div className="flex-1">
@@ -312,10 +312,10 @@ export function InsightNavigator({
         )}
 
         {/* Insights Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 sm:gap-6 mb-8">
           {insights.map((insight, index) => (
             <Card key={index} className="reports-card hover:shadow-lg transition-all duration-300">
-              <div className="p-6">
+              <div className="p-4 sm:p-5 md:p-6">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
                     <div className={`p-2 rounded-lg ${getCategoryColor(insight.category)}`}>
@@ -387,8 +387,8 @@ export function InsightNavigator({
         </div>
 
         {/* Summary Analytics */}
-        <Card className="mb-6">
-          <div className="p-6">
+        <Card className="mb-4 sm:mb-6">
+          <div className="p-4 sm:p-5 md:p-6">
             <div className="flex items-center gap-3 mb-4">
               <BarChart3 className="w-5 h-5 text-blue-600 dark:text-blue-400" />
               <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
@@ -396,21 +396,21 @@ export function InsightNavigator({
               </h2>
             </div>
             
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
               <div className="text-center">
-                <div className="text-2xl font-bold text-green-600 dark:text-green-400">87%</div>
+                <div className="text-xl sm:text-2xl font-bold text-green-600 dark:text-green-400">87%</div>
                 <div className="text-sm text-slate-600 dark:text-slate-400">Overall Progress</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">23</div>
+                <div className="text-xl sm:text-2xl font-bold text-blue-600 dark:text-blue-400">23</div>
                 <div className="text-sm text-slate-600 dark:text-slate-400">Data Points</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">3</div>
+                <div className="text-xl sm:text-2xl font-bold text-purple-600 dark:text-purple-400">3</div>
                 <div className="text-sm text-slate-600 dark:text-slate-400">Areas Improving</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-amber-600 dark:text-amber-400">1</div>
+                <div className="text-xl sm:text-2xl font-bold text-amber-600 dark:text-amber-400">1</div>
                 <div className="text-sm text-slate-600 dark:text-slate-400">Areas to Monitor</div>
               </div>
             </div>
@@ -419,7 +419,7 @@ export function InsightNavigator({
 
         {/* Next Steps */}
         <Card>
-          <div className="p-6">
+          <div className="p-4 sm:p-5 md:p-6">
             <div className="flex items-center gap-3 mb-4">
               <Target className="w-5 h-5 text-green-600 dark:text-green-400" />
               <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">

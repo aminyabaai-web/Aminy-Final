@@ -149,7 +149,7 @@ export function TodaysFocusCard({
         </div>
       </div>
 
-      <div className="p-4">
+      <div className="p-3 sm:p-4">
         {renderTask(primaryTask, true)}
       </div>
 

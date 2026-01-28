@@ -40,7 +40,7 @@ export function FiscalIntermediaryOnePager({
             <div className="w-10 h-10 bg-teal-600 rounded-xl flex items-center justify-center">
               <Heart className="w-5 h-5 text-white" />
             </div>
-            <span className="text-2xl font-bold text-gray-900">Aminy</span>
+            <span className="text-xl sm:text-2xl font-bold text-gray-900">Aminy</span>
           </div>
           <p className="text-sm text-gray-600">
             AI-Powered Support for Self-Directed Families
@@ -98,7 +98,7 @@ export function FiscalIntermediaryOnePager({
           hours when your team isn't available.
         </p>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           <div className="bg-teal-50 rounded-lg p-4">
             <div className="flex items-center gap-2 mb-2">
               <Clock className="w-4 h-4 text-teal-600" />
@@ -144,21 +144,21 @@ export function FiscalIntermediaryOnePager({
           <TrendingUp className="w-5 h-5 text-teal-600" />
           Pilot Results
         </h2>
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
           <div className="text-center p-4 bg-gray-50 rounded-lg">
-            <div className="text-2xl font-bold text-teal-600">40%</div>
+            <div className="text-xl sm:text-2xl font-bold text-teal-600">40%</div>
             <div className="text-xs text-gray-600 mt-1">Fewer support calls</div>
           </div>
           <div className="text-center p-4 bg-gray-50 rounded-lg">
-            <div className="text-2xl font-bold text-teal-600">2.5hrs</div>
+            <div className="text-xl sm:text-2xl font-bold text-teal-600">2.5hrs</div>
             <div className="text-xs text-gray-600 mt-1">Saved/family/week</div>
           </div>
           <div className="text-center p-4 bg-gray-50 rounded-lg">
-            <div className="text-2xl font-bold text-teal-600">94%</div>
+            <div className="text-xl sm:text-2xl font-bold text-teal-600">94%</div>
             <div className="text-xs text-gray-600 mt-1">6-month retention</div>
           </div>
           <div className="text-center p-4 bg-gray-50 rounded-lg">
-            <div className="text-2xl font-bold text-teal-600">92%</div>
+            <div className="text-xl sm:text-2xl font-bold text-teal-600">92%</div>
             <div className="text-xs text-gray-600 mt-1">Family satisfaction</div>
           </div>
         </div>
@@ -170,7 +170,7 @@ export function FiscalIntermediaryOnePager({
           <Shield className="w-5 h-5 text-teal-600" />
           Enterprise Ready
         </h2>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
           <div className="flex items-start gap-2">
             <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
             <div>
@@ -258,7 +258,7 @@ export function FiscalIntermediaryOnePager({
         <p className="text-teal-100 mb-4">
           Schedule a demo to see Aminy in action and discuss your specific needs.
         </p>
-        <div className="flex justify-center gap-6">
+        <div className="flex justify-center gap-3 sm:gap-4 sm:gap-6">
           <div className="flex items-center gap-2">
             <Mail className="w-4 h-4" />
             <span>{contactEmail}</span>
@@ -271,7 +271,7 @@ export function FiscalIntermediaryOnePager({
       </section>
 
       {/* Footer */}
-      <div className="mt-6 pt-4 border-t border-gray-200 flex justify-between items-center text-xs text-gray-500">
+      <div className="mt-4 sm:mt-6 pt-4 border-t border-gray-200 flex justify-between items-center text-xs text-gray-500">
         <span>© 2025 Aminy, Inc. | aminy.com</span>
         <span>HIPAA Compliant • BCBA Advised • Parent-Founded</span>
       </div>

@@ -1062,7 +1062,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
             <p className="text-gray-600">Enter your special code to start</p>
           </div>
           
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             <div className="flex justify-center space-x-2">
               {[...Array(6)].map((_, i) => (
                 <motion.div
@@ -1079,7 +1079,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
               ))}
             </div>
             
-            <div className="grid grid-cols-3 gap-3 mt-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mt-4 sm:mt-6">
               {[1,2,3,4,5,6,7,8,9,'🔄',0,'✓'].map((num, index) => (
                 <motion.button
                   key={index}
@@ -1113,7 +1113,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
             )}
           </div>
           
-          <div className="mt-6 text-center">
+          <div className="mt-4 sm:mt-6 text-center">
             <p className="text-sm text-gray-500">
               Parent? Hold power button + volume up for 3 seconds
             </p>
@@ -1173,7 +1173,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
         {/* Main Content Area */}
         <div className="flex-1 overflow-y-auto">
           {activeView === 'home' && (
-            <div className="p-6 space-y-6">
+            <div className="p-6 space-y-3 sm:space-y-4 sm:space-y-6">
               {/* Today's Mission */}
               {currentMission && !currentMission.completed && (
                 <motion.div
@@ -1205,7 +1205,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
               )}
 
               {/* Progress Tiles */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <motion.div
                   whileHover={{ scale: 1.02 }}
                   className="bg-white rounded-2xl p-4 shadow-sm"
@@ -1320,7 +1320,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
               </div>
 
               {/* Quick Actions */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
@@ -1345,7 +1345,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
           )}
 
           {activeView === 'activity' && selectedActivity && (
-            <div className="p-6">
+            <div className="p-4 sm:p-5 md:p-6">
               <motion.div
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
@@ -1383,7 +1383,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
                 </div>
 
                 {/* Practice Area */}
-                <div className="p-6">
+                <div className="p-4 sm:p-5 md:p-6">
                   {/* Current Word Display with Visual Coaching */}
                   <div className="text-center mb-8">
                     <motion.div
@@ -1450,7 +1450,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
                   </div>
 
                   {/* Recording Controls */}
-                  <div className="flex justify-center space-x-4 mb-6">
+                  <div className="flex justify-center space-x-4 mb-4 sm:mb-6">
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
@@ -1510,7 +1510,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
                   </div>
 
                   {/* Kid-friendly controls */}
-                  <div className="grid grid-cols-3 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                     <Button
                       variant="outline"
                       onClick={() => setCurrentWord('sun')}
@@ -1565,7 +1565,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
           )}
 
           {activeView === 'calm-corner' && (
-            <div className="p-6">
+            <div className="p-4 sm:p-5 md:p-6">
               <motion.div
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
@@ -1574,12 +1574,12 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
                 <motion.button
                   whileHover={{ scale: 1.1 }}
                   onClick={() => setActiveView('home')}
-                  className="mb-6 w-10 h-10 bg-white/50 rounded-full flex items-center justify-center mx-auto"
+                  className="mb-4 sm:mb-6 w-10 h-10 bg-white/50 rounded-full flex items-center justify-center mx-auto"
                 >
                   <ArrowLeft className="w-5 h-5 text-indigo-600" />
                 </motion.button>
 
-                <h2 className="text-2xl text-indigo-800 mb-6">🫧 Calm Corner</h2>
+                <h2 className="text-2xl text-indigo-800 mb-4 sm:mb-6">🫧 Calm Corner</h2>
                 
                 {/* Breathing Animation */}
                 <motion.div
@@ -1601,7 +1601,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
                   Breathe in slowly... and breathe out slowly...
                 </p>
 
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   <Button
                     onClick={() => {
                       setNeedsBreak(false);
@@ -1634,8 +1634,8 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
           )}
 
           {activeView === 'activity-select' && (
-            <div className="p-6">
-              <div className="flex items-center justify-between mb-6">
+            <div className="p-4 sm:p-5 md:p-6">
+              <div className="flex items-center justify-between mb-4 sm:mb-6">
                 <motion.button
                   whileHover={{ scale: 1.1 }}
                   onClick={() => setActiveView('home')}
@@ -1656,7 +1656,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
               </div>
 
               {/* Track Filters */}
-              <div className="flex overflow-x-auto space-x-2 mb-6 pb-2">
+              <div className="flex overflow-x-auto space-x-2 mb-4 sm:mb-6 pb-2">
                 {TRACK_FILTERS.map((filter) => (
                   <motion.button
                     key={filter.id}
@@ -1741,8 +1741,8 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
           )}
 
           {activeView === 'buddy-select' && (
-            <div className="p-6">
-              <div className="flex items-center justify-between mb-6">
+            <div className="p-4 sm:p-5 md:p-6">
+              <div className="flex items-center justify-between mb-4 sm:mb-6">
                 <motion.button
                   whileHover={{ scale: 1.1 }}
                   onClick={() => setActiveView('activity-select')}
@@ -1756,7 +1756,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
                 <div className="w-10 h-10" />
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 {buddyVoices.map((buddy) => (
                   <motion.div
                     key={buddy.id}
@@ -1845,7 +1845,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
                 Enter parent PIN to exit Kid Mode
               </p>
               
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
                 {[1,2,3,4,5,6,7,8,9,'C',0,'✓'].map((num, index) => (
                   <Button
                     key={index}

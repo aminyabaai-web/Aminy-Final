@@ -199,7 +199,7 @@ export function TrustAndPrivacy({ userId }: { userId: string }) {
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="max-w-4xl mx-auto space-y-3 sm:space-y-4 sm:space-y-6">
       {/* Enhanced Privacy Mode (HIPAA-Lite) */}
       <Card>
         <CardHeader>
@@ -211,7 +211,7 @@ export function TrustAndPrivacy({ userId }: { userId: string }) {
             Keep your data local and private - no cloud training, maximum security
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-3 sm:space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex-1">
               <Label htmlFor="enhanced-privacy" className="text-base font-semibold">
@@ -255,7 +255,7 @@ export function TrustAndPrivacy({ userId }: { userId: string }) {
             Manage how your data is used
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-6">
+        <CardContent className="space-y-3 sm:space-y-4 sm:space-y-6">
           <div className="flex items-center justify-between">
             <div className="flex-1">
               <Label htmlFor="model-training" className="text-base">
@@ -323,7 +323,7 @@ export function TrustAndPrivacy({ userId }: { userId: string }) {
             Plain-English explanation of how we handle your data
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-3 sm:space-y-4">
           <div className="text-sm text-slate-700 space-y-3">
             <div>
               <h4 className="font-semibold text-slate-900 mb-1">What We Collect</h4>

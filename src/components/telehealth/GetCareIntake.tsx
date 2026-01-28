@@ -84,7 +84,7 @@ export function GetCareIntakeScreen({
       </header>
 
       {/* Form */}
-      <div className="px-4 py-6 space-y-6">
+      <div className="px-4 py-6 space-y-3 sm:space-y-4 sm:space-y-6">
         {/* Step 1: Visit Reason */}
         <section className="bg-white rounded-2xl p-4 border border-gray-100">
           <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -118,7 +118,7 @@ export function GetCareIntakeScreen({
           <label className="block text-sm font-medium text-gray-700 mb-3">
             Who is this for?
           </label>
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
             <WhoButton
               icon={<Baby className="w-5 h-5" />}
               label="Child"
@@ -209,7 +209,7 @@ export function GetCareIntakeScreen({
           <label className="block text-sm font-medium text-gray-700 mb-3">
             Visit type
           </label>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <VisitTypeButton
               icon={<Video className="w-5 h-5" />}
               label="Remote"

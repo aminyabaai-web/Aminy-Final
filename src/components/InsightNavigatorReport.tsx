@@ -131,17 +131,17 @@ export function InsightNavigatorReport({
   if (!navigator) return null;
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="max-w-4xl mx-auto space-y-3 sm:space-y-4 sm:space-y-6">
       {/* Header */}
       <Card className="p-6 bg-gradient-to-br from-teal-600 to-cyan-600 text-white border-0">
         <div className="flex items-start justify-between mb-4">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 sm:gap-4">
             <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center">
               <Brain className="w-8 h-8" />
             </div>
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <h1 className="text-2xl font-bold">Insight Navigator</h1>
+                <h1 className="text-xl sm:text-2xl font-bold">Insight Navigator</h1>
                 <Badge className="bg-white/20 text-white border-0">
                   <Sparkles className="w-3 h-3 mr-1" />
                   Living Intake Document
@@ -167,7 +167,7 @@ export function InsightNavigatorReport({
             )}
           </div>
         </div>
-        <div className="flex items-center gap-4 text-sm text-teal-100">
+        <div className="flex items-center gap-3 sm:gap-4 text-sm text-teal-100">
           <span className="flex items-center gap-1">
             <Clock className="w-4 h-4" />
             Updated {new Date(navigator.lastUpdated).toLocaleDateString()}
@@ -188,7 +188,7 @@ export function InsightNavigatorReport({
             <Zap className="w-5 h-5 text-violet-600" />
             Provider Quick Start
           </h2>
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid md:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
             <div>
               <h3 className="text-sm font-medium text-violet-700 mb-2 flex items-center gap-1">
                 <CheckCircle className="w-4 h-4" /> Must Know
@@ -218,7 +218,7 @@ export function InsightNavigatorReport({
       )}
 
       {/* Executive Summary */}
-      <Card className="p-6">
+      <Card className="p-4 sm:p-5 md:p-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="font-semibold text-gray-900 flex items-center gap-2">
             <FileText className="w-5 h-5 text-teal-600" />
@@ -240,9 +240,9 @@ export function InsightNavigatorReport({
           <TabsTrigger value="providers">For Providers</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="overview" className="space-y-4 mt-4">
-          <div className="grid md:grid-cols-2 gap-4">
-            <Card className="p-4">
+        <TabsContent value="overview" className="space-y-3 sm:space-y-4 mt-4">
+          <div className="grid md:grid-cols-2 gap-3 sm:gap-4">
+            <Card className="p-3 sm:p-4">
               <h3 className="font-medium text-green-700 mb-3 flex items-center gap-2">
                 <Star className="w-4 h-4" />Strengths
               </h3>
@@ -254,7 +254,7 @@ export function InsightNavigatorReport({
                 ))}
               </ul>
             </Card>
-            <Card className="p-4">
+            <Card className="p-3 sm:p-4">
               <h3 className="font-medium text-amber-700 mb-3 flex items-center gap-2">
                 <Target className="w-4 h-4" />Challenges
               </h3>
@@ -268,7 +268,7 @@ export function InsightNavigatorReport({
             </Card>
           </div>
 
-          <Card className="p-4">
+          <Card className="p-3 sm:p-4">
             <h3 className="font-medium text-blue-700 mb-3 flex items-center gap-2">
               <Heart className="w-4 h-4" />Interests & Motivators
             </h3>
@@ -291,17 +291,17 @@ export function InsightNavigatorReport({
           </Card>
         </TabsContent>
 
-        <TabsContent value="history" className="space-y-4 mt-4">
+        <TabsContent value="history" className="space-y-3 sm:space-y-4 mt-4">
           {Object.entries(navigator.background).map(([key, value]) => (
-            <Card key={key} className="p-4">
+            <Card key={key} className="p-3 sm:p-4">
               <h3 className="font-medium text-gray-900 mb-2 capitalize">{key.replace(/([A-Z])/g, ' $1')}</h3>
               <p className="text-sm text-gray-700">{value}</p>
             </Card>
           ))}
         </TabsContent>
 
-        <TabsContent value="strategies" className="space-y-4 mt-4">
-          <Card className="p-4">
+        <TabsContent value="strategies" className="space-y-3 sm:space-y-4 mt-4">
+          <Card className="p-3 sm:p-4">
             <h3 className="font-medium text-green-700 mb-3 flex items-center gap-2">
               <CheckCircle className="w-5 h-5" />What's Working
             </h3>
@@ -315,7 +315,7 @@ export function InsightNavigatorReport({
             </div>
           </Card>
 
-          <Card className="p-4">
+          <Card className="p-3 sm:p-4">
             <h3 className="font-medium text-amber-700 mb-3 flex items-center gap-2">
               <AlertTriangle className="w-5 h-5" />What's Not Working
             </h3>
@@ -349,22 +349,22 @@ export function InsightNavigatorReport({
           </Card>
         </TabsContent>
 
-        <TabsContent value="providers" className="space-y-4 mt-4">
-          <Card className="p-4">
+        <TabsContent value="providers" className="space-y-3 sm:space-y-4 mt-4">
+          <Card className="p-3 sm:p-4">
             <h3 className="font-medium text-gray-900 mb-3 flex items-center gap-2">
               <MessageSquare className="w-4 h-4" />Communication Style
             </h3>
             <p className="text-sm text-gray-700">{navigator.currentPresentation.communicationStyle}</p>
           </Card>
 
-          <Card className="p-4">
+          <Card className="p-3 sm:p-4">
             <h3 className="font-medium text-gray-900 mb-3 flex items-center gap-2">
               <Hand className="w-4 h-4" />Sensory Profile
             </h3>
             <p className="text-sm text-gray-700">{navigator.currentPresentation.sensoryProfile}</p>
           </Card>
 
-          <Card className="p-4">
+          <Card className="p-3 sm:p-4">
             <h3 className="font-medium text-violet-700 mb-3">Approach Guidance</h3>
             <ul className="space-y-2">
               {navigator.providerQuickStart.approachGuidance.map((item, idx) => (
@@ -375,7 +375,7 @@ export function InsightNavigatorReport({
             </ul>
           </Card>
 
-          <Card className="p-4">
+          <Card className="p-3 sm:p-4">
             <h3 className="font-medium text-pink-700 mb-3">Family Preferences</h3>
             <ul className="space-y-2">
               {navigator.providerQuickStart.familyPreferences.map((item, idx) => (
@@ -386,7 +386,7 @@ export function InsightNavigatorReport({
             </ul>
           </Card>
 
-          <Card className="p-4">
+          <Card className="p-3 sm:p-4">
             <h3 className="font-medium text-gray-900 mb-4 flex items-center gap-2">
               <TrendingUp className="w-4 h-4" />Recent Progress
             </h3>

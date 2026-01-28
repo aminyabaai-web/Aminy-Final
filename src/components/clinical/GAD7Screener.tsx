@@ -276,8 +276,8 @@ export function GAD7Screener({
   // History View
   if (showHistoryView) {
     return (
-      <Card className="p-6">
-        <div className="flex items-center justify-between mb-6">
+      <Card className="p-4 sm:p-5 md:p-6">
+        <div className="flex items-center justify-between mb-4 sm:mb-6">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
             <History className="w-5 h-5 text-teal-600" />
             Assessment History
@@ -300,12 +300,12 @@ export function GAD7Screener({
             </Button>
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {/* Trend Summary */}
             {history.length >= 2 && (
-              <div className="p-4 bg-gray-50 dark:bg-slate-800 rounded-lg mb-6">
+              <div className="p-4 bg-gray-50 dark:bg-slate-800 rounded-lg mb-4 sm:mb-6">
                 <p className="text-sm text-gray-600 dark:text-slate-400 mb-2">Score Trend</p>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3 sm:gap-4">
                   <div className="flex items-end gap-1 h-16">
                     {history.slice(0, 5).reverse().map((h, i) => (
                       <div
@@ -353,7 +353,7 @@ export function GAD7Screener({
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-2xl font-bold text-gray-900 dark:text-white">
+                    <span className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
                       {h.totalScore}/21
                     </span>
                     <span className="text-sm text-gray-500 dark:text-slate-400">
@@ -374,8 +374,8 @@ export function GAD7Screener({
     const info = getSeverityInfo(result.severity);
 
     return (
-      <Card className="p-6">
-        <div className={`p-6 rounded-xl bg-gradient-to-br ${info.bgColor} border ${info.borderColor} mb-6`}>
+      <Card className="p-4 sm:p-5 md:p-6">
+        <div className={`p-6 rounded-xl bg-gradient-to-br ${info.bgColor} border ${info.borderColor} mb-4 sm:mb-6`}>
           <div className="flex items-center justify-between mb-4">
             <div>
               <p className="text-sm text-gray-600 dark:text-slate-400 mb-1">GAD-7 Score</p>
@@ -418,7 +418,7 @@ export function GAD7Screener({
         </div>
 
         {/* Recommendation */}
-        <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg mb-6">
+        <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg mb-4 sm:mb-6">
           <div className="flex items-start gap-3">
             <Info className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
             <div>
@@ -431,7 +431,7 @@ export function GAD7Screener({
         </div>
 
         {/* Question breakdown */}
-        <div className="mb-6">
+        <div className="mb-4 sm:mb-6">
           <h3 className="font-medium text-gray-900 dark:text-white mb-3">Response Summary</h3>
           <div className="space-y-2">
             {GAD7_QUESTIONS.map((q, i) => (
@@ -466,7 +466,7 @@ export function GAD7Screener({
         </div>
 
         {/* Disclaimer */}
-        <p className="text-xs text-gray-500 dark:text-slate-400 mt-6 text-center">
+        <p className="text-xs text-gray-500 dark:text-slate-400 mt-4 sm:mt-6 text-center">
           The GAD-7 is a screening tool, not a diagnostic instrument. Please consult with a qualified
           healthcare provider for proper diagnosis and treatment recommendations.
         </p>
@@ -476,9 +476,9 @@ export function GAD7Screener({
 
   // Assessment View
   return (
-    <Card className="p-6">
+    <Card className="p-4 sm:p-5 md:p-6">
       {/* Header */}
-      <div className="mb-6">
+      <div className="mb-4 sm:mb-6">
         <div className="flex items-center justify-between mb-2">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
             <Heart className="w-5 h-5 text-teal-600" />
@@ -500,7 +500,7 @@ export function GAD7Screener({
       </div>
 
       {/* Progress */}
-      <div className="mb-6">
+      <div className="mb-4 sm:mb-6">
         <div className="flex items-center justify-between text-sm text-gray-500 dark:text-slate-400 mb-2">
           <span>Question {currentQuestion + 1} of 7</span>
           <span>{Math.round(progress)}% complete</span>
@@ -515,7 +515,7 @@ export function GAD7Screener({
 
       {/* Question */}
       <div className="mb-8">
-        <p className="text-xl font-medium text-gray-900 dark:text-white mb-6">
+        <p className="text-xl font-medium text-gray-900 dark:text-white mb-4 sm:mb-6">
           {GAD7_QUESTIONS[currentQuestion].text}
         </p>
 

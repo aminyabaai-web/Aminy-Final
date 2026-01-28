@@ -74,7 +74,7 @@ export function Phase2FeaturesMenu({ onNavigate, userRole = 'parent' }: Phase2Fe
             className="p-4 cursor-pointer hover:shadow-md transition-all hover:border-accent/30"
             onClick={() => onNavigate(feature.id)}
           >
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3 sm:gap-4">
               <div className={`w-12 h-12 ${feature.bgColor} rounded-xl flex items-center justify-center flex-shrink-0`}>
                 <Icon className={`w-6 h-6 ${feature.color}`} />
               </div>

@@ -697,7 +697,7 @@ export function EnhancedAskAminy({
             {/* Enhanced Messages Area */}
             <div className="flex-1 flex flex-col overflow-hidden">
               <ScrollArea className="flex-1 px-4">
-                <div className="space-y-6 py-4">
+                <div className="space-y-3 sm:space-y-4 sm:space-y-6 py-4">
                   {messages.length === 0 && showSuggestions && (
                     <div className="text-center py-8">
                       <div className="w-16 h-16 bg-gradient-to-br from-accent/20 to-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
@@ -706,7 +706,7 @@ export function EnhancedAskAminy({
                       <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
                         How can I help with {userData.childName} today?
                       </h4>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-6 max-w-md mx-auto">
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 sm:mb-6 max-w-md mx-auto">
                         Ask me anything about development, routines, behaviors, school support, or concerns you have.
                       </p>
                       
@@ -852,7 +852,7 @@ export function EnhancedAskAminy({
 
             {/* Enhanced Input Area */}
             <div className="border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
-              <div className="p-4">
+              <div className="p-3 sm:p-4">
                 <div className="flex items-end gap-3">
                   <div className="flex-1 relative">
                     <textarea

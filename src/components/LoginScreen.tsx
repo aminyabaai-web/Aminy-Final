@@ -229,7 +229,7 @@ export function LoginScreen({
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 0.2, duration: 0.4 }}
-              className="mb-6"
+              className="mb-4 sm:mb-6"
             >
               <Logo size="md" showTagline={false} />
             </motion.div>
@@ -261,7 +261,7 @@ export function LoginScreen({
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mb-6 p-4 rounded-xl"
+              className="mb-4 sm:mb-6 p-4 rounded-xl"
               style={{
                 backgroundColor: 'rgba(244, 67, 54, 0.1)',
                 border: '1px solid rgba(244, 67, 54, 0.2)',
@@ -286,7 +286,7 @@ export function LoginScreen({
             }}
           >
             {/* SSO Buttons */}
-            <div className="space-y-3 mb-6">
+            <div className="space-y-3 mb-4 sm:mb-6">
               <Button
                 onClick={handleAppleSignIn}
                 disabled={isLoading}
@@ -331,7 +331,7 @@ export function LoginScreen({
             </div>
 
             {/* Divider */}
-            <div className="relative mb-6">
+            <div className="relative mb-4 sm:mb-6">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full" style={{ borderTop: '1px solid rgba(13, 27, 42, 0.1)' }} />
               </div>
@@ -477,7 +477,7 @@ export function LoginScreen({
 
             {/* Create Account Link */}
             <p
-              className="mt-6 text-center text-sm"
+              className="mt-4 sm:mt-6 text-center text-sm"
               style={{
                 color: '#0D1B2A',
                 opacity: 0.7,

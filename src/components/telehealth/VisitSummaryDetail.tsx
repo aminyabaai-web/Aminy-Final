@@ -87,7 +87,7 @@ export function VisitSummaryDetailScreen({
       </header>
 
       {/* Content */}
-      <div className="px-4 py-6 pb-32 space-y-4">
+      <div className="px-4 py-6 pb-32 space-y-3 sm:space-y-4">
         {/* Provider Card */}
         <div className="bg-white rounded-2xl border border-gray-100 p-4">
           <div className="flex items-center gap-3">

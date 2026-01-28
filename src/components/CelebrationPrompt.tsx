@@ -183,7 +183,7 @@ export function CelebrationPrompt({
             {getIcon()}
           </div>
 
-          <h2 className="text-2xl font-bold text-white mb-2">{celebration.title}</h2>
+          <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">{celebration.title}</h2>
 
           {celebration.metric && (
             <Badge className="bg-white/20 text-white text-lg px-4 py-1">
@@ -194,7 +194,7 @@ export function CelebrationPrompt({
 
         {/* Body */}
         <div className="p-6 text-center">
-          <p className="text-slate-600 mb-6 leading-relaxed">
+          <p className="text-slate-600 mb-4 sm:mb-6 leading-relaxed">
             {celebration.message}
           </p>
 
@@ -217,7 +217,7 @@ export function CelebrationPrompt({
               </Button>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {/* Share Preview Card */}
               <div className={`bg-gradient-to-br ${getGradient()} p-4 rounded-xl text-white`}>
                 <div className="flex items-center gap-2 mb-2">

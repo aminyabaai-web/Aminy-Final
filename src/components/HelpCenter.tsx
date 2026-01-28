@@ -190,7 +190,7 @@ export function HelpCenter({ onClose }: HelpCenterProps) {
       >
         {/* Header */}
         <div className="bg-white border-b border-gray-200">
-          <div className="flex items-center justify-between px-6 py-4">
+          <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4">
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-teal-100 rounded-xl flex items-center justify-center">
                 <HelpCircle className="w-5 h-5 text-teal-600" />
@@ -246,7 +246,7 @@ export function HelpCenter({ onClose }: HelpCenterProps) {
           {/* Sidebar */}
           <div className="w-80 border-r border-gray-200 overflow-y-auto bg-gray-50">
             {!selectedArticle ? (
-              <div className="p-4">
+              <div className="p-3 sm:p-4">
                 <nav className="space-y-2">
                   {helpTabsNavigation.map((tab) => (
                     <button
@@ -271,7 +271,7 @@ export function HelpCenter({ onClose }: HelpCenterProps) {
                   ))}
                 </nav>
 
-                <div className="mt-6">
+                <div className="mt-4 sm:mt-6">
                   <Button
                     onClick={() => setShowContactForm(true)}
                     className="w-full bg-teal-600 hover:bg-teal-700 text-white"
@@ -282,7 +282,7 @@ export function HelpCenter({ onClose }: HelpCenterProps) {
                 </div>
               </div>
             ) : (
-              <div className="p-4">
+              <div className="p-3 sm:p-4">
                 <Button
                   variant="ghost"
                   onClick={() => setSelectedArticle(null)}
@@ -299,10 +299,10 @@ export function HelpCenter({ onClose }: HelpCenterProps) {
           <div className="flex-1 overflow-y-auto">
             {showContactForm ? (
               /* Contact Form */
-              <div className="p-6">
+              <div className="p-4 sm:p-5 md:p-6">
                 <div className="max-w-2xl">
                   <h3 className="text-lg text-slate-900 mb-4">Contact Support</h3>
-                  <form className="space-y-4">
+                  <form className="space-y-3 sm:space-y-4">
                     <div>
                       <label className="block text-sm text-slate-700 mb-2">Subject</label>
                       <input
@@ -337,7 +337,7 @@ export function HelpCenter({ onClose }: HelpCenterProps) {
               </div>
             ) : selectedArticle ? (
               /* Article View */
-              <div className="p-6">
+              <div className="p-4 sm:p-5 md:p-6">
                 <div className="max-w-2xl">
                   <h3 className="text-xl text-slate-900 mb-4">{selectedArticle.title}</h3>
                   <div className="space-y-3">
@@ -364,13 +364,13 @@ export function HelpCenter({ onClose }: HelpCenterProps) {
               </div>
             ) : (
               /* Articles Grid */
-              <div className="p-6">
+              <div className="p-4 sm:p-5 md:p-6">
                 <div className="mb-4">
                   <h3 className="text-lg text-slate-900">{currentTab?.label}</h3>
                   <p className="text-sm text-slate-600">{currentTab?.description}</p>
                 </div>
                 
-                <div className="grid gap-4">
+                <div className="grid gap-3 sm:gap-4">
                   {filteredArticles.map((article, index) => (
                     <Card
                       key={index}
@@ -431,7 +431,7 @@ export function HelpCenter({ onClose }: HelpCenterProps) {
             className="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="p-6">
+            <div className="p-4 sm:p-5 md:p-6">
               <div className="flex items-center space-x-3 mb-4">
                 <div className="w-10 h-10 bg-red-100 rounded-xl flex items-center justify-center">
                   <AlertTriangle className="w-5 h-5 text-red-600" />
@@ -444,7 +444,7 @@ export function HelpCenter({ onClose }: HelpCenterProps) {
               
               <CrisisResources />
               
-              <div className="mt-6 flex space-x-3">
+              <div className="mt-4 sm:mt-6 flex space-x-3">
                 <Button
                   onClick={() => setShowUrgentHelp(false)}
                   className="flex-1 bg-slate-600 hover:bg-slate-700 text-white"

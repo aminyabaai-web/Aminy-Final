@@ -322,7 +322,7 @@ export function PlanHierarchy({
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 py-6 space-y-6">
+      <div className="max-w-4xl mx-auto px-4 py-6 space-y-3 sm:space-y-4 sm:space-y-6">
         {/* AI Goal Recommender */}
         {aiRecommendations.length > 0 && showAIRecommendations && (
           <Card className="p-5 bg-gradient-to-br from-teal-50 to-white border-2 border-teal-200">
@@ -477,7 +477,7 @@ export function PlanHierarchy({
             <CollapsibleContent>
               <div className="px-5 pb-5">
                 <Separator className="mb-4" />
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   {monthlyGoals.map((goal) => (
                     <div
                       key={goal.id}
@@ -548,7 +548,7 @@ export function PlanHierarchy({
             <CollapsibleContent>
               <div className="px-5 pb-5">
                 <Separator className="mb-4" />
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   {weeklyFocus.map((week) => (
                     <div
                       key={week.id}
@@ -623,9 +623,9 @@ export function PlanHierarchy({
         </Collapsible>
 
         {/* Quick Actions */}
-        <Card className="p-4">
+        <Card className="p-3 sm:p-4">
           <h3 className="font-medium text-slate-900 mb-3">Quick Actions</h3>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <Button variant="outline" className="justify-start gap-2">
               <Copy className="w-4 h-4" />
               Share Plan

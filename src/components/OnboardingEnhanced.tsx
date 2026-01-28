@@ -534,12 +534,12 @@ function WhatToExpectStep({
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ type: 'spring', damping: 10 }}
-          className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-accent/20 to-purple-100 mb-6"
+          className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-accent/20 to-purple-100 mb-4 sm:mb-6"
         >
           <Sparkles className="w-10 h-10 text-accent" />
         </motion.div>
 
-        <h1 className="text-3xl font-bold text-primary mb-4">
+        <h1 className="text-2xl sm:text-3xl font-bold text-primary mb-4">
           You're not alone anymore
         </h1>
         <p className="text-lg text-muted-foreground">
@@ -549,7 +549,7 @@ function WhatToExpectStep({
       </div>
 
       {/* What you'll get */}
-      <Card className="p-6 mb-6">
+      <Card className="p-6 mb-4 sm:mb-6">
         <h3 className="font-semibold text-primary mb-4 flex items-center gap-2">
           <Gift className="w-5 h-5 text-accent" />
           What you'll get today:
@@ -606,7 +606,7 @@ function WhatToExpectStep({
       </div>
 
       {/* Time estimate */}
-      <p className="text-center text-xs text-muted-foreground mt-6">
+      <p className="text-center text-xs text-muted-foreground mt-4 sm:mt-6">
         <Clock className="w-3 h-3 inline mr-1" />
         Takes about 5 minutes • No credit card needed
       </p>
@@ -643,7 +643,7 @@ function NameCollectionStep({
   return (
     <div className="max-w-md mx-auto">
       <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-primary mb-2">
+        <h2 className="text-xl sm:text-2xl font-bold text-primary mb-2">
           {tone.greeting}! 👋
         </h2>
         <p className="text-muted-foreground">
@@ -652,7 +652,7 @@ function NameCollectionStep({
       </div>
 
       <form onSubmit={handleSubmit}>
-        <Card className="p-6 mb-6">
+        <Card className="p-6 mb-4 sm:mb-6">
           <Input
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -718,7 +718,7 @@ function ChildBasicsStep({
   return (
     <div className="max-w-md mx-auto">
       <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-primary mb-2">
+        <h2 className="text-xl sm:text-2xl font-bold text-primary mb-2">
           Nice to meet you, {parentName}!
         </h2>
         <p className="text-muted-foreground">
@@ -727,7 +727,7 @@ function ChildBasicsStep({
       </div>
 
       <form onSubmit={handleSubmit}>
-        <Card className="p-6 mb-6 space-y-4">
+        <Card className="p-6 mb-4 sm:mb-6 space-y-3 sm:space-y-4">
           <div>
             <label className="block text-sm font-medium text-primary mb-2">
               Child's first name
@@ -810,8 +810,8 @@ function PrimaryConcernStep({
 
   return (
     <div className="max-w-md mx-auto">
-      <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold text-primary mb-2">
+      <div className="text-center mb-4 sm:mb-6">
+        <h2 className="text-xl sm:text-2xl font-bold text-primary mb-2">
           What's your biggest challenge with {childName} right now?
         </h2>
         <p className="text-muted-foreground">
@@ -819,7 +819,7 @@ function PrimaryConcernStep({
         </p>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4 sm:mb-6">
         {concerns.map((c) => (
           <button
             key={c.id}
@@ -929,7 +929,7 @@ function QuickWinStep({
 
   return (
     <div className="max-w-md mx-auto">
-      <div className="text-center mb-6">
+      <div className="text-center mb-4 sm:mb-6">
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
@@ -938,7 +938,7 @@ function QuickWinStep({
         >
           <Zap className="w-8 h-8 text-amber-500" />
         </motion.div>
-        <h2 className="text-2xl font-bold text-primary mb-2">
+        <h2 className="text-xl sm:text-2xl font-bold text-primary mb-2">
           Your First Personalized Tip
         </h2>
         <p className="text-muted-foreground text-sm px-4">
@@ -946,7 +946,7 @@ function QuickWinStep({
         </p>
       </div>
 
-      <Card className="p-6 mb-6 bg-gradient-to-br from-amber-50 to-orange-50 border-amber-200">
+      <Card className="p-6 mb-4 sm:mb-6 bg-gradient-to-br from-amber-50 to-orange-50 border-amber-200">
         <p className="text-primary leading-relaxed">{tip}</p>
       </Card>
 
@@ -955,7 +955,7 @@ function QuickWinStep({
         type="validation"
       />
 
-      <div className="mt-6 space-y-3">
+      <div className="mt-4 sm:mt-6 space-y-3">
         <Button
           onClick={onNext}
           className="w-full min-h-[48px] bg-accent hover:bg-accent/90"
@@ -1019,8 +1019,8 @@ function ToneSelectionStep({
 
   return (
     <div className="max-w-md mx-auto">
-      <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold text-primary mb-2">
+      <div className="text-center mb-4 sm:mb-6">
+        <h2 className="text-xl sm:text-2xl font-bold text-primary mb-2">
           How should Aminy talk to you, {parentName}?
         </h2>
         <p className="text-muted-foreground">
@@ -1028,7 +1028,7 @@ function ToneSelectionStep({
         </p>
       </div>
 
-      <div className="space-y-3 mb-6">
+      <div className="space-y-3 mb-4 sm:mb-6">
         {tones.map((t) => (
           <button
             key={t.id}
@@ -1141,8 +1141,8 @@ function DiagnosisStep({
 
   return (
     <div className="max-w-md mx-auto">
-      <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold text-primary mb-2">
+      <div className="text-center mb-4 sm:mb-6">
+        <h2 className="text-xl sm:text-2xl font-bold text-primary mb-2">
           Tell us more about {childName}
         </h2>
         <p className="text-muted-foreground">
@@ -1177,7 +1177,7 @@ function DiagnosisStep({
         <DiagnosisValidation diagnoses={selectedDiagnoses} childName={childName} />
       )}
 
-      <Card className="p-4 mb-6 mt-4">
+      <Card className="p-4 mb-4 sm:mb-6 mt-4">
         <label className="block text-sm font-medium text-primary mb-3">
           Communication level
         </label>
@@ -1294,7 +1294,7 @@ function FocusAreasStep({
   return (
     <div className="max-w-md mx-auto">
       <div className="text-center mb-4">
-        <h2 className="text-2xl font-bold text-primary mb-2">
+        <h2 className="text-xl sm:text-2xl font-bold text-primary mb-2">
           What matters most for {childName}?
         </h2>
         <p className="text-muted-foreground mb-2">
@@ -1305,7 +1305,7 @@ function FocusAreasStep({
         </p>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 mb-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
         {areas.map((area) => (
           <button
             key={area.id}
@@ -1339,7 +1339,7 @@ function FocusAreasStep({
         <FocusAreaValidation focusAreas={selected} childName={childName} />
       )}
 
-      <div className="mt-6">
+      <div className="mt-4 sm:mt-6">
         <Button
           onClick={handleNext}
           disabled={selected.length === 0}
@@ -1395,8 +1395,8 @@ function AccountStep({
 
   return (
     <div className="max-w-md mx-auto">
-      <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold text-primary mb-2">
+      <div className="text-center mb-4 sm:mb-6">
+        <h2 className="text-xl sm:text-2xl font-bold text-primary mb-2">
           Almost there! Let's save your plan
         </h2>
         <p className="text-muted-foreground">
@@ -1431,7 +1431,7 @@ function AccountStep({
       </button>
 
       {showOptional && (
-        <Card className="p-4 mb-4 space-y-4">
+        <Card className="p-4 mb-4 space-y-3 sm:space-y-4">
           <div>
             <label className="block text-sm font-medium text-primary mb-2">
               State (for local resources)
@@ -1449,7 +1449,7 @@ function AccountStep({
         <ResourcesTeaser state={stateValue} hasInsurance={!!insurance} />
       )}
 
-      <div className="mt-6">
+      <div className="mt-4 sm:mt-6">
         <Button
           onClick={handleNext}
           disabled={!emailValue || !emailValue.includes('@')}
@@ -1488,11 +1488,11 @@ function PlanGeneratingStep({
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ repeat: Infinity, duration: 2, ease: 'linear' }}
-          className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-accent/20 mb-6"
+          className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-accent/20 mb-4 sm:mb-6"
         >
           <Brain className="w-8 h-8 text-accent" />
         </motion.div>
-        <h2 className="text-2xl font-bold text-primary mb-2">
+        <h2 className="text-xl sm:text-2xl font-bold text-primary mb-2">
           Creating {childName}'s plan...
         </h2>
         <p className="text-muted-foreground">
@@ -1500,7 +1500,7 @@ function PlanGeneratingStep({
         </p>
       </div>
 
-      <Card className="p-6">
+      <Card className="p-4 sm:p-5 md:p-6">
         <PlanGenerationProgress childName={childName} step={planStep} />
       </Card>
     </div>
@@ -1529,7 +1529,7 @@ function CompletionStep({
         dataPointsCollected={Object.keys(data).filter(k => data[k as keyof OnboardingData]).length * 3}
       />
 
-      <div className="mt-6 space-y-3">
+      <div className="mt-4 sm:mt-6 space-y-3">
         <Button
           onClick={onComplete}
           className="w-full min-h-[48px] bg-accent hover:bg-accent/90"
@@ -1733,8 +1733,8 @@ function DemoOverlay({
         </button>
 
         {/* Header */}
-        <div className="text-center mb-6">
-          <h2 className="text-2xl font-bold text-white mb-2">
+        <div className="text-center mb-4 sm:mb-6">
+          <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">
             See How Aminy Works
           </h2>
           <p className="text-white/60 text-sm">
@@ -1745,7 +1745,7 @@ function DemoOverlay({
         {/* Video or Fallback */}
         {showFallback ? (
           // Fallback slideshow when no video URL
-          <Card className="p-6 mb-6">
+          <Card className="p-6 mb-4 sm:mb-6">
             <AnimatePresence mode="wait">
               <motion.div
                 key={fallbackStep}
@@ -1765,7 +1765,7 @@ function DemoOverlay({
             </AnimatePresence>
 
             {/* Dots */}
-            <div className="flex justify-center gap-2 mt-6">
+            <div className="flex justify-center gap-2 mt-4 sm:mt-6">
               {fallbackSteps.map((_, i) => (
                 <button
                   key={i}
@@ -1780,7 +1780,7 @@ function DemoOverlay({
           </Card>
         ) : (
           // Actual video player
-          <div className="mb-6 relative">
+          <div className="mb-4 sm:mb-6 relative">
             {!isVideoLoaded && (
               <div className="absolute inset-0 flex items-center justify-center bg-gray-900 rounded-xl">
                 <div className="text-center">

@@ -363,7 +363,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
   };
 
   const renderMessages = () => (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       {/* Coach Office Hours */}
       <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
         <div className="flex items-center gap-2 mb-2">
@@ -376,7 +376,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
       </div>
 
       {/* Message Thread */}
-      <div className="space-y-4 max-h-80 overflow-y-auto">
+      <div className="space-y-3 sm:space-y-4 max-h-80 overflow-y-auto">
         {messages.map((message) => (
           <div
             key={message.id}
@@ -495,11 +495,11 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
   );
 
   const renderSchedule = () => (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       {/* Duration Selection */}
       <div>
         <h3 className="font-semibold text-gray-900 mb-3">Session Duration</h3>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <button
             onClick={() => setSelectedDuration('25min')}
             className={`p-4 rounded-lg border-2 transition-all ${
@@ -585,7 +585,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
       )}
 
       {/* Consent & Book */}
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         <div className="flex items-start gap-3 p-4 bg-amber-50 rounded-lg border border-amber-200">
           <input
             type="checkbox"
@@ -614,25 +614,25 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
   );
 
   const renderMinutes = () => (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       {/* Minutes Wallet */}
       <div className="p-6 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg border border-purple-200">
         <h3 className="font-semibold text-gray-900 mb-4">Your Minutes Wallet</h3>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
           <div className="text-center">
-            <div className="text-2xl font-bold text-purple-600">
+            <div className="text-xl sm:text-2xl font-bold text-purple-600">
               {minutesWallet.includedThisMonth}
             </div>
             <div className="text-sm text-gray-600">Included this month</div>
           </div>
           <div className="text-center">
-            <div className="text-2xl font-bold text-green-600">
+            <div className="text-xl sm:text-2xl font-bold text-green-600">
               {remainingMinutes}
             </div>
             <div className="text-sm text-gray-600">Remaining</div>
           </div>
           <div className="text-center">
-            <div className="text-2xl font-bold text-blue-600">
+            <div className="text-xl sm:text-2xl font-bold text-blue-600">
               {minutesWallet.purchased}
             </div>
             <div className="text-sm text-gray-600">Purchased</div>
@@ -643,10 +643,10 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
       {/* Buy Minutes */}
       <div>
         <h3 className="font-semibold text-gray-900 mb-3">Buy Additional Minutes</h3>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div className="p-4 bg-white rounded-lg border border-gray-200">
             <div className="text-center mb-3">
-              <div className="text-2xl font-bold">25 min</div>
+              <div className="text-xl sm:text-2xl font-bold">25 min</div>
               <div className="text-lg font-semibold text-accent">$49</div>
               <div className="text-xs text-gray-500">$1.96 per minute</div>
             </div>
@@ -661,7 +661,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
           </div>
           <div className="p-4 bg-white rounded-lg border border-gray-200">
             <div className="text-center mb-3">
-              <div className="text-2xl font-bold">50 min</div>
+              <div className="text-xl sm:text-2xl font-bold">50 min</div>
               <div className="text-lg font-semibold text-accent">$89</div>
               <div className="text-xs text-gray-500">$1.78 per minute</div>
               <Badge className="text-xs mt-1">Best Value</Badge>
@@ -704,7 +704,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
   );
 
   const renderPastSessions = () => (
-    <div className="space-y-4">
+    <div className="space-y-3 sm:space-y-4">
       {pastSessions.map((session) => (
         <div key={session.id} className="space-y-3">
           {/* Session Header */}
@@ -753,7 +753,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
 
           {/* Session Summary */}
           {selectedSession?.id === session.id && session.summary && (
-            <div className="p-4 bg-gray-50 rounded-lg border border-gray-200 space-y-4">
+            <div className="p-4 bg-gray-50 rounded-lg border border-gray-200 space-y-3 sm:space-y-4">
               <div>
                 <h4 className="font-semibold text-gray-900 mb-2 flex items-center gap-2">
                   <Target className="w-4 h-4 text-blue-600" />
@@ -884,13 +884,13 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
           <div className="text-center py-12">
             <Stethoscope className="w-16 h-16 text-gray-300 mx-auto mb-4" />
             <h2 className="text-lg font-semibold text-gray-900 mb-2">Upgrade to Pro</h2>
-            <p className="text-gray-600 mb-6 max-w-xs mx-auto">
+            <p className="text-gray-600 mb-4 sm:mb-6 max-w-xs mx-auto">
               Access 1-on-1 coaching with certified developmental specialists
             </p>
             <Button onClick={onPaywallTrigger} className="mx-auto">
               View Pro Features
             </Button>
-            <div className="mt-6 p-4 bg-purple-50 rounded-lg">
+            <div className="mt-4 sm:mt-6 p-4 bg-purple-50 rounded-lg">
               <div className="flex items-center gap-2 mb-2">
                 <Award className="w-4 h-4 text-purple-600" />
                 <span className="font-medium text-purple-900">What's Included</span>
@@ -906,7 +906,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
         ) : (
           <>
             {/* Tab Navigation */}
-            <div className="mb-6">
+            <div className="mb-4 sm:mb-6">
               <div className="flex bg-gray-100 rounded-lg p-1">
                 {tabItems.map((tab) => {
                   const Icon = tab.icon;
@@ -930,7 +930,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
 
             {/* Tab Content */}
             <Card className="aminy-card">
-              <div className="p-6">
+              <div className="p-4 sm:p-5 md:p-6">
                 {activeView === 'messages' && renderMessages()}
                 {activeView === 'schedule' && renderSchedule()}
                 {activeView === 'minutes' && renderMinutes()}

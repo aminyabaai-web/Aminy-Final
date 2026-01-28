@@ -346,7 +346,7 @@ export function AminyJrEnhanced({
         </motion.div>
       </div>
       {/* Eyes */}
-      <div className="absolute top-6 left-6 flex gap-4">
+      <div className="absolute top-6 left-6 flex gap-3 sm:gap-4">
         <div className="w-3 h-3 bg-white rounded-full">
           <div className="w-1.5 h-1.5 bg-black rounded-full ml-1 mt-1" />
         </div>
@@ -375,7 +375,7 @@ export function AminyJrEnhanced({
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.3 }}
-            className="text-3xl text-gray-900 mt-6 mb-3"
+            className="text-3xl text-gray-900 mt-4 sm:mt-6 mb-3"
           >
             Hi {childName}! 👋
           </motion.h1>
@@ -437,11 +437,11 @@ export function AminyJrEnhanced({
           transition={{ type: 'spring', duration: 0.8 }}
           className="text-center"
         >
-          <Trophy className="w-32 h-32 text-yellow-500 mx-auto mb-6" />
+          <Trophy className="w-32 h-32 text-yellow-500 mx-auto mb-4 sm:mb-6" />
           
           <h1 className="text-4xl mb-4">🎉 Amazing! 🎉</h1>
           
-          <div className="flex justify-center gap-2 mb-6">
+          <div className="flex justify-center gap-2 mb-4 sm:mb-6">
             {[...Array(currentActivity?.stars || 1)].map((_, i) => (
               <motion.div
                 key={i}
@@ -506,11 +506,11 @@ export function AminyJrEnhanced({
 
       {showConfetti && <ConfettiEffect />}
 
-      <div className="max-w-4xl mx-auto px-4 py-6 space-y-6">
+      <div className="max-w-4xl mx-auto px-4 py-6 space-y-3 sm:space-y-4 sm:space-y-6">
         {/* Mascot Guide */}
         {currentView === 'home' && (
           <Card className="p-6 bg-gradient-to-r from-teal-50 to-blue-50 border-teal-200">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3 sm:gap-4">
               <CompassMascot mood="encouraging" />
               <div className="flex-1">
                 <p className="text-lg text-gray-800 mb-2">
@@ -526,7 +526,7 @@ export function AminyJrEnhanced({
 
         {/* Main Menu */}
         {currentView === 'home' && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
             {/* Speech Play */}
             <button
               onClick={() => setCurrentView('speech-play')}
@@ -609,7 +609,7 @@ export function AminyJrEnhanced({
 
         {/* Speech Play View */}
         {currentView === 'speech-play' && !isActivityActive && (
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             <Button
               variant="ghost"
               onClick={() => setCurrentView('home')}
@@ -629,14 +629,14 @@ export function AminyJrEnhanced({
               </div>
             </Card>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
               {speechActivities.map(activity => (
                 <button
                   key={activity.id}
                   onClick={() => handleStartActivity(activity)}
                   className="group relative overflow-hidden rounded-2xl border-2 border-gray-200 bg-white hover:border-blue-400 transition-all hover:shadow-lg p-6 text-left"
                 >
-                  <div className="flex items-start gap-4">
+                  <div className="flex items-start gap-3 sm:gap-4">
                     <div className="text-5xl">{activity.icon}</div>
                     <div className="flex-1">
                       <h3 className="text-lg text-gray-900 mb-1">{activity.title}</h3>
@@ -660,9 +660,9 @@ export function AminyJrEnhanced({
 
         {/* Active Activity */}
         {currentView === 'speech-play' && isActivityActive && currentActivity && (
-          <div className="space-y-6">
+          <div className="space-y-3 sm:space-y-4 sm:space-y-6">
             <Card className="p-6 bg-gradient-to-br from-blue-50 to-purple-50 border-blue-200">
-              <div className="text-center mb-6">
+              <div className="text-center mb-4 sm:mb-6">
                 <div className="text-6xl mb-4">{currentActivity.icon}</div>
                 <h2 className="text-2xl text-gray-900 mb-2">{currentActivity.title}</h2>
                 <p className="text-lg text-gray-600">{currentActivity.description}</p>
@@ -672,8 +672,8 @@ export function AminyJrEnhanced({
               <p className="text-center text-sm text-gray-600">{Math.round(activityProgress)}% complete</p>
             </Card>
 
-            <Card className="p-6">
-              <div className="flex items-center gap-4">
+            <Card className="p-4 sm:p-5 md:p-6">
+              <div className="flex items-center gap-3 sm:gap-4">
                 <CompassMascot mood="encouraging" />
                 <p className="text-lg text-gray-800">{currentActivity.voicePrompt}</p>
               </div>
@@ -683,7 +683,7 @@ export function AminyJrEnhanced({
 
         {/* Mini Missions View */}
         {currentView === 'mini-missions' && (
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             <Button
               variant="ghost"
               onClick={() => setCurrentView('home')}

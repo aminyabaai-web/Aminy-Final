@@ -299,7 +299,7 @@ export function WhatAminyKnows({ onBack, childId }: WhatAminyKnowsProps) {
               </Button>
             )}
             <div className="flex-1">
-              <h1 className="text-xl font-semibold text-primary flex items-center gap-2">
+              <h1 className="text-lg sm:text-xl font-semibold text-primary flex items-center gap-2">
                 <Brain className="w-5 h-5 text-accent" />
                 What Aminy Knows
               </h1>
@@ -324,7 +324,7 @@ export function WhatAminyKnows({ onBack, childId }: WhatAminyKnowsProps) {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-6"
+          className="mb-4 sm:mb-6"
         >
           <Card className="p-4 bg-gradient-to-br from-accent/5 to-purple-50/50 border-accent/10">
             <div className="flex items-center justify-between">
@@ -332,7 +332,7 @@ export function WhatAminyKnows({ onBack, childId }: WhatAminyKnowsProps) {
                 <p className="text-sm text-muted-foreground">
                   Aminy has learned
                 </p>
-                <p className="text-2xl font-bold text-primary">
+                <p className="text-xl sm:text-2xl font-bold text-primary">
                   {totalFacts} {totalFacts === 1 ? 'thing' : 'things'}
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">
@@ -347,7 +347,7 @@ export function WhatAminyKnows({ onBack, childId }: WhatAminyKnowsProps) {
         </motion.div>
 
         {/* Category Filter */}
-        <div className="mb-6 overflow-x-auto pb-2 -mx-4 px-4">
+        <div className="mb-4 sm:mb-6 overflow-x-auto pb-2 -mx-4 px-4">
           <div className="flex gap-2 min-w-max">
             <Button
               variant={selectedCategory === null ? 'default' : 'outline'}
@@ -398,7 +398,7 @@ export function WhatAminyKnows({ onBack, childId }: WhatAminyKnowsProps) {
 
         {/* Memory Categories */}
         {!loading && (
-          <div className="space-y-6">
+          <div className="space-y-3 sm:space-y-4 sm:space-y-6">
             <AnimatePresence mode="popLayout">
               {Object.entries(filteredMemories).map(([categoryKey, facts]) => {
                 if (!facts || facts.length === 0) return null;
@@ -515,12 +515,12 @@ export function WhatAminyKnows({ onBack, childId }: WhatAminyKnowsProps) {
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-4 py-4">
+          <div className="space-y-3 sm:space-y-4 py-4">
             <div>
               <label className="text-sm font-medium text-primary mb-2 block">
                 Category
               </label>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {Object.entries(categories).slice(0, 6).map(([key, cat]) => {
                   const Icon = cat.icon;
                   return (

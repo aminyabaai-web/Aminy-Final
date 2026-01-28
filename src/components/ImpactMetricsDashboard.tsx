@@ -252,9 +252,9 @@ export function ImpactMetricsDashboard({
 
   if (loading || !metrics) {
     return (
-      <div className="p-6 space-y-4 animate-pulse">
+      <div className="p-6 space-y-3 sm:space-y-4 animate-pulse">
         <div className="h-8 bg-gray-200 dark:bg-slate-700 rounded w-1/3" />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
           {[1, 2, 3].map(i => (
             <div key={i} className="h-32 bg-gray-200 dark:bg-slate-700 rounded-xl" />
           ))}
@@ -264,11 +264,11 @@ export function ImpactMetricsDashboard({
   }
 
   return (
-    <div className="p-6 space-y-6 bg-gray-50 dark:bg-slate-900 min-h-screen">
+    <div className="p-6 space-y-3 sm:space-y-4 sm:space-y-6 bg-gray-50 dark:bg-slate-900 min-h-screen">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 sm:gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
             <Target className="w-7 h-7 text-teal-600" />
             Impact Dashboard
           </h1>
@@ -312,14 +312,14 @@ export function ImpactMetricsDashboard({
       {activeView === 'dashboard' && (
         <>
           {/* Key Impact Indicators */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
               <Card className="p-4 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-slate-800 dark:to-slate-800 border-blue-200 dark:border-slate-700">
                 <div className="flex items-center justify-between mb-2">
                   <Users className="w-5 h-5 text-blue-600" />
                   {getTrendIcon(metrics.trends.beneficiaryGrowth)}
                 </div>
-                <div className="text-2xl font-bold text-blue-700 dark:text-blue-400">
+                <div className="text-xl sm:text-2xl font-bold text-blue-700 dark:text-blue-400">
                   {metrics.beneficiaries.total.toLocaleString()}
                 </div>
                 <div className="text-xs text-blue-600 dark:text-blue-500">Families Served</div>
@@ -335,7 +335,7 @@ export function ImpactMetricsDashboard({
                   <TrendingUp className="w-5 h-5 text-green-600" />
                   {getTrendIcon(metrics.trends.outcomeImprovement)}
                 </div>
-                <div className="text-2xl font-bold text-green-700 dark:text-green-400">
+                <div className="text-xl sm:text-2xl font-bold text-green-700 dark:text-green-400">
                   {metrics.outcomes.behaviorImprovements}%
                 </div>
                 <div className="text-xs text-green-600 dark:text-green-500">Behavior Improvement</div>
@@ -351,7 +351,7 @@ export function ImpactMetricsDashboard({
                   <Heart className="w-5 h-5 text-purple-600" />
                   {getTrendIcon(metrics.trends.retentionTrend)}
                 </div>
-                <div className="text-2xl font-bold text-purple-700 dark:text-purple-400">
+                <div className="text-xl sm:text-2xl font-bold text-purple-700 dark:text-purple-400">
                   {metrics.outcomes.stressReduction}%
                 </div>
                 <div className="text-xs text-purple-600 dark:text-purple-500">Stress Reduction</div>
@@ -366,7 +366,7 @@ export function ImpactMetricsDashboard({
                 <div className="flex items-center justify-between mb-2">
                   <Sparkles className="w-5 h-5 text-amber-600" />
                 </div>
-                <div className="text-2xl font-bold text-amber-700 dark:text-amber-400">
+                <div className="text-xl sm:text-2xl font-bold text-amber-700 dark:text-amber-400">
                   {metrics.outcomes.familyQualityOfLife}/10
                 </div>
                 <div className="text-xs text-amber-600 dark:text-amber-500">Quality of Life</div>
@@ -378,14 +378,14 @@ export function ImpactMetricsDashboard({
           </div>
 
           {/* Detailed Sections */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
             {/* Beneficiary Demographics */}
             <Card className="p-5 dark:bg-slate-800 dark:border-slate-700">
               <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                 <Users className="w-5 h-5 text-teal-600" />
                 Beneficiary Breakdown
               </h3>
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-gray-600 dark:text-gray-400">Children Served</span>
                   <span className="font-semibold dark:text-white">{metrics.beneficiaries.children}</span>
@@ -420,7 +420,7 @@ export function ImpactMetricsDashboard({
                 <Target className="w-5 h-5 text-teal-600" />
                 Outcome Metrics
               </h3>
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 {[
                   { label: 'Behavior Improvement', value: metrics.outcomes.behaviorImprovements, target: 70, color: 'bg-green-500' },
                   { label: 'Stress Reduction', value: metrics.outcomes.stressReduction, target: 60, color: 'bg-purple-500' },
@@ -458,7 +458,7 @@ export function ImpactMetricsDashboard({
                 <Activity className="w-5 h-5 text-teal-600" />
                 Operational Metrics
               </h3>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div className="text-center p-3 bg-gray-50 dark:bg-slate-900 rounded-lg">
                   <div className="text-xl font-bold text-gray-900 dark:text-white">
                     {metrics.operations.sessionsDelivered.toLocaleString()}
@@ -526,11 +526,11 @@ export function ImpactMetricsDashboard({
 
       {activeView === 'toc' && (
         <Card className="p-6 dark:bg-slate-800 dark:border-slate-700">
-          <h3 className="font-semibold text-gray-900 dark:text-white mb-6 text-lg">
+          <h3 className="font-semibold text-gray-900 dark:text-white mb-4 sm:mb-6 text-lg">
             Theory of Change
           </h3>
           <div className="overflow-x-auto">
-            <div className="flex gap-4 min-w-[800px]">
+            <div className="flex gap-3 sm:gap-4 min-w-[800px]">
               {/* Inputs */}
               <div className="flex-1">
                 <div className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase mb-3">Inputs</div>
@@ -616,11 +616,11 @@ export function ImpactMetricsDashboard({
             <Globe className="w-5 h-5 text-teal-600" />
             IRIS+ Catalog Alignment
           </h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
+          <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 sm:mb-6">
             Our metrics are aligned with the Global Impact Investing Network (GIIN) IRIS+ system
             for standardized impact measurement and reporting.
           </p>
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {IRIS_METRICS.map((metric) => (
               <div
                 key={metric.code}
@@ -641,7 +641,7 @@ export function ImpactMetricsDashboard({
               </div>
             ))}
           </div>
-          <div className="mt-6 p-4 bg-teal-50 dark:bg-teal-900/20 rounded-lg">
+          <div className="mt-4 sm:mt-6 p-4 bg-teal-50 dark:bg-teal-900/20 rounded-lg">
             <div className="flex items-start gap-3">
               <AlertCircle className="w-5 h-5 text-teal-600 dark:text-teal-400 flex-shrink-0 mt-0.5" />
               <div className="text-sm text-teal-800 dark:text-teal-300">

@@ -122,7 +122,7 @@ export function PersistentAskAminyFAB({
                 <p className="text-sm text-muted-foreground mb-4">
                   How can I help you today?
                 </p>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {['Routines', 'Behavior', 'Sleep', 'Speech'].map((topic) => (
                     <Button
                       key={topic}

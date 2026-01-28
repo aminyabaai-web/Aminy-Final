@@ -18,12 +18,12 @@ export function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white border-b sticky top-0 z-10">
-        <div className="max-w-3xl mx-auto px-4 py-4 flex items-center gap-4">
+        <div className="max-w-3xl mx-auto px-4 py-4 flex items-center gap-3 sm:gap-4">
           <Button variant="ghost" size="icon" onClick={onBack}>
             <ArrowLeft className="w-5 h-5" />
           </Button>
           <div>
-            <h1 className="text-xl font-semibold text-gray-900">Privacy Policy</h1>
+            <h1 className="text-lg sm:text-xl font-semibold text-gray-900">Privacy Policy</h1>
             <p className="text-sm text-gray-500">Last updated: {lastUpdated}</p>
           </div>
         </div>
@@ -38,7 +38,7 @@ export function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
               <div className="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center">
                 <Shield className="w-5 h-5 text-teal-600" />
               </div>
-              <h2 className="text-xl font-semibold text-gray-900">Introduction</h2>
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Introduction</h2>
             </div>
             <p className="text-gray-600 leading-relaxed">
               Aminy ("we," "our," or "us") is committed to protecting your privacy and the privacy of your family.
@@ -57,7 +57,7 @@ export function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
               <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
                 <Database className="w-5 h-5 text-blue-600" />
               </div>
-              <h2 className="text-xl font-semibold text-gray-900">Information We Collect</h2>
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Information We Collect</h2>
             </div>
 
             <h3 className="font-medium text-gray-900 mt-4 mb-2">Information You Provide</h3>
@@ -84,7 +84,7 @@ export function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
               <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
                 <Eye className="w-5 h-5 text-purple-600" />
               </div>
-              <h2 className="text-xl font-semibold text-gray-900">How We Use Your Information</h2>
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900">How We Use Your Information</h2>
             </div>
             <ul className="list-disc list-inside text-gray-600 space-y-2">
               <li>Provide personalized behavioral wellness guidance</li>
@@ -104,7 +104,7 @@ export function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
               <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
                 <Lock className="w-5 h-5 text-green-600" />
               </div>
-              <h2 className="text-xl font-semibold text-gray-900">Data Security</h2>
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Data Security</h2>
             </div>
             <p className="text-gray-600 leading-relaxed">
               We implement industry-standard security measures to protect your data:
@@ -124,7 +124,7 @@ export function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
               <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center">
                 <Globe className="w-5 h-5 text-amber-600" />
               </div>
-              <h2 className="text-xl font-semibold text-gray-900">Data Sharing</h2>
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Data Sharing</h2>
             </div>
             <p className="text-gray-600 leading-relaxed">
               We do not sell your personal information. We may share data with:
@@ -138,7 +138,7 @@ export function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
 
           {/* Your Rights */}
           <section>
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Your Rights</h2>
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">Your Rights</h2>
             <p className="text-gray-600 leading-relaxed">
               Depending on your location, you may have the following rights:
             </p>
@@ -160,7 +160,7 @@ export function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
 
           {/* Children's Privacy (COPPA) */}
           <section>
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Children's Privacy</h2>
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">Children's Privacy</h2>
             <p className="text-gray-600 leading-relaxed">
               Aminy is designed for parents and caregivers to use on behalf of their children.
               We do not knowingly collect information directly from children under 13.
@@ -173,7 +173,7 @@ export function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
 
           {/* Data Retention */}
           <section>
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Data Retention</h2>
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">Data Retention</h2>
             <p className="text-gray-600 leading-relaxed">
               We retain your data for as long as your account is active or as needed to provide services.
               If you delete your account, we will delete your personal data within 30 days, except where
@@ -187,7 +187,7 @@ export function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
               <div className="w-10 h-10 bg-pink-100 rounded-lg flex items-center justify-center">
                 <Mail className="w-5 h-5 text-pink-600" />
               </div>
-              <h2 className="text-xl font-semibold text-gray-900">Contact Us</h2>
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Contact Us</h2>
             </div>
             <p className="text-gray-600 leading-relaxed">
               If you have questions about this Privacy Policy or our data practices, please contact us:
@@ -207,7 +207,7 @@ export function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
 
           {/* Updates */}
           <section>
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Changes to This Policy</h2>
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">Changes to This Policy</h2>
             <p className="text-gray-600 leading-relaxed">
               We may update this Privacy Policy from time to time. We will notify you of any material
               changes by posting the new policy on this page and updating the "Last updated" date.

@@ -75,9 +75,9 @@ export function BCBANotesTemplate({ childName, onSave }: BCBANotesTemplateProps)
   };
 
   return (
-    <div className="space-y-6 max-w-4xl mx-auto">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6 max-w-4xl mx-auto">
       <div className="flex items-center justify-between">
-        <h3 className="text-xl font-semibold text-gray-900">BCBA/RBT Session Notes</h3>
+        <h3 className="text-lg sm:text-xl font-semibold text-gray-900">BCBA/RBT Session Notes</h3>
         <Badge variant="outline" className="text-xs">
           Auto-saved to Vault
         </Badge>
@@ -85,7 +85,7 @@ export function BCBANotesTemplate({ childName, onSave }: BCBANotesTemplateProps)
 
       {/* Client Info */}
       <Card className="p-4 bg-gray-50 border-gray-200">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
           <div>
             <Label className="text-xs text-gray-600">Client Name</Label>
             <Input value={childName} readOnly className="bg-white" />
@@ -140,7 +140,7 @@ export function BCBANotesTemplate({ childName, onSave }: BCBANotesTemplateProps)
       )}
 
       {/* Session Details Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
         <div>
           <Label htmlFor="goal" className="text-sm font-semibold text-gray-900">Goal</Label>
           <Textarea
@@ -191,7 +191,7 @@ export function BCBANotesTemplate({ childName, onSave }: BCBANotesTemplateProps)
       </div>
 
       {/* Full Width Fields */}
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         <div>
           <Label htmlFor="abc" className="text-sm font-semibold text-gray-900">ABC events</Label>
           <Textarea

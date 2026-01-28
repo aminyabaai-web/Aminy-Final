@@ -81,7 +81,7 @@ export function EmptyState({
       {/* Description */}
       <p
         className={cn(
-          'text-gray-500 dark:text-slate-400 max-w-sm mb-6',
+          'text-gray-500 dark:text-slate-400 max-w-sm mb-4 sm:mb-6',
           isCompact ? 'text-sm' : 'text-base'
         )}
       >

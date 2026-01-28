@@ -94,7 +94,7 @@ export function MicroFeedbackGlow({ trigger, onDismiss }: MicroFeedbackGlowProps
             transition={{ type: 'spring', damping: 20, stiffness: 300 }}
             className="fixed top-4 left-1/2 -translate-x-1/2 z-50 max-w-sm"
           >
-            <div className="bg-white rounded-2xl shadow-xl border border-slate-100 px-6 py-4 flex items-center gap-3">
+            <div className="bg-white rounded-2xl shadow-xl border border-slate-100 px-4 sm:px-6 py-3 sm:py-4 flex items-center gap-3">
               <motion.div
                 animate={{
                   scale: [1, 1.2, 1],

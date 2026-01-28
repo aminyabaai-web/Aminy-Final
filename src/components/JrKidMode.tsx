@@ -136,9 +136,9 @@ export const JrKidMode: React.FC<JrKidModeProps> = ({
     return (
       <div className="fixed inset-0 bg-gradient-to-br from-blue-50 via-teal-50 to-green-50 flex items-center justify-center z-50 p-4">
         <Card className="max-w-md w-full p-8 text-center">
-          <div className="text-4xl mb-6">🎤</div>
-          <h2 className="text-xl font-semibold text-primary mb-4">Voice Recognition</h2>
-          <p className="text-muted-foreground mb-6 leading-relaxed">
+          <div className="text-4xl mb-4 sm:mb-6">🎤</div>
+          <h2 className="text-lg sm:text-xl font-semibold text-primary mb-4">Voice Recognition</h2>
+          <p className="text-muted-foreground mb-4 sm:mb-6 leading-relaxed">
             On-device recognition by default. You can turn off the mic anytime.
           </p>
           <div className="flex gap-3">
@@ -194,7 +194,7 @@ export const JrKidMode: React.FC<JrKidModeProps> = ({
 
         {/* Rewards Content */}
         <div className="max-w-md mx-auto px-4 py-8">
-          <div className="grid grid-cols-1 gap-6">
+          <div className="grid grid-cols-1 gap-3 sm:gap-4 sm:gap-6">
             {[
               { name: 'Bubble Time', cost: 3, icon: '🫧', color: 'blue' },
               { name: 'Music Break', cost: 3, icon: '🎵', color: 'green' },
@@ -293,7 +293,7 @@ export const JrKidMode: React.FC<JrKidModeProps> = ({
 
       {/* Kid Mode Content - Large Activity Tiles */}
       <div className="max-w-md mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-3 sm:gap-4 sm:gap-6 md:grid-cols-2">
           {/* Speech Tile */}
           <Card 
             className={`p-8 text-center bg-gradient-to-br from-blue-100 to-blue-200 border-blue-200 cursor-pointer transition-all duration-200 ${!prefersReducedMotion ? 'hover:scale-105' : 'hover:bg-blue-150'}`}

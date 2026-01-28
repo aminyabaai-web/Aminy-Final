@@ -545,7 +545,7 @@ export function SecureMessaging({ userId, userType, userName }: SecureMessagingP
           </div>
 
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-neutral-50">
+          <div className="flex-1 overflow-y-auto p-4 space-y-3 sm:space-y-4 bg-neutral-50">
             {messages.map(message => {
               const isOwn = message.senderId === userId;
               return (

@@ -31,7 +31,7 @@ export function CoverPage({ onNavigate }: CoverPageProps) {
         <div className="max-w-4xl w-full">
           {/* Logo & Title */}
           <div className="text-center mb-12">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-accent rounded-2xl shadow-lg mb-6">
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-accent rounded-2xl shadow-lg mb-4 sm:mb-6">
               <Heart className="w-12 h-12 text-white" />
             </div>
             
@@ -70,12 +70,12 @@ export function CoverPage({ onNavigate }: CoverPageProps) {
 
           {/* Usage Instructions */}
           <div className="bg-white rounded-2xl border border-gray-200 shadow-lg p-8 mb-8">
-            <h2 className="text-2xl font-semibold text-primary mb-6 flex items-center gap-2">
+            <h2 className="text-2xl font-semibold text-primary mb-4 sm:mb-6 flex items-center gap-2">
               <Play className="w-6 h-6 text-accent" />
               Usage Instructions
             </h2>
             
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               <div className="flex items-start gap-3">
                 <div className="w-6 h-6 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
                   <span className="text-sm font-medium text-accent">1</span>
@@ -124,7 +124,7 @@ export function CoverPage({ onNavigate }: CoverPageProps) {
           </div>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-8">
             <button
               onClick={handleStart}
               className="flex items-center justify-center gap-2 bg-accent text-white font-semibold py-4 px-8 rounded-lg hover:opacity-90 transition-all shadow-lg hover:shadow-xl"
@@ -143,7 +143,7 @@ export function CoverPage({ onNavigate }: CoverPageProps) {
           </div>
 
           {/* Quick Links */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-8">
             <button
               onClick={() => onNavigate('onboarding')}
               className="bg-white border border-gray-200 rounded-lg p-4 hover:border-accent hover:shadow-md transition-all text-left"
@@ -180,8 +180,8 @@ export function CoverPage({ onNavigate }: CoverPageProps) {
 
           {/* Features Grid */}
           <div className="bg-white rounded-xl border border-gray-200 p-6 mb-8">
-            <h2 className="text-xl font-semibold text-primary mb-4">What's Included</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <h2 className="text-lg sm:text-xl font-semibold text-primary mb-4">What's Included</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               {[
                 { icon: CheckCircle, text: 'Complete component library', color: 'text-green-600' },
                 { icon: CheckCircle, text: '5-step onboarding flow', color: 'text-green-600' },

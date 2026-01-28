@@ -42,10 +42,10 @@ export function PaymentConfirmation({
           <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <Check className="w-8 h-8 text-green-600" />
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
             Payment Successful!
           </h2>
-          <p className="text-gray-600 mb-6">
+          <p className="text-gray-600 mb-4 sm:mb-6">
             Welcome to Aminy {tier ? tierNames[tier] : ''}! Your subscription is now active.
           </p>
           <Button
@@ -66,13 +66,13 @@ export function PaymentConfirmation({
           <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <AlertCircle className="w-8 h-8 text-amber-600" />
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
             Verification Taking Longer Than Expected
           </h2>
           <p className="text-gray-600 mb-4">
             {error || "We're still processing your payment. This usually takes just a moment."}
           </p>
-          <p className="text-sm text-gray-500 mb-6">
+          <p className="text-sm text-gray-500 mb-4 sm:mb-6">
             If you were charged, your subscription will be activated shortly. You can also check your email for confirmation.
           </p>
           <div className="flex gap-3">
@@ -119,7 +119,7 @@ export function PaymentConfirmation({
         <div className="w-16 h-16 bg-teal-50 rounded-full flex items-center justify-center mx-auto mb-4">
           <Loader2 className="w-8 h-8 text-teal-600 animate-spin" />
         </div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
           Confirming Your Payment
         </h2>
         <p className="text-gray-600 mb-2">

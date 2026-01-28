@@ -20,11 +20,11 @@ interface CommunityForYouProps {
 
 export function CommunityForYou({ posts, onSave, onShare, onHide }: CommunityForYouProps) {
   return (
-    <div className="space-y-4">
+    <div className="space-y-3 sm:space-y-4">
       <h3 className="text-lg font-semibold">For you</h3>
       
       {posts.map((post) => (
-        <Card key={post.id} className="p-4">
+        <Card key={post.id} className="p-3 sm:p-4">
           <div className="flex items-start gap-3 mb-3">
             <BookOpen className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
             <div className="flex-1">

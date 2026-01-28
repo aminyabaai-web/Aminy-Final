@@ -115,17 +115,17 @@ export function TelehealthHome({
       </header>
 
       {/* Content */}
-      <div className="px-4 py-6 pb-24 space-y-6">
+      <div className="px-4 py-6 pb-24 space-y-3 sm:space-y-4 sm:space-y-6">
         {/* Greeting */}
         <div className="bg-gradient-to-br from-[#577590] to-[#466379] rounded-2xl p-5 text-white">
-          <h2 className="text-xl font-semibold mb-1">Hi {userName}!</h2>
+          <h2 className="text-lg sm:text-xl font-semibold mb-1">Hi {userName}!</h2>
           <p className="text-white/80 text-sm">
             Get personalized guidance from autism and neurodivergence experts.
           </p>
         </div>
 
         {/* Primary CTAs */}
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <button
             onClick={() => startFlow('browse-concerns')}
             className="bg-white rounded-2xl border border-gray-100 p-4 text-left hover:shadow-md hover:border-[#577590]/30 transition-all"

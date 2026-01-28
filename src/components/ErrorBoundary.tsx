@@ -219,23 +219,23 @@ function DefaultErrorFallback({
     <div className="min-h-screen bg-white flex items-center justify-center p-4">
       <div className="text-center max-w-lg">
         {/* Apple-style error icon */}
-        <div className="w-16 h-16 mx-auto mb-6 bg-red-50 rounded-full flex items-center justify-center">
+        <div className="w-16 h-16 mx-auto mb-4 sm:mb-6 bg-red-50 rounded-full flex items-center justify-center">
           <svg className="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
           </svg>
         </div>
         
-        <h2 className="text-xl font-semibold text-gray-900 mb-3">
+        <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3">
           We hit an unexpected bump
         </h2>
 
-        <p className="text-gray-600 mb-6 leading-relaxed">
+        <p className="text-gray-600 mb-4 sm:mb-6 leading-relaxed">
           Don't worry — this happens sometimes and it's not your fault.
           We've been notified and are looking into it. Let's try again together.
         </p>
 
         {/* Error details toggle */}
-        <div className="mb-6">
+        <div className="mb-4 sm:mb-6">
           <button
             onClick={() => setShowDetails(!showDetails)}
             className="text-sm text-blue-600 hover:text-blue-700 mb-3"
@@ -270,7 +270,7 @@ function DefaultErrorFallback({
         </div>
 
         {/* Error reporting */}
-        <div className="mt-6 pt-6 border-t border-gray-200">
+        <div className="mt-4 sm:mt-6 pt-6 border-t border-gray-200">
           {!reportSent ? (
             <button
               onClick={sendErrorReport}

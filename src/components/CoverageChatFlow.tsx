@@ -364,7 +364,7 @@ export function CoverageChatFlow({
       {/* Messages */}
       <div 
         ref={chatContainerRef}
-        className="flex-1 overflow-y-auto p-4 space-y-4"
+        className="flex-1 overflow-y-auto p-4 space-y-3 sm:space-y-4"
         style={{ maxHeight: 'calc(100vh - 300px)' }}
       >
         {messages.map((message) => (

@@ -35,7 +35,7 @@ export function BrandGuideComponent() {
         
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="flex items-center justify-center gap-3 mb-6">
+          <div className="flex items-center justify-center gap-3 mb-4 sm:mb-6">
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-r from-[#C9EAD9] via-[#FFE2B6] to-[#E6E0F8] opacity-20 blur-2xl rounded-full"></div>
               <div className="relative w-16 h-16 bg-gradient-to-br from-accent to-teal-500 rounded-full flex items-center justify-center">
@@ -67,9 +67,9 @@ export function BrandGuideComponent() {
           </TabsList>
 
           {/* IDENTITY TAB */}
-          <TabsContent value="identity" className="space-y-6">
+          <TabsContent value="identity" className="space-y-3 sm:space-y-4 sm:space-y-6">
             <Card className="p-8">
-              <div className="flex items-start gap-4 mb-6">
+              <div className="flex items-start gap-3 sm:gap-4 mb-4 sm:mb-6">
                 <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0">
                   <Shield className="w-6 h-6 text-accent" />
                 </div>
@@ -79,7 +79,7 @@ export function BrandGuideComponent() {
                 </div>
               </div>
 
-              <div className="space-y-6">
+              <div className="space-y-3 sm:space-y-4 sm:space-y-6">
                 {/* Tagline */}
                 <div className="bg-gradient-to-r from-accent/5 to-teal-50 rounded-xl p-6 border border-accent/20">
                   <h3 className="font-semibold text-slate-900 mb-2">Official Tagline</h3>
@@ -111,7 +111,7 @@ export function BrandGuideComponent() {
                 </div>
 
                 {/* Category */}
-                <div className="grid md:grid-cols-2 gap-4">
+                <div className="grid md:grid-cols-2 gap-3 sm:gap-4">
                   <div>
                     <h3 className="font-semibold text-slate-900 mb-2">Category</h3>
                     <Badge className="bg-accent text-white">AI Behavioral Wellness</Badge>
@@ -125,7 +125,7 @@ export function BrandGuideComponent() {
                 {/* Value Pillars */}
                 <div>
                   <h3 className="font-semibold text-slate-900 mb-4">Three Value Pillars</h3>
-                  <div className="grid md:grid-cols-3 gap-4">
+                  <div className="grid md:grid-cols-3 gap-3 sm:gap-4">
                     <Card className="p-4 bg-blue-50 border-blue-200">
                       <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center mb-3">
                         <Shield className="w-5 h-5 text-white" />
@@ -162,9 +162,9 @@ export function BrandGuideComponent() {
           </TabsContent>
 
           {/* COLORS TAB */}
-          <TabsContent value="colors" className="space-y-6">
+          <TabsContent value="colors" className="space-y-3 sm:space-y-4 sm:space-y-6">
             <Card className="p-8">
-              <div className="flex items-start gap-4 mb-6">
+              <div className="flex items-start gap-3 sm:gap-4 mb-4 sm:mb-6">
                 <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0">
                   <Palette className="w-6 h-6 text-accent" />
                 </div>
@@ -178,7 +178,7 @@ export function BrandGuideComponent() {
                 {/* AI Gradient Colors */}
                 <div>
                   <h3 className="font-semibold text-slate-900 mb-4">AI Gradient Palette</h3>
-                  <div className="grid sm:grid-cols-3 gap-4">
+                  <div className="grid sm:grid-cols-3 gap-3 sm:gap-4">
                     <div className="space-y-2">
                       <div className="h-24 rounded-lg bg-[#C9EAD9] border-2 border-slate-200"></div>
                       <div className="text-sm">
@@ -245,7 +245,7 @@ export function BrandGuideComponent() {
                 {/* Primary Accent */}
                 <div>
                   <h3 className="font-semibold text-slate-900 mb-4">Primary Accent</h3>
-                  <div className="grid sm:grid-cols-2 gap-4">
+                  <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">
                     <div className="space-y-2">
                       <div className="h-24 rounded-lg bg-[#0891b2] border-2 border-slate-200"></div>
                       <div className="text-sm">
@@ -283,7 +283,7 @@ export function BrandGuideComponent() {
                 {/* Tier Colors */}
                 <div>
                   <h3 className="font-semibold text-slate-900 mb-4">Tier Colors</h3>
-                  <div className="grid sm:grid-cols-3 gap-4">
+                  <div className="grid sm:grid-cols-3 gap-3 sm:gap-4">
                     <div className="space-y-2">
                       <div className="h-16 rounded-lg bg-[#3B82F6] border-2 border-slate-200"></div>
                       <div className="text-sm">
@@ -314,9 +314,9 @@ export function BrandGuideComponent() {
           </TabsContent>
 
           {/* VOICE & TONE TAB */}
-          <TabsContent value="voice" className="space-y-6">
+          <TabsContent value="voice" className="space-y-3 sm:space-y-4 sm:space-y-6">
             <Card className="p-8">
-              <div className="flex items-start gap-4 mb-6">
+              <div className="flex items-start gap-3 sm:gap-4 mb-4 sm:mb-6">
                 <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0">
                   <MessageSquare className="w-6 h-6 text-accent" />
                 </div>
@@ -327,7 +327,7 @@ export function BrandGuideComponent() {
               </div>
 
               {/* Voice Description */}
-              <div className="bg-gradient-to-r from-accent/5 to-teal-50 rounded-xl p-6 border border-accent/20 mb-6">
+              <div className="bg-gradient-to-r from-accent/5 to-teal-50 rounded-xl p-6 border border-accent/20 mb-4 sm:mb-6">
                 <h3 className="font-semibold text-slate-900 mb-2">Voice: Warm-Expert</h3>
                 <p className="text-slate-700 mb-3">
                   60% compassionate coach, 40% intelligent assistant
@@ -398,7 +398,7 @@ export function BrandGuideComponent() {
               </div>
 
               {/* Characteristics */}
-              <div className="mt-6 grid md:grid-cols-2 gap-4">
+              <div className="mt-4 sm:mt-6 grid md:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <h3 className="font-semibold text-slate-900 mb-3">✓ Do This</h3>
                   <ul className="space-y-2 text-sm text-slate-700">
@@ -447,9 +447,9 @@ export function BrandGuideComponent() {
           </TabsContent>
 
           {/* LEXICON TAB */}
-          <TabsContent value="lexicon" className="space-y-6">
+          <TabsContent value="lexicon" className="space-y-3 sm:space-y-4 sm:space-y-6">
             <Card className="p-8">
-              <div className="flex items-start gap-4 mb-6">
+              <div className="flex items-start gap-3 sm:gap-4 mb-4 sm:mb-6">
                 <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0">
                   <Type className="w-6 h-6 text-accent" />
                 </div>
@@ -459,7 +459,7 @@ export function BrandGuideComponent() {
                 </div>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="grid md:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
                 {/* DO USE */}
                 <div>
                   <div className="flex items-center gap-2 mb-4">
@@ -540,28 +540,28 @@ export function BrandGuideComponent() {
               </div>
 
               {/* Replacement Guide */}
-              <div className="mt-6 bg-slate-50 rounded-xl p-6 border border-slate-200">
+              <div className="mt-4 sm:mt-6 bg-slate-50 rounded-xl p-6 border border-slate-200">
                 <h3 className="font-semibold text-slate-900 mb-4">Say This Instead</h3>
                 <div className="space-y-3 text-sm">
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-3 sm:gap-4">
                     <Badge variant="destructive" className="min-w-[100px]">therapy</Badge>
                     <span className="text-slate-400">→</span>
                     <Badge className="bg-green-600 min-w-[100px]">support</Badge>
                     <span className="text-slate-600">or "behavioral wellness"</span>
                   </div>
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-3 sm:gap-4">
                     <Badge variant="destructive" className="min-w-[100px]">patient</Badge>
                     <span className="text-slate-400">→</span>
                     <Badge className="bg-green-600 min-w-[100px]">child</Badge>
                     <span className="text-slate-600">or "family"</span>
                   </div>
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-3 sm:gap-4">
                     <Badge variant="destructive" className="min-w-[100px]">disorder</Badge>
                     <span className="text-slate-400">→</span>
                     <Badge className="bg-green-600 min-w-[100px]">neurodivergent</Badge>
                     <span className="text-slate-600">or "developmental needs"</span>
                   </div>
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-3 sm:gap-4">
                     <Badge variant="destructive" className="min-w-[100px]">cure</Badge>
                     <span className="text-slate-400">→</span>
                     <Badge className="bg-green-600 min-w-[100px]">progress</Badge>
@@ -573,9 +573,9 @@ export function BrandGuideComponent() {
           </TabsContent>
 
           {/* MICROCOPY TAB */}
-          <TabsContent value="microcopy" className="space-y-6">
+          <TabsContent value="microcopy" className="space-y-3 sm:space-y-4 sm:space-y-6">
             <Card className="p-8">
-              <div className="flex items-start gap-4 mb-6">
+              <div className="flex items-start gap-3 sm:gap-4 mb-4 sm:mb-6">
                 <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0">
                   <Eye className="w-6 h-6 text-accent" />
                 </div>
@@ -585,7 +585,7 @@ export function BrandGuideComponent() {
                 </div>
               </div>
 
-              <div className="space-y-6">
+              <div className="space-y-3 sm:space-y-4 sm:space-y-6">
                 {/* Headlines */}
                 <div>
                   <h3 className="font-semibold text-slate-900 mb-3">Headlines</h3>

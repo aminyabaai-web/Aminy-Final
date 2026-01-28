@@ -37,6 +37,7 @@ import {
 import { supabase } from '../utils/supabase/client';
 import { CohortAnalysis } from './admin/CohortAnalysis';
 import { ViralMetricsDashboard } from './admin/ViralMetricsDashboard';
+import { getAggregatedMetrics, getRetentionMetrics } from '../lib/outcomes-tracking';
 
 interface AdminPortalProps {
   onBack?: () => void;
@@ -598,7 +599,7 @@ export function AdminPortal({ onBack }: AdminPortalProps) {
                 </button>
               )}
               <div>
-                <h1 className="text-xl font-semibold text-gray-900 dark:text-white">AACT Pilot Dashboard</h1>
+                <h1 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">AACT Pilot Dashboard</h1>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
                   {pilotData.overview.totalFamilies} Families | {pilotData.overview.daysRemaining} Days Left
                   {lastUpdated && (
@@ -706,9 +707,9 @@ export function AdminPortal({ onBack }: AdminPortalProps) {
         )}
 
         {activeSection === 'overview' && (
-          <div className="space-y-6">
+          <div className="space-y-3 sm:space-y-4 sm:space-y-6">
             {/* Key Metrics Grid */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
               <MetricCard
                 label="Active Families"
                 value={pilotData.overview.activeFamilies}
@@ -745,10 +746,10 @@ export function AdminPortal({ onBack }: AdminPortalProps) {
             {/* Tier Distribution */}
             <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Tier Distribution</h3>
-              <div className="grid grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
                 {Object.entries(pilotData.tierDistribution).map(([tier, count]) => (
                   <div key={tier} className="text-center">
-                    <div className="text-2xl font-bold text-gray-900 dark:text-white">{count}</div>
+                    <div className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">{count}</div>
                     <div className="text-sm text-gray-500 dark:text-gray-400 capitalize">{tier}</div>
                     <div className="text-xs text-gray-400">
                       {((count / pilotData.overview.totalFamilies) * 100).toFixed(1)}%
@@ -774,7 +775,7 @@ export function AdminPortal({ onBack }: AdminPortalProps) {
                   style={{ width: `${(pilotData.tierDistribution.pro / 150) * 100}%` }}
                 />
               </div>
-              <div className="mt-2 flex justify-center gap-4 text-xs">
+              <div className="mt-2 flex justify-center gap-3 sm:gap-4 text-xs">
                 <span className="flex items-center gap-1"><span className="w-2 h-2 bg-gray-400 rounded" /> Free</span>
                 <span className="flex items-center gap-1"><span className="w-2 h-2 bg-blue-400 rounded" /> Starter</span>
                 <span className="flex items-center gap-1"><span className="w-2 h-2 bg-accent rounded" /> Core</span>
@@ -783,11 +784,11 @@ export function AdminPortal({ onBack }: AdminPortalProps) {
             </div>
 
             {/* Quick Stats */}
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid md:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
               {/* Top KPIs vs Targets */}
               <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">KPIs vs Targets</h3>
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   <KPIRow label="Onboarding" value={84.7} target={70} />
                   <KPIRow label="7-Day Activation" value={58.3} target={55} />
                   <KPIRow label="DAU/WAU" value={37.2} target={35} />
@@ -799,7 +800,7 @@ export function AdminPortal({ onBack }: AdminPortalProps) {
               {/* NPS Breakdown */}
               <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">NPS Breakdown</h3>
-                <div className="flex items-center justify-center mb-6">
+                <div className="flex items-center justify-center mb-4 sm:mb-6">
                   <div className="text-center">
                     <div className="text-5xl font-bold text-accent">{pilotData.nps.score}</div>
                     <div className="text-sm text-gray-500">Net Promoter Score</div>
@@ -819,8 +820,8 @@ export function AdminPortal({ onBack }: AdminPortalProps) {
         )}
 
         {activeSection === 'engagement' && (
-          <div className="space-y-6">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="space-y-3 sm:space-y-4 sm:space-y-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
               <MetricCard
                 label="DAU/WAU"
                 value={`${pilotData.engagement.dauWau}%`}
@@ -856,7 +857,7 @@ export function AdminPortal({ onBack }: AdminPortalProps) {
             {/* Engagement Funnel */}
             <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Engagement Funnel</h3>
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 <FunnelStep step="1" label="Signed Up" value={150} percentage={100} />
                 <FunnelStep step="2" label="Completed Onboarding" value={127} percentage={84.7} />
                 <FunnelStep step="3" label="First AI Conversation" value={118} percentage={78.7} />
@@ -867,7 +868,7 @@ export function AdminPortal({ onBack }: AdminPortalProps) {
             </div>
 
             {/* Viral Growth & Cohort Retention */}
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid md:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
               <ViralMetricsDashboard />
               <CohortAnalysis period="weekly" limit={6} />
             </div>
@@ -875,8 +876,8 @@ export function AdminPortal({ onBack }: AdminPortalProps) {
         )}
 
         {activeSection === 'ai' && (
-          <div className="space-y-6">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="space-y-3 sm:space-y-4 sm:space-y-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
               <MetricCard
                 label="Total Conversations"
                 value={pilotData.aiUsage.totalConversations.toLocaleString()}
@@ -932,17 +933,17 @@ export function AdminPortal({ onBack }: AdminPortalProps) {
             {/* Memory System Stats */}
             <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">AI Memory System</h3>
-              <div className="grid grid-cols-3 gap-4 text-center">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 text-center">
                 <div>
-                  <div className="text-2xl font-bold text-gray-900 dark:text-white">2,847</div>
+                  <div className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">2,847</div>
                   <div className="text-sm text-gray-500">Facts Learned</div>
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-gray-900 dark:text-white">89%</div>
+                  <div className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">89%</div>
                   <div className="text-sm text-gray-500">Memory Accuracy</div>
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-gray-900 dark:text-white">456</div>
+                  <div className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">456</div>
                   <div className="text-sm text-gray-500">Documents Processed</div>
                 </div>
               </div>
@@ -951,8 +952,8 @@ export function AdminPortal({ onBack }: AdminPortalProps) {
         )}
 
         {activeSection === 'clinical' && (
-          <div className="space-y-6">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="space-y-3 sm:space-y-4 sm:space-y-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
               <MetricCard
                 label="Plan Adherence"
                 value={`${pilotData.clinical.therapyPlanAdherence}%`}
@@ -988,21 +989,21 @@ export function AdminPortal({ onBack }: AdminPortalProps) {
             {/* Outcomes Tracking */}
             <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Outcomes Tracking</h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 sm:gap-6 text-center">
                 <div>
-                  <div className="text-3xl font-bold text-accent dark:text-accent">{pilotData.clinical.outcomeTrackingEntries.toLocaleString()}</div>
+                  <div className="text-2xl sm:text-3xl font-bold text-accent dark:text-accent">{pilotData.clinical.outcomeTrackingEntries.toLocaleString()}</div>
                   <div className="text-sm text-gray-500 dark:text-gray-400">Data Points Collected</div>
                 </div>
                 <div>
-                  <div className="text-3xl font-bold text-accent dark:text-accent">14.3</div>
+                  <div className="text-2xl sm:text-3xl font-bold text-accent dark:text-accent">14.3</div>
                   <div className="text-sm text-gray-500 dark:text-gray-400">Avg Entries/Family</div>
                 </div>
                 <div>
-                  <div className="text-3xl font-bold text-accent dark:text-accent">89%</div>
+                  <div className="text-2xl sm:text-3xl font-bold text-accent dark:text-accent">89%</div>
                   <div className="text-sm text-gray-500 dark:text-gray-400">Weekly Tracking Rate</div>
                 </div>
                 <div>
-                  <div className="text-3xl font-bold text-accent dark:text-accent">4.2</div>
+                  <div className="text-2xl sm:text-3xl font-bold text-accent dark:text-accent">4.2</div>
                   <div className="text-sm text-gray-500 dark:text-gray-400">Avg Improvement Score</div>
                 </div>
               </div>
@@ -1011,7 +1012,7 @@ export function AdminPortal({ onBack }: AdminPortalProps) {
             {/* Condition Breakdown */}
             <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">By Primary Condition</h3>
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
                 <ConditionCard condition="Autism" families={78} adherence={75.2} improvement={4.3} />
                 <ConditionCard condition="ADHD" families={52} adherence={71.8} improvement={4.1} />
                 <ConditionCard condition="Anxiety" families={20} adherence={69.5} improvement={4.0} />
@@ -1021,8 +1022,8 @@ export function AdminPortal({ onBack }: AdminPortalProps) {
         )}
 
         {activeSection === 'marketplace' && (
-          <div className="space-y-6">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="space-y-3 sm:space-y-4 sm:space-y-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
               <MetricCard
                 label="Total Bookings"
                 value={pilotData.marketplace.totalBookings}
@@ -1052,9 +1053,9 @@ export function AdminPortal({ onBack }: AdminPortalProps) {
             {/* Top Providers */}
             <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Top Providers</h3>
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 {pilotData.marketplace.topProviders.map((provider, i) => (
-                  <div key={provider.name} className="flex items-center gap-4 p-3 bg-gray-50 dark:bg-slate-800 rounded-lg">
+                  <div key={provider.name} className="flex items-center gap-3 sm:gap-4 p-3 bg-gray-50 dark:bg-slate-800 rounded-lg">
                     <div className="w-10 h-10 bg-accent/10 rounded-full flex items-center justify-center text-accent font-bold">
                       {i + 1}
                     </div>
@@ -1074,17 +1075,17 @@ export function AdminPortal({ onBack }: AdminPortalProps) {
             {/* Revenue Breakdown */}
             <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Revenue Breakdown</h3>
-              <div className="grid grid-cols-3 gap-6 text-center">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 sm:gap-6 text-center">
                 <div>
-                  <div className="text-2xl font-bold text-gray-900 dark:text-white">$100</div>
+                  <div className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">$100</div>
                   <div className="text-sm text-gray-500">Avg Session Price</div>
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-accent">$156</div>
+                  <div className="text-xl sm:text-2xl font-bold text-accent">$156</div>
                   <div className="text-sm text-gray-500">Revenue/Active Family</div>
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-gray-900 dark:text-white">15%</div>
+                  <div className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">15%</div>
                   <div className="text-sm text-gray-500">Platform Fee</div>
                 </div>
               </div>
@@ -1093,8 +1094,8 @@ export function AdminPortal({ onBack }: AdminPortalProps) {
         )}
 
         {activeSection === 'b2b' && (
-          <div className="space-y-6">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="space-y-3 sm:space-y-4 sm:space-y-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
               <MetricCard
                 label="Clinics Engaged"
                 value={pilotData.b2bMetrics.clinicsEngaged}
@@ -1124,19 +1125,19 @@ export function AdminPortal({ onBack }: AdminPortalProps) {
             {/* B2B Trojan Horse Metrics */}
             <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-2">B2B "Trojan Horse" Strategy</h3>
-              <p className="text-sm text-gray-500 mb-6">Families bringing Aminy into their clinics</p>
+              <p className="text-sm text-gray-500 mb-4 sm:mb-6">Families bringing Aminy into their clinics</p>
 
-              <div className="grid md:grid-cols-3 gap-6">
+              <div className="grid md:grid-cols-3 gap-3 sm:gap-4 sm:gap-6">
                 <div className="text-center p-4 bg-accent/5 dark:bg-accent/10 rounded-lg">
-                  <div className="text-3xl font-bold text-accent dark:text-accent mb-1">68%</div>
+                  <div className="text-2xl sm:text-3xl font-bold text-accent dark:text-accent mb-1">68%</div>
                   <div className="text-sm text-gray-600 dark:text-gray-400">Families shared Insight Report with provider</div>
                 </div>
                 <div className="text-center p-4 bg-accent/5 dark:bg-accent/10 rounded-lg">
-                  <div className="text-3xl font-bold text-accent dark:text-accent mb-1">12</div>
+                  <div className="text-2xl sm:text-3xl font-bold text-accent dark:text-accent mb-1">12</div>
                   <div className="text-sm text-gray-600 dark:text-gray-400">Clinics requested enterprise demo</div>
                 </div>
                 <div className="text-center p-4 bg-accent/5 dark:bg-accent/10 rounded-lg">
-                  <div className="text-3xl font-bold text-accent dark:text-accent mb-1">$23K</div>
+                  <div className="text-2xl sm:text-3xl font-bold text-accent dark:text-accent mb-1">$23K</div>
                   <div className="text-sm text-gray-600 dark:text-gray-400">Projected annual B2B revenue</div>
                 </div>
               </div>
@@ -1184,7 +1185,7 @@ function MetricCard({ label, value, icon: Icon, target, current, total, trend, s
           <Icon className="w-4 h-4" />
         </div>
       </div>
-      <div className="text-2xl font-bold text-gray-900 dark:text-white">
+      <div className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
         {value}
         {total && <span className="text-sm font-normal text-gray-400 dark:text-gray-500">/{total}</span>}
       </div>
@@ -1249,7 +1250,7 @@ function NPSBar({ label, count, total, color }: { label: string; count: number; 
 // Funnel Step Component
 function FunnelStep({ step, label, value, percentage }: { step: string; label: string; value: number; percentage: number }) {
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex items-center gap-3 sm:gap-4">
       <div className="w-8 h-8 bg-accent/10 dark:bg-accent/20 rounded-full flex items-center justify-center text-accent font-bold text-sm">
         {step}
       </div>
@@ -1300,7 +1301,7 @@ function PipelineRow({ stage, count }: { stage: string; count: number }) {
   const percentage = (count / maxCount) * 100;
 
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex items-center gap-3 sm:gap-4">
       <span className="text-sm text-gray-600 dark:text-gray-400 w-32">{stage}</span>
       <div className="flex-1 h-6 bg-gray-100 dark:bg-slate-800 rounded overflow-hidden">
         <div

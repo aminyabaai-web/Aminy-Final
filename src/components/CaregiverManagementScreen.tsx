@@ -100,9 +100,9 @@ export function CaregiverManagementScreen({ onBack }: CaregiverManagementScreenP
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 py-6 space-y-6">
+      <div className="max-w-4xl mx-auto px-4 py-6 space-y-3 sm:space-y-4 sm:space-y-6">
         {/* Role Explanations */}
-        <Card className="p-6">
+        <Card className="p-4 sm:p-5 md:p-6">
           <h2 className="font-semibold mb-4">Access Roles</h2>
           <div className="space-y-3">
             <div className="flex items-start gap-3">
@@ -156,7 +156,7 @@ export function CaregiverManagementScreen({ onBack }: CaregiverManagementScreenP
           <h2 className="font-semibold mb-4">Team Members</h2>
           <div className="space-y-3">
             {caregivers.map((caregiver) => (
-              <Card key={caregiver.id} className="p-4">
+              <Card key={caregiver.id} className="p-3 sm:p-4">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
@@ -222,7 +222,7 @@ export function CaregiverManagementScreen({ onBack }: CaregiverManagementScreenP
         </div>
 
         {/* Invite Methods */}
-        <Card className="p-6">
+        <Card className="p-4 sm:p-5 md:p-6">
           <h2 className="font-semibold mb-4">Invite Methods</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             <Button variant="outline" className="h-auto flex-col gap-2 py-4">

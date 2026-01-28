@@ -105,8 +105,8 @@ export function CarePlanGeneratorStep({ formData, onComplete }: CarePlanGenerato
 
   // AI Analysis Phase Component
   const AnalyzingPhase = () => (
-    <div className="space-y-6 plan-populate-animation">
-      <div className="text-center space-y-4">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6 plan-populate-animation">
+      <div className="text-center space-y-3 sm:space-y-4">
         <div className="care-plan-icon w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center mx-auto">
           <Brain className="w-7 h-7 text-accent animate-pulse" />
         </div>
@@ -137,8 +137,8 @@ export function CarePlanGeneratorStep({ formData, onComplete }: CarePlanGenerato
 
   // AI Generation Phase Component
   const GeneratingPhase = () => (
-    <div className="space-y-6 plan-populate-animation">
-      <div className="text-center space-y-4">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6 plan-populate-animation">
+      <div className="text-center space-y-3 sm:space-y-4">
         <div className="care-plan-icon w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center mx-auto">
           <Sparkles className="w-7 h-7 text-accent animate-pulse" />
         </div>
@@ -150,7 +150,7 @@ export function CarePlanGeneratorStep({ formData, onComplete }: CarePlanGenerato
         </div>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         <div className="p-4 bg-white rounded-xl border border-accent/20">
           <div className="flex items-center gap-3 mb-3">
             <Target className="w-5 h-5 text-accent" />
@@ -267,7 +267,7 @@ export function CarePlanGeneratorStep({ formData, onComplete }: CarePlanGenerato
     const mockGoals = generateGoalsForDomains();
 
     return (
-      <div className="space-y-6">
+      <div className="space-y-3 sm:space-y-4 sm:space-y-6">
         {/* AI Attribution Badge */}
         <div className="ai-attribution-badge">
           <div className="flex items-center justify-center gap-2 p-3 bg-gradient-to-r from-blue-50 to-teal-50 border border-blue-200/50 rounded-xl">
@@ -422,7 +422,7 @@ export function CarePlanGeneratorStep({ formData, onComplete }: CarePlanGenerato
             <p className="text-sm text-muted-foreground leading-relaxed">
               Your personalized care plan is ready. Daily activities and progress tracking will appear on your dashboard, growing smarter with every interaction.
             </p>
-            <div className="flex items-center justify-center gap-4 pt-2">
+            <div className="flex items-center justify-center gap-3 sm:gap-4 pt-2">
               <div className="flex items-center gap-1">
                 <UserCheck className="w-3 h-3 text-accent" />
                 <span className="text-xs text-muted-foreground">Expert-Backed</span>
@@ -443,7 +443,7 @@ export function CarePlanGeneratorStep({ formData, onComplete }: CarePlanGenerato
         <div className="care-plan-final-divider premium-divider"></div>
 
         {/* Final Actions */}
-        <div className="final-actions-layout space-y-4">
+        <div className="final-actions-layout space-y-3 sm:space-y-4">
           <div className="text-center">
             <Button
               variant="ghost"
@@ -470,10 +470,10 @@ export function CarePlanGeneratorStep({ formData, onComplete }: CarePlanGenerato
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       {/* Phase-based rendering */}
       {generationPhase === 'initial' && (
-        <div className="text-center space-y-4 plan-populate-animation">
+        <div className="text-center space-y-3 sm:space-y-4 plan-populate-animation">
           <div className="care-plan-icon w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center mx-auto">
             <Sparkles className="w-7 h-7 text-accent" />
           </div>

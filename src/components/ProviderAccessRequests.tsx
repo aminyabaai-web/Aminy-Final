@@ -257,7 +257,7 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
         <div className="max-w-2xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
+              <h1 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">
                 Access Requests
               </h1>
               {pendingCount > 0 && (
@@ -329,7 +329,7 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
                 </p>
               </div>
             ) : (
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 {requests
                   .filter(r => r.status === 'pending')
                   .map(request => (
@@ -338,7 +338,7 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
                       className="p-4 hover:shadow-md transition-shadow cursor-pointer"
                       onClick={() => setSelectedRequest(request)}
                     >
-                      <div className="flex items-start gap-4">
+                      <div className="flex items-start gap-3 sm:gap-4">
                         {/* Provider Avatar */}
                         <div className="w-12 h-12 bg-gradient-to-br from-teal-400 to-cyan-500 rounded-full flex items-center justify-center flex-shrink-0">
                           {request.provider.photoUrl ? (
@@ -369,7 +369,7 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
                             "{request.reason}"
                           </p>
 
-                          <div className="flex items-center gap-4 mt-3">
+                          <div className="flex items-center gap-3 sm:gap-4 mt-3">
                             <div className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-lg text-xs font-medium ${ACCESS_LEVELS[request.requestedLevel].color}`}>
                               {React.createElement(ACCESS_LEVELS[request.requestedLevel].icon, { className: 'w-3 h-3' })}
                               {ACCESS_LEVELS[request.requestedLevel].label}
@@ -403,10 +403,10 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
                 </p>
               </div>
             ) : (
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 {activeAccess.map(access => (
-                  <Card key={access.id} className="p-4">
-                    <div className="flex items-start gap-4">
+                  <Card key={access.id} className="p-3 sm:p-4">
+                    <div className="flex items-start gap-3 sm:gap-4">
                       {/* Provider Avatar */}
                       <div className="w-12 h-12 bg-gradient-to-br from-purple-400 to-indigo-500 rounded-full flex items-center justify-center flex-shrink-0">
                         <User className="w-6 h-6 text-white" />
@@ -426,7 +426,7 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
                           {access.provider.credentials}
                         </p>
 
-                        <div className="flex items-center gap-4 mt-3">
+                        <div className="flex items-center gap-3 sm:gap-4 mt-3">
                           <div className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-lg text-xs font-medium ${ACCESS_LEVELS[access.accessLevel].color}`}>
                             {React.createElement(ACCESS_LEVELS[access.accessLevel].icon, { className: 'w-3 h-3' })}
                             {ACCESS_LEVELS[access.accessLevel].label}
@@ -501,9 +501,9 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
             </div>
 
             {/* Modal Content */}
-            <div className="p-4 space-y-6">
+            <div className="p-4 space-y-3 sm:space-y-4 sm:space-y-6">
               {/* Provider Info */}
-              <div className="flex items-start gap-4">
+              <div className="flex items-start gap-3 sm:gap-4">
                 <div className="w-16 h-16 bg-gradient-to-br from-teal-400 to-cyan-500 rounded-full flex items-center justify-center flex-shrink-0">
                   <User className="w-8 h-8 text-white" />
                 </div>
@@ -593,7 +593,7 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
                 <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
                   Access Duration
                 </h4>
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
                   {[
                     { days: 7, label: '1 Week' },
                     { days: 30, label: '30 Days' },

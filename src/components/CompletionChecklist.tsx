@@ -123,7 +123,7 @@ export function CompletionChecklist({ onNavigate, onBack }: CompletionChecklistP
               </p>
             </div>
             <div className="text-right">
-              <div className="text-3xl font-bold text-accent">{overallProgress}%</div>
+              <div className="text-2xl sm:text-3xl font-bold text-accent">{overallProgress}%</div>
               <p className="text-xs text-gray-500">Overall Progress</p>
             </div>
           </div>
@@ -142,7 +142,7 @@ export function CompletionChecklist({ onNavigate, onBack }: CompletionChecklistP
 
       {/* Checklist Sections */}
       <div className="max-w-4xl mx-auto px-4 py-8">
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           {Object.entries(checklistData).map(([sectionId, section]) => {
             const progress = calculateProgress(section);
             const isExpanded = expandedSection === sectionId;
@@ -152,7 +152,7 @@ export function CompletionChecklist({ onNavigate, onBack }: CompletionChecklistP
                 {/* Section Header */}
                 <button
                   onClick={() => setExpandedSection(isExpanded ? null : sectionId)}
-                  className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
+                  className="w-full px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
                 >
                   <div className="flex items-center gap-3">
                     <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
@@ -183,7 +183,7 @@ export function CompletionChecklist({ onNavigate, onBack }: CompletionChecklistP
 
                 {/* Section Items */}
                 {isExpanded && (
-                  <div className="border-t border-gray-100 px-6 py-4 space-y-2">
+                  <div className="border-t border-gray-100 px-4 sm:px-6 py-3 sm:py-4 space-y-2">
                     {section.items.map((item) => (
                       <div
                         key={item.id}
@@ -219,7 +219,7 @@ export function CompletionChecklist({ onNavigate, onBack }: CompletionChecklistP
         {/* Final Summary Card */}
         <div className="mt-8 bg-gradient-to-br from-teal-50 to-blue-50 rounded-xl border border-teal-200 p-6 text-center">
           <FileCheck className="w-12 h-12 text-accent mx-auto mb-4" />
-          <h3 className="text-xl font-semibold text-primary mb-2">
+          <h3 className="text-lg sm:text-xl font-semibold text-primary mb-2">
             {overallProgress === 100 ? '🎉 All Complete!' : 'Great Progress!'}
           </h3>
           <p className="text-gray-700 mb-4">

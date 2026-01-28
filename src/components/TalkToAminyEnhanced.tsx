@@ -657,7 +657,7 @@ export const TalkToAminyEnhanced: React.FC<TalkToAminyEnhancedProps> = ({
       {/* Enhanced Messages with Better Layout */}
       {messages.length > 0 && (
         <ScrollArea className="max-h-80 mb-4">
-          <div className="space-y-4 pr-4">
+          <div className="space-y-3 sm:space-y-4 pr-4">
             {messages.map((message, index) => (
               <div
                 key={message.id}
@@ -786,7 +786,7 @@ export const TalkToAminyEnhanced: React.FC<TalkToAminyEnhancedProps> = ({
 
       {/* Conversation Stats */}
       {messages.length > 0 && (
-        <div className="flex items-center justify-center gap-4 mb-4 p-2 bg-muted/30 rounded-lg">
+        <div className="flex items-center justify-center gap-3 sm:gap-4 mb-4 p-2 bg-muted/30 rounded-lg">
           <div className="flex items-center gap-1 text-xs text-muted-foreground">
             <MessageSquare className="w-3 h-3" />
             <span>{messages.length} messages</span>

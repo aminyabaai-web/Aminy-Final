@@ -182,7 +182,7 @@ export function CohortAnalysis({ period = 'weekly', limit = 8 }: CohortAnalysisP
 
   if (isLoading) {
     return (
-      <Card className="p-6">
+      <Card className="p-4 sm:p-5 md:p-6">
         <div className="flex items-center justify-center py-12">
           <Loader2 className="w-6 h-6 animate-spin text-teal-600" />
           <span className="ml-2 text-gray-600 dark:text-slate-400">Loading cohort data...</span>
@@ -193,7 +193,7 @@ export function CohortAnalysis({ period = 'weekly', limit = 8 }: CohortAnalysisP
 
   if (error) {
     return (
-      <Card className="p-6">
+      <Card className="p-4 sm:p-5 md:p-6">
         <div className="text-center py-12 text-red-600">
           {error}
         </div>
@@ -203,7 +203,7 @@ export function CohortAnalysis({ period = 'weekly', limit = 8 }: CohortAnalysisP
 
   if (cohorts.length === 0) {
     return (
-      <Card className="p-6">
+      <Card className="p-4 sm:p-5 md:p-6">
         <div className="text-center py-12 text-gray-500 dark:text-slate-400">
           No cohort data available yet. Users will appear here once they sign up.
         </div>
@@ -212,7 +212,7 @@ export function CohortAnalysis({ period = 'weekly', limit = 8 }: CohortAnalysisP
   }
 
   return (
-    <Card className="p-6">
+    <Card className="p-4 sm:p-5 md:p-6">
       <div className="flex items-center justify-between mb-4">
         <h3 className="font-semibold text-gray-900 dark:text-white">
           Cohort Retention Analysis
@@ -278,7 +278,7 @@ export function CohortAnalysis({ period = 'weekly', limit = 8 }: CohortAnalysisP
       </div>
 
       {/* Legend */}
-      <div className="mt-4 flex items-center gap-4 text-xs text-gray-500 dark:text-slate-400">
+      <div className="mt-4 flex items-center gap-3 sm:gap-4 text-xs text-gray-500 dark:text-slate-400">
         <div className="flex items-center gap-1">
           <div className="w-3 h-3 rounded bg-green-100 dark:bg-green-900/30" />
           <span>&gt;60%</span>

@@ -94,7 +94,7 @@ export function FeedbackCollector({
             animate={{ opacity: 1, y: 0 }}
             className="py-4"
           >
-            <div className="text-center mb-6">
+            <div className="text-center mb-4 sm:mb-6">
               <h2 className="text-xl text-slate-900 mb-2">
                 How's Aminy feeling?
               </h2>
@@ -103,7 +103,7 @@ export function FeedbackCollector({
               </p>
             </div>
 
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
               <button
                 onClick={() => handleMoodSelect('easy')}
                 className="flex flex-col items-center gap-3 p-6 rounded-2xl border-2 border-slate-200 hover:border-emerald-400 hover:bg-emerald-50 transition-all group"
@@ -138,7 +138,7 @@ export function FeedbackCollector({
             animate={{ opacity: 1, x: 0 }}
             className="py-4"
           >
-            <div className="text-center mb-6">
+            <div className="text-center mb-4 sm:mb-6">
               <h2 className="text-xl text-slate-900 mb-2">
                 Tell us more
               </h2>
@@ -147,7 +147,7 @@ export function FeedbackCollector({
               </p>
             </div>
 
-            <div className="space-y-4 mb-6">
+            <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
               {/* What felt easiest */}
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">

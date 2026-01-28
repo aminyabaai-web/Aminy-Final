@@ -186,8 +186,8 @@ export function StressCheckIn({
         </div>
 
         {/* Stress Scale */}
-        <div className="p-6">
-          <p className="text-center text-slate-600 mb-6">
+        <div className="p-4 sm:p-5 md:p-6">
+          <p className="text-center text-slate-600 mb-4 sm:mb-6">
             On a scale of 1-10, how stressed are you feeling?
           </p>
 
@@ -210,7 +210,7 @@ export function StressCheckIn({
           </div>
 
           {stressLevel !== null && (
-            <div className="text-center mb-6 animate-in fade-in-50">
+            <div className="text-center mb-4 sm:mb-6 animate-in fade-in-50">
               <Badge className={`${getStressColor(stressLevel)} text-white`}>
                 {getStressDescription(stressLevel)}
               </Badge>
@@ -218,7 +218,7 @@ export function StressCheckIn({
           )}
 
           {/* Scale Labels */}
-          <div className="flex justify-between text-xs text-slate-500 mb-6">
+          <div className="flex justify-between text-xs text-slate-500 mb-4 sm:mb-6">
             <span>Calm & peaceful</span>
             <span>Overwhelmed</span>
           </div>

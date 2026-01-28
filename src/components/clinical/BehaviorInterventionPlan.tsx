@@ -408,12 +408,12 @@ export function BehaviorInterventionPlan({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       {/* Header */}
-      <Card className="p-6">
+      <Card className="p-4 sm:p-5 md:p-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
               <FileText className="w-6 h-6 text-teal-600" />
               Behavior Intervention Plan
             </h1>
@@ -473,7 +473,7 @@ export function BehaviorInterventionPlan({
         expanded={expandedSections.has('assessment')}
         onToggle={() => toggleSection('assessment')}
       >
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
               Assessment Date
@@ -535,7 +535,7 @@ export function BehaviorInterventionPlan({
         expanded={expandedSections.has('behaviors')}
         onToggle={() => toggleSection('behaviors')}
       >
-        <div className="space-y-6">
+        <div className="space-y-3 sm:space-y-4 sm:space-y-6">
           {bip.targetBehaviors.map((behavior, index) => (
             <Card key={behavior.id} className="p-4 bg-gray-50 dark:bg-slate-800">
               <div className="flex items-center justify-between mb-3">
@@ -550,7 +550,7 @@ export function BehaviorInterventionPlan({
                 </button>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-4">
+              <div className="grid md:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
                     Behavior Name
@@ -610,7 +610,7 @@ export function BehaviorInterventionPlan({
           </Button>
 
           {/* Function Hypotheses */}
-          <div className="mt-6">
+          <div className="mt-4 sm:mt-6">
             <h4 className="font-medium text-gray-900 dark:text-white mb-3">Function Hypotheses</h4>
             <div className="grid md:grid-cols-2 gap-3">
               {(['escape', 'attention', 'tangible', 'sensory', 'multiple'] as const).map(func => (
@@ -657,7 +657,7 @@ export function BehaviorInterventionPlan({
         expanded={expandedSections.has('intervention')}
         onToggle={() => toggleSection('intervention')}
       >
-        <div className="space-y-6">
+        <div className="space-y-3 sm:space-y-4 sm:space-y-6">
           {/* Replacement Behaviors */}
           <div>
             <div className="flex items-center justify-between mb-3">
@@ -679,7 +679,7 @@ export function BehaviorInterventionPlan({
 
             {bip.replacementBehaviors.map((rb, index) => (
               <Card key={rb.id} className="p-4 bg-green-50 dark:bg-green-900/20 mb-3">
-                <div className="grid md:grid-cols-2 gap-4">
+                <div className="grid md:grid-cols-2 gap-3 sm:gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
                       Behavior Name
@@ -741,7 +741,7 @@ export function BehaviorInterventionPlan({
 
             {bip.preventionStrategies.map((ps, index) => (
               <Card key={ps.id} className="p-4 bg-blue-50 dark:bg-blue-900/20 mb-3">
-                <div className="grid md:grid-cols-3 gap-4">
+                <div className="grid md:grid-cols-3 gap-3 sm:gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
                       Category
@@ -796,7 +796,7 @@ export function BehaviorInterventionPlan({
         onToggle={() => toggleSection('crisis')}
         variant="warning"
       >
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
             <div className="flex items-start gap-3">
               <AlertTriangle className="w-5 h-5 text-yellow-600 mt-0.5" />
@@ -811,8 +811,8 @@ export function BehaviorInterventionPlan({
           </div>
 
           {bip.responseProcedures.map((rp, index) => (
-            <Card key={rp.id} className="p-4">
-              <div className="grid md:grid-cols-3 gap-4">
+            <Card key={rp.id} className="p-3 sm:p-4">
+              <div className="grid md:grid-cols-3 gap-3 sm:gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
                     Phase
@@ -865,8 +865,8 @@ export function BehaviorInterventionPlan({
         expanded={expandedSections.has('goals')}
         onToggle={() => toggleSection('goals')}
       >
-        <div className="space-y-4">
-          <div className="grid md:grid-cols-2 gap-4">
+        <div className="space-y-3 sm:space-y-4">
+          <div className="grid md:grid-cols-2 gap-3 sm:gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
                 Data Collection Method
@@ -943,7 +943,7 @@ export function BehaviorInterventionPlan({
         expanded={expandedSections.has('team')}
         onToggle={() => toggleSection('team')}
       >
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid md:grid-cols-2 gap-3 sm:gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
               BCBA Name
@@ -1032,7 +1032,7 @@ function CollapsibleSection({
           <ChevronRight className="w-5 h-5 text-gray-400" />
         )}
       </button>
-      {expanded && <div className="p-4">{children}</div>}
+      {expanded && <div className="p-3 sm:p-4">{children}</div>}
     </Card>
   );
 }

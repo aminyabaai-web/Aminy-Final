@@ -220,7 +220,7 @@ export function UrgentHelpDisclaimer({ className = '' }: UrgentHelpDisclaimerPro
 // Crisis resources component for urgent help
 export function CrisisResources() {
   return (
-    <div className="space-y-4">
+    <div className="space-y-3 sm:space-y-4">
       <UrgentHelpDisclaimer />
       
       <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">

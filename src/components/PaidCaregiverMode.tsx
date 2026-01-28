@@ -188,7 +188,7 @@ export function PaidCaregiverMode({
   if (!waiverProfile) {
     return (
       <Card className="p-6 bg-gradient-to-br from-teal-50 to-blue-50 border-teal-200">
-        <div className="flex items-start gap-4">
+        <div className="flex items-start gap-3 sm:gap-4">
           <div className="p-3 bg-teal-100 rounded-xl">
             <Building2 className="w-6 h-6 text-teal-600" />
           </div>
@@ -220,7 +220,7 @@ export function PaidCaregiverMode({
 
   // Main caregiver dashboard
   return (
-    <div className="space-y-4">
+    <div className="space-y-3 sm:space-y-4">
       {/* Header with fiscal agent */}
       <Card className="p-4 bg-gradient-to-r from-teal-600 to-blue-600 text-white">
         <div className="flex items-center justify-between">
@@ -327,7 +327,7 @@ export function PaidCaregiverMode({
       </Card>
 
       {/* Weekly Hours Summary */}
-      <Card className="p-4">
+      <Card className="p-3 sm:p-4">
         <div className="flex items-center justify-between mb-3">
           <h4 className="font-semibold text-gray-900 flex items-center gap-2">
             <Calendar className="w-4 h-4 text-teal-600" />
@@ -340,21 +340,21 @@ export function PaidCaregiverMode({
 
         <Progress value={hoursPercentage} className="h-3 mb-3" />
 
-        <div className="grid grid-cols-3 gap-4 text-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 text-center">
           <div>
-            <div className="text-2xl font-bold text-teal-600">
+            <div className="text-xl sm:text-2xl font-bold text-teal-600">
               {formatHours(weeklyHours)}
             </div>
             <div className="text-xs text-gray-500">Logged</div>
           </div>
           <div>
-            <div className="text-2xl font-bold text-blue-600">
+            <div className="text-xl sm:text-2xl font-bold text-blue-600">
               {formatHours(hoursRemaining)}
             </div>
             <div className="text-xs text-gray-500">Remaining</div>
           </div>
           <div>
-            <div className="text-2xl font-bold text-green-600">
+            <div className="text-xl sm:text-2xl font-bold text-green-600">
               {weeklyEntries.filter((e) => e.status === 'completed').length}
             </div>
             <div className="text-xs text-gray-500">Entries</div>
@@ -363,7 +363,7 @@ export function PaidCaregiverMode({
       </Card>
 
       {/* Recent Time Entries */}
-      <Card className="p-4">
+      <Card className="p-3 sm:p-4">
         <div className="flex items-center justify-between mb-3">
           <h4 className="font-semibold text-gray-900">Recent Entries</h4>
           <Button variant="ghost" size="sm">
@@ -420,13 +420,13 @@ export function PaidCaregiverMode({
       </Card>
 
       {/* Export Actions */}
-      <Card className="p-4">
+      <Card className="p-3 sm:p-4">
         <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
           <FileText className="w-4 h-4 text-teal-600" />
           Export Documentation
         </h4>
 
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           <Button variant="outline" className="justify-start">
             <Download className="w-4 h-4 mr-2" />
             Weekly Summary
@@ -500,8 +500,8 @@ export function WaiverSetupFlow({
   };
 
   return (
-    <div className="p-6">
-      <div className="mb-6">
+    <div className="p-4 sm:p-5 md:p-6">
+      <div className="mb-4 sm:mb-6">
         <h2 className="text-xl font-bold text-gray-900 mb-2">
           Set Up Waiver Profile
         </h2>
@@ -517,7 +517,7 @@ export function WaiverSetupFlow({
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
-            className="space-y-4"
+            className="space-y-3 sm:space-y-4"
           >
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -599,7 +599,7 @@ export function WaiverSetupFlow({
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
-            className="space-y-4"
+            className="space-y-3 sm:space-y-4"
           >
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -661,7 +661,7 @@ export function WaiverSetupFlow({
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
-            className="space-y-4"
+            className="space-y-3 sm:space-y-4"
           >
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">

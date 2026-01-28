@@ -123,7 +123,7 @@ export function SupplementingServicesInfo({
 
   if (variant === 'modal') {
     return (
-      <div className="space-y-6">
+      <div className="space-y-3 sm:space-y-4 sm:space-y-6">
         <div className="text-center">
           <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <Users className="w-6 h-6 text-teal-600" />
@@ -190,7 +190,7 @@ export function SupplementingServicesInfo({
       </section>
 
       {/* Stats */}
-      <section className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+      <section className="grid md:grid-cols-3 gap-3 sm:gap-4 sm:gap-6 max-w-4xl mx-auto">
         {whyItMatters.map((item, index) => (
           <motion.div
             key={index}
@@ -215,11 +215,11 @@ export function SupplementingServicesInfo({
 
       {/* What We Supplement */}
       <section className="max-w-5xl mx-auto">
-        <h2 className="text-2xl font-bold text-center text-gray-900 mb-8">
+        <h2 className="text-xl sm:text-2xl font-bold text-center text-gray-900 mb-8">
           How Aminy Supplements Your Care Team
         </h2>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 sm:gap-6">
           {supplementAreas.map((area, index) => (
             <motion.div
               key={index}
@@ -291,12 +291,12 @@ export function SupplementingServicesInfo({
 
       {/* How We Work Together */}
       <section className="max-w-4xl mx-auto">
-        <h2 className="text-2xl font-bold text-center text-gray-900 mb-8">
+        <h2 className="text-xl sm:text-2xl font-bold text-center text-gray-900 mb-8">
           Better Together
         </h2>
 
-        <div className="grid md:grid-cols-2 gap-6">
-          <Card className="p-6">
+        <div className="grid md:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
+          <Card className="p-4 sm:p-5 md:p-6">
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <Users className="w-5 h-5 text-teal-600" />
               Your Therapy Team
@@ -359,10 +359,10 @@ export function SupplementingServicesInfo({
       {/* CTA */}
       <section className="text-center max-w-xl mx-auto">
         <Card className="p-8 bg-gradient-to-br from-teal-600 to-teal-700 text-white">
-          <h2 className="text-2xl font-bold mb-4">
+          <h2 className="text-xl sm:text-2xl font-bold mb-4">
             Support for the whole journey
           </h2>
-          <p className="text-teal-100 mb-6">
+          <p className="text-teal-100 mb-4 sm:mb-6">
             Your therapy team handles the clinical work.
             Aminy helps with everything else.
           </p>

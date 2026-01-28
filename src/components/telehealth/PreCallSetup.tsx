@@ -278,7 +278,7 @@ export function PreCallSetup({
       {/* Header */}
       <div className="bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 px-4 py-4">
         <div className="max-w-2xl mx-auto">
-          <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
+          <h1 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">
             Pre-Call Setup
           </h1>
           <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
@@ -288,7 +288,7 @@ export function PreCallSetup({
       </div>
 
       <div className="flex-1 overflow-y-auto">
-        <div className="max-w-2xl mx-auto p-4 space-y-6">
+        <div className="max-w-2xl mx-auto p-4 space-y-3 sm:space-y-4 sm:space-y-6">
           {/* Video Preview */}
           <div className="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-sm">
             <div className="relative aspect-video bg-gray-900">
@@ -458,7 +458,7 @@ export function PreCallSetup({
 
             {/* Device Settings Dropdown */}
             {showDeviceSettings && devices.cameras.length > 0 && (
-              <div className="p-4 bg-gray-50 dark:bg-slate-900 space-y-4">
+              <div className="p-4 bg-gray-50 dark:bg-slate-900 space-y-3 sm:space-y-4">
                 {/* Camera Selection */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">

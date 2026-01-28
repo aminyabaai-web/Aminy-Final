@@ -361,14 +361,14 @@ export function BCBANotesApproval({
   // BCBA Note Entry View
   if (mode === 'bcba_entry' && step === 'write') {
     return (
-      <div className="max-w-2xl mx-auto space-y-6">
+      <div className="max-w-2xl mx-auto space-y-3 sm:space-y-4 sm:space-y-6">
         <Card className="p-6 bg-gradient-to-br from-teal-50 to-cyan-50 border-teal-200">
           <div className="flex items-center gap-3 mb-4">
             <div className="p-3 bg-teal-100 rounded-xl">
               <FileText className="w-6 h-6 text-teal-600" />
             </div>
             <div>
-              <h2 className="text-xl font-semibold text-gray-900">Session Notes</h2>
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Session Notes</h2>
               <p className="text-sm text-gray-600">
                 {note?.childName} • {note?.sessionType} • {note?.sessionDate && new Date(note.sessionDate).toLocaleDateString()}
               </p>
@@ -389,7 +389,7 @@ export function BCBANotesApproval({
           </div>
         </Card>
 
-        <Card className="p-6">
+        <Card className="p-4 sm:p-5 md:p-6">
           <Label className="text-base font-medium text-gray-900 mb-3 block">
             Clinical Session Notes
           </Label>
@@ -452,14 +452,14 @@ Next session focus:
   // Preview for BCBA before sending to parent
   if (mode === 'bcba_entry' && step === 'preview' && note?.aiProcessedNotes) {
     return (
-      <div className="max-w-2xl mx-auto space-y-6">
+      <div className="max-w-2xl mx-auto space-y-3 sm:space-y-4 sm:space-y-6">
         <Card className="p-6 bg-gradient-to-br from-green-50 to-emerald-50 border-green-200">
           <div className="flex items-center gap-3">
             <div className="p-3 bg-green-100 rounded-xl">
               <CheckCircle className="w-6 h-6 text-green-600" />
             </div>
             <div>
-              <h2 className="text-xl font-semibold text-gray-900">Preview Parent Summary</h2>
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Preview Parent Summary</h2>
               <p className="text-sm text-gray-600">
                 Review the AI-generated summary before sending to {note.parentName}
               </p>
@@ -489,14 +489,14 @@ Next session focus:
   // Parent Review View
   if (mode === 'parent_review' && step === 'review' && note?.aiProcessedNotes) {
     return (
-      <div className="max-w-2xl mx-auto space-y-6">
+      <div className="max-w-2xl mx-auto space-y-3 sm:space-y-4 sm:space-y-6">
         <Card className="p-6 bg-gradient-to-br from-violet-50 to-purple-50 border-violet-200">
           <div className="flex items-center gap-3 mb-4">
             <div className="p-3 bg-violet-100 rounded-xl">
               <MessageSquare className="w-6 h-6 text-violet-600" />
             </div>
             <div>
-              <h2 className="text-xl font-semibold text-gray-900">
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
                 Session Summary from {note.providerName}
               </h2>
               <p className="text-sm text-gray-600">
@@ -513,7 +513,7 @@ Next session focus:
         </Card>
 
         {/* Key Takeaways */}
-        <Card className="p-4">
+        <Card className="p-3 sm:p-4">
           <h3 className="font-medium text-gray-900 mb-3 flex items-center gap-2">
             <Lightbulb className="w-4 h-4 text-amber-500" />
             Key Takeaways
@@ -529,7 +529,7 @@ Next session focus:
         </Card>
 
         {/* Recommendations to Approve */}
-        <Card className="p-4">
+        <Card className="p-3 sm:p-4">
           <h3 className="font-medium text-gray-900 mb-3 flex items-center gap-2">
             <Target className="w-4 h-4 text-teal-600" />
             Recommended Actions
@@ -579,7 +579,7 @@ Next session focus:
         </Card>
 
         {/* Care Plan Updates */}
-        <Card className="p-4">
+        <Card className="p-3 sm:p-4">
           <h3 className="font-medium text-gray-900 mb-3 flex items-center gap-2">
             <Brain className="w-4 h-4 text-violet-600" />
             Care Plan Updates
@@ -609,7 +609,7 @@ Next session focus:
                   />
                   <div className="flex-1">
                     <span className="font-medium text-gray-900 block mb-2">{update.area}</span>
-                    <div className="grid grid-cols-2 gap-3 text-sm">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
                       <div className="p-2 bg-gray-100 rounded">
                         <span className="text-xs text-gray-500 block">Current</span>
                         <span className="text-gray-700">{update.currentState}</span>
@@ -643,7 +643,7 @@ Next session focus:
         </Card>
 
         {/* Optional Feedback */}
-        <Card className="p-4">
+        <Card className="p-3 sm:p-4">
           <Label className="text-sm font-medium text-gray-900 mb-2 block">
             Any feedback or questions? (Optional)
           </Label>
@@ -690,10 +690,10 @@ Next session focus:
           <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <CheckCircle className="w-8 h-8 text-green-600" />
           </div>
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">
             {mode === 'bcba_entry' ? 'Notes Sent Successfully!' : 'Care Plan Updated!'}
           </h2>
-          <p className="text-gray-600 mb-6">
+          <p className="text-gray-600 mb-4 sm:mb-6">
             {mode === 'bcba_entry'
               ? `${note?.parentName} will receive a notification to review your session notes.`
               : `Your selections have been added to ${note?.childName}'s care plan. The AI assistant now knows about these updates!`
@@ -701,7 +701,7 @@ Next session focus:
           </p>
 
           {note?.parentResponse && (
-            <div className="text-left p-4 bg-gray-50 rounded-lg mb-6">
+            <div className="text-left p-4 bg-gray-50 rounded-lg mb-4 sm:mb-6">
               <h4 className="font-medium text-gray-900 mb-2">What was approved:</h4>
               <p className="text-sm text-gray-600">
                 {note.parentResponse.approvedRecommendations.length} recommendations,{' '}
@@ -725,13 +725,13 @@ Next session focus:
   // Helper to render AI processed notes (used in preview and view-only)
   function renderAIProcessedNotes(notes: AIProcessedNote, interactive: boolean) {
     return (
-      <div className="space-y-4">
-        <Card className="p-4">
+      <div className="space-y-3 sm:space-y-4">
+        <Card className="p-3 sm:p-4">
           <h3 className="font-medium text-gray-900 mb-2">Summary</h3>
           <p className="text-sm text-gray-700 leading-relaxed">{notes.summary}</p>
         </Card>
 
-        <Card className="p-4">
+        <Card className="p-3 sm:p-4">
           <h3 className="font-medium text-gray-900 mb-3">Key Takeaways</h3>
           <ul className="space-y-2">
             {notes.keyTakeaways.map((takeaway, idx) => (
@@ -743,7 +743,7 @@ Next session focus:
           </ul>
         </Card>
 
-        <Card className="p-4">
+        <Card className="p-3 sm:p-4">
           <h3 className="font-medium text-gray-900 mb-3">Recommendations</h3>
           <div className="space-y-3">
             {notes.recommendations.map((rec) => (
@@ -758,13 +758,13 @@ Next session focus:
           </div>
         </Card>
 
-        <Card className="p-4">
+        <Card className="p-3 sm:p-4">
           <h3 className="font-medium text-gray-900 mb-3">Care Plan Updates</h3>
           <div className="space-y-3">
             {notes.suggestedCarePlanUpdates.map((update) => (
               <div key={update.id} className="p-3 bg-gray-50 rounded-lg">
                 <span className="font-medium text-gray-900 block mb-2">{update.area}</span>
-                <div className="grid grid-cols-2 gap-2 text-sm">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
                   <div className="p-2 bg-white rounded border">
                     <span className="text-xs text-gray-500">Current:</span>
                     <span className="block">{update.currentState}</span>

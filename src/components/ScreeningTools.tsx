@@ -270,7 +270,7 @@ export function ScreeningTools({ childName, childAge, onComplete }: ScreeningToo
           <div className="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <ClipboardList className="w-8 h-8 text-teal-600" />
           </div>
-          <h1 className="text-2xl font-bold text-neutral-900 mb-2">
+          <h1 className="text-xl sm:text-2xl font-bold text-neutral-900 mb-2">
             Developmental Screening
           </h1>
           <p className="text-neutral-600">
@@ -279,7 +279,7 @@ export function ScreeningTools({ childName, childAge, onComplete }: ScreeningToo
         </div>
 
         {!isEligibleAge && (
-          <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+          <div className="mb-4 sm:mb-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
             <div className="flex items-start gap-3">
               <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
               <div>
@@ -294,7 +294,7 @@ export function ScreeningTools({ childName, childAge, onComplete }: ScreeningToo
           </div>
         )}
 
-        <div className="space-y-4 mb-8">
+        <div className="space-y-3 sm:space-y-4 mb-8">
           <div className="flex items-start gap-3 p-4 bg-neutral-50 rounded-lg">
             <Clock className="w-5 h-5 text-neutral-500 flex-shrink-0 mt-0.5" />
             <div>
@@ -365,7 +365,7 @@ export function ScreeningTools({ childName, childAge, onComplete }: ScreeningToo
               <Badge className="bg-amber-100 text-amber-700 text-xs">Key Item</Badge>
             )}
           </div>
-          <h2 className="text-xl font-semibold text-neutral-900 mb-3">
+          <h2 className="text-lg sm:text-xl font-semibold text-neutral-900 mb-3">
             {currentQuestion.text}
           </h2>
           {currentQuestion.description && (
@@ -376,7 +376,7 @@ export function ScreeningTools({ childName, childAge, onComplete }: ScreeningToo
         </div>
 
         {/* Answer Buttons */}
-        <div className="grid grid-cols-2 gap-4 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-6">
           <Button
             onClick={() => handleAnswer(true)}
             variant="outline"
@@ -434,7 +434,7 @@ export function ScreeningTools({ childName, childAge, onComplete }: ScreeningToo
         {/* Result Header */}
         <div className={`${colors.bg} ${colors.border} border rounded-xl p-6 mb-8`}>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-semibold text-neutral-900">Screening Complete</h2>
+            <h2 className="text-lg sm:text-xl font-semibold text-neutral-900">Screening Complete</h2>
             <Badge className={colors.badge}>
               {result.riskLevel === 'low' && 'Low Risk'}
               {result.riskLevel === 'medium' && 'Medium Risk'}
@@ -442,14 +442,14 @@ export function ScreeningTools({ childName, childAge, onComplete }: ScreeningToo
             </Badge>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 mb-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4">
             <div>
               <p className="text-sm text-neutral-500">Total Score</p>
-              <p className="text-2xl font-bold text-neutral-900">{result.totalScore} / 20</p>
+              <p className="text-xl sm:text-2xl font-bold text-neutral-900">{result.totalScore} / 20</p>
             </div>
             <div>
               <p className="text-sm text-neutral-500">Critical Items</p>
-              <p className="text-2xl font-bold text-neutral-900">{result.criticalScore} / 10</p>
+              <p className="text-xl sm:text-2xl font-bold text-neutral-900">{result.criticalScore} / 10</p>
             </div>
           </div>
 
@@ -534,7 +534,7 @@ export function ScreeningTools({ childName, childAge, onComplete }: ScreeningToo
         </div>
 
         {/* Disclaimer */}
-        <p className="mt-6 text-xs text-neutral-400 text-center">
+        <p className="mt-4 sm:mt-6 text-xs text-neutral-400 text-center">
           Screening completed on {new Date().toLocaleDateString()} for {childName} (age {ageInMonths} months).
           The M-CHAT-R/F is copyrighted by Diana Robins, Deborah Fein, & Marianne Barton.
           This implementation is for educational demonstration purposes.
@@ -689,7 +689,7 @@ export function GAD7Screening({ userName, onComplete, forCaregiver = true }: GAD
           <div className="w-16 h-16 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center mx-auto mb-4">
             <HelpCircle className="w-8 h-8 text-purple-600 dark:text-purple-400" />
           </div>
-          <h1 className="text-2xl font-bold text-neutral-900 dark:text-white mb-2">
+          <h1 className="text-xl sm:text-2xl font-bold text-neutral-900 dark:text-white mb-2">
             Caregiver Wellness Check
           </h1>
           <p className="text-neutral-600 dark:text-neutral-400">
@@ -697,7 +697,7 @@ export function GAD7Screening({ userName, onComplete, forCaregiver = true }: GAD
           </p>
         </div>
 
-        <div className="space-y-4 mb-8">
+        <div className="space-y-3 sm:space-y-4 mb-8">
           <div className="bg-purple-50 dark:bg-purple-900/30 rounded-lg p-4">
             <h3 className="font-semibold text-purple-900 dark:text-purple-100 mb-2">
               Why We Ask
@@ -759,7 +759,7 @@ export function GAD7Screening({ userName, onComplete, forCaregiver = true }: GAD
     return (
       <Card className="max-w-2xl mx-auto p-8">
         {/* Progress bar */}
-        <div className="mb-6">
+        <div className="mb-4 sm:mb-6">
           <div className="flex justify-between items-center mb-2">
             <span className="text-sm text-neutral-600 dark:text-neutral-400">
               Question {currentQuestionIndex + 1} of {GAD7_QUESTIONS.length}
@@ -781,7 +781,7 @@ export function GAD7Screening({ userName, onComplete, forCaregiver = true }: GAD
           <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-2">
             Over the <strong>last 2 weeks</strong>, how often have you been bothered by:
           </p>
-          <h2 className="text-xl font-semibold text-neutral-900 dark:text-white">
+          <h2 className="text-lg sm:text-xl font-semibold text-neutral-900 dark:text-white">
             {currentQuestion.text}
           </h2>
         </div>
@@ -856,7 +856,7 @@ export function GAD7Screening({ userName, onComplete, forCaregiver = true }: GAD
           <div className={`w-16 h-16 ${bg} rounded-full flex items-center justify-center mx-auto mb-4`}>
             <Icon className={`w-8 h-8 ${text}`} />
           </div>
-          <h1 className="text-2xl font-bold text-neutral-900 dark:text-white mb-2">
+          <h1 className="text-xl sm:text-2xl font-bold text-neutral-900 dark:text-white mb-2">
             Your Results
           </h1>
           <Badge className={`${bg} ${text} capitalize`}>
@@ -865,12 +865,12 @@ export function GAD7Screening({ userName, onComplete, forCaregiver = true }: GAD
         </div>
 
         {/* Score display */}
-        <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg p-6 mb-6">
+        <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg p-6 mb-4 sm:mb-6">
           <div className="flex items-center justify-between mb-4">
             <span className="text-sm text-neutral-600 dark:text-neutral-400">
               GAD-7 Score
             </span>
-            <span className="text-2xl font-bold text-neutral-900 dark:text-white">
+            <span className="text-xl sm:text-2xl font-bold text-neutral-900 dark:text-white">
               {result.totalScore} / 21
             </span>
           </div>
@@ -897,7 +897,7 @@ export function GAD7Screening({ userName, onComplete, forCaregiver = true }: GAD
         </div>
 
         {/* Interpretation */}
-        <div className={`${bg} rounded-lg p-6 mb-6`}>
+        <div className={`${bg} rounded-lg p-6 mb-4 sm:mb-6`}>
           <h3 className={`font-semibold ${text} mb-2`}>
             What This Means
           </h3>
@@ -907,7 +907,7 @@ export function GAD7Screening({ userName, onComplete, forCaregiver = true }: GAD
         </div>
 
         {/* Recommendation */}
-        <div className="bg-purple-50 dark:bg-purple-900/30 rounded-lg p-6 mb-6">
+        <div className="bg-purple-50 dark:bg-purple-900/30 rounded-lg p-6 mb-4 sm:mb-6">
           <h3 className="font-semibold text-purple-900 dark:text-purple-100 mb-2">
             Our Recommendation
           </h3>
@@ -918,7 +918,7 @@ export function GAD7Screening({ userName, onComplete, forCaregiver = true }: GAD
 
         {/* Crisis resources if needed */}
         {result.severityLevel === 'severe' && (
-          <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-6">
+          <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-4 sm:mb-6">
             <h4 className="font-semibold text-red-900 dark:text-red-100 mb-2 flex items-center gap-2">
               <AlertTriangle className="w-4 h-4" />
               Need Support Now?
@@ -953,7 +953,7 @@ export function GAD7Screening({ userName, onComplete, forCaregiver = true }: GAD
           </Button>
         </div>
 
-        <p className="text-xs text-neutral-500 dark:text-neutral-400 text-center mt-6">
+        <p className="text-xs text-neutral-500 dark:text-neutral-400 text-center mt-4 sm:mt-6">
           The GAD-7 is a screening tool, not a diagnostic instrument.
           Please consult with a healthcare professional for proper evaluation and treatment.
         </p>

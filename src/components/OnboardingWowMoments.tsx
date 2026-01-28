@@ -196,7 +196,7 @@ export function InsightSummaryWow({
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="mb-6"
+      className="mb-4 sm:mb-6"
     >
       <Card className="p-6 bg-gradient-to-br from-accent/5 via-purple-50 to-pink-50 border-accent/20">
         <div className="text-center mb-4">
@@ -208,7 +208,7 @@ export function InsightSummaryWow({
           </h3>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <div className="p-4 bg-white/60 rounded-xl">
             <p className="font-medium text-accent mb-2 flex items-center gap-2">
               <Star className="w-4 h-4" />
@@ -361,7 +361,7 @@ export function OnboardingComplete({
           <Heart className="w-8 h-8 text-accent" />
         </div>
 
-        <h2 className="text-2xl font-bold text-primary mb-2">
+        <h2 className="text-xl sm:text-2xl font-bold text-primary mb-2">
           You did it, {parentName}!
         </h2>
 

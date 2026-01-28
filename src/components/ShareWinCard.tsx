@@ -186,7 +186,7 @@ export function WinCardGallery({ wins }: {
   wins: Array<{ text: string; type: WinType; initial?: string; streak?: number }>
 }) {
   return (
-    <div className="grid gap-4 md:grid-cols-2">
+    <div className="grid gap-3 sm:gap-4 md:grid-cols-2">
       {wins.map((win, i) => (
         <ShareWinCard
           key={i}

@@ -329,7 +329,7 @@ export function JrModeActive({ childName, onSessionComplete, onPlanMasteryUpdate
           </p>
         </div>
         
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <div className="p-4 bg-white/60 rounded-xl">
             <p className="text-sm text-blue-700 mb-2">Follow the breathing circle:</p>
             <div className="w-16 h-16 mx-auto bg-blue-200 rounded-full animate-pulse flex items-center justify-center">
@@ -358,14 +358,14 @@ export function JrModeActive({ childName, onSessionComplete, onPlanMasteryUpdate
     
     return (
       <Card className="p-6 bg-gradient-to-br from-green-50 to-emerald-50 border-green-200">
-        <div className="text-center mb-6">
+        <div className="text-center mb-4 sm:mb-6">
           <Trophy className="w-12 h-12 text-green-500 mx-auto mb-2" />
           <h3 className="text-lg font-semibold text-green-800 mb-2">Great Job, {childName}!</h3>
           <p className="text-sm text-green-600">You completed your Jr Mode session!</p>
         </div>
         
-        <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-3 sm:space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <div className="text-center p-3 bg-white/60 rounded-lg">
               <div className="text-lg font-bold text-green-700">{activitiesCompleted}</div>
               <div className="text-xs text-green-600">Activities</div>
@@ -424,17 +424,17 @@ export function JrModeActive({ childName, onSessionComplete, onPlanMasteryUpdate
           <SessionSummary />
         ) : (
           <Card className="p-6 text-center">
-            <div className="mb-6">
+            <div className="mb-4 sm:mb-6">
               <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-teal-100 to-cyan-100 rounded-2xl flex items-center justify-center">
                 <Play className="w-8 h-8 text-teal-600" />
               </div>
-              <h2 className="text-xl font-semibold text-primary mb-2">Ready to Learn, {childName}?</h2>
+              <h2 className="text-lg sm:text-xl font-semibold text-primary mb-2">Ready to Learn, {childName}?</h2>
               <p className="text-muted-foreground">
                 Let's practice some fun activities together! Tap the button when you're ready to start.
               </p>
             </div>
             
-            <div className="space-y-4 mb-6">
+            <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
               <h3 className="text-sm font-semibold text-primary">Today's Activities:</h3>
               <div className="grid gap-2">
                 {activities.map((activity, index) => (
@@ -456,7 +456,7 @@ export function JrModeActive({ childName, onSessionComplete, onPlanMasteryUpdate
               </div>
             </div>
             
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center justify-between mb-4 sm:mb-6">
               <div className="flex items-center gap-2">
                 <Button
                   variant="ghost"
@@ -490,9 +490,9 @@ export function JrModeActive({ childName, onSessionComplete, onPlanMasteryUpdate
   const progress = ((currentActivity + 1) / activities.length) * 100;
 
   return (
-    <div className="max-w-md mx-auto px-4 py-6 space-y-4">
+    <div className="max-w-md mx-auto px-4 py-6 space-y-3 sm:space-y-4">
       {/* Session Header */}
-      <Card className="p-4">
+      <Card className="p-3 sm:p-4">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
             <Badge variant="outline" className="text-teal-600 border-teal-600">
@@ -534,8 +534,8 @@ export function JrModeActive({ childName, onSessionComplete, onPlanMasteryUpdate
 
       {/* Current Activity */}
       {currentActivityData && !sessionPaused && (
-        <Card className="p-6">
-          <div className="text-center mb-6">
+        <Card className="p-4 sm:p-5 md:p-6">
+          <div className="text-center mb-4 sm:mb-6">
             <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-teal-100 to-cyan-100 rounded-2xl flex items-center justify-center">
               {currentActivityData.icon}
             </div>
@@ -566,7 +566,7 @@ export function JrModeActive({ childName, onSessionComplete, onPlanMasteryUpdate
           </div>
           
           {/* Quick fatigue indicators */}
-          <div className="flex justify-center gap-4 mt-4 pt-4 border-t">
+          <div className="flex justify-center gap-3 sm:gap-4 mt-4 pt-4 border-t">
             <Button
               variant="ghost"
               size="sm"
@@ -614,7 +614,7 @@ export function JrModeActive({ childName, onSessionComplete, onPlanMasteryUpdate
       )}
 
       {/* Targets Progress */}
-      <Card className="p-4">
+      <Card className="p-3 sm:p-4">
         <h4 className="text-sm font-semibold text-primary mb-3">Skills Progress</h4>
         <div className="space-y-2">
           {targets.map(target => {
@@ -641,7 +641,7 @@ export function JrModeActive({ childName, onSessionComplete, onPlanMasteryUpdate
 
       {/* Fatigue Indicators */}
       {fatigueEvents.length > 0 && (
-        <Card className="p-4">
+        <Card className="p-3 sm:p-4">
           <h4 className="text-sm font-semibold text-primary mb-2">Session Notes</h4>
           <div className="text-xs text-muted-foreground">
             {fatigueEvents.length} attention event{fatigueEvents.length !== 1 ? 's' : ''} recorded

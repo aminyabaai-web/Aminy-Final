@@ -178,7 +178,7 @@ export function ReportsHub({ childId, childName, accessToken, userTier = 'free' 
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -217,7 +217,7 @@ export function ReportsHub({ childId, childName, accessToken, userTier = 'free' 
           </Button>
         </Card>
       ) : (
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-3 sm:gap-4 md:grid-cols-2">
           {reports.map((report) => {
             const typeInfo = reportTypeLabels[report.reportType];
             const isExpired = new Date(report.expiresAt) < new Date();
@@ -308,11 +308,11 @@ export function ReportsHub({ childId, childName, accessToken, userTier = 'free' 
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {/* Report Type Selection */}
             <div>
               <Label className="text-sm mb-3 block">Report Type</Label>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {(Object.keys(reportTypeLabels) as ReportType[]).map((type) => {
                   const info = reportTypeLabels[type];
                   const requiresPro = ['iep', 'bcba', 'insurance'].includes(type);
@@ -344,7 +344,7 @@ export function ReportsHub({ childId, childName, accessToken, userTier = 'free' 
             </div>
 
             {/* Date Range */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <Label className="text-xs">Start Date</Label>
                 <Input
@@ -413,7 +413,7 @@ export function ReportsHub({ childId, childName, accessToken, userTier = 'free' 
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             <div>
               <Label className="text-sm mb-2 block">Provider's Email</Label>
               <Input

@@ -322,7 +322,7 @@ export function Dashboard10({
               >
                 🎉
               </motion.div>
-              <h2 className="text-2xl font-bold mb-2">
+              <h2 className="text-xl sm:text-2xl font-bold mb-2">
                 {streakDays}-Day Streak!
               </h2>
               <p className="text-amber-100">
@@ -356,7 +356,7 @@ export function Dashboard10({
           </div>
 
           {/* Child Profile Snapshot */}
-          <div className="flex items-center gap-4 bg-white/10 rounded-xl p-3">
+          <div className="flex items-center gap-3 sm:gap-4 bg-white/10 rounded-xl p-3">
             <div className="w-12 h-12 bg-gradient-to-br from-teal-400 to-teal-600 rounded-full flex items-center justify-center text-xl font-bold">
               {child.name[0]}
             </div>
@@ -414,7 +414,7 @@ export function Dashboard10({
       </header>
 
       {/* Main Content */}
-      <main className="max-w-4xl mx-auto px-4 py-6 space-y-6">
+      <main className="max-w-4xl mx-auto px-4 py-6 space-y-3 sm:space-y-4 sm:space-y-6">
         {/* ========================================
             PROACTIVE NUDGES - AI that reaches out
             (Aminy's unique proactive support)
@@ -560,7 +560,7 @@ export function Dashboard10({
             ======================================== */}
         <section>
           <Card className="p-4 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border-0 shadow-sm">
-            <div className="flex items-start gap-4">
+            <div className="flex items-start gap-3 sm:gap-4">
               <div className="p-2 bg-amber-100 dark:bg-amber-800/50 rounded-full">
                 <Award className="w-6 h-6 text-amber-600 dark:text-amber-400" />
               </div>

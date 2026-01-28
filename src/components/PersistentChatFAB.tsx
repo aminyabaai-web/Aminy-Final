@@ -171,7 +171,7 @@ export function PersistentChatFAB({ userData, isAuthenticated = false }: Persist
                 <h3 className="text-lg font-semibold text-slate-900 mb-2">
                   Sign in to chat with Aminy
                 </h3>
-                <p className="text-sm text-slate-600 mb-6 max-w-sm">
+                <p className="text-sm text-slate-600 mb-4 sm:mb-6 max-w-sm">
                   Get personalized guidance based on your family's progress and goals.
                 </p>
                 <Button className="bg-accent hover:bg-accent/90">

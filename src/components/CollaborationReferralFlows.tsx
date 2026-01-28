@@ -146,7 +146,7 @@ export function FamilyInviteFlow({ childName = 'Eddie', onClose }: FamilyInviteF
             </div>
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className="p-6 space-y-6">
+            <form onSubmit={handleSubmit} className="p-6 space-y-3 sm:space-y-4 sm:space-y-6">
               <p className="text-sm text-gray-600">
                 Co-caregivers can view activities, add notes, and track progress together
               </p>
@@ -266,7 +266,7 @@ export function FamilyInviteFlow({ childName = 'Eddie', onClose }: FamilyInviteF
                 <button
                   type="button"
                   onClick={onClose}
-                  className="flex-1 px-6 py-4 border-2 border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-all"
+                  className="flex-1 px-4 sm:px-6 py-3 sm:py-4 border-2 border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-all"
                 >
                   Cancel
                 </button>
@@ -286,7 +286,7 @@ export function FamilyInviteFlow({ childName = 'Eddie', onClose }: FamilyInviteF
         {currentScreen === 'success' && (
           <>
             <div className="p-8 text-center">
-              <div className="mb-6 flex justify-center">
+              <div className="mb-4 sm:mb-6 flex justify-center">
                 <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center animate-in zoom-in-50 duration-500">
                   <CheckCircle className="w-10 h-10 text-green-600" />
                 </div>
@@ -304,7 +304,7 @@ export function FamilyInviteFlow({ childName = 'Eddie', onClose }: FamilyInviteF
 
               {/* Pending Invites List */}
               {pendingInvites.length > 0 && (
-                <div className="bg-gray-50 rounded-lg p-4 mb-6 text-left">
+                <div className="bg-gray-50 rounded-lg p-4 mb-4 sm:mb-6 text-left">
                   <h3 className="font-medium text-sm text-gray-900 mb-3">Pending invites</h3>
                   <div className="space-y-2">
                     {pendingInvites.map((invite, idx) => (
@@ -345,7 +345,7 @@ export function FamilyInviteFlow({ childName = 'Eddie', onClose }: FamilyInviteF
         {currentScreen === 'error' && (
           <>
             <div className="p-8 text-center">
-              <div className="mb-6 flex justify-center">
+              <div className="mb-4 sm:mb-6 flex justify-center">
                 <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
                   <AlertCircle className="w-10 h-10 text-red-600" />
                 </div>
@@ -395,7 +395,7 @@ export function FamilyInviteFlow({ childName = 'Eddie', onClose }: FamilyInviteF
               </button>
             </div>
 
-            <div className="p-6 space-y-6">
+            <div className="p-6 space-y-3 sm:space-y-4 sm:space-y-6">
               {/* Active Co-caregivers */}
               <div>
                 <h3 className="font-medium text-gray-900 mb-3">Active co-caregivers</h3>
@@ -403,7 +403,7 @@ export function FamilyInviteFlow({ childName = 'Eddie', onClose }: FamilyInviteF
                   {coCaregiversList.map((caregiver) => (
                     <div
                       key={caregiver.id}
-                      className="flex items-center gap-4 p-4 bg-white border border-gray-200 rounded-lg hover:shadow-md transition-all"
+                      className="flex items-center gap-3 sm:gap-4 p-4 bg-white border border-gray-200 rounded-lg hover:shadow-md transition-all"
                     >
                       <div className="w-10 h-10 bg-accent/10 rounded-full flex items-center justify-center">
                         <Users className="w-5 h-5 text-accent" />
@@ -567,7 +567,7 @@ ${parentName}`;
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="p-6 space-y-6">
+            <form onSubmit={handleSubmit} className="p-6 space-y-3 sm:space-y-4 sm:space-y-6">
               <p className="text-sm text-gray-600">
                 Share progress reports with therapists, teachers, and providers
               </p>
@@ -657,7 +657,7 @@ ${parentName}`;
                 <button
                   type="button"
                   onClick={onClose}
-                  className="flex-1 px-6 py-4 border-2 border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-all"
+                  className="flex-1 px-4 sm:px-6 py-3 sm:py-4 border-2 border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-all"
                 >
                   Cancel
                 </button>
@@ -677,7 +677,7 @@ ${parentName}`;
         {currentScreen === 'success' && (
           <>
             <div className="p-8 text-center">
-              <div className="mb-6 flex justify-center">
+              <div className="mb-4 sm:mb-6 flex justify-center">
                 <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center animate-in zoom-in-50 duration-500">
                   <CheckCircle className="w-10 h-10 text-green-600" />
                 </div>
@@ -715,7 +715,7 @@ ${parentName}`;
         {currentScreen === 'error' && (
           <>
             <div className="p-8 text-center">
-              <div className="mb-6 flex justify-center">
+              <div className="mb-4 sm:mb-6 flex justify-center">
                 <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
                   <AlertCircle className="w-10 h-10 text-red-600" />
                 </div>
@@ -838,7 +838,7 @@ export function ReferralFlow({ onClose }: ReferralFlowProps) {
           </button>
         </div>
 
-        <div className="p-6 space-y-6">
+        <div className="p-6 space-y-3 sm:space-y-4 sm:space-y-6">
           
           {hasReferrals ? (
             <>
@@ -863,7 +863,7 @@ export function ReferralFlow({ onClose }: ReferralFlowProps) {
               {/* Share Buttons */}
               <div>
                 <h3 className="font-medium text-gray-900 mb-3">Share your code</h3>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <button
                     onClick={() => handleShare('sms')}
                     className="flex items-center justify-center gap-2 p-4 border-2 border-gray-200 rounded-lg hover:border-accent hover:bg-accent/5 transition-all"
@@ -898,25 +898,25 @@ export function ReferralFlow({ onClose }: ReferralFlowProps) {
               {/* Stats Cards */}
               <div>
                 <h3 className="font-medium text-gray-900 mb-3">Your referrals</h3>
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                   <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
                     <div className="flex items-center justify-center gap-2 mb-1">
                       <Users className="w-5 h-5 text-green-600" />
-                      <p className="text-2xl font-bold text-green-900">{referralStats.friendsJoined}</p>
+                      <p className="text-xl sm:text-2xl font-bold text-green-900">{referralStats.friendsJoined}</p>
                     </div>
                     <p className="text-xs text-green-700">Friends joined</p>
                   </div>
                   <div className="bg-accent/10 border border-accent/20 rounded-lg p-4 text-center">
                     <div className="flex items-center justify-center gap-2 mb-1">
                       <Gift className="w-5 h-5 text-accent" />
-                      <p className="text-2xl font-bold text-accent">{referralStats.monthsEarned}</p>
+                      <p className="text-xl sm:text-2xl font-bold text-accent">{referralStats.monthsEarned}</p>
                     </div>
                     <p className="text-xs text-accent">Months earned</p>
                   </div>
                   <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 text-center">
                     <div className="flex items-center justify-center gap-2 mb-1">
                       <Clock className="w-5 h-5 text-gray-600" />
-                      <p className="text-2xl font-bold text-gray-900">{referralStats.invitesPending}</p>
+                      <p className="text-xl sm:text-2xl font-bold text-gray-900">{referralStats.invitesPending}</p>
                     </div>
                     <p className="text-xs text-gray-600">Invites pending</p>
                   </div>
@@ -973,13 +973,13 @@ export function ReferralFlow({ onClose }: ReferralFlowProps) {
           ) : (
             // SCREEN 4: EMPTY STATE
             <div className="text-center py-12">
-              <div className="mb-6 flex justify-center">
+              <div className="mb-4 sm:mb-6 flex justify-center">
                 <div className="w-20 h-20 bg-accent/10 rounded-full flex items-center justify-center">
                   <Users className="w-10 h-10 text-accent" />
                 </div>
               </div>
               
-              <h3 className="text-xl font-semibold text-primary mb-2">
+              <h3 className="text-lg sm:text-xl font-semibold text-primary mb-2">
                 No referrals yet
               </h3>
               <p className="text-gray-600 mb-8 max-w-md mx-auto">
@@ -987,7 +987,7 @@ export function ReferralFlow({ onClose }: ReferralFlowProps) {
               </p>
 
               {/* Referral Code Display */}
-              <div className="bg-gradient-to-br from-accent/10 to-blue-50 border border-accent/20 rounded-xl p-6 mb-6 max-w-md mx-auto">
+              <div className="bg-gradient-to-br from-accent/10 to-blue-50 border border-accent/20 rounded-xl p-6 mb-4 sm:mb-6 max-w-md mx-auto">
                 <p className="text-sm text-gray-600 mb-2">Your referral code</p>
                 <div className="flex items-center justify-center gap-3 mb-4">
                   <p className="text-4xl font-bold text-accent tracking-wider">{referralCode}</p>
@@ -1116,7 +1116,7 @@ export function CollaborationReferralExample() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-4">
-      <div className="max-w-md mx-auto space-y-4">
+      <div className="max-w-md mx-auto space-y-3 sm:space-y-4">
         <h1 className="text-2xl font-semibold mb-4">Collaboration & Referral Flows</h1>
         
         <Button

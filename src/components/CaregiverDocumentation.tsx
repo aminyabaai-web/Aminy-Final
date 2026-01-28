@@ -369,7 +369,7 @@ export function CaregiverDocumentation({
         </div>
       </div>
 
-      <div className="px-4 py-6 max-w-4xl mx-auto space-y-6">
+      <div className="px-4 py-6 max-w-4xl mx-auto space-y-3 sm:space-y-4 sm:space-y-6">
         {/* Timer Card */}
         <Card className="p-6 bg-gradient-to-r from-accent/10 to-teal-50 border-accent/20">
           <div className="flex items-center justify-between mb-4">
@@ -404,17 +404,17 @@ export function CaregiverDocumentation({
         </Card>
 
         {/* Summary Stats */}
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
           <Card className="p-4 text-center">
-            <p className="text-2xl font-bold text-accent">{getTotalHours().toFixed(1)}</p>
+            <p className="text-xl sm:text-2xl font-bold text-accent">{getTotalHours().toFixed(1)}</p>
             <p className="text-sm text-slate-500">Total Hours</p>
           </Card>
           <Card className="p-4 text-center">
-            <p className="text-2xl font-bold text-slate-900">{entries.length}</p>
+            <p className="text-xl sm:text-2xl font-bold text-slate-900">{entries.length}</p>
             <p className="text-sm text-slate-500">Entries</p>
           </Card>
           <Card className="p-4 text-center">
-            <p className="text-2xl font-bold text-green-600">
+            <p className="text-xl sm:text-2xl font-bold text-green-600">
               {entries.filter(e => e.verified).length}
             </p>
             <p className="text-sm text-slate-500">Verified</p>
@@ -452,9 +452,9 @@ export function CaregiverDocumentation({
 
         {/* Add Entry Form */}
         {showAddEntry && (
-          <Card className="p-4">
+          <Card className="p-3 sm:p-4">
             <h3 className="font-medium text-slate-900 mb-4">Add Time Entry</h3>
-            <div className="grid grid-cols-2 gap-4 mb-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4">
               <div>
                 <label className="text-sm text-slate-600 mb-1 block">Date</label>
                 <Input
@@ -527,7 +527,7 @@ export function CaregiverDocumentation({
             </Card>
           ) : (
             entries.map((entry) => (
-              <Card key={entry.id} className="p-4">
+              <Card key={entry.id} className="p-3 sm:p-4">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">

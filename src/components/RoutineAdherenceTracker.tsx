@@ -238,13 +238,13 @@ export function RoutineAdherenceTracker({
   const categoryOrder: Routine['category'][] = ['morning', 'afternoon', 'evening', 'bedtime'];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       {/* Stats Header */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
         <Card className="p-4 text-center">
           <div className="flex items-center justify-center gap-2 mb-1">
             <TrendingUp className="w-4 h-4 text-green-600" />
-            <span className="text-2xl font-bold text-green-600">{weeklyStats.adherence}%</span>
+            <span className="text-xl sm:text-2xl font-bold text-green-600">{weeklyStats.adherence}%</span>
           </div>
           <p className="text-xs text-slate-500">This Week</p>
         </Card>
@@ -252,7 +252,7 @@ export function RoutineAdherenceTracker({
         <Card className="p-4 text-center">
           <div className="flex items-center justify-center gap-2 mb-1">
             <CheckCircle className="w-4 h-4 text-accent" />
-            <span className="text-2xl font-bold text-accent">{weeklyStats.completed}</span>
+            <span className="text-xl sm:text-2xl font-bold text-accent">{weeklyStats.completed}</span>
           </div>
           <p className="text-xs text-slate-500">Completed</p>
         </Card>
@@ -260,14 +260,14 @@ export function RoutineAdherenceTracker({
         <Card className="p-4 text-center">
           <div className="flex items-center justify-center gap-2 mb-1">
             <Flame className="w-4 h-4 text-orange-500" />
-            <span className="text-2xl font-bold text-orange-500">{weeklyStats.streak}</span>
+            <span className="text-xl sm:text-2xl font-bold text-orange-500">{weeklyStats.streak}</span>
           </div>
           <p className="text-xs text-slate-500">Day Streak</p>
         </Card>
       </div>
 
       {/* Weekly Progress */}
-      <Card className="p-4">
+      <Card className="p-3 sm:p-4">
         <div className="flex items-center justify-between mb-2">
           <span className="text-sm font-medium text-slate-700">Weekly Progress</span>
           <span className="text-sm text-slate-500">{weeklyStats.completed}/{weeklyStats.total} routines</span>
@@ -298,7 +298,7 @@ export function RoutineAdherenceTracker({
           if (!categoryRoutines || categoryRoutines.length === 0) return null;
 
           return (
-            <div key={category} className="mb-6">
+            <div key={category} className="mb-4 sm:mb-6">
               <h4 className="text-sm font-medium text-slate-500 mb-3">{getCategoryLabel(category)}</h4>
               <div className="space-y-2">
                 {categoryRoutines.map((routine) => {
@@ -317,7 +317,7 @@ export function RoutineAdherenceTracker({
                         'bg-white hover:shadow-md'
                       }`}
                     >
-                      <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-3 sm:gap-4">
                         {/* Status Icon */}
                         <button
                           onClick={() => !isCompleted && handleMarkComplete(routine, 'completed')}

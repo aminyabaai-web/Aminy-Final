@@ -83,11 +83,11 @@ export function BenefitsNavigatorScreen({ onBack, userTier = 'core' }: BenefitsN
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 py-6 space-y-6">
+      <div className="max-w-4xl mx-auto px-4 py-6 space-y-3 sm:space-y-4 sm:space-y-6">
         {/* Insurance Coverage Header */}
         {hasInsurance && (
-          <Card className="p-4">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <Card className="p-3 sm:p-4">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
               <div className="flex items-center gap-3">
                 <CheckCircle className="w-5 h-5 text-green-600" />
                 <div>
@@ -146,7 +146,7 @@ export function BenefitsNavigatorScreen({ onBack, userTier = 'core' }: BenefitsN
             <BenefitsStatusPanel />
 
             {/* Quick Actions */}
-            <Card className="p-6">
+            <Card className="p-4 sm:p-5 md:p-6">
               <h2 className="font-semibold mb-4">Quick Actions</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 <Button
@@ -176,7 +176,7 @@ export function BenefitsNavigatorScreen({ onBack, userTier = 'core' }: BenefitsN
             </Card>
 
             {/* Services Coverage */}
-            <Card className="p-6">
+            <Card className="p-4 sm:p-5 md:p-6">
               <h2 className="font-semibold mb-4">Your Coverage</h2>
               <div className="space-y-3">
                 {services.map((service) => (
@@ -251,9 +251,9 @@ export function BenefitsNavigatorScreen({ onBack, userTier = 'core' }: BenefitsN
         )}
 
         {activeView === 'tracking' && (
-          <Card className="p-6">
+          <Card className="p-4 sm:p-5 md:p-6">
             <h2 className="font-semibold mb-4">Track Requests</h2>
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {/* Sample tracking items */}
               <div className="border border-gray-200 rounded-lg p-4">
                 <div className="flex items-center justify-between mb-2">

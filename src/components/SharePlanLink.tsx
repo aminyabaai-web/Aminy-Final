@@ -37,7 +37,7 @@ export function SharePlanLink({ tier, onGenerateLink }: SharePlanLinkProps) {
   };
 
   return (
-    <Card className="p-6">
+    <Card className="p-4 sm:p-5 md:p-6">
       <div className="flex items-center justify-between mb-4">
         <h3 className="font-semibold">Share Care Plan</h3>
         {tier === 'pro-plus' && (
@@ -48,7 +48,7 @@ export function SharePlanLink({ tier, onGenerateLink }: SharePlanLinkProps) {
       </div>
 
       {!generatedLink ? (
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <div>
             <Label>Link Expiry</Label>
             <select
@@ -83,7 +83,7 @@ export function SharePlanLink({ tier, onGenerateLink }: SharePlanLinkProps) {
           </Button>
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <div>
             <Label>Share Link</Label>
             <div className="flex gap-2 mt-2">

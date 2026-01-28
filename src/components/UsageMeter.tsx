@@ -161,7 +161,7 @@ export function UsageMeter({
         </div>
       )}
 
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         {/* Messages */}
         <div>
           <div className="flex items-center justify-between mb-1.5">
