@@ -65,6 +65,10 @@ interface FormData {
   specialties: string[];
   years_experience: number;
   bio: string;
+  hourly_rate: number;
+  accepts_terms: boolean;
+  practice_name?: string;
+  practice_tax_id?: string;
 }
 
 const PROVIDER_TYPES: { value: ProviderType; label: string; description: string }[] = [
@@ -124,6 +128,10 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
     specialties: [],
     years_experience: 0,
     bio: '',
+    hourly_rate: 99,
+    accepts_terms: false,
+    practice_name: '',
+    practice_tax_id: '',
   });
 
   useEffect(() => {
@@ -894,14 +902,93 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                   </p>
                 </div>
 
-                {/* Agreement */}
+                {/* Rates & Payment Setup */}
+                <div className="p-4 bg-neutral-50 dark:bg-slate-800 rounded-lg">
+                  <h3 className="font-medium text-neutral-900 dark:text-white mb-3 flex items-center gap-2">
+                    <Briefcase className="w-4 h-4 text-teal-600" />
+                    Rates & Payment
+                  </h3>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-neutral-700 dark:text-slate-300 mb-1.5">
+                        Session Rate (per 50-minute session)
+                      </label>
+                      <div className="relative w-40">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500">$</span>
+                        <Input
+                          type="number"
+                          min="50"
+                          max="500"
+                          value={formData.hourly_rate}
+                          onChange={(e) => updateField('hourly_rate', parseInt(e.target.value) || 99)}
+                          className="pl-7"
+                        />
+                      </div>
+                      <p className="text-xs text-neutral-500 mt-1">
+                        Aminy takes 15% platform fee. You'll earn ${Math.round(formData.hourly_rate * 0.85)} per session.
+                      </p>
+                    </div>
+
+                    <div className="p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
+                      <p className="text-sm text-amber-800 dark:text-amber-300">
+                        <strong>Payment Setup:</strong> After approval, you'll set up Stripe Connect to receive payments directly to your bank account. Payouts are processed weekly.
+                      </p>
+                    </div>
+
+                    {/* Optional: Practice/Group Info */}
+                    <div className="border-t border-neutral-200 dark:border-slate-700 pt-4 mt-4">
+                      <p className="text-sm font-medium text-neutral-700 dark:text-slate-300 mb-3">
+                        Part of a practice or group? (Optional)
+                      </p>
+                      <div className="grid grid-cols-2 gap-3">
+                        <Input
+                          value={formData.practice_name || ''}
+                          onChange={(e) => updateField('practice_name', e.target.value)}
+                          placeholder="Practice name"
+                        />
+                        <Input
+                          value={formData.practice_tax_id || ''}
+                          onChange={(e) => updateField('practice_tax_id', e.target.value)}
+                          placeholder="Tax ID (optional)"
+                        />
+                      </div>
+                      <p className="text-xs text-neutral-500 mt-1">
+                        Groups can set up centralized billing after individual providers are approved.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Terms Agreement */}
                 <div className="p-4 bg-teal-50 dark:bg-teal-900/20 rounded-lg border border-teal-200 dark:border-teal-800">
-                  <p className="text-sm text-teal-800 dark:text-teal-300">
-                    By submitting this application, you confirm that all information provided is accurate
-                    and that you consent to Aminy verifying your credentials. You agree to our
-                    <a href="#" className="underline ml-1">Provider Terms of Service</a> and
-                    <a href="#" className="underline ml-1">Privacy Policy</a>.
-                  </p>
+                  <label className="flex items-start gap-3 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={formData.accepts_terms}
+                      onChange={(e) => updateField('accepts_terms', e.target.checked)}
+                      className="mt-1 w-5 h-5 rounded border-teal-300 text-teal-600 focus:ring-teal-500"
+                    />
+                    <span className="text-sm text-teal-800 dark:text-teal-300">
+                      I confirm that all information provided is accurate and I consent to Aminy verifying my credentials.
+                      I agree to the{' '}
+                      <a href="#" className="underline font-medium">Provider Terms of Service</a>,{' '}
+                      <a href="#" className="underline font-medium">Privacy Policy</a>, and{' '}
+                      <a href="#" className="underline font-medium">Platform Fee Agreement</a> (15% per session).
+                    </span>
+                  </label>
+                </div>
+
+                {/* Key Terms Summary */}
+                <div className="p-4 bg-neutral-100 dark:bg-slate-700 rounded-lg">
+                  <h4 className="font-medium text-neutral-900 dark:text-white mb-2">Key Terms</h4>
+                  <ul className="text-sm text-neutral-600 dark:text-slate-400 space-y-1">
+                    <li>• 15% platform fee per completed session</li>
+                    <li>• Weekly payouts via Stripe Connect</li>
+                    <li>• You set your own availability and rates</li>
+                    <li>• Cancel anytime with 30 days notice</li>
+                    <li>• HIPAA-compliant telehealth platform included</li>
+                    <li>• Access to AI patient summaries and tools</li>
+                  </ul>
                 </div>
               </div>
 
@@ -921,8 +1008,8 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                 </Button>
                 <Button
                   onClick={handleSubmit}
-                  disabled={isSubmitting}
-                  className="bg-teal-600 hover:bg-teal-700"
+                  disabled={isSubmitting || !formData.accepts_terms}
+                  className="bg-teal-600 hover:bg-teal-700 disabled:opacity-50"
                 >
                   {isSubmitting ? (
                     <>

@@ -12,6 +12,7 @@ interface SplashPageProps {
   onWatchDemo?: () => void;
   onStartReflection?: () => void;
   onSignIn?: () => void;
+  onForProviders?: () => void;
 }
 
 const fontStack = 'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", "Helvetica Neue", Arial, "Noto Sans", sans-serif';
@@ -24,7 +25,8 @@ const fontSmoothing: React.CSSProperties = {
 
 export function SplashPage({
   onStartTrial,
-  onSignIn
+  onSignIn,
+  onForProviders
 }: SplashPageProps) {
 
   useEffect(() => {
@@ -247,6 +249,30 @@ export function SplashPage({
             >
               Already have an account? Sign in
             </button>
+
+            {onForProviders && (
+              <div style={{ marginTop: '8px' }}>
+                <button
+                  onClick={onForProviders}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: 'rgba(13, 148, 136, 0.7)',
+                    fontFamily: fontStack,
+                    fontSize: '12px',
+                    fontWeight: 500,
+                    cursor: 'pointer',
+                    padding: '6px 12px',
+                    transition: 'color 0.2s ease',
+                    ...fontSmoothing,
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.color = 'rgba(13, 148, 136, 1)'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(13, 148, 136, 0.7)'}
+                >
+                  Are you a provider? Join our network →
+                </button>
+              </div>
+            )}
           </motion.div>
 
           {/* Bottom Badges */}

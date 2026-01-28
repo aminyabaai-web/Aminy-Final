@@ -42,6 +42,7 @@ import { ViralMetricsDashboard } from './admin/ViralMetricsDashboard';
 import { UserManagement } from './admin/UserManagement';
 import { ModerationDashboard } from './admin/ModerationDashboard';
 import { AIInsights } from './admin/AIInsights';
+import { ProviderApplicationReview } from './admin/ProviderApplicationReview';
 import { getAggregatedMetrics, getRetentionMetrics } from '../lib/outcomes-tracking';
 
 interface AdminPortalProps {
@@ -184,7 +185,7 @@ const getStatusIcon = (value: number, target: number, isInverse = false) => {
 };
 
 export function AdminPortal({ onBack }: AdminPortalProps) {
-  const [activeSection, setActiveSection] = useState<'overview' | 'engagement' | 'ai' | 'clinical' | 'marketplace' | 'b2b' | 'users' | 'moderation' | 'revenue' | 'insights'>('overview');
+  const [activeSection, setActiveSection] = useState<'overview' | 'engagement' | 'ai' | 'clinical' | 'marketplace' | 'b2b' | 'users' | 'moderation' | 'revenue' | 'insights' | 'applications'>('overview');
   const [dateRange, setDateRange] = useState<'7d' | '30d' | 'all'>('all');
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -684,6 +685,7 @@ export function AdminPortal({ onBack }: AdminPortalProps) {
               { id: 'clinical', label: 'Clinical', icon: Heart },
               { id: 'marketplace', label: 'Marketplace', icon: Video },
               { id: 'moderation', label: 'Moderation', icon: Shield },
+              { id: 'applications', label: 'Provider Apps', icon: FileText },
               { id: 'b2b', label: 'B2B', icon: Building2 },
             ].map(({ id, label, icon: Icon }) => (
               <button
@@ -1176,6 +1178,10 @@ export function AdminPortal({ onBack }: AdminPortalProps) {
 
         {activeSection === 'insights' && (
           <AIInsights />
+        )}
+
+        {activeSection === 'applications' && (
+          <ProviderApplicationReview adminId="admin-1" />
         )}
 
         {activeSection === 'revenue' && (

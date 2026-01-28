@@ -993,6 +993,7 @@ export default function App() {
                 onStartTrial={handleGetStarted}
                 onSignIn={handleLogin}
                 onStartReflection={handleGetStarted}
+                onForProviders={() => navigateToScreen("provider-landing")}
               />
             </Suspense>
           );
@@ -1500,6 +1501,7 @@ export default function App() {
                 onStartTrial={handleGetStarted}
                 onSignIn={handleLogin}
                 onStartReflection={handleGetStarted}
+                onForProviders={() => navigateToScreen("provider-landing")}
               />
             </Suspense>
           );
