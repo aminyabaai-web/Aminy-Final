@@ -3,9 +3,10 @@
  *
  * MRR/ARR tracking, revenue forecasting, and financial health metrics.
  * Complements UnitEconomicsView with forward-looking financial analysis.
+ * Connected to Stripe via financial-analytics service.
  */
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState } from 'react';
 import { Card } from '../ui/card';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
@@ -27,81 +28,70 @@ import {
   Zap,
   AlertTriangle,
   CheckCircle,
+  Loader2,
 } from 'lucide-react';
-import { supabase } from '../../utils/supabase/client';
+import { toast } from 'sonner';
+import {
+  useFinancialAnalytics,
+  downloadFinancialReport,
+  type MRRData,
+  type RevenueBreakdown,
+  type ForecastData,
+} from '../../lib/financial-analytics';
 
 interface FinancialAnalyticsProps {
   onBack?: () => void;
 }
 
-interface MRRData {
-  month: string;
-  newMRR: number;
-  expansionMRR: number;
-  contractionMRR: number;
-  churnMRR: number;
-  netNewMRR: number;
-  totalMRR: number;
-}
-
-interface RevenueBreakdown {
-  tier: string;
-  mrr: number;
-  subscribers: number;
-  arpu: number;
-  percentOfTotal: number;
-  growth: number;
-  color: string;
-}
-
-interface ForecastData {
-  month: string;
-  projected: number;
-  conservative: number;
-  optimistic: number;
-  actual?: number;
-}
-
-// Mock data - would come from Stripe/billing backend in production
-const MOCK_MRR_HISTORY: MRRData[] = [
-  { month: 'Aug 2024', newMRR: 8420, expansionMRR: 1230, contractionMRR: 450, churnMRR: 2100, netNewMRR: 7100, totalMRR: 52300 },
-  { month: 'Sep 2024', newMRR: 11200, expansionMRR: 1890, contractionMRR: 620, churnMRR: 2340, netNewMRR: 10130, totalMRR: 62430 },
-  { month: 'Oct 2024', newMRR: 14500, expansionMRR: 2340, contractionMRR: 780, churnMRR: 2560, netNewMRR: 13500, totalMRR: 75930 },
-  { month: 'Nov 2024', newMRR: 18200, expansionMRR: 3120, contractionMRR: 890, churnMRR: 2890, netNewMRR: 17540, totalMRR: 93470 },
-  { month: 'Dec 2024', newMRR: 21300, expansionMRR: 4200, contractionMRR: 1020, churnMRR: 3200, netNewMRR: 21280, totalMRR: 114750 },
-  { month: 'Jan 2025', newMRR: 24800, expansionMRR: 5100, contractionMRR: 1150, churnMRR: 3450, netNewMRR: 25300, totalMRR: 140050 },
-];
-
-const TIER_REVENUE: RevenueBreakdown[] = [
-  { tier: 'Starter', mrr: 8630, subscribers: 1234, arpu: 6.99, percentOfTotal: 6.2, growth: 12.3, color: '#3B82F6' },
-  { tier: 'Core', mrr: 32318, subscribers: 2156, arpu: 14.99, percentOfTotal: 23.1, growth: 18.7, color: '#10B981' },
-  { tier: 'Pro', mrr: 26280, subscribers: 876, arpu: 29.99, percentOfTotal: 18.8, growth: 24.5, color: '#8B5CF6' },
-  { tier: 'Pro+', mrr: 11698, subscribers: 234, arpu: 49.99, percentOfTotal: 8.4, growth: 31.2, color: '#F59E0B' },
-  { tier: 'Enterprise', mrr: 61124, subscribers: 89, arpu: 686.79, percentOfTotal: 43.6, growth: 42.1, color: '#EC4899' },
-];
-
-const MOCK_FORECAST: ForecastData[] = [
-  { month: 'Feb 2025', projected: 168060, conservative: 154500, optimistic: 182000, actual: undefined },
-  { month: 'Mar 2025', projected: 201672, conservative: 180900, optimistic: 224000, actual: undefined },
-  { month: 'Apr 2025', projected: 242006, conservative: 211980, optimistic: 276000, actual: undefined },
-  { month: 'May 2025', projected: 290408, conservative: 248220, optimistic: 340000, actual: undefined },
-  { month: 'Jun 2025', projected: 348489, conservative: 290770, optimistic: 420000, actual: undefined },
-];
-
 export function FinancialAnalytics({ onBack }: FinancialAnalyticsProps) {
   const [timeframe, setTimeframe] = useState<'3m' | '6m' | '12m' | 'all'>('6m');
-  const [isLoading, setIsLoading] = useState(false);
 
-  const currentMRR = MOCK_MRR_HISTORY[MOCK_MRR_HISTORY.length - 1].totalMRR;
-  const previousMRR = MOCK_MRR_HISTORY[MOCK_MRR_HISTORY.length - 2].totalMRR;
-  const mrrGrowth = ((currentMRR - previousMRR) / previousMRR * 100).toFixed(1);
+  // Fetch financial data from Stripe/Supabase
+  const { data, isLoading, error, refresh } = useFinancialAnalytics(timeframe);
 
-  const currentARR = currentMRR * 12;
-  const totalSubscribers = TIER_REVENUE.reduce((sum, t) => sum + t.subscribers, 0);
-  const blendedARPU = currentMRR / totalSubscribers;
+  // Extract metrics from data or use defaults
+  const metrics = data?.metrics || {
+    currentMRR: 0,
+    previousMRR: 0,
+    mrrGrowth: 0,
+    currentARR: 0,
+    totalSubscribers: 0,
+    blendedARPU: 0,
+    churnRate: 0,
+    nrr: 100,
+    grossMargin: 82,
+    quickRatio: 0,
+    logoChurn: 0,
+  };
 
-  const churnRate = (MOCK_MRR_HISTORY[MOCK_MRR_HISTORY.length - 1].churnMRR / previousMRR * 100).toFixed(1);
-  const nrr = ((currentMRR + MOCK_MRR_HISTORY[MOCK_MRR_HISTORY.length - 1].expansionMRR - MOCK_MRR_HISTORY[MOCK_MRR_HISTORY.length - 1].churnMRR) / previousMRR * 100).toFixed(0);
+  const mrrHistory = data?.mrrHistory || [];
+  const revenueByTier = data?.revenueByTier || [];
+  const forecast = data?.forecast || [];
+
+  const currentMRR = metrics.currentMRR;
+  const previousMRR = metrics.previousMRR;
+  const mrrGrowth = metrics.mrrGrowth.toFixed(1);
+  const currentARR = metrics.currentARR;
+  const totalSubscribers = metrics.totalSubscribers;
+  const blendedARPU = metrics.blendedARPU;
+  const churnRate = metrics.churnRate.toFixed(1);
+  const nrr = metrics.nrr.toFixed(0);
+  const grossMargin = metrics.grossMargin;
+  const quickRatio = metrics.quickRatio;
+  const logoChurn = metrics.logoChurn;
+
+  // Get latest MRR movement data
+  const latestMRR = mrrHistory.length > 0 ? mrrHistory[mrrHistory.length - 1] : null;
+
+  // Handle export
+  const handleExport = () => {
+    if (!data) {
+      toast.error('No data to export');
+      return;
+    }
+    downloadFinancialReport(data);
+    toast.success('Financial report downloaded');
+  };
 
   const formatCurrency = (value: number) => {
     if (value >= 1000000) return `$${(value / 1000000).toFixed(1)}M`;
@@ -137,7 +127,21 @@ export function FinancialAnalytics({ onBack }: FinancialAnalyticsProps) {
               </button>
             ))}
           </div>
-          <Button variant="outline" size="sm">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={refresh}
+            disabled={isLoading}
+          >
+            <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+            Refresh
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleExport}
+            disabled={!data || isLoading}
+          >
             <Download className="w-4 h-4 mr-2" />
             Export
           </Button>
@@ -180,7 +184,32 @@ export function FinancialAnalytics({ onBack }: FinancialAnalyticsProps) {
         />
       </div>
 
+      {/* Loading State */}
+      {isLoading && (
+        <div className="flex items-center justify-center py-12">
+          <Loader2 className="w-8 h-8 animate-spin text-accent" />
+          <span className="ml-2 text-neutral-600 dark:text-slate-400">Loading financial data...</span>
+        </div>
+      )}
+
+      {/* Error State */}
+      {error && (
+        <Card className="p-6 border-rose-200 bg-rose-50 dark:border-rose-800 dark:bg-rose-900/20">
+          <div className="flex items-center gap-2 text-rose-600 dark:text-rose-400">
+            <AlertTriangle className="w-5 h-5" />
+            <span className="font-medium">Error loading financial data</span>
+          </div>
+          <p className="mt-2 text-sm text-rose-700 dark:text-rose-300">{error}</p>
+          <Button variant="outline" size="sm" onClick={refresh} className="mt-4">
+            <RefreshCw className="w-4 h-4 mr-2" />
+            Retry
+          </Button>
+        </Card>
+      )}
+
       {/* MRR Movement */}
+      {!isLoading && !error && (
+      <>
       <Card className="p-6">
         <h2 className="text-lg font-semibold mb-4 text-neutral-900 dark:text-white">
           MRR Movement
@@ -192,7 +221,7 @@ export function FinancialAnalytics({ onBack }: FinancialAnalyticsProps) {
               <span className="text-xs font-medium">New MRR</span>
             </div>
             <p className="text-xl font-bold text-emerald-700 dark:text-emerald-300">
-              +{formatCurrency(MOCK_MRR_HISTORY[MOCK_MRR_HISTORY.length - 1].newMRR)}
+              +{formatCurrency(latestMRR?.newMRR || 0)}
             </p>
           </div>
           <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
@@ -201,7 +230,7 @@ export function FinancialAnalytics({ onBack }: FinancialAnalyticsProps) {
               <span className="text-xs font-medium">Expansion</span>
             </div>
             <p className="text-xl font-bold text-blue-700 dark:text-blue-300">
-              +{formatCurrency(MOCK_MRR_HISTORY[MOCK_MRR_HISTORY.length - 1].expansionMRR)}
+              +{formatCurrency(latestMRR?.expansionMRR || 0)}
             </p>
           </div>
           <div className="text-center p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg">
@@ -210,7 +239,7 @@ export function FinancialAnalytics({ onBack }: FinancialAnalyticsProps) {
               <span className="text-xs font-medium">Contraction</span>
             </div>
             <p className="text-xl font-bold text-amber-700 dark:text-amber-300">
-              -{formatCurrency(MOCK_MRR_HISTORY[MOCK_MRR_HISTORY.length - 1].contractionMRR)}
+              -{formatCurrency(latestMRR?.contractionMRR || 0)}
             </p>
           </div>
           <div className="text-center p-4 bg-rose-50 dark:bg-rose-900/20 rounded-lg">
@@ -219,7 +248,7 @@ export function FinancialAnalytics({ onBack }: FinancialAnalyticsProps) {
               <span className="text-xs font-medium">Churn</span>
             </div>
             <p className="text-xl font-bold text-rose-700 dark:text-rose-300">
-              -{formatCurrency(MOCK_MRR_HISTORY[MOCK_MRR_HISTORY.length - 1].churnMRR)}
+              -{formatCurrency(latestMRR?.churnMRR || 0)}
             </p>
           </div>
         </div>
@@ -239,11 +268,11 @@ export function FinancialAnalytics({ onBack }: FinancialAnalyticsProps) {
               </tr>
             </thead>
             <tbody>
-              {MOCK_MRR_HISTORY.map((row, idx) => (
+              {mrrHistory.map((row, idx) => (
                 <tr
                   key={row.month}
                   className={`border-b border-neutral-100 dark:border-slate-800 ${
-                    idx === MOCK_MRR_HISTORY.length - 1 ? 'bg-neutral-50 dark:bg-slate-800/50 font-medium' : ''
+                    idx === mrrHistory.length - 1 ? 'bg-neutral-50 dark:bg-slate-800/50 font-medium' : ''
                   }`}
                 >
                   <td className="py-3 px-4 text-neutral-900 dark:text-white">{row.month}</td>
@@ -272,7 +301,7 @@ export function FinancialAnalytics({ onBack }: FinancialAnalyticsProps) {
             Revenue by Tier
           </h2>
           <div className="space-y-4">
-            {TIER_REVENUE.map((tier) => (
+            {revenueByTier.map((tier) => (
               <div key={tier.tier} className="space-y-2">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
@@ -316,11 +345,13 @@ export function FinancialAnalytics({ onBack }: FinancialAnalyticsProps) {
             Revenue Forecast
           </h2>
           <div className="space-y-4">
-            {MOCK_FORECAST.map((forecast, idx) => {
-              const growthFromCurrent = ((forecast.projected - currentMRR) / currentMRR * 100).toFixed(0);
+            {forecast.map((item, idx) => {
+              const growthFromCurrent = currentMRR > 0
+                ? ((item.projected - currentMRR) / currentMRR * 100).toFixed(0)
+                : '0';
               return (
                 <div
-                  key={forecast.month}
+                  key={item.month}
                   className={`p-4 rounded-lg border ${
                     idx === 0
                       ? 'border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-900/20'
@@ -329,7 +360,7 @@ export function FinancialAnalytics({ onBack }: FinancialAnalyticsProps) {
                 >
                   <div className="flex items-center justify-between mb-2">
                     <span className="font-medium text-neutral-900 dark:text-white">
-                      {forecast.month}
+                      {item.month}
                     </span>
                     <Badge
                       variant={parseInt(growthFromCurrent) > 50 ? 'default' : 'secondary'}
@@ -341,15 +372,15 @@ export function FinancialAnalytics({ onBack }: FinancialAnalyticsProps) {
                   <div className="flex items-baseline gap-4">
                     <div>
                       <p className="text-2xl font-bold text-neutral-900 dark:text-white">
-                        {formatCurrency(forecast.projected)}
+                        {formatCurrency(item.projected)}
                       </p>
                       <p className="text-xs text-neutral-500 dark:text-slate-400">Projected</p>
                     </div>
                     <div className="text-right">
                       <p className="text-sm text-neutral-600 dark:text-slate-300">
-                        <span className="text-amber-600">{formatCurrency(forecast.conservative)}</span>
+                        <span className="text-amber-600">{formatCurrency(item.conservative)}</span>
                         {' - '}
-                        <span className="text-emerald-600">{formatCurrency(forecast.optimistic)}</span>
+                        <span className="text-emerald-600">{formatCurrency(item.optimistic)}</span>
                       </p>
                       <p className="text-xs text-neutral-500 dark:text-slate-400">Range</p>
                     </div>
@@ -375,31 +406,33 @@ export function FinancialAnalytics({ onBack }: FinancialAnalyticsProps) {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <HealthIndicator
             label="Gross Margin"
-            value="82%"
-            status="healthy"
+            value={`${grossMargin}%`}
+            status={grossMargin >= 70 ? 'healthy' : grossMargin >= 50 ? 'warning' : 'critical'}
             target=">70%"
           />
           <HealthIndicator
             label="Quick Ratio"
-            value="3.2"
-            status="healthy"
+            value={quickRatio.toFixed(1)}
+            status={quickRatio >= 1 ? 'healthy' : 'critical'}
             target=">1"
             description="(New MRR + Expansion) / (Churn + Contraction)"
           />
           <HealthIndicator
             label="Logo Churn"
-            value="2.8%"
-            status="healthy"
+            value={`${logoChurn.toFixed(1)}%`}
+            status={logoChurn < 5 ? 'healthy' : logoChurn < 10 ? 'warning' : 'critical'}
             target="<5%"
           />
           <HealthIndicator
             label="MRR Churn"
             value={`${churnRate}%`}
-            status={parseFloat(churnRate) < 5 ? 'healthy' : 'warning'}
+            status={parseFloat(churnRate) < 5 ? 'healthy' : parseFloat(churnRate) < 10 ? 'warning' : 'critical'}
             target="<5%"
           />
         </div>
       </Card>
+      </>
+      )}
     </div>
   );
 }
