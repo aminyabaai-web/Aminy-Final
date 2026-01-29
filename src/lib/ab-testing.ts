@@ -1,423 +1,589 @@
 /**
- * ab-testing.ts
- * A/B Testing Infrastructure for Aminy
+ * A/B Testing Infrastructure
  *
- * Features:
- * - Experiment definition and management
- * - User bucketing (deterministic)
- * - Event tracking
- * - Conversion analysis
- * - Feature flags integration
+ * Handles experiment definition, user assignment, and metrics tracking
+ * for prompt versioning, UI experiments, and feature flags.
  */
 
 import { supabase } from '../utils/supabase/client';
+import { useState, useEffect, useCallback } from 'react';
 
-// Experiment configuration
+// ============================================================================
+// Types
+// ============================================================================
+
+export type ExperimentStatus = 'draft' | 'running' | 'paused' | 'completed';
+export type VariantType = 'control' | 'treatment';
+
+export interface ExperimentVariant {
+  id: string;
+  name: string;
+  description?: string;
+  weight: number; // 0-100, percentage of traffic
+  config: Record<string, unknown>;
+}
+
 export interface Experiment {
   id: string;
   name: string;
   description: string;
-  variants: Variant[];
-  targetAudience?: AudienceFilter;
-  startDate: Date;
-  endDate?: Date;
-  status: 'draft' | 'running' | 'paused' | 'completed';
+  type: 'prompt' | 'ui' | 'feature' | 'pricing';
+  status: ExperimentStatus;
+  startDate?: string;
+  endDate?: string;
+  targetAudience?: {
+    tiers?: string[];
+    percentOfUsers?: number;
+    newUsersOnly?: boolean;
+  };
+  variants: ExperimentVariant[];
   primaryMetric: string;
   secondaryMetrics?: string[];
+  minimumSampleSize?: number;
+  createdAt: string;
+  updatedAt: string;
 }
 
-export interface Variant {
-  id: string;
-  name: string;
-  weight: number; // Percentage (0-100)
-  config?: Record<string, unknown>;
-}
-
-export interface AudienceFilter {
-  tiers?: string[];
-  minAge?: number;
-  maxAge?: number;
-  regions?: string[];
-  percentage?: number; // What % of eligible users to include
-}
-
-export interface ExperimentAssignment {
+export interface UserAssignment {
   experimentId: string;
   variantId: string;
-  userId: string;
-  assignedAt: Date;
+  assignedAt: string;
 }
 
 export interface ExperimentEvent {
   experimentId: string;
   variantId: string;
-  userId: string;
-  eventType: string;
-  eventData?: Record<string, unknown>;
-  timestamp: Date;
+  eventType: 'impression' | 'conversion' | 'engagement' | 'custom';
+  eventName: string;
+  value?: number;
+  metadata?: Record<string, unknown>;
+  timestamp: string;
 }
 
-// Active experiments
-const EXPERIMENTS: Experiment[] = [
-  {
-    id: 'onboarding-flow-v2',
-    name: 'Onboarding Flow V2',
-    description: 'Test new streamlined onboarding with fewer steps',
-    variants: [
-      { id: 'control', name: 'Original (12 steps)', weight: 50 },
-      { id: 'treatment', name: 'Streamlined (8 steps)', weight: 50 },
-    ],
-    startDate: new Date('2026-01-01'),
-    status: 'running',
-    primaryMetric: 'onboarding_completion_rate',
-    secondaryMetrics: ['time_to_complete', 'd7_retention'],
-  },
-  {
-    id: 'paywall-timing',
-    name: 'Paywall Timing Test',
-    description: 'Test showing paywall after 3 vs 5 free messages',
-    variants: [
-      { id: 'control', name: '5 free messages', weight: 33 },
-      { id: 'early', name: '3 free messages', weight: 33 },
-      { id: 'late', name: '7 free messages', weight: 34 },
-    ],
-    startDate: new Date('2026-01-15'),
-    status: 'running',
-    primaryMetric: 'conversion_rate',
-    secondaryMetrics: ['messages_before_upgrade', 'revenue_per_user'],
-  },
-  {
-    id: 'morning-mission-prompt',
-    name: 'Morning Mission Prompt Style',
-    description: 'Test different prompt styles for morning missions',
-    variants: [
-      { id: 'control', name: 'Standard notification', weight: 50 },
-      { id: 'gamified', name: 'Gamified with streak bonus', weight: 50 },
-    ],
-    startDate: new Date('2026-01-10'),
-    status: 'running',
-    primaryMetric: 'mission_completion_rate',
-    secondaryMetrics: ['streak_length', 'morning_engagement'],
-  },
-  {
-    id: 'ai-response-length',
-    name: 'AI Response Length',
-    description: 'Test shorter vs longer AI responses',
-    variants: [
-      { id: 'standard', name: 'Standard length', weight: 50 },
-      { id: 'concise', name: 'Concise responses', weight: 50 },
-    ],
-    startDate: new Date('2026-01-20'),
-    status: 'running',
-    primaryMetric: 'user_satisfaction',
-    secondaryMetrics: ['messages_per_session', 'follow_up_questions'],
-  },
-];
+export interface ExperimentResults {
+  experimentId: string;
+  variants: {
+    variantId: string;
+    variantName: string;
+    impressions: number;
+    conversions: number;
+    conversionRate: number;
+    engagementScore: number;
+    avgValue?: number;
+    confidence: number;
+  }[];
+  winner?: string;
+  statisticalSignificance: number;
+  sampleSize: number;
+  duration: number; // days
+}
 
-// In-memory cache for assignments
-const assignmentCache: Map<string, ExperimentAssignment> = new Map();
+// ============================================================================
+// Storage Keys
+// ============================================================================
+
+const ASSIGNMENTS_KEY = 'aminy_ab_assignments';
+const EVENTS_BUFFER_KEY = 'aminy_ab_events_buffer';
+
+// ============================================================================
+// Local Storage Helpers
+// ============================================================================
+
+function getStoredAssignments(): Record<string, UserAssignment> {
+  try {
+    const stored = localStorage.getItem(ASSIGNMENTS_KEY);
+    return stored ? JSON.parse(stored) : {};
+  } catch {
+    return {};
+  }
+}
+
+function setStoredAssignment(experimentId: string, assignment: UserAssignment): void {
+  try {
+    const assignments = getStoredAssignments();
+    assignments[experimentId] = assignment;
+    localStorage.setItem(ASSIGNMENTS_KEY, JSON.stringify(assignments));
+  } catch {
+    console.warn('[ABTesting] Failed to store assignment');
+  }
+}
+
+function getEventsBuffer(): ExperimentEvent[] {
+  try {
+    const stored = localStorage.getItem(EVENTS_BUFFER_KEY);
+    return stored ? JSON.parse(stored) : [];
+  } catch {
+    return [];
+  }
+}
+
+function addToEventsBuffer(event: ExperimentEvent): void {
+  try {
+    const buffer = getEventsBuffer();
+    buffer.push(event);
+    localStorage.setItem(EVENTS_BUFFER_KEY, JSON.stringify(buffer.slice(-100))); // Keep last 100
+  } catch {
+    console.warn('[ABTesting] Failed to buffer event');
+  }
+}
+
+function clearEventsBuffer(): void {
+  try {
+    localStorage.removeItem(EVENTS_BUFFER_KEY);
+  } catch {
+    // Ignore
+  }
+}
+
+// ============================================================================
+// User Assignment
+// ============================================================================
 
 /**
- * Generate a deterministic hash for user bucketing
+ * Get a deterministic hash for user assignment
  */
-function hashString(str: string): number {
+function hashUserForExperiment(userId: string, experimentId: string): number {
+  const str = \`\${userId}-\${experimentId}\`;
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
     const char = str.charCodeAt(i);
     hash = ((hash << 5) - hash) + char;
     hash = hash & hash; // Convert to 32-bit integer
   }
-  return Math.abs(hash);
+  return Math.abs(hash) % 100;
 }
 
 /**
- * Get variant assignment for a user in an experiment
- * Uses deterministic bucketing so same user always gets same variant
+ * Assign a user to an experiment variant
  */
-export function getVariant(experimentId: string, userId: string): Variant | null {
-  // Check cache first
-  const cacheKey = `${experimentId}:${userId}`;
-  const cached = assignmentCache.get(cacheKey);
-  if (cached) {
-    const experiment = EXPERIMENTS.find(e => e.id === experimentId);
-    return experiment?.variants.find(v => v.id === cached.variantId) || null;
-  }
-
-  // Find experiment
-  const experiment = EXPERIMENTS.find(e => e.id === experimentId);
-  if (!experiment || experiment.status !== 'running') {
+export function assignUserToVariant(
+  userId: string,
+  experiment: Experiment
+): UserAssignment | null {
+  // Check if experiment is running
+  if (experiment.status !== 'running') {
     return null;
   }
 
-  // Deterministic bucketing
-  const hash = hashString(`${experimentId}:${userId}`);
-  const bucket = hash % 100;
+  // Check existing assignment
+  const assignments = getStoredAssignments();
+  if (assignments[experiment.id]) {
+    return assignments[experiment.id];
+  }
 
-  // Find variant based on weights
-  let cumulative = 0;
+  // Calculate user's bucket (0-99)
+  const bucket = hashUserForExperiment(userId, experiment.id);
+
+  // Check if user is in target audience percentage
+  const targetPercent = experiment.targetAudience?.percentOfUsers ?? 100;
+  if (bucket >= targetPercent) {
+    return null; // User not in experiment
+  }
+
+  // Assign to variant based on weights
+  let cumulativeWeight = 0;
+  const normalizedBucket = (bucket / targetPercent) * 100;
+
   for (const variant of experiment.variants) {
-    cumulative += variant.weight;
-    if (bucket < cumulative) {
-      // Cache assignment
-      assignmentCache.set(cacheKey, {
-        experimentId,
+    cumulativeWeight += variant.weight;
+    if (normalizedBucket < cumulativeWeight) {
+      const assignment: UserAssignment = {
+        experimentId: experiment.id,
         variantId: variant.id,
-        userId,
-        assignedAt: new Date(),
-      });
-
-      // Log assignment (fire and forget)
-      logAssignment(experimentId, variant.id, userId);
-
-      return variant;
+        assignedAt: new Date().toISOString(),
+      };
+      setStoredAssignment(experiment.id, assignment);
+      return assignment;
     }
   }
 
-  return experiment.variants[0]; // Fallback to first variant
+  // Fallback to first variant
+  const assignment: UserAssignment = {
+    experimentId: experiment.id,
+    variantId: experiment.variants[0].id,
+    assignedAt: new Date().toISOString(),
+  };
+  setStoredAssignment(experiment.id, assignment);
+  return assignment;
 }
 
 /**
- * Check if user is in a specific variant
+ * Get user's variant for an experiment
  */
-export function isInVariant(experimentId: string, variantId: string, userId: string): boolean {
-  const variant = getVariant(experimentId, userId);
-  return variant?.id === variantId;
+export function getUserVariant(
+  userId: string,
+  experiment: Experiment
+): ExperimentVariant | null {
+  const assignment = assignUserToVariant(userId, experiment);
+  if (!assignment) return null;
+
+  return experiment.variants.find(v => v.id === assignment.variantId) ?? null;
 }
 
 /**
- * Get config value for user's variant
+ * Get variant config value
  */
 export function getVariantConfig<T>(
-  experimentId: string,
   userId: string,
+  experiment: Experiment,
   key: string,
   defaultValue: T
 ): T {
-  const variant = getVariant(experimentId, userId);
-  if (!variant?.config || !(key in variant.config)) {
-    return defaultValue;
-  }
-  return variant.config[key] as T;
+  const variant = getUserVariant(userId, experiment);
+  if (!variant) return defaultValue;
+
+  return (variant.config[key] as T) ?? defaultValue;
 }
 
-/**
- * Log experiment assignment to Supabase
- */
-async function logAssignment(
-  experimentId: string,
-  variantId: string,
-  userId: string
-): Promise<void> {
-  try {
-    await supabase.from('ab_experiment_assignments').insert({
-      experiment_id: experimentId,
-      variant_id: variantId,
-      user_id: userId,
-      assigned_at: new Date().toISOString(),
-    });
-  } catch (error) {
-    console.error('[ABTesting] Failed to log assignment:', error);
-  }
-}
+// ============================================================================
+// Event Tracking
+// ============================================================================
 
 /**
- * Track an event for an experiment
+ * Track an experiment event
  */
 export async function trackExperimentEvent(
-  experimentId: string,
   userId: string,
-  eventType: string,
-  eventData?: Record<string, unknown>
+  experimentId: string,
+  eventType: ExperimentEvent['eventType'],
+  eventName: string,
+  value?: number,
+  metadata?: Record<string, unknown>
 ): Promise<void> {
-  const variant = getVariant(experimentId, userId);
-  if (!variant) return;
+  const assignments = getStoredAssignments();
+  const assignment = assignments[experimentId];
+
+  if (!assignment) {
+    console.warn(\`[ABTesting] No assignment for experiment \${experimentId}\`);
+    return;
+  }
 
   const event: ExperimentEvent = {
     experimentId,
-    variantId: variant.id,
-    userId,
+    variantId: assignment.variantId,
     eventType,
-    eventData,
-    timestamp: new Date(),
+    eventName,
+    value,
+    metadata,
+    timestamp: new Date().toISOString(),
   };
 
+  // Buffer event locally
+  addToEventsBuffer(event);
+
+  // Try to send to backend
   try {
-    await supabase.from('ab_experiment_events').insert({
-      experiment_id: event.experimentId,
-      variant_id: event.variantId,
-      user_id: event.userId,
-      event_type: event.eventType,
-      event_data: event.eventData,
-      created_at: event.timestamp.toISOString(),
+    await supabase.from('experiment_events').insert({
+      experiment_id: experimentId,
+      variant_id: assignment.variantId,
+      user_id: userId,
+      event_type: eventType,
+      event_name: eventName,
+      event_value: value,
+      metadata,
+      created_at: event.timestamp,
     });
   } catch (error) {
-    console.error('[ABTesting] Failed to track event:', error);
+    console.warn('[ABTesting] Failed to track event, buffered locally:', error);
   }
 }
 
 /**
- * Get all active experiments
+ * Track impression (user saw the variant)
  */
-export function getActiveExperiments(): Experiment[] {
-  return EXPERIMENTS.filter(e => e.status === 'running');
+export function trackImpression(
+  userId: string,
+  experimentId: string,
+  metadata?: Record<string, unknown>
+): void {
+  trackExperimentEvent(userId, experimentId, 'impression', 'view', undefined, metadata);
 }
 
 /**
- * Get experiment by ID
+ * Track conversion (user completed desired action)
  */
-export function getExperiment(experimentId: string): Experiment | undefined {
-  return EXPERIMENTS.find(e => e.id === experimentId);
+export function trackConversion(
+  userId: string,
+  experimentId: string,
+  conversionName: string,
+  value?: number,
+  metadata?: Record<string, unknown>
+): void {
+  trackExperimentEvent(userId, experimentId, 'conversion', conversionName, value, metadata);
 }
 
 /**
- * Calculate experiment results (simplified)
+ * Track engagement (user interacted with variant)
  */
-export async function getExperimentResults(experimentId: string): Promise<{
-  experiment: Experiment;
-  variantResults: Array<{
-    variantId: string;
-    variantName: string;
-    participants: number;
-    conversions: number;
-    conversionRate: number;
-  }>;
-} | null> {
-  const experiment = EXPERIMENTS.find(e => e.id === experimentId);
-  if (!experiment) return null;
+export function trackEngagement(
+  userId: string,
+  experimentId: string,
+  engagementName: string,
+  value?: number,
+  metadata?: Record<string, unknown>
+): void {
+  trackExperimentEvent(userId, experimentId, 'engagement', engagementName, value, metadata);
+}
+
+// ============================================================================
+// Flush Events
+// ============================================================================
+
+/**
+ * Flush buffered events to backend
+ */
+export async function flushEvents(userId: string): Promise<void> {
+  const buffer = getEventsBuffer();
+  if (buffer.length === 0) return;
 
   try {
-    // Get assignments
-    const { data: assignments } = await supabase
-      .from('ab_experiment_assignments')
-      .select('variant_id, user_id')
-      .eq('experiment_id', experimentId);
+    const events = buffer.map(event => ({
+      experiment_id: event.experimentId,
+      variant_id: event.variantId,
+      user_id: userId,
+      event_type: event.eventType,
+      event_name: event.eventName,
+      event_value: event.value,
+      metadata: event.metadata,
+      created_at: event.timestamp,
+    }));
 
-    // Get conversion events
-    const { data: events } = await supabase
-      .from('ab_experiment_events')
-      .select('variant_id, user_id, event_type')
-      .eq('experiment_id', experimentId)
-      .eq('event_type', experiment.primaryMetric);
-
-    const variantResults = experiment.variants.map(variant => {
-      const variantAssignments = assignments?.filter(a => a.variant_id === variant.id) || [];
-      const variantConversions = events?.filter(e => e.variant_id === variant.id) || [];
-      const uniqueConversions = new Set(variantConversions.map(e => e.user_id)).size;
-
-      return {
-        variantId: variant.id,
-        variantName: variant.name,
-        participants: variantAssignments.length,
-        conversions: uniqueConversions,
-        conversionRate: variantAssignments.length > 0
-          ? (uniqueConversions / variantAssignments.length) * 100
-          : 0,
-      };
-    });
-
-    return { experiment, variantResults };
+    await supabase.from('experiment_events').insert(events);
+    clearEventsBuffer();
   } catch (error) {
-    console.error('[ABTesting] Failed to get results:', error);
+    console.warn('[ABTesting] Failed to flush events:', error);
+  }
+}
+
+// ============================================================================
+// Experiment Management
+// ============================================================================
+
+/**
+ * Fetch active experiments
+ */
+export async function getActiveExperiments(): Promise<Experiment[]> {
+  try {
+    const { data, error } = await supabase
+      .from('experiments')
+      .select('*')
+      .eq('status', 'running')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    return (data || []).map(row => ({
+      id: row.id,
+      name: row.name,
+      description: row.description,
+      type: row.type,
+      status: row.status,
+      startDate: row.start_date,
+      endDate: row.end_date,
+      targetAudience: row.target_audience,
+      variants: row.variants || [],
+      primaryMetric: row.primary_metric,
+      secondaryMetrics: row.secondary_metrics,
+      minimumSampleSize: row.minimum_sample_size,
+      createdAt: row.created_at,
+      updatedAt: row.updated_at,
+    }));
+  } catch (error) {
+    console.warn('[ABTesting] Failed to fetch experiments:', error);
+    return [];
+  }
+}
+
+/**
+ * Get experiment results
+ */
+export async function getExperimentResults(experimentId: string): Promise<ExperimentResults | null> {
+  try {
+    const { data, error } = await supabase
+      .rpc('get_experiment_results', { p_experiment_id: experimentId });
+
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    console.warn('[ABTesting] Failed to fetch results:', error);
     return null;
   }
 }
 
-// Feature Flags (simple implementation)
-const FEATURE_FLAGS: Record<string, {
-  enabled: boolean;
-  rolloutPercentage: number;
-  allowedTiers?: string[];
-}> = {
-  'new-community-ui': {
-    enabled: true,
-    rolloutPercentage: 100,
-  },
-  'ai-memory-v2': {
-    enabled: true,
-    rolloutPercentage: 50,
-  },
-  'provider-messaging': {
-    enabled: true,
-    rolloutPercentage: 100,
-    allowedTiers: ['core', 'pro'],
-  },
-  'fiscal-agent-export': {
-    enabled: true,
-    rolloutPercentage: 100,
-  },
-  'screening-tools': {
-    enabled: true,
-    rolloutPercentage: 75,
-  },
-  'dark-mode': {
-    enabled: false,
-    rolloutPercentage: 0,
-  },
-};
+// ============================================================================
+// Prompt Experiments
+// ============================================================================
+
+export interface PromptExperiment extends Experiment {
+  type: 'prompt';
+  variants: (ExperimentVariant & {
+    config: {
+      systemPrompt?: string;
+      temperature?: number;
+      maxTokens?: number;
+      responseStyle?: string;
+      includeEmoji?: boolean;
+    };
+  })[];
+}
 
 /**
- * Check if a feature flag is enabled for a user
+ * Get prompt config for current user
  */
-export function isFeatureEnabled(
-  featureKey: string,
+export function getPromptConfig(
   userId: string,
-  userTier?: string
-): boolean {
-  const flag = FEATURE_FLAGS[featureKey];
-  if (!flag || !flag.enabled) return false;
-
-  // Check tier restriction
-  if (flag.allowedTiers && userTier && !flag.allowedTiers.includes(userTier)) {
-    return false;
+  experiment: PromptExperiment
+): {
+  systemPrompt?: string;
+  temperature?: number;
+  maxTokens?: number;
+  responseStyle?: string;
+  includeEmoji?: boolean;
+} {
+  const variant = getUserVariant(userId, experiment);
+  if (!variant) {
+    return {};
   }
 
-  // Check rollout percentage
-  if (flag.rolloutPercentage < 100) {
-    const hash = hashString(`${featureKey}:${userId}`);
-    const bucket = hash % 100;
-    return bucket < flag.rolloutPercentage;
-  }
-
-  return true;
-}
-
-/**
- * Get all feature flags (for admin dashboard)
- */
-export function getAllFeatureFlags(): typeof FEATURE_FLAGS {
-  return FEATURE_FLAGS;
-}
-
-// React hook for experiments
-export function useExperiment(experimentId: string, userId: string) {
-  const variant = getVariant(experimentId, userId);
-
-  return {
-    variant,
-    variantId: variant?.id || null,
-    isControl: variant?.id === 'control',
-    isTreatment: variant?.id !== 'control',
-    config: variant?.config || {},
-    trackEvent: (eventType: string, data?: Record<string, unknown>) =>
-      trackExperimentEvent(experimentId, userId, eventType, data),
+  return variant.config as {
+    systemPrompt?: string;
+    temperature?: number;
+    maxTokens?: number;
+    responseStyle?: string;
+    includeEmoji?: boolean;
   };
 }
 
-// React hook for feature flags
-export function useFeatureFlag(featureKey: string, userId: string, userTier?: string) {
-  return isFeatureEnabled(featureKey, userId, userTier);
+// ============================================================================
+// Feature Flags (Simple A/B)
+// ============================================================================
+
+export interface FeatureFlag {
+  id: string;
+  name: string;
+  enabled: boolean;
+  percentage: number; // 0-100
+  targetTiers?: string[];
 }
 
+const featureFlags: Map<string, FeatureFlag> = new Map();
+
+/**
+ * Check if a feature is enabled for user
+ */
+export function isFeatureEnabled(
+  userId: string,
+  flagId: string,
+  userTier?: string
+): boolean {
+  const flag = featureFlags.get(flagId);
+  if (!flag || !flag.enabled) return false;
+
+  // Check tier restriction
+  if (flag.targetTiers && userTier && !flag.targetTiers.includes(userTier)) {
+    return false;
+  }
+
+  // Check percentage rollout
+  const bucket = hashUserForExperiment(userId, flagId);
+  return bucket < flag.percentage;
+}
+
+/**
+ * Register a feature flag
+ */
+export function registerFeatureFlag(flag: FeatureFlag): void {
+  featureFlags.set(flag.id, flag);
+}
+
+// ============================================================================
+// React Hook
+// ============================================================================
+
+export function useExperiment(experimentId: string) {
+  const [experiment, setExperiment] = useState<Experiment | null>(null);
+  const [variant, setVariant] = useState<ExperimentVariant | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadExperiment() {
+      const experiments = await getActiveExperiments();
+      const exp = experiments.find(e => e.id === experimentId);
+
+      if (exp) {
+        setExperiment(exp);
+        // Get user ID from localStorage or generate one
+        const userId = localStorage.getItem('user_id') || 'anonymous';
+        const userVariant = getUserVariant(userId, exp);
+        setVariant(userVariant);
+      }
+
+      setIsLoading(false);
+    }
+
+    loadExperiment();
+  }, [experimentId]);
+
+  const trackEvent = useCallback(
+    (eventType: ExperimentEvent['eventType'], eventName: string, value?: number) => {
+      if (!experiment) return;
+      const userId = localStorage.getItem('user_id') || 'anonymous';
+      trackExperimentEvent(userId, experiment.id, eventType, eventName, value);
+    },
+    [experiment]
+  );
+
+  const getConfig = useCallback(
+    <T,>(key: string, defaultValue: T): T => {
+      if (!variant) return defaultValue;
+      return (variant.config[key] as T) ?? defaultValue;
+    },
+    [variant]
+  );
+
+  return {
+    experiment,
+    variant,
+    isLoading,
+    trackEvent,
+    trackImpression: () => trackEvent('impression', 'view'),
+    trackConversion: (name: string, value?: number) => trackEvent('conversion', name, value),
+    trackEngagement: (name: string, value?: number) => trackEvent('engagement', name, value),
+    getConfig,
+    isControl: variant?.id === experiment?.variants[0]?.id,
+    isTreatment: variant?.id !== experiment?.variants[0]?.id,
+  };
+}
+
+export function useFeatureFlag(flagId: string, userTier?: string) {
+  const [isEnabled, setIsEnabled] = useState(false);
+
+  useEffect(() => {
+    const userId = localStorage.getItem('user_id') || 'anonymous';
+    setIsEnabled(isFeatureEnabled(userId, flagId, userTier));
+  }, [flagId, userTier]);
+
+  return isEnabled;
+}
+
+// ============================================================================
+// Default Export
+// ============================================================================
+
 export default {
-  getVariant,
-  isInVariant,
+  assignUserToVariant,
+  getUserVariant,
   getVariantConfig,
   trackExperimentEvent,
+  trackImpression,
+  trackConversion,
+  trackEngagement,
+  flushEvents,
   getActiveExperiments,
-  getExperiment,
   getExperimentResults,
+  getPromptConfig,
   isFeatureEnabled,
-  getAllFeatureFlags,
+  registerFeatureFlag,
   useExperiment,
   useFeatureFlag,
 };
