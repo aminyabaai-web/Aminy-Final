@@ -657,8 +657,17 @@ export const TalkToAminyEnhanced: React.FC<TalkToAminyEnhancedProps> = ({
       {/* Enhanced Messages with Better Layout */}
       {messages.length > 0 && (
         <ScrollArea className="max-h-80 mb-4">
-          <div className="space-y-3 sm:space-y-4 pr-4">
-            {messages.map((message, index) => (
+          <div
+            className="space-y-3 sm:space-y-4 pr-4"
+            role="log"
+            aria-label="Conversation with Aminy"
+            aria-live="polite"
+            aria-relevant="additions"
+            aria-busy={isStreaming}
+          >
+            {messages.map((message, index) => {
+              const messageAriaLabel = `${message.role === 'user' ? 'You said' : 'Aminy said'} at ${message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+              return (
               <div
                 key={message.id}
                 className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'} group`}
@@ -669,6 +678,8 @@ export const TalkToAminyEnhanced: React.FC<TalkToAminyEnhancedProps> = ({
                       ? 'bg-accent text-white'
                       : 'bg-muted text-foreground border border-border/50'
                   }`}
+                  role="group"
+                  aria-label={messageAriaLabel}
                 >
                   {/* Message Header with Timestamp */}
                   <div className="flex items-center justify-between mb-2">
@@ -761,15 +772,16 @@ export const TalkToAminyEnhanced: React.FC<TalkToAminyEnhancedProps> = ({
                   )}
                 </div>
               </div>
-            ))}
-            
+            );
+            })}
+
             {/* Enhanced Typing Indicator */}
             {isTyping && (
-              <div className="flex justify-start">
+              <div className="flex justify-start" role="status" aria-live="polite">
                 <div className="bg-muted border border-border/50 p-4 rounded-lg">
                   <div className="flex items-center gap-3">
-                    <CompassIcon className="w-4 h-4 animate-spin" />
-                    <div className="flex space-x-1">
+                    <CompassIcon className="w-4 h-4 animate-spin" aria-hidden="true" />
+                    <div className="flex space-x-1" aria-hidden="true">
                       <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce"></div>
                       <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
                       <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>

@@ -363,7 +363,12 @@ export function CommunityFeed({
       </div>
 
       {/* Posts Feed */}
-      <div className="space-y-3 sm:space-y-4">
+      <div
+        className="space-y-3 sm:space-y-4"
+        role="feed"
+        aria-label="Community posts"
+        aria-busy={loading}
+      >
         {loading ? (
           <Card className="p-8 text-center">
             <div className="animate-pulse">
@@ -379,7 +384,7 @@ export function CommunityFeed({
             />
           </Card>
         ) : (
-          filteredPosts.map((post) => (
+          filteredPosts.map((post, index) => (
             <PostCard
               key={post.id}
               post={post}
@@ -387,6 +392,8 @@ export function CommunityFeed({
               onLike={() => handleLike(post.id)}
               onToggleComments={() => toggleComments(post.id)}
               showComments={expandedComments.has(post.id)}
+              positionInFeed={index + 1}
+              totalPosts={filteredPosts.length}
               canPin={canPinPosts}
               onViewProfile={onViewProfile}
               onDelete={async (postId) => {
@@ -468,6 +475,8 @@ interface PostCardProps {
   onFollow?: (userId: string) => void;
   isFollowing?: boolean;
   isFollowLoading?: boolean;
+  positionInFeed?: number;
+  totalPosts?: number;
 }
 
 function PostCard({
@@ -485,6 +494,8 @@ function PostCard({
   onFollow,
   isFollowing = false,
   isFollowLoading = false,
+  positionInFeed,
+  totalPosts,
 }: PostCardProps) {
   const [newComment, setNewComment] = useState('');
   const [showReportDialog, setShowReportDialog] = useState(false);
@@ -567,13 +578,21 @@ function PostCard({
     // In production, would refresh comments
   };
 
+  const postLabel = `Post by ${post.isAnonymous ? 'Anonymous Parent' : post.userName}: ${post.content.slice(0, 50)}${post.content.length > 50 ? '...' : ''}`;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.2 }}
     >
-      <Card className={`p-4 ${post.isPinned ? 'border-amber-300 bg-amber-50/50' : ''}`}>
+      <Card
+        className={`p-4 ${post.isPinned ? 'border-amber-300 bg-amber-50/50' : ''}`}
+        role="article"
+        aria-label={postLabel}
+        aria-posinset={positionInFeed}
+        aria-setsize={totalPosts}
+      >
         {/* Pinned indicator */}
         {post.isPinned && (
           <div className="flex items-center gap-1 text-xs text-amber-600 mb-2">
@@ -678,13 +697,24 @@ function PostCard({
 
           {/* Report Dialog */}
           {showReportDialog && (
-            <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={() => setShowReportDialog(false)}>
-              <div className="bg-white dark:bg-slate-900 rounded-xl p-6 max-w-sm w-full" onClick={(e) => e.stopPropagation()}>
+            <div
+              className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+              onClick={() => setShowReportDialog(false)}
+              role="presentation"
+            >
+              <div
+                className="bg-white dark:bg-slate-900 rounded-xl p-6 max-w-sm w-full"
+                onClick={(e) => e.stopPropagation()}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="report-dialog-title"
+                aria-describedby="report-dialog-description"
+              >
                 <div className="flex items-center gap-2 mb-4">
-                  <AlertTriangle className="w-5 h-5 text-amber-500" />
-                  <h3 className="font-semibold text-gray-900 dark:text-white">Report this post</h3>
+                  <AlertTriangle className="w-5 h-5 text-amber-500" aria-hidden="true" />
+                  <h3 id="report-dialog-title" className="font-semibold text-gray-900 dark:text-white">Report this post</h3>
                 </div>
-                <p className="text-sm text-gray-600 dark:text-slate-400 mb-4">Why are you reporting this post?</p>
+                <p id="report-dialog-description" className="text-sm text-gray-600 dark:text-slate-400 mb-4">Why are you reporting this post?</p>
                 <div className="space-y-2">
                   {[
                     'Inappropriate content',
@@ -763,9 +793,11 @@ function PostCard({
           <div className="flex items-center gap-3 sm:gap-4">
             <button
               onClick={onLike}
-              className={`flex items-center gap-1 text-sm ${
+              className={`flex items-center gap-1 text-sm min-h-[44px] px-2 ${
                 isLiked ? 'text-red-500' : 'text-gray-500 hover:text-red-500'
               }`}
+              aria-pressed={isLiked}
+              aria-label={`${isLiked ? 'Unlike' : 'Like'} post, ${post.likes} ${post.likes === 1 ? 'like' : 'likes'}`}
             >
               <Heart className={`w-5 h-5 ${isLiked ? 'fill-current' : ''}`} />
               <span>{post.likes}</span>
@@ -773,7 +805,9 @@ function PostCard({
 
             <button
               onClick={onToggleComments}
-              className="flex items-center gap-1 text-sm text-gray-500 hover:text-blue-500"
+              className="flex items-center gap-1 text-sm text-gray-500 hover:text-blue-500 min-h-[44px] px-2"
+              aria-expanded={showComments}
+              aria-label={`${showComments ? 'Hide' : 'Show'} comments, ${post.commentCount} ${post.commentCount === 1 ? 'comment' : 'comments'}`}
             >
               <MessageCircle className="w-5 h-5" />
               <span>{post.commentCount}</span>
@@ -791,6 +825,7 @@ function PostCard({
           <button
             onClick={handleBookmark}
             className={`min-h-[44px] px-2 ${bookmarked ? 'text-amber-500' : 'text-gray-400 hover:text-amber-500'}`}
+            aria-pressed={bookmarked}
             aria-label={bookmarked ? 'Remove from bookmarks' : 'Add to bookmarks'}
           >
             <Bookmark className={`w-5 h-5 ${bookmarked ? 'fill-current' : ''}`} />
@@ -924,6 +959,7 @@ function CreatePostModal({
       exit={{ opacity: 0 }}
       className="fixed inset-0 bg-black/50 flex items-end sm:items-center justify-center z-50"
       onClick={onClose}
+      role="presentation"
     >
       <motion.div
         initial={{ y: '100%' }}
@@ -931,11 +967,18 @@ function CreatePostModal({
         exit={{ y: '100%' }}
         className="bg-white dark:bg-slate-900 rounded-t-xl sm:rounded-xl w-full max-w-lg max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="create-post-title"
       >
         {/* Header */}
         <div className="sticky top-0 bg-white dark:bg-slate-900 p-4 border-b border-gray-200 dark:border-slate-700 flex items-center justify-between">
-          <h3 className="text-lg font-bold text-gray-900 dark:text-white">Share with Community</h3>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 dark:hover:text-slate-300">
+          <h3 id="create-post-title" className="text-lg font-bold text-gray-900 dark:text-white">Share with Community</h3>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-600 dark:hover:text-slate-300 min-h-[44px] min-w-[44px] flex items-center justify-center"
+            aria-label="Close dialog"
+          >
             <X className="w-6 h-6" />
           </button>
         </div>
@@ -967,7 +1010,9 @@ function CreatePostModal({
 
           {/* Content */}
           <div>
+            <label htmlFor="post-content" className="sr-only">Post content</label>
             <textarea
+              id="post-content"
               value={content}
               onChange={(e) => setContent(e.target.value)}
               placeholder={
@@ -983,6 +1028,8 @@ function CreatePostModal({
               }
               rows={5}
               className="w-full p-3 border border-gray-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500 resize-none"
+              aria-required="true"
+              aria-invalid={content.trim().length === 0 ? undefined : false}
             />
           </div>
 
@@ -1006,11 +1053,15 @@ function CreatePostModal({
               className={`w-12 h-6 rounded-full transition-colors ${
                 isAnonymous ? 'bg-teal-600' : 'bg-gray-300'
               }`}
+              role="switch"
+              aria-checked={isAnonymous}
+              aria-label="Post anonymously"
             >
               <div
                 className={`w-5 h-5 bg-white rounded-full shadow transition-transform ${
                   isAnonymous ? 'translate-x-6' : 'translate-x-0.5'
                 }`}
+                aria-hidden="true"
               />
             </button>
           </div>

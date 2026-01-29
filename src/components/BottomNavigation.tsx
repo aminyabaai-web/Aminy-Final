@@ -212,6 +212,8 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, navigate }: 
                 }}
                 aria-label={tab.ariaLabel}
                 aria-current={isActive ? 'page' : undefined}
+                aria-expanded={tab.id === 'more' ? showMoreMenu : undefined}
+                aria-haspopup={tab.id === 'more' ? 'dialog' : undefined}
                 role="tab"
                 disabled={isDisabled}
               >
@@ -256,7 +258,12 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, navigate }: 
           />
 
           {/* Menu Sheet */}
-          <div className="fixed bottom-0 left-0 right-0 z-[70] bg-white dark:bg-slate-800 rounded-t-2xl border-t border-gray-200 dark:border-slate-600 max-h-[70vh] overflow-y-auto">
+          <div
+            className="fixed bottom-0 left-0 right-0 z-[70] bg-white dark:bg-slate-800 rounded-t-2xl border-t border-gray-200 dark:border-slate-600 max-h-[70vh] overflow-y-auto"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="more-menu-title"
+          >
             <div className="max-w-md mx-auto">
               {/* Pull indicator */}
               <div className="flex justify-center pt-3 pb-2">
@@ -265,7 +272,7 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, navigate }: 
 
               {/* Header */}
               <div className="flex items-center justify-between px-4 pb-3 border-b border-gray-100 dark:border-slate-700">
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">More</h2>
+                <h2 id="more-menu-title" className="text-lg font-semibold text-gray-900 dark:text-gray-100">More</h2>
                 <button
                   onClick={() => setShowMoreMenu(false)}
                   className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
@@ -276,7 +283,7 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, navigate }: 
               </div>
 
               {/* Menu Items */}
-              <div className="p-4 space-y-1">
+              <nav className="p-4 space-y-1" role="menu" aria-label="Additional features">
                 {moreItems.map((item) => {
                   const Icon = item.icon;
                   const isItemActive = activeTab === item.id;
@@ -294,7 +301,9 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, navigate }: 
                           : 'hover:bg-gray-50 dark:hover:bg-slate-700'
                         }
                       `}
-                      aria-label={`Open ${item.label}`}
+                      role="menuitem"
+                      aria-label={`${item.label}: ${item.description}`}
+                      aria-current={isItemActive ? 'page' : undefined}
                     >
                       <div className="flex items-center space-x-3">
                         <div className={`
@@ -322,7 +331,7 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, navigate }: 
                     </button>
                   );
                 })}
-              </div>
+              </nav>
 
               {/* Safe area padding */}
               <div style={{ height: 'max(16px, env(safe-area-inset-bottom))' }} />
