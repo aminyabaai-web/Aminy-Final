@@ -1,0 +1,318 @@
+/* ========================================
+   ACCESSIBILITY STYLES
+   ========================================
+   Focus states, reduced motion, screen reader utilities
+   ======================================== */
+
+/* ----------------------------------------
+   FOCUS VISIBLE STYLES
+   Visible focus rings for keyboard navigation only
+   ---------------------------------------- */
+
+/* Global focus-visible styles for keyboard users */
+*:focus-visible {
+  outline: 2px solid #0891b2 !important;
+  outline-offset: 2px !important;
+  border-radius: 4px;
+}
+
+/* Remove default focus outline for mouse/touch users */
+*:focus:not(:focus-visible) {
+  outline: none !important;
+}
+
+/* High contrast focus for keyboard navigation mode */
+body.keyboard-nav *:focus-visible {
+  outline: 3px solid #0891b2 !important;
+  outline-offset: 3px !important;
+  box-shadow: 0 0 0 6px rgba(8, 145, 178, 0.2);
+}
+
+/* ----------------------------------------
+   SKIP LINKS
+   Allow keyboard users to skip to main content
+   ---------------------------------------- */
+
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  padding: 12px 24px;
+  background: #0891b2;
+  color: white;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 0 0 8px 8px;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* ----------------------------------------
+   SCREEN READER ONLY
+   Visually hidden but accessible to screen readers
+   ---------------------------------------- */
+
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Show on focus for skip links */
+.sr-only-focusable:focus,
+.sr-only-focusable:focus-within {
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+  padding: inherit !important;
+  margin: inherit !important;
+  overflow: visible !important;
+  clip: auto !important;
+  white-space: normal !important;
+}
+
+/* ----------------------------------------
+   REDUCED MOTION
+   Respect user's motion preferences
+   ---------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ----------------------------------------
+   HIGH CONTRAST MODE
+   Enhanced visibility for users with visual impairments
+   ---------------------------------------- */
+
+@media (prefers-contrast: high) {
+  /* Increase border visibility */
+  button,
+  input,
+  textarea,
+  select {
+    border-width: 2px !important;
+  }
+
+  /* Stronger focus indicators */
+  *:focus-visible {
+    outline-width: 3px !important;
+  }
+
+  /* Ensure text has strong contrast */
+  .text-slate-400,
+  .text-slate-500,
+  .text-gray-400,
+  .text-gray-500 {
+    color: #374151 !important;
+  }
+
+  .dark .text-slate-400,
+  .dark .text-slate-500,
+  .dark .text-gray-400,
+  .dark .text-gray-500 {
+    color: #d1d5db !important;
+  }
+}
+
+/* ----------------------------------------
+   TOUCH TARGETS
+   Ensure minimum 44x44px touch targets (WCAG 2.1 AAA)
+   ---------------------------------------- */
+
+@media (pointer: coarse) {
+  button,
+  a,
+  input[type="checkbox"],
+  input[type="radio"],
+  select,
+  [role="button"],
+  [role="tab"],
+  [role="menuitem"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Inline links get padding for larger tap area */
+  p a,
+  li a {
+    padding: 8px 4px;
+    margin: -8px -4px;
+  }
+}
+
+/* ----------------------------------------
+   FORCED COLORS MODE (Windows High Contrast)
+   ---------------------------------------- */
+
+@media (forced-colors: active) {
+  /* Use system colors */
+  *:focus-visible {
+    outline: 2px solid ButtonText !important;
+  }
+
+  button,
+  [role="button"] {
+    border: 2px solid ButtonText;
+  }
+
+  /* Ensure links are distinguishable */
+  a {
+    text-decoration: underline;
+  }
+}
+
+/* ----------------------------------------
+   ARIA LIVE REGIONS
+   Styling for screen reader announcements
+   ---------------------------------------- */
+
+[aria-live="polite"],
+[aria-live="assertive"] {
+  /* Ensure live regions are not visually intrusive */
+}
+
+.aria-live-announcer {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ----------------------------------------
+   KEYBOARD NAVIGATION HINTS
+   Visual indicators for keyboard shortcuts
+   ---------------------------------------- */
+
+body.keyboard-nav [data-shortcut]::after {
+  content: attr(data-shortcut);
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  color: #6b7280;
+  background: #f3f4f6;
+  padding: 2px 6px;
+  border-radius: 4px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+body.keyboard-nav [data-shortcut]:focus-visible::after {
+  opacity: 1;
+}
+
+/* ----------------------------------------
+   LOADING STATE ACCESSIBILITY
+   Ensure loading states are accessible
+   ---------------------------------------- */
+
+[aria-busy="true"] {
+  cursor: wait;
+}
+
+[aria-busy="true"] * {
+  pointer-events: none;
+}
+
+/* ----------------------------------------
+   ERROR STATE ACCESSIBILITY
+   Ensure errors are clearly indicated
+   ---------------------------------------- */
+
+[aria-invalid="true"] {
+  border-color: #dc2626 !important;
+}
+
+[aria-invalid="true"]:focus-visible {
+  outline-color: #dc2626 !important;
+  box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.2) !important;
+}
+
+/* ----------------------------------------
+   DISABLED STATE ACCESSIBILITY
+   Ensure disabled elements are clearly indicated
+   ---------------------------------------- */
+
+[aria-disabled="true"],
+[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ----------------------------------------
+   TEXT SCALING
+   Support user font size preferences
+   ---------------------------------------- */
+
+@media (min-resolution: 1dppx) {
+  html {
+    /* Allow text to scale based on user preferences */
+    font-size: 100%;
+  }
+}
+
+/* Ensure text doesn't get cut off when scaled */
+* {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+/* ----------------------------------------
+   PRINT STYLES
+   Accessible print output
+   ---------------------------------------- */
+
+@media print {
+  /* Expand all collapsed content for print */
+  [aria-expanded="false"] {
+    display: block !important;
+  }
+
+  /* Show link URLs in print */
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    color: #666;
+  }
+
+  /* Don't show URLs for internal links */
+  a[href^="#"]::after,
+  a[href^="javascript:"]::after {
+    content: "";
+  }
+
+  /* Hide interactive elements that don't work in print */
+  button:not(.print-visible),
+  [role="button"]:not(.print-visible),
+  input:not(.print-visible),
+  video,
+  audio {
+    display: none !important;
+  }
+}

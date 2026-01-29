@@ -10,6 +10,23 @@ import { injectSafeAreaStyles } from "./lib/mobile-safe-areas.ts";
 // Service worker for offline support
 import { registerServiceWorker } from "./lib/service-worker.ts";
 
+// Initialize keyboard navigation detection for accessibility
+function initKeyboardNavDetection() {
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === 'Tab') {
+      document.body.classList.add('keyboard-nav');
+    }
+  };
+
+  const handleMouseDown = () => {
+    document.body.classList.remove('keyboard-nav');
+  };
+
+  window.addEventListener('keydown', handleKeyDown);
+  window.addEventListener('mousedown', handleMouseDown);
+}
+initKeyboardNavDetection();
+
 // Initialize Sentry first (before anything can error)
 initSentry();
 
