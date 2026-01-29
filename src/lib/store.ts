@@ -525,3 +525,193 @@ export async function syncStreaksFromCloud(userId: string): Promise<void> {
     // Keep local streaks on error
   }
 }
+
+// ============================================================================
+// AI STATE STORE (Consolidates AIContext)
+// ============================================================================
+
+export interface ChildProfile {
+  name: string;
+  age?: number;
+  neuroType: string;
+}
+
+export interface AIProcessingState {
+  isProcessing: boolean;
+  lastResponse: string | null;
+  error: string | null;
+  conversationId: string | null;
+}
+
+interface AIStoreState {
+  parentStress: number;
+  childProfile: ChildProfile;
+  aiProcessing: AIProcessingState;
+
+  // Actions
+  updateParentStress: (stress: number) => void;
+  updateChildProfile: (updates: Partial<ChildProfile>) => void;
+  setAIProcessing: (processing: boolean) => void;
+  setAIResponse: (response: string | null) => void;
+  setAIError: (error: string | null) => void;
+  setAIConversationId: (id: string | null) => void;
+  resetAIState: () => void;
+}
+
+const initialAIState = {
+  parentStress: 5,
+  childProfile: { name: '', age: undefined, neuroType: '' },
+  aiProcessing: {
+    isProcessing: false,
+    lastResponse: null,
+    error: null,
+    conversationId: null,
+  },
+};
+
+export const useAIStore = create<AIStoreState>()((set) => ({
+  ...initialAIState,
+
+  updateParentStress: (stress) => set({
+    parentStress: Math.max(0, Math.min(10, stress))
+  }),
+
+  updateChildProfile: (updates) => set((state) => ({
+    childProfile: { ...state.childProfile, ...updates },
+  })),
+
+  setAIProcessing: (isProcessing) => set((state) => ({
+    aiProcessing: { ...state.aiProcessing, isProcessing },
+  })),
+
+  setAIResponse: (lastResponse) => set((state) => ({
+    aiProcessing: { ...state.aiProcessing, lastResponse },
+  })),
+
+  setAIError: (error) => set((state) => ({
+    aiProcessing: { ...state.aiProcessing, error },
+  })),
+
+  setAIConversationId: (conversationId) => set((state) => ({
+    aiProcessing: { ...state.aiProcessing, conversationId },
+  })),
+
+  resetAIState: () => set(initialAIState),
+}));
+
+// ============================================================================
+// CONVERSATION STATE STORE (Consolidates ConversationContext)
+// ============================================================================
+
+export interface Message {
+  id: string;
+  role: 'user' | 'assistant' | 'system';
+  content: string;
+  timestamp: number;
+  // Extended fields for rich messages
+  metadata?: {
+    sources?: string[];
+    confidence?: number;
+    toolUsed?: string;
+  };
+}
+
+interface ConversationStoreState {
+  messages: Message[];
+  isLoading: boolean;
+  currentConversationId: string | null;
+
+  // Actions
+  addMessage: (message: Omit<Message, 'id' | 'timestamp'>) => void;
+  clearMessages: () => void;
+  setLoading: (loading: boolean) => void;
+  setConversationId: (id: string | null) => void;
+  loadConversation: (messages: Message[]) => void;
+  updateMessage: (id: string, updates: Partial<Message>) => void;
+  removeMessage: (id: string) => void;
+}
+
+export const useConversationStore = create<ConversationStoreState>()((set) => ({
+  messages: [],
+  isLoading: false,
+  currentConversationId: null,
+
+  addMessage: (message) => {
+    const newMessage: Message = {
+      ...message,
+      id: `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      timestamp: Date.now(),
+    };
+    set((state) => ({
+      messages: [...state.messages, newMessage],
+    }));
+  },
+
+  clearMessages: () => set({ messages: [] }),
+
+  setLoading: (isLoading) => set({ isLoading }),
+
+  setConversationId: (currentConversationId) => set({ currentConversationId }),
+
+  loadConversation: (messages) => set({ messages }),
+
+  updateMessage: (id, updates) => set((state) => ({
+    messages: state.messages.map((m) =>
+      m.id === id ? { ...m, ...updates } : m
+    ),
+  })),
+
+  removeMessage: (id) => set((state) => ({
+    messages: state.messages.filter((m) => m.id !== id),
+  })),
+}));
+
+// ============================================================================
+// COMPATIBILITY HOOKS (For gradual migration from Context)
+// ============================================================================
+
+/**
+ * Hook that provides AIContext-compatible interface using Zustand
+ * Use this during migration, then switch to useAIStore directly
+ */
+export function useAICompatibility() {
+  const store = useAIStore();
+  const aminyStore = useAminyStore();
+
+  return {
+    parentStress: store.parentStress,
+    childProfile: store.childProfile,
+    currentGoals: aminyStore.goals.filter(g => g.status === 'active'),
+    updateParentStress: store.updateParentStress,
+    updateChildProfile: store.updateChildProfile,
+    addGoal: aminyStore.addGoal,
+    removeGoal: aminyStore.deleteGoal,
+    state: store.aiProcessing,
+    setProcessing: store.setAIProcessing,
+    setResponse: store.setAIResponse,
+    setError: store.setAIError,
+    setConversationId: store.setAIConversationId,
+    reset: store.resetAIState,
+  };
+}
+
+/**
+ * Hook that provides ConversationContext-compatible interface using Zustand
+ * Use this during migration, then switch to useConversationStore directly
+ */
+export function useConversationCompatibility() {
+  const store = useConversationStore();
+
+  return {
+    state: {
+      messages: store.messages,
+      isLoading: store.isLoading,
+      currentConversationId: store.currentConversationId,
+    },
+    addMessage: store.addMessage,
+    clearMessages: store.clearMessages,
+    setLoading: store.setLoading,
+    setConversationId: store.setConversationId,
+    loadConversation: store.loadConversation,
+  };
+}
