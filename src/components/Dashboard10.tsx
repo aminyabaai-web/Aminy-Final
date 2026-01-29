@@ -54,6 +54,7 @@ import { ActionItems } from './ActionItems';
 import { HealthDataIntegration } from './HealthDataIntegration';
 import { TrialProgressBanner, SoftNudgeModal, HardPaywallModal } from './TrialExperience';
 import { ShareInsightInline } from './ShareInsight';
+import { ReferralCard } from './ReferralCard';
 import { supabase } from '../utils/supabase/client';
 
 // Types
@@ -695,6 +696,22 @@ export function Dashboard10({
             />
           </section>
         )}
+
+        {/* ========================================
+            7. REFERRAL - Viral growth mechanism
+            Prominent placement for better K-factor
+            ======================================== */}
+        <section>
+          <ReferralCard
+            referralCode={userId?.slice(0, 8) || 'AMINY'}
+            referralCount={0}
+            rewardEarned={0}
+            variant="dashboard"
+            onShare={() => {
+              // Track share event for analytics
+            }}
+          />
+        </section>
       </main>
 
       {/* ========================================

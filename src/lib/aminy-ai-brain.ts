@@ -14,6 +14,7 @@
 
 import { store } from './store';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
+import { supabase } from '../utils/supabase/client';
 
 interface ChildContext {
   id: string;
@@ -217,7 +218,7 @@ export interface AminyAIContext {
  */
 export async function buildAIContext(): Promise<AminyAIContext> {
   const state = store.getState();
-  const currentChild = state.currentChildId 
+  const currentChild = state.currentChildId
     ? state.children.find(c => c.id === state.currentChildId)
     : state.children[0];
 
@@ -233,17 +234,53 @@ export async function buildAIContext(): Promise<AminyAIContext> {
   const juniorContext = await buildJuniorModeContext(currentChild.id);
   const telehealthContext = await buildTelehealthContext(currentChild.id);
 
+  // CRITICAL: Load onboarding data to maintain memory continuity
+  // This ensures the AI remembers what was shared during onboarding
+  let onboardingContext: {
+    initialConcern?: string;
+    conversationSummary?: Array<{ role: string; content: string }>;
+  } = {};
+
+  try {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('onboarding_data')
+        .eq('id', user.id)
+        .single();
+
+      if (profile?.onboarding_data) {
+        onboardingContext = profile.onboarding_data;
+      }
+    }
+  } catch (e) {
+    console.error('Error loading onboarding context:', e);
+  }
+
+  // Merge onboarding data into primary concerns and memory
+  const primaryConcerns = [
+    ...(state.concerns || []),
+    ...(onboardingContext.initialConcern ? [onboardingContext.initialConcern] : [])
+  ].filter(Boolean);
+
+  // Add onboarding conversation to memory context
+  const enrichedMemory = {
+    ...memoryContext,
+    onboardingConversation: onboardingContext.conversationSummary || [],
+  };
+
   return {
     child: childContext,
     vault: vaultContext,
     dailyPlan: dailyPlanContext,
-    memory: memoryContext,
+    memory: enrichedMemory,
     juniorMode: juniorContext,
     telehealthSessions: telehealthContext,
     parentProfile: {
       name: state.parentName || 'Parent',
       relationshipToChild: 'Parent',
-      primaryConcerns: state.concerns || [],
+      primaryConcerns,
       copingStrategies: [],
       supportNeeds: []
     },
@@ -624,6 +661,11 @@ ${context.dailyPlan.upcomingChallenges.length > 0
 ═══════════════════════════════════════════════════════════════
 MEMORY (What You Remember About This Family)
 ═══════════════════════════════════════════════════════════════
+${context.memory.onboardingConversation && context.memory.onboardingConversation.length > 0
+  ? `FIRST CONVERSATION (from onboarding):
+${context.memory.onboardingConversation.map(m => `${m.role === 'user' ? 'Parent' : 'You'}: ${m.content}`).join('\n')}
+---`
+  : ''}
 Recent topics: ${context.memory.conversations.slice(-5).map(c => c.topic).join(', ') || 'First conversations'}
 Recurring concerns: ${context.memory.parentConcerns.slice(0, 3).join('; ') || 'None recorded yet'}
 What's worked: ${context.memory.successfulStrategies.slice(0, 3).map(s => s.description).join('; ') || 'Still learning what works best'}
