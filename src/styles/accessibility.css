@@ -136,9 +136,39 @@ body.keyboard-nav *:focus-visible {
 /* ----------------------------------------
    TOUCH TARGETS
    Ensure minimum 44x44px touch targets (WCAG 2.1 AAA)
+   Mobile-first approach: larger on mobile, normal on desktop
    ---------------------------------------- */
 
+/* Touch target utility classes */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+.touch-target-sm {
+  min-height: 40px;
+  min-width: 40px;
+}
+
+.touch-target-lg {
+  min-height: 48px;
+  min-width: 48px;
+}
+
+/* Expanded touch target via pseudo-element (visual stays small) */
+.touch-target-expanded {
+  position: relative;
+}
+
+.touch-target-expanded::before {
+  content: '';
+  position: absolute;
+  inset: -12px;
+}
+
+/* Touch device optimizations */
 @media (pointer: coarse) {
+  /* Base interactive elements */
   button,
   a,
   input[type="checkbox"],
@@ -146,16 +176,71 @@ body.keyboard-nav *:focus-visible {
   select,
   [role="button"],
   [role="tab"],
-  [role="menuitem"] {
+  [role="menuitem"],
+  [role="option"],
+  [role="listitem"][tabindex] {
     min-height: 44px;
     min-width: 44px;
   }
 
   /* Inline links get padding for larger tap area */
   p a,
-  li a {
+  li a,
+  span a {
     padding: 8px 4px;
     margin: -8px -4px;
+    display: inline-block;
+  }
+
+  /* Icon-only buttons need explicit sizing */
+  button[aria-label]:not([aria-label=""]):empty,
+  [role="button"][aria-label]:not([aria-label=""]):empty {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Spacing between touch targets */
+  .touch-spacing > * + * {
+    margin-top: 8px;
+  }
+
+  /* List items in navigation/menus */
+  nav li,
+  [role="menu"] li,
+  [role="listbox"] li {
+    min-height: 44px;
+  }
+}
+
+/* Desktop: allow smaller touch targets */
+@media (pointer: fine) {
+  .touch-target {
+    min-height: 36px;
+    min-width: 36px;
+  }
+
+  .touch-target-sm {
+    min-height: 32px;
+    min-width: 32px;
+  }
+
+  .touch-target-lg {
+    min-height: 40px;
+    min-width: 40px;
+  }
+}
+
+/* Touch feedback optimization */
+@supports (-webkit-touch-callout: none) {
+  /* iOS Safari optimizations */
+  button,
+  a,
+  [role="button"] {
+    -webkit-tap-highlight-color: rgba(8, 145, 178, 0.15);
+    touch-action: manipulation;
   }
 }
 
