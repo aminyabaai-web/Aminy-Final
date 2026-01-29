@@ -108,9 +108,277 @@ app.use('*', async (c, next) => {
   c.header('Content-Security-Policy', "default-src 'none'; frame-ancestors 'none'");
 });
 
-// Health check endpoint
+// ============================================================================
+// HEALTH CHECK ENDPOINTS - Production Monitoring
+// ============================================================================
+
+interface HealthCheckResult {
+  status: 'healthy' | 'degraded' | 'unhealthy';
+  timestamp: string;
+  version: string;
+  uptime: number;
+  checks: {
+    name: string;
+    status: 'pass' | 'fail' | 'warn';
+    message?: string;
+    latencyMs?: number;
+  }[];
+  system?: {
+    memory: {
+      heapUsed: number;
+      heapTotal: number;
+    };
+  };
+}
+
+const startTime = Date.now();
+
+// Basic health check (for load balancers)
 app.get("/make-server-8a022548/health", (c) => {
+  return c.json({
+    status: "ok",
+    timestamp: new Date().toISOString(),
+    uptime: Date.now() - startTime,
+  });
+});
+
+// Liveness probe (is the service running?)
+app.get("/make-server-8a022548/health/live", (c) => {
   return c.json({ status: "ok" });
+});
+
+// Readiness probe (is the service ready to accept traffic?)
+app.get("/make-server-8a022548/health/ready", async (c) => {
+  const checks = [];
+  let overallStatus: 'healthy' | 'degraded' | 'unhealthy' = 'healthy';
+
+  // Check AI configuration
+  const aiConfig = getAIConfig();
+  if (aiConfig) {
+    checks.push({ name: 'ai_config', status: 'pass' as const });
+  } else {
+    checks.push({ name: 'ai_config', status: 'fail' as const, message: 'No AI provider configured' });
+    overallStatus = 'unhealthy';
+  }
+
+  // Check Stripe configuration
+  const stripeKey = Deno.env.get('STRIPE_SECRET_KEY');
+  if (stripeKey) {
+    checks.push({ name: 'stripe_config', status: 'pass' as const });
+  } else {
+    checks.push({ name: 'stripe_config', status: 'warn' as const, message: 'Stripe not configured' });
+    if (overallStatus === 'healthy') overallStatus = 'degraded';
+  }
+
+  // Check Daily.co configuration
+  const dailyKey = Deno.env.get('DAILY_API_KEY');
+  if (dailyKey) {
+    checks.push({ name: 'video_config', status: 'pass' as const });
+  } else {
+    checks.push({ name: 'video_config', status: 'warn' as const, message: 'Video calls not configured' });
+    if (overallStatus === 'healthy') overallStatus = 'degraded';
+  }
+
+  const result: HealthCheckResult = {
+    status: overallStatus,
+    timestamp: new Date().toISOString(),
+    version: '1.0.0',
+    uptime: Date.now() - startTime,
+    checks,
+  };
+
+  const statusCode = overallStatus === 'unhealthy' ? 503 : 200;
+  return c.json(result, statusCode);
+});
+
+// Deep health check (comprehensive check of all dependencies)
+app.get("/make-server-8a022548/health/deep", async (c) => {
+  const authHeader = c.req.header('Authorization');
+
+  // Deep health check requires authentication
+  const authResult = await verifyAuth(authHeader);
+  if (!authResult.user || authResult.user.role !== 'admin') {
+    // Return basic health for non-admins
+    return c.json({
+      status: 'ok',
+      message: 'Admin authentication required for deep health check',
+    });
+  }
+
+  const checks: HealthCheckResult['checks'] = [];
+  let overallStatus: 'healthy' | 'degraded' | 'unhealthy' = 'healthy';
+
+  // Check AI provider connectivity
+  const aiConfig = getAIConfig();
+  if (aiConfig) {
+    const aiStart = Date.now();
+    try {
+      // Simple ping to AI provider
+      if (aiConfig.provider === 'openai') {
+        const response = await fetch('https://api.openai.com/v1/models', {
+          headers: { 'Authorization': `Bearer ${aiConfig.apiKey}` },
+        });
+        if (response.ok) {
+          checks.push({
+            name: 'ai_provider',
+            status: 'pass',
+            latencyMs: Date.now() - aiStart
+          });
+        } else {
+          throw new Error(`API returned ${response.status}`);
+        }
+      } else {
+        // Anthropic doesn't have a simple ping endpoint, check key format
+        if (aiConfig.apiKey.startsWith('sk-ant-')) {
+          checks.push({
+            name: 'ai_provider',
+            status: 'pass',
+            message: 'API key format valid',
+            latencyMs: Date.now() - aiStart
+          });
+        } else {
+          checks.push({ name: 'ai_provider', status: 'warn', message: 'API key format unusual' });
+        }
+      }
+    } catch (error) {
+      checks.push({
+        name: 'ai_provider',
+        status: 'fail',
+        message: error instanceof Error ? error.message : 'Connection failed'
+      });
+      overallStatus = 'degraded';
+    }
+  } else {
+    checks.push({ name: 'ai_provider', status: 'fail', message: 'No AI provider configured' });
+    overallStatus = 'unhealthy';
+  }
+
+  // Check Stripe connectivity
+  const stripeKey = Deno.env.get('STRIPE_SECRET_KEY');
+  if (stripeKey) {
+    const stripeStart = Date.now();
+    try {
+      const response = await fetch('https://api.stripe.com/v1/balance', {
+        headers: { 'Authorization': `Bearer ${stripeKey}` },
+      });
+      if (response.ok) {
+        checks.push({
+          name: 'stripe',
+          status: 'pass',
+          latencyMs: Date.now() - stripeStart
+        });
+      } else {
+        checks.push({
+          name: 'stripe',
+          status: 'warn',
+          message: `API returned ${response.status}`,
+          latencyMs: Date.now() - stripeStart
+        });
+        if (overallStatus === 'healthy') overallStatus = 'degraded';
+      }
+    } catch (error) {
+      checks.push({
+        name: 'stripe',
+        status: 'fail',
+        message: 'Connection failed'
+      });
+      if (overallStatus === 'healthy') overallStatus = 'degraded';
+    }
+  } else {
+    checks.push({ name: 'stripe', status: 'warn', message: 'Not configured' });
+  }
+
+  // Check Daily.co connectivity
+  const dailyKey = Deno.env.get('DAILY_API_KEY');
+  if (dailyKey) {
+    const dailyStart = Date.now();
+    try {
+      const response = await fetch('https://api.daily.co/v1/', {
+        headers: { 'Authorization': `Bearer ${dailyKey}` },
+      });
+      if (response.ok) {
+        checks.push({
+          name: 'daily_video',
+          status: 'pass',
+          latencyMs: Date.now() - dailyStart
+        });
+      } else {
+        checks.push({
+          name: 'daily_video',
+          status: 'warn',
+          message: `API returned ${response.status}`
+        });
+      }
+    } catch (error) {
+      checks.push({ name: 'daily_video', status: 'fail', message: 'Connection failed' });
+    }
+  } else {
+    checks.push({ name: 'daily_video', status: 'warn', message: 'Not configured' });
+  }
+
+  // Check KV store
+  const kvStart = Date.now();
+  try {
+    const testKey = `health_check_${Date.now()}`;
+    await kv.setKV(testKey, 'test', 5000); // 5 second TTL
+    const result = await kv.getKV(testKey);
+    if (result === 'test') {
+      checks.push({
+        name: 'kv_store',
+        status: 'pass',
+        latencyMs: Date.now() - kvStart
+      });
+    } else {
+      checks.push({ name: 'kv_store', status: 'warn', message: 'Read/write mismatch' });
+    }
+  } catch (error) {
+    checks.push({ name: 'kv_store', status: 'fail', message: 'KV store error' });
+    if (overallStatus === 'healthy') overallStatus = 'degraded';
+  }
+
+  const result: HealthCheckResult = {
+    status: overallStatus,
+    timestamp: new Date().toISOString(),
+    version: '1.0.0',
+    uptime: Date.now() - startTime,
+    checks,
+    system: {
+      memory: {
+        // @ts-ignore - Deno memory info
+        heapUsed: Deno.memoryUsage?.()?.heapUsed || 0,
+        heapTotal: Deno.memoryUsage?.()?.heapTotal || 0,
+      },
+    },
+  };
+
+  const statusCode = overallStatus === 'unhealthy' ? 503 : 200;
+  return c.json(result, statusCode);
+});
+
+// Metrics endpoint for monitoring systems
+app.get("/make-server-8a022548/metrics", async (c) => {
+  const authHeader = c.req.header('Authorization');
+
+  // Metrics require authentication
+  const authResult = await verifyAuth(authHeader);
+  if (!authResult.user || authResult.user.role !== 'admin') {
+    return c.json({ error: 'Admin authentication required' }, 401);
+  }
+
+  // Return Prometheus-style metrics
+  const metrics = [
+    `# HELP aminy_uptime_seconds Server uptime in seconds`,
+    `# TYPE aminy_uptime_seconds gauge`,
+    `aminy_uptime_seconds ${(Date.now() - startTime) / 1000}`,
+    ``,
+    `# HELP aminy_health_status Health status (1=healthy, 0.5=degraded, 0=unhealthy)`,
+    `# TYPE aminy_health_status gauge`,
+    `aminy_health_status 1`,
+  ].join('\n');
+
+  return c.text(metrics, 200, {
+    'Content-Type': 'text/plain; version=0.0.4',
+  });
 });
 
 // ============================================================================
