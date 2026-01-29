@@ -8,6 +8,7 @@
 export type ProviderCategory = 'behavioral' | 'therapy' | 'diagnostic';
 export type SessionType =
   | 'bcba_consult'
+  | 'bcba_quick'
   | 'bcba_assessment'
   | 'rbt_session'
   | 'rbt_extended'
@@ -61,13 +62,29 @@ export const SESSION_PRICING: Record<SessionType, SessionPricing> = {
     duration: 60,
     durationDisplay: 'up to 60 min',
     price: 149,
-    providerPay: 60,
-    margin: 60,
+    providerPay: 65,
+    margin: 56,
     cptCode: '97155/97156',
     cptDescription: 'Adaptive behavior treatment with protocol modification',
     category: 'behavioral',
     providerType: 'bcba',
     popular: true,
+  },
+  bcba_quick: {
+    id: 'bcba_quick',
+    name: 'BCBA Quick Check-In',
+    shortName: 'BCBA Quick',
+    description: 'Brief consultation for specific questions or follow-ups',
+    parentBenefit: 'Get quick answers without scheduling a full session',
+    duration: 30,
+    durationDisplay: 'up to 30 min',
+    price: 79,
+    providerPay: 35,
+    margin: 56,
+    cptCode: '97155',
+    cptDescription: 'Adaptive behavior treatment with protocol modification',
+    category: 'behavioral',
+    providerType: 'bcba',
   },
   bcba_assessment: {
     id: 'bcba_assessment',
@@ -77,9 +94,9 @@ export const SESSION_PRICING: Record<SessionType, SessionPricing> = {
     parentBenefit: 'Understand your child\'s strengths and get a clear path forward',
     duration: 90,
     durationDisplay: 'up to 90 min',
-    price: 269,
-    providerPay: 105,
-    margin: 61,
+    price: 219,
+    providerPay: 95,
+    margin: 57,
     cptCode: '97151',
     cptDescription: 'Behavior identification assessment',
     category: 'behavioral',
@@ -110,8 +127,8 @@ export const SESSION_PRICING: Record<SessionType, SessionPricing> = {
     duration: 60,
     durationDisplay: 'up to 60 min',
     price: 89,
-    providerPay: 35,
-    margin: 61,
+    providerPay: 38,
+    margin: 57,
     cptCode: '97153',
     cptDescription: 'Adaptive behavior treatment',
     category: 'behavioral',
@@ -128,8 +145,8 @@ export const SESSION_PRICING: Record<SessionType, SessionPricing> = {
     duration: 45,
     durationDisplay: 'up to 45 min',
     price: 129,
-    providerPay: 50,
-    margin: 61,
+    providerPay: 55,
+    margin: 57,
     cptCode: '90834',
     cptDescription: 'Psychotherapy, 38-52 minutes',
     category: 'therapy',
@@ -143,9 +160,9 @@ export const SESSION_PRICING: Record<SessionType, SessionPricing> = {
     parentBenefit: 'Deeper exploration and more time for breakthroughs',
     duration: 60,
     durationDisplay: 'up to 60 min',
-    price: 149,
-    providerPay: 60,
-    margin: 60,
+    price: 159,
+    providerPay: 70,
+    margin: 56,
     cptCode: '90837',
     cptDescription: 'Psychotherapy, 53+ minutes',
     category: 'therapy',
@@ -160,9 +177,9 @@ export const SESSION_PRICING: Record<SessionType, SessionPricing> = {
     parentBenefit: 'Help your child find their voice and connect',
     duration: 45,
     durationDisplay: 'up to 45 min',
-    price: 139,
+    price: 129,
     providerPay: 55,
-    margin: 60,
+    margin: 57,
     cptCode: '92507',
     cptDescription: 'Speech/language treatment, individual',
     category: 'therapy',
@@ -176,9 +193,9 @@ export const SESSION_PRICING: Record<SessionType, SessionPricing> = {
     parentBenefit: 'Help your child feel comfortable and capable in daily life',
     duration: 45,
     durationDisplay: 'up to 45 min',
-    price: 139,
+    price: 129,
     providerPay: 55,
-    margin: 60,
+    margin: 57,
     cptCode: '97530',
     cptDescription: 'Therapeutic activities',
     category: 'therapy',
@@ -194,9 +211,9 @@ export const SESSION_PRICING: Record<SessionType, SessionPricing> = {
     parentBenefit: 'Get clarity and a clear path to the right support',
     duration: 90,
     durationDisplay: 'up to 90 min',
-    price: 799,
-    providerPay: 160,
-    margin: 80,
+    price: 899,
+    providerPay: 375,
+    margin: 58,
     cptCode: '96130, 96131',
     cptDescription: 'Psychological testing evaluation',
     category: 'diagnostic',
@@ -210,9 +227,9 @@ export const SESSION_PRICING: Record<SessionType, SessionPricing> = {
     parentBenefit: 'Understand attention challenges and get actionable next steps',
     duration: 60,
     durationDisplay: 'up to 60 min',
-    price: 299,
-    providerPay: 80,
-    margin: 73,
+    price: 399,
+    providerPay: 175,
+    margin: 56,
     cptCode: '96130, 96136',
     cptDescription: 'Psychological testing evaluation',
     category: 'diagnostic',
@@ -227,9 +244,9 @@ export const SESSION_PRICING: Record<SessionType, SessionPricing> = {
     parentBenefit: 'Complete picture in one appointment - no repeat visits',
     duration: 120,
     durationDisplay: 'up to 120 min',
-    price: 999,
-    providerPay: 200,
-    margin: 80,
+    price: 1199,
+    providerPay: 500,
+    margin: 58,
     cptCode: '96130, 96131, 96136',
     cptDescription: 'Psychological testing evaluation',
     category: 'diagnostic',
@@ -244,8 +261,8 @@ export const SESSION_PRICING: Record<SessionType, SessionPricing> = {
     duration: 45,
     durationDisplay: 'up to 45 min',
     price: 149,
-    providerPay: 40,
-    margin: 73,
+    providerPay: 60,
+    margin: 60,
     cptCode: '96110',
     cptDescription: 'Developmental screening',
     category: 'diagnostic',
@@ -257,49 +274,50 @@ export const SESSION_PRICING: Record<SessionType, SessionPricing> = {
 // SAME-DAY PRIORITY BOOKING
 // =============================================================================
 
-export const SAME_DAY_FEE = 30;
+export const SAME_DAY_FEE = 35;
+export const SAME_DAY_PROVIDER_BONUS = 15;
 
 export const SAME_DAY_PRICING: SameDayPricing[] = [
   {
     sessionId: 'bcba_consult',
     standardPrice: 149,
-    sameDayPrice: 179,
-    providerBonus: 10,
+    sameDayPrice: 184,
+    providerBonus: SAME_DAY_PROVIDER_BONUS,
     convenienceFee: SAME_DAY_FEE,
   },
   {
     sessionId: 'rbt_session',
     standardPrice: 49,
-    sameDayPrice: 79,
-    providerBonus: 5,
+    sameDayPrice: 84,
+    providerBonus: SAME_DAY_PROVIDER_BONUS,
     convenienceFee: SAME_DAY_FEE,
   },
   {
     sessionId: 'therapist_45',
     standardPrice: 129,
-    sameDayPrice: 159,
-    providerBonus: 10,
+    sameDayPrice: 164,
+    providerBonus: SAME_DAY_PROVIDER_BONUS,
     convenienceFee: SAME_DAY_FEE,
   },
   {
     sessionId: 'therapist_60',
-    standardPrice: 149,
-    sameDayPrice: 179,
-    providerBonus: 10,
+    standardPrice: 159,
+    sameDayPrice: 194,
+    providerBonus: SAME_DAY_PROVIDER_BONUS,
     convenienceFee: SAME_DAY_FEE,
   },
   {
     sessionId: 'slp_session',
-    standardPrice: 139,
-    sameDayPrice: 169,
-    providerBonus: 10,
+    standardPrice: 129,
+    sameDayPrice: 164,
+    providerBonus: SAME_DAY_PROVIDER_BONUS,
     convenienceFee: SAME_DAY_FEE,
   },
   {
     sessionId: 'ot_session',
-    standardPrice: 139,
-    sameDayPrice: 169,
-    providerBonus: 10,
+    standardPrice: 129,
+    sameDayPrice: 164,
+    providerBonus: SAME_DAY_PROVIDER_BONUS,
     convenienceFee: SAME_DAY_FEE,
   },
 ];
@@ -395,13 +413,15 @@ export const PRICING_MESSAGING = {
 // SUBSCRIPTION TIER INTEGRATION
 // =============================================================================
 
-export const TIER_DISCOUNTS = {
+export const TIER_DISCOUNTS: Record<string, number> = {
   free: 0,
-  core: 0,
-  pro: 0.10, // 10% off sessions for Pro members
+  starter: 0.10, // Legacy: same as Core
+  core: 0.10,    // 10% off sessions
+  pro: 0.20,     // 20% off sessions
+  proplus: 0.30, // 30% off sessions (Family Plan)
 };
 
-export function getPriceForTier(basePrice: number, tier: 'free' | 'core' | 'pro'): number {
-  const discount = TIER_DISCOUNTS[tier];
+export function getPriceForTier(basePrice: number, tier: string): number {
+  const discount = TIER_DISCOUNTS[tier] || 0;
   return Math.round(basePrice * (1 - discount));
 }

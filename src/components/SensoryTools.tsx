@@ -345,11 +345,6 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
     setSelectedTool(tool);
     setSessionStartTime(new Date());
     setSessionDuration(0);
-    
-    // Start ambient sound if selected
-    if (ambientSound !== 'none') {
-      toast.info(`${ambientSound} sounds playing softly...`);
-    }
   };
 
   // Complete session
@@ -504,40 +499,12 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
                     />
                   </div>
 
+                  {/* Ambient sounds - coming in future update
                   <div>
                     <Label className="text-sm text-gray-700 mb-2">Ambient Sound</Label>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
-                      {ambientSounds.map(sound => (
-                        <button
-                          key={sound.id}
-                          onClick={() => setAmbientSound(sound.id)}
-                          className={`p-2 rounded-lg border-2 text-sm flex items-center gap-2 transition-all ${
-                            ambientSound === sound.id
-                              ? 'border-purple-500 bg-purple-50'
-                              : 'border-gray-200 bg-white hover:border-purple-300'
-                          }`}
-                        >
-                          {sound.icon}
-                          {sound.name}
-                        </button>
-                      ))}
-                    </div>
+                    <p className="text-xs text-gray-400">Coming soon</p>
                   </div>
-
-                  {ambientSound !== 'none' && (
-                    <div>
-                      <Label className="text-sm text-gray-700 mb-2">Volume</Label>
-                      <Slider
-                        value={[soundVolume]}
-                        onValueChange={([value]) => setSoundVolume(value)}
-                        min={0}
-                        max={100}
-                        step={10}
-                        className="mt-2"
-                      />
-                      <p className="text-xs text-gray-500 mt-1">{soundVolume}%</p>
-                    </div>
-                  )}
+                  */}
                 </div>
               </Card>
             </motion.div>

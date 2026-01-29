@@ -37,12 +37,13 @@ export const TRIAL_CONFIG = {
 };
 
 // Pricing configuration (simplified - Starter removed)
+// Optimized for ~60% marketplace margins, 80%+ SaaS margins
 export const tierPricing: Record<TierType, { monthly: number; yearly: number; savings?: number; hasTrial?: boolean }> = {
   free: { monthly: 0, yearly: 0 },
-  starter: { monthly: 14.99, yearly: 129, savings: 28, hasTrial: true }, // Legacy: same as Core
-  core: { monthly: 14.99, yearly: 129, savings: 28, hasTrial: true },
-  pro: { monthly: 29.99, yearly: 279, savings: 22, hasTrial: true },
-  proplus: { monthly: 49.99, yearly: 479, savings: 20, hasTrial: true },
+  starter: { monthly: 24.99, yearly: 199, savings: 101, hasTrial: true }, // Legacy: same as Core
+  core: { monthly: 24.99, yearly: 199, savings: 101, hasTrial: true },
+  pro: { monthly: 49.99, yearly: 399, savings: 201, hasTrial: true },
+  proplus: { monthly: 79.99, yearly: 649, savings: 311, hasTrial: true },
 };
 
 // HSA/FSA eligibility configuration
@@ -76,8 +77,8 @@ export const PROFESSIONAL_TIERS: Record<ProfessionalAccountType, ProfessionalTie
     displayName: 'School Edition',
     description: 'For teachers and school support staff',
     minSeats: 5,
-    pricePerSeatMonthly: 9.99,
-    pricePerSeatYearly: 89,
+    pricePerSeatMonthly: 14.99,
+    pricePerSeatYearly: 129,
     features: [
       'Classroom mode for multiple students',
       'Teacher dashboard with progress views',
@@ -97,8 +98,8 @@ export const PROFESSIONAL_TIERS: Record<ProfessionalAccountType, ProfessionalTie
     displayName: 'Clinic Edition',
     description: 'For ABA clinics and therapy centers',
     minSeats: 3,
-    pricePerSeatMonthly: 19.99,
-    pricePerSeatYearly: 179,
+    pricePerSeatMonthly: 34.99,
+    pricePerSeatYearly: 299,
     features: [
       'Provider portal with caseload management',
       'Client progress dashboards',
@@ -119,8 +120,8 @@ export const PROFESSIONAL_TIERS: Record<ProfessionalAccountType, ProfessionalTie
     displayName: 'Private Practice',
     description: 'For independent BCBAs and therapists',
     minSeats: 1,
-    pricePerSeatMonthly: 24.99,
-    pricePerSeatYearly: 229,
+    pricePerSeatMonthly: 49.99,
+    pricePerSeatYearly: 449,
     features: [
       'Provider portal',
       'Client caseload management',
@@ -140,8 +141,8 @@ export const PROFESSIONAL_TIERS: Record<ProfessionalAccountType, ProfessionalTie
     displayName: 'Agency/Enterprise',
     description: 'For large organizations and state agencies',
     minSeats: 25,
-    pricePerSeatMonthly: 7.99,
-    pricePerSeatYearly: 69,
+    pricePerSeatMonthly: 12.99,
+    pricePerSeatYearly: 99,
     features: [
       'All Clinic Edition features',
       'Custom branding',
@@ -851,26 +852,26 @@ const tierFeatureMap: Record<TierType, string[]> = {
   free: [
     'limited-ai-chat',        // 5 messages/day
     'basic-daily-plan',       // Pre-set activities only
-    'basic-calm-tools',       // 5 calm tools
+    'basic-calm-tools',       // 3 core tools: Breathe Glow, Visual Timer, Bubble Pop
     'basic-tracking',         // Simple completion tracking
     'community-read-only',    // View community, can't post
   ],
   starter: [
-    'limited-ai-chat',        // 20 messages/day
-    'basic-daily-plan',
+    'unlimited-ai-chat',      // Legacy: same as Core
+    'adaptive-daily-plan',
     'custom-tasks',           // Add custom tasks
-    'full-calm-tools',        // All calm tools
-    'basic-tracking',
+    'full-calm-tools',        // All 5 tools: + Fluid Swirl, Fidget Spinner
+    'advanced-tracking',
     'favorites',              // Save favorites
     'reminders',              // Push notifications
     'community-participate',  // Can post in community
-    'basic-reports',          // Weekly summaries
+    'full-reports',           // Monthly analytics
   ],
   core: [
     'unlimited-ai-chat',      // No limits
     'adaptive-daily-plan',    // AI-suggested activities
     'custom-tasks',
-    'full-calm-tools',
+    'full-calm-tools',        // All 5 tools: + Fluid Swirl, Fidget Spinner
     'advanced-tracking',      // Detailed progress
     'favorites',
     'reminders',
@@ -878,7 +879,7 @@ const tierFeatureMap: Record<TierType, string[]> = {
     'full-reports',           // Monthly analytics
     'vault-access',           // Document storage
     'ai-document-analysis',   // AI reads IEPs, medical records
-    'multi-child',            // Up to 3 children
+    'multi-child',            // Up to 2 children
     'marketplace-access',     // Book sessions (pay per use)
     'care-plan-export',       // Export for providers
   ],
@@ -886,7 +887,7 @@ const tierFeatureMap: Record<TierType, string[]> = {
     'unlimited-ai-chat',
     'adaptive-daily-plan',
     'custom-tasks',
-    'full-calm-tools',
+    'full-calm-tools',        // All 5 tools
     'advanced-tracking',
     'favorites',
     'reminders',
@@ -897,18 +898,17 @@ const tierFeatureMap: Record<TierType, string[]> = {
     'multi-child',            // Up to 3 children
     'marketplace-access',
     'care-plan-export',
-    'bcba-consult',           // Monthly BCBA session included
     'clinical-reports',       // IEP-ready reports
     'priority-support',       // Faster response
-    'early-access',           // Beta features
+    'priority-booking',       // 48hr booking guarantee
+    'provider-sharing',       // Share with providers
     'discounted-sessions',    // 20% off marketplace
-    'live-ai-video-30',       // 30 min/month Live AI Video
   ],
   proplus: [
     'unlimited-ai-chat',
     'adaptive-daily-plan',
     'custom-tasks',
-    'full-calm-tools',
+    'full-calm-tools',        // All 5 tools
     'advanced-tracking',
     'favorites',
     'reminders',
@@ -919,16 +919,14 @@ const tierFeatureMap: Record<TierType, string[]> = {
     'multi-child-unlimited',  // Unlimited children
     'marketplace-access',
     'care-plan-export',
-    'bcba-consult',           // Monthly BCBA session included
     'clinical-reports',       // IEP-ready reports
     'priority-support',       // Faster response
-    'early-access',           // Beta features
+    'priority-booking',       // 48hr booking guarantee
+    'provider-sharing',       // Share with providers
     'discounted-sessions',    // 30% off marketplace
-    'live-ai-video-unlimited',// Unlimited Live AI Video
-    'human-credit-monthly',   // Monthly human consultation credit
-    'expiring-share-links',   // Time-limited secure sharing
+    'care-coordinator',       // Async care coordination support
+    'multi-caregiver',        // 4 caregiver accounts
     'advanced-analytics',     // Detailed progress analytics
-    'api-access',             // API access for integrations
     'dedicated-support',      // Dedicated support channel
   ],
 };
@@ -977,7 +975,7 @@ export function getTierFeatureDescriptions(tier: TierType): string[] {
     free: [
       'Daily plan with curated activities',
       '5 AI chat messages per day',
-      'Basic calm tools for stressful moments',
+      'Core calm tools (breathing, timer, bubbles)',
       'Track daily progress',
       '7-day free trial of Core included',
     ],
@@ -986,9 +984,9 @@ export function getTierFeatureDescriptions(tier: TierType): string[] {
       'Unlimited AI chat (text & voice)',
       'AI reads your IEPs & medical records',
       'Adaptive plans that learn what works',
-      'Book BCBA/RBT sessions (pay per use)',
-      'Support up to 3 children',
-      'Export care plans for providers',
+      '10% off marketplace sessions',
+      'Support up to 2 children',
+      'Full sensory regulation toolkit',
       'HSA/FSA eligible',
     ],
     core: [
@@ -996,27 +994,26 @@ export function getTierFeatureDescriptions(tier: TierType): string[] {
       'Unlimited AI chat (text & voice)',
       'AI reads your IEPs & medical records',
       'Adaptive plans that learn what works',
-      'Book BCBA/RBT sessions (pay per use)',
-      'Support up to 3 children',
-      'Export care plans for providers',
+      '10% off marketplace sessions',
+      'Support up to 2 children',
+      'Full sensory regulation toolkit',
       'HSA/FSA eligible',
     ],
     pro: [
       'Everything in Core, plus:',
-      'One monthly BCBA consultation included',
-      'Live Expert Video Sessions (with AI notes)',
-      'Provider-ready clinical reports',
+      'Support up to 3 children',
+      'Clinical-grade progress reports (IEP-ready)',
+      'Provider sharing portal',
       '20% off all marketplace sessions',
-      'Priority support',
+      'Priority booking',
       'HSA/FSA eligible',
     ],
     proplus: [
       'Everything in Pro, plus:',
       'Unlimited children profiles',
-      'Unlimited expert video sessions',
-      'Monthly human consultation credit',
       '30% off all marketplace sessions',
-      'Time-limited secure sharing links',
+      'Care coordinator (async support)',
+      '4 caregiver accounts',
       'Advanced analytics dashboard',
       'Dedicated support channel',
       'Perfect for families with multiple children',
@@ -1102,10 +1099,10 @@ export function getUpgradePath(currentTier: TierType): TierType | null {
 export function getMarketplaceDiscount(tier: TierType | undefined): number {
   const discounts: Record<TierType, number> = {
     free: 0,
-    starter: 0,
-    core: 0,
-    pro: 20,     // 20% off
-    proplus: 30, // 30% off
+    starter: 10,  // Legacy: same as Core
+    core: 10,     // 10% off
+    pro: 20,      // 20% off
+    proplus: 30,  // 30% off
   };
   return tier ? discounts[tier] : 0;
 }
@@ -1119,8 +1116,8 @@ export function includesBCBAConsult(tier: TierType | undefined): boolean {
 export function getMaxChildren(tier: TierType | undefined): number | null {
   const limits: Record<TierType, number | null> = {
     free: 1,
-    starter: 3,    // Legacy: same as Core
-    core: 3,
+    starter: 2,    // Legacy: same as Core
+    core: 2,
     pro: 3,
     proplus: null, // unlimited (Family Plan)
   };
