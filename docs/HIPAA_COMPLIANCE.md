@@ -595,7 +595,11 @@ Continuous Monitoring:
 | Email/password auth | ✅ Implemented | Supabase Auth | Secure password hashing |
 | OAuth (Google/Apple) | ✅ Implemented | Supabase Auth | Industry standard OAuth 2.0 |
 | Password reset | ✅ Implemented | `AuthCallback.tsx` | Secure token-based reset |
-| MFA for providers | 🟡 Planned | - | Requires implementation |
+| MFA for providers | ✅ Implemented | `src/lib/mfa.ts` | TOTP-based, Supabase Auth |
+| MFA enrollment UI | ✅ Implemented | `MFAEnrollment.tsx` | QR code + manual entry |
+| MFA verification | ✅ Implemented | `MFAVerification.tsx` | Login flow integration |
+| MFA settings | ✅ Implemented | `MFASettings.tsx` | Enable/disable, backup codes |
+| Server MFA enforcement | ✅ Implemented | `auth-middleware.ts` | AAL2 required for providers |
 | | | | |
 | **Data Protection** | | | |
 | PII scrubbing in errors | ✅ Implemented | `server/sanitize.ts` | Email, phone, SSN patterns |
@@ -609,27 +613,22 @@ Continuous Monitoring:
 
 ### Outstanding Items for Full HIPAA Compliance
 
-1. **MFA for Healthcare Providers**
-   - Status: Planned
-   - Priority: High
-   - Implementation: Add TOTP-based MFA for provider accounts
-
-2. **Business Associate Agreement (BAA)**
+1. **Business Associate Agreement (BAA)**
    - Status: Template created
    - Priority: Critical
    - Action: Execute BAAs with Supabase, Stripe, Daily.co
 
-3. **Penetration Testing**
+2. **Penetration Testing**
    - Status: Not conducted
    - Priority: High
    - Action: Schedule annual penetration test
 
-4. **Data Retention Automation**
+3. **Data Retention Automation**
    - Status: Policy defined
    - Priority: Medium
    - Action: Implement automated 7-year retention with secure deletion
 
-5. **Disaster Recovery Testing**
+4. **Disaster Recovery Testing**
    - Status: DR plan documented
    - Priority: Medium
    - Action: Conduct DR drill and document results
