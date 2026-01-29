@@ -6,9 +6,11 @@
  * - Visit Summary list (most recent on top)
  * - Action Items checklist
  * - Book follow-up CTA
+ *
+ * Connected to Supabase via care-plan service
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   ArrowLeft,
   FileText,
@@ -21,158 +23,56 @@ import {
   ClipboardList,
   PartyPopper,
   Plus,
-  Target
+  Target,
+  Loader2,
+  RefreshCw
 } from 'lucide-react';
+import { toast } from 'sonner';
 import {
+  useCarePlan,
   VisitSummary,
-  ActionItem,
+  ActionItem
+} from '../../lib/care-plan';
+import {
   Provider,
   MOCK_PROVIDERS,
-  VISIT_TYPES
 } from '../../types/telehealth';
 
 interface CarePlanTabProps {
+  userId: string;
   onBack: () => void;
   onBookFollowUp: () => void;
   onViewSummary: (summaryId: string) => void;
 }
 
-// Mock data for demo
-const MOCK_VISIT_SUMMARIES: (VisitSummary & { provider: Provider })[] = [
-  {
-    id: 'vs-1',
-    appointmentId: 'apt-1',
-    providerId: 'provider-1',
-    userId: 'user-1',
-    provider: MOCK_PROVIDERS[0],
-    reasonForVisit: 'Meltdowns during transitions',
-    whatWeDiscussed: [
-      'Identified triggers: sudden changes and sensory overwhelm',
-      'Current routine review showed gaps in visual supports',
-      'Discussed proactive strategies vs reactive responses',
-      'Reviewed "First-Then" board technique'
-    ],
-    planForNext7Days: [
-      'Create a visual schedule for morning routine',
-      'Give 5-minute and 2-minute warnings before transitions',
-      'Practice "First-Then" language during calm moments',
-      'Track meltdown frequency in Aminy app',
-      'Celebrate successful transitions with specific praise'
-    ],
-    whatToTrack: [
-      'Number of meltdowns per day',
-      'Successful transitions (count)',
-      'Warning effectiveness (did warnings help?)'
-    ],
-    followUpRecommendation: 'Check-in in 2 weeks to review progress and adjust strategies',
-    createdAt: '2025-01-10T14:30:00Z',
-    updatedAt: '2025-01-10T14:30:00Z'
-  },
-  {
-    id: 'vs-2',
-    appointmentId: 'apt-2',
-    providerId: 'provider-3',
-    userId: 'user-1',
-    provider: MOCK_PROVIDERS[2],
-    reasonForVisit: 'Parent burnout and self-care',
-    whatWeDiscussed: [
-      'Acknowledged the exhaustion and emotional weight',
-      'Explored sources of support (or lack thereof)',
-      'Discussed the "oxygen mask" principle',
-      'Identified small moments for self-care'
-    ],
-    planForNext7Days: [
-      'Schedule 15 minutes of alone time daily (non-negotiable)',
-      'Reach out to one supportive person this week',
-      'Try one "micro-break" technique when overwhelmed',
-      'Journal for 5 minutes before bed'
-    ],
-    whatToTrack: [
-      'Daily self-care minutes',
-      'Energy level (1-10) morning and evening',
-      'Support interactions'
-    ],
-    followUpRecommendation: 'Follow-up in 2-3 weeks to build on progress',
-    createdAt: '2024-12-15T10:00:00Z',
-    updatedAt: '2024-12-15T10:00:00Z'
-  }
-];
-
-const MOCK_ACTION_ITEMS: ActionItem[] = [
-  {
-    id: 'ai-1',
-    userId: 'user-1',
-    visitSummaryId: 'vs-1',
-    title: 'Create visual schedule for morning routine',
-    description: 'Use pictures or icons to show each step of the morning',
-    dueDate: '2025-01-17T00:00:00Z',
-    completed: true,
-    completedAt: '2025-01-14T09:00:00Z',
-    source: 'visit-summary',
-    createdAt: '2025-01-10T14:30:00Z',
-    updatedAt: '2025-01-14T09:00:00Z'
-  },
-  {
-    id: 'ai-2',
-    userId: 'user-1',
-    visitSummaryId: 'vs-1',
-    title: 'Practice 5-minute and 2-minute warnings',
-    description: 'Give warnings before any transition happens',
-    dueDate: '2025-01-17T00:00:00Z',
-    completed: false,
-    source: 'visit-summary',
-    createdAt: '2025-01-10T14:30:00Z',
-    updatedAt: '2025-01-10T14:30:00Z'
-  },
-  {
-    id: 'ai-3',
-    userId: 'user-1',
-    visitSummaryId: 'vs-1',
-    title: 'Track meltdowns in Aminy app',
-    description: 'Log each meltdown with time and trigger if known',
-    dueDate: '2025-01-24T00:00:00Z',
-    completed: false,
-    source: 'visit-summary',
-    createdAt: '2025-01-10T14:30:00Z',
-    updatedAt: '2025-01-10T14:30:00Z'
-  },
-  {
-    id: 'ai-4',
-    userId: 'user-1',
-    visitSummaryId: 'vs-2',
-    title: 'Schedule 15 minutes of alone time daily',
-    description: 'Non-negotiable self-care time',
-    dueDate: '2024-12-22T00:00:00Z',
-    completed: true,
-    completedAt: '2024-12-20T08:00:00Z',
-    source: 'visit-summary',
-    createdAt: '2024-12-15T10:00:00Z',
-    updatedAt: '2024-12-20T08:00:00Z'
-  }
-];
-
 export function CarePlanTabScreen({
+  userId,
   onBack,
   onBookFollowUp,
   onViewSummary
 }: CarePlanTabProps) {
   const [activeTab, setActiveTab] = useState<'summaries' | 'actions'>('summaries');
-  const [actionItems, setActionItems] = useState(MOCK_ACTION_ITEMS);
+
+  // Use the care plan hook for data
+  const {
+    visitSummaries,
+    actionItems,
+    isLoading,
+    error,
+    refresh,
+    toggleItem
+  } = useCarePlan(userId);
 
   const pendingActions = actionItems.filter(a => !a.completed);
   const completedActions = actionItems.filter(a => a.completed);
 
-  const toggleActionComplete = (actionId: string) => {
-    setActionItems(prev => prev.map(item => {
-      if (item.id === actionId) {
-        return {
-          ...item,
-          completed: !item.completed,
-          completedAt: !item.completed ? new Date().toISOString() : undefined
-        };
-      }
-      return item;
-    }));
+  const handleToggleAction = async (actionId: string) => {
+    try {
+      await toggleItem(actionId);
+      toast.success('Action item updated');
+    } catch (err) {
+      toast.error('Failed to update action item');
+    }
   };
 
   const formatDate = (isoString: string) => {
@@ -193,6 +93,27 @@ export function CarePlanTabScreen({
     if (diffDays < 7) return `${diffDays} days ago`;
     if (diffDays < 14) return 'Last week';
     return formatDate(isoString);
+  };
+
+  // Helper to get a default provider when not joined from database
+  const getDefaultProvider = (providerId?: string): Provider => {
+    const found = MOCK_PROVIDERS.find(p => p.id === providerId);
+    return found || {
+      id: providerId || 'unknown',
+      firstName: 'Provider',
+      lastName: '',
+      title: 'Healthcare Provider',
+      specialty: '',
+      bio: '',
+      credentials: [],
+      languages: ['English'],
+      rating: 5,
+      reviewCount: 0,
+      availability: [],
+      acceptsInsurance: true,
+      pricePerSession: 0,
+      avatarUrl: undefined,
+    };
   };
 
   return (
@@ -251,24 +172,46 @@ export function CarePlanTabScreen({
 
       {/* Content */}
       <div className="px-4 py-6 pb-24">
-        {activeTab === 'summaries' ? (
+        {/* Loading State */}
+        {isLoading && (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="w-8 h-8 animate-spin text-[#577590]" />
+            <span className="ml-2 text-gray-600">Loading care plan...</span>
+          </div>
+        )}
+
+        {/* Error State */}
+        {error && !isLoading && (
+          <div className="text-center py-12">
+            <p className="text-red-600 mb-4">{error}</p>
+            <button
+              onClick={refresh}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-[#577590] text-white rounded-lg hover:bg-[#466379]"
+            >
+              <RefreshCw className="w-4 h-4" />
+              Try Again
+            </button>
+          </div>
+        )}
+
+        {!isLoading && !error && activeTab === 'summaries' ? (
           /* Visit Summaries Tab */
           <div className="space-y-3 sm:space-y-4">
-            {MOCK_VISIT_SUMMARIES.length === 0 ? (
+            {visitSummaries.length === 0 ? (
               <EmptyVisitSummaries onBookVisit={onBookFollowUp} />
             ) : (
-              MOCK_VISIT_SUMMARIES.map((summary) => (
+              visitSummaries.map((summary) => (
                 <VisitSummaryCard
                   key={summary.id}
                   summary={summary}
-                  provider={summary.provider}
+                  provider={summary.provider || getDefaultProvider(summary.providerId)}
                   onClick={() => onViewSummary(summary.id)}
                   formatDate={formatRelativeDate}
                 />
               ))
             )}
           </div>
-        ) : (
+        ) : !isLoading && !error && (
           /* Action Items Tab */
           <div className="space-y-3 sm:space-y-4 sm:space-y-6">
             {/* Pending Actions */}
@@ -283,7 +226,7 @@ export function CarePlanTabScreen({
                     <ActionItemCard
                       key={item.id}
                       item={item}
-                      onToggle={() => toggleActionComplete(item.id)}
+                      onToggle={() => handleToggleAction(item.id)}
                       formatDate={formatDate}
                     />
                   ))}
@@ -305,7 +248,7 @@ export function CarePlanTabScreen({
                     <ActionItemCard
                       key={item.id}
                       item={item}
-                      onToggle={() => toggleActionComplete(item.id)}
+                      onToggle={() => handleToggleAction(item.id)}
                       formatDate={formatDate}
                     />
                   ))}
