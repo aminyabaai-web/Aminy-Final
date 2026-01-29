@@ -4,6 +4,11 @@
 @import './design-tokens.css';
 
 /* ========================================
+   ACCESSIBILITY STYLES
+   ======================================== */
+@import './accessibility.css';
+
+/* ========================================
    CLS OPTIMIZATIONS - CRITICAL
    ======================================== */
 @import './cls-optimizations.css';

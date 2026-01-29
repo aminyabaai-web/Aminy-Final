@@ -50,6 +50,13 @@ import { QuickShareButton } from './ShareWinFlow';
 import { DifferentiationCallout } from './DifferentiationCallout';
 import { ProactiveNudgeSystem } from './ProactiveNudgeSystem';
 import { MorningMission, useMorningMission } from './MorningMission';
+import { ActionItems } from './ActionItems';
+import { HealthDataIntegration } from './HealthDataIntegration';
+import { TrialProgressBanner, SoftNudgeModal, HardPaywallModal } from './TrialExperience';
+import { ShareInsightInline } from './ShareInsight';
+import { ReferralCard } from './ReferralCard';
+import { NotificationPrompt, useShouldShowNotificationPrompt } from './NotificationPrompt';
+import { supabase } from '../utils/supabase/client';
 
 // Types
 interface ChildProfile {
@@ -158,10 +165,49 @@ export function Dashboard10({
   const [activeTab, setActiveTab] = useState<'home' | 'resources' | 'community' | 'profile'>('home');
   const [dailyTip] = useState(() => DAILY_TIPS[Math.floor(Math.random() * DAILY_TIPS.length)]);
   const [showStreakCelebration, setShowStreakCelebration] = useState(false);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [showSoftNudge, setShowSoftNudge] = useState(false);
+  const [showHardPaywall, setShowHardPaywall] = useState(false);
+  const [conversationsUsed, setConversationsUsed] = useState(0);
   const chatButtonRef = useRef<HTMLButtonElement>(null);
 
   // Morning mission state
   const { shouldShow: showMorningMission, isCompleted: missionCompleted } = useMorningMission();
+
+  // Notification prompt state
+  const shouldShowNotificationPrompt = useShouldShowNotificationPrompt();
+  const [showNotificationPrompt, setShowNotificationPrompt] = useState(true);
+
+  // Check trial status for free users
+  useEffect(() => {
+    if (userTier === 'free' && userId) {
+      supabase
+        .from('trial_tracking')
+        .select('conversations_used, has_seen_nudge')
+        .eq('user_id', userId)
+        .single()
+        .then(({ data }) => {
+          if (data) {
+            setConversationsUsed(data.conversations_used || 0);
+            // Show soft nudge after 3 conversations if not seen
+            if (data.conversations_used >= 3 && !data.has_seen_nudge) {
+              setShowSoftNudge(true);
+            }
+            // Show hard paywall after 5 conversations
+            if (data.conversations_used >= 5) {
+              setShowHardPaywall(true);
+            }
+          }
+        });
+    }
+  }, [userTier, userId]);
+
+  // Get user ID from Supabase
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (user) setUserId(user.id);
+    });
+  }, []);
 
   // Auto-set routine based on time of day
   useEffect(() => {
@@ -555,6 +601,48 @@ export function Dashboard10({
         </section>
 
         {/* ========================================
+            TRIAL PROGRESS - Show free users their journey
+            Makes upgrade feel natural, not forced
+            ======================================== */}
+        {userTier === 'free' && (
+          <section>
+            <TrialProgressBanner onUpgrade={() => onNavigate?.('paywall')} />
+          </section>
+        )}
+
+        {/* ========================================
+            NOTIFICATION PROMPT - Enable push notifications
+            Personalized value proposition
+            ======================================== */}
+        {shouldShowNotificationPrompt && showNotificationPrompt && (
+          <section>
+            <NotificationPrompt
+              childName={child.name}
+              onDismiss={() => setShowNotificationPrompt(false)}
+              onEnable={() => setShowNotificationPrompt(false)}
+              variant="card"
+            />
+          </section>
+        )}
+
+        {/* ========================================
+            SLEEP INSIGHTS - Apple Health / Google Fit
+            Automatic data that predicts behavior
+            ======================================== */}
+        {userId && (
+          <section>
+            <HealthDataIntegration
+              userId={userId}
+              childId={child.id}
+              childName={child.name}
+              onSleepDataUpdate={(data) => {
+                // Could trigger AI insight about sleep impact
+              }}
+            />
+          </section>
+        )}
+
+        {/* ========================================
             4. WINS & CELEBRATIONS (10%)
             Easy viral sharing with branded images
             ======================================== */}
@@ -608,6 +696,41 @@ export function Dashboard10({
               </button>
             ))}
           </div>
+        </section>
+
+        {/* ========================================
+            6. ACTION ITEMS - Organic Data Collection
+            Check-ins and screenings via conversational AI
+            ======================================== */}
+        {userId && (
+          <section>
+            <ActionItems
+              userId={userId}
+              childId={child.id}
+              childName={child.name}
+              childAge={child.age}
+              parentName={userData.parentName}
+              onItemComplete={(item) => {
+                // Could trigger celebration or update streak
+              }}
+            />
+          </section>
+        )}
+
+        {/* ========================================
+            7. REFERRAL - Viral growth mechanism
+            Prominent placement for better K-factor
+            ======================================== */}
+        <section>
+          <ReferralCard
+            referralCode={userId?.slice(0, 8) || 'AMINY'}
+            referralCount={0}
+            rewardEarned={0}
+            variant="dashboard"
+            onShare={() => {
+              // Track share event for analytics
+            }}
+          />
         </section>
       </main>
 
@@ -764,6 +887,39 @@ export function Dashboard10({
           ))}
         </div>
       </nav>
+
+      {/* ========================================
+          TRIAL MODALS - Soft nudge & hard paywall
+          ======================================== */}
+      <AnimatePresence>
+        {showSoftNudge && (
+          <SoftNudgeModal
+            childName={child.name}
+            insightsCount={conversationsUsed}
+            onUpgrade={() => {
+              setShowSoftNudge(false);
+              onNavigate?.('paywall');
+            }}
+            onDismiss={async () => {
+              setShowSoftNudge(false);
+              // Mark as seen so it doesn't show again
+              if (userId) {
+                await supabase
+                  .from('trial_tracking')
+                  .update({ has_seen_nudge: true })
+                  .eq('user_id', userId);
+              }
+            }}
+          />
+        )}
+
+        {showHardPaywall && (
+          <HardPaywallModal
+            childName={child.name}
+            onUpgrade={() => onNavigate?.('paywall')}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

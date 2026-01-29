@@ -62,6 +62,8 @@ import { brandColors } from '../lib/brand-system';
 import { supabase } from '../utils/supabase/client';
 import { CredentialBadge, VerifiedBadge } from './provider/CredentialBadge';
 import { PatientAISummary } from './provider/PatientAISummary';
+import { ProviderInsightsDashboard } from './provider/ProviderInsightsDashboard';
+import { CareCoordination } from './provider/CareCoordination';
 
 interface Patient {
   id: string;
@@ -107,7 +109,7 @@ interface ProviderPortalProps {
 }
 
 export function ProviderPortal({ providerId }: ProviderPortalProps) {
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'patients' | 'sessions' | 'earnings' | 'settings' | 'ai-summaries'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'patients' | 'sessions' | 'earnings' | 'settings' | 'ai-summaries' | 'insights' | 'coordination'>('dashboard');
   const [patients, setPatients] = useState<Patient[]>([]);
   const [sessions, setSessions] = useState<Session[]>([]);
   const [provider, setProvider] = useState<ProviderProfile | null>(null);
@@ -490,7 +492,9 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
             {[
               { id: 'dashboard', label: 'Dashboard', icon: Home },
               { id: 'patients', label: 'Patients', icon: Users },
+              { id: 'insights', label: 'Insights', icon: BarChart3 },
               { id: 'ai-summaries', label: 'AI Summaries', icon: Brain },
+              { id: 'coordination', label: 'Care Team', icon: Heart },
               { id: 'sessions', label: 'Sessions', icon: Calendar },
               { id: 'earnings', label: 'Earnings', icon: DollarSign },
               { id: 'settings', label: 'Settings', icon: Settings }
@@ -1130,6 +1134,77 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
                 ))}
               </div>
             </Card>
+          </div>
+        )}
+
+        {activeTab === 'insights' && (
+          <ProviderInsightsDashboard
+            providerId={providerId}
+            patients={patients.map(p => ({
+              id: p.id,
+              childName: p.childName,
+              parentName: p.parentName,
+              conditions: p.conditions,
+              profileAccess: p.profileAccess,
+            }))}
+          />
+        )}
+
+        {activeTab === 'coordination' && selectedPatient && selectedPatient.profileAccess === 'granted' ? (
+          <CareCoordination
+            providerId={providerId}
+            patientId={selectedPatient.id}
+            patientName={selectedPatient.childName}
+            parentName={selectedPatient.parentName}
+            parentId="parent-123"
+          />
+        ) : activeTab === 'coordination' && (
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-xl font-semibold text-neutral-900 dark:text-white">Care Coordination</h2>
+              <p className="text-neutral-500 dark:text-slate-400 mt-1">
+                Select a patient with granted access to view their care team
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {patients
+                .filter(p => p.profileAccess === 'granted')
+                .map(patient => (
+                  <Card
+                    key={patient.id}
+                    onClick={() => setSelectedPatient(patient)}
+                    className="p-4 cursor-pointer hover:shadow-md transition-all hover:border-teal-300 dark:hover:border-teal-700"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-violet-100 to-purple-100 dark:from-violet-900/30 dark:to-purple-900/30 flex items-center justify-center">
+                        <span className="text-lg font-semibold text-violet-700 dark:text-violet-400">
+                          {patient.childName.split(' ').map(n => n[0]).join('')}
+                        </span>
+                      </div>
+                      <div>
+                        <h4 className="font-medium text-neutral-900 dark:text-white">{patient.childName}</h4>
+                        <p className="text-sm text-neutral-500 dark:text-slate-400">{patient.parentName}</p>
+                      </div>
+                    </div>
+                    <Button size="sm" className="w-full mt-4 bg-teal-600 hover:bg-teal-700">
+                      View Care Team
+                    </Button>
+                  </Card>
+                ))}
+            </div>
+
+            {patients.filter(p => p.profileAccess === 'granted').length === 0 && (
+              <Card className="p-12 text-center">
+                <Heart className="w-12 h-12 mx-auto mb-4 text-neutral-300 dark:text-slate-600" />
+                <h3 className="text-lg font-medium text-neutral-900 dark:text-white mb-2">
+                  No Patients with Access
+                </h3>
+                <p className="text-neutral-500 dark:text-slate-400 max-w-md mx-auto">
+                  Request access from patient families to collaborate with their care team.
+                </p>
+              </Card>
+            )}
           </div>
         )}
       </main>

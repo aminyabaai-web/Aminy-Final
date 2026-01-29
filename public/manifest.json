@@ -85,6 +85,13 @@
       "icons": [{ "src": "/icons/chat-icon.png", "sizes": "96x96" }]
     },
     {
+      "name": "Crisis Resources",
+      "short_name": "Crisis",
+      "description": "Emergency contacts and calming techniques",
+      "url": "/?screen=crisis-resources",
+      "icons": [{ "src": "/icons/crisis-icon.png", "sizes": "96x96" }]
+    },
+    {
       "name": "Log Incident",
       "short_name": "Log",
       "description": "Quick log a behavioral incident",
