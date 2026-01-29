@@ -7,6 +7,8 @@ import { initSentry } from "./lib/sentry.ts";
 import "./i18n";
 // Mobile safe area support
 import { injectSafeAreaStyles } from "./lib/mobile-safe-areas.ts";
+// Service worker for offline support
+import { registerServiceWorker } from "./lib/service-worker.ts";
 
 // Initialize Sentry first (before anything can error)
 initSentry();
@@ -38,3 +40,15 @@ initEnvValidation();
 injectSafeAreaStyles();
 
 createRoot(document.getElementById("root")!).render(<App />);
+
+// Register service worker for offline support & push notifications
+// Only register in production to avoid caching issues during development
+if (import.meta.env.PROD) {
+  registerServiceWorker().then((registration) => {
+    if (registration) {
+      console.log('[Aminy] Service worker registered successfully');
+    }
+  }).catch((error) => {
+    console.error('[Aminy] Service worker registration failed:', error);
+  });
+}

@@ -279,6 +279,13 @@ const MedicationTracker = lazy(() =>
   })),
 );
 
+// Crisis Resources - cached offline
+const CrisisResources = lazy(() =>
+  import("./components/CrisisResources").then((m) => ({
+    default: m.CrisisResources,
+  })),
+);
+
 // Secure Admin Portal Wrapper with server-side verification
 const SecureAdminPortalWrapper = React.memo(function SecureAdminPortalWrapper({
   userId,
@@ -440,7 +447,8 @@ type AppScreen =
   | "access-requests" // Provider access request management
   | "provider-landing" // Provider marketing landing page
   | "provider-apply" // Provider application form
-  | "medications"; // Medication tracking for children
+  | "medications" // Medication tracking for children
+  | "crisis-resources"; // Offline-available crisis resources
 
 interface ChildProfile {
   id: string;
@@ -1491,6 +1499,15 @@ export default function App() {
             </Suspense>
           );
 
+        case "crisis-resources":
+          return (
+            <Suspense fallback={<LoadingSkeleton />}>
+              <CrisisResources
+                onBack={() => navigateToScreen("dashboard")}
+              />
+            </Suspense>
+          );
+
         default:
           return (
             <Suspense fallback={<LoadingSkeleton />}>
@@ -1616,7 +1633,9 @@ export default function App() {
 
                   {/* Offline Indicator - Deferred */}
                   <Suspense fallback={null}>
-                    <OfflineIndicator />
+                    <OfflineIndicator
+                      onCrisisResourcesClick={() => navigateToScreen("crisis-resources")}
+                    />
                   </Suspense>
 
                   {/* Update Available Banner - Deferred */}

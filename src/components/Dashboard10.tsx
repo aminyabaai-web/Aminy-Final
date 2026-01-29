@@ -55,6 +55,7 @@ import { HealthDataIntegration } from './HealthDataIntegration';
 import { TrialProgressBanner, SoftNudgeModal, HardPaywallModal } from './TrialExperience';
 import { ShareInsightInline } from './ShareInsight';
 import { ReferralCard } from './ReferralCard';
+import { NotificationPrompt, useShouldShowNotificationPrompt } from './NotificationPrompt';
 import { supabase } from '../utils/supabase/client';
 
 // Types
@@ -172,6 +173,10 @@ export function Dashboard10({
 
   // Morning mission state
   const { shouldShow: showMorningMission, isCompleted: missionCompleted } = useMorningMission();
+
+  // Notification prompt state
+  const shouldShowNotificationPrompt = useShouldShowNotificationPrompt();
+  const [showNotificationPrompt, setShowNotificationPrompt] = useState(true);
 
   // Check trial status for free users
   useEffect(() => {
@@ -602,6 +607,21 @@ export function Dashboard10({
         {userTier === 'free' && (
           <section>
             <TrialProgressBanner onUpgrade={() => onNavigate?.('paywall')} />
+          </section>
+        )}
+
+        {/* ========================================
+            NOTIFICATION PROMPT - Enable push notifications
+            Personalized value proposition
+            ======================================== */}
+        {shouldShowNotificationPrompt && showNotificationPrompt && (
+          <section>
+            <NotificationPrompt
+              childName={child.name}
+              onDismiss={() => setShowNotificationPrompt(false)}
+              onEnable={() => setShowNotificationPrompt(false)}
+              variant="card"
+            />
           </section>
         )}
 

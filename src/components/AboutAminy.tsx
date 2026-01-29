@@ -12,28 +12,28 @@ interface AboutAminyProps {
 export function AboutAminy({ variant = 'full', showLegal = true }: AboutAminyProps) {
   if (variant === 'compact') {
     return (
-      <Card className="p-6 bg-gradient-to-br from-accent/5 to-teal-50">
+      <Card className="p-6 bg-gradient-to-br from-accent/5 to-teal-50 dark:from-slate-800 dark:to-slate-700">
         <div className="space-y-3 sm:space-y-4">
           <div className="flex items-start gap-3">
             <div className="w-10 h-10 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0">
               <Heart className="w-5 h-5 text-accent" />
             </div>
             <div>
-              <h3 className="font-semibold text-slate-900 mb-1">About {BRAND_IDENTITY.name}</h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
+              <h3 className="font-semibold text-slate-900 dark:text-white mb-1">About {BRAND_IDENTITY.name}</h3>
+              <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
                 <strong>Category:</strong> {BRAND_IDENTITY.category}<br />
                 <strong>Subcategory:</strong> {BRAND_IDENTITY.subcategory}
               </p>
             </div>
           </div>
-          
-          <p className="text-sm text-slate-700 leading-relaxed">
+
+          <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
             {POSITIONING_STATEMENT}
           </p>
 
           {showLegal && (
-            <div className="pt-3 border-t border-slate-200">
-              <p className="text-xs text-slate-500 italic">
+            <div className="pt-3 border-t border-slate-200 dark:border-slate-600">
+              <p className="text-xs text-slate-500 dark:text-slate-400 italic">
                 {LEGAL_PRIVACY.disclaimer}
               </p>
             </div>
@@ -46,29 +46,29 @@ export function AboutAminy({ variant = 'full', showLegal = true }: AboutAminyPro
   return (
     <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       {/* Header */}
-      <div className="text-center pb-6 border-b border-slate-200">
-        <h1 className="text-3xl font-semibold text-slate-900 mb-3">About {BRAND_IDENTITY.name}</h1>
-        <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+      <div className="text-center pb-6 border-b border-slate-200 dark:border-slate-700">
+        <h1 className="text-3xl font-semibold text-slate-900 dark:text-white mb-3">About {BRAND_IDENTITY.name}</h1>
+        <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
           {BRAND_IDENTITY.tagline}
         </p>
       </div>
 
       {/* Positioning Statement */}
-      <Card className="p-6 bg-gradient-to-br from-accent/5 to-teal-50 border-accent/20">
+      <Card className="p-6 bg-gradient-to-br from-accent/5 to-teal-50 dark:from-slate-800 dark:to-slate-700 border-accent/20">
         <div className="flex items-start gap-3 sm:gap-4">
           <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0">
             <Sparkles className="w-6 h-6 text-accent" />
           </div>
           <div>
-            <h2 className="text-lg sm:text-xl font-semibold text-slate-900 mb-3">What is {BRAND_IDENTITY.name}?</h2>
-            <p className="text-slate-700 leading-relaxed mb-4">
+            <h2 className="text-lg sm:text-xl font-semibold text-slate-900 dark:text-white mb-3">What is {BRAND_IDENTITY.name}?</h2>
+            <p className="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
               {POSITIONING_STATEMENT}
             </p>
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-accent/20 rounded-full">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 border border-accent/20 rounded-full">
               <Badge variant="outline" className="border-accent/40 text-accent bg-accent/5">
                 {BRAND_IDENTITY.category}
               </Badge>
-              <span className="text-xs text-slate-500">•</span>
+              <span className="text-xs text-slate-500 dark:text-slate-400">•</span>
               <Badge variant="outline" className="border-accent/40 text-accent bg-accent/5">
                 {BRAND_IDENTITY.subcategory}
               </Badge>
@@ -79,32 +79,32 @@ export function AboutAminy({ variant = 'full', showLegal = true }: AboutAminyPro
 
       {/* Core Value Pillars */}
       <div className="grid md:grid-cols-3 gap-3 sm:gap-4">
-        <Card className="p-5 hover:shadow-lg transition-shadow">
-          <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mb-3">
-            <Shield className="w-5 h-5 text-blue-600" />
+        <Card className="p-5 hover:shadow-lg transition-shadow dark:hover:shadow-slate-900/50">
+          <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mb-3">
+            <Shield className="w-5 h-5 text-blue-600 dark:text-blue-400" />
           </div>
-          <h3 className="font-semibold text-slate-900 mb-2">{VALUE_PILLARS.calmAndPredictability.title}</h3>
-          <p className="text-sm text-slate-600 leading-relaxed">
+          <h3 className="font-semibold text-slate-900 dark:text-white mb-2">{VALUE_PILLARS.calmAndPredictability.title}</h3>
+          <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
             {VALUE_PILLARS.calmAndPredictability.description}
           </p>
         </Card>
 
-        <Card className="p-5 hover:shadow-lg transition-shadow">
-          <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mb-3">
-            <Heart className="w-5 h-5 text-green-600" />
+        <Card className="p-5 hover:shadow-lg transition-shadow dark:hover:shadow-slate-900/50">
+          <div className="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mb-3">
+            <Heart className="w-5 h-5 text-green-600 dark:text-green-400" />
           </div>
-          <h3 className="font-semibold text-slate-900 mb-2">{VALUE_PILLARS.connectionAndConfidence.title}</h3>
-          <p className="text-sm text-slate-600 leading-relaxed">
+          <h3 className="font-semibold text-slate-900 dark:text-white mb-2">{VALUE_PILLARS.connectionAndConfidence.title}</h3>
+          <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
             {VALUE_PILLARS.connectionAndConfidence.description}
           </p>
         </Card>
 
-        <Card className="p-5 hover:shadow-lg transition-shadow">
-          <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mb-3">
-            <Target className="w-5 h-5 text-purple-600" />
+        <Card className="p-5 hover:shadow-lg transition-shadow dark:hover:shadow-slate-900/50">
+          <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mb-3">
+            <Target className="w-5 h-5 text-purple-600 dark:text-purple-400" />
           </div>
-          <h3 className="font-semibold text-slate-900 mb-2">{VALUE_PILLARS.scienceAndSimplicity.title}</h3>
-          <p className="text-sm text-slate-600 leading-relaxed">
+          <h3 className="font-semibold text-slate-900 dark:text-white mb-2">{VALUE_PILLARS.scienceAndSimplicity.title}</h3>
+          <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
             {VALUE_PILLARS.scienceAndSimplicity.description}
           </p>
         </Card>
@@ -113,27 +113,27 @@ export function AboutAminy({ variant = 'full', showLegal = true }: AboutAminyPro
       {/* Our Approach - ABA + AI */}
       <Card className="p-4 sm:p-5 md:p-6">
         <div className="flex items-start gap-3 mb-4">
-          <div className="w-10 h-10 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
-            <Brain className="w-5 h-5 text-purple-600" />
+          <div className="w-10 h-10 bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 rounded-full flex items-center justify-center flex-shrink-0">
+            <Brain className="w-5 h-5 text-purple-600 dark:text-purple-400" />
           </div>
           <div>
-            <h2 className="text-lg sm:text-xl font-semibold text-slate-900">Our Approach: ABA + AI</h2>
+            <h2 className="text-lg sm:text-xl font-semibold text-slate-900 dark:text-white">Our Approach: ABA + AI</h2>
           </div>
         </div>
-        
-        <div className="space-y-3 text-slate-700 leading-relaxed">
+
+        <div className="space-y-3 text-slate-700 dark:text-slate-300 leading-relaxed">
           <p>
-            ABA (Applied Behavior Analysis) isn't just for therapy centers—it's for breakfast time, car rides, getting dressed, 
+            ABA (Applied Behavior Analysis) isn't just for therapy centers—it's for breakfast time, car rides, getting dressed,
             and all the everyday moments that make up family life.
           </p>
           <p>
-            {BRAND_IDENTITY.name} translates behavioral science into <strong>small daily wins</strong> that make family life calmer. 
+            {BRAND_IDENTITY.name} translates behavioral science into <strong>small daily wins</strong> that make family life calmer.
             Our adaptive AI learns your family's unique rhythm and personalizes guidance based on proven ABA principles.
           </p>
-          
-          <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg p-4 my-4">
-            <h3 className="font-semibold text-slate-900 mb-3 flex items-center gap-2">
-              <Zap className="w-4 h-4 text-purple-600" />
+
+          <div className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg p-4 my-4">
+            <h3 className="font-semibold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
+              <Zap className="w-4 h-4 text-purple-600 dark:text-purple-400" />
               Powered by Adaptive AI & ABA Science
             </h3>
             <ul className="space-y-2 ml-6 list-disc text-sm">
@@ -149,17 +149,17 @@ export function AboutAminy({ variant = 'full', showLegal = true }: AboutAminyPro
 
       {/* What We're Not (Legal Disclosure) */}
       {showLegal && (
-        <Card className="p-6 bg-amber-50 border-amber-200">
+        <Card className="p-6 bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800">
           <div className="flex items-start gap-3">
-            <div className="w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-              <Shield className="w-5 h-5 text-amber-700" />
+            <div className="w-10 h-10 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+              <Shield className="w-5 h-5 text-amber-700 dark:text-amber-400" />
             </div>
             <div>
-              <h3 className="font-semibold text-amber-900 mb-2">Important Disclosure</h3>
-              <p className="text-sm text-amber-800 leading-relaxed mb-3">
+              <h3 className="font-semibold text-amber-900 dark:text-amber-200 mb-2">Important Disclosure</h3>
+              <p className="text-sm text-amber-800 dark:text-amber-300 leading-relaxed mb-3">
                 {LEGAL_PRIVACY.disclaimer}
               </p>
-              <p className="text-sm text-amber-800 leading-relaxed font-medium">
+              <p className="text-sm text-amber-800 dark:text-amber-300 leading-relaxed font-medium">
                 We provide wellness guidance and support—not medical diagnosis or clinical treatment.
               </p>
             </div>
@@ -168,15 +168,15 @@ export function AboutAminy({ variant = 'full', showLegal = true }: AboutAminyPro
       )}
 
       {/* Privacy & Safety */}
-      <Card className="p-6 bg-slate-50 border-slate-200">
+      <Card className="p-6 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700">
         <div className="flex items-start gap-3">
-          <div className="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center flex-shrink-0">
-            <Shield className="w-5 h-5 text-slate-600" />
+          <div className="w-10 h-10 bg-slate-100 dark:bg-slate-700 rounded-full flex items-center justify-center flex-shrink-0">
+            <Shield className="w-5 h-5 text-slate-600 dark:text-slate-400" />
           </div>
           <div>
-            <h3 className="font-semibold text-slate-900 mb-2">Your Privacy & Data</h3>
-            <p className="text-sm text-slate-700 leading-relaxed">
-              {LEGAL_PRIVACY.privacyPromise} We use industry-standard encryption and security practices 
+            <h3 className="font-semibold text-slate-900 dark:text-white mb-2">Your Privacy & Data</h3>
+            <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+              {LEGAL_PRIVACY.privacyPromise} We use industry-standard encryption and security practices
               to keep your family's information safe.
             </p>
           </div>
@@ -184,8 +184,8 @@ export function AboutAminy({ variant = 'full', showLegal = true }: AboutAminyPro
       </Card>
 
       {/* Version & Support */}
-      <div className="pt-6 border-t border-slate-200 text-center">
-        <p className="text-sm text-slate-500">
+      <div className="pt-6 border-t border-slate-200 dark:border-slate-700 text-center">
+        <p className="text-sm text-slate-500 dark:text-slate-400">
           {BRAND_IDENTITY.name} v1.0 • Made with 💙 for families navigating neurodivergence
         </p>
       </div>
