@@ -27,6 +27,8 @@ import {
   QrCode,
   CheckCircle,
   AlertCircle,
+  Twitter,
+  Facebook,
 } from 'lucide-react';
 import {
   Referral,
@@ -43,6 +45,7 @@ import {
 } from '../lib/referral-program';
 import { EmptyReferrals } from './ui/empty-state';
 import { toast } from 'sonner';
+import { trackReferralShare, getShareText, getReferralUrl } from '../lib/viral-analytics';
 
 interface ReferralDashboardProps {
   userId: string;
@@ -112,11 +115,60 @@ export function ReferralDashboard({
   };
 
   // Share via SMS
-  const handleSmsShare = () => {
+  const handleSmsShare = async () => {
     const { body, url } = getReferralShareMessage(referralCode, userName);
     const smsUrl = `sms:?body=${encodeURIComponent(body + ' ' + url)}`;
     window.open(smsUrl);
     onShare?.('sms');
+    // Track the share
+    await trackReferralShare(userId, 'sms');
+  };
+
+  // Share via Twitter
+  const handleTwitterShare = async () => {
+    const shareText = getShareText();
+    const url = getReferralUrl(referralCode);
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText.twitter)}&url=${encodeURIComponent(url)}`;
+    window.open(twitterUrl, '_blank', 'width=600,height=400');
+    onShare?.('copy'); // Using 'copy' as generic social
+    await trackReferralShare(userId, 'social');
+    toast.success('Opening Twitter to share');
+  };
+
+  // Share via Facebook
+  const handleFacebookShare = async () => {
+    const url = getReferralUrl(referralCode);
+    const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+    window.open(facebookUrl, '_blank', 'width=600,height=400');
+    onShare?.('copy'); // Using 'copy' as generic social
+    await trackReferralShare(userId, 'social');
+    toast.success('Opening Facebook to share');
+  };
+
+  // Native share API (mobile)
+  const handleNativeShare = async () => {
+    const { title, body, url } = getReferralShareMessage(referralCode, userName);
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title,
+          text: body,
+          url,
+        });
+        onShare?.('copy');
+        await trackReferralShare(userId, 'other');
+        toast.success('Thanks for sharing!');
+      } catch (error) {
+        // User cancelled or share failed
+        if ((error as Error).name !== 'AbortError') {
+          console.error('Share failed:', error);
+        }
+      }
+    } else {
+      // Fallback to copy
+      handleCopy();
+    }
   };
 
   if (loading) {
@@ -199,29 +251,53 @@ export function ReferralDashboard({
             animate={{ opacity: 1, height: 'auto' }}
             className="mt-4 pt-4 border-t border-white/20"
           >
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
               <button
                 onClick={handleEmailShare}
-                className="flex flex-col items-center p-3 bg-white/10 rounded-lg hover:bg-white/20"
+                className="flex flex-col items-center p-3 bg-white/10 rounded-lg hover:bg-white/20 transition-colors"
               >
                 <Mail className="w-5 h-5 mb-1" />
                 <span className="text-xs">Email</span>
               </button>
               <button
                 onClick={handleSmsShare}
-                className="flex flex-col items-center p-3 bg-white/10 rounded-lg hover:bg-white/20"
+                className="flex flex-col items-center p-3 bg-white/10 rounded-lg hover:bg-white/20 transition-colors"
               >
                 <MessageCircle className="w-5 h-5 mb-1" />
                 <span className="text-xs">Text</span>
               </button>
               <button
+                onClick={handleTwitterShare}
+                className="flex flex-col items-center p-3 bg-white/10 rounded-lg hover:bg-white/20 transition-colors"
+              >
+                <Twitter className="w-5 h-5 mb-1" />
+                <span className="text-xs">Twitter</span>
+              </button>
+              <button
+                onClick={handleFacebookShare}
+                className="flex flex-col items-center p-3 bg-white/10 rounded-lg hover:bg-white/20 transition-colors"
+              >
+                <Facebook className="w-5 h-5 mb-1" />
+                <span className="text-xs">Facebook</span>
+              </button>
+              <button
                 onClick={() => onShare?.('qr')}
-                className="flex flex-col items-center p-3 bg-white/10 rounded-lg hover:bg-white/20"
+                className="flex flex-col items-center p-3 bg-white/10 rounded-lg hover:bg-white/20 transition-colors"
               >
                 <QrCode className="w-5 h-5 mb-1" />
                 <span className="text-xs">QR Code</span>
               </button>
             </div>
+            {/* Native share button for mobile */}
+            {'share' in navigator && (
+              <button
+                onClick={handleNativeShare}
+                className="w-full mt-3 py-2 bg-white/20 rounded-lg hover:bg-white/30 transition-colors flex items-center justify-center gap-2 text-sm font-medium"
+              >
+                <Share2 className="w-4 h-4" />
+                More sharing options
+              </button>
+            )}
           </motion.div>
         )}
 
