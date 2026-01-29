@@ -7,6 +7,7 @@
  */
 
 import { supabase } from '../utils/supabase/client';
+import { projectId, publicAnonKey } from '../utils/supabase/info';
 
 // ============================================
 // TYPES
@@ -452,11 +453,80 @@ function getRecommendedAction(tier: EscalationTier, type?: CrisisType): string {
 }
 
 // ============================================
+// AI-POWERED DETECTION (Layer 2)
+// ============================================
+
+const getBackendUrl = () => `https://${projectId}.supabase.co/functions/v1/make-server-8a022548`;
+
+/**
+ * AI-powered crisis detection for nuanced cases
+ * Called when regex detection is inconclusive (0.3-0.6 confidence)
+ */
+async function aiCrisisClassification(
+  message: string
+): Promise<{ isCrisis: boolean; type?: CrisisType; confidence: number; reasoning?: string } | null> {
+  try {
+    const response = await fetch(`${getBackendUrl()}/ai/crisis-detect`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${publicAnonKey}`,
+      },
+      body: JSON.stringify({
+        message,
+        prompt: CRISIS_CLASSIFICATION_PROMPT,
+      }),
+    });
+
+    if (!response.ok) {
+      console.error('[Crisis AI] Classification failed:', response.status);
+      return null;
+    }
+
+    const data = await response.json();
+    return data.classification || null;
+  } catch (error) {
+    console.error('[Crisis AI] Error:', error);
+    return null;
+  }
+}
+
+const CRISIS_CLASSIFICATION_PROMPT = `You are a crisis detection system for a parenting support app.
+Analyze the message for signs of crisis. Be SENSITIVE but avoid false positives.
+
+CRISIS TYPES TO DETECT:
+1. suicidal_ideation - Thoughts of suicide or ending life
+2. self_harm - Self-injury thoughts or behaviors
+3. child_safety - Potential harm to a child
+4. domestic_violence - Abuse or violence in the home
+5. caregiver_burnout - Severe parental exhaustion (only if reaching crisis level)
+6. mental_health_crisis - Acute psychological distress
+7. medical_emergency - Urgent medical situation
+
+IMPORTANT:
+- Normal parenting stress is NOT a crisis
+- "I'm exhausted" alone is NOT a crisis
+- Look for SEVERE distress indicators
+- Consider context and nuance
+- When uncertain, lean toward detection (safety first)
+
+Respond with JSON:
+{
+  "isCrisis": boolean,
+  "type": string or null,
+  "confidence": number (0-1),
+  "reasoning": "brief explanation"
+}`;
+
+// ============================================
 // MAIN DETECTION FUNCTION
 // ============================================
 
 /**
  * Comprehensive crisis detection with multi-layer analysis
+ * Layer 1: Fast regex pre-screening
+ * Layer 2: AI classification for nuanced cases
+ * Layer 3: Contextual modifiers
  */
 export function detectCrisis(message: string): CrisisDetectionResult {
   // Layer 1: Fast regex pre-screening
@@ -483,6 +553,96 @@ export function detectCrisis(message: string): CrisisDetectionResult {
   );
 
   // Determine escalation tier
+  const escalationTier = determineEscalationTier(adjustedConfidence);
+
+  // Get resources for this crisis type
+  const resources = CRISIS_RESOURCES[primaryMatch.type] || [];
+
+  // Get recommended action
+  const recommendedAction = getRecommendedAction(escalationTier, primaryMatch.type);
+
+  return {
+    isCrisis: true,
+    type: primaryMatch.type,
+    confidence: adjustedConfidence,
+    escalationTier,
+    matchedPatterns: [
+      ...primaryMatch.patterns,
+      ...appliedModifiers.map(m => `[Context: ${m}]`),
+    ],
+    recommendedAction,
+    resources,
+  };
+}
+
+/**
+ * Async crisis detection with AI enhancement
+ * Use this for more accurate detection when async is acceptable
+ */
+export async function detectCrisisEnhanced(message: string): Promise<CrisisDetectionResult> {
+  // Layer 1: Fast regex pre-screening
+  const { matches, hasAnyMatch } = regexPreScreen(message);
+
+  // If no regex matches, try AI for subtle signals
+  if (!hasAnyMatch) {
+    // Check for subtle crisis language that regex might miss
+    const subtleIndicators = /\b(can'?t (cope|go on|take it)|overwhelmed|breaking|hopeless|desperate|no way out)\b/i;
+
+    if (subtleIndicators.test(message)) {
+      // Use AI for nuanced detection
+      const aiResult = await aiCrisisClassification(message);
+
+      if (aiResult && aiResult.isCrisis && aiResult.confidence >= 0.5) {
+        const type = aiResult.type as CrisisType || 'caregiver_burnout';
+        const escalationTier = determineEscalationTier(aiResult.confidence);
+
+        return {
+          isCrisis: true,
+          type,
+          confidence: aiResult.confidence,
+          escalationTier,
+          matchedPatterns: [`[AI Detected: ${aiResult.reasoning || 'nuanced crisis signals'}]`],
+          recommendedAction: getRecommendedAction(escalationTier, type),
+          resources: CRISIS_RESOURCES[type] || CRISIS_RESOURCES.caregiver_burnout,
+        };
+      }
+    }
+
+    return {
+      isCrisis: false,
+      confidence: 0,
+      escalationTier: 'low',
+      matchedPatterns: [],
+      recommendedAction: 'No crisis indicators detected',
+      resources: [],
+    };
+  }
+
+  // Get highest priority match
+  const primaryMatch = matches[0];
+
+  // Apply contextual modifiers
+  let { adjustedConfidence, appliedModifiers } = applyContextModifiers(
+    message,
+    primaryMatch.baseConfidence
+  );
+
+  // Layer 2: AI enhancement for borderline cases (0.4-0.7 confidence)
+  if (adjustedConfidence >= 0.4 && adjustedConfidence <= 0.7) {
+    const aiResult = await aiCrisisClassification(message);
+
+    if (aiResult) {
+      // Blend AI confidence with regex confidence
+      const blendedConfidence = (adjustedConfidence * 0.4) + (aiResult.confidence * 0.6);
+      adjustedConfidence = Math.min(0.95, blendedConfidence);
+
+      if (aiResult.reasoning) {
+        appliedModifiers.push(`AI: ${aiResult.reasoning}`);
+      }
+    }
+  }
+
+  // Determine escalation tier with final confidence
   const escalationTier = determineEscalationTier(adjustedConfidence);
 
   // Get resources for this crisis type
@@ -616,6 +776,7 @@ export async function logCrisisDetection(
 
 export default {
   detectCrisis,
+  detectCrisisEnhanced,
   generateCrisisResponse,
   logCrisisDetection,
   CRISIS_RESOURCES,

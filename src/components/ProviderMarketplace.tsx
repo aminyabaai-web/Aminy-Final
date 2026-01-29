@@ -61,6 +61,7 @@ import {
 import { EmptyProviders, EmptySearchResults } from './ui/empty-state';
 import { providerTypes, type ProviderType, type ProviderTypeInfo } from '../lib/child-profiles';
 import { brandColors, getColorForProvider } from '../lib/brand-system';
+import { VerifiedBadge } from './provider/CredentialBadge';
 
 // Types
 interface MarketplaceProvider {
@@ -81,6 +82,7 @@ interface MarketplaceProvider {
   nextAvailable: string;
   isBookmarked: boolean;
   badges: string[];
+  verificationStatus?: 'verified' | 'pending' | 'manual_review' | 'expired' | 'failed';
 }
 
 interface AvailabilitySlot {
@@ -334,7 +336,8 @@ export function ProviderMarketplace({
       availability: generateAvailability(),
       nextAvailable: 'Tomorrow 10:00 AM',
       isBookmarked: false,
-      badges: ['Top Rated', 'Clinical Director']
+      badges: ['Top Rated', 'Clinical Director'],
+      verificationStatus: 'verified'
     },
     {
       id: 'prov-2',
@@ -352,7 +355,8 @@ export function ProviderMarketplace({
       availability: generateAvailability(),
       nextAvailable: 'Today 3:00 PM',
       isBookmarked: true,
-      badges: ['Teen Specialist']
+      badges: ['Teen Specialist'],
+      verificationStatus: 'verified'
     },
     {
       id: 'prov-3',
@@ -370,7 +374,8 @@ export function ProviderMarketplace({
       availability: generateAvailability(),
       nextAvailable: 'Tomorrow 2:00 PM',
       isBookmarked: false,
-      badges: ['Great with Kids']
+      badges: ['Great with Kids'],
+      verificationStatus: 'verified'
     },
 
     // THERAPY TEAM
@@ -390,7 +395,8 @@ export function ProviderMarketplace({
       availability: generateAvailability(),
       nextAvailable: 'Today 5:00 PM',
       isBookmarked: false,
-      badges: ['Anxiety Specialist', 'Bilingual']
+      badges: ['Anxiety Specialist', 'Bilingual'],
+      verificationStatus: 'verified'
     },
     {
       id: 'prov-5',
@@ -408,7 +414,8 @@ export function ProviderMarketplace({
       availability: generateAvailability(),
       nextAvailable: 'Thursday 11:00 AM',
       isBookmarked: false,
-      badges: ['IEP Expert', 'Advocacy Pro']
+      badges: ['IEP Expert', 'Advocacy Pro'],
+      verificationStatus: 'verified'
     },
     {
       id: 'prov-6',
@@ -426,7 +433,8 @@ export function ProviderMarketplace({
       availability: generateAvailability(),
       nextAvailable: 'Wednesday 9:00 AM',
       isBookmarked: false,
-      badges: ['AAC Specialist']
+      badges: ['AAC Specialist'],
+      verificationStatus: 'pending'
     },
     {
       id: 'prov-7',
@@ -444,7 +452,8 @@ export function ProviderMarketplace({
       availability: generateAvailability(),
       nextAvailable: 'Friday 10:00 AM',
       isBookmarked: false,
-      badges: ['Sensory Expert']
+      badges: ['Sensory Expert'],
+      verificationStatus: 'verified'
     },
 
     // MEDICAL TEAM
@@ -464,7 +473,8 @@ export function ProviderMarketplace({
       availability: generateAvailability(),
       nextAvailable: 'Next Week',
       isBookmarked: false,
-      badges: ['Board Certified', 'Top Rated']
+      badges: ['Board Certified', 'Top Rated'],
+      verificationStatus: 'verified'
     },
     {
       id: 'prov-9',
@@ -482,7 +492,8 @@ export function ProviderMarketplace({
       availability: generateAvailability(),
       nextAvailable: '2 Weeks',
       isBookmarked: false,
-      badges: ['Diagnostic Expert', 'Highly Sought']
+      badges: ['Diagnostic Expert', 'Highly Sought'],
+      verificationStatus: 'verified'
     }
   ];
 
@@ -585,9 +596,14 @@ export function ProviderMarketplace({
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between mb-1">
               <div>
-                <h3 className="font-semibold text-gray-900 group-hover:text-teal-600 transition-colors">
-                  {provider.name}, {provider.credentials}
-                </h3>
+                <div className="flex items-center gap-2">
+                  <h3 className="font-semibold text-gray-900 group-hover:text-teal-600 transition-colors">
+                    {provider.name}, {provider.credentials}
+                  </h3>
+                  {provider.verificationStatus && (
+                    <VerifiedBadge status={provider.verificationStatus} />
+                  )}
+                </div>
                 <p className="text-sm text-gray-500">{typeInfo.fullTitle}</p>
               </div>
               <div className="flex items-center gap-1 text-sm">

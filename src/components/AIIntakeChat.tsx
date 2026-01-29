@@ -1187,12 +1187,16 @@ Return as JSON array of strings.`,
       </div>
 
       {/* Chat Container - Scrollable with proper spacing */}
-      <div 
+      <div
         ref={chatContainerRef}
         className="flex-1 overflow-y-auto overflow-x-hidden px-4 py-6 pb-6"
-        style={{ 
+        style={{
           scrollBehavior: 'smooth'
         }}
+        role="log"
+        aria-label="Conversation with Aminy"
+        aria-live="polite"
+        aria-relevant="additions"
       >
         <div className="max-w-2xl mx-auto space-y-3 sm:space-y-4">
           <AnimatePresence>
@@ -1379,7 +1383,7 @@ Return as JSON array of strings.`,
           <div className="max-w-2xl mx-auto">
             {/* Voice-first toggle */}
             {conversationTurn === 0 && !currentInput && (
-              <div className="flex items-center justify-center gap-3 sm:gap-4 mb-3">
+              <div className="flex items-center justify-center gap-3 sm:gap-4 mb-3" role="group" aria-label="Choose input method">
                 <button
                   onClick={() => setUseVoiceFirst(false)}
                   className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm transition-colors ${
@@ -1387,8 +1391,10 @@ Return as JSON array of strings.`,
                       ? 'bg-teal-100 text-teal-700 font-medium'
                       : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
                   }`}
+                  aria-label="Type your message"
+                  aria-pressed={!useVoiceFirst}
                 >
-                  <Send className="w-4 h-4" />
+                  <Send className="w-4 h-4" aria-hidden="true" />
                   Type
                 </button>
                 <button
@@ -1398,8 +1404,10 @@ Return as JSON array of strings.`,
                       ? 'bg-teal-100 text-teal-700 font-medium'
                       : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
                   }`}
+                  aria-label="Speak your message"
+                  aria-pressed={useVoiceFirst}
                 >
-                  <Volume2 className="w-4 h-4" />
+                  <Volume2 className="w-4 h-4" aria-hidden="true" />
                   Speak
                 </button>
               </div>
@@ -1426,13 +1434,14 @@ Return as JSON array of strings.`,
                 <button
                   onClick={() => setUseVoiceFirst(false)}
                   className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 underline"
+                  aria-label="Switch to typing mode"
                 >
                   I'd rather type
                 </button>
               </div>
             ) : (
               <>
-                <div className="flex items-end gap-2">
+                <div className="flex items-end gap-2" role="form" aria-label="Message input">
                   <div className="flex-1 relative">
                     <Textarea
                       value={currentInput}
@@ -1459,6 +1468,10 @@ Return as JSON array of strings.`,
                       autoCapitalize="sentences"
                       autoCorrect="on"
                       spellCheck={true}
+                      aria-label={conversationTurn === 0
+                        ? "Tell Aminy about your child"
+                        : "Continue your conversation with Aminy"}
+                      aria-describedby="chat-input-hint"
                     />
                     <button
                       onClick={handleVoiceInput}
@@ -1467,20 +1480,22 @@ Return as JSON array of strings.`,
                           ? 'bg-red-100 text-red-600'
                           : 'bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600'
                       }`}
-                      title="Voice input"
+                      aria-label={isListening ? "Stop voice input" : "Start voice input"}
+                      aria-pressed={isListening}
                     >
-                      <Mic className="w-4 h-4" />
+                      <Mic className="w-4 h-4" aria-hidden="true" />
                     </button>
                   </div>
                   <Button
                     onClick={handleSendMessage}
                     disabled={!currentInput.trim() || isTyping}
                     className="bg-teal-500 hover:bg-teal-600 text-white h-[88px] px-6"
+                    aria-label="Send message"
                   >
-                    <Send className="w-5 h-5" />
+                    <Send className="w-5 h-5" aria-hidden="true" />
                   </Button>
                 </div>
-                <p className="text-xs text-gray-500 dark:text-gray-400 text-center mt-2">
+                <p id="chat-input-hint" className="text-xs text-gray-500 dark:text-gray-400 text-center mt-2">
                   🔒 Everything you share helps me build your personalized plan
                 </p>
               </>

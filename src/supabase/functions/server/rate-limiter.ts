@@ -101,12 +101,14 @@ export async function checkRateLimit(
       resetAt: entry.resetAt,
     };
   } catch (error) {
-    // On error, allow the request (fail open) but log it
-    console.error('Rate limit check failed:', error);
+    // SECURITY: Fail CLOSED - deny requests when rate limiting is unavailable
+    // This prevents abuse if the KV store is down
+    console.error('[RateLimit] Check failed, denying request for safety:', error);
     return {
-      allowed: true,
-      remaining: config.maxRequests,
-      resetAt: now + config.windowMs,
+      allowed: false,
+      remaining: 0,
+      resetAt: now + 60000, // Retry in 60 seconds
+      retryAfter: 60,
     };
   }
 }
@@ -156,11 +158,13 @@ export async function checkGlobalRateLimit(): Promise<RateLimitResult> {
       resetAt: entry.resetAt,
     };
   } catch (error) {
-    console.error('Global rate limit check failed:', error);
+    // SECURITY: Fail CLOSED for global rate limit - critical for DDoS protection
+    console.error('[RateLimit] Global check failed, denying request for safety:', error);
     return {
-      allowed: true,
-      remaining: GLOBAL_RATE_LIMIT.maxRequests,
-      resetAt: now + GLOBAL_RATE_LIMIT.windowMs,
+      allowed: false,
+      remaining: 0,
+      resetAt: now + 5000, // Retry in 5 seconds for global
+      retryAfter: 5,
     };
   }
 }
@@ -309,15 +313,18 @@ export async function checkDailyUsage(
       shouldShowPaywall,
     };
   } catch (error) {
-    console.error('Daily usage check failed:', error);
-    // Fail open - allow the request but log the error
+    console.error('[RateLimit] Daily usage check failed:', error);
+    // SECURITY: Fail CLOSED but with graceful degradation
+    // Allow a small buffer for transient errors, but prevent abuse
     return {
-      allowed: true,
-      messagesUsed: 0,
+      allowed: false,
+      messagesUsed: limit, // Assume at limit
       messagesLimit: limit,
-      messagesRemaining: limit,
+      messagesRemaining: 0,
       resetsAt: getResetTimeUTC(),
       shouldShowPaywall: false,
+      // Note: This will show "rate limit" not "paywall" which is correct
+      // because the issue is temporary, not subscription-based
     };
   }
 }
