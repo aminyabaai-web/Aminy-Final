@@ -6,6 +6,15 @@
  */
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import {
+  logWebhookReceived,
+  logPaymentSucceededServer,
+  logPaymentFailedServer,
+  logSubscriptionCreatedServer,
+  logSubscriptionCancelledServer,
+  logSubscriptionRenewedServer,
+  logSecurityAlert,
+} from './audit-logger.ts';
 
 // Note: In production, use Stripe SDK: import Stripe from 'stripe';
 // const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY')!);
@@ -921,6 +930,11 @@ export async function handleWebhook(req: Request): Promise<Response> {
     const isValid = await verifyWebhookSignature(body, signature, STRIPE_WEBHOOK_SECRET);
     if (!isValid) {
       console.error('Invalid webhook signature - potential fraud attempt');
+      // Log security alert for invalid signature
+      await logSecurityAlert('invalid_webhook_signature', {
+        signatureProvided: !!signature,
+        bodyLength: body.length,
+      }, req.headers.get('x-forwarded-for') || undefined);
       return new Response(JSON.stringify({ error: 'Invalid signature' }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' },
@@ -928,6 +942,13 @@ export async function handleWebhook(req: Request): Promise<Response> {
     }
 
     const event = JSON.parse(body);
+
+    // AUDIT: Log webhook received
+    await logWebhookReceived(
+      event.type,
+      event.id,
+      req.headers.get('x-forwarded-for') || undefined
+    );
 
     switch (event.type) {
       case 'checkout.session.completed': {
@@ -954,6 +975,23 @@ export async function handleWebhook(req: Request): Promise<Response> {
             if (tier) {
               await updateUserTier(userId, tier);
               console.log(`Updated user ${userId} to tier ${tier}`);
+
+              // AUDIT: Log payment success and subscription creation
+              await logPaymentSucceededServer(
+                userId,
+                session.payment_intent || session.id,
+                customerId,
+                session.amount_total || 0,
+                tier,
+                session.subscription
+              );
+              await logSubscriptionCreatedServer(
+                userId,
+                session.subscription,
+                customerId,
+                tier,
+                subscription.trial_end
+              );
             }
           } catch (err) {
             console.error('Failed to update user tier:', err);
@@ -983,9 +1021,26 @@ export async function handleWebhook(req: Request): Promise<Response> {
 
         // Check if subscription is being canceled
         if (subscription.cancel_at_period_end) {
-          // Get customer email
+          // Get customer email and user ID
           try {
             const customer = await stripeRequest(`/customers/${customerId}`);
+
+            // AUDIT: Log subscription cancellation
+            const { data: customerData } = await supabase
+              .from('stripe_customers')
+              .select('user_id')
+              .eq('stripe_customer_id', customerId)
+              .single();
+
+            if (customerData?.user_id) {
+              await logSubscriptionCancelledServer(
+                customerData.user_id,
+                subscription.id,
+                customerId,
+                true // cancel at period end
+              );
+            }
+
             if (customer.email) {
               const endDate = new Date(subscription.current_period_end * 1000).toLocaleDateString('en-US', {
                 month: 'long',
@@ -1030,6 +1085,29 @@ export async function handleWebhook(req: Request): Promise<Response> {
         const invoice = event.data.object;
         const customerEmail = invoice.customer_email;
         const customerName = invoice.customer_name || 'there';
+        const customerId = invoice.customer;
+
+        // AUDIT: Log subscription renewal for recurring payments
+        if (invoice.billing_reason === 'subscription_cycle' && invoice.subscription) {
+          try {
+            const { data: customerData } = await supabase
+              .from('stripe_customers')
+              .select('user_id')
+              .eq('stripe_customer_id', customerId)
+              .single();
+
+            if (customerData?.user_id) {
+              await logSubscriptionRenewedServer(
+                customerData.user_id,
+                invoice.subscription,
+                invoice.id,
+                invoice.amount_paid || 0
+              );
+            }
+          } catch (err) {
+            console.error('Failed to log subscription renewal:', err);
+          }
+        }
 
         // Send payment confirmation for recurring payments
         if (customerEmail && invoice.billing_reason === 'subscription_cycle') {
@@ -1050,6 +1128,28 @@ export async function handleWebhook(req: Request): Promise<Response> {
         const invoice = event.data.object;
         const customerEmail = invoice.customer_email;
         const customerName = invoice.customer_name || 'there';
+        const customerId = invoice.customer;
+
+        // AUDIT: Log payment failure
+        try {
+          const { data: customerData } = await supabase
+            .from('stripe_customers')
+            .select('user_id')
+            .eq('stripe_customer_id', customerId)
+            .single();
+
+          if (customerData?.user_id) {
+            await logPaymentFailedServer(
+              customerData.user_id,
+              invoice.payment_intent,
+              invoice.amount_due || 0,
+              invoice.last_finalization_error?.message || 'Payment failed',
+              invoice.last_finalization_error?.code
+            );
+          }
+        } catch (err) {
+          console.error('Failed to log payment failure:', err);
+        }
 
         // Send payment failed notification
         if (customerEmail) {

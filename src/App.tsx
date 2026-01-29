@@ -26,6 +26,7 @@ import { ThemeProvider } from "./lib/theme-provider";
 import { supabase } from "./utils/supabase/client";
 import { FeedbackButton } from "./components/FeedbackButton";
 import { verifyAdminAccess } from "./hooks/useSecureSession";
+import { setSentryUser, clearSentryUser } from "./lib/sentry";
 
 // DEFERRED - Load after first paint
 const SafetyBoundary = lazy(() =>
@@ -778,6 +779,13 @@ export default function App() {
                 hasCompletedOnboarding: profile.has_completed_onboarding || false,
               }));
 
+              // Set Sentry user context for error tracking
+              setSentryUser({
+                id: session.user.id,
+                email: session.user.email,
+                tier: profile.tier || 'free',
+              });
+
               // Navigate based on onboarding status
               if (profile.has_completed_onboarding) {
                 navigateToScreen('dashboard');
@@ -802,6 +810,9 @@ export default function App() {
             navigateToScreen('onboarding');
           }
         } else if (event === 'SIGNED_OUT') {
+          // Clear Sentry user context
+          clearSentryUser();
+
           // Clear user data on sign out
           localStorage.removeItem('aminy-user');
           setUserData({

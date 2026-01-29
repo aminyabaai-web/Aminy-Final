@@ -31,7 +31,20 @@ export type AuditAction =
   | 'appointment_cancelled'
   | 'document_uploaded'
   | 'data_shared'
-  | 'settings_changed';
+  | 'settings_changed'
+  // Financial transaction actions
+  | 'payment_initiated'
+  | 'payment_succeeded'
+  | 'payment_failed'
+  | 'subscription_created'
+  | 'subscription_updated'
+  | 'subscription_cancelled'
+  | 'subscription_renewed'
+  | 'refund_initiated'
+  | 'refund_completed'
+  | 'promo_code_applied'
+  | 'tier_upgraded'
+  | 'tier_downgraded';
 
 // Resource types being accessed
 export type AuditResourceType =
@@ -51,7 +64,13 @@ export type AuditResourceType =
   | 'share_link'
   | 'fhir_bundle'
   | 'session_notes'
-  | 'progress_report';
+  | 'progress_report'
+  // Financial resources
+  | 'payment'
+  | 'subscription'
+  | 'invoice'
+  | 'refund'
+  | 'promo_code';
 
 // User roles for audit context
 export type AuditUserRole = 'parent' | 'provider' | 'admin' | 'caregiver' | 'system';
@@ -598,6 +617,331 @@ export function getProviderActivityAudit(providerId: string, days: number = 30):
   };
 }
 
+// =============================================================================
+// FINANCIAL TRANSACTION AUDIT LOGGING
+// =============================================================================
+
+/**
+ * Log payment initiation (checkout started)
+ */
+export function logPaymentInitiated(
+  userId: string,
+  userRole: AuditUserRole,
+  sessionId: string,
+  tier: string,
+  interval: 'monthly' | 'annual',
+  amountCents: number,
+  promoCode?: string
+): Promise<AuditEvent> {
+  return logAuditEvent({
+    userId,
+    userRole,
+    action: 'payment_initiated',
+    resourceType: 'payment',
+    resourceId: sessionId,
+    details: {
+      tier,
+      interval,
+      amountCents,
+      amountFormatted: `$${(amountCents / 100).toFixed(2)}`,
+      promoCode: promoCode || null,
+      initiatedAt: new Date().toISOString(),
+    },
+    sessionId: getSessionId(),
+    success: true,
+  });
+}
+
+/**
+ * Log successful payment
+ */
+export function logPaymentSucceeded(
+  userId: string,
+  stripePaymentId: string,
+  stripeCustomerId: string,
+  amountCents: number,
+  tier: string,
+  interval: 'monthly' | 'annual',
+  isNewSubscription: boolean
+): Promise<AuditEvent> {
+  return logAuditEvent({
+    userId,
+    userRole: 'parent',
+    action: 'payment_succeeded',
+    resourceType: 'payment',
+    resourceId: stripePaymentId,
+    details: {
+      stripeCustomerId,
+      amountCents,
+      amountFormatted: `$${(amountCents / 100).toFixed(2)}`,
+      tier,
+      interval,
+      isNewSubscription,
+      processedAt: new Date().toISOString(),
+    },
+    sessionId: getSessionId(),
+    success: true,
+  });
+}
+
+/**
+ * Log failed payment
+ */
+export function logPaymentFailed(
+  userId: string,
+  stripePaymentId: string | undefined,
+  amountCents: number,
+  failureReason: string,
+  failureCode?: string
+): Promise<AuditEvent> {
+  return logAuditEvent({
+    userId,
+    userRole: 'parent',
+    action: 'payment_failed',
+    resourceType: 'payment',
+    resourceId: stripePaymentId || 'unknown',
+    details: {
+      amountCents,
+      amountFormatted: `$${(amountCents / 100).toFixed(2)}`,
+      failureReason,
+      failureCode,
+      failedAt: new Date().toISOString(),
+    },
+    sessionId: getSessionId(),
+    success: false,
+    errorMessage: failureReason,
+  });
+}
+
+/**
+ * Log subscription creation
+ */
+export function logSubscriptionCreated(
+  userId: string,
+  subscriptionId: string,
+  stripeCustomerId: string,
+  tier: string,
+  interval: 'monthly' | 'annual',
+  trialDays?: number
+): Promise<AuditEvent> {
+  return logAuditEvent({
+    userId,
+    userRole: 'parent',
+    action: 'subscription_created',
+    resourceType: 'subscription',
+    resourceId: subscriptionId,
+    details: {
+      stripeCustomerId,
+      tier,
+      interval,
+      trialDays: trialDays || 0,
+      hasTrial: (trialDays || 0) > 0,
+      createdAt: new Date().toISOString(),
+    },
+    sessionId: getSessionId(),
+    success: true,
+  });
+}
+
+/**
+ * Log subscription cancellation
+ */
+export function logSubscriptionCancelled(
+  userId: string,
+  subscriptionId: string,
+  tier: string,
+  cancelReason?: string,
+  cancelAtPeriodEnd: boolean = true
+): Promise<AuditEvent> {
+  return logAuditEvent({
+    userId,
+    userRole: 'parent',
+    action: 'subscription_cancelled',
+    resourceType: 'subscription',
+    resourceId: subscriptionId,
+    details: {
+      tier,
+      cancelReason: cancelReason || 'User requested',
+      cancelAtPeriodEnd,
+      cancelledAt: new Date().toISOString(),
+    },
+    sessionId: getSessionId(),
+    success: true,
+  });
+}
+
+/**
+ * Log subscription renewal (recurring payment)
+ */
+export function logSubscriptionRenewed(
+  userId: string,
+  subscriptionId: string,
+  invoiceId: string,
+  amountCents: number,
+  tier: string
+): Promise<AuditEvent> {
+  return logAuditEvent({
+    userId,
+    userRole: 'parent',
+    action: 'subscription_renewed',
+    resourceType: 'subscription',
+    resourceId: subscriptionId,
+    details: {
+      invoiceId,
+      amountCents,
+      amountFormatted: `$${(amountCents / 100).toFixed(2)}`,
+      tier,
+      renewedAt: new Date().toISOString(),
+    },
+    sessionId: getSessionId(),
+    success: true,
+  });
+}
+
+/**
+ * Log tier change (upgrade or downgrade)
+ */
+export function logTierChange(
+  userId: string,
+  subscriptionId: string,
+  oldTier: string,
+  newTier: string,
+  changeType: 'upgrade' | 'downgrade',
+  proratedAmountCents?: number
+): Promise<AuditEvent> {
+  return logAuditEvent({
+    userId,
+    userRole: 'parent',
+    action: changeType === 'upgrade' ? 'tier_upgraded' : 'tier_downgraded',
+    resourceType: 'subscription',
+    resourceId: subscriptionId,
+    details: {
+      oldTier,
+      newTier,
+      changeType,
+      proratedAmountCents,
+      proratedAmountFormatted: proratedAmountCents ? `$${(proratedAmountCents / 100).toFixed(2)}` : null,
+      changedAt: new Date().toISOString(),
+    },
+    sessionId: getSessionId(),
+    success: true,
+  });
+}
+
+/**
+ * Log promo code application
+ */
+export function logPromoCodeApplied(
+  userId: string,
+  promoCode: string,
+  discountType: 'percent' | 'fixed',
+  discountValue: number,
+  originalAmountCents: number,
+  finalAmountCents: number,
+  context: 'subscription' | 'telehealth' | 'marketplace'
+): Promise<AuditEvent> {
+  return logAuditEvent({
+    userId,
+    userRole: 'parent',
+    action: 'promo_code_applied',
+    resourceType: 'promo_code',
+    resourceId: promoCode,
+    details: {
+      discountType,
+      discountValue,
+      discountFormatted: discountType === 'percent' ? `${discountValue}%` : `$${(discountValue / 100).toFixed(2)}`,
+      originalAmountCents,
+      finalAmountCents,
+      savingsAmountCents: originalAmountCents - finalAmountCents,
+      savingsFormatted: `$${((originalAmountCents - finalAmountCents) / 100).toFixed(2)}`,
+      context,
+      appliedAt: new Date().toISOString(),
+    },
+    sessionId: getSessionId(),
+    success: true,
+  });
+}
+
+/**
+ * Log refund
+ */
+export function logRefund(
+  userId: string,
+  refundId: string,
+  originalPaymentId: string,
+  amountCents: number,
+  reason: string,
+  initiatedBy: 'user' | 'admin' | 'system'
+): Promise<AuditEvent> {
+  return logAuditEvent({
+    userId,
+    userRole: initiatedBy === 'admin' ? 'admin' : initiatedBy === 'system' ? 'system' : 'parent',
+    action: 'refund_completed',
+    resourceType: 'refund',
+    resourceId: refundId,
+    details: {
+      originalPaymentId,
+      amountCents,
+      amountFormatted: `$${(amountCents / 100).toFixed(2)}`,
+      reason,
+      initiatedBy,
+      refundedAt: new Date().toISOString(),
+    },
+    sessionId: getSessionId(),
+    success: true,
+  });
+}
+
+/**
+ * Get financial audit summary for a user
+ */
+export function getFinancialAuditSummary(userId: string): {
+  totalPayments: number;
+  totalAmountPaid: number;
+  subscriptionChanges: number;
+  promoCodesUsed: number;
+  refunds: number;
+  recentTransactions: AuditEvent[];
+} {
+  const financialActions: AuditAction[] = [
+    'payment_initiated',
+    'payment_succeeded',
+    'payment_failed',
+    'subscription_created',
+    'subscription_updated',
+    'subscription_cancelled',
+    'subscription_renewed',
+    'refund_initiated',
+    'refund_completed',
+    'promo_code_applied',
+    'tier_upgraded',
+    'tier_downgraded',
+  ];
+
+  const allEvents = getAuditLog({ userId });
+  const financialEvents = allEvents.filter(e => financialActions.includes(e.action));
+
+  const successfulPayments = financialEvents.filter(
+    e => e.action === 'payment_succeeded' || e.action === 'subscription_renewed'
+  );
+
+  const totalAmountPaid = successfulPayments.reduce((sum, e) => {
+    const amount = (e.details as any)?.amountCents || 0;
+    return sum + amount;
+  }, 0);
+
+  return {
+    totalPayments: successfulPayments.length,
+    totalAmountPaid,
+    subscriptionChanges: financialEvents.filter(
+      e => e.action.startsWith('subscription_') || e.action.startsWith('tier_')
+    ).length,
+    promoCodesUsed: financialEvents.filter(e => e.action === 'promo_code_applied').length,
+    refunds: financialEvents.filter(e => e.action === 'refund_completed').length,
+    recentTransactions: financialEvents.slice(0, 20),
+  };
+}
+
 export default {
   logAuditEvent,
   logDataAccess,
@@ -613,5 +957,16 @@ export default {
   logSettingsChange,
   getAuditLog,
   getChildAuditSummary,
-  getProviderActivityAudit
+  getProviderActivityAudit,
+  // Financial audit functions
+  logPaymentInitiated,
+  logPaymentSucceeded,
+  logPaymentFailed,
+  logSubscriptionCreated,
+  logSubscriptionCancelled,
+  logSubscriptionRenewed,
+  logTierChange,
+  logPromoCodeApplied,
+  logRefund,
+  getFinancialAuditSummary,
 };
