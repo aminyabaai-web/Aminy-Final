@@ -1,37 +1,70 @@
 import React, { useState, useRef } from 'react';
-import { Upload, File, X, Check, AlertCircle } from 'lucide-react';
+import { Upload, File, X, Check, AlertCircle, Loader2 } from 'lucide-react';
 import { Button } from './ui/button';
 import { Progress } from './ui/progress';
+import { toast } from 'sonner';
+import {
+  uploadMultipleFiles,
+  validateFile,
+  VaultRecordType,
+  VaultDocumentSource,
+  UploadResult
+} from '../lib/vault-storage';
 
 interface DocumentUploaderProps {
-  onUpload: (files: File[]) => void;
+  onUpload: (files: File[], results?: UploadResult[]) => void;
+  userId?: string;
+  childId?: string;
+  recordType?: VaultRecordType;
+  source?: VaultDocumentSource;
   maxSize?: number; // in MB
   acceptedTypes?: string[];
+  /** If true, uses actual Supabase storage. If false, uses mock upload for demo */
+  useRealStorage?: boolean;
 }
 
-export function DocumentUploader({ 
-  onUpload, 
-  maxSize = 10,
-  acceptedTypes = ['.pdf', '.doc', '.docx', '.jpg', '.jpeg', '.png']
+export function DocumentUploader({
+  onUpload,
+  userId,
+  childId,
+  recordType = 'uploaded',
+  source = 'parent-upload',
+  maxSize = 50,
+  acceptedTypes = ['.pdf', '.doc', '.docx', '.jpg', '.jpeg', '.png'],
+  useRealStorage = true,
 }: DocumentUploaderProps) {
   const [files, setFiles] = useState<File[]>([]);
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [currentFile, setCurrentFile] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = Array.from(e.target.files || []);
-    
-    // Validate file sizes
-    const invalidFiles = selectedFiles.filter(f => f.size > maxSize * 1024 * 1024);
+
+    // Validate each file
+    const invalidFiles: string[] = [];
+    const validFiles: File[] = [];
+
+    selectedFiles.forEach(file => {
+      const validation = validateFile(file);
+      if (!validation.valid) {
+        invalidFiles.push(`${file.name}: ${validation.error}`);
+      } else {
+        validFiles.push(file);
+      }
+    });
+
     if (invalidFiles.length > 0) {
-      setError(`Some files exceed ${maxSize}MB limit`);
-      return;
+      setError(invalidFiles.join('\n'));
+    } else {
+      setError(null);
     }
 
-    setFiles(prev => [...prev, ...selectedFiles]);
-    setError(null);
+    if (validFiles.length > 0) {
+      setFiles(prev => [...prev, ...validFiles]);
+    }
   };
 
   const handleRemove = (index: number) => {
@@ -43,20 +76,100 @@ export function DocumentUploader({
 
     setUploading(true);
     setProgress(0);
+    setError(null);
 
-    // Simulate upload progress
-    const interval = setInterval(() => {
-      setProgress(prev => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          setUploading(false);
-          onUpload(files);
-          setFiles([]);
-          return 100;
+    // Check if we should use real storage
+    if (useRealStorage && userId) {
+      try {
+        const { results, successCount, failureCount } = await uploadMultipleFiles(
+          files,
+          userId,
+          {
+            recordType,
+            source,
+            childId,
+            onProgress: (overallProgress, currentFileName) => {
+              setProgress(Math.round(overallProgress));
+              setCurrentFile(currentFileName);
+            },
+          }
+        );
+
+        setUploading(false);
+
+        if (successCount > 0) {
+          toast.success(`${successCount} file${successCount > 1 ? 's' : ''} uploaded successfully`);
         }
-        return prev + 10;
-      });
-    }, 200);
+
+        if (failureCount > 0) {
+          const failedFiles = results
+            .filter(r => !r.success)
+            .map(r => r.error)
+            .join(', ');
+          toast.error(`${failureCount} file${failureCount > 1 ? 's' : ''} failed: ${failedFiles}`);
+        }
+
+        onUpload(files, results);
+        setFiles([]);
+        setProgress(0);
+        setCurrentFile('');
+      } catch (err) {
+        console.error('Upload error:', err);
+        setError(err instanceof Error ? err.message : 'Upload failed');
+        setUploading(false);
+        toast.error('Upload failed. Please try again.');
+      }
+    } else {
+      // Fallback: Mock upload for demo/development
+      const interval = setInterval(() => {
+        setProgress(prev => {
+          if (prev >= 100) {
+            clearInterval(interval);
+            setUploading(false);
+            toast.success(`${files.length} file${files.length > 1 ? 's' : ''} uploaded`);
+            onUpload(files);
+            setFiles([]);
+            return 100;
+          }
+          return prev + 10;
+        });
+      }, 200);
+    }
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const droppedFiles = Array.from(e.dataTransfer.files);
+
+    // Validate each file
+    const invalidFiles: string[] = [];
+    const validFiles: File[] = [];
+
+    droppedFiles.forEach(file => {
+      const validation = validateFile(file);
+      if (!validation.valid) {
+        invalidFiles.push(`${file.name}: ${validation.error}`);
+      } else {
+        validFiles.push(file);
+      }
+    });
+
+    if (invalidFiles.length > 0) {
+      setError(invalidFiles.join('\n'));
+    } else {
+      setError(null);
+    }
+
+    if (validFiles.length > 0) {
+      setFiles(prev => [...prev, ...validFiles]);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
   };
 
   return (
@@ -65,6 +178,8 @@ export function DocumentUploader({
       <div
         className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-accent transition-colors"
         onClick={() => fileInputRef.current?.click()}
+        onDrop={handleDrop}
+        onDragOver={handleDragOver}
       >
         <Upload className="w-12 h-12 mx-auto mb-4 text-gray-400" />
         <p className="text-sm font-medium mb-1">Click to upload or drag and drop</p>
@@ -83,9 +198,9 @@ export function DocumentUploader({
 
       {/* Error Message */}
       {error && (
-        <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg">
-          <AlertCircle className="w-4 h-4 text-red-600" />
-          <p className="text-sm text-red-700">{error}</p>
+        <div className="flex items-start gap-2 p-3 bg-red-50 border border-red-200 rounded-lg">
+          <AlertCircle className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0" />
+          <p className="text-sm text-red-700 whitespace-pre-line">{error}</p>
         </div>
       )}
 
@@ -120,8 +235,13 @@ export function DocumentUploader({
       {uploading && (
         <div className="space-y-2">
           <div className="flex items-center justify-between text-sm">
-            <span>Uploading...</span>
-            <span>{progress}%</span>
+            <div className="flex items-center gap-2">
+              <Loader2 className="w-4 h-4 animate-spin" />
+              <span>
+                {currentFile ? `Uploading ${currentFile}...` : 'Uploading...'}
+              </span>
+            </div>
+            <span className="font-medium">{progress}%</span>
           </div>
           <Progress value={progress} />
         </div>
@@ -133,6 +253,13 @@ export function DocumentUploader({
           <Check className="w-4 h-4 mr-2" />
           Upload {files.length} {files.length === 1 ? 'file' : 'files'}
         </Button>
+      )}
+
+      {/* Storage Info */}
+      {!useRealStorage && (
+        <p className="text-xs text-center text-muted-foreground">
+          Demo mode: Files are not persisted. Enable real storage for production.
+        </p>
       )}
     </div>
   );
