@@ -718,6 +718,35 @@ function PostCard({
           <p className="text-gray-900 dark:text-white whitespace-pre-wrap">{post.content}</p>
         </div>
 
+        {/* Images */}
+        {post.imageUrls && post.imageUrls.length > 0 && (
+          <div className={`mb-3 grid gap-2 ${
+            post.imageUrls.length === 1 ? 'grid-cols-1' :
+            post.imageUrls.length === 2 ? 'grid-cols-2' :
+            post.imageUrls.length === 3 ? 'grid-cols-3' :
+            'grid-cols-2'
+          }`}>
+            {post.imageUrls.map((url, index) => (
+              <div
+                key={index}
+                className={`relative rounded-lg overflow-hidden bg-gray-100 dark:bg-slate-800 ${
+                  post.imageUrls!.length === 1 ? 'aspect-video' :
+                  post.imageUrls!.length === 3 && index === 0 ? 'row-span-2 aspect-square' :
+                  'aspect-square'
+                }`}
+              >
+                <img
+                  src={url}
+                  alt={`Post image ${index + 1}`}
+                  className="w-full h-full object-cover cursor-pointer hover:opacity-95 transition-opacity"
+                  onClick={() => window.open(url, '_blank')}
+                  loading="lazy"
+                />
+              </div>
+            ))}
+          </div>
+        )}
+
         {/* Tags */}
         {post.tags.length > 0 && (
           <div className="flex flex-wrap gap-1 mb-3">

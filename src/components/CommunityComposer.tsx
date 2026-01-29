@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button } from './ui/button';
 import { Textarea } from './ui/textarea';
 import { Input } from './ui/input';
@@ -6,22 +6,85 @@ import { Badge } from './ui/badge';
 import { Switch } from './ui/switch';
 import { Label } from './ui/label';
 import { Card } from './ui/card';
-import { 
-  Send, 
-  AlertCircle, 
-  Paperclip, 
+import {
+  Send,
+  AlertCircle,
+  ImagePlus,
   X,
   Save,
-  FileImage
+  FileImage,
+  Loader2
 } from 'lucide-react';
 import { toast } from 'sonner';
 
-interface CommunityComposerProps {
-  onPost: (content: { title: string; body: string; tags: string[]; anonymous: boolean; removeNames: boolean }) => void;
-  onCancel: () => void;
+// Image validation and upload types
+interface ImagePreview {
+  id: string;
+  file: File;
+  url: string;
+  uploading?: boolean;
+  uploadedUrl?: string;
+  error?: string;
 }
 
-export function CommunityComposer({ onPost, onCancel }: CommunityComposerProps) {
+const MAX_IMAGES = 4;
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
+const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+
+// Upload image to Supabase Storage or fallback to data URL
+async function uploadImageToStorage(file: File, userId?: string): Promise<string> {
+  try {
+    // Try Supabase Storage first
+    const { supabase } = await import('../utils/supabase/client');
+
+    const fileExt = file.name.split('.').pop()?.toLowerCase() || 'jpg';
+    const fileName = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}.${fileExt}`;
+    const filePath = `community/${userId || 'anonymous'}/${fileName}`;
+
+    const { data, error } = await supabase.storage
+      .from('community-images')
+      .upload(filePath, file, {
+        cacheControl: '3600',
+        upsert: false,
+        contentType: file.type,
+      });
+
+    if (error) {
+      console.warn('Supabase upload failed, using data URL fallback:', error);
+      throw error;
+    }
+
+    // Get public URL
+    const { data: urlData } = supabase.storage
+      .from('community-images')
+      .getPublicUrl(data.path);
+
+    return urlData.publicUrl;
+  } catch (error) {
+    // Fallback to data URL for local/demo mode
+    console.log('Using data URL fallback for image');
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        if (typeof reader.result === 'string') {
+          resolve(reader.result);
+        } else {
+          reject(new Error('Failed to read file'));
+        }
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+}
+
+interface CommunityComposerProps {
+  onPost: (content: { title: string; body: string; tags: string[]; anonymous: boolean; removeNames: boolean; imageUrls?: string[] }) => void;
+  onCancel: () => void;
+  userId?: string;
+}
+
+export function CommunityComposer({ onPost, onCancel, userId }: CommunityComposerProps) {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -29,10 +92,123 @@ export function CommunityComposer({ onPost, onCancel }: CommunityComposerProps) 
   const [anonymous, setAnonymous] = useState(false);
   const [characterCount, setCharacterCount] = useState(0);
   const [hasDraft, setHasDraft] = useState(false);
-  
+  const [images, setImages] = useState<ImagePreview[]>([]);
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const CHARACTER_LIMIT = 500;
-  
+
   const tags = ['Routines', 'Sensory', 'Communication', 'School', 'Community', 'Self-care'];
+
+  // Validate image file
+  const validateImage = (file: File): { valid: boolean; error?: string } => {
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      return { valid: false, error: 'Only JPEG, PNG, WebP, and GIF images are allowed' };
+    }
+    if (file.size > MAX_IMAGE_SIZE) {
+      return { valid: false, error: 'Image must be less than 5MB' };
+    }
+    return { valid: true };
+  };
+
+  // Handle image selection
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+
+    if (images.length + files.length > MAX_IMAGES) {
+      toast.error(`You can only add up to ${MAX_IMAGES} images`);
+      return;
+    }
+
+    const newImages: ImagePreview[] = [];
+    const errors: string[] = [];
+
+    files.forEach(file => {
+      const validation = validateImage(file);
+      if (!validation.valid) {
+        errors.push(`${file.name}: ${validation.error}`);
+      } else {
+        newImages.push({
+          id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+          file,
+          url: URL.createObjectURL(file),
+        });
+      }
+    });
+
+    if (errors.length > 0) {
+      toast.error(errors.join('\n'));
+    }
+
+    if (newImages.length > 0) {
+      setImages(prev => [...prev, ...newImages]);
+    }
+
+    // Reset input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  // Remove image
+  const removeImage = (imageId: string) => {
+    setImages(prev => {
+      const toRemove = prev.find(img => img.id === imageId);
+      if (toRemove) {
+        URL.revokeObjectURL(toRemove.url);
+      }
+      return prev.filter(img => img.id !== imageId);
+    });
+  };
+
+  // Upload images to storage
+  const uploadImages = async (): Promise<string[]> => {
+    if (images.length === 0) return [];
+
+    setIsUploading(true);
+    const uploadedUrls: string[] = [];
+
+    try {
+      for (const image of images) {
+        // Mark as uploading
+        setImages(prev =>
+          prev.map(img =>
+            img.id === image.id ? { ...img, uploading: true } : img
+          )
+        );
+
+        // For now, we'll use data URLs as a fallback
+        // In production, this would upload to Supabase Storage
+        const uploadedUrl = await uploadImageToStorage(image.file, userId);
+
+        uploadedUrls.push(uploadedUrl);
+
+        // Mark as uploaded
+        setImages(prev =>
+          prev.map(img =>
+            img.id === image.id
+              ? { ...img, uploading: false, uploadedUrl }
+              : img
+          )
+        );
+      }
+
+      return uploadedUrls;
+    } catch (error) {
+      console.error('Image upload error:', error);
+      toast.error('Failed to upload some images');
+      return uploadedUrls;
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      images.forEach(img => URL.revokeObjectURL(img.url));
+    };
+  }, []);
 
   // Auto-save drafts to localStorage
   useEffect(() => {
@@ -112,14 +288,14 @@ export function CommunityComposer({ onPost, onCancel }: CommunityComposerProps) 
   };
 
   const toggleTag = (tag: string) => {
-    setSelectedTags(prev => 
-      prev.includes(tag) 
+    setSelectedTags(prev =>
+      prev.includes(tag)
         ? prev.filter(t => t !== tag)
         : prev.length < 3 ? [...prev, tag] : prev
     );
   };
 
-  const handlePost = () => {
+  const handlePost = async () => {
     if (!body.trim()) {
       toast.error('Your post needs some content. What would you like to share?');
       return;
@@ -130,22 +306,31 @@ export function CommunityComposer({ onPost, onCancel }: CommunityComposerProps) 
       return;
     }
 
+    // Upload images first if any
+    let imageUrls: string[] = [];
+    if (images.length > 0) {
+      imageUrls = await uploadImages();
+    }
+
     onPost({
       title,
       body,
       tags: selectedTags,
       anonymous,
-      removeNames
+      removeNames,
+      imageUrls: imageUrls.length > 0 ? imageUrls : undefined
     });
 
-    // Clear draft after successful post
+    // Clear images and draft after successful post
+    images.forEach(img => URL.revokeObjectURL(img.url));
+    setImages([]);
     localStorage.removeItem('community-draft');
     setHasDraft(false);
   };
 
   const charactersRemaining = CHARACTER_LIMIT - characterCount;
   const isOverLimit = characterCount > CHARACTER_LIMIT;
-  const canPost = body.trim().length > 0 && selectedTags.length > 0 && !isOverLimit;
+  const canPost = body.trim().length > 0 && selectedTags.length > 0 && !isOverLimit && !isUploading;
 
   return (
     <div className="max-w-2xl mx-auto space-y-3 sm:space-y-4 sm:space-y-6">
@@ -310,23 +495,91 @@ export function CommunityComposer({ onPost, onCancel }: CommunityComposerProps) 
             </div>
           </div>
 
+          {/* Image Previews */}
+          {images.length > 0 && (
+            <div className="space-y-2">
+              <Label className="text-sm font-medium text-slate-700 block">
+                Images ({images.length}/{MAX_IMAGES})
+              </Label>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                {images.map((image) => (
+                  <div
+                    key={image.id}
+                    className="relative aspect-square rounded-lg overflow-hidden border border-gray-200 bg-gray-50"
+                  >
+                    <img
+                      src={image.url}
+                      alt="Preview"
+                      className="w-full h-full object-cover"
+                    />
+                    {image.uploading && (
+                      <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                        <Loader2 className="w-6 h-6 text-white animate-spin" />
+                      </div>
+                    )}
+                    {!image.uploading && (
+                      <button
+                        type="button"
+                        onClick={() => removeImage(image.id)}
+                        className="absolute top-1 right-1 p-1 bg-black/60 rounded-full hover:bg-black/80 transition-colors"
+                        aria-label="Remove image"
+                      >
+                        <X className="w-3 h-3 text-white" />
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Action buttons */}
           <div className="flex items-center justify-between pt-4 border-t border-gray-200">
-            <Button variant="outline" size="sm">
-              <Paperclip className="w-4 h-4 mr-2" />
-              Attach files
-            </Button>
+            <div className="flex gap-2">
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept={ALLOWED_TYPES.join(',')}
+                multiple
+                onChange={handleImageSelect}
+                className="hidden"
+                id="image-upload"
+              />
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={images.length >= MAX_IMAGES || isUploading}
+              >
+                <ImagePlus className="w-4 h-4 mr-2" />
+                {images.length > 0 ? 'Add more' : 'Add images'}
+              </Button>
+              {images.length > 0 && (
+                <span className="text-xs text-slate-500 self-center">
+                  {MAX_IMAGES - images.length} remaining
+                </span>
+              )}
+            </div>
 
             <div className="flex gap-3">
-              <Button variant="ghost" onClick={onCancel}>
+              <Button variant="ghost" onClick={onCancel} disabled={isUploading}>
                 Cancel
               </Button>
-              <Button 
+              <Button
                 onClick={handlePost}
                 disabled={!canPost}
               >
-                <Send className="w-4 h-4 mr-2" />
-                Post
+                {isUploading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Uploading...
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-4 h-4 mr-2" />
+                    Post
+                  </>
+                )}
               </Button>
             </div>
           </div>
