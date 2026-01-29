@@ -49,6 +49,17 @@ import {
   type AuthUser,
   type TierType,
 } from "./auth-middleware.ts";
+import {
+  checkAdminPermission,
+  logAdminAction,
+  getModerationQueue,
+  getModerationItem,
+  reviewModerationItem,
+  applyUserModerationAction,
+  getUserModerationHistory,
+  flagContent,
+  getModerationStats,
+} from "./moderation-routes.ts";
 
 const app = new Hono();
 
@@ -3477,6 +3488,246 @@ app.post("/make-server-8a022548/coach/goal/update", async (c) => {
   } catch (error) {
     return c.json({ error: 'Failed to update goal' }, 500);
   }
+});
+
+// ============================================================================
+// MODERATION API ROUTES
+// ============================================================================
+
+// Get moderation queue
+app.get("/make-server-8a022548/moderation/queue", async (c) => {
+  const authHeader = c.req.header('Authorization');
+  const authResult = await verifyAuth(authHeader);
+
+  if (!authResult.user) {
+    return unauthorizedResponse(c, authResult.error || 'Authentication required');
+  }
+
+  // Check admin/moderator permissions
+  const permResult = await checkAdminPermission(authResult.user.id, 'moderator');
+  if (!permResult.allowed) {
+    return forbiddenResponse(c, 'Moderator access required');
+  }
+
+  const status = c.req.query('status') as 'pending' | 'approved' | 'rejected' | 'escalated' | undefined;
+  const content_type = c.req.query('content_type');
+  const limit = parseInt(c.req.query('limit') || '50');
+  const offset = parseInt(c.req.query('offset') || '0');
+
+  const result = await getModerationQueue({ status, content_type, limit, offset });
+
+  if (result.error) {
+    return c.json({ error: result.error }, 500);
+  }
+
+  return c.json({
+    items: result.data,
+    total: result.count,
+    limit,
+    offset,
+  });
+});
+
+// Get single moderation item
+app.get("/make-server-8a022548/moderation/queue/:id", async (c) => {
+  const authHeader = c.req.header('Authorization');
+  const authResult = await verifyAuth(authHeader);
+
+  if (!authResult.user) {
+    return unauthorizedResponse(c, authResult.error || 'Authentication required');
+  }
+
+  const permResult = await checkAdminPermission(authResult.user.id, 'moderator');
+  if (!permResult.allowed) {
+    return forbiddenResponse(c, 'Moderator access required');
+  }
+
+  const itemId = c.req.param('id');
+  const result = await getModerationItem(itemId);
+
+  if (result.error) {
+    return c.json({ error: result.error }, 404);
+  }
+
+  return c.json(result.data);
+});
+
+// Review/resolve moderation item
+app.post("/make-server-8a022548/moderation/queue/:id/review", async (c) => {
+  const authHeader = c.req.header('Authorization');
+  const authResult = await verifyAuth(authHeader);
+
+  if (!authResult.user) {
+    return unauthorizedResponse(c, authResult.error || 'Authentication required');
+  }
+
+  const permResult = await checkAdminPermission(authResult.user.id, 'moderator');
+  if (!permResult.allowed) {
+    return forbiddenResponse(c, 'Moderator access required');
+  }
+
+  const itemId = c.req.param('id');
+  const body = await c.req.json();
+
+  const { status, notes, userAction } = body;
+
+  if (!status || !['approved', 'rejected', 'escalated'].includes(status)) {
+    return c.json({ error: 'Valid status required (approved, rejected, escalated)' }, 400);
+  }
+
+  const result = await reviewModerationItem(itemId, authResult.user.id, {
+    status,
+    notes,
+    userAction,
+  });
+
+  // Log admin action
+  await logAdminAction({
+    admin_id: authResult.user.id,
+    admin_email: authResult.user.email || '',
+    action: `moderation_${status}`,
+    action_category: 'moderation',
+    target_type: 'content',
+    target_id: itemId,
+    target_details: { status, notes },
+    ip_address: c.req.header('x-forwarded-for') || undefined,
+    user_agent: c.req.header('user-agent'),
+    success: result.success,
+    error_message: result.error,
+  });
+
+  if (!result.success) {
+    return c.json({ error: result.error }, 500);
+  }
+
+  return c.json({ success: true, message: `Item ${status}` });
+});
+
+// Flag content for moderation
+app.post("/make-server-8a022548/moderation/flag", async (c) => {
+  const authHeader = c.req.header('Authorization');
+  const authResult = await verifyAuth(authHeader);
+
+  if (!authResult.user) {
+    return unauthorizedResponse(c, authResult.error || 'Authentication required');
+  }
+
+  const body = await c.req.json();
+  const { contentType, contentId, flagCategory, flagReason, contentText } = body;
+
+  if (!contentType || !contentId || !flagCategory) {
+    return c.json({ error: 'contentType, contentId, and flagCategory are required' }, 400);
+  }
+
+  const result = await flagContent(contentType, contentId, flagCategory, {
+    flaggedBy: authResult.user.id,
+    flagReason,
+    contentText,
+  });
+
+  if (!result.success) {
+    return c.json({ error: result.error }, 500);
+  }
+
+  return c.json({ success: true, id: result.id });
+});
+
+// Get user moderation history
+app.get("/make-server-8a022548/moderation/user/:userId/history", async (c) => {
+  const authHeader = c.req.header('Authorization');
+  const authResult = await verifyAuth(authHeader);
+
+  if (!authResult.user) {
+    return unauthorizedResponse(c, authResult.error || 'Authentication required');
+  }
+
+  const permResult = await checkAdminPermission(authResult.user.id, 'moderator');
+  if (!permResult.allowed) {
+    return forbiddenResponse(c, 'Moderator access required');
+  }
+
+  const userId = c.req.param('userId');
+  const limit = parseInt(c.req.query('limit') || '50');
+
+  const result = await getUserModerationHistory(userId, limit);
+
+  if (result.error) {
+    return c.json({ error: result.error }, 500);
+  }
+
+  return c.json({ history: result.data });
+});
+
+// Apply moderation action to user
+app.post("/make-server-8a022548/moderation/user/:userId/action", async (c) => {
+  const authHeader = c.req.header('Authorization');
+  const authResult = await verifyAuth(authHeader);
+
+  if (!authResult.user) {
+    return unauthorizedResponse(c, authResult.error || 'Authentication required');
+  }
+
+  // Require admin (not just moderator) for user actions
+  const permResult = await checkAdminPermission(authResult.user.id, 'admin');
+  if (!permResult.allowed) {
+    return forbiddenResponse(c, 'Admin access required');
+  }
+
+  const userId = c.req.param('userId');
+  const body = await c.req.json();
+
+  const { action, reason, notes, expires_at } = body;
+
+  if (!action || !reason) {
+    return c.json({ error: 'action and reason are required' }, 400);
+  }
+
+  const result = await applyUserModerationAction(userId, authResult.user.id, {
+    action,
+    reason,
+    notes,
+    expires_at,
+  });
+
+  // Log admin action
+  await logAdminAction({
+    admin_id: authResult.user.id,
+    admin_email: authResult.user.email || '',
+    action: `user_${action}`,
+    action_category: 'user_management',
+    target_type: 'user',
+    target_id: userId,
+    target_details: { action, reason, notes },
+    ip_address: c.req.header('x-forwarded-for') || undefined,
+    user_agent: c.req.header('user-agent'),
+    success: result.success,
+    error_message: result.error,
+  });
+
+  if (!result.success) {
+    return c.json({ error: result.error }, 500);
+  }
+
+  return c.json({ success: true, message: `Action ${action} applied to user` });
+});
+
+// Get moderation statistics
+app.get("/make-server-8a022548/moderation/stats", async (c) => {
+  const authHeader = c.req.header('Authorization');
+  const authResult = await verifyAuth(authHeader);
+
+  if (!authResult.user) {
+    return unauthorizedResponse(c, authResult.error || 'Authentication required');
+  }
+
+  const permResult = await checkAdminPermission(authResult.user.id, 'moderator');
+  if (!permResult.allowed) {
+    return forbiddenResponse(c, 'Moderator access required');
+  }
+
+  const stats = await getModerationStats();
+
+  return c.json(stats);
 });
 
 Deno.serve(app.fetch);
