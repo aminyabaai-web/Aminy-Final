@@ -56,32 +56,57 @@ const app = new Hono();
 app.use('*', logger(console.log));
 
 // Enable CORS for all routes and methods
-// Restrict to allowed origins for security
-const allowedOrigins = [
+// SECURITY: Strict origin validation - only allow known domains
+const isProduction = Deno.env.get('ENVIRONMENT') === 'production' ||
+                     Deno.env.get('DENO_ENV') === 'production' ||
+                     !Deno.env.get('ENVIRONMENT'); // Default to production if not set
+
+const productionOrigins = [
   'https://aminy.app',
   'https://www.aminy.app',
   'https://app.aminy.app',
+];
+
+const developmentOrigins = [
+  ...productionOrigins,
   'http://localhost:5173',
   'http://localhost:3000',
+  'http://localhost:5174',
   'http://127.0.0.1:5173',
+  'http://127.0.0.1:3000',
 ];
+
+const allowedOrigins = isProduction ? productionOrigins : developmentOrigins;
 
 app.use(
   "/*",
   cors({
     origin: (origin) => {
-      // Allow requests with no origin (mobile apps, Postman, etc.)
-      if (!origin) return 'https://aminy.app';
+      // Allow requests with no origin (mobile apps, server-to-server)
+      if (!origin) return productionOrigins[0];
+
       // Check if origin is in allowed list
       if (allowedOrigins.includes(origin)) return origin;
-      // In development, allow any localhost
-      if (origin.includes('localhost') || origin.includes('127.0.0.1')) return origin;
-      // Default to main domain
-      return 'https://aminy.app';
+
+      // SECURITY: In production, reject unknown origins
+      // In development, allow specific localhost ports only (not wildcard)
+      if (!isProduction) {
+        // Only allow localhost with specific ports, not arbitrary ports
+        const localhostMatch = origin.match(/^http:\/\/(localhost|127\.0\.0\.1):(3000|5173|5174|8080)$/);
+        if (localhostMatch) return origin;
+      }
+
+      // Log rejected origins for monitoring
+      console.warn('[CORS] Rejected origin:', origin, 'Production:', isProduction);
+
+      // Return null to reject (proper CORS rejection)
+      // Returning the origin would allow it, so we return the production domain
+      // which will cause a CORS error on the client
+      return productionOrigins[0];
     },
-    allowHeaders: ["Content-Type", "Authorization", "X-User-Id", "X-Coach-Id"],
+    allowHeaders: ["Content-Type", "Authorization", "X-User-Id", "X-Coach-Id", "X-Request-Id"],
     allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    exposeHeaders: ["Content-Length", "X-RateLimit-Limit", "X-RateLimit-Remaining"],
+    exposeHeaders: ["Content-Length", "X-RateLimit-Limit", "X-RateLimit-Remaining", "X-Request-Id"],
     maxAge: 600,
     credentials: true,
   }),

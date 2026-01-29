@@ -1,7 +1,6 @@
 /**
  * Email Service
- * Stub for sending emails via third-party service
- * Placeholders for real email service integration
+ * Production-ready email sending via Resend (primary) or SendGrid (fallback)
  */
 
 interface EmailOptions {
@@ -11,117 +10,279 @@ interface EmailOptions {
   text?: string;
   from?: string;
   replyTo?: string;
+  tags?: { name: string; value: string }[];
+}
+
+interface EmailResult {
+  success: boolean;
+  messageId?: string;
+  provider?: 'resend' | 'sendgrid' | 'development';
+  error?: string;
+}
+
+// Email delivery tracking for monitoring
+let emailStats = {
+  sent: 0,
+  failed: 0,
+  lastError: null as string | null,
+  lastSentAt: null as number | null,
+};
+
+export function getEmailStats() {
+  return { ...emailStats };
 }
 
 /**
- * Send an email using configured email service
- * PLACEHOLDER: Replace with actual email service (Resend, SendGrid, etc.)
+ * Send an email using Resend (primary) with SendGrid fallback
  */
 export async function sendEmail(options: EmailOptions): Promise<boolean> {
+  const result = await sendEmailWithDetails(options);
+  return result.success;
+}
+
+/**
+ * Send an email with detailed result information
+ */
+export async function sendEmailWithDetails(options: EmailOptions): Promise<EmailResult> {
   const {
     to,
     subject,
     html,
     text,
     from = 'Aminy <noreply@aminy.ai>',
-    replyTo = 'support@aminy.ai'
+    replyTo = 'support@aminy.ai',
+    tags = [],
   } = options;
 
-  // ============================================================================
-  // OPTION 1: Resend (Recommended for modern apps)
-  // ============================================================================
-  // Uncomment and configure when you have Resend API key
-  /*
-  const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY');
-  if (!RESEND_API_KEY) {
-    console.error('RESEND_API_KEY not configured');
-    return false;
+  // Validate email address
+  if (!to || !isValidEmail(to)) {
+    console.error('[Email] Invalid recipient email:', to);
+    return { success: false, error: 'Invalid recipient email' };
   }
+
+  // Check if we're in development mode with no email keys
+  const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY');
+  const SENDGRID_API_KEY = Deno.env.get('SENDGRID_API_KEY');
+  const isDevelopment = Deno.env.get('ENVIRONMENT') === 'development' ||
+                        Deno.env.get('DENO_ENV') === 'development';
+
+  // If no email providers configured
+  if (!RESEND_API_KEY && !SENDGRID_API_KEY) {
+    if (isDevelopment) {
+      console.log('[Email] Development mode - would send email:', { to, subject });
+      return { success: true, provider: 'development', messageId: `dev_${Date.now()}` };
+    }
+    console.error('[Email] No email provider configured (RESEND_API_KEY or SENDGRID_API_KEY required)');
+    emailStats.failed++;
+    emailStats.lastError = 'No email provider configured';
+    return { success: false, error: 'No email provider configured' };
+  }
+
+  // Try Resend first (primary provider)
+  if (RESEND_API_KEY) {
+    const resendResult = await sendViaResend({
+      to, subject, html, text, from, replyTo, tags, apiKey: RESEND_API_KEY
+    });
+
+    if (resendResult.success) {
+      emailStats.sent++;
+      emailStats.lastSentAt = Date.now();
+      return resendResult;
+    }
+
+    console.warn('[Email] Resend failed, trying SendGrid fallback:', resendResult.error);
+  }
+
+  // Fallback to SendGrid
+  if (SENDGRID_API_KEY) {
+    const sendgridResult = await sendViaSendGrid({
+      to, subject, html, text, from, replyTo, apiKey: SENDGRID_API_KEY
+    });
+
+    if (sendgridResult.success) {
+      emailStats.sent++;
+      emailStats.lastSentAt = Date.now();
+      return sendgridResult;
+    }
+
+    emailStats.failed++;
+    emailStats.lastError = sendgridResult.error || 'SendGrid failed';
+    return sendgridResult;
+  }
+
+  // If we get here, Resend was configured but failed and no SendGrid fallback
+  emailStats.failed++;
+  emailStats.lastError = 'Primary provider failed, no fallback configured';
+  return { success: false, error: 'Email delivery failed' };
+}
+
+/**
+ * Send email via Resend API
+ */
+async function sendViaResend(params: {
+  to: string;
+  subject: string;
+  html?: string;
+  text?: string;
+  from: string;
+  replyTo: string;
+  tags: { name: string; value: string }[];
+  apiKey: string;
+}): Promise<EmailResult> {
+  const { to, subject, html, text, from, replyTo, tags, apiKey } = params;
 
   try {
     const response = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${RESEND_API_KEY}`,
+        'Authorization': `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         from,
-        to,
+        to: [to],
         subject,
-        html: html || text,
+        html: html || undefined,
+        text: text || undefined,
         reply_to: replyTo,
+        tags: tags.length > 0 ? tags : undefined,
       }),
     });
 
     if (!response.ok) {
-      const error = await response.text();
-      console.error('Resend email error:', error);
-      return false;
+      const errorText = await response.text();
+      console.error('[Email] Resend API error:', response.status, errorText);
+      return {
+        success: false,
+        provider: 'resend',
+        error: `Resend API error: ${response.status}`
+      };
     }
 
-    return true;
-  } catch (error) {
-    console.error('Error sending email via Resend:', error);
-    return false;
-  }
-  */
+    const data = await response.json();
+    console.log('[Email] Sent via Resend:', { to, subject, messageId: data.id });
 
-  // ============================================================================
-  // OPTION 2: SendGrid
-  // ============================================================================
-  // Uncomment and configure when you have SendGrid API key
-  /*
-  const SENDGRID_API_KEY = Deno.env.get('SENDGRID_API_KEY');
-  if (!SENDGRID_API_KEY) {
-    console.error('SENDGRID_API_KEY not configured');
-    return false;
+    return {
+      success: true,
+      provider: 'resend',
+      messageId: data.id
+    };
+  } catch (error) {
+    console.error('[Email] Resend request failed:', error);
+    return {
+      success: false,
+      provider: 'resend',
+      error: error instanceof Error ? error.message : 'Network error'
+    };
   }
+}
+
+/**
+ * Send email via SendGrid API
+ */
+async function sendViaSendGrid(params: {
+  to: string;
+  subject: string;
+  html?: string;
+  text?: string;
+  from: string;
+  replyTo: string;
+  apiKey: string;
+}): Promise<EmailResult> {
+  const { to, subject, html, text, from, replyTo, apiKey } = params;
+
+  // Parse "Name <email>" format
+  const fromMatch = from.match(/^(.+)\s*<(.+)>$/);
+  const fromEmail = fromMatch ? fromMatch[2] : from;
+  const fromName = fromMatch ? fromMatch[1].trim() : 'Aminy';
 
   try {
     const response = await fetch('https://api.sendgrid.com/v3/mail/send', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${SENDGRID_API_KEY}`,
+        'Authorization': `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         personalizations: [{
           to: [{ email: to }],
         }],
-        from: { email: from.match(/<(.+)>/)?.[1] || from, name: 'Aminy' },
+        from: { email: fromEmail, name: fromName },
+        reply_to: { email: replyTo },
         subject,
         content: [
-          { type: 'text/html', value: html || text || '' }
+          ...(text ? [{ type: 'text/plain', value: text }] : []),
+          ...(html ? [{ type: 'text/html', value: html }] : []),
         ],
       }),
     });
 
-    if (!response.ok) {
-      const error = await response.text();
-      console.error('SendGrid email error:', error);
-      return false;
+    // SendGrid returns 202 for success, not 200
+    if (response.status !== 202 && !response.ok) {
+      const errorText = await response.text();
+      console.error('[Email] SendGrid API error:', response.status, errorText);
+      return {
+        success: false,
+        provider: 'sendgrid',
+        error: `SendGrid API error: ${response.status}`
+      };
     }
 
-    return true;
+    // SendGrid doesn't return message ID in response body
+    const messageId = response.headers.get('x-message-id') || `sg_${Date.now()}`;
+    console.log('[Email] Sent via SendGrid:', { to, subject, messageId });
+
+    return {
+      success: true,
+      provider: 'sendgrid',
+      messageId
+    };
   } catch (error) {
-    console.error('Error sending email via SendGrid:', error);
-    return false;
+    console.error('[Email] SendGrid request failed:', error);
+    return {
+      success: false,
+      provider: 'sendgrid',
+      error: error instanceof Error ? error.message : 'Network error'
+    };
   }
-  */
+}
 
-  // ============================================================================
-  // OPTION 3: Supabase Email (for transactional emails)
-  // ============================================================================
-  // This is available if you have Supabase Auth email configured
-  // But it's not ideal for custom emails like report sharing
+/**
+ * Basic email validation
+ */
+function isValidEmail(email: string): boolean {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
 
-  // ============================================================================
-  // DEVELOPMENT MODE: Log email instead of sending
-  // ============================================================================
+/**
+ * Send a batch of emails (with rate limiting)
+ */
+export async function sendBatchEmails(
+  emails: EmailOptions[],
+  delayMs: number = 100
+): Promise<{ successful: number; failed: number; results: EmailResult[] }> {
+  const results: EmailResult[] = [];
+  let successful = 0;
+  let failed = 0;
 
-  // Return true to simulate successful send in development
-  return true;
+  for (const email of emails) {
+    const result = await sendEmailWithDetails(email);
+    results.push(result);
+
+    if (result.success) {
+      successful++;
+    } else {
+      failed++;
+    }
+
+    // Rate limit to avoid hitting API limits
+    if (delayMs > 0) {
+      await new Promise(resolve => setTimeout(resolve, delayMs));
+    }
+  }
+
+  return { successful, failed, results };
 }
 
 /**
