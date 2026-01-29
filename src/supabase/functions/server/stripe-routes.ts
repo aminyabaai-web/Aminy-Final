@@ -909,16 +909,22 @@ export async function handleWebhook(req: Request): Promise<Response> {
       });
     }
 
-    if (STRIPE_WEBHOOK_SECRET) {
-      const isValid = await verifyWebhookSignature(body, signature, STRIPE_WEBHOOK_SECRET);
-      if (!isValid) {
-        console.error('Invalid webhook signature');
-        return new Response(JSON.stringify({ error: 'Invalid signature' }), {
-          status: 400,
-          headers: { 'Content-Type': 'application/json' },
-        });
-      }
-    } else {
+    // CRITICAL: Always validate webhook signature in production
+    if (!STRIPE_WEBHOOK_SECRET) {
+      console.error('STRIPE_WEBHOOK_SECRET not configured - rejecting webhook');
+      return new Response(JSON.stringify({ error: 'Webhook secret not configured' }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    const isValid = await verifyWebhookSignature(body, signature, STRIPE_WEBHOOK_SECRET);
+    if (!isValid) {
+      console.error('Invalid webhook signature - potential fraud attempt');
+      return new Response(JSON.stringify({ error: 'Invalid signature' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
 
     const event = JSON.parse(body);

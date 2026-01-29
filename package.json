@@ -88,6 +88,11 @@
             "test:coverage": "vitest run --coverage",
             "test:e2e": "playwright test",
             "test:e2e:ui": "playwright test --ui",
-            "test:e2e:headed": "playwright test --headed"
+            "test:e2e:headed": "playwright test --headed",
+            "db:setup": "./scripts/setup-database.sh setup",
+            "db:migrate": "./scripts/setup-database.sh migrate",
+            "db:seed": "./scripts/setup-database.sh seed",
+            "db:reset": "./scripts/setup-database.sh reset",
+            "db:validate": "./scripts/setup-database.sh validate"
       }
 }

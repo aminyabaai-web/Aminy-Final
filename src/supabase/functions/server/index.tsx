@@ -87,6 +87,27 @@ app.use(
   }),
 );
 
+// Security headers middleware - applies to all API responses
+app.use('*', async (c, next) => {
+  await next();
+
+  // Add security headers to all responses
+  c.header('X-Content-Type-Options', 'nosniff');
+  c.header('X-Frame-Options', 'DENY');
+  c.header('X-XSS-Protection', '1; mode=block');
+  c.header('Referrer-Policy', 'strict-origin-when-cross-origin');
+  c.header('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+
+  // HSTS for production
+  const isProduction = !c.req.url.includes('localhost');
+  if (isProduction) {
+    c.header('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  }
+
+  // API-specific CSP (more restrictive than frontend)
+  c.header('Content-Security-Policy', "default-src 'none'; frame-ancestors 'none'");
+});
+
 // Health check endpoint
 app.get("/make-server-8a022548/health", (c) => {
   return c.json({ status: "ok" });
@@ -559,8 +580,10 @@ app.post("/make-server-8a022548/ai/chat", async (c) => {
       return c.json({ error: 'messages array is required' }, 400);
     }
 
-    // SECURITY: Detect potential prompt injection attempts
-    // Log suspicious activity for security monitoring
+    // SECURITY: Detect and BLOCK prompt injection attempts
+    // High-severity patterns are blocked; low-severity are sanitized
+    const HIGH_SEVERITY_PATTERNS = ['jailbreak_attempt', 'instruction_override', 'context_delimiter'];
+
     for (const msg of messages) {
       if (msg.role === 'user' && msg.content) {
         const injectionCheck = detectPromptInjection(msg.content);
@@ -570,8 +593,19 @@ app.post("/make-server-8a022548/ai/chat", async (c) => {
             contentPreview: msg.content.substring(0, 100) + '...',
             timestamp: new Date().toISOString(),
           });
-          // Continue processing - sanitization will handle it
-          // But log for security monitoring
+
+          // BLOCK high-severity injection attempts
+          const hasHighSeverity = injectionCheck.patterns.some(p => HIGH_SEVERITY_PATTERNS.includes(p));
+          if (hasHighSeverity) {
+            console.error(`SECURITY: BLOCKED high-severity prompt injection from ${rateLimitId}`, {
+              patterns: injectionCheck.patterns,
+            });
+            return c.json({
+              error: 'Your message could not be processed. Please rephrase and try again.',
+              code: 'CONTENT_POLICY_VIOLATION',
+            }, 400);
+          }
+          // Low-severity patterns will be handled by sanitization
         }
       }
     }
