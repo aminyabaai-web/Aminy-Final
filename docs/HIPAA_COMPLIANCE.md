@@ -552,4 +552,88 @@ Continuous Monitoring:
 
 ---
 
+## Appendix D: Technical Implementation Status
+
+**Last Updated:** January 2026
+
+### Security Controls Implementation
+
+| Control | Status | File/Location | Notes |
+|---------|--------|---------------|-------|
+| **Access Controls** | | | |
+| Role-based access (RLS) | ✅ Implemented | `supabase/migrations/*.sql` | Database-level RLS policies |
+| Session management | ✅ Implemented | `src/lib/security/session.ts` | Secure session handling |
+| Rate limiting | ✅ Implemented | `server/rate-limiter.ts` | Per-user and global limits |
+| | | | |
+| **Audit Logging** | | | |
+| Access audit logs | ✅ Implemented | `src/lib/audit-logger.ts` | HIPAA-compliant logging |
+| Financial audit logs | ✅ Implemented | `server/audit-logger.ts` | Payment/subscription events |
+| Webhook audit logs | ✅ Implemented | `server/stripe-routes.ts` | Stripe webhook events |
+| Log retention (7 years) | 🟡 Configured | Supabase settings | Requires production verification |
+| | | | |
+| **Encryption** | | | |
+| TLS 1.3 in transit | ✅ Implemented | `vercel.json` | HSTS enabled |
+| AES-256 at rest | ✅ Supabase | Database level | Managed by Supabase |
+| | | | |
+| **Security Headers** | | | |
+| Content-Security-Policy | ✅ Implemented | `vercel.json` | Prevents XSS |
+| Strict-Transport-Security | ✅ Implemented | `vercel.json` | Enforces HTTPS |
+| X-Frame-Options | ✅ Implemented | `vercel.json` | Prevents clickjacking |
+| X-Content-Type-Options | ✅ Implemented | `vercel.json` | Prevents MIME sniffing |
+| API security headers | ✅ Implemented | `server/index.tsx` | Edge function middleware |
+| | | | |
+| **Input Validation** | | | |
+| Prompt injection blocking | ✅ Implemented | `server/index.tsx` | High-severity patterns blocked |
+| Input sanitization | ✅ Implemented | `server/sanitize.ts` | PII scrubbing |
+| Webhook HMAC validation | ✅ Implemented | `server/stripe-routes.ts` | Mandatory verification |
+| | | | |
+| **Monitoring** | | | |
+| Error tracking (Sentry) | ✅ Implemented | `src/lib/sentry.ts` | With user context |
+| Security alerts | ✅ Implemented | `server/audit-logger.ts` | Invalid signature alerts |
+| | | | |
+| **Authentication** | | | |
+| Email/password auth | ✅ Implemented | Supabase Auth | Secure password hashing |
+| OAuth (Google/Apple) | ✅ Implemented | Supabase Auth | Industry standard OAuth 2.0 |
+| Password reset | ✅ Implemented | `AuthCallback.tsx` | Secure token-based reset |
+| MFA for providers | 🟡 Planned | - | Requires implementation |
+| | | | |
+| **Data Protection** | | | |
+| PII scrubbing in errors | ✅ Implemented | `server/sanitize.ts` | Email, phone, SSN patterns |
+| Minimum necessary access | ✅ Implemented | RLS policies | Database-level enforcement |
+| Data export controls | ✅ Implemented | `audit-logger.ts` | Logged with user context |
+
+### Legend
+- ✅ Implemented and tested
+- 🟡 Configured but requires production verification
+- 🔴 Not implemented / Planned
+
+### Outstanding Items for Full HIPAA Compliance
+
+1. **MFA for Healthcare Providers**
+   - Status: Planned
+   - Priority: High
+   - Implementation: Add TOTP-based MFA for provider accounts
+
+2. **Business Associate Agreement (BAA)**
+   - Status: Template created
+   - Priority: Critical
+   - Action: Execute BAAs with Supabase, Stripe, Daily.co
+
+3. **Penetration Testing**
+   - Status: Not conducted
+   - Priority: High
+   - Action: Schedule annual penetration test
+
+4. **Data Retention Automation**
+   - Status: Policy defined
+   - Priority: Medium
+   - Action: Implement automated 7-year retention with secure deletion
+
+5. **Disaster Recovery Testing**
+   - Status: DR plan documented
+   - Priority: Medium
+   - Action: Conduct DR drill and document results
+
+---
+
 *This document is confidential and intended for internal use only. Do not distribute externally without authorization from the Compliance Team.*
