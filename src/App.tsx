@@ -287,6 +287,13 @@ const CrisisResources = lazy(() =>
   })),
 );
 
+// Keyboard Help Modal - Shows keyboard shortcuts
+const KeyboardHelpModal = lazy(() =>
+  import("./components/KeyboardHelpModal").then((m) => ({
+    default: m.KeyboardHelpModal,
+  })),
+);
+
 // Secure Admin Portal Wrapper with server-side verification
 const SecureAdminPortalWrapper = React.memo(function SecureAdminPortalWrapper({
   userId,
@@ -1634,13 +1641,21 @@ export default function App() {
                 />
 
                 <div className="min-h-screen" style={{ backgroundColor: '#F5F5F5' }}>
-                  {/* Skip to content link for accessibility */}
-                  <a
-                    href="#main"
-                    className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-accent focus:text-white focus:rounded-lg focus:shadow-lg"
-                  >
-                    Skip to content
-                  </a>
+                  {/* Skip links for keyboard navigation accessibility */}
+                  <div className="skip-links">
+                    <a
+                      href="#main"
+                      className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:px-4 focus:py-3 focus:bg-cyan-600 focus:text-white focus:rounded-lg focus:shadow-lg focus:font-medium focus:min-h-[44px] focus:flex focus:items-center"
+                    >
+                      Skip to main content
+                    </a>
+                    <a
+                      href="#main-navigation"
+                      className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-56 focus:z-[9999] focus:px-4 focus:py-3 focus:bg-cyan-600 focus:text-white focus:rounded-lg focus:shadow-lg focus:font-medium focus:min-h-[44px] focus:flex focus:items-center"
+                    >
+                      Skip to navigation
+                    </a>
+                  </div>
 
                   {/* Offline Indicator - Deferred */}
                   <Suspense fallback={null}>
@@ -1654,8 +1669,16 @@ export default function App() {
                     <UpdateBanner />
                   </Suspense>
 
-                  {/* Main content with id for skip link */}
-                  <main id="main">{renderScreen()}</main>
+                  {/* Main content with id for skip link - tabIndex for focus management */}
+                  <main
+                    id="main"
+                    tabIndex={-1}
+                    className="outline-none"
+                    role="main"
+                    aria-label="Main content"
+                  >
+                    {renderScreen()}
+                  </main>
 
                   {/* Persistent Ask Aminy FAB */}
                   {showFAB && (
@@ -1726,6 +1749,11 @@ export default function App() {
 
                   {/* Feedback Button - Always visible for user feedback */}
                   <FeedbackButton />
+
+                  {/* Keyboard Help Modal - Shows on F1 or Shift+? */}
+                  <Suspense fallback={null}>
+                    <KeyboardHelpModal />
+                  </Suspense>
                 </div>
               </CLSOptimizer>
             </MobilePolishEnhancer>
