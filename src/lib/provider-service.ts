@@ -3,8 +3,11 @@
  *
  * Production-ready provider management for Aminy marketplace
  * Handles provider profiles, availability, and patient relationships
+ *
+ * Uses Supabase directly with API fallback
  */
 
+import { supabase } from '../utils/supabase/client';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
 
 // Provider types
@@ -103,29 +106,80 @@ const getAccessToken = (): string => {
     : publicAnonKey;
 };
 
+// Helper to convert DB row to ProviderProfile
+function dbRowToProvider(row: any): ProviderProfile {
+  return {
+    id: row.id,
+    userId: row.user_id,
+    name: `${row.first_name} ${row.last_name}`.trim(),
+    credentials: row.title,
+    type: row.provider_type,
+    email: row.email,
+    phone: row.phone,
+    photo: row.avatar_url,
+    bio: row.bio,
+    specialties: row.specialties || [],
+    languages: row.languages || ['English'],
+    insurance: row.insurance_accepted || [],
+    location: {
+      city: row.location_city || '',
+      state: row.location_state || '',
+      zipCode: row.location_zip_code || '',
+      telehealth: row.offers_telehealth,
+      inPerson: row.offers_in_person,
+    },
+    availability: row.availability || {},
+    hourlyRate: row.hourly_rate ? row.hourly_rate / 100 : 0, // Convert cents to dollars
+    rating: parseFloat(row.rating) || 5.0,
+    reviewCount: row.review_count || 0,
+    verified: row.verified || false,
+    acceptingNewPatients: row.accepts_new_patients,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+  };
+}
+
 /**
  * Get provider profile by ID
  */
 export async function getProvider(providerId: string): Promise<ProviderProfile | null> {
-  const accessToken = getAccessToken();
+  try {
+    // Try Supabase first
+    const { data, error } = await supabase
+      .from('providers')
+      .select('*')
+      .eq('id', providerId)
+      .single();
 
-  const response = await fetch(
-    `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/providers/${providerId}`,
-    {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
+    if (error) {
+      if (error.code === 'PGRST116') return null; // Not found
+      throw error;
     }
-  );
 
-  if (!response.ok) {
-    if (response.status === 404) return null;
-    throw new Error('Failed to get provider');
+    return dbRowToProvider(data);
+  } catch (err) {
+    console.warn('[ProviderService] Supabase error, trying API fallback:', err);
+
+    // Fallback to API
+    const accessToken = getAccessToken();
+    const response = await fetch(
+      `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/providers/${providerId}`,
+      {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    if (!response.ok) {
+      if (response.status === 404) return null;
+      throw new Error('Failed to get provider');
+    }
+
+    return response.json();
   }
-
-  return response.json();
 }
 
 /**

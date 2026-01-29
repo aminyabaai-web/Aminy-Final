@@ -6,6 +6,15 @@ import { Label } from './ui/label';
 import { Badge } from './ui/badge';
 import { toast } from 'sonner';
 import { generateClinicalReport } from '../lib/aminy-ai-brain';
+import jsPDF from 'jspdf';
+
+// ============================================================================
+// PDF Generation Constants
+// ============================================================================
+const AMINY_BLUE = '#577590';
+const AMINY_GREEN = '#43AA8B';
+const GRAY_600 = '#4B5563';
+const GRAY_400 = '#9CA3AF';
 
 interface AIReportGeneratorProps {
   childName: string;
@@ -13,6 +22,154 @@ interface AIReportGeneratorProps {
 }
 
 type ReportType = 'iep' | 'progress' | 'bcba-notes' | 'coverage-letter';
+
+// ============================================================================
+// PDF Generation Function
+// ============================================================================
+function generateClinicalReportPDF(
+  reportContent: string,
+  reportType: ReportType,
+  childName: string
+): jsPDF {
+  const doc = new jsPDF({
+    orientation: 'portrait',
+    unit: 'mm',
+    format: 'a4'
+  });
+
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+  const margin = 20;
+  const contentWidth = pageWidth - (margin * 2);
+  let yPos = margin;
+
+  const reportTitles: Record<ReportType, string> = {
+    'progress': 'Progress Report',
+    'iep': 'Individualized Education Program (IEP)',
+    'bcba-notes': 'BCBA Session Notes',
+    'coverage-letter': 'Insurance Coverage Letter'
+  };
+
+  // Helper to add new page if needed
+  const checkPageBreak = (neededSpace: number = 30) => {
+    if (yPos + neededSpace > pageHeight - margin) {
+      doc.addPage();
+      yPos = margin;
+      // Add header on new page
+      doc.setFontSize(9);
+      doc.setTextColor(GRAY_400);
+      doc.text(`${reportTitles[reportType]} - ${childName}`, margin, yPos);
+      doc.text(`Page ${doc.getNumberOfPages()}`, pageWidth - margin - 15, yPos);
+      yPos += 10;
+    }
+  };
+
+  // Header
+  doc.setFontSize(24);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(AMINY_BLUE);
+  doc.text('Aminy', margin, yPos);
+  yPos += 8;
+
+  doc.setFontSize(16);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(GRAY_600);
+  doc.text(reportTitles[reportType], margin, yPos);
+  yPos += 10;
+
+  // Child info and date
+  doc.setFontSize(11);
+  doc.setTextColor(GRAY_400);
+  doc.text(`Child: ${childName}`, margin, yPos);
+  yPos += 6;
+  doc.text(`Generated: ${new Date().toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  })}`, margin, yPos);
+  yPos += 12;
+
+  // Confidentiality notice
+  doc.setFillColor(255, 251, 235); // amber-50
+  doc.roundedRect(margin, yPos, contentWidth, 12, 2, 2, 'F');
+  doc.setFontSize(8);
+  doc.setTextColor('#92400E'); // amber-800
+  doc.text('CONFIDENTIAL: This document contains protected health information (PHI).', margin + 5, yPos + 5);
+  doc.text('Handle in accordance with HIPAA regulations.', margin + 5, yPos + 9);
+  yPos += 18;
+
+  // Horizontal line
+  doc.setDrawColor(AMINY_BLUE);
+  doc.setLineWidth(0.5);
+  doc.line(margin, yPos, pageWidth - margin, yPos);
+  yPos += 10;
+
+  // Process report content - split into paragraphs and render
+  const paragraphs = reportContent.split('\n\n');
+
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(GRAY_600);
+
+  paragraphs.forEach((paragraph) => {
+    if (!paragraph.trim()) return;
+
+    // Check if it's a header (starts with # or all caps or ends with :)
+    const isHeader = paragraph.startsWith('#') ||
+                     paragraph.match(/^[A-Z\s]{10,}:?$/) ||
+                     (paragraph.length < 50 && paragraph.endsWith(':'));
+
+    if (isHeader) {
+      checkPageBreak(15);
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(AMINY_BLUE);
+      const headerText = paragraph.replace(/^#+\s*/, '');
+      doc.text(headerText, margin, yPos);
+      yPos += 8;
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(GRAY_600);
+    } else if (paragraph.startsWith('•') || paragraph.startsWith('-') || paragraph.startsWith('*')) {
+      // Bullet points
+      const bullets = paragraph.split('\n');
+      bullets.forEach((bullet) => {
+        checkPageBreak(8);
+        const bulletText = bullet.replace(/^[•\-*]\s*/, '');
+        const lines = doc.splitTextToSize(`• ${bulletText}`, contentWidth - 10);
+        doc.text(lines, margin + 5, yPos);
+        yPos += lines.length * 5 + 2;
+      });
+    } else {
+      // Regular paragraph
+      checkPageBreak(15);
+      const lines = doc.splitTextToSize(paragraph, contentWidth);
+      lines.forEach((line: string) => {
+        checkPageBreak(6);
+        doc.text(line, margin, yPos);
+        yPos += 5;
+      });
+      yPos += 3;
+    }
+  });
+
+  // Footer on last page
+  yPos = pageHeight - 25;
+  doc.setDrawColor(GRAY_400);
+  doc.setLineWidth(0.3);
+  doc.line(margin, yPos, pageWidth - margin, yPos);
+  yPos += 5;
+
+  doc.setFontSize(8);
+  doc.setTextColor(GRAY_400);
+  doc.text('This report was generated by Aminy AI using child progress data.', margin, yPos);
+  yPos += 4;
+  doc.text('For clinical decisions, please consult with qualified healthcare providers.', margin, yPos);
+  yPos += 4;
+  doc.text(`Generated by Aminy | support@aminy.ai | www.aminy.ai`, margin, yPos);
+
+  return doc;
+}
 
 interface ReportOption {
   type: ReportType;
@@ -94,18 +251,16 @@ export function AIReportGenerator({ childName, userTier }: AIReportGeneratorProp
     const report = generatedReports.get(reportType);
     if (!report) return;
 
-    const reportTitle = reportOptions.find(r => r.type === reportType)?.title || 'Report';
-    const blob = new Blob([report], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${childName}-${reportTitle.replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    
-    toast.success('Report downloaded!');
+    try {
+      const reportTitle = reportOptions.find(r => r.type === reportType)?.title || 'Report';
+      const doc = generateClinicalReportPDF(report, reportType, childName);
+      const filename = `${childName}-${reportTitle.replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.pdf`;
+      doc.save(filename);
+      toast.success('PDF report downloaded!');
+    } catch (error) {
+      console.error('Failed to generate PDF:', error);
+      toast.error('Failed to generate PDF. Please try again.');
+    }
   };
 
   const canAccessReport = (tierRequired: string): boolean => {
@@ -184,7 +339,7 @@ export function AIReportGenerator({ childName, userTier }: AIReportGeneratorProp
                         className="h-8"
                       >
                         <Download className="w-3 h-3 mr-1.5" />
-                        Download
+                        Download PDF
                       </Button>
                     )}
                   </div>

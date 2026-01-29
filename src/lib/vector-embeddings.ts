@@ -1,567 +1,502 @@
 /**
- * Vector Embedding System for Semantic Search
+ * Vector Embeddings Service
  *
- * Enables semantic similarity search across conversation history
- * using lightweight client-side embeddings with optional server-side
- * integration for more accurate results.
+ * Provides semantic search capabilities using vector embeddings.
+ * Uses Supabase pgvector for storage and similarity search.
  */
 
-// ============================================
-// TYPES
-// ============================================
+import { supabase } from '../utils/supabase/client';
 
-export interface EmbeddingVector {
+// ============================================================================
+// Types
+// ============================================================================
+
+export interface Embedding {
   id: string;
-  childId: string;
-  type: 'message' | 'fact' | 'document' | 'summary';
+  userId: string;
   content: string;
+  contentType: 'fact' | 'memory' | 'document' | 'message';
   embedding: number[];
-  metadata: {
-    timestamp: string;
-    source?: string;
-    category?: string;
-    emotionalContext?: string;
-  };
+  metadata?: Record<string, unknown>;
+  createdAt: string;
 }
 
-export interface SemanticSearchResult {
+export interface SimilarityResult {
   id: string;
   content: string;
-  score: number;
-  type: EmbeddingVector['type'];
-  metadata: EmbeddingVector['metadata'];
+  contentType: string;
+  similarity: number;
+  metadata?: Record<string, unknown>;
 }
 
-// ============================================
-// SIMPLE CLIENT-SIDE EMBEDDINGS
-// Using TF-IDF-like approach for lightweight semantic search
-// ============================================
+export interface EmbeddingConfig {
+  model: 'text-embedding-3-small' | 'text-embedding-3-large';
+  dimensions: 256 | 512 | 1024 | 1536 | 3072;
+}
 
-// Common English stop words to filter out
-const STOP_WORDS = new Set([
-  'a', 'an', 'the', 'and', 'or', 'but', 'is', 'are', 'was', 'were',
-  'be', 'been', 'being', 'have', 'has', 'had', 'do', 'does', 'did',
-  'will', 'would', 'could', 'should', 'may', 'might', 'must', 'shall',
-  'to', 'of', 'in', 'for', 'on', 'with', 'at', 'by', 'from', 'as',
-  'into', 'through', 'during', 'before', 'after', 'above', 'below',
-  'between', 'under', 'again', 'further', 'then', 'once', 'here',
-  'there', 'when', 'where', 'why', 'how', 'all', 'each', 'few',
-  'more', 'most', 'other', 'some', 'such', 'no', 'nor', 'not',
-  'only', 'own', 'same', 'so', 'than', 'too', 'very', 'can',
-  'just', 'don', 'now', 'i', 'me', 'my', 'myself', 'we', 'our',
-  'you', 'your', 'he', 'him', 'his', 'she', 'her', 'it', 'its',
-  'they', 'them', 'their', 'what', 'which', 'who', 'whom', 'this',
-  'that', 'these', 'those', 'am', 'up', 'down', 'out', 'off', 'over',
-]);
+// ============================================================================
+// Configuration
+// ============================================================================
 
-// Domain-specific important words (weighted higher)
-const DOMAIN_KEYWORDS: Record<string, number> = {
-  // Behaviors
-  'meltdown': 2.0,
-  'tantrum': 1.8,
-  'aggression': 1.8,
-  'aggressive': 1.8,
-  'hitting': 1.7,
-  'biting': 1.7,
-  'screaming': 1.6,
-  'crying': 1.5,
-  'calm': 1.5,
-  'regulated': 1.6,
-  'dysregulated': 1.8,
-  'overstimulated': 1.7,
-  'overwhelmed': 1.6,
-  'anxious': 1.6,
-  'anxiety': 1.6,
-  'stimming': 1.7,
-  'elopement': 1.9,
-  'wandering': 1.7,
-  'escape': 1.5,
-
-  // Sensory
-  'sensory': 1.8,
-  'noise': 1.5,
-  'loud': 1.4,
-  'texture': 1.5,
-  'touch': 1.4,
-  'light': 1.4,
-  'bright': 1.3,
-  'smell': 1.4,
-  'taste': 1.4,
-  'proprioceptive': 1.8,
-  'vestibular': 1.8,
-
-  // Strategies
-  'visual': 1.5,
-  'schedule': 1.5,
-  'timer': 1.5,
-  'countdown': 1.5,
-  'transition': 1.6,
-  'warning': 1.4,
-  'routine': 1.6,
-  'predictable': 1.5,
-  'consistent': 1.5,
-  'reinforcement': 1.7,
-  'reward': 1.5,
-  'token': 1.5,
-  'break': 1.4,
-  'calm-down': 1.6,
-  'deep-pressure': 1.7,
-  'weighted': 1.6,
-  'fidget': 1.5,
-
-  // Communication
-  'nonverbal': 1.7,
-  'verbal': 1.5,
-  'pecs': 1.8,
-  'aac': 1.8,
-  'sign': 1.5,
-  'language': 1.4,
-  'speech': 1.5,
-  'words': 1.3,
-  'communicate': 1.5,
-  'express': 1.4,
-
-  // Diagnoses
-  'autism': 1.9,
-  'autistic': 1.9,
-  'asd': 1.9,
-  'adhd': 1.8,
-  'add': 1.7,
-  'spd': 1.8,
-  'odd': 1.7,
-  'pda': 1.8,
-
-  // Therapy
-  'aba': 1.9,
-  'therapy': 1.5,
-  'therapist': 1.5,
-  'bcba': 1.8,
-  'rbt': 1.7,
-  'ot': 1.6,
-  'occupational': 1.5,
-  'speech-therapy': 1.6,
-  'iep': 1.8,
-  'school': 1.4,
-  'teacher': 1.4,
-
-  // Activities
-  'sleep': 1.6,
-  'bedtime': 1.5,
-  'morning': 1.4,
-  'routine': 1.5,
-  'meal': 1.4,
-  'eating': 1.5,
-  'food': 1.4,
-  'picky': 1.5,
-  'bath': 1.4,
-  'homework': 1.4,
-  'play': 1.3,
-  'social': 1.5,
-  'friend': 1.4,
+const DEFAULT_CONFIG: EmbeddingConfig = {
+  model: 'text-embedding-3-small',
+  dimensions: 512, // Good balance of performance and accuracy
 };
 
+// ============================================================================
+// Embedding Generation
+// ============================================================================
+
 /**
- * Tokenize and normalize text
+ * Generate embedding for text using backend API
  */
-function tokenize(text: string): string[] {
-  return text
-    .toLowerCase()
-    .replace(/[^\w\s-]/g, ' ')
-    .split(/\s+/)
-    .filter(word => word.length > 2 && !STOP_WORDS.has(word));
+export async function generateEmbedding(
+  text: string,
+  config: EmbeddingConfig = DEFAULT_CONFIG
+): Promise<number[] | null> {
+  if (!text || text.trim().length === 0) {
+    return null;
+  }
+
+  try {
+    // Call backend edge function for embedding generation
+    const { data, error } = await supabase.functions.invoke('generate-embedding', {
+      body: {
+        text: text.trim(),
+        model: config.model,
+        dimensions: config.dimensions,
+      },
+    });
+
+    if (error) throw error;
+    return data.embedding;
+  } catch (error) {
+    console.error('[VectorEmbeddings] Failed to generate embedding:', error);
+    return null;
+  }
 }
 
 /**
- * Calculate term frequency for a document
+ * Generate embeddings for multiple texts in batch
  */
-function termFrequency(tokens: string[]): Map<string, number> {
-  const tf = new Map<string, number>();
-  tokens.forEach(token => {
-    tf.set(token, (tf.get(token) || 0) + 1);
-  });
+export async function generateEmbeddingsBatch(
+  texts: string[],
+  config: EmbeddingConfig = DEFAULT_CONFIG
+): Promise<(number[] | null)[]> {
+  if (!texts || texts.length === 0) {
+    return [];
+  }
 
-  // Normalize by document length
-  const maxFreq = Math.max(...tf.values());
-  tf.forEach((freq, token) => {
-    // Apply domain keyword weighting
-    const weight = DOMAIN_KEYWORDS[token] || 1.0;
-    tf.set(token, (freq / maxFreq) * weight);
-  });
+  try {
+    const { data, error } = await supabase.functions.invoke('generate-embedding', {
+      body: {
+        texts: texts.map(t => t.trim()).filter(Boolean),
+        model: config.model,
+        dimensions: config.dimensions,
+        batch: true,
+      },
+    });
 
-  return tf;
+    if (error) throw error;
+    return data.embeddings;
+  } catch (error) {
+    console.error('[VectorEmbeddings] Failed to generate batch embeddings:', error);
+    return texts.map(() => null);
+  }
 }
+
+// ============================================================================
+// Storage Operations
+// ============================================================================
 
 /**
- * Build vocabulary from corpus
+ * Store an embedding in the database
  */
-function buildVocabulary(documents: string[]): Map<string, number> {
-  const vocab = new Map<string, number>();
-  let index = 0;
-
-  documents.forEach(doc => {
-    tokenize(doc).forEach(token => {
-      if (!vocab.has(token)) {
-        vocab.set(token, index++);
-      }
-    });
-  });
-
-  return vocab;
-}
-
-/**
- * Create a simple embedding vector using TF-IDF-like weighting
- */
-function createEmbedding(text: string, vocabulary: Map<string, number>): number[] {
-  const tokens = tokenize(text);
-  const tf = termFrequency(tokens);
-  const vector = new Array(vocabulary.size).fill(0);
-
-  tf.forEach((freq, token) => {
-    const idx = vocabulary.get(token);
-    if (idx !== undefined) {
-      vector[idx] = freq;
-    }
-  });
-
-  // Normalize the vector
-  const magnitude = Math.sqrt(vector.reduce((sum, val) => sum + val * val, 0));
-  if (magnitude > 0) {
-    return vector.map(v => v / magnitude);
-  }
-  return vector;
-}
-
-/**
- * Calculate cosine similarity between two vectors
- */
-function cosineSimilarity(a: number[], b: number[]): number {
-  if (a.length !== b.length) return 0;
-
-  let dotProduct = 0;
-  let magnitudeA = 0;
-  let magnitudeB = 0;
-
-  for (let i = 0; i < a.length; i++) {
-    dotProduct += a[i] * b[i];
-    magnitudeA += a[i] * a[i];
-    magnitudeB += b[i] * b[i];
-  }
-
-  magnitudeA = Math.sqrt(magnitudeA);
-  magnitudeB = Math.sqrt(magnitudeB);
-
-  if (magnitudeA === 0 || magnitudeB === 0) return 0;
-  return dotProduct / (magnitudeA * magnitudeB);
-}
-
-// ============================================
-// EMBEDDING STORE
-// ============================================
-
-class EmbeddingStore {
-  private embeddings: Map<string, EmbeddingVector[]> = new Map();
-  private vocabulary: Map<string, number> = new Map();
-  private needsRebuild = true;
-
-  constructor() {
-    this.loadFromStorage();
-  }
-
-  private loadFromStorage() {
-    try {
-      const data = localStorage.getItem('aminy-embeddings');
-      if (data) {
-        const parsed = JSON.parse(data);
-        Object.entries(parsed.embeddings || {}).forEach(([key, value]) => {
-          this.embeddings.set(key, value as EmbeddingVector[]);
-        });
-        this.vocabulary = new Map(Object.entries(parsed.vocabulary || {}));
-        this.needsRebuild = false;
-      }
-    } catch (e) {
-      console.error('Failed to load embeddings from storage:', e);
-    }
-  }
-
-  private saveToStorage() {
-    try {
-      const embeddingsObj: Record<string, EmbeddingVector[]> = {};
-      this.embeddings.forEach((value, key) => {
-        embeddingsObj[key] = value;
-      });
-
-      const vocabularyObj: Record<string, number> = {};
-      this.vocabulary.forEach((value, key) => {
-        vocabularyObj[key] = value;
-      });
-
-      localStorage.setItem('aminy-embeddings', JSON.stringify({
-        embeddings: embeddingsObj,
-        vocabulary: vocabularyObj,
-      }));
-    } catch (e) {
-      console.error('Failed to save embeddings to storage:', e);
-    }
-  }
-
-  /**
-   * Rebuild vocabulary from all stored content
-   */
-  rebuildVocabulary() {
-    const allContent: string[] = [];
-    this.embeddings.forEach(vectors => {
-      vectors.forEach(v => allContent.push(v.content));
-    });
-
-    this.vocabulary = buildVocabulary(allContent);
-
-    // Re-embed all content with new vocabulary
-    this.embeddings.forEach((vectors, childId) => {
-      vectors.forEach(v => {
-        v.embedding = createEmbedding(v.content, this.vocabulary);
-      });
-    });
-
-    this.needsRebuild = false;
-    this.saveToStorage();
-  }
-
-  /**
-   * Add content and create embedding
-   */
-  addContent(
-    childId: string,
-    type: EmbeddingVector['type'],
-    content: string,
-    metadata: EmbeddingVector['metadata']
-  ): EmbeddingVector {
-    // Update vocabulary with new terms
-    const newTokens = tokenize(content);
-    newTokens.forEach(token => {
-      if (!this.vocabulary.has(token)) {
-        this.vocabulary.set(token, this.vocabulary.size);
-        this.needsRebuild = true;
-      }
-    });
-
-    const embedding = createEmbedding(content, this.vocabulary);
-
-    const vector: EmbeddingVector = {
-      id: `emb-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-      childId,
-      type,
-      content,
-      embedding,
-      metadata,
-    };
-
-    const childEmbeddings = this.embeddings.get(childId) || [];
-    childEmbeddings.push(vector);
-    this.embeddings.set(childId, childEmbeddings);
-
-    this.saveToStorage();
-    return vector;
-  }
-
-  /**
-   * Search for semantically similar content
-   */
-  search(
-    childId: string,
-    query: string,
-    options: {
-      type?: EmbeddingVector['type'];
-      limit?: number;
-      minScore?: number;
-    } = {}
-  ): SemanticSearchResult[] {
-    const { type, limit = 5, minScore = 0.1 } = options;
-
-    if (this.needsRebuild) {
-      this.rebuildVocabulary();
-    }
-
-    const queryEmbedding = createEmbedding(query, this.vocabulary);
-    const childEmbeddings = this.embeddings.get(childId) || [];
-
-    const results: SemanticSearchResult[] = [];
-
-    childEmbeddings.forEach(vector => {
-      if (type && vector.type !== type) return;
-
-      const score = cosineSimilarity(queryEmbedding, vector.embedding);
-      if (score >= minScore) {
-        results.push({
-          id: vector.id,
-          content: vector.content,
-          score,
-          type: vector.type,
-          metadata: vector.metadata,
-        });
-      }
-    });
-
-    // Sort by score descending and limit results
-    return results
-      .sort((a, b) => b.score - a.score)
-      .slice(0, limit);
-  }
-
-  /**
-   * Find related content based on a given content ID
-   */
-  findRelated(
-    childId: string,
-    contentId: string,
-    limit: number = 5
-  ): SemanticSearchResult[] {
-    const childEmbeddings = this.embeddings.get(childId) || [];
-    const sourceVector = childEmbeddings.find(v => v.id === contentId);
-
-    if (!sourceVector) return [];
-
-    const results: SemanticSearchResult[] = [];
-
-    childEmbeddings.forEach(vector => {
-      if (vector.id === contentId) return;
-
-      const score = cosineSimilarity(sourceVector.embedding, vector.embedding);
-      if (score > 0.1) {
-        results.push({
-          id: vector.id,
-          content: vector.content,
-          score,
-          type: vector.type,
-          metadata: vector.metadata,
-        });
-      }
-    });
-
-    return results
-      .sort((a, b) => b.score - a.score)
-      .slice(0, limit);
-  }
-
-  /**
-   * Get statistics about embeddings
-   */
-  getStats(childId: string): {
-    totalEmbeddings: number;
-    byType: Record<string, number>;
-    vocabularySize: number;
-  } {
-    const childEmbeddings = this.embeddings.get(childId) || [];
-    const byType: Record<string, number> = {};
-
-    childEmbeddings.forEach(v => {
-      byType[v.type] = (byType[v.type] || 0) + 1;
-    });
-
-    return {
-      totalEmbeddings: childEmbeddings.length,
-      byType,
-      vocabularySize: this.vocabulary.size,
-    };
-  }
-
-  /**
-   * Clean up old embeddings
-   */
-  cleanup(childId: string, maxAge: number = 90) {
-    const cutoffDate = new Date();
-    cutoffDate.setDate(cutoffDate.getDate() - maxAge);
-
-    const childEmbeddings = this.embeddings.get(childId) || [];
-    const validEmbeddings = childEmbeddings.filter(v =>
-      new Date(v.metadata.timestamp) >= cutoffDate
-    );
-
-    this.embeddings.set(childId, validEmbeddings);
-    this.needsRebuild = true;
-    this.saveToStorage();
-  }
-
-  /**
-   * Clear all embeddings for a child
-   */
-  clear(childId: string) {
-    this.embeddings.delete(childId);
-    this.saveToStorage();
-  }
-}
-
-// ============================================
-// SINGLETON EXPORT
-// ============================================
-
-export const embeddingStore = new EmbeddingStore();
-
-// ============================================
-// HELPER FUNCTIONS
-// ============================================
-
-/**
- * Index a conversation message for semantic search
- */
-export function indexMessage(
-  childId: string,
+export async function storeEmbedding(
+  userId: string,
   content: string,
-  author: 'user' | 'assistant',
-  emotionalContext?: string
-): EmbeddingVector {
-  return embeddingStore.addContent(childId, 'message', content, {
-    timestamp: new Date().toISOString(),
-    source: author,
-    emotionalContext,
-  });
+  contentType: Embedding['contentType'],
+  embedding: number[],
+  metadata?: Record<string, unknown>
+): Promise<string | null> {
+  try {
+    const { data, error } = await supabase
+      .from('embeddings')
+      .insert({
+        user_id: userId,
+        content,
+        content_type: contentType,
+        embedding,
+        metadata,
+      })
+      .select('id')
+      .single();
+
+    if (error) throw error;
+    return data.id;
+  } catch (error) {
+    console.error('[VectorEmbeddings] Failed to store embedding:', error);
+    return null;
+  }
 }
 
 /**
- * Index a fact for semantic search
+ * Store content with auto-generated embedding
  */
-export function indexFact(
-  childId: string,
+export async function storeWithEmbedding(
+  userId: string,
   content: string,
-  category: string
-): EmbeddingVector {
-  return embeddingStore.addContent(childId, 'fact', content, {
-    timestamp: new Date().toISOString(),
-    category,
-  });
+  contentType: Embedding['contentType'],
+  metadata?: Record<string, unknown>
+): Promise<string | null> {
+  const embedding = await generateEmbedding(content);
+  if (!embedding) {
+    console.warn('[VectorEmbeddings] Could not generate embedding for content');
+    return null;
+  }
+
+  return storeEmbedding(userId, content, contentType, embedding, metadata);
 }
 
 /**
- * Search for relevant context given a user query
+ * Delete an embedding
  */
-export function searchRelevantContext(
-  childId: string,
+export async function deleteEmbedding(embeddingId: string): Promise<boolean> {
+  try {
+    const { error } = await supabase
+      .from('embeddings')
+      .delete()
+      .eq('id', embeddingId);
+
+    if (error) throw error;
+    return true;
+  } catch (error) {
+    console.error('[VectorEmbeddings] Failed to delete embedding:', error);
+    return false;
+  }
+}
+
+/**
+ * Delete all embeddings for a user
+ */
+export async function deleteUserEmbeddings(userId: string): Promise<boolean> {
+  try {
+    const { error } = await supabase
+      .from('embeddings')
+      .delete()
+      .eq('user_id', userId);
+
+    if (error) throw error;
+    return true;
+  } catch (error) {
+    console.error('[VectorEmbeddings] Failed to delete user embeddings:', error);
+    return false;
+  }
+}
+
+// ============================================================================
+// Similarity Search
+// ============================================================================
+
+/**
+ * Search for similar content using vector similarity
+ */
+export async function searchSimilar(
+  userId: string,
   query: string,
-  limit: number = 5
-): SemanticSearchResult[] {
-  return embeddingStore.search(childId, query, { limit, minScore: 0.15 });
+  options: {
+    limit?: number;
+    threshold?: number;
+    contentTypes?: Embedding['contentType'][];
+  } = {}
+): Promise<SimilarityResult[]> {
+  const { limit = 10, threshold = 0.7, contentTypes } = options;
+
+  // Generate query embedding
+  const queryEmbedding = await generateEmbedding(query);
+  if (!queryEmbedding) {
+    console.warn('[VectorEmbeddings] Could not generate query embedding');
+    return [];
+  }
+
+  return searchByEmbedding(userId, queryEmbedding, { limit, threshold, contentTypes });
 }
 
 /**
- * Get context summary from semantic search results
+ * Search by pre-computed embedding vector
  */
-export function buildSemanticContext(
-  results: SemanticSearchResult[],
-  maxLength: number = 2000
-): string {
-  if (results.length === 0) return '';
+export async function searchByEmbedding(
+  userId: string,
+  embedding: number[],
+  options: {
+    limit?: number;
+    threshold?: number;
+    contentTypes?: Embedding['contentType'][];
+  } = {}
+): Promise<SimilarityResult[]> {
+  const { limit = 10, threshold = 0.7, contentTypes } = options;
 
-  let context = '**Relevant past context:**\n';
-  let currentLength = context.length;
+  try {
+    // Use Supabase RPC function for vector similarity search
+    const { data, error } = await supabase.rpc('search_embeddings', {
+      p_user_id: userId,
+      p_query_embedding: embedding,
+      p_match_threshold: threshold,
+      p_match_count: limit,
+      p_content_types: contentTypes || null,
+    });
 
-  for (const result of results) {
-    const entry = `- ${result.content} (${result.type}, relevance: ${(result.score * 100).toFixed(0)}%)\n`;
+    if (error) throw error;
 
-    if (currentLength + entry.length > maxLength) break;
+    return (data || []).map((row: any) => ({
+      id: row.id,
+      content: row.content,
+      contentType: row.content_type,
+      similarity: row.similarity,
+      metadata: row.metadata,
+    }));
+  } catch (error) {
+    console.error('[VectorEmbeddings] Similarity search failed:', error);
+    return [];
+  }
+}
 
-    context += entry;
-    currentLength += entry.length;
+// ============================================================================
+// Hybrid Search (Keyword + Semantic)
+// ============================================================================
+
+/**
+ * Perform hybrid search combining keyword and semantic search
+ */
+export async function hybridSearch(
+  userId: string,
+  query: string,
+  options: {
+    limit?: number;
+    semanticWeight?: number; // 0-1, weight for semantic results
+    contentTypes?: Embedding['contentType'][];
+  } = {}
+): Promise<SimilarityResult[]> {
+  const { limit = 10, semanticWeight = 0.7, contentTypes } = options;
+
+  // Perform both searches in parallel
+  const [semanticResults, keywordResults] = await Promise.all([
+    searchSimilar(userId, query, { limit: limit * 2, threshold: 0.5, contentTypes }),
+    keywordSearch(userId, query, { limit: limit * 2, contentTypes }),
+  ]);
+
+  // Merge results with weighted scoring
+  const resultMap = new Map<string, SimilarityResult & { score: number }>();
+
+  // Add semantic results
+  for (const result of semanticResults) {
+    resultMap.set(result.id, {
+      ...result,
+      score: result.similarity * semanticWeight,
+    });
   }
 
-  return context;
+  // Add/merge keyword results
+  const keywordWeight = 1 - semanticWeight;
+  for (const result of keywordResults) {
+    const existing = resultMap.get(result.id);
+    if (existing) {
+      existing.score += result.similarity * keywordWeight;
+    } else {
+      resultMap.set(result.id, {
+        ...result,
+        score: result.similarity * keywordWeight,
+      });
+    }
+  }
+
+  // Sort by combined score and return top results
+  return Array.from(resultMap.values())
+    .sort((a, b) => b.score - a.score)
+    .slice(0, limit)
+    .map(({ score, ...result }) => ({
+      ...result,
+      similarity: score,
+    }));
 }
+
+/**
+ * Keyword-based search using full-text search
+ */
+async function keywordSearch(
+  userId: string,
+  query: string,
+  options: {
+    limit?: number;
+    contentTypes?: Embedding['contentType'][];
+  } = {}
+): Promise<SimilarityResult[]> {
+  const { limit = 10, contentTypes } = options;
+
+  try {
+    // Build the query
+    let queryBuilder = supabase
+      .from('embeddings')
+      .select('id, content, content_type, metadata')
+      .eq('user_id', userId)
+      .textSearch('content', query, { type: 'websearch' })
+      .limit(limit);
+
+    if (contentTypes && contentTypes.length > 0) {
+      queryBuilder = queryBuilder.in('content_type', contentTypes);
+    }
+
+    const { data, error } = await queryBuilder;
+
+    if (error) throw error;
+
+    // Assign decreasing similarity scores based on rank
+    return (data || []).map((row: any, index: number) => ({
+      id: row.id,
+      content: row.content,
+      contentType: row.content_type,
+      similarity: 1 - (index / limit) * 0.5, // Scores from 1.0 to 0.5
+      metadata: row.metadata,
+    }));
+  } catch (error) {
+    console.error('[VectorEmbeddings] Keyword search failed:', error);
+    return [];
+  }
+}
+
+// ============================================================================
+// Memory Integration
+// ============================================================================
+
+/**
+ * Store a memory fact with embedding
+ */
+export async function storeMemoryFact(
+  userId: string,
+  fact: string,
+  category: string,
+  confidence?: number
+): Promise<string | null> {
+  return storeWithEmbedding(userId, fact, 'fact', {
+    category,
+    confidence: confidence ?? 1.0,
+    storedAt: new Date().toISOString(),
+  });
+}
+
+/**
+ * Store a conversation message with embedding
+ */
+export async function storeMessage(
+  userId: string,
+  message: string,
+  role: 'user' | 'assistant',
+  conversationId?: string
+): Promise<string | null> {
+  return storeWithEmbedding(userId, message, 'message', {
+    role,
+    conversationId,
+    timestamp: new Date().toISOString(),
+  });
+}
+
+/**
+ * Find relevant memories for context
+ */
+export async function findRelevantMemories(
+  userId: string,
+  query: string,
+  maxResults: number = 5
+): Promise<SimilarityResult[]> {
+  return searchSimilar(userId, query, {
+    limit: maxResults,
+    threshold: 0.6,
+    contentTypes: ['fact', 'memory'],
+  });
+}
+
+/**
+ * Find relevant conversation context
+ */
+export async function findRelevantContext(
+  userId: string,
+  query: string,
+  maxResults: number = 3
+): Promise<SimilarityResult[]> {
+  return hybridSearch(userId, query, {
+    limit: maxResults,
+    semanticWeight: 0.8,
+  });
+}
+
+// ============================================================================
+// Maintenance
+// ============================================================================
+
+/**
+ * Re-embed content that may have outdated embeddings
+ */
+export async function reembedContent(
+  userId: string,
+  contentType?: Embedding['contentType']
+): Promise<number> {
+  try {
+    // Fetch content to re-embed
+    let queryBuilder = supabase
+      .from('embeddings')
+      .select('id, content')
+      .eq('user_id', userId)
+      .limit(100);
+
+    if (contentType) {
+      queryBuilder = queryBuilder.eq('content_type', contentType);
+    }
+
+    const { data, error } = await queryBuilder;
+    if (error) throw error;
+    if (!data || data.length === 0) return 0;
+
+    // Generate new embeddings in batch
+    const contents = data.map(row => row.content);
+    const newEmbeddings = await generateEmbeddingsBatch(contents);
+
+    // Update records with new embeddings
+    let updated = 0;
+    for (let i = 0; i < data.length; i++) {
+      if (newEmbeddings[i]) {
+        const { error: updateError } = await supabase
+          .from('embeddings')
+          .update({ embedding: newEmbeddings[i] })
+          .eq('id', data[i].id);
+
+        if (!updateError) updated++;
+      }
+    }
+
+    return updated;
+  } catch (error) {
+    console.error('[VectorEmbeddings] Re-embedding failed:', error);
+    return 0;
+  }
+}
+
+// ============================================================================
+// Default Export
+// ============================================================================
+
+export default {
+  generateEmbedding,
+  generateEmbeddingsBatch,
+  storeEmbedding,
+  storeWithEmbedding,
+  deleteEmbedding,
+  deleteUserEmbeddings,
+  searchSimilar,
+  searchByEmbedding,
+  hybridSearch,
+  storeMemoryFact,
+  storeMessage,
+  findRelevantMemories,
+  findRelevantContext,
+  reembedContent,
+};
