@@ -26,6 +26,8 @@ export interface AuthResult {
   authenticated: boolean;
   user: AuthUser | null;
   error?: string;
+  aal?: 'aal1' | 'aal2'; // Authenticator Assurance Level
+  mfaVerified?: boolean;
 }
 
 /**
@@ -182,6 +184,19 @@ export async function verifyAuth(authHeader: string | null): Promise<AuthResult>
     const tier = normalizeTier(profile?.tier);
     const role = profile?.role || 'parent';
 
+    // Check MFA/AAL level from session
+    // The AAL is encoded in the JWT claims
+    const jwt = token.split('.')[1];
+    let aal: 'aal1' | 'aal2' = 'aal1';
+    try {
+      const payload = JSON.parse(atob(jwt));
+      if (payload.aal === 'aal2') {
+        aal = 'aal2';
+      }
+    } catch {
+      // Default to aal1 if we can't parse
+    }
+
     return {
       authenticated: true,
       user: {
@@ -190,6 +205,8 @@ export async function verifyAuth(authHeader: string | null): Promise<AuthResult>
         tier,
         role,
       },
+      aal,
+      mfaVerified: aal === 'aal2',
     };
   } catch (error) {
     console.error('Auth verification error:', error);
@@ -306,4 +323,56 @@ export function forbiddenResponse(
       headers: { 'Content-Type': 'application/json' },
     }
   );
+}
+
+/**
+ * Create a response requiring MFA verification
+ */
+export function mfaRequiredResponse(message?: string): Response {
+  return new Response(
+    JSON.stringify({
+      error: message || 'Multi-factor authentication required',
+      code: 'MFA_REQUIRED',
+      mfaRequired: true,
+    }),
+    {
+      status: 403,
+      headers: { 'Content-Type': 'application/json' },
+    }
+  );
+}
+
+/**
+ * Verify auth with MFA requirement for sensitive provider operations
+ * HIPAA compliance: Providers accessing PHI must have MFA enabled and verified
+ */
+export async function verifyAuthWithMFA(
+  authHeader: string | null,
+  requireMFA: boolean = true
+): Promise<AuthResult & { mfaRequired?: boolean }> {
+  const authResult = await verifyAuth(authHeader);
+
+  if (!authResult.authenticated || !authResult.user) {
+    return authResult;
+  }
+
+  // For providers and admins, MFA is required for sensitive operations
+  const isProviderOrAdmin = ['provider', 'admin'].includes(authResult.user.role);
+
+  if (requireMFA && isProviderOrAdmin && !authResult.mfaVerified) {
+    return {
+      ...authResult,
+      mfaRequired: true,
+      error: 'MFA verification required for this operation',
+    };
+  }
+
+  return authResult;
+}
+
+/**
+ * Check if a user role requires MFA
+ */
+export function rolRequiresMFA(role: string): boolean {
+  return ['provider', 'admin'].includes(role);
 }
