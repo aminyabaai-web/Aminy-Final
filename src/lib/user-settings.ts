@@ -6,6 +6,7 @@
  */
 
 import { supabase } from '../utils/supabase/client';
+import { syncEncryptedStorage } from './security/encrypted-storage';
 
 // ============================================================================
 // Types
@@ -644,12 +645,12 @@ function transformNotificationPrefsToDb(prefs: Partial<NotificationPreferences>)
 }
 
 // ============================================================================
-// Helper Functions - LocalStorage Fallbacks
+// Helper Functions - LocalStorage Fallbacks (with encryption for PHI)
 // ============================================================================
 
 function getProfileFromStorage(userId: string): UserProfile | null {
   try {
-    const stored = localStorage.getItem(`aminy_profile_${userId}`);
+    const stored = syncEncryptedStorage.getItem(`aminy_profile_${userId}`);
     return stored ? JSON.parse(stored) : null;
   } catch {
     return null;
@@ -659,7 +660,7 @@ function getProfileFromStorage(userId: string): UserProfile | null {
 function saveProfileToStorage(userId: string, profile: Partial<UserProfile>): void {
   try {
     const existing = getProfileFromStorage(userId) || {};
-    localStorage.setItem(`aminy_profile_${userId}`, JSON.stringify({ ...existing, ...profile }));
+    syncEncryptedStorage.setItem(`aminy_profile_${userId}`, JSON.stringify({ ...existing, ...profile }));
   } catch {
     // Ignore storage errors
   }
@@ -667,16 +668,24 @@ function saveProfileToStorage(userId: string, profile: Partial<UserProfile>): vo
 
 function getChildProfilesFromStorage(userId: string): ChildProfile[] {
   try {
-    const stored = localStorage.getItem(`aminy_children_${userId}`);
+    const stored = syncEncryptedStorage.getItem(`aminy_children_${userId}`);
     return stored ? JSON.parse(stored) : [];
   } catch {
     return [];
   }
 }
 
+function saveChildProfilesToStorage(userId: string, children: ChildProfile[]): void {
+  try {
+    syncEncryptedStorage.setItem(`aminy_children_${userId}`, JSON.stringify(children));
+  } catch {
+    // Ignore storage errors
+  }
+}
+
 function getNotificationPrefsFromStorage(userId: string): NotificationPreferences | null {
   try {
-    const stored = localStorage.getItem(`aminy_notifications_${userId}`);
+    const stored = syncEncryptedStorage.getItem(`aminy_notifications_${userId}`);
     return stored ? JSON.parse(stored) : getDefaultNotificationPreferences(userId);
   } catch {
     return getDefaultNotificationPreferences(userId);
@@ -686,7 +695,7 @@ function getNotificationPrefsFromStorage(userId: string): NotificationPreference
 function saveNotificationPrefsToStorage(userId: string, prefs: Partial<NotificationPreferences>): void {
   try {
     const existing = getNotificationPrefsFromStorage(userId) || getDefaultNotificationPreferences(userId);
-    localStorage.setItem(`aminy_notifications_${userId}`, JSON.stringify({ ...existing, ...prefs }));
+    syncEncryptedStorage.setItem(`aminy_notifications_${userId}`, JSON.stringify({ ...existing, ...prefs }));
   } catch {
     // Ignore storage errors
   }
@@ -694,7 +703,7 @@ function saveNotificationPrefsToStorage(userId: string, prefs: Partial<Notificat
 
 function getPrivacySettingsFromStorage(userId: string): PrivacySettings | null {
   try {
-    const stored = localStorage.getItem(`aminy_privacy_${userId}`);
+    const stored = syncEncryptedStorage.getItem(`aminy_privacy_${userId}`);
     return stored ? JSON.parse(stored) : getDefaultPrivacySettings(userId);
   } catch {
     return getDefaultPrivacySettings(userId);
@@ -704,7 +713,7 @@ function getPrivacySettingsFromStorage(userId: string): PrivacySettings | null {
 function savePrivacySettingsToStorage(userId: string, settings: Partial<PrivacySettings>): void {
   try {
     const existing = getPrivacySettingsFromStorage(userId) || getDefaultPrivacySettings(userId);
-    localStorage.setItem(`aminy_privacy_${userId}`, JSON.stringify({ ...existing, ...settings }));
+    syncEncryptedStorage.setItem(`aminy_privacy_${userId}`, JSON.stringify({ ...existing, ...settings }));
   } catch {
     // Ignore storage errors
   }
@@ -712,6 +721,7 @@ function savePrivacySettingsToStorage(userId: string, settings: Partial<PrivacyS
 
 function getAppPreferencesFromStorage(userId: string): AppPreferences | null {
   try {
+    // App preferences are not PHI, can use regular storage
     const stored = localStorage.getItem(`aminy_app_prefs_${userId}`);
     return stored ? JSON.parse(stored) : getDefaultAppPreferences(userId);
   } catch {
@@ -721,6 +731,7 @@ function getAppPreferencesFromStorage(userId: string): AppPreferences | null {
 
 function saveAppPreferencesToStorage(userId: string, prefs: Partial<AppPreferences>): void {
   try {
+    // App preferences are not PHI, can use regular storage
     const existing = getAppPreferencesFromStorage(userId) || getDefaultAppPreferences(userId);
     localStorage.setItem(`aminy_app_prefs_${userId}`, JSON.stringify({ ...existing, ...prefs }));
   } catch {

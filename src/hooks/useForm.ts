@@ -6,6 +6,7 @@
  */
 
 import { useState, useCallback, useMemo, useRef, FormEvent } from 'react';
+import { sanitizeFormData } from '../lib/security/sanitize';
 
 type ValidationRule<T> = {
   validate: (value: T, allValues: Record<string, unknown>) => boolean;
@@ -34,6 +35,12 @@ interface UseFormOptions<T extends Record<string, unknown>> {
   onSubmit?: (values: T) => void | Promise<void>;
   /** Transform values before submit */
   transformValues?: (values: T) => T;
+  /** Sanitize values before submit (default: true) */
+  sanitize?: boolean;
+  /** Fields that allow rich text HTML (for sanitization) */
+  richTextFields?: string[];
+  /** Fields to skip sanitization */
+  skipSanitizeFields?: string[];
 }
 
 interface UseFormReturn<T extends Record<string, unknown>> {
@@ -133,6 +140,9 @@ export function useForm<T extends Record<string, unknown>>(
     validateOnBlur = true,
     onSubmit,
     transformValues,
+    sanitize = true, // Sanitize by default for security
+    richTextFields = [],
+    skipSanitizeFields = [],
   } = options;
 
   const [values, setValuesState] = useState<T>(initialValues);
@@ -265,7 +275,19 @@ export function useForm<T extends Record<string, unknown>>(
     setIsSubmitting(true);
 
     try {
-      const finalValues = transformValues ? transformValues(values) : values;
+      // Sanitize values to prevent XSS attacks
+      let finalValues = sanitize
+        ? sanitizeFormData(values, {
+            richTextFields,
+            skipFields: skipSanitizeFields,
+          })
+        : values;
+
+      // Apply custom transformation if provided
+      if (transformValues) {
+        finalValues = transformValues(finalValues);
+      }
+
       await onSubmit(finalValues);
     } catch (err) {
       const error = err instanceof Error ? err.message : String(err);
@@ -273,7 +295,7 @@ export function useForm<T extends Record<string, unknown>>(
     } finally {
       setIsSubmitting(false);
     }
-  }, [initialValues, validateForm, onSubmit, transformValues, values]);
+  }, [initialValues, validateForm, onSubmit, transformValues, values, sanitize, richTextFields, skipSanitizeFields]);
 
   // Get props for a field input
   const getFieldProps = useCallback(<K extends keyof T>(field: K) => {
