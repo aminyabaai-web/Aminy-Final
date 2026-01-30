@@ -10,6 +10,7 @@ import { FocusTrap } from './FocusTrap';
 import { categorizeUserInput } from '../lib/aiOrchestrator';
 import { useAminyStore } from '../lib/store';
 import { CONTENT } from '../lib/content';
+import { toast } from 'sonner';
 import type { Task as AITask } from '../lib/aiOrchestrator';
 
 interface UnloadMindModalProps {
@@ -100,7 +101,7 @@ export function UnloadMindModal({ isOpen, onClose, onTasksCreated }: UnloadMindM
       }
     } catch (error) {
       console.error('Failed to categorize input:', error);
-      alert(CONTENT.UNLOAD_MIND.ERROR);
+      toast.error(CONTENT.UNLOAD_MIND.ERROR);
     } finally {
       setIsProcessing(false);
     }

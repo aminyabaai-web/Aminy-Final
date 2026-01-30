@@ -19,6 +19,7 @@ import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Progress } from './ui/progress';
+import { toast } from 'sonner';
 import {
   FileText,
   Download,
@@ -273,7 +274,9 @@ export function FiscalAgentSubmissionFlow({
   // Generate PDF (mock)
   const handleDownloadPdf = () => {
     // In production, this would generate a real PDF
-    alert('PDF download would be triggered here. In production, this generates a formatted PDF with all service notes and hours summary.');
+    toast.success('PDF download started', {
+      description: 'In production, this generates a formatted PDF with all service notes and hours summary.',
+    });
   };
 
   if (loading) {

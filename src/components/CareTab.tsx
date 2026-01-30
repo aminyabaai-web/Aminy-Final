@@ -301,7 +301,9 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
     // Analytics removed for production
 
     // Mock Stripe integration
-    alert(`🔄 Stripe Integration\n\nPurchasing ${pack}-minute pack for $${prices[pack]}\n\nThis would integrate with Stripe for actual payment processing.`);
+    toast.success(`Purchasing ${pack}-minute pack for $${prices[pack]}`, {
+      description: 'In production, this would integrate with Stripe for payment processing.',
+    });
   };
 
   // Handle AMA (Ask Me Anything) submission for non-Pro users

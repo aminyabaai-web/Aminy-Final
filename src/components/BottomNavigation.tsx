@@ -16,6 +16,7 @@ import {
   Users,
   BarChart3
 } from 'lucide-react';
+import { toast } from 'sonner';
 
 interface BottomNavigationProps {
   activeTab: string;
@@ -187,7 +188,9 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, navigate }: 
                 key={tab.id}
                 onClick={() => {
                   if (isDisabled) {
-                    alert('🔒 Pro only - Upgrade to Pro for this feature.');
+                    toast('This feature requires Aminy Pro', {
+                      description: 'Upgrade to access all features.',
+                    });
                     return;
                   }
 

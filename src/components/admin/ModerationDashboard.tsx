@@ -15,6 +15,7 @@ import { Card } from '../ui/card';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Textarea } from '../ui/textarea';
+import { toast } from 'sonner';
 import {
   Flag,
   CheckCircle,
@@ -345,7 +346,7 @@ export function ModerationDashboard() {
         .update({ status: 'banned' })
         .eq('id', userId);
 
-      alert('User has been banned');
+      toast.success('User has been banned');
     } catch (error) {
       console.error('Failed to ban user:', error);
     } finally {

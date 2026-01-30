@@ -15,6 +15,7 @@ import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Progress } from './ui/progress';
+import { toast } from 'sonner';
 import {
   CreditCard,
   Camera,
@@ -683,7 +684,7 @@ export function InsuranceVerification({
                   variant="outline"
                   onClick={() => {
                     // Would save card for future reference
-                    alert('Insurance card saved!');
+                    toast.success('Insurance card saved!');
                   }}
                 >
                   <DollarSign className="w-4 h-4 mr-2" />

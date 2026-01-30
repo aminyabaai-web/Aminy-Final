@@ -74,6 +74,14 @@ export const JrScreen: React.FC<JrScreenProps> = ({
   const [showPinChangeSheet, setShowPinChangeSheet] = useState(false);
   const [showDifficultySheet, setShowDifficultySheet] = useState(false);
 
+  // PIN change form state
+  const [pinChangeForm, setPinChangeForm] = useState({
+    currentPin: '',
+    newPin: '',
+    confirmPin: '',
+    error: ''
+  });
+
   // Get child's first name for personalized UI
   const childFirstName = childName.split(' ')[0];
 
@@ -115,8 +123,42 @@ export const JrScreen: React.FC<JrScreenProps> = ({
   const maxDevices = userTier === 'pro' ? Infinity : 1;
 
   // Check prefers-reduced-motion for accessibility
-  const prefersReducedMotion = typeof window !== 'undefined' ? 
+  const prefersReducedMotion = typeof window !== 'undefined' ?
     window.matchMedia('(prefers-reduced-motion: reduce)').matches : false;
+
+  // Simple hash function for PIN storage (not cryptographically secure, but prevents plain text storage)
+  const hashPin = (pin: string): string => {
+    let hash = 0;
+    const str = `aminy-jr-${pin}-salt`;
+    for (let i = 0; i < str.length; i++) {
+      const char = str.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash; // Convert to 32bit integer
+    }
+    return hash.toString(36);
+  };
+
+  // Get stored PIN hash (defaults to hash of '1234' for first-time setup)
+  const getStoredPinHash = (): string => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('jr-pin-hash');
+      if (stored) return stored;
+    }
+    // Default PIN hash for '1234' - user should change this
+    return hashPin('1234');
+  };
+
+  // Save PIN hash
+  const savePinHash = (pin: string): void => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('jr-pin-hash', hashPin(pin));
+    }
+  };
+
+  // Verify PIN against stored hash
+  const verifyPin = (pin: string): boolean => {
+    return hashPin(pin) === getStoredPinHash();
+  };
 
   // Load tokens from localStorage
   useEffect(() => {
@@ -182,9 +224,7 @@ export const JrScreen: React.FC<JrScreenProps> = ({
   };
 
   const handlePinSubmit = () => {
-    const correctPin = '1234'; // In real app, this would be user-configurable
-    
-    if (pinInput === correctPin) {
+    if (verifyPin(pinInput)) {
       if (isExitingKidMode) {
         setIsKidMode(false);
       } else {
@@ -197,6 +237,34 @@ export const JrScreen: React.FC<JrScreenProps> = ({
       setPinError('Incorrect PIN. Try again.');
       setPinInput('');
     }
+  };
+
+  const handlePinChangeSubmit = () => {
+    // Validate current PIN
+    if (!verifyPin(pinChangeForm.currentPin)) {
+      setPinChangeForm(prev => ({ ...prev, error: 'Current PIN is incorrect.' }));
+      return;
+    }
+
+    // Validate new PIN
+    if (pinChangeForm.newPin.length !== 4) {
+      setPinChangeForm(prev => ({ ...prev, error: 'New PIN must be 4 digits.' }));
+      return;
+    }
+
+    // Validate PIN confirmation
+    if (pinChangeForm.newPin !== pinChangeForm.confirmPin) {
+      setPinChangeForm(prev => ({ ...prev, error: 'New PINs do not match.' }));
+      return;
+    }
+
+    // Save the new PIN
+    savePinHash(pinChangeForm.newPin);
+
+    // Reset form and close sheet
+    setPinChangeForm({ currentPin: '', newPin: '', confirmPin: '', error: '' });
+    setShowPinChangeSheet(false);
+    toast.success('PIN updated successfully!');
   };
 
   const handleSessionComplete = (sessionData: any) => {
@@ -1096,7 +1164,12 @@ export const JrScreen: React.FC<JrScreenProps> = ({
         </Sheet>
 
         {/* PIN Change Sheet */}
-        <Sheet open={showPinChangeSheet} onOpenChange={setShowPinChangeSheet}>
+        <Sheet open={showPinChangeSheet} onOpenChange={(open) => {
+          setShowPinChangeSheet(open);
+          if (!open) {
+            setPinChangeForm({ currentPin: '', newPin: '', confirmPin: '', error: '' });
+          }
+        }}>
           <SheetContent>
             <SheetHeader>
               <SheetTitle>Change PIN</SheetTitle>
@@ -1104,8 +1177,14 @@ export const JrScreen: React.FC<JrScreenProps> = ({
                 Set a new 4-digit PIN for accessing parent mode
               </SheetDescription>
             </SheetHeader>
-            
+
             <div className="py-6 space-y-3 sm:space-y-4">
+              {pinChangeForm.error && (
+                <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+                  <p className="text-sm text-red-600 dark:text-red-400">{pinChangeForm.error}</p>
+                </div>
+              )}
+
               <div>
                 <Label htmlFor="current-pin" className="text-sm font-medium">Current PIN</Label>
                 <Input
@@ -1116,9 +1195,15 @@ export const JrScreen: React.FC<JrScreenProps> = ({
                   maxLength={4}
                   placeholder="••••"
                   className="text-center text-xl font-mono tracking-widest mt-1"
+                  value={pinChangeForm.currentPin}
+                  onChange={(e) => setPinChangeForm(prev => ({
+                    ...prev,
+                    currentPin: e.target.value.replace(/\D/g, '').slice(0, 4),
+                    error: ''
+                  }))}
                 />
               </div>
-              
+
               <div>
                 <Label htmlFor="new-pin" className="text-sm font-medium">New PIN</Label>
                 <Input
@@ -1129,9 +1214,15 @@ export const JrScreen: React.FC<JrScreenProps> = ({
                   maxLength={4}
                   placeholder="••••"
                   className="text-center text-xl font-mono tracking-widest mt-1"
+                  value={pinChangeForm.newPin}
+                  onChange={(e) => setPinChangeForm(prev => ({
+                    ...prev,
+                    newPin: e.target.value.replace(/\D/g, '').slice(0, 4),
+                    error: ''
+                  }))}
                 />
               </div>
-              
+
               <div>
                 <Label htmlFor="confirm-pin" className="text-sm font-medium">Confirm New PIN</Label>
                 <Input
@@ -1142,24 +1233,39 @@ export const JrScreen: React.FC<JrScreenProps> = ({
                   maxLength={4}
                   placeholder="••••"
                   className="text-center text-xl font-mono tracking-widest mt-1"
+                  value={pinChangeForm.confirmPin}
+                  onChange={(e) => setPinChangeForm(prev => ({
+                    ...prev,
+                    confirmPin: e.target.value.replace(/\D/g, '').slice(0, 4),
+                    error: ''
+                  }))}
                 />
               </div>
+
+              <p className="text-xs text-muted-foreground">
+                Default PIN is 1234. We recommend changing it to something memorable.
+              </p>
             </div>
-            
+
             <div className="flex gap-3">
               <Button
-                onClick={() => setShowPinChangeSheet(false)}
+                onClick={() => {
+                  setShowPinChangeSheet(false);
+                  setPinChangeForm({ currentPin: '', newPin: '', confirmPin: '', error: '' });
+                }}
                 variant="outline"
                 className="flex-1"
               >
                 Cancel
               </Button>
               <Button
-                onClick={() => {
-                  setShowPinChangeSheet(false);
-                  toast.success('PIN updated successfully!');
-                }}
+                onClick={handlePinChangeSubmit}
                 className="flex-1"
+                disabled={
+                  pinChangeForm.currentPin.length !== 4 ||
+                  pinChangeForm.newPin.length !== 4 ||
+                  pinChangeForm.confirmPin.length !== 4
+                }
               >
                 Update PIN
               </Button>
