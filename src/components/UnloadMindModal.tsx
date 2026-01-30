@@ -6,6 +6,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { X, Brain, Sparkles, CheckCircle2, Loader2, Mic, Camera } from 'lucide-react';
 import { Button } from './ui/button';
+import { FocusTrap } from './FocusTrap';
 import { categorizeUserInput } from '../lib/aiOrchestrator';
 import { useAminyStore } from '../lib/store';
 import { CONTENT } from '../lib/content';
@@ -37,7 +38,7 @@ export function UnloadMindModal({ isOpen, onClose, onTasksCreated }: UnloadMindM
     }
   }, [isOpen, step]);
 
-  // Trap focus within modal
+  // Handle escape key (focus trap handles Tab cycling)
   useEffect(() => {
     if (!isOpen) return;
 
@@ -49,6 +50,16 @@ export function UnloadMindModal({ isOpen, onClose, onTasksCreated }: UnloadMindM
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen]);
+
+  // Prevent body scroll when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
   }, [isOpen]);
 
   const handleClose = () => {
@@ -122,15 +133,16 @@ export function UnloadMindModal({ isOpen, onClose, onTasksCreated }: UnloadMindM
         }
       }}
     >
-      <div
-        ref={modalRef}
-        className="bg-white rounded-2xl max-w-2xl w-full mx-auto shadow-2xl"
-        style={{ contain: 'layout style', minHeight: '400px', maxHeight: '90vh', overflow: 'auto' }}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="unload-mind-title"
-        onClick={(e) => e.stopPropagation()}
-      >
+      <FocusTrap active={isOpen} onEscape={handleClose}>
+        <div
+          ref={modalRef}
+          className="bg-white rounded-2xl max-w-2xl w-full mx-auto shadow-2xl"
+          style={{ contain: 'layout style', minHeight: '400px', maxHeight: '90vh', overflow: 'auto' }}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="unload-mind-title"
+          onClick={(e) => e.stopPropagation()}
+        >
         {/* Header */}
         <div className="sticky top-0 bg-white border-b border-slate-200 p-6 rounded-t-2xl z-10">
           <div className="flex items-center justify-between">
@@ -297,6 +309,7 @@ export function UnloadMindModal({ isOpen, onClose, onTasksCreated }: UnloadMindM
           )}
         </div>
       </div>
+      </FocusTrap>
     </div>
   );
 }

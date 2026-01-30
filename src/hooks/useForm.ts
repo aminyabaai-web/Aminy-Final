@@ -43,6 +43,12 @@ interface UseFormOptions<T extends Record<string, unknown>> {
   skipSanitizeFields?: string[];
 }
 
+/** Server-side validation error format */
+interface ServerValidationError {
+  field?: string;
+  message: string;
+}
+
 interface UseFormReturn<T extends Record<string, unknown>> {
   /** Current form values */
   values: T;
@@ -68,6 +74,8 @@ interface UseFormReturn<T extends Record<string, unknown>> {
   setValues: (values: Partial<T>) => void;
   /** Set field error */
   setError: <K extends keyof T>(field: K, error: string | null) => void;
+  /** Set multiple field errors (from server validation) */
+  setServerErrors: (errors: ServerValidationError[]) => void;
   /** Mark field as touched */
   setTouched: <K extends keyof T>(field: K, touched?: boolean) => void;
   /** Validate a single field */
@@ -96,6 +104,8 @@ interface UseFormReturn<T extends Record<string, unknown>> {
     onChange: (e: { target: { value: unknown } }) => void;
     onBlur: () => void;
   };
+  /** Focus the first field with an error */
+  focusFirstError: () => void;
 }
 
 /**
@@ -225,6 +235,46 @@ export function useForm<T extends Record<string, unknown>>(
     setErrors(prev => ({ ...prev, [field]: error }));
   }, []);
 
+  // Set multiple errors from server validation response
+  const setServerErrors = useCallback((serverErrors: ServerValidationError[]) => {
+    const newErrors: Partial<{ [K in keyof T]: string | null }> = {};
+    let hasGeneralError = false;
+
+    for (const error of serverErrors) {
+      if (error.field && error.field in initialValues) {
+        newErrors[error.field as keyof T] = error.message;
+        // Mark the field as touched so error shows
+        setTouched(prev => ({ ...prev, [error.field as keyof T]: true }));
+      } else {
+        // General error (no specific field)
+        hasGeneralError = true;
+        setSubmitError(error.message);
+      }
+    }
+
+    if (!hasGeneralError && serverErrors.length > 0 && Object.keys(newErrors).length === 0) {
+      // All errors were general, set submit error
+      setSubmitError(serverErrors.map(e => e.message).join('. '));
+    }
+
+    setErrors(prev => ({ ...prev, ...newErrors }));
+  }, [initialValues]);
+
+  // Focus the first field with an error
+  const focusFirstError = useCallback(() => {
+    const fieldKeys = Object.keys(initialValues) as (keyof T)[];
+    for (const field of fieldKeys) {
+      if (errors[field]) {
+        const element = fieldRefs.current[field as string];
+        if (element) {
+          element.focus();
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          break;
+        }
+      }
+    }
+  }, [errors, initialValues]);
+
   // Mark field as touched
   const setTouchedField = useCallback(<K extends keyof T>(field: K, isTouched = true) => {
     setTouched(prev => ({ ...prev, [field]: isTouched }));
@@ -267,6 +317,8 @@ export function useForm<T extends Record<string, unknown>>(
 
     // Validate
     if (!validateForm()) {
+      // Focus first error field for accessibility
+      setTimeout(() => focusFirstError(), 100);
       return;
     }
 
@@ -350,6 +402,7 @@ export function useForm<T extends Record<string, unknown>>(
     setValue,
     setValues,
     setError,
+    setServerErrors,
     setTouched: setTouchedField,
     validateField,
     validateForm,
@@ -358,6 +411,7 @@ export function useForm<T extends Record<string, unknown>>(
     handleSubmit,
     getFieldProps,
     register,
+    focusFirstError,
   };
 }
 
