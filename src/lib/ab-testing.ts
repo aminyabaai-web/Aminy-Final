@@ -143,7 +143,7 @@ function clearEventsBuffer(): void {
  * Get a deterministic hash for user assignment
  */
 function hashUserForExperiment(userId: string, experimentId: string): number {
-  const str = \`\${userId}-\${experimentId}\`;
+  const str = `${userId}-${experimentId}`;
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
     const char = str.charCodeAt(i);
@@ -254,7 +254,7 @@ export async function trackExperimentEvent(
   const assignment = assignments[experimentId];
 
   if (!assignment) {
-    console.warn(\`[ABTesting] No assignment for experiment \${experimentId}\`);
+    console.warn(`[ABTesting] No assignment for experiment ${experimentId}`);
     return;
   }
 
