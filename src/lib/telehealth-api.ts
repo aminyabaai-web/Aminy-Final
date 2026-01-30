@@ -24,6 +24,7 @@ import {
   MOCK_PROVIDERS,
 } from '../types/telehealth';
 import { generateSlots, holdSlot, confirmSlot, releaseHold } from './availability-engine';
+import { secureFetch } from './security/secure-fetch';
 
 // API Configuration
 const API_BASE_URL = import.meta.env.VITE_API_URL ||
@@ -69,18 +70,17 @@ export async function createAppointment(params: CreateAppointmentParams): Promis
     return createMockAppointment(params);
   }
 
-  const response = await fetch(`${API_BASE_URL}/appointments`, {
+  const result = await secureFetch<Appointment>(`${API_BASE_URL}/appointments`, {
     method: 'POST',
     headers: getAuthHeaders(),
     body: JSON.stringify(params),
   });
 
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || 'Failed to create appointment');
+  if (!result.ok || !result.data) {
+    throw new Error(result.error || 'Failed to create appointment');
   }
 
-  return response.json();
+  return result.data;
 }
 
 /**
@@ -91,16 +91,17 @@ export async function getAppointment(appointmentId: string): Promise<Appointment
     return getMockAppointment(appointmentId);
   }
 
-  const response = await fetch(`${API_BASE_URL}/appointments/${appointmentId}`, {
+  const result = await secureFetch<Appointment>(`${API_BASE_URL}/appointments/${appointmentId}`, {
+    method: 'GET',
     headers: getAuthHeaders(),
   });
 
-  if (!response.ok) {
-    if (response.status === 404) return null;
+  if (!result.ok) {
+    if (result.status === 404) return null;
     throw new Error('Failed to fetch appointment');
   }
 
-  return response.json();
+  return result.data;
 }
 
 /**
@@ -111,15 +112,16 @@ export async function getUserAppointments(userId: string): Promise<Appointment[]
     return getMockUserAppointments(userId);
   }
 
-  const response = await fetch(`${API_BASE_URL}/appointments?userId=${userId}`, {
+  const result = await secureFetch<Appointment[]>(`${API_BASE_URL}/appointments?userId=${userId}`, {
+    method: 'GET',
     headers: getAuthHeaders(),
   });
 
-  if (!response.ok) {
+  if (!result.ok || !result.data) {
     throw new Error('Failed to fetch appointments');
   }
 
-  return response.json();
+  return result.data;
 }
 
 /**
@@ -148,17 +150,17 @@ export async function cancelAppointment(
     return updateMockAppointmentStatus(appointmentId, 'cancelled');
   }
 
-  const response = await fetch(`${API_BASE_URL}/appointments/${appointmentId}/cancel`, {
+  const result = await secureFetch<Appointment>(`${API_BASE_URL}/appointments/${appointmentId}/cancel`, {
     method: 'POST',
     headers: getAuthHeaders(),
     body: JSON.stringify({ reason }),
   });
 
-  if (!response.ok) {
-    throw new Error('Failed to cancel appointment');
+  if (!result.ok || !result.data) {
+    throw new Error(result.error || 'Failed to cancel appointment');
   }
 
-  return response.json();
+  return result.data;
 }
 
 /**
@@ -173,17 +175,17 @@ export async function rescheduleAppointment(
     return rescheduleMockAppointment(appointmentId, newSlot);
   }
 
-  const response = await fetch(`${API_BASE_URL}/appointments/${appointmentId}/reschedule`, {
+  const result = await secureFetch<Appointment>(`${API_BASE_URL}/appointments/${appointmentId}/reschedule`, {
     method: 'POST',
     headers: getAuthHeaders(),
     body: JSON.stringify({ slotId: newSlotId, slot: newSlot }),
   });
 
-  if (!response.ok) {
-    throw new Error('Failed to reschedule appointment');
+  if (!result.ok || !result.data) {
+    throw new Error(result.error || 'Failed to reschedule appointment');
   }
 
-  return response.json();
+  return result.data;
 }
 
 /**
@@ -194,16 +196,16 @@ export async function completeAppointment(appointmentId: string): Promise<Appoin
     return updateMockAppointmentStatus(appointmentId, 'completed');
   }
 
-  const response = await fetch(`${API_BASE_URL}/appointments/${appointmentId}/complete`, {
+  const result = await secureFetch<Appointment>(`${API_BASE_URL}/appointments/${appointmentId}/complete`, {
     method: 'POST',
     headers: getAuthHeaders(),
   });
 
-  if (!response.ok) {
-    throw new Error('Failed to complete appointment');
+  if (!result.ok || !result.data) {
+    throw new Error(result.error || 'Failed to complete appointment');
   }
 
-  return response.json();
+  return result.data;
 }
 
 // ============================================================================
@@ -227,15 +229,16 @@ export async function getProviders(filters?: {
   if (filters?.specialty) params.set('specialty', filters.specialty);
   if (filters?.role) params.set('role', filters.role);
 
-  const response = await fetch(`${API_BASE_URL}/providers?${params}`, {
+  const result = await secureFetch<Provider[]>(`${API_BASE_URL}/providers?${params}`, {
+    method: 'GET',
     headers: getAuthHeaders(),
   });
 
-  if (!response.ok) {
+  if (!result.ok || !result.data) {
     throw new Error('Failed to fetch providers');
   }
 
-  return response.json();
+  return result.data;
 }
 
 /**
@@ -246,16 +249,17 @@ export async function getProvider(providerId: string): Promise<Provider | null> 
     return MOCK_PROVIDERS.find(p => p.id === providerId) || null;
   }
 
-  const response = await fetch(`${API_BASE_URL}/providers/${providerId}`, {
+  const result = await secureFetch<Provider>(`${API_BASE_URL}/providers/${providerId}`, {
+    method: 'GET',
     headers: getAuthHeaders(),
   });
 
-  if (!response.ok) {
-    if (response.status === 404) return null;
+  if (!result.ok) {
+    if (result.status === 404) return null;
     throw new Error('Failed to fetch provider');
   }
 
-  return response.json();
+  return result.data;
 }
 
 /**
@@ -285,16 +289,16 @@ export async function getProviderSlots(
     startDate: (startDate || new Date()).toISOString(),
   });
 
-  const response = await fetch(
+  const result = await secureFetch<TimeSlot[]>(
     `${API_BASE_URL}/providers/${providerId}/slots?${params}`,
-    { headers: getAuthHeaders() }
+    { method: 'GET', headers: getAuthHeaders() }
   );
 
-  if (!response.ok) {
+  if (!result.ok || !result.data) {
     throw new Error('Failed to fetch slots');
   }
 
-  return response.json();
+  return result.data;
 }
 
 /**
@@ -312,17 +316,17 @@ export async function holdSlotForCheckout(
     };
   }
 
-  const response = await fetch(`${API_BASE_URL}/slots/${slotId}/hold`, {
+  const result = await secureFetch<{ success: boolean; expiresAt?: string }>(`${API_BASE_URL}/slots/${slotId}/hold`, {
     method: 'POST',
     headers: getAuthHeaders(),
     body: JSON.stringify({ userId }),
   });
 
-  if (!response.ok) {
+  if (!result.ok || !result.data) {
     return { success: false };
   }
 
-  return response.json();
+  return result.data;
 }
 
 /**
@@ -334,7 +338,7 @@ export async function releaseSlotHold(slotId: string, userId: string): Promise<v
     return;
   }
 
-  await fetch(`${API_BASE_URL}/slots/${slotId}/release`, {
+  await secureFetch(`${API_BASE_URL}/slots/${slotId}/release`, {
     method: 'POST',
     headers: getAuthHeaders(),
     body: JSON.stringify({ userId }),
@@ -353,15 +357,16 @@ export async function getVisitSummaries(userId: string): Promise<VisitSummary[]>
     return getMockVisitSummaries(userId);
   }
 
-  const response = await fetch(`${API_BASE_URL}/summaries?userId=${userId}`, {
+  const result = await secureFetch<VisitSummary[]>(`${API_BASE_URL}/summaries?userId=${userId}`, {
+    method: 'GET',
     headers: getAuthHeaders(),
   });
 
-  if (!response.ok) {
+  if (!result.ok || !result.data) {
     throw new Error('Failed to fetch visit summaries');
   }
 
-  return response.json();
+  return result.data;
 }
 
 /**
@@ -372,16 +377,17 @@ export async function getVisitSummary(summaryId: string): Promise<VisitSummary |
     return getMockVisitSummary(summaryId);
   }
 
-  const response = await fetch(`${API_BASE_URL}/summaries/${summaryId}`, {
+  const result = await secureFetch<VisitSummary>(`${API_BASE_URL}/summaries/${summaryId}`, {
+    method: 'GET',
     headers: getAuthHeaders(),
   });
 
-  if (!response.ok) {
-    if (response.status === 404) return null;
+  if (!result.ok) {
+    if (result.status === 404) return null;
     throw new Error('Failed to fetch visit summary');
   }
 
-  return response.json();
+  return result.data;
 }
 
 /**
@@ -395,17 +401,17 @@ export async function createVisitSummary(
     return createMockVisitSummary(appointmentId, summary);
   }
 
-  const response = await fetch(`${API_BASE_URL}/summaries`, {
+  const result = await secureFetch<VisitSummary>(`${API_BASE_URL}/summaries`, {
     method: 'POST',
     headers: getAuthHeaders(),
     body: JSON.stringify({ appointmentId, ...summary }),
   });
 
-  if (!response.ok) {
-    throw new Error('Failed to create visit summary');
+  if (!result.ok || !result.data) {
+    throw new Error(result.error || 'Failed to create visit summary');
   }
 
-  return response.json();
+  return result.data;
 }
 
 // ============================================================================
@@ -420,15 +426,16 @@ export async function getActionItems(userId: string): Promise<ActionItem[]> {
     return getMockActionItems(userId);
   }
 
-  const response = await fetch(`${API_BASE_URL}/action-items?userId=${userId}`, {
+  const result = await secureFetch<ActionItem[]>(`${API_BASE_URL}/action-items?userId=${userId}`, {
+    method: 'GET',
     headers: getAuthHeaders(),
   });
 
-  if (!response.ok) {
+  if (!result.ok || !result.data) {
     throw new Error('Failed to fetch action items');
   }
 
-  return response.json();
+  return result.data;
 }
 
 /**
@@ -442,17 +449,17 @@ export async function toggleActionItem(
     return toggleMockActionItem(actionItemId, completed);
   }
 
-  const response = await fetch(`${API_BASE_URL}/action-items/${actionItemId}`, {
+  const result = await secureFetch<ActionItem>(`${API_BASE_URL}/action-items/${actionItemId}`, {
     method: 'PATCH',
     headers: getAuthHeaders(),
     body: JSON.stringify({ completed, completedAt: completed ? new Date().toISOString() : null }),
   });
 
-  if (!response.ok) {
-    throw new Error('Failed to update action item');
+  if (!result.ok || !result.data) {
+    throw new Error(result.error || 'Failed to update action item');
   }
 
-  return response.json();
+  return result.data;
 }
 
 // ============================================================================
@@ -476,17 +483,17 @@ export async function joinWaitlist(
     return { success: true, position: Math.floor(Math.random() * 10) + 1 };
   }
 
-  const response = await fetch(`${API_BASE_URL}/waitlist`, {
+  const result = await secureFetch<{ success: boolean; position?: number }>(`${API_BASE_URL}/waitlist`, {
     method: 'POST',
     headers: getAuthHeaders(),
     body: JSON.stringify({ userId, providerId, preferences }),
   });
 
-  if (!response.ok) {
-    throw new Error('Failed to join waitlist');
+  if (!result.ok || !result.data) {
+    throw new Error(result.error || 'Failed to join waitlist');
   }
 
-  return response.json();
+  return result.data;
 }
 
 // ============================================================================

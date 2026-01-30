@@ -23,7 +23,8 @@ import {
   Bell,
   MapPin,
   Home,
-  FileText
+  FileText,
+  Check
 } from 'lucide-react';
 import {
   Provider,
@@ -38,6 +39,7 @@ import {
   checkTelehealthAvailability72Hours,
   TelehealthAvailabilityCheck
 } from '../../lib/availability-engine';
+import { PRICING_MESSAGING } from '../../lib/pricing';
 
 interface BookVisitProps {
   onBack: () => void;
@@ -246,6 +248,25 @@ export function BookVisitScreen({
             <p className="text-sm text-gray-500 truncate max-w-[250px]">{intake.visitReason}</p>
           </div>
         </div>
+        {/* Progress Breadcrumbs */}
+        <nav className="flex items-center gap-2 mt-3" aria-label="Booking progress">
+          <div className="flex items-center gap-1.5">
+            <span className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
+              <Check className="w-3 h-3 text-white" />
+            </span>
+            <span className="text-xs font-medium text-green-600">Tell us more</span>
+          </div>
+          <ChevronRight className="w-4 h-4 text-gray-300" aria-hidden="true" />
+          <div className="flex items-center gap-1.5">
+            <span className="w-5 h-5 bg-[#577590] rounded-full flex items-center justify-center text-white text-xs font-bold">2</span>
+            <span className="text-xs font-medium text-[#577590]">Choose provider</span>
+          </div>
+          <ChevronRight className="w-4 h-4 text-gray-300" aria-hidden="true" />
+          <div className="flex items-center gap-1.5">
+            <span className="w-5 h-5 bg-gray-200 rounded-full flex items-center justify-center text-gray-500 text-xs font-bold">3</span>
+            <span className="text-xs text-gray-400">Confirm</span>
+          </div>
+        </nav>
       </header>
 
       {/* Filters */}
@@ -327,6 +348,21 @@ export function BookVisitScreen({
 
       {/* Provider List */}
       <div className="px-4 py-6 pb-24 space-y-3 sm:space-y-4">
+        {/* Pricing Info Banner */}
+        <div className="bg-gradient-to-r from-green-50 to-teal-50 border border-green-100 rounded-xl p-3 flex items-center gap-3">
+          <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+            <span className="text-lg">💳</span>
+          </div>
+          <div className="flex-1">
+            <p className="text-sm font-medium text-gray-800">
+              All sessions are HSA/FSA eligible
+            </p>
+            <p className="text-xs text-gray-600">
+              Superbill provided for insurance reimbursement
+            </p>
+          </div>
+        </div>
+
         {/* 72-Hour Availability Status Banner */}
         {telehealthAvailability.hasAvailabilityWithin72Hours && (
           <div className="bg-green-50 border border-green-200 rounded-xl p-3 flex items-center gap-3">
@@ -441,7 +477,10 @@ function ProviderCard({
               </h3>
               <p className="text-sm text-gray-500">{provider.roleDisplayName}</p>
             </div>
-            <span className="text-sm font-semibold text-gray-900">${price}</span>
+            <div className="text-right">
+              <span className="text-lg font-bold text-gray-900">${price}</span>
+              <p className="text-xs text-green-600 font-medium">HSA/FSA eligible</p>
+            </div>
           </div>
 
           {/* Rating & Visit Type */}
