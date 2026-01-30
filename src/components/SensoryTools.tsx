@@ -49,6 +49,26 @@ interface Bubble {
   y: number;
   size: number;
   velocity: { x: number; y: number };
+  hue: number;           // Pre-computed color
+  wobblePhase: number;   // For wobble animation
+  wobbleSpeed: number;   // Wobble frequency
+}
+
+interface PopEffect {
+  id: string;
+  x: number;
+  y: number;
+  size: number;
+  hue: number;
+}
+
+interface AmbientParticle {
+  id: number;
+  angle: number;
+  distance: number;
+  size: number;
+  speed: number;
+  opacity: number;
 }
 
 export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryToolsProps) {
@@ -65,11 +85,14 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
   
   // Tool-specific state
   const [bubbles, setBubbles] = useState<Bubble[]>([]);
+  const [popEffects, setPopEffects] = useState<PopEffect[]>([]);
   const [spinnerRotation, setSpinnerRotation] = useState(0);
   const [spinnerVelocity, setSpinnerVelocity] = useState(0);
   const [breathePhase, setBreathePhase] = useState<'inhale' | 'hold' | 'exhale'>('inhale');
   const [breatheProgress, setBreatheProgress] = useState(0);
-  const [fluidParticles, setFluidParticles] = useState<Array<{ x: number; y: number; vx: number; vy: number; hue: number }>>([]);
+  const [breatheParticles, setBreatheParticles] = useState<AmbientParticle[]>([]);
+  const [fluidParticles, setFluidParticles] = useState<Array<{ x: number; y: number; vx: number; vy: number; hue: number; size: number }>>([]);
+  const [touchPoint, setTouchPoint] = useState<{ x: number; y: number } | null>(null);
   
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -129,47 +152,82 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
 
-    // Initialize particles
-    const particles: Array<{ x: number; y: number; vx: number; vy: number; hue: number }> = [];
-    for (let i = 0; i < 200; i++) {
+    // Initialize particles with varied sizes
+    const particles: Array<{ x: number; y: number; vx: number; vy: number; hue: number; size: number }> = [];
+    for (let i = 0; i < 300; i++) {
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 2,
-        vy: (Math.random() - 0.5) * 2,
-        hue: Math.random() * 360
+        vx: (Math.random() - 0.5) * 1.5,
+        vy: (Math.random() - 0.5) * 1.5,
+        hue: Math.random() * 360,
+        size: 2 + Math.random() * 4 // 2-6px varied sizes
       });
     }
     setFluidParticles(particles);
 
+    let hueShift = 0;
+    let lastTouchPoint: { x: number; y: number } | null = null;
+
     const animate = () => {
-      ctx.fillStyle = `rgba(255, 255, 255, ${0.1 * (visualIntensity / 100)})`;
+      // Fade effect for trails
+      ctx.fillStyle = `rgba(15, 15, 25, ${0.08 * (visualIntensity / 100)})`;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+      hueShift = (hueShift + 0.3) % 360; // Smooth color shifting
+
       particles.forEach((p, i) => {
+        // Apply gentle drift when not touching
+        p.vx *= 0.995;
+        p.vy *= 0.995;
+
+        // Add slight random movement for organic feel
+        p.vx += (Math.random() - 0.5) * 0.1;
+        p.vy += (Math.random() - 0.5) * 0.1;
+
         // Update position
         p.x += p.vx;
         p.y += p.vy;
 
-        // Bounce off edges
-        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
-        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+        // Soft bounce off edges
+        if (p.x < 0) { p.x = 0; p.vx *= -0.8; }
+        if (p.x > canvas.width) { p.x = canvas.width; p.vx *= -0.8; }
+        if (p.y < 0) { p.y = 0; p.vy *= -0.8; }
+        if (p.y > canvas.height) { p.y = canvas.height; p.vy *= -0.8; }
 
-        // Draw particle
-        const alpha = 0.6 * (visualIntensity / 100);
-        ctx.fillStyle = `hsla(${p.hue}, 70%, 60%, ${alpha})`;
+        // Shift hue over time for rainbow effect
+        p.hue = (p.hue + 0.2) % 360;
+
+        // Draw glowing particle
+        const alpha = 0.7 * (visualIntensity / 100);
+        const displayHue = (p.hue + hueShift) % 360;
+
+        // Outer glow
+        const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 2);
+        gradient.addColorStop(0, `hsla(${displayHue}, 80%, 65%, ${alpha})`);
+        gradient.addColorStop(0.5, `hsla(${displayHue}, 70%, 55%, ${alpha * 0.5})`);
+        gradient.addColorStop(1, `hsla(${displayHue}, 60%, 45%, 0)`);
+
+        ctx.fillStyle = gradient;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, p.size * 2, 0, Math.PI * 2);
         ctx.fill();
 
-        // Draw connections
-        particles.slice(i + 1).forEach(p2 => {
+        // Core particle
+        ctx.fillStyle = `hsla(${displayHue}, 90%, 75%, ${alpha})`;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Draw connections to nearby particles
+        particles.slice(i + 1, i + 30).forEach(p2 => {
           const dx = p2.x - p.x;
           const dy = p2.y - p.y;
           const distance = Math.sqrt(dx * dx + dy * dy);
 
-          if (distance < 100) {
-            ctx.strokeStyle = `hsla(${(p.hue + p2.hue) / 2}, 70%, 60%, ${(1 - distance / 100) * alpha})`;
+          if (distance < 80) {
+            const lineAlpha = (1 - distance / 80) * alpha * 0.4;
+            ctx.strokeStyle = `hsla(${(displayHue + (p2.hue + hueShift) % 360) / 2}, 70%, 60%, ${lineAlpha})`;
             ctx.lineWidth = 1;
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
@@ -199,16 +257,35 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
     const x = 'touches' in e ? e.touches[0].clientX - rect.left : e.clientX - rect.left;
     const y = 'touches' in e ? e.touches[0].clientY - rect.top : e.clientY - rect.top;
 
-    // Add force to nearby particles
+    setTouchPoint({ x, y });
+
+    // Add force to nearby particles with improved physics
     fluidParticles.forEach(p => {
       const dx = p.x - x;
       const dy = p.y - y;
       const distance = Math.sqrt(dx * dx + dy * dy);
 
-      if (distance < 100) {
-        const force = (100 - distance) / 100;
-        p.vx += (dx / distance) * force * 2;
-        p.vy += (dy / distance) * force * 2;
+      if (distance < 150 && distance > 0) {
+        // Smoother force falloff with quadratic curve
+        const force = Math.pow((150 - distance) / 150, 2) * 3;
+        const normalizedDx = dx / distance;
+        const normalizedDy = dy / distance;
+
+        // Push particles away from touch point
+        p.vx += normalizedDx * force;
+        p.vy += normalizedDy * force;
+
+        // Add slight swirl effect
+        p.vx += normalizedDy * force * 0.3;
+        p.vy -= normalizedDx * force * 0.3;
+
+        // Clamp velocity
+        const maxVel = 8;
+        const vel = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+        if (vel > maxVel) {
+          p.vx = (p.vx / vel) * maxVel;
+          p.vy = (p.vy / vel) * maxVel;
+        }
       }
     });
 
@@ -220,20 +297,25 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
     if (selectedTool !== 'bubble-pop') return;
 
     const interval = setInterval(() => {
-      if (bubbles.length < 20) {
+      if (bubbles.length < 15) {
+        // Pre-compute bubble colors for consistent rendering
+        const hue = Math.random() * 360;
         const newBubble: Bubble = {
           id: `bubble-${Date.now()}-${Math.random()}`,
           x: Math.random() * (window.innerWidth - 100) + 50,
           y: window.innerHeight + 50,
-          size: 40 + Math.random() * 60,
+          size: 50 + Math.random() * 50,
           velocity: {
-            x: (Math.random() - 0.5) * 2,
-            y: -2 - Math.random() * 2
-          }
+            x: (Math.random() - 0.5) * 1.5,
+            y: -1.5 - Math.random() * 1.5
+          },
+          hue,
+          wobblePhase: Math.random() * Math.PI * 2,
+          wobbleSpeed: 0.02 + Math.random() * 0.03
         };
         setBubbles(prev => [...prev, newBubble]);
       }
-    }, 1000);
+    }, 800);
 
     return () => clearInterval(interval);
   }, [selectedTool, bubbles.length]);
@@ -246,8 +328,9 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
         prev
           .map(bubble => ({
             ...bubble,
-            x: bubble.x + bubble.velocity.x,
-            y: bubble.y + bubble.velocity.y
+            x: bubble.x + bubble.velocity.x + Math.sin(bubble.wobblePhase) * 0.5,
+            y: bubble.y + bubble.velocity.y,
+            wobblePhase: bubble.wobblePhase + bubble.wobbleSpeed
           }))
           .filter(bubble => bubble.y > -100)
       );
@@ -264,8 +347,28 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
     };
   }, [selectedTool]);
 
-  const handleBubblePop = (bubbleId: string) => {
-    setBubbles(prev => prev.filter(b => b.id !== bubbleId));
+  // Clean up pop effects after animation
+  useEffect(() => {
+    if (popEffects.length === 0) return;
+
+    const timeout = setTimeout(() => {
+      setPopEffects(prev => prev.slice(1));
+    }, 500);
+
+    return () => clearTimeout(timeout);
+  }, [popEffects]);
+
+  const handleBubblePop = (bubble: Bubble) => {
+    // Create pop effect at bubble location
+    setPopEffects(prev => [...prev, {
+      id: bubble.id,
+      x: bubble.x,
+      y: bubble.y,
+      size: bubble.size,
+      hue: bubble.hue
+    }]);
+
+    setBubbles(prev => prev.filter(b => b.id !== bubble.id));
     triggerHaptic('medium');
   };
 
@@ -275,7 +378,8 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
 
     const animate = () => {
       setSpinnerRotation(prev => (prev + spinnerVelocity) % 360);
-      setSpinnerVelocity(prev => prev * 0.98); // Friction
+      // Much lower friction for longer, satisfying spins
+      setSpinnerVelocity(prev => prev * 0.995);
 
       animationFrameRef.current = requestAnimationFrame(animate);
     };
@@ -290,11 +394,65 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
   }, [selectedTool, spinnerVelocity]);
 
   const handleSpinnerSpin = () => {
-    setSpinnerVelocity(20 + Math.random() * 20);
+    // Add to existing velocity for more realistic momentum
+    setSpinnerVelocity(prev => Math.min(prev + 15 + Math.random() * 10, 45));
     triggerHaptic('heavy');
   };
 
+  // Calculate RPM for display
+  const spinnerRPM = Math.round(Math.abs(spinnerVelocity) * 10);
+
   // ========== BREATHE GLOW ==========
+  // Initialize ambient particles for breathe glow
+  useEffect(() => {
+    if (selectedTool !== 'breathe-glow') return;
+
+    // Create floating ambient particles
+    const particles: AmbientParticle[] = [];
+    for (let i = 0; i < 20; i++) {
+      particles.push({
+        id: i,
+        angle: (i / 20) * Math.PI * 2,
+        distance: 150 + Math.random() * 100,
+        size: 2 + Math.random() * 4,
+        speed: 0.002 + Math.random() * 0.003,
+        opacity: 0.3 + Math.random() * 0.4
+      });
+    }
+    setBreatheParticles(particles);
+
+    return () => setBreatheParticles([]);
+  }, [selectedTool]);
+
+  // Animate ambient particles
+  useEffect(() => {
+    if (selectedTool !== 'breathe-glow' || breatheParticles.length === 0) return;
+
+    const animate = () => {
+      setBreatheParticles(prev =>
+        prev.map(p => ({
+          ...p,
+          angle: p.angle + p.speed,
+          // Pulse distance with breathing
+          distance: breathePhase === 'inhale'
+            ? 150 + (breatheProgress / 100) * 50
+            : breathePhase === 'hold'
+              ? 200
+              : 200 - (breatheProgress / 100) * 50
+        }))
+      );
+      animationFrameRef.current = requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    return () => {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+    };
+  }, [selectedTool, breatheParticles.length, breathePhase, breatheProgress]);
+
   useEffect(() => {
     if (selectedTool !== 'breathe-glow') return;
 
@@ -331,13 +489,25 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
   }, [selectedTool, breathePhase]);
 
   const getGlowSize = () => {
+    // Smoother easing with cubic function
+    const easeProgress = breatheProgress / 100;
+    const easedProgress = breathePhase === 'inhale'
+      ? easeProgress * easeProgress * (3 - 2 * easeProgress) // Smooth ease in-out
+      : easeProgress * easeProgress * (3 - 2 * easeProgress);
+
     if (breathePhase === 'inhale') {
-      return 100 + (breatheProgress / 100) * 150; // 100px to 250px
+      return 100 + easedProgress * 150; // 100px to 250px
     } else if (breathePhase === 'hold') {
       return 250;
     } else {
-      return 250 - (breatheProgress / 100) * 150; // 250px to 100px
+      return 250 - easedProgress * 150; // 250px to 100px
     }
+  };
+
+  // Get phase duration for progress arc
+  const getPhaseDuration = () => {
+    const durations = { inhale: 4, hold: 2, exhale: 6 };
+    return durations[breathePhase];
   };
 
   // Start session
@@ -389,9 +559,13 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
     setSessionStartTime(null);
     setSessionDuration(0);
     setBubbles([]);
+    setPopEffects([]);
     setSpinnerVelocity(0);
+    setSpinnerRotation(0);
     setBreathePhase('inhale');
     setBreatheProgress(0);
+    setBreatheParticles([]);
+    setTouchPoint(null);
 
     if (!autoComplete) {
       toast.info('Session saved!');
@@ -607,29 +781,108 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
         )}
 
         {selectedTool === 'bubble-pop' && (
-          <div className="w-full h-full relative">
+          <div className="w-full h-full relative overflow-hidden">
+            {/* Pop effects layer */}
+            <AnimatePresence>
+              {popEffects.map(effect => (
+                <motion.div
+                  key={`pop-${effect.id}`}
+                  initial={{ scale: 0.5, opacity: 1 }}
+                  animate={{ scale: 2.5, opacity: 0 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.4, ease: 'easeOut' }}
+                  className="absolute pointer-events-none"
+                  style={{
+                    left: effect.x,
+                    top: effect.y,
+                    width: effect.size,
+                    height: effect.size,
+                    transform: 'translate(-50%, -50%)'
+                  }}
+                >
+                  {/* Expanding ring */}
+                  <div
+                    className="absolute inset-0 rounded-full border-4"
+                    style={{
+                      borderColor: `hsla(${effect.hue}, 80%, 70%, 0.8)`
+                    }}
+                  />
+                  {/* Sparkle particles */}
+                  {[...Array(8)].map((_, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ scale: 1, x: 0, y: 0, opacity: 1 }}
+                      animate={{
+                        scale: 0,
+                        x: Math.cos((i / 8) * Math.PI * 2) * 60,
+                        y: Math.sin((i / 8) * Math.PI * 2) * 60,
+                        opacity: 0
+                      }}
+                      transition={{ duration: 0.4, ease: 'easeOut' }}
+                      className="absolute left-1/2 top-1/2 w-3 h-3 rounded-full"
+                      style={{
+                        background: `hsla(${(effect.hue + i * 20) % 360}, 90%, 70%, 1)`,
+                        boxShadow: `0 0 8px hsla(${(effect.hue + i * 20) % 360}, 90%, 70%, 0.8)`
+                      }}
+                    />
+                  ))}
+                </motion.div>
+              ))}
+            </AnimatePresence>
+
+            {/* Bubbles layer */}
             <AnimatePresence>
               {bubbles.map(bubble => (
                 <motion.button
                   key={bubble.id}
                   initial={{ scale: 0, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 0.8, x: bubble.x, y: bubble.y }}
-                  exit={{ scale: 0, opacity: 0 }}
-                  onClick={() => handleBubblePop(bubble.id)}
+                  animate={{
+                    scale: 1 + Math.sin(bubble.wobblePhase * 2) * 0.05,
+                    opacity: 0.9,
+                    x: bubble.x,
+                    y: bubble.y
+                  }}
+                  exit={{ scale: 1.3, opacity: 0 }}
+                  transition={{ exit: { duration: 0.15 } }}
+                  onClick={() => handleBubblePop(bubble)}
                   className="absolute"
                   style={{
                     width: bubble.size,
                     height: bubble.size,
-                    transform: `translate(-50%, -50%)`
+                    transform: 'translate(-50%, -50%)'
                   }}
                 >
+                  {/* Bubble with iridescent shimmer */}
                   <div
-                    className="w-full h-full rounded-full"
+                    className="w-full h-full rounded-full relative overflow-hidden"
                     style={{
-                      background: `radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8), hsla(${Math.random() * 360}, 70%, 60%, 0.6))`,
-                      boxShadow: 'inset 0 0 20px rgba(255, 255, 255, 0.5)'
+                      background: `
+                        radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 70%, rgba(255, 255, 255, 0.3) 0%, transparent 30%),
+                        linear-gradient(135deg,
+                          hsla(${bubble.hue}, 70%, 75%, 0.7) 0%,
+                          hsla(${(bubble.hue + 40) % 360}, 70%, 65%, 0.6) 50%,
+                          hsla(${(bubble.hue + 80) % 360}, 70%, 70%, 0.7) 100%
+                        )
+                      `,
+                      boxShadow: `
+                        inset 0 0 ${bubble.size * 0.3}px rgba(255, 255, 255, 0.4),
+                        inset -${bubble.size * 0.1}px -${bubble.size * 0.1}px ${bubble.size * 0.2}px rgba(0, 0, 0, 0.1),
+                        0 0 ${bubble.size * 0.2}px hsla(${bubble.hue}, 60%, 60%, 0.3)
+                      `,
+                      border: '1px solid rgba(255, 255, 255, 0.3)'
                     }}
-                  />
+                  >
+                    {/* Shimmer highlight */}
+                    <div
+                      className="absolute w-1/3 h-1/3 rounded-full"
+                      style={{
+                        top: '15%',
+                        left: '20%',
+                        background: 'radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 70%)'
+                      }}
+                    />
+                  </div>
                 </motion.button>
               ))}
             </AnimatePresence>
@@ -641,46 +894,212 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
             <motion.div
               animate={{ rotate: spinnerRotation }}
               onClick={handleSpinnerSpin}
-              className="cursor-pointer"
+              className="cursor-pointer select-none"
+              style={{
+                // Add motion blur at high speeds
+                filter: spinnerVelocity > 20 ? `blur(${Math.min(spinnerVelocity / 15, 3)}px)` : 'none'
+              }}
             >
               <div className="relative w-64 h-64">
-                {[0, 120, 240].map((angle, i) => (
+                {/* Spinner arms with 3D effect */}
+                {[0, 120, 240].map((angle, i) => {
+                  const armColors = [
+                    { from: '#60A5FA', to: '#7C3AED', shadow: 'rgba(124, 58, 237, 0.6)' },
+                    { from: '#34D399', to: '#0EA5E9', shadow: 'rgba(14, 165, 233, 0.6)' },
+                    { from: '#F472B6', to: '#F59E0B', shadow: 'rgba(245, 158, 11, 0.6)' }
+                  ];
+                  const colors = armColors[i];
+
+                  return (
+                    <div
+                      key={i}
+                      className="absolute top-1/2 left-1/2 w-20 h-20 -ml-10 -mt-10 rounded-full"
+                      style={{
+                        transform: `rotate(${angle}deg) translateY(-80px)`,
+                        background: `
+                          radial-gradient(circle at 30% 30%, rgba(255,255,255,0.4) 0%, transparent 50%),
+                          linear-gradient(135deg, ${colors.from} 0%, ${colors.to} 100%)
+                        `,
+                        boxShadow: `
+                          0 0 30px ${colors.shadow},
+                          inset 0 2px 4px rgba(255,255,255,0.3),
+                          inset 0 -2px 4px rgba(0,0,0,0.2),
+                          0 4px 8px rgba(0,0,0,0.3)
+                        `
+                      }}
+                    >
+                      {/* Inner bearing circle */}
+                      <div
+                        className="absolute top-1/2 left-1/2 w-8 h-8 -ml-4 -mt-4 rounded-full"
+                        style={{
+                          background: `
+                            radial-gradient(circle at 40% 40%, #e5e7eb 0%, #9ca3af 50%, #6b7280 100%)
+                          `,
+                          boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.5), inset 0 -1px 2px rgba(0,0,0,0.3)'
+                        }}
+                      />
+                    </div>
+                  );
+                })}
+
+                {/* Center hub with 3D metallic effect */}
+                <div
+                  className="absolute top-1/2 left-1/2 w-16 h-16 -ml-8 -mt-8 rounded-full"
+                  style={{
+                    background: `
+                      radial-gradient(circle at 35% 35%, #f3f4f6 0%, #d1d5db 30%, #9ca3af 60%, #6b7280 100%)
+                    `,
+                    boxShadow: `
+                      0 0 20px rgba(0,0,0,0.3),
+                      inset 0 2px 4px rgba(255,255,255,0.6),
+                      inset 0 -2px 4px rgba(0,0,0,0.3),
+                      0 4px 12px rgba(0,0,0,0.4)
+                    `,
+                    border: '2px solid rgba(255,255,255,0.3)'
+                  }}
+                >
+                  {/* Center dot */}
                   <div
-                    key={i}
-                    className="absolute top-1/2 left-1/2 w-20 h-20 -ml-10 -mt-10 rounded-full bg-gradient-to-br from-blue-400 to-purple-600"
+                    className="absolute top-1/2 left-1/2 w-4 h-4 -ml-2 -mt-2 rounded-full"
                     style={{
-                      transform: `rotate(${angle}deg) translateY(-80px)`,
-                      boxShadow: '0 0 30px rgba(99, 102, 241, 0.6)'
+                      background: 'radial-gradient(circle at 40% 40%, #374151 0%, #111827 100%)',
+                      boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2)'
                     }}
                   />
-                ))}
-                <div className="absolute top-1/2 left-1/2 w-12 h-12 -ml-6 -mt-4 sm:mt-6 rounded-full bg-gray-800 border-4 border-white" />
+                </div>
               </div>
             </motion.div>
-            <p className="text-lg text-gray-300">Tap to spin!</p>
+
+            {/* RPM Counter and instructions */}
+            <div className="text-center">
+              {spinnerRPM > 0 && (
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-2xl font-bold text-purple-400 mb-2"
+                >
+                  {spinnerRPM} RPM
+                </motion.p>
+              )}
+              <p className="text-lg text-gray-300">
+                {spinnerRPM > 100 ? 'Great spin!' : spinnerRPM > 0 ? 'Keep tapping!' : 'Tap to spin!'}
+              </p>
+            </div>
           </div>
         )}
 
         {selectedTool === 'breathe-glow' && (
-          <div className="flex flex-col items-center gap-8">
-            <motion.div
-              animate={{
-                width: getGlowSize(),
-                height: getGlowSize(),
-                opacity: breathePhase === 'hold' ? 1 : 0.7
-              }}
-              transition={{ duration: 0.3 }}
-              className="rounded-full bg-gradient-to-br from-green-400 to-teal-500"
-              style={{
-                boxShadow: `0 0 ${getGlowSize() / 2}px rgba(52, 211, 153, 0.6)`
-              }}
-            />
-            <div className="text-center">
-              <p className="text-2xl font-medium capitalize mb-2">{breathePhase}</p>
+          <div className="flex flex-col items-center gap-8 relative">
+            {/* Ambient floating particles */}
+            {breatheParticles.map(particle => (
+              <motion.div
+                key={particle.id}
+                className="absolute rounded-full"
+                style={{
+                  width: particle.size,
+                  height: particle.size,
+                  left: '50%',
+                  top: '50%',
+                  transform: `translate(-50%, -50%) translate(${Math.cos(particle.angle) * particle.distance}px, ${Math.sin(particle.angle) * particle.distance}px)`,
+                  background: `radial-gradient(circle, rgba(52, 211, 153, ${particle.opacity}) 0%, transparent 70%)`,
+                  boxShadow: `0 0 ${particle.size * 2}px rgba(52, 211, 153, ${particle.opacity * 0.5})`
+                }}
+              />
+            ))}
+
+            {/* Progress arc container */}
+            <div className="relative">
+              {/* SVG Progress Arc */}
+              <svg
+                className="absolute"
+                style={{
+                  width: getGlowSize() + 40,
+                  height: getGlowSize() + 40,
+                  left: '50%',
+                  top: '50%',
+                  transform: 'translate(-50%, -50%)'
+                }}
+              >
+                {/* Background arc */}
+                <circle
+                  cx={(getGlowSize() + 40) / 2}
+                  cy={(getGlowSize() + 40) / 2}
+                  r={(getGlowSize() + 20) / 2}
+                  fill="none"
+                  stroke="rgba(255,255,255,0.1)"
+                  strokeWidth="4"
+                />
+                {/* Progress arc */}
+                <circle
+                  cx={(getGlowSize() + 40) / 2}
+                  cy={(getGlowSize() + 40) / 2}
+                  r={(getGlowSize() + 20) / 2}
+                  fill="none"
+                  stroke={breathePhase === 'inhale' ? '#34D399' : breathePhase === 'hold' ? '#60A5FA' : '#A78BFA'}
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                  strokeDasharray={Math.PI * (getGlowSize() + 20)}
+                  strokeDashoffset={Math.PI * (getGlowSize() + 20) * (1 - breatheProgress / 100)}
+                  style={{
+                    transform: 'rotate(-90deg)',
+                    transformOrigin: 'center',
+                    transition: 'stroke 0.3s ease'
+                  }}
+                />
+              </svg>
+
+              {/* Main glow orb */}
+              <motion.div
+                animate={{
+                  width: getGlowSize(),
+                  height: getGlowSize(),
+                  opacity: breathePhase === 'hold' ? 1 : 0.85
+                }}
+                transition={{ duration: 0.1, ease: 'linear' }}
+                className="rounded-full relative"
+                style={{
+                  background: `
+                    radial-gradient(circle at 35% 35%, rgba(255,255,255,0.3) 0%, transparent 40%),
+                    radial-gradient(circle at center, #34D399 0%, #0D9488 50%, #0F766E 100%)
+                  `,
+                  boxShadow: `
+                    0 0 ${getGlowSize() / 2}px rgba(52, 211, 153, 0.5),
+                    0 0 ${getGlowSize()}px rgba(52, 211, 153, 0.3),
+                    inset 0 0 ${getGlowSize() / 4}px rgba(255, 255, 255, 0.2)
+                  `
+                }}
+              >
+                {/* Pulsing ring during hold phase */}
+                {breathePhase === 'hold' && (
+                  <motion.div
+                    className="absolute inset-0 rounded-full border-2 border-white/30"
+                    animate={{ scale: [1, 1.1, 1], opacity: [0.5, 0.2, 0.5] }}
+                    transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+                  />
+                )}
+              </motion.div>
+            </div>
+
+            {/* Phase indicator */}
+            <div className="text-center mt-4">
+              <motion.p
+                key={breathePhase}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-3xl font-medium capitalize mb-2"
+                style={{
+                  color: breathePhase === 'inhale' ? '#34D399' : breathePhase === 'hold' ? '#60A5FA' : '#A78BFA'
+                }}
+              >
+                {breathePhase}
+              </motion.p>
               <p className="text-sm text-gray-400">
                 {breathePhase === 'inhale' && 'Breathe in slowly...'}
                 {breathePhase === 'hold' && 'Hold gently...'}
                 {breathePhase === 'exhale' && 'Breathe out slowly...'}
+              </p>
+              <p className="text-xs text-gray-500 mt-1">
+                {getPhaseDuration()}s phase
               </p>
             </div>
           </div>
