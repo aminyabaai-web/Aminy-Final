@@ -419,7 +419,7 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
           onClick={() => handleThreadSelect(thread.id)}
           className={`w-full p-4 rounded-lg border text-left transition-colors hover:bg-gray-50 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 ${
             selectedThreadId === thread.id ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-400' : 'border-gray-200 dark:border-slate-700 dark:bg-slate-800/50'
-          }`>
+          }`}
           aria-label={`Conversation with ${thread.patientName}`}
           tabIndex={0}
         >

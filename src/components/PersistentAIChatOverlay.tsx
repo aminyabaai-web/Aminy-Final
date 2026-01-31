@@ -3,11 +3,11 @@
  * With memory drawer and calm pulse aesthetics
  */
 
-import React, { useState, useEffect, useRef } from 'react';
-import { X, Send, ChevronDown, Sparkles, Clock, TrendingUp, Heart } from 'lucide-react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { X, ChevronDown, Sparkles, Clock, TrendingUp, Heart } from 'lucide-react';
 import { Button } from './ui/button';
-import { Textarea } from './ui/textarea';
 import { Badge } from './ui/badge';
+import { EnhancedChatInput, type Attachment } from './EnhancedChatInput';
 import { motion, AnimatePresence } from 'motion/react';
 import { toast } from 'sonner';
 import {
@@ -43,7 +43,6 @@ export function PersistentAIChatOverlay({
   hasNewInsight = false
 }: PersistentAIChatOverlayProps) {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [userContext, setUserContext] = useState<UserContext | null>(null);
   const [memories, setMemories] = useState<MemorySummary[]>([]);
@@ -89,18 +88,24 @@ export function PersistentAIChatOverlay({
     "Show me what's working"
   ];
 
-  const handleSend = async () => {
-    if (!input.trim() || isLoading) return;
+  const handleSend = useCallback(async (inputText: string, attachments: Attachment[]) => {
+    if (!inputText.trim() || isLoading) return;
+
+    // Build message with attachments info
+    let content = inputText;
+    if (attachments.length > 0) {
+      const attachmentInfo = attachments.map(a => `[${a.type}: ${a.name}]`).join(' ');
+      content = `${inputText}\n\nAttachments: ${attachmentInfo}`;
+    }
 
     const userMessage: Message = {
       id: Date.now().toString(),
       role: 'user',
-      content: input,
+      content,
       timestamp: new Date()
     };
 
     setMessages(prev => [...prev, userMessage]);
-    setInput('');
     setIsLoading(true);
 
     try {
@@ -119,7 +124,7 @@ export function PersistentAIChatOverlay({
             'Authorization': `Bearer ${publicAnonKey}`
           },
           body: JSON.stringify({
-            userMessage: input,
+            userMessage: inputText,
             conversationHistory: messages.map(m => ({
               role: m.role,
               content: m.content
@@ -155,7 +160,7 @@ Respond naturally, showing you remember their journey. Be brief (2-3 sentences) 
           timestamp: new Date(),
           category: 'calm_cue',
           content: data.message,
-          context: { userQuery: input }
+          context: { userQuery: inputText }
         });
       }
 
@@ -164,11 +169,12 @@ Respond naturally, showing you remember their journey. Be brief (2-3 sentences) 
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [isLoading, userContext, messages, currentPath, userId]);
 
-  const handleStarterPrompt = (prompt: string) => {
-    setInput(prompt);
-  };
+  const handleStarterPrompt = useCallback((prompt: string) => {
+    // Directly send the starter prompt
+    handleSend(prompt, []);
+  }, [handleSend]);
 
   return (
     <AnimatePresence>
@@ -355,30 +361,16 @@ Respond naturally, showing you remember their journey. Be brief (2-3 sentences) 
               )}
             </AnimatePresence>
 
-            {/* Input */}
+            {/* Enhanced Input with Mic/Camera/Upload */}
             <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-slate-100 shrink-0">
-              <div className="flex gap-2">
-                <Textarea
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                      e.preventDefault();
-                      handleSend();
-                    }
-                  }}
-                  placeholder="Ask anything..."
-                  className="resize-none border-slate-200 focus:border-cyan-400 focus:ring-cyan-400 rounded-xl text-sm"
-                  rows={2}
-                />
-                <Button
-                  onClick={handleSend}
-                  disabled={!input.trim() || isLoading}
-                  className="h-auto bg-cyan-600 hover:bg-cyan-700 rounded-xl px-4"
-                >
-                  <Send className="w-4 h-4" />
-                </Button>
-              </div>
+              <EnhancedChatInput
+                onSend={handleSend}
+                placeholder="Ask anything... (or use mic/camera)"
+                disabled={false}
+                isLoading={isLoading}
+                maxAttachments={3}
+                className="rounded-xl"
+              />
             </div>
           </motion.div>
         </>

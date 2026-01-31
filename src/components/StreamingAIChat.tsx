@@ -3,10 +3,10 @@
  * Makes Aminy feel like a continuous, human conversation (like Claude)
  */
 
-import React, { useState, useEffect, useRef } from 'react';
-import { Send, Loader2, Sparkles } from 'lucide-react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { Loader2, Sparkles } from 'lucide-react';
 import { Button } from './ui/button';
-import { Textarea } from './ui/textarea';
+import { EnhancedChatInput, type Attachment } from './EnhancedChatInput';
 import {
   loadConversationHistory,
   saveMessageToHistory,
@@ -40,7 +40,6 @@ export function StreamingAIChat({
   showRateLimitIndicator = true,
 }: StreamingAIChatProps) {
   const [messages, setMessages] = useState<ConversationMessage[]>([]);
-  const [input, setInput] = useState('');
   const [isStreaming, setIsStreaming] = useState(false);
   const [streamingContent, setStreamingContent] = useState('');
   const [isLoadingHistory, setIsLoadingHistory] = useState(true);
@@ -82,8 +81,8 @@ export function StreamingAIChat({
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }
 
-  async function handleSend() {
-    if (!input.trim() || isStreaming) return;
+  const handleSend = useCallback(async (inputText: string, attachments: Attachment[]) => {
+    if (!inputText.trim() || isStreaming) return;
 
     const userId = store.getState().userId;
     if (!userId) {
@@ -91,20 +90,27 @@ export function StreamingAIChat({
       return;
     }
 
+    // Build content with attachments info
+    let content = inputText.trim();
+    if (attachments.length > 0) {
+      const attachmentInfo = attachments.map(a => `[${a.type}: ${a.name}]`).join(' ');
+      content = `${content}\n\nAttachments: ${attachmentInfo}`;
+    }
+
     const userMessage: ConversationMessage = {
       role: 'user',
-      content: input.trim(),
+      content,
       timestamp: new Date().toISOString(),
       metadata: {
         module: context.module,
         action: context.recentAction,
         mood: context.parentMood,
+        attachments: attachments.map(a => ({ type: a.type, name: a.name, url: a.url })),
       },
     };
 
     // Add user message immediately
     setMessages(prev => [...prev, userMessage]);
-    setInput('');
     setIsStreaming(true);
     setStreamingContent('');
 
@@ -170,14 +176,7 @@ export function StreamingAIChat({
       setIsStreaming(false);
       setStreamingContent('');
     }
-  }
-
-  function handleKeyPress(e: React.KeyboardEvent) {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSend();
-    }
-  }
+  }, [isStreaming, context, messages, childId, enableMemoryExtraction, onConversionPrompt]);
 
   if (isLoadingHistory) {
     return (
@@ -275,31 +274,16 @@ export function StreamingAIChat({
         <RateLimitInline onUpgradeClick={onUpgradeClick} />
       )}
 
-      {/* Input area */}
+      {/* Enhanced Input area with mic/camera/upload */}
       <div className="border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-4">
-        <div className="flex items-end gap-2 max-w-4xl mx-auto">
-          <Textarea
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={handleKeyPress}
+        <div className="max-w-4xl mx-auto">
+          <EnhancedChatInput
+            onSend={handleSend}
             placeholder={isRateLimited ? "Daily limit reached - upgrade for unlimited messages" : placeholder}
-            className="flex-1 resize-none min-h-[44px] max-h-[120px]"
-            rows={1}
-            disabled={isStreaming || isRateLimited}
+            disabled={isRateLimited}
+            isLoading={isStreaming}
+            maxAttachments={5}
           />
-          <Button
-            onClick={handleSend}
-            disabled={!input.trim() || isStreaming || isRateLimited}
-            size="lg"
-            className="bg-accent hover:bg-accent/90 text-white h-[44px] px-4"
-            aria-label="Send message"
-          >
-            {isStreaming ? (
-              <Loader2 className="w-5 h-5 animate-spin" />
-            ) : (
-              <Send className="w-5 h-5" />
-            )}
-          </Button>
         </div>
       </div>
     </div>
