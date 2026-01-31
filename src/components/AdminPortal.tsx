@@ -44,6 +44,7 @@ import { ModerationDashboard } from './admin/ModerationDashboard';
 import { AIInsights } from './admin/AIInsights';
 import { ProviderApplicationReview } from './admin/ProviderApplicationReview';
 import { getAggregatedMetrics, getRetentionMetrics } from '../lib/outcomes-tracking';
+import { MRRDashboard } from './MRRDashboard';
 
 interface AdminPortalProps {
   onBack?: () => void;
@@ -1185,139 +1186,7 @@ export function AdminPortal({ onBack }: AdminPortalProps) {
         )}
 
         {activeSection === 'revenue' && (
-          <div className="space-y-6">
-            {/* Revenue Overview */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <MetricCard
-                label="MRR"
-                value={`$${(pilotData.marketplace.revenue * 0.7).toLocaleString()}`}
-                icon={DollarSign}
-                trend="+12% this month"
-              />
-              <MetricCard
-                label="ARR"
-                value={`$${(pilotData.marketplace.revenue * 0.7 * 12).toLocaleString()}`}
-                icon={TrendingUp}
-                subtitle="Projected"
-              />
-              <MetricCard
-                label="Paid Users"
-                value={pilotData.tierDistribution.starter + pilotData.tierDistribution.core + pilotData.tierDistribution.pro}
-                icon={Users}
-                subtitle={`${Math.round(((pilotData.tierDistribution.starter + pilotData.tierDistribution.core + pilotData.tierDistribution.pro) / pilotData.overview.totalFamilies) * 100)}% conversion`}
-              />
-              <MetricCard
-                label="ARPU"
-                value={`$${pilotData.overview.totalFamilies > 0 ? Math.round(pilotData.marketplace.revenue / pilotData.overview.totalFamilies) : 0}`}
-                icon={DollarSign}
-                subtitle="Avg revenue per user"
-              />
-            </div>
-
-            {/* Revenue by Tier */}
-            <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Revenue by Tier</h3>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-800 rounded-lg">
-                  <div>
-                    <div className="font-medium text-gray-900 dark:text-white">Starter ($6.99/mo)</div>
-                    <div className="text-sm text-gray-500">{pilotData.tierDistribution.starter} users</div>
-                  </div>
-                  <div className="text-right">
-                    <div className="font-bold text-gray-900 dark:text-white">${(pilotData.tierDistribution.starter * 6.99).toFixed(0)}/mo</div>
-                    <div className="text-xs text-gray-500">${(pilotData.tierDistribution.starter * 6.99 * 12).toFixed(0)}/yr</div>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-800 rounded-lg">
-                  <div>
-                    <div className="font-medium text-gray-900 dark:text-white">Core ($14.99/mo)</div>
-                    <div className="text-sm text-gray-500">{pilotData.tierDistribution.core} users</div>
-                  </div>
-                  <div className="text-right">
-                    <div className="font-bold text-gray-900 dark:text-white">${(pilotData.tierDistribution.core * 14.99).toFixed(0)}/mo</div>
-                    <div className="text-xs text-gray-500">${(pilotData.tierDistribution.core * 14.99 * 12).toFixed(0)}/yr</div>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between p-3 bg-accent/10 dark:bg-accent/20 rounded-lg">
-                  <div>
-                    <div className="font-medium text-gray-900 dark:text-white">Pro ($29.99/mo)</div>
-                    <div className="text-sm text-gray-500">{pilotData.tierDistribution.pro} users</div>
-                  </div>
-                  <div className="text-right">
-                    <div className="font-bold text-accent">${(pilotData.tierDistribution.pro * 29.99).toFixed(0)}/mo</div>
-                    <div className="text-xs text-gray-500">${(pilotData.tierDistribution.pro * 29.99 * 12).toFixed(0)}/yr</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Revenue Sources */}
-            <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Revenue Sources</h3>
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Subscriptions</h4>
-                  <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">
-                    ${((pilotData.tierDistribution.starter * 6.99) + (pilotData.tierDistribution.core * 14.99) + (pilotData.tierDistribution.pro * 29.99)).toFixed(0)}
-                  </div>
-                  <div className="text-sm text-gray-500">Monthly recurring</div>
-                </div>
-                <div>
-                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Telehealth Sessions</h4>
-                  <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">
-                    ${pilotData.marketplace.totalBookings * 75}
-                  </div>
-                  <div className="text-sm text-gray-500">{pilotData.marketplace.totalBookings} sessions @ $75 avg</div>
-                </div>
-              </div>
-            </div>
-
-            {/* LTV & Churn */}
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Customer Lifetime Value</h3>
-                <div className="text-center">
-                  <div className="text-4xl font-bold text-accent mb-2">$312</div>
-                  <div className="text-sm text-gray-500">Avg LTV (based on 18mo avg lifespan)</div>
-                  <div className="mt-4 grid grid-cols-3 gap-4 text-center">
-                    <div>
-                      <div className="text-lg font-bold text-gray-900 dark:text-white">$84</div>
-                      <div className="text-xs text-gray-500">Starter LTV</div>
-                    </div>
-                    <div>
-                      <div className="text-lg font-bold text-gray-900 dark:text-white">$270</div>
-                      <div className="text-xs text-gray-500">Core LTV</div>
-                    </div>
-                    <div>
-                      <div className="text-lg font-bold text-accent">$540</div>
-                      <div className="text-xs text-gray-500">Pro LTV</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Churn & Retention</h3>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-gray-600 dark:text-gray-400">Monthly Churn</span>
-                    <span className="font-bold text-green-600">5.2%</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-gray-600 dark:text-gray-400">Annual Churn</span>
-                    <span className="font-bold text-yellow-600">47%</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-gray-600 dark:text-gray-400">Net Revenue Retention</span>
-                    <span className="font-bold text-accent">108%</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-gray-600 dark:text-gray-400">Expansion Revenue</span>
-                    <span className="font-bold text-green-600">+$420/mo</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <MRRDashboard showCohorts={true} refreshInterval={120} />
         )}
       </main>
     </div>

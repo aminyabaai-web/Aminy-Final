@@ -15,6 +15,8 @@ interface ErrorBoundaryProps {
   onError?: (error: Error, errorInfo: React.ErrorInfo) => void;
   isolate?: boolean; // Whether this boundary should isolate errors
   critical?: boolean; // Whether errors here are critical
+  level?: 'page' | 'section' | 'component'; // UI level for appropriate fallback
+  resetKeys?: unknown[]; // Keys that trigger reset when changed
 }
 
 interface ErrorContext {
@@ -296,6 +298,159 @@ function DefaultErrorFallback({
           </p>
         </div>
       </div>
+    </div>
+  );
+}
+
+// ============================================================================
+// Level-specific Fallback Components
+// ============================================================================
+
+function SectionErrorFallback({
+  error,
+  retry,
+  errorId,
+}: {
+  error?: Error;
+  retry: () => void;
+  errorId?: string;
+}) {
+  return (
+    <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-6">
+      <div className="flex items-start gap-4">
+        <div className="w-10 h-10 bg-red-100 dark:bg-red-900/50 rounded-full flex items-center justify-center flex-shrink-0">
+          <svg className="w-5 h-5 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+        </div>
+        <div className="flex-1">
+          <h3 className="text-lg font-semibold text-red-900 dark:text-red-200 mb-1">
+            This section couldn't load
+          </h3>
+          <p className="text-red-700 dark:text-red-300 text-sm mb-4">
+            There was a problem loading this content. You can try again or continue using other parts of the app.
+          </p>
+          <button
+            onClick={retry}
+            className="px-4 py-2 bg-red-600 text-white text-sm rounded-lg font-medium hover:bg-red-700 transition-colors"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ComponentErrorFallback({
+  retry,
+}: {
+  error?: Error;
+  retry: () => void;
+  errorId?: string;
+}) {
+  return (
+    <div className="inline-flex items-center gap-2 px-3 py-2 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+      <svg className="w-4 h-4 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <span className="text-sm text-red-700 dark:text-red-300">Failed to load</span>
+      <button
+        onClick={retry}
+        className="text-sm text-red-600 hover:underline font-medium"
+      >
+        Retry
+      </button>
+    </div>
+  );
+}
+
+// Get fallback based on level
+export function getFallbackForLevel(level?: 'page' | 'section' | 'component') {
+  switch (level) {
+    case 'section':
+      return SectionErrorFallback;
+    case 'component':
+      return ComponentErrorFallback;
+    case 'page':
+    default:
+      return DefaultErrorFallback;
+  }
+}
+
+// ============================================================================
+// HOC for wrapping components with error boundary
+// ============================================================================
+
+export function withErrorBoundary<P extends object>(
+  WrappedComponent: React.ComponentType<P>,
+  options: Omit<ErrorBoundaryProps, 'children'> = {}
+) {
+  const WithErrorBoundary = (props: P) => (
+    <ErrorBoundary {...options}>
+      <WrappedComponent {...props} />
+    </ErrorBoundary>
+  );
+
+  WithErrorBoundary.displayName = `WithErrorBoundary(${WrappedComponent.displayName || WrappedComponent.name || 'Component'})`;
+
+  return WithErrorBoundary;
+}
+
+// ============================================================================
+// Hook for imperative error throwing (useful in event handlers)
+// ============================================================================
+
+export function useErrorBoundary() {
+  const [error, setError] = React.useState<Error | null>(null);
+
+  if (error) {
+    throw error;
+  }
+
+  const throwError = React.useCallback((err: Error) => {
+    setError(err);
+  }, []);
+
+  const resetError = React.useCallback(() => {
+    setError(null);
+  }, []);
+
+  return { throwError, resetError };
+}
+
+// ============================================================================
+// Async Boundary combining ErrorBoundary with Suspense
+// ============================================================================
+
+interface AsyncBoundaryProps {
+  children: React.ReactNode;
+  fallback?: React.ComponentType<{ error?: Error; retry: () => void; errorId?: string }>;
+  loadingFallback?: React.ReactNode;
+  onError?: (error: Error, errorInfo: React.ErrorInfo) => void;
+  level?: 'page' | 'section' | 'component';
+}
+
+export function AsyncBoundary({
+  children,
+  fallback,
+  loadingFallback,
+  onError,
+  level = 'section',
+}: AsyncBoundaryProps) {
+  return (
+    <ErrorBoundary fallback={fallback || getFallbackForLevel(level)} onError={onError} level={level}>
+      <React.Suspense fallback={loadingFallback || <DefaultLoadingFallback />}>
+        {children}
+      </React.Suspense>
+    </ErrorBoundary>
+  );
+}
+
+function DefaultLoadingFallback() {
+  return (
+    <div className="flex items-center justify-center p-8">
+      <div className="w-8 h-8 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin" />
     </div>
   );
 }
