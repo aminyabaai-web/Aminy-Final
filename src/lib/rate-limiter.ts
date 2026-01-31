@@ -5,6 +5,8 @@
  * Supports multiple strategies: sliding window, token bucket, and fixed window.
  */
 
+import { useState, useCallback, useRef } from 'react';
+
 // ============================================================================
 // Types
 // ============================================================================
@@ -403,8 +405,6 @@ export function rateLimitMiddleware(options: RateLimitMiddlewareOptions) {
 // ============================================================================
 // React Hook for Client-Side Rate Limiting
 // ============================================================================
-
-import { useState, useCallback, useRef } from 'react';
 
 interface UseRateLimitOptions {
   limit: number;

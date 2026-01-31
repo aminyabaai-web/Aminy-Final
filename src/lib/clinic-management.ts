@@ -5,7 +5,7 @@
  * Designed to get the "ABA Clinics/Providers" stakeholder perspective to 9+/10.
  */
 
-import { supabase } from './supabase';
+import { supabase } from '../utils/supabase/client';
 import { paymentLogger } from './logger';
 
 // ============================================================================
