@@ -5,7 +5,7 @@
  * for VC-ready reporting and business intelligence.
  */
 
-import { supabase } from './supabase';
+import { supabase } from '../utils/supabase/client';
 import { paymentLogger } from './logger';
 
 // ============================================================================

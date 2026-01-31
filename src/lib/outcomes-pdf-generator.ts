@@ -5,7 +5,7 @@
  * for insurance payers, demonstrating treatment efficacy and medical necessity.
  */
 
-import { supabase } from './supabase';
+import { supabase } from '../utils/supabase/client';
 
 // ============================================================================
 // Types
