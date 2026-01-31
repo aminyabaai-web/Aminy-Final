@@ -107,7 +107,9 @@ export function VisualTimer({
 
     // Play completion sound
     if (soundEnabled && audioRef.current) {
-      audioRef.current.play().catch(() => {});
+      audioRef.current.play().catch(() => {
+        // Audio playback blocked by browser autoplay policy - this is expected
+      });
     }
 
     // Trigger celebration

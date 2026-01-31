@@ -504,68 +504,65 @@ export function ConnectorStatus({
     return 'not-available';
   };
 
+  // Compute statuses at the top level for hooks
+  const resolved = resolveStatus();
+  const juniorDone = resolved.junior;
+  const insightDone = resolved.insight;
+  const benefitsReady = resolved.benefits;
+  const isPro = resolved.isPro;
+
+  // Visibility rules: hide card when all required steps complete for non-Pro users
+  const allRequiredComplete = juniorDone && insightDone && benefitsReady;
+  const shouldHideConnector = !isPro && allRequiredComplete;
+
+  // Analytics: connector visibility tracking (moved to top level)
+  useEffect(() => {
+    // Visibility state tracked for analytics
+  }, [shouldHideConnector, juniorDone, insightDone, benefitsReady, isPro]);
+
+  // Live updates event listeners (moved to top level)
+  useEffect(() => {
+    const handleConnectorChange = () => {
+      // Force re-render when connector status changes
+      setStatusRefresh(prev => prev + 1);
+    };
+
+    // Listen for connector changes
+    window.addEventListener("connector:changed", handleConnectorChange);
+
+    // Listen for specific flag changes
+    const flagKeys = ["aminy:paired", "aminy:insight", "aminy:benefits", "aminy:pro"];
+    const handleStorageChange = (e: StorageEvent) => {
+      if (flagKeys.includes(e.key || '')) {
+        handleConnectorChange();
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    // Custom event listeners for flag updates
+    flagKeys.forEach(key => {
+      window.addEventListener(key, handleConnectorChange);
+    });
+
+    return () => {
+      window.removeEventListener("connector:changed", handleConnectorChange);
+      window.removeEventListener("storage", handleStorageChange);
+      flagKeys.forEach(key => {
+        window.removeEventListener(key, handleConnectorChange);
+      });
+    };
+  }, []);
+
+  // Early return if connector should be hidden
+  if (shouldHideConnector) {
+    return null;
+  }
+
   try {
     return (
       <Card className="aminy-card">
         {(() => {
-          // Compute statuses (read-only) - using helper functions for consistency
-          const resolved = resolveStatus();
-          const juniorDone = resolved.junior; // paired
-          const insightDone = resolved.insight; // snapshot complete  
-          const benefitsReady = resolved.benefits; // status ≠ Pending/Ineligible
-          const isPro = resolved.isPro; // from plan
-
-          // Visibility rules implementation
-          // If not Pro and juniorDone && insightDone && benefitsReady → hide the whole Connector card
-          const allRequiredComplete = juniorDone && insightDone && benefitsReady;
-          const shouldHideConnector = !isPro && allRequiredComplete;
-
-          // Analytics: connector visibility tracking
-          React.useEffect(() => {
-            // Visibility state tracked for analytics
-          }, [shouldHideConnector, juniorDone, insightDone, benefitsReady, isPro]);
-
-          // If connector should be hidden, return null (completely hide the card)
-          if (shouldHideConnector) {
-            return null;
-          }
-
-          // Live updates event listeners
-          React.useEffect(() => {
-            const handleConnectorChange = () => {
-              // Force re-render when connector status changes
-              if (typeof onRefresh === 'function') {
-                onRefresh();
-              }
-            };
-
-            // Listen for connector changes
-            window.addEventListener("connector:changed", handleConnectorChange);
-
-            // Listen for specific flag changes
-            const flagKeys = ["aminy:paired", "aminy:insight", "aminy:benefits", "aminy:pro"];
-            const handleStorageChange = (e: StorageEvent) => {
-              if (flagKeys.includes(e.key || '')) {
-                handleConnectorChange();
-              }
-            };
-
-            window.addEventListener("storage", handleStorageChange);
-
-            // Custom event listeners for flag updates
-            flagKeys.forEach(key => {
-              window.addEventListener(key, handleConnectorChange);
-            });
-
-            return () => {
-              window.removeEventListener("connector:changed", handleConnectorChange);
-              window.removeEventListener("storage", handleStorageChange);
-              flagKeys.forEach(key => {
-                window.removeEventListener(key, handleConnectorChange);
-              });
-            };
-          }, []);
-
           // Show full connector (visibility controlled above)
           return (
             <div 
@@ -1136,7 +1133,7 @@ export function ConnectorStatus({
       </Card>
     );
   } catch (error) {
-    console.error('Error rendering ConnectorStatus:', error);
+    // Error rendering ConnectorStatus - show fallback UI
     
     // Fallback UI
     return (

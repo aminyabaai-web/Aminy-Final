@@ -183,7 +183,9 @@ export function IntervalRecording({
     if (!soundEnabled) return;
 
     if (audioRef.current) {
-      audioRef.current.play().catch(() => {});
+      audioRef.current.play().catch(() => {
+        // Audio playback blocked by browser autoplay policy - this is expected
+      });
     } else {
       // Web Audio API fallback
       try {

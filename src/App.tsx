@@ -9,6 +9,7 @@ import React, {
 // CRITICAL PATH - Regular imports for instant FCP (MINIMIZED)
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { usePaymentConfirmation, getPaymentStatusFromUrl, clearPaymentParamsFromUrl } from "./hooks/usePaymentConfirmation";
+import { logger } from "./lib/logger";
 
 // Lazy load SplashPage (full landing page)
 const SplashPage = lazy(() =>
@@ -322,7 +323,7 @@ const SecureAdminPortalWrapper = React.memo(function SecureAdminPortalWrapper({
           onAccessDenied();
         }
       } catch (error) {
-        console.error("Admin verification failed:", error);
+        logger.error("Admin verification failed", error);
         onAccessDenied();
       } finally {
         setIsVerifying(false);
@@ -517,7 +518,7 @@ const getInitialScreen = (): AppScreen => {
       if (user.hasCompletedOnboarding) {
         // Prefetch dashboard immediately if we know user is logged in
         if (typeof window !== 'undefined') {
-          import(/* webpackPrefetch: true */ "./components/Dashboard10").catch(() => {});
+          import(/* webpackPrefetch: true */ "./components/Dashboard10").catch((err) => logger.dev('Prefetch failed', err));
         }
         return "dashboard";
       } else if (user.email) {
@@ -525,7 +526,7 @@ const getInitialScreen = (): AppScreen => {
       }
     }
   } catch (e) {
-    console.error("Failed to parse stored user data", e);
+    logger.error("Failed to parse stored user data", e);
   }
 
   return "splash";
@@ -538,9 +539,9 @@ const getInitialUserData = (): UserData => {
       return JSON.parse(storedUser);
     }
   } catch (e) {
-    console.error("Failed to parse stored user data", e);
+    logger.error("Failed to parse stored user data", e);
   }
-  
+
   return {
     parentName: "",
     childName: "",
@@ -601,7 +602,8 @@ export default function App() {
           .from('profiles')
           .update({ tier })
           .eq('id', paymentUserId)
-          .then(() => {});
+          .then(() => { /* profile update complete */ })
+          .catch(err => logger.error('Failed to update profile tier', err));
       }
     },
     onTimeout: () => {
@@ -650,20 +652,20 @@ export default function App() {
       // Haptics
       import("./lib/haptics")
         .then((m) => m.enableAutoHaptics?.())
-        .catch(() => {});
-      
+        .catch((err) => logger.dev('Haptics module load failed', err));
+
       // Performance monitoring - lowest priority
       setTimeout(() => {
         import("./lib/performance-monitor")
           .then((m) => m.initPerformanceMonitoring?.())
-          .catch(() => {});
+          .catch((err) => logger.dev('Performance monitor load failed', err));
       }, 3000);
-      
+
       // Analytics - lowest priority
       setTimeout(() => {
         import("./lib/analytics-engine")
           .then((m) => m.initAnalytics?.())
-          .catch(() => {});
+          .catch((err) => logger.dev('Analytics engine load failed', err));
       }, 5000);
     };
 
@@ -808,7 +810,7 @@ export default function App() {
               navigateToScreen('onboarding');
             }
           } catch (error) {
-            console.error('Error loading profile:', error);
+            logger.error('Error loading profile', error);
             // Still set email and proceed to onboarding
             setUserData(prev => ({
               ...prev,
@@ -897,7 +899,7 @@ export default function App() {
         updatedData.email,
         updatedData.childName,
         updatedData.parentName
-      ).catch(err => console.error('Failed to trigger retention flow:', err));
+      ).catch(err => logger.error('Failed to trigger retention flow', err));
     }
 
     // NEW STRATEGY: Let users experience the magic first
@@ -928,7 +930,7 @@ export default function App() {
     try {
       await supabase.auth.signOut();
     } catch (error) {
-      console.error("Error signing out:", error);
+      logger.error("Error signing out", error);
     }
     // Clear local storage
     localStorage.removeItem("aminy-user");
