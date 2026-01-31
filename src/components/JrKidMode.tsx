@@ -195,29 +195,55 @@ export const JrKidMode: React.FC<JrKidModeProps> = ({
         {/* Rewards Content */}
         <div className="max-w-md mx-auto px-4 py-8">
           <div className="grid grid-cols-1 gap-3 sm:gap-4 sm:gap-6">
-            {[
-              { name: 'Bubble Time', cost: 3, icon: '🫧', color: 'blue' },
-              { name: 'Music Break', cost: 3, icon: '🎵', color: 'green' },
-              { name: 'Screen Time', cost: 5, icon: '📱', color: 'purple' },
-              { name: 'Special Snack', cost: 4, icon: '🍪', color: 'orange' }
-            ].map((reward) => (
-              <Card 
-                key={reward.name}
-                className={`p-6 text-center cursor-pointer transition-all duration-200 ${
-                  tokens >= reward.cost 
-                    ? `bg-gradient-to-br from-${reward.color}-100 to-${reward.color}-200 border-${reward.color}-200 ${!prefersReducedMotion ? 'hover:scale-105' : 'hover:opacity-90'}` 
-                    : 'opacity-50 cursor-not-allowed'
-                }`}
-                onClick={() => tokens >= reward.cost && redeemReward()}
-              >
-                <div className="text-4xl mb-3">{reward.icon}</div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">{reward.name}</h3>
-                <div className="flex items-center justify-center gap-2">
-                  <Star className="w-4 h-4 text-yellow-500" />
-                  <span className="font-medium">{reward.cost} tokens</span>
-                </div>
-              </Card>
-            ))}
+            {(() => {
+              // Static color classes - Tailwind purges dynamic classes at build time
+              const rewardColors: Record<string, { gradient: string; border: string }> = {
+                blue: { gradient: 'bg-gradient-to-br from-blue-100 to-blue-200', border: 'border-blue-200' },
+                green: { gradient: 'bg-gradient-to-br from-green-100 to-green-200', border: 'border-green-200' },
+                purple: { gradient: 'bg-gradient-to-br from-purple-100 to-purple-200', border: 'border-purple-200' },
+                orange: { gradient: 'bg-gradient-to-br from-orange-100 to-orange-200', border: 'border-orange-200' },
+              };
+
+              const rewards = [
+                { name: 'Bubble Time', cost: 3, icon: '🫧', color: 'blue' },
+                { name: 'Music Break', cost: 3, icon: '🎵', color: 'green' },
+                { name: 'Screen Time', cost: 5, icon: '📱', color: 'purple' },
+                { name: 'Special Snack', cost: 4, icon: '🍪', color: 'orange' }
+              ];
+
+              return rewards.map((reward) => {
+                const colorClasses = rewardColors[reward.color] || rewardColors.blue;
+                const isAffordable = tokens >= reward.cost;
+
+                return (
+                  <Card
+                    key={reward.name}
+                    className={`p-6 text-center cursor-pointer transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500 ${
+                      isAffordable
+                        ? `${colorClasses.gradient} ${colorClasses.border} ${!prefersReducedMotion ? 'hover:scale-105' : 'hover:opacity-90'}`
+                        : 'opacity-50 cursor-not-allowed bg-gray-100'
+                    }`}
+                    onClick={() => isAffordable && redeemReward()}
+                    tabIndex={isAffordable ? 0 : -1}
+                    role="button"
+                    aria-disabled={!isAffordable}
+                    onKeyDown={(e) => {
+                      if (isAffordable && (e.key === 'Enter' || e.key === ' ')) {
+                        e.preventDefault();
+                        redeemReward();
+                      }
+                    }}
+                  >
+                    <div className="text-4xl mb-3" aria-hidden="true">{reward.icon}</div>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">{reward.name}</h3>
+                    <div className="flex items-center justify-center gap-2">
+                      <Star className="w-4 h-4 text-yellow-500" aria-hidden="true" />
+                      <span className="font-medium">{reward.cost} tokens</span>
+                    </div>
+                  </Card>
+                );
+              });
+            })()}
           </div>
         </div>
       </div>

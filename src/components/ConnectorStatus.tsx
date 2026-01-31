@@ -7,6 +7,7 @@ import { connectorHub, CONNECTOR_EVENTS } from '../lib/connector-hub';
 import { ConnectorStatus as ConnectorStatusType } from '../types/connector';
 import { getCurrentConnectorStatus } from '../lib/seed-data';
 import { Card } from './ui/card';
+import { toast } from 'sonner';
 
 interface ConnectorStatusProps {
   onNavigate: (destination: string) => void;
@@ -319,8 +320,10 @@ export function ConnectorStatus({
 
   const handlePillClick = (destination: string, requiresPro: boolean = false) => {
     if (requiresPro && userTier !== 'pro') {
-      // Show upgrade modal for Pro features
-      alert('🔒 This feature requires Aminy Pro. Upgrade to access Provider Directory and Care coordination.');
+      // Show upgrade notification for Pro features
+      toast('This feature requires Aminy Pro', {
+        description: 'Upgrade to access Provider Directory and Care coordination.',
+      });
       return;
     }
     onNavigate(destination);

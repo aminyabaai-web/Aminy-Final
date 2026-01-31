@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import { SESSION_BUNDLES, SessionBundle } from '../types/telehealth';
 import { createBundleCheckoutSession, BUNDLE_STRIPE_PRICES } from '../lib/stripe-service';
+import { toast } from 'sonner';
 
 interface SessionBundlesProps {
   onSelectBundle: (bundle: SessionBundle) => void;
@@ -51,7 +52,7 @@ export function SessionBundles({
   const handlePurchase = async (bundle: SessionBundle) => {
     if (!userId) {
       // Redirect to login/signup
-      alert('Please sign in to purchase a bundle');
+      toast.error('Please sign in to purchase a bundle');
       return;
     }
 
@@ -81,13 +82,15 @@ export function SessionBundles({
         } else {
           // For demo/dev mode without real Stripe
           console.log('Demo mode: Would redirect to Stripe checkout for bundle:', bundle.id);
-          alert(`Bundle "${bundle.name}" selected! In production with Stripe configured, this would redirect to checkout.`);
+          toast.success(`Bundle "${bundle.name}" selected!`, {
+            description: 'In production, this would redirect to checkout.',
+          });
           setSelectedBundle(bundle.id);
         }
       }
     } catch (error) {
       console.error('Error purchasing bundle:', error);
-      alert('Failed to initiate checkout. Please try again.');
+      toast.error('Failed to initiate checkout. Please try again.');
     } finally {
       setPurchasingBundle(null);
     }

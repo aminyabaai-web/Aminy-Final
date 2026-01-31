@@ -15,6 +15,7 @@ import { FileText, Share, Shield, Clock, Download, Check, Loader2 } from 'lucide
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
+import { toast } from 'sonner';
 import {
   downloadReferralPacketPDF,
   getReferralPacketBlob,
@@ -44,7 +45,7 @@ export function ProviderReadyPacket({
 
   const handleExport = async () => {
     if (!consentChecked) {
-      alert('Please confirm consent to share before downloading.');
+      toast.error('Please confirm consent to share before downloading.');
       return;
     }
 
@@ -73,7 +74,7 @@ export function ProviderReadyPacket({
       setTimeout(() => setDownloadComplete(false), 3000);
     } catch (error) {
       console.error('PDF generation failed:', error);
-      alert('Failed to generate PDF. Please try again.');
+      toast.error('Failed to generate PDF. Please try again.');
     } finally {
       setIsGenerating(false);
     }
@@ -81,7 +82,7 @@ export function ProviderReadyPacket({
 
   const handleShare = async () => {
     if (!consentChecked) {
-      alert('Please confirm consent to share before creating a share link.');
+      toast.error('Please confirm consent to share before creating a share link.');
       return;
     }
 
@@ -113,13 +114,15 @@ export function ProviderReadyPacket({
 
       // Copy to clipboard
       await navigator.clipboard.writeText(expiringLink);
-      alert('Share link copied to clipboard! Link expires in 30 days.');
+      toast.success('Share link copied to clipboard!', {
+        description: 'Link expires in 30 days.',
+      });
 
       // Clean up object URL
       URL.revokeObjectURL(url);
     } catch (error) {
       console.error('Share link creation failed:', error);
-      alert('Failed to create share link. Please try again.');
+      toast.error('Failed to create share link. Please try again.');
     } finally {
       setIsSharing(false);
     }

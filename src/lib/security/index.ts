@@ -42,6 +42,37 @@ export {
   useAuthRateLimit,
 } from './auth-rate-limit';
 
+// Encrypted Storage
+export {
+  encryptedStorage,
+  syncEncryptedStorage,
+  SENSITIVE_KEYS,
+} from './encrypted-storage';
+
+// Input Sanitization
+export {
+  sanitizeText,
+  sanitizeRichText,
+  sanitizeEmail,
+  sanitizePhone,
+  sanitizeUrl,
+  sanitizeFilename,
+  sanitizeJSON,
+  sanitizeSearchQuery,
+  sanitizeObject,
+  sanitizeFormData,
+  sanitizeWithMaxLength,
+  createSanitizedChangeHandler,
+  default as sanitize,
+} from './sanitize';
+
+// Secure Fetch (with CSRF protection)
+export {
+  secureFetch,
+  secureApi,
+  useSecureFetch,
+} from './secure-fetch';
+
 // Security utilities
 export const SecurityConfig = {
   // Session settings
@@ -59,4 +90,8 @@ export const SecurityConfig = {
 
   // Sensitive operations that require CSRF
   CSRF_PROTECTED_METHODS: ['POST', 'PUT', 'PATCH', 'DELETE'],
+
+  // Encryption
+  ENCRYPTION_ALGORITHM: 'AES-GCM',
+  ENCRYPTION_KEY_LENGTH: 256,
 } as const;

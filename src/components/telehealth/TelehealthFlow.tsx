@@ -10,7 +10,8 @@
  * 5. Appointment Confirmation → Success → Care Plan
  */
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
+import { toast } from 'sonner';
 import {
   Concern,
   Provider,
@@ -68,6 +69,16 @@ export function TelehealthFlow({
     });
   }, [onAnalytics]);
 
+  // Validate current step and redirect if missing required data
+  // This avoids setting state during render which causes infinite loops
+  useEffect(() => {
+    if (currentStep === 'book-visit' && !booking.intake) {
+      setCurrentStep('get-care');
+    } else if (currentStep === 'confirm' && (!selectedProvider || !selectedSlot || !booking.intake)) {
+      setCurrentStep('book-visit');
+    }
+  }, [currentStep, booking.intake, selectedProvider, selectedSlot]);
+
   // =========================================================================
   // Navigation handlers
   // =========================================================================
@@ -109,26 +120,34 @@ export function TelehealthFlow({
   const handleJoinWaitlist = (provider?: Provider) => {
     trackEvent('waitlist_joined', { providerId: provider?.id });
     // In production, show waitlist modal or redirect
-    alert('Added to waitlist! We\'ll notify you when appointments become available.');
+    toast.success('Added to waitlist!', {
+      description: 'We\'ll notify you when appointments become available.',
+    });
   };
 
   // 72-Hour Fallback Handlers
   const handleRequestLocalCare = () => {
     trackEvent('local_care_requested', { userState: defaultState });
     // In production, navigate to Find Care screen or show modal
-    alert('Local care support requested. We\'ll help you find providers in your area.');
+    toast.success('Local care support requested', {
+      description: 'We\'ll help you find providers in your area.',
+    });
   };
 
   const handleStartHomeProgram = () => {
     trackEvent('home_program_started', { userState: defaultState });
     // In production, navigate to Home Program onboarding
-    alert('Welcome to Aminy Home Program! We\'ll support you at home while you wait for telehealth.');
+    toast.success('Welcome to Aminy Home Program!', {
+      description: 'We\'ll support you at home while you wait for telehealth.',
+    });
   };
 
   const handleExportReferralPacket = () => {
     trackEvent('referral_packet_exported', { userState: defaultState });
     // In production, trigger PDF generation and download
-    alert('Referral packet downloaded! Share this with local providers to help them understand your needs.');
+    toast.success('Referral packet downloaded!', {
+      description: 'Share this with local providers to help them understand your needs.',
+    });
   };
 
   const handleAppointmentComplete = (appointmentId: string) => {
@@ -202,8 +221,8 @@ export function TelehealthFlow({
       );
 
     case 'book-visit':
+      // If intake is missing, useEffect will redirect - show nothing while redirecting
       if (!booking.intake) {
-        setCurrentStep('get-care');
         return null;
       }
       return (
@@ -219,8 +238,8 @@ export function TelehealthFlow({
       );
 
     case 'confirm':
+      // If required data is missing, useEffect will redirect - show nothing while redirecting
       if (!selectedProvider || !selectedSlot || !booking.intake) {
-        setCurrentStep('book-visit');
         return null;
       }
       return (

@@ -21,7 +21,9 @@ import {
   Shield,
   Lock,
   Info,
-  ChevronDown
+  ChevronDown,
+  ChevronRight,
+  Check
 } from 'lucide-react';
 import {
   Provider,
@@ -190,6 +192,40 @@ export function AppointmentConfirmationScreen({
     }
   };
 
+  // Progress breadcrumbs component
+  const ProgressBreadcrumbs = ({ currentPhase }: { currentPhase: 'confirm' | 'payment' | 'success' }) => (
+    <nav className="flex items-center gap-2 mt-3" aria-label="Booking progress">
+      <div className="flex items-center gap-1.5">
+        <span className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
+          <Check className="w-3 h-3 text-white" />
+        </span>
+        <span className="text-xs font-medium text-green-600 hidden sm:inline">Tell us more</span>
+      </div>
+      <ChevronRight className="w-4 h-4 text-gray-300" aria-hidden="true" />
+      <div className="flex items-center gap-1.5">
+        <span className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
+          <Check className="w-3 h-3 text-white" />
+        </span>
+        <span className="text-xs font-medium text-green-600 hidden sm:inline">Choose provider</span>
+      </div>
+      <ChevronRight className="w-4 h-4 text-gray-300" aria-hidden="true" />
+      <div className="flex items-center gap-1.5">
+        <span className={`w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold ${
+          currentPhase === 'success'
+            ? 'bg-green-500 text-white'
+            : 'bg-[#577590] text-white'
+        }`}>
+          {currentPhase === 'success' ? <Check className="w-3 h-3" /> : '3'}
+        </span>
+        <span className={`text-xs font-medium ${
+          currentPhase === 'success' ? 'text-green-600' : 'text-[#577590]'
+        }`}>
+          {currentPhase === 'confirm' ? 'Confirm' : currentPhase === 'payment' ? 'Payment' : 'Booked'}
+        </span>
+      </div>
+    </nav>
+  );
+
   // ============================================================================
   // Step 1: Confirm Details
   // ============================================================================
@@ -211,6 +247,7 @@ export function AppointmentConfirmationScreen({
               <p className="text-sm text-gray-500">Review your booking details</p>
             </div>
           </div>
+          <ProgressBreadcrumbs currentPhase="confirm" />
         </header>
 
         {/* Content */}
@@ -334,9 +371,17 @@ export function AppointmentConfirmationScreen({
                 <span className="text-xl font-bold text-gray-900">{formatPrice(pricing.total)}</span>
               </div>
             </div>
-            <p className="text-xs text-gray-500 mt-2">
-              Cash-pay only. No insurance billing.
-            </p>
+            {/* HSA/FSA and Superbill Info */}
+            <div className="mt-3 pt-3 border-t border-gray-100 space-y-2">
+              <div className="flex items-center gap-2 text-sm text-green-700">
+                <span className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 text-xs">✓</span>
+                <span className="font-medium">HSA/FSA eligible</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <span className="w-5 h-5 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0 text-xs">📄</span>
+                <span>Superbill provided for insurance reimbursement</span>
+              </div>
+            </div>
           </div>
 
           {/* Cancellation Policy */}
@@ -388,6 +433,7 @@ export function AppointmentConfirmationScreen({
               <p className="text-sm text-gray-500">Secure checkout</p>
             </div>
           </div>
+          <ProgressBreadcrumbs currentPhase="payment" />
         </header>
 
         {/* Content */}

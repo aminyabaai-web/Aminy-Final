@@ -15,6 +15,7 @@ import { Card } from '../ui/card';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Input } from '../ui/input';
+import { toast } from 'sonner';
 import {
   Search,
   Filter,
@@ -289,7 +290,9 @@ export function UserManagement() {
   const handleImpersonate = (userId: string) => {
     // In production, this would create an impersonation session
     console.log('Impersonating user:', userId);
-    alert(`Impersonation mode enabled for user ${userId}. In production, this would allow viewing the app as this user.`);
+    toast.success(`Impersonation mode enabled for user ${userId}`, {
+      description: 'In production, this would allow viewing the app as this user.',
+    });
   };
 
   const handleExportUsers = () => {

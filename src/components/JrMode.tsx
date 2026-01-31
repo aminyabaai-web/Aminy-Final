@@ -6,6 +6,7 @@ import { Play, Pause, RotateCcw, Heart, Star, Sparkles, Volume2, Home } from 'lu
 import { Button } from './ui/button';
 import { Progress } from './ui/progress';
 import { connectorActions } from '../lib/connector-hub';
+import { toast } from 'sonner';
 
 interface JrModeProps {
   childName: string;
@@ -123,7 +124,10 @@ export function JrMode({ childName, onExit, userTier }: JrModeProps) {
     setShowCalmBreak(false);
     
     // Show completion celebration
-    alert(`🎉 Great job, ${childName}!\n\nSession completed:\n• ${Math.max(1, finalMinutes)} minutes\n• ${Math.round(finalAccuracy)}% accuracy\n• You're amazing! 🌟`);
+    toast.success(`Great job, ${childName}!`, {
+      description: `Session completed: ${Math.max(1, finalMinutes)} min, ${Math.round(finalAccuracy)}% accuracy. You're amazing!`,
+      duration: 5000,
+    });
 
     // Session data logged for analytics
   };
@@ -154,12 +158,12 @@ export function JrMode({ childName, onExit, userTier }: JrModeProps) {
       // Show positive feedback
       const encouragement = ['Great job!', 'Awesome!', 'You\'re doing amazing!', 'Perfect!'];
       const message = encouragement[Math.floor(Math.random() * encouragement.length)];
-      alert(`✅ ${message} 🌟`);
+      toast.success(message, { duration: 2000 });
     } else {
       setErrors(prev => [...prev, `${currentActivity.id}_${response}`]);
       setAccuracy(prev => Math.max(0, prev - 2));
       // Show gentle correction
-      alert('💝 Try again! You\'ve got this!');
+      toast('Try again! You\'ve got this!', { duration: 2000 });
     }
     
     // Move to next activity after response
