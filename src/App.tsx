@@ -123,6 +123,21 @@ const SettingsScreen = lazy(() =>
     default: m.SettingsScreen,
   })),
 );
+const ProfileScreen = lazy(() =>
+  import("./components/ProfileScreen").then((m) => ({
+    default: m.ProfileScreen,
+  })),
+);
+const WeeklyAISummary = lazy(() =>
+  import("./components/WeeklyAISummary").then((m) => ({
+    default: m.WeeklyAISummary,
+  })),
+);
+const AnalyticsCharts = lazy(() =>
+  import("./components/AnalyticsCharts").then((m) => ({
+    default: m.AnalyticsCharts,
+  })),
+);
 const AuthCallback = lazy(() =>
   import("./components/AuthCallback").then((m) => ({
     default: m.AuthCallback,
@@ -389,6 +404,23 @@ const CommunityForYou = lazy(() =>
   })),
 );
 
+// New feature components - Store, Community Hub, Provider Analytics
+const StoreMarketplace = lazy(() =>
+  import("./components/StoreMarketplace").then((m) => ({
+    default: m.StoreMarketplace,
+  })),
+);
+const CommunityHub = lazy(() =>
+  import("./components/CommunityHub").then((m) => ({
+    default: m.CommunityHub,
+  })),
+);
+const ProviderAnalytics = lazy(() =>
+  import("./components/provider/ProviderAnalytics").then((m) => ({
+    default: m.ProviderAnalytics,
+  })),
+);
+
 // OPTIMIZED LOADING SKELETON - Ultra lightweight, prevents CLS
 // Uses Aminy brand colors: Soft Cream (#F5F5F5), Muted Teal (#577590)
 const LoadingSkeleton = React.memo(() => (
@@ -457,7 +489,12 @@ type AppScreen =
   | "provider-landing" // Provider marketing landing page
   | "provider-apply" // Provider application form
   | "medications" // Medication tracking for children
-  | "crisis-resources"; // Offline-available crisis resources
+  | "crisis-resources" // Offline-available crisis resources
+  | "weekly-insights" // AI weekly summary
+  | "analytics-charts" // Visual analytics
+  | "store" // Resource store/marketplace
+  | "community-hub" // Parent community hub
+  | "provider-analytics"; // Provider analytics dashboard
 
 interface ChildProfile {
   id: string;
@@ -1127,7 +1164,8 @@ export default function App() {
                     "provider-portal", "insight-report", "outcomes", "on-demand-telehealth",
                     "settings", "calm-tools", "incident-log", "care-plan", "resources",
                     "community", "profile", "benefits", "junior", "my-appointments",
-                    "conversational-booking", "messages", "access-requests"
+                    "conversational-booking", "messages", "access-requests", "store",
+                    "community-hub", "provider-analytics", "weekly-insights", "analytics-charts"
                   ];
                   if (validScreens.includes(destination as AppScreen)) {
                     navigateToScreen(destination as AppScreen);
@@ -1185,6 +1223,8 @@ export default function App() {
               <SettingsScreen
                 onBack={() => navigateToScreen("dashboard")}
                 onLogout={handleLogout}
+                onNavigate={(screen) => navigateToScreen(screen as AppScreen)}
+                userTier={userData.tier || 'free'}
               />
             </Suspense>
           );
@@ -1378,9 +1418,10 @@ export default function App() {
         case "profile":
           return (
             <Suspense fallback={<LoadingSkeleton />}>
-              <SettingsScreen
+              <ProfileScreen
                 onBack={() => navigateToScreen("dashboard")}
-                onLogout={handleLogout}
+                onNavigate={(screen) => navigateToScreen(screen as AppScreen)}
+                userTier={userData.tier || 'free'}
               />
             </Suspense>
           );
@@ -1524,6 +1565,96 @@ export default function App() {
             <Suspense fallback={<LoadingSkeleton />}>
               <CrisisResources
                 onBack={() => navigateToScreen("dashboard")}
+              />
+            </Suspense>
+          );
+
+        case "weekly-insights":
+          return (
+            <Suspense fallback={<LoadingSkeleton />}>
+              <div className="min-h-screen bg-gray-50 dark:bg-slate-900 pb-24">
+                <div className="sticky top-0 z-10 bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
+                  <div className="max-w-2xl mx-auto px-4 py-4">
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={() => navigateToScreen("dashboard")}
+                        className="p-2 hover:bg-gray-100 rounded-lg"
+                      >
+                        <span className="sr-only">Back</span>
+                        ←
+                      </button>
+                      <h1 className="text-xl font-semibold dark:text-white">Weekly Insights</h1>
+                    </div>
+                  </div>
+                </div>
+                <div className="max-w-2xl mx-auto px-4 py-6">
+                  <WeeklyAISummary
+                    childName={userData.childName || 'Your child'}
+                    childId={userData.activeChildId}
+                    onViewDetails={() => navigateToScreen("analytics-charts")}
+                  />
+                </div>
+              </div>
+            </Suspense>
+          );
+
+        case "analytics-charts":
+          return (
+            <Suspense fallback={<LoadingSkeleton />}>
+              <div className="min-h-screen bg-gray-50 dark:bg-slate-900 pb-24">
+                <div className="sticky top-0 z-10 bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
+                  <div className="max-w-2xl mx-auto px-4 py-4">
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={() => navigateToScreen("dashboard")}
+                        className="p-2 hover:bg-gray-100 rounded-lg"
+                      >
+                        <span className="sr-only">Back</span>
+                        ←
+                      </button>
+                      <h1 className="text-xl font-semibold dark:text-white">Analytics</h1>
+                    </div>
+                  </div>
+                </div>
+                <div className="max-w-2xl mx-auto px-4 py-6">
+                  <AnalyticsCharts
+                    childName={userData.childName || 'Your child'}
+                    childId={userData.activeChildId}
+                  />
+                </div>
+              </div>
+            </Suspense>
+          );
+
+        case "store":
+          return (
+            <Suspense fallback={<LoadingSkeleton />}>
+              <StoreMarketplace
+                onBack={() => navigateToScreen("dashboard")}
+                userTier={userData.tier || 'free'}
+                onUpgrade={() => navigateToScreen("paywall")}
+              />
+            </Suspense>
+          );
+
+        case "community-hub":
+          return (
+            <Suspense fallback={<LoadingSkeleton />}>
+              <CommunityHub
+                onBack={() => navigateToScreen("dashboard")}
+                userTier={userData.tier || 'free'}
+                userName={userData.parentName || 'Parent'}
+                onUpgrade={() => navigateToScreen("paywall")}
+              />
+            </Suspense>
+          );
+
+        case "provider-analytics":
+          return (
+            <Suspense fallback={<LoadingSkeleton />}>
+              <ProviderAnalytics
+                providerId="provider-1"
+                onBack={() => navigateToScreen("provider-portal")}
               />
             </Suspense>
           );

@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
-import { 
-  Users, 
-  ShoppingBag, 
-  User, 
+import {
+  Users,
+  ShoppingBag,
+  User,
   HelpCircle,
   ChevronRight,
   Sparkles,
@@ -10,7 +10,10 @@ import {
   Bell,
   Shield,
   FileText,
-  MessageSquare
+  MessageSquare,
+  BarChart3,
+  Brain,
+  TrendingUp
 } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 
@@ -91,11 +94,27 @@ export function MorePage({ onNavigate, onAnalytics }: MorePageProps) {
 
   const additionalItems = [
     {
+      id: 'weekly-insights',
+      icon: Brain,
+      label: 'Weekly Insights',
+      sublabel: 'AI-powered progress summary',
+      destination: 'weekly-insights',
+      analytics: 'weekly_insights'
+    },
+    {
+      id: 'analytics',
+      icon: BarChart3,
+      label: 'Analytics & Trends',
+      sublabel: 'Visual progress tracking',
+      destination: 'analytics-charts',
+      analytics: 'analytics_charts'
+    },
+    {
       id: 'notifications',
       icon: Bell,
       label: 'Notifications',
       sublabel: 'Manage alerts and reminders',
-      destination: 'notifications', // Routes to SettingsPage with notifications section
+      destination: 'settings', // Routes to SettingsPage with notifications section
       analytics: 'notifications'
     },
     {
