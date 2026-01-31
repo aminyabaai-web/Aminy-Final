@@ -30,8 +30,10 @@ import { secureFetch } from './security/secure-fetch';
 const API_BASE_URL = import.meta.env.VITE_API_URL ||
   `https://${projectId}.supabase.co/functions/v1/telehealth`;
 
-// Only use mock data if explicitly enabled (default to real API in production)
-const USE_MOCK_DATA = import.meta.env.VITE_USE_MOCK_DATA === 'true';
+// PRODUCTION MODE: Always use real API unless explicitly in development
+// Mock data is ONLY enabled when VITE_USE_MOCK_DATA is explicitly set to 'true'
+// Default behavior is REAL DATA for production safety
+const USE_MOCK_DATA = import.meta.env.VITE_USE_MOCK_DATA === 'true' && import.meta.env.DEV;
 
 // ============================================================================
 // Auth Helpers

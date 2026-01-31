@@ -102,8 +102,8 @@ const MOCK_APPOINTMENTS: Appointment[] = [
     userState: 'AZ',
     price: 165,
     paymentStatus: 'completed',
-    videoJoinUrl: 'https://zoom.us/j/123456789',
-    videoProvider: 'zoom',
+    videoJoinUrl: '', // Generated dynamically by Daily.co when appointment is created
+    videoProvider: 'daily',
     status: 'confirmed',
     createdAt: '2025-01-14T00:00:00Z',
     updatedAt: '2025-01-14T00:00:00Z'
@@ -122,8 +122,8 @@ const MOCK_APPOINTMENTS: Appointment[] = [
     userState: 'CA',
     price: 85,
     paymentStatus: 'completed',
-    videoJoinUrl: 'https://zoom.us/j/987654321',
-    videoProvider: 'zoom',
+    videoJoinUrl: '', // Generated dynamically by Daily.co when appointment is created
+    videoProvider: 'daily',
     status: 'confirmed',
     createdAt: '2025-01-13T00:00:00Z',
     updatedAt: '2025-01-13T00:00:00Z'
