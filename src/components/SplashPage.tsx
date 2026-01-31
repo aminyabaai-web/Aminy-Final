@@ -154,7 +154,7 @@ export function SplashPage({
               ...fontSmoothing,
             }}
           >
-            ABA-informed strategies, expert provider network, all in one place. Get started in 12 weeks or less.
+            ABA-informed strategies and expert providers, together in one calm space. Start seeing small wins today.
           </motion.p>
 
           {/* Primary CTA */}

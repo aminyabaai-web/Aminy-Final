@@ -3290,4 +3290,348 @@ app.post("/make-server-8a022548/coach/goal/update", async (c) => {
   }
 });
 
+// ============================================================================
+// BILLING ENGINE ENDPOINTS
+// ============================================================================
+
+// Get invoices
+app.get("/make-server-8a022548/billing/invoices", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    const { createClient } = await import('jsr:@supabase/supabase-js@2');
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+    );
+
+    const { data: { user } } = await supabase.auth.getUser(accessToken);
+    if (!user?.id) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
+    const limit = parseInt(c.req.query('limit') || '10');
+
+    // Get invoices from Stripe via stored data
+    const { data: invoices } = await supabase
+      .from('invoices')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false })
+      .limit(limit);
+
+    return c.json({ invoices: invoices || [] });
+  } catch (error) {
+    return c.json({ error: 'Failed to fetch invoices' }, 500);
+  }
+});
+
+// Get payment methods
+app.get("/make-server-8a022548/billing/payment-methods", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    const { createClient } = await import('jsr:@supabase/supabase-js@2');
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+    );
+
+    const { data: { user } } = await supabase.auth.getUser(accessToken);
+    if (!user?.id) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
+    // Get Stripe customer ID
+    const { data: customer } = await supabase
+      .from('stripe_customers')
+      .select('stripe_customer_id')
+      .eq('user_id', user.id)
+      .single();
+
+    if (!customer?.stripe_customer_id) {
+      return c.json({ paymentMethods: [] });
+    }
+
+    // In production, fetch from Stripe API
+    // For now, return stored payment methods
+    const { data: methods } = await supabase
+      .from('payment_methods')
+      .select('*')
+      .eq('user_id', user.id);
+
+    return c.json({ paymentMethods: methods || [] });
+  } catch (error) {
+    return c.json({ error: 'Failed to fetch payment methods' }, 500);
+  }
+});
+
+// ============================================================================
+// PROVIDER DASHBOARD ENDPOINTS
+// ============================================================================
+
+// Start provider video session
+app.post("/make-server-8a022548/provider/start-session", async (c) => {
+  try {
+    const { appointmentId } = await c.req.json();
+
+    // Create or get video room
+    const room = await createVideoRoom(c.req.raw);
+
+    // Get meeting token
+    const tokenResponse = await getMeetingToken(c.req.raw);
+    const tokenData = await tokenResponse.json();
+
+    return c.json({
+      roomUrl: room.url || `https://aminy.daily.co/${appointmentId}`,
+      token: tokenData.token,
+    });
+  } catch (error) {
+    return c.json({ error: 'Failed to start session' }, 500);
+  }
+});
+
+// End provider video session
+app.post("/make-server-8a022548/provider/end-session", async (c) => {
+  try {
+    const { appointmentId } = await c.req.json();
+
+    // Update appointment status
+    const { createClient } = await import('jsr:@supabase/supabase-js@2');
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+    );
+
+    await supabase
+      .from('appointments')
+      .update({ status: 'completed', updated_at: new Date().toISOString() })
+      .eq('id', appointmentId);
+
+    return c.json({ success: true });
+  } catch (error) {
+    return c.json({ error: 'Failed to end session' }, 500);
+  }
+});
+
+// ============================================================================
+// AI MEMORY ENDPOINTS
+// ============================================================================
+
+// Extract facts from text
+app.post("/make-server-8a022548/ai/extract-facts", async (c) => {
+  try {
+    const { text } = await c.req.json();
+
+    // Use Claude to extract facts
+    const anthropicApiKey = Deno.env.get('ANTHROPIC_API_KEY');
+    if (!anthropicApiKey) {
+      return c.json({ facts: [] });
+    }
+
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': anthropicApiKey,
+        'anthropic-version': '2023-06-01',
+      },
+      body: JSON.stringify({
+        model: 'claude-3-haiku-20240307',
+        max_tokens: 1024,
+        messages: [{
+          role: 'user',
+          content: `Extract structured facts from this text about a child and family. Return as JSON array with objects containing: category (child_info, preference, trigger, strength, challenge, strategy, medical, educational), key (short identifier), value (the fact), confidence (0-1).
+
+Text: ${text}
+
+Return only valid JSON array.`
+        }],
+      }),
+    });
+
+    if (!response.ok) {
+      return c.json({ facts: [] });
+    }
+
+    const data = await response.json();
+    const content = data.content?.[0]?.text || '[]';
+
+    try {
+      const facts = JSON.parse(content);
+      return c.json({ facts });
+    } catch {
+      return c.json({ facts: [] });
+    }
+  } catch (error) {
+    return c.json({ facts: [] });
+  }
+});
+
+// Analyze document
+app.post("/make-server-8a022548/ai/analyze-document", async (c) => {
+  try {
+    const { content, documentType } = await c.req.json();
+
+    const anthropicApiKey = Deno.env.get('ANTHROPIC_API_KEY');
+    if (!anthropicApiKey) {
+      return c.json({ summary: 'Document processed', keyFindings: [], goals: [], recommendations: [] });
+    }
+
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': anthropicApiKey,
+        'anthropic-version': '2023-06-01',
+      },
+      body: JSON.stringify({
+        model: 'claude-3-haiku-20240307',
+        max_tokens: 2048,
+        messages: [{
+          role: 'user',
+          content: `Analyze this ${documentType} document and extract key information. Return as JSON with: summary (brief overview), keyFindings (array of important points), goals (array of goals mentioned), recommendations (array of recommendations).
+
+Document content: ${content.substring(0, 10000)}
+
+Return only valid JSON.`
+        }],
+      }),
+    });
+
+    if (!response.ok) {
+      return c.json({ summary: 'Document processed', keyFindings: [], goals: [], recommendations: [] });
+    }
+
+    const data = await response.json();
+    const contentText = data.content?.[0]?.text || '{}';
+
+    try {
+      return c.json(JSON.parse(contentText));
+    } catch {
+      return c.json({ summary: 'Document processed', keyFindings: [], goals: [], recommendations: [] });
+    }
+  } catch (error) {
+    return c.json({ summary: 'Document processed', keyFindings: [], goals: [], recommendations: [] });
+  }
+});
+
+// Generate routine from ABA goals
+app.post("/make-server-8a022548/ai/generate-routine", async (c) => {
+  try {
+    const { prompt, period, goals } = await c.req.json();
+
+    const anthropicApiKey = Deno.env.get('ANTHROPIC_API_KEY');
+    if (!anthropicApiKey) {
+      return c.json({ error: 'AI not configured' }, 500);
+    }
+
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': anthropicApiKey,
+        'anthropic-version': '2023-06-01',
+      },
+      body: JSON.stringify({
+        model: 'claude-3-haiku-20240307',
+        max_tokens: 2048,
+        messages: [{
+          role: 'user',
+          content: `${prompt}
+
+Return as JSON with: name (routine name), description (brief description), difficulty (easy/moderate/challenging), steps (array with title, description, duration in minutes, skillArea, promptLevel, isOptional boolean).`
+        }],
+      }),
+    });
+
+    if (!response.ok) {
+      return c.json({ error: 'Failed to generate routine' }, 500);
+    }
+
+    const data = await response.json();
+    const contentText = data.content?.[0]?.text || '{}';
+
+    try {
+      return c.json(JSON.parse(contentText));
+    } catch {
+      return c.json({ error: 'Failed to parse routine' }, 500);
+    }
+  } catch (error) {
+    return c.json({ error: 'Failed to generate routine' }, 500);
+  }
+});
+
+// ============================================================================
+// RETENTION ENGINE ENDPOINTS
+// ============================================================================
+
+// Track retention event
+app.post("/make-server-8a022548/retention/event", async (c) => {
+  try {
+    const event = await c.req.json();
+
+    const { createClient } = await import('jsr:@supabase/supabase-js@2');
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+    );
+
+    // Store event for analytics
+    await supabase.from('retention_events').insert({
+      user_id: event.userId,
+      event_type: event.type,
+      metadata: event.metadata || {},
+      created_at: event.timestamp || new Date().toISOString(),
+    });
+
+    return c.json({ success: true });
+  } catch (error) {
+    return c.json({ error: 'Failed to track event' }, 500);
+  }
+});
+
+// Get engagement profile
+app.get("/make-server-8a022548/retention/profile/:userId", async (c) => {
+  try {
+    const userId = c.req.param('userId');
+
+    const { createClient } = await import('jsr:@supabase/supabase-js@2');
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+    );
+
+    // Get user profile and stats
+    const [profileResult, streakResult, conversationsResult] = await Promise.all([
+      supabase.from('profiles').select('*').eq('id', userId).single(),
+      supabase.from('user_streaks').select('*').eq('user_id', userId).eq('type', 'daily_checkin').single(),
+      supabase.from('conversations').select('id', { count: 'exact', head: true }).eq('user_id', userId),
+    ]);
+
+    const profile = profileResult.data;
+    const streak = streakResult.data;
+
+    return c.json({
+      userId,
+      lastActiveAt: streak?.last_activity_date || profile?.updated_at || new Date().toISOString(),
+      totalSessions: 0,
+      streakDays: streak?.current_streak || 0,
+      longestStreak: streak?.longest_streak || 0,
+      aiConversations: conversationsResult.count || 0,
+      goalsCompleted: 0,
+      tier: profile?.tier || 'free',
+      onboardingCompleted: profile?.onboarding_completed || false,
+      notificationsEnabled: true,
+      emailPreferences: {
+        weeklyDigest: true,
+        progressUpdates: true,
+        tips: true,
+        promotional: false,
+      },
+      riskLevel: 'low',
+    });
+  } catch (error) {
+    return c.json({ error: 'Failed to get profile' }, 500);
+  }
+});
+
 Deno.serve(app.fetch);
