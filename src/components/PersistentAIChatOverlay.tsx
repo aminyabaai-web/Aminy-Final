@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { X, ChevronDown, Sparkles, Clock, TrendingUp, Heart } from 'lucide-react';
+import { X, ChevronDown, Sparkles, Clock, TrendingUp, Heart, Brain, Lightbulb } from 'lucide-react';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { EnhancedChatInput, type Attachment } from './EnhancedChatInput';
@@ -19,6 +19,14 @@ import {
   type UserContext,
   type MemorySummary
 } from '../ai/contextLayer';
+
+// Memory callout types for "Aminy remembers" feature
+interface MemoryCallout {
+  id: string;
+  type: 'preference' | 'trigger' | 'strategy' | 'milestone' | 'challenge';
+  content: string;
+  timestamp: Date;
+}
 
 interface Message {
   id: string;
@@ -47,6 +55,8 @@ export function PersistentAIChatOverlay({
   const [userContext, setUserContext] = useState<UserContext | null>(null);
   const [memories, setMemories] = useState<MemorySummary[]>([]);
   const [showMemoryDrawer, setShowMemoryDrawer] = useState(false);
+  const [memoryCallouts, setMemoryCallouts] = useState<MemoryCallout[]>([]);
+  const [showMemoryCallout, setShowMemoryCallout] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Load user context and memories
@@ -65,6 +75,23 @@ export function PersistentAIChatOverlay({
   const loadMemories = async () => {
     const recentMemories = await fetchMemories(userId, 5);
     setMemories(recentMemories);
+
+    // Generate memory callouts from recent memories
+    if (recentMemories.length > 0) {
+      const callouts: MemoryCallout[] = recentMemories.slice(0, 3).map((memory, idx) => ({
+        id: `callout-${idx}`,
+        type: memory.category === 'calm_cue' ? 'strategy' :
+              memory.category === 'progress' ? 'milestone' : 'preference',
+        content: memory.content.slice(0, 100) + (memory.content.length > 100 ? '...' : ''),
+        timestamp: new Date(memory.timestamp)
+      }));
+      setMemoryCallouts(callouts);
+      // Show callout briefly when chat opens
+      if (callouts.length > 0) {
+        setShowMemoryCallout(true);
+        setTimeout(() => setShowMemoryCallout(false), 5000);
+      }
+    }
   };
 
   const scrollToBottom = () => {
@@ -244,6 +271,45 @@ Respond naturally, showing you remember their journey. Be brief (2-3 sentences) 
                 </div>
               )}
             </div>
+
+            {/* Memory Callout Banner - "Aminy remembers" */}
+            <AnimatePresence>
+              {showMemoryCallout && memoryCallouts.length > 0 && messages.length === 0 && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="mx-4 sm:mx-6 mt-2 p-3 rounded-xl bg-gradient-to-r from-violet-50 to-cyan-50 dark:from-violet-900/20 dark:to-cyan-900/20 border border-violet-200 dark:border-violet-800"
+                >
+                  <div className="flex items-center gap-2 mb-2">
+                    <Brain className="w-4 h-4 text-violet-600 dark:text-violet-400" />
+                    <span className="text-sm font-medium text-violet-800 dark:text-violet-200">
+                      Aminy remembers...
+                    </span>
+                    <button
+                      onClick={() => setShowMemoryCallout(false)}
+                      className="ml-auto p-1 hover:bg-violet-100 dark:hover:bg-violet-800 rounded-full"
+                    >
+                      <X className="w-3 h-3 text-violet-500" />
+                    </button>
+                  </div>
+                  <div className="space-y-1.5">
+                    {memoryCallouts.slice(0, 2).map((callout) => (
+                      <div
+                        key={callout.id}
+                        className="flex items-start gap-2 text-xs text-violet-700 dark:text-violet-300"
+                      >
+                        <Lightbulb className="w-3 h-3 mt-0.5 flex-shrink-0" />
+                        <span className="line-clamp-1">{callout.content}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <p className="text-xs text-violet-500 dark:text-violet-400 mt-2 italic">
+                    I use these memories to give you more personalized support.
+                  </p>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             {/* Messages */}
             <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-3 sm:py-4 space-y-3 sm:space-y-4">

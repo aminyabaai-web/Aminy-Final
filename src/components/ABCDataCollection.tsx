@@ -304,6 +304,10 @@ export function ABCDataCollection({
     const byDay: Record<string, number> = {};
     const byHour: Record<number, number> = {};
 
+    // Trend data - incidents per day for visualization
+    const trendData: { date: string; count: number; behaviors: Record<string, number> }[] = [];
+    const dateCountMap: Record<string, { count: number; behaviors: Record<string, number> }> = {};
+
     entries.forEach(e => {
       // Behavior counts
       behaviorCounts[e.behaviorCategory] = (behaviorCounts[e.behaviorCategory] || 0) + 1;
@@ -317,6 +321,24 @@ export function ABCDataCollection({
       // By hour
       const hour = new Date(e.occurredAt).getHours();
       byHour[hour] = (byHour[hour] || 0) + 1;
+
+      // Trend data by date
+      const dateKey = new Date(e.occurredAt).toISOString().split('T')[0];
+      if (!dateCountMap[dateKey]) {
+        dateCountMap[dateKey] = { count: 0, behaviors: {} };
+      }
+      dateCountMap[dateKey].count++;
+      dateCountMap[dateKey].behaviors[e.behaviorCategory] = (dateCountMap[dateKey].behaviors[e.behaviorCategory] || 0) + 1;
+    });
+
+    // Convert to sorted array for trend chart
+    const sortedDates = Object.keys(dateCountMap).sort();
+    sortedDates.forEach(date => {
+      trendData.push({
+        date,
+        count: dateCountMap[date].count,
+        behaviors: dateCountMap[date].behaviors
+      });
     });
 
     const topBehaviors = Object.entries(behaviorCounts)
@@ -330,7 +352,16 @@ export function ABCDataCollection({
     const likelyFunction = Object.entries(consequenceCounts)
       .sort((a, b) => b[1] - a[1])[0];
 
-    return { behaviorCounts, antecedentCounts, consequenceCounts, byDay, byHour, topBehaviors, topAntecedents, likelyFunction };
+    // Calculate trend direction (improving/declining/stable)
+    let trendDirection: 'improving' | 'declining' | 'stable' = 'stable';
+    if (trendData.length >= 3) {
+      const recent = trendData.slice(-3).reduce((sum, d) => sum + d.count, 0) / 3;
+      const earlier = trendData.slice(0, 3).reduce((sum, d) => sum + d.count, 0) / 3;
+      if (recent < earlier * 0.8) trendDirection = 'improving';
+      else if (recent > earlier * 1.2) trendDirection = 'declining';
+    }
+
+    return { behaviorCounts, antecedentCounts, consequenceCounts, byDay, byHour, topBehaviors, topAntecedents, likelyFunction, trendData, trendDirection };
   }, [entries]);
 
   const getBehaviorColor = (category: BehaviorCategory) => {
@@ -569,6 +600,88 @@ export function ABCDataCollection({
                 <p className="text-sm text-neutral-500 dark:text-neutral-400">Likely Function</p>
               </Card>
             </div>
+
+            {/* Trend Chart - Behavior Frequency Over Time */}
+            {stats.trendData.length > 0 && (
+              <Card className="p-4 sm:p-5 md:p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <h3 className="font-semibold text-neutral-900 dark:text-white">Behavior Trend</h3>
+                    <p className="text-sm text-neutral-500 dark:text-neutral-400">Incidents per day over time</p>
+                  </div>
+                  <Badge className={
+                    stats.trendDirection === 'improving' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' :
+                    stats.trendDirection === 'declining' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' :
+                    'bg-neutral-100 text-neutral-600 dark:bg-slate-800 dark:text-neutral-400'
+                  }>
+                    {stats.trendDirection === 'improving' && '↓ Improving'}
+                    {stats.trendDirection === 'declining' && '↑ Increasing'}
+                    {stats.trendDirection === 'stable' && '→ Stable'}
+                  </Badge>
+                </div>
+
+                {/* Simple bar chart visualization */}
+                <div className="flex items-end gap-1 h-32 border-b border-l border-neutral-200 dark:border-slate-700 pl-2 pb-2">
+                  {stats.trendData.slice(-14).map((day, idx) => {
+                    const maxCount = Math.max(...stats.trendData.slice(-14).map(d => d.count), 1);
+                    const height = (day.count / maxCount) * 100;
+                    const dateObj = new Date(day.date);
+                    return (
+                      <div key={idx} className="flex-1 flex flex-col items-center group relative">
+                        <div
+                          className="w-full bg-gradient-to-t from-teal-500 to-teal-400 dark:from-teal-600 dark:to-teal-500 rounded-t transition-all hover:from-teal-600 hover:to-teal-500"
+                          style={{ height: `${Math.max(height, 4)}%` }}
+                          title={`${day.count} incidents on ${dateObj.toLocaleDateString()}`}
+                        />
+                        {/* Tooltip on hover */}
+                        <div className="absolute bottom-full mb-2 hidden group-hover:block bg-slate-900 dark:bg-slate-700 text-white text-xs px-2 py-1 rounded whitespace-nowrap z-10">
+                          {dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}: {day.count} incidents
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className="flex justify-between mt-2 text-xs text-neutral-400 dark:text-neutral-500">
+                  {stats.trendData.length > 0 && (
+                    <>
+                      <span>{new Date(stats.trendData[Math.max(0, stats.trendData.length - 14)].date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+                      <span>{new Date(stats.trendData[stats.trendData.length - 1].date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+                    </>
+                  )}
+                </div>
+              </Card>
+            )}
+
+            {/* Time of Day Distribution */}
+            <Card className="p-4 sm:p-5 md:p-6">
+              <h3 className="font-semibold text-neutral-900 dark:text-white mb-4">Time of Day Distribution</h3>
+              <div className="flex items-end gap-0.5 h-24">
+                {Array.from({ length: 24 }, (_, hour) => {
+                  const count = stats.byHour[hour] || 0;
+                  const maxCount = Math.max(...Object.values(stats.byHour), 1);
+                  const height = (count / maxCount) * 100;
+                  const timeLabel = hour === 0 ? '12am' : hour === 12 ? '12pm' : hour < 12 ? `${hour}am` : `${hour - 12}pm`;
+                  return (
+                    <div key={hour} className="flex-1 flex flex-col items-center group relative">
+                      <div
+                        className="w-full bg-blue-400 dark:bg-blue-500 rounded-t transition-all hover:bg-blue-500 dark:hover:bg-blue-400"
+                        style={{ height: `${Math.max(height, 2)}%` }}
+                      />
+                      <div className="absolute bottom-full mb-2 hidden group-hover:block bg-slate-900 dark:bg-slate-700 text-white text-xs px-2 py-1 rounded whitespace-nowrap z-10">
+                        {timeLabel}: {count} incidents
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="flex justify-between mt-2 text-xs text-neutral-400 dark:text-neutral-500">
+                <span>12am</span>
+                <span>6am</span>
+                <span>12pm</span>
+                <span>6pm</span>
+                <span>11pm</span>
+              </div>
+            </Card>
 
             {/* Top Behaviors */}
             <Card className="p-4 sm:p-5 md:p-6">
