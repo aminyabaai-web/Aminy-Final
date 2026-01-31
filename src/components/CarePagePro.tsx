@@ -417,48 +417,48 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
         <button
           key={thread.id}
           onClick={() => handleThreadSelect(thread.id)}
-          className={`w-full p-4 rounded-lg border text-left transition-colors hover:bg-gray-50 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-            selectedThreadId === thread.id ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'border-gray-200 dark:border-slate-700'
-          }`}
+          className={`w-full p-4 rounded-lg border text-left transition-colors hover:bg-gray-50 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 ${
+            selectedThreadId === thread.id ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-400' : 'border-gray-200 dark:border-slate-700 dark:bg-slate-800/50'
+          }`>
           aria-label={`Conversation with ${thread.patientName}`}
           tabIndex={0}
         >
           <div className="flex items-start gap-3">
             <div className="relative">
-              <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                <span className="text-sm font-semibold text-blue-700">{thread.avatarInitials}</span>
+              <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
+                <span className="text-sm font-semibold text-blue-700 dark:text-blue-400">{thread.avatarInitials}</span>
               </div>
-              <div className={`absolute -bottom-1 -right-1 w-3 h-3 border-2 border-white rounded-full ${
-                thread.status === 'online' ? 'bg-green-500' : 'bg-gray-400'
+              <div className={`absolute -bottom-1 -right-1 w-3 h-3 border-2 border-white dark:border-slate-800 rounded-full ${
+                thread.status === 'online' ? 'bg-green-500' : 'bg-gray-400 dark:bg-slate-500'
               }`} />
             </div>
             
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between mb-1">
                 <h4 className="font-medium text-gray-900 dark:text-white truncate">{thread.patientName}</h4>
-                <span className="text-xs text-gray-500">{thread.timestamp}</span>
+                <span className="text-xs text-gray-500 dark:text-slate-400">{thread.timestamp}</span>
               </div>
-              
+
               <div className="flex items-center gap-2 mb-2">
-                <span className="text-xs text-gray-500">{thread.specialty}</span>
+                <span className="text-xs text-gray-500 dark:text-slate-400">{thread.specialty}</span>
                 <div className="flex items-center gap-1">
                   <div className={`w-2 h-2 rounded-full ${
-                    thread.status === 'online' ? 'bg-green-500' : 'bg-gray-400'
+                    thread.status === 'online' ? 'bg-green-500' : 'bg-gray-400 dark:bg-slate-500'
                   }`} />
-                  <span className="text-xs text-gray-500">
+                  <span className="text-xs text-gray-500 dark:text-slate-400">
                     Office hours: 9-6p PST
                   </span>
                 </div>
               </div>
-              
-              <p className="text-sm text-gray-600 truncate">{thread.lastMessage}</p>
-              
+
+              <p className="text-sm text-gray-600 dark:text-slate-300 truncate">{thread.lastMessage}</p>
+
               <div className="flex items-center gap-1 mt-2">
                 <div className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-slate-300">
                   Avg response: 24-48h
                 </div>
                 {thread.unread && (
-                  <div className="w-2 h-2 bg-blue-600 rounded-full" />
+                  <div className="w-2 h-2 bg-blue-600 dark:bg-blue-400 rounded-full" />
                 )}
               </div>
             </div>
@@ -468,8 +468,8 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
       
       {/* Empty state */}
       {mockThreads.length === 0 && (
-        <div className="text-center py-8 text-gray-500">
-          <MessageCircle className="w-8 h-8 mx-auto mb-2 text-gray-300" />
+        <div className="text-center py-8 text-gray-500 dark:text-slate-400">
+          <MessageCircle className="w-8 h-8 mx-auto mb-2 text-gray-300 dark:text-slate-600" />
           <p>Select a conversation to start messaging</p>
         </div>
       )}
@@ -536,10 +536,10 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
   const renderMessageStream = () => {
     if (!currentThread || currentMessages.length === 0) {
       return (
-        <div className="flex-1 flex items-center justify-center text-gray-500">
+        <div className="flex-1 flex items-center justify-center text-gray-500 dark:text-slate-400">
           <div className="text-center">
-            <MessageCircle className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-            <h3 className="text-lg font-medium mb-2">Start a conversation</h3>
+            <MessageCircle className="w-12 h-12 mx-auto mb-4 text-gray-300 dark:text-slate-600" />
+            <h3 className="text-lg font-medium mb-2 text-gray-700 dark:text-slate-300">Start a conversation</h3>
             <p className="text-sm">Send a message to begin chatting with your care team</p>
           </div>
         </div>
@@ -571,7 +571,7 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
             Today
           </div>
         </div>
-        
+
         {groupedMessages.map((group, groupIndex) => (
           <div key={groupIndex} className={`flex ${group.sender === 'patient' ? 'justify-end' : 'justify-start'}`}>
             <div className={`max-w-[80%] space-y-1 ${group.sender === 'patient' ? 'ml-12' : 'mr-12'}`}>
@@ -585,7 +585,7 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
                     }`}
                   >
                     <p className="text-sm leading-relaxed">{message.content}</p>
-                    
+
                     {/* Attachments */}
                     {message.attachments && message.attachments.length > 0 && (
                       <div className="mt-3 space-y-2">
@@ -593,9 +593,9 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
                           <div
                             key={attachIndex}
                             className={`flex items-center gap-2 p-2 rounded-lg ${
-                              group.sender === 'patient' 
-                                ? 'bg-white/20' 
-                                : 'bg-gray-50'
+                              group.sender === 'patient'
+                                ? 'bg-white/20'
+                                : 'bg-gray-50 dark:bg-slate-700'
                             }`}
                           >
                             {attachment.type === 'file' && <FileText className="w-4 h-4" />}
@@ -637,11 +637,11 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
         {isTyping && (
           <div className="flex justify-start">
             <div className="max-w-[80%] mr-12">
-              <div className="bg-white border border-gray-200 px-4 py-3 rounded-2xl">
+              <div className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 px-4 py-3 rounded-2xl">
                 <div className="flex space-x-1">
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" />
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
+                  <div className="w-2 h-2 bg-gray-400 dark:bg-slate-500 rounded-full animate-bounce" />
+                  <div className="w-2 h-2 bg-gray-400 dark:bg-slate-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
+                  <div className="w-2 h-2 bg-gray-400 dark:bg-slate-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
                 </div>
               </div>
             </div>
@@ -655,10 +655,10 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
 
   const renderComposer = () => {
     if (!currentThread) return null;
-    
+
     return (
-      <div className="p-4 border-t border-gray-100">
-        <div className="bg-gray-50 border border-gray-200 rounded-xl p-3 focus-within:border-blue-500 transition-colors">
+      <div className="p-4 border-t border-gray-100 dark:border-slate-800">
+        <div className="bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl p-3 focus-within:border-blue-500 dark:focus-within:border-blue-400 transition-colors">
           <textarea
             ref={composerRef}
             value={messageInput}
@@ -666,27 +666,27 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
             onKeyDown={handleKeyDown}
             placeholder="Type your message..."
             rows={1}
-            className="w-full bg-transparent resize-none focus:outline-none text-sm placeholder-gray-500 pr-20"
+            className="w-full bg-transparent resize-none focus:outline-none text-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-slate-400 pr-20"
             style={{ minHeight: '20px', maxHeight: '120px' }}
           />
-          
+
           <div className="flex items-center justify-between mt-2">
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setShowAttachmentMenu(!showAttachmentMenu)}
-                className="p-1.5 hover:bg-gray-200 rounded-lg transition-colors"
+                className="p-1.5 hover:bg-gray-200 dark:hover:bg-slate-700 rounded-lg transition-colors"
                 aria-label="Attach file"
               >
-                <Paperclip className="w-4 h-4 text-gray-600" />
+                <Paperclip className="w-4 h-4 text-gray-600 dark:text-slate-400" />
               </button>
               <button
-                className="p-1.5 hover:bg-gray-200 rounded-lg transition-colors"
+                className="p-1.5 hover:bg-gray-200 dark:hover:bg-slate-700 rounded-lg transition-colors"
                 aria-label="Voice input"
               >
-                <Mic className="w-4 h-4 text-gray-600" />
+                <Mic className="w-4 h-4 text-gray-600 dark:text-slate-400" />
               </button>
             </div>
-            
+
             <button
               onClick={handleSendMessage}
               disabled={!messageInput.trim() || isSending}
@@ -723,10 +723,10 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
     // Desktop layout
     return (
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 sm:gap-6 h-[calc(100vh-240px)]">
-        <div className="lg:col-span-1 bg-white border border-gray-200 rounded-lg p-4 overflow-y-auto">
+        <div className="lg:col-span-1 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-4 overflow-y-auto">
           {renderThreadList()}
         </div>
-        <div className="lg:col-span-2 bg-white border border-gray-200 rounded-lg overflow-hidden flex flex-col">
+        <div className="lg:col-span-2 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg overflow-hidden flex flex-col">
           {selectedThreadId ? (
             <>
               {renderConversationHeader()}
@@ -734,10 +734,10 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
               {renderComposer()}
             </>
           ) : (
-            <div className="flex-1 flex items-center justify-center text-gray-500">
+            <div className="flex-1 flex items-center justify-center text-gray-500 dark:text-slate-400">
               <div className="text-center">
-                <MessageCircle className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-                <h3 className="text-lg font-medium mb-2">Select a conversation</h3>
+                <MessageCircle className="w-12 h-12 mx-auto mb-4 text-gray-300 dark:text-slate-600" />
+                <h3 className="text-lg font-medium mb-2 text-gray-700 dark:text-slate-300">Select a conversation</h3>
                 <p className="text-sm">Choose a thread from the left to start messaging</p>
               </div>
             </div>
@@ -749,54 +749,54 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
 
   const renderSchedule = () => (
     <div className="space-y-3 sm:space-y-4 sm:space-y-6">
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
+      <div className="bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-700 p-6">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-gray-900">Book a Session</h3>
-          <div className="text-sm text-gray-500">Dr. Sarah Chen, BCBA</div>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Book a Session</h3>
+          <div className="text-sm text-gray-500 dark:text-slate-400">Dr. Sarah Chen, BCBA</div>
         </div>
-        
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-6">
           <button
             onClick={() => setSelectedDuration(25)}
             className={`p-4 rounded-lg border-2 transition-colors ${
               selectedDuration === 25
-                ? 'border-blue-500 bg-blue-50'
-                : 'border-gray-200 hover:border-gray-300'
+                ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-400'
+                : 'border-gray-200 dark:border-slate-600 hover:border-gray-300 dark:hover:border-slate-500 dark:bg-slate-800/50'
             }`}
           >
             <div className="text-center">
-              <div className="text-xl sm:text-2xl font-bold text-gray-900">25 min</div>
-              <div className="text-sm text-gray-600">Focus Session</div>
+              <div className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">25 min</div>
+              <div className="text-sm text-gray-600 dark:text-slate-400">Focus Session</div>
             </div>
           </button>
           <button
             onClick={() => setSelectedDuration(50)}
             className={`p-4 rounded-lg border-2 transition-colors ${
               selectedDuration === 50
-                ? 'border-blue-500 bg-blue-50'
-                : 'border-gray-200 hover:border-gray-300'
+                ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-400'
+                : 'border-gray-200 dark:border-slate-600 hover:border-gray-300 dark:hover:border-slate-500 dark:bg-slate-800/50'
             }`}
           >
             <div className="text-center">
-              <div className="text-xl sm:text-2xl font-bold text-gray-900">50 min</div>
-              <div className="text-sm text-gray-600">Deep Dive</div>
+              <div className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">50 min</div>
+              <div className="text-sm text-gray-600 dark:text-slate-400">Deep Dive</div>
             </div>
           </button>
         </div>
-        
+
         <Button onClick={handleBookSession} className="w-full">
           Book {selectedDuration}-minute Session
         </Button>
       </div>
-      
+
       {/* Upcoming Sessions */}
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Upcoming Sessions</h3>
+      <div className="bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-700 p-6">
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Upcoming Sessions</h3>
         <div className="space-y-3">
-          <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+          <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-700 rounded-lg">
             <div>
-              <div className="font-medium">Dr. Sarah Chen, BCBA</div>
-              <div className="text-sm text-gray-600">Thursday, Dec 19 • 2:00 PM PST</div>
+              <div className="font-medium text-gray-900 dark:text-white">Dr. Sarah Chen, BCBA</div>
+              <div className="text-sm text-gray-600 dark:text-slate-400">Thursday, Dec 19 • 2:00 PM PST</div>
             </div>
             <Badge variant="outline">25 min</Badge>
           </div>
@@ -807,37 +807,37 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
 
   const renderMinutes = () => (
     <div className="space-y-3 sm:space-y-4 sm:space-y-6">
-      <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg border border-purple-200 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Minutes Wallet</h3>
+      <div className="bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-lg border border-purple-200 dark:border-purple-800 p-6">
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Minutes Wallet</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
           <div className="text-center">
-            <div className="text-xl sm:text-2xl font-bold text-purple-600">200</div>
-            <div className="text-sm text-gray-600">Included</div>
+            <div className="text-xl sm:text-2xl font-bold text-purple-600 dark:text-purple-400">200</div>
+            <div className="text-sm text-gray-600 dark:text-slate-400">Included</div>
           </div>
           <div className="text-center">
-            <div className="text-xl sm:text-2xl font-bold text-green-600">{remainingMinutes}</div>
-            <div className="text-sm text-gray-600">Remaining</div>
+            <div className="text-xl sm:text-2xl font-bold text-green-600 dark:text-green-400">{remainingMinutes}</div>
+            <div className="text-sm text-gray-600 dark:text-slate-400">Remaining</div>
           </div>
           <div className="text-center">
-            <div className="text-xl sm:text-2xl font-bold text-blue-600">{usedMinutes}</div>
-            <div className="text-sm text-gray-600">Used</div>
+            <div className="text-xl sm:text-2xl font-bold text-blue-600 dark:text-blue-400">{usedMinutes}</div>
+            <div className="text-sm text-gray-600 dark:text-slate-400">Used</div>
           </div>
         </div>
       </div>
-      
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Buy Additional Minutes</h3>
+
+      <div className="bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-700 p-6">
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Buy Additional Minutes</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-          <div className="p-4 border border-gray-200 rounded-lg text-center">
-            <div className="text-xl font-bold">25 min</div>
-            <div className="text-lg font-semibold text-blue-600">$49</div>
+          <div className="p-4 border border-gray-200 dark:border-slate-600 rounded-lg text-center dark:bg-slate-800/50">
+            <div className="text-xl font-bold text-gray-900 dark:text-white">25 min</div>
+            <div className="text-lg font-semibold text-blue-600 dark:text-blue-400">$49</div>
             <Button onClick={() => handleBuyMinutes(25)} size="sm" className="mt-2 w-full">
               Purchase
             </Button>
           </div>
-          <div className="p-4 border border-gray-200 rounded-lg text-center">
-            <div className="text-xl font-bold">50 min</div>
-            <div className="text-lg font-semibold text-blue-600">$89</div>
+          <div className="p-4 border border-gray-200 dark:border-slate-600 rounded-lg text-center dark:bg-slate-800/50">
+            <div className="text-xl font-bold text-gray-900 dark:text-white">50 min</div>
+            <div className="text-lg font-semibold text-blue-600 dark:text-blue-400">$89</div>
             <Button onClick={() => handleBuyMinutes(50)} size="sm" className="mt-2 w-full">
               Purchase
             </Button>
@@ -849,15 +849,15 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
 
   const renderPastSessions = () => (
     <div className="space-y-3 sm:space-y-4">
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Session History</h3>
+      <div className="bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-700 p-6">
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Session History</h3>
         <div className="space-y-3 sm:space-y-4">
-          <div className="p-4 border border-gray-200 rounded-lg">
+          <div className="p-4 border border-gray-200 dark:border-slate-600 rounded-lg dark:bg-slate-800/50">
             <div className="flex items-center justify-between mb-2">
-              <div className="font-medium">Dr. Sarah Chen, BCBA</div>
-              <div className="text-sm text-gray-500">Dec 10, 2024</div>
+              <div className="font-medium text-gray-900 dark:text-white">Dr. Sarah Chen, BCBA</div>
+              <div className="text-sm text-gray-500 dark:text-slate-400">Dec 10, 2024</div>
             </div>
-            <div className="text-sm text-gray-600 mb-3">
+            <div className="text-sm text-gray-600 dark:text-slate-400 mb-3">
               Morning routine strategies and visual schedule implementation
             </div>
             <div className="flex gap-2">
