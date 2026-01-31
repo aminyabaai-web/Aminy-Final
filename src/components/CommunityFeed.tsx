@@ -370,10 +370,10 @@ export function CommunityFeed({
         aria-busy={loading}
       >
         {loading ? (
-          <Card className="p-8 text-center">
+          <Card className="p-8 text-center dark:bg-slate-800 dark:border-slate-700">
             <div className="animate-pulse">
-              <div className="h-4 bg-gray-200 rounded w-3/4 mx-auto mb-2" />
-              <div className="h-4 bg-gray-200 rounded w-1/2 mx-auto" />
+              <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-3/4 mx-auto mb-2" />
+              <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-1/2 mx-auto" />
             </div>
           </Card>
         ) : filteredPosts.length === 0 ? (
