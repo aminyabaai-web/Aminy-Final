@@ -24,7 +24,8 @@ import {
   MapPin,
   Home,
   FileText,
-  Check
+  Check,
+  Loader2
 } from 'lucide-react';
 import {
   Provider,
@@ -32,7 +33,6 @@ import {
   VisitType,
   TimeSlot,
   VISIT_TYPES,
-  MOCK_PROVIDERS,
   PROVIDER_ROLE_DISPLAY
 } from '../../types/telehealth';
 import {
@@ -40,6 +40,7 @@ import {
   TelehealthAvailabilityCheck
 } from '../../lib/availability-engine';
 import { PRICING_MESSAGING } from '../../lib/pricing';
+import { supabase } from '../../utils/supabase/client';
 
 interface BookVisitProps {
   onBack: () => void;
@@ -63,6 +64,59 @@ export function BookVisitScreen({
   const [visitFormat, setVisitFormat] = useState<'remote' | 'in-office'>('remote');
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [visitType, setVisitType] = useState<VisitType>(intake.preferredVisitType || 'consult');
+  const [allProviders, setAllProviders] = useState<Provider[]>([]);
+  const [isLoadingProviders, setIsLoadingProviders] = useState(true);
+
+  // Fetch real providers from database
+  useEffect(() => {
+    async function loadProviders() {
+      setIsLoadingProviders(true);
+      try {
+        const { data, error } = await supabase
+          .from('provider_profiles')
+          .select('*')
+          .eq('is_active', true)
+          .eq('is_accepting_patients', true)
+          .order('rating', { ascending: false });
+
+        if (error) {
+          console.error('Failed to load providers:', error);
+          return;
+        }
+
+        if (data && data.length > 0) {
+          // Transform database providers to Provider type
+          const providers: Provider[] = data.map((p: any) => ({
+            id: p.id,
+            name: p.name || `${p.first_name || ''} ${p.last_name || ''}`.trim(),
+            role: p.provider_type || 'bcba',
+            credentials: p.credentials || '',
+            specialties: p.specialties || [],
+            licensedStates: p.states_licensed || [],
+            yearsExperience: p.years_experience || 5,
+            languages: p.languages || ['English'],
+            bio: p.bio || '',
+            photoUrl: p.photo_url,
+            rating: parseFloat(p.rating) || 4.5,
+            reviewCount: p.review_count || 0,
+            consultPrice: p.session_rate || 99,
+            deepReviewPrice: (p.session_rate || 99) * 2,
+            offersConsult: true,
+            offersDeepReview: true,
+            isActive: p.is_active,
+            acceptingNewPatients: p.is_accepting_patients,
+            nextAvailable: p.next_available ? new Date(p.next_available) : new Date(),
+          }));
+          setAllProviders(providers);
+        }
+      } catch (err) {
+        console.error('Error loading providers:', err);
+      } finally {
+        setIsLoadingProviders(false);
+      }
+    }
+    loadProviders();
+  }, []);
 
   // Generate next 14 days for date selector
   const dateOptions = useMemo(() => {
@@ -78,7 +132,7 @@ export function BookVisitScreen({
 
   // Filter providers by user's state
   const availableProviders = useMemo(() => {
-    return MOCK_PROVIDERS.filter(provider => {
+    return allProviders.filter(provider => {
       // Check if provider is licensed in user's state
       if (!provider.licensedStates.includes(intake.userState)) {
         return false;
@@ -89,7 +143,7 @@ export function BookVisitScreen({
       // Check if provider is active and accepting
       return provider.isActive && provider.acceptingNewPatients;
     });
-  }, [intake.userState, visitType]);
+  }, [allProviders, intake.userState, visitType]);
 
   // =========================================================================
   // 72-HOUR TELEHEALTH-FIRST ROUTING RULE
@@ -106,7 +160,7 @@ export function BookVisitScreen({
     const threeDaysFromNow = new Date(now.getTime() + 72 * 60 * 60 * 1000);
 
     // Generate slots for all providers (not just filtered by state - we check state in the function)
-    MOCK_PROVIDERS.forEach(provider => {
+    allProviders.forEach(provider => {
       const slotDuration = VISIT_TYPES[visitType].duration;
 
       // Generate slots for next 3 days
@@ -150,17 +204,17 @@ export function BookVisitScreen({
     });
 
     return slots;
-  }, [visitType]);
+  }, [allProviders, visitType]);
 
   // Check 72-hour availability
   const telehealthAvailability = useMemo<TelehealthAvailabilityCheck>(() => {
     return checkTelehealthAvailability72Hours(
-      MOCK_PROVIDERS,
+      allProviders,
       intake.userState,
       allSlotsNext72Hours,
       visitType
     );
-  }, [intake.userState, allSlotsNext72Hours, visitType]);
+  }, [allProviders, intake.userState, allSlotsNext72Hours, visitType]);
 
   // CRITICAL: Only show local care options when NO telehealth available within 72 hours
   const shouldShowLocalCareOptions = telehealthAvailability.shouldShowLocalCare;
@@ -229,7 +283,20 @@ export function BookVisitScreen({
     });
   };
 
-  const noProvidersAvailable = availableProviders.length === 0;
+  const noProvidersAvailable = availableProviders.length === 0 && !isLoadingProviders;
+
+  // Show loading while fetching providers
+  if (isLoadingProviders) {
+    return (
+      <div className="min-h-screen bg-[#F5F5F5] flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="w-8 h-8 text-[#577590] animate-spin mx-auto mb-3" />
+          <p className="text-gray-600 font-medium">Finding providers in your area...</p>
+          <p className="text-sm text-gray-400 mt-1">This only takes a moment</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#F5F5F5]">

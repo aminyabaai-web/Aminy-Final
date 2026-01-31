@@ -154,7 +154,7 @@ export function AppointmentConfirmationScreen({
 
       // Send confirmation email
       await sendAppointmentConfirmationEmail(userEmail, {
-        userName: intake.forWhom === 'myself' ? 'there' : intake.childAge || 'there',
+        userName: intake.whoIsThisFor === 'parent' ? 'there' : intake.whoIsThisFor === 'child' ? 'your child' : 'your family',
         providerName: `${provider.firstName} ${provider.lastName}`,
         appointmentDate: formatDate(slot.startTime),
         appointmentTime: formatTime(slot.startTime),
@@ -164,9 +164,11 @@ export function AppointmentConfirmationScreen({
 
       setAppointmentId(appointment.id);
       setCurrentStep('success');
-    } catch (error) {
+    } catch (error: any) {
       console.error('Payment/booking error:', error);
-      // In production, show error toast
+      // Show error to user
+      setCurrentStep('payment'); // Go back to payment step
+      alert(error?.message || 'Something went wrong with your booking. Please try again.');
     } finally {
       setIsProcessing(false);
     }
