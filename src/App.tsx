@@ -404,6 +404,23 @@ const CommunityForYou = lazy(() =>
   })),
 );
 
+// New feature components - Store, Community Hub, Provider Analytics
+const StoreMarketplace = lazy(() =>
+  import("./components/StoreMarketplace").then((m) => ({
+    default: m.StoreMarketplace,
+  })),
+);
+const CommunityHub = lazy(() =>
+  import("./components/CommunityHub").then((m) => ({
+    default: m.CommunityHub,
+  })),
+);
+const ProviderAnalytics = lazy(() =>
+  import("./components/provider/ProviderAnalytics").then((m) => ({
+    default: m.ProviderAnalytics,
+  })),
+);
+
 // OPTIMIZED LOADING SKELETON - Ultra lightweight, prevents CLS
 // Uses Aminy brand colors: Soft Cream (#F5F5F5), Muted Teal (#577590)
 const LoadingSkeleton = React.memo(() => (
@@ -474,7 +491,10 @@ type AppScreen =
   | "medications" // Medication tracking for children
   | "crisis-resources" // Offline-available crisis resources
   | "weekly-insights" // AI weekly summary
-  | "analytics-charts"; // Visual analytics
+  | "analytics-charts" // Visual analytics
+  | "store" // Resource store/marketplace
+  | "community-hub" // Parent community hub
+  | "provider-analytics"; // Provider analytics dashboard
 
 interface ChildProfile {
   id: string;
@@ -1144,7 +1164,8 @@ export default function App() {
                     "provider-portal", "insight-report", "outcomes", "on-demand-telehealth",
                     "settings", "calm-tools", "incident-log", "care-plan", "resources",
                     "community", "profile", "benefits", "junior", "my-appointments",
-                    "conversational-booking", "messages", "access-requests"
+                    "conversational-booking", "messages", "access-requests", "store",
+                    "community-hub", "provider-analytics", "weekly-insights", "analytics-charts"
                   ];
                   if (validScreens.includes(destination as AppScreen)) {
                     navigateToScreen(destination as AppScreen);
@@ -1602,6 +1623,39 @@ export default function App() {
                   />
                 </div>
               </div>
+            </Suspense>
+          );
+
+        case "store":
+          return (
+            <Suspense fallback={<LoadingSkeleton />}>
+              <StoreMarketplace
+                onBack={() => navigateToScreen("dashboard")}
+                userTier={userData.tier || 'free'}
+                onUpgrade={() => navigateToScreen("paywall")}
+              />
+            </Suspense>
+          );
+
+        case "community-hub":
+          return (
+            <Suspense fallback={<LoadingSkeleton />}>
+              <CommunityHub
+                onBack={() => navigateToScreen("dashboard")}
+                userTier={userData.tier || 'free'}
+                userName={userData.parentName || 'Parent'}
+                onUpgrade={() => navigateToScreen("paywall")}
+              />
+            </Suspense>
+          );
+
+        case "provider-analytics":
+          return (
+            <Suspense fallback={<LoadingSkeleton />}>
+              <ProviderAnalytics
+                providerId="provider-1"
+                onBack={() => navigateToScreen("provider-portal")}
+              />
             </Suspense>
           );
 
