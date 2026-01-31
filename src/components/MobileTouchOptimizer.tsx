@@ -140,7 +140,8 @@ export const MobileTouchOptimizer: React.FC<MobileTouchOptimizerProps> = ({
       }}
     >
       {children}
-      
+
+      {/* SECURITY: Static CSS only, no user input - safe for dangerouslySetInnerHTML */}
       <style dangerouslySetInnerHTML={{
         __html: `
         .touch-active {

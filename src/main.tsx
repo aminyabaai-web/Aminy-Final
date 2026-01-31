@@ -9,6 +9,8 @@ import "./i18n";
 import { injectSafeAreaStyles } from "./lib/mobile-safe-areas.ts";
 // Service worker for offline support
 import { registerServiceWorker } from "./lib/service-worker.ts";
+// Production-safe logger
+import { logger } from "./lib/logger.ts";
 
 // Initialize keyboard navigation detection for accessibility
 function initKeyboardNavDetection() {
@@ -63,9 +65,9 @@ createRoot(document.getElementById("root")!).render(<App />);
 if (import.meta.env.PROD) {
   registerServiceWorker().then((registration) => {
     if (registration) {
-      console.log('[Aminy] Service worker registered successfully');
+      logger.info('Service worker registered successfully');
     }
   }).catch((error) => {
-    console.error('[Aminy] Service worker registration failed:', error);
+    logger.error('Service worker registration failed', error);
   });
 }

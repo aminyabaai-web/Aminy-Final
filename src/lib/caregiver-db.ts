@@ -9,6 +9,24 @@
 import { WAIVER_SERVICE_CODES, FISCAL_AGENTS } from './tier-utils';
 
 // ============================================================================
+// SECURE ID GENERATION
+// ============================================================================
+
+/**
+ * Generate a cryptographically secure random ID for security-sensitive operations
+ * Uses crypto.getRandomValues() instead of Math.random() for unpredictability
+ */
+function generateSecureId(prefix: string, length: number = 12): string {
+  const array = new Uint8Array(length);
+  crypto.getRandomValues(array);
+  const randomPart = Array.from(array)
+    .map(b => b.toString(36).padStart(2, '0'))
+    .join('')
+    .slice(0, length);
+  return `${prefix}-${Date.now()}-${randomPart}`;
+}
+
+// ============================================================================
 // TYPES
 // ============================================================================
 
@@ -854,7 +872,7 @@ export async function createEVVClockIn(
   }
 
   const evvData: EVVData = {
-    verificationId: `evv-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
+    verificationId: generateSecureId('evv'),
     serviceType: 'personal-care', // Map from service code
     serviceCode,
     recipientId,
