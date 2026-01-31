@@ -7,9 +7,10 @@
  * - Clear value proposition > feature lists
  *
  * Strategy: Lead with Core ($14.99/mo), make Pro discoverable but not the focus.
+ * Enhanced with tier comparison, promo codes, and social proof.
  */
 
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Crown,
@@ -25,6 +26,13 @@ import {
   Star,
   ChevronDown,
   X,
+  Gift,
+  CreditCard,
+  Table,
+  Minus,
+  Video,
+  FileText,
+  BadgeCheck,
 } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
@@ -32,6 +40,58 @@ import { toast } from 'sonner';
 import { TierType, tierPricing } from '../lib/tier-utils';
 import { createCheckoutSession, isStripeConfigured } from '../lib/stripe-service';
 import { supabase } from '../utils/supabase/client';
+
+// Promo code definitions
+const PROMO_CODES: Record<string, { discount: number; type: 'percent' | 'fixed'; description: string; validTiers: TierType[] }> = {
+  'WELCOME20': { discount: 20, type: 'percent', description: '20% off first 3 months', validTiers: ['core', 'pro', 'proplus'] },
+  'FAMILY15': { discount: 15, type: 'percent', description: '15% off any plan', validTiers: ['starter', 'core', 'pro', 'proplus'] },
+  'BCBA10': { discount: 10, type: 'fixed', description: '$10 off first month', validTiers: ['pro', 'proplus'] },
+  'AUTISM2024': { discount: 25, type: 'percent', description: 'Autism Awareness Month special', validTiers: ['core', 'pro'] },
+};
+
+// Testimonials data
+const TESTIMONIALS = [
+  {
+    text: "Finally, an app that actually understands my child.",
+    author: "Sarah M.",
+    context: "parent of a 6-year-old with autism",
+    rating: 5
+  },
+  {
+    text: "The AI suggestions have transformed our daily routines. Fewer meltdowns, more happy moments.",
+    author: "Michael R.",
+    context: "father of twins with ADHD",
+    rating: 5
+  },
+  {
+    text: "Worth every penny. The BCBA sessions alone are worth the Pro subscription.",
+    author: "Jennifer L.",
+    context: "mom of a 4-year-old in ABA therapy",
+    rating: 5
+  },
+  {
+    text: "I finally feel like I have a support system that's available 24/7.",
+    author: "David K.",
+    context: "single dad navigating an autism diagnosis",
+    rating: 5
+  }
+];
+
+// Tier comparison features
+const TIER_FEATURES = [
+  { name: 'AI Conversations', free: '3/day', starter: '10/day', core: 'Unlimited', pro: 'Unlimited', proplus: 'Unlimited' },
+  { name: 'Memory & Context', free: '7 days', starter: '30 days', core: 'Full history', pro: 'Full history', proplus: 'Full history' },
+  { name: 'Daily Strategies', free: false, starter: true, core: true, pro: true, proplus: true },
+  { name: 'Behavior Tracking', free: 'Basic', starter: 'Standard', core: 'Advanced', pro: 'Advanced', proplus: 'Advanced' },
+  { name: 'Sleep & Routine Insights', free: false, starter: 'Basic', core: true, pro: true, proplus: true },
+  { name: 'Document Vault', free: false, starter: '5 docs', core: '50 docs', pro: 'Unlimited', proplus: 'Unlimited' },
+  { name: 'Weekly AI Summary', free: false, starter: false, core: true, pro: true, proplus: true },
+  { name: 'BCBA Telehealth', free: false, starter: false, core: false, pro: '1/month', proplus: '4/month' },
+  { name: 'Custom Intervention Plans', free: false, starter: false, core: false, pro: true, proplus: true },
+  { name: 'Priority Support', free: false, starter: false, core: false, pro: true, proplus: true },
+  { name: 'Family Sharing', free: false, starter: false, core: false, pro: false, proplus: '5 members' },
+  { name: 'Dedicated Care Manager', free: false, starter: false, core: false, pro: false, proplus: true },
+];
 
 interface PaywallSimplifiedProps {
   onSubscribe: (tier: TierType) => void;
@@ -47,11 +107,68 @@ export function PaywallSimplified({
   conversationsHad = 0,
 }: PaywallSimplifiedProps) {
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const [showComparison, setShowComparison] = useState(false);
   const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'yearly'>('monthly');
   const [isLoading, setIsLoading] = useState(false);
+  const [promoCode, setPromoCode] = useState('');
+  const [appliedPromo, setAppliedPromo] = useState<{ code: string; discount: number; type: 'percent' | 'fixed'; description: string } | null>(null);
+  const [promoError, setPromoError] = useState('');
+  const [currentTestimonial, setCurrentTestimonial] = useState(0);
 
-  const price = billingPeriod === 'monthly' ? 14.99 : 129;
+  // Rotate testimonials
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTestimonial((prev) => (prev + 1) % TESTIMONIALS.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const basePrice = billingPeriod === 'monthly' ? 14.99 : 129;
   const perMonth = billingPeriod === 'yearly' ? (129 / 12).toFixed(2) : 14.99;
+
+  // Calculate discounted price
+  const calculateDiscount = useCallback((baseAmount: number): number => {
+    if (!appliedPromo) return baseAmount;
+    if (appliedPromo.type === 'percent') {
+      return baseAmount * (1 - appliedPromo.discount / 100);
+    }
+    return Math.max(0, baseAmount - appliedPromo.discount);
+  }, [appliedPromo]);
+
+  const finalPrice = calculateDiscount(basePrice);
+  const finalPerMonth = billingPeriod === 'yearly'
+    ? (calculateDiscount(129) / 12).toFixed(2)
+    : calculateDiscount(14.99).toFixed(2);
+
+  // Promo code validation
+  const handleApplyPromo = useCallback(() => {
+    const upperCode = promoCode.toUpperCase().trim();
+    setPromoError('');
+
+    if (!upperCode) {
+      setPromoError('Please enter a promo code');
+      return;
+    }
+
+    const promo = PROMO_CODES[upperCode];
+    if (!promo) {
+      setPromoError('Invalid promo code');
+      return;
+    }
+
+    if (!promo.validTiers.includes('core')) {
+      setPromoError('This code is not valid for the Core plan');
+      return;
+    }
+
+    setAppliedPromo({ code: upperCode, ...promo });
+    toast.success(`Promo code applied: ${promo.description}`);
+  }, [promoCode]);
+
+  const handleRemovePromo = useCallback(() => {
+    setAppliedPromo(null);
+    setPromoCode('');
+  }, []);
 
   const handleStartTrial = async () => {
     setIsLoading(true);
@@ -204,18 +321,45 @@ export function PaywallSimplified({
             </div>
 
             <div className="p-6">
+              {/* HSA/FSA Badge - Prominent */}
+              <div className="flex justify-center mb-4">
+                <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-700 px-3 py-1.5 rounded-full text-sm font-medium">
+                  <CreditCard className="w-4 h-4" />
+                  HSA/FSA Eligible
+                  <BadgeCheck className="w-4 h-4" />
+                </div>
+              </div>
+
               {/* Price */}
               <div className="text-center mb-6">
                 <div className="flex items-baseline justify-center gap-1">
+                  {appliedPromo && (
+                    <span className="text-2xl text-slate-400 line-through mr-2">
+                      ${perMonth}
+                    </span>
+                  )}
                   <span className="text-4xl font-bold text-slate-900">
-                    ${perMonth}
+                    ${finalPerMonth}
                   </span>
                   <span className="text-slate-500">/month</span>
                 </div>
                 {billingPeriod === 'yearly' && (
                   <p className="text-sm text-slate-500 mt-1">
-                    Billed annually (${price}/year)
+                    Billed annually (${appliedPromo ? finalPrice.toFixed(2) : basePrice}/year)
                   </p>
+                )}
+                {appliedPromo && (
+                  <div className="flex items-center justify-center gap-2 mt-2">
+                    <span className="bg-green-100 text-green-700 text-xs font-medium px-2 py-0.5 rounded">
+                      {appliedPromo.code}: {appliedPromo.description}
+                    </span>
+                    <button
+                      onClick={handleRemovePromo}
+                      className="text-slate-400 hover:text-slate-600"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </div>
                 )}
                 <p className="text-teal-600 font-medium mt-2">
                   7-day free trial included
@@ -257,8 +401,41 @@ export function PaywallSimplified({
               </Button>
 
               <p className="text-center text-xs text-slate-500 mt-3">
-                No credit card required • Cancel anytime • HSA/FSA eligible
+                No credit card required • Cancel anytime
               </p>
+
+              {/* Promo Code Input */}
+              <div className="mt-4 pt-4 border-t border-gray-100">
+                <div className="flex items-center gap-2">
+                  <div className="flex-1 relative">
+                    <Gift className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                    <input
+                      type="text"
+                      value={promoCode}
+                      onChange={(e) => {
+                        setPromoCode(e.target.value);
+                        setPromoError('');
+                      }}
+                      placeholder="Promo code"
+                      disabled={!!appliedPromo}
+                      className="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent disabled:bg-gray-50"
+                    />
+                  </div>
+                  <Button
+                    type="button"
+                    onClick={handleApplyPromo}
+                    disabled={!!appliedPromo || !promoCode}
+                    variant="outline"
+                    size="sm"
+                    className="shrink-0"
+                  >
+                    Apply
+                  </Button>
+                </div>
+                {promoError && (
+                  <p className="text-xs text-red-500 mt-1">{promoError}</p>
+                )}
+              </div>
             </div>
           </Card>
         </motion.div>
@@ -325,19 +502,119 @@ export function PaywallSimplified({
           )}
         </AnimatePresence>
 
-        {/* Social proof */}
+        {/* Compare Plans Button */}
+        <button
+          onClick={() => setShowComparison(!showComparison)}
+          className="mt-4 flex items-center gap-2 text-white/60 hover:text-white/80 transition-colors"
+        >
+          <Table className="w-4 h-4" />
+          <span className="text-sm">Compare all plans</span>
+          <ChevronDown className={`w-4 h-4 transition-transform ${showComparison ? 'rotate-180' : ''}`} />
+        </button>
+
+        {/* Tier Comparison Table */}
+        <AnimatePresence>
+          {showComparison && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="w-full max-w-4xl mt-4 overflow-hidden"
+            >
+              <Card className="p-4 bg-slate-800/80 border-slate-700 overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-slate-600">
+                      <th className="text-left py-2 px-2 text-slate-400">Feature</th>
+                      <th className="text-center py-2 px-2 text-slate-400">Free</th>
+                      <th className="text-center py-2 px-2 text-slate-400">Starter<br /><span className="text-xs text-slate-500">$4.99/mo</span></th>
+                      <th className="text-center py-2 px-2 text-teal-400 font-bold">Core<br /><span className="text-xs text-teal-300">$14.99/mo</span></th>
+                      <th className="text-center py-2 px-2 text-violet-400">Pro<br /><span className="text-xs text-violet-300">$29.99/mo</span></th>
+                      <th className="text-center py-2 px-2 text-amber-400">Pro+<br /><span className="text-xs text-amber-300">$59.99/mo</span></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {TIER_FEATURES.map((feature, index) => (
+                      <tr key={feature.name} className={index % 2 === 0 ? 'bg-slate-700/30' : ''}>
+                        <td className="py-2 px-2 text-slate-300">{feature.name}</td>
+                        {['free', 'starter', 'core', 'pro', 'proplus'].map((tier) => {
+                          const value = feature[tier as keyof typeof feature];
+                          return (
+                            <td key={tier} className={`text-center py-2 px-2 ${tier === 'core' ? 'bg-teal-500/10' : ''}`}>
+                              {value === true ? (
+                                <Check className="w-4 h-4 text-green-400 mx-auto" />
+                              ) : value === false ? (
+                                <Minus className="w-4 h-4 text-slate-500 mx-auto" />
+                              ) : (
+                                <span className={`text-xs ${tier === 'core' ? 'text-teal-300' : 'text-slate-300'}`}>{value}</span>
+                              )}
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </Card>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Social proof - Rotating testimonials */}
         <div className="mt-8 text-center">
           <div className="flex items-center justify-center gap-1 mb-2">
             {[...Array(5)].map((_, i) => (
               <Star key={i} className="w-5 h-5 fill-amber-400 text-amber-400" />
             ))}
           </div>
-          <p className="text-white/80 text-sm">
-            "Finally, an app that actually understands my child."
-          </p>
-          <p className="text-white/50 text-xs mt-1">
-            — Sarah M., parent of a 6-year-old with autism
-          </p>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentTestimonial}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3 }}
+            >
+              <p className="text-white/80 text-sm max-w-md mx-auto">
+                "{TESTIMONIALS[currentTestimonial].text}"
+              </p>
+              <p className="text-white/50 text-xs mt-1">
+                — {TESTIMONIALS[currentTestimonial].author}, {TESTIMONIALS[currentTestimonial].context}
+              </p>
+            </motion.div>
+          </AnimatePresence>
+
+          {/* Testimonial indicators */}
+          <div className="flex items-center justify-center gap-2 mt-4">
+            {TESTIMONIALS.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentTestimonial(index)}
+                className={`w-2 h-2 rounded-full transition-all ${
+                  index === currentTestimonial
+                    ? 'bg-teal-400 w-4'
+                    : 'bg-white/30 hover:bg-white/50'
+                }`}
+                aria-label={`View testimonial ${index + 1}`}
+              />
+            ))}
+          </div>
+
+          {/* Trust badges */}
+          <div className="flex items-center justify-center gap-4 mt-6 text-white/40">
+            <div className="flex items-center gap-1 text-xs">
+              <Shield className="w-4 h-4" />
+              <span>HIPAA Compliant</span>
+            </div>
+            <div className="flex items-center gap-1 text-xs">
+              <Users className="w-4 h-4" />
+              <span>10,000+ Families</span>
+            </div>
+            <div className="flex items-center gap-1 text-xs">
+              <Heart className="w-4 h-4" />
+              <span>BCBA Designed</span>
+            </div>
+          </div>
         </div>
       </div>
 

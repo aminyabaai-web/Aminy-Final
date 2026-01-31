@@ -3,9 +3,11 @@
  *
  * Real video calling using Daily.co
  * Handles the actual video session UI
+ * Enhanced with in-call chat, recording, and connection quality indicator
  */
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
@@ -30,6 +32,15 @@ import {
   Minimize2,
   Volume2,
   VolumeX,
+  Circle,
+  Send,
+  X,
+  Wifi,
+  WifiOff,
+  Signal,
+  SignalLow,
+  SignalMedium,
+  SignalHigh,
 } from 'lucide-react';
 import {
   createVideoRoom,
@@ -65,6 +76,17 @@ interface Participant {
   screenShare: boolean;
 }
 
+interface ChatMessage {
+  id: string;
+  senderId: string;
+  senderName: string;
+  text: string;
+  timestamp: Date;
+  isLocal: boolean;
+}
+
+type ConnectionQuality = 'excellent' | 'good' | 'fair' | 'poor' | 'unknown';
+
 export function VideoCall({
   sessionId,
   userId,
@@ -98,6 +120,21 @@ export function VideoCall({
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const sessionDuration = sessionType === '50min' ? 50 * 60 : 25 * 60;
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Chat state
+  const [chatOpen, setChatOpen] = useState(false);
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
+  const [chatInput, setChatInput] = useState('');
+  const [unreadCount, setUnreadCount] = useState(0);
+  const chatEndRef = useRef<HTMLDivElement>(null);
+
+  // Recording state (providers only)
+  const [isRecording, setIsRecording] = useState(false);
+  const [recordingStartTime, setRecordingStartTime] = useState<Date | null>(null);
+
+  // Connection quality
+  const [connectionQuality, setConnectionQuality] = useState<ConnectionQuality>('unknown');
+  const [networkStats, setNetworkStats] = useState<{ bitrate?: number; packetLoss?: number }>({});
 
   // Initialize call
   const initializeCall = useCallback(async () => {
@@ -320,6 +357,156 @@ export function VideoCall({
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
+  // =========== CHAT FUNCTIONALITY ===========
+
+  // Send chat message
+  const sendChatMessage = useCallback(() => {
+    if (!chatInput.trim()) return;
+
+    const callObject = callObjectRef.current;
+    if (!callObject) return;
+
+    const message: ChatMessage = {
+      id: `${Date.now()}-${userId}`,
+      senderId: userId,
+      senderName: userName,
+      text: chatInput.trim(),
+      timestamp: new Date(),
+      isLocal: true,
+    };
+
+    // Add to local messages
+    setChatMessages(prev => [...prev, message]);
+    setChatInput('');
+
+    // Send via Daily chat
+    try {
+      callObject.sendAppMessage({ type: 'chat', message }, '*');
+    } catch (err) {
+      console.error('Failed to send chat message:', err);
+    }
+  }, [chatInput, userId, userName]);
+
+  // Handle incoming chat messages
+  const handleAppMessage = useCallback((event: any) => {
+    if (event.data?.type === 'chat' && event.data?.message) {
+      const incomingMessage: ChatMessage = {
+        ...event.data.message,
+        isLocal: false,
+        timestamp: new Date(event.data.message.timestamp),
+      };
+      setChatMessages(prev => [...prev, incomingMessage]);
+
+      // Increment unread count if chat is closed
+      if (!chatOpen) {
+        setUnreadCount(prev => prev + 1);
+      }
+    }
+  }, [chatOpen]);
+
+  // Open chat and reset unread count
+  const toggleChat = useCallback(() => {
+    setChatOpen(prev => {
+      if (!prev) {
+        setUnreadCount(0);
+      }
+      return !prev;
+    });
+  }, []);
+
+  // Scroll chat to bottom when new messages arrive
+  useEffect(() => {
+    if (chatEndRef.current) {
+      chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [chatMessages]);
+
+  // =========== RECORDING FUNCTIONALITY ===========
+
+  // Toggle recording (providers only)
+  const toggleRecording = useCallback(async () => {
+    if (!isProvider) return;
+
+    const callObject = callObjectRef.current;
+    if (!callObject) return;
+
+    try {
+      if (isRecording) {
+        await callObject.stopRecording();
+        setIsRecording(false);
+        setRecordingStartTime(null);
+      } else {
+        await callObject.startRecording();
+        setIsRecording(true);
+        setRecordingStartTime(new Date());
+      }
+    } catch (err) {
+      console.error('Recording error:', err);
+    }
+  }, [isProvider, isRecording]);
+
+  // =========== CONNECTION QUALITY ===========
+
+  // Get connection quality indicator
+  const getConnectionQualityIcon = useCallback(() => {
+    switch (connectionQuality) {
+      case 'excellent':
+        return <SignalHigh className="w-4 h-4 text-green-500" />;
+      case 'good':
+        return <SignalMedium className="w-4 h-4 text-green-400" />;
+      case 'fair':
+        return <SignalLow className="w-4 h-4 text-yellow-500" />;
+      case 'poor':
+        return <WifiOff className="w-4 h-4 text-red-500" />;
+      default:
+        return <Wifi className="w-4 h-4 text-slate-400" />;
+    }
+  }, [connectionQuality]);
+
+  // Monitor network quality
+  useEffect(() => {
+    const callObject = callObjectRef.current;
+    if (!callObject || callState !== 'joined') return;
+
+    // Set up app message handler for chat
+    callObject.on('app-message', handleAppMessage);
+
+    // Poll network stats
+    const statsInterval = setInterval(async () => {
+      try {
+        const stats = await callObject.getNetworkStats();
+        if (stats?.stats) {
+          const { latest } = stats.stats;
+          if (latest) {
+            setNetworkStats({
+              bitrate: latest.videoSendBitsPerSecond || latest.videoRecvBitsPerSecond,
+              packetLoss: latest.videoSendPacketLoss || latest.videoRecvPacketLoss,
+            });
+
+            // Determine quality based on packet loss
+            const packetLoss = latest.videoSendPacketLoss || 0;
+            if (packetLoss < 1) {
+              setConnectionQuality('excellent');
+            } else if (packetLoss < 3) {
+              setConnectionQuality('good');
+            } else if (packetLoss < 10) {
+              setConnectionQuality('fair');
+            } else {
+              setConnectionQuality('poor');
+            }
+          }
+        }
+      } catch (err) {
+        // Silently handle stats errors
+      }
+    }, 5000);
+
+    return () => {
+      callObject.off('app-message', handleAppMessage);
+      clearInterval(statsInterval);
+    };
+  }, [callState, handleAppMessage]);
+
   // Cleanup on unmount
   useEffect(() => {
     return () => {
@@ -434,12 +621,24 @@ export function VideoCall({
             <CheckCircle className="w-3 h-3 mr-1" />
             Live
           </Badge>
-          <span className="text-white text-sm">
+          {isRecording && (
+            <Badge className="bg-red-500 text-white animate-pulse">
+              <Circle className="w-3 h-3 mr-1 fill-current" />
+              REC
+            </Badge>
+          )}
+          <span className="text-white text-sm hidden sm:inline">
             {isProvider ? `Session with ${childName}'s family` : `Session with ${providerName}`}
           </span>
         </div>
 
         <div className="flex items-center gap-3 sm:gap-4">
+          {/* Connection quality */}
+          <div className="flex items-center gap-1" title={`Connection: ${connectionQuality}`}>
+            {getConnectionQualityIcon()}
+            <span className="text-xs text-slate-400 hidden sm:inline capitalize">{connectionQuality}</span>
+          </div>
+
           {/* Timer */}
           <div className={`flex items-center gap-2 px-3 py-1 rounded-full ${
             elapsedSeconds > sessionDuration * 0.9 ? 'bg-red-500' : 'bg-slate-700'
@@ -499,21 +698,104 @@ export function VideoCall({
         </div>
       </div>
 
+      {/* Chat Panel */}
+      <AnimatePresence>
+        {chatOpen && (
+          <motion.div
+            initial={{ x: '100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '100%' }}
+            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+            className="fixed right-0 top-0 bottom-0 w-80 bg-slate-800 border-l border-slate-700 flex flex-col z-50"
+          >
+            {/* Chat header */}
+            <div className="flex items-center justify-between p-4 border-b border-slate-700">
+              <h3 className="text-white font-medium">Chat</h3>
+              <button
+                onClick={toggleChat}
+                className="p-2 hover:bg-slate-700 rounded-full transition-colors"
+              >
+                <X className="w-5 h-5 text-slate-400" />
+              </button>
+            </div>
+
+            {/* Chat messages */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+              {chatMessages.length === 0 ? (
+                <p className="text-center text-slate-500 text-sm">
+                  No messages yet. Start the conversation!
+                </p>
+              ) : (
+                chatMessages.map((msg) => (
+                  <div
+                    key={msg.id}
+                    className={`flex flex-col ${msg.isLocal ? 'items-end' : 'items-start'}`}
+                  >
+                    <div
+                      className={`max-w-[80%] rounded-lg px-3 py-2 ${
+                        msg.isLocal
+                          ? 'bg-teal-600 text-white'
+                          : 'bg-slate-700 text-white'
+                      }`}
+                    >
+                      {!msg.isLocal && (
+                        <p className="text-xs text-slate-300 mb-1">{msg.senderName}</p>
+                      )}
+                      <p className="text-sm">{msg.text}</p>
+                    </div>
+                    <p className="text-xs text-slate-500 mt-1">
+                      {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </p>
+                  </div>
+                ))
+              )}
+              <div ref={chatEndRef} />
+            </div>
+
+            {/* Chat input */}
+            <div className="p-4 border-t border-slate-700">
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  value={chatInput}
+                  onChange={(e) => setChatInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      sendChatMessage();
+                    }
+                  }}
+                  placeholder="Type a message..."
+                  className="flex-1 bg-slate-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+                />
+                <Button
+                  onClick={sendChatMessage}
+                  disabled={!chatInput.trim()}
+                  className="bg-teal-600 hover:bg-teal-700 rounded-lg"
+                >
+                  <Send className="w-5 h-5" />
+                </Button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Controls */}
       <div className="bg-slate-800 px-4 py-4">
-        <div className="max-w-lg mx-auto flex items-center justify-center gap-3 sm:gap-4">
+        <div className="max-w-2xl mx-auto flex items-center justify-center gap-2 sm:gap-3">
           {/* Mic toggle */}
           <Button
             size="lg"
             variant={audioEnabled ? 'secondary' : 'destructive'}
-            className="rounded-full w-14 h-14"
+            className="rounded-full w-12 h-12 sm:w-14 sm:h-14"
             onClick={toggleAudio}
             aria-label={audioEnabled ? 'Mute microphone' : 'Unmute microphone'}
           >
             {audioEnabled ? (
-              <Mic className="w-6 h-6" aria-hidden="true" />
+              <Mic className="w-5 h-5 sm:w-6 sm:h-6" aria-hidden="true" />
             ) : (
-              <MicOff className="w-6 h-6" aria-hidden="true" />
+              <MicOff className="w-5 h-5 sm:w-6 sm:h-6" aria-hidden="true" />
             )}
           </Button>
 
@@ -521,14 +803,14 @@ export function VideoCall({
           <Button
             size="lg"
             variant={videoEnabled ? 'secondary' : 'destructive'}
-            className="rounded-full w-14 h-14"
+            className="rounded-full w-12 h-12 sm:w-14 sm:h-14"
             onClick={toggleVideo}
             aria-label={videoEnabled ? 'Turn off camera' : 'Turn on camera'}
           >
             {videoEnabled ? (
-              <Video className="w-6 h-6" aria-hidden="true" />
+              <Video className="w-5 h-5 sm:w-6 sm:h-6" aria-hidden="true" />
             ) : (
-              <VideoOff className="w-6 h-6" aria-hidden="true" />
+              <VideoOff className="w-5 h-5 sm:w-6 sm:h-6" aria-hidden="true" />
             )}
           </Button>
 
@@ -536,29 +818,58 @@ export function VideoCall({
           <Button
             size="lg"
             variant={screenShareEnabled ? 'default' : 'secondary'}
-            className={`rounded-full w-14 h-14 ${screenShareEnabled ? 'bg-teal-600' : ''}`}
+            className={`rounded-full w-12 h-12 sm:w-14 sm:h-14 ${screenShareEnabled ? 'bg-teal-600' : ''}`}
             onClick={toggleScreenShare}
             aria-label={screenShareEnabled ? 'Stop screen sharing' : 'Share screen'}
           >
             {screenShareEnabled ? (
-              <MonitorOff className="w-6 h-6" aria-hidden="true" />
+              <MonitorOff className="w-5 h-5 sm:w-6 sm:h-6" aria-hidden="true" />
             ) : (
-              <Monitor className="w-6 h-6" aria-hidden="true" />
+              <Monitor className="w-5 h-5 sm:w-6 sm:h-6" aria-hidden="true" />
             )}
           </Button>
+
+          {/* Chat toggle */}
+          <Button
+            size="lg"
+            variant="secondary"
+            className="rounded-full w-12 h-12 sm:w-14 sm:h-14 relative"
+            onClick={toggleChat}
+            aria-label={chatOpen ? 'Close chat' : 'Open chat'}
+          >
+            <MessageSquare className="w-5 h-5 sm:w-6 sm:h-6" aria-hidden="true" />
+            {unreadCount > 0 && (
+              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                {unreadCount > 9 ? '9+' : unreadCount}
+              </span>
+            )}
+          </Button>
+
+          {/* Recording (providers only) */}
+          {isProvider && (
+            <Button
+              size="lg"
+              variant={isRecording ? 'destructive' : 'secondary'}
+              className={`rounded-full w-12 h-12 sm:w-14 sm:h-14 ${isRecording ? 'animate-pulse' : ''}`}
+              onClick={toggleRecording}
+              aria-label={isRecording ? 'Stop recording' : 'Start recording'}
+            >
+              <Circle className={`w-5 h-5 sm:w-6 sm:h-6 ${isRecording ? 'fill-current' : ''}`} aria-hidden="true" />
+            </Button>
+          )}
 
           {/* Speaker toggle */}
           <Button
             size="lg"
             variant="secondary"
-            className="rounded-full w-14 h-14"
+            className="rounded-full w-12 h-12 sm:w-14 sm:h-14 hidden sm:flex"
             onClick={() => setSpeakerEnabled(!speakerEnabled)}
             aria-label={speakerEnabled ? 'Mute speaker' : 'Unmute speaker'}
           >
             {speakerEnabled ? (
-              <Volume2 className="w-6 h-6" aria-hidden="true" />
+              <Volume2 className="w-5 h-5 sm:w-6 sm:h-6" aria-hidden="true" />
             ) : (
-              <VolumeX className="w-6 h-6" aria-hidden="true" />
+              <VolumeX className="w-5 h-5 sm:w-6 sm:h-6" aria-hidden="true" />
             )}
           </Button>
 
@@ -566,14 +877,14 @@ export function VideoCall({
           <Button
             size="lg"
             variant="secondary"
-            className="rounded-full w-14 h-14"
+            className="rounded-full w-12 h-12 sm:w-14 sm:h-14 hidden sm:flex"
             onClick={toggleFullscreen}
             aria-label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
           >
             {isFullscreen ? (
-              <Minimize2 className="w-6 h-6" aria-hidden="true" />
+              <Minimize2 className="w-5 h-5 sm:w-6 sm:h-6" aria-hidden="true" />
             ) : (
-              <Maximize2 className="w-6 h-6" aria-hidden="true" />
+              <Maximize2 className="w-5 h-5 sm:w-6 sm:h-6" aria-hidden="true" />
             )}
           </Button>
 
@@ -581,11 +892,11 @@ export function VideoCall({
           <Button
             size="lg"
             variant="destructive"
-            className="rounded-full w-14 h-14 bg-red-600 hover:bg-red-700"
+            className="rounded-full w-12 h-12 sm:w-14 sm:h-14 bg-red-600 hover:bg-red-700"
             onClick={leaveCall}
             aria-label="End call"
           >
-            <PhoneOff className="w-6 h-6" aria-hidden="true" />
+            <PhoneOff className="w-5 h-5 sm:w-6 sm:h-6" aria-hidden="true" />
           </Button>
         </div>
       </div>
