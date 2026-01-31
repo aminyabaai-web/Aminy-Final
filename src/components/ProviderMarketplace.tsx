@@ -282,11 +282,11 @@ export function ProviderMarketplace({
         // Transform DB data to component format
         const dbProviders: MarketplaceProvider[] = data.map((p: any) => ({
           id: p.id,
-          name: p.name,
+          name: p.name || `${p.first_name || ''} ${p.last_name || ''}`.trim() || 'Provider',
           credentials: p.credentials,
           type: p.provider_type as ProviderType,
           photoUrl: p.photo_url,
-          rating: p.rating || 4.5,
+          rating: parseFloat(p.rating) || 4.5,
           reviewCount: p.review_count || 0,
           yearsExperience: p.years_experience || 5,
           specialties: p.specialties || [],
@@ -295,9 +295,10 @@ export function ProviderMarketplace({
           bio: p.bio || '',
           approach: p.approach || '',
           availability: generateAvailability(), // Generate dynamic availability
-          nextAvailable: 'Check schedule',
+          nextAvailable: p.next_available ? new Date(p.next_available).toLocaleDateString() : 'Check schedule',
           isBookmarked: false,
-          badges: p.badges || []
+          badges: p.badges || [],
+          verificationStatus: p.verification_status || 'verified'
         }));
         setProviders(dbProviders);
       } else {

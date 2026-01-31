@@ -40,14 +40,7 @@ import { toast } from 'sonner';
 import { TierType, tierPricing } from '../lib/tier-utils';
 import { createCheckoutSession, isStripeConfigured } from '../lib/stripe-service';
 import { supabase } from '../utils/supabase/client';
-
-// Promo code definitions
-const PROMO_CODES: Record<string, { discount: number; type: 'percent' | 'fixed'; description: string; validTiers: TierType[] }> = {
-  'WELCOME20': { discount: 20, type: 'percent', description: '20% off first 3 months', validTiers: ['core', 'pro', 'proplus'] },
-  'FAMILY15': { discount: 15, type: 'percent', description: '15% off any plan', validTiers: ['starter', 'core', 'pro', 'proplus'] },
-  'BCBA10': { discount: 10, type: 'fixed', description: '$10 off first month', validTiers: ['pro', 'proplus'] },
-  'AUTISM2024': { discount: 25, type: 'percent', description: 'Autism Awareness Month special', validTiers: ['core', 'pro'] },
-};
+import { billingEngine } from '../lib/billing-engine';
 
 // Testimonials data
 const TESTIMONIALS = [
@@ -140,8 +133,10 @@ export function PaywallSimplified({
     ? (calculateDiscount(129) / 12).toFixed(2)
     : calculateDiscount(14.99).toFixed(2);
 
-  // Promo code validation
-  const handleApplyPromo = useCallback(() => {
+  // Promo code validation (uses backend validation)
+  const [isValidatingPromo, setIsValidatingPromo] = useState(false);
+
+  const handleApplyPromo = useCallback(async () => {
     const upperCode = promoCode.toUpperCase().trim();
     setPromoError('');
 
@@ -150,19 +145,30 @@ export function PaywallSimplified({
       return;
     }
 
-    const promo = PROMO_CODES[upperCode];
-    if (!promo) {
-      setPromoError('Invalid promo code');
-      return;
-    }
+    setIsValidatingPromo(true);
+    try {
+      const result = await billingEngine.validatePromoCode(upperCode, 'core');
 
-    if (!promo.validTiers.includes('core')) {
-      setPromoError('This code is not valid for the Core plan');
-      return;
-    }
+      if (!result.valid) {
+        setPromoError(result.error || 'Invalid promo code');
+        return;
+      }
 
-    setAppliedPromo({ code: upperCode, ...promo });
-    toast.success(`Promo code applied: ${promo.description}`);
+      if (result.promoCode) {
+        setAppliedPromo({
+          code: upperCode,
+          discount: result.promoCode.discountPercent || result.promoCode.discountAmount || 0,
+          type: result.promoCode.discountPercent ? 'percent' : 'fixed',
+          description: result.promoCode.description || `${result.promoCode.discountPercent || result.promoCode.discountAmount}% off`
+        });
+        toast.success(`Promo code applied: ${result.promoCode.description || 'Discount applied!'}`);
+      }
+    } catch (error) {
+      console.error('Promo validation error:', error);
+      setPromoError('Failed to validate promo code');
+    } finally {
+      setIsValidatingPromo(false);
+    }
   }, [promoCode]);
 
   const handleRemovePromo = useCallback(() => {
@@ -424,12 +430,12 @@ export function PaywallSimplified({
                   <Button
                     type="button"
                     onClick={handleApplyPromo}
-                    disabled={!!appliedPromo || !promoCode}
+                    disabled={!!appliedPromo || !promoCode || isValidatingPromo}
                     variant="outline"
                     size="sm"
                     className="shrink-0"
                   >
-                    Apply
+                    {isValidatingPromo ? 'Checking...' : 'Apply'}
                   </Button>
                 </div>
                 {promoError && (
