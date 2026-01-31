@@ -41,6 +41,8 @@ import {
   Maximize2,
   Minimize2,
   X,
+  Loader2,
+  Send,
 } from 'lucide-react';
 import { useConversation } from '../context/ConversationContext';
 
@@ -57,6 +59,7 @@ import { ShareInsightInline } from './ShareInsight';
 import { ReferralCard } from './ReferralCard';
 import { NotificationPrompt, useShouldShowNotificationPrompt } from './NotificationPrompt';
 import { supabase } from '../utils/supabase/client';
+import { useDashboardData, getDefaultRoutines, getDefaultGoals } from '../hooks/useDashboardData';
 
 // Types
 interface ChildProfile {
@@ -170,6 +173,12 @@ export function Dashboard10({
   const [showHardPaywall, setShowHardPaywall] = useState(false);
   const [conversationsUsed, setConversationsUsed] = useState(0);
   const chatButtonRef = useRef<HTMLButtonElement>(null);
+  const [chatInput, setChatInput] = useState('');
+  const [isSendingChat, setIsSendingChat] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Get conversation context for sending messages
+  const { messages: chatMessages, sendMessage, createConversation, setChildContext, currentConversation } = useConversation();
 
   // Morning mission state
   const { shouldShow: showMorningMission, isCompleted: missionCompleted } = useMorningMission();
@@ -209,6 +218,58 @@ export function Dashboard10({
     });
   }, []);
 
+  // Set up conversation context when child data is available
+  useEffect(() => {
+    if (userId && userData.childName) {
+      const childId = `child-${userId.substring(0, 8)}`;
+      setChildContext(childId);
+      if (!currentConversation) {
+        createConversation(childId, `Chat about ${userData.childName}`);
+      }
+    }
+  }, [userId, userData.childName, setChildContext, createConversation, currentConversation]);
+
+  // Auto-scroll to bottom when new messages arrive
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [chatMessages]);
+
+  // Handle sending chat messages
+  const handleSendChat = async () => {
+    if (!chatInput.trim() || isSendingChat) return;
+
+    const messageText = chatInput.trim();
+    setChatInput('');
+    setIsSendingChat(true);
+
+    try {
+      const childId = `child-${userId?.substring(0, 8) || 'temp'}`;
+      await sendMessage('parent', messageText, { childId });
+
+      // Increment trial conversation count for free users
+      if (userTier === 'free' && userId) {
+        setConversationsUsed(prev => prev + 1);
+        await supabase.rpc('increment_trial_conversations', { user_id_param: userId }).catch(() => {});
+      }
+    } catch (err) {
+      console.error('Failed to send message:', err);
+      setChatInput(messageText); // Restore input on error
+    } finally {
+      setIsSendingChat(false);
+    }
+  };
+
+  // Handle Enter key in chat
+  const handleChatKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSendChat();
+    }
+  };
+
+  // Load real dashboard data from database
+  const dashboardData = useDashboardData(userId || undefined);
+
   // Auto-set routine based on time of day
   useEffect(() => {
     const hour = new Date().getHours();
@@ -218,74 +279,61 @@ export function Dashboard10({
     else setActiveRoutine('bedtime');
   }, []);
 
-  // Sample data (would come from API in production)
-  const child: ChildProfile = childProfile || {
-    id: 'child-1',
-    name: userData.childName || 'Alex',
+  // Use real data from hook, with fallback for empty states
+  const child: ChildProfile = dashboardData.childProfile || childProfile || {
+    id: `child-${userId?.substring(0, 8) || 'temp'}`,
+    name: userData.childName || 'Your Child',
     age: 5,
-    goals: [
-      { name: 'Communication', percentMet: 70, trend: 'up' },
-      { name: 'Regulation', percentMet: 50, trend: 'stable' },
-    ]
+    goals: getDefaultGoals(userData.childName).map(g => ({
+      name: g.name,
+      percentMet: g.progress,
+      trend: g.trend,
+    })),
   };
 
-  const upcomingEvents: UpcomingEvent[] = [
-    { id: '1', title: 'Speech Coaching', time: '10:00 AM', type: 'telehealth' },
-    { id: '2', title: 'Meltdown Prep', time: '3:00 PM', type: 'reminder' },
-  ];
+  // Real upcoming events from database
+  const upcomingEvents: UpcomingEvent[] = dashboardData.upcomingEvents.length > 0
+    ? dashboardData.upcomingEvents
+    : [
+        { id: '1', title: 'Schedule a session', time: 'Explore Providers', type: 'telehealth' as const },
+      ];
 
-  const dailyRoutines: DailyRoutine[] = [
-    {
-      timeOfDay: 'morning',
-      label: 'Morning',
-      icon: <Sun className="w-4 h-4" />,
-      completedCount: 2,
-      tasks: [
-        { id: '1', title: 'Wake-Up Cue', description: 'Visual schedule', icon: '📋', completed: true, timeEstimate: '2 min' },
-        { id: '2', title: 'Brush Teeth', description: '2 min timer', icon: '🪥', completed: true, timeEstimate: '2 min' },
-        { id: '3', title: 'Breakfast Transition', description: 'Reward badge', icon: '🍳', completed: false, timeEstimate: '10 min' },
-      ]
-    },
-    {
-      timeOfDay: 'afternoon',
-      label: 'Afternoon',
-      icon: <Sunset className="w-4 h-4" />,
-      completedCount: 0,
-      tasks: [
-        { id: '4', title: 'Lunch Routine', description: 'Choice board', icon: '🥗', completed: false, timeEstimate: '15 min' },
-        { id: '5', title: 'Quiet Time', description: 'Sensory break', icon: '🧘', completed: false, timeEstimate: '20 min' },
-      ]
-    },
-    {
-      timeOfDay: 'evening',
-      label: 'Evening',
-      icon: <Moon className="w-4 h-4" />,
-      completedCount: 0,
-      tasks: [
-        { id: '6', title: 'Family Time', description: 'Structured play', icon: '🎮', completed: false, timeEstimate: '30 min' },
-        { id: '7', title: 'Dinner', description: 'Mealtime supports', icon: '🍽️', completed: false, timeEstimate: '20 min' },
-      ]
-    },
-    {
-      timeOfDay: 'bedtime',
-      label: 'Bedtime',
-      icon: <Star className="w-4 h-4" />,
-      completedCount: 0,
-      tasks: [
-        { id: '8', title: 'Bath Time', description: 'Calming routine', icon: '🛁', completed: false, timeEstimate: '15 min' },
-        { id: '9', title: 'Story & Wind Down', description: 'Bedtime cues', icon: '📚', completed: false, timeEstimate: '15 min' },
-      ]
-    },
-  ];
+  // Build routines from real data or use defaults
+  const routineIcons: Record<string, React.ReactNode> = {
+    morning: <Sun className="w-4 h-4" />,
+    afternoon: <Sunset className="w-4 h-4" />,
+    evening: <Moon className="w-4 h-4" />,
+    bedtime: <Star className="w-4 h-4" />,
+  };
+
+  const dailyRoutines: DailyRoutine[] = dashboardData.todaysRoutines.length > 0
+    ? dashboardData.todaysRoutines.map(r => ({
+        timeOfDay: r.timeOfDay,
+        label: r.label,
+        icon: routineIcons[r.timeOfDay] || <Sun className="w-4 h-4" />,
+        tasks: r.tasks.map(t => ({
+          id: t.id,
+          title: t.title,
+          description: t.description,
+          icon: t.icon,
+          completed: t.completed,
+          timeEstimate: t.timeEstimate,
+        })),
+        completedCount: r.completedCount,
+      }))
+    : getDefaultRoutines(userData.childName).map(r => ({
+        ...r,
+        icon: routineIcons[r.timeOfDay] || <Sun className="w-4 h-4" />,
+      }));
 
   const currentRoutine = dailyRoutines.find(r => r.timeOfDay === activeRoutine) || dailyRoutines[0];
   const totalTasks = currentRoutine.tasks.length;
   const completedTasks = currentRoutine.tasks.filter(t => t.completed).length;
   const progressPercent = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
 
-  // Streak data
-  const streakDays = 5;
-  const todaysWins = 3;
+  // Real streak data from database
+  const streakDays = dashboardData.streak;
+  const todaysWins = dashboardData.milestonesEarned;
 
   // Get contextual prompts based on time of day and child progress
   const getContextualPrompts = () => {
@@ -341,9 +389,34 @@ export function Dashboard10({
     }
   };
 
-  const handleTaskToggle = (taskId: string) => {
-    // Would update backend in production
+  const handleTaskToggle = async (taskId: string) => {
+    // Find which routine this task belongs to
+    const routine = dailyRoutines.find(r => r.tasks.some(t => t.id === taskId));
+    if (routine && dashboardData.todaysRoutines.length > 0) {
+      // Find the routine ID from dashboard data
+      const routineData = dashboardData.todaysRoutines.find(r => r.timeOfDay === routine.timeOfDay);
+      if (routineData) {
+        // Use the completeRoutineStep from the hook
+        await dashboardData.completeRoutineStep(routineData.timeOfDay, taskId);
+      }
+    }
   };
+
+  // Show loading state while data is being fetched
+  if (dashboardData.isLoading && userId) {
+    return (
+      <div className="min-h-screen bg-[#F5F5F5] dark:bg-slate-900 flex items-center justify-center">
+        <div className="text-center">
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+            className="w-12 h-12 border-4 border-[#577590] border-t-transparent rounded-full mx-auto mb-4"
+          />
+          <p className="text-[#0D1B2A] dark:text-white font-medium">Loading your calm hub...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#F5F5F5] dark:bg-slate-900 pb-24">
@@ -811,44 +884,88 @@ export function Dashboard10({
 
             {/* Chat Messages - Responsive Height */}
             <div className={`p-4 overflow-y-auto space-y-3 ${isFullScreenChat ? 'h-[calc(100vh-180px)]' : 'max-h-80'}`}>
-              <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-700 dark:to-slate-600 rounded-xl p-4 text-sm shadow-sm">
-                <p className="text-gray-700 dark:text-gray-200 leading-relaxed">
-                  Hi {userData.parentName}! 👋 I'm here to help with {child.name}'s day.
-                  {activeRoutine === 'morning' && " Ready to start the morning routine? I can suggest activities that work for this time of day."}
-                  {activeRoutine === 'afternoon' && " How's the afternoon going? Need help with any activities or transitions?"}
-                  {activeRoutine === 'evening' && " Winding down for the evening? Let me help you with calming activities or dinner routines."}
-                  {activeRoutine === 'bedtime' && " Bedtime approaching! I can help you prep a smooth bedtime routine."}
-                </p>
-              </div>
+              {/* Welcome message if no chat history */}
+              {chatMessages.length === 0 && (
+                <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-700 dark:to-slate-600 rounded-xl p-4 text-sm shadow-sm">
+                  <p className="text-gray-700 dark:text-gray-200 leading-relaxed">
+                    Hi {userData.parentName}! 👋 I'm here to help with {child.name}'s day.
+                    {activeRoutine === 'morning' && " Ready to start the morning routine? I can suggest activities that work for this time of day."}
+                    {activeRoutine === 'afternoon' && " How's the afternoon going? Need help with any activities or transitions?"}
+                    {activeRoutine === 'evening' && " Winding down for the evening? Let me help you with calming activities or dinner routines."}
+                    {activeRoutine === 'bedtime' && " Bedtime approaching! I can help you prep a smooth bedtime routine."}
+                  </p>
+                </div>
+              )}
 
-              {/* Contextual Quick Actions */}
-            <div className="flex flex-wrap gap-2">
-              {getContextualPrompts().map((prompt, index) => (
-                <button
-                  key={index}
-                  className="text-xs px-3 py-1.5 rounded-full bg-[#577590]/10 text-[#577590] hover:bg-[#577590]/20 transition-colors"
+              {/* Actual chat messages */}
+              {chatMessages.map((msg) => (
+                <div
+                  key={msg.id}
+                  className={`rounded-xl p-3 text-sm shadow-sm ${
+                    msg.author === 'parent'
+                      ? 'bg-[#577590] text-white ml-8'
+                      : 'bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-700 dark:to-slate-600 text-gray-700 dark:text-gray-200 mr-8'
+                  }`}
                 >
-                  {prompt}
-                </button>
+                  <p className="leading-relaxed whitespace-pre-wrap">{msg.content}</p>
+                </div>
               ))}
+
+              {/* Loading indicator */}
+              {isSendingChat && (
+                <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-700 dark:to-slate-600 rounded-xl p-3 text-sm shadow-sm mr-8">
+                  <div className="flex items-center gap-2">
+                    <Loader2 className="w-4 h-4 animate-spin text-[#577590]" />
+                    <span className="text-gray-500 dark:text-gray-400">Aminy is thinking...</span>
+                  </div>
+                </div>
+              )}
+
+              <div ref={messagesEndRef} />
+
+              {/* Contextual Quick Actions - only show when no messages */}
+              {chatMessages.length === 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {getContextualPrompts().map((prompt, index) => (
+                    <button
+                      key={index}
+                      onClick={() => {
+                        setChatInput(prompt);
+                      }}
+                      className="text-xs px-3 py-1.5 rounded-full bg-[#577590]/10 text-[#577590] hover:bg-[#577590]/20 transition-colors"
+                    >
+                      {prompt}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
-          </div>
 
             {/* Chat Input - Enhanced */}
             <div className="p-4 border-t dark:border-slate-700 bg-gray-50 dark:bg-slate-750">
               <div className="flex gap-2">
                 <input
                   type="text"
+                  value={chatInput}
+                  onChange={(e) => setChatInput(e.target.value)}
+                  onKeyDown={handleChatKeyDown}
                   placeholder="Ask Aminy anything..."
                   className="flex-1 px-4 py-3 text-sm rounded-xl border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:border-[#577590] focus:ring-2 focus:ring-[#577590]/20 transition-all"
                   aria-label="Chat message input"
+                  disabled={isSendingChat}
                 />
                 <Button
                   size="sm"
-                  className="bg-[#577590] hover:bg-[#4a6478] px-4 py-3 rounded-xl transition-all"
+                  onClick={handleSendChat}
+                  disabled={!chatInput.trim() || isSendingChat}
+                  className="bg-[#577590] hover:bg-[#4a6478] px-4 py-3 rounded-xl transition-all disabled:opacity-50"
                   aria-label="Send message"
                 >
-                  <MessageSquare className="w-4 h-4" />
+                  {isSendingChat ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <Send className="w-4 h-4" />
+                  )}
                 </Button>
               </div>
             </div>

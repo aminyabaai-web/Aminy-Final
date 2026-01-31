@@ -5,6 +5,49 @@
 -- ============================================================================
 
 -- ============================================================================
+-- MULTI-CHILD SUPPORT
+-- ============================================================================
+
+-- Children table for multi-child families
+CREATE TABLE IF NOT EXISTS children (
+  id TEXT PRIMARY KEY,
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  name TEXT NOT NULL,
+  age INTEGER,
+  date_of_birth DATE,
+  photo_url TEXT,
+  diagnosis TEXT[] DEFAULT '{}',
+  conditions TEXT[] DEFAULT '{}',
+  goals TEXT[] DEFAULT '{}',
+  notes TEXT,
+  is_primary BOOLEAN DEFAULT false,
+  is_active BOOLEAN DEFAULT true,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_children_user ON children(user_id);
+CREATE INDEX IF NOT EXISTS idx_children_primary ON children(user_id, is_primary);
+
+ALTER TABLE children ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users can view own children"
+  ON children FOR SELECT
+  USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can insert own children"
+  ON children FOR INSERT
+  WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can update own children"
+  ON children FOR UPDATE
+  USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can delete own children"
+  ON children FOR DELETE
+  USING (auth.uid() = user_id);
+
+-- ============================================================================
 -- DAILY ROUTINES SYSTEM
 -- ============================================================================
 
@@ -413,6 +456,70 @@ CREATE POLICY "Users can view own coins"
 CREATE POLICY "Users can insert own coins"
   ON calm_coins FOR INSERT
   WITH CHECK (auth.uid() = user_id);
+
+-- ============================================================================
+-- TRIAL TRACKING
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS trial_tracking (
+  id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  trial_started_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  trial_ends_at TIMESTAMPTZ NOT NULL,
+  conversations_used INTEGER NOT NULL DEFAULT 0,
+  max_trial_conversations INTEGER NOT NULL DEFAULT 5,
+  has_seen_nudge BOOLEAN DEFAULT false,
+  is_converted BOOLEAN DEFAULT false,
+  converted_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  UNIQUE(user_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_trial_tracking_user ON trial_tracking(user_id);
+CREATE INDEX IF NOT EXISTS idx_trial_tracking_ends ON trial_tracking(trial_ends_at);
+
+ALTER TABLE trial_tracking ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users can view own trial"
+  ON trial_tracking FOR SELECT
+  USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can insert own trial"
+  ON trial_tracking FOR INSERT
+  WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can update own trial"
+  ON trial_tracking FOR UPDATE
+  USING (auth.uid() = user_id);
+
+CREATE POLICY "Service role can manage trials"
+  ON trial_tracking FOR ALL
+  USING (auth.role() = 'service_role');
+
+-- ============================================================================
+-- USAGE TRACKING
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS usage_tracking (
+  id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  date DATE NOT NULL,
+  message_count INTEGER NOT NULL DEFAULT 0,
+  session_count INTEGER NOT NULL DEFAULT 0,
+  features_used TEXT[] DEFAULT '{}',
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  UNIQUE(user_id, date)
+);
+
+CREATE INDEX IF NOT EXISTS idx_usage_tracking_user ON usage_tracking(user_id);
+CREATE INDEX IF NOT EXISTS idx_usage_tracking_date ON usage_tracking(date);
+
+ALTER TABLE usage_tracking ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users can view own usage"
+  ON usage_tracking FOR SELECT
+  USING (auth.uid() = user_id);
 
 -- ============================================================================
 -- HELPER FUNCTIONS

@@ -913,7 +913,7 @@ export default function App() {
     navigateToScreen("onboarding");
   };
 
-  const handleOnboardingComplete = (data: Partial<UserData>) => {
+  const handleOnboardingComplete = async (data: Partial<UserData>) => {
     const updatedData = {
       ...userData,
       ...data,
@@ -928,9 +928,78 @@ export default function App() {
       tier: "free", // Start as free, paywall will handle upgrade
     }));
 
+    // Save profile to database
+    try {
+      const { data: authData } = await supabase.auth.getUser();
+      const userId = authData?.user?.id;
+
+      if (userId) {
+        // Generate a unique child ID
+        const childId = `child-${userId.substring(0, 8)}-${Date.now().toString(36)}`;
+
+        // Upsert profile with all onboarding data
+        const { error: profileError } = await supabase.from('profiles').upsert({
+          id: userId,
+          email: updatedData.email,
+          parent_name: updatedData.parentName,
+          child_name: updatedData.childName,
+          child_id: childId,
+          child_age: updatedData.childAge || null,
+          relationship: updatedData.relationship,
+          state: updatedData.state,
+          tier: 'free',
+          has_completed_onboarding: true,
+          updated_at: new Date().toISOString(),
+        }, { onConflict: 'id' });
+
+        if (profileError) {
+          logger.error('Failed to save profile', profileError);
+        } else {
+          logger.info('Profile saved successfully', { userId, childId });
+        }
+
+        // Initialize trial tracking (7 days, 5 free conversations)
+        const trialEnd = new Date();
+        trialEnd.setDate(trialEnd.getDate() + 7);
+
+        await supabase.from('trial_tracking').upsert({
+          user_id: userId,
+          trial_started_at: new Date().toISOString(),
+          trial_ends_at: trialEnd.toISOString(),
+          conversations_used: 0,
+          max_trial_conversations: 5,
+          is_converted: false,
+        }, { onConflict: 'user_id' }).catch(err => {
+          logger.error('Failed to create trial tracking', err);
+        });
+
+        // Create default goals for the child
+        const defaultGoals = [
+          { id: `goal-${childId}-comm`, title: 'Communication', progress: 0, is_active: true },
+          { id: `goal-${childId}-reg`, title: 'Self-Regulation', progress: 0, is_active: true },
+          { id: `goal-${childId}-routine`, title: 'Daily Routines', progress: 0, is_active: true },
+        ];
+
+        await supabase.from('goals').upsert(
+          defaultGoals.map(g => ({
+            ...g,
+            user_id: userId,
+            child_id: childId,
+            created_at: new Date().toISOString(),
+          })),
+          { onConflict: 'id' }
+        ).catch(err => {
+          logger.error('Failed to create default goals', err);
+        });
+      }
+    } catch (error) {
+      logger.error('Error saving onboarding data to database', error);
+    }
+
     // Trigger retention flows: email sequences, push notification scheduling
     if (updatedData.email && updatedData.childName && updatedData.parentName) {
-      const userId = updatedData.email; // Use email as userId until Supabase auth provides one
+      const { data: authData } = await supabase.auth.getUser();
+      const userId = authData?.user?.id || updatedData.email;
       triggerRetentionFlow(
         userId,
         updatedData.email,
