@@ -153,6 +153,7 @@ export function AppointmentConfirmationScreen({
         visitType: visitType as VisitPriceType,
         providerId: provider.id,
         slotId: slot.id,
+        scheduledAt: slot.startTime,
         isMember: false, // TODO: Check actual membership status
         promoCode: promoApplied || undefined,
       });

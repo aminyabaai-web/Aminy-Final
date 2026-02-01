@@ -936,6 +936,76 @@ export async function handleWebhook(req: Request): Promise<Response> {
           await storeStripeCustomerId(userId, customerId);
         }
 
+        // Check if this is a telehealth visit payment
+        const metadata = session.metadata || {};
+        if (metadata.type === 'telehealth_visit') {
+          try {
+            // Create the appointment after successful payment
+            const appointmentData = {
+              user_id: userId,
+              provider_id: metadata.providerId,
+              slot_id: metadata.slotId,
+              visit_type: metadata.visitType,
+              visit_format: 'remote',
+              status: 'confirmed',
+              payment_status: 'completed',
+              payment_id: session.payment_intent,
+              price: session.amount_total,
+              scheduled_at: metadata.scheduledAt || new Date().toISOString(),
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString(),
+            };
+
+            const { data: appointment, error: appointmentError } = await supabase
+              .from('telehealth_appointments')
+              .insert(appointmentData)
+              .select()
+              .single();
+
+            if (appointmentError) {
+              console.error('Failed to create appointment:', appointmentError);
+            } else {
+              console.log(`Created telehealth appointment ${appointment.id} for user ${userId}`);
+
+              // Send confirmation email
+              if (customerEmail) {
+                const visitDate = new Date(metadata.scheduledAt || Date.now()).toLocaleDateString('en-US', {
+                  weekday: 'long',
+                  month: 'long',
+                  day: 'numeric',
+                  year: 'numeric'
+                });
+                const amount = session.amount_total
+                  ? `$${(session.amount_total / 100).toFixed(2)}`
+                  : 'your visit';
+
+                await sendEmail(
+                  customerEmail,
+                  'Your Telehealth Visit is Confirmed - Aminy',
+                  `
+                    <div style="font-family: system-ui, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+                      <h1 style="color: #577590;">Your Visit is Confirmed!</h1>
+                      <p>Hi ${customerName},</p>
+                      <p>Your telehealth appointment has been scheduled and paid for.</p>
+                      <div style="background: #f5f5f5; padding: 20px; border-radius: 12px; margin: 20px 0;">
+                        <p><strong>Date:</strong> ${visitDate}</p>
+                        <p><strong>Amount Paid:</strong> ${amount}</p>
+                        <p><strong>Format:</strong> Video Call</p>
+                      </div>
+                      <p>You'll receive a video link before your appointment.</p>
+                      <p>Thank you for choosing Aminy!</p>
+                    </div>
+                  `,
+                  `Your telehealth visit is confirmed for ${visitDate}. Amount paid: ${amount}`
+                );
+              }
+            }
+          } catch (err) {
+            console.error('Error creating telehealth appointment:', err);
+          }
+          break;
+        }
+
         // CRITICAL: Update user's tier in the database based on subscription
         if (userId && session.subscription) {
           try {

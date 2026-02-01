@@ -231,9 +231,15 @@ CREATE TABLE IF NOT EXISTS provider_availability (
   day_of_week INTEGER NOT NULL CHECK (day_of_week >= 0 AND day_of_week <= 6),
   start_time TIME NOT NULL,
   end_time TIME NOT NULL,
+  timezone TEXT DEFAULT 'America/Phoenix',
+  is_recurring BOOLEAN DEFAULT true,
   is_available BOOLEAN DEFAULT true,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+-- Add timezone column if it doesn't exist
+ALTER TABLE provider_availability ADD COLUMN IF NOT EXISTS timezone TEXT DEFAULT 'America/Phoenix';
+ALTER TABLE provider_availability ADD COLUMN IF NOT EXISTS is_recurring BOOLEAN DEFAULT true;
 
 CREATE INDEX IF NOT EXISTS idx_provider_availability_provider ON provider_availability(provider_id);
 
