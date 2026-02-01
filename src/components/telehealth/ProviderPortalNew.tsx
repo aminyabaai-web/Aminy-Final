@@ -11,7 +11,7 @@
  * - Visit summary entry
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   User,
   Calendar,
@@ -28,7 +28,8 @@ import {
   Bell,
   CheckCircle,
   AlertCircle,
-  X
+  X,
+  Loader2
 } from 'lucide-react';
 import {
   Provider,
@@ -39,6 +40,7 @@ import {
   PROVIDER_ROLE_DISPLAY,
   ProviderRole
 } from '../../types/telehealth';
+import { supabase } from '../../utils/supabase/client';
 
 interface ProviderPortalProps {
   providerId: string;
@@ -57,95 +59,206 @@ const DAYS_OF_WEEK = [
   { value: 6, label: 'Saturday' }
 ];
 
-// Mock provider data
-const INITIAL_PROVIDER: Provider = {
-  id: 'provider-1',
-  firstName: 'Sarah',
-  lastName: 'Chen',
-  credentials: 'BCBA, LBA',
+// Default empty provider for loading state
+const EMPTY_PROVIDER: Provider = {
+  id: '',
+  firstName: '',
+  lastName: '',
+  credentials: '',
   role: 'bcba',
-  roleDisplayName: 'Board Certified Behavior Analyst',
-  bio: 'Specializing in early intervention and parent coaching for families navigating autism.',
-  licensedStates: ['AZ', 'CA', 'TX'],
-  offersConsult: true,
-  offersDeepReview: true,
-  consultPrice: 85,
-  deepReviewPrice: 165,
+  roleDisplayName: '',
+  bio: '',
+  licensedStates: [],
+  offersConsult: false,
+  offersDeepReview: false,
+  consultPrice: 0,
+  deepReviewPrice: 0,
   organization: 'independent',
-  isActive: true,
-  acceptingNewPatients: true,
-  createdAt: '2024-01-15T00:00:00Z',
-  updatedAt: '2024-01-15T00:00:00Z'
+  isActive: false,
+  acceptingNewPatients: false,
+  createdAt: '',
+  updatedAt: ''
 };
-
-// Mock availability
-const INITIAL_AVAILABILITY: AvailabilityBlock[] = [
-  { id: 'av-1', providerId: 'provider-1', dayOfWeek: 1, startTime: '09:00', endTime: '12:00', timezone: 'America/Phoenix', isRecurring: true },
-  { id: 'av-2', providerId: 'provider-1', dayOfWeek: 1, startTime: '14:00', endTime: '17:00', timezone: 'America/Phoenix', isRecurring: true },
-  { id: 'av-3', providerId: 'provider-1', dayOfWeek: 3, startTime: '09:00', endTime: '16:00', timezone: 'America/Phoenix', isRecurring: true },
-  { id: 'av-4', providerId: 'provider-1', dayOfWeek: 5, startTime: '10:00', endTime: '14:00', timezone: 'America/Phoenix', isRecurring: true }
-];
-
-// Mock upcoming appointments
-const MOCK_APPOINTMENTS: Appointment[] = [
-  {
-    id: 'apt-1',
-    userId: 'user-1',
-    providerId: 'provider-1',
-    scheduledAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-    timezone: 'America/Phoenix',
-    visitType: 'deep-review',
-    visitFormat: 'remote',
-    duration: 50,
-    visitReason: 'Follow-up on meltdown strategies',
-    whoIsThisFor: 'child',
-    userState: 'AZ',
-    price: 165,
-    paymentStatus: 'completed',
-    videoJoinUrl: '', // Generated dynamically by Daily.co when appointment is created
-    videoProvider: 'daily',
-    status: 'confirmed',
-    createdAt: '2025-01-14T00:00:00Z',
-    updatedAt: '2025-01-14T00:00:00Z'
-  },
-  {
-    id: 'apt-2',
-    userId: 'user-2',
-    providerId: 'provider-1',
-    scheduledAt: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
-    timezone: 'America/Phoenix',
-    visitType: 'consult',
-    visitFormat: 'remote',
-    duration: 25,
-    visitReason: 'Initial consultation - sleep issues',
-    whoIsThisFor: 'family',
-    userState: 'CA',
-    price: 85,
-    paymentStatus: 'completed',
-    videoJoinUrl: '', // Generated dynamically by Daily.co when appointment is created
-    videoProvider: 'daily',
-    status: 'confirmed',
-    createdAt: '2025-01-13T00:00:00Z',
-    updatedAt: '2025-01-13T00:00:00Z'
-  }
-];
 
 export function ProviderPortalNew({ providerId, onLogout }: ProviderPortalProps) {
   const [activeTab, setActiveTab] = useState<PortalTab>('profile');
-  const [provider, setProvider] = useState<Provider>(INITIAL_PROVIDER);
-  const [availability, setAvailability] = useState<AvailabilityBlock[]>(INITIAL_AVAILABILITY);
-  const [appointments] = useState<Appointment[]>(MOCK_APPOINTMENTS);
+  const [provider, setProvider] = useState<Provider>(EMPTY_PROVIDER);
+  const [availability, setAvailability] = useState<AvailabilityBlock[]>([]);
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
+
+  // Load real provider data from database
+  useEffect(() => {
+    async function loadProviderData() {
+      if (!providerId) {
+        setLoadError('No provider ID provided');
+        setIsLoading(false);
+        return;
+      }
+
+      setIsLoading(true);
+      setLoadError(null);
+
+      try {
+        // Load provider profile
+        const { data: providerData, error: providerError } = await supabase
+          .from('provider_profiles')
+          .select('*')
+          .eq('id', providerId)
+          .single();
+
+        if (providerError) throw new Error('Failed to load provider profile');
+
+        if (providerData) {
+          setProvider({
+            id: providerData.id,
+            firstName: providerData.first_name || providerData.name?.split(' ')[0] || '',
+            lastName: providerData.last_name || providerData.name?.split(' ').slice(1).join(' ') || '',
+            credentials: providerData.credentials || '',
+            role: providerData.provider_type || 'bcba',
+            roleDisplayName: PROVIDER_ROLE_DISPLAY[providerData.provider_type as ProviderRole] || 'Provider',
+            bio: providerData.bio || '',
+            licensedStates: providerData.states_licensed || [],
+            offersConsult: providerData.offers_consult ?? true,
+            offersDeepReview: providerData.offers_deep_review ?? true,
+            consultPrice: providerData.consult_price || 85,
+            deepReviewPrice: providerData.deep_review_price || 165,
+            organization: providerData.organization || 'independent',
+            isActive: providerData.is_active ?? true,
+            acceptingNewPatients: providerData.is_accepting_patients ?? true,
+            createdAt: providerData.created_at,
+            updatedAt: providerData.updated_at,
+            availabilityBlocks: [],
+            timeOffBlocks: []
+          });
+        }
+
+        // Load availability blocks
+        const { data: availData } = await supabase
+          .from('provider_availability')
+          .select('*')
+          .eq('provider_id', providerId);
+
+        if (availData) {
+          setAvailability(availData.map((a: any) => ({
+            id: a.id,
+            providerId: a.provider_id,
+            dayOfWeek: a.day_of_week,
+            startTime: a.start_time,
+            endTime: a.end_time,
+            timezone: a.timezone || 'America/Phoenix',
+            isRecurring: a.is_recurring ?? true
+          })));
+        }
+
+        // Load upcoming appointments
+        const { data: apptData } = await supabase
+          .from('telehealth_appointments')
+          .select('*')
+          .eq('provider_id', providerId)
+          .gte('scheduled_at', new Date().toISOString())
+          .order('scheduled_at', { ascending: true })
+          .limit(20);
+
+        if (apptData) {
+          setAppointments(apptData.map((a: any) => ({
+            id: a.id,
+            userId: a.user_id,
+            providerId: a.provider_id,
+            scheduledAt: a.scheduled_at,
+            timezone: a.timezone || 'America/Phoenix',
+            visitType: a.visit_type,
+            visitFormat: a.visit_format || 'remote',
+            duration: a.duration || 25,
+            visitReason: a.visit_reason || '',
+            whoIsThisFor: a.who_is_this_for || 'child',
+            userState: a.user_state,
+            price: a.price || 0,
+            paymentStatus: a.payment_status || 'pending',
+            videoJoinUrl: a.video_join_url || '',
+            videoProvider: a.video_provider || 'daily',
+            status: a.status || 'confirmed',
+            createdAt: a.created_at,
+            updatedAt: a.updated_at
+          })));
+        }
+      } catch (error: any) {
+        console.error('Failed to load provider data:', error);
+        setLoadError(error.message || 'Failed to load provider data');
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    loadProviderData();
+  }, [providerId]);
 
   const handleSave = async () => {
     setIsSaving(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    setIsSaving(false);
-    setSaveSuccess(true);
-    setTimeout(() => setSaveSuccess(false), 3000);
+    try {
+      // Save provider profile to database
+      const { error } = await supabase
+        .from('provider_profiles')
+        .update({
+          first_name: provider.firstName,
+          last_name: provider.lastName,
+          bio: provider.bio,
+          credentials: provider.credentials,
+          states_licensed: provider.licensedStates,
+          offers_consult: provider.offersConsult,
+          offers_deep_review: provider.offersDeepReview,
+          consult_price: provider.consultPrice,
+          deep_review_price: provider.deepReviewPrice,
+          is_accepting_patients: provider.acceptingNewPatients,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', providerId);
+
+      if (error) throw error;
+
+      setSaveSuccess(true);
+      setTimeout(() => setSaveSuccess(false), 3000);
+    } catch (error: any) {
+      console.error('Failed to save:', error);
+      alert('Failed to save changes. Please try again.');
+    } finally {
+      setIsSaving(false);
+    }
   };
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="w-8 h-8 text-[#577590] animate-spin mx-auto mb-3" />
+          <p className="text-gray-600">Loading your portal...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (loadError) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+        <div className="bg-white rounded-xl shadow-sm p-6 max-w-md text-center">
+          <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+          <h2 className="text-lg font-semibold text-gray-900 mb-2">Unable to Load Portal</h2>
+          <p className="text-gray-600 mb-4">{loadError}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-4 py-2 bg-[#577590] text-white font-medium rounded-lg hover:bg-[#466379]"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">

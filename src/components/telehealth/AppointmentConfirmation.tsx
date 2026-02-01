@@ -131,44 +131,42 @@ export function AppointmentConfirmationScreen({
       const userId = localStorage.getItem('user-id') || 'user-temp';
       const userEmail = localStorage.getItem('user-email') || 'user@example.com';
 
-      // Create the appointment
-      const appointment = await createAppointment({
+      // Store pending appointment info for after payment
+      const pendingAppointment = {
         userId,
+        userEmail,
         providerId: provider.id,
+        providerName: `${provider.firstName} ${provider.lastName}`,
         slotId: slot.id,
         slot,
         visitType,
         intake,
-      });
+        visitDisplayName: visitConfig.displayName,
+        timestamp: Date.now(),
+      };
+      localStorage.setItem('pending-telehealth-appointment', JSON.stringify(pendingAppointment));
 
-      // Schedule reminders
-      await scheduleAppointmentReminders(
-        appointment.id,
+      // Create Stripe checkout session for the visit
+      const checkout = await createVisitPayment({
         userId,
-        userEmail,
-        undefined, // phone number
-        new Date(slot.startTime),
-        `${provider.firstName} ${provider.lastName}`,
-        appointment.videoRoomUrl
-      );
-
-      // Send confirmation email
-      await sendAppointmentConfirmationEmail(userEmail, {
-        userName: intake.whoIsThisFor === 'parent' ? 'there' : intake.whoIsThisFor === 'child' ? 'your child' : 'your family',
-        providerName: `${provider.firstName} ${provider.lastName}`,
-        appointmentDate: formatDate(slot.startTime),
-        appointmentTime: formatTime(slot.startTime),
-        visitType: visitConfig.displayName,
-        videoLink: appointment.videoRoomUrl,
+        email: userEmail,
+        visitType: visitType as VisitPriceType,
+        providerId: provider.id,
+        slotId: slot.id,
+        isMember: false, // TODO: Check actual membership status
+        promoCode: promoApplied || undefined,
       });
 
-      setAppointmentId(appointment.id);
-      setCurrentStep('success');
+      // Redirect to Stripe Checkout
+      if (checkout.url) {
+        window.location.href = checkout.url;
+      } else {
+        throw new Error('Failed to create payment session');
+      }
     } catch (error: any) {
-      console.error('Payment/booking error:', error);
-      // Show error to user
-      setCurrentStep('payment'); // Go back to payment step
-      alert(error?.message || 'Something went wrong with your booking. Please try again.');
+      console.error('Payment error:', error);
+      setCurrentStep('payment');
+      alert(error?.message || 'Unable to process payment. Please try again.');
     } finally {
       setIsProcessing(false);
     }
@@ -446,53 +444,26 @@ export function AppointmentConfirmationScreen({
             <p className="text-4xl font-bold text-gray-900">${price}.00</p>
           </div>
 
-          {/* Mock Payment Form */}
+          {/* Stripe Checkout Info */}
           <div className="bg-white rounded-2xl border border-gray-100 p-4 space-y-3 sm:space-y-4">
             <h4 className="font-medium text-gray-900 flex items-center gap-2">
               <CreditCard className="w-5 h-5" />
-              Card Details
+              Secure Payment
             </h4>
 
-            <div className="space-y-3">
-              <div>
-                <label className="block text-sm text-gray-600 mb-1">Card number</label>
-                <input
-                  type="text"
-                  placeholder="1234 5678 9012 3456"
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#577590]/20 focus:border-[#577590]"
-                />
-              </div>
+            <p className="text-sm text-gray-600">
+              You'll be redirected to Stripe's secure checkout to complete your payment.
+              We accept all major credit and debit cards.
+            </p>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-sm text-gray-600 mb-1">Expiry</label>
-                  <input
-                    type="text"
-                    placeholder="MM/YY"
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#577590]/20 focus:border-[#577590]"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm text-gray-600 mb-1">CVC</label>
-                  <input
-                    type="text"
-                    placeholder="123"
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#577590]/20 focus:border-[#577590]"
-                  />
-                </div>
+            <div className="flex items-center gap-2 text-sm text-gray-500">
+              <div className="flex -space-x-1">
+                <div className="w-8 h-5 bg-blue-600 rounded text-white text-[10px] flex items-center justify-center font-bold">VISA</div>
+                <div className="w-8 h-5 bg-red-500 rounded text-white text-[10px] flex items-center justify-center font-bold">MC</div>
+                <div className="w-8 h-5 bg-blue-400 rounded text-white text-[10px] flex items-center justify-center font-bold">AMEX</div>
               </div>
+              <span>and more</span>
             </div>
-
-            {/* Save Card */}
-            <label className="flex items-center gap-3 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={saveCard}
-                onChange={(e) => setSaveCard(e.target.checked)}
-                className="w-5 h-5 rounded border-gray-300 text-[#577590] focus:ring-[#577590]"
-              />
-              <span className="text-sm text-gray-700">Save card for future bookings</span>
-            </label>
           </div>
 
           {/* Security Note */}
