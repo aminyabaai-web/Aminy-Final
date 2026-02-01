@@ -630,7 +630,128 @@ export function useRetention() {
   };
 }
 
-export default {
+// ============================================================================
+// Dashboard Integration Functions
+// ============================================================================
+
+/**
+ * Get user's primary streak (daily app usage)
+ */
+export async function getPrimaryStreak(userId: string): Promise<{ currentStreak: number; longestStreak: number } | null> {
+  try {
+    const { createClient } = await import('@supabase/supabase-js');
+    const supabase = createClient(
+      `https://${projectId}.supabase.co`,
+      publicAnonKey
+    );
+
+    const { data } = await supabase
+      .from('user_streaks')
+      .select('current_streak, longest_streak')
+      .eq('user_id', userId)
+      .eq('streak_type', 'daily_checkin')
+      .single();
+
+    if (data) {
+      return {
+        currentStreak: data.current_streak || 0,
+        longestStreak: data.longest_streak || 0,
+      };
+    }
+    return { currentStreak: 0, longestStreak: 0 };
+  } catch {
+    return { currentStreak: 0, longestStreak: 0 };
+  }
+}
+
+/**
+ * Get user's earned milestones
+ */
+export async function getEarnedMilestones(userId: string): Promise<any[]> {
+  try {
+    const { createClient } = await import('@supabase/supabase-js');
+    const supabase = createClient(
+      `https://${projectId}.supabase.co`,
+      publicAnonKey
+    );
+
+    const { data } = await supabase
+      .from('user_milestones')
+      .select('*')
+      .eq('user_id', userId)
+      .eq('is_earned', true)
+      .order('earned_at', { ascending: false });
+
+    return data || [];
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Get pending celebrations (milestones earned but not yet celebrated)
+ */
+export async function getPendingCelebrations(userId: string): Promise<any[]> {
+  try {
+    const { createClient } = await import('@supabase/supabase-js');
+    const supabase = createClient(
+      `https://${projectId}.supabase.co`,
+      publicAnonKey
+    );
+
+    const { data } = await supabase
+      .from('user_milestones')
+      .select('*')
+      .eq('user_id', userId)
+      .eq('is_earned', true)
+      .eq('is_celebrated', false)
+      .order('earned_at', { ascending: false });
+
+    return data || [];
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Record user activity for streak tracking
+ */
+export async function recordActivity(userId: string, activityType: string): Promise<void> {
+  try {
+    const { createClient } = await import('@supabase/supabase-js');
+    const supabase = createClient(
+      `https://${projectId}.supabase.co`,
+      publicAnonKey
+    );
+
+    const today = new Date().toISOString().split('T')[0];
+
+    // Upsert activity record
+    await supabase
+      .from('user_activities')
+      .upsert({
+        user_id: userId,
+        activity_type: activityType,
+        activity_date: today,
+        updated_at: new Date().toISOString(),
+      }, {
+        onConflict: 'user_id,activity_type,activity_date',
+      });
+
+    // Update streak
+    await supabase.rpc('update_user_streak', {
+      p_user_id: userId,
+      p_streak_type: activityType,
+    }).catch(() => {
+      // RPC may not exist yet, that's okay
+    });
+  } catch {
+    // Silently fail - streak tracking is non-critical
+  }
+}
+
+// Named export for retentionEngine object
+export const retentionEngine = {
   trackRetentionEvent,
   getUserEngagementProfile,
   calculateChurnRisk,
@@ -643,4 +764,10 @@ export default {
   trackSessionEngagement,
   initializeRetentionTracking,
   useRetention,
+  getPrimaryStreak,
+  getEarnedMilestones,
+  getPendingCelebrations,
+  recordActivity,
 };
+
+export default retentionEngine;
