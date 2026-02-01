@@ -438,6 +438,7 @@ export async function createVisitPayment({
   visitType,
   providerId,
   slotId,
+  scheduledAt,
   isMember = false,
   promoCode,
 }: {
@@ -446,6 +447,7 @@ export async function createVisitPayment({
   visitType: VisitPriceType;
   providerId: string;
   slotId: string;
+  scheduledAt?: string;
   isMember?: boolean;
   promoCode?: string;
 }): Promise<CheckoutResponse> {
@@ -462,6 +464,7 @@ export async function createVisitPayment({
       visitType,
       providerId,
       slotId,
+      scheduledAt: scheduledAt || '',
       promoCode: promoCode || '',
     },
   });
