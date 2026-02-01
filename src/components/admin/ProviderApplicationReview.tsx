@@ -51,6 +51,7 @@ type FilterStatus = 'all' | 'pending' | 'under_review' | 'approved' | 'rejected'
 export function ProviderApplicationReview({ adminId }: ProviderApplicationReviewProps) {
   const [applications, setApplications] = useState<ProviderApplication[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [filter, setFilter] = useState<FilterStatus>('pending');
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedApp, setExpandedApp] = useState<string | null>(null);
@@ -64,6 +65,7 @@ export function ProviderApplicationReview({ adminId }: ProviderApplicationReview
 
   const loadApplications = async () => {
     setIsLoading(true);
+    setLoadError(null);
     try {
       let query = supabase
         .from('provider_applications')
@@ -78,97 +80,19 @@ export function ProviderApplicationReview({ adminId }: ProviderApplicationReview
 
       if (error) {
         console.error('[ProviderApplicationReview] Error loading:', error);
-        // Use demo data if no table exists
-        setApplications(getDemoApplications());
+        setLoadError('Unable to load applications. Please check your database connection.');
+        setApplications([]);
       } else {
-        setApplications(data as ProviderApplication[] || getDemoApplications());
+        setApplications(data as ProviderApplication[] || []);
       }
     } catch (error) {
       console.error('[ProviderApplicationReview] Error:', error);
-      setApplications(getDemoApplications());
+      setLoadError('Network error. Please try again.');
+      setApplications([]);
     } finally {
       setIsLoading(false);
     }
   };
-
-  const getDemoApplications = (): ProviderApplication[] => [
-    {
-      id: 'app-1',
-      user_id: 'user-1',
-      full_name: 'Dr. Sarah Mitchell',
-      email: 'sarah.mitchell@example.com',
-      phone: '(555) 123-4567',
-      provider_type: 'bcba',
-      license_number: 'BCBA-12345',
-      license_state: 'CA',
-      license_expiry: '2026-12-31',
-      npi_number: '1234567890',
-      specialties: ['Autism Spectrum', 'Early Intervention', 'Parent Training'],
-      years_experience: 8,
-      bio: 'Passionate about helping families navigate the challenges of raising neurodivergent children. Specialized in early intervention and parent training programs.',
-      status: 'pending',
-      ai_verification_result: {
-        license_valid: true,
-        license_status: 'active',
-        name_match: true,
-        confidence_score: 0.92,
-        verification_source: 'Aminy AI Verification System',
-        flags: [],
-        verified_at: new Date().toISOString(),
-      },
-      submitted_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-    },
-    {
-      id: 'app-2',
-      user_id: 'user-2',
-      full_name: 'Marcus Johnson',
-      email: 'marcus.j@therapycenter.com',
-      phone: '(555) 987-6543',
-      provider_type: 'psychologist',
-      license_number: 'PSY-98765',
-      license_state: 'TX',
-      license_expiry: '2025-06-30',
-      specialties: ['ADHD', 'Anxiety', 'Teen Mental Health'],
-      years_experience: 12,
-      bio: 'Clinical psychologist with over a decade of experience working with children and adolescents.',
-      status: 'under_review',
-      ai_verification_result: {
-        license_valid: true,
-        license_status: 'pending_verification',
-        name_match: true,
-        confidence_score: 0.75,
-        verification_source: 'Aminy AI Verification System',
-        flags: ['NPI number recommended for this provider type'],
-        verified_at: new Date().toISOString(),
-      },
-      submitted_at: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
-    },
-    {
-      id: 'app-3',
-      user_id: 'user-3',
-      full_name: 'Emily Chen',
-      email: 'emily.chen@speechpath.com',
-      phone: '(555) 456-7890',
-      provider_type: 'slp',
-      license_number: 'SLP-2024-001',
-      license_state: 'NY',
-      license_expiry: '2024-03-15',
-      specialties: ['Speech & Language', 'Feeding Therapy'],
-      years_experience: 5,
-      bio: 'Speech-language pathologist specializing in pediatric communication disorders.',
-      status: 'under_review',
-      ai_verification_result: {
-        license_valid: false,
-        license_status: 'expired',
-        name_match: true,
-        confidence_score: 0.45,
-        verification_source: 'Aminy AI Verification System',
-        flags: ['License appears to be expired'],
-        verified_at: new Date().toISOString(),
-      },
-      submitted_at: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-    },
-  ];
 
   const handleApprove = async (appId: string) => {
     setProcessingId(appId);
@@ -358,6 +282,16 @@ export function ProviderApplicationReview({ adminId }: ProviderApplicationReview
         <Card className="p-8 text-center">
           <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-teal-600" />
           <p className="text-neutral-500">Loading applications...</p>
+        </Card>
+      ) : loadError ? (
+        <Card className="p-8 text-center">
+          <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+          <p className="text-neutral-900 dark:text-white font-medium mb-2">Unable to Load Applications</p>
+          <p className="text-neutral-500 dark:text-slate-400 mb-4">{loadError}</p>
+          <Button variant="outline" onClick={loadApplications}>
+            <RefreshCw className="w-4 h-4 mr-2" />
+            Try Again
+          </Button>
         </Card>
       ) : filteredApplications.length === 0 ? (
         <Card className="p-8 text-center">

@@ -37,8 +37,10 @@ import {
 } from '../../types/telehealth';
 import {
   checkTelehealthAvailability72Hours,
-  TelehealthAvailabilityCheck
+  TelehealthAvailabilityCheck,
+  generateSlots
 } from '../../lib/availability-engine';
+import { getProviderSlots } from '../../lib/telehealth-api';
 import { PRICING_MESSAGING } from '../../lib/pricing';
 import { supabase } from '../../utils/supabase/client';
 
@@ -219,49 +221,60 @@ export function BookVisitScreen({
   // CRITICAL: Only show local care options when NO telehealth available within 72 hours
   const shouldShowLocalCareOptions = telehealthAvailability.shouldShowLocalCare;
 
-  // Generate mock slots for each provider
-  const providerSlots = useMemo(() => {
-    const slotsMap: Record<string, TimeSlot[]> = {};
-    const dateStr = selectedDate.toISOString().split('T')[0];
+  // Load real slots from provider availability
+  const [providerSlots, setProviderSlots] = useState<Record<string, TimeSlot[]>>({});
+  const [isLoadingSlots, setIsLoadingSlots] = useState(false);
 
-    availableProviders.forEach(provider => {
-      const slots: TimeSlot[] = [];
-      const slotDuration = VISIT_TYPES[visitType].duration;
+  // Fetch real availability slots for each provider
+  useEffect(() => {
+    async function loadSlots() {
+      if (availableProviders.length === 0) return;
 
-      // Generate 3-6 random slots for demo
-      const slotCount = Math.floor(Math.random() * 4) + 3;
-      const startHour = 9;
-      const usedHours = new Set<number>();
+      setIsLoadingSlots(true);
+      const slotsMap: Record<string, TimeSlot[]> = {};
+      const dateStr = selectedDate.toISOString().split('T')[0];
 
-      for (let i = 0; i < slotCount; i++) {
-        let hour: number;
-        do {
-          hour = startHour + Math.floor(Math.random() * 8);
-        } while (usedHours.has(hour));
-        usedHours.add(hour);
-
-        const startTime = new Date(selectedDate);
-        startTime.setHours(hour, Math.random() > 0.5 ? 0 : 30, 0, 0);
-
-        const endTime = new Date(startTime);
-        endTime.setMinutes(endTime.getMinutes() + slotDuration);
-
-        slots.push({
-          id: `${provider.id}-${dateStr}-${hour}`,
-          providerId: provider.id,
-          startTime: startTime.toISOString(),
-          endTime: endTime.toISOString(),
-          visitType,
-          status: 'available'
-        });
+      try {
+        // Load slots for all providers in parallel
+        await Promise.all(
+          availableProviders.map(async (provider) => {
+            try {
+              // If provider has availability blocks, use them
+              if (provider.availabilityBlocks && provider.availabilityBlocks.length > 0) {
+                const slots = generateSlots(
+                  provider.id,
+                  provider.availabilityBlocks,
+                  provider.timeOffBlocks || [],
+                  visitType,
+                  [],
+                  selectedDate
+                );
+                // Filter to selected date
+                slotsMap[provider.id] = slots.filter(slot =>
+                  slot.startTime.startsWith(dateStr)
+                );
+              } else {
+                // Try API call for slots
+                const slots = await getProviderSlots(provider.id, visitType, selectedDate);
+                slotsMap[provider.id] = slots.filter(slot =>
+                  slot.startTime.startsWith(dateStr)
+                );
+              }
+            } catch (error) {
+              console.error(`Failed to load slots for ${provider.id}:`, error);
+              slotsMap[provider.id] = []; // Empty on error
+            }
+          })
+        );
+      } catch (error) {
+        console.error('Failed to load provider slots:', error);
+      } finally {
+        setProviderSlots(slotsMap);
+        setIsLoadingSlots(false);
       }
+    }
 
-      // Sort by time
-      slots.sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
-      slotsMap[provider.id] = slots;
-    });
-
-    return slotsMap;
+    loadSlots();
   }, [availableProviders, selectedDate, visitType]);
 
   const formatDate = (date: Date) => {
