@@ -170,7 +170,13 @@ export function ErrorDisplay({
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             {onRetry && error?.retryable !== false && (
-              <Button onClick={onRetry}>
+              <Button
+                onClick={() => {
+                  if (onRetry) onRetry();
+                  else window.location.reload();
+                }}
+                className="bg-teal-500 hover:bg-teal-600 text-white"
+              >
                 <RefreshCw className="w-4 h-4 mr-2" />
                 Try again
               </Button>
@@ -178,7 +184,8 @@ export function ErrorDisplay({
 
             <Button
               variant="outline"
-              onClick={() => window.location.href = '/'}
+              onClick={() => window.location.replace('/')}
+              className="border-gray-300"
             >
               Go to Home
               <ChevronRight className="w-4 h-4 ml-1" />

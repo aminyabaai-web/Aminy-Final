@@ -7,6 +7,13 @@ interface LogoProps {
   showTagline?: boolean;
 }
 
+// Crisp text rendering styles
+const crispText: React.CSSProperties = {
+  WebkitFontSmoothing: 'antialiased',
+  MozOsxFontSmoothing: 'grayscale',
+  textRendering: 'optimizeLegibility',
+} as React.CSSProperties;
+
 export function Logo({ size = 'md', showText = true, showTagline = false }: LogoProps) {
   const sizes = {
     sm: { 
@@ -70,14 +77,15 @@ export function Logo({ size = 'md', showText = true, showTagline = false }: Logo
       {showText && (
         <div className="flex flex-col items-start">
           {/* "aminy" Wordmark - Primary Visual Anchor */}
-          <div 
+          <div
             className="text-primary leading-none"
-            style={{ 
-              fontFamily: 'Manrope, system-ui, sans-serif', 
+            style={{
+              fontFamily: 'Manrope, system-ui, sans-serif',
               fontWeight: 700,
               fontSize: currentSize.wordmarkSize,
               letterSpacing: '-0.02em',
-              marginBottom: showTagline ? currentSize.wordmarkTaglineSpacing : '0'
+              marginBottom: showTagline ? currentSize.wordmarkTaglineSpacing : '0',
+              ...crispText,
             }}
           >
             aminy
@@ -85,19 +93,20 @@ export function Logo({ size = 'md', showText = true, showTagline = false }: Logo
           
           {/* Tagline - Left-aligned beneath wordmark for web hierarchy */}
           {showTagline && (
-            <div 
+            <div
               className="leading-tight"
-              style={{ 
+              style={{
                 fontFamily: 'Manrope, system-ui, sans-serif',
                 fontSize: currentSize.taglineSize,
-                fontWeight: 500, /* Increased from 400 for better visibility */
+                fontWeight: 500,
                 letterSpacing: '0.02em',
                 lineHeight: '1.2',
                 textTransform: 'uppercase',
-                color: 'var(--foreground)', /* Increased contrast from muted-foreground */
+                color: 'var(--foreground)',
                 fontStyle: 'italic',
-                opacity: 0.75, /* Reduced opacity slightly for balance */
-                textAlign: 'left' /* Changed from center to left for web hierarchy */
+                opacity: 0.75,
+                textAlign: 'left',
+                ...crispText,
               }}
             >
               <div style={{ marginBottom: '1px' }}>

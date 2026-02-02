@@ -278,43 +278,58 @@ export class RecoverableErrorBoundary extends React.Component<
 const DefaultErrorFallback: React.FC<{ error: Error; reset: () => void }> = ({ error, reset }) => {
   const [showDetails, setShowDetails] = useState(false);
 
+  const handleTryAgain = () => {
+    // Try the reset function first
+    try {
+      reset();
+    } catch (e) {
+      // If reset fails, reload the page
+      window.location.reload();
+    }
+  };
+
+  const handleGoHome = () => {
+    // Force navigation to home
+    window.location.replace('/');
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center p-6 bg-gray-50">
       <div className="max-w-md w-full text-center">
         <div className="w-16 h-16 mx-auto mb-4 sm:mb-6 bg-red-100 rounded-full flex items-center justify-center">
           <AlertTriangle className="w-8 h-8 text-red-600" />
         </div>
-        
+
         <h1 className="text-2xl font-semibold text-gray-900 mb-2">
           Oops! Something went wrong
         </h1>
-        
+
         <p className="text-gray-600 mb-4 sm:mb-6">
-          Don't worry, this happens sometimes. Try refreshing the page or go back to the previous page.
+          Don't worry, this happens sometimes. Try refreshing the page or go back home.
         </p>
 
         <div className="space-y-3">
           <Button
-            onClick={reset}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+            onClick={handleTryAgain}
+            className="w-full bg-teal-500 hover:bg-teal-600 text-white"
           >
             <RefreshCw className="w-4 h-4 mr-2" />
             Try Again
           </Button>
-          
+
           <Button
             variant="outline"
-            onClick={() => window.location.href = '/'}
-            className="w-full"
+            onClick={handleGoHome}
+            className="w-full border-gray-300 hover:bg-gray-100"
           >
             <Home className="w-4 h-4 mr-2" />
             Go to Home
           </Button>
-          
+
           <Button
             variant="ghost"
-            onClick={() => window.location.href = '/care'}
-            className="w-full"
+            onClick={() => window.location.replace('/care')}
+            className="w-full text-gray-600 hover:text-gray-800"
           >
             <MessageCircle className="w-4 h-4 mr-2" />
             Contact Support

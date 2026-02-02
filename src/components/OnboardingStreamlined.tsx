@@ -23,6 +23,7 @@ import {
   Heart,
   Shield,
   Check,
+  Mic,
 } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
@@ -75,6 +76,7 @@ WHAT NOT TO DO:
 - Don't list 5+ strategies (save that for later)
 - Don't be overly formal or clinical
 - Don't start with "I understand" — show understanding through specifics instead
+- NEVER suggest phone calls, video calls, in-person meetings, or scheduling appointments. You are an AI companion.
 
 The parent's name is ${parentName}. Speak to them directly and warmly.`;
 }
@@ -83,15 +85,21 @@ The parent's name is ${parentName}. Speak to them directly and warmly.`;
 function buildFollowUpSystemPrompt(childName: string, childAge: number, parentName: string): string {
   return `You are Aminy, continuing your first conversation with ${parentName} about their ${childAge}-year-old, ${childName}.
 
-You're in onboarding — this is about building trust and showing value. Keep responses focused and warm.
+You're in onboarding — this is about building trust, showing value, and gently guiding them to subscribe.
 
 GOALS:
 1. Acknowledge what they just shared
 2. Build on your previous response
-3. Share ONE more insight or strategy
-4. Either ask a follow-up OR transition naturally toward offering more structured support
+3. Share ONE more insight or strategy that demonstrates your expertise
+4. After 2-3 exchanges, naturally mention that there's so much more you can help with inside the full Aminy experience
 
-Keep it to 2-3 paragraphs. Be warm, specific, and genuinely helpful.`;
+IMPORTANT RULES:
+- NEVER suggest phone calls, video calls, in-person meetings, or scheduling appointments. You are an AI.
+- Keep responses to 2-3 short paragraphs — don't overwhelm them
+- After showing value, gently guide them toward clicking "I'm ready" to continue inside the app
+- Make them excited about what Aminy can do for them, but don't give everything away for free
+
+Keep it warm, specific, and genuinely helpful while building anticipation for the full experience.`;
 }
 
 export function OnboardingStreamlined({ onComplete, initialEmail = '' }: OnboardingStreamlinedProps) {
@@ -119,18 +127,41 @@ export function OnboardingStreamlined({ onComplete, initialEmail = '' }: Onboard
     setData(prev => ({ ...prev, ...updates }));
   };
 
-  // Check if user is already authenticated on mount
+  // Check if user is already authenticated and has existing data
   useEffect(() => {
     const checkAuth = async () => {
       try {
         const { data: { user } } = await supabase.auth.getUser();
         if (user) {
           setIsAuthenticated(true);
-          updateData({
-            email: user.email || '',
-            parentName: user.user_metadata?.full_name || user.user_metadata?.name || '',
-          });
-          setStep(2);
+
+          // Check for existing profile and child data
+          const [profileResult, childResult] = await Promise.all([
+            supabase.from('profiles').select('name, has_completed_onboarding, onboarding_data').eq('id', user.id).single(),
+            supabase.from('children').select('name, age_years').eq('parent_id', user.id).eq('is_primary', true).single()
+          ]);
+
+          const profile = profileResult.data;
+          const child = childResult.data;
+
+          // If user has completed onboarding before, load their data
+          if (profile?.has_completed_onboarding && child) {
+            updateData({
+              email: user.email || '',
+              parentName: profile.name || user.user_metadata?.full_name || user.user_metadata?.name || '',
+              childName: child.name || '',
+              childAge: child.age_years || 0,
+              initialConcern: profile.onboarding_data?.initialConcern || '',
+            });
+            // Skip to step 3 since they already have child info
+            setStep(3);
+          } else {
+            updateData({
+              email: user.email || '',
+              parentName: profile?.name || user.user_metadata?.full_name || user.user_metadata?.name || '',
+            });
+            setStep(2);
+          }
         }
       } catch (e) {
         console.error('Auth check error:', e);
@@ -501,10 +532,11 @@ export function OnboardingStreamlined({ onComplete, initialEmail = '' }: Onboard
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
-                className="flex flex-col h-[calc(100vh-200px)]"
+                className="flex flex-col"
+                style={{ height: 'calc(100vh - 120px)', minHeight: '400px' }}
               >
                 {/* Chat messages */}
-                <div className="flex-1 overflow-y-auto space-y-4 pb-4">
+                <div className="flex-1 overflow-y-auto space-y-4 pb-4 -mx-4 px-4">
                   {/* Initial prompt if no messages yet */}
                   {data.conversationHistory.length === 0 && (
                     <Card className="p-4 bg-gradient-to-br from-teal-50 to-cyan-50 border-teal-200">
@@ -576,31 +608,37 @@ export function OnboardingStreamlined({ onComplete, initialEmail = '' }: Onboard
                   <div ref={messagesEndRef} />
                 </div>
 
-                {/* Input area */}
-                <div className="border-t border-gray-200 pt-4 bg-white">
+                {/* Input area - fixed at bottom */}
+                <div className="border-t border-gray-200 pt-3 pb-2 bg-white sticky bottom-0 -mx-4 px-4">
                   <div className="flex gap-2 items-end">
-                    <textarea
-                      ref={textareaRef}
-                      value={inputValue}
-                      onChange={(e) => setInputValue(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' && !e.shiftKey) {
-                          e.preventDefault();
-                          handleSendMessage();
+                    <div className="flex-1 relative">
+                      <textarea
+                        ref={textareaRef}
+                        value={inputValue}
+                        onChange={(e) => setInputValue(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault();
+                            handleSendMessage();
+                          }
+                        }}
+                        placeholder={
+                          data.conversationHistory.length === 0
+                            ? "Share what's on your mind..."
+                            : "Reply to continue..."
                         }
-                      }}
-                      placeholder={
-                        data.conversationHistory.length === 0
-                          ? "Share what's on your mind..."
-                          : "Reply to continue our conversation..."
-                      }
-                      className="flex-1 px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:border-transparent resize-none transition-all min-h-[48px] max-h-[120px]"
-                      rows={1}
-                    />
+                        className="w-full px-4 py-3 pr-10 rounded-2xl border border-gray-200 bg-gray-50 focus:ring-2 focus:ring-teal-500 focus:border-transparent resize-none transition-all min-h-[48px] max-h-[120px] text-sm"
+                        rows={1}
+                      />
+                      {/* Microphone hint */}
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
+                        <Mic className="w-4 h-4" />
+                      </div>
+                    </div>
                     <Button
                       onClick={handleSendMessage}
                       disabled={!inputValue.trim() || isSendingMessage}
-                      className="h-12 w-12 rounded-xl bg-teal-500 hover:bg-teal-600 text-white disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center transition-colors"
+                      className="h-12 w-12 rounded-xl bg-teal-500 hover:bg-teal-600 text-white disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center transition-colors flex-shrink-0"
                     >
                       {isSendingMessage ? (
                         <Loader2 className="w-5 h-5 animate-spin" />
@@ -609,6 +647,9 @@ export function OnboardingStreamlined({ onComplete, initialEmail = '' }: Onboard
                       )}
                     </Button>
                   </div>
+                  <p className="text-xs text-gray-400 text-center mt-2">
+                    Tap the mic icon on your keyboard to dictate
+                  </p>
 
                   {/* Continue button appears after conversation */}
                   {showContinueButton && data.conversationHistory.length >= 2 && (
@@ -620,7 +661,7 @@ export function OnboardingStreamlined({ onComplete, initialEmail = '' }: Onboard
                       <Button
                         onClick={handleComplete}
                         disabled={isLoading}
-                        className="w-full py-4 rounded-xl font-semibold text-lg bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 text-white transition-all"
+                        className="w-full py-4 rounded-xl font-semibold text-lg bg-teal-500 hover:bg-teal-600 text-white transition-all shadow-sm"
                       >
                         {isLoading ? (
                           <span className="flex items-center justify-center gap-2">
