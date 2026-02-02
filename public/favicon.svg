@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
   <!-- Outer circle -->
-  <circle cx="16" cy="16" r="14" fill="none" stroke="#1a2e3f" stroke-width="2.5"/>
-  <!-- Compass needle - dark navy (pointing upper-left) -->
-  <path d="M16 16 L8 8 L12 14 Z" fill="#1a2e3f"/>
-  <!-- Compass needle - teal (pointing lower-right) -->
-  <path d="M16 16 L24 24 L20 18 Z" fill="#4a7c8c"/>
+  <circle cx="16" cy="16" r="13" fill="none" stroke="#1B3A4B" stroke-width="2.5"/>
+  <!-- Compass needle - dark navy (pointing upper-right) -->
+  <path d="M16 16 L22 7 L18 13 Z" fill="#1B3A4B"/>
+  <!-- Compass needle - teal (pointing lower-left) -->
+  <path d="M16 16 L10 25 L14 19 Z" fill="#5B8A9A"/>
 </svg>
