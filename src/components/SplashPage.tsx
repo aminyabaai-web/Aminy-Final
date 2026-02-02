@@ -5,7 +5,7 @@
 import React, { useEffect } from 'react';
 import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
-import aminyLogoCropped from "../assets/aminy-logo-cropped.png";
+import aminyLogoFull from "../assets/aminy-logo-full.png";
 
 interface SplashPageProps {
   onStartTrial: () => void;
@@ -103,11 +103,10 @@ export function SplashPage({
             }}
           >
             <img
-              src={aminyLogoCropped}
+              src={aminyLogoFull}
               alt="Aminy - Gentle Guidance. Meaningful Progress."
               style={{
-                width: 'min(58vw, 240px)',
-                aspectRatio: '827 / 338',
+                width: 'min(62vw, 260px)',
                 objectFit: 'contain',
               }}
             />
