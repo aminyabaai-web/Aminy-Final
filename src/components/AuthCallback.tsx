@@ -101,58 +101,89 @@ export function AuthCallback({ onAuthSuccess, onPasswordReset, onError }: AuthCa
   return (
     <div
       className="min-h-screen flex flex-col items-center justify-center px-6"
-      style={{ backgroundColor: '#F5F5F5' }}
+      style={{
+        background: 'linear-gradient(135deg, #F8FAFC 0%, #EEF2F7 100%)'
+      }}
     >
-      <div className="text-center max-w-md">
-        <div className="mb-8">
+      {/* Card container */}
+      <div
+        className="w-full max-w-sm bg-white rounded-2xl shadow-lg p-8 text-center"
+        style={{
+          boxShadow: '0 4px 24px rgba(13, 27, 42, 0.08), 0 1px 3px rgba(13, 27, 42, 0.04)'
+        }}
+      >
+        <div className="mb-6">
           <Logo size="md" showTagline={false} />
         </div>
 
         {status === 'processing' && (
-          <div className="flex flex-col items-center gap-3 sm:gap-4">
-            <div
-              className="w-10 h-10 border-3 rounded-full animate-spin"
-              style={{
-                borderColor: 'rgba(87, 117, 144, 0.2)',
-                borderTopColor: '#577590',
-              }}
-            />
-            <p
-              className="text-lg"
-              style={{ color: '#0D1B2A', opacity: 0.7 }}
-            >
-              {message}
-            </p>
+          <div className="flex flex-col items-center gap-5">
+            {/* Premium spinner */}
+            <div className="relative w-14 h-14">
+              <div
+                className="absolute inset-0 rounded-full animate-spin"
+                style={{
+                  border: '3px solid transparent',
+                  borderTopColor: '#577590',
+                  borderRightColor: '#577590',
+                }}
+              />
+              <div
+                className="absolute inset-2 rounded-full animate-pulse"
+                style={{
+                  backgroundColor: 'rgba(87, 117, 144, 0.08)',
+                }}
+              />
+            </div>
+            <div>
+              <p
+                className="text-base font-medium mb-1"
+                style={{ color: '#0D1B2A' }}
+              >
+                {message}
+              </p>
+              <p
+                className="text-sm"
+                style={{ color: '#577590' }}
+              >
+                This will only take a moment
+              </p>
+            </div>
           </div>
         )}
 
         {status === 'success' && (
-          <div className="flex flex-col items-center gap-3 sm:gap-4">
+          <div className="flex flex-col items-center gap-5">
             <div
               className="w-16 h-16 rounded-full flex items-center justify-center"
-              style={{ backgroundColor: 'rgba(76, 175, 80, 0.1)' }}
+              style={{
+                backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                animation: 'scaleIn 0.3s ease-out'
+              }}
             >
               <svg
                 className="w-8 h-8"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="#4CAF50"
-                strokeWidth={2}
+                strokeWidth={2.5}
               >
                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <p
-              className="text-lg font-medium"
-              style={{ color: '#0D1B2A' }}
-            >
-              {message}
-            </p>
+            <div>
+              <p
+                className="text-base font-medium"
+                style={{ color: '#0D1B2A' }}
+              >
+                {message}
+              </p>
+            </div>
           </div>
         )}
 
         {status === 'error' && (
-          <div className="flex flex-col items-center gap-3 sm:gap-4">
+          <div className="flex flex-col items-center gap-5">
             <div
               className="w-16 h-16 rounded-full flex items-center justify-center"
               style={{ backgroundColor: 'rgba(244, 67, 54, 0.1)' }}
@@ -162,26 +193,36 @@ export function AuthCallback({ onAuthSuccess, onPasswordReset, onError }: AuthCa
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="#F44336"
-                strokeWidth={2}
+                strokeWidth={2.5}
               >
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </div>
-            <p
-              className="text-lg"
-              style={{ color: '#F44336' }}
-            >
-              {message}
-            </p>
-            <p
-              className="text-sm"
-              style={{ color: '#0D1B2A', opacity: 0.6 }}
-            >
-              Redirecting you back...
-            </p>
+            <div>
+              <p
+                className="text-base font-medium mb-1"
+                style={{ color: '#F44336' }}
+              >
+                {message}
+              </p>
+              <p
+                className="text-sm"
+                style={{ color: '#577590' }}
+              >
+                Redirecting you back...
+              </p>
+            </div>
           </div>
         )}
       </div>
+
+      {/* Subtle branding footer */}
+      <p
+        className="mt-6 text-xs"
+        style={{ color: 'rgba(13, 27, 42, 0.4)' }}
+      >
+        Secured by Aminy
+      </p>
     </div>
   );
 }
