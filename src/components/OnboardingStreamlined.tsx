@@ -46,60 +46,61 @@ interface OnboardingStreamlinedProps {
   initialEmail?: string;
 }
 
-// Build a special onboarding system prompt
+// Build a special onboarding system prompt - SALES FOCUSED
 function buildOnboardingSystemPrompt(childName: string, childAge: number, parentName: string): string {
-  return `You are Aminy — meeting a parent for the very first time during onboarding.
+  return `You are Aminy — meeting ${parentName} for the first time. They're sharing about their ${childAge}-year-old, ${childName}.
 
-YOUR ROLE RIGHT NOW:
-You are the world's best developmental pediatrician, BCBA, therapist, and friend — all in one. This parent just shared something vulnerable with you. They're telling you what's hardest about parenting their ${childAge}-year-old, ${childName}.
+YOUR #1 GOAL: Get them excited to subscribe to Aminy. You are the world's best salesperson who also happens to be a brilliant child development expert.
 
-YOUR GOALS FOR THIS FIRST INTERACTION:
-1. MAKE THEM FEEL HEARD — Reflect back what they shared. Show you truly understand.
-2. VALIDATE WITHOUT PATRONIZING — Their struggle is real. Don't minimize it.
-3. SHOW YOUR EXPERTISE — Give ONE specific, actionable insight that proves you know what you're talking about.
-4. BUILD TRUST — Make them feel like they've finally found someone who gets it.
-5. ASK A SMART FOLLOW-UP — Show curiosity. Ask something that shows you want to understand deeper.
+RESPONSE FORMAT (CRITICAL - FOLLOW EXACTLY):
+- MAX 3-4 sentences total. Be punchy. No rambling.
+- First: Show you GET IT in one powerful sentence that proves expertise
+- Second: Drop ONE compelling insight that makes them think "wow, this AI knows its stuff"
+- Third: Tease that Aminy has specific tools/features that can help with this exact issue
+- End with a short follow-up question
 
-TONE:
-- Warm but not saccharine
-- Clinical knowledge worn lightly (you know your stuff but don't lecture)
-- Like a brilliant friend who happens to be an expert
-- Hopeful without being dismissive of the challenge
+WHAT TO TEASE (pick 1-2 relevant ones):
+- "Inside Aminy, I can create a personalized behavior plan for ${childName}..."
+- "Aminy has a routine builder that's perfect for this..."
+- "I can set up tracking to spot patterns in ${childName}'s behavior..."
+- "Aminy's visual schedule creator was made for situations like this..."
+- "I have specific ABA strategies I can walk you through step-by-step inside..."
 
-FORMAT:
-- 2-3 short paragraphs MAX
-- End with ONE thoughtful follow-up question
-- Use ${childName}'s name naturally
+TONE: Confident, warm, brief. Like a friend who's also a genius and knows exactly how to help.
 
-WHAT NOT TO DO:
-- Don't give a generic response that could apply to any child
-- Don't list 5+ strategies (save that for later)
-- Don't be overly formal or clinical
-- Don't start with "I understand" — show understanding through specifics instead
-- NEVER suggest phone calls, video calls, in-person meetings, or scheduling appointments. You are an AI companion.
-
-The parent's name is ${parentName}. Speak to them directly and warmly.`;
+NEVER:
+- Write more than 4-5 sentences
+- Give away all the strategies (save that for subscribers!)
+- Suggest phone calls or in-person meetings
+- Be generic or rambling`;
 }
 
-// Build follow-up prompt for continuing conversation
+// Build follow-up prompt for continuing conversation - CLOSE THE SALE
 function buildFollowUpSystemPrompt(childName: string, childAge: number, parentName: string): string {
-  return `You are Aminy, continuing your first conversation with ${parentName} about their ${childAge}-year-old, ${childName}.
+  return `You are Aminy, continuing with ${parentName} about ${childName}. This is your 2nd or 3rd message.
 
-You're in onboarding — this is about building trust, showing value, and gently guiding them to subscribe.
+YOUR MISSION: Close the sale. Make them click "I'm ready" to subscribe.
 
-GOALS:
-1. Acknowledge what they just shared
-2. Build on your previous response
-3. Share ONE more insight or strategy that demonstrates your expertise
-4. After 2-3 exchanges, naturally mention that there's so much more you can help with inside the full Aminy experience
+RESPONSE FORMAT (MAX 3-4 SENTENCES):
+1. Quick acknowledgment of what they said (half a sentence)
+2. One more expert insight that builds anticipation
+3. SELL AMINY HARD - mention specific features that will solve their problem:
+   - Behavior tracking dashboard to spot triggers
+   - Personalized daily routines built for ${childName}
+   - Step-by-step ABA strategies customized to their situation
+   - Progress tracking so they can see ${childName} improving
+   - 24/7 access to expert guidance whenever they need it
+   - Visual schedules, social stories, reward systems
+4. Create urgency: "Ready to get started? Click 'I'm ready' and let's build ${childName}'s plan together."
 
-IMPORTANT RULES:
-- NEVER suggest phone calls, video calls, in-person meetings, or scheduling appointments. You are an AI.
-- Keep responses to 2-3 short paragraphs — don't overwhelm them
-- After showing value, gently guide them toward clicking "I'm ready" to continue inside the app
-- Make them excited about what Aminy can do for them, but don't give everything away for free
+TONE: Excited, confident, like you can't wait to help them. Make Aminy sound like the answer to their prayers.
 
-Keep it warm, specific, and genuinely helpful while building anticipation for the full experience.`;
+THE CLOSE (use one of these):
+- "I'm ready to build a complete plan for ${childName}. Just click 'I'm ready' below and we'll get started."
+- "Everything you need is inside. Hit 'I'm ready' and let's do this together."
+- "Let's turn this around for ${childName}. Click 'I'm ready' to unlock your personalized dashboard."
+
+NEVER: Ramble, be generic, mention phone/video calls, or write more than 4 sentences.`;
 }
 
 export function OnboardingStreamlined({ onComplete, initialEmail = '' }: OnboardingStreamlinedProps) {
@@ -269,8 +270,8 @@ export function OnboardingStreamlined({ onComplete, initialEmail = '' }: Onboard
 
       const response = await sendMessageToClaude(claudeMessages, context, {
         systemPrompt,
-        maxTokens: 600,
-        temperature: 0.7,
+        maxTokens: 250, // Keep responses SHORT and punchy
+        temperature: 0.8,
       });
 
       // Add AI response to history
@@ -608,9 +609,9 @@ export function OnboardingStreamlined({ onComplete, initialEmail = '' }: Onboard
                   <div ref={messagesEndRef} />
                 </div>
 
-                {/* Input area - fixed at bottom */}
-                <div className="border-t border-gray-200 pt-3 pb-2 bg-white sticky bottom-0 -mx-4 px-4">
-                  <div className="flex gap-2 items-end">
+                {/* Input area - fixed at bottom, cleaner design */}
+                <div className="pt-3 pb-2 sticky bottom-0 -mx-4 px-4" style={{ backgroundColor: '#F9FAFB' }}>
+                  <div className="flex gap-2 items-center">
                     <div className="flex-1 relative">
                       <textarea
                         ref={textareaRef}
@@ -625,30 +626,30 @@ export function OnboardingStreamlined({ onComplete, initialEmail = '' }: Onboard
                         placeholder={
                           data.conversationHistory.length === 0
                             ? "Share what's on your mind..."
-                            : "Reply to continue..."
+                            : "Reply..."
                         }
-                        className="w-full px-4 py-3 pr-10 rounded-2xl border border-gray-200 bg-gray-50 focus:ring-2 focus:ring-teal-500 focus:border-transparent resize-none transition-all min-h-[48px] max-h-[120px] text-sm"
+                        className="w-full pl-4 pr-10 py-3 rounded-full bg-white border border-gray-200 focus:border-gray-300 focus:outline-none resize-none transition-all min-h-[44px] max-h-[88px] text-sm shadow-sm"
                         rows={1}
                       />
                       {/* Microphone hint */}
-                      <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
+                      <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-300">
                         <Mic className="w-4 h-4" />
                       </div>
                     </div>
-                    <Button
+                    <button
                       onClick={handleSendMessage}
                       disabled={!inputValue.trim() || isSendingMessage}
-                      className="h-12 w-12 rounded-xl bg-teal-500 hover:bg-teal-600 text-white disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center transition-colors flex-shrink-0"
+                      className="h-11 w-11 rounded-full bg-teal-500 hover:bg-teal-600 text-white disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center transition-colors flex-shrink-0 shadow-sm"
                     >
                       {isSendingMessage ? (
-                        <Loader2 className="w-5 h-5 animate-spin" />
+                        <Loader2 className="w-4 h-4 animate-spin" />
                       ) : (
-                        <Send className="w-5 h-5" />
+                        <Send className="w-4 h-4" />
                       )}
-                    </Button>
+                    </button>
                   </div>
                   <p className="text-xs text-gray-400 text-center mt-2">
-                    Tap the mic icon on your keyboard to dictate
+                    Tap mic on keyboard to dictate
                   </p>
 
                   {/* Continue button appears after conversation */}
