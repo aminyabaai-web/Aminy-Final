@@ -639,7 +639,7 @@ export function OnboardingStreamlined({ onComplete, initialEmail = '' }: Onboard
                 </div>
 
                 {/* Input area - fixed at bottom, cleaner design */}
-                <div className="pt-3 pb-2 sticky bottom-0 -mx-4 px-4" style={{ backgroundColor: '#F9FAFB' }}>
+                <div className="pt-3 pb-2 sticky bottom-0 -mx-4 px-4 bg-white">
                   <div className="flex gap-2 items-center">
                     <div className="flex-1 relative">
                       <textarea
