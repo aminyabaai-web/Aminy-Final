@@ -665,7 +665,7 @@ export default function App() {
 
   const handlePaymentConfirmCancel = useCallback(() => {
     // Open support link
-    window.open('mailto:support@aminy.app?subject=Payment%20Issue', '_blank');
+    window.open('mailto:support@aminy.ai?subject=Payment%20Issue', '_blank');
   }, []);
 
   // ======================================
