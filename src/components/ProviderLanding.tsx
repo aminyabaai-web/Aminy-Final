@@ -153,7 +153,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
       </section>
 
       {/* Provider Types */}
-      <section className="py-16 bg-white dark:bg-slate-900">
+      <section className="py-24 bg-white dark:bg-slate-900">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-neutral-900 dark:text-white">
@@ -185,7 +185,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
       </section>
 
       {/* Features */}
-      <section className="py-16 bg-neutral-50 dark:bg-slate-800">
+      <section className="py-24 bg-neutral-50 dark:bg-slate-800">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-neutral-900 dark:text-white">
@@ -250,7 +250,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
       </section>
 
       {/* How It Works */}
-      <section className="py-20 mt-16 bg-white dark:bg-slate-900">
+      <section className="py-24 bg-white dark:bg-slate-900">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-neutral-900 dark:text-white">
@@ -258,7 +258,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
             </h2>
           </div>
 
-          <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-0">
+          <div className="grid grid-cols-[1fr_auto_1fr_auto_1fr_auto_1fr] items-start gap-y-4 max-w-4xl mx-auto">
             {[
               {
                 title: 'Apply Online',
@@ -282,16 +282,16 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
               },
             ].map(({ title, desc, icon: Icon }, index, arr) => (
               <React.Fragment key={title}>
-                <div className="text-center flex-1 max-w-[200px]">
-                  <div className="w-16 h-16 rounded-full bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center mx-auto mb-4">
-                    <Icon className="w-8 h-8 text-teal-600" />
+                <div className="text-center px-2">
+                  <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center mx-auto mb-3">
+                    <Icon className="w-7 h-7 sm:w-8 sm:h-8 text-teal-600" />
                   </div>
-                  <h3 className="font-semibold text-neutral-900 dark:text-white mb-2">{title}</h3>
-                  <p className="text-neutral-600 dark:text-slate-400 text-sm">{desc}</p>
+                  <h3 className="font-semibold text-neutral-900 dark:text-white mb-1 text-sm sm:text-base">{title}</h3>
+                  <p className="text-neutral-600 dark:text-slate-400 text-xs sm:text-sm">{desc}</p>
                 </div>
                 {index < arr.length - 1 && (
-                  <div className="hidden md:flex items-center justify-center px-4">
-                    <ArrowRight className="w-6 h-6 text-teal-400" />
+                  <div className="flex items-center justify-center pt-4 sm:pt-5">
+                    <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 text-teal-400" />
                   </div>
                 )}
               </React.Fragment>
@@ -301,7 +301,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
       </section>
 
       {/* Earnings Calculator */}
-      <section className="py-20 mt-16 bg-gradient-to-br from-teal-600 to-cyan-600">
+      <section className="py-24 bg-gradient-to-br from-teal-600 to-cyan-600">
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div className="text-white">
@@ -315,11 +315,11 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
                   <CheckCircle className="w-5 h-5 text-teal-200" />
-                  <span>BCBAs earn $120-$175/hour on average</span>
+                  <span>BCBA sessions at $99/session</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <CheckCircle className="w-5 h-5 text-teal-200" />
-                  <span>RBTs earn $25-$45/hour on average</span>
+                  <span>RBT sessions at competitive rates</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <CheckCircle className="w-5 h-5 text-teal-200" />
@@ -338,19 +338,19 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
               </h3>
               <div className="space-y-3">
                 <div className="flex justify-between p-3 bg-neutral-50 dark:bg-slate-700 rounded-lg">
-                  <span className="text-neutral-600 dark:text-slate-400">20 sessions/week @ $150</span>
-                  <span className="font-semibold text-neutral-900 dark:text-white">$3,000</span>
+                  <span className="text-neutral-600 dark:text-slate-400">20 sessions/week @ $99</span>
+                  <span className="font-semibold text-neutral-900 dark:text-white">$1,980</span>
                 </div>
                 <div className="flex justify-between p-3 bg-neutral-50 dark:bg-slate-700 rounded-lg">
                   <span className="text-neutral-600 dark:text-slate-400">Platform fee (15%)</span>
-                  <span className="font-semibold text-red-600">-$450</span>
+                  <span className="font-semibold text-red-600">-$297</span>
                 </div>
                 <div className="flex justify-between p-4 bg-teal-50 dark:bg-teal-900/30 rounded-lg border-2 border-teal-200 dark:border-teal-700">
                   <span className="font-semibold text-teal-800 dark:text-teal-300">Your Weekly Earnings</span>
-                  <span className="text-xl font-bold text-teal-700 dark:text-teal-400">$2,550</span>
+                  <span className="text-xl font-bold text-teal-700 dark:text-teal-400">$1,683</span>
                 </div>
                 <p className="text-center text-neutral-500 dark:text-slate-400 text-sm">
-                  = $10,200/month or $122,400/year
+                  = $6,732/month or $80,784/year
                 </p>
               </div>
             </Card>
@@ -359,7 +359,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
       </section>
 
       {/* Testimonials */}
-      <section className="py-20 mt-16 bg-white dark:bg-slate-900">
+      <section className="py-24 bg-white dark:bg-slate-900">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-neutral-900 dark:text-white">
