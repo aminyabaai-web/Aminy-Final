@@ -3,13 +3,14 @@
  *
  * Simplified tier structure:
  * - Free: Basic AI access (3/day), limited features
- * - Core ($14.99/mo): Unlimited AI, full features, BCBA access at full price
- * - Pro ($29.99/mo): Everything + included BCBA sessions, priority support
+ * - Core ($14.99/mo): Unlimited AI, full features, 10% off sessions
+ * - Pro ($29.99/mo): Everything + 1 included BCBA session, 20% off sessions
  *
- * Key change: BCBA telehealth available on ALL tiers with discounts:
- * - Free: Pay full price ($99/session)
- * - Core: 20% discount ($79/session)
- * - Pro: 1 included/month + 40% discount ($59/session)
+ * Telehealth session pricing (from pricing.ts):
+ * - BCBA Consult (60 min): $149 base
+ * - Free: Full price ($149)
+ * - Core: 10% off ($134)
+ * - Pro: 1 included/month + 20% off ($119)
  */
 
 import React, { useState, useCallback } from 'react';
@@ -73,7 +74,7 @@ const TIER_FEATURES = [
   { name: 'Sleep & Routine Insights', free: false, core: true, pro: true },
   { name: 'Document Vault', free: false, core: '50 docs', pro: 'Unlimited' },
   { name: 'Weekly AI Summary', free: false, core: true, pro: true },
-  { name: 'BCBA Telehealth Access', free: 'Full price', core: '20% off', pro: '1 included + 40% off' },
+  { name: 'BCBA Telehealth Access', free: 'Full price', core: '10% off', pro: '1 included + 20% off' },
   { name: 'Custom Intervention Plans', free: false, core: false, pro: true },
   { name: 'Priority Support', free: false, core: false, pro: true },
 ];
@@ -323,7 +324,7 @@ export function PaywallSimplified({
                     'Full memory of your journey',
                     'Personalized daily strategies',
                     'Sleep & behavior insights',
-                    'BCBA telehealth (20% off)',
+                    'BCBA telehealth (10% off)',
                   ].map((feature) => (
                     <li key={feature} className="flex items-start gap-2 text-gray-700">
                       <Check className="w-4 h-4 text-teal-500 mt-0.5 flex-shrink-0" />
@@ -384,7 +385,7 @@ export function PaywallSimplified({
                   {[
                     'Everything in Core',
                     '1 BCBA session/month included',
-                    'Additional sessions 40% off',
+                    'Additional sessions 20% off',
                     'Custom intervention plans',
                     'Priority support',
                   ].map((feature) => (

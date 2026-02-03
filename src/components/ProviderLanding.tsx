@@ -338,19 +338,19 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
               </h3>
               <div className="space-y-3">
                 <div className="flex justify-between p-3 bg-neutral-50 dark:bg-slate-700 rounded-lg">
-                  <span className="text-neutral-600 dark:text-slate-400">15 consults/week @ $65</span>
-                  <span className="font-semibold text-neutral-900 dark:text-white">$975</span>
+                  <span className="text-neutral-600 dark:text-slate-400">20 consults/week @ $65</span>
+                  <span className="font-semibold text-neutral-900 dark:text-white">$1,300</span>
                 </div>
                 <div className="flex justify-between p-3 bg-neutral-50 dark:bg-slate-700 rounded-lg">
-                  <span className="text-neutral-600 dark:text-slate-400">5 assessments/week @ $95</span>
-                  <span className="font-semibold text-neutral-900 dark:text-white">$475</span>
+                  <span className="text-neutral-600 dark:text-slate-400">10 assessments/week @ $95</span>
+                  <span className="font-semibold text-neutral-900 dark:text-white">$950</span>
                 </div>
                 <div className="flex justify-between p-4 bg-teal-50 dark:bg-teal-900/30 rounded-lg border-2 border-teal-200 dark:border-teal-700">
                   <span className="font-semibold text-teal-800 dark:text-teal-300">Your Weekly Earnings</span>
-                  <span className="text-xl font-bold text-teal-700 dark:text-teal-400">$1,450</span>
+                  <span className="text-xl font-bold text-teal-700 dark:text-teal-400">$2,250</span>
                 </div>
                 <p className="text-center text-neutral-500 dark:text-slate-400 text-sm">
-                  = $5,800/month or $69,600/year
+                  = $9,000/month or $108,000/year
                 </p>
               </div>
             </Card>
