@@ -763,7 +763,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
         {/* Help Section */}
         <Card className="divide-y divide-gray-200 dark:divide-slate-700">
           <button
-            onClick={() => window.open('mailto:support@aminy.care', '_blank')}
+            onClick={() => window.open('mailto:support@aminy.ai', '_blank')}
             className="w-full p-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
           >
             <div className="flex items-center gap-3">

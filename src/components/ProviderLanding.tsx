@@ -48,6 +48,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
               src={aminyLogoCropped}
               alt="Aminy"
               className="h-8 w-auto object-contain"
+              style={{ maxHeight: '32px', maxWidth: '180px' }}
             />
           </button>
           <div className="flex items-center gap-3">
