@@ -232,7 +232,7 @@ export function LoginScreen({
               alt="Aminy"
               style={{
                 width: 'min(45vw, 160px)',
-                height: 'auto',
+                aspectRatio: '827 / 338',
                 objectFit: 'contain',
               }}
             />
@@ -657,26 +657,33 @@ export function LoginScreen({
           </motion.form>
 
           {/* Create Account Link */}
-          <motion.p
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.4, delay: 0.35 }}
             style={{
               textAlign: 'center',
               marginTop: '28px',
-              color: 'rgba(17, 24, 39, 0.5)',
-              fontSize: '14px',
-              ...fontSmoothing,
             }}
           >
-            Don't have an account?{' '}
+            <span
+              style={{
+                color: 'rgba(17, 24, 39, 0.5)',
+                fontSize: '14px',
+                ...fontSmoothing,
+              }}
+            >
+              Don't have an account?
+            </span>{' '}
             <button
               onClick={onCreateAccount}
               disabled={isLoading}
               style={{
                 background: 'none',
                 border: 'none',
+                padding: 0,
                 color: '#5a7380',
+                fontSize: '14px',
                 fontWeight: 500,
                 cursor: 'pointer',
                 textDecoration: 'underline',
@@ -690,7 +697,7 @@ export function LoginScreen({
             >
               Create one
             </button>
-          </motion.p>
+          </motion.div>
 
           {/* Trust Badges */}
           <motion.div

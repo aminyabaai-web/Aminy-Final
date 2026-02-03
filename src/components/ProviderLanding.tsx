@@ -9,7 +9,8 @@ import React from 'react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
-import { Logo } from './Logo';
+import aminyLogoCropped from "../assets/aminy-logo-cropped.png";
+import compassImage from "figma:asset/2e39d2a71ccd340d3accf6a7d306e6a6a6781942.png";
 import {
   ArrowRight,
   CheckCircle,
@@ -43,7 +44,11 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
       <header className="bg-white dark:bg-slate-900 border-b border-neutral-200 dark:border-slate-700 sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <button onClick={onBack} className="flex items-center gap-2">
-            <Logo size="md" showText />
+            <img
+              src={aminyLogoCropped}
+              alt="Aminy"
+              className="h-8 w-auto object-contain"
+            />
           </button>
           <div className="flex items-center gap-3">
             <Button variant="ghost" onClick={onLogin}>
@@ -442,14 +447,21 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
       {/* Footer */}
       <footer className="bg-neutral-900 dark:bg-slate-900 border-t border-neutral-800 py-8">
         <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between">
-          <div className="flex items-center gap-2 mb-4 sm:mb-0">
-            <Logo size="sm" showText={false} />
+          <div className="flex items-center gap-3 mb-4 sm:mb-0">
+            <div className="w-7 h-7 rounded-full overflow-hidden bg-white flex items-center justify-center">
+              <img
+                src={compassImage}
+                alt="Aminy"
+                className="w-[130%] h-[130%] object-contain"
+                style={{ transform: 'scale(1.15)' }}
+              />
+            </div>
             <span className="text-neutral-400">Aminy for Providers</span>
           </div>
           <div className="flex gap-6 text-sm text-neutral-500">
-            <a href="#" className="hover:text-white">Privacy Policy</a>
-            <a href="#" className="hover:text-white">Terms of Service</a>
-            <a href="#" className="hover:text-white">Contact</a>
+            <a href="/?screen=privacy-policy" className="hover:text-white">Privacy Policy</a>
+            <a href="/?screen=terms-of-service" className="hover:text-white">Terms of Service</a>
+            <a href="mailto:providers@aminy.co" className="hover:text-white">Contact</a>
           </div>
         </div>
       </footer>
