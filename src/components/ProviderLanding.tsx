@@ -446,22 +446,27 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
 
       {/* Footer */}
       <footer className="bg-neutral-900 dark:bg-slate-900 border-t border-neutral-800 py-8">
-        <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between">
-          <div className="flex items-center gap-3 mb-4 sm:mb-0">
-            <div className="w-7 h-7 rounded-full overflow-hidden bg-white flex items-center justify-center">
-              <img
-                src={compassImage}
-                alt="Aminy"
-                className="w-[130%] h-[130%] object-contain"
-                style={{ transform: 'scale(1.15)' }}
-              />
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="flex flex-col sm:flex-row items-center justify-between mb-6">
+            <div className="flex items-center gap-3 mb-4 sm:mb-0">
+              <div className="w-7 h-7 rounded-full overflow-hidden bg-white flex items-center justify-center">
+                <img
+                  src={compassImage}
+                  alt="Aminy"
+                  className="w-[130%] h-[130%] object-contain"
+                  style={{ transform: 'scale(1.15)' }}
+                />
+              </div>
+              <span className="text-neutral-400">Aminy for Providers</span>
             </div>
-            <span className="text-neutral-400">Aminy for Providers</span>
+            <div className="flex gap-6 text-sm text-neutral-500">
+              <a href="/?screen=privacy-policy" className="hover:text-white">Privacy Policy</a>
+              <a href="/?screen=terms-of-service" className="hover:text-white">Terms of Service</a>
+              <a href="mailto:providers@aminy.co" className="hover:text-white">Contact</a>
+            </div>
           </div>
-          <div className="flex gap-6 text-sm text-neutral-500">
-            <a href="/?screen=privacy-policy" className="hover:text-white">Privacy Policy</a>
-            <a href="/?screen=terms-of-service" className="hover:text-white">Terms of Service</a>
-            <a href="mailto:providers@aminy.co" className="hover:text-white">Contact</a>
+          <div className="text-center text-xs text-neutral-600 pt-4 border-t border-neutral-800">
+            © {new Date().getFullYear()} Aminy, Inc. All rights reserved.
           </div>
         </div>
       </footer>

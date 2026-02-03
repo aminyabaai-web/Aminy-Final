@@ -461,7 +461,7 @@ export function B2BPartnerPortal({
       {/* Footer */}
       <footer className="py-8 px-4 bg-gray-900 text-gray-400">
         <div className="max-w-4xl mx-auto text-center text-sm">
-          <p>© 2025 Aminy. Enterprise solutions for autism support.</p>
+          <p>© {new Date().getFullYear()} Aminy, Inc. All rights reserved.</p>
         </div>
       </footer>
     </div>

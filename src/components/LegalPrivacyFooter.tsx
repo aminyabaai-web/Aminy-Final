@@ -145,7 +145,7 @@ export function LegalPrivacyFooter({
           </div>
           
           <p className="text-xs text-slate-400 mt-4">
-            © 2024 Aminy. All rights reserved. Made with 💙 for families navigating neurodivergence.
+            © {new Date().getFullYear()} Aminy, Inc. All rights reserved.
           </p>
         </div>
       </div>
