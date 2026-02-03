@@ -126,15 +126,16 @@ export function AuthCallback({ onAuthSuccess, onPasswordReset, onError }: AuthCa
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        style={{ marginBottom: '48px' }}
+        style={{ marginBottom: '48px', overflow: 'hidden' }}
       >
         <img
           src={aminyLogoCropped}
           alt="Aminy"
           style={{
-            width: '140px',
+            width: '200px',
             aspectRatio: '827 / 338',
             objectFit: 'contain',
+            transform: 'scale(1.25)',
           }}
         />
       </motion.div>
