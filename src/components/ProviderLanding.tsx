@@ -43,7 +43,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
       <header className="bg-white dark:bg-slate-900 border-b border-neutral-200 dark:border-slate-700 sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <button onClick={onBack} className="flex items-center gap-2">
-            <Logo size={36} showText />
+            <Logo size="md" showText />
           </button>
           <div className="flex items-center gap-3">
             <Button variant="ghost" onClick={onLogin}>
@@ -443,7 +443,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
       <footer className="bg-neutral-900 dark:bg-slate-900 border-t border-neutral-800 py-8">
         <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between">
           <div className="flex items-center gap-2 mb-4 sm:mb-0">
-            <Logo size={28} showText={false} />
+            <Logo size="sm" showText={false} />
             <span className="text-neutral-400">Aminy for Providers</span>
           </div>
           <div className="flex gap-6 text-sm text-neutral-500">

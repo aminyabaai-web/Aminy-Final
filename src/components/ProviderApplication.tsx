@@ -265,7 +265,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
         <header className="bg-white dark:bg-slate-900 border-b border-neutral-200 dark:border-slate-700 sticky top-0 z-50">
           <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Logo size={32} showText={false} />
+              <Logo size="sm" showText={false} />
               <span className="text-lg font-semibold text-neutral-900 dark:text-white">Provider Application</span>
             </div>
             <Button variant="ghost" onClick={onBack}>
@@ -367,7 +367,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
       <div className="min-h-screen bg-gradient-to-b from-teal-50 to-white dark:from-slate-900 dark:to-slate-800">
         <header className="bg-white dark:bg-slate-900 border-b border-neutral-200 dark:border-slate-700 sticky top-0 z-50">
           <div className="max-w-4xl mx-auto px-4 py-4 flex items-center">
-            <Logo size={32} showText={false} />
+            <Logo size="sm" showText={false} />
             <span className="text-lg font-semibold text-neutral-900 dark:text-white ml-3">Provider Application</span>
           </div>
         </header>
@@ -414,7 +414,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
       <header className="bg-white dark:bg-slate-900 border-b border-neutral-200 dark:border-slate-700 sticky top-0 z-50">
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Logo size={32} showText={false} />
+            <Logo size="sm" showText={false} />
             <span className="text-lg font-semibold text-neutral-900 dark:text-white">Provider Application</span>
           </div>
           <Button variant="ghost" onClick={onBack}>

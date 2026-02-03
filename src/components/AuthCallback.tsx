@@ -1,15 +1,17 @@
 /**
  * AuthCallback - Handles OAuth redirects and password reset tokens
  *
- * This component handles:
+ * Premium, calm design matching the app's aesthetic.
+ * Handles:
  * 1. OAuth callbacks from Google/Apple sign-in
  * 2. Password reset token processing
  * 3. Email confirmation redirects
  */
 
 import React, { useEffect, useState } from 'react';
+import { motion } from 'motion/react';
 import { supabase } from '../utils/supabase/client';
-import { Logo } from './Logo';
+import aminyLogoCropped from "../assets/aminy-logo-cropped.png";
 
 interface AuthCallbackProps {
   onAuthSuccess: (email: string) => void;
@@ -17,9 +19,18 @@ interface AuthCallbackProps {
   onError: (message: string) => void;
 }
 
+const fontStack = 'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", "Helvetica Neue", Arial, "Noto Sans", sans-serif';
+
+const fontSmoothing: React.CSSProperties = {
+  WebkitFontSmoothing: 'antialiased',
+  MozOsxFontSmoothing: 'grayscale',
+  textRendering: 'geometricPrecision',
+} as React.CSSProperties;
+
 export function AuthCallback({ onAuthSuccess, onPasswordReset, onError }: AuthCallbackProps) {
   const [status, setStatus] = useState<'processing' | 'success' | 'error'>('processing');
-  const [message, setMessage] = useState('Processing your request...');
+  const [message, setMessage] = useState('Signing you in');
+  const [subMessage, setSubMessage] = useState('Please wait a moment...');
 
   useEffect(() => {
     const handleCallback = async () => {
@@ -40,12 +51,12 @@ export function AuthCallback({ onAuthSuccess, onPasswordReset, onError }: AuthCa
         const type = hashParams.get('type') || queryParams.get('type');
 
         if (type === 'recovery') {
-          setMessage('Redirecting to password reset...');
+          setMessage('Password reset ready');
+          setSubMessage('Taking you to reset your password...');
           setStatus('success');
-          // Give user a moment to see the message
           setTimeout(() => {
             onPasswordReset();
-          }, 1000);
+          }, 1200);
           return;
         }
 
@@ -58,11 +69,12 @@ export function AuthCallback({ onAuthSuccess, onPasswordReset, onError }: AuthCa
         }
 
         if (session?.user) {
-          setMessage('Sign in successful! Redirecting...');
+          setMessage('Welcome back');
+          setSubMessage('Preparing your dashboard...');
           setStatus('success');
           setTimeout(() => {
             onAuthSuccess(session.user.email || '');
-          }, 1000);
+          }, 1200);
         } else {
           // No session and no error - might be email confirmation
           const accessToken = hashParams.get('access_token');
@@ -73,11 +85,12 @@ export function AuthCallback({ onAuthSuccess, onPasswordReset, onError }: AuthCa
               throw refreshError;
             }
             if (data.session?.user) {
-              setMessage('Email confirmed! Redirecting...');
+              setMessage('Email confirmed');
+              setSubMessage('Your account is ready...');
               setStatus('success');
               setTimeout(() => {
                 onAuthSuccess(data.session.user.email || '');
-              }, 1000);
+              }, 1200);
               return;
             }
           }
@@ -87,11 +100,12 @@ export function AuthCallback({ onAuthSuccess, onPasswordReset, onError }: AuthCa
         }
       } catch (err: any) {
         console.error('Auth callback error:', err);
-        setMessage(err.message || 'An error occurred during sign in.');
+        setMessage('Something went wrong');
+        setSubMessage(err.message || 'Please try signing in again.');
         setStatus('error');
         setTimeout(() => {
           onError(err.message || 'Authentication failed');
-        }, 2000);
+        }, 2500);
       }
     };
 
@@ -100,129 +114,255 @@ export function AuthCallback({ onAuthSuccess, onPasswordReset, onError }: AuthCa
 
   return (
     <div
-      className="min-h-screen flex flex-col items-center justify-center px-6"
+      className="min-h-screen min-h-[100dvh] flex flex-col items-center justify-center px-6"
       style={{
-        background: 'linear-gradient(135deg, #F8FAFC 0%, #EEF2F7 100%)'
+        backgroundColor: '#F8F8F6',
+        fontFamily: fontStack,
+        ...fontSmoothing,
       }}
     >
-      {/* Card container */}
-      <div
-        className="w-full max-w-sm bg-white rounded-2xl shadow-lg p-8 text-center"
+      {/* Logo */}
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        style={{ marginBottom: '48px' }}
+      >
+        <img
+          src={aminyLogoCropped}
+          alt="Aminy"
+          style={{
+            width: '140px',
+            height: 'auto',
+            objectFit: 'contain',
+          }}
+        />
+      </motion.div>
+
+      {/* Status Card */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
         style={{
-          boxShadow: '0 4px 24px rgba(13, 27, 42, 0.08), 0 1px 3px rgba(13, 27, 42, 0.04)'
+          width: '100%',
+          maxWidth: '320px',
+          textAlign: 'center',
         }}
       >
-        <div className="mb-6">
-          <Logo size="md" showTagline={false} />
-        </div>
-
-        {status === 'processing' && (
-          <div className="flex flex-col items-center gap-5">
-            {/* Premium spinner */}
-            <div className="relative w-14 h-14">
-              <div
-                className="absolute inset-0 rounded-full animate-spin"
-                style={{
-                  border: '3px solid transparent',
-                  borderTopColor: '#577590',
-                  borderRightColor: '#577590',
-                }}
-              />
-              <div
-                className="absolute inset-2 rounded-full animate-pulse"
-                style={{
-                  backgroundColor: 'rgba(87, 117, 144, 0.08)',
-                }}
-              />
-            </div>
-            <div>
-              <p
-                className="text-base font-medium mb-1"
-                style={{ color: '#0D1B2A' }}
-              >
-                {message}
-              </p>
-              <p
-                className="text-sm"
-                style={{ color: '#577590' }}
-              >
-                This will only take a moment
-              </p>
-            </div>
-          </div>
-        )}
-
-        {status === 'success' && (
-          <div className="flex flex-col items-center gap-5">
+        {/* Status Icon */}
+        <motion.div
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.4, delay: 0.2 }}
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            marginBottom: '28px',
+          }}
+        >
+          {status === 'processing' && (
             <div
-              className="w-16 h-16 rounded-full flex items-center justify-center"
               style={{
-                backgroundColor: 'rgba(76, 175, 80, 0.1)',
-                animation: 'scaleIn 0.3s ease-out'
+                width: '56px',
+                height: '56px',
+                position: 'relative',
+              }}
+            >
+              {/* Outer spinning ring */}
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 1.2, repeat: Infinity, ease: 'linear' }}
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  borderRadius: '50%',
+                  border: '2.5px solid transparent',
+                  borderTopColor: '#5a7380',
+                  borderRightColor: 'rgba(90, 115, 128, 0.3)',
+                }}
+              />
+              {/* Inner pulsing circle */}
+              <motion.div
+                animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.5, 0.3] }}
+                transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+                style={{
+                  position: 'absolute',
+                  inset: '12px',
+                  borderRadius: '50%',
+                  backgroundColor: 'rgba(90, 115, 128, 0.15)',
+                }}
+              />
+            </div>
+          )}
+
+          {status === 'success' && (
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: 'spring', stiffness: 200, damping: 15 }}
+              style={{
+                width: '56px',
+                height: '56px',
+                borderRadius: '50%',
+                backgroundColor: 'rgba(76, 175, 80, 0.12)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <motion.svg
+                initial={{ pathLength: 0, opacity: 0 }}
+                animate={{ pathLength: 1, opacity: 1 }}
+                transition={{ duration: 0.4, delay: 0.2 }}
+                width="28"
+                height="28"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#4CAF50"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <motion.path
+                  initial={{ pathLength: 0 }}
+                  animate={{ pathLength: 1 }}
+                  transition={{ duration: 0.4, delay: 0.2 }}
+                  d="M5 13l4 4L19 7"
+                />
+              </motion.svg>
+            </motion.div>
+          )}
+
+          {status === 'error' && (
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: 'spring', stiffness: 200, damping: 15 }}
+              style={{
+                width: '56px',
+                height: '56px',
+                borderRadius: '50%',
+                backgroundColor: 'rgba(239, 68, 68, 0.12)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
             >
               <svg
-                className="w-8 h-8"
-                fill="none"
+                width="24"
+                height="24"
                 viewBox="0 0 24 24"
-                stroke="#4CAF50"
-                strokeWidth={2.5}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-            <div>
-              <p
-                className="text-base font-medium"
-                style={{ color: '#0D1B2A' }}
-              >
-                {message}
-              </p>
-            </div>
-          </div>
-        )}
-
-        {status === 'error' && (
-          <div className="flex flex-col items-center gap-5">
-            <div
-              className="w-16 h-16 rounded-full flex items-center justify-center"
-              style={{ backgroundColor: 'rgba(244, 67, 54, 0.1)' }}
-            >
-              <svg
-                className="w-8 h-8"
                 fill="none"
-                viewBox="0 0 24 24"
-                stroke="#F44336"
-                strokeWidth={2.5}
+                stroke="#EF4444"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
               </svg>
-            </div>
-            <div>
-              <p
-                className="text-base font-medium mb-1"
-                style={{ color: '#F44336' }}
-              >
-                {message}
-              </p>
-              <p
-                className="text-sm"
-                style={{ color: '#577590' }}
-              >
-                Redirecting you back...
-              </p>
-            </div>
-          </div>
-        )}
-      </div>
+            </motion.div>
+          )}
+        </motion.div>
 
-      {/* Subtle branding footer */}
-      <p
-        className="mt-6 text-xs"
-        style={{ color: 'rgba(13, 27, 42, 0.4)' }}
+        {/* Message */}
+        <motion.h1
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, delay: 0.3 }}
+          style={{
+            color: status === 'error' ? '#DC2626' : 'rgba(17, 24, 39, 0.88)',
+            fontFamily: fontStack,
+            fontWeight: 600,
+            fontSize: '20px',
+            letterSpacing: '-0.01em',
+            marginBottom: '8px',
+            ...fontSmoothing,
+          }}
+        >
+          {message}
+        </motion.h1>
+
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, delay: 0.4 }}
+          style={{
+            color: 'rgba(17, 24, 39, 0.5)',
+            fontFamily: fontStack,
+            fontWeight: 400,
+            fontSize: '14px',
+            lineHeight: 1.5,
+            ...fontSmoothing,
+          }}
+        >
+          {subMessage}
+        </motion.p>
+
+        {/* Progress bar for processing state */}
+        {status === 'processing' && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4, delay: 0.5 }}
+            style={{
+              marginTop: '32px',
+              height: '3px',
+              backgroundColor: 'rgba(90, 115, 128, 0.15)',
+              borderRadius: '2px',
+              overflow: 'hidden',
+            }}
+          >
+            <motion.div
+              initial={{ x: '-100%' }}
+              animate={{ x: '100%' }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+              style={{
+                height: '100%',
+                width: '40%',
+                backgroundColor: '#5a7380',
+                borderRadius: '2px',
+              }}
+            />
+          </motion.div>
+        )}
+      </motion.div>
+
+      {/* Subtle footer with badge styling */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6, delay: 0.6 }}
+        style={{
+          position: 'absolute',
+          bottom: '32px',
+          display: 'flex',
+          gap: '8px',
+        }}
       >
-        Secured by Aminy
-      </p>
+        {['Secure', 'Private', 'HIPAA-Conscious'].map((text) => (
+          <span
+            key={text}
+            style={{
+              display: 'inline-block',
+              padding: '4px 10px',
+              backgroundColor: 'rgba(255, 255, 255, 0.5)',
+              border: '1px solid rgba(17, 24, 39, 0.04)',
+              borderRadius: '10px',
+              color: 'rgba(17, 24, 39, 0.35)',
+              fontFamily: fontStack,
+              fontSize: '10px',
+              fontWeight: 450,
+              letterSpacing: '0.01em',
+              ...fontSmoothing,
+            }}
+          >
+            {text}
+          </span>
+        ))}
+      </motion.div>
     </div>
   );
 }

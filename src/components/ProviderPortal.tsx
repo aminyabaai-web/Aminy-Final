@@ -443,7 +443,7 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-3 sm:gap-4">
-              <Logo size={32} showText={false} />
+              <Logo size="sm" showText={false} />
               <div className="flex items-center gap-2">
                 <span className="text-lg font-semibold text-neutral-900 dark:text-white">Provider Portal</span>
                 <Badge className="bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400 font-medium">
