@@ -10,6 +10,7 @@ import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import compassImage from "figma:asset/2e39d2a71ccd340d3accf6a7d306e6a6a6781942.png";
+import aminyLogoCropped from "../assets/aminy-logo-cropped.png";
 import {
   ArrowRight,
   CheckCircle,
@@ -43,16 +44,17 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
       <header className="bg-white dark:bg-slate-900 border-b border-neutral-200 dark:border-slate-700 sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <button onClick={onBack} className="flex items-center gap-2">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full overflow-hidden bg-white flex items-center justify-center">
-                <img
-                  src={compassImage}
-                  alt="Aminy"
-                  className="w-[130%] h-[130%] object-contain"
-                  style={{ transform: 'scale(1.15)' }}
-                />
-              </div>
-              <span className="text-xl font-bold text-neutral-900 dark:text-white">aminy</span>
+            <div style={{ overflow: 'hidden', height: '36px', display: 'flex', alignItems: 'center' }}>
+              <img
+                src={aminyLogoCropped}
+                alt="Aminy"
+                style={{
+                  height: '44px',
+                  width: 'auto',
+                  objectFit: 'contain',
+                  transform: 'scale(1.3)',
+                }}
+              />
             </div>
           </button>
           <div className="flex items-center gap-3">
@@ -312,64 +314,62 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
 
       {/* Earnings Calculator */}
       <section className="py-24 bg-gradient-to-br from-teal-600 to-cyan-600">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div className="text-white">
-              <h2 className="text-3xl font-bold mb-4">
-                Earn What You're Worth
-              </h2>
-              <p className="text-teal-100 text-lg mb-6">
-                We offer competitive, standardized rates based on your credential type
-                and session length. Transparent pricing with no hidden costs.
-              </p>
-              <div className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <CheckCircle className="w-5 h-5 text-teal-200" />
-                  <span>BCBAs earn $65–$95 per session</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <CheckCircle className="w-5 h-5 text-teal-200" />
-                  <span>RBTs earn $20–$38 per session</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <CheckCircle className="w-5 h-5 text-teal-200" />
-                  <span>Weekly automatic payouts</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <CheckCircle className="w-5 h-5 text-teal-200" />
-                  <span>No monthly fees or minimums</span>
-                </div>
-              </div>
+        <div className="max-w-3xl mx-auto px-4">
+          <div className="text-center text-white mb-10">
+            <h2 className="text-3xl font-bold mb-4">
+              Earn What You're Worth
+            </h2>
+            <p className="text-teal-100 text-lg mb-6">
+              We offer competitive, standardized rates based on your credential type
+              and session length. Transparent pricing with no hidden costs.
+            </p>
+            <div className="flex flex-wrap justify-center gap-x-8 gap-y-3">
+              <span className="flex items-center gap-2">
+                <CheckCircle className="w-5 h-5 text-teal-200" />
+                BCBAs earn $65–$95 per session
+              </span>
+              <span className="flex items-center gap-2">
+                <CheckCircle className="w-5 h-5 text-teal-200" />
+                RBTs earn $20–$38 per session
+              </span>
+              <span className="flex items-center gap-2">
+                <CheckCircle className="w-5 h-5 text-teal-200" />
+                Weekly automatic payouts
+              </span>
+              <span className="flex items-center gap-2">
+                <CheckCircle className="w-5 h-5 text-teal-200" />
+                No monthly fees or minimums
+              </span>
             </div>
-
-            <Card className="p-6 bg-white dark:bg-slate-800">
-              <h3 className="font-semibold text-neutral-900 dark:text-white mb-4">
-                BCBA Earnings Example
-              </h3>
-              <div className="space-y-3">
-                <div className="flex justify-between p-3 bg-neutral-50 dark:bg-slate-700 rounded-lg">
-                  <span className="text-neutral-600 dark:text-slate-400">20 consults/week @ $65</span>
-                  <span className="font-semibold text-neutral-900 dark:text-white">$1,300</span>
-                </div>
-                <div className="flex justify-between p-3 bg-neutral-50 dark:bg-slate-700 rounded-lg">
-                  <span className="text-neutral-600 dark:text-slate-400">10 assessments/week @ $95</span>
-                  <span className="font-semibold text-neutral-900 dark:text-white">$950</span>
-                </div>
-                <div className="flex justify-between p-4 bg-teal-50 dark:bg-teal-900/30 rounded-lg border-2 border-teal-200 dark:border-teal-700">
-                  <span className="font-semibold text-teal-800 dark:text-teal-300">Your Weekly Earnings</span>
-                  <span className="text-xl font-bold text-teal-700 dark:text-teal-400">$2,250</span>
-                </div>
-                <p className="text-center text-neutral-500 dark:text-slate-400 text-sm">
-                  = $9,000/month or $108,000/year
-                </p>
-              </div>
-            </Card>
           </div>
+
+          <Card className="p-6 bg-white dark:bg-slate-800 max-w-lg mx-auto">
+            <h3 className="font-semibold text-neutral-900 dark:text-white mb-4 text-center">
+              BCBA Earnings Example
+            </h3>
+            <div className="space-y-3">
+              <div className="flex justify-between p-3 bg-neutral-50 dark:bg-slate-700 rounded-lg">
+                <span className="text-neutral-600 dark:text-slate-400">20 consults/week @ $65</span>
+                <span className="font-semibold text-neutral-900 dark:text-white">$1,300</span>
+              </div>
+              <div className="flex justify-between p-3 bg-neutral-50 dark:bg-slate-700 rounded-lg">
+                <span className="text-neutral-600 dark:text-slate-400">10 assessments/week @ $95</span>
+                <span className="font-semibold text-neutral-900 dark:text-white">$950</span>
+              </div>
+              <div className="flex justify-between p-4 bg-teal-50 dark:bg-teal-900/30 rounded-lg border-2 border-teal-200 dark:border-teal-700">
+                <span className="font-semibold text-teal-800 dark:text-teal-300">Your Weekly Earnings</span>
+                <span className="text-xl font-bold text-teal-700 dark:text-teal-400">$2,250</span>
+              </div>
+              <p className="text-center text-neutral-500 dark:text-slate-400 text-sm">
+                = $9,000/month or $108,000/year
+              </p>
+            </div>
+          </Card>
         </div>
       </section>
 
       {/* Testimonials */}
-      <section className="pt-32 pb-24 bg-white dark:bg-slate-900">
+      <section className="pt-40 pb-24 bg-white dark:bg-slate-900">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-neutral-900 dark:text-white">
