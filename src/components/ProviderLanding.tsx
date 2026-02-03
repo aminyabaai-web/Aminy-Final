@@ -249,7 +249,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
       </section>
 
       {/* How It Works */}
-      <section className="py-20 mt-8 bg-white dark:bg-slate-900">
+      <section className="py-20 mt-16 bg-white dark:bg-slate-900">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-neutral-900 dark:text-white">
@@ -300,7 +300,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
       </section>
 
       {/* Earnings Calculator */}
-      <section className="py-20 mt-8 bg-gradient-to-br from-teal-600 to-cyan-600">
+      <section className="py-20 mt-16 bg-gradient-to-br from-teal-600 to-cyan-600">
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div className="text-white">
@@ -308,8 +308,8 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
                 Earn What You're Worth
               </h2>
               <p className="text-teal-100 text-lg mb-6">
-                Competitive rates based on your credentials and experience. Our platform fee is a simple 15%
-                with no hidden costs.
+                We offer competitive, standardized rates based on your credential type.
+                Our platform fee is a simple 15% with no hidden costs.
               </p>
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
@@ -358,7 +358,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
       </section>
 
       {/* Testimonials */}
-      <section className="py-20 mt-8 bg-white dark:bg-slate-900">
+      <section className="py-20 mt-16 bg-white dark:bg-slate-900">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-neutral-900 dark:text-white">
@@ -421,14 +421,16 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
             Join our growing network of verified providers and help families get the support they need.
             Applications are reviewed within 24-48 hours.
           </p>
-          <Button
-            size="lg"
-            className="bg-teal-600 hover:bg-teal-700 text-lg px-8"
-            onClick={onApply}
-          >
-            Apply Now - It's Free
-            <ArrowRight className="w-5 h-5 ml-2" />
-          </Button>
+          <div className="inline-flex">
+            <Button
+              size="lg"
+              className="bg-teal-600 hover:bg-teal-700 text-lg px-8"
+              onClick={onApply}
+            >
+              Apply Now - It's Free
+              <ArrowRight className="w-5 h-5 ml-2" />
+            </Button>
+          </div>
           <p className="text-neutral-500 text-sm mt-6">
             Questions? Contact us at <a href="mailto:providers@aminy.ai" className="text-teal-400 hover:underline">providers@aminy.ai</a>
           </p>
