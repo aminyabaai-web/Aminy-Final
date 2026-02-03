@@ -526,9 +526,9 @@ Continuous Monitoring:
 
 ## Appendix A: Contact Information
 
-**Security Incidents:** security@aminy.care
-**Privacy Questions:** privacy@aminy.care
-**Compliance Inquiries:** compliance@aminy.care
+**Security Incidents:** security@aminy.ai
+**Privacy Questions:** privacy@aminy.ai
+**Compliance Inquiries:** compliance@aminy.ai
 
 **Emergency Hotline:** Available to authorized personnel
 

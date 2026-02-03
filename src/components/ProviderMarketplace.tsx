@@ -4,10 +4,10 @@
  * Premium marketplace experience for booking provider sessions.
  * Positions providers as "guides" who help families navigate the journey.
  *
- * Provider Types:
- * - Behavioral Team: BCBA ($99), RBT ($49)
- * - Therapy Team: LPC ($99), LCSW ($99), SLP ($89), OT ($99)
- * - Medical Team: Psychiatrist ($275 initial, $150 follow-up), Dev Pediatrician ($350/$175)
+ * Provider Types & Base Prices (see pricing.ts for source of truth):
+ * - Behavioral Team: BCBA ($79-$219), RBT ($49-$89)
+ * - Therapy Team: LPC/LCSW ($129-$159), SLP ($129), OT ($129)
+ * - Diagnostic: Autism Eval ($899), ADHD Eval ($399), Combined ($1,199)
  *
  * Features:
  * - OpenTable-style availability booking

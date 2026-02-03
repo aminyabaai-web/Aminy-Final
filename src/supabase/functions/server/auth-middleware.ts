@@ -84,7 +84,6 @@ const TIER_FEATURES: Record<TierType, Set<string>> = {
     'multi-child',
     'marketplace-access',
     'care-plan-export',
-    'bcba-consult',           // Monthly BCBA session included
     'clinical-reports',       // IEP-ready reports
     'priority-support',       // Faster response
     'early-access',           // Beta features

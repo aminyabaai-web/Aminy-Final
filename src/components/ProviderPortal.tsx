@@ -1094,7 +1094,7 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
                   <label className="block text-sm font-medium text-neutral-700 mb-1.5">
                     Session Rate
                   </label>
-                  <Input defaultValue="$99/session" />
+                  <Input defaultValue="Set by Aminy based on credentials" disabled className="bg-neutral-50" />
                 </div>
               </div>
             </Card>

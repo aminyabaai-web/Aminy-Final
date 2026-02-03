@@ -23,28 +23,29 @@ interface ALaCarteMenuProps {
 export function ALaCarteMenu({ onBookSession, userTier = 'free', isProUser = false }: ALaCarteMenuProps) {
   const [selectedService, setSelectedService] = useState<string | null>(null);
 
-  // Cash-pay session pricing (aligned with AACT Arizona rates)
+  // Cash-pay session pricing (aligned with pricing.ts source of truth)
+  // Tier discounts: Free=0%, Core=10%, Pro=20%
   const sessions = [
     {
       id: 'rbt-30',
       type: 'RBT',
-      title: 'RBT Parent Coaching',
+      title: 'ABA Coaching Session',
       duration: 30,
-      price: 75,
-      proPrice: 60, // 20% discount for Pro
-      description: 'One-on-one session with a Registered Behavior Technician focused on daily strategies and routine building.',
+      price: 49,
+      proPrice: 39, // 20% discount for Pro
+      description: 'Skill-building session with a trained behavior technician focused on daily strategies and routine building.',
       bestFor: 'Daily skill practice, routine building, play-based learning',
       icon: User,
       color: 'bg-blue-100 text-blue-700',
       popular: false
     },
     {
-      id: 'rbt-45',
+      id: 'rbt-60',
       type: 'RBT',
-      title: 'RBT Extended Session',
-      duration: 45,
-      price: 100,
-      proPrice: 80,
+      title: 'ABA Extended Coaching',
+      duration: 60,
+      price: 89,
+      proPrice: 71,
       description: 'Extended coaching session for deeper work on specific skills or challenging situations.',
       bestFor: 'Complex skill building, intensive parent training',
       icon: User,
@@ -54,10 +55,23 @@ export function ALaCarteMenu({ onBookSession, userTier = 'free', isProUser = fal
     {
       id: 'bcba-30',
       type: 'BCBA',
-      title: 'BCBA Consultation',
+      title: 'BCBA Quick Check-In',
       duration: 30,
-      price: 150,
-      proPrice: 120,
+      price: 79,
+      proPrice: 63,
+      description: 'Brief consultation for specific questions or follow-ups with a Board Certified Behavior Analyst.',
+      bestFor: 'Quick questions, follow-ups, progress check-ins',
+      icon: GraduationCap,
+      color: 'bg-teal-100 text-teal-700',
+      popular: false
+    },
+    {
+      id: 'bcba-60',
+      type: 'BCBA',
+      title: 'BCBA Consultation',
+      duration: 60,
+      price: 149,
+      proPrice: 119,
       description: 'Expert consultation with a Board Certified Behavior Analyst to review progress and adjust strategies.',
       bestFor: 'Care plan review, strategy adjustments, goal setting',
       icon: GraduationCap,
@@ -65,27 +79,14 @@ export function ALaCarteMenu({ onBookSession, userTier = 'free', isProUser = fal
       popular: true
     },
     {
-      id: 'bcba-45',
+      id: 'bcba-90',
       type: 'BCBA',
-      title: 'BCBA Deep Dive',
-      duration: 45,
-      price: 175,
-      proPrice: 140,
-      description: 'Comprehensive session for behavior assessment, crisis planning, or IEP/school consultation prep.',
+      title: 'Comprehensive Assessment',
+      duration: 90,
+      price: 219,
+      proPrice: 175,
+      description: 'In-depth evaluation to create a personalized behavior support plan for complex cases.',
       bestFor: 'Behavior challenges, school meetings, complex situations',
-      icon: GraduationCap,
-      color: 'bg-teal-100 text-teal-700',
-      popular: false
-    },
-    {
-      id: 'bcba-d-45',
-      type: 'BCBA-D',
-      title: 'Clinical Director Session',
-      duration: 45,
-      price: 200,
-      proPrice: 160,
-      description: 'Premium consultation with our Clinical Director for the most complex cases and comprehensive evaluations.',
-      bestFor: 'Complex diagnoses, multi-disciplinary coordination, second opinions',
       icon: Sparkles,
       color: 'bg-violet-100 text-violet-700',
       popular: false

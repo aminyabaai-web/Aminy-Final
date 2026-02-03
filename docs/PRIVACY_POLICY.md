@@ -134,8 +134,8 @@ You have the right to:
 | **Correct your data** | Edit directly in app or contact support |
 | **Delete your data** | Settings → Privacy → Delete Account |
 | **Export your data** | Settings → Privacy → Download My Data |
-| **Restrict processing** | Contact privacy@aminy.care |
-| **Object to processing** | Contact privacy@aminy.care |
+| **Restrict processing** | Contact privacy@aminy.ai |
+| **Object to processing** | Contact privacy@aminy.ai |
 
 ### HIPAA Rights
 
@@ -147,7 +147,7 @@ As our Service handles Protected Health Information (PHI), you have additional r
 - **Right to restrict:** Request restrictions on how we use/disclose PHI
 - **Right to confidential communications:** Request we communicate via specific methods
 
-To exercise HIPAA rights, contact: privacy@aminy.care
+To exercise HIPAA rights, contact: privacy@aminy.ai
 
 ---
 
@@ -200,7 +200,7 @@ After account deletion:
 
 Our Service is designed for parents and caregivers of children. We do not knowingly collect information directly from children under 13.
 
-If you believe a child has provided us information directly, please contact us at privacy@aminy.care and we will delete it promptly.
+If you believe a child has provided us information directly, please contact us at privacy@aminy.ai and we will delete it promptly.
 
 ---
 
@@ -215,7 +215,7 @@ If you're a California resident, you have additional rights under the California
 
 **We do not sell personal information.**
 
-To exercise CCPA rights: privacy@aminy.care or call 1-800-XXX-XXXX
+To exercise CCPA rights: privacy@aminy.ai or call 1-800-XXX-XXXX
 
 ---
 
@@ -241,14 +241,14 @@ Your continued use after changes constitutes acceptance of the updated policy.
 ## Contact Us
 
 **Privacy Questions:**
-Email: privacy@aminy.care
+Email: privacy@aminy.ai
 
 **Data Protection Officer:**
-Email: dpo@aminy.care
+Email: dpo@aminy.ai
 
-**Mailing Address:**
-Aminy, Inc.
-[Address]
+**Contact:**
+Aminy, LLC
+Email: privacy@aminy.ai
 
 **To file a complaint:**
 If you believe we've violated your privacy rights, you may file a complaint with:
