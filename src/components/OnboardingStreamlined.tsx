@@ -306,23 +306,51 @@ export function OnboardingStreamlined({ onComplete, initialEmail = '' }: Onboard
 
   const handleComplete = async () => {
     setIsLoading(true);
+    setError(null);
 
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        await supabase.from('profiles').upsert({
-          id: user.id,
-          name: data.parentName,
-          has_completed_onboarding: true,
-          onboarding_data: {
-            childName: data.childName,
-            childAge: data.childAge,
-            initialConcern: data.initialConcern,
-            conversationSummary: data.conversationHistory.slice(0, 4),
-          }
-        });
 
-        // Create child record
+      if (!user) {
+        // No user session - this shouldn't happen but handle gracefully
+        console.error('No user session found');
+        onComplete(data);
+        return;
+      }
+
+      // Update profile
+      const { error: profileError } = await supabase.from('profiles').upsert({
+        id: user.id,
+        name: data.parentName,
+        has_completed_onboarding: true,
+        onboarding_data: {
+          childName: data.childName,
+          childAge: data.childAge,
+          initialConcern: data.initialConcern,
+          conversationSummary: data.conversationHistory.slice(0, 4),
+        }
+      });
+
+      if (profileError) {
+        console.error('Profile update error:', profileError);
+      }
+
+      // Check if child already exists, if so update, otherwise insert
+      const { data: existingChild } = await supabase
+        .from('children')
+        .select('id')
+        .eq('parent_id', user.id)
+        .eq('is_primary', true)
+        .single();
+
+      if (existingChild) {
+        // Update existing child
+        await supabase.from('children').update({
+          name: data.childName,
+          age_years: data.childAge,
+        }).eq('id', existingChild.id);
+      } else {
+        // Create new child record
         await supabase.from('children').insert({
           parent_id: user.id,
           name: data.childName,
@@ -333,8 +361,9 @@ export function OnboardingStreamlined({ onComplete, initialEmail = '' }: Onboard
 
       onComplete(data);
     } catch (e: any) {
-      setError(e.message);
-      setIsLoading(false);
+      console.error('handleComplete error:', e);
+      // Still try to proceed even if DB operations failed
+      onComplete(data);
     }
   };
 
