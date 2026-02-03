@@ -929,9 +929,9 @@ export default function App() {
       tier: "free",
     }));
 
-    // Navigate to dashboard IMMEDIATELY - don't wait for DB operations
-    navigateToScreen("dashboard");
-    toast.success(`Welcome! Let's help ${updatedData.childName || 'your child'} thrive.`);
+    // Navigate to PAYWALL - strike while they're excited from onboarding chat
+    // This is the optimal conversion moment - they've just experienced Aminy's value
+    navigateToScreen("paywall");
 
     // Do DB operations in background - don't block the user
     (async () => {
