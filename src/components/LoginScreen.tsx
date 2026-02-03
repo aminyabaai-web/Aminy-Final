@@ -232,10 +232,11 @@ export function LoginScreen({
               src={aminyLogoCropped}
               alt="Aminy"
               style={{
-                width: 'min(45vw, 160px)',
+                width: 'min(55vw, 220px)',
                 height: 'auto',
                 objectFit: 'contain',
                 display: 'block',
+                transform: 'scale(1.25)',
               }}
             />
           </motion.div>
