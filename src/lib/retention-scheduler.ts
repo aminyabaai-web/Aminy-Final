@@ -537,7 +537,7 @@ async function sendEmail(notification: any): Promise<void> {
   // Example implementation with Resend:
   // const resend = new Resend(process.env.RESEND_API_KEY);
   // await resend.emails.send({
-  //   from: 'Aminy <hello@aminy.app>',
+  //   from: 'Aminy <hello@aminy.ai>',
   //   to: userEmail,
   //   subject: notification.payload.subject,
   //   html: `<h1>${notification.payload.title}</h1><p>${notification.payload.body}</p>`,

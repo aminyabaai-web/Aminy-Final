@@ -225,6 +225,7 @@ export function LoginScreen({
               display: 'flex',
               justifyContent: 'center',
               marginBottom: '40px',
+              overflow: 'hidden',
             }}
           >
             <img
@@ -232,8 +233,9 @@ export function LoginScreen({
               alt="Aminy"
               style={{
                 width: 'min(45vw, 160px)',
-                aspectRatio: '827 / 338',
+                height: 'auto',
                 objectFit: 'contain',
+                display: 'block',
               }}
             />
           </motion.div>

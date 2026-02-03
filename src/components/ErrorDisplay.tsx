@@ -196,7 +196,7 @@ export function ErrorDisplay({
           <div className="mt-4 sm:mt-6 pt-6 border-t border-gray-200">
             <p className="text-sm text-gray-500">
               Need help?{' '}
-              <a href="mailto:support@aminy.app" className="text-accent hover:underline">
+              <a href="mailto:support@aminy.ai" className="text-accent hover:underline">
                 Contact support
               </a>
             </p>

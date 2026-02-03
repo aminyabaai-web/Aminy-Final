@@ -340,7 +340,7 @@ const icsContent = `BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//Aminy//Telehealth//EN
 BEGIN:VEVENT
-UID:${sessionId}@aminy.app
+UID:${sessionId}@aminy.ai
 DTSTART:${formatDateICS(startDate)}
 DTEND:${formatDateICS(endDate)}
 SUMMARY:Telehealth Session with ${provider}

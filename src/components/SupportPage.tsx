@@ -138,7 +138,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
       icon: <Mail className="w-5 h-5" />,
       steps: [
         { id: 'email', title: 'Check Email Address', instruction: 'Verify you\'re using the correct email address' },
-        { id: 'spam', title: 'Check Spam Folder', instruction: 'Look for emails from support@aminy.com' },
+        { id: 'spam', title: 'Check Spam Folder', instruction: 'Look for emails from support@aminy.ai' },
         { id: 'resend', title: 'Resend Verification', instruction: 'Request a new verification email' }
       ]
     },

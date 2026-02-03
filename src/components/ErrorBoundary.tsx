@@ -290,7 +290,7 @@ function DefaultErrorFallback({
           <p className="text-xs text-gray-400">
             If this problem persists, please{' '}
             <a 
-              href="mailto:support@aminy.com" 
+              href="mailto:support@aminy.ai" 
               className="text-blue-600 hover:text-blue-700"
             >
               contact support

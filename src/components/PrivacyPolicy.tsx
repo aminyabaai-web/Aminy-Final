@@ -152,8 +152,8 @@ export function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
             </ul>
             <p className="text-gray-600 leading-relaxed mt-4">
               To exercise these rights, please contact us at{' '}
-              <a href="mailto:privacy@aminy.app" className="text-teal-600 hover:underline">
-                privacy@aminy.app
+              <a href="mailto:privacy@aminy.ai" className="text-teal-600 hover:underline">
+                privacy@aminy.ai
               </a>
             </p>
           </section>
@@ -195,12 +195,12 @@ export function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
             <div className="mt-4 p-4 bg-gray-50 rounded-lg">
               <p className="text-gray-700">
                 <strong>Email:</strong>{' '}
-                <a href="mailto:privacy@aminy.app" className="text-teal-600 hover:underline">
-                  privacy@aminy.app
+                <a href="mailto:privacy@aminy.ai" className="text-teal-600 hover:underline">
+                  privacy@aminy.ai
                 </a>
               </p>
-              <p className="text-gray-700 mt-2">
-                <strong>Address:</strong> Aminy Inc., [Address to be added]
+              <p className="text-gray-500 text-sm mt-2">
+                Aminy, LLC
               </p>
             </div>
           </section>

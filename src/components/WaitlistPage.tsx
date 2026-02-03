@@ -369,7 +369,7 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
       {/* Footer */}
       <footer className="py-8 px-4 bg-gray-900 text-gray-400">
         <div className="max-w-4xl mx-auto text-center text-sm">
-          <p>© {new Date().getFullYear()} Aminy, Inc. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Aminy, LLC All rights reserved.</p>
           <p className="mt-2">
             Aminy is an AI companion, not a replacement for professional therapy or medical advice.
           </p>

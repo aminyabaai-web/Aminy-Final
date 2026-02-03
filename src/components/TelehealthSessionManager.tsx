@@ -276,7 +276,7 @@ export function TelehealthSessionManager({
 VERSION:2.0
 PRODID:-//Aminy//Telehealth//EN
 BEGIN:VEVENT
-UID:${session.id}@aminy.app
+UID:${session.id}@aminy.ai
 DTSTAMP:${formatDate(new Date())}
 DTSTART:${formatDate(startDate)}
 DTEND:${formatDate(endDate)}

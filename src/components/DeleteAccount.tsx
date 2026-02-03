@@ -139,10 +139,10 @@ export function DeleteAccount({
             If you wish to delete your account, please contact our Member Technical Support team
             (select 'Tech Support' in secure messaging recipient list, or email{' '}
             <a
-              href="mailto:support@aminy.app"
+              href="mailto:support@aminy.ai"
               className="text-accent hover:underline"
             >
-              support@aminy.app
+              support@aminy.ai
             </a>
             ). Indicate "Account deletion" in the subject.
           </p>
@@ -208,7 +208,7 @@ export function DeleteAccount({
           <Button
             variant="outline"
             className="w-full"
-            onClick={() => window.location.href = 'mailto:support@aminy.app?subject=Account%20deletion%20request'}
+            onClick={() => window.location.href = 'mailto:support@aminy.ai?subject=Account%20deletion%20request'}
           >
             <Mail className="w-5 h-5 mr-2" />
             Email Support Instead
