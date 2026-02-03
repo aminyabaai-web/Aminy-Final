@@ -23,7 +23,6 @@ import {
   Heart,
   Shield,
   Check,
-  Mic,
 } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
@@ -638,10 +637,10 @@ export function OnboardingStreamlined({ onComplete, initialEmail = '' }: Onboard
                   <div ref={messagesEndRef} />
                 </div>
 
-                {/* Input area - fixed at bottom, cleaner design */}
-                <div className="pt-3 pb-2 sticky bottom-0 -mx-4 px-4 bg-white">
-                  <div className="flex gap-2 items-center">
-                    <div className="flex-1 relative">
+                {/* Input area - fixed at bottom, premium design */}
+                <div className="pt-4 pb-3 sticky bottom-0 -mx-4 px-4 bg-gradient-to-t from-white via-white to-transparent">
+                  <div className="flex gap-3 items-end">
+                    <div className="flex-1">
                       <textarea
                         ref={textareaRef}
                         value={inputValue}
@@ -655,30 +654,29 @@ export function OnboardingStreamlined({ onComplete, initialEmail = '' }: Onboard
                         placeholder={
                           data.conversationHistory.length === 0
                             ? "Share what's on your mind..."
-                            : "Reply..."
+                            : "Type your reply..."
                         }
-                        className="w-full pl-4 pr-10 py-3 rounded-full bg-white border border-gray-200 focus:border-gray-300 focus:outline-none resize-none transition-all min-h-[44px] max-h-[88px] text-sm shadow-sm"
+                        className="w-full px-4 py-3 rounded-2xl bg-gray-50 border border-gray-200 focus:border-teal-400 focus:ring-2 focus:ring-teal-100 focus:outline-none resize-none transition-all min-h-[48px] max-h-[120px] text-[15px] leading-relaxed placeholder:text-gray-400"
+                        style={{
+                          lineHeight: '1.5',
+                        }}
                         rows={1}
                       />
-                      {/* Microphone hint */}
-                      <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-300">
-                        <Mic className="w-4 h-4" />
-                      </div>
                     </div>
                     <button
                       onClick={handleSendMessage}
                       disabled={!inputValue.trim() || isSendingMessage}
-                      className="h-11 w-11 rounded-full bg-teal-500 hover:bg-teal-600 text-white disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center transition-colors flex-shrink-0 shadow-sm"
+                      className="h-12 w-12 rounded-full bg-teal-500 hover:bg-teal-600 text-white disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center transition-all flex-shrink-0 shadow-md hover:shadow-lg"
                     >
                       {isSendingMessage ? (
-                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <Loader2 className="w-5 h-5 animate-spin" />
                       ) : (
-                        <Send className="w-4 h-4" />
+                        <Send className="w-5 h-5" />
                       )}
                     </button>
                   </div>
                   <p className="text-xs text-gray-400 text-center mt-2">
-                    Tap mic on keyboard to dictate
+                    Press Enter to send, Shift+Enter for new line
                   </p>
 
                   {/* Continue button appears after conversation */}
