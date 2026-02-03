@@ -9,7 +9,6 @@ import React from 'react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
-import aminyLogoCropped from "../assets/aminy-logo-cropped.png";
 import compassImage from "figma:asset/2e39d2a71ccd340d3accf6a7d306e6a6a6781942.png";
 import {
   ArrowRight,
@@ -44,12 +43,17 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
       <header className="bg-white dark:bg-slate-900 border-b border-neutral-200 dark:border-slate-700 sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <button onClick={onBack} className="flex items-center gap-2">
-            <img
-              src={aminyLogoCropped}
-              alt="Aminy"
-              className="h-8 w-auto object-contain"
-              style={{ maxHeight: '32px', maxWidth: '180px' }}
-            />
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-full overflow-hidden bg-white flex items-center justify-center">
+                <img
+                  src={compassImage}
+                  alt="Aminy"
+                  className="w-[130%] h-[130%] object-contain"
+                  style={{ transform: 'scale(1.15)' }}
+                />
+              </div>
+              <span className="text-xl font-bold text-neutral-900 dark:text-white">aminy</span>
+            </div>
           </button>
           <div className="flex items-center gap-3">
             <Button variant="ghost" onClick={onLogin}>
@@ -153,7 +157,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
       </section>
 
       {/* Provider Types */}
-      <section className="py-24 bg-white dark:bg-slate-900">
+      <section className="pt-32 pb-24 bg-white dark:bg-slate-900">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-neutral-900 dark:text-white">
@@ -185,7 +189,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
       </section>
 
       {/* Features */}
-      <section className="py-24 bg-neutral-50 dark:bg-slate-800">
+      <section className="pt-32 pb-24 bg-neutral-50 dark:bg-slate-800">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-neutral-900 dark:text-white">
@@ -250,7 +254,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
       </section>
 
       {/* How It Works */}
-      <section className="py-24 bg-white dark:bg-slate-900">
+      <section className="pt-32 pb-24 bg-white dark:bg-slate-900">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-neutral-900 dark:text-white">
@@ -258,7 +262,10 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
             </h2>
           </div>
 
-          <div className="grid grid-cols-[1fr_auto_1fr_auto_1fr_auto_1fr] items-start gap-y-4 max-w-4xl mx-auto">
+          <div
+            style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'center', gap: '0px' }}
+            className="max-w-5xl mx-auto"
+          >
             {[
               {
                 title: 'Apply Online',
@@ -282,16 +289,19 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
               },
             ].map(({ title, desc, icon: Icon }, index, arr) => (
               <React.Fragment key={title}>
-                <div className="text-center px-2">
-                  <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center mx-auto mb-3">
-                    <Icon className="w-7 h-7 sm:w-8 sm:h-8 text-teal-600" />
+                <div style={{ flex: '1 1 0%', textAlign: 'center', padding: '0 8px' }}>
+                  <div
+                    style={{ width: '64px', height: '64px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px auto' }}
+                    className="bg-teal-100 dark:bg-teal-900/30"
+                  >
+                    <Icon className="w-8 h-8 text-teal-600" />
                   </div>
                   <h3 className="font-semibold text-neutral-900 dark:text-white mb-1 text-sm sm:text-base">{title}</h3>
                   <p className="text-neutral-600 dark:text-slate-400 text-xs sm:text-sm">{desc}</p>
                 </div>
                 {index < arr.length - 1 && (
-                  <div className="flex items-center justify-center pt-4 sm:pt-5">
-                    <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 text-teal-400" />
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', paddingTop: '20px', flexShrink: 0 }}>
+                    <ArrowRight className="w-6 h-6 text-teal-400" />
                   </div>
                 )}
               </React.Fragment>
@@ -359,7 +369,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
       </section>
 
       {/* Testimonials */}
-      <section className="py-24 bg-white dark:bg-slate-900">
+      <section className="pt-32 pb-24 bg-white dark:bg-slate-900">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-neutral-900 dark:text-white">
