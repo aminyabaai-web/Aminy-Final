@@ -309,17 +309,17 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
                 Earn What You're Worth
               </h2>
               <p className="text-teal-100 text-lg mb-6">
-                We offer competitive, standardized rates based on your credential type.
-                Our platform fee is a simple 15% with no hidden costs.
+                We offer competitive, standardized rates based on your credential type
+                and session length. Transparent pricing with no hidden costs.
               </p>
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
                   <CheckCircle className="w-5 h-5 text-teal-200" />
-                  <span>BCBA sessions at $99/session</span>
+                  <span>BCBAs earn $65–$95 per session</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <CheckCircle className="w-5 h-5 text-teal-200" />
-                  <span>RBT sessions at competitive rates</span>
+                  <span>RBTs earn $20–$38 per session</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <CheckCircle className="w-5 h-5 text-teal-200" />
@@ -338,19 +338,19 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
               </h3>
               <div className="space-y-3">
                 <div className="flex justify-between p-3 bg-neutral-50 dark:bg-slate-700 rounded-lg">
-                  <span className="text-neutral-600 dark:text-slate-400">20 sessions/week @ $99</span>
-                  <span className="font-semibold text-neutral-900 dark:text-white">$1,980</span>
+                  <span className="text-neutral-600 dark:text-slate-400">15 consults/week @ $65</span>
+                  <span className="font-semibold text-neutral-900 dark:text-white">$975</span>
                 </div>
                 <div className="flex justify-between p-3 bg-neutral-50 dark:bg-slate-700 rounded-lg">
-                  <span className="text-neutral-600 dark:text-slate-400">Platform fee (15%)</span>
-                  <span className="font-semibold text-red-600">-$297</span>
+                  <span className="text-neutral-600 dark:text-slate-400">5 assessments/week @ $95</span>
+                  <span className="font-semibold text-neutral-900 dark:text-white">$475</span>
                 </div>
                 <div className="flex justify-between p-4 bg-teal-50 dark:bg-teal-900/30 rounded-lg border-2 border-teal-200 dark:border-teal-700">
                   <span className="font-semibold text-teal-800 dark:text-teal-300">Your Weekly Earnings</span>
-                  <span className="text-xl font-bold text-teal-700 dark:text-teal-400">$1,683</span>
+                  <span className="text-xl font-bold text-teal-700 dark:text-teal-400">$1,450</span>
                 </div>
                 <p className="text-center text-neutral-500 dark:text-slate-400 text-sm">
-                  = $6,732/month or $80,784/year
+                  = $5,800/month or $69,600/year
                 </p>
               </div>
             </Card>
