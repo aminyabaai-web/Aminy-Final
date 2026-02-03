@@ -203,7 +203,7 @@ export function CoverPage({ onNavigate }: CoverPageProps) {
             <p className="mb-2">Designed for viral growth and user delight</p>
             <p>Built with React, TypeScript, and Tailwind CSS</p>
             <p className="mt-4 text-xs text-gray-400">
-              © 2025 Aminy. All rights reserved.
+              © {new Date().getFullYear()} Aminy, Inc. All rights reserved.
             </p>
           </div>
         </div>

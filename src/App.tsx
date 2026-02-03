@@ -56,6 +56,11 @@ const UpdateBanner = lazy(() =>
     default: m.UpdateBanner,
   })),
 );
+const CookieConsent = lazy(() =>
+  import("./components/CookieConsent").then((m) => ({
+    default: m.CookieConsent,
+  })),
+);
 const DialogAccessibilityProvider = lazy(() =>
   import("./components/DialogAccessibilityProvider").then(
     (m) => ({ default: m.DialogAccessibilityProvider }),
@@ -660,7 +665,7 @@ export default function App() {
 
   const handlePaymentConfirmCancel = useCallback(() => {
     // Open support link
-    window.open('mailto:support@aminy.app?subject=Payment%20Issue', '_blank');
+    window.open('mailto:support@aminy.ai?subject=Payment%20Issue', '_blank');
   }, []);
 
   // ======================================
@@ -804,7 +809,7 @@ export default function App() {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         if (event === 'SIGNED_IN' && session?.user) {
-          // Load user profile from Supabase
+          // Load user profile and children data from Supabase
           try {
             const { data: profile } = await supabase
               .from('profiles')
@@ -812,11 +817,25 @@ export default function App() {
               .eq('id', session.user.id)
               .single();
 
+            // Also load children data
+            const { data: children } = await supabase
+              .from('children')
+              .select('*')
+              .eq('parent_id', session.user.id)
+              .order('created_at', { ascending: true });
+
+            // Find the primary child or first child
+            const primaryChild = children?.find(c => c.is_primary) || children?.[0];
+
             if (profile) {
               setUserData(prev => ({
                 ...prev,
                 parentName: profile.parent_name || prev.parentName,
-                childName: profile.child_name || prev.childName,
+                childName: primaryChild?.name || profile.child_name || prev.childName,
+                childAge: primaryChild?.age_years || primaryChild?.age || prev.childAge,
+                childId: primaryChild?.id || prev.childId,
+                activeChildId: primaryChild?.id || prev.activeChildId,
+                children: children || prev.children,
                 relationship: profile.relationship || prev.relationship,
                 state: profile.state || prev.state,
                 tier: (profile.tier as TierType) || prev.tier,
@@ -1883,6 +1902,11 @@ export default function App() {
                   {/* Toast notifications - Deferred */}
                   <Suspense fallback={null}>
                     <Toaster />
+                  </Suspense>
+
+                  {/* Cookie Consent Banner */}
+                  <Suspense fallback={null}>
+                    <CookieConsent />
                   </Suspense>
 
                   {/* Urgent Help Modal */}

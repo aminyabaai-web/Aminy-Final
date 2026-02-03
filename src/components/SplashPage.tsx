@@ -6,6 +6,7 @@ import React, { useEffect } from 'react';
 import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
 import aminyLogoCropped from "../assets/aminy-logo-cropped.png";
+import { MedicalDisclaimer } from './MedicalDisclaimer';
 
 interface SplashPageProps {
   onStartTrial: () => void;
@@ -373,6 +374,19 @@ export function SplashPage({
 
         </div>
       </main>
+
+      {/* Medical Disclaimer */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1, delay: 1.3 }}
+        style={{
+          padding: '0 24px',
+          marginTop: '32px',
+        }}
+      >
+        <MedicalDisclaimer variant="inline" className="text-center max-w-md mx-auto" />
+      </motion.div>
 
       {/* Footer spacer */}
       <div style={{ height: '40px' }} />

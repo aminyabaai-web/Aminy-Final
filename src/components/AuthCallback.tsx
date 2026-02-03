@@ -133,7 +133,7 @@ export function AuthCallback({ onAuthSuccess, onPasswordReset, onError }: AuthCa
           alt="Aminy"
           style={{
             width: '140px',
-            height: 'auto',
+            aspectRatio: '827 / 338',
             objectFit: 'contain',
           }}
         />

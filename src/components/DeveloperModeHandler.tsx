@@ -101,7 +101,7 @@ export function DeveloperModeHandler({ onNavigate, onTierChange }: DeveloperMode
 
   return (
     <Dialog open={showDevMode} onOpenChange={setShowDevMode}>
-      <DialogContent className="w-[95vw] max-w-2xl max-h-[85vh] flex flex-col p-0 overflow-hidden mx-auto">
+      <DialogContent className="fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] w-[95vw] max-w-2xl max-h-[85vh] flex flex-col p-0 overflow-hidden">
         <DialogHeader className="p-4 pb-3 border-b shrink-0">
           <DialogTitle>Developer Mode</DialogTitle>
           <DialogDescription>

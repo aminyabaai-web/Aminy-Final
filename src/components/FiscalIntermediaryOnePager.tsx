@@ -272,7 +272,7 @@ export function FiscalIntermediaryOnePager({
 
       {/* Footer */}
       <div className="mt-4 sm:mt-6 pt-4 border-t border-gray-200 flex justify-between items-center text-xs text-gray-500">
-        <span>© 2025 Aminy, Inc. | aminy.com</span>
+        <span>© {new Date().getFullYear()} Aminy, Inc. | aminy.com</span>
         <span>HIPAA Compliant • BCBA Advised • Parent-Founded</span>
       </div>
     </div>
