@@ -4,13 +4,15 @@
  * Simplified tier structure:
  * - Free: Basic AI access (3/day), limited features
  * - Core ($14.99/mo): Unlimited AI, full features, 10% off sessions
- * - Pro ($29.99/mo): Everything + 1 included BCBA session, 20% off sessions
+ * - Pro ($29.99/mo): Everything + 20% off sessions, custom plans, priority support
+ * - Pro+ / Family Plan ($49.99/mo): Everything + 30% off, unlimited children, advanced analytics
  *
  * Telehealth session pricing (from pricing.ts):
  * - BCBA Consult (60 min): $149 base
  * - Free: Full price ($149)
  * - Core: 10% off ($134)
- * - Pro: 1 included/month + 20% off ($119)
+ * - Pro: 20% off ($119)
+ * - Pro+: 30% off ($104)
  */
 
 import React, { useState, useCallback } from 'react';
@@ -29,8 +31,6 @@ import {
   X,
   Gift,
   CreditCard,
-  BadgeCheck,
-  Video,
   Minus,
 } from 'lucide-react';
 import { Button } from './ui/button';
@@ -67,16 +67,18 @@ const TESTIMONIALS = [
 
 // Simplified tier features for comparison
 const TIER_FEATURES = [
-  { name: 'AI Conversations', free: '3/day', core: 'Unlimited', pro: 'Unlimited' },
-  { name: 'Memory & Context', free: '7 days', core: 'Full history', pro: 'Full history' },
-  { name: 'Daily Strategies', free: false, core: true, pro: true },
-  { name: 'Behavior Tracking', free: 'Basic', core: 'Advanced', pro: 'Advanced' },
-  { name: 'Sleep & Routine Insights', free: false, core: true, pro: true },
-  { name: 'Document Vault', free: false, core: '50 docs', pro: 'Unlimited' },
-  { name: 'Weekly AI Summary', free: false, core: true, pro: true },
-  { name: 'BCBA Telehealth Access', free: 'Full price', core: '10% off', pro: '1 included + 20% off' },
-  { name: 'Custom Intervention Plans', free: false, core: false, pro: true },
-  { name: 'Priority Support', free: false, core: false, pro: true },
+  { name: 'AI Conversations', free: '3/day', core: 'Unlimited', pro: 'Unlimited', proplus: 'Unlimited' },
+  { name: 'Memory & Context', free: '7 days', core: 'Full history', pro: 'Full history', proplus: 'Full history' },
+  { name: 'Daily Strategies', free: false, core: true, pro: true, proplus: true },
+  { name: 'Behavior Tracking', free: 'Basic', core: 'Advanced', pro: 'Advanced', proplus: 'Advanced' },
+  { name: 'Sleep & Routine Insights', free: false, core: true, pro: true, proplus: true },
+  { name: 'Document Vault', free: false, core: '50 docs', pro: 'Unlimited', proplus: 'Unlimited' },
+  { name: 'Weekly AI Summary', free: false, core: true, pro: true, proplus: true },
+  { name: 'Session Discount', free: 'Full price', core: '10% off', pro: '20% off', proplus: '30% off' },
+  { name: 'Children Supported', free: '1', core: 'Up to 3', pro: 'Up to 3', proplus: 'Unlimited' },
+  { name: 'Custom Intervention Plans', free: false, core: false, pro: true, proplus: true },
+  { name: 'Advanced Analytics', free: false, core: false, pro: false, proplus: true },
+  { name: 'Priority Support', free: false, core: false, pro: true, proplus: true },
 ];
 
 interface PaywallSimplifiedProps {
@@ -114,10 +116,13 @@ export function PaywallSimplified({
   const coreYearly = 129; // ~$10.75/mo
   const proMonthly = 29.99;
   const proYearly = 259; // ~$21.58/mo
+  const proplusMonthly = 49.99;
+  const proplusYearly = 429; // ~$35.75/mo
 
   const corePrice = billingPeriod === 'monthly' ? coreMonthly : coreYearly;
   const corePerMonth = billingPeriod === 'yearly' ? (coreYearly / 12).toFixed(2) : coreMonthly.toFixed(2);
   const proPerMonth = billingPeriod === 'yearly' ? (proYearly / 12).toFixed(2) : proMonthly.toFixed(2);
+  const proplusPerMonth = billingPeriod === 'yearly' ? (proplusYearly / 12).toFixed(2) : proplusMonthly.toFixed(2);
 
   // Calculate discounted price
   const calculateDiscount = useCallback((baseAmount: number): number => {
@@ -165,7 +170,13 @@ export function PaywallSimplified({
     }
   }, [promoCode]);
 
-  const handleSubscribe = async (tier: 'core' | 'pro') => {
+  const tierDisplayName = (tier: string) => {
+    if (tier === 'proplus') return 'Family Plan';
+    if (tier === 'pro') return 'Pro';
+    return 'Core';
+  };
+
+  const handleSubscribe = async (tier: 'core' | 'pro' | 'proplus') => {
     setIsLoading(true);
 
     try {
@@ -183,7 +194,9 @@ export function PaywallSimplified({
         try {
           const priceId = tier === 'core'
             ? (billingPeriod === 'monthly' ? 'price_core_monthly' : 'price_core_yearly')
-            : (billingPeriod === 'monthly' ? 'price_pro_monthly' : 'price_pro_yearly');
+            : tier === 'pro'
+            ? (billingPeriod === 'monthly' ? 'price_pro_monthly' : 'price_pro_yearly')
+            : (billingPeriod === 'monthly' ? 'price_proplus_monthly' : 'price_proplus_yearly');
 
           const session = await createCheckoutSession({
             priceId,
@@ -206,12 +219,12 @@ export function PaywallSimplified({
 
       // Default: local subscription (demo mode or Stripe not configured)
       onSubscribe(tier);
-      toast.success(`🎉 Welcome to Aminy™ ${tier === 'pro' ? 'Pro' : 'Core'}! Your 7-day trial has started.`);
+      toast.success(`Welcome to Aminy ${tierDisplayName(tier)}! Your 7-day trial has started.`);
     } catch (error) {
       console.error('Subscription error:', error);
       // Still proceed with local subscription on any error
       onSubscribe(tier);
-      toast.success(`🎉 Welcome to Aminy™ ${tier === 'pro' ? 'Pro' : 'Core'}!`);
+      toast.success(`Welcome to Aminy ${tierDisplayName(tier)}!`);
     } finally {
       setIsLoading(false);
     }
@@ -278,7 +291,7 @@ export function PaywallSimplified({
         </div>
 
         {/* Pricing Cards */}
-        <div className="w-full max-w-2xl grid md:grid-cols-2 gap-4 mb-6">
+        <div className="w-full max-w-4xl grid md:grid-cols-3 gap-4 mb-6">
           {/* Core Plan */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -324,7 +337,7 @@ export function PaywallSimplified({
                     'Full memory of your journey',
                     'Personalized daily strategies',
                     'Sleep & behavior insights',
-                    'BCBA telehealth (10% off)',
+                    'All sessions 10% off',
                   ].map((feature) => (
                     <li key={feature} className="flex items-start gap-2 text-gray-700">
                       <Check className="w-4 h-4 text-teal-500 mt-0.5 flex-shrink-0" />
@@ -355,16 +368,12 @@ export function PaywallSimplified({
             transition={{ delay: 0.2 }}
           >
             <Card className="relative overflow-hidden border border-gray-200 bg-white h-full">
-              <div className="absolute top-0 right-0 bg-violet-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
-                BEST VALUE
-              </div>
-
               <div className="p-5">
                 <h3 className="text-lg font-bold text-gray-900 mb-1">Pro</h3>
 
                 <div className="flex items-center gap-1.5 mb-3">
-                  <Video className="w-3.5 h-3.5 text-violet-600" />
-                  <span className="text-xs font-medium text-violet-600">Includes BCBA Session</span>
+                  <CreditCard className="w-3.5 h-3.5 text-emerald-600" />
+                  <span className="text-xs font-medium text-emerald-600">HSA/FSA Eligible</span>
                 </div>
 
                 {/* Price */}
@@ -384,8 +393,7 @@ export function PaywallSimplified({
                 <ul className="space-y-2 mb-4 text-sm">
                   {[
                     'Everything in Core',
-                    '1 BCBA session/month included',
-                    'Additional sessions 20% off',
+                    'All sessions 20% off',
                     'Custom intervention plans',
                     'Priority support',
                   ].map((feature) => (
@@ -401,6 +409,69 @@ export function PaywallSimplified({
                   disabled={isLoading}
                   variant="outline"
                   className="w-full border-violet-500 text-violet-600 hover:bg-violet-50 font-semibold py-3 rounded-xl"
+                >
+                  Start Free Trial
+                </Button>
+
+                <p className="text-xs text-gray-500 text-center mt-2">
+                  No credit card required • Cancel anytime
+                </p>
+              </div>
+            </Card>
+          </motion.div>
+
+          {/* Pro+ / Family Plan */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            <Card className="relative overflow-hidden border-2 border-violet-500 bg-white h-full">
+              <div className="absolute top-0 right-0 bg-violet-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
+                BEST VALUE
+              </div>
+
+              <div className="p-5">
+                <h3 className="text-lg font-bold text-gray-900 mb-1">Family Plan</h3>
+
+                <div className="flex items-center gap-1.5 mb-3">
+                  <Users className="w-3.5 h-3.5 text-violet-600" />
+                  <span className="text-xs font-medium text-violet-600">Unlimited Children</span>
+                </div>
+
+                {/* Price */}
+                <div className="mb-4">
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-3xl font-bold text-gray-900">
+                      ${proplusPerMonth}
+                    </span>
+                    <span className="text-gray-500 text-sm">/month</span>
+                  </div>
+                  <p className="text-violet-600 text-sm font-medium mt-1">
+                    7-day free trial included
+                  </p>
+                </div>
+
+                {/* Features */}
+                <ul className="space-y-2 mb-4 text-sm">
+                  {[
+                    'Everything in Pro',
+                    'All sessions 30% off',
+                    'Unlimited children',
+                    'Advanced analytics',
+                    'Dedicated support',
+                  ].map((feature) => (
+                    <li key={feature} className="flex items-start gap-2 text-gray-700">
+                      <Check className="w-4 h-4 text-violet-500 mt-0.5 flex-shrink-0" />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <Button
+                  onClick={() => handleSubscribe('proplus')}
+                  disabled={isLoading}
+                  className="w-full bg-violet-500 hover:bg-violet-600 text-white font-semibold py-3 rounded-xl shadow-sm"
                 >
                   Start Free Trial
                 </Button>
@@ -464,7 +535,7 @@ export function PaywallSimplified({
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="w-full max-w-2xl mb-6 overflow-hidden"
+              className="w-full max-w-4xl mb-6 overflow-hidden"
             >
               <Card className="p-4 bg-white border border-gray-200 overflow-x-auto">
                 <table className="w-full text-sm">
@@ -474,16 +545,17 @@ export function PaywallSimplified({
                       <th className="text-center py-2 px-2 text-gray-600 font-medium">Free</th>
                       <th className="text-center py-2 px-2 text-teal-600 font-bold">Core<br /><span className="text-xs font-normal">$14.99/mo</span></th>
                       <th className="text-center py-2 px-2 text-violet-600 font-bold">Pro<br /><span className="text-xs font-normal">$29.99/mo</span></th>
+                      <th className="text-center py-2 px-2 text-violet-600 font-bold">Family<br /><span className="text-xs font-normal">$49.99/mo</span></th>
                     </tr>
                   </thead>
                   <tbody>
                     {TIER_FEATURES.map((feature, index) => (
                       <tr key={feature.name} className={index % 2 === 0 ? 'bg-gray-50' : ''}>
                         <td className="py-2 px-2 text-gray-700">{feature.name}</td>
-                        {['free', 'core', 'pro'].map((tier) => {
+                        {['free', 'core', 'pro', 'proplus'].map((tier) => {
                           const value = feature[tier as keyof typeof feature];
                           return (
-                            <td key={tier} className={`text-center py-2 px-2 ${tier === 'core' ? 'bg-teal-50/50' : ''}`}>
+                            <td key={tier} className={`text-center py-2 px-2 ${tier === 'core' ? 'bg-teal-50/50' : tier === 'proplus' ? 'bg-violet-50/50' : ''}`}>
                               {value === true ? (
                                 <Check className="w-4 h-4 text-emerald-500 mx-auto" />
                               ) : value === false ? (
