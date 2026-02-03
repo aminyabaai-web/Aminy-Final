@@ -145,7 +145,7 @@ export function LegalPrivacyFooter({
           </div>
           
           <p className="text-xs text-slate-400 mt-4">
-            © {new Date().getFullYear()} Aminy, Inc. All rights reserved.
+            © {new Date().getFullYear()} Aminy, LLC All rights reserved.
           </p>
         </div>
       </div>

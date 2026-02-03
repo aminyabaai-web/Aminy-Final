@@ -99,7 +99,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
                 </span>
                 <span className="flex items-center gap-2">
                   <CheckCircle className="w-4 h-4 text-green-600" />
-                  Set your own rates
+                  Competitive rates
                 </span>
                 <span className="flex items-center gap-2">
                   <CheckCircle className="w-4 h-4 text-green-600" />
@@ -163,9 +163,10 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             {[
               { title: 'BCBAs', desc: 'Board Certified Behavior Analysts', icon: Brain },
+              { title: 'RBTs', desc: 'Registered Behavior Technicians', icon: Award },
               { title: 'Psychologists', desc: 'Clinical & Child Psychologists', icon: Heart },
               { title: 'Therapists', desc: 'LMFT, LCSW, LPC', icon: MessageSquare },
               { title: 'SLPs', desc: 'Speech-Language Pathologists', icon: Users },
@@ -248,76 +249,76 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
       </section>
 
       {/* How It Works */}
-      <section className="py-16 bg-white dark:bg-slate-900">
+      <section className="py-20 mt-8 bg-white dark:bg-slate-900">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center mb-12">
+          <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-neutral-900 dark:text-white">
               Getting Started is Easy
             </h2>
           </div>
 
-          <div className="grid md:grid-cols-4 gap-8">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-0">
             {[
               {
-                step: 1,
                 title: 'Apply Online',
                 desc: 'Complete a simple application with your credentials',
                 icon: FileText,
               },
               {
-                step: 2,
                 title: 'AI Verification',
                 desc: 'Our AI verifies your license and credentials',
                 icon: Sparkles,
               },
               {
-                step: 3,
                 title: 'Build Profile',
-                desc: 'Set up your profile, rates, and availability',
+                desc: 'Set up your profile and availability',
                 icon: Users,
               },
               {
-                step: 4,
                 title: 'Start Helping',
                 desc: 'Connect with families and grow your practice',
                 icon: Heart,
               },
-            ].map(({ step, title, desc, icon: Icon }) => (
-              <div key={step} className="text-center relative">
-                <div className="w-16 h-16 rounded-full bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center mx-auto mb-4">
-                  <Icon className="w-8 h-8 text-teal-600" />
+            ].map(({ title, desc, icon: Icon }, index, arr) => (
+              <React.Fragment key={title}>
+                <div className="text-center flex-1 max-w-[200px]">
+                  <div className="w-16 h-16 rounded-full bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center mx-auto mb-4">
+                    <Icon className="w-8 h-8 text-teal-600" />
+                  </div>
+                  <h3 className="font-semibold text-neutral-900 dark:text-white mb-2">{title}</h3>
+                  <p className="text-neutral-600 dark:text-slate-400 text-sm">{desc}</p>
                 </div>
-                <div className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-teal-600 text-white flex items-center justify-center font-bold text-sm">
-                  {step}
-                </div>
-                <h3 className="font-semibold text-neutral-900 dark:text-white mb-2">{title}</h3>
-                <p className="text-neutral-600 dark:text-slate-400 text-sm">{desc}</p>
-              </div>
+                {index < arr.length - 1 && (
+                  <div className="hidden md:flex items-center justify-center px-4">
+                    <ArrowRight className="w-6 h-6 text-teal-400" />
+                  </div>
+                )}
+              </React.Fragment>
             ))}
           </div>
         </div>
       </section>
 
       {/* Earnings Calculator */}
-      <section className="py-16 bg-gradient-to-br from-teal-600 to-cyan-600">
+      <section className="py-20 mt-8 bg-gradient-to-br from-teal-600 to-cyan-600">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div className="text-white">
               <h2 className="text-3xl font-bold mb-4">
                 Earn What You're Worth
               </h2>
               <p className="text-teal-100 text-lg mb-6">
-                Set your own rates and keep more of what you earn. Our platform fee is a simple 15%
+                Competitive rates based on your credentials and experience. Our platform fee is a simple 15%
                 with no hidden costs.
               </p>
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
                   <CheckCircle className="w-5 h-5 text-teal-200" />
-                  <span>Average provider earns $6,000-$12,000/month</span>
+                  <span>BCBAs earn $120-$175/hour on average</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <CheckCircle className="w-5 h-5 text-teal-200" />
-                  <span>Set your own hourly rates ($75-$200+)</span>
+                  <span>RBTs earn $25-$45/hour on average</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <CheckCircle className="w-5 h-5 text-teal-200" />
@@ -332,23 +333,23 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
 
             <Card className="p-6 bg-white dark:bg-slate-800">
               <h3 className="font-semibold text-neutral-900 dark:text-white mb-4">
-                Earnings Example
+                BCBA Earnings Example
               </h3>
               <div className="space-y-3">
                 <div className="flex justify-between p-3 bg-neutral-50 dark:bg-slate-700 rounded-lg">
-                  <span className="text-neutral-600 dark:text-slate-400">20 sessions/week @ $99</span>
-                  <span className="font-semibold text-neutral-900 dark:text-white">$1,980</span>
+                  <span className="text-neutral-600 dark:text-slate-400">20 sessions/week @ $150</span>
+                  <span className="font-semibold text-neutral-900 dark:text-white">$3,000</span>
                 </div>
                 <div className="flex justify-between p-3 bg-neutral-50 dark:bg-slate-700 rounded-lg">
                   <span className="text-neutral-600 dark:text-slate-400">Platform fee (15%)</span>
-                  <span className="font-semibold text-red-600">-$297</span>
+                  <span className="font-semibold text-red-600">-$450</span>
                 </div>
                 <div className="flex justify-between p-4 bg-teal-50 dark:bg-teal-900/30 rounded-lg border-2 border-teal-200 dark:border-teal-700">
                   <span className="font-semibold text-teal-800 dark:text-teal-300">Your Weekly Earnings</span>
-                  <span className="text-xl font-bold text-teal-700 dark:text-teal-400">$1,683</span>
+                  <span className="text-xl font-bold text-teal-700 dark:text-teal-400">$2,550</span>
                 </div>
                 <p className="text-center text-neutral-500 dark:text-slate-400 text-sm">
-                  = $6,732/month or $80,784/year
+                  = $10,200/month or $122,400/year
                 </p>
               </div>
             </Card>
@@ -357,9 +358,9 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
       </section>
 
       {/* Testimonials */}
-      <section className="py-16 bg-white dark:bg-slate-900">
+      <section className="py-20 mt-8 bg-white dark:bg-slate-900">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center mb-12">
+          <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-neutral-900 dark:text-white">
               What Providers Say
             </h2>
@@ -420,26 +421,16 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
             Join our growing network of verified providers and help families get the support they need.
             Applications are reviewed within 24-48 hours.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button
-              size="lg"
-              className="bg-teal-600 hover:bg-teal-700 text-lg px-8"
-              onClick={onApply}
-            >
-              Apply Now - It's Free
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="text-lg px-8 border-neutral-600 text-white hover:bg-neutral-800"
-              onClick={onLogin}
-            >
-              Provider Sign In
-            </Button>
-          </div>
+          <Button
+            size="lg"
+            className="bg-teal-600 hover:bg-teal-700 text-lg px-8"
+            onClick={onApply}
+          >
+            Apply Now - It's Free
+            <ArrowRight className="w-5 h-5 ml-2" />
+          </Button>
           <p className="text-neutral-500 text-sm mt-6">
-            Questions? Contact us at <a href="mailto:providers@aminy.co" className="text-teal-400 hover:underline">providers@aminy.co</a>
+            Questions? Contact us at <a href="mailto:providers@aminy.ai" className="text-teal-400 hover:underline">providers@aminy.ai</a>
           </p>
         </div>
       </section>
@@ -462,11 +453,11 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
             <div className="flex gap-6 text-sm text-neutral-500">
               <a href="/?screen=privacy-policy" className="hover:text-white">Privacy Policy</a>
               <a href="/?screen=terms-of-service" className="hover:text-white">Terms of Service</a>
-              <a href="mailto:providers@aminy.co" className="hover:text-white">Contact</a>
+              <a href="mailto:providers@aminy.ai" className="hover:text-white">Contact</a>
             </div>
           </div>
           <div className="text-center text-xs text-neutral-600 pt-4 border-t border-neutral-800">
-            © {new Date().getFullYear()} Aminy, Inc. All rights reserved.
+            © {new Date().getFullYear()} Aminy, LLC. All rights reserved.
           </div>
         </div>
       </footer>

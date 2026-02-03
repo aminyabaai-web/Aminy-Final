@@ -583,7 +583,7 @@ export function generateICalEvent(session: TelehealthSession): string {
 VERSION:2.0
 PRODID:-//Aminy//Telehealth//EN
 BEGIN:VEVENT
-UID:${session.id}@aminy.app
+UID:${session.id}@aminy.ai
 DTSTART:${formatDate(startDate)}
 DTEND:${formatDate(endDate)}
 SUMMARY:Aminy Telehealth Session

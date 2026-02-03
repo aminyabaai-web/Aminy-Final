@@ -55,7 +55,7 @@ export function MedicalDisclaimer({ variant = 'footer', className = '' }: Medica
         Always consult with appropriate professionals regarding your child's specific needs.
       </p>
       <p className="text-xs text-gray-400 dark:text-gray-500 mt-2">
-        © {new Date().getFullYear()} Aminy, Inc. All rights reserved. Aminy™ is a trademark of Aminy, Inc.
+        © {new Date().getFullYear()} Aminy, LLC All rights reserved. Aminy™ is a trademark of Aminy, LLC
       </p>
     </div>
   );

@@ -43,7 +43,7 @@ export function TermsOfService({ onBack }: TermsOfServiceProps) {
             </div>
             <p className="text-gray-600 leading-relaxed">
               Welcome to Aminy! These Terms of Service ("Terms") govern your use of the Aminy mobile
-              application and related services (the "Service") operated by Aminy Inc. ("we," "us," or "our").
+              application and related services (the "Service") operated by Aminy, LLC ("we," "us," or "our").
             </p>
             <p className="text-gray-600 leading-relaxed mt-4">
               By accessing or using the Service, you agree to be bound by these Terms. If you disagree
@@ -181,7 +181,7 @@ export function TermsOfService({ onBack }: TermsOfServiceProps) {
             <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">Intellectual Property</h2>
             <p className="text-gray-600 leading-relaxed">
               The Service and its original content (excluding user-provided content) are and will remain
-              the exclusive property of Aminy Inc. and its licensors. The Service is protected by
+              the exclusive property of Aminy, LLC and its licensors. The Service is protected by
               copyright, trademark, and other laws.
             </p>
             <p className="text-gray-600 leading-relaxed mt-4">
@@ -250,14 +250,14 @@ export function TermsOfService({ onBack }: TermsOfServiceProps) {
             <div className="mt-4 p-4 bg-gray-50 rounded-lg">
               <p className="text-gray-700">
                 <strong>Email:</strong>{' '}
-                <a href="mailto:legal@aminy.app" className="text-teal-600 hover:underline">
-                  legal@aminy.app
+                <a href="mailto:legal@aminy.ai" className="text-teal-600 hover:underline">
+                  legal@aminy.ai
                 </a>
               </p>
               <p className="text-gray-700 mt-2">
                 <strong>Support:</strong>{' '}
-                <a href="mailto:support@aminy.app" className="text-teal-600 hover:underline">
-                  support@aminy.app
+                <a href="mailto:support@aminy.ai" className="text-teal-600 hover:underline">
+                  support@aminy.ai
                 </a>
               </p>
             </div>

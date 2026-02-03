@@ -452,7 +452,7 @@ export function B2BPartnerPortal({
               className="border-white text-white hover:bg-white/10"
             >
               <Mail className="w-4 h-4 mr-2" />
-              partnerships@aminy.com
+              partnerships@aminy.ai
             </Button>
           </div>
         </div>
@@ -461,7 +461,7 @@ export function B2BPartnerPortal({
       {/* Footer */}
       <footer className="py-8 px-4 bg-gray-900 text-gray-400">
         <div className="max-w-4xl mx-auto text-center text-sm">
-          <p>© {new Date().getFullYear()} Aminy, Inc. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Aminy, LLC All rights reserved.</p>
         </div>
       </footer>
     </div>

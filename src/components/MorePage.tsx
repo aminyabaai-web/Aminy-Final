@@ -257,7 +257,7 @@ export function MorePage({ onNavigate, onAnalytics }: MorePageProps) {
         <div className="mt-12 pt-8 border-t border-gray-200 dark:border-slate-600">
           <div className="text-center text-xs text-slate-500 dark:text-slate-400 space-y-1">
             <p>Aminy Version 1.0.0</p>
-            <p>© {new Date().getFullYear()} Aminy, Inc. All rights reserved.</p>
+            <p>© {new Date().getFullYear()} Aminy, LLC All rights reserved.</p>
           </div>
         </div>
       </div>

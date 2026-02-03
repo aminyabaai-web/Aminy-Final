@@ -28,7 +28,7 @@ interface FiscalIntermediaryOnePagerProps {
 
 export function FiscalIntermediaryOnePager({
   contactName = 'Partnership Team',
-  contactEmail = 'partnerships@aminy.com',
+  contactEmail = 'partnerships@aminy.ai',
   contactPhone = '(555) 123-4567',
 }: FiscalIntermediaryOnePagerProps) {
   return (
@@ -272,7 +272,7 @@ export function FiscalIntermediaryOnePager({
 
       {/* Footer */}
       <div className="mt-4 sm:mt-6 pt-4 border-t border-gray-200 flex justify-between items-center text-xs text-gray-500">
-        <span>© {new Date().getFullYear()} Aminy, Inc. | aminy.com</span>
+        <span>© {new Date().getFullYear()} Aminy, LLC | aminy.com</span>
         <span>HIPAA Compliant • BCBA Advised • Parent-Founded</span>
       </div>
     </div>

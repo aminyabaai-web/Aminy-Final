@@ -50,8 +50,8 @@ interface AnalyticsData {
 
 // Admin emails for access control
 const ADMIN_EMAILS = [
-  'admin@aminy.app',
-  'founder@aminy.app',
+  'admin@aminy.ai',
+  'founder@aminy.ai',
   'aminyaba.ai@gmail.com',
 ];
 

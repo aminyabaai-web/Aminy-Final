@@ -304,7 +304,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                   {existingApplication.rejection_reason || 'Your application could not be approved at this time.'}
                 </p>
                 <p className="text-sm text-neutral-500 dark:text-slate-500 mb-6">
-                  If you believe this is an error, please contact support@aminy.co
+                  If you believe this is an error, please contact support@aminy.ai
                 </p>
                 <Button variant="outline" onClick={onBack}>
                   Back to Home

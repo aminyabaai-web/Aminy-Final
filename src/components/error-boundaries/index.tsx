@@ -264,7 +264,7 @@ function PaymentErrorFallback({ error, retry, errorId }: FallbackProps) {
         </button>
 
         <a
-          href="mailto:billing@aminy.com"
+          href="mailto:billing@aminy.ai"
           className="w-full px-4 py-2 text-center text-blue-600 hover:text-blue-700 focus:outline-none focus:underline text-sm"
         >
           Contact Billing Support

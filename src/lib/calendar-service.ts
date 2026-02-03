@@ -141,7 +141,7 @@ export function generateICSContent(event: CalendarEvent): string {
       .replace(/\n/g, '\\n');
   };
 
-  const uid = `aminy-${Date.now()}-${Math.random().toString(36).slice(2)}@aminy.app`;
+  const uid = `aminy-${Date.now()}-${Math.random().toString(36).slice(2)}@aminy.ai`;
   const now = formatDate(new Date());
 
   let icsContent = [
