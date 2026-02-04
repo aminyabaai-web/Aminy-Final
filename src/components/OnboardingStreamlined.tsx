@@ -577,7 +577,7 @@ export function OnboardingStreamlined({ onComplete, initialEmail = '' }: Onboard
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
                 className="flex flex-col"
-                style={{ height: 'calc(100vh - 120px)', minHeight: '400px' }}
+                style={{ height: 'calc(100dvh - 120px)', minHeight: '400px' }}
               >
                 {/* Chat messages */}
                 <div className="flex-1 overflow-y-auto space-y-4 pb-4 -mx-4 px-4">
@@ -653,7 +653,7 @@ export function OnboardingStreamlined({ onComplete, initialEmail = '' }: Onboard
                 </div>
 
                 {/* Input area - fixed at bottom, premium design */}
-                <div className="pt-4 pb-3 sticky bottom-0 -mx-4 px-4 bg-gradient-to-t from-white via-white to-transparent">
+                <div className="pt-3 sticky bottom-0 -mx-4 px-4 bg-gradient-to-t from-white via-white to-transparent" style={{ paddingBottom: 'max(12px, env(safe-area-inset-bottom, 12px))' }}>
                   <div className="flex gap-2 items-end">
                     {/* Mic button */}
                     {isVoiceSupported && (
@@ -694,7 +694,7 @@ export function OnboardingStreamlined({ onComplete, initialEmail = '' }: Onboard
                             ? "Share what's on your mind..."
                             : "Type your reply..."
                         }
-                        className="w-full px-4 py-3 rounded-2xl bg-gray-50 border border-gray-200 focus:border-teal-400 focus:ring-2 focus:ring-teal-100 focus:outline-none resize-none transition-all min-h-[48px] max-h-[120px] text-[15px] leading-relaxed placeholder:text-gray-400 scrollbar-hide"
+                        className="w-full px-4 py-3 rounded-2xl bg-gray-50 border border-gray-200 focus:border-teal-400 focus:ring-2 focus:ring-teal-100 focus:outline-none resize-none transition-all min-h-[48px] max-h-[120px] text-[16px] leading-relaxed placeholder:text-gray-400 scrollbar-hide"
                         style={{
                           lineHeight: '1.5',
                         }}

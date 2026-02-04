@@ -1134,10 +1134,14 @@ export default function App() {
     currentScreen === "vault";
 
   // Determine if screen should have swipe navigation
+  // Exclude public/standalone pages that need native scrolling
   const shouldEnableSwipe =
     currentScreen !== "splash" &&
     currentScreen !== "login" &&
-    currentScreen !== "create-account";
+    currentScreen !== "create-account" &&
+    currentScreen !== "onboarding" &&
+    currentScreen !== "provider-landing" &&
+    currentScreen !== "provider-apply";
 
   // Determine if screen should have pull-to-refresh
   const shouldEnablePullToRefresh =

@@ -132,8 +132,8 @@ export const MobilePolishEnhancer: React.FC<MobilePolishEnhancerProps> = ({
       data-mobile={isMobile.toString()}
       data-keyboard={isKeyboardOpen ? 'open' : 'closed'}
       style={{
-        height: isMobile && viewportHeight > 0 ? `${viewportHeight}px` : 'auto',
-        minHeight: isMobile ? 'var(--vh, 1vh) * 100' : '100vh'
+        minHeight: isMobile && viewportHeight > 0 ? `${viewportHeight}px` : '100vh',
+        overflowY: 'auto',
       }}
     >
       {children}
