@@ -192,20 +192,15 @@ export function PaywallSimplified({
       // Only try Stripe if we have a user AND Stripe is properly configured
       if (user && isStripeConfigured()) {
         try {
-          const priceId = tier === 'core'
-            ? (billingPeriod === 'monthly' ? 'price_core_monthly' : 'price_core_yearly')
-            : tier === 'pro'
-            ? (billingPeriod === 'monthly' ? 'price_pro_monthly' : 'price_pro_yearly')
-            : (billingPeriod === 'monthly' ? 'price_proplus_monthly' : 'price_proplus_yearly');
+          const interval = billingPeriod === 'monthly' ? 'monthly' : 'annual';
 
           const session = await createCheckoutSession({
-            priceId,
             userId: user.id,
-            customerEmail: user.email || '',
-            successUrl: `${window.location.origin}/dashboard?upgraded=true`,
-            cancelUrl: `${window.location.origin}/dashboard`,
-            trialDays: 7,
-            promoCode: appliedPromo?.code,
+            email: user.email || '',
+            tier: tier as any,
+            interval: interval as any,
+            successUrl: `${window.location.origin}/?screen=dashboard&payment=success`,
+            cancelUrl: `${window.location.origin}/?screen=paywall&payment=cancelled`,
           });
 
           if (session?.url) {
