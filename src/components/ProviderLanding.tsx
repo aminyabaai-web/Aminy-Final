@@ -44,18 +44,15 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
       <header className="bg-white dark:bg-slate-900 border-b border-neutral-200 dark:border-slate-700 sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <button onClick={onBack} className="flex items-center gap-2">
-            <div style={{ overflow: 'hidden', height: '36px', display: 'flex', alignItems: 'center' }}>
+            <div className="w-9 h-9 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0" style={{ background: '#0d3d40' }}>
               <img
-                src={aminyLogoCropped}
-                alt="Aminy"
-                style={{
-                  height: '44px',
-                  width: 'auto',
-                  objectFit: 'contain',
-                  transform: 'scale(1.3)',
-                }}
+                src={compassImage}
+                alt=""
+                className="w-[130%] h-[130%] object-contain"
+                style={{ transform: 'scale(1.15)' }}
               />
             </div>
+            <span className="text-2xl font-bold text-neutral-900 dark:text-white tracking-tight">aminy</span>
           </button>
           <div className="flex items-center gap-3">
             <Button variant="ghost" onClick={onLogin}>
@@ -313,9 +310,9 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
       </section>
 
       {/* Earnings Calculator */}
-      <section className="py-24 bg-gradient-to-br from-teal-600 to-cyan-600">
+      <section className="py-16 bg-gradient-to-br from-teal-600 to-cyan-600">
         <div className="max-w-3xl mx-auto px-4">
-          <div className="text-center text-white mb-10">
+          <div className="text-center text-white mb-8">
             <h2 className="text-3xl font-bold mb-4">
               Earn What You're Worth
             </h2>
