@@ -23,11 +23,14 @@ import {
   Heart,
   Shield,
   Check,
+  Mic,
+  MicOff,
 } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { supabase } from '../utils/supabase/client';
 import { sendMessageToClaude, type ClaudeMessage, type ConversationContext } from '../lib/ai-engine/claude-client';
+import { useVoiceInput } from '../hooks/useVoiceInput';
 
 // Types
 interface OnboardingData {
@@ -112,6 +115,22 @@ export function OnboardingStreamlined({ onComplete, initialEmail = '' }: Onboard
   const [showContinueButton, setShowContinueButton] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Voice dictation
+  const {
+    isListening,
+    isSupported: isVoiceSupported,
+    toggleListening,
+    resetTranscript,
+  } = useVoiceInput({
+    continuous: true,
+    interimResults: true,
+    onResult: (transcript, isFinal) => {
+      if (isFinal && transcript.trim()) {
+        setInputValue(prev => prev ? prev + ' ' + transcript.trim() : transcript.trim());
+      }
+    },
+  });
 
   const [data, setData] = useState<OnboardingData>({
     email: initialEmail,
@@ -639,7 +658,28 @@ export function OnboardingStreamlined({ onComplete, initialEmail = '' }: Onboard
 
                 {/* Input area - fixed at bottom, premium design */}
                 <div className="pt-4 pb-3 sticky bottom-0 -mx-4 px-4 bg-gradient-to-t from-white via-white to-transparent">
-                  <div className="flex gap-3 items-end">
+                  <div className="flex gap-2 items-end">
+                    {/* Mic button */}
+                    {isVoiceSupported && (
+                      <button
+                        onClick={() => {
+                          resetTranscript();
+                          toggleListening();
+                        }}
+                        className={`h-12 w-12 rounded-full flex items-center justify-center transition-all flex-shrink-0 ${
+                          isListening
+                            ? 'bg-red-100 text-red-600 hover:bg-red-200'
+                            : 'bg-gray-100 text-gray-500 hover:text-teal-600 hover:bg-teal-50'
+                        }`}
+                        title={isListening ? 'Stop recording' : 'Voice input'}
+                      >
+                        {isListening ? (
+                          <MicOff className="w-5 h-5" />
+                        ) : (
+                          <Mic className="w-5 h-5" />
+                        )}
+                      </button>
+                    )}
                     <div className="flex-1">
                       <textarea
                         ref={textareaRef}
@@ -652,11 +692,13 @@ export function OnboardingStreamlined({ onComplete, initialEmail = '' }: Onboard
                           }
                         }}
                         placeholder={
-                          data.conversationHistory.length === 0
+                          isListening
+                            ? "Listening..."
+                            : data.conversationHistory.length === 0
                             ? "Share what's on your mind..."
                             : "Type your reply..."
                         }
-                        className="w-full px-4 py-3 rounded-2xl bg-gray-50 border border-gray-200 focus:border-teal-400 focus:ring-2 focus:ring-teal-100 focus:outline-none resize-none transition-all min-h-[48px] max-h-[120px] text-[15px] leading-relaxed placeholder:text-gray-400"
+                        className="w-full px-4 py-3 rounded-2xl bg-gray-50 border border-gray-200 focus:border-teal-400 focus:ring-2 focus:ring-teal-100 focus:outline-none resize-none transition-all min-h-[48px] max-h-[120px] text-[15px] leading-relaxed placeholder:text-gray-400 scrollbar-hide"
                         style={{
                           lineHeight: '1.5',
                         }}

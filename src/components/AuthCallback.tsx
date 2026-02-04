@@ -132,10 +132,10 @@ export function AuthCallback({ onAuthSuccess, onPasswordReset, onError }: AuthCa
           src={aminyLogoCropped}
           alt="Aminy"
           style={{
-            width: '200px',
+            width: '240px',
             aspectRatio: '827 / 338',
             objectFit: 'contain',
-            transform: 'scale(1.25)',
+            transform: 'scale(1.45)',
           }}
         />
       </motion.div>
