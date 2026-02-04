@@ -97,8 +97,8 @@ describe('Financial Transaction Audit Events', () => {
       resourceId: 'pi_test123',
       details: {
         stripeCustomerId: 'cus_test456',
-        amountCents: 2499,
-        amountFormatted: '$24.99',
+        amountCents: 1499,
+        amountFormatted: '$14.99',
         tier: 'core',
         interval: 'monthly',
         isNewSubscription: true,

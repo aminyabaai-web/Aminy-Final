@@ -330,8 +330,8 @@ export async function createCheckout(
         tier,
         interval,
         promoCode,
-        successUrl: successUrl || `${window.location.origin}/dashboard?payment=success`,
-        cancelUrl: cancelUrl || `${window.location.origin}/pricing?payment=cancelled`,
+        successUrl: successUrl || `${window.location.origin}/?screen=dashboard&payment=success`,
+        cancelUrl: cancelUrl || `${window.location.origin}/?screen=paywall&payment=cancelled`,
       }),
     });
 

@@ -2,7 +2,7 @@
  * PaywallSimplified - Premium, Clean Pricing
  *
  * Simplified tier structure:
- * - Free: Basic AI access (3/day), limited features
+ * - Free: Basic AI access (5/day), limited features
  * - Core ($14.99/mo): Unlimited AI, full features, 10% off sessions
  * - Pro ($29.99/mo): Everything + 20% off sessions, custom plans, priority support
  * - Pro+ / Family Plan ($49.99/mo): Everything + 30% off, unlimited children, advanced analytics
@@ -67,7 +67,7 @@ const TESTIMONIALS = [
 
 // Simplified tier features for comparison
 const TIER_FEATURES = [
-  { name: 'AI Conversations', free: '3/day', core: 'Unlimited', pro: 'Unlimited', proplus: 'Unlimited' },
+  { name: 'AI Conversations', free: '5/day', core: 'Unlimited', pro: 'Unlimited', proplus: 'Unlimited' },
   { name: 'Memory & Context', free: '7 days', core: 'Full history', pro: 'Full history', proplus: 'Full history' },
   { name: 'Daily Strategies', free: false, core: true, pro: true, proplus: true },
   { name: 'Behavior Tracking', free: 'Basic', core: 'Advanced', pro: 'Advanced', proplus: 'Advanced' },
@@ -75,7 +75,7 @@ const TIER_FEATURES = [
   { name: 'Document Vault', free: false, core: '50 docs', pro: 'Unlimited', proplus: 'Unlimited' },
   { name: 'Weekly AI Summary', free: false, core: true, pro: true, proplus: true },
   { name: 'Telehealth Discount', free: 'Full price', core: '10% off', pro: '20% off', proplus: '30% off' },
-  { name: 'Children Supported', free: '1', core: 'Up to 3', pro: 'Up to 3', proplus: 'Unlimited' },
+  { name: 'Children Supported', free: '1', core: 'Up to 2', pro: 'Up to 3', proplus: 'Unlimited' },
   { name: 'Custom Intervention Plans', free: false, core: false, pro: true, proplus: true },
   { name: 'Priority Support', free: false, core: false, pro: true, proplus: true },
   { name: 'Advanced Analytics', free: false, core: false, pro: false, proplus: true },
@@ -115,9 +115,9 @@ export function PaywallSimplified({
   const coreMonthly = 14.99;
   const coreYearly = 129; // ~$10.75/mo
   const proMonthly = 29.99;
-  const proYearly = 259; // ~$21.58/mo
+  const proYearly = 279; // ~$23.25/mo
   const proplusMonthly = 49.99;
-  const proplusYearly = 429; // ~$35.75/mo
+  const proplusYearly = 479; // ~$39.92/mo
 
   const corePrice = billingPeriod === 'monthly' ? coreMonthly : coreYearly;
   const corePerMonth = billingPeriod === 'yearly' ? (coreYearly / 12).toFixed(2) : coreMonthly.toFixed(2);

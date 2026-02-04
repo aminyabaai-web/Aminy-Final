@@ -1062,7 +1062,7 @@ export default function App() {
   };
 
   const handleMessageSent = () => {
-    if (userData.tier === "free" || userData.tier === "core") {
+    if (userData.tier === "free") {
       setMessagesLeft((prev) => Math.max(0, prev - 1));
     }
   };

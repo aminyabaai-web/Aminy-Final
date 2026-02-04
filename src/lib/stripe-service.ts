@@ -54,7 +54,7 @@ export const isStripeConfigured = (): boolean => {
 // Must match tier-utils.ts pricing
 export const TIER_PRICING = {
   free: { monthly: 0, annual: 0 },
-  starter: { monthly: 6.99, annual: 59 },   // ~30% savings annually
+  starter: { monthly: 14.99, annual: 129 },  // Legacy: same as Core
   core: { monthly: 14.99, annual: 129 },    // ~28% savings annually
   pro: { monthly: 29.99, annual: 279 },     // ~22% savings annually
   proplus: { monthly: 49.99, annual: 479 }, // ~20% savings annually
@@ -101,8 +101,8 @@ export async function createCheckoutSession({
   email,
   tier,
   interval,
-  successUrl = `${window.location.origin}/dashboard?payment=success`,
-  cancelUrl = `${window.location.origin}/paywall?payment=cancelled`,
+  successUrl = `${window.location.origin}/?screen=dashboard&payment=success`,
+  cancelUrl = `${window.location.origin}/?screen=paywall&payment=cancelled`,
 }: CreateCheckoutParams): Promise<CheckoutResponse> {
   const accessToken = getAccessToken();
 
@@ -278,8 +278,8 @@ export async function createOneTimePayment({
         amount,
         description,
         metadata,
-        successUrl: `${window.location.origin}/dashboard?payment=success`,
-        cancelUrl: `${window.location.origin}/telehealth?payment=cancelled`,
+        successUrl: `${window.location.origin}/?screen=dashboard&payment=success`,
+        cancelUrl: `${window.location.origin}/?screen=telehealth&payment=cancelled`,
       }),
     }
   );
@@ -452,7 +452,7 @@ export async function createVisitPayment({
   promoCode?: string;
 }): Promise<CheckoutResponse> {
   const pricing = VISIT_PRICES[visitType];
-  const { total } = calculateVisitPrice(visitType, isMember, promoCode);
+  const { total } = await calculateVisitPrice(visitType, isMember, promoCode);
 
   return createOneTimePayment({
     userId,
@@ -504,8 +504,8 @@ export async function createBundleCheckoutSession({
   consultCredits,
   deepReviewCredits,
   validityDays,
-  successUrl = `${window.location.origin}/telehealth?bundle=success`,
-  cancelUrl = `${window.location.origin}/telehealth/bundles?bundle=cancelled`,
+  successUrl = `${window.location.origin}/?screen=telehealth&bundle=success`,
+  cancelUrl = `${window.location.origin}/?screen=telehealth&bundle=cancelled`,
 }: {
   userId: string;
   email: string;

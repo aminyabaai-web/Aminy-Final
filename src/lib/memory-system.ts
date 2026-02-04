@@ -85,10 +85,10 @@ export const TIER_LIMITS: Record<TierType, {
     canLearnFromVault: false,
     contextTokens: 3000,          // Enough context for helpful responses
   },
-  // Starter: Entry Empowerment - $6.99/mo
+  // Starter: Legacy tier (maps to Core) - $14.99/mo
   // MUST MATCH tier-utils.ts getAIMessageLimit()
   starter: {
-    messagesPerDay: 20,           // 20 messages/day (matches tier-utils.ts)
+    messagesPerDay: Infinity,     // Unlimited (same as Core - matches tier-utils.ts)
     memoryDays: 30,               // Short context memory
     maxDocuments: 5,              // Basic vault
     maxFacts: 100,

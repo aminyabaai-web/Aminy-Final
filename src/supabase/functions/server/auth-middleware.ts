@@ -36,22 +36,28 @@ export interface AuthResult {
  */
 const TIER_FEATURES: Record<TierType, Set<string>> = {
   free: new Set([
-    'limited-ai-chat',        // 10 messages/day
+    'limited-ai-chat',        // 5 messages/day
     'basic-daily-plan',       // Pre-set activities only
-    'basic-calm-tools',       // 5 calm tools
+    'basic-calm-tools',       // 3 core calm tools
     'basic-tracking',         // Simple completion tracking
     'community-read-only',    // View community, can't post
   ]),
   starter: new Set([
-    'limited-ai-chat',        // 50 messages/day
-    'basic-daily-plan',
-    'custom-tasks',           // Add custom tasks
-    'full-calm-tools',        // All calm tools
-    'basic-tracking',
-    'favorites',              // Save favorites
-    'reminders',              // Push notifications
-    'community-participate',  // Can post in community
-    'basic-reports',          // Weekly summaries
+    // Legacy: Starter maps to Core - same features
+    'unlimited-ai-chat',
+    'adaptive-daily-plan',
+    'custom-tasks',
+    'full-calm-tools',
+    'advanced-tracking',
+    'favorites',
+    'reminders',
+    'community-participate',
+    'full-reports',
+    'vault-access',
+    'ai-document-analysis',
+    'multi-child',            // Up to 2 children
+    'marketplace-access',
+    'care-plan-export',
   ]),
   core: new Set([
     'unlimited-ai-chat',      // No limits
@@ -65,7 +71,7 @@ const TIER_FEATURES: Record<TierType, Set<string>> = {
     'full-reports',           // Monthly analytics
     'vault-access',           // Document storage
     'ai-document-analysis',   // AI reads IEPs, medical records
-    'multi-child',            // Up to 3 children
+    'multi-child',            // Up to 2 children
     'marketplace-access',     // Book sessions (pay per use)
     'care-plan-export',       // Export for providers
   ]),

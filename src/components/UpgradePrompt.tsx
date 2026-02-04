@@ -30,7 +30,7 @@ interface UpgradePromptProps {
 }
 
 const TIER_PRICES = {
-  starter: '$6.99',
+  starter: '$14.99',
   core: '$14.99',
   pro: '$29.99',
 };

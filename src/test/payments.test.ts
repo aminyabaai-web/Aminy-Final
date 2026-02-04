@@ -6,11 +6,12 @@
 import { describe, it, expect } from 'vitest';
 
 // Define pricing inline to avoid import resolution issues
+// Must match tier-utils.ts and stripe-service.ts
 const TIER_PRICING = {
-  starter: { monthly: 6.99, annual: 59 },
-  core: { monthly: 12.99, annual: 119 },
-  pro: { monthly: 24.99, annual: 229 },
-  proplus: { monthly: 49.99, annual: 449 },
+  starter: { monthly: 14.99, annual: 129 },  // Legacy: same as Core
+  core: { monthly: 14.99, annual: 129 },
+  pro: { monthly: 29.99, annual: 279 },
+  proplus: { monthly: 49.99, annual: 479 },
 };
 
 function formatPrice(cents: number): string {
@@ -19,33 +20,32 @@ function formatPrice(cents: number): string {
 
 describe('Tier Pricing Configuration', () => {
   it('should have correct pricing structure', () => {
-    expect(TIER_PRICING.starter.monthly).toBe(6.99);
-    expect(TIER_PRICING.starter.annual).toBe(59);
+    expect(TIER_PRICING.starter.monthly).toBe(14.99);
+    expect(TIER_PRICING.starter.annual).toBe(129);
 
-    expect(TIER_PRICING.core.monthly).toBe(12.99);
-    expect(TIER_PRICING.core.annual).toBe(119);
+    expect(TIER_PRICING.core.monthly).toBe(14.99);
+    expect(TIER_PRICING.core.annual).toBe(129);
 
-    expect(TIER_PRICING.pro.monthly).toBe(24.99);
-    expect(TIER_PRICING.pro.annual).toBe(229);
+    expect(TIER_PRICING.pro.monthly).toBe(29.99);
+    expect(TIER_PRICING.pro.annual).toBe(279);
 
     expect(TIER_PRICING.proplus.monthly).toBe(49.99);
-    expect(TIER_PRICING.proplus.annual).toBe(449);
+    expect(TIER_PRICING.proplus.annual).toBe(479);
   });
 
   it('should calculate annual savings correctly', () => {
-    // Starter: $6.99 * 12 = $83.88 vs $59 annual = $24.88 saved
-    const starterMonthlyCost = TIER_PRICING.starter.monthly * 12;
-    const starterAnnualCost = TIER_PRICING.starter.annual;
-    expect(starterMonthlyCost).toBeGreaterThan(starterAnnualCost);
-
-    // Core: $12.99 * 12 = $155.88 vs $119 annual = $36.88 saved
+    // Core: $14.99 * 12 = $179.88 vs $129 annual = $50.88 saved
     const coreMonthlyCost = TIER_PRICING.core.monthly * 12;
     const coreAnnualCost = TIER_PRICING.core.annual;
     expect(coreMonthlyCost).toBeGreaterThan(coreAnnualCost);
+
+    // Pro: $29.99 * 12 = $359.88 vs $279 annual = $80.88 saved
+    const proMonthlyCost = TIER_PRICING.pro.monthly * 12;
+    const proAnnualCost = TIER_PRICING.pro.annual;
+    expect(proMonthlyCost).toBeGreaterThan(proAnnualCost);
   });
 
   it('should have tiers in ascending price order', () => {
-    expect(TIER_PRICING.starter.monthly).toBeLessThan(TIER_PRICING.core.monthly);
     expect(TIER_PRICING.core.monthly).toBeLessThan(TIER_PRICING.pro.monthly);
     expect(TIER_PRICING.pro.monthly).toBeLessThan(TIER_PRICING.proplus.monthly);
   });
@@ -53,9 +53,9 @@ describe('Tier Pricing Configuration', () => {
 
 describe('Price Formatting', () => {
   it('should format prices correctly', () => {
-    expect(formatPrice(699)).toBe('$6.99');
-    expect(formatPrice(1299)).toBe('$12.99');
-    expect(formatPrice(5900)).toBe('$59.00');
+    expect(formatPrice(1499)).toBe('$14.99');
+    expect(formatPrice(2999)).toBe('$29.99');
+    expect(formatPrice(4999)).toBe('$49.99');
   });
 
   it('should handle zero price', () => {
