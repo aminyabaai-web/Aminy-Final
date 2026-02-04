@@ -77,8 +77,8 @@ const TIER_FEATURES = [
   { name: 'Telehealth Discount', free: 'Full price', core: '10% off', pro: '20% off', proplus: '30% off' },
   { name: 'Children Supported', free: '1', core: 'Up to 3', pro: 'Up to 3', proplus: 'Unlimited' },
   { name: 'Custom Intervention Plans', free: false, core: false, pro: true, proplus: true },
-  { name: 'Advanced Analytics', free: false, core: false, pro: false, proplus: true },
   { name: 'Priority Support', free: false, core: false, pro: true, proplus: true },
+  { name: 'Advanced Analytics', free: false, core: false, pro: false, proplus: true },
 ];
 
 interface PaywallSimplifiedProps {
