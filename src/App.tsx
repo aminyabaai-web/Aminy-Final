@@ -1,6 +1,7 @@
 import React, {
   useState,
   useEffect,
+  useRef,
   lazy,
   Suspense,
   startTransition,
@@ -511,15 +512,16 @@ interface ChildProfile {
 interface UserData {
   parentName: string;
   childName: string;
-  childId?: string; // Add childId for URL params
+  childAge?: number;
+  childId?: string;
   relationship: string;
   state: string;
   email?: string;
   hasCompletedOnboarding: boolean;
   tier?: TierType;
-  role?: 'parent' | 'provider' | 'admin'; // Role-based access control
-  children?: ChildProfile[]; // Multi-child support
-  activeChildId?: string; // Currently selected child
+  role?: 'parent' | 'provider' | 'admin';
+  children?: ChildProfile[];
+  activeChildId?: string;
 }
 
 // Initialize screen state synchronously to prevent LCP delays
@@ -548,7 +550,7 @@ const getInitialScreen = (): AppScreen => {
   // Check URL params
   const params = new URLSearchParams(window.location.search);
   const urlScreen = params.get("screen");
-  if (urlScreen && ["login", "create-account", "forgot-password", "reset-password", "privacy-policy", "terms-of-service", "join"].includes(urlScreen)) {
+  if (urlScreen && ["login", "create-account", "forgot-password", "reset-password", "privacy-policy", "terms-of-service", "join", "provider-landing", "provider-apply"].includes(urlScreen)) {
     return urlScreen as AppScreen;
   }
 
@@ -597,6 +599,9 @@ const getInitialUserData = (): UserData => {
 export default function App() {
   const [currentScreen, setCurrentScreen] =
     useState<AppScreen>(getInitialScreen);
+  const currentScreenRef = useRef<AppScreen>(currentScreen);
+  // Keep ref in sync so async callbacks (auth listener) see the latest screen
+  useEffect(() => { currentScreenRef.current = currentScreen; }, [currentScreen]);
   const [userData, setUserData] = useState<UserData>(getInitialUserData);
   const [activeTab, setActiveTab] = useState("home");
   const [messagesLeft, setMessagesLeft] = useState(10);
@@ -750,6 +755,8 @@ export default function App() {
           "caregivers",
           "vault",
           "junior",
+          "provider-landing",
+          "provider-apply",
         ].includes(screen)
       ) {
         setCurrentScreen(screen as AppScreen);
@@ -806,6 +813,11 @@ export default function App() {
 
   // Supabase auth state listener - handles session changes from OAuth, login, logout
   useEffect(() => {
+    // Public/auth screens where we should navigate after sign-in
+    const authScreens = ['login', 'create-account', 'auth-callback', 'splash'];
+    // Public screens where we should NOT redirect (e.g. provider browsing)
+    const publicNoRedirect = ['provider-landing', 'provider-apply', 'privacy-policy', 'terms-of-service'];
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         if (event === 'SIGNED_IN' && session?.user) {
@@ -825,7 +837,7 @@ export default function App() {
               .order('created_at', { ascending: true });
 
             // Find the primary child or first child
-            const primaryChild = children?.find(c => c.is_primary) || children?.[0];
+            const primaryChild = children?.find((c: { is_primary?: boolean }) => c.is_primary) || children?.[0];
 
             if (profile) {
               setUserData(prev => ({
@@ -851,11 +863,16 @@ export default function App() {
                 tier: profile.tier || 'free',
               });
 
-              // Navigate based on onboarding status
-              if (profile.has_completed_onboarding) {
-                navigateToScreen('dashboard');
-              } else {
-                navigateToScreen('onboarding');
+              // Only navigate if user is on an auth/login screen — don't redirect
+              // away from public pages like provider-landing.
+              // Use ref to get the *current* screen (avoids stale closure).
+              const screen = currentScreenRef.current;
+              if (!publicNoRedirect.includes(screen)) {
+                if (profile.has_completed_onboarding) {
+                  navigateToScreen('dashboard');
+                } else if (authScreens.includes(screen)) {
+                  navigateToScreen('onboarding');
+                }
               }
             } else {
               // New user, start onboarding
@@ -863,16 +880,22 @@ export default function App() {
                 ...prev,
                 email: session.user.email || '',
               }));
-              navigateToScreen('onboarding');
+              const screen = currentScreenRef.current;
+              if (authScreens.includes(screen)) {
+                navigateToScreen('onboarding');
+              }
             }
           } catch (error) {
             logger.error('Error loading profile', error);
-            // Still set email and proceed to onboarding
+            // Still set email
             setUserData(prev => ({
               ...prev,
               email: session.user.email || '',
             }));
-            navigateToScreen('onboarding');
+            const screen = currentScreenRef.current;
+            if (authScreens.includes(screen)) {
+              navigateToScreen('onboarding');
+            }
           }
         } else if (event === 'SIGNED_OUT') {
           // Clear Sentry user context
@@ -915,12 +938,13 @@ export default function App() {
   };
 
   const handleLoginSuccess = (email: string) => {
+    // Only set email here — the auth state listener will load the full profile
+    // (childName, childAge, hasCompletedOnboarding, etc.) from Supabase and
+    // navigate to the correct screen (dashboard or onboarding).
     setUserData((prev) => ({
       ...prev,
       email,
-      hasCompletedOnboarding: true,
     }));
-    navigateToScreen("dashboard");
     toast.success("Good to see you — let's make today great.");
   };
 
@@ -961,14 +985,11 @@ export default function App() {
         if (userId) {
           const childId = `child-${userId.substring(0, 8)}-${Date.now().toString(36)}`;
 
-          // Upsert profile - non-blocking
+          // Upsert profile - non-blocking (only use columns that exist in profiles table)
           supabase.from('profiles').upsert({
             id: userId,
-            email: updatedData.email,
             parent_name: updatedData.parentName,
             child_name: updatedData.childName,
-            child_id: childId,
-            child_age: updatedData.childAge || null,
             relationship: updatedData.relationship,
             state: updatedData.state,
             tier: 'free',

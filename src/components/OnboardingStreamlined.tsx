@@ -336,17 +336,13 @@ export function OnboardingStreamlined({ onComplete, initialEmail = '' }: Onboard
         return;
       }
 
-      // Update profile
+      // Update profile - use correct column names matching profiles table schema
       const { error: profileError } = await supabase.from('profiles').upsert({
         id: user.id,
-        name: data.parentName,
+        parent_name: data.parentName,
+        child_name: data.childName,
         has_completed_onboarding: true,
-        onboarding_data: {
-          childName: data.childName,
-          childAge: data.childAge,
-          initialConcern: data.initialConcern,
-          conversationSummary: data.conversationHistory.slice(0, 4),
-        }
+        updated_at: new Date().toISOString(),
       });
 
       if (profileError) {
