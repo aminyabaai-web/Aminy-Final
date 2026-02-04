@@ -74,7 +74,7 @@ const TIER_FEATURES = [
   { name: 'Sleep & Routine Insights', free: false, core: true, pro: true, proplus: true },
   { name: 'Document Vault', free: false, core: '50 docs', pro: 'Unlimited', proplus: 'Unlimited' },
   { name: 'Weekly AI Summary', free: false, core: true, pro: true, proplus: true },
-  { name: 'Session Discount', free: 'Full price', core: '10% off', pro: '20% off', proplus: '30% off' },
+  { name: 'Telehealth Discount', free: 'Full price', core: '10% off', pro: '20% off', proplus: '30% off' },
   { name: 'Children Supported', free: '1', core: 'Up to 3', pro: 'Up to 3', proplus: 'Unlimited' },
   { name: 'Custom Intervention Plans', free: false, core: false, pro: true, proplus: true },
   { name: 'Advanced Analytics', free: false, core: false, pro: false, proplus: true },
@@ -297,13 +297,14 @@ export function PaywallSimplified({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
+            className="flex"
           >
-            <Card className="relative overflow-hidden border-2 border-teal-500 bg-white h-full">
+            <Card className="relative overflow-hidden border-2 border-teal-500 bg-white flex flex-col w-full">
               <div className="absolute top-0 right-0 bg-teal-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
                 MOST POPULAR
               </div>
 
-              <div className="p-5">
+              <div className="p-5 flex flex-col flex-1">
                 <h3 className="text-lg font-bold text-gray-900 mb-1">Core</h3>
 
                 {/* HSA/FSA Badge */}
@@ -337,7 +338,7 @@ export function PaywallSimplified({
                     'Full memory of your journey',
                     'Personalized daily strategies',
                     'Sleep & behavior insights',
-                    'All sessions 10% off',
+                    '10% off provider telehealth',
                   ].map((feature) => (
                     <li key={feature} className="flex items-start gap-2 text-gray-700">
                       <Check className="w-4 h-4 text-teal-500 mt-0.5 flex-shrink-0" />
@@ -346,17 +347,19 @@ export function PaywallSimplified({
                   ))}
                 </ul>
 
-                <Button
-                  onClick={() => handleSubscribe('core')}
-                  disabled={isLoading}
-                  className="w-full bg-teal-500 hover:bg-teal-600 text-white font-semibold py-3 rounded-xl shadow-sm"
-                >
-                  Start Free Trial
-                </Button>
+                <div className="mt-auto">
+                  <Button
+                    onClick={() => handleSubscribe('core')}
+                    disabled={isLoading}
+                    className="w-full bg-teal-500 hover:bg-teal-600 text-white font-semibold py-3 rounded-xl shadow-sm"
+                  >
+                    Start Free Trial
+                  </Button>
 
-                <p className="text-xs text-gray-500 text-center mt-2">
-                  No credit card required • Cancel anytime
-                </p>
+                  <p className="text-xs text-gray-500 text-center mt-2">
+                    No credit card required • Cancel anytime
+                  </p>
+                </div>
               </div>
             </Card>
           </motion.div>
@@ -366,9 +369,10 @@ export function PaywallSimplified({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
+            className="flex"
           >
-            <Card className="relative overflow-hidden border border-gray-200 bg-white h-full">
-              <div className="p-5">
+            <Card className="relative overflow-hidden border border-gray-200 bg-white flex flex-col w-full">
+              <div className="p-5 flex flex-col flex-1">
                 <h3 className="text-lg font-bold text-gray-900 mb-1">Pro</h3>
 
                 <div className="flex items-center gap-1.5 mb-3">
@@ -384,7 +388,7 @@ export function PaywallSimplified({
                     </span>
                     <span className="text-gray-500 text-sm">/month</span>
                   </div>
-                  <p className="text-violet-600 text-sm font-medium mt-1">
+                  <p className="text-teal-600 text-sm font-medium mt-1">
                     7-day free trial included
                   </p>
                 </div>
@@ -393,29 +397,30 @@ export function PaywallSimplified({
                 <ul className="space-y-2 mb-4 text-sm">
                   {[
                     'Everything in Core',
-                    'All sessions 20% off',
+                    '20% off provider telehealth',
                     'Custom intervention plans',
                     'Priority support',
                   ].map((feature) => (
                     <li key={feature} className="flex items-start gap-2 text-gray-700">
-                      <Check className="w-4 h-4 text-violet-500 mt-0.5 flex-shrink-0" />
+                      <Check className="w-4 h-4 text-teal-500 mt-0.5 flex-shrink-0" />
                       <span>{feature}</span>
                     </li>
                   ))}
                 </ul>
 
-                <Button
-                  onClick={() => handleSubscribe('pro')}
-                  disabled={isLoading}
-                  variant="outline"
-                  className="w-full border-violet-500 text-violet-600 hover:bg-violet-50 font-semibold py-3 rounded-xl"
-                >
-                  Start Free Trial
-                </Button>
+                <div className="mt-auto">
+                  <Button
+                    onClick={() => handleSubscribe('pro')}
+                    disabled={isLoading}
+                    className="w-full bg-teal-500 hover:bg-teal-600 text-white font-semibold py-3 rounded-xl shadow-sm"
+                  >
+                    Start Free Trial
+                  </Button>
 
-                <p className="text-xs text-gray-500 text-center mt-2">
-                  No credit card required • Cancel anytime
-                </p>
+                  <p className="text-xs text-gray-500 text-center mt-2">
+                    No credit card required • Cancel anytime
+                  </p>
+                </div>
               </div>
             </Card>
           </motion.div>
@@ -425,13 +430,14 @@ export function PaywallSimplified({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
+            className="flex"
           >
-            <Card className="relative overflow-hidden border-2 border-violet-500 bg-white h-full">
+            <Card className="relative overflow-hidden border-2 border-violet-500 bg-white flex flex-col w-full">
               <div className="absolute top-0 right-0 bg-violet-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
                 BEST VALUE
               </div>
 
-              <div className="p-5">
+              <div className="p-5 flex flex-col flex-1">
                 <h3 className="text-lg font-bold text-gray-900 mb-1">Family Plan</h3>
 
                 <div className="flex items-center gap-1.5 mb-3">
@@ -447,7 +453,7 @@ export function PaywallSimplified({
                     </span>
                     <span className="text-gray-500 text-sm">/month</span>
                   </div>
-                  <p className="text-violet-600 text-sm font-medium mt-1">
+                  <p className="text-teal-600 text-sm font-medium mt-1">
                     7-day free trial included
                   </p>
                 </div>
@@ -456,33 +462,40 @@ export function PaywallSimplified({
                 <ul className="space-y-2 mb-4 text-sm">
                   {[
                     'Everything in Pro',
-                    'All sessions 30% off',
+                    '30% off provider telehealth',
                     'Unlimited children',
                     'Advanced analytics',
                     'Dedicated support',
                   ].map((feature) => (
                     <li key={feature} className="flex items-start gap-2 text-gray-700">
-                      <Check className="w-4 h-4 text-violet-500 mt-0.5 flex-shrink-0" />
+                      <Check className="w-4 h-4 text-teal-500 mt-0.5 flex-shrink-0" />
                       <span>{feature}</span>
                     </li>
                   ))}
                 </ul>
 
-                <Button
-                  onClick={() => handleSubscribe('proplus')}
-                  disabled={isLoading}
-                  className="w-full bg-violet-500 hover:bg-violet-600 text-white font-semibold py-3 rounded-xl shadow-sm"
-                >
-                  Start Free Trial
-                </Button>
+                <div className="mt-auto">
+                  <Button
+                    onClick={() => handleSubscribe('proplus')}
+                    disabled={isLoading}
+                    className="w-full bg-teal-500 hover:bg-teal-600 text-white font-semibold py-3 rounded-xl shadow-sm"
+                  >
+                    Start Free Trial
+                  </Button>
 
-                <p className="text-xs text-gray-500 text-center mt-2">
-                  No credit card required • Cancel anytime
-                </p>
+                  <p className="text-xs text-gray-500 text-center mt-2">
+                    No credit card required • Cancel anytime
+                  </p>
+                </div>
               </div>
             </Card>
           </motion.div>
         </div>
+
+        {/* Telehealth context note */}
+        <p className="text-xs text-gray-400 text-center max-w-lg mx-auto mb-6">
+          All plans include access to our provider marketplace — book telehealth sessions with BCBAs, RBTs, therapists, and more. Higher tiers save more per session.
+        </p>
 
         {/* Promo Code */}
         <div className="w-full max-w-sm mb-6">
