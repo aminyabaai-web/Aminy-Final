@@ -75,7 +75,7 @@ const TIER_COLORS: Record<string, string> = {
 };
 
 const TIER_PRICES: Record<string, { monthly: number; annual: number }> = {
-  'Starter': { monthly: 6.99, annual: 4.99 },
+  'Starter': { monthly: 14.99, annual: 10.75 },
   'Core': { monthly: 14.99, annual: 9.99 },
   'Pro': { monthly: 29.99, annual: 19.99 },
   'Pro+': { monthly: 49.99, annual: 39.99 },

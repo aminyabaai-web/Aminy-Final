@@ -141,7 +141,7 @@ const MOCK_CHANNELS: ChannelMetrics[] = [
 
 const TIER_BREAKDOWN = [
   { tier: 'Free', users: 4521, revenue: 0, arpu: 0, color: '#94A3B8' },
-  { tier: 'Starter', users: 1234, revenue: 8627, arpu: 6.99, color: '#3B82F6' },
+  { tier: 'Starter', users: 1234, revenue: 18498, arpu: 14.99, color: '#3B82F6' },
   { tier: 'Core', users: 2156, revenue: 32318, arpu: 14.99, color: '#10B981' },
   { tier: 'Pro', users: 876, revenue: 26251, arpu: 29.99, color: '#8B5CF6' },
   { tier: 'Pro+', users: 234, revenue: 11698, arpu: 49.99, color: '#F59E0B' },

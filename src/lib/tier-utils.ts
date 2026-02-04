@@ -40,10 +40,10 @@ export const TRIAL_CONFIG = {
 // Optimized for ~60% marketplace margins, 80%+ SaaS margins
 export const tierPricing: Record<TierType, { monthly: number; yearly: number; savings?: number; hasTrial?: boolean }> = {
   free: { monthly: 0, yearly: 0 },
-  starter: { monthly: 24.99, yearly: 199, savings: 101, hasTrial: true }, // Legacy: same as Core
-  core: { monthly: 24.99, yearly: 199, savings: 101, hasTrial: true },
-  pro: { monthly: 49.99, yearly: 399, savings: 201, hasTrial: true },
-  proplus: { monthly: 79.99, yearly: 649, savings: 311, hasTrial: true },
+  starter: { monthly: 14.99, yearly: 129, savings: 51, hasTrial: true }, // Legacy: same as Core
+  core: { monthly: 14.99, yearly: 129, savings: 51, hasTrial: true },
+  pro: { monthly: 29.99, yearly: 279, savings: 81, hasTrial: true },
+  proplus: { monthly: 49.99, yearly: 479, savings: 121, hasTrial: true },
 };
 
 // HSA/FSA eligibility configuration
@@ -1048,7 +1048,7 @@ export function getHSAFSANote(): string {
 export function getAIMessageLimit(tier: TierType | undefined): number | null {
   const limits: Record<TierType, number | null> = {
     free: 5,
-    starter: 20,
+    starter: null,  // Legacy: same as Core (unlimited)
     core: null,    // unlimited
     pro: null,     // unlimited
     proplus: null, // unlimited
@@ -1058,7 +1058,7 @@ export function getAIMessageLimit(tier: TierType | undefined): number | null {
 
 // Check if tier has unlimited AI
 export function hasUnlimitedAI(tier: TierType | undefined): boolean {
-  return tier === 'core' || tier === 'pro' || tier === 'proplus';
+  return tier === 'starter' || tier === 'core' || tier === 'pro' || tier === 'proplus';
 }
 
 // Get Live AI Video limits per tier (minutes per month)
@@ -1107,9 +1107,9 @@ export function getMarketplaceDiscount(tier: TierType | undefined): number {
   return tier ? discounts[tier] : 0;
 }
 
-// Check if tier includes BCBA consultation
+// Check if tier includes BCBA consultation (only Pro+ / Family Plan)
 export function includesBCBAConsult(tier: TierType | undefined): boolean {
-  return tier === 'pro' || tier === 'proplus';
+  return tier === 'proplus';
 }
 
 // Get max children allowed per tier

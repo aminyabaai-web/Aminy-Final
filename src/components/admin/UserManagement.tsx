@@ -165,7 +165,7 @@ export function UserManagement() {
           activeUsers: mappedUsers.filter(u => u.status === 'active').length,
           paidUsers: mappedUsers.filter(u => u.tier !== 'free').length,
           mrr: mappedUsers.reduce((sum, u) => {
-            const prices = { free: 0, starter: 6.99, core: 14.99, pro: 29.99, proplus: 49.99 };
+            const prices = { free: 0, starter: 14.99, core: 14.99, pro: 29.99, proplus: 49.99 };
             return sum + (prices[u.tier] || 0);
           }, 0),
         });
@@ -651,7 +651,7 @@ export function UserManagement() {
                     className="w-full px-3 py-2 border rounded-lg bg-white dark:bg-slate-800 dark:border-slate-700"
                   >
                     <option value="free">Free</option>
-                    <option value="starter">Starter ($6.99/mo)</option>
+                    <option value="starter">Starter ($14.99/mo)</option>
                     <option value="core">Core ($14.99/mo)</option>
                     <option value="pro">Pro ($29.99/mo)</option>
                     <option value="proplus">Pro+ ($49.99/mo)</option>
