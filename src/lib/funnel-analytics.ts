@@ -185,9 +185,8 @@ export async function trackFunnelStage(
       medium: event.medium,
       campaign: event.campaign,
     });
-    console.log(`[Analytics] Funnel stage tracked: ${stage}`);
-  } catch (err) {
-    console.warn('[Analytics] Failed to save funnel event to Supabase:', err);
+  } catch {
+    // Silent fail - analytics should not break the app
   }
 }
 
@@ -220,8 +219,8 @@ export async function trackFeatureUsage(
       metadata: metadata || {},
       duration,
     });
-  } catch (err) {
-    console.warn('[Analytics] Failed to save feature event to Supabase:', err);
+  } catch {
+    // Silent fail - analytics should not break the app
   }
 }
 
@@ -237,7 +236,13 @@ export function trackPageView(userId: string, path: string): void {
   };
 
   // Store in session storage for current session tracking
-  const pageViews = JSON.parse(sessionStorage.getItem('aminy_page_views') || '[]');
+  let pageViews: typeof event[] = [];
+  try {
+    pageViews = JSON.parse(sessionStorage.getItem('aminy_page_views') || '[]');
+  } catch {
+    // Reset if corrupted
+    pageViews = [];
+  }
   pageViews.push(event);
   sessionStorage.setItem('aminy_page_views', JSON.stringify(pageViews));
 }

@@ -22,12 +22,17 @@ export class JuniorRecommender {
   private loader = contentLoader;
 
   // Main recommendation function
-  recommend(context: RecommendationContext): RecommendationResult {
+  recommend(context: RecommendationContext): RecommendationResult | null {
     const candidates = this.getCandidateActivities(context);
     const scored = this.scoreActivities(candidates, context);
-    
+
     // Sort by score (highest first)
     scored.sort((a, b) => b.score - a.score);
+
+    // Handle empty results
+    if (scored.length === 0) {
+      return null;
+    }
 
     const top = scored[0];
     const alternates = scored.slice(1, 4).map(s => s.activity);

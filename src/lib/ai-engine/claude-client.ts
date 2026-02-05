@@ -209,8 +209,10 @@ export async function sendMessageToClaudeStreaming(
   const lastUserMessage = sanitizedMessages.filter(m => m.role === 'user').pop()?.content || '';
   const { config: dynamicConfig, classification } = getConfigForMessage(lastUserMessage);
 
-  // Log query classification for analytics (can be sent to Supabase)
-  console.log('[AI Config] Query classified as:', classification.type, 'confidence:', classification.confidence);
+  // Log query classification for analytics in development only
+  if (import.meta.env.DEV) {
+    console.log('[AI Config] Query classified as:', classification.type, 'confidence:', classification.confidence);
+  }
 
   const {
     maxTokens = dynamicConfig.maxTokens,
@@ -248,7 +250,7 @@ export async function sendMessageToClaudeStreaming(
 
     return await handleStreamingResponse(response, callbacks);
   } catch (error) {
-    console.error('Claude API error:', error);
+    if (import.meta.env.DEV) console.error('Claude API error:', error);
     callbacks.onError?.(error as Error);
     throw error;
   }
@@ -275,7 +277,9 @@ export async function sendMessageToClaude(
   const lastUserMessage = sanitizedMessages.filter(m => m.role === 'user').pop()?.content || '';
   const { config: dynamicConfig, classification } = getConfigForMessage(lastUserMessage);
 
-  console.log('[AI Config] Query classified as:', classification.type, 'confidence:', classification.confidence);
+  if (import.meta.env.DEV) {
+    console.log('[AI Config] Query classified as:', classification.type, 'confidence:', classification.confidence);
+  }
 
   const {
     maxTokens = dynamicConfig.maxTokens,
@@ -307,7 +311,7 @@ export async function sendMessageToClaude(
     const data = await response.json();
     return data.message || data.content || '';
   } catch (error) {
-    console.error('Claude API error:', error);
+    if (import.meta.env.DEV) console.error('Claude API error:', error);
     throw error;
   }
 }

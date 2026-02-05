@@ -196,7 +196,6 @@ export function AdminPortal({ onBack }: AdminPortalProps) {
   // Fetch real metrics from Supabase
   const fetchMetrics = useCallback(async () => {
     setIsRefreshing(true);
-    console.log('[Admin] Fetching metrics from Supabase...');
 
     try {
       // Calculate date ranges based on selection
