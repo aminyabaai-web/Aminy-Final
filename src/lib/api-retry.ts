@@ -128,7 +128,15 @@ export async function apiCall<T>(
     throw new Error(`API error ${response.status}: ${errorBody}`);
   }
 
-  return response.json();
+  const text = await response.text();
+  if (!text) {
+    return {} as T; // Empty response
+  }
+  try {
+    return JSON.parse(text) as T;
+  } catch {
+    throw new Error(`Invalid JSON response: ${text.substring(0, 100)}`);
+  }
 }
 
 /**

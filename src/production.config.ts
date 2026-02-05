@@ -32,15 +32,15 @@ export const productionConfig = {
     pushNotifications: true,
     
     // Developer features
-    devPanel: process.env.NODE_ENV === 'development',
+    devPanel: import.meta.env.DEV,
     performanceMonitoring: true,
     errorReporting: true
   },
 
   // API Configuration
   api: {
-    baseUrl: process.env.NODE_ENV === 'production' 
-      ? 'https://api.aminy.app' 
+    baseUrl: import.meta.env.PROD
+      ? 'https://api.aminy.app'
       : 'http://localhost:3001',
     timeout: 30000,
     retryAttempts: 3,
@@ -120,7 +120,7 @@ export const productionConfig = {
   security: {
     // Content Security Policy
     csp: {
-      enabled: process.env.NODE_ENV === 'production',
+      enabled: import.meta.env.PROD,
       directives: {
         'default-src': ["'self'"],
         'script-src': ["'self'", "'unsafe-inline'", 'https://www.googletagmanager.com'],
@@ -188,7 +188,7 @@ export const productionConfig = {
       highContrast: true
     },
     testing: {
-      axeCore: process.env.NODE_ENV === 'development',
+      axeCore: import.meta.env.DEV,
       announcements: true
     }
   },
@@ -203,36 +203,36 @@ export const productionConfig = {
 
   // Development Configuration
   development: {
-    enableDevTools: process.env.NODE_ENV === 'development',
-    enableHotReload: process.env.NODE_ENV === 'development',
-    showPerformanceMetrics: process.env.NODE_ENV === 'development',
-    mockApi: process.env.NODE_ENV === 'development',
-    debugLogging: process.env.NODE_ENV === 'development'
+    enableDevTools: import.meta.env.DEV,
+    enableHotReload: import.meta.env.DEV,
+    showPerformanceMetrics: import.meta.env.DEV,
+    mockApi: import.meta.env.DEV,
+    debugLogging: import.meta.env.DEV
   },
 
   // Build Configuration
   build: {
     // Source maps
-    sourceMaps: process.env.NODE_ENV === 'development',
-    
+    sourceMaps: import.meta.env.DEV,
+
     // Compression
     compression: {
-      enabled: process.env.NODE_ENV === 'production',
+      enabled: import.meta.env.PROD,
       algorithm: 'gzip',
       level: 6
     },
-    
+
     // Tree shaking
     treeShaking: true,
-    
+
     // Dead code elimination
     deadCodeElimination: true,
-    
+
     // Minification
-    minify: process.env.NODE_ENV === 'production',
-    
+    minify: import.meta.env.PROD,
+
     // Asset optimization
-    optimizeAssets: process.env.NODE_ENV === 'production'
+    optimizeAssets: import.meta.env.PROD
   },
 
   // Monitoring Configuration
@@ -240,7 +240,7 @@ export const productionConfig = {
     // Performance monitoring
     performance: {
       enabled: true,
-      sampleRate: process.env.NODE_ENV === 'production' ? 0.1 : 1.0, // 10% in prod, 100% in dev
+      sampleRate: import.meta.env.PROD ? 0.1 : 1.0, // 10% in prod, 100% in dev
       thresholds: {
         lcp: 2500,  // ms
         fid: 100,   // ms
@@ -268,15 +268,15 @@ export const productionConfig = {
 
   // Deployment Configuration
   deployment: {
-    environment: process.env.NODE_ENV || 'development',
-    version: process.env.APP_VERSION || '1.0.0',
-    buildNumber: process.env.BUILD_NUMBER || '1',
+    environment: import.meta.env.MODE || 'development',
+    version: import.meta.env.VITE_APP_VERSION || '1.0.0',
+    buildNumber: import.meta.env.VITE_BUILD_NUMBER || '1',
     deploymentDate: new Date().toISOString(),
-    commitHash: process.env.COMMIT_HASH || '',
-    
+    commitHash: import.meta.env.VITE_COMMIT_HASH || '',
+
     // CDN settings
     cdn: {
-      enabled: process.env.NODE_ENV === 'production',
+      enabled: import.meta.env.PROD,
       baseUrl: 'https://cdn.aminy.app',
       version: 'v1'
     }

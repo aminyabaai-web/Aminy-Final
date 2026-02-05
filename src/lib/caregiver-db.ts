@@ -139,7 +139,14 @@ const STORAGE_KEYS = {
 function getFromStorage<T>(key: string): T[] {
   if (typeof window === 'undefined') return [];
   const data = localStorage.getItem(key);
-  return data ? JSON.parse(data) : [];
+  if (!data) return [];
+  try {
+    return JSON.parse(data);
+  } catch {
+    // Reset corrupted data
+    localStorage.removeItem(key);
+    return [];
+  }
 }
 
 function saveToStorage<T>(key: string, data: T[]): void {
@@ -956,18 +963,31 @@ export function collectEVVSignature(timeEntryId: string): boolean {
 const EVV_STORAGE_KEY = 'aminy_evv_data';
 
 function saveEVVData(timeEntryId: string, evvData: EVVData): void {
-  const allEvv = JSON.parse(localStorage.getItem(EVV_STORAGE_KEY) || '{}');
+  let allEvv: Record<string, EVVData> = {};
+  try {
+    allEvv = JSON.parse(localStorage.getItem(EVV_STORAGE_KEY) || '{}');
+  } catch {
+    allEvv = {};
+  }
   allEvv[timeEntryId] = evvData;
   localStorage.setItem(EVV_STORAGE_KEY, JSON.stringify(allEvv));
 }
 
 export function getEVVData(timeEntryId: string): EVVData | null {
-  const allEvv = JSON.parse(localStorage.getItem(EVV_STORAGE_KEY) || '{}');
-  return allEvv[timeEntryId] || null;
+  try {
+    const allEvv = JSON.parse(localStorage.getItem(EVV_STORAGE_KEY) || '{}');
+    return allEvv[timeEntryId] || null;
+  } catch {
+    return null;
+  }
 }
 
 export function getAllEVVData(): Record<string, EVVData> {
-  return JSON.parse(localStorage.getItem(EVV_STORAGE_KEY) || '{}');
+  try {
+    return JSON.parse(localStorage.getItem(EVV_STORAGE_KEY) || '{}');
+  } catch {
+    return {};
+  }
 }
 
 /**

@@ -105,7 +105,14 @@ interface MedicationReminder {
 // Hook for tier management
 function useTierLite() {
   const [tier, setTier] = useState(window.aminyTier?.get?.() || "starter");
-  useEffect(() => window.aminyTier?.subscribe?.(setTier), []);
+  useEffect(() => {
+    const unsubscribe = window.aminyTier?.subscribe?.(setTier);
+    return () => {
+      if (typeof unsubscribe === 'function') {
+        unsubscribe();
+      }
+    };
+  }, []);
   return tier;
 }
 

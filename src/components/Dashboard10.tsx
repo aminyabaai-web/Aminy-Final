@@ -249,7 +249,10 @@ export function Dashboard10({
       // Increment trial conversation count for free users
       if (userTier === 'free' && userId) {
         setConversationsUsed(prev => prev + 1);
-        await supabase.rpc('increment_trial_conversations', { user_id_param: userId }).catch(() => {});
+        // Non-critical - count tracking failure shouldn't affect chat
+        await supabase.rpc('increment_trial_conversations', { user_id_param: userId }).catch((err) => {
+          if (import.meta.env.DEV) console.warn('Trial count increment failed:', err);
+        });
       }
     } catch (err) {
       console.error('Failed to send message:', err);

@@ -332,8 +332,11 @@ export function useDashboardData(userId?: string): DashboardData & {
         error: null,
       });
 
-      // Record activity for streak tracking
-      await retentionEngine.recordActivity(userId, 'daily_checkin').catch(() => {});
+      // Record activity for streak tracking (non-critical)
+      await retentionEngine.recordActivity(userId, 'daily_checkin').catch((err) => {
+        // Non-critical - streak tracking failure shouldn't break dashboard
+        if (import.meta.env.DEV) console.warn('Streak tracking failed:', err);
+      });
 
     } catch (error: any) {
       console.error('Failed to load dashboard data:', error);
