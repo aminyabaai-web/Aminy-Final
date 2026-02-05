@@ -113,18 +113,15 @@ export function CLSOptimizer({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <div 
+    <div
       data-suspense-boundary="true"
-      style={{ 
+      style={{
         minHeight: '100vh',
-        height: '100%',
-        contain: 'layout style paint',
+        contain: 'layout style',
         isolation: 'isolate',
         transform: 'translateZ(0)',
         backfaceVisibility: 'hidden',
-        perspective: '1000px',
         willChange: 'auto',
-        contentVisibility: 'auto'
       }}
     >
       {children}
