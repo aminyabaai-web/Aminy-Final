@@ -200,8 +200,11 @@ class Cache<T = any> {
           }
         }
       }
-    } catch {
-      // Ignore storage errors
+    } catch (error) {
+      // Log storage errors in dev for debugging
+      if (import.meta.env.DEV) {
+        console.warn('[Cache] Failed to load from storage:', error);
+      }
     }
   }
 
@@ -212,8 +215,11 @@ class Cache<T = any> {
         obj[key] = entry;
       }
       localStorage.setItem(this.config.storageKey, JSON.stringify(obj));
-    } catch {
-      // Ignore storage errors
+    } catch (error) {
+      // Log storage errors in dev for debugging (quota exceeded, etc.)
+      if (import.meta.env.DEV) {
+        console.warn('[Cache] Failed to save to storage:', error);
+      }
     }
   }
 }

@@ -221,8 +221,18 @@ export function logConfigStatus(): void {
 
   console.group('🔧 Aminy Configuration Status');
 
+  console.log('Supabase:', status.supabase ? '✅' : '❌');
+  console.log('Stripe:', status.stripe ? '✅' : '❌');
+  console.log('Daily.co:', status.daily ? '✅' : '❌');
+  console.log('Sentry:', status.sentry ? '✅' : '❌');
+  console.log('Analytics:', status.analytics ? '✅' : '❌');
+  console.log('Production Ready:', status.productionReady ? '✅' : '❌');
+
   if (status.issues.length > 0) {
     console.group('⚠️ Issues');
+    status.issues.forEach((issue, index) => {
+      console.warn(`${index + 1}. ${issue}`);
+    });
     console.groupEnd();
   }
 

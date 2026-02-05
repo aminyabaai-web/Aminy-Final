@@ -47,6 +47,64 @@ export interface ConversationContext {
 // Backend API URL
 const getBackendUrl = () => `https://${projectId}.supabase.co/functions/v1/make-server-8a022548`;
 
+// Rate limiting state (simple client-side throttling)
+const rateLimitState = {
+  lastRequest: 0,
+  requestCount: 0,
+  windowStart: Date.now(),
+};
+
+const RATE_LIMIT = {
+  maxRequestsPerMinute: 30,
+  minIntervalMs: 500, // Minimum 500ms between requests
+};
+
+/**
+ * Check and update rate limit - throws if limit exceeded
+ */
+function checkRateLimit(): void {
+  const now = Date.now();
+
+  // Reset window every minute
+  if (now - rateLimitState.windowStart > 60000) {
+    rateLimitState.windowStart = now;
+    rateLimitState.requestCount = 0;
+  }
+
+  // Check requests per minute
+  if (rateLimitState.requestCount >= RATE_LIMIT.maxRequestsPerMinute) {
+    throw new Error('Rate limit exceeded. Please wait a moment before trying again.');
+  }
+
+  // Check minimum interval
+  if (now - rateLimitState.lastRequest < RATE_LIMIT.minIntervalMs) {
+    throw new Error('Please wait a moment before sending another message.');
+  }
+
+  rateLimitState.lastRequest = now;
+  rateLimitState.requestCount++;
+}
+
+/**
+ * Sanitize user input before sending to AI
+ * Removes potential injection attempts and limits message length
+ */
+function sanitizeMessage(content: string): string {
+  // Remove any HTML/script tags
+  let sanitized = content.replace(/<[^>]*>/g, '');
+
+  // Limit message length to prevent abuse (10,000 chars)
+  const MAX_LENGTH = 10000;
+  if (sanitized.length > MAX_LENGTH) {
+    sanitized = sanitized.substring(0, MAX_LENGTH) + '... [truncated]';
+  }
+
+  // Remove null bytes and other control characters (except newlines, tabs)
+  sanitized = sanitized.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '');
+
+  return sanitized.trim();
+}
+
 /**
  * Check if the AI backend is available
  */
@@ -138,8 +196,17 @@ export async function sendMessageToClaudeStreaming(
   callbacks: StreamingCallbacks,
   options: ClaudeRequestOptions = {}
 ): Promise<string> {
+  // Check rate limit before proceeding
+  checkRateLimit();
+
+  // Sanitize all user messages before sending
+  const sanitizedMessages = messages.map(m => ({
+    ...m,
+    content: m.role === 'user' ? sanitizeMessage(m.content) : m.content,
+  }));
+
   // Get dynamic config based on message content
-  const lastUserMessage = messages.filter(m => m.role === 'user').pop()?.content || '';
+  const lastUserMessage = sanitizedMessages.filter(m => m.role === 'user').pop()?.content || '';
   const { config: dynamicConfig, classification } = getConfigForMessage(lastUserMessage);
 
   // Log query classification for analytics (can be sent to Supabase)
@@ -161,7 +228,7 @@ export async function sendMessageToClaudeStreaming(
       body: JSON.stringify({
         messages: [
           { role: 'system', content: systemPrompt },
-          ...messages.slice(-20), // Last 20 messages for context
+          ...sanitizedMessages.slice(-20), // Last 20 messages for context
         ],
         max_tokens: maxTokens,
         temperature,
@@ -195,8 +262,17 @@ export async function sendMessageToClaude(
   context: ConversationContext,
   options: ClaudeRequestOptions = {}
 ): Promise<string> {
+  // Check rate limit before proceeding
+  checkRateLimit();
+
+  // Sanitize all user messages before sending
+  const sanitizedMessages = messages.map(m => ({
+    ...m,
+    content: m.role === 'user' ? sanitizeMessage(m.content) : m.content,
+  }));
+
   // Get dynamic config based on message content
-  const lastUserMessage = messages.filter(m => m.role === 'user').pop()?.content || '';
+  const lastUserMessage = sanitizedMessages.filter(m => m.role === 'user').pop()?.content || '';
   const { config: dynamicConfig, classification } = getConfigForMessage(lastUserMessage);
 
   console.log('[AI Config] Query classified as:', classification.type, 'confidence:', classification.confidence);
@@ -215,8 +291,8 @@ export async function sendMessageToClaude(
         'Authorization': `Bearer ${publicAnonKey}`,
       },
       body: JSON.stringify({
-        userMessage: messages[messages.length - 1]?.content || '',
-        conversationHistory: messages.slice(0, -1),
+        userMessage: sanitizedMessages[sanitizedMessages.length - 1]?.content || '',
+        conversationHistory: sanitizedMessages.slice(0, -1),
         systemPrompt,
         max_tokens: maxTokens,
         temperature,

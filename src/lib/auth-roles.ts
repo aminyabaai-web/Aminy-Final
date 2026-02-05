@@ -60,13 +60,26 @@ export async function getCurrentUserRole(): Promise<UserRole | null> {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return null;
 
-    const { data: profile } = await supabase
+    const { data: profile, error } = await supabase
       .from('profiles')
       .select('role')
       .eq('id', user.id)
       .single();
 
-    return (profile?.role as UserRole) || 'parent';
+    // Handle database errors - don't silently ignore them
+    if (error) {
+      console.error('[AuthRoles] Error fetching user role:', error);
+      return 'parent'; // Safe default for UI rendering
+    }
+
+    // Validate role is a known value
+    const validRoles: UserRole[] = ['parent', 'provider', 'admin'];
+    const role = profile?.role;
+    if (role && validRoles.includes(role as UserRole)) {
+      return role as UserRole;
+    }
+
+    return 'parent'; // Default for unknown/missing roles
   } catch (error) {
     console.error('[AuthRoles] Error getting user role:', error);
     return null;
@@ -203,13 +216,13 @@ export async function submitProviderApplication(
     // Run AI verification
     const verificationResult = await verifyProviderCredentials(application);
 
-    // Determine initial status based on AI verification
+    // SECURITY: Never auto-approve - always require human review for healthcare providers
+    // AI verification helps prioritize review queue but final approval is always manual
     let status: ProviderApplication['status'] = 'pending';
-    if (verificationResult.license_valid && verificationResult.confidence_score >= 0.85) {
-      status = 'approved'; // Auto-approve high-confidence applications
-    } else if (verificationResult.flags.length > 0) {
-      status = 'under_review'; // Flag for manual review
+    if (verificationResult.flags.length > 0 || !verificationResult.license_valid) {
+      status = 'under_review'; // Flag for priority manual review due to issues
     }
+    // Note: Even high-confidence applications stay 'pending' until admin reviews
 
     const { data, error } = await supabase
       .from('provider_applications')
@@ -235,14 +248,12 @@ export async function submitProviderApplication(
 
     if (error) {
       console.error('[AuthRoles] Error submitting application:', error);
-      // For demo, return success anyway
-      return { success: true, applicationId: 'demo-' + Date.now() };
+      // SECURITY FIX: Return actual error instead of fake success
+      return { success: false, error: 'Failed to submit application. Please try again.' };
     }
 
-    // If auto-approved, create provider profile and update user role
-    if (status === 'approved') {
-      await createProviderFromApplication(user.id, application, data.id);
-    }
+    // Provider profile is only created after admin approval via reviewProviderApplication()
+    // No auto-creation here for security
 
     return { success: true, applicationId: data.id };
   } catch (error) {

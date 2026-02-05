@@ -89,14 +89,15 @@ export async function checkMFARequirement(): Promise<MFARequirement> {
       return { required: false };
     }
 
-    // Get user's role
-    const { data: profile } = await supabase
+    // Get user's role - check for errors explicitly
+    const { data: profile, error: profileError } = await supabase
       .from('profiles')
       .select('role, created_at')
       .eq('id', user.id)
       .single();
 
-    if (!profile) {
+    if (profileError || !profile) {
+      console.error('[MFA] Error fetching profile for MFA check:', profileError);
       return { required: false };
     }
 
