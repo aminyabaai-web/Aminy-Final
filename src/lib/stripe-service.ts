@@ -88,9 +88,14 @@ interface SubscriptionStatus {
 
 // Get access token from localStorage
 const getAccessToken = (): string => {
-  return typeof window !== 'undefined'
-    ? localStorage.getItem('access_token') || publicAnonKey
-    : publicAnonKey;
+  if (typeof window === 'undefined') return publicAnonKey;
+  return localStorage.getItem('access_token') || publicAnonKey;
+};
+
+// Get origin URL safely for SSR environments
+const getOrigin = (): string => {
+  if (typeof window === 'undefined') return '';
+  return window.location.origin;
 };
 
 /**
@@ -101,8 +106,8 @@ export async function createCheckoutSession({
   email,
   tier,
   interval,
-  successUrl = `${window.location.origin}/?screen=dashboard&payment=success`,
-  cancelUrl = `${window.location.origin}/?screen=paywall&payment=cancelled`,
+  successUrl = `${getOrigin()}/?screen=dashboard&payment=success`,
+  cancelUrl = `${getOrigin()}/?screen=paywall&payment=cancelled`,
 }: CreateCheckoutParams): Promise<CheckoutResponse> {
   const accessToken = getAccessToken();
 
@@ -127,11 +132,16 @@ export async function createCheckoutSession({
   );
 
   if (!response.ok) {
-    const error = await response.text();
-    throw new Error(`Failed to create checkout session: ${error}`);
+    const errorText = await response.text();
+    throw new Error(`Failed to create checkout session: ${errorText}`);
   }
 
-  return response.json();
+  try {
+    return await response.json();
+  } catch (parseError) {
+    console.error('[Stripe] Failed to parse checkout response:', parseError);
+    throw new Error('Invalid response from payment server');
+  }
 }
 
 /**
@@ -139,7 +149,7 @@ export async function createCheckoutSession({
  */
 export async function createPortalSession(
   userId: string,
-  returnUrl: string = `${window.location.origin}/settings`
+  returnUrl: string = `${getOrigin()}/settings`
 ): Promise<{ url: string }> {
   const accessToken = getAccessToken();
 
@@ -156,11 +166,16 @@ export async function createPortalSession(
   );
 
   if (!response.ok) {
-    const error = await response.text();
-    throw new Error(`Failed to create portal session: ${error}`);
+    const errorText = await response.text();
+    throw new Error(`Failed to create portal session: ${errorText}`);
   }
 
-  return response.json();
+  try {
+    return await response.json();
+  } catch (parseError) {
+    console.error('[Stripe] Failed to parse portal response:', parseError);
+    throw new Error('Invalid response from payment server');
+  }
 }
 
 /**
@@ -278,8 +293,8 @@ export async function createOneTimePayment({
         amount,
         description,
         metadata,
-        successUrl: `${window.location.origin}/?screen=dashboard&payment=success`,
-        cancelUrl: `${window.location.origin}/?screen=telehealth&payment=cancelled`,
+        successUrl: `${getOrigin()}/?screen=dashboard&payment=success`,
+        cancelUrl: `${getOrigin()}/?screen=telehealth&payment=cancelled`,
       }),
     }
   );
@@ -504,8 +519,8 @@ export async function createBundleCheckoutSession({
   consultCredits,
   deepReviewCredits,
   validityDays,
-  successUrl = `${window.location.origin}/?screen=telehealth&bundle=success`,
-  cancelUrl = `${window.location.origin}/?screen=telehealth&bundle=cancelled`,
+  successUrl = `${getOrigin()}/?screen=telehealth&bundle=success`,
+  cancelUrl = `${getOrigin()}/?screen=telehealth&bundle=cancelled`,
 }: {
   userId: string;
   email: string;
