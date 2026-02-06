@@ -83,7 +83,7 @@ export function ResetPasswordScreen({ onSuccess, onBack }: ResetPasswordScreenPr
 
   if (isSuccess) {
     return (
-      <div className="min-h-screen bg-white flex flex-col relative overflow-hidden">
+      <div className="min-h-screen bg-white dark:bg-slate-900 flex flex-col relative overflow-hidden">
         <div className="flex items-center justify-between p-6 border-b border-gray-100">
           <div className="w-16"></div>
           <Logo size="sm" showText={false} showTagline={false} />
@@ -127,7 +127,7 @@ export function ResetPasswordScreen({ onSuccess, onBack }: ResetPasswordScreenPr
   }
 
   return (
-    <div className="min-h-screen bg-white flex flex-col relative overflow-hidden">
+    <div className="min-h-screen bg-white dark:bg-slate-900 flex flex-col relative overflow-hidden">
       <div className="flex items-center justify-between p-6 border-b border-gray-100">
         <button
           onClick={onBack}

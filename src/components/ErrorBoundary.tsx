@@ -218,7 +218,7 @@ function DefaultErrorFallback({
   };
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center p-4">
+    <div className="min-h-screen bg-white dark:bg-slate-900 flex items-center justify-center p-4">
       <div className="text-center max-w-lg">
         {/* Apple-style error icon */}
         <div className="w-16 h-16 mx-auto mb-4 sm:mb-6 bg-red-50 rounded-full flex items-center justify-center">

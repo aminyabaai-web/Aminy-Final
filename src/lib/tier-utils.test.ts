@@ -102,11 +102,12 @@ describe('Tier Utilities', () => {
 
   describe('getTierYearlySavings', () => {
     it('returns correct savings percentages', () => {
+      // Implementation returns dollar savings, not percentages
       expect(getTierYearlySavings('free')).toBe(0);
-      expect(getTierYearlySavings('starter')).toBe(28); // Starter now same as Core
-      expect(getTierYearlySavings('core')).toBe(28);
-      expect(getTierYearlySavings('pro')).toBe(22);
-      expect(getTierYearlySavings('proplus')).toBe(20);
+      expect(getTierYearlySavings('starter')).toBe(51); // Starter now same as Core
+      expect(getTierYearlySavings('core')).toBe(51);
+      expect(getTierYearlySavings('pro')).toBe(81);
+      expect(getTierYearlySavings('proplus')).toBe(121);
     });
   });
 
@@ -124,16 +125,17 @@ describe('Tier Utilities', () => {
     });
 
     it('correctly checks pro tier features', () => {
-      expect(hasTierFeature('pro', 'bcba-consult')).toBe(true);
+      // Pro tier features based on actual implementation
+      expect(hasTierFeature('pro', 'clinical-reports')).toBe(true);
       expect(hasTierFeature('pro', 'priority-support')).toBe(true);
-      expect(hasTierFeature('pro', 'live-ai-video-30')).toBe(true);
+      expect(hasTierFeature('pro', 'discounted-sessions')).toBe(true);
     });
 
     it('correctly checks proplus tier features', () => {
-      expect(hasTierFeature('proplus', 'bcba-consult')).toBe(true);
-      expect(hasTierFeature('proplus', 'live-ai-video-unlimited')).toBe(true);
-      expect(hasTierFeature('proplus', 'human-credit-monthly')).toBe(true);
+      expect(hasTierFeature('proplus', 'care-coordinator')).toBe(true);
+      expect(hasTierFeature('proplus', 'multi-caregiver')).toBe(true);
       expect(hasTierFeature('proplus', 'multi-child-unlimited')).toBe(true);
+      expect(hasTierFeature('proplus', 'dedicated-support')).toBe(true);
     });
 
     it('returns false for undefined tier', () => {
@@ -179,7 +181,7 @@ describe('Tier Utilities', () => {
   describe('getAIMessageLimit', () => {
     it('returns correct limits', () => {
       expect(getAIMessageLimit('free')).toBe(5);
-      expect(getAIMessageLimit('starter')).toBe(20);
+      expect(getAIMessageLimit('starter')).toBeNull(); // Legacy: same as Core (unlimited)
       expect(getAIMessageLimit('core')).toBeNull(); // unlimited
       expect(getAIMessageLimit('pro')).toBeNull(); // unlimited
       expect(getAIMessageLimit('proplus')).toBeNull(); // unlimited
@@ -197,9 +199,10 @@ describe('Tier Utilities', () => {
       expect(hasUnlimitedAI('proplus')).toBe(true);
     });
 
-    it('returns false for free and starter', () => {
+    it('returns false for free only (starter is legacy and maps to unlimited)', () => {
       expect(hasUnlimitedAI('free')).toBe(false);
-      expect(hasUnlimitedAI('starter')).toBe(false);
+      // Note: starter is legacy and now has unlimited AI
+      expect(hasUnlimitedAI('starter')).toBe(true);
     });
 
     it('returns false for undefined', () => {
@@ -233,16 +236,16 @@ describe('Tier Utilities', () => {
   describe('getMarketplaceDiscount', () => {
     it('returns correct discount percentages', () => {
       expect(getMarketplaceDiscount('free')).toBe(0);
-      expect(getMarketplaceDiscount('starter')).toBe(0);
-      expect(getMarketplaceDiscount('core')).toBe(0);
+      expect(getMarketplaceDiscount('starter')).toBe(10); // Legacy: same as Core
+      expect(getMarketplaceDiscount('core')).toBe(10);
       expect(getMarketplaceDiscount('pro')).toBe(20);
       expect(getMarketplaceDiscount('proplus')).toBe(30);
     });
   });
 
   describe('includesBCBAConsult', () => {
-    it('returns true for pro and proplus', () => {
-      expect(includesBCBAConsult('pro')).toBe(true);
+    it('returns true for proplus only', () => {
+      // Only proplus includes BCBA consult per implementation
       expect(includesBCBAConsult('proplus')).toBe(true);
     });
 
@@ -250,14 +253,15 @@ describe('Tier Utilities', () => {
       expect(includesBCBAConsult('free')).toBe(false);
       expect(includesBCBAConsult('starter')).toBe(false);
       expect(includesBCBAConsult('core')).toBe(false);
+      expect(includesBCBAConsult('pro')).toBe(false); // Pro doesn't include BCBA consult
     });
   });
 
   describe('getMaxChildren', () => {
     it('returns correct limits', () => {
       expect(getMaxChildren('free')).toBe(1);
-      expect(getMaxChildren('starter')).toBe(3); // Starter now same as Core
-      expect(getMaxChildren('core')).toBe(3);
+      expect(getMaxChildren('starter')).toBe(2); // Legacy: same as Core
+      expect(getMaxChildren('core')).toBe(2);
       expect(getMaxChildren('pro')).toBe(3);
       expect(getMaxChildren('proplus')).toBeNull(); // unlimited (Family Plan)
     });

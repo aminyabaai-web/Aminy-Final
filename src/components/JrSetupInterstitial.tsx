@@ -25,7 +25,7 @@ export const JrSetupInterstitial: React.FC<JrSetupInterstitialProps> = ({
   onBack 
 }) => {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white dark:bg-slate-900">
       {/* Progress Header - Keep as Step 4 of 7 */}
       <div className="bg-white border-b border-gray-100 px-4 py-6">
         <div className="max-w-md mx-auto">

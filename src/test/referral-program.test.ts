@@ -263,7 +263,7 @@ describe('Viral Analytics Integration', () => {
     const kFactor = avgInvitesSent * conversionRate;
 
     expect(avgInvitesSent).toBe(1.5);
-    expect(conversionRate).toBe(0.2);
-    expect(kFactor).toBe(0.3);
+    expect(conversionRate).toBeCloseTo(0.2, 5);
+    expect(kFactor).toBeCloseTo(0.3, 5);
   });
 });

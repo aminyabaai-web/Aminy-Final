@@ -166,7 +166,7 @@ export function LaunchStatusDashboard({ onBack }: LaunchStatusDashboardProps) {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white dark:bg-slate-900">
       {/* Header */}
       <div className="bg-gradient-to-r from-accent/5 via-accent/8 to-accent/5 border-b border-accent/10">
         <div className="max-w-4xl mx-auto px-4 py-6">
