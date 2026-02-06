@@ -304,7 +304,7 @@ export function BookVisitScreen({
     return (
       <div className="min-h-screen bg-[#F5F5F5] flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 text-[#577590] animate-spin mx-auto mb-3" />
+          <Loader2 className="w-8 h-8 text-[#0891b2] animate-spin mx-auto mb-3" />
           <p className="text-gray-600 font-medium">Finding providers in your area...</p>
           <p className="text-sm text-gray-400 mt-1">This only takes a moment</p>
         </div>
@@ -339,8 +339,8 @@ export function BookVisitScreen({
           </div>
           <ChevronRight className="w-4 h-4 text-gray-300" aria-hidden="true" />
           <div className="flex items-center gap-1.5">
-            <span className="w-5 h-5 bg-[#577590] rounded-full flex items-center justify-center text-white text-xs font-bold">2</span>
-            <span className="text-xs font-medium text-[#577590]">Choose provider</span>
+            <span className="w-5 h-5 bg-[#0891b2] rounded-full flex items-center justify-center text-white text-xs font-bold">2</span>
+            <span className="text-xs font-medium text-[#0891b2]">Choose provider</span>
           </div>
           <ChevronRight className="w-4 h-4 text-gray-300" aria-hidden="true" />
           <div className="flex items-center gap-1.5">
@@ -358,7 +358,7 @@ export function BookVisitScreen({
             onClick={() => setVisitFormat('remote')}
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
               visitFormat === 'remote'
-                ? 'bg-[#577590] text-white'
+                ? 'bg-[#0891b2] text-white'
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
           >
@@ -381,7 +381,7 @@ export function BookVisitScreen({
             onClick={() => setVisitType('consult')}
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
               visitType === 'consult'
-                ? 'bg-[#577590]/10 text-[#577590] border-2 border-[#577590]'
+                ? 'bg-[#0891b2]/10 text-[#0891b2] border-2 border-[#0891b2]'
                 : 'bg-gray-100 text-gray-600 border-2 border-transparent hover:bg-gray-200'
             }`}
           >
@@ -392,7 +392,7 @@ export function BookVisitScreen({
             onClick={() => setVisitType('deep-review')}
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
               visitType === 'deep-review'
-                ? 'bg-[#577590]/10 text-[#577590] border-2 border-[#577590]'
+                ? 'bg-[#0891b2]/10 text-[#0891b2] border-2 border-[#0891b2]'
                 : 'bg-gray-100 text-gray-600 border-2 border-transparent hover:bg-gray-200'
             }`}
           >
@@ -414,9 +414,9 @@ export function BookVisitScreen({
                 onClick={() => setSelectedDate(date)}
                 className={`flex-shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
                   isSelected
-                    ? 'bg-[#577590] text-white'
+                    ? 'bg-[#0891b2] text-white'
                     : isToday
-                    ? 'bg-[#577590]/10 text-[#577590]'
+                    ? 'bg-[#0891b2]/10 text-[#0891b2]'
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               >
@@ -537,13 +537,13 @@ function ProviderCard({
                 className="w-full h-full object-cover"
               />
             ) : (
-              <div className="w-full h-full bg-gradient-to-br from-[#577590] to-[#466379] flex items-center justify-center text-white text-lg sm:text-xl font-semibold">
+              <div className="w-full h-full bg-gradient-to-br from-[#0891b2] to-[#466379] flex items-center justify-center text-white text-lg sm:text-xl font-semibold">
                 {provider.firstName[0]}{provider.lastName[0]}
               </div>
             )}
           </div>
           {provider.hasVideoIntro && (
-            <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-[#577590] rounded-full flex items-center justify-center">
+            <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-[#0891b2] rounded-full flex items-center justify-center">
               <Video className="w-3 h-3 text-white" />
             </div>
           )}
@@ -593,7 +593,7 @@ function ProviderCard({
                 <button
                   key={slot.id}
                   onClick={() => onSelectSlot(slot)}
-                  className="px-4 py-2 bg-[#577590] text-white text-sm font-medium rounded-full hover:bg-[#466379] active:scale-95 transition-all"
+                  className="px-4 py-2 bg-[#0891b2] text-white text-sm font-medium rounded-full hover:bg-[#466379] active:scale-95 transition-all"
                 >
                   {formatTime(slot.startTime)}
                 </button>
@@ -605,7 +605,7 @@ function ProviderCard({
             <p className="text-sm text-gray-500 mb-2">No appointments available today</p>
             <button
               onClick={onJoinWaitlist}
-              className="inline-flex items-center gap-2 px-4 py-2 border-2 border-[#577590] text-[#577590] text-sm font-medium rounded-full hover:bg-[#577590]/5 transition-all"
+              className="inline-flex items-center gap-2 px-4 py-2 border-2 border-[#0891b2] text-[#0891b2] text-sm font-medium rounded-full hover:bg-[#0891b2]/5 transition-all"
             >
               <Bell className="w-4 h-4" />
               Join Waitlist
@@ -670,7 +670,7 @@ function NoProvidersCard({
           We don't currently have providers licensed in {userState} with availability in the next 72 hours.
         </p>
         {/* Reassurance copy per requirement */}
-        <p className="text-sm text-[#577590] font-medium mb-4 sm:mb-6">
+        <p className="text-sm text-[#0891b2] font-medium mb-4 sm:mb-6">
           We'll support you at home while you wait.
         </p>
 
@@ -678,7 +678,7 @@ function NoProvidersCard({
           {/* Primary CTA: Join Waitlist */}
           <button
             onClick={onJoinWaitlist}
-            className="w-full py-3 bg-[#577590] text-white font-medium rounded-xl hover:bg-[#466379] transition-colors flex items-center justify-center gap-2"
+            className="w-full py-3 bg-[#0891b2] text-white font-medium rounded-xl hover:bg-[#466379] transition-colors flex items-center justify-center gap-2"
           >
             <Bell className="w-4 h-4" />
             Join Telehealth Waitlist
@@ -691,7 +691,7 @@ function NoProvidersCard({
               {onRequestLocalCare && (
                 <button
                   onClick={onRequestLocalCare}
-                  className="w-full py-3 border-2 border-[#577590] text-[#577590] font-medium rounded-xl hover:bg-[#577590]/5 transition-colors flex items-center justify-center gap-2"
+                  className="w-full py-3 border-2 border-[#0891b2] text-[#0891b2] font-medium rounded-xl hover:bg-[#0891b2]/5 transition-colors flex items-center justify-center gap-2"
                 >
                   <MapPin className="w-4 h-4" />
                   Request Local Care Support
@@ -715,7 +715,7 @@ function NoProvidersCard({
           {onStartHomeProgram && (
             <button
               onClick={onStartHomeProgram}
-              className="w-full py-3 bg-gradient-to-r from-[#43AA8B] to-[#577590] text-white font-medium rounded-xl hover:opacity-90 transition-all flex items-center justify-center gap-2"
+              className="w-full py-3 bg-gradient-to-r from-[#43AA8B] to-[#0891b2] text-white font-medium rounded-xl hover:opacity-90 transition-all flex items-center justify-center gap-2"
             >
               <Home className="w-4 h-4" />
               Start Aminy Home Program Now

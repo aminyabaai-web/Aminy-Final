@@ -140,7 +140,7 @@ export function CarePlanTabScreen({
             onClick={() => setActiveTab('summaries')}
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
               activeTab === 'summaries'
-                ? 'bg-[#577590] text-white'
+                ? 'bg-[#0891b2] text-white'
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
           >
@@ -151,7 +151,7 @@ export function CarePlanTabScreen({
             onClick={() => setActiveTab('actions')}
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
               activeTab === 'actions'
-                ? 'bg-[#577590] text-white'
+                ? 'bg-[#0891b2] text-white'
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
           >
@@ -161,7 +161,7 @@ export function CarePlanTabScreen({
               <span className={`px-2 py-0.5 text-xs rounded-full ${
                 activeTab === 'actions'
                   ? 'bg-white/20'
-                  : 'bg-[#577590]/10 text-[#577590]'
+                  : 'bg-[#0891b2]/10 text-[#0891b2]'
               }`}>
                 {pendingActions.length}
               </span>
@@ -175,7 +175,7 @@ export function CarePlanTabScreen({
         {/* Loading State */}
         {isLoading && (
           <div className="flex items-center justify-center py-12">
-            <Loader2 className="w-8 h-8 animate-spin text-[#577590]" />
+            <Loader2 className="w-8 h-8 animate-spin text-[#0891b2]" />
             <span className="ml-2 text-gray-600">Loading care plan...</span>
           </div>
         )}
@@ -186,7 +186,7 @@ export function CarePlanTabScreen({
             <p className="text-red-600 mb-4">{error}</p>
             <button
               onClick={refresh}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-[#577590] text-white rounded-lg hover:bg-[#466379]"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-[#0891b2] text-white rounded-lg hover:bg-[#466379]"
             >
               <RefreshCw className="w-4 h-4" />
               Try Again
@@ -263,7 +263,7 @@ export function CarePlanTabScreen({
       <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-100 safe-area-bottom">
         <button
           onClick={onBookFollowUp}
-          className="w-full py-4 bg-[#577590] text-white font-semibold text-lg rounded-xl hover:bg-[#466379] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+          className="w-full py-4 bg-[#0891b2] text-white font-semibold text-lg rounded-xl hover:bg-[#466379] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
         >
           <Plus className="w-5 h-5" />
           Book Follow-up
@@ -288,7 +288,7 @@ function VisitSummaryCard({ summary, provider, onClick, formatDate }: VisitSumma
   return (
     <button
       onClick={onClick}
-      className="w-full bg-white rounded-2xl border border-gray-100 p-4 text-left hover:shadow-md hover:border-[#577590]/30 transition-all"
+      className="w-full bg-white rounded-2xl border border-gray-100 p-4 text-left hover:shadow-md hover:border-[#0891b2]/30 transition-all"
     >
       <div className="flex items-start gap-3">
         {/* Provider Avatar */}
@@ -300,7 +300,7 @@ function VisitSummaryCard({ summary, provider, onClick, formatDate }: VisitSumma
               className="w-full h-full object-cover"
             />
           ) : (
-            <div className="w-full h-full bg-gradient-to-br from-[#577590] to-[#466379] flex items-center justify-center text-white text-sm font-semibold">
+            <div className="w-full h-full bg-gradient-to-br from-[#0891b2] to-[#466379] flex items-center justify-center text-white text-sm font-semibold">
               {provider.firstName[0]}{provider.lastName[0]}
             </div>
           )}
@@ -325,7 +325,7 @@ function VisitSummaryCard({ summary, provider, onClick, formatDate }: VisitSumma
       {/* Reason Preview */}
       <div className="mt-3 pt-3 border-t border-gray-100">
         <p className="text-sm text-gray-600 line-clamp-2">{summary.reasonForVisit}</p>
-        <p className="text-xs text-[#577590] mt-2">
+        <p className="text-xs text-[#0891b2] mt-2">
           {summary.planForNext7Days.length} action items
         </p>
       </div>
@@ -359,7 +359,7 @@ function ActionItemCard({ item, onToggle, formatDate }: ActionItemCardProps) {
           {item.completed ? (
             <CheckCircle className="w-6 h-6 text-green-500" />
           ) : (
-            <Circle className="w-6 h-6 text-gray-300 hover:text-[#577590] transition-colors" />
+            <Circle className="w-6 h-6 text-gray-300 hover:text-[#0891b2] transition-colors" />
           )}
         </button>
 
@@ -402,7 +402,7 @@ function EmptyVisitSummaries({ onBookVisit }: { onBookVisit: () => void }) {
       </p>
       <button
         onClick={onBookVisit}
-        className="inline-flex items-center gap-2 px-6 py-3 bg-[#577590] text-white font-medium rounded-xl hover:bg-[#466379] transition-colors"
+        className="inline-flex items-center gap-2 px-6 py-3 bg-[#0891b2] text-white font-medium rounded-xl hover:bg-[#466379] transition-colors"
       >
         <Video className="w-5 h-5" />
         Book Your First Visit

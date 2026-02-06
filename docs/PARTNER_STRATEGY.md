@@ -133,7 +133,7 @@ interface Organization {
   slug: string;  // "rise"
   branding: {
     logo: string;
-    primaryColor: string;  // #577590 → custom
+    primaryColor: string;  // #0891b2 → custom
     secondaryColor: string;
     tagline: string;
   };

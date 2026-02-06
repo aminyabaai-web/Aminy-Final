@@ -106,7 +106,7 @@ ON CONFLICT (name) DO UPDATE SET
 -- Seed referral tiers
 INSERT INTO referral_tiers (name, min_referrals, reward_description, badge_color)
 VALUES
-  ('Supporter', 1, '1 free month per referral + $25 credit for friend', '#577590'),
+  ('Supporter', 1, '1 free month per referral + $25 credit for friend', '#0891b2'),
   ('Champion', 5, 'All Supporter perks + 20% off marketplace + priority support', '#43AA8B'),
   ('Ambassador', 10, 'All Champion perks + free BCBA session + early access + Ambassador badge', '#E07A5F')
 ON CONFLICT (name) DO UPDATE SET

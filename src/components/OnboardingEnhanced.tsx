@@ -1595,7 +1595,7 @@ const DEMO_VIDEO_URL = ''; // e.g., 'https://www.youtube.com/embed/YOUR_VIDEO_ID
  * Quick reference:
  * - Duration: 45-60 seconds
  * - Style: Headspace/Calm meets Pixar emotional storytelling
- * - Colors: Cream (#F5F5F5), Navy (#0D1B2A), Teal (#577590), Mint (#C9EAD9), Amber (#FFE2B6), Lavender (#E6E0F8)
+ * - Colors: Cream (#F5F5F5), Navy (#0D1B2A), Teal (#0891b2), Mint (#C9EAD9), Amber (#FFE2B6), Lavender (#E6E0F8)
  * - Story arc: Overwhelmed parent → discovers Aminy → gets personalized help → transformation → "You're not alone"
  * - Key scenes: Morning struggle, app discovery, AI response, child succeeds, peaceful evening
  *

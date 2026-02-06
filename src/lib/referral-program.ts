@@ -86,7 +86,7 @@ export const REFERRAL_TIERS: ReferralTier[] = [
     name: 'Supporter',
     minReferrals: 1,
     perks: ['1 free month per referral', '$25 credit for friend'],
-    badgeColor: '#577590',
+    badgeColor: '#0891b2',
     badgeIcon: '🌟',
   },
   {
