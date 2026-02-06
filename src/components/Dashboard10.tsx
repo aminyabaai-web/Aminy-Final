@@ -5,7 +5,7 @@
  * - Calm UX for parents (reduce mental load, "exhale test")
  * - Data capture for investors/payers (adherence, outcomes)
  * - Single-scroll "Calm Hub" design
- * - Brand colors: #0D1B2A navy, #F5F5F5 cream, #577590 teal accents
+ * - Brand colors: #0D1B2A navy, #F5F5F5 cream, #0891b2 teal accents
  * - Inter font, 8-12px corners, soft shadows
  */
 
@@ -413,7 +413,7 @@ export function Dashboard10({
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-            className="w-12 h-12 border-4 border-[#577590] border-t-transparent rounded-full mx-auto mb-4"
+            className="w-12 h-12 border-4 border-[#0891b2] border-t-transparent rounded-full mx-auto mb-4"
           />
           <p className="text-[#0D1B2A] dark:text-white font-medium">Loading your calm hub...</p>
         </div>
@@ -586,7 +586,7 @@ export function Dashboard10({
                 onClick={() => setActiveRoutine(routine.timeOfDay)}
                 className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${
                   activeRoutine === routine.timeOfDay
-                    ? 'bg-[#577590] text-white shadow-md'
+                    ? 'bg-[#0891b2] text-white shadow-md'
                     : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700'
                 }`}
               >
@@ -757,7 +757,7 @@ export function Dashboard10({
             ======================================== */}
         <section>
           <h2 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-            <Zap className="w-5 h-5 text-[#577590]" />
+            <Zap className="w-5 h-5 text-[#0891b2]" />
             Quick Actions
           </h2>
 
@@ -822,7 +822,7 @@ export function Dashboard10({
           className={`fixed bottom-24 right-4 z-40 w-14 h-14 rounded-full shadow-lg transition-all duration-300 ${
             showAIChat
               ? 'bg-gray-700 text-white rotate-0'
-              : 'bg-[#577590] text-white hover:bg-[#4a6478]'
+              : 'bg-[#0891b2] text-white hover:bg-[#4a6478]'
           }`}
           aria-label={showAIChat ? 'Minimize chat' : 'Open chat with Aminy'}
           aria-expanded={showAIChat}
@@ -857,7 +857,7 @@ export function Dashboard10({
                   Chat with Aminy
                 </h3>
                 <div className="flex items-center gap-2">
-                  <Badge className="bg-[#577590] text-white text-xs">AI Companion</Badge>
+                  <Badge className="bg-[#0891b2] text-white text-xs">AI Companion</Badge>
                   <button
                     onClick={() => setIsFullScreenChat(!isFullScreenChat)}
                     className="p-1.5 hover:bg-white/20 rounded-lg transition-colors"
@@ -907,7 +907,7 @@ export function Dashboard10({
                   key={msg.id}
                   className={`rounded-xl p-3 text-sm shadow-sm ${
                     msg.author === 'parent'
-                      ? 'bg-[#577590] text-white ml-8'
+                      ? 'bg-[#0891b2] text-white ml-8'
                       : 'bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-700 dark:to-slate-600 text-gray-700 dark:text-gray-200 mr-8'
                   }`}
                 >
@@ -919,7 +919,7 @@ export function Dashboard10({
               {isSendingChat && (
                 <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-700 dark:to-slate-600 rounded-xl p-3 text-sm shadow-sm mr-8">
                   <div className="flex items-center gap-2">
-                    <Loader2 className="w-4 h-4 animate-spin text-[#577590]" />
+                    <Loader2 className="w-4 h-4 animate-spin text-[#0891b2]" />
                     <span className="text-gray-500 dark:text-gray-400">Aminy is thinking...</span>
                   </div>
                 </div>
@@ -936,7 +936,7 @@ export function Dashboard10({
                       onClick={() => {
                         setChatInput(prompt);
                       }}
-                      className="text-xs px-3 py-1.5 rounded-full bg-[#577590]/10 text-[#577590] hover:bg-[#577590]/20 transition-colors"
+                      className="text-xs px-3 py-1.5 rounded-full bg-[#0891b2]/10 text-[#0891b2] hover:bg-[#0891b2]/20 transition-colors"
                     >
                       {prompt}
                     </button>
@@ -954,7 +954,7 @@ export function Dashboard10({
                   onChange={(e) => setChatInput(e.target.value)}
                   onKeyDown={handleChatKeyDown}
                   placeholder="Ask Aminy anything..."
-                  className="flex-1 px-4 py-3 text-sm rounded-xl border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:border-[#577590] focus:ring-2 focus:ring-[#577590]/20 transition-all"
+                  className="flex-1 px-4 py-3 text-sm rounded-xl border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:border-[#0891b2] focus:ring-2 focus:ring-[#0891b2]/20 transition-all"
                   aria-label="Chat message input"
                   disabled={isSendingChat}
                 />
@@ -962,7 +962,7 @@ export function Dashboard10({
                   size="sm"
                   onClick={handleSendChat}
                   disabled={!chatInput.trim() || isSendingChat}
-                  className="bg-[#577590] hover:bg-[#4a6478] px-4 py-3 rounded-xl transition-all disabled:opacity-50"
+                  className="bg-[#0891b2] hover:bg-[#4a6478] px-4 py-3 rounded-xl transition-all disabled:opacity-50"
                   aria-label="Send message"
                 >
                   {isSendingChat ? (
@@ -998,7 +998,7 @@ export function Dashboard10({
               }}
               className={`flex flex-col items-center gap-1 px-4 py-2 rounded-lg transition-colors ${
                 activeTab === tab.id
-                  ? 'text-[#577590]'
+                  ? 'text-[#0891b2]'
                   : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
               }`}
             >

@@ -127,7 +127,7 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-slate-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-b from-white to-slate-50 dark:from-slate-950 dark:to-slate-900 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         
         {/* Header */}
@@ -137,54 +137,84 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
             <span className="text-sm font-medium text-accent">Powered by AI and ABA Science</span>
           </div>
           
-          <h1 className="text-4xl sm:text-5xl font-semibold text-slate-900 mb-4">
+          <h1 className="text-4xl sm:text-5xl font-semibold text-slate-900 dark:text-white mb-4">
             Choose Your Calm Plan
           </h1>
           
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto mb-2">
+          <p className="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto mb-2">
             Start with a 7-day free trial of Core or Plus — no credit card needed.
           </p>
           
-          <p className="text-sm text-slate-500 max-w-xl mx-auto">
+          <p className="text-sm text-slate-500 dark:text-slate-400 max-w-xl mx-auto">
             Using proven ABA principles, Aminy creates calm you can feel.
           </p>
         </div>
 
         {/* Forta Differentiator Banner - VC-informed positioning */}
-        <div className="bg-gradient-to-r from-teal-50 to-emerald-50 border border-teal-200 rounded-xl p-6 mb-8 max-w-4xl mx-auto">
+        <div className="bg-gradient-to-r from-teal-50 to-emerald-50 dark:from-teal-900/40 dark:to-emerald-900/30 border border-teal-200 dark:border-teal-800/60 rounded-xl p-6 mb-8 max-w-4xl mx-auto">
           <div className="flex items-start gap-3 sm:gap-4">
-            <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center flex-shrink-0">
-              <Sparkles className="w-6 h-6 text-teal-600" />
+            <div className="w-12 h-12 bg-teal-100 dark:bg-teal-900/60 rounded-full flex items-center justify-center flex-shrink-0">
+              <Sparkles className="w-6 h-6 text-teal-600 dark:text-teal-300" />
             </div>
             <div className="flex-1">
-              <h3 className="font-semibold text-teal-900 mb-2">Start Today, Not in 90 Days</h3>
-              <p className="text-sm text-teal-800 mb-3">
+              <h3 className="font-semibold text-teal-900 dark:text-teal-100 mb-2">Start Today, Not in 90 Days</h3>
+              <p className="text-sm text-teal-800 dark:text-teal-200 mb-3">
                 Unlike traditional ABA services with long waitlists and diagnosis requirements, Aminy gives you immediate support.
               </p>
               <div className="grid sm:grid-cols-2 gap-3">
                 <div className="flex items-center gap-2">
-                  <div className="w-5 h-5 bg-teal-200 rounded-full flex items-center justify-center">
-                    <Check className="w-3 h-3 text-teal-700" />
+                  <div className="w-5 h-5 bg-teal-200 dark:bg-teal-800 rounded-full flex items-center justify-center">
+                    <Check className="w-3 h-3 text-teal-700 dark:text-teal-200" />
                   </div>
-                  <span className="text-sm text-teal-700">No waitlist — instant AI access</span>
+                  <span className="text-sm text-teal-700 dark:text-teal-200">No waitlist — instant AI access</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-5 h-5 bg-teal-200 rounded-full flex items-center justify-center">
-                    <Check className="w-3 h-3 text-teal-700" />
+                  <div className="w-5 h-5 bg-teal-200 dark:bg-teal-800 rounded-full flex items-center justify-center">
+                    <Check className="w-3 h-3 text-teal-700 dark:text-teal-200" />
                   </div>
-                  <span className="text-sm text-teal-700">No diagnosis required</span>
+                  <span className="text-sm text-teal-700 dark:text-teal-200">No diagnosis required</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-5 h-5 bg-teal-200 rounded-full flex items-center justify-center">
-                    <Check className="w-3 h-3 text-teal-700" />
+                  <div className="w-5 h-5 bg-teal-200 dark:bg-teal-800 rounded-full flex items-center justify-center">
+                    <Check className="w-3 h-3 text-teal-700 dark:text-teal-200" />
                   </div>
-                  <span className="text-sm text-teal-700">Works for any family, any child</span>
+                  <span className="text-sm text-teal-700 dark:text-teal-200">Works for any family, any child</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-5 h-5 bg-teal-200 rounded-full flex items-center justify-center">
-                    <Check className="w-3 h-3 text-teal-700" />
+                  <div className="w-5 h-5 bg-teal-200 dark:bg-teal-800 rounded-full flex items-center justify-center">
+                    <Check className="w-3 h-3 text-teal-700 dark:text-teal-200" />
                   </div>
-                  <span className="text-sm text-teal-700">Expert sessions available within days</span>
+                  <span className="text-sm text-teal-700 dark:text-teal-200">Expert sessions available within days</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Trial Clarity */}
+        <div className="bg-white/90 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 mb-10 max-w-4xl mx-auto">
+          <div className="flex items-start gap-4">
+            <div className="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
+              <CreditCard className="w-6 h-6 text-accent" />
+            </div>
+            <div className="flex-1 space-y-2">
+              <h3 className="text-lg font-semibold text-slate-900 dark:text-white">What happens after your trial?</h3>
+              <p className="text-sm text-slate-600 dark:text-slate-300">
+                Your {TRIAL_CONFIG.durationDays}-day trial includes full {getTierDisplayName(TRIAL_CONFIG.trialTier)} access.
+                When it ends, you can pick any plan or stay on Free — no surprises.
+              </p>
+              <div className="grid gap-3 sm:grid-cols-3 text-sm">
+                <div className="rounded-xl border border-slate-200 dark:border-slate-700 p-3">
+                  <p className="font-semibold text-slate-900 dark:text-white">Choose Core</p>
+                  <p className="text-slate-600 dark:text-slate-300">${tierPricing.core.monthly}/mo after trial</p>
+                </div>
+                <div className="rounded-xl border border-slate-200 dark:border-slate-700 p-3">
+                  <p className="font-semibold text-slate-900 dark:text-white">Upgrade to Pro</p>
+                  <p className="text-slate-600 dark:text-slate-300">${tierPricing.pro.monthly}/mo with BCBA support</p>
+                </div>
+                <div className="rounded-xl border border-slate-200 dark:border-slate-700 p-3">
+                  <p className="font-semibold text-slate-900 dark:text-white">Stay on Free</p>
+                  <p className="text-slate-600 dark:text-slate-300">Limited features, always $0</p>
                 </div>
               </div>
             </div>

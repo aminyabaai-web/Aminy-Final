@@ -42,7 +42,7 @@ export interface ReportOptions {
 // PDF Generation Utilities
 // ============================================================================
 
-const AMINY_BLUE = '#577590';
+const AMINY_BLUE = '#0891b2';
 const AMINY_GREEN = '#43AA8B';
 const GRAY_600 = '#4B5563';
 const GRAY_400 = '#9CA3AF';

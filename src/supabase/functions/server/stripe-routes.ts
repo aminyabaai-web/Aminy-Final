@@ -104,11 +104,11 @@ const emailTemplates = {
           body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; }
           .container { max-width: 600px; margin: 0 auto; padding: 40px 20px; }
           .header { text-align: center; margin-bottom: 30px; }
-          .logo { font-size: 28px; font-weight: 600; color: #577590; }
+          .logo { font-size: 28px; font-weight: 600; color: #0891b2; }
           .content { background: #f8f9fa; padding: 30px; border-radius: 12px; }
-          .amount { font-size: 24px; font-weight: 600; color: #577590; }
+          .amount { font-size: 24px; font-weight: 600; color: #0891b2; }
           .footer { text-align: center; margin-top: 30px; color: #666; font-size: 14px; }
-          .button { display: inline-block; background: #577590; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; margin-top: 20px; }
+          .button { display: inline-block; background: #0891b2; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; margin-top: 20px; }
         </style>
       </head>
       <body>
@@ -145,10 +145,10 @@ const emailTemplates = {
           body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; }
           .container { max-width: 600px; margin: 0 auto; padding: 40px 20px; }
           .header { text-align: center; margin-bottom: 30px; }
-          .logo { font-size: 28px; font-weight: 600; color: #577590; }
+          .logo { font-size: 28px; font-weight: 600; color: #0891b2; }
           .content { background: #fff5f5; padding: 30px; border-radius: 12px; border: 1px solid #fed7d7; }
           .footer { text-align: center; margin-top: 30px; color: #666; font-size: 14px; }
-          .button { display: inline-block; background: #577590; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; margin-top: 20px; }
+          .button { display: inline-block; background: #0891b2; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; margin-top: 20px; }
         </style>
       </head>
       <body>
@@ -189,11 +189,11 @@ const emailTemplates = {
           body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; }
           .container { max-width: 600px; margin: 0 auto; padding: 40px 20px; }
           .header { text-align: center; margin-bottom: 30px; }
-          .logo { font-size: 28px; font-weight: 600; color: #577590; }
+          .logo { font-size: 28px; font-weight: 600; color: #0891b2; }
           .content { background: #f8f9fa; padding: 30px; border-radius: 12px; }
           .highlight { background: #e8f4f8; padding: 15px; border-radius: 8px; margin: 20px 0; }
           .footer { text-align: center; margin-top: 30px; color: #666; font-size: 14px; }
-          .button { display: inline-block; background: #577590; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; margin-top: 20px; }
+          .button { display: inline-block; background: #0891b2; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; margin-top: 20px; }
         </style>
       </head>
       <body>
@@ -233,14 +233,14 @@ const emailTemplates = {
           body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; }
           .container { max-width: 600px; margin: 0 auto; padding: 40px 20px; }
           .header { text-align: center; margin-bottom: 30px; }
-          .logo { font-size: 28px; font-weight: 600; color: #577590; }
+          .logo { font-size: 28px; font-weight: 600; color: #0891b2; }
           .content { background: linear-gradient(135deg, #f8f9fa 0%, #e8f4f8 100%); padding: 30px; border-radius: 12px; }
-          .countdown { font-size: 48px; font-weight: 700; color: #577590; text-align: center; margin: 20px 0; }
+          .countdown { font-size: 48px; font-weight: 700; color: #0891b2; text-align: center; margin: 20px 0; }
           .features { background: white; padding: 20px; border-radius: 8px; margin: 20px 0; }
           .feature { display: flex; align-items: center; gap: 10px; margin: 10px 0; }
           .check { color: #22c55e; font-weight: bold; }
           .footer { text-align: center; margin-top: 30px; color: #666; font-size: 14px; }
-          .button { display: inline-block; background: #577590; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; margin-top: 20px; }
+          .button { display: inline-block; background: #0891b2; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; margin-top: 20px; }
         </style>
       </head>
       <body>
