@@ -232,8 +232,8 @@ export function CreateAccountScreen({
 
   return (
     <div
+      className="min-h-screen min-h-[100dvh]"
       style={{
-        minHeight: '100vh',
         backgroundColor: '#F8F8F6',
         fontFamily: fontStack,
         display: 'flex',
@@ -281,7 +281,8 @@ export function CreateAccountScreen({
       {/* Main Content */}
       <main
         style={{
-          padding: '4px 20px 32px',
+          padding: '4px 20px',
+          paddingBottom: 'max(32px, calc(env(safe-area-inset-bottom, 0px) + 16px))',
         }}
       >
         <div style={{ maxWidth: '420px', margin: '0 auto' }}>

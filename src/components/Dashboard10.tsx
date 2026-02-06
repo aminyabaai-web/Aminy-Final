@@ -513,6 +513,7 @@ export function Dashboard10({
               upcomingEvents.map((event) => (
                 <button
                   key={event.id}
+                  onClick={() => onNavigate?.(event.type === 'telehealth' ? 'my-appointments' : 'care-plan')}
                   className="flex-shrink-0 bg-white/10 hover:bg-white/15 rounded-lg px-3 py-2 flex items-center gap-2 transition-colors"
                 >
                   {event.type === 'telehealth' ? (
@@ -979,7 +980,7 @@ export function Dashboard10({
       {/* ========================================
           7. BOTTOM NAVIGATOR TABS (Fixed)
           ======================================== */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 border-t border-gray-200 dark:border-slate-700 z-20 safe-bottom">
+      <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 border-t border-gray-200 dark:border-slate-700 z-20" style={{ paddingBottom: 'max(8px, env(safe-area-inset-bottom))' }}>
         <div className="max-w-4xl mx-auto flex justify-around py-2">
           {[
             { id: 'home', label: 'Home', icon: <Home className="w-5 h-5" /> },

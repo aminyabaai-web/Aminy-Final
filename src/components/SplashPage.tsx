@@ -231,25 +231,27 @@ export function SplashPage({
               marginBottom: '44px',
             }}
           >
-            <button
-              onClick={onSignIn}
-              style={{
-                background: 'none',
-                border: 'none',
-                color: 'rgba(17, 24, 39, 0.45)',
-                fontFamily: fontStack,
-                fontSize: '13px',
-                fontWeight: 400,
-                cursor: 'pointer',
-                padding: '8px 16px',
-                transition: 'color 0.2s ease',
-                ...fontSmoothing,
-              }}
-              onMouseEnter={(e) => e.currentTarget.style.color = 'rgba(17, 24, 39, 0.65)'}
-              onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(17, 24, 39, 0.45)'}
-            >
-              Already have an account? Sign in
-            </button>
+            {onSignIn && (
+              <button
+                onClick={onSignIn}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: 'rgba(17, 24, 39, 0.45)',
+                  fontFamily: fontStack,
+                  fontSize: '13px',
+                  fontWeight: 400,
+                  cursor: 'pointer',
+                  padding: '8px 16px',
+                  transition: 'color 0.2s ease',
+                  ...fontSmoothing,
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.color = 'rgba(17, 24, 39, 0.65)'}
+                onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(17, 24, 39, 0.45)'}
+              >
+                Already have an account? Sign in
+              </button>
+            )}
 
             {onForProviders && (
               <div style={{ marginTop: '8px' }}>
@@ -388,8 +390,8 @@ export function SplashPage({
         <MedicalDisclaimer variant="inline" className="text-center max-w-md mx-auto" />
       </motion.div>
 
-      {/* Footer spacer */}
-      <div style={{ height: '40px' }} />
+      {/* Footer spacer with safe area */}
+      <div style={{ height: 'max(40px, calc(env(safe-area-inset-bottom, 0px) + 24px))' }} />
     </div>
   );
 }

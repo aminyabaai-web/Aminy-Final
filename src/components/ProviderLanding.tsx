@@ -37,7 +37,7 @@ interface ProviderLandingProps {
 
 export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingProps) {
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-900">
+    <div className="min-h-screen min-h-[100dvh] bg-white dark:bg-slate-900">
       {/* Header — compact on mobile */}
       <header className="bg-white dark:bg-slate-900 border-b border-neutral-200 dark:border-slate-700 sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-3 sm:px-4 py-3 flex items-center justify-between gap-2">

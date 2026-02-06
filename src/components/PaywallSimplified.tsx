@@ -510,7 +510,7 @@ export function PaywallSimplified({
             </div>
             <Button
               onClick={handleApplyPromo}
-              disabled={isValidatingPromo}
+              disabled={isValidatingPromo || !promoCode.trim()}
               variant="outline"
               className="px-4 rounded-xl"
             >

@@ -283,6 +283,44 @@
 }
 
 /* ========================================
+   MOBILE SAFE AREA UTILITIES
+   ======================================== */
+
+/* Safe bottom padding - for fixed bottom elements */
+.safe-bottom {
+  padding-bottom: max(8px, env(safe-area-inset-bottom, 0px));
+}
+
+/* Safe bottom with extra padding for content above bottom nav */
+.safe-bottom-nav {
+  padding-bottom: calc(max(8px, env(safe-area-inset-bottom, 0px)) + 80px);
+}
+
+/* Safe top padding - for content below status bar */
+.safe-top {
+  padding-top: max(8px, env(safe-area-inset-top, 0px));
+}
+
+/* Full screen safe area - for fullscreen overlays */
+.safe-all {
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-left: env(safe-area-inset-left, 0px);
+}
+
+/* Mobile viewport height - accounts for browser chrome */
+.min-h-screen-safe {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.h-screen-safe {
+  height: 100vh;
+  height: 100dvh;
+}
+
+/* ========================================
    TONE TYPOGRAPHY CLASSES
    ======================================== */
 
