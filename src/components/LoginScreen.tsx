@@ -211,7 +211,7 @@ export function LoginScreen({
         className="flex-1 flex flex-col items-center px-6"
         style={{
           paddingTop: 'clamp(24px, 6vh, 48px)',
-          paddingBottom: '32px',
+          paddingBottom: 'max(32px, calc(env(safe-area-inset-bottom, 0px) + 16px))',
           overflowY: 'auto',
         }}
       >

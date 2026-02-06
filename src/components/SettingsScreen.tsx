@@ -362,7 +362,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 pb-24">
+    <div className="min-h-screen min-h-[100dvh] bg-gray-50 dark:bg-slate-900" style={{ paddingBottom: 'max(96px, calc(env(safe-area-inset-bottom, 0px) + 80px))' }}>
       {/* Header */}
       <div className="sticky top-0 z-10 bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
         <div className="max-w-2xl mx-auto px-4 py-4">
@@ -801,14 +801,16 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
         </Card>
 
         {/* Sign Out */}
-        <Button
-          variant="outline"
-          className="w-full text-red-600 border-red-200 hover:bg-red-50"
-          onClick={onLogout}
-        >
-          <LogOut className="w-4 h-4 mr-2" />
-          Sign Out
-        </Button>
+        {onLogout && (
+          <Button
+            variant="outline"
+            className="w-full text-red-600 border-red-200 hover:bg-red-50"
+            onClick={onLogout}
+          >
+            <LogOut className="w-4 h-4 mr-2" />
+            Sign Out
+          </Button>
+        )}
 
         {/* App Version */}
         <p className="text-center text-xs text-muted-foreground">
