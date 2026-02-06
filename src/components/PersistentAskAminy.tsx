@@ -662,9 +662,9 @@ export function PersistentAskAminy({
                                 {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                               </span>
                               {message.contextUsed && (
-                                <Badge variant="secondary" className="text-xs">
+                                <Badge variant="secondary" className="text-xs bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300 border-purple-200 dark:border-purple-800">
                                   <Brain className="w-2 h-2 mr-1" />
-                                  Context-aware
+                                  Aminy remembers
                                 </Badge>
                               )}
                               {message.isStreaming && (

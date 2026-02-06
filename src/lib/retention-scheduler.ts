@@ -528,40 +528,136 @@ export async function processDueNotifications(): Promise<number> {
 // ============================================
 
 /**
- * Send email notification (implement with your email provider)
+ * Send email notification using the email service
  */
 async function sendEmail(notification: any): Promise<void> {
-  // TODO: Integrate with email provider (Resend, SendGrid, etc.)
-  console.log(`[Email] Would send to user ${notification.user_id}: ${notification.payload.subject}`);
+  try {
+    // Get user's email from profile
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('email, parent_name, onboarding_data')
+      .eq('id', notification.user_id)
+      .single();
 
-  // Example implementation with Resend:
-  // const resend = new Resend(process.env.RESEND_API_KEY);
-  // await resend.emails.send({
-  //   from: 'Aminy <hello@aminy.ai>',
-  //   to: userEmail,
-  //   subject: notification.payload.subject,
-  //   html: `<h1>${notification.payload.title}</h1><p>${notification.payload.body}</p>`,
-  // });
+    if (!profile?.email) {
+      console.warn(`[Retention] No email found for user ${notification.user_id}`);
+      return;
+    }
+
+    const childName = profile.onboarding_data?.childName || 'your child';
+    const parentName = profile.parent_name || 'there';
+
+    // Map notification type to email template
+    const templateMap: Record<string, string> = {
+      'trial_reminder': notification.metadata?.day === 1 ? 'trial_day_1' :
+                        notification.metadata?.day === 3 ? 'trial_day_3' : 'trial_day_5',
+      'trial_ending_soon': 'trial_ending_soon',
+      'trial_expired': 'trial_expired',
+      'streak_reminder': 'streak_celebration',
+      'streak_at_risk': 'reengagement',
+      'reengagement': 'reengagement',
+      'weekly_summary': 'weekly_summary',
+      'care_plan_reminder': 'reengagement',
+    };
+
+    const template = templateMap[notification.type] || 'reengagement';
+
+    // Call Supabase Edge Function to send email
+    const { error } = await supabase.functions.invoke('send-email', {
+      body: {
+        to: profile.email,
+        subject: notification.payload.subject,
+        html: `
+          <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+            <h1 style="color: #0d9488;">${notification.payload.title}</h1>
+            <p style="color: #374151; font-size: 16px; line-height: 1.6;">${notification.payload.body}</p>
+            ${notification.payload.actionUrl ? `
+              <a href="${notification.payload.actionUrl}" style="display: inline-block; background: #0d9488; color: white; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: 600; margin: 20px 0;">
+                ${notification.payload.actionText || 'Open Aminy'}
+              </a>
+            ` : ''}
+          </div>
+        `,
+        text: `${notification.payload.title}\n\n${notification.payload.body}`,
+        template,
+        metadata: {
+          parentName,
+          childName,
+          ...notification.metadata,
+        },
+      },
+    });
+
+    if (error) {
+      console.error(`[Retention] Email send error:`, error);
+      throw error;
+    }
+
+    console.log(`[Email] Sent ${notification.type} to ${profile.email}`);
+  } catch (err) {
+    console.error(`[Retention] Failed to send email:`, err);
+    throw err;
+  }
 }
 
 /**
- * Send push notification (implement with your push provider)
+ * Send push notification using Web Push via Supabase Edge Function
  */
 async function sendPush(notification: any): Promise<void> {
-  // TODO: Integrate with push provider (Firebase, OneSignal, etc.)
-  console.log(`[Push] Would send to user ${notification.user_id}: ${notification.payload.title}`);
+  try {
+    // Get user's push subscription from profiles
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('push_subscription, push_enabled')
+      .eq('id', notification.user_id)
+      .single();
 
-  // Example implementation with Firebase:
-  // await admin.messaging().send({
-  //   token: userPushToken,
-  //   notification: {
-  //     title: notification.payload.title,
-  //     body: notification.payload.body,
-  //   },
-  //   data: {
-  //     actionUrl: notification.payload.actionUrl,
-  //   },
-  // });
+    if (!profile?.push_enabled || !profile?.push_subscription) {
+      console.log(`[Push] User ${notification.user_id} has push disabled or no subscription`);
+      return;
+    }
+
+    // Call Supabase Edge Function to send push notification
+    const { error } = await supabase.functions.invoke('send-push', {
+      body: {
+        subscription: profile.push_subscription,
+        payload: {
+          title: notification.payload.title,
+          body: notification.payload.body,
+          icon: '/icons/icon-192x192.png',
+          badge: '/icons/badge-72x72.png',
+          data: {
+            url: notification.payload.actionUrl || '/',
+            notificationId: notification.id,
+            type: notification.type,
+          },
+          actions: notification.payload.actionText ? [
+            {
+              action: 'open',
+              title: notification.payload.actionText,
+            },
+            {
+              action: 'dismiss',
+              title: 'Dismiss',
+            },
+          ] : undefined,
+          tag: notification.type, // Group notifications by type
+          renotify: true,
+          requireInteraction: notification.type === 'trial_ending_soon', // Important ones stay visible
+        },
+      },
+    });
+
+    if (error) {
+      console.error(`[Push] Send error:`, error);
+      throw error;
+    }
+
+    console.log(`[Push] Sent ${notification.type} to user ${notification.user_id}`);
+  } catch (err) {
+    console.error(`[Push] Failed to send push:`, err);
+    throw err;
+  }
 }
 
 // ============================================
