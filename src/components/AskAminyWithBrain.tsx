@@ -155,12 +155,13 @@ export function AskAminyWithBrain({
       );
 
     } catch (error) {
-      toast.error('I had a little hiccup. Mind trying that again?');
-      
+      const errorDetails = error instanceof Error ? error.message : 'Unknown error';
+      toast.error("I couldn't process that. Check your connection and try again.");
+
       const errorMessage: Message = {
         id: `msg-${Date.now() + 1}`,
         role: 'assistant',
-        content: `I'm having trouble connecting right now, but I'm here to help! Can you try asking again?`,
+        content: `I had trouble connecting just now. This could be a network issue or our servers might be busy. Could you try again in a moment? If the problem continues, check your internet connection.\n\n(Technical: ${errorDetails})`,
         timestamp: new Date()
       };
       setMessages(prev => [...prev, errorMessage]);
@@ -311,7 +312,11 @@ export function AskAminyWithBrain({
                   <div className="bg-slate-100 rounded-2xl px-4 py-3 text-sm">
                     <div className="flex items-center gap-2">
                       <Loader2 className="w-4 h-4 animate-spin text-accent" />
-                      <span className="text-muted-foreground">Aminy is thinking...</span>
+                      <span className="text-muted-foreground">
+                        {aiContext
+                          ? `Reviewing ${userData.childName}'s profile and history...`
+                          : "Thinking about your question..."}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -379,6 +384,9 @@ export function AskAminyWithBrain({
             </div>
             <p className="text-[10px] text-muted-foreground mt-2 text-center">
               AI has full context about {userData.childName} • Press Enter to send
+            </p>
+            <p className="text-[9px] text-muted-foreground/70 mt-1 text-center">
+              Aminy provides guidance, not medical advice. Consult your healthcare provider for clinical decisions.
             </p>
           </div>
         </Card>

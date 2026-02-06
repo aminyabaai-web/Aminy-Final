@@ -132,24 +132,33 @@ export async function getProviderProfile(): Promise<any | null> {
 }
 
 /**
- * AI-powered credential verification
- * In production, this would call real license verification APIs
+ * Credential pre-screening (NOT final verification)
+ *
+ * IMPORTANT: This performs preliminary format validation only.
+ * Full credential verification MUST be completed manually by admin staff
+ * by checking:
+ * - BACB Registry: https://www.bacb.com/certificant-registry/
+ * - State Licensing Board (varies by state)
+ * - NPPES NPI Lookup: https://npiregistry.cms.hhs.gov/
+ *
+ * TODO: Integrate real APIs for automated verification:
+ * - BACB API (when available)
+ * - NPPES REST API: https://npiregistry.cms.hhs.gov/api/
+ * - State licensing board APIs (varies by state)
  */
 export async function verifyProviderCredentials(
   application: Partial<ProviderApplication>
 ): Promise<AIVerificationResult> {
-  console.log('[AuthRoles] Verifying credentials for:', application.full_name);
+  // SECURITY: Log for audit trail but don't expose PII in production logs
+  if (process.env.NODE_ENV === 'development') {
+    console.log('[AuthRoles] Pre-screening credentials for:', application.full_name);
+  }
 
-  // Simulate API call delay
-  await new Promise(resolve => setTimeout(resolve, 2000));
+  // Simulate processing time for UX
+  await new Promise(resolve => setTimeout(resolve, 1500));
 
-  // In production, this would:
-  // 1. Query state licensing board APIs
-  // 2. Verify NPI numbers via NPPES
-  // 3. Check BACB registry for BCBAs
-  // 4. Cross-reference name and license number
-
-  // For now, we'll do intelligent mock verification
+  // NOTE: This is FORMAT VALIDATION ONLY - not actual verification
+  // Real verification requires manual admin review against official registries
   const licenseNumber = application.license_number || '';
   const providerType = application.provider_type || '';
 
@@ -190,12 +199,17 @@ export async function verifyProviderCredentials(
     licenseStatus = 'pending_verification';
   }
 
+  // Add explicit flag that this is preliminary only
+  if (confidenceScore < 1) {
+    flags.push('IMPORTANT: Pre-screening only - manual verification against official registries required');
+  }
+
   return {
     license_valid: licenseFormatValid && !isExpired && confidenceScore >= 0.7,
     license_status: licenseStatus,
-    name_match: true, // Would verify against license board records
+    name_match: true, // NOTE: Requires manual verification against license board records
     confidence_score: Math.min(confidenceScore, 1),
-    verification_source: 'Aminy AI Verification System',
+    verification_source: 'Aminy Pre-Screening (Manual Verification Required)',
     flags,
     verified_at: new Date().toISOString(),
   };

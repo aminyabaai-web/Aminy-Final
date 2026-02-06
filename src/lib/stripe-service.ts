@@ -86,10 +86,27 @@ interface SubscriptionStatus {
   trialEnd?: string;
 }
 
-// Get access token from localStorage
-const getAccessToken = (): string => {
+/**
+ * Get access token securely
+ * NOTE: For HIPAA compliance, tokens should be managed by Supabase Auth
+ * which uses httpOnly cookies internally. Never store PHI access tokens in localStorage.
+ * The publicAnonKey is safe for anonymous API calls, Supabase handles authenticated sessions.
+ */
+const getAccessToken = async (): Promise<string> => {
   if (typeof window === 'undefined') return publicAnonKey;
-  return localStorage.getItem('access_token') || publicAnonKey;
+
+  // Use Supabase's secure session management instead of localStorage
+  try {
+    const { data: { session } } = await (await import('../utils/supabase/client')).supabase.auth.getSession();
+    if (session?.access_token) {
+      return session.access_token;
+    }
+  } catch (error) {
+    // Fall back to anon key for unauthenticated requests
+    console.warn('[Stripe] Session not available, using anon key');
+  }
+
+  return publicAnonKey;
 };
 
 // Get origin URL safely for SSR environments
@@ -109,7 +126,7 @@ export async function createCheckoutSession({
   successUrl = `${getOrigin()}/?screen=dashboard&payment=success`,
   cancelUrl = `${getOrigin()}/?screen=paywall&payment=cancelled`,
 }: CreateCheckoutParams): Promise<CheckoutResponse> {
-  const accessToken = getAccessToken();
+  const accessToken = await getAccessToken();
 
   const response = await fetch(
     `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/payments/create-checkout`,
@@ -151,7 +168,7 @@ export async function createPortalSession(
   userId: string,
   returnUrl: string = `${getOrigin()}/settings`
 ): Promise<{ url: string }> {
-  const accessToken = getAccessToken();
+  const accessToken = await getAccessToken();
 
   const response = await fetch(
     `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/payments/create-portal`,
@@ -182,7 +199,7 @@ export async function createPortalSession(
  * Get current subscription status
  */
 export async function getSubscriptionStatus(userId: string): Promise<SubscriptionStatus> {
-  const accessToken = getAccessToken();
+  const accessToken = await getAccessToken();
 
   const response = await fetch(
     `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/payments/subscription/${userId}`,
@@ -213,7 +230,7 @@ export async function getSubscriptionStatus(userId: string): Promise<Subscriptio
  * Cancel subscription (at period end)
  */
 export async function cancelSubscription(userId: string): Promise<{ success: boolean }> {
-  const accessToken = getAccessToken();
+  const accessToken = await getAccessToken();
 
   const response = await fetch(
     `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/payments/cancel`,
@@ -239,7 +256,7 @@ export async function cancelSubscription(userId: string): Promise<{ success: boo
  * Resume cancelled subscription
  */
 export async function resumeSubscription(userId: string): Promise<{ success: boolean }> {
-  const accessToken = getAccessToken();
+  const accessToken = await getAccessToken();
 
   const response = await fetch(
     `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/payments/resume`,
@@ -277,7 +294,7 @@ export async function createOneTimePayment({
   description: string;
   metadata?: Record<string, string>;
 }): Promise<CheckoutResponse> {
-  const accessToken = getAccessToken();
+  const accessToken = await getAccessToken();
 
   const response = await fetch(
     `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/payments/create-payment`,
