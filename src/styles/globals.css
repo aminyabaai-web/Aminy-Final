@@ -86,7 +86,7 @@ body {
   --secondary: #f8fafc;
   --secondary-foreground: #1e293b;
   --muted: #f1f5f9;
-  --muted-foreground: #64748b; /* Slightly warmer gray */
+  --muted-foreground: #4B5563; /* WCAG AA compliant gray - fixed from #64748b for better contrast */
   --accent: #0891b2; /* Teal accent - used more sparingly */
   --accent-foreground: #ffffff;
   --destructive: #dc2626;

@@ -614,6 +614,10 @@ export function AdminPortal({ onBack }: AdminPortalProps) {
                     </span>
                   )}
                 </p>
+                {/* Data quality note for transparency */}
+                <p className="text-xs text-amber-600 dark:text-amber-400 mt-0.5">
+                  ℹ️ Some metrics use estimates where data is unavailable (NPS, goal progress)
+                </p>
               </div>
             </div>
 

@@ -312,17 +312,88 @@ async function buildChildContext(child: any): Promise<ChildContext> {
 }
 
 async function buildVaultContext(childId: string): Promise<VaultContext> {
-  const state = store.getState();
-  const vault = state.vault || {};
-  
-  return {
-    evaluations: vault.evaluations || [],
-    iepDocuments: vault.ieps || [],
-    progressReports: vault.progressReports || [],
-    bcbaNotes: vault.bcbaNotes || [],
-    insuranceInfo: vault.insurance || [],
-    medicalRecords: vault.medical || []
+  // Try to load from Supabase first for persistence, then fall back to local store
+  let vaultData: VaultContext = {
+    evaluations: [],
+    iepDocuments: [],
+    progressReports: [],
+    bcbaNotes: [],
+    insuranceInfo: [],
+    medicalRecords: []
   };
+
+  try {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      // Load vault documents from database
+      const { data: documents } = await supabase
+        .from('vault_documents')
+        .select('id, title, document_type, uploaded_at, ai_summary, key_insights')
+        .eq('user_id', user.id)
+        .eq('child_id', childId)
+        .order('uploaded_at', { ascending: false })
+        .limit(50);
+
+      if (documents && documents.length > 0) {
+        // Categorize documents by type
+        documents.forEach(doc => {
+          const formattedDoc = {
+            id: doc.id,
+            title: doc.title,
+            type: doc.document_type,
+            date: doc.uploaded_at,
+            summary: doc.ai_summary,
+            keyInsights: doc.key_insights || []
+          };
+
+          switch (doc.document_type) {
+            case 'evaluation':
+            case 'psychological_eval':
+            case 'developmental_eval':
+              vaultData.evaluations.push(formattedDoc);
+              break;
+            case 'iep':
+            case 'ifsp':
+              vaultData.iepDocuments.push(formattedDoc);
+              break;
+            case 'progress_report':
+              vaultData.progressReports.push(formattedDoc);
+              break;
+            case 'bcba_notes':
+            case 'therapy_notes':
+              vaultData.bcbaNotes.push(formattedDoc);
+              break;
+            case 'insurance':
+            case 'eob':
+              vaultData.insuranceInfo.push(formattedDoc);
+              break;
+            case 'medical':
+            case 'prescription':
+              vaultData.medicalRecords.push(formattedDoc);
+              break;
+          }
+        });
+      }
+    }
+  } catch (e) {
+    console.error('[AI Brain] Error loading vault from database:', e);
+  }
+
+  // Fall back to local store if database is empty
+  if (vaultData.evaluations.length === 0) {
+    const state = store.getState();
+    const vault = state.vault || {};
+    vaultData = {
+      evaluations: vault.evaluations || [],
+      iepDocuments: vault.ieps || [],
+      progressReports: vault.progressReports || [],
+      bcbaNotes: vault.bcbaNotes || [],
+      insuranceInfo: vault.insurance || [],
+      medicalRecords: vault.medical || []
+    };
+  }
+
+  return vaultData;
 }
 
 async function buildDailyPlanContext(childId: string): Promise<DailyPlanContext> {
