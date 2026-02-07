@@ -19,8 +19,7 @@ jobs:
           cache: npm
 
       - name: Install deps
-        run: npm ci
-
+        run: npm ci --legacy-peer-deps
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
