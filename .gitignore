@@ -19,8 +19,6 @@ dist/
 
 # Testing
 coverage/
-playwright-report/
-test-results/
 
 # IDE
 .idea/
@@ -47,3 +45,8 @@ tmp/
 temp/
 .vercel
 .next/
+
+# Playwright
+playwright-report/
+test-results/
+e2e-screenshots/
