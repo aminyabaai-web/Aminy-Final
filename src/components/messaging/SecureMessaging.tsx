@@ -650,8 +650,8 @@ export function SecureMessaging({ userId, userRole, onBack }: SecureMessagingPro
                 onKeyDown={handleKeyPress}
                 placeholder="Type a message..."
                 rows={1}
-                className="w-full bg-transparent resize-none focus:outline-none text-sm min-h-[24px] max-h-[120px]"
-                style={{ lineHeight: '24px' }}
+                className="w-full bg-transparent resize-none focus:outline-none text-sm min-h-[40px] max-h-[120px]"
+                style={{ lineHeight: '24px', paddingTop: '8px' }}
               />
             </div>
 

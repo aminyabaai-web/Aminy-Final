@@ -78,10 +78,12 @@ function getMFAState(status: MFAStatus, requirement: MFARequirement): MFAState {
 
 function generateBackupCodes(): string[] {
   const codes: string[] = [];
+  // Character set excludes ambiguous chars: 0, O, 1, I, L
+  const allowedChars = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
   for (let i = 0; i < 10; i++) {
     const code = Array.from(
       { length: 8 },
-      () => 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[Math.floor(Math.random() * 32)]
+      () => allowedChars[Math.floor(Math.random() * allowedChars.length)]
     ).join('');
     codes.push(code);
   }
@@ -234,7 +236,8 @@ describe('Backup Codes', () => {
 
   it('should use only allowed characters (no ambiguous chars)', () => {
     const codes = generateBackupCodes();
-    const allowedChars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    // Excludes 0, O, 1, I, L
+    const allowedChars = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
     codes.forEach(code => {
       for (const char of code) {
         expect(allowedChars).toContain(char);

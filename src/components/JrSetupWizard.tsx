@@ -415,7 +415,7 @@ export const JrSetupWizard: React.FC<JrSetupWizardProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white dark:bg-slate-900">
       {/* Progress Header */}
       <div className="bg-white border-b border-gray-100 px-4 py-6">
         <div className="max-w-md mx-auto">

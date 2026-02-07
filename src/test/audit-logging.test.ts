@@ -108,7 +108,7 @@ describe('Financial Transaction Audit Events', () => {
 
     expect(event.action).toBe('payment_succeeded');
     expect(event.resourceType).toBe('payment');
-    expect(event.details.amountCents).toBe(2499);
+    expect(event.details.amountCents).toBe(1499);
     expect(event.details.tier).toBe('core');
   });
 

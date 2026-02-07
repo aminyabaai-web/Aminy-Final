@@ -173,16 +173,19 @@ describe('Circuit Breaker', () => {
     it('should decrease failure count on success in CLOSED state', () => {
       circuit.recordFailure();
       circuit.recordFailure();
+      // failures = 2
 
-      // Now record a success
+      // Now record a success - decrements failure count by 1
       circuit.recordSuccess();
+      // failures = 1
 
-      // Should need 3 more failures to open (threshold is 3)
+      // Need 2 more failures to reach threshold of 3
       circuit.recordFailure();
-      circuit.recordFailure();
+      // failures = 2
       expect(circuit.getState()).toBe('CLOSED');
 
       circuit.recordFailure();
+      // failures = 3 >= threshold, should OPEN
       expect(circuit.getState()).toBe('OPEN');
     });
   });

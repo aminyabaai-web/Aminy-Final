@@ -277,7 +277,7 @@ export function OnDemandTelehealth({
   // Browse available providers
   if (step === 'browse') {
     return (
-      <div className="min-h-screen bg-white pb-24">
+      <div className="min-h-screen bg-white dark:bg-slate-900 pb-24">
         {/* Header */}
         <div className="sticky top-0 z-10 bg-white border-b border-gray-200">
           <div className="max-w-2xl mx-auto px-4 py-4">
@@ -443,7 +443,7 @@ export function OnDemandTelehealth({
   // Confirm booking
   if (step === 'confirm' && selectedProvider) {
     return (
-      <div className="min-h-screen bg-white pb-24">
+      <div className="min-h-screen bg-white dark:bg-slate-900 pb-24">
         <div className="sticky top-0 z-10 bg-white border-b border-gray-200">
           <div className="max-w-2xl mx-auto px-4 py-4">
             <div className="flex items-center gap-3">
@@ -582,7 +582,7 @@ export function OnDemandTelehealth({
   // Consent step
   if (step === 'consent') {
     return (
-      <div className="min-h-screen bg-white pb-24">
+      <div className="min-h-screen bg-white dark:bg-slate-900 pb-24">
         <div className="sticky top-0 z-10 bg-white border-b border-gray-200">
           <div className="max-w-2xl mx-auto px-4 py-4">
             <div className="flex items-center gap-3">
@@ -609,7 +609,7 @@ export function OnDemandTelehealth({
   // Connecting state
   if (step === 'connecting') {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center p-4">
+      <div className="min-h-screen bg-white dark:bg-slate-900 flex items-center justify-center p-4">
         <div className="text-center max-w-sm">
           <div className="w-20 h-20 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
             <Video className="w-10 h-10 text-accent animate-pulse" />
@@ -714,7 +714,7 @@ export function OnDemandTelehealth({
   // Session summary
   if (step === 'summary' && session) {
     return (
-      <div className="min-h-screen bg-white pb-24">
+      <div className="min-h-screen bg-white dark:bg-slate-900 pb-24">
         <div className="sticky top-0 z-10 bg-white border-b border-gray-200">
           <div className="max-w-2xl mx-auto px-4 py-4">
             <h1 className="text-lg font-semibold text-gray-900">Session Complete</h1>

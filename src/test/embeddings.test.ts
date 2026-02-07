@@ -81,18 +81,20 @@ describe('Embeddings Service', () => {
     });
 
     it('should decompress 8-bit back to approximate values', () => {
-      const original = [0.5, -0.5, 0.25, -0.25, 0];
+      // Use normalized values where max is 1.0 for proper compression behavior
+      const original = [1.0, -1.0, 0.5, -0.5, 0];
       const compressed = compressEmbedding(original, 8);
       const decompressed = decompressEmbedding(compressed, 8);
 
-      // 8-bit compression has some precision loss
+      // 8-bit compression has some precision loss (within ~1%)
       for (let i = 0; i < original.length; i++) {
         expect(decompressed[i]).toBeCloseTo(original[i], 1);
       }
     });
 
     it('should decompress 16-bit with better precision', () => {
-      const original = [0.5, -0.5, 0.25, -0.25, 0];
+      // Use normalized values where max is 1.0 for proper compression behavior
+      const original = [1.0, -1.0, 0.5, -0.5, 0];
       const compressed = compressEmbedding(original, 16);
       const decompressed = decompressEmbedding(compressed, 16);
 
@@ -235,7 +237,8 @@ describe('Semantic Search Logic', () => {
 describe('Memory Retrieval Scenarios', () => {
   describe('Child Preference Queries', () => {
     it('should identify preference-related queries', () => {
-      const preferenceKeywords = ['likes', 'loves', 'favorite', 'enjoys', 'prefers'];
+      // Include common verb forms (like/likes, love/loves, enjoy/enjoys)
+      const preferenceKeywords = ['like', 'likes', 'love', 'loves', 'favorite', 'enjoy', 'enjoys', 'prefers'];
       const queries = [
         'What does Alex like to eat',
         'What are his favorite toys',

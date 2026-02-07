@@ -49,7 +49,7 @@ export function ApproveScreen({ onApprove, onSimplify, onNotNow }: ApproveScreen
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div className="min-h-screen bg-white dark:bg-slate-900 flex flex-col">
       {/* Header */}
       <div className="px-4 py-6 border-b border-gray-100">
         <h1 className="text-2xl font-semibold text-center text-slate-900">

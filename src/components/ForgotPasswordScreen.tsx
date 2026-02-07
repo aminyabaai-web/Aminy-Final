@@ -58,7 +58,7 @@ export function ForgotPasswordScreen({ onBack, onBackToLogin }: ForgotPasswordSc
 
   if (isSuccess) {
     return (
-      <div className="min-h-screen bg-white flex flex-col relative overflow-hidden">
+      <div className="min-h-screen bg-white dark:bg-slate-900 flex flex-col relative overflow-hidden">
         {/* Header with Back Button */}
         <div className="flex items-center justify-between p-6 border-b border-gray-100">
           <button
@@ -147,7 +147,7 @@ export function ForgotPasswordScreen({ onBack, onBackToLogin }: ForgotPasswordSc
   }
 
   return (
-    <div className="min-h-screen bg-white flex flex-col relative overflow-hidden">
+    <div className="min-h-screen bg-white dark:bg-slate-900 flex flex-col relative overflow-hidden">
       {/* Header with Back Button */}
       <div className="flex items-center justify-between p-6 border-b border-gray-100">
         <button

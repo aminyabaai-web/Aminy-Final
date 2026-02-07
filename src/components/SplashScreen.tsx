@@ -31,7 +31,7 @@ export function SplashScreen({ onGetStarted, onLogin }: SplashScreenProps) {
 
   return (
     <div 
-      className="min-h-screen bg-white overflow-hidden" 
+      className="min-h-screen bg-white dark:bg-slate-900 overflow-hidden" 
       role="main"
       aria-label="Aminy welcome page"
       style={{ 
