@@ -404,7 +404,7 @@ export function ROICalculator() {
             <AssumptionCard
               icon={Users}
               title="Aminy Cost"
-              value={formatCurrency(AMINY_COST_PER_MEMBER_ANNUAL) + '/year"}
+              value={formatCurrency(AMINY_COST_PER_MEMBER_ANNUAL) + '/year'}
               source="Enterprise pricing (volume discounts available)"
             />
           </div>
