@@ -673,6 +673,21 @@ export default function App() {
     window.open('mailto:support@aminy.ai?subject=Payment%20Issue', '_blank');
   }, []);
 
+  // Memoized callbacks for AuthCallback to prevent re-render loops
+  const handleAuthCallbackSuccess = useCallback((email: string) => {
+    setUserData(prev => ({ ...prev, email }));
+    // The auth state listener will handle the rest
+  }, []);
+
+  const handleAuthCallbackPasswordReset = useCallback(() => {
+    navigateToScreen("reset-password");
+  }, []);
+
+  const handleAuthCallbackError = useCallback((message: string) => {
+    toast.error(message);
+    navigateToScreen("login");
+  }, []);
+
   // ======================================
   // OPTIMIZED INITIALIZATION - CRITICAL PATH FIRST
   // ======================================
@@ -1206,17 +1221,9 @@ export default function App() {
           return (
             <Suspense fallback={<LoadingSkeleton />}>
               <AuthCallback
-                onAuthSuccess={(email) => {
-                  setUserData(prev => ({ ...prev, email }));
-                  // The auth state listener will handle the rest
-                }}
-                onPasswordReset={() => {
-                  navigateToScreen("reset-password");
-                }}
-                onError={(message) => {
-                  toast.error(message);
-                  navigateToScreen("login");
-                }}
+                onAuthSuccess={handleAuthCallbackSuccess}
+                onPasswordReset={handleAuthCallbackPasswordReset}
+                onError={handleAuthCallbackError}
               />
             </Suspense>
           );
