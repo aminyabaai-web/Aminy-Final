@@ -219,15 +219,15 @@ export function Dashboard10({
   }, []);
 
   // Set up conversation context when child data is available
+  // Only create conversation once - don't re-run when currentConversation changes
   useEffect(() => {
-    if (userId && userData.childName) {
+    if (userId && userData.childName && !currentConversation) {
       const childId = `child-${userId.substring(0, 8)}`;
       setChildContext(childId);
-      if (!currentConversation) {
-        createConversation(childId, `Chat about ${userData.childName}`);
-      }
+      createConversation(childId, `Chat about ${userData.childName}`);
     }
-  }, [userId, userData.childName, setChildContext, createConversation, currentConversation]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- Only run when userId/childName available, not on currentConversation changes
+  }, [userId, userData.childName]);
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
@@ -921,7 +921,7 @@ export function Dashboard10({
                 <div
                   key={msg.id}
                   className={`rounded-xl p-3 text-sm shadow-sm ${
-                    msg.author === 'parent'
+                    msg.role === 'user'
                       ? 'bg-[#577590] text-white ml-8'
                       : 'bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-700 dark:to-slate-600 text-gray-700 dark:text-gray-200 mr-8'
                   }`}
