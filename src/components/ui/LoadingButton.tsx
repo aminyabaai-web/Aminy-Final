@@ -22,9 +22,9 @@ interface LoadingButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variantClasses = {
-  primary: 'bg-[#577590] text-white hover:bg-[#466379] disabled:bg-gray-300 disabled:text-gray-500',
+  primary: 'bg-[#0891b2] text-white hover:bg-[#466379] disabled:bg-gray-300 disabled:text-gray-500',
   secondary: 'bg-gray-100 text-gray-700 hover:bg-gray-200 disabled:bg-gray-100 disabled:text-gray-400',
-  outline: 'border-2 border-[#577590] text-[#577590] hover:bg-[#577590]/5 disabled:border-gray-300 disabled:text-gray-400',
+  outline: 'border-2 border-[#0891b2] text-[#0891b2] hover:bg-[#0891b2]/5 disabled:border-gray-300 disabled:text-gray-400',
   ghost: 'text-gray-700 hover:bg-gray-100 disabled:text-gray-400',
   danger: 'bg-red-600 text-white hover:bg-red-700 disabled:bg-gray-300 disabled:text-gray-500',
 };
@@ -61,7 +61,7 @@ export const LoadingButton = forwardRef<HTMLButtonElement, LoadingButtonProps>(
           inline-flex items-center justify-center gap-2
           font-medium rounded-xl
           transition-all duration-150
-          focus:outline-none focus:ring-2 focus:ring-[#577590]/20 focus:ring-offset-2
+          focus:outline-none focus:ring-2 focus:ring-[#0891b2]/20 focus:ring-offset-2
           disabled:cursor-not-allowed
           active:scale-[0.98]
           ${variantClasses[variant]}
@@ -104,7 +104,7 @@ export const InlineSpinner: React.FC<{
 
   return (
     <Loader2
-      className={`animate-spin text-[#577590] ${sizeMap[size]} ${className}`}
+      className={`animate-spin text-[#0891b2] ${sizeMap[size]} ${className}`}
       aria-label="Loading"
     />
   );

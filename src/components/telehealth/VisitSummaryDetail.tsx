@@ -99,7 +99,7 @@ export function VisitSummaryDetailScreen({
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <div className="w-full h-full bg-gradient-to-br from-[#577590] to-[#466379] flex items-center justify-center text-white font-semibold">
+                <div className="w-full h-full bg-gradient-to-br from-[#0891b2] to-[#466379] flex items-center justify-center text-white font-semibold">
                   {provider.firstName[0]}{provider.lastName[0]}
                 </div>
               )}
@@ -134,7 +134,7 @@ export function VisitSummaryDetailScreen({
           <ul className="space-y-3">
             {summary.whatWeDiscussed.map((item, index) => (
               <li key={index} className="flex gap-3">
-                <span className="text-[#577590] font-medium">•</span>
+                <span className="text-[#0891b2] font-medium">•</span>
                 <span className="text-gray-700">{item}</span>
               </li>
             ))}
@@ -142,15 +142,15 @@ export function VisitSummaryDetailScreen({
         </section>
 
         {/* Your Plan for Next 7 Days */}
-        <section className="bg-[#577590]/5 rounded-2xl border border-[#577590]/20 p-4">
-          <h3 className="text-sm font-medium text-[#577590] mb-3 flex items-center gap-2">
+        <section className="bg-[#0891b2]/5 rounded-2xl border border-[#0891b2]/20 p-4">
+          <h3 className="text-sm font-medium text-[#0891b2] mb-3 flex items-center gap-2">
             <ClipboardList className="w-4 h-4" />
             Your Plan for the Next 7 Days
           </h3>
           <ol className="space-y-3">
             {summary.planForNext7Days.map((item, index) => (
               <li key={index} className="flex gap-3">
-                <span className="w-6 h-6 bg-[#577590] text-white text-sm font-medium rounded-full flex items-center justify-center flex-shrink-0">
+                <span className="w-6 h-6 bg-[#0891b2] text-white text-sm font-medium rounded-full flex items-center justify-center flex-shrink-0">
                   {index + 1}
                 </span>
                 <span className="text-gray-700">{item}</span>
@@ -168,7 +168,7 @@ export function VisitSummaryDetailScreen({
           <ul className="space-y-2">
             {summary.whatToTrack.map((item, index) => (
               <li key={index} className="flex items-center gap-3 p-2 bg-gray-50 rounded-lg">
-                <div className="w-2 h-2 bg-[#577590] rounded-full" />
+                <div className="w-2 h-2 bg-[#0891b2] rounded-full" />
                 <span className="text-gray-700 text-sm">{item}</span>
               </li>
             ))}
@@ -201,7 +201,7 @@ export function VisitSummaryDetailScreen({
       <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-100 safe-area-bottom">
         <button
           onClick={onBookFollowUp}
-          className="w-full py-4 bg-[#577590] text-white font-semibold text-lg rounded-xl hover:bg-[#466379] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+          className="w-full py-4 bg-[#0891b2] text-white font-semibold text-lg rounded-xl hover:bg-[#466379] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
         >
           <CalendarPlus className="w-5 h-5" />
           Book Follow-up

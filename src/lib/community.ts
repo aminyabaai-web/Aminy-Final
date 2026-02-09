@@ -141,7 +141,7 @@ export const POST_CATEGORIES: Record<PostCategory, {
     displayName: 'Introductions',
     description: 'Introduce yourself to the community',
     icon: '👋',
-    color: '#577590',
+    color: '#0891b2',
   },
 };
 
@@ -184,7 +184,7 @@ export const COMMUNITY_BADGES: CommunityBadge[] = [
     name: 'Aminy Veteran',
     description: 'Member for 6+ months',
     icon: '🏅',
-    color: '#577590',
+    color: '#0891b2',
     earnedAt: '',
   },
 ];

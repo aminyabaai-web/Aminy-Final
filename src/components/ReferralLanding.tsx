@@ -108,7 +108,7 @@ export function ReferralLanding({ onNavigateToSignup, onNavigateToLogin }: Refer
   if (isProcessing) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-[#F5F5F5] to-white flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-[#577590] border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-[#0891b2] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -118,7 +118,7 @@ export function ReferralLanding({ onNavigateToSignup, onNavigateToLogin }: Refer
       {/* Header */}
       <div className="px-6 py-8">
         <div className="text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-[#43AA8B] to-[#577590] rounded-2xl mb-4">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-[#43AA8B] to-[#0891b2] rounded-2xl mb-4">
             <Gift className="w-8 h-8 text-white" />
           </div>
           <h1 className="text-xl sm:text-2xl font-bold text-[#0D1B2A] mb-2">
@@ -133,7 +133,7 @@ export function ReferralLanding({ onNavigateToSignup, onNavigateToLogin }: Refer
       {/* Gift Card */}
       <div className="px-6 mb-8">
         <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-          <div className="bg-gradient-to-r from-[#43AA8B] to-[#577590] p-6 text-white">
+          <div className="bg-gradient-to-r from-[#43AA8B] to-[#0891b2] p-6 text-white">
             <div className="flex items-center gap-3 mb-3">
               <Sparkles className="w-6 h-6" />
               <span className="text-lg font-semibold">Your Welcome Gift</span>
@@ -155,7 +155,7 @@ export function ReferralLanding({ onNavigateToSignup, onNavigateToLogin }: Refer
             {referralCode && (
               <div className="bg-gray-50 rounded-lg p-3 text-center">
                 <p className="text-xs text-gray-500 mb-1">Your referral code</p>
-                <p className="font-mono font-semibold text-[#577590]">{referralCode}</p>
+                <p className="font-mono font-semibold text-[#0891b2]">{referralCode}</p>
               </div>
             )}
           </div>
@@ -211,7 +211,7 @@ export function ReferralLanding({ onNavigateToSignup, onNavigateToLogin }: Refer
       <div className="px-6 pb-8 space-y-3">
         <button
           onClick={onNavigateToSignup}
-          className="w-full bg-gradient-to-r from-[#43AA8B] to-[#577590] text-white py-4 rounded-xl font-semibold flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all"
+          className="w-full bg-gradient-to-r from-[#43AA8B] to-[#0891b2] text-white py-4 rounded-xl font-semibold flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all"
         >
           Claim Your $25 Credit
           <ArrowRight className="w-5 h-5" />
@@ -219,7 +219,7 @@ export function ReferralLanding({ onNavigateToSignup, onNavigateToLogin }: Refer
 
         <button
           onClick={onNavigateToLogin}
-          className="w-full bg-white text-[#577590] py-4 rounded-xl font-semibold border border-gray-200 hover:bg-gray-50 transition-colors"
+          className="w-full bg-white text-[#0891b2] py-4 rounded-xl font-semibold border border-gray-200 hover:bg-gray-50 transition-colors"
         >
           I Already Have an Account
         </button>
@@ -229,7 +229,7 @@ export function ReferralLanding({ onNavigateToSignup, onNavigateToLogin }: Refer
       <div className="px-6 pb-8">
         <p className="text-xs text-center text-gray-500">
           Credit applies to marketplace sessions. Referral rewards subject to{' '}
-          <span className="text-[#577590]">program terms</span>.
+          <span className="text-[#0891b2]">program terms</span>.
         </p>
       </div>
     </div>

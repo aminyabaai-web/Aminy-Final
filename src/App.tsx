@@ -428,7 +428,7 @@ const ProviderAnalytics = lazy(() =>
 );
 
 // OPTIMIZED LOADING SKELETON - Ultra lightweight, prevents CLS
-// Uses Aminy brand colors: Soft Cream (#F5F5F5), Muted Teal (#577590)
+// Uses Aminy brand colors: Soft Cream (#F5F5F5), Muted Teal (#0891b2)
 const LoadingSkeleton = React.memo(() => (
   <div
     className="min-h-screen flex items-center justify-center"
@@ -445,7 +445,7 @@ const LoadingSkeleton = React.memo(() => (
         width: '2rem',
         height: '2rem',
         border: '2px solid rgba(87, 117, 144, 0.2)',
-        borderTopColor: '#577590',
+        borderTopColor: '#0891b2',
         contain: 'layout size',
         willChange: 'transform'
       }}

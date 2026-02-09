@@ -24,7 +24,7 @@ Art Direction:
 Color Palette (MUST use these exact brand colors):
 - Background: Soft cream white (#F5F5F5)
 - Primary text/elements: Deep navy (#0D1B2A)
-- Accent color (buttons, highlights): Muted teal (#577590)
+- Accent color (buttons, highlights): Muted teal (#0891b2)
 - Soft mint for success/calm moments: (#C9EAD9)
 - Warm amber for warmth/hope: (#FFE2B6)
 - Gentle lavender for magic/AI moments: (#E6E0F8)

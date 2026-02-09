@@ -43,7 +43,7 @@ export function PersistentAIChatFAB({
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={handleOpen}
-            className="fixed bottom-20 right-4 md:bottom-6 md:right-6 z-40 w-14 h-14 bg-gradient-to-br from-cyan-600 to-cyan-700 text-white rounded-full shadow-lg hover:shadow-xl transition-shadow flex items-center justify-center group"
+            className="fixed bottom-20 right-4 md:bottom-6 md:right-6 z-40 w-14 h-14 bg-gradient-to-br from-teal-500 to-cyan-600 dark:from-teal-400 dark:to-cyan-500 text-white rounded-full shadow-lg hover:shadow-xl transition-shadow flex items-center justify-center group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
             aria-label="Ask Aminy"
           >
             {/* Gentle Pulse Animation */}
@@ -103,10 +103,10 @@ export function PersistentAIChatFAB({
             </div>
 
             {/* Tooltip */}
-            <div className="absolute bottom-full right-0 mb-2 px-3 py-1.5 bg-slate-900 text-white text-xs rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+            <div className="absolute bottom-full right-0 mb-2 px-3 py-1.5 bg-slate-900 dark:bg-slate-800 text-white text-xs rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
               Ask Aminy 💬
               <div className="absolute top-full right-4 -mt-1">
-                <div className="w-2 h-2 bg-slate-900 transform rotate-45"></div>
+                <div className="w-2 h-2 bg-slate-900 dark:bg-slate-800 transform rotate-45"></div>
               </div>
             </div>
           </motion.button>

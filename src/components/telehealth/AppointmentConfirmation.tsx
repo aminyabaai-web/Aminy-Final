@@ -214,12 +214,12 @@ export function AppointmentConfirmationScreen({
         <span className={`w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold ${
           currentPhase === 'success'
             ? 'bg-green-500 text-white'
-            : 'bg-[#577590] text-white'
+            : 'bg-[#0891b2] text-white'
         }`}>
           {currentPhase === 'success' ? <Check className="w-3 h-3" /> : '3'}
         </span>
         <span className={`text-xs font-medium ${
-          currentPhase === 'success' ? 'text-green-600' : 'text-[#577590]'
+          currentPhase === 'success' ? 'text-green-600' : 'text-[#0891b2]'
         }`}>
           {currentPhase === 'confirm' ? 'Confirm' : currentPhase === 'payment' ? 'Payment' : 'Booked'}
         </span>
@@ -265,7 +265,7 @@ export function AppointmentConfirmationScreen({
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-[#577590] to-[#466379] flex items-center justify-center text-white font-semibold">
+                  <div className="w-full h-full bg-gradient-to-br from-[#0891b2] to-[#466379] flex items-center justify-center text-white font-semibold">
                     {provider.firstName[0]}{provider.lastName[0]}
                   </div>
                 )}
@@ -343,12 +343,12 @@ export function AppointmentConfirmationScreen({
                   value={promoCode}
                   onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
                   placeholder="Promo code"
-                  className="flex-1 px-3 py-2 text-sm bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#577590]/20"
+                  className="flex-1 px-3 py-2 text-sm bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0891b2]/20"
                 />
                 <button
                   onClick={handleApplyPromo}
                   disabled={!promoCode.trim()}
-                  className="px-4 py-2 text-sm font-medium text-[#577590] bg-[#577590]/10 rounded-lg hover:bg-[#577590]/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-4 py-2 text-sm font-medium text-[#0891b2] bg-[#0891b2]/10 rounded-lg hover:bg-[#0891b2]/20 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Apply
                 </button>
@@ -404,7 +404,7 @@ export function AppointmentConfirmationScreen({
         <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-100 safe-area-bottom">
           <button
             onClick={handleProceedToPayment}
-            className="w-full py-4 bg-[#577590] text-white font-semibold text-lg rounded-xl hover:bg-[#466379] active:scale-[0.98] transition-all"
+            className="w-full py-4 bg-[#0891b2] text-white font-semibold text-lg rounded-xl hover:bg-[#466379] active:scale-[0.98] transition-all"
           >
             Continue to Payment
           </button>
@@ -487,7 +487,7 @@ export function AppointmentConfirmationScreen({
             className={`w-full py-4 font-semibold text-lg rounded-xl transition-all flex items-center justify-center gap-2 ${
               isProcessing
                 ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                : 'bg-[#577590] text-white hover:bg-[#466379] active:scale-[0.98]'
+                : 'bg-[#0891b2] text-white hover:bg-[#466379] active:scale-[0.98]'
             }`}
           >
             {isProcessing ? (
@@ -536,7 +536,7 @@ export function AppointmentConfirmationScreen({
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <div className="w-full h-full bg-gradient-to-br from-[#577590] to-[#466379] flex items-center justify-center text-white font-semibold">
+                <div className="w-full h-full bg-gradient-to-br from-[#0891b2] to-[#466379] flex items-center justify-center text-white font-semibold">
                   {provider.firstName[0]}{provider.lastName[0]}
                 </div>
               )}
@@ -570,7 +570,7 @@ export function AppointmentConfirmationScreen({
           <div className="relative">
             <button
               onClick={() => setShowCalendarOptions(!showCalendarOptions)}
-              className="w-full py-3 bg-white border-2 border-[#577590] text-[#577590] font-medium rounded-xl hover:bg-[#577590]/5 transition-colors flex items-center justify-center gap-2"
+              className="w-full py-3 bg-white border-2 border-[#0891b2] text-[#0891b2] font-medium rounded-xl hover:bg-[#0891b2]/5 transition-colors flex items-center justify-center gap-2"
             >
               <CalendarPlus className="w-5 h-5" />
               Add to Calendar
@@ -610,12 +610,12 @@ export function AppointmentConfirmationScreen({
         </div>
 
         {/* Quick Intake Prompt */}
-        <div className="mt-4 sm:mt-6 p-4 bg-[#577590]/10 rounded-xl">
-          <h4 className="font-medium text-[#577590] mb-1">Complete Quick Intake</h4>
+        <div className="mt-4 sm:mt-6 p-4 bg-[#0891b2]/10 rounded-xl">
+          <h4 className="font-medium text-[#0891b2] mb-1">Complete Quick Intake</h4>
           <p className="text-sm text-gray-600 mb-3">
             Help your provider prepare by answering a few questions (2 minutes).
           </p>
-          <button className="text-sm font-medium text-[#577590] hover:underline flex items-center gap-1">
+          <button className="text-sm font-medium text-[#0891b2] hover:underline flex items-center gap-1">
             Start Quick Intake
             <ExternalLink className="w-4 h-4" />
           </button>
@@ -636,7 +636,7 @@ export function AppointmentConfirmationScreen({
       <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-100 safe-area-bottom">
         <button
           onClick={handleDone}
-          className="w-full py-4 bg-[#577590] text-white font-semibold text-lg rounded-xl hover:bg-[#466379] active:scale-[0.98] transition-all"
+          className="w-full py-4 bg-[#0891b2] text-white font-semibold text-lg rounded-xl hover:bg-[#466379] active:scale-[0.98] transition-all"
         >
           Done
         </button>

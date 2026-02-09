@@ -93,7 +93,7 @@ export function BrowseTopConcerns({
             placeholder="Search concerns..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#577590]/20 focus:border-[#577590] transition-all"
+            className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0891b2]/20 focus:border-[#0891b2] transition-all"
           />
         </div>
       </div>
@@ -120,7 +120,7 @@ export function BrowseTopConcerns({
                 <p className="text-gray-500 mb-2">No concerns match your search</p>
                 <button
                   onClick={() => setSearchQuery('')}
-                  className="text-[#577590] font-medium hover:underline"
+                  className="text-[#0891b2] font-medium hover:underline"
                 >
                   Clear search
                 </button>
@@ -175,7 +175,7 @@ export function BrowseTopConcerns({
               recommendedVisitType: 'consult',
               urgencyLevel: 'routine'
             })}
-            className="flex items-center gap-2 text-[#577590] font-medium text-sm hover:underline"
+            className="flex items-center gap-2 text-[#0891b2] font-medium text-sm hover:underline"
           >
             Describe a different concern
             <ChevronRight className="w-4 h-4" />
@@ -227,7 +227,7 @@ export function BrowseTopConcerns({
               </a>
               <button
                 onClick={handleSafetyAcknowledge}
-                className="block w-full py-3 px-4 bg-[#577590] text-white font-medium text-center rounded-xl hover:bg-[#466379] transition-colors"
+                className="block w-full py-3 px-4 bg-[#0891b2] text-white font-medium text-center rounded-xl hover:bg-[#466379] transition-colors"
               >
                 Continue to Book Support
               </button>
@@ -265,8 +265,8 @@ function ConcernTile({ concern, onClick }: ConcernTileProps) {
       onClick={onClick}
       className={`
         relative p-4 bg-white rounded-2xl border text-left
-        hover:shadow-md hover:border-[#577590]/30 transition-all
-        focus:outline-none focus:ring-2 focus:ring-[#577590]/20
+        hover:shadow-md hover:border-[#0891b2]/30 transition-all
+        focus:outline-none focus:ring-2 focus:ring-[#0891b2]/20
         ${isUrgent ? 'border-amber-200' : 'border-gray-100'}
       `}
     >

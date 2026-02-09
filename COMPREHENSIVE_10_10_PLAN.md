@@ -194,7 +194,7 @@ Impact: Viral coefficient suffers, users lose interest
 
 ### 2.5 Color Consistency (1 hour)
 ```
-Issue: Teal inconsistent - #0891b2 vs #577590 used interchangeably
+Issue: Teal inconsistent - #0891b2 vs #0891b2 used interchangeably
 Impact: Brand feels inconsistent
 ```
 
