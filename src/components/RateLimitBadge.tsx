@@ -138,7 +138,7 @@ export function RateLimitBadge({
       <Tooltip>
         <TooltipTrigger asChild>
           <button
-            onClick={reachedLimit ? onUpgradeClick : undefined}
+            onClick={reachedLimit && onUpgradeClick ? onUpgradeClick : () => {}}
             className={cn(
               'inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-medium transition-colors',
               reachedLimit
