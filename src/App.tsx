@@ -560,7 +560,13 @@ const getInitialScreen = (): AppScreen => {
     if (storedUser) {
       const user = JSON.parse(storedUser);
       if (user.hasCompletedOnboarding) {
-        // Prefetch dashboard immediately if we know user is logged in
+        // Check tier - free users should see paywall, paid users go to dashboard
+        const userTier = user.tier || 'free';
+        if (userTier === 'free') {
+          // Free user - show paywall to encourage subscription
+          return "paywall";
+        }
+        // Prefetch dashboard immediately if we know user is paid
         if (typeof window !== 'undefined') {
           import(/* webpackPrefetch: true */ "./components/Dashboard10").catch((err) => logger.dev('Prefetch failed', err));
         }
@@ -884,7 +890,15 @@ export default function App() {
               const screen = currentScreenRef.current;
               if (!publicNoRedirect.includes(screen)) {
                 if (profile.has_completed_onboarding) {
-                  navigateToScreen('dashboard');
+                  // Check if returning user is still on free tier - show paywall
+                  const userTier = profile.tier || 'free';
+                  if (userTier === 'free') {
+                    // Returning free user - show paywall to encourage subscription
+                    navigateToScreen('paywall');
+                  } else {
+                    // Paid user - go directly to dashboard
+                    navigateToScreen('dashboard');
+                  }
                 } else if (authScreens.includes(screen)) {
                   navigateToScreen('onboarding');
                 }
