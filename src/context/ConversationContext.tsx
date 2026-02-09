@@ -75,9 +75,14 @@ export function ConversationProvider({ children }: ConversationProviderProps) {
   const [state, setState] = useState<ConversationState>(initialState);
   const [currentConversation, setCurrentConversation] = useState<Conversation | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
+  // Ref to track current messages without causing re-renders
+  const messagesRef = useRef<Message[]>([]);
 
   // Generate unique message ID
   const generateMessageId = () => `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+  // Keep messagesRef in sync with state.messages
+  messagesRef.current = state.messages;
 
   // Add a message to the conversation
   const addMessage = useCallback((message: Omit<Message, 'id' | 'timestamp'>) => {
@@ -169,8 +174,8 @@ export function ConversationProvider({ children }: ConversationProviderProps) {
     }));
 
     try {
-      // Build conversation history for Claude
-      const conversationHistory: ClaudeMessage[] = state.messages.map(msg => ({
+      // Build conversation history for Claude using ref for stable reference
+      const conversationHistory: ClaudeMessage[] = messagesRef.current.map(msg => ({
         role: msg.role === 'user' ? 'user' : 'assistant',
         content: msg.content,
       }));
@@ -226,7 +231,7 @@ export function ConversationProvider({ children }: ConversationProviderProps) {
         isLoading: false,
       }));
     }
-  }, [state.messages]);
+  }, []); // No dependencies - uses refs for stable access to messages
 
   // Memoize context value to prevent unnecessary re-renders of consumers
   const value = useMemo<ConversationContextValue>(() => ({

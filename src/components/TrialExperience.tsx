@@ -66,6 +66,11 @@ export function useTrialExperience() {
   return context;
 }
 
+// Safe version that doesn't throw - for components that may be used outside TrialProvider
+export function useTrialExperienceSafe() {
+  return useContext(TrialContext);
+}
+
 interface TrialProviderProps {
   userId: string;
   userTier: string;
@@ -205,7 +210,18 @@ interface TrialProgressBannerProps {
 }
 
 export function TrialProgressBanner({ onUpgrade }: TrialProgressBannerProps) {
-  const { trialState } = useTrialExperience();
+  const context = useTrialExperienceSafe();
+
+  // If no TrialProvider, use default state (treat as beginning of trial)
+  const trialState = context?.trialState ?? {
+    conversationsUsed: 0,
+    conversationsRemaining: TRIAL_CONFIG.freeConversations,
+    isTrialActive: true,
+    hasSeenNudge: false,
+    trialStartDate: null,
+    lastConversationDate: null,
+    insights: [],
+  };
 
   if (!trialState.isTrialActive && trialState.conversationsRemaining === Infinity) {
     // Paid user
