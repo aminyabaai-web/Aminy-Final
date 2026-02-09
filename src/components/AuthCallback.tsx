@@ -8,10 +8,11 @@
  * 3. Email confirmation redirects
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { motion } from 'motion/react';
 import { supabase } from '../utils/supabase/client';
 import aminyLogoCropped from "../assets/aminy-logo-cropped.png";
+import { logger } from '../lib/logger';
 
 interface AuthCallbackProps {
   onAuthSuccess: (email: string) => void;
@@ -31,85 +32,122 @@ export function AuthCallback({ onAuthSuccess, onPasswordReset, onError }: AuthCa
   const [status, setStatus] = useState<'processing' | 'success' | 'error'>('processing');
   const [message, setMessage] = useState('Signing you in');
   const [subMessage, setSubMessage] = useState('Please wait a moment...');
+  const handledRef = useRef(false);
 
   useEffect(() => {
-    const handleCallback = async () => {
+    // Prevent double handling
+    if (handledRef.current) return;
+
+    // Get the URL hash and query params for initial checks
+    const hashParams = new URLSearchParams(window.location.hash.substring(1));
+    const queryParams = new URLSearchParams(window.location.search);
+
+    // Check for error in URL first
+    const error = hashParams.get('error') || queryParams.get('error');
+    const errorDescription = hashParams.get('error_description') || queryParams.get('error_description');
+
+    if (error) {
+      handledRef.current = true;
+      logger.error('Auth callback URL error:', { error, errorDescription });
+      setMessage('Something went wrong');
+      setSubMessage(errorDescription || error || 'Please try signing in again.');
+      setStatus('error');
+      setTimeout(() => {
+        onError(errorDescription || error || 'Authentication failed');
+      }, 2500);
+      return;
+    }
+
+    // Check if this is a password recovery
+    const type = hashParams.get('type') || queryParams.get('type');
+
+    if (type === 'recovery') {
+      handledRef.current = true;
+      setMessage('Password reset ready');
+      setSubMessage('Taking you to reset your password...');
+      setStatus('success');
+      setTimeout(() => {
+        onPasswordReset();
+      }, 1200);
+      return;
+    }
+
+    // For OAuth callbacks, Supabase needs to process the URL tokens.
+    // We listen for the auth state change which fires after Supabase processes the tokens.
+    let timeoutId: NodeJS.Timeout;
+    let authHandled = false;
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      // Only handle SIGNED_IN or TOKEN_REFRESHED events
+      if (authHandled || handledRef.current) return;
+
+      logger.dev('Auth callback received event:', event);
+
+      if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && session?.user) {
+        authHandled = true;
+        handledRef.current = true;
+        clearTimeout(timeoutId);
+
+        setMessage('Welcome back');
+        setSubMessage('Preparing your dashboard...');
+        setStatus('success');
+        setTimeout(() => {
+          onAuthSuccess(session.user.email || '');
+        }, 1200);
+      }
+    });
+
+    // Also check for existing session (in case auth state already changed)
+    const checkExistingSession = async () => {
       try {
-        // Get the URL hash and query params
-        const hashParams = new URLSearchParams(window.location.hash.substring(1));
-        const queryParams = new URLSearchParams(window.location.search);
+        // Small delay to let Supabase process URL tokens
+        await new Promise(resolve => setTimeout(resolve, 100));
 
-        // Check for error in URL
-        const error = hashParams.get('error') || queryParams.get('error');
-        const errorDescription = hashParams.get('error_description') || queryParams.get('error_description');
+        if (authHandled || handledRef.current) return;
 
-        if (error) {
-          throw new Error(errorDescription || error);
-        }
-
-        // Check if this is a password recovery
-        const type = hashParams.get('type') || queryParams.get('type');
-
-        if (type === 'recovery') {
-          setMessage('Password reset ready');
-          setSubMessage('Taking you to reset your password...');
-          setStatus('success');
-          setTimeout(() => {
-            onPasswordReset();
-          }, 1200);
-          return;
-        }
-
-        // For OAuth, Supabase automatically handles the session from the URL
-        // We just need to check if we have a session now
         const { data: { session }, error: sessionError } = await supabase.auth.getSession();
 
         if (sessionError) {
           throw sessionError;
         }
 
-        if (session?.user) {
+        if (session?.user && !authHandled && !handledRef.current) {
+          authHandled = true;
+          handledRef.current = true;
+          clearTimeout(timeoutId);
+
           setMessage('Welcome back');
           setSubMessage('Preparing your dashboard...');
           setStatus('success');
           setTimeout(() => {
             onAuthSuccess(session.user.email || '');
           }, 1200);
-        } else {
-          // No session and no error - might be email confirmation
-          const accessToken = hashParams.get('access_token');
-          if (accessToken) {
-            // Try to get session with the access token
-            const { data, error: refreshError } = await supabase.auth.refreshSession();
-            if (refreshError) {
-              throw refreshError;
-            }
-            if (data.session?.user) {
-              setMessage('Email confirmed');
-              setSubMessage('Your account is ready...');
-              setStatus('success');
-              setTimeout(() => {
-                onAuthSuccess(data.session.user.email || '');
-              }, 1200);
-              return;
-            }
-          }
-
-          // If we still don't have a session, something went wrong
-          throw new Error('Unable to complete sign in. Please try again.');
         }
-      } catch (err: any) {
-        console.error('Auth callback error:', err);
-        setMessage('Something went wrong');
-        setSubMessage(err.message || 'Please try signing in again.');
-        setStatus('error');
-        setTimeout(() => {
-          onError(err.message || 'Authentication failed');
-        }, 2500);
+      } catch (err) {
+        logger.error('Error checking existing session:', err);
       }
     };
 
-    handleCallback();
+    checkExistingSession();
+
+    // Timeout after 10 seconds - if no session by then, show error
+    timeoutId = setTimeout(() => {
+      if (!authHandled && !handledRef.current) {
+        handledRef.current = true;
+        logger.error('Auth callback timeout - no session established');
+        setMessage('Unable to sign in');
+        setSubMessage('Please try again or use a different sign-in method.');
+        setStatus('error');
+        setTimeout(() => {
+          onError('Authentication timed out. Please try again.');
+        }, 2500);
+      }
+    }, 10000);
+
+    return () => {
+      clearTimeout(timeoutId);
+      subscription.unsubscribe();
+    };
   }, [onAuthSuccess, onPasswordReset, onError]);
 
   return (
