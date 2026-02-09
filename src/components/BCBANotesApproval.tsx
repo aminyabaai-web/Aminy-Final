@@ -711,7 +711,7 @@ Next session focus:
           )}
 
           <Button
-            onClick={onComplete ? () => onComplete(note!) : undefined}
+            onClick={() => onComplete?.(note!)}
             className="w-full bg-teal-600 hover:bg-teal-700"
           >
             {mode === 'bcba_entry' ? 'Back to Dashboard' : 'View Updated Care Plan'}

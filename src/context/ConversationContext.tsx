@@ -5,7 +5,7 @@
  * Provides methods for Dashboard10 and other components to interact with AI chat
  */
 
-import React, { createContext, useContext, useState, useCallback, ReactNode, useRef } from 'react';
+import React, { createContext, useContext, useState, useCallback, useMemo, ReactNode, useRef } from 'react';
 import { sendMessageToClaude, type ClaudeMessage } from '../lib/ai-engine/claude-client';
 
 interface Message {
@@ -228,7 +228,8 @@ export function ConversationProvider({ children }: ConversationProviderProps) {
     }
   }, [state.messages]);
 
-  const value: ConversationContextValue = {
+  // Memoize context value to prevent unnecessary re-renders of consumers
+  const value = useMemo<ConversationContextValue>(() => ({
     // State (backward compatibility)
     state,
 
@@ -247,7 +248,18 @@ export function ConversationProvider({ children }: ConversationProviderProps) {
     setLoading,
     setConversationId,
     loadConversation,
-  };
+  }), [
+    state,
+    currentConversation,
+    sendMessage,
+    createConversation,
+    setChildContext,
+    addMessage,
+    clearMessages,
+    setLoading,
+    setConversationId,
+    loadConversation,
+  ]);
 
   return (
     <ConversationContext.Provider value={value}>

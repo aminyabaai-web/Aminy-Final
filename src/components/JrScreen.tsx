@@ -1035,7 +1035,7 @@ export const JrScreen: React.FC<JrScreenProps> = ({
                   Cancel
                 </Button>
                 <Button
-                  onClick={isCalibrating ? undefined : handleCalibrationStart}
+                  onClick={handleCalibrationStart}
                   className="flex-1"
                   disabled={isCalibrating}
                 >

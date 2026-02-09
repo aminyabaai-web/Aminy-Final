@@ -519,7 +519,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
 
               <div className="flex justify-end">
                 <Button
-                  onClick={() => validateStep(1) && setStep(2)}
+                  onClick={() => { if (validateStep(1)) setStep(2); }}
                   className="bg-teal-600 hover:bg-teal-700"
                 >
                   Continue
@@ -805,7 +805,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                   Back
                 </Button>
                 <Button
-                  onClick={() => validateStep(3) && setStep(4)}
+                  onClick={() => { if (validateStep(3)) setStep(4); }}
                   className="bg-teal-600 hover:bg-teal-700"
                 >
                   Review Application

@@ -190,7 +190,7 @@ export function CompletionChecklist({ onNavigate, onBack }: CompletionChecklistP
                         className={`flex items-start gap-3 py-2 ${
                           item.link ? 'cursor-pointer hover:bg-gray-50 -mx-2 px-2 rounded-lg' : ''
                         }`}
-                        onClick={() => item.link && onNavigate(item.link)}
+                        onClick={() => item.link && onNavigate?.(item.link)}
                       >
                         {item.complete ? (
                           <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
