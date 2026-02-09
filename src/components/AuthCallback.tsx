@@ -8,7 +8,7 @@
  * 3. Email confirmation redirects
  */
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { motion } from 'motion/react';
 import { supabase } from '../utils/supabase/client';
 import aminyLogoCropped from "../assets/aminy-logo-cropped.png";
@@ -18,6 +18,13 @@ interface AuthCallbackProps {
   onAuthSuccess: (email: string) => void;
   onPasswordReset: () => void;
   onError: (message: string) => void;
+}
+
+// Use refs for callbacks to prevent useEffect re-runs on prop changes
+function useStableCallback<T extends (...args: any[]) => any>(callback: T): T {
+  const callbackRef = useRef(callback);
+  callbackRef.current = callback;
+  return useCallback((...args: Parameters<T>) => callbackRef.current(...args), []) as T;
 }
 
 const fontStack = 'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", "Helvetica Neue", Arial, "Noto Sans", sans-serif';
@@ -33,6 +40,11 @@ export function AuthCallback({ onAuthSuccess, onPasswordReset, onError }: AuthCa
   const [message, setMessage] = useState('Signing you in');
   const [subMessage, setSubMessage] = useState('Please wait a moment...');
   const handledRef = useRef(false);
+
+  // Use stable callbacks to prevent useEffect re-runs when props change
+  const stableOnAuthSuccess = useStableCallback(onAuthSuccess);
+  const stableOnPasswordReset = useStableCallback(onPasswordReset);
+  const stableOnError = useStableCallback(onError);
 
   useEffect(() => {
     // Prevent double handling
@@ -53,7 +65,7 @@ export function AuthCallback({ onAuthSuccess, onPasswordReset, onError }: AuthCa
       setSubMessage(errorDescription || error || 'Please try signing in again.');
       setStatus('error');
       setTimeout(() => {
-        onError(errorDescription || error || 'Authentication failed');
+        stableOnError(errorDescription || error || 'Authentication failed');
       }, 2500);
       return;
     }
@@ -67,7 +79,7 @@ export function AuthCallback({ onAuthSuccess, onPasswordReset, onError }: AuthCa
       setSubMessage('Taking you to reset your password...');
       setStatus('success');
       setTimeout(() => {
-        onPasswordReset();
+        stableOnPasswordReset();
       }, 1200);
       return;
     }
@@ -92,7 +104,7 @@ export function AuthCallback({ onAuthSuccess, onPasswordReset, onError }: AuthCa
         setSubMessage('Preparing your dashboard...');
         setStatus('success');
         setTimeout(() => {
-          onAuthSuccess(session.user.email || '');
+          stableOnAuthSuccess(session.user.email || '');
         }, 1200);
       }
     });
@@ -120,7 +132,7 @@ export function AuthCallback({ onAuthSuccess, onPasswordReset, onError }: AuthCa
           setSubMessage('Preparing your dashboard...');
           setStatus('success');
           setTimeout(() => {
-            onAuthSuccess(session.user.email || '');
+            stableOnAuthSuccess(session.user.email || '');
           }, 1200);
         }
       } catch (err) {
@@ -139,7 +151,7 @@ export function AuthCallback({ onAuthSuccess, onPasswordReset, onError }: AuthCa
         setSubMessage('Please try again or use a different sign-in method.');
         setStatus('error');
         setTimeout(() => {
-          onError('Authentication timed out. Please try again.');
+          stableOnError('Authentication timed out. Please try again.');
         }, 2500);
       }
     }, 10000);
@@ -148,7 +160,7 @@ export function AuthCallback({ onAuthSuccess, onPasswordReset, onError }: AuthCa
       clearTimeout(timeoutId);
       subscription.unsubscribe();
     };
-  }, [onAuthSuccess, onPasswordReset, onError]);
+  }, [stableOnAuthSuccess, stableOnPasswordReset, stableOnError]);
 
   return (
     <div
