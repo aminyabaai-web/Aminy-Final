@@ -47,6 +47,9 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        // Skip external domains to avoid CSP violations with service worker fetch
+        // Google Fonts are cached natively by browsers with long cache headers
+        navigateFallbackDenylist: [/^https:\/\/fonts\./],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/.*\.supabase\.co\/.*/i,
@@ -62,17 +65,8 @@ export default defineConfig({
               },
             },
           },
-          {
-            urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'google-fonts-cache',
-              expiration: {
-                maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
-              },
-            },
-          },
+          // NOTE: Google Fonts caching removed - browsers cache fonts natively
+          // and service worker fetch of cross-origin fonts causes CSP issues
         ],
       },
     }),

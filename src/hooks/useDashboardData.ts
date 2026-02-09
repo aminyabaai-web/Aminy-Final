@@ -145,6 +145,7 @@ export function useDashboardData(userId?: string): DashboardData & {
       setData(prev => ({ ...prev, isLoading: true, error: null }));
 
       // Parallel fetch all data sources
+      // SAFETY: Wrap each Supabase query in error handling to prevent cascading failures
       const [
         profileResult,
         childrenResult,
@@ -163,15 +164,35 @@ export function useDashboardData(userId?: string): DashboardData & {
           .from('profiles')
           .select('*')
           .eq('id', userId)
-          .single(),
+          .single()
+          .catch((err) => {
+            console.warn('[Dashboard] Profile fetch failed:', err?.message || err);
+            return { data: null, error: err };
+          }),
 
         // Get all children for this user
+        // SAFETY: This table may not exist in all environments - handle 404 gracefully
         supabase
           .from('children')
           .select('*')
           .eq('user_id', userId)
           .eq('is_active', true)
-          .order('is_primary', { ascending: false }),
+          .order('is_primary', { ascending: false })
+          .then((result) => {
+            // Handle 404 or other errors - treat as empty data
+            if (result.error) {
+              // Log once, don't spam console
+              if (import.meta.env.DEV) {
+                console.warn('[Dashboard] Children table query returned error (may not exist):', result.error.message);
+              }
+              return { data: [], error: null };
+            }
+            return result;
+          })
+          .catch((err) => {
+            console.warn('[Dashboard] Children fetch failed:', err?.message || err);
+            return { data: [], error: err };
+          }),
 
         // Get today's routines
         routinesEngine.getTodaysRoutines(userId).catch(() => []),
@@ -183,7 +204,11 @@ export function useDashboardData(userId?: string): DashboardData & {
           .eq('user_id', userId)
           .eq('is_active', true)
           .order('created_at', { ascending: false })
-          .limit(5),
+          .limit(5)
+          .catch((err) => {
+            console.warn('[Dashboard] Goals fetch failed:', err?.message || err);
+            return { data: [], error: err };
+          }),
 
         // Get upcoming appointments
         supabase
@@ -193,7 +218,11 @@ export function useDashboardData(userId?: string): DashboardData & {
           .eq('status', 'scheduled')
           .gte('start_time', new Date().toISOString())
           .order('start_time', { ascending: true })
-          .limit(3),
+          .limit(3)
+          .catch((err) => {
+            console.warn('[Dashboard] Appointments fetch failed:', err?.message || err);
+            return { data: [], error: err };
+          }),
 
         // Get calm tool stats
         calmToolsTracking.getToolStats(userId, undefined, 7).catch(() => []),
@@ -218,22 +247,26 @@ export function useDashboardData(userId?: string): DashboardData & {
       const profile = profileResult.data;
 
       // Process goals first (needed for child profiles)
-      const goals = (goalsResult.data || []).map((g: any) => ({
-        id: g.id,
-        name: g.title || g.name,
-        progress: g.progress || 0,
-        percentMet: g.progress || 0,
-        trend: g.trend || 'stable',
-        childId: g.child_id,
+      // SAFETY: Ensure goalsResult.data is an array
+      const safeGoalsData = Array.isArray(goalsResult?.data) ? goalsResult.data : [];
+      const goals = safeGoalsData.map((g: any) => ({
+        id: g?.id || '',
+        name: g?.title || g?.name || 'Goal',
+        progress: g?.progress || 0,
+        percentMet: g?.progress || 0,
+        trend: g?.trend || 'stable',
+        childId: g?.child_id,
       }));
 
       // Build children array from the children table
-      const childrenFromTable: ChildProfile[] = (childrenResult.data || []).map((c: any) => ({
-        id: c.id,
-        name: c.name,
-        age: c.age || 5,
-        photoUrl: c.photo_url,
-        goals: goals.filter(g => g.childId === c.id).map(g => ({
+      // SAFETY: Ensure childrenResult.data is an array
+      const safeChildrenData = Array.isArray(childrenResult?.data) ? childrenResult.data : [];
+      const childrenFromTable: ChildProfile[] = safeChildrenData.map((c: any) => ({
+        id: c?.id || '',
+        name: c?.name || 'Child',
+        age: c?.age || 5,
+        photoUrl: c?.photo_url,
+        goals: goals.filter(g => g.childId === c?.id).map(g => ({
           id: g.id,
           name: g.name,
           percentMet: g.progress,
@@ -263,35 +296,44 @@ export function useDashboardData(userId?: string): DashboardData & {
         : (childProfile ? [childProfile] : []);
 
       // Process routines
-      const todaysRoutines: RoutineData[] = (routinesResult as DailyRoutine[]).map(r => ({
-        timeOfDay: r.period,
-        label: r.name,
-        tasks: r.steps.map(s => ({
-          id: s.id,
-          title: s.title,
-          description: s.description || '',
-          icon: getRoutineIcon(s.abaSkillArea),
-          completed: s.status === 'completed',
-          timeEstimate: `${s.durationMinutes}m`,
-        })),
-        completedCount: r.steps.filter(s => s.status === 'completed').length,
-        totalCount: r.steps.length,
-      }));
+      // SAFETY: Ensure routinesResult is an array
+      const safeRoutinesData = Array.isArray(routinesResult) ? routinesResult : [];
+      const todaysRoutines: RoutineData[] = safeRoutinesData.map((r: any) => {
+        const safeSteps = Array.isArray(r?.steps) ? r.steps : [];
+        return {
+          timeOfDay: r?.period || 'morning',
+          label: r?.name || 'Routine',
+          tasks: safeSteps.map((s: any) => ({
+            id: s?.id || '',
+            title: s?.title || '',
+            description: s?.description || '',
+            icon: getRoutineIcon(s?.abaSkillArea),
+            completed: s?.status === 'completed',
+            timeEstimate: `${s?.durationMinutes || 5}m`,
+          })),
+          completedCount: safeSteps.filter((s: any) => s?.status === 'completed').length,
+          totalCount: safeSteps.length,
+        };
+      });
 
       // Process upcoming events
-      const upcomingEvents: UpcomingEvent[] = (appointmentsResult.data || []).map((a: any) => ({
-        id: a.id,
-        title: a.providers
-          ? `Session with ${a.providers.first_name} ${a.providers.last_name}`
+      // SAFETY: Ensure appointmentsResult.data is an array
+      const safeAppointmentsData = Array.isArray(appointmentsResult?.data) ? appointmentsResult.data : [];
+      const upcomingEvents: UpcomingEvent[] = safeAppointmentsData.map((a: any) => ({
+        id: a?.id || '',
+        title: a?.providers
+          ? `Session with ${a.providers.first_name || ''} ${a.providers.last_name || ''}`
           : 'Upcoming Appointment',
-        time: new Date(a.start_time).toLocaleString(),
+        time: a?.start_time ? new Date(a.start_time).toLocaleString() : 'TBD',
         type: 'telehealth' as const,
       }));
 
-      const nextAppt = appointmentsResult.data?.[0];
+      const nextAppt = safeAppointmentsData[0];
 
       // Calculate totals
-      const totalCalmMinutes = calmStats.reduce((sum, s) => sum + s.totalMinutes, 0);
+      // SAFETY: Ensure calmStats is an array
+      const safeCalmStats = Array.isArray(calmStats) ? calmStats : [];
+      const totalCalmMinutes = safeCalmStats.reduce((sum, s) => sum + (s?.totalMinutes || 0), 0);
       const routineAdherence = todaysRoutines.length > 0
         ? Math.round(
             todaysRoutines.reduce((sum, r) => sum + (r.completedCount / Math.max(r.totalCount, 1)), 0) /
@@ -300,11 +342,22 @@ export function useDashboardData(userId?: string): DashboardData & {
         : 0;
 
       // Count recent conversations
-      const { count: recentConversationCount } = await supabase
-        .from('conversations')
-        .select('id', { count: 'exact', head: true })
-        .eq('user_id', userId)
-        .gte('created_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString());
+      // SAFETY: Wrap in try-catch for graceful handling
+      let recentConversationCount = 0;
+      try {
+        const { count } = await supabase
+          .from('conversations')
+          .select('id', { count: 'exact', head: true })
+          .eq('user_id', userId)
+          .gte('created_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString());
+        recentConversationCount = count || 0;
+      } catch (err) {
+        console.warn('[Dashboard] Conversation count failed:', err);
+      }
+
+      // SAFETY: Ensure milestones and celebrations are arrays
+      const safeMilestones = Array.isArray(milestonesResult) ? milestonesResult : [];
+      const safeCelebrations = Array.isArray(celebrationsResult) ? celebrationsResult : [];
 
       setData({
         childProfile,
@@ -316,18 +369,18 @@ export function useDashboardData(userId?: string): DashboardData & {
         upcomingEvents,
         nextAppointment: nextAppt ? {
           providerName: nextAppt.providers
-            ? `${nextAppt.providers.first_name} ${nextAppt.providers.last_name}`
+            ? `${nextAppt.providers.first_name || ''} ${nextAppt.providers.last_name || ''}`
             : 'Provider',
-          time: new Date(nextAppt.start_time).toLocaleString(),
+          time: nextAppt.start_time ? new Date(nextAppt.start_time).toLocaleString() : 'TBD',
           type: nextAppt.visit_type || 'session',
         } : undefined,
-        calmToolStats: calmStats,
+        calmToolStats: safeCalmStats,
         totalCalmMinutes,
         memoryContext,
-        recentConversationCount: recentConversationCount || 0,
+        recentConversationCount,
         trialStatus,
-        milestonesEarned: milestonesResult.length,
-        pendingCelebrations: celebrationsResult,
+        milestonesEarned: safeMilestones.length,
+        pendingCelebrations: safeCelebrations,
         isLoading: false,
         error: null,
       });

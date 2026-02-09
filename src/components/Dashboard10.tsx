@@ -283,6 +283,7 @@ export function Dashboard10({
   }, []);
 
   // Use real data from hook, with fallback for empty states
+  // SAFETY: Always ensure arrays are defined before accessing .length or .map()
   const child: ChildProfile = dashboardData.childProfile || childProfile || {
     id: `child-${userId?.substring(0, 8) || 'temp'}`,
     name: userData.childName || 'Your Child',
@@ -294,9 +295,10 @@ export function Dashboard10({
     })),
   };
 
-  // Real upcoming events from database
-  const upcomingEvents: UpcomingEvent[] = dashboardData.upcomingEvents.length > 0
-    ? dashboardData.upcomingEvents
+  // SAFETY: Ensure upcomingEvents is always an array
+  const safeUpcomingEvents = Array.isArray(dashboardData.upcomingEvents) ? dashboardData.upcomingEvents : [];
+  const upcomingEvents: UpcomingEvent[] = safeUpcomingEvents.length > 0
+    ? safeUpcomingEvents
     : [
         { id: '1', title: 'Schedule a session', time: 'Explore Providers', type: 'telehealth' as const },
       ];
@@ -309,29 +311,39 @@ export function Dashboard10({
     bedtime: <Star className="w-4 h-4" />,
   };
 
-  const dailyRoutines: DailyRoutine[] = dashboardData.todaysRoutines.length > 0
-    ? dashboardData.todaysRoutines.map(r => ({
+  // SAFETY: Ensure todaysRoutines is always an array
+  const safeTodaysRoutines = Array.isArray(dashboardData.todaysRoutines) ? dashboardData.todaysRoutines : [];
+  const dailyRoutines: DailyRoutine[] = safeTodaysRoutines.length > 0
+    ? safeTodaysRoutines.map(r => ({
         timeOfDay: r.timeOfDay,
         label: r.label,
         icon: routineIcons[r.timeOfDay] || <Sun className="w-4 h-4" />,
-        tasks: r.tasks.map(t => ({
+        tasks: Array.isArray(r.tasks) ? r.tasks.map(t => ({
           id: t.id,
           title: t.title,
           description: t.description,
           icon: t.icon,
           completed: t.completed,
           timeEstimate: t.timeEstimate,
-        })),
-        completedCount: r.completedCount,
+        })) : [],
+        completedCount: r.completedCount ?? 0,
       }))
     : getDefaultRoutines(userData.childName).map(r => ({
         ...r,
         icon: routineIcons[r.timeOfDay] || <Sun className="w-4 h-4" />,
       }));
 
-  const currentRoutine = dailyRoutines.find(r => r.timeOfDay === activeRoutine) || dailyRoutines[0];
-  const totalTasks = currentRoutine.tasks.length;
-  const completedTasks = currentRoutine.tasks.filter(t => t.completed).length;
+  // SAFETY: Ensure currentRoutine and tasks are always defined
+  const currentRoutine = dailyRoutines.find(r => r.timeOfDay === activeRoutine) || dailyRoutines[0] || {
+    timeOfDay: 'morning' as const,
+    label: 'Morning Routine',
+    icon: <Sun className="w-4 h-4" />,
+    tasks: [],
+    completedCount: 0,
+  };
+  const safeTasks = Array.isArray(currentRoutine.tasks) ? currentRoutine.tasks : [];
+  const totalTasks = safeTasks.length;
+  const completedTasks = safeTasks.filter(t => t.completed).length;
   const progressPercent = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
 
   // Real streak data from database
@@ -341,7 +353,9 @@ export function Dashboard10({
   // Get contextual prompts based on time of day and child progress
   const getContextualPrompts = () => {
     const timePrompts = CONTEXTUAL_PROMPTS[activeRoutine] || CONTEXTUAL_PROMPTS.morning;
-    const progressPrompts = child.goals.some(g => g.percentMet >= 70) ? CONTEXTUAL_PROMPTS.progress : CONTEXTUAL_PROMPTS.challenges;
+    // SAFETY: Ensure child.goals is an array before calling .some()
+    const safeGoals = Array.isArray(child.goals) ? child.goals : [];
+    const progressPrompts = safeGoals.some(g => g.percentMet >= 70) ? CONTEXTUAL_PROMPTS.progress : CONTEXTUAL_PROMPTS.challenges;
     // Mix time-based and progress-based prompts
     return [...timePrompts.slice(0, 2), ...progressPrompts.slice(0, 1)];
   };
@@ -394,10 +408,11 @@ export function Dashboard10({
 
   const handleTaskToggle = async (taskId: string) => {
     // Find which routine this task belongs to
-    const routine = dailyRoutines.find(r => r.tasks.some(t => t.id === taskId));
-    if (routine && dashboardData.todaysRoutines.length > 0) {
+    // SAFETY: Use safeTodaysRoutines instead of direct access
+    const routine = dailyRoutines.find(r => Array.isArray(r.tasks) && r.tasks.some(t => t.id === taskId));
+    if (routine && safeTodaysRoutines.length > 0) {
       // Find the routine ID from dashboard data
-      const routineData = dashboardData.todaysRoutines.find(r => r.timeOfDay === routine.timeOfDay);
+      const routineData = safeTodaysRoutines.find(r => r.timeOfDay === routine.timeOfDay);
       if (routineData) {
         // Use the completeRoutineStep from the hook
         await dashboardData.completeRoutineStep(routineData.timeOfDay, taskId);
