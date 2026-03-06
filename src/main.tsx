@@ -1,3 +1,4 @@
+// @ts-expect-error - @types/react-dom not installed
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
@@ -11,6 +12,10 @@ import { injectSafeAreaStyles } from "./lib/mobile-safe-areas.ts";
 import { registerServiceWorker } from "./lib/service-worker.ts";
 // Production-safe logger
 import { logger } from "./lib/logger.ts";
+
+interface WindowWithGtag extends Window {
+  gtag?: (...args: [string, ...unknown[]]) => void;
+}
 
 // Initialize keyboard navigation detection for accessibility
 function initKeyboardNavDetection() {
@@ -29,27 +34,51 @@ function initKeyboardNavDetection() {
 }
 initKeyboardNavDetection();
 
-// Initialize Sentry first (before anything can error)
-initSentry();
+// GDPR opt-in: only initialize tracking if user has accepted cookies
+const cookieConsent = localStorage.getItem('aminy-cookie-consent');
 
-// Initialize Google Analytics if configured
-const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID;
-if (GA_MEASUREMENT_ID) {
-  // Load the gtag.js script dynamically
-  const script = document.createElement('script');
-  script.async = true;
-  script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
-  document.head.appendChild(script);
+if (cookieConsent === 'accepted') {
+  // Initialize Sentry for error tracking
+  initSentry();
 
-  // Configure GA with measurement ID
-  script.onload = () => {
-    if (typeof (window as any).gtag === 'function') {
-      (window as any).gtag('config', GA_MEASUREMENT_ID, {
-        send_page_view: true,
-        cookie_flags: 'SameSite=None;Secure',
-      });
-    }
-  };
+  // Initialize Google Analytics if configured
+  const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID;
+  if (GA_MEASUREMENT_ID) {
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
+    document.head.appendChild(script);
+    script.onload = () => {
+      const win = window as unknown as WindowWithGtag;
+      if (typeof win.gtag === 'function') {
+        win.gtag('config', GA_MEASUREMENT_ID, {
+          send_page_view: true,
+          cookie_flags: 'SameSite=None;Secure',
+        });
+      }
+    };
+  }
+}
+
+// Export for dynamic init after cookie consent is given
+export function initTracking() {
+  initSentry();
+  const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID;
+  if (GA_MEASUREMENT_ID && !document.querySelector(`script[src*="googletagmanager"]`)) {
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
+    document.head.appendChild(script);
+    script.onload = () => {
+      const win = window as unknown as WindowWithGtag;
+      if (typeof win.gtag === 'function') {
+        win.gtag('config', GA_MEASUREMENT_ID, {
+          send_page_view: true,
+          cookie_flags: 'SameSite=None;Secure',
+        });
+      }
+    };
+  }
 }
 
 // Validate environment variables on startup

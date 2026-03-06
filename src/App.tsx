@@ -7,6 +7,7 @@ import React, {
   startTransition,
   useCallback,
 } from "react";
+import { MotionConfig } from "motion/react";
 // CRITICAL PATH - Regular imports for instant FCP (MINIMIZED)
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { usePaymentConfirmation, getPaymentStatusFromUrl, clearPaymentParamsFromUrl } from "./hooks/usePaymentConfirmation";
@@ -26,9 +27,14 @@ import { AIProvider } from "./context/AIContext";
 import { ConversationProvider } from "./context/ConversationContext";
 import { ThemeProvider } from "./lib/theme-provider";
 import { supabase } from "./utils/supabase/client";
+import { getMFAState } from "./lib/mfa";
 import { FeedbackButton } from "./components/FeedbackButton";
 import { verifyAdminAccess } from "./hooks/useSecureSession";
-import { setSentryUser, clearSentryUser } from "./lib/sentry";
+import { setSentryUser, clearSentryUser, addBreadcrumb } from "./lib/sentry";
+import { proactiveNudges } from "./lib/proactive-nudges";
+import { orchestrateOnboarding, type OnboardingData } from "./lib/onboarding-orchestrator";
+import { useShouldShowNotificationPrompt } from "./components/NotificationPrompt";
+import { setupDailyCheckIns } from "./lib/push-notifications";
 
 // DEFERRED - Load after first paint
 const SafetyBoundary = lazy(() =>
@@ -72,6 +78,16 @@ const DeveloperModeHandler = lazy(() =>
     default: m.DeveloperModeHandler,
   })),
 );
+const NPSSurveyModal = lazy(() =>
+  import("./components/NPSSurveyModal").then((m) => ({
+    default: m.NPSSurveyModal,
+  })),
+);
+const FeedbackCollector = lazy(() =>
+  import("./components/FeedbackCollector").then((m) => ({
+    default: m.FeedbackCollector,
+  })),
+);
 
 // OPTIMIZED LAZY LOADING - With prefetch hints
 const OnboardingStreamlined = lazy(() =>
@@ -104,6 +120,7 @@ const BenefitsNavigatorScreen = lazy(() =>
     default: m.BenefitsNavigatorScreen,
   })),
 );
+const PriorAuthFlow = lazy(() => import("./components/PriorAuthFlow"));
 const TelehealthHome = lazy(() =>
   import("./components/telehealth/TelehealthHome").then((m) => ({
     default: m.TelehealthHome,
@@ -122,6 +139,11 @@ const RecordsVault = lazy(() =>
 const JuniorPageEnhancedPro = lazy(() =>
   import("./components/JuniorPageEnhancedPro").then((m) => ({
     default: m.JuniorPageEnhancedPro,
+  })),
+);
+const FreeScreeningFlow = lazy(() =>
+  import("./components/FreeScreeningFlow").then((m) => ({
+    default: m.FreeScreeningFlow,
   })),
 );
 const SettingsScreen = lazy(() =>
@@ -174,6 +196,11 @@ const UrgentHelpModal = lazy(() =>
     default: m.UrgentHelpModal,
   })),
 );
+const NotificationPrompt = lazy(() =>
+  import("./components/NotificationPrompt").then((m) => ({
+    default: m.NotificationPrompt,
+  })),
+);
 const PullToRefresh = lazy(() =>
   import("./components/PullToRefresh").then((m) => ({
     default: m.PullToRefresh,
@@ -221,9 +248,26 @@ const ProviderMarketplace = lazy(() =>
     default: m.ProviderMarketplace,
   })),
 );
+const EVVDashboard = lazy(() =>
+  import("./components/EVVDashboard"),
+);
+const ClaimsDashboard = lazy(() =>
+  import("./components/ClaimsDashboard"),
+);
+const PayerOutcomesDashboard = lazy(() =>
+  import("./components/PayerOutcomesDashboard"),
+);
+const ClinicalReportExport = lazy(() =>
+  import("./components/ClinicalReportExport"),
+);
 const ProviderPortal = lazy(() =>
   import("./components/ProviderPortal").then((m) => ({
     default: m.ProviderPortal,
+  })),
+);
+const ProviderOnboarding = lazy(() =>
+  import("./components/ProviderOnboarding").then((m) => ({
+    default: m.ProviderOnboarding,
   })),
 );
 const InsightNavigatorReport = lazy(() =>
@@ -355,7 +399,7 @@ const SecureAdminPortalWrapper = React.memo(function SecureAdminPortalWrapper({
   }, [userId, onAccessDenied]);
 
   if (isVerifying) {
-    return <LoadingSkeleton />;
+    return <LoadingSkeleton screen="admin" />;
   }
 
   if (!isAdmin) {
@@ -421,37 +465,194 @@ const CommunityHub = lazy(() =>
     default: m.CommunityHub,
   })),
 );
+const B2BPartnerPortal = lazy(() =>
+  import("./components/B2BPartnerPortal").then((m) => ({
+    default: m.B2BPartnerPortal,
+  })),
+);
+const B2BOrgSetup = lazy(() =>
+  import("./components/B2BOrgSetup").then((m) => ({
+    default: m.B2BOrgSetup,
+  })),
+);
+const ProviderIdentityVerification = lazy(() =>
+  import("./components/ProviderIdentityVerification").then((m) => ({
+    default: m.ProviderIdentityVerification,
+  })),
+);
+const CaregiverEnrollmentWizard = lazy(() =>
+  import("./components/CaregiverEnrollmentWizard").then((m) => ({
+    default: m.CaregiverEnrollmentWizard,
+  })),
+);
 const ProviderAnalytics = lazy(() =>
   import("./components/provider/ProviderAnalytics").then((m) => ({
     default: m.ProviderAnalytics,
   })),
 );
+const VisionAI = lazy(() =>
+  import("./components/VisionAI").then((m) => ({
+    default: m.VisionAI,
+  })),
+);
+const OutcomeMeasures = lazy(() =>
+  import("./components/OutcomeMeasures").then((m) => ({
+    default: m.OutcomeMeasures,
+  })),
+);
+
+// MFA (Multi-Factor Authentication) - HIPAA requirement for providers/admins
+const MFAEnrollment = lazy(() =>
+  import("./components/MFAEnrollment").then((m) => ({
+    default: m.MFAEnrollment,
+  })),
+);
+const MFAVerification = lazy(() =>
+  import("./components/MFAVerification").then((m) => ({
+    default: m.MFAVerification,
+  })),
+);
+
+// Cherry-picked from Aminy-Final — enhanced telehealth + new features
+const VideoCall = lazy(() => import("./components/VideoCall"));
+const PreCallSetup = lazy(() => import("./components/PreCallSetup"));
+const BCBASessionBriefing = lazy(() =>
+  import("./components/BCBASessionBriefing").then((m) => ({
+    default: m.BCBASessionBriefing,
+  })),
+);
+const ProviderReviews = lazy(() => import("./components/ProviderReviews"));
+const ReferralDashboard = lazy(() => import("./components/ReferralDashboard"));
+const MCHATScreening = lazy(() =>
+  import("./components/MCHATScreening").then((m) => ({
+    default: m.MCHATScreening,
+  })),
+);
+const AccountSettingsPremium = lazy(() => import("./components/AccountSettingsPremium"));
+const CaregiverTimesheet = lazy(() => import("./components/CaregiverTimesheet"));
+const ParentCalmMode = lazy(() =>
+  import("./components/ParentCalmMode").then((m) => ({
+    default: m.ParentCalmMode,
+  })),
+);
+const TokenRewardsBoard = lazy(() => import("./components/TokenRewardsBoard"));
+const MemorySettingsPage = lazy(() =>
+  import("./components/MemorySettingsPage").then((m) => ({
+    default: m.MemorySettingsPage,
+  })),
+);
+const CaregiverCredentialingWizard = lazy(() =>
+  import("./components/provider/CaregiverCredentialingWizard").then((m) => ({
+    default: m.CaregiverCredentialingWizard,
+  })),
+);
+const ProviderClinicalTemplates = lazy(() =>
+  import("./components/provider/ProviderClinicalTemplates").then((m) => ({
+    default: m.ProviderClinicalTemplates,
+  })),
+);
+const DailyVideoRoom = lazy(() =>
+  import("./components/DailyVideoRoom").then((m) => ({
+    default: m.DailyVideoRoom,
+  })),
+);
+const MultiRoleTelehealthRoom = lazy(() =>
+  import("./components/MultiRoleTelehealthRoom").then((m) => ({
+    default: m.MultiRoleTelehealthRoom,
+  })),
+);
+const ParentApprovalCard = lazy(() =>
+  import("./components/ParentApprovalCard").then((m) => ({
+    default: m.ParentApprovalCard,
+  })),
+);
+const ShareViewer = lazy(() =>
+  import("./components/ShareViewer").then((m) => ({
+    default: m.ShareViewer,
+  })),
+);
+const VideoCallRoom = lazy(() =>
+  import("./components/telehealth/VideoCallRoom"),
+);
 
 // OPTIMIZED LOADING SKELETON - Ultra lightweight, prevents CLS
 // Uses Aminy brand colors: Soft Cream (#F5F5F5), Muted Teal (#0891b2)
-const LoadingSkeleton = React.memo(() => (
-  <div
-    className="min-h-screen flex items-center justify-center"
-    style={{
-      minHeight: '100vh',
-      backgroundColor: '#F5F5F5',
-      contain: 'layout style paint',
-      contentVisibility: 'auto'
-    }}
-  >
+// Contextual loading messages by screen category
+const LOADING_MESSAGES: Record<string, string> = {
+  dashboard: 'Loading your dashboard...',
+  telehealth: 'Connecting to telehealth...',
+  marketplace: 'Finding providers near you...',
+  vault: 'Opening your secure vault...',
+  settings: 'Loading your preferences...',
+  junior: 'Setting up a fun session...',
+  benefits: 'Checking your coverage...',
+  'calm-tools': 'Preparing calming activities...',
+  outcomes: 'Calculating your progress...',
+  'insight-report': 'Generating your insights...',
+  'analytics-charts': 'Crunching your data...',
+  onboarding: 'Getting things ready for you...',
+};
+
+const LoadingSkeleton = React.memo(({ message, screen }: { message?: string; screen?: string }) => {
+  const [showTimeout, setShowTimeout] = React.useState(false);
+  // Auto-pick contextual message from screen name if no explicit message
+  const displayMessage = message || (screen ? LOADING_MESSAGES[screen] : undefined);
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => setShowTimeout(true), 10000); // 10 seconds
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
     <div
-      className="w-8 h-8 rounded-full animate-spin"
+      className="min-h-screen flex flex-col items-center justify-center gap-4"
       style={{
-        width: '2rem',
-        height: '2rem',
-        border: '2px solid rgba(87, 117, 144, 0.2)',
-        borderTopColor: '#0891b2',
-        contain: 'layout size',
-        willChange: 'transform'
+        minHeight: '100vh',
+        backgroundColor: '#F5F5F5',
+        contain: 'layout style paint',
+        contentVisibility: 'auto'
       }}
-    ></div>
-  </div>
-));
+    >
+      <div
+        className="w-8 h-8 rounded-full animate-spin"
+        style={{
+          width: '2rem',
+          height: '2rem',
+          border: '2px solid rgba(87, 117, 144, 0.2)',
+          borderTopColor: '#0891b2',
+          contain: 'layout size',
+          willChange: 'transform'
+        }}
+      ></div>
+      {displayMessage && (
+        <p style={{ color: '#6B7280', fontSize: '0.875rem', textAlign: 'center' }}>
+          {displayMessage}
+        </p>
+      )}
+      {showTimeout && (
+        <div style={{ textAlign: 'center', marginTop: '0.5rem' }}>
+          <p style={{ color: '#9CA3AF', fontSize: '0.75rem', marginBottom: '0.5rem' }}>
+            Having trouble loading?
+          </p>
+          <button
+            onClick={() => window.location.reload()}
+            style={{
+              color: '#0891b2',
+              fontSize: '0.75rem',
+              fontWeight: 500,
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              textDecoration: 'underline',
+            }}
+          >
+            Try again
+          </button>
+        </div>
+      )}
+    </div>
+  );
+});
 
 type AppScreen =
   | "splash"
@@ -470,6 +671,7 @@ type AppScreen =
   | "phase2-menu"
   | "marketplace"     // Full provider marketplace
   | "provider-portal" // Provider-facing portal
+  | "provider-onboarding" // Provider signup/registration flow
   | "insight-report"  // Living intake document
   | "outcomes"
   | "admin-portal"    // AACT pilot metrics dashboard
@@ -500,7 +702,39 @@ type AppScreen =
   | "analytics-charts" // Visual analytics
   | "store" // Resource store/marketplace
   | "community-hub" // Parent community hub
-  | "provider-analytics"; // Provider analytics dashboard
+  | "provider-analytics" // Provider analytics dashboard
+  | "evv-dashboard" // EVV (Electronic Visit Verification) for Medicaid compliance
+  | "claims-dashboard" // Costs & Coverage for parents
+  | "payer-dashboard" // Payer Outcomes Dashboard for insurance/MCO stakeholders
+  | "clinical-reports" // Clinical PDF export for pediatricians/BCBAs
+  | "free-screening" // Pre-signup screening acquisition funnel
+  | "prior-auth" // Prior authorization flow
+  | "b2b-partner" // B2B partner portal
+  | "b2b-setup" // B2B org setup wizard
+  | "caregiver-enrollment" // Paid caregiver enrollment
+  | "outcome-measures" // Standardized outcome assessments
+  | "provider-identity-verification" // Provider background check + ID verification
+  | "vision-ai" // Photo + Video AI analysis
+  | "mfa-enrollment" // MFA setup for providers/admins (HIPAA)
+  | "mfa-verification" // MFA code entry after login
+  | "video-call" // Native Daily.co video call with chat + recording
+  | "pre-call-setup" // Camera/mic testing before telehealth
+  | "bcba-briefing" // Pre-session clinical briefing for providers
+  | "provider-reviews" // Provider review display
+  | "referral-dashboard" // Referral tracking dashboard
+  | "mchat-screening"
+  | "account-settings"
+  | "caregiver-timesheet"
+  | "parent-calm-mode"
+  | "token-rewards"
+  | "memory-settings"
+  | "caregiver-credentialing" // Caregiver credentialing wizard
+  | "clinical-templates" // Provider clinical templates
+  | "daily-video-room" // Daily.co video room
+  | "multi-role-telehealth" // Multi-role telehealth room
+  | "parent-approval" // Parent approval card for provider suggestions
+  | "share-viewer" // Share viewer for non-authenticated users
+  | "video-call-room"; // Telehealth video call room
 
 interface ChildProfile {
   id: string;
@@ -510,10 +744,14 @@ interface ChildProfile {
 }
 
 interface UserData {
+  id?: string;
+  userId?: string;
+  name?: string;
   parentName: string;
   childName: string;
   childAge?: number;
   childId?: string;
+  childDOB?: string;
   relationship: string;
   state: string;
   email?: string;
@@ -523,6 +761,15 @@ interface UserData {
   children?: ChildProfile[];
   activeChildId?: string;
 }
+
+// Screens accessible via deep links (?screen=xxx)
+const DEEP_LINKABLE_SCREENS: AppScreen[] = [
+  "login", "create-account", "forgot-password", "reset-password",
+  "privacy-policy", "terms-of-service", "join",
+  "provider-landing", "provider-apply",
+  "benefits", "telehealth", "caregivers", "vault", "junior",
+  "crisis-resources", "incident-log", "free-screening",
+];
 
 // Initialize screen state synchronously to prevent LCP delays
 const getInitialScreen = (): AppScreen => {
@@ -550,7 +797,7 @@ const getInitialScreen = (): AppScreen => {
   // Check URL params
   const params = new URLSearchParams(window.location.search);
   const urlScreen = params.get("screen");
-  if (urlScreen && ["login", "create-account", "forgot-password", "reset-password", "privacy-policy", "terms-of-service", "join", "provider-landing", "provider-apply"].includes(urlScreen)) {
+  if (urlScreen && DEEP_LINKABLE_SCREENS.includes(urlScreen as AppScreen)) {
     return urlScreen as AppScreen;
   }
 
@@ -608,14 +855,55 @@ export default function App() {
   const currentScreenRef = useRef<AppScreen>(currentScreen);
   // Keep ref in sync so async callbacks (auth listener) see the latest screen
   useEffect(() => { currentScreenRef.current = currentScreen; }, [currentScreen]);
+
+  // Track screen navigation for Sentry debugging + scroll to top
+  const prevScreenRef = useRef<AppScreen>(currentScreen);
+  useEffect(() => {
+    const prev = prevScreenRef.current;
+    if (prev !== currentScreen) {
+      addBreadcrumb('navigation', `Screen: ${prev} → ${currentScreen}`, {
+        from: prev,
+        to: currentScreen,
+        timestamp: new Date().toISOString(),
+      });
+      prevScreenRef.current = currentScreen;
+    }
+    // Scroll to top when navigating between screens
+    // Target both window AND .mobile-polish-wrapper (the actual scroll container on mobile)
+    window.scrollTo(0, 0);
+    document.querySelector('.mobile-polish-wrapper')?.scrollTo(0, 0);
+  }, [currentScreen]);
+
   const [userData, setUserData] = useState<UserData>(getInitialUserData);
   const [activeTab, setActiveTab] = useState("home");
   const [messagesLeft, setMessagesLeft] = useState(10);
   const [isInitialized, setIsInitialized] = useState(false);
   const [showHelpModal, setShowHelpModal] = useState(false);
   const [showUnloadMindModal, setShowUnloadMindModal] = useState(false);
+  const [showNotificationPrompt, setShowNotificationPrompt] = useState(false);
+  const [showNPSSurvey, setShowNPSSurvey] = useState(false);
+  const [showFeedbackCollector, setShowFeedbackCollector] = useState(false);
+  // Track whether the next SIGNED_OUT is from an intentional logout vs. session expiry
+  const intentionalLogoutRef = useRef(false);
   const [showPaymentConfirmation, setShowPaymentConfirmation] = useState(false);
   const [paymentUserId, setPaymentUserId] = useState<string | null>(null);
+  const [fabOpen, setFabOpen] = useState(false);
+  // MFA state — tracks whether we need enrollment or verification after login
+  const [mfaGracePeriodEnds, setMfaGracePeriodEnds] = useState<Date | undefined>(undefined);
+  const [mfaRequired, setMfaRequired] = useState(false);
+
+  // Push notification prompt — show after user reaches dashboard
+  const shouldShowNotificationPrompt = useShouldShowNotificationPrompt();
+
+  useEffect(() => {
+    if (currentScreen === "dashboard" && shouldShowNotificationPrompt && userData.id) {
+      // Delay prompt to let the dashboard load first
+      const timer = setTimeout(() => {
+        setShowNotificationPrompt(true);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [currentScreen, shouldShowNotificationPrompt, userData.id]);
 
   // ======================================
   // PAYMENT CONFIRMATION - Check URL for payment return
@@ -655,8 +943,7 @@ export default function App() {
           .from('profiles')
           .update({ tier })
           .eq('id', paymentUserId)
-          .then(() => { /* profile update complete */ })
-          .catch(err => logger.error('Failed to update profile tier', err));
+          .then(() => { /* profile update complete */ }, (err: unknown) => logger.error('Failed to update profile tier', err));
       }
     },
     onTimeout: () => {
@@ -768,18 +1055,7 @@ export default function App() {
       const screen = params.get("screen");
       const tab = params.get("tab");
 
-      if (
-        screen &&
-        [
-          "benefits",
-          "telehealth",
-          "caregivers",
-          "vault",
-          "junior",
-          "provider-landing",
-          "provider-apply",
-        ].includes(screen)
-      ) {
+      if (screen && DEEP_LINKABLE_SCREENS.includes(screen as AppScreen)) {
         setCurrentScreen(screen as AppScreen);
       }
 
@@ -827,10 +1103,65 @@ export default function App() {
     window.history.pushState({}, "", newUrl);
   };
 
+  // Debug navigation hooks — only available in development
+  if (import.meta.env.DEV) {
+    window.__navigateToScreen = (screen: string) => navigateToScreen(screen as AppScreen);
+    window.__setCurrentScreen = (screen: string) => setCurrentScreen(screen as AppScreen);
+  }
+
   // Mark as initialized immediately - session is checked synchronously on mount
   useEffect(() => {
     setIsInitialized(true);
   }, []);
+
+  // Listen for DataService errors and show toast notifications
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const detail = (e as CustomEvent<{ operation: string; message: string }>).detail;
+      const userMessage = detail.message?.includes('JWT')
+        ? 'Your session has expired. Please sign in again.'
+        : 'Something went wrong. Please try again.';
+      toast.error(userMessage);
+    };
+    window.addEventListener('dataservice:error', handler);
+    return () => window.removeEventListener('dataservice:error', handler);
+  }, []);
+
+  // NPS Survey trigger — show after 7 days of first sign-up, max once per 90 days
+  useEffect(() => {
+    const NPS_COOLDOWN_KEY = 'aminy-nps-last-shown';
+    const NPS_FIRST_LOGIN_KEY = 'aminy-first-login';
+    const NPS_COOLDOWN_MS = 90 * 24 * 60 * 60 * 1000; // 90 days
+    const NPS_DELAY_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
+
+    if (!userData.id) return;
+
+    try {
+      // Respect cooldown
+      const lastShown = localStorage.getItem(NPS_COOLDOWN_KEY);
+      if (lastShown && Date.now() - Number(lastShown) < NPS_COOLDOWN_MS) return;
+
+      // Track first login time
+      let firstLogin = Number(localStorage.getItem(NPS_FIRST_LOGIN_KEY) || '0');
+      if (!firstLogin) {
+        firstLogin = Date.now();
+        localStorage.setItem(NPS_FIRST_LOGIN_KEY, String(firstLogin));
+      }
+
+      // Show after 7 days of first login
+      if (Date.now() - firstLogin >= NPS_DELAY_MS) {
+        const timer = setTimeout(() => setShowNPSSurvey(true), 15000);
+        return () => clearTimeout(timer);
+      }
+    } catch {
+      // Silently fail — NPS is non-critical
+    }
+  }, [userData.id]);
+
+  // CSS rule [style*="opacity: 0"] { opacity: 1 !important } in index.css handles
+  // the inline opacity:0 that motion/react v12 sets as initial animation state.
+  // WAAPI animations override CSS !important while running, so active animations
+  // still work correctly. The CSS rule is the passive safety net.
 
   // Supabase auth state listener - handles session changes from OAuth, login, logout
   useEffect(() => {
@@ -884,12 +1215,60 @@ export default function App() {
                 tier: profile.tier || 'free',
               });
 
+              // Start the proactive nudge scheduler for authenticated users
+              proactiveNudges.start();
+
               // Only navigate if user is on an auth/login screen — don't redirect
               // away from public pages like provider-landing.
               // Use ref to get the *current* screen (avoids stale closure).
               const screen = currentScreenRef.current;
               if (!publicNoRedirect.includes(screen)) {
                 if (profile.has_completed_onboarding) {
+                  // ─── MFA CHECK (HIPAA) ─────────────────────────
+                  // For providers/admins, check MFA status before allowing access.
+                  const userRole = profile.role || 'parent';
+                  if (userRole === 'provider' || userRole === 'admin') {
+                    try {
+                      const mfaState = await getMFAState();
+
+                      if (mfaState.needsVerification) {
+                        // Has MFA enrolled but session is only AAL1 — verify
+                        navigateToScreen('mfa-verification');
+                        return; // Don't navigate further until MFA verified
+                      }
+
+                      if (mfaState.needsEnrollment) {
+                        // MFA required but not enrolled — force enrollment
+                        setMfaRequired(true);
+                        setMfaGracePeriodEnds(undefined);
+                        navigateToScreen('mfa-enrollment');
+                        return;
+                      }
+
+                      if (!mfaState.status.isEnrolled && !mfaState.requirement.required && mfaState.requirement.gracePeriodEnds) {
+                        // Within grace period, not enrolled — prompt enrollment (skippable)
+                        // Throttle prompts: at most once per day via localStorage
+                        const prompted = localStorage.getItem('aminy-mfa-enrollment-prompted');
+                        const now = Date.now();
+                        const ONE_DAY = 24 * 60 * 60 * 1000;
+
+                        if (!prompted || (now - parseInt(prompted, 10)) > ONE_DAY) {
+                          localStorage.setItem('aminy-mfa-enrollment-prompted', String(now));
+                          setMfaRequired(false);
+                          setMfaGracePeriodEnds(mfaState.requirement.gracePeriodEnds);
+                          navigateToScreen('mfa-enrollment');
+                          return;
+                        }
+                      }
+
+                      // MFA satisfied or grace period prompt already shown today — proceed
+                    } catch (mfaError) {
+                      // MFA check failed — don't block login, log and continue
+                      logger.error('MFA check failed during sign-in', mfaError);
+                    }
+                  }
+                  // ─── END MFA CHECK ─────────────────────────────
+
                   // Check if returning user is still on free tier - show paywall
                   const userTier = profile.tier || 'free';
                   if (userTier === 'free') {
@@ -927,8 +1306,15 @@ export default function App() {
             }
           }
         } else if (event === 'SIGNED_OUT') {
+          // Stop the proactive nudge scheduler
+          proactiveNudges.stop();
+
           // Clear Sentry user context
           clearSentryUser();
+
+          // Detect session expiry vs. intentional logout
+          const wasIntentional = intentionalLogoutRef.current;
+          intentionalLogoutRef.current = false; // Reset the flag
 
           // Clear user data on sign out
           localStorage.removeItem('aminy-user');
@@ -940,12 +1326,57 @@ export default function App() {
             hasCompletedOnboarding: false,
             tier: 'free',
           });
-          navigateToScreen('splash');
+          navigateToScreen('login');
+
+          if (!wasIntentional) {
+            // Session expired unexpectedly — let the user know
+            toast.error('Your session has expired. Please sign in again.', {
+              duration: 6000,
+            });
+            logger.dev('Session expired — auto-signed out');
+          }
+        } else if (event === 'TOKEN_REFRESHED') {
+          logger.dev('Auth token refreshed successfully');
         }
       }
     );
 
-    return () => subscription.unsubscribe();
+    return () => {
+      subscription.unsubscribe();
+      // Stop nudge scheduler when the app-level auth effect cleans up
+      proactiveNudges.stop();
+    };
+  }, []);
+
+  // Periodic session health check — every 5 minutes, verify the session is still valid
+  // This catches edge cases where the token silently expires between auto-refresh cycles
+  useEffect(() => {
+    const authScreens = ['login', 'create-account', 'auth-callback', 'splash'];
+    const SESSION_CHECK_INTERVAL = 5 * 60 * 1000; // 5 minutes
+
+    const checkSession = async () => {
+      const screen = currentScreenRef.current;
+      // Only check if user is on an authenticated screen
+      if (authScreens.includes(screen)) return;
+
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) {
+          // Session is gone — token refresh must have failed silently
+          logger.dev('Session health check: no active session, redirecting to login');
+          toast.error('Your session has expired. Please sign in again.', {
+            duration: 6000,
+          });
+          navigateToScreen('login');
+        }
+      } catch {
+        // Network error — don't redirect, just log
+        logger.dev('Session health check: network error (ignoring)');
+      }
+    };
+
+    const interval = setInterval(checkSession, SESSION_CHECK_INTERVAL);
+    return () => clearInterval(interval);
   }, []);
 
   // Save user data to localStorage whenever it changes
@@ -1024,7 +1455,7 @@ export default function App() {
             tier: 'free',
             has_completed_onboarding: true,
             updated_at: new Date().toISOString(),
-          }, { onConflict: 'id' }).catch(err => logger.error('Profile upsert error', err));
+          }, { onConflict: 'id' }).then(null, (err: unknown) => logger.error('Profile upsert error', err));
 
           // Trial tracking - non-blocking
           const trialEnd = new Date();
@@ -1036,7 +1467,7 @@ export default function App() {
             conversations_used: 0,
             max_trial_conversations: 5,
             is_converted: false,
-          }, { onConflict: 'user_id' }).catch(err => logger.error('Trial tracking error', err));
+          }, { onConflict: 'user_id' }).then(null, (err: unknown) => logger.error('Trial tracking error', err));
 
           // Default goals - non-blocking
           const defaultGoals = [
@@ -1052,7 +1483,7 @@ export default function App() {
               created_at: new Date().toISOString(),
             })),
             { onConflict: 'id' }
-          ).catch(err => logger.error('Goals creation error', err));
+          ).then(null, (err: unknown) => logger.error('Goals creation error', err));
 
           // Retention flows - non-blocking
           if (updatedData.email && updatedData.childName && updatedData.parentName) {
@@ -1063,6 +1494,34 @@ export default function App() {
               updatedData.parentName
             ).catch(err => logger.error('Retention flow error', err));
           }
+
+          // Onboarding orchestration - non-blocking
+          // Runs child profile setup, screening suggestions, notifications, care plan goals, and AI memory
+          const onboardingData: OnboardingData = {
+            userId,
+            parentName: updatedData.parentName || '',
+            child: {
+              name: updatedData.childName || '',
+              dateOfBirth: '', // Not collected in streamlined onboarding; filled later
+              pronouns: '',
+              concerns: updatedData.children?.[0]?.conditions ?? [],
+            },
+            state: updatedData.state,
+          };
+
+          orchestrateOnboarding(onboardingData)
+            .then(result => {
+              const errorCount = result.errors.length;
+              if (errorCount > 0) {
+                logger.warn('Onboarding orchestration partial errors', result.errors);
+              } else {
+                logger.info('Onboarding orchestration completed', {
+                  childId: result.childProfile?.id,
+                  goalsCreated: result.carePlanGoals?.created ?? 0,
+                });
+              }
+            })
+            .catch(err => logger.error('Onboarding orchestration error', err));
         }
       } catch (error) {
         logger.error('Background onboarding save error', error);
@@ -1087,6 +1546,10 @@ export default function App() {
   };
 
   const handleLogout = async () => {
+    // Flag so the auth listener knows this is intentional (not a session expiry)
+    intentionalLogoutRef.current = true;
+    // Stop proactive nudge scheduler on explicit logout
+    proactiveNudges.stop();
     // Sign out from Supabase to clear the session
     try {
       await supabase.auth.signOut();
@@ -1170,7 +1633,10 @@ export default function App() {
     currentScreen !== "create-account" &&
     currentScreen !== "onboarding" &&
     currentScreen !== "provider-landing" &&
-    currentScreen !== "provider-apply";
+    currentScreen !== "provider-apply" &&
+    currentScreen !== "free-screening" &&
+    currentScreen !== "mfa-enrollment" &&
+    currentScreen !== "mfa-verification";
 
   // Determine if screen should have pull-to-refresh
   const shouldEnablePullToRefresh =
@@ -1182,19 +1648,20 @@ export default function App() {
       switch (currentScreen) {
         case "splash":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <SplashPage
                 onStartTrial={handleGetStarted}
                 onSignIn={handleLogin}
                 onStartReflection={handleGetStarted}
                 onForProviders={() => navigateToScreen("provider-landing")}
+                onFreeScreening={() => navigateToScreen("free-screening")}
               />
             </Suspense>
           );
 
         case "login":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <LoginScreen
                 onLogin={handleLoginSuccess}
                 onBack={() => navigateToScreen("splash")}
@@ -1210,7 +1677,7 @@ export default function App() {
 
         case "forgot-password":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <ForgotPasswordScreen
                 onBack={() => navigateToScreen("login")}
                 onBackToLogin={() => navigateToScreen("login")}
@@ -1220,7 +1687,7 @@ export default function App() {
 
         case "reset-password":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <ResetPasswordScreen
                 onSuccess={() => {
                   toast.success("Password updated successfully!");
@@ -1233,7 +1700,7 @@ export default function App() {
 
         case "auth-callback":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <AuthCallback
                 onAuthSuccess={handleAuthCallbackSuccess}
                 onPasswordReset={handleAuthCallbackPasswordReset}
@@ -1244,7 +1711,7 @@ export default function App() {
 
         case "create-account":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <CreateAccountScreen
                 onCreateAccount={handleCreateAccount}
                 onBack={() => navigateToScreen("splash")}
@@ -1253,9 +1720,33 @@ export default function App() {
             </Suspense>
           );
 
+        case "free-screening":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <FreeScreeningFlow
+                onBack={() => navigateToScreen("splash")}
+                onSignUp={() => navigateToScreen("create-account")}
+                onBookEvaluation={() => {
+                  // Pass screening context to marketplace via localStorage
+                  const results = JSON.parse(localStorage.getItem('aminy_screening_results') || '[]');
+                  const latest = results[results.length - 1];
+                  if (latest) {
+                    localStorage.setItem('aminy_screening_routing', JSON.stringify({
+                      riskLevel: latest.riskLevel,
+                      recommendedProviders: latest.recommendedProviders,
+                      instrumentId: latest.instrumentId,
+                      concern: latest.summary?.slice(0, 100),
+                    }));
+                  }
+                  navigateToScreen("marketplace");
+                }}
+              />
+            </Suspense>
+          );
+
         case "onboarding":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <OnboardingStreamlined
                 onComplete={handleOnboardingComplete}
                 initialEmail={userData.email || ""}
@@ -1265,30 +1756,51 @@ export default function App() {
 
         case "dashboard":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <Dashboard
                 userData={{
                   parentName: userData.parentName,
                   childName: userData.childName,
                 }}
                 userTier={userData.tier}
+                userRole={userData.role || 'parent'}
                 onNavigate={(destination) => {
                   // Handle paywall specially
                   if (destination === "paywall") {
                     handlePaywallTrigger();
                     return;
                   }
+                  // Handle AI center button — open the floating chat panel
+                  if (destination === "ask-aminy") {
+                    setFabOpen(true);
+                    return;
+                  }
+                  // Map nav IDs to screen IDs (bottom nav / More menu aliases)
+                  const navAliases: Record<string, AppScreen> = {
+                    'plan': 'care-plan',
+                    'document-vault': 'vault',
+                    'care': 'conversational-booking',
+                    'reports': 'clinical-reports',
+                    'vision-ai': 'vision-ai',
+                    'caregiver-enrollment': 'caregiver-enrollment',
+                    'b2b-partner': 'b2b-partner',
+                    'b2b-setup': 'b2b-setup',
+                  };
+                  const resolved = navAliases[destination] || destination;
                   // Map any valid screen destination
                   const validScreens: AppScreen[] = [
                     "telehealth", "caregivers", "vault", "bcba-portal", "marketplace",
-                    "provider-portal", "insight-report", "outcomes", "on-demand-telehealth",
+                    "provider-portal", "provider-onboarding", "insight-report", "outcomes", "on-demand-telehealth",
                     "settings", "calm-tools", "incident-log", "care-plan", "resources",
                     "community", "profile", "benefits", "junior", "my-appointments",
                     "conversational-booking", "messages", "access-requests", "store",
-                    "community-hub", "provider-analytics", "weekly-insights", "analytics-charts"
+                    "community-hub", "provider-analytics", "weekly-insights", "analytics-charts",
+                    "evv-dashboard", "claims-dashboard", "payer-dashboard", "clinical-reports",
+                    "prior-auth", "vision-ai", "caregiver-enrollment", "b2b-partner", "b2b-setup",
+                    "outcome-measures"
                   ];
-                  if (validScreens.includes(destination as AppScreen)) {
-                    navigateToScreen(destination as AppScreen);
+                  if (validScreens.includes(resolved as AppScreen)) {
+                    navigateToScreen(resolved as AppScreen);
                   }
                 }}
               />
@@ -1297,7 +1809,7 @@ export default function App() {
 
         case "telehealth":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <TelehealthHome
                 onBack={() => navigateToScreen("dashboard")}
                 userState={userData.state || "AZ"}
@@ -1320,7 +1832,7 @@ export default function App() {
 
         case "caregivers":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <CaregiverManagementScreen
                 onBack={() => navigateToScreen("dashboard")}
               />
@@ -1329,7 +1841,7 @@ export default function App() {
 
         case "vault":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <RecordsVault
                 onBack={() => navigateToScreen("dashboard")}
                 onClose={() => navigateToScreen("dashboard")}
@@ -1339,7 +1851,7 @@ export default function App() {
 
         case "settings":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <SettingsScreen
                 onBack={() => navigateToScreen("dashboard")}
                 onLogout={handleLogout}
@@ -1351,7 +1863,7 @@ export default function App() {
 
         case "paywall":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <PaywallScreen
                 onSubscribe={handleSubscribe}
                 onClose={() => navigateToScreen("dashboard")}
@@ -1362,7 +1874,7 @@ export default function App() {
 
         case "bcba-portal":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <BCBACoachPortal
                 onBack={() => navigateToScreen("dashboard")}
               />
@@ -1371,7 +1883,7 @@ export default function App() {
 
         case "launch-status":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <LaunchStatusDashboard
                 onBack={() => navigateToScreen("dashboard")}
               />
@@ -1380,7 +1892,7 @@ export default function App() {
 
         case "analytics":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <EnhancedAnalyticsDashboard
                 onBack={() => navigateToScreen("dashboard")}
               />
@@ -1389,7 +1901,7 @@ export default function App() {
 
         case "phase2-menu":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <Phase2FeaturesMenu
                 onNavigate={(screen) => {
                   if (screen === "bcba-portal") {
@@ -1413,10 +1925,10 @@ export default function App() {
 
         case "marketplace":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <ProviderMarketplace
                 onBack={() => navigateToScreen("dashboard")}
-                onBookProvider={(providerId) => {
+                onBookSession={(providerId: string) => {
                   // Navigate to telehealth booking flow
                   navigateToScreen("telehealth");
                 }}
@@ -1426,16 +1938,41 @@ export default function App() {
 
         case "provider-portal":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <ProviderPortal
-                providerId="provider-1"
+                providerId={userData.id || '00000000-0000-0000-0000-000000000000'}
+              />
+            </Suspense>
+          );
+
+        case "provider-onboarding":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <ProviderOnboarding
+                onBack={() => navigateToScreen("dashboard")}
+                onComplete={(providerId) => {
+                  // After onboarding, route to identity verification before marketplace listing
+                  localStorage.setItem('aminy-pending-provider-id', providerId);
+                  navigateToScreen("provider-identity-verification");
+                }}
+              />
+            </Suspense>
+          );
+
+        case "provider-identity-verification":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <ProviderIdentityVerification
+                providerId={localStorage.getItem('aminy-pending-provider-id') || 'unknown'}
+                onComplete={() => navigateToScreen("provider-portal")}
+                onBack={() => navigateToScreen("provider-portal")}
               />
             </Suspense>
           );
 
         case "insight-report":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <InsightNavigatorReport
                 childId={userData.childId || "child-1"}
                 mode="parent"
@@ -1445,10 +1982,10 @@ export default function App() {
 
         case "outcomes":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <OutcomesTracking
                 childId={userData.childId || "child-1"}
-                initialView="caregiver"
+                view="caregiver"
               />
             </Suspense>
           );
@@ -1457,7 +1994,7 @@ export default function App() {
           // Secure admin portal with server-side verification
           // SECURITY: Uses database role verification, not localStorage
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <SecureAdminPortalWrapper
                 userId={userData.id}
                 onBack={() => navigateToScreen("dashboard")}
@@ -1471,26 +2008,63 @@ export default function App() {
 
         case "on-demand-telehealth":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <OnDemandTelehealth
                 onBack={() => navigateToScreen("dashboard")}
-                onComplete={() => {
+                onSessionEnd={() => {
                   navigateToScreen("dashboard");
                   toast.success("Session completed successfully!");
                 }}
                 childName={userData.childName || "your child"}
-                userTier={userData.tier}
+                userTier={userData.tier as string}
               />
             </Suspense>
           );
 
         case "calm-tools":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <SensoryTools
                 childName={userData.childName || "your child"}
                 onBack={() => navigateToScreen("dashboard")}
-                onSessionComplete={(data) => {
+                onSessionComplete={async (sessionData) => {
+                  try {
+                    const { data: { user } } = await supabase.auth.getUser();
+                    const uid = user?.id;
+                    if (uid) {
+                      // Persist calm session to Supabase
+                      await supabase.from('calm_tool_sessions').insert({
+                        user_id: uid,
+                        mood_before: sessionData?.moodBefore || null,
+                        mood_after: sessionData?.moodAfter || null,
+                        duration_seconds: sessionData?.duration || 0,
+                        coins_earned: sessionData?.coinsEarned || 10,
+                        tool_type: sessionData?.toolType || 'calm',
+                        completed_at: new Date().toISOString(),
+                      }).then(() => {});
+
+                      // Streak + badges
+                      const { incrementStreak } = await import('./lib/streak-service');
+                      const { checkAndAwardBadges } = await import('./lib/badge-service');
+                      incrementStreak(uid).catch(() => {});
+                      checkAndAwardBadges(uid, 'calm_session').catch(() => {});
+
+                      // Record to parent-junior bridge
+                      const { recordJuniorProgress } = await import('./lib/parent-junior-bridge');
+                      recordJuniorProgress(userData.childId || 'default', {
+                        activityId: `calm-${Date.now()}`,
+                        activityTitle: sessionData?.toolType || 'Calm Tool Session',
+                        domain: 'regulation',
+                        durationSeconds: (sessionData?.duration || 0) * 60,
+                        tokensEarned: sessionData?.coinsEarned || 10,
+                        completedAt: new Date().toISOString(),
+                      });
+                    }
+                    toast.success(`Great job! +${sessionData?.coinsEarned || 10} calm coins earned`);
+                  } catch (e) {
+                    console.error('Session complete error:', e);
+                    toast.success('Session complete!');
+                  }
                 }}
               />
             </Suspense>
@@ -1498,7 +2072,7 @@ export default function App() {
 
         case "incident-log":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <ActivityLog
                 onBack={() => navigateToScreen("dashboard")}
               />
@@ -1507,9 +2081,10 @@ export default function App() {
 
         case "care-plan":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <CareTab
                 childName={userData.childName}
+                userTier={userData.tier as string}
                 onBack={() => navigateToScreen("dashboard")}
               />
             </Suspense>
@@ -1517,7 +2092,7 @@ export default function App() {
 
         case "resources":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <CommunityForYou
                 childName={userData.childName}
                 onBack={() => navigateToScreen("dashboard")}
@@ -1527,7 +2102,7 @@ export default function App() {
 
         case "community":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <CommunityForYou
                 childName={userData.childName}
                 onBack={() => navigateToScreen("dashboard")}
@@ -1537,7 +2112,7 @@ export default function App() {
 
         case "profile":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <ProfileScreen
                 onBack={() => navigateToScreen("dashboard")}
                 onNavigate={(screen) => navigateToScreen(screen as AppScreen)}
@@ -1548,26 +2123,41 @@ export default function App() {
 
         case "benefits":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <BenefitsNavigatorScreen
                 onBack={() => navigateToScreen("dashboard")}
+                onNavigate={(screen: string) => navigateToScreen(screen as AppScreen)}
+              />
+            </Suspense>
+          );
+
+        case "prior-auth":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <PriorAuthFlow
+                onBack={() => navigateToScreen("benefits")}
+                onComplete={() => navigateToScreen("benefits")}
+                childName={userData.childName}
               />
             </Suspense>
           );
 
         case "junior":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <JuniorPageEnhancedPro
-                childName={userData.childName || "Alex"}
-                onBack={() => navigateToScreen("dashboard")}
+                userData={{
+                  parentName: userData.parentName || "Parent",
+                  childName: userData.childName || "Alex"
+                }}
+                userTier={userData.tier || "starter"}
               />
             </Suspense>
           );
 
         case "privacy-policy":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <PrivacyPolicy
                 onBack={() => navigateToScreen("splash")}
               />
@@ -1576,7 +2166,7 @@ export default function App() {
 
         case "terms-of-service":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <TermsOfService
                 onBack={() => navigateToScreen("splash")}
               />
@@ -1585,7 +2175,7 @@ export default function App() {
 
         case "join":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <ReferralLanding
                 onNavigateToSignup={() => navigateToScreen("create-account")}
                 onNavigateToLogin={() => navigateToScreen("login")}
@@ -1595,7 +2185,7 @@ export default function App() {
 
         case "my-appointments":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <MyAppointments
                 onBack={() => navigateToScreen("dashboard")}
                 onBookNew={() => navigateToScreen("conversational-booking")}
@@ -1606,7 +2196,7 @@ export default function App() {
 
         case "conversational-booking":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <ConversationalBooking
                 onBack={() => navigateToScreen("telehealth")}
                 onComplete={() => {
@@ -1620,10 +2210,10 @@ export default function App() {
 
         case "messages":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <SecureMessaging
-                currentUserId={userData.id || "parent-1"}
-                currentUserRole="parent"
+                userId={userData.id || "parent-1"}
+                userRole="parent"
                 onBack={() => navigateToScreen("dashboard")}
               />
             </Suspense>
@@ -1631,11 +2221,9 @@ export default function App() {
 
         case "access-requests":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <ProviderAccessRequests
-                parentId={userData.id || "parent-1"}
-                childId={userData.childId || "child-1"}
-                childName={userData.childName || "your child"}
+                userId={userData.id || "parent-1"}
                 onBack={() => navigateToScreen("dashboard")}
               />
             </Suspense>
@@ -1643,7 +2231,7 @@ export default function App() {
 
         case "provider-landing":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <ProviderLanding
                 onApply={() => navigateToScreen("provider-apply")}
                 onLogin={() => navigateToScreen("login")}
@@ -1654,7 +2242,7 @@ export default function App() {
 
         case "provider-apply":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <ProviderApplication
                 onBack={() => navigateToScreen("provider-landing")}
                 onSuccess={() => {
@@ -1669,7 +2257,7 @@ export default function App() {
 
         case "medications":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <div className="min-h-screen bg-gradient-to-b from-neutral-50 to-white dark:from-slate-900 dark:to-slate-800 p-4 sm:p-6">
                 <MedicationTracker
                   childId={userData.childId || "child-1"}
@@ -1682,7 +2270,7 @@ export default function App() {
 
         case "crisis-resources":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <CrisisResources
                 onBack={() => navigateToScreen("dashboard")}
               />
@@ -1691,7 +2279,7 @@ export default function App() {
 
         case "weekly-insights":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <div className="min-h-screen bg-gray-50 dark:bg-slate-900 pb-24">
                 <div className="sticky top-0 z-10 bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
                   <div className="max-w-2xl mx-auto px-4 py-4">
@@ -1720,7 +2308,7 @@ export default function App() {
 
         case "analytics-charts":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <div className="min-h-screen bg-gray-50 dark:bg-slate-900 pb-24">
                 <div className="sticky top-0 z-10 bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
                   <div className="max-w-2xl mx-auto px-4 py-4">
@@ -1748,7 +2336,7 @@ export default function App() {
 
         case "store":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <StoreMarketplace
                 onBack={() => navigateToScreen("dashboard")}
                 userTier={userData.tier || 'free'}
@@ -1759,11 +2347,12 @@ export default function App() {
 
         case "community-hub":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <CommunityHub
                 onBack={() => navigateToScreen("dashboard")}
                 userTier={userData.tier || 'free'}
                 userName={userData.parentName || 'Parent'}
+                userId={userData.userId || ''}
                 onUpgrade={() => navigateToScreen("paywall")}
               />
             </Suspense>
@@ -1771,17 +2360,421 @@ export default function App() {
 
         case "provider-analytics":
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <ProviderAnalytics
-                providerId="provider-1"
+                providerId={userData.id || '00000000-0000-0000-0000-000000000000'}
                 onBack={() => navigateToScreen("provider-portal")}
+              />
+            </Suspense>
+          );
+
+        case "evv-dashboard":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <EVVDashboard
+                childId={userData.childId || "child-1"}
+                childName={userData.childName || "Your Child"}
+                onBack={() => navigateToScreen("dashboard")}
+              />
+            </Suspense>
+          );
+
+        case "claims-dashboard":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <ClaimsDashboard
+                userId={paymentUserId || "demo-user"}
+                childId={userData.childId || "child-1"}
+                childName={userData.childName || "Your Child"}
+                childDOB={userData.childDOB}
+                onBack={() => navigateToScreen("dashboard")}
+              />
+            </Suspense>
+          );
+
+        case "payer-dashboard":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <PayerOutcomesDashboard
+                organizationName="Aminy Health Plan"
+                organizationType="mco"
+                onExportReport={() => {
+                  // Generate compliance-ready export using audit data
+                  import('./lib/hipaa-compliance').then(({ getComplianceStatus, generatePHIAccessReport }) => {
+                    const compliance = getComplianceStatus();
+                    const phiReport = generatePHIAccessReport(90);
+                    const exportData = {
+                      generatedAt: new Date().toISOString(),
+                      complianceScore: compliance.overallScore,
+                      unresolvedAlerts: compliance.unresolvedAlerts,
+                      phiAccessSummary: {
+                        totalAccesses: phiReport.totalAccesses,
+                        uniqueUsers: phiReport.uniqueUsers,
+                        riskScore: phiReport.riskScore,
+                      },
+                      retentionCompliant: compliance.retentionCompliant,
+                    };
+                    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `aminy-payer-report-${new Date().toISOString().split('T')[0]}.json`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                  }).catch(console.error);
+                }}
+              />
+            </Suspense>
+          );
+
+        case "clinical-reports":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <ClinicalReportExport
+                childName={userData.childName || "Your Child"}
+                childId={userData.childId || "child-1"}
+                userTier={userData.tier || "free"}
+                onBack={() => navigateToScreen("dashboard")}
+              />
+            </Suspense>
+          );
+
+        case "b2b-partner":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <B2BPartnerPortal
+                onContactSales={() => toast.info("Sales team will reach out within 24 hours.")}
+                onNavigate={(screen) => navigateToScreen(screen as AppScreen)}
+                onBack={() => navigateToScreen("dashboard")}
+              />
+            </Suspense>
+          );
+
+        case "b2b-setup":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <B2BOrgSetup
+                onComplete={() => navigateToScreen("dashboard")}
+                onBack={() => navigateToScreen("b2b-partner")}
+              />
+            </Suspense>
+          );
+
+        case "caregiver-enrollment":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <CaregiverEnrollmentWizard
+                onComplete={() => navigateToScreen("dashboard")}
+                onBack={() => navigateToScreen("dashboard")}
+              />
+            </Suspense>
+          );
+
+        case "vision-ai":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <VisionAI
+                tier={(() => {
+                  const sub = localStorage.getItem('aminy-subscription');
+                  if (sub) {
+                    try { const s = JSON.parse(sub); return s.tier || 'core'; } catch { return 'core'; }
+                  }
+                  return 'core';
+                })()}
+                onBack={() => navigateToScreen("dashboard")}
+                onAnalysisComplete={(result) => {
+                  // Store analysis result for conversation injection
+                  localStorage.setItem('aminy-vision-result', JSON.stringify(result));
+                  navigateToScreen("dashboard");
+                }}
+              />
+            </Suspense>
+          );
+
+        case "outcome-measures":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <OutcomeMeasures
+                userId={userData.id}
+                onBack={() => navigateToScreen("dashboard")}
+              />
+            </Suspense>
+          );
+
+        case "mfa-enrollment":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <MFAEnrollment
+                onComplete={() => {
+                  // MFA enrolled and verified — proceed to normal post-login flow
+                  const userTier = userData.tier || 'free';
+                  if (userTier === 'free') {
+                    navigateToScreen('paywall');
+                  } else {
+                    navigateToScreen('dashboard');
+                  }
+                }}
+                onSkip={!mfaRequired ? () => {
+                  // Grace period skip — proceed to normal flow
+                  const userTier = userData.tier || 'free';
+                  if (userTier === 'free') {
+                    navigateToScreen('paywall');
+                  } else {
+                    navigateToScreen('dashboard');
+                  }
+                } : undefined}
+                required={mfaRequired}
+                gracePeriodEnds={mfaGracePeriodEnds}
+              />
+            </Suspense>
+          );
+
+        case "mfa-verification":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <MFAVerification
+                onSuccess={() => {
+                  // MFA verified — proceed to normal post-login flow
+                  const userTier = userData.tier || 'free';
+                  if (userTier === 'free') {
+                    navigateToScreen('paywall');
+                  } else {
+                    navigateToScreen('dashboard');
+                  }
+                }}
+                onCancel={() => {
+                  // Cancel MFA — sign out and return to login
+                  intentionalLogoutRef.current = true;
+                  supabase.auth.signOut();
+                  navigateToScreen('login');
+                }}
+                email={userData.email}
+              />
+            </Suspense>
+          );
+
+        case "video-call":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen="telehealth" />}>
+              <VideoCall
+                sessionId={localStorage.getItem('aminy-active-session-id') || ''}
+                userId={userData.id || ''}
+                userName={userData.name || 'User'}
+                isProvider={userData.role === 'provider' || userData.role === 'admin'}
+                onCallEnd={() => navigateToScreen("telehealth")}
+              />
+            </Suspense>
+          );
+
+        case "pre-call-setup":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen="telehealth" />}>
+              <PreCallSetup
+                onReady={() => navigateToScreen("video-call")}
+                onCancel={() => navigateToScreen("telehealth")}
+              />
+            </Suspense>
+          );
+
+        case "bcba-briefing":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen="telehealth" />}>
+              <BCBASessionBriefing
+                familyId={localStorage.getItem('aminy-active-family-id') || ''}
+                childName={userData.childName || 'Patient'}
+                parentName={userData.name || 'Parent'}
+                sessionType="bcba-45"
+                onStartSession={() => navigateToScreen("pre-call-setup")}
+              />
+            </Suspense>
+          );
+
+        case "provider-reviews":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen="marketplace" />}>
+              <ProviderReviews
+                providerId={localStorage.getItem('aminy-viewing-provider-id') || ''}
+                providerName={localStorage.getItem('aminy-viewing-provider-name') || 'Provider'}
+                reviews={[]}
+                stats={{ averageRating: 0, totalReviews: 0, ratingBreakdown: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 }, recommendRate: 0 }}
+              />
+            </Suspense>
+          );
+
+        case "referral-dashboard":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <ReferralDashboard
+                userId={userData.id || ''}
+                userName={userData.name || 'User'}
+              />
+            </Suspense>
+          );
+
+        case "mchat-screening":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <MCHATScreening
+                onComplete={(score, riskLevel) => {
+                  logger.info('M-CHAT screening complete', { score, riskLevel });
+                  navigateToScreen("dashboard");
+                }}
+                onBack={() => navigateToScreen("dashboard")}
+                childName={userData.childName || "your child"}
+              />
+            </Suspense>
+          );
+
+        case "account-settings":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <AccountSettingsPremium
+                onBack={() => navigateToScreen("settings")}
+                onLogout={handleLogout}
+                onNavigate={(screen) => navigateToScreen(screen as AppScreen)}
+                userTier={userData.tier}
+              />
+            </Suspense>
+          );
+
+        case "caregiver-timesheet":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <CaregiverTimesheet
+                onBack={() => navigateToScreen("caregivers")}
+                caregiverName={userData.parentName || "Caregiver"}
+              />
+            </Suspense>
+          );
+
+        case "parent-calm-mode":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <ParentCalmMode
+                isOpen={true}
+                fullScreen={true}
+                onClose={() => navigateToScreen("dashboard")}
+                onTalkToAminy={() => navigateToScreen("dashboard")}
+                parentName={userData.parentName || "Parent"}
+              />
+            </Suspense>
+          );
+
+        case "token-rewards":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <TokenRewardsBoard
+                onBack={() => navigateToScreen("junior")}
+                availableTokens={0}
+                onSpendTokens={(amount) => {
+                  logger.info('Tokens spent', { amount });
+                }}
+                childName={userData.childName || "your child"}
+              />
+            </Suspense>
+          );
+
+        case "memory-settings":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <MemorySettingsPage
+                userId={userData.id || ''}
+                onClose={() => navigateToScreen("settings")}
+              />
+            </Suspense>
+          );
+
+        case "caregiver-credentialing":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <CaregiverCredentialingWizard />
+            </Suspense>
+          );
+
+        case "clinical-templates":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <ProviderClinicalTemplates
+                patientId={localStorage.getItem('aminy-active-patient-id') || ''}
+                patientName={userData.childName || 'Patient'}
+              />
+            </Suspense>
+          );
+
+        case "daily-video-room":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen="telehealth" />}>
+              <DailyVideoRoom
+                roomUrl={localStorage.getItem('aminy-daily-room-url') || ''}
+              />
+            </Suspense>
+          );
+
+        case "multi-role-telehealth":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen="telehealth" />}>
+              <MultiRoleTelehealthRoom
+                onLeave={() => navigateToScreen("telehealth")}
+                role={
+                  (userData.role === 'provider' || userData.role === 'admin')
+                    ? 'bcba'
+                    : 'parent'
+                }
+                patientName={userData.childName || 'Patient'}
+              />
+            </Suspense>
+          );
+
+        case "parent-approval":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <ParentApprovalCard
+                suggestion={{
+                  id: '',
+                  type: 'routine_change',
+                  status: 'proposed' as const,
+                  createdAt: new Date().toISOString(),
+                  providerId: '',
+                  providerName: '',
+                  providerRole: '',
+                  childId: userData.childId || '',
+                  rationale: '',
+                  expectedOutcome: '',
+                  payload: {} as any,
+                }}
+                onAccept={() => navigateToScreen("dashboard")}
+                onReject={() => navigateToScreen("dashboard")}
+              />
+            </Suspense>
+          );
+
+        case "share-viewer":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <ShareViewer
+                token={new URLSearchParams(window.location.search).get('token') || ''}
+                onStartTrial={() => navigateToScreen("create-account")}
+              />
+            </Suspense>
+          );
+
+        case "video-call-room":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen="telehealth" />}>
+              <VideoCallRoom
+                sessionId={localStorage.getItem('aminy-active-session-id') || ''}
+                userId={userData.id || ''}
+                userName={userData.name || 'User'}
+                isProvider={userData.role === 'provider' || userData.role === 'admin'}
+                childName={userData.childName}
+                onCallEnd={() => navigateToScreen("telehealth")}
               />
             </Suspense>
           );
 
         default:
           return (
-            <Suspense fallback={<LoadingSkeleton />}>
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <SplashPage
                 onStartTrial={handleGetStarted}
                 onSignIn={handleLogin}
@@ -1826,73 +2819,30 @@ export default function App() {
       <AIProvider>
         <ConversationProvider>
           <ErrorBoundary>
-          <Suspense fallback={<LoadingSkeleton />}>
+          <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
             <SafetyBoundary>
               <DialogAccessibilityProvider>
                 <MobilePolishEnhancer>
                   <CLSOptimizer>
-                {/* Developer Mode - Access with Shift + D */}
+                {/* Developer Mode - Only in development builds (Shift + D) */}
+                {import.meta.env.DEV && (
                 <DeveloperModeHandler
-                  onNavigate={(screen, tab) => {
-                    if (screen === "splash") {
-                      navigateToScreen("splash");
-                    } else if (screen === "onboarding") {
-                      navigateToScreen("onboarding");
-                    } else if (screen === "dashboard") {
-                      navigateToScreen("dashboard", tab);
-                    } else if (screen === "benefits") {
-                      navigateToScreen("benefits");
-                    } else if (screen === "telehealth") {
-                      navigateToScreen("telehealth");
-                    } else if (screen === "caregivers") {
-                      navigateToScreen("caregivers");
-                    } else if (screen === "vault") {
-                      navigateToScreen("vault");
-                    } else if (screen === "junior") {
-                      navigateToScreen("junior");
-                    } else if (screen === "paywall") {
-                      navigateToScreen("paywall");
-                    } else if (screen === "settings") {
-                      navigateToScreen("settings");
-                    } else if (screen === "bcba-portal") {
-                      navigateToScreen("bcba-portal");
-                    } else if (screen === "launch-status") {
-                      navigateToScreen("launch-status");
-                    } else if (screen === "analytics") {
-                      navigateToScreen("analytics");
-                    } else if (screen === "phase2-menu") {
-                      navigateToScreen("phase2-menu");
-                    } else if (screen === "marketplace") {
-                      navigateToScreen("marketplace");
-                    } else if (screen === "provider-portal") {
-                      navigateToScreen("provider-portal");
-                    } else if (screen === "insight-report") {
-                      navigateToScreen("insight-report");
-                    } else if (screen === "outcomes") {
-                      navigateToScreen("outcomes");
-                    } else if (screen === "admin-portal") {
-                      navigateToScreen("admin-portal");
-                    } else if (screen === "provider-landing") {
-                      navigateToScreen("provider-landing");
-                    } else if (screen === "provider-apply") {
-                      navigateToScreen("provider-apply");
-                    } else if (screen === "medications") {
-                      navigateToScreen("medications");
-                    } else if (screen === "on-demand-telehealth") {
-                      navigateToScreen("on-demand-telehealth");
-                    }
+                  onNavigate={(screen) => {
+                    navigateToScreen(screen as AppScreen);
                   }}
                   onTierChange={(tier) => {
                     setUserData((prev) => ({
                       ...prev,
-                      tier,
+                      tier: tier as TierType,
                     }));
                     toast.success(
                       `Tier updated to ${tier.toUpperCase()}`,
                     );
                   }}
                 />
+                )}
 
+                <MotionConfig reducedMotion="user">
                 <div className="min-h-screen" style={{ backgroundColor: '#F5F5F5' }}>
                   {/* Skip links for keyboard navigation accessibility */}
                   <div className="skip-links">
@@ -1941,6 +2891,8 @@ export default function App() {
                         messagesLeft={messagesLeft}
                         onPaywallTrigger={handlePaywallTrigger}
                         position="bottom-right"
+                        isOpen={fabOpen}
+                        onOpenChange={setFabOpen}
                       />
                     </Suspense>
                   )}
@@ -1950,10 +2902,35 @@ export default function App() {
                     <Toaster />
                   </Suspense>
 
-                  {/* Cookie Consent Banner */}
+                  {/* Cookie Consent Banner — GDPR opt-in gates Sentry + GA */}
                   <Suspense fallback={null}>
-                    <CookieConsent />
+                    <CookieConsent
+                      onAccept={() => {
+                        import('./main').then(m => m.initTracking()).catch(() => {});
+                      }}
+                    />
                   </Suspense>
+
+                  {/* Push Notification Opt-In Prompt */}
+                  {showNotificationPrompt && (
+                    <Suspense fallback={null}>
+                      <NotificationPrompt
+                        variant="modal"
+                        childName={userData.childName || "your child"}
+                        onDismiss={() => setShowNotificationPrompt(false)}
+                        onEnable={() => {
+                          setShowNotificationPrompt(false);
+                          // Initialize daily check-in notifications after subscription
+                          const userId = userData.id || userData.userId || '';
+                          if (userId) {
+                            setupDailyCheckIns(userId, userData.childName || "your child").catch(
+                              (err) => console.error("Failed to setup daily check-ins:", err)
+                            );
+                          }
+                        }}
+                      />
+                    </Suspense>
+                  )}
 
                   {/* Urgent Help Modal */}
                   {showHelpModal && (
@@ -1966,29 +2943,7 @@ export default function App() {
                     </Suspense>
                   )}
 
-                  {/* Unload Mind Button - Shows on dashboard and feature screens */}
-                  {showFAB && (
-                    <Suspense fallback={null}>
-                      <UnloadMindButton
-                        onClick={() => setShowUnloadMindModal(true)}
-                      />
-                    </Suspense>
-                  )}
-
-                  {/* Unload Mind Modal */}
-                  {showUnloadMindModal && (
-                    <Suspense fallback={null}>
-                      <UnloadMindModal
-                        isOpen={showUnloadMindModal}
-                        onClose={() => setShowUnloadMindModal(false)}
-                        onTasksCreated={(count) => {
-                          toast.success(
-                            `Created ${count} task${count !== 1 ? 's' : ''} and set your top focus!`,
-                          );
-                        }}
-                      />
-                    </Suspense>
-                  )}
+                  {/* Unload Mind removed — AI is now center nav button */}
 
                   {/* Payment Confirmation Modal */}
                   {showPaymentConfirmation && (
@@ -2008,11 +2963,42 @@ export default function App() {
                   {/* Feedback Button - Always visible for user feedback */}
                   <FeedbackButton />
 
+                  {/* NPS Survey Modal — triggered after 7 days */}
+                  {showNPSSurvey && (
+                    <Suspense fallback={null}>
+                      <NPSSurveyModal
+                        isOpen={showNPSSurvey}
+                        onClose={() => {
+                          setShowNPSSurvey(false);
+                          try {
+                            localStorage.setItem('aminy-nps-last-shown', String(Date.now()));
+                          } catch { /* non-critical */ }
+                        }}
+                        userId={userData.id || userData.userId || ''}
+                        childName={userData.childName || 'your child'}
+                        trigger="day_7"
+                      />
+                    </Suspense>
+                  )}
+
+                  {/* Feedback Collector — available on demand */}
+                  {showFeedbackCollector && (
+                    <Suspense fallback={null}>
+                      <FeedbackCollector
+                        isOpen={showFeedbackCollector}
+                        onClose={() => setShowFeedbackCollector(false)}
+                        userId={userData.id || userData.userId || ''}
+                        context={currentScreen}
+                      />
+                    </Suspense>
+                  )}
+
                   {/* Keyboard Help Modal - Shows on F1 or Shift+? */}
                   <Suspense fallback={null}>
                     <KeyboardHelpModal />
                   </Suspense>
                 </div>
+                </MotionConfig>
               </CLSOptimizer>
             </MobilePolishEnhancer>
           </DialogAccessibilityProvider>

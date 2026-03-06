@@ -35,7 +35,7 @@ interface InsightNavigatorProps {
     childName: string;
   };
   userTier?: string;
-  connectorData?: any;
+  connectorData?: Record<string, unknown>;
   onPaywallTrigger?: () => void;
 }
 

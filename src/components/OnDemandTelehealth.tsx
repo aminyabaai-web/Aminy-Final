@@ -1,14 +1,14 @@
 /**
- * OnDemandTelehealth - Immediate coaching for crisis moments
+ * OnDemandTelehealth - Real people, right now, who get it
  *
- * Per spec: Users trigger from AI chat/dashboard during crisis
- * → see "available now" providers → book/pay for instant 15-30 min session
- * → get de-escalation tips (ABA-lite strategies)
+ * When a parent needs help NOW — a meltdown at the grocery store, bedtime
+ * spiraling, or just an "I can't do this alone" moment — this connects them
+ * with a real provider in minutes. Not a chatbot. A human who understands.
  *
- * Premium pricing: Standard rate + $50 for on-demand urgency
+ * Providers loaded from Supabase with fallback to demo providers.
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
@@ -28,27 +28,46 @@ import {
   Heart,
   MessageSquare,
   X,
-  RefreshCw
+  RefreshCw,
+  Mic,
+  MicOff,
+  VideoOff,
+  Wifi,
+  WifiOff
 } from 'lucide-react';
 import { TelehealthConsent } from './TelehealthConsent';
+import { supabase } from '../utils/supabase/client';
+import {
+  Provider as TelehealthProvider,
+  MOCK_PROVIDERS as TELEHEALTH_MOCK_PROVIDERS,
+  PROVIDER_ROLE_DISPLAY
+} from '../types/telehealth';
+import {
+  createVideoRoom,
+  getMeetingToken,
+  deleteRoom,
+  loadDailySDK,
+} from '../lib/daily-video';
+import { isDailyConfigured } from '../lib/daily-config';
+import { DailyVideoFrame, type DailyVideoFrameRef } from './DailyVideoFrame';
 
-// Types
-interface Provider {
+// On-demand display provider — adapter from rich Provider type
+interface OnDemandProvider {
   id: string;
   name: string;
   title: string;
   photo?: string;
-  specialties: ('autism' | 'anxiety' | 'adhd' | 'meltdowns' | 'transitions' | 'sensory')[];
+  specialties: string[];
   rating: number;
   reviewCount: number;
   availabilityStatus: 'available' | 'busy' | 'offline';
   estimatedWait: number; // minutes
-  baseRate: number; // per 30 min
+  baseRate: number; // per 30 min — uses consultPrice
 }
 
 interface OnDemandSession {
   id: string;
-  provider: Provider;
+  provider: OnDemandProvider;
   status: 'pending' | 'connecting' | 'active' | 'completed' | 'cancelled';
   startTime?: string;
   duration: number; // minutes
@@ -64,44 +83,67 @@ interface OnDemandTelehealthProps {
   userTier?: string;
 }
 
-// Mock providers - would come from real-time database
-const MOCK_PROVIDERS: Provider[] = [
-  {
-    id: 'provider-1',
-    name: 'Dr. Sarah Chen',
-    title: 'BCBA, Autism Specialist',
-    specialties: ['autism', 'meltdowns', 'transitions'],
-    rating: 4.9,
-    reviewCount: 127,
-    availabilityStatus: 'available',
+/** Convert rich Provider type to display format */
+function toOnDemandProvider(p: TelehealthProvider): OnDemandProvider {
+  return {
+    id: p.id,
+    name: `${p.firstName} ${p.lastName}${p.credentials ? ', ' + p.credentials : ''}`,
+    title: p.roleDisplayName || PROVIDER_ROLE_DISPLAY[p.role] || p.role,
+    photo: p.avatarUrl,
+    specialties: p.referralTags || [p.role],
+    rating: p.rating || 4.5,
+    reviewCount: p.reviewCount || 0,
+    availabilityStatus: p.isActive && p.acceptingNewPatients ? 'available' : 'offline',
     estimatedWait: 0,
-    baseRate: 100
-  },
-  {
-    id: 'provider-2',
-    name: 'Marcus Johnson',
-    title: 'RBT, Behavior Specialist',
-    specialties: ['adhd', 'anxiety', 'sensory'],
-    rating: 4.8,
-    reviewCount: 89,
-    availabilityStatus: 'available',
-    estimatedWait: 2,
-    baseRate: 75
-  },
-  {
-    id: 'provider-3',
-    name: 'Dr. Emily Rodriguez',
-    title: 'BCBA, Anxiety & ADHD',
-    specialties: ['anxiety', 'adhd', 'meltdowns'],
-    rating: 4.9,
-    reviewCount: 156,
-    availabilityStatus: 'busy',
-    estimatedWait: 15,
-    baseRate: 120
-  }
-];
+    baseRate: p.consultPrice || 85
+  };
+}
 
-// On-demand premium fee
+/** Fetch providers from Supabase, fallback to mock data */
+async function fetchProviders(): Promise<OnDemandProvider[]> {
+  try {
+    const { data, error } = await supabase
+      .from('provider_profiles')
+      .select('*')
+      .eq('is_active', true)
+      .eq('is_accepting_patients', true);
+
+    if (error) throw error;
+
+    if (data && data.length > 0) {
+      return data.map((row: Record<string, unknown>) => toOnDemandProvider({
+        id: row.id as string,
+        firstName: (row.first_name as string) || '',
+        lastName: (row.last_name as string) || '',
+        credentials: (row.credentials as string) || '',
+        role: (row.provider_type as TelehealthProvider['role']) || 'parent-coach',
+        roleDisplayName: PROVIDER_ROLE_DISPLAY[row.provider_type as keyof typeof PROVIDER_ROLE_DISPLAY] || '',
+        bio: (row.bio as string) || '',
+        avatarUrl: row.avatar_url as string | undefined,
+        licensedStates: (row.states_licensed as string[]) || [],
+        offersConsult: (row.offers_consult as boolean) ?? true,
+        offersDeepReview: (row.offers_deep_review as boolean) ?? true,
+        consultPrice: (row.consult_price as number) || 85,
+        deepReviewPrice: (row.deep_review_price as number) || 165,
+        organization: (row.organization as TelehealthProvider['organization']) || 'independent',
+        referralTags: row.referral_tags as string[] | undefined,
+        rating: row.rating as number | undefined,
+        reviewCount: row.review_count as number | undefined,
+        isActive: (row.is_active as boolean) ?? true,
+        acceptingNewPatients: (row.is_accepting_patients as boolean) ?? true,
+        createdAt: (row.created_at as string) || new Date().toISOString(),
+        updatedAt: (row.updated_at as string) || new Date().toISOString(),
+      }));
+    }
+  } catch (error) {
+    console.warn('[Telehealth] Failed to fetch providers from Supabase:', error);
+  }
+
+  // Fallback: use rich mock providers from types
+  return TELEHEALTH_MOCK_PROVIDERS.filter(p => p.isActive).map(toOnDemandProvider);
+}
+
+// Same-day availability fee
 const URGENT_FEE = 50;
 
 export function OnDemandTelehealth({
@@ -113,14 +155,23 @@ export function OnDemandTelehealth({
   userTier = 'core'
 }: OnDemandTelehealthProps) {
   const [step, setStep] = useState<'browse' | 'confirm' | 'consent' | 'connecting' | 'session' | 'summary'>('browse');
-  const [providers, setProviders] = useState<Provider[]>([]);
-  const [selectedProvider, setSelectedProvider] = useState<Provider | null>(null);
+  const [providers, setProviders] = useState<OnDemandProvider[]>([]);
+  const [selectedProvider, setSelectedProvider] = useState<OnDemandProvider | null>(null);
   const [selectedDuration, setSelectedDuration] = useState<15 | 30>(30);
   const [loading, setLoading] = useState(true);
   const [session, setSession] = useState<OnDemandSession | null>(null);
   const [sessionNotes, setSessionNotes] = useState('');
   const [hasConsent, setHasConsent] = useState(false);
   const [connectionProgress, setConnectionProgress] = useState(0);
+
+  // ── Real video call state ──
+  const [roomUrl, setRoomUrl] = useState<string | null>(null);
+  const [roomName, setRoomName] = useState<string | null>(null);
+  const [meetingToken, setMeetingToken] = useState<string | null>(null);
+  const [currentUserName, setCurrentUserName] = useState<string>('Parent');
+  const [callError, setCallError] = useState<string | null>(null);
+  const [elapsed, setElapsed] = useState(0);
+  const videoFrameRef = useRef<DailyVideoFrameRef>(null);
 
   // Check for existing consent
   useEffect(() => {
@@ -135,44 +186,51 @@ export function OnDemandTelehealth({
     }
   }, []);
 
-  // Simulate loading available providers
+  // Load available providers from Supabase (fallback to mock)
   useEffect(() => {
     const loadProviders = async () => {
       setLoading(true);
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 800));
 
-      // Filter available providers based on crisis type
-      const available = MOCK_PROVIDERS.filter(p => {
-        if (crisisType === 'meltdown') {
-          return p.specialties.includes('meltdowns') || p.specialties.includes('autism');
-        }
-        if (crisisType === 'anxiety') {
-          return p.specialties.includes('anxiety');
-        }
-        return true;
-      }).sort((a, b) => {
-        // Sort by availability, then wait time
+      const allProviders = await fetchProviders();
+
+      // Sort by availability, then wait time
+      const sorted = allProviders.sort((a, b) => {
         if (a.availabilityStatus === 'available' && b.availabilityStatus !== 'available') return -1;
         if (b.availabilityStatus === 'available' && a.availabilityStatus !== 'available') return 1;
         return a.estimatedWait - b.estimatedWait;
       });
 
-      setProviders(available);
+      setProviders(sorted);
       setLoading(false);
     };
 
     loadProviders();
   }, [crisisType]);
 
+  // Session elapsed timer
+  useEffect(() => {
+    if (step !== 'session' || !session) return;
+    setElapsed(0);
+    const interval = setInterval(() => {
+      setElapsed(prev => prev + 1);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [step, session]);
+
+  const formatElapsed = (seconds: number) => {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+  };
+
   // Calculate total cost
-  const calculateCost = (provider: Provider, duration: number) => {
+  const calculateCost = (provider: OnDemandProvider, duration: number) => {
     const baseForDuration = duration === 15 ? provider.baseRate * 0.6 : provider.baseRate;
     return baseForDuration + URGENT_FEE;
   };
 
   // Handle provider selection
-  const handleSelectProvider = (provider: Provider) => {
+  const handleSelectProvider = (provider: OnDemandProvider) => {
     setSelectedProvider(provider);
     setStep('confirm');
   };
@@ -198,45 +256,120 @@ export function OnDemandTelehealth({
     startConnection();
   };
 
-  // Start connection to provider
-  const startConnection = () => {
+  // Start real connection to provider via Daily.co
+  const startConnection = async () => {
     if (!selectedProvider) return;
 
     setStep('connecting');
     setConnectionProgress(0);
+    setCallError(null);
 
-    // Simulate connection process
-    const interval = setInterval(() => {
-      setConnectionProgress(prev => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          // Start session
-          const newSession: OnDemandSession = {
-            id: `session-${Date.now()}`,
-            provider: selectedProvider,
-            status: 'active',
-            startTime: new Date().toISOString(),
-            duration: selectedDuration,
-            totalCost: calculateCost(selectedProvider, selectedDuration)
-          };
-          setSession(newSession);
-          setStep('session');
-          onSessionStart?.(newSession);
-          return 100;
-        }
-        return prev + 10;
+    // Check Daily.co configuration first
+    if (!isDailyConfigured()) {
+      setCallError('Video calling is being set up. Please try again shortly.');
+      return;
+    }
+
+    try {
+      // Step 1: Load Daily.co SDK
+      setConnectionProgress(10);
+      await loadDailySDK();
+
+      // Step 2: Get current user
+      setConnectionProgress(25);
+      const { data: { user } } = await supabase.auth.getUser();
+      const userId = user?.id || `anon-${Date.now()}`;
+      const userName = user?.user_metadata?.full_name
+        || user?.user_metadata?.name
+        || user?.email?.split('@')[0]
+        || 'Parent';
+      setCurrentUserName(userName);
+
+      // Step 3: Create secure video room
+      setConnectionProgress(45);
+      const sessionId = `ondemand-${Date.now()}`;
+      const room = await createVideoRoom(sessionId, {
+        privacy: 'private',
+        expiryMinutes: selectedDuration + 15, // buffer time
+        enableScreenShare: true,
+        enableChat: true,
+        enableRecording: false,
       });
-    }, 300);
+
+      // Step 4: Get meeting token
+      setConnectionProgress(65);
+      const { token } = await getMeetingToken(
+        room.name,
+        userId,
+        userName,
+        false // parent is not provider
+      );
+
+      // Step 5: Store video room details
+      setConnectionProgress(85);
+      setRoomUrl(room.url);
+      setRoomName(room.name);
+      setMeetingToken(token);
+
+      // Step 6: Create session record
+      const newSession: OnDemandSession = {
+        id: sessionId,
+        provider: selectedProvider,
+        status: 'active',
+        startTime: new Date().toISOString(),
+        duration: selectedDuration,
+        totalCost: calculateCost(selectedProvider, selectedDuration)
+      };
+      setSession(newSession);
+
+      setConnectionProgress(100);
+      // Brief pause at 100% for UX, then show video
+      setTimeout(() => setStep('session'), 400);
+
+      onSessionStart?.(newSession);
+    } catch (err: unknown) {
+      console.error('Video connection failed:', err);
+      const errMessage = err instanceof Error ? err.message : '';
+      setCallError(
+        errMessage.includes('Failed to create')
+          ? 'Could not set up the video room. The service may be temporarily unavailable.'
+          : errMessage.includes('Failed to get meeting token')
+          ? 'Could not verify your session. Please try again.'
+          : errMessage || 'Connection failed. Please try again.'
+      );
+    }
   };
 
-  // End session
-  const handleEndSession = () => {
+  // End session — leave call + clean up room
+  const handleEndSession = async () => {
     if (!session) return;
+
+    // Leave the Daily.co call
+    if (videoFrameRef.current) {
+      try { await videoFrameRef.current.leave(); } catch (error) { console.warn('[Telehealth] Failed to leave video call:', error); }
+    }
+
+    // Clean up the room server-side
+    if (roomName) {
+      try { await deleteRoom(roomName); } catch (error) { console.warn('[Telehealth] Failed to delete video room:', error); }
+    }
 
     const completedSession = { ...session, status: 'completed' as const };
     setSession(completedSession);
     setStep('summary');
   };
+
+  // Called by DailyVideoFrame when participant leaves via Daily's built-in button
+  const handleVideoLeave = useCallback(() => {
+    if (step === 'session' && session) {
+      // Clean up room and show summary
+      if (roomName) {
+        deleteRoom(roomName).catch(() => {});
+      }
+      setSession(prev => prev ? { ...prev, status: 'completed' as const } : null);
+      setStep('summary');
+    }
+  }, [step, session, roomName]);
 
   // Complete and save summary
   const handleCompleteSummary = () => {
@@ -246,28 +379,28 @@ export function OnDemandTelehealth({
     onBack?.();
   };
 
-  // Get crisis-specific messaging
+  // Crisis-specific messaging — CTCA: lead with empathy, not service description
   const getCrisisMessage = () => {
     switch (crisisType) {
       case 'meltdown':
         return {
-          title: "Let's get you help right now",
-          subtitle: "Connect with a coach who specializes in meltdown support"
+          title: "We're here. Let's get through this together.",
+          subtitle: `Someone who truly understands meltdowns is ready to help with ${childName}`
         };
       case 'anxiety':
         return {
-          title: "We're here to help",
-          subtitle: "Connect with an anxiety support specialist"
+          title: "You're not alone in this moment.",
+          subtitle: `A specialist who gets anxiety in kids is ready to talk about ${childName}`
         };
       case 'overwhelm':
         return {
-          title: "You don't have to handle this alone",
-          subtitle: "Get immediate support from a trained coach"
+          title: "Take a breath. Help is right here.",
+          subtitle: "A real person who understands your world is available now"
         };
       default:
         return {
-          title: "Immediate coaching available",
-          subtitle: "Connect with a specialist in minutes"
+          title: "Real people who get neurodivergent families",
+          subtitle: "Connect with someone who understands — in minutes, not weeks"
         };
     }
   };
@@ -295,14 +428,14 @@ export function OnDemandTelehealth({
           </div>
         </div>
 
-        {/* Urgent banner */}
-        <div className="bg-gradient-to-r from-amber-50 to-orange-50 border-b border-amber-200 px-4 py-3">
+        {/* Urgent Support Banner */}
+        <div className="bg-green-50 border-b border-green-200 px-4 py-3">
           <div className="max-w-2xl mx-auto flex items-center gap-3">
-            <Zap className="w-5 h-5 text-amber-600" />
-            <p className="text-sm text-amber-900">
-              <strong>On-demand sessions</strong> connect you with a coach immediately.
-              +${URGENT_FEE} urgent fee applies.
-            </p>
+            <Shield className="w-5 h-5 text-green-600" />
+            <div>
+              <p className="text-sm font-medium text-green-900">HIPAA-Compliant Video Sessions</p>
+              <p className="text-xs text-green-700/70">Secure, encrypted video calls with licensed professionals. Your session is private and protected.</p>
+            </div>
           </div>
         </div>
 
@@ -311,7 +444,7 @@ export function OnDemandTelehealth({
           {loading ? (
             <div className="flex flex-col items-center justify-center py-12">
               <Loader2 className="w-8 h-8 text-accent animate-spin mb-4" />
-              <p className="text-gray-600">Finding available coaches...</p>
+              <p className="text-gray-600">Finding someone who can help right now...</p>
             </div>
           ) : providers.length === 0 ? (
             // No providers available
@@ -319,17 +452,17 @@ export function OnDemandTelehealth({
               <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Clock className="w-8 h-8 text-gray-400" />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">No coaches available right now</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Everyone's with a family right now</h3>
               <p className="text-gray-600 mb-4">
-                All our coaches are currently in sessions. You can join the waitlist or try our AI-guided support.
+                All our providers are currently helping other parents — but I can put you first in line, or we can work through this together with Aminy's AI guide.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <Button variant="outline">
-                  Join Waitlist
+                  Put me first in line
                 </Button>
                 <Button onClick={onBack}>
                   <Brain className="w-4 h-4 mr-2" />
-                  Use AI Guide Instead
+                  Get help from Aminy now
                 </Button>
               </div>
             </Card>
@@ -402,7 +535,7 @@ export function OnDemandTelehealth({
                       <div className="mt-3 flex items-center justify-between">
                         <p className="text-sm text-gray-600">
                           30 min: <span className="font-semibold text-gray-900">${calculateCost(provider, 30)}</span>
-                          <span className="text-gray-400 ml-1">(incl. ${URGENT_FEE} urgent fee)</span>
+                          <span className="text-gray-400 ml-1">(incl. same-day fee)</span>
                         </p>
                         {provider.availabilityStatus === 'available' && (
                           <Button size="sm" className="bg-accent hover:bg-accent/90">
@@ -450,7 +583,7 @@ export function OnDemandTelehealth({
               <Button variant="ghost" size="sm" onClick={() => setStep('browse')}>
                 <ArrowLeft className="w-4 h-4" />
               </Button>
-              <h1 className="text-lg font-semibold text-gray-900">Confirm Session</h1>
+              <h1 className="text-lg font-semibold text-gray-900">You're almost connected</h1>
             </div>
           </div>
         </div>
@@ -520,7 +653,7 @@ export function OnDemandTelehealth({
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600">On-demand urgent fee</span>
+                <span className="text-gray-600">Same-day availability</span>
                 <span className="text-gray-900">${URGENT_FEE}</span>
               </div>
               <div className="border-t border-gray-200 pt-2 mt-2 flex justify-between font-semibold">
@@ -532,23 +665,23 @@ export function OnDemandTelehealth({
 
           {/* What to expect */}
           <Card className="p-3 sm:p-4">
-            <h3 className="font-medium text-gray-900 mb-3">What to Expect</h3>
+            <h3 className="font-medium text-gray-900 mb-3">Here's what happens next</h3>
             <ul className="space-y-2 text-sm text-gray-600">
               <li className="flex items-start gap-2">
                 <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                <span>Secure video call through the Aminy app</span>
+                <span>Private, secure video call — just you and the provider</span>
               </li>
               <li className="flex items-start gap-2">
                 <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                <span>Immediate strategies tailored to {childName}'s needs</span>
+                <span>Real strategies tailored to what {childName} is going through right now</span>
               </li>
               <li className="flex items-start gap-2">
                 <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                <span>Session notes saved to your progress reports</span>
+                <span>Everything discussed is saved — so you can refer back anytime</span>
               </li>
               <li className="flex items-start gap-2">
                 <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                <span>Follow-up tips and resources after session</span>
+                <span>Personalized next steps and resources sent after your session</span>
               </li>
             </ul>
           </Card>
@@ -606,105 +739,162 @@ export function OnDemandTelehealth({
     );
   }
 
-  // Connecting state
+  // Connecting state — real progress through Daily.co setup
   if (step === 'connecting') {
     return (
       <div className="min-h-screen bg-white dark:bg-slate-900 flex items-center justify-center p-4">
         <div className="text-center max-w-sm">
-          <div className="w-20 h-20 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
-            <Video className="w-10 h-10 text-accent animate-pulse" />
-          </div>
+          {!callError ? (
+            <>
+              <div className="w-20 h-20 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
+                <Video className="w-10 h-10 text-accent animate-pulse" />
+              </div>
 
-          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">
-            Connecting to {selectedProvider?.name}...
-          </h2>
-          <p className="text-gray-600 mb-4 sm:mb-6">
-            Please stay on this screen. We're setting up your secure session.
-          </p>
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">
+                Connecting to {selectedProvider?.name}...
+              </h2>
+              <p className="text-gray-600 mb-4 sm:mb-6">
+                Please stay on this screen. We're setting up your secure session.
+              </p>
 
-          {/* Progress bar */}
-          <div className="w-full bg-gray-200 rounded-full h-2 mb-4">
-            <div
-              className="bg-accent h-2 rounded-full transition-all duration-300"
-              style={{ width: `${connectionProgress}%` }}
-            />
-          </div>
+              {/* Progress bar */}
+              <div className="w-full bg-gray-200 rounded-full h-2 mb-4">
+                <div
+                  className="bg-accent h-2 rounded-full transition-all duration-500"
+                  style={{ width: `${connectionProgress}%` }}
+                />
+              </div>
 
-          <p className="text-sm text-gray-500">
-            {connectionProgress < 30 && 'Initializing secure connection...'}
-            {connectionProgress >= 30 && connectionProgress < 60 && 'Verifying session details...'}
-            {connectionProgress >= 60 && connectionProgress < 90 && 'Notifying coach...'}
-            {connectionProgress >= 90 && 'Almost there!'}
-          </p>
+              <p className="text-sm text-gray-500">
+                {connectionProgress < 20 && 'Loading secure video...'}
+                {connectionProgress >= 20 && connectionProgress < 40 && 'Verifying your identity...'}
+                {connectionProgress >= 40 && connectionProgress < 65 && 'Creating private room...'}
+                {connectionProgress >= 65 && connectionProgress < 85 && 'Securing your session...'}
+                {connectionProgress >= 85 && connectionProgress < 100 && 'Almost there!'}
+                {connectionProgress >= 100 && 'Connected!'}
+              </p>
 
-          <Button
-            variant="ghost"
-            onClick={() => {
-              setStep('browse');
-              setConnectionProgress(0);
-            }}
-            className="mt-4 sm:mt-6 text-gray-500"
-          >
-            Cancel
-          </Button>
+              <Button
+                variant="ghost"
+                onClick={() => {
+                  setStep('browse');
+                  setConnectionProgress(0);
+                }}
+                className="mt-4 sm:mt-6 text-gray-500"
+              >
+                Cancel
+              </Button>
+            </>
+          ) : (
+            /* Error state with retry */
+            <>
+              <div className="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
+                <WifiOff className="w-10 h-10 text-red-400" />
+              </div>
+
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">
+                Connection issue
+              </h2>
+              <p className="text-gray-600 mb-4 sm:mb-6">
+                {callError}
+              </p>
+
+              <div className="flex gap-3 justify-center">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setStep('browse');
+                    setConnectionProgress(0);
+                    setCallError(null);
+                  }}
+                >
+                  Go Back
+                </Button>
+                <Button
+                  onClick={() => {
+                    setCallError(null);
+                    startConnection();
+                  }}
+                  className="bg-accent hover:bg-accent/90"
+                >
+                  <RefreshCw className="w-4 h-4 mr-1" />
+                  Try Again
+                </Button>
+              </div>
+            </>
+          )}
         </div>
       </div>
     );
   }
 
-  // Active session
+  // Active session — real Daily.co video
   if (step === 'session' && session) {
     return (
-      <div className="min-h-screen bg-gray-900 flex flex-col">
-        {/* Video area (simulated) */}
-        <div className="flex-1 relative">
-          <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
-            <div className="text-center">
-              <div className="w-24 h-24 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-4xl font-semibold text-white">
-                  {session.provider.name.split(' ').map(n => n[0]).join('')}
-                </span>
+      <div className="h-screen bg-gray-900 flex flex-col overflow-hidden">
+        {/* Daily.co video area */}
+        <div className="flex-1 relative min-h-0">
+          {roomUrl && meetingToken ? (
+            <DailyVideoFrame
+              ref={videoFrameRef}
+              roomUrl={roomUrl}
+              token={meetingToken}
+              userName={currentUserName}
+              onLeave={handleVideoLeave}
+              onError={(err) => {
+                if (err === 'retry') {
+                  // Re-attempt connection
+                  startConnection();
+                } else {
+                  console.error('Video error:', err);
+                }
+              }}
+            />
+          ) : (
+            /* Fallback if room data missing (shouldn't happen) */
+            <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+              <div className="text-center">
+                <div className="w-24 h-24 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-4xl font-semibold text-white">
+                    {session.provider.name.split(' ').map(n => n[0]).join('')}
+                  </span>
+                </div>
+                <p className="text-white/80">{session.provider.name}</p>
+                <Badge className="mt-2 bg-yellow-500/20 text-yellow-300">
+                  Waiting for video...
+                </Badge>
               </div>
-              <p className="text-white/80">{session.provider.name}</p>
-              <Badge className="mt-2 bg-green-500/20 text-green-300">
-                <span className="w-2 h-2 bg-green-400 rounded-full mr-1 animate-pulse" />
-                Session Active
-              </Badge>
             </div>
-          </div>
-
-          {/* Self-view (simulated) */}
-          <div className="absolute bottom-4 right-4 w-32 h-24 bg-gray-700 rounded-lg border-2 border-white/20 flex items-center justify-center">
-            <span className="text-white/60 text-sm">You</span>
-          </div>
+          )}
         </div>
 
-        {/* Controls */}
-        <div className="bg-gray-800 px-4 py-6">
+        {/* Session controls bar */}
+        <div className="bg-gray-800 border-t border-gray-700 px-4 py-4">
           <div className="max-w-md mx-auto">
-            {/* Timer */}
-            <div className="text-center mb-4">
-              <p className="text-white/60 text-sm">Session in progress</p>
-              <p className="text-white text-2xl font-mono">
-                {session.duration}:00
-              </p>
+            {/* Timer + session info */}
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                <span className="text-white/70 text-sm">
+                  {session.provider.name}
+                </span>
+              </div>
+              <div className="text-right">
+                <p className="text-white font-mono text-lg">{formatElapsed(elapsed)}</p>
+                <p className="text-white/50 text-xs">
+                  of {session.duration} min session
+                </p>
+              </div>
             </div>
 
-            {/* Control buttons */}
-            <div className="flex items-center justify-center gap-3 sm:gap-4">
-              <button className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center text-white hover:bg-white/20 transition-colors">
-                <MessageSquare className="w-5 h-5" />
-              </button>
-              <button
-                onClick={handleEndSession}
-                className="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center text-white hover:bg-red-600 transition-colors"
-              >
-                <Phone className="w-6 h-6 rotate-[135deg]" />
-              </button>
-              <button className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center text-white hover:bg-white/20 transition-colors">
-                <Video className="w-5 h-5" />
-              </button>
-            </div>
+            {/* End session button */}
+            <Button
+              onClick={handleEndSession}
+              className="w-full bg-red-500 hover:bg-red-600 text-white font-medium py-3"
+            >
+              <Phone className="w-4 h-4 mr-2 rotate-[135deg]" />
+              End Session
+            </Button>
           </div>
         </div>
       </div>

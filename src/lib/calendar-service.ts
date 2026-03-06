@@ -233,7 +233,7 @@ export function createCalendarEventFromAppointment(
   const endTime = new Date(appointment.endTime);
 
   const description = [
-    `${visitConfig.name} with ${appointment.providerName}`,
+    `${visitConfig.displayName} with ${appointment.providerName}`,
     '',
     appointment.reasonForVisit ? `Topic: ${appointment.reasonForVisit}` : '',
     '',
@@ -243,7 +243,7 @@ export function createCalendarEventFromAppointment(
   ].filter(Boolean).join('\n');
 
   return {
-    title: `Aminy: ${visitConfig.name} with ${appointment.providerName}`,
+    title: `Aminy: ${visitConfig.displayName} with ${appointment.providerName}`,
     description,
     startTime,
     endTime,

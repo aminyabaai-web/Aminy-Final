@@ -61,8 +61,6 @@ export default defineConfig({
   
   // Server configuration for dev
   server: {
-    // Enable HTTP/2
-    https: false,
     // Optimize HMR
     hmr: {
       overlay: true

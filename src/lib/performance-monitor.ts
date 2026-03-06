@@ -30,7 +30,7 @@ export interface PerformanceSnapshot {
   timestamp: number;
   url: string;
   userAgent: string;
-  connection?: any;
+  connection?: { effectiveType?: string; downlink?: number; rtt?: number; saveData?: boolean };
   deviceMemory?: number;
   hardwareConcurrency?: number;
   coreWebVitals: CoreWebVitals;
@@ -114,8 +114,8 @@ class PerformanceMonitor {
       this.createObserver(['layout-shift'], (entries) => {
         let cls = 0;
         for (const entry of entries as PerformanceEntry[]) {
-          if (!(entry as any).hadRecentInput) {
-            cls += (entry as any).value;
+          if (!(entry as PerformanceEntry & { hadRecentInput?: boolean }).hadRecentInput) {
+            cls += (entry as PerformanceEntry & { value?: number }).value || 0;
           }
         }
         this.metricsCollected.CLS = cls;
@@ -494,8 +494,8 @@ export function usePerformanceMonitor() {
 }
 
 // Utility Functions
-export function withPerformanceTracking<T extends any[]>(
-  fn: (...args: T) => any,
+export function withPerformanceTracking<T extends unknown[]>(
+  fn: (...args: T) => unknown,
   featureName: string
 ) {
   return (...args: T) => {

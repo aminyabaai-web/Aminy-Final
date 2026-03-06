@@ -54,7 +54,7 @@ interface RoutineAdherenceTrackerProps {
 }
 
 export function RoutineAdherenceTracker({
-  routines,
+  routines = [],
   onRoutineComplete,
   onAddRoutine
 }: RoutineAdherenceTrackerProps) {

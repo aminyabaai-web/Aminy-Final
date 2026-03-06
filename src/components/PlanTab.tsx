@@ -4,6 +4,7 @@ import { Button } from './ui/button';
 import { Progress } from './ui/progress';
 import { Badge } from './ui/badge';
 import { Separator } from './ui/separator';
+import { dataService } from '../lib/supabase-data';
 import { 
   ClipboardList,
   Target,
@@ -56,8 +57,8 @@ interface PlanTabProps {
     childName: string;
   };
   userTier?: string | null;
-  connectorData?: any;
-  publishEvent?: (eventName: string, payload: any) => void;
+  connectorData?: Record<string, unknown>;
+  publishEvent?: (eventName: string, payload: Record<string, unknown>) => void;
   onConnectorNavigation?: (destination: string) => void;
 }
 
@@ -231,6 +232,45 @@ export function PlanTab({ userData, userTier, connectorData, publishEvent, onCon
       ]
     }
   ]);
+
+  // Load real treatment goals from Supabase (replace demo goals)
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadGoals() {
+      try {
+        const realGoals = await dataService.getTreatmentGoals();
+        if (cancelled || realGoals.length === 0) return;
+
+        // Map domain → category
+        const domainMap: Record<string, Goal['category']> = {
+          communication: 'speech', speech: 'speech', language: 'speech',
+          social: 'social', 'social skills': 'social',
+          sensory: 'sensory', 'sensory processing': 'sensory', behavior: 'sensory',
+          routines: 'routines', 'self-care': 'routines', 'daily living': 'routines',
+          academic: 'routines',
+        };
+
+        const mapped: Goal[] = realGoals.map(g => ({
+          id: g.id,
+          title: g.title,
+          description: g.description || '',
+          category: domainMap[(g.domain || '').toLowerCase()] || 'routines',
+          timeline: g.status === 'mastered' ? 'short' : 'medium',
+          priority: g.trend_direction === 'declining' ? 'high' : g.trend_direction === 'improving' ? 'medium' : 'low',
+          progress: g.current,
+          milestones: [], // No milestones table yet
+        }));
+
+        if (!cancelled) setGoals(mapped);
+      } catch (err) {
+        console.warn('[PlanTab] Could not load real goals, keeping defaults:', err);
+      }
+    }
+
+    loadGoals();
+    return () => { cancelled = true; };
+  }, []);
 
   const getTimeOfDayIcon = (timeOfDay: string) => {
     switch (timeOfDay) {

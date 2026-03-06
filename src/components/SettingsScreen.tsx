@@ -45,7 +45,10 @@ import {
   Fingerprint,
   ShieldCheck,
   AlertTriangle,
-  Info
+  Info,
+  CalendarDays,
+  RefreshCw,
+  Unplug
 } from 'lucide-react';
 import { ThemeSelector } from '../lib/theme-provider';
 import { Button } from './ui/button';
@@ -58,6 +61,22 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { toast } from 'sonner';
 import { supabase } from '../utils/supabase/client';
 import { TierType, getTierDisplayName } from '../lib/tier-utils';
+import { createPortalSession } from '../lib/stripe-service';
+import {
+  isPushSupported,
+  getNotificationPermission,
+  subscribeToPush,
+  unsubscribeFromPush,
+} from '../lib/push-notifications';
+import {
+  isCalendarConnected,
+  connectGoogleCalendar,
+  disconnectGoogleCalendar,
+  triggerFullSync,
+  toggleAutoSync,
+  getCalendarIntegration,
+  type CalendarIntegration,
+} from '../lib/google-calendar-sync';
 
 interface SettingsScreenProps {
   onBack?: () => void;
@@ -137,6 +156,12 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
     cancelAtPeriodEnd: false
   });
 
+  // Calendar integration
+  const [calendarConnected, setCalendarConnected] = useState(false);
+  const [calendarIntegration, setCalendarIntegration] = useState<CalendarIntegration | null>(null);
+  const [calendarSyncing, setCalendarSyncing] = useState(false);
+  const [calendarConnecting, setCalendarConnecting] = useState(false);
+
   // Load settings
   useEffect(() => {
     loadSettings();
@@ -169,7 +194,15 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
 
       // Check MFA status
       const { data: factors } = await supabase.auth.mfa.listFactors();
-      setMfaEnabled(factors?.totp?.length > 0 || false);
+      setMfaEnabled((factors?.totp?.length ?? 0) > 0 || false);
+
+      // Check calendar integration status
+      const connected = await isCalendarConnected(user.id);
+      setCalendarConnected(connected);
+      if (connected) {
+        const integration = await getCalendarIntegration(user.id);
+        setCalendarIntegration(integration);
+      }
 
     } catch (error) {
       console.error('Error loading settings:', error);
@@ -235,8 +268,8 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
       toast.success('Password updated successfully');
       setShowPasswordDialog(false);
       setPasswordForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
-    } catch (error: any) {
-      setPasswordError(error.message || 'Failed to update password');
+    } catch (error: unknown) {
+      setPasswordError(error instanceof Error ? error.message : 'Failed to update password');
     } finally {
       setIsSaving(false);
     }
@@ -254,8 +287,8 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
       toast.success('Two-factor authentication enabled');
       setMfaEnabled(true);
       setShowMfaSetup(false);
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to enable 2FA');
+    } catch (error: unknown) {
+      toast.error(error instanceof Error ? error.message : 'Failed to enable 2FA');
     }
   };
 
@@ -270,8 +303,73 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
 
       setMfaEnabled(false);
       toast.success('Two-factor authentication disabled');
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to disable 2FA');
+    } catch (error: unknown) {
+      toast.error(error instanceof Error ? error.message : 'Failed to disable 2FA');
+    }
+  };
+
+  // Calendar integration handlers
+  const handleConnectCalendar = async () => {
+    setCalendarConnecting(true);
+    try {
+      await connectGoogleCalendar();
+      // User will be redirected to Google OAuth
+    } catch (error: unknown) {
+      console.error('Failed to connect calendar:', error);
+      toast.error(error instanceof Error ? error.message : 'Failed to connect Google Calendar');
+      setCalendarConnecting(false);
+    }
+  };
+
+  const handleDisconnectCalendar = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      await disconnectGoogleCalendar(user.id);
+      setCalendarConnected(false);
+      setCalendarIntegration(null);
+      toast.success('Google Calendar disconnected');
+    } catch (error: unknown) {
+      console.error('Failed to disconnect calendar:', error);
+      toast.error('Failed to disconnect Google Calendar');
+    }
+  };
+
+  const handleSyncNow = async () => {
+    setCalendarSyncing(true);
+    try {
+      const result = await triggerFullSync();
+      if (result.errors.length > 0) {
+        toast.error(`Sync completed with ${result.errors.length} error(s)`);
+      } else {
+        toast.success(`Synced: ${result.pushed} pushed, ${result.pulled} events pulled`);
+      }
+      // Refresh integration data to update last_sync_at
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const integration = await getCalendarIntegration(user.id);
+        setCalendarIntegration(integration);
+      }
+    } catch (error: unknown) {
+      console.error('Sync failed:', error);
+      toast.error('Calendar sync failed');
+    } finally {
+      setCalendarSyncing(false);
+    }
+  };
+
+  const handleToggleAutoSync = async (enabled: boolean) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      await toggleAutoSync(user.id, enabled);
+      setCalendarIntegration(prev => prev ? { ...prev, sync_enabled: enabled } : null);
+      toast.success(enabled ? 'Auto-sync enabled' : 'Auto-sync disabled');
+    } catch (error: unknown) {
+      console.error('Failed to toggle auto-sync:', error);
+      toast.error('Failed to update sync settings');
     }
   };
 
@@ -356,9 +454,30 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
     }
   };
 
-  const handleManageSubscription = () => {
-    // Open Stripe Customer Portal or navigate to subscription page
-    onNavigate?.('paywall');
+  const handleManageSubscription = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        // Not logged in — show paywall instead
+        onNavigate?.('paywall');
+        return;
+      }
+      if (subscription.tier === 'free') {
+        // Free users go to paywall to upgrade
+        onNavigate?.('paywall');
+        return;
+      }
+      // Paying users get Stripe Customer Portal
+      toast.loading('Opening billing portal...');
+      const { url } = await createPortalSession(user.id);
+      window.location.href = url;
+    } catch (error) {
+      console.error('Portal error:', error);
+      toast.dismiss();
+      toast.error('Could not open billing portal. Please try again.');
+      // Fallback to paywall
+      onNavigate?.('paywall');
+    }
   };
 
   return (
@@ -446,14 +565,39 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                       <Smartphone className="w-4 h-4 text-muted-foreground" />
                       <div>
                         <p className="font-medium dark:text-white">Push Notifications</p>
-                        <p className="text-sm text-muted-foreground">Get alerts on your device</p>
+                        <p className="text-sm text-muted-foreground">
+                          {!isPushSupported()
+                            ? 'Not supported in this browser'
+                            : getNotificationPermission() === 'denied'
+                              ? 'Blocked — enable in browser settings'
+                              : 'Get alerts on your device'}
+                        </p>
                       </div>
                     </div>
                     <Switch
                       checked={notifications.pushEnabled}
-                      onCheckedChange={(checked) => {
-                        const newSettings = { ...notifications, pushEnabled: checked };
-                        saveNotificationSettings(newSettings);
+                      disabled={!isPushSupported() || getNotificationPermission() === 'denied'}
+                      onCheckedChange={async (checked) => {
+                        try {
+                          const { data: { user } } = await supabase.auth.getUser();
+                          const userId = user?.id || '';
+                          if (checked) {
+                            // Subscribe to push via Web Push API
+                            const sub = await subscribeToPush(userId);
+                            if (!sub) {
+                              toast.error('Could not enable push notifications. Check browser permissions.');
+                              return;
+                            }
+                          } else {
+                            // Unsubscribe from push
+                            await unsubscribeFromPush(userId);
+                          }
+                          const newSettings = { ...notifications, pushEnabled: checked };
+                          saveNotificationSettings(newSettings);
+                        } catch (err) {
+                          console.error('Push toggle error:', err);
+                          toast.error('Failed to update push notifications');
+                        }
                       }}
                     />
                   </div>
@@ -623,6 +767,146 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                         Your account is protected with two-factor authentication
                       </p>
                     </div>
+                  )}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </Card>
+
+        {/* Connected Calendars Section */}
+        <Card className="overflow-hidden">
+          <button
+            onClick={() => setActiveSection(activeSection === 'calendars' ? null : 'calendars')}
+            className="w-full p-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
+          >
+            <div className="flex items-center gap-3">
+              <CalendarDays className="w-5 h-5 text-teal-500" />
+              <div className="text-left">
+                <h3 className="font-semibold dark:text-white">Connected Calendars</h3>
+                <p className="text-sm text-muted-foreground">
+                  {calendarConnected ? 'Google Calendar connected' : 'Sync appointments with your calendar'}
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              {calendarConnected && (
+                <Badge className="bg-green-100 text-green-700">Connected</Badge>
+              )}
+              <ChevronRight className={`w-5 h-5 text-muted-foreground transition-transform ${activeSection === 'calendars' ? 'rotate-90' : ''}`} />
+            </div>
+          </button>
+
+          <AnimatePresence>
+            {activeSection === 'calendars' && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                className="border-t border-gray-200 dark:border-slate-700"
+              >
+                <div className="p-4 space-y-4">
+                  {!calendarConnected ? (
+                    /* Not Connected State */
+                    <div className="text-center py-4">
+                      <div className="w-12 h-12 bg-teal-50 dark:bg-teal-900/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <CalendarDays className="w-6 h-6 text-teal-600" />
+                      </div>
+                      <h4 className="font-medium dark:text-white mb-1">Connect Google Calendar</h4>
+                      <p className="text-sm text-muted-foreground mb-4 max-w-xs mx-auto">
+                        Automatically sync your Aminy appointments to Google Calendar and see your full schedule in one place.
+                      </p>
+                      <Button
+                        onClick={handleConnectCalendar}
+                        disabled={calendarConnecting}
+                        className="bg-teal-600 hover:bg-teal-700 text-white"
+                      >
+                        {calendarConnecting ? (
+                          <>
+                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                            Connecting...
+                          </>
+                        ) : (
+                          <>
+                            <CalendarDays className="w-4 h-4 mr-2" />
+                            Connect Google Calendar
+                          </>
+                        )}
+                      </Button>
+                      <p className="text-xs text-muted-foreground mt-3">
+                        We only access your calendar to create and read events. We never modify or delete your existing events.
+                      </p>
+                    </div>
+                  ) : (
+                    /* Connected State */
+                    <>
+                      {/* Connection Info */}
+                      <div className="flex items-center gap-3 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                        <div className="w-8 h-8 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center shadow-sm">
+                          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
+                            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
+                            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                          </svg>
+                        </div>
+                        <div className="flex-1">
+                          <p className="font-medium text-green-800 dark:text-green-300 text-sm">Google Calendar</p>
+                          <p className="text-xs text-green-600 dark:text-green-400">
+                            {calendarIntegration?.last_sync_at
+                              ? `Last synced ${new Date(calendarIntegration.last_sync_at).toLocaleString()}`
+                              : 'Connected — not yet synced'}
+                          </p>
+                        </div>
+                        <ShieldCheck className="w-4 h-4 text-green-600" />
+                      </div>
+
+                      {/* Auto-Sync Toggle */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <RefreshCw className="w-4 h-4 text-muted-foreground" />
+                          <div>
+                            <p className="font-medium dark:text-white">Auto-sync</p>
+                            <p className="text-sm text-muted-foreground">
+                              Automatically sync new appointments
+                            </p>
+                          </div>
+                        </div>
+                        <Switch
+                          checked={calendarIntegration?.sync_enabled ?? true}
+                          onCheckedChange={handleToggleAutoSync}
+                        />
+                      </div>
+
+                      {/* Sync Now Button */}
+                      <Button
+                        variant="outline"
+                        className="w-full"
+                        onClick={handleSyncNow}
+                        disabled={calendarSyncing}
+                      >
+                        {calendarSyncing ? (
+                          <>
+                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                            Syncing...
+                          </>
+                        ) : (
+                          <>
+                            <RefreshCw className="w-4 h-4 mr-2" />
+                            Sync Now
+                          </>
+                        )}
+                      </Button>
+
+                      {/* Disconnect */}
+                      <button
+                        onClick={handleDisconnectCalendar}
+                        className="w-full flex items-center justify-center gap-2 p-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                      >
+                        <Unplug className="w-4 h-4" />
+                        Disconnect Google Calendar
+                      </button>
+                    </>
                   )}
                 </div>
               </motion.div>

@@ -213,7 +213,7 @@ export function GAD7Screener({
   };
 
   const calculateResult = async (finalAnswers: (number | null)[]) => {
-    const totalScore = finalAnswers.reduce((sum, val) => sum + (val || 0), 0);
+    const totalScore = finalAnswers.reduce<number>((sum, val) => sum + (val || 0), 0);
     const severity = getSeverity(totalScore);
 
     const response: GAD7Response = {

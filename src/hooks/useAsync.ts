@@ -9,7 +9,7 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 
 type AsyncStatus = 'idle' | 'loading' | 'success' | 'error';
 
-interface AsyncState<T> {
+export interface AsyncState<T> {
   status: AsyncStatus;
   data: T | null;
   error: Error | null;
@@ -19,7 +19,7 @@ interface AsyncState<T> {
   isError: boolean;
 }
 
-interface UseAsyncOptions<T> {
+export interface UseAsyncOptions<T> {
   /** Initial data value */
   initialData?: T;
   /** Callback on success */
@@ -32,7 +32,7 @@ interface UseAsyncOptions<T> {
   runOnMount?: boolean;
 }
 
-interface UseAsyncReturn<T, Args extends unknown[]> extends AsyncState<T> {
+export interface UseAsyncReturn<T, Args extends unknown[]> extends AsyncState<T> {
   /** Execute the async function */
   run: (...args: Args) => Promise<T | undefined>;
   /** Reset to initial state */
@@ -251,7 +251,7 @@ export function useDebouncedAsync<T, Args extends unknown[] = []>(
   delay: number = 300,
   options: UseAsyncOptions<T> = {}
 ) {
-  const timeoutRef = useRef<NodeJS.Timeout>();
+  const timeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
   const async = useAsync(asyncFunction, options);
 
   const debouncedRun = useCallback((...args: Args) => {

@@ -29,10 +29,10 @@ import {
 } from 'lucide-react';
 import {
   Provider,
+  ProviderRole,
   GetCareIntake,
   VisitType,
   TimeSlot,
-  VISIT_TYPES,
   PROVIDER_ROLE_DISPLAY
 } from '../../types/telehealth';
 import {
@@ -88,11 +88,29 @@ export function BookVisitScreen({
 
         if (data && data.length > 0) {
           // Transform database providers to Provider type
-          const providers: Provider[] = data.map((p: any) => ({
+          interface ProviderRow {
+            id: string;
+            first_name?: string;
+            last_name?: string;
+            name?: string;
+            provider_type?: string;
+            credentials?: string;
+            bio?: string;
+            states_licensed?: string[];
+            session_rate?: number;
+            rating?: string;
+            review_count?: number;
+            is_active?: boolean;
+            is_accepting_patients?: boolean;
+            created_at?: string;
+            updated_at?: string;
+            photo_url?: string;
+          }
+          const providers: Provider[] = (data as ProviderRow[]).map((p) => ({
             id: p.id,
             firstName: p.first_name || p.name?.split(' ')[0] || 'Provider',
             lastName: p.last_name || p.name?.split(' ').slice(1).join(' ') || '',
-            role: p.provider_type || 'bcba',
+            role: (p.provider_type || 'bcba') as ProviderRole,
             roleDisplayName: PROVIDER_ROLE_DISPLAY[p.provider_type as keyof typeof PROVIDER_ROLE_DISPLAY] || 'Provider',
             credentials: p.credentials || '',
             bio: p.bio || '',
@@ -102,7 +120,7 @@ export function BookVisitScreen({
             consultPrice: p.session_rate || 99,
             deepReviewPrice: (p.session_rate || 99) * 2,
             organization: 'independent' as const,
-            rating: parseFloat(p.rating) || 4.5,
+            rating: parseFloat(p.rating || '4.5') || 4.5,
             reviewCount: p.review_count || 0,
             isActive: p.is_active ?? true,
             acceptingNewPatients: p.is_accepting_patients ?? true,
@@ -113,7 +131,7 @@ export function BookVisitScreen({
           setAllProviders(providers);
         }
       } catch (err) {
-        console.error('Error loading providers:', err);
+        console.error('Error loading providers:', err instanceof Error ? err.message : err);
       } finally {
         setIsLoadingProviders(false);
       }
@@ -147,80 +165,6 @@ export function BookVisitScreen({
       return provider.isActive && provider.acceptingNewPatients;
     });
   }, [allProviders, intake.userState, visitType]);
-
-  // =========================================================================
-  // 72-HOUR TELEHEALTH-FIRST ROUTING RULE
-  // =========================================================================
-  // Business Rule: "Help finding local care" ONLY appears when there are ZERO
-  // eligible Aminy telehealth providers licensed in the user's state with
-  // availability within the next 72 hours.
-  // =========================================================================
-
-  // Generate ALL slots for next 72 hours for the 72-hour check
-  const allSlotsNext72Hours = useMemo(() => {
-    const slots: TimeSlot[] = [];
-    const now = new Date();
-    const threeDaysFromNow = new Date(now.getTime() + 72 * 60 * 60 * 1000);
-
-    // Generate slots for all providers (not just filtered by state - we check state in the function)
-    allProviders.forEach(provider => {
-      const slotDuration = VISIT_TYPES[visitType].duration;
-
-      // Generate slots for next 3 days
-      for (let dayOffset = 0; dayOffset < 3; dayOffset++) {
-        const currentDate = new Date(now);
-        currentDate.setDate(now.getDate() + dayOffset);
-        currentDate.setHours(0, 0, 0, 0);
-
-        // Generate 4-8 random slots per day for demo
-        const slotCount = Math.floor(Math.random() * 5) + 4;
-        const usedHours = new Set<number>();
-
-        for (let i = 0; i < slotCount; i++) {
-          let hour: number;
-          do {
-            hour = 9 + Math.floor(Math.random() * 8); // 9am-5pm
-          } while (usedHours.has(hour));
-          usedHours.add(hour);
-
-          const startTime = new Date(currentDate);
-          startTime.setHours(hour, Math.random() > 0.5 ? 0 : 30, 0, 0);
-
-          // Skip slots in the past
-          if (startTime <= now) continue;
-          // Skip slots beyond 72 hours
-          if (startTime > threeDaysFromNow) continue;
-
-          const endTime = new Date(startTime);
-          endTime.setMinutes(endTime.getMinutes() + slotDuration);
-
-          slots.push({
-            id: `${provider.id}-${startTime.toISOString()}`,
-            providerId: provider.id,
-            startTime: startTime.toISOString(),
-            endTime: endTime.toISOString(),
-            visitType,
-            status: 'available'
-          });
-        }
-      }
-    });
-
-    return slots;
-  }, [allProviders, visitType]);
-
-  // Check 72-hour availability
-  const telehealthAvailability = useMemo<TelehealthAvailabilityCheck>(() => {
-    return checkTelehealthAvailability72Hours(
-      allProviders,
-      intake.userState,
-      allSlotsNext72Hours,
-      visitType
-    );
-  }, [allProviders, intake.userState, allSlotsNext72Hours, visitType]);
-
-  // CRITICAL: Only show local care options when NO telehealth available within 72 hours
-  const shouldShowLocalCareOptions = telehealthAvailability.shouldShowLocalCare;
 
   // Load real slots from provider availability
   const [providerSlots, setProviderSlots] = useState<Record<string, TimeSlot[]>>({});
@@ -277,6 +221,60 @@ export function BookVisitScreen({
 
     loadSlots();
   }, [availableProviders, selectedDate, visitType]);
+
+  // =========================================================================
+  // 72-HOUR TELEHEALTH-FIRST ROUTING RULE
+  // =========================================================================
+  // Business Rule: "Help finding local care" ONLY appears when there are ZERO
+  // eligible Aminy telehealth providers licensed in the user's state with
+  // availability within the next 72 hours.
+  // =========================================================================
+
+  // Use real loaded slots for the 72-hour availability check
+  // instead of randomly generated mock data
+  const allSlotsNext72Hours = useMemo(() => {
+    const slots: TimeSlot[] = [];
+    const now = new Date();
+    const threeDaysFromNow = new Date(now.getTime() + 72 * 60 * 60 * 1000);
+
+    // Aggregate all loaded provider slots
+    Object.values(providerSlots).forEach(ps => {
+      ps.forEach(slot => {
+        const slotTime = new Date(slot.startTime);
+        if (slotTime > now && slotTime < threeDaysFromNow) {
+          slots.push(slot);
+        }
+      });
+    });
+
+    // If we have active providers but slots haven't loaded yet,
+    // don't prematurely trigger "no availability" — return a placeholder
+    if (availableProviders.length > 0 && slots.length === 0 && isLoadingSlots) {
+      return availableProviders.map(p => ({
+        id: `placeholder-${p.id}`,
+        providerId: p.id,
+        startTime: new Date(now.getTime() + 3600000).toISOString(),
+        endTime: new Date(now.getTime() + 5400000).toISOString(),
+        visitType,
+        status: 'available' as const,
+      }));
+    }
+
+    return slots;
+  }, [providerSlots, availableProviders, isLoadingSlots, visitType]);
+
+  // Check 72-hour availability
+  const telehealthAvailability = useMemo<TelehealthAvailabilityCheck>(() => {
+    return checkTelehealthAvailability72Hours(
+      allProviders,
+      intake.userState,
+      allSlotsNext72Hours,
+      visitType
+    );
+  }, [allProviders, intake.userState, allSlotsNext72Hours, visitType]);
+
+  // CRITICAL: Only show local care options when NO telehealth available within 72 hours
+  const shouldShowLocalCareOptions = telehealthAvailability.shouldShowLocalCare;
 
   const formatDate = (date: Date) => {
     const today = new Date();

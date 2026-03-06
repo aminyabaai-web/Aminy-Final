@@ -25,6 +25,7 @@ import {
 } from '../lib/tier-utils';
 import { createCheckoutSession, isStripeConfigured } from '../lib/stripe-service';
 import { supabase } from '../utils/supabase/client';
+import { addBreadcrumb, captureError } from '../lib/sentry';
 
 interface PaywallScreenProps {
   onSubscribe: (tier: TierType) => void;
@@ -100,6 +101,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
     }
 
     setIsLoading(tierId);
+    addBreadcrumb('payment', `Checkout started: ${tierId}`, { tier: tierId, billing: billingPeriod });
 
     try {
       // Get current user
@@ -129,9 +131,12 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
 
       // Redirect to Stripe Checkout
       window.location.href = url;
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Payment error:', error);
-      toast.error(error.message || 'Something went wrong. Please try again.');
+      const err = error instanceof Error ? error : new Error('Payment checkout failed');
+      captureError(err, { tier: tierId, billing: billingPeriod });
+      addBreadcrumb('payment', `Checkout failed: ${err.message}`, { tier: tierId });
+      toast.error(err.message || 'Something went wrong. Please try again.');
       setIsLoading(null);
     }
   };

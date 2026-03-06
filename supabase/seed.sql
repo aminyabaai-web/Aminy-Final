@@ -138,9 +138,9 @@ BEGIN
   IF current_setting('app.environment', true) = 'development' OR current_setting('app.environment', true) IS NULL THEN
     INSERT INTO profiles (id, email, full_name, role, tier, onboarding_completed)
     VALUES
-      ('00000000-0000-0000-0000-000000000001', 'admin@aminy.app', 'Test Admin', 'admin', 'proplus', true),
-      ('00000000-0000-0000-0000-000000000002', 'provider@aminy.app', 'Test Provider', 'provider', 'pro', true),
-      ('00000000-0000-0000-0000-000000000003', 'parent@aminy.app', 'Test Parent', 'parent', 'core', true)
+      ('00000000-0000-0000-0000-000000000001', 'admin@aminy.ai', 'Test Admin', 'admin', 'proplus', true),
+      ('00000000-0000-0000-0000-000000000002', 'provider@aminy.ai', 'Test Provider', 'provider', 'pro', true),
+      ('00000000-0000-0000-0000-000000000003', 'parent@aminy.ai', 'Test Parent', 'parent', 'core', true)
     ON CONFLICT (id) DO NOTHING;
 
     RAISE NOTICE 'Test profiles created for development';

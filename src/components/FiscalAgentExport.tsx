@@ -312,11 +312,11 @@ export function FiscalAgentExport({
 
     const entry: ServiceEntry = {
       id: `entry-${Date.now()}`,
-      date: newEntry.date,
-      serviceCode: newEntry.serviceCode,
+      date: newEntry.date!,
+      serviceCode: newEntry.serviceCode || '',
       serviceName: service.name,
-      startTime: newEntry.startTime,
-      endTime: newEntry.endTime,
+      startTime: newEntry.startTime!,
+      endTime: newEntry.endTime!,
       units,
       rate: service.rate,
       notes: newEntry.notes,

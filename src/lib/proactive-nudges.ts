@@ -5,6 +5,7 @@
 
 import { CONTENT } from './content';
 import { useAminyStore } from './store';
+import { supabase } from '../utils/supabase/client';
 
 export interface Nudge {
   id: string;
@@ -84,7 +85,7 @@ class ProactiveNudgeManager {
   /**
    * Check conditions and generate appropriate nudges
    */
-  private checkConditions() {
+  private async checkConditions() {
     const now = new Date();
     const hour = now.getHours();
     const dayOfWeek = now.getDay();
@@ -236,6 +237,135 @@ class ProactiveNudgeManager {
       });
     }
 
+    // 7. ABC incident-based suggestions — reference recent logged behaviors
+    // Query Supabase for recent ABC entries and generate contextual nudges
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString();
+        const { data: recentEntries } = await supabase
+          .from('abc_entries')
+          .select('behavior_category, antecedent_category, occurred_at, setting, intensity')
+          .eq('user_id', user.id)
+          .gte('occurred_at', oneWeekAgo)
+          .order('occurred_at', { ascending: false })
+          .limit(20);
+
+        if (recentEntries && recentEntries.length > 0) {
+          // Analyze patterns in recent incidents
+          const behaviorCounts: Record<string, number> = {};
+          const antecedentCounts: Record<string, number> = {};
+          let transitionIncidents = 0;
+          let highIntensityCount = 0;
+
+          for (const entry of recentEntries) {
+            if (entry.behavior_category) {
+              behaviorCounts[entry.behavior_category] = (behaviorCounts[entry.behavior_category] || 0) + 1;
+            }
+            if (entry.antecedent_category) {
+              antecedentCounts[entry.antecedent_category] = (antecedentCounts[entry.antecedent_category] || 0) + 1;
+            }
+            // Detect transition-related incidents
+            const antecedent = (entry.antecedent_category || '').toLowerCase();
+            if (antecedent.includes('transition') || antecedent.includes('change') || antecedent.includes('switch')) {
+              transitionIncidents++;
+            }
+            if (entry.intensity && entry.intensity >= 4) {
+              highIntensityCount++;
+            }
+          }
+
+          // Transition-related tantrums — suggest visual schedule
+          if (transitionIncidents >= 2 && !this.hasActiveNudge('incident-transition-schedule')) {
+            newNudges.push({
+              id: 'incident-transition-schedule',
+              type: 'suggestion',
+              priority: 'high',
+              message: `I noticed ${transitionIncidents} transition-related incidents this week. A visual transition schedule could help — would you like to create one?`,
+              actionLabel: 'Create visual schedule',
+              onAction: () => {
+                useAminyStore.getState().setActiveTab('jr');
+              },
+              dismissible: true,
+              expiresAt: new Date(now.getTime() + 24 * 60 * 60 * 1000),
+            });
+          }
+
+          // Frequent tantrums/meltdowns — suggest calming strategies
+          const tantrumCount = (behaviorCounts['tantrum'] || 0) + (behaviorCounts['meltdown'] || 0) + (behaviorCounts['aggression'] || 0);
+          if (tantrumCount >= 3 && !this.hasActiveNudge('incident-calming-strategy')) {
+            newNudges.push({
+              id: 'incident-calming-strategy',
+              type: 'suggestion',
+              priority: 'high',
+              message: `There have been ${tantrumCount} challenging behavior incidents this week. Let's explore some calming strategies together.`,
+              actionLabel: 'Calming strategies',
+              onAction: () => {
+                useAminyStore.getState().setShowUnloadMindModal(true);
+              },
+              dismissible: true,
+              expiresAt: new Date(now.getTime() + 24 * 60 * 60 * 1000),
+            });
+          }
+
+          // High-intensity incidents — suggest professional support
+          if (highIntensityCount >= 3 && !this.hasActiveNudge('incident-professional-support')) {
+            newNudges.push({
+              id: 'incident-professional-support',
+              type: 'suggestion',
+              priority: 'high',
+              message: `I've noticed several high-intensity incidents this week. It might help to talk through strategies with a provider.`,
+              actionLabel: 'Find a provider',
+              onAction: () => {
+                useAminyStore.getState().setActiveTab('hub');
+              },
+              dismissible: true,
+              expiresAt: new Date(now.getTime() + 48 * 60 * 60 * 1000),
+            });
+          }
+
+          // Demand-avoidance patterns — suggest collaborative approaches
+          const demandAvoidance = (antecedentCounts['demand'] || 0) + (antecedentCounts['request'] || 0) + (antecedentCounts['task'] || 0);
+          if (demandAvoidance >= 3 && !this.hasActiveNudge('incident-demand-avoidance')) {
+            newNudges.push({
+              id: 'incident-demand-avoidance',
+              type: 'suggestion',
+              priority: 'medium',
+              message: `I see a pattern with task-related triggers. Collaborative problem-solving or offering choices might help reduce resistance.`,
+              actionLabel: 'Ask Aminy for tips',
+              onAction: () => {
+                useAminyStore.getState().setShowUnloadMindModal(true);
+              },
+              dismissible: true,
+              expiresAt: new Date(now.getTime() + 24 * 60 * 60 * 1000),
+            });
+          }
+
+          // Sensory-related incidents — suggest sensory tools
+          const sensoryAntecedents = (antecedentCounts['sensory'] || 0) + (antecedentCounts['noise'] || 0) + (antecedentCounts['environment'] || 0);
+          if (sensoryAntecedents >= 2 && !this.hasActiveNudge('incident-sensory-tools')) {
+            newNudges.push({
+              id: 'incident-sensory-tools',
+              type: 'suggestion',
+              priority: 'medium',
+              message: `Sensory triggers came up ${sensoryAntecedents} times this week. A sensory toolkit or quiet space might make a big difference.`,
+              actionLabel: 'Explore sensory tools',
+              onAction: () => {
+                useAminyStore.getState().setActiveTab('jr');
+              },
+              dismissible: true,
+              expiresAt: new Date(now.getTime() + 24 * 60 * 60 * 1000),
+            });
+          }
+        }
+      }
+    } catch (error) {
+      // Non-critical: ABC query failure should not break nudge system
+      if (typeof window !== 'undefined' && import.meta.env?.DEV) {
+        console.warn('[ProactiveNudges] ABC incident query failed:', error);
+      }
+    }
+
     // Add new nudges (filter out dismissed ones)
     newNudges.forEach(nudge => {
       if (!this.dismissedNudges.has(nudge.id)) {
@@ -339,7 +469,7 @@ export function useProactiveNudges() {
 
 // Dev tools
 if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
-  (window as any).aminyNudges = {
+  (window as unknown as Record<string, unknown>).aminyNudges = {
     check: () => proactiveNudges.checkNow(),
     getActive: () => proactiveNudges.getActiveNudge(),
     getAll: () => proactiveNudges.getAllNudges(),

@@ -22,14 +22,60 @@ interface BottomNavigationProps {
   activeTab: string;
   onNavigate: (tabId: string) => void;
   userTier?: string | null;
+  userRole?: 'parent' | 'provider' | 'admin';
   navigate?: (destination: string) => void;
 }
 
-export function BottomNavigation({ activeTab, onNavigate, userTier, navigate }: BottomNavigationProps) {
+export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = 'parent', navigate }: BottomNavigationProps) {
   const [showMoreMenu, setShowMoreMenu] = useState(false);
 
-  // One Medical inspired: 5 tabs with AI in center
-  const tabs = [
+  const isProvider = userRole === 'provider' || userRole === 'admin';
+
+  // Role-based primary tabs
+  // Parents: Home, Messages, Aminy (center), Calm Tools, More
+  // Providers: Dashboard, Patients, Aminy (center), Notes, More
+  const tabs = isProvider ? [
+    {
+      id: 'home',
+      label: 'Dashboard',
+      icon: Home,
+      ariaLabel: 'Dashboard - Your practice overview',
+      enabled: true,
+      isCenter: false
+    },
+    {
+      id: 'messages',
+      label: 'Patients',
+      icon: Users,
+      ariaLabel: 'Patients - Your caseload',
+      enabled: true,
+      isCenter: false
+    },
+    {
+      id: 'ask-aminy',
+      label: 'Aminy',
+      icon: Sparkles,
+      ariaLabel: 'Aminy - Clinical AI assistant',
+      enabled: true,
+      isCenter: true
+    },
+    {
+      id: 'plan',
+      label: 'Notes',
+      icon: ClipboardList,
+      ariaLabel: 'Notes - Clinical documentation',
+      enabled: true,
+      isCenter: false
+    },
+    {
+      id: 'more',
+      label: 'More',
+      icon: MoreHorizontal,
+      ariaLabel: 'More - Additional tools',
+      enabled: true,
+      isCenter: false
+    }
+  ] : [
     {
       id: 'home',
       label: 'Home',
@@ -50,15 +96,15 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, navigate }: 
       id: 'ask-aminy',
       label: 'Aminy',
       icon: Sparkles,
-      ariaLabel: 'Ask Aminy - Your AI companion',
+      ariaLabel: 'Aminy - Your AI companion',
       enabled: true,
-      isCenter: true // Center position with prominent styling
+      isCenter: true
     },
     {
-      id: 'plan',
-      label: 'Plan',
-      icon: ClipboardList,
-      ariaLabel: 'Plan - Your child\'s care plan',
+      id: 'calm-tools',
+      label: 'Calm',
+      icon: Sparkles,
+      ariaLabel: 'Calm Corner - Sensory tools for your child',
       enabled: true,
       isCenter: false
     },
@@ -72,12 +118,58 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, navigate }: 
     }
   ];
 
-  const moreItems = [
+  // Role-based "More" menu items
+  // Parents see: family-focused features (Routines, Log, Telehealth, Crisis, Settings)
+  // Providers see: clinical tools (Analytics, Reports, Billing, Schedule, Settings)
+  const moreItems = isProvider ? [
+    {
+      id: 'provider-analytics',
+      label: 'Analytics',
+      icon: BarChart3,
+      description: 'Practice metrics and outcomes'
+    },
     {
       id: 'reports',
       label: 'Reports',
-      icon: BarChart3,
-      description: 'Progress tracking and outcomes'
+      icon: ClipboardList,
+      description: 'Clinical reports and exports'
+    },
+    {
+      id: 'telehealth',
+      label: 'Schedule',
+      icon: Users,
+      description: 'Session scheduling'
+    },
+    {
+      id: 'benefits',
+      label: 'Billing',
+      icon: Shield,
+      description: 'CPT codes and superbills'
+    },
+    {
+      id: 'settings',
+      label: 'Settings',
+      icon: Settings,
+      description: 'Practice preferences'
+    },
+    {
+      id: 'profile',
+      label: 'Profile',
+      icon: User,
+      description: 'Account settings'
+    }
+  ] : [
+    {
+      id: 'incident-log',
+      label: 'Log Incident',
+      icon: ClipboardList,
+      description: 'Track behaviors and triggers'
+    },
+    {
+      id: 'telehealth',
+      label: 'Get Care',
+      icon: Users,
+      description: 'Book a session with an expert'
     },
     {
       id: 'document-vault',
@@ -86,16 +178,10 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, navigate }: 
       description: 'Your digital medical binder'
     },
     {
-      id: 'care',
-      label: 'Coaching',
-      icon: Users,
-      description: 'Professional coaching sessions'
-    },
-    {
-      id: 'telehealth',
-      label: 'Telehealth',
-      icon: Users,
-      description: 'Video sessions and appointments'
+      id: 'crisis-resources',
+      label: 'Crisis Help',
+      icon: Shield,
+      description: 'Emergency contacts and calming'
     },
     {
       id: 'benefits',
@@ -103,13 +189,6 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, navigate }: 
       icon: Shield,
       description: 'Insurance and benefits navigator'
     },
-    // Jr Mode paused for now
-    // {
-    //   id: 'junior',
-    //   label: 'Jr Mode',
-    //   icon: Sparkles,
-    //   description: 'Kid mode activities and games'
-    // },
     {
       id: 'settings',
       label: 'Settings',
@@ -139,8 +218,9 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, navigate }: 
         <div className="grid grid-cols-5 gap-1">
           {tabs.map((tab) => {
             const Icon = tab.icon;
+            const moreTabIds = moreItems.map(item => item.id);
             const isActive = activeTab === tab.id ||
-              (tab.id === 'more' && ['benefits', 'telehealth', 'settings', 'profile', 'reports', 'document-vault', 'care'].includes(activeTab));
+              (tab.id === 'more' && moreTabIds.includes(activeTab));
             const isDisabled = !tab.enabled;
 
             // Center AI button gets special treatment

@@ -101,7 +101,7 @@ export function AskAminyHomeCard({
       contextRichness,
     });
     
-    onAskAminyClick();
+    onAskAminyClick?.();
   };
 
   return (
@@ -216,7 +216,7 @@ export function AskAminyHomeCard({
             )}
             onClick={(e) => {
               e.stopPropagation();
-              onAskAminyClick();
+              onAskAminyClick?.();
             }}
           >
             <Sparkles className="w-5 h-5 mr-2" />

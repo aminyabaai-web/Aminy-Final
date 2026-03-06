@@ -632,7 +632,7 @@ export function BrandGuideComponent() {
                       Build My Calm Plan
                     </Button>
                     <Button variant="outline">
-                      Ask Aminy 💬
+                      Aminy 💬
                     </Button>
                     <Button variant="outline">
                       See How It Works

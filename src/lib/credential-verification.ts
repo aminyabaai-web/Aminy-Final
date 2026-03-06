@@ -43,7 +43,7 @@ export interface Credential {
   verifiedAt?: string;
   verificationSource?: string;
   documentUrl?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface VerificationResult {
@@ -55,7 +55,7 @@ export interface VerificationResult {
     status?: string;
     expirationDate?: string;
     specializations?: string[];
-    disciplinaryActions?: any[];
+    disciplinaryActions?: { type: string; date?: string; description?: string }[];
   };
   error?: string;
   source: string;
@@ -181,7 +181,7 @@ export async function verifyNPI(npiNumber: string): Promise<VerificationResult> 
         name: basic.name || `${basic.first_name} ${basic.last_name}`,
         credentialNumber: provider.number,
         status: basic.status || 'Active',
-        specializations: taxonomies.map((t: any) => t.desc),
+        specializations: taxonomies.map((t: { desc: string }) => t.desc),
       },
       source: 'npi_registry',
       verifiedAt: new Date().toISOString(),
@@ -344,7 +344,7 @@ export async function verifyProvider(
       case 'bacb':
         result = await verifyBACBCredential(
           credential.credentialNumber!,
-          credential.metadata?.lastName || ''
+          (credential.metadata?.lastName as string) || ''
         );
         break;
 
@@ -355,15 +355,15 @@ export async function verifyProvider(
       case 'state_license':
         result = await verifyStateLicense(
           credential.state!,
-          credential.metadata?.licenseType || providerType,
+          (credential.metadata?.licenseType as string) || providerType,
           credential.credentialNumber!,
-          credential.metadata?.lastName || ''
+          (credential.metadata?.lastName as string) || ''
         );
         break;
 
       case 'insurance_panel':
         result = await verifyInsurancePanel(
-          credential.metadata?.npi || '',
+          (credential.metadata?.npi as string) || '',
           credential.issuingAuthority!
         );
         break;

@@ -105,7 +105,7 @@ export async function isProvider(): Promise<boolean> {
 /**
  * Get provider profile for current user (if they're a provider)
  */
-export async function getProviderProfile(): Promise<any | null> {
+export async function getProviderProfile(): Promise<Record<string, unknown> | null> {
   try {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return null;
@@ -322,7 +322,7 @@ async function createProviderFromApplication(
       })
       .eq('id', userId);
 
-    console.log('[AuthRoles] Provider profile created:', provider.id);
+    if (import.meta.env.DEV) console.log('[AuthRoles] Provider profile created:', provider.id);
   } catch (error) {
     console.error('[AuthRoles] Error in createProviderFromApplication:', error);
   }

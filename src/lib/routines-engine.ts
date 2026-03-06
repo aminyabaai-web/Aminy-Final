@@ -132,7 +132,7 @@ export async function generateAIRoutine(params: GenerateRoutineParams): Promise<
     period,
     name: aiRoutine.name || getDefaultRoutineName(period),
     description: aiRoutine.description,
-    steps: aiRoutine.steps.map((step: any, index: number) => ({
+    steps: aiRoutine.steps.map((step: { title: string; description?: string; duration?: number; isOptional?: boolean; skillArea?: string; promptLevel?: string }, index: number) => ({
       id: `step-${Date.now()}-${index}`,
       title: step.title,
       description: step.description,
@@ -159,7 +159,7 @@ function buildRoutinePrompt(
   period: RoutinePeriod,
   goals: ABAGoal[],
   challenges?: string[],
-  preferences?: any
+  preferences?: Record<string, unknown>
 ): string {
   const goalDescriptions = goals.map(g => `- ${g.title}: ${g.description}`).join('\n');
   const challengeList = challenges?.join(', ') || 'none specified';
@@ -262,12 +262,12 @@ function getDefaultRoutineName(period: RoutinePeriod): string {
   return names[period];
 }
 
-function getDefaultTime(period: RoutinePeriod, preferences?: any): string {
+function getDefaultTime(period: RoutinePeriod, preferences?: Record<string, unknown>): string {
   const defaults: Record<RoutinePeriod, string> = {
-    morning: preferences?.wakeTime || '07:00',
+    morning: (preferences?.wakeTime as string) || '07:00',
     afternoon: '15:30',
     evening: '18:00',
-    bedtime: preferences?.bedTime ? subtractMinutes(preferences.bedTime, 45) : '20:00',
+    bedtime: preferences?.bedTime ? subtractMinutes(preferences.bedTime as string, 45) : '20:00',
   };
   return defaults[period];
 }
@@ -501,7 +501,7 @@ export async function completeStep(
     throw new Error('Completion not found');
   }
 
-  const steps = (completion.daily_routines as any)?.steps as RoutineStep[] || [];
+  const steps = (completion.daily_routines as { steps?: RoutineStep[] })?.steps || [];
   const stepIndex = steps.findIndex(s => s.id === stepId);
 
   if (stepIndex !== -1) {
@@ -546,7 +546,7 @@ export async function skipStep(completionId: string, stepId: string, reason?: st
 
   if (!completion) return;
 
-  const steps = (completion.daily_routines as any)?.steps as RoutineStep[] || [];
+  const steps = (completion.daily_routines as { steps?: RoutineStep[] })?.steps || [];
   const stepIndex = steps.findIndex(s => s.id === stepId);
 
   if (stepIndex !== -1) {
@@ -685,44 +685,44 @@ export async function getAdherenceStats(
 // Helper Functions
 // ============================================================================
 
-function mapDbRoutine(data: any): DailyRoutine {
+function mapDbRoutine(data: Record<string, unknown>): DailyRoutine {
   return {
-    id: data.id,
-    userId: data.user_id,
-    childId: data.child_id,
-    period: data.period,
-    name: data.name,
-    description: data.description,
-    steps: data.steps || [],
-    scheduledTime: data.scheduled_time,
-    estimatedDuration: data.estimated_duration,
-    isAiGenerated: data.is_ai_generated,
-    linkedGoalIds: data.linked_goal_ids || [],
-    difficulty: data.difficulty,
-    isActive: data.is_active,
-    daysOfWeek: data.days_of_week || [0, 1, 2, 3, 4, 5, 6],
-    createdAt: data.created_at,
-    updatedAt: data.updated_at,
+    id: data.id as string,
+    userId: data.user_id as string,
+    childId: data.child_id as string,
+    period: data.period as RoutinePeriod,
+    name: data.name as string,
+    description: data.description as string | undefined,
+    steps: (data.steps || []) as RoutineStep[],
+    scheduledTime: data.scheduled_time as string,
+    estimatedDuration: data.estimated_duration as number,
+    isAiGenerated: data.is_ai_generated as boolean,
+    linkedGoalIds: (data.linked_goal_ids || []) as string[],
+    difficulty: data.difficulty as DailyRoutine['difficulty'],
+    isActive: data.is_active as boolean,
+    daysOfWeek: (data.days_of_week || [0, 1, 2, 3, 4, 5, 6]) as number[],
+    createdAt: data.created_at as string,
+    updatedAt: data.updated_at as string,
   };
 }
 
-function mapDbCompletion(data: any): RoutineCompletion {
+function mapDbCompletion(data: Record<string, unknown>): RoutineCompletion {
   return {
-    id: data.id,
-    routineId: data.routine_id,
-    userId: data.user_id,
-    childId: data.child_id,
-    scheduledDate: data.scheduled_date,
-    startedAt: data.started_at,
-    completedAt: data.completed_at,
-    status: data.status,
-    stepsCompleted: data.steps_completed,
-    totalSteps: data.total_steps,
-    adherenceScore: data.adherence_score,
-    notes: data.notes,
-    moodBefore: data.mood_before,
-    moodAfter: data.mood_after,
-    challengesNoted: data.challenges_noted,
+    id: data.id as string,
+    routineId: data.routine_id as string,
+    userId: data.user_id as string,
+    childId: data.child_id as string,
+    scheduledDate: data.scheduled_date as string,
+    startedAt: data.started_at as string | undefined,
+    completedAt: data.completed_at as string | undefined,
+    status: data.status as RoutineCompletion['status'],
+    stepsCompleted: data.steps_completed as number,
+    totalSteps: data.total_steps as number,
+    adherenceScore: data.adherence_score as number,
+    notes: data.notes as string | undefined,
+    moodBefore: data.mood_before as RoutineCompletion['moodBefore'],
+    moodAfter: data.mood_after as RoutineCompletion['moodAfter'],
+    challengesNoted: data.challenges_noted as string[] | undefined,
   };
 }
 

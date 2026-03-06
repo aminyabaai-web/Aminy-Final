@@ -74,7 +74,7 @@ export function ShareInsight({
 
   const shareText = prepareInsightForSharing(insight, childName);
   const emoji = getCategoryEmoji(category);
-  const shareUrl = 'https://aminy.app';
+  const shareUrl = 'https://aminy.ai';
 
   const handleCopy = useCallback(async () => {
     try {
@@ -273,7 +273,7 @@ export function ShareInsight({
                     <Heart className="w-4 h-4 text-pink-300" />
                     <span className="text-xs text-white/70">Shared with love</span>
                   </div>
-                  <span className="text-xs font-medium">aminy.app</span>
+                  <span className="text-xs font-medium">aminy.ai</span>
                 </div>
               </div>
 

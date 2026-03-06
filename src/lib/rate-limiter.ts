@@ -83,7 +83,7 @@ class MemoryStore {
 
   destroy(): void {
     if (this.cleanupInterval) {
-      clearInterval(this.cleanupInterval);
+      clearInterval(this.cleanupInterval as ReturnType<typeof setInterval>);
     }
     this.store.clear();
   }

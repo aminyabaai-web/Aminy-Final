@@ -221,7 +221,7 @@ export function MedicationTracker({ childId, childName, onClose }: MedicationTra
         ];
 
         demoMeds.forEach(med => {
-          (med.times || []).forEach(time => {
+          (med.times || []).forEach((time: string) => {
             const isPast = time < currentTime;
             demoLogs.push({
               id: `${med.id}-${time}`,

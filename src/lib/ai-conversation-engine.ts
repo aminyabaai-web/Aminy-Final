@@ -86,7 +86,8 @@ export interface ConversationMessage {
     module?: string;
     action?: string;
     mood?: string;
-    contextPayload?: any;
+    contextPayload?: Record<string, unknown>;
+    attachments?: Array<{ type: string; name: string; url?: string }>;
   };
 }
 
@@ -123,7 +124,7 @@ export interface ConversationContext {
     name: string;
     age: number;
     concerns: string[];
-    goals: any[];
+    goals: { id?: string; description: string; area?: string; progress?: number }[];
   };
   weeklyProgress?: {
     sessionsCompleted: number;
@@ -131,8 +132,8 @@ export interface ConversationContext {
     cuesUsed: string[];
   };
   parentMood?: 'calm' | 'stressed' | 'frustrated' | 'hopeful' | 'overwhelmed';
-  vaultDocuments?: any[];
-  dailyPlan?: any;
+  vaultDocuments?: { id: string; title: string; type: string; date: string; summary?: string }[];
+  dailyPlan?: { todayActivities?: { title: string; completed: boolean }[]; challenges?: string[] };
 }
 
 /**
@@ -244,8 +245,8 @@ export async function loadConversationHistory(userId: string): Promise<Conversat
     const messages = data.messages || [];
 
     // Transform to ConversationMessage format
-    return messages.map((msg: any) => ({
-      role: msg.role,
+    return messages.map((msg: { role: string; content: string; created_at?: string; timestamp?: string; metadata?: ConversationMessage['metadata'] }) => ({
+      role: msg.role as ConversationMessage['role'],
       content: msg.content,
       timestamp: msg.created_at || msg.timestamp || new Date().toISOString(),
       metadata: msg.metadata,
@@ -338,7 +339,7 @@ export async function generateAIResponse(
   options?: StreamingOptions
 ): Promise<string> {
   try {
-    const userId = store.getState().userId;
+    const userId = store.getState().user?.id;
     if (!userId) throw new Error('User not authenticated');
 
     // Build context-rich system prompt
@@ -513,8 +514,8 @@ Your core personality:
   }
 
   // Gentle conversion logic
-  const subscription = store.getState().subscription;
-  const hasActiveTrial = subscription?.status === 'active' || subscription?.status === 'trialing';
+  const userTier = store.getState().user?.tier;
+  const hasActiveTrial = userTier === 'core' || userTier === 'complete';
   
   if (!hasActiveTrial && context.module !== 'paywall') {
     prompt += `\n\n[CONVERSION OPPORTUNITY] If the conversation flows naturally and rapport is established, you can gently invite them to try the 7-day free trial. Use warm, no-pressure language:

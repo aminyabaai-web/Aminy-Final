@@ -35,7 +35,8 @@ import {
   Save,
   Loader2,
   BarChart3,
-  ArrowLeft
+  ArrowLeft,
+  Info
 } from 'lucide-react';
 import { supabase } from '../utils/supabase/client';
 
@@ -422,6 +423,16 @@ export function ABCDataCollection({
           </div>
         </div>
       </header>
+
+      {/* Clinical Disclaimer */}
+      <div className="max-w-4xl mx-auto px-4 pt-3">
+        <div className="flex items-center gap-2 p-2 bg-amber-50 border border-amber-200 rounded-lg text-xs">
+          <Info className="w-4 h-4 text-amber-600 flex-shrink-0" />
+          <span className="text-amber-800">
+            For educational tracking only. Clinical behavior analysis requires oversight by a licensed BCBA.
+          </span>
+        </div>
+      </div>
 
       {/* Tabs & Filters */}
       <div className="bg-white dark:bg-slate-900 border-b border-neutral-100 dark:border-slate-800">

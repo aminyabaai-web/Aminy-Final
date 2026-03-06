@@ -279,7 +279,7 @@ routes.get("/analytics/summary", async (c) => {
     const moduleUsage = await kv.get(`analytics:module_usage:${userId}`) || {};
     
     const summary = {
-      moduleUsage: Object.entries(moduleUsage).map(([module, data]: any) => ({
+      moduleUsage: Object.entries(moduleUsage as Record<string, { visits: number }>).map(([module, data]) => ({
         module,
         percentage: Math.round((data.visits / 100) * 100),
       })),

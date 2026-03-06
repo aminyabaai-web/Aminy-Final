@@ -64,6 +64,69 @@ export interface CoverageStatus {
   documentsUploaded: string[];
 }
 
+/** Pattern detected by the AI knowledge graph */
+export interface KnowledgePattern {
+  type: string;
+  data: Record<string, unknown>;
+  detectedAt: string;
+}
+
+/** Child profile used by the AI brain for context building */
+export interface AIChildProfile {
+  id: string;
+  name: string;
+  age?: number;
+  neuroType?: string;
+  diagnoses?: string[];
+  [key: string]: unknown;
+}
+
+/** A document stored in the vault */
+export interface VaultDocument {
+  id: string;
+  title: string;
+  type: string;
+  date: string;
+  summary?: string;
+  keyInsights?: string[];
+}
+
+/** Vault data structure used by the AI brain */
+export interface VaultData {
+  evaluations?: VaultDocument[];
+  ieps?: VaultDocument[];
+  progressReports?: VaultDocument[];
+  bcbaNotes?: VaultDocument[];
+  insurance?: VaultDocument[];
+  medical?: VaultDocument[];
+}
+
+/** Weekly plan data used by the AI brain */
+export interface WeeklyPlanData {
+  todayActivities?: unknown[];
+  completedActivities?: unknown[];
+  challenges?: unknown[];
+  [key: string]: unknown;
+}
+
+/** Conversation history entry */
+export interface ConversationHistoryEntry {
+  role: string;
+  content: string;
+  timestamp?: number;
+  [key: string]: unknown;
+}
+
+/** Junior mode session data */
+export interface JuniorModeData {
+  sessions?: unknown[];
+  skillsPracticed?: unknown[];
+  emotions?: unknown[];
+  communicationAttempts?: number;
+  successfulInteractions?: number;
+  [key: string]: unknown;
+}
+
 export interface Session {
   id: string;
   type: 'telehealth' | 'jr' | 'live-vision';
@@ -135,12 +198,23 @@ interface AminyStore {
   
   // Knowledge Graph (for AI personalization)
   knowledgeGraph: {
-    patterns: Array<{ type: string; data: any; detectedAt: string }>;
-    preferences: Record<string, any>;
+    patterns: KnowledgePattern[];
+    preferences: Record<string, unknown>;
   };
-  addPattern: (type: string, data: any) => void;
-  updatePreference: (key: string, value: any) => void;
-  
+  addPattern: (type: string, data: Record<string, unknown>) => void;
+  updatePreference: (key: string, value: unknown) => void;
+
+  // AI Brain compatibility (accessed by aminy-ai-brain.ts)
+  currentChildId?: string;
+  children?: AIChildProfile[];
+  concerns?: string[];
+  parentName?: string;
+  selectedTier?: string;
+  vault?: VaultData;
+  weeklyPlan?: WeeklyPlanData;
+  conversationHistory?: ConversationHistoryEntry[];
+  juniorModeData?: JuniorModeData;
+
   // Reset
   reset: () => void;
 }
@@ -416,6 +490,9 @@ export const useAminyStore = create<AminyStore>()(
 // SELECTORS
 // ============================================================================
 
+// Store instance alias for non-React access (getState/setState)
+export const store = useAminyStore;
+
 export const selectors = {
   // Get active goals by level
   getGoalsByLevel: (level: Goal['level']) => (state: AminyStore) => 
@@ -483,7 +560,7 @@ export async function handleOnboardingComplete(
       await scheduleRetentionNotifications(userId, childName, '09:00'); // 9 AM default
     }
 
-    console.log('Onboarding complete: All retention flows activated');
+    if (import.meta.env.DEV) console.log('Onboarding complete: All retention flows activated');
   } catch (error) {
     console.error('Error setting up retention flows:', error);
     // Don't block onboarding completion on retention setup errors
@@ -519,7 +596,7 @@ export async function syncStreaksFromCloud(userId: string): Promise<void> {
       pauseReason: cloudStreak.pauseReason,
     });
 
-    console.log('[Store] Streaks synced from cloud:', cloudStreak);
+    if (import.meta.env.DEV) console.log('[Store] Streaks synced from cloud');
   } catch (error) {
     console.error('[Store] Error syncing streaks:', error);
     // Keep local streaks on error

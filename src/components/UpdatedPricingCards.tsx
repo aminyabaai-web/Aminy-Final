@@ -135,7 +135,7 @@ export function UpdatedPricingCards({ onSubscribe, currentTier }: UpdatedPricing
               
               {/* Live AI Video Badge */}
               <div className="mt-3 flex justify-center">
-                <LiveAIVideoBadge tier={tier.id as 'core' | 'pro' | 'pro-plus'} variant="minimal" />
+                <LiveAIVideoBadge tier={tier.id as any} variant="minimal" />
               </div>
             </div>
 

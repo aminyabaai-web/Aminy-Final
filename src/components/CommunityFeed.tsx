@@ -412,7 +412,7 @@ export function CommunityFeed({
                   const post = posts.find(p => p.id === postId);
                   if (post) {
                     const shouldFlag = flagForModeration(`${post.title} ${post.body}`);
-                    console.log('Report submitted:', { postId, reason, flagged: shouldFlag });
+                    if (import.meta.env.DEV) console.log('Report submitted:', { postId, reason, flagged: shouldFlag });
                     toast.success('Report submitted. Thank you for keeping our community safe.');
                   }
                 } catch (error) {
@@ -446,7 +446,7 @@ export function CommunityFeed({
             childAge={childAge}
             onClose={() => setShowCreatePost(false)}
             onSubmit={async (post) => {
-              const newPost = await createPost(post);
+              const newPost = await createPost(post as Omit<CommunityPost, 'id' | 'likeCount' | 'commentCount' | 'shareCount' | 'bookmarkCount' | 'isModerated' | 'moderationStatus' | 'createdAt' | 'updatedAt'>);
               setPosts([newPost, ...posts]);
               setShowCreatePost(false);
             }}
@@ -500,12 +500,13 @@ function PostCard({
   const [newComment, setNewComment] = useState('');
   const [showReportDialog, setShowReportDialog] = useState(false);
   const [bookmarked, setBookmarked] = useState(isBookmarked);
-  const isLiked = post.likedBy.includes(currentUserId);
+  const isLiked = post.likedBy?.includes(currentUserId) ?? false;
   const isOwnPost = post.userId === currentUserId;
   const category = POST_CATEGORIES[post.category];
 
   const handleShare = async () => {
-    const shareText = `Check out this post from Aminy Community: "${post.content.slice(0, 100)}${post.content.length > 100 ? '...' : ''}"`;
+    const shareText = `Check out this post from Aminy Community: "${(post.content ?? post.body).slice(0, 100)}${(post.content ?? post.body).length > 100 ? '...' : ''}"`;
+
     const shareUrl = `${window.location.origin}/community/post/${post.id}`;
 
     if (navigator.share) {
@@ -571,14 +572,15 @@ function PostCard({
     if (!newComment.trim()) return;
     await addComment(post.id, {
       userId: currentUserId,
+      userDisplayName: 'You',
       userName: 'You',
-      content: newComment,
+      body: newComment,
     });
     setNewComment('');
     // In production, would refresh comments
   };
 
-  const postLabel = `Post by ${post.isAnonymous ? 'Anonymous Parent' : post.userName}: ${post.content.slice(0, 50)}${post.content.length > 50 ? '...' : ''}`;
+  const postLabel = `Post by ${post.isAnonymous ? 'Anonymous Parent' : post.userName}: ${(post.content ?? post.body).slice(0, 50)}${(post.content ?? post.body).length > 50 ? '...' : ''}`;
 
   return (
     <motion.div
@@ -609,7 +611,7 @@ function PostCard({
               className="w-10 h-10 rounded-full bg-gradient-to-br from-teal-400 to-blue-500 flex items-center justify-center text-white font-medium cursor-pointer"
               onClick={() => !post.isAnonymous && onViewProfile?.(post.userId)}
             >
-              {post.isAnonymous ? '?' : post.userName.charAt(0)}
+              {post.isAnonymous ? '?' : post.userName?.charAt(0) ?? '?'}
             </div>
             <div>
               <div className="flex items-center gap-2">
@@ -617,11 +619,11 @@ function PostCard({
                   {post.isAnonymous ? 'Anonymous Parent' : post.userName}
                 </span>
                 {/* Badges */}
-                {post.userBadges.slice(0, 2).map((badge) => {
-                  const badgeInfo = COMMUNITY_BADGES[badge];
+                {(post.userBadges ?? []).slice(0, 2).map((badge) => {
+                  const badgeInfo = COMMUNITY_BADGES.find(b => b.id === badge.id) ?? badge;
                   return (
                     <Badge
-                      key={badge}
+                      key={badge.id}
                       variant="outline"
                       className="text-xs py-0"
                       title={badgeInfo?.description}
@@ -842,12 +844,12 @@ function PostCard({
               className="mt-4 pt-4 border-t"
             >
               {/* Existing comments */}
-              {post.comments.length > 0 ? (
+              {(post.comments ?? []).length > 0 ? (
                 <div className="space-y-3 mb-4">
-                  {post.comments.slice(0, 3).map((comment) => (
+                  {(post.comments ?? []).slice(0, 3).map((comment) => (
                     <div key={comment.id} className="flex gap-2">
                       <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-slate-700 flex items-center justify-center text-gray-600 dark:text-slate-300 text-sm font-medium flex-shrink-0">
-                        {comment.userName.charAt(0)}
+                        {comment.userName?.charAt(0) ?? '?'}
                       </div>
                       <div className="flex-1 bg-gray-50 dark:bg-slate-800 rounded-lg p-2">
                         <div className="flex items-center gap-2">
@@ -858,13 +860,13 @@ function PostCard({
                             {formatTimeAgo(new Date(comment.createdAt))}
                           </span>
                         </div>
-                        <p className="text-sm text-gray-700 dark:text-slate-300">{comment.content}</p>
+                        <p className="text-sm text-gray-700 dark:text-slate-300">{comment.body}</p>
                       </div>
                     </div>
                   ))}
-                  {post.comments.length > 3 && (
+                  {(post.comments ?? []).length > 3 && (
                     <button className="text-sm text-teal-600 hover:underline">
-                      View all {post.comments.length} comments
+                      View all {(post.comments ?? []).length} comments
                     </button>
                   )}
                 </div>
@@ -934,16 +936,12 @@ function CreatePostModal({
         category,
         tags,
         isAnonymous,
-        childAgeRange: childAge
-          ? childAge < 3
-            ? '0-2'
-            : childAge < 6
-            ? '3-5'
-            : childAge < 10
-            ? '6-9'
+        ageGroup: childAge
+          ? childAge < 6
+            ? 'preschool'
             : childAge < 13
-            ? '10-12'
-            : '13+'
+            ? 'school-age'
+            : 'teen'
           : undefined,
       });
     } catch (error) {

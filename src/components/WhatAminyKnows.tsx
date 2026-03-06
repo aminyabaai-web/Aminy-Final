@@ -157,7 +157,7 @@ export function WhatAminyKnows({ onBack, childId }: WhatAminyKnowsProps) {
     setLoading(true);
     try {
       const facts = await getMemoryFacts(currentChildId || '');
-      setMemories(facts);
+      setMemories(facts as unknown as MemoryFact[]);
     } catch (error) {
       console.error('Failed to load memories:', error);
       // Use local data as fallback
@@ -173,7 +173,7 @@ export function WhatAminyKnows({ onBack, childId }: WhatAminyKnowsProps) {
 
     if (currentChild) {
       // Strengths
-      (currentChild.strengths || []).forEach((s: string, i: number) => {
+      ((currentChild.strengths as string[] | undefined) || []).forEach((s: string, i: number) => {
         localMemories.push({
           id: `strength-${i}`,
           category: 'strength',
@@ -184,7 +184,7 @@ export function WhatAminyKnows({ onBack, childId }: WhatAminyKnowsProps) {
       });
 
       // Challenges
-      (currentChild.challenges || []).forEach((c: string, i: number) => {
+      ((currentChild.challenges as string[] | undefined) || []).forEach((c: string, i: number) => {
         localMemories.push({
           id: `challenge-${i}`,
           category: 'challenge',
@@ -206,7 +206,7 @@ export function WhatAminyKnows({ onBack, childId }: WhatAminyKnowsProps) {
       });
 
       // Sensory profile
-      const sensory = currentChild.sensoryProfile;
+      const sensory = currentChild.sensoryProfile as { seekers?: string[]; avoiders?: string[] } | undefined;
       if (sensory) {
         (sensory.seekers || []).forEach((s: string, i: number) => {
           localMemories.push({

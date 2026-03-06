@@ -66,9 +66,9 @@ app.use('*', logger(console.log));
 // Enable CORS for all routes and methods
 // Restrict to allowed origins for security
 const allowedOrigins = [
-  'https://aminy.app',
-  'https://www.aminy.app',
-  'https://app.aminy.app',
+  'https://aminy.ai',
+  'https://www.aminy.ai',
+  'https://app.aminy.ai',
   'https://aminyapp.vercel.app',
   'https://aminy-onboarding.vercel.app',
   'http://localhost:5173',
@@ -81,13 +81,13 @@ app.use(
   cors({
     origin: (origin) => {
       // Allow requests with no origin (mobile apps, Postman, etc.)
-      if (!origin) return 'https://aminy.app';
+      if (!origin) return 'https://aminy.ai';
       // Check if origin is in allowed list
       if (allowedOrigins.includes(origin)) return origin;
       // In development, allow any localhost
       if (origin.includes('localhost') || origin.includes('127.0.0.1')) return origin;
       // Default to main domain
-      return 'https://aminy.app';
+      return 'https://aminy.ai';
     },
     allowHeaders: ["Content-Type", "Authorization", "X-User-Id", "X-Coach-Id"],
     allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
@@ -1547,17 +1547,17 @@ app.delete("/make-server-8a022548/reports/:reportId", async (c) => {
   }
 });
 
-// Share report via email (placeholder)
+// Share report via email (KV-stored reports)
 app.post("/make-server-8a022548/reports/:reportId/share", async (c) => {
   try {
     const accessToken = c.req.header('Authorization')?.split(' ')[1];
     const { createClient } = await import('jsr:@supabase/supabase-js@2');
-    const supabase = createClient(
+    const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL')!,
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
     );
 
-    const { data: { user }, error: authError } = await supabase.auth.getUser(accessToken);
+    const { data: { user }, error: authError } = await supabaseClient.auth.getUser(accessToken);
     if (!user?.id) {
       return c.json({ error: 'Unauthorized' }, 401);
     }
@@ -1570,10 +1570,71 @@ app.post("/make-server-8a022548/reports/:reportId/share", async (c) => {
       return c.json({ error: 'Report not found' }, 404);
     }
 
-    // In production, this would send an email via SendGrid, Resend, etc.
+    // Get sender name from profile
+    const { data: profile } = await supabaseClient
+      .from('profiles')
+      .select('full_name')
+      .eq('id', user.id)
+      .single();
+
+    const senderName = profile?.full_name || 'An Aminy parent';
+    const childName = report.childName || 'their child';
+    const reportUrl = `https://app.aminy.ai/shared/report/${reportId}`;
+
+    await sendReportShareEmail(recipientEmail, senderName, childName, reportUrl, message);
 
     return c.json({ success: true });
   } catch (error) {
+    console.error('[Share] Report share error:', error);
+    return c.json({ error: 'Failed to share report' }, 500);
+  }
+});
+
+// Share progress report via email (direct — no KV storage required)
+app.post("/make-server-8a022548/reports/share-direct", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    const { createClient } = await import('jsr:@supabase/supabase-js@2');
+    const supabaseClient = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+    );
+
+    const { data: { user } } = await supabaseClient.auth.getUser(accessToken);
+    if (!user?.id) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
+    const { recipientEmail, childName, parentName, reportSummary, message } = await c.req.json();
+
+    if (!recipientEmail || !childName) {
+      return c.json({ error: 'recipientEmail and childName are required' }, 400);
+    }
+
+    const senderName = parentName || 'An Aminy parent';
+
+    // Store report in KV with 7-day TTL for the shareable link
+    const reportId = crypto.randomUUID();
+    await kv.set(`report:${reportId}`, {
+      userId: user.id,
+      childName,
+      parentName: senderName,
+      reportSummary,
+      createdAt: new Date().toISOString(),
+      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+    });
+
+    const reportUrl = `https://app.aminy.ai/shared/report/${reportId}`;
+
+    const sent = await sendReportShareEmail(recipientEmail, senderName, childName, reportUrl, message);
+
+    if (!sent) {
+      return c.json({ error: 'Failed to send email. Email service may not be configured.' }, 500);
+    }
+
+    return c.json({ success: true, reportId, reportUrl });
+  } catch (error) {
+    console.error('[Share] Direct share error:', error);
     return c.json({ error: 'Failed to share report' }, 500);
   }
 });
@@ -2829,12 +2890,20 @@ app.post("/make-server-8a022548/coverage/email", async (c) => {
       ...report
     });
 
-    // Send email with PDF attachment
-    await sendReportShareEmail({
-      toEmail: email,
-      reportType: 'Coverage Clarity Report',
-      attachmentBuffer: pdfBuffer,
-      attachmentFilename: 'coverage-report.pdf'
+    // Send email with coverage report summary
+    const { sendEmail: sendEmailDirect } = await import('./email-service.ts');
+    await sendEmailDirect({
+      to: email,
+      subject: 'Your Coverage Clarity Report - Aminy',
+      html: `
+        <div style="font-family: system-ui, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+          <h1 style="color: #0891b2;">Your Coverage Clarity Report</h1>
+          <p>Here is your insurance coverage analysis from Aminy.</p>
+          <p>For the full PDF report, please download it from your Aminy dashboard.</p>
+          <p>Best regards,<br>The Aminy Team</p>
+        </div>
+      `,
+      text: 'Your Coverage Clarity Report is ready. Download the full PDF from your Aminy dashboard.',
     });
 
     return c.json({ success: true });

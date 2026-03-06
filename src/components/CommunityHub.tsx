@@ -10,7 +10,7 @@
  * - Resource sharing between parents
  */
 
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Users,
@@ -51,6 +51,9 @@ import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { toast } from 'sonner';
 import { TierType } from '../lib/tier-utils';
+import { getPosts as getSupabasePosts, createPost as createSupabasePost, likePost as likeSupabasePost, unlikePost as unlikeSupabasePost, bookmarkPost as bookmarkSupabasePost, unbookmarkPost as unbookmarkSupabasePost } from '../lib/community-service';
+import { checkAndAwardBadges } from '../lib/badge-service';
+import { supabase } from '../utils/supabase/client';
 
 // Types
 interface Post {
@@ -107,6 +110,7 @@ interface CommunityHubProps {
   userTier?: TierType;
   onBack?: () => void;
   onNavigate?: (screen: string) => void;
+  onUpgrade?: () => void;
 }
 
 // Mock data
@@ -287,7 +291,7 @@ export function CommunityHub({
   onNavigate,
 }: CommunityHubProps) {
   const [view, setView] = useState<CommunityView>('feed');
-  const [posts, setPosts] = useState<Post[]>(MOCK_POSTS);
+  const [posts, setPosts] = useState<Post[]>([]);
   const [groups, setGroups] = useState<Group[]>(MOCK_GROUPS);
   const [events, setEvents] = useState<Event[]>(MOCK_EVENTS);
   const [searchQuery, setSearchQuery] = useState('');
@@ -299,6 +303,107 @@ export function CommunityHub({
     category: 'questions' as PostCategory,
     isAnonymous: false,
   });
+
+  // Load posts from Supabase (fall back to MOCK_POSTS when empty)
+  useEffect(() => {
+    async function loadPosts() {
+      if (!userId) return;
+      const dbPosts = await getSupabasePosts(userId);
+      if (dbPosts.length > 0) {
+        setPosts(dbPosts.map(p => ({
+          id: p.id,
+          authorId: p.userId,
+          authorName: p.displayName,
+          isAnonymous: p.isAnonymous,
+          isBCBA: false,
+          title: p.title,
+          content: p.body,
+          category: p.category as PostCategory,
+          tags: [],
+          likes: p.likeCount,
+          comments: p.commentCount,
+          shares: 0,
+          views: 0,
+          isLiked: p.isLikedByUser,
+          isBookmarked: p.isBookmarkedByUser,
+          createdAt: new Date(p.createdAt),
+          isPinned: p.isPinned,
+        })));
+      } else {
+        // Fall back to mock data when DB is empty
+        setPosts(MOCK_POSTS);
+      }
+    }
+    loadPosts();
+  }, [userId]);
+
+  // Load groups from Supabase (fall back to MOCK_GROUPS when empty)
+  useEffect(() => {
+    async function loadGroups() {
+      try {
+        const { data, error } = await supabase
+          .from('community_groups')
+          .select('*')
+          .order('member_count', { ascending: false })
+          .limit(20);
+
+        if (error) throw error;
+
+        if (data && data.length > 0) {
+          setGroups(data.map((g: { id: string; name: string; description?: string; member_count?: number; category?: string; is_private?: boolean; is_joined?: boolean; recent_activity?: string; icon?: string }) => ({
+            id: g.id,
+            name: g.name,
+            description: g.description || '',
+            memberCount: g.member_count || 0,
+            category: (g.category || 'topic') as GroupCategory,
+            isPrivate: g.is_private ?? false,
+            isJoined: g.is_joined ?? false,
+            recentActivity: g.recent_activity ? new Date(g.recent_activity) : new Date(),
+            icon: g.icon || 'users',
+          })));
+        }
+        // If no data, MOCK_GROUPS remains as initial state
+      } catch (err) {
+        console.warn('CommunityHub: Failed to load groups from Supabase, using mock data', err);
+        // MOCK_GROUPS remains as initial state
+      }
+    }
+    loadGroups();
+  }, []);
+
+  // Load events from Supabase (fall back to MOCK_EVENTS when empty)
+  useEffect(() => {
+    async function loadEvents() {
+      try {
+        const { data, error } = await supabase
+          .from('community_events')
+          .select('*')
+          .gte('event_date', new Date().toISOString())
+          .order('event_date', { ascending: true })
+          .limit(20);
+
+        if (error) throw error;
+
+        if (data && data.length > 0) {
+          setEvents(data.map((e: { id: string; title: string; description?: string; location?: string; event_date: string; attendee_count?: number; is_virtual?: boolean; is_attending?: boolean }) => ({
+            id: e.id,
+            title: e.title,
+            description: e.description || '',
+            location: e.location || 'Virtual',
+            date: new Date(e.event_date),
+            attendeeCount: e.attendee_count || 0,
+            isVirtual: e.is_virtual ?? false,
+            isAttending: e.is_attending ?? false,
+          })));
+        }
+        // If no data, MOCK_EVENTS remains as initial state
+      } catch (err) {
+        console.warn('CommunityHub: Failed to load events from Supabase, using mock data', err);
+        // MOCK_EVENTS remains as initial state
+      }
+    }
+    loadEvents();
+  }, []);
 
   // Filter posts
   const filteredPosts = useMemo(() => {
@@ -331,19 +436,36 @@ export function CommunityHub({
           : post
       )
     );
-  }, []);
+    // Persist to Supabase (non-blocking)
+    const post = posts.find(p => p.id === postId);
+    if (userId && post) {
+      if (post.isLiked) {
+        unlikeSupabasePost(userId, postId).catch(() => {});
+      } else {
+        likeSupabasePost(userId, postId).catch(() => {});
+      }
+    }
+  }, [posts, userId]);
 
   // Handle bookmark
   const handleBookmark = useCallback((postId: string) => {
+    const post = posts.find(p => p.id === postId);
     setPosts(prev =>
-      prev.map(post =>
-        post.id === postId
-          ? { ...post, isBookmarked: !post.isBookmarked }
-          : post
+      prev.map(p =>
+        p.id === postId
+          ? { ...p, isBookmarked: !p.isBookmarked }
+          : p
       )
     );
-    toast.success('Post bookmarked');
-  }, []);
+    if (userId && post) {
+      if (post.isBookmarked) {
+        unbookmarkSupabasePost(userId, postId).catch(() => {});
+      } else {
+        bookmarkSupabasePost(userId, postId).catch(() => {});
+      }
+    }
+    toast.success(post?.isBookmarked ? 'Bookmark removed' : 'Post bookmarked');
+  }, [posts, userId]);
 
   // Handle join group
   const handleJoinGroup = useCallback((groupId: string) => {
@@ -400,6 +522,19 @@ export function CommunityHub({
     setNewPost({ title: '', content: '', category: 'questions', isAnonymous: false });
     setShowNewPost(false);
     toast.success('Post published!');
+
+    // Persist to Supabase (non-blocking)
+    if (userId) {
+      createSupabasePost(
+        userId,
+        newPost.title,
+        newPost.content,
+        newPost.category,
+        newPost.isAnonymous,
+        userName
+      ).catch(() => {});
+      checkAndAwardBadges(userId, 'community_post').catch(() => {});
+    }
   }, [newPost, userId, userName]);
 
   // Format relative time

@@ -75,7 +75,7 @@ export function PersistentChatFAB({ userData, isAuthenticated = false }: Persist
           }}
           size="lg"
           className="relative h-14 px-6 bg-accent hover:bg-accent/90 text-white shadow-lg hover:shadow-xl transition-all duration-200 rounded-full group"
-          aria-label="Ask Aminy - Open AI chat"
+          aria-label="Aminy - Open AI chat"
         >
           {/* Pulse animation for new suggestion */}
           {hasNewSuggestion && (
@@ -86,7 +86,7 @@ export function PersistentChatFAB({ userData, isAuthenticated = false }: Persist
           <span className="absolute inset-0 rounded-full bg-gradient-to-r from-accent via-teal-400 to-accent opacity-0 group-hover:opacity-20 blur-sm transition-opacity"></span>
           
           <MessageCircle className="w-5 h-5 mr-2 relative z-10" />
-          <span className="relative z-10 font-semibold">Ask Aminy 💬</span>
+          <span className="relative z-10 font-semibold">Aminy 💬</span>
           
           {/* Sparkle indicator */}
           {hasNewSuggestion && (
@@ -121,7 +121,7 @@ export function PersistentChatFAB({ userData, isAuthenticated = false }: Persist
                   <Sparkles className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <SheetTitle className="text-lg">Ask Aminy</SheetTitle>
+                  <SheetTitle className="text-lg">Aminy</SheetTitle>
                   <p className="text-xs text-slate-500 mt-0.5">
                     Powered by AI and ABA behavioral science
                   </p>

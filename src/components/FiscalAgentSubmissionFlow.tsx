@@ -227,7 +227,7 @@ export function FiscalAgentSubmissionFlow({
       const totalCharges = services.reduce((sum, s) => sum + s.chargeAmount, 0);
 
       // Use HCBS-specific claim formatting
-      const state = fiscalAgent?.state || 'AZ'; // Would come from waiver profile
+      const state = fiscalAgent?.states?.[0] || 'AZ'; // Would come from waiver profile
       const claim = formatHCBSClaim(
         {
           billingProvider: {

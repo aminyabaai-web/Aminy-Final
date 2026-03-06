@@ -4,15 +4,47 @@
 import React, { useState, useEffect } from 'react';
 import { CheckCircle, Smartphone, Brain, Shield, Stethoscope, ChevronRight, Clock, AlertCircle } from 'lucide-react';
 import { connectorHub, CONNECTOR_EVENTS } from '../lib/connector-hub';
-import { ConnectorStatus as ConnectorStatusType } from '../types/connector';
+import { ConnectorStatus as ConnectorStatusType, ConnectorEvent, JrProfile, InsightSnapshot, CoverageCase, Referral, ConnectorCaregiver } from '../types/connector';
 import { getCurrentConnectorStatus } from '../lib/seed-data';
 import { Card } from './ui/card';
 import { toast } from 'sonner';
 
+/** Shape of the connectorData prop – Map-based lookups by entity ID */
+interface ConnectorDataMap {
+  jrProfiles?: Map<string, JrProfile & { pairedAt?: Date }>;
+  insights?: Map<string, InsightSnapshot & { started?: boolean }>;
+  coverage?: Map<string, CoverageCase & { benefits?: Array<{ status: string; sessionsPerYear?: number; copayAmount?: number; deductibleMet?: boolean }> }>;
+  referrals?: Map<string, Referral>;
+  caregivers?: Map<string, ConnectorCaregiver>;
+}
+
+/** Augment Window for Aminy-specific global flags */
+interface AminyAppState {
+  insight?: { snapshot?: { goals?: unknown[]; summary?: string; id?: string }; region?: Record<string, unknown> };
+  devices?: unknown[];
+  profile?: { devices?: unknown[]; region?: Record<string, unknown> };
+  benefits?: { checklistSeeded?: boolean; toggledCount?: number; items?: Array<{ toggled?: boolean }> };
+  user?: { plan?: string };
+}
+
+interface AminyWindow extends Window {
+  __appState?: AminyAppState;
+  benefitsChecklist?: { saved?: boolean };
+  benefitsStep6Visited?: boolean;
+  providerSaved?: boolean;
+  directoryViewed?: boolean;
+}
+
+interface NavigateOptions {
+  tab?: string;
+  section?: string;
+  [key: string]: unknown;
+}
+
 interface ConnectorStatusProps {
-  onNavigate: (destination: string) => void;
+  onNavigate: (destination: string, options?: NavigateOptions) => void;
   userTier?: string | null;
-  connectorData?: any;
+  connectorData?: ConnectorDataMap;
   completionFlags?: {
     jr: boolean;
     ins: boolean;
@@ -61,7 +93,7 @@ export function ConnectorStatus({
   // Local status resolver - derive from app data (no flags)
   const resolveStatus = () => {
     try {
-      const app = (window as any)?.__appState || {};
+      const app = (window as AminyWindow).__appState || {} as AminyAppState;
       
       // Insight: check snapshot with null-safe checks
       const snapshot = app.insight?.snapshot;
@@ -75,7 +107,7 @@ export function ConnectorStatus({
       // Benefits: check checklist seeded and toggle status
       const b = app.benefits || {};
       const benefitsReady = (!!b.checklistSeeded && (b.toggledCount ?? 0) > 0) ||
-                           (Array.isArray(b.items) && b.items.some(i => i?.toggled));
+                           (Array.isArray(b.items) && b.items.some((i: { toggled?: boolean }) => i?.toggled));
       
       // Provider: check Pro status and region availability
       const region = app.profile?.region || app.insight?.region || {};
@@ -175,19 +207,19 @@ export function ConnectorStatus({
         
         case 'benefits':
           const coverage = connectorData?.coverage?.get('child-1');
-          const hasChecklist = typeof window !== 'undefined' && (window as any).benefitsChecklist?.saved;
-          const hasCoveredBenefits = coverage?.benefits?.some?.((b: any) => b?.status === 'covered');
-          const benefitsStep6Visited = typeof window !== 'undefined' && (window as any).benefitsStep6Visited;
-          
+          const hasChecklist = typeof window !== 'undefined' && (window as AminyWindow).benefitsChecklist?.saved;
+          const hasCoveredBenefits = coverage?.benefits?.some?.((b: { status: string }) => b?.status === 'covered');
+          const benefitsStep6Visited = typeof window !== 'undefined' && (window as AminyWindow).benefitsStep6Visited;
+
           if (hasCoveredBenefits || hasChecklist) return 'bg-green-500';
           if (benefitsStep6Visited && !hasCoveredBenefits && !hasChecklist) return 'bg-purple-500';
           return 'bg-gray-400';
-        
+
         case 'providers':
           const referrals = Array.from(connectorData?.referrals?.values() || []);
-          const hasSentReferral = referrals.some((r: any) => r?.status === 'sent');
-          const hasProviderSaved = typeof window !== 'undefined' && (window as any).providerSaved;
-          const directoryViewed = typeof window !== 'undefined' && (window as any).directoryViewed;
+          const hasSentReferral = referrals.some((r: Referral) => r?.status === 'sent');
+          const hasProviderSaved = typeof window !== 'undefined' && (window as AminyWindow).providerSaved;
+          const directoryViewed = typeof window !== 'undefined' && (window as AminyWindow).directoryViewed;
           
           if (hasSentReferral || hasProviderSaved) return 'bg-green-500';
           if (directoryViewed && !hasSentReferral) return 'bg-purple-500';
@@ -227,11 +259,11 @@ export function ConnectorStatus({
       
       // Check if user has sent referrals or saved providers
       const referrals = Array.from(connectorData?.referrals?.values() || []);
-      const hasSentReferral = referrals.some((r: any) => r?.status === 'sent');
-      const hasProviderSaved = typeof window !== 'undefined' && (window as any).providerSaved;
-      
+      const hasSentReferral = referrals.some((r: Referral) => r?.status === 'sent');
+      const hasProviderSaved = typeof window !== 'undefined' && (window as AminyWindow).providerSaved;
+
       // Return true (green) if there are providers available (≥1) OR user has engaged
-      return providerCount >= 1 || hasSentReferral || hasProviderSaved;
+      return providerCount >= 1 || hasSentReferral || !!hasProviderSaved;
     } catch (error) {
       return false; // Default to false (purple) if there's an error
     }
@@ -253,9 +285,9 @@ export function ConnectorStatus({
   const getBenefitsStatus = (): 'ready' | 'pending' | 'not-started' => {
     try {
       const coverage = connectorData?.coverage?.get('child-1');
-      const hasChecklist = typeof window !== 'undefined' && (window as any).benefitsChecklist?.saved;
-      const hasCoveredBenefits = coverage?.benefits?.some?.((b: any) => b?.status === 'covered');
-      const benefitsStep6Visited = typeof window !== 'undefined' && (window as any).benefitsStep6Visited;
+      const hasChecklist = typeof window !== 'undefined' && (window as AminyWindow).benefitsChecklist?.saved;
+      const hasCoveredBenefits = coverage?.benefits?.some?.((b: { status: string }) => b?.status === 'covered');
+      const benefitsStep6Visited = typeof window !== 'undefined' && (window as AminyWindow).benefitsStep6Visited;
       
       if (hasCoveredBenefits || hasChecklist) return 'ready';
       if (benefitsStep6Visited && !hasCoveredBenefits && !hasChecklist) return 'pending';
@@ -276,29 +308,31 @@ export function ConnectorStatus({
         setLastUpdate(new Date());
       }),
 
-      connectorHub.subscribe(CONNECTOR_EVENTS.INSIGHT_UPDATED, (event) => {
+      connectorHub.subscribe(CONNECTOR_EVENTS.INSIGHT_UPDATED, (event: ConnectorEvent) => {
+        const payload = event.payload as { confidence: number };
         setStatus(prev => ({
           ...prev,
-          insight: { 
-            completed: true, 
-            confidence: event.payload.confidence,
+          insight: {
+            completed: true,
+            confidence: payload.confidence,
             lastUpdated: new Date()
           }
         }));
         setLastUpdate(new Date());
       }),
 
-      connectorHub.subscribe(CONNECTOR_EVENTS.COVERAGE_UPDATED, (event) => {
+      connectorHub.subscribe(CONNECTOR_EVENTS.COVERAGE_UPDATED, (event: ConnectorEvent) => {
+        const payload = event.payload as { eligible: boolean; status: string };
         setStatus(prev => ({
           ...prev,
-          benefits: { 
-            eligible: event.payload.eligible,
-            status: event.payload.status,
+          benefits: {
+            eligible: payload.eligible,
+            status: payload.status,
             checkedAt: new Date()
           },
           providers: {
-            available: event.payload.eligible,
-            count: event.payload.eligible ? 12 : 0
+            available: payload.eligible,
+            count: payload.eligible ? 12 : 0
           }
         }));
         setLastUpdate(new Date());

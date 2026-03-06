@@ -6,7 +6,7 @@
  * must set the cookies. This module provides the client-side handling.
  */
 
-import { supabase } from '../supabase';
+import { supabase } from '../../utils/supabase/client';
 
 // Session storage keys
 const SESSION_KEYS = {

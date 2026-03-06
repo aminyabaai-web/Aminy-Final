@@ -41,7 +41,7 @@ export interface ProviderCredential {
   verification_status: VerificationStatus;
   verified_at?: string;
   verification_notes?: string;
-  raw_response?: Record<string, any>;
+  raw_response?: Record<string, unknown>;
 }
 
 export interface VerificationResult {

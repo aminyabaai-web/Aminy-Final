@@ -143,7 +143,7 @@ export function CoverageCoachEducation({ onBack, userState = 'AZ' }: CoverageCoa
 }
 
 // Overview Section
-function OverviewSection({ sections, onSelectSection }: { sections: any[]; onSelectSection: (id: string) => void }) {
+function OverviewSection({ sections, onSelectSection }: { sections: { id: string; icon: React.ComponentType<{ className?: string }>; label: string; color: string }[]; onSelectSection: (id: string) => void }) {
   return (
     <div className="space-y-3 sm:space-y-4">
       <Card className="p-4 bg-gradient-to-r from-accent/10 to-teal-50 border-accent/20">

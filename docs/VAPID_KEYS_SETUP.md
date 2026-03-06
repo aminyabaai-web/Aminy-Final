@@ -65,14 +65,14 @@ Set these as secrets in the Supabase Dashboard:
 |-------------|-------|-------------|
 | `VAPID_PUBLIC_KEY` | Your public key | Same as frontend |
 | `VAPID_PRIVATE_KEY` | Your private key | **Keep secret!** |
-| `VAPID_SUBJECT` | `mailto:hello@aminy.app` or `https://aminy.app` | Contact info |
+| `VAPID_SUBJECT` | `mailto:hello@aminy.ai` or `https://aminy.ai` | Contact info |
 
 #### Using Supabase CLI
 ```bash
 # Set secrets via CLI
 supabase secrets set VAPID_PUBLIC_KEY="BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjSgSnfckjBJuBkr3qBUYIHBQFLXYp5Nksh8U"
 supabase secrets set VAPID_PRIVATE_KEY="your-private-key-here"
-supabase secrets set VAPID_SUBJECT="mailto:hello@aminy.app"
+supabase secrets set VAPID_SUBJECT="mailto:hello@aminy.ai"
 ```
 
 ---

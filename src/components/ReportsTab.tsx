@@ -51,7 +51,7 @@ interface ReportsTabProps {
     childName?: string;
   };
   userTier: TierType;
-  connectorData?: any;
+  connectorData?: Record<string, unknown>;
   onPaywallTrigger?: () => void;
 }
 
@@ -83,7 +83,7 @@ export function ReportsTab({ userData, userTier, connectorData, onPaywallTrigger
   const [selectedPeriod, setSelectedPeriod] = useState('week');
   const [isGenerating, setIsGenerating] = useState(false);
   const [exportFormat, setExportFormat] = useState<'pdf' | 'csv'>('pdf');
-  const [savedCoverageSummaries, setSavedCoverageSummaries] = useState<any[]>([]);
+  const [savedCoverageSummaries, setSavedCoverageSummaries] = useState<Array<{ id: string; childName: string; savedAt: string }>>([]);
 
   // Load coverage summaries on mount
   useEffect(() => {
@@ -308,7 +308,7 @@ export function ReportsTab({ userData, userTier, connectorData, onPaywallTrigger
                   <Sparkles className="w-4 h-4 text-blue-600" />
                 </h3>
                 <p className="text-blue-800 leading-relaxed">
-                  <strong>{userData.childName}</strong> gained 2 new communication skills this month. 
+                  <strong>{userData?.childName || 'your child'}</strong> gained 2 new communication skills this month. 
                   Bedtime routine success increased by 20%, while morning transition meltdowns 
                   decreased from 5 to 2 per week. Token board effectiveness remains high with 
                   consistent engagement in preferred activities.
@@ -476,7 +476,7 @@ export function ReportsTab({ userData, userTier, connectorData, onPaywallTrigger
                 <div>
                   <p className="font-medium text-gray-900">Ready to Master</p>
                   <p className="text-sm text-gray-600">
-                    {userData.childName} is showing readiness for 3-step sequencing tasks in the morning routine.
+                    {userData?.childName || 'your child'} is showing readiness for 3-step sequencing tasks in the morning routine.
                   </p>
                 </div>
               </div>
@@ -712,7 +712,7 @@ export function ReportsTab({ userData, userTier, connectorData, onPaywallTrigger
                 <Badge variant="secondary">{savedCoverageSummaries.length}</Badge>
               </h3>
               <div className="space-y-3">
-                {savedCoverageSummaries.slice(0, 5).map((summary: any) => (
+                {savedCoverageSummaries.slice(0, 5).map((summary) => (
                   <div key={summary.id} className="flex items-center justify-between p-4 bg-slate-50 rounded-lg border border-slate-200">
                     <div className="flex-1">
                       <h4 className="font-medium text-slate-900">

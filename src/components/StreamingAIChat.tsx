@@ -66,7 +66,7 @@ export function StreamingAIChat({
   }, [messages, streamingContent]);
 
   async function loadHistory() {
-    const userId = store.getState().userId;
+    const userId = store.getState().user?.id;
     if (!userId) {
       setIsLoadingHistory(false);
       return;
@@ -84,7 +84,7 @@ export function StreamingAIChat({
   const handleSend = useCallback(async (inputText: string, attachments: Attachment[]) => {
     if (!inputText.trim() || isStreaming) return;
 
-    const userId = store.getState().userId;
+    const userId = store.getState().user?.id;
     if (!userId) {
       console.error('User not authenticated');
       return;
@@ -280,7 +280,7 @@ export function StreamingAIChat({
           <EnhancedChatInput
             onSend={handleSend}
             placeholder={isRateLimited ? "Daily limit reached - upgrade for unlimited messages" : placeholder}
-            disabled={isRateLimited}
+            disabled={isRateLimited ?? undefined}
             isLoading={isStreaming}
             maxAttachments={5}
           />

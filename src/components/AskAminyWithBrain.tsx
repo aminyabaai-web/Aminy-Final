@@ -214,7 +214,7 @@ export function AskAminyWithBrain({
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-2">
-                  <h3 className="font-semibold">Ask Aminy</h3>
+                  <h3 className="font-semibold">Aminy</h3>
                   <Badge variant="outline" className="text-[10px] px-1.5 py-0.5 bg-green-50 text-green-700 border-green-200">
                     <Sparkles className="w-2.5 h-2.5 mr-1" />
                     Context-Aware AI

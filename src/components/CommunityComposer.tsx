@@ -62,7 +62,7 @@ async function uploadImageToStorage(file: File, userId?: string): Promise<string
     return urlData.publicUrl;
   } catch (error) {
     // Fallback to data URL for local/demo mode
-    console.log('Using data URL fallback for image');
+    console.warn('Using data URL fallback for image');
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onloadend = () => {

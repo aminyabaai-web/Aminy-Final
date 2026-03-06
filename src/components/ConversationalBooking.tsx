@@ -29,9 +29,11 @@ import { AvailabilityPicker, TimeSlot } from './AvailabilityPicker';
 import { supabase } from '../utils/supabase/client';
 import { toast } from 'sonner';
 import { SESSION_PRICING } from '../lib/pricing';
+import { checkEligibility, type EligibilityResult } from '../lib/benefits-service';
+import { Shield, FileText, DollarSign } from 'lucide-react';
 
 // Types
-type BookingStep = 'concern' | 'history' | 'provider-pref' | 'time-select' | 'details' | 'confirm';
+type BookingStep = 'concern' | 'history' | 'provider-pref' | 'insurance-check' | 'time-select' | 'details' | 'confirm';
 
 interface BookingState {
   step: BookingStep;
@@ -75,8 +77,11 @@ interface ConversationalBookingProps {
   childName: string;
   assignedProvider?: Provider;
   childGoals?: Goal[];
-  onComplete: (booking: BookingState) => void;
-  onCancel: () => void;
+  onComplete?: (booking?: BookingState) => void;
+  onCancel?: () => void;
+  onBack?: () => void;
+  userId?: string;
+  childId?: string;
 }
 
 // Concern Options
@@ -197,9 +202,9 @@ async function saveBookingToDatabase(booking: {
     }
 
     return { success: true, bookingId: data.id };
-  } catch (e: any) {
+  } catch (e: unknown) {
     console.error('Booking save failed:', e);
-    return { success: false, error: e.message };
+    return { success: false, error: e instanceof Error ? e.message : 'Unknown error' };
   }
 }
 
@@ -327,6 +332,9 @@ export function ConversationalBooking({
   const [childGoals, setChildGoals] = useState<Goal[]>(propChildGoals || []);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [insuranceResult, setInsuranceResult] = useState<EligibilityResult | null>(null);
+  const [insuranceLoading, setInsuranceLoading] = useState(false);
+  const [generateSuperbill, setGenerateSuperbill] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   // Load providers from database
@@ -350,7 +358,7 @@ export function ConversationalBooking({
           .limit(20);
 
         if (error) {
-          console.error('Error loading providers:', error);
+          console.error('Error loading providers:', error.message);
           setProviders(FALLBACK_PROVIDERS);
         } else if (data && data.length > 0) {
           setProviders(data.map(p => ({
@@ -417,12 +425,12 @@ export function ConversationalBooking({
   };
 
   const goBack = () => {
-    const steps: BookingStep[] = ['concern', 'history', 'provider-pref', 'time-select', 'details', 'confirm'];
+    const steps: BookingStep[] = ['concern', 'history', 'provider-pref', 'insurance-check', 'time-select', 'details', 'confirm'];
     const currentIndex = steps.indexOf(state.step);
     if (currentIndex > 0) {
       updateState({ step: steps[currentIndex - 1] });
     } else {
-      onCancel();
+      onCancel?.();
     }
   };
 
@@ -442,8 +450,47 @@ export function ConversationalBooking({
     updateState({
       providerPreference: pref,
       selectedProvider: provider || (pref === 'assigned' ? assignedProvider : undefined),
-      step: 'time-select'
+      step: 'insurance-check'
     });
+
+    // Run insurance eligibility check in background
+    runInsuranceCheck();
+  };
+
+  const runInsuranceCheck = async () => {
+    setInsuranceLoading(true);
+    try {
+      // Load user's state + insurance from Supabase profile
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('state, insurance_provider, child_age, diagnoses')
+          .eq('id', user.id)
+          .single();
+
+        if (profile?.state) {
+          const result = await checkEligibility(
+            profile.state,
+            profile.child_age || 8,
+            profile.diagnoses || []
+          );
+          setInsuranceResult(result);
+          return;
+        }
+      }
+      // No profile data — show self-pay option
+      setInsuranceResult(null);
+    } catch (e) {
+      console.error('Insurance check failed:', e);
+      setInsuranceResult(null);
+    } finally {
+      setInsuranceLoading(false);
+    }
+  };
+
+  const handleInsuranceNext = () => {
+    updateState({ step: 'time-select' });
   };
 
   const handleTimeSelect = (slot: TimeSlot) => {
@@ -495,11 +542,11 @@ export function ConversationalBooking({
 
       if (result.success) {
         toast.success('Session booked successfully! You will receive a confirmation email.');
-        onComplete({ ...state, bookingId: result.bookingId } as any);
+        onComplete?.({ ...state } as BookingState);
       } else {
         toast.error(result.error || 'Failed to book session. Please try again.');
       }
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.error('Booking failed:', e);
       toast.error('An error occurred. Please try again.');
     } finally {
@@ -535,11 +582,11 @@ export function ConversationalBooking({
           <p className="text-sm text-gray-500">for {childName}</p>
         </div>
         <div className="flex items-center gap-1">
-          {['concern', 'history', 'provider-pref', 'time-select', 'details', 'confirm'].map((step, i) => (
+          {['concern', 'history', 'provider-pref', 'insurance-check', 'time-select', 'details', 'confirm'].map((step, i) => (
             <div
               key={step}
               className={`w-2 h-2 rounded-full transition-colors ${
-                ['concern', 'history', 'provider-pref', 'time-select', 'details', 'confirm'].indexOf(state.step) >= i
+                ['concern', 'history', 'provider-pref', 'insurance-check', 'time-select', 'details', 'confirm'].indexOf(state.step) >= i
                   ? 'bg-teal-600'
                   : 'bg-gray-200'
               }`}
@@ -667,9 +714,88 @@ export function ConversationalBooking({
           )}
         </AnimatePresence>
 
+        {/* Step 3.5: Insurance Coverage Check */}
+        <AnimatePresence>
+          {state.selectedProvider && (state.step === 'insurance-check' || state.step === 'time-select' || state.step === 'details' || state.step === 'confirm') && (
+            <>
+              <ChatMessage isAI>
+                <div className="flex items-center gap-2 mb-2">
+                  <Shield className="w-5 h-5 text-teal-600" />
+                  <p className="font-medium">Insurance Coverage Check</p>
+                </div>
+                {insuranceLoading ? (
+                  <div className="flex items-center gap-2 text-gray-500">
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span className="text-sm">Checking your coverage...</span>
+                  </div>
+                ) : insuranceResult?.eligible ? (
+                  <div className="space-y-2">
+                    <div className="p-3 bg-green-50 rounded-lg border border-green-200">
+                      <p className="text-sm text-green-800 font-medium">Your insurance likely covers this session</p>
+                      <div className="mt-2 space-y-1">
+                        {insuranceResult.programs.slice(0, 2).map((prog, i) => (
+                          <p key={i} className="text-xs text-green-700">
+                            {prog.name}: {prog.summary.slice(0, 80)}...
+                          </p>
+                        ))}
+                      </div>
+                      {insuranceResult.coveredServices.filter(s => s.covered).length > 0 && (
+                        <p className="text-xs text-green-600 mt-1">
+                          Covered: {insuranceResult.coveredServices.filter(s => s.covered).map(s => s.name).join(', ')}
+                        </p>
+                      )}
+                    </div>
+                    <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={generateSuperbill}
+                        onChange={(e) => setGenerateSuperbill(e.target.checked)}
+                        className="w-4 h-4 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+                      />
+                      <FileText className="w-4 h-4" />
+                      Generate superbill for insurance reimbursement
+                    </label>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <div className="p-3 bg-amber-50 rounded-lg border border-amber-200">
+                      <p className="text-sm text-amber-800">We couldn't verify insurance coverage. You can still book as self-pay.</p>
+                      <p className="text-xs text-amber-600 mt-1">Tip: Update your insurance info in Settings for future checks.</p>
+                    </div>
+                    <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={generateSuperbill}
+                        onChange={(e) => setGenerateSuperbill(e.target.checked)}
+                        className="w-4 h-4 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+                      />
+                      <FileText className="w-4 h-4" />
+                      Generate superbill to submit to insurance yourself
+                    </label>
+                  </div>
+                )}
+              </ChatMessage>
+
+              {state.step === 'insurance-check' && (
+                <div className="ml-11">
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={handleInsuranceNext}
+                    className="w-full py-3 bg-teal-600 text-white font-medium rounded-xl transition-colors hover:bg-teal-700 flex items-center justify-center gap-2"
+                  >
+                    <Calendar className="w-4 h-4" />
+                    Continue to Scheduling
+                  </motion.button>
+                </div>
+              )}
+            </>
+          )}
+        </AnimatePresence>
+
         {/* Step 4: Time Selection */}
         <AnimatePresence>
-          {state.selectedProvider && state.step !== 'concern' && state.step !== 'history' && state.step !== 'provider-pref' && (
+          {state.selectedProvider && state.step !== 'concern' && state.step !== 'history' && state.step !== 'provider-pref' && state.step !== 'insurance-check' && (
             <>
               <ChatMessage isAI={false}>
                 <p>Book with {state.selectedProvider.name}</p>
@@ -761,6 +887,23 @@ export function ConversationalBooking({
                     )}
                     <span className="text-sm capitalize">{state.visitType} call</span>
                   </div>
+                  <div className="flex items-center gap-2 pt-2 border-t border-gray-200 mt-2">
+                    <DollarSign className="w-4 h-4 text-gray-400" />
+                    <span className="text-sm font-medium">
+                      ${getSessionPrice(state.selectedProvider?.title || '', 60).price}
+                    </span>
+                    {insuranceResult?.eligible && (
+                      <span className="text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
+                        Insurance may cover
+                      </span>
+                    )}
+                  </div>
+                  {generateSuperbill && (
+                    <div className="flex items-center gap-2 mt-1">
+                      <FileText className="w-4 h-4 text-teal-500" />
+                      <span className="text-xs text-teal-600">Superbill will be generated after session</span>
+                    </div>
+                  )}
                 </div>
               </ChatMessage>
 

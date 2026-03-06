@@ -8,6 +8,8 @@ import { motion } from 'motion/react';
 import { Eye, EyeOff, ArrowLeft, AlertCircle } from 'lucide-react';
 import { supabase } from '../utils/supabase/client';
 import { useAuthRateLimit } from '../lib/security/auth-rate-limit';
+import { useFormValidation } from '../lib/use-form-validation';
+import { loginSchema } from '../lib/schemas';
 import aminyLogoCropped from "../assets/aminy-logo-cropped.png";
 
 interface LoginScreenProps {
@@ -34,11 +36,7 @@ export function LoginScreen({
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [errors, setErrors] = useState<{
-    email?: string;
-    password?: string;
-    signin?: string;
-  }>({});
+  const { errors, validate, setFieldError, clearErrors, setErrors } = useFormValidation(loginSchema);
   const [isLoading, setIsLoading] = useState(false);
 
   const { limited, message: rateLimitMessage, recordFailure, recordSuccess, checkRateLimit } = useAuthRateLimit();
@@ -47,42 +45,19 @@ export function LoginScreen({
     checkRateLimit();
   }, [checkRateLimit]);
 
-  const validateEmail = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-  const validateForm = () => {
-    const newErrors: typeof errors = {};
-
-    if (!email) {
-      newErrors.email = "Please enter your email";
-    } else if (!validateEmail(email)) {
-      newErrors.email = "Please enter a valid email";
-    }
-
-    if (!password) {
-      newErrors.password = "Please enter your password";
-    } else if (password.length < 8) {
-      newErrors.password = "Password must be at least 8 characters";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (limited) {
-      setErrors({ signin: rateLimitMessage });
+      setErrors({ signin: rateLimitMessage || 'Too many attempts. Please try again later.' });
       return;
     }
 
-    if (!validateForm()) return;
+    const result = validate({ email, password });
+    if (!result.success) return;
 
     setIsLoading(true);
-    setErrors({});
+    clearErrors();
 
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -168,8 +143,12 @@ export function LoginScreen({
     }
   };
 
-  const clearError = (field: keyof typeof errors) => {
-    setErrors(prev => ({ ...prev, [field]: undefined }));
+  const clearError = (field: string) => {
+    setErrors(prev => {
+      const next = { ...prev };
+      delete next[field];
+      return next;
+    });
   };
 
   return (
@@ -225,7 +204,6 @@ export function LoginScreen({
               display: 'flex',
               justifyContent: 'center',
               marginBottom: '40px',
-              overflow: 'hidden',
             }}
           >
             <img
@@ -236,7 +214,6 @@ export function LoginScreen({
                 height: 'auto',
                 objectFit: 'contain',
                 display: 'block',
-                transform: 'scale(1.25)',
               }}
             />
           </motion.div>

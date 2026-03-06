@@ -632,7 +632,7 @@ export function PlanHierarchy({
             </Button>
             <Button variant="outline" className="justify-start gap-2">
               <MessageCircle className="w-4 h-4" />
-              Ask Aminy
+              Aminy
             </Button>
           </div>
         </Card>

@@ -420,7 +420,8 @@ async function getPromoDiscount(code: string, subtotal: number): Promise<number>
   try {
     const result = await validatePromoCode(code, subtotal);
     return result.discountAmount || 0;
-  } catch {
+  } catch (error) {
+    console.warn('[Stripe] Promo code validation failed:', error);
     return 0;
   }
 }
@@ -628,7 +629,8 @@ export async function getBundleCredits(userId: string): Promise<{
     }
 
     return response.json();
-  } catch {
+  } catch (error) {
+    console.warn('[Stripe] Failed to fetch bundle credits:', error);
     return {
       consultCredits: 0,
       deepReviewCredits: 0,
@@ -679,6 +681,144 @@ export async function useBundleCredit({
   return response.json();
 }
 
+// ============================================================================
+// Tier Change / Proration Functions
+// ============================================================================
+
+/** Ordered list of tiers from lowest to highest for upgrade/downgrade detection */
+const TIER_ORDER: TierType[] = ['free', 'starter', 'core', 'pro', 'proplus'];
+
+export interface ProrationPreview {
+  /** Amount the customer will be credited (in cents) for unused time on current plan */
+  credit: number;
+  /** Amount the customer will be charged (in cents) for the new plan prorated period */
+  debit: number;
+  /** Net amount the customer owes now (debit - credit, in cents). Negative = credit */
+  netAmount: number;
+  /** Human-readable formatted net amount */
+  formattedNetAmount: string;
+  /** Whether this is an upgrade (immediate) or downgrade (end of period) */
+  direction: 'upgrade' | 'downgrade' | 'lateral';
+  /** When the change takes effect */
+  effectiveDate: string;
+  /** The new price ID that will be applied */
+  newPriceId: string;
+}
+
+/**
+ * Get a proration preview for changing subscription plans.
+ *
+ * Calls the backend which uses Stripe's upcoming invoice API
+ * to calculate exact proration amounts.
+ */
+export async function getProrationPreview(
+  subscriptionId: string,
+  newPriceId: string
+): Promise<ProrationPreview> {
+  const accessToken = await getAccessToken();
+
+  const response = await fetch(
+    `${EDGE_FUNCTION_BASE}/payments/proration-preview`,
+    {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ subscriptionId, newPriceId }),
+    }
+  );
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Failed to get proration preview: ${errorText}`);
+  }
+
+  return response.json();
+}
+
+/**
+ * Change subscription tier with smart proration handling.
+ *
+ * - Upgrades: Applied immediately with prorated charge for the remainder
+ *   of the current billing period.
+ * - Downgrades: Scheduled at period end so the user keeps their current
+ *   features until the paid period expires. No immediate charge.
+ * - Lateral (same rank, different interval): Treated like an upgrade
+ *   so the new interval starts immediately.
+ */
+export async function changeTier(
+  userId: string,
+  currentTier: TierType,
+  newTier: TierType,
+  interval: BillingInterval
+): Promise<{
+  success: boolean;
+  direction: 'upgrade' | 'downgrade' | 'lateral';
+  effectiveDate: string;
+  prorationPreview?: ProrationPreview;
+}> {
+  const accessToken = await getAccessToken();
+
+  const currentRank = TIER_ORDER.indexOf(currentTier);
+  const newRank = TIER_ORDER.indexOf(newTier);
+
+  let direction: 'upgrade' | 'downgrade' | 'lateral';
+  if (newRank > currentRank) {
+    direction = 'upgrade';
+  } else if (newRank < currentRank) {
+    direction = 'downgrade';
+  } else {
+    direction = 'lateral';
+  }
+
+  // Build the price key for the new plan
+  const priceKey = `${newTier}_${interval}` as keyof typeof STRIPE_PRICES;
+  const newPriceId = STRIPE_PRICES[priceKey];
+
+  if (!newPriceId) {
+    throw new Error(`No price configured for ${newTier} ${interval}`);
+  }
+
+  const response = await fetch(
+    `${EDGE_FUNCTION_BASE}/payments/change-tier`,
+    {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userId,
+        newPriceId,
+        newTier,
+        direction,
+        // Downgrades happen at period end, upgrades immediately
+        prorationBehavior: direction === 'downgrade'
+          ? 'none'
+          : 'create_prorations',
+        billingCycleAnchor: direction === 'downgrade'
+          ? undefined
+          : 'unchanged',
+      }),
+    }
+  );
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Failed to change tier: ${errorText}`);
+  }
+
+  const result = await response.json();
+
+  return {
+    success: true,
+    direction,
+    effectiveDate: result.effectiveDate || new Date().toISOString(),
+    prorationPreview: result.prorationPreview,
+  };
+}
+
 export default {
   createCheckoutSession,
   createPortalSession,
@@ -690,6 +830,8 @@ export default {
   calculateVisitPrice,
   validatePromoCode,
   formatPrice,
+  changeTier,
+  getProrationPreview,
   createBundleCheckoutSession,
   getBundleCredits,
   useBundleCredit,

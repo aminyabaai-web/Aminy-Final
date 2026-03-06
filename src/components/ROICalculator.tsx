@@ -136,7 +136,7 @@ export function ROICalculator() {
 
   const handleSubmitEmail = () => {
     // In production, this would send the email and generate a PDF
-    console.log('Email submitted:', email);
+    if (import.meta.env.DEV) console.log('Email submitted:', email);
     setShowEmailCapture(false);
     // Show success toast or download PDF
   };

@@ -201,6 +201,11 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Demo Data Banner */}
+      <div className="bg-amber-50 border-b border-amber-200 px-4 py-2.5 flex items-center gap-2">
+        <span className="text-amber-600 text-sm font-medium">Demo Data</span>
+        <span className="text-amber-700/70 text-xs">Sample metrics shown for demonstration. Connect analytics backend for real data.</span>
+      </div>
       {/* Header */}
       <div className="bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4">
         <div className="flex items-center justify-between">

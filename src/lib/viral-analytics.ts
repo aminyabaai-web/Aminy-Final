@@ -428,7 +428,7 @@ export function interpretKFactor(k: number): {
 export function getReferralUrl(code: string): string {
   const baseUrl = typeof window !== 'undefined'
     ? window.location.origin
-    : 'https://aminy.app';
+    : 'https://aminy.ai';
   return `${baseUrl}/join?ref=${code}`;
 }
 

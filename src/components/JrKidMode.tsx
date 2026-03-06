@@ -20,15 +20,6 @@ import {
   Heart
 } from 'lucide-react';
 
-interface JrKidModeProps {
-  childName: string;
-  tokens: number;
-  onTokensChange: (newTokens: number) => void;
-  onExitKidMode: () => void;
-  onSessionComplete: (sessionData: any) => void;
-  prefersReducedMotion: boolean;
-}
-
 interface ModuleSession {
   module: string;
   startedAt: Date;
@@ -36,6 +27,17 @@ interface ModuleSession {
   successful: number;
   durationMin: number;
   accuracy: number;
+}
+
+interface JrKidModeProps {
+  childName: string;
+  tokens?: number;
+  onTokensChange?: (newTokens: number) => void;
+  onExitKidMode?: () => void;
+  onExit?: () => void;
+  onSessionComplete?: (sessionData: ModuleSession) => void;
+  prefersReducedMotion?: boolean;
+  jrProfile?: import('../types/connector').JrProfile;
 }
 
 export const JrKidMode: React.FC<JrKidModeProps> = ({
@@ -91,10 +93,10 @@ export const JrKidMode: React.FC<JrKidModeProps> = ({
       };
 
       // Award token
-      onTokensChange(tokens + 1);
-      
+      onTokensChange?.((tokens ?? 0) + 1);
+
       // Report session data
-      onSessionComplete(completedSession);
+      onSessionComplete?.(completedSession);
 
       // Show celebration
       showCelebration();
@@ -124,8 +126,8 @@ export const JrKidMode: React.FC<JrKidModeProps> = ({
   };
 
   const redeemReward = () => {
-    if (tokens >= 3) {
-      onTokensChange(tokens - 3);
+    if ((tokens ?? 0) >= 3) {
+      onTokensChange?.((tokens ?? 0) - 3);
       // Show reward animation
       showCelebration();
       setShowRewards(false);
@@ -213,7 +215,7 @@ export const JrKidMode: React.FC<JrKidModeProps> = ({
 
               return rewards.map((reward) => {
                 const colorClasses = rewardColors[reward.color] || rewardColors.blue;
-                const isAffordable = tokens >= reward.cost;
+                const isAffordable = (tokens ?? 0) >= reward.cost;
 
                 return (
                   <Card
@@ -259,7 +261,7 @@ export const JrKidMode: React.FC<JrKidModeProps> = ({
       onBack={() => setActiveModule(null)}
       sessionData={sessionData}
       setSessionData={setSessionData}
-      prefersReducedMotion={prefersReducedMotion}
+      prefersReducedMotion={prefersReducedMotion ?? false}
     />;
   }
 
@@ -291,7 +293,7 @@ export const JrKidMode: React.FC<JrKidModeProps> = ({
               onMouseDown={(e) => {
                 // Require long press (500ms) for exit
                 const timeout = setTimeout(() => {
-                  onExitKidMode();
+                  onExitKidMode?.();
                 }, 500);
                 
                 const handleMouseUp = () => {
@@ -460,8 +462,8 @@ const ModuleInterface: React.FC<ModuleInterfaceProps> = ({
     }
   };
 
-  const config = moduleConfig[moduleType as keyof typeof moduleConfig];
-  
+  const config = moduleConfig[moduleType as keyof typeof moduleConfig] as { title: string; color: string; icon: React.ComponentType<{ className?: string }>; activities: { name: string; prompt: string; keywords?: string[]; duration?: number; steps?: string[] }[] } | undefined;
+
   if (!config) {
     return <div>Module not found</div>;
   }
@@ -568,7 +570,7 @@ const ModuleInterface: React.FC<ModuleInterfaceProps> = ({
 
         {currentActivityData.steps && (
           <div className="mb-8">
-            {currentActivityData.steps.map((step, index) => (
+            {currentActivityData.steps.map((step: string, index: number) => (
               <div 
                 key={index}
                 className={`flex items-center gap-3 p-3 rounded-lg mb-2 ${

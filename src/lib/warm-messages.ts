@@ -187,7 +187,7 @@ export function getMessage(
   key: string, 
   context?: Record<string, string>
 ): string {
-  const message = (MESSAGES[category] as any)?.[key];
+  const message = (MESSAGES[category] as Record<string, string>)?.[key];
   
   if (!message) {
     return MESSAGES.errors.genericError;
@@ -212,7 +212,7 @@ export function getRandomMessage(category: keyof typeof MESSAGES): string {
 /**
  * Format console logs in warm tone (for development)
  */
-export function logWarm(action: string, details?: any) {
+export function logWarm(action: string, details?: unknown) {
   const prefix = '🌿 Aminy:';
   if (details) {
   } else {

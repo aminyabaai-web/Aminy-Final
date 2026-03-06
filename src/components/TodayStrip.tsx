@@ -8,7 +8,7 @@ interface TodayStripItem {
   subtitle: string;
   duration: string;
   status?: 'upcoming' | 'current' | 'completed';
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 interface TodayStripProps {

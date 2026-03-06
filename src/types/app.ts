@@ -188,7 +188,7 @@ export interface Session {
   recordingUrl?: string;
   createdAt: string;
   updatedAt: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface ActionItem {
@@ -258,7 +258,7 @@ export interface InsuranceDocument {
   name: string;
   url: string;
   uploadedAt: string;
-  extractedData?: Record<string, any>;
+  extractedData?: Record<string, unknown>;
 }
 
 // ============================================================================
@@ -282,7 +282,7 @@ export interface Report {
   shareLinkExpires?: string;
   sharedAt?: string;
   sections: ReportSection[];
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface ReportSection {
@@ -290,14 +290,14 @@ export interface ReportSection {
   title: string;
   type: 'summary' | 'goals' | 'sessions' | 'wins' | 'recommendations';
   content: string;
-  data?: any;
+  data?: Record<string, unknown> | unknown[];
   visualizations?: Visualization[];
 }
 
 export interface Visualization {
   type: 'chart' | 'progress-bar' | 'timeline' | 'stat-card';
-  data: any;
-  config?: Record<string, any>;
+  data: Record<string, unknown> | unknown[];
+  config?: Record<string, unknown>;
 }
 
 // ============================================================================
@@ -334,7 +334,7 @@ export interface VaultDocument {
 
 export interface DocumentMetadata {
   extractedText?: string;
-  extractedData?: Record<string, any>;
+  extractedData?: Record<string, unknown>;
   ocr?: boolean;
   pages?: number;
   version?: number;
@@ -432,7 +432,7 @@ export interface MicroCue {
 export interface KnowledgeGraph {
   userId: string;
   patterns: Pattern[];
-  preferences: Record<string, any>;
+  preferences: Record<string, unknown>;
   insights: Insight[];
   lastUpdated: string;
 }
@@ -440,7 +440,7 @@ export interface KnowledgeGraph {
 export interface Pattern {
   id: string;
   type: string;
-  data: any;
+  data: Record<string, unknown>;
   detectedAt: string;
   confidence: number; // 0-1
   occurrences: number;
@@ -540,7 +540,7 @@ export interface AIContext {
 
 export interface AIResponse {
   success: boolean;
-  data?: any;
+  data?: Record<string, unknown> | unknown[];
   error?: string;
   usage?: {
     promptTokens: number;

@@ -5,6 +5,24 @@
 
 import * as kv from "./kv_store.tsx";
 
+// ---------------------------------------------------------------------------
+// Supabase client type (minimal interface for methods used in this module)
+// ---------------------------------------------------------------------------
+
+/** Supabase query builder chain (simplified) */
+interface SupabaseQueryBuilder {
+  select(columns: string, options?: { count?: string; head?: boolean }): SupabaseQueryBuilder;
+  insert(values: Record<string, unknown>): SupabaseQueryBuilder;
+  update(values: Record<string, unknown>): SupabaseQueryBuilder;
+  eq(column: string, value: string | number): SupabaseQueryBuilder;
+  single(): Promise<{ data: Record<string, unknown> | null; error: { code?: string; message: string } | null }>;
+}
+
+/** Minimal Supabase client interface as used in this module */
+interface SupabaseClient {
+  from(table: string): SupabaseQueryBuilder;
+}
+
 interface RateLimitConfig {
   windowMs: number;      // Time window in milliseconds
   maxRequests: number;   // Max requests per window
@@ -242,7 +260,7 @@ function getResetTimeUTC(): string {
  * Uses Supabase usage_tracking table
  */
 export async function checkDailyUsage(
-  supabase: any,
+  supabase: SupabaseClient,
   userId: string,
   tier: string = 'free',
   incrementCount: boolean = false
@@ -326,7 +344,7 @@ export async function checkDailyUsage(
  * Get current daily usage without incrementing
  */
 export async function getDailyUsage(
-  supabase: any,
+  supabase: SupabaseClient,
   userId: string,
   tier: string = 'free'
 ): Promise<DailyUsageResult> {
@@ -337,7 +355,7 @@ export async function getDailyUsage(
  * Combined check: per-minute rate limit + daily usage limit
  */
 export async function checkAllLimits(
-  supabase: any,
+  supabase: SupabaseClient,
   userId: string,
   tier: string = 'free',
   endpoint: string = 'ai',

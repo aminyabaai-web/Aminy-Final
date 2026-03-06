@@ -392,6 +392,11 @@ export function AnalyticsCharts({
 
   return (
     <div className="space-y-6">
+      {/* Demo Data Banner */}
+      <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-2.5 flex items-center gap-2">
+        <span className="text-amber-600 text-sm font-medium">Sample Data</span>
+        <span className="text-amber-700/70 text-xs">Showing demo analytics. Real data will appear as you track activities.</span>
+      </div>
       {/* Date Range Selector */}
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-semibold dark:text-white">Analytics for {childName}</h2>

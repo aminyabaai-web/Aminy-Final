@@ -7,6 +7,14 @@ import makingFriendsData from '../content/boosters/making_friends.json';
 import transitionsData from '../content/boosters/transitions.json';
 import publicSpeakingData from '../content/boosters/public_speaking.json';
 
+export interface ActivityVariant {
+  context?: string;
+  activity?: string;
+  materials?: string;
+  rules?: string[];
+  [key: string]: string | string[] | undefined;
+}
+
 export interface Activity {
   id: string;
   title: string;
@@ -22,7 +30,7 @@ export interface Activity {
   success_criteria: string;
   mastery_rule: string;
   generalization: string;
-  variants: any[];
+  variants: ActivityVariant[];
 }
 
 export interface ActivityPack {

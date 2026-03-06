@@ -85,7 +85,7 @@ export function DesignSystem() {
     { id: 'components', name: 'Components', icon: Component },
   ];
 
-  const renderTokenCard = (tokenName: string, token: any, category: string) => (
+  const renderTokenCard = (tokenName: string, token: { value: string; description: string }, category: string) => (
     <div key={tokenName} className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-4 hover:shadow-md transition-shadow">
       <div className="flex items-start justify-between mb-2">
         <code className="text-sm font-mono text-slate-900 dark:text-slate-100 bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">

@@ -18,8 +18,8 @@ interface UpcomingSessionsStripProps {
   onViewAll?: () => void;
 }
 
-export function UpcomingSessionsStrip({ 
-  sessions, 
+export function UpcomingSessionsStrip({
+  sessions = [],
   onSessionClick,
   onViewAll 
 }: UpcomingSessionsStripProps) {

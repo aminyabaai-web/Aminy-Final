@@ -112,7 +112,8 @@ describe('Plan Tab Utilities', () => {
 
   describe('formatDate', () => {
     it('should format Date object correctly', () => {
-      const date = new Date('2024-12-25');
+      // Use noon UTC to avoid timezone date-shift issues
+      const date = new Date('2024-12-25T12:00:00');
       const result = formatDate(date);
       expect(result).toContain('Dec');
       expect(result).toContain('25');
@@ -120,7 +121,7 @@ describe('Plan Tab Utilities', () => {
     });
 
     it('should format date string correctly', () => {
-      const result = formatDate('2024-01-15');
+      const result = formatDate('2024-01-15T12:00:00');
       expect(result).toContain('Jan');
       expect(result).toContain('15');
     });

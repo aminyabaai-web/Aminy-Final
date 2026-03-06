@@ -60,15 +60,17 @@ export interface Appointment {
 }
 
 interface MyAppointmentsProps {
-  appointments: Appointment[];
-  onBookNew: () => void;
-  onJoinCall: (appointment: Appointment) => void;
-  onReschedule: (appointment: Appointment) => void;
-  onCancel: (appointment: Appointment) => void;
-  onLeaveReview: (appointment: Appointment) => void;
-  onBookAgain: (appointment: Appointment) => void;
-  onCompleteQuestionnaire: (appointment: Appointment) => void;
+  appointments?: Appointment[];
+  onBookNew?: () => void;
+  onJoinCall?: (appointment: Appointment) => void;
+  onReschedule?: (appointment: Appointment) => void;
+  onCancel?: (appointment: Appointment) => void;
+  onLeaveReview?: (appointment: Appointment) => void;
+  onBookAgain?: (appointment: Appointment) => void;
+  onCompleteQuestionnaire?: (appointment: Appointment) => void;
   childName?: string;
+  onBack?: () => void;
+  onNavigateToProvider?: () => void;
 }
 
 // Fallback data (only used if database is empty or unavailable)
@@ -132,12 +134,13 @@ export function useAppointments(userId?: string): {
         setAppointments(FALLBACK_APPOINTMENTS);
       } else if (data && data.length > 0) {
         const now = new Date();
-        setAppointments(data.map((booking: any) => {
-          const scheduledAt = new Date(booking.scheduled_at);
+        setAppointments(data.map((booking: Record<string, unknown>) => {
+          const scheduledAt = new Date(booking.scheduled_at as string);
           const isPast = scheduledAt < now;
           const hoursUntil = (scheduledAt.getTime() - now.getTime()) / (1000 * 60 * 60);
+          const providerObj = booking.provider as Record<string, unknown> | null;
 
-          let status: Appointment['status'] = booking.status;
+          let status: Appointment['status'] = booking.status as Appointment['status'];
           if (booking.status === 'confirmed' && !isPast) {
             status = 'upcoming';
           } else if (booking.status === 'confirmed' && isPast) {
@@ -145,31 +148,31 @@ export function useAppointments(userId?: string): {
           }
 
           return {
-            id: booking.id,
+            id: booking.id as string,
             provider: {
-              id: booking.provider?.id || 'unknown',
-              name: booking.provider?.full_name || 'Provider',
-              title: booking.provider?.credentials || '',
-              specialty: booking.provider?.specialty || '',
+              id: (providerObj?.id as string) || 'unknown',
+              name: (providerObj?.full_name as string) || 'Provider',
+              title: (providerObj?.credentials as string) || '',
+              specialty: (providerObj?.specialty as string) || '',
             },
             scheduledAt,
-            duration: booking.session_duration_minutes || 60,
-            sessionType: booking.session_type || 'Consultation',
+            duration: (booking.session_duration_minutes as number) || 60,
+            sessionType: (booking.session_type as string) || 'Consultation',
             status,
             visitType: 'video' as const,
-            videoCallUrl: booking.video_room_url,
-            concern: booking.concern,
+            videoCallUrl: booking.video_room_url as string | undefined,
+            concern: booking.concern as string | undefined,
             preVisitQuestionnaire: {
               completed: true,
               url: '',
             },
             postVisitReview: booking.rating ? {
               submitted: true,
-              rating: booking.rating,
+              rating: booking.rating as number,
             } : {
               submitted: false,
             },
-            sessionNotes: booking.notes,
+            sessionNotes: booking.notes as string | undefined,
             canReschedule: !isPast && hoursUntil > 24,
             canCancel: !isPast && hoursUntil > 24,
           };
@@ -177,9 +180,9 @@ export function useAppointments(userId?: string): {
       } else {
         setAppointments(FALLBACK_APPOINTMENTS);
       }
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.error('Failed to load appointments:', e);
-      setError(e.message);
+      setError(e instanceof Error ? e.message : 'Unknown error');
       setAppointments(FALLBACK_APPOINTMENTS);
     } finally {
       setIsLoading(false);
@@ -289,12 +292,12 @@ function AppointmentCard({
   onCompleteQuestionnaire
 }: {
   appointment: Appointment;
-  onJoinCall: (a: Appointment) => void;
-  onReschedule: (a: Appointment) => void;
-  onCancel: (a: Appointment) => void;
-  onLeaveReview: (a: Appointment) => void;
-  onBookAgain: (a: Appointment) => void;
-  onCompleteQuestionnaire: (a: Appointment) => void;
+  onJoinCall?: (a: Appointment) => void;
+  onReschedule?: (a: Appointment) => void;
+  onCancel?: (a: Appointment) => void;
+  onLeaveReview?: (a: Appointment) => void;
+  onBookAgain?: (a: Appointment) => void;
+  onCompleteQuestionnaire?: (a: Appointment) => void;
 }) {
   const canJoin = appointment.status === 'upcoming' && isWithinJoinWindow(appointment.scheduledAt);
   const showQuestionnaire = appointment.status === 'upcoming' &&
@@ -365,7 +368,7 @@ function AppointmentCard({
         <div className="px-4 pb-3">
           {showQuestionnaire && (
             <button
-              onClick={() => onCompleteQuestionnaire(appointment)}
+              onClick={() => onCompleteQuestionnaire?.(appointment)}
               className="w-full flex items-center justify-between p-3 bg-amber-50 border border-amber-200 rounded-lg text-amber-800 hover:bg-amber-100 transition-colors"
             >
               <div className="flex items-center gap-2">
@@ -377,7 +380,7 @@ function AppointmentCard({
           )}
           {showReviewPrompt && (
             <button
-              onClick={() => onLeaveReview(appointment)}
+              onClick={() => onLeaveReview?.(appointment)}
               className="w-full flex items-center justify-between p-3 bg-teal-50 border border-teal-200 rounded-lg text-teal-800 hover:bg-teal-100 transition-colors"
             >
               <div className="flex items-center gap-2">
@@ -395,7 +398,7 @@ function AppointmentCard({
         {/* Join Call Button */}
         {canJoin && (
           <button
-            onClick={() => onJoinCall(appointment)}
+            onClick={() => onJoinCall?.(appointment)}
             className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-colors"
           >
             <Video className="w-4 h-4" />
@@ -408,7 +411,7 @@ function AppointmentCard({
           <>
             {appointment.canReschedule && (
               <button
-                onClick={() => onReschedule(appointment)}
+                onClick={() => onReschedule?.(appointment)}
                 className="flex items-center gap-2 px-4 py-2 text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
               >
                 <RefreshCw className="w-4 h-4" />
@@ -417,7 +420,7 @@ function AppointmentCard({
             )}
             {appointment.canCancel && (
               <button
-                onClick={() => onCancel(appointment)}
+                onClick={() => onCancel?.(appointment)}
                 className="flex items-center gap-2 px-4 py-2 text-red-600 border border-red-200 rounded-lg hover:bg-red-50 transition-colors"
               >
                 <X className="w-4 h-4" />
@@ -430,7 +433,7 @@ function AppointmentCard({
         {/* Completed Actions */}
         {appointment.status === 'completed' && (
           <button
-            onClick={() => onBookAgain(appointment)}
+            onClick={() => onBookAgain?.(appointment)}
             className="flex items-center gap-2 px-4 py-2 text-teal-600 border border-teal-200 rounded-lg hover:bg-teal-50 transition-colors"
           >
             <CalendarPlus className="w-4 h-4" />
@@ -444,7 +447,7 @@ function AppointmentCard({
 
 // Main Component
 export function MyAppointments({
-  appointments,
+  appointments = [],
   onBookNew,
   onJoinCall,
   onReschedule,
@@ -452,8 +455,10 @@ export function MyAppointments({
   onLeaveReview,
   onBookAgain,
   onCompleteQuestionnaire,
-  childName
-}: MyAppointmentsProps) {
+  childName,
+  onBack,
+  onNavigateToProvider
+}: MyAppointmentsProps & { onBack?: () => void; onNavigateToProvider?: () => void }) {
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
 
   const upcomingAppointments = appointments
@@ -578,7 +583,7 @@ export function MyAppointments({
           <button
             onClick={() => {
               const nextCall = upcomingAppointments.find(a => isWithinJoinWindow(a.scheduledAt));
-              if (nextCall) onJoinCall(nextCall);
+              if (nextCall) onJoinCall?.(nextCall);
             }}
             className="flex items-center gap-2 px-6 py-3 bg-green-600 text-white font-semibold rounded-full shadow-lg hover:bg-green-700 transition-all hover:shadow-xl"
           >

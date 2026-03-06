@@ -22,6 +22,7 @@ export interface ChildProfile {
   name: string;
   age: number;
   photoUrl?: string;
+  isPrimary?: boolean;
   goals: {
     id: string;
     name: string;
@@ -52,6 +53,69 @@ export interface RoutineData {
   tasks: DailyTaskItem[];
   completedCount: number;
   totalCount: number;
+}
+
+/** Raw goal row from the Supabase goals table */
+interface GoalRow {
+  id?: string;
+  title?: string;
+  name?: string;
+  progress?: number;
+  trend?: 'up' | 'down' | 'stable';
+  child_id?: string;
+  is_active?: boolean;
+  user_id?: string;
+  created_at?: string;
+}
+
+/** Raw child row from the Supabase children table */
+interface ChildRow {
+  id?: string;
+  name?: string;
+  age?: number;
+  photo_url?: string;
+  is_primary?: boolean;
+  user_id?: string;
+  is_active?: boolean;
+}
+
+/** Raw routine from the routines engine */
+interface RawRoutine {
+  period?: 'morning' | 'afternoon' | 'evening' | 'bedtime';
+  name?: string;
+  steps?: RawRoutineStep[];
+}
+
+/** Raw routine step */
+interface RawRoutineStep {
+  id?: string;
+  title?: string;
+  description?: string;
+  abaSkillArea?: string;
+  status?: string;
+  durationMinutes?: number;
+}
+
+/** Raw appointment row from the Supabase appointments table */
+interface AppointmentRow {
+  id?: string;
+  start_time?: string;
+  visit_type?: string;
+  status?: string;
+  user_id?: string;
+  providers?: {
+    first_name?: string;
+    last_name?: string;
+  };
+}
+
+/** A milestone celebration earned by the user */
+export interface Celebration {
+  id: string;
+  milestone_key?: string;
+  milestone_name?: string;
+  celebrated_at?: string;
+  [key: string]: unknown;
 }
 
 export interface DashboardData {
@@ -99,7 +163,7 @@ export interface DashboardData {
 
   // Engagement
   milestonesEarned: number;
-  pendingCelebrations: any[];
+  pendingCelebrations: Celebration[];
 
   // Loading states
   isLoading: boolean;
@@ -110,7 +174,7 @@ export interface DashboardData {
 // Hook Implementation
 // ============================================================================
 
-export function useDashboardData(userId?: string): DashboardData & {
+export function useDashboardData(userId?: string, childId?: string): DashboardData & {
   refresh: () => Promise<void>;
   completeRoutineStep: (routineId: string, stepId: string) => Promise<void>;
   startRoutine: (routineId: string) => Promise<void>;
@@ -165,8 +229,8 @@ export function useDashboardData(userId?: string): DashboardData & {
           .select('*')
           .eq('id', userId)
           .single()
-          .catch((err) => {
-            console.warn('[Dashboard] Profile fetch failed:', err?.message || err);
+          .then(null, (err: unknown) => {
+            console.warn('[Dashboard] Profile fetch failed:', err);
             return { data: null, error: err };
           }),
 
@@ -189,26 +253,29 @@ export function useDashboardData(userId?: string): DashboardData & {
             }
             return result;
           })
-          .catch((err) => {
-            console.warn('[Dashboard] Children fetch failed:', err?.message || err);
+          .then(null, (err: unknown) => {
+            console.warn('[Dashboard] Children fetch failed:', err);
             return { data: [], error: err };
           }),
 
         // Get today's routines
         routinesEngine.getTodaysRoutines(userId).catch(() => []),
 
-        // Get active goals
-        supabase
-          .from('goals')
-          .select('*')
-          .eq('user_id', userId)
-          .eq('is_active', true)
-          .order('created_at', { ascending: false })
-          .limit(5)
-          .catch((err) => {
-            console.warn('[Dashboard] Goals fetch failed:', err?.message || err);
+        // Get active goals (filtered by childId when provided)
+        (() => {
+          let query = supabase
+            .from('goals')
+            .select('*')
+            .eq('user_id', userId)
+            .eq('is_active', true)
+            .order('created_at', { ascending: false })
+            .limit(5);
+          if (childId) query = query.eq('child_id', childId);
+          return query.then(null, (err: unknown) => {
+            console.warn('[Dashboard] Goals fetch failed:', err);
             return { data: [], error: err };
-          }),
+          });
+        })(),
 
         // Get upcoming appointments
         supabase
@@ -219,8 +286,8 @@ export function useDashboardData(userId?: string): DashboardData & {
           .gte('start_time', new Date().toISOString())
           .order('start_time', { ascending: true })
           .limit(3)
-          .catch((err) => {
-            console.warn('[Dashboard] Appointments fetch failed:', err?.message || err);
+          .then(null, (err: unknown) => {
+            console.warn('[Dashboard] Appointments fetch failed:', err);
             return { data: [], error: err };
           }),
 
@@ -248,25 +315,25 @@ export function useDashboardData(userId?: string): DashboardData & {
 
       // Process goals first (needed for child profiles)
       // SAFETY: Ensure goalsResult.data is an array
-      const safeGoalsData = Array.isArray(goalsResult?.data) ? goalsResult.data : [];
-      const goals = safeGoalsData.map((g: any) => ({
+      const safeGoalsData: GoalRow[] = Array.isArray(goalsResult?.data) ? goalsResult.data : [];
+      const goals = safeGoalsData.map((g) => ({
         id: g?.id || '',
         name: g?.title || g?.name || 'Goal',
         progress: g?.progress || 0,
         percentMet: g?.progress || 0,
-        trend: g?.trend || 'stable',
+        trend: (g?.trend || 'stable') as 'up' | 'down' | 'stable',
         childId: g?.child_id,
       }));
 
       // Build children array from the children table
       // SAFETY: Ensure childrenResult.data is an array
-      const safeChildrenData = Array.isArray(childrenResult?.data) ? childrenResult.data : [];
-      const childrenFromTable: ChildProfile[] = safeChildrenData.map((c: any) => ({
+      const safeChildrenData: ChildRow[] = Array.isArray(childrenResult?.data) ? childrenResult.data : [];
+      const childrenFromTable: ChildProfile[] = safeChildrenData.map((c) => ({
         id: c?.id || '',
         name: c?.name || 'Child',
         age: c?.age || 5,
         photoUrl: c?.photo_url,
-        goals: goals.filter(g => g.childId === c?.id).map(g => ({
+        goals: goals.filter((g) => g.childId === c?.id).map((g) => ({
           id: g.id,
           name: g.name,
           percentMet: g.progress,
@@ -282,7 +349,7 @@ export function useDashboardData(userId?: string): DashboardData & {
             name: profile.child_name || 'Your Child',
             age: profile.child_age || 5,
             photoUrl: profile.child_photo_url,
-            goals: goals.map(g => ({
+            goals: goals.map((g) => ({
               id: g.id,
               name: g.name,
               percentMet: g.progress,
@@ -298,12 +365,12 @@ export function useDashboardData(userId?: string): DashboardData & {
       // Process routines
       // SAFETY: Ensure routinesResult is an array
       const safeRoutinesData = Array.isArray(routinesResult) ? routinesResult : [];
-      const todaysRoutines: RoutineData[] = safeRoutinesData.map((r: any) => {
-        const safeSteps = Array.isArray(r?.steps) ? r.steps : [];
+      const todaysRoutines: RoutineData[] = safeRoutinesData.map((r: RawRoutine) => {
+        const safeSteps: RawRoutineStep[] = Array.isArray(r?.steps) ? r.steps : [];
         return {
           timeOfDay: r?.period || 'morning',
           label: r?.name || 'Routine',
-          tasks: safeSteps.map((s: any) => ({
+          tasks: safeSteps.map((s) => ({
             id: s?.id || '',
             title: s?.title || '',
             description: s?.description || '',
@@ -311,7 +378,7 @@ export function useDashboardData(userId?: string): DashboardData & {
             completed: s?.status === 'completed',
             timeEstimate: `${s?.durationMinutes || 5}m`,
           })),
-          completedCount: safeSteps.filter((s: any) => s?.status === 'completed').length,
+          completedCount: safeSteps.filter((s) => s?.status === 'completed').length,
           totalCount: safeSteps.length,
         };
       });
@@ -319,7 +386,8 @@ export function useDashboardData(userId?: string): DashboardData & {
       // Process upcoming events
       // SAFETY: Ensure appointmentsResult.data is an array
       const safeAppointmentsData = Array.isArray(appointmentsResult?.data) ? appointmentsResult.data : [];
-      const upcomingEvents: UpcomingEvent[] = safeAppointmentsData.map((a: any) => ({
+      const safeAppointments: AppointmentRow[] = safeAppointmentsData;
+      const upcomingEvents: UpcomingEvent[] = safeAppointments.map((a) => ({
         id: a?.id || '',
         title: a?.providers
           ? `Session with ${a.providers.first_name || ''} ${a.providers.last_name || ''}`
@@ -357,7 +425,7 @@ export function useDashboardData(userId?: string): DashboardData & {
 
       // SAFETY: Ensure milestones and celebrations are arrays
       const safeMilestones = Array.isArray(milestonesResult) ? milestonesResult : [];
-      const safeCelebrations = Array.isArray(celebrationsResult) ? celebrationsResult : [];
+      const safeCelebrations = Array.isArray(celebrationsResult) ? celebrationsResult as Celebration[] : [];
 
       setData({
         childProfile,
@@ -391,15 +459,15 @@ export function useDashboardData(userId?: string): DashboardData & {
         if (import.meta.env.DEV) console.warn('Streak tracking failed:', err);
       });
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Failed to load dashboard data:', error);
       setData(prev => ({
         ...prev,
         isLoading: false,
-        error: error.message || 'Failed to load data',
+        error: error instanceof Error ? error.message : 'Failed to load data',
       }));
     }
-  }, [userId]);
+  }, [userId, childId]);
 
   // Complete a routine step
   const completeRoutineStep = useCallback(async (routineId: string, stepId: string) => {

@@ -93,7 +93,7 @@ export function moderateContent(content: string): ModerationResult {
   });
 
   // Determine if content should pass
-  const passed = severity !== 'severe' && filteredContent.trim().length > 0;
+  const passed = (severity as string) !== 'severe' && filteredContent.trim().length > 0;
 
   return {
     passed,

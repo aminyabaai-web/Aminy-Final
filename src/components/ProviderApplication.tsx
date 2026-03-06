@@ -143,7 +143,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
     });
   }, []);
 
-  const updateField = (field: keyof FormData, value: any) => {
+  const updateField = (field: keyof FormData, value: FormData[keyof FormData]) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     setError(null);
   };
@@ -176,6 +176,20 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
         }
         if (!formData.license_expiry) {
           setError('Please enter your license expiration date');
+          return false;
+        }
+        if (formData.license_number.length < 5) {
+          setError('License number must be at least 5 characters');
+          return false;
+        }
+        // Validate NPI format if provided (10 digits, required for BCBA/Psychologist/Therapist)
+        if (formData.npi_number) {
+          if (!/^\d{10}$/.test(formData.npi_number)) {
+            setError('NPI number must be exactly 10 digits');
+            return false;
+          }
+        } else if (['bcba', 'psychologist', 'therapist', 'slp', 'ot', 'pt'].includes(formData.provider_type)) {
+          setError('NPI number is required for licensed providers. You can look yours up at npiregistry.cms.hhs.gov');
           return false;
         }
         return true;

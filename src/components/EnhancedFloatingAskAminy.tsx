@@ -185,7 +185,7 @@ export function EnhancedFloatingAskAminy({
           hasNewContext && "animate-pulse",
           className
         )}
-        aria-label={`Ask Aminy - ${remainingMessages !== null ? `${remainingMessages} messages left` : 'Unlimited'}`}
+        aria-label={`Aminy - ${remainingMessages !== null ? `${remainingMessages} messages left` : 'Unlimited'}`}
       >
         <div className="relative">
           {/* Main icon */}

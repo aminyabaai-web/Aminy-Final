@@ -54,7 +54,7 @@ export function ReferralShare({
   const [friendEmail, setFriendEmail] = useState('');
 
   // Generate shareable link
-  const referralLink = `https://aminy.app/join?ref=${referralCode}`;
+  const referralLink = `https://aminy.ai/join?ref=${referralCode}`;
 
   // Copy to clipboard
   const handleCopy = async () => {

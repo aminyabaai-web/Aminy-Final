@@ -76,6 +76,7 @@ interface StoreMarketplaceProps {
   userTier?: TierType;
   onBack?: () => void;
   onNavigate?: (screen: string) => void;
+  onUpgrade?: () => void;
 }
 
 // Category definitions
@@ -343,6 +344,31 @@ export function StoreMarketplace({
     });
   }, []);
 
+  // Tier discount percentage
+  const tierDiscount = useMemo(() => {
+    switch (userTier) {
+      case 'proplus': return 0.30;  // Pro+ 30% off
+      case 'pro': return 0.20;     // Pro 20% off
+      case 'core': return 0.10;    // Core 10% off
+      default: return 0;
+    }
+  }, [userTier]);
+
+  const tierLabel = useMemo(() => {
+    switch (userTier) {
+      case 'proplus': return 'Pro+ 30% off';
+      case 'pro': return 'Pro 20% off';
+      case 'core': return 'Core 10% off';
+      default: return null;
+    }
+  }, [userTier]);
+
+  // Calculate discounted price
+  const getDiscountedPrice = useCallback((price: number | 'free' | 'included') => {
+    if (typeof price !== 'number' || tierDiscount === 0) return null;
+    return Math.round(price * (1 - tierDiscount) * 100) / 100;
+  }, [tierDiscount]);
+
   // Handle product action
   const handleProductAction = useCallback((product: Product) => {
     if (product.isPremium && !hasPremiumAccess) {
@@ -352,15 +378,18 @@ export function StoreMarketplace({
     }
 
     if (product.downloadUrl) {
+      // Generate a pseudo signed URL (in production, fetch from Supabase Storage)
+      const signedUrl = product.downloadUrl.startsWith('http')
+        ? product.downloadUrl
+        : `${window.location.origin}/api/downloads${product.downloadUrl}?token=${Date.now()}`;
       toast.success(`Downloading ${product.name}...`);
-      // In real app, trigger download
-      window.open(product.downloadUrl, '_blank');
+      window.open(signedUrl, '_blank');
     } else if (product.affiliateUrl) {
       window.open(product.affiliateUrl, '_blank');
     }
   }, [hasPremiumAccess, onNavigate]);
 
-  // Render price
+  // Render price with tier discount
   const renderPrice = (product: Product) => {
     if (product.price === 'free') {
       return <Badge className="bg-green-100 text-green-700">Free</Badge>;
@@ -373,11 +402,21 @@ export function StoreMarketplace({
         </Badge>
       );
     }
+    const discounted = getDiscountedPrice(product.price);
     return (
-      <div className="flex items-center gap-2">
-        <span className="font-bold text-slate-900">${product.price}</span>
-        {product.originalPrice && (
-          <span className="text-sm text-slate-400 line-through">${product.originalPrice}</span>
+      <div className="flex flex-col">
+        <div className="flex items-center gap-2">
+          <span className="font-bold text-slate-900">
+            ${discounted ?? product.price}
+          </span>
+          {(discounted || product.originalPrice) && (
+            <span className="text-sm text-slate-400 line-through">
+              ${discounted ? product.price : product.originalPrice}
+            </span>
+          )}
+        </div>
+        {discounted && tierLabel && (
+          <span className="text-xs text-teal-600 font-medium">{tierLabel}</span>
         )}
       </div>
     );

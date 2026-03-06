@@ -7,9 +7,13 @@ import { readFileSync } from 'fs';
 // Read version from package.json for build-time injection
 const pkg = JSON.parse(readFileSync('./package.json', 'utf-8'));
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   define: {
     'import.meta.env.VITE_APP_VERSION': JSON.stringify(pkg.version),
+  },
+  esbuild: {
+    // Strip console.log/debug/warn from production builds (keeps console.error)
+    pure: mode === 'production' ? ['console.log', 'console.debug', 'console.warn'] : [],
   },
   plugins: [
     react(),
@@ -17,31 +21,51 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
       manifest: {
-        name: 'Aminy - Your Parenting Companion',
+        name: 'Aminy\u2122 - ABA Support for Your Family',
         short_name: 'Aminy',
-        description: 'AI-powered behavioral wellness companion for parents of neurodivergent children',
-        theme_color: '#06b6d4',
-        background_color: '#ffffff',
+        description: 'AI-powered support for parents of neurodivergent children. Get personalized ABA guidance, behavior tracking, and connect with certified professionals.',
+        theme_color: '#0891b2',
+        background_color: '#F5F5F5',
         display: 'standalone',
-        orientation: 'portrait',
+        orientation: 'portrait-primary',
         scope: '/',
         start_url: '/',
+        lang: 'en-US',
+        categories: ['health', 'lifestyle', 'education'],
         icons: [
+          { src: '/pwa-72x72.png', sizes: '72x72', type: 'image/png' },
+          { src: '/pwa-96x96.png', sizes: '96x96', type: 'image/png' },
+          { src: '/pwa-128x128.png', sizes: '128x128', type: 'image/png' },
+          { src: '/pwa-144x144.png', sizes: '144x144', type: 'image/png' },
+          { src: '/pwa-192x192.png', sizes: '192x192', type: 'image/png' },
+          { src: '/pwa-384x384.png', sizes: '384x384', type: 'image/png' },
+          { src: '/pwa-512x512.png', sizes: '512x512', type: 'image/png' },
+          { src: '/pwa-512x512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+        ],
+        shortcuts: [
           {
-            src: '/pwa-192x192.png',
-            sizes: '192x192',
-            type: 'image/png',
+            name: 'Ask Aminy',
+            short_name: 'Chat',
+            description: 'Start a conversation with your AI coach',
+            url: '/?tab=chat',
           },
           {
-            src: '/pwa-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
+            name: 'Crisis Resources',
+            short_name: 'Crisis',
+            description: 'Emergency contacts and calming techniques',
+            url: '/?screen=crisis-resources',
           },
           {
-            src: '/pwa-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'maskable',
+            name: 'Log Incident',
+            short_name: 'Log',
+            description: 'Quick log a behavioral incident',
+            url: '/?screen=incident-log',
+          },
+          {
+            name: 'Book Session',
+            short_name: 'Book',
+            description: 'Schedule a telehealth session',
+            url: '/?screen=telehealth',
           },
         ],
       },
@@ -117,12 +141,38 @@ export default defineConfig({
         '@': path.resolve(__dirname, './src'),
       },
     },
+    optimizeDeps: {
+      include: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime'],
+    },
     build: {
       target: 'esnext',
       outDir: 'build',
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            'vendor-react': ['react', 'react-dom', 'react/jsx-runtime'],
+            'vendor-supabase': ['@supabase/supabase-js'],
+            'vendor-radix': [
+              '@radix-ui/react-dialog',
+              '@radix-ui/react-dropdown-menu',
+              '@radix-ui/react-popover',
+              '@radix-ui/react-select',
+              '@radix-ui/react-tabs',
+              '@radix-ui/react-tooltip',
+              '@radix-ui/react-accordion',
+              '@radix-ui/react-scroll-area',
+              '@radix-ui/react-switch',
+              '@radix-ui/react-checkbox',
+              '@radix-ui/react-slot',
+            ],
+            'vendor-motion': ['motion/react'],
+            'vendor-ui': ['sonner', 'lucide-react', 'class-variance-authority', 'clsx', 'tailwind-merge'],
+          },
+        },
+      },
     },
     server: {
       port: 3000,
       open: true,
     },
-  });
+  }));

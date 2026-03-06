@@ -227,7 +227,7 @@ export function AdminPortal({ onBack }: AdminPortalProps) {
         // AI conversations
         supabase.from('conversations').select('id, user_id, created_at'),
         // AI messages
-        supabase.from('messages').select('id, role, created_at, tokens_used'),
+        supabase.from('messages').select('id, role, created_at, tokens_used, conversation_id'),
         // Routine completions
         supabase.from('routine_completions').select('id, completion_status, created_at'),
         // Stress logs (for clinical tracking)
@@ -306,7 +306,7 @@ export function AdminPortal({ onBack }: AdminPortalProps) {
         .limit(1000);
 
       if (messageContents) {
-        messageContents.forEach((msg: any) => {
+        messageContents.forEach((msg: { content: string }) => {
           const content = msg.content || '';
           Object.entries(intentPatterns).forEach(([intent, pattern]) => {
             if (pattern.test(content)) {
@@ -333,7 +333,7 @@ export function AdminPortal({ onBack }: AdminPortalProps) {
       let npsResponseRate = 0;
 
       if (npsResponses && npsResponses.length > 0) {
-        npsResponses.forEach((r: any) => {
+        npsResponses.forEach((r: { score: number; created_at: string }) => {
           if (r.score >= 9) promoters++;
           else if (r.score >= 7) passives++;
           else detractors++;
@@ -358,7 +358,7 @@ export function AdminPortal({ onBack }: AdminPortalProps) {
 
       let avgSatisfaction = 4.5; // Default
       if (feedbackRatings && feedbackRatings.length > 0) {
-        const sum = feedbackRatings.reduce((acc: number, f: any) => acc + (f.rating || 0), 0);
+        const sum = feedbackRatings.reduce((acc: number, f: { rating: number | null }) => acc + (f.rating || 0), 0);
         avgSatisfaction = Math.round((sum / feedbackRatings.length) * 10) / 10;
       }
 
@@ -373,7 +373,7 @@ export function AdminPortal({ onBack }: AdminPortalProps) {
       const payingUsers = new Set<string>();
 
       if (payments && payments.length > 0) {
-        payments.forEach((p: any) => {
+        payments.forEach((p: { amount: number; status: string; created_at: string; user_id: string }) => {
           totalRevenue += p.amount || 0;
           payingUsers.add(p.user_id);
         });
@@ -393,7 +393,7 @@ export function AdminPortal({ onBack }: AdminPortalProps) {
       const providerBookings: Record<string, { sessions: number; ratings: number[]; name: string }> = {};
 
       if (bookings && bookings.length > 0) {
-        bookings.forEach((b: any) => {
+        bookings.forEach((b: { id: string; user_id: string; provider_id: string; status: string; rating: number | null; amount: number; created_at: string }) => {
           totalBookings++;
           marketplaceRevenue += b.amount || 0;
           if (b.status === 'completed') completedBookings++;
@@ -428,8 +428,8 @@ export function AdminPortal({ onBack }: AdminPortalProps) {
       let providersOnboarded = 0;
 
       if (clinics && clinics.length > 0) {
-        clinicsEngaged = clinics.filter((c: any) => c.status === 'active').length;
-        providersOnboarded = clinics.reduce((acc: number, c: any) => acc + (c.providers_count || 0), 0);
+        clinicsEngaged = clinics.filter((c: { id: string; name: string; providers_count: number; status: string }) => c.status === 'active').length;
+        providersOnboarded = clinics.reduce((acc: number, c: { id: string; name: string; providers_count: number; status: string }) => acc + (c.providers_count || 0), 0);
       }
 
       // Fetch insight report sharing stats
@@ -548,7 +548,7 @@ export function AdminPortal({ onBack }: AdminPortalProps) {
 
       setPilotData(newData);
       setLastUpdated(new Date());
-      console.log('[Admin] Metrics loaded:', newData);
+      if (import.meta.env.DEV) console.log('[Admin] Metrics loaded:', newData);
     } catch (error) {
       console.error('[Admin] Error fetching metrics:', error);
       // Keep existing data on error
@@ -626,7 +626,7 @@ export function AdminPortal({ onBack }: AdminPortalProps) {
               <div className="relative">
                 <select
                   value={dateRange}
-                  onChange={(e) => setDateRange(e.target.value as any)}
+                  onChange={(e) => setDateRange(e.target.value as '7d' | '30d' | 'all')}
                   className="appearance-none bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg px-3 py-2 pr-8 text-sm dark:text-white focus:outline-none focus:ring-2 focus:ring-accent"
                 >
                   <option value="7d">Last 7 days</option>
@@ -694,7 +694,7 @@ export function AdminPortal({ onBack }: AdminPortalProps) {
             ].map(({ id, label, icon: Icon }) => (
               <button
                 key={id}
-                onClick={() => setActiveSection(id as any)}
+                onClick={() => setActiveSection(id as 'overview' | 'engagement' | 'ai' | 'clinical' | 'marketplace' | 'b2b' | 'users' | 'moderation' | 'revenue' | 'insights' | 'applications')}
                 className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 whitespace-nowrap transition-colors ${
                   activeSection === id
                     ? 'border-accent text-accent'

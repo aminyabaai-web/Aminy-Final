@@ -32,8 +32,33 @@ import { Button } from './ui/button';
 import { triggerHaptic } from '../lib/haptics';
 import { cn } from '../lib/utils';
 
+// Type definitions for questions and resources
+interface QuestionOption {
+  value: number;
+  label: string;
+  emoji?: string;
+}
+
+interface ScreeningQuestion {
+  id: string;
+  category: string;
+  question: string;
+  options: QuestionOption[];
+  isSafety?: boolean;
+  isCritical?: boolean;
+}
+
+interface CrisisResource {
+  name: string;
+  description: string;
+  icon: React.ComponentType<{ className?: string }>;
+  phone?: string;
+  url?: string;
+  text?: string;
+}
+
 // Age-appropriate question sets
-const YOUNG_CHILD_QUESTIONS = [
+const YOUNG_CHILD_QUESTIONS: ScreeningQuestion[] = [
   // Ages 2-6: Parent observation-based
   {
     id: 'mood_young',
@@ -93,7 +118,7 @@ const YOUNG_CHILD_QUESTIONS = [
   },
 ];
 
-const SCHOOL_AGE_QUESTIONS = [
+const SCHOOL_AGE_QUESTIONS: ScreeningQuestion[] = [
   // Ages 7-12: Mix of parent observation and child-like framing
   {
     id: 'mood_school',
@@ -188,7 +213,7 @@ const SCHOOL_AGE_QUESTIONS = [
   },
 ];
 
-const TEEN_QUESTIONS = [
+const TEEN_QUESTIONS: ScreeningQuestion[] = [
   // Ages 13-18: More direct, PHQ-A style
   {
     id: 'mood_teen',
@@ -308,7 +333,7 @@ const TEEN_QUESTIONS = [
 ];
 
 // Crisis resources for children/teens
-const CRISIS_RESOURCES = {
+const CRISIS_RESOURCES: { child: CrisisResource[]; teen: CrisisResource[] } = {
   child: [
     {
       name: "Talk to your child's pediatrician",

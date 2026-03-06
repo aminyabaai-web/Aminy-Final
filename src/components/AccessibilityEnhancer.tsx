@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { toast } from 'sonner';
 import { Eye, EyeOff, Palette, Moon, Sun, Zap, Volume2, VolumeX } from 'lucide-react';
 import { Button } from './ui/button';
@@ -403,21 +403,21 @@ const applyAccessibilityPreferences = (preferences: A11yPreferences) => {
 export const useVoiceControl = () => {
   const [isListening, setIsListening] = useState(false);
   const [isSupported, setIsSupported] = useState(false);
-  const recognitionRef = useRef<any>(null);
+  const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
     
-    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const SpeechRecognitionCtor = typeof globalThis.SpeechRecognition !== 'undefined' ? globalThis.SpeechRecognition : typeof globalThis.webkitSpeechRecognition !== 'undefined' ? globalThis.webkitSpeechRecognition : null;
     
-    if (SpeechRecognition) {
+    if (SpeechRecognitionCtor) {
       setIsSupported(true);
-      recognitionRef.current = new SpeechRecognition();
+      recognitionRef.current = new SpeechRecognitionCtor();
       recognitionRef.current.continuous = false;
       recognitionRef.current.interimResults = false;
       recognitionRef.current.lang = 'en-US';
 
-      recognitionRef.current.onresult = (event: any) => {
+      recognitionRef.current.onresult = (event: SpeechRecognitionEvent) => {
         const transcript = event.results[0][0].transcript.toLowerCase();
         
         // Basic voice commands
@@ -434,7 +434,7 @@ export const useVoiceControl = () => {
         announce(`Voice command recognized: ${transcript}`);
       };
 
-      recognitionRef.current.onerror = (event: any) => {
+      recognitionRef.current.onerror = (event: SpeechRecognitionErrorEvent) => {
         console.error('[Voice] Recognition error:', event.error);
         setIsListening(false);
         

@@ -1,10 +1,10 @@
 /**
- * Dashboard10 - The Perfect 10/10 Dashboard
+ * Dashboard10 - Your Calm Hub
  *
- * Designed per detailed spec:
- * - Calm UX for parents (reduce mental load, "exhale test")
- * - Data capture for investors/payers (adherence, outcomes)
- * - Single-scroll "Calm Hub" design
+ * Design philosophy:
+ * - Every element should pass the "exhale test" — does seeing this help the parent breathe easier?
+ * - CTCA Child Standard: treat every family like YOUR child is the patient
+ * - Single-scroll calm hub that celebrates consistency, not perfection
  * - Brand colors: #0D1B2A navy, #F5F5F5 cream, #0891b2 teal accents
  * - Inter font, 8-12px corners, soft shadows
  */
@@ -43,23 +43,31 @@ import {
   X,
   Loader2,
   Send,
+  Stethoscope,
+  Camera,
 } from 'lucide-react';
 import { useConversation } from '../context/ConversationContext';
 
-// Strategic components for viral growth & upgrade conversion
+// Supporting components
 import { OutcomesDashboardWidget } from './OutcomesDashboardWidget';
 import { QuickShareButton } from './ShareWinFlow';
 import { DifferentiationCallout } from './DifferentiationCallout';
 import { ProactiveNudgeSystem } from './ProactiveNudgeSystem';
+import { ProactiveCheckIn, useProactiveCheckIns } from './ProactiveCheckIn';
 import { MorningMission, useMorningMission } from './MorningMission';
 import { ActionItems } from './ActionItems';
 import { HealthDataIntegration } from './HealthDataIntegration';
 import { TrialProgressBanner, SoftNudgeModal, HardPaywallModal } from './TrialExperience';
+import { BottomNavigation } from './BottomNavigation';
 import { ShareInsightInline } from './ShareInsight';
 import { ReferralCard } from './ReferralCard';
 import { NotificationPrompt, useShouldShowNotificationPrompt } from './NotificationPrompt';
 import { supabase } from '../utils/supabase/client';
+import { incrementStreak } from '../lib/streak-service';
 import { useDashboardData, getDefaultRoutines, getDefaultGoals } from '../hooks/useDashboardData';
+import { getUserBadges, type EarnedBadge } from '../lib/badge-service';
+import { useNudgeEngine } from '../hooks/useNudgeEngine';
+import { subscribeToPush, isPushSupported, getNotificationPermission } from '../lib/push-notifications';
 
 // Types
 interface ChildProfile {
@@ -67,6 +75,7 @@ interface ChildProfile {
   name: string;
   age: number;
   photoUrl?: string;
+  isPrimary?: boolean;
   goals: {
     name: string;
     percentMet: number;
@@ -106,52 +115,56 @@ interface Dashboard10Props {
   childProfile?: ChildProfile;
   onNavigate?: (destination: string) => void;
   userTier?: string;
+  userRole?: 'parent' | 'provider' | 'admin';
 }
 
-// Daily tips that rotate
+// Daily affirmations — CTCA Child Standard: validate the parent, not the metrics
 const DAILY_TIPS = [
-  "One deep breath can reset the moment.",
-  "Progress isn't always visible, but it's always happening.",
-  "You're showing up, and that's what matters most.",
-  "Small wins today become big changes tomorrow.",
-  "Trust the process. You've got this.",
+  "One deep breath can reset the whole moment. You already know that.",
+  "Progress isn't always visible — but you'd be amazed how much is happening beneath the surface.",
+  "You're showing up every single day. That consistency is changing everything.",
+  "Today's small wins are tomorrow's breakthroughs. We see you building them.",
+  "You know your child better than any algorithm ever could. Trust that.",
+  "The fact that you're here means your child has exactly the parent they need.",
+  "Hard days don't erase good days. The good days are still there.",
+  "You don't have to be perfect. You just have to be present. And you are.",
 ];
 
-// Contextual chat prompts based on time of day and situation
+// Contextual chat prompts — written as things a parent would actually say or need
 const CONTEXTUAL_PROMPTS: Record<string, string[]> = {
   morning: [
-    'Help with morning transitions',
-    'Wake-up routine tips',
-    'Breakfast strategies',
-    'Getting ready for school',
+    'Mornings are rough — help me make transitions easier',
+    'How can I get us out the door without a meltdown?',
+    'Breakfast is a battle. What should I try?',
+    'School drop-off tips for today',
   ],
   afternoon: [
-    'Post-school decompression',
-    'Homework support ideas',
-    'Healthy snack transitions',
-    'Managing afternoon energy',
+    'Help me with the after-school crash',
+    'Homework is becoming a power struggle',
+    'What can I do during the afternoon lull?',
+    'How do I handle the 3pm energy burst?',
   ],
   evening: [
-    'Dinner time strategies',
-    'Screen time boundaries',
-    'Family activity ideas',
-    'Wind-down preparations',
+    'Dinner is chaotic — any strategies?',
+    'How do I set screen time limits without a meltdown?',
+    'What can we do together tonight?',
+    'Help me start winding things down',
   ],
   bedtime: [
-    'Calming bedtime routine',
-    'Sleep transition tips',
-    'Managing bedtime anxiety',
-    'Story time suggestions',
+    'Bedtime is taking forever — help',
+    'How do I calm bedtime anxiety?',
+    'Sleep routine ideas that actually work',
+    'Help me make bedtime feel safe',
   ],
   progress: [
-    'Celebrate recent wins',
-    'Next milestone planning',
-    'Progress report insights',
+    'Something went really well — let me tell you',
+    'What should we work on next?',
+    'Help me see how far we\'ve come',
   ],
   challenges: [
-    'Meltdown prevention',
-    'Sensory regulation help',
-    'Communication strategies',
+    'I\'m worried about a pattern I\'m seeing',
+    'Help me understand what\'s behind this behavior',
+    'I need strategies for right now',
   ],
 };
 
@@ -159,7 +172,8 @@ export function Dashboard10({
   userData,
   childProfile,
   onNavigate,
-  userTier = 'core'
+  userTier = 'core',
+  userRole = 'parent'
 }: Dashboard10Props) {
   const [activeRoutine, setActiveRoutine] = useState<'morning' | 'afternoon' | 'evening' | 'bedtime'>('morning');
   // CHAT-FIRST: Start with chat expanded to make it the primary experience
@@ -169,6 +183,7 @@ export function Dashboard10({
   const [dailyTip] = useState(() => DAILY_TIPS[Math.floor(Math.random() * DAILY_TIPS.length)]);
   const [showStreakCelebration, setShowStreakCelebration] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
+  const [badges, setBadges] = useState<EarnedBadge[]>([]);
   const [showSoftNudge, setShowSoftNudge] = useState(false);
   const [showHardPaywall, setShowHardPaywall] = useState(false);
   const [conversationsUsed, setConversationsUsed] = useState(0);
@@ -186,6 +201,51 @@ export function Dashboard10({
   // Notification prompt state
   const shouldShowNotificationPrompt = useShouldShowNotificationPrompt();
   const [showNotificationPrompt, setShowNotificationPrompt] = useState(true);
+
+  // Proactive check-in system
+  const { currentCheckIn, dismissCheckIn, triggerCheckIn } = useProactiveCheckIns();
+
+  // Nudge engine for personalized tips
+  const { getNudge, getPersonalizedTip } = useNudgeEngine();
+  const [activeTip, setActiveTip] = useState<string | null>(null);
+  const [showTip, setShowTip] = useState(false);
+
+  // Initialize nudge tip on mount
+  useEffect(() => {
+    const tip = getNudge() || getPersonalizedTip();
+    if (tip) {
+      setActiveTip(tip);
+      setShowTip(true);
+    }
+  }, [getNudge, getPersonalizedTip]);
+
+  // Trigger proactive check-in after a short delay on dashboard load
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      triggerCheckIn();
+    }, 5000); // 5 second delay to let dashboard settle
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- Only on mount
+  }, []);
+
+  // Initialize push notification subscription on first dashboard load
+  useEffect(() => {
+    if (!userId) return;
+    const pushInitKey = `aminy_push_init_${userId}`;
+    const alreadyInitialized = localStorage.getItem(pushInitKey);
+    if (alreadyInitialized) return;
+
+    // Only auto-subscribe if user already granted permission previously
+    if (isPushSupported() && getNotificationPermission() === 'granted') {
+      subscribeToPush(userId).then((sub) => {
+        if (sub) {
+          localStorage.setItem(pushInitKey, 'true');
+        }
+      }).catch((err) => {
+        if (import.meta.env.DEV) console.warn('Push subscription init failed:', err);
+      });
+    }
+  }, [userId]);
 
   // Check trial status for free users
   useEffect(() => {
@@ -211,10 +271,16 @@ export function Dashboard10({
     }
   }, [userTier, userId]);
 
-  // Get user ID from Supabase
+  // Get user ID from Supabase + increment daily streak
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
-      if (user) setUserId(user.id);
+      if (user) {
+        setUserId(user.id);
+        // Record daily activity — this keeps the streak alive
+        incrementStreak(user.id).catch(() => {});
+        // Load earned badges
+        getUserBadges(user.id).then(b => setBadges(b)).catch(() => {});
+      }
     });
   }, []);
 
@@ -250,7 +316,7 @@ export function Dashboard10({
       if (userTier === 'free' && userId) {
         setConversationsUsed(prev => prev + 1);
         // Non-critical - count tracking failure shouldn't affect chat
-        await supabase.rpc('increment_trial_conversations', { user_id_param: userId }).catch((err) => {
+        await Promise.resolve(supabase.rpc('increment_trial_conversations', { user_id_param: userId })).catch((err: unknown) => {
           if (import.meta.env.DEV) console.warn('Trial count increment failed:', err);
         });
       }
@@ -270,8 +336,11 @@ export function Dashboard10({
     }
   };
 
-  // Load real dashboard data from database
-  const dashboardData = useDashboardData(userId || undefined);
+  // Multi-child support
+  const [activeChildId, setActiveChildId] = useState<string | undefined>(undefined);
+
+  // Load real dashboard data from database (with child filtering)
+  const dashboardData = useDashboardData(userId || undefined, activeChildId);
 
   // Auto-set routine based on time of day
   useEffect(() => {
@@ -372,12 +441,12 @@ export function Dashboard10({
 
   // Quick actions
   const quickActions = [
-    { id: 'plan', label: 'Update Plan', icon: <FileText className="w-5 h-5" />, color: 'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-300' },
-    { id: 'calm', label: 'Calm Tools', icon: <Wind className="w-5 h-5" />, color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300' },
-    { id: 'log', label: 'Log Incident', icon: <AlertCircle className="w-5 h-5" />, color: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300' },
-    { id: 'telehealth', label: 'Telehealth', icon: <Video className="w-5 h-5" />, color: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300' },
-    { id: 'resources', label: 'Resources', icon: <BookOpen className="w-5 h-5" />, color: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300' },
-    { id: 'community', label: 'Community', icon: <Users className="w-5 h-5" />, color: 'bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-300' },
+    { id: 'plan', label: 'Our Plan', icon: <FileText className="w-5 h-5" />, color: 'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-300' },
+    { id: 'calm', label: 'Calm Corner', icon: <Wind className="w-5 h-5" />, color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300' },
+    { id: 'log', label: 'Note a Moment', icon: <AlertCircle className="w-5 h-5" />, color: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300' },
+    { id: 'telehealth', label: 'Talk to Someone', icon: <Video className="w-5 h-5" />, color: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300' },
+    { id: 'resources', label: 'Learn More', icon: <BookOpen className="w-5 h-5" />, color: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300' },
+    { id: 'community', label: 'Other Parents', icon: <Users className="w-5 h-5" />, color: 'bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-300' },
   ];
 
   const handleQuickAction = (actionId: string) => {
@@ -492,6 +561,28 @@ export function Dashboard10({
             <p className="text-sm text-gray-400 italic mt-1">{dailyTip}</p>
           </div>
 
+          {/* Multi-Child Switcher */}
+          {dashboardData.children.length > 1 && (
+            <div className="flex gap-2 mb-3 overflow-x-auto pb-1 scrollbar-hide">
+              {dashboardData.children.map(c => (
+                <button
+                  key={c.id}
+                  onClick={() => setActiveChildId(c.id === activeChildId ? undefined : c.id)}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm transition-colors flex-shrink-0 ${
+                    (activeChildId === c.id || (!activeChildId && c.isPrimary))
+                      ? 'bg-teal-500/30 text-teal-200 border border-teal-400/40'
+                      : 'bg-white/10 text-gray-300 hover:bg-white/15'
+                  }`}
+                >
+                  <span className="w-5 h-5 rounded-full bg-gradient-to-br from-teal-400 to-teal-600 flex items-center justify-center text-[10px] font-bold text-white">
+                    {c.name?.[0] || '?'}
+                  </span>
+                  {c.name}
+                </button>
+              ))}
+            </div>
+          )}
+
           {/* Child Profile Snapshot */}
           <div className="flex items-center gap-3 sm:gap-4 bg-white/10 rounded-xl p-3">
             <div className="w-12 h-12 bg-gradient-to-br from-teal-400 to-teal-600 rounded-full flex items-center justify-center text-xl font-bold">
@@ -558,15 +649,135 @@ export function Dashboard10({
             (Aminy's unique proactive support)
             ======================================== */}
         <ProactiveNudgeSystem
+          userId={userId || undefined}
           childName={child.name}
-          onActionTaken={(nudgeId) => {
-            // Track nudge interaction for analytics
+          parentName={userData.parentName}
+          userTier={userTier}
+          currentStreak={streakDays}
+          routineAdherence={dashboardData.routineAdherence}
+          onAction={(nudge) => {
+            // Route nudge actions to appropriate screens
             if (import.meta.env.DEV) {
-              console.log('Nudge action taken:', nudgeId);
+              console.log('Nudge action taken:', nudge.id, nudge.action?.target);
             }
-            // In production, this would send to analytics
+            if (nudge.action?.target) {
+              const targetMap: Record<string, string> = {
+                'stress_check': 'calm-tools',
+                'daily_log': 'incident-log',
+                'quick_activity': 'care-plan',
+                'outcomes': 'analytics-charts',
+                'calm_tools': 'calm-tools',
+                'routines': 'care-plan',
+                'weekly_report': 'weekly-insights',
+              };
+              const screen = targetMap[nudge.action.target];
+              if (screen) onNavigate?.(screen);
+            }
           }}
         />
+
+        {/* Nudge Engine Personalized Tip */}
+        {showTip && activeTip && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="bg-gradient-to-r from-teal-50 to-cyan-50 dark:from-teal-900/20 dark:to-cyan-900/20 border border-teal-200 dark:border-teal-700 rounded-xl p-3"
+          >
+            <div className="flex items-start gap-2">
+              <Sparkles className="w-4 h-4 text-teal-600 dark:text-teal-400 mt-0.5 flex-shrink-0" />
+              <p className="text-sm text-teal-800 dark:text-teal-200 flex-1">{activeTip}</p>
+              <button
+                onClick={() => setShowTip(false)}
+                className="p-0.5 text-teal-400 hover:text-teal-600 flex-shrink-0"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Badges Row */}
+        {badges.length > 0 && (
+          <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide -mx-1 px-1">
+            {badges.slice(0, 8).map(badge => (
+              <div
+                key={badge.id}
+                className="flex-shrink-0 flex items-center gap-1.5 bg-white dark:bg-slate-800 rounded-full px-3 py-1.5 border border-gray-100 dark:border-slate-700 shadow-sm"
+                title={badge.description}
+              >
+                <span className="text-base">{badge.emoji}</span>
+                <span className="text-xs font-medium text-slate-600 dark:text-slate-300 whitespace-nowrap">{badge.name}</span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Next Appointment Card */}
+        {dashboardData.nextAppointment && (
+          <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-gray-100 dark:border-slate-700 shadow-sm">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center">
+                  <Video className="w-5 h-5 text-teal-600" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium">Next: {dashboardData.nextAppointment.providerName}</p>
+                  <p className="text-xs text-muted-foreground">{dashboardData.nextAppointment.time}</p>
+                </div>
+              </div>
+              {(() => {
+                try {
+                  const apptTime = new Date(dashboardData.nextAppointment!.time);
+                  const diff = apptTime.getTime() - Date.now();
+                  if (diff > 0 && diff < 15 * 60 * 1000) {
+                    return (
+                      <Button size="sm" onClick={() => onNavigate?.('my-appointments')}>
+                        Join Call
+                      </Button>
+                    );
+                  }
+                } catch {}
+                return (
+                  <Button size="sm" variant="outline" onClick={() => onNavigate?.('my-appointments')}>
+                    View
+                  </Button>
+                );
+              })()}
+            </div>
+          </div>
+        )}
+
+        {/* Weekly Summary Card */}
+        <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-gray-100 dark:border-slate-700 shadow-sm">
+          <h3 className="text-sm font-semibold mb-3">This Week</h3>
+          <div className="grid grid-cols-3 gap-3 text-center">
+            <div>
+              <p className="text-2xl font-bold text-teal-600">{dashboardData.routineAdherence}%</p>
+              <p className="text-xs text-muted-foreground">Routine</p>
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-amber-600">{dashboardData.streak || streakDays}</p>
+              <p className="text-xs text-muted-foreground">Day Streak</p>
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-purple-600">
+                {dashboardData.activeGoals?.filter(g => g.progress >= 100).length || 0}/{dashboardData.activeGoals?.length || 0}
+              </p>
+              <p className="text-xs text-muted-foreground">Goals Met</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Empty State CTAs */}
+        {(!dashboardData.activeGoals || dashboardData.activeGoals.length === 0) && (
+          <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-dashed border-gray-200 dark:border-slate-700 text-center">
+            <p className="text-sm text-muted-foreground mb-2">Set goals to track {child.name}'s progress</p>
+            <Button size="sm" variant="outline" onClick={() => onNavigate?.('care-plan')}>
+              Set First Goal
+            </Button>
+          </div>
+        )}
 
         {/* ========================================
             MORNING MISSION - Daily engagement anchor
@@ -788,6 +999,24 @@ export function Dashboard10({
               </button>
             ))}
           </div>
+
+          {/* Provider Reports Card */}
+          <div
+            className="mt-3 p-3.5 rounded-xl bg-gradient-to-r from-teal-50 to-emerald-50 dark:from-teal-900/20 dark:to-emerald-900/20 border border-teal-200 dark:border-teal-800 flex items-center gap-3 cursor-pointer hover:shadow-sm transition-shadow"
+            onClick={() => onNavigate?.('clinical-reports')}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => e.key === 'Enter' && onNavigate?.('clinical-reports')}
+          >
+            <div className="w-10 h-10 rounded-lg bg-teal-100 dark:bg-teal-800/50 flex items-center justify-center flex-shrink-0">
+              <Stethoscope className="w-5 h-5 text-teal-700 dark:text-teal-300" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <h3 className="font-medium text-sm text-teal-900 dark:text-teal-100">Provider Reports</h3>
+              <p className="text-xs text-teal-700 dark:text-teal-300">Generate clinical PDFs for your child's care team</p>
+            </div>
+            <ChevronRight className="w-4 h-4 text-teal-400 flex-shrink-0" />
+          </div>
         </section>
 
         {/* ========================================
@@ -963,6 +1192,14 @@ export function Dashboard10({
             {/* Chat Input - Enhanced */}
             <div className="p-4 border-t dark:border-slate-700 bg-gray-50 dark:bg-slate-750">
               <div className="flex gap-2">
+                <button
+                  onClick={() => onNavigate?.('vision-ai')}
+                  className="p-3 rounded-xl bg-violet-100 hover:bg-violet-200 dark:bg-violet-900/30 dark:hover:bg-violet-800/40 text-violet-600 dark:text-violet-400 transition-all"
+                  aria-label="Open Vision AI camera"
+                  title="Photo &amp; Video AI"
+                >
+                  <Camera className="w-4 h-4" />
+                </button>
                 <input
                   type="text"
                   value={chatInput}
@@ -995,34 +1232,53 @@ export function Dashboard10({
       {/* ========================================
           7. BOTTOM NAVIGATOR TABS (Fixed)
           ======================================== */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 border-t border-gray-200 dark:border-slate-700 z-20" style={{ paddingBottom: 'max(8px, env(safe-area-inset-bottom))' }}>
-        <div className="max-w-4xl mx-auto flex justify-around py-2">
-          {[
-            { id: 'home', label: 'Home', icon: <Home className="w-5 h-5" /> },
-            { id: 'resources', label: 'Resources', icon: <BookOpen className="w-5 h-5" /> },
-            { id: 'community', label: 'Community', icon: <Users className="w-5 h-5" /> },
-            { id: 'profile', label: 'Profile', icon: <User className="w-5 h-5" /> },
-          ].map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => {
-                setActiveTab(tab.id as typeof activeTab);
-                if (tab.id !== 'home' && onNavigate) {
-                  onNavigate(tab.id);
-                }
-              }}
-              className={`flex flex-col items-center gap-1 px-4 py-2 rounded-lg transition-colors ${
-                activeTab === tab.id
-                  ? 'text-[#0891b2]'
-                  : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
-              }`}
-            >
-              {tab.icon}
-              <span className="text-xs font-medium">{tab.label}</span>
-            </button>
-          ))}
-        </div>
-      </nav>
+      <BottomNavigation
+        activeTab={activeTab}
+        onNavigate={(tabId) => {
+          if (tabId === 'home') {
+            setActiveTab('home');
+          } else if (tabId === 'ask-aminy') {
+            // Center AI button — toggle inline chat or navigate to full chat
+            onNavigate?.('ask-aminy');
+          } else {
+            setActiveTab(tabId as typeof activeTab);
+            onNavigate?.(tabId);
+          }
+        }}
+        userTier={userTier}
+        userRole={userRole}
+      />
+
+      {/* ========================================
+          PROACTIVE CHECK-IN - AI-initiated engagement
+          Floating card at bottom of screen
+          ======================================== */}
+      {currentCheckIn && (
+        <ProactiveCheckIn
+          type={currentCheckIn}
+          isOpen={true}
+          onClose={dismissCheckIn}
+          onAction={(action) => {
+            dismissCheckIn();
+            switch (action) {
+              case 'chat':
+                // Open inline chat or navigate to Ask Aminy
+                setShowAIChat(true);
+                break;
+              case 'log':
+                onNavigate?.('incident-log');
+                break;
+              case 'review':
+                onNavigate?.('weekly-insights');
+                break;
+              case 'close':
+                // Just dismiss
+                break;
+            }
+          }}
+          childName={child.name}
+        />
+      )}
 
       {/* ========================================
           TRIAL MODALS - Soft nudge & hard paywall

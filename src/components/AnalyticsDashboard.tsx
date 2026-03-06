@@ -43,9 +43,9 @@ import {
   ArrowDownRight,
   Minus,
 } from 'lucide-react';
-import { analytics, useAnalytics } from '../lib/analytics-engine';
-import { performanceMonitor, usePerformanceMonitor } from '../lib/performance-monitor';
-import { contextEngine, useContextEngine } from '../lib/context-engine';
+import { analytics, useAnalytics, AnalyticsEvent, UserJourney, BehaviorPattern, FeatureUsage } from '../lib/analytics-engine';
+import { performanceMonitor, usePerformanceMonitor, CoreWebVitals, CustomMetrics, PerformanceSnapshot } from '../lib/performance-monitor';
+import { contextEngine, useContextEngine, ChildContext, CaregiverContext, SessionContext, ConversationSummary } from '../lib/context-engine';
 import { toast } from 'sonner';
 
 // Comparison period options
@@ -62,13 +62,127 @@ const AI_INSIGHTS: Record<string, string> = {
   errorCount: "Errors impact user experience. Zero errors is ideal. Any errors should be investigated to ensure reliability.",
 };
 
+// Typed structures for dashboard data
+interface AnalyticsExportData {
+  events: AnalyticsEvent[];
+  session: Partial<UserJourney>;
+  patterns: BehaviorPattern[];
+  usage: FeatureUsage[];
+  insights: {
+    duration: number;
+    eventCount: number;
+    engagementScore: number;
+    completedGoals: string[];
+    dropOffRisk: 'low' | 'medium' | 'high';
+  } | null;
+}
+
+interface PerformanceExportData {
+  coreWebVitals: CoreWebVitals;
+  customMetrics: CustomMetrics;
+  snapshots: PerformanceSnapshot[];
+  insights: {
+    coreWebVitals: CoreWebVitals & { ratings: Record<string, string> };
+    customMetrics: CustomMetrics;
+    performanceScore: number;
+    recommendations: string[];
+  };
+}
+
+interface ContextExportData {
+  child: ChildContext | null;
+  caregiver: CaregiverContext | null;
+  session: SessionContext;
+  conversations: ConversationSummary[];
+  insights: {
+    contextRichness: number;
+    missingContext: string[];
+    recommendations: string[];
+    personalizationOpportunities: string[];
+  };
+}
+
+interface SummaryStats {
+  totalEvents: number;
+  sessionDuration: number;
+  featuresUsed: number;
+  contextRichness: number;
+  performanceScore: number;
+  errorCount: number;
+  conversionsCompleted: number;
+  avgResponseTime: number;
+  avgCalmCuesPerWeek: number;
+}
+
+interface HourlyActivity {
+  hour: number;
+  events: number;
+  features: number;
+}
+
+interface TrendsData {
+  hourlyActivity: HourlyActivity[];
+  mostActiveHour: HourlyActivity;
+  totalRecentEvents: number;
+}
+
+interface UserJourneyAnalysis {
+  totalSteps: number;
+  uniqueSteps: number;
+  mostVisitedStep: { step: string; count: number };
+  journeyMap: Record<string, number>;
+}
+
+interface FeatureEngagementItem {
+  feature: string;
+  uses: number;
+  avgDuration: number;
+  lastUsed: number;
+}
+
+interface ErrorAnalysis {
+  totalErrors: number;
+  errorTypes: Record<string, number>;
+  recentErrors: AnalyticsEvent[];
+  errorRate: number;
+}
+
+interface DashboardData {
+  session?: {
+    duration: number;
+    eventCount: number;
+    engagementScore: number;
+    completedGoals: string[];
+    dropOffRisk: 'low' | 'medium' | 'high';
+  } | null;
+  analytics?: AnalyticsExportData;
+  performance?: PerformanceExportData;
+  context?: ContextExportData;
+  summary?: SummaryStats;
+  trends?: TrendsData;
+  userJourney?: UserJourneyAnalysis;
+  featureEngagement?: FeatureEngagementItem[];
+  errorAnalysis?: ErrorAnalysis;
+}
+
+interface DrillDownItem {
+  label?: string;
+  name?: string;
+  value?: string | number;
+  count?: number;
+  events?: number;
+  [key: string]: unknown;
+}
+
+type DrillDownCompatible = DrillDownItem | AnalyticsEvent | FeatureEngagementItem | HourlyActivity;
+
 interface AnalyticsDashboardProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
 export function AnalyticsDashboard({ isOpen, onClose }: AnalyticsDashboardProps) {
-  const [dashboardData, setDashboardData] = useState<any>({});
+  const [dashboardData, setDashboardData] = useState<DashboardData>({});
   const [isLoading, setIsLoading] = useState(true);
   const [lastRefresh, setLastRefresh] = useState(Date.now());
   
@@ -84,7 +198,7 @@ export function AnalyticsDashboard({ isOpen, onClose }: AnalyticsDashboardProps)
   const [drillDownData, setDrillDownData] = useState<{
     type: string;
     title: string;
-    data: any[];
+    data: DrillDownCompatible[];
   } | null>(null);
 
   // NEW: Active tooltip state
@@ -122,7 +236,7 @@ export function AnalyticsDashboard({ isOpen, onClose }: AnalyticsDashboardProps)
   }, []);
 
   // NEW: Export chart data as CSV
-  const handleExportChartCSV = useCallback((chartId: string, chartTitle: string, data: any[]) => {
+  const handleExportChartCSV = useCallback((chartId: string, chartTitle: string, data: DrillDownCompatible[]) => {
     if (!data || data.length === 0) {
       toast.error('No data to export');
       return;
@@ -145,7 +259,7 @@ export function AnalyticsDashboard({ isOpen, onClose }: AnalyticsDashboardProps)
   }, []);
 
   // NEW: Handle drill-down on chart element
-  const handleDrillDown = useCallback((type: string, title: string, data: any[]) => {
+  const handleDrillDown = useCallback((type: string, title: string, data: DrillDownCompatible[]) => {
     setDrillDownData({ type, title, data });
   }, []);
 
@@ -186,12 +300,12 @@ export function AnalyticsDashboard({ isOpen, onClose }: AnalyticsDashboardProps)
     }
   };
 
-  const generateSummaryStats = (analytics: any, performance: any, context: any) => {
+  const generateSummaryStats = (analytics: AnalyticsExportData, performance: PerformanceExportData, context: ContextExportData): SummaryStats => {
     const events = analytics.events || [];
     const session = analytics.session || {};
     
     // Calculate avg calm cue responses per user/week (NEW METRIC)
-    const calmCueEvents = events.filter((e: any) => 
+    const calmCueEvents = events.filter((e: AnalyticsEvent) =>
       e.event === 'ai_chat_message' || e.event === 'calm_cue_delivered'
     );
     const weekInMs = 7 * 24 * 60 * 60 * 1000;
@@ -200,19 +314,19 @@ export function AnalyticsDashboard({ isOpen, onClose }: AnalyticsDashboardProps)
     
     return {
       totalEvents: events.length,
-      sessionDuration: Math.round((Date.now() - session.startTime) / 1000 / 60), // minutes
-      featuresUsed: new Set(events.map((e: any) => extractFeature(e.event)).filter(Boolean)).size,
+      sessionDuration: Math.round((Date.now() - (session.startTime ?? Date.now())) / 1000 / 60), // minutes
+      featuresUsed: new Set(events.map((e: AnalyticsEvent) => extractFeature(e.event)).filter(Boolean)).size,
       contextRichness: context.insights?.contextRichness || 0,
       performanceScore: performance.insights?.performanceScore || 0,
-      errorCount: events.filter((e: any) => e.event === 'error_occurred').length,
-      conversionsCompleted: events.filter((e: any) => e.event === 'conversion_completed').length,
+      errorCount: events.filter((e: AnalyticsEvent) => e.event === 'error_occurred').length,
+      conversionsCompleted: events.filter((e: AnalyticsEvent) => e.event === 'conversion_completed').length,
       avgResponseTime: calculateAvgResponseTime(events),
       avgCalmCuesPerWeek: Math.round(avgCalmCuesPerWeek * 10) / 10, // NEW METRIC
     };
   };
 
   const extractFeature = (eventName: string): string | null => {
-    if (eventName.startsWith('ask_aminy_')) return 'Ask Aminy';
+    if (eventName.startsWith('ask_aminy_')) return 'Aminy';
     if (eventName.startsWith('care_plan_')) return 'Care Planning';
     if (eventName.startsWith('junior_')) return 'Junior Mode';
     if (eventName.includes('report')) return 'Reports';
@@ -220,18 +334,19 @@ export function AnalyticsDashboard({ isOpen, onClose }: AnalyticsDashboardProps)
     return null;
   };
 
-  const calculateAvgResponseTime = (events: any[]): number => {
-    const responseEvents = events.filter(e => 
-      e.properties?.responseTime && e.properties.responseTime < 10000
-    );
-    
+  const calculateAvgResponseTime = (events: AnalyticsEvent[]): number => {
+    const responseEvents = events.filter(e => {
+      const rt = e.properties?.responseTime as number | undefined;
+      return rt !== undefined && rt < 10000;
+    });
+
     if (responseEvents.length === 0) return 0;
-    
-    const totalTime = responseEvents.reduce((sum, e) => sum + e.properties.responseTime, 0);
+
+    const totalTime = responseEvents.reduce((sum, e) => sum + (e.properties.responseTime as number), 0);
     return Math.round(totalTime / responseEvents.length);
   };
 
-  const calculateTrends = (events: any[]) => {
+  const calculateTrends = (events: AnalyticsEvent[]): TrendsData => {
     const last24Hours = Date.now() - 86400000;
     const recentEvents = events.filter(e => e.timestamp > last24Hours);
     
@@ -258,59 +373,60 @@ export function AnalyticsDashboard({ isOpen, onClose }: AnalyticsDashboardProps)
     };
   };
 
-  const analyzeUserJourney = (events: any[]) => {
-    const journeyEvents = events.filter(e => 
+  const analyzeUserJourney = (events: AnalyticsEvent[]): UserJourneyAnalysis => {
+    const journeyEvents = events.filter(e =>
       ['page_viewed', 'feature_engaged', 'conversion_completed', 'onboarding_step_completed'].includes(e.event)
     );
-    
-    const journeyMap = journeyEvents.reduce((map, event) => {
-      const step = event.properties?.page || event.properties?.feature || event.event;
+
+    const journeyMap = journeyEvents.reduce<Record<string, number>>((map, event) => {
+      const step = (event.properties?.page || event.properties?.feature || event.event) as string;
       map[step] = (map[step] || 0) + 1;
       return map;
     }, {});
-    
+
     return {
       totalSteps: journeyEvents.length,
       uniqueSteps: Object.keys(journeyMap).length,
-      mostVisitedStep: Object.entries(journeyMap).reduce((max: any, [step, count]: any) => 
-        count > max.count ? { step, count } : max, { step: '', count: 0 }
+      mostVisitedStep: Object.entries(journeyMap).reduce(
+        (max: { step: string; count: number }, [step, count]: [string, number]) =>
+          count > max.count ? { step, count } : max, { step: '', count: 0 }
       ),
       journeyMap,
     };
   };
 
-  const analyzeFeatureEngagement = (events: any[]) => {
+  const analyzeFeatureEngagement = (events: AnalyticsEvent[]): FeatureEngagementItem[] => {
     const featureEvents = events.filter(e => e.event === 'feature_engaged');
-    const engagement = featureEvents.reduce((acc, event) => {
-      const feature = event.properties?.feature;
+    const engagement = featureEvents.reduce<Record<string, { uses: number; avgDuration: number; lastUsed: number }>>((acc, event) => {
+      const feature = event.properties?.feature as string | undefined;
       if (feature) {
         acc[feature] = {
           uses: (acc[feature]?.uses || 0) + 1,
-          avgDuration: event.properties?.duration || 0,
+          avgDuration: (event.properties?.duration as number) || 0,
           lastUsed: event.timestamp,
         };
       }
       return acc;
     }, {});
-    
+
     return Object.entries(engagement)
-      .map(([feature, data]: any) => ({ feature, ...data }))
+      .map(([feature, data]: [string, { uses: number; avgDuration: number; lastUsed: number }]) => ({ feature, ...data }))
       .sort((a, b) => b.uses - a.uses);
   };
 
-  const analyzeErrors = (events: any[]) => {
+  const analyzeErrors = (events: AnalyticsEvent[]): ErrorAnalysis => {
     const errors = events.filter(e => e.event === 'error_occurred');
-    const errorTypes = errors.reduce((acc, error) => {
-      const type = error.properties?.errorName || 'Unknown';
+    const errorTypes = errors.reduce<Record<string, number>>((acc, error) => {
+      const type = (error.properties?.errorName as string) || 'Unknown';
       acc[type] = (acc[type] || 0) + 1;
       return acc;
     }, {});
-    
+
     return {
       totalErrors: errors.length,
       errorTypes,
       recentErrors: errors.slice(-5),
-      errorRate: errors.length / events.length,
+      errorRate: events.length > 0 ? errors.length / events.length : 0,
     };
   };
 
@@ -319,15 +435,15 @@ export function AnalyticsDashboard({ isOpen, onClose }: AnalyticsDashboardProps)
   };
 
   const handleExportData = () => {
-    const exportData = {
+    const exportPayload = {
       timestamp: new Date().toISOString(),
       dashboard: dashboardData,
       rawAnalytics: exportData(),
       rawPerformance: exportPerformanceData(),
       rawContext: exportContextData(),
     };
-    
-    const blob = new Blob([JSON.stringify(exportData, null, 2)], { 
+
+    const blob = new Blob([JSON.stringify(exportPayload, null, 2)], {
       type: 'application/json' 
     });
     const url = URL.createObjectURL(blob);
@@ -393,7 +509,7 @@ export function AnalyticsDashboard({ isOpen, onClose }: AnalyticsDashboardProps)
   };
 
   // NEW: Chart Export Menu Component
-  const ChartExportMenu = ({ chartId, chartTitle, data }: { chartId: string; chartTitle: string; data: any[] }) => (
+  const ChartExportMenu = ({ chartId, chartTitle, data }: { chartId: string; chartTitle: string; data: DrillDownCompatible[] }) => (
     <div className="flex items-center gap-1">
       <button
         onClick={() => handleExportChartPNG(chartId, chartTitle)}
@@ -431,19 +547,22 @@ export function AnalyticsDashboard({ isOpen, onClose }: AnalyticsDashboardProps)
             </div>
             <div className="p-4 overflow-y-auto max-h-[60vh]">
               <div className="space-y-2">
-                {drillDownData.data.map((item, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-700 rounded-lg"
-                  >
-                    <span className="text-sm text-gray-700 dark:text-gray-300">
-                      {item.label || item.name || `Item ${index + 1}`}
-                    </span>
-                    <span className="font-medium text-gray-900 dark:text-white">
-                      {item.value || item.count || item.events || '-'}
-                    </span>
-                  </div>
-                ))}
+                {drillDownData.data.map((item, index) => {
+                  const record = item as Record<string, unknown>;
+                  return (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-700 rounded-lg"
+                    >
+                      <span className="text-sm text-gray-700 dark:text-gray-300">
+                        {(record.label || record.name || `Item ${index + 1}`) as string}
+                      </span>
+                      <span className="font-medium text-gray-900 dark:text-white">
+                        {String(record.value || record.count || record.events || '-')}
+                      </span>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -641,12 +760,12 @@ export function AnalyticsDashboard({ isOpen, onClose }: AnalyticsDashboardProps)
                       />
                     </div>
                     <div className="h-64 flex items-end space-x-2">
-                      {dashboardData.trends?.hourlyActivity?.map((hour: any, index: number) => (
+                      {dashboardData.trends?.hourlyActivity?.map((hour: HourlyActivity, index: number) => (
                         <div
                           key={index}
                           className="flex-1 bg-blue-200 dark:bg-blue-800 rounded-t cursor-pointer hover:bg-blue-300 dark:hover:bg-blue-700 transition-colors"
                           style={{
-                            height: `${Math.max(4, (hour.events / Math.max(...dashboardData.trends.hourlyActivity.map((h: any) => h.events))) * 100)}%`
+                            height: `${Math.max(4, (hour.events / Math.max(...(dashboardData.trends?.hourlyActivity ?? []).map((h: HourlyActivity) => h.events))) * 100)}%`
                           }}
                           title={`Hour ${hour.hour}: ${hour.events} events`}
                           onClick={() => handleDrillDown(
@@ -722,19 +841,19 @@ export function AnalyticsDashboard({ isOpen, onClose }: AnalyticsDashboardProps)
                   <Card className="p-4 sm:p-5 md:p-6">
                     <h3 className="text-lg font-semibold mb-4">Core Web Vitals</h3>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
-                      {Object.entries(dashboardData.performance?.coreWebVitals || {}).map(([metric, value]: any) => (
+                      {Object.entries(dashboardData.performance?.coreWebVitals || {}).map(([metric, value]: [string, unknown]) => (
                         metric !== 'ratings' && (
                           <div key={metric} className="text-center p-4 border rounded-lg">
                             <p className="text-sm text-gray-500 uppercase">{metric}</p>
-                            <p className="text-xl font-bold">{Math.round(value)}ms</p>
+                            <p className="text-xl font-bold">{Math.round(value as number)}ms</p>
                             <Badge className={
-                              dashboardData.performance?.coreWebVitals?.ratings?.[metric] === 'good'
+                              dashboardData.performance?.insights?.coreWebVitals?.ratings?.[metric] === 'good'
                                 ? "bg-green-100 text-green-800"
-                                : dashboardData.performance?.coreWebVitals?.ratings?.[metric] === 'needs-improvement'
+                                : dashboardData.performance?.insights?.coreWebVitals?.ratings?.[metric] === 'needs-improvement'
                                   ? "bg-yellow-100 text-yellow-800"
                                   : "bg-red-100 text-red-800"
                             }>
-                              {dashboardData.performance?.coreWebVitals?.ratings?.[metric] || 'unknown'}
+                              {dashboardData.performance?.insights?.coreWebVitals?.ratings?.[metric] || 'unknown'}
                             </Badge>
                           </div>
                         )
@@ -748,14 +867,14 @@ export function AnalyticsDashboard({ isOpen, onClose }: AnalyticsDashboardProps)
                   <Card className="p-4 sm:p-5 md:p-6">
                     <h3 className="text-lg font-semibold mb-4">User Journey Flow</h3>
                     <div className="space-y-3 sm:space-y-4">
-                      {Object.entries(dashboardData.userJourney?.journeyMap || {}).map(([step, count]: any) => (
+                      {Object.entries(dashboardData.userJourney?.journeyMap || {}).map(([step, count]: [string, number]) => (
                         <div key={step} className="flex items-center justify-between p-3 border rounded-lg">
                           <span className="font-medium">{step}</span>
                           <div className="flex items-center gap-2">
                             <div 
                               className="h-2 bg-blue-500 rounded"
                               style={{ 
-                                width: `${Math.max(20, (count / Math.max(...Object.values(dashboardData.userJourney?.journeyMap || {}))) * 200)}px` 
+                                width: `${Math.max(20, (count / Math.max(...(Object.values(dashboardData.userJourney?.journeyMap || {}) as number[]))) * 200)}px`
                               }}
                             />
                             <span className="text-sm text-gray-500">{count}</span>
@@ -771,7 +890,7 @@ export function AnalyticsDashboard({ isOpen, onClose }: AnalyticsDashboardProps)
                   <Card className="p-4 sm:p-5 md:p-6">
                     <h3 className="text-lg font-semibold mb-4">Feature Engagement</h3>
                     <div className="space-y-3 sm:space-y-4">
-                      {dashboardData.featureEngagement?.map((feature: any, index: number) => (
+                      {dashboardData.featureEngagement?.map((feature: FeatureEngagementItem, index: number) => (
                         <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
                           <div>
                             <p className="font-medium">{feature.feature}</p>

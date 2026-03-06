@@ -93,6 +93,36 @@ interface SessionDigest {
   resourcesShared: string[];
 }
 
+interface AbcEntry {
+  behavior_category: string;
+  antecedent_category: string;
+  consequence_category: string;
+  occurred_at: string;
+  child_id: string;
+}
+
+interface ChatMessage {
+  content: string;
+  role: string;
+  created_at: string;
+}
+
+interface TreatmentGoal {
+  goal_text: string;
+  baseline_value: number | null;
+  current_value: number | null;
+  target_value: number | null;
+  child_id: string;
+  status: string;
+}
+
+interface MarketplaceBooking {
+  scheduled_at: string;
+  status: string;
+  user_id: string;
+  provider_id: string;
+}
+
 interface SessionPrepDigestProps {
   childId: string;
   providerId: string;
@@ -182,7 +212,7 @@ export function SessionPrepDigest({
       const triggerCounts: Record<string, number> = {};
       const consequenceCounts: Record<string, number> = {};
 
-      (abcData || []).forEach((entry: any) => {
+      (abcData || []).forEach((entry: AbcEntry) => {
         behaviorCounts[entry.behavior_category] = (behaviorCounts[entry.behavior_category] || 0) + 1;
         triggerCounts[entry.antecedent_category] = (triggerCounts[entry.antecedent_category] || 0) + 1;
         consequenceCounts[entry.consequence_category] = (consequenceCounts[entry.consequence_category] || 0) + 1;
@@ -202,7 +232,7 @@ export function SessionPrepDigest({
         .sort((a, b) => b[1] - a[1])[0]?.[0] || 'undetermined';
 
       // Extract parent concerns from messages
-      const parentMessages = (messages || []).filter((m: any) => m.role === 'user');
+      const parentMessages = (messages || []).filter((m: ChatMessage) => m.role === 'user');
       const recentConcerns = extractConcerns(parentMessages);
       const winsToAcknowledge = extractWins(parentMessages);
       const questionsAsked = extractQuestions(parentMessages);
@@ -226,12 +256,12 @@ export function SessionPrepDigest({
       else if (currentIncidents < previousIncidents * 0.8) incidentsTrend = 'down';
 
       // Process goals
-      const goalProgress: GoalProgress[] = (goalsData || []).map((g: any) => ({
+      const goalProgress: GoalProgress[] = (goalsData || []).map((g: TreatmentGoal) => ({
         goal: g.goal_text,
         baseline: g.baseline_value || 0,
         current: g.current_value || 0,
         target: g.target_value || 100,
-        trend: g.current_value > g.baseline_value ? 'up' : g.current_value < g.baseline_value ? 'down' : 'stable'
+        trend: (g.current_value ?? 0) > (g.baseline_value ?? 0) ? 'up' : (g.current_value ?? 0) < (g.baseline_value ?? 0) ? 'down' : 'stable'
       }));
 
       // Generate recommended focus areas
@@ -257,10 +287,10 @@ export function SessionPrepDigest({
       const thisMonth = new Date();
       thisMonth.setDate(1);
       const sessionsThisMonth = (sessions || []).filter(
-        (s: any) => new Date(s.scheduled_at) >= thisMonth
+        (s: MarketplaceBooking) => new Date(s.scheduled_at) >= thisMonth
       ).length;
       const totalSessions = sessions?.length || 0;
-      const completedSessions = (sessions || []).filter((s: any) => s.status === 'completed').length;
+      const completedSessions = (sessions || []).filter((s: MarketplaceBooking) => s.status === 'completed').length;
       const attendanceRate = totalSessions > 0 ? (completedSessions / totalSessions) * 100 : 100;
 
       // Build digest
@@ -314,7 +344,7 @@ export function SessionPrepDigest({
       .replace(/\b\w/g, l => l.toUpperCase());
   };
 
-  const extractConcerns = (messages: any[]): string[] => {
+  const extractConcerns = (messages: ChatMessage[]): string[] => {
     const concernPatterns = [
       /worried about/i,
       /concerned about/i,
@@ -344,7 +374,7 @@ export function SessionPrepDigest({
     return [...new Set(concerns)].slice(0, 5);
   };
 
-  const extractWins = (messages: any[]): string[] => {
+  const extractWins = (messages: ChatMessage[]): string[] => {
     const winPatterns = [
       /did great/i,
       /did well/i,
@@ -374,7 +404,7 @@ export function SessionPrepDigest({
     return [...new Set(wins)].slice(0, 3);
   };
 
-  const extractQuestions = (messages: any[]): string[] => {
+  const extractQuestions = (messages: ChatMessage[]): string[] => {
     const questions: string[] = [];
     messages.forEach(m => {
       const content = m.content || '';
@@ -604,6 +634,14 @@ export function SessionPrepDigest({
           </div>
         </div>
       </Card>
+
+      {/* Clinical Disclaimer */}
+      <div className="flex items-center gap-2 p-2 bg-amber-50 border border-amber-200 rounded-lg text-xs">
+        <span className="text-amber-600 flex-shrink-0">📋</span>
+        <span className="text-amber-800">
+          AI-generated session prep is for informational support. Clinical session planning should be directed by the treating BCBA or therapist.
+        </span>
+      </div>
 
       {/* Recommended Focus */}
       <CollapsibleCard

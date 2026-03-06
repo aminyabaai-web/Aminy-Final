@@ -33,17 +33,6 @@ import {
   EyeOff
 } from 'lucide-react';
 
-interface DevicePairingFlowProps {
-  userData: {
-    parentName: string;
-    childName: string;
-  };
-  userTier?: string;
-  onClose?: () => void;
-  onComplete?: (deviceInfo: any) => void;
-  onPaywallTrigger?: () => void;
-}
-
 interface PairedDevice {
   id: string;
   name: string;
@@ -51,6 +40,17 @@ interface PairedDevice {
   status: 'active' | 'inactive' | 'pending';
   lastSeen: string;
   pairingCode: string;
+}
+
+interface DevicePairingFlowProps {
+  userData: {
+    parentName: string;
+    childName: string;
+  };
+  userTier?: string;
+  onClose?: () => void;
+  onComplete?: (deviceInfo: PairedDevice) => void;
+  onPaywallTrigger?: () => void;
 }
 
 export function DevicePairingFlow({ 

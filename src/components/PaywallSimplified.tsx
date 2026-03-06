@@ -111,13 +111,13 @@ export function PaywallSimplified({
     return () => clearInterval(interval);
   }, []);
 
-  // Pricing
-  const coreMonthly = 14.99;
-  const coreYearly = 129; // ~$10.75/mo
-  const proMonthly = 29.99;
-  const proYearly = 279; // ~$23.25/mo
-  const proplusMonthly = 49.99;
-  const proplusYearly = 479; // ~$39.92/mo
+  // Pricing (updated: Core $24.99, Pro $49.99, Pro+ $79.99)
+  const coreMonthly = 24.99;
+  const coreYearly = 239; // ~$19.92/mo — 20% savings
+  const proMonthly = 49.99;
+  const proYearly = 479; // ~$39.92/mo — 20% savings
+  const proplusMonthly = 79.99;
+  const proplusYearly = 767; // ~$63.92/mo — 20% savings
 
   const corePrice = billingPeriod === 'monthly' ? coreMonthly : coreYearly;
   const corePerMonth = billingPeriod === 'yearly' ? (coreYearly / 12).toFixed(2) : coreMonthly.toFixed(2);
@@ -152,16 +152,20 @@ export function PaywallSimplified({
     try {
       const result = await billingEngine.validatePromoCode(upperCode, 'core');
 
-      if (result.valid && result.discount) {
+      const promo = result.promoCode;
+      if (result.valid && promo) {
+        const discount = promo.discountPercent ?? promo.discountAmount ?? 0;
+        const discountType = promo.discountPercent ? 'percent' : 'fixed';
+        const description = discountType === 'percent' ? `${discount}% off` : `$${discount} off`;
         setAppliedPromo({
           code: upperCode,
-          discount: result.discount,
-          type: result.discountType || 'percent',
-          description: result.description || `${result.discount}% off`,
+          discount,
+          type: discountType,
+          description,
         });
-        toast.success(`Promo code applied: ${result.description || `${result.discount}% off`}`);
+        toast.success(`Promo code applied: ${description}`);
       } else {
-        setPromoError(result.message || 'Invalid promo code');
+        setPromoError(result.error || 'Invalid promo code');
       }
     } catch (error) {
       setPromoError('Unable to validate code. Please try again.');
@@ -186,7 +190,7 @@ export function PaywallSimplified({
         const { data } = await supabase.auth.getUser();
         user = data?.user;
       } catch (authError) {
-        console.log('Auth check skipped:', authError);
+        console.warn('Auth check skipped:', authError);
       }
 
       // Only try Stripe if we have a user AND Stripe is properly configured
@@ -208,7 +212,7 @@ export function PaywallSimplified({
             return;
           }
         } catch (stripeError) {
-          console.log('Stripe checkout unavailable, using local subscription:', stripeError);
+          console.warn('Stripe checkout unavailable, using local subscription:', stripeError);
         }
       }
 
@@ -488,9 +492,23 @@ export function PaywallSimplified({
         </div>
 
         {/* Telehealth context note */}
-        <p className="text-xs text-gray-400 text-center max-w-lg mx-auto mb-6">
+        <p className="text-xs text-gray-400 text-center max-w-lg mx-auto mb-4">
           All plans include access to our provider marketplace — book telehealth sessions with BCBAs, RBTs, therapists, and more. Higher tiers save more per session.
         </p>
+
+        {/* 7-Day Free Trial of Core */}
+        <div className="w-full max-w-sm mb-6 text-center">
+          <button
+            onClick={() => {
+              onSubscribe('core' as TierType);
+              toast.success('Welcome to Aminy! Your 7-day free trial of Core has started.');
+            }}
+            className="text-sm text-teal-600 hover:text-teal-700 font-medium underline underline-offset-2 transition-colors"
+          >
+            Start 7-day free trial of Core — no credit card required
+          </button>
+          <p className="text-xs text-gray-400 mt-1">Full Core access for 7 days, then $24.99/mo</p>
+        </div>
 
         {/* Promo Code */}
         <div className="w-full max-w-sm mb-6">

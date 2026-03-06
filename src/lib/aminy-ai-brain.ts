@@ -12,7 +12,7 @@
  * Think of this as Aminy's actual "brain" - everything flows through here
  */
 
-import { store } from './store';
+import { useAminyStore as store, type ConversationHistoryEntry } from './store';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
 import { supabase } from '../utils/supabase/client';
 
@@ -105,6 +105,7 @@ interface ConversationMemory {
   parentConcerns: string[];
   successfulStrategies: Strategy[];
   challengingScenarios: Scenario[];
+  onboardingConversation?: Array<{ role: string; content: string }>;
 }
 
 interface Conversation {
@@ -218,9 +219,10 @@ export interface AminyAIContext {
  */
 export async function buildAIContext(): Promise<AminyAIContext> {
   const state = store.getState();
+  const children = state.children ?? [];
   const currentChild = state.currentChildId
-    ? state.children.find(c => c.id === state.currentChildId)
-    : state.children[0];
+    ? children.find((c: { id: string }) => c.id === state.currentChildId)
+    : children[0];
 
   if (!currentChild) {
     throw new Error('No child profile found');
@@ -284,7 +286,7 @@ export async function buildAIContext(): Promise<AminyAIContext> {
       copingStrategies: [],
       supportNeeds: []
     },
-    tier: state.selectedTier || 'core',
+    tier: (state.selectedTier || 'core') as 'free' | 'core' | 'pro',
     clinicalData: {
       diagnosisHistory: childContext.diagnoses,
       therapyHistory: [],
@@ -294,11 +296,21 @@ export async function buildAIContext(): Promise<AminyAIContext> {
   };
 }
 
-async function buildChildContext(child: any): Promise<ChildContext> {
+async function buildChildContext(child: {
+  id: string;
+  name: string;
+  age?: number;
+  challenges?: string[];
+  strengths?: string[];
+  diagnoses?: string[];
+  sensoryProfile?: { seekers?: string[]; avoiders?: string[] };
+  communicationLevel?: 'nonverbal' | 'emerging' | 'conversational';
+  goals?: Goal[];
+}): Promise<ChildContext> {
   return {
     id: child.id,
     name: child.name,
-    age: child.age,
+    age: child.age ?? 0,
     concerns: child.challenges || [],
     strengths: child.strengths || [],
     diagnoses: child.diagnoses || [],
@@ -384,12 +396,12 @@ async function buildVaultContext(childId: string): Promise<VaultContext> {
     const state = store.getState();
     const vault = state.vault || {};
     vaultData = {
-      evaluations: vault.evaluations || [],
-      iepDocuments: vault.ieps || [],
-      progressReports: vault.progressReports || [],
-      bcbaNotes: vault.bcbaNotes || [],
-      insuranceInfo: vault.insurance || [],
-      medicalRecords: vault.medical || []
+      evaluations: (vault.evaluations || []) as Document[],
+      iepDocuments: (vault.ieps || []) as Document[],
+      progressReports: (vault.progressReports || []) as Document[],
+      bcbaNotes: (vault.bcbaNotes || []) as Document[],
+      insuranceInfo: (vault.insurance || []) as Document[],
+      medicalRecords: (vault.medical || []) as Document[]
     };
   }
 
@@ -399,19 +411,19 @@ async function buildVaultContext(childId: string): Promise<VaultContext> {
 async function buildDailyPlanContext(childId: string): Promise<DailyPlanContext> {
   const state = store.getState();
   const plan = state.weeklyPlan || {};
-  
+
   return {
-    currentWeek: plan,
-    todaysFocus: plan.todayActivities || [],
-    completedToday: plan.completedActivities || [],
-    upcomingChallenges: plan.challenges || []
+    currentWeek: plan as unknown as WeeklyPlan,
+    todaysFocus: (plan.todayActivities || []) as Activity[],
+    completedToday: (plan.completedActivities || []) as Activity[],
+    upcomingChallenges: (plan.challenges || []) as string[]
   };
 }
 
 async function buildMemoryContext(childId: string): Promise<ConversationMemory> {
   const state = store.getState();
-  const conversations = state.conversationHistory || [];
-  
+  const conversations = (state.conversationHistory || []) as unknown as Conversation[];
+
   return {
     conversations,
     commonQuestions: extractCommonQuestions(conversations),
@@ -424,11 +436,11 @@ async function buildMemoryContext(childId: string): Promise<ConversationMemory> 
 async function buildJuniorModeContext(childId: string): Promise<JuniorModeContext> {
   const state = store.getState();
   const jrData = state.juniorModeData || {};
-  
+
   return {
-    gamesPlayed: jrData.sessions || [],
-    skillsPracticed: jrData.skillsPracticed || [],
-    emotionalRegulation: jrData.emotions || [],
+    gamesPlayed: (jrData.sessions || []) as GameSession[],
+    skillsPracticed: (jrData.skillsPracticed || []) as string[],
+    emotionalRegulation: (jrData.emotions || []) as EmotionData[],
     communicationAttempts: jrData.communicationAttempts || 0,
     successfulInteractions: jrData.successfulInteractions || 0
   };
@@ -440,8 +452,8 @@ async function buildTelehealthContext(childId: string): Promise<TelehealthSessio
   
   // Filter and format telehealth sessions
   return sessions
-    .filter(s => s.type === 'telehealth' && s.status === 'completed' && s.summary)
-    .map(session => {
+    .filter((s) => s.type === 'telehealth' && s.status === 'completed' && s.summary)
+    .map((session) => {
       try {
         const summaryData = typeof session.summary === 'string' 
           ? JSON.parse(session.summary) 
@@ -734,7 +746,7 @@ MEMORY (What You Remember About This Family)
 ═══════════════════════════════════════════════════════════════
 ${context.memory.onboardingConversation && context.memory.onboardingConversation.length > 0
   ? `FIRST CONVERSATION (from onboarding):
-${context.memory.onboardingConversation.map(m => `${m.role === 'user' ? 'Parent' : 'You'}: ${m.content}`).join('\n')}
+${context.memory.onboardingConversation.map((m: { role: string; content: string }) => `${m.role === 'user' ? 'Parent' : 'You'}: ${m.content}`).join('\n')}
 ---`
   : ''}
 Recent topics: ${context.memory.conversations.slice(-5).map(c => c.topic).join(', ') || 'First conversations'}
@@ -1004,15 +1016,15 @@ export async function storeConversation(
   outcome?: string
 ): Promise<void> {
   const state = store.getState();
-  const childId = state.currentChildId || state.children[0]?.id;
-  const userId = state.userId;
+  const childId = state.currentChildId || (state.children ?? [])[0]?.id;
+  const userId = state.user?.id;
 
   if (!childId) return;
 
   const conversation: Conversation = {
     id: `conv-${Date.now()}`,
     timestamp: new Date().toISOString(),
-    messages,
+    messages: messages as Conversation['messages'],
     topic,
     outcome
   };
@@ -1020,7 +1032,7 @@ export async function storeConversation(
   // Store in local state
   const updatedHistory = [
     ...(state.conversationHistory || []),
-    conversation
+    conversation as unknown as ConversationHistoryEntry
   ];
 
   store.setState({
@@ -1076,8 +1088,8 @@ async function persistConversationToBackend(
  */
 export async function persistAIContext(): Promise<void> {
   const state = store.getState();
-  const userId = state.userId;
-  const childId = state.currentChildId || state.children[0]?.id;
+  const userId = state.user?.id;
+  const childId = state.currentChildId || (state.children ?? [])[0]?.id;
 
   if (!userId || !childId) return;
 
@@ -1168,9 +1180,9 @@ export async function persistAIContext(): Promise<void> {
 /**
  * Load AI context from Supabase on app initialization
  */
-export async function loadAIContextFromBackend(): Promise<any | null> {
+export async function loadAIContextFromBackend(): Promise<Record<string, unknown> | null> {
   const state = store.getState();
-  const userId = state.userId;
+  const userId = state.user?.id;
 
   if (!userId) return null;
 
@@ -1209,7 +1221,7 @@ export async function storeMemoryFact(
   confidence: number = 0.8
 ): Promise<void> {
   const state = store.getState();
-  const userId = state.userId;
+  const userId = state.user?.id;
 
   if (!userId) return;
 
@@ -1246,9 +1258,9 @@ export async function storeMemoryFact(
 /**
  * Get all memory facts for a child
  */
-export async function getMemoryFacts(childId: string): Promise<any[]> {
+export async function getMemoryFacts(childId: string): Promise<Record<string, unknown>[]> {
   const state = store.getState();
-  const userId = state.userId;
+  const userId = state.user?.id;
 
   if (!userId) return [];
 

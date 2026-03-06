@@ -6,7 +6,7 @@ import { UrgentHelpSheet } from './HelpCenter';
 interface HelpButtonProps {
   onHelpOpen: () => void;
   onUrgentHelpOpen?: () => void;
-  onAnalytics?: (event: string, data: any) => void;
+  onAnalytics?: (event: string, data: Record<string, unknown>) => void;
   className?: string;
   variant?: 'header' | 'standalone';
   showUrgentHelp?: boolean;

@@ -344,7 +344,7 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
               <div className="space-y-3 sm:space-y-4">
                 <div>
                   <div className="flex justify-between text-sm mb-2">
-                    <span className="text-slate-600">Ask Aminy (AI Chat)</span>
+                    <span className="text-slate-600">Aminy (AI Chat)</span>
                     <span className="text-slate-900">92%</span>
                   </div>
                   <div className="w-full bg-slate-200 rounded-full h-2">

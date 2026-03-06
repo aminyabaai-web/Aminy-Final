@@ -18,6 +18,9 @@ import {
   type ConversationContext,
 } from './claude-client';
 
+import { buildParentAIContext } from '../parent-junior-bridge';
+import { getScreeningResults } from '../screening-instruments';
+
 import {
   saveConversation,
   loadRecentConversations,
@@ -88,6 +91,30 @@ export function getCurrentContext(): ConversationContext {
     tier === 'core' ? 'core' :
     'starter';
 
+  // Build Junior activity context (feeds AI with child's practice data)
+  const childId = state.user?.id ? `child-${state.user.id.substring(0, 8)}` : 'default';
+  let juniorContext: string | undefined;
+  try {
+    const bridgeContext = buildParentAIContext(childId, mappedTier);
+    if (bridgeContext.trim()) juniorContext = bridgeContext;
+  } catch {
+    // Bridge not available — no Junior data yet, which is fine
+  }
+
+  // Build screening results context (if parent has completed screenings)
+  let screeningContext: string | undefined;
+  try {
+    const screenings = getScreeningResults();
+    if (screenings.length > 0) {
+      const recent = screenings.slice(-3); // Last 3 screenings
+      screeningContext = recent.map(s =>
+        `${s.instrumentName} (${new Date(s.completedAt).toLocaleDateString()}): Score ${s.totalScore} — ${s.riskLevel} risk. ${s.summary}`
+      ).join('\n');
+    }
+  } catch {
+    // Screening data not available
+  }
+
   return {
     childName,
     childAge,
@@ -99,6 +126,8 @@ export function getCurrentContext(): ConversationContext {
     parentName,
     recentTopics: [],
     tier: mappedTier,
+    juniorContext,
+    screeningContext,
   };
 }
 
@@ -175,6 +204,16 @@ export async function sendMessage(
 LONG-TERM MEMORY (What you remember about this family)
 ═══════════════════════════════════════════════════════════════
 ${memoryContext}`;
+  }
+
+  // Inject Junior activity context so parent AI knows about child's practice
+  try {
+    const juniorContext = buildParentAIContext(childId, context.tier);
+    if (juniorContext) {
+      systemPrompt += `\n\n${juniorContext}`;
+    }
+  } catch (error) {
+    // Non-critical — parent AI still works without Junior data
   }
 
   // Convert history to Claude format
@@ -295,6 +334,18 @@ function generateSuggestions(
   } else if (combined.includes('sensory')) {
     suggestions.push('Sensory toolkit ideas');
     suggestions.push('Environment modifications');
+  }
+
+  // Proactive caregiver discovery — detect diagnosis + burnout/financial stress keywords
+  const burnoutKeywords = ['overwhelmed', 'exhausted', 'burned out', 'burnout', 'can\'t afford', 'too expensive', 'insurance won\'t', 'financial', 'paying for', 'help paying', 'tired', 'alone', 'struggling'];
+  const hasDiagnosis = context.diagnoses && context.diagnoses.length > 0;
+  const hasBurnoutSignal = burnoutKeywords.some(kw => combined.includes(kw));
+
+  if (hasDiagnosis && hasBurnoutSignal) {
+    suggestions.push('Check paid caregiver eligibility');
+    suggestions.push('Explore insurance benefits');
+  } else if (combined.includes('caregiver') || combined.includes('paid') || combined.includes('medicaid') || combined.includes('waiver')) {
+    suggestions.push('Check paid caregiver eligibility');
   }
 
   // Always add a general follow-up option

@@ -55,15 +55,32 @@ import {
   RefreshCw,
   Plus,
   Save,
-  X
+  X,
+  Briefcase,
+  Download,
+  Printer
 } from 'lucide-react';
 import type { ProviderType } from '../lib/child-profiles';
 import { brandColors } from '../lib/brand-system';
 import { supabase } from '../utils/supabase/client';
 import { CredentialBadge, VerifiedBadge } from './provider/CredentialBadge';
+import { getBranding, saveBranding, type ProviderBranding } from '../lib/provider-branding';
+import { CPT_CODES, getCPTByCode, suggestCPTCodes, validateNoteForCPT, type CPTCode } from '../lib/cpt-codes';
 import { PatientAISummary } from './provider/PatientAISummary';
 import { ProviderInsightsDashboard } from './provider/ProviderInsightsDashboard';
 import { CareCoordination } from './provider/CareCoordination';
+import { RBTManagement } from './provider/RBTManagement';
+import {
+  generateSuperbillFromSession,
+  saveSuperbillToSupabase,
+  type SessionForSuperbill,
+  type ClinicalNoteForSuperbill,
+  type ProviderForSuperbill,
+} from '../lib/superbill-service';
+import type { Superbill } from '../types/telehealth';
+
+// Lazy-load the SuperbillGenerator for the provider-side superbill overlay
+const SuperbillGenerator = React.lazy(() => import('./SuperbillGenerator'));
 
 interface Patient {
   id: string;
@@ -102,6 +119,7 @@ interface ProviderProfile {
   totalPatients: number;
   sessionsThisMonth: number;
   earningsThisMonth: number;
+  needsSetup?: boolean;
 }
 
 interface ProviderPortalProps {
@@ -109,7 +127,7 @@ interface ProviderPortalProps {
 }
 
 export function ProviderPortal({ providerId }: ProviderPortalProps) {
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'patients' | 'sessions' | 'earnings' | 'settings' | 'ai-summaries' | 'insights' | 'coordination'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'patients' | 'sessions' | 'earnings' | 'settings' | 'ai-summaries' | 'insights' | 'coordination' | 'my-practice' | 'clinical-notes'>('dashboard');
   const [patients, setPatients] = useState<Patient[]>([]);
   const [sessions, setSessions] = useState<Session[]>([]);
   const [provider, setProvider] = useState<ProviderProfile | null>(null);
@@ -120,14 +138,115 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
   const [showSessionNotes, setShowSessionNotes] = useState<string | null>(null);
   const [sessionNotes, setSessionNotes] = useState({ subjective: '', objective: '', assessment: '', plan: '' });
   const [isSavingNotes, setIsSavingNotes] = useState(false);
+  // Clinical notes tab state — discipline-specific note templates
+  type NoteType = 'soap' | 'aba-session' | 'progress' | 'slp-session' | 'mental-health' | 'diagnostic-eval' | 'dev-ped';
+  const NOTE_TEMPLATES: Record<NoteType, { label: string; badge: string; badgeClass: string; fields: Array<{ key: string; label: string; placeholder: string; rows?: number }> }> = {
+    'soap': {
+      label: 'SOAP Note', badge: 'SOAP', badgeClass: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300',
+      fields: [
+        { key: 'subjective', label: 'S — Subjective', placeholder: "Parent/caregiver reports, child's statements, behavioral observations..." },
+        { key: 'objective', label: 'O — Objective', placeholder: 'Measurable data, session metrics, standardized scores...' },
+        { key: 'assessment', label: 'A — Assessment', placeholder: 'Clinical interpretation, progress toward goals, barriers...' },
+        { key: 'plan', label: 'P — Plan', placeholder: 'Next steps, goal modifications, recommendations...' },
+      ],
+    },
+    'aba-session': {
+      label: 'ABA Session Note', badge: 'ABA', badgeClass: 'bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-300',
+      fields: [
+        { key: 'targets', label: 'Targets Addressed', placeholder: 'List skill acquisition and behavior reduction targets...' },
+        { key: 'trials', label: 'Trials / Data', placeholder: 'Trial counts, correct/incorrect, percentage mastery...' },
+        { key: 'prompting', label: 'Prompting Levels', placeholder: 'Full physical, partial physical, model, gestural, independent...' },
+        { key: 'data', label: 'Session Summary', placeholder: 'Overall session behavior, reinforcement used, notable events...' },
+      ],
+    },
+    'slp-session': {
+      label: 'SLP Session Note', badge: 'SLP', badgeClass: 'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-300',
+      fields: [
+        { key: 'articulation', label: 'Articulation / Phonology', placeholder: 'Phoneme targets (e.g., /r/, /s/ blends), % accuracy, error patterns...' },
+        { key: 'language', label: 'Receptive / Expressive Language', placeholder: 'Language sample, MLU, following directions, vocabulary targets...' },
+        { key: 'fluency_voice', label: 'Fluency / Voice / AAC', placeholder: 'Dysfluency counts, vocal quality, AAC device trials, pragmatics...' },
+        { key: 'oral_motor', label: 'Oral Motor / Feeding', placeholder: 'Oral motor exercises, feeding observations, sensory responses...' },
+        { key: 'plan', label: 'Plan / Homework', placeholder: 'Home practice activities, next session targets, parent carryover instructions...' },
+      ],
+    },
+    'mental-health': {
+      label: 'Mental Health Note', badge: 'MH', badgeClass: 'bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-300',
+      fields: [
+        { key: 'presenting', label: 'Presenting Concerns', placeholder: 'Current symptoms, triggers, mood, sleep, appetite...' },
+        { key: 'risk_assessment', label: 'Safety / Risk Assessment', placeholder: 'SI/HI screening, self-harm, risk level, protective factors...' },
+        { key: 'intervention', label: 'Therapeutic Intervention', placeholder: 'Modality used (CBT, DBT, play therapy), techniques, child response...' },
+        { key: 'standardized', label: 'Standardized Measures', placeholder: 'PHQ-A, GAD-7, SCARED, RCADS scores if administered...' },
+        { key: 'progress', label: 'Treatment Plan Progress', placeholder: 'Progress toward treatment goals, barriers, caregiver involvement...' },
+        { key: 'plan', label: 'Plan', placeholder: 'Next session focus, homework, medication coordination, referrals...' },
+      ],
+    },
+    'diagnostic-eval': {
+      label: 'Diagnostic Evaluation', badge: 'EVAL', badgeClass: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300',
+      fields: [
+        { key: 'reason', label: 'Reason for Referral', placeholder: 'Referral source, presenting concerns, specific diagnostic questions...' },
+        { key: 'history', label: 'Developmental / Medical History', placeholder: 'Milestones, prenatal/birth, medical conditions, prior diagnoses, medications...' },
+        { key: 'battery', label: 'Test Battery Administered', placeholder: 'ADOS-2, WISC-V, Vineland-3, BASC-3, Conners-4, BRIEF-2...' },
+        { key: 'behavioral_obs', label: 'Behavioral Observations', placeholder: 'Engagement, attention, communication style, affect, motor, sensory...' },
+        { key: 'scores', label: 'Results / Scores', placeholder: 'Standard scores, percentiles, composite indices, clinically significant findings...', rows: 4 },
+        { key: 'impressions', label: 'Diagnostic Impressions', placeholder: 'DSM-5 codes, differential diagnosis, clinical rationale...' },
+        { key: 'recommendations', label: 'Recommendations', placeholder: 'Recommended services, school accommodations, follow-up, referrals...' },
+      ],
+    },
+    'dev-ped': {
+      label: 'Developmental Pediatrics', badge: 'DEV PED', badgeClass: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300',
+      fields: [
+        { key: 'chief_complaint', label: 'Chief Complaint', placeholder: 'Primary concern, duration, changes since last visit...' },
+        { key: 'milestones', label: 'Developmental Milestones', placeholder: 'Gross motor, fine motor, speech/language, social/emotional, cognitive status...' },
+        { key: 'exam', label: 'Physical / Neuro Exam', placeholder: 'Growth parameters, neurological findings, dysmorphic features, sensory...' },
+        { key: 'medications', label: 'Medication Review', placeholder: 'Current medications, dosage, side effects, efficacy, adjustments...' },
+        { key: 'assessment', label: 'Assessment', placeholder: 'Diagnostic updates, comorbidities, functional impact...' },
+        { key: 'coordination', label: 'Care Coordination / Plan', placeholder: 'Therapy referrals, school letter, follow-up schedule, lab orders...' },
+      ],
+    },
+    'progress': {
+      label: 'Progress Note', badge: 'Progress', badgeClass: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300',
+      fields: [
+        { key: 'narrative', label: 'Narrative', placeholder: "Describe the client's progress, behavioral changes, milestones, and next steps...", rows: 6 },
+      ],
+    },
+  };
+
+  const [clinicalNotes, setClinicalNotes] = useState<Array<{
+    id: string;
+    patientName: string;
+    noteType: NoteType;
+    date: string;
+    content: Record<string, string>;
+    signed: boolean;
+    locked: boolean;
+    cptCode?: string;
+  }>>([]);
+  const [showNoteEditor, setShowNoteEditor] = useState(false);
+  const [editingNote, setEditingNote] = useState<{
+    noteType: NoteType;
+    patientId: string;
+    patientName: string;
+    sessionId?: string;
+    content: Record<string, string>;
+    cptCode?: string;
+  } | null>(null);
   const [earnings, setEarnings] = useState<{ thisMonth: number; lastMonth: number; pending: number; ytd: number }>({
     thisMonth: 0, lastMonth: 0, pending: 0, ytd: 0
   });
+  // White-label branding
+  const [branding, setBranding] = useState<ProviderBranding | null>(() => getBranding());
+  const [brandingForm, setBrandingForm] = useState({ orgName: '', logoUrl: '', primaryColor: '', tagline: '' });
+
+  // Superbill generation state
+  const [showSuperbillGenerator, setShowSuperbillGenerator] = useState(false);
+  const [generatedSuperbill, setGeneratedSuperbill] = useState<Superbill | null>(null);
+  const [superbillToast, setSuperbillToast] = useState<string | null>(null);
+  const [lastSavedNoteId, setLastSavedNoteId] = useState<string | null>(null);
 
   // Load provider data from Supabase
   const loadProviderData = useCallback(async () => {
     setIsRefreshing(true);
-    console.log('[ProviderPortal] Loading data for provider:', providerId);
+    if (import.meta.env.DEV) console.log('[ProviderPortal] Loading data for provider:', providerId);
 
     try {
       // Fetch provider profile
@@ -138,7 +257,7 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
         .single();
 
       if (providerError && providerError.code !== 'PGRST116') {
-        console.error('[ProviderPortal] Error fetching provider:', providerError);
+        console.error('[ProviderPortal] Error fetching provider:', providerError.message);
       }
 
       // If no provider found in DB, use fallback mock data for demo
@@ -188,7 +307,7 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
         .eq('provider_id', providerId);
 
       if (patientsError) {
-        console.error('[ProviderPortal] Error fetching patients:', patientsError);
+        console.error('[ProviderPortal] Error fetching patients:', patientsError.message);
       }
 
       // Get child profiles for patient details
@@ -248,7 +367,7 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
         .order('scheduled_at', { ascending: true });
 
       if (sessionsError) {
-        console.error('[ProviderPortal] Error fetching sessions:', sessionsError);
+        console.error('[ProviderPortal] Error fetching sessions:', sessionsError.message);
       }
 
       const sessionsList: Session[] = [];
@@ -383,6 +502,148 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
     }
   };
 
+  // Clinical notes handlers
+  const handleSaveClinicalNote = async () => {
+    if (!editingNote) return;
+    setIsSavingNotes(true);
+    try {
+      const noteId = `note-${Date.now()}`;
+      const newNote = {
+        id: noteId,
+        patientName: editingNote.patientName,
+        noteType: editingNote.noteType,
+        date: new Date().toISOString().split('T')[0],
+        content: editingNote.content,
+        signed: false,
+        locked: false,
+      };
+
+      // Save to Supabase
+      const { error } = await supabase.from('session_notes').insert({
+        session_id: editingNote.sessionId || noteId,
+        provider_id: providerId,
+        note_type: editingNote.noteType,
+        subjective: editingNote.content.subjective || editingNote.content.narrative || null,
+        objective: editingNote.content.objective || editingNote.content.targets || null,
+        assessment: editingNote.content.assessment || editingNote.content.data || null,
+        plan: editingNote.content.plan || editingNote.content.prompting || null,
+        shared_with_parent: false,
+      });
+
+      if (error) console.warn('[ProviderPortal] Supabase save error (using local):', error);
+
+      setClinicalNotes(prev => [newNote, ...prev]);
+      setLastSavedNoteId(noteId);
+      setEditingNote(null);
+      setShowNoteEditor(false);
+    } catch (err) {
+      console.error('[ProviderPortal] Error saving clinical note:', err);
+    } finally {
+      setIsSavingNotes(false);
+    }
+  };
+
+  // Superbill generation handler
+  const handleGenerateSuperbill = (noteId: string) => {
+    const note = clinicalNotes.find(n => n.id === noteId);
+    if (!note || !provider) return;
+
+    // Find the session associated with this note (if any)
+    const linkedSession = sessions.find(s =>
+      s.patientName === note.patientName && s.status !== 'cancelled'
+    );
+
+    // Build the session object for the superbill service
+    const sessionData: SessionForSuperbill = linkedSession
+      ? {
+          id: linkedSession.id,
+          patientId: linkedSession.patientId,
+          patientName: linkedSession.patientName,
+          scheduledAt: linkedSession.scheduledAt,
+          duration: linkedSession.duration,
+          type: linkedSession.type,
+          status: linkedSession.status,
+        }
+      : {
+          id: noteId,
+          patientId: note.patientName.replace(/\s+/g, '-').toLowerCase(),
+          patientName: note.patientName,
+          scheduledAt: new Date(note.date),
+          duration: 50, // default session length
+          type: 'Follow-up Session',
+          status: 'completed',
+        };
+
+    // Build the clinical note object
+    const clinicalNoteData: ClinicalNoteForSuperbill = {
+      noteType: note.noteType,
+      content: note.content,
+      cptCode: note.cptCode,
+      patientName: note.patientName,
+      sessionId: linkedSession?.id,
+    };
+
+    // Build the provider object
+    const providerData: ProviderForSuperbill = {
+      id: provider.id,
+      name: provider.name,
+      credentials: provider.credentials,
+      type: provider.type,
+    };
+
+    // Generate the superbill
+    const superbill = generateSuperbillFromSession(sessionData, clinicalNoteData, providerData);
+    setGeneratedSuperbill(superbill);
+    setShowSuperbillGenerator(true);
+    setLastSavedNoteId(null);
+
+    // Persist to Supabase (fire-and-forget with toast)
+    saveSuperbillToSupabase(superbill).then(savedId => {
+      if (savedId) {
+        setSuperbillToast('Superbill generated and saved successfully');
+      } else {
+        setSuperbillToast('Superbill generated (saved locally — sync pending)');
+      }
+      setTimeout(() => setSuperbillToast(null), 4000);
+    });
+  };
+
+  const handleSignLockNote = (noteId: string) => {
+    setClinicalNotes(prev => prev.map(n =>
+      n.id === noteId ? { ...n, signed: true, locked: true } : n
+    ));
+  };
+
+  const handleExportNotePDF = (noteId: string) => {
+    const note = clinicalNotes.find(n => n.id === noteId);
+    if (!note) return;
+
+    // Build plain text for PDF
+    const lines: string[] = [
+      `Clinical Note — ${note.noteType.toUpperCase()}`,
+      `Patient: ${note.patientName}`,
+      `Date: ${note.date}`,
+      `Provider: ${provider?.name || providerId}`,
+      '',
+    ];
+
+    // Template-driven export — works for all disciplines
+    const tmpl = NOTE_TEMPLATES[note.noteType];
+    tmpl.fields.forEach(f => {
+      lines.push(`${f.label.toUpperCase()}:`, note.content[f.key] || '—', '');
+    });
+
+    if (note.signed) lines.push('', `Signed & Locked: ${note.date}`);
+
+    const blob = new Blob([lines.join('\n')], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `clinical-note-${note.patientName.replace(/\s/g, '-')}-${note.date}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   const formatTimeUntil = (date: Date) => {
     const now = new Date();
     const diff = date.getTime() - now.getTime();
@@ -443,13 +704,36 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-3 sm:gap-4">
-              <Logo size="sm" showText={false} />
-              <div className="flex items-center gap-2">
-                <span className="text-lg font-semibold text-neutral-900 dark:text-white">Provider Portal</span>
-                <Badge className="bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400 font-medium">
-                  {provider.credentials}
-                </Badge>
-              </div>
+              {branding?.orgName ? (
+                <>
+                  {branding.logoUrl ? (
+                    <img src={branding.logoUrl} alt={branding.orgName} className="w-8 h-8 rounded-lg object-contain" />
+                  ) : (
+                    <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-sm" style={{ backgroundColor: branding.primaryColor || '#0891b2' }}>
+                      {branding.orgName.slice(0, 2).toUpperCase()}
+                    </div>
+                  )}
+                  <div className="flex flex-col">
+                    <div className="flex items-center gap-2">
+                      <span className="text-lg font-semibold text-neutral-900 dark:text-white">{branding.orgName}</span>
+                      <Badge className="bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400 font-medium">
+                        {provider.credentials}
+                      </Badge>
+                    </div>
+                    <span className="text-[10px] text-neutral-400 dark:text-slate-500 -mt-0.5">powered by Aminy</span>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <Logo size="sm" showText={false} />
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg font-semibold text-neutral-900 dark:text-white">Provider Portal</span>
+                    <Badge className="bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400 font-medium">
+                      {provider.credentials}
+                    </Badge>
+                  </div>
+                </>
+              )}
             </div>
 
             <div className="flex items-center gap-3 sm:gap-4">
@@ -497,6 +781,8 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
               { id: 'coordination', label: 'Care Team', icon: Heart },
               { id: 'sessions', label: 'Sessions', icon: Calendar },
               { id: 'earnings', label: 'Earnings', icon: DollarSign },
+              { id: 'clinical-notes', label: 'Notes', icon: ClipboardList },
+              { id: 'my-practice', label: 'My Practice', icon: Briefcase },
               { id: 'settings', label: 'Settings', icon: Settings }
             ].map(tab => (
               <button
@@ -1108,6 +1394,96 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
             </Card>
 
             <Card className="p-4 sm:p-5 md:p-6">
+              <h3 className="font-semibold text-neutral-900 dark:text-white mb-2">Practice Branding</h3>
+              <p className="text-neutral-500 dark:text-slate-400 text-sm mb-4">
+                Customize how your practice appears to families. Your logo and name will display in the header with "powered by Aminy."
+              </p>
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 dark:text-slate-300 mb-1">Practice / Clinic Name</label>
+                  <Input
+                    value={brandingForm.orgName}
+                    onChange={e => setBrandingForm(prev => ({ ...prev, orgName: e.target.value }))}
+                    placeholder="e.g., Bright Path ABA"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 dark:text-slate-300 mb-1">Logo URL</label>
+                  <Input
+                    value={brandingForm.logoUrl}
+                    onChange={e => setBrandingForm(prev => ({ ...prev, logoUrl: e.target.value }))}
+                    placeholder="https://yoursite.com/logo.png"
+                  />
+                  <p className="text-xs text-neutral-400 mt-1">Square image recommended (128×128 or larger)</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 dark:text-slate-300 mb-1">Brand Color</label>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="color"
+                      value={brandingForm.primaryColor || '#0891b2'}
+                      onChange={e => setBrandingForm(prev => ({ ...prev, primaryColor: e.target.value }))}
+                      className="w-10 h-10 rounded-lg border border-neutral-200 cursor-pointer"
+                    />
+                    <Input
+                      value={brandingForm.primaryColor}
+                      onChange={e => setBrandingForm(prev => ({ ...prev, primaryColor: e.target.value }))}
+                      placeholder="#0891b2"
+                      className="flex-1"
+                    />
+                  </div>
+                </div>
+                <div className="flex gap-2 pt-2">
+                  <Button
+                    onClick={async () => {
+                      if (!brandingForm.orgName.trim()) return;
+                      await saveBranding(providerId, {
+                        orgName: brandingForm.orgName,
+                        logoUrl: brandingForm.logoUrl || undefined,
+                        primaryColor: brandingForm.primaryColor || undefined,
+                        tagline: brandingForm.tagline || undefined,
+                      });
+                      setBranding(getBranding());
+                    }}
+                    className="bg-teal-600 hover:bg-teal-700 text-white"
+                  >
+                    <Save className="w-4 h-4 mr-1" /> Save Branding
+                  </Button>
+                  {branding?.orgName && (
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        localStorage.removeItem('aminy-provider-branding');
+                        setBranding(null);
+                        setBrandingForm({ orgName: '', logoUrl: '', primaryColor: '', tagline: '' });
+                      }}
+                    >
+                      Reset to Aminy
+                    </Button>
+                  )}
+                </div>
+                {branding?.orgName && (
+                  <div className="mt-3 p-3 bg-neutral-50 dark:bg-slate-800 rounded-lg">
+                    <p className="text-xs text-neutral-500 dark:text-slate-400 mb-2">Preview:</p>
+                    <div className="flex items-center gap-2">
+                      {branding.logoUrl ? (
+                        <img src={branding.logoUrl} alt="" className="w-6 h-6 rounded object-contain" />
+                      ) : (
+                        <div className="w-6 h-6 rounded flex items-center justify-center text-white text-[10px] font-bold" style={{ backgroundColor: branding.primaryColor || '#0891b2' }}>
+                          {branding.orgName.slice(0, 2).toUpperCase()}
+                        </div>
+                      )}
+                      <div>
+                        <span className="text-sm font-semibold text-neutral-900 dark:text-white">{branding.orgName}</span>
+                        <span className="block text-[9px] text-neutral-400">powered by Aminy</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </Card>
+
+            <Card className="p-4 sm:p-5 md:p-6">
               <h3 className="font-semibold text-neutral-900 mb-4">Availability</h3>
               <p className="text-neutral-600 mb-4">
                 Set your available hours for patient bookings
@@ -1207,7 +1583,367 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
             )}
           </div>
         )}
+
+        {/* Clinical Notes Tab */}
+        {activeTab === 'clinical-notes' && (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-xl font-semibold text-neutral-900 dark:text-white">Clinical Notes</h2>
+                <p className="text-neutral-500 dark:text-slate-400 mt-1">
+                  SOAP notes, ABA session notes, and progress documentation
+                </p>
+              </div>
+              <Button
+                onClick={() => {
+                  setEditingNote({
+                    noteType: 'soap',
+                    patientId: '',
+                    patientName: patients[0]?.childName || 'Patient',
+                    content: {},
+                  });
+                  setShowNoteEditor(true);
+                }}
+                className="bg-teal-600 hover:bg-teal-700 text-white"
+              >
+                <Plus className="w-4 h-4 mr-1" /> New Note
+              </Button>
+            </div>
+
+            {/* Note Editor */}
+            {showNoteEditor && editingNote && (
+              <Card className="p-5 border-2 border-teal-200 dark:border-teal-800 bg-white dark:bg-slate-900">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-semibold text-neutral-900 dark:text-white">New Clinical Note</h3>
+                    <button onClick={() => { setShowNoteEditor(false); setEditingNote(null); }} className="text-neutral-400 hover:text-neutral-600">
+                      <X className="w-5 h-5" />
+                    </button>
+                  </div>
+
+                  {/* CPT Code + Patient Row */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="text-sm font-medium text-neutral-700 dark:text-slate-300 mb-1 block">
+                        <Sparkles className="w-3.5 h-3.5 inline mr-1 text-amber-500" />CPT Code
+                      </label>
+                      <select
+                        className="w-full px-3 py-2 border border-neutral-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-neutral-900 dark:text-white text-sm"
+                        value={editingNote.cptCode || ''}
+                        onChange={e => {
+                          const code = e.target.value;
+                          const cpt = getCPTByCode(code);
+                          setEditingNote(prev => {
+                            if (!prev) return prev;
+                            if (cpt) {
+                              return { ...prev, cptCode: code, noteType: cpt.noteTemplate as NoteType, content: {} };
+                            }
+                            return { ...prev, cptCode: code };
+                          });
+                        }}
+                      >
+                        <option value="">Select CPT code...</option>
+                        <optgroup label="ABA / Behavior Analysis">
+                          {CPT_CODES.filter(c => c.category === 'aba').map(c => (
+                            <option key={c.code} value={c.code}>{c.code} — {c.shortName}</option>
+                          ))}
+                        </optgroup>
+                        <optgroup label="Speech-Language Pathology">
+                          {CPT_CODES.filter(c => c.category === 'slp').map(c => (
+                            <option key={c.code} value={c.code}>{c.code} — {c.shortName}</option>
+                          ))}
+                        </optgroup>
+                        <optgroup label="Mental Health">
+                          {CPT_CODES.filter(c => c.category === 'mental-health').map(c => (
+                            <option key={c.code} value={c.code}>{c.code} — {c.shortName}</option>
+                          ))}
+                        </optgroup>
+                        <optgroup label="Diagnostic / Psych Testing">
+                          {CPT_CODES.filter(c => c.category === 'diagnostic').map(c => (
+                            <option key={c.code} value={c.code}>{c.code} — {c.shortName}</option>
+                          ))}
+                        </optgroup>
+                        <optgroup label="Developmental Pediatrics">
+                          {CPT_CODES.filter(c => c.category === 'dev-ped').map(c => (
+                            <option key={c.code} value={c.code}>{c.code} — {c.shortName}</option>
+                          ))}
+                        </optgroup>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium text-neutral-700 dark:text-slate-300 mb-1 block">Patient</label>
+                      <select
+                        className="w-full px-3 py-2 border border-neutral-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-neutral-900 dark:text-white text-sm"
+                        value={editingNote.patientName}
+                        onChange={e => setEditingNote(prev => prev ? { ...prev, patientName: e.target.value } : prev)}
+                      >
+                        {patients.length > 0 ? patients.map(p => (
+                          <option key={p.id} value={p.childName}>{p.childName}</option>
+                        )) : <option value="Patient">Demo Patient</option>}
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* CPT Billing Tip */}
+                  {editingNote.cptCode && (() => {
+                    const cpt = getCPTByCode(editingNote.cptCode);
+                    if (!cpt) return null;
+                    return (
+                      <div className="p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200/60 dark:border-amber-800/40 rounded-lg">
+                        <div className="flex items-start gap-2">
+                          <Sparkles className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
+                          <div className="text-xs">
+                            <p className="font-semibold text-amber-800 dark:text-amber-300">{cpt.code} — {cpt.description}</p>
+                            <p className="text-amber-700 dark:text-amber-400 mt-1">{cpt.billingTip}</p>
+                            <p className="text-amber-600 dark:text-amber-500 mt-1">Duration: {cpt.typicalDuration} • Modifiers: {cpt.commonModifiers.join(', ') || 'none'}</p>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })()}
+
+                  {/* Note Type (auto-selected by CPT, but can be overridden) */}
+                  <div>
+                    <label className="text-sm font-medium text-neutral-700 dark:text-slate-300 mb-1 block">
+                      Note Template {editingNote.cptCode ? <span className="text-xs text-teal-600 font-normal">(auto-selected by CPT)</span> : ''}
+                    </label>
+                    <select
+                      className="w-full px-3 py-2 border border-neutral-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-neutral-900 dark:text-white text-sm"
+                      value={editingNote.noteType}
+                      onChange={e => setEditingNote(prev => prev ? { ...prev, noteType: e.target.value as NoteType, content: {} } : prev)}
+                    >
+                      {(Object.entries(NOTE_TEMPLATES) as [NoteType, typeof NOTE_TEMPLATES[NoteType]][]).map(([key, tmpl]) => (
+                        <option key={key} value={key}>{tmpl.label}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Template-driven fields with required indicators */}
+                  <div className="space-y-3">
+                    {NOTE_TEMPLATES[editingNote.noteType].fields.map(({ key, label, placeholder, rows }) => {
+                      const cpt = editingNote.cptCode ? getCPTByCode(editingNote.cptCode) : null;
+                      const isRequired = cpt?.requiredFields.includes(key);
+                      return (
+                        <div key={key}>
+                          <label className="text-sm font-medium text-neutral-700 dark:text-slate-300 mb-1 block">
+                            {label}
+                            {isRequired && <span className="text-rose-500 ml-1" title="Required for billing">*</span>}
+                          </label>
+                          <Textarea
+                            value={editingNote.content[key] || ''}
+                            onChange={e => setEditingNote(prev => prev ? { ...prev, content: { ...prev.content, [key]: e.target.value } } : prev)}
+                            placeholder={placeholder}
+                            className={`text-sm ${isRequired && !editingNote.content[key]?.trim() ? 'border-rose-200 dark:border-rose-800' : ''} ${rows ? `min-h-[${rows * 24}px]` : 'min-h-[80px]'}`}
+                            rows={rows || 3}
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Billing Compliance Check */}
+                  {editingNote.cptCode && (() => {
+                    const validation = validateNoteForCPT(editingNote.cptCode, editingNote.content);
+                    if (validation.valid && validation.warnings.length === 0) return null;
+                    return (
+                      <div className={`p-3 rounded-lg text-xs ${validation.valid ? 'bg-amber-50 dark:bg-amber-900/20 border border-amber-200/60' : 'bg-rose-50 dark:bg-rose-900/20 border border-rose-200/60'}`}>
+                        {!validation.valid && (
+                          <p className="font-medium text-rose-700 dark:text-rose-300 mb-1">
+                            <AlertCircle className="w-3.5 h-3.5 inline mr-1" />
+                            Missing required fields for {editingNote.cptCode}: {validation.missingFields.join(', ')}
+                          </p>
+                        )}
+                        {validation.warnings.map((w, i) => (
+                          <p key={i} className="text-amber-700 dark:text-amber-400">{w}</p>
+                        ))}
+                      </div>
+                    );
+                  })()}
+
+                  {/* Save Button */}
+                  <div className="flex justify-end gap-2 pt-2">
+                    <Button variant="outline" onClick={() => { setShowNoteEditor(false); setEditingNote(null); }}>
+                      Cancel
+                    </Button>
+                    <Button
+                      onClick={handleSaveClinicalNote}
+                      disabled={isSavingNotes}
+                      className="bg-teal-600 hover:bg-teal-700 text-white"
+                    >
+                      {isSavingNotes ? <Loader2 className="w-4 h-4 animate-spin mr-1" /> : <Save className="w-4 h-4 mr-1" />}
+                      Save Note
+                    </Button>
+                  </div>
+                </div>
+              </Card>
+            )}
+
+            {/* Existing Notes List */}
+            {clinicalNotes.length === 0 && !showNoteEditor && (
+              <Card className="p-8 text-center">
+                <ClipboardList className="w-12 h-12 mx-auto text-neutral-300 dark:text-slate-600 mb-3" />
+                <p className="text-neutral-500 dark:text-slate-400 font-medium">No clinical notes yet</p>
+                <p className="text-neutral-400 dark:text-slate-500 text-sm mt-1">Create your first note to start documenting sessions</p>
+              </Card>
+            )}
+
+            {clinicalNotes.map(note => {
+              const tmpl = NOTE_TEMPLATES[note.noteType];
+              const isJustSaved = lastSavedNoteId === note.id;
+              return (
+                <Card key={note.id} className={`p-4 ${note.locked ? 'border-green-200 dark:border-green-800 bg-green-50/50 dark:bg-green-900/10' : ''} ${isJustSaved ? 'ring-2 ring-teal-400/60' : ''}`}>
+                  <div className="flex items-start justify-between mb-3">
+                    <div>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <h3 className="font-semibold text-neutral-900 dark:text-white">{note.patientName}</h3>
+                        <Badge className={tmpl.badgeClass}>{tmpl.badge}</Badge>
+                        {note.cptCode && (
+                          <Badge className="bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 font-mono text-xs">
+                            CPT {note.cptCode}
+                          </Badge>
+                        )}
+                        {note.signed && (
+                          <Badge className="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300">
+                            <Lock className="w-3 h-3 mr-1" /> Signed & Locked
+                          </Badge>
+                        )}
+                      </div>
+                      <p className="text-sm text-neutral-500 dark:text-slate-400 mt-0.5">{note.date}</p>
+                    </div>
+                    <div className="flex gap-1">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleGenerateSuperbill(note.id)}
+                        title="Generate Superbill"
+                        className="text-teal-600 hover:text-teal-700 hover:bg-teal-50"
+                      >
+                        <Printer className="w-4 h-4" />
+                      </Button>
+                      {!note.locked && (
+                        <Button variant="ghost" size="sm" onClick={() => handleSignLockNote(note.id)} title="Sign & Lock">
+                          <CheckCircle className="w-4 h-4 text-green-600" />
+                        </Button>
+                      )}
+                      <Button variant="ghost" size="sm" onClick={() => handleExportNotePDF(note.id)} title="Export">
+                        <Download className="w-4 h-4 text-neutral-500" />
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* Template-driven content preview — shows first 2 fields */}
+                  <div className="space-y-1 text-sm text-neutral-600 dark:text-slate-300">
+                    {tmpl.fields.slice(0, 3).map(f => {
+                      const val = note.content[f.key];
+                      if (!val) return null;
+                      return (
+                        <p key={f.key}>
+                          <span className="font-medium text-neutral-700 dark:text-slate-200">{f.label.split('—')[0].split('/')[0].trim()}:</span>{' '}
+                          {val.slice(0, 120)}{val.length > 120 ? '...' : ''}
+                        </p>
+                      );
+                    })}
+                  </div>
+
+                  {/* "Generate Superbill" CTA shown on the just-saved note */}
+                  {isJustSaved && (
+                    <div className="mt-3 pt-3 border-t border-neutral-100 dark:border-slate-700">
+                      <Button
+                        onClick={() => handleGenerateSuperbill(note.id)}
+                        className="w-full bg-teal-600 hover:bg-teal-700 text-white"
+                      >
+                        <FileText className="w-4 h-4 mr-2" />
+                        Generate Superbill for This Session
+                      </Button>
+                    </div>
+                  )}
+                </Card>
+              );
+            })}
+          </div>
+        )}
+
+        {/* My Practice (BCBA Practice Management) */}
+        {activeTab === 'my-practice' && (
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-xl font-semibold text-neutral-900 dark:text-white">My Practice</h2>
+              <p className="text-neutral-500 dark:text-slate-400 mt-1">
+                Manage your RBT team, track supervision hours, and handle billing
+              </p>
+            </div>
+            <RBTManagement providerId={providerId} />
+          </div>
+        )}
       </main>
+
+      {/* Superbill Generator Overlay */}
+      {showSuperbillGenerator && generatedSuperbill && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <Card className="max-w-4xl w-full max-h-[90vh] overflow-y-auto bg-white dark:bg-slate-900">
+            <div className="p-4 border-b border-neutral-100 dark:border-slate-700 sticky top-0 bg-white dark:bg-slate-900 z-10 flex items-center justify-between">
+              <div>
+                <h2 className="text-lg font-semibold text-neutral-900 dark:text-white flex items-center gap-2">
+                  <FileText className="w-5 h-5 text-teal-600" />
+                  Superbill — {generatedSuperbill.patientName}
+                </h2>
+                <p className="text-sm text-neutral-500 dark:text-slate-400">
+                  Pre-filled from session data. Review and download.
+                </p>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  setShowSuperbillGenerator(false);
+                  setGeneratedSuperbill(null);
+                }}
+              >
+                <X className="w-5 h-5" />
+              </Button>
+            </div>
+            <div className="p-0">
+              <React.Suspense fallback={
+                <div className="p-12 text-center">
+                  <div className="animate-spin w-8 h-8 border-2 border-teal-600 border-t-transparent rounded-full mx-auto mb-3" />
+                  <p className="text-sm text-neutral-500">Loading superbill generator...</p>
+                </div>
+              }>
+                <SuperbillGenerator
+                  userId={generatedSuperbill.userId}
+                  childName={generatedSuperbill.patientName}
+                  childDOB={generatedSuperbill.patientDOB}
+                  appointmentId={generatedSuperbill.appointmentId}
+                  appointmentDate={generatedSuperbill.dateOfService}
+                  providerName={generatedSuperbill.providerName}
+                  providerCredentials={generatedSuperbill.providerCredentials}
+                  providerNPI={generatedSuperbill.providerNPI}
+                  onClose={() => {
+                    setShowSuperbillGenerator(false);
+                    setGeneratedSuperbill(null);
+                  }}
+                />
+              </React.Suspense>
+            </div>
+          </Card>
+        </div>
+      )}
+
+      {/* Superbill Toast Notification */}
+      {superbillToast && (
+        <div className="fixed bottom-6 right-6 z-50 animate-in slide-in-from-bottom-5 fade-in duration-300">
+          <div className="bg-teal-600 text-white px-5 py-3 rounded-xl shadow-lg flex items-center gap-3">
+            <CheckCircle className="w-5 h-5 flex-shrink-0" />
+            <span className="text-sm font-medium">{superbillToast}</span>
+            <button
+              onClick={() => setSuperbillToast(null)}
+              className="ml-2 text-white/70 hover:text-white"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Patient Detail Modal */}
       {selectedPatient && (

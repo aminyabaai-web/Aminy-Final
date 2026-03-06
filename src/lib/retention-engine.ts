@@ -44,7 +44,7 @@ export interface RetentionEvent {
   type: RetentionEventType;
   userId: string;
   timestamp: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export type RetentionEventType =
@@ -76,7 +76,7 @@ export const EMAIL_SEQUENCES = {
     },
     {
       day: 1,
-      subject: "Quick tip: Get the most out of Ask Aminy",
+      subject: "Quick tip: Get the most out of Aminy",
       template: 'onboarding_ai_intro',
     },
     {
@@ -380,7 +380,7 @@ export async function triggerOnboardingSequence(
     if (!response.ok) {
       console.error('Welcome email failed:', await response.text());
     } else {
-      console.log('[Retention] Welcome email sent successfully');
+      if (import.meta.env.DEV) console.log('[Retention] Welcome email sent successfully');
     }
 
     // Store onboarding start time for follow-up emails
@@ -427,7 +427,7 @@ export async function triggerReengagementCampaign(
     if (!response.ok) {
       console.error('Re-engagement email failed:', await response.text());
     } else {
-      console.log(`[Retention] Re-engagement email sent (${daysInactive} days inactive)`);
+      if (import.meta.env.DEV) console.log(`[Retention] Re-engagement email sent (${daysInactive} days inactive)`);
     }
   } catch (error) {
     console.error('Failed to trigger re-engagement:', error);
@@ -476,7 +476,7 @@ export async function sendWeeklyDigest(
     if (!response.ok) {
       console.error('Weekly digest email failed:', await response.text());
     } else {
-      console.log('[Retention] Weekly digest email sent');
+      if (import.meta.env.DEV) console.log('[Retention] Weekly digest email sent');
     }
   } catch (error) {
     console.error('Failed to send weekly digest:', error);
@@ -488,7 +488,7 @@ export async function sendWeeklyDigest(
  */
 export function showEngagementPrompt(
   type: 'streak' | 'goal' | 'calm' | 'achievement',
-  data: Record<string, any>
+  data: Record<string, unknown>
 ): void {
   const prompts = {
     streak: {
@@ -604,7 +604,7 @@ export function useRetention() {
   const userId = store.user?.id;
   const childName = store.user?.childName || 'your child';
 
-  const trackEvent = (type: RetentionEventType, metadata?: Record<string, any>) => {
+  const trackEvent = (type: RetentionEventType, metadata?: Record<string, unknown>) => {
     if (!userId) return;
     trackRetentionEvent({ type, userId, metadata });
   };
@@ -667,7 +667,7 @@ export async function getPrimaryStreak(userId: string): Promise<{ currentStreak:
 /**
  * Get user's earned milestones
  */
-export async function getEarnedMilestones(userId: string): Promise<any[]> {
+export async function getEarnedMilestones(userId: string): Promise<Record<string, unknown>[]> {
   try {
     const { createClient } = await import('@supabase/supabase-js');
     const supabase = createClient(
@@ -691,7 +691,7 @@ export async function getEarnedMilestones(userId: string): Promise<any[]> {
 /**
  * Get pending celebrations (milestones earned but not yet celebrated)
  */
-export async function getPendingCelebrations(userId: string): Promise<any[]> {
+export async function getPendingCelebrations(userId: string): Promise<Record<string, unknown>[]> {
   try {
     const { createClient } = await import('@supabase/supabase-js');
     const supabase = createClient(
@@ -739,10 +739,10 @@ export async function recordActivity(userId: string, activityType: string): Prom
       });
 
     // Update streak
-    await supabase.rpc('update_user_streak', {
+    await Promise.resolve(supabase.rpc('update_user_streak', {
       p_user_id: userId,
       p_streak_type: activityType,
-    }).catch(() => {
+    })).catch(() => {
       // RPC may not exist yet, that's okay
     });
   } catch {

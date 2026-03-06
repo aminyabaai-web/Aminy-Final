@@ -1,0 +1,8 @@
+# Default owner for everything
+* @estaren
+
+# Supabase / backend
+supabase/ @estaren
+
+# CI/CD configuration
+.github/ @estaren

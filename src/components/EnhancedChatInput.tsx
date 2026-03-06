@@ -56,7 +56,7 @@ interface EnhancedChatInputProps {
 }
 
 // Check if browser supports Speech Recognition
-const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+const SpeechRecognitionCtor = typeof globalThis.SpeechRecognition !== 'undefined' ? globalThis.SpeechRecognition : typeof globalThis.webkitSpeechRecognition !== 'undefined' ? globalThis.webkitSpeechRecognition : null;
 
 export function EnhancedChatInput({
   onSend,
@@ -84,7 +84,7 @@ export function EnhancedChatInput({
   const cameraInputRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const recognitionRef = useRef<any>(null);
+  const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
   const recordingTimerRef = useRef<NodeJS.Timeout | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
 
@@ -104,13 +104,13 @@ export function EnhancedChatInput({
 
   // Initialize speech recognition
   useEffect(() => {
-    if (SpeechRecognition) {
-      recognitionRef.current = new SpeechRecognition();
+    if (SpeechRecognitionCtor) {
+      recognitionRef.current = new SpeechRecognitionCtor();
       recognitionRef.current.continuous = true;
       recognitionRef.current.interimResults = true;
       recognitionRef.current.lang = 'en-US';
 
-      recognitionRef.current.onresult = (event: any) => {
+      recognitionRef.current.onresult = (event: SpeechRecognitionEvent) => {
         let interimTranscript = '';
         let finalTranscript = '';
 
@@ -131,7 +131,7 @@ export function EnhancedChatInput({
         }
       };
 
-      recognitionRef.current.onerror = (event: any) => {
+      recognitionRef.current.onerror = (event: SpeechRecognitionErrorEvent) => {
         console.error('Speech recognition error:', event.error);
         if (event.error === 'not-allowed') {
           toast.error('Microphone access denied. Please enable in browser settings.');
@@ -169,7 +169,7 @@ export function EnhancedChatInput({
 
   // Start voice recording
   const startRecording = async () => {
-    if (!SpeechRecognition) {
+    if (!SpeechRecognitionCtor) {
       toast.error('Voice input is not supported in this browser. Try Chrome or Edge.');
       return;
     }

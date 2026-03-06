@@ -27,7 +27,7 @@ This checklist covers testing Aminy as a PWA on iOS Safari, with special attenti
 ## Part 1: Basic PWA Installation
 
 ### 1.1 Add to Home Screen
-- [ ] Open Safari and navigate to https://aminy.app
+- [ ] Open Safari and navigate to https://aminy.ai
 - [ ] Tap the **Share** button (square with arrow)
 - [ ] Scroll down and tap **Add to Home Screen**
 - [ ] Verify app name is "Aminy"

@@ -1,11 +1,11 @@
 # Aminy - Robots.txt
-# https://aminy.app
+# https://aminy.ai
 
 User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://aminy.app/sitemap.xml
+Sitemap: https://aminy.ai/sitemap.xml
 
 # Disallow sensitive paths
 Disallow: /api/

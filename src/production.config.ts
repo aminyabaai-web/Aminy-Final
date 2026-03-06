@@ -7,7 +7,7 @@ export const productionConfig = {
     version: '1.0.0',
     description: 'AI-powered guidance for parents of children with developmental needs',
     author: 'Aminy Team',
-    homepage: 'https://aminy.app',
+    homepage: 'https://aminy.ai',
     repository: 'https://github.com/aminy/app',
     license: 'Proprietary'
   },
@@ -40,7 +40,7 @@ export const productionConfig = {
   // API Configuration
   api: {
     baseUrl: import.meta.env.PROD
-      ? 'https://api.aminy.app'
+      ? 'https://api.aminy.ai'
       : 'http://localhost:3001',
     timeout: 30000,
     retryAttempts: 3,
@@ -127,7 +127,7 @@ export const productionConfig = {
         'style-src': ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
         'font-src': ["'self'", 'https://fonts.gstatic.com'],
         'img-src': ["'self'", 'data:', 'https://images.unsplash.com', 'https://via.placeholder.com'],
-        'connect-src': ["'self'", 'https://api.aminy.app', 'https://www.google-analytics.com']
+        'connect-src': ["'self'", 'https://api.aminy.ai', 'https://www.google-analytics.com']
       }
     },
     
@@ -277,7 +277,7 @@ export const productionConfig = {
     // CDN settings
     cdn: {
       enabled: import.meta.env.PROD,
-      baseUrl: 'https://cdn.aminy.app',
+      baseUrl: 'https://cdn.aminy.ai',
       version: 'v1'
     }
   }

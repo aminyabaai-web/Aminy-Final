@@ -184,8 +184,8 @@ export function LetterDraftingFlow({
     const typeInfo = letterTypes.find(lt => lt.type === selectedType);
 
     // Different fields based on letter type
-    const getFields = () => {
-      const baseFields = [
+    const getFields = (): { key: string; label: string; placeholder: string; required?: boolean; type?: string }[] => {
+      const baseFields: { key: string; label: string; placeholder: string; required?: boolean; type?: string }[] = [
         { key: 'childName', label: "Child's Name", placeholder: 'Alex', required: true },
         { key: 'childAge', label: "Child's Age", placeholder: '6', type: 'number' },
         { key: 'diagnosis', label: 'Diagnosis', placeholder: 'Autism Spectrum Disorder' },

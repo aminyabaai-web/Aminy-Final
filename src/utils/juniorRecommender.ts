@@ -1,6 +1,6 @@
 // Junior Recommender - AI-powered activity recommendation engine
 
-import { Activity, SessionLog, contentLoader } from './juniorContentLoader';
+import { Activity, ActivityVariant, SessionLog, contentLoader } from './juniorContentLoader';
 
 export interface RecommendationContext {
   childAge: number;
@@ -259,7 +259,7 @@ export class JuniorRecommender {
   }
 
   // Get next generalization variant
-  getGeneralizationVariant(activity: Activity): any | null {
+  getGeneralizationVariant(activity: Activity): ActivityVariant | null {
     if (!activity.variants || activity.variants.length === 0) {
       return null;
     }

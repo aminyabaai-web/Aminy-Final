@@ -926,7 +926,7 @@ export function getFinancialAuditSummary(userId: string): {
   );
 
   const totalAmountPaid = successfulPayments.reduce((sum, e) => {
-    const amount = (e.details as any)?.amountCents || 0;
+    const amount = (e.details as { amountCents?: number })?.amountCents || 0;
     return sum + amount;
   }, 0);
 

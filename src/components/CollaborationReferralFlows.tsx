@@ -790,7 +790,7 @@ export function ReferralFlow({ onClose }: ReferralFlowProps) {
   };
 
   const handleShare = (method: 'sms' | 'email' | 'link' | 'more') => {
-    const message = `I've been using Aminy to support my child's development and it's been amazing! Get 1 month free with my code: ${referralCode}\n\nhttps://aminy.app`;
+    const message = `I've been using Aminy to support my child's development and it's been amazing! Get 1 month free with my code: ${referralCode}\n\nhttps://aminy.ai`;
     
     switch (method) {
       case 'sms':
@@ -800,7 +800,7 @@ export function ReferralFlow({ onClose }: ReferralFlowProps) {
         window.open(`mailto:?subject=Try Aminy - 1 Month Free&body=${encodeURIComponent(message)}`);
         break;
       case 'link':
-        navigator.clipboard.writeText(`https://aminy.app?ref=${referralCode}`);
+        navigator.clipboard.writeText(`https://aminy.ai?ref=${referralCode}`);
         toast.success('Link copied!');
         break;
       case 'more':

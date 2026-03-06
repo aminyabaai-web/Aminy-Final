@@ -454,7 +454,7 @@ export function DeveloperModePanel({ onNavigate, onTierChange }: DeveloperModePa
               <MessageSquare className="w-4 h-4 text-blue-600" />
               <div>
                 <p className="font-medium text-sm">Chat Unlimited</p>
-                <p className="text-xs text-muted-foreground">Unlimited Ask Aminy messages</p>
+                <p className="text-xs text-muted-foreground">Unlimited Aminy messages</p>
               </div>
             </div>
             <Switch 
@@ -690,7 +690,7 @@ export function DeveloperModePanel({ onNavigate, onTierChange }: DeveloperModePa
         </h3>
         <div className="space-y-3">
           <div className="flex items-center justify-between p-2 bg-gray-50 rounded">
-            <span className="text-sm">Ask Aminy (Front & Center)</span>
+            <span className="text-sm">Aminy (Front & Center)</span>
             <Badge className="bg-green-100 text-green-700 border-green-200">Enabled</Badge>
           </div>
           <div className="flex items-center justify-between p-2 bg-gray-50 rounded">

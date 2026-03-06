@@ -8,11 +8,37 @@
 const DAILY_API_KEY = Deno.env.get('DAILY_API_KEY') || '';
 const DAILY_API_URL = 'https://api.daily.co/v1';
 
+// ---------------------------------------------------------------------------
+// Type definitions for Daily.co API responses
+// ---------------------------------------------------------------------------
+
+/** A participant entry from the Daily.co presence API */
+interface DailyPresenceParticipant {
+  session_id: string;
+  user_id: string;
+  user_name: string;
+  join_time: string;
+  duration: number;
+}
+
+/** A recording entry from the Daily.co recordings API */
+interface DailyRecording {
+  id: string;
+  status: string;
+  [key: string]: unknown;
+}
+
+/** Helper to get an error message from an unknown error */
+function getErrorMessage(error: unknown): string {
+  if (error instanceof Error) return error.message;
+  return String(error);
+}
+
 // Helper to make Daily API calls
 async function dailyRequest(
   endpoint: string,
   method: string = 'GET',
-  body?: Record<string, any>
+  body?: Record<string, unknown>
 ) {
   const url = `${DAILY_API_URL}${endpoint}`;
 
@@ -121,7 +147,7 @@ export async function createRoom(req: Request): Promise<Response> {
     });
   } catch (error) {
     console.error('Create room error:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -185,7 +211,7 @@ export async function getMeetingToken(req: Request): Promise<Response> {
     });
   } catch (error) {
     console.error('Get token error:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -229,13 +255,13 @@ export async function getRoom(roomName: string): Promise<Response> {
     });
   } catch (error) {
     console.error('Get room error:', error);
-    if (error.message?.includes('not found')) {
+    if (error instanceof Error && error.message?.includes('not found')) {
       return new Response(JSON.stringify({ error: 'Room not found' }), {
         status: 404,
         headers: { 'Content-Type': 'application/json' },
       });
     }
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -262,7 +288,7 @@ export async function deleteRoom(roomName: string): Promise<Response> {
     });
   } catch (error) {
     console.error('Delete room error:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -289,9 +315,9 @@ export async function getRoomPresence(roomName: string): Promise<Response> {
 
     return new Response(JSON.stringify({
       totalCount: presence.total_count || 0,
-      participants: (presence.data || []).map((p: any) => ({
+      participants: (presence.data || []).map((p: DailyPresenceParticipant) => ({
         sessionId: p.session_id,
-        oderId: p.user_id,
+        userId: p.user_id,
         userName: p.user_name,
         joinTime: p.join_time,
         duration: p.duration,
@@ -302,7 +328,7 @@ export async function getRoomPresence(roomName: string): Promise<Response> {
     });
   } catch (error) {
     console.error('Get presence error:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -338,7 +364,7 @@ export async function startRecording(roomName: string): Promise<Response> {
     });
   } catch (error) {
     console.error('Start recording error:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -362,7 +388,7 @@ export async function stopRecording(roomName: string): Promise<Response> {
 
     // Get active recording
     const recordings = await dailyRequest(`/rooms/${roomName}/recordings`);
-    const activeRecording = recordings.data?.find((r: any) => r.status === 'in-progress');
+    const activeRecording = recordings.data?.find((r: DailyRecording) => r.status === 'in-progress');
 
     if (activeRecording) {
       await dailyRequest(`/recordings/${activeRecording.id}`, 'DELETE');
@@ -374,7 +400,7 @@ export async function stopRecording(roomName: string): Promise<Response> {
     });
   } catch (error) {
     console.error('Stop recording error:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });

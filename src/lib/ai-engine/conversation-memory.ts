@@ -301,7 +301,7 @@ export async function extractAndStoreFacts(
     if (success) stored++;
   }
 
-  console.log(`[Memory] Stored ${stored}/${extractedFacts.length} facts`);
+  if (import.meta.env.DEV) console.log(`[Memory] Stored ${stored}/${extractedFacts.length} facts`);
   return { stored, extracted: extractedFacts.length };
 }
 
@@ -414,7 +414,7 @@ async function extractFactsWithAI(
     });
 
     if (!response.ok) {
-      console.log('[Memory] AI extraction failed, falling back to regex');
+      console.warn('[Memory] AI extraction failed, falling back to regex');
       return extractFactsFromMessagesRegex(messages);
     }
 
@@ -540,16 +540,16 @@ export async function extractFactsEnhanced(
     try {
       const aiFacts = await extractFactsWithAI(messages);
       if (aiFacts.length > 0) {
-        console.log(`[Memory] AI extracted ${aiFacts.length} facts`);
+        if (import.meta.env.DEV) console.log(`[Memory] AI extracted ${aiFacts.length} facts`);
         return aiFacts;
       }
     } catch (e) {
-      console.log('[Memory] AI extraction failed, using regex fallback');
+      console.warn('[Memory] AI extraction failed, using regex fallback');
     }
   }
 
   const regexFacts = extractFactsFromMessagesRegex(messages);
-  console.log(`[Memory] Regex extracted ${regexFacts.length} facts`);
+  if (import.meta.env.DEV) console.log(`[Memory] Regex extracted ${regexFacts.length} facts`);
   return regexFacts;
 }
 

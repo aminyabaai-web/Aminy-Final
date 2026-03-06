@@ -30,6 +30,7 @@ import {
 import { Button } from '../ui/button';
 import { Card } from '../ui/card';
 import { logMessageSent, logMessageRead } from '../../lib/audit-logger';
+import { supabase } from '../../utils/supabase/client';
 
 // Types
 interface Provider {
@@ -212,6 +213,42 @@ const MOCK_MESSAGES: Record<string, Message[]> = {
   ]
 };
 
+// Supabase row shapes (no generated types available)
+interface SupabaseProviderRow {
+  id: string;
+  full_name: string;
+  credentials: string;
+  specialty: string;
+  photo_url?: string;
+  is_verified: boolean;
+  is_online: boolean;
+}
+
+interface SupabaseMessageRow {
+  id: string;
+  thread_id: string;
+  sender_id: string;
+  sender_type: 'parent' | 'provider';
+  content: string;
+  attachments?: Attachment[];
+  created_at: string;
+  read_at?: string;
+  status: string;
+}
+
+interface SupabaseThreadRow {
+  id: string;
+  child_id: string;
+  child_name: string;
+  unread_count: number;
+  is_muted: boolean;
+  is_archived: boolean;
+  created_at: string;
+  updated_at: string;
+  provider: SupabaseProviderRow;
+  last_message: SupabaseMessageRow[];
+}
+
 interface SecureMessagingProps {
   userId: string;
   userRole: 'parent' | 'provider';
@@ -227,24 +264,156 @@ export function SecureMessaging({ userId, userRole, onBack }: SecureMessagingPro
   const [showSearch, setShowSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [showThreadMenu, setShowThreadMenu] = useState(false);
+  const [threadsLoading, setThreadsLoading] = useState(true);
+  const [messagesLoading, setMessagesLoading] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  // Load messages when thread is selected
+  // Load threads from Supabase on mount, fall back to MOCK_THREADS
   useEffect(() => {
-    if (selectedThread) {
-      const threadMessages = MOCK_MESSAGES[selectedThread.id] || [];
-      setMessages(threadMessages);
+    async function loadThreads() {
+      try {
+        setThreadsLoading(true);
+        const { data, error } = await supabase
+          .from('message_threads')
+          .select(`
+            id,
+            child_id,
+            child_name,
+            unread_count,
+            is_muted,
+            is_archived,
+            created_at,
+            updated_at,
+            provider:provider_profiles(
+              id,
+              full_name,
+              credentials,
+              specialty,
+              photo_url,
+              is_verified,
+              is_online
+            ),
+            last_message:messages(
+              id,
+              thread_id,
+              sender_id,
+              sender_type,
+              content,
+              created_at,
+              read_at,
+              status
+            )
+          `)
+          .or(`participant1_id.eq.${userId},participant2_id.eq.${userId}`)
+          .order('updated_at', { ascending: false });
 
-      // Mark as read
-      if (selectedThread.unreadCount > 0) {
-        setThreads(prev =>
-          prev.map(t =>
-            t.id === selectedThread.id ? { ...t, unreadCount: 0 } : t
-          )
-        );
+        if (error) throw error;
+
+        if (data && data.length > 0) {
+          const rows = data as unknown as SupabaseThreadRow[];
+          const mapped: MessageThread[] = rows.map((t) => ({
+            id: t.id,
+            provider: {
+              id: t.provider?.id || 'unknown',
+              name: t.provider?.full_name || 'Provider',
+              credentials: t.provider?.credentials || '',
+              specialty: t.provider?.specialty || '',
+              photoUrl: t.provider?.photo_url,
+              isVerified: t.provider?.is_verified ?? true,
+              isOnline: t.provider?.is_online ?? false,
+            },
+            childId: t.child_id || '',
+            childName: t.child_name || '',
+            lastMessage: t.last_message?.[0]
+              ? {
+                  id: t.last_message[0].id,
+                  threadId: t.last_message[0].thread_id,
+                  senderId: t.last_message[0].sender_id,
+                  senderType: t.last_message[0].sender_type,
+                  content: t.last_message[0].content,
+                  attachments: [],
+                  createdAt: t.last_message[0].created_at,
+                  readAt: t.last_message[0].read_at,
+                  status: (t.last_message[0].status || 'delivered') as Message['status'],
+                }
+              : undefined,
+            unreadCount: t.unread_count || 0,
+            isMuted: t.is_muted || false,
+            isArchived: t.is_archived || false,
+            createdAt: t.created_at,
+            updatedAt: t.updated_at,
+          }));
+          setThreads(mapped);
+        } else {
+          // No rows returned — fall back to mock data
+          setThreads(MOCK_THREADS);
+        }
+      } catch (err) {
+        console.warn('SecureMessaging: Failed to load threads from Supabase, using mock data', err);
+        setThreads(MOCK_THREADS);
+      } finally {
+        setThreadsLoading(false);
       }
+    }
+
+    loadThreads();
+  }, [userId]);
+
+  // Load messages when thread is selected — try Supabase first, fall back to MOCK_MESSAGES
+  useEffect(() => {
+    if (!selectedThread) return;
+
+    async function loadMessages() {
+      try {
+        setMessagesLoading(true);
+        const { data, error } = await supabase
+          .from('messages')
+          .select('*')
+          .eq('thread_id', selectedThread!.id)
+          .order('created_at', { ascending: true });
+
+        if (error) throw error;
+
+        if (data && data.length > 0) {
+          const rows = data as unknown as SupabaseMessageRow[];
+          setMessages(
+            rows.map((m) => ({
+              id: m.id,
+              threadId: m.thread_id,
+              senderId: m.sender_id,
+              senderType: m.sender_type,
+              content: m.content,
+              attachments: m.attachments || [],
+              createdAt: m.created_at,
+              readAt: m.read_at,
+              status: (m.status || 'delivered') as Message['status'],
+            }))
+          );
+        } else {
+          // Fall back to mock messages for this thread
+          const threadMessages = MOCK_MESSAGES[selectedThread!.id] || [];
+          setMessages(threadMessages);
+        }
+      } catch (err) {
+        console.warn('SecureMessaging: Failed to load messages from Supabase, using mock data', err);
+        const threadMessages = MOCK_MESSAGES[selectedThread!.id] || [];
+        setMessages(threadMessages);
+      } finally {
+        setMessagesLoading(false);
+      }
+    }
+
+    loadMessages();
+
+    // Mark as read
+    if (selectedThread.unreadCount > 0) {
+      setThreads(prev =>
+        prev.map(t =>
+          t.id === selectedThread.id ? { ...t, unreadCount: 0 } : t
+        )
+      );
     }
   }, [selectedThread]);
 

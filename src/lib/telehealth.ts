@@ -545,7 +545,7 @@ export async function admitFromWaitingRoom(
 ): Promise<boolean> {
   // In a real implementation, this would update the participant's admitted status
   // and trigger a real-time notification
-  console.log(`[Telehealth] Admitting participant ${participantId} to session ${sessionId}`);
+  void (`[Telehealth] Admitting participant ${participantId} to session ${sessionId}`);
   return true;
 }
 

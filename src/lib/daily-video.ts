@@ -6,6 +6,14 @@
  */
 
 import { projectId, publicAnonKey } from '../utils/supabase/info';
+import type {
+  DailyCallObject,
+  DailyEventType,
+  DailyEvent,
+} from '../types/video';
+
+// Re-export for consumers
+export type { DailyCallObject };
 
 // Daily.co room configuration
 export interface DailyRoomConfig {
@@ -28,9 +36,14 @@ export interface DailyRoom {
   url: string;
   apiCreated: boolean;
   privacy: string;
-  config: Record<string, any>;
+  config: Record<string, unknown>;
   createdAt: string;
   expiresAt?: string;
+}
+
+// Daily.co SDK factory interface for window.DailyIframe
+interface DailyIframeFactory {
+  createCallObject: (config: Record<string, unknown>) => DailyCallObject;
 }
 
 // Daily.co meeting token
@@ -214,10 +227,10 @@ export async function createCallObject(options: {
   userName?: string;
   startVideoOff?: boolean;
   startAudioOff?: boolean;
-}): Promise<any> {
+}): Promise<DailyCallObject> {
   await loadDailySDK();
 
-  const DailyIframe = (window as any).DailyIframe;
+  const DailyIframe = (window as unknown as Record<string, unknown>).DailyIframe as DailyIframeFactory | undefined;
   if (!DailyIframe) {
     throw new Error('Daily.co SDK not loaded');
   }
@@ -305,11 +318,11 @@ export type VideoCallEventHandler = {
  * Create event listeners for a Daily.co call object
  */
 export function attachCallEventHandlers(
-  callObject: any,
+  callObject: DailyCallObject,
   handlers: VideoCallEventHandler
 ): () => void {
-  const handleJoinedMeeting = (event: any) => {
-    const local = event.participants?.local;
+  const handleJoinedMeeting = (event: DailyEvent) => {
+    const local = event.participants?.['local'];
     if (local && handlers.onJoined) {
       handlers.onJoined({
         sessionId: local.session_id,
@@ -324,9 +337,9 @@ export function attachCallEventHandlers(
     }
   };
 
-  const handleParticipantJoined = (event: any) => {
+  const handleParticipantJoined = (event: DailyEvent) => {
     const p = event.participant;
-    if (!p.local && handlers.onParticipantJoined) {
+    if (p && !p.local && handlers.onParticipantJoined) {
       handlers.onParticipantJoined({
         sessionId: p.session_id,
         userId: p.user_id,
@@ -340,15 +353,15 @@ export function attachCallEventHandlers(
     }
   };
 
-  const handleParticipantLeft = (event: any) => {
-    if (handlers.onParticipantLeft) {
+  const handleParticipantLeft = (event: DailyEvent) => {
+    if (event.participant && handlers.onParticipantLeft) {
       handlers.onParticipantLeft(event.participant.session_id);
     }
   };
 
-  const handleParticipantUpdated = (event: any) => {
+  const handleParticipantUpdated = (event: DailyEvent) => {
     const p = event.participant;
-    if (handlers.onParticipantUpdated) {
+    if (p && handlers.onParticipantUpdated) {
       handlers.onParticipantUpdated({
         sessionId: p.session_id,
         userId: p.user_id,
@@ -362,13 +375,13 @@ export function attachCallEventHandlers(
     }
   };
 
-  const handleError = (event: any) => {
+  const handleError = (event: DailyEvent) => {
     if (handlers.onError) {
       handlers.onError(event.errorMsg || 'An error occurred');
     }
   };
 
-  const handleLeftMeeting = () => {
+  const handleLeftMeeting = (_event: DailyEvent) => {
     if (handlers.onCallEnded) {
       handlers.onCallEnded();
     }
@@ -399,7 +412,7 @@ export function attachCallEventHandlers(
 /**
  * Toggle local audio (mute/unmute)
  */
-export async function toggleAudio(callObject: any): Promise<boolean> {
+export async function toggleAudio(callObject: DailyCallObject): Promise<boolean> {
   const newState = !callObject.localAudio();
   await callObject.setLocalAudio(newState);
   return newState;
@@ -408,7 +421,7 @@ export async function toggleAudio(callObject: any): Promise<boolean> {
 /**
  * Toggle local video (on/off)
  */
-export async function toggleVideo(callObject: any): Promise<boolean> {
+export async function toggleVideo(callObject: DailyCallObject): Promise<boolean> {
   const newState = !callObject.localVideo();
   await callObject.setLocalVideo(newState);
   return newState;
@@ -417,21 +430,21 @@ export async function toggleVideo(callObject: any): Promise<boolean> {
 /**
  * Start screen sharing
  */
-export async function startScreenShare(callObject: any): Promise<void> {
+export async function startScreenShare(callObject: DailyCallObject): Promise<void> {
   await callObject.startScreenShare();
 }
 
 /**
  * Stop screen sharing
  */
-export async function stopScreenShare(callObject: any): Promise<void> {
+export async function stopScreenShare(callObject: DailyCallObject): Promise<void> {
   await callObject.stopScreenShare();
 }
 
 /**
  * Leave the call
  */
-export async function leaveCall(callObject: any): Promise<void> {
+export async function leaveCall(callObject: DailyCallObject): Promise<void> {
   await callObject.leave();
   await callObject.destroy();
 }
@@ -448,7 +461,7 @@ export async function joinTelehealthSession(
   userId: string,
   userName: string,
   isProvider: boolean = false
-): Promise<{ callObject: any; roomUrl: string }> {
+): Promise<{ callObject: DailyCallObject; roomUrl: string }> {
   // Get or create room
   let room = await getRoomBySession(appointmentId);
   if (!room) {
@@ -480,7 +493,7 @@ export async function joinTelehealthSession(
  * End a telehealth session (provider only)
  */
 export async function endTelehealthSession(
-  callObject: any,
+  callObject: DailyCallObject,
   roomName: string
 ): Promise<void> {
   await leaveCall(callObject);

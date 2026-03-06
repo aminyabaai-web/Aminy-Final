@@ -14,7 +14,8 @@ import {
   sendMessage as sendAIMessage,
   type ConversationMessage as AIConversationMessage,
 } from '../lib/ai-engine';
-import { memoryManager, type TierType } from '../lib/memory-system';
+import { memoryManager } from '../lib/memory-system';
+import type { TierType } from '../lib/tier-utils';
 
 interface Message {
   id: string;
@@ -39,71 +40,72 @@ interface EnhancedAskAminyProps {
   className?: string;
 }
 
-// Enhanced response templates with better context awareness
+// Response templates — CTCA Child Standard: lead with empathy, validate the parent, then offer expertise
+// These are fallback templates when the AI API is unreachable. The real Claude responses are warmer.
 const RESPONSE_TEMPLATES = {
   routine: {
     responses: [
-      "Routines provide crucial structure for {childName}! Let's create a visual schedule that breaks down each step clearly. Research shows that predictable routines reduce anxiety and improve cooperation.",
-      "Building consistent routines for {childName} is so important. I recommend starting with one specific routine and using visual cues like pictures or timers to help {childName} understand the sequence.",
-      "Great question about routines! For {childName}, consistency paired with flexibility is key. Visual schedules work wonderfully - what time of day or activity would you like to focus on first?"
+      "I hear you — routines can feel like a constant battle. But here's the thing: {childName} actually craves that structure, even when it doesn't look like it. Let's build a visual schedule together that makes each step feel predictable and safe.",
+      "You're already doing the hardest part — being consistent. For {childName}, even a small visual cue (a picture, a timer, a song) can turn chaos into something manageable. What part of the day feels hardest right now?",
+      "The fact that you're thinking about routines tells me you understand {childName} really well. Predictability reduces anxiety — let's start with one routine and make it rock-solid before we add more."
     ],
     followUps: [
-      "Create a visual schedule",
-      "Transition techniques",
-      "Morning routine tips",
-      "Bedtime strategies"
+      "Help me build a visual schedule",
+      "Transitions are the hardest part",
+      "Morning routine ideas",
+      "Bedtime is a struggle"
     ]
   },
   behavior: {
     responses: [
-      "Understanding what triggers challenging behaviors is the first step to supporting {childName}. I can help you identify patterns and develop proactive strategies that work with {childName}'s unique needs.",
-      "Behavior is communication, especially for {childName}. Let's look at what might be behind these behaviors - is it sensory, communication, or environmental? Together we can build a support plan.",
-      "You're asking exactly the right questions about {childName}'s behavior. Prevention is always better than reaction - what situations tend to be most challenging for {childName}?"
+      "I can tell this is weighing on you, and I want you to know — you're not failing. Every behavior is {childName} trying to communicate something. Let's figure out what they're telling us, together.",
+      "Behavior is communication, especially for {childName}. When things escalate, there's always a reason underneath — sensory overload, frustration, anxiety. You're already noticing patterns, which is huge. Let's use that.",
+      "You're asking exactly the right questions. The fact that you're looking for what's *behind* the behavior — not just trying to stop it — means {childName} has an incredible advocate. What moments feel most challenging?"
     ],
     followUps: [
-      "Behavior tracking tools",
-      "Calming strategies",
-      "Prevention techniques",
-      "Environmental modifications"
+      "Help me see the patterns",
+      "What to do during a meltdown",
+      "Prevention strategies",
+      "Making our space work better"
     ]
   },
   communication: {
     responses: [
-      "Communication develops at {childName}'s own pace, and there are so many ways to support this journey. What communication goals are you working on together?",
-      "Every child's communication path is unique, including {childName}'s. I can suggest activities and strategies that match {childName}'s current level and interests.",
-      "Communication is about connection, not just words. For {childName}, we can explore various approaches - from visual supports to augmentative communication options."
+      "Communication looks different for every child, and {childName}'s path is uniquely theirs. There are so many ways to support this journey — and you're already doing it by paying attention. What are you noticing?",
+      "Here's something important: communication isn't just about words. {childName} is already communicating — through gestures, behaviors, preferences. Let's build on what's already working.",
+      "You're tuning into something really important about {childName}'s communication. Connection first, words second — that's the approach that research supports. What feels like it's working, even a little?"
     ],
     followUps: [
-      "Speech activities",
-      "Communication apps",
-      "Visual supports",
-      "Language development games"
+      "Activities we can do at home",
+      "Visual supports that help",
+      "When should I be concerned?",
+      "Ways to encourage language"
     ]
   },
   school: {
     responses: [
-      "School partnerships are essential for {childName}'s success. I can help you prepare for meetings, understand {childName}'s rights, and develop collaboration strategies with the team.",
-      "Advocating for {childName} at school shows your dedication. Let's discuss specific accommodations, IEP goals, or communication strategies that could help {childName} thrive.",
-      "School can be challenging, but with the right supports, {childName} can succeed. What's your main concern about {childName}'s school experience right now?"
+      "Navigating school is one of the hardest parts of this journey, and the fact that you're advocating for {childName} says everything. I can help you prepare for meetings, understand your rights, and make the team work *with* you.",
+      "You shouldn't have to fight for what {childName} needs at school — but I know it can feel that way. Let's make sure you walk into every meeting with the right language, the right requests, and confidence in your corner.",
+      "School can be amazing or exhausting for {childName} — sometimes both in the same day. What's your biggest concern right now? I'll help you figure out the next step."
     ],
     followUps: [
-      "IEP meeting prep",
-      "Teacher collaboration",
-      "Accommodation ideas",
-      "School communication"
+      "Help me prep for an IEP meeting",
+      "How to talk to the teacher",
+      "What accommodations should I ask for?",
+      "School is sending notes home"
     ]
   },
   sensory: {
     responses: [
-      "Sensory needs significantly impact {childName}'s daily experiences. Understanding {childName}'s sensory profile helps us create the right environment and support strategies.",
-      "You're recognizing something really important about {childName}'s sensory needs. Let's identify specific triggers and develop a sensory toolkit that works for {childName}.",
-      "Sensory processing affects so much of {childName}'s world. I can help create accommodations and activities that support {childName}'s unique sensory profile."
+      "You're recognizing something really important about {childName}. Sensory needs affect everything — eating, sleeping, learning, playing. The good news is that once we understand the profile, we can make {childName}'s world feel so much safer.",
+      "Sensory processing shapes how {childName} experiences the world. What feels overwhelming to us might be unbearable for them — and vice versa. Let's figure out {childName}'s specific triggers and build a toolkit that actually works.",
+      "The way {childName} responds to sensory input tells us so much. You're already picking up on these cues — that's incredibly perceptive. Let's turn those observations into strategies you can use every day."
     ],
     followUps: [
-      "Sensory tools",
-      "Environment setup",
-      "Calming techniques",
-      "Sensory activities"
+      "Help me understand sensory needs",
+      "Our home feels overwhelming",
+      "Calming strategies that work",
+      "Sensory activities to try"
     ]
   }
 };
@@ -258,7 +260,7 @@ export function EnhancedAskAminy({
         crisisDetected,
       };
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('AI response error:', error);
 
       // Fall back to template-based response if AI fails
@@ -552,7 +554,7 @@ export function EnhancedAskAminy({
         });
       }
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error generating response:', error);
       toast.error('Sorry, I encountered an issue. Please try again.');
 
@@ -641,7 +643,7 @@ export function EnhancedAskAminy({
             </div>
             <div className="flex-1">
               <div className="flex items-center gap-2">
-                <h3 className="font-semibold text-gray-900 dark:text-gray-100">Ask Aminy</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-gray-100">Aminy</h3>
                 <Badge className="bg-gradient-to-r from-violet-100 to-purple-100 text-violet-800 border-violet-200 text-xs">
                   <Sparkles className="w-3 h-3 mr-1" />
                   Powered by AI
@@ -679,6 +681,7 @@ export function EnhancedAskAminy({
               size="sm"
               onClick={() => setIsMinimized(!isMinimized)}
               className="w-8 h-8 p-0"
+              aria-label={isMinimized ? "Expand chat" : "Minimize chat"}
             >
               {isMinimized ? <Maximize2 className="w-4 h-4" /> : <Minimize2 className="w-4 h-4" />}
             </Button>
@@ -687,6 +690,7 @@ export function EnhancedAskAminy({
               size="sm"
               onClick={onClose}
               className="w-8 h-8 p-0"
+              aria-label="Close chat"
             >
               <X className="w-4 h-4" />
             </Button>
@@ -696,7 +700,7 @@ export function EnhancedAskAminy({
         {!isMinimized && (
           <>
             {/* Enhanced Messages Area */}
-            <div className="flex-1 flex flex-col overflow-hidden">
+            <div className="flex-1 flex flex-col overflow-hidden" role="log" aria-label="Chat messages" aria-live="polite">
               <ScrollArea className="flex-1 px-4">
                 <div className="space-y-3 sm:space-y-4 sm:space-y-6 py-4">
                   {messages.length === 0 && showSuggestions && (
@@ -830,7 +834,7 @@ export function EnhancedAskAminy({
                                 childName={userData.childName}
                                 onShare={(platform) => {
                                   // Track share for analytics
-                                  console.log(`Shared insight via ${platform}`);
+                                  if (import.meta.env.DEV) console.log(`Shared insight via ${platform}`);
                                 }}
                               />
                             </div>
@@ -876,6 +880,7 @@ export function EnhancedAskAminy({
                       onChange={(e) => setInput(e.target.value)}
                       onKeyPress={handleKeyPress}
                       placeholder={`Ask me anything about ${userData.childName}...`}
+                      aria-label={`Message Aminy about ${userData.childName}`}
                       className="w-full resize-none rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-4 py-3 text-sm focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 aminy-ai-input-field"
                       style={{ minHeight: '48px', maxHeight: '120px' }}
                       disabled={isTyping || isStreaming || !canSendMessage}
@@ -888,6 +893,7 @@ export function EnhancedAskAminy({
                       size="sm"
                       className="w-10 h-10 p-0 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
                       title="Attach file"
+                      aria-label="Attach file"
                       disabled={isTyping || isStreaming}
                     >
                       <Paperclip className="w-4 h-4" />
@@ -901,9 +907,10 @@ export function EnhancedAskAminy({
                         input.trim() && "shadow-lg hover:shadow-xl hover:scale-105"
                       )}
                       title="Send message"
+                      aria-label={isTyping || isStreaming ? "AI is responding" : "Send message"}
                     >
                       {isTyping || isStreaming ? (
-                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" aria-hidden="true" />
                       ) : (
                         <ArrowUp className="w-4 h-4" />
                       )}

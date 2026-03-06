@@ -73,9 +73,9 @@ const isProduction = Deno.env.get('ENVIRONMENT') === 'production' ||
                      !Deno.env.get('ENVIRONMENT'); // Default to production if not set
 
 const productionOrigins = [
-  'https://aminy.app',
-  'https://www.aminy.app',
-  'https://app.aminy.app',
+  'https://aminy.ai',
+  'https://www.aminy.ai',
+  'https://app.aminy.ai',
 ];
 
 const developmentOrigins = [
@@ -2812,12 +2812,12 @@ app.get("/make-server-8a022548/stress-logs/recent", async (c) => {
     cutoffDate.setDate(cutoffDate.getDate() - days);
 
     // Get all stress logs for user
-    const allLogs = await kv.getByPrefix(`stress_log:${user.id}:`);
-    
+    const allLogs = await kv.getByPrefix(`stress_log:${user.id}:`) as { timestamp: string }[];
+
     // Filter by date
     const recentLogs = allLogs
-      .filter((log: any) => new Date(log.timestamp) >= cutoffDate)
-      .sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+      .filter((log) => new Date(log.timestamp) >= cutoffDate)
+      .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
 
     return c.json({ logs: recentLogs });
   } catch (error) {

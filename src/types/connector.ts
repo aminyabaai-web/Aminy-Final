@@ -1,7 +1,7 @@
 // Aminy MVP - Connector Hub Data Models
 // Lightweight types for the integrated Connector system
 
-export interface Caregiver {
+export interface ConnectorCaregiver {
   id: string;
   name: string;
   email: string;
@@ -66,7 +66,7 @@ export interface JrProfile {
 export interface Plan {
   childId: string;
   version: string;
-  goals: Goal[];
+  goals: ConnectorGoal[];
   dailyTasks: DailyTask[];
   reinforcement: {
     type: 'visual' | 'auditory' | 'tactile';
@@ -77,7 +77,7 @@ export interface Plan {
   lastUpdated: Date;
 }
 
-export interface Goal {
+export interface ConnectorGoal {
   id: string;
   domain: 'speech' | 'social' | 'sensory' | 'routines';
   title: string;
@@ -99,7 +99,7 @@ export interface DailyTask {
   notes?: string;
 }
 
-export interface Session {
+export interface ConnectorSession {
   id: string;
   childId: string;
   type: 'parent' | 'jr';
@@ -163,7 +163,7 @@ export interface Referral {
   };
 }
 
-export interface Report {
+export interface ConnectorReport {
   id: string;
   childId: string;
   type: 'starter' | 'core' | 'pro';
@@ -218,14 +218,14 @@ export interface ConnectorStatus {
 
 // Sample seed data interfaces
 export interface SeedData {
-  caregivers: Caregiver[];
+  caregivers: ConnectorCaregiver[];
   children: Child[];
   devices: Device[];
   jrProfiles: JrProfile[];
   plans: Plan[];
-  sessions: Session[];
+  sessions: ConnectorSession[];
   insights: InsightSnapshot[];
   coverage: CoverageCase[];
   referrals: Referral[];
-  reports: Report[];
+  reports: ConnectorReport[];
 }

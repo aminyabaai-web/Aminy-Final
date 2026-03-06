@@ -113,7 +113,7 @@ export const AccessibilityAuditor: React.FC = () => {
       if (import.meta.env.DEV && issues.length > 0) {
         console.group('♿ Accessibility Issues Detected');
         issues.forEach((issue) => {
-          console.log(`[${issue.severity}] ${issue.element}: ${issue.issue}`);
+          console.log(`[${issue.type}] ${issue.element}: ${issue.message}`);
         });
         console.groupEnd();
       }

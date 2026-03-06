@@ -225,7 +225,7 @@ export function ShareableMilestoneCard({
   };
 
   const handleCopyLink = async () => {
-    const shareText = `${displayEmoji} ${displayTitle}\n\n${description}\n\nTracked with Aminy - helping families thrive!\naminy.app`;
+    const shareText = `${displayEmoji} ${displayTitle}\n\n${description}\n\nTracked with Aminy - helping families thrive!\naminy.ai`;
     await navigator.clipboard.writeText(shareText);
     triggerHaptic('success');
   };

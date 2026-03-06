@@ -102,7 +102,7 @@ export function CaregiverDocumentation({
 
   // Timer effect
   useEffect(() => {
-    let interval: NodeJS.Timer;
+    let interval: ReturnType<typeof setInterval>;
     if (timerRunning && timerStart) {
       interval = setInterval(() => {
         setTimerElapsed(Math.floor((new Date().getTime() - timerStart.getTime()) / 1000));

@@ -68,7 +68,7 @@ export async function saveStreak(streak: StreakData): Promise<boolean> {
 
     if (error) throw error;
 
-    console.log('[StreakService] Streak saved successfully');
+    if (import.meta.env.DEV) console.log('[StreakService] Streak saved successfully');
     return true;
   } catch (error) {
     console.error('[StreakService] Error saving streak:', error);
@@ -226,14 +226,14 @@ export async function syncStreakFromCloud(
   // If cloud has better streak, use cloud
   if (cloudStreak.currentStreak > localStreak.current ||
       cloudStreak.longestStreak > localStreak.longest) {
-    console.log('[StreakService] Using cloud streak (better than local)');
+    if (import.meta.env.DEV) console.log('[StreakService] Using cloud streak (better than local)');
     return cloudStreak;
   }
 
   // If local has better streak, sync to cloud
   if (localStreak.current > cloudStreak.currentStreak ||
       localStreak.longest > cloudStreak.longestStreak) {
-    console.log('[StreakService] Syncing local streak to cloud');
+    if (import.meta.env.DEV) console.log('[StreakService] Syncing local streak to cloud');
     const merged: StreakData = {
       userId,
       currentStreak: Math.max(localStreak.current, cloudStreak.currentStreak),

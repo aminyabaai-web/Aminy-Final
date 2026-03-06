@@ -259,7 +259,7 @@ const getAuthToken = (): string => {
     : publicAnonKey;
 };
 
-const billingApi = async (endpoint: string, options: RequestInit = {}): Promise<any> => {
+const billingApi = async (endpoint: string, options: RequestInit = {}): Promise<Record<string, unknown>> => {
   const response = await fetch(
     `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/billing${endpoint}`,
     {
@@ -337,13 +337,13 @@ export async function createCheckout(
 
     return {
       success: true,
-      checkoutUrl: result.url,
+      checkoutUrl: result.url as string | undefined,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Checkout error:', error);
     return {
       success: false,
-      error: error.message || 'Failed to create checkout',
+      error: (error as Error).message || 'Failed to create checkout',
     };
   }
 }
@@ -361,7 +361,7 @@ export async function openBillingPortal(userId: string): Promise<string | null> 
       }),
     });
 
-    return result.url;
+    return result.url as string | null;
   } catch (error) {
     console.error('Portal error:', error);
     return null;
@@ -442,7 +442,7 @@ export async function changeTier(
 export async function getPaymentMethods(userId: string): Promise<PaymentMethod[]> {
   try {
     const result = await billingApi(`/payment-methods?userId=${userId}`);
-    return result.paymentMethods || [];
+    return (result.paymentMethods || []) as PaymentMethod[];
   } catch (error) {
     console.error('Get payment methods error:', error);
     return [];
@@ -497,17 +497,17 @@ export async function removePaymentMethod(
 export async function getInvoices(userId: string, limit: number = 10): Promise<Invoice[]> {
   try {
     const result = await billingApi(`/invoices?userId=${userId}&limit=${limit}`);
-    return (result.invoices || []).map((inv: any) => ({
-      id: inv.id,
-      stripeInvoiceId: inv.stripe_invoice_id,
-      amount: inv.amount,
-      currency: inv.currency,
-      status: inv.status,
-      description: inv.description,
-      invoiceUrl: inv.invoice_url,
-      pdfUrl: inv.pdf_url,
-      createdAt: inv.created_at,
-      paidAt: inv.paid_at,
+    return ((result.invoices || []) as Record<string, unknown>[]).map((inv) => ({
+      id: inv.id as string,
+      stripeInvoiceId: inv.stripe_invoice_id as string,
+      amount: inv.amount as number,
+      currency: inv.currency as string,
+      status: inv.status as Invoice['status'],
+      description: inv.description as string,
+      invoiceUrl: inv.invoice_url as string,
+      pdfUrl: inv.pdf_url as string,
+      createdAt: inv.created_at as string,
+      paidAt: inv.paid_at as string,
     }));
   } catch (error) {
     console.error('Get invoices error:', error);
@@ -523,13 +523,14 @@ export async function getUpcomingInvoice(userId: string): Promise<Invoice | null
     const result = await billingApi(`/upcoming-invoice?userId=${userId}`);
     if (!result.invoice) return null;
 
+    const invoice = result.invoice as Record<string, unknown>;
     return {
       id: 'upcoming',
       stripeInvoiceId: '',
-      amount: result.invoice.amount,
-      currency: result.invoice.currency,
+      amount: invoice.amount as number,
+      currency: invoice.currency as string,
       status: 'pending',
-      description: result.invoice.description,
+      description: invoice.description as string,
       createdAt: new Date().toISOString(),
     };
   } catch (error) {
@@ -583,9 +584,9 @@ export async function validatePromoCode(
     });
 
     if (result.valid) {
-      return { valid: true, promoCode: result.promoCode };
+      return { valid: true, promoCode: result.promoCode as PromoCode | undefined };
     }
-    return { valid: false, error: result.error || 'Invalid code' };
+    return { valid: false, error: (result.error as string) || 'Invalid code' };
   } catch (error) {
     return { valid: false, error: 'Failed to validate code' };
   }
@@ -808,25 +809,190 @@ export async function incrementMessageCount(userId: string): Promise<void> {
 }
 
 // ============================================================================
+// Grace Period Management
+// ============================================================================
+
+/** Number of days a user retains paid features after a payment fails */
+export const GRACE_PERIOD_DAYS = 7;
+
+export interface GracePeriodStatus {
+  inGracePeriod: boolean;
+  daysRemaining: number;
+  suspendedAt: string | null;
+  /** ISO timestamp when the grace period started (first past_due event) */
+  gracePeriodStartedAt: string | null;
+  /** ISO timestamp when features will be suspended */
+  gracePeriodEndsAt: string | null;
+}
+
+/**
+ * Handle a subscription that has entered past_due status.
+ *
+ * Called by the webhook when Stripe reports a failed payment.
+ * Creates or updates a grace_periods row so the frontend can
+ * show a countdown banner and the backend can enforce suspension
+ * once the window expires.
+ */
+export async function handlePastDueSubscription(
+  userId: string,
+  subscriptionId: string
+): Promise<{ success: boolean; gracePeriodEndsAt: string }> {
+  const now = new Date();
+  const endsAt = new Date(now.getTime() + GRACE_PERIOD_DAYS * 24 * 60 * 60 * 1000);
+
+  // Upsert so we don't reset an existing grace period if Stripe fires
+  // multiple past_due webhooks for the same cycle.
+  const { error } = await supabase
+    .from('grace_periods')
+    .upsert(
+      {
+        user_id: userId,
+        subscription_id: subscriptionId,
+        status: 'active',
+        started_at: now.toISOString(),
+        ends_at: endsAt.toISOString(),
+        suspended_at: null,
+        updated_at: now.toISOString(),
+      },
+      { onConflict: 'user_id' }
+    );
+
+  if (error) {
+    console.error('[Billing] Failed to create grace period:', error);
+    throw new Error(`Failed to create grace period: ${error.message}`);
+  }
+
+  console.log(
+    `[Billing] Grace period started for user ${userId} — ends ${endsAt.toISOString()}`
+  );
+
+  return { success: true, gracePeriodEndsAt: endsAt.toISOString() };
+}
+
+/**
+ * Get the current grace period status for a user.
+ *
+ * Returns a stable object the frontend can use for banners / feature gating.
+ */
+export async function getGracePeriodStatus(
+  userId: string
+): Promise<GracePeriodStatus> {
+  const { data, error } = await supabase
+    .from('grace_periods')
+    .select('*')
+    .eq('user_id', userId)
+    .eq('status', 'active')
+    .maybeSingle();
+
+  if (error) {
+    console.error('[Billing] Failed to fetch grace period:', error);
+  }
+
+  // No active grace period
+  if (!data) {
+    return {
+      inGracePeriod: false,
+      daysRemaining: 0,
+      suspendedAt: null,
+      gracePeriodStartedAt: null,
+      gracePeriodEndsAt: null,
+    };
+  }
+
+  const now = new Date();
+  const endsAt = new Date(data.ends_at as string);
+  const msRemaining = endsAt.getTime() - now.getTime();
+  const daysRemaining = Math.max(0, Math.ceil(msRemaining / (1000 * 60 * 60 * 24)));
+
+  return {
+    inGracePeriod: daysRemaining > 0 && !data.suspended_at,
+    daysRemaining,
+    suspendedAt: (data.suspended_at as string) || null,
+    gracePeriodStartedAt: (data.started_at as string) || null,
+    gracePeriodEndsAt: (data.ends_at as string) || null,
+  };
+}
+
+/**
+ * Expire a grace period and suspend the user's paid features.
+ *
+ * Called either by a scheduled job or by the webhook when the
+ * grace window has elapsed and payment still has not succeeded.
+ */
+export async function expireGracePeriod(userId: string): Promise<boolean> {
+  const now = new Date().toISOString();
+
+  // Mark the grace period as expired
+  const { error: gpError } = await supabase
+    .from('grace_periods')
+    .update({ status: 'expired', suspended_at: now, updated_at: now })
+    .eq('user_id', userId)
+    .eq('status', 'active');
+
+  if (gpError) {
+    console.error('[Billing] Failed to expire grace period:', gpError);
+    return false;
+  }
+
+  // Downgrade the user to free tier
+  const { error: profileError } = await supabase
+    .from('profiles')
+    .update({ tier: 'free', updated_at: now })
+    .eq('id', userId);
+
+  if (profileError) {
+    console.error('[Billing] Failed to downgrade user after grace expiry:', profileError);
+    return false;
+  }
+
+  console.log(`[Billing] Grace period expired — user ${userId} downgraded to free`);
+  return true;
+}
+
+/**
+ * Resolve a grace period after the user successfully pays.
+ *
+ * Called by the webhook on `invoice.payment_succeeded` when there
+ * is an active grace period for the customer.
+ */
+export async function resolveGracePeriod(userId: string): Promise<boolean> {
+  const now = new Date().toISOString();
+
+  const { error } = await supabase
+    .from('grace_periods')
+    .update({ status: 'resolved', updated_at: now })
+    .eq('user_id', userId)
+    .eq('status', 'active');
+
+  if (error) {
+    console.error('[Billing] Failed to resolve grace period:', error);
+    return false;
+  }
+
+  console.log(`[Billing] Grace period resolved for user ${userId}`);
+  return true;
+}
+
+// ============================================================================
 // Helpers
 // ============================================================================
 
-function mapDbSubscription(data: any): Subscription {
+function mapDbSubscription(data: Record<string, unknown>): Subscription {
   return {
-    id: data.id,
-    userId: data.user_id,
-    stripeSubscriptionId: data.stripe_subscription_id,
-    stripeCustomerId: data.stripe_customer_id,
-    tier: data.tier,
-    status: data.status,
-    interval: data.interval,
-    currentPeriodStart: data.current_period_start,
-    currentPeriodEnd: data.current_period_end,
-    cancelAtPeriodEnd: data.cancel_at_period_end,
-    canceledAt: data.canceled_at,
-    trialEnd: data.trial_end,
-    createdAt: data.created_at,
-    updatedAt: data.updated_at,
+    id: data.id as string,
+    userId: data.user_id as string,
+    stripeSubscriptionId: data.stripe_subscription_id as string,
+    stripeCustomerId: data.stripe_customer_id as string,
+    tier: data.tier as SubscriptionTier,
+    status: data.status as SubscriptionStatus,
+    interval: data.interval as BillingInterval,
+    currentPeriodStart: data.current_period_start as string,
+    currentPeriodEnd: data.current_period_end as string,
+    cancelAtPeriodEnd: data.cancel_at_period_end as boolean,
+    canceledAt: data.canceled_at as string | undefined,
+    trialEnd: data.trial_end as string | undefined,
+    createdAt: data.created_at as string,
+    updatedAt: data.updated_at as string,
   };
 }
 
@@ -857,6 +1023,7 @@ export const billingEngine = {
   // Configuration
   PRICING_TIERS,
   PROMO_CODES,
+  GRACE_PERIOD_DAYS,
 
   // Subscription
   getSubscription,
@@ -865,6 +1032,12 @@ export const billingEngine = {
   cancelSubscription,
   resumeSubscription,
   changeTier,
+
+  // Grace Period
+  handlePastDueSubscription,
+  getGracePeriodStatus,
+  expireGracePeriod,
+  resolveGracePeriod,
 
   // Payment Methods
   getPaymentMethods,

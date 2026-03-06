@@ -105,7 +105,7 @@ export interface FiscalAgentSubmission {
     entries: number;
   }>;
   // Submission details
-  submissionMethod: 'pdf_download' | 'direct_api' | 'portal_upload';
+  submissionMethod: 'pdf_download' | 'direct_api' | 'portal_upload' | 'clearinghouse';
   status: 'pending' | 'submitted' | 'processing' | 'approved' | 'rejected' | 'needs_revision';
   submittedAt?: string;
   processedAt?: string;
@@ -142,8 +142,9 @@ function getFromStorage<T>(key: string): T[] {
   if (!data) return [];
   try {
     return JSON.parse(data);
-  } catch {
+  } catch (error) {
     // Reset corrupted data
+    console.warn('[CaregiverDB] Corrupted localStorage data, resetting key:', key, error);
     localStorage.removeItem(key);
     return [];
   }
@@ -802,7 +803,8 @@ export async function requestEVVLocation(): Promise<{
         try {
           const address = await reverseGeocode(location.latitude, location.longitude);
           resolve({ ...location, address });
-        } catch {
+        } catch (error) {
+          console.warn('[CaregiverDB] Reverse geocoding failed:', error);
           resolve(location);
         }
       },
@@ -967,6 +969,7 @@ function saveEVVData(timeEntryId: string, evvData: EVVData): void {
   try {
     allEvv = JSON.parse(localStorage.getItem(EVV_STORAGE_KEY) || '{}');
   } catch {
+    // localStorage unavailable
     allEvv = {};
   }
   allEvv[timeEntryId] = evvData;
@@ -978,6 +981,7 @@ export function getEVVData(timeEntryId: string): EVVData | null {
     const allEvv = JSON.parse(localStorage.getItem(EVV_STORAGE_KEY) || '{}');
     return allEvv[timeEntryId] || null;
   } catch {
+    // localStorage unavailable
     return null;
   }
 }
@@ -986,6 +990,7 @@ export function getAllEVVData(): Record<string, EVVData> {
   try {
     return JSON.parse(localStorage.getItem(EVV_STORAGE_KEY) || '{}');
   } catch {
+    // localStorage unavailable
     return {};
   }
 }

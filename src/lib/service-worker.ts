@@ -25,7 +25,7 @@ export function isServiceWorkerSupported(): boolean {
  */
 export async function registerServiceWorker(): Promise<ServiceWorkerRegistration | null> {
   if (!isServiceWorkerSupported()) {
-    console.log('[SW] Service workers not supported');
+    if (import.meta.env.DEV) console.log('[SW] Service workers not supported');
     return null;
   }
 
@@ -36,7 +36,7 @@ export async function registerServiceWorker(): Promise<ServiceWorkerRegistration
 
     swRegistration = registration;
 
-    console.log('[SW] Service worker registered:', registration.scope);
+    if (import.meta.env.DEV) console.log('[SW] Service worker registered:', registration.scope);
 
     // Handle updates
     registration.addEventListener('updatefound', () => {
@@ -45,7 +45,7 @@ export async function registerServiceWorker(): Promise<ServiceWorkerRegistration
         newWorker.addEventListener('statechange', () => {
           if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
             // New version available
-            console.log('[SW] New version available');
+            if (import.meta.env.DEV) console.log('[SW] New version available');
             dispatchEvent(new CustomEvent('sw-update-available'));
           }
         });
@@ -148,7 +148,7 @@ export async function skipWaitingAndReload(): Promise<void> {
 export async function clearAllCaches(): Promise<void> {
   const cacheNames = await caches.keys();
   await Promise.all(cacheNames.map((name) => caches.delete(name)));
-  console.log('[SW] All caches cleared');
+  if (import.meta.env.DEV) console.log('[SW] All caches cleared');
 }
 
 /**
@@ -174,5 +174,5 @@ export async function isResourceCached(url: string): Promise<boolean> {
 export async function precacheUrls(urls: string[]): Promise<void> {
   const cache = await caches.open('aminy-v1');
   await cache.addAll(urls);
-  console.log('[SW] Precached URLs:', urls);
+  if (import.meta.env.DEV) console.log('[SW] Precached URLs:', urls);
 }

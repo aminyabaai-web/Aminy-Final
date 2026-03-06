@@ -25,7 +25,7 @@ export function AskAminyStatusIndicator() {
         activeFeatures.forEach(([feature, enabled]) => {
         });
       }}
-      title={`Ask Aminy Enhanced (${activeFeatures.filter(([, enabled]) => enabled).length} features active)`}
+      title={`Aminy Enhanced (${activeFeatures.filter(([, enabled]) => enabled).length} features active)`}
     >
       <div className="relative">
         <Sparkles className="w-6 h-6 transition-transform group-hover:scale-110" />

@@ -8,7 +8,7 @@
 // Core Analytics Types
 export interface AnalyticsEvent {
   event: string;
-  properties: Record<string, any>;
+  properties: Record<string, unknown>;
   userId?: string;
   childId?: string;
   sessionId: string;
@@ -229,7 +229,7 @@ class AnalyticsEngine {
     });
   }
 
-  public track(event: string, properties: Record<string, any> = {}): void {
+  public track(event: string, properties: Record<string, unknown> = {}): void {
     if (!ANALYTICS_CONFIG.enabledEvents.includes(event) && !event.startsWith('custom_')) {
       if (ANALYTICS_CONFIG.debugMode) {
       }
@@ -244,7 +244,7 @@ class AnalyticsEngine {
         timestamp: Date.now(),
       },
       userId: this.userId,
-      childId: properties.childId,
+      childId: properties.childId as string | undefined,
       sessionId: this.sessionId,
       timestamp: Date.now(),
       userTier: this.userTier,
@@ -332,7 +332,7 @@ class AnalyticsEngine {
 
   private getFeatureFromEvent(event: string): string | null {
     const featureMap: Record<string, string> = {
-      'ask_aminy_opened': 'Ask Aminy',
+      'ask_aminy_opened': 'Aminy',
       'care_plan_viewed': 'Care Planning',
       'reports_generated': 'Reports',
       'junior_mode_activated': 'Junior Mode',
@@ -366,7 +366,8 @@ class AnalyticsEngine {
       engagementDepth: this.calculateEngagementDepth(duration),
     });
 
-    this.currentSession.totalEngagementTime += duration;
+    const session = this.currentSession;
+    if (session) { session.totalEngagementTime = (session.totalEngagementTime ?? 0) + duration; }
 
     // Track deep engagement
     if (duration > 300000) { // 5 minutes
@@ -380,7 +381,7 @@ class AnalyticsEngine {
     return 'deep'; // >= 3 minutes
   }
 
-  public trackError(error: Error, context: Record<string, any> = {}): void {
+  public trackError(error: Error, context: Record<string, unknown> = {}): void {
     this.track('error_occurred', {
       errorMessage: error.message,
       errorStack: error.stack,
@@ -391,7 +392,7 @@ class AnalyticsEngine {
     });
   }
 
-  public trackPerformance(metric: string, value: number, context?: Record<string, any>): void {
+  public trackPerformance(metric: string, value: number, context?: Record<string, unknown>): void {
     this.track('performance_metric', {
       metric,
       value,
@@ -489,9 +490,10 @@ class AnalyticsEngine {
 
     // Also send to Google Analytics if configured
     const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID;
-    if (GA_MEASUREMENT_ID && typeof window !== 'undefined' && (window as any).gtag) {
+    const win = window as unknown as { gtag?: (command: string, event: string, params: Record<string, unknown>) => void };
+    if (GA_MEASUREMENT_ID && typeof window !== 'undefined' && win.gtag) {
       for (const event of events) {
-        (window as any).gtag('event', event.event, {
+        win.gtag('event', event.event, {
           ...event.properties,
           user_tier: event.userTier,
           session_id: event.sessionId,
@@ -505,7 +507,7 @@ class AnalyticsEngine {
     session: Partial<UserJourney>;
     patterns: BehaviorPattern[];
     usage: FeatureUsage[];
-    insights: any;
+    insights: ReturnType<AnalyticsEngine['getSessionInsights']> | null;
   } {
     return {
       events: JSON.parse(localStorage.getItem('aminy_analytics') || '[]'),
@@ -708,14 +710,14 @@ export function getUpgradeFunnelMetrics(): {
 // ============================================================================
 
 // Utility Functions
-export function trackPageView(page: string, properties?: Record<string, any>) {
+export function trackPageView(page: string, properties?: Record<string, unknown>) {
   analytics.track('page_viewed', {
     page,
     ...properties,
   });
 }
 
-export function trackUserAction(action: string, context?: Record<string, any>) {
+export function trackUserAction(action: string, context?: Record<string, unknown>) {
   analytics.track('user_action', {
     action,
     context,

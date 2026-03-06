@@ -47,9 +47,12 @@ import {
 } from 'lucide-react';
 import type { VaultRecord } from '../types/vault';
 import { useStorage } from '../lib/useStorage';
+import { uploadVaultFile, listVaultDocuments, deleteVaultDocument, getVaultDocumentUrl } from '../lib/vault-storage';
+import type { VaultRecordType } from '../lib/vault-storage';
+import { supabase } from '../utils/supabase/client';
 
 // Enhanced types for the vault implementation
-interface EnhancedVaultRecord extends VaultRecord {
+interface EnhancedVaultRecord extends Omit<VaultRecord, 'type' | 'source' | 'visibility'> {
   type: 'IEP' | 'Evaluation' | 'Report' | 'Prescription/Order' | 'Care Plan' | 'Uploaded (Parent)' | 'Coach Note (PDF)' | 'Session Artifact' | 'School Letter' | 'Other';
   source: 'Parent Upload' | 'Junior' | 'Coach' | 'School' | 'Clinic' | 'Other';
   docDate?: string;
@@ -95,14 +98,19 @@ interface EnhancedVaultRecord extends VaultRecord {
   };
 }
 
-interface RecordsVaultProps {
+export interface RecordsVaultProps {
   onClose?: () => void;
   onBack?: () => void;
   vaultRecords?: VaultRecord[];
-  publishEvent: (eventName: string, payload: any) => void;
-  connectorData: any;
-  setConnectorData: (data: any) => void;
+  publishEvent?: (eventName: string, payload: Record<string, unknown>) => void;
+  connectorData?: Record<string, unknown>;
+  setConnectorData?: (data: Record<string, unknown>) => void;
   userTier?: 'starter' | 'core' | 'pro';
+  childId?: string;
+  records?: VaultRecord[];
+  onRecordAdded?: (record: VaultRecord) => void;
+  onRecordUpdated?: (record: VaultRecord) => void;
+  onRecordDeleted?: (recordId: string) => void;
 }
 
 const RECORD_TYPES = [
@@ -126,148 +134,6 @@ const SOURCE_TYPES = [
   'Clinic',
   'Other'
 ] as const;
-
-// Mock data for demonstration
-const getMockRecords = (): EnhancedVaultRecord[] => [
-  {
-    id: 'mock-1',
-    childId: 'child-1',
-    title: 'IEP Annual Review 2024',
-    type: 'IEP',
-    source: 'School',
-    date: '2024-03-15',
-    docDate: '2024-03-15',
-    visibility: 'Private',
-    relatedTo: [
-      { id: 'goal-1', type: 'Goal', title: 'Express needs verbally' },
-      { id: 'goal-2', type: 'Goal', title: 'Follow two-step instructions' }
-    ],
-    notes: 'Annual review went well. Updated goals for next year.',
-    files: [{
-      id: 'file-1',
-      name: 'IEP_Annual_Review_2024.pdf',
-      url: '/mock-file.pdf',
-      type: 'application/pdf',
-      size: 2048576,
-      uploadedAt: '2024-03-15T10:00:00Z'
-    }],
-    shareSettings: {
-      hasShareLink: true,
-      shareId: 'share-123',
-      expiresAt: '2024-06-15',
-      hasWatermark: true,
-      hasPasscode: true,
-      audienceLabel: 'Teacher',
-      viewLog: [{
-        viewedBy: 'Mrs. Smith',
-        viewedAt: '2024-03-16T09:00:00Z'
-      }]
-    },
-    status: 'Active',
-    ocrStatus: 'Complete',
-    hasSignatures: true,
-    hasImages: false,
-    hasAudio: false,
-    extractedFields: {
-      studentName: 'Emma',
-      docDate: '2024-03-15',
-      district: 'Washington Elementary District',
-      services: ['Speech Therapy', 'Occupational Therapy']
-    },
-    category: ['School', 'IEP'],
-    tags: ['annual review', 'speech', 'OT'],
-    usableByAssistant: true,
-    attachToExport: true,
-    createdAt: '2024-03-15T10:00:00Z',
-    sourceType: 'upload',
-    fileType: 'application/pdf',
-    vaultText: 'IEP Annual Review meeting notes and updated goals for speech therapy and occupational therapy services.'
-  },
-  {
-    id: 'mock-2',
-    childId: 'child-1',
-    title: 'Behavioral Assessment Report',
-    type: 'Evaluation',
-    source: 'Clinic',
-    date: '2024-02-28',
-    docDate: '2024-02-28',
-    visibility: 'Shared',
-    relatedTo: [
-      { id: 'strategy-1', type: 'Strategy', title: 'Visual schedule' }
-    ],
-    notes: 'Comprehensive evaluation with detailed recommendations.',
-    files: [{
-      id: 'file-2',
-      name: 'Behavioral_Assessment_Feb2024.pdf',
-      url: '/mock-assessment.pdf',
-      type: 'application/pdf',
-      size: 3145728,
-      uploadedAt: '2024-02-28T14:00:00Z'
-    }],
-    shareSettings: {
-      hasShareLink: true,
-      shareId: 'share-456',
-      expiresAt: '2024-05-28',
-      hasWatermark: true,
-      hasPasscode: false,
-      audienceLabel: 'Provider',
-      viewLog: []
-    },
-    status: 'Active',
-    ocrStatus: 'Complete',
-    hasSignatures: true,
-    hasImages: true,
-    hasAudio: false,
-    extractedFields: {
-      studentName: 'Emma',
-      docDate: '2024-02-28',
-      district: 'Assessment Center',
-      services: ['ABA Therapy', 'Social Skills Training']
-    },
-    category: ['Medical', 'Assessment'],
-    tags: ['autism', 'behavioral', 'recommendations'],
-    usableByAssistant: true,
-    attachToExport: false,
-    createdAt: '2024-02-28T14:00:00Z',
-    sourceType: 'upload',
-    fileType: 'application/pdf',
-    vaultText: 'Comprehensive behavioral assessment indicating specific intervention strategies and therapeutic recommendations.'
-  },
-  {
-    id: 'mock-3',
-    childId: 'child-1',
-    title: 'Progress Photos - Visual Schedule',
-    type: 'Session Artifact',
-    source: 'Parent Upload',
-    date: '2024-03-20',
-    visibility: 'Private',
-    relatedTo: [
-      { id: 'routine-1', type: 'Routine', title: 'Morning routine' }
-    ],
-    notes: 'Photos showing Emma successfully using the visual schedule.',
-    files: [{
-      id: 'file-3',
-      name: 'visual_schedule_progress.jpg',
-      url: '/mock-photos.jpg',
-      type: 'image/jpeg',
-      size: 1048576,
-      uploadedAt: '2024-03-20T08:00:00Z'
-    }],
-    status: 'Active',
-    ocrStatus: 'None',
-    hasSignatures: false,
-    hasImages: true,
-    hasAudio: false,
-    category: ['Progress', 'Photos'],
-    tags: ['visual schedule', 'routine', 'success'],
-    usableByAssistant: false,
-    attachToExport: true,
-    createdAt: '2024-03-20T08:00:00Z',
-    sourceType: 'upload',
-    fileType: 'image/jpeg',
-    vaultText: ''
-  }
-];
 
 // Record Row Component
 interface RecordRowProps {
@@ -411,7 +277,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ record, isOpen, onClose, userTi
   const [audienceLabel, setAudienceLabel] = useState('');
 
   const generateShareLink = () => {
-    const mockLink = `https://aminy.app/shared/${record.id}?key=abc123`;
+    const mockLink = `https://aminy.ai/shared/${record.id}?key=abc123`;
     setShareLink(mockLink);
     toast.success('Secure share link created • Expires in ' + expiresIn + ' days');
   };
@@ -506,28 +372,112 @@ const ShareModal: React.FC<ShareModalProps> = ({ record, isOpen, onClose, userTi
 // Main Component
 export const RecordsVault: React.FC<RecordsVaultProps> = ({
   onClose,
+  onBack,
   vaultRecords = [],
   publishEvent,
   connectorData,
   setConnectorData,
   userTier = 'core'
 }) => {
+  // Use onClose if provided, otherwise fall back to onBack
+  const handleClose = onClose || onBack;
   // Use storage hook for unified storage information
   const { usedBytes, quotaBytes, planTier, capabilities } = useStorage();
-  
-  // Convert to enhanced vault records and add mock data if empty
-  const records: EnhancedVaultRecord[] = vaultRecords.length > 0 
-    ? vaultRecords.map(record => ({
-        ...record,
-        type: (record as any).type || 'Other',
-        source: (record as any).source || 'Parent Upload',
-        visibility: (record as any).visibility || 'Private',
-        relatedTo: (record as any).relatedTo || [],
-        files: (record as any).files || [],
-        status: (record as any).status || 'Active',
-        ocrStatus: (record as any).ocrStatus || 'None'
-      })) as EnhancedVaultRecord[]
-    : getMockRecords();
+
+  // ─── Real data from Supabase ───────────
+  const [records, setRecords] = useState<EnhancedVaultRecord[]>([]);
+  const [isLoadingDocs, setIsLoadingDocs] = useState(true);
+  const [uploadingFile, setUploadingFile] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+
+  useEffect(() => {
+    async function loadDocuments() {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+          setRecords([]);
+          setIsLoadingDocs(false);
+          return;
+        }
+
+        const { documents, error } = await listVaultDocuments(user.id, { limit: 100 });
+        if (error || !documents || documents.length === 0) {
+          // No documents yet — show empty state
+          setRecords([]);
+        } else {
+          // Map Supabase vault documents to EnhancedVaultRecord format
+          const mapped = documents.map(doc => ({
+            id: doc.id,
+            title: doc.fileName,
+            date: doc.uploadedAt || new Date().toISOString(),
+            type: doc.recordType || 'Other',
+            source: doc.source || 'Parent Upload',
+            visibility: doc.visibility || 'Private',
+            relatedTo: [],
+            files: [{ name: doc.fileName, size: doc.fileSize ? `${(doc.fileSize / 1024).toFixed(0)} KB` : '—', type: doc.mimeType || 'application/pdf' }],
+            status: 'Active',
+            ocrStatus: 'None',
+            filePath: doc.filePath,
+          })) as unknown as EnhancedVaultRecord[];
+          setRecords(mapped);
+        }
+      } catch {
+        setRecords([]);
+      } finally {
+        setIsLoadingDocs(false);
+      }
+    }
+    loadDocuments();
+  }, [vaultRecords]);
+
+  // ─── Real file upload handler ───────────────
+  const handleFileUpload = async (file: File, title: string, recordType: string) => {
+    setUploadingFile(true);
+    setUploadProgress(0);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        toast.error('Please sign in to upload documents');
+        return;
+      }
+
+      const result = await uploadVaultFile(file, user.id, {
+        recordType: (recordType.toLowerCase().replace(/[^a-z-]/g, '-') as VaultRecordType) || 'other',
+        source: 'parent-upload',
+        onProgress: (p) => setUploadProgress(p),
+      });
+
+      if (result.success) {
+        toast.success('Document uploaded successfully!');
+        // Reload documents
+        const { documents } = await listVaultDocuments(user.id, { limit: 100 });
+        if (documents) {
+          const mapped = documents.map(doc => ({
+            id: doc.id,
+            title: doc.fileName,
+            date: doc.uploadedAt || new Date().toISOString(),
+            type: doc.recordType || 'Other',
+            source: doc.source || 'Parent Upload',
+            visibility: doc.visibility || 'Private',
+            relatedTo: [],
+            files: [{ name: doc.fileName, size: doc.fileSize ? `${(doc.fileSize / 1024).toFixed(0)} KB` : '—', type: doc.mimeType || 'application/pdf' }],
+            status: 'Active',
+            ocrStatus: 'None',
+            filePath: doc.filePath,
+          })) as unknown as EnhancedVaultRecord[];
+          setRecords(mapped);
+        }
+        setShowAddRecord(false);
+      } else {
+        toast.error(result.error || 'Upload failed');
+      }
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : 'Upload failed');
+    } finally {
+      setUploadingFile(false);
+      setUploadProgress(0);
+    }
+  };
 
   // State management
   const [searchQuery, setSearchQuery] = useState('');
@@ -537,6 +487,7 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
   const [selectedRecords, setSelectedRecords] = useState<string[]>([]);
   const [showAddRecord, setShowAddRecord] = useState(false);
   const [shareModalRecord, setShareModalRecord] = useState<EnhancedVaultRecord | null>(null);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
   const [viewRecord, setViewRecord] = useState<EnhancedVaultRecord | null>(null);
 
   // Filter and sort records
@@ -580,7 +531,7 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
   const totalGB = quotaBytes / (1024 * 1024 * 1024);
 
   return (
-    <div className="fixed inset-0 bg-background z-50 flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col">
       {/* Header */}
       <div className="sticky top-0 z-10 bg-background border-b">
         <div className="p-4 sm:p-5 md:p-6">
@@ -590,7 +541,7 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={onClose}
+                  onClick={handleClose}
                   className="mr-2"
                 >
                   <X className="w-4 h-4" />
@@ -686,18 +637,37 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
                     </div>
                     
                     {/* File Upload Area */}
-                    <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-6 text-center">
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept=".pdf,.jpg,.jpeg,.png,.heic,.docx,.doc"
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          const titleInput = document.getElementById('title') as HTMLInputElement;
+                          const title = titleInput?.value || file.name;
+                          handleFileUpload(file, title, 'other');
+                        }
+                      }}
+                    />
+                    <div
+                      className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-6 text-center cursor-pointer hover:border-primary/50 transition-colors"
+                      onClick={() => fileInputRef.current?.click()}
+                    >
                       <Upload className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
                       <p className="text-sm text-muted-foreground mb-2">
                         Drop files here or click to browse
                       </p>
                       <p className="text-xs text-muted-foreground">
-                        Supports PDF, images, and documents up to 200MB
+                        Supports PDF, images, and documents up to 50MB
                       </p>
-                      <Button variant="outline" className="mt-2">
-                        <Camera className="w-4 h-4 mr-2" />
-                        Scan with camera
-                      </Button>
+                      {uploadingFile && (
+                        <div className="mt-3">
+                          <Progress value={uploadProgress} className="w-full h-2" />
+                          <p className="text-xs text-primary mt-1">Uploading... {uploadProgress}%</p>
+                        </div>
+                      )}
                     </div>
                     
                     {/* Advanced Options */}
@@ -718,11 +688,11 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
                       <Button variant="outline" onClick={() => setShowAddRecord(false)}>
                         Cancel
                       </Button>
-                      <Button onClick={() => {
-                        toast.success('Record added • Auto-tagged and searchable');
-                        setShowAddRecord(false);
-                      }}>
-                        Add Record
+                      <Button
+                        onClick={() => fileInputRef.current?.click()}
+                        disabled={uploadingFile}
+                      >
+                        {uploadingFile ? 'Uploading...' : 'Select File & Upload'}
                       </Button>
                     </div>
                   </div>
@@ -761,7 +731,7 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
         <div className="flex items-center gap-3 sm:gap-4">
           <div className="flex items-center gap-2">
             <Label className="text-sm">Sort:</Label>
-            <Select value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
+            <Select value={sortBy} onValueChange={(value: string) => setSortBy(value as 'newest' | 'oldest' | 'a-z' | 'z-a')}>
               <SelectTrigger className="w-24">
                 <SelectValue />
               </SelectTrigger>

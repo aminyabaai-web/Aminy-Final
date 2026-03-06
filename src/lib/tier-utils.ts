@@ -1151,3 +1151,20 @@ export function qualifiesForTrial(tier: TierType | undefined): boolean {
   // Only Free tier users qualify for the 7-day trial
   return tier === 'free' || !tier;
 }
+
+// Get tier usage limits for display
+export function getTierLimits(tier: TierType | undefined): {
+  messagesPerDay: number | null;
+  documents: number | null;
+  memoryFacts: number | null;
+  children: number | null;
+} {
+  const messageLimit = getAIMessageLimit(tier);
+  const childrenLimit = getMaxChildren(tier);
+  return {
+    messagesPerDay: messageLimit,
+    documents: tier === 'free' ? 5 : tier === 'starter' ? 20 : null,
+    memoryFacts: tier === 'free' ? 50 : tier === 'starter' ? 200 : null,
+    children: childrenLimit,
+  };
+}

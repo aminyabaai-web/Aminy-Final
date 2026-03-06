@@ -52,6 +52,7 @@ interface ManageCaregiversProps {
   onInvite?: (email: string, role: CaregiverRole) => void;
   onRemove?: (id: string) => void;
   onUpgrade?: () => void;
+  onCancel?: () => void;
 }
 
 // ============================================================================

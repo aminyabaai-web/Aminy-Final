@@ -11,7 +11,7 @@
  * - Resources library
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   ArrowLeft,
   Calendar,
@@ -30,7 +30,8 @@ import {
 import { TelehealthFlow } from './TelehealthFlow';
 import { QASessionsHub } from './QASessionsHub';
 import { PlaybooksLibrary } from './PlaybooksLibrary';
-import { DEFAULT_CONCERNS, MOCK_PROVIDERS } from '../../types/telehealth';
+import { DEFAULT_CONCERNS, Provider, PROVIDER_ROLE_DISPLAY } from '../../types/telehealth';
+import { supabase } from '../../utils/supabase/client';
 
 interface TelehealthHomeProps {
   onBack: () => void;
@@ -40,7 +41,7 @@ interface TelehealthHomeProps {
 }
 
 type HomeView = 'home' | 'flow' | 'qa-sessions' | 'playbooks';
-type FlowEntry = 'browse-concerns' | 'get-care' | 'care-plan';
+type FlowEntry = 'choose-path' | 'browse-concerns' | 'get-care' | 'care-plan';
 
 export function TelehealthHome({
   onBack,
@@ -50,14 +51,65 @@ export function TelehealthHome({
 }: TelehealthHomeProps) {
   const [currentView, setCurrentView] = useState<HomeView>('home');
   const [flowEntry, setFlowEntry] = useState<FlowEntry>('browse-concerns');
+  const [featuredProviders, setFeaturedProviders] = useState<Provider[]>([]);
+  const [isLoadingProviders, setIsLoadingProviders] = useState(true);
 
   // Featured concerns (subset for quick access)
   const featuredConcerns = DEFAULT_CONCERNS.slice(0, 4);
 
-  // Featured providers
-  const featuredProviders = MOCK_PROVIDERS.filter(p =>
-    p.licensedStates.includes(userState)
-  ).slice(0, 2);
+  // Fetch real providers from Supabase (same pattern as BookVisit.tsx)
+  useEffect(() => {
+    async function loadFeaturedProviders() {
+      try {
+        const { data, error } = await supabase
+          .from('provider_profiles')
+          .select('*')
+          .eq('is_active', true)
+          .eq('is_accepting_patients', true)
+          .order('rating', { ascending: false })
+          .limit(4);
+
+        if (!error && data && data.length > 0) {
+          const providers: Provider[] = data
+            .filter((p: Record<string, unknown>) => !userState || ((p.states_licensed as string[]) || []).includes(userState))
+            .slice(0, 2)
+            .map((p: Record<string, unknown>) => {
+              const firstName = (p.first_name as string) || ((p.name as string) || '').split(' ')[0] || 'Provider';
+              const lastName = (p.last_name as string) || ((p.name as string) || '').split(' ').slice(1).join(' ') || '';
+              const sessionRate = (p.session_rate as number) || 99;
+              return {
+                id: p.id as string,
+                firstName,
+                lastName,
+                role: (p.provider_type as Provider['role']) || 'bcba',
+                roleDisplayName: PROVIDER_ROLE_DISPLAY[p.provider_type as keyof typeof PROVIDER_ROLE_DISPLAY] || 'Provider',
+                credentials: (p.credentials as string) || '',
+                bio: (p.bio as string) || '',
+                licensedStates: (p.states_licensed as string[]) || [],
+                offersConsult: true,
+                offersDeepReview: true,
+                consultPrice: sessionRate,
+                deepReviewPrice: sessionRate * 2,
+                organization: 'independent' as const,
+                rating: parseFloat(String(p.rating)) || 4.5,
+                reviewCount: (p.review_count as number) || 0,
+                isActive: (p.is_active as boolean) ?? true,
+                acceptingNewPatients: (p.is_accepting_patients as boolean) ?? true,
+                createdAt: (p.created_at as string) || new Date().toISOString(),
+                updatedAt: (p.updated_at as string) || new Date().toISOString(),
+                avatarUrl: p.photo_url as string | undefined,
+              };
+            });
+          setFeaturedProviders(providers);
+        }
+      } catch {
+        // Supabase unavailable — featured providers section just won't show
+      } finally {
+        setIsLoadingProviders(false);
+      }
+    }
+    loadFeaturedProviders();
+  }, [userState]);
 
   const startFlow = (entry: FlowEntry) => {
     setFlowEntry(entry);
@@ -127,7 +179,7 @@ export function TelehealthHome({
         {/* Primary CTAs */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <button
-            onClick={() => startFlow('browse-concerns')}
+            onClick={() => startFlow('choose-path')}
             className="bg-white rounded-2xl border border-gray-100 p-4 text-left hover:shadow-md hover:border-[#0891b2]/30 transition-all"
           >
             <div className="w-12 h-12 bg-[#0891b2]/10 rounded-full flex items-center justify-center mb-3">
@@ -144,7 +196,7 @@ export function TelehealthHome({
             <div className="w-12 h-12 bg-[#0891b2]/10 rounded-full flex items-center justify-center mb-3">
               <MessageCircle className="w-6 h-6 text-[#0891b2]" />
             </div>
-            <h3 className="font-semibold text-gray-900">Ask Aminy</h3>
+            <h3 className="font-semibold text-gray-900">Aminy</h3>
             <p className="text-sm text-gray-500 mt-1">AI guidance 24/7</p>
           </button>
 

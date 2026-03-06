@@ -31,7 +31,7 @@ interface PullToRefreshState {
 // ============================================================================
 
 export function usePullToRefresh(
-  containerRef: React.RefObject<HTMLElement>,
+  containerRef: React.RefObject<HTMLElement | null>,
   options: PullToRefreshOptions
 ) {
   const {

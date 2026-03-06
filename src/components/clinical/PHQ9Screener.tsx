@@ -179,7 +179,7 @@ export function PHQ9Screener({ onComplete, onCancel, userName }: PHQ9ScreenerPro
   };
 
   const calculateResult = () => {
-    const totalScore = responses.reduce((sum, val) => sum + (val || 0), 0);
+    const totalScore = responses.reduce<number>((sum, val) => sum + (val || 0), 0);
     const { severity, label } = getSeverity(totalScore);
     const hasCriticalResponse = (responses[8] || 0) > 0;
 

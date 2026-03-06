@@ -24,6 +24,7 @@ interface ModerationQueueItem {
   flag_reason: string | null;
   flagged_by: string | null;
   ai_confidence: number | null;
+  ai_explanation: string | null;
   status: ModerationStatus;
   resolved_by: string | null;
   resolution_notes: string | null;
