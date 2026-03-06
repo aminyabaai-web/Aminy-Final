@@ -126,7 +126,7 @@ export const ProviderInfoCard = ({
   onSchedule,
   onStartCall
 }: {
-  provider?: any;
+  provider?: { name: string; credentials: string[]; specialty: string; availability: string };
   onSchedule?: () => void;
   onStartCall?: () => void;
 }) => (
@@ -177,7 +177,7 @@ export const AppointmentCard = ({
   onPrepare,
   onJoinSession
 }: {
-  appointment: any;
+  appointment: { title: string; status: string; date: string; time: string; provider: string; copay?: number; notes: string; canReschedule?: boolean };
   onReschedule?: () => void;
   onPrepare?: () => void;
   onJoinSession?: () => void;

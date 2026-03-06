@@ -14,9 +14,40 @@ import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { cn } from '../lib/utils';
 
+// Type for SpeechRecognition instance (not fully typed in all browsers)
+interface SpeechRecognitionInstance {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  onstart: (() => void) | null;
+  onend: (() => void) | null;
+  onerror: ((event: SpeechRecognitionErrorEvent) => void) | null;
+  onresult: ((event: SpeechRecognitionResultEvent) => void) | null;
+  start: () => void;
+  stop: () => void;
+}
+
+interface SpeechRecognitionErrorEvent {
+  error: string;
+}
+
+interface SpeechRecognitionResultEvent {
+  resultIndex: number;
+  results: SpeechRecognitionResultList;
+}
+
+interface SpeechRecognitionResultList {
+  length: number;
+  [index: number]: {
+    isFinal: boolean;
+    [index: number]: { transcript: string };
+  };
+}
+
 // Check for browser support
-const SpeechRecognition = typeof window !== 'undefined'
-  ? (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
+type SpeechRecognitionConstructor = new () => SpeechRecognitionInstance;
+const SpeechRecognition: SpeechRecognitionConstructor | null = typeof window !== 'undefined'
+  ? ((window as unknown as Record<string, unknown>).SpeechRecognition || (window as unknown as Record<string, unknown>).webkitSpeechRecognition) as SpeechRecognitionConstructor | null
   : null;
 
 interface VoiceInputProps {
@@ -38,7 +69,7 @@ export function VoiceInput({
   const [transcript, setTranscript] = useState('');
   const [error, setError] = useState<string | null>(null);
 
-  const recognitionRef = useRef<any>(null);
+  const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
 
   // Check if speech recognition is supported
   useEffect(() => {
@@ -83,7 +114,7 @@ export function VoiceInput({
       onListeningChange?.(false);
     };
 
-    recognition.onerror = (event: any) => {
+    recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
       console.error('Speech recognition error:', event.error);
       setIsListening(false);
       onListeningChange?.(false);
@@ -100,7 +131,7 @@ export function VoiceInput({
       }
     };
 
-    recognition.onresult = (event: any) => {
+    recognition.onresult = (event: SpeechRecognitionResultEvent) => {
       let finalTranscript = '';
       let interimTranscript = '';
 

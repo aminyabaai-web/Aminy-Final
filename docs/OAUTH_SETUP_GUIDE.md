@@ -94,7 +94,7 @@ This guide walks through setting up Google and Apple OAuth for Aminy.
 | Field | Value |
 |-------|-------|
 | Description | Aminy |
-| Bundle ID | com.aminy.app (Explicit) |
+| Bundle ID | com.aminy.ai (Explicit) |
 
 6. Scroll down and enable **Sign In with Apple**
 7. Click **Continue** → **Register**
@@ -117,7 +117,7 @@ This guide walks through setting up Google and Apple OAuth for Aminy.
 
 | Field | Value |
 |-------|-------|
-| Primary App ID | Select your App ID (com.aminy.app) |
+| Primary App ID | Select your App ID (com.aminy.ai) |
 | Domains | aminy-onboarding.vercel.app |
 | Return URLs | `https://YOUR_PROJECT.supabase.co/auth/v1/callback` |
 

@@ -37,6 +37,7 @@ import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { toast } from 'sonner';
+import { supabase } from '../utils/supabase/client';
 
 // Types
 interface CommunityPost {
@@ -97,6 +98,55 @@ interface BCBAQASession {
   questionsAnswered: number;
   isLive: boolean;
   isUpcoming: boolean;
+}
+
+// Row types for Supabase query results
+interface CommunityGroupRow {
+  id: string;
+  name: string;
+  location?: string;
+  member_count?: number;
+  topics?: string[];
+  meeting_frequency?: string;
+  is_virtual?: boolean;
+  next_meeting?: string;
+}
+
+interface CommunityEventRow {
+  id: string;
+  title: string;
+  host?: string;
+  host_credentials?: string;
+  event_date: string;
+  duration?: number;
+  attendee_count?: number;
+  max_attendees?: number;
+  event_type?: VirtualEvent['type'];
+  topics?: string[];
+  is_registered?: boolean;
+}
+
+interface ParentSpotlightRow {
+  id: string;
+  parent_name: string;
+  child_age: number;
+  achievement: string;
+  story: string;
+  strategy_used: string;
+  timeframe: string;
+  like_count?: number;
+  comment_count?: number;
+}
+
+interface BCBAQASessionRow {
+  id: string;
+  topic: string;
+  host: string;
+  host_credentials: string;
+  date: string;
+  duration?: number;
+  questions_answered?: number;
+  is_live?: boolean;
 }
 
 interface CommunityForYouProps {
@@ -287,12 +337,124 @@ export function CommunityForYou({
   const [likedSpotlights, setLikedSpotlights] = useState<Set<string>>(new Set());
   const [remindedQA, setRemindedQA] = useState<Set<string>>(new Set());
 
+  // Live data state (falls back to mocks)
+  const [liveGroups, setLiveGroups] = useState<LocalGroup[]>(MOCK_LOCAL_GROUPS);
+  const [liveEvents, setLiveEvents] = useState<VirtualEvent[]>(MOCK_EVENTS);
+  const [liveSpotlights, setLiveSpotlights] = useState<ParentSpotlight[]>(MOCK_SPOTLIGHTS);
+  const [liveQASessions, setLiveQASessions] = useState<BCBAQASession[]>(MOCK_QA_SESSIONS);
+  const [dataLoading, setDataLoading] = useState(true);
+
+  // Fetch community data from Supabase on mount, fall back to mocks
+  useEffect(() => {
+    async function fetchCommunityData() {
+      setDataLoading(true);
+      try {
+        // Fetch groups
+        const { data: groupsData, error: groupsErr } = await supabase
+          .from('community_groups')
+          .select('*')
+          .limit(10);
+        if (!groupsErr && groupsData && groupsData.length > 0) {
+          setLiveGroups((groupsData as CommunityGroupRow[]).map((g) => ({
+            id: g.id,
+            name: g.name,
+            location: g.location || 'Virtual',
+            memberCount: g.member_count || 0,
+            topics: g.topics || [],
+            meetingFrequency: g.meeting_frequency || 'Weekly',
+            isVirtual: g.is_virtual ?? true,
+            nextMeeting: g.next_meeting ? new Date(g.next_meeting) : undefined,
+          })));
+        } else {
+          console.warn('CommunityForYou: Using mock groups data', groupsErr);
+        }
+
+        // Fetch upcoming events
+        const { data: eventsData, error: eventsErr } = await supabase
+          .from('community_events')
+          .select('*')
+          .gte('event_date', new Date().toISOString())
+          .order('event_date', { ascending: true })
+          .limit(10);
+        if (!eventsErr && eventsData && eventsData.length > 0) {
+          setLiveEvents((eventsData as CommunityEventRow[]).map((e) => ({
+            id: e.id,
+            title: e.title,
+            host: e.host || 'Aminy Team',
+            hostCredentials: e.host_credentials,
+            date: new Date(e.event_date),
+            duration: e.duration || 60,
+            attendees: e.attendee_count || 0,
+            maxAttendees: e.max_attendees,
+            type: e.event_type || 'webinar',
+            topics: e.topics || [],
+            isRegistered: e.is_registered ?? false,
+          })));
+        } else {
+          console.warn('CommunityForYou: Using mock events data', eventsErr);
+        }
+
+        // Fetch parent spotlights
+        const { data: spotlightsData, error: spotlightsErr } = await supabase
+          .from('parent_spotlights')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .limit(10);
+        if (!spotlightsErr && spotlightsData && spotlightsData.length > 0) {
+          setLiveSpotlights((spotlightsData as ParentSpotlightRow[]).map((s) => ({
+            id: s.id,
+            parentName: s.parent_name,
+            childAge: s.child_age,
+            achievement: s.achievement,
+            story: s.story,
+            strategyUsed: s.strategy_used,
+            timeframe: s.timeframe,
+            likes: s.like_count || 0,
+            comments: s.comment_count || 0,
+          })));
+        } else {
+          console.warn('CommunityForYou: Using mock spotlights data', spotlightsErr);
+        }
+
+        // Fetch BCBA Q&A sessions
+        const { data: qaData, error: qaErr } = await supabase
+          .from('bcba_qa_sessions')
+          .select('*')
+          .order('date', { ascending: true })
+          .limit(10);
+        if (!qaErr && qaData && qaData.length > 0) {
+          const now = new Date();
+          setLiveQASessions((qaData as BCBAQASessionRow[]).map((q) => ({
+            id: q.id,
+            topic: q.topic,
+            host: q.host,
+            hostCredentials: q.host_credentials,
+            date: new Date(q.date),
+            duration: q.duration || 45,
+            questionsAnswered: q.questions_answered || 0,
+            isLive: q.is_live ?? false,
+            isUpcoming: new Date(q.date) > now,
+          })));
+        } else {
+          console.warn('CommunityForYou: Using mock Q&A sessions data', qaErr);
+        }
+      } catch (err) {
+        console.warn('CommunityForYou: Supabase fetch failed, using all mock data', err);
+        // All mocks are already the initial values, no need to reset
+      } finally {
+        setDataLoading(false);
+      }
+    }
+
+    fetchCommunityData();
+  }, []);
+
   // Filter groups by location
   const localGroups = useMemo(() => {
-    return MOCK_LOCAL_GROUPS.filter(
+    return liveGroups.filter(
       (group) => group.isVirtual || group.location.includes(userLocation.split(',')[0])
     );
-  }, [userLocation]);
+  }, [userLocation, liveGroups]);
 
   const handleSave = (postId: string) => {
     setSavedPosts((prev) => {
@@ -597,7 +759,7 @@ export function CommunityForYou({
         </Button>
       </div>
 
-      {MOCK_EVENTS.map((event) => (
+      {liveEvents.map((event) => (
         <Card key={event.id} className="p-4 hover:shadow-md transition-shadow">
           <div className="flex items-start justify-between gap-3 mb-3">
             <div className="flex-1">
@@ -677,7 +839,7 @@ export function CommunityForYou({
         Real wins from parents like you. Get inspired by their journeys.
       </p>
 
-      {MOCK_SPOTLIGHTS.map((spotlight) => (
+      {liveSpotlights.map((spotlight) => (
         <Card key={spotlight.id} className="p-4 hover:shadow-md transition-shadow bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/10 dark:to-orange-900/10 border-amber-200 dark:border-amber-800">
           <div className="flex items-start gap-3 mb-3">
             <div className="w-10 h-10 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center">
@@ -761,7 +923,7 @@ export function CommunityForYou({
         Free live sessions with certified BCBAs. Ask your questions, get expert answers.
       </p>
 
-      {MOCK_QA_SESSIONS.map((session) => (
+      {liveQASessions.map((session) => (
         <Card key={session.id} className="p-4 hover:shadow-md transition-shadow border-purple-200 dark:border-purple-800">
           <div className="flex items-start justify-between gap-3 mb-3">
             <div className="flex-1">
@@ -841,6 +1003,11 @@ export function CommunityForYou({
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-slate-900 pb-24">
+      {/* Demo Data Banner */}
+      <div className="bg-amber-50 dark:bg-amber-900/20 border-b border-amber-200 dark:border-amber-800 px-4 py-2 flex items-center gap-2">
+        <span className="text-amber-600 dark:text-amber-400 text-xs font-medium">Preview</span>
+        <span className="text-amber-700/70 dark:text-amber-300/70 text-xs">Community features shown with sample data. Groups and events coming soon.</span>
+      </div>
       {/* Header */}
       <div className="sticky top-0 z-10 bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
         <div className="max-w-2xl mx-auto px-4 py-4">

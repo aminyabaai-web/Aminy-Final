@@ -6,6 +6,7 @@ interface ChildProfileChipProps {
   showName?: boolean;
   className?: string;
   photoUrl?: string;
+  child?: { name: string; profileImage?: string };
 }
 
 export function ChildProfileChip({ 
@@ -14,7 +15,7 @@ export function ChildProfileChip({
   className = '',
   photoUrl 
 }: ChildProfileChipProps) {
-  const { childShort, child } = useDisplayNames();
+  const { childShort } = useDisplayNames();
   
   // Get first letter of child's name for avatar
   const initials = childShort.charAt(0).toUpperCase();
@@ -58,7 +59,7 @@ export function ChildProfileChip({
         {photoUrl ? (
           <img 
             src={photoUrl} 
-            alt={`${child}'s photo`}
+            alt={`${childShort}'s photo`}
             className="w-full h-full rounded-full object-cover"
           />
         ) : (

@@ -18,14 +18,28 @@ interface EnhancedScheduleViewProps {
   userTier: string;
   isStarter: boolean;
   onPaywallTrigger?: () => void;
-  mockAppointments: any[];
+  mockAppointments: {
+    id: string;
+    title: string;
+    date: string;
+    time: string;
+    type: string;
+    status: string;
+    provider: string;
+    notes: string;
+    insuranceStatus: string;
+    copay: number;
+    authorizationNumber?: string;
+    canReschedule: boolean;
+    rescheduleDeadline?: string | null;
+  }[];
 }
 
 export const EnhancedScheduleView: React.FC<EnhancedScheduleViewProps> = ({
   userTier,
   isStarter,
   onPaywallTrigger,
-  mockAppointments
+  mockAppointments = []
 }) => {
   const [showPreSessionChecklist, setShowPreSessionChecklist] = useState(false);
   const [showRescheduleModal, setShowRescheduleModal] = useState(false);
@@ -64,7 +78,8 @@ export const EnhancedScheduleView: React.FC<EnhancedScheduleViewProps> = ({
 
   const handleJoinSession = (appointmentId: string) => {
     const appointment = mockAppointments.find(apt => apt.id === appointmentId);
-    
+    if (!appointment) return;
+
     // Check if session is starting soon
     const appointmentDate = new Date(appointment.date + 'T' + appointment.time.split(' - ')[0]);
     const now = new Date();

@@ -21,6 +21,7 @@ import { Card } from './ui/card';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Progress } from './ui/progress';
+import { dataService } from '../lib/supabase-data';
 
 interface OutcomeMetric {
   label: string;
@@ -49,49 +50,92 @@ export function OutcomesDashboardWidget({
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Load real metrics from Supabase in production
-    // For now, simulate with realistic demo data
     const loadMetrics = async () => {
       setLoading(true);
+      try {
+        // Fetch real data from Supabase
+        const [goals, screenings, usage] = await Promise.all([
+          dataService.getTreatmentGoals(),
+          dataService.getScreeningResults(),
+          dataService.getDailyUsage(),
+        ]);
 
-      // Simulated data - replace with real Supabase queries
-      await new Promise(resolve => setTimeout(resolve, 500));
+        const builtMetrics: OutcomeMetric[] = [];
 
-      setMetrics([
-        {
-          label: 'Parent Stress',
-          value: 4.2,
-          previousValue: 6.1,
-          unit: '/10',
-          trend: 'down',
-          isPositive: true, // Lower stress is good
-          icon: Heart,
-          color: 'text-rose-500',
-        },
-        {
-          label: 'Routine Adherence',
-          value: 78,
-          previousValue: 62,
-          unit: '%',
-          trend: 'up',
-          isPositive: true,
-          icon: Target,
-          color: 'text-teal-500',
-        },
-        {
+        // Goals Progress — count completed/mastered goals
+        const completedGoals = goals.filter(g => g.status === 'mastered' || g.status === 'completed');
+        const inProgressGoals = goals.filter(g => g.status === 'in_progress');
+        const avgProgress = inProgressGoals.length > 0
+          ? Math.round(inProgressGoals.reduce((s, g) => s + g.current, 0) / inProgressGoals.length)
+          : 0;
+
+        builtMetrics.push({
           label: 'Goals Progress',
-          value: 3,
-          previousValue: 1,
-          unit: ' completed',
-          trend: 'up',
+          value: goals.length > 0 ? avgProgress : 0,
+          previousValue: 0,
+          unit: goals.length > 0 ? `% avg (${completedGoals.length} mastered)` : ' — add goals to track',
+          trend: goals.length > 0 ? 'up' : 'stable',
           isPositive: true,
           icon: Activity,
           color: 'text-blue-500',
-        },
-      ]);
+        });
 
-      setWeeklyStreak(12);
-      setLoading(false);
+        // Screening Trend — show latest screening score improvement
+        if (screenings.length >= 2) {
+          const latest = screenings[0];
+          const previous = screenings[1];
+          const change = latest.total_score - previous.total_score;
+          builtMetrics.push({
+            label: latest.instrument_name,
+            value: latest.total_score,
+            previousValue: previous.total_score,
+            unit: ` (${latest.risk_level})`,
+            trend: change < 0 ? 'down' : change > 0 ? 'up' : 'stable',
+            isPositive: change <= 0, // Lower screening scores generally mean lower risk
+            icon: Target,
+            color: 'text-teal-500',
+          });
+        } else if (screenings.length === 1) {
+          builtMetrics.push({
+            label: screenings[0].instrument_name,
+            value: screenings[0].total_score,
+            previousValue: screenings[0].total_score,
+            unit: ` (${screenings[0].risk_level})`,
+            trend: 'stable',
+            isPositive: true,
+            icon: Target,
+            color: 'text-teal-500',
+          });
+        }
+
+        // Treatment Goal Trend — show best-improving goal
+        const improvingGoals = inProgressGoals.filter(g => g.trend_direction === 'improving');
+        if (improvingGoals.length > 0) {
+          const best = improvingGoals.reduce((a, b) => (b.current - b.baseline) > (a.current - a.baseline) ? b : a);
+          builtMetrics.push({
+            label: best.title,
+            value: best.current,
+            previousValue: best.baseline,
+            unit: `% (from ${best.baseline}%)`,
+            trend: 'up',
+            isPositive: true,
+            icon: Heart,
+            color: 'text-rose-500',
+          });
+        }
+
+        setMetrics(builtMetrics);
+
+        // Approximate streak from usage (real streak computed by retention engine elsewhere)
+        setWeeklyStreak(usage?.message_count || 0 > 0 ? 1 : 0);
+      } catch (err) {
+        console.warn('[OutcomesWidget] Failed to load real data:', err);
+        // Show empty state rather than fake data
+        setMetrics([]);
+        setWeeklyStreak(0);
+      } finally {
+        setLoading(false);
+      }
     };
 
     loadMetrics();
@@ -142,16 +186,26 @@ export function OutcomesDashboardWidget({
   }
 
   if (compact) {
+    const topMetric = metrics[0];
+    const summaryText = topMetric
+      ? `${topMetric.label}: ${topMetric.value}${topMetric.unit.split('(')[0].trim()}`
+      : 'Track your progress with Aminy';
+    const subText = metrics.length > 0
+      ? `${metrics.length} metric${metrics.length > 1 ? 's' : ''} tracked`
+      : 'Complete screenings or set goals to start';
+
     return (
       <Card className="p-4 bg-gradient-to-r from-teal-50 to-blue-50 border-teal-200">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-teal-100 rounded-full">
-              <TrendingDown className="w-5 h-5 text-teal-600" />
+              {topMetric?.trend === 'up' && topMetric.isPositive
+                ? <TrendingUp className="w-5 h-5 text-teal-600" />
+                : <Activity className="w-5 h-5 text-teal-600" />}
             </div>
             <div>
-              <p className="font-medium text-teal-900">Your stress is down 31%</p>
-              <p className="text-sm text-teal-700">12-week streak of using Aminy</p>
+              <p className="font-medium text-teal-900">{summaryText}</p>
+              <p className="text-sm text-teal-700">{subText}</p>
             </div>
           </div>
           <Button variant="ghost" size="sm" onClick={onViewDetails}>
@@ -185,6 +239,13 @@ export function OutcomesDashboardWidget({
 
       {/* Metrics Grid */}
       <div className="p-3 sm:p-4">
+        {metrics.length === 0 && (
+          <div className="text-center py-6">
+            <Activity className="w-8 h-8 text-gray-300 mx-auto mb-2" />
+            <p className="text-sm font-medium text-gray-600">No outcomes data yet</p>
+            <p className="text-xs text-gray-400 mt-1">Complete a screening or set treatment goals to start tracking real progress.</p>
+          </div>
+        )}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
           {metrics.map((metric, index) => {
             const Icon = metric.icon;

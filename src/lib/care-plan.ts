@@ -47,7 +47,7 @@ export interface ActionItem {
   completedAt?: string;
   source: 'visit-summary' | 'ai-suggestion' | 'self-created' | 'provider';
   childId?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   createdAt: string;
   updatedAt: string;
 }
@@ -64,9 +64,11 @@ export interface CarePlanGoal {
   targetProgress: number;
   unit?: string;
   status: 'active' | 'completed' | 'paused' | 'archived';
+  /** Controls display order within each status group (lower = higher) */
+  orderIndex?: number;
   startedAt: string;
   completedAt?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   createdAt: string;
   updatedAt: string;
 }
@@ -104,68 +106,70 @@ const STORAGE_KEYS = {
 // Converters
 // ============================================================================
 
-function dbRowToVisitSummary(row: any): VisitSummary {
+function dbRowToVisitSummary(row: Record<string, unknown>): VisitSummary {
+  const providers = row.providers as { id: string; first_name: string; last_name: string; title: string; specialty: string; avatar_url?: string } | null;
   return {
-    id: row.id,
-    userId: row.user_id,
-    appointmentId: row.appointment_id,
-    providerId: row.provider_id,
-    reasonForVisit: row.reason_for_visit,
-    whatWeDiscussed: row.what_we_discussed || [],
-    planForNext7Days: row.plan_for_next_7_days || [],
-    whatToTrack: row.what_to_track || [],
-    followUpRecommendation: row.follow_up_recommendation,
-    childId: row.child_id,
-    createdAt: row.created_at,
-    updatedAt: row.updated_at,
-    provider: row.providers ? {
-      id: row.providers.id,
-      firstName: row.providers.first_name,
-      lastName: row.providers.last_name,
-      title: row.providers.title,
-      specialty: row.providers.specialty,
-      avatarUrl: row.providers.avatar_url,
+    id: row.id as string,
+    userId: row.user_id as string,
+    appointmentId: row.appointment_id as string,
+    providerId: row.provider_id as string,
+    reasonForVisit: row.reason_for_visit as string,
+    whatWeDiscussed: (row.what_we_discussed || []) as string[],
+    planForNext7Days: (row.plan_for_next_7_days || []) as string[],
+    whatToTrack: (row.what_to_track || []) as string[],
+    followUpRecommendation: row.follow_up_recommendation as string | undefined,
+    childId: row.child_id as string | undefined,
+    createdAt: row.created_at as string,
+    updatedAt: row.updated_at as string,
+    provider: providers ? {
+      id: providers.id,
+      firstName: providers.first_name,
+      lastName: providers.last_name,
+      title: providers.title,
+      specialty: providers.specialty,
+      avatarUrl: providers.avatar_url,
     } : undefined,
   };
 }
 
-function dbRowToActionItem(row: any): ActionItem {
+function dbRowToActionItem(row: Record<string, unknown>): ActionItem {
   return {
-    id: row.id,
-    userId: row.user_id,
-    visitSummaryId: row.visit_summary_id,
-    title: row.title,
-    description: row.description,
-    dueDate: row.due_date,
-    priority: row.priority || 'medium',
-    completed: row.completed || false,
-    completedAt: row.completed_at,
-    source: row.source,
-    childId: row.child_id,
-    metadata: row.metadata,
-    createdAt: row.created_at,
-    updatedAt: row.updated_at,
+    id: row.id as string,
+    userId: row.user_id as string,
+    visitSummaryId: row.visit_summary_id as string | undefined,
+    title: row.title as string,
+    description: row.description as string | undefined,
+    dueDate: row.due_date as string | undefined,
+    priority: (row.priority || 'medium') as 'low' | 'medium' | 'high',
+    completed: (row.completed || false) as boolean,
+    completedAt: row.completed_at as string | undefined,
+    source: row.source as ActionItem['source'],
+    childId: row.child_id as string | undefined,
+    metadata: row.metadata as Record<string, unknown> | undefined,
+    createdAt: row.created_at as string,
+    updatedAt: row.updated_at as string,
   };
 }
 
-function dbRowToGoal(row: any): CarePlanGoal {
+function dbRowToGoal(row: Record<string, unknown>): CarePlanGoal {
   return {
-    id: row.id,
-    userId: row.user_id,
-    childId: row.child_id,
-    title: row.title,
-    description: row.description,
-    category: row.category,
-    targetFrequency: row.target_frequency,
-    currentProgress: row.current_progress || 0,
-    targetProgress: row.target_progress || 100,
-    unit: row.unit,
-    status: row.status || 'active',
-    startedAt: row.started_at,
-    completedAt: row.completed_at,
-    metadata: row.metadata,
-    createdAt: row.created_at,
-    updatedAt: row.updated_at,
+    id: row.id as string,
+    userId: row.user_id as string,
+    childId: row.child_id as string | undefined,
+    title: row.title as string,
+    description: row.description as string | undefined,
+    category: row.category as GoalCategory,
+    targetFrequency: row.target_frequency as string | undefined,
+    currentProgress: (row.current_progress || 0) as number,
+    targetProgress: (row.target_progress || 100) as number,
+    unit: row.unit as string | undefined,
+    status: (row.status || 'active') as CarePlanGoal['status'],
+    orderIndex: row.order_index as number | undefined,
+    startedAt: row.started_at as string,
+    completedAt: row.completed_at as string | undefined,
+    metadata: row.metadata as Record<string, unknown> | undefined,
+    createdAt: row.created_at as string,
+    updatedAt: row.updated_at as string,
   };
 }
 
@@ -526,6 +530,7 @@ export async function getGoals(userId: string, options?: {
       .from('care_plan_goals')
       .select('*')
       .eq('user_id', userId)
+      .order('order_index', { ascending: true, nullsFirst: false })
       .order('created_at', { ascending: false });
 
     if (options?.status) {
@@ -711,6 +716,54 @@ export async function updateGoalStatus(
 }
 
 // ============================================================================
+// Reorder Goals
+// ============================================================================
+
+/**
+ * Batch-update the orderIndex of goals so they persist in the user's
+ * preferred order. The `goalIds` array represents the full ordered list;
+ * each goal receives an orderIndex equal to its position in the array.
+ *
+ * Falls back to localStorage when Supabase is unavailable.
+ */
+export async function reorderGoals(userId: string, goalIds: string[]): Promise<void> {
+  try {
+    // Build an array of update promises — one per goal
+    const updates = goalIds.map((goalId, index) =>
+      supabase
+        .from('care_plan_goals')
+        .update({ order_index: index })
+        .eq('id', goalId)
+        .eq('user_id', userId)
+    );
+
+    // Execute all updates concurrently
+    const results = await Promise.all(updates);
+
+    // Check for errors in any of the updates
+    const firstError = results.find(r => r.error);
+    if (firstError?.error) throw firstError.error;
+  } catch (error) {
+    console.warn('[CarePlan] Supabase error reordering goals, using localStorage:', error);
+
+    // Fallback: update orderIndex in the local store
+    const goals = getLocalGoals(userId);
+    const reordered = goals.map(goal => {
+      const newIndex = goalIds.indexOf(goal.id);
+      return {
+        ...goal,
+        orderIndex: newIndex >= 0 ? newIndex : undefined,
+        updatedAt: new Date().toISOString(),
+      };
+    });
+
+    // Sort by the new orderIndex before saving
+    reordered.sort((a, b) => (a.orderIndex ?? Infinity) - (b.orderIndex ?? Infinity));
+    saveLocalGoals(reordered);
+  }
+}
+
+// ============================================================================
 // Summary
 // ============================================================================
 
@@ -725,12 +778,13 @@ export async function getCarePlanSummary(userId: string): Promise<CarePlanSummar
 
     if (error) throw error;
 
+    const result = data as Record<string, unknown>;
     return {
-      totalSummaries: data.total_summaries || 0,
-      totalActionItems: data.total_action_items || 0,
-      completedActionItems: data.completed_action_items || 0,
-      activeGoals: data.active_goals || 0,
-      lastVisitDate: data.last_visit_date,
+      totalSummaries: (result.total_summaries as number) || 0,
+      totalActionItems: (result.total_action_items as number) || 0,
+      completedActionItems: (result.completed_action_items as number) || 0,
+      activeGoals: (result.active_goals as number) || 0,
+      lastVisitDate: result.last_visit_date as string | undefined,
     };
   } catch (error) {
     console.warn('[CarePlan] Supabase error getting summary, calculating locally:', error);
@@ -845,6 +899,7 @@ export default {
   createGoal,
   updateGoalProgress,
   updateGoalStatus,
+  reorderGoals,
   getCarePlanSummary,
   useCarePlan,
 };

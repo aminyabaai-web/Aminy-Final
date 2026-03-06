@@ -17,9 +17,18 @@ import {
 } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 
+interface MoreMenuItem {
+  id: string;
+  icon: React.ComponentType<{ className?: string; strokeWidth?: number }>;
+  label: string;
+  sublabel: string;
+  destination: string;
+  analytics: string;
+}
+
 interface MorePageProps {
   onNavigate: (destination: string) => void;
-  onAnalytics: (event: string, data: any) => void;
+  onAnalytics: (event: string, data: Record<string, string>) => void;
 }
 
 export function MorePage({ onNavigate, onAnalytics }: MorePageProps) {
@@ -154,7 +163,7 @@ export function MorePage({ onNavigate, onAnalytics }: MorePageProps) {
     }
   ];
 
-  const handleItemClick = (item: any) => {
+  const handleItemClick = (item: MoreMenuItem) => {
     try {
       onAnalytics('more_item_opened', { item: item.analytics });
       onNavigate(item.destination);
@@ -163,14 +172,14 @@ export function MorePage({ onNavigate, onAnalytics }: MorePageProps) {
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent, item: any) => {
+  const handleKeyDown = (e: React.KeyboardEvent, item: MoreMenuItem) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       handleItemClick(item);
     }
   };
 
-  const MenuItem = ({ item, isFirst = false }: { item: any; isFirst?: boolean }) => {
+  const MenuItem = ({ item, isFirst = false }: { item: MoreMenuItem; isFirst?: boolean }) => {
     const Icon = item.icon;
     
     return (

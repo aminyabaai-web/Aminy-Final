@@ -7,7 +7,7 @@
  * 3. Show confirmation success
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   ArrowLeft,
   Video,
@@ -45,11 +45,19 @@ import {
   sendAppointmentConfirmationEmail
 } from '../../lib/notification-system';
 import {
+  scheduleNotification,
+} from '../../lib/push-notifications';
+import {
   addToCalendar,
   CALENDAR_OPTIONS,
   CalendarType,
   createCalendarEventFromAppointment
 } from '../../lib/calendar-service';
+import {
+  isCalendarConnected,
+  syncAppointmentToCalendar,
+} from '../../lib/google-calendar-sync';
+import { supabase } from '../../utils/supabase/client';
 
 interface AppointmentConfirmationProps {
   provider: Provider;
@@ -78,14 +86,48 @@ export function AppointmentConfirmationScreen({
   const [promoApplied, setPromoApplied] = useState<string | null>(null);
   const [promoError, setPromoError] = useState<string | null>(null);
   const [showCalendarOptions, setShowCalendarOptions] = useState(false);
+  const [calendarAutoSynced, setCalendarAutoSynced] = useState(false);
 
   const visitConfig = VISIT_TYPES[visitType];
 
   // Calculate price with discounts
   // Check membership from intake data (intake contains user subscription info)
   const priceType: VisitPriceType = visitType === 'consult' ? 'consult' : 'extended';
-  const isMember = intake?.userTier && intake.userTier !== 'free';
-  const pricing = calculateVisitPrice(priceType, isMember, promoApplied || undefined);
+  const isMember = intake?.userTier ? intake.userTier !== 'free' : false;
+  const [pricing, setPricing] = useState<{ subtotal: number; discount: number; total: number; breakdown: string[] }>({ subtotal: 0, discount: 0, total: 0, breakdown: [] });
+
+  useEffect(() => {
+    calculateVisitPrice(priceType, isMember as boolean, promoApplied || undefined).then(setPricing);
+  }, [priceType, isMember, promoApplied]);
+
+  // Auto-sync to Google Calendar when appointment is confirmed
+  useEffect(() => {
+    if (currentStep !== 'success' || !appointmentId || calendarAutoSynced) return;
+
+    const autoSync = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+
+        const connected = await isCalendarConnected(user.id);
+        if (connected) {
+          const result = await syncAppointmentToCalendar(appointmentId);
+          if (result.success) {
+            if (import.meta.env.DEV) console.log('Appointment auto-synced to Google Calendar:', result.eventId);
+          } else {
+            console.warn('Calendar auto-sync failed:', result.error);
+          }
+        }
+      } catch (err) {
+        console.warn('Calendar auto-sync error:', err);
+      } finally {
+        setCalendarAutoSynced(true);
+      }
+    };
+
+    autoSync();
+  }, [currentStep, appointmentId, calendarAutoSynced]);
+
   const price = pricing.total / 100; // Convert from cents to dollars
 
   const formatDate = (isoString: string) => {
@@ -106,10 +148,10 @@ export function AppointmentConfirmationScreen({
     });
   };
 
-  const handleApplyPromo = () => {
+  const handleApplyPromo = async () => {
     if (!promoCode.trim()) return;
 
-    const result = validatePromoCode(promoCode);
+    const result = await validatePromoCode(promoCode);
     if (result.valid) {
       setPromoApplied(promoCode.toUpperCase());
       setPromoError(null);
@@ -127,9 +169,10 @@ export function AppointmentConfirmationScreen({
     setIsProcessing(true);
 
     try {
-      // Get user data (in production, from auth context)
-      const userId = localStorage.getItem('user-id') || 'user-temp';
-      const userEmail = localStorage.getItem('user-email') || 'user@example.com';
+      // Get real user data from Supabase auth
+      const { data: { user } } = await supabase.auth.getUser();
+      const userId = user?.id || localStorage.getItem('user-id') || 'user-temp';
+      const userEmail = user?.email || localStorage.getItem('user-email') || 'user@example.com';
 
       // Store pending appointment info for after payment
       const pendingAppointment = {
@@ -154,9 +197,49 @@ export function AppointmentConfirmationScreen({
         providerId: provider.id,
         slotId: slot.id,
         scheduledAt: slot.startTime,
-        isMember: false, // TODO: Check actual membership status
+        isMember: isMember || false,
         promoCode: promoApplied || undefined,
       });
+
+      // Schedule push notification reminders for the appointment
+      // (fire-and-forget — don't block the Stripe redirect)
+      const appointmentDate = new Date(slot.startTime);
+      const providerFullName = `${provider.firstName} ${provider.lastName}`;
+
+      scheduleAppointmentReminders(
+        `pending-${Date.now()}`,
+        userId,
+        userEmail,
+        undefined, // phone — not collected in this flow
+        appointmentDate,
+        providerFullName,
+      ).catch((err) => console.error('Failed to schedule appointment reminders:', err));
+
+      // Also schedule a push notification 1 hour before via push-notifications system
+      const oneHourBefore = new Date(appointmentDate.getTime() - 60 * 60 * 1000);
+      if (oneHourBefore > new Date()) {
+        scheduleNotification(userId, {
+          userId,
+          title: 'Appointment in 1 hour',
+          body: `Your appointment with ${providerFullName} starts in 1 hour. Get ready!`,
+          scheduledFor: oneHourBefore,
+          type: 'custom',
+          data: { providerName: providerFullName, visitType },
+        }).catch((err) => console.error('Failed to schedule push reminder:', err));
+      }
+
+      // Send confirmation email
+      sendAppointmentConfirmationEmail(userEmail, {
+        userName: 'there',
+        providerName: providerFullName,
+        appointmentDate: appointmentDate.toLocaleDateString('en-US', {
+          weekday: 'long', month: 'long', day: 'numeric', year: 'numeric'
+        }),
+        appointmentTime: appointmentDate.toLocaleTimeString('en-US', {
+          hour: 'numeric', minute: '2-digit', hour12: true
+        }),
+        visitType: visitConfig.displayName,
+      }).catch((err) => console.error('Failed to send confirmation email:', err));
 
       // Redirect to Stripe Checkout
       if (checkout.url) {
@@ -164,10 +247,10 @@ export function AppointmentConfirmationScreen({
       } else {
         throw new Error('Failed to create payment session');
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Payment error:', error);
       setCurrentStep('payment');
-      alert(error?.message || 'Unable to process payment. Please try again.');
+      alert(error instanceof Error ? error.message : 'Unable to process payment. Please try again.');
     } finally {
       setIsProcessing(false);
     }
@@ -328,7 +411,7 @@ export function AppointmentConfirmationScreen({
             </div>
 
             {/* Show discounts */}
-            {pricing.breakdown.map((line, idx) => (
+            {pricing.breakdown.map((line: string, idx: number) => (
               <div key={idx} className="flex items-center justify-between text-sm text-green-600">
                 <span>{line.split(':')[0]}</span>
                 <span>{line.split(':')[1]}</span>

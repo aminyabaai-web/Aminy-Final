@@ -18,7 +18,7 @@ const TWILIO_ACCOUNT_SID = Deno.env.get("TWILIO_ACCOUNT_SID");
 const TWILIO_AUTH_TOKEN = Deno.env.get("TWILIO_AUTH_TOKEN");
 const TWILIO_PHONE_NUMBER = Deno.env.get("TWILIO_PHONE_NUMBER");
 const SENDGRID_API_KEY = Deno.env.get("SENDGRID_API_KEY");
-const FROM_EMAIL = Deno.env.get("FROM_EMAIL") || "noreply@aminy.app";
+const FROM_EMAIL = Deno.env.get("FROM_EMAIL") || "noreply@aminy.ai";
 
 // Initialize clients
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
@@ -26,9 +26,9 @@ const stripe = new Stripe(STRIPE_SECRET_KEY, { apiVersion: "2023-10-16" });
 
 // CORS headers - restrict to app domain in production
 const ALLOWED_ORIGINS = [
-  'https://aminy.app',
-  'https://www.aminy.app',
-  'https://app.aminy.app',
+  'https://aminy.ai',
+  'https://www.aminy.ai',
+  'https://app.aminy.ai',
   ...(Deno.env.get('ENVIRONMENT') !== 'production' ? ['http://localhost:3000', 'http://localhost:5173'] : []),
 ];
 

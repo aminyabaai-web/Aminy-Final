@@ -20,6 +20,8 @@ import { Separator } from './ui/separator';
 import { Checkbox } from './ui/checkbox';
 import { Label } from './ui/label';
 import { toast } from 'sonner';
+import { sendMessageToClaude } from '../lib/ai-engine/claude-client';
+import { getCurrentContext } from '../lib/ai-engine';
 import {
   FileText,
   Sparkles,
@@ -268,10 +270,81 @@ export function BCBANotesApproval({
 
     setIsProcessing(true);
 
-    // Simulate AI processing
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    let processedNotes: AIProcessedNote;
 
-    const processedNotes = generateMockAIProcessedNotes();
+    try {
+      const context = getCurrentContext();
+      const systemPrompt = `You are a clinical AI assistant for Aminy, a behavioral wellness app for neurodivergent families. Given raw BCBA clinical notes, create a parent-friendly summary and actionable recommendations.
+
+Return your response as JSON (and ONLY JSON, no markdown fences) with this exact structure:
+{
+  "summary": "A parent-friendly summary (2-3 sentences, no clinical jargon, warm and encouraging tone)",
+  "keyTakeaways": ["3-5 bullet points highlighting key observations and progress"],
+  "recommendations": [
+    {
+      "id": "rec-1",
+      "title": "Short action title",
+      "description": "Parent-friendly description of what to do and why",
+      "category": "routine|strategy|goal|resource",
+      "priority": "high|medium|low"
+    }
+  ],
+  "suggestedCarePlanUpdates": [
+    {
+      "id": "update-1",
+      "area": "Area of care plan",
+      "currentState": "What the current goal/status is",
+      "proposedChange": "What the new goal/status should be",
+      "rationale": "Parent-friendly explanation of why this change is recommended"
+    }
+  ],
+  "encouragement": "A warm, personal encouragement message to the parent (2-3 sentences)"
+}
+
+Important guidelines:
+- Use warm, supportive language throughout — no clinical jargon
+- Reference the child by name when possible
+- Make recommendations specific and actionable
+- Include 3-5 recommendations and 1-3 care plan updates
+- The encouragement should feel personal and celebrate the parent's effort`;
+
+      const childName = note?.childName || context.childName || 'the child';
+      const parentName = note?.parentName || context.parentName || 'the parent';
+
+      const response = await sendMessageToClaude(
+        [{ role: 'user', content: `Process these BCBA clinical session notes for ${childName} (parent: ${parentName}):\n\n${rawNotes}` }],
+        context,
+        { systemPrompt, maxTokens: 2000, temperature: 0.7 }
+      );
+
+      // Parse the JSON response — handle possible markdown code fences
+      const jsonStr = response.replace(/^```(?:json)?\s*/, '').replace(/\s*```$/, '').trim();
+      const parsed = JSON.parse(jsonStr);
+
+      processedNotes = {
+        summary: parsed.summary || '',
+        keyTakeaways: Array.isArray(parsed.keyTakeaways) ? parsed.keyTakeaways : [],
+        recommendations: Array.isArray(parsed.recommendations) ? parsed.recommendations.map((r: Record<string, unknown>, i: number) => ({
+          id: (r.id as string) || `rec-${i + 1}`,
+          title: (r.title as string) || '',
+          description: (r.description as string) || '',
+          category: (['routine', 'strategy', 'goal', 'resource'].includes(r.category as string) ? r.category : 'strategy') as Recommendation['category'],
+          priority: (['high', 'medium', 'low'].includes(r.priority as string) ? r.priority : 'medium') as Recommendation['priority'],
+        })) : [],
+        suggestedCarePlanUpdates: Array.isArray(parsed.suggestedCarePlanUpdates) ? parsed.suggestedCarePlanUpdates.map((u: Record<string, unknown>, i: number) => ({
+          id: (u.id as string) || `update-${i + 1}`,
+          area: (u.area as string) || '',
+          currentState: (u.currentState as string) || '',
+          proposedChange: (u.proposedChange as string) || '',
+          rationale: (u.rationale as string) || '',
+        })) : [],
+        encouragement: parsed.encouragement || '',
+      };
+    } catch (error) {
+      console.warn('AI processing failed, falling back to mock data:', error);
+      processedNotes = generateMockAIProcessedNotes();
+      toast.info('Using preview data — AI service temporarily unavailable');
+    }
 
     setNote(prev => prev ? {
       ...prev,

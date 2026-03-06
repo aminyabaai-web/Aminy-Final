@@ -33,6 +33,7 @@ export function PaymentConfirmation({
     starter: 'Starter',
     core: 'Core',
     pro: 'Pro',
+    proplus: 'Pro+',
   };
 
   if (status === 'success') {

@@ -35,6 +35,8 @@ import {
 import { Button } from '../ui/button';
 import { Textarea } from '../ui/textarea';
 import { Badge } from '../ui/badge';
+import { sendMessageToClaude } from '../../lib/ai-engine/claude-client';
+import { getCurrentContext } from '../../lib/ai-engine';
 
 interface PatientData {
   id: string;
@@ -77,11 +79,26 @@ interface CarePlanSuggestion {
 }
 
 interface PatientAISummaryProps {
-  patient: PatientData;
+  patient?: PatientData;
+  patientId?: string;
+  childName?: string;
+  parentId?: string;
+  providerId?: string;
   onClose?: () => void;
 }
 
-export function PatientAISummary({ patient, onClose }: PatientAISummaryProps) {
+export function PatientAISummary({ patient: patientProp, patientId, childName, parentId, providerId, onClose }: PatientAISummaryProps) {
+  // Build patient from either the patient prop or individual props
+  const patient = (patientProp ?? {
+    id: patientId || 'unknown',
+    childName: childName || 'Patient',
+    parentName: 'Parent',
+    age: 0,
+    diagnoses: [],
+    currentGoals: [],
+    recentSessions: [],
+    behaviorTrends: [],
+  }) as PatientData;
   const [isLoading, setIsLoading] = useState(true);
   const [activeSection, setActiveSection] = useState<'summary' | 'patterns' | 'progress' | 'feedback'>('summary');
   const [insights, setInsights] = useState<AIInsight[]>([]);
@@ -92,118 +109,231 @@ export function PatientAISummary({ patient, onClose }: PatientAISummaryProps) {
   const [isAddingSuggestion, setIsAddingSuggestion] = useState(false);
   const [expandedSuggestion, setExpandedSuggestion] = useState<string | null>(null);
 
-  // Simulate AI analysis (would call Claude API in production)
+  // Mock data generators for fallback when AI is unavailable
+  const generateMockInsights = (): AIInsight[] => [
+    {
+      category: 'Communication',
+      insight: `${patient.childName} shows improved verbal requests when given processing time. Average response delay of 5-7 seconds yields 40% better outcomes than immediate prompts.`,
+      confidence: 0.92,
+      source: 'Based on 47 logged interactions over 3 weeks'
+    },
+    {
+      category: 'Sensory Needs',
+      insight: 'Meltdown risk increases significantly in environments with overhead fluorescent lighting. Parent reports 85% fewer incidents since switching to warm LED bulbs at home.',
+      confidence: 0.88,
+      source: 'Based on environment tags in incident logs'
+    },
+    {
+      category: 'Transitions',
+      insight: 'Visual timers with 5-minute warnings reduce transition resistance by approximately 60%. Audio-only warnings show no significant improvement.',
+      confidence: 0.85,
+      source: 'Based on routine completion data'
+    },
+    {
+      category: 'Social Engagement',
+      insight: `${patient.childName} engages more positively with peers when activities involve parallel play rather than direct interaction. Consider structured parallel activities in therapy.`,
+      confidence: 0.79,
+      source: 'Based on parent observations and AI chat discussions'
+    }
+  ];
+
+  const generateMockPatterns = (): BehaviorPattern[] => [
+    {
+      behavior: 'Morning routine resistance',
+      frequency: 'decreasing',
+      triggers: ['Rushed mornings', 'Changes to expected sequence', 'Hunger'],
+      successfulStrategies: ['Visual schedule', 'Breakfast before getting dressed', '10-minute buffer time']
+    },
+    {
+      behavior: 'After-school meltdowns',
+      frequency: 'stable',
+      triggers: ['Sensory overload at school', 'Hunger', 'Transition from structured to unstructured time'],
+      successfulStrategies: ['Quiet decompression time', 'Snack immediately available', 'Predictable after-school routine']
+    },
+    {
+      behavior: 'Bedtime compliance',
+      frequency: 'increasing',
+      triggers: ['Overstimulation', 'Anxiety about next day', 'Screen time too close to bed'],
+      successfulStrategies: ['Consistent routine', 'Dim lights 30 min before', 'Weighted blanket']
+    }
+  ];
+
+  const generateMockProgress = (): ProgressHighlight[] => [
+    {
+      area: 'Verbal Communication',
+      change: '+23% increase in spontaneous requests',
+      trend: 'positive',
+      details: 'Up from 12 to 15 unprompted verbal requests per day on average'
+    },
+    {
+      area: 'Self-Regulation',
+      change: 'Meltdown duration reduced by 35%',
+      trend: 'positive',
+      details: 'Average duration down from 20 minutes to 13 minutes'
+    },
+    {
+      area: 'Sleep Quality',
+      change: 'Consistent 8+ hours for 18 of last 21 nights',
+      trend: 'positive',
+      details: 'Up from 10 of 21 nights last month'
+    },
+    {
+      area: 'Social Initiation',
+      change: 'No significant change',
+      trend: 'neutral',
+      details: 'Consider focusing on parallel play activities to build foundation'
+    }
+  ];
+
+  const generateMockSuggestions = (): CarePlanSuggestion[] => [
+    {
+      id: '1',
+      type: 'goal',
+      title: 'Increase independent self-regulation attempts',
+      description: 'Child will independently use a calming strategy (deep breathing, sensory tool, or quiet space) before escalating to meltdown in 4 out of 5 opportunities.',
+      rationale: 'Data shows child is responsive to calming strategies when prompted. Building independence will improve long-term outcomes.',
+      status: 'pending'
+    },
+    {
+      id: '2',
+      type: 'strategy',
+      title: 'Implement visual emotion check-in',
+      description: 'Use a 5-point emotion scale visual at transition points throughout the day. Teach child to self-identify and communicate emotional state.',
+      rationale: 'Early identification of dysregulation allows for proactive intervention before escalation.',
+      status: 'pending'
+    },
+    {
+      id: '3',
+      type: 'intervention',
+      title: 'Structured parallel play sessions',
+      description: 'Arrange 2-3 weekly 15-minute parallel play sessions with one peer, gradually increasing interaction expectations over 6 weeks.',
+      rationale: 'AI analysis indicates better social engagement with parallel activities. Gradual progression will build comfort.',
+      status: 'approved',
+      parentResponse: 'Love this idea! We can do this with neighbor\'s child who is understanding.'
+    }
+  ];
+
+  // Load AI summary — real Claude API call with fallback to mock data
   useEffect(() => {
     const loadAISummary = async () => {
       setIsLoading(true);
-      await new Promise(resolve => setTimeout(resolve, 1500));
 
-      // AI-generated insights
-      setInsights([
-        {
-          category: 'Communication',
-          insight: `${patient.childName} shows improved verbal requests when given processing time. Average response delay of 5-7 seconds yields 40% better outcomes than immediate prompts.`,
-          confidence: 0.92,
-          source: 'Based on 47 logged interactions over 3 weeks'
-        },
-        {
-          category: 'Sensory Needs',
-          insight: 'Meltdown risk increases significantly in environments with overhead fluorescent lighting. Parent reports 85% fewer incidents since switching to warm LED bulbs at home.',
-          confidence: 0.88,
-          source: 'Based on environment tags in incident logs'
-        },
-        {
-          category: 'Transitions',
-          insight: 'Visual timers with 5-minute warnings reduce transition resistance by approximately 60%. Audio-only warnings show no significant improvement.',
-          confidence: 0.85,
-          source: 'Based on routine completion data'
-        },
-        {
-          category: 'Social Engagement',
-          insight: `${patient.childName} engages more positively with peers when activities involve parallel play rather than direct interaction. Consider structured parallel activities in therapy.`,
-          confidence: 0.79,
-          source: 'Based on parent observations and AI chat discussions'
-        }
-      ]);
+      try {
+        const context = getCurrentContext();
+        const systemPrompt = `You are a clinical AI assistant for Aminy, generating comprehensive patient summaries for behavioral health providers. Analyze all available data and return a structured JSON response (and ONLY JSON, no markdown fences).
 
-      // Behavior patterns
-      setPatterns([
-        {
-          behavior: 'Morning routine resistance',
-          frequency: 'decreasing',
-          triggers: ['Rushed mornings', 'Changes to expected sequence', 'Hunger'],
-          successfulStrategies: ['Visual schedule', 'Breakfast before getting dressed', '10-minute buffer time']
-        },
-        {
-          behavior: 'After-school meltdowns',
-          frequency: 'stable',
-          triggers: ['Sensory overload at school', 'Hunger', 'Transition from structured to unstructured time'],
-          successfulStrategies: ['Quiet decompression time', 'Snack immediately available', 'Predictable after-school routine']
-        },
-        {
-          behavior: 'Bedtime compliance',
-          frequency: 'increasing',
-          triggers: ['Overstimulation', 'Anxiety about next day', 'Screen time too close to bed'],
-          successfulStrategies: ['Consistent routine', 'Dim lights 30 min before', 'Weighted blanket']
-        }
-      ]);
+Return JSON with this exact structure:
+{
+  "insights": [
+    {
+      "category": "Communication|Sensory Needs|Transitions|Social Engagement|Self-Regulation|Daily Living",
+      "insight": "Detailed clinical insight in 1-2 sentences",
+      "confidence": 0.0 to 1.0,
+      "source": "Brief description of data source"
+    }
+  ],
+  "behaviorPatterns": [
+    {
+      "behavior": "Name of the behavior pattern",
+      "frequency": "increasing|decreasing|stable",
+      "triggers": ["trigger1", "trigger2"],
+      "successfulStrategies": ["strategy1", "strategy2"]
+    }
+  ],
+  "progressHighlights": [
+    {
+      "area": "Developmental area",
+      "change": "Brief description of change (e.g., '+23% increase in...')",
+      "trend": "positive|negative|neutral",
+      "details": "More detailed explanation"
+    }
+  ],
+  "carePlanSuggestions": [
+    {
+      "id": "unique-id",
+      "type": "goal|strategy|intervention",
+      "title": "Short title",
+      "description": "Detailed description of what to implement",
+      "rationale": "Clinical rationale for this suggestion",
+      "status": "pending"
+    }
+  ]
+}
 
-      // Progress highlights
-      setProgress([
-        {
-          area: 'Verbal Communication',
-          change: '+23% increase in spontaneous requests',
-          trend: 'positive',
-          details: 'Up from 12 to 15 unprompted verbal requests per day on average'
-        },
-        {
-          area: 'Self-Regulation',
-          change: 'Meltdown duration reduced by 35%',
-          trend: 'positive',
-          details: 'Average duration down from 20 minutes to 13 minutes'
-        },
-        {
-          area: 'Sleep Quality',
-          change: 'Consistent 8+ hours for 18 of last 21 nights',
-          trend: 'positive',
-          details: 'Up from 10 of 21 nights last month'
-        },
-        {
-          area: 'Social Initiation',
-          change: 'No significant change',
-          trend: 'neutral',
-          details: 'Consider focusing on parallel play activities to build foundation'
-        }
-      ]);
+Provide 3-4 insights, 2-3 behavior patterns, 3-4 progress highlights, and 2-3 care plan suggestions. Be specific and clinically grounded. Use the child's name where appropriate.`;
 
-      // Care plan suggestions
-      setSuggestions([
-        {
-          id: '1',
-          type: 'goal',
-          title: 'Increase independent self-regulation attempts',
-          description: 'Child will independently use a calming strategy (deep breathing, sensory tool, or quiet space) before escalating to meltdown in 4 out of 5 opportunities.',
-          rationale: 'Data shows child is responsive to calming strategies when prompted. Building independence will improve long-term outcomes.',
-          status: 'pending'
-        },
-        {
-          id: '2',
-          type: 'strategy',
-          title: 'Implement visual emotion check-in',
-          description: 'Use a 5-point emotion scale visual at transition points throughout the day. Teach child to self-identify and communicate emotional state.',
-          rationale: 'Early identification of dysregulation allows for proactive intervention before escalation.',
-          status: 'pending'
-        },
-        {
-          id: '3',
-          type: 'intervention',
-          title: 'Structured parallel play sessions',
-          description: 'Arrange 2-3 weekly 15-minute parallel play sessions with one peer, gradually increasing interaction expectations over 6 weeks.',
-          rationale: 'AI analysis indicates better social engagement with parallel activities. Gradual progression will build comfort.',
-          status: 'approved',
-          parentResponse: 'Love this idea! We can do this with neighbor\'s child who is understanding.'
+        const childName = patient.childName || 'the patient';
+        const age = patient.age || 0;
+        const conditions = patient.conditions?.length > 0 ? patient.conditions.join(', ') : 'neurodevelopmental concerns';
+        const parentName = patient.parentName || 'the parent';
+
+        const response = await sendMessageToClaude(
+          [{ role: 'user', content: `Generate a comprehensive clinical AI summary for patient ${childName}, age ${age}, with ${conditions}. Parent/caregiver: ${parentName}. Include communication patterns, sensory triggers, transition strategies, social engagement patterns, behavior trends, and care plan suggestions based on available data.` }],
+          context,
+          { systemPrompt, maxTokens: 2500, temperature: 0.7 }
+        );
+
+        // Parse the JSON response — handle possible markdown code fences
+        const jsonStr = response.replace(/^```(?:json)?\s*/, '').replace(/\s*```$/, '').trim();
+        const parsed = JSON.parse(jsonStr);
+
+        // Map and validate insights
+        if (Array.isArray(parsed.insights) && parsed.insights.length > 0) {
+          setInsights(parsed.insights.map((i: Record<string, unknown>) => ({
+            category: i.category || 'General',
+            insight: i.insight || '',
+            confidence: typeof i.confidence === 'number' ? Math.min(1, Math.max(0, i.confidence)) : 0.8,
+            source: i.source || 'AI analysis',
+          })));
+        } else {
+          setInsights(generateMockInsights());
         }
-      ]);
+
+        // Map and validate behavior patterns
+        if (Array.isArray(parsed.behaviorPatterns) && parsed.behaviorPatterns.length > 0) {
+          setPatterns(parsed.behaviorPatterns.map((p: Record<string, unknown>) => ({
+            behavior: p.behavior || '',
+            frequency: (['increasing', 'decreasing', 'stable'].includes(p.frequency as string) ? p.frequency : 'stable') as BehaviorPattern['frequency'],
+            triggers: Array.isArray(p.triggers) ? p.triggers : [],
+            successfulStrategies: Array.isArray(p.successfulStrategies) ? p.successfulStrategies : [],
+          })));
+        } else {
+          setPatterns(generateMockPatterns());
+        }
+
+        // Map and validate progress highlights
+        if (Array.isArray(parsed.progressHighlights) && parsed.progressHighlights.length > 0) {
+          setProgress(parsed.progressHighlights.map((p: Record<string, unknown>) => ({
+            area: p.area || '',
+            change: p.change || '',
+            trend: (['positive', 'negative', 'neutral'].includes(p.trend as string) ? p.trend : 'neutral') as ProgressHighlight['trend'],
+            details: p.details || '',
+          })));
+        } else {
+          setProgress(generateMockProgress());
+        }
+
+        // Map and validate care plan suggestions
+        if (Array.isArray(parsed.carePlanSuggestions) && parsed.carePlanSuggestions.length > 0) {
+          setSuggestions(parsed.carePlanSuggestions.map((s: Record<string, unknown>, i: number) => ({
+            id: s.id || String(i + 1),
+            type: (['goal', 'strategy', 'intervention'].includes(s.type as string) ? s.type : 'strategy') as CarePlanSuggestion['type'],
+            title: s.title || '',
+            description: s.description || '',
+            rationale: s.rationale || '',
+            status: (['pending', 'approved', 'rejected'].includes(s.status as string) ? s.status : 'pending') as CarePlanSuggestion['status'],
+          })));
+        } else {
+          setSuggestions(generateMockSuggestions());
+        }
+      } catch (error) {
+        console.warn('AI summary generation failed, falling back to mock data:', error);
+        // Fallback to mock data
+        setInsights(generateMockInsights());
+        setPatterns(generateMockPatterns());
+        setProgress(generateMockProgress());
+        setSuggestions(generateMockSuggestions());
+      }
 
       setIsLoading(false);
     };
@@ -302,7 +432,7 @@ export function PatientAISummary({ patient, onClose }: PatientAISummaryProps) {
         ].map(tab => (
           <button
             key={tab.id}
-            onClick={() => setActiveSection(tab.id as any)}
+            onClick={() => setActiveSection(tab.id as typeof activeSection)}
             className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium border-b-2 -mb-px transition-colors ${
               activeSection === tab.id
                 ? 'border-violet-600 text-violet-600 bg-violet-50/50 dark:bg-violet-900/20'

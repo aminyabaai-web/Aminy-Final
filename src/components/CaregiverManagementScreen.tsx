@@ -11,40 +11,50 @@ interface CaregiverManagementScreenProps {
 
 export function CaregiverManagementScreen({ onBack }: CaregiverManagementScreenProps) {
   const [showAddCaregiver, setShowAddCaregiver] = useState(false);
-  const [caregivers, setCaregivers] = useState([
+  type CaregiverRole = 'owner' | 'caregiver' | 'read-only';
+  type CaregiverStatus = 'active' | 'pending';
+
+  const [caregivers, setCaregivers] = useState<Array<{
+    id: string;
+    name: string;
+    email: string;
+    role: CaregiverRole;
+    status: CaregiverStatus;
+    addedDate: string;
+  }>>([
     {
       id: '1',
       name: 'Parent (You)',
       email: 'parent@example.com',
-      role: 'owner' as const,
-      status: 'active' as const,
+      role: 'owner',
+      status: 'active',
       addedDate: '2025-09-01'
     },
     {
       id: '2',
       name: 'Partner',
       email: 'partner@example.com',
-      role: 'caregiver' as const,
-      status: 'active' as const,
+      role: 'caregiver',
+      status: 'active',
       addedDate: '2025-09-15'
     },
     {
       id: '3',
       name: 'Grandparent',
       email: 'grandparent@example.com',
-      role: 'read-only' as const,
-      status: 'pending' as const,
+      role: 'read-only',
+      status: 'pending',
       addedDate: '2025-10-18'
     }
   ]);
 
-  const handleInvite = (data: { email: string; name: string; role: 'owner' | 'caregiver' | 'read-only' }) => {
+  const handleInvite = (email: string, role: CaregiverRole) => {
     const newCaregiver = {
       id: Date.now().toString(),
-      name: data.name,
-      email: data.email,
-      role: data.role,
-      status: 'pending' as const,
+      name: email.split('@')[0],
+      email,
+      role,
+      status: 'pending' as CaregiverStatus,
       addedDate: new Date().toISOString().split('T')[0]
     };
     setCaregivers([...caregivers, newCaregiver]);

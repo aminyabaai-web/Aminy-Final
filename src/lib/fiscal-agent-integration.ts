@@ -141,7 +141,7 @@ export async function getAuthorizations(childId: string): Promise<ServiceAuthori
   }
 }
 
-function calculateAuthStatus(auth: any): ServiceAuthorization['status'] {
+function calculateAuthStatus(auth: { end_date: string; authorized_units: number; used_units: number; authorization_number?: string }): ServiceAuthorization['status'] {
   const now = new Date();
   const endDate = new Date(auth.end_date);
   const remaining = auth.authorized_units - auth.used_units;

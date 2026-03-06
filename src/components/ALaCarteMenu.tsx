@@ -101,6 +101,7 @@ export function ALaCarteMenu({ onBookSession, userTier = 'free', isProUser = fal
         description: `${session.title} (${session.duration} min) - $${isProUser ? session.proPrice : session.price}`,
         action: {
           label: 'Continue',
+          onClick: () => {},
         }
       });
     }

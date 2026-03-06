@@ -1,7 +1,7 @@
 // Aminy MVP - Sample Seed Data for Connector Hub Demo
 // Complete data set to demonstrate the full Connector loop
 
-import { SeedData, Child, Plan, Session, InsightSnapshot, CoverageCase, Device, JrProfile, Report } from '../types/connector';
+import { SeedData, Child, Plan, ConnectorSession, InsightSnapshot, CoverageCase, Device, JrProfile, ConnectorReport } from '../types/connector';
 
 export const seedData: SeedData = {
   caregivers: [

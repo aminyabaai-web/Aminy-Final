@@ -10,6 +10,10 @@ import { Badge } from './ui/badge';
 import { EnhancedChatInput, type Attachment } from './EnhancedChatInput';
 import { motion, AnimatePresence } from 'motion/react';
 import { toast } from 'sonner';
+import { supabase as supabaseConfig } from '../lib/env-config';
+
+const { projectId, anonKey: publicAnonKey } = supabaseConfig;
+
 import {
   fetchUserContext,
   buildAIContextString,
@@ -244,7 +248,7 @@ Respond naturally, showing you remember their journey. Be brief (2-3 sentences) 
                       <span className="absolute -top-1 -right-1 w-2 h-2 bg-gradient-to-r from-emerald-400 via-amber-400 to-violet-400 rounded-full animate-pulse" />
                     )}
                   </div>
-                  <h2 className="text-slate-900">Ask Aminy</h2>
+                  <h2 className="text-slate-900">Aminy</h2>
                 </div>
                 <Button
                   variant="ghost"

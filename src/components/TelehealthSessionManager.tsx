@@ -28,6 +28,11 @@ import {
   X
 } from 'lucide-react';
 import { useAminyStore } from '../lib/store';
+import {
+  orchestratePostSession,
+  type SessionCompletionData,
+  type OrchestrationResult,
+} from '../lib/session-orchestrator';
 
 interface SessionCredit {
   type: '50min' | '25min';
@@ -170,6 +175,84 @@ export function TelehealthSessionManager({
 
   // Persist to global store
   const addSession = useAminyStore(state => state.addSession);
+  const storeUser = useAminyStore(state => state.user);
+  const currentChildId = useAminyStore(state => state.currentChildId);
+
+  /**
+   * Post-session orchestration: when a session is completed (notes finalized),
+   * trigger the automated workflow for superbill, FHIR, notifications, etc.
+   */
+  const handlePostSessionOrchestration = async (session: ScheduledSession) => {
+    if (!storeUser?.id || !session.sessionSummary) return;
+
+    const sessionEnd = new Date(session.date);
+    const durationMinutes = session.type === '50min' ? 50 : 25;
+    sessionEnd.setMinutes(sessionEnd.getMinutes() + durationMinutes);
+
+    const completionData: SessionCompletionData = {
+      appointmentId: session.id,
+      userId: storeUser.id,
+      childId: currentChildId ?? `child-${storeUser.id.substring(0, 8)}`,
+      providerId: `provider-${session.provider.replace(/\s+/g, '-').toLowerCase()}`,
+      providerName: session.provider,
+      childName,
+      sessionStart: session.date.toISOString(),
+      sessionEnd: sessionEnd.toISOString(),
+      sessionDuration: durationMinutes,
+      visitType: session.type === '50min' ? 'deep-review' : 'consult-25',
+      visitFormat: 'remote',
+      diagnosisCodes: ['F84.0'], // Default; real flow would pull from child profile
+      sessionNotes: session.sessionSummary.observations,
+      soapContent: {
+        subjective: session.sessionSummary.topics.join('; '),
+        objective: session.sessionSummary.observations,
+        assessment: session.sessionSummary.progress
+          .map(p => `${p.area}: ${p.status} - ${p.notes}`)
+          .join('; '),
+        plan: session.sessionSummary.recommendations.join('; '),
+      },
+    };
+
+    try {
+      const result: OrchestrationResult = await orchestratePostSession(completionData);
+      const successCount = result.steps.filter(s => s.status === 'success').length;
+      const errorCount = result.errors.length;
+
+      if (errorCount === 0) {
+        toast.success('Post-session tasks completed', {
+          description: `${successCount} tasks processed automatically (superbill, follow-up, records)`,
+        });
+      } else {
+        toast.warning('Post-session tasks partially completed', {
+          description: `${successCount} succeeded, ${errorCount} need attention`,
+        });
+      }
+
+      if (import.meta.env.DEV) console.log('[TelehealthSessionManager] Orchestration result:', result);
+    } catch (err) {
+      console.error('[TelehealthSessionManager] Orchestration error:', err);
+      toast.error('Could not complete post-session tasks', {
+        description: 'Superbill and records may need manual processing',
+      });
+    }
+  };
+
+  // Track which sessions have already been orchestrated so we don't re-run
+  const orchestratedSessionIds = React.useRef<Set<string>>(new Set());
+
+  // When a session transitions to 'completed' with notes, trigger orchestration
+  useEffect(() => {
+    for (const session of scheduledSessions) {
+      if (
+        session.status === 'completed' &&
+        session.sessionSummary &&
+        !orchestratedSessionIds.current.has(session.id)
+      ) {
+        orchestratedSessionIds.current.add(session.id);
+        handlePostSessionOrchestration(session);
+      }
+    }
+  }, [scheduledSessions]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const getDaysUntilReset = () => {
     const resetDate = sessionCredits[0].resetDate;

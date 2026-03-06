@@ -54,7 +54,7 @@ const statusConfig = {
   }
 };
 
-export function ActionableConnectorCards({ cards }: ActionableConnectorCardsProps) {
+export function ActionableConnectorCards({ cards = [] }: ActionableConnectorCardsProps) {
   if (!cards || cards.length === 0) {
     return null;
   }

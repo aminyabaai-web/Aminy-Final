@@ -215,11 +215,11 @@ export const CONTENT = {
 // Helper to get content with fallback
 export function getContent(path: string, fallback = ''): string {
   const keys = path.split('.');
-  let value: any = CONTENT;
+  let value: unknown = CONTENT;
   
   for (const key of keys) {
-    if (value && typeof value === 'object' && key in value) {
-      value = value[key];
+    if (value && typeof value === 'object' && key in (value as Record<string, unknown>)) {
+      value = (value as Record<string, unknown>)[key];
     } else {
       return fallback;
     }

@@ -39,7 +39,7 @@ import {
   Headphones,
   Smile,
   Baby,
-  Robot,
+  Bot,
   Pause,
   Square,
   Home,
@@ -83,6 +83,17 @@ import {
   Radio,
   Wind
 } from 'lucide-react';
+import { JrCalmCorner } from './JrCalmCorner';
+import {
+  recordJuniorProgress,
+  getFocusAreas,
+  getJuniorDifficultyOverrides,
+  getJuniorAvoidanceTriggers,
+  getJuniorRecommendations,
+  markRecommendationApplied,
+  type FocusDomain,
+  type DifficultyLevel,
+} from '../lib/parent-junior-bridge';
 
 interface JuniorPageProps {
   userData: {
@@ -261,10 +272,43 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
   const [currentSessionTime, setCurrentSessionTime] = useState(0);
   const [emotionDetected, setEmotionDetected] = useState<'frustrated' | 'excited' | 'anxious' | 'calm'>('calm');
   
-  // Enhanced Parent Integration State
+  // Enhanced Parent Integration State — loaded from bridge on mount
   const [todaysFocus, setTodaysFocus] = useState<string[]>(['/s/ blends', 'morning routine step 3', 'prosody practice']);
+  const [difficultyOverrides, setDifficultyOverrides] = useState<Record<string, DifficultyLevel>>({});
+  const [avoidanceTriggers, setAvoidanceTriggers] = useState<string[]>([]);
   const [sharedRewards, setSharedRewards] = useState(['stickers', 'high-fives', 'favorite song']);
   const [recentParentActivity, setRecentParentActivity] = useState('Set focus: practice /s/ sounds with prosody');
+
+  // Load parent-set focus areas, difficulty overrides, and avoidance triggers on mount
+  useEffect(() => {
+    const childId = userData?.childName?.toLowerCase().replace(/\s+/g, '-') || 'default';
+
+    // Load focus areas from parent bridge (replaces hardcoded defaults)
+    const focusAreas = getFocusAreas(childId);
+    if (focusAreas.length > 0) {
+      const goals = focusAreas.flatMap(a => a.goals);
+      setTodaysFocus(goals.length > 0 ? goals : ['/s/ blends', 'morning routine step 3', 'prosody practice']);
+      setRecentParentActivity(`Focus areas: ${focusAreas.map(a => `${a.domain} (${a.priority})`).join(', ')}`);
+    }
+
+    // Load difficulty overrides
+    const overrides = getJuniorDifficultyOverrides(childId);
+    const overrideMap: Record<string, DifficultyLevel> = {};
+    overrides.forEach(o => { overrideMap[o.domain] = o.level; });
+    setDifficultyOverrides(overrideMap);
+
+    // Load avoidance triggers
+    const triggers = getJuniorAvoidanceTriggers(childId);
+    setAvoidanceTriggers(triggers.map(t => t.trigger.toLowerCase()));
+
+    // Apply pending recommendations
+    const recs = getJuniorRecommendations(childId).filter(r => !r.applied);
+    recs.forEach((rec, idx) => {
+      overrideMap[rec.domain] = rec.difficulty;
+      markRecommendationApplied(childId, idx);
+    });
+    if (recs.length > 0) setDifficultyOverrides({ ...overrideMap });
+  }, [userData?.childName]);
   const [parentMicroCards, setParentMicroCards] = useState<ParentMicroCard[]>([
     {
       id: 'victory-s-sounds',
@@ -621,7 +665,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
     }
   ];
 
-  // Adaptive AI Journey that never stalls
+  // Adaptive AI Journey with parent cross-learning
   const getPersonalizedJourney = useCallback(() => {
     const userProfile = {
       currentLevel: currentSpeechLevel,
@@ -633,13 +677,27 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
       sessionTime: currentSessionTime
     };
 
+    // Filter out activities matching avoidance triggers from parent
+    const safeActivities = activities.filter(a => {
+      const activityText = `${a.title} ${a.description} ${a.focus?.join(' ') || ''} ${a.mode || ''}`.toLowerCase();
+      return !avoidanceTriggers.some(trigger => activityText.includes(trigger));
+    });
+
+    // Apply parent difficulty overrides to adjust effective level per domain
+    const getEffectiveLevel = (domain: string): number => {
+      const override = difficultyOverrides[domain];
+      if (override === 'easier') return Math.max(0, userProfile.currentLevel - 1);
+      if (override === 'harder') return Math.min(3, userProfile.currentLevel + 1);
+      return userProfile.currentLevel;
+    };
+
     // Dynamic difficulty shaping based on performance
     if (userProfile.recentAccuracy < 0.6 && practiceAttempts > 2) {
       return {
-        recommendedActivities: activities.filter(a => 
-          a.regulationFriendly && 
-          a.energyLevel === 'quick-wins' && 
-          a.level <= userProfile.currentLevel - 1
+        recommendedActivities: safeActivities.filter(a =>
+          a.regulationFriendly &&
+          a.energyLevel === 'quick-wins' &&
+          a.level <= Math.max(0, getEffectiveLevel(a.skillType) - 1)
         ),
         supportLevel: 'errorless-learning',
         visualSupports: true,
@@ -650,8 +708,8 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
     // Progressive challenge when ready
     if (userProfile.recentAccuracy > 0.9 && successStreak > 3) {
       return {
-        recommendedActivities: activities.filter(a => 
-          a.level === userProfile.currentLevel + 1 && 
+        recommendedActivities: safeActivities.filter(a =>
+          a.level === getEffectiveLevel(a.skillType) + 1 &&
           a.unlocked
         ),
         supportLevel: 'minimal-cues',
@@ -660,10 +718,10 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
       };
     }
 
-    // Default adaptive path
+    // Default adaptive path — weighted by parent focus areas
     return {
-      recommendedActivities: activities.filter(a => 
-        a.level <= userProfile.currentLevel && 
+      recommendedActivities: safeActivities.filter(a =>
+        a.level <= getEffectiveLevel(a.skillType) &&
         a.unlocked &&
         todaysFocus.some(focus => a.focus?.some(f => focus.includes(f)))
       ),
@@ -671,7 +729,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
       visualSupports: true,
       adaptiveMessage: 'Perfect level for you today!'
     };
-  }, [currentSpeechLevel, needsBreak, childEnergyLevel, speechAnalysis, practiceAttempts, successStreak, todaysFocus, currentSessionTime, activities]);
+  }, [currentSpeechLevel, needsBreak, childEnergyLevel, speechAnalysis, practiceAttempts, successStreak, todaysFocus, currentSessionTime, activities, difficultyOverrides, avoidanceTriggers]);
 
   // Enhanced speech practice with revolutionary AI feedback
   const handleAdvancedSpeechPractice = async () => {
@@ -913,7 +971,18 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
   };
 
   // Enhanced sync to parent app with comprehensive data
-  const syncToParentEnhanced = (eventType: string, data: any) => {
+  const syncToParentEnhanced = (eventType: string, data: {
+    activityId?: string;
+    word?: string;
+    mission?: { description?: string };
+    activity?: string;
+    accuracy?: number;
+    tokensEarned?: number;
+    emotionBefore?: string;
+    emotionAfter?: string;
+    context?: string;
+    [key: string]: unknown;
+  }) => {
     const parentUpdate = {
       timestamp: new Date(),
       childName,
@@ -940,15 +1009,34 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
     };
     
     
-    // Advanced parent notifications with actionable insights
-    if (eventType === 'practice_mastery' && data.accuracy > 0.9) {
-    }
-    
-    if (eventType === 'needs_coaching') {
-    }
-    
-    if (eventType === 'regulation_success') {
-    }
+    // Record progress to parent-junior bridge (feeds parent AI + weekly summaries)
+    const childId = 'default';
+    const domainMap: Record<string, FocusDomain> = {
+      'practice_mastery': 'speech',
+      'needs_coaching': 'speech',
+      'mission_completed': 'speech',
+      'regulation_success': 'regulation',
+      'social_activity': 'social',
+      'sensory_activity': 'sensory',
+      'routine_activity': 'routines',
+      'aac_activity': 'aac',
+    };
+
+    const domain = domainMap[eventType] || 'speech';
+
+    recordJuniorProgress(childId, {
+      activityId: data.activityId || `${eventType}-${Date.now()}`,
+      activityTitle: data.word || data.mission?.description || data.activity || eventType,
+      domain,
+      completedAt: new Date().toISOString(),
+      durationSeconds: currentSessionTime || 0,
+      accuracy: data.accuracy,
+      promptLevel: adaptiveDifficulty,
+      tokensEarned: data.tokensEarned || 1,
+      emotionBefore: data.emotionBefore || emotionDetected,
+      emotionAfter: data.emotionAfter || emotionDetected,
+      notes: data.context || undefined,
+    });
   };
 
   // Handle Kid Mode login with enhanced security
@@ -1565,72 +1653,33 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
           )}
 
           {activeView === 'calm-corner' && (
-            <div className="p-4 sm:p-5 md:p-6">
-              <motion.div
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                className="bg-gradient-to-br from-indigo-100 to-purple-100 rounded-3xl p-8 text-center min-h-96"
-              >
-                <motion.button
-                  whileHover={{ scale: 1.1 }}
-                  onClick={() => setActiveView('home')}
-                  className="mb-4 sm:mb-6 w-10 h-10 bg-white/50 rounded-full flex items-center justify-center mx-auto"
-                >
-                  <ArrowLeft className="w-5 h-5 text-indigo-600" />
-                </motion.button>
-
-                <h2 className="text-2xl text-indigo-800 mb-4 sm:mb-6">🫧 Calm Corner</h2>
-                
-                {/* Breathing Animation */}
-                <motion.div
-                  animate={{ 
-                    scale: [1, 1.3, 1],
-                    opacity: [0.7, 1, 0.7]
-                  }}
-                  transition={{ 
-                    duration: 4, 
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                  className="w-32 h-32 bg-gradient-to-br from-blue-200 to-purple-200 rounded-full mx-auto mb-8 flex items-center justify-center"
-                >
-                  <Wind className="w-12 h-12 text-indigo-600" />
-                </motion.div>
-
-                <p className="text-indigo-700 mb-8 text-lg">
-                  Breathe in slowly... and breathe out slowly...
-                </p>
-
-                <div className="space-y-3 sm:space-y-4">
-                  <Button
-                    onClick={() => {
-                      setNeedsBreak(false);
-                      setEmotionDetected('calm');
-                      toast.success("💙 Great job calming down! You're ready to practice again.", {
-                        duration: 3000,
-                      });
-                      
-                      syncToParentEnhanced('regulation_success', {
-                        activity: 'calm-corner',
-                        duration: '2-3 minutes',
-                        outcome: 'successful_self_regulation'
-                      });
-                    }}
-                    className="bg-indigo-500 hover:bg-indigo-600 text-white w-full py-3 rounded-xl"
-                  >
-                    I feel better now 😌
-                  </Button>
-                  
-                  <Button
-                    variant="outline"
-                    onClick={() => setActiveView('home')}
-                    className="w-full py-3 rounded-xl"
-                  >
-                    Back to activities
-                  </Button>
-                </div>
-              </motion.div>
-            </div>
+            <JrCalmCorner
+              onBack={() => setActiveView('home')}
+              onComplete={(data) => {
+                setNeedsBreak(false);
+                setEmotionDetected('calm');
+                toast.success("💙 Great job calming down! You're ready to practice again.", {
+                  duration: 3000,
+                });
+                syncToParentEnhanced('regulation_success', {
+                  activity: data.activity,
+                  emotionBefore: data.emotionBefore,
+                  emotionAfter: data.emotionAfter,
+                  durationSeconds: data.durationSeconds,
+                  outcome: 'successful_self_regulation'
+                });
+                setActiveView('home');
+              }}
+              buddyName={
+                selectedBuddy === 'sunny' ? 'Sunny' :
+                selectedBuddy === 'luna' ? 'Luna' :
+                selectedBuddy === 'breezy' ? 'Breezy' :
+                selectedBuddy === 'sparky' ? 'Sparky' :
+                'Coco'
+              }
+              accessMode="always"
+              autoTriggered={needsBreak}
+            />
           )}
 
           {activeView === 'activity-select' && (

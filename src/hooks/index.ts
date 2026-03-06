@@ -29,3 +29,7 @@ export { useMFA } from './useMFA';
 // Payment and subscription hooks
 export { usePaymentConfirmation } from './usePaymentConfirmation';
 export { useSubscription } from './useSubscription';
+export { useGracePeriod, type GracePeriodStatus, type UseGracePeriodOptions, type UseGracePeriodReturn } from './useGracePeriod';
+
+// Organization and B2B hooks
+export { useOrganization } from './useOrganization';

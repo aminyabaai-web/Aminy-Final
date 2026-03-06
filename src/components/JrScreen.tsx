@@ -49,7 +49,7 @@ interface JrScreenProps {
   userTier: string | null;
   connectorData: {
     devices: Map<string, Device>;
-    [key: string]: any;
+    [key: string]: unknown;
   };
 }
 
@@ -267,7 +267,7 @@ export const JrScreen: React.FC<JrScreenProps> = ({
     toast.success('PIN updated successfully!');
   };
 
-  const handleSessionComplete = (sessionData: any) => {
+  const handleSessionComplete = (sessionData: { module: string; startedAt: Date; attempts: number; successful: number; durationMin: number; accuracy: number }) => {
     // Publish session completed event to connector hub
     connectorHub.publish(CONNECTOR_EVENTS.JR_SESSION_COMPLETED, {
       childId: 'child-1',
@@ -580,16 +580,18 @@ export const JrScreen: React.FC<JrScreenProps> = ({
                   <span className="text-muted-foreground">Target Set:</span>
                   <span className="font-medium">
                     {jrProfile?.targetSet || 'Speech set'} — {
-                      jrProfile?.targetBand?.charAt(0).toUpperCase() + 
-                      jrProfile?.targetBand?.slice(1).toLowerCase() || 'Intermediate'
+                      jrProfile?.targetBand
+                        ? jrProfile.targetBand.charAt(0).toUpperCase() + jrProfile.targetBand.slice(1).toLowerCase()
+                        : 'Intermediate'
                     }
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-muted-foreground">Difficulty Band:</span>
                   <span className="font-medium">
-                    {jrProfile?.difficultyBand?.charAt(0).toUpperCase() + 
-                     jrProfile?.difficultyBand?.slice(1).toLowerCase() || 
+                    {jrProfile?.difficultyBand
+                      ? jrProfile.difficultyBand.charAt(0).toUpperCase() + jrProfile.difficultyBand.slice(1).toLowerCase()
+                      : 
                      getDifficultyBand(preferences.difficulty)}
                   </span>
                 </div>

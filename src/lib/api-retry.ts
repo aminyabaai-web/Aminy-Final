@@ -7,25 +7,29 @@ interface RetryConfig {
   maxRetries?: number;
   baseDelayMs?: number;
   maxDelayMs?: number;
-  shouldRetry?: (error: any, attempt: number) => boolean;
-  onRetry?: (error: any, attempt: number, delayMs: number) => void;
+  shouldRetry?: (error: unknown, attempt: number) => boolean;
+  onRetry?: (error: unknown, attempt: number, delayMs: number) => void;
 }
 
 const DEFAULT_CONFIG: Required<RetryConfig> = {
   maxRetries: 3,
   baseDelayMs: 1000,
   maxDelayMs: 10000,
-  shouldRetry: (error, attempt) => {
+  shouldRetry: (error: unknown, _attempt: number) => {
     // Retry on network errors, 5xx errors, and rate limits (429)
-    if (error?.name === 'TypeError' || error?.message?.includes('fetch')) {
+    if (error instanceof TypeError) {
       return true; // Network error
     }
-    const status = error?.status || error?.response?.status;
+    if (error instanceof Error && error.message?.includes('fetch')) {
+      return true; // Network error
+    }
+    const status = (error as { status?: number })?.status
+      || (error as { response?: { status?: number } })?.response?.status;
     if (status === 429) return true; // Rate limited
-    if (status >= 500 && status < 600) return true; // Server error
+    if (status !== undefined && status >= 500 && status < 600) return true; // Server error
     return false;
   },
-  onRetry: (error, attempt, delayMs) => {
+  onRetry: (_error: unknown, _attempt: number, _delayMs: number) => {
   },
 };
 
@@ -57,7 +61,7 @@ export async function fetchWithRetry(
   config?: RetryConfig
 ): Promise<Response> {
   const finalConfig = { ...DEFAULT_CONFIG, ...config };
-  let lastError: any;
+  let lastError: unknown;
 
   for (let attempt = 1; attempt <= finalConfig.maxRetries + 1; attempt++) {
     try {
@@ -103,7 +107,7 @@ export async function fetchWithRetry(
  */
 export async function apiCall<T>(
   url: string,
-  options?: RequestInit & { json?: any },
+  options?: RequestInit & { json?: unknown },
   config?: RetryConfig
 ): Promise<T> {
   const { json, ...fetchOptions } = options || {};
@@ -144,7 +148,7 @@ export async function apiCall<T>(
  */
 export async function aiApiCall<T>(
   endpoint: string,
-  data: any,
+  data: Record<string, unknown>,
   options?: { userId?: string; tier?: string }
 ): Promise<T> {
   const baseUrl = import.meta.env.VITE_SUPABASE_URL;
@@ -162,14 +166,14 @@ export async function aiApiCall<T>(
     {
       maxRetries: 2, // Fewer retries for AI (expensive)
       baseDelayMs: 2000,
-      shouldRetry: (error, attempt) => {
+      shouldRetry: (error: unknown, attempt: number) => {
         // Don't retry client errors (4xx) except rate limits
-        const status = error?.status;
+        const status = (error as { status?: number })?.status;
         if (status === 429) return true;
-        if (status >= 400 && status < 500) return false;
+        if (status !== undefined && status >= 400 && status < 500) return false;
         return attempt <= 2;
       },
-      onRetry: (error, attempt, delay) => {
+      onRetry: (_error: unknown, _attempt: number, _delay: number) => {
       },
     }
   );

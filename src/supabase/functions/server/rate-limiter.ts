@@ -5,6 +5,16 @@
 
 import * as kv from "./kv_store.tsx";
 
+interface SupabaseQueryBuilder {
+  select(columns: string): { eq(column: string, value: string): { single(): Promise<{ data: Record<string, unknown> | null; error: { code?: string } | null }>; }; }; };
+  update(values: Record<string, unknown>): { eq(column: string, value: string): { eq(column: string, value: string): Promise<unknown>; }; };
+  insert(values: Record<string, unknown>): Promise<unknown>;
+}
+
+interface SupabaseLike {
+  from(table: string): SupabaseQueryBuilder;
+}
+
 interface RateLimitConfig {
   windowMs: number;      // Time window in milliseconds
   maxRequests: number;   // Max requests per window
@@ -246,7 +256,7 @@ function getResetTimeUTC(): string {
  * Uses Supabase usage_tracking table
  */
 export async function checkDailyUsage(
-  supabase: any,
+  supabase: SupabaseLike,
   userId: string,
   tier: string = 'free',
   incrementCount: boolean = false
@@ -333,7 +343,7 @@ export async function checkDailyUsage(
  * Get current daily usage without incrementing
  */
 export async function getDailyUsage(
-  supabase: any,
+  supabase: SupabaseLike,
   userId: string,
   tier: string = 'free'
 ): Promise<DailyUsageResult> {
@@ -344,7 +354,7 @@ export async function getDailyUsage(
  * Combined check: per-minute rate limit + daily usage limit
  */
 export async function checkAllLimits(
-  supabase: any,
+  supabase: SupabaseLike,
   userId: string,
   tier: string = 'free',
   endpoint: string = 'ai',

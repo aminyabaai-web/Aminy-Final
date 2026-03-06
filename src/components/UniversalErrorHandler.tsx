@@ -15,7 +15,7 @@ interface AppError {
   timestamp: Date;
   recoverable: boolean;
   userAction?: string;
-  context?: Record<string, any>;
+  context?: Record<string, unknown>;
 }
 
 // Error Context
@@ -78,9 +78,14 @@ export const ErrorProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     // Log to console and analytics
     console.error('[Error]', error);
-    
-    if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', 'exception', {
+
+    interface WindowWithGtag extends Window {
+      gtag?: (command: string, eventName: string, params: Record<string, unknown>) => void;
+    }
+
+    const windowWithGtag = window as unknown as WindowWithGtag;
+    if (typeof window !== 'undefined' && windowWithGtag.gtag) {
+      windowWithGtag.gtag('event', 'exception', {
         description: error.message,
         fatal: !error.recoverable,
         error_type: error.type
@@ -236,7 +241,7 @@ export class RecoverableErrorBoundary extends React.Component<
   },
   { hasError: boolean; error?: Error }
 > {
-  constructor(props: any) {
+  constructor(props: RecoverableErrorBoundary['props']) {
     super(props);
     this.state = { hasError: false };
   }
@@ -253,8 +258,15 @@ export class RecoverableErrorBoundary extends React.Component<
     }
 
     // Report to error tracking service
-    if (typeof window !== 'undefined' && (window as any).Sentry) {
-      (window as any).Sentry.captureException(error, {
+    interface WindowWithSentry extends Window {
+      Sentry?: {
+        captureException: (error: Error, context: Record<string, unknown>) => void;
+      };
+    }
+
+    const windowWithSentry = window as unknown as WindowWithSentry;
+    if (typeof window !== 'undefined' && windowWithSentry.Sentry) {
+      windowWithSentry.Sentry.captureException(error, {
         contexts: { react: errorInfo }
       });
     }
@@ -440,7 +452,7 @@ export const useValidationError = () => {
   const handleValidationError = useCallback((
     field: string,
     message?: string,
-    context?: Record<string, any>
+    context?: Record<string, unknown>
   ) => {
     addError({
       type: 'validation',

@@ -27,10 +27,17 @@ export interface UpgradeTrigger {
   message: string;
   ctaText: string;
   ctaAction: 'upgrade' | 'trial' | 'learn_more';
-  variant?: 'soft' | 'standard' | 'urgent';
+  variant?: 'soft' | 'standard' | 'urgent' | 'inline' | 'banner' | 'modal' | 'toast';
   dismissable: boolean;
   cooldownMs: number; // How long before showing again
   metadata?: Record<string, unknown>;
+  // Extended properties used by UpgradePrompt component
+  id?: string;
+  ctaLink?: string;
+  urgency?: 'low' | 'medium' | 'high';
+  description?: string;
+  showFreeTrial?: boolean;
+  recommendedTier?: string;
 }
 
 export interface TriggerConfig {

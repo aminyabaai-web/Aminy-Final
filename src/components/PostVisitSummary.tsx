@@ -16,8 +16,8 @@ export function PostVisitSummary({
   providerName, 
   sessionDate, 
   sessionType, 
-  keyTakeaways,
-  actionItems 
+  keyTakeaways = [],
+  actionItems = []
 }: PostVisitSummaryProps) {
   return (
     <Card className="p-4 sm:p-5 md:p-6">

@@ -268,7 +268,7 @@ export function ParentHubPage({ onNavigate, userTier }: ParentHubPageProps) {
     toast.success('Saved to your collection!');
   };
 
-  const handleAddToPlan = (item: any) => {
+  const handleAddToPlan = (item: Record<string, unknown>) => {
     toast.success('Added to your Plan!');
   };
 

@@ -8,9 +8,12 @@ export const autoFileBenefitsLetter = (childId: string, state: string): VaultRec
     id: `vault-benefits-${Date.now()}`,
     childId,
     title: `Evaluation Request Letter - ${state}`,
+    type: 'Prescription/Letter' as const,
     category: ['Letters & forms'],
     tags: ['Benefits', 'School', 'Evaluation'],
     date: new Date().toISOString().split('T')[0],
+    source: 'Session Artifact' as const,
+    visibility: 'Private' as const,
     vaultText: `Evaluation Request Letter
 
 Dear ${state} Department of Education,
@@ -66,9 +69,12 @@ export const autoFileBenefitsSnapshot = (childId: string, state: string, statusC
     id: `vault-benefits-snapshot-${Date.now()}`,
     childId,
     title: `Benefits Status - ${state}`,
+    type: 'Report' as const,
     category: ['Benefits', 'Other'],
     tags: ['Benefits', 'Status', 'Snapshot'],
     date: new Date().toISOString().split('T')[0],
+    source: 'Session Artifact' as const,
+    visibility: 'Private' as const,
     vaultText: `Benefits Status Snapshot - ${state}
 
 Generated: ${new Date().toLocaleDateString()}
@@ -118,14 +124,17 @@ Note: This information is for planning purposes only and does not constitute a g
 };
 
 // Auto-file Insight Snapshot to vault
-export const autoFileInsightSnapshot = (childId: string, insightData: any): VaultRecord => {
+export const autoFileInsightSnapshot = (childId: string, insightData: { confidence?: number; flags?: string[]; recommendations?: string[] }): VaultRecord => {
   const record: VaultRecord = {
     id: `vault-insight-${Date.now()}`,
     childId,
     title: `Insight Snapshot - ${new Date().toLocaleDateString()}`,
+    type: 'Evaluation' as const,
     category: ['Evaluations'],
     tags: ['Insight', 'Assessment', 'AI-Generated'],
     date: new Date().toISOString().split('T')[0],
+    source: 'Session Artifact' as const,
+    visibility: 'Private' as const,
     vaultText: `Aminy Insight Snapshot
 
 Generated: ${new Date().toLocaleString()}

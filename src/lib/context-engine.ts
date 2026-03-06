@@ -81,7 +81,7 @@ class ContextEngine {
   private caregiverContext: CaregiverContext | null = null;
   private sessionContext: SessionContext;
   private conversationHistory: ConversationSummary[] = [];
-  private behaviorPatterns: Map<string, any> = new Map();
+  private behaviorPatterns: Map<string, { count: number; lastSeen: string; data: unknown }> = new Map();
 
   constructor() {
     this.sessionContext = {
@@ -269,7 +269,7 @@ class ContextEngine {
   public getSessionContext(): SessionContext {
     return {
       ...this.sessionContext,
-      sessionDuration: Date.now() - analytics.exportData().session.startTime,
+      sessionDuration: Date.now() - (analytics.exportData()?.session?.startTime ?? Date.now()),
       previousConversations: this.conversationHistory.slice(-5), // Last 5 conversations
     };
   }
@@ -432,7 +432,7 @@ class ContextEngine {
 
   public enhancePromptWithContext(userPrompt: string): {
     enhancedPrompt: string;
-    context: any;
+    context: Record<string, unknown>;
     personalizationLevel: 'basic' | 'moderate' | 'high';
   } {
     const contextRichness = this.calculateContextRichness();

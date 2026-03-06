@@ -94,7 +94,7 @@ export function clearSentryUser(): void {
  */
 export function captureError(
   error: Error,
-  context?: Record<string, any>
+  context?: Record<string, unknown>
 ): string {
   return Sentry.captureException(error, {
     extra: context,
@@ -107,7 +107,7 @@ export function captureError(
 export function captureMessage(
   message: string,
   level: 'info' | 'warning' | 'error' = 'info',
-  context?: Record<string, any>
+  context?: Record<string, unknown>
 ): void {
   Sentry.captureMessage(message, {
     level,
@@ -121,7 +121,7 @@ export function captureMessage(
 export function addBreadcrumb(
   category: string,
   message: string,
-  data?: Record<string, any>
+  data?: Record<string, unknown>
 ): void {
   Sentry.addBreadcrumb({
     category,

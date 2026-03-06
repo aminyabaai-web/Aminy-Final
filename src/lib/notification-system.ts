@@ -91,7 +91,7 @@ export async function subscribeToPush(
       const vapidPublicKey = await getVapidPublicKey();
       subscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(vapidPublicKey),
+        applicationServerKey: urlBase64ToUint8Array(vapidPublicKey) as BufferSource,
       });
     }
 
@@ -229,10 +229,10 @@ class NotificationDB {
     const transaction = db.transaction([this.storeName], 'readwrite');
     const store = transaction.objectStore(this.storeName);
     
-    const notification = await store.get(notificationId);
+    const notification = await (store.get(notificationId) as unknown as Promise<Record<string, unknown> | undefined>);
     if (notification) {
       notification.read = true;
-      await store.put(notification);
+      await (store.put(notification) as unknown as Promise<IDBValidKey>);
     }
     
     db.close();
@@ -342,7 +342,7 @@ export interface TelehealthNotification extends NotificationPayload {
   notificationType: TelehealthNotificationType;
   appointmentId?: string;
   providerId?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 // ============================================================================
@@ -361,7 +361,7 @@ export interface EmailTemplate {
 export async function sendEmail(
   to: string,
   template: TelehealthNotificationType,
-  data: Record<string, any>
+  data: Record<string, unknown>
 ): Promise<{ success: boolean; messageId?: string }> {
   const response = await fetch(
     `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/notifications/email`,

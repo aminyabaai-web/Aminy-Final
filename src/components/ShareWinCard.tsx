@@ -70,7 +70,7 @@ export function ShareWinCard({
         await navigator.share({
           title: config.label,
           text: fullText,
-          url: 'https://aminy.app'
+          url: 'https://aminy.ai'
         });
       } catch (err) {
         // User cancelled or share failed, fallback to copy
@@ -89,7 +89,7 @@ export function ShareWinCard({
   };
 
   const shareToFacebook = () => {
-    const url = encodeURIComponent('https://aminy.app');
+    const url = encodeURIComponent('https://aminy.ai');
     window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${encodeURIComponent(shareText)}`, '_blank');
     onShare?.();
   };

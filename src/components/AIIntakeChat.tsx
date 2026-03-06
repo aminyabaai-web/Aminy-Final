@@ -136,7 +136,7 @@ export function AIIntakeChat({ onComplete, initialData, isReturningUser = false,
       try {
         localStorage.setItem(ONBOARDING_STORAGE_KEY, JSON.stringify(progressData));
       } catch (e) {
-        console.log('[Onboarding] Could not save progress:', e);
+        console.warn('[Onboarding] Could not save progress:', e);
       }
     }
   }, [step, childName, childAge, recentChallenges, parentGoals, conversationHistory, extractedInsights, empathyDetected, conversationTurn, progress]);
@@ -162,7 +162,7 @@ export function AIIntakeChat({ onComplete, initialData, isReturningUser = false,
         }
       }
     } catch (e) {
-      console.log('[Onboarding] Could not restore progress:', e);
+      console.warn('[Onboarding] Could not restore progress:', e);
     }
   }, []);
 
@@ -339,11 +339,11 @@ export function AIIntakeChat({ onComplete, initialData, isReturningUser = false,
     try {
       const aiInsights = await extractInsightsWithAI(text);
       if (aiInsights.length > 0) {
-        console.log('[Onboarding] AI extracted insights:', aiInsights);
+        if (import.meta.env.DEV) console.log('[Onboarding] AI extracted insights:', aiInsights);
         return aiInsights;
       }
     } catch (e) {
-      console.log('[Onboarding] AI extraction failed, using regex fallback');
+      console.warn('[Onboarding] AI extraction failed, using regex fallback');
     }
 
     // Fallback to regex-based extraction
@@ -1023,20 +1023,19 @@ Return as JSON array of strings.`,
   };
 
   // Voice input using Web Speech API
-  const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
 
   useEffect(() => {
     // Initialize speech recognition
-    const SpeechRecognition =
-      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const SpeechRecognitionCtor = typeof globalThis.SpeechRecognition !== 'undefined' ? globalThis.SpeechRecognition : typeof globalThis.webkitSpeechRecognition !== 'undefined' ? globalThis.webkitSpeechRecognition : null;
 
-    if (SpeechRecognition) {
-      recognitionRef.current = new SpeechRecognition();
+    if (SpeechRecognitionCtor) {
+      recognitionRef.current = new SpeechRecognitionCtor();
       recognitionRef.current.continuous = false;
       recognitionRef.current.interimResults = true;
       recognitionRef.current.lang = 'en-US';
 
-      recognitionRef.current.onresult = (event: any) => {
+      recognitionRef.current.onresult = (event: SpeechRecognitionEvent) => {
         let finalTranscript = '';
         let interimTranscript = '';
 
@@ -1055,7 +1054,7 @@ Return as JSON array of strings.`,
         }
       };
 
-      recognitionRef.current.onerror = (event: any) => {
+      recognitionRef.current.onerror = (event: SpeechRecognitionErrorEvent) => {
         setIsListening(false);
         if (event.error === 'no-speech') {
           toast.info("I didn't hear anything. Try again?");

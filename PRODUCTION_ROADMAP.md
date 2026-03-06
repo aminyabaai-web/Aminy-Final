@@ -104,8 +104,8 @@
 
   // NEW:
   const ALLOWED_ORIGINS = [
-    'https://aminy.app',
-    'https://www.aminy.app',
+    'https://aminy.ai',
+    'https://www.aminy.ai',
     import.meta.env.DEV ? 'http://localhost:3000' : null,
   ].filter(Boolean);
 
@@ -838,7 +838,7 @@
       await navigator.share({
         title: 'Join Aminy',
         text: `Get support for your neurodivergent child with Aminy! Use my code: ${referralCode}`,
-        url: `https://aminy.app/signup?ref=${referralCode}`,
+        url: `https://aminy.ai/signup?ref=${referralCode}`,
       });
     };
 
@@ -893,15 +893,15 @@
   <!-- Open Graph -->
   <meta property="og:title" content="Aminy - ABA Support for Your Family" />
   <meta property="og:description" content="Your AI companion for supporting your neurodivergent child" />
-  <meta property="og:image" content="https://aminy.app/og-image.png" />
-  <meta property="og:url" content="https://aminy.app" />
+  <meta property="og:image" content="https://aminy.ai/og-image.png" />
+  <meta property="og:url" content="https://aminy.ai" />
   <meta property="og:type" content="website" />
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Aminy - ABA Support for Your Family" />
   <meta name="twitter:description" content="Your AI companion for supporting your neurodivergent child" />
-  <meta name="twitter:image" content="https://aminy.app/og-image.png" />
+  <meta name="twitter:image" content="https://aminy.ai/og-image.png" />
   ```
 
 ### 7.4 Enable Strict TypeScript
@@ -992,7 +992,7 @@
 
 ### 8.5 Launch Checklist
 - [ ] All environment variables set in Vercel
-- [ ] DNS configured for aminy.app
+- [ ] DNS configured for aminy.ai
 - [ ] SSL certificate active
 - [ ] Sentry receiving errors
 - [ ] Google Analytics receiving events

@@ -19,8 +19,8 @@ import {
   Clock,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import type { UpgradePrompt as UpgradePromptType } from '../lib/upgrade-triggers';
-import { trackPromptShown, trackPromptDismissed } from '../lib/upgrade-triggers';
+import type { UpgradeTrigger as UpgradePromptType } from '../lib/upgrade-triggers';
+import { recordTriggerShown as trackPromptShown, recordTriggerDismissed as trackPromptDismissed } from '../lib/upgrade-triggers';
 
 interface UpgradePromptProps {
   prompt: UpgradePromptType;
@@ -29,13 +29,13 @@ interface UpgradePromptProps {
   onUpgrade?: () => void;
 }
 
-const TIER_PRICES = {
+const TIER_PRICES: Record<string, string> = {
   starter: '$14.99',
   core: '$14.99',
   pro: '$29.99',
 };
 
-const TIER_COLORS = {
+const TIER_COLORS: Record<string, string> = {
   starter: 'from-blue-500 to-indigo-600',
   core: 'from-purple-500 to-violet-600',
   pro: 'from-amber-500 to-orange-600',
@@ -51,23 +51,21 @@ export function UpgradePrompt({
 
   useEffect(() => {
     // Track that prompt was shown
-    trackPromptShown(userId, prompt, {
-      triggerType: prompt.id.split('-')[0] as any,
-      currentTier: 'free', // Would come from context
-      usageCount: 1,
-    });
+    trackPromptShown(prompt.type);
   }, []);
 
   const handleDismiss = () => {
     setIsVisible(false);
-    trackPromptDismissed(userId, prompt.id);
+    trackPromptDismissed(prompt.type);
     onDismiss?.();
   };
 
   const handleUpgrade = () => {
-    window.location.href = prompt.ctaLink;
+    window.location.href = prompt.ctaLink ?? '/upgrade';
     onUpgrade?.();
   };
+
+  const recTier = prompt.recommendedTier ?? 'core';
 
   if (!isVisible) return null;
 
@@ -80,7 +78,7 @@ export function UpgradePrompt({
           : 'border-teal-200 bg-teal-50 dark:border-teal-800 dark:bg-teal-900/20'
       }`}>
         <div className="flex items-start gap-4">
-          <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${TIER_COLORS[prompt.recommendedTier]} flex items-center justify-center flex-shrink-0`}>
+          <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${TIER_COLORS[recTier]} flex items-center justify-center flex-shrink-0`}>
             <Crown className="w-5 h-5 text-white" />
           </div>
           <div className="flex-1 min-w-0">
@@ -144,7 +142,7 @@ export function UpgradePrompt({
                   {prompt.title}
                 </p>
                 <span className="hidden sm:inline text-white/80">
-                  {prompt.description.substring(0, 60)}...
+                  {(prompt.description ?? '').substring(0, 60)}...
                 </span>
               </div>
               <div className="flex items-center gap-2">
@@ -196,13 +194,13 @@ export function UpgradePrompt({
           >
             <Card className="w-full max-w-md overflow-hidden">
               {/* Header */}
-              <div className={`bg-gradient-to-br ${TIER_COLORS[prompt.recommendedTier]} p-6 text-white text-center`}>
+              <div className={`bg-gradient-to-br ${TIER_COLORS[recTier]} p-6 text-white text-center`}>
                 <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-white/20 flex items-center justify-center">
                   <Crown className="w-8 h-8" />
                 </div>
                 <h3 className="text-xl font-bold mb-1">{prompt.title}</h3>
                 <p className="text-white/80">
-                  Upgrade to {prompt.recommendedTier.charAt(0).toUpperCase() + prompt.recommendedTier.slice(1)}
+                  Upgrade to {recTier.charAt(0).toUpperCase() + recTier.slice(1)}
                 </p>
               </div>
 
@@ -215,7 +213,7 @@ export function UpgradePrompt({
                 {/* Price */}
                 <div className="text-center mb-6">
                   <span className="text-3xl font-bold text-neutral-900 dark:text-white">
-                    {TIER_PRICES[prompt.recommendedTier]}
+                    {TIER_PRICES[recTier]}
                   </span>
                   <span className="text-neutral-500">/month</span>
                 </div>
@@ -233,7 +231,7 @@ export function UpgradePrompt({
                 {/* CTA */}
                 <Button
                   onClick={handleUpgrade}
-                  className={`w-full h-12 bg-gradient-to-r ${TIER_COLORS[prompt.recommendedTier]} hover:opacity-90`}
+                  className={`w-full h-12 bg-gradient-to-r ${TIER_COLORS[recTier]} hover:opacity-90`}
                 >
                   <Zap className="w-5 h-5 mr-2" />
                   {prompt.ctaText}
@@ -267,7 +265,7 @@ export function UpgradePrompt({
       >
         <Card className="p-4 shadow-lg max-w-sm">
           <div className="flex items-start gap-3">
-            <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${TIER_COLORS[prompt.recommendedTier]} flex items-center justify-center flex-shrink-0`}>
+            <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${TIER_COLORS[recTier]} flex items-center justify-center flex-shrink-0`}>
               <Crown className="w-4 h-4 text-white" />
             </div>
             <div className="flex-1">

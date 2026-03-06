@@ -82,6 +82,57 @@ interface PaymentMethod {
   icon: React.ReactNode;
 }
 
+interface ShopProduct {
+  id: number;
+  title: string;
+  description: string;
+  price: number;
+  originalPrice?: number;
+  retailer: string;
+  shipSpeed: string;
+  rating: number;
+  reviews: number;
+  image: string;
+  whyThisProduct: string;
+  tags: string[];
+  safetyCallouts: string[];
+  tryFirst: string;
+  category: string;
+  inStock: boolean;
+  affiliateLink: boolean;
+  evidenceLevel: string;
+  targets: string;
+  useDuring: string[];
+  contraindications: string | null;
+  aminyApproved: boolean;
+  postPurchaseSteps: string[];
+  items?: string[];
+}
+
+interface PlanableItem {
+  title: string;
+  price?: number;
+  category?: string;
+  targets?: string;
+}
+
+interface CartableItem {
+  id: number | string;
+  title: string;
+  price: number;
+  originalPrice?: number;
+  image: string;
+  items?: string[];
+}
+
+interface ProductCardProps {
+  product: ShopProduct;
+  onSave: (id: number) => void;
+  onAddToPlan: (product: ShopProduct) => void;
+  onAddToJunior: (product: ShopProduct) => void;
+  isSaved: boolean;
+}
+
 // Mock data for demonstration
 const mockChildData = {
   name: "Eddie",
@@ -354,7 +405,7 @@ export function ShopPage({ onNavigate, userTier = 'starter' }: ShopPageProps) {
     );
   };
 
-  const handleAddToPlan = (product: any) => {
+  const handleAddToPlan = (product: PlanableItem) => {
     // Simulate adding to Plan system
     const planItem = {
       id: `plan-item-${Date.now()}`,
@@ -380,7 +431,7 @@ export function ShopPage({ onNavigate, userTier = 'starter' }: ShopPageProps) {
     }
   };
 
-  const handleAddToJunior = (product: any) => {
+  const handleAddToJunior = (product: PlanableItem) => {
     // Simulate adding to Junior system
     const juniorActivity = {
       id: `junior-activity-${Date.now()}`,
@@ -407,7 +458,7 @@ export function ShopPage({ onNavigate, userTier = 'starter' }: ShopPageProps) {
   };
 
   // Cart functions
-  const addToCart = (item: any, type: 'product' | 'bundle' = 'product') => {
+  const addToCart = (item: CartableItem, type: 'product' | 'bundle' = 'product') => {
     const cartItem: CartItem = {
       id: type === 'bundle' ? `bundle-${item.id}` : `product-${item.id}`,
       title: item.title,
@@ -1234,7 +1285,7 @@ export function ShopPage({ onNavigate, userTier = 'starter' }: ShopPageProps) {
   };
 
   // ProductCard component without "Use in Junior today" buttons
-  const ProductCard = ({ product, onSave, onAddToPlan, onAddToJunior, isSaved }: any) => {
+  const ProductCard = ({ product, onSave, onAddToPlan, onAddToJunior, isSaved }: ProductCardProps) => {
     const [showFullDescription, setShowFullDescription] = useState(false);
     const [addToCartAnimation, setAddToCartAnimation] = useState(false);
 

@@ -81,7 +81,7 @@ export function SessionBundles({
           window.location.href = url;
         } else {
           // For demo/dev mode without real Stripe
-          console.log('Demo mode: Would redirect to Stripe checkout for bundle:', bundle.id);
+          if (import.meta.env.DEV) console.log('Demo mode: Would redirect to Stripe checkout for bundle:', bundle.id);
           toast.success(`Bundle "${bundle.name}" selected!`, {
             description: 'In production, this would redirect to checkout.',
           });

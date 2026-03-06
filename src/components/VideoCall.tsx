@@ -50,7 +50,7 @@ import {
   formatRemainingTime,
   type DailyRoom,
 } from '../lib/daily-video';
-import type { DailyEvent, DailyCallObject, DailyParticipant } from '../types/video';
+import type { DailyEvent, DailyCallObject, DailyParticipant, DailyEventObjectAppMessage, DailyEventHandler } from '../types/video';
 
 interface VideoCallProps {
   sessionId: string;
@@ -388,12 +388,14 @@ export function VideoCall({
   }, [chatInput, userId, userName]);
 
   // Handle incoming chat messages
-  const handleAppMessage = useCallback((event: any) => {
-    if (event.data?.type === 'chat' && event.data?.message) {
+  const handleAppMessage: DailyEventHandler = useCallback((event) => {
+    const data = 'data' in event ? (event as DailyEventObjectAppMessage).data : undefined;
+    if (data && data.type === 'chat' && data.message) {
+      const msg = data.message as Record<string, unknown>;
       const incomingMessage: ChatMessage = {
-        ...event.data.message,
+        ...(msg as unknown as ChatMessage),
         isLocal: false,
-        timestamp: new Date(event.data.message.timestamp),
+        timestamp: new Date(msg.timestamp as string),
       };
       setChatMessages(prev => [...prev, incomingMessage]);
 

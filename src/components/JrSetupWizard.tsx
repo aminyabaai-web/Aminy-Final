@@ -24,7 +24,8 @@ import {
   Gift,
   CheckCircle,
   Sparkles,
-  RefreshCw
+  RefreshCw,
+  Play
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -44,7 +45,8 @@ interface JrProfile {
 interface JrSetupWizardProps {
   childName: string;
   onComplete: (profile: JrProfile) => void;
-  onCancel: () => void;
+  onCancel?: () => void;
+  onBack?: () => void;
 }
 
 export const JrSetupWizard: React.FC<JrSetupWizardProps> = ({ 
@@ -107,7 +109,7 @@ export const JrSetupWizard: React.FC<JrSetupWizardProps> = ({
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
     } else {
-      onCancel();
+      onCancel?.();
     }
   };
 

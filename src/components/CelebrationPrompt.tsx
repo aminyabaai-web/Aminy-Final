@@ -14,6 +14,7 @@ import React, { useState, useEffect } from 'react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
+import { FocusTrap } from './FocusTrap';
 import {
   X,
   Share2,
@@ -152,7 +153,7 @@ export function CelebrationPrompt({
         await navigator.share({
           title: celebration.title,
           text: shareText,
-          url: 'https://aminy.app'
+          url: 'https://aminy.ai'
         });
       } else {
         await navigator.clipboard.writeText(shareText);
@@ -166,7 +167,8 @@ export function CelebrationPrompt({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+    <FocusTrap active onEscape={onClose}>
+    <div role="dialog" aria-modal="true" aria-label={celebration.title} className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
       <Card className="w-full max-w-sm bg-white rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
         {/* Header with gradient */}
         <div className={`bg-gradient-to-br ${getGradient()} p-8 text-center relative`}>
@@ -249,6 +251,7 @@ export function CelebrationPrompt({
         </div>
       </Card>
     </div>
+    </FocusTrap>
   );
 }
 

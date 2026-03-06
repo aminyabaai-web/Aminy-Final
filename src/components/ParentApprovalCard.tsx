@@ -1,0 +1,454 @@
+/**
+ * Parent Approval Card
+ * 
+ * Shows provider suggestions to parent with:
+ * - Clear explanation of what changes
+ * - Before/After preview
+ * - Accept / Not now buttons
+ * - Auto-apply on accept + celebration
+ */
+
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { Card } from './ui/card';
+import { Button } from './ui/button';
+import { Badge } from './ui/badge';
+import { Check, X, Info, Undo, Sparkles } from 'lucide-react';
+import { 
+  ProviderSuggestion, 
+  ProviderSuggestionEngine,
+  type RoutineChangePayload,
+  type GoalAdjustmentPayload,
+  type PromptScriptPayload,
+  type ReinforcementPayload
+} from '../lib/provider-suggestion-system';
+import { HAPTICS, ANIMATIONS } from '../lib/mobile-experience-enhancer';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
+
+interface ParentApprovalCardProps {
+  suggestion: ProviderSuggestion;
+  onAccept: () => void;
+  onReject: () => void;
+  onUndo?: () => void;
+}
+
+export function ParentApprovalCard({ suggestion, onAccept, onReject, onUndo }: ParentApprovalCardProps) {
+  const [showDetails, setShowDetails] = useState(false);
+  const [isAccepting, setIsAccepting] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(false);
+
+  const canUndo = suggestion.status === 'accepted' && suggestion.reviewedAt && 
+    (Date.now() - new Date(suggestion.reviewedAt).getTime()) < (24 * 60 * 60 * 1000);
+
+  const handleAccept = async () => {
+    HAPTICS.success();
+    setIsAccepting(true);
+    
+    // Simulate acceptance
+    setTimeout(() => {
+      setIsAccepting(false);
+      setShowCelebration(true);
+      onAccept();
+      
+      // Hide celebration after 3 seconds
+      setTimeout(() => setShowCelebration(false), 3000);
+    }, 500);
+  };
+
+  const handleReject = () => {
+    HAPTICS.light();
+    onReject();
+  };
+
+  const handleUndo = () => {
+    HAPTICS.medium();
+    if (onUndo) onUndo();
+  };
+
+  if (suggestion.status === 'rejected') {
+    return null; // Don't show rejected suggestions
+  }
+
+  const typeLabels = {
+    routine_change: '📋 Routine Adjustment',
+    goal_adjustment: '🎯 Goal Update',
+    prompt_script: '💬 New Strategy',
+    reinforcement: '⭐ Reinforcement Plan',
+    environment_change: '🏠 Environment Suggestion',
+    coverage_note: '📄 Coverage Note'
+  };
+
+  const typeColors = {
+    routine_change: 'bg-blue-100 text-blue-700 border-blue-200',
+    goal_adjustment: 'bg-purple-100 text-purple-700 border-purple-200',
+    prompt_script: 'bg-green-100 text-green-700 border-green-200',
+    reinforcement: 'bg-yellow-100 text-yellow-700 border-yellow-200',
+    environment_change: 'bg-orange-100 text-orange-700 border-orange-200',
+    coverage_note: 'bg-gray-100 text-gray-700 border-gray-200'
+  };
+
+  return (
+    <>
+      <motion.div {...ANIMATIONS.fadeIn}>
+        <Card className={`p-4 border-2 ${
+          suggestion.status === 'accepted' 
+            ? 'bg-green-50 border-green-200' 
+            : 'bg-blue-50 border-blue-200'
+        }`}>
+          {/* Header */}
+          <div className="flex items-start justify-between mb-3">
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <Badge className={typeColors[suggestion.type]}>
+                  {typeLabels[suggestion.type]}
+                </Badge>
+                {suggestion.status === 'accepted' && (
+                  <Badge className="bg-green-600 text-white">
+                    <Check className="w-3 h-3 mr-1" />
+                    Accepted
+                  </Badge>
+                )}
+              </div>
+              <p className="text-sm text-gray-900">
+                Suggested by <strong>{suggestion.providerName}</strong>
+                <span className="text-gray-500 ml-1">({suggestion.providerRole})</span>
+              </p>
+              <p className="text-xs text-gray-500 mt-1">
+                {new Date(suggestion.createdAt).toLocaleDateString()}
+              </p>
+            </div>
+            
+            <button
+              onClick={() => setShowDetails(true)}
+              className="text-blue-600 hover:text-blue-700"
+            >
+              <Info className="w-5 h-5" />
+            </button>
+          </div>
+
+          {/* Summary */}
+          <div className="mb-4">
+            <h4 className="text-sm font-medium text-gray-900 mb-2">
+              {getSuggestionTitle(suggestion)}
+            </h4>
+            <p className="text-sm text-gray-700 mb-2">
+              {suggestion.rationale}
+            </p>
+            <div className="bg-white rounded-lg p-3 border border-gray-200">
+              <p className="text-xs text-gray-600 mb-1">Expected outcome:</p>
+              <p className="text-sm text-gray-900">{suggestion.expectedOutcome}</p>
+            </div>
+          </div>
+
+          {/* Before/After Preview */}
+          <SuggestionPreview suggestion={suggestion} />
+
+          {/* Actions */}
+          {suggestion.status === 'proposed' && (
+            <div className="flex gap-2 mt-4">
+              <Button
+                onClick={handleAccept}
+                disabled={isAccepting}
+                className="flex-1 bg-green-600 hover:bg-green-700 text-white"
+              >
+                {isAccepting ? (
+                  <>
+                    <motion.div
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                    >
+                      <Sparkles className="w-4 h-4 mr-2" />
+                    </motion.div>
+                    Applying...
+                  </>
+                ) : (
+                  <>
+                    <Check className="w-4 h-4 mr-2" />
+                    Accept & Apply
+                  </>
+                )}
+              </Button>
+              <Button
+                onClick={handleReject}
+                variant="outline"
+                className="flex-1"
+              >
+                <X className="w-4 h-4 mr-2" />
+                Not Now
+              </Button>
+            </div>
+          )}
+
+          {/* Undo Option */}
+          {canUndo && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              className="mt-3 text-center"
+            >
+              <button
+                onClick={handleUndo}
+                className="text-xs text-orange-600 hover:text-orange-700 flex items-center gap-1 mx-auto"
+              >
+                <Undo className="w-3 h-3" />
+                Undo this change (available for 24 hours)
+              </button>
+            </motion.div>
+          )}
+
+          {/* Celebration Message */}
+          <AnimatePresence>
+            {showCelebration && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                className="mt-4 p-3 bg-green-100 border border-green-300 rounded-lg"
+              >
+                <p className="text-sm text-green-900 text-center">
+                  🎉 Applied! You're not doing this alone. {suggestion.providerName} is supporting you every step.
+                </p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </Card>
+      </motion.div>
+
+      {/* Details Modal */}
+      <Dialog open={showDetails} onOpenChange={setShowDetails}>
+        <DialogContent className="max-w-md max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Suggestion Details</DialogTitle>
+          </DialogHeader>
+          <SuggestionDetailsView suggestion={suggestion} />
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+}
+
+// ===================================
+// SUGGESTION PREVIEW
+// ===================================
+
+function SuggestionPreview({ suggestion }: { suggestion: ProviderSuggestion }) {
+  switch (suggestion.type) {
+    case 'routine_change':
+      return <RoutineChangePreview payload={suggestion.payload as unknown as RoutineChangePayload} />;
+    case 'goal_adjustment':
+      return <GoalAdjustmentPreview payload={suggestion.payload as unknown as GoalAdjustmentPayload} />;
+    case 'prompt_script':
+      return <PromptScriptPreview payload={suggestion.payload as unknown as PromptScriptPayload} />;
+    case 'reinforcement':
+      return <ReinforcementPreview payload={suggestion.payload as unknown as ReinforcementPayload} />;
+    default:
+      return null;
+  }
+}
+
+function RoutineChangePreview({ payload }: { payload: RoutineChangePayload }) {
+  return (
+    <div className="space-y-2">
+      {payload.changes.map((change, idx) => (
+        <div key={idx} className="bg-white rounded p-2 border border-gray-200 text-xs">
+          <div className="text-gray-600 mb-1 capitalize">{change.field.replace('_', ' ')}:</div>
+          <div className="grid grid-cols-2 gap-2">
+            <div>
+              <div className="text-gray-500 mb-1">Before:</div>
+              <div className="text-gray-700 line-through">{change.before}</div>
+            </div>
+            <div>
+              <div className="text-green-600 mb-1">After:</div>
+              <div className="text-gray-900 font-medium">{change.after}</div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function GoalAdjustmentPreview({ payload }: { payload: GoalAdjustmentPayload }) {
+  return (
+    <div className="bg-white rounded p-3 border border-gray-200 text-sm">
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <div className="text-gray-500 mb-1 text-xs">Current:</div>
+          <div className="text-gray-700 line-through">{payload.before}</div>
+        </div>
+        <div>
+          <div className="text-green-600 mb-1 text-xs">New:</div>
+          <div className="text-gray-900 font-medium">{payload.after}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PromptScriptPreview({ payload }: { payload: PromptScriptPayload }) {
+  return (
+    <div className="bg-white rounded p-3 border border-gray-200 text-sm">
+      <div className="mb-2">
+        <span className="text-gray-600">For: </span>
+        <span className="text-gray-900 font-medium">{payload.situation}</span>
+      </div>
+      <div className="bg-blue-50 rounded p-2 text-sm text-gray-700">
+        "{payload.script}"
+      </div>
+      {payload.whenToUse && (
+        <div className="mt-2 text-xs text-gray-600">
+          Use when: {payload.whenToUse}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ReinforcementPreview({ payload }: { payload: ReinforcementPayload }) {
+  return (
+    <div className="bg-white rounded p-3 border border-gray-200 text-sm">
+      <div className="mb-2">
+        <span className="text-gray-600">Reinforce: </span>
+        <span className="text-gray-900 font-medium">{payload.behavior}</span>
+      </div>
+      <div className="mb-2">
+        <span className="text-gray-600">With: </span>
+        <span className="text-green-600 font-medium">{payload.reinforcer}</span>
+      </div>
+      <div className="text-xs text-gray-600">
+        Schedule: {payload.schedule.replace('_', ' ')}
+      </div>
+    </div>
+  );
+}
+
+// ===================================
+// DETAILED VIEW
+// ===================================
+
+function SuggestionDetailsView({ suggestion }: { suggestion: ProviderSuggestion }) {
+  return (
+    <div className="space-y-4">
+      <div>
+        <h4 className="text-sm font-medium text-gray-900 mb-2">Rationale</h4>
+        <p className="text-sm text-gray-700">{suggestion.rationale}</p>
+      </div>
+
+      <div>
+        <h4 className="text-sm font-medium text-gray-900 mb-2">Expected Outcome</h4>
+        <p className="text-sm text-gray-700">{suggestion.expectedOutcome}</p>
+      </div>
+
+      <div>
+        <h4 className="text-sm font-medium text-gray-900 mb-2">Changes</h4>
+        <SuggestionPreview suggestion={suggestion} />
+      </div>
+
+      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+        <p className="text-xs text-yellow-900">
+          <strong>Remember:</strong> You're always the final decision-maker. Accept this suggestion only if it feels right for {suggestion.childName}. You can undo within 24 hours if needed.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+// ===================================
+// HELPERS
+// ===================================
+
+function getSuggestionTitle(suggestion: ProviderSuggestion): string {
+  switch (suggestion.type) {
+    case 'routine_change':
+      const routinePayload = suggestion.payload as unknown as RoutineChangePayload;
+      return `Adjust "${routinePayload.routineName}" routine`;
+    case 'goal_adjustment':
+      const goalPayload = suggestion.payload as unknown as GoalAdjustmentPayload;
+      return `Update goal: ${goalPayload.goalName}`;
+    case 'prompt_script':
+      const promptPayload = suggestion.payload as unknown as PromptScriptPayload;
+      return `New prompting strategy for ${promptPayload.situation}`;
+    case 'reinforcement':
+      const reinforcementPayload = suggestion.payload as unknown as ReinforcementPayload;
+      return `Reinforce ${reinforcementPayload.behavior}`;
+    case 'environment_change':
+      return 'Environment modification suggestion';
+    case 'coverage_note':
+      return 'Coverage documentation note';
+    default:
+      return 'Provider suggestion';
+  }
+}
+
+// ===================================
+// PENDING SUGGESTIONS LIST
+// ===================================
+
+export function PendingSuggestionsList({ 
+  childId, 
+  childName 
+}: { 
+  childId: string;
+  childName: string;
+}) {
+  const [suggestions, setSuggestions] = useState<ProviderSuggestion[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Mock - would use actual provider suggestion engine
+  const engine = new ProviderSuggestionEngine('provider-1', 'Dr. Smith', 'BCBA');
+
+  React.useEffect(() => {
+    loadSuggestions();
+  }, [childId]);
+
+  const loadSuggestions = async () => {
+    setLoading(true);
+    const pending = await engine.getPendingSuggestions(childId);
+    setSuggestions(pending);
+    setLoading(false);
+  };
+
+  const handleAccept = async (suggestionId: string) => {
+    const result = await engine.acceptSuggestion(suggestionId);
+    if (result.success) {
+      loadSuggestions(); // Refresh
+    }
+  };
+
+  const handleReject = async (suggestionId: string) => {
+    await engine.rejectSuggestion(suggestionId);
+    loadSuggestions(); // Refresh
+  };
+
+  const handleUndo = async (suggestionId: string) => {
+    const success = await engine.undoAcceptance(suggestionId);
+    if (success) {
+      loadSuggestions(); // Refresh
+    }
+  };
+
+  if (loading) {
+    return <div className="text-sm text-gray-500">Loading suggestions...</div>;
+  }
+
+  if (suggestions.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="space-y-3">
+      <h3 className="text-sm font-medium text-gray-900">
+        Provider Suggestions ({suggestions.length})
+      </h3>
+      {suggestions.map(suggestion => (
+        <ParentApprovalCard
+          key={suggestion.id}
+          suggestion={suggestion}
+          onAccept={() => handleAccept(suggestion.id)}
+          onReject={() => handleReject(suggestion.id)}
+          onUndo={() => handleUndo(suggestion.id)}
+        />
+      ))}
+    </div>
+  );
+}

@@ -3,7 +3,7 @@
  * Validated Developmental Screening Instruments
  *
  * Features:
- * - M-CHAT-R/F (Modified Checklist for Autism in Toddlers)
+ * - Aminy Developmental Milestones Check (educational screening)
  * - ASQ-3 (Ages & Stages Questionnaire) style questions
  * - Scoring algorithms
  * - Risk level interpretation
@@ -32,6 +32,7 @@ import {
   HelpCircle,
   ExternalLink
 } from 'lucide-react';
+import { ClinicalScopeDisclaimer } from './GlobalDisclaimer';
 
 interface ScreeningQuestion {
   id: string;
@@ -54,129 +55,123 @@ interface ScreeningToolsProps {
   onComplete?: (result: ScreeningResult) => void;
 }
 
-// M-CHAT-R/F Questions (20 questions)
-// Note: These are simplified versions for demonstration
-// The actual M-CHAT-R/F is a validated instrument with specific licensing
-const MCHAT_QUESTIONS: ScreeningQuestion[] = [
+// Aminy Developmental Milestones Check
+// Original questions organized by developmental domain
+// NOT a validated diagnostic instrument — for educational milestone tracking only
+// Covers: Joint Attention, Social Engagement, Communication, Play, Motor, Sensory
+const MILESTONE_QUESTIONS: ScreeningQuestion[] = [
+  // Joint Attention (3 questions) — critical developmental domain
   {
-    id: 'mchat1',
-    text: 'If you point at something across the room, does your child look at it?',
-    description: 'For example, if you point at a toy or animal, does your child look at the toy or animal?',
+    id: 'ja1',
+    text: 'When you gesture toward something nearby, does your child follow your gesture to look at it?',
+    description: 'For example, if you motion toward a pet or toy, do they look where you indicated?',
     criticalItem: true,
   },
   {
-    id: 'mchat2',
-    text: 'Have you ever wondered if your child might be deaf?',
-    criticalItem: false,
-  },
-  {
-    id: 'mchat3',
-    text: 'Does your child play pretend or make-believe?',
-    description: 'For example, pretend to drink from an empty cup, pretend to talk on a phone, or pretend to feed a doll or stuffed animal?',
+    id: 'ja2',
+    text: 'Does your child use gestures to direct your attention to things they find interesting?',
+    description: 'For example, reaching toward or indicating a bird outside, or a picture in a book?',
     criticalItem: true,
   },
   {
-    id: 'mchat4',
-    text: 'Does your child like climbing on things?',
-    description: 'For example, furniture, playground equipment, or stairs?',
-    criticalItem: false,
+    id: 'ja3',
+    text: 'Does your child bring objects to show you, just to share — not because they need help?',
+    description: 'For example, bringing a leaf, a drawing, or a toy to you with a look of excitement?',
+    criticalItem: true,
   },
+  // Social Engagement (4 questions) — critical developmental domain
   {
-    id: 'mchat5',
-    text: 'Does your child make unusual finger movements near their eyes?',
-    description: 'For example, does your child wiggle fingers close to their eyes?',
-    criticalItem: false,
-  },
-  {
-    id: 'mchat6',
-    text: 'Does your child point with one finger to ask for something or to get help?',
-    description: 'For example, pointing to a snack or toy that is out of reach?',
+    id: 'se1',
+    text: 'Does your child seem interested in watching or being near other children?',
+    description: 'For example, watching kids at a playground, smiling at other children, or moving toward them?',
     criticalItem: true,
   },
   {
-    id: 'mchat7',
-    text: 'Does your child point with one finger to show you something interesting?',
-    description: 'For example, pointing at an airplane in the sky or a big truck in the road?',
+    id: 'se2',
+    text: 'Does your child make eye contact during everyday moments like playing, talking, or getting dressed?',
     criticalItem: true,
   },
   {
-    id: 'mchat8',
-    text: 'Is your child interested in other children?',
-    description: 'For example, does your child watch other children, smile at them, or go to them?',
+    id: 'se3',
+    text: 'When you smile at your child, do they typically smile back?',
+    criticalItem: false,
+  },
+  {
+    id: 'se4',
+    text: 'When something unexpected happens, does your child check your facial expression for a reaction?',
+    description: 'For example, if they hear an unusual sound or see something unfamiliar?',
+    criticalItem: false,
+  },
+  // Communication (4 questions)
+  {
+    id: 'co1',
+    text: 'Does your child usually respond when you say their name?',
+    description: 'For example, by looking up, vocalizing, or pausing what they\'re doing?',
     criticalItem: true,
   },
   {
-    id: 'mchat9',
-    text: 'Does your child show you things by bringing them to you or holding them up for you to see?',
-    description: 'Not to get help, but just to share?',
+    id: 'co2',
+    text: 'Does your child use gestures to request things or ask for help?',
+    description: 'For example, reaching toward a snack on a high shelf, or gesturing at a toy they want?',
     criticalItem: true,
   },
   {
-    id: 'mchat10',
-    text: 'Does your child respond when you call their name?',
-    description: 'For example, does your child look up, talk or babble, or stop what they are doing when you call their name?',
+    id: 'co3',
+    text: 'Does your child seem to understand simple instructions?',
+    description: 'For example, "bring me the ball" or "sit down" — even if they don\'t always follow through?',
+    criticalItem: false,
+  },
+  {
+    id: 'co4',
+    text: 'Does your child try to get your attention to watch what they\'re doing?',
+    description: 'For example, looking at you for a reaction, vocalizing "look!", or tugging your hand?',
+    criticalItem: false,
+  },
+  // Play Skills (3 questions)
+  {
+    id: 'pl1',
+    text: 'Does your child engage in pretend or imaginative play?',
+    description: 'For example, pretending to drink from an empty cup, "feeding" a stuffed animal, or playing house?',
     criticalItem: true,
   },
   {
-    id: 'mchat11',
-    text: 'When you smile at your child, do they smile back at you?',
+    id: 'pl2',
+    text: 'Does your child imitate actions they see you do?',
+    description: 'For example, waving, clapping, pretending to talk on a phone, or sweeping?',
     criticalItem: false,
   },
   {
-    id: 'mchat12',
-    text: 'Does your child get upset by everyday sounds?',
-    description: 'For example, does your child scream or cry to noise such as a vacuum cleaner or loud music?',
+    id: 'pl3',
+    text: 'Does your child enjoy active play like climbing, running, or being gently swung?',
+    criticalItem: false,
+  },
+  // Motor Development (2 questions)
+  {
+    id: 'mo1',
+    text: 'Is your child walking independently?',
     criticalItem: false,
   },
   {
-    id: 'mchat13',
-    text: 'Does your child walk?',
+    id: 'mo2',
+    text: 'Does your child enjoy climbing on furniture, play structures, or steps?',
+    criticalItem: false,
+  },
+  // Sensory Responses (2 questions) — reversed scoring
+  {
+    id: 'sn1',
+    text: 'Does your child become very distressed by common household sounds?',
+    description: 'For example, strong reactions to vacuum cleaners, blenders, or hand dryers?',
     criticalItem: false,
   },
   {
-    id: 'mchat14',
-    text: 'Does your child look you in the eye when you are talking to them, playing with them, or dressing them?',
-    criticalItem: true,
-  },
-  {
-    id: 'mchat15',
-    text: 'Does your child try to copy what you do?',
-    description: 'For example, wave bye-bye, clap, or make a funny noise when you do?',
-    criticalItem: false,
-  },
-  {
-    id: 'mchat16',
-    text: 'If you turn your head to look at something, does your child look around to see what you are looking at?',
-    criticalItem: true,
-  },
-  {
-    id: 'mchat17',
-    text: 'Does your child try to get you to watch them?',
-    description: 'For example, does your child look at you for praise, or say "look" or "watch me"?',
-    criticalItem: false,
-  },
-  {
-    id: 'mchat18',
-    text: 'Does your child understand when you tell them to do something?',
-    description: 'For example, if you say "put the book on the chair," does your child understand (even if they don\'t follow through)?',
-    criticalItem: false,
-  },
-  {
-    id: 'mchat19',
-    text: 'If something new happens, does your child look at your face to see how you feel about it?',
-    description: 'For example, if they hear a strange or funny noise, or see a new toy, will they look at your face?',
-    criticalItem: false,
-  },
-  {
-    id: 'mchat20',
-    text: 'Does your child like movement activities?',
-    description: 'For example, being swung or bounced on your knee?',
+    id: 'sn2',
+    text: 'Have you had concerns about whether your child may have difficulty hearing?',
     criticalItem: false,
   },
 ];
 
-// Questions where YES indicates concern (most are NO = concern)
-const REVERSED_QUESTIONS = ['mchat2', 'mchat5', 'mchat12'];
+// Questions where YES indicates a potential area to discuss (reversed scoring)
+const REVERSED_QUESTIONS = ['sn1', 'sn2'];
 
 export function ScreeningTools({ childName, childAge, onComplete }: ScreeningToolsProps) {
   const [currentScreen, setCurrentScreen] = useState<'intro' | 'questions' | 'results'>('intro');
@@ -192,7 +187,7 @@ export function ScreeningTools({ childName, childAge, onComplete }: ScreeningToo
     let totalScore = 0;
     let criticalScore = 0;
 
-    MCHAT_QUESTIONS.forEach(q => {
+    MILESTONE_QUESTIONS.forEach(q => {
       const answer = answers[q.id];
       if (answer === null || answer === undefined) return;
 
@@ -212,19 +207,19 @@ export function ScreeningTools({ childName, childAge, onComplete }: ScreeningToo
       }
     });
 
-    // Determine risk level based on M-CHAT-R/F scoring
+    // Determine areas of focus based on milestone check scoring
     let riskLevel: 'low' | 'medium' | 'high';
     let recommendation: string;
 
     if (totalScore <= 2) {
       riskLevel = 'low';
-      recommendation = 'Your child\'s responses do not indicate elevated risk for autism spectrum disorder at this time. Continue to monitor development and discuss any concerns with your pediatrician at regular check-ups.';
-    } else if (totalScore >= 3 && totalScore <= 7 && criticalScore < 2) {
+      recommendation = 'Based on your responses, your child appears to be meeting most developmental milestones in the areas covered. Continue to track progress and share any observations with your pediatrician at regular check-ups.';
+    } else if (totalScore >= 3 && totalScore <= 6 && criticalScore < 2) {
       riskLevel = 'medium';
-      recommendation = 'Some responses suggest areas that may warrant further discussion with your healthcare provider. Consider scheduling a developmental evaluation to get a clearer picture of your child\'s development.';
+      recommendation = 'Some responses suggest developmental areas worth discussing with your healthcare provider. This is common and doesn\'t necessarily indicate a problem — a professional can provide a clearer picture.';
     } else {
       riskLevel = 'high';
-      recommendation = 'The screening results suggest a need for a comprehensive developmental evaluation. We strongly recommend contacting your pediatrician or a developmental specialist to discuss next steps.';
+      recommendation = 'Several responses suggest developmental areas that would benefit from professional evaluation. We recommend sharing these results with your pediatrician, who may suggest a comprehensive developmental assessment.';
     }
 
     return {
@@ -237,10 +232,10 @@ export function ScreeningTools({ childName, childAge, onComplete }: ScreeningToo
 
   // Handle answer
   const handleAnswer = (answer: boolean) => {
-    const question = MCHAT_QUESTIONS[currentQuestionIndex];
+    const question = MILESTONE_QUESTIONS[currentQuestionIndex];
     setAnswers(prev => ({ ...prev, [question.id]: answer }));
 
-    if (currentQuestionIndex < MCHAT_QUESTIONS.length - 1) {
+    if (currentQuestionIndex < MILESTONE_QUESTIONS.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
     } else {
       // Calculate results
@@ -260,7 +255,7 @@ export function ScreeningTools({ childName, childAge, onComplete }: ScreeningToo
   };
 
   // Progress percentage
-  const progress = ((currentQuestionIndex + 1) / MCHAT_QUESTIONS.length) * 100;
+  const progress = ((currentQuestionIndex + 1) / MILESTONE_QUESTIONS.length) * 100;
 
   // Render intro screen
   if (currentScreen === 'intro') {
@@ -274,7 +269,7 @@ export function ScreeningTools({ childName, childAge, onComplete }: ScreeningToo
             Developmental Screening
           </h1>
           <p className="text-neutral-600">
-            M-CHAT-R/F Screening for {childName}
+            Developmental Milestones Check for {childName}
           </p>
         </div>
 
@@ -285,7 +280,7 @@ export function ScreeningTools({ childName, childAge, onComplete }: ScreeningToo
               <div>
                 <p className="font-medium text-amber-800">Age Notice</p>
                 <p className="text-sm text-amber-700">
-                  The M-CHAT-R/F is validated for children 16-30 months old.
+                  This milestones check is designed for children 16-30 months old.
                   {childName}'s current age ({ageInMonths} months) is {ageInMonths < 16 ? 'below' : 'above'} the recommended range.
                   Results may be less accurate.
                 </p>
@@ -299,7 +294,7 @@ export function ScreeningTools({ childName, childAge, onComplete }: ScreeningToo
             <Clock className="w-5 h-5 text-neutral-500 flex-shrink-0 mt-0.5" />
             <div>
               <p className="font-medium text-neutral-900">Takes about 5-10 minutes</p>
-              <p className="text-sm text-neutral-500">20 questions about your child's behavior</p>
+              <p className="text-sm text-neutral-500">18 questions about your child's development</p>
             </div>
           </div>
 
@@ -320,6 +315,21 @@ export function ScreeningTools({ childName, childAge, onComplete }: ScreeningToo
           </div>
         </div>
 
+        {/* Clinical Disclaimer */}
+        <div className="mb-4 p-4 bg-amber-50 border-2 border-amber-200 rounded-xl">
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="font-semibold text-amber-900 text-sm mb-1">Important: Educational Screening Only</p>
+              <p className="text-amber-800 text-xs leading-relaxed">
+                This checklist covers common developmental milestones for educational purposes only.
+                It is <strong>not</strong> a validated diagnostic instrument and does not replace professional screening tools.
+                Results should always be discussed with your pediatrician or a developmental specialist.
+              </p>
+            </div>
+          </div>
+        </div>
+
         <div className="flex flex-col gap-3">
           <Button
             onClick={() => setCurrentScreen('questions')}
@@ -331,7 +341,7 @@ export function ScreeningTools({ childName, childAge, onComplete }: ScreeningToo
           </Button>
           <p className="text-xs text-center text-neutral-500">
             By proceeding, you acknowledge this screening tool is for educational purposes
-            and does not replace professional medical advice.
+            and does not replace professional medical evaluation or diagnosis.
           </p>
         </div>
       </Card>
@@ -340,14 +350,14 @@ export function ScreeningTools({ childName, childAge, onComplete }: ScreeningToo
 
   // Render questions screen
   if (currentScreen === 'questions') {
-    const currentQuestion = MCHAT_QUESTIONS[currentQuestionIndex];
+    const currentQuestion = MILESTONE_QUESTIONS[currentQuestionIndex];
 
     return (
       <Card className="max-w-2xl mx-auto p-8">
         {/* Progress */}
         <div className="mb-8">
           <div className="flex items-center justify-between text-sm text-neutral-500 mb-2">
-            <span>Question {currentQuestionIndex + 1} of {MCHAT_QUESTIONS.length}</span>
+            <span>Question {currentQuestionIndex + 1} of {MILESTONE_QUESTIONS.length}</span>
             <span>{Math.round(progress)}% complete</span>
           </div>
           <div className="h-2 bg-neutral-200 rounded-full overflow-hidden">
@@ -431,25 +441,28 @@ export function ScreeningTools({ childName, childAge, onComplete }: ScreeningToo
 
     return (
       <Card className="max-w-2xl mx-auto p-8">
+        {/* Clinical Disclaimer for Results */}
+        <ClinicalScopeDisclaimer compact className="mb-6" />
+
         {/* Result Header */}
         <div className={`${colors.bg} ${colors.border} border rounded-xl p-6 mb-8`}>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg sm:text-xl font-semibold text-neutral-900">Screening Complete</h2>
+            <h2 className="text-lg sm:text-xl font-semibold text-neutral-900">Milestones Check Complete</h2>
             <Badge className={colors.badge}>
-              {result.riskLevel === 'low' && 'Low Risk'}
-              {result.riskLevel === 'medium' && 'Medium Risk'}
-              {result.riskLevel === 'high' && 'Elevated Risk'}
+              {result.riskLevel === 'low' && 'On Track'}
+              {result.riskLevel === 'medium' && 'Some Areas to Watch'}
+              {result.riskLevel === 'high' && 'Worth Discussing'}
             </Badge>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4">
             <div>
-              <p className="text-sm text-neutral-500">Total Score</p>
-              <p className="text-xl sm:text-2xl font-bold text-neutral-900">{result.totalScore} / 20</p>
+              <p className="text-sm text-neutral-500">Areas Flagged</p>
+              <p className="text-xl sm:text-2xl font-bold text-neutral-900">{result.totalScore} / {MILESTONE_QUESTIONS.length}</p>
             </div>
             <div>
-              <p className="text-sm text-neutral-500">Critical Items</p>
-              <p className="text-xl sm:text-2xl font-bold text-neutral-900">{result.criticalScore} / 10</p>
+              <p className="text-sm text-neutral-500">Key Milestone Areas</p>
+              <p className="text-xl sm:text-2xl font-bold text-neutral-900">{result.criticalScore} flagged</p>
             </div>
           </div>
 
@@ -463,8 +476,8 @@ export function ScreeningTools({ childName, childAge, onComplete }: ScreeningToo
             <div className="flex items-start gap-3 p-3 bg-neutral-50 rounded-lg">
               <Info className="w-5 h-5 text-neutral-500 flex-shrink-0 mt-0.5" />
               <p className="text-sm text-neutral-600">
-                This screening is a first step, not a diagnosis. Many children who screen positive
-                do not have autism, and some who screen negative may still benefit from evaluation.
+                This milestones check helps you notice developmental patterns — it is not a diagnosis.
+                Every child develops differently, and flagged areas don't necessarily indicate a concern.
               </p>
             </div>
             <div className="flex items-start gap-3 p-3 bg-neutral-50 rounded-lg">
@@ -536,8 +549,8 @@ export function ScreeningTools({ childName, childAge, onComplete }: ScreeningToo
         {/* Disclaimer */}
         <p className="mt-4 sm:mt-6 text-xs text-neutral-400 text-center">
           Screening completed on {new Date().toLocaleDateString()} for {childName} (age {ageInMonths} months).
-          The M-CHAT-R/F is copyrighted by Diana Robins, Deborah Fein, & Marianne Barton.
-          This implementation is for educational demonstration purposes.
+          Aminy Developmental Milestones Check is an educational tool and is not a validated screening instrument.
+          For professional developmental screening, consult your pediatrician about the M-CHAT-R/F or ASQ-3.
         </p>
       </Card>
     );

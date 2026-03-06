@@ -10,7 +10,10 @@ export type ReportType =
   | 'monthly'
   | 'provider'
   | 'insurance'
-  | 'behavioral';
+  | 'behavioral'
+  | 'parent'
+  | 'iep'
+  | 'bcba';
 
 export interface ReportConfig {
   type: ReportType;
@@ -61,6 +64,24 @@ export const REPORT_CONFIGS: Record<ReportType, ReportConfig> = {
     title: 'Behavioral Analysis',
     description: 'Detailed behavioral data analysis',
     sections: ['data', 'patterns', 'interventions'],
+  },
+  parent: {
+    type: 'parent',
+    title: 'Parent Report',
+    description: 'Summary report for parents',
+    sections: ['overview', 'progress', 'recommendations'],
+  },
+  iep: {
+    type: 'iep',
+    title: 'IEP Progress Report',
+    description: 'Report for IEP meetings',
+    sections: ['goals', 'progress', 'accommodations'],
+  },
+  bcba: {
+    type: 'bcba',
+    title: 'BCBA Clinical Notes',
+    description: 'Notes for BCBA supervision',
+    sections: ['observations', 'interventions', 'data'],
   },
 };
 

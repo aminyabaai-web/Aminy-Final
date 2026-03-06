@@ -13,6 +13,10 @@ export interface DailyParticipant {
   video: boolean;
   screen: boolean;
   joined_at: Date;
+  /** @deprecated Use tracks.video.persistentTrack instead */
+  videoTrack?: MediaStreamTrack | false;
+  /** @deprecated Use tracks.audio.persistentTrack instead */
+  audioTrack?: MediaStreamTrack | false;
   tracks: {
     audio?: DailyTrack;
     video?: DailyTrack;
@@ -26,6 +30,22 @@ export interface DailyTrack {
   persistentTrack?: MediaStreamTrack;
 }
 
+export interface DailyNetworkStats {
+  stats?: {
+    latest?: {
+      videoSendBitsPerSecond?: number;
+      videoRecvBitsPerSecond?: number;
+      videoSendPacketLoss?: number;
+      videoRecvPacketLoss?: number;
+      audioSendBitsPerSecond?: number;
+      audioRecvBitsPerSecond?: number;
+      audioSendPacketLoss?: number;
+      audioRecvPacketLoss?: number;
+      timestamp?: number;
+    };
+  };
+}
+
 export interface DailyCallObject {
   join: (options?: { url?: string }) => Promise<DailyParticipant>;
   leave: () => Promise<void>;
@@ -34,6 +54,10 @@ export interface DailyCallObject {
   setLocalVideo: (enabled: boolean) => void;
   startScreenShare: () => Promise<void>;
   stopScreenShare: () => Promise<void>;
+  startRecording: (options?: Record<string, unknown>) => void;
+  stopRecording: (options?: { instanceId?: string }) => void;
+  sendAppMessage: (data: unknown, to?: string | string[]) => DailyCallObject;
+  getNetworkStats: () => Promise<DailyNetworkStats>;
   participants: () => Record<string, DailyParticipant>;
   localAudio: () => boolean;
   localVideo: () => boolean;
@@ -63,9 +87,15 @@ export type DailyEventType =
   | 'track-stopped'
   | 'network-quality-change'
   | 'recording-started'
-  | 'recording-stopped';
+  | 'recording-stopped'
+  | 'app-message'
+  | 'transcription-started'
+  | 'transcription-stopped'
+  | 'active-speaker-change'
+  | 'local-screen-share-started'
+  | 'local-screen-share-stopped';
 
-export type DailyEventHandler = (event: DailyEvent) => void;
+export type DailyEventHandler = (event: DailyEvent | DailyEventObjectAppMessage) => void;
 
 export interface DailyEvent {
   action: DailyEventType;
@@ -77,6 +107,12 @@ export interface DailyEvent {
     msg: string;
   };
   track?: MediaStreamTrack;
+}
+
+export interface DailyEventObjectAppMessage extends DailyEvent {
+  action: Extract<DailyEventType, 'app-message'>;
+  data: Record<string, unknown>;
+  fromId: string;
 }
 
 // App-level video types

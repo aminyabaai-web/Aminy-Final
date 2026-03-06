@@ -22,7 +22,7 @@ interface FieldState<T> {
   dirty: boolean;
 }
 
-interface UseFormOptions<T extends Record<string, unknown>> {
+export interface UseFormOptions<T extends Record<string, unknown>> {
   /** Initial form values */
   initialValues: T;
   /** Validation rules per field */
@@ -49,7 +49,7 @@ interface ServerValidationError {
   message: string;
 }
 
-interface UseFormReturn<T extends Record<string, unknown>> {
+export interface UseFormReturn<T extends Record<string, unknown>> {
   /** Current form values */
   values: T;
   /** Field errors */
@@ -145,7 +145,7 @@ export function useForm<T extends Record<string, unknown>>(
 ): UseFormReturn<T> {
   const {
     initialValues,
-    validationRules = {},
+    validationRules = {} as Partial<{ [K in keyof T]: FieldValidation<T[K]> }>,
     validateOnChange = true,
     validateOnBlur = true,
     onSubmit,

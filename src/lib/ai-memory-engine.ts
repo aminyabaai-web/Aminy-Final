@@ -763,51 +763,51 @@ export async function clearMemory(userId: string, childId?: string): Promise<voi
 // Helper Functions
 // ============================================================================
 
-function mapDbFact(data: any): MemoryFact {
+function mapDbFact(data: Record<string, unknown>): MemoryFact {
   return {
-    id: data.id,
-    userId: data.user_id,
-    childId: data.child_id,
-    category: data.category,
-    key: data.key,
-    value: data.value,
-    confidence: data.confidence,
-    source: data.source,
-    sourceId: data.source_id,
-    extractedAt: data.extracted_at,
-    lastVerified: data.last_verified,
-    isActive: data.is_active,
+    id: data.id as string,
+    userId: data.user_id as string,
+    childId: data.child_id as string | undefined,
+    category: data.category as MemoryFact['category'],
+    key: data.key as string,
+    value: data.value as string,
+    confidence: data.confidence as number,
+    source: data.source as MemoryFact['source'],
+    sourceId: data.source_id as string | undefined,
+    extractedAt: data.extracted_at as string,
+    lastVerified: data.last_verified as string | undefined,
+    isActive: data.is_active as boolean,
   };
 }
 
-function mapDbMemory(data: any): ConversationMemory {
+function mapDbMemory(data: Record<string, unknown>): ConversationMemory {
   return {
-    id: data.id,
-    userId: data.user_id,
-    childId: data.child_id,
-    conversationId: data.conversation_id,
-    summary: data.summary,
-    keyTopics: data.key_topics || [],
-    emotionalTone: data.emotional_tone,
-    actionItems: data.action_items || [],
-    factsExtracted: data.facts_extracted || [],
-    createdAt: data.created_at,
+    id: data.id as string,
+    userId: data.user_id as string,
+    childId: data.child_id as string | undefined,
+    conversationId: data.conversation_id as string,
+    summary: data.summary as string,
+    keyTopics: (data.key_topics || []) as string[],
+    emotionalTone: data.emotional_tone as ConversationMemory['emotionalTone'],
+    actionItems: (data.action_items || []) as string[],
+    factsExtracted: (data.facts_extracted || []) as string[],
+    createdAt: data.created_at as string,
   };
 }
 
-function mapDbInsight(data: any): DocumentInsight {
+function mapDbInsight(data: Record<string, unknown>): DocumentInsight {
   return {
-    id: data.id,
-    userId: data.user_id,
-    childId: data.child_id,
-    documentId: data.document_id,
-    documentType: data.document_type,
-    summary: data.summary,
-    keyFindings: data.key_findings || [],
-    goals: data.goals || [],
-    recommendations: data.recommendations || [],
-    factsExtracted: data.facts_extracted || [],
-    processedAt: data.processed_at,
+    id: data.id as string,
+    userId: data.user_id as string,
+    childId: data.child_id as string | undefined,
+    documentId: data.document_id as string,
+    documentType: data.document_type as string,
+    summary: data.summary as string,
+    keyFindings: (data.key_findings || []) as string[],
+    goals: (data.goals || []) as string[],
+    recommendations: (data.recommendations || []) as string[],
+    factsExtracted: (data.facts_extracted || []) as string[],
+    processedAt: data.processed_at as string,
   };
 }
 

@@ -11,7 +11,9 @@ import { cn } from '../lib/utils';
 import { useContextEngine } from '../lib/context-engine';
 import { useAnalytics } from '../lib/analytics-engine';
 import { toast } from 'sonner';
-import { memoryManager, type TierType } from '../lib/memory-system';
+import { memoryManager } from '../lib/memory-system';
+import type { TierType } from '../lib/tier-utils';
+import { addBreadcrumb, captureError } from '../lib/sentry';
 import { RateLimitBadge } from './RateLimitBadge';
 import { useRateLimitStore, hasReachedLimit } from '../lib/rate-limit-store';
 
@@ -200,11 +202,7 @@ export function PersistentAskAminy({
       }
 
       // Enhanced context-aware response generation
-      const enhancedPrompt = enhancePrompt(userMessage, {
-        childName: userData.childName,
-        parentName: userData.parentName,
-        conversationHistory: context.slice(-4) // Last 2 exchanges
-      });
+      const enhancedPrompt = enhancePrompt(userMessage);
 
       // Realistic processing delay
       await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 400));
@@ -245,11 +243,11 @@ export function PersistentAskAminy({
       setIsTyping(false);
       return { response, contextUsed, suggestions };
 
-    } catch (error: any) {
-      if (error.message === 'AbortError') {
+    } catch (error: unknown) {
+      if (error instanceof Error && error.message === 'AbortError') {
         return null;
       }
-      
+
       setIsTyping(false);
       setIsStreaming(false);
       throw error;
@@ -320,6 +318,11 @@ export function PersistentAskAminy({
     setShowSuggestions(false);
 
     // Track message sent
+    addBreadcrumb('ai.chat', 'User message sent', {
+      messageLength: messageContent.length,
+      messageCount: messages.length + 1,
+      userTier,
+    });
     track('ask_aminy_message_sent', {
       messageLength: messageContent.length,
       messageCount: messages.length + 1,
@@ -359,8 +362,11 @@ export function PersistentAskAminy({
         });
       }
       
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error generating response:', error);
+      const err = error instanceof Error ? error : new Error('AI response generation failed');
+      captureError(err, { messageCount: messages.length, userTier });
+      addBreadcrumb('ai.chat', `AI error: ${err.message}`, { messageCount: messages.length });
       toast.error('Sorry, I encountered an issue. Please try again.');
       
       const errorMsg: Message = {
@@ -522,7 +528,7 @@ export function PersistentAskAminy({
             </div>
             <div className="flex-1">
               <div className="flex items-center gap-2">
-                <h3 className="font-semibold text-gray-900 dark:text-gray-100">Ask Aminy</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-gray-100">Aminy</h3>
                 <Badge className="bg-green-100 text-green-800 border-green-200 text-xs">
                   Always Available
                 </Badge>

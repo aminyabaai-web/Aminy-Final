@@ -5,6 +5,15 @@ import { Card } from './ui/card';
 import { Badge } from './ui/badge';
 import { Plus, Star, Heart, Share, Download, Play, Users, MessageSquare, Zap } from 'lucide-react';
 
+interface ActionItem {
+  title?: string;
+  name?: string;
+  type?: string;
+  device?: string;
+  format?: string;
+  [key: string]: unknown;
+}
+
 interface EnhancerProps {
   userTier?: string;
   onNavigate?: (destination: string) => void;
@@ -14,7 +23,7 @@ interface EnhancerProps {
 export const MissingFunctionalityEnhancer = ({ userTier = 'starter', onNavigate }: EnhancerProps) => {
   
   // Universal "Add to Plan" functionality
-  const handleAddToPlan = (item: any) => {
+  const handleAddToPlan = (item: ActionItem) => {
     toast.success(`Added "${item.title || item.name || 'Item'}" to your Plan!`);
     
     // Simulate plan integration
@@ -24,7 +33,7 @@ export const MissingFunctionalityEnhancer = ({ userTier = 'starter', onNavigate 
   };
 
   // Universal "Add to Junior" functionality
-  const handleAddToJunior = (item: any) => {
+  const handleAddToJunior = (item: ActionItem) => {
     toast.success(`Added "${item.title || item.name || 'Activity'}" to Junior's activities!`);
     
     // Simulate Junior integration
@@ -34,22 +43,22 @@ export const MissingFunctionalityEnhancer = ({ userTier = 'starter', onNavigate 
   };
 
   // Universal Save functionality
-  const handleSave = (item: any) => {
+  const handleSave = (item: ActionItem) => {
     toast.success('Saved to your collection!');
   };
 
   // Universal Share functionality
-  const handleShare = (item: any) => {
+  const handleShare = (item: ActionItem) => {
     toast.success('Shared with your care team!');
   };
 
   // Universal Like/Favorite functionality
-  const handleLike = (item: any) => {
+  const handleLike = (item: ActionItem) => {
     toast.success('Marked as helpful!');
   };
 
   // Universal Download functionality
-  const handleDownload = (item: any) => {
+  const handleDownload = (item: ActionItem) => {
     toast.success('Download started!');
     
     // Simulate download
@@ -59,29 +68,29 @@ export const MissingFunctionalityEnhancer = ({ userTier = 'starter', onNavigate 
   };
 
   // Universal Watch/Play functionality
-  const handleWatchPlay = (item: any) => {
+  const handleWatchPlay = (item: ActionItem) => {
     toast.success('Opening content...');
   };
 
   // Shop/E-commerce functionality
-  const handleAddToCart = (product: any) => {
+  const handleAddToCart = (product: ActionItem) => {
     toast.success(`Added "${product.title}" to cart!`);
   };
 
-  const handleBuyNow = (product: any) => {
+  const handleBuyNow = (product: ActionItem) => {
     toast.success('Redirecting to checkout...');
   };
 
   // Community functionality
-  const handleJoinGroup = (group: any) => {
+  const handleJoinGroup = (group: ActionItem) => {
     toast.success('Joined community group!');
   };
 
-  const handleJoinEvent = (event: any) => {
+  const handleJoinEvent = (event: ActionItem) => {
     toast.success('Event added to your calendar!');
   };
 
-  const handleFollowUser = (user: any) => {
+  const handleFollowUser = (user: ActionItem) => {
     toast.success('Now following user!');
   };
 
@@ -103,11 +112,11 @@ export const MissingFunctionalityEnhancer = ({ userTier = 'starter', onNavigate 
   };
 
   // Junior page functionality
-  const handleStartActivity = (activity: any) => {
+  const handleStartActivity = (activity: ActionItem) => {
     toast.success(`Starting "${activity.title}" activity!`);
   };
 
-  const handleCompleteActivity = (activity: any) => {
+  const handleCompleteActivity = (activity: ActionItem) => {
     toast.success('Activity completed! 🌟');
     
     setTimeout(() => {
@@ -115,7 +124,7 @@ export const MissingFunctionalityEnhancer = ({ userTier = 'starter', onNavigate 
     }, 1000);
   };
 
-  const handleScheduleActivity = (activity: any) => {
+  const handleScheduleActivity = (activity: ActionItem) => {
     toast.success('Activity scheduled for later!');
   };
 
@@ -180,7 +189,7 @@ export const MissingFunctionalityEnhancer = ({ userTier = 'starter', onNavigate 
 // Enhanced Universal Button Component
 interface UniversalButtonProps {
   action: string;
-  item?: any;
+  item?: ActionItem;
   userTier?: string;
   onNavigate?: (destination: string) => void;
   variant?: 'default' | 'outline' | 'ghost';
@@ -206,61 +215,62 @@ export const UniversalButton = ({
   const enhancer = MissingFunctionalityEnhancer({ userTier, onNavigate });
   
   const handleClick = () => {
+    const safeItem: ActionItem = item ?? {};
     switch (action) {
       case 'add-to-plan':
-        enhancer.handleAddToPlan(item);
+        enhancer.handleAddToPlan(safeItem);
         break;
       case 'add-to-junior':
-        enhancer.handleAddToJunior(item);
+        enhancer.handleAddToJunior(safeItem);
         break;
       case 'save':
-        enhancer.handleSave(item);
+        enhancer.handleSave(safeItem);
         break;
       case 'share':
-        enhancer.handleShare(item);
+        enhancer.handleShare(safeItem);
         break;
       case 'like':
-        enhancer.handleLike(item);
+        enhancer.handleLike(safeItem);
         break;
       case 'download':
-        enhancer.handleDownload(item);
+        enhancer.handleDownload(safeItem);
         break;
       case 'watch':
       case 'play':
-        enhancer.handleWatchPlay(item);
+        enhancer.handleWatchPlay(safeItem);
         break;
       case 'add-to-cart':
-        enhancer.handleAddToCart(item);
+        enhancer.handleAddToCart(safeItem);
         break;
       case 'buy-now':
-        enhancer.handleBuyNow(item);
+        enhancer.handleBuyNow(safeItem);
         break;
       case 'join-group':
-        enhancer.handleJoinGroup(item);
+        enhancer.handleJoinGroup(safeItem);
         break;
       case 'join-event':
-        enhancer.handleJoinEvent(item);
+        enhancer.handleJoinEvent(safeItem);
         break;
       case 'follow':
-        enhancer.handleFollowUser(item);
+        enhancer.handleFollowUser(safeItem);
         break;
       case 'enable-notification':
-        enhancer.handleEnableNotification(item?.type || 'notifications');
+        enhancer.handleEnableNotification(safeItem.type || 'notifications');
         break;
       case 'sync-device':
-        enhancer.handleSyncDevice(item?.device || 'device');
+        enhancer.handleSyncDevice(safeItem.device || 'device');
         break;
       case 'export-data':
-        enhancer.handleExportData(item?.format || 'pdf');
+        enhancer.handleExportData(safeItem.format || 'pdf');
         break;
       case 'start-activity':
-        enhancer.handleStartActivity(item);
+        enhancer.handleStartActivity(safeItem);
         break;
       case 'complete-activity':
-        enhancer.handleCompleteActivity(item);
+        enhancer.handleCompleteActivity(safeItem);
         break;
       case 'schedule-activity':
-        enhancer.handleScheduleActivity(item);
+        enhancer.handleScheduleActivity(safeItem);
         break;
       case 'message-coach':
         enhancer.handleMessageCoach();

@@ -30,6 +30,8 @@ import type { VaultRecord } from '../types/vault';
 import { VAULT_EVENTS } from '../types/vault';
 import { connectorHub } from '../lib/connector-hub';
 import { DisclaimerFooter } from './DisclaimerFooter';
+import { sendMessage, getCurrentContext, type AIResponse } from '../lib/ai-engine';
+import { useAminyStore } from '../lib/store';
 
 interface Message {
   id: string;
@@ -51,8 +53,8 @@ interface TalkToAminyEnhancedProps {
   vaultRecords: VaultRecord[];
   userTier: string | null;
   canSendMessage: boolean;
-  onMessageSent: () => void;
-  onPaywallTrigger: () => void;
+  onMessageSent?: () => void;
+  onPaywallTrigger?: () => void;
   onRecordOpen: (recordId: string) => void;
 }
 
@@ -64,6 +66,11 @@ export const TalkToAminyEnhanced: React.FC<TalkToAminyEnhancedProps> = ({
   onPaywallTrigger,
   onRecordOpen
 }) => {
+  // Get user context for real AI calls
+  const user = useAminyStore((s) => s.user);
+  const userId = user?.id || 'anonymous';
+  const childId = user?.id ? `child-${user.id.substring(0, 8)}` : 'default';
+
   // Core state
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
@@ -164,133 +171,94 @@ export const TalkToAminyEnhanced: React.FC<TalkToAminyEnhancedProps> = ({
       .slice(0, 3); // Top 3 results
   };
 
-  // Enhanced AI response generation with streaming and context awareness
+  // Enhanced AI response generation using real Claude AI
   const generateResponse = async (userMessage: string, vaultContext: VaultRecord[], conversationContext: Message[] = []) => {
     // Create abort controller for this request
     abortControllerRef.current = new AbortController();
-    const signal = abortControllerRef.current.signal;
-    
+
     try {
       setIsTyping(true);
       setIsStreaming(true);
-      
+
       // Generate conversation title if this is the first message
       if (messages.length === 0 && !conversationTitle) {
         const title = userMessage.length > 30 ? userMessage.substring(0, 30) + '...' : userMessage;
         setConversationTitle(title);
       }
-      
-      let response = '';
+
       let citations: Message['citations'] = [];
       let contextUsed = false;
-      
-      // Enhanced context awareness
-      const recentMessages = conversationContext.slice(-4); // Last 2 exchanges
-      const hasContext = recentMessages.length > 0;
-      
-      // Check if question is about records or builds on previous conversation
-      const isRecordQuery = /\b(iep|evaluation|goals|school|therapy|report|assessment|last|recent|mentioned|you said|earlier|previous|before|that|it)\b/i.test(userMessage);
-      const isFollowUp = /\b(you said|earlier|previous|before|that|it|more|explain|tell me more|what about|how about|also)\b/i.test(userMessage);
-      
-      // Enhanced response generation with multiple response types
-      if (isRecordQuery && vaultContext.length > 0) {
+
+      // Build vault context string for the AI
+      let vaultContextString = '';
+      if (vaultContext.length > 0) {
         contextUsed = true;
-        response = await generateRecordBasedResponse(userMessage, vaultContext, recentMessages, signal);
-        
-        // Add citations
+        vaultContextString = '\n\n[VAULT DOCUMENTS RELEVANT TO THIS QUESTION]\n' +
+          vaultContext.map(record => {
+            const snippet = record.vaultText?.substring(0, 500) || 'No content available';
+            return `--- ${record.title} (${record.tags.join(', ')}) ---\n${snippet}`;
+          }).join('\n\n');
+
+        // Build citations
         vaultContext.forEach(record => {
           const snippet = record.vaultText?.substring(0, 150) + '...' || 'No content available';
           citations.push({
             recordId: record.id,
             title: record.title,
             snippet: snippet,
-            page: Math.floor(Math.random() * 10) + 1 // Mock page number
           });
         });
-        
-        // Publish citation event
+
+        // Publish citation events
         citations.forEach(citation => {
           connectorHub.publish(VAULT_EVENTS.VAULT_CITATION, {
             recordId: citation.recordId,
             snippet: citation.snippet
           }, 'talk-to-aminy');
         });
-        
-      } else if (isFollowUp && hasContext) {
-        response = await generateContextAwareResponse(userMessage, recentMessages, signal);
-      } else {
-        response = await generateStandardResponse(userMessage, signal);
       }
-      
+
+      // Build conversation history for the AI engine
+      const historyForAI = conversationContext
+        .filter(m => m.role === 'user' || m.role === 'assistant')
+        .map(m => ({
+          id: m.id,
+          role: m.role as 'user' | 'assistant',
+          content: m.content,
+          timestamp: m.timestamp.toISOString?.() || new Date().toISOString(),
+        }));
+
+      // Append vault context to the user message so Claude can reference documents
+      const enrichedMessage = vaultContextString
+        ? `${userMessage}\n${vaultContextString}`
+        : userMessage;
+
+      // Call real AI engine
+      const aiResponse: AIResponse = await sendMessage(
+        enrichedMessage,
+        historyForAI,
+        {
+          userId,
+          childId,
+          conversationId,
+          enableMemory: true,
+          maxTokens: 1024,
+        }
+      );
+
       setIsTyping(false);
       setIsStreaming(false);
-      
-      return { response, citations, contextUsed };
-      
-    } catch (error: any) {
-      if (error.name === 'AbortError') {
+
+      return { response: aiResponse.content, citations, contextUsed };
+
+    } catch (error: unknown) {
+      if (error instanceof Error && error.name === 'AbortError') {
         return null;
       }
-      
+
       setIsTyping(false);
       setIsStreaming(false);
       throw error;
-    }
-  };
-
-  // Generate record-based responses with more sophistication
-  const generateRecordBasedResponse = async (userMessage: string, vaultContext: VaultRecord[], recentMessages: Message[], signal: AbortSignal): Promise<string> => {
-    // Simulate AI processing with realistic delays
-    await new Promise(resolve => setTimeout(resolve, 800));
-    if (signal.aborted) throw new Error('AbortError');
-    
-    const responses = [
-      "Based on your uploaded records, I can see that your child has shown significant progress in several key areas. The evaluation highlights specific strengths in communication development and suggests continued focus on social interaction goals.",
-      "Looking at your documents, the most recent assessment indicates positive trends in behavior regulation and adaptive skills. The recommendations emphasize building on current successes while introducing new challenges gradually.",
-      "From your records, I notice consistent patterns in your child's learning preferences and response to different intervention strategies. The data suggests that visual supports have been particularly effective.",
-      "Your uploaded evaluations show clear developmental milestones being met, with particular strength in language comprehension. The therapist notes suggest expanding current programs to include peer interaction components.",
-      "Based on the documentation you've shared, your child's progress trajectory is very encouraging. The reports consistently mention improved self-regulation and increased engagement in structured activities."
-    ];
-    
-    return responses[Math.floor(Math.random() * responses.length)];
-  };
-
-  // Generate context-aware follow-up responses
-  const generateContextAwareResponse = async (userMessage: string, recentMessages: Message[], signal: AbortSignal): Promise<string> => {
-    await new Promise(resolve => setTimeout(resolve, 600));
-    if (signal.aborted) throw new Error('AbortError');
-    
-    const lastAssistantMessage = recentMessages.filter(m => m.role === 'assistant').slice(-1)[0];
-    
-    if (lastAssistantMessage?.content.includes('progress')) {
-      return "Absolutely! Building on that progress, I'd recommend focusing on consistency in your current approaches while gradually introducing new challenges. What specific area would you like to expand on first?";
-    } else if (lastAssistantMessage?.content.includes('strategies')) {
-      return "Great question! Those strategies can be adapted in several ways. Would you like me to suggest modifications for home, school, or community settings?";
-    } else {
-      return "I understand you'd like to know more about that. Could you help me understand which specific aspect you'd like me to elaborate on?";
-    }
-  };
-
-  // Generate standard helpful responses
-  const generateStandardResponse = async (userMessage: string, signal: AbortSignal): Promise<string> => {
-    await new Promise(resolve => setTimeout(resolve, 700));
-    if (signal.aborted) throw new Error('AbortError');
-    
-    // Enhanced response matching based on keywords
-    const lowerMessage = userMessage.toLowerCase();
-    
-    if (lowerMessage.includes('routine') || lowerMessage.includes('schedule')) {
-      return "Routines are so important for development! I'd suggest starting with visual schedules that show each step clearly. What time of day or activity would you like to focus on first?";
-    } else if (lowerMessage.includes('behavior') || lowerMessage.includes('meltdown')) {
-      return "Understanding the triggers behind challenging behaviors is key. I can help you identify patterns and develop prevention strategies. What situations tend to be most difficult?";
-    } else if (lowerMessage.includes('speech') || lowerMessage.includes('communication')) {
-      return "Communication development happens at different paces for every child. I can suggest activities that match your child's current level and interests. What communication goals are you working on?";
-    } else if (lowerMessage.includes('school') || lowerMessage.includes('teacher')) {
-      return "School partnerships are crucial for success. I can help you prepare for meetings, understand IEP goals, or suggest home-school collaboration strategies. What's your main school concern?";
-    } else if (lowerMessage.includes('sensory') || lowerMessage.includes('overwhelmed')) {
-      return "Sensory needs can really impact daily life. I can help identify your child's sensory profile and suggest accommodations or activities. What sensory challenges do you notice most?";
-    } else {
-      return "I'm here to help with any aspect of your child's development! Whether it's daily routines, communication, behavior strategies, school support, or understanding evaluations - what would be most helpful to discuss right now?";
     }
   };
 
@@ -298,18 +266,18 @@ export const TalkToAminyEnhanced: React.FC<TalkToAminyEnhancedProps> = ({
     if (!inputValue.trim()) return;
     
     if (!canSendMessage) {
-      onPaywallTrigger();
+      onPaywallTrigger?.();
       return;
     }
-    
+
     // Abort any ongoing response generation
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
     }
-    
+
     const userMessage = inputValue.trim();
     setInputValue('');
-    onMessageSent();
+    onMessageSent?.();
     
     // Add user message
     const userMsg: Message = {
@@ -351,8 +319,8 @@ export const TalkToAminyEnhanced: React.FC<TalkToAminyEnhancedProps> = ({
         await simulateStreaming(response, aiMsgId);
       }
       
-    } catch (error: any) {
-      if (error.name !== 'AbortError') {
+    } catch (error: unknown) {
+      if (!(error instanceof Error && error.name === 'AbortError')) {
         console.error('Error generating response:', error);
         toast.error('Sorry, I encountered an issue. Please try again.');
         
@@ -502,34 +470,61 @@ export const TalkToAminyEnhanced: React.FC<TalkToAminyEnhancedProps> = ({
       return;
     }
     
+    interface SpeechRecognitionEvent {
+      results: { [index: number]: { [index: number]: { transcript: string } } };
+    }
+
+    interface SpeechRecognitionErrorEvent {
+      error: string;
+    }
+
+    interface SpeechRecognitionInstance {
+      continuous: boolean;
+      interimResults: boolean;
+      lang: string;
+      onstart: (() => void) | null;
+      onresult: ((event: SpeechRecognitionEvent) => void) | null;
+      onerror: ((event: SpeechRecognitionErrorEvent) => void) | null;
+      onend: (() => void) | null;
+      start: () => void;
+    }
+
+    interface WindowWithSpeechRecognition extends Window {
+      webkitSpeechRecognition?: new () => SpeechRecognitionInstance;
+      SpeechRecognition?: new () => SpeechRecognitionInstance;
+    }
+
+    const windowWithSR = window as unknown as WindowWithSpeechRecognition;
+
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-      const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
-      const recognition = new SpeechRecognition();
-      
+      const SpeechRecognitionCtor = windowWithSR.webkitSpeechRecognition || windowWithSR.SpeechRecognition;
+      if (!SpeechRecognitionCtor) return;
+      const recognition = new SpeechRecognitionCtor();
+
       recognition.continuous = false;
       recognition.interimResults = false;
       recognition.lang = 'en-US';
-      
+
       recognition.onstart = () => {
         setIsListening(true);
       };
-      
-      recognition.onresult = (event: any) => {
+
+      recognition.onresult = (event: SpeechRecognitionEvent) => {
         const transcript = event.results[0][0].transcript;
         setInputValue(prev => prev + (prev ? ' ' : '') + transcript);
         adjustTextareaHeight();
       };
-      
-      recognition.onerror = (event: any) => {
+
+      recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
         console.error('Speech recognition error:', event.error);
         toast.error('Voice recognition failed. Please try again.');
         setIsListening(false);
       };
-      
+
       recognition.onend = () => {
         setIsListening(false);
       };
-      
+
       recognition.start();
     } else {
       toast.error('Speech recognition not supported in this browser');
@@ -539,7 +534,7 @@ export const TalkToAminyEnhanced: React.FC<TalkToAminyEnhancedProps> = ({
   // Enhanced file attachment (placeholder implementation)
   const handleFileAttachment = () => {
     if (userTier === 'starter') {
-      onPaywallTrigger();
+      onPaywallTrigger?.();
       return;
     }
     
@@ -589,7 +584,7 @@ export const TalkToAminyEnhanced: React.FC<TalkToAminyEnhancedProps> = ({
           </div>
           <div className="flex-1">
             <div className="flex items-center gap-2">
-              <h3 className="font-semibold text-primary">Ask Aminy</h3>
+              <h3 className="font-semibold text-primary">Aminy</h3>
               <Badge className="text-xs badge">
                 {userTier === 'core' || userTier === 'pro' ? 'Unlimited' : 'Limited'}
               </Badge>

@@ -192,7 +192,7 @@ export async function verifyMFAEnrollment(factorId: string, code: string): Promi
       return false;
     }
 
-    console.log('[MFA] Enrollment verified successfully');
+    if (import.meta.env.DEV) console.log('[MFA] Enrollment verified successfully');
     return true;
   } catch (error) {
     console.error('[MFA] Error verifying enrollment:', error);
@@ -242,7 +242,7 @@ export async function verifyMFALogin(code: string): Promise<boolean> {
       return false;
     }
 
-    console.log('[MFA] Login MFA verified successfully');
+    if (import.meta.env.DEV) console.log('[MFA] Login MFA verified successfully');
     return true;
   } catch (error) {
     console.error('[MFA] Error verifying login MFA:', error);
@@ -264,7 +264,7 @@ export async function unenrollMFA(factorId: string): Promise<boolean> {
       return false;
     }
 
-    console.log('[MFA] Factor unenrolled successfully');
+    if (import.meta.env.DEV) console.log('[MFA] Factor unenrolled successfully');
     return true;
   } catch (error) {
     console.error('[MFA] Error unenrolling MFA:', error);

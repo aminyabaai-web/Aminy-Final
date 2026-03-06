@@ -9,6 +9,70 @@ import * as kv from "./kv_store.tsx";
 
 type ProviderType = 'bcba' | 'slp' | 'ot' | 'pt' | 'psychologist' | 'developmental_pediatrician' | 'other';
 
+interface AvailabilitySlot {
+  start: string;
+  end: string;
+}
+
+interface ProviderRecord {
+  id: string;
+  type: ProviderType;
+  specialties?: string[];
+  location?: {
+    zipCode?: string;
+    telehealth?: boolean;
+  };
+  insurance?: string[];
+  hourlyRate?: number;
+  languages?: string[];
+  acceptingNewPatients?: boolean;
+  rating?: number;
+  reviewCount?: number;
+  verified?: boolean;
+  verificationStatus?: string;
+  verificationData?: {
+    licenseNumber: string;
+    licenseState: string;
+    npiNumber: string;
+    submittedAt: string;
+  };
+  availability?: Record<string, AvailabilitySlot[]>;
+  createdAt?: string;
+  updatedAt?: string;
+  [key: string]: unknown;
+}
+
+interface SessionRecord {
+  id: string;
+  providerId: string;
+  patientId: string;
+  patientName?: string;
+  parentName?: string;
+  scheduledAt: string;
+  duration: number;
+  type?: string;
+  status: string;
+  notes?: string;
+  notesSubmitted?: boolean;
+  fee?: number;
+  paid?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+  [key: string]: unknown;
+}
+
+interface PatientRecord {
+  childName?: string;
+  parentName?: string;
+  profileAccess?: string;
+  [key: string]: unknown;
+}
+
+function getErrorMessage(error: unknown): string {
+  if (error instanceof Error) return error.message;
+  return String(error);
+}
+
 /**
  * Get provider by ID
  */
@@ -27,9 +91,9 @@ export async function getProvider(providerId: string): Promise<Response> {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Get provider error:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -52,31 +116,31 @@ export async function searchProviders(req: Request): Promise<Response> {
     const acceptingNew = url.searchParams.get('acceptingNew');
 
     // Get all providers
-    const allProviders = await kv.getByPrefix('provider:');
+    const allProviders = (await kv.getByPrefix('provider:')) as ProviderRecord[];
 
     // Filter based on criteria
-    let filtered = allProviders.filter((p: any) => {
+    let filtered = allProviders.filter((p: ProviderRecord) => {
       if (type && p.type !== type) return false;
       if (specialties?.length && !specialties.some(s => p.specialties?.includes(s))) return false;
       if (zipCode && p.location?.zipCode !== zipCode) return false;
       if (telehealth === 'true' && !p.location?.telehealth) return false;
       if (insurance && !p.insurance?.includes(insurance)) return false;
-      if (maxRate && p.hourlyRate > parseInt(maxRate)) return false;
+      if (maxRate && (p.hourlyRate ?? 0) > parseInt(maxRate)) return false;
       if (language && !p.languages?.includes(language)) return false;
       if (acceptingNew === 'true' && !p.acceptingNewPatients) return false;
       return true;
     });
 
     // Sort by rating
-    filtered.sort((a: any, b: any) => (b.rating || 0) - (a.rating || 0));
+    filtered.sort((a: ProviderRecord, b: ProviderRecord) => (b.rating || 0) - (a.rating || 0));
 
     return new Response(JSON.stringify(filtered), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Search providers error:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -88,25 +152,26 @@ export async function searchProviders(req: Request): Promise<Response> {
  */
 export async function saveProvider(req: Request): Promise<Response> {
   try {
-    const data = await req.json();
+    const data = (await req.json()) as Record<string, unknown>;
     const isUpdate = req.method === 'PUT';
 
-    const providerId = data.id || `provider_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+    const providerId = (data.id as string) || `provider_${Date.now()}_${Math.random().toString(36).substring(7)}`;
 
-    const provider = {
-      ...data,
+    const provider: ProviderRecord = {
+      ...(data as Omit<ProviderRecord, 'id'>),
       id: providerId,
       updatedAt: new Date().toISOString(),
-      createdAt: data.createdAt || new Date().toISOString(),
-      verified: data.verified || false,
-      rating: data.rating || 0,
-      reviewCount: data.reviewCount || 0,
+      createdAt: (data.createdAt as string) || new Date().toISOString(),
+      verified: (data.verified as boolean) || false,
+      rating: (data.rating as number) || 0,
+      reviewCount: (data.reviewCount as number) || 0,
+      type: (data.type as ProviderType) || 'other',
     };
 
     await kv.set(`provider:${providerId}`, provider);
 
     // Index by type for faster searches
-    const typeIndex = await kv.get(`providers_by_type:${provider.type}`) || [];
+    const typeIndex = ((await kv.get(`providers_by_type:${provider.type}`)) as string[] | null) || [];
     if (!typeIndex.includes(providerId)) {
       typeIndex.push(providerId);
       await kv.set(`providers_by_type:${provider.type}`, typeIndex);
@@ -116,9 +181,9 @@ export async function saveProvider(req: Request): Promise<Response> {
       status: isUpdate ? 200 : 201,
       headers: { 'Content-Type': 'application/json' },
     });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Save provider error:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -130,9 +195,9 @@ export async function saveProvider(req: Request): Promise<Response> {
  */
 export async function updateAvailability(req: Request, providerId: string): Promise<Response> {
   try {
-    const { availability } = await req.json();
+    const { availability } = (await req.json()) as { availability: Record<string, AvailabilitySlot[]> };
 
-    const provider = await kv.get(`provider:${providerId}`);
+    const provider = (await kv.get(`provider:${providerId}`)) as ProviderRecord | null;
     if (!provider) {
       return new Response(JSON.stringify({ error: 'Provider not found' }), {
         status: 404,
@@ -149,9 +214,9 @@ export async function updateAvailability(req: Request, providerId: string): Prom
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Update availability error:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -169,9 +234,9 @@ export async function getProviderPatients(providerId: string): Promise<Response>
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Get patients error:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -188,9 +253,9 @@ export async function getProviderSessions(req: Request, providerId: string): Pro
     const startDate = url.searchParams.get('startDate');
     const endDate = url.searchParams.get('endDate');
 
-    const allSessions = await kv.getByPrefix(`session:${providerId}:`);
+    const allSessions = (await kv.getByPrefix(`session:${providerId}:`)) as SessionRecord[];
 
-    const filtered = allSessions.filter((s: any) => {
+    const filtered = allSessions.filter((s: SessionRecord) => {
       if (status && s.status !== status) return false;
       if (startDate && new Date(s.scheduledAt) < new Date(startDate)) return false;
       if (endDate && new Date(s.scheduledAt) > new Date(endDate)) return false;
@@ -198,7 +263,7 @@ export async function getProviderSessions(req: Request, providerId: string): Pro
     });
 
     // Sort by date
-    filtered.sort((a: any, b: any) =>
+    filtered.sort((a: SessionRecord, b: SessionRecord) =>
       new Date(a.scheduledAt).getTime() - new Date(b.scheduledAt).getTime()
     );
 
@@ -206,9 +271,9 @@ export async function getProviderSessions(req: Request, providerId: string): Pro
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Get sessions error:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -220,7 +285,7 @@ export async function getProviderSessions(req: Request, providerId: string): Pro
  */
 export async function getProviderStats(providerId: string): Promise<Response> {
   try {
-    const provider = await kv.get(`provider:${providerId}`);
+    const provider = (await kv.get(`provider:${providerId}`)) as ProviderRecord | null;
     if (!provider) {
       return new Response(JSON.stringify({ error: 'Provider not found' }), {
         status: 404,
@@ -228,33 +293,33 @@ export async function getProviderStats(providerId: string): Promise<Response> {
       });
     }
 
-    const patients = await kv.getByPrefix(`provider_patient:${providerId}:`);
-    const sessions = await kv.getByPrefix(`session:${providerId}:`);
+    const patients = (await kv.getByPrefix(`provider_patient:${providerId}:`)) as PatientRecord[];
+    const sessions = (await kv.getByPrefix(`session:${providerId}:`)) as SessionRecord[];
 
     const now = new Date();
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
 
-    const sessionsThisMonth = sessions.filter((s: any) =>
+    const sessionsThisMonth = sessions.filter((s: SessionRecord) =>
       new Date(s.scheduledAt) >= monthStart && s.status === 'completed'
     );
 
-    const earningsThisMonth = sessionsThisMonth.reduce((sum: number, s: any) => sum + (s.fee || 0), 0);
+    const earningsThisMonth = sessionsThisMonth.reduce((sum: number, s: SessionRecord) => sum + (s.fee || 0), 0);
     const earningsTotal = sessions
-      .filter((s: any) => s.status === 'completed')
-      .reduce((sum: number, s: any) => sum + (s.fee || 0), 0);
+      .filter((s: SessionRecord) => s.status === 'completed')
+      .reduce((sum: number, s: SessionRecord) => sum + (s.fee || 0), 0);
 
-    const activePatients = patients.filter((p: any) => p.profileAccess === 'granted').length;
+    const activePatients = patients.filter((p: PatientRecord) => p.profileAccess === 'granted').length;
 
     // Find next available slot
     const upcomingSessions = sessions
-      .filter((s: any) => new Date(s.scheduledAt) > now && s.status === 'upcoming')
-      .sort((a: any, b: any) => new Date(a.scheduledAt).getTime() - new Date(b.scheduledAt).getTime());
+      .filter((s: SessionRecord) => new Date(s.scheduledAt) > now && s.status === 'upcoming')
+      .sort((a: SessionRecord, b: SessionRecord) => new Date(a.scheduledAt).getTime() - new Date(b.scheduledAt).getTime());
 
     const stats = {
       totalPatients: patients.length,
       activePatients,
       sessionsThisMonth: sessionsThisMonth.length,
-      sessionsTotal: sessions.filter((s: any) => s.status === 'completed').length,
+      sessionsTotal: sessions.filter((s: SessionRecord) => s.status === 'completed').length,
       earningsThisMonth,
       earningsTotal,
       rating: provider.rating || 0,
@@ -266,9 +331,9 @@ export async function getProviderStats(providerId: string): Promise<Response> {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Get stats error:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -280,7 +345,13 @@ export async function getProviderStats(providerId: string): Promise<Response> {
  */
 export async function scheduleSession(req: Request, providerId: string): Promise<Response> {
   try {
-    const { patientId, scheduledAt, duration, type, notes } = await req.json();
+    const { patientId, scheduledAt, duration, type, notes } = (await req.json()) as {
+      patientId: string;
+      scheduledAt: string;
+      duration: number;
+      type?: string;
+      notes?: string;
+    };
 
     if (!patientId || !scheduledAt || !duration) {
       return new Response(JSON.stringify({ error: 'Missing required fields' }), {
@@ -289,7 +360,7 @@ export async function scheduleSession(req: Request, providerId: string): Promise
       });
     }
 
-    const provider = await kv.get(`provider:${providerId}`);
+    const provider = (await kv.get(`provider:${providerId}`)) as ProviderRecord | null;
     if (!provider) {
       return new Response(JSON.stringify({ error: 'Provider not found' }), {
         status: 404,
@@ -297,10 +368,10 @@ export async function scheduleSession(req: Request, providerId: string): Promise
       });
     }
 
-    const patient = await kv.get(`provider_patient:${providerId}:${patientId}`);
+    const patient = (await kv.get(`provider_patient:${providerId}:${patientId}`)) as PatientRecord | null;
 
     const sessionId = `session_${Date.now()}_${Math.random().toString(36).substring(7)}`;
-    const session = {
+    const session: SessionRecord = {
       id: sessionId,
       providerId,
       patientId,
@@ -322,9 +393,9 @@ export async function scheduleSession(req: Request, providerId: string): Promise
       status: 201,
       headers: { 'Content-Type': 'application/json' },
     });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Schedule session error:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -336,11 +407,11 @@ export async function scheduleSession(req: Request, providerId: string): Promise
  */
 export async function updateSessionStatus(req: Request, sessionId: string): Promise<Response> {
   try {
-    const { status, notes } = await req.json();
+    const { status, notes } = (await req.json()) as { status: string; notes?: string };
 
     // Find the session
-    const allSessions = await kv.getByPrefix('session:');
-    const session = allSessions.find((s: any) => s.id === sessionId);
+    const allSessions = (await kv.getByPrefix('session:')) as SessionRecord[];
+    const session = allSessions.find((s: SessionRecord) => s.id === sessionId);
 
     if (!session) {
       return new Response(JSON.stringify({ error: 'Session not found' }), {
@@ -359,9 +430,9 @@ export async function updateSessionStatus(req: Request, sessionId: string): Prom
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Update session error:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -373,11 +444,11 @@ export async function updateSessionStatus(req: Request, sessionId: string): Prom
  */
 export async function submitSessionNotes(req: Request, sessionId: string): Promise<Response> {
   try {
-    const notes = await req.json();
+    const notes = (await req.json()) as Record<string, unknown>;
 
     // Find the session
-    const allSessions = await kv.getByPrefix('session:');
-    const session = allSessions.find((s: any) => s.id === sessionId);
+    const allSessions = (await kv.getByPrefix('session:')) as SessionRecord[];
+    const session = allSessions.find((s: SessionRecord) => s.id === sessionId);
 
     if (!session) {
       return new Response(JSON.stringify({ error: 'Session not found' }), {
@@ -405,9 +476,9 @@ export async function submitSessionNotes(req: Request, sessionId: string): Promi
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Submit notes error:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -419,7 +490,7 @@ export async function submitSessionNotes(req: Request, sessionId: string): Promi
  */
 export async function requestProfileAccess(req: Request, providerId: string): Promise<Response> {
   try {
-    const { childId, message } = await req.json();
+    const { childId, message } = (await req.json()) as { childId: string; message?: string };
 
     const requestId = `access_request:${providerId}:${childId}:${Date.now()}`;
     const request = {
@@ -437,9 +508,9 @@ export async function requestProfileAccess(req: Request, providerId: string): Pr
       status: 201,
       headers: { 'Content-Type': 'application/json' },
     });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Request access error:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -462,7 +533,7 @@ export async function getAvailableSlots(req: Request, providerId: string): Promi
       });
     }
 
-    const provider = await kv.get(`provider:${providerId}`);
+    const provider = (await kv.get(`provider:${providerId}`)) as ProviderRecord | null;
     if (!provider) {
       return new Response(JSON.stringify({ error: 'Provider not found' }), {
         status: 404,
@@ -472,16 +543,16 @@ export async function getAvailableSlots(req: Request, providerId: string): Promi
 
     // Get day of week
     const dayOfWeek = new Date(date).toLocaleDateString('en-US', { weekday: 'lowercase' });
-    const dayAvailability = provider.availability?.[dayOfWeek] || [];
+    const dayAvailability: AvailabilitySlot[] = provider.availability?.[dayOfWeek] || [];
 
     // Get existing sessions for the date
-    const allSessions = await kv.getByPrefix(`session:${providerId}:`);
+    const allSessions = (await kv.getByPrefix(`session:${providerId}:`)) as SessionRecord[];
     const dayStart = new Date(date);
     dayStart.setHours(0, 0, 0, 0);
     const dayEnd = new Date(date);
     dayEnd.setHours(23, 59, 59, 999);
 
-    const bookedSessions = allSessions.filter((s: any) => {
+    const bookedSessions = allSessions.filter((s: SessionRecord) => {
       const sessionDate = new Date(s.scheduledAt);
       return sessionDate >= dayStart && sessionDate <= dayEnd && s.status !== 'cancelled';
     });
@@ -503,7 +574,7 @@ export async function getAvailableSlots(req: Request, providerId: string): Promi
         const slotEndDateTime = new Date(slotDateTime.getTime() + duration * 60000);
 
         // Check if slot conflicts with existing sessions
-        const hasConflict = bookedSessions.some((s: any) => {
+        const hasConflict = bookedSessions.some((s: SessionRecord) => {
           const sessionStart = new Date(s.scheduledAt);
           const sessionEnd = new Date(sessionStart.getTime() + s.duration * 60000);
           return !(slotEndDateTime <= sessionStart || slotDateTime >= sessionEnd);
@@ -526,9 +597,9 @@ export async function getAvailableSlots(req: Request, providerId: string): Promi
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Get slots error:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -540,9 +611,13 @@ export async function getAvailableSlots(req: Request, providerId: string): Promi
  */
 export async function verifyProvider(req: Request, providerId: string): Promise<Response> {
   try {
-    const { licenseNumber, licenseState, npiNumber } = await req.json();
+    const { licenseNumber, licenseState, npiNumber } = (await req.json()) as {
+      licenseNumber: string;
+      licenseState: string;
+      npiNumber: string;
+    };
 
-    const provider = await kv.get(`provider:${providerId}`);
+    const provider = (await kv.get(`provider:${providerId}`)) as ProviderRecord | null;
     if (!provider) {
       return new Response(JSON.stringify({ error: 'Provider not found' }), {
         status: 404,
@@ -569,9 +644,9 @@ export async function verifyProvider(req: Request, providerId: string): Promise<
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Verify provider error:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });

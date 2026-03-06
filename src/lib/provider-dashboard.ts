@@ -146,7 +146,7 @@ const getAuthToken = (): string => {
     : publicAnonKey;
 };
 
-const providerApi = async (endpoint: string, options: RequestInit = {}): Promise<any> => {
+const providerApi = async (endpoint: string, options: RequestInit = {}): Promise<unknown> => {
   const response = await fetch(
     `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/provider${endpoint}`,
     {
@@ -310,13 +310,13 @@ export async function getTimeOff(providerId: string): Promise<TimeOff[]> {
 
   if (error) return [];
 
-  return (data || []).map((row: any) => ({
-    id: row.id,
-    providerId: row.provider_id,
-    startDate: row.start_date,
-    endDate: row.end_date,
-    reason: row.reason,
-    isAllDay: row.is_all_day,
+  return (data || []).map((row) => ({
+    id: row.id as string,
+    providerId: row.provider_id as string,
+    startDate: row.start_date as string,
+    endDate: row.end_date as string,
+    reason: row.reason as string | undefined,
+    isAllDay: row.is_all_day as boolean,
   }));
 }
 
@@ -381,23 +381,26 @@ export async function getAppointments(
     return [];
   }
 
-  return (data || []).map((row: any) => ({
-    id: row.id,
-    providerId: row.provider_id,
-    clientId: row.user_id,
-    clientName: row.profiles?.parent_name || 'Client',
-    childName: row.profiles?.child_name || 'Child',
-    childAge: row.profiles?.child_age || 0,
-    startTime: row.start_time,
-    endTime: row.end_time,
-    visitType: row.visit_type,
-    status: row.status,
-    reasonForVisit: row.reason_for_visit,
-    notes: row.notes,
-    videoRoomUrl: row.video_room_url,
-    videoRoomName: row.video_room_name,
-    createdAt: row.created_at,
-  }));
+  return (data || []).map((row) => {
+    const profiles = row.profiles as { parent_name?: string; child_name?: string; child_age?: number } | null;
+    return {
+      id: row.id as string,
+      providerId: row.provider_id as string,
+      clientId: row.user_id as string,
+      clientName: profiles?.parent_name || 'Client',
+      childName: profiles?.child_name || 'Child',
+      childAge: profiles?.child_age || 0,
+      startTime: row.start_time as string,
+      endTime: row.end_time as string,
+      visitType: row.visit_type as string,
+      status: row.status as AppointmentStatus,
+      reasonForVisit: row.reason_for_visit as string,
+      notes: row.notes as string | undefined,
+      videoRoomUrl: row.video_room_url as string | undefined,
+      videoRoomName: row.video_room_name as string | undefined,
+      createdAt: row.created_at as string,
+    };
+  });
 }
 
 /**
@@ -464,8 +467,8 @@ export async function startVideoSession(appointmentId: string): Promise<{
     await updateAppointmentStatus(appointmentId, 'in_progress');
 
     return {
-      roomUrl: result.roomUrl,
-      token: result.token,
+      roomUrl: (result as Record<string, unknown>).roomUrl as string,
+      token: (result as Record<string, unknown>).token as string,
     };
   } catch (error) {
     console.error('Failed to start video session:', error);
@@ -678,7 +681,7 @@ export async function getClients(providerId: string): Promise<ClientSummary[]> {
   for (const apt of appointments) {
     const clientId = apt.user_id;
     if (!clientMap.has(clientId)) {
-      const profile = apt.profiles as any;
+      const profile = apt.profiles as { parent_name?: string; child_name?: string; child_age?: number; tier?: string } | null;
       clientMap.set(clientId, {
         clientId,
         clientName: profile?.parent_name || 'Client',
@@ -816,68 +819,68 @@ export async function getProviderStats(providerId: string): Promise<ProviderStat
 // Helpers
 // ============================================================================
 
-function mapDbProvider(data: any): Provider {
+function mapDbProvider(data: Record<string, unknown>): Provider {
   return {
-    id: data.id,
-    userId: data.user_id,
-    firstName: data.first_name,
-    lastName: data.last_name,
-    email: data.email,
-    phone: data.phone,
-    role: data.role,
-    credentials: data.credentials || [],
-    licenseNumber: data.license_number,
-    licensedStates: data.licensed_states || [],
-    specialties: data.specialties || [],
-    bio: data.bio,
-    photoUrl: data.photo_url,
-    hourlyRate: data.hourly_rate,
-    rating: data.rating,
-    reviewCount: data.review_count,
-    isAcceptingNew: data.is_accepting_new,
-    languages: data.languages || ['English'],
-    timezone: data.timezone || 'America/New_York',
-    createdAt: data.created_at,
-    updatedAt: data.updated_at,
+    id: data.id as string,
+    userId: data.user_id as string,
+    firstName: data.first_name as string,
+    lastName: data.last_name as string,
+    email: data.email as string,
+    phone: data.phone as string | undefined,
+    role: data.role as Provider['role'],
+    credentials: (data.credentials || []) as string[],
+    licenseNumber: data.license_number as string,
+    licensedStates: (data.licensed_states || []) as string[],
+    specialties: (data.specialties || []) as string[],
+    bio: data.bio as string | undefined,
+    photoUrl: data.photo_url as string | undefined,
+    hourlyRate: data.hourly_rate as number,
+    rating: data.rating as number,
+    reviewCount: data.review_count as number,
+    isAcceptingNew: data.is_accepting_new as boolean,
+    languages: (data.languages || ['English']) as string[],
+    timezone: (data.timezone as string) || 'America/New_York',
+    createdAt: data.created_at as string,
+    updatedAt: data.updated_at as string,
   };
 }
 
-function mapDbAvailability(data: any): AvailabilitySlot {
+function mapDbAvailability(data: Record<string, unknown>): AvailabilitySlot {
   return {
-    id: data.id,
-    providerId: data.provider_id,
-    dayOfWeek: data.day_of_week,
-    startTime: data.start_time,
-    endTime: data.end_time,
-    isRecurring: data.is_recurring ?? true,
-    effectiveFrom: data.effective_from,
-    effectiveUntil: data.effective_until,
+    id: data.id as string,
+    providerId: data.provider_id as string,
+    dayOfWeek: data.day_of_week as number,
+    startTime: data.start_time as string,
+    endTime: data.end_time as string,
+    isRecurring: (data.is_recurring as boolean) ?? true,
+    effectiveFrom: data.effective_from as string | undefined,
+    effectiveUntil: data.effective_until as string | undefined,
   };
 }
 
-function mapDbSessionNote(data: any): SessionNote {
+function mapDbSessionNote(data: Record<string, unknown>): SessionNote {
   return {
-    id: data.id,
-    appointmentId: data.appointment_id,
-    providerId: data.provider_id,
-    clientId: data.client_id,
-    childName: data.child_name,
-    sessionDate: data.session_date,
-    sessionDuration: data.session_duration,
-    status: data.status,
-    presentingConcerns: data.presenting_concerns,
-    interventionsUsed: data.interventions_used || [],
-    clientResponse: data.client_response,
-    progressTowardGoals: data.progress_toward_goals,
-    recommendationsForHome: data.recommendations_for_home || [],
-    nextSessionFocus: data.next_session_focus,
-    cptCodes: data.cpt_codes || [],
-    unitsProvided: data.units_provided,
-    createdAt: data.created_at,
-    updatedAt: data.updated_at,
-    submittedAt: data.submitted_at,
-    approvedBy: data.approved_by,
-    approvedAt: data.approved_at,
+    id: data.id as string,
+    appointmentId: data.appointment_id as string,
+    providerId: data.provider_id as string,
+    clientId: data.client_id as string,
+    childName: data.child_name as string,
+    sessionDate: data.session_date as string,
+    sessionDuration: data.session_duration as number,
+    status: data.status as SessionNote['status'],
+    presentingConcerns: data.presenting_concerns as string,
+    interventionsUsed: (data.interventions_used || []) as string[],
+    clientResponse: data.client_response as string,
+    progressTowardGoals: data.progress_toward_goals as string,
+    recommendationsForHome: (data.recommendations_for_home || []) as string[],
+    nextSessionFocus: data.next_session_focus as string,
+    cptCodes: (data.cpt_codes || []) as string[],
+    unitsProvided: data.units_provided as number,
+    createdAt: data.created_at as string,
+    updatedAt: data.updated_at as string,
+    submittedAt: data.submitted_at as string | undefined,
+    approvedBy: data.approved_by as string | undefined,
+    approvedAt: data.approved_at as string | undefined,
   };
 }
 

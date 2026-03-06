@@ -22,7 +22,7 @@ import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { triggerHaptic } from '../lib/haptics';
 import { cn } from '../lib/utils';
-import { store } from '../lib/store';
+import { useAminyStore } from '../lib/store';
 
 type CheckInType =
   | 'morning_greeting'
@@ -270,8 +270,8 @@ export function useProactiveCheckIns() {
     }
 
     // Get user's last active time from store
-    const state = store.getState();
-    const lastActive = state.lastActiveAt ? new Date(state.lastActiveAt) : null;
+    const state = useAminyStore.getState();
+    const lastActive = (state as any).lastActiveAt ? new Date((state as any).lastActiveAt) : null;
     const daysSinceActive = lastActive
       ? Math.floor((now.getTime() - lastActive.getTime()) / (1000 * 60 * 60 * 24))
       : 0;

@@ -8,7 +8,7 @@ import { UrgentHelpModal } from './UrgentHelpModal';
 import { HelpCenter } from './HelpCenter';
 import { ChildProfileChip } from './ChildProfileChip';
 import { CoverageChatFlow, CoverageResponses } from './CoverageChatFlow';
-import { CoverageClaritySummary } from './CoverageClaritySummary';
+import { CoverageClaritySummary, CoverageSummaryData } from './CoverageClaritySummary';
 import { useDisplayNames } from '../lib/name-store';
 import { toast } from 'sonner';
 import {
@@ -44,7 +44,7 @@ interface CoverageCoachProps {
     childName: string;
   };
   userTier?: string;
-  connectorData?: any;
+  connectorData?: Record<string, unknown>;
   onPaywallTrigger?: () => void;
 }
 
@@ -81,7 +81,7 @@ export function CoverageCoach({
   const [showChatFlow, setShowChatFlow] = useState(false);
   const [showSummary, setShowSummary] = useState(false);
   const [coverageResponses, setCoverageResponses] = useState<CoverageResponses | null>(null);
-  const [savedSummaries, setSavedSummaries] = useState<any[]>([]);
+  const [savedSummaries, setSavedSummaries] = useState<(CoverageSummaryData & { id: string; savedAt: string })[]>([]);
 
   // Safe data extraction
   const safeUserData = userData || { parentName: 'Parent', childName: 'Child' };
@@ -265,7 +265,7 @@ export function CoverageCoach({
     setShowSummary(true);
   };
 
-  const handleSaveSummary = async (summaryData: any) => {
+  const handleSaveSummary = async (summaryData: CoverageSummaryData) => {
     // Save to local state and localStorage
     const newSummary = {
       ...summaryData,
@@ -282,7 +282,7 @@ export function CoverageCoach({
     toast.success('Coverage summary saved to Reports!');
   };
 
-  const handleEmailSummary = async (summaryData: any) => {
+  const handleEmailSummary = async (summaryData: CoverageSummaryData) => {
     // In a real app, this would call the backend to send an email
     // For now, we'll simulate it
     await new Promise(resolve => setTimeout(resolve, 1500));

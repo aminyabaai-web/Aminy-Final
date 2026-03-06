@@ -13,6 +13,7 @@ import { motion } from 'motion/react';
 import { supabase } from '../utils/supabase/client';
 import aminyLogoCropped from "../assets/aminy-logo-cropped.png";
 import { logger } from '../lib/logger';
+import { storeCalendarTokens } from '../lib/google-calendar-sync';
 
 interface AuthCallbackProps {
   onAuthSuccess: (email: string) => void;
@@ -21,10 +22,10 @@ interface AuthCallbackProps {
 }
 
 // Use refs for callbacks to prevent useEffect re-runs on prop changes
-function useStableCallback<T extends (...args: any[]) => any>(callback: T): T {
+function useStableCallback<A extends unknown[], R>(callback: (...args: A) => R): (...args: A) => R {
   const callbackRef = useRef(callback);
   callbackRef.current = callback;
-  return useCallback((...args: Parameters<T>) => callbackRef.current(...args), []) as T;
+  return useCallback((...args: A) => callbackRef.current(...args), []);
 }
 
 const fontStack = 'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", "Helvetica Neue", Arial, "Noto Sans", sans-serif';
@@ -100,12 +101,46 @@ export function AuthCallback({ onAuthSuccess, onPasswordReset, onError }: AuthCa
         handledRef.current = true;
         clearTimeout(timeoutId);
 
-        setMessage('Welcome back');
-        setSubMessage('Preparing your dashboard...');
-        setStatus('success');
-        setTimeout(() => {
-          stableOnAuthSuccess(session.user.email || '');
-        }, 1200);
+        // Check if this is a calendar connection callback
+        const isCalendarConnect = queryParams.get('calendar_connect') === 'true';
+
+        if (isCalendarConnect && session.provider_token) {
+          // Store the Google Calendar tokens
+          setMessage('Connecting calendar');
+          setSubMessage('Setting up Google Calendar sync...');
+
+          storeCalendarTokens(
+            session.user.id,
+            session.provider_token,
+            session.provider_refresh_token || null
+          )
+            .then(() => {
+              logger.dev('Calendar tokens stored successfully');
+              setMessage('Calendar connected');
+              setSubMessage('Google Calendar is now synced with Aminy');
+              setStatus('success');
+              setTimeout(() => {
+                stableOnAuthSuccess(session.user.email || '');
+              }, 1500);
+            })
+            .catch((err) => {
+              logger.error('Failed to store calendar tokens:', err);
+              // Still proceed with auth success even if calendar storage fails
+              setMessage('Welcome back');
+              setSubMessage('Calendar setup had an issue, but you are signed in.');
+              setStatus('success');
+              setTimeout(() => {
+                stableOnAuthSuccess(session.user.email || '');
+              }, 1500);
+            });
+        } else {
+          setMessage('Welcome back');
+          setSubMessage('Preparing your dashboard...');
+          setStatus('success');
+          setTimeout(() => {
+            stableOnAuthSuccess(session.user.email || '');
+          }, 1200);
+        }
       }
     });
 
@@ -128,12 +163,44 @@ export function AuthCallback({ onAuthSuccess, onPasswordReset, onError }: AuthCa
           handledRef.current = true;
           clearTimeout(timeoutId);
 
-          setMessage('Welcome back');
-          setSubMessage('Preparing your dashboard...');
-          setStatus('success');
-          setTimeout(() => {
-            stableOnAuthSuccess(session.user.email || '');
-          }, 1200);
+          // Check if this is a calendar connection callback
+          const isCalendarConnect = queryParams.get('calendar_connect') === 'true';
+
+          if (isCalendarConnect && session.provider_token) {
+            setMessage('Connecting calendar');
+            setSubMessage('Setting up Google Calendar sync...');
+
+            storeCalendarTokens(
+              session.user.id,
+              session.provider_token,
+              session.provider_refresh_token || null
+            )
+              .then(() => {
+                logger.dev('Calendar tokens stored (existing session path)');
+                setMessage('Calendar connected');
+                setSubMessage('Google Calendar is now synced with Aminy');
+                setStatus('success');
+                setTimeout(() => {
+                  stableOnAuthSuccess(session.user.email || '');
+                }, 1500);
+              })
+              .catch((err) => {
+                logger.error('Failed to store calendar tokens:', err);
+                setMessage('Welcome back');
+                setSubMessage('Calendar setup had an issue, but you are signed in.');
+                setStatus('success');
+                setTimeout(() => {
+                  stableOnAuthSuccess(session.user.email || '');
+                }, 1500);
+              });
+          } else {
+            setMessage('Welcome back');
+            setSubMessage('Preparing your dashboard...');
+            setStatus('success');
+            setTimeout(() => {
+              stableOnAuthSuccess(session.user.email || '');
+            }, 1200);
+          }
         }
       } catch (err) {
         logger.error('Error checking existing session:', err);

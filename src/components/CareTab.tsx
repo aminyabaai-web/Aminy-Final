@@ -41,6 +41,7 @@ interface CareTabProps {
   onPaywallTrigger?: () => void;
   onSuccessEvent?: (eventType: string, source: string) => void;
   returnTo?: string | null;
+  onBack?: () => void;
 }
 
 type CareTabView = 'messages' | 'schedule' | 'minutes' | 'past-sessions';

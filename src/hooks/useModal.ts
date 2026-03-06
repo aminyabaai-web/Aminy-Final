@@ -7,7 +7,7 @@
 
 import { useState, useCallback, useEffect, useRef } from 'react';
 
-interface UseModalOptions {
+export interface UseModalOptions {
   /** Initial open state */
   defaultOpen?: boolean;
   /** Callback when modal opens */
@@ -22,7 +22,7 @@ interface UseModalOptions {
   preventScroll?: boolean;
 }
 
-interface UseModalReturn {
+export interface UseModalReturn {
   /** Whether the modal is open */
   isOpen: boolean;
   /** Open the modal */
@@ -45,7 +45,7 @@ interface UseModalReturn {
     tabIndex: number;
   };
   /** Ref for the modal content (for click outside detection) */
-  contentRef: React.RefObject<HTMLDivElement>;
+  contentRef: React.RefObject<HTMLDivElement | null>;
 }
 
 /**
@@ -83,7 +83,7 @@ export function useModal(options: UseModalOptions = {}): UseModalReturn {
   } = options;
 
   const [isOpen, setIsOpenState] = useState(defaultOpen);
-  const contentRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement | null>(null);
   const previousActiveElement = useRef<Element | null>(null);
 
   const open = useCallback(() => {

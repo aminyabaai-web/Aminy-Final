@@ -23,7 +23,7 @@ import {
   Edit3, Reply, HelpCircle, AlertCircle, Trash2, RotateCcw, Volume2, 
   Zap, Users, Hash, AtSign, Eye, Copy, Share, ExternalLink,
   PlayCircle, Loader2, Check, RefreshCw, Wifi, WifiOff, Upload,
-  Calendar as CalendarDays, Bell, Square, Home, End, Slash,
+  Calendar as CalendarDays, Bell, Square, Home, Slash,
   MonitorSpeaker, Maximize2, StickyNote, ChevronDown, ChevronUp,
   FileVideo, FileImage, File, Mic2, Settings, Pin
 } from 'lucide-react';
@@ -70,7 +70,7 @@ interface CarePageProps {
   childName?: string;
   onNavigate?: (destination: string) => void;
   onPaywallTrigger?: () => void;
-  connectorData?: any;
+  connectorData?: Record<string, unknown>;
   setActiveTab?: (tab: string) => void;
   userData?: {
     parentName?: string;

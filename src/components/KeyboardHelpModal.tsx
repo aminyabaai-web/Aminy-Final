@@ -23,7 +23,7 @@ const shortcutCategories: ShortcutCategory[] = [
     title: 'Navigation',
     shortcuts: [
       { keys: ['Alt', 'H'], description: 'Go to Home' },
-      { keys: ['Alt', 'A'], description: 'Go to Ask Aminy' },
+      { keys: ['Alt', 'A'], description: 'Go to Aminy' },
       { keys: ['Alt', 'M'], description: 'Go to Messages' },
       { keys: ['Alt', 'P'], description: 'Go to Care Plan' },
       { keys: ['Alt', 'R'], description: 'Go to Reports' },

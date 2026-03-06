@@ -85,7 +85,7 @@ export function useVoiceInput(options: VoiceInputOptions = {}) {
     confidence: 0,
   });
 
-  const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const recognitionRef = useRef<any>(null);
   const isInitializedRef = useRef(false);
 
   // Check browser support

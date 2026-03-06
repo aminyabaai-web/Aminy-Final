@@ -37,19 +37,20 @@ const vibratePattern = (pattern: number | number[]): void => {
 const getTapticEngine = (): HapticAPI | null => {
   // Check for iOS Taptic Engine API (iOS 10+)
   if (typeof window !== 'undefined') {
-    const w = window as any;
+    const w = window as unknown as { webkit?: { messageHandlers?: { haptic?: { postMessage: (msg: Record<string, string>) => void } } }; navigator?: Navigator & { vibrate?: (pattern: number | number[]) => boolean } };
     
     // iOS 13+ Haptic Feedback API
-    if (w.webkit?.messageHandlers?.haptic) {
+    const hapticHandler = w.webkit?.messageHandlers?.haptic;
+    if (hapticHandler) {
       return {
         impact: (style) => {
-          w.webkit.messageHandlers.haptic.postMessage({ type: 'impact', style });
+          hapticHandler.postMessage({ type: 'impact', style });
         },
         notification: (type) => {
-          w.webkit.messageHandlers.haptic.postMessage({ type: 'notification', style: type });
+          hapticHandler.postMessage({ type: 'notification', style: type });
         },
         selection: () => {
-          w.webkit.messageHandlers.haptic.postMessage({ type: 'selection' });
+          hapticHandler.postMessage({ type: 'selection' });
         }
       };
     }

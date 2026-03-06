@@ -158,7 +158,7 @@ describe('Referral Share Message', () => {
 
   it('should generate proper URL format', () => {
     const message = getReferralShareMessage('AMINY-CODE-XYZ', 'User');
-    expect(message.url).toMatch(/https:\/\/aminy\.app\/join\?ref=AMINY-CODE-XYZ/);
+    expect(message.url).toMatch(/https:\/\/aminy\.ai\/join\?ref=AMINY-CODE-XYZ/);
   });
 });
 

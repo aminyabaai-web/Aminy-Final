@@ -650,7 +650,7 @@ You're starting this check-in now. Begin with a warm greeting and your first que
                           <ShareInsightInline
                             insight={msg.content}
                             childName={childName}
-                            onShare={(platform) => console.log(`Shared via ${platform}`)}
+                            onShare={(platform) => { if (import.meta.env.DEV) console.log(`Shared via ${platform}`); }}
                           />
                         </div>
                       )}

@@ -11,7 +11,7 @@ import {
   Calendar, Clock, Video, Phone, MapPin, Shield, CheckCircle2, 
   AlertCircle, Star, Upload, Camera, FileText, Paperclip,
   User, Settings, Bell, MessageSquare, ExternalLink, Copy,
-  Trash2, Edit3, RotateCcw, Share, Download, Archive
+  Trash2, Edit3, RotateCcw, Share, Download, Archive, Send
 } from 'lucide-react';
 
 // Medical-grade provider availability system
@@ -73,10 +73,10 @@ interface CareTabPolishProps {
     specialty: string;
     availability: ProviderAvailability[];
   };
-  sessionHistory?: any[];
-  onScheduleSession?: (sessionData: any) => void;
-  onMessageSent?: (message: any) => void;
-  onFileUploaded?: (file: any) => void;
+  sessionHistory?: Record<string, unknown>[];
+  onScheduleSession?: (sessionData: { date: string; time: string }) => void;
+  onMessageSent?: (message: { content: string; attachments: File[]; priority: 'routine' | 'important' | 'urgent' }) => void;
+  onFileUploaded?: (file: File[]) => void;
 }
 
 export const CareTabPolish: React.FC<CareTabPolishProps> = ({
@@ -142,7 +142,7 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
 
   // Provider integration state
   const [showProviderCalendar, setShowProviderCalendar] = useState(false);
-  const [selectedAppointment, setSelectedAppointment] = useState<any>(null);
+  const [selectedAppointment, setSelectedAppointment] = useState<{ date: string; time: string } | null>(null);
   const [showRescheduleModal, setShowRescheduleModal] = useState(false);
   const [insuranceStatus, setInsuranceStatus] = useState<InsuranceStatus>({
     verified: true,
@@ -193,7 +193,7 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
     }));
   };
 
-  const handleScheduleAppointment = (appointmentData: any) => {
+  const handleScheduleAppointment = (appointmentData: { date: string; time: string }) => {
     // Enhanced appointment scheduling with insurance verification
     if (insuranceStatus.authorizationRequired && insuranceStatus.authorizationStatus !== 'approved') {
       toast.error('Prior authorization required', {
@@ -581,9 +581,9 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
             id="message-file-upload"
           />
           <label htmlFor="message-file-upload">
-            <Button size="sm" variant="outline" as="span">
+            <span className="inline-flex items-center justify-center rounded-md text-sm font-medium border border-input bg-background hover:bg-accent hover:text-accent-foreground h-8 px-3 cursor-pointer">
               <Paperclip className="h-4 w-4" />
-            </Button>
+            </span>
           </label>
           
           <Button 

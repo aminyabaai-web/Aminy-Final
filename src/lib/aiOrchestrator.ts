@@ -13,6 +13,7 @@ export interface Task {
   category: 'urgent' | 'important' | 'routine' | 'someday';
   context: 'child-care' | 'self-care' | 'admin' | 'family';
   estimatedTime: '5 min' | '15 min' | '30 min' | '1 hour' | 'longer';
+  reason?: string;
 }
 
 export interface TopFocus {

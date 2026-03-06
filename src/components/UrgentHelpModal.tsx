@@ -8,13 +8,13 @@ import {
   Phone
 } from 'lucide-react';
 
-interface UrgentHelpModalProps {
-  isOpen: boolean;
+export interface UrgentHelpModalProps {
+  isOpen?: boolean;
   onClose: () => void;
-  onAnalytics: (event: string, data: any) => void;
+  onAnalytics?: (event: string, data: Record<string, unknown>) => void;
 }
 
-export function UrgentHelpModal({ isOpen, onClose, onAnalytics }: UrgentHelpModalProps) {
+export function UrgentHelpModal({ isOpen = true, onClose, onAnalytics = () => {} }: UrgentHelpModalProps) {
   // Handle escape key
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {

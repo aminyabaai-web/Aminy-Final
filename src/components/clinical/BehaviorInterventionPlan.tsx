@@ -466,6 +466,14 @@ export function BehaviorInterventionPlan({
         </div>
       </Card>
 
+      {/* Clinical Disclaimer */}
+      <div className="flex items-center gap-2 p-2 bg-amber-50 border border-amber-200 rounded-lg text-xs">
+        <AlertTriangle className="w-4 h-4 text-amber-600 flex-shrink-0" />
+        <span className="text-amber-800">
+          This tool supports BIP documentation. All behavior intervention plans should be developed and supervised by a Board Certified Behavior Analyst (BCBA).
+        </span>
+      </div>
+
       {/* Assessment Summary Section */}
       <CollapsibleSection
         title="Assessment Summary"

@@ -43,7 +43,7 @@ export interface Credential {
   verifiedAt?: string;
   verificationSource?: string;
   documentUrl?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface VerificationResult {
@@ -55,7 +55,7 @@ export interface VerificationResult {
     status?: string;
     expirationDate?: string;
     specializations?: string[];
-    disciplinaryActions?: any[];
+    disciplinaryActions?: { type: string; date?: string; description?: string }[];
   };
   error?: string;
   source: string;
@@ -137,51 +137,271 @@ export async function verifyBACBCredential(
   }
 }
 
+// ── NPPES API response types ─────────────────────────────────────────
+
+/** Taxonomy entry in NPPES API response */
+interface NPPESTaxonomy {
+  code: string;
+  taxonomy_group: string;
+  desc: string;
+  state: string;
+  license: string;
+  primary: boolean;
+}
+
+/** Address entry in NPPES API response */
+interface NPPESAddress {
+  country_code: string;
+  country_name: string;
+  address_purpose: string;
+  address_type: string;
+  address_1: string;
+  address_2: string;
+  city: string;
+  state: string;
+  postal_code: string;
+  telephone_number: string;
+  fax_number: string;
+}
+
+/** Basic info section of NPPES API response */
+interface NPPESBasic {
+  first_name?: string;
+  last_name?: string;
+  middle_name?: string;
+  name?: string;
+  organization_name?: string;
+  credential?: string;
+  sole_proprietor?: string;
+  gender?: string;
+  enumeration_date?: string;
+  last_updated?: string;
+  status?: string;
+  name_prefix?: string;
+  name_suffix?: string;
+}
+
+/** Single provider result from NPPES API */
+interface NPPESResult {
+  created_epoch: number;
+  enumeration_type: string;
+  last_updated_epoch: number;
+  number: string;
+  addresses: NPPESAddress[];
+  basic: NPPESBasic;
+  taxonomies: NPPESTaxonomy[];
+  identifiers: Array<{ identifier: string; desc: string; code: string; state: string; issuer: string }>;
+  other_names: Array<{ type: string; code: string; first_name?: string; last_name?: string; organization_name?: string }>;
+  endpoints: Array<{ endpointType: string; endpoint: string }>;
+}
+
+/** NPPES API response envelope */
+interface NPPESResponse {
+  result_count: number;
+  results: NPPESResult[];
+}
+
+/** Detailed NPI verification data returned by verifyNPI */
+export interface NPIVerificationData {
+  npiNumber: string;
+  entityType: 'individual' | 'organization';
+  providerName: string;
+  firstName?: string;
+  lastName?: string;
+  middleName?: string;
+  credential?: string;
+  organizationName?: string;
+  gender?: string;
+  enumerationDate: string;
+  lastUpdated: string;
+  status: string;
+  practiceAddress: {
+    line1: string;
+    line2: string | null;
+    city: string;
+    state: string;
+    zip: string;
+    phone: string;
+  } | null;
+  mailingAddress: {
+    line1: string;
+    line2: string | null;
+    city: string;
+    state: string;
+    zip: string;
+  } | null;
+  taxonomies: Array<{
+    code: string;
+    description: string;
+    primary: boolean;
+    state: string;
+    licenseNumber: string;
+  }>;
+  primaryTaxonomy: string | null;
+  identifiers: Array<{ identifier: string; description: string; state: string }>;
+}
+
+/**
+ * Validate NPI number format (10-digit Luhn check per CMS spec).
+ * Returns true if the number passes the Luhn algorithm with the 80840 prefix.
+ */
+export function isValidNPIFormat(npi: string): boolean {
+  if (!/^\d{10}$/.test(npi)) return false;
+
+  // NPI uses Luhn algorithm with prefix 80840
+  const prefixed = '80840' + npi;
+  let sum = 0;
+  let alternate = false;
+
+  for (let i = prefixed.length - 1; i >= 0; i--) {
+    let digit = parseInt(prefixed[i], 10);
+    if (alternate) {
+      digit *= 2;
+      if (digit > 9) digit -= 9;
+    }
+    sum += digit;
+    alternate = !alternate;
+  }
+
+  return sum % 10 === 0;
+}
+
 /**
  * Verify NPI (National Provider Identifier)
- * Uses the NPI Registry API
+ * Uses the NPPES NPI Registry API (free, public, no API key required).
+ * Endpoint: https://npiregistry.cms.hhs.gov/api/?version=2.1
+ *
+ * Parses the full response including provider name, taxonomy codes,
+ * practice address, enumeration date, and identifiers.
  */
 export async function verifyNPI(npiNumber: string): Promise<VerificationResult> {
+  // Pre-validate format before hitting the API
+  const trimmed = npiNumber.trim();
+  if (!isValidNPIFormat(trimmed)) {
+    return {
+      success: false,
+      status: 'not_found',
+      error: `Invalid NPI format: must be a 10-digit number passing Luhn validation (got "${trimmed}")`,
+      source: 'npi_registry',
+      verifiedAt: new Date().toISOString(),
+    };
+  }
+
   try {
-    // NPI Registry is a public API
+    // NPPES NPI Registry is a public API -- no key required
     const response = await fetch(
-      `https://npiregistry.cms.hhs.gov/api/?version=2.1&number=${npiNumber}`
+      `https://npiregistry.cms.hhs.gov/api/?version=2.1&number=${encodeURIComponent(trimmed)}`
     );
 
     if (!response.ok) {
       return {
         success: false,
         status: 'error',
-        error: 'NPI Registry unavailable',
+        error: `NPI Registry returned HTTP ${response.status}`,
         source: 'npi_registry',
         verifiedAt: new Date().toISOString(),
       };
     }
 
-    const data = await response.json();
+    const data: NPPESResponse = await response.json();
 
     if (data.result_count === 0) {
       return {
         success: false,
         status: 'not_found',
-        error: 'NPI not found in registry',
+        error: 'NPI not found in the NPPES registry',
         source: 'npi_registry',
         verifiedAt: new Date().toISOString(),
       };
     }
 
     const provider = data.results[0];
-    const basic = provider.basic || {};
-    const taxonomies = provider.taxonomies || [];
+    const basic = provider.basic;
+    const taxonomies = provider.taxonomies ?? [];
+    const addresses = provider.addresses ?? [];
+
+    // Determine entity type
+    const isOrganization = provider.enumeration_type === 'NPI-2';
+    const entityType: 'individual' | 'organization' = isOrganization ? 'organization' : 'individual';
+
+    // Build provider name
+    const providerName = isOrganization
+      ? (basic.organization_name ?? 'Unknown Organization')
+      : [basic.first_name, basic.middle_name, basic.last_name].filter(Boolean).join(' ') || 'Unknown';
+
+    // Parse practice address (address_purpose === 'LOCATION')
+    const practiceAddr = addresses.find(a => a.address_purpose === 'LOCATION');
+    const mailingAddr = addresses.find(a => a.address_purpose === 'MAILING');
+
+    const practiceAddress = practiceAddr
+      ? {
+          line1: practiceAddr.address_1,
+          line2: practiceAddr.address_2 || null,
+          city: practiceAddr.city,
+          state: practiceAddr.state,
+          zip: practiceAddr.postal_code,
+          phone: practiceAddr.telephone_number,
+        }
+      : null;
+
+    const mailingAddress = mailingAddr
+      ? {
+          line1: mailingAddr.address_1,
+          line2: mailingAddr.address_2 || null,
+          city: mailingAddr.city,
+          state: mailingAddr.state,
+          zip: mailingAddr.postal_code,
+        }
+      : null;
+
+    // Parse taxonomies
+    const parsedTaxonomies = taxonomies.map(t => ({
+      code: t.code,
+      description: t.desc,
+      primary: t.primary,
+      state: t.state,
+      licenseNumber: t.license,
+    }));
+
+    const primaryTaxonomy = parsedTaxonomies.find(t => t.primary)?.description ?? null;
+
+    // Parse identifiers
+    const parsedIdentifiers = (provider.identifiers ?? []).map(id => ({
+      identifier: id.identifier,
+      description: id.desc,
+      state: id.state,
+    }));
+
+    // Build the detailed NPI verification data
+    const npiData: NPIVerificationData = {
+      npiNumber: provider.number,
+      entityType,
+      providerName,
+      firstName: basic.first_name,
+      lastName: basic.last_name,
+      middleName: basic.middle_name,
+      credential: basic.credential,
+      organizationName: basic.organization_name,
+      gender: basic.gender,
+      enumerationDate: basic.enumeration_date ?? '',
+      lastUpdated: basic.last_updated ?? '',
+      status: basic.status === 'A' ? 'Active' : (basic.status ?? 'Unknown'),
+      practiceAddress,
+      mailingAddress,
+      taxonomies: parsedTaxonomies,
+      primaryTaxonomy,
+      identifiers: parsedIdentifiers,
+    };
 
     return {
       success: true,
       status: 'verified',
       data: {
-        name: basic.name || `${basic.first_name} ${basic.last_name}`,
+        name: providerName,
         credentialNumber: provider.number,
-        status: basic.status || 'Active',
-        specializations: taxonomies.map((t: any) => t.desc),
+        status: npiData.status,
+        expirationDate: undefined, // NPI does not expire
+        specializations: parsedTaxonomies.map(t => t.description),
       },
       source: 'npi_registry',
       verifiedAt: new Date().toISOString(),
@@ -191,9 +411,108 @@ export async function verifyNPI(npiNumber: string): Promise<VerificationResult> 
     return {
       success: false,
       status: 'error',
-      error: String(error),
+      error: error instanceof Error ? error.message : String(error),
       source: 'npi_registry',
       verifiedAt: new Date().toISOString(),
+    };
+  }
+}
+
+/**
+ * Enhanced NPI lookup that returns the full NPIVerificationData object.
+ * Use this when you need address, taxonomy, and enumeration details beyond
+ * the standard VerificationResult.
+ */
+export async function lookupNPIDetails(npiNumber: string): Promise<{
+  success: boolean;
+  data: NPIVerificationData | null;
+  error?: string;
+}> {
+  const trimmed = npiNumber.trim();
+  if (!isValidNPIFormat(trimmed)) {
+    return { success: false, data: null, error: 'Invalid NPI format' };
+  }
+
+  try {
+    const response = await fetch(
+      `https://npiregistry.cms.hhs.gov/api/?version=2.1&number=${encodeURIComponent(trimmed)}`
+    );
+
+    if (!response.ok) {
+      return { success: false, data: null, error: `HTTP ${response.status}` };
+    }
+
+    const result: NPPESResponse = await response.json();
+
+    if (result.result_count === 0) {
+      return { success: false, data: null, error: 'NPI not found' };
+    }
+
+    const provider = result.results[0];
+    const basic = provider.basic;
+    const isOrganization = provider.enumeration_type === 'NPI-2';
+    const addresses = provider.addresses ?? [];
+
+    const practiceAddr = addresses.find(a => a.address_purpose === 'LOCATION');
+    const mailingAddr = addresses.find(a => a.address_purpose === 'MAILING');
+
+    const taxonomies = (provider.taxonomies ?? []).map(t => ({
+      code: t.code,
+      description: t.desc,
+      primary: t.primary,
+      state: t.state,
+      licenseNumber: t.license,
+    }));
+
+    const data: NPIVerificationData = {
+      npiNumber: provider.number,
+      entityType: isOrganization ? 'organization' : 'individual',
+      providerName: isOrganization
+        ? (basic.organization_name ?? '')
+        : [basic.first_name, basic.middle_name, basic.last_name].filter(Boolean).join(' '),
+      firstName: basic.first_name,
+      lastName: basic.last_name,
+      middleName: basic.middle_name,
+      credential: basic.credential,
+      organizationName: basic.organization_name,
+      gender: basic.gender,
+      enumerationDate: basic.enumeration_date ?? '',
+      lastUpdated: basic.last_updated ?? '',
+      status: basic.status === 'A' ? 'Active' : (basic.status ?? 'Unknown'),
+      practiceAddress: practiceAddr
+        ? {
+            line1: practiceAddr.address_1,
+            line2: practiceAddr.address_2 || null,
+            city: practiceAddr.city,
+            state: practiceAddr.state,
+            zip: practiceAddr.postal_code,
+            phone: practiceAddr.telephone_number,
+          }
+        : null,
+      mailingAddress: mailingAddr
+        ? {
+            line1: mailingAddr.address_1,
+            line2: mailingAddr.address_2 || null,
+            city: mailingAddr.city,
+            state: mailingAddr.state,
+            zip: mailingAddr.postal_code,
+          }
+        : null,
+      taxonomies,
+      primaryTaxonomy: taxonomies.find(t => t.primary)?.description ?? null,
+      identifiers: (provider.identifiers ?? []).map(id => ({
+        identifier: id.identifier,
+        description: id.desc,
+        state: id.state,
+      })),
+    };
+
+    return { success: true, data };
+  } catch (error) {
+    return {
+      success: false,
+      data: null,
+      error: error instanceof Error ? error.message : String(error),
     };
   }
 }
@@ -344,7 +663,7 @@ export async function verifyProvider(
       case 'bacb':
         result = await verifyBACBCredential(
           credential.credentialNumber!,
-          credential.metadata?.lastName || ''
+          (credential.metadata?.lastName as string) || ''
         );
         break;
 
@@ -355,15 +674,15 @@ export async function verifyProvider(
       case 'state_license':
         result = await verifyStateLicense(
           credential.state!,
-          credential.metadata?.licenseType || providerType,
+          (credential.metadata?.licenseType as string) || providerType,
           credential.credentialNumber!,
-          credential.metadata?.lastName || ''
+          (credential.metadata?.lastName as string) || ''
         );
         break;
 
       case 'insurance_panel':
         result = await verifyInsurancePanel(
-          credential.metadata?.npi || '',
+          (credential.metadata?.npi as string) || '',
           credential.issuingAuthority!
         );
         break;
@@ -608,6 +927,8 @@ export function formatCredentialDisplay(credential: Credential): {
 export default {
   verifyBACBCredential,
   verifyNPI,
+  lookupNPIDetails,
+  isValidNPIFormat,
   verifyStateLicense,
   verifyInsurancePanel,
   verifyProvider,

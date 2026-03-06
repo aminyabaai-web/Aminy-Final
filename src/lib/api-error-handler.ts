@@ -85,7 +85,7 @@ export function parseApiError(error: unknown): ApiError {
   }
 
   // HTTP response errors
-  if (error instanceof Response || (error as any)?.status) {
+  if (error instanceof Response || (error as { status?: number })?.status) {
     const response = error as Response;
     const status = response.status;
 

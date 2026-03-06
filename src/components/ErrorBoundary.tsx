@@ -1,6 +1,7 @@
 import React from 'react';
 import { analytics } from '../lib/analytics-engine';
 import { logError } from '../lib/error-logging';
+import { captureError, addBreadcrumb } from '../lib/sentry';
 
 interface ErrorBoundaryState {
   hasError: boolean;
@@ -65,11 +66,21 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
     });
 
     // Log error to Supabase for tracking
-    logError({
-      message: error.message,
-      stack: error.stack,
-      componentName: errorInfo.componentStack?.split('\n')[1]?.trim() || 'Unknown',
-      severity: this.props.critical ? 'error' : 'warning',
+    const componentName = errorInfo.componentStack?.split('\n')[1]?.trim() || 'Unknown';
+    logError(error, componentName, this.props.critical ? 'error' : 'warning');
+
+    // Send to Sentry for centralized error monitoring
+    const sentryEventId = captureError(error, {
+      componentName,
+      componentStack: errorInfo.componentStack,
+      errorId: this.state.errorId,
+      retryCount: this.retryCount,
+      isCritical: this.props.critical,
+      boundaryType: this.props.isolate ? 'isolated' : 'global',
+    });
+    addBreadcrumb('error-boundary', `Caught error in ${componentName}`, {
+      errorId: this.state.errorId,
+      sentryEventId,
     });
 
     // Enhanced logging for development
@@ -97,8 +108,8 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
       url: window.location.href,
       userAgent: navigator.userAgent,
       timestamp: Date.now(),
-      sessionId: analytics.exportData().session.sessionId || 'unknown',
-      componentStack: errorInfo.componentStack,
+      sessionId: analytics.exportData().session.sessionId ?? 'unknown',
+      componentStack: errorInfo.componentStack || undefined,
       buildVersion: '1.0.0', // Should come from build process
       featureFlags: this.getFeatureFlags(),
     };
@@ -200,11 +211,14 @@ function DefaultErrorFallback({
         userSubmitted: true,
       });
 
-      // In production, send to error reporting service
-      // await fetch('/api/error-report', {
-      //   method: 'POST',
-      //   body: JSON.stringify({ errorId, userFeedback: 'User submitted error report' })
-      // });
+      // Send to Sentry with user-submitted context
+      if (error) {
+        captureError(error, {
+          errorId,
+          userSubmitted: true,
+          source: 'error_boundary_report_button',
+        });
+      }
 
       setReportSent(true);
     } catch (reportError) {

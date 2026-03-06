@@ -1,14 +1,70 @@
 import React, { useEffect, useState, useCallback, createContext, useContext } from 'react';
 import { toast } from 'sonner';
 
+// ===== TYPE DECLARATIONS FOR THIRD-PARTY GLOBALS =====
+
+/** Props for the error fallback component */
+interface ErrorFallbackProps {
+  error?: Error;
+}
+
+/** Sentry-like error reporting SDK on window */
+interface SentryGlobal {
+  captureException: (error: Error, context?: { contexts: { react: React.ErrorInfo } }) => void;
+}
+
+/** Google Analytics gtag function */
+type GtagFunction = (
+  command: string,
+  targetOrEvent: string,
+  params?: Record<string, unknown>
+) => void;
+
+/** Generic analytics tracker */
+interface AnalyticsTracker {
+  track: (eventName: string, properties: Record<string, unknown>) => void;
+}
+
+/** Extended window with optional third-party globals */
+interface WindowWithGlobals extends Window {
+  Sentry?: SentryGlobal;
+  gtag?: GtagFunction;
+  customAnalytics?: AnalyticsTracker;
+  analytics?: AnalyticsTracker;
+}
+
+/** Navigator Network Information API connection */
+interface NetworkInformationConnection extends EventTarget {
+  type?: string;
+  effectiveType?: string;
+}
+
+/** Navigator extended with experimental connection APIs */
+interface NavigatorWithConnection extends Navigator {
+  connection?: NetworkInformationConnection;
+  mozConnection?: NetworkInformationConnection;
+  webkitConnection?: NetworkInformationConnection;
+}
+
+/** Performance entry that may carry a `value` (e.g., CLS, LCP) */
+interface PerformanceEntryWithValue extends PerformanceEntry {
+  value?: number;
+}
+
+/** BeforeInstallPromptEvent for PWA install prompt */
+interface BeforeInstallPromptEvent extends Event {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
+}
+
 // ===== PHASE 3: PRODUCTION EXCELLENCE & PERFORMANCE OPTIMIZATION =====
 
 // Error Boundary with Analytics Integration
 export class ProductionErrorBoundary extends React.Component<
-  { children: React.ReactNode; fallback?: React.ComponentType<any> },
+  { children: React.ReactNode; fallback?: React.ComponentType<ErrorFallbackProps> },
   { hasError: boolean; error?: Error }
 > {
-  constructor(props: any) {
+  constructor(props: { children: React.ReactNode; fallback?: React.ComponentType<ErrorFallbackProps> }) {
     super(props);
     this.state = { hasError: false };
   }
@@ -24,15 +80,16 @@ export class ProductionErrorBoundary extends React.Component<
       console.error('[Production Error]', error, errorInfo);
       
       // Report to external service (Sentry, LogRocket, etc.)
-      if ((window as any).Sentry) {
-        (window as any).Sentry.captureException(error, {
+      const typedWindow = window as WindowWithGlobals;
+      if (typedWindow.Sentry) {
+        typedWindow.Sentry.captureException(error, {
           contexts: { react: errorInfo }
         });
       }
-      
+
       // Track error event
-      if ((window as any).gtag) {
-        (window as any).gtag('event', 'exception', {
+      if (typedWindow.gtag) {
+        typedWindow.gtag('event', 'exception', {
           description: error.message,
           fatal: false
         });
@@ -93,15 +150,17 @@ export const usePerformanceMonitor = () => {
     if (typeof window === 'undefined') return;
 
     // Web Vitals monitoring
+    const typedWindow = window as WindowWithGlobals;
     const observer = new PerformanceObserver((list) => {
       list.getEntries().forEach((entry) => {
         // Log performance metrics
-        
+
         // Report to analytics
-        if ((window as any).gtag) {
-          (window as any).gtag('event', 'web_vitals', {
+        const entryWithValue = entry as PerformanceEntryWithValue;
+        if (typedWindow.gtag) {
+          typedWindow.gtag('event', 'web_vitals', {
             metric_name: entry.name,
-            metric_value: entry.duration || entry.value,
+            metric_value: entry.duration || entryWithValue.value,
             page_path: window.location.pathname
           });
         }
@@ -137,8 +196,9 @@ export const NetworkProvider: React.FC<{ children: React.ReactNode }> = ({ child
       return { isOnline: true, connectionType: 'unknown', effectiveType: '4g' };
     }
 
-    const connection = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
-    
+    const nav = navigator as NavigatorWithConnection;
+    const connection = nav.connection || nav.mozConnection || nav.webkitConnection;
+
     return {
       isOnline: navigator.onLine,
       connectionType: connection?.type || 'unknown',
@@ -150,7 +210,8 @@ export const NetworkProvider: React.FC<{ children: React.ReactNode }> = ({ child
     if (typeof window === 'undefined' || typeof navigator === 'undefined') return;
 
     const updateOnlineStatus = () => {
-      const connection = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
+      const nav = navigator as NavigatorWithConnection;
+      const connection = nav.connection || nav.mozConnection || nav.webkitConnection;
       
       setNetworkStatus(prev => ({
         ...prev,
@@ -168,13 +229,14 @@ export const NetworkProvider: React.FC<{ children: React.ReactNode }> = ({ child
     };
 
     const updateConnection = () => {
-      const connection = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
+      const nav = navigator as NavigatorWithConnection;
+      const connection = nav.connection || nav.mozConnection || nav.webkitConnection;
       
       if (connection) {
         setNetworkStatus(prev => ({
           ...prev,
-          connectionType: connection.type,
-          effectiveType: connection.effectiveType
+          connectionType: connection.type ?? prev.connectionType,
+          effectiveType: connection.effectiveType ?? prev.effectiveType
         }));
 
         // Warn about slow connections
@@ -187,16 +249,17 @@ export const NetworkProvider: React.FC<{ children: React.ReactNode }> = ({ child
     window.addEventListener('online', updateOnlineStatus);
     window.addEventListener('offline', updateOnlineStatus);
 
-    const connection = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
-    if (connection) {
-      connection.addEventListener('change', updateConnection);
+    const navForCleanup = navigator as NavigatorWithConnection;
+    const connectionForCleanup = navForCleanup.connection || navForCleanup.mozConnection || navForCleanup.webkitConnection;
+    if (connectionForCleanup) {
+      connectionForCleanup.addEventListener('change', updateConnection);
     }
 
     return () => {
       window.removeEventListener('online', updateOnlineStatus);
       window.removeEventListener('offline', updateOnlineStatus);
-      if (connection) {
-        connection.removeEventListener('change', updateConnection);
+      if (connectionForCleanup) {
+        connectionForCleanup.removeEventListener('change', updateConnection);
       }
     };
   }, []);
@@ -269,7 +332,7 @@ export const useAccessibility = () => {
 
 // Progressive Web App Enhancement
 export const usePWA = () => {
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstallable, setIsInstallable] = useState(false);
 
   useEffect(() => {
@@ -277,7 +340,7 @@ export const usePWA = () => {
 
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
-      setDeferredPrompt(e);
+      setDeferredPrompt(e as BeforeInstallPromptEvent);
       setIsInstallable(true);
     };
 
@@ -325,10 +388,10 @@ export const usePWA = () => {
 
 // Analytics Context with Enhanced Tracking
 interface AnalyticsContextType {
-  trackEvent: (eventName: string, properties?: Record<string, any>) => void;
+  trackEvent: (eventName: string, properties?: Record<string, unknown>) => void;
   trackPageView: (page: string, title?: string) => void;
-  trackUserAction: (action: string, target: string, properties?: Record<string, any>) => void;
-  setUserProperties: (properties: Record<string, any>) => void;
+  trackUserAction: (action: string, target: string, properties?: Record<string, unknown>) => void;
+  setUserProperties: (properties: Record<string, unknown>) => void;
 }
 
 const AnalyticsContext = createContext<AnalyticsContextType>({
@@ -339,13 +402,14 @@ const AnalyticsContext = createContext<AnalyticsContextType>({
 });
 
 export const AnalyticsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const trackEvent = useCallback((eventName: string, properties: Record<string, any> = {}) => {
+  const trackEvent = useCallback((eventName: string, properties: Record<string, unknown> = {}) => {
     try {
       // Console logging for development
 
       // Google Analytics 4
-      if (typeof window !== 'undefined' && (window as any).gtag) {
-        (window as any).gtag('event', eventName, {
+      const typedWindow = (typeof window !== 'undefined' ? window : undefined) as WindowWithGlobals | undefined;
+      if (typedWindow?.gtag) {
+        typedWindow.gtag('event', eventName, {
           ...properties,
           timestamp: new Date().toISOString(),
           user_agent: navigator.userAgent,
@@ -355,22 +419,24 @@ export const AnalyticsProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       }
 
       // Custom analytics service (placeholder)
-      if (typeof window !== 'undefined' && (window as any).customAnalytics) {
-        (window as any).customAnalytics.track(eventName, properties);
+      if (typedWindow?.customAnalytics) {
+        typedWindow.customAnalytics.track(eventName, properties);
       }
 
       // Send to multiple analytics providers
-      if (typeof window !== 'undefined' && (window as any).analytics) {
-        (window as any).analytics.track(eventName, properties);
+      if (typedWindow?.analytics) {
+        typedWindow.analytics.track(eventName, properties);
       }
-    } catch (error) {
+    } catch (error: unknown) {
+      // Silently fail analytics
     }
   }, []);
 
   const trackPageView = useCallback((page: string, title?: string) => {
     try {
-      if (typeof window !== 'undefined' && (window as any).gtag) {
-        (window as any).gtag('config', 'GA_MEASUREMENT_ID', {
+      const typedWindow = (typeof window !== 'undefined' ? window : undefined) as WindowWithGlobals | undefined;
+      if (typedWindow?.gtag) {
+        typedWindow.gtag('config', 'GA_MEASUREMENT_ID', {
           page_title: title || document.title,
           page_location: page
         });
@@ -380,11 +446,12 @@ export const AnalyticsProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         page_title: title || document.title,
         page_location: page
       });
-    } catch (error) {
+    } catch (error: unknown) {
+      // Silently fail analytics
     }
   }, [trackEvent]);
 
-  const trackUserAction = useCallback((action: string, target: string, properties: Record<string, any> = {}) => {
+  const trackUserAction = useCallback((action: string, target: string, properties: Record<string, unknown> = {}) => {
     trackEvent('user_action', {
       action,
       target,
@@ -392,15 +459,17 @@ export const AnalyticsProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     });
   }, [trackEvent]);
 
-  const setUserProperties = useCallback((properties: Record<string, any>) => {
+  const setUserProperties = useCallback((properties: Record<string, unknown>) => {
     try {
-      if (typeof window !== 'undefined' && (window as any).gtag) {
-        (window as any).gtag('config', 'GA_MEASUREMENT_ID', {
+      const typedWindow = (typeof window !== 'undefined' ? window : undefined) as WindowWithGlobals | undefined;
+      if (typedWindow?.gtag) {
+        typedWindow.gtag('config', 'GA_MEASUREMENT_ID', {
           custom_map: properties
         });
       }
 
-    } catch (error) {
+    } catch (error: unknown) {
+      // Silently fail analytics
     }
   }, []);
 
@@ -529,7 +598,7 @@ export const useSEO = (metadata: {
       }
     };
 
-    let scriptTag = document.querySelector('script[type="application/ld+json"]');
+    let scriptTag = document.querySelector('script[type="application/ld+json"]') as HTMLScriptElement | null;
     if (!scriptTag) {
       scriptTag = document.createElement('script');
       scriptTag.type = 'application/ld+json';

@@ -95,6 +95,11 @@ export function ViralMetricsDashboard({ className }: ViralMetricsDashboardProps)
 
   return (
     <Card className={`p-6 ${className}`}>
+      {/* Demo Data Banner */}
+      <div className="bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mb-4 flex items-center gap-2">
+        <span className="text-amber-600 text-xs font-medium">Demo Data</span>
+        <span className="text-amber-700/70 text-xs">Sample viral metrics. Connect referral backend for real data.</span>
+      </div>
       <div className="flex items-center justify-between mb-4 sm:mb-6">
         <h3 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
           <Zap className="w-5 h-5 text-yellow-500" />

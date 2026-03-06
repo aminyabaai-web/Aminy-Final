@@ -11,7 +11,9 @@ export type PostCategory =
   | 'strategies'
   | 'resources'
   | 'support'
-  | 'introductions';
+  | 'introductions'
+  | 'tips'
+  | 'struggles';
 
 export interface CommunityPost {
   id: string;
@@ -19,10 +21,13 @@ export interface CommunityPost {
   userDisplayName: string;
   userTier: string;
   userBadge?: string; // e.g., "5-month member", "Ambassador"
+  userBadges?: CommunityBadge[];
+  userName?: string;
   // Content
   category: PostCategory;
   title: string;
   body: string;
+  content?: string;
   imageUrls?: string[];
   // Tags
   tags: string[];
@@ -33,6 +38,12 @@ export interface CommunityPost {
   commentCount: number;
   shareCount: number;
   bookmarkCount: number;
+  likes?: number;
+  likedBy?: string[];
+  comments?: CommunityComment[];
+  // Display
+  isAnonymous?: boolean;
+  isPinned?: boolean;
   // Moderation
   isModerated: boolean;
   moderationStatus: 'pending' | 'approved' | 'flagged' | 'removed';
@@ -46,6 +57,7 @@ export interface CommunityComment {
   postId: string;
   userId: string;
   userDisplayName: string;
+  userName?: string;
   body: string;
   likeCount: number;
   isFromProvider?: boolean;
@@ -71,11 +83,14 @@ export interface CommunityMember {
 export interface CommunityBadge {
   id: string;
   name: string;
+  label?: string;
   description: string;
   icon: string;
   color: string;
   earnedAt: string;
 }
+
+export type UserBadge = CommunityBadge;
 
 // Community configuration
 export interface CommunityConfig {
@@ -103,6 +118,7 @@ export const COMMUNITY_CONFIG: CommunityConfig = {
 // Post categories with display info
 export const POST_CATEGORIES: Record<PostCategory, {
   displayName: string;
+  label?: string;
   description: string;
   icon: string;
   color: string;
@@ -142,6 +158,20 @@ export const POST_CATEGORIES: Record<PostCategory, {
     description: 'Introduce yourself to the community',
     icon: '👋',
     color: '#0891b2',
+  },
+  tips: {
+    displayName: 'Tips & Tricks',
+    label: 'Tips',
+    description: 'Share helpful tips with other parents',
+    icon: '💡',
+    color: '#10B981',
+  },
+  struggles: {
+    displayName: 'Daily Struggles',
+    label: 'Struggles',
+    description: 'Share challenges and get support',
+    icon: '💪',
+    color: '#EF4444',
   },
 };
 
@@ -994,43 +1024,43 @@ const COMMENTS_STORAGE_KEY = 'aminy_community_comments';
 const LIKES_STORAGE_KEY = 'aminy_community_likes';
 
 // Helper to convert DB row to CommunityPost
-function dbRowToPost(row: any): CommunityPost {
+function dbRowToPost(row: Record<string, unknown>): CommunityPost {
   return {
-    id: row.id,
-    userId: row.user_id,
-    userDisplayName: row.user_display_name,
-    userTier: row.user_tier || 'free',
-    userBadge: row.user_badge,
-    category: row.category,
-    title: row.title,
-    body: row.body,
-    imageUrls: row.image_urls || [],
-    tags: row.tags || [],
-    ageGroup: row.age_group,
-    concernTags: row.concern_tags || [],
-    likeCount: row.like_count || 0,
-    commentCount: row.comment_count || 0,
-    shareCount: row.share_count || 0,
-    bookmarkCount: row.bookmark_count || 0,
-    isModerated: row.is_moderated || false,
-    moderationStatus: row.moderation_status || 'approved',
-    createdAt: row.created_at,
-    updatedAt: row.updated_at,
+    id: row.id as string,
+    userId: row.user_id as string,
+    userDisplayName: row.user_display_name as string,
+    userTier: (row.user_tier as string) || 'free',
+    userBadge: row.user_badge as string | undefined,
+    category: row.category as CommunityPost['category'],
+    title: row.title as string,
+    body: row.body as string,
+    imageUrls: (row.image_urls || []) as string[],
+    tags: (row.tags || []) as string[],
+    ageGroup: row.age_group as CommunityPost['ageGroup'],
+    concernTags: (row.concern_tags || []) as string[],
+    likeCount: (row.like_count as number) || 0,
+    commentCount: (row.comment_count as number) || 0,
+    shareCount: (row.share_count as number) || 0,
+    bookmarkCount: (row.bookmark_count as number) || 0,
+    isModerated: (row.is_moderated as boolean) || false,
+    moderationStatus: (row.moderation_status as CommunityPost['moderationStatus']) || 'approved',
+    createdAt: row.created_at as string,
+    updatedAt: row.updated_at as string,
   };
 }
 
 // Helper to convert DB row to CommunityComment
-function dbRowToComment(row: any): CommunityComment {
+function dbRowToComment(row: Record<string, unknown>): CommunityComment {
   return {
-    id: row.id,
-    postId: row.post_id,
-    userId: row.user_id,
-    userDisplayName: row.user_display_name,
-    body: row.body,
-    likeCount: row.like_count || 0,
-    isFromProvider: row.is_from_provider,
-    providerCredentials: row.provider_credentials,
-    createdAt: row.created_at,
+    id: row.id as string,
+    postId: row.post_id as string,
+    userId: row.user_id as string,
+    userDisplayName: row.user_display_name as string,
+    body: row.body as string,
+    likeCount: (row.like_count as number) || 0,
+    isFromProvider: row.is_from_provider as boolean | undefined,
+    providerCredentials: row.provider_credentials as string | undefined,
+    createdAt: row.created_at as string,
   };
 }
 
@@ -1100,7 +1130,7 @@ export async function createPost(
 
     if (error) throw error;
 
-    console.log('[Community] Post created in Supabase:', data.id);
+    if (import.meta.env.DEV) console.log('[Community] Post created in Supabase:', data.id);
 
     // Check for new badges in background (don't block post creation)
     checkAndAwardBadges(post.userId).catch(err =>
@@ -1260,7 +1290,7 @@ export async function addComment(
 
     if (error) throw error;
 
-    console.log('[Community] Comment created in Supabase:', data.id);
+    if (import.meta.env.DEV) console.log('[Community] Comment created in Supabase:', data.id);
     const newComment = dbRowToComment(data);
 
     // Fetch post to get author ID for notification
@@ -1399,7 +1429,7 @@ export async function getPosts(options?: {
 
     if (error) throw error;
 
-    console.log(`[Community] Fetched ${data?.length || 0} posts from Supabase`);
+    if (import.meta.env.DEV) console.log(`[Community] Fetched ${data?.length || 0} posts from Supabase`);
     return (data || []).map(dbRowToPost);
   } catch (err) {
     console.warn('[Community] Supabase error in getPosts, using localStorage:', err);

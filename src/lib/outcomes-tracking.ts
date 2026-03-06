@@ -18,7 +18,7 @@ export interface OutcomeEvent {
   event_type: OutcomeEventType;
   metric_name: string;
   metric_value: number;
-  context?: Record<string, any>;
+  context?: Record<string, unknown>;
   created_at?: string;
 }
 
@@ -531,8 +531,9 @@ export async function syncOfflineEvents(): Promise<number> {
 
     const { error } = await supabase
       .from('outcome_events')
-      .insert(events.map((e: any) => {
+      .insert(events.map((e: Record<string, unknown>) => {
         const { _offline, ...rest } = e;
+        void _offline;
         return rest;
       }));
 
@@ -602,7 +603,7 @@ if (typeof window !== 'undefined') {
   window.addEventListener('online', () => {
     syncOfflineEvents().then(count => {
       if (count > 0) {
-        console.log(`Synced ${count} offline outcome events`);
+        if (import.meta.env.DEV) console.log(`Synced ${count} offline outcome events`);
       }
     });
   });

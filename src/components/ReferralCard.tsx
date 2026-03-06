@@ -36,7 +36,7 @@ export function ReferralCard({
   onShare,
 }: ReferralCardProps) {
   const [copied, setCopied] = useState(false);
-  const referralLink = `https://aminy.app/join/${referralCode}`;
+  const referralLink = `https://aminy.ai/join/${referralCode}`;
 
   const handleCopy = useCallback(async () => {
     try {

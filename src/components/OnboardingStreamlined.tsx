@@ -191,6 +191,36 @@ export function OnboardingStreamlined({ onComplete, initialEmail = '' }: Onboard
     checkAuth();
   }, []);
 
+  // Persist onboarding progress to localStorage (resume within 24 hours)
+  useEffect(() => {
+    if (step > 1 && (data.childName || data.parentName)) {
+      localStorage.setItem('aminy-onboarding-progress', JSON.stringify({
+        step,
+        data: { parentName: data.parentName, childName: data.childName, childAge: data.childAge, email: data.email },
+        timestamp: Date.now(),
+      }));
+    }
+  }, [step, data.parentName, data.childName, data.childAge, data.email]);
+
+  // Restore progress on mount (if within 24 hours and not already loaded from Supabase)
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      try {
+        const saved = localStorage.getItem('aminy-onboarding-progress');
+        if (saved) {
+          const { step: savedStep, data: savedData, timestamp } = JSON.parse(saved);
+          const isRecent = Date.now() - timestamp < 24 * 60 * 60 * 1000;
+          if (isRecent && savedStep > 1 && savedData) {
+            setStep(savedStep);
+            updateData(savedData);
+          } else {
+            localStorage.removeItem('aminy-onboarding-progress');
+          }
+        }
+      } catch { /* ignore */ }
+    }
+  }, [isLoading, isAuthenticated]);
+
   // Scroll to bottom when messages update
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -325,6 +355,7 @@ export function OnboardingStreamlined({ onComplete, initialEmail = '' }: Onboard
   const handleComplete = async () => {
     setIsLoading(true);
     setError(null);
+    localStorage.removeItem('aminy-onboarding-progress');
 
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -372,6 +403,82 @@ export function OnboardingStreamlined({ onComplete, initialEmail = '' }: Onboard
           is_primary: true,
         });
       }
+
+      // ─── Seed initial streak (day 1!) ───────────────
+      const today = new Date().toISOString().split('T')[0];
+      await supabase.from('user_streaks').upsert({
+        id: `${user.id}_daily_checkin`,
+        user_id: user.id,
+        type: 'daily_checkin',
+        current_streak: 1,
+        longest_streak: 1,
+        last_activity_date: today,
+        total_activities: 1,
+        started_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      }, { onConflict: 'user_id,type' }).then(({ error }) => {
+        if (error) console.warn('[Onboarding] Streak seed error:', error.message);
+      });
+
+      // ─── Persist initial concern to child record ───────────────
+      if (data.initialConcern) {
+        const childId = existingChild?.id;
+        if (childId) {
+          await supabase.from('children').update({
+            challenges: [data.initialConcern],
+          }).eq('id', childId).then(({ error }) => {
+            if (error) console.warn('[Onboarding] Challenge update error:', error.message);
+          });
+        }
+      }
+
+      // ─── Seed 2-3 initial treatment goals from concerns ───────────────
+      const concernGoals = [
+        { title: 'Daily routine consistency', domain: 'daily_living', description: 'Build predictable morning and bedtime routines' },
+        ...(data.initialConcern?.toLowerCase().includes('speech') || data.initialConcern?.toLowerCase().includes('talk') || data.initialConcern?.toLowerCase().includes('communicat')
+          ? [{ title: 'Communication growth', domain: 'communication', description: 'Support expressive and receptive language development' }]
+          : [{ title: 'Self-regulation skills', domain: 'self_regulation', description: 'Learn calming strategies for big emotions' }]),
+        { title: 'Social connection', domain: 'social', description: 'Build comfort and skills in peer interactions' },
+      ];
+
+      for (const goal of concernGoals) {
+        await supabase.from('treatment_goals').insert({
+          user_id: user.id,
+          title: goal.title,
+          domain: goal.domain,
+          description: goal.description,
+          status: 'not_started',
+          current_progress: 0,
+          priority: 'medium',
+          is_active: true,
+        }).then(({ error }) => {
+          if (error && !error.message?.includes('duplicate')) {
+            console.warn('[Onboarding] Goal seed error:', error.message);
+          }
+        });
+      }
+
+      // ─── Migrate any pre-signup screening results ───────────────
+      try {
+        const { getScreeningResults, clearLocalScreeningResults } = await import('../lib/screening-instruments');
+        const screeningResults = getScreeningResults();
+        if (screeningResults.length > 0) {
+          // Store screening results to Supabase
+          for (const sr of screeningResults) {
+            await Promise.resolve(supabase.from('screening_results').insert({
+              user_id: user.id,
+              instrument_id: sr.instrumentId,
+              instrument_name: sr.instrumentName,
+              total_score: sr.totalScore,
+              risk_level: sr.riskLevel,
+              answers: sr.answers,
+              summary: sr.summary,
+              completed_at: sr.completedAt,
+            })).catch(() => {}); // OK if table doesn't exist yet
+          }
+          clearLocalScreeningResults();
+        }
+      } catch { /* screening migration is nice-to-have */ }
 
       onComplete(data);
     } catch (e: any) {

@@ -305,7 +305,7 @@ export function useFeatureFlags() {
 
 // Dev tools integration - ONLY in development
 if (typeof window !== 'undefined' && import.meta.env.DEV) {
-  (window as any).aminyFlags = {
+  (window as unknown as Record<string, unknown>).aminyFlags = {
     get: () => featureFlags.getStatus(),
     enable: (flag: keyof FeatureFlags) => featureFlags.enable(flag),
     disable: (flag: keyof FeatureFlags) => featureFlags.disable(flag),

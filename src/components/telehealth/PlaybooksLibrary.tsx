@@ -395,8 +395,8 @@ const MOCK_PLAYBOOKS: Playbook[] = [
 
 interface PlaybooksLibraryProps {
   onBack: () => void;
-  onSelectPlaybook: (playbook: Playbook) => void;
-  onBookmark: (playbookId: string, bookmarked: boolean) => void;
+  onSelectPlaybook?: (playbook: Playbook) => void;
+  onBookmark?: (playbookId: string, bookmarked: boolean) => void;
 }
 
 export function PlaybooksLibrary({
@@ -429,7 +429,7 @@ export function PlaybooksLibrary({
     ));
     const pb = playbooks.find(p => p.id === playbookId);
     if (pb) {
-      onBookmark(playbookId, !pb.isBookmarked);
+      onBookmark?.(playbookId, !pb.isBookmarked);
     }
   };
 
@@ -512,7 +512,7 @@ export function PlaybooksLibrary({
             <PlaybookCard
               key={playbook.id}
               playbook={playbook}
-              onSelect={() => onSelectPlaybook(playbook)}
+              onSelect={() => onSelectPlaybook?.(playbook)}
               onToggleBookmark={() => handleToggleBookmark(playbook.id)}
             />
           ))

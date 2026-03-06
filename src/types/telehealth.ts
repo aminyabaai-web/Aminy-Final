@@ -258,6 +258,8 @@ export interface Provider {
   // Status
   isActive: boolean;
   acceptingNewPatients: boolean;
+  availabilityBlocks?: AvailabilityBlock[];
+  timeOffBlocks?: TimeOffBlock[];
   createdAt: string;
   updatedAt: string;
 }
@@ -361,7 +363,8 @@ export type AppointmentStatus =
   | 'completed'
   | 'cancelled'
   | 'no-show'
-  | 'rescheduled';
+  | 'rescheduled'
+  | 'scheduled';
 
 export interface Appointment {
   id: string;
@@ -369,6 +372,8 @@ export interface Appointment {
   providerId: string;
   // Scheduling
   scheduledAt: string; // ISO datetime
+  startTime?: string;
+  endTime?: string;
   timezone: string;
   visitType: VisitType;
   visitFormat: VisitFormat;
@@ -426,6 +431,7 @@ export interface ActionItem {
   id: string;
   userId: string;
   visitSummaryId?: string;
+  summaryId?: string;
   // Content
   title: string;
   description?: string;
@@ -822,6 +828,7 @@ export interface GetCareIntake {
   // Step 1: Reason
   visitReason: string;
   concernId?: string;
+  additionalNotes?: string;
   // Step 2: Who
   whoIsThisFor: 'child' | 'parent' | 'family';
   // Step 3: Location
@@ -830,6 +837,8 @@ export interface GetCareIntake {
   // Step 4: Visit type
   visitFormat: VisitFormat;
   preferredVisitType?: VisitType;
+  // User subscription info
+  userTier?: string;
 }
 
 // ============================================================================
@@ -901,7 +910,7 @@ export interface TelehealthAnalyticsPayload {
   userState?: string;
   appointmentId?: string;
   timestamp: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 // ============================================================================

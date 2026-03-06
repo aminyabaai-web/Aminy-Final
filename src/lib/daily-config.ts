@@ -116,17 +116,18 @@ export type CallQuality = keyof typeof CALL_QUALITY_PRESETS;
  * Detect recommended call quality based on connection
  */
 export async function detectRecommendedQuality(): Promise<CallQuality> {
-  if (!navigator.connection) {
+  const nav = navigator as Navigator & { connection?: { effectiveType?: string; downlink?: number } };
+  if (!nav.connection) {
     return 'medium'; // Default if Network Information API not supported
   }
 
-  const connection = navigator.connection as any;
+  const connection = nav.connection;
   const effectiveType = connection.effectiveType;
   const downlink = connection.downlink; // Mbps
 
-  if (effectiveType === '4g' && downlink >= 5) {
+  if (effectiveType === '4g' && (downlink ?? 0) >= 5) {
     return 'high';
-  } else if (effectiveType === '4g' || (effectiveType === '3g' && downlink >= 1)) {
+  } else if (effectiveType === '4g' || (effectiveType === '3g' && (downlink ?? 0) >= 1)) {
     return 'medium';
   } else if (effectiveType === '3g') {
     return 'low';
@@ -153,7 +154,7 @@ export type DailyEvent =
 /**
  * Handle Daily.co errors
  */
-export function handleDailyError(error: any): string {
+export function handleDailyError(error: unknown): string {
   const errorMessages: Record<string, string> = {
     'meeting-not-found': 'This video session is no longer available.',
     'room-full': 'The video session is at capacity. Please try again later.',
@@ -166,7 +167,8 @@ export function handleDailyError(error: any): string {
     'microphone-error': 'Unable to access microphone. Check permissions.',
   };
 
-  const errorType = error?.errorMsg || error?.error || 'unknown';
+  const err = error as { errorMsg?: string; error?: string } | null;
+  const errorType = err?.errorMsg || err?.error || 'unknown';
   return errorMessages[errorType] || 'An error occurred with the video session. Please try again.';
 }
 

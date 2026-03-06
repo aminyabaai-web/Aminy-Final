@@ -65,11 +65,11 @@ export interface QASession {
 
 interface QASessionsHubProps {
   onBack: () => void;
-  onRegister: (sessionId: string) => void;
-  onUnregister: (sessionId: string) => void;
-  onSetReminder: (sessionId: string, enabled: boolean) => void;
-  onAddToCalendar: (session: QASession) => void;
-  onWatchReplay: (sessionId: string) => void;
+  onRegister?: (sessionId: string) => void;
+  onUnregister?: (sessionId: string) => void;
+  onSetReminder?: (sessionId: string, enabled: boolean) => void;
+  onAddToCalendar?: (session: QASession) => void;
+  onWatchReplay?: (sessionId: string) => void;
   userEmail?: string;
 }
 
@@ -205,7 +205,7 @@ export function QASessionsHub({
         ? { ...s, isRegistered: true, registeredCount: s.registeredCount + 1 }
         : s
     ));
-    onRegister(sessionId);
+    onRegister?.(sessionId);
   };
 
   const handleUnregister = (sessionId: string) => {
@@ -214,7 +214,7 @@ export function QASessionsHub({
         ? { ...s, isRegistered: false, hasReminder: false, registeredCount: s.registeredCount - 1 }
         : s
     ));
-    onUnregister(sessionId);
+    onUnregister?.(sessionId);
   };
 
   const handleToggleReminder = (sessionId: string) => {
@@ -223,7 +223,7 @@ export function QASessionsHub({
       setSessions(prev => prev.map(s =>
         s.id === sessionId ? { ...s, hasReminder: !s.hasReminder } : s
       ));
-      onSetReminder(sessionId, !session.hasReminder);
+      onSetReminder?.(sessionId, !session.hasReminder);
     }
   };
 
@@ -265,6 +265,14 @@ export function QASessionsHub({
           </div>
         </div>
       </header>
+
+      {/* Demo Data Banner */}
+      <div className="px-4 py-2 bg-amber-50 border-b border-amber-200">
+        <div className="flex items-center gap-2">
+          <span className="text-amber-600 text-xs font-medium">Preview</span>
+          <span className="text-amber-700/70 text-xs">Sample sessions shown. Live Q&A sessions coming soon.</span>
+        </div>
+      </div>
 
       {/* Included Badge */}
       <div className="px-4 py-3 bg-gradient-to-r from-amber-50 to-orange-50 border-b border-amber-200">
@@ -311,7 +319,7 @@ export function QASessionsHub({
                 onRegister={() => handleRegister(session.id)}
                 onUnregister={() => handleUnregister(session.id)}
                 onToggleReminder={() => handleToggleReminder(session.id)}
-                onAddToCalendar={() => onAddToCalendar(session)}
+                onAddToCalendar={() => onAddToCalendar?.(session)}
                 formatDate={formatDate}
                 formatTime={formatTime}
               />
@@ -329,7 +337,7 @@ export function QASessionsHub({
               <ReplayCard
                 key={session.id}
                 session={session}
-                onWatch={() => onWatchReplay(session.id)}
+                onWatch={() => onWatchReplay?.(session.id)}
                 formatDate={formatDate}
               />
             ))

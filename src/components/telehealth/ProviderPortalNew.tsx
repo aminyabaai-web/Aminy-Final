@@ -38,9 +38,46 @@ import {
   Appointment,
   US_STATES,
   PROVIDER_ROLE_DISPLAY,
-  ProviderRole
+  ProviderRole,
+  DayOfWeek,
+  VisitType,
+  VisitFormat,
+  AppointmentStatus
 } from '../../types/telehealth';
 import { supabase } from '../../utils/supabase/client';
+
+/** Row shape returned by the provider_availability table */
+interface AvailabilityRow {
+  id: string;
+  provider_id: string;
+  day_of_week: number;
+  start_time: string;
+  end_time: string;
+  timezone?: string;
+  is_recurring?: boolean;
+}
+
+/** Row shape returned by the telehealth_appointments table */
+interface AppointmentRow {
+  id: string;
+  user_id: string;
+  provider_id: string;
+  scheduled_at: string;
+  timezone?: string;
+  visit_type: string;
+  visit_format?: string;
+  duration?: number;
+  visit_reason?: string;
+  who_is_this_for?: string;
+  user_state: string;
+  price?: number;
+  payment_status?: string;
+  video_join_url?: string;
+  video_provider?: string;
+  status?: string;
+  created_at: string;
+  updated_at: string;
+}
 
 interface ProviderPortalProps {
   providerId: string;
@@ -143,10 +180,10 @@ export function ProviderPortalNew({ providerId, onLogout }: ProviderPortalProps)
           .eq('provider_id', providerId);
 
         if (availData) {
-          setAvailability(availData.map((a: any) => ({
+          setAvailability(availData.map((a: AvailabilityRow) => ({
             id: a.id,
             providerId: a.provider_id,
-            dayOfWeek: a.day_of_week,
+            dayOfWeek: a.day_of_week as DayOfWeek,
             startTime: a.start_time,
             endTime: a.end_time,
             timezone: a.timezone || 'America/Phoenix',
@@ -164,30 +201,30 @@ export function ProviderPortalNew({ providerId, onLogout }: ProviderPortalProps)
           .limit(20);
 
         if (apptData) {
-          setAppointments(apptData.map((a: any) => ({
+          setAppointments(apptData.map((a: AppointmentRow) => ({
             id: a.id,
             userId: a.user_id,
             providerId: a.provider_id,
             scheduledAt: a.scheduled_at,
             timezone: a.timezone || 'America/Phoenix',
-            visitType: a.visit_type,
-            visitFormat: a.visit_format || 'remote',
+            visitType: a.visit_type as VisitType,
+            visitFormat: (a.visit_format || 'remote') as VisitFormat,
             duration: a.duration || 25,
             visitReason: a.visit_reason || '',
-            whoIsThisFor: a.who_is_this_for || 'child',
+            whoIsThisFor: (a.who_is_this_for || 'child') as 'family' | 'parent' | 'child',
             userState: a.user_state,
             price: a.price || 0,
-            paymentStatus: a.payment_status || 'pending',
+            paymentStatus: (a.payment_status || 'pending') as Appointment['paymentStatus'],
             videoJoinUrl: a.video_join_url || '',
-            videoProvider: a.video_provider || 'daily',
-            status: a.status || 'confirmed',
+            videoProvider: (a.video_provider || 'zoom') as Appointment['videoProvider'],
+            status: (a.status || 'confirmed') as AppointmentStatus,
             createdAt: a.created_at,
             updatedAt: a.updated_at
           })));
         }
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.error('Failed to load provider data:', error);
-        setLoadError(error.message || 'Failed to load provider data');
+        setLoadError(error instanceof Error ? error.message : 'Failed to load provider data');
       } finally {
         setIsLoading(false);
       }
@@ -221,7 +258,7 @@ export function ProviderPortalNew({ providerId, onLogout }: ProviderPortalProps)
 
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 3000);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Failed to save:', error);
       alert('Failed to save changes. Please try again.');
     } finally {

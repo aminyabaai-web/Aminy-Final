@@ -25,22 +25,79 @@ import {
   Target,
   Award,
   BookOpen,
+  Minus,
+  Plus,
+  Loader2,
+  ChevronLeft,
 } from 'lucide-react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
+import { toast } from 'sonner';
+import { B2B_PLANS, calculateB2BPrice, createB2BCheckoutSession, type B2BPlanType } from '../lib/b2b-checkout';
 
 interface B2BPartnerPortalProps {
   partnerType?: 'fiscal_intermediary' | 'aba_provider' | 'school' | 'general';
   onContactSales?: () => void;
+  onNavigate?: (screen: string) => void;
+  onBack?: () => void;
 }
 
 export function B2BPartnerPortal({
   partnerType = 'general',
   onContactSales,
+  onNavigate,
+  onBack,
 }: B2BPartnerPortalProps) {
   const [activeTab, setActiveTab] = useState('overview');
+  const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'annual'>('annual');
+  const [seatCounts, setSeatCounts] = useState<Record<string, number>>({
+    clinic: 5,
+    school: 10,
+    agency: 25,
+  });
+  const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null);
+
+  const handleSeatChange = (plan: string, delta: number) => {
+    const min = B2B_PLANS[plan as B2BPlanType]?.minSeats || 1;
+    setSeatCounts(prev => ({
+      ...prev,
+      [plan]: Math.max(min, (prev[plan] || min) + delta),
+    }));
+  };
+
+  const handleCheckout = async (planType: B2BPlanType) => {
+    if (planType === 'enterprise') {
+      onContactSales?.();
+      return;
+    }
+
+    setCheckoutLoading(planType);
+    try {
+      const result = await createB2BCheckoutSession({
+        planType,
+        seatCount: seatCounts[planType] || B2B_PLANS[planType].minSeats,
+        billingPeriod,
+      });
+
+      if (result.url) {
+        if (result.url.includes('screen=b2b-setup')) {
+          // Demo mode — navigate internally
+          onNavigate?.('b2b-setup');
+          toast.success(`${B2B_PLANS[planType].name} plan activated!`);
+        } else {
+          window.location.href = result.url;
+        }
+      } else if (result.error) {
+        toast.error(result.error);
+      }
+    } catch (e) {
+      toast.error('Checkout failed. Please try again.');
+    } finally {
+      setCheckoutLoading(null);
+    }
+  };
 
   // Fiscal Intermediary specific content
   const fiscalIntermediaryContent = {
@@ -197,30 +254,35 @@ export function B2BPartnerPortal({
     },
   ];
 
-  const pricingTiers = [
-    {
-      name: 'Starter',
-      families: 'Up to 100 families',
-      price: '$3/family/mo',
-      features: ['Core AI features', 'Basic analytics', 'Email support'],
-    },
-    {
-      name: 'Growth',
-      families: 'Up to 500 families',
-      price: '$2.50/family/mo',
-      features: ['Everything in Starter', 'Custom branding', 'API access', 'Priority support'],
-      popular: true,
-    },
-    {
-      name: 'Enterprise',
-      families: 'Unlimited families',
-      price: 'Custom',
-      features: ['Everything in Growth', 'White-label', 'SSO', 'Dedicated success manager', 'SLA guarantee'],
-    },
-  ];
+  const pricingTierKeys: B2BPlanType[] = ['clinic', 'school', 'agency', 'enterprise'];
+  const pricingTiers = pricingTierKeys.map((key) => {
+    const plan = B2B_PLANS[key];
+    const seats = seatCounts[key] || plan.minSeats;
+    const pricing = calculateB2BPrice(key, seats, billingPeriod);
+    return {
+      key,
+      name: plan.name,
+      description: key === 'clinic' ? `Min ${plan.minSeats} seats` : key === 'enterprise' ? '100+ seats' : `Min ${plan.minSeats} seats`,
+      price: key === 'enterprise' ? 'Custom' : `$${pricing.perSeat.toFixed(2)}/seat/mo`,
+      total: key === 'enterprise' ? 'Contact us' : `$${pricing.total.toFixed(0)}${billingPeriod === 'annual' ? '/yr' : '/mo'}`,
+      savings: pricing.savings,
+      features: [...plan.features],
+      popular: key === 'clinic',
+      minSeats: plan.minSeats,
+    };
+  });
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+      {/* Back Navigation */}
+      {onBack && (
+        <div className="px-4 pt-4">
+          <Button variant="ghost" onClick={onBack} className="text-slate-600 hover:text-slate-900">
+            <ChevronLeft className="w-4 h-4 mr-1" />
+            Back
+          </Button>
+        </div>
+      )}
       {/* Hero */}
       <section className="py-16 px-4">
         <div className="max-w-4xl mx-auto text-center">
@@ -360,44 +422,95 @@ export function B2BPartnerPortal({
           <h2 className="text-xl sm:text-2xl font-bold text-center text-gray-900 mb-4">
             Simple, Scalable Pricing
           </h2>
-          <p className="text-center text-gray-600 mb-12 max-w-xl mx-auto">
+          <p className="text-center text-gray-600 mb-6 max-w-xl mx-auto">
             Volume discounts that grow with you. No setup fees. No long-term contracts required.
           </p>
 
-          <div className="grid md:grid-cols-3 gap-3 sm:gap-4 sm:gap-6">
-            {pricingTiers.map((tier, index) => (
+          {/* Billing Period Toggle */}
+          <div className="flex items-center justify-center gap-3 mb-10">
+            <span className={`text-sm font-medium ${billingPeriod === 'monthly' ? 'text-gray-900' : 'text-gray-500'}`}>Monthly</span>
+            <button
+              onClick={() => setBillingPeriod(prev => prev === 'monthly' ? 'annual' : 'monthly')}
+              className={`relative w-14 h-7 rounded-full transition-colors ${billingPeriod === 'annual' ? 'bg-blue-600' : 'bg-gray-300'}`}
+            >
+              <div className={`absolute top-0.5 left-0.5 w-6 h-6 bg-white rounded-full shadow transition-transform ${billingPeriod === 'annual' ? 'translate-x-7' : ''}`} />
+            </button>
+            <span className={`text-sm font-medium ${billingPeriod === 'annual' ? 'text-gray-900' : 'text-gray-500'}`}>Annual</span>
+            {billingPeriod === 'annual' && (
+              <Badge className="bg-green-100 text-green-800 text-xs">Save up to 30%</Badge>
+            )}
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {pricingTiers.map((tier) => (
               <Card
-                key={index}
-                className={`p-6 ${tier.popular ? 'ring-2 ring-blue-500 relative' : ''}`}
+                key={tier.key}
+                className={`p-5 ${tier.popular ? 'ring-2 ring-blue-500 relative' : ''}`}
               >
                 {tier.popular && (
                   <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-blue-500 text-white">
                     Most Popular
                   </Badge>
                 )}
-                <h3 className="text-xl font-bold text-gray-900 mb-2">
+                <h3 className="text-lg font-bold text-gray-900 mb-1">
                   {tier.name}
                 </h3>
-                <p className="text-sm text-gray-500 mb-4">
-                  {tier.families}
+                <p className="text-xs text-gray-500 mb-3">
+                  {tier.description}
                 </p>
-                <div className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-6">
+                <div className="text-2xl font-bold text-gray-900 mb-1">
                   {tier.price}
                 </div>
-                <ul className="space-y-3 mb-4 sm:mb-6">
-                  {tier.features.map((feature, i) => (
-                    <li key={i} className="flex items-center gap-2 text-sm">
-                      <CheckCircle className="w-4 h-4 text-green-600" />
+                <p className="text-xs text-gray-500 mb-3">{tier.total}</p>
+
+                {tier.savings > 0 && (
+                  <p className="text-xs text-green-600 font-medium mb-3">
+                    Save ${tier.savings.toFixed(0)}/year
+                  </p>
+                )}
+
+                {/* Seat Selector (not for enterprise) */}
+                {tier.key !== 'enterprise' && (
+                  <div className="flex items-center justify-between bg-gray-50 rounded-lg p-2 mb-4">
+                    <button
+                      onClick={() => handleSeatChange(tier.key, -1)}
+                      className="w-7 h-7 flex items-center justify-center rounded-md bg-white border border-gray-200 text-gray-600 hover:bg-gray-100"
+                    >
+                      <Minus className="w-3 h-3" />
+                    </button>
+                    <span className="text-sm font-medium">
+                      {seatCounts[tier.key] || tier.minSeats} seats
+                    </span>
+                    <button
+                      onClick={() => handleSeatChange(tier.key, 1)}
+                      className="w-7 h-7 flex items-center justify-center rounded-md bg-white border border-gray-200 text-gray-600 hover:bg-gray-100"
+                    >
+                      <Plus className="w-3 h-3" />
+                    </button>
+                  </div>
+                )}
+
+                <ul className="space-y-2 mb-4">
+                  {tier.features.slice(0, 5).map((feature, i) => (
+                    <li key={i} className="flex items-center gap-2 text-xs">
+                      <CheckCircle className="w-3.5 h-3.5 text-green-600 flex-shrink-0" />
                       <span className="text-gray-700">{feature}</span>
                     </li>
                   ))}
+                  {tier.features.length > 5 && (
+                    <li className="text-xs text-blue-600">+{tier.features.length - 5} more features</li>
+                  )}
                 </ul>
                 <Button
                   className={`w-full ${tier.popular ? 'bg-blue-600 hover:bg-blue-700' : ''}`}
                   variant={tier.popular ? 'default' : 'outline'}
-                  onClick={onContactSales}
+                  onClick={() => handleCheckout(tier.key as B2BPlanType)}
+                  disabled={checkoutLoading === tier.key}
                 >
-                  Get Started
+                  {checkoutLoading === tier.key ? (
+                    <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                  ) : null}
+                  {tier.key === 'enterprise' ? 'Contact Sales' : 'Get Started'}
                 </Button>
               </Card>
             ))}

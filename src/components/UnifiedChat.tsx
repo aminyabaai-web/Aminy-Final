@@ -29,6 +29,8 @@ interface UnifiedChatProps {
   childName?: string;
   onClose?: () => void;
   embedded?: boolean;
+  userData?: { parentName?: string; childName?: string };
+  starterPrompts?: string[];
 }
 
 export function UnifiedChat({ 
@@ -40,12 +42,14 @@ export function UnifiedChat({
   const {
     messages,
     currentConversation,
-    loading,
-    error,
+    state,
     sendMessage,
     createConversation,
     setChildContext,
   } = useConversation();
+
+  const loading = state.isLoading;
+  const error: string | null = null;
 
   const [input, setInput] = useState('');
   const [isSending, setIsSending] = useState(false);
@@ -57,6 +61,16 @@ export function UnifiedChat({
       setChildContext(childId);
     }
   }, [childId, setChildContext]);
+
+  // Map message role to author string for display
+  const getAuthor = (msg: { role: string }): string => {
+    switch (msg.role) {
+      case 'user': return 'parent';
+      case 'assistant': return 'ai';
+      case 'system': return 'system';
+      default: return msg.role;
+    }
+  };
 
   // Create conversation if none exists
   useEffect(() => {
@@ -189,8 +203,8 @@ export function UnifiedChat({
           )}
 
           {messages.map((message) => {
-            const colors = getAuthorColors(message.author);
-            const isUser = message.author === 'parent';
+            const colors = getAuthorColors(getAuthor(message));
+            const isUser = getAuthor(message) === 'parent';
 
             return (
               <div
@@ -206,10 +220,10 @@ export function UnifiedChat({
                     {!isUser && (
                       <>
                         <div className={`p-1 ${colors.bg} rounded`}>
-                          {getAuthorIcon(message.author)}
+                          {getAuthorIcon(getAuthor(message))}
                         </div>
                         <span className="text-xs font-medium text-muted-foreground">
-                          {getAuthorLabel(message.author)}
+                          {getAuthorLabel(getAuthor(message))}
                         </span>
                       </>
                     )}

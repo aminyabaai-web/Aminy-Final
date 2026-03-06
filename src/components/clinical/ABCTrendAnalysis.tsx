@@ -367,6 +367,14 @@ export function ABCTrendAnalysis({
 
   return (
     <div className="space-y-3 sm:space-y-4 sm:space-y-6">
+      {/* Clinical Disclaimer */}
+      <div className="flex items-center gap-2 p-2 bg-amber-50 border border-amber-200 rounded-lg text-xs">
+        <span className="text-amber-600 flex-shrink-0">📊</span>
+        <span className="text-amber-800">
+          Trend analysis is for educational tracking. Clinical interpretation requires a licensed BCBA or behavior analyst.
+        </span>
+      </div>
+
       {/* Summary Header */}
       <Card className="p-6 bg-gradient-to-br from-teal-50 to-cyan-50 dark:from-teal-900/20 dark:to-cyan-900/20 border-teal-200 dark:border-teal-800">
         <div className="flex items-start justify-between">

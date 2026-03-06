@@ -276,7 +276,7 @@ export async function applyUserModerationAction(
 export async function getUserModerationHistory(
   userId: string,
   limit: number = 50
-): Promise<{ data: any[]; error?: string }> {
+): Promise<{ data: Record<string, unknown>[]; error?: string }> {
   const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
   try {

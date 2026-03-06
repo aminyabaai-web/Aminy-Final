@@ -153,7 +153,7 @@ export function getReferralShareMessage(referralCode: string, userName: string):
   return {
     title: 'Join me on Aminy!',
     body: `${userName} invited you to Aminy - the AI-powered companion for families navigating autism and neurodivergence. Use code ${referralCode} to get $25 toward your first expert session!`,
-    url: `https://aminy.app/join?ref=${referralCode}`,
+    url: `https://aminy.ai/join?ref=${referralCode}`,
   };
 }
 

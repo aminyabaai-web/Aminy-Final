@@ -128,13 +128,14 @@ export function VideoRoom({
             onEnd?.();
           },
         });
-      } catch (error: any) {
+      } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'Failed to join call';
         setCallState(prev => ({
           ...prev,
           state: 'error',
-          error: error.message || 'Failed to join call',
+          error: message,
         }));
-        onError?.(error.message || 'Failed to join call');
+        onError?.(message);
       }
     };
 

@@ -82,6 +82,7 @@ interface SecureMessagingProps {
   userId: string;
   userType: 'provider' | 'parent';
   userName: string;
+  onBack?: () => void;
 }
 
 // Quick reply templates

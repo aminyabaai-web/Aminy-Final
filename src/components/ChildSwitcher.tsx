@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Avatar, AvatarFallback } from './ui/avatar';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
-import { Check, Plus, ChevronDown, Lock, Infinity, Crown } from 'lucide-react';
+import { Check, Plus, ChevronDown, Lock, Infinity as InfinityIcon, Crown } from 'lucide-react';
 import { TierType, getMaxChildren, getTierDisplayName, compareTiers } from '../lib/tier-utils';
 
 interface Child {
@@ -22,7 +22,7 @@ interface ChildSwitcherProps {
 }
 
 export function ChildSwitcher({
-  children,
+  children = [],
   activeChildId,
   onSwitch,
   onAddChild,
@@ -34,9 +34,9 @@ export function ChildSwitcher({
 
   // Get max children allowed for this tier
   const maxChildren = getMaxChildren(tier);
-  const isUnlimited = maxChildren === Infinity;
-  const canAddMore = isUnlimited || children.length < maxChildren;
-  const childrenRemaining = isUnlimited ? Infinity : maxChildren - children.length;
+  const isUnlimited = maxChildren === null;
+  const canAddMore = isUnlimited || children.length < (maxChildren ?? 1);
+  const childrenRemaining = isUnlimited ? Infinity : (maxChildren ?? 1) - children.length;
 
   // Determine the next tier that allows more children
   const getUpgradeTierForChildren = (): TierType | null => {
@@ -84,7 +84,7 @@ export function ChildSwitcher({
         )}
         {isUnlimited && (
           <Badge variant="outline" className="text-xs bg-purple-50 text-purple-700 border-purple-200">
-            <Infinity className="w-3 h-3 mr-1" />
+            <InfinityIcon className="w-3 h-3 mr-1" />
             Unlimited
           </Badge>
         )}

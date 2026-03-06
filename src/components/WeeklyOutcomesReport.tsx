@@ -216,7 +216,7 @@ export function WeeklyOutcomesReport({ onShare, onClose }: WeeklyOutcomesReportP
     }
   };
 
-  const calculateStreak = (routines: any[]): number => {
+  const calculateStreak = (routines: { scheduled_at: string; completion_status: string }[]): number => {
     if (routines.length === 0) return 0;
 
     const dayMap = new Map<string, { completed: number; total: number }>();

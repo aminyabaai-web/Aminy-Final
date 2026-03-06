@@ -91,23 +91,18 @@ export function ReportsHub({ childId, childName, accessToken, userTier = 'free' 
     }
 
     try {
-      const report = await createReport({
-        childId,
-        reportType,
-        startDate: dateRange.start,
-        endDate: dateRange.end,
+      const report = await createReport(reportType as any, {
+        dateRange: { start: new Date(dateRange.start), end: new Date(dateRange.end) },
         includeCharts,
-        includeGoals,
-        includeActivities: true,
-        watermark: reportType === 'parent' ? undefined : 'CONFIDENTIAL - For Provider Use Only',
+        childName,
       });
 
       toast.success('Report generated successfully! 🎉');
       setShowCreateDialog(false);
-      
+
       // Auto-download
       if (report) {
-        downloadReport(report);
+        downloadReport(report.id);
       }
     } catch (err) {
       toast.error('Failed to generate report. Please try again.');
@@ -144,7 +139,7 @@ export function ReportsHub({ childId, childName, accessToken, userTier = 'free' 
     }
   };
 
-  const reportTypeLabels: Record<ReportType, { name: string; icon: string; description: string }> = {
+  const reportTypeLabels: Partial<Record<ReportType, { name: string; icon: string; description: string }>> = {
     parent: { 
       name: 'Parent Summary', 
       icon: '📊', 
@@ -219,14 +214,16 @@ export function ReportsHub({ childId, childName, accessToken, userTier = 'free' 
       ) : (
         <div className="grid gap-3 sm:gap-4 md:grid-cols-2">
           {reports.map((report) => {
-            const typeInfo = reportTypeLabels[report.reportType];
-            const isExpired = new Date(report.expiresAt) < new Date();
+            const reportTypeKey = (report.reportType ?? report.type) as keyof typeof reportTypeLabels;
+            const typeInfo = reportTypeLabels[reportTypeKey] ?? { name: 'Report', icon: '📄', description: '' };
+            const expiresAt = report.expiresAt ?? new Date(report.createdAt.getTime() + 7 * 24 * 60 * 60 * 1000).toISOString();
+            const isExpired = new Date(expiresAt) < new Date();
             const daysUntilExpiry = Math.ceil(
-              (new Date(report.expiresAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24)
+              (new Date(expiresAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24)
             );
 
             return (
-              <Card key={report.reportId} className="p-5 hover:shadow-md transition-shadow">
+              <Card key={report.reportId ?? report.id} className="p-5 hover:shadow-md transition-shadow">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-start gap-3">
                     <div className="text-3xl">{typeInfo.icon}</div>
@@ -247,7 +244,7 @@ export function ReportsHub({ childId, childName, accessToken, userTier = 'free' 
                 <div className="space-y-2 mb-4 text-xs text-muted-foreground">
                   <div className="flex items-center gap-2">
                     <Calendar className="w-3 h-3" />
-                    <span>Generated {new Date(report.generatedAt).toLocaleDateString()}</span>
+                    <span>Generated {new Date(report.generatedAt ?? report.createdAt).toLocaleDateString()}</span>
                   </div>
                   {!isExpired && (
                     <div className="flex items-center gap-2">
@@ -261,7 +258,7 @@ export function ReportsHub({ childId, childName, accessToken, userTier = 'free' 
                   {!isExpired && (
                     <>
                       <Button
-                        onClick={() => downloadReport(report)}
+                        onClick={() => downloadReport(report.id)}
                         variant="outline"
                         size="sm"
                         className="flex-1"
@@ -271,7 +268,7 @@ export function ReportsHub({ childId, childName, accessToken, userTier = 'free' 
                       </Button>
                       <Button
                         onClick={() => {
-                          setSelectedReportId(report.reportId);
+                          setSelectedReportId(report.reportId ?? report.id);
                           setShowShareDialog(true);
                         }}
                         variant="outline"
@@ -284,7 +281,7 @@ export function ReportsHub({ childId, childName, accessToken, userTier = 'free' 
                     </>
                   )}
                   <Button
-                    onClick={() => handleDeleteReport(report.reportId)}
+                    onClick={() => handleDeleteReport(report.reportId ?? report.id)}
                     variant="ghost"
                     size="sm"
                     className="text-muted-foreground hover:text-red-600"
@@ -314,7 +311,8 @@ export function ReportsHub({ childId, childName, accessToken, userTier = 'free' 
               <Label className="text-sm mb-3 block">Report Type</Label>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {(Object.keys(reportTypeLabels) as ReportType[]).map((type) => {
-                  const info = reportTypeLabels[type];
+                  const info = reportTypeLabels[type]!;
+                  if (!info) return null;
                   const requiresPro = ['iep', 'bcba', 'insurance'].includes(type);
                   const isLocked = requiresPro && userTier !== 'premium';
 

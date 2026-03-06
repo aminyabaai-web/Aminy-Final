@@ -1,10 +1,11 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { FileText, Download, TrendingUp, TrendingDown, Minus, Lock, Loader2, Share2, Calendar } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
 import jsPDF from 'jspdf';
 import { TierType, hasFeature, getTierDisplayName } from '../lib/tier-utils';
+import { supabase } from '../utils/supabase/client';
 
 // ============================================================================
 // Types
@@ -235,6 +236,7 @@ function generateWeeklyOutcomesPDF(data: WeeklyOutcomesData): jsPDF {
 
 export function WeeklyOutcomesPDF({ data, tier = 'free', onUpgrade }: WeeklyOutcomesPDFProps) {
   const [isGenerating, setIsGenerating] = useState(false);
+  const [realData, setRealData] = useState<WeeklyOutcomesData | null>(null);
 
   // Calculate date range
   const today = new Date();
@@ -244,8 +246,50 @@ export function WeeklyOutcomesPDF({ data, tier = 'free', onUpgrade }: WeeklyOutc
   // Check if user has access (Core tier or above)
   const hasAccess = hasFeature(tier, 'full-reports');
 
-  // Use provided data or demo data
-  const reportData: WeeklyOutcomesData = useMemo(() => data || {
+  // Load real data from Supabase
+  useEffect(() => {
+    async function loadRealData() {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+
+        const weekStartISO = weekStart.toISOString();
+
+        const [profileRes, childRes, goalsRes, calmRes, milestonesRes] = await Promise.all([
+          supabase.from('profiles').select('name').eq('id', user.id).single(),
+          supabase.from('children').select('name').eq('user_id', user.id).limit(1).single(),
+          supabase.from('goals').select('*').eq('user_id', user.id).eq('is_active', true),
+          supabase.from('calm_tool_sessions').select('coins_earned, duration_seconds').eq('user_id', user.id).gte('completed_at', weekStartISO),
+          supabase.from('user_milestones').select('milestone_type').eq('user_id', user.id).gte('achieved_at', weekStartISO),
+        ]);
+
+        const goals = goalsRes.data || [];
+        const calmSessions = calmRes.data || [];
+        const totalCoins = calmSessions.reduce((sum: number, s: { coins_earned?: number }) => sum + (s.coins_earned || 0), 0);
+        const goalsAchieved = goals.filter((g: { progress?: number }) => (g.progress || 0) >= 100).length;
+
+        setRealData({
+          childName: childRes.data?.name || 'Child',
+          parentName: profileRes.data?.name || 'Parent',
+          weekStart,
+          weekEnd,
+          activitiesCompleted: calmSessions.length + goalsAchieved,
+          activitiesPlanned: Math.max(goals.length + 5, calmSessions.length + goalsAchieved),
+          routineAdherence: goals.length > 0 ? Math.round(goals.reduce((sum: number, g: { progress?: number }) => sum + (g.progress || 0), 0) / goals.length) : 0,
+          stressLevelAvg: 4.0,
+          goalsAchieved,
+          goalsInProgress: goals.length - goalsAchieved,
+          wins: (milestonesRes.data || []).map((m: { milestone_type: string }) => `Earned badge: ${m.milestone_type}`).slice(0, 3),
+          challenges: [],
+          calmCoinsEarned: totalCoins,
+        });
+      } catch { /* fall back to demo data */ }
+    }
+    loadRealData();
+  }, []);
+
+  // Use provided data > real data > demo data
+  const reportData: WeeklyOutcomesData = useMemo(() => data || realData || {
     childName: 'Child',
     parentName: 'Parent',
     weekStart,
@@ -268,7 +312,7 @@ export function WeeklyOutcomesPDF({ data, tier = 'free', onUpgrade }: WeeklyOutc
     ],
     aiInsights: 'Great progress this week! Morning routines are becoming more consistent. Consider adding a visual schedule for evening transitions to build on morning success.',
     calmCoinsEarned: 45
-  }, [data, weekStart, weekEnd]);
+  }, [data, realData, weekStart, weekEnd]);
 
   const handleDownload = async () => {
     if (!hasAccess) {

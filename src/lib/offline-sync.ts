@@ -27,7 +27,7 @@ interface DBSchema {
 
 export interface ChildProfileOffline {
   id: string;
-  data: any;
+  data: Record<string, unknown>;
   lastModified: string;
   synced: boolean;
   version: number;
@@ -36,7 +36,7 @@ export interface ChildProfileOffline {
 export interface RoutineOffline {
   id: string;
   childId: string;
-  data: any;
+  data: Record<string, unknown>;
   lastModified: string;
   synced: boolean;
   version: number;
@@ -46,7 +46,7 @@ export interface ProgressEntryOffline {
   id: string;
   childId: string;
   date: string;
-  data: any;
+  data: Record<string, unknown>;
   lastModified: string;
   synced: boolean;
 }
@@ -56,7 +56,7 @@ export interface SyncQueueItem {
   action: 'create' | 'update' | 'delete';
   entityType: 'profile' | 'routine' | 'progress' | 'timeEntry' | 'message';
   entityId: string;
-  payload: any;
+  payload: Record<string, unknown>;
   createdAt: string;
   retryCount: number;
   lastAttempt?: string;
@@ -65,7 +65,7 @@ export interface SyncQueueItem {
 
 export interface CacheEntry {
   key: string;
-  data: any;
+  data: unknown;
   expiresAt: string;
   createdAt: string;
 }
@@ -260,7 +260,7 @@ export async function queueAction(
   action: SyncQueueItem['action'],
   entityType: SyncQueueItem['entityType'],
   entityId: string,
-  payload: any
+  payload: Record<string, unknown>
 ): Promise<string> {
   const queueItem: SyncQueueItem = {
     id: `queue-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
@@ -357,7 +357,7 @@ export async function processSyncQueue(): Promise<{
 async function syncItem(item: SyncQueueItem): Promise<void> {
   // Placeholder for actual API calls
   // In production, implement actual sync logic here
-  console.log('Syncing item:', item);
+  if (import.meta.env.DEV) console.log('Syncing item:', item);
 
   // Simulate network request
   await new Promise((resolve) => setTimeout(resolve, 100));
@@ -366,7 +366,7 @@ async function syncItem(item: SyncQueueItem): Promise<void> {
   if (item.action === 'update' || item.action === 'create') {
     const storeName = entityTypeToStore(item.entityType);
     if (storeName) {
-      const existingItem = await getItem<any>(storeName, item.entityId);
+      const existingItem = await getItem<{ id: string; synced?: boolean }>(storeName, item.entityId);
       if (existingItem) {
         await putItem(storeName, { ...existingItem, synced: true });
       }
@@ -393,7 +393,7 @@ function entityTypeToStore(entityType: SyncQueueItem['entityType']): string | nu
  */
 export async function setCache(
   key: string,
-  data: any,
+  data: unknown,
   ttlMinutes: number = 60
 ): Promise<void> {
   const entry: CacheEntry = {
@@ -403,7 +403,7 @@ export async function setCache(
     createdAt: new Date().toISOString(),
   };
 
-  await putItem('cache', entry);
+  await putItem('cache', { ...entry, id: entry.key });
 }
 
 /**
@@ -450,7 +450,7 @@ export async function clearExpiredCache(): Promise<number> {
  */
 export async function saveProfileOffline(
   id: string,
-  data: any
+  data: Record<string, unknown>
 ): Promise<ChildProfileOffline> {
   const existing = await getItem<ChildProfileOffline>('profiles', id);
 
@@ -473,7 +473,7 @@ export async function saveProfileOffline(
 /**
  * Get profile data (offline-first)
  */
-export async function getProfileOffline(id: string): Promise<any | undefined> {
+export async function getProfileOffline(id: string): Promise<Record<string, unknown> | undefined> {
   const profile = await getItem<ChildProfileOffline>('profiles', id);
   return profile?.data;
 }
@@ -484,7 +484,7 @@ export async function getProfileOffline(id: string): Promise<any | undefined> {
 export async function saveProgressOffline(
   childId: string,
   date: string,
-  data: any
+  data: Record<string, unknown>
 ): Promise<ProgressEntryOffline> {
   const id = `progress-${childId}-${date}`;
   const existing = await getItem<ProgressEntryOffline>('progress', id);
@@ -539,12 +539,12 @@ let syncInProgress = false;
  * Handle coming online - trigger sync
  */
 function handleOnline() {
-  console.log('Device online - triggering sync');
+  if (import.meta.env.DEV) console.log('Device online - triggering sync');
   if (!syncInProgress) {
     syncInProgress = true;
     processSyncQueue()
       .then((result) => {
-        console.log('Sync complete:', result);
+        if (import.meta.env.DEV) console.log('Sync complete:', result);
       })
       .catch((error) => {
         console.error('Sync failed:', error);
@@ -559,7 +559,7 @@ function handleOnline() {
  * Handle going offline
  */
 function handleOffline() {
-  console.log('Device offline - queuing actions');
+  if (import.meta.env.DEV) console.log('Device offline - queuing actions');
 }
 
 /**
@@ -568,7 +568,7 @@ function handleOffline() {
 export function initOfflineSync(): void {
   // Open database
   openDatabase().then(() => {
-    console.log('IndexedDB initialized');
+    if (import.meta.env.DEV) console.log('IndexedDB initialized');
   });
 
   // Set up network listeners
@@ -618,7 +618,7 @@ export async function getStorageInfo(): Promise<{
   ]);
 
   // Estimate storage usage
-  const estimateSize = (items: any[]) =>
+  const estimateSize = (items: unknown[]) =>
     new Blob([JSON.stringify(items)]).size;
 
   const used =

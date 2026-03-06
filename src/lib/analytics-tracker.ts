@@ -30,7 +30,7 @@ export interface AnalyticsEventData {
   userId: string;
   event: AnalyticsEvent;
   timestamp: string;
-  properties?: Record<string, any>;
+  properties?: Record<string, unknown>;
   sessionId?: string;
 }
 
@@ -53,7 +53,7 @@ export interface RetentionMetrics {
  */
 export async function trackEvent(
   event: AnalyticsEvent,
-  properties?: Record<string, any>
+  properties?: Record<string, unknown>
 ): Promise<void> {
   try {
     const userId = localStorage.getItem('userId');
@@ -93,7 +93,7 @@ export async function trackEvent(
 /**
  * Track module visit
  */
-export function trackModuleVisit(module: string): void {
+export function trackModuleVisit(module: string): (() => void) {
   const startTime = Date.now();
   
   trackEvent('nav_tab_selected', { module });

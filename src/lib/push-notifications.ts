@@ -31,7 +31,7 @@ export interface ScheduledNotification {
   body: string;
   scheduledFor: Date;
   type: 'daily_checkin' | 'streak_reminder' | 'routine_nudge' | 'calm_moment' | 'custom';
-  data?: Record<string, any>;
+  data?: Record<string, unknown>;
   sent: boolean;
 }
 
@@ -101,7 +101,7 @@ export async function subscribeToPush(userId: string): Promise<PushSubscriptionD
     if (!subscription) {
       subscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
+        applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY) as BufferSource,
       });
     }
 
@@ -210,8 +210,8 @@ export async function scheduleNotification(
           'Authorization': `Bearer ${publicAnonKey}`,
         },
         body: JSON.stringify({
-          userId,
           ...notification,
+          userId,
         }),
       }
     );
@@ -289,7 +289,7 @@ export async function setupDailyCheckIns(
 /**
  * Send a local notification immediately (for testing)
  */
-export function sendLocalNotification(title: string, body: string, data?: any): void {
+export function sendLocalNotification(title: string, body: string, data?: { route?: string; icon?: string; onClick?: () => void; [key: string]: unknown }): void {
   if (Notification.permission !== 'granted') {
     console.warn('Notification permission not granted');
     return;
@@ -378,20 +378,20 @@ import { useState, useEffect } from 'react';
  * Call from browser console: window.testPushNotifications()
  */
 export async function testPushNotifications(): Promise<{ success: boolean; message: string }> {
-  console.log('[Push Test] Starting push notification verification...');
+  if (import.meta.env.DEV) console.log('[Push Test] Starting push notification verification...');
 
   // Step 1: Check support
   if (!isPushSupported()) {
     return { success: false, message: 'Push notifications not supported in this browser' };
   }
-  console.log('[Push Test] ✓ Push notifications supported');
+  if (import.meta.env.DEV) console.log('[Push Test] Push notifications supported');
 
   // Step 2: Check service worker
   const registration = await navigator.serviceWorker.ready;
   if (!registration) {
     return { success: false, message: 'Service worker not registered' };
   }
-  console.log('[Push Test] ✓ Service worker ready');
+  if (import.meta.env.DEV) console.log('[Push Test] Service worker ready');
 
   // Step 3: Check permission
   const permission = getNotificationPermission();
@@ -399,13 +399,13 @@ export async function testPushNotifications(): Promise<{ success: boolean; messa
     return { success: false, message: 'Notification permission denied. Enable in browser settings.' };
   }
   if (permission === 'default') {
-    console.log('[Push Test] Permission not yet granted. Requesting...');
+    if (import.meta.env.DEV) console.log('[Push Test] Permission not yet granted. Requesting...');
     const newPermission = await requestNotificationPermission();
     if (newPermission !== 'granted') {
       return { success: false, message: 'User declined notification permission' };
     }
   }
-  console.log('[Push Test] ✓ Permission granted');
+  if (import.meta.env.DEV) console.log('[Push Test] Permission granted');
 
   // Step 4: Test local notification
   try {
@@ -414,7 +414,7 @@ export async function testPushNotifications(): Promise<{ success: boolean; messa
       'Push notifications are working! You\'re all set to receive updates.',
       { test: true }
     );
-    console.log('[Push Test] ✓ Local notification sent');
+    if (import.meta.env.DEV) console.log('[Push Test] Local notification sent');
     return { success: true, message: 'Push notifications verified! Check your notification.' };
   } catch (error) {
     return { success: false, message: `Failed to send test notification: ${error}` };
@@ -423,5 +423,5 @@ export async function testPushNotifications(): Promise<{ success: boolean; messa
 
 // Expose test function to window for easy console testing
 if (typeof window !== 'undefined') {
-  (window as any).testPushNotifications = testPushNotifications;
+  (window as unknown as Record<string, unknown>).testPushNotifications = testPushNotifications;
 }

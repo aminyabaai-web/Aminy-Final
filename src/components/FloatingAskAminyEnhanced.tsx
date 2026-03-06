@@ -123,7 +123,7 @@ export function FloatingAskAminyEnhanced({
           hasNewContext && enableContextDetection && "animate-pulse",
           className
         )}
-        aria-label="Ask Aminy - Always available to help"
+        aria-label="Aminy - Always available to help"
       >
         <div className="relative">
           {/* Main icon with enhanced context awareness */}

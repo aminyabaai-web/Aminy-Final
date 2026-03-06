@@ -14,6 +14,7 @@ interface SplashPageProps {
   onStartReflection?: () => void;
   onSignIn?: () => void;
   onForProviders?: () => void;
+  onFreeScreening?: () => void;
 }
 
 const fontStack = 'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", "Helvetica Neue", Arial, "Noto Sans", sans-serif';
@@ -27,7 +28,8 @@ const fontSmoothing: React.CSSProperties = {
 export function SplashPage({
   onStartTrial,
   onSignIn,
-  onForProviders
+  onForProviders,
+  onFreeScreening,
 }: SplashPageProps) {
 
   useEffect(() => {
@@ -155,7 +157,7 @@ export function SplashPage({
               ...fontSmoothing,
             }}
           >
-            ABA-informed strategies and expert providers, together in one calm space. Start seeing small wins today.
+            Real ABA strategies and real providers who understand your world — together in one calm place. Start seeing small wins today.
           </motion.p>
 
           {/* Primary CTA */}
@@ -220,6 +222,50 @@ export function SplashPage({
           >
             7-day free trial · No credit card required
           </motion.p>
+
+          {/* Free Screening CTA — the acquisition hook */}
+          {onFreeScreening && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.75 }}
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                marginBottom: '20px',
+              }}
+            >
+              <button
+                onClick={onFreeScreening}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  background: 'none',
+                  border: '1px solid rgba(13, 148, 136, 0.25)',
+                  borderRadius: '12px',
+                  color: 'rgba(13, 148, 136, 0.85)',
+                  fontFamily: fontStack,
+                  fontSize: '13px',
+                  fontWeight: 500,
+                  cursor: 'pointer',
+                  padding: '10px 20px',
+                  transition: 'all 0.2s ease',
+                  ...fontSmoothing,
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = 'rgba(13, 148, 136, 0.06)';
+                  e.currentTarget.style.borderColor = 'rgba(13, 148, 136, 0.4)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.borderColor = 'rgba(13, 148, 136, 0.25)';
+                }}
+              >
+                Concerned about your child? Free screening →
+              </button>
+            </motion.div>
+          )}
 
           {/* Sign in */}
           <motion.div

@@ -22,7 +22,7 @@ interface HealthMetrics {
   avgResponseTime: number;
 }
 
-export function HealthDashboard(): JSX.Element {
+export function HealthDashboard(): React.ReactNode {
   const [metrics, setMetrics] = useState<HealthMetrics>({
     services: [],
     uptime: 100,

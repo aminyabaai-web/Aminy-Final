@@ -26,7 +26,7 @@ interface LogEntry {
   timestamp: string;
   level: LogLevel;
   message: string;
-  context?: Record<string, any>;
+  context?: Record<string, unknown>;
   error?: { name: string; message: string; stack?: string };
   module?: string;
   sessionId?: string;
@@ -77,7 +77,7 @@ function getSessionId(): string | undefined {
 function createLogEntry(
   level: LogLevel,
   message: string,
-  context?: Record<string, any>,
+  context?: Record<string, unknown>,
   error?: Error,
   module?: string
 ): LogEntry {
@@ -237,28 +237,28 @@ export const safeConsole = {
  */
 function createChildLogger(module: string) {
   return {
-    debug(message: string, context?: Record<string, any>): void {
+    debug(message: string, context?: Record<string, unknown>): void {
       if (shouldLog('debug')) {
         const entry = createLogEntry('debug', message, context, undefined, module);
         console.debug(formatMessage('debug', message, module), context || '');
         if (config.enableRemote) logBuffer.push(entry);
       }
     },
-    info(message: string, context?: Record<string, any>): void {
+    info(message: string, context?: Record<string, unknown>): void {
       if (shouldLog('info')) {
         const entry = createLogEntry('info', message, context, undefined, module);
         console.info(formatMessage('info', message, module), context || '');
         if (config.enableRemote) logBuffer.push(entry);
       }
     },
-    warn(message: string, context?: Record<string, any>): void {
+    warn(message: string, context?: Record<string, unknown>): void {
       if (shouldLog('warn')) {
         const entry = createLogEntry('warn', message, context, undefined, module);
         console.warn(formatMessage('warn', message, module), context || '');
         if (config.enableRemote) logBuffer.push(entry);
       }
     },
-    error(message: string, error?: Error | unknown, context?: Record<string, any>): void {
+    error(message: string, error?: Error | unknown, context?: Record<string, unknown>): void {
       if (shouldLog('error')) {
         const err = error instanceof Error ? error : undefined;
         const entry = createLogEntry('error', message, context, err, module);

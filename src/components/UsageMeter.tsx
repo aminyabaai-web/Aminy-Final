@@ -38,12 +38,12 @@ export function UsageMeter({
   const tierName = getTierDisplayName(normalizedTier);
 
   // Calculate percentages
-  const messagePercent = limits.messagesPerDay === Infinity
+  const messagePercent = !limits.messagesPerDay || limits.messagesPerDay === Infinity
     ? 0
     : Math.min(100, (messagesUsedToday / limits.messagesPerDay) * 100);
-  const documentPercent = limits.maxDocuments === Infinity
+  const documentPercent = !limits.documents || limits.documents === Infinity
     ? 0
-    : Math.min(100, (documentsUploaded / limits.maxDocuments) * 100);
+    : Math.min(100, (documentsUploaded / limits.documents) * 100);
 
   const isNearLimit = messagePercent >= 80;
   const isAtLimit = messagePercent >= 100;
@@ -102,8 +102,8 @@ export function UsageMeter({
                   {isAtLimit
                     ? "Daily limit reached"
                     : isNearLimit
-                      ? `${limits.messagesPerDay - messagesUsedToday} messages left`
-                      : `${messagesUsedToday}/${limits.messagesPerDay} messages`}
+                      ? `${(limits.messagesPerDay ?? 0) - messagesUsedToday} messages left`
+                      : `${messagesUsedToday}/${limits.messagesPerDay ?? 'Unlimited'} messages`}
                 </span>
               </div>
               <Progress
@@ -197,12 +197,12 @@ export function UsageMeter({
               <span className="text-sm text-muted-foreground">Vault Documents</span>
             </div>
             <span className="text-sm font-medium text-primary">
-              {limits.maxDocuments === Infinity
+              {limits.documents === Infinity
                 ? `${documentsUploaded} stored`
-                : `${documentsUploaded} / ${limits.maxDocuments}`}
+                : `${documentsUploaded} / ${limits.documents}`}
             </span>
           </div>
-          {limits.maxDocuments !== Infinity && (
+          {limits.documents !== Infinity && (
             <Progress value={documentPercent} className="h-2" />
           )}
         </div>
@@ -215,11 +215,11 @@ export function UsageMeter({
               <span className="text-sm text-muted-foreground">Memory Window</span>
             </div>
             <span className="text-sm font-medium text-primary">
-              {limits.memoryDays === Infinity
+              {limits.memoryFacts === Infinity
                 ? 'Unlimited'
-                : limits.memoryDays === 0
+                : limits.memoryFacts === 0
                   ? 'None'
-                  : `${limits.memoryDays} days`}
+                  : `${limits.memoryFacts} days`}
             </span>
           </div>
         </div>

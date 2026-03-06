@@ -44,7 +44,7 @@ interface SubscriptionManagementProps {
 
 // Cancel Flow with win-back offers
 interface CancelFlowButtonProps {
-  onCancel: () => Promise<void>;
+  onCancel: () => Promise<void | boolean>;
   tierName: string;
 }
 
@@ -350,7 +350,8 @@ export function SubscriptionManagement({ accessToken }: SubscriptionManagementPr
     free: 'bg-gray-100 text-gray-700',
     starter: 'bg-blue-100 text-blue-700',
     core: 'bg-accent/10 text-accent',
-    pro: 'bg-gradient-to-r from-purple-600 to-pink-600 text-white'
+    pro: 'bg-gradient-to-r from-purple-600 to-pink-600 text-white',
+    proplus: 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white'
   };
 
   return (

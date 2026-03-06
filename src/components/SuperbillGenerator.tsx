@@ -19,7 +19,11 @@ import {
   ChevronDown,
   ChevronUp,
   Printer,
-  Mail
+  Mail,
+  Send,
+  Loader2,
+  AlertCircle,
+  Clock,
 } from 'lucide-react';
 import {
   COMMON_CPT_CODES,
@@ -29,6 +33,12 @@ import {
   type SuperbillLineItem
 } from '../types/telehealth';
 import jsPDF from 'jspdf';
+import {
+  submitInsuranceClaim,
+  isClearinghouseConfigured,
+  type ClaimSubmission,
+  type ClaimResponse,
+} from '../lib/clearinghouse-integration';
 
 interface SuperbillGeneratorProps {
   userId: string;
@@ -95,8 +105,11 @@ export function SuperbillGenerator({
   providerNPI = '',
   onClose
 }: SuperbillGeneratorProps) {
-  const [step, setStep] = useState<'form' | 'preview' | 'download'>('form');
+  const [step, setStep] = useState<'form' | 'preview' | 'download' | 'submitting' | 'submitted'>('form');
   const [expandedCategory, setExpandedCategory] = useState<string | null>('ABA');
+  const [isSubmittingClaim, setIsSubmittingClaim] = useState(false);
+  const [claimResponse, setClaimResponse] = useState<ClaimResponse | null>(null);
+  const [claimError, setClaimError] = useState<string | null>(null);
   const [formData, setFormData] = useState<SuperbillFormData>({
     patientName: childName,
     patientDOB: childDOB,
@@ -263,6 +276,76 @@ export function SuperbillGenerator({
   const handlePrint = () => {
     const pdf = generatePDF();
     window.open(pdf.output('bloburl'), '_blank');
+  };
+
+  const handleSubmitToInsurance = async () => {
+    setIsSubmittingClaim(true);
+    setClaimError(null);
+    setClaimResponse(null);
+    setStep('submitting');
+
+    try {
+      // Map superbill form data to ClaimSubmission interface
+      const lineItems = generateLineItems();
+      const primaryDiagnosis = formData.diagnosisCodes[0];
+      const additionalDiagnoses = formData.diagnosisCodes.slice(1);
+
+      const claim: ClaimSubmission = {
+        claimType: 'professional',
+        billingProvider: {
+          npi: formData.providerNPI || '0000000000',
+          taxId: formData.providerTaxId || '',
+          name: formData.providerName || 'Provider',
+          address: {
+            line1: formData.providerAddress || '',
+            city: '',
+            state: '',
+            zip: '',
+          },
+          phone: '',
+        },
+        subscriber: {
+          memberId: userId || '',
+          firstName: formData.patientName.split(' ')[0] || '',
+          lastName: formData.patientName.split(' ').slice(1).join(' ') || '',
+          dob: formData.patientDOB || '',
+          gender: 'U',
+          address: {
+            line1: formData.patientAddress || '',
+            city: formData.patientCity || '',
+            state: formData.patientState || '',
+            zip: formData.patientZip || '',
+          },
+        },
+        payer: {
+          payerId: '',
+          payerName: '',
+        },
+        diagnosis: [
+          ...(primaryDiagnosis ? [{ code: primaryDiagnosis, isPrimary: true }] : []),
+          ...additionalDiagnoses.map(code => ({ code, isPrimary: false })),
+        ],
+        services: lineItems.map((item, idx) => ({
+          serviceDate: formData.dateOfService,
+          procedureCode: item.cptCode,
+          units: item.units,
+          chargeAmount: item.totalCharge,
+          placeOfService: '02', // Telehealth
+          diagnosisPointers: [1], // Point to primary diagnosis
+        })),
+        totalCharges: calculateTotal(),
+      };
+
+      const response = await submitInsuranceClaim(claim);
+      setClaimResponse(response);
+      setStep('submitted');
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : 'Submission failed. Your claim has been queued for retry.';
+      setClaimError(msg);
+      setStep('submitted');
+    } finally {
+      setIsSubmittingClaim(false);
+    }
   };
 
   const toggleCPTCode = (code: string) => {
@@ -702,7 +785,7 @@ export function SuperbillGenerator({
             </div>
           </Card>
 
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-3">
             <Button variant="outline" onClick={() => setStep('form')} className="flex-1">
               Edit
             </Button>
@@ -715,6 +798,27 @@ export function SuperbillGenerator({
               Download PDF
             </Button>
           </div>
+          {/* Submit to Insurance */}
+          <Card className="p-4 bg-blue-50 border-blue-200 mt-4">
+            <div className="flex items-start gap-3 mb-3">
+              <Send className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="text-sm font-medium text-blue-900">Submit to Insurance</p>
+                <p className="text-xs text-blue-700 mt-0.5">
+                  Electronically submit this claim to your insurance via our clearinghouse.
+                  {!isClearinghouseConfigured() && ' (Demo mode - no live submission)'}
+                </p>
+              </div>
+            </div>
+            <Button
+              onClick={handleSubmitToInsurance}
+              disabled={isSubmittingClaim || formData.selectedCPTCodes.length === 0 || formData.diagnosisCodes.length === 0}
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center gap-2"
+            >
+              <Send className="w-4 h-4" />
+              Submit Claim Electronically
+            </Button>
+          </Card>
         </div>
       )}
 
@@ -728,7 +832,89 @@ export function SuperbillGenerator({
             Your superbill has been saved. You can submit it to your HSA/FSA administrator
             or insurance provider for reimbursement.
           </p>
-          <div className="flex gap-3 justify-center">
+          <div className="flex flex-wrap gap-3 justify-center">
+            <Button variant="outline" onClick={() => setStep('form')}>
+              Generate Another
+            </Button>
+            <Button
+              onClick={handleSubmitToInsurance}
+              disabled={isSubmittingClaim}
+              className="bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2"
+            >
+              <Send className="w-4 h-4" />
+              Submit to Insurance
+            </Button>
+            {onClose && (
+              <Button onClick={onClose} className="bg-accent hover:bg-accent/90">
+                Done
+              </Button>
+            )}
+          </div>
+        </Card>
+      )}
+
+      {step === 'submitting' && (
+        <Card className="p-8 text-center">
+          <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
+          </div>
+          <h3 className="text-lg sm:text-xl font-semibold text-slate-900 mb-2">Submitting Claim...</h3>
+          <p className="text-slate-600 mb-2">
+            Generating EDI 837P and transmitting to clearinghouse.
+          </p>
+          <p className="text-xs text-slate-400">This may take a moment.</p>
+        </Card>
+      )}
+
+      {step === 'submitted' && (
+        <Card className="p-8 text-center">
+          {claimResponse && claimResponse.success ? (
+            <>
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <CheckCircle className="w-8 h-8 text-green-600" />
+              </div>
+              <h3 className="text-lg sm:text-xl font-semibold text-slate-900 mb-2">Claim Submitted!</h3>
+              <p className="text-slate-600 mb-2">
+                Your claim has been accepted by the clearinghouse.
+              </p>
+              <div className="bg-slate-50 rounded-lg p-3 text-left text-sm mb-4 space-y-1">
+                <p><span className="text-slate-500">Control #:</span> <span className="font-mono">{claimResponse.claimControlNumber}</span></p>
+                <p><span className="text-slate-500">Transaction ID:</span> <span className="font-mono">{claimResponse.transactionId}</span></p>
+                <p><span className="text-slate-500">Status:</span> <Badge className="bg-green-100 text-green-800 ml-1">{claimResponse.status}</Badge></p>
+              </div>
+              {claimResponse.warnings && claimResponse.warnings.length > 0 && (
+                <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-left text-xs mb-4">
+                  {claimResponse.warnings.map((w, i) => (
+                    <p key={i} className="text-amber-700"><span className="font-medium">{w.code}:</span> {w.message}</p>
+                  ))}
+                </div>
+              )}
+            </>
+          ) : (
+            <>
+              <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                {claimError ? (
+                  <AlertCircle className="w-8 h-8 text-red-600" />
+                ) : (
+                  <Clock className="w-8 h-8 text-amber-600" />
+                )}
+              </div>
+              <h3 className="text-lg sm:text-xl font-semibold text-slate-900 mb-2">
+                {claimError ? 'Submission Issue' : 'Claim Queued'}
+              </h3>
+              <p className="text-slate-600 mb-2">
+                {claimError || 'Your claim has been queued and will be retried automatically.'}
+              </p>
+              {claimResponse && claimResponse.errors && claimResponse.errors.length > 0 && (
+                <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-left text-xs mb-4">
+                  {claimResponse.errors.map((e, i) => (
+                    <p key={i} className="text-red-700"><span className="font-medium">{e.code}:</span> {e.message}</p>
+                  ))}
+                </div>
+              )}
+            </>
+          )}
+          <div className="flex gap-3 justify-center mt-4">
             <Button variant="outline" onClick={() => setStep('form')}>
               Generate Another
             </Button>

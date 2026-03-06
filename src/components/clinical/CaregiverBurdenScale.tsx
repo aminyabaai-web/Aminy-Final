@@ -194,7 +194,7 @@ export function CaregiverBurdenScale({ onComplete, onCancel, userName }: Caregiv
   };
 
   const calculateResult = (finalResponses: (number | null)[]) => {
-    const totalScore = finalResponses.reduce((sum, val) => sum + (val || 0), 0);
+    const totalScore = finalResponses.reduce<number>((sum, val) => sum + (val || 0), 0);
     const { severity, label } = getSeverity(totalScore);
 
     // Calculate category scores

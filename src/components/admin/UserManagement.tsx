@@ -289,7 +289,7 @@ export function UserManagement() {
 
   const handleImpersonate = (userId: string) => {
     // In production, this would create an impersonation session
-    console.log('Impersonating user:', userId);
+    if (import.meta.env.DEV) console.log('Impersonating user:', userId);
     toast.success(`Impersonation mode enabled for user ${userId}`, {
       description: 'In production, this would allow viewing the app as this user.',
     });

@@ -24,11 +24,16 @@ import {
 
 interface HelpCenterProps {
   onClose: () => void;
+  isOpen?: boolean;
+  onAnalytics?: (event: string, data: Record<string, unknown>) => void;
 }
 
-export function HelpCenter({ onClose }: HelpCenterProps) {
+// Stub component for backward compatibility
+export const UrgentHelpSheet = HelpCenter;
+
+export function HelpCenter({ onClose, onAnalytics }: HelpCenterProps) {
   const [activeTab, setActiveTab] = useState<string>('gettingStarted');
-  const [selectedArticle, setSelectedArticle] = useState<any>(null);
+  const [selectedArticle, setSelectedArticle] = useState<{ title: string; bullets: string[] } | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [showContactForm, setShowContactForm] = useState(false);
   const [showUrgentHelp, setShowUrgentHelp] = useState(false);
@@ -153,7 +158,7 @@ export function HelpCenter({ onClose }: HelpCenterProps) {
   };
 
   // Handle article selection
-  const handleArticleSelect = (article: any) => {
+  const handleArticleSelect = (article: { title: string; bullets: string[] }) => {
     setSelectedArticle(article);
   };
 
@@ -302,11 +307,24 @@ export function HelpCenter({ onClose }: HelpCenterProps) {
               <div className="p-4 sm:p-5 md:p-6">
                 <div className="max-w-2xl">
                   <h3 className="text-lg text-slate-900 mb-4">Contact Support</h3>
-                  <form className="space-y-3 sm:space-y-4">
+                  <form className="space-y-3 sm:space-y-4" onSubmit={(e) => {
+                    e.preventDefault();
+                    const form = e.currentTarget;
+                    const subject = (form.elements.namedItem('subject') as HTMLInputElement)?.value;
+                    const message = (form.elements.namedItem('message') as HTMLTextAreaElement)?.value;
+                    if (!subject?.trim() || !message?.trim()) return;
+                    // Open mailto with form content as fallback
+                    const mailtoUrl = `mailto:support@aminy.ai?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+                    window.open(mailtoUrl, '_blank');
+                    onAnalytics?.('help_contact_submitted', { subject });
+                    setShowContactForm(false);
+                  }}>
                     <div>
                       <label className="block text-sm text-slate-700 mb-2">Subject</label>
                       <input
+                        name="subject"
                         type="text"
+                        required
                         placeholder="Brief description of your issue"
                         className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                       />
@@ -314,7 +332,9 @@ export function HelpCenter({ onClose }: HelpCenterProps) {
                     <div>
                       <label className="block text-sm text-slate-700 mb-2">Message</label>
                       <textarea
+                        name="message"
                         rows={6}
+                        required
                         placeholder="Please describe your issue in detail..."
                         className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                       />

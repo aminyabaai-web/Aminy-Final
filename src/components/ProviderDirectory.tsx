@@ -8,6 +8,8 @@ import { UrgentHelpModal } from './UrgentHelpModal';
 import { HelpCenter } from './HelpCenter';
 import { ChildProfileChip } from './ChildProfileChip';
 import { useDisplayNames } from '../lib/name-store';
+import { VerifiedBadge } from './provider/CredentialBadge';
+import type { VerificationStatus } from '../lib/provider-verification';
 import { toast } from 'sonner';
 import {
   Bell,
@@ -69,6 +71,7 @@ interface Provider {
   isBookmarked: boolean;
   profileImage?: string;
   badges: string[];
+  verificationStatus: VerificationStatus;
 }
 
 export function ProviderDirectory({ 
@@ -110,7 +113,8 @@ export function ProviderDirectory({
       experience: '15+ years',
       approach: 'Family-centered ABA with focus on naturalistic teaching and parent empowerment. Specializes in early intervention and complex cases.',
       isBookmarked: false,
-      badges: ['BHCOE Accredited', 'Telehealth', 'Clinical Director', 'From $149/session']
+      badges: ['BHCOE Accredited', 'Telehealth', 'Clinical Director', 'From $149/session'],
+      verificationStatus: 'verified'
     },
     {
       id: '2',
@@ -131,7 +135,8 @@ export function ProviderDirectory({
       experience: '10+ years',
       approach: 'Specializes in teens and young adults with autism. Focus on social skills, independence, and life transitions.',
       isBookmarked: false,
-      badges: ['BHCOE Accredited', 'Telehealth', 'Teen Specialist', 'From $149/session']
+      badges: ['BHCOE Accredited', 'Telehealth', 'Teen Specialist', 'From $149/session'],
+      verificationStatus: 'verified'
     },
     {
       id: '3',
@@ -152,7 +157,8 @@ export function ProviderDirectory({
       experience: '12+ years',
       approach: 'Integrates speech and language goals with ABA. Expert in feeding therapy and sensory challenges.',
       isBookmarked: false,
-      badges: ['BHCOE Accredited', 'Telehealth', 'Feeding Specialist', 'From $149/session']
+      badges: ['BHCOE Accredited', 'Telehealth', 'Feeding Specialist', 'From $149/session'],
+      verificationStatus: 'verified'
     },
     {
       id: '4',
@@ -173,7 +179,8 @@ export function ProviderDirectory({
       experience: '5+ years',
       approach: 'Energetic and creative approach. Specializes in making learning fun through play-based interventions.',
       isBookmarked: false,
-      badges: ['BHCOE Accredited', 'Telehealth', 'Great with Kids', 'From $49/session']
+      badges: ['BHCOE Accredited', 'Telehealth', 'Great with Kids', 'From $49/session'],
+      verificationStatus: 'verified'
     },
     {
       id: '5',
@@ -194,7 +201,8 @@ export function ProviderDirectory({
       experience: '8+ years',
       approach: 'Expert in functional behavior assessments and behavior intervention plans. Works closely with schools.',
       isBookmarked: false,
-      badges: ['BHCOE Accredited', 'Telehealth', 'Behavior Specialist', 'From $149/session']
+      badges: ['BHCOE Accredited', 'Telehealth', 'Behavior Specialist', 'From $149/session'],
+      verificationStatus: 'verified'
     },
     {
       id: '6',
@@ -215,7 +223,8 @@ export function ProviderDirectory({
       experience: '4+ years',
       approach: 'Bilingual specialist focusing on early learners. Strong emphasis on parent coaching and home strategies.',
       isBookmarked: false,
-      badges: ['BHCOE Accredited', 'Telehealth', 'Bilingual', 'From $49/session']
+      badges: ['BHCOE Accredited', 'Telehealth', 'Bilingual', 'From $49/session'],
+      verificationStatus: 'pending'
     }
   ]);
 
@@ -321,7 +330,10 @@ export function ProviderDirectory({
                 </span>
               </div>
             </div>
-            <p className="text-slate-600 dark:text-slate-400 mb-1">{provider.title}</p>
+            <div className="flex items-center gap-2 mb-1">
+              <p className="text-slate-600 dark:text-slate-400">{provider.title}</p>
+              <VerifiedBadge status={provider.verificationStatus} />
+            </div>
             <p className="text-slate-500 dark:text-slate-500 text-sm mb-2">{provider.practice}</p>
             
             <div className="flex items-center gap-2 mb-3">

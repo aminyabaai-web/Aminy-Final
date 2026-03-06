@@ -12,11 +12,12 @@ interface Activity {
 }
 
 interface ActivityLogProps {
-  activities: Activity[];
+  activities?: Activity[];
   maxItems?: number;
+  onBack?: () => void;
 }
 
-export function ActivityLog({ activities, maxItems = 10 }: ActivityLogProps) {
+export function ActivityLog({ activities = [], maxItems = 10, onBack }: ActivityLogProps) {
   const displayedActivities = activities.slice(0, maxItems);
 
   const getIcon = (type: Activity['type']) => {
@@ -68,7 +69,14 @@ export function ActivityLog({ activities, maxItems = 10 }: ActivityLogProps) {
   };
 
   return (
-    <Card className="p-3 sm:p-4">
+    <div>
+      {onBack && (
+        <div className="flex items-center gap-2 p-4 border-b">
+          <button onClick={onBack} className="p-2 hover:bg-gray-100 rounded-lg">←</button>
+          <h1 className="text-xl font-semibold">Activity Log</h1>
+        </div>
+      )}
+    <Card className="p-3 sm:p-4 m-4">
       <h3 className="font-semibold mb-4">Recent Activity</h3>
       <div className="space-y-3 sm:space-y-4">
         {displayedActivities.map((activity) => {
@@ -105,5 +113,6 @@ export function ActivityLog({ activities, maxItems = 10 }: ActivityLogProps) {
         )}
       </div>
     </Card>
+    </div>
   );
 }

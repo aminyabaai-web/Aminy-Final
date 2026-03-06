@@ -12,7 +12,7 @@ const DAILY_API_URL = 'https://api.daily.co/v1';
 async function dailyRequest(
   endpoint: string,
   method: string = 'GET',
-  body?: Record<string, any>
+  body?: Record<string, unknown>
 ) {
   const url = `${DAILY_API_URL}${endpoint}`;
 
@@ -289,7 +289,7 @@ export async function getRoomPresence(roomName: string): Promise<Response> {
 
     return new Response(JSON.stringify({
       totalCount: presence.total_count || 0,
-      participants: (presence.data || []).map((p: any) => ({
+      participants: (presence.data || []).map((p: Record<string, unknown>) => ({
         sessionId: p.session_id,
         oderId: p.user_id,
         userName: p.user_name,
@@ -362,7 +362,7 @@ export async function stopRecording(roomName: string): Promise<Response> {
 
     // Get active recording
     const recordings = await dailyRequest(`/rooms/${roomName}/recordings`);
-    const activeRecording = recordings.data?.find((r: any) => r.status === 'in-progress');
+    const activeRecording = recordings.data?.find((r: Record<string, unknown>) => r.status === 'in-progress');
 
     if (activeRecording) {
       await dailyRequest(`/recordings/${activeRecording.id}`, 'DELETE');

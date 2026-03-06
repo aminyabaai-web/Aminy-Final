@@ -13,6 +13,7 @@ import {
 interface Phase2FeaturesMenuProps {
   onNavigate: (screen: string) => void;
   userRole?: 'parent' | 'coach' | 'admin';
+  onBack?: () => void;
 }
 
 export function Phase2FeaturesMenu({ onNavigate, userRole = 'parent' }: Phase2FeaturesMenuProps) {

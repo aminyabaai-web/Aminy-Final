@@ -15,6 +15,8 @@ import { motion } from 'motion/react';
 import { Eye, EyeOff, ArrowLeft, ArrowRight, AlertCircle, Check, Loader2 } from 'lucide-react';
 import aminyLogoCropped from "../assets/aminy-logo-cropped.png";
 import { supabase } from '../utils/supabase/client';
+import { useFormValidation } from '../lib/use-form-validation';
+import { createAccountSchema } from '../lib/schemas';
 
 const fontStack = 'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", "Helvetica Neue", Arial, "Noto Sans", sans-serif';
 
@@ -58,14 +60,7 @@ export function CreateAccountScreen({
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [errors, setErrors] = useState<{
-    fullName?: string;
-    email?: string;
-    password?: string;
-    confirmPassword?: string;
-    signup?: string;
-    terms?: string;
-  }>({});
+  const { errors, validate, setFieldError, clearErrors, setErrors } = useFormValidation(createAccountSchema);
   const [isLoading, setIsLoading] = useState(false);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
 
@@ -78,53 +73,24 @@ export function CreateAccountScreen({
     return () => clearTimeout(timer);
   }, []);
 
-  const validateEmail = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-  const validateForm = () => {
-    const newErrors: typeof errors = {};
-
-    if (!fullName.trim()) {
-      newErrors.fullName = "Please enter your name";
-    }
-
-    if (!email) {
-      newErrors.email = "Please enter your email";
-    } else if (!validateEmail(email)) {
-      newErrors.email = "Please enter a valid email";
-    }
-
-    if (!password) {
-      newErrors.password = "Please create a password";
-    } else if (password.length < 8) {
-      newErrors.password = "At least 8 characters needed";
-    }
-
-    if (!confirmPassword) {
-      newErrors.confirmPassword = "Please confirm your password";
-    } else if (password !== confirmPassword) {
-      newErrors.confirmPassword = "Passwords don't match";
-    }
-
-    if (!acceptedTerms) {
-      newErrors.terms = "Please accept to continue";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!validateForm()) {
-      return;
-    }
+    // Split fullName into first/last for the schema
+    const [firstName = '', ...lastParts] = fullName.trim().split(' ');
+    const lastName = lastParts.join(' ') || firstName; // fallback: use first as last if single name
+    const result = validate({
+      email,
+      password,
+      confirmPassword,
+      firstName,
+      lastName,
+      acceptTerms: acceptedTerms,
+    });
+    if (!result.success) return;
 
     setIsLoading(true);
-    setErrors({});
+    clearErrors();
 
     try {
       const { data, error } = await supabase.auth.signUp({
@@ -200,8 +166,12 @@ export function CreateAccountScreen({
     }
   };
 
-  const clearError = (field: keyof typeof errors) => {
-    setErrors(prev => ({ ...prev, [field]: undefined }));
+  const clearError = (field: string) => {
+    setErrors(prev => {
+      const next = { ...prev };
+      delete next[field];
+      return next;
+    });
   };
 
   // Common input styles

@@ -76,6 +76,9 @@ interface MarketplaceProvider {
   specialties: string[];
   conditions: string[];
   languages: string[];
+  insuranceAccepted: string[];
+  sessionRate?: number;
+  statesLicensed: string[];
   bio: string;
   approach: string;
   availability: AvailabilitySlot[];
@@ -97,6 +100,7 @@ interface ProviderMarketplaceProps {
   userTier?: string;
   onBookSession?: (providerId: string, sessionType: string, dateTime: string) => void;
   onViewProvider?: (providerId: string) => void;
+  onBack?: () => void;
 }
 
 // Filter state interface
@@ -243,20 +247,19 @@ export function ProviderMarketplace({
     });
   };
 
-  // Load providers from Supabase with fallback to mock data
+  // Load providers from Supabase with server-side filtering + fallback to mock data
   const loadProviders = useCallback(async () => {
     setIsLoading(true);
-    console.log('[Marketplace] Loading providers from Supabase...');
 
     try {
-      // Build query based on category filter
+      // Build query with server-side filters
       let query = supabase
         .from('provider_profiles')
         .select('*')
         .eq('is_active', true)
         .eq('is_accepting_patients', true);
 
-      // Filter by category
+      // Category filter
       if (selectedCategory !== 'all') {
         const categoryTypes: Record<string, string[]> = {
           behavioral: ['bcba', 'rbt'],
@@ -269,7 +272,42 @@ export function ProviderMarketplace({
         }
       }
 
-      // Execute query
+      // Server-side search (name or credentials)
+      if (searchQuery.trim()) {
+        const q = searchQuery.trim();
+        query = query.or(`name.ilike.%${q}%,credentials.ilike.%${q}%`);
+      }
+
+      // Server-side rating filter
+      if (filters.minRating > 0) {
+        query = query.gte('rating', filters.minRating);
+      }
+
+      // Server-side price filter
+      if (filters.maxPrice < 500) {
+        query = query.lte('session_rate', filters.maxPrice);
+      }
+
+      // Server-side insurance filter
+      if (filters.insurances.length > 0) {
+        query = query.overlaps('insurance_accepted', filters.insurances);
+      }
+
+      // Server-side language filter
+      if (filters.languages.length > 0) {
+        query = query.overlaps('languages', filters.languages);
+      }
+
+      // Server-side specialties filter
+      if (filters.specialties.length > 0) {
+        query = query.overlaps('specialties', filters.specialties);
+      }
+
+      // Server-side state filter
+      if (filters.state) {
+        query = query.contains('states_licensed', [filters.state]);
+      }
+
       const { data, error } = await query.order('rating', { ascending: false });
 
       if (error) {
@@ -278,45 +316,98 @@ export function ProviderMarketplace({
       }
 
       if (data && data.length > 0) {
-        console.log(`[Marketplace] Found ${data.length} providers from DB`);
-        // Transform DB data to component format
-        const dbProviders: MarketplaceProvider[] = data.map((p: any) => ({
+        interface ProviderRow {
+          id: string;
+          name?: string;
+          first_name?: string;
+          last_name?: string;
+          credentials?: string;
+          provider_type?: string;
+          photo_url?: string;
+          rating?: string;
+          review_count?: number;
+          years_experience?: number;
+          specialties?: string[];
+          conditions?: string[];
+          languages?: string[];
+          insurance_accepted?: string[];
+          session_rate?: number;
+          states_licensed?: string[];
+          bio?: string;
+          approach?: string;
+          next_available?: string;
+          badges?: string[];
+          verification_status?: string;
+        }
+        const dbProviders: MarketplaceProvider[] = (data as ProviderRow[]).map((p) => ({
           id: p.id,
           name: p.name || `${p.first_name || ''} ${p.last_name || ''}`.trim() || 'Provider',
-          credentials: p.credentials,
-          type: p.provider_type as ProviderType,
-          photoUrl: p.photo_url,
-          rating: parseFloat(p.rating) || 4.5,
+          credentials: p.credentials || '',
+          type: (p.provider_type || 'bcba') as ProviderType,
+          photoUrl: p.photo_url || '',
+          rating: parseFloat(p.rating || '4.5') || 4.5,
           reviewCount: p.review_count || 0,
           yearsExperience: p.years_experience || 5,
           specialties: p.specialties || [],
           conditions: p.conditions || [],
           languages: p.languages || ['English'],
+          insuranceAccepted: p.insurance_accepted || [],
+          sessionRate: p.session_rate || undefined,
+          statesLicensed: p.states_licensed || [],
           bio: p.bio || '',
           approach: p.approach || '',
-          availability: generateAvailability(), // Generate dynamic availability
+          availability: generateAvailability(),
           nextAvailable: p.next_available ? new Date(p.next_available).toLocaleDateString() : 'Check schedule',
           isBookmarked: false,
           badges: p.badges || [],
-          verificationStatus: p.verification_status || 'verified'
+          verificationStatus: (p.verification_status || 'verified') as MarketplaceProvider['verificationStatus']
         }));
         setProviders(dbProviders);
       } else {
-        // Fallback to mock data if no DB providers
-        console.log('[Marketplace] No DB providers, using mock data');
+        // Fallback to mock data — also apply client-side search to mocks
         setProviders(generateMockProviders());
       }
     } catch (error) {
       console.error('[Marketplace] Failed to load providers:', error);
-      // Use mock data as fallback
       setProviders(generateMockProviders());
     } finally {
       setIsLoading(false);
     }
-  }, [selectedCategory]);
+  }, [selectedCategory, searchQuery, filters]);
 
+  // Pre-filter from screening routing data (set by FreeScreeningFlow → App.tsx)
+  const [screeningBanner, setScreeningBanner] = useState<string | null>(null);
   useEffect(() => {
-    loadProviders();
+    try {
+      const raw = localStorage.getItem('aminy_screening_routing');
+      if (!raw) return;
+      const routing = JSON.parse(raw);
+      // Map recommended provider types to category filter
+      const providerTypes = (routing.recommendedProviders || []).map((p: string) => p.toLowerCase());
+      if (providerTypes.some((p: string) => p.includes('bcba') || p.includes('behavioral') || p.includes('rbt'))) {
+        setSelectedCategory('behavioral');
+      } else if (providerTypes.some((p: string) => p.includes('therap') || p.includes('counselor') || p.includes('slp') || p.includes('ot'))) {
+        setSelectedCategory('therapy');
+      } else if (providerTypes.some((p: string) => p.includes('pediatr') || p.includes('neuro') || p.includes('diagnostic'))) {
+        setSelectedCategory('medical');
+      }
+      // Show contextual banner
+      if (routing.riskLevel === 'high') {
+        setScreeningBanner(`Based on your screening results, we recommend a diagnostic evaluation. We've pre-filtered providers who can help.`);
+      } else if (routing.riskLevel === 'moderate') {
+        setScreeningBanner(`Your screening suggests some areas of concern. Here are providers who specialize in evaluation and support.`);
+      }
+      // Clean up — only use once
+      localStorage.removeItem('aminy_screening_routing');
+    } catch { /* ignore parse errors */ }
+  }, []);
+
+  // Debounced provider loading — 300ms delay for search/filter changes
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      loadProviders();
+    }, 300);
+    return () => clearTimeout(timer);
   }, [loadProviders]);
 
   const generateMockProviders = (): MarketplaceProvider[] => [
@@ -332,6 +423,9 @@ export function ProviderMarketplace({
       specialties: ['Early Intervention', 'Parent Training', 'Complex Cases'],
       conditions: ['Autism', 'ADHD', 'Developmental Delay'],
       languages: ['English', 'Mandarin'],
+      insuranceAccepted: ['Aetna', 'Blue Cross Blue Shield', 'UnitedHealthcare', 'Medicaid'],
+      sessionRate: 149,
+      statesLicensed: ['California', 'New York', 'Texas'],
       bio: 'Clinical Director with 15+ years specializing in early intervention and family-centered ABA.',
       approach: 'I believe parents are the experts on their children. My role is to give you the tools and confidence to help your child thrive.',
       availability: generateAvailability(),
@@ -351,6 +445,9 @@ export function ProviderMarketplace({
       specialties: ['Teen Services', 'Social Skills', 'Transition Planning'],
       conditions: ['Autism', 'ADHD', 'Anxiety'],
       languages: ['English', 'Spanish'],
+      insuranceAccepted: ['Cigna', 'Anthem', 'Tricare', 'Self-Pay'],
+      sessionRate: 129,
+      statesLicensed: ['Texas', 'Florida', 'Arizona'],
       bio: 'Specializing in teens and young adults, focusing on independence and life skills.',
       approach: 'Helping young people find their voice and build the skills they need for adult life.',
       availability: generateAvailability(),
@@ -370,6 +467,9 @@ export function ProviderMarketplace({
       specialties: ['Play-Based Learning', 'Daily Routines', 'Early Childhood'],
       conditions: ['Autism', 'Developmental Delay'],
       languages: ['English'],
+      insuranceAccepted: ['Medicaid', 'Blue Cross Blue Shield', 'Self-Pay'],
+      sessionRate: 49,
+      statesLicensed: ['California', 'Oregon'],
       bio: 'Energetic and creative RBT who makes learning fun through play.',
       approach: 'I meet kids where they are and build on their interests to teach new skills.',
       availability: generateAvailability(),
@@ -391,6 +491,9 @@ export function ProviderMarketplace({
       specialties: ['Anxiety', 'Emotional Regulation', 'Family Therapy'],
       conditions: ['Anxiety', 'ADHD', 'Autism', 'Depression'],
       languages: ['English', 'Spanish'],
+      insuranceAccepted: ['Aetna', 'Cigna', 'Humana', 'UnitedHealthcare'],
+      sessionRate: 129,
+      statesLicensed: ['New York', 'New Jersey', 'Pennsylvania'],
       bio: 'Helping families navigate the emotional landscape of neurodivergence.',
       approach: 'I create a safe space for both children and parents to process feelings and build coping skills.',
       availability: generateAvailability(),
@@ -410,6 +513,9 @@ export function ProviderMarketplace({
       specialties: ['System Navigation', 'IEP Advocacy', 'Parent Support'],
       conditions: ['Autism', 'ADHD', 'Learning Disability'],
       languages: ['English', 'Korean'],
+      insuranceAccepted: ['Blue Cross Blue Shield', 'Medicaid', 'Anthem'],
+      sessionRate: 139,
+      statesLicensed: ['California', 'Washington'],
       bio: 'Your advocate in navigating schools, insurance, and community resources.',
       approach: 'I help families understand their rights and get the services they deserve.',
       availability: generateAvailability(),
@@ -429,6 +535,9 @@ export function ProviderMarketplace({
       specialties: ['AAC', 'Social Communication', 'Feeding'],
       conditions: ['Autism', 'Speech Delay', 'Developmental Delay'],
       languages: ['English', 'Cantonese'],
+      insuranceAccepted: ['Aetna', 'Kaiser Permanente', 'Medicaid', 'Self-Pay'],
+      sessionRate: 129,
+      statesLicensed: ['California', 'New York'],
       bio: 'Speech-language pathologist specializing in AAC and social communication.',
       approach: 'Every child has something to say. My job is to help them find their voice.',
       availability: generateAvailability(),
@@ -448,6 +557,9 @@ export function ProviderMarketplace({
       specialties: ['Sensory Processing', 'Fine Motor', 'Self-Care Skills'],
       conditions: ['Sensory Processing', 'Autism', 'ADHD'],
       languages: ['English', 'Spanish'],
+      insuranceAccepted: ['Cigna', 'Tricare', 'UnitedHealthcare'],
+      sessionRate: 129,
+      statesLicensed: ['Texas', 'Florida', 'Georgia'],
       bio: 'Helping children regulate their sensory systems and master daily skills.',
       approach: 'I use sensory strategies and play to help kids feel comfortable in their bodies.',
       availability: generateAvailability(),
@@ -469,6 +581,9 @@ export function ProviderMarketplace({
       specialties: ['Medication Management', 'Complex Diagnoses', 'ADHD'],
       conditions: ['ADHD', 'Anxiety', 'Autism', 'Depression', 'OCD'],
       languages: ['English'],
+      insuranceAccepted: ['Aetna', 'Blue Cross Blue Shield', 'UnitedHealthcare', 'Cigna', 'Humana'],
+      sessionRate: 299,
+      statesLicensed: ['New York', 'Connecticut', 'New Jersey'],
       bio: 'Board-certified child psychiatrist with expertise in neurodevelopmental conditions.',
       approach: 'I take a conservative, collaborative approach to medication, always involving families in decisions.',
       availability: generateAvailability(),
@@ -488,6 +603,9 @@ export function ProviderMarketplace({
       specialties: ['Diagnostic Evaluations', 'Developmental Assessments', 'Autism'],
       conditions: ['Autism', 'ADHD', 'Developmental Delay', 'Learning Disability'],
       languages: ['English', 'Korean'],
+      insuranceAccepted: ['Blue Cross Blue Shield', 'Medicaid', 'Kaiser Permanente', 'Anthem'],
+      sessionRate: 399,
+      statesLicensed: ['California', 'Oregon', 'Washington'],
       bio: 'Developmental pediatrician providing comprehensive evaluations and care coordination.',
       approach: 'I see the whole child and work with families to create a complete picture of their needs.',
       availability: generateAvailability(),
@@ -562,6 +680,23 @@ export function ProviderMarketplace({
         if (!hasCondition) return false;
       }
 
+      // Insurance filter (client-side for mock data)
+      if (filters.insurances.length > 0) {
+        const hasInsurance = filters.insurances.some(ins => prov.insuranceAccepted?.includes(ins));
+        if (!hasInsurance) return false;
+      }
+
+      // State filter (client-side for mock data)
+      if (filters.state) {
+        const hasState = prov.statesLicensed?.includes(filters.state);
+        if (!hasState) return false;
+      }
+
+      // Price filter (client-side for mock data)
+      if (filters.maxPrice < 500 && prov.sessionRate) {
+        if (prov.sessionRate > filters.maxPrice) return false;
+      }
+
       // Available this week filter
       if (filters.availableThisWeek && prov.availability.length === 0) return false;
 
@@ -615,13 +750,34 @@ export function ProviderMarketplace({
             </div>
 
             {/* Specialties */}
-            <div className="flex flex-wrap gap-1.5 mb-3">
+            <div className="flex flex-wrap gap-1.5 mb-2">
               {provider.specialties.slice(0, 3).map((spec, idx) => (
                 <Badge key={idx} variant="outline" className="text-xs">
                   {spec}
                 </Badge>
               ))}
             </div>
+
+            {/* Insurance & Price */}
+            {(provider.insuranceAccepted?.length > 0 || provider.sessionRate) && (
+              <div className="flex items-center gap-2 mb-2 flex-wrap">
+                {provider.sessionRate && (
+                  <span className="text-xs font-semibold text-teal-700 bg-teal-50 px-2 py-0.5 rounded-full">
+                    From ${provider.sessionRate}
+                  </span>
+                )}
+                {provider.insuranceAccepted?.slice(0, 3).map((ins, idx) => (
+                  <span key={idx} className="text-xs text-green-700 bg-green-50 px-2 py-0.5 rounded-full border border-green-200">
+                    {ins}
+                  </span>
+                ))}
+                {(provider.insuranceAccepted?.length || 0) > 3 && (
+                  <span className="text-xs text-gray-500">
+                    +{provider.insuranceAccepted.length - 3} more
+                  </span>
+                )}
+              </div>
+            )}
 
             {/* Quick info */}
             <div className="flex items-center gap-3 sm:gap-4 text-sm text-gray-600 mb-3">
@@ -729,6 +885,29 @@ export function ProviderMarketplace({
           </div>
         </div>
       </div>
+
+      {/* Screening Routing Banner */}
+      {screeningBanner && (
+        <div className="max-w-4xl mx-auto px-4 pt-4">
+          <div className="p-4 bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 rounded-xl">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0">
+                <Shield className="w-5 h-5 text-emerald-600" />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-emerald-800">Recommended for You</p>
+                <p className="text-xs text-emerald-600 mt-0.5">{screeningBanner}</p>
+              </div>
+              <button
+                onClick={() => setScreeningBanner(null)}
+                className="ml-auto text-emerald-400 hover:text-emerald-600 text-lg"
+              >
+                ×
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Recommended Banner (if child conditions provided) */}
       {childConditions.length > 0 && (
@@ -850,6 +1029,27 @@ export function ProviderMarketplace({
                     <Check className={`w-3.5 h-3.5 inline mr-1 ${filters.availableThisWeek ? 'opacity-100' : 'opacity-0'}`} />
                     Available This Week
                   </button>
+                </div>
+              </div>
+
+              {/* Max Price Filter */}
+              <div>
+                <label className="text-sm font-medium text-gray-700 mb-1 block flex items-center gap-1">
+                  <DollarSign className="w-3.5 h-3.5" />
+                  Max Price: {filters.maxPrice >= 500 ? 'Any' : `$${filters.maxPrice}`}
+                </label>
+                <input
+                  type="range"
+                  min={25}
+                  max={500}
+                  step={25}
+                  value={filters.maxPrice}
+                  onChange={(e) => setFilters(prev => ({ ...prev, maxPrice: Number(e.target.value) }))}
+                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-teal-600"
+                />
+                <div className="flex justify-between text-xs text-gray-400 mt-1">
+                  <span>$25</span>
+                  <span>$500+</span>
                 </div>
               </div>
             </div>

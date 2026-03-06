@@ -72,11 +72,11 @@ export const MobilePolishEnhancer: React.FC<MobilePolishEnhancerProps> = ({
         document.body.classList.add('mobile-optimized');
         
         // Enhanced scrolling for mobile
-        document.body.style.webkitOverflowScrolling = 'touch';
+        (document.body.style as any).webkitOverflowScrolling = 'touch';
         document.body.style.overscrollBehavior = 'contain';
         
         // Optimize tap highlights
-        document.body.style.webkitTapHighlightColor = 'rgba(8, 145, 178, 0.15)';
+        (document.body.style as any).webkitTapHighlightColor = 'rgba(8, 145, 178, 0.15)';
         
         // Prevent text selection on UI elements
         const uiElements = document.querySelectorAll('button, .aminy-card, .aminy-button-primary, .aminy-button-secondary');

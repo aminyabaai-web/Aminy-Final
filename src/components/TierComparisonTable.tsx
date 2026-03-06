@@ -30,7 +30,7 @@ export function TierComparisonTable({ compact = false }: TierComparisonTableProp
     {
       category: 'AI Support',
       items: [
-        { name: 'Ask Aminy chat access', starter: 'Limited', core: 'Unlimited', pro: 'Unlimited' },
+        { name: 'Aminy chat access', starter: 'Limited', core: 'Unlimited', pro: 'Unlimited' },
         { name: 'Text & voice conversations', starter: false, core: true, pro: true },
         { name: 'Advanced AI reasoning', starter: false, core: true, pro: true },
         { name: 'Live AI video support', starter: false, core: false, pro: true },

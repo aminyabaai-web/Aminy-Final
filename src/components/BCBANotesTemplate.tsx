@@ -8,9 +8,22 @@ import { Badge } from './ui/badge';
 import { Sparkles, Save, CheckCircle, AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
 
+interface BCBANotes {
+  childName: string;
+  goal: string;
+  promptingLevel: string;
+  masteryCriteria: string;
+  trials: string;
+  abcEvents: string;
+  dosage: string;
+  quickTapStatus: string | null;
+  reasons: string[];
+  timestamp: string;
+}
+
 interface BCBANotesTemplateProps {
   childName: string;
-  onSave: (notes: any) => void;
+  onSave: (notes: BCBANotes) => void;
 }
 
 export function BCBANotesTemplate({ childName, onSave }: BCBANotesTemplateProps) {

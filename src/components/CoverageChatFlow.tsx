@@ -67,7 +67,7 @@ interface Question {
   inputType: 'text' | 'radio' | 'multiselect' | 'textarea';
   options?: { value: string; label: string; description?: string }[];
   fieldPath: string;
-  followUpQuestion?: (answer: any) => string | null;
+  followUpQuestion?: (answer: string) => string | null;
 }
 
 const questions: Question[] = [
@@ -303,17 +303,17 @@ export function CoverageChatFlow({
     }, 500);
   };
 
-  const updateResponse = (fieldPath: string, value: any) => {
+  const updateResponse = (fieldPath: string, value: string | string[]) => {
     const pathParts = fieldPath.split('.');
     setResponses(prev => {
       const newResponses = { ...prev };
-      let current: any = newResponses;
+      let current: Record<string, unknown> = newResponses as Record<string, unknown>;
       
       for (let i = 0; i < pathParts.length - 1; i++) {
         if (!current[pathParts[i]]) {
           current[pathParts[i]] = {};
         }
-        current = current[pathParts[i]];
+        current = current[pathParts[i]] as Record<string, unknown>;
       }
       
       current[pathParts[pathParts.length - 1]] = value;

@@ -8,19 +8,21 @@
 import DOMPurify from 'dompurify';
 
 // Configure DOMPurify for maximum security
-const purifyConfig: DOMPurify.Config = {
-  ALLOWED_TAGS: [], // No HTML tags allowed by default
-  ALLOWED_ATTR: [],
+const purifyConfig = {
+  ALLOWED_TAGS: [] as string[], // No HTML tags allowed by default
+  ALLOWED_ATTR: [] as string[],
   KEEP_CONTENT: true,
-  RETURN_DOM: false,
-  RETURN_DOM_FRAGMENT: false,
+  RETURN_DOM: false as const,
+  RETURN_DOM_FRAGMENT: false as const,
 };
 
 // Relaxed config for rich text fields that need some formatting
-const richTextConfig: DOMPurify.Config = {
+const richTextConfig = {
   ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'p', 'br', 'ul', 'ol', 'li'],
-  ALLOWED_ATTR: [],
+  ALLOWED_ATTR: [] as string[],
   KEEP_CONTENT: true,
+  RETURN_DOM: false as const,
+  RETURN_DOM_FRAGMENT: false as const,
 };
 
 /**
@@ -28,7 +30,7 @@ const richTextConfig: DOMPurify.Config = {
  */
 export function sanitizeText(input: string | null | undefined): string {
   if (input == null) return '';
-  return DOMPurify.sanitize(String(input), purifyConfig).trim();
+  return (DOMPurify.sanitize(String(input), purifyConfig) as string).trim();
 }
 
 /**
@@ -36,7 +38,7 @@ export function sanitizeText(input: string | null | undefined): string {
  */
 export function sanitizeRichText(input: string | null | undefined): string {
   if (input == null) return '';
-  return DOMPurify.sanitize(String(input), richTextConfig);
+  return DOMPurify.sanitize(String(input), richTextConfig) as string;
 }
 
 /**

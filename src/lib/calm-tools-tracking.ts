@@ -607,22 +607,22 @@ export async function getCalmToolCoins(userId: string, days: number = 7): Promis
 // Helper Functions
 // ============================================================================
 
-function mapDbSession(data: any): CalmToolSession {
+function mapDbSession(data: Record<string, unknown>): CalmToolSession {
   return {
-    id: data.id,
-    userId: data.user_id,
-    childId: data.child_id,
-    toolType: data.tool_type,
-    startedAt: data.started_at,
-    endedAt: data.ended_at,
-    durationSeconds: data.duration_seconds || 0,
-    moodBefore: data.mood_before,
-    moodAfter: data.mood_after,
-    wasEffective: data.was_effective,
-    triggeredBy: data.triggered_by,
-    context: data.context,
-    notes: data.notes,
-    coinsEarned: data.coins_earned || 0,
+    id: data.id as string,
+    userId: data.user_id as string,
+    childId: data.child_id as string | undefined,
+    toolType: data.tool_type as CalmToolSession['toolType'],
+    startedAt: data.started_at as string,
+    endedAt: data.ended_at as string | undefined,
+    durationSeconds: (data.duration_seconds as number) || 0,
+    moodBefore: data.mood_before as CalmToolSession['moodBefore'],
+    moodAfter: data.mood_after as CalmToolSession['moodAfter'],
+    wasEffective: data.was_effective as boolean | undefined,
+    triggeredBy: data.triggered_by as string | undefined,
+    context: data.context as string | undefined,
+    notes: data.notes as string | undefined,
+    coinsEarned: (data.coins_earned as number) || 0,
   };
 }
 

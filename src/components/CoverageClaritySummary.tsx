@@ -19,12 +19,21 @@ import {
   Loader2
 } from 'lucide-react';
 
+export interface CoverageSummaryData {
+  generatedDate: string;
+  childName: string;
+  parentName: string;
+  responses: CoverageResponses;
+  recommendations: Recommendation[];
+  nextSteps: string[];
+}
+
 interface CoverageClaritySummaryProps {
   responses: CoverageResponses;
   childName: string;
   parentName: string;
-  onSave?: (summaryData: any) => void;
-  onEmail?: (summaryData: any) => void;
+  onSave?: (summaryData: CoverageSummaryData) => void;
+  onEmail?: (summaryData: CoverageSummaryData) => void;
   onClose?: () => void;
 }
 
@@ -75,7 +84,7 @@ export function CoverageClaritySummary({
       recommendations.push({
         title: 'Explore Respite Care Options',
         description: 'Respite gives you time to recharge. Many states offer respite through Medicaid waivers or HCBS programs.',
-        priority: responses.respiteServices.interested === 'yes' ? 'high' : 'medium',
+        priority: responses.respiteServices.interested === true ? 'high' : 'medium',
         actionItems: [
           'Contact your state\'s HCBS (Home and Community Based Services) program',
           'Ask about autism-specific Medicaid waivers in your state',
@@ -306,7 +315,7 @@ export function CoverageClaritySummary({
                 {responses.primaryInsurance?.hasInsurance && (
                   <p>✓ You have {responses.primaryInsurance.provider} coverage</p>
                 )}
-                {responses.secondaryCoverage?.type && responses.secondaryCoverage.type !== 'none' && (
+                {responses.secondaryCoverage?.type && (
                   <p>✓ Secondary coverage through {responses.secondaryCoverage.type.toUpperCase()}</p>
                 )}
                 {responses.habilitationServices?.serviceTypes && (
@@ -404,7 +413,7 @@ export function CoverageClaritySummary({
 }
 
 // Generate HTML report for download
-function generateHTMLReport(data: any): string {
+function generateHTMLReport(data: CoverageSummaryData): string {
   return `
 <!DOCTYPE html>
 <html lang="en">
@@ -434,12 +443,12 @@ function generateHTMLReport(data: any): string {
   <div class="section">
     <h2>Your Coverage Snapshot</h2>
     ${data.responses.primaryInsurance?.hasInsurance ? `<p>✓ Primary Insurance: ${data.responses.primaryInsurance.provider || 'On file'}</p>` : ''}
-    ${data.responses.secondaryCoverage?.type && data.responses.secondaryCoverage.type !== 'none' ? `<p>✓ Secondary Coverage: ${data.responses.secondaryCoverage.type.toUpperCase()}</p>` : ''}
+    ${data.responses.secondaryCoverage?.type ? `<p>✓ Secondary Coverage: ${data.responses.secondaryCoverage.type.toUpperCase()}</p>` : ''}
     ${data.responses.habilitationServices?.serviceTypes ? `<p>✓ Services of Interest: ${data.responses.habilitationServices.serviceTypes.join(', ')}</p>` : ''}
   </div>
 
   <h2>Personalized Recommendations</h2>
-  ${data.recommendations.map((rec: any) => `
+  ${data.recommendations.map((rec: Recommendation) => `
     <div class="recommendation">
       <h3>${rec.title} <span class="badge ${rec.priority}">${rec.priority} priority</span> <span class="badge likely">${rec.coverageLikelihood}</span></h3>
       <p>${rec.description}</p>

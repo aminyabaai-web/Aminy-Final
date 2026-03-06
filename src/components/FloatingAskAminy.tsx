@@ -34,7 +34,7 @@ export function FloatingAskAminy({
           "md:bottom-24",
           className
         )}
-        aria-label="Ask Aminy"
+        aria-label="Aminy"
       >
         <div className="relative">
           <Sparkles className="w-6 h-6 transition-transform group-hover:scale-110" />

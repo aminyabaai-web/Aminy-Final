@@ -37,6 +37,10 @@ interface SensoryToolsProps {
     toolId: string;
     duration: number;
     completed: boolean;
+    moodBefore?: number;
+    moodAfter?: number;
+    coinsEarned?: number;
+    toolType?: string;
   }) => void;
 }
 
@@ -96,7 +100,7 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
   
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
-  const animationFrameRef = useRef<number>();
+  const animationFrameRef = useRef<number>(undefined);
 
   // Timer for session duration
   useEffect(() => {
@@ -843,7 +847,7 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
                     y: bubble.y
                   }}
                   exit={{ scale: 1.3, opacity: 0 }}
-                  transition={{ exit: { duration: 0.15 } }}
+                  transition={{ duration: 0.15 }}
                   onClick={() => handleBubblePop(bubble)}
                   className="absolute"
                   style={{

@@ -21,6 +21,8 @@ import {
   ActionItem,
   GetCareIntake,
   VisitType,
+  AvailabilityBlock,
+  TimeOffBlock,
   MOCK_PROVIDERS,
 } from '../types/telehealth';
 import { generateSlots, holdSlot, confirmSlot, releaseHold } from './availability-engine';
@@ -136,9 +138,9 @@ export async function getUpcomingAppointments(userId: string): Promise<Appointme
   return appointments
     .filter(apt =>
       apt.status === 'scheduled' &&
-      new Date(apt.startTime) > now
+      new Date(apt.startTime ?? apt.scheduledAt) > now
     )
-    .sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
+    .sort((a, b) => new Date(a.startTime ?? a.scheduledAt).getTime() - new Date(b.startTime ?? b.scheduledAt).getTime());
 }
 
 /**
@@ -278,8 +280,8 @@ export async function getProviderSlots(
 
     return generateSlots(
       providerId,
-      provider.availabilityBlocks,
-      provider.timeOffBlocks || [],
+      (provider.availabilityBlocks ?? []) as AvailabilityBlock[],
+      (provider.timeOffBlocks ?? []) as TimeOffBlock[],
       visitType,
       [],
       startDate
@@ -406,7 +408,7 @@ export async function createVisitSummary(
   const result = await secureFetch<VisitSummary>(`${API_BASE_URL}/summaries`, {
     method: 'POST',
     headers: getAuthHeaders(),
-    body: JSON.stringify({ appointmentId, ...summary }),
+    body: JSON.stringify({ ...summary, appointmentId }),
   });
 
   if (!result.ok || !result.data) {
@@ -548,14 +550,21 @@ function createMockAppointment(params: CreateAppointmentParams): Appointment {
     id: `apt-${Date.now()}`,
     userId: params.userId,
     providerId: params.providerId,
-    providerName: provider ? `${provider.firstName} ${provider.lastName}` : 'Provider',
+    scheduledAt: params.slot.startTime,
     startTime: params.slot.startTime,
     endTime: params.slot.endTime,
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     visitType: params.visitType,
+    visitFormat: params.intake.visitFormat ?? 'video',
+    duration: params.visitType === 'consult' ? 25 : 50,
+    visitReason: params.intake.visitReason,
+    whoIsThisFor: params.intake.whoIsThisFor ?? 'child',
+    userState: params.intake.userState ?? '',
+    price: 0,
+    paymentStatus: 'pending',
+    videoJoinUrl: `https://meet.aminy.ai/room/${Date.now()}`,
+    videoProvider: 'zoom',
     status: 'scheduled',
-    reasonForVisit: params.intake.visitReason,
-    notes: params.intake.additionalNotes,
-    videoRoomUrl: `https://meet.aminy.app/room/${Date.now()}`,
     createdAt: now,
     updatedAt: now,
   };
@@ -651,29 +660,32 @@ function getMockActionItems(userId: string): ActionItem[] {
       id: 'ai-1',
       summaryId: 'vs-1',
       userId,
-      text: 'Create a visual schedule for morning routine',
-      priority: 'high',
+      title: 'Create a visual schedule for morning routine',
+      source: 'visit-summary',
       completed: false,
       createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     },
     {
       id: 'ai-2',
       summaryId: 'vs-1',
       userId,
-      text: 'Give 5-minute warnings before transitions',
-      priority: 'medium',
+      title: 'Give 5-minute warnings before transitions',
+      source: 'visit-summary',
       completed: true,
       completedAt: new Date(Date.now() - 86400000).toISOString(),
       createdAt: new Date(Date.now() - 172800000).toISOString(),
+      updatedAt: new Date(Date.now() - 86400000).toISOString(),
     },
     {
       id: 'ai-3',
       summaryId: 'vs-1',
       userId,
-      text: 'Practice "First-Then" language during calm moments',
-      priority: 'medium',
+      title: 'Practice "First-Then" language during calm moments',
+      source: 'visit-summary',
       completed: false,
       createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     },
   ];
 

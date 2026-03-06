@@ -19,6 +19,10 @@ export interface Report {
   url?: string;
   blob?: Blob;
   childName?: string;
+  reportType?: string;
+  reportId?: string;
+  expiresAt?: string;
+  generatedAt?: string;
 }
 
 export type ReportType =
@@ -27,7 +31,10 @@ export type ReportType =
   | 'provider-packet'
   | 'iep-summary'
   | 'bcba-notes'
-  | 'insurance-letter';
+  | 'insurance-letter'
+  | 'parent'
+  | 'iep'
+  | 'bcba';
 
 export interface ReportOptions {
   dateRange?: { start: Date; end: Date };
@@ -48,13 +55,16 @@ const GRAY_600 = '#4B5563';
 const GRAY_400 = '#9CA3AF';
 
 function getReportTitle(type: ReportType): string {
-  const titles: Record<ReportType, string> = {
+  const titles: Partial<Record<ReportType, string>> = {
     'weekly-outcomes': 'Weekly Outcomes Report',
     'monthly-progress': 'Monthly Progress Summary',
     'provider-packet': 'Provider Referral Packet',
     'iep-summary': 'IEP Progress Report',
     'bcba-notes': 'BCBA Clinical Notes',
     'insurance-letter': 'Insurance Documentation',
+    'parent': 'Parent Report',
+    'iep': 'IEP Report',
+    'bcba': 'BCBA Report',
   };
   return titles[type] || 'Progress Report';
 }
@@ -160,7 +170,7 @@ function generateBasePDF(
 }
 
 function getReportContent(type: ReportType, childName: string): string {
-  const contents: Record<ReportType, string> = {
+  const contents: Record<string, string> = {
     'weekly-outcomes': `This week's progress for ${childName}:\n\n• Completed 12 of 15 planned activities (80% completion)\n• Routine adherence improved to 85%\n• Achieved 3 goals, with 5 more in progress\n• Parent stress level decreased from 5.1 to 4.2\n\nKey Wins:\n• Morning routine completed independently 3 days in a row\n• Used calm-down strategies during frustration\n• Made eye contact with new friend at school\n\nAreas to Focus:\n• Evening transitions remain challenging\n• Homework focus decreased mid-week`,
 
     'monthly-progress': `Monthly progress summary for ${childName}:\n\n• 85% of weekly activities completed on average\n• 12 goals achieved this month\n• Communication skills showed 15% improvement\n• Social interactions increased by 20%\n\nMilestones Reached:\n• Independently completed morning routine\n• First playdate without support needed\n• Expressed emotions using feeling words`,
@@ -172,6 +182,12 @@ function getReportContent(type: ReportType, childName: string): string {
     'bcba-notes': `BCBA Clinical Notes for ${childName}:\n\nSession Date: ${new Date().toLocaleDateString()}\n\nBehavioral Observations:\n• Appropriate engagement during structured activities\n• Decreased verbal protests during transitions\n• Increased use of communication device\n\nInterventions Applied:\n• Visual countdown timer\n• First-Then board\n• Token reinforcement system\n\nRecommendations:\n• Continue current intervention strategies\n• Fade verbal prompts for routine completion\n• Increase peer interaction opportunities`,
 
     'insurance-letter': `Insurance Documentation for ${childName}:\n\nMedical Necessity Statement:\n\nThis child requires ongoing therapeutic intervention to address developmental delays and behavioral challenges. Current diagnosis supports the need for:\n\n• Applied Behavior Analysis (ABA) services\n• Speech-language therapy\n• Occupational therapy\n\nProgress and Outcomes:\n• Documented improvement in target behaviors\n• Measurable progress toward treatment goals\n• Parent engagement in home programming\n\nContinued services are medically necessary to maintain gains and achieve developmental milestones.`,
+
+    'parent': `Parent report for ${childName}:\n\nThis report summarizes observations and progress from the parent perspective.\n\n• Daily routine compliance and challenges\n• Behavioral patterns noted at home\n• Strategies that have been effective`,
+
+    'iep': `IEP report for ${childName}:\n\nSummary of IEP goal progress and accommodations review.`,
+
+    'bcba': `BCBA report for ${childName}:\n\nBehavioral assessment summary and treatment recommendations.`,
   };
 
   return contents[type] || `Progress report for ${childName}`;
@@ -181,7 +197,7 @@ function getReportContent(type: ReportType, childName: string): string {
 // Hook
 // ============================================================================
 
-export function useReports() {
+export function useReports(_options?: { accessToken?: string }) {
   const [reports, setReports] = useState<Report[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -268,6 +284,14 @@ export function useReports() {
     setReports([]);
   }, [reports]);
 
+  // Aliases for backward compatibility
+  const currentReport = reports.length > 0 ? reports[reports.length - 1] : null;
+  const loading = isGenerating;
+  const createReport = generateReport;
+  const fetchReports = (_childId?: string) => { /* no-op, reports loaded from state */ };
+  const removeReport = deleteReport;
+  const shareReportWithProvider = async (_reportId: string, _email: string, _message?: string) => { /* no-op placeholder */ };
+
   return {
     reports,
     isGenerating,
@@ -277,5 +301,12 @@ export function useReports() {
     downloadReport,
     getReportsByType,
     clearReports,
+    // Additional aliases used by ReportsHub
+    currentReport,
+    loading,
+    createReport,
+    fetchReports,
+    removeReport,
+    shareReportWithProvider,
   };
 }

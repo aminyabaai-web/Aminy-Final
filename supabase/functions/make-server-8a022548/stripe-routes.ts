@@ -10,12 +10,73 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 // Note: In production, use Stripe SDK: import Stripe from 'stripe';
 // const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY')!);
 
+// ---------------------------------------------------------------------------
+// Type definitions for Stripe webhook objects and Supabase client
+// ---------------------------------------------------------------------------
+
+/** Minimal interface for a Supabase client as used in this module */
+interface SupabaseClient {
+  from(table: string): SupabaseQueryBuilder;
+  rpc(fn: string, params?: Record<string, unknown>): Promise<{ data: unknown; error: SupabaseError | null }>;
+}
+
+/** Supabase query builder chain (simplified) */
+interface SupabaseQueryBuilder {
+  select(columns: string, options?: { count?: string; head?: boolean }): SupabaseQueryBuilder;
+  insert(values: Record<string, unknown> | Record<string, unknown>[]): SupabaseQueryBuilder;
+  update(values: Record<string, unknown>): SupabaseQueryBuilder;
+  upsert(values: Record<string, unknown>, options?: { onConflict?: string }): SupabaseQueryBuilder;
+  delete(): SupabaseQueryBuilder;
+  eq(column: string, value: string | number | boolean): SupabaseQueryBuilder;
+  single(): Promise<{ data: Record<string, unknown> | null; error: SupabaseError | null; count?: number | null }>;
+  maybeSingle(): Promise<{ data: Record<string, unknown> | null; error: SupabaseError | null }>;
+}
+
+/** Supabase error shape */
+interface SupabaseError {
+  message: string;
+  code?: string;
+}
+
+/** Stripe subscription object (minimal fields used in this module) */
+interface StripeSubscription {
+  id: string;
+  customer: string;
+  status: string;
+  cancel_at_period_end: boolean;
+  current_period_end: number;
+  trial_end: number | null;
+  metadata?: Record<string, string>;
+  items: {
+    data: Array<{
+      price?: {
+        id: string;
+        recurring?: { interval: string };
+      };
+    }>;
+  };
+}
+
+/** Stripe webhook event */
+interface StripeWebhookEvent {
+  type: string;
+  data: {
+    object: Record<string, unknown>;
+  };
+}
+
+/** Helper to get an error message from an unknown error */
+function getErrorMessage(error: unknown): string {
+  if (error instanceof Error) return error.message;
+  return String(error);
+}
+
 const STRIPE_SECRET_KEY = Deno.env.get('STRIPE_SECRET_KEY') || '';
 const STRIPE_WEBHOOK_SECRET = Deno.env.get('STRIPE_WEBHOOK_SECRET') || '';
 const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY') || '';
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL') || '';
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || '';
-const FROM_EMAIL = 'Aminy <hello@aminy.app>';
+const FROM_EMAIL = 'Aminy <hello@aminy.ai>';
 
 // Initialize Supabase client with service role for admin operations
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
@@ -113,7 +174,7 @@ const emailTemplates = {
             <p><span class="amount">${amount}</span> on ${date}</p>
             <p>Your subscription is active and you have full access to all your plan features.</p>
             <p>If you have any questions, just reply to this email - we're here to help.</p>
-            <a href="https://app.aminy.app" class="button">Open Aminy</a>
+            <a href="https://app.aminy.ai" class="button">Open Aminy</a>
           </div>
           <div class="footer">
             <p>With care,<br>The Aminy Team</p>
@@ -157,7 +218,7 @@ const emailTemplates = {
               <li>Your bank may have declined the charge</li>
             </ul>
             <p>Please update your payment method to keep your subscription active:</p>
-            <a href="https://app.aminy.app/settings/subscription" class="button">Update Payment Method</a>
+            <a href="https://app.aminy.ai/settings/subscription" class="button">Update Payment Method</a>
             <p style="margin-top: 20px;">If you need help, just reply to this email.</p>
           </div>
           <div class="footer">
@@ -167,7 +228,7 @@ const emailTemplates = {
       </body>
       </html>
     `,
-    text: `Hi ${name}, We had trouble processing your payment of ${amount}. Please update your payment method at https://app.aminy.app/settings/subscription - The Aminy Team`,
+    text: `Hi ${name}, We had trouble processing your payment of ${amount}. Please update your payment method at https://app.aminy.ai/settings/subscription - The Aminy Team`,
   }),
 
   subscriptionCanceled: (name: string, endDate: string) => ({
@@ -201,7 +262,7 @@ const emailTemplates = {
             </div>
             <p>If you ever want to come back, your data will be waiting for you. Just log in and resubscribe.</p>
             <p>Changed your mind? You can resume your subscription anytime before ${endDate}:</p>
-            <a href="https://app.aminy.app/settings/subscription" class="button">Resume Subscription</a>
+            <a href="https://app.aminy.ai/settings/subscription" class="button">Resume Subscription</a>
             <p style="margin-top: 20px;">We'd love to hear what we could do better. Just reply to this email with any feedback.</p>
           </div>
           <div class="footer">
@@ -211,7 +272,7 @@ const emailTemplates = {
       </body>
       </html>
     `,
-    text: `Hi ${name}, We received your cancellation request. Your access continues until ${endDate}. Changed your mind? Resume at https://app.aminy.app/settings/subscription - The Aminy Team`,
+    text: `Hi ${name}, We received your cancellation request. Your access continues until ${endDate}. Changed your mind? Resume at https://app.aminy.ai/settings/subscription - The Aminy Team`,
   }),
 
   trialEnding: (name: string, daysLeft: number) => ({
@@ -251,7 +312,7 @@ const emailTemplates = {
               <div class="feature"><span class="check">✓</span> Aminy Jr activities for your child</div>
             </div>
             <p style="text-align: center;">
-              <a href="https://app.aminy.app/settings/subscription" class="button">Keep My Access</a>
+              <a href="https://app.aminy.ai/settings/subscription" class="button">Keep My Access</a>
             </p>
           </div>
           <div class="footer">
@@ -261,7 +322,7 @@ const emailTemplates = {
       </body>
       </html>
     `,
-    text: `Hi ${name}, Your Aminy trial ends in ${daysLeft} day${daysLeft === 1 ? '' : 's'}. Keep your access at https://app.aminy.app/settings/subscription - The Aminy Team`,
+    text: `Hi ${name}, Your Aminy trial ends in ${daysLeft} day${daysLeft === 1 ? '' : 's'}. Keep your access at https://app.aminy.ai/settings/subscription - The Aminy Team`,
   }),
 };
 
@@ -269,7 +330,7 @@ const emailTemplates = {
 async function stripeRequest(
   endpoint: string,
   method: string = 'GET',
-  body?: Record<string, any>
+  body?: Record<string, string>
 ) {
   const url = `https://api.stripe.com/v1${endpoint}`;
 
@@ -284,7 +345,7 @@ async function stripeRequest(
   };
 
   if (body && method !== 'GET') {
-    options.body = new URLSearchParams(body as Record<string, string>).toString();
+    options.body = new URLSearchParams(body).toString();
   }
 
   const response = await fetch(url, options);
@@ -321,7 +382,7 @@ const PRICE_IDS: Record<string, string> = {
  * - First-purchase-only restrictions
  * - Context restrictions (subscription, telehealth, marketplace)
  */
-export async function validatePromoCode(req: Request, supabase?: any): Promise<Response> {
+export async function validatePromoCode(req: Request, supabase?: SupabaseClient): Promise<Response> {
   try {
     const { code, subtotal, userId, context = 'telehealth' } = await req.json();
 
@@ -459,7 +520,7 @@ export async function validatePromoCode(req: Request, supabase?: any): Promise<R
 export async function calculatePromoDiscount(
   code: string,
   subtotal: number,
-  supabase?: any
+  supabase?: SupabaseClient
 ): Promise<number> {
   const sanitizedCode = code.toUpperCase().replace(/[^A-Z0-9]/g, '');
 
@@ -498,7 +559,7 @@ export async function calculatePromoDiscount(
  * Record a promo code redemption (for tracking and abuse prevention)
  */
 export async function recordPromoRedemption(
-  supabase: any,
+  supabase: SupabaseClient,
   userId: string,
   code: string,
   context: 'subscription' | 'telehealth' | 'marketplace',
@@ -580,7 +641,7 @@ export async function createCheckoutSession(req: Request): Promise<Response> {
     });
   } catch (error) {
     console.error('Create checkout error:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -623,7 +684,7 @@ export async function createPortalSession(req: Request): Promise<Response> {
     });
   } catch (error) {
     console.error('Create portal error:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -683,7 +744,7 @@ export async function getSubscription(userId: string): Promise<Response> {
     });
   } catch (error) {
     console.error('Get subscription error:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -726,7 +787,7 @@ export async function cancelSubscription(req: Request): Promise<Response> {
     });
   } catch (error) {
     console.error('Cancel subscription error:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -749,7 +810,7 @@ export async function resumeSubscription(req: Request): Promise<Response> {
     }
 
     const subscriptions = await stripeRequest(`/subscriptions?customer=${customerId}`);
-    const cancelledSub = subscriptions.data?.find((s: any) => s.cancel_at_period_end);
+    const cancelledSub = subscriptions.data?.find((s: StripeSubscription) => s.cancel_at_period_end);
 
     if (!cancelledSub) {
       return new Response(JSON.stringify({ error: 'No cancelled subscription found' }), {
@@ -768,7 +829,7 @@ export async function resumeSubscription(req: Request): Promise<Response> {
     });
   } catch (error) {
     console.error('Resume subscription error:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -814,7 +875,7 @@ export async function createOneTimePayment(req: Request): Promise<Response> {
     });
   } catch (error) {
     console.error('Create payment error:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -909,16 +970,21 @@ export async function handleWebhook(req: Request): Promise<Response> {
       });
     }
 
-    if (STRIPE_WEBHOOK_SECRET) {
-      const isValid = await verifyWebhookSignature(body, signature, STRIPE_WEBHOOK_SECRET);
-      if (!isValid) {
-        console.error('Invalid webhook signature');
-        return new Response(JSON.stringify({ error: 'Invalid signature' }), {
-          status: 400,
-          headers: { 'Content-Type': 'application/json' },
-        });
-      }
-    } else {
+    if (!STRIPE_WEBHOOK_SECRET) {
+      console.error('STRIPE_WEBHOOK_SECRET not configured — refusing to process unverified webhook');
+      return new Response(JSON.stringify({ error: 'Webhook verification not configured' }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    const isValid = await verifyWebhookSignature(body, signature, STRIPE_WEBHOOK_SECRET);
+    if (!isValid) {
+      console.error('Invalid webhook signature');
+      return new Response(JSON.stringify({ error: 'Invalid signature' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
 
     const event = JSON.parse(body);
@@ -1007,20 +1073,18 @@ export async function handleWebhook(req: Request): Promise<Response> {
         }
 
         // CRITICAL: Update user's tier in the database based on subscription
+        // If this fails, we let the error propagate → webhook returns non-200 → Stripe retries
         if (userId && session.subscription) {
-          try {
-            // Get the subscription to determine the tier from the price
-            const subscription = await stripeRequest(`/subscriptions/${session.subscription}`);
-            const priceId = subscription.items?.data?.[0]?.price?.id;
+          const subscription = await stripeRequest(`/subscriptions/${session.subscription}`);
+          const priceId = subscription.items?.data?.[0]?.price?.id;
 
-            // Map price ID to tier
-            const tier = getTierFromPriceId(priceId);
-            if (tier) {
-              await updateUserTier(userId, tier);
-              console.log(`Updated user ${userId} to tier ${tier}`);
-            }
-          } catch (err) {
-            console.error('Failed to update user tier:', err);
+          const tier = getTierFromPriceId(priceId);
+          if (tier) {
+            await updateUserTier(userId, tier);
+            console.log(`Updated user ${userId} to tier ${tier}`);
+
+            // Also store subscription metadata for audit trail
+            await storeStripeCustomerId(userId, customerId);
           }
         }
 
@@ -1044,6 +1108,117 @@ export async function handleWebhook(req: Request): Promise<Response> {
       case 'customer.subscription.updated': {
         const subscription = event.data.object;
         const customerId = subscription.customer;
+
+        // ── Handle past_due status → start grace period ──
+        if (subscription.status === 'past_due') {
+          try {
+            const { data: customerData } = await supabase
+              .from('stripe_customers')
+              .select('user_id')
+              .eq('stripe_customer_id', customerId)
+              .single();
+
+            if (customerData?.user_id) {
+              const userId = customerData.user_id as string;
+              const GRACE_PERIOD_DAYS = 7;
+              const now = new Date();
+              const endsAt = new Date(now.getTime() + GRACE_PERIOD_DAYS * 24 * 60 * 60 * 1000);
+
+              // Upsert grace period — don't reset if one already exists for this cycle
+              await supabase
+                .from('grace_periods')
+                .upsert(
+                  {
+                    user_id: userId,
+                    subscription_id: subscription.id,
+                    status: 'active',
+                    started_at: now.toISOString(),
+                    ends_at: endsAt.toISOString(),
+                    suspended_at: null,
+                    updated_at: now.toISOString(),
+                  },
+                  { onConflict: 'user_id' }
+                );
+
+              console.log(`Grace period started for user ${userId} — ends ${endsAt.toISOString()}`);
+
+              // Notify the customer about the payment issue and grace period
+              try {
+                const customer = await stripeRequest(`/customers/${customerId}`);
+                if (customer.email) {
+                  const graceEndDate = endsAt.toLocaleDateString('en-US', {
+                    month: 'long',
+                    day: 'numeric',
+                    year: 'numeric',
+                  });
+                  await sendEmail(
+                    customer.email,
+                    'Action Required: Update Your Payment Method - Aminy',
+                    `
+                      <div style="font-family: system-ui, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+                        <h1 style="color: #e07a5f;">Payment Issue — Your Access is Safe for Now</h1>
+                        <p>Hi ${customer.name || 'there'},</p>
+                        <p>We were unable to process your latest payment. Don't worry — your full access continues until <strong>${graceEndDate}</strong>.</p>
+                        <p>Please update your payment method before then to avoid losing your features:</p>
+                        <p style="text-align: center; margin: 24px 0;">
+                          <a href="https://app.aminy.ai/settings/subscription" style="display: inline-block; background: #0891b2; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none;">Update Payment Method</a>
+                        </p>
+                        <p>If you have any questions, just reply to this email.</p>
+                        <p>— The Aminy Team</p>
+                      </div>
+                    `,
+                    `Hi ${customer.name || 'there'}, we couldn't process your payment. Your access continues until ${graceEndDate}. Update at https://app.aminy.ai/settings/subscription`
+                  );
+                }
+              } catch (emailErr) {
+                console.error('Failed to send grace period email:', emailErr);
+              }
+            }
+          } catch (err) {
+            console.error('Failed to handle past_due subscription:', err);
+          }
+        }
+
+        // ── Handle subscription becoming active again → resolve grace period ──
+        if (subscription.status === 'active') {
+          try {
+            const { data: customerData } = await supabase
+              .from('stripe_customers')
+              .select('user_id')
+              .eq('stripe_customer_id', customerId)
+              .single();
+
+            if (customerData?.user_id) {
+              const userId = customerData.user_id as string;
+
+              // Resolve any active grace period
+              const { data: activeGrace } = await supabase
+                .from('grace_periods')
+                .select('id')
+                .eq('user_id', userId)
+                .eq('status', 'active')
+                .maybeSingle();
+
+              if (activeGrace) {
+                await supabase
+                  .from('grace_periods')
+                  .update({ status: 'resolved', updated_at: new Date().toISOString() })
+                  .eq('user_id', userId)
+                  .eq('status', 'active');
+                console.log(`Grace period resolved for user ${userId}`);
+              }
+
+              // Update tier from subscription metadata/price
+              const priceId = subscription.items?.data?.[0]?.price?.id;
+              const tier = getTierFromPriceId(priceId);
+              if (tier) {
+                await updateUserTier(userId, tier);
+              }
+            }
+          } catch (err) {
+            console.error('Failed to resolve grace period on reactivation:', err);
+          }
+        }
 
         // Check if subscription is being canceled
         if (subscription.cancel_at_period_end) {
@@ -1072,20 +1247,18 @@ export async function handleWebhook(req: Request): Promise<Response> {
         const customerId = subscription.customer;
 
         // Downgrade user to free tier when subscription ends
-        try {
-          // Find user by customer ID
-          const { data: customerData } = await supabase
-            .from('stripe_customers')
-            .select('user_id')
-            .eq('stripe_customer_id', customerId)
-            .single();
+        // If this fails, let it propagate → webhook returns non-200 → Stripe retries
+        const { data: customerData } = await supabase
+          .from('stripe_customers')
+          .select('user_id')
+          .eq('stripe_customer_id', customerId)
+          .single();
 
-          if (customerData?.user_id) {
-            await updateUserTier(customerData.user_id, 'free');
-            console.log(`Downgraded user ${customerData.user_id} to free tier`);
-          }
-        } catch (err) {
-          console.error('Failed to downgrade user tier:', err);
+        if (customerData?.user_id) {
+          await updateUserTier(customerData.user_id as string, 'free');
+          console.log(`Downgraded user ${customerData.user_id} to free tier`);
+        } else {
+          console.warn(`No user found for Stripe customer ${customerId} — cannot downgrade tier`);
         }
         break;
       }
@@ -1094,6 +1267,39 @@ export async function handleWebhook(req: Request): Promise<Response> {
         const invoice = event.data.object;
         const customerEmail = invoice.customer_email;
         const customerName = invoice.customer_name || 'there';
+        const invoiceCustomerId = invoice.customer;
+
+        // ── Resolve grace period if payment succeeds ──
+        if (invoiceCustomerId) {
+          try {
+            const { data: customerData } = await supabase
+              .from('stripe_customers')
+              .select('user_id')
+              .eq('stripe_customer_id', invoiceCustomerId)
+              .single();
+
+            if (customerData?.user_id) {
+              const userId = customerData.user_id as string;
+              const { data: activeGrace } = await supabase
+                .from('grace_periods')
+                .select('id')
+                .eq('user_id', userId)
+                .eq('status', 'active')
+                .maybeSingle();
+
+              if (activeGrace) {
+                await supabase
+                  .from('grace_periods')
+                  .update({ status: 'resolved', updated_at: new Date().toISOString() })
+                  .eq('user_id', userId)
+                  .eq('status', 'active');
+                console.log(`Grace period resolved after successful payment for user ${userId}`);
+              }
+            }
+          } catch (err) {
+            console.error('Failed to resolve grace period on payment success:', err);
+          }
+        }
 
         // Send payment confirmation for recurring payments
         if (customerEmail && invoice.billing_reason === 'subscription_cycle') {
@@ -1114,6 +1320,54 @@ export async function handleWebhook(req: Request): Promise<Response> {
         const invoice = event.data.object;
         const customerEmail = invoice.customer_email;
         const customerName = invoice.customer_name || 'there';
+        const failedCustomerId = invoice.customer;
+
+        // ── Check if grace period has expired → downgrade to free ──
+        if (failedCustomerId) {
+          try {
+            const { data: customerData } = await supabase
+              .from('stripe_customers')
+              .select('user_id')
+              .eq('stripe_customer_id', failedCustomerId)
+              .single();
+
+            if (customerData?.user_id) {
+              const userId = customerData.user_id as string;
+              const { data: activeGrace } = await supabase
+                .from('grace_periods')
+                .select('*')
+                .eq('user_id', userId)
+                .eq('status', 'active')
+                .maybeSingle();
+
+              if (activeGrace) {
+                const endsAt = new Date(activeGrace.ends_at as string);
+                const now = new Date();
+
+                if (now >= endsAt) {
+                  // Grace period expired — suspend features
+                  await supabase
+                    .from('grace_periods')
+                    .update({
+                      status: 'expired',
+                      suspended_at: now.toISOString(),
+                      updated_at: now.toISOString(),
+                    })
+                    .eq('user_id', userId)
+                    .eq('status', 'active');
+
+                  await updateUserTier(userId, 'free');
+                  console.log(`Grace period expired — user ${userId} downgraded to free`);
+                } else {
+                  const daysLeft = Math.ceil((endsAt.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+                  console.log(`Payment failed again for user ${userId} — ${daysLeft} day(s) left in grace period`);
+                }
+              }
+            }
+          } catch (err) {
+            console.error('Failed to check grace period on payment failure:', err);
+          }
+        }
 
         // Send payment failed notification
         if (customerEmail) {
@@ -1153,8 +1407,10 @@ export async function handleWebhook(req: Request): Promise<Response> {
     });
   } catch (error) {
     console.error('Webhook error:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
-      status: 400,
+    // Return 500 for processing errors so Stripe retries the webhook
+    // (400 tells Stripe "bad request, don't retry" which is wrong for transient DB errors)
+    return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
+      status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
   }
@@ -1208,22 +1464,301 @@ async function storeStripeCustomerId(userId: string, customerId: string): Promis
   }
 }
 
-// Helper to update user tier after successful subscription
-async function updateUserTier(userId: string, tier: string): Promise<void> {
-  try {
-    const { error } = await supabase
-      .from('profiles')
-      .update({ tier })
-      .eq('id', userId);
+// Helper to update user tier after successful subscription — with retry
+async function updateUserTier(userId: string, tier: string, retries = 2): Promise<void> {
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .update({ tier, updated_at: new Date().toISOString() })
+        .eq('id', userId);
 
-    if (error) {
-      console.error('Error updating user tier:', error);
-      throw error;
+      if (error) {
+        if (attempt < retries) {
+          console.warn(`updateUserTier attempt ${attempt + 1} failed, retrying:`, error.message);
+          await new Promise(r => setTimeout(r, 500 * (attempt + 1)));
+          continue;
+        }
+        throw error;
+      }
+
+      return; // success
+    } catch (error) {
+      if (attempt >= retries) {
+        console.error(`updateUserTier FAILED after ${retries + 1} attempts for user ${userId}:`, error);
+        throw error; // propagate so webhook returns non-200 → Stripe retries
+      }
+    }
+  }
+}
+
+/**
+ * Get proration preview for a plan change
+ *
+ * Uses Stripe's upcoming invoice API to show the user what they'll
+ * be charged (or credited) when switching plans.
+ */
+export async function getProrationPreview(req: Request): Promise<Response> {
+  try {
+    const { subscriptionId, newPriceId } = await req.json();
+
+    if (!subscriptionId || !newPriceId) {
+      return new Response(JSON.stringify({ error: 'Missing subscriptionId or newPriceId' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
 
+    // Get the current subscription to find the item ID
+    const subscription = await stripeRequest(`/subscriptions/${subscriptionId}`);
+    const currentItemId = subscription.items?.data?.[0]?.id;
+
+    if (!currentItemId) {
+      return new Response(JSON.stringify({ error: 'No subscription item found' }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Use Stripe's upcoming invoice endpoint to preview proration
+    const preview = await stripeRequest(
+      `/invoices/upcoming?subscription=${subscriptionId}` +
+      `&subscription_items[0][id]=${currentItemId}` +
+      `&subscription_items[0][price]=${newPriceId}` +
+      `&subscription_proration_behavior=create_prorations`
+    );
+
+    // Calculate credit and debit from proration line items
+    let credit = 0;
+    let debit = 0;
+
+    for (const line of (preview.lines?.data || [])) {
+      if (line.proration) {
+        if (line.amount < 0) {
+          credit += Math.abs(line.amount);
+        } else {
+          debit += line.amount;
+        }
+      }
+    }
+
+    const netAmount = debit - credit;
+
+    return new Response(JSON.stringify({
+      credit,
+      debit,
+      netAmount,
+      formattedNetAmount: `$${(Math.abs(netAmount) / 100).toFixed(2)}`,
+      newPriceId,
+    }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
   } catch (error) {
-    console.error('Error in updateUserTier:', error);
-    throw error;
+    console.error('Proration preview error:', error);
+    return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+}
+
+/**
+ * Change subscription tier (upgrade or downgrade)
+ *
+ * - Upgrades: immediate with proration
+ * - Downgrades: scheduled at period end (no proration)
+ */
+export async function changeTierHandler(req: Request): Promise<Response> {
+  try {
+    const { userId, newPriceId, newTier, direction, prorationBehavior } = await req.json();
+
+    if (!userId || !newPriceId || !newTier) {
+      return new Response(JSON.stringify({ error: 'Missing required fields' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    const customerId = await getStripeCustomerId(userId);
+    if (!customerId) {
+      return new Response(JSON.stringify({ error: 'No Stripe customer found' }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Get current active subscription
+    const subscriptions = await stripeRequest(`/subscriptions?customer=${customerId}&status=active`);
+    if (!subscriptions.data?.length) {
+      return new Response(JSON.stringify({ error: 'No active subscription' }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    const currentSub = subscriptions.data[0];
+    const currentItemId = currentSub.items?.data?.[0]?.id;
+
+    if (!currentItemId) {
+      return new Response(JSON.stringify({ error: 'No subscription item found' }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    const isDowngrade = direction === 'downgrade';
+
+    // Build update params
+    const updateParams: Record<string, string> = {
+      'items[0][id]': currentItemId,
+      'items[0][price]': newPriceId,
+      'metadata[tier]': newTier,
+      'proration_behavior': isDowngrade ? 'none' : (prorationBehavior || 'create_prorations'),
+    };
+
+    // For downgrades, schedule the change at period end
+    // by using Stripe's subscription schedule or cancel_at_period_end pattern.
+    // The simplest approach: update immediately but with no proration,
+    // OR use a subscription schedule. We use the "update at period end" approach:
+    if (isDowngrade) {
+      // Create a subscription schedule to defer the downgrade
+      // First check if a schedule already exists
+      if (currentSub.schedule) {
+        // Update existing schedule
+        await stripeRequest(`/subscription_schedules/${currentSub.schedule}`, 'POST', {
+          'phases[0][items][0][price]': currentSub.items.data[0].price.id,
+          'phases[0][end_date]': String(currentSub.current_period_end),
+          'phases[1][items][0][price]': newPriceId,
+          'phases[1][iterations]': '1',
+        });
+      } else {
+        // Create new schedule from the existing subscription
+        const schedule = await stripeRequest('/subscription_schedules', 'POST', {
+          'from_subscription': currentSub.id,
+        });
+
+        // Release the default phase and set up two phases:
+        // 1. Current plan until period end
+        // 2. New plan starting at period end
+        await stripeRequest(`/subscription_schedules/${schedule.id}`, 'POST', {
+          'phases[0][items][0][price]': currentSub.items.data[0].price.id,
+          'phases[0][start_date]': String(currentSub.current_period_start),
+          'phases[0][end_date]': String(currentSub.current_period_end),
+          'phases[1][items][0][price]': newPriceId,
+          'phases[1][iterations]': '1',
+        });
+      }
+
+      // Update the user's tier in our database only when the period ends.
+      // For now, store the pending change so the UI can show "downgrading to X on DATE".
+      await supabase
+        .from('pending_tier_changes')
+        .upsert(
+          {
+            user_id: userId,
+            new_tier: newTier,
+            new_price_id: newPriceId,
+            effective_at: new Date(currentSub.current_period_end * 1000).toISOString(),
+            created_at: new Date().toISOString(),
+          },
+          { onConflict: 'user_id' }
+        );
+
+      return new Response(JSON.stringify({
+        success: true,
+        direction: 'downgrade',
+        effectiveDate: new Date(currentSub.current_period_end * 1000).toISOString(),
+        message: `Your plan will change to ${newTier} at the end of your current billing period.`,
+      }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    // ── Upgrade: apply immediately ──
+    const updatedSub = await stripeRequest(`/subscriptions/${currentSub.id}`, 'POST', updateParams);
+
+    // Immediately update the user's tier
+    await updateUserTier(userId, newTier);
+    console.log(`Upgraded user ${userId} to ${newTier} immediately`);
+
+    // Clear any pending downgrade
+    await supabase
+      .from('pending_tier_changes')
+      .delete()
+      .eq('user_id', userId);
+
+    return new Response(JSON.stringify({
+      success: true,
+      direction: 'upgrade',
+      effectiveDate: new Date().toISOString(),
+      prorationPreview: {
+        newPriceId,
+      },
+    }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  } catch (error) {
+    console.error('Change tier error:', error);
+    return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+}
+
+/**
+ * Get grace period status for a user (called by frontend hook)
+ */
+export async function getGracePeriodStatus(userId: string): Promise<Response> {
+  try {
+    const { data, error } = await supabase
+      .from('grace_periods')
+      .select('*')
+      .eq('user_id', userId)
+      .eq('status', 'active')
+      .maybeSingle();
+
+    if (error) {
+      console.error('Failed to fetch grace period:', error);
+    }
+
+    if (!data) {
+      return new Response(JSON.stringify({
+        inGracePeriod: false,
+        daysRemaining: 0,
+        suspendedAt: null,
+        gracePeriodStartedAt: null,
+        gracePeriodEndsAt: null,
+      }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    const now = new Date();
+    const endsAt = new Date(data.ends_at as string);
+    const msRemaining = endsAt.getTime() - now.getTime();
+    const daysRemaining = Math.max(0, Math.ceil(msRemaining / (1000 * 60 * 60 * 24)));
+
+    return new Response(JSON.stringify({
+      inGracePeriod: daysRemaining > 0 && !data.suspended_at,
+      daysRemaining,
+      suspendedAt: data.suspended_at || null,
+      gracePeriodStartedAt: data.started_at || null,
+      gracePeriodEndsAt: data.ends_at || null,
+    }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  } catch (error) {
+    console.error('Grace period status error:', error);
+    return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 }
 
@@ -1235,4 +1770,7 @@ export default {
   resumeSubscription,
   createOneTimePayment,
   handleWebhook,
+  getProrationPreview,
+  changeTierHandler,
+  getGracePeriodStatus,
 };

@@ -5,6 +5,8 @@ import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { ArrowLeft, CheckCircle, AlertCircle } from 'lucide-react';
 import { supabase } from '../utils/supabase/client';
+import { useFormValidation } from '../lib/use-form-validation';
+import { forgotPasswordSchema } from '../lib/schemas';
 
 interface ForgotPasswordScreenProps {
   onBack: () => void;
@@ -13,30 +15,18 @@ interface ForgotPasswordScreenProps {
 
 export function ForgotPasswordScreen({ onBack, onBackToLogin }: ForgotPasswordScreenProps) {
   const [email, setEmail] = useState('');
-  const [errors, setErrors] = useState<{ email?: string }>({});
+  const { errors, validate, clearErrors, setErrors } = useFormValidation(forgotPasswordSchema);
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  const validateEmail = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!email) {
-      setErrors({ email: 'Email is required' });
-      return;
-    }
 
-    if (!validateEmail(email)) {
-      setErrors({ email: 'Please enter a valid email address' });
-      return;
-    }
+    const result = validate({ email });
+    if (!result.success) return;
 
     setIsLoading(true);
-    setErrors({});
+    clearErrors();
 
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {

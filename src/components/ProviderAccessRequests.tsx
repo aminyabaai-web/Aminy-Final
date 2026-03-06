@@ -23,6 +23,7 @@ import {
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { logAccessDecision, logAccessRequest } from '../lib/audit-logger';
+import { supabase } from '../utils/supabase/client';
 
 // Types
 interface Provider {
@@ -144,6 +145,7 @@ const MOCK_ACTIVE_ACCESS: ActiveAccess[] = [
 interface ProviderAccessRequestsProps {
   userId: string;
   onClose?: () => void;
+  onBack?: () => void;
 }
 
 export function ProviderAccessRequests({ userId, onClose }: ProviderAccessRequestsProps) {
@@ -152,6 +154,133 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
   const [selectedRequest, setSelectedRequest] = useState<AccessRequest | null>(null);
   const [showRevokeConfirm, setShowRevokeConfirm] = useState<string | null>(null);
   const [tab, setTab] = useState<'pending' | 'active'>('pending');
+  const [loading, setLoading] = useState(true);
+
+  // Load access requests and active access from Supabase, fall back to mocks
+  useEffect(() => {
+    async function loadAccessData() {
+      try {
+        setLoading(true);
+
+        // Fetch pending/recent requests
+        const { data: reqData, error: reqErr } = await supabase
+          .from('provider_access_requests')
+          .select(`
+            id,
+            child_id,
+            child_name,
+            requested_level,
+            reason,
+            status,
+            created_at,
+            expires_at,
+            resolved_at,
+            resolved_by,
+            provider:provider_profiles(
+              id,
+              full_name,
+              credentials,
+              specialty,
+              organization,
+              photo_url,
+              verified_at
+            )
+          `)
+          .eq('parent_user_id', userId)
+          .order('created_at', { ascending: false });
+
+        if (reqErr) throw reqErr;
+
+        if (reqData && reqData.length > 0) {
+          setRequests(reqData.map((r: Record<string, unknown>) => {
+            const prov = r.provider as Record<string, unknown> | null;
+            return {
+              id: r.id as string,
+              provider: {
+                id: (prov?.id as string) || 'unknown',
+                name: (prov?.full_name as string) || 'Provider',
+                credentials: (prov?.credentials as string) || '',
+                specialty: (prov?.specialty as string) || '',
+                organization: prov?.organization as string | undefined,
+                photoUrl: prov?.photo_url as string | undefined,
+                verifiedAt: prov?.verified_at as string | undefined,
+              },
+              childId: r.child_id as string,
+              childName: (r.child_name as string) || '',
+              requestedLevel: (r.requested_level as AccessRequest['requestedLevel']) || 'summary',
+              reason: (r.reason as string) || '',
+              status: (r.status as AccessRequest['status']) || 'pending',
+              createdAt: r.created_at as string,
+              expiresAt: r.expires_at as string | undefined,
+              resolvedAt: r.resolved_at as string | undefined,
+              resolvedBy: r.resolved_by as string | undefined,
+            };
+          }));
+        }
+        // If no data, MOCK_REQUESTS remains as initial state
+
+        // Fetch active access grants
+        const { data: accessData, error: accessErr } = await supabase
+          .from('provider_active_access')
+          .select(`
+            id,
+            child_id,
+            child_name,
+            access_level,
+            granted_at,
+            expires_at,
+            last_accessed_at,
+            access_count,
+            provider:provider_profiles(
+              id,
+              full_name,
+              credentials,
+              specialty,
+              organization,
+              photo_url,
+              verified_at
+            )
+          `)
+          .eq('parent_user_id', userId)
+          .gte('expires_at', new Date().toISOString());
+
+        if (accessErr) throw accessErr;
+
+        if (accessData && accessData.length > 0) {
+          setActiveAccess(accessData.map((a: Record<string, unknown>) => {
+            const prov = a.provider as Record<string, unknown> | null;
+            return {
+              id: a.id as string,
+              provider: {
+                id: (prov?.id as string) || 'unknown',
+                name: (prov?.full_name as string) || 'Provider',
+                credentials: (prov?.credentials as string) || '',
+                specialty: (prov?.specialty as string) || '',
+                organization: prov?.organization as string | undefined,
+                photoUrl: prov?.photo_url as string | undefined,
+                verifiedAt: prov?.verified_at as string | undefined,
+              },
+              childId: a.child_id as string,
+              childName: (a.child_name as string) || '',
+              accessLevel: (a.access_level as ActiveAccess['accessLevel']) || 'summary',
+              grantedAt: a.granted_at as string,
+              expiresAt: a.expires_at as string,
+              lastAccessedAt: a.last_accessed_at as string | undefined,
+              accessCount: (a.access_count as number) || 0,
+            };
+          }));
+        }
+        // If no data, MOCK_ACTIVE_ACCESS remains as initial state
+      } catch (err) {
+        console.warn('ProviderAccessRequests: Failed to load from Supabase, using mock data', err);
+        // Mocks remain as initial values
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadAccessData();
+  }, [userId]);
 
   const pendingCount = requests.filter(r => r.status === 'pending').length;
 

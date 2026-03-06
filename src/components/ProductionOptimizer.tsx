@@ -1,12 +1,34 @@
 import React, { useEffect, useState } from 'react';
 
+interface BeforeInstallPromptEvent extends Event {
+  prompt(): Promise<{ outcome: 'accepted' | 'dismissed' }>;
+}
+
+interface PerformanceMemory {
+  usedJSHeapSize: number;
+  totalJSHeapSize: number;
+  jsHeapSizeLimit: number;
+}
+
+interface PerformanceWithMemory extends Performance {
+  memory?: PerformanceMemory;
+}
+
+interface WindowWithExtensions extends Window {
+  analytics?: {
+    track: (event: string, properties: Record<string, unknown>) => void;
+  };
+  gc?: () => void;
+  restoreFocus?: () => void;
+}
+
 /**
  * ProductionOptimizer - Final production optimizations
  * Handles mobile performance, PWA features, and user experience enhancements
  */
 export const ProductionOptimizer: React.FC = () => {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
-  const [installPrompt, setInstallPrompt] = useState<any>(null);
+  const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
 
   useEffect(() => {
     // 1. MOBILE PERFORMANCE OPTIMIZATIONS
@@ -86,7 +108,7 @@ export const ProductionOptimizer: React.FC = () => {
     const handleInstallPrompt = () => {
       const handleBeforeInstallPrompt = (e: Event) => {
         e.preventDefault();
-        setInstallPrompt(e);
+        setInstallPrompt(e as BeforeInstallPromptEvent);
       };
 
       window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
@@ -106,8 +128,8 @@ export const ProductionOptimizer: React.FC = () => {
               if (entry.entryType === 'longtask' && entry.duration > 50) {
                 
                 // Log to analytics if available
-                if ((window as any).analytics) {
-                  (window as any).analytics.track('performance_long_task', {
+                if ((window as WindowWithExtensions).analytics) {
+                  (window as WindowWithExtensions).analytics!.track('performance_long_task', {
                     duration: entry.duration,
                     timestamp: Date.now(),
                   });
@@ -124,12 +146,12 @@ export const ProductionOptimizer: React.FC = () => {
       // Monitor memory usage (Chrome only)
       if ('memory' in performance) {
         const checkMemory = () => {
-          const memory = (performance as any).memory;
-          if (memory.usedJSHeapSize > memory.jsHeapSizeLimit * 0.9) {
+          const memory = (performance as PerformanceWithMemory).memory;
+          if (memory && memory.usedJSHeapSize > memory.jsHeapSizeLimit * 0.9) {
             
             // Trigger garbage collection hints
             if ('gc' in window) {
-              (window as any).gc();
+              (window as WindowWithExtensions).gc?.();
             }
           }
         };
@@ -158,7 +180,7 @@ export const ProductionOptimizer: React.FC = () => {
       });
 
       // Store focus restoration function globally
-      (window as any).restoreFocus = () => {
+      (window as WindowWithExtensions).restoreFocus = () => {
         if (lastFocusedElement && lastFocusedElement.isConnected) {
           lastFocusedElement.focus();
         }
@@ -266,8 +288,8 @@ export const ProductionOptimizer: React.FC = () => {
       {process.env.NODE_ENV === 'development' && (
         <div className="fixed bottom-4 right-4 bg-black/80 text-white text-xs p-2 rounded font-mono z-50">
           <div>Online: {isOnline ? '✅' : '❌'}</div>
-          <div>Memory: {(performance as any).memory ? 
-            `${Math.round(((performance as any).memory.usedJSHeapSize / 1048576) * 100) / 100}MB` : 
+          <div>Memory: {(performance as PerformanceWithMemory).memory ?
+            `${Math.round(((performance as PerformanceWithMemory).memory!.usedJSHeapSize / 1048576) * 100) / 100}MB` :
             'N/A'}
           </div>
         </div>

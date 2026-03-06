@@ -9,6 +9,84 @@ import * as kv from "./kv_store.tsx";
 
 type ProviderType = 'bcba' | 'slp' | 'ot' | 'pt' | 'psychologist' | 'developmental_pediatrician' | 'other';
 
+type SessionStatus = 'upcoming' | 'completed' | 'cancelled' | 'no-show';
+
+/** Time slot within a day's availability */
+interface AvailabilitySlot {
+  start: string; // "HH:MM"
+  end: string;   // "HH:MM"
+}
+
+/** Provider location info */
+interface ProviderLocation {
+  zipCode?: string;
+  telehealth?: boolean;
+  address?: string;
+  city?: string;
+  state?: string;
+}
+
+/** Verification data for a provider */
+interface VerificationData {
+  licenseNumber: string;
+  licenseState: string;
+  npiNumber: string;
+  submittedAt: string;
+}
+
+/** Provider profile stored in KV */
+interface ProviderRecord {
+  id: string;
+  type: ProviderType;
+  name?: string;
+  specialties?: string[];
+  location?: ProviderLocation;
+  insurance?: string[];
+  hourlyRate?: number;
+  languages?: string[];
+  acceptingNewPatients?: boolean;
+  rating?: number;
+  reviewCount?: number;
+  availability?: Record<string, AvailabilitySlot[]>;
+  verified?: boolean;
+  verificationStatus?: string;
+  verificationData?: VerificationData;
+  createdAt: string;
+  updatedAt: string;
+}
+
+/** Session record stored in KV */
+interface SessionRecord {
+  id: string;
+  providerId: string;
+  patientId: string;
+  patientName?: string;
+  parentName?: string;
+  scheduledAt: string;
+  duration: number;
+  type: string;
+  status: SessionStatus;
+  notes?: string;
+  fee?: number;
+  paid?: boolean;
+  notesSubmitted?: boolean;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+/** Patient relationship record stored in KV */
+interface PatientRecord {
+  childName?: string;
+  parentName?: string;
+  profileAccess?: 'granted' | 'pending' | 'denied';
+}
+
+/** Helper to get an error message from an unknown error */
+function getErrorMessage(error: unknown): string {
+  if (error instanceof Error) return error.message;
+  return String(error);
+}
+
 /**
  * Get provider by ID
  */
@@ -29,7 +107,7 @@ export async function getProvider(providerId: string): Promise<Response> {
     });
   } catch (error) {
     console.error('Get provider error:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -52,23 +130,23 @@ export async function searchProviders(req: Request): Promise<Response> {
     const acceptingNew = url.searchParams.get('acceptingNew');
 
     // Get all providers
-    const allProviders = await kv.getByPrefix('provider:');
+    const allProviders = await kv.getByPrefix<ProviderRecord>('provider:');
 
     // Filter based on criteria
-    let filtered = allProviders.filter((p: any) => {
+    let filtered = allProviders.filter((p: ProviderRecord) => {
       if (type && p.type !== type) return false;
       if (specialties?.length && !specialties.some(s => p.specialties?.includes(s))) return false;
       if (zipCode && p.location?.zipCode !== zipCode) return false;
       if (telehealth === 'true' && !p.location?.telehealth) return false;
       if (insurance && !p.insurance?.includes(insurance)) return false;
-      if (maxRate && p.hourlyRate > parseInt(maxRate)) return false;
+      if (maxRate && (p.hourlyRate ?? 0) > parseInt(maxRate)) return false;
       if (language && !p.languages?.includes(language)) return false;
       if (acceptingNew === 'true' && !p.acceptingNewPatients) return false;
       return true;
     });
 
     // Sort by rating
-    filtered.sort((a: any, b: any) => (b.rating || 0) - (a.rating || 0));
+    filtered.sort((a: ProviderRecord, b: ProviderRecord) => (b.rating || 0) - (a.rating || 0));
 
     return new Response(JSON.stringify(filtered), {
       status: 200,
@@ -76,7 +154,7 @@ export async function searchProviders(req: Request): Promise<Response> {
     });
   } catch (error) {
     console.error('Search providers error:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -118,7 +196,7 @@ export async function saveProvider(req: Request): Promise<Response> {
     });
   } catch (error) {
     console.error('Save provider error:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -151,7 +229,7 @@ export async function updateAvailability(req: Request, providerId: string): Prom
     });
   } catch (error) {
     console.error('Update availability error:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -171,7 +249,7 @@ export async function getProviderPatients(providerId: string): Promise<Response>
     });
   } catch (error) {
     console.error('Get patients error:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -188,9 +266,9 @@ export async function getProviderSessions(req: Request, providerId: string): Pro
     const startDate = url.searchParams.get('startDate');
     const endDate = url.searchParams.get('endDate');
 
-    const allSessions = await kv.getByPrefix(`session:${providerId}:`);
+    const allSessions = await kv.getByPrefix<SessionRecord>(`session:${providerId}:`);
 
-    const filtered = allSessions.filter((s: any) => {
+    const filtered = allSessions.filter((s: SessionRecord) => {
       if (status && s.status !== status) return false;
       if (startDate && new Date(s.scheduledAt) < new Date(startDate)) return false;
       if (endDate && new Date(s.scheduledAt) > new Date(endDate)) return false;
@@ -198,7 +276,7 @@ export async function getProviderSessions(req: Request, providerId: string): Pro
     });
 
     // Sort by date
-    filtered.sort((a: any, b: any) =>
+    filtered.sort((a: SessionRecord, b: SessionRecord) =>
       new Date(a.scheduledAt).getTime() - new Date(b.scheduledAt).getTime()
     );
 
@@ -208,7 +286,7 @@ export async function getProviderSessions(req: Request, providerId: string): Pro
     });
   } catch (error) {
     console.error('Get sessions error:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -228,33 +306,33 @@ export async function getProviderStats(providerId: string): Promise<Response> {
       });
     }
 
-    const patients = await kv.getByPrefix(`provider_patient:${providerId}:`);
-    const sessions = await kv.getByPrefix(`session:${providerId}:`);
+    const patients = await kv.getByPrefix<PatientRecord>(`provider_patient:${providerId}:`);
+    const sessions = await kv.getByPrefix<SessionRecord>(`session:${providerId}:`);
 
     const now = new Date();
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
 
-    const sessionsThisMonth = sessions.filter((s: any) =>
+    const sessionsThisMonth = sessions.filter((s: SessionRecord) =>
       new Date(s.scheduledAt) >= monthStart && s.status === 'completed'
     );
 
-    const earningsThisMonth = sessionsThisMonth.reduce((sum: number, s: any) => sum + (s.fee || 0), 0);
+    const earningsThisMonth = sessionsThisMonth.reduce((sum: number, s: SessionRecord) => sum + (s.fee || 0), 0);
     const earningsTotal = sessions
-      .filter((s: any) => s.status === 'completed')
-      .reduce((sum: number, s: any) => sum + (s.fee || 0), 0);
+      .filter((s: SessionRecord) => s.status === 'completed')
+      .reduce((sum: number, s: SessionRecord) => sum + (s.fee || 0), 0);
 
-    const activePatients = patients.filter((p: any) => p.profileAccess === 'granted').length;
+    const activePatients = patients.filter((p: PatientRecord) => p.profileAccess === 'granted').length;
 
     // Find next available slot
     const upcomingSessions = sessions
-      .filter((s: any) => new Date(s.scheduledAt) > now && s.status === 'upcoming')
-      .sort((a: any, b: any) => new Date(a.scheduledAt).getTime() - new Date(b.scheduledAt).getTime());
+      .filter((s: SessionRecord) => new Date(s.scheduledAt) > now && s.status === 'upcoming')
+      .sort((a: SessionRecord, b: SessionRecord) => new Date(a.scheduledAt).getTime() - new Date(b.scheduledAt).getTime());
 
     const stats = {
       totalPatients: patients.length,
       activePatients,
       sessionsThisMonth: sessionsThisMonth.length,
-      sessionsTotal: sessions.filter((s: any) => s.status === 'completed').length,
+      sessionsTotal: sessions.filter((s: SessionRecord) => s.status === 'completed').length,
       earningsThisMonth,
       earningsTotal,
       rating: provider.rating || 0,
@@ -268,7 +346,7 @@ export async function getProviderStats(providerId: string): Promise<Response> {
     });
   } catch (error) {
     console.error('Get stats error:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -324,7 +402,7 @@ export async function scheduleSession(req: Request, providerId: string): Promise
     });
   } catch (error) {
     console.error('Schedule session error:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -339,8 +417,8 @@ export async function updateSessionStatus(req: Request, sessionId: string): Prom
     const { status, notes } = await req.json();
 
     // Find the session
-    const allSessions = await kv.getByPrefix('session:');
-    const session = allSessions.find((s: any) => s.id === sessionId);
+    const allSessions = await kv.getByPrefix<SessionRecord>('session:');
+    const session = allSessions.find((s: SessionRecord) => s.id === sessionId);
 
     if (!session) {
       return new Response(JSON.stringify({ error: 'Session not found' }), {
@@ -361,7 +439,7 @@ export async function updateSessionStatus(req: Request, sessionId: string): Prom
     });
   } catch (error) {
     console.error('Update session error:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -376,8 +454,8 @@ export async function submitSessionNotes(req: Request, sessionId: string): Promi
     const notes = await req.json();
 
     // Find the session
-    const allSessions = await kv.getByPrefix('session:');
-    const session = allSessions.find((s: any) => s.id === sessionId);
+    const allSessions = await kv.getByPrefix<SessionRecord>('session:');
+    const session = allSessions.find((s: SessionRecord) => s.id === sessionId);
 
     if (!session) {
       return new Response(JSON.stringify({ error: 'Session not found' }), {
@@ -407,7 +485,7 @@ export async function submitSessionNotes(req: Request, sessionId: string): Promi
     });
   } catch (error) {
     console.error('Submit notes error:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -439,7 +517,7 @@ export async function requestProfileAccess(req: Request, providerId: string): Pr
     });
   } catch (error) {
     console.error('Request access error:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -475,13 +553,13 @@ export async function getAvailableSlots(req: Request, providerId: string): Promi
     const dayAvailability = provider.availability?.[dayOfWeek] || [];
 
     // Get existing sessions for the date
-    const allSessions = await kv.getByPrefix(`session:${providerId}:`);
+    const allSessions = await kv.getByPrefix<SessionRecord>(`session:${providerId}:`);
     const dayStart = new Date(date);
     dayStart.setHours(0, 0, 0, 0);
     const dayEnd = new Date(date);
     dayEnd.setHours(23, 59, 59, 999);
 
-    const bookedSessions = allSessions.filter((s: any) => {
+    const bookedSessions = allSessions.filter((s: SessionRecord) => {
       const sessionDate = new Date(s.scheduledAt);
       return sessionDate >= dayStart && sessionDate <= dayEnd && s.status !== 'cancelled';
     });
@@ -503,7 +581,7 @@ export async function getAvailableSlots(req: Request, providerId: string): Promi
         const slotEndDateTime = new Date(slotDateTime.getTime() + duration * 60000);
 
         // Check if slot conflicts with existing sessions
-        const hasConflict = bookedSessions.some((s: any) => {
+        const hasConflict = bookedSessions.some((s: SessionRecord) => {
           const sessionStart = new Date(s.scheduledAt);
           const sessionEnd = new Date(sessionStart.getTime() + s.duration * 60000);
           return !(slotEndDateTime <= sessionStart || slotDateTime >= sessionEnd);
@@ -528,7 +606,7 @@ export async function getAvailableSlots(req: Request, providerId: string): Promi
     });
   } catch (error) {
     console.error('Get slots error:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -571,7 +649,7 @@ export async function verifyProvider(req: Request, providerId: string): Promise<
     });
   } catch (error) {
     console.error('Verify provider error:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });

@@ -40,6 +40,9 @@ export function DocumentVaultPage({ userTier, onNavigate }: DocumentVaultPagePro
       id: 'vault-1',
       childId: 'child-1',
       title: 'IEP Meeting Notes - Spring 2024',
+      type: 'IEP',
+      source: 'Uploaded',
+      visibility: 'Private',
       category: ['School', 'IEP'],
       tags: ['speech', 'occupational therapy', 'goals'],
       date: '2024-03-15',
@@ -61,6 +64,9 @@ export function DocumentVaultPage({ userTier, onNavigate }: DocumentVaultPagePro
       id: 'vault-2',
       childId: 'child-1',
       title: 'Behavioral Assessment Report',
+      type: 'Evaluation',
+      source: 'Uploaded',
+      visibility: 'Private',
       category: ['Evaluation', 'Behavioral'],
       tags: ['autism', 'sensory', 'recommendations'],
       date: '2024-02-28',
@@ -250,7 +256,7 @@ export function DocumentVaultPage({ userTier, onNavigate }: DocumentVaultPagePro
                   <CompassIcon className="w-4 h-4" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-medium text-slate-900 dark:text-slate-100">Ask Aminy</h3>
+                  <h3 className="text-sm font-medium text-slate-900 dark:text-slate-100">Aminy</h3>
                   <p className="text-xs text-slate-500">Search your records</p>
                 </div>
               </div>
@@ -288,7 +294,7 @@ export function DocumentVaultPage({ userTier, onNavigate }: DocumentVaultPagePro
               <div className="mt-4 sm:mt-6">
                 <TalkToAminyEnhanced
                   vaultRecords={vaultRecords}
-                  userTier={userTier}
+                  userTier={userTier ?? null}
                   canSendMessage={true}
                   onRecordOpen={handleRecordOpen}
                 />

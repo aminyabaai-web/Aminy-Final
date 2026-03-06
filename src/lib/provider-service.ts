@@ -107,35 +107,35 @@ const getAccessToken = (): string => {
 };
 
 // Helper to convert DB row to ProviderProfile
-function dbRowToProvider(row: any): ProviderProfile {
+function dbRowToProvider(row: Record<string, unknown>): ProviderProfile {
   return {
-    id: row.id,
-    userId: row.user_id,
-    name: `${row.first_name} ${row.last_name}`.trim(),
-    credentials: row.title,
-    type: row.provider_type,
-    email: row.email,
-    phone: row.phone,
-    photo: row.avatar_url,
-    bio: row.bio,
-    specialties: row.specialties || [],
-    languages: row.languages || ['English'],
-    insurance: row.insurance_accepted || [],
+    id: row.id as string,
+    userId: row.user_id as string,
+    name: `${row.first_name || ''} ${row.last_name || ''}`.trim(),
+    credentials: row.title as string,
+    type: row.provider_type as ProviderProfile['type'],
+    email: row.email as string,
+    phone: row.phone as string | undefined,
+    photo: row.avatar_url as string | undefined,
+    bio: row.bio as string | undefined,
+    specialties: (row.specialties || []) as string[],
+    languages: (row.languages || ['English']) as string[],
+    insurance: (row.insurance_accepted || []) as string[],
     location: {
-      city: row.location_city || '',
-      state: row.location_state || '',
-      zipCode: row.location_zip_code || '',
-      telehealth: row.offers_telehealth,
-      inPerson: row.offers_in_person,
+      city: (row.location_city as string) || '',
+      state: (row.location_state as string) || '',
+      zipCode: (row.location_zip_code as string) || '',
+      telehealth: row.offers_telehealth as boolean,
+      inPerson: row.offers_in_person as boolean,
     },
-    availability: row.availability || {},
-    hourlyRate: row.hourly_rate ? row.hourly_rate / 100 : 0, // Convert cents to dollars
-    rating: parseFloat(row.rating) || 5.0,
-    reviewCount: row.review_count || 0,
-    verified: row.verified || false,
-    acceptingNewPatients: row.accepts_new_patients,
-    createdAt: row.created_at,
-    updatedAt: row.updated_at,
+    availability: (row.availability || {}) as ProviderProfile['availability'],
+    hourlyRate: row.hourly_rate ? (row.hourly_rate as number) / 100 : 0,
+    rating: parseFloat(row.rating as string) || 5.0,
+    reviewCount: (row.review_count as number) || 0,
+    verified: (row.verified as boolean) || false,
+    acceptingNewPatients: row.accepts_new_patients as boolean,
+    createdAt: row.created_at as string,
+    updatedAt: row.updated_at as string,
   };
 }
 

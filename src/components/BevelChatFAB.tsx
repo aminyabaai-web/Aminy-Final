@@ -66,7 +66,7 @@ export function BevelChatFAB({
               style={{
                 boxShadow: '0 4px 12px rgba(120, 120, 120, 0.15)'
               }}
-              aria-label="Ask Aminy"
+              aria-label="Aminy"
             >
               <MessageCircle className="w-6 h-6" strokeWidth={2} />
 
@@ -91,7 +91,7 @@ export function BevelChatFAB({
                   boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)'
                 }}
               >
-                Ask Aminy 💬
+                Aminy 💬
                 <div className="absolute top-full right-4 -mt-1">
                   <div className="w-2 h-2 bg-slate-900 transform rotate-45"></div>
                 </div>

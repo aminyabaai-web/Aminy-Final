@@ -12,7 +12,7 @@ interface BenefitsStatusPanelProps {
   statuses: BenefitsStatus[];
 }
 
-export function BenefitsStatusPanel({ statuses }: BenefitsStatusPanelProps) {
+export function BenefitsStatusPanel({ statuses = [] }: BenefitsStatusPanelProps) {
   const statusConfig = {
     submitted: { icon: Clock, color: 'blue', label: 'Submitted' },
     review: { icon: Clock, color: 'yellow', label: 'In review' },

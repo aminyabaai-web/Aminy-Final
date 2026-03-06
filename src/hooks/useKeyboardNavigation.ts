@@ -102,7 +102,7 @@ export function useGlobalKeyboardShortcuts(
           case 'a':
             event.preventDefault();
             onNavigate('ask-aminy');
-            announce('Navigating to Ask Aminy');
+            announce('Navigating to Aminy');
             break;
           case 'm':
             event.preventDefault();

@@ -27,7 +27,7 @@ class ConnectorHub {
   }
 
   // Publish events
-  publish(eventName: string, payload: any, source: string = 'unknown'): void {
+  publish(eventName: string, payload: unknown, source: string = 'unknown'): void {
     const event: ConnectorEvent = {
       type: eventName,
       payload,
@@ -167,7 +167,7 @@ export const connectorActions = {
   updateInsight: (insightData: { 
     childId: string; 
     confidence: number; 
-    flags: any[]; 
+    flags: string[];
     recommendations: string[] 
   }) => {
     connectorHub.publish(CONNECTOR_EVENTS.INSIGHT_UPDATED, insightData, 'insight-navigator');
@@ -178,24 +178,35 @@ export const connectorActions = {
     childId: string; 
     eligible: boolean; 
     status: string; 
-    benefits?: any 
+    benefits?: Record<string, unknown>
   }) => {
     connectorHub.publish(CONNECTOR_EVENTS.COVERAGE_UPDATED, coverageData, 'coverage-coach');
   },
 
   // Report actions
-  exportReport: (reportData: { 
-    childId: string; 
-    type: string; 
-    format: string; 
-    period: any 
+  exportReport: (reportData: {
+    childId: string;
+    type: string;
+    format: string;
+    period: { start: string; end: string }
   }) => {
     connectorHub.publish(CONNECTOR_EVENTS.REPORT_EXPORTED, reportData, 'reports-center');
+  },
+
+  // Outcome logging
+  logOutcome: (outcomeData: {
+    childId: string;
+    type: string;
+    subtype?: string;
+    value?: number;
+    metadata?: Record<string, unknown>;
+  }) => {
+    connectorHub.publish('outcome.logged', outcomeData, 'sensory-tools');
   }
 };
 
 // Helper for creating mock events during development
-export const createMockEvent = (eventName: string, payload: any) => {
+export const createMockEvent = (eventName: string, payload: unknown) => {
   connectorHub.publish(eventName, payload, 'mock-data');
 };
 

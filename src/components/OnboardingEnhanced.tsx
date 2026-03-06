@@ -1587,7 +1587,7 @@ function CompletionStep({
 // ============================================
 // 🎬 REPLACE THIS URL WITH YOUR ACTUAL VIDEO
 // ============================================
-const DEMO_VIDEO_URL = ''; // e.g., 'https://www.youtube.com/embed/YOUR_VIDEO_ID'
+const DEMO_VIDEO_URL: string = ''; // e.g., 'https://www.youtube.com/embed/YOUR_VIDEO_ID'
 
 /**
  * DEMO VIDEO PROMPT - Full version in: src/assets/VEO3_DEMO_VIDEO_PROMPT.md

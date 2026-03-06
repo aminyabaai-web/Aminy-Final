@@ -5,7 +5,7 @@
  * Requires STRIPE_SECRET_KEY in Supabase secrets
  */
 
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { createClient, type SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import {
   logWebhookReceived,
   logPaymentSucceededServer,
@@ -122,7 +122,7 @@ const emailTemplates = {
             <p><span class="amount">${amount}</span> on ${date}</p>
             <p>Your subscription is active and you have full access to all your plan features.</p>
             <p>If you have any questions, just reply to this email - we're here to help.</p>
-            <a href="https://app.aminy.app" class="button">Open Aminy</a>
+            <a href="https://app.aminy.ai" class="button">Open Aminy</a>
           </div>
           <div class="footer">
             <p>With care,<br>The Aminy Team</p>
@@ -166,7 +166,7 @@ const emailTemplates = {
               <li>Your bank may have declined the charge</li>
             </ul>
             <p>Please update your payment method to keep your subscription active:</p>
-            <a href="https://app.aminy.app/settings/subscription" class="button">Update Payment Method</a>
+            <a href="https://app.aminy.ai/settings/subscription" class="button">Update Payment Method</a>
             <p style="margin-top: 20px;">If you need help, just reply to this email.</p>
           </div>
           <div class="footer">
@@ -176,7 +176,7 @@ const emailTemplates = {
       </body>
       </html>
     `,
-    text: `Hi ${name}, We had trouble processing your payment of ${amount}. Please update your payment method at https://app.aminy.app/settings/subscription - The Aminy Team`,
+    text: `Hi ${name}, We had trouble processing your payment of ${amount}. Please update your payment method at https://app.aminy.ai/settings/subscription - The Aminy Team`,
   }),
 
   subscriptionCanceled: (name: string, endDate: string) => ({
@@ -210,7 +210,7 @@ const emailTemplates = {
             </div>
             <p>If you ever want to come back, your data will be waiting for you. Just log in and resubscribe.</p>
             <p>Changed your mind? You can resume your subscription anytime before ${endDate}:</p>
-            <a href="https://app.aminy.app/settings/subscription" class="button">Resume Subscription</a>
+            <a href="https://app.aminy.ai/settings/subscription" class="button">Resume Subscription</a>
             <p style="margin-top: 20px;">We'd love to hear what we could do better. Just reply to this email with any feedback.</p>
           </div>
           <div class="footer">
@@ -220,7 +220,7 @@ const emailTemplates = {
       </body>
       </html>
     `,
-    text: `Hi ${name}, We received your cancellation request. Your access continues until ${endDate}. Changed your mind? Resume at https://app.aminy.app/settings/subscription - The Aminy Team`,
+    text: `Hi ${name}, We received your cancellation request. Your access continues until ${endDate}. Changed your mind? Resume at https://app.aminy.ai/settings/subscription - The Aminy Team`,
   }),
 
   trialEnding: (name: string, daysLeft: number) => ({
@@ -260,7 +260,7 @@ const emailTemplates = {
               <div class="feature"><span class="check">✓</span> Aminy Jr activities for your child</div>
             </div>
             <p style="text-align: center;">
-              <a href="https://app.aminy.app/settings/subscription" class="button">Keep My Access</a>
+              <a href="https://app.aminy.ai/settings/subscription" class="button">Keep My Access</a>
             </p>
           </div>
           <div class="footer">
@@ -270,7 +270,7 @@ const emailTemplates = {
       </body>
       </html>
     `,
-    text: `Hi ${name}, Your Aminy trial ends in ${daysLeft} day${daysLeft === 1 ? '' : 's'}. Keep your access at https://app.aminy.app/settings/subscription - The Aminy Team`,
+    text: `Hi ${name}, Your Aminy trial ends in ${daysLeft} day${daysLeft === 1 ? '' : 's'}. Keep your access at https://app.aminy.ai/settings/subscription - The Aminy Team`,
   }),
 };
 
@@ -278,7 +278,7 @@ const emailTemplates = {
 async function stripeRequest(
   endpoint: string,
   method: string = 'GET',
-  body?: Record<string, any>
+  body?: Record<string, string>
 ) {
   const url = `https://api.stripe.com/v1${endpoint}`;
 
@@ -293,7 +293,7 @@ async function stripeRequest(
   };
 
   if (body && method !== 'GET') {
-    options.body = new URLSearchParams(body as Record<string, string>).toString();
+    options.body = new URLSearchParams(body).toString();
   }
 
   const response = await fetch(url, options);
@@ -330,7 +330,7 @@ const PRICE_IDS: Record<string, string> = {
  * - First-purchase-only restrictions
  * - Context restrictions (subscription, telehealth, marketplace)
  */
-export async function validatePromoCode(req: Request, supabase?: any): Promise<Response> {
+export async function validatePromoCode(req: Request, supabase?: SupabaseClient): Promise<Response> {
   try {
     const { code, subtotal, userId, context = 'telehealth' } = await req.json();
 
@@ -468,7 +468,7 @@ export async function validatePromoCode(req: Request, supabase?: any): Promise<R
 export async function calculatePromoDiscount(
   code: string,
   subtotal: number,
-  supabase?: any
+  supabase?: SupabaseClient
 ): Promise<number> {
   const sanitizedCode = code.toUpperCase().replace(/[^A-Z0-9]/g, '');
 
@@ -507,7 +507,7 @@ export async function calculatePromoDiscount(
  * Record a promo code redemption (for tracking and abuse prevention)
  */
 export async function recordPromoRedemption(
-  supabase: any,
+  supabase: SupabaseClient,
   userId: string,
   code: string,
   context: 'subscription' | 'telehealth' | 'marketplace',
@@ -758,7 +758,7 @@ export async function resumeSubscription(req: Request): Promise<Response> {
     }
 
     const subscriptions = await stripeRequest(`/subscriptions?customer=${customerId}`);
-    const cancelledSub = subscriptions.data?.find((s: any) => s.cancel_at_period_end);
+    const cancelledSub = subscriptions.data?.find((s: Record<string, unknown>) => s.cancel_at_period_end);
 
     if (!cancelledSub) {
       return new Response(JSON.stringify({ error: 'No cancelled subscription found' }), {

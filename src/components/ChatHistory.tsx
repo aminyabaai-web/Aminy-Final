@@ -64,7 +64,7 @@ export function ChatHistory({
 
               // Extract first user message as title/preview
               const messages = parsed.messages || [];
-              const firstUserMessage = messages.find((m: any) => m.role === 'user');
+              const firstUserMessage = messages.find((m: { role: string; content?: string }) => m.role === 'user');
               const lastMessage = messages[messages.length - 1];
 
               allConversations.push({
