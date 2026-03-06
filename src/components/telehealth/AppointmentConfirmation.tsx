@@ -66,6 +66,7 @@ interface AppointmentConfirmationProps {
   intake: GetCareIntake;
   onBack: () => void;
   onComplete: (appointmentId: string) => void;
+  onJoinVideo?: () => void;
 }
 
 type FlowStep = 'confirm' | 'payment' | 'success';

@@ -19,6 +19,7 @@ interface SkeletonProps {
   height?: string | number;
   rounded?: 'none' | 'sm' | 'md' | 'lg' | 'xl' | 'full';
   animate?: boolean;
+  style?: React.CSSProperties;
 }
 
 export function Skeleton({
@@ -27,6 +28,7 @@ export function Skeleton({
   height,
   rounded = 'md',
   animate = true,
+  style: styleProp,
 }: SkeletonProps) {
   const roundedClasses = {
     none: 'rounded-none',
@@ -37,7 +39,7 @@ export function Skeleton({
     full: 'rounded-full',
   };
 
-  const style: React.CSSProperties = {};
+  const style: React.CSSProperties = { ...styleProp };
   if (width) style.width = typeof width === 'number' ? `${width}px` : width;
   if (height) style.height = typeof height === 'number' ? `${height}px` : height;
 

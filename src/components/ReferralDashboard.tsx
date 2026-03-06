@@ -481,14 +481,14 @@ export function ReferralDashboard({
                       className={`w-8 h-8 rounded-full flex items-center justify-center ${
                         referral.status === 'rewarded'
                           ? 'bg-green-100'
-                          : referral.status === 'qualified'
+                          : referral.status === 'converted'
                           ? 'bg-blue-100'
                           : 'bg-gray-200'
                       }`}
                     >
                       {referral.status === 'rewarded' ? (
                         <Gift className="w-4 h-4 text-green-600" />
-                      ) : referral.status === 'qualified' ? (
+                      ) : referral.status === 'converted' ? (
                         <CheckCircle className="w-4 h-4 text-blue-600" />
                       ) : (
                         <Clock className="w-4 h-4 text-gray-500" />
@@ -509,7 +509,7 @@ export function ReferralDashboard({
                       <Badge className="bg-green-100 text-green-700">
                         +1 month earned
                       </Badge>
-                    ) : referral.status === 'qualified' ? (
+                    ) : referral.status === 'converted' ? (
                       <Badge className="bg-blue-100 text-blue-700">
                         Qualified
                       </Badge>

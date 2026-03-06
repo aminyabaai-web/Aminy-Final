@@ -89,13 +89,13 @@ describe('Referral Tiers', () => {
 });
 
 describe('Referral Qualification', () => {
-  it('should return 0 days for already qualified referral', () => {
+  it('should return 0 days for already converted referral', () => {
     const referral: Referral = {
       id: 'ref-1',
       referrerUserId: 'user-1',
       referredUserId: 'user-2',
       referralCode: 'AMINY-TEST-123',
-      status: 'qualified',
+      status: 'converted',
       createdAt: new Date().toISOString(),
     };
 
@@ -173,11 +173,11 @@ describe('Referral Summary', () => {
     expect(summary.referralCode).toBe('AMINY-TEST-123');
   });
 
-  it('should count pending and qualified referrals separately', () => {
+  it('should count pending and converted referrals separately', () => {
     const referrals: Referral[] = [
       { id: '1', referrerUserId: 'u1', referredUserId: 'r1', referralCode: 'C', status: 'pending', createdAt: new Date().toISOString() },
       { id: '2', referrerUserId: 'u1', referredUserId: 'r2', referralCode: 'C', status: 'pending', createdAt: new Date().toISOString() },
-      { id: '3', referrerUserId: 'u1', referredUserId: 'r3', referralCode: 'C', status: 'qualified', createdAt: new Date().toISOString() },
+      { id: '3', referrerUserId: 'u1', referredUserId: 'r3', referralCode: 'C', status: 'converted', createdAt: new Date().toISOString() },
       { id: '4', referrerUserId: 'u1', referredUserId: 'r4', referralCode: 'C', status: 'rewarded', createdAt: new Date().toISOString() },
     ];
 
@@ -185,16 +185,16 @@ describe('Referral Summary', () => {
 
     expect(summary.totalReferrals).toBe(4);
     expect(summary.pendingReferrals).toBe(2);
-    expect(summary.qualifiedReferrals).toBe(2); // qualified + rewarded
+    expect(summary.qualifiedReferrals).toBe(2); // converted + rewarded
   });
 
-  it('should determine correct tier based on qualified referrals', () => {
+  it('should determine correct tier based on converted referrals', () => {
     const qualifiedReferrals: Referral[] = Array(5).fill(null).map((_, i) => ({
       id: `ref-${i}`,
       referrerUserId: 'u1',
       referredUserId: `r${i}`,
       referralCode: 'CODE',
-      status: 'qualified' as const,
+      status: 'converted' as const,
       createdAt: new Date().toISOString(),
     }));
 

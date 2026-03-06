@@ -29,6 +29,7 @@ import { BookVisitScreen } from './BookVisit';
 import { AppointmentConfirmationScreen } from './AppointmentConfirmation';
 import { CarePlanTabScreen } from './CarePlanTab';
 import { VisitSummaryDetailScreen } from './VisitSummaryDetail';
+import { VideoCall } from './VideoCallRoom';
 
 // Flow steps
 type TelehealthStep =
@@ -39,7 +40,8 @@ type TelehealthStep =
   | 'book-visit'
   | 'confirm'
   | 'care-plan'
-  | 'summary-detail';
+  | 'summary-detail'
+  | 'video-call';
 
 type BookingPath = 'quick-consult' | 'start-services' | null;
 
@@ -180,6 +182,11 @@ export function TelehealthFlow({
     setBooking(prev => ({ ...prev, appointmentId }));
     trackEvent('appointment_confirmed', { appointmentId });
     setCurrentStep('care-plan');
+  };
+
+  const handleJoinVideoCall = () => {
+    trackEvent('joined_video_call', { appointmentId: booking.appointmentId });
+    setCurrentStep('video-call');
   };
 
   const handleBookFollowUp = () => {
@@ -448,6 +455,7 @@ export function TelehealthFlow({
           intake={booking.intake}
           onBack={handleBack}
           onComplete={handleAppointmentComplete}
+          onJoinVideo={handleJoinVideoCall}
         />
       );
 
@@ -495,6 +503,25 @@ export function TelehealthFlow({
           onBookFollowUp={handleBookFollowUp}
           onShare={() => trackEvent('visit_summary_shared', { summaryId: viewingSummaryId })}
           onExport={() => trackEvent('visit_summary_exported', { summaryId: viewingSummaryId })}
+        />
+      );
+
+    case 'video-call':
+      return (
+        <VideoCall
+          sessionId={booking.appointmentId || `session-${Date.now()}`}
+          userId="user-1"
+          userName="Parent"
+          providerName={selectedProvider ? `${selectedProvider.firstName} ${selectedProvider.lastName}` : 'Provider'}
+          sessionType={selectedVisitType === 'consult' ? '25min' : '50min'}
+          onCallEnd={() => {
+            trackEvent('video_call_ended', { appointmentId: booking.appointmentId });
+            setCurrentStep('summary-detail');
+          }}
+          onError={(err) => {
+            toast.error('Video Call Error', { description: err });
+            setCurrentStep('care-plan');
+          }}
         />
       );
 
