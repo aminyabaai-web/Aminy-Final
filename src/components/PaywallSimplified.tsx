@@ -1,11 +1,11 @@
 /**
  * PaywallSimplified - Premium, Clean Pricing
  *
- * Simplified tier structure:
+ * Simplified tier structure (prices from tier-utils.ts):
  * - Free: Basic AI access (5/day), limited features
- * - Core ($14.99/mo): Unlimited AI, full features, 10% off sessions
- * - Pro ($29.99/mo): Everything + 20% off sessions, custom plans, priority support
- * - Pro+ / Family Plan ($49.99/mo): Everything + 30% off, unlimited children, advanced analytics
+ * - Core: Unlimited AI, full features, 10% off sessions
+ * - Pro: Everything + 20% off sessions, custom plans, priority support
+ * - Pro+ / Family Plan: Everything + 30% off, unlimited children, advanced analytics
  *
  * Telehealth session pricing (from pricing.ts):
  * - BCBA Consult (60 min): $149 base
@@ -36,7 +36,7 @@ import {
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { toast } from 'sonner';
-import { TierType } from '../lib/tier-utils';
+import { TierType, tierPricing } from '../lib/tier-utils';
 import { createCheckoutSession, isStripeConfigured } from '../lib/stripe-service';
 import { supabase } from '../utils/supabase/client';
 import { billingEngine } from '../lib/billing-engine';
@@ -111,13 +111,13 @@ export function PaywallSimplified({
     return () => clearInterval(interval);
   }, []);
 
-  // Pricing (updated: Core $24.99, Pro $49.99, Pro+ $79.99)
-  const coreMonthly = 24.99;
-  const coreYearly = 239; // ~$19.92/mo — 20% savings
-  const proMonthly = 49.99;
-  const proYearly = 479; // ~$39.92/mo — 20% savings
-  const proplusMonthly = 79.99;
-  const proplusYearly = 767; // ~$63.92/mo — 20% savings
+  // Pricing — derived from tier-utils.ts (single source of truth)
+  const coreMonthly = tierPricing.core.monthly;
+  const coreYearly = tierPricing.core.yearly;
+  const proMonthly = tierPricing.pro.monthly;
+  const proYearly = tierPricing.pro.yearly;
+  const proplusMonthly = tierPricing.proplus.monthly;
+  const proplusYearly = tierPricing.proplus.yearly;
 
   const corePrice = billingPeriod === 'monthly' ? coreMonthly : coreYearly;
   const corePerMonth = billingPeriod === 'yearly' ? (coreYearly / 12).toFixed(2) : coreMonthly.toFixed(2);
@@ -507,7 +507,7 @@ export function PaywallSimplified({
           >
             Start 7-day free trial of Core — no credit card required
           </button>
-          <p className="text-xs text-gray-400 mt-1">Full Core access for 7 days, then $24.99/mo</p>
+          <p className="text-xs text-gray-400 mt-1">Full Core access for 7 days, then ${tierPricing.core.monthly}/mo</p>
         </div>
 
         {/* Promo Code */}
@@ -569,9 +569,9 @@ export function PaywallSimplified({
                     <tr className="border-b border-gray-200">
                       <th className="text-left py-2 px-2 text-gray-600 font-medium">Feature</th>
                       <th className="text-center py-2 px-2 text-gray-600 font-medium">Free</th>
-                      <th className="text-center py-2 px-2 text-teal-600 font-bold">Core<br /><span className="text-xs font-normal">$14.99/mo</span></th>
-                      <th className="text-center py-2 px-2 text-violet-600 font-bold">Pro<br /><span className="text-xs font-normal">$29.99/mo</span></th>
-                      <th className="text-center py-2 px-2 text-violet-600 font-bold">Family<br /><span className="text-xs font-normal">$49.99/mo</span></th>
+                      <th className="text-center py-2 px-2 text-teal-600 font-bold">Core<br /><span className="text-xs font-normal">${tierPricing.core.monthly}/mo</span></th>
+                      <th className="text-center py-2 px-2 text-violet-600 font-bold">Pro<br /><span className="text-xs font-normal">${tierPricing.pro.monthly}/mo</span></th>
+                      <th className="text-center py-2 px-2 text-violet-600 font-bold">Family<br /><span className="text-xs font-normal">${tierPricing.proplus.monthly}/mo</span></th>
                     </tr>
                   </thead>
                   <tbody>

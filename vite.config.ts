@@ -75,14 +75,45 @@ export default defineConfig(({ mode }) => ({
         // Google Fonts are cached natively by browsers with long cache headers
         navigateFallbackDenylist: [/^https:\/\/fonts\./],
         runtimeCaching: [
+          // Crisis resources — MUST work offline (CacheFirst with long expiry)
+          {
+            urlPattern: /\/crisis.*/,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'crisis-resources',
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 86400 * 30, // 30 days
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
+          // Supabase API calls — NetworkFirst with fallback to cache
           {
             urlPattern: /^https:\/\/.*\.supabase\.co\/.*/i,
             handler: 'NetworkFirst',
             options: {
               cacheName: 'supabase-api-cache',
               expiration: {
-                maxEntries: 50,
-                maxAgeSeconds: 60 * 60, // 1 hour
+                maxEntries: 100,
+                maxAgeSeconds: 86400, // 24 hours
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
+          // Internal API calls — NetworkFirst
+          {
+            urlPattern: /\/api\/.*/,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'api-cache',
+              expiration: {
+                maxEntries: 100,
+                maxAgeSeconds: 86400, // 24 hours
               },
               cacheableResponse: {
                 statuses: [0, 200],

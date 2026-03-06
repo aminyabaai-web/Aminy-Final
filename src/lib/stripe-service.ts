@@ -11,6 +11,7 @@
  */
 
 import { projectId, publicAnonKey } from '../utils/supabase/info';
+import { tierPricing, type TierType } from './tier-utils';
 
 // Edge function base URL for API calls
 const EDGE_FUNCTION_BASE = `https://${projectId}.supabase.co/functions/v1/make-server-8a022548`;
@@ -50,17 +51,17 @@ export const isStripeConfigured = (): boolean => {
   );
 };
 
-// Tier pricing (display only - actual prices in Stripe)
-// Must match tier-utils.ts pricing
+// Tier pricing — re-exported from tier-utils.ts (single source of truth)
+// Keys: monthly / yearly (tier-utils uses 'yearly', Stripe uses 'annual')
 export const TIER_PRICING = {
-  free: { monthly: 0, annual: 0 },
-  starter: { monthly: 14.99, annual: 129 },  // Legacy: same as Core
-  core: { monthly: 14.99, annual: 129 },    // ~28% savings annually
-  pro: { monthly: 29.99, annual: 279 },     // ~22% savings annually
-  proplus: { monthly: 49.99, annual: 479 }, // ~20% savings annually
+  free: { monthly: tierPricing.free.monthly, annual: tierPricing.free.yearly },
+  starter: { monthly: tierPricing.starter.monthly, annual: tierPricing.starter.yearly },
+  core: { monthly: tierPricing.core.monthly, annual: tierPricing.core.yearly },
+  pro: { monthly: tierPricing.pro.monthly, annual: tierPricing.pro.yearly },
+  proplus: { monthly: tierPricing.proplus.monthly, annual: tierPricing.proplus.yearly },
 } as const;
 
-export type TierType = 'free' | 'starter' | 'core' | 'pro' | 'proplus';
+export type { TierType };
 export type BillingInterval = 'monthly' | 'annual';
 
 interface CreateCheckoutParams {

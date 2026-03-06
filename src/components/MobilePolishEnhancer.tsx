@@ -4,13 +4,11 @@ import { enableAutoHaptics } from '../lib/haptics';
 interface MobilePolishEnhancerProps {
   children: React.ReactNode;
   enableHaptics?: boolean;
-  registerServiceWorker?: boolean;
 }
 
-export const MobilePolishEnhancer: React.FC<MobilePolishEnhancerProps> = ({ 
+export const MobilePolishEnhancer: React.FC<MobilePolishEnhancerProps> = ({
   children,
   enableHaptics: enableHapticsOption = true,
-  registerServiceWorker: registerSW = true
 }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);

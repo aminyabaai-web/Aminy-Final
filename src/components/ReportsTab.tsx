@@ -37,7 +37,7 @@ import {
   Shield,
   Infinity
 } from 'lucide-react';
-import { TierType, hasFeature, getTierDisplayName, compareTiers } from '../lib/tier-utils';
+import { TierType, hasFeature, getTierDisplayName, compareTiers, tierPricing } from '../lib/tier-utils';
 
 // Mock date functions for demo purposes
 const format = (date: Date, formatStr: string) => date.toLocaleDateString();
@@ -804,7 +804,7 @@ export function ReportsTab({ userData, userTier, connectorData, onPaywallTrigger
                       View Upgrade Options
                     </Button>
                     <Badge variant="outline" className="text-amber-700 border-amber-300">
-                      {getTierDisplayName('core')} from $14.99/mo
+                      {getTierDisplayName('core')} from ${tierPricing.core.monthly}/mo
                     </Badge>
                   </div>
                 </div>

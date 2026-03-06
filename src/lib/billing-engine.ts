@@ -12,6 +12,7 @@
 
 import { supabase } from '../utils/supabase/client';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
+import { tierPricing, tierDisplayNames, getTierFeatureDescriptions, type TierType } from './tier-utils';
 
 // ============================================================================
 // Types
@@ -105,13 +106,15 @@ export interface CheckoutResult {
 // Pricing Configuration
 // ============================================================================
 
+// Pricing derived from tier-utils.ts (single source of truth)
+// Stripe price IDs come from environment variables — never hardcode placeholder IDs
 export const PRICING_TIERS: PricingTier[] = [
   {
     id: 'free',
     name: 'Free',
     description: 'Try Aminy with basic features',
-    monthlyPrice: 0,
-    yearlyPrice: 0,
+    monthlyPrice: tierPricing.free.monthly,
+    yearlyPrice: tierPricing.free.yearly,
     yearlyMonthlyEquivalent: 0,
     features: [
       '5 AI messages per day',
@@ -134,9 +137,9 @@ export const PRICING_TIERS: PricingTier[] = [
     id: 'core',
     name: 'Core',
     description: 'Everything you need for daily support',
-    monthlyPrice: 24.99,
-    yearlyPrice: 199,
-    yearlyMonthlyEquivalent: 16.58,
+    monthlyPrice: tierPricing.core.monthly,
+    yearlyPrice: tierPricing.core.yearly,
+    yearlyMonthlyEquivalent: +(tierPricing.core.yearly / 12).toFixed(2),
     features: [
       'Unlimited AI conversations',
       'Up to 2 children',
@@ -154,8 +157,8 @@ export const PRICING_TIERS: PricingTier[] = [
       marketplaceDiscount: 10,
     },
     stripePriceIds: {
-      monthly: 'price_core_monthly',
-      yearly: 'price_core_yearly',
+      monthly: import.meta.env.VITE_PRICE_CORE_MONTHLY || '',
+      yearly: import.meta.env.VITE_PRICE_CORE_ANNUAL || '',
     },
     isPopular: true,
     badge: 'Most Popular',
@@ -164,9 +167,9 @@ export const PRICING_TIERS: PricingTier[] = [
     id: 'pro',
     name: 'Pro',
     description: 'Advanced features for serious progress',
-    monthlyPrice: 49.99,
-    yearlyPrice: 399,
-    yearlyMonthlyEquivalent: 33.25,
+    monthlyPrice: tierPricing.pro.monthly,
+    yearlyPrice: tierPricing.pro.yearly,
+    yearlyMonthlyEquivalent: +(tierPricing.pro.yearly / 12).toFixed(2),
     features: [
       'Everything in Core',
       'Up to 3 children',
@@ -184,17 +187,17 @@ export const PRICING_TIERS: PricingTier[] = [
       marketplaceDiscount: 20,
     },
     stripePriceIds: {
-      monthly: 'price_pro_monthly',
-      yearly: 'price_pro_yearly',
+      monthly: import.meta.env.VITE_PRICE_PRO_MONTHLY || '',
+      yearly: import.meta.env.VITE_PRICE_PRO_ANNUAL || '',
     },
   },
   {
     id: 'pro_plus',
     name: 'Pro+ Family',
     description: 'Complete family support system',
-    monthlyPrice: 79.99,
-    yearlyPrice: 649,
-    yearlyMonthlyEquivalent: 54.08,
+    monthlyPrice: tierPricing.proplus.monthly,
+    yearlyPrice: tierPricing.proplus.yearly,
+    yearlyMonthlyEquivalent: +(tierPricing.proplus.yearly / 12).toFixed(2),
     features: [
       'Everything in Pro',
       'Unlimited children',
@@ -212,8 +215,8 @@ export const PRICING_TIERS: PricingTier[] = [
       marketplaceDiscount: 30,
     },
     stripePriceIds: {
-      monthly: 'price_proplus_monthly',
-      yearly: 'price_proplus_yearly',
+      monthly: import.meta.env.VITE_PRICE_PROPLUS_MONTHLY || '',
+      yearly: import.meta.env.VITE_PRICE_PROPLUS_ANNUAL || '',
     },
     badge: 'Best Value',
   },

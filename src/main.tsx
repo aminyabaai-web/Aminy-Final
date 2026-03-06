@@ -8,10 +8,8 @@ import { initSentry } from "./lib/sentry.ts";
 import "./i18n";
 // Mobile safe area support
 import { injectSafeAreaStyles } from "./lib/mobile-safe-areas.ts";
-// Service worker for offline support
-import { registerServiceWorker } from "./lib/service-worker.ts";
-// Production-safe logger
-import { logger } from "./lib/logger.ts";
+// NOTE: Service worker registration is handled automatically by VitePWA
+// (vite-plugin-pwa) with registerType: 'autoUpdate'. No manual registration needed.
 
 interface WindowWithGtag extends Window {
   gtag?: (...args: [string, ...unknown[]]) => void;
@@ -89,14 +87,5 @@ injectSafeAreaStyles();
 
 createRoot(document.getElementById("root")!).render(<App />);
 
-// Register service worker for offline support & push notifications
-// Only register in production to avoid caching issues during development
-if (import.meta.env.PROD) {
-  registerServiceWorker().then((registration) => {
-    if (registration) {
-      logger.info('Service worker registered successfully');
-    }
-  }).catch((error) => {
-    logger.error('Service worker registration failed', error);
-  });
-}
+// Service worker registration is handled by VitePWA plugin automatically.
+// See vite.config.ts VitePWA({ registerType: 'autoUpdate' }) for configuration.

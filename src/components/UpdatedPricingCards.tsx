@@ -4,6 +4,7 @@ import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Check, Crown, Sparkles, Zap, Star } from 'lucide-react';
 import { LiveAIVideoBadge } from './LiveAIVideoBadge';
+import { tierPricing } from '../lib/tier-utils';
 
 interface PricingTier {
   id: string;
@@ -25,7 +26,7 @@ export function UpdatedPricingCards({ onSubscribe, currentTier }: UpdatedPricing
     {
       id: 'core',
       name: 'Core',
-      price: 14.99,
+      price: tierPricing.core.monthly,
       period: '/mo',
       features: [
         'AI Companion unlimited',
@@ -39,7 +40,7 @@ export function UpdatedPricingCards({ onSubscribe, currentTier }: UpdatedPricing
     {
       id: 'pro',
       name: 'Pro',
-      price: 29.99,
+      price: tierPricing.pro.monthly,
       period: '/mo',
       popular: true,
       features: [
@@ -55,7 +56,7 @@ export function UpdatedPricingCards({ onSubscribe, currentTier }: UpdatedPricing
     {
       id: 'pro-plus',
       name: 'Pro Plus',
-      price: 49.99,
+      price: tierPricing.proplus.monthly,
       period: '/mo',
       features: [
         'Everything in Pro, plus:',

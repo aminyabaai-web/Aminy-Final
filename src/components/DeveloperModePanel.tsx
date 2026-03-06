@@ -7,6 +7,7 @@ import { Badge } from './ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { toast } from 'sonner';
 import { AIStatusIndicator } from './AIStatusIndicator';
+import { tierPricing } from '../lib/tier-utils';
 
 interface DeveloperModePanelProps {
   onNavigate?: (screen: string, tab?: string) => void;
@@ -421,19 +422,19 @@ export function DeveloperModePanel({ onNavigate, onTierChange }: DeveloperModePa
                 <SelectItem value="core">
                   <div className="flex items-center gap-2">
                     <Shield className="w-4 h-4" />
-                    Core ($14.99/mo)
+                    Core (${tierPricing.core.monthly}/mo)
                   </div>
                 </SelectItem>
                 <SelectItem value="pro">
                   <div className="flex items-center gap-2">
                     <Crown className="w-4 h-4" />
-                    Pro ($29.99/mo)
+                    Pro (${tierPricing.pro.monthly}/mo)
                   </div>
                 </SelectItem>
                 <SelectItem value="pro-plus">
                   <div className="flex items-center gap-2">
                     <Crown className="w-4 h-4 text-purple-600" />
-                    Pro Plus ($49.99/mo)
+                    Pro Plus (${tierPricing.proplus.monthly}/mo)
                   </div>
                 </SelectItem>
               </SelectContent>

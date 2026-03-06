@@ -94,6 +94,30 @@ import {
   type FocusDomain,
   type DifficultyLevel,
 } from '../lib/parent-junior-bridge';
+import { useVoiceInput } from '../hooks/useVoiceInput';
+
+// ============================================================================
+// Levenshtein Similarity — real transcript-vs-target accuracy scoring
+// ============================================================================
+
+function levenshteinSimilarity(a: string, b: string): number {
+  const la = a.toLowerCase().trim();
+  const lb = b.toLowerCase().trim();
+  if (la === lb) return 1;
+  if (la.length === 0 || lb.length === 0) return 0;
+  const matrix = Array.from({ length: la.length + 1 }, (_, i) =>
+    Array.from({ length: lb.length + 1 }, (_, j) => (i === 0 ? j : j === 0 ? i : 0))
+  );
+  for (let i = 1; i <= la.length; i++) {
+    for (let j = 1; j <= lb.length; j++) {
+      matrix[i][j] =
+        la[i - 1] === lb[j - 1]
+          ? matrix[i - 1][j - 1]
+          : 1 + Math.min(matrix[i - 1][j], matrix[i][j - 1], matrix[i - 1][j - 1]);
+    }
+  }
+  return 1 - matrix[la.length][lb.length] / Math.max(la.length, lb.length);
+}
 
 interface JuniorPageProps {
   userData: {
@@ -271,7 +295,43 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
   const [isOfflineMode, setIsOfflineMode] = useState(false);
   const [currentSessionTime, setCurrentSessionTime] = useState(0);
   const [emotionDetected, setEmotionDetected] = useState<'frustrated' | 'excited' | 'anxious' | 'calm'>('calm');
-  
+
+  // Real speech recognition via Web Speech API
+  const speechPromptTimestamp = useRef<number>(0);
+  const latestTranscriptRef = useRef<string>('');
+  const latestConfidenceRef = useRef<number>(0);
+  const speechResolverRef = useRef<((transcript: string) => void) | null>(null);
+
+  const voiceInput = useVoiceInput({
+    continuous: false,
+    interimResults: true,
+    language: 'en-US',
+    onResult: (_transcript, isFinal) => {
+      // Always keep the latest transcript for when promise resolves
+      if (_transcript) {
+        latestTranscriptRef.current = _transcript;
+      }
+      if (isFinal && speechResolverRef.current) {
+        // Final result received — resolve immediately (onEnd will also fire, but we guard with null check)
+        const resolver = speechResolverRef.current;
+        speechResolverRef.current = null;
+        resolver(latestTranscriptRef.current);
+      }
+    },
+    onEnd: () => {
+      // When recognition ends (final result or timeout), resolve the promise
+      if (speechResolverRef.current) {
+        speechResolverRef.current(latestTranscriptRef.current);
+        speechResolverRef.current = null;
+      }
+    },
+  });
+
+  // Keep confidence ref in sync with voice hook state (avoids stale closures)
+  useEffect(() => {
+    latestConfidenceRef.current = voiceInput.confidence;
+  }, [voiceInput.confidence]);
+
   // Enhanced Parent Integration State — loaded from bridge on mount
   const [todaysFocus, setTodaysFocus] = useState<string[]>(['/s/ blends', 'morning routine step 3', 'prosody practice']);
   const [difficultyOverrides, setDifficultyOverrides] = useState<Record<string, DifficultyLevel>>({});
@@ -731,70 +791,112 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
     };
   }, [currentSpeechLevel, needsBreak, childEnergyLevel, speechAnalysis, practiceAttempts, successStreak, todaysFocus, currentSessionTime, activities, difficultyOverrides, avoidanceTriggers]);
 
-  // Enhanced speech practice with revolutionary AI feedback
+  // Enhanced speech practice with REAL speech recognition feedback
   const handleAdvancedSpeechPractice = async () => {
+    // If speech recognition is not supported, do not generate fake data
+    if (!voiceInput.isSupported) {
+      toast.error('Speech practice requires a microphone-enabled browser (Chrome, Edge, Safari).', {
+        description: 'You can still use text input mode.',
+        duration: 5000,
+      });
+      return;
+    }
+
     try {
       setIsRecording(true);
-      setAudioProcessing(true);
       setPracticeAttempts(prev => prev + 1);
       setPracticeReps(prev => prev + 1);
-      
-      // Simulate ultra-low latency <200ms
-      await new Promise(resolve => setTimeout(resolve, 180));
-      
-      // Revolutionary phoneme-level analysis with coarticulation
+
+      // Record when the prompt was shown for real latency measurement
+      speechPromptTimestamp.current = Date.now();
+      latestTranscriptRef.current = '';
+      latestConfidenceRef.current = 0;
+
+      // Start real speech recognition
+      voiceInput.resetTranscript();
+      voiceInput.startListening();
+
+      // Wait for speech result via onEnd callback or timeout (8s max)
+      const transcript = await new Promise<string>((resolve) => {
+        speechResolverRef.current = resolve;
+
+        // Safety timeout in case onEnd never fires
+        setTimeout(() => {
+          if (speechResolverRef.current) {
+            voiceInput.stopListening();
+            const fallback = latestTranscriptRef.current;
+            speechResolverRef.current = null;
+            resolve(fallback);
+          }
+        }, 8000);
+      });
+
+      setIsRecording(false);
+      setAudioProcessing(true);
+
+      // Calculate REAL metrics from actual speech input
+      const realLatency = Date.now() - speechPromptTimestamp.current;
+      const realConfidence = latestConfidenceRef.current || 0; // from SpeechRecognition API via ref
+      const transcriptAccuracy = transcript
+        ? levenshteinSimilarity(transcript, currentWord)
+        : 0;
+
+      // Use real confidence as the primary accuracy signal, blended with transcript match
+      const overallAccuracy = transcript
+        ? transcriptAccuracy * 0.6 + realConfidence * 0.4
+        : 0;
+
       const targetPhonemes = analyzeTargetPhonemes(currentWord);
       const analysis: SpeechAnalysis = {
-        accuracy: Math.random() * 0.4 + 0.6,
-        clarity: Math.random() * 0.3 + 0.7,
+        accuracy: overallAccuracy,
+        clarity: realConfidence,
         attempt: true,
         phonemes: targetPhonemes,
-        confidence: Math.random() * 0.3 + 0.7,
-        needsSupport: Math.random() < 0.3,
-        latency: 150 + Math.random() * 50, // 150-200ms
+        confidence: realConfidence,
+        needsSupport: overallAccuracy < 0.6,
+        latency: realLatency,
         phonemeLevel: true,
-        coarticulationScore: Math.random() * 0.3 + 0.7,
-        prosodyScore: Math.random() * 0.4 + 0.6,
-        voicingAccuracy: Math.random() * 0.3 + 0.7,
-        placementAccuracy: Math.random() * 0.4 + 0.6,
-        mannerAccuracy: Math.random() * 0.3 + 0.7,
-        intelligibilityProxy: Math.random() * 0.2 + 0.8,
-        errorlessLearningNeeded: practiceAttempts > 3 && Math.random() < 0.4,
-        visualCuesRecommended: Math.random() < 0.6
+        // Derived metrics based on real accuracy (not random)
+        coarticulationScore: Math.min(1, overallAccuracy * 1.05),
+        prosodyScore: realConfidence,
+        voicingAccuracy: transcriptAccuracy,
+        placementAccuracy: transcriptAccuracy,
+        mannerAccuracy: Math.min(1, (transcriptAccuracy + realConfidence) / 2),
+        intelligibilityProxy: transcript ? Math.min(1, overallAccuracy * 1.1) : 0,
+        errorlessLearningNeeded: practiceAttempts > 3 && overallAccuracy < 0.5,
+        visualCuesRecommended: overallAccuracy < 0.7,
       };
-      
+
       setSpeechAnalysis(analysis);
-      
-      // Advanced error-aware re-cues with place/manner/voicing feedback
+
+      // Feedback based on real analysis
       if (analysis.accuracy > 0.9) {
         setSuccessStreak(prev => prev + 1);
         setTodayTokens(prev => prev + 1);
         setGeneralizationWins(prev => prev + 1);
-        
-        // Spectacular visual celebration
+
         if (visualCoaching.spectrogramFireworks) {
           setShowConfetti(true);
           setTimeout(() => setShowConfetti(false), 3000);
         }
-        
+
         toast.success(`🌟 AMAZING! That "${currentWord}" was PERFECT!`, {
-          description: `Phoneme accuracy: ${Math.round(analysis.accuracy * 100)}% | Prosody: ${Math.round((analysis.prosodyScore || 0) * 100)}%`,
+          description: `Accuracy: ${Math.round(analysis.accuracy * 100)}% | Confidence: ${Math.round(realConfidence * 100)}%`,
           duration: 3000,
         });
-        
-        // Create enhanced parent micro-card
+
         const newMicroCard: ParentMicroCard = {
           id: `victory-${Date.now()}`,
-          title: `${childName} nailed "${currentWord}" with prosody!`,
-          message: `Accuracy: ${Math.round(analysis.accuracy * 100)}% | Try in context: "stirring soup"`,
+          title: `${childName} nailed "${currentWord}"!`,
+          message: `Accuracy: ${Math.round(analysis.accuracy * 100)}% | Heard: "${transcript}"`,
           timestamp: new Date(),
           type: 'celebration',
           actionable: true,
           priority: 'high',
-          category: 'speech'
+          category: 'speech',
         };
         setParentMicroCards(prev => [newMicroCard, ...prev]);
-        
+
         syncToParentEnhanced('practice_mastery', {
           word: currentWord,
           accuracy: analysis.accuracy,
@@ -802,38 +904,44 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
           prosody: analysis.prosodyScore,
           coarticulation: analysis.coarticulationScore,
           generalizationReady: true,
-          nextTarget: 'real-world context'
+          nextTarget: 'real-world context',
+          transcript,
         });
-        
+
       } else if (analysis.accuracy > 0.7) {
         setSuccessStreak(prev => Math.max(0, prev - 1));
-        
+
         if (visualCoaching.mouthAnimation) {
           toast(`👍 Good work! I heard ${Math.round(analysis.accuracy * 100)}% of those sounds!`, {
-            description: "Let's fine-tune that last part 👄",
+            description: transcript ? `I heard: "${transcript}" — let's fine-tune! 👄` : "Let's fine-tune that last part 👄",
             duration: 3000,
           });
         } else {
           toast(`👍 Good try! You're ${Math.round(analysis.accuracy * 100)}% there!`, {
-            description: "One more adjustment and you've got it!",
+            description: transcript ? `I heard: "${transcript}"` : 'One more adjustment and you\'ve got it!',
             duration: 3000,
           });
         }
-        
+
+      } else if (!transcript) {
+        // No speech detected at all
+        toast("🎤 I didn't hear anything. Try speaking a bit louder!", {
+          description: `Say "${currentWord}" into the microphone`,
+          duration: 4000,
+        });
+
       } else {
-        // Revolutionary error-specific coaching
+        // Low accuracy — error-specific coaching
         const errorType = detectAdvancedSpeechError(currentWord, analysis);
         setSuccessStreak(0);
-        
+
         if (analysis.errorlessLearningNeeded) {
-          // Switch to errorless learning mode
           toast("💙 Let's try an easier way! I'll help you more.", {
-            description: "Switching to guided practice mode",
+            description: 'Switching to guided practice mode',
             duration: 4000,
           });
-          
           setAdaptiveDifficulty(prev => Math.max(1, prev - 1));
-          
+
         } else if (errorType === 's_to_t_substitution') {
           if (visualCoaching.mouthAnimation) {
             toast("🐍 Snake sound! Tongue tip behind teeth, air flows out - sssss!", {
@@ -846,32 +954,33 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
               duration: 4000,
             });
           }
-          
+
         } else if (errorType === 'prosody_difficulty') {
           toast("🎵 Let's add some music to that word!", {
             description: "STARfish goes up ⬆️ then down ⬇️",
             duration: 4000,
           });
-          
+
         } else if (errorType === 'coarticulation_difficulty') {
           toast("🔗 Let's connect those sounds smoothly!", {
             description: "ST-ST-STAR - practice the connection",
             duration: 4500,
           });
         }
-        
+
         syncToParentEnhanced('needs_coaching', {
           word: currentWord,
           accuracy: analysis.accuracy,
           errorPattern: errorType,
           recommendedStrategy: getEnhancedStrategy(errorType),
-          visualSupportsUsed: visualCoaching.enabled
+          visualSupportsUsed: visualCoaching.enabled,
+          transcript,
         });
       }
-      
+
       // Emotion-aware pacing and regulation detection
       detectEmotionAndAdapt(analysis);
-      
+
     } catch (error) {
       console.error('Speech practice error:', error);
       toast.error("Let's try that again! 🔄");
@@ -1472,6 +1581,21 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
 
                 {/* Practice Area */}
                 <div className="p-4 sm:p-5 md:p-6">
+                  {/* Speech recognition browser support banner */}
+                  {!voiceInput.isSupported && (
+                    <div className="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-xl text-center text-sm text-amber-800">
+                      <AlertTriangle className="w-4 h-4 inline-block mr-1 -mt-0.5" />
+                      Speech practice requires a microphone-enabled browser (Chrome, Edge, Safari). You can still use text input mode.
+                    </div>
+                  )}
+
+                  {/* Voice input error banner */}
+                  {voiceInput.error && (
+                    <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl text-center text-sm text-red-700">
+                      {voiceInput.error}
+                    </div>
+                  )}
+
                   {/* Current Word Display with Visual Coaching */}
                   <div className="text-center mb-8">
                     <motion.div
@@ -1516,23 +1640,25 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
                       </motion.div>
                     )}
 
-                    {/* Visual feedback */}
+                    {/* Visual feedback — real metrics from speech recognition */}
                     {speechAnalysis && (
                       <motion.div
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
-                        className="flex justify-center space-x-4 text-sm"
+                        className="flex flex-wrap justify-center gap-3 text-sm"
                       >
                         <div className="flex items-center space-x-1">
                           <div className="w-3 h-3 bg-green-500 rounded-full" />
                           <span>Accuracy: {Math.round(speechAnalysis.accuracy * 100)}%</span>
                         </div>
-                        {speechAnalysis.prosodyScore && (
-                          <div className="flex items-center space-x-1">
-                            <div className="w-3 h-3 bg-blue-500 rounded-full" />
-                            <span>Melody: {Math.round(speechAnalysis.prosodyScore * 100)}%</span>
-                          </div>
-                        )}
+                        <div className="flex items-center space-x-1">
+                          <div className="w-3 h-3 bg-blue-500 rounded-full" />
+                          <span>Confidence: {Math.round(speechAnalysis.confidence * 100)}%</span>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          <div className="w-3 h-3 bg-purple-500 rounded-full" />
+                          <span>Response: {speechAnalysis.latency < 1000 ? `${Math.round(speechAnalysis.latency)}ms` : `${(speechAnalysis.latency / 1000).toFixed(1)}s`}</span>
+                        </div>
                       </motion.div>
                     )}
                   </div>
