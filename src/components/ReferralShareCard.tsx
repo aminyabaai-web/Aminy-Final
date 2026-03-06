@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { motion } from 'motion/react';
 import { Share2, Copy, CheckCircle, Gift } from 'lucide-react';
 import { Button } from './ui/button';
-import { getReferralShareMessage } from '../lib/referral-program';
 
 interface ReferralShareCardProps {
     referralCode: string;
@@ -11,7 +10,11 @@ interface ReferralShareCardProps {
 
 export function ReferralShareCard({ referralCode, userName = 'A friend' }: ReferralShareCardProps) {
     const [copied, setCopied] = useState(false);
-    const shareMessage = getReferralShareMessage(referralCode, userName);
+    const shareMessage = useMemo(() => ({
+        title: 'Join me on Aminy!',
+        body: `${userName} invited you to Aminy - the AI-powered companion for families navigating autism and neurodivergence. Use code ${referralCode} to get $25 toward your first expert session!`,
+        url: `https://aminy.ai/join?ref=${referralCode}`,
+    }), [referralCode, userName]);
 
     const handleShare = async () => {
         if (navigator.share) {

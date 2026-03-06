@@ -22,6 +22,7 @@ const SplashPage = lazy(() =>
 import { CLSOptimizer } from "./components/CLSOptimizer";
 import { toast } from "sonner";
 import { TierType, getTierDisplayName } from "./lib/tier-utils";
+import { getScreenGateReason } from "./lib/feature-flags";
 import { handleOnboardingComplete as triggerRetentionFlow } from "./lib/store";
 import { AIProvider } from "./context/AIContext";
 import { ConversationProvider } from "./context/ConversationContext";
@@ -574,6 +575,55 @@ const ShareViewer = lazy(() =>
 const VideoCallRoom = lazy(() =>
   import("./components/telehealth/VideoCallRoom"),
 );
+
+// GATED SCREEN PLACEHOLDER - Shown when a screen is behind a disabled feature flag
+const GATE_MESSAGES: Record<string, { title: string; description: string }> = {
+  'b2b': {
+    title: 'Coming Soon for Organizations',
+    description: 'This feature is designed for clinics, schools, and organizations. It will be available in a future update.',
+  },
+  'b2g': {
+    title: 'Payer Portal Coming Soon',
+    description: 'This dashboard is designed for insurance companies and managed care organizations.',
+  },
+  'fiscal-agent': {
+    title: 'Fiscal Agent Integration Coming Soon',
+    description: 'EVV and caregiver management features are coming in a future update.',
+  },
+  'dev-mode': {
+    title: 'Developer Tools',
+    description: 'This screen is only available in developer mode.',
+  },
+};
+
+const GatedScreenPlaceholder = React.memo(function GatedScreenPlaceholder({
+  gateReason,
+  onBack,
+}: {
+  gateReason: string;
+  onBack: () => void;
+}) {
+  const msg = GATE_MESSAGES[gateReason] || GATE_MESSAGES['b2b'];
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 flex items-center justify-center p-4">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-8 max-w-md text-center">
+        <div className="w-16 h-16 bg-teal-100 dark:bg-teal-900 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg className="w-8 h-8 text-teal-600 dark:text-teal-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+          </svg>
+        </div>
+        <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">{msg.title}</h1>
+        <p className="text-gray-600 dark:text-gray-400 mb-6 text-sm leading-relaxed">{msg.description}</p>
+        <button
+          onClick={onBack}
+          className="bg-teal-600 text-white px-6 py-2.5 rounded-xl font-medium hover:bg-teal-700 transition-colors"
+        >
+          Back to Home
+        </button>
+      </div>
+    </div>
+  );
+});
 
 // OPTIMIZED LOADING SKELETON - Ultra lightweight, prevents CLS
 // Uses Aminy brand colors: Soft Cream (#F5F5F5), Muted Teal (#0891b2)
@@ -1644,6 +1694,17 @@ export default function App() {
 
   // Render current screen with lazy loading
   const renderScreen = () => {
+    // Check if this screen is gated behind a product feature flag
+    const gateReason = getScreenGateReason(currentScreen);
+    if (gateReason) {
+      return (
+        <GatedScreenPlaceholder
+          gateReason={gateReason}
+          onBack={() => navigateToScreen("dashboard")}
+        />
+      );
+    }
+
     const screen = (() => {
       switch (currentScreen) {
         case "splash":

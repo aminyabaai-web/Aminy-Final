@@ -149,13 +149,11 @@ export async function uploadVerificationImage(
 
 // ── Checkr API Types ─────────────────────────────────────────────────
 
-/** Checkr API base URL (sandbox vs production) */
-const CHECKR_API_BASE = import.meta.env.VITE_CHECKR_ENV === 'production'
-  ? 'https://api.checkr.com'
-  : 'https://api.checkr-staging.com';
-
-/** Whether the Checkr API key is configured */
-const CHECKR_CONFIGURED = Boolean(import.meta.env.VITE_CHECKR_API_KEY);
+/**
+ * Checkr integration — all calls route through the clearinghouse edge function.
+ * API keys are stored as Supabase secrets, never exposed to the client.
+ */
+const CHECKR_CONFIGURED = true; // Always available via edge function
 
 /** Checkr candidate object */
 interface CheckrCandidate {
@@ -224,75 +222,39 @@ interface CheckrAPIResult<T> {
 
 /**
  * Make an authenticated request to the Checkr API.
- * Uses Basic auth with the API key (no password).
- * Routes through a Supabase edge function in production to avoid
- * exposing the API key in the browser.
+ * ALL calls route through the clearinghouse edge function — API keys
+ * are stored server-side as Supabase secrets, never exposed to the client.
  */
 async function checkrFetch<T>(
   method: 'GET' | 'POST',
   path: string,
   body?: Record<string, unknown>
 ): Promise<CheckrAPIResult<T>> {
-  if (!CHECKR_CONFIGURED) {
-    return {
-      success: false,
-      data: null,
-      error: 'Checkr API key not configured. Set VITE_CHECKR_API_KEY in environment.',
-    };
-  }
-
   try {
-    // In production, route through edge function for security
-    if (import.meta.env.PROD) {
-      const { data: { session } } = await supabase.auth.getSession();
-      const token = session?.access_token;
+    const { data: { session } } = await supabase.auth.getSession();
+    const token = session?.access_token;
 
-      const edgeFunctionUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/checkr-proxy`;
-      const response = await fetch(edgeFunctionUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
-        },
-        body: JSON.stringify({ method, path, body }),
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        return {
-          success: false,
-          data: null,
-          error: `Checkr proxy error (${response.status}): ${errorText}`,
-          httpStatus: response.status,
-        };
-      }
-
-      const data: T = await response.json();
-      return { success: true, data };
-    }
-
-    // Dev mode: direct API calls with the staging key
-    const apiKey = import.meta.env.VITE_CHECKR_API_KEY;
-    const headers: Record<string, string> = {
-      'Authorization': `Basic ${btoa(apiKey + ':')}`,
-      'Content-Type': 'application/json',
-    };
-
-    const url = `${CHECKR_API_BASE}${path}`;
-    const options: RequestInit = {
-      method,
-      headers,
-      ...(body && method === 'POST' ? { body: JSON.stringify(body) } : {}),
-    };
-
-    const response = await fetch(url, options);
+    const edgeFunctionUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/clearinghouse`;
+    const response = await fetch(edgeFunctionUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+      },
+      body: JSON.stringify({
+        action: 'background_check',
+        method,
+        path,
+        body,
+      }),
+    });
 
     if (!response.ok) {
       const errorText = await response.text();
       return {
         success: false,
         data: null,
-        error: `Checkr API error (${response.status}): ${errorText}`,
+        error: `Checkr proxy error (${response.status}): ${errorText}`,
         httpStatus: response.status,
       };
     }

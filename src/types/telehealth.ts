@@ -612,7 +612,7 @@ export interface InsuranceVerificationResult {
   // Notes
   notes?: string;
   verifiedAt?: string;
-  verifiedBy?: 'system' | 'manual' | 'availity' | 'waystar';
+  verifiedBy?: 'system' | 'manual' | 'availity' | 'waystar' | 'clearinghouse';
   // Error info
   errorMessage?: string;
   // Clearinghouse response (for reference/debugging)

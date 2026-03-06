@@ -1134,6 +1134,27 @@ export function getActiveTiers(): TierType[] {
   return ['free', 'core', 'pro', 'proplus'];
 }
 
+/**
+ * Get consumer-facing tiers only (B2C launch).
+ * Excludes Pro+ / Family Plan which is positioned as enterprise/organization tier.
+ * Use this for consumer pricing pages and paywall displays.
+ */
+export function getConsumerTiers(): Pick<typeof tierPricing, 'free' | 'core' | 'pro'> {
+  return {
+    free: tierPricing.free,
+    core: tierPricing.core,
+    pro: tierPricing.pro,
+    // proplus excluded from consumer view (it's enterprise/organization)
+  };
+}
+
+/**
+ * Get consumer-facing tier type list (for iteration in UI)
+ */
+export function getConsumerTierTypes(): TierType[] {
+  return ['free', 'core', 'pro'];
+}
+
 // Get tier marketing tagline
 export function getTierTagline(tier: TierType): string {
   const taglines: Record<TierType, string> = {

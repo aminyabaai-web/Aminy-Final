@@ -31,18 +31,14 @@ import {
   Facebook,
 } from 'lucide-react';
 import {
-  Referral,
-  ReferralSummary,
-  ReferralTier,
+  type Referral,
+  type ReferralTier,
   REFERRAL_TIERS,
   REFERRAL_PROGRAM_CONFIG,
-  getOrCreateReferralCode,
-  getUserReferrals,
-  getReferralSummary,
   getReferralShareMessage,
   getReferralQualificationDays,
-  generateMockReferrals,
 } from '../lib/referral-program';
+import { useReferralData } from '../hooks/useReferralData';
 import { EmptyReferrals } from './ui/empty-state';
 import { toast } from 'sonner';
 import { trackReferralShare, getShareText, getReferralUrl } from '../lib/viral-analytics';
@@ -58,38 +54,33 @@ export function ReferralDashboard({
   userName,
   onShare,
 }: ReferralDashboardProps) {
-  const [referralCode, setReferralCode] = useState<string>('');
-  const [referrals, setReferrals] = useState<Referral[]>([]);
-  const [summary, setSummary] = useState<ReferralSummary | null>(null);
-  const [loading, setLoading] = useState(true);
+  // Use the Supabase-first referral hook
+  const {
+    referralCode: referralCodeData,
+    referrals,
+    summary,
+    loading,
+    error,
+    getOrCreateCode,
+  } = useReferralData(userId);
+
+  const referralCode = referralCodeData?.code || '';
   const [copied, setCopied] = useState(false);
   const [showShareOptions, setShowShareOptions] = useState(false);
 
-  // Load referral data
+  // Auto-create referral code on mount if not present
   useEffect(() => {
-    async function loadData() {
-      setLoading(true);
-      try {
-        // Get or create referral code
-        const codeData = await getOrCreateReferralCode(userId);
-        setReferralCode(codeData.code);
-
-        // Get referrals (use mock for demo)
-        const userReferrals = generateMockReferrals(userId);
-        setReferrals(userReferrals);
-
-        // Calculate summary
-        const referralSummary = getReferralSummary(userReferrals, codeData.code);
-        setSummary(referralSummary);
-      } catch (error) {
-        console.error('Error loading referral data:', error);
-        toast.error('Unable to load your referral data. Please try again.');
-      }
-      setLoading(false);
+    if (!loading && !referralCodeData && userId) {
+      getOrCreateCode();
     }
+  }, [loading, referralCodeData, userId, getOrCreateCode]);
 
-    loadData();
-  }, [userId]);
+  // Show error toast if load fails
+  useEffect(() => {
+    if (error) {
+      toast.error('Unable to load your referral data. Please try again.');
+    }
+  }, [error]);
 
   // Copy referral link
   const handleCopy = async () => {

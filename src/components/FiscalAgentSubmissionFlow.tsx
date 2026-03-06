@@ -58,7 +58,7 @@ import {
 import { WAIVER_SERVICE_CODES, FISCAL_AGENTS } from '../lib/tier-utils';
 import {
   submitInsuranceClaim,
-  isAvailityConfigured,
+  isClearinghouseConfigured,
   formatHCBSClaim,
   ClaimSubmission,
   ClaimResponse,
@@ -622,9 +622,9 @@ export function FiscalAgentSubmissionFlow({
                       <div className="text-sm text-blue-800">
                         <strong>Electronic submission</strong> sends your hours directly to your fiscal agent
                         via the Availity clearinghouse using industry-standard EDI 837P format.
-                        {!isAvailityConfigured() && (
+                        {!isClearinghouseConfigured() && (
                           <span className="block mt-1 text-blue-600">
-                            Note: Currently in demo mode. Configure VITE_AVAILITY_API_KEY for live submission.
+                            Note: Currently in demo mode. Configure clearinghouse secrets in Supabase for live submission.
                           </span>
                         )}
                       </div>

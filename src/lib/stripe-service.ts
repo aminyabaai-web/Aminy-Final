@@ -25,21 +25,23 @@ if (import.meta.env.DEV && !STRIPE_PUBLISHABLE_KEY) {
 
 // Stripe Price IDs - MUST be set in environment variables for production
 // Create these products in your Stripe Dashboard and copy the price_xxx IDs
+//
+// Env var lookup order: VITE_STRIPE_PRICE_* (preferred) > VITE_PRICE_* (legacy)
 export const STRIPE_PRICES = {
   // Subscription prices
-  starter_monthly: import.meta.env.VITE_PRICE_STARTER_MONTHLY || 'price_starter_monthly',
-  starter_annual: import.meta.env.VITE_PRICE_STARTER_ANNUAL || 'price_starter_annual',
-  core_monthly: import.meta.env.VITE_PRICE_CORE_MONTHLY || 'price_core_monthly',
-  core_annual: import.meta.env.VITE_PRICE_CORE_ANNUAL || 'price_core_annual',
-  pro_monthly: import.meta.env.VITE_PRICE_PRO_MONTHLY || 'price_pro_monthly',
-  pro_annual: import.meta.env.VITE_PRICE_PRO_ANNUAL || 'price_pro_annual',
-  proplus_monthly: import.meta.env.VITE_PRICE_PROPLUS_MONTHLY || 'price_proplus_monthly',
-  proplus_annual: import.meta.env.VITE_PRICE_PROPLUS_ANNUAL || 'price_proplus_annual',
+  starter_monthly: import.meta.env.VITE_STRIPE_PRICE_CORE_MONTHLY || import.meta.env.VITE_PRICE_STARTER_MONTHLY || '',
+  starter_annual: import.meta.env.VITE_STRIPE_PRICE_CORE_YEARLY || import.meta.env.VITE_PRICE_STARTER_ANNUAL || '',
+  core_monthly: import.meta.env.VITE_STRIPE_PRICE_CORE_MONTHLY || import.meta.env.VITE_PRICE_CORE_MONTHLY || '',
+  core_annual: import.meta.env.VITE_STRIPE_PRICE_CORE_YEARLY || import.meta.env.VITE_PRICE_CORE_ANNUAL || '',
+  pro_monthly: import.meta.env.VITE_STRIPE_PRICE_PRO_MONTHLY || import.meta.env.VITE_PRICE_PRO_MONTHLY || '',
+  pro_annual: import.meta.env.VITE_STRIPE_PRICE_PRO_YEARLY || import.meta.env.VITE_PRICE_PRO_ANNUAL || '',
+  proplus_monthly: import.meta.env.VITE_STRIPE_PRICE_PROPLUS_MONTHLY || import.meta.env.VITE_PRICE_PROPLUS_MONTHLY || '',
+  proplus_annual: import.meta.env.VITE_STRIPE_PRICE_PROPLUS_YEARLY || import.meta.env.VITE_PRICE_PROPLUS_ANNUAL || '',
   // Visit prices
-  initial_consult: import.meta.env.VITE_PRICE_INITIAL_CONSULT || 'price_initial_consult',
-  followup: import.meta.env.VITE_PRICE_FOLLOWUP || 'price_followup',
-  emergency: import.meta.env.VITE_PRICE_EMERGENCY || 'price_emergency',
-  extended: import.meta.env.VITE_PRICE_EXTENDED || 'price_extended',
+  initial_consult: import.meta.env.VITE_PRICE_INITIAL_CONSULT || '',
+  followup: import.meta.env.VITE_PRICE_FOLLOWUP || '',
+  emergency: import.meta.env.VITE_PRICE_EMERGENCY || '',
+  extended: import.meta.env.VITE_PRICE_EXTENDED || '',
 } as const;
 
 // Check if Stripe is properly configured
@@ -47,7 +49,8 @@ export const isStripeConfigured = (): boolean => {
   return !!(
     STRIPE_PUBLISHABLE_KEY &&
     STRIPE_PUBLISHABLE_KEY.startsWith('pk_') &&
-    !STRIPE_PRICES.starter_monthly.startsWith('price_starter')
+    STRIPE_PRICES.core_monthly &&
+    STRIPE_PRICES.core_monthly.startsWith('price_')
   );
 };
 
@@ -117,7 +120,10 @@ const getOrigin = (): string => {
 };
 
 /**
- * Create a Stripe Checkout session for subscription
+ * Create a Stripe Checkout session for subscription or one-time payment.
+ *
+ * Calls the `stripe-checkout` edge function which auto-detects recurring vs
+ * one-time based on the Stripe Price object.
  */
 export async function createCheckoutSession({
   userId,
@@ -127,39 +133,38 @@ export async function createCheckoutSession({
   successUrl = `${getOrigin()}/?screen=dashboard&payment=success`,
   cancelUrl = `${getOrigin()}/?screen=paywall&payment=cancelled`,
 }: CreateCheckoutParams): Promise<CheckoutResponse> {
-  const accessToken = await getAccessToken();
+  const priceId = STRIPE_PRICES[`${tier}_${interval}` as keyof typeof STRIPE_PRICES];
 
-  const response = await fetch(
-    `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/payments/create-checkout`,
-    {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        userId,
-        email,
-        tier,
-        interval,
-        successUrl,
-        cancelUrl,
-        priceId: STRIPE_PRICES[`${tier}_${interval}` as keyof typeof STRIPE_PRICES],
-      }),
-    }
-  );
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`Failed to create checkout session: ${errorText}`);
+  if (!priceId) {
+    throw new Error(
+      `No Stripe price configured for ${tier} / ${interval}. ` +
+      'Set the VITE_STRIPE_PRICE_* environment variables.'
+    );
   }
 
-  try {
-    return await response.json();
-  } catch (parseError) {
-    console.error('[Stripe] Failed to parse checkout response:', parseError);
-    throw new Error('Invalid response from payment server');
+  // Import supabase client lazily to avoid circular dependency
+  const { supabase: sb } = await import('../utils/supabase/client');
+
+  const { data, error } = await sb.functions.invoke('stripe-checkout', {
+    body: {
+      priceId,
+      userId,
+      customerEmail: email,
+      successUrl,
+      cancelUrl,
+    },
+  });
+
+  if (error) {
+    console.error('[Stripe] Edge function error:', error);
+    throw new Error(`Failed to create checkout session: ${error.message}`);
   }
+
+  if (!data?.url) {
+    throw new Error('Checkout session created but no URL returned');
+  }
+
+  return { url: data.url, sessionId: data.sessionId };
 }
 
 /**

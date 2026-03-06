@@ -37,7 +37,7 @@ import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { toast } from 'sonner';
 import { TierType, tierPricing } from '../lib/tier-utils';
-import { createCheckoutSession, isStripeConfigured } from '../lib/stripe-service';
+import { createCheckoutSession, isStripeConfigured, STRIPE_PRICES } from '../lib/stripe-service';
 import { supabase } from '../utils/supabase/client';
 import { billingEngine } from '../lib/billing-engine';
 
@@ -195,14 +195,25 @@ export function PaywallSimplified({
 
       // Only try Stripe if we have a user AND Stripe is properly configured
       if (user && isStripeConfigured()) {
-        try {
-          const interval = billingPeriod === 'monthly' ? 'monthly' : 'annual';
+        // Map billing period to the STRIPE_PRICES key suffix
+        const interval = billingPeriod === 'monthly' ? 'monthly' : 'annual';
+        const priceKey = `${tier}_${interval}` as keyof typeof STRIPE_PRICES;
+        const priceId = STRIPE_PRICES[priceKey];
 
+        if (!priceId) {
+          toast.error(
+            `Payment not available: ${tierDisplayName(tier)} ${billingPeriod} price is not configured. Please contact support.`
+          );
+          setIsLoading(false);
+          return;
+        }
+
+        try {
           const session = await createCheckoutSession({
             userId: user.id,
             email: user.email || '',
-            tier: tier as any,
-            interval: interval as any,
+            tier: tier as TierType,
+            interval: interval as 'monthly' | 'annual',
             successUrl: `${window.location.origin}/?screen=dashboard&payment=success`,
             cancelUrl: `${window.location.origin}/?screen=paywall&payment=cancelled`,
           });
@@ -211,12 +222,18 @@ export function PaywallSimplified({
             window.location.href = session.url;
             return;
           }
-        } catch (stripeError) {
-          console.warn('Stripe checkout unavailable, using local subscription:', stripeError);
+        } catch (stripeError: any) {
+          console.warn('Stripe checkout error:', stripeError);
+          toast.error(stripeError?.message || 'Payment system unavailable. Please try again.');
+          setIsLoading(false);
+          return;
         }
       }
 
       // Default: local subscription (demo mode or Stripe not configured)
+      if (!isStripeConfigured() && import.meta.env.DEV) {
+        console.info('[Paywall] Stripe not configured — using demo mode');
+      }
       onSubscribe(tier);
       toast.success(`Welcome to Aminy ${tierDisplayName(tier)}! Your 7-day trial has started.`);
     } catch (error) {

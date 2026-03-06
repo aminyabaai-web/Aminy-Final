@@ -14,9 +14,12 @@ import {
   FolderOpen,
   Shield,
   Users,
-  BarChart3
+  BarChart3,
+  Baby,
+  Heart
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { productFlags } from '../lib/feature-flags';
 
 interface BottomNavigationProps {
   activeTab: string;
@@ -29,11 +32,12 @@ interface BottomNavigationProps {
 export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = 'parent', navigate }: BottomNavigationProps) {
   const [showMoreMenu, setShowMoreMenu] = useState(false);
 
-  const isProvider = userRole === 'provider' || userRole === 'admin';
+  // Only show provider nav when B2B is explicitly enabled AND user has provider role
+  const isProvider = productFlags.b2bEnabled && (userRole === 'provider' || userRole === 'admin');
 
   // Role-based primary tabs
-  // Parents: Home, Messages, Aminy (center), Calm Tools, More
-  // Providers: Dashboard, Patients, Aminy (center), Notes, More
+  // B2C Parents: Home, Chat (Ask Aminy), Junior (center), Care, More
+  // B2B Providers (only when b2bEnabled): Dashboard, Patients, Aminy (center), Notes, More
   const tabs = isProvider ? [
     {
       id: 'home',
@@ -85,26 +89,26 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
       isCenter: false
     },
     {
-      id: 'messages',
-      label: 'Messages',
-      icon: MessageCircle,
-      ariaLabel: 'Messages - Provider communication',
+      id: 'ask-aminy',
+      label: 'Chat',
+      icon: Sparkles,
+      ariaLabel: 'Chat - Talk to Aminy AI',
       enabled: true,
       isCenter: false
     },
     {
-      id: 'ask-aminy',
-      label: 'Aminy',
-      icon: Sparkles,
-      ariaLabel: 'Aminy - Your AI companion',
+      id: 'junior',
+      label: 'Junior',
+      icon: Baby,
+      ariaLabel: 'Junior - Fun activities for your child',
       enabled: true,
       isCenter: true
     },
     {
-      id: 'calm-tools',
-      label: 'Calm',
-      icon: Sparkles,
-      ariaLabel: 'Calm Corner - Sensory tools for your child',
+      id: 'care-plan',
+      label: 'Care',
+      icon: Heart,
+      ariaLabel: 'Care - Your care plan',
       enabled: true,
       isCenter: false
     },
