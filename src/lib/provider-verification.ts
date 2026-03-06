@@ -61,35 +61,211 @@ export interface VerificationResult {
 // VERIFICATION FUNCTIONS
 // ============================================================================
 
+// ── BACB Certificate Format Types ────────────────────────────────────
+
 /**
- * Verify a BACB credential (BCBA, BCaBA, RBT)
- * Uses the BACB Certificant Registry API
+ * BACB certificate number formats by credential type:
+ * - BCBA:   1-XX-XXXXX (e.g., 1-21-54321)
+ * - BCBA-D: 1-XX-XXXXX (same format, differentiated by registry record)
+ * - BCaBA:  0-XX-XXXXX (e.g., 0-20-12345)
+ * - RBT:    RBT-XXXXXXX (e.g., RBT-2145678)
+ *
+ * BACB does NOT provide a public API. Verification requires either:
+ * 1. BACB Certificant Registry manual lookup (https://www.bacb.com/services/o.php?page=100155)
+ * 2. Direct contract with BACB for bulk verification
+ *
+ * This implementation validates the format, stores the request for manual review,
+ * and provides a sandbox mode for development.
+ */
+
+type BACBCredentialType = 'bcba' | 'bcba-d' | 'bcaba' | 'rbt';
+
+/** Regex patterns for each BACB credential type */
+const BACB_FORMAT_PATTERNS: Record<BACBCredentialType, RegExp> = {
+  bcba: /^1-\d{2}-\d{5}$/,
+  'bcba-d': /^1-\d{2}-\d{5}$/,
+  bcaba: /^0-\d{2}-\d{5}$/,
+  rbt: /^RBT-\d{7}$/i,
+};
+
+/** Human-readable format descriptions for error messages */
+const BACB_FORMAT_DESCRIPTIONS: Record<BACBCredentialType, string> = {
+  bcba: '1-XX-XXXXX (e.g., 1-21-54321)',
+  'bcba-d': '1-XX-XXXXX (e.g., 1-21-54321)',
+  bcaba: '0-XX-XXXXX (e.g., 0-20-12345)',
+  rbt: 'RBT-XXXXXXX (e.g., RBT-2145678)',
+};
+
+/** Sandbox mock data for BACB verification in development */
+const BACB_SANDBOX_DATA: Record<string, {
+  name: string;
+  status: 'Active' | 'Expired' | 'Revoked' | 'Inactive';
+  expiration_date: string;
+  specialty: string;
+  type: BACBCredentialType;
+}> = {
+  '1-21-54321': {
+    name: 'Jane Smith, BCBA',
+    status: 'Active',
+    expiration_date: '2027-03-31',
+    specialty: 'Applied Behavior Analysis',
+    type: 'bcba',
+  },
+  '1-19-12345': {
+    name: 'John Doe, BCBA-D',
+    status: 'Active',
+    expiration_date: '2026-12-31',
+    specialty: 'Applied Behavior Analysis - Doctoral',
+    type: 'bcba-d',
+  },
+  '0-20-67890': {
+    name: 'Sarah Johnson, BCaBA',
+    status: 'Active',
+    expiration_date: '2026-06-30',
+    specialty: 'Applied Behavior Analysis - Assistant',
+    type: 'bcaba',
+  },
+  'RBT-2145678': {
+    name: 'Mike Wilson, RBT',
+    status: 'Active',
+    expiration_date: '2026-09-30',
+    specialty: 'Registered Behavior Technician',
+    type: 'rbt',
+  },
+  '1-18-00001': {
+    name: 'Expired Provider, BCBA',
+    status: 'Expired',
+    expiration_date: '2024-01-15',
+    specialty: 'Applied Behavior Analysis',
+    type: 'bcba',
+  },
+};
+
+/** Whether sandbox/mock mode is enabled for BACB verification */
+const BACB_SANDBOX_MODE = import.meta.env.DEV || import.meta.env.VITE_BACB_SANDBOX === 'true';
+
+/**
+ * Validate BACB certificate number format for a given credential type.
+ * Returns null if valid, or an error message string if invalid.
+ */
+export function validateBACBFormat(
+  certificantNumber: string,
+  type: BACBCredentialType
+): string | null {
+  const pattern = BACB_FORMAT_PATTERNS[type];
+  if (!pattern) {
+    return `Unknown BACB credential type: ${type}`;
+  }
+
+  const trimmed = certificantNumber.trim();
+  if (!pattern.test(trimmed)) {
+    return `Invalid ${type.toUpperCase()} certificate format. Expected: ${BACB_FORMAT_DESCRIPTIONS[type]}`;
+  }
+
+  return null; // Valid
+}
+
+/**
+ * Verify a BACB credential (BCBA, BCaBA, RBT).
+ *
+ * BACB does NOT offer a public API. This function:
+ * 1. Validates the certificate number format
+ * 2. In sandbox/dev mode, returns mock data for known test numbers
+ * 3. In production, queues the verification for manual review via Supabase
+ * 4. Falls back to manual_review status if the backend is unreachable
  */
 export async function verifyBACBCredential(
   certificantNumber: string,
-  type: 'bcba' | 'bcba-d' | 'bcaba' | 'rbt'
+  type: BACBCredentialType
 ): Promise<VerificationResult> {
+  const trimmed = certificantNumber.trim().toUpperCase();
+
+  // Step 1: Format validation
+  // For RBT, the pattern expects uppercase so we use trimmed
+  // For BCBA/BCaBA, the format is numeric with dashes
+  const formatToCheck = type === 'rbt' ? trimmed : certificantNumber.trim();
+  const formatError = validateBACBFormat(formatToCheck, type);
+  if (formatError) {
+    return {
+      success: false,
+      status: 'failed',
+      message: formatError,
+    };
+  }
+
+  // Step 2: Sandbox mode -- return mock data for development/testing
+  if (BACB_SANDBOX_MODE) {
+    const normalizedKey = type === 'rbt' ? trimmed : certificantNumber.trim();
+    const mockEntry = BACB_SANDBOX_DATA[normalizedKey];
+
+    if (mockEntry) {
+      if (mockEntry.status === 'Active') {
+        return {
+          success: true,
+          status: 'verified',
+          message: `[SANDBOX] ${type.toUpperCase()} credential verified`,
+          data: {
+            name: mockEntry.name,
+            credential_number: certificantNumber.trim(),
+            status: mockEntry.status,
+            expiration_date: mockEntry.expiration_date,
+            specialty: mockEntry.specialty,
+          },
+        };
+      } else if (mockEntry.status === 'Expired') {
+        return {
+          success: false,
+          status: 'expired',
+          message: `[SANDBOX] Credential found but expired (${mockEntry.expiration_date})`,
+          data: {
+            name: mockEntry.name,
+            credential_number: certificantNumber.trim(),
+            status: mockEntry.status,
+            expiration_date: mockEntry.expiration_date,
+          },
+        };
+      } else {
+        return {
+          success: false,
+          status: 'failed',
+          message: `[SANDBOX] Credential status: ${mockEntry.status}`,
+          data: {
+            credential_number: certificantNumber.trim(),
+            status: mockEntry.status,
+          },
+        };
+      }
+    }
+
+    // Unknown sandbox number -- treat as manual review to simulate real behavior
+    return {
+      success: false,
+      status: 'manual_review',
+      message: `[SANDBOX] ${type.toUpperCase()} certificate #${certificantNumber.trim()} not in sandbox data. Queued for manual verification.`,
+    };
+  }
+
+  // Step 3: Production -- attempt backend verification, queue for manual review
   try {
-    // BACB Registry lookup URL
-    // In production, this would call a backend function that queries BACB
     const response = await fetch(
       `/api/verify/bacb`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          certificant_number: certificantNumber,
-          credential_type: type.toUpperCase()
-        })
+          certificant_number: certificantNumber.trim(),
+          credential_type: type.toUpperCase(),
+        }),
       }
     );
 
     if (!response.ok) {
-      // Fallback to manual verification if API unavailable
+      // Backend unavailable -- queue for manual review
+      await queueBACBManualReview(certificantNumber.trim(), type);
       return {
         success: false,
         status: 'manual_review',
-        message: 'BACB registry unavailable. Credential flagged for manual verification.'
+        message: 'BACB registry unavailable. Credential queued for manual verification (typically 24-48 hours).',
       };
     }
 
@@ -102,11 +278,11 @@ export async function verifyBACBCredential(
         message: `${type.toUpperCase()} credential verified`,
         data: {
           name: data.name,
-          credential_number: certificantNumber,
+          credential_number: certificantNumber.trim(),
           status: data.status,
           expiration_date: data.expiration_date,
-          specialty: data.specialty
-        }
+          specialty: data.specialty,
+        },
       };
     } else if (data.found && data.status === 'Expired') {
       return {
@@ -114,25 +290,66 @@ export async function verifyBACBCredential(
         status: 'expired',
         message: 'Credential found but expired',
         data: {
-          credential_number: certificantNumber,
+          credential_number: certificantNumber.trim(),
           status: data.status,
-          expiration_date: data.expiration_date
-        }
+          expiration_date: data.expiration_date,
+        },
       };
     } else {
       return {
         success: false,
         status: 'failed',
-        message: 'Credential not found in BACB registry'
+        message: 'Credential not found in BACB registry',
       };
     }
   } catch (error) {
     console.error('BACB verification error:', error);
+    // Queue for manual review on any error
+    await queueBACBManualReview(certificantNumber.trim(), type);
     return {
       success: false,
       status: 'manual_review',
-      message: 'Verification failed. Flagged for manual review.'
+      message: 'Verification failed. Credential queued for manual review.',
     };
+  }
+}
+
+/**
+ * Queue a BACB credential for manual verification by the admin team.
+ * Persists to Supabase admin_tasks table or falls back to localStorage.
+ */
+async function queueBACBManualReview(
+  certificantNumber: string,
+  type: BACBCredentialType
+): Promise<void> {
+  try {
+    await supabase
+      .from('admin_tasks')
+      .insert({
+        task_type: 'bacb_manual_verification',
+        priority: 'high',
+        status: 'pending',
+        data: {
+          certificant_number: certificantNumber,
+          credential_type: type,
+          requested_at: new Date().toISOString(),
+          verification_url: 'https://www.bacb.com/services/o.php?page=100155',
+        },
+        created_at: new Date().toISOString(),
+      });
+  } catch {
+    // Supabase unavailable -- store locally for retry
+    const pendingKey = 'aminy-bacb-pending-reviews';
+    const pending: Array<{ number: string; type: string; requestedAt: string }> = JSON.parse(
+      localStorage.getItem(pendingKey) || '[]'
+    );
+    pending.push({
+      number: certificantNumber,
+      type,
+      requestedAt: new Date().toISOString(),
+    });
+    localStorage.setItem(pendingKey, JSON.stringify(pending));
+    console.warn('BACB manual review queued locally (Supabase unavailable)');
   }
 }
 
@@ -556,11 +773,12 @@ export async function initiateVerification(credentialId: string): Promise<Verifi
 export default {
   verifyCredential,
   verifyBACBCredential,
+  validateBACBFormat,
   verifyNPI,
   submitCredentialForVerification,
   getProviderCredentials,
   isProviderVerified,
   getVerificationBadge,
   initiateVerification,
-  useProviderVerification
+  useProviderVerification,
 };

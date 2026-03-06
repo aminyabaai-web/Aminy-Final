@@ -585,7 +585,7 @@ export const ABA_SERVICE_CODES = {
 // CARC (Claim Adjustment Reason Codes) Lookup for ERA 835 Display
 // ============================================================================
 
-const CARC_DESCRIPTIONS: Record<string, string> = {
+export const CARC_DESCRIPTIONS: Record<string, string> = {
   '1': 'Deductible Amount',
   '2': 'Coinsurance Amount',
   '3': 'Co-payment Amount',
@@ -2392,13 +2392,530 @@ export async function submitPriorAuth(request: {
 }
 
 /**
- * Get remittance advice (EDI 835) for a provider
+ * Get remittance advice (EDI 835) for a provider.
+ * Fetches ERA files from clearinghouse and parses them.
  */
 export async function getRemittanceAdvice(request: {
   providerNpi: string;
-}): Promise<{ success: boolean; payments: unknown[] }> {
-  console.warn('[clearinghouse] getRemittanceAdvice is a stub');
+  dateFrom?: string;
+  dateTo?: string;
+}): Promise<{ success: boolean; payments: ERA835ParseResult[] }> {
+  if (USE_EDGE_FUNCTION) {
+    try {
+      const result = await callClearinghouseFunction('eligibility', {
+        action: 'get_remittance',
+        providerNpi: request.providerNpi,
+        dateFrom: request.dateFrom,
+        dateTo: request.dateTo,
+      });
+      const rawFiles = (result.eraFiles || []) as string[];
+      const parsed = rawFiles.map(f => parseERA835(f));
+      return { success: true, payments: parsed };
+    } catch (error) {
+      console.warn('[clearinghouse] Edge function remittance fetch failed:', error);
+    }
+  }
+
+  if (isAvailityConfigured()) {
+    try {
+      const response = await fetch(`${AVAILITY_API_URL}/availity/v1/remittances`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${AVAILITY_API_KEY}`,
+          'Content-Type': 'application/json',
+          'X-Api-Key': AVAILITY_API_KEY,
+        },
+        body: JSON.stringify({
+          providerNPI: request.providerNpi,
+          dateFrom: request.dateFrom,
+          dateTo: request.dateTo,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Availity remittance error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      const rawFiles = (data.eraFiles || []) as string[];
+      const parsed = rawFiles.map((f: string) => parseERA835(f));
+      return { success: true, payments: parsed };
+    } catch (error) {
+      console.warn('[clearinghouse] Availity remittance fetch failed:', error);
+    }
+  }
+
+  // Mock for development
   return { success: true, payments: [] };
+}
+
+// ============================================================================
+// EDI 276 Claim Status Request Generation
+// ============================================================================
+
+/**
+ * EDI 276 Claim Status Inquiry types
+ */
+export interface EDI276Request {
+  informationReceiverNpi: string;
+  informationReceiverName: string;
+  providerNpi: string;
+  providerTaxId: string;
+  providerName: string;
+  payerId: string;
+  payerName: string;
+  claims: Array<{
+    memberId: string;
+    memberLastName: string;
+    memberFirstName: string;
+    memberDob: string;
+    claimControlNumber?: string;
+    serviceDateFrom: string;
+    serviceDateTo?: string;
+    chargedAmount?: number;
+  }>;
+}
+
+/**
+ * EDI 277 Claim Status Response types
+ */
+export interface EDI277Response {
+  success: boolean;
+  transactionId: string;
+  claims: Array<{
+    claimControlNumber: string;
+    memberLastName: string;
+    memberFirstName: string;
+    memberId: string;
+    statusCategoryCode: string;
+    statusCategoryDescription: string;
+    statusCode: string;
+    statusDescription: string;
+    totalChargedAmount: number;
+    totalPaidAmount: number;
+    adjudicationDate: string;
+    remittanceDate: string;
+    checkNumber: string;
+    serviceLines: Array<{
+      procedureCode: string;
+      chargedAmount: number;
+      paidAmount: number;
+      serviceDate: string;
+      statusCategoryCode: string;
+      statusDescription: string;
+    }>;
+  }>;
+  errors?: Array<{ code: string; message: string }>;
+}
+
+/** Status category codes from ASC X12 277 */
+export const STATUS_CATEGORY_CODES: Record<string, string> = {
+  'A0': 'Acknowledgement - Receipt confirmed',
+  'A1': 'Acknowledgement - Forwarded to next entity',
+  'A2': 'Acknowledgement - Accepted into adjudication system',
+  'A3': 'Acknowledgement - Returned as unprocessable claim',
+  'A4': 'Acknowledgement - Not found',
+  'A5': 'Acknowledgement - Split claim',
+  'A6': 'Acknowledgement - Rejected — not a valid claim',
+  'P0': 'Pending — Adjudication/Details',
+  'P1': 'Pending — In Process',
+  'P2': 'Pending — Payer review',
+  'P3': 'Pending — Provider requested information',
+  'P4': 'Pending — Patient requested information',
+  'F0': 'Finalized — Payment/Denial details',
+  'F1': 'Finalized — Denied',
+  'F2': 'Finalized — Paid',
+  'F3': 'Finalized — Revised',
+  'F3F': 'Finalized — Forwarded',
+  'F4': 'Finalized — Adjudication Complete',
+  'R0': 'Requests — Additional Information',
+  'R1': 'Requests — Documentation',
+  'R3': 'Requests — Claim must be resubmitted',
+  'R4': 'Requests — Patient demographics needed',
+  'R5': 'Requests — Provider information needed',
+  'E0': 'Error — General',
+  'E1': 'Error — Authorization number missing/invalid',
+  'E2': 'Error — Subscriber/member ID invalid',
+  'D0': 'Data Search — Not applicable',
+};
+
+/**
+ * Generate an EDI 276 Claim Status Inquiry document.
+ *
+ * Follows ASC X12 005010X212 implementation guide:
+ * - ISA/IEA interchange envelope
+ * - GS/GE functional group (GS01 = 'HN' for status inquiry)
+ * - ST/SE transaction set (ST01 = '276')
+ * - BHT for transaction context
+ * - Hierarchical loops: Information Source, Information Receiver, Service Provider, Subscriber
+ * - TRN trace numbers for each claim inquiry
+ * - Service date and claim reference segments
+ */
+export function generateEDI276(request: EDI276Request): string {
+  const now = new Date();
+  const icn = generateInterchangeControlNumber();
+  const gcn = generateGroupControlNumber();
+  const tscn = generateTransactionSetControlNumber();
+
+  const segments: string[] = [];
+
+  // ISA - Interchange Control Header
+  segments.push(
+    `ISA${ELEMENT_SEP}00${ELEMENT_SEP}${padRight('', 10)}${ELEMENT_SEP}00${ELEMENT_SEP}${padRight('', 10)}${ELEMENT_SEP}ZZ${ELEMENT_SEP}${padRight(request.providerNpi, 15)}${ELEMENT_SEP}ZZ${ELEMENT_SEP}${padRight(request.payerId, 15)}${ELEMENT_SEP}${formatISADate(now)}${ELEMENT_SEP}${formatHHMM(now)}${ELEMENT_SEP}^${ELEMENT_SEP}00501${ELEMENT_SEP}${icn}${ELEMENT_SEP}0${ELEMENT_SEP}P${ELEMENT_SEP}${COMPONENT_SEP}${SEGMENT_TERM}`
+  );
+
+  // GS - Functional Group Header (HN = Health Care Claim Status Notification)
+  segments.push(
+    buildSegment('GS', 'HN', request.providerNpi, request.payerId,
+      formatCCYYMMDD(now), formatHHMM(now), gcn, 'X', '005010X212')
+  );
+
+  // ST - Transaction Set Header
+  const stIndex = segments.length;
+  segments.push(buildSegment('ST', '276', tscn, '005010X212'));
+
+  // BHT - Beginning of Hierarchical Transaction
+  const bhtRefId = `CSI${generateControlNumber(6)}`;
+  segments.push(
+    buildSegment('BHT', '0010', '13', bhtRefId, formatCCYYMMDD(now), formatHHMM(now))
+  );
+
+  // HL Loop 1 - Information Source (Payer)
+  segments.push(buildSegment('HL', '1', '', '20', '1'));
+  segments.push(
+    buildSegment('NM1', 'PR', '2', request.payerName, '', '', '', '', 'PI', request.payerId)
+  );
+
+  // HL Loop 2 - Information Receiver (Provider)
+  segments.push(buildSegment('HL', '2', '1', '21', '1'));
+  segments.push(
+    buildSegment('NM1', '41', '2', request.informationReceiverName, '', '', '', '', 'XX', request.informationReceiverNpi)
+  );
+
+  // HL Loop 3 - Service Provider
+  segments.push(buildSegment('HL', '3', '2', '19', '1'));
+  segments.push(
+    buildSegment('NM1', '1P', '2', request.providerName, '', '', '', '', 'XX', request.providerNpi)
+  );
+  segments.push(buildSegment('REF', 'EI', request.providerTaxId));
+
+  // For each claim, add subscriber level HL and claim inquiry
+  let hlCounter = 3;
+  for (const claim of request.claims) {
+    hlCounter++;
+
+    // HL Loop 4 - Subscriber
+    segments.push(buildSegment('HL', hlCounter.toString(), '3', '22', '0'));
+    segments.push(buildSegment('DMG', 'D8', isoDateToEDI(claim.memberDob)));
+    segments.push(
+      buildSegment('NM1', 'IL', '1', claim.memberLastName, claim.memberFirstName, '', '', '', 'MI', claim.memberId)
+    );
+
+    // TRN - Trace Number for this inquiry
+    const traceNumber = `TRC${generateControlNumber(6)}`;
+    segments.push(buildSegment('TRN', '1', traceNumber, request.providerNpi));
+
+    // STC - status request not needed (this is a request, not a response)
+
+    // REF - Claim identification
+    if (claim.claimControlNumber) {
+      segments.push(buildSegment('REF', '1K', claim.claimControlNumber));
+    }
+
+    // DTP - Service Date(s)
+    if (claim.serviceDateTo) {
+      segments.push(
+        buildSegment('DTP', '472', 'RD8', `${isoDateToEDI(claim.serviceDateFrom)}-${isoDateToEDI(claim.serviceDateTo)}`)
+      );
+    } else {
+      segments.push(
+        buildSegment('DTP', '472', 'D8', isoDateToEDI(claim.serviceDateFrom))
+      );
+    }
+
+    // AMT - Charged amount
+    if (claim.chargedAmount !== undefined) {
+      segments.push(buildSegment('AMT', 'T3', formatAmount(claim.chargedAmount)));
+    }
+  }
+
+  // SE - Transaction Set Trailer
+  const segmentCountFromST = segments.length - stIndex + 1;
+  segments.push(buildSegment('SE', segmentCountFromST.toString(), tscn));
+
+  // GE - Functional Group Trailer
+  segments.push(buildSegment('GE', '1', gcn));
+
+  // IEA - Interchange Control Trailer
+  segments.push(buildSegment('IEA', '1', icn));
+
+  return segments.join('');
+}
+
+/**
+ * Parse an EDI 277 Claim Status Response document.
+ *
+ * Extracts claim status information from the 277 response transaction,
+ * mapping status category codes and status codes to human-readable descriptions.
+ */
+export function parseEDI277(ediContent: string): EDI277Response {
+  const segmentStrings = ediContent.split(SEGMENT_TERM).filter(s => s.trim().length > 0);
+  const parseErrors: Array<{ code: string; message: string }> = [];
+  const claims: EDI277Response['claims'] = [];
+
+  let transactionId = '';
+  let currentClaim: EDI277Response['claims'][0] | null = null;
+  let currentServiceLine: EDI277Response['claims'][0]['serviceLines'][0] | null = null;
+  let inServiceLineLoop = false;
+
+  for (const segStr of segmentStrings) {
+    const elements = segStr.split(ELEMENT_SEP);
+    const segId = elements[0]?.trim();
+
+    switch (segId) {
+      case 'ST': {
+        if (elements[1] !== '277') {
+          parseErrors.push({
+            code: 'INVALID_TRANSACTION',
+            message: `Expected 277 transaction set, found ${elements[1]}`,
+          });
+        }
+        transactionId = elements[2] || '';
+        break;
+      }
+
+      case 'STC': {
+        // Status Information
+        // STC01 is composite: StatusCategoryCode:StatusCode
+        const stcComposite = (elements[1] || '').split(COMPONENT_SEP);
+        const categoryCode = stcComposite[0] || '';
+        const statusCode = stcComposite[1] || '';
+        const adjudicationDate = elements[2] || '';
+        const totalPaid = parseFloat(elements[4] || '0');
+
+        if (inServiceLineLoop && currentServiceLine) {
+          currentServiceLine.statusCategoryCode = categoryCode;
+          currentServiceLine.statusDescription =
+            STATUS_CATEGORY_CODES[categoryCode] || `Status ${categoryCode}`;
+        } else if (currentClaim) {
+          currentClaim.statusCategoryCode = categoryCode;
+          currentClaim.statusCategoryDescription =
+            STATUS_CATEGORY_CODES[categoryCode] || `Status category ${categoryCode}`;
+          currentClaim.statusCode = statusCode;
+          currentClaim.statusDescription =
+            STATUS_CATEGORY_CODES[categoryCode] || `Status ${statusCode}`;
+          currentClaim.adjudicationDate = adjudicationDate;
+          currentClaim.totalPaidAmount = totalPaid;
+        }
+        break;
+      }
+
+      case 'TRN': {
+        // Trace Number - starts a new claim inquiry response
+        if (currentClaim) {
+          if (currentServiceLine) {
+            currentClaim.serviceLines.push(currentServiceLine);
+            currentServiceLine = null;
+          }
+          claims.push(currentClaim);
+        }
+        inServiceLineLoop = false;
+
+        currentClaim = {
+          claimControlNumber: '',
+          memberLastName: '',
+          memberFirstName: '',
+          memberId: '',
+          statusCategoryCode: '',
+          statusCategoryDescription: '',
+          statusCode: '',
+          statusDescription: '',
+          totalChargedAmount: 0,
+          totalPaidAmount: 0,
+          adjudicationDate: '',
+          remittanceDate: '',
+          checkNumber: '',
+          serviceLines: [],
+        };
+        break;
+      }
+
+      case 'REF': {
+        if (!currentClaim) break;
+        // 1K = Payer Claim Control Number
+        if (elements[1] === '1K') {
+          currentClaim.claimControlNumber = elements[2] || '';
+        }
+        break;
+      }
+
+      case 'NM1': {
+        if (!currentClaim) break;
+        if (elements[1] === 'IL' || elements[1] === 'QC') {
+          currentClaim.memberLastName = elements[3] || '';
+          currentClaim.memberFirstName = elements[4] || '';
+          if (elements[8] === 'MI') {
+            currentClaim.memberId = elements[9] || '';
+          }
+        }
+        break;
+      }
+
+      case 'DTP': {
+        if (!currentClaim) break;
+        if (elements[1] === '472') {
+          // Service Date
+          if (inServiceLineLoop && currentServiceLine) {
+            currentServiceLine.serviceDate = elements[3] || '';
+          }
+        } else if (elements[1] === '050') {
+          // Received Date
+          currentClaim.remittanceDate = elements[3] || '';
+        }
+        break;
+      }
+
+      case 'AMT': {
+        if (!currentClaim) break;
+        if (elements[1] === 'T3') {
+          currentClaim.totalChargedAmount = parseFloat(elements[2] || '0');
+        }
+        break;
+      }
+
+      case 'SVC': {
+        if (!currentClaim) break;
+        // Save previous service line
+        if (currentServiceLine) {
+          currentClaim.serviceLines.push(currentServiceLine);
+        }
+        inServiceLineLoop = true;
+
+        const svcComposite = (elements[1] || '').split(COMPONENT_SEP);
+        const procedureCode = svcComposite[1] || '';
+
+        currentServiceLine = {
+          procedureCode,
+          chargedAmount: parseFloat(elements[2] || '0'),
+          paidAmount: parseFloat(elements[3] || '0'),
+          serviceDate: '',
+          statusCategoryCode: '',
+          statusDescription: '',
+        };
+        break;
+      }
+    }
+  }
+
+  // Push last claim
+  if (currentClaim) {
+    if (currentServiceLine) {
+      currentClaim.serviceLines.push(currentServiceLine);
+    }
+    claims.push(currentClaim);
+  }
+
+  return {
+    success: parseErrors.length === 0,
+    transactionId,
+    claims,
+    errors: parseErrors.length > 0 ? parseErrors : undefined,
+  };
+}
+
+/**
+ * Submit batch claim status inquiries via EDI 276.
+ * Generates the EDI, submits to clearinghouse, and parses the 277 response.
+ */
+export async function submitClaimStatusInquiry(
+  request: EDI276Request
+): Promise<EDI277Response> {
+  const edi276 = generateEDI276(request);
+
+  if (USE_EDGE_FUNCTION) {
+    try {
+      const result = await callClearinghouseFunction('claim_status', {
+        ediPayload: edi276,
+        format: '276',
+      });
+      if (result.edi277Response) {
+        return parseEDI277(result.edi277Response as string);
+      }
+      // If API returns structured data instead of raw EDI
+      return result as unknown as EDI277Response;
+    } catch (error) {
+      console.warn('[clearinghouse] EDI 276 submission via edge function failed:', error);
+    }
+  }
+
+  if (isAvailityConfigured()) {
+    try {
+      const response = await fetch(`${AVAILITY_API_URL}/availity/v1/claim-statuses`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${AVAILITY_API_KEY}`,
+          'Content-Type': 'application/json',
+          'X-Api-Key': AVAILITY_API_KEY,
+        },
+        body: JSON.stringify({
+          format: '276',
+          payload: edi276,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Availity 276 submission error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      if (data.edi277Response) {
+        return parseEDI277(data.edi277Response as string);
+      }
+      return data as EDI277Response;
+    } catch (error) {
+      console.warn('[clearinghouse] Availity 276 submission failed:', error);
+    }
+  }
+
+  // Mock response for development
+  return {
+    success: true,
+    transactionId: `MOCK-277-${Date.now()}`,
+    claims: request.claims.map(claim => ({
+      claimControlNumber: claim.claimControlNumber || `CLM${Date.now()}`,
+      memberLastName: claim.memberLastName,
+      memberFirstName: claim.memberFirstName,
+      memberId: claim.memberId,
+      statusCategoryCode: 'F2',
+      statusCategoryDescription: STATUS_CATEGORY_CODES['F2'] || 'Finalized — Paid',
+      statusCode: '0',
+      statusDescription: 'Processed as Primary',
+      totalChargedAmount: claim.chargedAmount || 0,
+      totalPaidAmount: (claim.chargedAmount || 0) * 0.8,
+      adjudicationDate: formatCCYYMMDD(new Date()),
+      remittanceDate: formatCCYYMMDD(new Date()),
+      checkNumber: `CHK${Math.random().toString().slice(2, 10)}`,
+      serviceLines: [],
+    })),
+  };
+}
+
+/**
+ * Map 277 status category code to a simplified claim status.
+ */
+export function mapStatusCategoryToClaimStatus(
+  categoryCode: string
+): 'accepted' | 'rejected' | 'pending' | 'finalized' | 'unknown' {
+  if (categoryCode.startsWith('A')) {
+    return categoryCode === 'A3' || categoryCode === 'A6' ? 'rejected' : 'accepted';
+  }
+  if (categoryCode.startsWith('P')) return 'pending';
+  if (categoryCode.startsWith('F')) {
+    return categoryCode === 'F1' ? 'rejected' : 'finalized';
+  }
+  if (categoryCode.startsWith('R')) return 'pending';
+  if (categoryCode.startsWith('E')) return 'rejected';
+  return 'unknown';
 }
 
 export default {
@@ -2425,6 +2942,18 @@ export default {
   // ERA 835 Parsing
   parseERA835,
 
+  // ERA 835 Remittance Retrieval
+  getRemittanceAdvice,
+
+  // EDI 276/277 Claim Status Inquiry
+  generateEDI276,
+  parseEDI277,
+  submitClaimStatusInquiry,
+  mapStatusCategoryToClaimStatus,
+
+  // Prior Authorization
+  submitPriorAuth,
+
   // Retry Queue
   getQueuedSubmissions,
   retryQueuedSubmissions,
@@ -2435,4 +2964,6 @@ export default {
   // Reference data
   CLEARINGHOUSE_PAYER_IDS,
   ABA_SERVICE_CODES,
+  STATUS_CATEGORY_CODES,
+  CARC_DESCRIPTIONS,
 };

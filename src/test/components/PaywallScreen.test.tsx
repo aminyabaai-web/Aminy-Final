@@ -1,15 +1,6 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-vi.mock('lucide-react', () => {
-  const icon = (name: string) =>
-    function MockIcon(props: Record<string, unknown>) {
-      return React.createElement('span', { 'data-testid': `icon-${name}`, ...props });
-    };
-  return new Proxy({}, {
-    get: (_target, prop: string) => icon(prop),
-  });
-});
 
 vi.mock('../../utils/supabase/client', () => ({
   supabase: {
@@ -94,7 +85,8 @@ describe('PaywallScreen', () => {
 
   it('renders three pricing tiers: Free, Core, Pro', () => {
     render(<PaywallScreen {...defaultProps} />);
-    expect(screen.getByText('Free')).toBeInTheDocument();
+    // "Free" appears as both tier name and price text, so use getAllByText
+    expect(screen.getAllByText('Free').length).toBeGreaterThanOrEqual(1);
     expect(screen.getByText('Core')).toBeInTheDocument();
     // "Pro" may appear multiple times, at least once
     expect(screen.getAllByText('Pro').length).toBeGreaterThanOrEqual(1);
@@ -131,7 +123,8 @@ describe('PaywallScreen', () => {
   });
 
   it('renders Continue with Free button for the free tier', () => {
-    render(<PaywallScreen {...defaultProps} />);
+    // When currentTier is NOT free, the free tier button shows "Continue with Free"
+    render(<PaywallScreen {...defaultProps} currentTier={'core' as const} />);
     expect(screen.getByText('Continue with Free')).toBeInTheDocument();
   });
 
