@@ -2,21 +2,36 @@
 -- Migration: 005_waitlist.sql
 
 -- Create waitlist table
-CREATE TABLE IF NOT EXISTS waitlist (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  email TEXT NOT NULL UNIQUE,
-  source TEXT DEFAULT 'landing_page',
-  referral_code TEXT,
-  utm_source TEXT,
-  utm_medium TEXT,
-  utm_campaign TEXT,
-  status TEXT DEFAULT 'waiting' CHECK (status IN ('waiting', 'invited', 'converted', 'unsubscribed')),
-  invited_at TIMESTAMPTZ,
-  converted_at TIMESTAMPTZ,
-  notes TEXT,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
+-- [MIGRATION FIX] Table waitlist created in earlier migration.
+-- Adding columns that would have been lost due to IF NOT EXISTS:
+-- Original CREATE TABLE commented out below.
+ALTER TABLE waitlist ADD COLUMN IF NOT EXISTS email TEXT UNIQUE;
+ALTER TABLE waitlist ADD COLUMN IF NOT EXISTS source TEXT DEFAULT 'landing_page';
+ALTER TABLE waitlist ADD COLUMN IF NOT EXISTS referral_code TEXT;
+ALTER TABLE waitlist ADD COLUMN IF NOT EXISTS utm_source TEXT;
+ALTER TABLE waitlist ADD COLUMN IF NOT EXISTS utm_medium TEXT;
+ALTER TABLE waitlist ADD COLUMN IF NOT EXISTS utm_campaign TEXT;
+ALTER TABLE waitlist ADD COLUMN IF NOT EXISTS invited_at TIMESTAMPTZ;
+ALTER TABLE waitlist ADD COLUMN IF NOT EXISTS converted_at TIMESTAMPTZ;
+ALTER TABLE waitlist ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT NOW();
+
+-- Original CREATE TABLE (commented out, columns added above):
+-- CREATE TABLE IF NOT EXISTS waitlist (
+--   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+--   email TEXT NOT NULL UNIQUE,
+--   source TEXT DEFAULT 'landing_page',
+--   referral_code TEXT,
+--   utm_source TEXT,
+--   utm_medium TEXT,
+--   utm_campaign TEXT,
+--   status TEXT DEFAULT 'waiting' CHECK (status IN ('waiting', 'invited', 'converted', 'unsubscribed')),
+--   invited_at TIMESTAMPTZ,
+--   converted_at TIMESTAMPTZ,
+--   notes TEXT,
+--   created_at TIMESTAMPTZ DEFAULT NOW(),
+--   updated_at TIMESTAMPTZ DEFAULT NOW()
+-- );
+
 
 -- Index for email lookups
 CREATE INDEX IF NOT EXISTS idx_waitlist_email ON waitlist(email);

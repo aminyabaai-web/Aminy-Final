@@ -232,34 +232,50 @@ CREATE INDEX IF NOT EXISTS idx_jr_activities_sort ON junior_activities(sort_orde
 -- 3. CONVERSATIONS TABLE (Persist Chat History)
 -- ============================================
 
-CREATE TABLE IF NOT EXISTS conversations (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  child_id UUID REFERENCES children(id) ON DELETE SET NULL,
-  title TEXT DEFAULT 'New Conversation',
-  messages JSONB NOT NULL DEFAULT '[]',
-  message_count INT NOT NULL DEFAULT 0,
-  -- AI context
-  facts_extracted JSONB DEFAULT '[]',
-  sentiment TEXT CHECK (sentiment IN ('positive', 'neutral', 'negative', 'crisis')),
-  topics TEXT[] DEFAULT '{}',
-  -- Metadata
-  last_message_at TIMESTAMPTZ,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
+-- [MIGRATION FIX] Table conversations created in earlier migration.
+-- Adding columns that would have been lost due to IF NOT EXISTS:
+-- Original CREATE TABLE commented out below.
+ALTER TABLE conversations ADD COLUMN IF NOT EXISTS messages JSONB NOT NULL DEFAULT '[]';
+ALTER TABLE conversations ADD COLUMN IF NOT EXISTS message_count INT NOT NULL DEFAULT 0;
+ALTER TABLE conversations ADD COLUMN IF NOT EXISTS facts_extracted JSONB DEFAULT '[]';
+ALTER TABLE conversations ADD COLUMN IF NOT EXISTS sentiment TEXT CHECK (sentiment IN ('positive', 'neutral', 'negative', 'crisis'));
+ALTER TABLE conversations ADD COLUMN IF NOT EXISTS topics TEXT[] DEFAULT '{}';
+ALTER TABLE conversations ADD COLUMN IF NOT EXISTS last_message_at TIMESTAMPTZ;
+
+-- Original CREATE TABLE (commented out, columns added above):
+-- CREATE TABLE IF NOT EXISTS conversations (
+--   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+--   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+--   child_id UUID REFERENCES children(id) ON DELETE SET NULL,
+--   title TEXT DEFAULT 'New Conversation',
+--   messages JSONB NOT NULL DEFAULT '[]',
+--   message_count INT NOT NULL DEFAULT 0,
+--   -- AI context
+--   facts_extracted JSONB DEFAULT '[]',
+--   sentiment TEXT CHECK (sentiment IN ('positive', 'neutral', 'negative', 'crisis')),
+--   topics TEXT[] DEFAULT '{}',
+--   -- Metadata
+--   last_message_at TIMESTAMPTZ,
+--   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+--   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+-- );
+
 
 ALTER TABLE conversations ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can view own conversations" ON conversations;
 CREATE POLICY "Users can view own conversations" ON conversations
   FOR SELECT TO authenticated USING (user_id = auth.uid());
 
+DROP POLICY IF EXISTS "Users can create conversations" ON conversations;
 CREATE POLICY "Users can create conversations" ON conversations
   FOR INSERT TO authenticated WITH CHECK (user_id = auth.uid());
 
+DROP POLICY IF EXISTS "Users can update own conversations" ON conversations;
 CREATE POLICY "Users can update own conversations" ON conversations
   FOR UPDATE TO authenticated USING (user_id = auth.uid());
 
+DROP POLICY IF EXISTS "Users can delete own conversations" ON conversations;
 CREATE POLICY "Users can delete own conversations" ON conversations
   FOR DELETE TO authenticated USING (user_id = auth.uid());
 

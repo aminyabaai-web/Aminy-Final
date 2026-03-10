@@ -55,7 +55,7 @@ export {
   goalTrialSchema,
   sessionNoteSchema,
   treatmentGoalSchema,
-  type SessionType,
+  type ClinicalSessionType as SessionType,
   type PromptLevel,
   type IncidentLogInput,
   type GoalTrialInput,

@@ -13,6 +13,10 @@
  */
 
 import { supabase } from '../utils/supabase/client';
+import type { SessionStatus } from '../types/app';
+
+// Re-export so existing consumers still work
+export type { SessionStatus };
 
 // ---------------------------------------------------------------------------
 // Types
@@ -26,14 +30,6 @@ export type VisitType =
   | 'therapy'
   | 'parent-coaching'
   | 'team-meeting';
-
-export type SessionStatus =
-  | 'scheduled'
-  | 'confirmed'
-  | 'in-progress'
-  | 'completed'
-  | 'cancelled'
-  | 'no-show';
 
 export interface ScheduledSession {
   id: string;

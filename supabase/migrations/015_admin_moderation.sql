@@ -9,34 +9,50 @@
 -- CONTENT MODERATION QUEUE
 -- ============================================
 
-CREATE TABLE IF NOT EXISTS moderation_queue (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  -- Content being moderated
-  content_type TEXT NOT NULL CHECK (content_type IN ('post', 'comment', 'message', 'profile', 'document')),
-  content_id UUID NOT NULL,
-  content_text TEXT,
-  content_author_id UUID REFERENCES auth.users(id),
-  content_author_name TEXT,
-  -- Flag information
-  flag_category TEXT NOT NULL CHECK (flag_category IN (
-    'spam', 'harassment', 'misinformation', 'inappropriate',
-    'self_harm', 'privacy', 'copyright', 'other'
-  )),
-  flag_reason TEXT,
-  flagged_by UUID REFERENCES auth.users(id), -- Null if AI-flagged
-  flagged_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  -- AI moderation
-  ai_confidence DECIMAL(3,2) CHECK (ai_confidence >= 0 AND ai_confidence <= 1),
-  ai_explanation TEXT,
-  -- Resolution
-  status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected', 'escalated')),
-  resolved_by UUID REFERENCES auth.users(id),
-  resolved_at TIMESTAMPTZ,
-  resolution_notes TEXT,
-  -- Metadata
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
+-- [MIGRATION FIX] Table moderation_queue created in earlier migration.
+-- Adding columns that would have been lost due to IF NOT EXISTS:
+-- Original CREATE TABLE commented out below.
+ALTER TABLE moderation_queue ADD COLUMN IF NOT EXISTS content_text TEXT;
+ALTER TABLE moderation_queue ADD COLUMN IF NOT EXISTS content_author_id UUID REFERENCES auth.users(id);
+ALTER TABLE moderation_queue ADD COLUMN IF NOT EXISTS content_author_name TEXT;
+ALTER TABLE moderation_queue ADD COLUMN IF NOT EXISTS flag_reason TEXT;
+ALTER TABLE moderation_queue ADD COLUMN IF NOT EXISTS flagged_by UUID REFERENCES auth.users(id);
+ALTER TABLE moderation_queue ADD COLUMN IF NOT EXISTS ai_explanation TEXT;
+ALTER TABLE moderation_queue ADD COLUMN IF NOT EXISTS resolved_by UUID REFERENCES auth.users(id);
+ALTER TABLE moderation_queue ADD COLUMN IF NOT EXISTS resolved_at TIMESTAMPTZ;
+ALTER TABLE moderation_queue ADD COLUMN IF NOT EXISTS resolution_notes TEXT;
+ALTER TABLE moderation_queue ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW();
+
+-- Original CREATE TABLE (commented out, columns added above):
+-- CREATE TABLE IF NOT EXISTS moderation_queue (
+--   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+--   -- Content being moderated
+--   content_type TEXT NOT NULL CHECK (content_type IN ('post', 'comment', 'message', 'profile', 'document')),
+--   content_id UUID NOT NULL,
+--   content_text TEXT,
+--   content_author_id UUID REFERENCES auth.users(id),
+--   content_author_name TEXT,
+--   -- Flag information
+--   flag_category TEXT NOT NULL CHECK (flag_category IN (
+--     'spam', 'harassment', 'misinformation', 'inappropriate',
+--     'self_harm', 'privacy', 'copyright', 'other'
+--   )),
+--   flag_reason TEXT,
+--   flagged_by UUID REFERENCES auth.users(id), -- Null if AI-flagged
+--   flagged_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+--   -- AI moderation
+--   ai_confidence DECIMAL(3,2) CHECK (ai_confidence >= 0 AND ai_confidence <= 1),
+--   ai_explanation TEXT,
+--   -- Resolution
+--   status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected', 'escalated')),
+--   resolved_by UUID REFERENCES auth.users(id),
+--   resolved_at TIMESTAMPTZ,
+--   resolution_notes TEXT,
+--   -- Metadata
+--   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+--   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+-- );
+
 
 -- Indexes for efficient querying
 CREATE INDEX IF NOT EXISTS idx_moderation_queue_status ON moderation_queue(status);

@@ -253,22 +253,26 @@ CREATE INDEX idx_provider_profiles_verified ON provider_profiles(verified);
 -- ============================================
 -- PROVIDER AVAILABILITY TABLE
 -- ============================================
-CREATE TABLE IF NOT EXISTS provider_availability (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  provider_id UUID REFERENCES provider_profiles(id) ON DELETE CASCADE,
+-- [MIGRATION FIX] Table provider_availability already created in earlier migration
+-- Original CREATE TABLE commented out to prevent silent column loss:
+-- CREATE TABLE IF NOT EXISTS provider_availability (
+--   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+--   provider_id UUID REFERENCES provider_profiles(id) ON DELETE CASCADE,
+-- 
+--   day_of_week INTEGER NOT NULL CHECK (day_of_week >= 0 AND day_of_week <= 6), -- 0=Sunday
+--   start_time TIME NOT NULL,
+--   end_time TIME NOT NULL,
+-- 
+--   UNIQUE(provider_id, day_of_week, start_time)
+-- );
 
-  day_of_week INTEGER NOT NULL CHECK (day_of_week >= 0 AND day_of_week <= 6), -- 0=Sunday
-  start_time TIME NOT NULL,
-  end_time TIME NOT NULL,
-
-  UNIQUE(provider_id, day_of_week, start_time)
-);
 
 ALTER TABLE provider_availability ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Anyone can view availability" ON provider_availability
   FOR SELECT USING (true);
 
+DROP POLICY IF EXISTS "Providers can manage own availability" ON provider_availability;
 CREATE POLICY "Providers can manage own availability" ON provider_availability
   FOR ALL USING (true);
 
@@ -360,36 +364,45 @@ CREATE INDEX idx_provider_sessions_status ON provider_sessions(status);
 -- ============================================
 -- SESSION NOTES TABLE
 -- ============================================
-CREATE TABLE IF NOT EXISTS session_notes (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  session_id UUID REFERENCES provider_sessions(id) ON DELETE CASCADE,
-  provider_id UUID REFERENCES provider_profiles(id) ON DELETE CASCADE,
+-- [MIGRATION FIX] Table session_notes created in earlier migration.
+-- Adding columns that would have been lost due to IF NOT EXISTS:
+-- Original CREATE TABLE commented out below.
+ALTER TABLE session_notes ADD COLUMN IF NOT EXISTS goal_progress JSONB DEFAULT '{}';
+ALTER TABLE session_notes ADD COLUMN IF NOT EXISTS provider_follow_up TEXT;
+ALTER TABLE session_notes ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ DEFAULT NOW();
 
-  -- Note content
-  note_type TEXT DEFAULT 'progress' CHECK (note_type IN (
-    'progress', 'intake', 'assessment', 'discharge', 'other'
-  )),
+-- Original CREATE TABLE (commented out, columns added above):
+-- CREATE TABLE IF NOT EXISTS session_notes (
+--   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+--   session_id UUID REFERENCES provider_sessions(id) ON DELETE CASCADE,
+--   provider_id UUID REFERENCES provider_profiles(id) ON DELETE CASCADE,
+-- 
+--   -- Note content
+--   note_type TEXT DEFAULT 'progress' CHECK (note_type IN (
+--     'progress', 'intake', 'assessment', 'discharge', 'other'
+--   )),
+-- 
+--   -- Structured fields
+--   subjective TEXT, -- Parent/caregiver report
+--   objective TEXT, -- Provider observations
+--   assessment TEXT, -- Clinical assessment
+--   plan TEXT, -- Plan for next session
+-- 
+--   -- Goals worked on
+--   goals_addressed TEXT[] DEFAULT '{}',
+--   goal_progress JSONB DEFAULT '{}', -- {goalId: 'improved'|'maintained'|'needs_attention'}
+-- 
+--   -- Recommendations
+--   home_recommendations TEXT,
+--   provider_follow_up TEXT,
+-- 
+--   -- Visibility
+--   shared_with_parent BOOLEAN DEFAULT false,
+-- 
+--   created_at TIMESTAMPTZ DEFAULT NOW(),
+--   updated_at TIMESTAMPTZ DEFAULT NOW()
+-- );
 
-  -- Structured fields
-  subjective TEXT, -- Parent/caregiver report
-  objective TEXT, -- Provider observations
-  assessment TEXT, -- Clinical assessment
-  plan TEXT, -- Plan for next session
-
-  -- Goals worked on
-  goals_addressed TEXT[] DEFAULT '{}',
-  goal_progress JSONB DEFAULT '{}', -- {goalId: 'improved'|'maintained'|'needs_attention'}
-
-  -- Recommendations
-  home_recommendations TEXT,
-  provider_follow_up TEXT,
-
-  -- Visibility
-  shared_with_parent BOOLEAN DEFAULT false,
-
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
 
 ALTER TABLE session_notes ENABLE ROW LEVEL SECURITY;
 

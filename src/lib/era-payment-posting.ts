@@ -49,6 +49,21 @@ export interface PostedPayment {
   postingStatus: 'posted' | 'pending_review' | 'write_off' | 'appeal';
   postedAt: string;
   postedBy: string; // 'auto' or user ID
+  // Snake_case aliases for Supabase raw rows
+  paid_amount?: number;
+  adjustment_amount?: number;
+  patient_responsibility?: number;
+  posting_status?: string;
+  payer_name?: string;
+  procedure_code?: string;
+  adjustment_reasons?: Array<{
+    groupCode?: string;
+    group_code?: string;
+    reasonCode?: string;
+    reason_code?: string;
+    amount: number;
+    description?: string;
+  }>;
 }
 
 /** Result of a payment posting batch operation */
@@ -581,7 +596,7 @@ export async function reconcilePayments(
     const lineAdjReasons: ReconciliationResult['serviceLineReconciliation'][0]['adjustmentReasons'] = [];
     for (const pm of matchingPayments) {
       const reasons = pm.adjustmentReasons || pm.adjustment_reasons || [];
-      for (const r of reasons) {
+      for (const r of reasons as Array<Record<string, any>>) {
         lineAdjReasons.push({
           groupCode: r.groupCode || r.group_code,
           reasonCode: r.reasonCode || r.reason_code,

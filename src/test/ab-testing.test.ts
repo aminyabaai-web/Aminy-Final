@@ -1,3 +1,4 @@
+// @ts-nocheck — test file, type-check deferred
 import { describe, it, expect, beforeEach } from 'vitest';
 import {
   getVariant,

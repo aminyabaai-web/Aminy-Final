@@ -386,8 +386,8 @@ export function MilestoneShareCard({
               </>
             ) : (
               <>
-                {navigator.share ? <Share2 size={18} /> : <Copy size={18} />}
-                <span>{navigator.share ? 'Share' : 'Copy Link'}</span>
+                {typeof navigator.share === 'function' ? <Share2 size={18} /> : <Copy size={18} />}
+                <span>{typeof navigator.share === 'function' ? 'Share' : 'Copy Link'}</span>
               </>
             )}
           </button>

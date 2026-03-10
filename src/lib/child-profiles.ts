@@ -369,12 +369,13 @@ export interface ProviderTypeInfo {
   description: string;
   role: string;
   bestFor: string[];
-  sessionTypes: SessionType[];
+  sessionTypes: SessionRecord[];
   color: string;
   icon: string;
 }
 
-export interface SessionType {
+/** Provider session offering record (not a union type — see SessionKind in types/app.ts) */
+export interface SessionRecord {
   id: string;
   name: string;
   duration: number;

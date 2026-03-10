@@ -50,7 +50,9 @@ export type AuditAction =
   | 'recording_consent_given'
   | 'recording_consent_declined'
   | 'recording_started'
-  | 'recording_stopped';
+  | 'recording_stopped'
+  | 'auto_reconnected'
+  | 'reconnect_failed';
 
 // Resource types being accessed
 export type AuditResourceType =

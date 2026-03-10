@@ -52,21 +52,34 @@ CREATE INDEX idx_referrals_status ON provider_referrals(status);
 -- 2. PROVIDER AVAILABILITY
 -- ============================================
 
-CREATE TABLE IF NOT EXISTS provider_availability (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  provider_id uuid NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-  day_of_week smallint NOT NULL CHECK (day_of_week BETWEEN 0 AND 6),
-  start_time time NOT NULL,
-  end_time time NOT NULL,
-  slot_type text DEFAULT 'available' CHECK (slot_type IN ('available', 'telehealth_only', 'in_person_only', 'blocked')),
-  recurrence text DEFAULT 'weekly' CHECK (recurrence IN ('weekly', 'biweekly', 'one_time')),
-  effective_from date,
-  effective_until date,
-  notes text,
-  created_at timestamptz DEFAULT now(),
-  updated_at timestamptz DEFAULT now(),
-  CONSTRAINT valid_time_range CHECK (start_time < end_time)
-);
+-- [MIGRATION FIX] Table provider_availability created in earlier migration.
+-- Adding columns that would have been lost due to IF NOT EXISTS:
+-- Original CREATE TABLE commented out below.
+ALTER TABLE provider_availability ADD COLUMN IF NOT EXISTS start_time time;
+ALTER TABLE provider_availability ADD COLUMN IF NOT EXISTS slot_type text DEFAULT 'available' CHECK (slot_type IN ('available', 'telehealth_only', 'in_person_only', 'blocked'));
+ALTER TABLE provider_availability ADD COLUMN IF NOT EXISTS recurrence text DEFAULT 'weekly' CHECK (recurrence IN ('weekly', 'biweekly', 'one_time'));
+ALTER TABLE provider_availability ADD COLUMN IF NOT EXISTS effective_from date;
+ALTER TABLE provider_availability ADD COLUMN IF NOT EXISTS effective_until date;
+ALTER TABLE provider_availability ADD COLUMN IF NOT EXISTS notes text;
+ALTER TABLE provider_availability ADD COLUMN IF NOT EXISTS updated_at timestamptz DEFAULT now();
+
+-- Original CREATE TABLE (commented out, columns added above):
+-- CREATE TABLE IF NOT EXISTS provider_availability (
+--   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+--   provider_id uuid NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+--   day_of_week smallint NOT NULL CHECK (day_of_week BETWEEN 0 AND 6),
+--   start_time time NOT NULL,
+--   end_time time NOT NULL,
+--   slot_type text DEFAULT 'available' CHECK (slot_type IN ('available', 'telehealth_only', 'in_person_only', 'blocked')),
+--   recurrence text DEFAULT 'weekly' CHECK (recurrence IN ('weekly', 'biweekly', 'one_time')),
+--   effective_from date,
+--   effective_until date,
+--   notes text,
+--   created_at timestamptz DEFAULT now(),
+--   updated_at timestamptz DEFAULT now(),
+--   CONSTRAINT valid_time_range CHECK (start_time < end_time)
+-- );
+
 
 ALTER TABLE provider_availability ENABLE ROW LEVEL SECURITY;
 

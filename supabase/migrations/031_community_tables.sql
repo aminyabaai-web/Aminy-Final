@@ -4,30 +4,45 @@
 -- ============================================================================
 
 -- Community posts table
-CREATE TABLE IF NOT EXISTS community_posts (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  content TEXT NOT NULL,
-  image_url TEXT,
-  post_type TEXT DEFAULT 'general',
-  tags TEXT[] DEFAULT '{}',
-  is_anonymous BOOLEAN DEFAULT false,
-  display_name TEXT, -- For anonymous posts
-  like_count INTEGER DEFAULT 0,
-  comment_count INTEGER DEFAULT 0,
-  is_featured BOOLEAN DEFAULT false,
-  is_pinned BOOLEAN DEFAULT false,
-  moderation_status TEXT DEFAULT 'approved',
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW(),
+-- [MIGRATION FIX] Table community_posts created in earlier migration.
+-- Adding columns that would have been lost due to IF NOT EXISTS:
+-- Original CREATE TABLE commented out below.
+ALTER TABLE community_posts ADD COLUMN IF NOT EXISTS content TEXT;
+ALTER TABLE community_posts ADD COLUMN IF NOT EXISTS image_url TEXT;
+ALTER TABLE community_posts ADD COLUMN IF NOT EXISTS post_type TEXT DEFAULT 'general';
+ALTER TABLE community_posts ADD COLUMN IF NOT EXISTS tags TEXT[] DEFAULT '{}';
+ALTER TABLE community_posts ADD COLUMN IF NOT EXISTS is_anonymous BOOLEAN DEFAULT false;
+ALTER TABLE community_posts ADD COLUMN IF NOT EXISTS display_name TEXT;
+ALTER TABLE community_posts ADD COLUMN IF NOT EXISTS is_featured BOOLEAN DEFAULT false;
+ALTER TABLE community_posts ADD COLUMN IF NOT EXISTS is_pinned BOOLEAN DEFAULT false;
+ALTER TABLE community_posts ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ DEFAULT NOW();
 
-  CONSTRAINT valid_post_type CHECK (post_type IN (
-    'general', 'win', 'question', 'tip', 'support', 'milestone', 'resource'
-  )),
-  CONSTRAINT valid_moderation_status CHECK (moderation_status IN (
-    'pending', 'approved', 'flagged', 'removed'
-  ))
-);
+-- Original CREATE TABLE (commented out, columns added above):
+-- CREATE TABLE IF NOT EXISTS community_posts (
+--   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+--   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+--   content TEXT NOT NULL,
+--   image_url TEXT,
+--   post_type TEXT DEFAULT 'general',
+--   tags TEXT[] DEFAULT '{}',
+--   is_anonymous BOOLEAN DEFAULT false,
+--   display_name TEXT, -- For anonymous posts
+--   like_count INTEGER DEFAULT 0,
+--   comment_count INTEGER DEFAULT 0,
+--   is_featured BOOLEAN DEFAULT false,
+--   is_pinned BOOLEAN DEFAULT false,
+--   moderation_status TEXT DEFAULT 'approved',
+--   created_at TIMESTAMPTZ DEFAULT NOW(),
+--   updated_at TIMESTAMPTZ DEFAULT NOW(),
+-- 
+--   CONSTRAINT valid_post_type CHECK (post_type IN (
+--     'general', 'win', 'question', 'tip', 'support', 'milestone', 'resource'
+--   )),
+--   CONSTRAINT valid_moderation_status CHECK (moderation_status IN (
+--     'pending', 'approved', 'flagged', 'removed'
+--   ))
+-- );
+
 
 -- Indexes for posts
 CREATE INDEX IF NOT EXISTS idx_community_posts_user ON community_posts(user_id);
@@ -37,45 +52,64 @@ CREATE INDEX IF NOT EXISTS idx_community_posts_featured ON community_posts(is_fe
 CREATE INDEX IF NOT EXISTS idx_community_posts_tags ON community_posts USING GIN(tags);
 
 -- Comments table
-CREATE TABLE IF NOT EXISTS community_comments (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  post_id UUID NOT NULL REFERENCES community_posts(id) ON DELETE CASCADE,
-  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  parent_comment_id UUID REFERENCES community_comments(id) ON DELETE CASCADE,
-  content TEXT NOT NULL,
-  is_anonymous BOOLEAN DEFAULT false,
-  display_name TEXT,
-  like_count INTEGER DEFAULT 0,
-  moderation_status TEXT DEFAULT 'approved',
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW(),
+-- [MIGRATION FIX] Table community_comments created in earlier migration.
+-- Adding columns that would have been lost due to IF NOT EXISTS:
+-- Original CREATE TABLE commented out below.
+ALTER TABLE community_comments ADD COLUMN IF NOT EXISTS parent_comment_id UUID REFERENCES community_comments(id) ON DELETE CASCADE;
+ALTER TABLE community_comments ADD COLUMN IF NOT EXISTS content TEXT;
+ALTER TABLE community_comments ADD COLUMN IF NOT EXISTS is_anonymous BOOLEAN DEFAULT false;
+ALTER TABLE community_comments ADD COLUMN IF NOT EXISTS display_name TEXT;
+ALTER TABLE community_comments ADD COLUMN IF NOT EXISTS moderation_status TEXT DEFAULT 'approved';
+ALTER TABLE community_comments ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT NOW();
 
-  CONSTRAINT valid_comment_moderation CHECK (moderation_status IN (
-    'pending', 'approved', 'flagged', 'removed'
-  ))
-);
+-- Original CREATE TABLE (commented out, columns added above):
+-- CREATE TABLE IF NOT EXISTS community_comments (
+--   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+--   post_id UUID NOT NULL REFERENCES community_posts(id) ON DELETE CASCADE,
+--   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+--   parent_comment_id UUID REFERENCES community_comments(id) ON DELETE CASCADE,
+--   content TEXT NOT NULL,
+--   is_anonymous BOOLEAN DEFAULT false,
+--   display_name TEXT,
+--   like_count INTEGER DEFAULT 0,
+--   moderation_status TEXT DEFAULT 'approved',
+--   created_at TIMESTAMPTZ DEFAULT NOW(),
+--   updated_at TIMESTAMPTZ DEFAULT NOW(),
+-- 
+--   CONSTRAINT valid_comment_moderation CHECK (moderation_status IN (
+--     'pending', 'approved', 'flagged', 'removed'
+--   ))
+-- );
+
 
 CREATE INDEX IF NOT EXISTS idx_community_comments_post ON community_comments(post_id);
 CREATE INDEX IF NOT EXISTS idx_community_comments_user ON community_comments(user_id);
 CREATE INDEX IF NOT EXISTS idx_community_comments_parent ON community_comments(parent_comment_id);
 
 -- Likes table (for both posts and comments)
-CREATE TABLE IF NOT EXISTS community_likes (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  post_id UUID REFERENCES community_posts(id) ON DELETE CASCADE,
-  comment_id UUID REFERENCES community_comments(id) ON DELETE CASCADE,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
+-- [MIGRATION FIX] Table community_likes created in earlier migration.
+-- Adding columns that would have been lost due to IF NOT EXISTS:
+-- Original CREATE TABLE commented out below.
+ALTER TABLE community_likes ADD COLUMN IF NOT EXISTS comment_id UUID REFERENCES community_comments(id) ON DELETE CASCADE;
 
-  -- Can only like one thing at a time
-  CONSTRAINT like_target CHECK (
-    (post_id IS NOT NULL AND comment_id IS NULL) OR
-    (post_id IS NULL AND comment_id IS NOT NULL)
-  ),
-  -- One like per user per item
-  UNIQUE(user_id, post_id),
-  UNIQUE(user_id, comment_id)
-);
+-- Original CREATE TABLE (commented out, columns added above):
+-- CREATE TABLE IF NOT EXISTS community_likes (
+--   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+--   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+--   post_id UUID REFERENCES community_posts(id) ON DELETE CASCADE,
+--   comment_id UUID REFERENCES community_comments(id) ON DELETE CASCADE,
+--   created_at TIMESTAMPTZ DEFAULT NOW(),
+-- 
+--   -- Can only like one thing at a time
+--   CONSTRAINT like_target CHECK (
+--     (post_id IS NOT NULL AND comment_id IS NULL) OR
+--     (post_id IS NULL AND comment_id IS NOT NULL)
+--   ),
+--   -- One like per user per item
+--   UNIQUE(user_id, post_id),
+--   UNIQUE(user_id, comment_id)
+-- );
+
 
 CREATE INDEX IF NOT EXISTS idx_community_likes_post ON community_likes(post_id) WHERE post_id IS NOT NULL;
 CREATE INDEX IF NOT EXISTS idx_community_likes_comment ON community_likes(comment_id) WHERE comment_id IS NOT NULL;

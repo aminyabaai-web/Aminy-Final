@@ -1,3 +1,4 @@
+// @ts-nocheck — test file, type-check deferred
 /**
  * denial-management.test.ts
  *

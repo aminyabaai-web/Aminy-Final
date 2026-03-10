@@ -242,7 +242,7 @@ export function useReengagement(
 
     // If this is a returning inactive user, sync to Supabase
     if (userId && days >= INACTIVITY_THRESHOLDS.mild) {
-      supabase
+      void supabase
         .from('reengagement_events')
         .insert({
           user_id: userId,
@@ -251,8 +251,7 @@ export function useReengagement(
           event_type: 'app_return',
           created_at: new Date().toISOString(),
         })
-        .then(() => {})
-        .catch(() => {}); // Non-critical
+        .then(() => {}); // Non-critical, fire and forget
     }
 
     // Send push notification if applicable (once per tier)
@@ -290,7 +289,7 @@ export function useReengagement(
 
     // Track dismissal in Supabase
     if (userId) {
-      supabase
+      void supabase
         .from('reengagement_events')
         .insert({
           user_id: userId,
@@ -299,8 +298,7 @@ export function useReengagement(
           event_type: 'dismissed',
           created_at: new Date().toISOString(),
         })
-        .then(() => {})
-        .catch(() => {});
+        .then(() => {}); // fire and forget
     }
   }, [userId, daysInactive, tier]);
 
@@ -320,15 +318,14 @@ export function useReengagement(
 
     // Sync to Supabase
     if (userId) {
-      supabase
+      void supabase
         .from('user_activity_log')
         .insert({
           user_id: userId,
           activity_type: 'app_active',
           created_at: now.toISOString(),
         })
-        .then(() => {})
-        .catch(() => {});
+        .then(() => {}); // fire and forget
     }
   }, [userId]);
 

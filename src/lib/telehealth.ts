@@ -11,22 +11,18 @@
  */
 
 import { createClientSupabaseClient } from '../utils/supabase/client';
+import type { SessionStatus } from '../types/app';
 
 const supabase = createClientSupabaseClient();
+
+// Re-export so existing consumers still work
+export type { SessionStatus };
 
 // ============================================================================
 // TYPES
 // ============================================================================
 
 export type TelehealthProvider = 'daily' | 'twilio';
-
-export type SessionStatus =
-  | 'scheduled'
-  | 'waiting'
-  | 'in_progress'
-  | 'completed'
-  | 'cancelled'
-  | 'no_show';
 
 export interface TelehealthSession {
   id: string;
@@ -321,7 +317,7 @@ export async function getUpcomingSessions(
       .select('*')
       .eq(column, userId)
       .gte('scheduled_at', now)
-      .in('status', ['scheduled', 'waiting', 'in_progress'])
+      .in('status', ['scheduled', 'waiting', 'in-progress'])
       .order('scheduled_at', { ascending: true });
 
     if (error) throw error;
@@ -352,7 +348,7 @@ export async function getUpcomingSessions(
       .filter(s =>
         s[column] === userId &&
         s.scheduledAt >= now &&
-        ['scheduled', 'waiting', 'in_progress'].includes(s.status)
+        ['scheduled', 'waiting', 'in-progress'].includes(s.status)
       )
       .sort((a, b) => new Date(a.scheduledAt).getTime() - new Date(b.scheduledAt).getTime());
   }

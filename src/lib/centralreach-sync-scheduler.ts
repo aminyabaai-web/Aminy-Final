@@ -702,7 +702,7 @@ export class SyncScheduler {
             },
           })
           .eq('id', syncLogId)
-          .catch(() => {});
+          .then(() => {}); // fire and forget
       }
 
       console.log(
@@ -741,7 +741,7 @@ export class SyncScheduler {
             completed_at: new Date().toISOString(),
           })
           .eq('id', syncLogId)
-          .catch(() => {});
+          .then(() => {}); // fire and forget
       }
 
       // Record individual error for recovery dashboard
@@ -766,7 +766,7 @@ export class SyncScheduler {
                 Math.pow(2, Math.min(record.consecutiveFailures, 10)),
           ).toISOString(),
         })
-        .catch(() => {});
+        .then(() => {}); // fire and forget
 
       console.error(
         `[CRSync] ${direction} ${dataType} failed:`,

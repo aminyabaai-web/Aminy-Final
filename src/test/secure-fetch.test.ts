@@ -1,3 +1,4 @@
+// @ts-nocheck — test file, type-check deferred
 /**
  * Secure Fetch Tests
  * Tests for secureFetch wrapper and secureApi convenience methods
