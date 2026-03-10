@@ -722,6 +722,114 @@ export async function useBundleCredit({
 }
 
 // ============================================================================
+// Subscription Pause / Resume Functions
+// ============================================================================
+
+export interface PauseStatus {
+  isPaused: boolean;
+  resumeDate: string | null;
+  pausedAt: string | null;
+  pauseDurationMonths: number | null;
+}
+
+/**
+ * Pause a subscription for a given duration.
+ * Sets `pause_collection` on the Stripe subscription via edge function.
+ *
+ * @param subscriptionId - Stripe subscription ID
+ * @param durationMonths - How many months to pause (1, 2, or 3)
+ */
+export async function pauseSubscription(
+  subscriptionId: string,
+  durationMonths: 1 | 2 | 3 = 1
+): Promise<{ success: boolean; resumeDate: string }> {
+  const accessToken = await getAccessToken();
+
+  const resumeDate = new Date();
+  resumeDate.setMonth(resumeDate.getMonth() + durationMonths);
+
+  const { data, error, ok } = await secureFetch<{ success: boolean; resumeDate: string }>(
+    `${EDGE_FUNCTION_BASE}/payments/pause-subscription`,
+    {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({
+        subscriptionId,
+        behavior: 'void', // Don't invoice during pause
+        resumesAt: Math.floor(resumeDate.getTime() / 1000),
+      }),
+    }
+  );
+
+  if (!ok || error) {
+    throw new Error(`Failed to pause subscription: ${error || 'Unknown error'}`);
+  }
+
+  return data!;
+}
+
+/**
+ * Resume a paused subscription immediately.
+ * Removes `pause_collection` from the Stripe subscription.
+ *
+ * @param subscriptionId - Stripe subscription ID
+ */
+export async function resumePausedSubscription(
+  subscriptionId: string
+): Promise<{ success: boolean }> {
+  const accessToken = await getAccessToken();
+
+  const { data, error, ok } = await secureFetch<{ success: boolean }>(
+    `${EDGE_FUNCTION_BASE}/payments/resume-paused-subscription`,
+    {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({ subscriptionId }),
+    }
+  );
+
+  if (!ok || error) {
+    throw new Error(`Failed to resume subscription: ${error || 'Unknown error'}`);
+  }
+
+  return data!;
+}
+
+/**
+ * Get the current pause status of a subscription.
+ */
+export async function getPauseStatus(
+  subscriptionId: string
+): Promise<PauseStatus> {
+  const accessToken = await getAccessToken();
+
+  try {
+    const { data, ok } = await secureFetch<PauseStatus>(
+      `${EDGE_FUNCTION_BASE}/payments/pause-status/${subscriptionId}`,
+      {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    if (!ok || !data) {
+      return { isPaused: false, resumeDate: null, pausedAt: null, pauseDurationMonths: null };
+    }
+
+    return data;
+  } catch (error) {
+    console.warn('[Stripe] Failed to get pause status:', error);
+    return { isPaused: false, resumeDate: null, pausedAt: null, pauseDurationMonths: null };
+  }
+}
+
+// ============================================================================
 // Tier Change / Proration Functions
 // ============================================================================
 
@@ -863,6 +971,9 @@ export default {
   getSubscriptionStatus,
   cancelSubscription,
   resumeSubscription,
+  pauseSubscription,
+  resumePausedSubscription,
+  getPauseStatus,
   createOneTimePayment,
   createVisitPayment,
   calculateVisitPrice,

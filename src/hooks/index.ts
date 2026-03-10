@@ -44,3 +44,9 @@ export { useProviderData } from './useProviderData';
 export { useContentData } from './useContentData';
 export { useMessagingData } from './useMessagingData';
 export { useCommunityData } from './useCommunityData';
+
+// PWA and device hooks
+export { useStandaloneMode, type UseStandaloneModeReturn } from './useStandaloneMode';
+export { useResponsiveLayout, type DeviceType, type UseResponsiveLayoutReturn } from './useResponsiveLayout';
+export { useHapticFeedback, triggerHaptic, type HapticType, type UseHapticFeedbackReturn } from './useHapticFeedback';
+export { useJuniorOfflineCache, type UseJuniorOfflineCacheReturn } from './useJuniorOfflineCache';

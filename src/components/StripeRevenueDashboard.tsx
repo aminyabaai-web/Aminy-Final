@@ -26,6 +26,9 @@ import {
   Clock,
   AlertTriangle,
   Shield,
+  PieChart,
+  Activity,
+  Target,
 } from 'lucide-react';
 import {
   revenue,
@@ -33,7 +36,8 @@ import {
   type CustomerMetrics,
   type RevenueEvent,
 } from '../lib/stripe-revenue';
-import { tierDisplayNames, type TierType } from '../lib/tier-utils';
+import { supabase } from '../utils/supabase/client';
+import { tierDisplayNames, tierPricing, type TierType } from '../lib/tier-utils';
 import { RoleGate } from './RoleGate';
 
 interface StripeRevenueDashboardProps {
@@ -140,6 +144,40 @@ export function StripeRevenueDashboard({ onBack }: StripeRevenueDashboardProps) 
   );
 }
 
+// Subscriber growth data for the last 12 months
+interface MonthlyGrowth {
+  month: string; // "Jan", "Feb", etc.
+  count: number;
+}
+
+/**
+ * Fetch subscriber growth data (last 12 months) from Supabase
+ */
+async function fetchSubscriberGrowth(): Promise<MonthlyGrowth[]> {
+  const months: MonthlyGrowth[] = [];
+  const now = new Date();
+
+  for (let i = 11; i >= 0; i--) {
+    const monthStart = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const monthEnd = new Date(now.getFullYear(), now.getMonth() - i + 1, 0, 23, 59, 59);
+    const monthLabel = monthStart.toLocaleString('en-US', { month: 'short' });
+
+    try {
+      const { count } = await supabase
+        .from('subscriptions')
+        .select('*', { count: 'exact', head: true })
+        .in('status', ['active', 'trialing'])
+        .lte('created_at', monthEnd.toISOString());
+
+      months.push({ month: monthLabel, count: count || 0 });
+    } catch {
+      months.push({ month: monthLabel, count: 0 });
+    }
+  }
+
+  return months;
+}
+
 /**
  * Inner dashboard component (only rendered for admin users)
  */
@@ -151,16 +189,21 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
   const [customers, setCustomers] = useState<CustomerMetrics | null>(null);
   const [byPlan, setByPlan] = useState<Record<string, { count: number; mrr: number; percentage: number }>>({});
   const [recentEvents, setRecentEvents] = useState<RevenueEvent[]>([]);
+  const [subscriberGrowth, setSubscriberGrowth] = useState<MonthlyGrowth[]>([]);
   const [_timeRange, setTimeRange] = useState<TimeRange>('30d');
 
   const loadData = useCallback(async () => {
     try {
       setError(null);
-      const report = await revenue.getReport();
+      const [report, growth] = await Promise.all([
+        revenue.getReport(),
+        fetchSubscriberGrowth(),
+      ]);
       setMRR(report.mrr);
       setCustomers(report.customers);
       setByPlan(report.byPlan);
       setRecentEvents(report.recentEvents);
+      setSubscriberGrowth(growth);
     } catch (err) {
       setError('Failed to load revenue data');
       console.error('Revenue dashboard error:', err);
@@ -364,10 +407,13 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
         </div>
       )}
 
-      {/* Unit Economics */}
+      {/* Unit Economics — Enhanced LTV Detail */}
       {customers && (
         <div className="bg-white rounded-xl border border-gray-200 p-4 space-y-3">
-          <h3 className="text-sm font-semibold text-gray-700">Unit Economics</h3>
+          <h3 className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+            <Target size={14} />
+            Unit Economics
+          </h3>
           <div className="grid grid-cols-3 gap-3">
             <div className="text-center">
               <p className="text-lg font-bold text-gray-900">{formatCurrency(customers.ltv)}</p>
@@ -379,7 +425,189 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
             </div>
             <div className="text-center">
               <p className="text-lg font-bold text-gray-900">{customers.conversionRate.toFixed(1)}%</p>
-              <p className="text-xs text-gray-500">Free → Paid</p>
+              <p className="text-xs text-gray-500">Free &rarr; Paid</p>
+            </div>
+          </div>
+
+          {/* LTV Calculation Breakdown */}
+          <div className="border-t border-gray-100 pt-3 space-y-1.5">
+            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">LTV Breakdown</p>
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-gray-500">Avg Revenue / User (monthly)</span>
+              <span className="font-medium text-gray-800">
+                {formatCurrencyDetailed(customers.averageRevenue)}
+              </span>
+            </div>
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-gray-500">Monthly Churn Rate</span>
+              <span className="font-medium text-gray-800">
+                {(customers.churnRate || 0).toFixed(2)}%
+              </span>
+            </div>
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-gray-500">Est. Customer Lifetime</span>
+              <span className="font-medium text-gray-800">
+                {customers.churnRate > 0
+                  ? `${(1 / (customers.churnRate / 100)).toFixed(1)} months`
+                  : '∞'}
+              </span>
+            </div>
+            <div className="flex items-center justify-between text-xs border-t border-gray-100 pt-1.5">
+              <span className="font-semibold text-gray-700">Estimated LTV</span>
+              <span className="font-bold text-green-600">
+                {customers.churnRate > 0
+                  ? formatCurrency(Math.round(customers.averageRevenue / (customers.churnRate / 100)))
+                  : formatCurrency(customers.ltv)}
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Churn Rate Visualization */}
+      {customers && (
+        <div className="bg-white rounded-xl border border-gray-200 p-4 space-y-3">
+          <h3 className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+            <Activity size={14} />
+            Churn Analysis
+          </h3>
+          {/* Visual churn gauge */}
+          <div className="relative h-4 rounded-full bg-gray-100 overflow-hidden">
+            <div
+              className={`absolute left-0 top-0 h-full rounded-full transition-all duration-700 ${
+                (customers.churnRate || 0) > 5
+                  ? 'bg-red-500'
+                  : (customers.churnRate || 0) > 3
+                  ? 'bg-amber-400'
+                  : 'bg-green-500'
+              }`}
+              style={{ width: `${Math.min(100, (customers.churnRate || 0) * 5)}%` }}
+            />
+          </div>
+          <div className="grid grid-cols-3 gap-3 text-center">
+            <div>
+              <p className="text-sm font-bold text-gray-900">
+                {customers.activeCustomers || 0}
+              </p>
+              <p className="text-[10px] text-gray-500">Active</p>
+            </div>
+            <div>
+              <p className="text-sm font-bold text-red-600">
+                {customers.churnedCustomers || 0}
+              </p>
+              <p className="text-[10px] text-gray-500">Churned</p>
+            </div>
+            <div>
+              <p className={`text-sm font-bold ${
+                (customers.churnRate || 0) > 5 ? 'text-red-600' :
+                (customers.churnRate || 0) > 3 ? 'text-amber-600' : 'text-green-600'
+              }`}>
+                {(customers.churnRate || 0).toFixed(1)}%
+              </p>
+              <p className="text-[10px] text-gray-500">Churn Rate</p>
+            </div>
+          </div>
+          <p className="text-[10px] text-gray-400">
+            {(customers.churnRate || 0) <= 3
+              ? 'Healthy churn rate. Below SaaS industry average.'
+              : (customers.churnRate || 0) <= 5
+              ? 'Moderate churn. Consider retention campaigns.'
+              : 'High churn rate. Investigate cancellation reasons.'}
+          </p>
+        </div>
+      )}
+
+      {/* Subscriber Growth Chart (last 12 months) */}
+      {subscriberGrowth.length > 0 && (
+        <div className="bg-white rounded-xl border border-gray-200 p-4 space-y-3">
+          <h3 className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+            <UserPlus size={14} />
+            Subscriber Growth (12 months)
+          </h3>
+          {(() => {
+            const maxCount = Math.max(...subscriberGrowth.map(m => m.count), 1);
+            return (
+              <div className="flex items-end gap-1.5" style={{ height: 120 }}>
+                {subscriberGrowth.map((m, i) => {
+                  const heightPct = maxCount > 0 ? (m.count / maxCount) * 100 : 0;
+                  return (
+                    <div key={i} className="flex flex-col items-center flex-1 gap-1">
+                      <span className="text-[9px] font-medium text-gray-600">{m.count}</span>
+                      <div
+                        className="w-full rounded-t bg-teal-500 transition-all duration-500"
+                        style={{
+                          height: `${Math.max(heightPct, 2)}%`,
+                          minHeight: 2,
+                        }}
+                        title={`${m.month}: ${m.count} subscribers`}
+                      />
+                      <span className="text-[9px] text-gray-400">{m.month}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })()}
+          {subscriberGrowth.length >= 2 && (() => {
+            const latest = subscriberGrowth[subscriberGrowth.length - 1].count;
+            const prev = subscriberGrowth[subscriberGrowth.length - 2].count;
+            const delta = prev > 0 ? ((latest - prev) / prev) * 100 : 0;
+            return (
+              <p className="text-[10px] text-gray-500">
+                Month-over-month: <span className={delta >= 0 ? 'text-green-600 font-medium' : 'text-red-600 font-medium'}>
+                  {delta >= 0 ? '+' : ''}{delta.toFixed(1)}%
+                </span>
+              </p>
+            );
+          })()}
+        </div>
+      )}
+
+      {/* Tier Distribution Pie Chart (CSS-based) */}
+      {Object.keys(byPlan).length > 0 && totalPlanSubscribers > 0 && (
+        <div className="bg-white rounded-xl border border-gray-200 p-4 space-y-3">
+          <h3 className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+            <PieChart size={14} />
+            Tier Distribution
+          </h3>
+          {/* CSS conic-gradient pie chart */}
+          <div className="flex items-center gap-6">
+            <div
+              className="w-28 h-28 rounded-full flex-shrink-0"
+              style={{
+                background: (() => {
+                  const planEntries = Object.entries(byPlan).sort((a, b) => b[1].count - a[1].count);
+                  const colorMap: Record<string, string> = {
+                    free: '#d1d5db',
+                    starter: '#2dd4bf',
+                    core: '#14b8a6',
+                    pro: '#3b82f6',
+                    proplus: '#a855f7',
+                  };
+                  let cumPct = 0;
+                  const segments = planEntries.map(([plan, data]) => {
+                    const start = cumPct;
+                    cumPct += data.percentage;
+                    return `${colorMap[plan] || '#9ca3af'} ${start}% ${cumPct}%`;
+                  });
+                  return `conic-gradient(${segments.join(', ')})`;
+                })(),
+              }}
+            />
+            <div className="flex-1 space-y-1.5">
+              {Object.entries(byPlan)
+                .sort((a, b) => b[1].count - a[1].count)
+                .map(([plan, data]) => (
+                  <div key={plan} className="flex items-center justify-between text-xs">
+                    <div className="flex items-center gap-1.5">
+                      <div className={`w-2 h-2 rounded-full ${PLAN_COLORS[plan] || 'bg-gray-400'}`} />
+                      <span className="text-gray-700">{tierDisplayNames[plan as TierType] || plan}</span>
+                    </div>
+                    <span className="font-medium text-gray-900">
+                      {data.count} ({data.percentage.toFixed(0)}%)
+                    </span>
+                  </div>
+                ))}
             </div>
           </div>
         </div>

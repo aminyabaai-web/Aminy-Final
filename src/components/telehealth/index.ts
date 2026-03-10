@@ -27,6 +27,12 @@ export { VideoRoom } from './VideoRoom';
 export { ConnectionQualityIndicator } from './ConnectionQualityIndicator';
 export { PostSessionNotes } from './PostSessionNotes';
 
+// New components (scorecard push to 9+)
+export { RecordingPlayback } from './RecordingPlayback';
+export { SessionScheduler } from './SessionScheduler';
+export { ParticipantManager } from './ParticipantManager';
+export type { CallParticipant, ParticipantRole } from './ParticipantManager';
+
 // Q&A Sessions & Playbooks
 export { QASessionsHub } from './QASessionsHub';
 export { PlaybooksLibrary } from './PlaybooksLibrary';
@@ -159,3 +165,35 @@ export {
 } from '../../lib/referral-packet-generator';
 
 export type { ReferralPacketData } from '../../lib/referral-packet-generator';
+
+// Re-export session scheduler service
+export {
+  bookSession,
+  getUpcomingSessions,
+  cancelSession,
+  sendReminder,
+  getProviderAvailability,
+  VISIT_TYPE_LABELS,
+  VISIT_TYPE_DURATIONS,
+} from '../../lib/session-scheduler';
+export type {
+  ScheduledSession,
+  ProviderTimeSlot,
+  BookSessionParams,
+  SessionStatus,
+} from '../../lib/session-scheduler';
+export type { VisitType as SchedulerVisitType } from '../../lib/session-scheduler';
+
+// Re-export care plan updater service
+export {
+  extractActionItems,
+  updateCarePlan,
+  generateHomeProgram,
+  processSessionNotesForCarePlan,
+} from '../../lib/care-plan-updater';
+export type {
+  PostSessionNotes as PostSessionNotesData,
+  ExtractedActionItem,
+  HomeProgramItem,
+  HomeProgram,
+} from '../../lib/care-plan-updater';

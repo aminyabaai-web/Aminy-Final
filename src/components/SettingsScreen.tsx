@@ -61,7 +61,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { toast } from 'sonner';
 import { supabase } from '../utils/supabase/client';
 import { TierType, getTierDisplayName } from '../lib/tier-utils';
-import { createPortalSession } from '../lib/stripe-service';
+import { createPortalSession, openCustomerPortal } from '../lib/stripe-service';
 import {
   isPushSupported,
   getNotificationPermission,
@@ -594,6 +594,39 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
               <ChevronRight className="w-4 h-4 ml-1" />
             </Button>
           </div>
+
+          {/* Manage Subscription deep-link — paying users only */}
+          {subscription.tier !== 'free' && (
+            <div className="mt-3 pt-3 border-t border-gray-100 dark:border-slate-700 flex flex-col gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full justify-between text-sm"
+                onClick={async () => {
+                  try {
+                    const { data: { user } } = await supabase.auth.getUser();
+                    if (!user) return;
+                    toast.loading('Opening subscription portal...');
+                    await openCustomerPortal(user.id);
+                    toast.dismiss();
+                  } catch (err) {
+                    toast.dismiss();
+                    toast.error('Could not open subscription portal.');
+                    console.error('Portal deep-link error:', err);
+                  }
+                }}
+              >
+                <span className="flex items-center gap-2">
+                  <CreditCard className="w-4 h-4" />
+                  Manage Subscription
+                </span>
+                <ExternalLink className="w-3.5 h-3.5 text-gray-400" />
+              </Button>
+              <p className="text-[11px] text-muted-foreground">
+                Update payment method, switch plans, view invoices, or cancel
+              </p>
+            </div>
+          )}
         </Card>
 
         {/* Notifications Section */}

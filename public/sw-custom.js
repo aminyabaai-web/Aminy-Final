@@ -234,14 +234,41 @@ self.addEventListener('message', (event) => {
       break;
 
     case 'PRECACHE_JUNIOR_ASSETS':
-      // Eagerly cache Junior activity assets for offline play
-      if (Array.isArray(event.data.urls)) {
-        caches.open('junior-assets').then((cache) => {
-          event.data.urls.forEach((url) => {
-            cache.add(url).catch(() => {
-              // Non-fatal: asset may already be cached or unavailable
-            });
-          });
+      // Eagerly cache Junior activity assets for offline play.
+      // Enhanced: tracks progress per-asset, reports back to client,
+      // and handles partial failures gracefully.
+      if (Array.isArray(event.data.urls) && event.data.urls.length > 0) {
+        const urls = event.data.urls;
+        const port = event.ports && event.ports[0];
+
+        caches.open('junior-assets').then(async (cache) => {
+          let cached = 0;
+          let failed = 0;
+
+          for (const url of urls) {
+            try {
+              // Check if already cached to avoid redundant fetches
+              const existing = await cache.match(url);
+              if (!existing) {
+                await cache.add(url);
+              }
+              cached++;
+            } catch {
+              // Non-fatal: asset may be unavailable or network issue
+              failed++;
+            }
+
+            // Report progress to the client (if a MessagePort was provided)
+            if (port) {
+              port.postMessage({
+                type: 'JUNIOR_CACHE_PROGRESS',
+                cached,
+                failed,
+                total: urls.length,
+                done: cached + failed >= urls.length,
+              });
+            }
+          }
         });
       }
       break;

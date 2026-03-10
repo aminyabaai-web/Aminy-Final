@@ -1,0 +1,434 @@
+/* ========================================
+   REDUCED MOTION STYLES
+   ========================================
+   Activated by:
+   1. OS-level prefers-reduced-motion: reduce
+   2. Manual toggle via useReducedMotion() hook (adds 'reduced-motion' class to <html>)
+
+   Both paths produce the same result.
+
+   Philosophy: Disable or simplify ALL animations and transitions.
+   Motion should NEVER be required to understand or use the UI.
+   Static alternatives (opacity changes, color changes) are OK.
+
+   WCAG 2.1 compliance:
+   - 2.3.1: Three Flashes or Below Threshold
+   - 2.3.3: Animation from Interactions
+   ======================================== */
+
+/* ----------------------------------------
+   Global: Kill all animations and transitions
+   ---------------------------------------- */
+
+html.reduced-motion *,
+html.reduced-motion *::before,
+html.reduced-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  animation-delay: 0ms !important;
+  transition-duration: 0.01ms !important;
+  transition-delay: 0ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* ----------------------------------------
+   Scroll behavior
+   ---------------------------------------- */
+
+html.reduced-motion {
+  scroll-behavior: auto !important;
+}
+
+html.reduced-motion *,
+html.reduced-motion body {
+  scroll-behavior: auto !important;
+}
+
+/* ----------------------------------------
+   motion/react (framer-motion) overrides
+   The library uses inline styles + WAAPI, so we need
+   aggressive overrides for its common patterns.
+   ---------------------------------------- */
+
+/* Disable opacity-based entrance animations */
+html.reduced-motion [style*="opacity"] {
+  opacity: 1 !important;
+}
+
+/* Disable transform-based animations */
+html.reduced-motion [style*="transform"] {
+  transform: none !important;
+}
+
+/* Disable slide/translate animations */
+html.reduced-motion [style*="translateX"],
+html.reduced-motion [style*="translateY"],
+html.reduced-motion [style*="translate3d"] {
+  transform: none !important;
+}
+
+/* Disable scale animations */
+html.reduced-motion [style*="scale"] {
+  transform: none !important;
+}
+
+/* ----------------------------------------
+   Common animation patterns in the Aminy app
+   ---------------------------------------- */
+
+/* Pulse/breathing animations (loading dots, etc.) */
+html.reduced-motion .animate-pulse,
+html.reduced-motion [class*="animate-pulse"] {
+  animation: none !important;
+}
+
+/* Bounce animations */
+html.reduced-motion .animate-bounce,
+html.reduced-motion [class*="animate-bounce"] {
+  animation: none !important;
+}
+
+/* Spin animations (loading spinners) */
+html.reduced-motion .animate-spin,
+html.reduced-motion [class*="animate-spin"] {
+  animation: none !important;
+}
+
+/* Ping animations (notification dots) */
+html.reduced-motion .animate-ping,
+html.reduced-motion [class*="animate-ping"] {
+  animation: none !important;
+}
+
+/* Shimmer/skeleton loading */
+html.reduced-motion [class*="shimmer"],
+html.reduced-motion [class*="skeleton"],
+html.reduced-motion [class*="loading-placeholder"] {
+  animation: none !important;
+  background-image: none !important;
+  background-color: #e5e7eb !important;
+}
+
+/* ----------------------------------------
+   Page transitions
+   ---------------------------------------- */
+
+/* Screen transitions in the 42-screen system */
+html.reduced-motion [data-screen-transition],
+html.reduced-motion [class*="screen-enter"],
+html.reduced-motion [class*="screen-exit"],
+html.reduced-motion [class*="page-transition"] {
+  animation: none !important;
+  transition: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* ----------------------------------------
+   Modal/dialog animations
+   ---------------------------------------- */
+
+html.reduced-motion [role="dialog"],
+html.reduced-motion [role="alertdialog"] {
+  animation: none !important;
+  transition: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* Backdrop fade */
+html.reduced-motion [data-backdrop],
+html.reduced-motion .backdrop,
+html.reduced-motion [class*="overlay"] {
+  animation: none !important;
+  transition: none !important;
+  opacity: 1 !important;
+}
+
+/* ----------------------------------------
+   Toast/notification animations
+   ---------------------------------------- */
+
+html.reduced-motion [role="alert"],
+html.reduced-motion [role="status"],
+html.reduced-motion [class*="toast"],
+html.reduced-motion [class*="notification"],
+html.reduced-motion [class*="snackbar"] {
+  animation: none !important;
+  transition: none !important;
+  transform: none !important;
+  opacity: 1 !important;
+}
+
+/* ----------------------------------------
+   Dropdown/menu animations
+   ---------------------------------------- */
+
+html.reduced-motion [role="menu"],
+html.reduced-motion [role="listbox"],
+html.reduced-motion [class*="dropdown"],
+html.reduced-motion [class*="popover"] {
+  animation: none !important;
+  transition: none !important;
+  transform: none !important;
+  opacity: 1 !important;
+}
+
+/* ----------------------------------------
+   Tab panel transitions
+   ---------------------------------------- */
+
+html.reduced-motion [role="tabpanel"] {
+  animation: none !important;
+  transition: none !important;
+  opacity: 1 !important;
+}
+
+/* ----------------------------------------
+   Accordion/collapse animations
+   ---------------------------------------- */
+
+html.reduced-motion [aria-expanded] + *,
+html.reduced-motion [class*="collapse"],
+html.reduced-motion [class*="accordion"] {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* ----------------------------------------
+   Progress bars and indicators
+   ---------------------------------------- */
+
+html.reduced-motion [role="progressbar"] {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* Indeterminate progress should show static state */
+html.reduced-motion [role="progressbar"][aria-valuenow="0"],
+html.reduced-motion [class*="indeterminate"] {
+  animation: none !important;
+  /* Show a static 50% fill instead of animated indeterminate */
+}
+
+/* ----------------------------------------
+   Carousel/slider animations
+   ---------------------------------------- */
+
+html.reduced-motion [role="region"][aria-roledescription="carousel"],
+html.reduced-motion [class*="carousel"],
+html.reduced-motion [class*="slider"],
+html.reduced-motion [class*="swiper"] {
+  animation: none !important;
+  transition: none !important;
+  scroll-snap-type: none !important;
+}
+
+/* ----------------------------------------
+   Hover animations — replace with static changes
+   ---------------------------------------- */
+
+html.reduced-motion a:hover,
+html.reduced-motion button:hover,
+html.reduced-motion [role="button"]:hover {
+  transition: none !important;
+  transform: none !important;
+}
+
+/* Allow color changes on hover (they're not "motion") */
+html.reduced-motion a:hover {
+  text-decoration: underline;
+}
+
+/* ----------------------------------------
+   Focus ring animations
+   ---------------------------------------- */
+
+html.reduced-motion *:focus,
+html.reduced-motion *:focus-visible {
+  transition: none !important;
+}
+
+/* ----------------------------------------
+   Loading spinners — replace with static indicator
+   ---------------------------------------- */
+
+html.reduced-motion .loading-spinner,
+html.reduced-motion [class*="spinner"],
+html.reduced-motion [aria-label*="loading"] {
+  animation: none !important;
+  /* Add a static "loading" appearance */
+  border-style: dotted !important;
+}
+
+/* ----------------------------------------
+   Background animations (parallax, gradients)
+   ---------------------------------------- */
+
+html.reduced-motion [class*="parallax"] {
+  transform: none !important;
+}
+
+html.reduced-motion [class*="bg-animate"],
+html.reduced-motion [class*="animated-bg"] {
+  animation: none !important;
+}
+
+/* ----------------------------------------
+   Video and auto-playing media
+   ---------------------------------------- */
+
+/* Auto-playing videos should pause */
+html.reduced-motion video[autoplay] {
+  /* CSS can't pause video, but we can hide it */
+  /* The JS hook should handle pausing via the DOM */
+}
+
+/* Animated GIFs get a static treatment */
+html.reduced-motion img[src$=".gif"] {
+  /* Can't stop GIFs with CSS, but hint to the user */
+}
+
+/* ----------------------------------------
+   Smooth scrolling in containers
+   ---------------------------------------- */
+
+html.reduced-motion [class*="scroll-smooth"],
+html.reduced-motion [style*="scroll-behavior: smooth"] {
+  scroll-behavior: auto !important;
+}
+
+/* ----------------------------------------
+   Counter/number animations
+   ---------------------------------------- */
+
+html.reduced-motion [class*="counter"],
+html.reduced-motion [class*="count-up"],
+html.reduced-motion [class*="count-down"] {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* ----------------------------------------
+   Chart animations (outcomes, analytics screens)
+   ---------------------------------------- */
+
+html.reduced-motion [class*="chart"],
+html.reduced-motion [class*="graph"],
+html.reduced-motion svg[class*="chart"] {
+  animation: none !important;
+  transition: none !important;
+}
+
+html.reduced-motion [class*="chart"] path,
+html.reduced-motion [class*="chart"] line,
+html.reduced-motion [class*="chart"] rect {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* ----------------------------------------
+   OS-level prefers-reduced-motion: reduce
+   Mirrors the above via the media query.
+   The global * rule is already in accessibility.css,
+   but these additional rules cover specific patterns.
+   ---------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  /* motion/react inline styles */
+  [style*="opacity"] {
+    opacity: 1 !important;
+  }
+
+  [style*="transform"],
+  [style*="translateX"],
+  [style*="translateY"],
+  [style*="scale"] {
+    transform: none !important;
+  }
+
+  /* Tailwind animation utilities */
+  .animate-pulse,
+  .animate-bounce,
+  .animate-spin,
+  .animate-ping {
+    animation: none !important;
+  }
+
+  /* Skeleton loading */
+  [class*="shimmer"],
+  [class*="skeleton"] {
+    animation: none !important;
+    background-image: none !important;
+    background-color: #e5e7eb !important;
+  }
+
+  /* Page transitions */
+  [data-screen-transition] {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  /* Modal/dialog */
+  [role="dialog"],
+  [role="alertdialog"] {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  /* Notifications */
+  [role="alert"],
+  [role="status"] {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  /* Dropdowns */
+  [role="menu"],
+  [role="listbox"] {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+
+  /* Tabs */
+  [role="tabpanel"] {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+
+  /* Progress */
+  [role="progressbar"] {
+    animation: none !important;
+  }
+
+  /* Charts */
+  [class*="chart"] path,
+  [class*="chart"] line,
+  [class*="chart"] rect {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  /* Hover */
+  a:hover,
+  button:hover,
+  [role="button"]:hover {
+    transition: none !important;
+    transform: none !important;
+  }
+
+  /* Focus */
+  *:focus,
+  *:focus-visible {
+    transition: none !important;
+  }
+
+  /* Scroll */
+  html,
+  * {
+    scroll-behavior: auto !important;
+  }
+}
