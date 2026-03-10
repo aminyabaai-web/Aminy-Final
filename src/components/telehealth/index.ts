@@ -24,6 +24,8 @@ export { VisitSummaryDetailScreen } from './VisitSummaryDetail';
 export { ProviderPortalNew } from './ProviderPortalNew';
 export { TelehealthPreferences } from './TelehealthPreferences';
 export { VideoRoom } from './VideoRoom';
+export { ConnectionQualityIndicator } from './ConnectionQualityIndicator';
+export { PostSessionNotes } from './PostSessionNotes';
 
 // Q&A Sessions & Playbooks
 export { QASessionsHub } from './QASessionsHub';
@@ -112,6 +114,25 @@ export {
   stopScreenShare,
   leaveCall
 } from '../../lib/daily-video';
+
+// Re-export connection quality + auto-reconnect hooks
+export { useConnectionQuality } from '../../hooks/useConnectionQuality';
+export type { ConnectionQuality, NetworkStats, ConnectionQualityResult } from '../../hooks/useConnectionQuality';
+export { useAutoReconnect } from '../../hooks/useAutoReconnect';
+export type { ReconnectState, AutoReconnectConfig, AutoReconnectResult } from '../../hooks/useAutoReconnect';
+
+// Re-export recording storage service
+export {
+  logRecordingConsent,
+  hasAllConsents,
+  createRecordingMetadata,
+  updateRecordingMetadata,
+  getRecordingForSession,
+  uploadRecordingToStorage,
+  transferDailyRecordingToStorage,
+  getRecordingPlaybackUrl,
+} from '../../lib/recording-storage';
+export type { RecordingConsent, RecordingMetadata } from '../../lib/recording-storage';
 
 // Re-export calendar service
 export {

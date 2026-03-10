@@ -29,6 +29,8 @@ import {
   Circle,
   Shield,
   CheckCircle,
+  RefreshCw,
+  WifiOff,
 } from 'lucide-react';
 import {
   joinTelehealthSession,
@@ -48,12 +50,27 @@ import {
 } from '../../lib/daily-video';
 import { useAuditedAction } from '../../hooks/useAuditedAction';
 import { DEFAULT_RETENTION_POLICIES, type RetentionPolicy } from '../../lib/hipaa-compliance';
+import { useConnectionQuality } from '../../hooks/useConnectionQuality';
+import { useAutoReconnect } from '../../hooks/useAutoReconnect';
+import { ConnectionQualityIndicator } from './ConnectionQualityIndicator';
+import { PostSessionNotes } from './PostSessionNotes';
+import {
+  logRecordingConsent,
+  createRecordingMetadata,
+  updateRecordingMetadata,
+} from '../../lib/recording-storage';
 
 interface VideoRoomProps {
   appointmentId: string;
   userId: string;
   userName: string;
   isProvider?: boolean;
+  /** Patient's user ID (for care-plan & recording storage) */
+  patientId?: string;
+  /** Provider's user ID (for care-plan & recording storage) */
+  providerId?: string;
+  /** Pre-filled reason for visit from booking */
+  reasonForVisit?: string;
   scheduledEndTime?: string;
   onEnd?: () => void;
   onError?: (error: string) => void;
@@ -64,6 +81,9 @@ export function VideoRoom({
   userId,
   userName,
   isProvider = false,
+  patientId,
+  providerId,
+  reasonForVisit,
   scheduledEndTime,
   onEnd,
   onError,
@@ -78,6 +98,13 @@ export function VideoRoom({
   const [showRecordingConsent, setShowRecordingConsent] = useState(false);
   const [consentChecked, setConsentChecked] = useState(false);
 
+  // Post-session notes state
+  const [showPostSessionNotes, setShowPostSessionNotes] = useState(false);
+  const [sessionEndedNaturally, setSessionEndedNaturally] = useState(false);
+
+  // Recording metadata tracking
+  const recordingMetadataIdRef = useRef<string | null>(null);
+
   const callObjectRef = useRef<DailyCallObject | null>(null);
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const remoteVideoRef = useRef<HTMLVideoElement>(null);
@@ -86,6 +113,22 @@ export function VideoRoom({
 
   // HIPAA audit logging for telehealth session
   const { logAction } = useAuditedAction('telehealth_session', appointmentId);
+
+  // Connection quality monitoring
+  const { quality: connectionQuality, stats: connectionStats } =
+    useConnectionQuality(callObjectRef.current);
+
+  // Auto-reconnect on network drops
+  const reconnect = useAutoReconnect(callObjectRef.current, {
+    roomUrl: callState.roomUrl || '',
+    userName,
+    onReconnected: () => {
+      logAction('auto_reconnected', { appointmentId });
+    },
+    onReconnectFailed: () => {
+      logAction('reconnect_failed', { appointmentId });
+    },
+  });
 
   // Get the session notes retention policy for display in consent modal
   const sessionRetention: RetentionPolicy | undefined = DEFAULT_RETENTION_POLICIES.find(
@@ -224,10 +267,22 @@ export function VideoRoom({
     setShowRecordingConsent(false);
     setConsentChecked(false);
 
+    const consentTimestamp = new Date().toISOString();
+
     logAction('recording_consent_given', {
       appointmentId,
-      consentTimestamp: new Date().toISOString(),
+      consentTimestamp,
       retentionDays: sessionRetention?.retentionDays ?? 2555,
+    });
+
+    // Persist consent to recording-storage service (HIPAA audit trail)
+    await logRecordingConsent({
+      sessionId: appointmentId,
+      userId,
+      userName,
+      role: isProvider ? 'provider' : 'patient',
+      consentGiven: true,
+      consentTimestamp,
     });
 
     if (!callObjectRef.current) return;
@@ -236,15 +291,36 @@ export function VideoRoom({
       setIsRecording(true);
       recordingStartTimeRef.current = new Date();
       logAction('recording_started', { appointmentId });
+
+      // Create recording metadata in Supabase
+      if (providerId && patientId) {
+        const metadata = await createRecordingMetadata({
+          sessionId: appointmentId,
+          appointmentId,
+          providerId,
+          patientId,
+        });
+        recordingMetadataIdRef.current = metadata.id;
+      }
     }
-  }, [appointmentId, logAction, sessionRetention]);
+  }, [appointmentId, userId, userName, isProvider, providerId, patientId, logAction, sessionRetention]);
 
   // Handle recording consent declined
-  const handleRecordingDeclined = useCallback(() => {
+  const handleRecordingDeclined = useCallback(async () => {
     setShowRecordingConsent(false);
     setConsentChecked(false);
     logAction('recording_consent_declined', { appointmentId });
-  }, [appointmentId, logAction]);
+
+    // Log the decline for HIPAA audit trail
+    await logRecordingConsent({
+      sessionId: appointmentId,
+      userId,
+      userName,
+      role: isProvider ? 'provider' : 'patient',
+      consentGiven: false,
+      consentTimestamp: new Date().toISOString(),
+    });
+  }, [appointmentId, userId, userName, isProvider, logAction]);
 
   // Handle stop recording
   const handleStopRecording = useCallback(async () => {
@@ -257,6 +333,14 @@ export function VideoRoom({
         : 0;
       recordingStartTimeRef.current = null;
       logAction('recording_stopped', { appointmentId, recordingDurationSeconds: durationSeconds });
+
+      // Update recording metadata with duration
+      if (recordingMetadataIdRef.current) {
+        await updateRecordingMetadata(recordingMetadataIdRef.current, {
+          status: 'processing',
+          durationSeconds,
+        });
+      }
     }
   }, [appointmentId, logAction]);
 
@@ -279,14 +363,35 @@ export function VideoRoom({
       await stopRecording(callObjectRef.current);
       logAction('recording_stopped', { appointmentId, reason: 'call_ended' });
       setIsRecording(false);
+
+      // Mark recording metadata as processing (Daily will provide download URL later)
+      if (recordingMetadataIdRef.current) {
+        const durationSeconds = recordingStartTimeRef.current
+          ? Math.floor((Date.now() - recordingStartTimeRef.current.getTime()) / 1000)
+          : 0;
+        await updateRecordingMetadata(recordingMetadataIdRef.current, {
+          status: 'processing',
+          durationSeconds,
+        });
+      }
     }
 
+    // Mark this as an intentional leave so auto-reconnect doesn't trigger
     if (callObjectRef.current) {
+      const markFn = (callObjectRef.current as unknown as Record<string, unknown>).__markIntentionalLeave;
+      if (typeof markFn === 'function') markFn();
       await leaveCall(callObjectRef.current);
     }
 
-    onEnd?.();
-  }, [onEnd, isRecording, appointmentId, logAction]);
+    setSessionEndedNaturally(true);
+
+    // If the user is a provider, show post-session notes instead of immediately closing
+    if (isProvider && patientId && providerId) {
+      setShowPostSessionNotes(true);
+    } else {
+      onEnd?.();
+    }
+  }, [onEnd, isRecording, isProvider, patientId, providerId, appointmentId, logAction]);
 
   // Render loading state
   if (callState.state === 'joining') {
@@ -347,6 +452,12 @@ export function VideoRoom({
             )}
           </div>
           <div className="flex items-center gap-2">
+            {/* Connection quality indicator */}
+            <ConnectionQualityIndicator
+              quality={connectionQuality}
+              stats={connectionStats}
+              variant="pill"
+            />
             <button
               onClick={() => setShowChat(!showChat)}
               className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
@@ -631,6 +742,79 @@ export function VideoRoom({
             </div>
           </div>
         </div>
+      )}
+
+      {/* Auto-Reconnect Overlay */}
+      {reconnect.state === 'reconnecting' && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-60 p-4">
+          <div className="bg-gray-900/95 backdrop-blur-sm border border-white/10 rounded-2xl p-6 max-w-sm w-full text-center">
+            <div className="w-16 h-16 border-4 border-yellow-400/30 border-t-yellow-400 rounded-full animate-spin mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-white">Reconnecting...</h3>
+            <p className="text-sm text-white/60 mt-2">
+              Connection was interrupted. Attempting to rejoin.
+            </p>
+            <p className="text-xs text-white/40 mt-3">
+              Attempt {reconnect.attemptCount} &middot; {reconnect.secondsRemaining}s remaining
+            </p>
+            <button
+              onClick={reconnect.cancel}
+              className="mt-4 px-4 py-2 border border-white/20 rounded-lg text-sm text-white/70 hover:bg-white/10 transition-colors"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Connection Lost Overlay */}
+      {reconnect.state === 'connection-lost' && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-60 p-4">
+          <div className="bg-gray-900/95 backdrop-blur-sm border border-white/10 rounded-2xl p-6 max-w-sm w-full text-center">
+            <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <WifiOff className="w-8 h-8 text-red-400" />
+            </div>
+            <h3 className="text-lg font-semibold text-white">Connection Lost</h3>
+            <p className="text-sm text-white/60 mt-2">
+              Unable to reconnect to the session. Check your network and try again.
+            </p>
+            <div className="flex gap-3 mt-4 sm:mt-6">
+              <button
+                onClick={() => onEnd?.()}
+                className="flex-1 py-3 px-4 border border-white/20 rounded-xl font-medium text-sm text-white/70 hover:bg-white/10 transition-colors"
+              >
+                Leave
+              </button>
+              <button
+                onClick={reconnect.retryNow}
+                className="flex-1 py-3 px-4 bg-blue-600 text-white rounded-xl font-medium text-sm hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+              >
+                <RefreshCw size={16} />
+                Retry
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Post-Session Notes (provider only) */}
+      {showPostSessionNotes && isProvider && patientId && providerId && (
+        <PostSessionNotes
+          appointmentId={appointmentId}
+          userId={userId}
+          patientId={patientId}
+          providerId={providerId}
+          reasonForVisit={reasonForVisit}
+          sessionDurationSeconds={elapsedTime}
+          wasRecorded={!!recordingMetadataIdRef.current}
+          onSaved={() => {
+            setShowPostSessionNotes(false);
+            onEnd?.();
+          }}
+          onSkip={() => {
+            setShowPostSessionNotes(false);
+            onEnd?.();
+          }}
+        />
       )}
     </div>
   );

@@ -6,14 +6,22 @@
  *
  * Uses the Background Sync API when available, falls back to
  * online/offline event listeners + periodic retry.
+ *
+ * Storage: IndexedDB (async, high-capacity, works in service workers).
  */
 
-import { useEffect, useCallback, useRef } from 'react';
+import { useEffect, useCallback, useRef, useState } from 'react';
 
-// Sync queue types
-export type SyncAction = 'behavior_log' | 'junior_result' | 'conversation' | 'routine_completion' | 'care_plan_update';
+// ---- Types ----
 
-interface SyncQueueItem {
+export type SyncAction =
+  | 'behavior_log'
+  | 'junior_result'
+  | 'conversation'
+  | 'routine_completion'
+  | 'care_plan_update';
+
+export interface SyncQueueItem {
   id: string;
   action: SyncAction;
   payload: Record<string, unknown>;
@@ -25,57 +33,126 @@ interface SyncQueueItem {
   lastAttempt?: string;
 }
 
-const SYNC_QUEUE_KEY = 'aminy_sync_queue';
+// ---- Constants ----
+
+const DB_NAME = 'aminy-sync-queue';
+const DB_VERSION = 1;
+const STORE_NAME = 'pending-mutations';
 const MAX_RETRIES = 5;
+const RETRY_INTERVAL_MS = 30_000; // 30 seconds
 
-// ---- Queue Management (localStorage-based, upgradeable to IndexedDB) ----
+// ---- IndexedDB Helpers ----
 
-function getQueue(): SyncQueueItem[] {
+function openDB(): Promise<IDBDatabase> {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(DB_NAME, DB_VERSION);
+
+    request.onupgradeneeded = () => {
+      const db = request.result;
+      if (!db.objectStoreNames.contains(STORE_NAME)) {
+        const store = db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+        store.createIndex('action', 'action', { unique: false });
+        store.createIndex('createdAt', 'createdAt', { unique: false });
+      }
+    };
+
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+}
+
+async function getQueue(): Promise<SyncQueueItem[]> {
   try {
-    const raw = localStorage.getItem(SYNC_QUEUE_KEY);
-    return raw ? JSON.parse(raw) : [];
+    const db = await openDB();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(STORE_NAME, 'readonly');
+      const store = tx.objectStore(STORE_NAME);
+      const req = store.getAll();
+      req.onsuccess = () => resolve(req.result ?? []);
+      req.onerror = () => reject(req.error);
+      tx.oncomplete = () => db.close();
+    });
   } catch {
     return [];
   }
 }
 
-function saveQueue(queue: SyncQueueItem[]) {
-  localStorage.setItem(SYNC_QUEUE_KEY, JSON.stringify(queue));
-}
-
-function addToQueue(item: Omit<SyncQueueItem, 'id' | 'retries' | 'createdAt' | 'maxRetries'>) {
-  const queue = getQueue();
-  queue.push({
+async function addToQueue(
+  item: Omit<SyncQueueItem, 'id' | 'retries' | 'createdAt' | 'maxRetries'>
+): Promise<number> {
+  const db = await openDB();
+  const entry: SyncQueueItem = {
     ...item,
     id: crypto.randomUUID(),
     retries: 0,
     maxRetries: MAX_RETRIES,
     createdAt: new Date().toISOString(),
+  };
+
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, 'readwrite');
+    const store = tx.objectStore(STORE_NAME);
+    store.add(entry);
+
+    // Count total items after adding
+    const countReq = store.count();
+    countReq.onsuccess = () => resolve(countReq.result);
+    countReq.onerror = () => reject(countReq.error);
+    tx.oncomplete = () => db.close();
   });
-  saveQueue(queue);
-  return queue.length;
 }
 
-function removeFromQueue(id: string) {
-  const queue = getQueue().filter(item => item.id !== id);
-  saveQueue(queue);
+async function removeFromQueue(id: string): Promise<void> {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, 'readwrite');
+    const store = tx.objectStore(STORE_NAME);
+    const req = store.delete(id);
+    req.onsuccess = () => resolve();
+    req.onerror = () => reject(req.error);
+    tx.oncomplete = () => db.close();
+  });
 }
 
-function updateRetry(id: string) {
-  const queue = getQueue().map(item =>
-    item.id === id
-      ? { ...item, retries: item.retries + 1, lastAttempt: new Date().toISOString() }
-      : item
-  );
-  // Remove items that exceeded max retries
-  const filtered = queue.filter(item => item.retries <= item.maxRetries);
-  saveQueue(filtered);
+async function updateRetry(id: string): Promise<void> {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, 'readwrite');
+    const store = tx.objectStore(STORE_NAME);
+    const getReq = store.get(id);
+
+    getReq.onsuccess = () => {
+      const item = getReq.result as SyncQueueItem | undefined;
+      if (!item) {
+        resolve();
+        return;
+      }
+
+      item.retries += 1;
+      item.lastAttempt = new Date().toISOString();
+
+      if (item.retries > item.maxRetries) {
+        // Exceeded max retries -- discard
+        store.delete(id);
+      } else {
+        store.put(item);
+      }
+      resolve();
+    };
+
+    getReq.onerror = () => reject(getReq.error);
+    tx.oncomplete = () => db.close();
+  });
 }
 
 // ---- Sync Processing ----
 
-async function processQueue(): Promise<{ synced: number; failed: number; remaining: number }> {
-  const queue = getQueue();
+async function processQueue(): Promise<{
+  synced: number;
+  failed: number;
+  remaining: number;
+}> {
+  const queue = await getQueue();
   if (queue.length === 0) return { synced: 0, failed: 0, remaining: 0 };
 
   let synced = 0;
@@ -87,31 +164,32 @@ async function processQueue(): Promise<{ synced: number; failed: number; remaini
         method: item.method,
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('access_token') || ''}`,
+          Authorization: `Bearer ${localStorage.getItem('access_token') ?? ''}`,
         },
         body: JSON.stringify(item.payload),
       });
 
       if (response.ok) {
-        removeFromQueue(item.id);
+        await removeFromQueue(item.id);
         synced++;
       } else if (response.status >= 400 && response.status < 500) {
-        // Client error — remove (won't succeed on retry)
-        removeFromQueue(item.id);
+        // Client error -- will never succeed on retry, remove
+        await removeFromQueue(item.id);
         failed++;
       } else {
-        // Server error — retry later
-        updateRetry(item.id);
+        // Server error -- retry later
+        await updateRetry(item.id);
         failed++;
       }
     } catch {
-      // Network error — retry later
-      updateRetry(item.id);
+      // Network error -- retry later
+      await updateRetry(item.id);
       failed++;
     }
   }
 
-  return { synced, failed, remaining: getQueue().length };
+  const remaining = await getQueue();
+  return { synced, failed, remaining: remaining.length };
 }
 
 // ---- Hook ----
@@ -119,7 +197,6 @@ async function processQueue(): Promise<{ synced: number; failed: number; remaini
 export function useBackgroundSync() {
   const processingRef = useRef(false);
 
-  // Process queue when coming online
   const processSync = useCallback(async () => {
     if (processingRef.current || !navigator.onLine) return;
     processingRef.current = true;
@@ -127,59 +204,72 @@ export function useBackgroundSync() {
     try {
       const result = await processQueue();
       if (result.synced > 0) {
-        window.dispatchEvent(new CustomEvent('sync-completed', { detail: result }));
+        window.dispatchEvent(
+          new CustomEvent('sync-completed', { detail: result })
+        );
       }
     } finally {
       processingRef.current = false;
     }
   }, []);
 
-  // Queue a mutation for background sync
-  const queueMutation = useCallback((
-    action: SyncAction,
-    endpoint: string,
-    payload: Record<string, unknown>,
-    method: 'POST' | 'PUT' | 'PATCH' = 'POST'
-  ): { queued: boolean; queueLength: number } => {
-    const length = addToQueue({ action, endpoint, payload, method });
+  const queueMutation = useCallback(
+    (
+      action: SyncAction,
+      endpoint: string,
+      payload: Record<string, unknown>,
+      method: 'POST' | 'PUT' | 'PATCH' = 'POST'
+    ): { queued: boolean; queueLength: Promise<number> } => {
+      const lengthPromise = addToQueue({ action, endpoint, payload, method });
 
-    // If online, try immediately
-    if (navigator.onLine) {
-      setTimeout(processSync, 100);
-    }
+      // If online, try immediately
+      if (navigator.onLine) {
+        setTimeout(processSync, 100);
+      }
 
-    // Register background sync if available
-    if ('serviceWorker' in navigator && 'SyncManager' in window) {
-      navigator.serviceWorker.ready.then(reg => {
-        (reg as unknown as { sync: { register: (tag: string) => Promise<void> } })
-          .sync.register('aminy-background-sync').catch(() => {});
-      });
-    }
+      // Register Background Sync API if available
+      if ('serviceWorker' in navigator && 'SyncManager' in window) {
+        navigator.serviceWorker.ready
+          .then((reg) => {
+            (
+              reg as unknown as {
+                sync: { register: (tag: string) => Promise<void> };
+              }
+            ).sync
+              .register('aminy-background-sync')
+              .catch(() => {});
+          })
+          .catch(() => {});
+      }
 
-    return { queued: true, queueLength: length };
-  }, [processSync]);
+      return { queued: true, queueLength: lengthPromise };
+    },
+    [processSync]
+  );
 
-  // Get current queue status
-  const getQueueStatus = useCallback(() => {
-    const queue = getQueue();
+  const getQueueStatus = useCallback(async () => {
+    const queue = await getQueue();
     return {
       pending: queue.length,
       items: queue.map(({ id, action, retries, createdAt }) => ({
-        id, action, retries, createdAt,
+        id,
+        action,
+        retries,
+        createdAt,
       })),
     };
   }, []);
 
-  // Listen for online events
+  // Listen for online events + periodic retry
   useEffect(() => {
     window.addEventListener('online', processSync);
 
-    // Also retry periodically (every 30s)
-    const interval = setInterval(() => {
-      if (navigator.onLine && getQueue().length > 0) {
+    const interval = setInterval(async () => {
+      const queue = await getQueue();
+      if (navigator.onLine && queue.length > 0) {
         processSync();
       }
-    }, 30000);
+    }, RETRY_INTERVAL_MS);
 
     // Process on mount if online
     if (navigator.onLine) {
@@ -200,17 +290,29 @@ export function useBackgroundSync() {
   };
 }
 
-/**
- * Offline indicator component data
- */
+// ---- Online Status Hook ----
+
 export function useOnlineStatus() {
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
-  const [pendingSyncs, setPendingSyncs] = useState(getQueue().length);
+  const [online, setOnline] = useState(
+    typeof navigator !== 'undefined' ? navigator.onLine : true
+  );
+  const [pendingSyncs, setPendingSyncs] = useState(0);
 
   useEffect(() => {
-    const handleOnline = () => { setIsOnline(true); setPendingSyncs(getQueue().length); };
-    const handleOffline = () => { setIsOnline(false); setPendingSyncs(getQueue().length); };
-    const handleSyncComplete = () => { setPendingSyncs(getQueue().length); };
+    // Load initial pending count
+    getQueue().then((q) => setPendingSyncs(q.length));
+
+    const handleOnline = () => {
+      setOnline(true);
+      getQueue().then((q) => setPendingSyncs(q.length));
+    };
+    const handleOffline = () => {
+      setOnline(false);
+      getQueue().then((q) => setPendingSyncs(q.length));
+    };
+    const handleSyncComplete = () => {
+      getQueue().then((q) => setPendingSyncs(q.length));
+    };
 
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
@@ -223,10 +325,7 @@ export function useOnlineStatus() {
     };
   }, []);
 
-  return { isOnline, pendingSyncs };
+  return { isOnline: online, pendingSyncs };
 }
-
-// Need useState for useOnlineStatus
-import { useState } from 'react';
 
 export default useBackgroundSync;

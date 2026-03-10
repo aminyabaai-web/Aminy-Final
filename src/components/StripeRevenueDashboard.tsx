@@ -25,6 +25,7 @@ import {
   Minus,
   Clock,
   AlertTriangle,
+  Shield,
 } from 'lucide-react';
 import {
   revenue,
@@ -34,7 +35,6 @@ import {
 } from '../lib/stripe-revenue';
 import { tierDisplayNames, type TierType } from '../lib/tier-utils';
 import { RoleGate } from './RoleGate';
-import { Shield } from 'lucide-react';
 
 interface StripeRevenueDashboardProps {
   onBack?: () => void;

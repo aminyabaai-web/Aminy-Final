@@ -1850,7 +1850,10 @@ export async function checkEligibilityWaystar(
     return result as unknown as EligibilityResponse;
   } catch (error) {
     console.warn('[clearinghouse] Waystar eligibility check failed:', error);
-    return getMockEligibilityResponse(request);
+    if (import.meta.env.DEV) {
+      return getMockEligibilityResponse(request);
+    }
+    throw error;
   }
 }
 

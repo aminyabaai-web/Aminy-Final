@@ -1,5 +1,6 @@
 // @ts-expect-error - @types/react-dom not installed
 import { createRoot } from "react-dom/client";
+import { StrictMode } from "react";
 import App from "./App.tsx";
 import "./index.css";
 import { initEnvValidation } from "./lib/env-validation.ts";
@@ -15,6 +16,11 @@ import { runBreachDetection } from "./lib/hipaa-compliance";
 import { getSecurityConfig } from "./lib/security/index";
 // NOTE: Service worker registration is handled automatically by VitePWA
 // (vite-plugin-pwa) with registerType: 'autoUpdate'. No manual registration needed.
+
+// ============================================================================
+// Performance Timing
+// ============================================================================
+performance.mark('aminy-main-start');
 
 interface WindowWithGtag extends Window {
   gtag?: (...args: [string, ...unknown[]]) => void;
@@ -138,8 +144,39 @@ window.addEventListener('beforeunload', () => {
 });
 
 // ============================================================================
+// Render
+// ============================================================================
 
-createRoot(document.getElementById("root")!).render(<App />);
+const rootElement = document.getElementById('root');
+
+if (!rootElement) {
+  // This should never happen unless index.html is corrupted
+  document.body.innerHTML =
+    '<div style="padding:2rem;font-family:system-ui;text-align:center">' +
+    '<h1>Aminy failed to start</h1>' +
+    '<p>The application root element is missing. Please try clearing your browser cache and reloading.</p>' +
+    '</div>';
+  throw new Error('[Aminy] #root element not found in document');
+}
+
+const root = createRoot(rootElement);
+
+root.render(
+  <StrictMode>
+    <App />
+  </StrictMode>
+);
+
+// Measure time from main.tsx entry to first render call
+performance.mark('aminy-render-called');
+performance.measure('aminy-startup', 'aminy-main-start', 'aminy-render-called');
+
+if (import.meta.env.DEV) {
+  const entry = performance.getEntriesByName('aminy-startup')[0];
+  if (entry) {
+    console.log(`[Perf] main.tsx startup: ${entry.duration.toFixed(1)}ms`);
+  }
+}
 
 // Service worker registration is handled by VitePWA plugin automatically.
 // See vite.config.ts VitePWA({ registerType: 'autoUpdate' }) for configuration.

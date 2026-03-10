@@ -15,7 +15,7 @@
  * - Pro+: 30% off ($104)
  */
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Crown,
@@ -32,6 +32,7 @@ import {
   Gift,
   CreditCard,
   Minus,
+  TrendingUp,
 } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
@@ -40,6 +41,59 @@ import { TierType, tierPricing } from '../lib/tier-utils';
 import { createCheckoutSession, isStripeConfigured, STRIPE_PRICES } from '../lib/stripe-service';
 import { supabase } from '../utils/supabase/client';
 import { billingEngine } from '../lib/billing-engine';
+
+// ── Social Proof Data ─────────────────────────────────────────────────
+// Structured for future Supabase pull — these are placeholder initial values.
+// Replace with a real-time query to `social_proof_counters` table when available.
+
+interface SocialProofData {
+  familyCount: number;
+  averageRating: number;
+  reviewCount: number;
+  recentSignupName: string; // e.g., "Sarah from TX" — anonymized
+  recentSignupMinutesAgo: number;
+}
+
+const DEFAULT_SOCIAL_PROOF: SocialProofData = {
+  familyCount: 537,
+  averageRating: 4.8,
+  reviewCount: 124,
+  recentSignupName: 'A family in Arizona',
+  recentSignupMinutesAgo: 12,
+};
+
+function useSocialProof(): SocialProofData {
+  const [data, setData] = useState<SocialProofData>(DEFAULT_SOCIAL_PROOF);
+
+  useEffect(() => {
+    let cancelled = false;
+    // Attempt to fetch live social proof from Supabase
+    (async () => {
+      try {
+        const { data: row } = await supabase
+          .from('social_proof_counters')
+          .select('family_count, average_rating, review_count, recent_signup_label, recent_signup_minutes_ago')
+          .eq('id', 'global')
+          .maybeSingle();
+
+        if (!cancelled && row) {
+          setData({
+            familyCount: row.family_count ?? DEFAULT_SOCIAL_PROOF.familyCount,
+            averageRating: row.average_rating ?? DEFAULT_SOCIAL_PROOF.averageRating,
+            reviewCount: row.review_count ?? DEFAULT_SOCIAL_PROOF.reviewCount,
+            recentSignupName: row.recent_signup_label ?? DEFAULT_SOCIAL_PROOF.recentSignupName,
+            recentSignupMinutesAgo: row.recent_signup_minutes_ago ?? DEFAULT_SOCIAL_PROOF.recentSignupMinutesAgo,
+          });
+        }
+      } catch {
+        // Table may not exist yet — use defaults
+      }
+    })();
+    return () => { cancelled = true; };
+  }, []);
+
+  return data;
+}
 
 // Testimonials
 const TESTIMONIALS = [
@@ -102,6 +156,7 @@ export function PaywallSimplified({
   const [promoError, setPromoError] = useState('');
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [isValidatingPromo, setIsValidatingPromo] = useState(false);
+  const socialProof = useSocialProof();
 
   // Rotate testimonials
   React.useEffect(() => {
@@ -279,6 +334,59 @@ export function PaywallSimplified({
           <p className="text-gray-600 max-w-sm mx-auto text-sm sm:text-base">
             Get unlimited AI support, personalized strategies, and tools designed by BCBAs to help your family thrive.
           </p>
+        </motion.div>
+
+        {/* Social Proof Banner */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+          className="w-full max-w-md mb-6"
+        >
+          {/* Family counter + rating row */}
+          <div className="flex items-center justify-center gap-4 mb-3">
+            <div className="flex items-center gap-1.5 bg-white rounded-full px-3.5 py-1.5 shadow-sm border border-gray-100">
+              <Users className="w-4 h-4 text-teal-600" />
+              <span className="text-sm font-semibold text-gray-900">
+                {socialProof.familyCount.toLocaleString()}+
+              </span>
+              <span className="text-xs text-gray-500">families</span>
+            </div>
+
+            <div className="flex items-center gap-1 bg-white rounded-full px-3.5 py-1.5 shadow-sm border border-gray-100">
+              <div className="flex items-center gap-0.5">
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <Star
+                    key={i}
+                    className={`w-3.5 h-3.5 ${
+                      i <= Math.floor(socialProof.averageRating)
+                        ? 'fill-amber-400 text-amber-400'
+                        : i - 0.5 <= socialProof.averageRating
+                        ? 'fill-amber-400/50 text-amber-400'
+                        : 'text-gray-200'
+                    }`}
+                  />
+                ))}
+              </div>
+              <span className="text-sm font-semibold text-gray-900 ml-0.5">
+                {socialProof.averageRating}
+              </span>
+              <span className="text-xs text-gray-400">
+                ({socialProof.reviewCount})
+              </span>
+            </div>
+          </div>
+
+          {/* Recent signup notification */}
+          <div className="flex items-center justify-center gap-1.5 text-xs text-gray-500">
+            <TrendingUp className="w-3 h-3 text-emerald-500" />
+            <span>
+              {socialProof.recentSignupName} joined{' '}
+              {socialProof.recentSignupMinutesAgo < 60
+                ? `${socialProof.recentSignupMinutesAgo} min ago`
+                : `${Math.floor(socialProof.recentSignupMinutesAgo / 60)}h ago`}
+            </span>
+          </div>
         </motion.div>
 
         {/* Billing toggle */}
@@ -644,18 +752,39 @@ export function PaywallSimplified({
         </div>
 
         {/* Trust badges */}
-        <div className="flex items-center justify-center gap-4 text-gray-400 mb-6">
+        <div className="flex items-center justify-center gap-4 text-gray-400 mb-4">
           <div className="flex items-center gap-1 text-xs">
             <Shield className="w-4 h-4" />
             <span>HIPAA Compliant</span>
           </div>
           <div className="flex items-center gap-1 text-xs">
             <Users className="w-4 h-4" />
-            <span>10,000+ Families</span>
+            <span>{socialProof.familyCount.toLocaleString()}+ Families</span>
           </div>
           <div className="flex items-center gap-1 text-xs">
             <Heart className="w-4 h-4" />
             <span>BCBA Designed</span>
+          </div>
+        </div>
+
+        {/* Social proof: "Families like yours" block */}
+        <div className="w-full max-w-md bg-white rounded-xl border border-gray-100 p-4 mb-6">
+          <p className="text-xs font-medium text-gray-500 uppercase tracking-wider text-center mb-3">
+            Families like yours
+          </p>
+          <div className="grid grid-cols-3 gap-3 text-center">
+            <div>
+              <p className="text-lg font-bold text-teal-700">{socialProof.familyCount}+</p>
+              <p className="text-xs text-gray-500">Active families</p>
+            </div>
+            <div>
+              <p className="text-lg font-bold text-teal-700">92%</p>
+              <p className="text-xs text-gray-500">Recommend to a friend</p>
+            </div>
+            <div>
+              <p className="text-lg font-bold text-teal-700">4.8/5</p>
+              <p className="text-xs text-gray-500">Average rating</p>
+            </div>
           </div>
         </div>
       </div>

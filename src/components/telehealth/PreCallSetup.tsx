@@ -33,6 +33,12 @@ interface DeviceStatus {
   network: 'checking' | 'good' | 'fair' | 'poor';
 }
 
+interface NetworkTestResult {
+  latencyMs: number;
+  downloadMbps: number;
+  effectiveType: string;
+}
+
 export function PreCallSetup({
   appointmentId,
   providerName,
@@ -62,6 +68,7 @@ export function PreCallSetup({
   }>({ camera: '', microphone: '', speaker: '' });
   const [showDeviceSettings, setShowDeviceSettings] = useState(false);
   const [testingAudio, setTestingAudio] = useState(false);
+  const [networkTestResult, setNetworkTestResult] = useState<NetworkTestResult | null>(null);
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const audioContext = useRef<AudioContext | null>(null);
@@ -150,29 +157,84 @@ export function PreCallSetup({
 
   async function checkNetworkQuality() {
     setStatus(prev => ({ ...prev, network: 'checking' }));
+    setNetworkTestResult(null);
 
     try {
-      // Simple latency check using fetch
-      const start = performance.now();
-      await fetch('https://www.google.com/generate_204', { mode: 'no-cors' });
-      const latency = performance.now() - start;
+      // ---- Step 1: Latency test (multiple samples, take median) ----
+      const latencySamples: number[] = [];
+      for (let i = 0; i < 3; i++) {
+        const start = performance.now();
+        await fetch('https://www.google.com/generate_204', { mode: 'no-cors' });
+        latencySamples.push(performance.now() - start);
+      }
+      latencySamples.sort((a, b) => a - b);
+      const medianLatency = latencySamples[1] ?? latencySamples[0];
 
-      // Also check connection type if available
-      const connection = (navigator as Navigator & { connection?: { effectiveType?: string } }).connection;
-      const effectiveType = connection?.effectiveType;
+      // ---- Step 2: Download bandwidth estimation ----
+      // Fetch a known-size resource and measure throughput.
+      // We use a Cloudflare endpoint that returns random bytes (100 KB).
+      let downloadMbps = 0;
+      try {
+        const downloadStart = performance.now();
+        const resp = await fetch(
+          'https://speed.cloudflare.com/__down?bytes=102400',
+          { cache: 'no-store' },
+        );
+        // Read the full body to ensure complete download
+        if (resp.body) {
+          const reader = resp.body.getReader();
+          let totalBytes = 0;
+          // eslint-disable-next-line no-constant-condition
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            totalBytes += value.byteLength;
+          }
+          const downloadDuration = (performance.now() - downloadStart) / 1000; // seconds
+          downloadMbps = totalBytes > 0
+            ? (totalBytes * 8) / downloadDuration / 1_000_000
+            : 0;
+        }
+      } catch {
+        // Cloudflare endpoint may be blocked — fall back to latency-only estimation
+        downloadMbps = 0;
+      }
 
+      // ---- Step 3: Network Information API (supplemental) ----
+      const connection = (navigator as Navigator & {
+        connection?: { effectiveType?: string; downlink?: number };
+      }).connection;
+      const effectiveType = connection?.effectiveType || 'unknown';
+      const apiDownlink = connection?.downlink; // Mbps estimate from the browser
+
+      // Use the better of measured vs API-reported bandwidth
+      const bestBandwidth = Math.max(downloadMbps, apiDownlink ?? 0);
+
+      // ---- Step 4: Composite quality determination ----
+      // Good:  latency < 100ms AND bandwidth >= 2 Mbps
+      // Fair:  latency < 250ms AND bandwidth >= 0.5 Mbps
+      // Poor:  everything else
       let quality: 'good' | 'fair' | 'poor';
 
-      if (effectiveType === '4g' && latency < 100) {
+      if (medianLatency < 100 && bestBandwidth >= 2) {
         quality = 'good';
-      } else if (effectiveType === '3g' || latency < 300) {
+      } else if (medianLatency < 250 && bestBandwidth >= 0.5) {
         quality = 'fair';
+      } else if (bestBandwidth === 0 && medianLatency < 150) {
+        // Speed test failed but latency is okay — be generous
+        quality = effectiveType === '4g' ? 'good' : 'fair';
       } else {
         quality = 'poor';
       }
 
+      setNetworkTestResult({
+        latencyMs: Math.round(medianLatency),
+        downloadMbps: Math.round(bestBandwidth * 10) / 10,
+        effectiveType,
+      });
       setStatus(prev => ({ ...prev, network: quality }));
     } catch {
+      setNetworkTestResult(null);
       setStatus(prev => ({ ...prev, network: 'poor' }));
     }
   }
@@ -442,14 +504,23 @@ export function PreCallSetup({
                     <p className="text-sm text-gray-500 dark:text-gray-400">
                       {getStatusText(status.network, 'Network')}
                     </p>
+                    {networkTestResult && status.network !== 'checking' && (
+                      <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
+                        {networkTestResult.latencyMs}ms latency
+                        {networkTestResult.downloadMbps > 0 && (
+                          <> &middot; {networkTestResult.downloadMbps} Mbps down</>
+                        )}
+                      </p>
+                    )}
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
                   <button
                     onClick={checkNetworkQuality}
-                    className="text-xs text-teal-600 dark:text-teal-400 hover:underline"
+                    disabled={status.network === 'checking'}
+                    className="text-xs text-teal-600 dark:text-teal-400 hover:underline disabled:opacity-50"
                   >
-                    Retest
+                    {status.network === 'checking' ? 'Testing...' : 'Retest'}
                   </button>
                   {getStatusIcon(status.network)}
                 </div>

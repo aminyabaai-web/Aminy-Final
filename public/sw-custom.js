@@ -232,5 +232,82 @@ self.addEventListener('message', (event) => {
         }
       });
       break;
+
+    case 'PRECACHE_JUNIOR_ASSETS':
+      // Eagerly cache Junior activity assets for offline play
+      if (Array.isArray(event.data.urls)) {
+        caches.open('junior-assets').then((cache) => {
+          event.data.urls.forEach((url) => {
+            cache.add(url).catch(() => {
+              // Non-fatal: asset may already be cached or unavailable
+            });
+          });
+        });
+      }
+      break;
+
+    case 'GET_CACHE_STATS':
+      caches.keys().then(async (cacheNames) => {
+        const stats = {};
+        for (const name of cacheNames) {
+          const cache = await caches.open(name);
+          const keys = await cache.keys();
+          stats[name] = keys.length;
+        }
+        if (event.ports && event.ports[0]) {
+          event.ports[0].postMessage({ type: 'CACHE_STATS', data: stats });
+        }
+      });
+      break;
+
+    case 'CLEAR_CACHE':
+      caches.keys().then((names) =>
+        Promise.all(names.map((name) => caches.delete(name)))
+      ).then(() => {
+        if (event.ports && event.ports[0]) {
+          event.ports[0].postMessage({ type: 'CACHE_CLEARED' });
+        }
+      });
+      break;
   }
+});
+
+// ============================================================================
+// Notification Close (analytics hook point)
+// ============================================================================
+
+self.addEventListener('notificationclose', () => {
+  // Notification dismissed — could send analytics here
+});
+
+// ============================================================================
+// Push Subscription Change
+// ============================================================================
+
+self.addEventListener('pushsubscriptionchange', (event) => {
+  event.waitUntil(
+    self.registration.pushManager
+      .subscribe({ userVisibleOnly: true })
+      .then((subscription) => {
+        return fetch('/api/push/resubscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(subscription),
+        });
+      })
+      .catch((err) => console.error('[SW] Re-subscribe failed:', err))
+  );
+});
+
+// ============================================================================
+// Error Handling
+// ============================================================================
+
+self.addEventListener('error', (event) => {
+  console.error('[SW] Service Worker error:', event.error);
+});
+
+self.addEventListener('unhandledrejection', (event) => {
+  console.error('[SW] Unhandled promise rejection:', event.reason);
+  event.preventDefault();
 });

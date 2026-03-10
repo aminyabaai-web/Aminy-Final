@@ -222,35 +222,24 @@ export const PRICING_TIERS: PricingTier[] = [
   },
 ];
 
-export const PROMO_CODES: PromoCode[] = [
-  {
-    code: 'WELCOME20',
-    discountPercent: 20,
-    validTiers: ['core', 'pro', 'pro_plus'],
-    validMonths: 3,
-    currentUses: 0,
-  },
-  {
-    code: 'FAMILY15',
-    discountPercent: 15,
-    validTiers: ['core', 'pro', 'pro_plus'],
-    currentUses: 0,
-  },
-  {
-    code: 'BCBA10',
-    discountAmount: 10,
-    validTiers: ['pro', 'pro_plus'],
-    currentUses: 0,
-  },
-  {
-    code: 'AUTISM2024',
-    discountPercent: 25,
-    validTiers: ['core', 'pro', 'pro_plus'],
-    validMonths: 1,
-    expiresAt: '2024-04-30T23:59:59Z',
-    currentUses: 0,
-  },
-];
+/**
+ * PROMO_CODES — DEPRECATED (kept for backward compatibility)
+ *
+ * SECURITY: Promo codes must NEVER be validated client-side. Hardcoding codes
+ * in the frontend bundle exposes them to anyone inspecting the JS source.
+ *
+ * All promo code validation now goes through the server-side edge function:
+ *   POST /billing/validate-promo  (or /payments/validate-promo)
+ *
+ * Server-side validation provides:
+ *   - Codes stored in database, not in client bundle
+ *   - Proper usage tracking and rate limiting
+ *   - Expiration enforcement with server clock (not client clock)
+ *   - Stripe Coupon/Promotion Code integration
+ *
+ * This empty array is exported only so existing imports don't break.
+ */
+export const PROMO_CODES: PromoCode[] = [];
 
 // ============================================================================
 // API Helpers
@@ -548,6 +537,11 @@ export async function getUpcomingInvoice(userId: string): Promise<Invoice | null
 
 /**
  * Validate a promo code
+ *
+ * SECURITY: All validation happens server-side via the edge function.
+ * The server checks the code against the database (or Stripe Promotion Codes),
+ * enforces usage limits, tier restrictions, and expiration with the server clock.
+ * No promo codes are stored or validated in the client bundle.
  */
 export async function validatePromoCode(
   code: string,
@@ -557,41 +551,23 @@ export async function validatePromoCode(
   promoCode?: PromoCode;
   error?: string;
 }> {
-  // First check local codes
-  const localCode = PROMO_CODES.find(p => p.code.toUpperCase() === code.toUpperCase());
-
-  if (localCode) {
-    // Check if valid for tier
-    if (!localCode.validTiers.includes(tier)) {
-      return { valid: false, error: 'Code not valid for this plan' };
-    }
-
-    // Check expiry
-    if (localCode.expiresAt && new Date(localCode.expiresAt) < new Date()) {
-      return { valid: false, error: 'Code has expired' };
-    }
-
-    // Check max uses
-    if (localCode.maxUses && localCode.currentUses >= localCode.maxUses) {
-      return { valid: false, error: 'Code has reached maximum uses' };
-    }
-
-    return { valid: true, promoCode: localCode };
+  if (!code || !code.trim()) {
+    return { valid: false, error: 'Please enter a promo code' };
   }
 
-  // Try server validation
   try {
     const result = await billingApi('/validate-promo', {
       method: 'POST',
-      body: JSON.stringify({ code, tier }),
+      body: JSON.stringify({ code: code.trim().toUpperCase(), tier }),
     });
 
     if (result.valid) {
       return { valid: true, promoCode: result.promoCode as PromoCode | undefined };
     }
-    return { valid: false, error: (result.error as string) || 'Invalid code' };
+    return { valid: false, error: (result.error as string) || 'Invalid promo code' };
   } catch (error) {
-    return { valid: false, error: 'Failed to validate code' };
+    console.warn('[Billing] Promo code validation failed:', error);
+    return { valid: false, error: 'Unable to validate code. Please try again.' };
   }
 }
 
