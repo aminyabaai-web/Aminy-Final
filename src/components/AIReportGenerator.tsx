@@ -5,7 +5,7 @@ import { Card } from './ui/card';
 import { Label } from './ui/label';
 import { Badge } from './ui/badge';
 import { toast } from 'sonner';
-import { generateClinicalReport } from '../lib/aminy-ai-brain';
+import { generateClinicalReport } from '../lib/ai-engine';
 import jsPDF from 'jspdf';
 
 // ============================================================================

@@ -53,6 +53,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { toast } from 'sonner';
 import { supabase } from '../utils/supabase/client';
 import { TierType, getTierDisplayName } from '../lib/tier-utils';
+import { useAuditedAction } from '../hooks/useAuditedAction';
 
 // Types
 interface ParentProfile {
@@ -133,6 +134,9 @@ const CONCERN_OPTIONS = [
 ];
 
 export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: ProfileScreenProps) {
+  // HIPAA audit: log PHI view on mount
+  const { logAction, logExport } = useAuditedAction('child_profile');
+
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -529,7 +533,7 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
     <div className="min-h-screen bg-gray-50 dark:bg-slate-900 pb-24">
       {/* Header */}
       <div className="sticky top-0 z-10 bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
-        <div className="max-w-2xl mx-auto px-4 py-4">
+        <div className="max-w-2xl md:max-w-2xl md:mx-auto px-4 py-4">
           <div className="flex items-center gap-3">
             {onBack && (
               <Button variant="ghost" size="sm" onClick={onBack}>
@@ -561,7 +565,7 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
             ].map(tab => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
+                onClick={() => setActiveTab(tab.id as 'profile' | 'children' | 'security')}
                 className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
                   activeTab === tab.id
                     ? 'border-teal-500 text-teal-600 dark:text-teal-400'
@@ -576,13 +580,13 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
         </div>
       </div>
 
-      <div className="max-w-2xl mx-auto px-4 py-6 space-y-6">
+      <div className="max-w-2xl md:max-w-2xl md:mx-auto px-4 py-6 space-y-6">
         {/* Profile Tab */}
         {activeTab === 'profile' && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="space-y-6"
+            className="space-y-6 lg:grid lg:grid-cols-2 lg:gap-8 lg:space-y-0"
           >
             {/* Profile Photo */}
             <Card className="p-6">

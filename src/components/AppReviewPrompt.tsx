@@ -1,0 +1,108 @@
+/**
+ * App Review Prompt UI Component
+ *
+ * A delightful, non-intrusive prompt asking users to rate the app.
+ * Only shown when useAppReviewPrompt() determines the user is
+ * in a positive state and has had enough engagement.
+ */
+
+import { useState } from 'react';
+import { Star, Heart, X, ExternalLink } from 'lucide-react';
+import { useAppReviewPrompt } from '../hooks/useAppReviewPrompt';
+
+export function AppReviewPrompt() {
+  const { shouldShowPrompt, triggerReview, dismissPrompt, neverAskAgain } = useAppReviewPrompt();
+  const [selectedRating, setSelectedRating] = useState(0);
+  const [hoveredRating, setHoveredRating] = useState(0);
+
+  if (!shouldShowPrompt) return null;
+
+  const handleRatingClick = (rating: number) => {
+    setSelectedRating(rating);
+    if (rating >= 4) {
+      // Good rating → send to app store
+      setTimeout(() => triggerReview(), 800);
+    } else {
+      // Lower rating → ask for feedback (don't route to store)
+      setTimeout(() => {
+        // TODO: Open in-app feedback form instead
+        dismissPrompt();
+      }, 800);
+    }
+  };
+
+  return (
+    <div className="fixed bottom-20 left-4 right-4 z-40 mx-auto max-w-sm animate-in slide-in-from-bottom fade-in duration-500">
+      <div className="rounded-2xl bg-white shadow-2xl border border-gray-100 p-5 relative">
+        {/* Close button */}
+        <button
+          onClick={dismissPrompt}
+          className="absolute right-3 top-3 p-1.5 rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+          aria-label="Dismiss"
+        >
+          <X size={16} />
+        </button>
+
+        <div className="text-center">
+          {/* Heart icon */}
+          <div className="w-12 h-12 bg-gradient-to-br from-pink-100 to-red-100 rounded-full flex items-center justify-center mx-auto mb-3">
+            <Heart className="w-6 h-6 text-pink-500 fill-pink-500" />
+          </div>
+
+          <h3 className="text-base font-semibold text-gray-900 mb-1">
+            Enjoying Aminy?
+          </h3>
+          <p className="text-sm text-gray-500 mb-4">
+            Your review helps other autism families discover us
+          </p>
+
+          {/* Star rating */}
+          <div className="flex items-center justify-center gap-1.5 mb-4">
+            {[1, 2, 3, 4, 5].map((rating) => (
+              <button
+                key={rating}
+                onClick={() => handleRatingClick(rating)}
+                onMouseEnter={() => setHoveredRating(rating)}
+                onMouseLeave={() => setHoveredRating(0)}
+                className="p-1 transition-transform hover:scale-110 active:scale-95"
+                aria-label={`Rate ${rating} stars`}
+              >
+                <Star
+                  size={28}
+                  className={`transition-colors ${
+                    rating <= (hoveredRating || selectedRating)
+                      ? 'text-amber-400 fill-amber-400'
+                      : 'text-gray-300'
+                  }`}
+                />
+              </button>
+            ))}
+          </div>
+
+          {/* Selected feedback */}
+          {selectedRating > 0 && selectedRating < 4 && (
+            <p className="text-xs text-gray-500 mb-3 animate-in fade-in">
+              Thank you for your feedback. We&apos;ll use it to improve!
+            </p>
+          )}
+          {selectedRating >= 4 && (
+            <div className="flex items-center justify-center gap-1.5 text-xs text-teal-600 mb-3 animate-in fade-in">
+              <ExternalLink size={12} />
+              <span>Taking you to leave a review...</span>
+            </div>
+          )}
+
+          {/* Don't ask again */}
+          <button
+            onClick={neverAskAgain}
+            className="text-xs text-gray-400 hover:text-gray-500 transition-colors"
+          >
+            Don&apos;t ask me again
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default AppReviewPrompt;

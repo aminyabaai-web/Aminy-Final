@@ -295,6 +295,8 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
   const [isOfflineMode, setIsOfflineMode] = useState(false);
   const [currentSessionTime, setCurrentSessionTime] = useState(0);
   const [emotionDetected, setEmotionDetected] = useState<'frustrated' | 'excited' | 'anxious' | 'calm'>('calm');
+  const [useTextInput, setUseTextInput] = useState(false);
+  const [textInputValue, setTextInputValue] = useState('');
 
   // Real speech recognition via Web Speech API
   const speechPromptTimestamp = useRef<number>(0);
@@ -722,6 +724,136 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
       energyLevel: 'adaptive',
       aacrequired: true,
       naturalisticMission: true
+    },
+
+    // === WAVE 2E — NEW ACTIVITIES (6 additions to reach 15 total) ===
+    {
+      id: 'rhyme-time',
+      title: 'Rhyme Time',
+      description: 'Find words that rhyme! Build phonological awareness with fun rhyming games.',
+      icon: <BookOpen className="w-5 h-5" />,
+      duration: '3-5 min',
+      skillType: 'speech',
+      level: 1,
+      sessionSize: 'standard',
+      unlocked: true,
+      tier: 'starter',
+      color: 'bg-violet-100 text-violet-600',
+      track: 'Phonological Awareness',
+      voiceReady: true,
+      focus: ['rhyming', 'word families'],
+      mode: 'matching',
+      regulationFriendly: true,
+      whyToday: 'Rhyming builds the foundation for reading and speech',
+      energyLevel: 'quick-wins',
+      offlineReady: true
+    },
+    {
+      id: 'story-retell',
+      title: 'Story Retell',
+      description: 'Listen to a short story and retell key events in your own words.',
+      icon: <MessageSquare className="w-5 h-5" />,
+      duration: '5-8 min',
+      skillType: 'speech',
+      level: 2,
+      sessionSize: 'standard',
+      unlocked: safeTier === 'core' || safeTier === 'pro',
+      tier: 'core',
+      color: 'bg-teal-100 text-teal-600',
+      track: 'Narrative Skills',
+      voiceReady: true,
+      focus: ['sequencing', 'narration', 'comprehension'],
+      mode: 'listen→retell',
+      regulationFriendly: true,
+      whyToday: 'Storytelling strengthens language and memory',
+      energyLevel: 'adaptive',
+      offlineReady: true
+    },
+    {
+      id: 'following-directions',
+      title: 'Following Directions',
+      description: 'Practice multi-step directions: "Put the red block ON the blue block!"',
+      icon: <Compass className="w-5 h-5" />,
+      duration: '3-5 min',
+      skillType: 'executive',
+      level: 1,
+      sessionSize: 'standard',
+      unlocked: true,
+      tier: 'starter',
+      color: 'bg-orange-100 text-orange-600',
+      track: 'Receptive Language',
+      voiceReady: false,
+      focus: ['listening', 'spatial concepts', 'sequencing'],
+      mode: 'interactive',
+      regulationFriendly: true,
+      whyToday: 'Following directions is key for school readiness',
+      energyLevel: 'quick-wins',
+      offlineReady: true
+    },
+    {
+      id: 'vocabulary-builder',
+      title: 'Vocabulary Builder',
+      description: 'Name items in categories, build word associations, and expand your word bank!',
+      icon: <Lightbulb className="w-5 h-5" />,
+      duration: '4-6 min',
+      skillType: 'speech',
+      level: 1,
+      sessionSize: 'standard',
+      unlocked: safeTier === 'core' || safeTier === 'pro',
+      tier: 'core',
+      color: 'bg-amber-100 text-amber-600',
+      track: 'Expressive Language',
+      voiceReady: true,
+      focus: ['categories', 'word associations', 'naming'],
+      mode: 'category-naming',
+      regulationFriendly: true,
+      whyToday: 'Growing your word bank for better expression',
+      energyLevel: 'adaptive',
+      offlineReady: true,
+      multilingual: true
+    },
+    {
+      id: 'emotion-labels',
+      title: 'Emotion Labels',
+      description: 'Identify emotions from real-life scenarios. How would YOU feel?',
+      icon: <Heart className="w-5 h-5" />,
+      duration: '4-6 min',
+      skillType: 'social',
+      level: 1,
+      sessionSize: 'standard',
+      unlocked: true,
+      tier: 'starter',
+      color: 'bg-rose-100 text-rose-600',
+      track: 'Social Communication',
+      voiceReady: true,
+      focus: ['emotion recognition', 'perspective taking', 'empathy'],
+      mode: 'scenario-based',
+      regulationFriendly: true,
+      whyToday: 'Understanding feelings builds stronger friendships',
+      energyLevel: 'adaptive',
+      offlineReady: true,
+      naturalisticMission: true
+    },
+    {
+      id: 'breathing-buddy',
+      title: 'Breathing Buddy',
+      description: 'Guided breathing with a visual animation. Breathe in... hold... breathe out...',
+      icon: <Wind className="w-5 h-5" />,
+      duration: '2-3 min',
+      skillType: 'sensory',
+      level: 0,
+      sessionSize: 'micro',
+      unlocked: true,
+      tier: 'starter',
+      color: 'bg-sky-100 text-sky-600',
+      track: 'Self-Regulation',
+      voiceReady: false,
+      focus: ['deep breathing', 'calm down', 'self-regulation'],
+      mode: 'guided-animation',
+      regulationFriendly: true,
+      whyToday: 'A quick reset when emotions feel big',
+      energyLevel: 'quick-wins',
+      offlineReady: true
     }
   ];
 
@@ -793,11 +925,12 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
 
   // Enhanced speech practice with REAL speech recognition feedback
   const handleAdvancedSpeechPractice = async () => {
-    // If speech recognition is not supported, do not generate fake data
+    // If speech recognition is not supported, switch to text input mode
     if (!voiceInput.isSupported) {
-      toast.error('Speech practice requires a microphone-enabled browser (Chrome, Edge, Safari).', {
-        description: 'You can still use text input mode.',
-        duration: 5000,
+      setUseTextInput(true);
+      toast('Switching to text input mode — type the word to practice!', {
+        description: 'Speech recognition is not available in this browser.',
+        duration: 4000,
       });
       return;
     }
@@ -988,6 +1121,53 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
       setIsRecording(false);
       setAudioProcessing(false);
     }
+  };
+
+  // Text-input fallback for speech practice (when Web Speech API is unavailable)
+  const handleTextInputPractice = () => {
+    const typed = textInputValue.trim();
+    if (!typed) return;
+
+    setPracticeAttempts(prev => prev + 1);
+    setPracticeReps(prev => prev + 1);
+
+    const accuracy = levenshteinSimilarity(typed, currentWord);
+    const targetPhonemes = analyzeTargetPhonemes(currentWord);
+
+    const analysis: SpeechAnalysis = {
+      accuracy,
+      clarity: accuracy > 0.7 ? 0.9 : 0.5,
+      attempt: true,
+      confidence: accuracy, // use accuracy as confidence proxy for text mode
+      needsSupport: accuracy < 0.5,
+      latency: 0,
+      phonemes: targetPhonemes,
+    };
+
+    setSpeechAnalysis(analysis);
+
+    if (accuracy >= 0.8) {
+      setSuccessStreak(prev => prev + 1);
+      setTodayTokens(prev => prev + 1);
+      toast.success(`Great job typing "${currentWord}"!`);
+    } else {
+      setSuccessStreak(0);
+      toast(`Almost! You typed "${typed}" — the target is "${currentWord}". Try again!`);
+    }
+
+    setTextInputValue('');
+    const childId = userData?.childName?.toLowerCase().replace(/\s+/g, '-') || 'default';
+    recordJuniorProgress(childId, {
+      activityId: 'text-practice',
+      activityTitle: `Text practice: ${currentWord}`,
+      domain: 'speech',
+      completedAt: new Date().toISOString(),
+      durationSeconds: 0,
+      accuracy: Math.round(accuracy * 100),
+      promptLevel: 0,
+      tokensEarned: accuracy >= 0.8 ? 1 : 0,
+      notes: `Text input mode — typed: "${typed}", target: "${currentWord}"`,
+    });
   };
 
   // Advanced emotion detection and adaptive pacing
@@ -1581,11 +1761,32 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
 
                 {/* Practice Area */}
                 <div className="p-4 sm:p-5 md:p-6">
-                  {/* Speech recognition browser support banner */}
+                  {/* Speech recognition browser support banner with text input toggle */}
                   {!voiceInput.isSupported && (
                     <div className="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-xl text-center text-sm text-amber-800">
                       <AlertTriangle className="w-4 h-4 inline-block mr-1 -mt-0.5" />
-                      Speech practice requires a microphone-enabled browser (Chrome, Edge, Safari). You can still use text input mode.
+                      Speech practice works best in Chrome, Edge, or Safari with a microphone. You can still practice with text input!
+                      {!useTextInput && (
+                        <button
+                          onClick={() => setUseTextInput(true)}
+                          className="mt-2 block mx-auto px-4 py-1.5 bg-amber-500 text-white rounded-lg text-xs font-medium hover:bg-amber-600 transition-colors"
+                        >
+                          Switch to Text Input
+                        </button>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Text input toggle for users who prefer typing */}
+                  {voiceInput.isSupported && (
+                    <div className="mb-3 flex justify-end">
+                      <button
+                        onClick={() => setUseTextInput(!useTextInput)}
+                        className="text-xs text-gray-500 hover:text-gray-700 flex items-center gap-1"
+                      >
+                        {useTextInput ? <Mic className="w-3 h-3" /> : <MessageSquare className="w-3 h-3" />}
+                        {useTextInput ? 'Switch to Voice' : 'Use Text Input'}
+                      </button>
                     </div>
                   )}
 
@@ -1663,18 +1864,51 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
                     )}
                   </div>
 
-                  {/* Recording Controls */}
-                  <div className="flex justify-center space-x-4 mb-4 sm:mb-6">
+                  {/* Recording Controls OR Text Input Fallback */}
+                  {useTextInput || !voiceInput.isSupported ? (
+                    /* Text Input Mode — fallback for unsupported browsers or user preference */
+                    <div className="mb-4 sm:mb-6">
+                      <div className="flex items-center gap-2 max-w-sm mx-auto">
+                        <input
+                          type="text"
+                          value={textInputValue}
+                          onChange={(e) => setTextInputValue(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') handleTextInputPractice();
+                          }}
+                          placeholder={`Type "${currentWord}" here...`}
+                          className="flex-1 px-4 py-3 border-2 border-blue-200 rounded-xl text-lg text-center focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 transition-colors"
+                          autoComplete="off"
+                          autoCapitalize="off"
+                          spellCheck={false}
+                        />
+                        <motion.button
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          onClick={handleTextInputPractice}
+                          disabled={!textInputValue.trim()}
+                          className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-purple-500 text-white flex items-center justify-center shadow-lg disabled:opacity-50"
+                        >
+                          <Check className="w-6 h-6" />
+                        </motion.button>
+                      </div>
+                      <p className="text-center text-xs text-gray-400 mt-2">
+                        Type the word above, then press Enter or tap the check button
+                      </p>
+                    </div>
+                  ) : (
+                    /* Voice Input Mode — primary speech practice */
+                    <div className="flex justify-center space-x-4 mb-4 sm:mb-6">
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={handleAdvancedSpeechPractice}
                       disabled={isRecording || audioProcessing}
                       className={`w-20 h-20 rounded-full flex items-center justify-center text-white shadow-lg ${
-                        isRecording 
-                          ? 'bg-red-500 animate-pulse' 
-                          : audioProcessing 
-                          ? 'bg-yellow-500' 
+                        isRecording
+                          ? 'bg-red-500 animate-pulse'
+                          : audioProcessing
+                          ? 'bg-yellow-500'
                           : 'bg-gradient-to-br from-blue-500 to-purple-500'
                       }`}
                     >
@@ -1722,6 +1956,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
                       <Brain className="w-6 h-6 text-purple-600" />
                     </motion.button>
                   </div>
+                  )}
 
                   {/* Kid-friendly controls */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">

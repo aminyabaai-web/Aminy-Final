@@ -5,6 +5,7 @@
  */
 
 import { supabase } from '../utils/supabase/client';
+import { syncEncryptedStorage } from './security/encrypted-storage';
 
 // ── Types ────────────────────────────────────────────────────────────
 
@@ -91,7 +92,7 @@ export function getDefaultVerificationSteps(): VerificationStep[] {
 const STORAGE_KEY = 'aminy-background-check';
 
 export function getBackgroundCheckState(providerId: string): BackgroundCheckState {
-  const stored = localStorage.getItem(STORAGE_KEY);
+  const stored = syncEncryptedStorage.getItem(STORAGE_KEY);
   if (stored) {
     const all = JSON.parse(stored);
     if (all[providerId]) return all[providerId];
@@ -105,9 +106,9 @@ export function getBackgroundCheckState(providerId: string): BackgroundCheckStat
 }
 
 export function saveBackgroundCheckState(state: BackgroundCheckState): void {
-  const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+  const stored = JSON.parse(syncEncryptedStorage.getItem(STORAGE_KEY) || '{}');
   stored[state.providerId] = state;
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
+  syncEncryptedStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
 }
 
 // ── Image Upload ─────────────────────────────────────────────────────
@@ -143,7 +144,7 @@ export async function uploadVerificationImage(
 
   // Fallback: store reference in localStorage
   const localKey = `aminy-verification-${providerId}-${imageType}`;
-  localStorage.setItem(localKey, 'uploaded');
+  syncEncryptedStorage.setItem(localKey, 'uploaded');
   return { url: `local://${imageType}`, success: true };
 }
 

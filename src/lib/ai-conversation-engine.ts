@@ -1,7 +1,11 @@
 /**
- * AI Conversation Engine
+ * @deprecated — StreamingAIChat.tsx now imports via `src/lib/ai-engine/`.
+ * This file is still re-exported from ai-engine/index.ts for compatibility.
+ * Phase 7 will refactor StreamingAIChat to use sendMessage() directly,
+ * at which point this file can be deleted.
+ *
+ * AI Conversation Engine (LEGACY)
  * Persistent, context-aware, emotionally intelligent conversations
- * Makes Aminy feel like Claude - continuous, human, and remembers everything
  */
 
 import { store } from './store';

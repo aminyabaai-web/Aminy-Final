@@ -32,7 +32,7 @@ import {
   createGoal,
   type GoalCategory,
 } from './care-plan';
-import { storeMemoryFact } from './aminy-ai-brain';
+import { storeMemoryFactCompat as storeMemoryFact } from './ai-engine';
 
 // ============================================================================
 // Types

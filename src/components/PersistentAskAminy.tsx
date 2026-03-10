@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { syncEncryptedStorage } from '../lib/security/encrypted-storage';
 import { Send, Paperclip, Mic, Sparkles, X, Minimize2, Maximize2, Brain, RotateCcw, Copy, MessageSquare, Zap, Volume2, Clock } from 'lucide-react';
 import { ChatHistory } from './ChatHistory';
 import { AttachmentPicker } from './AttachmentPicker';
@@ -103,7 +104,7 @@ export function PersistentAskAminy({
     if (!isOpen) return;
     
     try {
-      const savedConversation = localStorage.getItem(`aminy-conversation-${conversationId}`);
+      const savedConversation = syncEncryptedStorage.getItem(`aminy-conversation-${conversationId}`);
       if (savedConversation) {
         const parsed = JSON.parse(savedConversation);
         setMessages(parsed.messages || []);
@@ -123,7 +124,7 @@ export function PersistentAskAminy({
           title: conversationTitle,
           lastUpdated: new Date().toISOString()
         };
-        localStorage.setItem(`aminy-conversation-${conversationId}`, JSON.stringify(conversationData));
+        syncEncryptedStorage.setItem(`aminy-conversation-${conversationId}`, JSON.stringify(conversationData));
         setLastActivity(new Date());
       } catch (error) {
       }
@@ -409,7 +410,7 @@ export function PersistentAskAminy({
     setConversationTitle('');
     setShowSuggestions(true);
     try {
-      localStorage.removeItem(`aminy-conversation-${conversationId}`);
+      syncEncryptedStorage.removeItem(`aminy-conversation-${conversationId}`);
       toast.success('Conversation cleared');
     } catch (error) {
       console.error('Error clearing conversation:', error);
@@ -467,7 +468,7 @@ export function PersistentAskAminy({
   // Handle selecting a conversation from history
   const handleSelectConversation = (selectedConversationId: string) => {
     try {
-      const savedConversation = localStorage.getItem(`aminy-conversation-${selectedConversationId}`);
+      const savedConversation = syncEncryptedStorage.getItem(`aminy-conversation-${selectedConversationId}`);
       if (savedConversation) {
         const parsed = JSON.parse(savedConversation);
         setMessages(parsed.messages || []);

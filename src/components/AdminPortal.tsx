@@ -45,6 +45,7 @@ import { AIInsights } from './admin/AIInsights';
 import { ProviderApplicationReview } from './admin/ProviderApplicationReview';
 import { getAggregatedMetrics, getRetentionMetrics } from '../lib/outcomes-tracking';
 import { MRRDashboard } from './MRRDashboard';
+import { useAuditedAction } from '../hooks/useAuditedAction';
 
 interface AdminPortalProps {
   onBack?: () => void;
@@ -186,6 +187,7 @@ const getStatusIcon = (value: number, target: number, isInverse = false) => {
 };
 
 export function AdminPortal({ onBack }: AdminPortalProps) {
+  useAuditedAction('user_account');
   const [activeSection, setActiveSection] = useState<'overview' | 'engagement' | 'ai' | 'clinical' | 'marketplace' | 'b2b' | 'users' | 'moderation' | 'revenue' | 'insights' | 'applications'>('overview');
   const [dateRange, setDateRange] = useState<'7d' | '30d' | 'all'>('all');
   const [isRefreshing, setIsRefreshing] = useState(false);

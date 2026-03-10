@@ -271,7 +271,7 @@ export function useProactiveCheckIns() {
 
     // Get user's last active time from store
     const state = useAminyStore.getState();
-    const lastActive = (state as any).lastActiveAt ? new Date((state as any).lastActiveAt) : null;
+    const lastActive = ('lastActiveAt' in state && state.lastActiveAt) ? new Date(state.lastActiveAt as string) : null;
     const daysSinceActive = lastActive
       ? Math.floor((now.getTime() - lastActive.getTime()) / (1000 * 60 * 60 * 24))
       : 0;

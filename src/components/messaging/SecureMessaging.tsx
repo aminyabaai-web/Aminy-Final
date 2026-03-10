@@ -29,6 +29,7 @@ import {
 } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Card } from '../ui/card';
+import { EmptyState } from '../EmptyState';
 import { logMessageSent, logMessageRead } from '../../lib/audit-logger';
 import { supabase } from '../../utils/supabase/client';
 
@@ -579,17 +580,13 @@ export function SecureMessaging({ userId, userRole, onBack }: SecureMessagingPro
         {/* Thread List */}
         <div className="max-w-2xl mx-auto divide-y divide-gray-100 dark:divide-slate-700">
           {filteredThreads.length === 0 ? (
-            <div className="text-center py-12 px-4">
-              <div className="w-16 h-16 bg-gray-100 dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4">
-                <MessageCircle className="w-8 h-8 text-gray-400" />
-              </div>
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                No messages yet
-              </h3>
-              <p className="text-sm text-gray-500">
-                Messages from your providers will appear here.
-              </p>
-            </div>
+            <EmptyState
+              IconComponent={MessageCircle}
+              title="No messages yet"
+              description="Messages from your providers will appear here. Book a session to get started."
+              actionText="Find a Provider"
+              onAction={() => {/* navigate to provider marketplace */}}
+            />
           ) : (
             filteredThreads.map(thread => (
               <button

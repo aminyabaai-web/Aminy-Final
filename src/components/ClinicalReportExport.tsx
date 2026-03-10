@@ -30,6 +30,7 @@ import { getClinicalReportData } from '../lib/clinical-report-data';
 import { generateClinicalReportPDF, DEFAULT_SECTIONS } from '../lib/clinical-pdf-generator';
 import type { ReportSections } from '../lib/clinical-pdf-generator';
 import { screeningResultsToClinicalAssessments } from '../lib/screening-instruments';
+import { useAuditedAction } from '../hooks/useAuditedAction';
 
 // ============================================================================
 // Types
@@ -63,6 +64,7 @@ export function ClinicalReportExport({
   childId,
   onBack,
 }: ClinicalReportExportProps) {
+  useAuditedAction('progress_report');
   const [step, setStep] = useState<Step>('configure');
   const [recipient, setRecipient] = useState<RecipientType>('pediatrician');
   const [sections, setSections] = useState<ReportSections>({ ...DEFAULT_SECTIONS });

@@ -6,6 +6,7 @@
  */
 
 import { supabase } from '../utils/supabase/client';
+import { syncEncryptedStorage } from './security/encrypted-storage';
 
 // ============================================================================
 // TYPES
@@ -505,14 +506,14 @@ const OFFLINE_EVENTS_KEY = 'aminy_offline_outcome_events';
 
 function saveToLocalStorage(event: Omit<OutcomeEvent, 'id' | 'created_at'>): void {
   try {
-    const existing = localStorage.getItem(OFFLINE_EVENTS_KEY);
+    const existing = syncEncryptedStorage.getItem(OFFLINE_EVENTS_KEY);
     const events = existing ? JSON.parse(existing) : [];
     events.push({
       ...event,
       created_at: new Date().toISOString(),
       _offline: true
     });
-    localStorage.setItem(OFFLINE_EVENTS_KEY, JSON.stringify(events));
+    syncEncryptedStorage.setItem(OFFLINE_EVENTS_KEY, JSON.stringify(events));
   } catch (err) {
     console.error('Error saving to localStorage:', err);
   }
@@ -523,7 +524,7 @@ function saveToLocalStorage(event: Omit<OutcomeEvent, 'id' | 'created_at'>): voi
  */
 export async function syncOfflineEvents(): Promise<number> {
   try {
-    const existing = localStorage.getItem(OFFLINE_EVENTS_KEY);
+    const existing = syncEncryptedStorage.getItem(OFFLINE_EVENTS_KEY);
     if (!existing) return 0;
 
     const events = JSON.parse(existing);
@@ -538,7 +539,7 @@ export async function syncOfflineEvents(): Promise<number> {
       }));
 
     if (!error) {
-      localStorage.removeItem(OFFLINE_EVENTS_KEY);
+      syncEncryptedStorage.removeItem(OFFLINE_EVENTS_KEY);
       return events.length;
     }
 

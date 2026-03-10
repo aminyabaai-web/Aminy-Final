@@ -16,6 +16,22 @@ import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Download, Share2, TrendingUp, TrendingDown, Check } from 'lucide-react';
 import { OutcomesEngine } from '../lib/outcomes-engine';
+
+/** Shape the component actually consumes (engine stub returns a simpler shape for now) */
+interface BeforeAfterMetric {
+  before: number;
+  after: number;
+  change: number;
+  improved: boolean;
+}
+
+interface BeforeAfterDisplaySummary {
+  timeframe: string;
+  overwhelm: BeforeAfterMetric;
+  routineAdherence: BeforeAfterMetric;
+  toughMoments: BeforeAfterMetric;
+  goalProgress: BeforeAfterMetric;
+}
 import { HAPTICS } from '../lib/mobile-experience-enhancer';
 
 interface BeforeAfterReportProps {
@@ -27,7 +43,7 @@ interface BeforeAfterReportProps {
 }
 
 export function BeforeAfterReport({ userId, childId, childName, parentName, days = 30 }: BeforeAfterReportProps) {
-  const [summary, setSummary] = useState<any>(null);
+  const [summary, setSummary] = useState<BeforeAfterDisplaySummary | null>(null);
   const [loading, setLoading] = useState(true);
   const [showFullReport, setShowFullReport] = useState(false);
 
@@ -41,7 +57,7 @@ export function BeforeAfterReport({ userId, childId, childName, parentName, days
     setLoading(true);
     try {
       const data = await outcomesEngine.generateBeforeAfterSummary(days);
-      setSummary(data);
+      setSummary(data as unknown as BeforeAfterDisplaySummary);
     } catch (error) {
       console.error('Error loading before/after summary:', error);
     } finally {
@@ -245,13 +261,7 @@ function DetailedReport({
   parentName,
   onCollapse
 }: {
-  summary: {
-    timeframe: string;
-    overwhelm: { improved: boolean; before: number; after: number; change: number };
-    routineAdherence: { improved: boolean; before: number; after: number; change: number };
-    toughMoments: { improved: boolean; before: number; after: number; change: number };
-    goalProgress: { improved: boolean; before: number; after: number; change: number };
-  };
+  summary: BeforeAfterDisplaySummary;
   childName: string;
   parentName: string;
   onCollapse: () => void;
@@ -395,11 +405,11 @@ export function BeforeAfterSectionForPDF({ userId, childId, childName, parentNam
   childName: string;
   parentName: string;
 }) {
-  const [summary, setSummary] = useState<any>(null);
+  const [summary, setSummary] = useState<BeforeAfterDisplaySummary | null>(null);
 
   useEffect(() => {
     const engine = new OutcomesEngine(userId, childId);
-    engine.generateBeforeAfterSummary(30).then(setSummary);
+    engine.generateBeforeAfterSummary(30).then(data => setSummary(data as unknown as BeforeAfterDisplaySummary));
   }, []);
 
   if (!summary) return null;

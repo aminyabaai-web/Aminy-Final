@@ -237,7 +237,7 @@ export function CarePlanTabScreen({
         {!isLoading && !error && activeTab === 'summaries' && (
           <div className="space-y-3 sm:space-y-4">
             {visitSummaries.length === 0 ? (
-              <EmptyVisitSummaries onBookVisit={onBookFollowUp as any} />
+              <EmptyVisitSummaries onBookVisit={onBookFollowUp ?? (() => {})} />
             ) : (
               visitSummaries.map((summary) => (
                 <VisitSummaryCard

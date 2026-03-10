@@ -33,3 +33,14 @@ export { useGracePeriod, type GracePeriodStatus, type UseGracePeriodOptions, typ
 
 // Organization and B2B hooks
 export { useOrganization } from './useOrganization';
+
+// Supabase data hooks (Wave 1B — replaces localStorage with Supabase-first)
+export { useDashboardData } from './useDashboardData';
+export { useJuniorData } from './useJuniorData';
+export { useVideoSessionData } from './useVideoSessionData';
+export { useAppointmentData } from './useAppointmentData';
+export { useOnboardingData } from './useOnboardingData';
+export { useProviderData } from './useProviderData';
+export { useContentData } from './useContentData';
+export { useMessagingData } from './useMessagingData';
+export { useCommunityData } from './useCommunityData';

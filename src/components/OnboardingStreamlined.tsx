@@ -264,8 +264,8 @@ export function OnboardingStreamlined({ onComplete, initialEmail = '' }: Onboard
 
       if (authError) throw authError;
       setStep(2);
-    } catch (e: any) {
-      setError(e.message || 'Failed to create account');
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : 'Failed to create account');
     } finally {
       setIsLoading(false);
     }
@@ -334,7 +334,7 @@ export function OnboardingStreamlined({ onComplete, initialEmail = '' }: Onboard
       if (newHistory.length >= 1) {
         setShowContinueButton(true);
       }
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.error('AI error:', e);
       // Add a fallback response
       updateData({
@@ -481,7 +481,7 @@ export function OnboardingStreamlined({ onComplete, initialEmail = '' }: Onboard
       } catch { /* screening migration is nice-to-have */ }
 
       onComplete(data);
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.error('handleComplete error:', e);
       // Still try to proceed even if DB operations failed
       onComplete(data);

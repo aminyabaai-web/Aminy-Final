@@ -9,6 +9,7 @@
 
 import { supabase } from '../utils/supabase/client';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
+import { secureFetch } from './security/secure-fetch';
 
 // Provider types
 export type ProviderType = 'bcba' | 'slp' | 'ot' | 'pt' | 'psychologist' | 'developmental_pediatrician' | 'other';
@@ -162,23 +163,22 @@ export async function getProvider(providerId: string): Promise<ProviderProfile |
 
     // Fallback to API
     const accessToken = getAccessToken();
-    const response = await fetch(
+    const result = await secureFetch<ProviderProfile>(
       `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/providers/${providerId}`,
       {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
         },
       }
     );
 
-    if (!response.ok) {
-      if (response.status === 404) return null;
+    if (!result.ok) {
+      if (result.status === 404) return null;
       throw new Error('Failed to get provider');
     }
 
-    return response.json();
+    return result.data;
   }
 }
 
@@ -207,22 +207,21 @@ export async function searchProviders(criteria: {
   if (criteria.language) params.set('language', criteria.language);
   if (criteria.acceptingNew !== undefined) params.set('acceptingNew', criteria.acceptingNew.toString());
 
-  const response = await fetch(
+  const result = await secureFetch<ProviderProfile[]>(
     `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/providers/search?${params.toString()}`,
     {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
       },
     }
   );
 
-  if (!response.ok) {
+  if (!result.ok) {
     throw new Error('Failed to search providers');
   }
 
-  return response.json();
+  return result.data!;
 }
 
 /**
@@ -231,24 +230,22 @@ export async function searchProviders(criteria: {
 export async function saveProviderProfile(profile: Partial<ProviderProfile>): Promise<ProviderProfile> {
   const accessToken = getAccessToken();
 
-  const response = await fetch(
+  const result = await secureFetch<ProviderProfile>(
     `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/providers`,
     {
       method: profile.id ? 'PUT' : 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
       },
       body: JSON.stringify(profile),
     }
   );
 
-  if (!response.ok) {
-    const error = await response.text();
-    throw new Error(`Failed to save provider profile: ${error}`);
+  if (!result.ok) {
+    throw new Error(`Failed to save provider profile: ${result.error}`);
   }
 
-  return response.json();
+  return result.data!;
 }
 
 /**
@@ -260,19 +257,18 @@ export async function updateAvailability(
 ): Promise<void> {
   const accessToken = getAccessToken();
 
-  const response = await fetch(
+  const result = await secureFetch(
     `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/providers/${providerId}/availability`,
     {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ availability }),
     }
   );
 
-  if (!response.ok) {
+  if (!result.ok) {
     throw new Error('Failed to update availability');
   }
 }
@@ -283,22 +279,21 @@ export async function updateAvailability(
 export async function getProviderPatients(providerId: string): Promise<ProviderPatient[]> {
   const accessToken = getAccessToken();
 
-  const response = await fetch(
+  const result = await secureFetch<ProviderPatient[]>(
     `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/providers/${providerId}/patients`,
     {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
       },
     }
   );
 
-  if (!response.ok) {
+  if (!result.ok) {
     throw new Error('Failed to get patients');
   }
 
-  return response.json();
+  return result.data!;
 }
 
 /**
@@ -319,22 +314,21 @@ export async function getProviderSessions(
   if (filter?.startDate) params.set('startDate', filter.startDate);
   if (filter?.endDate) params.set('endDate', filter.endDate);
 
-  const response = await fetch(
+  const result = await secureFetch<ProviderSession[]>(
     `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/providers/${providerId}/sessions?${params.toString()}`,
     {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
       },
     }
   );
 
-  if (!response.ok) {
+  if (!result.ok) {
     throw new Error('Failed to get sessions');
   }
 
-  return response.json();
+  return result.data!;
 }
 
 /**
@@ -343,22 +337,21 @@ export async function getProviderSessions(
 export async function getProviderStats(providerId: string): Promise<ProviderStats> {
   const accessToken = getAccessToken();
 
-  const response = await fetch(
+  const result = await secureFetch<ProviderStats>(
     `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/providers/${providerId}/stats`,
     {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
       },
     }
   );
 
-  if (!response.ok) {
+  if (!result.ok) {
     throw new Error('Failed to get provider stats');
   }
 
-  return response.json();
+  return result.data!;
 }
 
 /**
@@ -376,24 +369,22 @@ export async function scheduleSession(
 ): Promise<ProviderSession> {
   const accessToken = getAccessToken();
 
-  const response = await fetch(
+  const result = await secureFetch<ProviderSession>(
     `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/providers/${providerId}/sessions`,
     {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
     }
   );
 
-  if (!response.ok) {
-    const error = await response.text();
-    throw new Error(`Failed to schedule session: ${error}`);
+  if (!result.ok) {
+    throw new Error(`Failed to schedule session: ${result.error}`);
   }
 
-  return response.json();
+  return result.data!;
 }
 
 /**
@@ -406,23 +397,22 @@ export async function updateSessionStatus(
 ): Promise<ProviderSession> {
   const accessToken = getAccessToken();
 
-  const response = await fetch(
+  const result = await secureFetch<ProviderSession>(
     `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/sessions/${sessionId}/status`,
     {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ status, notes }),
     }
   );
 
-  if (!response.ok) {
+  if (!result.ok) {
     throw new Error('Failed to update session status');
   }
 
-  return response.json();
+  return result.data!;
 }
 
 /**
@@ -435,23 +425,22 @@ export async function requestProfileAccess(
 ): Promise<{ success: boolean; requestId: string }> {
   const accessToken = getAccessToken();
 
-  const response = await fetch(
+  const result = await secureFetch<{ success: boolean; requestId: string }>(
     `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/providers/${providerId}/request-access`,
     {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ childId, message }),
     }
   );
 
-  if (!response.ok) {
+  if (!result.ok) {
     throw new Error('Failed to request profile access');
   }
 
-  return response.json();
+  return result.data!;
 }
 
 /**
@@ -464,19 +453,18 @@ export async function updateProfileAccess(
 ): Promise<void> {
   const accessToken = getAccessToken();
 
-  const response = await fetch(
+  const result = await secureFetch(
     `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/children/${childId}/provider-access`,
     {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ providerId, access }),
     }
   );
 
-  if (!response.ok) {
+  if (!result.ok) {
     throw new Error('Failed to update profile access');
   }
 }
@@ -496,19 +484,18 @@ export async function submitSessionNotes(
 ): Promise<void> {
   const accessToken = getAccessToken();
 
-  const response = await fetch(
+  const result = await secureFetch(
     `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/sessions/${sessionId}/notes`,
     {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
       },
       body: JSON.stringify(notes),
     }
   );
 
-  if (!response.ok) {
+  if (!result.ok) {
     throw new Error('Failed to submit session notes');
   }
 }
@@ -523,23 +510,21 @@ export async function getAvailableSlots(
 ): Promise<string[]> {
   const accessToken = getAccessToken();
 
-  const response = await fetch(
+  const result = await secureFetch<{ slots: string[] }>(
     `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/providers/${providerId}/slots?date=${date}&duration=${duration}`,
     {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
       },
     }
   );
 
-  if (!response.ok) {
+  if (!result.ok) {
     throw new Error('Failed to get available slots');
   }
 
-  const data = await response.json();
-  return data.slots || [];
+  return result.data?.slots || [];
 }
 
 /**
@@ -555,23 +540,22 @@ export async function verifyProvider(
 ): Promise<{ verified: boolean; message?: string }> {
   const accessToken = getAccessToken();
 
-  const response = await fetch(
+  const result = await secureFetch<{ verified: boolean; message?: string }>(
     `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/providers/${providerId}/verify`,
     {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
       },
       body: JSON.stringify(documents),
     }
   );
 
-  if (!response.ok) {
+  if (!result.ok) {
     throw new Error('Failed to verify provider');
   }
 
-  return response.json();
+  return result.data!;
 }
 
 export default {

@@ -147,7 +147,7 @@ export const JrSetupWizard: React.FC<JrSetupWizardProps> = ({
     }, 500); // Update every 500ms for smooth progress
   };
 
-  const updateProfile = (field: keyof JrProfile, value: any) => {
+  const updateProfile = (field: keyof JrProfile, value: JrProfile[keyof JrProfile]) => {
     setProfile(prev => ({ ...prev, [field]: value }));
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }));

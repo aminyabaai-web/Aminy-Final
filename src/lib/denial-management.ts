@@ -807,6 +807,50 @@ export async function getUpcomingAppealDeadlines(
   }
 }
 
+/**
+ * Get denial records for a specific patient (parent-facing).
+ * Matches on patient_name (case-insensitive) for the given user's children.
+ */
+export async function getDenialRecordsForPatient(
+  patientName: string,
+  filters?: {
+    status?: DenialStatus;
+    dateFrom?: string;
+    dateTo?: string;
+  }
+): Promise<DenialRecord[]> {
+  try {
+    let query = supabase
+      .from('denial_records')
+      .select('*')
+      .ilike('patient_name', `%${patientName}%`)
+      .order('created_at', { ascending: false })
+      .limit(50);
+
+    if (filters?.status) {
+      query = query.eq('status', filters.status);
+    }
+    if (filters?.dateFrom) {
+      query = query.gte('date_of_service', filters.dateFrom);
+    }
+    if (filters?.dateTo) {
+      query = query.lte('date_of_service', filters.dateTo);
+    }
+
+    const { data, error } = await query;
+
+    if (error) {
+      console.error('[denial-management] Error fetching patient denials:', error.message);
+      return [];
+    }
+
+    return (data ?? []).map(mapRowToDenialRecord);
+  } catch (err) {
+    console.error('[denial-management] Unexpected patient denial fetch error:', err);
+    return [];
+  }
+}
+
 // ============================================================================
 // Denial Metrics / Analytics
 // ============================================================================

@@ -6,6 +6,7 @@
  */
 
 import { projectId, publicAnonKey } from '../../utils/supabase/info';
+import { syncEncryptedStorage } from '../security/encrypted-storage';
 
 // Types
 export interface ConversationMessage {
@@ -673,7 +674,7 @@ export function saveConversationLocally(
 ): void {
   try {
     const key = `${STORAGE_KEY_PREFIX}${conversationId}`;
-    localStorage.setItem(key, JSON.stringify({
+    syncEncryptedStorage.setItem(key, JSON.stringify({
       ...conversation,
       updatedAt: new Date().toISOString(),
     }));
@@ -685,7 +686,7 @@ export function saveConversationLocally(
 export function loadConversationLocally(conversationId: string): Conversation | null {
   try {
     const key = `${STORAGE_KEY_PREFIX}${conversationId}`;
-    const data = localStorage.getItem(key);
+    const data = syncEncryptedStorage.getItem(key);
     return data ? JSON.parse(data) : null;
   } catch (error) {
     console.error('Error loading conversation locally:', error);
@@ -696,10 +697,14 @@ export function loadConversationLocally(conversationId: string): Conversation | 
 export function listLocalConversations(): string[] {
   const keys: string[] = [];
   try {
+    // Check both encrypted (enc_) and unencrypted versions
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
-      if (key?.startsWith(STORAGE_KEY_PREFIX)) {
-        keys.push(key.replace(STORAGE_KEY_PREFIX, ''));
+      if (key) {
+        const cleanKey = key.replace(/^enc_/, '');
+        if (cleanKey.startsWith(STORAGE_KEY_PREFIX) && !keys.includes(cleanKey.replace(STORAGE_KEY_PREFIX, ''))) {
+          keys.push(cleanKey.replace(STORAGE_KEY_PREFIX, ''));
+        }
       }
     }
   } catch (error) {

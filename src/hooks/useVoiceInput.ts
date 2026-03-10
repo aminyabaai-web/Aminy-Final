@@ -85,7 +85,7 @@ export function useVoiceInput(options: VoiceInputOptions = {}) {
     confidence: 0,
   });
 
-  const recognitionRef = useRef<any>(null);
+  const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
   const isInitializedRef = useRef(false);
 
   // Check browser support
@@ -97,7 +97,7 @@ export function useVoiceInput(options: VoiceInputOptions = {}) {
 
     if (isSupported && !isInitializedRef.current) {
       const SpeechRecognition =
-        (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+        window.SpeechRecognition || window.webkitSpeechRecognition;
 
       recognitionRef.current = new SpeechRecognition();
       recognitionRef.current.continuous = continuous;

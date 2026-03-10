@@ -41,7 +41,9 @@ serve(async (req) => {
             const isRecurring = price.type === 'recurring';
 
             const sessionParams: Stripe.Checkout.SessionCreateParams = {
-                payment_method_types: ['card'],
+                // Do NOT restrict payment_method_types — let Stripe auto-enable
+                // card, Apple Pay, Google Pay, and Link based on the customer's
+                // device and your Stripe Dashboard payment-method settings.
                 line_items: [{ price: priceId, quantity: 1 }],
                 mode: isRecurring ? 'subscription' : 'payment',
                 success_url:
@@ -133,7 +135,7 @@ serve(async (req) => {
 
         // Create Checkout Session (cart mode — always payment)
         const session = await stripe.checkout.sessions.create({
-            payment_method_types: ['card'],
+            // No payment_method_types — Stripe auto-enables wallet payments
             line_items: lineItems,
             mode: 'payment',
             success_url:

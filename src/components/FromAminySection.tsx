@@ -8,7 +8,7 @@ interface FromAminyCard {
   headline: string;
   subtext: string;
   cta: string;
-  icon: React.ComponentType<any>;
+  icon: React.ComponentType<{ className?: string }>;
   iconBg: string;
   iconColor: string;
 }

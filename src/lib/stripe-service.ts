@@ -12,12 +12,16 @@
 
 import { projectId, publicAnonKey } from '../utils/supabase/info';
 import { tierPricing, type TierType } from './tier-utils';
+import { secureFetch } from './security/secure-fetch';
 
 // Edge function base URL for API calls
 const EDGE_FUNCTION_BASE = `https://${projectId}.supabase.co/functions/v1/make-server-8a022548`;
 
 // Stripe Publishable Key (required for frontend)
 export const STRIPE_PUBLISHABLE_KEY = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || '';
+
+// Detect whether Stripe is running in test mode (pk_test_ prefix)
+export const isStripeTestMode = STRIPE_PUBLISHABLE_KEY?.startsWith('pk_test_');
 
 // Validate Stripe is configured (only warn in dev)
 if (import.meta.env.DEV && !STRIPE_PUBLISHABLE_KEY) {
@@ -176,29 +180,27 @@ export async function createPortalSession(
 ): Promise<{ url: string }> {
   const accessToken = await getAccessToken();
 
-  const response = await fetch(
+  const { data, error, ok } = await secureFetch<{ url: string }>(
     `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/payments/create-portal`,
     {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ userId, returnUrl }),
     }
   );
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`Failed to create portal session: ${errorText}`);
+  if (!ok || error) {
+    throw new Error(`Failed to create portal session: ${error || 'Unknown error'}`);
   }
 
-  try {
-    return await response.json();
-  } catch (parseError) {
-    console.error('[Stripe] Failed to parse portal response:', parseError);
+  if (!data) {
+    console.error('[Stripe] Failed to parse portal response');
     throw new Error('Invalid response from payment server');
   }
+
+  return data;
 }
 
 /**
@@ -207,18 +209,17 @@ export async function createPortalSession(
 export async function getSubscriptionStatus(userId: string): Promise<SubscriptionStatus> {
   const accessToken = await getAccessToken();
 
-  const response = await fetch(
+  const { data, ok } = await secureFetch<SubscriptionStatus>(
     `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/payments/subscription/${userId}`,
     {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
       },
     }
   );
 
-  if (!response.ok) {
+  if (!ok || !data) {
     // Default to free tier if no subscription found
     return {
       active: false,
@@ -229,7 +230,7 @@ export async function getSubscriptionStatus(userId: string): Promise<Subscriptio
     };
   }
 
-  return response.json();
+  return data;
 }
 
 /**
@@ -238,24 +239,22 @@ export async function getSubscriptionStatus(userId: string): Promise<Subscriptio
 export async function cancelSubscription(userId: string): Promise<{ success: boolean }> {
   const accessToken = await getAccessToken();
 
-  const response = await fetch(
+  const { data, error, ok } = await secureFetch<{ success: boolean }>(
     `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/payments/cancel`,
     {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ userId }),
     }
   );
 
-  if (!response.ok) {
-    const error = await response.text();
-    throw new Error(`Failed to cancel subscription: ${error}`);
+  if (!ok || error) {
+    throw new Error(`Failed to cancel subscription: ${error || 'Unknown error'}`);
   }
 
-  return response.json();
+  return data!;
 }
 
 /**
@@ -264,24 +263,22 @@ export async function cancelSubscription(userId: string): Promise<{ success: boo
 export async function resumeSubscription(userId: string): Promise<{ success: boolean }> {
   const accessToken = await getAccessToken();
 
-  const response = await fetch(
+  const { data, error, ok } = await secureFetch<{ success: boolean }>(
     `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/payments/resume`,
     {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ userId }),
     }
   );
 
-  if (!response.ok) {
-    const error = await response.text();
-    throw new Error(`Failed to resume subscription: ${error}`);
+  if (!ok || error) {
+    throw new Error(`Failed to resume subscription: ${error || 'Unknown error'}`);
   }
 
-  return response.json();
+  return data!;
 }
 
 /**
@@ -302,13 +299,12 @@ export async function createOneTimePayment({
 }): Promise<CheckoutResponse> {
   const accessToken = await getAccessToken();
 
-  const response = await fetch(
+  const { data, error, ok } = await secureFetch<CheckoutResponse>(
     `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/payments/create-payment`,
     {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         userId,
@@ -322,12 +318,44 @@ export async function createOneTimePayment({
     }
   );
 
-  if (!response.ok) {
-    const error = await response.text();
-    throw new Error(`Failed to create payment: ${error}`);
+  if (!ok || error) {
+    throw new Error(`Failed to create payment: ${error || 'Unknown error'}`);
   }
 
-  return response.json();
+  return data!;
+}
+
+/**
+ * Open the Stripe Customer Portal in a new tab so the user can self-manage
+ * their subscription (cancel, update payment method, switch plans, view invoices).
+ *
+ * This is the recommended entry point for any "Manage Subscription" or
+ * "Update Payment Method" button throughout the app.
+ *
+ * @param userId - The Supabase user ID
+ * @param returnUrl - Where to send the user after they close the portal
+ *                    (defaults to current origin /settings)
+ * @param options.newTab - Open in a new tab (default: true). Set to false to
+ *                         redirect the current window.
+ * @returns The portal URL (also opens it automatically)
+ */
+export async function openCustomerPortal(
+  userId: string,
+  returnUrl?: string,
+  options: { newTab?: boolean } = {}
+): Promise<string> {
+  const { newTab = true } = options;
+  const finalReturnUrl = returnUrl || `${getOrigin()}/?screen=settings`;
+
+  const { url } = await createPortalSession(userId, finalReturnUrl);
+
+  if (newTab) {
+    window.open(url, '_blank', 'noopener,noreferrer');
+  } else {
+    window.location.href = url;
+  }
+
+  return url;
 }
 
 /**
@@ -448,20 +476,26 @@ export async function validatePromoCode(
   error?: string;
 }> {
   try {
-    const response = await fetch(`${EDGE_FUNCTION_BASE}/payments/validate-promo`, {
+    const { data, ok } = await secureFetch<{
+      valid: boolean;
+      description?: string;
+      type?: 'percent' | 'fixed';
+      value?: number;
+      discountAmount?: number;
+      error?: string;
+    }>(`${EDGE_FUNCTION_BASE}/payments/validate-promo`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
         'Authorization': `Bearer ${publicAnonKey}`,
       },
       body: JSON.stringify({ code, subtotal }),
     });
 
-    if (!response.ok) {
+    if (!ok || !data) {
       return { valid: false, error: 'Validation failed' };
     }
 
-    return await response.json();
+    return data;
   } catch (error) {
     console.error('Promo validation error:', error);
     return { valid: false, error: 'Network error' };
@@ -563,13 +597,12 @@ export async function createBundleCheckoutSession({
     throw new Error(`Unknown bundle ID: ${bundleId}`);
   }
 
-  const response = await fetch(
+  const { data, error, ok } = await secureFetch<CheckoutResponse>(
     `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/payments/create-bundle-checkout`,
     {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         userId,
@@ -593,12 +626,11 @@ export async function createBundleCheckoutSession({
     }
   );
 
-  if (!response.ok) {
-    const error = await response.text();
-    throw new Error(`Failed to create bundle checkout session: ${error}`);
+  if (!ok || error) {
+    throw new Error(`Failed to create bundle checkout session: ${error || 'Unknown error'}`);
   }
 
-  return response.json();
+  return data!;
 }
 
 /**
@@ -613,18 +645,22 @@ export async function getBundleCredits(userId: string): Promise<{
   const accessToken = getAccessToken();
 
   try {
-    const response = await fetch(
+    const { data, ok } = await secureFetch<{
+      consultCredits: number;
+      deepReviewCredits: number;
+      expiresAt: string | null;
+      bundleId: string | null;
+    }>(
       `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/payments/bundle-credits/${userId}`,
       {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
         },
       }
     );
 
-    if (!response.ok) {
+    if (!ok || !data) {
       // No credits found
       return {
         consultCredits: 0,
@@ -634,7 +670,7 @@ export async function getBundleCredits(userId: string): Promise<{
       };
     }
 
-    return response.json();
+    return data;
   } catch (error) {
     console.warn('[Stripe] Failed to fetch bundle credits:', error);
     return {
@@ -662,13 +698,12 @@ export async function useBundleCredit({
 }): Promise<{ success: boolean; remainingCredits: number }> {
   const accessToken = getAccessToken();
 
-  const response = await fetch(
+  const { data, error, ok } = await secureFetch<{ success: boolean; remainingCredits: number }>(
     `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/payments/use-bundle-credit`,
     {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         userId,
@@ -679,12 +714,11 @@ export async function useBundleCredit({
     }
   );
 
-  if (!response.ok) {
-    const error = await response.text();
-    throw new Error(`Failed to use bundle credit: ${error}`);
+  if (!ok || error) {
+    throw new Error(`Failed to use bundle credit: ${error || 'Unknown error'}`);
   }
 
-  return response.json();
+  return data!;
 }
 
 // ============================================================================
@@ -723,24 +757,22 @@ export async function getProrationPreview(
 ): Promise<ProrationPreview> {
   const accessToken = await getAccessToken();
 
-  const response = await fetch(
+  const { data, error, ok } = await secureFetch<ProrationPreview>(
     `${EDGE_FUNCTION_BASE}/payments/proration-preview`,
     {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ subscriptionId, newPriceId }),
     }
   );
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`Failed to get proration preview: ${errorText}`);
+  if (!ok || error) {
+    throw new Error(`Failed to get proration preview: ${error || 'Unknown error'}`);
   }
 
-  return response.json();
+  return data!;
 }
 
 /**
@@ -786,13 +818,15 @@ export async function changeTier(
     throw new Error(`No price configured for ${newTier} ${interval}`);
   }
 
-  const response = await fetch(
+  const { data: result, error, ok } = await secureFetch<{
+    effectiveDate?: string;
+    prorationPreview?: ProrationPreview;
+  }>(
     `${EDGE_FUNCTION_BASE}/payments/change-tier`,
     {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         userId,
@@ -810,12 +844,9 @@ export async function changeTier(
     }
   );
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`Failed to change tier: ${errorText}`);
+  if (!ok || error || !result) {
+    throw new Error(`Failed to change tier: ${error || 'Unknown error'}`);
   }
-
-  const result = await response.json();
 
   return {
     success: true,
@@ -828,6 +859,7 @@ export async function changeTier(
 export default {
   createCheckoutSession,
   createPortalSession,
+  openCustomerPortal,
   getSubscriptionStatus,
   cancelSubscription,
   resumeSubscription,

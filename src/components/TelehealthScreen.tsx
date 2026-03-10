@@ -7,6 +7,7 @@ import { Alert, AlertDescription } from './ui/alert';
 import { TelehealthSessionManager } from './TelehealthSessionManager';
 import { PostVisitSummary } from './PostVisitSummary';
 import { TelehealthConsent, ConsentStatusBadge } from './TelehealthConsent';
+import { useAuditedAction } from '../hooks/useAuditedAction';
 
 interface TelehealthScreenProps {
   onBack?: () => void;
@@ -32,6 +33,9 @@ export function TelehealthScreen({
   parentName = 'Parent',
   onNavigate
 }: TelehealthScreenProps) {
+  // HIPAA audit: log telehealth session view on mount
+  const { logAction, logExport } = useAuditedAction('telehealth_session');
+
   const [activeView, setActiveView] = useState<'credits' | 'history'>('credits');
   const [selectedVisit, setSelectedVisit] = useState<string | null>(null);
   const [hasConsent, setHasConsent] = useState<boolean>(false);

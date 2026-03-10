@@ -27,6 +27,7 @@
  */
 
 import { projectId, publicAnonKey } from '../utils/supabase/info';
+import { secureFetch } from './security/secure-fetch';
 
 import type {
   CentralReachConfig,
@@ -41,6 +42,7 @@ import type {
   CRJuniorSessionPayload,
   CRCaregiverWellnessPayload,
   CRHomeProgramProgressPayload,
+  CRTelehealthSessionPayload,
   CRWebhookPayload,
   CRWebhookEvent,
   CRSyncRecord,
@@ -65,6 +67,7 @@ import {
   crJuniorSessionPayloadSchema,
   crCaregiverWellnessPayloadSchema,
   crHomeProgramProgressPayloadSchema,
+  crTelehealthSessionPayloadSchema,
   crWebhookPayloadSchema,
   crApiResponseSchema,
 } from './schemas/centralreach';
@@ -75,16 +78,15 @@ import {
 
 const CR_BASE_URL = import.meta.env.VITE_CENTRALREACH_BASE_URL || 'https://members.centralreach.com/api';
 const CR_CLIENT_ID = import.meta.env.VITE_CENTRALREACH_CLIENT_ID || '';
-const CR_CLIENT_SECRET = import.meta.env.VITE_CENTRALREACH_CLIENT_SECRET || '';
+// CR_CLIENT_SECRET, CR_WEBHOOK_SECRET removed — secrets are now only in the edge function
 const CR_API_VERSION = import.meta.env.VITE_CENTRALREACH_API_VERSION || 'v1';
 const CR_ORGANIZATION_ID = import.meta.env.VITE_CENTRALREACH_ORG_ID || '';
-const CR_WEBHOOK_SECRET = import.meta.env.VITE_CENTRALREACH_WEBHOOK_SECRET || '';
 
 // Supabase Edge Function URL for secure server-side operations
 const CR_FUNCTION_URL = `https://${projectId}.supabase.co/functions/v1/centralreach`;
 
-// Use edge function in production (keeps OAuth credentials secure)
-const USE_EDGE_FUNCTION = import.meta.env.PROD || import.meta.env.VITE_USE_EDGE_FUNCTIONS === 'true';
+// Always route through edge function — client never calls CentralReach directly
+const USE_EDGE_FUNCTION = true;
 
 // ============================================================================
 // Error Types
@@ -238,7 +240,7 @@ export class CentralReachClient {
     this.config = {
       baseUrl: config?.baseUrl || CR_BASE_URL,
       clientId: config?.clientId || CR_CLIENT_ID,
-      clientSecret: config?.clientSecret || CR_CLIENT_SECRET,
+      clientSecret: config?.clientSecret || '', // Secret now lives in edge function only
       apiVersion: config?.apiVersion || CR_API_VERSION,
       organizationId: config?.organizationId || CR_ORGANIZATION_ID,
     };
@@ -265,7 +267,12 @@ export class CentralReachClient {
    */
   async authenticateWithCode(code: string): Promise<void> {
     try {
-      const response = await fetch(`${this.config.baseUrl}/oauth/token`, {
+      const result = await secureFetch<{
+        access_token: string;
+        refresh_token: string;
+        expires_in: number;
+        scope?: string;
+      }>(`${this.config.baseUrl}/oauth/token`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams({
@@ -275,19 +282,19 @@ export class CentralReachClient {
           client_secret: this.config.clientSecret,
           redirect_uri: `${window.location.origin}/auth/centralreach/callback`,
         }),
+        skipCSRF: true,
       });
 
-      if (!response.ok) {
-        const error = await response.text();
+      if (!result.ok || !result.data) {
         throw new CentralReachError(
-          `OAuth token exchange failed: ${error}`,
+          `OAuth token exchange failed: ${result.error || 'Unknown error'}`,
           'AUTH_FAILED',
-          response.status,
+          result.status,
           false,
         );
       }
 
-      const data = await response.json();
+      const data = result.data;
       this.tokens = {
         accessToken: data.access_token,
         refreshToken: data.refresh_token,
@@ -313,7 +320,12 @@ export class CentralReachClient {
     }
 
     try {
-      const response = await fetch(`${this.config.baseUrl}/oauth/token`, {
+      const result = await secureFetch<{
+        access_token: string;
+        refresh_token?: string;
+        expires_in: number;
+        scope?: string;
+      }>(`${this.config.baseUrl}/oauth/token`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams({
@@ -322,15 +334,16 @@ export class CentralReachClient {
           client_id: this.config.clientId,
           client_secret: this.config.clientSecret,
         }),
+        skipCSRF: true,
       });
 
-      if (!response.ok) {
+      if (!result.ok || !result.data) {
         // Refresh token expired/revoked - user must re-authenticate
         this.clearTokens();
         throw CentralReachError.unauthorized();
       }
 
-      const data = await response.json();
+      const data = result.data;
       this.tokens = {
         accessToken: data.access_token,
         refreshToken: data.refresh_token || this.tokens.refreshToken,
@@ -391,45 +404,41 @@ export class CentralReachClient {
     };
 
     try {
-      const response = await fetch(url, {
+      const result = await secureFetch<T>(url, {
         method,
         headers,
         body: body ? JSON.stringify(body) : undefined,
+        skipCSRF: true,
       });
 
-      // Update rate limit tracking from response headers
-      this.updateRateLimitInfo(response.headers);
-
-      if (!response.ok) {
-        if (response.status === 429) {
-          const resetHeader = response.headers.get('X-RateLimit-Reset');
-          const resetAt = resetHeader ? parseInt(resetHeader, 10) * 1000 : Date.now() + 60_000;
+      if (!result.ok) {
+        if (result.status === 429) {
+          // Rate limit headers not accessible via secureFetch; use default reset time
+          const resetAt = Date.now() + 60_000;
           throw CentralReachError.rateLimit(resetAt);
         }
 
-        if (response.status === 401) {
+        if (result.status === 401) {
           // Try refreshing token once
           await this.refreshAccessToken();
           // Retry the request (recursive, but only once since refresh either succeeds or throws)
           return this.apiRequest<T>(method, endpoint, body);
         }
 
-        let errorBody: CRApiError;
-        try {
-          errorBody = await response.json();
-        } catch {
-          errorBody = {
-            code: `HTTP_${response.status}`,
-            message: `CentralReach API error: ${response.status} ${response.statusText}`,
-            statusCode: response.status,
-            retryable: response.status >= 500,
-          };
-        }
+        // Extract error details from secureFetch response
+        const errorBody: CRApiError = (result.data && typeof result.data === 'object')
+          ? result.data as unknown as CRApiError
+          : {
+              code: `HTTP_${result.status}`,
+              message: result.error || `CentralReach API error: ${result.status}`,
+              statusCode: result.status,
+              retryable: result.status >= 500,
+            };
 
         throw CentralReachError.fromApiError(errorBody);
       }
 
-      return (await response.json()) as T;
+      return result.data as T;
     } catch (error) {
       if (error instanceof CentralReachError) throw error;
       throw CentralReachError.networkError(error);
@@ -506,7 +515,7 @@ async function callCREdgeFunction<T>(
   const token = localStorage.getItem('supabase.auth.token');
   const authToken = token ? JSON.parse(token)?.access_token : publicAnonKey;
 
-  const response = await fetch(CR_FUNCTION_URL, {
+  const result = await secureFetch<T>(CR_FUNCTION_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -515,17 +524,16 @@ async function callCREdgeFunction<T>(
     body: JSON.stringify({ action, ...data }),
   });
 
-  if (!response.ok) {
-    const error = await response.text();
+  if (!result.ok) {
     throw new CentralReachError(
-      `CentralReach edge function error: ${response.status} - ${error}`,
+      `CentralReach edge function error: ${result.status} - ${result.error || 'Unknown error'}`,
       'EDGE_FUNCTION_ERROR',
-      response.status,
-      response.status >= 500,
+      result.status,
+      result.status >= 500,
     );
   }
 
-  return (await response.json()) as T;
+  return result.data as T;
 }
 
 // ============================================================================
@@ -975,6 +983,71 @@ export async function updateHomeProgramProgress(
 }
 
 /**
+ * Push telehealth session notes to CentralReach after a video call.
+ * Maps session data (notes, goals addressed, interventions, billing code)
+ * to CentralReach's clinical data format for documentation and billing.
+ *
+ * Called from VideoCallRoom post-session flow. Includes:
+ * - Session metadata (duration, attendees, platform)
+ * - Clinical notes and interventions
+ * - Goal linkage for treatment plan documentation
+ * - Billing code for insurance claim preparation
+ * - Recording consent status for HIPAA compliance
+ */
+export async function pushTelehealthSessionNotes(
+  data: CRTelehealthSessionPayload,
+): Promise<{ success: boolean; crRecordId: string }> {
+  const validated = crTelehealthSessionPayloadSchema.parse(data);
+
+  const pusher = async () => {
+    if (USE_EDGE_FUNCTION) {
+      return callCREdgeFunction<{ success: boolean; crRecordId: string }>(
+        'push_telehealth_session',
+        { data: validated },
+      );
+    }
+
+    if (!crClient.isConfigured) {
+      console.warn('[CentralReach] Not configured, queuing telehealth session notes');
+      return queuePushForLater('telehealth_session', validated);
+    }
+
+    return crClient.apiRequest<{ success: boolean; crRecordId: string }>(
+      'POST',
+      `/clients/${validated.clientId}/telehealth-sessions`,
+      {
+        sessionId: validated.sessionId,
+        providerId: validated.providerId,
+        date: validated.date,
+        startTime: validated.startTime,
+        endTime: validated.endTime,
+        durationMinutes: validated.durationMinutes,
+        sessionType: validated.sessionType,
+        platform: validated.platform,
+        attendees: validated.attendees,
+        notes: validated.sessionNotes,
+        goalsAddressed: validated.goalsAddressed,
+        interventionsUsed: validated.interventionsUsed,
+        parentObservations: validated.parentObservations,
+        nextSteps: validated.nextSteps,
+        recordingConsent: validated.recordingConsent,
+        recordingUrl: validated.recordingUrl,
+        billingCode: validated.billingCode,
+        requiresFollowUp: validated.requiresFollowUp,
+        source: 'aminy_telehealth',
+      },
+    );
+  };
+
+  try {
+    return await withRetry(pusher);
+  } catch (error) {
+    await queuePushForLater('telehealth_session', validated);
+    throw error;
+  }
+}
+
+/**
  * Orchestrate a full bidirectional sync for a client.
  * Pulls latest data from CentralReach, pushes any queued local data.
  */
@@ -1084,19 +1157,13 @@ export async function handleCentralReachWebhook(
  * Verify the HMAC-SHA256 signature on an incoming webhook.
  */
 function verifyWebhookSignature(payload: CRWebhookPayload): boolean {
-  if (!CR_WEBHOOK_SECRET) {
-    console.warn('[CentralReach] No webhook secret configured, skipping verification');
-    return true; // Allow in development
+  // Webhook signature verification now happens server-side in the edge function.
+  // Client-side only checks that a signature is present.
+  if (!payload.signature || payload.signature.length === 0) {
+    console.warn('[CentralReach] Webhook missing signature');
+    return false;
   }
-
-  // In production, this would use SubtleCrypto to verify HMAC-SHA256:
-  // const encoder = new TextEncoder();
-  // const key = await crypto.subtle.importKey('raw', encoder.encode(CR_WEBHOOK_SECRET), { name: 'HMAC', hash: 'SHA-256' }, false, ['verify']);
-  // const data = encoder.encode(JSON.stringify({ event: payload.event, timestamp: payload.timestamp, organizationId: payload.organizationId, data: payload.data }));
-  // return crypto.subtle.verify('HMAC', key, hexToBuffer(payload.signature), data);
-
-  // Placeholder: signature presence check
-  return payload.signature.length > 0;
+  return true;
 }
 
 // Webhook event handlers (dispatch new data to app state)
@@ -1321,7 +1388,7 @@ async function queuePushForLater(
     const token = localStorage.getItem('supabase.auth.token');
     const authToken = token ? JSON.parse(token)?.access_token : publicAnonKey;
 
-    await fetch(
+    const persistResult = await secureFetch(
       `https://${projectId}.supabase.co/rest/v1/centralreach_sync_queue`,
       {
         method: 'POST',
@@ -1345,6 +1412,12 @@ async function queuePushForLater(
         }),
       },
     );
+    if (!persistResult.ok) {
+      console.warn(
+        '[CentralReach] Failed to persist push to Supabase queue:',
+        persistResult.error,
+      );
+    }
   } catch (err) {
     console.warn(
       '[CentralReach] Failed to persist push to Supabase queue:',
@@ -1571,10 +1644,11 @@ export async function getCentralReachHealth(): Promise<{
 
   if (USE_EDGE_FUNCTION) {
     try {
-      const response = await fetch(`${CR_FUNCTION_URL}/health`, {
+      const healthResult = await secureFetch(`${CR_FUNCTION_URL}/health`, {
+        method: 'GET',
         headers: { Authorization: `Bearer ${publicAnonKey}` },
       });
-      if (response.ok) {
+      if (healthResult.ok) {
         health.edgeFunction = true;
         health.status = 'ok';
       }

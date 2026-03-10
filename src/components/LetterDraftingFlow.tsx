@@ -253,7 +253,7 @@ export function LetterDraftingFlow({
               <Input
                 type={field.type || 'text'}
                 placeholder={field.placeholder}
-                value={(formData as any)[field.key] || ''}
+                value={(formData as Record<string, string | number | undefined>)[field.key] || ''}
                 onChange={(e) => updateFormData(field.key as keyof LetterContext, field.type === 'number' ? parseInt(e.target.value) || '' : e.target.value)}
               />
             </div>

@@ -26,6 +26,9 @@ import {
   AlertTriangle,
   X,
   Users,
+  Circle,
+  Shield,
+  CheckCircle,
 } from 'lucide-react';
 import {
   joinTelehealthSession,
@@ -34,12 +37,17 @@ import {
   toggleVideo,
   startScreenShare,
   stopScreenShare,
+  startRecording,
+  stopRecording,
   attachCallEventHandlers,
   VideoParticipant,
   VideoCallState,
   initialVideoCallState,
   formatRemainingTime,
+  type DailyCallObject,
 } from '../../lib/daily-video';
+import { useAuditedAction } from '../../hooks/useAuditedAction';
+import { DEFAULT_RETENTION_POLICIES, type RetentionPolicy } from '../../lib/hipaa-compliance';
 
 interface VideoRoomProps {
   appointmentId: string;
@@ -65,10 +73,27 @@ export function VideoRoom({
   const [showChat, setShowChat] = useState(false);
   const [elapsedTime, setElapsedTime] = useState(0);
 
-  const callObjectRef = useRef<any>(null);
+  // Recording state
+  const [isRecording, setIsRecording] = useState(false);
+  const [showRecordingConsent, setShowRecordingConsent] = useState(false);
+  const [consentChecked, setConsentChecked] = useState(false);
+
+  const callObjectRef = useRef<DailyCallObject | null>(null);
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const remoteVideoRef = useRef<HTMLVideoElement>(null);
   const startTimeRef = useRef<Date | null>(null);
+  const recordingStartTimeRef = useRef<Date | null>(null);
+
+  // HIPAA audit logging for telehealth session
+  const { logAction } = useAuditedAction('telehealth_session', appointmentId);
+
+  // Get the session notes retention policy for display in consent modal
+  const sessionRetention: RetentionPolicy | undefined = DEFAULT_RETENTION_POLICIES.find(
+    p => p.resourceType === 'session_notes'
+  );
+  const retentionYears = sessionRetention
+    ? Math.round(sessionRetention.retentionDays / 365)
+    : 7;
 
   // Join the call on mount
   useEffect(() => {
@@ -194,17 +219,74 @@ export function VideoRoom({
     setCallState(prev => ({ ...prev, isScreenSharing: !prev.isScreenSharing }));
   }, [callState.isScreenSharing]);
 
+  // Handle recording consent — user clicks "I Consent" in the modal
+  const handleRecordingConsent = useCallback(async () => {
+    setShowRecordingConsent(false);
+    setConsentChecked(false);
+
+    logAction('recording_consent_given', {
+      appointmentId,
+      consentTimestamp: new Date().toISOString(),
+      retentionDays: sessionRetention?.retentionDays ?? 2555,
+    });
+
+    if (!callObjectRef.current) return;
+    const started = await startRecording(callObjectRef.current);
+    if (started) {
+      setIsRecording(true);
+      recordingStartTimeRef.current = new Date();
+      logAction('recording_started', { appointmentId });
+    }
+  }, [appointmentId, logAction, sessionRetention]);
+
+  // Handle recording consent declined
+  const handleRecordingDeclined = useCallback(() => {
+    setShowRecordingConsent(false);
+    setConsentChecked(false);
+    logAction('recording_consent_declined', { appointmentId });
+  }, [appointmentId, logAction]);
+
+  // Handle stop recording
+  const handleStopRecording = useCallback(async () => {
+    if (!callObjectRef.current) return;
+    const stopped = await stopRecording(callObjectRef.current);
+    if (stopped) {
+      setIsRecording(false);
+      const durationSeconds = recordingStartTimeRef.current
+        ? Math.floor((Date.now() - recordingStartTimeRef.current.getTime()) / 1000)
+        : 0;
+      recordingStartTimeRef.current = null;
+      logAction('recording_stopped', { appointmentId, recordingDurationSeconds: durationSeconds });
+    }
+  }, [appointmentId, logAction]);
+
+  // Toggle recording — shows consent modal if not yet recording
+  const handleToggleRecording = useCallback(() => {
+    if (isRecording) {
+      handleStopRecording();
+    } else {
+      setShowRecordingConsent(true);
+    }
+  }, [isRecording, handleStopRecording]);
+
   // Handle end call
   const handleEndCall = useCallback(async () => {
     setShowEndConfirm(false);
     setCallState(prev => ({ ...prev, state: 'leaving' }));
+
+    // Auto-stop recording if active
+    if (isRecording && callObjectRef.current) {
+      await stopRecording(callObjectRef.current);
+      logAction('recording_stopped', { appointmentId, reason: 'call_ended' });
+      setIsRecording(false);
+    }
 
     if (callObjectRef.current) {
       await leaveCall(callObjectRef.current);
     }
 
     onEnd?.();
-  }, [onEnd]);
+  }, [onEnd, isRecording, appointmentId, logAction]);
 
   // Render loading state
   if (callState.state === 'joining') {
@@ -252,6 +334,12 @@ export function VideoRoom({
             <span className="text-white text-sm font-medium">
               {formatElapsedTime(elapsedTime)}
             </span>
+            {isRecording && (
+              <div className="flex items-center gap-1.5 bg-red-500/80 px-2 py-0.5 rounded-full">
+                <Circle className="w-2.5 h-2.5 text-white fill-white animate-pulse" />
+                <span className="text-white text-xs font-medium">REC</span>
+              </div>
+            )}
             {scheduledEndTime && (
               <span className="text-white/60 text-sm">
                 • Ends {formatRemainingTime(scheduledEndTime)}
@@ -395,6 +483,21 @@ export function VideoRoom({
             )}
           </button>
 
+          {/* Record */}
+          {isProvider && (
+            <button
+              onClick={handleToggleRecording}
+              className={`p-4 rounded-full transition-colors ${
+                isRecording
+                  ? 'bg-red-500 hover:bg-red-600 ring-2 ring-red-300 ring-offset-2 ring-offset-gray-900'
+                  : 'bg-white/20 hover:bg-white/30'
+              }`}
+              title={isRecording ? 'Stop recording' : 'Start recording'}
+            >
+              <Circle className={`w-6 h-6 text-white ${isRecording ? 'fill-white' : ''}`} />
+            </button>
+          )}
+
           {/* End Call */}
           <button
             onClick={() => setShowEndConfirm(true)}
@@ -431,6 +534,99 @@ export function VideoRoom({
                 className="flex-1 py-3 px-4 bg-red-500 text-white rounded-xl font-medium hover:bg-red-600 transition-colors"
               >
                 End Call
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* HIPAA Recording Consent Modal */}
+      {showRecordingConsent && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-60 p-4">
+          <div className="bg-white rounded-2xl p-6 max-w-md w-full max-h-[90vh] overflow-y-auto">
+            {/* Header with HIPAA shield */}
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center flex-shrink-0">
+                <Shield className="w-5 h-5 text-blue-600" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">Recording Consent Required</h3>
+                <p className="text-xs text-gray-500">HIPAA §164.508(a) Authorization</p>
+              </div>
+            </div>
+
+            {/* Notice */}
+            <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-4">
+              <p className="text-sm text-amber-800 font-medium mb-1">
+                This session will be recorded
+              </p>
+              <p className="text-xs text-amber-700">
+                All participants will be notified that recording is active.
+                The recording will include audio and video from all participants.
+              </p>
+            </div>
+
+            {/* Retention policy details */}
+            <div className="space-y-3 mb-4">
+              <div className="flex items-start gap-2">
+                <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                <p className="text-sm text-gray-700">
+                  Recording stored securely with end-to-end encryption
+                </p>
+              </div>
+              <div className="flex items-start gap-2">
+                <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                <p className="text-sm text-gray-700">
+                  Retained for <span className="font-semibold">{retentionYears} years</span> per {sessionRetention?.legalBasis ?? 'HIPAA §164.530(j)'}
+                </p>
+              </div>
+              <div className="flex items-start gap-2">
+                <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                <p className="text-sm text-gray-700">
+                  Accessible only to authorized providers and the patient/guardian
+                </p>
+              </div>
+              <div className="flex items-start gap-2">
+                <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                <p className="text-sm text-gray-700">
+                  Your consent is logged and auditable per HIPAA requirements
+                </p>
+              </div>
+            </div>
+
+            {/* Consent checkbox */}
+            <label className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl cursor-pointer mb-4">
+              <input
+                type="checkbox"
+                checked={consentChecked}
+                onChange={(e) => setConsentChecked(e.target.checked)}
+                className="mt-0.5 w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+              />
+              <span className="text-sm text-gray-700 leading-snug">
+                I understand and consent to this telehealth session being recorded. I acknowledge
+                the recording will be stored per the retention policy above and may be used for
+                clinical documentation purposes.
+              </span>
+            </label>
+
+            {/* Actions */}
+            <div className="flex gap-3">
+              <button
+                onClick={handleRecordingDeclined}
+                className="flex-1 py-3 px-4 border border-gray-200 rounded-xl font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+              >
+                Decline
+              </button>
+              <button
+                onClick={handleRecordingConsent}
+                disabled={!consentChecked}
+                className={`flex-1 py-3 px-4 rounded-xl font-medium transition-colors ${
+                  consentChecked
+                    ? 'bg-blue-600 text-white hover:bg-blue-700'
+                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                }`}
+              >
+                I Consent
               </button>
             </div>
           </div>

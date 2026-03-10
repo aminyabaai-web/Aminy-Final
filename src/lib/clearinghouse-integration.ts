@@ -23,6 +23,7 @@
  */
 
 import { projectId, publicAnonKey } from '../utils/supabase/info';
+import { secureFetch } from './security/secure-fetch';
 
 // Supabase Edge Function URL for secure clearinghouse operations
 // ALL clearinghouse API keys live server-side in Supabase secrets — never in the client bundle.
@@ -1867,21 +1868,23 @@ async function callClearinghouseFunction(
   const token = localStorage.getItem('supabase.auth.token');
   const authToken = token ? JSON.parse(token)?.access_token : publicAnonKey;
 
-  const response = await fetch(CLEARINGHOUSE_FUNCTION_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${authToken}`,
-    },
-    body: JSON.stringify({ action, ...data }),
-  });
+  const { data: responseData, error, status, ok } = await secureFetch<Record<string, unknown>>(
+    CLEARINGHOUSE_FUNCTION_URL,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`,
+      },
+      body: JSON.stringify({ action, ...data }),
+    }
+  );
 
-  if (!response.ok) {
-    const error = await response.text();
-    throw new Error(`Clearinghouse function error: ${response.status} - ${error}`);
+  if (!ok) {
+    throw new Error(`Clearinghouse function error: ${status} - ${error || 'Unknown error'}`);
   }
 
-  return response.json();
+  return responseData || {};
 }
 
 // ============================================================================
@@ -1996,7 +1999,7 @@ async function queueForRetry(
     const token = localStorage.getItem('supabase.auth.token');
     const authToken = token ? JSON.parse(token)?.access_token : publicAnonKey;
 
-    await fetch(`https://${projectId}.supabase.co/rest/v1/claim_submission_attempts`, {
+    await secureFetch(`https://${projectId}.supabase.co/rest/v1/claim_submission_attempts`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -2045,7 +2048,7 @@ async function updateSubmissionAttemptStatus(
     const token = localStorage.getItem('supabase.auth.token');
     const authToken = token ? JSON.parse(token)?.access_token : publicAnonKey;
 
-    await fetch(`https://${projectId}.supabase.co/rest/v1/claim_submission_attempts?id=eq.${attemptId}`, {
+    await secureFetch(`https://${projectId}.supabase.co/rest/v1/claim_submission_attempts?id=eq.${attemptId}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -2132,8 +2135,11 @@ export async function verifyInsuranceEligibility(
       }}
     );
   } catch (error) {
-    console.warn('[clearinghouse] Eligibility check failed, returning mock:', error);
-    return getMockEligibilityResponse(request);
+    console.warn('[clearinghouse] Eligibility check failed:', error);
+    if (import.meta.env.DEV) {
+      return getMockEligibilityResponse(request);
+    }
+    throw error;
   }
 }
 
@@ -2177,8 +2183,11 @@ export async function getClaimStatus(
       }}
     );
   } catch (error) {
-    console.warn('[clearinghouse] Claim status check failed, returning mock:', error);
-    return getMockClaimStatusResponse(request);
+    console.warn('[clearinghouse] Claim status check failed:', error);
+    if (import.meta.env.DEV) {
+      return getMockClaimStatusResponse(request);
+    }
+    throw error;
   }
 }
 
@@ -2243,11 +2252,14 @@ export async function getClearinghouseHealth(): Promise<{
   };
 
   try {
-    const response = await fetch(`${CLEARINGHOUSE_FUNCTION_URL}/health`, {
-      headers: { 'Authorization': `Bearer ${publicAnonKey}` },
-    });
-    if (response.ok) {
-      const data = await response.json();
+    const { data, ok } = await secureFetch<{ availity?: boolean; waystar?: boolean }>(
+      `${CLEARINGHOUSE_FUNCTION_URL}/health`,
+      {
+        method: 'GET',
+        headers: { 'Authorization': `Bearer ${publicAnonKey}` },
+      }
+    );
+    if (ok) {
       health.edgeFunction = true;
       health.availity = data?.availity ?? false;
       health.waystar = data?.waystar ?? false;

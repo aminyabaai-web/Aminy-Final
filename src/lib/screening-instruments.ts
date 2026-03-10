@@ -11,6 +11,8 @@
  * Post-signup: migrated to Supabase + MemoryFacts
  */
 
+import { syncEncryptedStorage } from './security/encrypted-storage';
+
 // ============================================
 // TYPES
 // ============================================
@@ -400,7 +402,7 @@ export function saveScreeningResult(result: ScreeningResult): void {
   // Always save to localStorage (works pre-signup)
   const existing = getScreeningResults();
   existing.push(result);
-  localStorage.setItem(SCREENING_STORAGE_KEY, JSON.stringify(existing));
+  syncEncryptedStorage.setItem(SCREENING_STORAGE_KEY, JSON.stringify(existing));
 
   // Also persist to Supabase if authenticated (non-blocking)
   import('./supabase-data').then(({ dataService }) => {
@@ -421,7 +423,7 @@ export function saveScreeningResult(result: ScreeningResult): void {
 
 export function getScreeningResults(): ScreeningResult[] {
   try {
-    const raw = localStorage.getItem(SCREENING_STORAGE_KEY);
+    const raw = syncEncryptedStorage.getItem(SCREENING_STORAGE_KEY);
     return raw ? JSON.parse(raw) : [];
   } catch {
     return [];
@@ -439,7 +441,7 @@ export function migrateScreeningResultsToUser(): ScreeningResult[] {
 }
 
 export function clearLocalScreeningResults(): void {
-  localStorage.removeItem(SCREENING_STORAGE_KEY);
+  syncEncryptedStorage.removeItem(SCREENING_STORAGE_KEY);
 }
 
 // ============================================

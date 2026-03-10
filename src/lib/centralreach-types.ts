@@ -267,6 +267,29 @@ export interface CRCaregiverWellnessPayload {
   notes?: string;
 }
 
+/** Telehealth session notes pushed to CentralReach after a video call */
+export interface CRTelehealthSessionPayload {
+  sessionId: string;
+  clientId: string;
+  providerId: string;
+  date: string;             // YYYY-MM-DD
+  startTime: string;        // HH:MM (24h)
+  endTime: string;          // HH:MM (24h)
+  durationMinutes: number;
+  sessionType: 'telehealth_video' | 'telehealth_audio' | 'telehealth_chat';
+  platform: 'daily' | 'zoom' | 'other';
+  attendees: string[];
+  sessionNotes: string;
+  goalsAddressed: string[]; // CR goal IDs discussed
+  interventionsUsed: string[];
+  parentObservations?: string;
+  nextSteps?: string;
+  recordingConsent: boolean;
+  recordingUrl?: string;
+  billingCode?: string;     // CPT code (e.g., 97153 for telehealth ABA)
+  requiresFollowUp: boolean;
+}
+
 /** Home program progress update pushed back to CentralReach */
 export interface CRHomeProgramProgressPayload {
   homeProgramId: string;
@@ -319,7 +342,7 @@ export type CRWebhookEvent =
 /** Sync status for a single entity */
 export interface CRSyncRecord {
   id: string;
-  entityType: 'session' | 'goal' | 'behavior_log' | 'routine' | 'routine_completion' | 'junior_session' | 'wellness' | 'caregiver_wellness' | 'home_program' | 'home_program_progress';
+  entityType: 'session' | 'goal' | 'behavior_log' | 'routine' | 'routine_completion' | 'junior_session' | 'wellness' | 'caregiver_wellness' | 'home_program' | 'home_program_progress' | 'telehealth_session';
   entityId: string;
   direction: 'pull' | 'push';
   status: 'pending' | 'in_progress' | 'completed' | 'failed' | 'conflict';

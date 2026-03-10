@@ -362,7 +362,7 @@ export function AnalyticsCharts({
   };
 
   const handleRangeChange = (value: string) => {
-    setSelectedRange(value as any);
+    setSelectedRange(value as 'week' | 'month' | 'quarter' | 'year');
     onDateRangeChange?.(value);
   };
 

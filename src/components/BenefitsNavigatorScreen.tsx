@@ -13,6 +13,7 @@ import {
   orchestrateBenefitsDiscovery,
   type BenefitsDiscoveryData,
 } from '../lib/benefits-orchestrator';
+import { useAuditedAction } from '../hooks/useAuditedAction';
 
 interface BenefitsNavigatorScreenProps {
   onBack?: () => void;
@@ -21,6 +22,7 @@ interface BenefitsNavigatorScreenProps {
 }
 
 export function BenefitsNavigatorScreen({ onBack, onNavigate, userTier = 'core' }: BenefitsNavigatorScreenProps) {
+  useAuditedAction('child_data');
   const [activeView, setActiveView] = useState<'overview' | 'letters' | 'tracking'>('overview');
   const [userState, setUserState] = useState<string>('');
   const [childAge, setChildAge] = useState<number>(5);

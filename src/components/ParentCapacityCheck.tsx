@@ -32,7 +32,7 @@ import { Textarea } from './ui/textarea';
 import { triggerHaptic } from '../lib/haptics';
 import { cn } from '../lib/utils';
 
-interface ParentCapacityResult {
+export interface ParentCapacityResult {
   stressLevel: number; // 1-10
   availableMinutes: number;
   supportLevel: 'none' | 'some' | 'good' | 'strong';

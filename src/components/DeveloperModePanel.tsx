@@ -175,7 +175,7 @@ export function DeveloperModePanel({ onNavigate, onTierChange }: DeveloperModePa
       performance: {
         userAgent: navigator.userAgent,
         screenSize: `${window.innerWidth}x${window.innerHeight}`,
-        memory: (performance as any).memory?.usedJSHeapSize || 'N/A'
+        memory: ('memory' in performance) ? (performance as unknown as { memory: { usedJSHeapSize: number } }).memory?.usedJSHeapSize : 'N/A'
       }
     };
     

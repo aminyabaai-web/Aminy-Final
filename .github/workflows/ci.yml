@@ -1,0 +1,91 @@
+name: CI (Type Check + Unit Tests + Security)
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+jobs:
+  typecheck:
+    name: TypeScript
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci --legacy-peer-deps
+      - name: Type check
+        run: npx tsc --noEmit
+
+  unit-tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci --legacy-peer-deps
+      - name: Run vitest
+        run: npx vitest run
+        env:
+          CI: true
+
+  security:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci --legacy-peer-deps
+      - name: Audit dependencies (high+ severity)
+        run: npm audit --audit-level=high
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci --legacy-peer-deps
+      - name: Build
+        run: npx vite build
+      - name: Report bundle size
+        run: |
+          echo "## Bundle Size Report" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "Total: $(du -sh build/ | cut -f1)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "JS Assets:" >> $GITHUB_STEP_SUMMARY
+          find build/assets -name '*.js' -exec du -sh {} \; | sort -rh >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "CSS Assets:" >> $GITHUB_STEP_SUMMARY
+          find build/assets -name '*.css' -exec du -sh {} \; | sort -rh >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+      - name: Check bundle size limits
+        run: |
+          TOTAL_KB=$(du -sk build/ | cut -f1)
+          echo "Total bundle: ${TOTAL_KB}KB"
+          if [ "$TOTAL_KB" -gt 8192 ]; then
+            echo "::error::Bundle size ${TOTAL_KB}KB exceeds 8MB limit"
+            exit 1
+          fi
+          JS_SIZE=$(find build/assets -name '*.js' -exec du -ck {} + | tail -1 | cut -f1)
+          echo "Total JS: ${JS_SIZE}KB"
+          if [ "$JS_SIZE" -gt 3072 ]; then
+            echo "::error::JS bundle ${JS_SIZE}KB exceeds 3MB limit"
+            exit 1
+          fi

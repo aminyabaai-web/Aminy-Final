@@ -8,6 +8,11 @@ import { initSentry } from "./lib/sentry.ts";
 import "./i18n";
 // Mobile safe area support
 import { injectSafeAreaStyles } from "./lib/mobile-safe-areas.ts";
+// Security modules
+import { encryptedStorage } from "./lib/security/encrypted-storage";
+import { getOrCreateCSRFToken } from "./lib/security/csrf";
+import { runBreachDetection } from "./lib/hipaa-compliance";
+import { getSecurityConfig } from "./lib/security/index";
 // NOTE: Service worker registration is handled automatically by VitePWA
 // (vite-plugin-pwa) with registerType: 'autoUpdate'. No manual registration needed.
 
@@ -84,6 +89,55 @@ initEnvValidation();
 
 // Inject mobile safe area styles for iOS/Android
 injectSafeAreaStyles();
+
+// ============================================================================
+// Security Initialization
+// ============================================================================
+
+// 1. Initialize CSRF token for the session (created once, persists in sessionStorage)
+getOrCreateCSRFToken();
+
+// 2. Migrate any existing unencrypted sensitive data to encrypted storage
+//    This is async and non-blocking — runs in the background
+encryptedStorage.migrateToEncrypted().catch((err) => {
+  console.warn('[Security] Encrypted storage migration failed (non-fatal):', err);
+});
+
+// 3. Start periodic HIPAA breach detection (runs every 5 minutes by default)
+const securityConfig = getSecurityConfig();
+let breachDetectionInterval: ReturnType<typeof setInterval> | null = null;
+
+if (securityConfig.breachDetectionEnabled) {
+  // Run initial breach detection after a short delay (don't block startup)
+  setTimeout(() => {
+    try {
+      runBreachDetection();
+    } catch (err) {
+      console.warn('[HIPAA] Initial breach detection failed (non-fatal):', err);
+    }
+  }, 5000);
+
+  // Schedule periodic breach detection
+  breachDetectionInterval = setInterval(() => {
+    try {
+      runBreachDetection();
+    } catch (err) {
+      console.warn('[HIPAA] Periodic breach detection failed (non-fatal):', err);
+    }
+  }, securityConfig.breachDetectionIntervalMs);
+}
+
+// Mark HIPAA mode as enabled for the compliance dashboard
+localStorage.setItem('aminy-hipaa-enabled', 'true');
+
+// Clean up breach detection on page unload
+window.addEventListener('beforeunload', () => {
+  if (breachDetectionInterval) {
+    clearInterval(breachDetectionInterval);
+  }
+});
+
+// ============================================================================
 
 createRoot(document.getElementById("root")!).render(<App />);
 

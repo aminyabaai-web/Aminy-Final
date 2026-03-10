@@ -7118,6 +7118,26 @@ html {
     min-height: 44px !important;
   }
 
+  /* Global touch targets — WCAG 2.5.8 minimum 44x44px on mobile */
+  button:not([class*="sr-only"]),
+  [role="button"],
+  a:not([class*="sr-only"]),
+  input[type="checkbox"],
+  input[type="radio"],
+  select,
+  .bottom-nav-item {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Ensure toggle switches and small icon buttons are tappable */
+  input[type="checkbox"] + label,
+  input[type="radio"] + label {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
   .mobile-card-spacing {
     margin-bottom: 14px !important;
     padding: 16px !important;
@@ -16181,3 +16201,117 @@ body.mobile-optimized {
 .via-teal-500 { --tw-gradient-via: #14b8a6; --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position); --tw-gradient-stops: var(--tw-gradient-via-stops); }
 .via-violet-50 { --tw-gradient-via: #f5f3ff; --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position); --tw-gradient-stops: var(--tw-gradient-via-stops); }
 .via-yellow-200 { --tw-gradient-via: #fef08a; --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position); --tw-gradient-stops: var(--tw-gradient-via-stops); }
+
+/* ============================================
+ * Accessibility Enhancement Utilities
+ * Added by sprint 2026-03-09
+ * ============================================ */
+
+/* High Contrast Mode */
+.high-contrast {
+  --contrast-border: 2px solid currentColor;
+  --contrast-outline: 3px solid #000;
+}
+
+.high-contrast * {
+  border-color: currentColor !important;
+}
+
+.high-contrast button,
+.high-contrast a,
+.high-contrast [role="button"] {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+.high-contrast img {
+  filter: contrast(1.2);
+}
+
+/* Reduced Motion Mode */
+.reduce-motion *,
+.reduce-motion *::before,
+.reduce-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* Focus indicator for keyboard navigation */
+.keyboard-focus *:focus-visible {
+  outline: 3px solid var(--accent, #0d9488) !important;
+  outline-offset: 3px !important;
+  border-radius: 4px;
+}
+
+/* Ensure all interactive elements meet 44x44 minimum touch target */
+@media (pointer: coarse) {
+  button:not(.icon-only),
+  a:not(.inline-link),
+  [role="button"],
+  input[type="checkbox"],
+  input[type="radio"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Screen reader only class */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border-width: 0 !important;
+}
+
+/* Animate-in utilities for new components */
+.animate-in {
+  animation: animate-in 0.3s ease-out;
+}
+
+@keyframes animate-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-in-from-right {
+  animation: slide-in-right 0.4s ease-out;
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.slide-in-from-bottom {
+  animation: slide-in-bottom 0.4s ease-out;
+}
+
+@keyframes slide-in-bottom {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -36,6 +36,7 @@ import {
   Sparkles
 } from 'lucide-react';
 import { supabase } from '../utils/supabase/client';
+import { useAuditedAction } from '../hooks/useAuditedAction';
 
 // Types
 interface SessionNote {
@@ -140,6 +141,9 @@ export function SessionNotes({
   onClose,
   onSave
 }: SessionNotesProps) {
+  // HIPAA audit: log session notes view on mount (include sessionId for traceability)
+  const { logAction, logExport } = useAuditedAction('session_notes', sessionId);
+
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [existingNote, setExistingNote] = useState<SessionNote | null>(null);

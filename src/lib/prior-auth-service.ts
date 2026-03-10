@@ -1,6 +1,9 @@
 // Prior Authorization service — Supabase-backed with localStorage fallback + PDF generation
 import jsPDF from 'jspdf';
 import { supabase } from '../utils/supabase/client';
+import { syncEncryptedStorage } from './security/encrypted-storage';
+import { submitPriorAuth as submitToClearinghouse } from './clearinghouse-integration';
+import { logAuditEvent } from './audit-logger';
 
 export interface PriorAuthRequest {
   id: string;
@@ -94,7 +97,7 @@ function mapRequestToDb(req: PriorAuthRequest): Omit<DbRow, 'created_at' | 'upda
 
 function getFromLocalStorage(userId?: string): PriorAuthRequest[] {
   try {
-    const all: PriorAuthRequest[] = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    const all: PriorAuthRequest[] = JSON.parse(syncEncryptedStorage.getItem(STORAGE_KEY) || '[]');
     return userId ? all.filter(r => r.userId === userId) : all;
   } catch {
     // localStorage unavailable
@@ -104,20 +107,20 @@ function getFromLocalStorage(userId?: string): PriorAuthRequest[] {
 
 function saveAllToLocalStorage(requests: PriorAuthRequest[]): void {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(requests));
+    syncEncryptedStorage.setItem(STORAGE_KEY, JSON.stringify(requests));
   } catch { /* localStorage full or unavailable */ }
 }
 
 function upsertInLocalStorage(request: PriorAuthRequest): void {
   try {
-    const all: PriorAuthRequest[] = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    const all: PriorAuthRequest[] = JSON.parse(syncEncryptedStorage.getItem(STORAGE_KEY) || '[]');
     const idx = all.findIndex(r => r.id === request.id);
     if (idx >= 0) {
       all[idx] = request;
     } else {
       all.push(request);
     }
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
+    syncEncryptedStorage.setItem(STORAGE_KEY, JSON.stringify(all));
   } catch { /* localStorage full or unavailable */ }
 }
 
@@ -152,7 +155,7 @@ export async function createAuthRequest(
 
   // Also add to benefit-requests for tracking (localStorage-only cross-feature link)
   try {
-    const tracked = JSON.parse(localStorage.getItem('aminy-benefit-requests') || '[]');
+    const tracked = JSON.parse(syncEncryptedStorage.getItem('aminy-benefit-requests') || '[]');
     tracked.push({
       title: `Prior Auth: ${data.serviceType}`,
       status: 'submitted',
@@ -160,7 +163,7 @@ export async function createAuthRequest(
       type: 'prior-auth',
       id: request.id,
     });
-    localStorage.setItem('aminy-benefit-requests', JSON.stringify(tracked));
+    syncEncryptedStorage.setItem('aminy-benefit-requests', JSON.stringify(tracked));
   } catch { /* ignore */ }
 
   return request;
@@ -224,13 +227,13 @@ export async function updateAuthStatus(
 
   // Always update localStorage cache
   try {
-    const all: PriorAuthRequest[] = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    const all: PriorAuthRequest[] = JSON.parse(syncEncryptedStorage.getItem(STORAGE_KEY) || '[]');
     const idx = all.findIndex(r => r.id === requestId);
     if (idx >= 0) {
       all[idx].status = status;
       all[idx].updatedAt = now;
       if (notes !== undefined) all[idx].notes = notes;
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
+      syncEncryptedStorage.setItem(STORAGE_KEY, JSON.stringify(all));
     }
   } catch { /* ignore */ }
 }
@@ -381,6 +384,172 @@ export function generateAuthPDF(request: PriorAuthRequest): void {
   doc.text(`${new Date().toLocaleString()}`, 140, 285);
 
   doc.save(`prior-auth-${request.serviceType.toLowerCase().replace(/\s+/g, '-')}-${new Date().toISOString().slice(0, 10)}.pdf`);
+}
+
+// ── Payer Submission via Clearinghouse ─────────────────────────────
+
+/**
+ * Submit a prior authorization request to the payer via the clearinghouse (EDI 278).
+ *
+ * Maps PriorAuthRequest → clearinghouse format → calls the clearinghouse edge function.
+ * Updates the request status to 'submitted' on success.
+ * Audit logs both the submission attempt and its outcome.
+ *
+ * @param request  The existing PriorAuthRequest to submit
+ * @param payerDetails  Payer-specific data needed for the 278 transaction
+ * @returns { success, referenceNumber, error? }
+ */
+export async function submitPriorAuthToPayer(
+  request: PriorAuthRequest,
+  payerDetails: {
+    payerId: string;
+    providerTaxId: string;
+    memberFirstName: string;
+    memberLastName: string;
+    memberDob: string;
+    requestedUnits: number;
+    startDate: string;
+    endDate: string;
+  }
+): Promise<{ success: boolean; referenceNumber?: string; error?: string }> {
+  const sessionId = typeof window !== 'undefined'
+    ? (sessionStorage.getItem('aminy_session_id') || 'unknown')
+    : 'server';
+
+  // Audit: submission attempt
+  await logAuditEvent({
+    action: 'export',
+    resourceType: 'prior_auth',
+    resourceId: request.id,
+    userId: request.userId,
+    userRole: 'parent',
+    sessionId,
+    success: true,
+    details: {
+      operation: 'prior_auth_submission',
+      payerId: payerDetails.payerId,
+      serviceType: request.serviceType,
+      insuranceCompany: request.insuranceCompany,
+    },
+  }).catch(() => { /* audit failure should not block submission */ });
+
+  try {
+    const result = await submitToClearinghouse({
+      memberId: request.memberId || '',
+      memberFirstName: payerDetails.memberFirstName,
+      memberLastName: payerDetails.memberLastName,
+      memberDob: payerDetails.memberDob,
+      providerNpi: request.providerNPI || '',
+      providerTaxId: payerDetails.providerTaxId,
+      payerId: payerDetails.payerId,
+      serviceCode: mapServiceTypeToCode(request.serviceType),
+      diagnosisCode: request.diagnosisCodes[0] || 'F84.0',
+      requestedUnits: payerDetails.requestedUnits,
+      startDate: payerDetails.startDate,
+      endDate: payerDetails.endDate,
+    });
+
+    if (result.success) {
+      // Update status to submitted
+      await updateAuthStatus(request.id, 'submitted', `Submitted to payer. Ref: ${result.referenceNumber}`);
+
+      // Audit: successful submission
+      await logAuditEvent({
+        action: 'export',
+        resourceType: 'prior_auth',
+        resourceId: request.id,
+        userId: request.userId,
+        userRole: 'parent',
+        sessionId,
+        success: true,
+        details: {
+          operation: 'prior_auth_submitted',
+          referenceNumber: result.referenceNumber,
+          payerId: payerDetails.payerId,
+        },
+      }).catch(() => {});
+
+      return { success: true, referenceNumber: result.referenceNumber };
+    }
+
+    return { success: false, error: 'Clearinghouse returned unsuccessful response' };
+  } catch (err) {
+    const errorMsg = err instanceof Error ? err.message : 'Unknown submission error';
+    console.error('[PriorAuth] Submission failed:', errorMsg);
+
+    // Audit: failed submission
+    await logAuditEvent({
+      action: 'export',
+      resourceType: 'prior_auth',
+      resourceId: request.id,
+      userId: request.userId,
+      userRole: 'parent',
+      sessionId,
+      success: false,
+      errorMessage: errorMsg,
+      details: {
+        operation: 'prior_auth_submission_failed',
+        error: errorMsg,
+        payerId: payerDetails.payerId,
+      },
+    }).catch(() => {});
+
+    return { success: false, error: errorMsg };
+  }
+}
+
+/**
+ * Check the status of a submitted prior auth with the clearinghouse.
+ * Currently returns local status — will poll the clearinghouse when
+ * real-time 278 response tracking is implemented on the edge function.
+ */
+export async function checkPriorAuthStatus(
+  requestId: string,
+  userId: string
+): Promise<{ status: PriorAuthRequest['status']; notes: string }> {
+  // Try to get the latest status from Supabase
+  try {
+    const { data, error } = await supabase
+      .from('prior_auth_requests')
+      .select('status, notes')
+      .eq('id', requestId)
+      .single();
+
+    if (!error && data) {
+      return {
+        status: data.status as PriorAuthRequest['status'],
+        notes: data.notes || '',
+      };
+    }
+  } catch {
+    // Fall through to localStorage
+  }
+
+  // Fallback: check localStorage
+  const local = getFromLocalStorage(userId);
+  const match = local.find(r => r.id === requestId);
+  return {
+    status: match?.status ?? 'draft',
+    notes: match?.notes ?? '',
+  };
+}
+
+/**
+ * Map human-readable service type to the standard CPT/HCPCS code
+ * used in EDI 278 transactions.
+ */
+function mapServiceTypeToCode(serviceType: string): string {
+  const codeMap: Record<string, string> = {
+    'ABA Therapy': '97153',
+    'Speech-Language Therapy': '92507',
+    'Occupational Therapy': '97530',
+    'Behavioral Health Assessment': '97151',
+    'Diagnostic Evaluation': '96130',
+    'Respite Care': 'T1005',
+    'Social Skills Group': '97154',
+    'Parent Training': '97156',
+  };
+  return codeMap[serviceType] || '97153'; // Default to ABA adaptive behavior treatment
 }
 
 // Common diagnosis codes for autism services

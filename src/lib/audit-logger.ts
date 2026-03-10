@@ -6,6 +6,7 @@
  */
 
 import { supabase } from '../utils/supabase/client';
+import { syncEncryptedStorage } from './security/encrypted-storage';
 
 // Environment check for production logging
 const IS_PRODUCTION = import.meta.env.PROD || import.meta.env.VITE_USE_MOCK_DATA === 'false';
@@ -44,7 +45,12 @@ export type AuditAction =
   | 'refund_completed'
   | 'promo_code_applied'
   | 'tier_upgraded'
-  | 'tier_downgraded';
+  | 'tier_downgraded'
+  // Telehealth recording actions
+  | 'recording_consent_given'
+  | 'recording_consent_declined'
+  | 'recording_started'
+  | 'recording_stopped';
 
 // Resource types being accessed
 export type AuditResourceType =
@@ -70,7 +76,17 @@ export type AuditResourceType =
   | 'subscription'
   | 'invoice'
   | 'refund'
-  | 'promo_code';
+  | 'promo_code'
+  // Telehealth resources
+  | 'telehealth_session'
+  | 'telehealth_recording'
+  // Insurance resources
+  | 'prior_auth'
+  | 'claim'
+  | 'denial'
+  // Data export & account management
+  | 'clinical_data'
+  | 'user_account';
 
 // User roles for audit context
 export type AuditUserRole = 'parent' | 'provider' | 'admin' | 'caregiver' | 'system';
@@ -144,7 +160,7 @@ function getUserAgent(): string {
  */
 function loadAuditLog(): AuditEvent[] {
   try {
-    const stored = localStorage.getItem(AUDIT_LOG_KEY);
+    const stored = syncEncryptedStorage.getItem(AUDIT_LOG_KEY);
     return stored ? JSON.parse(stored) : [];
   } catch {
     return [];
@@ -161,7 +177,7 @@ async function saveAuditEvent(event: AuditEvent): Promise<void> {
     const log = loadAuditLog();
     log.push(event);
     const trimmedLog = log.slice(-10000);
-    localStorage.setItem(AUDIT_LOG_KEY, JSON.stringify(trimmedLog));
+    syncEncryptedStorage.setItem(AUDIT_LOG_KEY, JSON.stringify(trimmedLog));
 
     // In production, also persist to Supabase for HIPAA compliance
     if (IS_PRODUCTION) {

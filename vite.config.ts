@@ -71,6 +71,9 @@ export default defineConfig(({ mode }) => ({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        // Import custom SW extensions (push notifications, background sync)
+        // This file lives in public/ and is copied to the build output
+        importScripts: ['sw-custom.js'],
         // Skip external domains to avoid CSP violations with service worker fetch
         // Google Fonts are cached natively by browsers with long cache headers
         navigateFallbackDenylist: [/^https:\/\/fonts\./],

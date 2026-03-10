@@ -58,7 +58,7 @@ export const MobileTouchOptimizer: React.FC<MobileTouchOptimizerProps> = ({
       
       scrollableElements.forEach(element => {
         // Enable momentum scrolling on iOS
-        ((element as HTMLElement).style as any).webkitOverflowScrolling = 'touch';
+        (element as HTMLElement).style.setProperty('-webkit-overflow-scrolling', 'touch');
         
         // Prevent overscroll bounce
         (element as HTMLElement).style.overscrollBehavior = 'contain';

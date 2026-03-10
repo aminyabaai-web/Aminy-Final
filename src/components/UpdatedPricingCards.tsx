@@ -4,7 +4,7 @@ import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Check, Crown, Sparkles, Zap, Star } from 'lucide-react';
 import { LiveAIVideoBadge } from './LiveAIVideoBadge';
-import { tierPricing } from '../lib/tier-utils';
+import { tierPricing, type TierType } from '../lib/tier-utils';
 
 interface PricingTier {
   id: string;
@@ -136,7 +136,7 @@ export function UpdatedPricingCards({ onSubscribe, currentTier }: UpdatedPricing
               
               {/* Live AI Video Badge */}
               <div className="mt-3 flex justify-center">
-                <LiveAIVideoBadge tier={tier.id as any} variant="minimal" />
+                <LiveAIVideoBadge tier={tier.id as TierType} variant="minimal" />
               </div>
             </div>
 

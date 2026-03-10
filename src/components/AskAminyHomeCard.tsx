@@ -13,7 +13,7 @@ interface AskAminyHomeCardProps {
   childName?: string;
   tier?: string;
   messagesLeft?: number;
-  chatMessages?: any[];
+  chatMessages?: Array<{ role: string; content: string }>;
   aiInput?: string;
   isAiReplying?: boolean;
   onInputChange?: (value: string) => void;

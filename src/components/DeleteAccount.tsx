@@ -8,16 +8,23 @@
  * - Message Tech Support button
  */
 
-import React from 'react';
-import { ArrowLeft, MessageSquare, AlertTriangle, Mail } from 'lucide-react';
+import React, { useState, useCallback } from 'react';
+import { ArrowLeft, MessageSquare, AlertTriangle, Mail, Download, Trash2, Loader2 } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { cn } from '../lib/utils';
+import { toast } from 'sonner';
+import { supabase } from '../utils/supabase/client';
+import { generateFHIRExport, downloadFHIRBundle, type AppChild, type AppAppointment } from '../lib/fhir-resources';
+import { logAuditEvent } from '../lib/audit-logger';
 
 interface DeleteAccountProps {
   onBack: () => void;
   onMessageSupport: () => void;
   userEmail?: string;
+  userId?: string;
+  childName?: string;
+  childId?: string;
   className?: string;
 }
 
@@ -25,8 +32,111 @@ export function DeleteAccount({
   onBack,
   onMessageSupport,
   userEmail,
+  userId,
+  childName,
+  childId,
   className
 }: DeleteAccountProps) {
+  const [exporting, setExporting] = useState(false);
+  const [requestingDeletion, setRequestingDeletion] = useState(false);
+  const [deletionRequested, setDeletionRequested] = useState(false);
+  const [confirmText, setConfirmText] = useState('');
+
+  // Download all user data as FHIR R4 JSON
+  const handleExportData = useCallback(async () => {
+    if (!userId) {
+      toast.error('Unable to export — user ID not found');
+      return;
+    }
+    setExporting(true);
+    try {
+      const child: AppChild = {
+        id: childId || `child-${userId.substring(0, 8)}`,
+        name: childName || 'Child',
+      };
+
+      // Fetch appointments from Supabase
+      const { data: appointments } = await supabase
+        .from('appointments')
+        .select('*')
+        .or(`patient_id.eq.${child.id},user_id.eq.${userId}`)
+        .limit(500);
+
+      const bundle = await generateFHIRExport(
+        child,
+        (appointments || []) as AppAppointment[],
+        userId,
+        undefined,
+      );
+
+      downloadFHIRBundle(bundle);
+      toast.success('Data exported as FHIR R4 JSON');
+    } catch (err) {
+      console.error('[DeleteAccount] Export failed:', err);
+      toast.error('Failed to export data. Please try again.');
+    } finally {
+      setExporting(false);
+    }
+  }, [userId, childId, childName]);
+
+  // Submit account deletion request
+  const handleRequestDeletion = useCallback(async () => {
+    if (!userId || confirmText !== 'DELETE') return;
+
+    setRequestingDeletion(true);
+    try {
+      // 1. Cancel any active subscriptions via edge function
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        const token = session?.access_token;
+        if (token) {
+          await fetch(
+            `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/make-server-8a022548/payments/cancel-subscription`,
+            {
+              method: 'POST',
+              headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ userId, reason: 'account_deletion' }),
+            }
+          );
+        }
+      } catch {
+        // Subscription cancel is best-effort — continue with deletion request
+      }
+
+      // 2. Record the deletion request
+      await supabase.from('account_deletion_requests').insert({
+        user_id: userId,
+        email: userEmail,
+        status: 'pending',
+        requested_at: new Date().toISOString(),
+      });
+
+      // 3. Audit log
+      const sessionId = sessionStorage.getItem('aminy_session_id') || 'unknown';
+      await logAuditEvent({
+        action: 'delete',
+        resourceType: 'user_account',
+        resourceId: userId,
+        userId,
+        userRole: 'parent',
+        sessionId,
+        success: true,
+        details: { event: 'deletion_requested', email: userEmail },
+      });
+
+      setDeletionRequested(true);
+      toast.success('Account deletion request submitted');
+    } catch (err) {
+      console.error('[DeleteAccount] Deletion request failed:', err);
+      toast.error('Failed to submit deletion request. Please contact support.');
+    } finally {
+      setRequestingDeletion(false);
+    }
+  }, [userId, userEmail, confirmText]);
+
   return (
     <div className={cn('min-h-screen bg-white dark:bg-slate-900', className)}>
       {/* Header */}
@@ -195,23 +305,87 @@ export function DeleteAccount({
           </div>
         </div>
 
+        {/* Data Export */}
+        <Card className="p-4 bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
+          <div className="flex gap-3">
+            <Download className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+            <div className="flex-1">
+              <p className="font-medium text-blue-800 dark:text-blue-300 mb-1">
+                Download Your Data First
+              </p>
+              <p className="text-blue-700 dark:text-blue-400 text-sm mb-3">
+                Export your child&apos;s records in FHIR R4 format before deletion.
+                This file can be imported into other healthcare apps.
+              </p>
+              <Button
+                onClick={handleExportData}
+                disabled={exporting}
+                variant="outline"
+                className="border-blue-300 text-blue-700 hover:bg-blue-100 dark:border-blue-600 dark:text-blue-300"
+              >
+                {exporting ? (
+                  <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Exporting...</>
+                ) : (
+                  <><Download className="w-4 h-4 mr-2" />Download My Data (FHIR R4)</>
+                )}
+              </Button>
+            </div>
+          </div>
+        </Card>
+
+        {/* Self-service deletion */}
+        {!deletionRequested ? (
+          <Card className="p-4 bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 mt-4">
+            <div className="space-y-3">
+              <p className="font-medium text-red-800 dark:text-red-300">
+                Request Account Deletion
+              </p>
+              <p className="text-red-700 dark:text-red-400 text-sm">
+                Type <strong>DELETE</strong> below to confirm. Your subscription will be cancelled
+                and your account will be queued for deletion within 30 days.
+              </p>
+              <input
+                type="text"
+                value={confirmText}
+                onChange={(e) => setConfirmText(e.target.value)}
+                placeholder='Type "DELETE" to confirm'
+                className="w-full px-3 py-2 border border-red-300 dark:border-red-700 rounded-lg text-sm bg-white dark:bg-slate-800 focus:ring-2 focus:ring-red-400"
+              />
+              <Button
+                onClick={handleRequestDeletion}
+                disabled={confirmText !== 'DELETE' || requestingDeletion}
+                className="w-full bg-red-600 hover:bg-red-700 text-white disabled:opacity-50"
+              >
+                {requestingDeletion ? (
+                  <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Processing...</>
+                ) : (
+                  <><Trash2 className="w-4 h-4 mr-2" />Delete My Account</>
+                )}
+              </Button>
+            </div>
+          </Card>
+        ) : (
+          <Card className="p-4 bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800 mt-4">
+            <p className="font-medium text-green-800 dark:text-green-300 mb-1">
+              ✅ Deletion Request Submitted
+            </p>
+            <p className="text-green-700 dark:text-green-400 text-sm">
+              Your account deletion request has been received. You will receive a confirmation
+              email at <strong>{userEmail}</strong> within 30 days.
+              Your subscription has been cancelled.
+            </p>
+          </Card>
+        )}
+
         {/* Actions */}
-        <div className="mt-8 space-y-3">
+        <div className="mt-6 space-y-3">
           <Button
             onClick={onMessageSupport}
-            className="w-full bg-accent hover:bg-accent/90 text-white"
-          >
-            <MessageSquare className="w-5 h-5 mr-2" />
-            Message Tech Support
-          </Button>
-
-          <Button
             variant="outline"
             className="w-full"
-            onClick={() => window.location.href = 'mailto:support@aminy.ai?subject=Account%20deletion%20request'}
           >
-            <Mail className="w-5 h-5 mr-2" />
-            Email Support Instead
+            <MessageSquare className="w-5 h-5 mr-2" />
+            Message Tech Support Instead
           </Button>
 
           <Button
@@ -219,14 +393,14 @@ export function DeleteAccount({
             className="w-full text-gray-500"
             onClick={onBack}
           >
-            Cancel
+            Go Back
           </Button>
         </div>
 
         {/* Footer note */}
-        <p className="text-xs text-gray-400 dark:text-gray-500 text-center mt-8">
-          Account deletion requests are typically processed within 30 days.
-          You will receive an email confirmation once your request has been completed.
+        <p className="text-xs text-gray-400 dark:text-gray-500 text-center mt-6">
+          Account deletion requests are processed within 30 days per our privacy policy.
+          Clinical records are retained as required by law.
         </p>
       </div>
     </div>

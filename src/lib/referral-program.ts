@@ -385,16 +385,16 @@ export async function applyReferralRewards(referralId: string): Promise<Referral
   return mapDbReferral(data);
 }
 
-function mapDbReferral(dbRef: any): Referral {
+function mapDbReferral(dbRef: Record<string, unknown>): Referral {
   return {
-    id: dbRef.id,
-    referrerUserId: dbRef.referrer_id,
-    referredUserId: dbRef.referred_id,
-    referralCode: dbRef.referral_code,
-    status: dbRef.status as any,
-    qualificationDate: dbRef.converted_at,
-    rewardedAt: dbRef.rewarded_at,
-    createdAt: dbRef.created_at,
+    id: dbRef.id as string,
+    referrerUserId: dbRef.referrer_id as string,
+    referredUserId: dbRef.referred_id as string,
+    referralCode: dbRef.referral_code as string,
+    status: dbRef.status as Referral['status'],
+    qualificationDate: dbRef.converted_at as string | undefined,
+    rewardedAt: dbRef.rewarded_at as string | undefined,
+    createdAt: dbRef.created_at as string,
   };
 }
 

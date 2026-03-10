@@ -39,6 +39,7 @@ import {
   Info
 } from 'lucide-react';
 import { supabase } from '../utils/supabase/client';
+import { useAuditedAction } from '../hooks/useAuditedAction';
 
 // Types
 interface ABCEntry {
@@ -126,6 +127,7 @@ export function ABCDataCollection({
   isProvider = false,
   providerId
 }: ABCDataCollectionProps) {
+  useAuditedAction('observation');
   // State
   const [entries, setEntries] = useState<ABCEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);

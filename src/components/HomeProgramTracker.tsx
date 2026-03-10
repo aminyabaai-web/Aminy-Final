@@ -125,19 +125,31 @@ export function HomeProgramTracker({
   const [loggingActivity, setLoggingActivity] = useState<string | null>(null);
 
   // Form states
-  const [newActivity, setNewActivity] = useState({
+  const [newActivity, setNewActivity] = useState<{
+    title: string;
+    description: string;
+    frequency: HomeActivity['frequency'];
+    durationMinutes: number;
+    category: HomeActivity['category'];
+    instructions: string;
+  }>({
     title: '',
     description: '',
-    frequency: 'daily' as const,
+    frequency: 'daily',
     durationMinutes: 10,
-    category: 'speech' as const,
+    category: 'speech',
     instructions: '',
   });
 
-  const [practiceLog, setPracticeLog] = useState({
+  const [practiceLog, setPracticeLog] = useState<{
+    durationMinutes: number;
+    difficulty: PracticeLog['difficulty'];
+    childEngagement: PracticeLog['childEngagement'];
+    notes: string;
+  }>({
     durationMinutes: 10,
-    difficulty: 'just_right' as const,
-    childEngagement: 3 as const,
+    difficulty: 'just_right',
+    childEngagement: 3,
     notes: '',
   });
 
@@ -575,7 +587,7 @@ export function HomeProgramTracker({
                               <label className="text-xs text-neutral-500 mb-1 block">Difficulty</label>
                               <select
                                 value={practiceLog.difficulty}
-                                onChange={(e) => setPracticeLog({ ...practiceLog, difficulty: e.target.value as any })}
+                                onChange={(e) => setPracticeLog({ ...practiceLog, difficulty: e.target.value as PracticeLog['difficulty'] })}
                                 className="w-full rounded-lg border border-neutral-200 dark:border-slate-700 p-2 text-sm"
                               >
                                 {DIFFICULTY_OPTIONS.map(opt => (
@@ -593,7 +605,7 @@ export function HomeProgramTracker({
                               {[1, 2, 3, 4, 5].map(star => (
                                 <button
                                   key={star}
-                                  onClick={() => setPracticeLog({ ...practiceLog, childEngagement: star as any })}
+                                  onClick={() => setPracticeLog({ ...practiceLog, childEngagement: star as PracticeLog['childEngagement'] })}
                                   className="p-1"
                                 >
                                   <Star
@@ -723,7 +735,7 @@ export function HomeProgramTracker({
                   </label>
                   <select
                     value={newActivity.category}
-                    onChange={(e) => setNewActivity({ ...newActivity, category: e.target.value as any })}
+                    onChange={(e) => setNewActivity({ ...newActivity, category: e.target.value as HomeActivity['category'] })}
                     className="w-full rounded-lg border border-neutral-200 dark:border-slate-700 p-2"
                   >
                     {Object.entries(CATEGORY_INFO).map(([key, info]) => (
@@ -740,7 +752,7 @@ export function HomeProgramTracker({
                   </label>
                   <select
                     value={newActivity.frequency}
-                    onChange={(e) => setNewActivity({ ...newActivity, frequency: e.target.value as any })}
+                    onChange={(e) => setNewActivity({ ...newActivity, frequency: e.target.value as HomeActivity['frequency'] })}
                     className="w-full rounded-lg border border-neutral-200 dark:border-slate-700 p-2"
                   >
                     {Object.entries(FREQUENCY_LABELS).map(([key, label]) => (

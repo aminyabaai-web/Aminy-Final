@@ -17,7 +17,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from './ui/dialog';
-import { useReports } from '../hooks/useReports';
+import { useReports, type ReportType as HookReportType } from '../hooks/useReports';
 import { ReportType } from '../lib/reportBuilder';
 import { toast } from 'sonner';
 import {
@@ -91,7 +91,8 @@ export function ReportsHub({ childId, childName, accessToken, userTier = 'free' 
     }
 
     try {
-      const report = await createReport(reportType as any, {
+      // Bridge between reportBuilder.ReportType and useReports.ReportType
+      const report = await createReport(reportType as unknown as HookReportType, {
         dateRange: { start: new Date(dateRange.start), end: new Date(dateRange.end) },
         includeCharts,
         childName,

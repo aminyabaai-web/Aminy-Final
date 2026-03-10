@@ -418,7 +418,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
                   />
                   <select
                     value={logForm.type}
-                    onChange={(e) => setLogForm(prev => ({ ...prev, type: e.target.value as any }))}
+                    onChange={(e) => setLogForm(prev => ({ ...prev, type: e.target.value as 'direct' | 'indirect' | 'group' }))}
                     className="px-3 py-2.5 border border-gray-300 rounded-lg text-sm"
                   >
                     <option value="direct">Direct</option>

@@ -442,13 +442,43 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
 
     setIsLoading(true);
     try {
-      // In production, this would call a secure backend endpoint
-      // that handles account deletion properly
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('Not authenticated');
+
+      // 1. Cancel active subscription (best effort)
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session?.access_token) {
+          await fetch(
+            `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/make-server-8a022548/payments/cancel-subscription`,
+            {
+              method: 'POST',
+              headers: {
+                'Authorization': `Bearer ${session.access_token}`,
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ userId: user.id, reason: 'account_deletion' }),
+            }
+          );
+        }
+      } catch {
+        // Continue — cancellation is best-effort
+      }
+
+      // 2. Record deletion request in Supabase
+      await supabase.from('account_deletion_requests').insert({
+        user_id: user.id,
+        email: user.email,
+        status: 'pending',
+        requested_at: new Date().toISOString(),
+      });
+
       toast.success('Account deletion requested. You will receive a confirmation email.');
       setShowDeleteDialog(false);
       onLogout?.();
     } catch (error) {
-      toast.error('Failed to delete account');
+      console.error('[Settings] Delete account error:', error);
+      toast.error('Failed to submit deletion request. Please contact support.');
     } finally {
       setIsLoading(false);
     }
@@ -501,7 +531,39 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
         </div>
       </div>
 
-      <div className="max-w-2xl mx-auto px-4 py-6 space-y-6">
+      <div className="max-w-2xl md:max-w-4xl mx-auto px-4 py-6 space-y-6 md:grid md:grid-cols-[240px_1fr] md:gap-6 md:space-y-0">
+        {/* Desktop settings sidebar — hidden on mobile */}
+        <aside className="hidden md:block space-y-1" aria-label="Settings categories">
+          {[
+            { id: 'subscription', label: 'Subscription', icon: Crown },
+            { id: 'notifications', label: 'Notifications', icon: Bell },
+            { id: 'security', label: 'Security', icon: Shield },
+            { id: 'theme', label: 'Appearance', icon: Palette },
+            { id: 'data', label: 'Data & Privacy', icon: Download },
+            { id: 'danger', label: 'Account', icon: AlertTriangle },
+          ].map((item) => {
+            const Icon = item.icon;
+            const isActive = activeSection === item.id;
+            return (
+              <button
+                key={item.id}
+                onClick={() => setActiveSection(isActive ? null : item.id)}
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                  isActive
+                    ? 'bg-teal-50 dark:bg-teal-900/20 text-teal-700 dark:text-teal-300'
+                    : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700'
+                }`}
+              >
+                <Icon className="w-4 h-4" />
+                {item.label}
+              </button>
+            );
+          })}
+        </aside>
+
+        {/* Settings content cards */}
+        <div className="space-y-6">
+
         {/* Subscription Section */}
         <Card className="p-4">
           <div className="flex items-center justify-between">
@@ -1100,6 +1162,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
         <p className="text-center text-xs text-muted-foreground">
           Aminy v1.0.0 • Made with care
         </p>
+        </div>{/* end settings content cards wrapper */}
       </div>
 
       {/* Password Change Dialog */}

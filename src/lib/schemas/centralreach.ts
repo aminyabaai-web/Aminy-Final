@@ -429,6 +429,34 @@ export const crHomeProgramProgressPayloadSchema = z.object({
 export type CRHomeProgramProgressPayloadInput = z.infer<typeof crHomeProgramProgressPayloadSchema>;
 
 // ---------------------------------------------------------------------------
+// Telehealth Session Schema
+// ---------------------------------------------------------------------------
+
+/** Telehealth session notes pushed to CentralReach after video call */
+export const crTelehealthSessionPayloadSchema = z.object({
+  sessionId: z.string().min(1, { message: "Session ID is required" }),
+  clientId: z.string().min(1, { message: "Client ID is required" }),
+  providerId: z.string().min(1, { message: "Provider ID is required" }),
+  date: isoDateSchema.describe("Session date"),
+  startTime: z.string().regex(/^\d{2}:\d{2}$/, { message: "Start time must be HH:MM format" }),
+  endTime: z.string().regex(/^\d{2}:\d{2}$/, { message: "End time must be HH:MM format" }),
+  durationMinutes: z.number().int().min(1).max(480).describe("Duration in minutes"),
+  sessionType: z.enum(['telehealth_video', 'telehealth_audio', 'telehealth_chat']).describe("Telehealth modality"),
+  platform: z.enum(['daily', 'zoom', 'other']).describe("Video platform used"),
+  attendees: z.array(z.string()).min(1).describe("Session attendees"),
+  sessionNotes: z.string().min(1, { message: "Session notes are required" }),
+  goalsAddressed: z.array(z.string()).describe("CentralReach goal IDs discussed"),
+  interventionsUsed: z.array(z.string()).describe("Interventions applied"),
+  parentObservations: z.string().optional().describe("Parent observations during session"),
+  nextSteps: z.string().optional().describe("Recommended next steps"),
+  recordingConsent: z.boolean().describe("Whether recording consent was obtained"),
+  recordingUrl: z.string().url().optional().describe("Secure URL to session recording"),
+  billingCode: z.string().optional().describe("CPT billing code"),
+  requiresFollowUp: z.boolean().describe("Whether follow-up is needed"),
+});
+export type CRTelehealthSessionPayloadInput = z.infer<typeof crTelehealthSessionPayloadSchema>;
+
+// ---------------------------------------------------------------------------
 // Webhook Schema
 // ---------------------------------------------------------------------------
 

@@ -21,12 +21,21 @@ declare global {
     continuous: boolean;
     interimResults: boolean;
     lang: string;
+    maxAlternatives: number;
     onresult: ((event: SpeechRecognitionEvent) => void) | null;
     onerror: ((event: SpeechRecognitionErrorEvent) => void) | null;
     onend: (() => void) | null;
     start(): void;
     stop(): void;
     abort(): void;
+    addEventListener<K extends keyof SpeechRecognitionEventMap>(
+      type: K,
+      listener: (ev: SpeechRecognitionEventMap[K]) => void
+    ): void;
+    removeEventListener<K extends keyof SpeechRecognitionEventMap>(
+      type: K,
+      listener: (ev: SpeechRecognitionEventMap[K]) => void
+    ): void;
   }
 
   interface SpeechRecognitionEvent extends Event {

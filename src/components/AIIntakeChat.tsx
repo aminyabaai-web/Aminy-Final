@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { syncEncryptedStorage } from '../lib/security/encrypted-storage';
 import { Button } from './ui/button';
 import { Textarea } from './ui/textarea';
 import { Card } from './ui/card';
@@ -11,6 +12,7 @@ import * as ConvoResponses from '../lib/conversational-responses';
 import { CompassIcon } from './CompassIcon';
 import { VoiceInputButton } from './VoiceInputButton';
 import { useKeyboardHeight } from '../hooks/useKeyboardHeight';
+import { useAuditedAction } from '../hooks/useAuditedAction';
 
 // Progress step definitions for breadcrumbs
 const ONBOARDING_STEPS = [
@@ -57,6 +59,7 @@ interface AIIntakeChatProps {
 }
 
 export function AIIntakeChat({ onComplete, initialData, isReturningUser = false, onSkipOnboarding }: AIIntakeChatProps) {
+  useAuditedAction('child_data');
   const [messages, setMessages] = useState<Message[]>([]);
   const [currentInput, setCurrentInput] = useState('');
   const [step, setStep] = useState<'intro' | 'empathy' | 'conversation' | 'summary' | 'routines' | 'complete'>('intro');
@@ -134,7 +137,7 @@ export function AIIntakeChat({ onComplete, initialData, isReturningUser = false,
         savedAt: new Date().toISOString(),
       };
       try {
-        localStorage.setItem(ONBOARDING_STORAGE_KEY, JSON.stringify(progressData));
+        syncEncryptedStorage.setItem(ONBOARDING_STORAGE_KEY, JSON.stringify(progressData));
       } catch (e) {
         console.warn('[Onboarding] Could not save progress:', e);
       }
@@ -144,7 +147,7 @@ export function AIIntakeChat({ onComplete, initialData, isReturningUser = false,
   // Restore onboarding progress on mount
   useEffect(() => {
     try {
-      const saved = localStorage.getItem(ONBOARDING_STORAGE_KEY);
+      const saved = syncEncryptedStorage.getItem(ONBOARDING_STORAGE_KEY);
       if (saved) {
         const data = JSON.parse(saved);
         const savedTime = new Date(data.savedAt);
@@ -158,7 +161,7 @@ export function AIIntakeChat({ onComplete, initialData, isReturningUser = false,
           setSavedProgress(data);
         } else {
           // Clear old data
-          localStorage.removeItem(ONBOARDING_STORAGE_KEY);
+          syncEncryptedStorage.removeItem(ONBOARDING_STORAGE_KEY);
         }
       }
     } catch (e) {
@@ -209,14 +212,14 @@ export function AIIntakeChat({ onComplete, initialData, isReturningUser = false,
 
   // Start fresh
   const handleStartFresh = () => {
-    localStorage.removeItem(ONBOARDING_STORAGE_KEY);
+    syncEncryptedStorage.removeItem(ONBOARDING_STORAGE_KEY);
     setSavedProgress(null);
     setShowResumePrompt(false);
   };
 
   // Clear progress on complete
   const clearOnboardingProgress = () => {
-    localStorage.removeItem(ONBOARDING_STORAGE_KEY);
+    syncEncryptedStorage.removeItem(ONBOARDING_STORAGE_KEY);
   };
 
   // Add message helpers

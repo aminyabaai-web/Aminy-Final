@@ -211,7 +211,7 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
     <nav
       id="main-navigation"
       tabIndex={-1}
-      className="fixed bottom-0 left-0 right-0 bg-white/98 dark:bg-slate-900/98 backdrop-blur-xl border-t border-gray-100 dark:border-slate-700 z-50 shadow-lg outline-none"
+      className="fixed bottom-0 left-0 right-0 bg-white/98 dark:bg-slate-900/98 backdrop-blur-xl border-t border-gray-100 dark:border-slate-700 z-50 shadow-lg outline-none md:hidden"
       style={{
         paddingBottom: 'max(12px, env(safe-area-inset-bottom))'
       }}

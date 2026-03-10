@@ -47,6 +47,7 @@ import {
   Camera,
 } from 'lucide-react';
 import { useConversation } from '../context/ConversationContext';
+import { useAuditedAction } from '../hooks/useAuditedAction';
 
 // Supporting components
 import { OutcomesDashboardWidget } from './OutcomesDashboardWidget';
@@ -175,6 +176,7 @@ export function Dashboard10({
   userTier = 'core',
   userRole = 'parent'
 }: Dashboard10Props) {
+  useAuditedAction('child_data');
   const [activeRoutine, setActiveRoutine] = useState<'morning' | 'afternoon' | 'evening' | 'bedtime'>('morning');
   // CHAT-FIRST: Start with chat expanded to make it the primary experience
   const [showAIChat, setShowAIChat] = useState(true);

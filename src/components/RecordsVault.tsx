@@ -50,6 +50,7 @@ import { useStorage } from '../lib/useStorage';
 import { uploadVaultFile, listVaultDocuments, deleteVaultDocument, getVaultDocumentUrl } from '../lib/vault-storage';
 import type { VaultRecordType } from '../lib/vault-storage';
 import { supabase } from '../utils/supabase/client';
+import { useAuditedAction } from '../hooks/useAuditedAction';
 
 // Enhanced types for the vault implementation
 interface EnhancedVaultRecord extends Omit<VaultRecord, 'type' | 'source' | 'visibility'> {
@@ -379,6 +380,9 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
   setConnectorData,
   userTier = 'core'
 }) => {
+  // HIPAA audit: log vault file access view on mount
+  const { logAction, logExport } = useAuditedAction('vault_file');
+
   // Use onClose if provided, otherwise fall back to onBack
   const handleClose = onClose || onBack;
   // Use storage hook for unified storage information

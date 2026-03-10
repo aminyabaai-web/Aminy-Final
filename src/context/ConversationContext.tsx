@@ -14,6 +14,7 @@ import {
   storeMemoryFact,
   buildMemoryContextString,
   type MemoryCategory,
+  type MemorySource,
 } from '../lib/ai-engine/conversation-memory';
 import { extractFactsFromMessage } from '../lib/fact-extraction';
 import { memoryManager } from '../lib/memory-system';
@@ -315,7 +316,7 @@ export function ConversationProvider({ children }: ConversationProviderProps) {
               childId: cid,
               category: fact.category,
               content: fact.content,
-              source: fact.source as any,
+              source: fact.source as 'conversation' | 'onboarding' | 'vault' | 'provider' | 'manual',
               confidence: fact.confidence,
             });
           });

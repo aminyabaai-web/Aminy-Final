@@ -39,8 +39,9 @@ export class SafetyBoundary extends Component<Props, State> {
     console.error('SafetyBoundary caught an error:', error, errorInfo);
     
     // Log to analytics if available
-    if (typeof window !== 'undefined' && (window as any).analytics) {
-      (window as any).analytics.track('error_boundary_triggered', {
+    const win = window as Window & { analytics?: { track: (event: string, data: Record<string, unknown>) => void } };
+    if (typeof window !== 'undefined' && win.analytics) {
+      win.analytics.track('error_boundary_triggered', {
         error: error.message,
         stack: error.stack,
         componentStack: errorInfo.componentStack,

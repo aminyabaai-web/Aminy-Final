@@ -222,9 +222,9 @@ export function PaywallSimplified({
             window.location.href = session.url;
             return;
           }
-        } catch (stripeError: any) {
+        } catch (stripeError: unknown) {
           console.warn('Stripe checkout error:', stripeError);
-          toast.error(stripeError?.message || 'Payment system unavailable. Please try again.');
+          toast.error(stripeError instanceof Error ? stripeError.message : 'Payment system unavailable. Please try again.');
           setIsLoading(false);
           return;
         }

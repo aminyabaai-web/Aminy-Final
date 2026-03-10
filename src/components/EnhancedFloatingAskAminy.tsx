@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { syncEncryptedStorage } from '../lib/security/encrypted-storage';
 import { Sparkles, MessageCircle, Zap, Brain, Sun, Moon, Coffee, Sunset } from 'lucide-react';
 import { EnhancedAskAminy } from './EnhancedAskAminy';
 import { cn } from '../lib/utils';
@@ -108,12 +109,12 @@ export function EnhancedFloatingAskAminy({
   useEffect(() => {
     const checkContextUpdates = () => {
       try {
-        const lastContextCheck = localStorage.getItem('aminy-last-context-check');
-        const lastDataUpdate = localStorage.getItem('aminy-last-data-update');
+        const lastContextCheck = syncEncryptedStorage.getItem('aminy-last-context-check');
+        const lastDataUpdate = syncEncryptedStorage.getItem('aminy-last-data-update');
         
         if (lastDataUpdate && (!lastContextCheck || lastDataUpdate > lastContextCheck)) {
           setHasNewContext(true);
-          localStorage.setItem('aminy-last-context-check', Date.now().toString());
+          syncEncryptedStorage.setItem('aminy-last-context-check', Date.now().toString());
         }
       } catch (error) {
       }
@@ -132,9 +133,12 @@ export function EnhancedFloatingAskAminy({
         let totalMessages = 0;
         for (let i = 0; i < localStorage.length; i++) {
           const key = localStorage.key(i);
-          if (key && key.startsWith('aminy-conversation-')) {
-            const conversation = JSON.parse(localStorage.getItem(key) || '{}');
-            totalMessages += (conversation.messages || []).length;
+          if (key) {
+            const cleanKey = key.replace(/^enc_/, '');
+            if (cleanKey.startsWith('aminy-conversation-')) {
+              const conversation = JSON.parse(syncEncryptedStorage.getItem(cleanKey) || '{}');
+              totalMessages += (conversation.messages || []).length;
+            }
           }
         }
         setMessageCount(totalMessages);
@@ -302,9 +306,9 @@ export function EnhancedAskAminyHomeCard({
 
       // Check for recent data
       try {
-        const caregiverData = localStorage.getItem('caregiver');
-        const childData = localStorage.getItem('child');
-        const planData = localStorage.getItem('carePlanData');
+        const caregiverData = syncEncryptedStorage.getItem('caregiver');
+        const childData = syncEncryptedStorage.getItem('child');
+        const planData = syncEncryptedStorage.getItem('carePlanData');
         
         if (caregiverData) {
           score += 25;

@@ -96,6 +96,34 @@ const PRICE_TO_TIER: Record<string, string> = {
   [Deno.env.get('STRIPE_PRICE_PROPLUS_ANNUAL') || 'price_proplus_annual']: 'proplus',
 };
 
+// ── Audit logging for financial events (writes directly to audit_log table) ──
+
+async function logFinancialAuditEvent(
+  userId: string | null,
+  action: string,
+  resourceType: string,
+  resourceId: string,
+  details: Record<string, unknown>
+): Promise<void> {
+  try {
+    await supabase.from('audit_log').insert({
+      id: `audit-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+      timestamp: new Date().toISOString(),
+      user_id: userId || 'system',
+      user_role: 'system',
+      action,
+      resource_type: resourceType,
+      resource_id: resourceId,
+      details: JSON.stringify(details),
+      session_id: 'stripe-webhook',
+      success: true,
+    });
+  } catch (err) {
+    // Audit logging should never block financial operations
+    console.warn('[Audit] Failed to log financial event:', err);
+  }
+}
+
 /**
  * Get tier from Stripe price ID
  */
@@ -1085,6 +1113,14 @@ export async function handleWebhook(req: Request): Promise<Response> {
 
             // Also store subscription metadata for audit trail
             await storeStripeCustomerId(userId, customerId);
+
+            // Audit: subscription created
+            await logFinancialAuditEvent(userId, 'subscription_created', 'subscription', session.subscription as string, {
+              tier,
+              priceId,
+              customerId,
+              amountTotal: session.amount_total,
+            });
           }
         }
 
@@ -1141,6 +1177,14 @@ export async function handleWebhook(req: Request): Promise<Response> {
                 );
 
               console.log(`Grace period started for user ${userId} — ends ${endsAt.toISOString()}`);
+
+              // Audit: grace period started
+              await logFinancialAuditEvent(userId, 'payment_failed', 'subscription', subscription.id, {
+                event: 'grace_period_started',
+                gracePeriodDays: GRACE_PERIOD_DAYS,
+                endsAt: endsAt.toISOString(),
+                customerId,
+              });
 
               // Notify the customer about the payment issue and grace period
               try {
@@ -1255,8 +1299,16 @@ export async function handleWebhook(req: Request): Promise<Response> {
           .single();
 
         if (customerData?.user_id) {
-          await updateUserTier(customerData.user_id as string, 'free');
-          console.log(`Downgraded user ${customerData.user_id} to free tier`);
+          const deletedUserId = customerData.user_id as string;
+          await updateUserTier(deletedUserId, 'free');
+          console.log(`Downgraded user ${deletedUserId} to free tier`);
+
+          // Audit: subscription deleted / downgrade
+          await logFinancialAuditEvent(deletedUserId, 'subscription_cancelled', 'subscription', subscription.id, {
+            previousTier: getTierFromPriceId(subscription.items?.data?.[0]?.price?.id) || 'unknown',
+            customerId,
+            reason: 'subscription_deleted',
+          });
         } else {
           console.warn(`No user found for Stripe customer ${customerId} — cannot downgrade tier`);
         }
@@ -1298,6 +1350,28 @@ export async function handleWebhook(req: Request): Promise<Response> {
             }
           } catch (err) {
             console.error('Failed to resolve grace period on payment success:', err);
+          }
+        }
+
+        // Audit: payment succeeded
+        if (invoiceCustomerId) {
+          try {
+            const { data: payingCustomer } = await supabase
+              .from('stripe_customers')
+              .select('user_id')
+              .eq('stripe_customer_id', invoiceCustomerId)
+              .single();
+
+            if (payingCustomer?.user_id) {
+              await logFinancialAuditEvent(payingCustomer.user_id as string, 'payment_succeeded', 'payment', invoice.id as string, {
+                amount: invoice.amount_paid,
+                currency: invoice.currency || 'usd',
+                billingReason: invoice.billing_reason,
+                customerId: invoiceCustomerId,
+              });
+            }
+          } catch {
+            // Best-effort audit
           }
         }
 
@@ -1358,6 +1432,14 @@ export async function handleWebhook(req: Request): Promise<Response> {
 
                   await updateUserTier(userId, 'free');
                   console.log(`Grace period expired — user ${userId} downgraded to free`);
+
+                  // Audit: grace period expired → downgrade
+                  await logFinancialAuditEvent(userId, 'tier_downgraded', 'subscription', invoice.subscription as string || 'unknown', {
+                    event: 'grace_period_expired',
+                    previousTier: 'unknown', // would need a lookup to get actual tier
+                    newTier: 'free',
+                    customerId: failedCustomerId,
+                  });
                 } else {
                   const daysLeft = Math.ceil((endsAt.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
                   console.log(`Payment failed again for user ${userId} — ${daysLeft} day(s) left in grace period`);

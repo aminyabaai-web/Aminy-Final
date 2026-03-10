@@ -5,6 +5,7 @@
 
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
+import { secureZustandStorage } from '../hooks/useSecureStorage';
 
 // ============================================================================
 // TYPES
@@ -469,7 +470,7 @@ export const useAminyStore = create<AminyStore>()(
     }),
     {
       name: 'aminy-store',
-      storage: createJSONStorage(() => localStorage),
+      storage: createJSONStorage(() => secureZustandStorage),
       partialize: (state) => ({
         // Only persist these fields
         user: state.user,

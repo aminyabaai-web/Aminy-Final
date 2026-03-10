@@ -31,6 +31,7 @@ import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { triggerHaptic } from '../lib/haptics';
 import { cn } from '../lib/utils';
+import { useAuditedAction } from '../hooks/useAuditedAction';
 
 // Type definitions for questions and resources
 interface QuestionOption {
@@ -370,7 +371,7 @@ const CRISIS_RESOURCES: { child: CrisisResource[]; teen: CrisisResource[] } = {
   ],
 };
 
-interface ChildMentalHealthResult {
+export interface ChildMentalHealthResult {
   moodScore: number;
   anxietyScore: number;
   safetyScore: number;
@@ -397,6 +398,7 @@ export function ChildMentalHealthScreen({
   onBack,
   onSkip,
 }: ChildMentalHealthScreenProps) {
+  useAuditedAction('child_data');
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [responses, setResponses] = useState<Record<string, number>>({});
   const [showCrisis, setShowCrisis] = useState(false);
