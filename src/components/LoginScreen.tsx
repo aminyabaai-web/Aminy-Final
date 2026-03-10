@@ -153,7 +153,7 @@ export function LoginScreen({
 
   return (
     <div
-      className="min-h-screen min-h-[100dvh] flex flex-col"
+      className="min-h-screen min-h-[100dvh] flex flex-col overflow-y-auto pb-6"
       style={{
         backgroundColor: '#F8F8F6',
         fontFamily: fontStack,

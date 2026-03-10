@@ -84,6 +84,8 @@ import {
   Wind
 } from 'lucide-react';
 import { JrCalmCorner } from './JrCalmCorner';
+import { AACBoard } from './junior/AACBoard';
+import { VisualSchedule } from './junior/VisualSchedule';
 import {
   recordJuniorProgress,
   getFocusAreas,
@@ -95,6 +97,9 @@ import {
   type DifficultyLevel,
 } from '../lib/parent-junior-bridge';
 import { useVoiceInput } from '../hooks/useVoiceInput';
+import { useTTS } from '../hooks/useTTS';
+import { getActivitiesSync, fetchActivities, type JuniorActivity } from '../lib/junior-content-service';
+import { getJuniorIcon, getSkillTypeColor } from '../utils/juniorIconMap';
 
 // ============================================================================
 // Levenshtein Similarity — real transcript-vs-target accuracy scoring
@@ -270,7 +275,7 @@ const TRACK_FILTERS = [
 ];
 
 export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: JuniorPageProps) {
-  const [activeView, setActiveView] = useState<'kid-login' | 'home' | 'buddy-select' | 'activity-select' | 'activity' | 'celebration' | 'calm-corner' | 'parent-education' | 'visual-coaching' | 'offline-manager' | 'parent-controls'>('kid-login');
+  const [activeView, setActiveView] = useState<'kid-login' | 'home' | 'buddy-select' | 'activity-select' | 'activity' | 'celebration' | 'calm-corner' | 'parent-education' | 'visual-coaching' | 'offline-manager' | 'parent-controls' | 'aac-board' | 'visual-schedule'>('kid-login');
   const [selectedBuddy, setSelectedBuddy] = useState<string>('sunny');
   const [currentSpeechLevel, setCurrentSpeechLevel] = useState<number>(2);
   const [isRecording, setIsRecording] = useState(false);
@@ -297,6 +302,23 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
   const [emotionDetected, setEmotionDetected] = useState<'frustrated' | 'excited' | 'anxious' | 'calm'>('calm');
   const [useTextInput, setUseTextInput] = useState(false);
   const [textInputValue, setTextInputValue] = useState('');
+
+  // =========================================================================
+  // Extended activities from CMS / content service
+  // =========================================================================
+  const [allActivitiesCMS, setAllActivitiesCMS] = useState<JuniorActivity[]>(() => getActivitiesSync());
+
+  // Load extended activities asynchronously (Supabase or fallback)
+  useEffect(() => {
+    let cancelled = false;
+    fetchActivities().then((fetched) => {
+      if (!cancelled && fetched.length > 0) setAllActivitiesCMS(fetched);
+    });
+    return () => { cancelled = true; };
+  }, []);
+
+  // TTS narration hook
+  const tts = useTTS();
 
   // Real speech recognition via Web Speech API
   const speechPromptTimestamp = useRef<number>(0);
@@ -857,6 +879,31 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
     }
   ];
 
+  // =========================================================================
+  // Merge extended CMS activities into the hardcoded list.
+  // De-duplicate by ID — hardcoded wins if both exist (richer metadata).
+  // =========================================================================
+  const hardcodedIds = new Set(activities.map((a) => a.id));
+  const extendedAsUI: Activity[] = allActivitiesCMS
+    .filter((cms) => !hardcodedIds.has(cms.id))
+    .map((cms) => ({
+      id: cms.id,
+      title: cms.title,
+      description: cms.description,
+      icon: getJuniorIcon(cms.icon),
+      duration: cms.duration,
+      skillType: cms.skillType,
+      level: cms.level,
+      sessionSize: cms.sessionSize,
+      unlocked: cms.unlocked,
+      tier: cms.tier,
+      color: getSkillTypeColor(cms.skillType),
+      track: cms.track,
+      voiceReady: cms.voiceReady,
+    }));
+
+  const allActivities: Activity[] = [...activities, ...extendedAsUI];
+
   // Adaptive AI Journey with parent cross-learning
   const getPersonalizedJourney = useCallback(() => {
     const userProfile = {
@@ -870,7 +917,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
     };
 
     // Filter out activities matching avoidance triggers from parent
-    const safeActivities = activities.filter(a => {
+    const safeActivities = allActivities.filter(a => {
       const activityText = `${a.title} ${a.description} ${a.focus?.join(' ') || ''} ${a.mode || ''}`.toLowerCase();
       return !avoidanceTriggers.some(trigger => activityText.includes(trigger));
     });
@@ -921,7 +968,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
       visualSupports: true,
       adaptiveMessage: 'Perfect level for you today!'
     };
-  }, [currentSpeechLevel, needsBreak, childEnergyLevel, speechAnalysis, practiceAttempts, successStreak, todaysFocus, currentSessionTime, activities, difficultyOverrides, avoidanceTriggers]);
+  }, [currentSpeechLevel, needsBreak, childEnergyLevel, speechAnalysis, practiceAttempts, successStreak, todaysFocus, currentSessionTime, allActivities, difficultyOverrides, avoidanceTriggers]);
 
   // Enhanced speech practice with REAL speech recognition feedback
   const handleAdvancedSpeechPractice = async () => {
@@ -1184,7 +1231,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
       
       // Auto-suggest regulation activity
       setTimeout(() => {
-        const calmActivity = activities.find(a => a.id === 'calm-corner');
+        const calmActivity = allActivities.find(a => a.id === 'calm-corner');
         if (calmActivity?.unlocked) {
           toast("🫧 Ready for breathing bubbles?", {
             description: "Tap to start your calm moment",
@@ -1697,7 +1744,27 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
               </div>
 
               {/* Quick Actions */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+              <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => setActiveView('aac-board')}
+                  className="bg-gradient-to-br from-blue-500 to-purple-500 rounded-2xl p-4 shadow-sm flex flex-col items-center space-y-2 text-white min-h-[88px]"
+                >
+                  <Layers className="w-7 h-7" />
+                  <span className="text-sm font-medium">My Words</span>
+                </motion.button>
+
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => setActiveView('visual-schedule')}
+                  className="bg-gradient-to-br from-green-500 to-teal-500 rounded-2xl p-4 shadow-sm flex flex-col items-center space-y-2 text-white min-h-[88px]"
+                >
+                  <Clock className="w-7 h-7" />
+                  <span className="text-sm font-medium">My Schedule</span>
+                </motion.button>
+
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
@@ -1707,7 +1774,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
                   <Gamepad2 className="w-6 h-6 text-blue-500" />
                   <span>All Activities</span>
                 </motion.button>
-                
+
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
@@ -1721,11 +1788,31 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
             </div>
           )}
 
+          {activeView === 'aac-board' && (
+            <AACBoard
+              childName={childName}
+              onBack={() => setActiveView('home')}
+            />
+          )}
+
+          {activeView === 'visual-schedule' && (
+            <VisualSchedule
+              childName={childName}
+              onBack={() => setActiveView('home')}
+            />
+          )}
+
           {activeView === 'activity' && selectedActivity && (
             <div className="p-4 sm:p-5 md:p-6">
               <motion.div
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
+                onAnimationComplete={() => {
+                  // Auto-narrate activity instructions when view loads
+                  if (selectedActivity.voiceReady !== false) {
+                    tts.speak(`${selectedActivity.title}. ${selectedActivity.description}`);
+                  }
+                }}
                 className="bg-white rounded-3xl shadow-lg overflow-hidden"
               >
                 {/* Activity Header */}
@@ -1733,20 +1820,42 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
                   <div className="flex items-center justify-between mb-4">
                     <motion.button
                       whileHover={{ scale: 1.1 }}
-                      onClick={() => setActiveView('home')}
+                      onClick={() => {
+                        tts.stop();
+                        setActiveView('home');
+                      }}
                       className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center"
                     >
                       <ArrowLeft className="w-5 h-5 text-white" />
                     </motion.button>
-                    
-                    <div className="text-center">
+
+                    <div className="text-center flex-1 mx-3">
                       <h2 className="text-xl text-white mb-1">{selectedActivity.title}</h2>
                       <p className="text-white/80 text-sm">{selectedActivity.description}</p>
                     </div>
-                    
-                    <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-                      {selectedActivity.icon}
-                    </div>
+
+                    {/* TTS replay / stop button */}
+                    <motion.button
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      onClick={() => {
+                        if (tts.isSpeaking) {
+                          tts.stop();
+                        } else {
+                          tts.speak(`${selectedActivity.title}. ${selectedActivity.description}`);
+                        }
+                      }}
+                      className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                        tts.isSpeaking ? 'bg-white/40' : 'bg-white/20'
+                      }`}
+                      aria-label={tts.isSpeaking ? 'Stop narration' : 'Read aloud'}
+                    >
+                      {tts.isSpeaking ? (
+                        <Square className="w-4 h-4 text-white" />
+                      ) : (
+                        <Volume2 className="w-5 h-5 text-white" />
+                      )}
+                    </motion.button>
                   </div>
                   
                   {/* Progress Bar */}
@@ -2084,38 +2193,59 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
                 ))}
               </div>
 
-              {/* Activities Grid */}
+              {/* Activity count */}
+              <p className="text-xs text-gray-400 mb-3">
+                {allActivities.filter(a => activeTrackFilter === 'all' || a.skillType === activeTrackFilter).length} activities
+              </p>
+
+              {/* Activities Grid — shows ALL activities, locked ones with overlay */}
               <div className="space-y-3">
-                {activities
-                  .filter(activity => 
+                {allActivities
+                  .filter(activity =>
                     activeTrackFilter === 'all' || activity.skillType === activeTrackFilter
                   )
-                  .filter(activity => activity.unlocked)
                   .map((activity, index) => (
                     <motion.div
                       key={activity.id}
                       initial={{ x: -20, opacity: 0 }}
                       animate={{ x: 0, opacity: 1 }}
-                      transition={{ delay: index * 0.05 }}
-                      whileHover={{ scale: 1.02 }}
+                      transition={{ delay: Math.min(index * 0.03, 0.6) }}
+                      whileHover={{ scale: activity.unlocked ? 1.02 : 1 }}
                       onClick={() => {
+                        if (!activity.unlocked) {
+                          toast(`Unlock "${activity.title}" with ${activity.tier === 'pro' ? 'Pro' : 'Core'} plan`);
+                          return;
+                        }
                         setSelectedActivity(activity);
+                        tts.speak(`Let's play ${activity.title}! ${activity.description}`);
                         setActiveView('activity');
                         setCurrentWord(activity.focus?.[0]?.replace(/[\/\[\]]/g, '') || 'star');
                       }}
-                      className={`${activity.color} rounded-2xl p-4 cursor-pointer shadow-sm`}
+                      className={`${activity.color} rounded-2xl p-4 cursor-pointer shadow-sm relative ${
+                        !activity.unlocked ? 'opacity-60' : ''
+                      }`}
                     >
+                      {/* Lock overlay for locked activities */}
+                      {!activity.unlocked && (
+                        <div className="absolute top-3 right-3">
+                          <Lock className="w-4 h-4 text-gray-500" />
+                        </div>
+                      )}
+
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center space-x-3">
                           {activity.icon}
                           <div>
-                            <h4 className="text-sm">{activity.title}</h4>
-                            <p className="text-xs opacity-75">{activity.duration} • {activity.track}</p>
+                            <h4 className="text-sm font-medium">{activity.title}</h4>
+                            <p className="text-xs opacity-75">{activity.duration} {activity.track && `\u2022 ${activity.track}`}</p>
                           </div>
                         </div>
                         <div className="flex items-center space-x-2">
                           {activity.tier === 'pro' && (
                             <Crown className="w-4 h-4 text-yellow-600" />
+                          )}
+                          {activity.voiceReady && (
+                            <Volume2 className="w-3.5 h-3.5 opacity-50" />
                           )}
                           {activity.offlineReady && (
                             <Download className="w-4 h-4 opacity-60" />
@@ -2123,7 +2253,9 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
                           <ChevronRight className="w-4 h-4" />
                         </div>
                       </div>
-                      
+
+                      <p className="text-xs opacity-70 mb-2 line-clamp-2">{activity.description}</p>
+
                       <div className="flex flex-wrap gap-1">
                         <Badge variant="outline" className="text-xs">
                           Level {activity.level}
@@ -2255,7 +2387,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
                 Enter parent PIN to exit Kid Mode
               </p>
               
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+              <div className="grid grid-cols-3 gap-2">
                 {[1,2,3,4,5,6,7,8,9,'C',0,'✓'].map((num, index) => (
                   <Button
                     key={index}

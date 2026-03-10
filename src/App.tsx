@@ -1006,6 +1006,8 @@ export default function App() {
   const [showFeedbackCollector, setShowFeedbackCollector] = useState(false);
   // Track whether the next SIGNED_OUT is from an intentional logout vs. session expiry
   const intentionalLogoutRef = useRef(false);
+  // Track whether the user ever had a valid session (prevents false "expired" toasts in dev/demo mode)
+  const hadSessionRef = useRef(false);
   const [showPaymentConfirmation, setShowPaymentConfirmation] = useState(false);
   const [paymentUserId, setPaymentUserId] = useState<string | null>(null);
   const [fabOpen, setFabOpen] = useState(false);
@@ -1335,6 +1337,7 @@ export default function App() {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         if (event === 'SIGNED_IN' && session?.user) {
+          hadSessionRef.current = true;
           // Load user profile and children data from Supabase
           try {
             const { data: profile } = await supabase
@@ -1490,13 +1493,14 @@ export default function App() {
           });
           navigateToScreen('login');
 
-          if (!wasIntentional) {
+          if (!wasIntentional && hadSessionRef.current) {
             // Session expired unexpectedly — let the user know
             toast.error('Your session has expired. Please sign in again.', {
               duration: 6000,
             });
             logger.dev('Session expired — auto-signed out');
           }
+          hadSessionRef.current = false;
         } else if (event === 'TOKEN_REFRESHED') {
           logger.dev('Auth token refreshed successfully');
         }
@@ -1526,6 +1530,9 @@ export default function App() {
       if (authScreens.includes(screen)) return;
 
       try {
+        // Only check if user previously had a valid session (skip in dev/demo mode)
+        if (!hadSessionRef.current) return;
+
         const { data: { session } } = await supabase.auth.getSession();
         if (!session) {
           // Session is gone — token refresh must have failed silently
@@ -1533,6 +1540,7 @@ export default function App() {
           toast.error('Your session has expired. Please sign in again.', {
             duration: 6000,
           });
+          hadSessionRef.current = false;
           navigateToScreen('login');
         }
       } catch {

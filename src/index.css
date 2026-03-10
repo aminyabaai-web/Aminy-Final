@@ -16315,3 +16315,149 @@ body.mobile-optimized {
     transform: translateY(0);
   }
 }
+
+/* ===========================================================================
+   AAC Board — category background & border colors
+   =========================================================================== */
+
+/* Wants & Needs — warm coral #E07A5F */
+.aac-bg-wants { background-color: #E07A5F; }
+.aac-border-wants { border-color: #E07A5F; }
+
+/* Feelings — medium purple #7B68EE */
+.aac-bg-feelings { background-color: #7B68EE; }
+.aac-border-feelings { border-color: #7B68EE; }
+
+/* People — teal green #43AA8B */
+.aac-bg-people { background-color: #43AA8B; }
+.aac-border-people { border-color: #43AA8B; }
+
+/* Actions — blue #4A90D9 */
+.aac-bg-actions { background-color: #4A90D9; }
+.aac-border-actions { border-color: #4A90D9; }
+
+/* Places — warm amber #F4A261 */
+.aac-bg-places { background-color: #F4A261; }
+.aac-border-places { border-color: #F4A261; }
+
+/* Food — burnt orange #E76F51 */
+.aac-bg-food { background-color: #E76F51; }
+.aac-border-food { border-color: #E76F51; }
+
+/* Questions — teal #2A9D8F */
+.aac-bg-questions { background-color: #2A9D8F; }
+.aac-border-questions { border-color: #2A9D8F; }
+
+/* Responses — steel blue #577590 */
+.aac-bg-responses { background-color: #577590; }
+.aac-border-responses { border-color: #577590; }
+
+/* border-3 utility (Tailwind v4 does not ship border-3 by default) */
+.border-3 { border-width: 3px; }
+
+/* AAC symbol speaking flash */
+.aac-symbol-speaking {
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.5);
+  background-color: #EFF6FF;
+}
+
+/* AAC sentence strip scrollbar hide */
+.aac-sentence-strip::-webkit-scrollbar { display: none; }
+.aac-sentence-strip { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* AAC speak button pulse */
+.aac-speak-btn-active {
+  box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
+  animation: aac-pulse 1.5s infinite;
+}
+@keyframes aac-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+  70% { box-shadow: 0 0 0 8px rgba(59, 130, 246, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+}
+
+/* AAC category tab scrollbar hide */
+.aac-category-tabs::-webkit-scrollbar { display: none; }
+.aac-category-tabs { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ===========================================================================
+   Visual Schedule — pulsing current item, checkmark animation
+   =========================================================================== */
+
+/* Pulsing border on current schedule item */
+.vs-current-pulse {
+  animation: vs-pulse 2s ease-in-out infinite;
+}
+@keyframes vs-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.3); }
+  50% { box-shadow: 0 0 0 6px rgba(59, 130, 246, 0.15); }
+}
+
+/* Checkmark completion animation */
+.vs-check-animate {
+  animation: vs-check 0.5s ease-out;
+}
+@keyframes vs-check {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.05); background-color: #D1FAE5; }
+  100% { transform: scale(1); }
+}
+
+/* ============================================
+   SENSORY MODE — Global accessibility classes
+   Applied to <html> by useSensoryMode hook
+   ============================================ */
+
+/* Muted colors: reduce saturation and contrast for sensory-sensitive users */
+html.sensory-muted-colors {
+  filter: saturate(0.6) contrast(0.9);
+}
+html.sensory-muted-colors img,
+html.sensory-muted-colors video {
+  filter: saturate(0.7);
+}
+
+/* Enlarged targets: boost touch target sizes by 25% for motor accessibility */
+html.sensory-enlarge-targets button,
+html.sensory-enlarge-targets [role="button"],
+html.sensory-enlarge-targets a,
+html.sensory-enlarge-targets input,
+html.sensory-enlarge-targets select,
+html.sensory-enlarge-targets textarea {
+  min-height: 56px !important;
+  min-width: 56px !important;
+  font-size: max(1em, 16px) !important;
+}
+html.sensory-enlarge-targets .aac-symbol-btn {
+  min-height: 90px !important;
+  min-width: 90px !important;
+}
+
+/* Reduced text density: increase line height and spacing */
+html.sensory-reduce-text {
+  line-height: 1.8 !important;
+  letter-spacing: 0.02em;
+  word-spacing: 0.08em;
+}
+html.sensory-reduce-text p,
+html.sensory-reduce-text li,
+html.sensory-reduce-text span {
+  line-height: 1.8 !important;
+}
+html.sensory-reduce-text h1,
+html.sensory-reduce-text h2,
+html.sensory-reduce-text h3 {
+  margin-bottom: 1em !important;
+}
+
+/* Visual timers: show countdown indicators with pulsing border */
+html.sensory-visual-timers [data-timer],
+html.sensory-visual-timers .activity-timer {
+  border: 3px solid #60A5FA !important;
+  border-radius: 12px;
+  animation: sensory-timer-pulse 2s ease-in-out infinite;
+}
+@keyframes sensory-timer-pulse {
+  0%, 100% { border-color: #60A5FA; }
+  50% { border-color: #93C5FD; }
+}
