@@ -181,7 +181,7 @@ export class AIJuniorContextProvider {
     const recentActivities = getRecentProgress(childId, 10);
 
     // Get existing bridge context (includes avoidance triggers, difficulty, etc.)
-    const bridgeContext = buildParentAIContext(childId, 'family'); // default tier
+    const bridgeContext = buildParentAIContext(childId, 'free'); // default tier
 
     // Build structured data
     const structuredData: JuniorContextData = {
