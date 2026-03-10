@@ -1,3 +1,11 @@
+# iCloud sync duplicates
+* 2.*
+* 2.js
+* 2.ts
+* 2.tsx
+* 2.sql
+* 2.json
+
 # Environment variables
 .env
 .env.local
