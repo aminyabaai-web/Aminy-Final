@@ -10,10 +10,10 @@ import { EnhancedChatInput, type Attachment } from './EnhancedChatInput';
 import {
   loadConversationHistory,
   saveMessageToHistory,
-  generateAIResponse,
-  ConversationMessage,
-  ConversationContext,
-} from '../lib/ai-conversation-engine';
+  generateStreamingAIResponse as generateAIResponse,
+  type StreamingChatMessage as ConversationMessage,
+  type StreamingChatContext as ConversationContext,
+} from '../lib/ai-engine';
 import { store } from '../lib/store';
 import { useRateLimitStore, hasReachedLimit } from '../lib/rate-limit-store';
 import { RateLimitInline } from './RateLimitBadge';

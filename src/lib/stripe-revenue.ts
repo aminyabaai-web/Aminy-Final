@@ -7,6 +7,7 @@
 
 import { supabase } from '../utils/supabase/client';
 import { paymentLogger } from './logger';
+import { tierPricing, type TierType } from './tier-utils';
 
 // ============================================================================
 // Types
@@ -27,7 +28,7 @@ export interface Subscription {
   stripeCustomerId: string;
   stripeSubscriptionId: string;
   status: 'active' | 'past_due' | 'canceled' | 'trialing' | 'paused';
-  plan: 'free' | 'starter' | 'professional' | 'clinic';
+  plan: TierType;
   priceId: string;
   amount: number; // in cents
   currency: string;
@@ -108,14 +109,18 @@ export interface RevenueReport {
 // Pricing Configuration
 // ============================================================================
 
-export const PRICING = {
-  free: { monthly: 0, yearly: 0 },
-  starter: { monthly: 1999, yearly: 19990 }, // $19.99/mo or $199.90/yr
-  professional: { monthly: 4999, yearly: 49990 }, // $49.99/mo
-  clinic: { monthly: 19999, yearly: 199990 }, // $199.99/mo
-} as const;
+// Derive pricing in cents from tier-utils (single source of truth)
+export const PRICING = Object.fromEntries(
+  Object.entries(tierPricing).map(([tier, p]) => [
+    tier,
+    {
+      monthly: Math.round(p.monthly * 100),
+      yearly: Math.round(p.yearly * 100),
+    },
+  ])
+) as Record<TierType, { monthly: number; yearly: number }>;
 
-export type PlanType = keyof typeof PRICING;
+export type PlanType = TierType;
 
 // ============================================================================
 // Webhook Handlers
@@ -382,12 +387,12 @@ async function getUserIdFromCustomer(customerId: string): Promise<string | null>
 }
 
 function getPlanFromPriceId(items: { data: Array<{ price: { id: string } }> }): PlanType {
-  // Map price IDs to plans - these would be your actual Stripe price IDs
+  // Map price IDs to plans — tier names match tier-utils.ts
   const priceId = items?.data?.[0]?.price?.id || '';
 
-  if (priceId.includes('clinic')) return 'clinic';
-  if (priceId.includes('professional') || priceId.includes('pro')) return 'professional';
-  if (priceId.includes('starter')) return 'starter';
+  if (priceId.includes('proplus') || priceId.includes('family')) return 'proplus';
+  if (priceId.includes('pro')) return 'pro';
+  if (priceId.includes('core') || priceId.includes('starter')) return 'core';
   return 'free';
 }
 

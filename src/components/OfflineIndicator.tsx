@@ -1,13 +1,33 @@
 /**
  * Offline Indicator
  *
- * Shows when the user is offline and provides quick access to crisis resources.
- * Enhanced with animation and crisis resource shortcut.
+ * Shows a banner when the user goes offline with:
+ *   - Pending sync count (from useBackgroundSync queue)
+ *   - Quick access to crisis resources (always cached)
+ *   - Brief "Back online" toast when connectivity returns
+ *   - Syncing status when reconnection triggers queue processing
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { WifiOff, Wifi, Phone, ChevronRight, X } from 'lucide-react';
+import { WifiOff, Wifi, Phone, ChevronRight, X, RefreshCw } from 'lucide-react';
+
+// ---- Sync queue helpers (reads from the same localStorage key as useBackgroundSync) ----
+
+const SYNC_QUEUE_KEY = 'aminy_sync_queue';
+
+function getPendingSyncCount(): number {
+  try {
+    const raw = localStorage.getItem(SYNC_QUEUE_KEY);
+    if (!raw) return 0;
+    const queue = JSON.parse(raw);
+    return Array.isArray(queue) ? queue.length : 0;
+  } catch {
+    return 0;
+  }
+}
+
+// ---- Component ----
 
 interface OfflineIndicatorProps {
   onCrisisResourcesClick?: () => void;
@@ -17,36 +37,67 @@ export function OfflineIndicator({ onCrisisResourcesClick }: OfflineIndicatorPro
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [dismissed, setDismissed] = useState(false);
   const [showReconnected, setShowReconnected] = useState(false);
+  const [pendingSyncs, setPendingSyncs] = useState(getPendingSyncCount);
+  const [isSyncing, setIsSyncing] = useState(false);
+
+  // Refresh pending count periodically while offline
+  const refreshPendingCount = useCallback(() => {
+    setPendingSyncs(getPendingSyncCount());
+  }, []);
 
   useEffect(() => {
-    let reconnectTimeout: NodeJS.Timeout;
+    let reconnectTimeout: ReturnType<typeof setTimeout>;
+    let pendingInterval: ReturnType<typeof setInterval>;
 
     const handleOnline = () => {
       setIsOnline(true);
       setDismissed(false);
-      // Show "reconnected" message briefly
+      setIsSyncing(true);
+
+      // Show "Back online — syncing..." briefly, then "Back online"
       setShowReconnected(true);
       reconnectTimeout = setTimeout(() => {
         setShowReconnected(false);
+        setIsSyncing(false);
       }, 3000);
+
+      // Refresh count after a short delay (queue processing is async)
+      setTimeout(refreshPendingCount, 2000);
     };
 
     const handleOffline = () => {
       setIsOnline(false);
       setDismissed(false);
+      refreshPendingCount();
+    };
+
+    const handleSyncCompleted = () => {
+      refreshPendingCount();
+      setIsSyncing(false);
     };
 
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
+    window.addEventListener('sync-completed', handleSyncCompleted);
+
+    // Poll pending count every 5s while offline
+    pendingInterval = setInterval(() => {
+      if (!navigator.onLine) {
+        refreshPendingCount();
+      }
+    }, 5000);
 
     return () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
+      window.removeEventListener('sync-completed', handleSyncCompleted);
       if (reconnectTimeout) clearTimeout(reconnectTimeout);
+      clearInterval(pendingInterval);
     };
-  }, []);
+  }, [refreshPendingCount]);
 
-  // Show reconnected message
+  // ---- Reconnected toast ----
+
   if (showReconnected) {
     return (
       <motion.div
@@ -58,17 +109,31 @@ export function OfflineIndicator({ onCrisisResourcesClick }: OfflineIndicatorPro
         aria-live="polite"
       >
         <div className="flex items-center justify-center gap-2 max-w-4xl mx-auto">
-          <Wifi className="w-5 h-5" />
-          <p className="text-sm font-medium">Back online</p>
+          {isSyncing ? (
+            <>
+              <RefreshCw className="w-5 h-5 animate-spin" />
+              <p className="text-sm font-medium">
+                Back online {pendingSyncs > 0 ? `— syncing ${pendingSyncs} item${pendingSyncs !== 1 ? 's' : ''}` : '— syncing...'}
+              </p>
+            </>
+          ) : (
+            <>
+              <Wifi className="w-5 h-5" />
+              <p className="text-sm font-medium">Back online</p>
+            </>
+          )}
         </div>
       </motion.div>
     );
   }
 
-  // Don't show if online or dismissed
+  // ---- Hidden when online or dismissed ----
+
   if (isOnline || dismissed) {
     return null;
   }
+
+  // ---- Offline banner ----
 
   return (
     <AnimatePresence>
@@ -89,7 +154,9 @@ export function OfflineIndicator({ onCrisisResourcesClick }: OfflineIndicatorPro
                   You're offline
                 </p>
                 <p className="text-xs text-white/80">
-                  Crisis resources still available
+                  {pendingSyncs > 0
+                    ? `${pendingSyncs} pending sync${pendingSyncs !== 1 ? 's' : ''} — will retry when connected`
+                    : 'Crisis resources still available'}
                 </p>
               </div>
             </div>

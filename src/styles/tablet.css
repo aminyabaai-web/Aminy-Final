@@ -1,0 +1,236 @@
+/**
+ * Tablet-Specific Layout Styles
+ *
+ * Breakpoints:
+ *   phone:   < 768px  (default, no media query needed)
+ *   tablet:  768px - 1024px
+ *   desktop: > 1024px
+ *
+ * These styles augment the mobile-first defaults with tablet/desktop overrides.
+ * Import this file alongside globals.css in your entry point.
+ */
+
+/* =========================================================================
+   Responsive Grid Base
+   ========================================================================= */
+
+.responsive-grid {
+  display: grid;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.responsive-grid--phone {
+  grid-template-columns: 1fr;
+}
+
+.responsive-grid--tablet {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.responsive-grid--desktop {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+/* =========================================================================
+   Dashboard — Tablet 2-Column Layout
+   ========================================================================= */
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  /* Dashboard cards grid */
+  .dashboard-cards,
+  [data-screen="dashboard"] .card-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  /* Dashboard header stays full-width */
+  .dashboard-header,
+  [data-screen="dashboard"] .screen-header {
+    grid-column: 1 / -1;
+  }
+
+  /* Featured/hero cards span full width */
+  .dashboard-hero-card,
+  .dashboard-featured {
+    grid-column: 1 / -1;
+  }
+
+  /* Quick actions row — 2 columns */
+  .quick-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  /* Stats row — 2x2 grid instead of 1x4 */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+}
+
+/* =========================================================================
+   Junior — Tablet Side-by-Side Layout
+   ========================================================================= */
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  /* Junior activity screen: activity + controls side by side */
+  .junior-activity-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: start;
+  }
+
+  /* Junior header spans full width */
+  .junior-activity-header {
+    grid-column: 1 / -1;
+  }
+
+  /* Activity content area */
+  .junior-activity-content {
+    min-height: 400px;
+  }
+
+  /* Controls/sidebar panel */
+  .junior-activity-controls {
+    position: sticky;
+    top: 16px;
+  }
+
+  /* Junior dashboard cards — 2 columns */
+  .junior-dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  /* Calm corner tools — 2 columns */
+  .calm-tools-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+}
+
+/* =========================================================================
+   Desktop — 3-Column & Max-Width
+   ========================================================================= */
+
+@media (min-width: 1025px) {
+  /* Center content with max-width on large screens */
+  .app-content-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* Dashboard cards — 3 columns */
+  .dashboard-cards,
+  [data-screen="dashboard"] .card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  /* Quick actions — 3 columns */
+  .quick-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  /* Stats — single row */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+
+  /* Junior dashboard — 3 columns */
+  .junior-dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+}
+
+/* =========================================================================
+   Utility Classes for Responsive Spanning
+   ========================================================================= */
+
+/* Span full width across all columns */
+.col-span-full {
+  grid-column: 1 / -1;
+}
+
+/* Span 2 columns (useful on tablet/desktop) */
+@media (min-width: 768px) {
+  .tablet-col-span-2 {
+    grid-column: span 2;
+  }
+
+  .tablet-col-span-full {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 1025px) {
+  .desktop-col-span-2 {
+    grid-column: span 2;
+  }
+
+  .desktop-col-span-3 {
+    grid-column: span 3;
+  }
+
+  .desktop-col-span-full {
+    grid-column: 1 / -1;
+  }
+}
+
+/* =========================================================================
+   Tablet-Optimized Spacing
+   ========================================================================= */
+
+@media (min-width: 768px) {
+  /* Increase padding on tablet+ */
+  .screen-container {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  /* Cards get slightly more padding */
+  .card,
+  .panel {
+    padding: 20px;
+  }
+
+  /* Modal widths */
+  .modal-content {
+    max-width: 560px;
+    margin: 0 auto;
+  }
+}
+
+/* =========================================================================
+   Safe Area Adjustments for Tablets
+   ========================================================================= */
+
+@media (min-width: 768px) {
+  /* Bottom navigation bar */
+  .bottom-nav {
+    max-width: 600px;
+    margin: 0 auto;
+    border-radius: 16px 16px 0 0;
+  }
+
+  /* Install prompt */
+  .pwa-install-banner {
+    max-width: 480px;
+    margin: 0 auto;
+  }
+}

@@ -42,7 +42,7 @@ export function WeeklyOutcomesDashboard({
     error,
     loadOutcomes: generateSummary,
   } = useOutcomes(childId);
-  const trends: any[] = [];
+  const trends: { metric: string; direction: 'up' | 'down' | 'stable'; value: number }[] = [];
   const fetchTrends = () => {};
 
   // Calculate week start for display
@@ -84,7 +84,23 @@ export function WeeklyOutcomesDashboard({
     );
   }
 
-  const summary: any = weeklySummary || {
+  const summary: {
+    totalActivities: number;
+    goalsProgress: number;
+    sessionsCompleted: number;
+    milestones: string[];
+    behaviorInsights: string[];
+    trend: 'improving' | 'stable' | 'needs_attention';
+    aiSummary?: string;
+  } = (weeklySummary as unknown as {
+    totalActivities: number;
+    goalsProgress: number;
+    sessionsCompleted: number;
+    milestones: string[];
+    behaviorInsights: string[];
+    trend: 'improving' | 'stable' | 'needs_attention';
+    aiSummary?: string;
+  }) || {
     totalActivities: 0,
     goalsProgress: 0,
     sessionsCompleted: 0,
@@ -196,7 +212,7 @@ export function WeeklyOutcomesDashboard({
             <span>Recent milestones</span>
           </div>
           <div className="space-y-2">
-            {(summary.milestones || []).slice(0, 2).map((milestone: any, index: number) => (
+            {(summary.milestones || []).slice(0, 2).map((milestone: string, index: number) => (
               <div 
                 key={index} 
                 className="flex items-start gap-2 p-2 bg-yellow-50 border border-yellow-100 rounded"

@@ -2,7 +2,14 @@
  * Pull-to-Refresh Hook
  *
  * Provides native-like pull-to-refresh functionality for mobile web.
- * Works with touch events and provides smooth animations.
+ * Uses touch events with a configurable threshold and resistance curve.
+ *
+ * Usage:
+ *   const containerRef = useRef<HTMLDivElement>(null);
+ *   const { isPulling, isRefreshing, pullDistance, canRefresh } =
+ *     usePullToRefresh(containerRef, { onRefresh: async () => { ... } });
+ *
+ * Pair with PullToRefreshIndicator for the visual spinner.
  */
 
 import { useEffect, useRef, useState, useCallback } from 'react';
@@ -12,11 +19,16 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 // ============================================================================
 
 interface PullToRefreshOptions {
+  /** Async callback invoked when the pull threshold is reached and released */
   onRefresh: () => Promise<void>;
-  threshold?: number; // Distance to pull before triggering (default: 80)
-  maxPull?: number; // Maximum pull distance (default: 120)
+  /** Distance in px (after resistance) to pull before triggering (default: 60) */
+  threshold?: number;
+  /** Maximum allowed pull distance in px (default: 100) */
+  maxPull?: number;
+  /** Disable the hook entirely */
   disabled?: boolean;
-  resistance?: number; // Resistance factor (default: 2.5)
+  /** Resistance factor — higher = harder to pull (default: 2.5) */
+  resistance?: number;
 }
 
 interface PullToRefreshState {
@@ -27,17 +39,29 @@ interface PullToRefreshState {
 }
 
 // ============================================================================
+// Standalone detection — skip pull-to-refresh if native behavior is active
+// ============================================================================
+
+function isStandalonePWA(): boolean {
+  if (typeof window === 'undefined') return false;
+  return (
+    window.matchMedia('(display-mode: standalone)').matches ||
+    (window.navigator as unknown as { standalone?: boolean }).standalone === true
+  );
+}
+
+// ============================================================================
 // Main Hook
 // ============================================================================
 
 export function usePullToRefresh(
   containerRef: React.RefObject<HTMLElement | null>,
-  options: PullToRefreshOptions
+  options: PullToRefreshOptions,
 ) {
   const {
     onRefresh,
-    threshold = 80,
-    maxPull = 120,
+    threshold = 60,
+    maxPull = 100,
     disabled = false,
     resistance = 2.5,
   } = options;
@@ -50,72 +74,80 @@ export function usePullToRefresh(
   });
 
   const touchStartY = useRef(0);
-  const touchCurrentY = useRef(0);
   const isPullingRef = useRef(false);
 
-  const handleTouchStart = useCallback((e: TouchEvent) => {
-    if (disabled || state.isRefreshing) return;
+  // Determine if we should be active
+  // In standalone PWA on iOS, the browser itself handles pull-to-refresh,
+  // so we skip our custom implementation to avoid double-firing.
+  const isDisabled = disabled || (isStandalonePWA() && /iPhone|iPad|iPod/.test(navigator.userAgent));
 
-    const container = containerRef.current;
-    if (!container) return;
+  const handleTouchStart = useCallback(
+    (e: TouchEvent) => {
+      if (isDisabled || state.isRefreshing) return;
 
-    // Only enable pull-to-refresh when scrolled to top
-    if (container.scrollTop > 0) return;
+      const container = containerRef.current;
+      if (!container) return;
 
-    touchStartY.current = e.touches[0].clientY;
-    isPullingRef.current = true;
-  }, [disabled, state.isRefreshing, containerRef]);
+      // Only activate when scrolled to top
+      if (container.scrollTop > 0) return;
 
-  const handleTouchMove = useCallback((e: TouchEvent) => {
-    if (!isPullingRef.current || disabled || state.isRefreshing) return;
+      touchStartY.current = e.touches[0].clientY;
+      isPullingRef.current = true;
+    },
+    [isDisabled, state.isRefreshing, containerRef],
+  );
 
-    const container = containerRef.current;
-    if (!container) return;
+  const handleTouchMove = useCallback(
+    (e: TouchEvent) => {
+      if (!isPullingRef.current || isDisabled || state.isRefreshing) return;
 
-    // Don't interfere with scrolling
-    if (container.scrollTop > 0) {
-      isPullingRef.current = false;
-      setState(prev => ({ ...prev, isPulling: false, pullDistance: 0 }));
-      return;
-    }
+      const container = containerRef.current;
+      if (!container) return;
 
-    touchCurrentY.current = e.touches[0].clientY;
-    const rawDistance = touchCurrentY.current - touchStartY.current;
+      // If the user has scrolled down since touchstart, bail out
+      if (container.scrollTop > 0) {
+        isPullingRef.current = false;
+        setState((prev) => ({ ...prev, isPulling: false, pullDistance: 0 }));
+        return;
+      }
 
-    // Only handle downward pull
-    if (rawDistance <= 0) {
-      setState(prev => ({ ...prev, isPulling: false, pullDistance: 0 }));
-      return;
-    }
+      const rawDistance = e.touches[0].clientY - touchStartY.current;
 
-    // Apply resistance
-    const pullDistance = Math.min(rawDistance / resistance, maxPull);
-    const canRefresh = pullDistance >= threshold;
+      // Only handle downward pull
+      if (rawDistance <= 0) {
+        setState((prev) => ({ ...prev, isPulling: false, pullDistance: 0 }));
+        return;
+      }
 
-    // Prevent default scroll behavior when pulling
-    if (pullDistance > 0) {
-      e.preventDefault();
-    }
+      // Apply resistance curve
+      const pullDistance = Math.min(rawDistance / resistance, maxPull);
+      const canRefresh = pullDistance >= threshold;
 
-    setState({
-      isPulling: true,
-      isRefreshing: false,
-      pullDistance,
-      canRefresh,
-    });
-  }, [disabled, state.isRefreshing, containerRef, threshold, maxPull, resistance]);
+      // Prevent native scroll when we're pulling
+      if (pullDistance > 0) {
+        e.preventDefault();
+      }
+
+      setState({
+        isPulling: true,
+        isRefreshing: false,
+        pullDistance,
+        canRefresh,
+      });
+    },
+    [isDisabled, state.isRefreshing, containerRef, threshold, maxPull, resistance],
+  );
 
   const handleTouchEnd = useCallback(async () => {
     if (!isPullingRef.current) return;
-
     isPullingRef.current = false;
 
     if (state.canRefresh && !state.isRefreshing) {
-      setState(prev => ({
+      setState((prev) => ({
         ...prev,
         isPulling: false,
         isRefreshing: true,
-        pullDistance: threshold, // Hold at threshold during refresh
+        pullDistance: threshold, // Hold at threshold during refresh animation
       }));
 
       try {
@@ -140,7 +172,7 @@ export function usePullToRefresh(
 
   useEffect(() => {
     const container = containerRef.current;
-    if (!container) return;
+    if (!container || isDisabled) return;
 
     container.addEventListener('touchstart', handleTouchStart, { passive: true });
     container.addEventListener('touchmove', handleTouchMove, { passive: false });
@@ -153,13 +185,13 @@ export function usePullToRefresh(
       container.removeEventListener('touchend', handleTouchEnd);
       container.removeEventListener('touchcancel', handleTouchEnd);
     };
-  }, [containerRef, handleTouchStart, handleTouchMove, handleTouchEnd]);
+  }, [containerRef, isDisabled, handleTouchStart, handleTouchMove, handleTouchEnd]);
 
   return state;
 }
 
 // ============================================================================
-// Simple Hook Version
+// Simple Hook Version (creates its own ref)
 // ============================================================================
 
 export function useSimplePullToRefresh(onRefresh: () => Promise<void>) {

@@ -6,6 +6,7 @@
  */
 
 import { supabase } from '../utils/supabase/client';
+import { syncEncryptedStorage } from './security/encrypted-storage';
 
 // ============================================================================
 // Types
@@ -180,7 +181,7 @@ function dbRowToGoal(row: Record<string, unknown>): CarePlanGoal {
 function getLocalVisitSummaries(userId: string): VisitSummary[] {
   if (typeof window === 'undefined') return [];
   try {
-    const stored = localStorage.getItem(STORAGE_KEYS.VISIT_SUMMARIES);
+    const stored = syncEncryptedStorage.getItem(STORAGE_KEYS.VISIT_SUMMARIES);
     const all = stored ? JSON.parse(stored) : [];
     return all.filter((s: VisitSummary) => s.userId === userId);
   } catch {
@@ -190,13 +191,13 @@ function getLocalVisitSummaries(userId: string): VisitSummary[] {
 
 function saveLocalVisitSummaries(summaries: VisitSummary[]): void {
   if (typeof window === 'undefined') return;
-  localStorage.setItem(STORAGE_KEYS.VISIT_SUMMARIES, JSON.stringify(summaries));
+  syncEncryptedStorage.setItem(STORAGE_KEYS.VISIT_SUMMARIES, JSON.stringify(summaries));
 }
 
 function getLocalActionItems(userId: string): ActionItem[] {
   if (typeof window === 'undefined') return [];
   try {
-    const stored = localStorage.getItem(STORAGE_KEYS.ACTION_ITEMS);
+    const stored = syncEncryptedStorage.getItem(STORAGE_KEYS.ACTION_ITEMS);
     const all = stored ? JSON.parse(stored) : [];
     return all.filter((item: ActionItem) => item.userId === userId);
   } catch {
@@ -206,13 +207,13 @@ function getLocalActionItems(userId: string): ActionItem[] {
 
 function saveLocalActionItems(items: ActionItem[]): void {
   if (typeof window === 'undefined') return;
-  localStorage.setItem(STORAGE_KEYS.ACTION_ITEMS, JSON.stringify(items));
+  syncEncryptedStorage.setItem(STORAGE_KEYS.ACTION_ITEMS, JSON.stringify(items));
 }
 
 function getLocalGoals(userId: string): CarePlanGoal[] {
   if (typeof window === 'undefined') return [];
   try {
-    const stored = localStorage.getItem(STORAGE_KEYS.GOALS);
+    const stored = syncEncryptedStorage.getItem(STORAGE_KEYS.GOALS);
     const all = stored ? JSON.parse(stored) : [];
     return all.filter((g: CarePlanGoal) => g.userId === userId);
   } catch {
@@ -222,7 +223,7 @@ function getLocalGoals(userId: string): CarePlanGoal[] {
 
 function saveLocalGoals(goals: CarePlanGoal[]): void {
   if (typeof window === 'undefined') return;
-  localStorage.setItem(STORAGE_KEYS.GOALS, JSON.stringify(goals));
+  syncEncryptedStorage.setItem(STORAGE_KEYS.GOALS, JSON.stringify(goals));
 }
 
 // ============================================================================

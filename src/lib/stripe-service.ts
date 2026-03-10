@@ -11,6 +11,8 @@
  */
 
 import { projectId, publicAnonKey } from '../utils/supabase/info';
+import { tierPricing, type TierType } from './tier-utils';
+import { secureFetch } from './security/secure-fetch';
 
 // Edge function base URL for API calls
 const EDGE_FUNCTION_BASE = `https://${projectId}.supabase.co/functions/v1/make-server-8a022548`;
@@ -18,27 +20,32 @@ const EDGE_FUNCTION_BASE = `https://${projectId}.supabase.co/functions/v1/make-s
 // Stripe Publishable Key (required for frontend)
 export const STRIPE_PUBLISHABLE_KEY = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || '';
 
+// Detect whether Stripe is running in test mode (pk_test_ prefix)
+export const isStripeTestMode = STRIPE_PUBLISHABLE_KEY?.startsWith('pk_test_');
+
 // Validate Stripe is configured (only warn in dev)
 if (import.meta.env.DEV && !STRIPE_PUBLISHABLE_KEY) {
 }
 
 // Stripe Price IDs - MUST be set in environment variables for production
 // Create these products in your Stripe Dashboard and copy the price_xxx IDs
+//
+// Env var lookup order: VITE_STRIPE_PRICE_* (preferred) > VITE_PRICE_* (legacy)
 export const STRIPE_PRICES = {
   // Subscription prices
-  starter_monthly: import.meta.env.VITE_PRICE_STARTER_MONTHLY || 'price_starter_monthly',
-  starter_annual: import.meta.env.VITE_PRICE_STARTER_ANNUAL || 'price_starter_annual',
-  core_monthly: import.meta.env.VITE_PRICE_CORE_MONTHLY || 'price_core_monthly',
-  core_annual: import.meta.env.VITE_PRICE_CORE_ANNUAL || 'price_core_annual',
-  pro_monthly: import.meta.env.VITE_PRICE_PRO_MONTHLY || 'price_pro_monthly',
-  pro_annual: import.meta.env.VITE_PRICE_PRO_ANNUAL || 'price_pro_annual',
-  proplus_monthly: import.meta.env.VITE_PRICE_PROPLUS_MONTHLY || 'price_proplus_monthly',
-  proplus_annual: import.meta.env.VITE_PRICE_PROPLUS_ANNUAL || 'price_proplus_annual',
+  starter_monthly: import.meta.env.VITE_STRIPE_PRICE_CORE_MONTHLY || import.meta.env.VITE_PRICE_STARTER_MONTHLY || '',
+  starter_annual: import.meta.env.VITE_STRIPE_PRICE_CORE_YEARLY || import.meta.env.VITE_PRICE_STARTER_ANNUAL || '',
+  core_monthly: import.meta.env.VITE_STRIPE_PRICE_CORE_MONTHLY || import.meta.env.VITE_PRICE_CORE_MONTHLY || '',
+  core_annual: import.meta.env.VITE_STRIPE_PRICE_CORE_YEARLY || import.meta.env.VITE_PRICE_CORE_ANNUAL || '',
+  pro_monthly: import.meta.env.VITE_STRIPE_PRICE_PRO_MONTHLY || import.meta.env.VITE_PRICE_PRO_MONTHLY || '',
+  pro_annual: import.meta.env.VITE_STRIPE_PRICE_PRO_YEARLY || import.meta.env.VITE_PRICE_PRO_ANNUAL || '',
+  proplus_monthly: import.meta.env.VITE_STRIPE_PRICE_PROPLUS_MONTHLY || import.meta.env.VITE_PRICE_PROPLUS_MONTHLY || '',
+  proplus_annual: import.meta.env.VITE_STRIPE_PRICE_PROPLUS_YEARLY || import.meta.env.VITE_PRICE_PROPLUS_ANNUAL || '',
   // Visit prices
-  initial_consult: import.meta.env.VITE_PRICE_INITIAL_CONSULT || 'price_initial_consult',
-  followup: import.meta.env.VITE_PRICE_FOLLOWUP || 'price_followup',
-  emergency: import.meta.env.VITE_PRICE_EMERGENCY || 'price_emergency',
-  extended: import.meta.env.VITE_PRICE_EXTENDED || 'price_extended',
+  initial_consult: import.meta.env.VITE_PRICE_INITIAL_CONSULT || '',
+  followup: import.meta.env.VITE_PRICE_FOLLOWUP || '',
+  emergency: import.meta.env.VITE_PRICE_EMERGENCY || '',
+  extended: import.meta.env.VITE_PRICE_EXTENDED || '',
 } as const;
 
 // Check if Stripe is properly configured
@@ -46,21 +53,22 @@ export const isStripeConfigured = (): boolean => {
   return !!(
     STRIPE_PUBLISHABLE_KEY &&
     STRIPE_PUBLISHABLE_KEY.startsWith('pk_') &&
-    !STRIPE_PRICES.starter_monthly.startsWith('price_starter')
+    STRIPE_PRICES.core_monthly &&
+    STRIPE_PRICES.core_monthly.startsWith('price_')
   );
 };
 
-// Tier pricing (display only - actual prices in Stripe)
-// Must match tier-utils.ts pricing
+// Tier pricing — re-exported from tier-utils.ts (single source of truth)
+// Keys: monthly / yearly (tier-utils uses 'yearly', Stripe uses 'annual')
 export const TIER_PRICING = {
-  free: { monthly: 0, annual: 0 },
-  starter: { monthly: 14.99, annual: 129 },  // Legacy: same as Core
-  core: { monthly: 14.99, annual: 129 },    // ~28% savings annually
-  pro: { monthly: 29.99, annual: 279 },     // ~22% savings annually
-  proplus: { monthly: 49.99, annual: 479 }, // ~20% savings annually
+  free: { monthly: tierPricing.free.monthly, annual: tierPricing.free.yearly },
+  starter: { monthly: tierPricing.starter.monthly, annual: tierPricing.starter.yearly },
+  core: { monthly: tierPricing.core.monthly, annual: tierPricing.core.yearly },
+  pro: { monthly: tierPricing.pro.monthly, annual: tierPricing.pro.yearly },
+  proplus: { monthly: tierPricing.proplus.monthly, annual: tierPricing.proplus.yearly },
 } as const;
 
-export type TierType = 'free' | 'starter' | 'core' | 'pro' | 'proplus';
+export type { TierType };
 export type BillingInterval = 'monthly' | 'annual';
 
 interface CreateCheckoutParams {
@@ -116,7 +124,10 @@ const getOrigin = (): string => {
 };
 
 /**
- * Create a Stripe Checkout session for subscription
+ * Create a Stripe Checkout session for subscription or one-time payment.
+ *
+ * Calls the `stripe-checkout` edge function which auto-detects recurring vs
+ * one-time based on the Stripe Price object.
  */
 export async function createCheckoutSession({
   userId,
@@ -126,39 +137,38 @@ export async function createCheckoutSession({
   successUrl = `${getOrigin()}/?screen=dashboard&payment=success`,
   cancelUrl = `${getOrigin()}/?screen=paywall&payment=cancelled`,
 }: CreateCheckoutParams): Promise<CheckoutResponse> {
-  const accessToken = await getAccessToken();
+  const priceId = STRIPE_PRICES[`${tier}_${interval}` as keyof typeof STRIPE_PRICES];
 
-  const response = await fetch(
-    `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/payments/create-checkout`,
-    {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        userId,
-        email,
-        tier,
-        interval,
-        successUrl,
-        cancelUrl,
-        priceId: STRIPE_PRICES[`${tier}_${interval}` as keyof typeof STRIPE_PRICES],
-      }),
-    }
-  );
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`Failed to create checkout session: ${errorText}`);
+  if (!priceId) {
+    throw new Error(
+      `No Stripe price configured for ${tier} / ${interval}. ` +
+      'Set the VITE_STRIPE_PRICE_* environment variables.'
+    );
   }
 
-  try {
-    return await response.json();
-  } catch (parseError) {
-    console.error('[Stripe] Failed to parse checkout response:', parseError);
-    throw new Error('Invalid response from payment server');
+  // Import supabase client lazily to avoid circular dependency
+  const { supabase: sb } = await import('../utils/supabase/client');
+
+  const { data, error } = await sb.functions.invoke('stripe-checkout', {
+    body: {
+      priceId,
+      userId,
+      customerEmail: email,
+      successUrl,
+      cancelUrl,
+    },
+  });
+
+  if (error) {
+    console.error('[Stripe] Edge function error:', error);
+    throw new Error(`Failed to create checkout session: ${error.message}`);
   }
+
+  if (!data?.url) {
+    throw new Error('Checkout session created but no URL returned');
+  }
+
+  return { url: data.url, sessionId: data.sessionId };
 }
 
 /**
@@ -170,29 +180,27 @@ export async function createPortalSession(
 ): Promise<{ url: string }> {
   const accessToken = await getAccessToken();
 
-  const response = await fetch(
+  const { data, error, ok } = await secureFetch<{ url: string }>(
     `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/payments/create-portal`,
     {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ userId, returnUrl }),
     }
   );
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`Failed to create portal session: ${errorText}`);
+  if (!ok || error) {
+    throw new Error(`Failed to create portal session: ${error || 'Unknown error'}`);
   }
 
-  try {
-    return await response.json();
-  } catch (parseError) {
-    console.error('[Stripe] Failed to parse portal response:', parseError);
+  if (!data) {
+    console.error('[Stripe] Failed to parse portal response');
     throw new Error('Invalid response from payment server');
   }
+
+  return data;
 }
 
 /**
@@ -201,18 +209,17 @@ export async function createPortalSession(
 export async function getSubscriptionStatus(userId: string): Promise<SubscriptionStatus> {
   const accessToken = await getAccessToken();
 
-  const response = await fetch(
+  const { data, ok } = await secureFetch<SubscriptionStatus>(
     `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/payments/subscription/${userId}`,
     {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
       },
     }
   );
 
-  if (!response.ok) {
+  if (!ok || !data) {
     // Default to free tier if no subscription found
     return {
       active: false,
@@ -223,7 +230,7 @@ export async function getSubscriptionStatus(userId: string): Promise<Subscriptio
     };
   }
 
-  return response.json();
+  return data;
 }
 
 /**
@@ -232,24 +239,22 @@ export async function getSubscriptionStatus(userId: string): Promise<Subscriptio
 export async function cancelSubscription(userId: string): Promise<{ success: boolean }> {
   const accessToken = await getAccessToken();
 
-  const response = await fetch(
+  const { data, error, ok } = await secureFetch<{ success: boolean }>(
     `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/payments/cancel`,
     {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ userId }),
     }
   );
 
-  if (!response.ok) {
-    const error = await response.text();
-    throw new Error(`Failed to cancel subscription: ${error}`);
+  if (!ok || error) {
+    throw new Error(`Failed to cancel subscription: ${error || 'Unknown error'}`);
   }
 
-  return response.json();
+  return data!;
 }
 
 /**
@@ -258,24 +263,22 @@ export async function cancelSubscription(userId: string): Promise<{ success: boo
 export async function resumeSubscription(userId: string): Promise<{ success: boolean }> {
   const accessToken = await getAccessToken();
 
-  const response = await fetch(
+  const { data, error, ok } = await secureFetch<{ success: boolean }>(
     `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/payments/resume`,
     {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ userId }),
     }
   );
 
-  if (!response.ok) {
-    const error = await response.text();
-    throw new Error(`Failed to resume subscription: ${error}`);
+  if (!ok || error) {
+    throw new Error(`Failed to resume subscription: ${error || 'Unknown error'}`);
   }
 
-  return response.json();
+  return data!;
 }
 
 /**
@@ -296,13 +299,12 @@ export async function createOneTimePayment({
 }): Promise<CheckoutResponse> {
   const accessToken = await getAccessToken();
 
-  const response = await fetch(
+  const { data, error, ok } = await secureFetch<CheckoutResponse>(
     `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/payments/create-payment`,
     {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         userId,
@@ -316,12 +318,44 @@ export async function createOneTimePayment({
     }
   );
 
-  if (!response.ok) {
-    const error = await response.text();
-    throw new Error(`Failed to create payment: ${error}`);
+  if (!ok || error) {
+    throw new Error(`Failed to create payment: ${error || 'Unknown error'}`);
   }
 
-  return response.json();
+  return data!;
+}
+
+/**
+ * Open the Stripe Customer Portal in a new tab so the user can self-manage
+ * their subscription (cancel, update payment method, switch plans, view invoices).
+ *
+ * This is the recommended entry point for any "Manage Subscription" or
+ * "Update Payment Method" button throughout the app.
+ *
+ * @param userId - The Supabase user ID
+ * @param returnUrl - Where to send the user after they close the portal
+ *                    (defaults to current origin /settings)
+ * @param options.newTab - Open in a new tab (default: true). Set to false to
+ *                         redirect the current window.
+ * @returns The portal URL (also opens it automatically)
+ */
+export async function openCustomerPortal(
+  userId: string,
+  returnUrl?: string,
+  options: { newTab?: boolean } = {}
+): Promise<string> {
+  const { newTab = true } = options;
+  const finalReturnUrl = returnUrl || `${getOrigin()}/?screen=settings`;
+
+  const { url } = await createPortalSession(userId, finalReturnUrl);
+
+  if (newTab) {
+    window.open(url, '_blank', 'noopener,noreferrer');
+  } else {
+    window.location.href = url;
+  }
+
+  return url;
 }
 
 /**
@@ -442,20 +476,26 @@ export async function validatePromoCode(
   error?: string;
 }> {
   try {
-    const response = await fetch(`${EDGE_FUNCTION_BASE}/payments/validate-promo`, {
+    const { data, ok } = await secureFetch<{
+      valid: boolean;
+      description?: string;
+      type?: 'percent' | 'fixed';
+      value?: number;
+      discountAmount?: number;
+      error?: string;
+    }>(`${EDGE_FUNCTION_BASE}/payments/validate-promo`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
         'Authorization': `Bearer ${publicAnonKey}`,
       },
       body: JSON.stringify({ code, subtotal }),
     });
 
-    if (!response.ok) {
+    if (!ok || !data) {
       return { valid: false, error: 'Validation failed' };
     }
 
-    return await response.json();
+    return data;
   } catch (error) {
     console.error('Promo validation error:', error);
     return { valid: false, error: 'Network error' };
@@ -557,13 +597,12 @@ export async function createBundleCheckoutSession({
     throw new Error(`Unknown bundle ID: ${bundleId}`);
   }
 
-  const response = await fetch(
+  const { data, error, ok } = await secureFetch<CheckoutResponse>(
     `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/payments/create-bundle-checkout`,
     {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         userId,
@@ -587,12 +626,11 @@ export async function createBundleCheckoutSession({
     }
   );
 
-  if (!response.ok) {
-    const error = await response.text();
-    throw new Error(`Failed to create bundle checkout session: ${error}`);
+  if (!ok || error) {
+    throw new Error(`Failed to create bundle checkout session: ${error || 'Unknown error'}`);
   }
 
-  return response.json();
+  return data!;
 }
 
 /**
@@ -607,18 +645,22 @@ export async function getBundleCredits(userId: string): Promise<{
   const accessToken = getAccessToken();
 
   try {
-    const response = await fetch(
+    const { data, ok } = await secureFetch<{
+      consultCredits: number;
+      deepReviewCredits: number;
+      expiresAt: string | null;
+      bundleId: string | null;
+    }>(
       `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/payments/bundle-credits/${userId}`,
       {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
         },
       }
     );
 
-    if (!response.ok) {
+    if (!ok || !data) {
       // No credits found
       return {
         consultCredits: 0,
@@ -628,7 +670,7 @@ export async function getBundleCredits(userId: string): Promise<{
       };
     }
 
-    return response.json();
+    return data;
   } catch (error) {
     console.warn('[Stripe] Failed to fetch bundle credits:', error);
     return {
@@ -656,13 +698,12 @@ export async function useBundleCredit({
 }): Promise<{ success: boolean; remainingCredits: number }> {
   const accessToken = getAccessToken();
 
-  const response = await fetch(
+  const { data, error, ok } = await secureFetch<{ success: boolean; remainingCredits: number }>(
     `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/payments/use-bundle-credit`,
     {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         userId,
@@ -673,12 +714,119 @@ export async function useBundleCredit({
     }
   );
 
-  if (!response.ok) {
-    const error = await response.text();
-    throw new Error(`Failed to use bundle credit: ${error}`);
+  if (!ok || error) {
+    throw new Error(`Failed to use bundle credit: ${error || 'Unknown error'}`);
   }
 
-  return response.json();
+  return data!;
+}
+
+// ============================================================================
+// Subscription Pause / Resume Functions
+// ============================================================================
+
+export interface PauseStatus {
+  isPaused: boolean;
+  resumeDate: string | null;
+  pausedAt: string | null;
+  pauseDurationMonths: number | null;
+}
+
+/**
+ * Pause a subscription for a given duration.
+ * Sets `pause_collection` on the Stripe subscription via edge function.
+ *
+ * @param subscriptionId - Stripe subscription ID
+ * @param durationMonths - How many months to pause (1, 2, or 3)
+ */
+export async function pauseSubscription(
+  subscriptionId: string,
+  durationMonths: 1 | 2 | 3 = 1
+): Promise<{ success: boolean; resumeDate: string }> {
+  const accessToken = await getAccessToken();
+
+  const resumeDate = new Date();
+  resumeDate.setMonth(resumeDate.getMonth() + durationMonths);
+
+  const { data, error, ok } = await secureFetch<{ success: boolean; resumeDate: string }>(
+    `${EDGE_FUNCTION_BASE}/payments/pause-subscription`,
+    {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({
+        subscriptionId,
+        behavior: 'void', // Don't invoice during pause
+        resumesAt: Math.floor(resumeDate.getTime() / 1000),
+      }),
+    }
+  );
+
+  if (!ok || error) {
+    throw new Error(`Failed to pause subscription: ${error || 'Unknown error'}`);
+  }
+
+  return data!;
+}
+
+/**
+ * Resume a paused subscription immediately.
+ * Removes `pause_collection` from the Stripe subscription.
+ *
+ * @param subscriptionId - Stripe subscription ID
+ */
+export async function resumePausedSubscription(
+  subscriptionId: string
+): Promise<{ success: boolean }> {
+  const accessToken = await getAccessToken();
+
+  const { data, error, ok } = await secureFetch<{ success: boolean }>(
+    `${EDGE_FUNCTION_BASE}/payments/resume-paused-subscription`,
+    {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({ subscriptionId }),
+    }
+  );
+
+  if (!ok || error) {
+    throw new Error(`Failed to resume subscription: ${error || 'Unknown error'}`);
+  }
+
+  return data!;
+}
+
+/**
+ * Get the current pause status of a subscription.
+ */
+export async function getPauseStatus(
+  subscriptionId: string
+): Promise<PauseStatus> {
+  const accessToken = await getAccessToken();
+
+  try {
+    const { data, ok } = await secureFetch<PauseStatus>(
+      `${EDGE_FUNCTION_BASE}/payments/pause-status/${subscriptionId}`,
+      {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    if (!ok || !data) {
+      return { isPaused: false, resumeDate: null, pausedAt: null, pauseDurationMonths: null };
+    }
+
+    return data;
+  } catch (error) {
+    console.warn('[Stripe] Failed to get pause status:', error);
+    return { isPaused: false, resumeDate: null, pausedAt: null, pauseDurationMonths: null };
+  }
 }
 
 // ============================================================================
@@ -717,24 +865,22 @@ export async function getProrationPreview(
 ): Promise<ProrationPreview> {
   const accessToken = await getAccessToken();
 
-  const response = await fetch(
+  const { data, error, ok } = await secureFetch<ProrationPreview>(
     `${EDGE_FUNCTION_BASE}/payments/proration-preview`,
     {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ subscriptionId, newPriceId }),
     }
   );
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`Failed to get proration preview: ${errorText}`);
+  if (!ok || error) {
+    throw new Error(`Failed to get proration preview: ${error || 'Unknown error'}`);
   }
 
-  return response.json();
+  return data!;
 }
 
 /**
@@ -780,13 +926,15 @@ export async function changeTier(
     throw new Error(`No price configured for ${newTier} ${interval}`);
   }
 
-  const response = await fetch(
+  const { data: result, error, ok } = await secureFetch<{
+    effectiveDate?: string;
+    prorationPreview?: ProrationPreview;
+  }>(
     `${EDGE_FUNCTION_BASE}/payments/change-tier`,
     {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         userId,
@@ -804,12 +952,9 @@ export async function changeTier(
     }
   );
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`Failed to change tier: ${errorText}`);
+  if (!ok || error || !result) {
+    throw new Error(`Failed to change tier: ${error || 'Unknown error'}`);
   }
-
-  const result = await response.json();
 
   return {
     success: true,
@@ -822,9 +967,13 @@ export async function changeTier(
 export default {
   createCheckoutSession,
   createPortalSession,
+  openCustomerPortal,
   getSubscriptionStatus,
   cancelSubscription,
   resumeSubscription,
+  pauseSubscription,
+  resumePausedSubscription,
+  getPauseStatus,
   createOneTimePayment,
   createVisitPayment,
   calculateVisitPrice,

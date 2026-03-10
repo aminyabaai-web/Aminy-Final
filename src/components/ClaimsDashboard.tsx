@@ -36,6 +36,12 @@ import {
   Loader2,
 } from 'lucide-react';
 import { supabase } from '../utils/supabase/client';
+import { useAuditedAction } from '../hooks/useAuditedAction';
+import {
+  getDenialRecordsForPatient,
+  type DenialRecord,
+  type DenialCategory,
+} from '../lib/denial-management';
 
 const SuperbillGenerator = lazy(() => import('./SuperbillGenerator'));
 
@@ -281,13 +287,39 @@ function EmptyExpenseState() {
 // Spending Tab
 // ============================================================================
 
-function SpendingTab({ expenses, childName, loading }: { expenses: ExpenseRecord[]; childName: string; loading: boolean }) {
+function SpendingTab({ expenses, childName, loading, denials = [], loadingDenials = false }: {
+  expenses: ExpenseRecord[];
+  childName: string;
+  loading: boolean;
+  denials?: DenialRecord[];
+  loadingDenials?: boolean;
+}) {
   if (loading) return <LoadingSkeleton />;
-  if (expenses.length === 0) return <EmptyExpenseState />;
+  if (expenses.length === 0 && denials.length === 0) return <EmptyExpenseState />;
   const totalCharged = expenses.reduce((s, e) => s + e.totalCharged, 0);
   const insurancePaid = expenses.reduce((s, e) => s + e.insurancePaid, 0);
   const youPaid = expenses.reduce((s, e) => s + e.youPaid, 0);
   const pendingAmount = expenses.filter(e => e.status === 'pending').reduce((s, e) => s + e.totalCharged, 0);
+
+  // Denial aggregations
+  const activeDenials = denials.filter(d => d.status !== 'resolved' && d.status !== 'written-off');
+  const totalDeniedAmount = activeDenials.reduce((s, d) => s + d.deniedAmount, 0);
+
+  // Human-readable category labels
+  const categoryLabels: Record<DenialCategory, string> = {
+    'eligibility': 'Eligibility Issue',
+    'authorization': 'Missing Authorization',
+    'coding': 'Coding Error',
+    'timely-filing': 'Filed Too Late',
+    'duplicate': 'Duplicate Claim',
+    'medical-necessity': 'Medical Necessity',
+    'bundling': 'Bundling Issue',
+    'coordination-of-benefits': 'Benefits Coordination',
+    'missing-info': 'Missing Information',
+    'contractual': 'Contractual Adjustment',
+    'patient-responsibility': 'Patient Responsibility',
+    'other': 'Other',
+  };
 
   return (
     <div className="space-y-4">
@@ -316,6 +348,106 @@ function SpendingTab({ expenses, childName, loading }: { expenses: ExpenseRecord
           </div>
         </div>
       </div>
+
+      {/* ── Denial Alerts ──────────────────────────────────────────────── */}
+      {!loadingDenials && activeDenials.length > 0 && (
+        <div className="bg-white rounded-xl p-4 shadow-sm border border-red-100">
+          <h3 className="text-sm font-semibold text-gray-900 mb-1 flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 text-red-500" />
+            Denied Claims ({activeDenials.length})
+          </h3>
+          <p className="text-xs text-gray-500 mb-3">
+            {formatCurrency(totalDeniedAmount)} in claims need attention
+          </p>
+
+          <div className="space-y-3">
+            {activeDenials.slice(0, 5).map(denial => {
+              const daysUntilDeadline = denial.appealDeadline
+                ? Math.ceil((new Date(denial.appealDeadline).getTime() - Date.now()) / 86400000)
+                : null;
+              const isUrgent = daysUntilDeadline !== null && daysUntilDeadline <= 14;
+              const topAction = denial.suggestedActions?.[0];
+
+              return (
+                <div key={denial.id} className="border border-red-100 rounded-lg p-3 bg-red-50/40">
+                  <div className="flex items-start justify-between mb-1.5">
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-medium text-gray-900">
+                        {denial.payerName}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        Service: {denial.dateOfService} &middot; {categoryLabels[denial.category] || denial.category}
+                      </p>
+                    </div>
+                    <span className="text-sm font-bold text-red-700 ml-2 flex-shrink-0">
+                      {formatCurrency(denial.deniedAmount)}
+                    </span>
+                  </div>
+
+                  {/* Appeal deadline warning */}
+                  {daysUntilDeadline !== null && (
+                    <div className={`flex items-center gap-1.5 text-xs mt-1.5 ${
+                      isUrgent ? 'text-red-600 font-semibold' : 'text-amber-600'
+                    }`}>
+                      <Clock className="w-3 h-3 flex-shrink-0" />
+                      {daysUntilDeadline <= 0
+                        ? 'Appeal deadline passed'
+                        : `${daysUntilDeadline} days to appeal`}
+                    </div>
+                  )}
+
+                  {/* Suggested action */}
+                  {topAction && (
+                    <div className="mt-2 p-2 rounded-md bg-white border border-gray-100">
+                      <div className="flex items-start gap-1.5">
+                        <CheckCircle className="w-3.5 h-3.5 text-teal-500 mt-0.5 flex-shrink-0" />
+                        <div>
+                          <p className="text-xs font-medium text-gray-700">Recommended action</p>
+                          <p className="text-xs text-gray-600 mt-0.5">{topAction.description}</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Status badge */}
+                  <div className="flex items-center gap-2 mt-2">
+                    <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${
+                      denial.status === 'new' ? 'bg-red-100 text-red-700' :
+                      denial.status === 'appealed' ? 'bg-blue-100 text-blue-700' :
+                      denial.status === 'resubmitted' ? 'bg-amber-100 text-amber-700' :
+                      denial.status === 'under-review' ? 'bg-purple-100 text-purple-700' :
+                      'bg-gray-100 text-gray-600'
+                    }`}>
+                      {denial.status === 'new' ? 'New' :
+                       denial.status === 'appealed' ? 'Appealed' :
+                       denial.status === 'resubmitted' ? 'Resubmitted' :
+                       denial.status === 'under-review' ? 'Under Review' :
+                       denial.status === 'corrective-action' ? 'Action Needed' :
+                       denial.status}
+                    </span>
+                    {denial.priority === 'critical' && (
+                      <span className="text-xs text-red-600 font-semibold">⚠ Critical</span>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+
+            {activeDenials.length > 5 && (
+              <p className="text-xs text-gray-500 text-center pt-1">
+                + {activeDenials.length - 5} more denied claims
+              </p>
+            )}
+          </div>
+        </div>
+      )}
+
+      {loadingDenials && (
+        <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 flex items-center gap-2">
+          <Loader2 className="w-4 h-4 animate-spin text-teal-600" />
+          <span className="text-xs text-gray-500">Checking for denied claims...</span>
+        </div>
+      )}
 
       {/* Expense List */}
       <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
@@ -488,6 +620,7 @@ export default function ClaimsDashboard({
   childDOB,
   onBack,
 }: ClaimsDashboardProps) {
+  useAuditedAction('payment');
   const [activeTab, setActiveTab] = useState<TabId>('spending');
 
   // ── Real data state ──────────────────────────────────────────────────
@@ -497,6 +630,10 @@ export default function ClaimsDashboard({
   );
   const [loadingExpenses, setLoadingExpenses] = useState(true);
   const [expenseError, setExpenseError] = useState<string | null>(null);
+
+  // ── Denial records state ──────────────────────────────────────────────
+  const [denials, setDenials] = useState<DenialRecord[]>([]);
+  const [loadingDenials, setLoadingDenials] = useState(true);
 
   // ── Load expenses from Supabase superbills table ─────────────────────
   const loadExpenses = useCallback(async () => {
@@ -539,6 +676,29 @@ export default function ClaimsDashboard({
   useEffect(() => {
     loadExpenses();
   }, [loadExpenses]);
+
+  // ── Load denial records for this child ─────────────────────────────
+  const loadDenials = useCallback(async () => {
+    if (!childName) {
+      setLoadingDenials(false);
+      return;
+    }
+
+    setLoadingDenials(true);
+    try {
+      const records = await getDenialRecordsForPatient(childName);
+      setDenials(records);
+    } catch {
+      console.warn('[ClaimsDashboard] Failed to load denials');
+      setDenials([]);
+    } finally {
+      setLoadingDenials(false);
+    }
+  }, [childName]);
+
+  useEffect(() => {
+    loadDenials();
+  }, [loadDenials]);
 
   // ── Persist benefits whenever they change ────────────────────────────
   useEffect(() => {
@@ -595,7 +755,7 @@ export default function ClaimsDashboard({
       {/* Tab Content */}
       <div className="px-4 py-4">
         {activeTab === 'spending' && (
-          <SpendingTab expenses={expenses} childName={childName} loading={loadingExpenses} />
+          <SpendingTab expenses={expenses} childName={childName} loading={loadingExpenses} denials={denials} loadingDenials={loadingDenials} />
         )}
         {activeTab === 'coverage' && (
           <CoverageTab benefits={benefits} />

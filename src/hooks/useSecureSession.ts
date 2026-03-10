@@ -13,6 +13,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { User, Session } from '@supabase/supabase-js';
+import { syncEncryptedStorage } from '../lib/security/encrypted-storage';
 import { supabase } from '../utils/supabase/client';
 import { TierType } from '../lib/tier-utils';
 
@@ -143,8 +144,8 @@ export function useSecureSession(): UseSecureSessionReturn {
           setUser(profile);
         } else if (event === 'SIGNED_OUT') {
           setUser(null);
-          // Clear any legacy localStorage data
-          localStorage.removeItem('aminy-user');
+          // Clear any legacy localStorage data (encrypted + plain)
+          syncEncryptedStorage.removeItem('aminy-user');
         } else if (event === 'TOKEN_REFRESHED' && newSession?.user) {
           // Refresh profile on token refresh
           const profile = await fetchUserProfile(newSession.user);
@@ -187,8 +188,8 @@ export function useSecureSession(): UseSecureSessionReturn {
       setUser(null);
       setSession(null);
 
-      // Clear any legacy localStorage data
-      localStorage.removeItem('aminy-user');
+      // Clear any legacy localStorage data (encrypted + plain)
+      syncEncryptedStorage.removeItem('aminy-user');
     } catch (err) {
       console.error('Sign out error:', err);
       setError(err as Error);

@@ -758,7 +758,7 @@ export function BehaviorInterventionPlan({
                       value={ps.category}
                       onChange={e => {
                         const updated = [...bip.preventionStrategies];
-                        updated[index] = { ...ps, category: e.target.value as any };
+                        updated[index] = { ...ps, category: e.target.value as PreventionStrategy['category'] };
                         setBip(prev => ({ ...prev, preventionStrategies: updated }));
                       }}
                       className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-gray-900 dark:text-white"
@@ -829,7 +829,7 @@ export function BehaviorInterventionPlan({
                     value={rp.phase}
                     onChange={e => {
                       const updated = [...bip.responseProcedures];
-                      updated[index] = { ...rp, phase: e.target.value as any };
+                      updated[index] = { ...rp, phase: e.target.value as ResponseProcedure['phase'] };
                       setBip(prev => ({ ...prev, responseProcedures: updated }));
                     }}
                     className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-gray-900 dark:text-white"
@@ -881,7 +881,7 @@ export function BehaviorInterventionPlan({
               </label>
               <select
                 value={bip.dataCollectionMethod}
-                onChange={e => setBip(prev => ({ ...prev, dataCollectionMethod: e.target.value as any }))}
+                onChange={e => setBip(prev => ({ ...prev, dataCollectionMethod: e.target.value as BIPData['dataCollectionMethod'] }))}
                 className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
               >
                 <option value="frequency">Frequency Count</option>

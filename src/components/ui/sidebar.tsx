@@ -17,7 +17,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "./sheet";
-import { Skeleton } from "./skeleton";
+import { Skeleton } from "./Skeleton";
 import {
   Tooltip,
   TooltipContent,

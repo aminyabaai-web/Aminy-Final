@@ -1018,10 +1018,32 @@ export function getAllLocalGroups(): LocalCommunityGroup[] {
 import { supabase } from '../utils/supabase/client';
 import { createCommunityNotification } from './notification-system';
 
-// localStorage keys for fallback
-const POSTS_STORAGE_KEY = 'aminy_community_posts';
-const COMMENTS_STORAGE_KEY = 'aminy_community_comments';
-const LIKES_STORAGE_KEY = 'aminy_community_likes';
+// ── Cache helpers — shared contract with useCommunityData hook ──
+// The hook writes Supabase-first + caches here; service reads from cache as fallback.
+const CACHE_KEYS = {
+  POSTS: 'aminy_community_posts',
+  COMMENTS: 'aminy_community_comments',
+  LIKES: 'aminy_community_likes',
+  FOLLOWS: 'aminy_community_follows',
+  BOOKMARKS_PREFIX: 'aminy_bookmarks_', // + userId
+} as const;
+
+function readCache<T>(key: string, fallback: T): T {
+  if (typeof window === 'undefined') return fallback;
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function writeCache(key: string, value: unknown): void {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch { /* storage full or blocked */ }
+}
 
 // Helper to convert DB row to CommunityPost
 function dbRowToPost(row: Record<string, unknown>): CommunityPost {
@@ -1064,35 +1086,17 @@ function dbRowToComment(row: Record<string, unknown>): CommunityComment {
   };
 }
 
-// localStorage fallback functions
+// Cache-backed fallback readers (shared keys with useCommunityData hook)
 function getLocalPosts(): CommunityPost[] {
-  if (typeof window === 'undefined') return SEED_POSTS;
-  try {
-    const stored = localStorage.getItem(POSTS_STORAGE_KEY);
-    return stored ? JSON.parse(stored) : SEED_POSTS;
-  } catch {
-    return SEED_POSTS;
-  }
+  return readCache<CommunityPost[]>(CACHE_KEYS.POSTS, SEED_POSTS);
 }
 
 function getLocalComments(): Record<string, CommunityComment[]> {
-  if (typeof window === 'undefined') return {};
-  try {
-    const stored = localStorage.getItem(COMMENTS_STORAGE_KEY);
-    return stored ? JSON.parse(stored) : {};
-  } catch {
-    return {};
-  }
+  return readCache<Record<string, CommunityComment[]>>(CACHE_KEYS.COMMENTS, {});
 }
 
 function getLocalLikes(): Record<string, string[]> {
-  if (typeof window === 'undefined') return {};
-  try {
-    const stored = localStorage.getItem(LIKES_STORAGE_KEY);
-    return stored ? JSON.parse(stored) : {};
-  } catch {
-    return {};
-  }
+  return readCache<Record<string, string[]>>(CACHE_KEYS.LIKES, {});
 }
 
 /**
@@ -1157,7 +1161,7 @@ export async function createPost(
 
     const posts = getLocalPosts();
     posts.unshift(newPost);
-    localStorage.setItem(POSTS_STORAGE_KEY, JSON.stringify(posts));
+    writeCache(CACHE_KEYS.POSTS, posts);
     return newPost;
   }
 }
@@ -1254,8 +1258,8 @@ export async function likePost(postId: string, userId: string, userName?: string
       posts[postIndex].likeCount = Math.max(0, posts[postIndex].likeCount - 1);
     }
 
-    localStorage.setItem(POSTS_STORAGE_KEY, JSON.stringify(posts));
-    localStorage.setItem(LIKES_STORAGE_KEY, JSON.stringify(likes));
+    writeCache(CACHE_KEYS.POSTS, posts);
+    writeCache(CACHE_KEYS.LIKES, likes);
     return posts[postIndex];
   }
 }
@@ -1331,15 +1335,15 @@ export async function addComment(
     const comments = getLocalComments();
     if (!comments[postId]) comments[postId] = [];
     comments[postId].push(newComment);
-    localStorage.setItem(COMMENTS_STORAGE_KEY, JSON.stringify(comments));
+    writeCache(CACHE_KEYS.COMMENTS, comments);
 
-    // Update post comment count in localStorage
+    // Update post comment count in cache
     const posts = getLocalPosts();
     const postIndex = posts.findIndex(p => p.id === postId);
     if (postIndex !== -1) {
       posts[postIndex].commentCount++;
       posts[postIndex].updatedAt = new Date().toISOString();
-      localStorage.setItem(POSTS_STORAGE_KEY, JSON.stringify(posts));
+      writeCache(CACHE_KEYS.POSTS, posts);
 
       // Send notification to post author (localStorage fallback)
       if (posts[postIndex].userId !== comment.userId) {
@@ -1496,7 +1500,7 @@ export async function deletePost(postId: string, userId: string): Promise<boolea
 
     posts[postIndex].moderationStatus = 'removed';
     posts[postIndex].updatedAt = new Date().toISOString();
-    localStorage.setItem(POSTS_STORAGE_KEY, JSON.stringify(posts));
+    writeCache(CACHE_KEYS.POSTS, posts);
     return true;
   }
 }
@@ -1517,17 +1521,17 @@ export async function bookmarkPost(postId: string, userId: string): Promise<Comm
       .single();
 
     // Also store in user's local bookmarks for quick access
-    const bookmarksKey = `aminy_bookmarks_${userId}`;
-    const userBookmarks = JSON.parse(localStorage.getItem(bookmarksKey) || '[]');
+    const bookmarksKey = `${CACHE_KEYS.BOOKMARKS_PREFIX}${userId}`;
+    const userBookmarks = readCache<string[]>(bookmarksKey, []);
     if (!userBookmarks.includes(postId)) {
       userBookmarks.push(postId);
-      localStorage.setItem(bookmarksKey, JSON.stringify(userBookmarks));
+      writeCache(bookmarksKey, userBookmarks);
     }
 
     if (error) throw error;
     return dbRowToPost(data);
   } catch (err) {
-    console.warn('[Community] Supabase error in bookmarkPost, using localStorage:', err);
+    console.warn('[Community] Supabase error in bookmarkPost, using cache:', err);
 
     const posts = getLocalPosts();
     const postIndex = posts.findIndex(p => p.id === postId);
@@ -1536,13 +1540,13 @@ export async function bookmarkPost(postId: string, userId: string): Promise<Comm
 
     posts[postIndex].bookmarkCount++;
     posts[postIndex].updatedAt = new Date().toISOString();
-    localStorage.setItem(POSTS_STORAGE_KEY, JSON.stringify(posts));
+    writeCache(CACHE_KEYS.POSTS, posts);
 
-    const bookmarksKey = `aminy_bookmarks_${userId}`;
-    const userBookmarks = JSON.parse(localStorage.getItem(bookmarksKey) || '[]');
+    const bookmarksKey = `${CACHE_KEYS.BOOKMARKS_PREFIX}${userId}`;
+    const userBookmarks = readCache<string[]>(bookmarksKey, []);
     if (!userBookmarks.includes(postId)) {
       userBookmarks.push(postId);
-      localStorage.setItem(bookmarksKey, JSON.stringify(userBookmarks));
+      writeCache(bookmarksKey, userBookmarks);
     }
 
     return posts[postIndex];
@@ -1553,8 +1557,8 @@ export async function bookmarkPost(postId: string, userId: string): Promise<Comm
  * Get user's bookmarked posts
  */
 export async function getUserBookmarks(userId: string): Promise<CommunityPost[]> {
-  const bookmarksKey = `aminy_bookmarks_${userId}`;
-  const bookmarkIds = JSON.parse(localStorage.getItem(bookmarksKey) || '[]') as string[];
+  const bookmarksKey = `${CACHE_KEYS.BOOKMARKS_PREFIX}${userId}`;
+  const bookmarkIds = readCache<string[]>(bookmarksKey, []);
 
   if (bookmarkIds.length === 0) return [];
 
@@ -1577,8 +1581,6 @@ export async function getUserBookmarks(userId: string): Promise<CommunityPost[]>
 // FOLLOW SYSTEM
 // ============================================================================
 
-const FOLLOWS_STORAGE_KEY = 'aminy_community_follows';
-
 export interface FollowRelationship {
   followerId: string;
   followingId: string;
@@ -1586,20 +1588,17 @@ export interface FollowRelationship {
 }
 
 /**
- * Get local follows from localStorage (for offline/fallback support)
+ * Get local follows from cache (for offline/fallback support)
  */
 function getLocalFollows(): FollowRelationship[] {
-  if (typeof window === 'undefined') return [];
-  const stored = localStorage.getItem(FOLLOWS_STORAGE_KEY);
-  return stored ? JSON.parse(stored) : [];
+  return readCache<FollowRelationship[]>(CACHE_KEYS.FOLLOWS, []);
 }
 
 /**
- * Save follows to localStorage
+ * Save follows to cache
  */
 function saveLocalFollows(follows: FollowRelationship[]): void {
-  if (typeof window === 'undefined') return;
-  localStorage.setItem(FOLLOWS_STORAGE_KEY, JSON.stringify(follows));
+  writeCache(CACHE_KEYS.FOLLOWS, follows);
 }
 
 /**

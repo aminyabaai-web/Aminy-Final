@@ -1,7 +1,11 @@
 /**
- * Service Worker Registration & Management
+ * Service Worker Utilities
  *
- * Handles registering the service worker and managing offline functionality.
+ * Utility functions for offline detection and connectivity monitoring.
+ *
+ * NOTE: Service worker registration is handled automatically by VitePWA
+ * (vite-plugin-pwa) with registerType: 'autoUpdate'. Do NOT manually
+ * register a service worker here — it will conflict with Workbox.
  */
 
 export interface ServiceWorkerStatus {
@@ -11,8 +15,6 @@ export interface ServiceWorkerStatus {
   registration?: ServiceWorkerRegistration;
 }
 
-let swRegistration: ServiceWorkerRegistration | null = null;
-
 /**
  * Check if service workers are supported
  */
@@ -21,73 +23,14 @@ export function isServiceWorkerSupported(): boolean {
 }
 
 /**
- * Register the service worker
- */
-export async function registerServiceWorker(): Promise<ServiceWorkerRegistration | null> {
-  if (!isServiceWorkerSupported()) {
-    if (import.meta.env.DEV) console.log('[SW] Service workers not supported');
-    return null;
-  }
-
-  try {
-    const registration = await navigator.serviceWorker.register('/sw.js', {
-      scope: '/',
-    });
-
-    swRegistration = registration;
-
-    if (import.meta.env.DEV) console.log('[SW] Service worker registered:', registration.scope);
-
-    // Handle updates
-    registration.addEventListener('updatefound', () => {
-      const newWorker = registration.installing;
-      if (newWorker) {
-        newWorker.addEventListener('statechange', () => {
-          if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-            // New version available
-            if (import.meta.env.DEV) console.log('[SW] New version available');
-            dispatchEvent(new CustomEvent('sw-update-available'));
-          }
-        });
-      }
-    });
-
-    return registration;
-  } catch (error) {
-    console.error('[SW] Registration failed:', error);
-    return null;
-  }
-}
-
-/**
- * Unregister the service worker
- */
-export async function unregisterServiceWorker(): Promise<boolean> {
-  if (!swRegistration) {
-    return false;
-  }
-
-  try {
-    const success = await swRegistration.unregister();
-    if (success) {
-      swRegistration = null;
-    }
-    return success;
-  } catch (error) {
-    console.error('[SW] Unregistration failed:', error);
-    return false;
-  }
-}
-
-/**
  * Get current service worker status
  */
 export async function getServiceWorkerStatus(): Promise<ServiceWorkerStatus> {
   const isSupported = isServiceWorkerSupported();
-  const isOnline = navigator.onLine;
+  const online = navigator.onLine;
 
   if (!isSupported) {
-    return { isSupported, isRegistered: false, isOnline };
+    return { isSupported, isRegistered: false, isOnline: online };
   }
 
   try {
@@ -95,11 +38,11 @@ export async function getServiceWorkerStatus(): Promise<ServiceWorkerStatus> {
     return {
       isSupported,
       isRegistered: !!registration,
-      isOnline,
+      isOnline: online,
       registration: registration || undefined,
     };
   } catch {
-    return { isSupported, isRegistered: false, isOnline };
+    return { isSupported, isRegistered: false, isOnline: online };
   }
 }
 
@@ -128,13 +71,15 @@ export function onConnectivityChange(callback: (isOnline: boolean) => void): () 
 
 /**
  * Skip waiting and activate new service worker
+ * Works with the VitePWA-generated service worker.
  */
 export async function skipWaitingAndReload(): Promise<void> {
-  if (!swRegistration?.waiting) {
+  const registration = await navigator.serviceWorker.getRegistration();
+  if (!registration?.waiting) {
     return;
   }
 
-  swRegistration.waiting.postMessage({ type: 'SKIP_WAITING' });
+  registration.waiting.postMessage({ type: 'SKIP_WAITING' });
 
   // Reload when the new service worker takes over
   navigator.serviceWorker.addEventListener('controllerchange', () => {
@@ -166,13 +111,4 @@ export async function isResourceCached(url: string): Promise<boolean> {
   }
 
   return false;
-}
-
-/**
- * Precache specific URLs
- */
-export async function precacheUrls(urls: string[]): Promise<void> {
-  const cache = await caches.open('aminy-v1');
-  await cache.addAll(urls);
-  if (import.meta.env.DEV) console.log('[SW] Precached URLs:', urls);
 }

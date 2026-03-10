@@ -425,7 +425,7 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
             <Card className="p-3 sm:p-4">
               <h4 className="font-semibold text-slate-900 mb-2">What happens after my free trial?</h4>
               <p className="text-sm text-slate-600">
-                After your 7-day trial, you'll continue on your chosen plan (Core $14.99/mo, Pro $29.99/mo, or Pro+ $49.99/mo).
+                After your 7-day trial, you'll continue on your chosen plan (Core ${tierPricing.core.monthly}/mo, Pro ${tierPricing.pro.monthly}/mo, or Pro+ ${tierPricing.proplus.monthly}/mo).
                 You'll receive reminder emails at days 4 and 6, and can cancel anytime before the trial ends.
               </p>
             </Card>

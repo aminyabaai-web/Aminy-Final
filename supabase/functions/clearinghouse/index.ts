@@ -1,24 +1,45 @@
 /**
  * Clearinghouse Edge Function
  *
- * Handles secure communication with healthcare clearinghouses (Availity, Waystar)
- * API keys are stored in Supabase secrets, not exposed to client
+ * Handles secure communication with healthcare clearinghouses and third-party APIs.
+ * ALL API keys are stored in Supabase secrets — never exposed to the client.
  *
- * Endpoints:
- * POST /eligibility - Check insurance eligibility (270/271)
- * POST /claims - Submit claims (837P)
- * POST /claim-status - Check claim status (276/277)
+ * Supported actions (via POST body.action):
+ *   eligibility      - Check insurance eligibility (270/271) via Availity
+ *   submit_claim     - Submit claims (837P/837I) via Availity
+ *   claim_status     - Check claim status (276/277) via Availity
+ *   get_remittance   - Fetch remittance advice (835) via Availity
+ *   background_check - Proxy Checkr API calls for provider background checks
+ *   prior_auth       - Submit prior authorization (stub)
+ *
+ * Also supports legacy path-based routing:
+ *   POST /eligibility, /claims, /claim-status
+ *   GET  /health
  */
 
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-// Environment variables (stored in Supabase secrets)
+// ── Environment variables (stored in Supabase secrets) ──────────────────────
+
+// Availity
 const AVAILITY_CLIENT_ID = Deno.env.get('AVAILITY_CLIENT_ID') || '';
 const AVAILITY_CLIENT_SECRET = Deno.env.get('AVAILITY_CLIENT_SECRET') || '';
 const AVAILITY_API_URL = Deno.env.get('AVAILITY_API_URL') || 'https://api.availity.com';
 const AVAILITY_OAUTH_URL = Deno.env.get('AVAILITY_OAUTH_URL') || 'https://api.availity.com/oauth2/token';
 
+// Waystar
+const WAYSTAR_API_KEY = Deno.env.get('WAYSTAR_API_KEY') || '';
+const WAYSTAR_API_URL = Deno.env.get('WAYSTAR_API_URL') || 'https://api.waystar.com';
+
+// Checkr (background checks)
+const CHECKR_API_KEY = Deno.env.get('CHECKR_API_KEY') || '';
+const CHECKR_ENV = Deno.env.get('CHECKR_ENV') || 'staging';
+const CHECKR_API_BASE = CHECKR_ENV === 'production'
+  ? 'https://api.checkr.com'
+  : 'https://api.checkr-staging.com';
+
+// Supabase
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL') || '';
 const SUPABASE_SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || '';
 
@@ -28,24 +49,27 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-// Token cache
+// ── Helpers ─────────────────────────────────────────────────────────────────
+
+function jsonResponse(data: unknown, status = 200): Response {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+  });
+}
+
+// ── Availity Token Cache ────────────────────────────────────────────────────
+
 let availityToken: { token: string; expiresAt: number } | null = null;
 
-/**
- * Get Availity OAuth token
- */
 async function getAvailityToken(): Promise<string> {
-  // Check cache
   if (availityToken && availityToken.expiresAt > Date.now()) {
     return availityToken.token;
   }
 
-  // Request new token
   const response = await fetch(AVAILITY_OAUTH_URL, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams({
       grant_type: 'client_credentials',
       client_id: AVAILITY_CLIENT_ID,
@@ -60,43 +84,40 @@ async function getAvailityToken(): Promise<string> {
   }
 
   const data = await response.json();
-
-  // Cache token (expires in ~1 hour typically)
   availityToken = {
     token: data.access_token,
-    expiresAt: Date.now() + (data.expires_in - 60) * 1000, // Subtract 60s buffer
+    expiresAt: Date.now() + (data.expires_in - 60) * 1000,
   };
 
   return data.access_token;
 }
 
-/**
- * Check if Availity is configured
- */
 function isAvailityConfigured(): boolean {
   return !!(AVAILITY_CLIENT_ID && AVAILITY_CLIENT_SECRET);
 }
 
-/**
- * Verify request authorization
- */
+function isWaystarConfigured(): boolean {
+  return !!WAYSTAR_API_KEY;
+}
+
+function isCheckrConfigured(): boolean {
+  return !!CHECKR_API_KEY;
+}
+
+// ── Auth & Audit ────────────────────────────────────────────────────────────
+
 async function verifyAuth(req: Request): Promise<{ userId: string; role: string } | null> {
   const authHeader = req.headers.get('authorization');
   if (!authHeader) return null;
 
   const token = authHeader.replace('Bearer ', '');
-
   const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
   const { data: { user }, error } = await supabase.auth.getUser(token);
 
   if (error || !user) return null;
-
   return { userId: user.id, role: user.user_metadata?.role || 'parent' };
 }
 
-/**
- * Log audit trail for HIPAA compliance
- */
 async function logAuditEvent(
   userId: string,
   action: string,
@@ -104,7 +125,6 @@ async function logAuditEvent(
   details: Record<string, unknown>
 ): Promise<void> {
   const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
-
   await supabase.from('audit_log').insert({
     user_id: userId,
     action,
@@ -114,9 +134,8 @@ async function logAuditEvent(
   }).catch(err => console.warn('Audit log failed:', err));
 }
 
-/**
- * Check eligibility via Availity
- */
+// ── Availity: Eligibility ───────────────────────────────────────────────────
+
 async function checkEligibility(request: {
   memberId: string;
   memberDob: string;
@@ -129,7 +148,6 @@ async function checkEligibility(request: {
   serviceCodes?: string[];
 }): Promise<Record<string, unknown>> {
   if (!isAvailityConfigured()) {
-    // Return mock response for development
     return {
       success: true,
       mock: true,
@@ -165,7 +183,6 @@ async function checkEligibility(request: {
   }
 
   const token = await getAvailityToken();
-
   const response = await fetch(`${AVAILITY_API_URL}/availity/v1/coverages`, {
     method: 'POST',
     headers: {
@@ -191,16 +208,11 @@ async function checkEligibility(request: {
   }
 
   const data = await response.json();
-  return {
-    success: true,
-    ...data,
-    timestamp: new Date().toISOString(),
-  };
+  return { success: true, ...data, timestamp: new Date().toISOString() };
 }
 
-/**
- * Submit claim via Availity
- */
+// ── Availity: Claims ────────────────────────────────────────────────────────
+
 async function submitClaim(claim: {
   claimType: 'professional' | 'institutional';
   billingProvider: Record<string, unknown>;
@@ -211,6 +223,7 @@ async function submitClaim(claim: {
   services: Array<Record<string, unknown>>;
   totalCharges: number;
   priorAuthNumber?: string;
+  ediPayload?: string;
 }): Promise<Record<string, unknown>> {
   if (!isAvailityConfigured()) {
     return {
@@ -225,9 +238,7 @@ async function submitClaim(claim: {
   }
 
   const token = await getAvailityToken();
-
-  // Build EDI 837P payload
-  const edi837P = buildEDI837P(claim);
+  const ediPayload = claim.ediPayload || buildEDI837P(claim);
 
   const response = await fetch(`${AVAILITY_API_URL}/availity/v1/claims`, {
     method: 'POST',
@@ -237,7 +248,7 @@ async function submitClaim(claim: {
     },
     body: JSON.stringify({
       claimType: claim.claimType === 'professional' ? '837P' : '837I',
-      ediPayload: edi837P,
+      ediPayload,
     }),
   });
 
@@ -249,9 +260,8 @@ async function submitClaim(claim: {
   return await response.json();
 }
 
-/**
- * Check claim status via Availity
- */
+// ── Availity: Claim Status ──────────────────────────────────────────────────
+
 async function checkClaimStatus(request: {
   claimControlNumber?: string;
   memberId: string;
@@ -259,6 +269,8 @@ async function checkClaimStatus(request: {
   serviceDateFrom: string;
   serviceDateTo?: string;
   providerNpi: string;
+  ediPayload?: string;
+  format?: string;
 }): Promise<Record<string, unknown>> {
   if (!isAvailityConfigured()) {
     return {
@@ -278,13 +290,18 @@ async function checkClaimStatus(request: {
 
   const token = await getAvailityToken();
 
+  // Support raw EDI 276 payload pass-through
+  const payload = request.format === '276' && request.ediPayload
+    ? { format: '276', payload: request.ediPayload }
+    : request;
+
   const response = await fetch(`${AVAILITY_API_URL}/availity/v1/claim-statuses`, {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(request),
+    body: JSON.stringify(payload),
   });
 
   if (!response.ok) {
@@ -294,18 +311,88 @@ async function checkClaimStatus(request: {
   return await response.json();
 }
 
-/**
- * Build EDI 837P format (simplified)
- */
+// ── Availity: Remittance ────────────────────────────────────────────────────
+
+async function getRemittance(request: {
+  providerNpi: string;
+  dateFrom?: string;
+  dateTo?: string;
+}): Promise<Record<string, unknown>> {
+  if (!isAvailityConfigured()) {
+    return { success: true, mock: true, eraFiles: [] };
+  }
+
+  const token = await getAvailityToken();
+  const response = await fetch(`${AVAILITY_API_URL}/availity/v1/remittances`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      providerNPI: request.providerNpi,
+      dateFrom: request.dateFrom,
+      dateTo: request.dateTo,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Availity remittance fetch failed: ${response.status}`);
+  }
+
+  return await response.json();
+}
+
+// ── Checkr: Background Check Proxy ──────────────────────────────────────────
+
+async function proxyCheckr(request: {
+  method: 'GET' | 'POST';
+  path: string;
+  body?: Record<string, unknown>;
+}): Promise<Record<string, unknown>> {
+  if (!isCheckrConfigured()) {
+    return {
+      success: false,
+      error: 'Checkr API key not configured. Set CHECKR_API_KEY in Supabase secrets.',
+    };
+  }
+
+  const url = `${CHECKR_API_BASE}${request.path}`;
+  const headers: Record<string, string> = {
+    'Authorization': `Basic ${btoa(CHECKR_API_KEY + ':')}`,
+    'Content-Type': 'application/json',
+  };
+
+  const options: RequestInit = {
+    method: request.method,
+    headers,
+    ...(request.body && request.method === 'POST' ? { body: JSON.stringify(request.body) } : {}),
+  };
+
+  const response = await fetch(url, options);
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    return {
+      success: false,
+      error: `Checkr API error (${response.status}): ${errorText}`,
+      httpStatus: response.status,
+    };
+  }
+
+  const data = await response.json();
+  return { success: true, ...data };
+}
+
+// ── EDI 837P stub (server-side) ─────────────────────────────────────────────
+
 function buildEDI837P(claim: Record<string, unknown>): string {
-  // In production, use proper EDI library
-  // This is a placeholder that returns claim as JSON
-  // Real implementation would format per X12 837P spec
   const controlNumber = Math.floor(Math.random() * 1000000000).toString().padStart(9, '0');
   return JSON.stringify({ ...claim, controlNumber });
 }
 
-// Main handler
+// ── Main Handler ────────────────────────────────────────────────────────────
+
 serve(async (req: Request) => {
   // Handle CORS preflight
   if (req.method === 'OPTIONS') {
@@ -316,83 +403,102 @@ serve(async (req: Request) => {
     // Verify authentication
     const auth = await verifyAuth(req);
     if (!auth) {
-      return new Response(
-        JSON.stringify({ error: 'Unauthorized' }),
-        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
+      return jsonResponse({ error: 'Unauthorized' }, 401);
     }
 
     const url = new URL(req.url);
     const path = url.pathname.replace('/clearinghouse', '');
 
-    // Route requests
+    // ── Health check (GET) ────────────────────────────────────────────
+    if (req.method === 'GET' && (path === '/health' || path === '')) {
+      return jsonResponse({
+        status: 'ok',
+        availityConfigured: isAvailityConfigured(),
+        waystarConfigured: isWaystarConfigured(),
+        checkrConfigured: isCheckrConfigured(),
+        timestamp: new Date().toISOString(),
+      });
+    }
+
+    // ── POST actions ──────────────────────────────────────────────────
     if (req.method === 'POST') {
       const body = await req.json();
+      const action = body.action || '';
 
-      if (path === '/eligibility' || path === '' && body.action === 'eligibility') {
-        // Log audit event
+      // Eligibility
+      if (path === '/eligibility' || action === 'eligibility') {
         await logAuditEvent(auth.userId, 'eligibility_check', 'insurance', {
           payerId: body.payerId,
-          memberId: body.memberId?.slice(-4), // Only log last 4 digits for privacy
+          memberId: body.memberId?.slice(-4),
         });
-
         const result = await checkEligibility(body);
-        return new Response(
-          JSON.stringify(result),
-          { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        );
+        return jsonResponse(result);
       }
 
-      if (path === '/claims' || path === '' && body.action === 'submit_claim') {
-        // Log audit event
+      // Submit claim
+      if (path === '/claims' || action === 'submit_claim') {
         await logAuditEvent(auth.userId, 'claim_submit', 'claim', {
           payerId: body.payer?.payerId,
           totalCharges: body.totalCharges,
         });
-
         const result = await submitClaim(body);
-        return new Response(
-          JSON.stringify(result),
-          { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        );
+        return jsonResponse(result);
       }
 
-      if (path === '/claim-status' || path === '' && body.action === 'claim_status') {
-        // Log audit event
+      // Claim status
+      if (path === '/claim-status' || action === 'claim_status') {
         await logAuditEvent(auth.userId, 'claim_status_check', 'claim', {
           claimControlNumber: body.claimControlNumber,
         });
-
         const result = await checkClaimStatus(body);
-        return new Response(
-          JSON.stringify(result),
-          { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        );
+        return jsonResponse(result);
+      }
+
+      // Remittance advice (ERA 835)
+      if (action === 'get_remittance') {
+        await logAuditEvent(auth.userId, 'remittance_fetch', 'remittance', {
+          providerNpi: body.providerNpi,
+        });
+        const result = await getRemittance(body);
+        return jsonResponse(result);
+      }
+
+      // Background check (Checkr proxy)
+      if (action === 'background_check') {
+        await logAuditEvent(auth.userId, 'background_check', 'provider', {
+          checkrPath: body.path,
+          checkrMethod: body.method,
+        });
+        const result = await proxyCheckr({
+          method: body.method || 'POST',
+          path: body.path,
+          body: body.body,
+        });
+        return jsonResponse(result, result.success === false ? 502 : 200);
+      }
+
+      // Prior authorization (stub)
+      if (action === 'prior_auth') {
+        await logAuditEvent(auth.userId, 'prior_auth', 'authorization', {
+          payerId: body.payerId,
+          serviceCode: body.serviceCode,
+        });
+        return jsonResponse({
+          success: true,
+          mock: true,
+          referenceNumber: `PA-${Date.now()}`,
+          message: 'Prior auth submission is a stub - implement when EDI 278 support is ready',
+        });
       }
     }
 
-    // Health check
-    if (req.method === 'GET' && (path === '/health' || path === '')) {
-      return new Response(
-        JSON.stringify({
-          status: 'ok',
-          availityConfigured: isAvailityConfigured(),
-          timestamp: new Date().toISOString(),
-        }),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
-    return new Response(
-      JSON.stringify({ error: 'Not found' }),
-      { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
+    return jsonResponse({ error: 'Not found' }, 404);
 
   } catch (error) {
     console.error('Clearinghouse function error:', error);
-    return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : 'Internal error' }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    return jsonResponse(
+      { error: error instanceof Error ? error.message : 'Internal error' },
+      500
     );
   }
 });

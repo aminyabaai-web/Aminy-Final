@@ -4,26 +4,37 @@
 -- ============================================================================
 
 -- Visit Summaries Table
-CREATE TABLE IF NOT EXISTS visit_summaries (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  appointment_id UUID REFERENCES telehealth_appointments(id) ON DELETE SET NULL,
-  provider_id UUID REFERENCES providers(id) ON DELETE SET NULL,
+-- [MIGRATION FIX] Table visit_summaries created in earlier migration.
+-- Adding columns that would have been lost due to IF NOT EXISTS:
+-- Original CREATE TABLE commented out below.
+ALTER TABLE visit_summaries ADD COLUMN IF NOT EXISTS what_we_discussed TEXT[] NOT NULL DEFAULT '{}';
+ALTER TABLE visit_summaries ADD COLUMN IF NOT EXISTS plan_for_next_7_days TEXT[] NOT NULL DEFAULT '{}';
+ALTER TABLE visit_summaries ADD COLUMN IF NOT EXISTS what_to_track TEXT[] NOT NULL DEFAULT '{}';
+ALTER TABLE visit_summaries ADD COLUMN IF NOT EXISTS follow_up_recommendation TEXT;
+ALTER TABLE visit_summaries ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW();
 
-  -- Visit details
-  reason_for_visit TEXT NOT NULL,
-  what_we_discussed TEXT[] NOT NULL DEFAULT '{}',
-  plan_for_next_7_days TEXT[] NOT NULL DEFAULT '{}',
-  what_to_track TEXT[] NOT NULL DEFAULT '{}',
-  follow_up_recommendation TEXT,
+-- Original CREATE TABLE (commented out, columns added above):
+-- CREATE TABLE IF NOT EXISTS visit_summaries (
+--   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+--   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+--   appointment_id UUID REFERENCES telehealth_appointments(id) ON DELETE SET NULL,
+--   provider_id UUID REFERENCES providers(id) ON DELETE SET NULL,
+-- 
+--   -- Visit details
+--   reason_for_visit TEXT NOT NULL,
+--   what_we_discussed TEXT[] NOT NULL DEFAULT '{}',
+--   plan_for_next_7_days TEXT[] NOT NULL DEFAULT '{}',
+--   what_to_track TEXT[] NOT NULL DEFAULT '{}',
+--   follow_up_recommendation TEXT,
+-- 
+--   -- Child context (optional)
+--   child_id UUID REFERENCES child_profiles(id) ON DELETE SET NULL,
+-- 
+--   -- Timestamps
+--   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+--   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+-- );
 
-  -- Child context (optional)
-  child_id UUID REFERENCES child_profiles(id) ON DELETE SET NULL,
-
-  -- Timestamps
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
 
 -- Create indexes
 CREATE INDEX IF NOT EXISTS idx_visit_summaries_user_id ON visit_summaries(user_id);

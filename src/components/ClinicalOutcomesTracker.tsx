@@ -39,6 +39,7 @@ import {
   Info
 } from 'lucide-react';
 import { supabase } from '../utils/supabase/client';
+import { useAuditedAction } from '../hooks/useAuditedAction';
 
 // Types
 interface ClinicalOutcome {
@@ -201,6 +202,7 @@ export function ClinicalOutcomesTracker({
   childName,
   onBack
 }: ClinicalOutcomesTrackerProps) {
+  useAuditedAction('child_data');
   const [outcomes, setOutcomes] = useState<ClinicalOutcome[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedType, setSelectedType] = useState<AssessmentType | 'all'>('all');

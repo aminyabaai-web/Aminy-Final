@@ -25,6 +25,7 @@ import {
 } from 'lucide-react';
 import { CompassIcon } from './CompassIcon';
 import type { VaultRecord } from '../types/vault';
+import { useAuditedAction } from '../hooks/useAuditedAction';
 
 interface DocumentVaultPageProps {
   userTier?: string | null;
@@ -32,6 +33,9 @@ interface DocumentVaultPageProps {
 }
 
 export function DocumentVaultPage({ userTier, onNavigate }: DocumentVaultPageProps) {
+  // HIPAA audit: log vault file access view on mount
+  const { logAction, logExport } = useAuditedAction('vault_file');
+
   const { caregiverShort, childShort } = useDisplayNames();
   
   // Mock vault records data

@@ -500,6 +500,41 @@ export async function endTelehealthSession(
   await deleteRoom(roomName);
 }
 
+// ============================================================================
+// Recording
+// ============================================================================
+
+/**
+ * Start cloud recording for the current call.
+ * Requires recording to be enabled in the Daily.co dashboard.
+ *
+ * @returns true if recording started successfully
+ */
+export async function startRecording(callObject: DailyCallObject): Promise<boolean> {
+  try {
+    await (callObject as unknown as { startRecording: () => Promise<void> }).startRecording();
+    return true;
+  } catch (error) {
+    console.error('[Daily] Failed to start recording:', error);
+    return false;
+  }
+}
+
+/**
+ * Stop cloud recording for the current call.
+ *
+ * @returns true if recording stopped successfully
+ */
+export async function stopRecording(callObject: DailyCallObject): Promise<boolean> {
+  try {
+    await (callObject as unknown as { stopRecording: () => Promise<void> }).stopRecording();
+    return true;
+  } catch (error) {
+    console.error('[Daily] Failed to stop recording:', error);
+    return false;
+  }
+}
+
 export default {
   createVideoRoom,
   getMeetingToken,
@@ -514,6 +549,8 @@ export default {
   toggleVideo,
   startScreenShare,
   stopScreenShare,
+  startRecording,
+  stopRecording,
   leaveCall,
   joinTelehealthSession,
   endTelehealthSession,

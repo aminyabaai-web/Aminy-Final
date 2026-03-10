@@ -5,6 +5,7 @@
  */
 
 import React, { useState, useEffect, useMemo } from 'react';
+import { tierPricing } from '../../lib/tier-utils';
 import { motion } from 'motion/react';
 import {
   TrendingUp,
@@ -140,11 +141,11 @@ const MOCK_CHANNELS: ChannelMetrics[] = [
 ];
 
 const TIER_BREAKDOWN = [
-  { tier: 'Free', users: 4521, revenue: 0, arpu: 0, color: '#94A3B8' },
-  { tier: 'Starter', users: 1234, revenue: 18498, arpu: 14.99, color: '#3B82F6' },
-  { tier: 'Core', users: 2156, revenue: 32318, arpu: 14.99, color: '#10B981' },
-  { tier: 'Pro', users: 876, revenue: 26251, arpu: 29.99, color: '#8B5CF6' },
-  { tier: 'Pro+', users: 234, revenue: 11698, arpu: 49.99, color: '#F59E0B' },
+  { tier: 'Free', users: 4521, revenue: 0, arpu: tierPricing.free.monthly, color: '#94A3B8' },
+  { tier: 'Starter', users: 1234, revenue: Math.round(1234 * tierPricing.starter.monthly), arpu: tierPricing.starter.monthly, color: '#3B82F6' },
+  { tier: 'Core', users: 2156, revenue: Math.round(2156 * tierPricing.core.monthly), arpu: tierPricing.core.monthly, color: '#10B981' },
+  { tier: 'Pro', users: 876, revenue: Math.round(876 * tierPricing.pro.monthly), arpu: tierPricing.pro.monthly, color: '#8B5CF6' },
+  { tier: 'Pro+', users: 234, revenue: Math.round(234 * tierPricing.proplus.monthly), arpu: tierPricing.proplus.monthly, color: '#F59E0B' },
 ];
 
 export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {

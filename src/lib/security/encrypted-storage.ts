@@ -125,17 +125,38 @@ function isEncryptionAvailable(): boolean {
  * Sensitive data categories that require encryption
  */
 export const SENSITIVE_KEYS = [
+  // User identity & profile
   'aminy_profile_',
-  'aminy_children_',
-  'aminy_notifications_',
-  'aminy_privacy_',
   'aminy-user',
-  'aminy_offline_outcome_events',
-  'aminy_memory-facts',
-  'aminy_memory-docs',
-  'conversationHistory',
+  'aminy-store',          // Zustand persisted state (goals, tasks, user, coverage)
+
+  // Child/caregiver PHI
+  'aminy_children_',
   'child',
   'caregiver',
+
+  // AI memory & conversations (contains PHI context)
+  'aminy_memory-facts',
+  'aminy_memory-docs',
+  'aminy-memory-facts',   // memory-system.ts keys (hyphen variant)
+  'aminy-memory-docs',
+  'aminy-memory-summaries',
+  'aminy-memory-usage',
+  'aminy_conversation_',  // conversation-memory.ts local storage
+  'aminy-conversation-',  // PersistentAskAminy.tsx conversation storage
+  'conversationHistory',
+  'aminy_onboarding_progress', // AI intake onboarding data
+
+  // Clinical & care data
+  'aminy_offline_outcome_events',
+  'aminy_care_plan_',
+  'carePlanData',          // Care plan data stored by components
+  'aminy_screening_',
+  'aminy_audit_log',      // HIPAA audit trail
+
+  // Privacy & notifications
+  'aminy_notifications_',
+  'aminy_privacy_',
 ];
 
 /**

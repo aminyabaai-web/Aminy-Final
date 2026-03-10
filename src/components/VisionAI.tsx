@@ -12,6 +12,7 @@ import {
   Sparkles, Lock, AlertTriangle,
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { syncEncryptedStorage } from '../lib/security/encrypted-storage';
 import {
   analyzePhoto,
   startVideoSession,
@@ -40,7 +41,7 @@ interface VisionAIProps {
 type Mode = 'photo' | 'video';
 
 export function VisionAI({ tier, userId, onClose, onBack, onAnalysisComplete, initialImage }: VisionAIProps) {
-  const effectiveUserId = userId || localStorage.getItem('aminy-user-id') || 'anonymous';
+  const effectiveUserId = userId || syncEncryptedStorage.getItem('aminy-user-id') || 'anonymous';
   const handleClose = onBack || onClose || (() => {});
   const [mode, setMode] = useState<Mode>('photo');
   const [isAnalyzing, setIsAnalyzing] = useState(false);

@@ -219,7 +219,7 @@ export function B2BOrgSetup({
                 />
                 <select
                   value={newRole}
-                  onChange={(e) => setNewRole(e.target.value as any)}
+                  onChange={(e) => setNewRole(e.target.value as 'admin' | 'provider' | 'staff')}
                   className="px-3 py-3 border border-gray-300 rounded-xl bg-white text-sm"
                 >
                   <option value="provider">Provider</option>

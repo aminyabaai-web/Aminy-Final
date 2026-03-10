@@ -29,6 +29,7 @@ import { BookVisitScreen } from './BookVisit';
 import { AppointmentConfirmationScreen } from './AppointmentConfirmation';
 import { CarePlanTabScreen } from './CarePlanTab';
 import { VisitSummaryDetailScreen } from './VisitSummaryDetail';
+import { VideoCall } from './VideoCallRoom';
 
 // Flow steps
 type TelehealthStep =
@@ -39,9 +40,92 @@ type TelehealthStep =
   | 'book-visit'
   | 'confirm'
   | 'care-plan'
-  | 'summary-detail';
+  | 'summary-detail'
+  | 'pre-call-check'
+  | 'video-call';
 
 type BookingPath = 'quick-consult' | 'start-services' | null;
+
+// Pre-call check component (inline in TelehealthFlow)
+function PreCallCheck({ onReady, onBack }: { onReady: () => void; onBack: () => void }) {
+  const [cameraReady, setCameraReady] = useState(false);
+  const [micReady, setMicReady] = useState(false);
+  const [checking, setChecking] = useState(true);
+
+  useEffect(() => {
+    // Check camera and microphone permissions
+    async function checkDevices() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        setCameraReady(true);
+        setMicReady(true);
+        // Stop tracks immediately - we just needed to check access
+        stream.getTracks().forEach(t => t.stop());
+      } catch (err) {
+        console.warn('Device check failed:', err);
+        // Try individual checks
+        try {
+          const video = await navigator.mediaDevices.getUserMedia({ video: true });
+          setCameraReady(true);
+          video.getTracks().forEach(t => t.stop());
+        } catch { setCameraReady(false); }
+        try {
+          const audio = await navigator.mediaDevices.getUserMedia({ audio: true });
+          setMicReady(true);
+          audio.getTracks().forEach(t => t.stop());
+        } catch { setMicReady(false); }
+      }
+      setChecking(false);
+    }
+    checkDevices();
+  }, []);
+
+  return (
+    <div className="max-w-md mx-auto p-6 space-y-6">
+      <h2 className="text-xl font-bold text-center">Pre-Call Check</h2>
+      <p className="text-center text-gray-600">Let's make sure everything is ready for your visit</p>
+
+      <div className="space-y-4">
+        <div className="flex items-center gap-3 p-4 rounded-lg bg-gray-50">
+          <span className="text-2xl">{checking ? '\u23F3' : cameraReady ? '\u2705' : '\u274C'}</span>
+          <div>
+            <p className="font-medium">Camera</p>
+            <p className="text-sm text-gray-500">{checking ? 'Checking...' : cameraReady ? 'Ready' : 'Not available - check permissions'}</p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-3 p-4 rounded-lg bg-gray-50">
+          <span className="text-2xl">{checking ? '\u23F3' : micReady ? '\u2705' : '\u274C'}</span>
+          <div>
+            <p className="font-medium">Microphone</p>
+            <p className="text-sm text-gray-500">{checking ? 'Checking...' : micReady ? 'Ready' : 'Not available - check permissions'}</p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-3 p-4 rounded-lg bg-gray-50">
+          <span className="text-2xl">{'connection' in navigator ? '\u2705' : '\u26A0\uFE0F'}</span>
+          <div>
+            <p className="font-medium">Internet Connection</p>
+            <p className="text-sm text-gray-500">{navigator.onLine ? 'Connected' : 'No connection detected'}</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex gap-3 pt-4">
+        <button onClick={onBack} className="flex-1 py-3 px-4 rounded-lg border border-gray-300 font-medium">
+          Back
+        </button>
+        <button
+          onClick={onReady}
+          disabled={checking}
+          className="flex-1 py-3 px-4 rounded-lg bg-teal-600 text-white font-medium disabled:opacity-50"
+        >
+          {cameraReady && micReady ? 'Join Call' : 'Continue Anyway'}
+        </button>
+      </div>
+    </div>
+  );
+}
 
 interface TelehealthFlowProps {
   initialStep?: TelehealthStep;
@@ -182,6 +266,11 @@ export function TelehealthFlow({
     setCurrentStep('care-plan');
   };
 
+  const handleJoinVideoCall = () => {
+    trackEvent('joined_video_call', { appointmentId: booking.appointmentId });
+    setCurrentStep('pre-call-check');
+  };
+
   const handleBookFollowUp = () => {
     // Reset booking state and start fresh
     setBooking({});
@@ -234,6 +323,9 @@ export function TelehealthFlow({
         onClose();
         break;
       case 'summary-detail':
+        setCurrentStep('care-plan');
+        break;
+      case 'pre-call-check':
         setCurrentStep('care-plan');
         break;
       default:
@@ -448,6 +540,7 @@ export function TelehealthFlow({
           intake={booking.intake}
           onBack={handleBack}
           onComplete={handleAppointmentComplete}
+          onJoinVideo={handleJoinVideoCall}
         />
       );
 
@@ -461,40 +554,67 @@ export function TelehealthFlow({
       );
 
     case 'summary-detail':
-      // Mock summary data - in production, fetch from API
-      const mockSummary = {
+      // Visit summary — will be loaded from Supabase in production
+      const visitSummary = {
         id: viewingSummaryId || 'vs-1',
-        appointmentId: 'apt-1',
-        providerId: 'provider-1',
+        appointmentId: booking.appointmentId || 'apt-1',
+        providerId: selectedProvider?.id || 'provider-1',
         userId: 'user-1',
-        reasonForVisit: 'Meltdowns during transitions',
+        reasonForVisit: booking.intake?.visitReason || 'Assessment pending',
         whatWeDiscussed: [
-          'Identified triggers: sudden changes and sensory overwhelm',
-          'Current routine review showed gaps in visual supports',
-          'Discussed proactive strategies vs reactive responses'
+          'Review care plan with provider',
+          'Follow up in 2 weeks'
         ],
         planForNext7Days: [
-          'Create a visual schedule for morning routine',
-          'Give 5-minute and 2-minute warnings before transitions',
-          'Practice "First-Then" language during calm moments'
+          'Review care plan with provider',
+          'Follow up in 2 weeks'
         ],
         whatToTrack: [
-          'Number of meltdowns per day',
-          'Successful transitions (count)'
+          'Session summary will be available after provider completes notes'
         ],
-        followUpRecommendation: 'Check-in in 2 weeks',
+        followUpRecommendation: 'Scheduled follow-up available in My Appointments',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
       };
 
       return (
         <VisitSummaryDetailScreen
-          summary={mockSummary}
+          summary={visitSummary}
           provider={MOCK_PROVIDERS[0]}
           onBack={handleBack}
           onBookFollowUp={handleBookFollowUp}
           onShare={() => trackEvent('visit_summary_shared', { summaryId: viewingSummaryId })}
           onExport={() => trackEvent('visit_summary_exported', { summaryId: viewingSummaryId })}
+        />
+      );
+
+    case 'pre-call-check':
+      return (
+        <PreCallCheck
+          onReady={() => {
+            trackEvent('pre_call_check_passed', { appointmentId: booking.appointmentId });
+            setCurrentStep('video-call');
+          }}
+          onBack={handleBack}
+        />
+      );
+
+    case 'video-call':
+      return (
+        <VideoCall
+          sessionId={booking.appointmentId || `session-${Date.now()}`}
+          userId="user-1"
+          userName="Parent"
+          providerName={selectedProvider ? `${selectedProvider.firstName} ${selectedProvider.lastName}` : 'Provider'}
+          sessionType={selectedVisitType === 'consult' ? '25min' : '50min'}
+          onCallEnd={() => {
+            trackEvent('video_call_ended', { appointmentId: booking.appointmentId });
+            setCurrentStep('summary-detail');
+          }}
+          onError={(err) => {
+            toast.error('Video Call Error', { description: err });
+            setCurrentStep('care-plan');
+          }}
         />
       );
 

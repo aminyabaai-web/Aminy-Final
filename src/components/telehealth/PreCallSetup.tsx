@@ -33,6 +33,23 @@ interface DeviceStatus {
   network: 'checking' | 'good' | 'fair' | 'poor';
 }
 
+type NetworkType = 'wifi' | 'cellular' | 'ethernet' | 'bluetooth' | 'unknown';
+
+interface NetworkTestResult {
+  latencyMs: number;
+  downloadMbps: number;
+  effectiveType: string;
+  networkType: NetworkType;
+}
+
+// ---------------------------------------------------------------------------
+// Bandwidth thresholds for telehealth video calls
+// ---------------------------------------------------------------------------
+
+const MIN_BANDWIDTH_MBPS = 1.5;
+const MAX_LATENCY_MS = 200;
+const AUDIO_ONLY_BANDWIDTH_MBPS = 0.5;
+
 export function PreCallSetup({
   appointmentId,
   providerName,
@@ -62,6 +79,10 @@ export function PreCallSetup({
   }>({ camera: '', microphone: '', speaker: '' });
   const [showDeviceSettings, setShowDeviceSettings] = useState(false);
   const [testingAudio, setTestingAudio] = useState(false);
+  const [networkTestResult, setNetworkTestResult] = useState<NetworkTestResult | null>(null);
+  const [audioOnlyRecommended, setAudioOnlyRecommended] = useState(false);
+  const [audioOnlyMode, setAudioOnlyMode] = useState(false);
+  const [bandwidthWarning, setBandwidthWarning] = useState<string | null>(null);
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const audioContext = useRef<AudioContext | null>(null);
@@ -150,29 +171,137 @@ export function PreCallSetup({
 
   async function checkNetworkQuality() {
     setStatus(prev => ({ ...prev, network: 'checking' }));
+    setNetworkTestResult(null);
 
     try {
-      // Simple latency check using fetch
-      const start = performance.now();
-      await fetch('https://www.google.com/generate_204', { mode: 'no-cors' });
-      const latency = performance.now() - start;
+      // ---- Step 1: Latency test (multiple samples, take median) ----
+      const latencySamples: number[] = [];
+      for (let i = 0; i < 3; i++) {
+        const start = performance.now();
+        await fetch('https://www.google.com/generate_204', { mode: 'no-cors' });
+        latencySamples.push(performance.now() - start);
+      }
+      latencySamples.sort((a, b) => a - b);
+      const medianLatency = latencySamples[1] ?? latencySamples[0];
 
-      // Also check connection type if available
-      const connection = (navigator as Navigator & { connection?: { effectiveType?: string } }).connection;
-      const effectiveType = connection?.effectiveType;
+      // ---- Step 2: Download bandwidth estimation ----
+      // Fetch a known-size resource and measure throughput.
+      // We use a Cloudflare endpoint that returns random bytes (100 KB).
+      let downloadMbps = 0;
+      try {
+        const downloadStart = performance.now();
+        const resp = await fetch(
+          'https://speed.cloudflare.com/__down?bytes=102400',
+          { cache: 'no-store' },
+        );
+        // Read the full body to ensure complete download
+        if (resp.body) {
+          const reader = resp.body.getReader();
+          let totalBytes = 0;
+          // eslint-disable-next-line no-constant-condition
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            totalBytes += value.byteLength;
+          }
+          const downloadDuration = (performance.now() - downloadStart) / 1000; // seconds
+          downloadMbps = totalBytes > 0
+            ? (totalBytes * 8) / downloadDuration / 1_000_000
+            : 0;
+        }
+      } catch {
+        // Cloudflare endpoint may be blocked — fall back to latency-only estimation
+        downloadMbps = 0;
+      }
 
+      // ---- Step 3: Network Information API (supplemental + type detection) ----
+      const connection = (navigator as Navigator & {
+        connection?: {
+          effectiveType?: string;
+          downlink?: number;
+          type?: string;
+        };
+      }).connection;
+      const effectiveType = connection?.effectiveType || 'unknown';
+      const apiDownlink = connection?.downlink; // Mbps estimate from the browser
+
+      // Detect network type: WiFi vs cellular vs ethernet
+      let networkType: NetworkType = 'unknown';
+      if (connection?.type) {
+        const rawType = connection.type.toLowerCase();
+        if (rawType === 'wifi') networkType = 'wifi';
+        else if (rawType === 'cellular') networkType = 'cellular';
+        else if (rawType === 'ethernet') networkType = 'ethernet';
+        else if (rawType === 'bluetooth') networkType = 'bluetooth';
+      }
+
+      // Use the better of measured vs API-reported bandwidth
+      const bestBandwidth = Math.max(downloadMbps, apiDownlink ?? 0);
+
+      // ---- Step 4: Composite quality determination ----
+      // Good:  latency < 100ms AND bandwidth >= 2 Mbps
+      // Fair:  latency < 250ms AND bandwidth >= 0.5 Mbps
+      // Poor:  everything else
       let quality: 'good' | 'fair' | 'poor';
 
-      if (effectiveType === '4g' && latency < 100) {
+      if (medianLatency < 100 && bestBandwidth >= 2) {
         quality = 'good';
-      } else if (effectiveType === '3g' || latency < 300) {
+      } else if (medianLatency < 250 && bestBandwidth >= 0.5) {
         quality = 'fair';
+      } else if (bestBandwidth === 0 && medianLatency < 150) {
+        // Speed test failed but latency is okay — be generous
+        quality = effectiveType === '4g' ? 'good' : 'fair';
       } else {
         quality = 'poor';
       }
 
+      // ---- Step 5: Bandwidth threshold warnings ----
+      setBandwidthWarning(null);
+      setAudioOnlyRecommended(false);
+
+      if (bestBandwidth > 0 && bestBandwidth < AUDIO_ONLY_BANDWIDTH_MBPS) {
+        // Very low bandwidth — audio only is the only option
+        setBandwidthWarning(
+          `Very low bandwidth detected (${Math.round(bestBandwidth * 10) / 10} Mbps). ` +
+          `Video calls require at least ${AUDIO_ONLY_BANDWIDTH_MBPS} Mbps. ` +
+          `We strongly recommend switching to audio-only mode.`
+        );
+        setAudioOnlyRecommended(true);
+      } else if (bestBandwidth > 0 && bestBandwidth < MIN_BANDWIDTH_MBPS) {
+        // Below minimum for smooth video — warn and suggest audio-only
+        setBandwidthWarning(
+          `Your download speed (${Math.round(bestBandwidth * 10) / 10} Mbps) is below the ` +
+          `recommended ${MIN_BANDWIDTH_MBPS} Mbps for video calls. You may experience ` +
+          `freezing or low quality. Consider switching to audio-only mode.`
+        );
+        setAudioOnlyRecommended(true);
+      } else if (medianLatency > MAX_LATENCY_MS) {
+        // High latency — warn about potential delays
+        setBandwidthWarning(
+          `High latency detected (${Math.round(medianLatency)}ms). You may experience ` +
+          `audio/video delays during the call. Moving closer to your router may help.`
+        );
+      }
+
+      // Cellular-specific warning
+      if (networkType === 'cellular' && quality !== 'good') {
+        setBandwidthWarning(prev =>
+          (prev ? prev + ' ' : '') +
+          'You are on a cellular connection. For best results, switch to WiFi.'
+        );
+      }
+
+      setNetworkTestResult({
+        latencyMs: Math.round(medianLatency),
+        downloadMbps: Math.round(bestBandwidth * 10) / 10,
+        effectiveType,
+        networkType,
+      });
       setStatus(prev => ({ ...prev, network: quality }));
     } catch {
+      setNetworkTestResult(null);
+      setBandwidthWarning(null);
+      setAudioOnlyRecommended(false);
       setStatus(prev => ({ ...prev, network: 'poor' }));
     }
   }
@@ -442,14 +571,29 @@ export function PreCallSetup({
                     <p className="text-sm text-gray-500 dark:text-gray-400">
                       {getStatusText(status.network, 'Network')}
                     </p>
+                    {networkTestResult && status.network !== 'checking' && (
+                      <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
+                        {networkTestResult.latencyMs}ms latency
+                        {networkTestResult.downloadMbps > 0 && (
+                          <> &middot; {networkTestResult.downloadMbps} Mbps down</>
+                        )}
+                        {networkTestResult.networkType !== 'unknown' && (
+                          <> &middot; {networkTestResult.networkType === 'wifi' ? 'WiFi' :
+                            networkTestResult.networkType === 'cellular' ? 'Cellular' :
+                            networkTestResult.networkType === 'ethernet' ? 'Ethernet' :
+                            networkTestResult.networkType.charAt(0).toUpperCase() + networkTestResult.networkType.slice(1)}</>
+                        )}
+                      </p>
+                    )}
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
                   <button
                     onClick={checkNetworkQuality}
-                    className="text-xs text-teal-600 dark:text-teal-400 hover:underline"
+                    disabled={status.network === 'checking'}
+                    className="text-xs text-teal-600 dark:text-teal-400 hover:underline disabled:opacity-50"
                   >
-                    Retest
+                    {status.network === 'checking' ? 'Testing...' : 'Retest'}
                   </button>
                   {getStatusIcon(status.network)}
                 </div>
@@ -518,8 +662,90 @@ export function PreCallSetup({
             )}
           </div>
 
-          {/* Tips */}
-          {status.network === 'poor' && (
+          {/* Bandwidth Warning Banner */}
+          {bandwidthWarning && (
+            <div className={`border rounded-xl p-4 ${
+              audioOnlyRecommended
+                ? 'bg-orange-50 dark:bg-orange-900/20 border-orange-200 dark:border-orange-800'
+                : 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800'
+            }`}>
+              <div className="flex items-start space-x-3">
+                <AlertTriangle className={`w-5 h-5 flex-shrink-0 mt-0.5 ${
+                  audioOnlyRecommended
+                    ? 'text-orange-600 dark:text-orange-400'
+                    : 'text-yellow-600 dark:text-yellow-400'
+                }`} />
+                <div className="flex-1">
+                  <p className={`font-medium ${
+                    audioOnlyRecommended
+                      ? 'text-orange-800 dark:text-orange-200'
+                      : 'text-yellow-800 dark:text-yellow-200'
+                  }`}>
+                    {audioOnlyRecommended ? 'Low bandwidth detected' : 'Connection notice'}
+                  </p>
+                  <p className={`text-sm mt-1 ${
+                    audioOnlyRecommended
+                      ? 'text-orange-700 dark:text-orange-300'
+                      : 'text-yellow-700 dark:text-yellow-300'
+                  }`}>
+                    {bandwidthWarning}
+                  </p>
+
+                  {/* Audio-only toggle */}
+                  {audioOnlyRecommended && (
+                    <button
+                      onClick={() => {
+                        setAudioOnlyMode(!audioOnlyMode);
+                        if (!audioOnlyMode && stream) {
+                          // Disable video track when switching to audio-only
+                          const videoTrack = stream.getVideoTracks()[0];
+                          if (videoTrack) {
+                            videoTrack.enabled = false;
+                            setVideoEnabled(false);
+                          }
+                        }
+                      }}
+                      className={`mt-3 px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
+                        audioOnlyMode
+                          ? 'bg-teal-600 text-white hover:bg-teal-700'
+                          : 'bg-white dark:bg-slate-800 text-orange-700 dark:text-orange-300 border border-orange-300 dark:border-orange-700 hover:bg-orange-100 dark:hover:bg-orange-900/30'
+                      }`}
+                    >
+                      {audioOnlyMode ? (
+                        <>
+                          <Mic className="w-4 h-4" />
+                          Audio-Only Mode Active
+                        </>
+                      ) : (
+                        <>
+                          <VideoOff className="w-4 h-4" />
+                          Switch to Audio-Only
+                        </>
+                      )}
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Network type info (cellular warning) */}
+          {networkTestResult?.networkType === 'cellular' && !bandwidthWarning && (
+            <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4">
+              <div className="flex items-start space-x-3">
+                <Wifi className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-medium text-blue-800 dark:text-blue-200">Using cellular data</p>
+                  <p className="text-sm text-blue-700 dark:text-blue-300 mt-1">
+                    Your connection uses mobile data. For the best experience, connect to WiFi if available. Video calls typically use 0.5-1.5 GB per hour.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Weak connection tips (only when no specific bandwidth warning shown) */}
+          {status.network === 'poor' && !bandwidthWarning && (
             <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl p-4">
               <div className="flex items-start space-x-3">
                 <AlertTriangle className="w-5 h-5 text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5" />
@@ -564,8 +790,17 @@ export function PreCallSetup({
             disabled={!allReady}
             className="flex-1 py-3 min-h-[48px] bg-teal-600 hover:bg-teal-700 text-white font-medium rounded-xl flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Join Call
-            <ArrowRight className="w-5 h-5 ml-2" />
+            {audioOnlyMode ? (
+              <>
+                <Mic className="w-5 h-5 mr-2" />
+                Join Audio Only
+              </>
+            ) : (
+              <>
+                Join Call
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </>
+            )}
           </Button>
         </div>
 

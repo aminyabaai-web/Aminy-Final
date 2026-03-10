@@ -41,7 +41,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from './ui/dialog';
-import { getMemoryFacts, storeMemoryFact } from '../lib/aminy-ai-brain';
+import { getMemoryFacts, storeMemoryFactCompat as storeMemoryFact } from '../lib/ai-engine';
 import { store } from '../lib/store';
 import { cn } from '../lib/utils';
 import { toast } from 'sonner';
@@ -241,7 +241,7 @@ export function WhatAminyKnows({ onBack, childId }: WhatAminyKnowsProps) {
     try {
       await storeMemoryFact(
         currentChildId || '',
-        newFact.category as any,
+        newFact.category as 'preference' | 'trigger' | 'strength' | 'challenge' | 'milestone' | 'strategy' | 'medical' | 'educational',
         newFact.content,
         'manual',
         1.0

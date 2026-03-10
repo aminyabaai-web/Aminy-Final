@@ -40,20 +40,35 @@ CREATE POLICY "Users can insert own profile"
 -- Child Profiles Table
 -- ============================================================================
 
-CREATE TABLE IF NOT EXISTS child_profiles (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  name TEXT NOT NULL,
-  date_of_birth DATE NOT NULL,
-  pronouns TEXT NOT NULL DEFAULT 'they/them',
-  avatar_initials TEXT,
-  goals TEXT[] DEFAULT '{}',
-  junior_status TEXT NOT NULL DEFAULT 'unpaired' CHECK (junior_status IN ('paired', 'unpaired')),
-  junior_device_info TEXT,
-  care_team_notes_enabled BOOLEAN NOT NULL DEFAULT FALSE,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
+-- [MIGRATION FIX] Table child_profiles created in earlier migration.
+-- Adding columns that would have been lost due to IF NOT EXISTS:
+-- Original CREATE TABLE commented out below.
+ALTER TABLE child_profiles ADD COLUMN IF NOT EXISTS user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE;
+ALTER TABLE child_profiles ADD COLUMN IF NOT EXISTS name TEXT;
+ALTER TABLE child_profiles ADD COLUMN IF NOT EXISTS date_of_birth DATE;
+ALTER TABLE child_profiles ADD COLUMN IF NOT EXISTS pronouns TEXT NOT NULL DEFAULT 'they/them';
+ALTER TABLE child_profiles ADD COLUMN IF NOT EXISTS avatar_initials TEXT;
+ALTER TABLE child_profiles ADD COLUMN IF NOT EXISTS goals TEXT[] DEFAULT '{}';
+ALTER TABLE child_profiles ADD COLUMN IF NOT EXISTS junior_status TEXT NOT NULL DEFAULT 'unpaired' CHECK (junior_status IN ('paired', 'unpaired'));
+ALTER TABLE child_profiles ADD COLUMN IF NOT EXISTS junior_device_info TEXT;
+ALTER TABLE child_profiles ADD COLUMN IF NOT EXISTS care_team_notes_enabled BOOLEAN NOT NULL DEFAULT FALSE;
+
+-- Original CREATE TABLE (commented out, columns added above):
+-- CREATE TABLE IF NOT EXISTS child_profiles (
+--   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+--   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+--   name TEXT NOT NULL,
+--   date_of_birth DATE NOT NULL,
+--   pronouns TEXT NOT NULL DEFAULT 'they/them',
+--   avatar_initials TEXT,
+--   goals TEXT[] DEFAULT '{}',
+--   junior_status TEXT NOT NULL DEFAULT 'unpaired' CHECK (junior_status IN ('paired', 'unpaired')),
+--   junior_device_info TEXT,
+--   care_team_notes_enabled BOOLEAN NOT NULL DEFAULT FALSE,
+--   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+--   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+-- );
+
 
 CREATE INDEX IF NOT EXISTS idx_child_profiles_user_id ON child_profiles(user_id);
 
@@ -80,29 +95,44 @@ CREATE POLICY "Users can delete own children"
 -- Notification Preferences Table
 -- ============================================================================
 
-CREATE TABLE IF NOT EXISTS notification_preferences (
-  user_id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
-  -- Email notifications
-  email_daily_summary BOOLEAN NOT NULL DEFAULT TRUE,
-  email_weekly_report BOOLEAN NOT NULL DEFAULT TRUE,
-  email_goal_milestones BOOLEAN NOT NULL DEFAULT TRUE,
-  email_session_reminders BOOLEAN NOT NULL DEFAULT TRUE,
-  email_messages BOOLEAN NOT NULL DEFAULT TRUE,
-  -- Push notifications
-  push_session_reminders BOOLEAN NOT NULL DEFAULT TRUE,
-  push_messages BOOLEAN NOT NULL DEFAULT TRUE,
-  push_urgent_alerts BOOLEAN NOT NULL DEFAULT TRUE,
-  push_daily_tips BOOLEAN NOT NULL DEFAULT TRUE,
-  -- SMS notifications
-  sms_session_reminders BOOLEAN NOT NULL DEFAULT TRUE,
-  sms_urgent_alerts BOOLEAN NOT NULL DEFAULT TRUE,
-  sms_appointment_confirmations BOOLEAN NOT NULL DEFAULT TRUE,
-  -- Quiet hours
-  quiet_hours_enabled BOOLEAN NOT NULL DEFAULT TRUE,
-  quiet_hours_start TIME NOT NULL DEFAULT '21:00',
-  quiet_hours_end TIME NOT NULL DEFAULT '07:00',
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
+-- [MIGRATION FIX] Table notification_preferences created in earlier migration.
+-- Adding columns that would have been lost due to IF NOT EXISTS:
+-- Original CREATE TABLE commented out below.
+ALTER TABLE notification_preferences ADD COLUMN IF NOT EXISTS email_weekly_report BOOLEAN NOT NULL DEFAULT TRUE;
+ALTER TABLE notification_preferences ADD COLUMN IF NOT EXISTS email_goal_milestones BOOLEAN NOT NULL DEFAULT TRUE;
+ALTER TABLE notification_preferences ADD COLUMN IF NOT EXISTS email_session_reminders BOOLEAN NOT NULL DEFAULT TRUE;
+ALTER TABLE notification_preferences ADD COLUMN IF NOT EXISTS email_messages BOOLEAN NOT NULL DEFAULT TRUE;
+ALTER TABLE notification_preferences ADD COLUMN IF NOT EXISTS push_messages BOOLEAN NOT NULL DEFAULT TRUE;
+ALTER TABLE notification_preferences ADD COLUMN IF NOT EXISTS push_urgent_alerts BOOLEAN NOT NULL DEFAULT TRUE;
+ALTER TABLE notification_preferences ADD COLUMN IF NOT EXISTS push_daily_tips BOOLEAN NOT NULL DEFAULT TRUE;
+ALTER TABLE notification_preferences ADD COLUMN IF NOT EXISTS sms_urgent_alerts BOOLEAN NOT NULL DEFAULT TRUE;
+ALTER TABLE notification_preferences ADD COLUMN IF NOT EXISTS sms_appointment_confirmations BOOLEAN NOT NULL DEFAULT TRUE;
+
+-- Original CREATE TABLE (commented out, columns added above):
+-- CREATE TABLE IF NOT EXISTS notification_preferences (
+--   user_id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+--   -- Email notifications
+--   email_daily_summary BOOLEAN NOT NULL DEFAULT TRUE,
+--   email_weekly_report BOOLEAN NOT NULL DEFAULT TRUE,
+--   email_goal_milestones BOOLEAN NOT NULL DEFAULT TRUE,
+--   email_session_reminders BOOLEAN NOT NULL DEFAULT TRUE,
+--   email_messages BOOLEAN NOT NULL DEFAULT TRUE,
+--   -- Push notifications
+--   push_session_reminders BOOLEAN NOT NULL DEFAULT TRUE,
+--   push_messages BOOLEAN NOT NULL DEFAULT TRUE,
+--   push_urgent_alerts BOOLEAN NOT NULL DEFAULT TRUE,
+--   push_daily_tips BOOLEAN NOT NULL DEFAULT TRUE,
+--   -- SMS notifications
+--   sms_session_reminders BOOLEAN NOT NULL DEFAULT TRUE,
+--   sms_urgent_alerts BOOLEAN NOT NULL DEFAULT TRUE,
+--   sms_appointment_confirmations BOOLEAN NOT NULL DEFAULT TRUE,
+--   -- Quiet hours
+--   quiet_hours_enabled BOOLEAN NOT NULL DEFAULT TRUE,
+--   quiet_hours_start TIME NOT NULL DEFAULT '21:00',
+--   quiet_hours_end TIME NOT NULL DEFAULT '07:00',
+--   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+-- );
+
 
 -- RLS for notification_preferences
 ALTER TABLE notification_preferences ENABLE ROW LEVEL SECURITY;

@@ -7,6 +7,7 @@
  */
 
 import { WAIVER_SERVICE_CODES, FISCAL_AGENTS } from './tier-utils';
+import { syncEncryptedStorage } from './security/encrypted-storage';
 
 // ============================================================================
 // SECURE ID GENERATION
@@ -138,21 +139,21 @@ const STORAGE_KEYS = {
 
 function getFromStorage<T>(key: string): T[] {
   if (typeof window === 'undefined') return [];
-  const data = localStorage.getItem(key);
+  const data = syncEncryptedStorage.getItem(key);
   if (!data) return [];
   try {
     return JSON.parse(data);
   } catch (error) {
     // Reset corrupted data
     console.warn('[CaregiverDB] Corrupted localStorage data, resetting key:', key, error);
-    localStorage.removeItem(key);
+    syncEncryptedStorage.removeItem(key);
     return [];
   }
 }
 
 function saveToStorage<T>(key: string, data: T[]): void {
   if (typeof window === 'undefined') return;
-  localStorage.setItem(key, JSON.stringify(data));
+  syncEncryptedStorage.setItem(key, JSON.stringify(data));
 }
 
 // ============================================================================
@@ -835,7 +836,7 @@ async function reverseGeocode(lat: number, lng: number): Promise<string | undefi
  */
 export function getDeviceId(): string {
   const storageKey = 'aminy_evv_device_id';
-  let deviceId = localStorage.getItem(storageKey);
+  let deviceId = syncEncryptedStorage.getItem(storageKey);
 
   if (!deviceId) {
     // Generate a unique device ID based on browser fingerprint
@@ -856,7 +857,7 @@ export function getDeviceId(): string {
     }
 
     deviceId = `device-${Math.abs(hash).toString(36)}-${Date.now().toString(36)}`;
-    localStorage.setItem(storageKey, deviceId);
+    syncEncryptedStorage.setItem(storageKey, deviceId);
   }
 
   return deviceId;
@@ -967,18 +968,18 @@ const EVV_STORAGE_KEY = 'aminy_evv_data';
 function saveEVVData(timeEntryId: string, evvData: EVVData): void {
   let allEvv: Record<string, EVVData> = {};
   try {
-    allEvv = JSON.parse(localStorage.getItem(EVV_STORAGE_KEY) || '{}');
+    allEvv = JSON.parse(syncEncryptedStorage.getItem(EVV_STORAGE_KEY) || '{}');
   } catch {
     // localStorage unavailable
     allEvv = {};
   }
   allEvv[timeEntryId] = evvData;
-  localStorage.setItem(EVV_STORAGE_KEY, JSON.stringify(allEvv));
+  syncEncryptedStorage.setItem(EVV_STORAGE_KEY, JSON.stringify(allEvv));
 }
 
 export function getEVVData(timeEntryId: string): EVVData | null {
   try {
-    const allEvv = JSON.parse(localStorage.getItem(EVV_STORAGE_KEY) || '{}');
+    const allEvv = JSON.parse(syncEncryptedStorage.getItem(EVV_STORAGE_KEY) || '{}');
     return allEvv[timeEntryId] || null;
   } catch {
     // localStorage unavailable
@@ -988,7 +989,7 @@ export function getEVVData(timeEntryId: string): EVVData | null {
 
 export function getAllEVVData(): Record<string, EVVData> {
   try {
-    return JSON.parse(localStorage.getItem(EVV_STORAGE_KEY) || '{}');
+    return JSON.parse(syncEncryptedStorage.getItem(EVV_STORAGE_KEY) || '{}');
   } catch {
     // localStorage unavailable
     return {};

@@ -7,6 +7,7 @@ import { Card } from './ui/card';
 import { Badge } from './ui/badge';
 import { Sparkles, Save, CheckCircle, AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
+import { useAuditedAction } from '../hooks/useAuditedAction';
 
 interface BCBANotes {
   childName: string;
@@ -27,6 +28,7 @@ interface BCBANotesTemplateProps {
 }
 
 export function BCBANotesTemplate({ childName, onSave }: BCBANotesTemplateProps) {
+  useAuditedAction('session_notes');
   const [goal, setGoal] = useState('');
   const [promptingLevel, setPromptingLevel] = useState('');
   const [masteryCriteria, setMasteryCriteria] = useState('');

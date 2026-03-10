@@ -4,12 +4,16 @@ import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
 import { ManageCaregivers } from './ManageCaregivers';
+import { useAuditedAction } from '../hooks/useAuditedAction';
 
 interface CaregiverManagementScreenProps {
   onBack?: () => void;
 }
 
 export function CaregiverManagementScreen({ onBack }: CaregiverManagementScreenProps) {
+  // HIPAA audit: log caregiver/account access view on mount
+  useAuditedAction('user_account');
+
   const [showAddCaregiver, setShowAddCaregiver] = useState(false);
   type CaregiverRole = 'owner' | 'caregiver' | 'read-only';
   type CaregiverStatus = 'active' | 'pending';

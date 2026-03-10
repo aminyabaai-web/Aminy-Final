@@ -17,21 +17,17 @@ export interface NotificationPayload {
 }
 
 /**
- * Register service worker for push notifications
+ * Get the active service worker registration.
+ * Service worker is registered by VitePWA — do NOT register manually.
  */
-export async function registerServiceWorker(): Promise<ServiceWorkerRegistration | null> {
+async function getServiceWorkerRegistration(): Promise<ServiceWorkerRegistration | null> {
   if (!('serviceWorker' in navigator)) {
     return null;
   }
-
   try {
-    const registration = await navigator.serviceWorker.register('/sw.js', {
-      scope: '/',
-    });
-
+    const registration = await navigator.serviceWorker.ready;
     return registration;
-  } catch (error) {
-    console.error('Service Worker registration failed:', error);
+  } catch {
     return null;
   }
 }
@@ -754,7 +750,7 @@ export async function createCommunityNotification(
 }
 
 export default {
-  registerServiceWorker,
+  getServiceWorkerRegistration,
   requestPushPermission,
   subscribeToPush,
   notificationDB,

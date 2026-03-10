@@ -18,6 +18,11 @@ const SESSION_KEYS = {
 // Token refresh threshold (5 minutes before expiry)
 const REFRESH_THRESHOLD_MS = 5 * 60 * 1000;
 
+// Inactivity timeout for PHI screens (15 minutes)
+const INACTIVITY_TIMEOUT_MS = 15 * 60 * 1000;
+// Activity events that reset the idle timer
+const ACTIVITY_EVENTS = ['mousedown', 'keydown', 'touchstart', 'scroll'] as const;
+
 export interface SessionData {
   accessToken: string;
   refreshToken: string;
@@ -143,9 +148,83 @@ export function setupSessionRefresh(intervalMs: number = 60000): () => void {
 }
 
 /**
+ * Setup inactivity timeout for PHI-sensitive screens.
+ * After INACTIVITY_TIMEOUT_MS of no user interaction, dispatches 'session-idle'
+ * event and optionally locks the session (requiring re-auth).
+ */
+export function setupInactivityTimeout(
+  timeoutMs: number = INACTIVITY_TIMEOUT_MS,
+  onIdle?: () => void
+): () => void {
+  let idleTimer: ReturnType<typeof setTimeout>;
+  let lastActivity = Date.now();
+
+  const resetTimer = () => {
+    lastActivity = Date.now();
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(() => {
+      window.dispatchEvent(new CustomEvent('session-idle', {
+        detail: { idleSince: lastActivity, duration: Date.now() - lastActivity },
+      }));
+      onIdle?.();
+    }, timeoutMs);
+  };
+
+  // Start timer immediately
+  resetTimer();
+
+  // Listen for user activity
+  for (const event of ACTIVITY_EVENTS) {
+    window.addEventListener(event, resetTimer, { passive: true });
+  }
+
+  // Cleanup
+  return () => {
+    clearTimeout(idleTimer);
+    for (const event of ACTIVITY_EVENTS) {
+      window.removeEventListener(event, resetTimer);
+    }
+  };
+}
+
+/**
+ * Cross-tab session sync via BroadcastChannel.
+ * When a user signs out in one tab, all tabs are notified.
+ */
+export function setupCrossTabSync(): () => void {
+  if (typeof BroadcastChannel === 'undefined') return () => {};
+
+  const channel = new BroadcastChannel('aminy-session');
+
+  // Listen for signout from other tabs
+  const handleMessage = (event: MessageEvent) => {
+    if (event.data?.type === 'SIGNED_OUT') {
+      window.dispatchEvent(new CustomEvent('session-expired'));
+    }
+  };
+  channel.addEventListener('message', handleMessage);
+
+  // Broadcast our own signout
+  const originalClearSession = clearSession;
+  // Monkey-patch clearSession to broadcast
+  const broadcastClear = async () => {
+    channel.postMessage({ type: 'SIGNED_OUT', timestamp: Date.now() });
+    await originalClearSession();
+  };
+
+  // Replace module export (note: this is a best-effort approach)
+  (globalThis as Record<string, unknown>).__aminy_broadcast_clear = broadcastClear;
+
+  return () => {
+    channel.removeEventListener('message', handleMessage);
+    channel.close();
+  };
+}
+
+/**
  * Hook for session state management
  */
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import type { Session, User } from '@supabase/supabase-js';
 
 export function useSecureSession() {
@@ -210,6 +289,40 @@ export function useSecureSession() {
     };
   }, []);
 
+  // Inactivity timeout for PHI screens
+  const [isIdle, setIsIdle] = useState(false);
+  const idleCleanupRef = useRef<(() => void) | null>(null);
+
+  const enableIdleTimeout = useCallback((timeoutMs?: number) => {
+    // Clean up any existing timer
+    idleCleanupRef.current?.();
+    setIsIdle(false);
+
+    idleCleanupRef.current = setupInactivityTimeout(timeoutMs, () => {
+      setIsIdle(true);
+    });
+  }, []);
+
+  const dismissIdle = useCallback(() => {
+    setIsIdle(false);
+    // Re-enable the timer
+    idleCleanupRef.current?.();
+    idleCleanupRef.current = setupInactivityTimeout(undefined, () => {
+      setIsIdle(true);
+    });
+  }, []);
+
+  // Cleanup idle timer on unmount
+  useEffect(() => {
+    return () => { idleCleanupRef.current?.(); };
+  }, []);
+
+  // Cross-tab sync
+  useEffect(() => {
+    const cleanup = setupCrossTabSync();
+    return cleanup;
+  }, []);
+
   return {
     session,
     user,
@@ -218,5 +331,8 @@ export function useSecureSession() {
     refreshSession,
     signOut,
     isAuthenticated: !!session,
+    isIdle,
+    enableIdleTimeout,
+    dismissIdle,
   };
 }

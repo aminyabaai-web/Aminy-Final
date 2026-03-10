@@ -6,6 +6,7 @@
  */
 
 import { analytics } from './analytics-engine';
+import { syncEncryptedStorage } from './security/encrypted-storage';
 
 // Context Types
 export interface ChildContext {
@@ -113,7 +114,7 @@ class ContextEngine {
   private loadStoredContext(): void {
     try {
       // Load child context
-      const childData = localStorage.getItem('child');
+      const childData = syncEncryptedStorage.getItem('child');
       if (childData) {
         const child = JSON.parse(childData);
         this.childContext = {
@@ -131,7 +132,7 @@ class ContextEngine {
       }
 
       // Load caregiver context
-      const caregiverData = localStorage.getItem('caregiver');
+      const caregiverData = syncEncryptedStorage.getItem('caregiver');
       if (caregiverData) {
         const caregiver = JSON.parse(caregiverData);
         this.caregiverContext = {
@@ -147,7 +148,7 @@ class ContextEngine {
       }
 
       // Load conversation history
-      const historyData = localStorage.getItem('conversationHistory');
+      const historyData = syncEncryptedStorage.getItem('conversationHistory');
       if (historyData) {
         this.conversationHistory = JSON.parse(historyData);
       }
@@ -282,7 +283,7 @@ class ContextEngine {
     }
     
     // Store updated context
-    localStorage.setItem('child', JSON.stringify(this.childContext));
+    syncEncryptedStorage.setItem('child', JSON.stringify(this.childContext));
     
     analytics.track('child_context_updated', {
       updatedFields: Object.keys(updates),
@@ -298,7 +299,7 @@ class ContextEngine {
     }
     
     // Store updated context
-    localStorage.setItem('caregiver', JSON.stringify(this.caregiverContext));
+    syncEncryptedStorage.setItem('caregiver', JSON.stringify(this.caregiverContext));
     
     analytics.track('caregiver_context_updated', {
       updatedFields: Object.keys(updates),
@@ -314,7 +315,7 @@ class ContextEngine {
     }
     
     // Store updated history
-    localStorage.setItem('conversationHistory', JSON.stringify(this.conversationHistory));
+    syncEncryptedStorage.setItem('conversationHistory', JSON.stringify(this.conversationHistory));
     
     // Update session context based on conversation
     this.updateSessionUrgency(summary);

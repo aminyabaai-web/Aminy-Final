@@ -49,6 +49,7 @@ import {
   Loader2,
 } from 'lucide-react';
 import { supabase } from '../../utils/supabase/client';
+import { tierPricing } from '../../lib/tier-utils';
 
 // Types
 interface ManagedUser {
@@ -165,7 +166,7 @@ export function UserManagement() {
           activeUsers: mappedUsers.filter(u => u.status === 'active').length,
           paidUsers: mappedUsers.filter(u => u.tier !== 'free').length,
           mrr: mappedUsers.reduce((sum, u) => {
-            const prices = { free: 0, starter: 14.99, core: 14.99, pro: 29.99, proplus: 49.99 };
+            const prices = { free: tierPricing.free.monthly, starter: tierPricing.starter.monthly, core: tierPricing.core.monthly, pro: tierPricing.pro.monthly, proplus: tierPricing.proplus.monthly };
             return sum + (prices[u.tier] || 0);
           }, 0),
         });
@@ -651,10 +652,10 @@ export function UserManagement() {
                     className="w-full px-3 py-2 border rounded-lg bg-white dark:bg-slate-800 dark:border-slate-700"
                   >
                     <option value="free">Free</option>
-                    <option value="starter">Starter ($14.99/mo)</option>
-                    <option value="core">Core ($14.99/mo)</option>
-                    <option value="pro">Pro ($29.99/mo)</option>
-                    <option value="proplus">Pro+ ($49.99/mo)</option>
+                    <option value="starter">Starter (${tierPricing.starter.monthly}/mo)</option>
+                    <option value="core">Core (${tierPricing.core.monthly}/mo)</option>
+                    <option value="pro">Pro (${tierPricing.pro.monthly}/mo)</option>
+                    <option value="proplus">Pro+ (${tierPricing.proplus.monthly}/mo)</option>
                   </select>
                 </div>
 

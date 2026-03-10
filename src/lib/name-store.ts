@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { syncEncryptedStorage } from './security/encrypted-storage';
 
 // Canonical localStorage keys
 const CAREGIVER_KEY = 'caregiver';
@@ -23,7 +24,7 @@ interface DisplayNames {
  */
 export function getCaregiverName(): string {
   try {
-    const stored = localStorage.getItem(CAREGIVER_KEY);
+    const stored = syncEncryptedStorage.getItem(CAREGIVER_KEY);
     if (!stored) return '';
     
     const parsed: NameRecord = JSON.parse(stored);
@@ -40,7 +41,7 @@ export function getCaregiverName(): string {
  */
 export function getChildName(): string {
   try {
-    const stored = localStorage.getItem(CHILD_KEY);
+    const stored = syncEncryptedStorage.getItem(CHILD_KEY);
     if (!stored) return '';
     
     const parsed: NameRecord = JSON.parse(stored);
@@ -58,7 +59,7 @@ export function getChildName(): string {
 export function setCaregiverName(full: string): void {
   try {
     const record: NameRecord = { name: full };
-    localStorage.setItem(CAREGIVER_KEY, JSON.stringify(record));
+    syncEncryptedStorage.setItem(CAREGIVER_KEY, JSON.stringify(record));
     broadcastNamesUpdated();
   } catch (error) {
     console.error('Failed to set caregiver name in localStorage:', error);
@@ -72,7 +73,7 @@ export function setCaregiverName(full: string): void {
 export function setChildName(full: string): void {
   try {
     const record: NameRecord = { name: full };
-    localStorage.setItem(CHILD_KEY, JSON.stringify(record));
+    syncEncryptedStorage.setItem(CHILD_KEY, JSON.stringify(record));
     broadcastNamesUpdated();
   } catch (error) {
     console.error('Failed to set child name in localStorage:', error);

@@ -69,12 +69,33 @@ export interface JuniorWeeklySummary {
 }
 
 // ============================================
-// STORAGE KEYS (localStorage-based, same as memory-system)
+// CACHE HELPERS — shared contract with useJuniorData hook
+// The hook writes Supabase-first + caches here; bridge reads from cache.
 // ============================================
 
-const FOCUS_AREAS_KEY = 'aminy-junior-focus-areas';
-const JUNIOR_PROGRESS_KEY = 'aminy-junior-progress';
-const JUNIOR_ACCESS_MODE_KEY = 'aminy-junior-access-mode';
+const CACHE_KEYS = {
+  FOCUS_AREAS: 'aminy-junior-focus-areas',
+  PROGRESS: 'aminy-junior-progress',
+  ACCESS_MODE: 'aminy-junior-access-mode',
+  DIFFICULTY: 'aminy-junior-difficulty',
+  AVOIDANCE: 'aminy-junior-avoidance-triggers',
+  RECOMMENDATIONS: 'aminy-junior-recommendations',
+} as const;
+
+function readCache<T>(key: string, fallback: T): T {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function writeCache(key: string, value: unknown): void {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch { /* storage full or blocked */ }
+}
 
 // ============================================
 // PARENT → JUNIOR: Focus Areas
@@ -87,7 +108,7 @@ const JUNIOR_ACCESS_MODE_KEY = 'aminy-junior-access-mode';
 export function setFocusAreas(childId: string, areas: FocusArea[]): void {
   const stored = getAllFocusAreas();
   stored[childId] = areas;
-  localStorage.setItem(FOCUS_AREAS_KEY, JSON.stringify(stored));
+  writeCache(CACHE_KEYS.FOCUS_AREAS, stored);
 
   // Also store as MemoryFacts so parent AI can reference them
   areas.forEach(area => {
@@ -145,12 +166,7 @@ export function toRecommenderContext(childId: string): {
 }
 
 function getAllFocusAreas(): Record<string, FocusArea[]> {
-  try {
-    const data = localStorage.getItem(FOCUS_AREAS_KEY);
-    return data ? JSON.parse(data) : {};
-  } catch {
-    return {};
-  }
+  return readCache<Record<string, FocusArea[]>>(CACHE_KEYS.FOCUS_AREAS, {});
 }
 
 // ============================================
@@ -171,7 +187,7 @@ export function recordJuniorProgress(childId: string, entry: JuniorProgressEntry
     all[childId] = all[childId].slice(-500);
   }
 
-  localStorage.setItem(JUNIOR_PROGRESS_KEY, JSON.stringify(all));
+  writeCache(CACHE_KEYS.PROGRESS, all);
 
   // Store milestone facts for parent AI
   if (entry.accuracy && entry.accuracy >= 90) {
@@ -317,12 +333,7 @@ export function generateWeeklySummary(childId: string): JuniorWeeklySummary | nu
 }
 
 function getAllProgress(): Record<string, JuniorProgressEntry[]> {
-  try {
-    const data = localStorage.getItem(JUNIOR_PROGRESS_KEY);
-    return data ? JSON.parse(data) : {};
-  } catch {
-    return {};
-  }
+  return readCache<Record<string, JuniorProgressEntry[]>>(CACHE_KEYS.PROGRESS, {});
 }
 
 // ============================================
@@ -348,7 +359,7 @@ export interface JuniorAccessConfig {
 export function setAccessConfig(childId: string, config: JuniorAccessConfig): void {
   const all = getAllAccessConfigs();
   all[childId] = config;
-  localStorage.setItem(JUNIOR_ACCESS_MODE_KEY, JSON.stringify(all));
+  writeCache(CACHE_KEYS.ACCESS_MODE, all);
 }
 
 export function getAccessConfig(childId: string): JuniorAccessConfig {
@@ -381,7 +392,7 @@ export function isJuniorAccessible(childId: string, requestingCalmCorner: boolea
     case 'earned':
       // In earned mode, parent must explicitly unlock
       // Check localStorage for current unlock status
-      const unlocked = localStorage.getItem(`aminy-junior-unlocked-${childId}`);
+      const unlocked = readCache<string>(`aminy-junior-unlocked-${childId}`, 'false');
       if (unlocked === 'true') {
         return { accessible: true };
       }
@@ -419,31 +430,24 @@ export function isJuniorAccessible(childId: string, requestingCalmCorner: boolea
  * Optionally set an expiry (e.g., 30 minutes of Junior time).
  */
 export function unlockJunior(childId: string, durationMinutes?: number): void {
-  localStorage.setItem(`aminy-junior-unlocked-${childId}`, 'true');
+  writeCache(`aminy-junior-unlocked-${childId}`, 'true');
 
   if (durationMinutes) {
     setTimeout(() => {
-      localStorage.setItem(`aminy-junior-unlocked-${childId}`, 'false');
+      writeCache(`aminy-junior-unlocked-${childId}`, 'false');
     }, durationMinutes * 60 * 1000);
   }
 }
 
 function getAllAccessConfigs(): Record<string, JuniorAccessConfig> {
-  try {
-    const data = localStorage.getItem(JUNIOR_ACCESS_MODE_KEY);
-    return data ? JSON.parse(data) : {};
-  } catch {
-    return {};
-  }
+  return readCache<Record<string, JuniorAccessConfig>>(CACHE_KEYS.ACCESS_MODE, {});
 }
 
 // ============================================
 // PARENT → JUNIOR: Bidirectional Cross-Learning
 // ============================================
 
-const JUNIOR_DIFFICULTY_KEY = 'aminy-junior-difficulty';
-const JUNIOR_AVOIDANCE_KEY = 'aminy-junior-avoidance-triggers';
-const JUNIOR_RECOMMENDATIONS_KEY = 'aminy-junior-recommendations';
+// Keys now defined in CACHE_KEYS at top of file
 
 export type DifficultyLevel = 'easier' | 'same' | 'harder';
 
@@ -474,11 +478,11 @@ export interface JuniorRecommendation {
  * Called after AI response suggests changes (e.g., "speech exercises are too easy").
  */
 export function setJuniorDifficultyFromParent(childId: string, domain: FocusDomain, level: DifficultyLevel, reason?: string): void {
-  const stored = JSON.parse(localStorage.getItem(JUNIOR_DIFFICULTY_KEY) || '{}');
+  const stored = readCache<Record<string, JuniorDifficultyOverride[]>>(CACHE_KEYS.DIFFICULTY, {});
   if (!stored[childId]) stored[childId] = [];
 
   // Replace existing override for this domain, or add new
-  const existing = stored[childId] as JuniorDifficultyOverride[];
+  const existing = stored[childId];
   const idx = existing.findIndex((d: JuniorDifficultyOverride) => d.domain === domain);
   const override: JuniorDifficultyOverride = { domain, level, setAt: new Date().toISOString(), reason };
 
@@ -489,7 +493,7 @@ export function setJuniorDifficultyFromParent(childId: string, domain: FocusDoma
   }
 
   stored[childId] = existing;
-  localStorage.setItem(JUNIOR_DIFFICULTY_KEY, JSON.stringify(stored));
+  writeCache(CACHE_KEYS.DIFFICULTY, stored);
 
   // Store as memory fact for AI context
   memoryManager.addFact({
@@ -506,8 +510,8 @@ export function setJuniorDifficultyFromParent(childId: string, domain: FocusDoma
  * Junior reads these on mount to adjust activity levels.
  */
 export function getJuniorDifficultyOverrides(childId: string): JuniorDifficultyOverride[] {
-  const stored = JSON.parse(localStorage.getItem(JUNIOR_DIFFICULTY_KEY) || '{}');
-  return (stored[childId] || []) as JuniorDifficultyOverride[];
+  const stored = readCache<Record<string, JuniorDifficultyOverride[]>>(CACHE_KEYS.DIFFICULTY, {});
+  return stored[childId] || [];
 }
 
 /**
@@ -515,16 +519,16 @@ export function getJuniorDifficultyOverrides(childId: string): JuniorDifficultyO
  * e.g., Parent says "he gets overwhelmed by timed activities" → Junior filters those out.
  */
 export function addJuniorAvoidanceTrigger(childId: string, trigger: string, source: 'parent' | 'ai' = 'ai', notes?: string): void {
-  const stored = JSON.parse(localStorage.getItem(JUNIOR_AVOIDANCE_KEY) || '{}');
+  const stored = readCache<Record<string, JuniorAvoidanceTrigger[]>>(CACHE_KEYS.AVOIDANCE, {});
   if (!stored[childId]) stored[childId] = [];
 
-  const triggers = stored[childId] as JuniorAvoidanceTrigger[];
+  const triggers = stored[childId];
   // Don't duplicate
   if (triggers.some((t: JuniorAvoidanceTrigger) => t.trigger.toLowerCase() === trigger.toLowerCase())) return;
 
   triggers.push({ trigger, addedAt: new Date().toISOString(), source, notes });
   stored[childId] = triggers;
-  localStorage.setItem(JUNIOR_AVOIDANCE_KEY, JSON.stringify(stored));
+  writeCache(CACHE_KEYS.AVOIDANCE, stored);
 
   memoryManager.addFact({
     childId,
@@ -540,20 +544,20 @@ export function addJuniorAvoidanceTrigger(childId: string, trigger: string, sour
  * Junior reads these to filter out activities that may cause distress.
  */
 export function getJuniorAvoidanceTriggers(childId: string): JuniorAvoidanceTrigger[] {
-  const stored = JSON.parse(localStorage.getItem(JUNIOR_AVOIDANCE_KEY) || '{}');
-  return (stored[childId] || []) as JuniorAvoidanceTrigger[];
+  const stored = readCache<Record<string, JuniorAvoidanceTrigger[]>>(CACHE_KEYS.AVOIDANCE, {});
+  return stored[childId] || [];
 }
 
 /**
  * Remove an avoidance trigger (parent decides it's no longer needed).
  */
 export function removeJuniorAvoidanceTrigger(childId: string, trigger: string): void {
-  const stored = JSON.parse(localStorage.getItem(JUNIOR_AVOIDANCE_KEY) || '{}');
+  const stored = readCache<Record<string, JuniorAvoidanceTrigger[]>>(CACHE_KEYS.AVOIDANCE, {});
   if (!stored[childId]) return;
-  stored[childId] = (stored[childId] as JuniorAvoidanceTrigger[]).filter(
+  stored[childId] = stored[childId].filter(
     (t: JuniorAvoidanceTrigger) => t.trigger.toLowerCase() !== trigger.toLowerCase()
   );
-  localStorage.setItem(JUNIOR_AVOIDANCE_KEY, JSON.stringify(stored));
+  writeCache(CACHE_KEYS.AVOIDANCE, stored);
 }
 
 /**
@@ -561,8 +565,8 @@ export function removeJuniorAvoidanceTrigger(childId: string, trigger: string): 
  * Returns suggestions like "try harder speech exercises" with domain + difficulty.
  */
 export function getJuniorRecommendations(childId: string): JuniorRecommendation[] {
-  const stored = JSON.parse(localStorage.getItem(JUNIOR_RECOMMENDATIONS_KEY) || '{}');
-  return (stored[childId] || []) as JuniorRecommendation[];
+  const stored = readCache<Record<string, JuniorRecommendation[]>>(CACHE_KEYS.RECOMMENDATIONS, {});
+  return stored[childId] || [];
 }
 
 /**
@@ -570,25 +574,25 @@ export function getJuniorRecommendations(childId: string): JuniorRecommendation[
  * Called when AI response contains actionable Junior suggestions.
  */
 export function addJuniorRecommendation(childId: string, rec: Omit<JuniorRecommendation, 'generatedAt' | 'applied'>): void {
-  const stored = JSON.parse(localStorage.getItem(JUNIOR_RECOMMENDATIONS_KEY) || '{}');
+  const stored = readCache<Record<string, JuniorRecommendation[]>>(CACHE_KEYS.RECOMMENDATIONS, {});
   if (!stored[childId]) stored[childId] = [];
 
-  const recs = stored[childId] as JuniorRecommendation[];
+  const recs = stored[childId];
   // Keep last 20 recommendations
   if (recs.length >= 20) recs.shift();
   recs.push({ ...rec, generatedAt: new Date().toISOString(), applied: false });
   stored[childId] = recs;
-  localStorage.setItem(JUNIOR_RECOMMENDATIONS_KEY, JSON.stringify(stored));
+  writeCache(CACHE_KEYS.RECOMMENDATIONS, stored);
 }
 
 /**
  * Mark a recommendation as applied (Junior acted on it).
  */
 export function markRecommendationApplied(childId: string, index: number): void {
-  const stored = JSON.parse(localStorage.getItem(JUNIOR_RECOMMENDATIONS_KEY) || '{}');
+  const stored = readCache<Record<string, JuniorRecommendation[]>>(CACHE_KEYS.RECOMMENDATIONS, {});
   if (stored[childId]?.[index]) {
     stored[childId][index].applied = true;
-    localStorage.setItem(JUNIOR_RECOMMENDATIONS_KEY, JSON.stringify(stored));
+    writeCache(CACHE_KEYS.RECOMMENDATIONS, stored);
   }
 }
 

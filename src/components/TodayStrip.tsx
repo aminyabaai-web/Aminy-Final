@@ -3,7 +3,7 @@ import { Calendar, MessageCircle, Heart, Clock } from 'lucide-react';
 
 interface TodayStripItem {
   id: string;
-  icon: React.ComponentType<any>;
+  icon: React.ComponentType<{ className?: string }>;
   title: string;
   subtitle: string;
   duration: string;

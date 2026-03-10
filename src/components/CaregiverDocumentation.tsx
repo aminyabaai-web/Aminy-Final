@@ -34,6 +34,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '../utils/supabase/client';
+import { useAuditedAction } from '../hooks/useAuditedAction';
 
 interface TimeEntry {
   id: string;
@@ -78,6 +79,7 @@ export function CaregiverDocumentation({
   clientName,
   fiscalIntermediary = 'acumen'
 }: CaregiverDocumentationProps) {
+  useAuditedAction('session_notes');
   const [entries, setEntries] = useState<TimeEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showAddEntry, setShowAddEntry] = useState(false);

@@ -25,7 +25,7 @@ import {
   Heart,
   Shield
 } from 'lucide-react';
-import type { TierType } from '../lib/tier-utils';
+import { tierPricing, type TierType } from '../lib/tier-utils';
 
 interface UpgradeNudgeProps {
   currentTier: TierType;
@@ -241,14 +241,14 @@ export function TierComparisonNudge({ currentTier, onSelectTier }: TierCompariso
     {
       id: 'starter' as TierType,
       name: 'Starter',
-      price: '$9.99/mo',
+      price: `$${tierPricing.starter.monthly}/mo`,
       features: ['50 messages/day', '30-day memory', '5 vault documents', 'Basic AI coaching'],
       highlight: currentTier === 'free'
     },
     {
       id: 'core' as TierType,
       name: 'Core',
-      price: '$19.99/mo',
+      price: `$${tierPricing.core.monthly}/mo`,
       features: ['200 messages/day', '90-day memory', '25 vault documents', 'Advanced AI coaching', 'Progress reports'],
       highlight: currentTier === 'starter',
       popular: true
@@ -256,7 +256,7 @@ export function TierComparisonNudge({ currentTier, onSelectTier }: TierCompariso
     {
       id: 'pro' as TierType,
       name: 'Pro',
-      price: '$39.99/mo',
+      price: `$${tierPricing.pro.monthly}/mo`,
       features: ['Unlimited messages', 'Unlimited memory', 'Unlimited vault', 'BCBA sessions included', 'Priority support'],
       highlight: currentTier === 'core'
     }

@@ -7,6 +7,97 @@
 
 import React from 'react';
 
+// =============================================================================
+// B2B / B2G / PRODUCT SEGMENT FEATURE FLAGS (env-driven)
+// =============================================================================
+// These control which product segments are enabled at build time.
+// By default all are OFF for consumer (B2C) launch.
+// Enable via .env.local: VITE_B2B_ENABLED=true, etc.
+
+export const productFlags = {
+  /** Enable B2B screens (admin portal, org setup, clinic dashboard, user management) */
+  b2bEnabled: import.meta.env.VITE_B2B_ENABLED === 'true',
+  /** Enable B2G / payer dashboard screens */
+  b2gEnabled: import.meta.env.VITE_B2G_ENABLED === 'true',
+  /** Enable fiscal agent / EVV integration screens */
+  fiscalAgentEnabled: import.meta.env.VITE_FISCAL_AGENT_ENABLED === 'true',
+  /** Enable developer-only screens (launch status, developer mode panel) */
+  devModeEnabled: import.meta.env.VITE_DEV_MODE === 'true',
+} as const;
+
+export type ProductFlagKey = keyof typeof productFlags;
+
+/**
+ * Check whether a product-segment feature flag is enabled.
+ * Use this to gate B2B, B2G, and dev-only screens.
+ */
+export function isProductFeatureEnabled(flag: ProductFlagKey): boolean {
+  return productFlags[flag];
+}
+
+/**
+ * Screens that are gated behind B2B flag
+ */
+export const B2B_GATED_SCREENS: readonly string[] = [
+  'admin-portal',
+  'b2b-partner',
+  'b2b-setup',
+  'bcba-portal',
+  'clinic-dashboard',
+  'provider-portal',
+  'provider-onboarding',
+  'provider-analytics',
+  'provider-identity-verification',
+  'clinical-templates',
+  'user-management',
+] as const;
+
+/**
+ * Screens that are gated behind B2G flag
+ */
+export const B2G_GATED_SCREENS: readonly string[] = [
+  'payer-dashboard',
+  'claims-dashboard',
+] as const;
+
+/**
+ * Screens that are gated behind fiscal agent flag
+ */
+export const FISCAL_AGENT_GATED_SCREENS: readonly string[] = [
+  'evv-dashboard',
+  'caregiver-enrollment',
+  'caregiver-credentialing',
+  'caregiver-timesheet',
+] as const;
+
+/**
+ * Screens that are gated behind dev mode flag
+ */
+export const DEV_GATED_SCREENS: readonly string[] = [
+  'launch-status',
+  'phase2-menu',
+  'analytics',
+] as const;
+
+/**
+ * Check if a screen should be gated (returns the gate reason or null if ungated)
+ */
+export function getScreenGateReason(screen: string): string | null {
+  if (B2B_GATED_SCREENS.includes(screen) && !productFlags.b2bEnabled) {
+    return 'b2b';
+  }
+  if (B2G_GATED_SCREENS.includes(screen) && !productFlags.b2gEnabled) {
+    return 'b2g';
+  }
+  if (FISCAL_AGENT_GATED_SCREENS.includes(screen) && !productFlags.fiscalAgentEnabled) {
+    return 'fiscal-agent';
+  }
+  if (DEV_GATED_SCREENS.includes(screen) && !productFlags.devModeEnabled) {
+    return 'dev-mode';
+  }
+  return null;
+}
+
 // Production-safe logging
 const devLog = (...args: unknown[]) => {
   if (import.meta.env.DEV) {

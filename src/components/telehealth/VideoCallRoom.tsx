@@ -51,6 +51,7 @@ import {
   type DailyRoom,
 } from '../../lib/daily-video';
 import type { DailyEvent, DailyCallObject, DailyParticipant, DailyEventObjectAppMessage, DailyEventHandler } from '../../types/video';
+import { useAuditedAction } from '../../hooks/useAuditedAction';
 
 interface VideoCallProps {
   sessionId: string;
@@ -98,6 +99,7 @@ export function VideoCall({
   onCallEnd,
   onError,
 }: VideoCallProps) {
+  useAuditedAction('appointment');
   // Refs
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const remoteVideoRef = useRef<HTMLVideoElement>(null);
@@ -135,6 +137,10 @@ export function VideoCall({
   // Connection quality
   const [connectionQuality, setConnectionQuality] = useState<ConnectionQuality>('unknown');
   const [networkStats, setNetworkStats] = useState<{ bitrate?: number; packetLoss?: number }>({});
+
+  // Session notes (providers only)
+  const [showNotes, setShowNotes] = useState(false);
+  const [sessionNotes, setSessionNotes] = useState('');
 
   // Initialize call
   const initializeCall = useCallback(async () => {
@@ -333,11 +339,16 @@ export function VideoCall({
     const callObject = callObjectRef.current;
     if (!callObject) return;
 
+    // Save session notes on call end (Supabase integration coming later)
+    if (isProvider && sessionNotes.trim()) {
+      console.log('[Session Notes - Call End]', { sessionId, notes: sessionNotes });
+    }
+
     setCallState('leaving');
     await callObject.leave();
     await callObject.destroy();
     callObjectRef.current = null;
-  }, []);
+  }, [isProvider, sessionNotes, sessionId]);
 
   // Toggle fullscreen
   const toggleFullscreen = useCallback(() => {
@@ -782,6 +793,36 @@ export function VideoCall({
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Session Notes Panel (providers only) */}
+      {isProvider && (
+        <div className="fixed bottom-20 right-4 z-40">
+          <button
+            onClick={() => setShowNotes(!showNotes)}
+            className="bg-white shadow-lg rounded-full p-3 border"
+            title="Session Notes"
+          >
+            <span aria-hidden="true">&#x1F4DD;</span>
+          </button>
+          {showNotes && (
+            <div className="absolute bottom-14 right-0 w-80 bg-white rounded-xl shadow-2xl border p-4">
+              <h4 className="font-semibold mb-2">Session Notes</h4>
+              <textarea
+                value={sessionNotes}
+                onChange={e => setSessionNotes(e.target.value)}
+                placeholder="Type session notes here..."
+                className="w-full h-32 p-2 border rounded-lg text-sm resize-none"
+              />
+              <button
+                onClick={() => { console.log('[Session Notes]', sessionNotes); setShowNotes(false); }}
+                className="mt-2 w-full py-2 bg-teal-600 text-white rounded-lg text-sm font-medium"
+              >
+                Save Notes
+              </button>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Controls */}
       <div className="bg-slate-800 px-4 py-4">

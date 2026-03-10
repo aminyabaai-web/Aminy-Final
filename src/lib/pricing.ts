@@ -6,7 +6,7 @@
  */
 
 export type ProviderCategory = 'behavioral' | 'therapy' | 'diagnostic';
-export type SessionType =
+export type BillingSessionType =
   | 'bcba_consult'
   | 'bcba_quick'
   | 'bcba_assessment'
@@ -22,7 +22,7 @@ export type SessionType =
   | 'dev_screening';
 
 export interface SessionPricing {
-  id: SessionType;
+  id: BillingSessionType;
   name: string;
   shortName: string;
   description: string;
@@ -40,7 +40,7 @@ export interface SessionPricing {
 }
 
 export interface SameDayPricing {
-  sessionId: SessionType;
+  sessionId: BillingSessionType;
   standardPrice: number;
   sameDayPrice: number;
   providerBonus: number;
@@ -51,7 +51,7 @@ export interface SameDayPricing {
 // SESSION PRICING
 // =============================================================================
 
-export const SESSION_PRICING: Record<SessionType, SessionPricing> = {
+export const SESSION_PRICING: Record<BillingSessionType, SessionPricing> = {
   // BEHAVIORAL TEAM
   bcba_consult: {
     id: 'bcba_consult',
@@ -326,7 +326,7 @@ export const SAME_DAY_PRICING: SameDayPricing[] = [
 // HELPER FUNCTIONS
 // =============================================================================
 
-export function getSessionPricing(sessionId: SessionType): SessionPricing {
+export function getSessionPricing(sessionId: BillingSessionType): SessionPricing {
   return SESSION_PRICING[sessionId];
 }
 
@@ -338,7 +338,7 @@ export function getPopularSessions(): SessionPricing[] {
   return Object.values(SESSION_PRICING).filter(s => s.popular);
 }
 
-export function getSameDayPrice(sessionId: SessionType): SameDayPricing | undefined {
+export function getSameDayPrice(sessionId: BillingSessionType): SameDayPricing | undefined {
   return SAME_DAY_PRICING.find(s => s.sessionId === sessionId);
 }
 

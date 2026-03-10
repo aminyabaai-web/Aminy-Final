@@ -7,12 +7,12 @@ import { ScrollArea } from './ui/scroll-area';
 import { Textarea } from './ui/textarea';
 import { cn } from '../lib/utils';
 import { toast } from 'sonner';
-import { 
-  generateContextualAIResponse, 
+import {
+  generateContextualAIResponse,
   storeConversation,
   buildAIContext,
   type AminyAIContext
-} from '../lib/aminy-ai-brain';
+} from '../lib/ai-engine';
 import { motion, AnimatePresence } from 'motion/react';
 
 interface Message {

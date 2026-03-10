@@ -16,7 +16,8 @@ import {
   InsuranceStatusBanner 
 } from './CareTabEnhancements';
 import { EnhancedScheduleView } from './EnhancedScheduleView';
-import { 
+import { useAuditedAction } from '../hooks/useAuditedAction';
+import {
   MessageCircle, Calendar, Clock, FileText, ArrowLeft, Send, Paperclip, Image, X, 
   AlertTriangle, Phone, User, Camera, MoreVertical, Video, Search, 
   Plus, ArrowDown, Mic, Download, CreditCard, Archive, Filter, Star, CheckCircle, Shield,
@@ -286,11 +287,12 @@ const mockAppointments = [
 ];
 
 // Analytics helper
-const trackEvent = (eventName: string, properties: Record<string, any> = {}) => {
+const trackEvent = (eventName: string, properties: Record<string, unknown> = {}) => {
   try {
     // In real app, this would fire to analytics service
-    if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', eventName, properties);
+    const win = window as Window & { gtag?: (command: string, event: string, params: Record<string, unknown>) => void };
+    if (typeof window !== 'undefined' && win.gtag) {
+      win.gtag('event', eventName, properties);
     }
   } catch (error) {
   }
@@ -307,6 +309,7 @@ export default function CarePage({
   freeMessageCount = 0,
   setFreeMessageCount
 }: CarePageProps) {
+  useAuditedAction('care_plan');
   const tier = useTierLite();
   const isPro = tier === 'pro';
   const isCore = tier === 'core';

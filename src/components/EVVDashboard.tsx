@@ -53,121 +53,137 @@ interface EVVDashboardProps {
 type TabType = 'clock' | 'records' | 'budget' | 'timesheets';
 
 // ============================================
-// DEMO DATA (Supabase fallback)
+// DEMO DATA (development-only fallback)
 // ============================================
 
-const DEMO_AUTHORIZATIONS: ServiceAuthorization[] = [
-  {
-    id: 'auth-1',
-    childId: 'child-1',
-    fiscalAgent: 'acumen',
-    authorizationNumber: 'AZ-2024-78543',
-    serviceCode: 'H2014',
-    serviceName: 'ABA Skills Training',
-    authorizedUnits: 480, // 120 hours in 15-min units
-    usedUnits: 196,
-    remainingUnits: 284,
-    unitType: '15min',
-    effectiveDate: '2024-11-01',
-    endDate: '2025-04-30',
-    status: 'active',
-    providerNpi: '1234567890',
-    createdAt: '2024-10-15',
-    updatedAt: '2025-02-20',
-  },
-  {
-    id: 'auth-2',
-    childId: 'child-1',
-    fiscalAgent: 'acumen',
-    authorizationNumber: 'AZ-2024-78544',
-    serviceCode: '97153',
-    serviceName: 'Adaptive Behavior Treatment',
-    authorizedUnits: 320,
-    usedUnits: 128,
-    remainingUnits: 192,
-    unitType: '15min',
-    effectiveDate: '2024-11-01',
-    endDate: '2025-04-30',
-    status: 'active',
-    createdAt: '2024-10-15',
-    updatedAt: '2025-02-20',
-  },
-];
+/**
+ * Demo authorizations used ONLY in development mode.
+ * In production, the component initializes with empty arrays and
+ * fetches real data from Supabase via getAuthorizations().
+ */
+function getDemoAuthorizations(): ServiceAuthorization[] {
+  if (!import.meta.env.DEV) return [];
+  return [
+    {
+      id: 'auth-1',
+      childId: 'child-1',
+      fiscalAgent: 'acumen',
+      authorizationNumber: 'AZ-2024-78543',
+      serviceCode: 'H2014',
+      serviceName: 'ABA Skills Training',
+      authorizedUnits: 480,
+      usedUnits: 196,
+      remainingUnits: 284,
+      unitType: '15min',
+      effectiveDate: '2024-11-01',
+      endDate: '2025-04-30',
+      status: 'active',
+      providerNpi: '1234567890',
+      createdAt: '2024-10-15',
+      updatedAt: '2025-02-20',
+    },
+    {
+      id: 'auth-2',
+      childId: 'child-1',
+      fiscalAgent: 'acumen',
+      authorizationNumber: 'AZ-2024-78544',
+      serviceCode: '97153',
+      serviceName: 'Adaptive Behavior Treatment',
+      authorizedUnits: 320,
+      usedUnits: 128,
+      remainingUnits: 192,
+      unitType: '15min',
+      effectiveDate: '2024-11-01',
+      endDate: '2025-04-30',
+      status: 'active',
+      createdAt: '2024-10-15',
+      updatedAt: '2025-02-20',
+    },
+  ];
+}
 
-const DEMO_EVV_RECORDS: EVVRecord[] = [
-  {
-    id: 'evv-1',
-    authorizationId: 'auth-1',
-    childId: 'child-1',
-    providerId: 'provider-1',
-    providerName: 'Maria Garcia, RBT',
-    serviceDate: '2025-02-24',
-    clockInTime: '2025-02-24T09:00:00Z',
-    clockOutTime: '2025-02-24T12:15:00Z',
-    clockInLocation: { latitude: 33.4484, longitude: -112.0740, address: '1234 Elm St, Phoenix, AZ' },
-    clockOutLocation: { latitude: 33.4484, longitude: -112.0740, address: '1234 Elm St, Phoenix, AZ' },
-    durationMinutes: 195,
-    units: 13,
-    serviceCode: 'H2014',
-    verificationMethod: 'gps',
-    status: 'verified',
-    createdAt: '2025-02-24T09:00:00Z',
-  },
-  {
-    id: 'evv-2',
-    authorizationId: 'auth-1',
-    childId: 'child-1',
-    providerId: 'provider-1',
-    providerName: 'Maria Garcia, RBT',
-    serviceDate: '2025-02-22',
-    clockInTime: '2025-02-22T13:30:00Z',
-    clockOutTime: '2025-02-22T16:00:00Z',
-    clockInLocation: { latitude: 33.4484, longitude: -112.0740, address: '1234 Elm St, Phoenix, AZ' },
-    clockOutLocation: { latitude: 33.4484, longitude: -112.0740, address: '1234 Elm St, Phoenix, AZ' },
-    durationMinutes: 150,
-    units: 10,
-    serviceCode: 'H2014',
-    verificationMethod: 'gps',
-    status: 'verified',
-    createdAt: '2025-02-22T13:30:00Z',
-  },
-  {
-    id: 'evv-3',
-    authorizationId: 'auth-2',
-    childId: 'child-1',
-    providerId: 'provider-2',
-    providerName: 'Dr. Sarah Chen, BCBA',
-    serviceDate: '2025-02-21',
-    clockInTime: '2025-02-21T10:00:00Z',
-    clockOutTime: '2025-02-21T11:00:00Z',
-    clockInLocation: { latitude: 33.4484, longitude: -112.0740, address: 'Aminy Clinic, Phoenix, AZ' },
-    clockOutLocation: { latitude: 33.4484, longitude: -112.0740, address: 'Aminy Clinic, Phoenix, AZ' },
-    durationMinutes: 60,
-    units: 4,
-    serviceCode: '97153',
-    verificationMethod: 'gps',
-    status: 'submitted',
-    createdAt: '2025-02-21T10:00:00Z',
-  },
-  {
-    id: 'evv-4',
-    authorizationId: 'auth-1',
-    childId: 'child-1',
-    providerId: 'provider-1',
-    providerName: 'Maria Garcia, RBT',
-    serviceDate: '2025-02-20',
-    clockInTime: '2025-02-20T09:00:00Z',
-    clockOutTime: '2025-02-20T11:30:00Z',
-    clockInLocation: { latitude: 33.4484, longitude: -112.0740, address: '1234 Elm St, Phoenix, AZ' },
-    clockOutLocation: { latitude: 33.4490, longitude: -112.0750, address: 'Nearby Park, Phoenix, AZ' },
-    durationMinutes: 150,
-    units: 10,
-    serviceCode: 'H2014',
-    verificationMethod: 'gps',
-    status: 'pending',
-    createdAt: '2025-02-20T09:00:00Z',
-  },
-];
+/**
+ * Demo EVV records used ONLY in development mode.
+ * In production, the component initializes with empty arrays and
+ * fetches real data from Supabase via getEVVRecords().
+ */
+function getDemoEVVRecords(): EVVRecord[] {
+  if (!import.meta.env.DEV) return [];
+  return [
+    {
+      id: 'evv-1',
+      authorizationId: 'auth-1',
+      childId: 'child-1',
+      providerId: 'provider-1',
+      providerName: 'Maria Garcia, RBT',
+      serviceDate: '2025-02-24',
+      clockInTime: '2025-02-24T09:00:00Z',
+      clockOutTime: '2025-02-24T12:15:00Z',
+      clockInLocation: { latitude: 33.4484, longitude: -112.0740, address: '1234 Elm St, Phoenix, AZ' },
+      clockOutLocation: { latitude: 33.4484, longitude: -112.0740, address: '1234 Elm St, Phoenix, AZ' },
+      durationMinutes: 195,
+      units: 13,
+      serviceCode: 'H2014',
+      verificationMethod: 'gps',
+      status: 'verified',
+      createdAt: '2025-02-24T09:00:00Z',
+    },
+    {
+      id: 'evv-2',
+      authorizationId: 'auth-1',
+      childId: 'child-1',
+      providerId: 'provider-1',
+      providerName: 'Maria Garcia, RBT',
+      serviceDate: '2025-02-22',
+      clockInTime: '2025-02-22T13:30:00Z',
+      clockOutTime: '2025-02-22T16:00:00Z',
+      clockInLocation: { latitude: 33.4484, longitude: -112.0740, address: '1234 Elm St, Phoenix, AZ' },
+      clockOutLocation: { latitude: 33.4484, longitude: -112.0740, address: '1234 Elm St, Phoenix, AZ' },
+      durationMinutes: 150,
+      units: 10,
+      serviceCode: 'H2014',
+      verificationMethod: 'gps',
+      status: 'verified',
+      createdAt: '2025-02-22T13:30:00Z',
+    },
+    {
+      id: 'evv-3',
+      authorizationId: 'auth-2',
+      childId: 'child-1',
+      providerId: 'provider-2',
+      providerName: 'Dr. Sarah Chen, BCBA',
+      serviceDate: '2025-02-21',
+      clockInTime: '2025-02-21T10:00:00Z',
+      clockOutTime: '2025-02-21T11:00:00Z',
+      clockInLocation: { latitude: 33.4484, longitude: -112.0740, address: 'Aminy Clinic, Phoenix, AZ' },
+      clockOutLocation: { latitude: 33.4484, longitude: -112.0740, address: 'Aminy Clinic, Phoenix, AZ' },
+      durationMinutes: 60,
+      units: 4,
+      serviceCode: '97153',
+      verificationMethod: 'gps',
+      status: 'submitted',
+      createdAt: '2025-02-21T10:00:00Z',
+    },
+    {
+      id: 'evv-4',
+      authorizationId: 'auth-1',
+      childId: 'child-1',
+      providerId: 'provider-1',
+      providerName: 'Maria Garcia, RBT',
+      serviceDate: '2025-02-20',
+      clockInTime: '2025-02-20T09:00:00Z',
+      clockOutTime: '2025-02-20T11:30:00Z',
+      clockInLocation: { latitude: 33.4484, longitude: -112.0740, address: '1234 Elm St, Phoenix, AZ' },
+      clockOutLocation: { latitude: 33.4490, longitude: -112.0750, address: 'Nearby Park, Phoenix, AZ' },
+      durationMinutes: 150,
+      units: 10,
+      serviceCode: 'H2014',
+      verificationMethod: 'gps',
+      status: 'pending',
+      createdAt: '2025-02-20T09:00:00Z',
+    },
+  ];
+}
 
 // ============================================
 // MAIN COMPONENT
@@ -182,12 +198,15 @@ export default function EVVDashboard({
   onBack,
 }: EVVDashboardProps) {
   const [activeTab, setActiveTab] = useState<TabType>('clock');
-  const [authorizations, setAuthorizations] = useState<ServiceAuthorization[]>(DEMO_AUTHORIZATIONS);
-  const [evvRecords, setEvvRecords] = useState<EVVRecord[]>(DEMO_EVV_RECORDS);
+  const [authorizations, setAuthorizations] = useState<ServiceAuthorization[]>(getDemoAuthorizations);
+  const [evvRecords, setEvvRecords] = useState<EVVRecord[]>(getDemoEVVRecords);
   const [isClockingIn, setIsClockingIn] = useState(false);
   const [activeSession, setActiveSession] = useState<EVVRecord | null>(null);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
-  const [selectedAuth, setSelectedAuth] = useState<string>(DEMO_AUTHORIZATIONS[0]?.id || '');
+  const [selectedAuth, setSelectedAuth] = useState<string>(() => {
+    const demo = getDemoAuthorizations();
+    return demo[0]?.id || '';
+  });
 
   // Load data from Supabase (falls back to demo)
   useEffect(() => {
@@ -279,7 +298,7 @@ export default function EVVDashboard({
         setActiveSession(demoRecord);
         setElapsedSeconds(0);
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       // Fallback without GPS
       const auth = authorizations.find(a => a.id === selectedAuth);
       const demoRecord: EVVRecord = {

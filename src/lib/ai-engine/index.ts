@@ -37,6 +37,36 @@ import {
 } from './conversation-memory';
 
 import { useAminyStore } from '../store';
+import { projectId, publicAnonKey } from '../../utils/supabase/info';
+
+// Re-export rich context (types + builder)
+export { buildAIContext } from './rich-context';
+export type { AminyAIContext } from './rich-context';
+
+// Re-export clinical reports
+export { generateClinicalReport } from './clinical-reports';
+
+// Re-export conversation memory functions for direct consumers
+export {
+  storeMemoryFact,
+  getRelevantMemories,
+  saveConversation,
+  loadRecentConversations,
+  saveConversationLocally,
+  loadConversationLocally,
+} from './conversation-memory';
+
+// Re-export streaming chat functions (from ai-conversation-engine, for StreamingAIChat.tsx)
+// These use a server-side thread model — Phase 7 will refactor to use sendMessage() directly
+export {
+  loadConversationHistory,
+  saveMessageToHistory,
+  generateAIResponse as generateStreamingAIResponse,
+  type ConversationMessage as StreamingChatMessage,
+  type ConversationContext as StreamingChatContext,
+  type StreamingOptions,
+  type DailyUsageInfo,
+} from '../ai-conversation-engine';
 
 // Re-export types
 export type {
@@ -430,10 +460,212 @@ export async function getConversationHistory(
   return loadRecentConversations(userId, limit);
 }
 
+// ============================================================================
+// Brain-compatible wrappers (for consumers migrating from aminy-ai-brain.ts)
+// ============================================================================
+
+/**
+ * Generate contextual AI response using the rich context builder.
+ * Drop-in replacement for aminy-ai-brain.ts generateContextualAIResponse().
+ */
+export async function generateContextualAIResponse(
+  userMessage: string,
+  conversationHistory: { role: string; content: string }[]
+): Promise<string> {
+  const { buildAIContext: buildRichContext } = await import('./rich-context');
+  const context = await buildRichContext();
+  const systemPrompt = buildContextualSystemPrompt(context);
+
+  try {
+    const response = await fetch(
+      `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/ai/brain`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${publicAnonKey}`
+        },
+        body: JSON.stringify({
+          userMessage,
+          conversationHistory,
+          systemPrompt
+        })
+      }
+    );
+
+    if (!response.ok) {
+      let errorMessage = `Server returned ${response.status}`;
+      try {
+        const errorData = await response.json();
+        errorMessage = errorData.error || errorMessage;
+      } catch {
+        const errorText = await response.text();
+        errorMessage = errorText || errorMessage;
+      }
+      throw new Error(errorMessage);
+    }
+
+    const data = await response.json();
+    if (!data.message) throw new Error('Invalid response format from server');
+    return data.message;
+  } catch (error) {
+    console.error('AI response error:', error);
+    return `I'm having trouble connecting right now. Can you try asking again in a moment?`;
+  }
+}
+
+/**
+ * Build the contextual system prompt from rich context.
+ * Used by generateContextualAIResponse().
+ */
+function buildContextualSystemPrompt(context: import('./rich-context').AminyAIContext): string {
+  return `You are Aminy — the world's most caring AI companion for parents of neurodivergent children.
+
+CHILD: ${context.child.name}
+• Age: ${context.child.age} years old
+• Communication: ${context.child.communicationLevel}
+${context.child.diagnoses.length > 0 ? `• Diagnoses: ${context.child.diagnoses.join(', ')}` : ''}
+• Strengths: ${context.child.strengths.join(', ') || 'Still discovering their unique gifts'}
+• Working on: ${context.child.concerns.join(', ') || 'General developmental support'}
+• Current Goals: ${context.child.currentGoals.map(g => `${g.area}: ${g.description}`).join('; ') || 'Goals being developed'}
+
+PARENT: ${context.parentProfile.name}
+• Primary concerns: ${context.parentProfile.primaryConcerns.join(', ') || 'Supporting their child'}
+
+TODAY'S PLAN:
+${context.dailyPlan.todaysFocus.length > 0
+  ? `Focus: ${context.dailyPlan.todaysFocus.map(a => a.title).join(', ')}`
+  : 'No specific plan yet — offer to help create one!'}
+
+MEMORY:
+Recent topics: ${context.memory.conversations.slice(-5).map(c => c.topic).join(', ') || 'First conversations'}
+What's worked: ${context.memory.successfulStrategies.slice(0, 3).map(s => s.description).join('; ') || 'Still learning'}
+
+GUIDELINES:
+1. BE PERSONAL — Always use ${context.child.name}'s name
+2. BE SPECIFIC — Reference actual data, not generic advice
+3. BE WARM — Validate feelings, celebrate wins
+4. BE ACTIONABLE — Give 2-3 concrete steps
+5. If crisis detected, provide 988 Lifeline immediately`;
+}
+
+/**
+ * Store a conversation for memory.
+ * Drop-in replacement for aminy-ai-brain.ts storeConversation().
+ */
+export async function storeConversation(
+  messages: { role: string; content: string }[],
+  topic: string,
+  outcome?: string
+): Promise<void> {
+  const state = useAminyStore.getState();
+  const childId = state.currentChildId || (state.children ?? [])[0]?.id;
+  const userId = state.user?.id;
+
+  if (!childId || !userId) return;
+
+  const conversationId = `conv-${Date.now()}`;
+
+  // Save via conversation memory
+  await saveConversation(userId, childId, {
+    id: conversationId,
+    title: topic,
+    messages: messages.map((m, i) => ({
+      id: `${conversationId}-${i}`,
+      role: m.role as 'user' | 'assistant',
+      content: m.content,
+      timestamp: new Date().toISOString(),
+    })),
+    topics: [topic],
+  });
+}
+
+/**
+ * Store a memory fact with brain-compatible signature.
+ * Drop-in replacement for aminy-ai-brain.ts storeMemoryFact().
+ */
+export async function storeMemoryFactCompat(
+  childId: string,
+  category: 'preference' | 'trigger' | 'strength' | 'challenge' | 'milestone' | 'strategy' | 'medical' | 'educational',
+  content: string,
+  source: 'conversation' | 'onboarding' | 'vault' | 'provider' | 'manual' = 'manual',
+  confidence: number = 0.8
+): Promise<void> {
+  const state = useAminyStore.getState();
+  const userId = state.user?.id;
+  if (!userId) return;
+
+  try {
+    const response = await fetch(
+      `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/memory/store`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${publicAnonKey}`,
+          'X-User-Id': userId
+        },
+        body: JSON.stringify({
+          childId,
+          category,
+          content,
+          source,
+          confidence,
+          expiresAt: null
+        })
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Failed to store memory fact: ${response.status}`);
+    }
+  } catch (error) {
+    console.error('Failed to store memory fact:', error);
+  }
+}
+
+/**
+ * Get all memory facts for a child.
+ * Drop-in replacement for aminy-ai-brain.ts getMemoryFacts().
+ */
+export async function getMemoryFacts(childId: string): Promise<Record<string, unknown>[]> {
+  const state = useAminyStore.getState();
+  const userId = state.user?.id;
+  if (!userId) return [];
+
+  try {
+    const response = await fetch(
+      `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/memory/recent?limit=50`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${publicAnonKey}`,
+          'X-User-Id': userId
+        }
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Failed to get memory facts: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data.memories || [];
+  } catch (error) {
+    console.error('Failed to get memory facts:', error);
+    return [];
+  }
+}
+
 export default {
   sendMessage,
   getCurrentContext,
   isAIAvailable,
   rememberFact,
   getConversationHistory,
+  generateContextualAIResponse,
+  storeConversation,
+  storeMemoryFactCompat,
+  getMemoryFacts,
 };

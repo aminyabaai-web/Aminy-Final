@@ -53,3 +53,8 @@ temp/
 playwright-report/
 test-results/
 e2e-screenshots/
+
+# Security — leaked key files (rotated, do not re-commit)
+TUESDAY_PLAN_10_10.md
+AuthKey.p8
+*.p8

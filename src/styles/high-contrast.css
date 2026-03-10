@@ -1,0 +1,561 @@
+/* ========================================
+   HIGH CONTRAST MODE STYLES
+   ========================================
+   Activated by:
+   1. OS-level prefers-contrast: more
+   2. Manual toggle via useHighContrast() hook (adds 'high-contrast' class to <html>)
+
+   Both paths are supported — the media query handles OS preferences,
+   the .high-contrast class handles the manual toggle. They use the
+   same CSS custom properties so the visual result is identical.
+
+   Philosophy: maximize text/background contrast, add visible borders,
+   thicken outlines, and ensure all interactive elements are visually
+   distinguishable. Avoid changing layout or hiding content.
+   ======================================== */
+
+/* ----------------------------------------
+   Custom Properties — High Contrast Palette
+   ---------------------------------------- */
+
+html.high-contrast,
+html:where(:not(.high-contrast)) {
+  /* These are defined but only activated inside the selectors below */
+}
+
+/* ----------------------------------------
+   Scope: manual toggle via JS class
+   ---------------------------------------- */
+
+html.high-contrast {
+  /* Override the app's brand colors with maximum-contrast alternatives */
+  --hc-bg: #ffffff;
+  --hc-bg-surface: #f5f5f5;
+  --hc-bg-muted: #e5e5e5;
+  --hc-text: #000000;
+  --hc-text-muted: #1a1a1a;
+  --hc-text-subtle: #333333;
+  --hc-border: #000000;
+  --hc-border-muted: #333333;
+  --hc-link: #0000ee;
+  --hc-link-visited: #551a8b;
+  --hc-focus: #0000ff;
+  --hc-error: #cc0000;
+  --hc-success: #006600;
+  --hc-warning: #cc6600;
+  --hc-primary: #000066;
+  --hc-primary-text: #ffffff;
+}
+
+/* ----------------------------------------
+   Text contrast overrides
+   ---------------------------------------- */
+
+html.high-contrast body {
+  color: #000000 !important;
+  background-color: #ffffff !important;
+}
+
+/* Override low-contrast text colors */
+html.high-contrast .text-slate-300,
+html.high-contrast .text-slate-400,
+html.high-contrast .text-slate-500,
+html.high-contrast .text-gray-300,
+html.high-contrast .text-gray-400,
+html.high-contrast .text-gray-500,
+html.high-contrast .text-zinc-400,
+html.high-contrast .text-zinc-500,
+html.high-contrast .text-neutral-400,
+html.high-contrast .text-neutral-500 {
+  color: #1a1a1a !important;
+}
+
+/* Extremely light text — make it fully visible */
+html.high-contrast .text-slate-200,
+html.high-contrast .text-gray-200,
+html.high-contrast .text-zinc-200,
+html.high-contrast .text-neutral-200 {
+  color: #333333 !important;
+}
+
+/* Placeholder text */
+html.high-contrast ::placeholder {
+  color: #333333 !important;
+  opacity: 1 !important;
+}
+
+/* ----------------------------------------
+   Background contrast overrides
+   ---------------------------------------- */
+
+/* Remove semi-transparent backgrounds that reduce contrast */
+html.high-contrast [class*="bg-opacity-"],
+html.high-contrast [class*="/50"],
+html.high-contrast [class*="/40"],
+html.high-contrast [class*="/30"],
+html.high-contrast [class*="/20"],
+html.high-contrast [class*="/10"],
+html.high-contrast [class*="/5"] {
+  opacity: 1 !important;
+}
+
+/* Cards and surfaces need clear boundaries */
+html.high-contrast [class*="bg-white"],
+html.high-contrast [class*="bg-slate-50"],
+html.high-contrast [class*="bg-gray-50"] {
+  background-color: #ffffff !important;
+  border: 2px solid #000000 !important;
+}
+
+/* ----------------------------------------
+   Border visibility
+   ---------------------------------------- */
+
+html.high-contrast button,
+html.high-contrast input,
+html.high-contrast textarea,
+html.high-contrast select,
+html.high-contrast [role="button"],
+html.high-contrast [role="tab"],
+html.high-contrast [role="listbox"],
+html.high-contrast [role="combobox"] {
+  border: 2px solid #000000 !important;
+}
+
+/* Dividers */
+html.high-contrast hr,
+html.high-contrast [role="separator"] {
+  border-color: #000000 !important;
+  border-width: 2px !important;
+}
+
+/* Card borders */
+html.high-contrast [class*="rounded-"],
+html.high-contrast [class*="shadow-"] {
+  border: 2px solid #333333 !important;
+}
+
+/* ----------------------------------------
+   Link styles
+   ---------------------------------------- */
+
+html.high-contrast a {
+  color: #0000ee !important;
+  text-decoration: underline !important;
+  text-decoration-thickness: 2px !important;
+  text-underline-offset: 3px !important;
+}
+
+html.high-contrast a:visited {
+  color: #551a8b !important;
+}
+
+html.high-contrast a:hover,
+html.high-contrast a:focus {
+  color: #0000cc !important;
+  text-decoration-thickness: 3px !important;
+}
+
+/* ----------------------------------------
+   Button styles
+   ---------------------------------------- */
+
+/* Primary buttons: dark background, white text */
+html.high-contrast button[class*="bg-"],
+html.high-contrast [role="button"][class*="bg-"] {
+  background-color: #000066 !important;
+  color: #ffffff !important;
+  border: 2px solid #000000 !important;
+  font-weight: 700 !important;
+}
+
+html.high-contrast button[class*="bg-"]:hover,
+html.high-contrast [role="button"][class*="bg-"]:hover {
+  background-color: #000044 !important;
+  text-decoration: underline !important;
+}
+
+/* Outline/ghost buttons: transparent bg, dark text */
+html.high-contrast button:not([class*="bg-"]),
+html.high-contrast [role="button"]:not([class*="bg-"]) {
+  color: #000000 !important;
+  border: 2px solid #000000 !important;
+  background-color: #ffffff !important;
+}
+
+html.high-contrast button:not([class*="bg-"]):hover,
+html.high-contrast [role="button"]:not([class*="bg-"]):hover {
+  background-color: #e5e5e5 !important;
+  text-decoration: underline !important;
+}
+
+/* ----------------------------------------
+   Focus indicators (enhanced)
+   ---------------------------------------- */
+
+html.high-contrast *:focus-visible {
+  outline: 4px solid #0000ff !important;
+  outline-offset: 3px !important;
+  box-shadow: 0 0 0 6px rgba(0, 0, 255, 0.3) !important;
+}
+
+html.high-contrast *:focus:not(:focus-visible) {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* ----------------------------------------
+   Form fields
+   ---------------------------------------- */
+
+html.high-contrast input,
+html.high-contrast textarea,
+html.high-contrast select {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border: 2px solid #000000 !important;
+}
+
+html.high-contrast input:focus,
+html.high-contrast textarea:focus,
+html.high-contrast select:focus {
+  border-color: #0000ff !important;
+  box-shadow: 0 0 0 3px rgba(0, 0, 255, 0.3) !important;
+}
+
+/* Error state */
+html.high-contrast [aria-invalid="true"] {
+  border-color: #cc0000 !important;
+  border-width: 3px !important;
+  box-shadow: 0 0 0 3px rgba(204, 0, 0, 0.3) !important;
+}
+
+/* Labels */
+html.high-contrast label {
+  color: #000000 !important;
+  font-weight: 600 !important;
+}
+
+/* ----------------------------------------
+   Status indicators
+   ---------------------------------------- */
+
+/* Error text */
+html.high-contrast .text-red-500,
+html.high-contrast .text-red-600,
+html.high-contrast .text-red-700,
+html.high-contrast [class*="text-danger"],
+html.high-contrast [class*="text-error"] {
+  color: #cc0000 !important;
+  font-weight: 700 !important;
+}
+
+/* Success text */
+html.high-contrast .text-green-500,
+html.high-contrast .text-green-600,
+html.high-contrast .text-green-700,
+html.high-contrast [class*="text-success"] {
+  color: #006600 !important;
+  font-weight: 700 !important;
+}
+
+/* Warning text */
+html.high-contrast .text-amber-500,
+html.high-contrast .text-amber-600,
+html.high-contrast .text-yellow-500,
+html.high-contrast .text-yellow-600,
+html.high-contrast [class*="text-warning"] {
+  color: #cc6600 !important;
+  font-weight: 700 !important;
+}
+
+/* ----------------------------------------
+   Icons and SVGs
+   ---------------------------------------- */
+
+html.high-contrast svg {
+  stroke-width: 2.5 !important;
+}
+
+/* Decorative icons should be hidden, functional icons need strong contrast */
+html.high-contrast svg:not([aria-hidden="true"]) {
+  color: #000000 !important;
+}
+
+/* ----------------------------------------
+   Badges and pills
+   ---------------------------------------- */
+
+html.high-contrast [class*="badge"],
+html.high-contrast [class*="pill"],
+html.high-contrast [class*="chip"],
+html.high-contrast [class*="tag"] {
+  border: 2px solid #000000 !important;
+  font-weight: 700 !important;
+}
+
+/* ----------------------------------------
+   Tab navigation
+   ---------------------------------------- */
+
+html.high-contrast [role="tab"] {
+  border: 2px solid #333333 !important;
+  color: #000000 !important;
+}
+
+html.high-contrast [role="tab"][aria-selected="true"] {
+  background-color: #000066 !important;
+  color: #ffffff !important;
+  border-color: #000000 !important;
+  font-weight: 700 !important;
+}
+
+html.high-contrast [role="tabpanel"] {
+  border: 2px solid #333333 !important;
+}
+
+/* ----------------------------------------
+   Modal / dialog
+   ---------------------------------------- */
+
+html.high-contrast [role="dialog"],
+html.high-contrast [role="alertdialog"] {
+  border: 3px solid #000000 !important;
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+/* Backdrop should be opaque for maximum contrast */
+html.high-contrast [data-backdrop],
+html.high-contrast .backdrop,
+html.high-contrast [class*="overlay"] {
+  background-color: rgba(0, 0, 0, 0.85) !important;
+}
+
+/* ----------------------------------------
+   Navigation
+   ---------------------------------------- */
+
+html.high-contrast nav,
+html.high-contrast [role="navigation"] {
+  border: 2px solid #000000 !important;
+}
+
+html.high-contrast nav a,
+html.high-contrast nav button,
+html.high-contrast [role="navigation"] a,
+html.high-contrast [role="navigation"] button {
+  border: 1px solid #333333 !important;
+}
+
+html.high-contrast nav a[aria-current],
+html.high-contrast nav a[aria-current="page"],
+html.high-contrast [role="navigation"] a[aria-current],
+html.high-contrast [role="navigation"] a[aria-current="page"] {
+  background-color: #000066 !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+/* ----------------------------------------
+   Bottom navigation (Aminy mobile)
+   ---------------------------------------- */
+
+html.high-contrast .bottom-nav,
+html.high-contrast [data-testid="bottom-nav"] {
+  border-top: 3px solid #000000 !important;
+  background-color: #ffffff !important;
+}
+
+html.high-contrast .bottom-nav button,
+html.high-contrast [data-testid="bottom-nav"] button {
+  color: #000000 !important;
+  font-weight: 600 !important;
+}
+
+html.high-contrast .bottom-nav button[aria-current="true"],
+html.high-contrast [data-testid="bottom-nav"] button[aria-current="true"] {
+  color: #000066 !important;
+  font-weight: 800 !important;
+  text-decoration: underline !important;
+  text-decoration-thickness: 3px !important;
+}
+
+/* ----------------------------------------
+   Progress indicators
+   ---------------------------------------- */
+
+html.high-contrast [role="progressbar"] {
+  border: 2px solid #000000 !important;
+}
+
+html.high-contrast [role="progressbar"]::after,
+html.high-contrast [role="progressbar"] > * {
+  background-color: #000066 !important;
+}
+
+/* ----------------------------------------
+   Tooltips and popovers
+   ---------------------------------------- */
+
+html.high-contrast [role="tooltip"] {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border: 2px solid #ffffff !important;
+  font-weight: 600 !important;
+}
+
+/* ----------------------------------------
+   Disabled elements
+   ---------------------------------------- */
+
+html.high-contrast [disabled],
+html.high-contrast [aria-disabled="true"] {
+  opacity: 0.6 !important;
+  border-style: dashed !important;
+  text-decoration: line-through !important;
+}
+
+/* ----------------------------------------
+   Gradient overrides — replace gradients with solid colors
+   ---------------------------------------- */
+
+html.high-contrast [class*="bg-gradient"] {
+  background-image: none !important;
+  background-color: #000066 !important;
+  color: #ffffff !important;
+}
+
+/* ----------------------------------------
+   Image and media
+   ---------------------------------------- */
+
+/* Add borders around images for clear boundaries */
+html.high-contrast img:not([role="presentation"]):not([aria-hidden="true"]) {
+  border: 2px solid #333333 !important;
+}
+
+/* ----------------------------------------
+   Scrollbar (for browsers that support it)
+   ---------------------------------------- */
+
+html.high-contrast ::-webkit-scrollbar-thumb {
+  background-color: #000000 !important;
+  border: 2px solid #ffffff !important;
+}
+
+html.high-contrast ::-webkit-scrollbar-track {
+  background-color: #e5e5e5 !important;
+}
+
+/* ----------------------------------------
+   OS-level prefers-contrast: more
+   Mirror all the above via the media query
+   ---------------------------------------- */
+
+@media (prefers-contrast: more) {
+  /* Text */
+  body {
+    color: #000000 !important;
+    background-color: #ffffff !important;
+  }
+
+  .text-slate-300,
+  .text-slate-400,
+  .text-slate-500,
+  .text-gray-300,
+  .text-gray-400,
+  .text-gray-500,
+  .text-zinc-400,
+  .text-zinc-500 {
+    color: #1a1a1a !important;
+  }
+
+  ::placeholder {
+    color: #333333 !important;
+    opacity: 1 !important;
+  }
+
+  /* Borders */
+  button,
+  input,
+  textarea,
+  select,
+  [role="button"],
+  [role="tab"] {
+    border: 2px solid #000000 !important;
+  }
+
+  hr {
+    border-color: #000000 !important;
+    border-width: 2px !important;
+  }
+
+  /* Links */
+  a {
+    color: #0000ee !important;
+    text-decoration: underline !important;
+    text-decoration-thickness: 2px !important;
+  }
+
+  /* Focus */
+  *:focus-visible {
+    outline: 4px solid #0000ff !important;
+    outline-offset: 3px !important;
+  }
+
+  /* Forms */
+  input,
+  textarea,
+  select {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  [aria-invalid="true"] {
+    border-color: #cc0000 !important;
+    border-width: 3px !important;
+  }
+
+  label {
+    color: #000000 !important;
+    font-weight: 600 !important;
+  }
+
+  /* Status */
+  .text-red-500,
+  .text-red-600 {
+    color: #cc0000 !important;
+    font-weight: 700 !important;
+  }
+
+  .text-green-500,
+  .text-green-600 {
+    color: #006600 !important;
+    font-weight: 700 !important;
+  }
+
+  /* SVG */
+  svg {
+    stroke-width: 2.5 !important;
+  }
+
+  /* Tabs */
+  [role="tab"][aria-selected="true"] {
+    background-color: #000066 !important;
+    color: #ffffff !important;
+  }
+
+  /* Dialogs */
+  [role="dialog"],
+  [role="alertdialog"] {
+    border: 3px solid #000000 !important;
+  }
+
+  /* Gradients */
+  [class*="bg-gradient"] {
+    background-image: none !important;
+    background-color: #000066 !important;
+    color: #ffffff !important;
+  }
+}

@@ -1,9 +1,17 @@
 /**
- * Security Module Exports
- * Centralized exports for all security functionality
+ * Security Module - Barrel Export
+ *
+ * Central entry point for all security utilities:
+ * - CSRF protection
+ * - Encrypted storage (HIPAA-compliant)
+ * - Secure fetch wrapper
+ * - Auth rate limiting
+ * - Input sanitization
+ * - Security headers
+ * - Session management
  */
 
-// CSRF Protection
+// ---- CSRF Protection ----
 export {
   generateCSRFToken,
   getOrCreateCSRFToken,
@@ -11,18 +19,28 @@ export {
   clearCSRFToken,
   addCSRFHeader,
   useCSRFToken,
-  validateCSRFMiddleware,
 } from './csrf';
 
-// Security Headers
+// ---- Encrypted Storage ----
+export {
+  encryptedStorage,
+  syncEncryptedStorage,
+  SENSITIVE_KEYS,
+} from './encrypted-storage';
+export type { default as EncryptedStorageDefault } from './encrypted-storage';
+
+// ---- Secure Fetch ----
+export { secureFetch, secureApi, useSecureFetch } from './secure-fetch';
+
+// ---- Security Headers ----
 export {
   getSecurityHeaders,
   getSecurityHeadersConfig,
   getVercelHeaders,
-  type SecurityHeaders,
 } from './headers';
+export type { SecurityHeaders } from './headers';
 
-// Session Management
+// ---- Session Management ----
 export {
   isSessionValid,
   refreshSessionIfNeeded,
@@ -30,68 +48,58 @@ export {
   getValidSession,
   setupSessionRefresh,
   useSecureSession,
-  type SessionData,
 } from './session';
+export type { SessionData } from './session';
 
-// Auth Rate Limiting
+// ---- BAA Requirements ----
 export {
-  isAuthRateLimited,
-  recordFailedAuthAttempt,
-  recordSuccessfulAuth,
-  clearAuthRateLimit,
-  useAuthRateLimit,
-} from './auth-rate-limit';
+  BAA_REQUIREMENTS,
+  getBAAComplianceStatus,
+  hasBAACoverage,
+} from './baa-requirements';
+export type { BAARequirement } from './baa-requirements';
 
-// Encrypted Storage
-export {
-  encryptedStorage,
-  syncEncryptedStorage,
-  SENSITIVE_KEYS,
-} from './encrypted-storage';
+// ---- Global Security Configuration ----
+export interface SecurityConfig {
+  /** Enable CSRF protection on state-changing requests */
+  csrfEnabled: boolean;
+  /** Enable encrypted storage for sensitive keys */
+  encryptionEnabled: boolean;
+  /** Enable audit logging */
+  auditLoggingEnabled: boolean;
+  /** Enable breach detection (periodic scanning) */
+  breachDetectionEnabled: boolean;
+  /** Breach detection interval in milliseconds (default: 5 min) */
+  breachDetectionIntervalMs: number;
+}
 
-// Input Sanitization
-export {
-  sanitizeText,
-  sanitizeRichText,
-  sanitizeEmail,
-  sanitizePhone,
-  sanitizeUrl,
-  sanitizeFilename,
-  sanitizeJSON,
-  sanitizeSearchQuery,
-  sanitizeObject,
-  sanitizeFormData,
-  sanitizeWithMaxLength,
-  createSanitizedChangeHandler,
-  default as sanitize,
-} from './sanitize';
+export const DEFAULT_SECURITY_CONFIG: SecurityConfig = {
+  csrfEnabled: true,
+  encryptionEnabled: true,
+  auditLoggingEnabled: true,
+  breachDetectionEnabled: true,
+  breachDetectionIntervalMs: 5 * 60 * 1000, // 5 minutes
+};
 
-// Secure Fetch (with CSRF protection)
-export {
-  secureFetch,
-  secureApi,
-  useSecureFetch,
-} from './secure-fetch';
+const SECURITY_CONFIG_KEY = 'aminy_security_config';
 
-// Security utilities
-export const SecurityConfig = {
-  // Session settings
-  SESSION_REFRESH_INTERVAL: 60000, // 1 minute
-  SESSION_TIMEOUT_WARNING: 5 * 60 * 1000, // 5 minutes before expiry
+/** Get the active security configuration */
+export function getSecurityConfig(): SecurityConfig {
+  try {
+    const stored = localStorage.getItem(SECURITY_CONFIG_KEY);
+    if (stored) {
+      return { ...DEFAULT_SECURITY_CONFIG, ...JSON.parse(stored) };
+    }
+  } catch {
+    // Fall back to defaults
+  }
+  return DEFAULT_SECURITY_CONFIG;
+}
 
-  // Rate limiting
-  AUTH_MAX_ATTEMPTS: 5,
-  AUTH_WINDOW_MS: 15 * 60 * 1000, // 15 minutes
-  AUTH_LOCKOUT_MS: 30 * 60 * 1000, // 30 minutes
-
-  // CSRF
-  CSRF_HEADER_NAME: 'X-CSRF-Token',
-  CSRF_COOKIE_NAME: 'csrf_token',
-
-  // Sensitive operations that require CSRF
-  CSRF_PROTECTED_METHODS: ['POST', 'PUT', 'PATCH', 'DELETE'],
-
-  // Encryption
-  ENCRYPTION_ALGORITHM: 'AES-GCM',
-  ENCRYPTION_KEY_LENGTH: 256,
-} as const;
+/** Update security configuration */
+export function updateSecurityConfig(partial: Partial<SecurityConfig>): SecurityConfig {
+  const current = getSecurityConfig();
+  const updated = { ...current, ...partial };
+  localStorage.setItem(SECURITY_CONFIG_KEY, JSON.stringify(updated));
+  return updated;
+}

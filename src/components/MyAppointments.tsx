@@ -27,6 +27,7 @@ import {
   Loader2
 } from 'lucide-react';
 import { supabase } from '../utils/supabase/client';
+import { EmptyState } from './EmptyState';
 
 // Types
 export interface Appointment {
@@ -547,27 +548,17 @@ export function MyAppointments({
               key="empty"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="py-12 text-center"
             >
-              <Calendar className="w-16 h-16 mx-auto text-gray-300 mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
-                {activeTab === 'upcoming' ? 'No upcoming appointments' : 'No past appointments'}
-              </h3>
-              <p className="text-gray-500 mb-4 sm:mb-6">
-                {activeTab === 'upcoming'
+              <EmptyState
+                IconComponent={Calendar}
+                title={activeTab === 'upcoming' ? 'No upcoming appointments' : 'No past appointments'}
+                description={activeTab === 'upcoming'
                   ? 'Book a session with one of our experts'
                   : 'Your completed sessions will appear here'
                 }
-              </p>
-              {activeTab === 'upcoming' && (
-                <button
-                  onClick={onBookNew}
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-teal-600 text-white font-medium rounded-lg hover:bg-teal-700 transition-colors"
-                >
-                  Book Your First Session
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              )}
+                actionText={activeTab === 'upcoming' ? 'Book Your First Session' : undefined}
+                onAction={activeTab === 'upcoming' ? onBookNew : undefined}
+              />
             </motion.div>
           )}
         </AnimatePresence>

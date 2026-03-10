@@ -21,6 +21,7 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 import type { UpgradeTrigger as UpgradePromptType } from '../lib/upgrade-triggers';
 import { recordTriggerShown as trackPromptShown, recordTriggerDismissed as trackPromptDismissed } from '../lib/upgrade-triggers';
+import { tierPricing } from '../lib/tier-utils';
 
 interface UpgradePromptProps {
   prompt: UpgradePromptType;
@@ -29,10 +30,11 @@ interface UpgradePromptProps {
   onUpgrade?: () => void;
 }
 
+// Prices derived from tier-utils.ts (single source of truth)
 const TIER_PRICES: Record<string, string> = {
-  starter: '$14.99',
-  core: '$14.99',
-  pro: '$29.99',
+  starter: `$${tierPricing.starter.monthly}`,
+  core: `$${tierPricing.core.monthly}`,
+  pro: `$${tierPricing.pro.monthly}`,
 };
 
 const TIER_COLORS: Record<string, string> = {

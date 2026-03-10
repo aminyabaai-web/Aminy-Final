@@ -84,6 +84,8 @@ import {
   Wind
 } from 'lucide-react';
 import { JrCalmCorner } from './JrCalmCorner';
+import { AACBoard } from './junior/AACBoard';
+import { VisualSchedule } from './junior/VisualSchedule';
 import {
   recordJuniorProgress,
   getFocusAreas,
@@ -94,6 +96,33 @@ import {
   type FocusDomain,
   type DifficultyLevel,
 } from '../lib/parent-junior-bridge';
+import { useVoiceInput } from '../hooks/useVoiceInput';
+import { useTTS } from '../hooks/useTTS';
+import { getActivitiesSync, fetchActivities, type JuniorActivity } from '../lib/junior-content-service';
+import { getJuniorIcon, getSkillTypeColor } from '../utils/juniorIconMap';
+
+// ============================================================================
+// Levenshtein Similarity — real transcript-vs-target accuracy scoring
+// ============================================================================
+
+function levenshteinSimilarity(a: string, b: string): number {
+  const la = a.toLowerCase().trim();
+  const lb = b.toLowerCase().trim();
+  if (la === lb) return 1;
+  if (la.length === 0 || lb.length === 0) return 0;
+  const matrix = Array.from({ length: la.length + 1 }, (_, i) =>
+    Array.from({ length: lb.length + 1 }, (_, j) => (i === 0 ? j : j === 0 ? i : 0))
+  );
+  for (let i = 1; i <= la.length; i++) {
+    for (let j = 1; j <= lb.length; j++) {
+      matrix[i][j] =
+        la[i - 1] === lb[j - 1]
+          ? matrix[i - 1][j - 1]
+          : 1 + Math.min(matrix[i - 1][j], matrix[i][j - 1], matrix[i - 1][j - 1]);
+    }
+  }
+  return 1 - matrix[la.length][lb.length] / Math.max(la.length, lb.length);
+}
 
 interface JuniorPageProps {
   userData: {
@@ -246,7 +275,7 @@ const TRACK_FILTERS = [
 ];
 
 export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: JuniorPageProps) {
-  const [activeView, setActiveView] = useState<'kid-login' | 'home' | 'buddy-select' | 'activity-select' | 'activity' | 'celebration' | 'calm-corner' | 'parent-education' | 'visual-coaching' | 'offline-manager' | 'parent-controls'>('kid-login');
+  const [activeView, setActiveView] = useState<'kid-login' | 'home' | 'buddy-select' | 'activity-select' | 'activity' | 'celebration' | 'calm-corner' | 'parent-education' | 'visual-coaching' | 'offline-manager' | 'parent-controls' | 'aac-board' | 'visual-schedule'>('kid-login');
   const [selectedBuddy, setSelectedBuddy] = useState<string>('sunny');
   const [currentSpeechLevel, setCurrentSpeechLevel] = useState<number>(2);
   const [isRecording, setIsRecording] = useState(false);
@@ -271,7 +300,62 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
   const [isOfflineMode, setIsOfflineMode] = useState(false);
   const [currentSessionTime, setCurrentSessionTime] = useState(0);
   const [emotionDetected, setEmotionDetected] = useState<'frustrated' | 'excited' | 'anxious' | 'calm'>('calm');
-  
+  const [useTextInput, setUseTextInput] = useState(false);
+  const [textInputValue, setTextInputValue] = useState('');
+
+  // =========================================================================
+  // Extended activities from CMS / content service
+  // =========================================================================
+  const [allActivitiesCMS, setAllActivitiesCMS] = useState<JuniorActivity[]>(() => getActivitiesSync());
+
+  // Load extended activities asynchronously (Supabase or fallback)
+  useEffect(() => {
+    let cancelled = false;
+    fetchActivities().then((fetched) => {
+      if (!cancelled && fetched.length > 0) setAllActivitiesCMS(fetched);
+    });
+    return () => { cancelled = true; };
+  }, []);
+
+  // TTS narration hook
+  const tts = useTTS();
+
+  // Real speech recognition via Web Speech API
+  const speechPromptTimestamp = useRef<number>(0);
+  const latestTranscriptRef = useRef<string>('');
+  const latestConfidenceRef = useRef<number>(0);
+  const speechResolverRef = useRef<((transcript: string) => void) | null>(null);
+
+  const voiceInput = useVoiceInput({
+    continuous: false,
+    interimResults: true,
+    language: 'en-US',
+    onResult: (_transcript, isFinal) => {
+      // Always keep the latest transcript for when promise resolves
+      if (_transcript) {
+        latestTranscriptRef.current = _transcript;
+      }
+      if (isFinal && speechResolverRef.current) {
+        // Final result received — resolve immediately (onEnd will also fire, but we guard with null check)
+        const resolver = speechResolverRef.current;
+        speechResolverRef.current = null;
+        resolver(latestTranscriptRef.current);
+      }
+    },
+    onEnd: () => {
+      // When recognition ends (final result or timeout), resolve the promise
+      if (speechResolverRef.current) {
+        speechResolverRef.current(latestTranscriptRef.current);
+        speechResolverRef.current = null;
+      }
+    },
+  });
+
+  // Keep confidence ref in sync with voice hook state (avoids stale closures)
+  useEffect(() => {
+    latestConfidenceRef.current = voiceInput.confidence;
+  }, [voiceInput.confidence]);
+
   // Enhanced Parent Integration State — loaded from bridge on mount
   const [todaysFocus, setTodaysFocus] = useState<string[]>(['/s/ blends', 'morning routine step 3', 'prosody practice']);
   const [difficultyOverrides, setDifficultyOverrides] = useState<Record<string, DifficultyLevel>>({});
@@ -662,8 +746,163 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
       energyLevel: 'adaptive',
       aacrequired: true,
       naturalisticMission: true
+    },
+
+    // === WAVE 2E — NEW ACTIVITIES (6 additions to reach 15 total) ===
+    {
+      id: 'rhyme-time',
+      title: 'Rhyme Time',
+      description: 'Find words that rhyme! Build phonological awareness with fun rhyming games.',
+      icon: <BookOpen className="w-5 h-5" />,
+      duration: '3-5 min',
+      skillType: 'speech',
+      level: 1,
+      sessionSize: 'standard',
+      unlocked: true,
+      tier: 'starter',
+      color: 'bg-violet-100 text-violet-600',
+      track: 'Phonological Awareness',
+      voiceReady: true,
+      focus: ['rhyming', 'word families'],
+      mode: 'matching',
+      regulationFriendly: true,
+      whyToday: 'Rhyming builds the foundation for reading and speech',
+      energyLevel: 'quick-wins',
+      offlineReady: true
+    },
+    {
+      id: 'story-retell',
+      title: 'Story Retell',
+      description: 'Listen to a short story and retell key events in your own words.',
+      icon: <MessageSquare className="w-5 h-5" />,
+      duration: '5-8 min',
+      skillType: 'speech',
+      level: 2,
+      sessionSize: 'standard',
+      unlocked: safeTier === 'core' || safeTier === 'pro',
+      tier: 'core',
+      color: 'bg-teal-100 text-teal-600',
+      track: 'Narrative Skills',
+      voiceReady: true,
+      focus: ['sequencing', 'narration', 'comprehension'],
+      mode: 'listen→retell',
+      regulationFriendly: true,
+      whyToday: 'Storytelling strengthens language and memory',
+      energyLevel: 'adaptive',
+      offlineReady: true
+    },
+    {
+      id: 'following-directions',
+      title: 'Following Directions',
+      description: 'Practice multi-step directions: "Put the red block ON the blue block!"',
+      icon: <Compass className="w-5 h-5" />,
+      duration: '3-5 min',
+      skillType: 'executive',
+      level: 1,
+      sessionSize: 'standard',
+      unlocked: true,
+      tier: 'starter',
+      color: 'bg-orange-100 text-orange-600',
+      track: 'Receptive Language',
+      voiceReady: false,
+      focus: ['listening', 'spatial concepts', 'sequencing'],
+      mode: 'interactive',
+      regulationFriendly: true,
+      whyToday: 'Following directions is key for school readiness',
+      energyLevel: 'quick-wins',
+      offlineReady: true
+    },
+    {
+      id: 'vocabulary-builder',
+      title: 'Vocabulary Builder',
+      description: 'Name items in categories, build word associations, and expand your word bank!',
+      icon: <Lightbulb className="w-5 h-5" />,
+      duration: '4-6 min',
+      skillType: 'speech',
+      level: 1,
+      sessionSize: 'standard',
+      unlocked: safeTier === 'core' || safeTier === 'pro',
+      tier: 'core',
+      color: 'bg-amber-100 text-amber-600',
+      track: 'Expressive Language',
+      voiceReady: true,
+      focus: ['categories', 'word associations', 'naming'],
+      mode: 'category-naming',
+      regulationFriendly: true,
+      whyToday: 'Growing your word bank for better expression',
+      energyLevel: 'adaptive',
+      offlineReady: true,
+      multilingual: true
+    },
+    {
+      id: 'emotion-labels',
+      title: 'Emotion Labels',
+      description: 'Identify emotions from real-life scenarios. How would YOU feel?',
+      icon: <Heart className="w-5 h-5" />,
+      duration: '4-6 min',
+      skillType: 'social',
+      level: 1,
+      sessionSize: 'standard',
+      unlocked: true,
+      tier: 'starter',
+      color: 'bg-rose-100 text-rose-600',
+      track: 'Social Communication',
+      voiceReady: true,
+      focus: ['emotion recognition', 'perspective taking', 'empathy'],
+      mode: 'scenario-based',
+      regulationFriendly: true,
+      whyToday: 'Understanding feelings builds stronger friendships',
+      energyLevel: 'adaptive',
+      offlineReady: true,
+      naturalisticMission: true
+    },
+    {
+      id: 'breathing-buddy',
+      title: 'Breathing Buddy',
+      description: 'Guided breathing with a visual animation. Breathe in... hold... breathe out...',
+      icon: <Wind className="w-5 h-5" />,
+      duration: '2-3 min',
+      skillType: 'sensory',
+      level: 0,
+      sessionSize: 'micro',
+      unlocked: true,
+      tier: 'starter',
+      color: 'bg-sky-100 text-sky-600',
+      track: 'Self-Regulation',
+      voiceReady: false,
+      focus: ['deep breathing', 'calm down', 'self-regulation'],
+      mode: 'guided-animation',
+      regulationFriendly: true,
+      whyToday: 'A quick reset when emotions feel big',
+      energyLevel: 'quick-wins',
+      offlineReady: true
     }
   ];
+
+  // =========================================================================
+  // Merge extended CMS activities into the hardcoded list.
+  // De-duplicate by ID — hardcoded wins if both exist (richer metadata).
+  // =========================================================================
+  const hardcodedIds = new Set(activities.map((a) => a.id));
+  const extendedAsUI: Activity[] = allActivitiesCMS
+    .filter((cms) => !hardcodedIds.has(cms.id))
+    .map((cms) => ({
+      id: cms.id,
+      title: cms.title,
+      description: cms.description,
+      icon: getJuniorIcon(cms.icon),
+      duration: cms.duration,
+      skillType: cms.skillType,
+      level: cms.level,
+      sessionSize: cms.sessionSize,
+      unlocked: cms.unlocked,
+      tier: cms.tier,
+      color: getSkillTypeColor(cms.skillType),
+      track: cms.track,
+      voiceReady: cms.voiceReady,
+    }));
+
+  const allActivities: Activity[] = [...activities, ...extendedAsUI];
 
   // Adaptive AI Journey with parent cross-learning
   const getPersonalizedJourney = useCallback(() => {
@@ -678,7 +917,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
     };
 
     // Filter out activities matching avoidance triggers from parent
-    const safeActivities = activities.filter(a => {
+    const safeActivities = allActivities.filter(a => {
       const activityText = `${a.title} ${a.description} ${a.focus?.join(' ') || ''} ${a.mode || ''}`.toLowerCase();
       return !avoidanceTriggers.some(trigger => activityText.includes(trigger));
     });
@@ -729,72 +968,115 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
       visualSupports: true,
       adaptiveMessage: 'Perfect level for you today!'
     };
-  }, [currentSpeechLevel, needsBreak, childEnergyLevel, speechAnalysis, practiceAttempts, successStreak, todaysFocus, currentSessionTime, activities, difficultyOverrides, avoidanceTriggers]);
+  }, [currentSpeechLevel, needsBreak, childEnergyLevel, speechAnalysis, practiceAttempts, successStreak, todaysFocus, currentSessionTime, allActivities, difficultyOverrides, avoidanceTriggers]);
 
-  // Enhanced speech practice with revolutionary AI feedback
+  // Enhanced speech practice with REAL speech recognition feedback
   const handleAdvancedSpeechPractice = async () => {
+    // If speech recognition is not supported, switch to text input mode
+    if (!voiceInput.isSupported) {
+      setUseTextInput(true);
+      toast('Switching to text input mode — type the word to practice!', {
+        description: 'Speech recognition is not available in this browser.',
+        duration: 4000,
+      });
+      return;
+    }
+
     try {
       setIsRecording(true);
-      setAudioProcessing(true);
       setPracticeAttempts(prev => prev + 1);
       setPracticeReps(prev => prev + 1);
-      
-      // Simulate ultra-low latency <200ms
-      await new Promise(resolve => setTimeout(resolve, 180));
-      
-      // Revolutionary phoneme-level analysis with coarticulation
+
+      // Record when the prompt was shown for real latency measurement
+      speechPromptTimestamp.current = Date.now();
+      latestTranscriptRef.current = '';
+      latestConfidenceRef.current = 0;
+
+      // Start real speech recognition
+      voiceInput.resetTranscript();
+      voiceInput.startListening();
+
+      // Wait for speech result via onEnd callback or timeout (8s max)
+      const transcript = await new Promise<string>((resolve) => {
+        speechResolverRef.current = resolve;
+
+        // Safety timeout in case onEnd never fires
+        setTimeout(() => {
+          if (speechResolverRef.current) {
+            voiceInput.stopListening();
+            const fallback = latestTranscriptRef.current;
+            speechResolverRef.current = null;
+            resolve(fallback);
+          }
+        }, 8000);
+      });
+
+      setIsRecording(false);
+      setAudioProcessing(true);
+
+      // Calculate REAL metrics from actual speech input
+      const realLatency = Date.now() - speechPromptTimestamp.current;
+      const realConfidence = latestConfidenceRef.current || 0; // from SpeechRecognition API via ref
+      const transcriptAccuracy = transcript
+        ? levenshteinSimilarity(transcript, currentWord)
+        : 0;
+
+      // Use real confidence as the primary accuracy signal, blended with transcript match
+      const overallAccuracy = transcript
+        ? transcriptAccuracy * 0.6 + realConfidence * 0.4
+        : 0;
+
       const targetPhonemes = analyzeTargetPhonemes(currentWord);
       const analysis: SpeechAnalysis = {
-        accuracy: Math.random() * 0.4 + 0.6,
-        clarity: Math.random() * 0.3 + 0.7,
+        accuracy: overallAccuracy,
+        clarity: realConfidence,
         attempt: true,
         phonemes: targetPhonemes,
-        confidence: Math.random() * 0.3 + 0.7,
-        needsSupport: Math.random() < 0.3,
-        latency: 150 + Math.random() * 50, // 150-200ms
+        confidence: realConfidence,
+        needsSupport: overallAccuracy < 0.6,
+        latency: realLatency,
         phonemeLevel: true,
-        coarticulationScore: Math.random() * 0.3 + 0.7,
-        prosodyScore: Math.random() * 0.4 + 0.6,
-        voicingAccuracy: Math.random() * 0.3 + 0.7,
-        placementAccuracy: Math.random() * 0.4 + 0.6,
-        mannerAccuracy: Math.random() * 0.3 + 0.7,
-        intelligibilityProxy: Math.random() * 0.2 + 0.8,
-        errorlessLearningNeeded: practiceAttempts > 3 && Math.random() < 0.4,
-        visualCuesRecommended: Math.random() < 0.6
+        // Derived metrics based on real accuracy (not random)
+        coarticulationScore: Math.min(1, overallAccuracy * 1.05),
+        prosodyScore: realConfidence,
+        voicingAccuracy: transcriptAccuracy,
+        placementAccuracy: transcriptAccuracy,
+        mannerAccuracy: Math.min(1, (transcriptAccuracy + realConfidence) / 2),
+        intelligibilityProxy: transcript ? Math.min(1, overallAccuracy * 1.1) : 0,
+        errorlessLearningNeeded: practiceAttempts > 3 && overallAccuracy < 0.5,
+        visualCuesRecommended: overallAccuracy < 0.7,
       };
-      
+
       setSpeechAnalysis(analysis);
-      
-      // Advanced error-aware re-cues with place/manner/voicing feedback
+
+      // Feedback based on real analysis
       if (analysis.accuracy > 0.9) {
         setSuccessStreak(prev => prev + 1);
         setTodayTokens(prev => prev + 1);
         setGeneralizationWins(prev => prev + 1);
-        
-        // Spectacular visual celebration
+
         if (visualCoaching.spectrogramFireworks) {
           setShowConfetti(true);
           setTimeout(() => setShowConfetti(false), 3000);
         }
-        
+
         toast.success(`🌟 AMAZING! That "${currentWord}" was PERFECT!`, {
-          description: `Phoneme accuracy: ${Math.round(analysis.accuracy * 100)}% | Prosody: ${Math.round((analysis.prosodyScore || 0) * 100)}%`,
+          description: `Accuracy: ${Math.round(analysis.accuracy * 100)}% | Confidence: ${Math.round(realConfidence * 100)}%`,
           duration: 3000,
         });
-        
-        // Create enhanced parent micro-card
+
         const newMicroCard: ParentMicroCard = {
           id: `victory-${Date.now()}`,
-          title: `${childName} nailed "${currentWord}" with prosody!`,
-          message: `Accuracy: ${Math.round(analysis.accuracy * 100)}% | Try in context: "stirring soup"`,
+          title: `${childName} nailed "${currentWord}"!`,
+          message: `Accuracy: ${Math.round(analysis.accuracy * 100)}% | Heard: "${transcript}"`,
           timestamp: new Date(),
           type: 'celebration',
           actionable: true,
           priority: 'high',
-          category: 'speech'
+          category: 'speech',
         };
         setParentMicroCards(prev => [newMicroCard, ...prev]);
-        
+
         syncToParentEnhanced('practice_mastery', {
           word: currentWord,
           accuracy: analysis.accuracy,
@@ -802,38 +1084,44 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
           prosody: analysis.prosodyScore,
           coarticulation: analysis.coarticulationScore,
           generalizationReady: true,
-          nextTarget: 'real-world context'
+          nextTarget: 'real-world context',
+          transcript,
         });
-        
+
       } else if (analysis.accuracy > 0.7) {
         setSuccessStreak(prev => Math.max(0, prev - 1));
-        
+
         if (visualCoaching.mouthAnimation) {
           toast(`👍 Good work! I heard ${Math.round(analysis.accuracy * 100)}% of those sounds!`, {
-            description: "Let's fine-tune that last part 👄",
+            description: transcript ? `I heard: "${transcript}" — let's fine-tune! 👄` : "Let's fine-tune that last part 👄",
             duration: 3000,
           });
         } else {
           toast(`👍 Good try! You're ${Math.round(analysis.accuracy * 100)}% there!`, {
-            description: "One more adjustment and you've got it!",
+            description: transcript ? `I heard: "${transcript}"` : 'One more adjustment and you\'ve got it!',
             duration: 3000,
           });
         }
-        
+
+      } else if (!transcript) {
+        // No speech detected at all
+        toast("🎤 I didn't hear anything. Try speaking a bit louder!", {
+          description: `Say "${currentWord}" into the microphone`,
+          duration: 4000,
+        });
+
       } else {
-        // Revolutionary error-specific coaching
+        // Low accuracy — error-specific coaching
         const errorType = detectAdvancedSpeechError(currentWord, analysis);
         setSuccessStreak(0);
-        
+
         if (analysis.errorlessLearningNeeded) {
-          // Switch to errorless learning mode
           toast("💙 Let's try an easier way! I'll help you more.", {
-            description: "Switching to guided practice mode",
+            description: 'Switching to guided practice mode',
             duration: 4000,
           });
-          
           setAdaptiveDifficulty(prev => Math.max(1, prev - 1));
-          
+
         } else if (errorType === 's_to_t_substitution') {
           if (visualCoaching.mouthAnimation) {
             toast("🐍 Snake sound! Tongue tip behind teeth, air flows out - sssss!", {
@@ -846,32 +1134,33 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
               duration: 4000,
             });
           }
-          
+
         } else if (errorType === 'prosody_difficulty') {
           toast("🎵 Let's add some music to that word!", {
             description: "STARfish goes up ⬆️ then down ⬇️",
             duration: 4000,
           });
-          
+
         } else if (errorType === 'coarticulation_difficulty') {
           toast("🔗 Let's connect those sounds smoothly!", {
             description: "ST-ST-STAR - practice the connection",
             duration: 4500,
           });
         }
-        
+
         syncToParentEnhanced('needs_coaching', {
           word: currentWord,
           accuracy: analysis.accuracy,
           errorPattern: errorType,
           recommendedStrategy: getEnhancedStrategy(errorType),
-          visualSupportsUsed: visualCoaching.enabled
+          visualSupportsUsed: visualCoaching.enabled,
+          transcript,
         });
       }
-      
+
       // Emotion-aware pacing and regulation detection
       detectEmotionAndAdapt(analysis);
-      
+
     } catch (error) {
       console.error('Speech practice error:', error);
       toast.error("Let's try that again! 🔄");
@@ -879,6 +1168,53 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
       setIsRecording(false);
       setAudioProcessing(false);
     }
+  };
+
+  // Text-input fallback for speech practice (when Web Speech API is unavailable)
+  const handleTextInputPractice = () => {
+    const typed = textInputValue.trim();
+    if (!typed) return;
+
+    setPracticeAttempts(prev => prev + 1);
+    setPracticeReps(prev => prev + 1);
+
+    const accuracy = levenshteinSimilarity(typed, currentWord);
+    const targetPhonemes = analyzeTargetPhonemes(currentWord);
+
+    const analysis: SpeechAnalysis = {
+      accuracy,
+      clarity: accuracy > 0.7 ? 0.9 : 0.5,
+      attempt: true,
+      confidence: accuracy, // use accuracy as confidence proxy for text mode
+      needsSupport: accuracy < 0.5,
+      latency: 0,
+      phonemes: targetPhonemes,
+    };
+
+    setSpeechAnalysis(analysis);
+
+    if (accuracy >= 0.8) {
+      setSuccessStreak(prev => prev + 1);
+      setTodayTokens(prev => prev + 1);
+      toast.success(`Great job typing "${currentWord}"!`);
+    } else {
+      setSuccessStreak(0);
+      toast(`Almost! You typed "${typed}" — the target is "${currentWord}". Try again!`);
+    }
+
+    setTextInputValue('');
+    const childId = userData?.childName?.toLowerCase().replace(/\s+/g, '-') || 'default';
+    recordJuniorProgress(childId, {
+      activityId: 'text-practice',
+      activityTitle: `Text practice: ${currentWord}`,
+      domain: 'speech',
+      completedAt: new Date().toISOString(),
+      durationSeconds: 0,
+      accuracy: Math.round(accuracy * 100),
+      promptLevel: 0,
+      tokensEarned: accuracy >= 0.8 ? 1 : 0,
+      notes: `Text input mode — typed: "${typed}", target: "${currentWord}"`,
+    });
   };
 
   // Advanced emotion detection and adaptive pacing
@@ -895,7 +1231,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
       
       // Auto-suggest regulation activity
       setTimeout(() => {
-        const calmActivity = activities.find(a => a.id === 'calm-corner');
+        const calmActivity = allActivities.find(a => a.id === 'calm-corner');
         if (calmActivity?.unlocked) {
           toast("🫧 Ready for breathing bubbles?", {
             description: "Tap to start your calm moment",
@@ -1408,7 +1744,27 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
               </div>
 
               {/* Quick Actions */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+              <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => setActiveView('aac-board')}
+                  className="bg-gradient-to-br from-blue-500 to-purple-500 rounded-2xl p-4 shadow-sm flex flex-col items-center space-y-2 text-white min-h-[88px]"
+                >
+                  <Layers className="w-7 h-7" />
+                  <span className="text-sm font-medium">My Words</span>
+                </motion.button>
+
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => setActiveView('visual-schedule')}
+                  className="bg-gradient-to-br from-green-500 to-teal-500 rounded-2xl p-4 shadow-sm flex flex-col items-center space-y-2 text-white min-h-[88px]"
+                >
+                  <Clock className="w-7 h-7" />
+                  <span className="text-sm font-medium">My Schedule</span>
+                </motion.button>
+
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
@@ -1418,7 +1774,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
                   <Gamepad2 className="w-6 h-6 text-blue-500" />
                   <span>All Activities</span>
                 </motion.button>
-                
+
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
@@ -1432,11 +1788,31 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
             </div>
           )}
 
+          {activeView === 'aac-board' && (
+            <AACBoard
+              childName={childName}
+              onBack={() => setActiveView('home')}
+            />
+          )}
+
+          {activeView === 'visual-schedule' && (
+            <VisualSchedule
+              childName={childName}
+              onBack={() => setActiveView('home')}
+            />
+          )}
+
           {activeView === 'activity' && selectedActivity && (
             <div className="p-4 sm:p-5 md:p-6">
               <motion.div
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
+                onAnimationComplete={() => {
+                  // Auto-narrate activity instructions when view loads
+                  if (selectedActivity.voiceReady !== false) {
+                    tts.speak(`${selectedActivity.title}. ${selectedActivity.description}`);
+                  }
+                }}
                 className="bg-white rounded-3xl shadow-lg overflow-hidden"
               >
                 {/* Activity Header */}
@@ -1444,20 +1820,42 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
                   <div className="flex items-center justify-between mb-4">
                     <motion.button
                       whileHover={{ scale: 1.1 }}
-                      onClick={() => setActiveView('home')}
+                      onClick={() => {
+                        tts.stop();
+                        setActiveView('home');
+                      }}
                       className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center"
                     >
                       <ArrowLeft className="w-5 h-5 text-white" />
                     </motion.button>
-                    
-                    <div className="text-center">
+
+                    <div className="text-center flex-1 mx-3">
                       <h2 className="text-xl text-white mb-1">{selectedActivity.title}</h2>
                       <p className="text-white/80 text-sm">{selectedActivity.description}</p>
                     </div>
-                    
-                    <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-                      {selectedActivity.icon}
-                    </div>
+
+                    {/* TTS replay / stop button */}
+                    <motion.button
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      onClick={() => {
+                        if (tts.isSpeaking) {
+                          tts.stop();
+                        } else {
+                          tts.speak(`${selectedActivity.title}. ${selectedActivity.description}`);
+                        }
+                      }}
+                      className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                        tts.isSpeaking ? 'bg-white/40' : 'bg-white/20'
+                      }`}
+                      aria-label={tts.isSpeaking ? 'Stop narration' : 'Read aloud'}
+                    >
+                      {tts.isSpeaking ? (
+                        <Square className="w-4 h-4 text-white" />
+                      ) : (
+                        <Volume2 className="w-5 h-5 text-white" />
+                      )}
+                    </motion.button>
                   </div>
                   
                   {/* Progress Bar */}
@@ -1472,6 +1870,42 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
 
                 {/* Practice Area */}
                 <div className="p-4 sm:p-5 md:p-6">
+                  {/* Speech recognition browser support banner with text input toggle */}
+                  {!voiceInput.isSupported && (
+                    <div className="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-xl text-center text-sm text-amber-800">
+                      <AlertTriangle className="w-4 h-4 inline-block mr-1 -mt-0.5" />
+                      Speech practice works best in Chrome, Edge, or Safari with a microphone. You can still practice with text input!
+                      {!useTextInput && (
+                        <button
+                          onClick={() => setUseTextInput(true)}
+                          className="mt-2 block mx-auto px-4 py-1.5 bg-amber-500 text-white rounded-lg text-xs font-medium hover:bg-amber-600 transition-colors"
+                        >
+                          Switch to Text Input
+                        </button>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Text input toggle for users who prefer typing */}
+                  {voiceInput.isSupported && (
+                    <div className="mb-3 flex justify-end">
+                      <button
+                        onClick={() => setUseTextInput(!useTextInput)}
+                        className="text-xs text-gray-500 hover:text-gray-700 flex items-center gap-1"
+                      >
+                        {useTextInput ? <Mic className="w-3 h-3" /> : <MessageSquare className="w-3 h-3" />}
+                        {useTextInput ? 'Switch to Voice' : 'Use Text Input'}
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Voice input error banner */}
+                  {voiceInput.error && (
+                    <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl text-center text-sm text-red-700">
+                      {voiceInput.error}
+                    </div>
+                  )}
+
                   {/* Current Word Display with Visual Coaching */}
                   <div className="text-center mb-8">
                     <motion.div
@@ -1516,39 +1950,74 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
                       </motion.div>
                     )}
 
-                    {/* Visual feedback */}
+                    {/* Visual feedback — real metrics from speech recognition */}
                     {speechAnalysis && (
                       <motion.div
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
-                        className="flex justify-center space-x-4 text-sm"
+                        className="flex flex-wrap justify-center gap-3 text-sm"
                       >
                         <div className="flex items-center space-x-1">
                           <div className="w-3 h-3 bg-green-500 rounded-full" />
                           <span>Accuracy: {Math.round(speechAnalysis.accuracy * 100)}%</span>
                         </div>
-                        {speechAnalysis.prosodyScore && (
-                          <div className="flex items-center space-x-1">
-                            <div className="w-3 h-3 bg-blue-500 rounded-full" />
-                            <span>Melody: {Math.round(speechAnalysis.prosodyScore * 100)}%</span>
-                          </div>
-                        )}
+                        <div className="flex items-center space-x-1">
+                          <div className="w-3 h-3 bg-blue-500 rounded-full" />
+                          <span>Confidence: {Math.round(speechAnalysis.confidence * 100)}%</span>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          <div className="w-3 h-3 bg-purple-500 rounded-full" />
+                          <span>Response: {speechAnalysis.latency < 1000 ? `${Math.round(speechAnalysis.latency)}ms` : `${(speechAnalysis.latency / 1000).toFixed(1)}s`}</span>
+                        </div>
                       </motion.div>
                     )}
                   </div>
 
-                  {/* Recording Controls */}
-                  <div className="flex justify-center space-x-4 mb-4 sm:mb-6">
+                  {/* Recording Controls OR Text Input Fallback */}
+                  {useTextInput || !voiceInput.isSupported ? (
+                    /* Text Input Mode — fallback for unsupported browsers or user preference */
+                    <div className="mb-4 sm:mb-6">
+                      <div className="flex items-center gap-2 max-w-sm mx-auto">
+                        <input
+                          type="text"
+                          value={textInputValue}
+                          onChange={(e) => setTextInputValue(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') handleTextInputPractice();
+                          }}
+                          placeholder={`Type "${currentWord}" here...`}
+                          className="flex-1 px-4 py-3 border-2 border-blue-200 rounded-xl text-lg text-center focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 transition-colors"
+                          autoComplete="off"
+                          autoCapitalize="off"
+                          spellCheck={false}
+                        />
+                        <motion.button
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          onClick={handleTextInputPractice}
+                          disabled={!textInputValue.trim()}
+                          className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-purple-500 text-white flex items-center justify-center shadow-lg disabled:opacity-50"
+                        >
+                          <Check className="w-6 h-6" />
+                        </motion.button>
+                      </div>
+                      <p className="text-center text-xs text-gray-400 mt-2">
+                        Type the word above, then press Enter or tap the check button
+                      </p>
+                    </div>
+                  ) : (
+                    /* Voice Input Mode — primary speech practice */
+                    <div className="flex justify-center space-x-4 mb-4 sm:mb-6">
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={handleAdvancedSpeechPractice}
                       disabled={isRecording || audioProcessing}
                       className={`w-20 h-20 rounded-full flex items-center justify-center text-white shadow-lg ${
-                        isRecording 
-                          ? 'bg-red-500 animate-pulse' 
-                          : audioProcessing 
-                          ? 'bg-yellow-500' 
+                        isRecording
+                          ? 'bg-red-500 animate-pulse'
+                          : audioProcessing
+                          ? 'bg-yellow-500'
                           : 'bg-gradient-to-br from-blue-500 to-purple-500'
                       }`}
                     >
@@ -1596,6 +2065,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
                       <Brain className="w-6 h-6 text-purple-600" />
                     </motion.button>
                   </div>
+                  )}
 
                   {/* Kid-friendly controls */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
@@ -1723,38 +2193,59 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
                 ))}
               </div>
 
-              {/* Activities Grid */}
+              {/* Activity count */}
+              <p className="text-xs text-gray-400 mb-3">
+                {allActivities.filter(a => activeTrackFilter === 'all' || a.skillType === activeTrackFilter).length} activities
+              </p>
+
+              {/* Activities Grid — shows ALL activities, locked ones with overlay */}
               <div className="space-y-3">
-                {activities
-                  .filter(activity => 
+                {allActivities
+                  .filter(activity =>
                     activeTrackFilter === 'all' || activity.skillType === activeTrackFilter
                   )
-                  .filter(activity => activity.unlocked)
                   .map((activity, index) => (
                     <motion.div
                       key={activity.id}
                       initial={{ x: -20, opacity: 0 }}
                       animate={{ x: 0, opacity: 1 }}
-                      transition={{ delay: index * 0.05 }}
-                      whileHover={{ scale: 1.02 }}
+                      transition={{ delay: Math.min(index * 0.03, 0.6) }}
+                      whileHover={{ scale: activity.unlocked ? 1.02 : 1 }}
                       onClick={() => {
+                        if (!activity.unlocked) {
+                          toast(`Unlock "${activity.title}" with ${activity.tier === 'pro' ? 'Pro' : 'Core'} plan`);
+                          return;
+                        }
                         setSelectedActivity(activity);
+                        tts.speak(`Let's play ${activity.title}! ${activity.description}`);
                         setActiveView('activity');
                         setCurrentWord(activity.focus?.[0]?.replace(/[\/\[\]]/g, '') || 'star');
                       }}
-                      className={`${activity.color} rounded-2xl p-4 cursor-pointer shadow-sm`}
+                      className={`${activity.color} rounded-2xl p-4 cursor-pointer shadow-sm relative ${
+                        !activity.unlocked ? 'opacity-60' : ''
+                      }`}
                     >
+                      {/* Lock overlay for locked activities */}
+                      {!activity.unlocked && (
+                        <div className="absolute top-3 right-3">
+                          <Lock className="w-4 h-4 text-gray-500" />
+                        </div>
+                      )}
+
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center space-x-3">
                           {activity.icon}
                           <div>
-                            <h4 className="text-sm">{activity.title}</h4>
-                            <p className="text-xs opacity-75">{activity.duration} • {activity.track}</p>
+                            <h4 className="text-sm font-medium">{activity.title}</h4>
+                            <p className="text-xs opacity-75">{activity.duration} {activity.track && `\u2022 ${activity.track}`}</p>
                           </div>
                         </div>
                         <div className="flex items-center space-x-2">
                           {activity.tier === 'pro' && (
                             <Crown className="w-4 h-4 text-yellow-600" />
+                          )}
+                          {activity.voiceReady && (
+                            <Volume2 className="w-3.5 h-3.5 opacity-50" />
                           )}
                           {activity.offlineReady && (
                             <Download className="w-4 h-4 opacity-60" />
@@ -1762,7 +2253,9 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
                           <ChevronRight className="w-4 h-4" />
                         </div>
                       </div>
-                      
+
+                      <p className="text-xs opacity-70 mb-2 line-clamp-2">{activity.description}</p>
+
                       <div className="flex flex-wrap gap-1">
                         <Badge variant="outline" className="text-xs">
                           Level {activity.level}
@@ -1894,7 +2387,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
                 Enter parent PIN to exit Kid Mode
               </p>
               
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+              <div className="grid grid-cols-3 gap-2">
                 {[1,2,3,4,5,6,7,8,9,'C',0,'✓'].map((num, index) => (
                   <Button
                     key={index}

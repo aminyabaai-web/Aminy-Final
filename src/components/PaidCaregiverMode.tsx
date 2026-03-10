@@ -36,6 +36,7 @@ import {
   FISCAL_AGENTS,
   getAvailableFiscalAgents,
   hasPaidCaregiverFeatures,
+  type TierType,
 } from '../lib/tier-utils';
 
 // Types
@@ -162,7 +163,7 @@ export function PaidCaregiverMode({
     : null;
 
   // Check if feature is available
-  if (!hasPaidCaregiverFeatures(userTier as any)) {
+  if (!hasPaidCaregiverFeatures(userTier as TierType)) {
     return (
       <Card className="p-6 bg-gradient-to-br from-amber-50 to-orange-50 border-amber-200">
         <div className="text-center">

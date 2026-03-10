@@ -70,19 +70,113 @@ export default defineConfig(({ mode }) => ({
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2,mp3,wav,json,webp}'],
+        // Import custom SW extensions (push notifications, background sync)
+        // This file lives in public/ and is copied to the build output
+        importScripts: ['sw-custom.js'],
         // Skip external domains to avoid CSP violations with service worker fetch
         // Google Fonts are cached natively by browsers with long cache headers
         navigateFallbackDenylist: [/^https:\/\/fonts\./],
         runtimeCaching: [
+          // Crisis resources — MUST work offline (CacheFirst with long expiry)
+          {
+            urlPattern: /\/crisis.*/,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'crisis-resources',
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 86400 * 30, // 30 days
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
+          // Junior activity assets (images, audio, animations) — CacheFirst for offline play
+          {
+            urlPattern: /\/(junior\/|assets\/junior\/|junior-)/,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'junior-assets',
+              expiration: {
+                maxEntries: 200,
+                maxAgeSeconds: 86400 * 14, // 14 days
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
+          // Junior API routes — NetworkFirst with 7-day offline fallback
+          {
+            urlPattern: /\/api\/junior\/.*/,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'junior-api',
+              expiration: {
+                maxEntries: 100,
+                maxAgeSeconds: 86400 * 7, // 7 days
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
+          // Supabase API calls — NetworkFirst with fallback to cache
           {
             urlPattern: /^https:\/\/.*\.supabase\.co\/.*/i,
             handler: 'NetworkFirst',
             options: {
               cacheName: 'supabase-api-cache',
               expiration: {
+                maxEntries: 100,
+                maxAgeSeconds: 86400, // 24 hours
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
+          // Internal API calls (non-Junior) — NetworkFirst
+          {
+            urlPattern: /\/api\/.*/,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'api-cache',
+              expiration: {
+                maxEntries: 100,
+                maxAgeSeconds: 86400, // 24 hours
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
+          // Images — StaleWhileRevalidate for fast loads with background refresh
+          {
+            urlPattern: /\.(?:png|jpg|jpeg|gif|webp|svg|ico)$/i,
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'images-cache',
+              expiration: {
+                maxEntries: 200,
+                maxAgeSeconds: 86400 * 30, // 30 days
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
+          // Audio files (Junior activities, calming sounds) — CacheFirst for offline play
+          {
+            urlPattern: /\.(?:mp3|wav|ogg|m4a|webm)$/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'audio-cache',
+              expiration: {
                 maxEntries: 50,
-                maxAgeSeconds: 60 * 60, // 1 hour
+                maxAgeSeconds: 86400 * 14, // 14 days
               },
               cacheableResponse: {
                 statuses: [0, 200],

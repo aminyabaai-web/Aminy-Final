@@ -170,13 +170,20 @@ export interface Reaction {
 // SESSIONS & SCHEDULING
 // ============================================================================
 
-export type SessionType = 'telehealth' | 'jr' | 'live-vision' | 'bcba' | 'therapy';
-export type SessionStatus = 'scheduled' | 'in-progress' | 'completed' | 'cancelled' | 'no-show';
+export type SessionKind = 'telehealth' | 'jr' | 'live-vision' | 'bcba' | 'therapy';
+export type SessionStatus =
+  | 'scheduled'
+  | 'confirmed'
+  | 'waiting'
+  | 'in-progress'
+  | 'completed'
+  | 'cancelled'
+  | 'no-show';
 
 export interface Session {
   id: string;
   userId: string;
-  type: SessionType;
+  type: SessionKind;
   providerId?: string;
   providerName?: string;
   scheduledAt: string;
@@ -198,7 +205,8 @@ export interface ActionItem {
   dueDate?: string;
 }
 
-export interface Provider {
+/** Lightweight provider summary (for lists, cards). Full provider: see types/telehealth.ts Provider */
+export interface ProviderBasic {
   id: string;
   name: string;
   title: string;

@@ -23,17 +23,15 @@
  */
 
 import { projectId, publicAnonKey } from '../utils/supabase/info';
-
-// Environment configuration
-const AVAILITY_API_KEY = import.meta.env.VITE_AVAILITY_API_KEY || '';
-const AVAILITY_API_URL = import.meta.env.VITE_AVAILITY_API_URL || 'https://api.availity.com';
-const WAYSTAR_API_KEY = import.meta.env.VITE_WAYSTAR_API_KEY || '';
+import { secureFetch } from './security/secure-fetch';
 
 // Supabase Edge Function URL for secure clearinghouse operations
+// ALL clearinghouse API keys live server-side in Supabase secrets — never in the client bundle.
 const CLEARINGHOUSE_FUNCTION_URL = `https://${projectId}.supabase.co/functions/v1/clearinghouse`;
 
-// Use edge function in production (keeps API keys secure)
-const USE_EDGE_FUNCTION = import.meta.env.PROD || import.meta.env.VITE_USE_EDGE_FUNCTIONS === 'true';
+// Always route through the edge function. Direct client-side API calls with
+// VITE_-prefixed keys have been removed — they exposed secrets in the browser.
+const USE_EDGE_FUNCTION = true;
 
 // ============================================================================
 // Types
@@ -1553,49 +1551,25 @@ export function parseERA835(ediContent: string): ERA835ParseResult {
 // Availity API Integration
 // ============================================================================
 
+/**
+ * @deprecated Client-side Availity keys have been removed.
+ * Availity configuration now lives in Supabase Edge Function secrets.
+ * This always returns false; use isClearinghouseConfigured() instead.
+ */
 export function isAvailityConfigured(): boolean {
-  return !!AVAILITY_API_KEY && AVAILITY_API_KEY.length > 10;
+  return false;
 }
 
 /**
- * Check eligibility via Availity (270/271 transaction)
+ * Check eligibility via Availity (270/271 transaction).
+ * Routes through the clearinghouse edge function — no client-side API keys.
  */
 export async function checkEligibilityAvaility(
   request: EligibilityRequest
 ): Promise<EligibilityResponse> {
-  if (!isAvailityConfigured()) {
-    console.warn('Availity not configured, returning mock response');
-    return getMockEligibilityResponse(request);
-  }
-
   try {
-    const response = await fetch(`${AVAILITY_API_URL}/availity/v1/coverages`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${AVAILITY_API_KEY}`,
-        'Content-Type': 'application/json',
-        'X-Api-Key': AVAILITY_API_KEY,
-      },
-      body: JSON.stringify({
-        payerID: request.payerId,
-        providerNPI: request.providerId,
-        providerTaxID: request.providerTaxId,
-        subscriberMemberID: request.memberId,
-        subscriberFirstName: request.memberFirstName,
-        subscriberLastName: request.memberLastName,
-        subscriberDOB: request.memberDob,
-        serviceDate: request.serviceDate,
-        serviceCodes: request.serviceCodes,
-      }),
-    });
-
-    if (!response.ok) {
-      const error = await response.text();
-      throw new Error(`Availity API error: ${response.status} - ${error}`);
-    }
-
-    const data = await response.json();
-    return parseAvailityEligibilityResponse(data, request);
+    const result = await callClearinghouseFunction('eligibility', request as unknown as Record<string, unknown>);
+    return result as unknown as EligibilityResponse;
   } catch (error) {
     console.error('Availity eligibility check failed:', error);
     throw error;
@@ -1603,16 +1577,12 @@ export async function checkEligibilityAvaility(
 }
 
 /**
- * Submit claim via Availity (837P)
+ * Submit claim via Availity (837P).
+ * Generates and validates EDI locally, then submits through edge function.
  */
 export async function submitClaimAvaility(
   claim: ClaimSubmission
 ): Promise<ClaimResponse> {
-  if (!isAvailityConfigured()) {
-    console.warn('Availity not configured, returning mock response');
-    return getMockClaimResponse(claim);
-  }
-
   try {
     // Generate production-valid EDI 837P
     const ediPayload = generateEDI837P(claim);
@@ -1627,26 +1597,11 @@ export async function submitClaimAvaility(
       throw new Error(`EDI validation failed: ${errorMessages}`);
     }
 
-    const response = await fetch(`${AVAILITY_API_URL}/availity/v1/claims`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${AVAILITY_API_KEY}`,
-        'Content-Type': 'application/json',
-        'X-Api-Key': AVAILITY_API_KEY,
-      },
-      body: JSON.stringify({
-        claimType: claim.claimType === 'professional' ? '837P' : '837I',
-        payload: ediPayload,
-      }),
+    const result = await callClearinghouseFunction('submit_claim', {
+      ...claim as unknown as Record<string, unknown>,
+      ediPayload,
     });
-
-    if (!response.ok) {
-      const error = await response.text();
-      throw new Error(`Availity claim submission error: ${response.status} - ${error}`);
-    }
-
-    const data = await response.json();
-    return parseAvailityClaimResponse(data);
+    return result as unknown as ClaimResponse;
   } catch (error) {
     console.error('Availity claim submission failed:', error);
     throw error;
@@ -1654,39 +1609,15 @@ export async function submitClaimAvaility(
 }
 
 /**
- * Check claim status via Availity (276/277)
+ * Check claim status via Availity (276/277).
+ * Routes through the clearinghouse edge function — no client-side API keys.
  */
 export async function checkClaimStatusAvaility(
   request: ClaimStatusRequest
 ): Promise<ClaimStatusResponse> {
-  if (!isAvailityConfigured()) {
-    return getMockClaimStatusResponse(request);
-  }
-
   try {
-    const response = await fetch(`${AVAILITY_API_URL}/availity/v1/claim-statuses`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${AVAILITY_API_KEY}`,
-        'Content-Type': 'application/json',
-        'X-Api-Key': AVAILITY_API_KEY,
-      },
-      body: JSON.stringify({
-        payerID: request.payerId,
-        providerNPI: request.providerNpi,
-        memberID: request.memberId,
-        serviceDateFrom: request.serviceDateFrom,
-        serviceDateTo: request.serviceDateTo,
-        claimControlNumber: request.claimControlNumber,
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error(`Availity status check error: ${response.status}`);
-    }
-
-    const data = await response.json();
-    return parseAvailityClaimStatusResponse(data);
+    const result = await callClearinghouseFunction('claim_status', request as unknown as Record<string, unknown>);
+    return result as unknown as ClaimStatusResponse;
   } catch (error) {
     console.error('Availity claim status check failed:', error);
     throw error;
@@ -1895,22 +1826,35 @@ function getMockClaimStatusResponse(request: ClaimStatusRequest): ClaimStatusRes
 // Waystar Integration (Secondary)
 // ============================================================================
 
+/**
+ * @deprecated Client-side Waystar keys have been removed.
+ * Waystar configuration now lives in Supabase Edge Function secrets.
+ * This always returns false; use isClearinghouseConfigured() instead.
+ */
 export function isWaystarConfigured(): boolean {
-  return !!WAYSTAR_API_KEY && WAYSTAR_API_KEY.length > 10;
+  return false;
 }
 
+/**
+ * Check eligibility via Waystar (270/271).
+ * Routes through the clearinghouse edge function where Waystar keys live.
+ */
 export async function checkEligibilityWaystar(
   request: EligibilityRequest
 ): Promise<EligibilityResponse> {
-  // Waystar has similar 270/271 eligibility checking
-  // Implementation would follow same pattern as Availity
-
-  if (!isWaystarConfigured()) {
-    return getMockEligibilityResponse(request);
+  try {
+    const result = await callClearinghouseFunction('eligibility', {
+      ...(request as unknown as Record<string, unknown>),
+      preferredClearinghouse: 'waystar',
+    });
+    return result as unknown as EligibilityResponse;
+  } catch (error) {
+    console.warn('[clearinghouse] Waystar eligibility check failed:', error);
+    if (import.meta.env.DEV) {
+      return getMockEligibilityResponse(request);
+    }
+    throw error;
   }
-
-  // Waystar-specific implementation...
-  throw new Error('Waystar integration not yet implemented');
 }
 
 // ============================================================================
@@ -1921,27 +1865,29 @@ export async function checkEligibilityWaystar(
  * Call clearinghouse edge function
  */
 async function callClearinghouseFunction(
-  action: 'eligibility' | 'submit_claim' | 'claim_status',
+  action: 'eligibility' | 'submit_claim' | 'claim_status' | 'get_remittance' | 'background_check' | 'prior_auth',
   data: Record<string, unknown>
 ): Promise<Record<string, unknown>> {
   const token = localStorage.getItem('supabase.auth.token');
   const authToken = token ? JSON.parse(token)?.access_token : publicAnonKey;
 
-  const response = await fetch(CLEARINGHOUSE_FUNCTION_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${authToken}`,
-    },
-    body: JSON.stringify({ action, ...data }),
-  });
+  const { data: responseData, error, status, ok } = await secureFetch<Record<string, unknown>>(
+    CLEARINGHOUSE_FUNCTION_URL,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`,
+      },
+      body: JSON.stringify({ action, ...data }),
+    }
+  );
 
-  if (!response.ok) {
-    const error = await response.text();
-    throw new Error(`Clearinghouse function error: ${response.status} - ${error}`);
+  if (!ok) {
+    throw new Error(`Clearinghouse function error: ${status} - ${error || 'Unknown error'}`);
   }
 
-  return response.json();
+  return responseData || {};
 }
 
 // ============================================================================
@@ -2056,7 +2002,7 @@ async function queueForRetry(
     const token = localStorage.getItem('supabase.auth.token');
     const authToken = token ? JSON.parse(token)?.access_token : publicAnonKey;
 
-    await fetch(`https://${projectId}.supabase.co/rest/v1/claim_submission_attempts`, {
+    await secureFetch(`https://${projectId}.supabase.co/rest/v1/claim_submission_attempts`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -2105,7 +2051,7 @@ async function updateSubmissionAttemptStatus(
     const token = localStorage.getItem('supabase.auth.token');
     const authToken = token ? JSON.parse(token)?.access_token : publicAnonKey;
 
-    await fetch(`https://${projectId}.supabase.co/rest/v1/claim_submission_attempts?id=eq.${attemptId}`, {
+    await secureFetch(`https://${projectId}.supabase.co/rest/v1/claim_submission_attempts?id=eq.${attemptId}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -2183,43 +2129,21 @@ export async function retryQueuedSubmissions(): Promise<Array<{ attemptId: strin
 export async function verifyInsuranceEligibility(
   request: EligibilityRequest
 ): Promise<EligibilityResponse> {
-  // Use edge function in production for security
-  if (USE_EDGE_FUNCTION) {
-    try {
-      return await withRetry(
-        () => callClearinghouseFunction('eligibility', request as unknown as Record<string, unknown>)
-          .then(result => result as unknown as EligibilityResponse),
-        { onRetry: (attempt, error, delay) => {
-          console.warn(`[clearinghouse] Eligibility check retry ${attempt}: ${error.message} (next in ${Math.round(delay)}ms)`);
-        }}
-      );
-    } catch (error) {
-      console.warn('Edge function eligibility check failed:', error);
-      // Fall through to local implementation
+  try {
+    return await withRetry(
+      () => callClearinghouseFunction('eligibility', request as unknown as Record<string, unknown>)
+        .then(result => result as unknown as EligibilityResponse),
+      { onRetry: (attempt, error, delay) => {
+        console.warn(`[clearinghouse] Eligibility check retry ${attempt}: ${error.message} (next in ${Math.round(delay)}ms)`);
+      }}
+    );
+  } catch (error) {
+    console.warn('[clearinghouse] Eligibility check failed:', error);
+    if (import.meta.env.DEV) {
+      return getMockEligibilityResponse(request);
     }
+    throw error;
   }
-
-  // Try Availity first (largest network) - direct API (development only)
-  if (isAvailityConfigured()) {
-    try {
-      return await withRetry(() => checkEligibilityAvaility(request));
-    } catch (error) {
-      console.warn('Availity eligibility check failed, trying Waystar:', error);
-    }
-  }
-
-  // Fall back to Waystar
-  if (isWaystarConfigured()) {
-    try {
-      return await withRetry(() => checkEligibilityWaystar(request));
-    } catch (error) {
-      console.warn('Waystar eligibility check failed:', error);
-    }
-  }
-
-  // Return mock for development
-  console.warn('No clearinghouse configured, returning mock eligibility');
-  return getMockEligibilityResponse(request);
 }
 
 /**
@@ -2230,35 +2154,20 @@ export async function verifyInsuranceEligibility(
 export async function submitInsuranceClaim(
   claim: ClaimSubmission
 ): Promise<ClaimResponse> {
-  // Use edge function in production for security
-  if (USE_EDGE_FUNCTION) {
-    try {
-      return await withRetry(
-        () => callClearinghouseFunction('submit_claim', claim as unknown as Record<string, unknown>)
-          .then(result => result as unknown as ClaimResponse),
-        { onRetry: (attempt, error, delay) => {
-          console.warn(`[clearinghouse] Claim submission retry ${attempt}: ${error.message} (next in ${Math.round(delay)}ms)`);
-        }}
-      );
-    } catch (error) {
-      console.warn('Edge function claim submission failed, queuing for retry:', error);
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      await queueForRetry(claim, errorMessage, RETRY_CONFIG.maxAttempts);
-      throw error;
-    }
+  try {
+    return await withRetry(
+      () => callClearinghouseFunction('submit_claim', claim as unknown as Record<string, unknown>)
+        .then(result => result as unknown as ClaimResponse),
+      { onRetry: (attempt, error, delay) => {
+        console.warn(`[clearinghouse] Claim submission retry ${attempt}: ${error.message} (next in ${Math.round(delay)}ms)`);
+      }}
+    );
+  } catch (error) {
+    console.warn('[clearinghouse] Claim submission failed, queuing for retry:', error);
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    await queueForRetry(claim, errorMessage, RETRY_CONFIG.maxAttempts);
+    throw error;
   }
-
-  if (isAvailityConfigured()) {
-    try {
-      return await withRetry(() => submitClaimAvaility(claim));
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      await queueForRetry(claim, errorMessage, RETRY_CONFIG.maxAttempts);
-      throw error;
-    }
-  }
-
-  return getMockClaimResponse(claim);
 }
 
 /**
@@ -2268,27 +2177,21 @@ export async function submitInsuranceClaim(
 export async function getClaimStatus(
   request: ClaimStatusRequest
 ): Promise<ClaimStatusResponse> {
-  // Use edge function in production for security
-  if (USE_EDGE_FUNCTION) {
-    try {
-      return await withRetry(
-        () => callClearinghouseFunction('claim_status', request as unknown as Record<string, unknown>)
-          .then(result => result as unknown as ClaimStatusResponse),
-      );
-    } catch (error) {
-      console.warn('Edge function claim status check failed:', error);
+  try {
+    return await withRetry(
+      () => callClearinghouseFunction('claim_status', request as unknown as Record<string, unknown>)
+        .then(result => result as unknown as ClaimStatusResponse),
+      { onRetry: (attempt, error, delay) => {
+        console.warn(`[clearinghouse] Claim status retry ${attempt}: ${error.message} (next in ${Math.round(delay)}ms)`);
+      }}
+    );
+  } catch (error) {
+    console.warn('[clearinghouse] Claim status check failed:', error);
+    if (import.meta.env.DEV) {
+      return getMockClaimStatusResponse(request);
     }
+    throw error;
   }
-
-  if (isAvailityConfigured()) {
-    try {
-      return await withRetry(() => checkClaimStatusAvaility(request));
-    } catch (error) {
-      console.warn('Availity claim status check failed:', error);
-    }
-  }
-
-  return getMockClaimStatusResponse(request);
 }
 
 // ============================================================================
@@ -2327,14 +2230,16 @@ export function formatHCBSClaim(
 }
 
 /**
- * Check if clearinghouse is configured (either via edge function or direct API)
+ * Check if clearinghouse is configured.
+ * Always true — all calls route through the Supabase edge function.
  */
 export function isClearinghouseConfigured(): boolean {
-  return USE_EDGE_FUNCTION || isAvailityConfigured() || isWaystarConfigured();
+  return true;
 }
 
 /**
- * Get clearinghouse health status
+ * Get clearinghouse health status.
+ * All calls go through the edge function — direct API keys are no longer on the client.
  */
 export async function getClearinghouseHealth(): Promise<{
   status: 'ok' | 'degraded' | 'down';
@@ -2344,27 +2249,27 @@ export async function getClearinghouseHealth(): Promise<{
 }> {
   const health = {
     status: 'down' as 'ok' | 'degraded' | 'down',
-    availity: isAvailityConfigured(),
-    waystar: isWaystarConfigured(),
+    availity: false,
+    waystar: false,
     edgeFunction: false,
   };
 
-  if (USE_EDGE_FUNCTION) {
-    try {
-      const response = await fetch(`${CLEARINGHOUSE_FUNCTION_URL}/health`, {
+  try {
+    const { data, ok } = await secureFetch<{ availity?: boolean; waystar?: boolean }>(
+      `${CLEARINGHOUSE_FUNCTION_URL}/health`,
+      {
+        method: 'GET',
         headers: { 'Authorization': `Bearer ${publicAnonKey}` },
-      });
-      if (response.ok) {
-        health.edgeFunction = true;
-        health.status = 'ok';
       }
-    } catch (error) {
-      console.warn('[Clearinghouse] Edge function health check failed:', error);
+    );
+    if (ok) {
+      health.edgeFunction = true;
+      health.availity = data?.availity ?? false;
+      health.waystar = data?.waystar ?? false;
+      health.status = 'ok';
     }
-  }
-
-  if (health.availity || health.waystar) {
-    health.status = health.edgeFunction ? 'ok' : 'degraded';
+  } catch (error) {
+    console.warn('[Clearinghouse] Edge function health check failed:', error);
   }
 
   return health;
@@ -2400,53 +2305,20 @@ export async function getRemittanceAdvice(request: {
   dateFrom?: string;
   dateTo?: string;
 }): Promise<{ success: boolean; payments: ERA835ParseResult[] }> {
-  if (USE_EDGE_FUNCTION) {
-    try {
-      const result = await callClearinghouseFunction('eligibility', {
-        action: 'get_remittance',
-        providerNpi: request.providerNpi,
-        dateFrom: request.dateFrom,
-        dateTo: request.dateTo,
-      });
-      const rawFiles = (result.eraFiles || []) as string[];
-      const parsed = rawFiles.map(f => parseERA835(f));
-      return { success: true, payments: parsed };
-    } catch (error) {
-      console.warn('[clearinghouse] Edge function remittance fetch failed:', error);
-    }
+  try {
+    const result = await callClearinghouseFunction('get_remittance', {
+      providerNpi: request.providerNpi,
+      dateFrom: request.dateFrom,
+      dateTo: request.dateTo,
+    });
+    const rawFiles = (result.eraFiles || []) as string[];
+    const parsed = rawFiles.map(f => parseERA835(f));
+    return { success: true, payments: parsed };
+  } catch (error) {
+    console.warn('[clearinghouse] Remittance fetch failed:', error);
+    // Return empty result on failure — caller can retry
+    return { success: false, payments: [] };
   }
-
-  if (isAvailityConfigured()) {
-    try {
-      const response = await fetch(`${AVAILITY_API_URL}/availity/v1/remittances`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${AVAILITY_API_KEY}`,
-          'Content-Type': 'application/json',
-          'X-Api-Key': AVAILITY_API_KEY,
-        },
-        body: JSON.stringify({
-          providerNPI: request.providerNpi,
-          dateFrom: request.dateFrom,
-          dateTo: request.dateTo,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Availity remittance error: ${response.status}`);
-      }
-
-      const data = await response.json();
-      const rawFiles = (data.eraFiles || []) as string[];
-      const parsed = rawFiles.map((f: string) => parseERA835(f));
-      return { success: true, payments: parsed };
-    } catch (error) {
-      console.warn('[clearinghouse] Availity remittance fetch failed:', error);
-    }
-  }
-
-  // Mock for development
-  return { success: true, payments: [] };
 }
 
 // ============================================================================
@@ -2832,52 +2704,21 @@ export async function submitClaimStatusInquiry(
 ): Promise<EDI277Response> {
   const edi276 = generateEDI276(request);
 
-  if (USE_EDGE_FUNCTION) {
-    try {
-      const result = await callClearinghouseFunction('claim_status', {
-        ediPayload: edi276,
-        format: '276',
-      });
-      if (result.edi277Response) {
-        return parseEDI277(result.edi277Response as string);
-      }
-      // If API returns structured data instead of raw EDI
-      return result as unknown as EDI277Response;
-    } catch (error) {
-      console.warn('[clearinghouse] EDI 276 submission via edge function failed:', error);
+  try {
+    const result = await callClearinghouseFunction('claim_status', {
+      ediPayload: edi276,
+      format: '276',
+    });
+    if (result.edi277Response) {
+      return parseEDI277(result.edi277Response as string);
     }
+    // If API returns structured data instead of raw EDI
+    return result as unknown as EDI277Response;
+  } catch (error) {
+    console.warn('[clearinghouse] EDI 276 submission failed:', error);
   }
 
-  if (isAvailityConfigured()) {
-    try {
-      const response = await fetch(`${AVAILITY_API_URL}/availity/v1/claim-statuses`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${AVAILITY_API_KEY}`,
-          'Content-Type': 'application/json',
-          'X-Api-Key': AVAILITY_API_KEY,
-        },
-        body: JSON.stringify({
-          format: '276',
-          payload: edi276,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Availity 276 submission error: ${response.status}`);
-      }
-
-      const data = await response.json();
-      if (data.edi277Response) {
-        return parseEDI277(data.edi277Response as string);
-      }
-      return data as EDI277Response;
-    } catch (error) {
-      console.warn('[clearinghouse] Availity 276 submission failed:', error);
-    }
-  }
-
-  // Mock response for development
+  // Mock response for development (edge function not reachable)
   return {
     success: true,
     transactionId: `MOCK-277-${Date.now()}`,

@@ -28,6 +28,7 @@ import {
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { supabase } from '../utils/supabase/client';
+import { tierPricing } from '../lib/tier-utils';
 
 // Trial configuration
 const TRIAL_CONFIG = {
@@ -415,7 +416,7 @@ export function HardPaywallModal({ childName, onUpgrade }: HardPaywallModalProps
         </Button>
 
         <p className="text-white/50 text-sm mt-4">
-          $14.99/month after trial · Cancel anytime · HSA/FSA eligible
+          ${tierPricing.core.monthly}/month after trial · Cancel anytime · HSA/FSA eligible
         </p>
       </motion.div>
     </motion.div>

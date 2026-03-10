@@ -11,6 +11,7 @@ import { MotionConfig } from "motion/react";
 // CRITICAL PATH - Regular imports for instant FCP (MINIMIZED)
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { usePaymentConfirmation, getPaymentStatusFromUrl, clearPaymentParamsFromUrl } from "./hooks/usePaymentConfirmation";
+import { useGracePeriod } from "./hooks/useGracePeriod";
 import { logger } from "./lib/logger";
 
 // Lazy load SplashPage (full landing page)
@@ -22,6 +23,7 @@ const SplashPage = lazy(() =>
 import { CLSOptimizer } from "./components/CLSOptimizer";
 import { toast } from "sonner";
 import { TierType, getTierDisplayName } from "./lib/tier-utils";
+import { getScreenGateReason } from "./lib/feature-flags";
 import { handleOnboardingComplete as triggerRetentionFlow } from "./lib/store";
 import { AIProvider } from "./context/AIContext";
 import { ConversationProvider } from "./context/ConversationContext";
@@ -29,12 +31,19 @@ import { ThemeProvider } from "./lib/theme-provider";
 import { supabase } from "./utils/supabase/client";
 import { getMFAState } from "./lib/mfa";
 import { FeedbackButton } from "./components/FeedbackButton";
+import { AppBreadcrumbs, BREADCRUMB_TRAILS } from "./components/AppBreadcrumbs";
 import { verifyAdminAccess } from "./hooks/useSecureSession";
+import { setupSessionRefresh } from "./lib/security/session";
+import { syncEncryptedStorage } from "./lib/security/encrypted-storage";
 import { setSentryUser, clearSentryUser, addBreadcrumb } from "./lib/sentry";
+import { setCurrentScreenGlobal } from "./lib/screen-state";
 import { proactiveNudges } from "./lib/proactive-nudges";
 import { orchestrateOnboarding, type OnboardingData } from "./lib/onboarding-orchestrator";
 import { useShouldShowNotificationPrompt } from "./components/NotificationPrompt";
 import { setupDailyCheckIns } from "./lib/push-notifications";
+import { useScreenAnalytics } from "./hooks/useScreenAnalytics";
+import { useBackgroundSync } from "./hooks/useBackgroundSync";
+import { useAccessibilityEnhancements } from "./hooks/useAccessibilityEnhancements";
 
 // DEFERRED - Load after first paint
 const SafetyBoundary = lazy(() =>
@@ -56,6 +65,11 @@ const MobilePolishEnhancer = lazy(() =>
 const OfflineIndicator = lazy(() =>
   import("./components/OfflineIndicator").then((m) => ({
     default: m.OfflineIndicator,
+  })),
+);
+const OfflineBanner = lazy(() =>
+  import("./components/OfflineBanner").then((m) => ({
+    default: m.OfflineBanner,
   })),
 );
 const UpdateBanner = lazy(() =>
@@ -360,6 +374,13 @@ const KeyboardHelpModal = lazy(() =>
   })),
 );
 
+// Desktop sidebar navigation (hidden on mobile, visible md+)
+const DesktopSideNav = lazy(() =>
+  import("./components/DesktopSideNav").then((m) => ({
+    default: m.DesktopSideNav,
+  })),
+);
+
 // Secure Admin Portal Wrapper with server-side verification
 const SecureAdminPortalWrapper = React.memo(function SecureAdminPortalWrapper({
   userId,
@@ -575,6 +596,97 @@ const VideoCallRoom = lazy(() =>
   import("./components/telehealth/VideoCallRoom"),
 );
 
+// === Sprint components: BATCH 1-7 (March 9, 2026) ===
+const CRSyncDashboard = lazy(() =>
+  import("./components/CRSyncDashboard").then((m) => ({
+    default: m.CRSyncDashboard,
+  })),
+);
+const StripeRevenueDashboard = lazy(() =>
+  import("./components/StripeRevenueDashboard").then((m) => ({
+    default: m.StripeRevenueDashboard,
+  })),
+);
+const WaitingRoom = lazy(() =>
+  import("./components/telehealth/WaitingRoom").then((m) => ({
+    default: m.WaitingRoom,
+  })),
+);
+const PWAInstallPrompt = lazy(() =>
+  import("./components/PWAInstallPrompt").then((m) => ({
+    default: m.PWAInstallPrompt,
+  })),
+);
+const AppReviewPrompt = lazy(() =>
+  import("./components/AppReviewPrompt").then((m) => ({
+    default: m.AppReviewPrompt,
+  })),
+);
+const PaymentFailureBanner = lazy(() =>
+  import("./components/PaymentFailureBanner").then((m) => ({
+    default: m.PaymentFailureBanner,
+  })),
+);
+const OnboardingQuickStart = lazy(() =>
+  import("./components/OnboardingQuickStart").then((m) => ({
+    default: m.OnboardingQuickStart,
+  })),
+);
+const JuniorMilestoneShare = lazy(() =>
+  import("./components/JuniorMilestoneShare").then((m) => ({
+    default: m.JuniorMilestoneShare,
+  })),
+);
+
+// GATED SCREEN PLACEHOLDER - Shown when a screen is behind a disabled feature flag
+const GATE_MESSAGES: Record<string, { title: string; description: string }> = {
+  'b2b': {
+    title: 'Coming Soon for Organizations',
+    description: 'This feature is designed for clinics, schools, and organizations. It will be available in a future update.',
+  },
+  'b2g': {
+    title: 'Payer Portal Coming Soon',
+    description: 'This dashboard is designed for insurance companies and managed care organizations.',
+  },
+  'fiscal-agent': {
+    title: 'Fiscal Agent Integration Coming Soon',
+    description: 'EVV and caregiver management features are coming in a future update.',
+  },
+  'dev-mode': {
+    title: 'Developer Tools',
+    description: 'This screen is only available in developer mode.',
+  },
+};
+
+const GatedScreenPlaceholder = React.memo(function GatedScreenPlaceholder({
+  gateReason,
+  onBack,
+}: {
+  gateReason: string;
+  onBack: () => void;
+}) {
+  const msg = GATE_MESSAGES[gateReason] || GATE_MESSAGES['b2b'];
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 flex items-center justify-center p-4">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-8 max-w-md text-center">
+        <div className="w-16 h-16 bg-teal-100 dark:bg-teal-900 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg className="w-8 h-8 text-teal-600 dark:text-teal-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+          </svg>
+        </div>
+        <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">{msg.title}</h1>
+        <p className="text-gray-600 dark:text-gray-400 mb-6 text-sm leading-relaxed">{msg.description}</p>
+        <button
+          onClick={onBack}
+          className="bg-teal-600 text-white px-6 py-2.5 rounded-xl font-medium hover:bg-teal-700 transition-colors"
+        >
+          Back to Home
+        </button>
+      </div>
+    </div>
+  );
+});
+
 // OPTIMIZED LOADING SKELETON - Ultra lightweight, prevents CLS
 // Uses Aminy brand colors: Soft Cream (#F5F5F5), Muted Teal (#0891b2)
 // Contextual loading messages by screen category
@@ -734,7 +846,10 @@ type AppScreen =
   | "multi-role-telehealth" // Multi-role telehealth room
   | "parent-approval" // Parent approval card for provider suggestions
   | "share-viewer" // Share viewer for non-authenticated users
-  | "video-call-room"; // Telehealth video call room
+  | "video-call-room" // Telehealth video call room
+  | "cr-sync" // CentralReach sync dashboard
+  | "revenue-dashboard" // Stripe revenue metrics (admin)
+  | "waiting-room"; // Telehealth waiting room
 
 interface ChildProfile {
   id: string;
@@ -760,6 +875,7 @@ interface UserData {
   role?: 'parent' | 'provider' | 'admin';
   children?: ChildProfile[];
   activeChildId?: string;
+  providerName?: string;
 }
 
 // Screens accessible via deep links (?screen=xxx)
@@ -801,9 +917,9 @@ const getInitialScreen = (): AppScreen => {
     return urlScreen as AppScreen;
   }
 
-  // Check localStorage synchronously
+  // Check encrypted storage synchronously (syncEncryptedStorage uses cache for sync reads)
   try {
-    const storedUser = localStorage.getItem("aminy-user");
+    const storedUser = syncEncryptedStorage.getItem("aminy-user");
     if (storedUser) {
       const user = JSON.parse(storedUser);
       if (user.hasCompletedOnboarding) {
@@ -831,7 +947,7 @@ const getInitialScreen = (): AppScreen => {
 
 const getInitialUserData = (): UserData => {
   try {
-    const storedUser = localStorage.getItem("aminy-user");
+    const storedUser = syncEncryptedStorage.getItem("aminy-user");
     if (storedUser) {
       return JSON.parse(storedUser);
     }
@@ -854,7 +970,12 @@ export default function App() {
     useState<AppScreen>(getInitialScreen);
   const currentScreenRef = useRef<AppScreen>(currentScreen);
   // Keep ref in sync so async callbacks (auth listener) see the latest screen
-  useEffect(() => { currentScreenRef.current = currentScreen; }, [currentScreen]);
+  // Also broadcast to the shared screen-state module so the AI context layer
+  // (and other non-React code) can read the current screen without pathname hacks.
+  useEffect(() => {
+    currentScreenRef.current = currentScreen;
+    setCurrentScreenGlobal(currentScreen);
+  }, [currentScreen]);
 
   // Track screen navigation for Sentry debugging + scroll to top
   const prevScreenRef = useRef<AppScreen>(currentScreen);
@@ -885,6 +1006,8 @@ export default function App() {
   const [showFeedbackCollector, setShowFeedbackCollector] = useState(false);
   // Track whether the next SIGNED_OUT is from an intentional logout vs. session expiry
   const intentionalLogoutRef = useRef(false);
+  // Track whether the user ever had a valid session (prevents false "expired" toasts in dev/demo mode)
+  const hadSessionRef = useRef(false);
   const [showPaymentConfirmation, setShowPaymentConfirmation] = useState(false);
   const [paymentUserId, setPaymentUserId] = useState<string | null>(null);
   const [fabOpen, setFabOpen] = useState(false);
@@ -892,8 +1015,34 @@ export default function App() {
   const [mfaGracePeriodEnds, setMfaGracePeriodEnds] = useState<Date | undefined>(undefined);
   const [mfaRequired, setMfaRequired] = useState(false);
 
+  // Cross-screen state (Wave 1B: replaces localStorage for screen-to-screen data passing)
+  const [pendingProviderId, setPendingProviderId] = useState<string>('');
+  const [viewingProviderId, setViewingProviderId] = useState<string>('');
+  const [viewingProviderName, setViewingProviderName] = useState<string>('Provider');
+  const [activeSessionId, setActiveSessionId] = useState<string>('');
+  const [dailyRoomUrl, setDailyRoomUrl] = useState<string>('');
+  const [activeFamilyId, setActiveFamilyId] = useState<string>('');
+  const [activePatientId, setActivePatientId] = useState<string>('');
+
   // Push notification prompt — show after user reaches dashboard
   const shouldShowNotificationPrompt = useShouldShowNotificationPrompt();
+
+  // Payment grace period — monitors failed payments and shows banner
+  const {
+    inGracePeriod,
+    daysRemaining,
+    bannerMessage: graceBannerMessage,
+    severity: graceSeverity,
+  } = useGracePeriod({ userId: userData.id });
+
+  // === Sprint hooks (Batch 7 integration) ===
+  // Screen analytics — track which screens are visited + time spent
+  useScreenAnalytics(currentScreen, { trackScroll: true, trackInteractions: true, tier: userData.tier });
+  // Background sync — process offline queue when connectivity returns
+  useBackgroundSync();
+  // Accessibility enhancements — runtime a11y improvements (focus management, announcements)
+  useAccessibilityEnhancements(currentScreen);
+  // App review prompt — self-contained component manages its own visibility
 
   useEffect(() => {
     if (currentScreen === "dashboard" && shouldShowNotificationPrompt && userData.id) {
@@ -1114,6 +1263,21 @@ export default function App() {
     setIsInitialized(true);
   }, []);
 
+  // HIPAA compliance dashboard — eagerly load compliance status on mount
+  // so it's available for admin dashboard, settings, and audit exports
+  const [hipaaComplianceScore, setHipaaComplianceScore] = useState<number | null>(null);
+  useEffect(() => {
+    import('./lib/hipaa-compliance').then(({ getComplianceStatus }) => {
+      try {
+        const status = getComplianceStatus();
+        setHipaaComplianceScore(status.overallScore);
+        logger.info('[HIPAA] Compliance score loaded on startup:', status.overallScore);
+      } catch (err) {
+        logger.warn('[HIPAA] Compliance status check failed (non-fatal):', err);
+      }
+    });
+  }, []);
+
   // Listen for DataService errors and show toast notifications
   useEffect(() => {
     const handler = (e: Event) => {
@@ -1173,6 +1337,7 @@ export default function App() {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         if (event === 'SIGNED_IN' && session?.user) {
+          hadSessionRef.current = true;
           // Load user profile and children data from Supabase
           try {
             const { data: profile } = await supabase
@@ -1316,8 +1481,8 @@ export default function App() {
           const wasIntentional = intentionalLogoutRef.current;
           intentionalLogoutRef.current = false; // Reset the flag
 
-          // Clear user data on sign out
-          localStorage.removeItem('aminy-user');
+          // Clear user data on sign out (removes both encrypted + unencrypted versions)
+          syncEncryptedStorage.removeItem('aminy-user');
           setUserData({
             parentName: '',
             childName: '',
@@ -1328,21 +1493,26 @@ export default function App() {
           });
           navigateToScreen('login');
 
-          if (!wasIntentional) {
+          if (!wasIntentional && hadSessionRef.current) {
             // Session expired unexpectedly — let the user know
             toast.error('Your session has expired. Please sign in again.', {
               duration: 6000,
             });
             logger.dev('Session expired — auto-signed out');
           }
+          hadSessionRef.current = false;
         } else if (event === 'TOKEN_REFRESHED') {
           logger.dev('Auth token refreshed successfully');
         }
       }
     );
 
+    // Auto-refresh session tokens before expiry (every 60s)
+    const cleanupSessionRefresh = setupSessionRefresh();
+
     return () => {
       subscription.unsubscribe();
+      cleanupSessionRefresh();
       // Stop nudge scheduler when the app-level auth effect cleans up
       proactiveNudges.stop();
     };
@@ -1360,6 +1530,9 @@ export default function App() {
       if (authScreens.includes(screen)) return;
 
       try {
+        // Only check if user previously had a valid session (skip in dev/demo mode)
+        if (!hadSessionRef.current) return;
+
         const { data: { session } } = await supabase.auth.getSession();
         if (!session) {
           // Session is gone — token refresh must have failed silently
@@ -1367,6 +1540,7 @@ export default function App() {
           toast.error('Your session has expired. Please sign in again.', {
             duration: 6000,
           });
+          hadSessionRef.current = false;
           navigateToScreen('login');
         }
       } catch {
@@ -1556,9 +1730,9 @@ export default function App() {
     } catch (error) {
       logger.error("Error signing out", error);
     }
-    // Clear local storage
-    localStorage.removeItem("aminy-user");
-    localStorage.removeItem("aminy-onboarding-progress");
+    // Clear local storage (encrypted storage handles both enc_ and plain keys)
+    syncEncryptedStorage.removeItem("aminy-user");
+    syncEncryptedStorage.removeItem("aminy-onboarding-progress");
     setUserData({
       parentName: "",
       childName: "",
@@ -1644,6 +1818,17 @@ export default function App() {
 
   // Render current screen with lazy loading
   const renderScreen = () => {
+    // Check if this screen is gated behind a product feature flag
+    const gateReason = getScreenGateReason(currentScreen);
+    if (gateReason) {
+      return (
+        <GatedScreenPlaceholder
+          gateReason={gateReason}
+          onBack={() => navigateToScreen("dashboard")}
+        />
+      );
+    }
+
     const screen = (() => {
       switch (currentScreen) {
         case "splash":
@@ -1727,17 +1912,7 @@ export default function App() {
                 onBack={() => navigateToScreen("splash")}
                 onSignUp={() => navigateToScreen("create-account")}
                 onBookEvaluation={() => {
-                  // Pass screening context to marketplace via localStorage
-                  const results = JSON.parse(localStorage.getItem('aminy_screening_results') || '[]');
-                  const latest = results[results.length - 1];
-                  if (latest) {
-                    localStorage.setItem('aminy_screening_routing', JSON.stringify({
-                      riskLevel: latest.riskLevel,
-                      recommendedProviders: latest.recommendedProviders,
-                      instrumentId: latest.instrumentId,
-                      concern: latest.summary?.slice(0, 100),
-                    }));
-                  }
+                  // Screening routing handled by useOnboardingData hook — navigate directly
                   navigateToScreen("marketplace");
                 }}
               />
@@ -1797,7 +1972,7 @@ export default function App() {
                     "community-hub", "provider-analytics", "weekly-insights", "analytics-charts",
                     "evv-dashboard", "claims-dashboard", "payer-dashboard", "clinical-reports",
                     "prior-auth", "vision-ai", "caregiver-enrollment", "b2b-partner", "b2b-setup",
-                    "outcome-measures"
+                    "outcome-measures", "cr-sync", "revenue-dashboard", "waiting-room",
                   ];
                   if (validScreens.includes(resolved as AppScreen)) {
                     navigateToScreen(resolved as AppScreen);
@@ -1952,7 +2127,7 @@ export default function App() {
                 onBack={() => navigateToScreen("dashboard")}
                 onComplete={(providerId) => {
                   // After onboarding, route to identity verification before marketplace listing
-                  localStorage.setItem('aminy-pending-provider-id', providerId);
+                  setPendingProviderId(providerId);
                   navigateToScreen("provider-identity-verification");
                 }}
               />
@@ -1963,7 +2138,7 @@ export default function App() {
           return (
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <ProviderIdentityVerification
-                providerId={localStorage.getItem('aminy-pending-provider-id') || 'unknown'}
+                providerId={pendingProviderId || 'unknown'}
                 onComplete={() => navigateToScreen("provider-portal")}
                 onBack={() => navigateToScreen("provider-portal")}
               />
@@ -2474,17 +2649,10 @@ export default function App() {
           return (
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <VisionAI
-                tier={(() => {
-                  const sub = localStorage.getItem('aminy-subscription');
-                  if (sub) {
-                    try { const s = JSON.parse(sub); return s.tier || 'core'; } catch { return 'core'; }
-                  }
-                  return 'core';
-                })()}
+                tier={userData.tier === 'proplus' ? 'pro_plus' : userData.tier === 'pro' ? 'pro' : 'core'}
                 onBack={() => navigateToScreen("dashboard")}
-                onAnalysisComplete={(result) => {
-                  // Store analysis result for conversation injection
-                  localStorage.setItem('aminy-vision-result', JSON.stringify(result));
+                onAnalysisComplete={(_result) => {
+                  // Vision result stored by useContentData hook — no localStorage needed
                   navigateToScreen("dashboard");
                 }}
               />
@@ -2557,7 +2725,7 @@ export default function App() {
           return (
             <Suspense fallback={<LoadingSkeleton screen="telehealth" />}>
               <VideoCall
-                sessionId={localStorage.getItem('aminy-active-session-id') || ''}
+                sessionId={activeSessionId || ''}
                 userId={userData.id || ''}
                 userName={userData.name || 'User'}
                 isProvider={userData.role === 'provider' || userData.role === 'admin'}
@@ -2580,7 +2748,7 @@ export default function App() {
           return (
             <Suspense fallback={<LoadingSkeleton screen="telehealth" />}>
               <BCBASessionBriefing
-                familyId={localStorage.getItem('aminy-active-family-id') || ''}
+                familyId={activeFamilyId || ''}
                 childName={userData.childName || 'Patient'}
                 parentName={userData.name || 'Parent'}
                 sessionType="bcba-45"
@@ -2593,8 +2761,8 @@ export default function App() {
           return (
             <Suspense fallback={<LoadingSkeleton screen="marketplace" />}>
               <ProviderReviews
-                providerId={localStorage.getItem('aminy-viewing-provider-id') || ''}
-                providerName={localStorage.getItem('aminy-viewing-provider-name') || 'Provider'}
+                providerId={viewingProviderId || ''}
+                providerName={viewingProviderName || 'Provider'}
                 reviews={[]}
                 stats={{ averageRating: 0, totalReviews: 0, ratingBreakdown: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 }, recommendRate: 0 }}
               />
@@ -2695,7 +2863,7 @@ export default function App() {
           return (
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <ProviderClinicalTemplates
-                patientId={localStorage.getItem('aminy-active-patient-id') || ''}
+                patientId={activePatientId || ''}
                 patientName={userData.childName || 'Patient'}
               />
             </Suspense>
@@ -2705,7 +2873,7 @@ export default function App() {
           return (
             <Suspense fallback={<LoadingSkeleton screen="telehealth" />}>
               <DailyVideoRoom
-                roomUrl={localStorage.getItem('aminy-daily-room-url') || ''}
+                roomUrl={dailyRoomUrl || ''}
               />
             </Suspense>
           );
@@ -2740,7 +2908,7 @@ export default function App() {
                   childId: userData.childId || '',
                   rationale: '',
                   expectedOutcome: '',
-                  payload: {} as any,
+                  payload: {} as Record<string, unknown>,
                 }}
                 onAccept={() => navigateToScreen("dashboard")}
                 onReject={() => navigateToScreen("dashboard")}
@@ -2762,12 +2930,46 @@ export default function App() {
           return (
             <Suspense fallback={<LoadingSkeleton screen="telehealth" />}>
               <VideoCallRoom
-                sessionId={localStorage.getItem('aminy-active-session-id') || ''}
+                sessionId={activeSessionId || ''}
                 userId={userData.id || ''}
                 userName={userData.name || 'User'}
                 isProvider={userData.role === 'provider' || userData.role === 'admin'}
                 childName={userData.childName}
                 onCallEnd={() => navigateToScreen("telehealth")}
+              />
+            </Suspense>
+          );
+
+        case "cr-sync":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <CRSyncDashboard
+                userId={userData.id || userData.userId || ''}
+                childId={userData.childId}
+                onBack={() => navigateToScreen("settings")}
+              />
+            </Suspense>
+          );
+
+        case "revenue-dashboard":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <StripeRevenueDashboard
+                onBack={() => navigateToScreen("dashboard")}
+              />
+            </Suspense>
+          );
+
+        case "waiting-room":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen="telehealth" />}>
+              <WaitingRoom
+                appointmentId={activeSessionId || 'pending'}
+                providerName={userData.providerName || 'Your Provider'}
+                userName={userData.parentName || userData.name || 'Parent'}
+                userId={userData.id || userData.userId || ''}
+                onAdmitted={() => navigateToScreen("video-call-room")}
+                onCancel={() => navigateToScreen("telehealth")}
               />
             </Suspense>
           );
@@ -2867,21 +3069,83 @@ export default function App() {
                     />
                   </Suspense>
 
+                  {/* Offline Banner - Shows sync status at bottom */}
+                  <Suspense fallback={null}>
+                    <OfflineBanner />
+                  </Suspense>
+
                   {/* Update Available Banner - Deferred */}
                   <Suspense fallback={null}>
                     <UpdateBanner />
                   </Suspense>
 
-                  {/* Main content with id for skip link - tabIndex for focus management */}
-                  <main
-                    id="main"
-                    tabIndex={-1}
-                    className="outline-none"
-                    role="main"
-                    aria-label="Main content"
-                  >
-                    {renderScreen()}
-                  </main>
+                  {/* PWA Install Prompt — encourage app installation */}
+                  <Suspense fallback={null}>
+                    <PWAInstallPrompt />
+                  </Suspense>
+
+                  {/* Desktop layout: sidebar + content; Mobile: content only */}
+                  <div className="mx-auto max-w-7xl md:flex">
+                    {/* Desktop sidebar navigation (hidden on mobile via component) */}
+                    <Suspense fallback={null}>
+                      <DesktopSideNav
+                        currentScreen={currentScreen}
+                        onNavigate={(screen: string) => navigateToScreen(screen as AppScreen)}
+                        userName={userData.name}
+                      />
+                    </Suspense>
+
+                    {/* Main content area */}
+                    <div className="flex-1 min-w-0">
+                      {/* Payment grace period banner — shows when payment failed */}
+                      {inGracePeriod && graceBannerMessage && (
+                        <div
+                          role="alert"
+                          className={`px-4 py-3 text-sm font-medium flex items-center justify-between gap-3 ${
+                            graceSeverity === 'critical'
+                              ? 'bg-red-50 text-red-800 border-b border-red-200'
+                              : 'bg-amber-50 text-amber-800 border-b border-amber-200'
+                          }`}
+                        >
+                          <div className="flex items-center gap-2 min-w-0">
+                            <span className="text-lg flex-shrink-0" aria-hidden="true">
+                              {graceSeverity === 'critical' ? '🚨' : '⚠️'}
+                            </span>
+                            <span className="truncate">{graceBannerMessage}</span>
+                          </div>
+                          <button
+                            onClick={() => navigateToScreen('paywall' as AppScreen)}
+                            className={`flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-semibold min-h-[36px] ${
+                              graceSeverity === 'critical'
+                                ? 'bg-red-600 text-white hover:bg-red-700'
+                                : 'bg-amber-600 text-white hover:bg-amber-700'
+                            }`}
+                          >
+                            Update Payment
+                          </button>
+                        </div>
+                      )}
+
+                      {/* Main content with id for skip link - tabIndex for focus management */}
+                      <main
+                        id="main"
+                        tabIndex={-1}
+                        className="outline-none"
+                        role="main"
+                        aria-label="Main content"
+                      >
+                        {/* Breadcrumbs for deep navigation screens */}
+                        {BREADCRUMB_TRAILS[currentScreen] && (
+                          <AppBreadcrumbs
+                            items={BREADCRUMB_TRAILS[currentScreen]}
+                            onNavigate={(screen) => navigateToScreen(screen as AppScreen)}
+                            className="bg-white/80 backdrop-blur-sm border-b border-gray-100"
+                          />
+                        )}
+                        {renderScreen()}
+                      </main>
+                    </div>
+                  </div>
 
                   {/* Persistent Ask Aminy FAB */}
                   {showFAB && (
@@ -2962,6 +3226,11 @@ export default function App() {
 
                   {/* Feedback Button - Always visible for user feedback */}
                   <FeedbackButton />
+
+                  {/* App Review Prompt — self-contained, triggered after positive sessions */}
+                  <Suspense fallback={null}>
+                    <AppReviewPrompt />
+                  </Suspense>
 
                   {/* NPS Survey Modal — triggered after 7 days */}
                   {showNPSSurvey && (

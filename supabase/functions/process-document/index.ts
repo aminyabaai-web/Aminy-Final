@@ -1,5 +1,7 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.0'
+import pdf from 'npm:pdf-parse@1.1.1'
+import { Buffer } from 'node:buffer'
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
@@ -61,12 +63,16 @@ serve(async (req) => {
 
         // 4. Extract text based on file type
         if (document.file_type === 'application/pdf') {
-            // In a real Edge environment with limited resources, we'd use a lightweight PDF parser
-            // or send it to an external API (like OpenAI's Vision/Files API) or an OCR service.
-            // For this implementation, we will mock the text extraction for demo PDFs, 
-            // but the embedding pipeline will be perfectly real.
-            extractedText = "This is the extracted content from the uploaded clinical PDF document. It contains an assessment of the child\'s developmental progress, highlighting strengths in expressive language but noting challenges with transitions and sensory regulation. The recommended treatment plan includes 15 hours of ABA therapy per week, focusing on adaptive living skills and coping mechanisms for sensory overload."
-            console.log("Mocked PDF extraction complete.")
+            const arrayBuffer = await fileData.arrayBuffer()
+            const buffer = Buffer.from(arrayBuffer)
+            try {
+                const pdfData = await pdf(buffer)
+                extractedText = pdfData.text
+                console.log("PDF extraction complete using pdf-parse.")
+            } catch (err: any) {
+                console.warn("Failed to parse PDF with pdf-parse:", err.message)
+                throw new Error("Unable to extract text from this PDF file.")
+            }
         } else {
             // Simple text file
             extractedText = await fileData.text()
@@ -152,7 +158,7 @@ serve(async (req) => {
             { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
         )
 
-    } catch (error) {
+    } catch (error: any) {
         console.error(`Edge Function Error: ${error.message}`);
         return new Response(
             JSON.stringify({ error: error.message }),

@@ -1,3 +1,5 @@
+import { supabase } from '../utils/supabase/client';
+
 /**
  * Referral Program
  * Implements viral referral mechanics for organic growth
@@ -8,6 +10,7 @@
 export type ReferralRewardType = 'free-month' | 'session-credit' | 'tier-upgrade' | 'marketplace-credit';
 
 export interface ReferralCode {
+  id?: string;
   code: string;
   userId: string;
   createdAt: string;
@@ -22,7 +25,7 @@ export interface Referral {
   referrerUserId: string;
   referredUserId: string;
   referralCode: string;
-  status: 'pending' | 'qualified' | 'rewarded' | 'expired';
+  status: 'pending' | 'converted' | 'rewarded' | 'expired';
   // Qualification: referred user must be on paid tier for 7+ days
   qualificationDate?: string;
   rewardedAt?: string;
@@ -177,7 +180,7 @@ export function getReferralSummary(
 ): ReferralSummary {
   const totalReferrals = referrals.length;
   const pendingReferrals = referrals.filter(r => r.status === 'pending').length;
-  const qualifiedReferrals = referrals.filter(r => r.status === 'qualified' || r.status === 'rewarded').length;
+  const qualifiedReferrals = referrals.filter(r => r.status === 'converted' || r.status === 'rewarded').length;
 
   const currentTier = getReferralTier(qualifiedReferrals);
   const currentTierIndex = currentTier ? REFERRAL_TIERS.indexOf(currentTier) : -1;
@@ -197,50 +200,63 @@ export function getReferralSummary(
 }
 
 // ============================================================================
-// PERSISTENCE LAYER (Local Storage for MVP, would be Supabase in production)
+// PERSISTENCE LAYER (Supabase)
 // ============================================================================
-
-const STORAGE_KEYS = {
-  REFERRAL_CODES: 'aminy_referral_codes',
-  REFERRALS: 'aminy_referrals',
-};
-
-function getFromStorage<T>(key: string): T[] {
-  if (typeof window === 'undefined') return [];
-  const data = localStorage.getItem(key);
-  return data ? JSON.parse(data) : [];
-}
-
-function saveToStorage<T>(key: string, data: T[]): void {
-  if (typeof window === 'undefined') return;
-  localStorage.setItem(key, JSON.stringify(data));
-}
 
 /**
  * Create or get existing referral code for user
  */
 export async function getOrCreateReferralCode(userId: string): Promise<ReferralCode> {
-  const codes = getFromStorage<ReferralCode>(STORAGE_KEYS.REFERRAL_CODES);
-
   // Check for existing code
-  const existingCode = codes.find(c => c.userId === userId && c.isActive);
-  if (existingCode) {
-    return existingCode;
+  const { data: existingCodes } = await supabase
+    .from('referral_codes')
+    .select('*')
+    .eq('user_id', userId)
+    .eq('is_active', true)
+    .limit(1);
+
+  if (existingCodes && existingCodes.length > 0) {
+    const codeData = existingCodes[0];
+    return {
+      id: codeData.id,
+      code: codeData.code,
+      userId: codeData.user_id,
+      createdAt: codeData.created_at,
+      expiresAt: codeData.expires_at,
+      maxUses: codeData.max_uses,
+      currentUses: codeData.uses,
+      isActive: codeData.is_active,
+    };
   }
 
   // Create new code
-  const newCode: ReferralCode = {
-    code: generateReferralCode(userId),
-    userId,
-    createdAt: new Date().toISOString(),
-    currentUses: 0,
-    isActive: true,
+  const newCodeString = generateReferralCode(userId);
+
+  const { data: newCode, error } = await supabase
+    .from('referral_codes')
+    .insert({
+      user_id: userId,
+      code: newCodeString,
+      reward_type: 'free_month',
+      reward_value: 1
+    })
+    .select()
+    .single();
+
+  if (error || !newCode) {
+    throw new Error('Failed to create referral code');
+  }
+
+  return {
+    id: newCode.id,
+    code: newCode.code,
+    userId: newCode.user_id,
+    createdAt: newCode.created_at,
+    expiresAt: newCode.expires_at,
+    maxUses: newCode.max_uses,
+    currentUses: newCode.uses,
+    isActive: newCode.is_active,
   };
-
-  codes.push(newCode);
-  saveToStorage(STORAGE_KEYS.REFERRAL_CODES, codes);
-
-  return newCode;
 }
 
 /**
@@ -250,107 +266,143 @@ export async function trackReferral(
   referrerCode: string,
   referredUserId: string
 ): Promise<Referral | null> {
-  const codes = getFromStorage<ReferralCode>(STORAGE_KEYS.REFERRAL_CODES);
-  const referrals = getFromStorage<Referral>(STORAGE_KEYS.REFERRALS);
-
   // Find the referral code
-  const codeData = codes.find(c => c.code === referrerCode && c.isActive);
+  const { data: codeData } = await supabase
+    .from('referral_codes')
+    .select('*')
+    .eq('code', referrerCode)
+    .eq('is_active', true)
+    .single();
+
   if (!codeData) {
     return null; // Invalid code
   }
 
   // Check if this user was already referred
-  const existingReferral = referrals.find(r => r.referredUserId === referredUserId);
+  const { data: existingReferral } = await supabase
+    .from('referrals')
+    .select('*')
+    .eq('referred_id', referredUserId)
+    .maybeSingle();
+
   if (existingReferral) {
-    return existingReferral; // Already referred
+    return mapDbReferral(existingReferral); // Already referred
   }
 
   // Create new referral
-  const newReferral: Referral = {
-    id: `ref-${Date.now()}`,
-    referrerUserId: codeData.userId,
-    referredUserId,
-    referralCode: referrerCode,
-    status: 'pending',
-    createdAt: new Date().toISOString(),
-  };
+  const { data: newReferral, error } = await supabase
+    .from('referrals')
+    .insert({
+      referrer_id: codeData.user_id,
+      referred_id: referredUserId,
+      referral_code: referrerCode,
+      status: 'pending'
+    })
+    .select()
+    .single();
 
-  referrals.push(newReferral);
-  saveToStorage(STORAGE_KEYS.REFERRALS, referrals);
-
-  // Increment code usage
-  const codeIndex = codes.findIndex(c => c.code === referrerCode);
-  if (codeIndex !== -1) {
-    codes[codeIndex].currentUses++;
-    saveToStorage(STORAGE_KEYS.REFERRAL_CODES, codes);
+  if (error || !newReferral) {
+    throw new Error('Failed to create referral');
   }
 
-  return newReferral;
+  // Increment code usage (can be handled by trigger, but doing it manually here)
+  await supabase
+    .from('referral_codes')
+    .update({ uses: codeData.uses + 1 })
+    .eq('id', codeData.id);
+
+  return mapDbReferral(newReferral);
 }
 
 /**
  * Get all referrals for a user (as referrer)
  */
 export async function getUserReferrals(userId: string): Promise<Referral[]> {
-  const referrals = getFromStorage<Referral>(STORAGE_KEYS.REFERRALS);
-  return referrals
-    .filter(r => r.referrerUserId === userId)
-    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  const { data: referrals } = await supabase
+    .from('referrals')
+    .select('*')
+    .eq('referrer_id', userId)
+    .order('created_at', { ascending: false });
+
+  if (!referrals) return [];
+
+  return referrals.map(mapDbReferral);
 }
 
 /**
  * Mark a referral as qualified (after 14 days on paid plan)
  */
 export async function qualifyReferral(referralId: string): Promise<Referral | null> {
-  const referrals = getFromStorage<Referral>(STORAGE_KEYS.REFERRALS);
-  const index = referrals.findIndex(r => r.id === referralId);
+  // Wait, backend uses 'converted'
+  const { data, error } = await supabase
+    .from('referrals')
+    .update({
+      status: 'converted',
+      converted_at: new Date().toISOString()
+    })
+    .eq('id', referralId)
+    .select()
+    .single();
 
-  if (index === -1) return null;
-
-  referrals[index] = {
-    ...referrals[index],
-    status: 'qualified',
-    qualificationDate: new Date().toISOString(),
-  };
-
-  saveToStorage(STORAGE_KEYS.REFERRALS, referrals);
-  return referrals[index];
+  if (error || !data) return null;
+  return mapDbReferral(data);
 }
 
 /**
  * Apply rewards for a qualified referral
  */
 export async function applyReferralRewards(referralId: string): Promise<Referral | null> {
-  const referrals = getFromStorage<Referral>(STORAGE_KEYS.REFERRALS);
-  const index = referrals.findIndex(r => r.id === referralId);
+  const { data: referral } = await supabase
+    .from('referrals')
+    .select('*')
+    .eq('id', referralId)
+    .single();
 
-  if (index === -1 || referrals[index].status !== 'qualified') return null;
+  if (!referral || referral.status !== 'converted') return null;
 
-  const now = new Date().toISOString();
+  const { data, error } = await supabase
+    .from('referrals')
+    .update({
+      status: 'rewarded',
+      rewarded_at: new Date().toISOString()
+    })
+    .eq('id', referralId)
+    .select()
+    .single();
 
-  referrals[index] = {
-    ...referrals[index],
-    status: 'rewarded',
-    rewardedAt: now,
-    referrerReward: {
-      ...REFERRAL_PROGRAM_CONFIG.referrerReward,
-      appliedAt: now,
-    },
-    referredReward: {
-      ...REFERRAL_PROGRAM_CONFIG.referredReward,
-      appliedAt: now,
-    },
+  if (error || !data) return null;
+
+  // Also create a reward record
+  await supabase.from('referral_rewards').insert({
+    user_id: data.referrer_id,
+    referral_id: data.id,
+    reward_type: 'free_month',
+    reward_value: 1,
+    status: 'applied',
+    applied_at: new Date().toISOString()
+  });
+
+  return mapDbReferral(data);
+}
+
+function mapDbReferral(dbRef: Record<string, unknown>): Referral {
+  return {
+    id: dbRef.id as string,
+    referrerUserId: dbRef.referrer_id as string,
+    referredUserId: dbRef.referred_id as string,
+    referralCode: dbRef.referral_code as string,
+    status: dbRef.status as Referral['status'],
+    qualificationDate: dbRef.converted_at as string | undefined,
+    rewardedAt: dbRef.rewarded_at as string | undefined,
+    createdAt: dbRef.created_at as string,
   };
-
-  saveToStorage(STORAGE_KEYS.REFERRALS, referrals);
-  return referrals[index];
 }
 
 /**
  * Generate mock referrals for demo
  */
 export function generateMockReferrals(userId: string): Referral[] {
-  const statuses: Referral['status'][] = ['pending', 'pending', 'qualified', 'rewarded', 'rewarded'];
+  const statuses: Referral['status'][] = ['pending', 'pending', 'converted', 'rewarded', 'rewarded'];
   const names = ['Alex M.', 'Jamie T.', 'Morgan K.', 'Casey L.', 'Taylor P.'];
 
   return statuses.map((status, i) => {

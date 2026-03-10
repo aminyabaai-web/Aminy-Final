@@ -51,6 +51,7 @@ import {
   Copy,
   Share2
 } from 'lucide-react';
+import { useAuditedAction } from '../hooks/useAuditedAction';
 
 // Quick reply templates
 const QUICK_REPLY_TEMPLATES = [
@@ -268,6 +269,7 @@ const mockMessages: Record<string, Message[]> = {
 };
 
 export default function CarePagePro({ userData, onNavigate, userTier, freeMessageCount = 0, setFreeMessageCount }: CarePageProProps) {
+  useAuditedAction('care_plan');
   const tier = useTierLite();
   const isPro = tier === 'pro';
   

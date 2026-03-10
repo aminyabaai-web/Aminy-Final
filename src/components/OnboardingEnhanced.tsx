@@ -45,8 +45,8 @@ import { cn } from '../lib/utils';
 import { toast } from 'sonner';
 
 // Import new enhancement components
-import { ChildMentalHealthScreen } from './ChildMentalHealthScreen';
-import { ParentCapacityCheck } from './ParentCapacityCheck';
+import { ChildMentalHealthScreen, type ChildMentalHealthResult } from './ChildMentalHealthScreen';
+import { ParentCapacityCheck, type ParentCapacityResult } from './ParentCapacityCheck';
 import {
   DiagnosisValidation,
   FocusAreaValidation,
@@ -105,8 +105,8 @@ interface OnboardingData {
   triggers?: string[];
 
   // Mental health
-  childMentalHealth?: any;
-  parentCapacity?: any;
+  childMentalHealth?: ChildMentalHealthResult;
+  parentCapacity?: ParentCapacityResult;
 
   // Generated
   quickWinTip?: string;

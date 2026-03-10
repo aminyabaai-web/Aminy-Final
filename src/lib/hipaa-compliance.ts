@@ -18,6 +18,7 @@ import {
   type AuditAction,
   type AuditUserRole,
 } from './audit-logger';
+import { syncEncryptedStorage } from './security/encrypted-storage';
 
 // ============================================================================
 // Data Retention Policies
@@ -118,7 +119,7 @@ const RETENTION_STORAGE_KEY = 'aminy_retention_policies';
  */
 export function getRetentionPolicies(): RetentionPolicy[] {
   try {
-    const stored = localStorage.getItem(RETENTION_STORAGE_KEY);
+    const stored = syncEncryptedStorage.getItem(RETENTION_STORAGE_KEY);
     if (stored) {
       const custom = JSON.parse(stored) as RetentionPolicy[];
       // Enforce HIPAA minimums — user can extend but not reduce below 6 years for PHI
@@ -230,7 +231,7 @@ function generateBreachId(): string {
  */
 export function getBreachThresholds(): BreachThresholds {
   try {
-    const stored = localStorage.getItem(THRESHOLDS_STORAGE_KEY);
+    const stored = syncEncryptedStorage.getItem(THRESHOLDS_STORAGE_KEY);
     if (stored) return { ...DEFAULT_THRESHOLDS, ...JSON.parse(stored) };
   } catch (error) { console.warn('[HIPAA] Failed to load breach thresholds from storage:', error); }
   return DEFAULT_THRESHOLDS;
@@ -245,7 +246,7 @@ function saveBreachAlert(alert: BreachAlert): void {
     alerts.push(alert);
     // Keep last 500 alerts
     const trimmed = alerts.slice(-500);
-    localStorage.setItem(BREACH_STORAGE_KEY, JSON.stringify(trimmed));
+    syncEncryptedStorage.setItem(BREACH_STORAGE_KEY, JSON.stringify(trimmed));
   } catch (e) {
     console.error('[HIPAA] Failed to save breach alert:', e);
   }
@@ -262,7 +263,7 @@ export function getBreachAlerts(filters?: {
   endDate?: string;
 }): BreachAlert[] {
   try {
-    const stored = localStorage.getItem(BREACH_STORAGE_KEY);
+    const stored = syncEncryptedStorage.getItem(BREACH_STORAGE_KEY);
     let alerts: BreachAlert[] = stored ? JSON.parse(stored) : [];
 
     if (filters) {
@@ -295,7 +296,7 @@ export function resolveBreachAlert(
     alerts[idx].resolvedAt = new Date().toISOString();
     alerts[idx].resolvedBy = resolvedBy;
     alerts[idx].falsePositive = falsePositive;
-    localStorage.setItem(BREACH_STORAGE_KEY, JSON.stringify(alerts));
+    syncEncryptedStorage.setItem(BREACH_STORAGE_KEY, JSON.stringify(alerts));
   }
 }
 
@@ -456,7 +457,7 @@ export function getComplianceStatus(): ComplianceStatus {
   const retentionStatus = getRetentionStatus();
 
   // Check encryption status
-  const encryptionEnabled = localStorage.getItem('aminy-hipaa-enabled') !== 'false';
+  const encryptionEnabled = syncEncryptedStorage.getItem('aminy-hipaa-enabled') !== 'false';
 
   // Check audit logging
   const recentAudit = getAuditLog({ limit: 1 });

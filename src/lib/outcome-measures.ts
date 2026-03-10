@@ -4,6 +4,7 @@
 // for behavioral wellness tracking in neurodivergent families.
 
 import { supabase } from '../utils/supabase/client';
+import { syncEncryptedStorage } from './security/encrypted-storage';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -359,9 +360,9 @@ export async function saveAssessmentResult(result: AssessmentResult): Promise<vo
   // Always save to localStorage first as a backup
   const storageKey = `aminy_assessments_${result.userId}_${result.childId}`;
   try {
-    const existing = JSON.parse(localStorage.getItem(storageKey) || '[]') as AssessmentResult[];
+    const existing = JSON.parse(syncEncryptedStorage.getItem(storageKey) || '[]') as AssessmentResult[];
     existing.push(result);
-    localStorage.setItem(storageKey, JSON.stringify(existing));
+    syncEncryptedStorage.setItem(storageKey, JSON.stringify(existing));
   } catch {
     // localStorage not available — ignore
   }
@@ -432,7 +433,7 @@ export async function getAssessmentHistory(
   // Fallback: localStorage
   const storageKey = `aminy_assessments_${userId}_${childId}`;
   try {
-    const stored = JSON.parse(localStorage.getItem(storageKey) || '[]') as AssessmentResult[];
+    const stored = JSON.parse(syncEncryptedStorage.getItem(storageKey) || '[]') as AssessmentResult[];
     const filtered = type ? stored.filter((r) => r.type === type) : stored;
     return filtered.sort((a, b) => new Date(b.completedAt).getTime() - new Date(a.completedAt).getTime());
   } catch {

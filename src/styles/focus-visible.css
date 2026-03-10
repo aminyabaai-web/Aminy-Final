@@ -1,0 +1,151 @@
+/* ========================================
+   FOCUS VISIBLE STYLES
+   ========================================
+   Enhanced focus indicators for keyboard navigation.
+   Works with useFocusVisible() hook from src/hooks/useFocusManagement.ts.
+   Supplements the existing styles in src/styles/accessibility.css.
+   ======================================== */
+
+/* ----------------------------------------
+   Base: visible focus for keyboard users only
+   ---------------------------------------- */
+
+/* When JS detects keyboard navigation, show strong focus rings */
+html.focus-visible-active *:focus {
+  outline: 3px solid #0891b2 !important;
+  outline-offset: 2px !important;
+}
+
+/* Remove default outlines for mouse/touch users (when JS-managed) */
+html:not(.focus-visible-active) *:focus:not(:focus-visible) {
+  outline: none !important;
+}
+
+/* ----------------------------------------
+   Per-element focus styles
+   ---------------------------------------- */
+
+/* Buttons */
+html.focus-visible-active button:focus,
+html.focus-visible-active [role="button"]:focus {
+  outline: 3px solid #0891b2 !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 5px rgba(8, 145, 178, 0.15);
+  border-radius: 8px;
+}
+
+/* Links */
+html.focus-visible-active a:focus {
+  outline: 3px solid #0891b2 !important;
+  outline-offset: 2px !important;
+  border-radius: 4px;
+  text-decoration-thickness: 2px;
+}
+
+/* Text inputs, selects, textareas */
+html.focus-visible-active input:focus,
+html.focus-visible-active select:focus,
+html.focus-visible-active textarea:focus {
+  outline: 3px solid #0891b2 !important;
+  outline-offset: 0px !important;
+  box-shadow: 0 0 0 4px rgba(8, 145, 178, 0.15);
+  border-color: #0891b2 !important;
+}
+
+/* Checkboxes and radios */
+html.focus-visible-active input[type="checkbox"]:focus,
+html.focus-visible-active input[type="radio"]:focus {
+  outline: 3px solid #0891b2 !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 4px rgba(8, 145, 178, 0.2);
+}
+
+/* Tab elements */
+html.focus-visible-active [role="tab"]:focus {
+  outline: 3px solid #0891b2 !important;
+  outline-offset: -2px !important;
+  box-shadow: inset 0 -3px 0 #0891b2;
+}
+
+/* Card-like containers when focusable */
+html.focus-visible-active [tabindex="0"]:focus:not(button):not(a):not(input):not(select):not(textarea) {
+  outline: 3px solid #0891b2 !important;
+  outline-offset: 2px !important;
+  border-radius: 12px;
+}
+
+/* ----------------------------------------
+   Navigation items
+   ---------------------------------------- */
+
+html.focus-visible-active nav a:focus,
+html.focus-visible-active nav button:focus,
+html.focus-visible-active [role="navigation"] a:focus,
+html.focus-visible-active [role="navigation"] button:focus {
+  outline: 3px solid #0891b2 !important;
+  outline-offset: -2px !important;
+  background-color: rgba(8, 145, 178, 0.08);
+  border-radius: 8px;
+}
+
+/* ----------------------------------------
+   Bottom navigation bar (common in Aminy mobile UI)
+   ---------------------------------------- */
+
+html.focus-visible-active .bottom-nav button:focus,
+html.focus-visible-active [data-testid="bottom-nav"] button:focus {
+  outline: 3px solid #0891b2 !important;
+  outline-offset: -2px !important;
+  background-color: rgba(8, 145, 178, 0.1);
+  border-radius: 12px;
+}
+
+/* ----------------------------------------
+   Modal / dialog focus
+   ---------------------------------------- */
+
+html.focus-visible-active [role="dialog"] *:focus,
+html.focus-visible-active [role="alertdialog"] *:focus {
+  outline: 3px solid #0891b2 !important;
+  outline-offset: 2px !important;
+}
+
+/* ----------------------------------------
+   Skip link enhancement (already in accessibility.css,
+   but adding focus-visible specificity)
+   ---------------------------------------- */
+
+html.focus-visible-active .skip-link:focus {
+  outline: 3px solid #ffffff !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* ----------------------------------------
+   Error state focus (aria-invalid elements)
+   ---------------------------------------- */
+
+html.focus-visible-active [aria-invalid="true"]:focus {
+  outline-color: #dc2626 !important;
+  box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.2) !important;
+}
+
+/* ----------------------------------------
+   Disabled elements should not show focus rings
+   ---------------------------------------- */
+
+[disabled]:focus,
+[aria-disabled="true"]:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* ----------------------------------------
+   Animation for focus ring appearance (only if motion is OK)
+   ---------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  html.focus-visible-active *:focus {
+    transition: outline-offset 0.1s ease, box-shadow 0.15s ease;
+  }
+}

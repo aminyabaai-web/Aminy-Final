@@ -12,6 +12,7 @@
 
 import { supabase } from '../utils/supabase/client';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
+import { tierPricing, tierDisplayNames, getTierFeatureDescriptions, type TierType } from './tier-utils';
 
 // ============================================================================
 // Types
@@ -105,13 +106,15 @@ export interface CheckoutResult {
 // Pricing Configuration
 // ============================================================================
 
+// Pricing derived from tier-utils.ts (single source of truth)
+// Stripe price IDs come from environment variables — never hardcode placeholder IDs
 export const PRICING_TIERS: PricingTier[] = [
   {
     id: 'free',
     name: 'Free',
     description: 'Try Aminy with basic features',
-    monthlyPrice: 0,
-    yearlyPrice: 0,
+    monthlyPrice: tierPricing.free.monthly,
+    yearlyPrice: tierPricing.free.yearly,
     yearlyMonthlyEquivalent: 0,
     features: [
       '5 AI messages per day',
@@ -134,9 +137,9 @@ export const PRICING_TIERS: PricingTier[] = [
     id: 'core',
     name: 'Core',
     description: 'Everything you need for daily support',
-    monthlyPrice: 24.99,
-    yearlyPrice: 199,
-    yearlyMonthlyEquivalent: 16.58,
+    monthlyPrice: tierPricing.core.monthly,
+    yearlyPrice: tierPricing.core.yearly,
+    yearlyMonthlyEquivalent: +(tierPricing.core.yearly / 12).toFixed(2),
     features: [
       'Unlimited AI conversations',
       'Up to 2 children',
@@ -154,8 +157,8 @@ export const PRICING_TIERS: PricingTier[] = [
       marketplaceDiscount: 10,
     },
     stripePriceIds: {
-      monthly: 'price_core_monthly',
-      yearly: 'price_core_yearly',
+      monthly: import.meta.env.VITE_PRICE_CORE_MONTHLY || '',
+      yearly: import.meta.env.VITE_PRICE_CORE_ANNUAL || '',
     },
     isPopular: true,
     badge: 'Most Popular',
@@ -164,9 +167,9 @@ export const PRICING_TIERS: PricingTier[] = [
     id: 'pro',
     name: 'Pro',
     description: 'Advanced features for serious progress',
-    monthlyPrice: 49.99,
-    yearlyPrice: 399,
-    yearlyMonthlyEquivalent: 33.25,
+    monthlyPrice: tierPricing.pro.monthly,
+    yearlyPrice: tierPricing.pro.yearly,
+    yearlyMonthlyEquivalent: +(tierPricing.pro.yearly / 12).toFixed(2),
     features: [
       'Everything in Core',
       'Up to 3 children',
@@ -184,17 +187,17 @@ export const PRICING_TIERS: PricingTier[] = [
       marketplaceDiscount: 20,
     },
     stripePriceIds: {
-      monthly: 'price_pro_monthly',
-      yearly: 'price_pro_yearly',
+      monthly: import.meta.env.VITE_PRICE_PRO_MONTHLY || '',
+      yearly: import.meta.env.VITE_PRICE_PRO_ANNUAL || '',
     },
   },
   {
     id: 'pro_plus',
     name: 'Pro+ Family',
     description: 'Complete family support system',
-    monthlyPrice: 79.99,
-    yearlyPrice: 649,
-    yearlyMonthlyEquivalent: 54.08,
+    monthlyPrice: tierPricing.proplus.monthly,
+    yearlyPrice: tierPricing.proplus.yearly,
+    yearlyMonthlyEquivalent: +(tierPricing.proplus.yearly / 12).toFixed(2),
     features: [
       'Everything in Pro',
       'Unlimited children',
@@ -212,42 +215,31 @@ export const PRICING_TIERS: PricingTier[] = [
       marketplaceDiscount: 30,
     },
     stripePriceIds: {
-      monthly: 'price_proplus_monthly',
-      yearly: 'price_proplus_yearly',
+      monthly: import.meta.env.VITE_PRICE_PROPLUS_MONTHLY || '',
+      yearly: import.meta.env.VITE_PRICE_PROPLUS_ANNUAL || '',
     },
     badge: 'Best Value',
   },
 ];
 
-export const PROMO_CODES: PromoCode[] = [
-  {
-    code: 'WELCOME20',
-    discountPercent: 20,
-    validTiers: ['core', 'pro', 'pro_plus'],
-    validMonths: 3,
-    currentUses: 0,
-  },
-  {
-    code: 'FAMILY15',
-    discountPercent: 15,
-    validTiers: ['core', 'pro', 'pro_plus'],
-    currentUses: 0,
-  },
-  {
-    code: 'BCBA10',
-    discountAmount: 10,
-    validTiers: ['pro', 'pro_plus'],
-    currentUses: 0,
-  },
-  {
-    code: 'AUTISM2024',
-    discountPercent: 25,
-    validTiers: ['core', 'pro', 'pro_plus'],
-    validMonths: 1,
-    expiresAt: '2024-04-30T23:59:59Z',
-    currentUses: 0,
-  },
-];
+/**
+ * PROMO_CODES — DEPRECATED (kept for backward compatibility)
+ *
+ * SECURITY: Promo codes must NEVER be validated client-side. Hardcoding codes
+ * in the frontend bundle exposes them to anyone inspecting the JS source.
+ *
+ * All promo code validation now goes through the server-side edge function:
+ *   POST /billing/validate-promo  (or /payments/validate-promo)
+ *
+ * Server-side validation provides:
+ *   - Codes stored in database, not in client bundle
+ *   - Proper usage tracking and rate limiting
+ *   - Expiration enforcement with server clock (not client clock)
+ *   - Stripe Coupon/Promotion Code integration
+ *
+ * This empty array is exported only so existing imports don't break.
+ */
+export const PROMO_CODES: PromoCode[] = [];
 
 // ============================================================================
 // API Helpers
@@ -545,6 +537,11 @@ export async function getUpcomingInvoice(userId: string): Promise<Invoice | null
 
 /**
  * Validate a promo code
+ *
+ * SECURITY: All validation happens server-side via the edge function.
+ * The server checks the code against the database (or Stripe Promotion Codes),
+ * enforces usage limits, tier restrictions, and expiration with the server clock.
+ * No promo codes are stored or validated in the client bundle.
  */
 export async function validatePromoCode(
   code: string,
@@ -554,41 +551,23 @@ export async function validatePromoCode(
   promoCode?: PromoCode;
   error?: string;
 }> {
-  // First check local codes
-  const localCode = PROMO_CODES.find(p => p.code.toUpperCase() === code.toUpperCase());
-
-  if (localCode) {
-    // Check if valid for tier
-    if (!localCode.validTiers.includes(tier)) {
-      return { valid: false, error: 'Code not valid for this plan' };
-    }
-
-    // Check expiry
-    if (localCode.expiresAt && new Date(localCode.expiresAt) < new Date()) {
-      return { valid: false, error: 'Code has expired' };
-    }
-
-    // Check max uses
-    if (localCode.maxUses && localCode.currentUses >= localCode.maxUses) {
-      return { valid: false, error: 'Code has reached maximum uses' };
-    }
-
-    return { valid: true, promoCode: localCode };
+  if (!code || !code.trim()) {
+    return { valid: false, error: 'Please enter a promo code' };
   }
 
-  // Try server validation
   try {
     const result = await billingApi('/validate-promo', {
       method: 'POST',
-      body: JSON.stringify({ code, tier }),
+      body: JSON.stringify({ code: code.trim().toUpperCase(), tier }),
     });
 
     if (result.valid) {
       return { valid: true, promoCode: result.promoCode as PromoCode | undefined };
     }
-    return { valid: false, error: (result.error as string) || 'Invalid code' };
+    return { valid: false, error: (result.error as string) || 'Invalid promo code' };
   } catch (error) {
-    return { valid: false, error: 'Failed to validate code' };
+    console.warn('[Billing] Promo code validation failed:', error);
+    return { valid: false, error: 'Unable to validate code. Please try again.' };
   }
 }
 

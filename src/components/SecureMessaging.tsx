@@ -42,6 +42,7 @@ import {
   Loader2
 } from 'lucide-react';
 import { supabase } from '../utils/supabase/client';
+import { useAuditedAction } from '../hooks/useAuditedAction';
 
 interface Message {
   id: string;
@@ -104,6 +105,7 @@ const QUICK_REPLIES = {
 };
 
 export function SecureMessaging({ userId, userType, userName }: SecureMessagingProps) {
+  useAuditedAction('message');
   const [threads, setThreads] = useState<Thread[]>([]);
   const [selectedThread, setSelectedThread] = useState<Thread | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);

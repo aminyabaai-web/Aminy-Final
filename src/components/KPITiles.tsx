@@ -27,7 +27,7 @@ interface KPITilesProps {
 export function KPITiles({ userId, childId, timeframe = '7d', variant = 'dashboard' }: KPITilesProps) {
   const [kpis, setKpis] = useState<KPISnapshot | null>(null);
   const [loading, setLoading] = useState(true);
-  const [selectedKPI, setSelectedKPI] = useState<string | null>(null);
+  const [selectedKPI, setSelectedKPI] = useState<'routineAdherence' | 'overwhelmDelta' | 'toughMoments' | 'goalProgress' | null>(null);
 
   const kpiEngine = new KPIEngine(userId, childId);
 
@@ -114,7 +114,7 @@ export function KPITiles({ userId, childId, timeframe = '7d', variant = 'dashboa
               inverted={item.inverted}
               onInfoClick={() => {
                 HAPTICS.light();
-                setSelectedKPI(item.id);
+                setSelectedKPI(item.id as 'routineAdherence' | 'overwhelmDelta' | 'toughMoments' | 'goalProgress');
               }}
               variant={variant}
             />
@@ -125,7 +125,7 @@ export function KPITiles({ userId, childId, timeframe = '7d', variant = 'dashboa
       {/* Info Modal */}
       {selectedKPI && (
         <KPIExplainerModal
-          kpiName={selectedKPI as any}
+          kpiName={selectedKPI!}
           isOpen={!!selectedKPI}
           onClose={() => setSelectedKPI(null)}
           kpiEngine={kpiEngine}

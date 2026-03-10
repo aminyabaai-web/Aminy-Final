@@ -10,6 +10,8 @@
  * - Voice therapy
  */
 
+import { syncEncryptedStorage } from './security/encrypted-storage';
+
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
@@ -487,16 +489,16 @@ const SLP_STORAGE_KEYS = {
  * Save articulation profile
  */
 export function saveArticulationProfile(profile: ArticulationProfile): void {
-  const profiles = JSON.parse(localStorage.getItem(SLP_STORAGE_KEYS.ARTICULATION) || '{}');
+  const profiles = JSON.parse(syncEncryptedStorage.getItem(SLP_STORAGE_KEYS.ARTICULATION) || '{}');
   profiles[profile.childId] = profile;
-  localStorage.setItem(SLP_STORAGE_KEYS.ARTICULATION, JSON.stringify(profiles));
+  syncEncryptedStorage.setItem(SLP_STORAGE_KEYS.ARTICULATION, JSON.stringify(profiles));
 }
 
 /**
  * Get articulation profile for a child
  */
 export function getArticulationProfile(childId: string): ArticulationProfile | null {
-  const profiles = JSON.parse(localStorage.getItem(SLP_STORAGE_KEYS.ARTICULATION) || '{}');
+  const profiles = JSON.parse(syncEncryptedStorage.getItem(SLP_STORAGE_KEYS.ARTICULATION) || '{}');
   return profiles[childId] || null;
 }
 
@@ -504,7 +506,7 @@ export function getArticulationProfile(childId: string): ArticulationProfile | n
  * Save session data
  */
 export function saveSLPSession(session: SLPSessionData): void {
-  const sessions = JSON.parse(localStorage.getItem(SLP_STORAGE_KEYS.SESSIONS) || '[]');
+  const sessions = JSON.parse(syncEncryptedStorage.getItem(SLP_STORAGE_KEYS.SESSIONS) || '[]');
   const index = sessions.findIndex((s: SLPSessionData) => s.id === session.id);
 
   if (index >= 0) {
@@ -513,13 +515,13 @@ export function saveSLPSession(session: SLPSessionData): void {
     sessions.push(session);
   }
 
-  localStorage.setItem(SLP_STORAGE_KEYS.SESSIONS, JSON.stringify(sessions));
+  syncEncryptedStorage.setItem(SLP_STORAGE_KEYS.SESSIONS, JSON.stringify(sessions));
 }
 
 /**
  * Get sessions for a child
  */
 export function getSLPSessions(childId: string): SLPSessionData[] {
-  const sessions = JSON.parse(localStorage.getItem(SLP_STORAGE_KEYS.SESSIONS) || '[]');
+  const sessions = JSON.parse(syncEncryptedStorage.getItem(SLP_STORAGE_KEYS.SESSIONS) || '[]');
   return sessions.filter((s: SLPSessionData) => s.childId === childId);
 }

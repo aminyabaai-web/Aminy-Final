@@ -291,7 +291,7 @@ export const validateConfig = (): boolean => {
   const requiredKeys = ['app.name', 'app.version'];
   
   for (const key of requiredKeys) {
-    const value = key.split('.').reduce((obj, k) => obj?.[k], productionConfig as any);
+    const value = key.split('.').reduce((obj: Record<string, unknown>, k) => (obj?.[k] as Record<string, unknown>) ?? undefined, productionConfig as unknown as Record<string, unknown>);
     if (!value) {
       console.error(`Missing required config: ${key}`);
       return false;
@@ -305,7 +305,7 @@ export const validateConfig = (): boolean => {
 export const initializeConfig = () => {
   // Set global config
   if (typeof window !== 'undefined') {
-    (window as any).__AMINY_CONFIG__ = productionConfig;
+    (window as unknown as Record<string, unknown>).__AMINY_CONFIG__ = productionConfig;
   }
   
   return validateConfig();

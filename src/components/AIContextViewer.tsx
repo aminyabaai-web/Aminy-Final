@@ -4,7 +4,7 @@ import { Card } from './ui/card';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './ui/collapsible';
-import { buildAIContext, type AminyAIContext } from '../lib/aminy-ai-brain';
+import { buildAIContext, type AminyAIContext } from '../lib/ai-engine';
 
 /**
  * AI Context Viewer

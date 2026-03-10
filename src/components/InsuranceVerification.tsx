@@ -41,7 +41,7 @@ import {
 } from '../types/telehealth';
 import {
   verifyInsuranceEligibility,
-  isAvailityConfigured,
+  isClearinghouseConfigured,
   CLEARINGHOUSE_PAYER_IDS,
   ABA_SERVICE_CODES,
   EligibilityResponse,
@@ -176,7 +176,7 @@ export function InsuranceVerification({
         outOfPocketMax: eligibilityResponse.coverage.outOfPocketMax.individual,
         outOfPocketSpent: eligibilityResponse.coverage.outOfPocketMax.spent,
         verifiedAt: new Date().toISOString(),
-        verifiedBy: isAvailityConfigured() ? 'availity' : 'system',
+        verifiedBy: isClearinghouseConfigured() ? 'clearinghouse' : 'system',
         // Store full response for reference
         clearinghouseResponse: eligibilityResponse,
       };

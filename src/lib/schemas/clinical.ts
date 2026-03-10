@@ -13,7 +13,7 @@ export const sessionTypeEnum = z.enum(
   { message: "Invalid session type" },
 );
 
-export type SessionType = z.infer<typeof sessionTypeEnum>;
+export type ClinicalSessionType = z.infer<typeof sessionTypeEnum>;
 
 export const promptLevelEnum = z.enum(
   ["independent", "gestural", "verbal", "model", "partial-physical", "full-physical"],

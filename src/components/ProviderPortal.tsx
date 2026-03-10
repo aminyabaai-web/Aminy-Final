@@ -67,6 +67,7 @@ import { CredentialBadge, VerifiedBadge } from './provider/CredentialBadge';
 import { getBranding, saveBranding, type ProviderBranding } from '../lib/provider-branding';
 import { CPT_CODES, getCPTByCode, suggestCPTCodes, validateNoteForCPT, type CPTCode } from '../lib/cpt-codes';
 import { PatientAISummary } from './provider/PatientAISummary';
+import { CRSyncStatus } from './CRSyncStatus';
 import { ProviderInsightsDashboard } from './provider/ProviderInsightsDashboard';
 import { CareCoordination } from './provider/CareCoordination';
 import { RBTManagement } from './provider/RBTManagement';
@@ -909,6 +910,9 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
                 </div>
               </Card>
             </div>
+
+            {/* CentralReach Sync Status */}
+            <CRSyncStatus userId="current-user" compact={false} />
 
             {/* Quick Access - Patients Needing Attention */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">

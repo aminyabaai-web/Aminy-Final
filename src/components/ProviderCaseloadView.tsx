@@ -204,7 +204,7 @@ export function ProviderCaseloadView({ onBack, providerName = "Dr. Sarah", role 
                     {['overview', 'clinical_templates', 'soap_notes', 'rbts', 'billing', 'agency_settings'].map((tab) => (
                         <button
                             key={tab}
-                            onClick={() => setActiveTab(tab as any)}
+                            onClick={() => setActiveTab(tab as typeof activeTab)}
                             style={{
                                 padding: '10px 20px', borderRadius: '100px', fontSize: '14px', fontWeight: 500,
                                 backgroundColor: activeTab === tab ? '#111827' : '#FFFFFF',
@@ -308,7 +308,7 @@ export function ProviderCaseloadView({ onBack, providerName = "Dr. Sarah", role 
                                                 {section.label}
                                             </label>
                                             <Textarea
-                                                value={(soapNote as any)[section.key]}
+                                                value={soapNote[section.key as keyof typeof soapNote]}
                                                 onChange={(e) => setSoapNote({ ...soapNote, [section.key]: e.target.value })}
                                                 placeholder={section.placeholder}
                                                 disabled={isSoapLocked}
@@ -361,7 +361,7 @@ export function ProviderCaseloadView({ onBack, providerName = "Dr. Sarah", role 
                                                         diagnosis: [{ code: 'F84.0', isPrimary: true }],
                                                         services: [{ cptCode: '97153', charge: 150.00, units: 4, date: new Date().toISOString().split('T')[0] }],
                                                         totalCharges: 150.00
-                                                    } as any);
+                                                    } as unknown as Parameters<typeof clearinghouse.submitInsuranceClaim>[0]); // TODO: provide full ClaimSubmission shape for demo data
                                                     toast.dismiss();
                                                     toast.success('Claim Successfully transmitted to Availity (EDI 837P generated).');
                                                 } catch (e) {

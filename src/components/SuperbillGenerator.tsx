@@ -550,7 +550,7 @@ export function SuperbillGenerator({
                 <label className="block text-sm text-slate-600 mb-1">Payment Method</label>
                 <select
                   value={formData.paymentMethod}
-                  onChange={e => setFormData(prev => ({ ...prev, paymentMethod: e.target.value as any }))}
+                  onChange={e => setFormData(prev => ({ ...prev, paymentMethod: e.target.value as 'credit_card' | 'hsa' | 'fsa' | 'cash' | 'check' }))}
                   className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm"
                 >
                   <option value="credit_card">Credit Card</option>

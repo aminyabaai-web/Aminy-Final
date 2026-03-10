@@ -13,6 +13,7 @@
  */
 
 import type { TierType } from './tier-utils';
+import { syncEncryptedStorage } from './security/encrypted-storage';
 
 // ============================================
 // TYPES
@@ -149,10 +150,10 @@ class MemoryManager {
 
   private loadFromStorage() {
     try {
-      const factsData = localStorage.getItem('aminy-memory-facts');
-      const docsData = localStorage.getItem('aminy-memory-docs');
-      const summariesData = localStorage.getItem('aminy-memory-summaries');
-      const usageData = localStorage.getItem('aminy-memory-usage');
+      const factsData = syncEncryptedStorage.getItem('aminy-memory-facts');
+      const docsData = syncEncryptedStorage.getItem('aminy-memory-docs');
+      const summariesData = syncEncryptedStorage.getItem('aminy-memory-summaries');
+      const usageData = syncEncryptedStorage.getItem('aminy-memory-usage');
 
       if (factsData) {
         const parsed = JSON.parse(factsData);
@@ -186,19 +187,19 @@ class MemoryManager {
     try {
       const factsObj: Record<string, MemoryFact[]> = {};
       this.facts.forEach((value, key) => { factsObj[key] = value; });
-      localStorage.setItem('aminy-memory-facts', JSON.stringify(factsObj));
+      syncEncryptedStorage.setItem('aminy-memory-facts', JSON.stringify(factsObj));
 
       const docsObj: Record<string, VaultDocument[]> = {};
       this.documents.forEach((value, key) => { docsObj[key] = value; });
-      localStorage.setItem('aminy-memory-docs', JSON.stringify(docsObj));
+      syncEncryptedStorage.setItem('aminy-memory-docs', JSON.stringify(docsObj));
 
       const summariesObj: Record<string, ConversationMemory[]> = {};
       this.conversationSummaries.forEach((value, key) => { summariesObj[key] = value; });
-      localStorage.setItem('aminy-memory-summaries', JSON.stringify(summariesObj));
+      syncEncryptedStorage.setItem('aminy-memory-summaries', JSON.stringify(summariesObj));
 
       const usageObj: Record<string, number> = {};
       this.dailyUsage.forEach((value, key) => { usageObj[key] = value; });
-      localStorage.setItem('aminy-memory-usage', JSON.stringify({
+      syncEncryptedStorage.setItem('aminy-memory-usage', JSON.stringify({
         usage: usageObj,
         lastResetDate: this.lastResetDate
       }));
