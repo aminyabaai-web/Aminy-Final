@@ -39,7 +39,7 @@ import { LaunchStateBadge } from './ui/LaunchStateBadge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { createDataProvenance, getSurfaceLaunchConfig } from '../lib/product-truth';
 import { getStateMarketCoverage, type SupportedProviderState } from '../lib/insurance/state-market-coverage';
-import { listClaimReadyCases, summarizeClaimReadyQueue, type ClaimReadyCase } from '../lib/claim-ready-queue';
+import { listClaimReadyCases, summarizeClaimReadyQueue, summarizePayerOps, type ClaimReadyCase } from '../lib/claim-ready-queue';
 
 interface PayerMetrics {
   // Population Overview
@@ -130,6 +130,7 @@ export function PayerOutcomesDashboard({
   const launchConfig = getSurfaceLaunchConfig('payer-dashboard');
   const marketCoverage = useMemo(() => getStateMarketCoverage(state), [state]);
   const claimQueueSummary = useMemo(() => summarizeClaimReadyQueue(claimQueue), [claimQueue]);
+  const payerOpsSummary = useMemo(() => summarizePayerOps(claimQueue, state), [claimQueue, state]);
   const visibleClaimQueue = useMemo(() => claimQueue.slice(0, 6), [claimQueue]);
   const marketLabel = marketCoverage?.label || state;
   const metricsProvenance = useMemo(() => (
@@ -707,7 +708,66 @@ export function PayerOutcomesDashboard({
                 </div>
               </Card>
 
-              <Card className="p-6">
+              <div className="space-y-6">
+                <Card className="p-6">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Payer Ops Pressure</h3>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                    This is the real biller pressure summary for the supported-state lane: auth blockers, denials, secondaries, and any payer cases that fall outside the launch matrix.
+                  </p>
+                  <div className="mt-5 grid grid-cols-2 gap-3 text-sm">
+                    <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3">
+                      <p className="text-xs uppercase tracking-[0.18em] text-amber-700">Auth blockers</p>
+                      <p className="mt-1 text-xl font-semibold text-amber-800">{payerOpsSummary.authBlockedCases}</p>
+                    </div>
+                    <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3">
+                      <p className="text-xs uppercase tracking-[0.18em] text-rose-700">Denials open</p>
+                      <p className="mt-1 text-xl font-semibold text-rose-800">{payerOpsSummary.deniedCases}</p>
+                    </div>
+                    <div className="rounded-2xl border border-sky-200 bg-sky-50 px-4 py-3">
+                      <p className="text-xs uppercase tracking-[0.18em] text-sky-700">Secondary plans</p>
+                      <p className="mt-1 text-xl font-semibold text-sky-800">{payerOpsSummary.secondaryPolicyCases}</p>
+                    </div>
+                    <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
+                      <p className="text-xs uppercase tracking-[0.18em] text-slate-600">Out of matrix</p>
+                      <p className="mt-1 text-xl font-semibold text-slate-800">{payerOpsSummary.unsupportedPayerCases}</p>
+                    </div>
+                  </div>
+                  <div className="mt-5 space-y-3">
+                    {payerOpsSummary.payerLanes.slice(0, 4).map((lane) => (
+                      <div key={lane.payerId} className="rounded-2xl border border-slate-200/85 bg-white/96 p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900/80">
+                        <div className="flex flex-wrap items-start justify-between gap-3">
+                          <div>
+                            <div className="flex flex-wrap items-center gap-2">
+                              <p className="text-sm font-semibold text-slate-900 dark:text-white">{lane.payerName}</p>
+                              <Badge className={lane.supported ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-200 text-slate-700'}>
+                                {lane.supported ? lane.launchState.replace(/_/g, ' ') : 'manual review'}
+                              </Badge>
+                            </div>
+                            <p className="mt-1 text-xs text-slate-500">
+                              {lane.totalCases} cases • {lane.blockedCases} blocked • {lane.deniedCases} denied • submission via {lane.submissionModes.join(', ').replace(/_/g, ' ')}
+                            </p>
+                          </div>
+                          <div className="text-right text-xs text-slate-500">
+                            <p>{lane.authBlockedCases} auth blocked</p>
+                            <p>{lane.secondaryPolicyCases} with secondary</p>
+                          </div>
+                        </div>
+                        {lane.operatorNotes.length > 0 ? (
+                          <ul className="mt-3 space-y-1 text-xs text-slate-600 dark:text-slate-300">
+                            {lane.operatorNotes.map((note) => (
+                              <li key={note} className="flex items-start gap-2">
+                                <AlertCircle className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-amber-500" />
+                                <span>{note}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        ) : null}
+                      </div>
+                    ))}
+                  </div>
+                </Card>
+
+                <Card className="p-6">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Supported Payer Matrix</h3>
                 <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                   Coverage Coach and claims ops should support the payer products covering the majority of addressable demand in each live state.
@@ -736,7 +796,8 @@ export function PayerOutcomesDashboard({
                     </div>
                   ))}
                 </div>
-              </Card>
+                </Card>
+              </div>
             </div>
           </TabsContent>
 

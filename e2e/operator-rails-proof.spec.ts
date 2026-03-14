@@ -293,6 +293,20 @@ test.describe('Operator rails backend proof', () => {
       {
         user_id: user.id,
         child_id: childId,
+        data_type: 'sessions',
+        direction: 'pull',
+        status: 'success',
+        records_processed: 5,
+        records_failed: 0,
+        error_message: null,
+        error_code: null,
+        duration_ms: 900,
+        sync_metadata: { source: 'centralreach', proof: true },
+        completed_at: new Date().toISOString(),
+      },
+      {
+        user_id: user.id,
+        child_id: childId,
         data_type: 'goals',
         direction: 'pull',
         status: 'success',
@@ -301,6 +315,34 @@ test.describe('Operator rails backend proof', () => {
         error_message: null,
         error_code: null,
         duration_ms: 1200,
+        sync_metadata: { source: 'centralreach', proof: true },
+        completed_at: new Date().toISOString(),
+      },
+      {
+        user_id: user.id,
+        child_id: childId,
+        data_type: 'insurance',
+        direction: 'pull',
+        status: 'success',
+        records_processed: 2,
+        records_failed: 0,
+        error_message: null,
+        error_code: null,
+        duration_ms: 1000,
+        sync_metadata: { source: 'centralreach', proof: true },
+        completed_at: new Date().toISOString(),
+      },
+      {
+        user_id: user.id,
+        child_id: childId,
+        data_type: 'auth_status',
+        direction: 'pull',
+        status: 'success',
+        records_processed: 2,
+        records_failed: 0,
+        error_message: null,
+        error_code: null,
+        duration_ms: 1000,
         sync_metadata: { source: 'centralreach', proof: true },
         completed_at: new Date().toISOString(),
       },
@@ -370,6 +412,8 @@ test.describe('Operator rails backend proof', () => {
     if (await refreshButton.isVisible().catch(() => false)) {
       await refreshButton.click();
     }
+    await expect.poll(async () => page.evaluate(() => document.body.innerText), { timeout: 20000 }).toContain('Clinic Workflow Proof');
+    await expect.poll(async () => page.evaluate(() => document.body.innerText), { timeout: 20000 }).toContain('Needs review');
     await expect.poll(async () => page.evaluate(() => document.body.innerText), { timeout: 20000 }).toContain('Operator Reconciliation Queue');
     await expect.poll(async () => page.evaluate(() => document.body.innerText), { timeout: 20000 }).toContain('1 jobs need review');
     await expect.poll(async () => page.evaluate(() => document.body.innerText), { timeout: 20000 }).toContain('Routine Completions');

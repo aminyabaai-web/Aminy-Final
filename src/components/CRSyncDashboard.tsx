@@ -37,7 +37,7 @@ import {
   Zap,
 } from 'lucide-react';
 import { syncScheduler } from '../lib/centralreach-sync-scheduler';
-import { buildCentralReachSyncJobs } from '../lib/centralreach-operator';
+import { buildCentralReachClinicWorkflowSummary, buildCentralReachSyncJobs } from '../lib/centralreach-operator';
 import type {
   SyncRecord,
   SyncLogEntry,
@@ -568,10 +568,7 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
   const handleRetryAll = async () => {
     setBulkRetrying(true);
     try {
-      const result = await syncScheduler.retryAllErrors();
-      console.log(
-        `[CRSyncDashboard] Bulk retry: ${result.succeeded} succeeded, ${result.failed} failed`,
-      );
+      await syncScheduler.retryAllErrors();
       await loadData();
     } finally {
       setBulkRetrying(false);
@@ -590,6 +587,7 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
   const pullRecords = syncRecords.filter((r) => r.direction === 'pull');
   const pushRecords = syncRecords.filter((r) => r.direction === 'push');
   const syncJobs = buildCentralReachSyncJobs(history?.entries ?? [], errors);
+  const clinicWorkflow = buildCentralReachClinicWorkflowSummary(syncJobs);
   const attentionJobs = syncJobs.filter((job) => job.reconciliationState !== 'healthy');
 
   return (
@@ -692,6 +690,78 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
       {/* Status Tab */}
       {activeTab === 'status' && (
         <div className="space-y-4">
+          <div className="rounded-3xl border border-white/80 bg-white/92 p-5 shadow-sm">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <p className="text-sm font-semibold text-gray-900">Clinic Workflow Proof</p>
+                <p className="text-xs text-gray-500 mt-1">
+                  This is the operational read on whether AACT or Rise can trust the current CentralReach pull/export workflow in daily clinic use.
+                </p>
+              </div>
+              <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
+                clinicWorkflow.state === 'operator_ready'
+                  ? 'bg-emerald-50 text-emerald-700'
+                  : clinicWorkflow.state === 'needs_review'
+                    ? 'bg-amber-50 text-amber-700'
+                    : 'bg-rose-50 text-rose-700'
+              }`}>
+                {clinicWorkflow.state === 'operator_ready'
+                  ? 'Operator ready'
+                  : clinicWorkflow.state === 'needs_review'
+                    ? 'Needs review'
+                    : 'Blocked'}
+              </span>
+            </div>
+            <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+              <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3">
+                <p className="text-xs uppercase tracking-[0.18em] text-emerald-700">Healthy</p>
+                <p className="mt-1 text-xl font-semibold text-emerald-800">{clinicWorkflow.healthyLanes}</p>
+              </div>
+              <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3">
+                <p className="text-xs uppercase tracking-[0.18em] text-amber-700">Warnings</p>
+                <p className="mt-1 text-xl font-semibold text-amber-800">{clinicWorkflow.warningLanes}</p>
+              </div>
+              <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3">
+                <p className="text-xs uppercase tracking-[0.18em] text-rose-700">Blocked</p>
+                <p className="mt-1 text-xl font-semibold text-rose-800">{clinicWorkflow.blockedLanes}</p>
+              </div>
+              <div className="rounded-2xl border border-sky-200 bg-sky-50 px-4 py-3">
+                <p className="text-xs uppercase tracking-[0.18em] text-sky-700">Tracked lanes</p>
+                <p className="mt-1 text-xl font-semibold text-sky-800">{clinicWorkflow.totalLanes}</p>
+              </div>
+            </div>
+            <div className="mt-4 grid gap-2">
+              {clinicWorkflow.lanes.map((lane) => (
+                <div key={`${lane.lane}:${lane.direction}`} className="rounded-2xl border border-slate-100 bg-slate-50/80 px-3 py-3">
+                  <div className="flex items-center justify-between gap-3">
+                    <div>
+                      <p className="text-sm font-medium text-gray-900">{lane.label}</p>
+                      <p className="mt-0.5 text-xs text-gray-500">{lane.operatorMessage}</p>
+                    </div>
+                    <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium ${
+                      lane.state === 'healthy'
+                        ? 'bg-emerald-50 text-emerald-700'
+                        : lane.state === 'warning'
+                          ? 'bg-amber-50 text-amber-700'
+                          : 'bg-rose-50 text-rose-700'
+                    }`}>
+                      {lane.state === 'healthy' ? 'Healthy' : lane.state === 'warning' ? 'Warning' : 'Blocked'}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+            {clinicWorkflow.blockedReasons.length > 0 ? (
+              <ul className="mt-4 space-y-1 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs text-amber-800">
+                {clinicWorkflow.blockedReasons.slice(0, 4).map((reason) => (
+                  <li key={reason} className="flex items-start gap-2">
+                    <AlertTriangle className="mt-0.5 h-3.5 w-3.5 flex-shrink-0" />
+                    <span>{reason}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+          </div>
           <div className="rounded-3xl border border-white/80 bg-white/92 p-5 shadow-sm">
             <div className="flex items-center justify-between gap-3">
               <div>

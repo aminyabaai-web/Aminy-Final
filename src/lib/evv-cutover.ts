@@ -95,8 +95,11 @@ export interface EVVCutoverSummary {
   state: EVVCutoverState;
   cyclesCompleted: number;
   cleanCycles: number;
+  consecutiveCleanCycles: number;
   averageAccuracy: number;
+  trailingWindowAccuracy: number;
   unresolvedCriticalExceptions: number;
+  systemsValidated: Array<'spokchoice' | 'dci'>;
   discrepancyTotals: Record<EVVDiscrepancyCategory, number>;
   cutoverBlockedReasons: string[];
 }
@@ -134,6 +137,13 @@ export function buildEVVReconciliationCycle(run: EVVReconciliationRun): EVVRecon
 export function summarizeEVVCutover(
   cycles: EVVReconciliationCycle[],
 ): EVVCutoverSummary {
+  const sortedCycles = [...cycles].sort((a, b) => {
+    const aTime = new Date(a.payrollDate || a.exportedAt).getTime();
+    const bTime = new Date(b.payrollDate || b.exportedAt).getTime();
+    return bTime - aTime;
+  });
+  const recentCycles = sortedCycles.slice(0, 3);
+  const isCleanCycle = (cycle: EVVReconciliationCycle) => cycle.accuracy >= 99.5 && cycle.criticalExceptions === 0;
   const discrepancyTotals = DISCREPANCY_CATEGORIES.reduce<Record<EVVDiscrepancyCategory, number>>(
     (totals, category) => {
       totals[category] = cycles.reduce(
@@ -152,32 +162,45 @@ export function summarizeEVVCutover(
   );
 
   const cyclesCompleted = cycles.length;
-  const cleanCycles = cycles.filter(
-    (cycle) => cycle.accuracy >= 99.5 && cycle.criticalExceptions === 0,
-  ).length;
+  const cleanCycles = cycles.filter(isCleanCycle).length;
+  let consecutiveCleanCycles = 0;
+  for (const cycle of recentCycles) {
+    if (!isCleanCycle(cycle)) break;
+    consecutiveCleanCycles += 1;
+  }
   const averageAccuracy =
     cyclesCompleted === 0
       ? 0
       : Math.round(
           (cycles.reduce((sum, cycle) => sum + cycle.accuracy, 0) / cyclesCompleted) * 10,
         ) / 10;
-  const unresolvedCriticalExceptions = cycles.reduce(
+  const trailingWindowAccuracy =
+    recentCycles.length === 0
+      ? 0
+      : Math.round(
+          (recentCycles.reduce((sum, cycle) => sum + cycle.accuracy, 0) / recentCycles.length) * 10,
+        ) / 10;
+  const unresolvedCriticalExceptions = recentCycles.reduce(
     (sum, cycle) => sum + cycle.criticalExceptions,
     0,
   );
+  const systemsValidated = Array.from(new Set(recentCycles.map((cycle) => cycle.systemOfRecord))) as Array<'spokchoice' | 'dci'>;
 
   const cutoverBlockedReasons: string[] = [];
   if (cyclesCompleted < 3) {
-    cutoverBlockedReasons.push('Three consecutive payroll cycles have not been reconciled yet.');
+    cutoverBlockedReasons.push('Three payroll cycles have not been reconciled yet.');
   }
-  if (cleanCycles < 3) {
-    cutoverBlockedReasons.push('Three clean payroll cycles at 99.5% accuracy are required before cutover.');
+  if (recentCycles.length >= 3 && consecutiveCleanCycles < 3) {
+    cutoverBlockedReasons.push('The three most recent payroll cycles are not all clean at 99.5% accuracy.');
   }
-  if (averageAccuracy < 99.5) {
-    cutoverBlockedReasons.push('Average reconciliation accuracy is below the 99.5% cutover threshold.');
+  if (recentCycles.length > 0 && trailingWindowAccuracy < 99.5) {
+    cutoverBlockedReasons.push('The current cutover window is averaging below the 99.5% reconciliation threshold.');
   }
   if (unresolvedCriticalExceptions > 0) {
     cutoverBlockedReasons.push('Critical EVV exceptions must be resolved before Aminy can become system of record.');
+  }
+  if (recentCycles.length >= 3 && !systemsValidated.includes('dci')) {
+    cutoverBlockedReasons.push('At least one recent clean cycle must be reconciled through the DCI transition lane before cutover.');
   }
 
   const state: EVVCutoverState = cutoverBlockedReasons.length === 0
@@ -190,8 +213,11 @@ export function summarizeEVVCutover(
     state,
     cyclesCompleted,
     cleanCycles,
+    consecutiveCleanCycles,
     averageAccuracy,
+    trailingWindowAccuracy,
     unresolvedCriticalExceptions,
+    systemsValidated,
     discrepancyTotals,
     cutoverBlockedReasons,
   };

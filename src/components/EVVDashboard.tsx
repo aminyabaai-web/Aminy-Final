@@ -476,7 +476,7 @@ export default function EVVDashboard({
                 {cutoverSummary.state === 'cutover_ready' ? 'Ready for primary EVV cutover' : 'Parallel run still required'}
               </h2>
               <p className="text-sm text-gray-500 mt-1">
-                Aminy should not become system of record until three clean payroll cycles reach 99.5% reconciliation accuracy with no critical exceptions.
+                Aminy should not become system of record until the three most recent payroll cycles are clean at 99.5% reconciliation accuracy, include the DCI transition lane, and have no critical exceptions.
               </p>
             </div>
             <div className="grid grid-cols-2 gap-3 min-w-[220px]">
@@ -485,18 +485,35 @@ export default function EVVDashboard({
                 <p className="text-2xl font-semibold text-gray-900">{cutoverSummary.cyclesCompleted}</p>
               </div>
               <div>
-                <p className="text-xs text-gray-500">Clean cycles</p>
-                <p className="text-2xl font-semibold text-emerald-600">{cutoverSummary.cleanCycles}</p>
+                <p className="text-xs text-gray-500">Clean streak</p>
+                <p className="text-2xl font-semibold text-emerald-600">{cutoverSummary.consecutiveCleanCycles}</p>
               </div>
               <div>
-                <p className="text-xs text-gray-500">Avg accuracy</p>
-                <p className="text-2xl font-semibold text-blue-600">{cutoverSummary.averageAccuracy}%</p>
+                <p className="text-xs text-gray-500">Recent accuracy</p>
+                <p className="text-2xl font-semibold text-blue-600">{cutoverSummary.trailingWindowAccuracy}%</p>
               </div>
               <div>
                 <p className="text-xs text-gray-500">Critical exceptions</p>
                 <p className="text-2xl font-semibold text-rose-600">{cutoverSummary.unresolvedCriticalExceptions}</p>
               </div>
             </div>
+          </div>
+          <div className="mt-4 flex flex-wrap items-center gap-2">
+            <span className="text-xs uppercase tracking-[0.18em] text-slate-400">Transition systems validated</span>
+            {cutoverSummary.systemsValidated.length > 0 ? (
+              cutoverSummary.systemsValidated.map((system) => (
+                <span
+                  key={system}
+                  className="inline-flex items-center rounded-full border border-teal-200 bg-teal-50 px-3 py-1 text-xs font-medium text-teal-700"
+                >
+                  {system === 'spokchoice' ? 'SpokChoice' : 'DCI'}
+                </span>
+              ))
+            ) : (
+              <span className="inline-flex items-center rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-medium text-slate-500">
+                No validated cycles yet
+              </span>
+            )}
           </div>
           {cutoverSummary.cutoverBlockedReasons.length > 0 ? (
             <ul className="mt-4 rounded-xl bg-amber-50 border border-amber-200 p-3 space-y-1 text-sm text-amber-800">

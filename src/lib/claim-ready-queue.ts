@@ -76,6 +76,31 @@ export interface ClaimQueueSummary {
   paid: number;
 }
 
+export interface PayerOpsLaneSummary {
+  payerId: string;
+  payerName: string;
+  supported: boolean;
+  launchState: 'pilot' | 'limited_launch' | 'live' | 'unsupported';
+  totalCases: number;
+  blockedCases: number;
+  authBlockedCases: number;
+  deniedCases: number;
+  secondaryPolicyCases: number;
+  submissionModes: ClaimRuleProfile['submissionMode'][];
+  operatorNotes: string[];
+}
+
+export interface PayerOpsSummary {
+  totalCases: number;
+  readyCases: number;
+  blockedCases: number;
+  authBlockedCases: number;
+  deniedCases: number;
+  secondaryPolicyCases: number;
+  unsupportedPayerCases: number;
+  payerLanes: PayerOpsLaneSummary[];
+}
+
 export interface CoverageRouteDecision {
   state: SupportedProviderState;
   payerId: string;
@@ -329,6 +354,82 @@ export function summarizeClaimReadyQueue(
       paid: 0,
     },
   );
+}
+
+function isBlockedStatus(status: ClaimReadyCase['queueStatus']): boolean {
+  return [
+    'missing_clinical_signoff',
+    'missing_eligibility',
+    'missing_auth',
+    'payer_assignment_mismatch',
+    'coding_review_required',
+  ].includes(status);
+}
+
+export function summarizePayerOps(
+  cases: ClaimReadyCase[],
+  state: SupportedProviderState,
+): PayerOpsSummary {
+  const marketCoverage = getStateMarketCoverage(state);
+  const supportedProducts = new Map((marketCoverage?.payerProducts || []).map((product) => [product.id, product]));
+  const laneMap = new Map<string, PayerOpsLaneSummary>();
+
+  for (const entry of cases) {
+    const supportedProduct = supportedProducts.get(entry.payerId);
+    const existing = laneMap.get(entry.payerId) || {
+      payerId: entry.payerId,
+      payerName: entry.payerName,
+      supported: Boolean(supportedProduct),
+      launchState: supportedProduct ? marketCoverage?.launchState || 'limited_launch' : 'unsupported',
+      totalCases: 0,
+      blockedCases: 0,
+      authBlockedCases: 0,
+      deniedCases: 0,
+      secondaryPolicyCases: 0,
+      submissionModes: [],
+      operatorNotes: [],
+    };
+
+    existing.totalCases += 1;
+    if (isBlockedStatus(entry.queueStatus)) existing.blockedCases += 1;
+    if (entry.queueStatus === 'missing_auth') existing.authBlockedCases += 1;
+    if (entry.queueStatus === 'denied') existing.deniedCases += 1;
+    if (entry.secondaryPolicyId) existing.secondaryPolicyCases += 1;
+    if (!existing.submissionModes.includes(entry.submissionMode)) {
+      existing.submissionModes.push(entry.submissionMode);
+    }
+    if (!supportedProduct) {
+      existing.operatorNotes.push('This payer is outside the supported-state matrix and needs manual lane review.');
+    } else if (entry.queueStatus === 'missing_auth') {
+      existing.operatorNotes.push('Prior authorization is the active blocker for this payer lane.');
+    } else if (entry.queueStatus === 'denied') {
+      existing.operatorNotes.push('Denial rework is open on this payer lane.');
+    }
+
+    laneMap.set(entry.payerId, existing);
+  }
+
+  const payerLanes = Array.from(laneMap.values())
+    .map((lane) => ({
+      ...lane,
+      operatorNotes: Array.from(new Set(lane.operatorNotes)),
+    }))
+    .sort((a, b) => {
+      if (b.blockedCases !== a.blockedCases) return b.blockedCases - a.blockedCases;
+      if (b.deniedCases !== a.deniedCases) return b.deniedCases - a.deniedCases;
+      return b.totalCases - a.totalCases;
+    });
+
+  return {
+    totalCases: cases.length,
+    readyCases: cases.filter((entry) => entry.queueStatus === 'ready_for_biller').length,
+    blockedCases: cases.filter((entry) => isBlockedStatus(entry.queueStatus)).length,
+    authBlockedCases: cases.filter((entry) => entry.queueStatus === 'missing_auth').length,
+    deniedCases: cases.filter((entry) => entry.queueStatus === 'denied').length,
+    secondaryPolicyCases: cases.filter((entry) => Boolean(entry.secondaryPolicyId)).length,
+    unsupportedPayerCases: cases.filter((entry) => !supportedProducts.has(entry.payerId)).length,
+    payerLanes,
+  };
 }
 
 export function getSampleClaimReadyQueue(
