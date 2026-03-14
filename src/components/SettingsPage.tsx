@@ -285,7 +285,7 @@ export function SettingsPage({ onNavigate, userTier = 'core', accessToken: propA
     if (onNavigate) {
       onNavigate('jr-setup');
     } else {
-      toast.info('Junior setup wizard will be launched here.');
+      toast.info('Ease setup wizard will be launched here.');
     }
   };
   
@@ -542,7 +542,7 @@ export function SettingsPage({ onNavigate, userTier = 'core', accessToken: propA
                 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
-                    <span className="text-slate-600">Junior Status:</span>
+                    <span className="text-slate-600">Ease Status:</span>
                     {child.juniorStatus === 'paired' ? (
                       <Badge className="bg-green-100 text-green-700">
                         <CheckCircle className="w-3 h-3 mr-1" />
@@ -569,7 +569,7 @@ export function SettingsPage({ onNavigate, userTier = 'core', accessToken: propA
               <div className="flex gap-2 mt-4">
                 <Button variant="outline" size="sm" onClick={() => handleConnectToJunior(child.id)}>
                   <QrCode className="w-4 h-4 mr-2" />
-                  Connect to Junior
+                  Connect to Ease
                 </Button>
                 <Button variant="outline" size="sm" onClick={() => toast.info('Interest management coming soon!')}>
                   <Settings className="w-4 h-4 mr-2" />
@@ -578,7 +578,7 @@ export function SettingsPage({ onNavigate, userTier = 'core', accessToken: propA
               </div>
               
               <p className="text-xs text-slate-500 mt-2">
-                <strong>Interests:</strong> Helps Junior pick activities your child loves.
+                <strong>Interests:</strong> Helps Ease personalize calm tools, rewards, and transitions.
               </p>
             </div>
           </div>
@@ -589,7 +589,7 @@ export function SettingsPage({ onNavigate, userTier = 'core', accessToken: propA
         <div className="text-center py-12">
           <Users className="w-12 h-12 text-slate-300 mx-auto mb-4" />
           <h3 className="text-lg text-slate-900 mb-2">No child profiles</h3>
-          <p className="text-slate-600 mb-4">Add your child to personalize Aminy Junior and your Plan.</p>
+          <p className="text-slate-600 mb-4">Add your child to personalize Aminy Ease and your Plan.</p>
           <Button onClick={() => setShowAddChildModal(true)}>
             <Plus className="w-4 h-4 mr-2" />
             Add Child Profile

@@ -119,7 +119,7 @@ const DATA_TYPE_LABELS: Record<string, string> = {
   home_programs: 'Home Programs',
   behavior_logs: 'Behavior Logs (ABC)',
   routine_completions: 'Routine Completions',
-  junior_results: 'Junior Results',
+  junior_results: 'Ease Results',
   wellness_data: 'Caregiver Wellness',
 };
 

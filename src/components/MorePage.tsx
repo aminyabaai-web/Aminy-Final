@@ -129,8 +129,8 @@ export function MorePage({ onNavigate, onAnalytics }: MorePageProps) {
     {
       id: 'junior',
       icon: Sparkles,
-      label: 'Aminy Junior',
-      sublabel: 'Kid mode activities',
+      label: 'Aminy Ease',
+      sublabel: 'Calm, rewards, transitions',
       destination: 'junior', // Routes to junior tab
       analytics: 'junior'
     }

@@ -124,12 +124,12 @@ describe('JrScreen', () => {
 
   it('renders without crashing', () => {
     render(<JrScreen {...defaultProps} />);
-    expect(screen.getByText('Aminy Junior')).toBeInTheDocument();
+    expect(screen.getByText('Aminy Ease')).toBeInTheDocument();
   });
 
   it('displays the child name greeting', () => {
     render(<JrScreen {...defaultProps} />);
-    expect(screen.getByText(/Welcome to Aminy Junior!/)).toBeInTheDocument();
+    expect(screen.getByText(/Welcome to Ease!/)).toBeInTheDocument();
   });
 
   it('displays token balance', () => {
@@ -149,12 +149,12 @@ describe('JrScreen', () => {
 
   it('shows the pair device prompt when no devices', () => {
     render(<JrScreen {...defaultProps} />);
-    expect(screen.getByText(/Pair a device to start Aminy Junior Mode/)).toBeInTheDocument();
+    expect(screen.getByText(/Pair a device to start Ease/)).toBeInTheDocument();
   });
 
   it('displays sync notice', () => {
     render(<JrScreen {...defaultProps} />);
-    expect(screen.getByText(/Aminy Junior sessions sync to your plan automatically/)).toBeInTheDocument();
+    expect(screen.getByText(/Ease sessions sync to your plan automatically/)).toBeInTheDocument();
   });
 
   it('renders with default token balance when no jrProfile', () => {

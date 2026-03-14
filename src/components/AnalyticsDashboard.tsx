@@ -328,7 +328,7 @@ export function AnalyticsDashboard({ isOpen, onClose }: AnalyticsDashboardProps)
   const extractFeature = (eventName: string): string | null => {
     if (eventName.startsWith('ask_aminy_')) return 'Aminy';
     if (eventName.startsWith('care_plan_')) return 'Care Planning';
-    if (eventName.startsWith('junior_')) return 'Junior Mode';
+    if (eventName.startsWith('junior_')) return 'Ease';
     if (eventName.includes('report')) return 'Reports';
     if (eventName.includes('vault')) return 'Document Vault';
     return null;

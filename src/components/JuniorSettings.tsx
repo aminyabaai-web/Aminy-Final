@@ -104,7 +104,7 @@ export function JuniorSettings({ onBack, childName }: JuniorSettingsProps) {
               <Label className="font-semibold">Daily Time Limit</Label>
             </div>
             <p className="text-sm text-muted-foreground mb-4">
-              Set a maximum time {childName} can use Junior mode per day
+              Set a maximum time {childName} can use Ease per day
             </p>
           </div>
           

@@ -133,8 +133,8 @@ export const JrSetupWizard: React.FC<JrSetupWizardProps> = ({
           };
           
           setTimeout(() => {
-            toast.success("Aminy Junior is ready! 🎉", {
-              description: "Calibration complete. Your child can start using Aminy Junior Mode.",
+            toast.success("Aminy Ease is ready! 🎉", {
+              description: "Calibration complete. Your child can start using Ease.",
             });
             onComplete(completedProfile);
           }, 500);
@@ -162,7 +162,7 @@ export const JrSetupWizard: React.FC<JrSetupWizardProps> = ({
         </div>
         <h3 className="text-lg sm:text-xl font-semibold text-primary mb-2">Choose Device</h3>
         <p className="text-muted-foreground">
-          Where will {profile.childNickname} use Aminy Junior?
+          Where will {profile.childNickname} use Ease?
         </p>
       </div>
 
@@ -178,7 +178,7 @@ export const JrSetupWizard: React.FC<JrSetupWizardProps> = ({
               <Smartphone className="w-5 h-5 text-gray-600" />
               <div>
                 <div className="font-medium">This device</div>
-                <div className="text-sm text-muted-foreground">Set up Aminy Junior Mode on this device</div>
+                <div className="text-sm text-muted-foreground">Set up Ease on this device</div>
               </div>
             </div>
           </Label>

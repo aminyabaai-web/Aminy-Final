@@ -114,8 +114,8 @@ function getInsightsForScreener(screenerId: ScreeningType): AminyInsight[] {
   if (screenerId === 'mchat') {
     common.splice(2, 0, {
       icon: Activity,
-      title: 'Aminy Junior practices therapy goals',
-      body: "If your child benefits from speech or social skills support, Aminy Junior turns therapy homework into fun activities with an AI buddy your child actually wants to talk to.",
+      title: 'Aminy Ease supports calm, transitions, and motivation',
+      body: "If your family needs calmer transitions, reward momentum, or a sensory reset, Aminy Ease gives you premium calm tools, visual wins, and routines that help at home between sessions.",
       afterQuestion: 7,
     });
   } else if (screenerId === 'psc') {

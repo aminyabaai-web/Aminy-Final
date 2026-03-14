@@ -433,7 +433,7 @@ export function PlanTab({ userData, userTier, connectorData, publishEvent, onCon
               </div>
               <div className="flex items-start gap-2">
                 <ChevronRight className="w-4 h-4 text-teal-600 mt-0.5 flex-shrink-0" />
-                <p className="text-sm text-slate-700 dark:text-slate-300">Schedule a progress review with your Aminy Junior coach this week</p>
+                <p className="text-sm text-slate-700 dark:text-slate-300">Schedule a progress review with your Aminy Ease coach this week</p>
               </div>
               <div className="flex items-start gap-2">
                 <ChevronRight className="w-4 h-4 text-teal-600 mt-0.5 flex-shrink-0" />
@@ -893,7 +893,7 @@ export function PlanTab({ userData, userTier, connectorData, publishEvent, onCon
       </div>
 
       <Card className="p-4 sm:p-5 md:p-6">
-        <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-4">Aminy Junior AI Insights</h3>
+        <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-4">Aminy Ease AI Insights</h3>
         <div className="space-y-3 sm:space-y-4">
           <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
             <div className="flex items-start gap-3">

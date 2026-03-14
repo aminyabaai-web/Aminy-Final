@@ -194,7 +194,7 @@ export function ShopPage({ onNavigate, userTier = 'starter' }: ShopPageProps) {
       id: 'speech-booster',
       title: 'Speech Booster Kit', 
       subtitle: 'Complete communication toolkit',
-      rationale: 'Based on: speech goals, Junior activity',
+      rationale: 'Based on: speech goals, Ease activity',
       price: 64.99,
       originalPrice: 79.96,
       items: ['Mirror Cards', 'Articulation Cards', 'Straw Set', 'Mouth Tools'],
@@ -260,7 +260,7 @@ export function ShopPage({ onNavigate, userTier = 'starter' }: ShopPageProps) {
       postPurchaseSteps: [
         'Set up 5-minute practice session',
         'Download visual schedule template',
-        'Complete Junior mini-mission: Timer Challenge'
+        'Complete Ease mini-mission: Timer Challenge'
       ]
     },
     {
@@ -288,7 +288,7 @@ export function ShopPage({ onNavigate, userTier = 'starter' }: ShopPageProps) {
       postPurchaseSteps: [
         'Laminate and cut choice cards',
         'Practice pointing with child',
-        'Use in Junior activity: Choice Game'
+        'Use in Ease activity: Choice Game'
       ]
     },
     {
@@ -305,7 +305,7 @@ export function ShopPage({ onNavigate, userTier = 'starter' }: ShopPageProps) {
       whyThisProduct: 'Supports sensory regulation during transitions (based on goals & logs)',
       tags: ['Clinically referenced', 'Portable', 'Aminy-approved'],
       safetyCallouts: ['Ages 4+', 'Choking hazard - small parts', 'Adult supervision required'],
-      tryFirst: 'Mini breathing exercise in Junior',
+      tryFirst: 'Mini breathing exercise in Ease',
       category: 'sensory',
       inStock: true,
       affiliateLink: true,
@@ -317,7 +317,7 @@ export function ShopPage({ onNavigate, userTier = 'starter' }: ShopPageProps) {
       postPurchaseSteps: [
         'Practice one calming technique together',
         'Create portable "calm kit" bag',
-        'Unlock Junior breathing mission: Ocean Waves'
+        'Unlock Ease breathing mission: Ocean Waves'
       ]
     },
     {
@@ -333,7 +333,7 @@ export function ShopPage({ onNavigate, userTier = 'starter' }: ShopPageProps) {
       whyThisProduct: 'Teaches social skills for school success (based on goals & logs)',
       tags: ['Digital', 'Customizable', 'Under $20', 'Aminy-approved'],
       safetyCallouts: ['Digital content', 'Screen time considerations'],
-      tryFirst: 'Sample social story in Junior',
+      tryFirst: 'Sample social story in Ease',
       category: 'digital',
       inStock: true,
       affiliateLink: false,
@@ -346,7 +346,7 @@ export function ShopPage({ onNavigate, userTier = 'starter' }: ShopPageProps) {
       postPurchaseSteps: [
         'Customize with child\'s photo',
         'Read together 3 times',
-        'Create Junior social mission: Friend Helper'
+        'Create Ease social mission: Friend Helper'
       ]
     }
   ];
@@ -447,7 +447,7 @@ export function ShopPage({ onNavigate, userTier = 'starter' }: ShopPageProps) {
     // Here you would normally send to backend/state management
     
     // Show user feedback
-    toast.success(`Created Junior activity for "${product.title}"! Check Junior tab for new activities.`);
+    toast.success(`Created Ease activity for "${product.title}". Check the Ease tab for new activities.`);
     
     // Navigate to Junior if callback provided
     if (onNavigate) {

@@ -249,7 +249,7 @@ export function AIContextViewer() {
     },
     {
       id: 'junior',
-      title: 'Junior Mode Activity',
+      title: 'Ease Activity',
       icon: <Sparkles className="w-4 h-4" />,
       count: context.juniorMode.gamesPlayed.length,
       content: (

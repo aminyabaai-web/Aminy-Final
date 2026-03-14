@@ -1,7 +1,7 @@
 /**
  * Junior Milestone Share Component
  *
- * Generates shareable milestone cards for Aminy Junior achievements.
+ * Generates shareable milestone cards for Aminy Ease achievements.
  * Privacy-first: uses child initials only, never full names.
  * Supports Web Share API (mobile) + clipboard + social intents.
  *
@@ -65,7 +65,7 @@ const milestoneConfig: Record<MilestoneType, {
     gradient: 'from-purple-500 to-pink-500',
     bgGradient: 'from-purple-50 to-pink-50',
     getTitle: () => 'First Word!',
-    getMessage: (m) => `${m.childInitial}. just spoke their first word in Aminy Junior! The speech recognition caught it perfectly.`,
+    getMessage: (m) => `${m.childInitial}. just spoke their first word in Aminy Ease! The speech recognition caught it perfectly.`,
     emoji: '🎉',
   },
   'streak': {
@@ -97,7 +97,7 @@ const milestoneConfig: Record<MilestoneType, {
     gradient: 'from-amber-500 to-yellow-500',
     bgGradient: 'from-amber-50 to-yellow-50',
     getTitle: (m) => 'Skill Mastered!',
-    getMessage: (m) => `${m.childInitial}. has mastered ${m.skillName || 'a skill track'} in Aminy Junior! Reached the highest difficulty level with sustained accuracy.`,
+    getMessage: (m) => `${m.childInitial}. has mastered ${m.skillName || 'a skill track'} in Aminy Ease! Reached the highest difficulty level with sustained accuracy.`,
     emoji: '👑',
   },
   'session-count': {
@@ -105,7 +105,7 @@ const milestoneConfig: Record<MilestoneType, {
     gradient: 'from-blue-500 to-indigo-500',
     bgGradient: 'from-blue-50 to-indigo-50',
     getTitle: (m) => `${m.value} Sessions!`,
-    getMessage: (m) => `${m.childInitial}. has completed ${m.value} Aminy Junior sessions! Every session builds toward meaningful progress.`,
+    getMessage: (m) => `${m.childInitial}. has completed ${m.value} Aminy Ease sessions! Every session builds toward meaningful progress.`,
     emoji: '🏆',
   },
 };
@@ -122,7 +122,7 @@ export function JuniorMilestoneShare({
   const config = milestoneConfig[milestone.type];
   const title = config.getTitle(milestone);
   const message = config.getMessage(milestone);
-  const shareText = `${config.emoji} ${title}\n\n${message}\n\n✨ Aminy Junior — Evidence-based learning for neurodivergent children\nhttps://aminy.app`;
+  const shareText = `${config.emoji} ${title}\n\n${message}\n\n✨ Aminy Ease — Evidence-based learning for neurodivergent children\nhttps://aminy.app`;
 
   const canNativeShare = typeof navigator !== 'undefined' && 'share' in navigator;
 
@@ -131,7 +131,7 @@ export function JuniorMilestoneShare({
     setSharing(true);
     try {
       await navigator.share({
-        title: `Aminy Junior: ${title}`,
+        title: `Aminy Ease: ${title}`,
         text: shareText,
         url: 'https://aminy.app',
       });

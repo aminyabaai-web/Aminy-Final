@@ -218,7 +218,7 @@ export function buildAIContextString(context: UserContext): string {
 
   if (context.lastJrSession) {
     const timeAgo = getTimeAgo(context.lastJrSession.timestamp);
-    parts.push(`Last Jr session was ${timeAgo}: ${context.lastJrSession.activity}.`);
+    parts.push(`Last Ease session was ${timeAgo}: ${context.lastJrSession.activity}.`);
   }
 
   return parts.join(' ');
@@ -228,7 +228,7 @@ export function buildAIContextString(context: UserContext): string {
  * Detect current module context
  */
 export function detectModuleContext(pathname: string): string {
-  if (pathname.includes('/jr')) return 'Junior Mode';
+  if (pathname.includes('/jr')) return 'Ease';
   if (pathname.includes('/shop')) return 'Shop';
   if (pathname.includes('/hub')) return 'Parent Hub';
   if (pathname.includes('/coverage')) return 'Coverage';
@@ -253,11 +253,11 @@ export function getCurrentContext(pathname: string, userContext?: UserContext): 
   
   if (path.includes('/jr')) {
     module = 'jr';
-    moduleName = 'Junior Mode';
-    placeholder = 'Ask about Jr routines, activities, or progress...';
+    moduleName = 'Ease';
+    placeholder = 'Ask about calm routines, rewards, transitions, or progress...';
     contextHint = userContext?.lastJrSession 
-      ? `Last Jr session: ${userContext.lastJrSession.activity}`
-      : 'I can help with Jr activities and behavioral strategies.';
+      ? `Last Ease session: ${userContext.lastJrSession.activity}`
+      : 'I can help with calm routines, rewards, transitions, and behavioral strategies.';
   } else if (path.includes('/shop')) {
     module = 'shop';
     moduleName = 'Shop';
@@ -349,7 +349,7 @@ export function generateContextChips(pathname: string, context: UserContext): st
   chips.push(module);
 
   if (pathname.includes('/jr') && context.lastJrSession) {
-    chips.push('Junior Activity');
+    chips.push('Ease Activity');
   }
 
   if (pathname.includes('/plan')) {

@@ -217,7 +217,7 @@ export function DevicePairingFlow({
           Connect {safeChildName}'s Device
         </h2>
         <p className="text-slate-600 dark:text-slate-400 max-w-md mx-auto">
-          Pair your child's device to enable Aminy Junior mode and track their progress across activities.
+          Pair your child's device to open Aminy Ease for calm tools, rewards, and transitions.
         </p>
       </div>
 
@@ -501,7 +501,7 @@ export function DevicePairingFlow({
           Device Connected!
         </h2>
         <p className="text-slate-600 dark:text-slate-400">
-          {safeChildName}'s device is now paired and ready to use with Aminy Junior.
+          {safeChildName}'s device is now paired and ready to use with Aminy Ease.
         </p>
       </div>
 

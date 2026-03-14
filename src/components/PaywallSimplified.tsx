@@ -763,7 +763,7 @@ export function PaywallSimplified({
               <p>Use Aminy for day-to-day caregiver coaching and structured support.</p>
             </div>
             <div>
-              <p className="font-semibold text-gray-900">Junior + summaries</p>
+              <p className="font-semibold text-gray-900">Ease + summaries</p>
               <p>Track child activities and generate provider-ready recap materials on paid tiers.</p>
             </div>
           </div>

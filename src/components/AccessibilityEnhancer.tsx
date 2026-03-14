@@ -595,7 +595,7 @@ export const useGlobalKeyboardShortcuts = () => {
           case 'j':
             event.preventDefault();
             window.dispatchEvent(new CustomEvent('navigate', { detail: 'junior' }));
-            announce('Navigating to Junior');
+            announce('Navigating to Ease');
             break;
           case 'm':
             event.preventDefault();

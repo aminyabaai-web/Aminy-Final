@@ -335,7 +335,7 @@ class AnalyticsEngine {
       'ask_aminy_opened': 'Aminy',
       'care_plan_viewed': 'Care Planning',
       'reports_generated': 'Reports',
-      'junior_mode_activated': 'Junior Mode',
+      'junior_mode_activated': 'Ease',
       'vault_accessed': 'Document Vault',
       'provider_directory_searched': 'Provider Directory',
       'dashboard_viewed': 'Dashboard',

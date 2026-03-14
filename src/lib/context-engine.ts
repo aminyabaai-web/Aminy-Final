@@ -219,7 +219,7 @@ class ContextEngine {
     const title = document.title;
     
     if (url.includes('/care') || title.includes('Care')) return 'care_planning';
-    if (url.includes('/junior') || title.includes('Junior')) return 'junior_mode';
+    if (url.includes('/junior') || title.includes('Junior') || title.includes('Ease')) return 'junior_mode';
     if (url.includes('/reports') || title.includes('Reports')) return 'reports';
     if (url.includes('/vault') || title.includes('Vault')) return 'document_vault';
     if (document.querySelector('[data-feature="ask-aminy"]')) return 'ask_aminy';

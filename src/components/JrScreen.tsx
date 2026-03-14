@@ -422,7 +422,7 @@ export const JrScreen: React.FC<JrScreenProps> = ({
                 🎮
               </div>
               <div>
-                <h1 className="text-xl text-primary font-medium">Aminy Junior</h1>
+                <h1 className="text-xl text-primary font-medium">Aminy Ease</h1>
                 <p className="text-sm text-muted-foreground">Learning companion setup</p>
               </div>
             </div>
@@ -432,9 +432,9 @@ export const JrScreen: React.FC<JrScreenProps> = ({
         <div className="max-w-md mx-auto px-4 py-8">
           <Card className="p-8 text-center">
             <div className="text-4xl mb-4 sm:mb-6">🚀</div>
-            <h2 className="text-lg sm:text-xl font-semibold text-primary mb-4">Welcome to Aminy Junior!</h2>
+            <h2 className="text-lg sm:text-xl font-semibold text-primary mb-4">Welcome to Aminy Ease!</h2>
             <p className="text-muted-foreground mb-4 sm:mb-6 leading-relaxed">
-              Let's set up {childName}'s personalized learning experience with speech practice, social skills, and fun activities.
+              Let's set up calm tools, rewards, and transition support so this is ready when your family needs it.
             </p>
             <Button 
               onClick={() => setShowSetupWizard(true)}
@@ -485,7 +485,7 @@ export const JrScreen: React.FC<JrScreenProps> = ({
                 </div>
                 <div className="flex-1">
                   <div className="flex items-baseline gap-2">
-                    <h1 className="text-xl text-primary font-medium">Aminy Junior</h1>
+                    <h1 className="text-xl text-primary font-medium">Aminy Ease</h1>
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Badge 
@@ -500,11 +500,11 @@ export const JrScreen: React.FC<JrScreenProps> = ({
                         </Badge>
                       </TooltipTrigger>
                       <TooltipContent>
-                        <p>{jrProfile?.status === 'active' ? 'Aminy Junior ready on this device.' : 'Aminy Junior is paused.'}</p>
+                        <p>{jrProfile?.status === 'active' ? 'Ease is ready on this device.' : 'Ease is paused.'}</p>
                       </TooltipContent>
                     </Tooltip>
                   </div>
-                  <p className="text-sm text-muted-foreground">{childName}'s learning companion</p>
+                  <p className="text-sm text-muted-foreground">{childName}'s calm, rewards, and transition space</p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
@@ -526,11 +526,11 @@ export const JrScreen: React.FC<JrScreenProps> = ({
                       className="bg-accent hover:bg-accent/90 text-accent-foreground"
                       size="sm"
                     >
-                      Start Kid Session
+                      Open Ease
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>Enter Aminy Junior Mode on this device</p>
+                    <p>Open Ease on this device</p>
                   </TooltipContent>
                 </Tooltip>
               </div>
@@ -539,7 +539,7 @@ export const JrScreen: React.FC<JrScreenProps> = ({
             {/* Helper Text */}
             <div className="mt-3 text-center">
               <p className="text-xs text-muted-foreground">
-                Aminy Junior sessions sync to your plan automatically.
+                Ease sessions sync to your plan automatically.
               </p>
             </div>
           </div>
@@ -556,7 +556,7 @@ export const JrScreen: React.FC<JrScreenProps> = ({
                 <div className="flex-1">
                   <h3 className="font-semibold text-primary">Profile</h3>
                   <p className="text-sm text-muted-foreground">
-                    {childName}'s learning settings
+                    {childName}'s Ease settings
                   </p>
                 </div>
                 <Tooltip>
@@ -797,7 +797,7 @@ export const JrScreen: React.FC<JrScreenProps> = ({
                   ))
                 ) : (
                   <div className="text-center py-4 text-muted-foreground">
-                    <p className="text-sm mb-2">Pair a device to start Aminy Junior Mode</p>
+                    <p className="text-sm mb-2">Pair a device to start Ease</p>
                     <Button
                       variant="outline"
                       size="lg"
@@ -872,7 +872,7 @@ export const JrScreen: React.FC<JrScreenProps> = ({
             </Card>
           </div>
           
-          {/* Aminy Junior Disclaimer */}
+          {/* Aminy Ease Disclaimer */}
           <div className="mt-4 sm:mt-6">
             <GlobalDisclaimer variant="card" showIcon={true} />
           </div>
@@ -887,10 +887,10 @@ export const JrScreen: React.FC<JrScreenProps> = ({
                   <Lock className="w-6 h-6 text-accent" />
                 </div>
                 <h3 className="text-lg font-semibold text-primary mb-2">
-                  {isExitingKidMode ? 'Exit Aminy Junior Mode' : 'Enter Aminy Junior Mode'}
+                  {isExitingKidMode ? 'Exit Ease' : 'Enter Ease'}
                 </h3>
                 <p className="text-sm text-muted-foreground">
-                  Enter the 4-digit PIN to {isExitingKidMode ? 'return to parent view' : 'switch to Aminy Junior mode'}
+                  Enter the 4-digit PIN to {isExitingKidMode ? 'return to parent view' : 'switch to Ease'}
                 </p>
               </div>
               

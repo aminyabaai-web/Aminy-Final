@@ -55,7 +55,7 @@ import { useAuditedAction } from '../hooks/useAuditedAction';
 // Enhanced types for the vault implementation
 interface EnhancedVaultRecord extends Omit<VaultRecord, 'type' | 'source' | 'visibility'> {
   type: 'IEP' | 'Evaluation' | 'Report' | 'Prescription/Order' | 'Care Plan' | 'Uploaded (Parent)' | 'Coach Note (PDF)' | 'Session Artifact' | 'School Letter' | 'Other';
-  source: 'Parent Upload' | 'Junior' | 'Coach' | 'School' | 'Clinic' | 'Other';
+  source: 'Parent Upload' | 'Junior' | 'Ease' | 'Coach' | 'School' | 'Clinic' | 'Other';
   docDate?: string;
   visibility: 'Private' | 'Shared';
   relatedTo: Array<{
@@ -129,12 +129,17 @@ const RECORD_TYPES = [
 
 const SOURCE_TYPES = [
   'Parent Upload',
+  'Ease',
   'Junior',
   'Coach', 
   'School',
   'Clinic',
   'Other'
 ] as const;
+
+function getSourceLabel(source: EnhancedVaultRecord['source']): string {
+  return source === 'Junior' ? 'Ease' : source;
+}
 
 // Record Row Component
 interface RecordRowProps {
@@ -211,7 +216,7 @@ const RecordRow: React.FC<RecordRowProps> = ({
               </div>
               
               <div className="flex items-center gap-3 sm:gap-4 text-sm text-muted-foreground mb-2">
-                <span>Source: {record.source}</span>
+                <span>Source: {getSourceLabel(record.source)}</span>
                 <span>•</span>
                 <span>{new Date(record.date).toLocaleDateString()}</span>
                 <span>•</span>

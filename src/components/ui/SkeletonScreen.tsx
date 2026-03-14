@@ -57,7 +57,7 @@ export function DashboardSkeleton() {
 
 export function JuniorSkeleton() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-cyan-50 to-white p-4 space-y-4" role="status" aria-label="Loading Junior">
+    <div className="min-h-screen bg-gradient-to-b from-cyan-50 to-white p-4 space-y-4" role="status" aria-label="Loading Ease">
       {/* Header */}
       <Skeleton className="h-12 w-full rounded-2xl" />
 
@@ -75,7 +75,7 @@ export function JuniorSkeleton() {
         ))}
       </div>
 
-      <span className="sr-only">Loading Junior activities...</span>
+      <span className="sr-only">Loading Ease activities...</span>
     </div>
   );
 }

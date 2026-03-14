@@ -13,6 +13,7 @@
  */
 
 import React, { useId, useState } from 'react';
+import { toast } from 'sonner';
 import {
   ArrowLeft,
   ArrowRight,
@@ -31,6 +32,8 @@ import {
   PROVIDER_ROLE_DISPLAY,
   US_STATES
 } from '../types/telehealth';
+import { verifyProvider, type Credential, type ProviderVerificationSummary } from '../lib/credential-verification';
+import { SUPPORTED_PROVIDER_STATES, isSupportedProviderState } from '../lib/insurance/state-market-coverage';
 
 interface ProviderOnboardingProps {
   onBack?: () => void;
@@ -64,6 +67,7 @@ interface ProviderFormData {
   role: ProviderRole;
   bio: string;
   npiNumber: string;
+  primaryCredentialNumber: string;
   licensedStates: string[];
   offersConsult: boolean;
   offersDeepReview: boolean;
@@ -83,6 +87,7 @@ const DEFAULT_FORM: ProviderFormData = {
   role: 'bcba',
   bio: '',
   npiNumber: '',
+  primaryCredentialNumber: '',
   licensedStates: [],
   offersConsult: true,
   offersDeepReview: true,
@@ -94,6 +99,47 @@ const DEFAULT_FORM: ProviderFormData = {
 };
 
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+
+type ProviderVerificationRole = 'bcba' | 'slp' | 'ot' | 'pt' | 'psychologist' | 'neuropsychologist';
+
+function mapRoleToVerificationRole(role: ProviderRole): ProviderVerificationRole | null {
+  switch (role) {
+    case 'bcba':
+    case 'behavior-consultant':
+      return 'bcba';
+    case 'slp':
+      return 'slp';
+    case 'ot':
+      return 'ot';
+    case 'pt':
+      return 'pt';
+    case 'psychologist':
+      return 'psychologist';
+    case 'neuropsychologist':
+      return 'neuropsychologist';
+    default:
+      return null;
+  }
+}
+
+function mapVerificationStatus(
+  summary: ProviderVerificationSummary | null,
+): 'pending' | 'verified' | 'manual_review' | 'expired' | 'failed' {
+  if (!summary) return 'pending';
+
+  switch (summary.overallStatus) {
+    case 'fully_verified':
+      return 'verified';
+    case 'partially_verified':
+      return 'manual_review';
+    case 'expired':
+      return 'expired';
+    case 'not_verified':
+    default:
+      return 'failed';
+  }
+}
 
 export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingProps) {
   const formId = useId();
@@ -114,7 +160,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
       case 'basics':
         return !!(form.firstName && form.lastName && form.email && form.credentials && form.role);
       case 'licensing':
-        return form.licensedStates.length > 0;
+        return form.licensedStates.length > 0 && !!form.primaryCredentialNumber;
       case 'services':
         return form.offersConsult || form.offersDeepReview;
       case 'availability':
@@ -168,10 +214,17 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
     setSubmitError(null);
 
     try {
-      // Insert provider profile
+      const primaryLicensedState = form.licensedStates[0] || '';
+      const liveMarketStates = form.licensedStates.filter((state) => isSupportedProviderState(state));
+      const marketplaceState = liveMarketStates[0] || primaryLicensedState;
+      const verificationRole = mapRoleToVerificationRole(form.role);
+      const fullName = `${form.firstName} ${form.lastName}`.trim();
+
       const { data: providerData, error: providerError } = await supabase
         .from('provider_profiles')
         .insert({
+          full_name: fullName,
+          name: fullName,
           first_name: form.firstName,
           last_name: form.lastName,
           email: form.email,
@@ -180,15 +233,24 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
           provider_type: form.role,
           bio: form.bio,
           npi_number: form.npiNumber,
+          license_number: form.primaryCredentialNumber,
+          license_state: marketplaceState || null,
+          state: marketplaceState || null,
           states_licensed: form.licensedStates,
           offers_consult: form.offersConsult,
           offers_deep_review: form.offersDeepReview,
           consult_price: form.consultPrice,
           deep_review_price: form.deepReviewPrice,
-          is_accepting_patients: form.acceptingNewPatients,
+          hourly_rate: form.consultPrice,
+          session_rate: form.consultPrice,
+          accepting_new_patients: false,
+          is_accepting_patients: false,
           accepts_insurance: form.acceptedInsurance.some((plan) => plan !== 'Cash Pay'),
           insurance_accepted: form.acceptedInsurance,
-          is_active: true,
+          verified: false,
+          verification_status: 'pending',
+          is_active: false,
+          offers_telehealth: true,
           organization: 'independent',
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
@@ -200,7 +262,6 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
 
       const providerId = providerData.id;
 
-      // Insert availability blocks
       if (form.availability.length > 0) {
         const availRows = form.availability.map(slot => ({
           provider_id: providerId,
@@ -217,8 +278,82 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
 
         if (availError) {
           console.error('Failed to save availability:', availError);
-          // Non-fatal — provider can set this up later in portal
         }
+      }
+
+      let verificationSummary: ProviderVerificationSummary | null = null;
+      let verificationStatus: 'pending' | 'verified' | 'manual_review' | 'expired' | 'failed' = 'pending';
+
+      if (verificationRole) {
+        const credentialsToVerify: Partial<Credential>[] = [
+          {
+            type: 'state_license',
+            credentialNumber: form.primaryCredentialNumber,
+            state: primaryLicensedState || undefined,
+            issueDate: new Date().toISOString(),
+            metadata: {
+              lastName: form.lastName,
+              licenseType: verificationRole,
+            },
+          },
+        ];
+
+        if (verificationRole === 'bcba') {
+          credentialsToVerify.unshift({
+            type: 'bacb',
+            credentialNumber: form.primaryCredentialNumber,
+            issueDate: new Date().toISOString(),
+            metadata: {
+              lastName: form.lastName,
+            },
+          });
+        }
+
+        if (form.npiNumber) {
+          credentialsToVerify.push({
+            type: 'npi',
+            credentialNumber: form.npiNumber,
+            issueDate: new Date().toISOString(),
+            metadata: {
+              lastName: form.lastName,
+            },
+          });
+        }
+
+        try {
+          verificationSummary = await verifyProvider(providerId, verificationRole, credentialsToVerify);
+          verificationStatus = mapVerificationStatus(verificationSummary);
+        } catch (verificationError) {
+          console.error('Provider verification failed during onboarding:', verificationError);
+          verificationStatus = 'manual_review';
+        }
+      }
+
+      const canGoLive = verificationStatus === 'verified' && liveMarketStates.length > 0;
+
+      const { error: activationError } = await supabase
+        .from('provider_profiles')
+        .update({
+          verified: canGoLive,
+          verification_status: verificationStatus,
+          is_active: canGoLive,
+          accepting_new_patients: canGoLive ? form.acceptingNewPatients : false,
+          is_accepting_patients: canGoLive ? form.acceptingNewPatients : false,
+          next_available: canGoLive && form.availability.length > 0 ? new Date().toISOString() : null,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', providerId);
+
+      if (activationError) throw activationError;
+
+      if (canGoLive) {
+        toast.success(`Profile verified. You are now bookable in ${liveMarketStates.join(', ')}.`);
+      } else if (verificationStatus === 'verified') {
+        toast.success('Verification cleared. Your marketplace listing will turn on automatically when one of your licensed states is a live Aminy market.');
+      } else if (verificationStatus === 'manual_review') {
+        toast.success('Profile submitted for manual verification. Aminy will keep your listing private until review is complete.');
+      } else {
+        toast.success('Profile submitted for verification. Aminy will keep your listing private until credentials clear.');
       }
 
       onComplete?.(providerId);
@@ -255,7 +390,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
             disabled={(currentStep !== 'review' && !canAdvance()) || isSubmitting}
             className="action-button ml-auto hidden min-h-11 items-center gap-2 rounded-xl bg-[#0891b2] px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#0c7791] disabled:cursor-not-allowed disabled:opacity-50 sm:inline-flex"
           >
-            {currentStep === 'review' ? 'Submit profile' : 'Continue'}
+            {currentStep === 'review' ? 'Submit for verification' : 'Continue'}
             <ArrowRight className="w-4 h-4" />
           </button>
         </nav>
@@ -390,19 +525,37 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
           <div className="space-y-6">
             <div className="bg-white rounded-xl border border-gray-200 p-6">
               <h2 className="text-lg font-semibold text-gray-900 mb-2">Licensing & Credentials</h2>
-              <p className="text-sm text-gray-500 mb-6">Select all states where you hold an active license</p>
+              <p className="text-sm text-gray-500 mb-6">Select every state where you hold an active license or certification. Aminy only lists providers after verification clears and at least one supported market is live.</p>
 
-              <div className="mb-6">
-                <label htmlFor={fieldId('npi-number')} className="mb-1 block text-sm font-medium text-gray-700">NPI Number</label>
-                <input
-                  id={fieldId('npi-number')}
-                  type="text"
-                  value={form.npiNumber}
-                  onChange={e => updateForm({ npiNumber: e.target.value })}
-                  placeholder="10-digit NPI"
-                  maxLength={10}
-                  className="w-full max-w-xs px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0891b2]/20 focus:border-[#0891b2]"
-                />
+              <div className="grid gap-4 mb-6 sm:grid-cols-2">
+                <div>
+                  <label htmlFor={fieldId('credential-number')} className="mb-1 block text-sm font-medium text-gray-700">Primary license or certification number *</label>
+                  <input
+                    id={fieldId('credential-number')}
+                    type="text"
+                    value={form.primaryCredentialNumber}
+                    onChange={e => updateForm({ primaryCredentialNumber: e.target.value })}
+                    placeholder="Used for verification before you go live"
+                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0891b2]/20 focus:border-[#0891b2]"
+                  />
+                </div>
+                <div>
+                  <label htmlFor={fieldId('npi-number')} className="mb-1 block text-sm font-medium text-gray-700">NPI Number</label>
+                  <input
+                    id={fieldId('npi-number')}
+                    type="text"
+                    value={form.npiNumber}
+                    onChange={e => updateForm({ npiNumber: e.target.value })}
+                    placeholder="10-digit NPI"
+                    maxLength={10}
+                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0891b2]/20 focus:border-[#0891b2]"
+                  />
+                </div>
+              </div>
+
+              <div className="mb-6 rounded-2xl border border-teal-100 bg-teal-50/70 px-4 py-3 text-sm text-slate-700">
+                <p className="font-medium text-slate-900">Supported launch states: {SUPPORTED_PROVIDER_STATES.join(' · ')}</p>
+                <p className="mt-1">You can add any licensed state now. Aminy keeps you off the marketplace until your credentials are validated, then turns on live booking only in supported markets where you are actually licensed.</p>
               </div>
 
               <div>
@@ -625,6 +778,9 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                   {form.npiNumber && (
                     <p className="text-sm text-gray-500 mt-2">NPI: {form.npiNumber}</p>
                   )}
+                  {form.primaryCredentialNumber && (
+                    <p className="text-sm text-gray-500 mt-1">Credential #: {form.primaryCredentialNumber}</p>
+                  )}
                 </div>
 
                 <div className="p-4 bg-gray-50 rounded-lg">
@@ -651,6 +807,13 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                   ) : (
                     <p className="text-sm text-gray-500">None set — you can configure this in your portal</p>
                   )}
+                </div>
+
+                <div className="rounded-2xl border border-teal-100 bg-teal-50/70 px-4 py-4">
+                  <h3 className="text-sm font-semibold text-slate-900">Before you go live</h3>
+                  <p className="mt-2 text-sm text-slate-700">
+                    Aminy verifies your primary credential, matches your licensed states, and only turns on marketplace discovery after those checks pass. If you add states outside the live launch footprint, they stay saved on your profile and become bookable when that market is opened.
+                  </p>
                 </div>
               </div>
 
@@ -690,7 +853,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
               ) : (
                 <>
                   <CheckCircle className="w-4 h-4" />
-                  Submit & Start Practicing
+                  Submit for verification
                 </>
               )}
             </button>

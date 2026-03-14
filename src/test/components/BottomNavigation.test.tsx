@@ -62,7 +62,7 @@ describe('BottomNavigation', () => {
     // Verify parent tab labels are present
     expect(screen.getByText('Home')).toBeInTheDocument();
     expect(screen.getByText('Chat')).toBeInTheDocument();
-    expect(screen.getByText('Junior')).toBeInTheDocument();
+    expect(screen.getByText('Ease')).toBeInTheDocument();
     expect(screen.getByText('Care')).toBeInTheDocument();
     expect(screen.getByText('More')).toBeInTheDocument();
   });
@@ -88,7 +88,7 @@ describe('BottomNavigation', () => {
     fireEvent.click(chatTab);
     expect(onNavigate).toHaveBeenCalledWith('ask-aminy');
 
-    const juniorTab = screen.getByRole('tab', { name: /junior/i });
+    const juniorTab = screen.getByRole('tab', { name: /ease/i });
     fireEvent.click(juniorTab);
     expect(onNavigate).toHaveBeenCalledWith('junior');
   });

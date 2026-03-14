@@ -144,8 +144,8 @@ const PUSH_DATA_TYPES = [
   },
   {
     type: 'junior_results',
-    label: 'Junior Session Results',
-    description: 'Aminy Junior game scores and skill data for your BCBA.',
+    label: 'Ease Session Results',
+    description: 'Aminy Ease calm, rewards, and transition data for your BCBA.',
     table: 'cr_push_queue',
     eventType: 'junior_session',
     freshnessHours: 24,
@@ -339,10 +339,10 @@ const FIELD_MAPPING_GROUPS: FieldMappingGroup[] = [
       { crField: 'BillingDocumentation', crType: 'object', aminyField: 'billing_metadata (jsonb)', aminyType: 'jsonb', status: 'mapped', notes: 'Nested billing doc → JSONB' },
     ],
   },
-  // ── Junior Results (Push: Aminy → CR) ──
+  // ── Ease Results (Push: Aminy → CR) ──
   {
     dataType: 'junior_results',
-    label: 'Junior Session Results',
+    label: 'Ease Session Results',
     direction: 'push',
     mappings: [
       { crField: 'ClientId', crType: 'string', aminyField: 'child_id', aminyType: 'uuid', status: 'mapped' },

@@ -608,7 +608,7 @@ export class GrowthLoopEngine {
         imageHint: 'progress_chart',
       },
       junior_level_up: {
-        title: 'New level unlocked in Junior!',
+        title: 'New level unlocked in Ease!',
         message: 'Your child leveled up! Share this achievement with family and friends.',
         ctaText: 'Share Achievement',
         contentType: 'junior_achievement',

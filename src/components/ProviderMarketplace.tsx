@@ -64,6 +64,7 @@ import { LaunchStateBadge } from './ui/LaunchStateBadge';
 import { providerTypes, type ProviderType, type ProviderTypeInfo } from '../lib/child-profiles';
 import { brandColors, getColorForProvider } from '../lib/brand-system';
 import { createDataProvenance, getSurfaceLaunchConfig, type DataProvenance } from '../lib/product-truth';
+import { SUPPORTED_PROVIDER_STATES, isSupportedProviderState } from '../lib/insurance/state-market-coverage';
 import { VerifiedBadge } from './provider/CredentialBadge';
 
 // Types
@@ -264,7 +265,8 @@ export function ProviderMarketplace({
         .from('provider_profiles')
         .select('*')
         .eq('is_active', true)
-        .eq('is_accepting_patients', true);
+        .eq('is_accepting_patients', true)
+        .eq('verification_status', 'verified');
 
       // Category filter
       if (selectedCategory !== 'all') {
@@ -346,7 +348,9 @@ export function ProviderMarketplace({
           badges?: string[];
           verification_status?: string;
         }
-        const dbProviders: MarketplaceProvider[] = (data as ProviderRow[]).map((p) => ({
+        const dbProviders: MarketplaceProvider[] = (data as ProviderRow[])
+          .filter((p) => (p.states_licensed || []).some((state) => isSupportedProviderState(state)))
+          .map((p) => ({
           id: p.id,
           name: p.name || `${p.first_name || ''} ${p.last_name || ''}`.trim() || 'Provider',
           credentials: p.credentials || '',
@@ -378,7 +382,7 @@ export function ProviderMarketplace({
       } else {
         setProviders([]);
         setProviderProvenance(null);
-        setProviderLoadMessage('We only show verified provider availability in markets where Aminy has live coverage.');
+        setProviderLoadMessage(`We only show verified provider availability in live Aminy markets (${SUPPORTED_PROVIDER_STATES.join(' · ')}).`);
       }
     } catch (error) {
       console.error('[Marketplace] Failed to load providers:', error);

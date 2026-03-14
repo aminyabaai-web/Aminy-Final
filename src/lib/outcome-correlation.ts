@@ -880,9 +880,9 @@ function generateRecommendations(
         id: 'increase_junior',
         priority: 'high',
         category: 'engagement',
-        title: 'Increase Junior Sessions',
+        title: 'Increase Ease Sessions',
         description:
-          'Data shows Junior sessions correlate with goal progress. Try adding 1-2 more sessions per week.',
+          'Data shows Ease sessions correlate with goal progress. Try adding 1-2 more sessions per week.',
         basedOn: corr.id,
       });
     }

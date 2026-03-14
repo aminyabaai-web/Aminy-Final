@@ -386,7 +386,7 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
                 </div>
                 <div>
                   <div className="flex justify-between text-sm mb-2">
-                    <span className="text-slate-600">Junior Mode</span>
+                    <span className="text-slate-600">Ease</span>
                     <span className="text-slate-900">64%</span>
                   </div>
                   <div className="w-full bg-slate-200 rounded-full h-2">

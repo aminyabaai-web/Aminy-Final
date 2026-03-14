@@ -1,40 +1,33 @@
 {
-  "generatedAt": "2026-03-14T10:39:08.796Z",
+  "generatedAt": "2026-03-14T13:15:50.092Z",
   "totalScreens": 25,
-  "totalIssues": 1,
+  "totalIssues": 0,
   "criticalIssues": 0,
   "screens": [
     {
       "screen": "Splash/Landing",
       "path": "/",
-      "timestamp": "2026-03-14T10:39:13.048Z",
-      "issues": [
-        {
-          "severity": "minor",
-          "category": "Accessibility",
-          "issue": "Heading levels are skipped (e.g., H2 followed by H4)",
-          "recommendation": "Use sequential heading levels for proper document outline"
-        }
-      ],
+      "timestamp": "2026-03-14T13:15:53.696Z",
+      "issues": [],
       "metrics": {
-        "loadTime": 1,
+        "loadTime": 0,
         "elementCount": 137,
         "interactiveElements": 9,
         "imageCount": 1,
         "formFields": 0
       },
       "scores": {
-        "accessibility": 95,
+        "accessibility": 100,
         "performance": 100,
         "usability": 100,
         "visualConsistency": 100,
-        "overall": 99
+        "overall": 100
       }
     },
     {
       "screen": "Login",
       "path": "/?screen=login",
-      "timestamp": "2026-03-14T10:39:16.042Z",
+      "timestamp": "2026-03-14T13:15:56.664Z",
       "issues": [],
       "metrics": {
         "loadTime": 0,
@@ -54,7 +47,7 @@
     {
       "screen": "Create Account",
       "path": "/?screen=create-account",
-      "timestamp": "2026-03-14T10:39:19.020Z",
+      "timestamp": "2026-03-14T13:15:59.630Z",
       "issues": [],
       "metrics": {
         "loadTime": 1,
@@ -74,10 +67,10 @@
     {
       "screen": "Forgot Password",
       "path": "/?screen=forgot-password",
-      "timestamp": "2026-03-14T10:39:21.988Z",
+      "timestamp": "2026-03-14T13:16:02.552Z",
       "issues": [],
       "metrics": {
-        "loadTime": 1,
+        "loadTime": 0,
         "elementCount": 126,
         "interactiveElements": 7,
         "imageCount": 1,
@@ -94,12 +87,12 @@
     {
       "screen": "Dashboard",
       "path": "/?screen=dashboard",
-      "timestamp": "2026-03-14T10:39:25.092Z",
+      "timestamp": "2026-03-14T13:16:05.525Z",
       "issues": [],
       "metrics": {
         "loadTime": 1,
-        "elementCount": 444,
-        "interactiveElements": 34,
+        "elementCount": 525,
+        "interactiveElements": 41,
         "imageCount": 1,
         "formFields": 0
       },
@@ -114,12 +107,12 @@
     {
       "screen": "Settings",
       "path": "/?screen=settings",
-      "timestamp": "2026-03-14T10:39:28.154Z",
+      "timestamp": "2026-03-14T13:16:08.620Z",
       "issues": [],
       "metrics": {
         "loadTime": 1,
-        "elementCount": 444,
-        "interactiveElements": 34,
+        "elementCount": 525,
+        "interactiveElements": 41,
         "imageCount": 1,
         "formFields": 0
       },
@@ -134,12 +127,12 @@
     {
       "screen": "Profile",
       "path": "/?screen=profile",
-      "timestamp": "2026-03-14T10:39:31.668Z",
+      "timestamp": "2026-03-14T13:16:11.720Z",
       "issues": [],
       "metrics": {
         "loadTime": 1,
-        "elementCount": 444,
-        "interactiveElements": 34,
+        "elementCount": 525,
+        "interactiveElements": 41,
         "imageCount": 1,
         "formFields": 0
       },
@@ -154,7 +147,7 @@
     {
       "screen": "Telehealth",
       "path": "/?screen=telehealth",
-      "timestamp": "2026-03-14T10:39:35.620Z",
+      "timestamp": "2026-03-14T13:16:16.628Z",
       "issues": [],
       "metrics": {
         "loadTime": 0,
@@ -174,7 +167,7 @@
     {
       "screen": "Vault",
       "path": "/?screen=vault",
-      "timestamp": "2026-03-14T10:39:39.425Z",
+      "timestamp": "2026-03-14T13:16:19.679Z",
       "issues": [],
       "metrics": {
         "loadTime": 0,
@@ -194,12 +187,12 @@
     {
       "screen": "Marketplace",
       "path": "/?screen=marketplace",
-      "timestamp": "2026-03-14T10:39:42.686Z",
+      "timestamp": "2026-03-14T13:16:22.641Z",
       "issues": [],
       "metrics": {
-        "loadTime": 0,
-        "elementCount": 444,
-        "interactiveElements": 34,
+        "loadTime": 1,
+        "elementCount": 525,
+        "interactiveElements": 41,
         "imageCount": 1,
         "formFields": 0
       },
@@ -214,7 +207,7 @@
     {
       "screen": "Junior Mode",
       "path": "/?screen=junior",
-      "timestamp": "2026-03-14T10:39:45.745Z",
+      "timestamp": "2026-03-14T13:16:25.728Z",
       "issues": [],
       "metrics": {
         "loadTime": 1,
@@ -234,12 +227,12 @@
     {
       "screen": "Paywall",
       "path": "/?screen=paywall",
-      "timestamp": "2026-03-14T10:39:48.737Z",
+      "timestamp": "2026-03-14T13:16:28.745Z",
       "issues": [],
       "metrics": {
-        "loadTime": 1,
-        "elementCount": 444,
-        "interactiveElements": 34,
+        "loadTime": 0,
+        "elementCount": 525,
+        "interactiveElements": 41,
         "imageCount": 1,
         "formFields": 0
       },
@@ -254,10 +247,10 @@
     {
       "screen": "Benefits Navigator",
       "path": "/?screen=benefits",
-      "timestamp": "2026-03-14T10:39:51.774Z",
+      "timestamp": "2026-03-14T13:16:31.817Z",
       "issues": [],
       "metrics": {
-        "loadTime": 0,
+        "loadTime": 1,
         "elementCount": 369,
         "interactiveElements": 22,
         "imageCount": 1,
@@ -274,12 +267,12 @@
     {
       "screen": "Messages",
       "path": "/?screen=messages",
-      "timestamp": "2026-03-14T10:39:55.124Z",
+      "timestamp": "2026-03-14T13:16:34.836Z",
       "issues": [],
       "metrics": {
-        "loadTime": 1,
-        "elementCount": 444,
-        "interactiveElements": 34,
+        "loadTime": 0,
+        "elementCount": 525,
+        "interactiveElements": 41,
         "imageCount": 1,
         "formFields": 0
       },
@@ -294,7 +287,7 @@
     {
       "screen": "Crisis Resources",
       "path": "/?screen=crisis-resources",
-      "timestamp": "2026-03-14T10:39:59.022Z",
+      "timestamp": "2026-03-14T13:16:37.918Z",
       "issues": [],
       "metrics": {
         "loadTime": 1,
@@ -314,12 +307,12 @@
     {
       "screen": "Outcomes",
       "path": "/?screen=outcomes",
-      "timestamp": "2026-03-14T10:40:02.069Z",
+      "timestamp": "2026-03-14T13:16:41.010Z",
       "issues": [],
       "metrics": {
         "loadTime": 1,
-        "elementCount": 444,
-        "interactiveElements": 34,
+        "elementCount": 525,
+        "interactiveElements": 41,
         "imageCount": 1,
         "formFields": 0
       },
@@ -334,12 +327,12 @@
     {
       "screen": "Care Plan",
       "path": "/?screen=care-plan",
-      "timestamp": "2026-03-14T10:40:05.122Z",
+      "timestamp": "2026-03-14T13:16:44.113Z",
       "issues": [],
       "metrics": {
-        "loadTime": 0,
-        "elementCount": 444,
-        "interactiveElements": 34,
+        "loadTime": 1,
+        "elementCount": 525,
+        "interactiveElements": 41,
         "imageCount": 1,
         "formFields": 0
       },
@@ -354,12 +347,12 @@
     {
       "screen": "Community",
       "path": "/?screen=community",
-      "timestamp": "2026-03-14T10:40:08.818Z",
+      "timestamp": "2026-03-14T13:16:47.188Z",
       "issues": [],
       "metrics": {
-        "loadTime": 1,
-        "elementCount": 444,
-        "interactiveElements": 34,
+        "loadTime": 0,
+        "elementCount": 525,
+        "interactiveElements": 41,
         "imageCount": 1,
         "formFields": 0
       },
@@ -374,10 +367,10 @@
     {
       "screen": "Provider Portal",
       "path": "/?screen=provider-portal&pilotState=AZ&pilotRole=provider&pilot=true&pilotOrg=aact",
-      "timestamp": "2026-03-14T10:40:15.029Z",
+      "timestamp": "2026-03-14T13:16:52.442Z",
       "issues": [],
       "metrics": {
-        "loadTime": 0,
+        "loadTime": 1,
         "elementCount": 509,
         "interactiveElements": 33,
         "imageCount": 2,
@@ -394,10 +387,10 @@
     {
       "screen": "Provider Onboarding",
       "path": "/?screen=provider-onboarding&pilotState=AZ&pilotRole=provider&pilot=true&pilotOrg=aact",
-      "timestamp": "2026-03-14T10:40:18.823Z",
+      "timestamp": "2026-03-14T13:16:56.134Z",
       "issues": [],
       "metrics": {
-        "loadTime": 1,
+        "loadTime": 0,
         "elementCount": 355,
         "interactiveElements": 29,
         "imageCount": 1,
@@ -414,10 +407,10 @@
     {
       "screen": "Claims Dashboard",
       "path": "/?screen=claims-dashboard&pilotState=AZ&pilotRole=admin&pilot=true&pilotOrg=aact&pilotPayers=bcba_of_az,mercycare",
-      "timestamp": "2026-03-14T10:40:23.610Z",
+      "timestamp": "2026-03-14T13:17:00.175Z",
       "issues": [],
       "metrics": {
-        "loadTime": 0,
+        "loadTime": 1,
         "elementCount": 290,
         "interactiveElements": 18,
         "imageCount": 1,
@@ -434,7 +427,7 @@
     {
       "screen": "Payer Dashboard",
       "path": "/?screen=payer-dashboard&pilotState=AZ&pilotRole=admin&pilot=true&pilotOrg=aact&pilotPayers=bcba_of_az,mercycare",
-      "timestamp": "2026-03-14T10:40:27.314Z",
+      "timestamp": "2026-03-14T13:17:04.065Z",
       "issues": [],
       "metrics": {
         "loadTime": 1,
@@ -454,10 +447,10 @@
     {
       "screen": "EVV Dashboard",
       "path": "/?screen=evv-dashboard&pilotState=AZ&pilotRole=admin&pilot=true&pilotOrg=aact&evvSystem=spokchoice&systemOfRecord=external",
-      "timestamp": "2026-03-14T10:40:31.283Z",
+      "timestamp": "2026-03-14T13:17:07.989Z",
       "issues": [],
       "metrics": {
-        "loadTime": 1,
+        "loadTime": 2,
         "elementCount": 351,
         "interactiveElements": 20,
         "imageCount": 1,
@@ -474,12 +467,12 @@
     {
       "screen": "Caregiver Timesheet",
       "path": "/?screen=caregiver-timesheet&pilotState=AZ&pilotRole=parent&pilot=true&pilotOrg=aact&evvSystem=spokchoice&systemOfRecord=external",
-      "timestamp": "2026-03-14T10:40:35.023Z",
+      "timestamp": "2026-03-14T13:17:11.078Z",
       "issues": [],
       "metrics": {
-        "loadTime": 1,
-        "elementCount": 444,
-        "interactiveElements": 34,
+        "loadTime": 0,
+        "elementCount": 525,
+        "interactiveElements": 41,
         "imageCount": 1,
         "formFields": 0
       },
@@ -494,10 +487,10 @@
     {
       "screen": "CentralReach Sync",
       "path": "/?screen=cr-sync&pilotState=AZ&pilotRole=admin&pilot=true&pilotOrg=aact",
-      "timestamp": "2026-03-14T10:40:40.587Z",
+      "timestamp": "2026-03-14T13:17:15.530Z",
       "issues": [],
       "metrics": {
-        "loadTime": 1,
+        "loadTime": 0,
         "elementCount": 591,
         "interactiveElements": 37,
         "imageCount": 1,
@@ -513,12 +506,8 @@
     }
   ],
   "summary": {
-    "topIssues": [
-      "Accessibility: Heading levels are skipped (e.g., H2 followed by H4) (1 screens)"
-    ],
-    "recommendations": [
-      "Fix 1 accessibility issues: Add labels to inputs, alt text to images, and increase touch targets"
-    ],
+    "topIssues": [],
+    "recommendations": [],
     "overallScore": 100
   }
 }

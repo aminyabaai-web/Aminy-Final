@@ -79,7 +79,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
   const quickTiles = useMemo(() => [
     {
       id: 'junior-setup',
-      title: 'Set up Aminy Junior',
+      title: 'Set up Aminy Ease',
       description: 'Pair your child\'s device',
       icon: <Smartphone className="w-5 h-5" />,
       category: 'setup',
@@ -123,12 +123,12 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
   const troubleshooters = useMemo(() => [
     {
       id: 'junior-pairing',
-      title: 'Junior Pairing Not Working',
+      title: 'Ease Pairing Not Working',
       icon: <Smartphone className="w-5 h-5" />,
       steps: [
         { id: 'wifi', title: 'Check Wi-Fi Connection', instruction: 'Make sure both devices are on the same Wi-Fi network' },
         { id: 'update', title: 'Update App', instruction: 'Check for app updates in the App Store or Play Store' },
-        { id: 'code', title: 'Display Pairing Code', instruction: 'Go to Settings > Junior Setup and display the QR code' },
+        { id: 'code', title: 'Display Pairing Code', instruction: 'Go to Settings > Ease Setup and display the QR code' },
         { id: 'pair', title: 'Re-pair Device', instruction: 'Scan the QR code with your child\'s device' }
       ]
     },
@@ -165,7 +165,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
   // Contact topics for triage - memoized to prevent re-creation
   const contactTopics = useMemo(() => [
     { id: 'account-billing', label: 'Account & Billing', sla: userTier === 'pro' ? '4-8 hours' : '24-48 hours' },
-    { id: 'junior-devices', label: 'Junior & Devices', sla: userTier === 'pro' ? '4-8 hours' : '24-48 hours' },
+    { id: 'junior-devices', label: 'Ease & Devices', sla: userTier === 'pro' ? '4-8 hours' : '24-48 hours' },
     ...(userTier === 'pro' ? [{ id: 'sessions', label: 'Sessions', sla: 'Priority - 2-4 hours' }] : []),
     { id: 'reports-data', label: 'Reports & Data', sla: userTier === 'pro' ? '4-8 hours' : '24-48 hours' },
     { id: 'privacy-sharing', label: 'Privacy & Sharing', sla: userTier === 'pro' ? '4-8 hours' : '24-48 hours' },
@@ -177,7 +177,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
     overall: 'operational' as const,
     services: [
       { name: 'Aminy Web App', status: 'operational' as const },
-      { name: 'Aminy Junior', status: 'operational' as const },
+      { name: 'Aminy Ease', status: 'operational' as const },
       { name: 'Care Messaging', status: 'operational' as const },
       { name: 'Live Sessions', status: 'operational' as const, proOnly: true },
       { name: 'Reports & Exports', status: 'operational' as const }
@@ -187,7 +187,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
 
   // AI Assistant suggestions - memoized to prevent re-creation
   const aiSuggestions = useMemo(() => [
-    "How do I pair Aminy Junior?",
+    "How do I pair Aminy Ease?",
     "Why can't I schedule a session?",
     "How do I export my progress report?",
     "Where do I update my billing information?"
@@ -204,7 +204,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
   const getAIArticle = useCallback((query: string): string => {
     const lowerQuery = query.toLowerCase();
     if (lowerQuery.includes('pair') || lowerQuery.includes('junior')) {
-      return "Pairing Aminy Junior requires both devices on the same network and updated apps.";
+      return "Pairing Aminy Ease requires both devices on the same network and updated apps.";
     } else if (lowerQuery.includes('session') || lowerQuery.includes('video')) {
       return "Session booking requires active Pro subscription and available credits.";
     } else if (lowerQuery.includes('report') || lowerQuery.includes('export')) {
@@ -220,7 +220,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
       return [
         "Check that both devices are connected to the same Wi-Fi network",
         "Update Aminy app on both devices to the latest version",
-        "Go to Settings > Junior Setup and display the QR code",
+        "Go to Settings > Ease Setup and display the QR code",
         "Scan the QR code with your child's device camera"
       ];
     } else if (lowerQuery.includes('session') || lowerQuery.includes('video')) {
@@ -287,7 +287,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
         <div className="relative max-w-lg mx-auto">
           <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
           <Input
-            placeholder="Ask about routines, billing, pairing Junior..."
+            placeholder="Ask about routines, billing, pairing Ease..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-12 h-12 text-base"
@@ -950,7 +950,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
         <div className="space-y-3 sm:space-y-4">
           {[
             { date: 'Feb 10, 2024', title: 'Enhanced AI Recommendations', type: 'feature' },
-            { date: 'Feb 5, 2024', title: 'Improved Junior Pairing', type: 'improvement' },
+            { date: 'Feb 5, 2024', title: 'Improved Ease Pairing', type: 'improvement' },
             { date: 'Jan 28, 2024', title: 'Bug Fixes & Performance', type: 'fix' }
           ].map((update, idx) => (
             <div key={idx} className="flex items-start gap-3">
@@ -1021,7 +1021,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
               <select className="w-full border rounded-lg px-3 py-2">
                 <option value="">Select area...</option>
                 <option value="plan">Plan</option>
-                <option value="junior">Junior</option>
+                <option value="junior">Ease</option>
                 <option value="care">Care</option>
                 <option value="reports">Reports</option>
                 <option value="settings">Settings</option>

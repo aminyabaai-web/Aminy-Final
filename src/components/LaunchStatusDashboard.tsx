@@ -44,7 +44,7 @@ export function LaunchStatusDashboard({ onBack }: LaunchStatusDashboardProps) {
       completion: 100,
       items: [
         { name: 'Parent Dashboard', done: true },
-        { name: 'Child (Junior) Mode', done: true },
+        { name: 'Child (Ease)', done: true },
         { name: 'AI Conversation Engine', done: true },
         { name: 'Care Plan Generator', done: true },
         { name: 'Goal Tracking', done: true }

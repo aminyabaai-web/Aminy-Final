@@ -99,9 +99,9 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
     },
     {
       id: 'junior',
-      label: 'Junior',
+      label: 'Ease',
       icon: Baby,
-      ariaLabel: 'Junior - Calm corner, rewards, and transitions',
+      ariaLabel: 'Ease - Calm corner, rewards, and transitions',
       enabled: true,
       isCenter: true
     },

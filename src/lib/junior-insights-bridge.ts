@@ -604,7 +604,7 @@ export class JuniorInsightsBridge {
       alerts.push({
         type: 'celebration',
         title: `${engagement.currentStreak}-day streak!`,
-        message: `Amazing consistency! ${engagement.currentStreak} days in a row of Junior practice. Consistency is what makes the biggest difference.`,
+        message: `Amazing consistency! ${engagement.currentStreak} days in a row using Ease. Consistency is what makes the biggest difference.`,
         priority: 'low',
         data: { streak: engagement.currentStreak },
         generatedAt: now,
@@ -672,7 +672,7 @@ export class JuniorInsightsBridge {
     patterns: PatternAlert[],
   ): string {
     if (weekEntries.length === 0) {
-      return `${childName} hasn't had any Junior sessions this week yet. When they do, I'll track their progress here.`;
+      return `${childName} hasn't used Ease this week yet. When they do, I'll track their progress here.`;
     }
 
     const totalMinutes = Math.round(

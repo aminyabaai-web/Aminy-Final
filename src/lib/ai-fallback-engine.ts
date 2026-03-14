@@ -126,8 +126,8 @@ const INTENT_PATTERNS: IntentPattern[] = [
   },
   {
     intent: 'junior_support',
-    keywords: ['Junior', 'activities', 'levels', 'game', 'app', 'progress', 'score', 'achievement', 'badge', 'streak', 'activity', 'session'],
-    phrases: ['junior says', 'in the app', 'junior activity', 'my child\'s progress', 'junior data', 'how is my child doing', 'junior scores'],
+    keywords: ['Ease', 'Junior', 'activities', 'levels', 'game', 'app', 'progress', 'score', 'achievement', 'badge', 'streak', 'activity', 'session', 'calm corner', 'reward board', 'transitions'],
+    phrases: ['ease says', 'junior says', 'in the app', 'ease activity', 'junior activity', 'my child\'s progress', 'ease data', 'junior data', 'how is my child doing', 'ease scores', 'reward board', 'calm corner'],
     weight: 0.9,
   },
   {
@@ -187,7 +187,21 @@ const RESPONSE_TEMPLATES: Record<IntentCategory, string[]> = {
     'I can help with scheduling. Here\'s what you can do in Aminy:\n\n- **Book a session:** Go to the Marketplace tab to browse available providers and book directly\n- **Manage appointments:** Check the Calendar screen for upcoming sessions\n- **Telehealth:** Video sessions can be scheduled from the provider\'s profile\n\nIf you need to find a new provider, try the Provider Discovery feature \u2014 it matches you based on your child\'s needs, your insurance, and your location.\n\nIs there a specific type of appointment you\'re looking for?',
   ],
   junior_support: [
-    'Junior tracks your child\'s progress across multiple developmental domains. Here\'s what the data tells us and how to make the most of it:\n\n**Understanding Junior\'s data:**\n- Each activity targets a specific skill (social, communication, motor, cognitive, daily living)\n- Accuracy and completion rate are tracked over time\n- The difficulty adapts to your child\'s level automatically\n\n**Tips for getting the most from Junior:**\n- Consistency matters more than duration \u2014 even 10 minutes daily is effective\n- Let your child lead \u2014 if they prefer certain activities, that\'s okay\n- Celebrate engagement, not just accuracy\n- Review the weekly summary to share progress with your therapy team\n\nWould you like me to look at a specific area of your child\'s Junior data?',
+    `Ease tracks the calm tools, rewards, transitions, and practice moments that help your child most. Here's what the data tells us and how to make the most of it:
+
+**Understanding Ease data:**
+- Calm Corner shows which soothing tools your child returns to most
+- Rewards and streaks highlight what keeps motivation steady
+- Transitions reveal which routines reduce pushback and overload
+- Practice sessions still track progress over time when you use them
+
+**Tips for getting the most from Ease:**
+- Consistency matters more than duration — even 5 to 10 minutes daily helps
+- Let your child gravitate toward the tools that feel soothing or motivating
+- Celebrate engagement and regulation, not just accuracy
+- Review the weekly summary to share what worked with your therapy team
+
+Would you like me to look at a specific part of your child's Ease data?`,
   ],
   school_transition: [
     'School transitions are a big deal, and planning ahead makes all the difference. Here\'s a framework to help:\n\n**Key readiness areas to assess:**\n1. Academic skills \u2014 Can they follow classroom instructions?\n2. Social skills \u2014 Can they interact with peers during unstructured time?\n3. Self-regulation \u2014 Can they handle transitions and sensory challenges?\n4. Self-advocacy \u2014 Can they ask for help when needed?\n\n**Practical steps:**\n- Request a school visit before the transition\n- Meet the receiving teacher in advance\n- Create a visual "map" of the new school\n- Practice the morning routine for the new school\n- Develop an IEP transition plan with specific supports\n\n**IEP considerations:**\n- Ensure the IEP includes transition goals\n- Request a gradual phase-in schedule if needed\n- Discuss sensory accommodations for the new environment\n\nWould you like help preparing questions for your next IEP meeting?',
@@ -199,10 +213,10 @@ const RESPONSE_TEMPLATES: Record<IntentCategory, string[]> = {
     '**If you or your child is in immediate danger, please call 911.**\n\n**If you need immediate emotional support:**\n- **988 Suicide & Crisis Lifeline:** Call or text 988 (24/7)\n- **Crisis Text Line:** Text HOME to 741741 (24/7)\n- **Autism Society Crisis Line:** 1-800-328-8476\n\n**If your child is in a behavioral crisis (not medical emergency):**\n- Ensure the environment is safe (remove objects that could cause harm)\n- Reduce stimulation (dim lights, lower noise, clear the area)\n- Stay calm and use minimal language\n- Do not physically restrain unless trained and absolutely necessary for safety\n- Wait for the crisis to pass, then comfort\n\nYou can always reach out to your child\'s BCBA or therapy team for crisis support planning. I\'m here if you want to talk through a safety plan.',
   ],
   progress_question: [
-    'Tracking progress is one of the most empowering things you can do as a parent. Here\'s how to think about it:\n\n**Where to look for progress:**\n- Junior\'s weekly summary shows trends across developmental domains\n- Your behavior log tracks meltdown frequency, duration, and triggers over time\n- Your therapy team\'s session notes capture clinical progress\n\n**What "progress" looks like:**\n- Progress is rarely linear \u2014 expect ups, downs, and plateaus\n- Small gains (5 seconds more of eye contact, one fewer meltdown per week) ARE significant\n- Regression during illness, transitions, or stress is normal and temporary\n\n**Data-driven conversations:**\n- Bring Junior\'s data and your behavior logs to therapy sessions\n- Ask your BCBA: "Based on the data, are we on track for this goal?"\n- Request updated benchmarks every 3-6 months\n\nWould you like me to pull up your child\'s recent progress data from Junior?',
+    'Tracking progress is one of the most empowering things you can do as a parent. Here\'s how to think about it:\n\n**Where to look for progress:**\n- Ease\'s weekly summary shows patterns in calm, rewards, transitions, and practice\n- Your behavior log tracks meltdown frequency, duration, and triggers over time\n- Your therapy team\'s session notes capture clinical progress\n\n**What "progress" looks like:**\n- Progress is rarely linear \u2014 expect ups, downs, and plateaus\n- Small gains (5 seconds more of eye contact, one fewer meltdown per week) ARE significant\n- Regression during illness, transitions, or stress is normal and temporary\n\n**Data-driven conversations:**\n- Bring Ease data and your behavior logs to therapy sessions\n- Ask your BCBA: "Based on the data, are we on track for this goal?"\n- Request updated benchmarks every 3-6 months\n\nWould you like me to pull up your child\'s recent Ease data?',
   ],
   general_question: [
-    'I\'m here to help with anything related to your family\'s journey. I can assist with:\n\n- **Behavioral strategies** \u2014 managing meltdowns, transitions, routines\n- **Communication support** \u2014 speech development, AAC tools, language tips\n- **Sensory regulation** \u2014 sensory diets, calming strategies, OT activities\n- **Insurance navigation** \u2014 appeals, authorization, coverage questions\n- **Junior insights** \u2014 understanding your child\'s app data and progress\n- **Care planning** \u2014 goal setting, therapy coordination, home programs\n- **Caregiver wellness** \u2014 burnout, self-care, support resources\n- **School & transitions** \u2014 IEPs, inclusion, new environments\n\nWhat would be most helpful for you right now?',
+    'I\'m here to help with anything related to your family\'s journey. I can assist with:\n\n- **Behavioral strategies** — managing meltdowns, transitions, routines\n- **Communication support** — speech development, AAC tools, language tips\n- **Sensory regulation** — sensory diets, calming strategies, OT activities\n- **Insurance navigation** — appeals, authorization, coverage questions\n- **Ease insights** — understanding your child\'s calm, rewards, transition, and practice data\n- **Care planning** — goal setting, therapy coordination, home programs\n- **Caregiver wellness** — burnout, self-care, support resources\n- **School & transitions** — IEPs, inclusion, new environments\n\nWhat would be most helpful for you right now?',
   ],
   greeting: [
     'Hi there! I\'m Ask Aminy, your family\'s AI companion. I\'m here to help with anything from behavioral strategies to insurance questions to just being a supportive listener.\n\nWhat\'s on your mind today?',

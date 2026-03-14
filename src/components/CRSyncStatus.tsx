@@ -151,8 +151,8 @@ const DATA_TYPES: DataTypeDisplay[] = [
   },
   {
     dataType: 'junior_results',
-    label: 'Aminy Junior Progress',
-    description: 'Game scores and skill data from your child\'s Aminy Junior sessions.',
+    label: 'Aminy Ease Progress',
+    description: 'Calm, rewards, transition, and session data from your child\'s Aminy Ease sessions.',
     icon: Sparkles,
     direction: 'push',
     category: 'sent',

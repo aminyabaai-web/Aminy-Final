@@ -127,6 +127,7 @@ interface ProviderProfile {
   licensedStates: string[];
   acceptedInsurance: string[];
   acceptsInsurance?: boolean;
+  verificationStatus?: 'pending' | 'verified' | 'manual_review' | 'expired' | 'failed';
   needsSetup?: boolean;
 }
 
@@ -258,6 +259,7 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
     whiteLabelEnabled: Boolean(branding?.orgName),
     telehealthEnabled: true,
     practiceName: branding?.orgName || `${provider.name} Practice`,
+    verificationStatus: provider.verificationStatus,
   }, sessions.filter((session) => session.status === 'upcoming').length) : null;
   const primaryPracticeState = provider?.licensedStates.find((state) => isSupportedProviderState(state));
   const practiceMarketCoverage = primaryPracticeState ? getStateMarketCoverage(primaryPracticeState) : null;
@@ -307,6 +309,7 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
           licensedStates: providerData.states_licensed || [],
           acceptedInsurance: providerData.insurance_accepted || ['Cash Pay'],
           acceptsInsurance: providerData.accepts_insurance || false,
+          verificationStatus: providerData.verification_status || (providerData.verified ? 'verified' : 'pending'),
         });
       } else {
         // No provider profile found - show setup prompt
@@ -325,6 +328,7 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
           licensedStates: [],
           acceptedInsurance: ['Cash Pay'],
           acceptsInsurance: false,
+          verificationStatus: 'pending',
           needsSetup: true,
         });
       }

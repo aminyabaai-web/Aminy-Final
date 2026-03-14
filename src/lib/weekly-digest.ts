@@ -562,7 +562,7 @@ function generateCTA(
         url: `${baseUrl}/?screen=dashboard`,
       },
       secondary: {
-        text: 'Start a quick Junior session',
+        text: 'Start a quick Ease session',
         url: `${baseUrl}/?screen=junior`,
       },
     };
@@ -571,7 +571,7 @@ function generateCTA(
   if (progress.totalSessions === 0) {
     return {
       primary: {
-        text: 'Start a Junior session this week',
+        text: 'Start an Ease session this week',
         url: `${baseUrl}/?screen=junior`,
       },
       secondary: {

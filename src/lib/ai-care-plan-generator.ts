@@ -154,12 +154,12 @@ export class AICareplanGenerator {
     // From Junior progress
     if (context.juniorProgress.length > 0) {
       goals.push({
-        title: 'Continue Junior practice sessions',
+        title: 'Continue Ease practice sessions',
         description: `Build on current progress with 2-3 short sessions per day. Focus on areas showing improvement.`,
         category: 'communication',
         targetFrequency: '3x daily, 5 min each',
         targetProgress: 100,
-        measurable: 'Complete at least 15 Junior sessions this week',
+        measurable: 'Complete at least 15 Ease sessions this week',
         priority: 'medium',
       });
     }
@@ -458,7 +458,7 @@ export class AICareplanGenerator {
       parts.push(`Current active goals: ${context.currentGoals.join(', ')}`);
     }
     if (context.juniorProgress.length > 0) {
-      parts.push(`Junior app progress: ${context.juniorProgress.join('; ')}`);
+      parts.push(`Ease progress: ${context.juniorProgress.join('; ')}`);
     }
     if (context.recentConversationTopics.length > 0) {
       parts.push(`Recent topics discussed: ${context.recentConversationTopics.join(', ')}`);
@@ -621,7 +621,7 @@ Return JSON with this shape:
       summary: `This week's focus for ${context.childName}: ${context.recentBehaviors.length > 0
         ? `address ${context.recentBehaviors[0]} patterns with proactive strategies`
         : 'maintain consistent routines and build on current progress'
-      }. ${context.juniorProgress.length > 0 ? 'Continue Junior app sessions to reinforce skills.' : 'Consider starting Junior app for structured skill practice.'}`,
+      }. ${context.juniorProgress.length > 0 ? 'Continue Ease sessions to reinforce calm, motivation, and skill carryover.' : 'Consider starting Ease for calm support, rewards, transitions, and structured practice.'}`,
       dailyRoutineItems: dailyRoutine,
       weeklyGoals,
       recommendedActivities,

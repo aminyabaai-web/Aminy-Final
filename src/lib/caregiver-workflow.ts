@@ -495,18 +495,18 @@ export function buildCaregiverWeeklySummary(input: {
     progressTrend,
     highlights: uniqueStrings([
       completedItems.length > 0 ? `${input.childName} completed ${completedItems.length} plan item${completedItems.length === 1 ? '' : 's'} this period.` : null,
-      completedSessions.length > 0 ? `Junior captured ${completedSessions.length} completed session${completedSessions.length === 1 ? '' : 's'} for ${input.childName}.` : null,
+      completedSessions.length > 0 ? `Ease captured ${completedSessions.length} completed session${completedSessions.length === 1 ? '' : 's'} for ${input.childName}.` : null,
       topTopic ? `Recent coaching stayed focused on ${topTopic}.` : null,
-      totalTokens > 0 ? `${input.childName} earned ${totalTokens} Junior tokens.` : null,
+      totalTokens > 0 ? `${input.childName} earned ${totalTokens} Ease tokens.` : null,
     ]).slice(0, 4),
     challenges: uniqueStrings([
       completedItems.length === 0 ? `No daily-plan items were marked complete for ${input.childName} yet.` : null,
       input.conversationSummaries.length === 0 ? 'No stored coaching summaries were available for this period.' : null,
-      completedSessions.length === 0 ? 'Junior progress has not been recorded for this period yet.' : null,
+      completedSessions.length === 0 ? 'Ease progress has not been recorded for this period yet.' : null,
     ]).slice(0, 3),
     recommendations: uniqueStrings([
       completedItems.length < Math.max(allItems.length, 1) ? 'Pick one plan item to finish each day before adding more.' : null,
-      completedSessions.length === 0 ? 'Launch one Junior activity from the daily plan so progress carries into the report.' : null,
+      completedSessions.length === 0 ? 'Launch one Ease activity from the daily plan so progress carries into the report.' : null,
       topTopic ? `Review Aminy guidance on ${topTopic} with your provider at the next check-in.` : 'Review this week’s stored guidance before your next provider conversation.',
     ]).slice(0, 4),
     goalsProgress,

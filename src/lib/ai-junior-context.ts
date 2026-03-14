@@ -6,7 +6,7 @@
  *   1. Answer parent questions: "How is Eddie doing in speech?"
  *   2. Reference actual session data in responses
  *   3. Recommend activities based on gaps
- *   4. Generate "Weekly Junior Reports" with trends
+ *   4. Generate "Weekly Ease Reports" with trends
  *   5. Proactively suggest: "Eddie might benefit from more sensory breaks"
  *
  * This module is the GLUE between:
@@ -227,14 +227,14 @@ export class AIJuniorContextProvider {
   ): string {
     const sections: string[] = [];
 
-    sections.push(`\n--- JUNIOR APP DATA (${childName}) ---`);
+    sections.push(`\n--- EASE DATA (${childName}) ---`);
 
     if (!snapshot || snapshot.totalSessions === 0) {
-      sections.push(`${childName} hasn't used Junior yet this week. If the parent asks about Junior, you can explain what it offers and encourage trying it.`);
+      sections.push(`${childName} hasn't used Ease yet this week. If the parent asks about Ease, you can explain the calm, rewards, and transition tools it offers and encourage trying it.`);
       if (focusProfile) {
         sections.push(getParentFocusBridge().buildAIContextSummary(focusProfile.childId, childName));
       }
-      sections.push('--- END JUNIOR DATA ---\n');
+      sections.push('--- END EASE DATA ---\n');
       return sections.join('\n');
     }
 
@@ -300,11 +300,11 @@ export class AIJuniorContextProvider {
 - For domain-specific questions, cite accuracy %, trends, and session counts.
 - When recommending changes, explain WHY based on the data.
 - You can suggest difficulty changes, focus area adjustments, and session constraints.
-- Use phrases like "Based on Junior data..." or "Looking at this week's sessions..."
+- Use phrases like "Based on Ease data..." or "Looking at this week's sessions..."
 - If you notice patterns, proactively share them even if the parent didn't ask.
 - Be warm, encouraging, and specific. Celebrate wins before addressing concerns.`);
 
-    sections.push('--- END JUNIOR DATA ---\n');
+    sections.push('--- END EASE DATA ---\n');
 
     return sections.join('\n');
   }
@@ -326,12 +326,12 @@ export class AIJuniorContextProvider {
 
     if (!snapshot || snapshot.totalSessions === 0) {
       return {
-        answer: `${childName} hasn't used Junior yet this week, so I don't have session data to reference. Would you like me to suggest some activities to get started?`,
+        answer: `${childName} hasn't used Ease yet this week, so I don't have session data to reference. Would you like me to suggest a calm tool, reward board, or transition routine to get started?`,
         dataPoints: [],
         followUps: [
-          'What activities would you recommend for getting started?',
-          'How do I set focus areas for Junior?',
-          'What domains does Junior cover?',
+          'What would you recommend to get started with Ease?',
+          'How do I set goals and rewards in Ease?',
+          'What can Ease help with?',
         ],
         datadriven: false,
       };
@@ -497,9 +497,9 @@ export class AIJuniorContextProvider {
 
     if (!snapshot || snapshot.totalSessions === 0) {
       return {
-        title: `Weekly Junior Report: ${childName}`,
+        title: `Weekly Ease Report: ${childName}`,
         period,
-        summary: `${childName} didn't have any Junior sessions this week. Even short, consistent practice — just 5 minutes a day — can make a meaningful difference. Let's set a small goal for next week!`,
+        summary: `${childName} didn't use Ease this week. Even short, consistent calm moments, reward check-ins, or transition practice can make a meaningful difference. Let's set one small goal for next week.`,
         domainSections: [],
         highlights: [],
         concerns: ['No practice sessions this week'],
@@ -603,7 +603,7 @@ export class AIJuniorContextProvider {
     }
 
     return {
-      title: `Weekly Junior Report: ${childName}`,
+      title: `Weekly Ease Report: ${childName}`,
       period,
       summary: summaryParts.join(' '),
       domainSections,

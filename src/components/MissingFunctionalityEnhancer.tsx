@@ -34,11 +34,11 @@ export const MissingFunctionalityEnhancer = ({ userTier = 'starter', onNavigate 
 
   // Universal "Add to Junior" functionality
   const handleAddToJunior = (item: ActionItem) => {
-    toast.success(`Added "${item.title || item.name || 'Activity'}" to Junior's activities!`);
+    toast.success(`Added "${item.title || item.name || 'Activity'}" to Ease's activities!`);
     
     // Simulate Junior integration
     setTimeout(() => {
-      toast.info('This activity is now available in Junior mode');
+      toast.info('This activity is now available in Ease');
     }, 2000);
   };
 

@@ -369,14 +369,14 @@ export function ConnectorStatus({
         <button
           onClick={() => handlePillClick('profile')} // Navigate to device management
           className="connector-pill connector-pill-success"
-          aria-label="Aminy Junior device paired successfully"
+          aria-label="Aminy Ease device paired successfully"
         >
           <div className="flex items-center gap-2">
             <div className="connector-icon connector-icon-success">
               <CheckCircle size={14} strokeWidth={2.5} />
             </div>
             <div className="connector-content">
-              <span className="connector-label">Aminy Junior Device</span>
+              <span className="connector-label">Aminy Ease Device</span>
               <span className="connector-sublabel">Paired ✓</span>
             </div>
           </div>
@@ -389,15 +389,15 @@ export function ConnectorStatus({
       <button
         onClick={() => handlePillClick('pairing')}
         className="connector-pill connector-pill-pending"
-        aria-label="Pair Aminy Junior device to get started"
+        aria-label="Pair Aminy Ease device to get started"
       >
         <div className="flex items-center gap-2">
           <div className="connector-icon connector-icon-pending">
             <Smartphone size={14} strokeWidth={2} />
           </div>
           <div className="connector-content">
-            <span className="connector-label">Aminy Junior Device</span>
-            <span className="connector-sublabel">Pair Aminy Junior device</span>
+            <span className="connector-label">Aminy Ease Device</span>
+            <span className="connector-sublabel">Pair Aminy Ease device</span>
           </div>
         </div>
         <ChevronRight size={12} className="connector-arrow" />
@@ -618,7 +618,7 @@ export function ConnectorStatus({
           {/* 4 Stacked Large List Rows */}
           <div className="space-y-3">
             
-            {/* Row 1: Aminy Junior device */}
+            {/* Row 1: Aminy Ease device */}
             <button
               role="button"
               tabIndex={0}
@@ -682,7 +682,7 @@ export function ConnectorStatus({
                     hyphens: 'auto'
                   }}
                 >
-                  Aminy Junior device
+                  Aminy Ease device
                 </div>
               </div>
               <div className="flex-shrink-0">

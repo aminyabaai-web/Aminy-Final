@@ -51,7 +51,7 @@ export function SupportPageSimple({ onNavigate, userTier = 'core' }: SupportPage
   const quickTiles = [
     {
       id: 'junior-setup',
-      title: 'Set up Aminy Junior',
+      title: 'Set up Aminy Ease',
       description: 'Pair your child\'s device',
       icon: <Smartphone className="w-5 h-5" />,
       popular: true
@@ -74,7 +74,7 @@ export function SupportPageSimple({ onNavigate, userTier = 'core' }: SupportPage
 
   const contactTopics = [
     { id: 'account-billing', label: 'Account & Billing' },
-    { id: 'junior-devices', label: 'Junior & Devices' },
+    { id: 'junior-devices', label: 'Ease & Devices' },
     { id: 'reports-data', label: 'Reports & Data' },
     { id: 'other', label: 'Other' }
   ];
@@ -94,7 +94,7 @@ export function SupportPageSimple({ onNavigate, userTier = 'core' }: SupportPage
         <div className="relative max-w-lg mx-auto">
           <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
           <Input
-            placeholder="Ask about routines, billing, pairing Junior..."
+            placeholder="Ask about routines, billing, pairing Ease..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-12 h-12 text-base"
