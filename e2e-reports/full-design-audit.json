@@ -1,14 +1,21 @@
 {
-  "generatedAt": "2026-03-14T10:15:39.613Z",
+  "generatedAt": "2026-03-14T10:39:08.796Z",
   "totalScreens": 25,
-  "totalIssues": 0,
+  "totalIssues": 1,
   "criticalIssues": 0,
   "screens": [
     {
       "screen": "Splash/Landing",
       "path": "/",
-      "timestamp": "2026-03-14T10:15:43.259Z",
-      "issues": [],
+      "timestamp": "2026-03-14T10:39:13.048Z",
+      "issues": [
+        {
+          "severity": "minor",
+          "category": "Accessibility",
+          "issue": "Heading levels are skipped (e.g., H2 followed by H4)",
+          "recommendation": "Use sequential heading levels for proper document outline"
+        }
+      ],
       "metrics": {
         "loadTime": 1,
         "elementCount": 137,
@@ -17,20 +24,20 @@
         "formFields": 0
       },
       "scores": {
-        "accessibility": 100,
+        "accessibility": 95,
         "performance": 100,
         "usability": 100,
         "visualConsistency": 100,
-        "overall": 100
+        "overall": 99
       }
     },
     {
       "screen": "Login",
       "path": "/?screen=login",
-      "timestamp": "2026-03-14T10:15:46.218Z",
+      "timestamp": "2026-03-14T10:39:16.042Z",
       "issues": [],
       "metrics": {
-        "loadTime": 1,
+        "loadTime": 0,
         "elementCount": 143,
         "interactiveElements": 12,
         "imageCount": 1,
@@ -47,7 +54,7 @@
     {
       "screen": "Create Account",
       "path": "/?screen=create-account",
-      "timestamp": "2026-03-14T10:15:49.666Z",
+      "timestamp": "2026-03-14T10:39:19.020Z",
       "issues": [],
       "metrics": {
         "loadTime": 1,
@@ -67,10 +74,10 @@
     {
       "screen": "Forgot Password",
       "path": "/?screen=forgot-password",
-      "timestamp": "2026-03-14T10:15:52.592Z",
+      "timestamp": "2026-03-14T10:39:21.988Z",
       "issues": [],
       "metrics": {
-        "loadTime": 0,
+        "loadTime": 1,
         "elementCount": 126,
         "interactiveElements": 7,
         "imageCount": 1,
@@ -87,7 +94,7 @@
     {
       "screen": "Dashboard",
       "path": "/?screen=dashboard",
-      "timestamp": "2026-03-14T10:15:55.521Z",
+      "timestamp": "2026-03-14T10:39:25.092Z",
       "issues": [],
       "metrics": {
         "loadTime": 1,
@@ -107,7 +114,7 @@
     {
       "screen": "Settings",
       "path": "/?screen=settings",
-      "timestamp": "2026-03-14T10:15:58.872Z",
+      "timestamp": "2026-03-14T10:39:28.154Z",
       "issues": [],
       "metrics": {
         "loadTime": 1,
@@ -127,10 +134,10 @@
     {
       "screen": "Profile",
       "path": "/?screen=profile",
-      "timestamp": "2026-03-14T10:16:01.903Z",
+      "timestamp": "2026-03-14T10:39:31.668Z",
       "issues": [],
       "metrics": {
-        "loadTime": 0,
+        "loadTime": 1,
         "elementCount": 444,
         "interactiveElements": 34,
         "imageCount": 1,
@@ -147,7 +154,7 @@
     {
       "screen": "Telehealth",
       "path": "/?screen=telehealth",
-      "timestamp": "2026-03-14T10:16:05.822Z",
+      "timestamp": "2026-03-14T10:39:35.620Z",
       "issues": [],
       "metrics": {
         "loadTime": 0,
@@ -167,10 +174,10 @@
     {
       "screen": "Vault",
       "path": "/?screen=vault",
-      "timestamp": "2026-03-14T10:16:08.881Z",
+      "timestamp": "2026-03-14T10:39:39.425Z",
       "issues": [],
       "metrics": {
-        "loadTime": 2,
+        "loadTime": 0,
         "elementCount": 326,
         "interactiveElements": 21,
         "imageCount": 1,
@@ -187,10 +194,10 @@
     {
       "screen": "Marketplace",
       "path": "/?screen=marketplace",
-      "timestamp": "2026-03-14T10:16:11.834Z",
+      "timestamp": "2026-03-14T10:39:42.686Z",
       "issues": [],
       "metrics": {
-        "loadTime": 1,
+        "loadTime": 0,
         "elementCount": 444,
         "interactiveElements": 34,
         "imageCount": 1,
@@ -207,7 +214,7 @@
     {
       "screen": "Junior Mode",
       "path": "/?screen=junior",
-      "timestamp": "2026-03-14T10:16:16.412Z",
+      "timestamp": "2026-03-14T10:39:45.745Z",
       "issues": [],
       "metrics": {
         "loadTime": 1,
@@ -227,7 +234,7 @@
     {
       "screen": "Paywall",
       "path": "/?screen=paywall",
-      "timestamp": "2026-03-14T10:16:19.421Z",
+      "timestamp": "2026-03-14T10:39:48.737Z",
       "issues": [],
       "metrics": {
         "loadTime": 1,
@@ -247,10 +254,10 @@
     {
       "screen": "Benefits Navigator",
       "path": "/?screen=benefits",
-      "timestamp": "2026-03-14T10:16:22.440Z",
+      "timestamp": "2026-03-14T10:39:51.774Z",
       "issues": [],
       "metrics": {
-        "loadTime": 1,
+        "loadTime": 0,
         "elementCount": 369,
         "interactiveElements": 22,
         "imageCount": 1,
@@ -267,7 +274,7 @@
     {
       "screen": "Messages",
       "path": "/?screen=messages",
-      "timestamp": "2026-03-14T10:16:25.445Z",
+      "timestamp": "2026-03-14T10:39:55.124Z",
       "issues": [],
       "metrics": {
         "loadTime": 1,
@@ -287,7 +294,7 @@
     {
       "screen": "Crisis Resources",
       "path": "/?screen=crisis-resources",
-      "timestamp": "2026-03-14T10:16:28.493Z",
+      "timestamp": "2026-03-14T10:39:59.022Z",
       "issues": [],
       "metrics": {
         "loadTime": 1,
@@ -307,7 +314,7 @@
     {
       "screen": "Outcomes",
       "path": "/?screen=outcomes",
-      "timestamp": "2026-03-14T10:16:31.539Z",
+      "timestamp": "2026-03-14T10:40:02.069Z",
       "issues": [],
       "metrics": {
         "loadTime": 1,
@@ -327,27 +334,7 @@
     {
       "screen": "Care Plan",
       "path": "/?screen=care-plan",
-      "timestamp": "2026-03-14T10:16:34.812Z",
-      "issues": [],
-      "metrics": {
-        "loadTime": 1,
-        "elementCount": 444,
-        "interactiveElements": 34,
-        "imageCount": 1,
-        "formFields": 0
-      },
-      "scores": {
-        "accessibility": 100,
-        "performance": 100,
-        "usability": 100,
-        "visualConsistency": 100,
-        "overall": 100
-      }
-    },
-    {
-      "screen": "Community",
-      "path": "/?screen=community",
-      "timestamp": "2026-03-14T10:16:37.862Z",
+      "timestamp": "2026-03-14T10:40:05.122Z",
       "issues": [],
       "metrics": {
         "loadTime": 0,
@@ -365,9 +352,29 @@
       }
     },
     {
+      "screen": "Community",
+      "path": "/?screen=community",
+      "timestamp": "2026-03-14T10:40:08.818Z",
+      "issues": [],
+      "metrics": {
+        "loadTime": 1,
+        "elementCount": 444,
+        "interactiveElements": 34,
+        "imageCount": 1,
+        "formFields": 0
+      },
+      "scores": {
+        "accessibility": 100,
+        "performance": 100,
+        "usability": 100,
+        "visualConsistency": 100,
+        "overall": 100
+      }
+    },
+    {
       "screen": "Provider Portal",
       "path": "/?screen=provider-portal&pilotState=AZ&pilotRole=provider&pilot=true&pilotOrg=aact",
-      "timestamp": "2026-03-14T10:16:44.047Z",
+      "timestamp": "2026-03-14T10:40:15.029Z",
       "issues": [],
       "metrics": {
         "loadTime": 0,
@@ -387,10 +394,10 @@
     {
       "screen": "Provider Onboarding",
       "path": "/?screen=provider-onboarding&pilotState=AZ&pilotRole=provider&pilot=true&pilotOrg=aact",
-      "timestamp": "2026-03-14T10:16:47.482Z",
+      "timestamp": "2026-03-14T10:40:18.823Z",
       "issues": [],
       "metrics": {
-        "loadTime": 0,
+        "loadTime": 1,
         "elementCount": 355,
         "interactiveElements": 29,
         "imageCount": 1,
@@ -407,10 +414,10 @@
     {
       "screen": "Claims Dashboard",
       "path": "/?screen=claims-dashboard&pilotState=AZ&pilotRole=admin&pilot=true&pilotOrg=aact&pilotPayers=bcba_of_az,mercycare",
-      "timestamp": "2026-03-14T10:16:51.777Z",
+      "timestamp": "2026-03-14T10:40:23.610Z",
       "issues": [],
       "metrics": {
-        "loadTime": 1,
+        "loadTime": 0,
         "elementCount": 290,
         "interactiveElements": 18,
         "imageCount": 1,
@@ -427,10 +434,10 @@
     {
       "screen": "Payer Dashboard",
       "path": "/?screen=payer-dashboard&pilotState=AZ&pilotRole=admin&pilot=true&pilotOrg=aact&pilotPayers=bcba_of_az,mercycare",
-      "timestamp": "2026-03-14T10:16:55.690Z",
+      "timestamp": "2026-03-14T10:40:27.314Z",
       "issues": [],
       "metrics": {
-        "loadTime": 0,
+        "loadTime": 1,
         "elementCount": 403,
         "interactiveElements": 22,
         "imageCount": 1,
@@ -447,11 +454,11 @@
     {
       "screen": "EVV Dashboard",
       "path": "/?screen=evv-dashboard&pilotState=AZ&pilotRole=admin&pilot=true&pilotOrg=aact&evvSystem=spokchoice&systemOfRecord=external",
-      "timestamp": "2026-03-14T10:17:00.105Z",
+      "timestamp": "2026-03-14T10:40:31.283Z",
       "issues": [],
       "metrics": {
-        "loadTime": 0,
-        "elementCount": 348,
+        "loadTime": 1,
+        "elementCount": 351,
         "interactiveElements": 20,
         "imageCount": 1,
         "formFields": 0
@@ -467,7 +474,7 @@
     {
       "screen": "Caregiver Timesheet",
       "path": "/?screen=caregiver-timesheet&pilotState=AZ&pilotRole=parent&pilot=true&pilotOrg=aact&evvSystem=spokchoice&systemOfRecord=external",
-      "timestamp": "2026-03-14T10:17:03.257Z",
+      "timestamp": "2026-03-14T10:40:35.023Z",
       "issues": [],
       "metrics": {
         "loadTime": 1,
@@ -487,11 +494,11 @@
     {
       "screen": "CentralReach Sync",
       "path": "/?screen=cr-sync&pilotState=AZ&pilotRole=admin&pilot=true&pilotOrg=aact",
-      "timestamp": "2026-03-14T10:17:07.974Z",
+      "timestamp": "2026-03-14T10:40:40.587Z",
       "issues": [],
       "metrics": {
         "loadTime": 1,
-        "elementCount": 510,
+        "elementCount": 591,
         "interactiveElements": 37,
         "imageCount": 1,
         "formFields": 0
@@ -506,8 +513,12 @@
     }
   ],
   "summary": {
-    "topIssues": [],
-    "recommendations": [],
+    "topIssues": [
+      "Accessibility: Heading levels are skipped (e.g., H2 followed by H4) (1 screens)"
+    ],
+    "recommendations": [
+      "Fix 1 accessibility issues: Add labels to inputs, alt text to images, and increase touch targets"
+    ],
     "overallScore": 100
   }
 }
