@@ -98,6 +98,7 @@ export function CrisisResources({ onBack }: CrisisResourcesProps) {
             <button
               onClick={onBack}
               className="p-2 -ml-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
+              aria-label="Go back"
             >
               <ArrowLeft className="w-5 h-5" />
             </button>
@@ -124,12 +125,34 @@ export function CrisisResources({ onBack }: CrisisResourcesProps) {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-9"
+            aria-label="Search crisis resources"
           />
         </div>
       </div>
 
       {/* Emergency Quick Access - Always Visible */}
       <div className="bg-red-50 dark:bg-red-900/20 border-b border-red-100 dark:border-red-900/30 p-4">
+        <div className="mb-4 flex flex-col gap-3 rounded-2xl border border-red-200 bg-white/80 p-4 shadow-sm dark:border-red-900/40 dark:bg-slate-900/40 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-red-600 dark:text-red-400">
+              Need help right now?
+            </p>
+            <h2 className="mt-1 text-lg font-semibold text-slate-900 dark:text-white">
+              Call or text 988 for immediate crisis support
+            </h2>
+            <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
+              If there is immediate danger, call 911. Otherwise, 988 is the fastest next step for urgent mental-health support.
+            </p>
+          </div>
+          <div className="flex flex-col gap-2 sm:min-w-[200px]">
+            <Button asChild className="h-11 rounded-2xl bg-red-600 text-white hover:bg-red-700 action-button">
+              <a href="tel:988">Call or text 988 now</a>
+            </Button>
+            <Button asChild variant="outline" className="h-11 rounded-2xl border-red-200 bg-white text-red-700 hover:bg-red-50 dark:border-red-900/40 dark:bg-slate-900 dark:text-red-300 dark:hover:bg-red-950/30">
+              <a href="tel:911">Call 911 if there is immediate danger</a>
+            </Button>
+          </div>
+        </div>
         <p className="text-xs font-medium text-red-600 dark:text-red-400 uppercase tracking-wide mb-3">
           Immediate Help
         </p>
@@ -191,6 +214,14 @@ export function CrisisResources({ onBack }: CrisisResourcesProps) {
 
       {/* Resources List */}
       <div className="p-4 space-y-3">
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <h2 className="text-lg font-semibold text-slate-900 dark:text-white">All crisis supports</h2>
+            <p className="text-sm text-slate-600 dark:text-slate-300">
+              Browse hotlines, calming supports, safety planning, and parent self-care resources.
+            </p>
+          </div>
+        </div>
         {filteredResources.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-slate-500 dark:text-slate-400">

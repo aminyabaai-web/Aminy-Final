@@ -170,6 +170,10 @@ export function OutcomesDashboardWidget({
     );
   };
 
+  const hasMeaningfulMetrics = metrics.some(
+    (metric) => metric.value > 0 || metric.previousValue > 0,
+  );
+
   if (loading) {
     return (
       <Card className="p-4 sm:p-5 md:p-6">
@@ -216,6 +220,27 @@ export function OutcomesDashboardWidget({
     );
   }
 
+  if (metrics.length === 0 || !hasMeaningfulMetrics) {
+    return (
+      <Card className="border border-white/80 bg-[linear-gradient(180deg,_rgba(255,255,255,0.96)_0%,_rgba(244,249,250,0.98)_100%)] shadow-[0_12px_40px_rgba(15,23,42,0.06)]">
+        <div className="p-4 sm:p-5">
+          <div className="flex items-start gap-3">
+            <div className="rounded-2xl bg-slate-100/90 p-2.5 text-slate-500">
+              <Activity className="h-5 w-5" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <h3 className="text-sm font-semibold text-slate-900">Progress will feel clearer soon</h3>
+              <p className="mt-1 text-sm leading-6 text-slate-600">
+                Once you log a few moments, complete a screening, or start a goal, Aminy will turn
+                those patterns into a calmer weekly view instead of pushing noisy charts too early.
+              </p>
+            </div>
+          </div>
+        </div>
+      </Card>
+    );
+  }
+
   return (
     <Card className="overflow-hidden">
       {/* Header */}
@@ -239,13 +264,6 @@ export function OutcomesDashboardWidget({
 
       {/* Metrics Grid */}
       <div className="p-3 sm:p-4">
-        {metrics.length === 0 && (
-          <div className="text-center py-6">
-            <Activity className="w-8 h-8 text-gray-300 mx-auto mb-2" />
-            <p className="text-sm font-medium text-gray-600">No outcomes data yet</p>
-            <p className="text-xs text-gray-400 mt-1">Complete a screening or set treatment goals to start tracking real progress.</p>
-          </div>
-        )}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
           {metrics.map((metric, index) => {
             const Icon = metric.icon;

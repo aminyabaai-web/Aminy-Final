@@ -42,7 +42,10 @@ import {
 } from '../../lib/availability-engine';
 import { getProviderSlots } from '../../lib/telehealth-api';
 import { PRICING_MESSAGING } from '../../lib/pricing';
+import { getDisplayPricingForProvider } from '../../lib/telehealth-economics';
 import { supabase } from '../../utils/supabase/client';
+
+const LIVE_TELEHEALTH_STATES = new Set(['AZ', 'MT', 'TX']);
 
 interface BookVisitProps {
   onBack: () => void;
@@ -76,9 +79,26 @@ export function BookVisitScreen({
       try {
         const { data, error } = await supabase
           .from('provider_profiles')
-          .select('*')
-          .eq('is_active', true)
-          .eq('is_accepting_patients', true)
+          .select(`
+            id,
+            full_name,
+            name,
+            provider_type,
+            credentials,
+            bio,
+            rating,
+            review_count,
+            verified,
+            accepting_new_patients,
+            offers_telehealth,
+            license_state,
+            state,
+            hourly_rate,
+            photo_url
+          `)
+          .eq('verified', true)
+          .eq('accepting_new_patients', true)
+          .eq('offers_telehealth', true)
           .order('rating', { ascending: false });
 
         if (error) {
@@ -90,44 +110,62 @@ export function BookVisitScreen({
           // Transform database providers to Provider type
           interface ProviderRow {
             id: string;
-            first_name?: string;
-            last_name?: string;
+            full_name?: string;
             name?: string;
             provider_type?: string;
             credentials?: string;
             bio?: string;
-            states_licensed?: string[];
-            session_rate?: number;
+            license_state?: string | null;
+            state?: string | null;
+            hourly_rate?: number;
             rating?: string;
             review_count?: number;
-            is_active?: boolean;
-            is_accepting_patients?: boolean;
+            verified?: boolean;
+            accepting_new_patients?: boolean;
+            offers_telehealth?: boolean;
             created_at?: string;
             updated_at?: string;
             photo_url?: string;
           }
-          const providers: Provider[] = (data as ProviderRow[]).map((p) => ({
-            id: p.id,
-            firstName: p.first_name || p.name?.split(' ')[0] || 'Provider',
-            lastName: p.last_name || p.name?.split(' ').slice(1).join(' ') || '',
-            role: (p.provider_type || 'bcba') as ProviderRole,
-            roleDisplayName: PROVIDER_ROLE_DISPLAY[p.provider_type as keyof typeof PROVIDER_ROLE_DISPLAY] || 'Provider',
-            credentials: p.credentials || '',
-            bio: p.bio || '',
-            licensedStates: p.states_licensed || [],
-            offersConsult: true,
-            offersDeepReview: true,
-            consultPrice: p.session_rate || 99,
-            deepReviewPrice: (p.session_rate || 99) * 2,
-            organization: 'independent' as const,
-            rating: parseFloat(p.rating || '4.5') || 4.5,
-            reviewCount: p.review_count || 0,
-            isActive: p.is_active ?? true,
-            acceptingNewPatients: p.is_accepting_patients ?? true,
-            createdAt: p.created_at || new Date().toISOString(),
-            updatedAt: p.updated_at || new Date().toISOString(),
-            avatarUrl: p.photo_url,
-          }));
+          const providers: Provider[] = (data as ProviderRow[])
+            .filter((provider) => {
+              const providerState = (provider.license_state || provider.state || '').toUpperCase();
+              return LIVE_TELEHEALTH_STATES.has(providerState);
+            })
+            .map((p) => {
+              const organization = 'independent' as Provider['organization'];
+              const providerState = (p.license_state || p.state || '').toUpperCase();
+              const fullName = p.full_name || p.name || 'Provider';
+              const [firstName = 'Provider', ...lastNameParts] = fullName.trim().split(/\s+/);
+              const pricing = getDisplayPricingForProvider(
+                organization,
+                p.hourly_rate || 99,
+                p.hourly_rate ? p.hourly_rate * 2 : undefined,
+              );
+
+              return {
+                id: p.id,
+                firstName,
+                lastName: lastNameParts.join(' '),
+                role: (p.provider_type || 'bcba') as ProviderRole,
+                roleDisplayName: PROVIDER_ROLE_DISPLAY[p.provider_type as keyof typeof PROVIDER_ROLE_DISPLAY] || 'Provider',
+                credentials: p.credentials || '',
+                bio: p.bio || '',
+                licensedStates: providerState ? [providerState] : [],
+                offersConsult: true,
+                offersDeepReview: true,
+                consultPrice: pricing.consultPrice,
+                deepReviewPrice: pricing.deepReviewPrice,
+                organization,
+                rating: parseFloat(p.rating || '4.5') || 4.5,
+                reviewCount: p.review_count || 0,
+                isActive: true,
+                acceptingNewPatients: p.accepting_new_patients ?? true,
+                createdAt: p.created_at || new Date().toISOString(),
+                updatedAt: p.updated_at || new Date().toISOString(),
+                avatarUrl: p.photo_url,
+              };
+            });
           setAllProviders(providers);
         }
       } catch (err) {
@@ -300,7 +338,7 @@ export function BookVisitScreen({
   // Show loading while fetching providers
   if (isLoadingProviders) {
     return (
-      <div className="min-h-screen bg-[#F5F5F5] flex items-center justify-center">
+      <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(45,212,191,0.12),transparent_30%),linear-gradient(180deg,#f7fffd_0%,#f4f7f8_100%)] flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-8 h-8 text-[#0891b2] animate-spin mx-auto mb-3" />
           <p className="text-gray-600 font-medium">Finding providers in your area...</p>
@@ -311,9 +349,9 @@ export function BookVisitScreen({
   }
 
   return (
-    <div className="min-h-screen bg-[#F5F5F5]">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(45,212,191,0.12),transparent_30%),linear-gradient(180deg,#f7fffd_0%,#f4f7f8_100%)]">
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-white border-b border-gray-100 px-4 py-3">
+      <header className="sticky top-0 z-10 border-b border-teal-100/80 bg-white/88 px-4 py-3 backdrop-blur supports-[backdrop-filter]:bg-white/78">
         <div className="flex items-center gap-3">
           <button
             onClick={onBack}
@@ -323,8 +361,8 @@ export function BookVisitScreen({
             <ArrowLeft className="w-5 h-5 text-gray-700" />
           </button>
           <div>
-            <h1 className="text-lg font-semibold text-gray-900">Book Visit</h1>
-            <p className="text-sm text-gray-500 truncate max-w-[250px]">{intake.visitReason}</p>
+              <h1 className="text-lg font-semibold text-slate-900">Choose a visit</h1>
+              <p className="max-w-[320px] truncate text-sm text-slate-500">{intake.visitReason}</p>
           </div>
         </div>
         {/* Progress Breadcrumbs */}
@@ -337,8 +375,8 @@ export function BookVisitScreen({
           </div>
           <ChevronRight className="w-4 h-4 text-gray-300" aria-hidden="true" />
           <div className="flex items-center gap-1.5">
-            <span className="w-5 h-5 bg-[#0891b2] rounded-full flex items-center justify-center text-white text-xs font-bold">2</span>
-            <span className="text-xs font-medium text-[#0891b2]">Choose provider</span>
+            <span className="w-5 h-5 rounded-full bg-teal-600 flex items-center justify-center text-white text-xs font-bold">2</span>
+            <span className="text-xs font-medium text-teal-700">Choose provider</span>
           </div>
           <ChevronRight className="w-4 h-4 text-gray-300" aria-hidden="true" />
           <div className="flex items-center gap-1.5">
@@ -349,15 +387,15 @@ export function BookVisitScreen({
       </header>
 
       {/* Filters */}
-      <div className="bg-white border-b border-gray-100 px-4 py-3 space-y-3">
+      <div className="border-b border-teal-100/80 bg-white/82 px-4 py-3 space-y-3 backdrop-blur supports-[backdrop-filter]:bg-white/70">
         {/* Visit Format Toggle */}
         <div className="flex gap-2">
           <button
             onClick={() => setVisitFormat('remote')}
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
               visitFormat === 'remote'
-                ? 'bg-[#0891b2] text-white'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                ? 'bg-teal-600 text-white'
+                : 'bg-slate-100 text-slate-600 hover:bg-teal-50'
             }`}
           >
             <Video className="w-4 h-4" />
@@ -365,11 +403,11 @@ export function BookVisitScreen({
           </button>
           <button
             disabled
-            className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium bg-gray-100 text-gray-400 cursor-not-allowed"
+            className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-400 cursor-not-allowed"
           >
             <Building2 className="w-4 h-4" />
             In Office
-            <span className="text-xs bg-gray-200 px-1.5 py-0.5 rounded">Soon</span>
+            <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-semibold tracking-[0.02em] text-slate-500">Soon</span>
           </button>
         </div>
 
@@ -379,8 +417,8 @@ export function BookVisitScreen({
             onClick={() => setVisitType('consult')}
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
               visitType === 'consult'
-                ? 'bg-[#0891b2]/10 text-[#0891b2] border-2 border-[#0891b2]'
-                : 'bg-gray-100 text-gray-600 border-2 border-transparent hover:bg-gray-200'
+                ? 'bg-teal-50 text-teal-700 border-2 border-teal-500'
+                : 'bg-slate-100 text-slate-600 border-2 border-transparent hover:bg-teal-50'
             }`}
           >
             <Clock className="w-4 h-4" />
@@ -390,8 +428,8 @@ export function BookVisitScreen({
             onClick={() => setVisitType('deep-review')}
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
               visitType === 'deep-review'
-                ? 'bg-[#0891b2]/10 text-[#0891b2] border-2 border-[#0891b2]'
-                : 'bg-gray-100 text-gray-600 border-2 border-transparent hover:bg-gray-200'
+                ? 'bg-teal-50 text-teal-700 border-2 border-teal-500'
+                : 'bg-slate-100 text-slate-600 border-2 border-transparent hover:bg-teal-50'
             }`}
           >
             <Clock className="w-4 h-4" />
@@ -412,10 +450,10 @@ export function BookVisitScreen({
                 onClick={() => setSelectedDate(date)}
                 className={`flex-shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
                   isSelected
-                    ? 'bg-[#0891b2] text-white'
+                    ? 'bg-teal-600 text-white'
                     : isToday
-                    ? 'bg-[#0891b2]/10 text-[#0891b2]'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    ? 'bg-teal-50 text-teal-700'
+                    : 'bg-slate-100 text-slate-600 hover:bg-teal-50'
                 }`}
               >
                 {formatDate(date)}
@@ -423,28 +461,31 @@ export function BookVisitScreen({
             );
           })}
         </div>
+        <p className="text-xs leading-5 text-slate-500">
+          Choose a time and Aminy keeps the rest simple: payment, reminders, secure room access, and any superbill follow-up stay attached to the same appointment.
+        </p>
       </div>
 
       {/* Provider List */}
       <div className="px-4 py-6 pb-24 space-y-3 sm:space-y-4">
         {/* Pricing Info Banner */}
-        <div className="bg-gradient-to-r from-green-50 to-teal-50 border border-green-100 rounded-xl p-3 flex items-center gap-3">
+        <div className="flex items-center gap-3 rounded-2xl border border-teal-100 bg-white/92 p-4 shadow-sm">
           <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
             <span className="text-lg">💳</span>
           </div>
           <div className="flex-1">
-            <p className="text-sm font-medium text-gray-800">
-              All sessions are HSA/FSA eligible
+            <p className="text-sm font-medium text-slate-800">
+              Cash-pay stays simple here
             </p>
-            <p className="text-xs text-gray-600">
-              Superbill provided for insurance reimbursement
+            <p className="text-xs text-slate-500">
+              Choose a licensed provider, book a time, and keep reminders, room access, and your superbill in one place.
             </p>
           </div>
         </div>
 
         {/* 72-Hour Availability Status Banner */}
         {telehealthAvailability.hasAvailabilityWithin72Hours && (
-          <div className="bg-green-50 border border-green-200 rounded-xl p-3 flex items-center gap-3">
+          <div className="flex items-center gap-3 rounded-2xl border border-emerald-200 bg-emerald-50/80 p-4">
             <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
               <Video className="w-4 h-4 text-green-600" />
             </div>
@@ -457,6 +498,9 @@ export function BookVisitScreen({
                   Next available: {new Date(telehealthAvailability.earliestSlot.startTime).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })} at {new Date(telehealthAvailability.earliestSlot.startTime).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
                 </p>
               )}
+              <p className="mt-1 text-xs text-green-700">
+                Aminy keeps the whole path calmer: booking, reminders, secure room access, and follow-up.
+              </p>
             </div>
           </div>
         )}
@@ -522,7 +566,7 @@ function ProviderCard({
   const hasSlots = slots.length > 0;
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+    <div className="bg-white rounded-3xl border border-slate-200/80 overflow-hidden shadow-sm">
       {/* Provider Info */}
       <div className="p-4 flex gap-3 sm:gap-4">
         {/* Avatar */}
@@ -535,13 +579,13 @@ function ProviderCard({
                 className="w-full h-full object-cover"
               />
             ) : (
-              <div className="w-full h-full bg-gradient-to-br from-[#0891b2] to-[#466379] flex items-center justify-center text-white text-lg sm:text-xl font-semibold">
+              <div className="w-full h-full bg-gradient-to-br from-teal-500 to-cyan-600 flex items-center justify-center text-white text-lg sm:text-xl font-semibold">
                 {provider.firstName[0]}{provider.lastName[0]}
               </div>
             )}
           </div>
           {provider.hasVideoIntro && (
-            <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-[#0891b2] rounded-full flex items-center justify-center">
+            <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-teal-600 rounded-full flex items-center justify-center">
               <Video className="w-3 h-3 text-white" />
             </div>
           )}
@@ -571,31 +615,34 @@ function ProviderCard({
                 <span className="text-gray-400">({provider.reviewCount})</span>
               </div>
             )}
-            <div className="flex items-center gap-1 text-sm text-gray-500">
-              <Video className="w-4 h-4" />
-              Remote visit over Zoom
+              <div className="flex items-center gap-1 text-sm text-slate-500">
+                <Video className="w-4 h-4" />
+                Secure Aminy video room
+              </div>
             </div>
+            <p className="mt-3 text-sm leading-6 text-slate-600">
+              {provider.bio || 'Calm, practical support with clear next steps and follow-up you can come back to later.'}
+            </p>
           </div>
         </div>
-      </div>
 
       {/* Time Slots */}
       <div className="px-4 pb-4">
         {hasSlots ? (
           <div>
-            <p className="text-sm text-gray-600 mb-2">
+            <p className="mb-2 text-sm text-slate-600">
               {slots.length} appointment{slots.length !== 1 ? 's' : ''} available
             </p>
             <div className="flex flex-wrap gap-2">
               {slots.slice(0, 6).map((slot) => (
-                <button
-                  key={slot.id}
-                  onClick={() => onSelectSlot(slot)}
-                  className="px-4 py-2 bg-[#0891b2] text-white text-sm font-medium rounded-full hover:bg-[#466379] active:scale-95 transition-all"
-                >
-                  {formatTime(slot.startTime)}
-                </button>
-              ))}
+              <button
+                key={slot.id}
+                onClick={() => onSelectSlot(slot)}
+                className="rounded-full border border-teal-200 bg-teal-50 px-4 py-2 text-sm font-medium text-teal-800 transition-all hover:bg-teal-100 hover:shadow-sm active:scale-95"
+              >
+                {formatTime(slot.startTime)}
+              </button>
+            ))}
             </div>
           </div>
         ) : (
@@ -603,7 +650,7 @@ function ProviderCard({
             <p className="text-sm text-gray-500 mb-2">No appointments available today</p>
             <button
               onClick={onJoinWaitlist}
-              className="inline-flex items-center gap-2 px-4 py-2 border-2 border-[#0891b2] text-[#0891b2] text-sm font-medium rounded-full hover:bg-[#0891b2]/5 transition-all"
+              className="inline-flex items-center gap-2 rounded-full border-2 border-teal-500 px-4 py-2 text-sm font-medium text-teal-700 transition-all hover:bg-teal-50"
             >
               <Bell className="w-4 h-4" />
               Join Waitlist
@@ -656,7 +703,7 @@ function NoProvidersCard({
   const showLocalCareOptions = availabilityCheck?.shouldShowLocalCare ?? true;
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 p-6">
+    <div className="bg-white rounded-3xl border border-slate-200/80 p-6 shadow-sm">
       <div className="text-center">
         <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <AlertCircle className="w-8 h-8 text-amber-600" />
@@ -668,7 +715,7 @@ function NoProvidersCard({
           We don't currently have providers licensed in {userState} with availability in the next 72 hours.
         </p>
         {/* Reassurance copy per requirement */}
-        <p className="text-sm text-[#0891b2] font-medium mb-4 sm:mb-6">
+        <p className="text-sm font-medium text-teal-700 mb-4 sm:mb-6">
           We'll support you at home while you wait.
         </p>
 
@@ -676,7 +723,7 @@ function NoProvidersCard({
           {/* Primary CTA: Join Waitlist */}
           <button
             onClick={onJoinWaitlist}
-            className="w-full py-3 bg-[#0891b2] text-white font-medium rounded-xl hover:bg-[#466379] transition-colors flex items-center justify-center gap-2"
+            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-teal-600 py-3 font-medium text-white transition-colors hover:bg-teal-700"
           >
             <Bell className="w-4 h-4" />
             Join Telehealth Waitlist
@@ -689,7 +736,7 @@ function NoProvidersCard({
               {onRequestLocalCare && (
                 <button
                   onClick={onRequestLocalCare}
-                  className="w-full py-3 border-2 border-[#0891b2] text-[#0891b2] font-medium rounded-xl hover:bg-[#0891b2]/5 transition-colors flex items-center justify-center gap-2"
+                className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-teal-200 bg-teal-50 py-3 font-medium text-teal-800 transition-colors hover:bg-teal-100"
                 >
                   <MapPin className="w-4 h-4" />
                   Request Local Care Support
@@ -700,7 +747,7 @@ function NoProvidersCard({
               {onExportReferralPacket && (
                 <button
                   onClick={onExportReferralPacket}
-                  className="w-full py-3 border border-gray-200 text-gray-700 font-medium rounded-xl hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
+                className="flex w-full items-center justify-center gap-2 rounded-2xl border border-slate-200 py-3 font-medium text-slate-700 transition-colors hover:bg-slate-50"
                 >
                   <FileText className="w-4 h-4" />
                   Download Referral Packet (PDF)
@@ -713,7 +760,7 @@ function NoProvidersCard({
           {onStartHomeProgram && (
             <button
               onClick={onStartHomeProgram}
-              className="w-full py-3 bg-gradient-to-r from-[#43AA8B] to-[#0891b2] text-white font-medium rounded-xl hover:opacity-90 transition-all flex items-center justify-center gap-2"
+              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-teal-600 py-3 font-medium text-white transition-colors hover:bg-teal-700"
             >
               <Home className="w-4 h-4" />
               Start Aminy Home Program Now

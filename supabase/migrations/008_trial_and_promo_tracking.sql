@@ -12,11 +12,9 @@ ALTER TABLE profiles
   ADD COLUMN IF NOT EXISTS subscription_status TEXT DEFAULT 'none' CHECK (
     subscription_status IN ('none', 'trialing', 'active', 'canceled', 'past_due')
   );
-
 -- Create index for querying trial end dates (for reminder emails)
 CREATE INDEX IF NOT EXISTS idx_profiles_trial_end ON profiles(trial_end_date)
   WHERE trial_end_date IS NOT NULL;
-
 -- ============================================
 -- PROMO CODE REDEMPTIONS TABLE (usage tracking)
 -- ============================================
@@ -37,18 +35,14 @@ CREATE TABLE IF NOT EXISTS promo_redemptions (
   ip_address TEXT, -- for fraud detection
   user_agent TEXT -- for fraud detection
 );
-
 -- Enable RLS
 ALTER TABLE promo_redemptions ENABLE ROW LEVEL SECURITY;
-
 -- Users can only see their own redemptions
 CREATE POLICY "Users can view own redemptions" ON promo_redemptions
   FOR SELECT USING (auth.uid() = user_id);
-
 -- Service role can insert (for backend redemption tracking)
 CREATE POLICY "Service role can insert redemptions" ON promo_redemptions
   FOR INSERT WITH CHECK (true);
-
 -- ============================================
 -- UPDATE PROMO_CODES TABLE
 -- ============================================
@@ -91,7 +85,6 @@ BEGIN
     ALTER TABLE promo_codes ADD COLUMN first_purchase_only BOOLEAN DEFAULT false;
   END IF;
 END $$;
-
 -- ============================================
 -- INDEXES FOR PROMO TRACKING
 -- ============================================
@@ -99,7 +92,6 @@ CREATE INDEX IF NOT EXISTS idx_promo_redemptions_user_id ON promo_redemptions(us
 CREATE INDEX IF NOT EXISTS idx_promo_redemptions_code ON promo_redemptions(promo_code);
 CREATE INDEX IF NOT EXISTS idx_promo_redemptions_user_code ON promo_redemptions(user_id, promo_code);
 CREATE INDEX IF NOT EXISTS idx_promo_redemptions_redeemed_at ON promo_redemptions(redeemed_at);
-
 -- ============================================
 -- FUNCTION: Check if user can use promo code
 -- ============================================
@@ -178,7 +170,6 @@ BEGIN
   RETURN QUERY SELECT true, 'Valid'::TEXT, v_promo.discount_type, v_promo.discount_value;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
-
 -- ============================================
 -- UPDATE PROMO CODES WITH NEW RESTRICTIONS
 -- ============================================
@@ -188,22 +179,18 @@ UPDATE promo_codes SET
   per_user_limit = 1,
   first_purchase_only = true
 WHERE code = 'WELCOME20';
-
 UPDATE promo_codes SET
   per_user_limit = 1,
   first_purchase_only = true
 WHERE code = 'FIRST10';
-
 UPDATE promo_codes SET
   per_user_limit = 1,
   max_uses = 1000 -- Limited time promotion
 WHERE code = 'AMINY50';
-
 UPDATE promo_codes SET
   per_user_limit = 3, -- Partners can use multiple times
   context_restriction = ARRAY['subscription', 'telehealth']
 WHERE code = 'AACT25';
-
 -- ============================================
 -- FUNCTION: Increment promo code usage
 -- ============================================

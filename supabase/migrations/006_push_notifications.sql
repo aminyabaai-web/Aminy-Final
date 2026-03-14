@@ -20,34 +20,26 @@ CREATE TABLE IF NOT EXISTS push_subscriptions (
   updated_at TIMESTAMPTZ DEFAULT NOW(),
   last_used_at TIMESTAMPTZ
 );
-
 -- Enable RLS
 ALTER TABLE push_subscriptions ENABLE ROW LEVEL SECURITY;
-
 -- Users can manage their own subscriptions
 CREATE POLICY "Users can view own push subscriptions" ON push_subscriptions
   FOR SELECT USING (auth.uid() = user_id);
-
 CREATE POLICY "Users can create push subscriptions" ON push_subscriptions
   FOR INSERT WITH CHECK (auth.uid() = user_id);
-
 CREATE POLICY "Users can delete own push subscriptions" ON push_subscriptions
   FOR DELETE USING (auth.uid() = user_id);
-
 -- Service role for cron job
 CREATE POLICY "Service role can manage push subscriptions" ON push_subscriptions
   FOR ALL USING (true);
-
 -- Index for efficient lookups
 CREATE INDEX IF NOT EXISTS idx_push_subscriptions_user_id ON push_subscriptions(user_id);
 CREATE INDEX IF NOT EXISTS idx_push_subscriptions_endpoint ON push_subscriptions(endpoint);
-
 -- Updated_at trigger
 DROP TRIGGER IF EXISTS update_push_subscriptions_updated_at ON push_subscriptions;
 CREATE TRIGGER update_push_subscriptions_updated_at
   BEFORE UPDATE ON push_subscriptions
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
 -- ============================================
 -- SCHEDULED NOTIFICATIONS TABLE
 -- Queue of notifications to be sent by cron job
@@ -79,32 +71,24 @@ CREATE TABLE IF NOT EXISTS scheduled_notifications (
   max_retries INTEGER DEFAULT 3,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- Enable RLS
 ALTER TABLE scheduled_notifications ENABLE ROW LEVEL SECURITY;
-
 -- Users can view their own scheduled notifications
 CREATE POLICY "Users can view own scheduled notifications" ON scheduled_notifications
   FOR SELECT USING (auth.uid() = user_id);
-
 CREATE POLICY "Users can create scheduled notifications" ON scheduled_notifications
   FOR INSERT WITH CHECK (auth.uid() = user_id);
-
 CREATE POLICY "Users can cancel own notifications" ON scheduled_notifications
   FOR DELETE USING (auth.uid() = user_id);
-
 -- Service role for cron job
 CREATE POLICY "Service role can manage scheduled notifications" ON scheduled_notifications
   FOR ALL USING (true);
-
 -- Indexes for efficient cron job queries
 CREATE INDEX IF NOT EXISTS idx_scheduled_notifications_due
   ON scheduled_notifications(scheduled_for)
   WHERE sent = false;
-
 CREATE INDEX IF NOT EXISTS idx_scheduled_notifications_user_type
   ON scheduled_notifications(user_id, notification_type);
-
 -- ============================================
 -- NOTIFICATION PREFERENCES TABLE
 -- User preferences for when/how to receive notifications
@@ -139,29 +123,22 @@ CREATE TABLE IF NOT EXISTS notification_preferences (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- Enable RLS
 ALTER TABLE notification_preferences ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "Users can view own notification preferences" ON notification_preferences
   FOR SELECT USING (auth.uid() = user_id);
-
 CREATE POLICY "Users can update own notification preferences" ON notification_preferences
   FOR UPDATE USING (auth.uid() = user_id);
-
 CREATE POLICY "Users can insert own notification preferences" ON notification_preferences
   FOR INSERT WITH CHECK (auth.uid() = user_id);
-
 -- Service role access
 CREATE POLICY "Service role can read notification preferences" ON notification_preferences
   FOR SELECT USING (true);
-
 -- Updated_at trigger
 DROP TRIGGER IF EXISTS update_notification_preferences_updated_at ON notification_preferences;
 CREATE TRIGGER update_notification_preferences_updated_at
   BEFORE UPDATE ON notification_preferences
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
 -- ============================================
 -- NOTIFICATION HISTORY TABLE
 -- Tracks sent notifications for analytics
@@ -180,24 +157,18 @@ CREATE TABLE IF NOT EXISTS notification_history (
   error TEXT,
   metadata JSONB DEFAULT '{}'
 );
-
 -- Enable RLS
 ALTER TABLE notification_history ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "Users can view own notification history" ON notification_history
   FOR SELECT USING (auth.uid() = user_id);
-
 -- Service role for insertion
 CREATE POLICY "Service role can manage notification history" ON notification_history
   FOR ALL USING (true);
-
 -- Index for analytics queries
 CREATE INDEX IF NOT EXISTS idx_notification_history_user_date
   ON notification_history(user_id, sent_at DESC);
-
 CREATE INDEX IF NOT EXISTS idx_notification_history_type_status
   ON notification_history(notification_type, delivery_status);
-
 -- ============================================
 -- CRON JOB FUNCTION: Process Due Notifications
 -- Called by pg_cron every minute
@@ -327,7 +298,6 @@ BEGIN
   RETURN notification_count;
 END;
 $$;
-
 -- ============================================
 -- VIEW: Pending Notifications for Edge Function
 -- Edge function polls this to send actual web push
@@ -347,7 +317,6 @@ FROM notification_history nh
 JOIN push_subscriptions ps ON nh.user_id = ps.user_id
 WHERE nh.delivery_status = 'sent'
   AND nh.sent_at > NOW() - INTERVAL '5 minutes';
-
 -- ============================================
 -- HELPER: Schedule Daily Check-ins for User
 -- Call this when user enables notifications
@@ -418,7 +387,6 @@ BEGIN
   RETURN scheduled_count;
 END;
 $$;
-
 -- ============================================
 -- HELPER: Schedule Streak Reminder
 -- ============================================
@@ -459,7 +427,6 @@ BEGIN
   RETURN notification_id;
 END;
 $$;
-
 -- ============================================
 -- ENABLE PG_CRON (requires superuser/Supabase dashboard)
 -- Run this in the Supabase SQL Editor with admin privileges:
@@ -482,7 +449,6 @@ $$;
 -- ============================================
 GRANT USAGE ON SCHEMA public TO authenticated;
 GRANT SELECT ON pending_push_notifications TO authenticated;
-
 COMMENT ON TABLE push_subscriptions IS 'Stores Web Push API subscriptions for each user/device';
 COMMENT ON TABLE scheduled_notifications IS 'Queue of notifications to be processed by cron job';
 COMMENT ON TABLE notification_preferences IS 'User preferences for notification timing and types';

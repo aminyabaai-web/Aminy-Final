@@ -68,6 +68,9 @@ import { getBranding, saveBranding, type ProviderBranding } from '../lib/provide
 import { CPT_CODES, getCPTByCode, suggestCPTCodes, validateNoteForCPT, type CPTCode } from '../lib/cpt-codes';
 import { PatientAISummary } from './provider/PatientAISummary';
 import { CRSyncStatus } from './CRSyncStatus';
+import { summarizePractice } from '../lib/provider-practice';
+import { listClaimReadyCases, summarizeClaimReadyQueue, type ClaimReadyCase } from '../lib/claim-ready-queue';
+import { getStateMarketCoverage, isSupportedProviderState } from '../lib/insurance/state-market-coverage';
 import { ProviderInsightsDashboard } from './provider/ProviderInsightsDashboard';
 import { CareCoordination } from './provider/CareCoordination';
 import { RBTManagement } from './provider/RBTManagement';
@@ -120,6 +123,10 @@ interface ProviderProfile {
   totalPatients: number;
   sessionsThisMonth: number;
   earningsThisMonth: number;
+  organization?: string;
+  licensedStates: string[];
+  acceptedInsurance: string[];
+  acceptsInsurance?: boolean;
   needsSetup?: boolean;
 }
 
@@ -236,6 +243,26 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
   });
   // White-label branding
   const [branding, setBranding] = useState<ProviderBranding | null>(() => getBranding());
+  const practiceSummary = provider ? summarizePractice({
+    providerId: provider.id,
+    providerName: provider.name,
+    businessModel: (branding?.orgName && /aact|rise/i.test(branding.orgName)) || (provider.organization && /aact|rise/i.test(provider.organization))
+      ? 'partner_clinic'
+      : provider.acceptsInsurance
+        ? 'hybrid'
+        : 'independent_network',
+    organization: branding?.orgName || provider.organization || 'Independent Provider',
+    licensedStates: provider.licensedStates,
+    careRails: provider.acceptsInsurance ? ['cash_pay_direct', 'insured_partner_billed'] : ['cash_pay_direct'],
+    acceptedInsurance: provider.acceptedInsurance.length ? provider.acceptedInsurance : ['Cash Pay'],
+    whiteLabelEnabled: Boolean(branding?.orgName),
+    telehealthEnabled: true,
+    practiceName: branding?.orgName || `${provider.name} Practice`,
+  }, sessions.filter((session) => session.status === 'upcoming').length) : null;
+  const primaryPracticeState = provider?.licensedStates.find((state) => isSupportedProviderState(state));
+  const practiceMarketCoverage = primaryPracticeState ? getStateMarketCoverage(primaryPracticeState) : null;
+  const [practiceClaimQueue, setPracticeClaimQueue] = useState<ClaimReadyCase[]>([]);
+  const practiceClaimQueueSummary = summarizeClaimReadyQueue(practiceClaimQueue);
   const [brandingForm, setBrandingForm] = useState({ orgName: '', logoUrl: '', primaryColor: '', tagline: '' });
 
   // Superbill generation state
@@ -263,9 +290,10 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
 
       // If no provider found in DB, use fallback mock data for demo
       if (providerData) {
+        const providerName = providerData.name || [providerData.first_name, providerData.last_name].filter(Boolean).join(' ') || 'Provider';
         setProvider({
           id: providerData.id,
-          name: providerData.name,
+          name: providerName,
           credentials: providerData.credentials,
           type: providerData.provider_type as ProviderType,
           photo: providerData.photo_url,
@@ -275,6 +303,10 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
           totalPatients: 0, // Will be calculated from patients
           sessionsThisMonth: 0,
           earningsThisMonth: 0,
+          organization: providerData.organization || 'Independent Provider',
+          licensedStates: providerData.states_licensed || [],
+          acceptedInsurance: providerData.insurance_accepted || ['Cash Pay'],
+          acceptsInsurance: providerData.accepts_insurance || false,
         });
       } else {
         // No provider profile found - show setup prompt
@@ -289,6 +321,10 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
           totalPatients: 0,
           sessionsThisMonth: 0,
           earningsThisMonth: 0,
+          organization: 'Independent Provider',
+          licensedStates: [],
+          acceptedInsurance: ['Cash Pay'],
+          acceptsInsurance: false,
           needsSetup: true,
         });
       }
@@ -472,6 +508,27 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
   useEffect(() => {
     loadProviderData();
   }, [loadProviderData]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadPracticeClaimQueue() {
+      if (!primaryPracticeState) {
+        setPracticeClaimQueue([]);
+        return;
+      }
+
+      const queue = await listClaimReadyCases(primaryPracticeState);
+      if (!cancelled) {
+        setPracticeClaimQueue(queue);
+      }
+    }
+
+    loadPracticeClaimQueue();
+    return () => {
+      cancelled = true;
+    };
+  }, [primaryPracticeState]);
 
   // Save session notes
   const handleSaveSessionNotes = async (sessionId: string) => {
@@ -721,7 +778,7 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
                         {provider.credentials}
                       </Badge>
                     </div>
-                    <span className="text-[10px] text-neutral-400 dark:text-slate-500 -mt-0.5">powered by Aminy</span>
+                    <span className="text-xs text-neutral-400 dark:text-slate-500 -mt-0.5">powered by Aminy</span>
                   </div>
                 </>
               ) : (
@@ -739,14 +796,21 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
 
             <div className="flex items-center gap-3 sm:gap-4">
               <Button
-                variant="ghost"
-                size="sm"
+                variant="outline"
+                size="icon"
                 onClick={() => loadProviderData()}
                 disabled={isRefreshing}
+                aria-label="Refresh provider dashboard"
+                className="border-slate-200 bg-white text-neutral-600 hover:border-teal-200 hover:bg-teal-50 hover:text-teal-700"
               >
                 <RefreshCw className={`w-5 h-5 text-neutral-600 dark:text-slate-400 ${isRefreshing ? 'animate-spin' : ''}`} />
               </Button>
-              <Button variant="ghost" size="sm" className="relative">
+              <Button
+                variant="outline"
+                size="icon"
+                className="relative border-slate-200 bg-white text-neutral-600 hover:border-teal-200 hover:bg-teal-50 hover:text-teal-700"
+                aria-label="Open notifications"
+              >
                 <Bell className="w-5 h-5 text-neutral-600 dark:text-slate-400" />
                 <span className="absolute -top-1 -right-1 w-4 h-4 bg-rose-500 text-white text-xs rounded-full flex items-center justify-center">
                   3
@@ -771,9 +835,9 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
       </header>
 
       {/* Navigation */}
-      <nav className="bg-white dark:bg-slate-900 border-b border-neutral-100 dark:border-slate-700">
+      <nav className="border-b border-neutral-100 bg-white/90 backdrop-blur dark:border-slate-700 dark:bg-slate-900/90">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex gap-1 overflow-x-auto">
+          <div className="flex gap-2 overflow-x-auto py-3">
             {[
               { id: 'dashboard', label: 'Dashboard', icon: Home },
               { id: 'patients', label: 'Patients', icon: Users },
@@ -789,10 +853,10 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as typeof activeTab)}
-                className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
+                className={`flex items-center gap-2 whitespace-nowrap rounded-2xl border px-4 py-2.5 text-sm font-medium transition-colors ${
                   activeTab === tab.id
-                    ? 'border-teal-600 text-teal-600'
-                    : 'border-transparent text-neutral-500 hover:text-neutral-700'
+                    ? 'border-teal-500 bg-white text-teal-700 shadow-sm'
+                    : 'border-slate-200 bg-transparent text-neutral-600 hover:border-teal-200 hover:bg-white hover:text-neutral-800'
                 }`}
               >
                 <tab.icon className="w-4 h-4" />
@@ -810,14 +874,19 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
             {/* Welcome & Next Session */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 sm:gap-6">
               {/* Welcome Card */}
-              <Card className="lg:col-span-2 p-6 bg-gradient-to-br from-teal-50 to-cyan-50 border-teal-200/60">
+              <Card className="lg:col-span-2 overflow-hidden border-teal-200/60 bg-gradient-to-br from-teal-50 via-white to-cyan-50 p-6 shadow-sm">
                 <div className="flex items-start justify-between">
                   <div>
+                    <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-teal-600">
+                      Independent practice cockpit
+                    </p>
                     <h1 className="text-xl sm:text-2xl font-bold text-neutral-900">
                       Welcome back, {provider.name.split(' ')[0]}
                     </h1>
+                    <h2 className="sr-only">Practice overview</h2>
+                    <h3 className="sr-only">Bookings, claims, and family follow-up</h3>
                     <p className="text-neutral-600 mt-1">
-                      You have {upcomingSessions.length} sessions scheduled this week
+                      Keep bookings, claim-ready work, and family follow-up moving from one calmer workflow.
                     </p>
                   </div>
                   <div className="flex items-center gap-1 bg-white/80 rounded-lg px-3 py-1.5">
@@ -828,7 +897,7 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
                 </div>
 
                 {nextSession && (
-                  <div className="mt-4 sm:mt-6 p-4 bg-white rounded-xl border border-teal-200/60">
+                  <div className="mt-4 sm:mt-6 rounded-2xl border border-teal-200/60 bg-white/95 p-4 shadow-sm">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3 sm:gap-4">
                         <div className="w-12 h-12 rounded-full bg-gradient-to-br from-violet-100 to-purple-100 flex items-center justify-center">
@@ -979,7 +1048,12 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
                         </div>
                       </div>
                       {session.hasInsightAccess ? (
-                        <Button variant="ghost" size="sm" className="text-teal-600">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="text-teal-600"
+                          aria-label={`View insight profile for ${session.patientName}`}
+                        >
                           <Eye className="w-4 h-4" />
                         </Button>
                       ) : (
@@ -1008,7 +1082,7 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
                     </p>
                   </div>
                 </div>
-                <Button className="bg-violet-600 hover:bg-violet-700">
+                <Button className="bg-teal-600 hover:bg-teal-700">
                   <Sparkles className="w-4 h-4 mr-2" />
                   View Patients
                 </Button>
@@ -1620,7 +1694,12 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <h3 className="font-semibold text-neutral-900 dark:text-white">New Clinical Note</h3>
-                    <button onClick={() => { setShowNoteEditor(false); setEditingNote(null); }} className="text-neutral-400 hover:text-neutral-600">
+                    <button
+                      type="button"
+                      onClick={() => { setShowNoteEditor(false); setEditingNote(null); }}
+                      aria-label="Close note editor"
+                      className="min-h-11 min-w-11 rounded-lg p-2 text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-neutral-600"
+                    >
                       <X className="w-5 h-5" />
                     </button>
                   </div>
@@ -1817,19 +1896,32 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
                     <div className="flex gap-1">
                       <Button
                         variant="ghost"
-                        size="sm"
+                        size="icon"
                         onClick={() => handleGenerateSuperbill(note.id)}
+                        aria-label={`Generate superbill for note from ${note.patientName}`}
                         title="Generate Superbill"
                         className="text-teal-600 hover:text-teal-700 hover:bg-teal-50"
                       >
                         <Printer className="w-4 h-4" />
                       </Button>
                       {!note.locked && (
-                        <Button variant="ghost" size="sm" onClick={() => handleSignLockNote(note.id)} title="Sign & Lock">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => handleSignLockNote(note.id)}
+                          aria-label={`Sign and lock note for ${note.patientName}`}
+                          title="Sign & Lock"
+                        >
                           <CheckCircle className="w-4 h-4 text-green-600" />
                         </Button>
                       )}
-                      <Button variant="ghost" size="sm" onClick={() => handleExportNotePDF(note.id)} title="Export">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleExportNotePDF(note.id)}
+                        aria-label={`Export note for ${note.patientName}`}
+                        title="Export"
+                      >
                         <Download className="w-4 h-4 text-neutral-500" />
                       </Button>
                     </div>
@@ -1873,9 +1965,92 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
             <div>
               <h2 className="text-xl font-semibold text-neutral-900 dark:text-white">My Practice</h2>
               <p className="text-neutral-500 dark:text-slate-400 mt-1">
-                Manage your RBT team, track supervision hours, and handle billing
+                Build an independent or partner-backed telehealth practice through Aminy, then layer on RBT supervision and billing workflows.
               </p>
             </div>
+            {practiceSummary && (
+              <Card className="p-5 rounded-2xl border border-neutral-200 dark:border-slate-700 bg-white dark:bg-slate-900/60">
+                <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.18em] text-neutral-500 dark:text-slate-400">Practice Launch Score</p>
+                    <h3 className="text-lg font-semibold text-neutral-900 dark:text-white mt-1">{practiceSummary.headline}</h3>
+                    <p className="text-sm text-neutral-600 dark:text-slate-300 mt-2 max-w-2xl">{practiceSummary.supportingCopy}</p>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {(provider?.licensedStates || []).slice(0, 4).map((state) => (
+                        <Badge key={state} variant="outline">{state}</Badge>
+                      ))}
+                      {(provider?.acceptedInsurance || []).slice(0, 3).map((plan) => (
+                        <Badge key={plan} className="bg-sky-100 text-sky-700 dark:bg-sky-900/20 dark:text-sky-300">{plan}</Badge>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3 min-w-[220px]">
+                    <div className="rounded-xl bg-teal-50 dark:bg-teal-900/20 p-3">
+                      <p className="text-xs text-teal-700 dark:text-teal-300">Readiness</p>
+                      <p className="text-2xl font-semibold text-teal-700 dark:text-teal-300">{practiceSummary.readinessScore}%</p>
+                    </div>
+                    <div className="rounded-xl bg-violet-50 dark:bg-violet-900/20 p-3">
+                      <p className="text-xs text-violet-700 dark:text-violet-300">Monthly range</p>
+                      <p className="text-sm font-semibold text-violet-700 dark:text-violet-300">${practiceSummary.monthlyRevenueRange.low.toLocaleString()} - ${practiceSummary.monthlyRevenueRange.high.toLocaleString()}</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-5 grid gap-3 md:grid-cols-2">
+                  {practiceSummary.checklist.map((item) => (
+                    <div key={item.id} className={`rounded-xl border p-3 ${item.completed ? 'border-emerald-200 bg-emerald-50/70 dark:border-emerald-800 dark:bg-emerald-950/30' : 'border-amber-200 bg-amber-50/70 dark:border-amber-800 dark:bg-amber-950/30'}`}>
+                      <div className="flex items-start gap-3">
+                        <div className={`mt-0.5 rounded-full p-1 ${item.completed ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300' : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300'}`}>
+                          {item.completed ? <CheckCircle className="w-4 h-4" /> : <AlertCircle className="w-4 h-4" />}
+                        </div>
+                        <div>
+                          <p className="font-medium text-neutral-900 dark:text-white">{item.label}</p>
+                          <p className="text-sm text-neutral-600 dark:text-slate-300 mt-1">{item.description}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-5 grid gap-3 lg:grid-cols-2">
+                  <div className="rounded-2xl border border-neutral-200 dark:border-slate-700 p-4">
+                    <p className="text-xs uppercase tracking-[0.18em] text-neutral-500 dark:text-slate-400">Supported Market</p>
+                    <h4 className="mt-2 text-base font-semibold text-neutral-900 dark:text-white">
+                      {practiceMarketCoverage ? practiceMarketCoverage.label : 'Expand to a supported state'}
+                    </h4>
+                    <p className="mt-2 text-sm text-neutral-600 dark:text-slate-300">
+                      {practiceMarketCoverage ? practiceMarketCoverage.notes[0] || `Coverage Coach is active across the ${practiceMarketCoverage.label} payer matrix.` : 'Complete licensure in AZ, MT, or TX to unlock Aminy cash-pay and partner-billed coverage routing.'}
+                    </p>
+                    {practiceMarketCoverage ? (
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        {practiceMarketCoverage.payerProducts.slice(0, 4).map((payer) => (
+                          <Badge key={payer.id} variant="outline">{payer.displayName}</Badge>
+                        ))}
+                      </div>
+                    ) : null}
+                  </div>
+                  <div className="rounded-2xl border border-neutral-200 dark:border-slate-700 p-4">
+                    <p className="text-xs uppercase tracking-[0.18em] text-neutral-500 dark:text-slate-400">Claim-Ready Queue</p>
+                    <h4 className="mt-2 text-base font-semibold text-neutral-900 dark:text-white">{practiceClaimQueueSummary.readyForBiller} ready · {practiceClaimQueueSummary.blocked} blocked</h4>
+                    <p className="mt-2 text-sm text-neutral-600 dark:text-slate-300">
+                      Aminy assembles claim-ready visit packets for supported-state payer rails. Biller review stays explicit before any submission lane runs.
+                    </p>
+                    <div className="mt-3 grid grid-cols-3 gap-2 text-sm">
+                      <div className="rounded-xl bg-emerald-50 dark:bg-emerald-900/20 p-2">
+                        <p className="text-xs text-emerald-700 dark:text-emerald-300">Ready</p>
+                        <p className="font-semibold text-emerald-700 dark:text-emerald-300">{practiceClaimQueueSummary.readyForBiller}</p>
+                      </div>
+                      <div className="rounded-xl bg-amber-50 dark:bg-amber-900/20 p-2">
+                        <p className="text-xs text-amber-700 dark:text-amber-300">Blocked</p>
+                        <p className="font-semibold text-amber-700 dark:text-amber-300">{practiceClaimQueueSummary.blocked}</p>
+                      </div>
+                      <div className="rounded-xl bg-blue-50 dark:bg-blue-900/20 p-2">
+                        <p className="text-xs text-blue-700 dark:text-blue-300">Submitted</p>
+                        <p className="font-semibold text-blue-700 dark:text-blue-300">{practiceClaimQueueSummary.submitted}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            )}
             <RBTManagement providerId={providerId} />
           </div>
         )}
@@ -1940,8 +2115,10 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
             <CheckCircle className="w-5 h-5 flex-shrink-0" />
             <span className="text-sm font-medium">{superbillToast}</span>
             <button
+              type="button"
               onClick={() => setSuperbillToast(null)}
-              className="ml-2 text-white/70 hover:text-white"
+              aria-label="Dismiss superbill notification"
+              className="ml-2 min-h-11 min-w-11 rounded-lg p-2 text-white/70 transition-colors hover:bg-white/10 hover:text-white"
             >
               <X className="w-4 h-4" />
             </button>
@@ -1970,7 +2147,7 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
                     </p>
                   </div>
                 </div>
-                <Button variant="ghost" size="sm" onClick={() => setSelectedPatient(null)}>
+                <Button variant="ghost" size="icon" onClick={() => setSelectedPatient(null)} aria-label="Close patient details">
                   &times;
                 </Button>
               </div>

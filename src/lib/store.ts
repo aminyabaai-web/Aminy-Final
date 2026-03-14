@@ -6,6 +6,11 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { secureZustandStorage } from '../hooks/useSecureStorage';
+import {
+  saveStreak,
+  syncStreakFromCloud,
+} from './streak-service';
+import { requestNotificationPermission, subscribeToPush } from './push-notifications';
 
 // ============================================================================
 // TYPES
@@ -364,16 +369,14 @@ export const useAminyStore = create<AminyStore>()(
         // Sync to Supabase in background
         const user = get().user;
         if (user?.id) {
-          import('./streak-service').then(({ saveStreak }) => {
-            const streaks = get().streaks;
-            saveStreak({
-              userId: user.id,
-              currentStreak: streaks.current,
-              longestStreak: streaks.longest,
-              lastActivityDate: streaks.lastActivityDate || null,
-              isPaused: streaks.isPaused,
-              pauseReason: streaks.pauseReason,
-            });
+          const streaks = get().streaks;
+          saveStreak({
+            userId: user.id,
+            currentStreak: streaks.current,
+            longestStreak: streaks.longest,
+            lastActivityDate: streaks.lastActivityDate || null,
+            isPaused: streaks.isPaused,
+            pauseReason: streaks.pauseReason,
           });
         }
       },
@@ -393,15 +396,13 @@ export const useAminyStore = create<AminyStore>()(
 
         // Sync to Supabase in background
         if (user?.id) {
-          import('./streak-service').then(({ saveStreak }) => {
-            saveStreak({
-              userId: user.id,
-              currentStreak: newStreaks.current,
-              longestStreak: newStreaks.longest,
-              lastActivityDate: newStreaks.lastActivityDate || null,
-              isPaused: newStreaks.isPaused,
-              pauseReason: newStreaks.pauseReason,
-            });
+          saveStreak({
+            userId: user.id,
+            currentStreak: newStreaks.current,
+            longestStreak: newStreaks.longest,
+            lastActivityDate: newStreaks.lastActivityDate || null,
+            isPaused: newStreaks.isPaused,
+            pauseReason: newStreaks.pauseReason,
           });
         }
       },
@@ -538,7 +539,6 @@ export async function handleOnboardingComplete(
 ): Promise<void> {
   // Import dynamically to avoid circular dependencies
   const { triggerOnboardingSequence, scheduleRetentionNotifications } = await import('./retention-engine');
-  const { requestNotificationPermission, subscribeToPush } = await import('./push-notifications');
 
   // Mark onboarding as complete in store
   const store = useAminyStore.getState();
@@ -578,7 +578,6 @@ export async function handleOnboardingComplete(
  */
 export async function syncStreaksFromCloud(userId: string): Promise<void> {
   try {
-    const { syncStreakFromCloud } = await import('./streak-service');
     const store = useAminyStore.getState();
 
     const cloudStreak = await syncStreakFromCloud(userId, {

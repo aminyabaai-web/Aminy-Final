@@ -4,76 +4,49 @@
 -- ============================================================================
 
 -- Create provider_profiles table if it doesn't exist
--- [MIGRATION FIX] Table provider_profiles created in earlier migration.
--- Adding columns that would have been lost due to IF NOT EXISTS:
--- Original CREATE TABLE commented out below.
-ALTER TABLE provider_profiles ADD COLUMN IF NOT EXISTS first_name TEXT;
-ALTER TABLE provider_profiles ADD COLUMN IF NOT EXISTS last_name TEXT;
-ALTER TABLE provider_profiles ADD COLUMN IF NOT EXISTS credentials TEXT;
-ALTER TABLE provider_profiles ADD COLUMN IF NOT EXISTS rating DECIMAL(2,1) DEFAULT 5.0;
-ALTER TABLE provider_profiles ADD COLUMN IF NOT EXISTS years_experience INTEGER DEFAULT 1;
-ALTER TABLE provider_profiles ADD COLUMN IF NOT EXISTS conditions TEXT[] DEFAULT '{}';
-ALTER TABLE provider_profiles ADD COLUMN IF NOT EXISTS bio TEXT;
-ALTER TABLE provider_profiles ADD COLUMN IF NOT EXISTS approach TEXT;
-ALTER TABLE provider_profiles ADD COLUMN IF NOT EXISTS hourly_rate INTEGER;
-ALTER TABLE provider_profiles ADD COLUMN IF NOT EXISTS session_rate INTEGER;
-ALTER TABLE provider_profiles ADD COLUMN IF NOT EXISTS states_licensed TEXT[] DEFAULT '{}';
-ALTER TABLE provider_profiles ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT true;
-ALTER TABLE provider_profiles ADD COLUMN IF NOT EXISTS is_accepting_patients BOOLEAN DEFAULT true;
-ALTER TABLE provider_profiles ADD COLUMN IF NOT EXISTS verification_status TEXT DEFAULT 'verified' CHECK (verification_status IN ('verified', 'pending', 'manual_review', 'expired', 'failed'));
-ALTER TABLE provider_profiles ADD COLUMN IF NOT EXISTS next_available TIMESTAMPTZ;
-
--- Original CREATE TABLE (commented out, columns added above):
--- CREATE TABLE IF NOT EXISTS provider_profiles (
---   id TEXT PRIMARY KEY,
---   user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
---   first_name TEXT NOT NULL,
---   last_name TEXT NOT NULL,
---   credentials TEXT NOT NULL,
---   provider_type TEXT NOT NULL,
---   photo_url TEXT,
---   rating DECIMAL(2,1) DEFAULT 5.0,
---   review_count INTEGER DEFAULT 0,
---   years_experience INTEGER DEFAULT 1,
---   specialties TEXT[] DEFAULT '{}',
---   conditions TEXT[] DEFAULT '{}',
---   languages TEXT[] DEFAULT '{English}',
---   bio TEXT,
---   approach TEXT,
---   hourly_rate INTEGER,
---   session_rate INTEGER,
---   states_licensed TEXT[] DEFAULT '{}',
---   insurance_accepted TEXT[] DEFAULT '{}',
---   is_active BOOLEAN DEFAULT true,
---   is_accepting_patients BOOLEAN DEFAULT true,
---   verification_status TEXT DEFAULT 'verified' CHECK (verification_status IN ('verified', 'pending', 'manual_review', 'expired', 'failed')),
---   next_available TIMESTAMPTZ,
---   created_at TIMESTAMPTZ DEFAULT NOW(),
---   updated_at TIMESTAMPTZ DEFAULT NOW()
--- );
-
-
+CREATE TABLE IF NOT EXISTS provider_profiles (
+  id TEXT PRIMARY KEY,
+  user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
+  first_name TEXT NOT NULL,
+  last_name TEXT NOT NULL,
+  credentials TEXT NOT NULL,
+  provider_type TEXT NOT NULL,
+  photo_url TEXT,
+  rating DECIMAL(2,1) DEFAULT 5.0,
+  review_count INTEGER DEFAULT 0,
+  years_experience INTEGER DEFAULT 1,
+  specialties TEXT[] DEFAULT '{}',
+  conditions TEXT[] DEFAULT '{}',
+  languages TEXT[] DEFAULT '{English}',
+  bio TEXT,
+  approach TEXT,
+  hourly_rate INTEGER,
+  session_rate INTEGER,
+  states_licensed TEXT[] DEFAULT '{}',
+  insurance_accepted TEXT[] DEFAULT '{}',
+  is_active BOOLEAN DEFAULT true,
+  is_accepting_patients BOOLEAN DEFAULT true,
+  verification_status TEXT DEFAULT 'verified' CHECK (verification_status IN ('verified', 'pending', 'manual_review', 'expired', 'failed')),
+  next_available TIMESTAMPTZ,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
 CREATE INDEX IF NOT EXISTS idx_provider_profiles_type ON provider_profiles(provider_type);
 CREATE INDEX IF NOT EXISTS idx_provider_profiles_active ON provider_profiles(is_active, is_accepting_patients);
 CREATE INDEX IF NOT EXISTS idx_provider_profiles_rating ON provider_profiles(rating DESC);
-
 ALTER TABLE provider_profiles ENABLE ROW LEVEL SECURITY;
-
 -- Everyone can view active provider profiles
 DROP POLICY IF EXISTS "Anyone can view active providers" ON provider_profiles;
 CREATE POLICY "Anyone can view active providers"
   ON provider_profiles FOR SELECT
   USING (is_active = true);
-
 -- Providers can update their own profile
 DROP POLICY IF EXISTS "Providers can update own profile" ON provider_profiles;
 CREATE POLICY "Providers can update own profile"
   ON provider_profiles FOR UPDATE
   USING (auth.uid() = user_id);
-
 -- Insert seed providers (delete existing first to avoid conflicts)
 DELETE FROM provider_profiles WHERE id LIKE 'seed-%';
-
 -- BEHAVIORAL TEAM
 INSERT INTO provider_profiles (
   id, first_name, last_name, credentials, provider_type, photo_url, rating, review_count,
@@ -244,36 +217,22 @@ INSERT INTO provider_profiles (
   true, true, 'verified',
   NOW() + INTERVAL '14 days'
 );
-
 -- Create provider_availability table if needed
--- [MIGRATION FIX] Table provider_availability created in earlier migration.
--- Adding columns that would have been lost due to IF NOT EXISTS:
--- Original CREATE TABLE commented out below.
-ALTER TABLE provider_availability ADD COLUMN IF NOT EXISTS start_time TIME;
-ALTER TABLE provider_availability ADD COLUMN IF NOT EXISTS timezone TEXT DEFAULT 'America/Phoenix';
-ALTER TABLE provider_availability ADD COLUMN IF NOT EXISTS is_recurring BOOLEAN DEFAULT true;
-ALTER TABLE provider_availability ADD COLUMN IF NOT EXISTS is_available BOOLEAN DEFAULT true;
-
--- Original CREATE TABLE (commented out, columns added above):
--- CREATE TABLE IF NOT EXISTS provider_availability (
---   id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
---   provider_id TEXT NOT NULL REFERENCES provider_profiles(id) ON DELETE CASCADE,
---   day_of_week INTEGER NOT NULL CHECK (day_of_week >= 0 AND day_of_week <= 6),
---   start_time TIME NOT NULL,
---   end_time TIME NOT NULL,
---   timezone TEXT DEFAULT 'America/Phoenix',
---   is_recurring BOOLEAN DEFAULT true,
---   is_available BOOLEAN DEFAULT true,
---   created_at TIMESTAMPTZ DEFAULT NOW()
--- );
-
-
+CREATE TABLE IF NOT EXISTS provider_availability (
+  id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+  provider_id TEXT NOT NULL REFERENCES provider_profiles(id) ON DELETE CASCADE,
+  day_of_week INTEGER NOT NULL CHECK (day_of_week >= 0 AND day_of_week <= 6),
+  start_time TIME NOT NULL,
+  end_time TIME NOT NULL,
+  timezone TEXT DEFAULT 'America/Phoenix',
+  is_recurring BOOLEAN DEFAULT true,
+  is_available BOOLEAN DEFAULT true,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
 -- Add timezone column if it doesn't exist
 ALTER TABLE provider_availability ADD COLUMN IF NOT EXISTS timezone TEXT DEFAULT 'America/Phoenix';
 ALTER TABLE provider_availability ADD COLUMN IF NOT EXISTS is_recurring BOOLEAN DEFAULT true;
-
 CREATE INDEX IF NOT EXISTS idx_provider_availability_provider ON provider_availability(provider_id);
-
 -- Seed availability for each provider (Mon-Fri, 9am-5pm)
 INSERT INTO provider_availability (id, provider_id, day_of_week, start_time, end_time, is_available)
 SELECT
@@ -287,39 +246,22 @@ FROM provider_profiles p
 CROSS JOIN generate_series(1, 5) AS dow
 WHERE p.id LIKE 'seed-%'
 ON CONFLICT DO NOTHING;
-
 -- Create provider_reviews table for future use
--- [MIGRATION FIX] Table provider_reviews created in earlier migration.
--- Adding columns that would have been lost due to IF NOT EXISTS:
--- Original CREATE TABLE commented out below.
-ALTER TABLE provider_reviews ADD COLUMN IF NOT EXISTS user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE;
-ALTER TABLE provider_reviews ADD COLUMN IF NOT EXISTS rating INTEGER CHECK (rating >= 1 AND rating <= 5);
-ALTER TABLE provider_reviews ADD COLUMN IF NOT EXISTS review_text TEXT;
-ALTER TABLE provider_reviews ADD COLUMN IF NOT EXISTS is_verified BOOLEAN DEFAULT false;
-ALTER TABLE provider_reviews ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ DEFAULT NOW();
-
--- Original CREATE TABLE (commented out, columns added above):
--- CREATE TABLE IF NOT EXISTS provider_reviews (
---   id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
---   provider_id TEXT NOT NULL REFERENCES provider_profiles(id) ON DELETE CASCADE,
---   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
---   rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
---   review_text TEXT,
---   is_verified BOOLEAN DEFAULT false,
---   created_at TIMESTAMPTZ DEFAULT NOW()
--- );
-
-
+CREATE TABLE IF NOT EXISTS provider_reviews (
+  id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+  provider_id TEXT NOT NULL REFERENCES provider_profiles(id) ON DELETE CASCADE,
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
+  review_text TEXT,
+  is_verified BOOLEAN DEFAULT false,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
 CREATE INDEX IF NOT EXISTS idx_provider_reviews_provider ON provider_reviews(provider_id);
-
 ALTER TABLE provider_reviews ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "Anyone can view verified reviews" ON provider_reviews
   FOR SELECT USING (is_verified = true);
-
 CREATE POLICY "Users can create reviews" ON provider_reviews
   FOR INSERT WITH CHECK (auth.uid() = user_id);
-
 -- Grant permissions
 GRANT SELECT ON provider_profiles TO anon, authenticated;
 GRANT SELECT ON provider_availability TO anon, authenticated;

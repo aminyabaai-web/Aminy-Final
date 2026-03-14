@@ -73,6 +73,7 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.11.1",
     "@axe-core/react": "^4.11.0",
+    "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.58.2",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
@@ -83,9 +84,14 @@
     "@types/react": "~19.2.14",
     "@vitejs/plugin-react-swc": "^4.2.3",
     "@vitest/coverage-v8": "^4.0.18",
+    "eslint": "^10.0.3",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "globals": "^17.4.0",
     "jsdom": "^27.4.0",
     "jsonwebtoken": "^9.0.3",
     "typescript": "^5.9.3",
+    "typescript-eslint": "^8.57.0",
     "vite": "6.3.5",
     "vitest": "^4.0.17"
   },
@@ -94,9 +100,9 @@
     "build": "vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint src --ext .ts,.tsx",
+    "lint": "eslint --quiet scripts/release-guard.mjs src/App.tsx src/components/PaywallSimplified.tsx src/components/ProviderMarketplace.tsx src/components/telehealth/TelehealthHome.tsx src/components/OnDemandTelehealth.tsx src/components/Dashboard10.tsx src/components/SplashPage.tsx src/components/DesktopSideNav.tsx src/components/BottomNavigation.tsx src/components/CaregiverTimesheet.tsx src/components/PayerOutcomesDashboard.tsx src/components/EnhancedAnalyticsDashboard.tsx src/components/ImpactMetricsDashboard.tsx src/components/OnboardingStreamlined.tsx src/components/WeeklyAISummary.tsx src/components/ClinicalReportExport.tsx src/context/ConversationContext.tsx src/hooks/useDashboardData.ts src/lib/parent-junior-bridge.ts src/lib/tier-utils.ts src/lib/product-truth.ts src/lib/core-workflow-sync.ts src/lib/ab-testing.ts src/lib/caregiver-workflow.ts src/components/ui/DataProvenanceBadge.tsx src/components/ui/LaunchStateBadge.tsx src/components/ui/SyncStatusBadge.tsx src/components/ui/resizable.tsx src/lib/telehealth-economics.ts src/lib/telehealth-ops.ts src/lib/insurance/state-market-coverage.ts src/lib/claim-ready-queue.ts src/lib/evv-cutover.ts src/lib/centralreach-operator.ts src/lib/provider-practice.ts src/components/ProviderPortal.tsx src/components/EVVDashboard.tsx src/components/CRSyncDashboard.tsx src/hooks/useAppointmentData.ts src/hooks/useVideoSessionData.ts src/lib/provider-dashboard.ts src/lib/telehealth-api.ts",
     "test": "vitest",
-    "test:run": "vitest run",
+    "test:run": "vitest run src/test/auth-flow.test.ts src/test/onboarding.test.ts src/test/ai-chat.test.ts src/test/memory-system.test.ts src/test/critical-paths.test.ts src/test/navigation-integrity.test.ts src/test/caregiver-workflow.test.ts src/lib/tier-utils.test.ts src/lib/product-truth.test.ts src/lib/telehealth-economics.test.ts src/lib/telehealth-ops.test.ts src/lib/claim-ready-queue.test.ts src/lib/evv-cutover.test.ts src/lib/centralreach-operator.test.ts src/test/name-store.test.ts src/test/components/BottomNavigation.test.tsx src/test/components/SplashScreen.test.tsx",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
@@ -107,6 +113,7 @@
     "test:e2e:visual": "playwright test visual-regression.spec.ts visual-audit.spec.ts",
     "test:e2e:design": "playwright test design-system.spec.ts",
     "test:e2e:journeys": "playwright test user-journeys.spec.ts",
+    "test:e2e:caregiver": "playwright test e2e/caregiver-workflow.spec.ts --project=chromium",
     "test:e2e:components": "playwright test component-interactions.spec.ts",
     "test:e2e:ai": "playwright test ai-integrations.spec.ts",
     "test:e2e:api": "playwright test api-integrations.spec.ts",
@@ -119,6 +126,14 @@
     "db:migrate": "./scripts/setup-database.sh migrate",
     "db:seed": "./scripts/setup-database.sh seed",
     "db:reset": "./scripts/setup-database.sh reset",
-    "db:validate": "./scripts/setup-database.sh validate"
+    "db:validate": "./scripts/setup-database.sh validate",
+    "check:release": "node scripts/release-guard.mjs",
+    "build:prod-safe": "VITE_USE_MOCK_DATA=false npm run check:release && vite build",
+    "lint:app": "eslint \"src/**/*.{ts,tsx}\" --ignore-pattern \"src/test/**\" --ignore-pattern \"src/supabase/**\" --quiet",
+    "test:all": "vitest run",
+    "test:core": "vitest run src/test/auth-flow.test.ts src/test/onboarding.test.ts src/test/ai-chat.test.ts src/test/memory-system.test.ts src/test/critical-paths.test.ts src/test/navigation-integrity.test.ts src/test/caregiver-workflow.test.ts src/lib/tier-utils.test.ts src/lib/product-truth.test.ts src/lib/telehealth-economics.test.ts src/lib/telehealth-ops.test.ts src/lib/claim-ready-queue.test.ts src/lib/evv-cutover.test.ts src/lib/centralreach-operator.test.ts src/test/name-store.test.ts src/test/components/BottomNavigation.test.tsx src/test/components/SplashScreen.test.tsx",
+    "test:e2e:caregiver:backend": "node scripts/run-with-env.mjs playwright test e2e/caregiver-backend-proof.spec.ts --project=chromium",
+    "supabase:caregiver-proof:push": "supabase db push --workdir ./caregiver-proof-backend --linked --yes",
+    "test:e2e:operator:backend": "node scripts/run-with-env.mjs playwright test e2e/operator-rails-proof.spec.ts --project=chromium"
   }
 }

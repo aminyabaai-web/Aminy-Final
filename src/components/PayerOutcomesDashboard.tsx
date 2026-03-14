@@ -8,7 +8,7 @@
  * - Quality metrics for value-based contracts
  */
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { motion } from 'motion/react';
 import {
   TrendingUp,
@@ -34,7 +34,12 @@ import {
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
+import { DataProvenanceBadge } from './ui/DataProvenanceBadge';
+import { LaunchStateBadge } from './ui/LaunchStateBadge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
+import { createDataProvenance, getSurfaceLaunchConfig } from '../lib/product-truth';
+import { getStateMarketCoverage, type SupportedProviderState } from '../lib/insurance/state-market-coverage';
+import { listClaimReadyCases, summarizeClaimReadyQueue, type ClaimReadyCase } from '../lib/claim-ready-queue';
 
 interface PayerMetrics {
   // Population Overview
@@ -70,6 +75,7 @@ interface PayerOutcomesDashboardProps {
   metrics?: Partial<PayerMetrics>;
   dateRange?: { start: Date; end: Date };
   onExportReport?: () => void;
+  state?: SupportedProviderState;
 }
 
 const DEFAULT_METRICS: PayerMetrics = {
@@ -111,14 +117,59 @@ export function PayerOutcomesDashboard({
   metrics: providedMetrics,
   dateRange,
   onExportReport,
+  state = 'AZ',
 }: PayerOutcomesDashboardProps) {
   const [activeTab, setActiveTab] = useState('overview');
   const [selectedTimeframe, setSelectedTimeframe] = useState<'30d' | '90d' | '1y'>('90d');
+  const [claimQueue, setClaimQueue] = useState<ClaimReadyCase[]>([]);
 
   const metrics = useMemo(() => ({
     ...DEFAULT_METRICS,
     ...providedMetrics,
   }), [providedMetrics]);
+  const launchConfig = getSurfaceLaunchConfig('payer-dashboard');
+  const marketCoverage = useMemo(() => getStateMarketCoverage(state), [state]);
+  const claimQueueSummary = useMemo(() => summarizeClaimReadyQueue(claimQueue), [claimQueue]);
+  const visibleClaimQueue = useMemo(() => claimQueue.slice(0, 6), [claimQueue]);
+  const marketLabel = marketCoverage?.label || state;
+  const metricsProvenance = useMemo(() => (
+    providedMetrics
+      ? createDataProvenance('live', 'Arizona payer pilot metrics', {
+          isVerified: true,
+          lastUpdatedAt: new Date().toISOString(),
+        })
+      : createDataProvenance('sample', 'Pilot sample metrics', {
+          isVerified: false,
+        })
+  ), [providedMetrics]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadClaimQueue() {
+      const cases = await listClaimReadyCases(state);
+      if (!cancelled) {
+        setClaimQueue(cases);
+      }
+    }
+
+    if (claimQueue.length === 0) {
+      void loadClaimQueue();
+    }
+
+    return () => {
+      cancelled = true;
+    };
+  }, [state, claimQueue.length]);
+
+  const handleTabChange = (nextTab: string) => {
+    setActiveTab(nextTab);
+    if (nextTab === 'claims') {
+      void listClaimReadyCases(state).then(setClaimQueue).catch((error) => {
+        console.warn('[PayerOutcomesDashboard] Failed to refresh claim queue on tab change:', error);
+      });
+    }
+  };
 
   const getOrgTypeLabel = () => {
     switch (organizationType) {
@@ -130,28 +181,69 @@ export function PayerOutcomesDashboard({
     }
   };
 
+  const queueTone = (status: ClaimReadyCase['queueStatus']) => {
+    switch (status) {
+      case 'ready_for_biller':
+      case 'approved_for_submission':
+        return {
+          badge: 'bg-emerald-100 text-emerald-800 border border-emerald-200',
+          panel: 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-800 dark:text-emerald-200',
+          helper: 'Ready for biller review',
+        };
+      case 'submitted':
+      case 'accepted':
+      case 'paid':
+        return {
+          badge: 'bg-sky-100 text-sky-800 border border-sky-200',
+          panel: 'bg-sky-50 dark:bg-sky-900/20 text-sky-800 dark:text-sky-200',
+          helper: 'Moving through the live submission lane',
+        };
+      case 'denied':
+        return {
+          badge: 'bg-rose-100 text-rose-800 border border-rose-200',
+          panel: 'bg-rose-50 dark:bg-rose-900/20 text-rose-800 dark:text-rose-200',
+          helper: 'Needs denial follow-up before payment',
+        };
+      default:
+        return {
+          badge: 'bg-amber-100 text-amber-800 border border-amber-200',
+          panel: 'bg-amber-50 dark:bg-amber-900/20 text-amber-800 dark:text-amber-200',
+          helper: 'Blocked until the missing requirement is resolved',
+        };
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(45,212,191,0.12),transparent_34%),linear-gradient(180deg,#f7fffd_0%,#f4f7f8_100%)]">
       {/* Header */}
-      <div className="bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
+      <div className="border-b border-teal-100/80 bg-white/88 backdrop-blur supports-[backdrop-filter]:bg-white/78">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <div className="flex items-center gap-2 mb-1">
+              <div className="mb-2 flex flex-wrap items-center gap-2">
                 <Building2 className="w-5 h-5 text-teal-600" />
                 <Badge variant="outline" className="text-xs">
                   {getOrgTypeLabel()}
                 </Badge>
+                <LaunchStateBadge state={launchConfig.state} label={launchConfig.badgeLabel} />
+                <DataProvenanceBadge provenance={metricsProvenance} />
               </div>
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                {organizationName} Outcomes Dashboard
+              <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+                {organizationName} Coverage and Claims
               </h1>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                Population health metrics and ROI analysis
+              <h2 className="sr-only">Payer operations overview</h2>
+              <h3 className="sr-only">Claims, metrics, and supported plans</h3>
+              <p className="mt-1 text-sm text-slate-600">
+                Coverage routing, claim-ready operations, and payer trust signals for the {marketLabel} supported lane.
               </p>
+              {!providedMetrics ? (
+                <p className="mt-2 max-w-2xl rounded-2xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800">
+                  This dashboard is using clearly labeled pilot sample metrics until live payer and claims data is connected for the {marketLabel} lane.
+                </p>
+              ) : null}
             </div>
             <div className="flex items-center gap-3">
-              <div className="flex border border-gray-200 dark:border-slate-600 rounded-lg overflow-hidden">
+              <div className="flex overflow-hidden rounded-2xl border border-teal-100 bg-white shadow-sm">
                 {(['30d', '90d', '1y'] as const).map((tf) => (
                   <button
                     key={tf}
@@ -159,14 +251,14 @@ export function PayerOutcomesDashboard({
                     className={`px-3 py-1.5 text-sm font-medium transition-colors ${
                       selectedTimeframe === tf
                         ? 'bg-teal-600 text-white'
-                        : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-700'
+                        : 'bg-white text-slate-600 hover:bg-teal-50'
                     }`}
                   >
                     {tf === '30d' ? '30 Days' : tf === '90d' ? '90 Days' : '1 Year'}
                   </button>
                 ))}
               </div>
-              <Button onClick={onExportReport}>
+              <Button onClick={onExportReport} className="rounded-2xl bg-teal-600 text-white hover:bg-teal-700">
                 <Download className="w-4 h-4 mr-2" />
                 Export Report
               </Button>
@@ -177,12 +269,13 @@ export function PayerOutcomesDashboard({
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="mb-6">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="financial">Financial Impact</TabsTrigger>
-            <TabsTrigger value="quality">Quality Metrics</TabsTrigger>
-            <TabsTrigger value="utilization">Utilization</TabsTrigger>
+        <Tabs value={activeTab} onValueChange={handleTabChange}>
+          <TabsList className="mb-6 h-auto flex-wrap justify-start gap-2 rounded-3xl border border-teal-100 bg-white/92 p-2 shadow-sm">
+            <TabsTrigger className="rounded-2xl data-[state=active]:bg-teal-600 data-[state=active]:text-white" value="overview">Overview</TabsTrigger>
+            <TabsTrigger className="rounded-2xl data-[state=active]:bg-teal-600 data-[state=active]:text-white" value="financial">Financial Impact</TabsTrigger>
+            <TabsTrigger className="rounded-2xl data-[state=active]:bg-teal-600 data-[state=active]:text-white" value="quality">Quality Metrics</TabsTrigger>
+            <TabsTrigger className="rounded-2xl data-[state=active]:bg-teal-600 data-[state=active]:text-white" value="utilization">Utilization</TabsTrigger>
+            <TabsTrigger className="rounded-2xl data-[state=active]:bg-teal-600 data-[state=active]:text-white" value="claims">Claims Ops</TabsTrigger>
           </TabsList>
 
           {/* Overview Tab */}
@@ -518,6 +611,135 @@ export function PayerOutcomesDashboard({
             </div>
           </TabsContent>
 
+          {/* Claims Ops Tab */}
+          <TabsContent value="claims">
+            <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+              <Card className="p-6 xl:col-span-2">
+                <div className="flex items-start justify-between gap-4 mb-6">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Claim-Ready Queue</h3>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                      Aminy assembles validated visit packets for biller review before submission. The queue is scoped to the {marketLabel} supported payer matrix and is not a fake auto-submit surface.
+                    </p>
+                    <p className="mt-3 text-xs uppercase tracking-[0.18em] text-slate-400">
+                      Showing the 6 most recent cases so the lane stays reviewable
+                    </p>
+                  </div>
+                  <div className="rounded-xl border border-gray-200 dark:border-slate-700 px-4 py-3 min-w-[220px]">
+                    <p className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">Queue Health</p>
+                    <div className="mt-2 grid grid-cols-2 gap-3 text-sm">
+                      <div>
+                        <p className="text-gray-500 dark:text-gray-400">Ready</p>
+                        <p className="text-xl font-semibold text-emerald-600">{claimQueueSummary.readyForBiller}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-500 dark:text-gray-400">Blocked</p>
+                        <p className="text-xl font-semibold text-amber-600">{claimQueueSummary.blocked}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-500 dark:text-gray-400">Submitted</p>
+                        <p className="text-xl font-semibold text-blue-600">{claimQueueSummary.submitted}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-500 dark:text-gray-400">Denied</p>
+                        <p className="text-xl font-semibold text-rose-600">{claimQueueSummary.denied}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  {visibleClaimQueue.map((item) => {
+                    const tone = queueTone(item.queueStatus);
+
+                    return (
+                    <div key={item.id} className="rounded-[28px] border border-slate-200/85 bg-white/96 p-5 shadow-sm transition-shadow hover:shadow-md dark:border-slate-700 dark:bg-slate-900/80">
+                      <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+                        <div>
+                          <div className="flex flex-wrap items-center gap-2 mb-2">
+                            <p className="font-semibold text-gray-900 dark:text-white">{item.patientName}</p>
+                            <Badge variant="outline" className="border-slate-300/80 bg-white/90 text-slate-600">
+                              {item.payerName}
+                            </Badge>
+                            <Badge className={tone.badge}>
+                              {item.queueStatus.replace(/_/g, ' ')}
+                            </Badge>
+                          </div>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">
+                            {item.providerName} • {item.visitType} • {item.serviceDate}
+                          </p>
+                          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                            Route: {item.route.replace(/_/g, ' ')} • Submission mode: {item.submissionMode.replace(/_/g, ' ')}
+                          </p>
+                          <p className="mt-2 text-sm font-medium text-slate-700 dark:text-slate-200">
+                            {tone.helper}
+                          </p>
+                        </div>
+                        <div className="rounded-2xl border border-slate-200 bg-slate-50/80 px-4 py-3 text-right dark:border-slate-700 dark:bg-slate-800/80">
+                          <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Visit amount</p>
+                          <p className="mt-1 text-lg font-semibold text-gray-900 dark:text-white">{formatCurrency(item.amountCents / 100)}</p>
+                        </div>
+                      </div>
+                      {item.issues.length > 0 ? (
+                        <div className={`mt-4 rounded-2xl p-4 ${tone.panel}`}>
+                          <p className="mb-2 text-xs uppercase tracking-wide text-current/80">Blocking issues</p>
+                          <ul className="space-y-1 text-sm text-current">
+                            {item.issues.map((issue) => (
+                              <li key={issue} className="flex items-start gap-2">
+                                <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                                <span>{issue}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ) : (
+                        <div className={`mt-4 rounded-2xl p-4 text-sm ${tone.panel}`}>
+                          This case is ready for biller review and submission through the configured {item.submissionMode.replace(/_/g, ' ')} lane.
+                        </div>
+                      )}
+                    </div>
+                  )})}
+                  {claimQueue.length > visibleClaimQueue.length ? (
+                    <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50/80 p-4 text-sm text-slate-600 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-300">
+                      {claimQueue.length - visibleClaimQueue.length} additional cases are available in the operator queue. This summary stays intentionally trimmed so billers can scan the lane quickly on desktop and mobile.
+                    </div>
+                  ) : null}
+                </div>
+              </Card>
+
+              <Card className="p-6">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Supported Payer Matrix</h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                  Coverage Coach and claims ops should support the payer products covering the majority of addressable demand in each live state.
+                </p>
+                <div className="mt-6 space-y-3">
+                  {(marketCoverage?.payerProducts || []).map((payer) => (
+                    <div key={payer.id} className="rounded-xl border border-gray-200 dark:border-slate-700 p-3">
+                      <div className="flex items-center justify-between gap-3">
+                        <div>
+                          <p className="font-medium text-gray-900 dark:text-white">{payer.displayName}</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
+                            {payer.payerType.replace(/_/g, ' ')} • {payer.submissionPath.replace(/_/g, ' ')}
+                          </p>
+                        </div>
+                        <Badge className={marketCoverage?.launchState === 'live' ? 'bg-emerald-100 text-emerald-700' : 'bg-blue-100 text-blue-700'}>
+                          {marketCoverage?.launchState.replace(/_/g, ' ') || 'limited launch'}
+                        </Badge>
+                      </div>
+                      {marketCoverage?.notes?.length ? (
+                        <ul className="mt-2 space-y-1 text-xs text-gray-600 dark:text-gray-300">
+                          {marketCoverage.notes.slice(0, 2).map((note: string) => (
+                            <li key={note}>• {note}</li>
+                          ))}
+                        </ul>
+                      ) : null}
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            </div>
+          </TabsContent>
+
           {/* Utilization Tab */}
           <TabsContent value="utilization">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -652,15 +874,15 @@ function MetricCard({
   color: 'green' | 'blue' | 'pink' | 'purple' | 'teal';
 }) {
   const colorClasses = {
-    green: 'bg-green-50 dark:bg-green-900/20 text-green-600',
-    blue: 'bg-blue-50 dark:bg-blue-900/20 text-blue-600',
-    pink: 'bg-pink-50 dark:bg-pink-900/20 text-pink-600',
-    purple: 'bg-purple-50 dark:bg-purple-900/20 text-purple-600',
-    teal: 'bg-teal-50 dark:bg-teal-900/20 text-teal-600',
+    green: 'bg-green-50 text-green-600',
+    blue: 'bg-blue-50 text-blue-600',
+    pink: 'bg-pink-50 text-pink-600',
+    purple: 'bg-purple-50 text-purple-600',
+    teal: 'bg-teal-50 text-teal-600',
   };
 
   return (
-    <Card className="p-4">
+    <Card className="rounded-3xl border border-white/80 bg-white/92 p-4 shadow-sm">
       <div className="flex items-start justify-between mb-3">
         <div className={`p-2 rounded-lg ${colorClasses[color]}`}>
           <Icon className="w-5 h-5" />
@@ -678,10 +900,10 @@ function MetricCard({
           </div>
         )}
       </div>
-      <p className="text-2xl font-bold text-gray-900 dark:text-white">{value}</p>
-      <p className="text-sm text-gray-500 dark:text-gray-400">{label}</p>
+      <p className="text-2xl font-bold text-slate-900">{value}</p>
+      <p className="text-sm text-slate-500">{label}</p>
       {subtext && (
-        <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">{subtext}</p>
+        <p className="mt-1 text-xs text-slate-400">{subtext}</p>
       )}
     </Card>
   );
@@ -713,12 +935,12 @@ function ProgressMetric({
   return (
     <div>
       <div className="flex justify-between mb-2">
-        <span className="text-sm text-gray-600 dark:text-gray-400">{label}</span>
-        <span className="text-sm font-medium text-gray-900 dark:text-white">
+        <span className="text-sm text-slate-600">{label}</span>
+        <span className="text-sm font-medium text-slate-900">
           {showPercentage ? `${value}%` : value}
         </span>
       </div>
-      <div className="h-2 bg-gray-100 dark:bg-slate-700 rounded-full overflow-hidden">
+      <div className="h-2 rounded-full bg-slate-100 overflow-hidden">
         <motion.div
           initial={{ width: 0 }}
           animate={{ width: `${percentage}%` }}
@@ -743,10 +965,10 @@ function SavingsRow({
   const total = count * avgCost;
 
   return (
-    <div className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-slate-700">
+    <div className="flex items-center justify-between border-b border-slate-100 py-3">
       <div>
-        <p className="font-medium text-gray-900 dark:text-white">{category}</p>
-        <p className="text-sm text-gray-500 dark:text-gray-400">{description}</p>
+        <p className="font-medium text-slate-900">{category}</p>
+        <p className="text-sm text-slate-500">{description}</p>
       </div>
       <div className="text-right">
         <p className="font-semibold text-green-600">{formatCurrency(total)}</p>
@@ -762,10 +984,10 @@ function UtilizationRow({ feature, percentage }: { feature: string; percentage: 
   return (
     <div>
       <div className="flex justify-between mb-1">
-        <span className="text-sm text-gray-600 dark:text-gray-400">{feature}</span>
-        <span className="text-sm font-medium text-gray-900 dark:text-white">{percentage}%</span>
+        <span className="text-sm text-slate-600">{feature}</span>
+        <span className="text-sm font-medium text-slate-900">{percentage}%</span>
       </div>
-      <div className="h-2 bg-gray-100 dark:bg-slate-700 rounded-full overflow-hidden">
+      <div className="h-2 rounded-full bg-slate-100 overflow-hidden">
         <div
           className="h-full bg-teal-500 rounded-full transition-all duration-500"
           style={{ width: `${percentage}%` }}

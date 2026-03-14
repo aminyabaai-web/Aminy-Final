@@ -138,6 +138,7 @@ export function useScreenAnalytics(
 
       // Only track visits > 500ms (filter out rapid navigation)
       if (durationMs < 500) return;
+      if (!userId.current) return;
 
       queueAnalyticsEvent({
         user_id: userId.current,

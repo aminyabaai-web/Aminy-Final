@@ -19,7 +19,6 @@ CREATE TABLE IF NOT EXISTS calendar_integrations (
   updated_at TIMESTAMPTZ DEFAULT now(),
   UNIQUE(user_id, provider)
 );
-
 -- Calendar event mappings (tracks which Aminy appointments map to which external events)
 CREATE TABLE IF NOT EXISTS calendar_event_mappings (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -32,32 +31,24 @@ CREATE TABLE IF NOT EXISTS calendar_event_mappings (
   created_at TIMESTAMPTZ DEFAULT now(),
   UNIQUE(appointment_id, calendar_integration_id)
 );
-
 -- Indexes for performance
 CREATE INDEX IF NOT EXISTS idx_calendar_integrations_user
   ON calendar_integrations(user_id);
-
 CREATE INDEX IF NOT EXISTS idx_calendar_integrations_user_provider
   ON calendar_integrations(user_id, provider);
-
 CREATE INDEX IF NOT EXISTS idx_calendar_event_mappings_appointment
   ON calendar_event_mappings(appointment_id);
-
 CREATE INDEX IF NOT EXISTS idx_calendar_event_mappings_integration
   ON calendar_event_mappings(calendar_integration_id);
-
 CREATE INDEX IF NOT EXISTS idx_calendar_event_mappings_external
   ON calendar_event_mappings(external_event_id);
-
 -- Row Level Security
 ALTER TABLE calendar_integrations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE calendar_event_mappings ENABLE ROW LEVEL SECURITY;
-
 -- Users can only manage their own calendar integrations
 CREATE POLICY "Users manage own calendar integrations"
   ON calendar_integrations FOR ALL
   USING (auth.uid() = user_id);
-
 -- Users can only manage their own calendar event mappings
 -- (via the calendar_integration they own)
 CREATE POLICY "Users manage own calendar event mappings"
@@ -69,7 +60,6 @@ CREATE POLICY "Users manage own calendar event mappings"
       AND ci.user_id = auth.uid()
     )
   );
-
 -- Service role bypass for edge functions
 -- (Edge functions use SUPABASE_SERVICE_ROLE_KEY which bypasses RLS)
 
@@ -81,7 +71,6 @@ BEGIN
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
-
 CREATE TRIGGER set_calendar_integrations_updated_at
   BEFORE UPDATE ON calendar_integrations
   FOR EACH ROW

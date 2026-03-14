@@ -26,14 +26,15 @@ interface BottomNavigationProps {
   onNavigate: (tabId: string) => void;
   userTier?: string | null;
   userRole?: 'parent' | 'provider' | 'admin';
+  pilotEligible?: boolean;
   navigate?: (destination: string) => void;
 }
 
-export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = 'parent', navigate }: BottomNavigationProps) {
+export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = 'parent', pilotEligible = false, navigate }: BottomNavigationProps) {
   const [showMoreMenu, setShowMoreMenu] = useState(false);
 
   // Only show provider nav when B2B is explicitly enabled AND user has provider role
-  const isProvider = productFlags.b2bEnabled && (userRole === 'provider' || userRole === 'admin');
+  const isProvider = (productFlags.b2bEnabled || pilotEligible) && (userRole === 'provider' || userRole === 'admin');
 
   // Role-based primary tabs
   // B2C Parents: Home, Chat (Ask Aminy), Junior (center), Care, More
@@ -100,7 +101,7 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
       id: 'junior',
       label: 'Junior',
       icon: Baby,
-      ariaLabel: 'Junior - Fun activities for your child',
+      ariaLabel: 'Junior - Calm corner, rewards, and transitions',
       enabled: true,
       isCenter: true
     },
@@ -171,9 +172,9 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
     },
     {
       id: 'telehealth',
-      label: 'Get Care',
+      label: 'Expert Care',
       icon: Users,
-      description: 'Book a session with an expert'
+      description: 'Live in supported provider states with verified clinicians'
     },
     {
       id: 'document-vault',

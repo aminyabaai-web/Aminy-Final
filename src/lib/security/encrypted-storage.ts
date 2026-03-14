@@ -204,7 +204,9 @@ export const encryptedStorage = {
       try {
         return await decrypt(encryptedValue);
       } catch (error) {
-        console.error('Decryption failed:', error);
+        if (import.meta.env.DEV) {
+          console.warn('Clearing unreadable encrypted storage item:', key, error);
+        }
         // Encryption key may have changed (new session), clear the data
         localStorage.removeItem(encryptedKey);
         return null;

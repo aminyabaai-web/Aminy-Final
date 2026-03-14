@@ -18,6 +18,8 @@
 
 import { memoryManager, type MemoryFact } from './memory-system';
 import type { TierType } from './tier-utils';
+import { persistJuniorProgress } from './caregiver-workflow';
+import { setWorkflowSyncStatus } from './core-workflow-sync';
 
 // ============================================
 // TYPES
@@ -188,6 +190,25 @@ export function recordJuniorProgress(childId: string, entry: JuniorProgressEntry
   }
 
   writeCache(CACHE_KEYS.PROGRESS, all);
+
+  setWorkflowSyncStatus('juniorProgress', 'pending_sync');
+  void persistJuniorProgress({
+    childId,
+    activityId: entry.activityId,
+    activityTitle: entry.activityTitle,
+    domain: entry.domain,
+    completedAt: entry.completedAt,
+    durationSeconds: entry.durationSeconds,
+    accuracy: entry.accuracy,
+    promptLevel: entry.promptLevel,
+    tokensEarned: entry.tokensEarned,
+    emotionBefore: entry.emotionBefore,
+    emotionAfter: entry.emotionAfter,
+    notes: entry.notes,
+  }).catch((error) => {
+    console.warn('[JuniorBridge] Failed to sync progress to Supabase:', error);
+    setWorkflowSyncStatus('juniorProgress', 'sync_failed');
+  });
 
   // Store milestone facts for parent AI
   if (entry.accuracy && entry.accuracy >= 90) {
@@ -389,7 +410,7 @@ export function isJuniorAccessible(childId: string, requestingCalmCorner: boolea
     case 'open':
       return { accessible: true };
 
-    case 'earned':
+    case 'earned': {
       // In earned mode, parent must explicitly unlock
       // Check localStorage for current unlock status
       const unlocked = readCache<string>(`aminy-junior-unlocked-${childId}`, 'false');
@@ -400,6 +421,7 @@ export function isJuniorAccessible(childId: string, requestingCalmCorner: boolea
         accessible: false,
         reason: 'Junior time needs to be earned! Ask your parent to unlock it.',
       };
+    }
 
     case 'scheduled': {
       if (!config.scheduledWindows || config.scheduledWindows.length === 0) {

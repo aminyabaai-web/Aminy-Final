@@ -146,11 +146,24 @@ class PerformanceMonitor {
 
   private createObserver(entryTypes: string[], callback: (entries: PerformanceEntry[]) => void): void {
     try {
+      const supportedEntryTypes = typeof PerformanceObserver !== 'undefined'
+        ? PerformanceObserver.supportedEntryTypes || []
+        : [];
+
+      if (!entryTypes.every((entryType) => supportedEntryTypes.includes(entryType))) {
+        return;
+      }
+
       const observer = new PerformanceObserver((list) => {
         callback(list.getEntries());
       });
-      
-      observer.observe({ entryTypes, buffered: true });
+
+      if (entryTypes.length === 1) {
+        observer.observe({ type: entryTypes[0], buffered: true });
+        return;
+      }
+
+      observer.observe({ entryTypes });
     } catch (error) {
     }
   }

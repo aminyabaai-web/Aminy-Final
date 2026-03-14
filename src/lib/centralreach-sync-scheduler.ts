@@ -24,6 +24,48 @@
 
 import { supabase } from '../utils/supabase/client';
 
+function getStoredSupabaseAccessToken(): string | null {
+  if (typeof window === 'undefined' || !window.localStorage) {
+    return null;
+  }
+
+  const authKey = Object.keys(window.localStorage).find((key) => key.startsWith('sb-') && key.endsWith('-auth-token'));
+  if (!authKey) return null;
+
+  try {
+    const raw = window.localStorage.getItem(authKey);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as { access_token?: string };
+    return parsed.access_token || null;
+  } catch {
+    return null;
+  }
+}
+
+async function fetchSupabaseRows(table: string, params: URLSearchParams): Promise<Record<string, unknown>[]> {
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string | undefined;
+  const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    return [];
+  }
+
+  const accessToken = getStoredSupabaseAccessToken();
+  const response = await fetch(`${supabaseUrl}/rest/v1/${table}?${params.toString()}`, {
+    headers: {
+      apikey: supabaseAnonKey,
+      Authorization: `Bearer ${accessToken || supabaseAnonKey}`,
+      Accept: 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`REST fetch failed for ${table}: ${response.status} ${await response.text()}`);
+  }
+
+  return await response.json() as Record<string, unknown>[];
+}
+
 // ============================================================================
 // Types
 // ============================================================================
@@ -375,21 +417,39 @@ export class SyncScheduler {
   ): Promise<SyncHistorySummary> {
     const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString();
 
-    let query = supabase
-      .from('cr_sync_log')
-      .select('*')
-      .eq('user_id', this.userId)
-      .gte('started_at', since)
-      .order('started_at', { ascending: false })
-      .limit(200);
+    let entries: SyncLogEntry[] = [];
 
-    if (dataType) {
-      query = query.eq('data_type', dataType);
+    try {
+      const params = new URLSearchParams({
+        select: '*',
+        user_id: `eq.${this.userId}`,
+        started_at: `gte.${since}`,
+        order: 'started_at.desc',
+        limit: '200',
+      });
+      if (dataType) {
+        params.set('data_type', `eq.${dataType}`);
+      }
+
+      entries = await fetchSupabaseRows('cr_sync_log', params) as unknown as SyncLogEntry[];
+    } catch {
+      let query = supabase
+        .from('cr_sync_log')
+        .select('*')
+        .eq('user_id', this.userId)
+        .gte('started_at', since)
+        .order('started_at', { ascending: false })
+        .limit(200);
+
+      if (dataType) {
+        query = query.eq('data_type', dataType);
+      }
+
+      const { data } = await query;
+      entries = (data || []) as SyncLogEntry[];
     }
 
-    const { data: entries, error } = await query;
-
-    if (error || !entries) {
+    if (!entries || entries.length === 0) {
       return {
         totalSyncs: 0,
         successCount: 0,
@@ -439,16 +499,27 @@ export class SyncScheduler {
    * Get unresolved sync errors for the error recovery dashboard.
    */
   async getUnresolvedErrors(): Promise<SyncErrorEntry[]> {
-    const { data, error } = await supabase
-      .from('cr_sync_errors')
-      .select('*')
-      .eq('user_id', this.userId)
-      .eq('resolved', false)
-      .order('created_at', { ascending: false })
-      .limit(100);
+    try {
+      const params = new URLSearchParams({
+        select: '*',
+        user_id: `eq.${this.userId}`,
+        resolved: 'eq.false',
+        order: 'created_at.desc',
+        limit: '100',
+      });
+      return await fetchSupabaseRows('cr_sync_errors', params) as unknown as SyncErrorEntry[];
+    } catch {
+      const { data, error } = await supabase
+        .from('cr_sync_errors')
+        .select('*')
+        .eq('user_id', this.userId)
+        .eq('resolved', false)
+        .order('created_at', { ascending: false })
+        .limit(100);
 
-    if (error || !data) return [];
-    return data as SyncErrorEntry[];
+      if (error || !data) return [];
+      return data as SyncErrorEntry[];
+    }
   }
 
   /**
@@ -783,25 +854,30 @@ export class SyncScheduler {
 
   private async loadSyncStates(): Promise<void> {
     try {
-      const { data } = await supabase
-        .from('cr_sync_status')
-        .select('*')
-        .eq('user_id', this.userId);
+      let rows: Record<string, unknown>[] = [];
+      try {
+        const params = new URLSearchParams({ select: '*', user_id: `eq.${this.userId}` });
+        rows = await fetchSupabaseRows('cr_sync_status', params);
+      } catch {
+        const { data } = await supabase
+          .from('cr_sync_status')
+          .select('*')
+          .eq('user_id', this.userId);
+        rows = (data || []) as Record<string, unknown>[];
+      }
 
-      if (data) {
-        for (const row of data) {
-          const key = this.getKey(row.data_type, row.direction);
-          this.syncRecords.set(key, {
-            dataType: row.data_type,
-            direction: row.direction,
-            status: row.status || 'idle',
-            lastSyncAt: row.last_sync_at,
-            lastError: row.last_error,
-            consecutiveFailures: row.consecutive_failures || 0,
-            nextSyncAt: row.next_sync_at,
-            recordsSynced: row.records_synced || 0,
-          });
-        }
+      for (const row of rows) {
+        const key = this.getKey(String(row.data_type) as SyncDataType, String(row.direction) as SyncDirection);
+        this.syncRecords.set(key, {
+          dataType: String(row.data_type) as SyncDataType,
+          direction: String(row.direction) as SyncDirection,
+          status: String(row.status || 'idle') as SyncStatus,
+          lastSyncAt: row.last_sync_at ? String(row.last_sync_at) : null,
+          lastError: row.last_error ? String(row.last_error) : null,
+          consecutiveFailures: Number(row.consecutive_failures || 0),
+          nextSyncAt: row.next_sync_at ? String(row.next_sync_at) : null,
+          recordsSynced: Number(row.records_synced || 0),
+        });
       }
     } catch {
       // Non-critical — will use defaults

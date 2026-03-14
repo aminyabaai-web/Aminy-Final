@@ -5,6 +5,7 @@
  * Combines push notifications, email sequences, gamification, and smart nudges
  */
 
+import { supabase } from '../utils/supabase/client';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
 import {
   scheduleNotification,
@@ -359,6 +360,11 @@ export async function triggerOnboardingSequence(
   childName: string,
   parentName?: string
 ): Promise<void> {
+  if (import.meta.env.VITE_ENABLE_RETENTION_EMAILS !== 'true') {
+    localStorage.setItem(`onboarding_start_${userId}`, new Date().toISOString());
+    return;
+  }
+
   try {
     // Send welcome email immediately
     const response = await fetch(
@@ -378,7 +384,10 @@ export async function triggerOnboardingSequence(
     );
 
     if (!response.ok) {
-      console.error('Welcome email failed:', await response.text());
+      const message = await response.text();
+      if (import.meta.env.DEV) {
+        console.warn('Welcome email unavailable during onboarding:', message);
+      }
     } else {
       if (import.meta.env.DEV) console.log('[Retention] Welcome email sent successfully');
     }
@@ -386,7 +395,9 @@ export async function triggerOnboardingSequence(
     // Store onboarding start time for follow-up emails
     localStorage.setItem(`onboarding_start_${userId}`, new Date().toISOString());
   } catch (error) {
-    console.error('Failed to trigger onboarding sequence:', error);
+    if (import.meta.env.DEV) {
+      console.warn('Failed to trigger onboarding sequence:', error);
+    }
   }
 }
 
@@ -639,18 +650,12 @@ export function useRetention() {
  */
 export async function getPrimaryStreak(userId: string): Promise<{ currentStreak: number; longestStreak: number } | null> {
   try {
-    const { createClient } = await import('@supabase/supabase-js');
-    const supabase = createClient(
-      `https://${projectId}.supabase.co`,
-      publicAnonKey
-    );
-
     const { data } = await supabase
       .from('user_streaks')
       .select('current_streak, longest_streak')
       .eq('user_id', userId)
-      .eq('streak_type', 'daily_checkin')
-      .single();
+      .eq('type', 'daily_checkin')
+      .maybeSingle();
 
     if (data) {
       return {
@@ -669,12 +674,6 @@ export async function getPrimaryStreak(userId: string): Promise<{ currentStreak:
  */
 export async function getEarnedMilestones(userId: string): Promise<Record<string, unknown>[]> {
   try {
-    const { createClient } = await import('@supabase/supabase-js');
-    const supabase = createClient(
-      `https://${projectId}.supabase.co`,
-      publicAnonKey
-    );
-
     const { data } = await supabase
       .from('user_milestones')
       .select('*')
@@ -693,12 +692,6 @@ export async function getEarnedMilestones(userId: string): Promise<Record<string
  */
 export async function getPendingCelebrations(userId: string): Promise<Record<string, unknown>[]> {
   try {
-    const { createClient } = await import('@supabase/supabase-js');
-    const supabase = createClient(
-      `https://${projectId}.supabase.co`,
-      publicAnonKey
-    );
-
     const { data } = await supabase
       .from('user_milestones')
       .select('*')
@@ -718,12 +711,6 @@ export async function getPendingCelebrations(userId: string): Promise<Record<str
  */
 export async function recordActivity(userId: string, activityType: string): Promise<void> {
   try {
-    const { createClient } = await import('@supabase/supabase-js');
-    const supabase = createClient(
-      `https://${projectId}.supabase.co`,
-      publicAnonKey
-    );
-
     const today = new Date().toISOString().split('T')[0];
 
     // Upsert activity record

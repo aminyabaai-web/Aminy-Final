@@ -4,7 +4,7 @@ import { StrictMode } from "react";
 import App from "./App.tsx";
 import "./index.css";
 import { initEnvValidation } from "./lib/env-validation.ts";
-import { initSentry } from "./lib/sentry.ts";
+import { initTracking } from "./lib/tracking-init";
 // Initialize i18n for internationalization
 import "./i18n";
 // Mobile safe area support
@@ -21,10 +21,6 @@ import { getSecurityConfig } from "./lib/security/index";
 // Performance Timing
 // ============================================================================
 performance.mark('aminy-main-start');
-
-interface WindowWithGtag extends Window {
-  gtag?: (...args: [string, ...unknown[]]) => void;
-}
 
 // Initialize keyboard navigation detection for accessibility
 function initKeyboardNavDetection() {
@@ -47,47 +43,7 @@ initKeyboardNavDetection();
 const cookieConsent = localStorage.getItem('aminy-cookie-consent');
 
 if (cookieConsent === 'accepted') {
-  // Initialize Sentry for error tracking
-  initSentry();
-
-  // Initialize Google Analytics if configured
-  const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID;
-  if (GA_MEASUREMENT_ID) {
-    const script = document.createElement('script');
-    script.async = true;
-    script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
-    document.head.appendChild(script);
-    script.onload = () => {
-      const win = window as unknown as WindowWithGtag;
-      if (typeof win.gtag === 'function') {
-        win.gtag('config', GA_MEASUREMENT_ID, {
-          send_page_view: true,
-          cookie_flags: 'SameSite=None;Secure',
-        });
-      }
-    };
-  }
-}
-
-// Export for dynamic init after cookie consent is given
-export function initTracking() {
-  initSentry();
-  const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID;
-  if (GA_MEASUREMENT_ID && !document.querySelector(`script[src*="googletagmanager"]`)) {
-    const script = document.createElement('script');
-    script.async = true;
-    script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
-    document.head.appendChild(script);
-    script.onload = () => {
-      const win = window as unknown as WindowWithGtag;
-      if (typeof win.gtag === 'function') {
-        win.gtag('config', GA_MEASUREMENT_ID, {
-          send_page_view: true,
-          cookie_flags: 'SameSite=None;Secure',
-        });
-      }
-    };
-  }
+  initTracking();
 }
 
 // Validate environment variables on startup

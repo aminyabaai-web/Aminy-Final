@@ -57,54 +57,24 @@ export function CaregiverTimesheet({ onBack, caregiverName = "Michael T." }: Car
     const [isClockedIn, setIsClockedIn] = useState(false);
     const [isProcessing, setIsProcessing] = useState(false);
     const [authStatus, setAuthStatus] = useState<'checking' | 'authorized' | 'denied'>('checking');
-    const [remainingHours, setRemainingHours] = useState<number | null>(null);
 
     // Live session state
     const [sessionStartTime, setSessionStartTime] = useState<Date | null>(null);
     const [elapsedTime, setElapsedTime] = useState(0);
     const [gpsStatus, setGpsStatus] = useState<'acquiring' | 'locked' | 'failed'>('acquiring');
 
-    // Mock History
-    const [timesheets, setTimesheets] = useState<TimesheetRecord[]>([
-        {
-            id: 'ts_001',
-            date: 'Oct 23, 2025',
-            startTime: '3:00 PM',
-            endTime: '5:30 PM',
-            totalTime: '2.5 hrs',
-            status: 'approved',
-            locationStart: 'Verified (GPS Block 4A)',
-            locationEnd: 'Verified (GPS Block 4A)'
-        },
-        {
-            id: 'ts_002',
-            date: 'Oct 21, 2025',
-            startTime: '4:00 PM',
-            endTime: '6:00 PM',
-            totalTime: '2.0 hrs',
-            status: 'approved',
-            locationStart: 'Verified (GPS Block 4A)',
-            locationEnd: 'Verified (GPS Block 4A)'
-        },
-        {
-            id: 'ts_003',
-            date: 'Oct 24, 2025',
-            startTime: '2:00 PM',
-            endTime: '5:00 PM',
-            totalTime: '3.0 hrs',
-            status: 'pending',
-            locationStart: 'Verified (GPS Block 4A)',
-            locationEnd: 'Pending Review'
-        }
-    ]);
+    const [timesheets, setTimesheets] = useState<TimesheetRecord[]>([]);
+
+    const resetPilotChecks = () => {
+        setAuthStatus('checking');
+        setGpsStatus('acquiring');
+    };
 
     // Simulate Real-time Medicaid Authorization Check
     useEffect(() => {
         if (activeTab === 'clock' && !isClockedIn) {
-            setAuthStatus('checking');
             const authTimer = setTimeout(() => {
                 setAuthStatus('authorized');
-                setRemainingHours(32.5); // Mock remaining hours on active waiver
             }, 1500);
             return () => clearTimeout(authTimer);
         }
@@ -123,7 +93,6 @@ export function CaregiverTimesheet({ onBack, caregiverName = "Michael T." }: Car
     useEffect(() => {
         // Simulate GPS locking
         if (activeTab === 'clock' && !isClockedIn) {
-            setGpsStatus('acquiring');
             const timer = setTimeout(() => setGpsStatus('locked'), 2000);
             return () => clearTimeout(timer);
         }
@@ -147,6 +116,7 @@ export function CaregiverTimesheet({ onBack, caregiverName = "Michael T." }: Car
                 setIsClockedIn(false);
                 setSessionStartTime(null);
                 setElapsedTime(0);
+                resetPilotChecks();
 
                 // Add to history
                 const newRecord: TimesheetRecord = {
@@ -172,7 +142,7 @@ export function CaregiverTimesheet({ onBack, caregiverName = "Michael T." }: Car
     };
 
     const handleExportData = () => {
-        toast.info('Generating Acumen DCI export snippet...');
+        toast.info('Generating Arizona pilot EVV export for SpokChoice/DCI reconciliation...');
         setTimeout(() => {
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(timesheets, null, 2));
             const a = document.createElement('a');
@@ -207,6 +177,8 @@ export function CaregiverTimesheet({ onBack, caregiverName = "Michael T." }: Car
                         <h1 style={{ fontSize: '18px', fontWeight: 600, color: 'rgba(17, 24, 39, 0.9)', letterSpacing: '-0.01em' }}>
                             EVV Timesheet
                         </h1>
+                        <h2 className="sr-only">EVV documentation overview</h2>
+                        <h3 className="sr-only">Shift capture, exports, and reconciliation status</h3>
                     </div>
                     <div style={{ fontSize: '13px', color: 'rgba(17, 24, 39, 0.5)', fontWeight: 500 }}>
                         {caregiverName}
@@ -216,10 +188,25 @@ export function CaregiverTimesheet({ onBack, caregiverName = "Michael T." }: Car
 
             <div style={{ maxWidth: '600px', margin: '0 auto', padding: '24px 20px' }}>
 
+                <div style={{ backgroundColor: '#FFFFFF', borderRadius: '24px', padding: '20px', marginBottom: '24px', boxShadow: '0 2px 10px rgba(0,0,0,0.02)', border: '1px solid rgba(139, 92, 246, 0.18)' }}>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '12px' }}>
+                        <span style={{ padding: '6px 12px', borderRadius: '999px', backgroundColor: '#F5F3FF', color: '#6D28D9', fontSize: '12px', fontWeight: 600 }}>Arizona DDD Pilot</span>
+                        <span style={{ padding: '6px 12px', borderRadius: '999px', backgroundColor: '#FFFBEB', color: '#B45309', fontSize: '12px', fontWeight: 600 }}>SpokChoice Current</span>
+                        <span style={{ padding: '6px 12px', borderRadius: '999px', backgroundColor: '#EFF6FF', color: '#1D4ED8', fontSize: '12px', fontWeight: 600 }}>DCI Transition Path</span>
+                        <span style={{ padding: '6px 12px', borderRadius: '999px', backgroundColor: '#ECFDF5', color: '#047857', fontSize: '12px', fontWeight: 600 }}>Aminy Shadow + Export</span>
+                    </div>
+                    <p style={{ fontSize: '14px', lineHeight: 1.6, color: '#374151', margin: 0 }}>
+                        Use Aminy to document shifts, capture EVV evidence, and export reconciliation data for the Arizona pilot. Do not treat Aminy as the payroll system of record until the DCI transition path is validated.
+                    </p>
+                </div>
+
                 {/* Navigation Tabs */}
                 <div style={{ display: 'flex', backgroundColor: '#E5E7EB', borderRadius: '16px', padding: '4px', marginBottom: '32px' }}>
                     <button
-                        onClick={() => setActiveTab('clock')}
+                        onClick={() => {
+                            resetPilotChecks();
+                            setActiveTab('clock');
+                        }}
                         style={{
                             flex: 1, padding: '10px', borderRadius: '12px', fontSize: '14px', fontWeight: 600, border: 'none', cursor: 'pointer',
                             backgroundColor: activeTab === 'clock' ? '#FFFFFF' : 'transparent',
@@ -271,10 +258,10 @@ export function CaregiverTimesheet({ onBack, caregiverName = "Michael T." }: Car
 
                                         <div>
                                             <p style={{ fontSize: '14px', fontWeight: 600, color: authStatus === 'checking' ? '#374151' : authStatus === 'authorized' ? '#065F46' : '#991B1B', marginBottom: '4px' }}>
-                                                {authStatus === 'checking' ? 'Verifying Medicaid Eligibility...' : authStatus === 'authorized' ? 'Cleared for Shift' : 'Authorization Denied'}
+                                                {authStatus === 'checking' ? 'Preparing pilot shadow session...' : authStatus === 'authorized' ? 'Shadow capture ready' : 'Review required before submission'}
                                             </p>
                                             <p style={{ fontSize: '13px', color: authStatus === 'checking' ? '#6B7280' : authStatus === 'authorized' ? '#059669' : '#DC2626', lineHeight: 1.4 }}>
-                                                {authStatus === 'checking' ? 'Querying State FMS database for active waiver...' : authStatus === 'authorized' ? `Client has an active Medicaid Waiver. ${remainingHours} hours remaining this week.` : 'Client does not have an active authorization code for this service.'}
+                                                {authStatus === 'checking' ? 'Aminy is preparing a shadow EVV record. Confirm final authorization in SpokChoice until the DCI transition is live.' : authStatus === 'authorized' ? 'Aminy is ready to capture a shadow EVV record for Arizona pilot reconciliation. SpokChoice remains the payroll system of record.' : 'Pause here and review the authorization path in your external EVV system before submission.'}
                                             </p>
                                         </div>
                                     </div>
@@ -322,7 +309,7 @@ export function CaregiverTimesheet({ onBack, caregiverName = "Michael T." }: Car
                                 <div style={{ marginTop: '32px', display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 24px', backgroundColor: '#F9FAFB', borderRadius: '100px', border: '1px solid #E5E7EB' }}>
                                     <MapPin size={16} color={gpsStatus === 'locked' ? '#10B981' : '#F59E0B'} />
                                     <span style={{ fontSize: '14px', fontWeight: 500, color: '#374151' }}>
-                                        {gpsStatus === 'acquiring' ? 'Acquiring GPS Signal...' : 'EVV Location Verified'}
+                                        {gpsStatus === 'acquiring' ? 'Preparing location capture...' : 'Pilot location capture ready'}
                                     </span>
                                     {gpsStatus === 'acquiring' && <Loader2 size={14} className="animate-spin" color="#6B7280" />}
                                 </div>
@@ -357,18 +344,26 @@ export function CaregiverTimesheet({ onBack, caregiverName = "Michael T." }: Car
                                 <ShieldCheck size={120} color="rgba(255,255,255,0.03)" style={{ position: 'absolute', right: '-20px', top: '-20px' }} />
                                 <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#FFFFFF', marginBottom: '8px' }}>Fiscal Intermediary Ready</h3>
                                 <p style={{ fontSize: '14px', color: '#9CA3AF', marginBottom: '20px', maxWidth: '80%', lineHeight: '1.5' }}>
-                                    Your timesheets are fully EVV compliant. Export them in the DCI / Acumen format for direct submission.
+                                    Aminy captures Arizona pilot timesheets in shadow mode. Export for SpokChoice reconciliation now, then validate the DCI transition path before primary submission.
                                 </p>
                                 <button
                                     onClick={handleExportData}
                                     style={{ backgroundColor: '#FFFFFF', color: '#111827', border: 'none', padding: '12px 24px', borderRadius: '100px', fontSize: '14px', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}
                                 >
-                                    <Download size={18} /> Export DCI JSON
+                                    <Download size={18} /> Export pilot EVV JSON
                                 </button>
                             </div>
 
                             {/* Timesheets List */}
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                {timesheets.length === 0 && (
+                                    <div style={{ backgroundColor: '#FFFFFF', borderRadius: '20px', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.02)', border: '1px solid #F3F4F6' }}>
+                                        <p style={{ fontSize: '15px', fontWeight: 600, color: '#111827', marginBottom: '8px' }}>No pilot time entries yet</p>
+                                        <p style={{ fontSize: '14px', color: '#6B7280', lineHeight: 1.5, margin: 0 }}>
+                                            Start a shadow session from the Live Session tab to capture your first Arizona pilot record. Aminy will only export entries you create here.
+                                        </p>
+                                    </div>
+                                )}
                                 {timesheets.map(ts => (
                                     <div key={ts.id} style={{ backgroundColor: '#FFFFFF', borderRadius: '20px', padding: '20px', boxShadow: '0 2px 8px rgba(0,0,0,0.02)', border: '1px solid #F3F4F6' }}>
                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>

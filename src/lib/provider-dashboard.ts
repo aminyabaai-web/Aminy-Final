@@ -12,13 +12,14 @@
 
 import { supabase } from '../utils/supabase/client';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
+import { isUpcomingAppointmentStatus, normalizeAppointmentLifecycleStatus } from './telehealth-ops';
 
 // ============================================================================
 // Types
 // ============================================================================
 
 export type ProviderRole = 'bcba' | 'rbt' | 'slp' | 'ot' | 'psychologist' | 'therapist';
-export type AppointmentStatus = 'scheduled' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled' | 'no_show';
+export type AppointmentStatus = 'confirmed' | 'ready_to_join' | 'in_progress' | 'completed' | 'cancelled' | 'no_show' | 'partner_followup_required';
 export type NoteStatus = 'draft' | 'pending_review' | 'approved' | 'rejected' | 'submitted';
 
 export interface Provider {
@@ -393,7 +394,7 @@ export async function getAppointments(
       startTime: row.start_time as string,
       endTime: row.end_time as string,
       visitType: row.visit_type as string,
-      status: row.status as AppointmentStatus,
+      status: normalizeAppointmentLifecycleStatus(row.status as string) as AppointmentStatus,
       reasonForVisit: row.reason_for_visit as string,
       notes: row.notes as string | undefined,
       videoRoomUrl: row.video_room_url as string | undefined,
@@ -427,7 +428,7 @@ export async function getUpcomingAppointments(
 ): Promise<ProviderAppointment[]> {
   return getAppointments(providerId, {
     startDate: new Date().toISOString(),
-    status: 'scheduled',
+    status: 'confirmed',
     limit,
   });
 }
@@ -729,7 +730,7 @@ export async function getClientDetails(
   const totalSessions = appointments?.filter(a => a.status === 'completed').length || 0;
   const lastSession = appointments?.find(a => a.status === 'completed')?.start_time;
   const nextSession = appointments?.find(a =>
-    a.status === 'scheduled' && new Date(a.start_time) > new Date()
+    isUpcomingAppointmentStatus(a.status as string) && new Date(a.start_time) > new Date()
   )?.start_time;
 
   // Get memory facts for client

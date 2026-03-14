@@ -25,9 +25,7 @@ CREATE TABLE IF NOT EXISTS children (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 CREATE INDEX idx_children_parent ON children(parent_id);
-
 -- Child profiles (extended info for provider view)
 CREATE TABLE IF NOT EXISTS child_profiles (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -43,9 +41,7 @@ CREATE TABLE IF NOT EXISTS child_profiles (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 CREATE INDEX idx_child_profiles_child ON child_profiles(child_id);
-
 -- Provider applications
 CREATE TABLE IF NOT EXISTS provider_applications (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -75,10 +71,8 @@ CREATE TABLE IF NOT EXISTS provider_applications (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 CREATE INDEX idx_provider_applications_status ON provider_applications(status);
 CREATE INDEX idx_provider_applications_user ON provider_applications(user_id);
-
 -- Marketplace bookings (actual session bookings)
 CREATE TABLE IF NOT EXISTS marketplace_bookings (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -110,12 +104,10 @@ CREATE TABLE IF NOT EXISTS marketplace_bookings (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 CREATE INDEX idx_marketplace_bookings_user ON marketplace_bookings(user_id);
 CREATE INDEX idx_marketplace_bookings_provider ON marketplace_bookings(provider_id);
 CREATE INDEX idx_marketplace_bookings_status ON marketplace_bookings(status);
 CREATE INDEX idx_marketplace_bookings_scheduled ON marketplace_bookings(scheduled_at);
-
 -- Telehealth sessions (video session records)
 CREATE TABLE IF NOT EXISTS telehealth_sessions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -135,10 +127,8 @@ CREATE TABLE IF NOT EXISTS telehealth_sessions (
   status TEXT DEFAULT 'created' CHECK (status IN ('created', 'waiting', 'in_progress', 'completed', 'abandoned')),
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 CREATE INDEX idx_telehealth_sessions_booking ON telehealth_sessions(booking_id);
 CREATE INDEX idx_telehealth_sessions_provider ON telehealth_sessions(provider_id);
-
 -- ============================================
 -- PRIORITY 2: CLINICAL FEATURES
 -- ============================================
@@ -163,9 +153,7 @@ CREATE TABLE IF NOT EXISTS medications (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 CREATE INDEX idx_medications_child ON medications(child_id);
-
 -- Medication logs
 CREATE TABLE IF NOT EXISTS medication_logs (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -179,11 +167,9 @@ CREATE TABLE IF NOT EXISTS medication_logs (
   side_effects TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 CREATE INDEX idx_medication_logs_medication ON medication_logs(medication_id);
 CREATE INDEX idx_medication_logs_child ON medication_logs(child_id);
 CREATE INDEX idx_medication_logs_date ON medication_logs(scheduled_time);
-
 -- Behavior intervention plans
 CREATE TABLE IF NOT EXISTS behavior_intervention_plans (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -211,9 +197,7 @@ CREATE TABLE IF NOT EXISTS behavior_intervention_plans (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 CREATE INDEX idx_bip_child ON behavior_intervention_plans(child_id);
-
 -- Assessment results
 CREATE TABLE IF NOT EXISTS assessment_results (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -235,10 +219,8 @@ CREATE TABLE IF NOT EXISTS assessment_results (
   notes TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 CREATE INDEX idx_assessment_results_child ON assessment_results(child_id);
 CREATE INDEX idx_assessment_results_type ON assessment_results(assessment_type);
-
 -- Crisis logs
 CREATE TABLE IF NOT EXISTS crisis_logs (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -258,10 +240,8 @@ CREATE TABLE IF NOT EXISTS crisis_logs (
   followup_scheduled BOOLEAN DEFAULT false,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 CREATE INDEX idx_crisis_logs_user ON crisis_logs(user_id);
 CREATE INDEX idx_crisis_logs_severity ON crisis_logs(severity);
-
 -- GAD-7 responses (anxiety screening)
 CREATE TABLE IF NOT EXISTS gad7_responses (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -274,9 +254,7 @@ CREATE TABLE IF NOT EXISTS gad7_responses (
   notes TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 CREATE INDEX idx_gad7_user ON gad7_responses(user_id);
-
 -- PHQ-9 responses (depression screening)
 CREATE TABLE IF NOT EXISTS phq9_responses (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -289,9 +267,7 @@ CREATE TABLE IF NOT EXISTS phq9_responses (
   notes TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 CREATE INDEX idx_phq9_user ON phq9_responses(user_id);
-
 -- ============================================
 -- PRIORITY 3: ADMIN/ANALYTICS
 -- ============================================
@@ -325,9 +301,7 @@ CREATE TABLE IF NOT EXISTS clinics (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 CREATE INDEX idx_clinics_status ON clinics(status);
-
 -- Moderation queue
 CREATE TABLE IF NOT EXISTS moderation_queue (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -345,10 +319,8 @@ CREATE TABLE IF NOT EXISTS moderation_queue (
   action_taken TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 CREATE INDEX idx_moderation_status ON moderation_queue(status);
 CREATE INDEX idx_moderation_content ON moderation_queue(content_type, content_id);
-
 -- NPS responses
 CREATE TABLE IF NOT EXISTS nps_responses (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -361,10 +333,8 @@ CREATE TABLE IF NOT EXISTS nps_responses (
   days_since_signup INTEGER,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 CREATE INDEX idx_nps_user ON nps_responses(user_id);
 CREATE INDEX idx_nps_score ON nps_responses(score);
-
 -- Message feedback (AI response ratings)
 CREATE TABLE IF NOT EXISTS message_feedback (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -377,9 +347,7 @@ CREATE TABLE IF NOT EXISTS message_feedback (
   feedback_text TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 CREATE INDEX idx_message_feedback_user ON message_feedback(user_id);
-
 -- Upgrade prompt analytics
 CREATE TABLE IF NOT EXISTS upgrade_prompt_analytics (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -392,9 +360,7 @@ CREATE TABLE IF NOT EXISTS upgrade_prompt_analytics (
   converted_at TIMESTAMPTZ,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 CREATE INDEX idx_upgrade_analytics_user ON upgrade_prompt_analytics(user_id);
-
 -- ============================================
 -- PRIORITY 4: SUPPORTING FEATURES
 -- ============================================
@@ -417,10 +383,8 @@ CREATE TABLE IF NOT EXISTS goals (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 CREATE INDEX idx_goals_user ON goals(user_id);
 CREATE INDEX idx_goals_child ON goals(child_id);
-
 -- User preferences
 CREATE TABLE IF NOT EXISTS user_preferences (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -443,9 +407,7 @@ CREATE TABLE IF NOT EXISTS user_preferences (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 CREATE INDEX idx_user_preferences_user ON user_preferences(user_id);
-
 -- Insight report shares
 CREATE TABLE IF NOT EXISTS insight_report_shares (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -461,10 +423,8 @@ CREATE TABLE IF NOT EXISTS insight_report_shares (
   access_count INTEGER DEFAULT 0,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 CREATE INDEX idx_report_shares_user ON insight_report_shares(user_id);
 CREATE INDEX idx_report_shares_token ON insight_report_shares(access_token);
-
 -- Referral credits
 CREATE TABLE IF NOT EXISTS referral_credits (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -480,9 +440,7 @@ CREATE TABLE IF NOT EXISTS referral_credits (
   used_for TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 CREATE INDEX idx_referral_credits_user ON referral_credits(user_id);
-
 -- Jr sessions (Aminy Jr for kids)
 CREATE TABLE IF NOT EXISTS jr_sessions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -499,9 +457,7 @@ CREATE TABLE IF NOT EXISTS jr_sessions (
   started_at TIMESTAMPTZ DEFAULT NOW(),
   completed_at TIMESTAMPTZ
 );
-
 CREATE INDEX idx_jr_sessions_child ON jr_sessions(child_id);
-
 -- Key-value store (for edge functions)
 CREATE TABLE IF NOT EXISTS kv_store_8a022548 (
   key TEXT PRIMARY KEY,
@@ -510,7 +466,6 @@ CREATE TABLE IF NOT EXISTS kv_store_8a022548 (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- Caregiver time entries (respite tracking)
 CREATE TABLE IF NOT EXISTS caregiver_time_entries (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -525,9 +480,7 @@ CREATE TABLE IF NOT EXISTS caregiver_time_entries (
   notes TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 CREATE INDEX idx_caregiver_time_user ON caregiver_time_entries(user_id);
-
 -- ============================================
 -- ROW LEVEL SECURITY POLICIES
 -- ============================================
@@ -556,19 +509,16 @@ ALTER TABLE insight_report_shares ENABLE ROW LEVEL SECURITY;
 ALTER TABLE referral_credits ENABLE ROW LEVEL SECURITY;
 ALTER TABLE jr_sessions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE caregiver_time_entries ENABLE ROW LEVEL SECURITY;
-
 -- Children policies
 CREATE POLICY "Users can view own children" ON children FOR SELECT USING (auth.uid() = parent_id);
 CREATE POLICY "Users can insert own children" ON children FOR INSERT WITH CHECK (auth.uid() = parent_id);
 CREATE POLICY "Users can update own children" ON children FOR UPDATE USING (auth.uid() = parent_id);
 CREATE POLICY "Users can delete own children" ON children FOR DELETE USING (auth.uid() = parent_id);
-
 -- Child profiles policies
 CREATE POLICY "Users can view own child profiles" ON child_profiles FOR SELECT
   USING (EXISTS (SELECT 1 FROM children WHERE children.id = child_profiles.child_id AND children.parent_id = auth.uid()));
 CREATE POLICY "Users can manage own child profiles" ON child_profiles FOR ALL
   USING (EXISTS (SELECT 1 FROM children WHERE children.id = child_profiles.child_id AND children.parent_id = auth.uid()));
-
 -- Provider applications policies
 CREATE POLICY "Users can view own applications" ON provider_applications FOR SELECT USING (auth.uid() = user_id);
 CREATE POLICY "Users can insert own applications" ON provider_applications FOR INSERT WITH CHECK (auth.uid() = user_id);
@@ -578,85 +528,64 @@ CREATE POLICY "Admins can view all applications" ON provider_applications FOR SE
 CREATE POLICY "Admins can update applications" ON provider_applications FOR UPDATE USING (
   EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('admin', 'super_admin'))
 );
-
 -- Marketplace bookings policies
 CREATE POLICY "Users can view own bookings" ON marketplace_bookings FOR SELECT USING (auth.uid() = user_id);
 CREATE POLICY "Providers can view their bookings" ON marketplace_bookings FOR SELECT
   USING (EXISTS (SELECT 1 FROM provider_profiles WHERE provider_profiles.id = marketplace_bookings.provider_id AND provider_profiles.user_id = auth.uid()));
 CREATE POLICY "Users can create bookings" ON marketplace_bookings FOR INSERT WITH CHECK (auth.uid() = user_id);
 CREATE POLICY "Users can update own bookings" ON marketplace_bookings FOR UPDATE USING (auth.uid() = user_id);
-
 -- Telehealth sessions policies
 CREATE POLICY "Participants can view sessions" ON telehealth_sessions FOR SELECT
   USING (auth.uid() = patient_id OR EXISTS (SELECT 1 FROM provider_profiles WHERE id = telehealth_sessions.provider_id AND user_id = auth.uid()));
-
 -- Medications policies
 CREATE POLICY "Users can manage medications for own children" ON medications FOR ALL
   USING (EXISTS (SELECT 1 FROM children WHERE children.id = medications.child_id AND children.parent_id = auth.uid()));
-
 -- Medication logs policies
 CREATE POLICY "Users can manage medication logs" ON medication_logs FOR ALL
   USING (EXISTS (SELECT 1 FROM children WHERE children.id = medication_logs.child_id AND children.parent_id = auth.uid()));
-
 -- BIP policies
 CREATE POLICY "Users can view BIPs for own children" ON behavior_intervention_plans FOR SELECT
   USING (EXISTS (SELECT 1 FROM children WHERE children.id = behavior_intervention_plans.child_id AND children.parent_id = auth.uid()));
 CREATE POLICY "Providers can manage BIPs" ON behavior_intervention_plans FOR ALL
   USING (auth.uid() = created_by OR EXISTS (SELECT 1 FROM provider_profiles WHERE user_id = auth.uid()));
-
 -- Assessment results policies
 CREATE POLICY "Users can view own assessment results" ON assessment_results FOR SELECT USING (auth.uid() = user_id);
 CREATE POLICY "Users can insert own assessment results" ON assessment_results FOR INSERT WITH CHECK (auth.uid() = user_id);
-
 -- Crisis logs policies
 CREATE POLICY "Users can view own crisis logs" ON crisis_logs FOR SELECT USING (auth.uid() = user_id);
 CREATE POLICY "System can insert crisis logs" ON crisis_logs FOR INSERT WITH CHECK (true);
-
 -- Screening response policies (GAD7, PHQ9)
 CREATE POLICY "Users can manage own GAD7 responses" ON gad7_responses FOR ALL USING (auth.uid() = user_id);
 CREATE POLICY "Users can manage own PHQ9 responses" ON phq9_responses FOR ALL USING (auth.uid() = user_id);
-
 -- Clinics policies
 CREATE POLICY "Admins can manage clinics" ON clinics FOR ALL
   USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('admin', 'super_admin')));
 CREATE POLICY "Clinic admins can view own clinic" ON clinics FOR SELECT USING (admin_user_id = auth.uid());
-
 -- Moderation policies
 CREATE POLICY "Admins can manage moderation queue" ON moderation_queue FOR ALL
   USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('admin', 'super_admin', 'moderator')));
-
 -- NPS policies
 CREATE POLICY "Users can manage own NPS responses" ON nps_responses FOR ALL USING (auth.uid() = user_id);
-
 -- Message feedback policies
 CREATE POLICY "Users can manage own feedback" ON message_feedback FOR ALL USING (auth.uid() = user_id);
-
 -- Upgrade analytics policies
 CREATE POLICY "Users can insert own analytics" ON upgrade_prompt_analytics FOR INSERT WITH CHECK (auth.uid() = user_id);
 CREATE POLICY "Admins can view all analytics" ON upgrade_prompt_analytics FOR SELECT
   USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('admin', 'super_admin')));
-
 -- Goals policies
 CREATE POLICY "Users can manage own goals" ON goals FOR ALL USING (auth.uid() = user_id);
-
 -- User preferences policies
 CREATE POLICY "Users can manage own preferences" ON user_preferences FOR ALL USING (auth.uid() = user_id);
-
 -- Insight report shares policies
 CREATE POLICY "Users can manage own report shares" ON insight_report_shares FOR ALL USING (auth.uid() = user_id);
-
 -- Referral credits policies
 CREATE POLICY "Users can view own credits" ON referral_credits FOR SELECT USING (auth.uid() = user_id);
-
 -- Jr sessions policies
 CREATE POLICY "Users can manage own jr sessions" ON jr_sessions FOR ALL USING (auth.uid() = parent_id);
-
 -- Caregiver time entries policies
 CREATE POLICY "Users can manage own time entries" ON caregiver_time_entries FOR ALL USING (auth.uid() = user_id);
-
 -- KV store - service role only
 CREATE POLICY "Service role can access kv store" ON kv_store_8a022548 FOR ALL USING (true);
-
 -- ============================================
 -- GRANT PERMISSIONS
 -- ============================================

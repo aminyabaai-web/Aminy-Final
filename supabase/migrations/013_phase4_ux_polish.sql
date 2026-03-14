@@ -17,35 +17,28 @@ CREATE TABLE IF NOT EXISTS ai_chat_conversations (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- Create index for faster lookups
 CREATE INDEX IF NOT EXISTS idx_chat_conversations_user_id ON ai_chat_conversations(user_id);
 CREATE INDEX IF NOT EXISTS idx_chat_conversations_updated ON ai_chat_conversations(updated_at DESC);
-
 -- Enable RLS
 ALTER TABLE ai_chat_conversations ENABLE ROW LEVEL SECURITY;
-
 -- RLS Policies (idempotent)
 DROP POLICY IF EXISTS "Users can view own conversations" ON ai_chat_conversations;
 CREATE POLICY "Users can view own conversations"
   ON ai_chat_conversations FOR SELECT
   USING (auth.uid() = user_id);
-
 DROP POLICY IF EXISTS "Users can create own conversations" ON ai_chat_conversations;
 CREATE POLICY "Users can create own conversations"
   ON ai_chat_conversations FOR INSERT
   WITH CHECK (auth.uid() = user_id);
-
 DROP POLICY IF EXISTS "Users can update own conversations" ON ai_chat_conversations;
 CREATE POLICY "Users can update own conversations"
   ON ai_chat_conversations FOR UPDATE
   USING (auth.uid() = user_id);
-
 DROP POLICY IF EXISTS "Users can delete own conversations" ON ai_chat_conversations;
 CREATE POLICY "Users can delete own conversations"
   ON ai_chat_conversations FOR DELETE
   USING (auth.uid() = user_id);
-
 -- ============================================
 -- CHAT MESSAGES TABLE
 -- ============================================
@@ -60,14 +53,11 @@ CREATE TABLE IF NOT EXISTS ai_chat_messages (
   context_used BOOLEAN DEFAULT FALSE, -- Whether AI used memory context
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- Create indexes
 CREATE INDEX IF NOT EXISTS idx_chat_messages_conversation ON ai_chat_messages(conversation_id);
 CREATE INDEX IF NOT EXISTS idx_chat_messages_created ON ai_chat_messages(created_at);
-
 -- Enable RLS
 ALTER TABLE ai_chat_messages ENABLE ROW LEVEL SECURITY;
-
 -- RLS Policies (users can access messages through conversation ownership)
 DROP POLICY IF EXISTS "Users can view messages in own conversations" ON ai_chat_messages;
 CREATE POLICY "Users can view messages in own conversations"
@@ -79,7 +69,6 @@ CREATE POLICY "Users can view messages in own conversations"
       AND ai_chat_conversations.user_id = auth.uid()
     )
   );
-
 DROP POLICY IF EXISTS "Users can add messages to own conversations" ON ai_chat_messages;
 CREATE POLICY "Users can add messages to own conversations"
   ON ai_chat_messages FOR INSERT
@@ -90,7 +79,6 @@ CREATE POLICY "Users can add messages to own conversations"
       AND ai_chat_conversations.user_id = auth.uid()
     )
   );
-
 DROP POLICY IF EXISTS "Users can delete messages in own conversations" ON ai_chat_messages;
 CREATE POLICY "Users can delete messages in own conversations"
   ON ai_chat_messages FOR DELETE
@@ -101,7 +89,6 @@ CREATE POLICY "Users can delete messages in own conversations"
       AND ai_chat_conversations.user_id = auth.uid()
     )
   );
-
 -- ============================================
 -- CHAT ATTACHMENTS TABLE
 -- ============================================
@@ -119,30 +106,24 @@ CREATE TABLE IF NOT EXISTS chat_attachments (
   thumbnail_url TEXT, -- For images
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- Create indexes
 CREATE INDEX IF NOT EXISTS idx_chat_attachments_user ON chat_attachments(user_id);
 CREATE INDEX IF NOT EXISTS idx_chat_attachments_message ON chat_attachments(message_id);
-
 -- Enable RLS
 ALTER TABLE chat_attachments ENABLE ROW LEVEL SECURITY;
-
 -- RLS Policies
 DROP POLICY IF EXISTS "Users can view own attachments" ON chat_attachments;
 CREATE POLICY "Users can view own attachments"
   ON chat_attachments FOR SELECT
   USING (auth.uid() = user_id);
-
 DROP POLICY IF EXISTS "Users can upload attachments" ON chat_attachments;
 CREATE POLICY "Users can upload attachments"
   ON chat_attachments FOR INSERT
   WITH CHECK (auth.uid() = user_id);
-
 DROP POLICY IF EXISTS "Users can delete own attachments" ON chat_attachments;
 CREATE POLICY "Users can delete own attachments"
   ON chat_attachments FOR DELETE
   USING (auth.uid() = user_id);
-
 -- ============================================
 -- VOICE INPUT LOGS (Optional - for analytics)
 -- ============================================
@@ -155,20 +136,16 @@ CREATE TABLE IF NOT EXISTS voice_input_logs (
   language TEXT DEFAULT 'en-US',
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- Enable RLS
 ALTER TABLE voice_input_logs ENABLE ROW LEVEL SECURITY;
-
 DROP POLICY IF EXISTS "Users can view own voice logs" ON voice_input_logs;
 CREATE POLICY "Users can view own voice logs"
   ON voice_input_logs FOR SELECT
   USING (auth.uid() = user_id);
-
 DROP POLICY IF EXISTS "Users can create own voice logs" ON voice_input_logs;
 CREATE POLICY "Users can create own voice logs"
   ON voice_input_logs FOR INSERT
   WITH CHECK (auth.uid() = user_id);
-
 -- ============================================
 -- TRIGGER: Update conversation on new message
 -- ============================================
@@ -196,14 +173,12 @@ BEGIN
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
-
 -- Create trigger (idempotent)
 DROP TRIGGER IF EXISTS trigger_update_conversation_on_message ON ai_chat_messages;
 CREATE TRIGGER trigger_update_conversation_on_message
   AFTER INSERT ON ai_chat_messages
   FOR EACH ROW
   EXECUTE FUNCTION update_conversation_on_message();
-
 -- ============================================
 -- STORAGE BUCKET FOR CHAT ATTACHMENTS
 -- ============================================
@@ -237,10 +212,8 @@ SELECT
 FROM ai_chat_conversations c
 LEFT JOIN chat_attachments a ON a.user_id = c.user_id
 GROUP BY user_id;
-
 -- Grant access to the view
 GRANT SELECT ON chat_analytics TO authenticated;
-
 -- ============================================
 -- COMMENTS
 -- ============================================

@@ -15,6 +15,7 @@ import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Progress } from './ui/progress';
+import { SyncStatusBadge } from './ui/SyncStatusBadge';
 import {
   Home,
   BookOpen,
@@ -48,11 +49,11 @@ import {
 } from 'lucide-react';
 import { useConversation } from '../context/ConversationContext';
 import { useAuditedAction } from '../hooks/useAuditedAction';
+import { useWorkflowSyncState } from '../lib/core-workflow-sync';
 
 // Supporting components
 import { OutcomesDashboardWidget } from './OutcomesDashboardWidget';
 import { QuickShareButton } from './ShareWinFlow';
-import { DifferentiationCallout } from './DifferentiationCallout';
 import { ProactiveNudgeSystem } from './ProactiveNudgeSystem';
 import { ProactiveCheckIn, useProactiveCheckIns } from './ProactiveCheckIn';
 import { MorningMission, useMorningMission } from './MorningMission';
@@ -112,6 +113,9 @@ interface Dashboard10Props {
   userData: {
     parentName: string;
     childName: string;
+    childId?: string;
+    activeChildId?: string;
+    pilotEligible?: boolean;
   };
   childProfile?: ChildProfile;
   onNavigate?: (destination: string) => void;
@@ -179,7 +183,7 @@ export function Dashboard10({
   useAuditedAction('child_data');
   const [activeRoutine, setActiveRoutine] = useState<'morning' | 'afternoon' | 'evening' | 'bedtime'>('morning');
   // CHAT-FIRST: Start with chat expanded to make it the primary experience
-  const [showAIChat, setShowAIChat] = useState(true);
+  const [showAIChat, setShowAIChat] = useState(false);
   const [isFullScreenChat, setIsFullScreenChat] = useState(false);
   const [activeTab, setActiveTab] = useState<'home' | 'resources' | 'community' | 'profile'>('home');
   const [dailyTip] = useState(() => DAILY_TIPS[Math.floor(Math.random() * DAILY_TIPS.length)]);
@@ -221,13 +225,9 @@ export function Dashboard10({
     }
   }, [getNudge, getPersonalizedTip]);
 
-  // Trigger proactive check-in after a short delay on dashboard load
+  // The dashboard already carries inline coaching cards; avoid stacking another floating prompt on load.
   useEffect(() => {
-    const timer = setTimeout(() => {
-      triggerCheckIn();
-    }, 5000); // 5 second delay to let dashboard settle
-    return () => clearTimeout(timer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- Only on mount
+    return undefined;
   }, []);
 
   // Initialize push notification subscription on first dashboard load
@@ -256,16 +256,17 @@ export function Dashboard10({
         .from('trial_tracking')
         .select('conversations_used, has_seen_nudge')
         .eq('user_id', userId)
-        .single()
+        .limit(1)
         .then(({ data }) => {
-          if (data) {
-            setConversationsUsed(data.conversations_used || 0);
+          const trial = Array.isArray(data) ? data[0] : null;
+          if (trial) {
+            setConversationsUsed(trial.conversations_used || 0);
             // Show soft nudge after 3 conversations if not seen
-            if (data.conversations_used >= 3 && !data.has_seen_nudge) {
+            if (trial.conversations_used >= 3 && !trial.has_seen_nudge) {
               setShowSoftNudge(true);
             }
             // Show hard paywall after 5 conversations
-            if (data.conversations_used >= 5) {
+            if (trial.conversations_used >= 5) {
               setShowHardPaywall(true);
             }
           }
@@ -290,7 +291,7 @@ export function Dashboard10({
   // Only create conversation once - don't re-run when currentConversation changes
   useEffect(() => {
     if (userId && userData.childName && !currentConversation) {
-      const childId = `child-${userId.substring(0, 8)}`;
+      const childId = userData.activeChildId || userData.childId || `child-${userId.substring(0, 8)}`;
       setChildContext(childId);
       createConversation(childId, `Chat about ${userData.childName}`);
     }
@@ -311,7 +312,7 @@ export function Dashboard10({
     setIsSendingChat(true);
 
     try {
-      const childId = `child-${userId?.substring(0, 8) || 'temp'}`;
+      const childId = userData.activeChildId || userData.childId || `child-${userId?.substring(0, 8) || 'temp'}`;
       await sendMessage('parent', messageText, { childId });
 
       // Increment trial conversation count for free users
@@ -371,7 +372,7 @@ export function Dashboard10({
   const upcomingEvents: UpcomingEvent[] = safeUpcomingEvents.length > 0
     ? safeUpcomingEvents
     : [
-        { id: '1', title: 'Schedule a session', time: 'Explore Providers', type: 'telehealth' as const },
+        { id: '1', title: 'Check expert care availability', time: 'Limited launch support', type: 'telehealth' as const },
       ];
 
   // Build routines from real data or use defaults
@@ -413,13 +414,52 @@ export function Dashboard10({
     completedCount: 0,
   };
   const safeTasks = Array.isArray(currentRoutine.tasks) ? currentRoutine.tasks : [];
+  const activePlanSnapshotId = dashboardData.activePlanSnapshotId;
   const totalTasks = safeTasks.length;
   const completedTasks = safeTasks.filter(t => t.completed).length;
   const progressPercent = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
 
+  const aiMemorySync = useWorkflowSyncState('aiMemory');
+  const juniorProgressSync = useWorkflowSyncState('juniorProgress');
+
   // Real streak data from database
   const streakDays = dashboardData.streak;
   const todaysWins = dashboardData.milestonesEarned;
+  const hasRoutineHistory =
+    dashboardData.routineAdherence > 0 ||
+    safeTodaysRoutines.some((routine) => (routine.completedCount ?? 0) > 0) ||
+    completedTasks > 0;
+  const hasEstablishedUsage = streakDays >= 3 || todaysWins > 0 || hasRoutineHistory;
+  const shouldShowProactiveNudges = hasEstablishedUsage && dashboardData.routineAdherence < 85;
+  const shouldShowPersonalizedTip = showTip && Boolean(activeTip) && hasEstablishedUsage;
+  const shouldShowNotificationCard =
+    shouldShowNotificationPrompt && showNotificationPrompt && hasEstablishedUsage && !dashboardData.nextAppointment;
+  const shouldShowSleepInsights = Boolean(userId) && (dashboardData.totalCalmMinutes > 0 || streakDays >= 5 || dashboardData.routineAdherence >= 60);
+  const shouldShowWinsCard = todaysWins > 0 || streakDays >= 3;
+  const shouldShowActionItems = Boolean(userId) && hasEstablishedUsage;
+  const shouldShowReferralCard = streakDays >= 3 || todaysWins >= 5;
+  const shouldShowOutcomesCard =
+    hasEstablishedUsage ||
+    dashboardData.totalCalmMinutes > 0 ||
+    dashboardData.recentConversationCount > 0 ||
+    dashboardData.activeGoals.some((goal) => goal.progress > 0);
+  const shouldShowTrialProgress =
+    userTier === 'free' && conversationsUsed > 0;
+  const shouldShowStarterSummary =
+    !hasEstablishedUsage &&
+    dashboardData.totalCalmMinutes === 0 &&
+    !dashboardData.nextAppointment;
+  const shouldShowProviderReportsCard = hasEstablishedUsage;
+
+  const hasGoalMomentum = Array.isArray(child.goals) && child.goals.some((goal) => goal.percentMet > 0);
+
+  const getRoutineTaskIcon = (task: DailyTask): string => {
+    if (!task.completed && ['✅', '☑️', '✔️'].includes(task.icon)) {
+      return '•';
+    }
+
+    return task.icon;
+  };
 
   // Get contextual prompts based on time of day and child progress
   const getContextualPrompts = () => {
@@ -443,12 +483,30 @@ export function Dashboard10({
 
   // Quick actions
   const quickActions = [
-    { id: 'plan', label: 'Our Plan', icon: <FileText className="w-5 h-5" />, color: 'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-300' },
-    { id: 'calm', label: 'Calm Corner', icon: <Wind className="w-5 h-5" />, color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300' },
-    { id: 'log', label: 'Note a Moment', icon: <AlertCircle className="w-5 h-5" />, color: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300' },
-    { id: 'telehealth', label: 'Talk to Someone', icon: <Video className="w-5 h-5" />, color: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300' },
-    { id: 'resources', label: 'Learn More', icon: <BookOpen className="w-5 h-5" />, color: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300' },
-    { id: 'community', label: 'Other Parents', icon: <Users className="w-5 h-5" />, color: 'bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-300' },
+    {
+      id: 'plan',
+      label: 'Our Plan',
+      icon: <FileText className="w-5 h-5 text-teal-700 dark:text-teal-300" />,
+      accent: 'bg-teal-100 dark:bg-teal-900/30',
+    },
+    {
+      id: 'calm',
+      label: 'Calm Corner',
+      icon: <Wind className="w-5 h-5 text-sky-700 dark:text-sky-300" />,
+      accent: 'bg-sky-100 dark:bg-sky-900/30',
+    },
+    {
+      id: 'log',
+      label: 'Note a Moment',
+      icon: <AlertCircle className="w-5 h-5 text-amber-700 dark:text-amber-300" />,
+      accent: 'bg-amber-100 dark:bg-amber-900/30',
+    },
+    {
+      id: 'telehealth',
+      label: 'Expert Care',
+      icon: <Video className="w-5 h-5 text-violet-700 dark:text-violet-300" />,
+      accent: 'bg-violet-100 dark:bg-violet-900/30',
+    },
   ];
 
   const handleQuickAction = (actionId: string) => {
@@ -494,7 +552,7 @@ export function Dashboard10({
   // Show loading state while data is being fetched
   if (dashboardData.isLoading && userId) {
     return (
-      <div className="min-h-screen bg-[#F5F5F5] dark:bg-slate-900 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center dark:bg-slate-900" style={{ background: 'linear-gradient(180deg, #f5fbfb 0%, #f6faf8 45%, #eef4f7 100%)' }}>
         <div className="text-center">
           <motion.div
             animate={{ rotate: 360 }}
@@ -508,7 +566,10 @@ export function Dashboard10({
   }
 
   return (
-    <div className="min-h-screen bg-[#F5F5F5] dark:bg-slate-900 pb-24">
+    <div
+      className="min-h-screen dark:bg-slate-900 pb-24"
+      style={{ background: 'linear-gradient(180deg, #f6fbfb 0%, #f6faf8 42%, #edf4f7 100%)' }}
+    >
       {/* ========================================
           STREAK CELEBRATION OVERLAY
           Animated celebration for milestone streaks
@@ -553,14 +614,19 @@ export function Dashboard10({
       {/* ========================================
           1. HEADER & TOP NAVIGATION (20%)
           ======================================== */}
-      <header className="bg-[#0D1B2A] text-white sticky top-0 z-20">
+      <header
+        className="sticky top-0 z-20 border-b border-teal-100/80 backdrop-blur-xl"
+        style={{ background: 'linear-gradient(135deg, rgba(247,252,252,0.95) 0%, rgba(240,249,249,0.96) 48%, rgba(238,246,250,0.97) 100%)' }}
+      >
         <div className="max-w-4xl mx-auto px-4 py-4">
           {/* Greeting */}
           <div className="mb-4">
-            <h1 className="text-lg font-semibold text-[#F5F5F5]">
+            <h1 className="text-[1.05rem] font-semibold tracking-[-0.02em] text-slate-950">
               Hi {userData.parentName || 'there'}, here's {child.name}'s calm start today.
             </h1>
-            <p className="text-sm text-gray-400 italic mt-1">{dailyTip}</p>
+            <h2 className="sr-only">Daily overview</h2>
+            <h3 className="sr-only">Primary actions and support</h3>
+            <p className="mt-1 max-w-2xl text-sm italic text-slate-600">{dailyTip}</p>
           </div>
 
           {/* Multi-Child Switcher */}
@@ -572,11 +638,11 @@ export function Dashboard10({
                   onClick={() => setActiveChildId(c.id === activeChildId ? undefined : c.id)}
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm transition-colors flex-shrink-0 ${
                     (activeChildId === c.id || (!activeChildId && c.isPrimary))
-                      ? 'bg-teal-500/30 text-teal-200 border border-teal-400/40'
-                      : 'bg-white/10 text-gray-300 hover:bg-white/15'
+                      ? 'border border-teal-200 bg-teal-600 text-white shadow-sm'
+                      : 'border border-slate-200 bg-white/85 text-slate-600 hover:bg-white'
                   }`}
                 >
-                  <span className="w-5 h-5 rounded-full bg-gradient-to-br from-teal-400 to-teal-600 flex items-center justify-center text-[10px] font-bold text-white">
+                  <span className="w-5 h-5 rounded-full bg-gradient-to-br from-teal-400 to-cyan-500 flex items-center justify-center text-sm font-bold text-white">
                     {c.name?.[0] || '?'}
                   </span>
                   {c.name}
@@ -585,34 +651,59 @@ export function Dashboard10({
             </div>
           )}
 
+          {(aiMemorySync || juniorProgressSync) && (
+            <div className="mb-3 flex flex-wrap items-center gap-2">
+              {aiMemorySync ? (
+                <div className="flex items-center gap-2 rounded-full border border-slate-200 bg-white/80 px-3 py-1.5 text-sm text-slate-600 shadow-sm">
+                  <span className="font-medium text-slate-900">AI memory</span>
+                  <SyncStatusBadge status={aiMemorySync.status} />
+                </div>
+              ) : null}
+              {juniorProgressSync ? (
+                <div className="flex items-center gap-2 rounded-full border border-slate-200 bg-white/80 px-3 py-1.5 text-sm text-slate-600 shadow-sm">
+                  <span className="font-medium text-slate-900">Junior progress</span>
+                  <SyncStatusBadge status={juniorProgressSync.status} />
+                </div>
+              ) : null}
+            </div>
+          )}
+
           {/* Child Profile Snapshot */}
-          <div className="flex items-center gap-3 sm:gap-4 bg-white/10 rounded-xl p-3">
-            <div className="w-12 h-12 bg-gradient-to-br from-teal-400 to-teal-600 rounded-full flex items-center justify-center text-xl font-bold">
+          <div className="flex items-center gap-3 rounded-[22px] border border-white/80 bg-white/80 p-4 shadow-[0_18px_40px_rgba(15,23,42,0.06)] sm:gap-4">
+            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-teal-400 to-cyan-500 flex items-center justify-center text-xl font-bold text-white shadow-sm">
               {child.name[0]}
             </div>
             <div className="flex-1">
               <div className="flex items-center gap-2">
-                <span className="font-medium">{child.name}</span>
-                <Badge variant="outline" className="text-xs border-white/30 text-white/80">
+                <span className="font-medium text-slate-950">{child.name}</span>
+                <Badge variant="outline" className="border-teal-100 bg-white/85 text-sm text-slate-700">
                   Age {child.age}
                 </Badge>
               </div>
-              <div className="flex gap-3 mt-1">
+              <div className="mt-1">
                 {child.goals && child.goals.length > 0 ? (
-                  child.goals.slice(0, 2).map((goal) => (
-                    <div key={goal.name} className="text-xs text-gray-300">
-                      {goal.name}: <span className={goal.trend === 'up' ? 'text-green-400' : 'text-gray-400'}>{goal.percentMet}%</span>
-                      {goal.trend === 'up' && ' ↑'}
+                  hasGoalMomentum ? (
+                    <div className="flex gap-3">
+                      {child.goals.slice(0, 2).map((goal) => (
+                        <div key={goal.name} className="text-sm text-slate-600">
+                          {goal.name}: <span className={goal.trend === 'up' ? 'text-teal-700' : 'text-slate-500'}>{goal.percentMet}%</span>
+                          {goal.trend === 'up' && ' ↑'}
+                        </div>
+                      ))}
                     </div>
-                  ))
+                  ) : (
+                    <div className="text-sm text-slate-600">
+                      Starting focus areas: {child.goals.slice(0, 2).map((goal) => goal.name).join(' • ')}
+                    </div>
+                  )
                 ) : (
-                  <div className="text-xs text-gray-400">
+                  <div className="text-sm text-slate-500">
                     No goals set yet • Tap to add
                   </div>
                 )}
               </div>
             </div>
-            <ChevronRight className="w-5 h-5 text-gray-400" />
+            <ChevronRight className="w-5 h-5 text-slate-400" />
           </div>
 
           {/* Upcoming Events Carousel */}
@@ -621,22 +712,28 @@ export function Dashboard10({
               upcomingEvents.map((event) => (
                 <button
                   key={event.id}
-                  onClick={() => onNavigate?.(event.type === 'telehealth' ? 'my-appointments' : 'care-plan')}
-                  className="flex-shrink-0 bg-white/10 hover:bg-white/15 rounded-lg px-3 py-2 flex items-center gap-2 transition-colors"
+                  onClick={() =>
+                    onNavigate?.(
+                      event.type === 'telehealth'
+                        ? (safeUpcomingEvents.length > 0 ? 'my-appointments' : 'conversational-booking')
+                        : 'care-plan'
+                    )
+                  }
+                  className="flex-shrink-0 rounded-2xl border border-slate-200 bg-white/85 px-3 py-2.5 shadow-sm transition-colors hover:bg-white"
                 >
                   {event.type === 'telehealth' ? (
-                    <Video className="w-4 h-4 text-teal-400" />
+                    <Video className="w-4 h-4 text-teal-600" />
                   ) : (
-                    <Calendar className="w-4 h-4 text-amber-400" />
+                    <Calendar className="w-4 h-4 text-amber-500" />
                   )}
                   <div className="text-left">
-                    <div className="text-sm font-medium">{event.title}</div>
-                    <div className="text-xs text-gray-400">{event.time}</div>
+                    <div className="text-sm font-medium text-slate-900">{event.title}</div>
+                    <div className="text-sm text-slate-500">{event.time}</div>
                   </div>
                 </button>
               ))
             ) : (
-              <div className="text-sm text-gray-400 py-2">
+              <div className="py-2 text-sm text-slate-500">
                 You're all caught up! No upcoming events.
               </div>
             )}
@@ -650,6 +747,7 @@ export function Dashboard10({
             PROACTIVE NUDGES - AI that reaches out
             (Aminy's unique proactive support)
             ======================================== */}
+        {shouldShowProactiveNudges ? (
         <ProactiveNudgeSystem
           userId={userId || undefined}
           childName={child.name}
@@ -677,9 +775,10 @@ export function Dashboard10({
             }
           }}
         />
+        ) : null}
 
         {/* Nudge Engine Personalized Tip */}
-        {showTip && activeTip && (
+        {shouldShowPersonalizedTip && activeTip && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -691,7 +790,8 @@ export function Dashboard10({
               <p className="text-sm text-teal-800 dark:text-teal-200 flex-1">{activeTip}</p>
               <button
                 onClick={() => setShowTip(false)}
-                className="p-0.5 text-teal-400 hover:text-teal-600 flex-shrink-0"
+                className="h-11 w-11 text-teal-400 hover:text-teal-600 flex-shrink-0 rounded-lg flex items-center justify-center"
+                aria-label="Dismiss personalized tip"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -709,7 +809,7 @@ export function Dashboard10({
                 title={badge.description}
               >
                 <span className="text-base">{badge.emoji}</span>
-                <span className="text-xs font-medium text-slate-600 dark:text-slate-300 whitespace-nowrap">{badge.name}</span>
+                <span className="text-sm font-medium text-slate-600 dark:text-slate-300 whitespace-nowrap">{badge.name}</span>
               </div>
             ))}
           </div>
@@ -725,7 +825,7 @@ export function Dashboard10({
                 </div>
                 <div>
                   <p className="text-sm font-medium">Next: {dashboardData.nextAppointment.providerName}</p>
-                  <p className="text-xs text-muted-foreground">{dashboardData.nextAppointment.time}</p>
+                  <p className="text-sm text-muted-foreground">{dashboardData.nextAppointment.time}</p>
                 </div>
               </div>
               {(() => {
@@ -739,7 +839,9 @@ export function Dashboard10({
                       </Button>
                     );
                   }
-                } catch {}
+                } catch (_error) {
+                  // Fall back to the generic appointment action if the date string is invalid.
+                }
                 return (
                   <Button size="sm" variant="outline" onClick={() => onNavigate?.('my-appointments')}>
                     View
@@ -750,26 +852,62 @@ export function Dashboard10({
           </div>
         )}
 
-        {/* Weekly Summary Card */}
-        <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-gray-100 dark:border-slate-700 shadow-sm">
-          <h3 className="text-sm font-semibold mb-3">This Week</h3>
-          <div className="grid grid-cols-3 gap-3 text-center">
-            <div>
-              <p className="text-2xl font-bold text-teal-600">{dashboardData.routineAdherence}%</p>
-              <p className="text-xs text-muted-foreground">Routine</p>
+        {/* Weekly Summary / Starter Card */}
+        {shouldShowStarterSummary ? (
+          <div className="rounded-2xl border border-teal-100 bg-gradient-to-br from-white via-teal-50/60 to-sky-50/70 p-5 shadow-sm dark:border-teal-900/40 dark:from-slate-800 dark:via-teal-950/20 dark:to-slate-900">
+            <div className="flex items-start gap-3">
+              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-300">
+                <Wind className="h-5 w-5" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                  Start gently today
+                </h3>
+                <p className="mt-1 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                  You do not need a perfect week to begin. Pick one calm step, one small routine, or one quick note.
+                  Aminy will build the rest around what works for your family.
+                </p>
+              </div>
             </div>
-            <div>
-              <p className="text-2xl font-bold text-amber-600">{dashboardData.streak || streakDays}</p>
-              <p className="text-xs text-muted-foreground">Day Streak</p>
-            </div>
-            <div>
-              <p className="text-2xl font-bold text-purple-600">
-                {dashboardData.activeGoals?.filter(g => g.progress >= 100).length || 0}/{dashboardData.activeGoals?.length || 0}
-              </p>
-              <p className="text-xs text-muted-foreground">Goals Met</p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <Button
+                size="sm"
+                className="rounded-full bg-[#0891b2] text-white hover:bg-[#0b7895]"
+                onClick={() => onNavigate?.('care-plan')}
+              >
+                See our plan
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                className="rounded-full border-slate-200 bg-white text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
+                onClick={() => onNavigate?.('calm-tools')}
+              >
+                Open Calm Corner
+              </Button>
             </div>
           </div>
-        </div>
+        ) : (
+          <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-gray-100 dark:border-slate-700 shadow-sm">
+            <h3 className="text-sm font-semibold mb-3">This Week</h3>
+            <div className="grid grid-cols-3 gap-3 text-center">
+              <div>
+                <p className="text-2xl font-bold text-teal-600">{dashboardData.routineAdherence}%</p>
+                <p className="text-sm text-muted-foreground">Routine</p>
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-amber-600">{dashboardData.streak || streakDays}</p>
+                <p className="text-sm text-muted-foreground">Day Streak</p>
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-purple-600">
+                  {dashboardData.activeGoals?.filter(g => g.progress >= 100).length || 0}/{dashboardData.activeGoals?.length || 0}
+                </p>
+                <p className="text-sm text-muted-foreground">Goals Met</p>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Empty State CTAs */}
         {(!dashboardData.activeGoals || dashboardData.activeGoals.length === 0) && (
@@ -821,7 +959,7 @@ export function Dashboard10({
                 {routine.icon}
                 <span className="font-medium text-sm">{routine.label}</span>
                 {routine.completedCount > 0 && (
-                  <Badge className="bg-green-500 text-white text-xs">
+                  <Badge className="bg-green-500 text-white text-sm">
                     {routine.completedCount}/{routine.tasks.length}
                   </Badge>
                 )}
@@ -830,7 +968,11 @@ export function Dashboard10({
           </div>
 
           {/* Current Routine Card */}
-          <Card className="p-4 bg-white dark:bg-slate-800 shadow-sm border-0">
+          <Card
+            className="p-4 bg-white dark:bg-slate-800 shadow-sm border-0"
+            data-testid="active-routine-card"
+            data-plan-snapshot-id={activePlanSnapshotId || ''}
+          >
             <div className="flex items-center justify-between mb-4">
               <h2 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                 {currentRoutine.icon}
@@ -850,13 +992,15 @@ export function Dashboard10({
                 <button
                   key={task.id}
                   onClick={() => handleTaskToggle(task.id)}
+                  data-testid={`routine-task-${task.id}`}
+                  data-plan-item-id={task.id}
                   className={`w-full flex items-center gap-3 p-3 rounded-lg transition-all ${
                     task.completed
                       ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800'
                       : 'bg-gray-50 dark:bg-slate-700/50 hover:bg-gray-100 dark:hover:bg-slate-700'
                   }`}
                 >
-                  <span className="text-2xl">{task.icon}</span>
+                  <span className="text-2xl">{getRoutineTaskIcon(task)}</span>
                   <div className="flex-1 text-left">
                     <div className={`font-medium ${task.completed ? 'text-green-700 dark:text-green-300' : 'text-gray-900 dark:text-white'}`}>
                       {task.title}
@@ -864,7 +1008,7 @@ export function Dashboard10({
                     <div className="text-sm text-gray-500 dark:text-gray-400">{task.description}</div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs text-gray-400">{task.timeEstimate}</span>
+                    <span className="text-sm text-gray-400">{task.timeEstimate}</span>
                     {task.completed ? (
                       <CheckCircle2 className="w-6 h-6 text-green-500" />
                     ) : (
@@ -891,25 +1035,19 @@ export function Dashboard10({
             3. OUTCOMES DASHBOARD - Measurable Progress
             Shows real value that makes subscription essential
             ======================================== */}
-        <section>
-          <OutcomesDashboardWidget
-            onViewDetails={() => onNavigate?.('progress-report')}
-          />
-        </section>
-
-        {/* ========================================
-            DIFFERENTIATION CALLOUT - Why Aminy Works
-            Makes the moat explicit
-            ======================================== */}
-        <section>
-          <DifferentiationCallout variant="compact" context="dashboard" />
-        </section>
+        {shouldShowOutcomesCard && (
+          <section>
+            <OutcomesDashboardWidget
+              onViewDetails={() => onNavigate?.('weekly-insights')}
+            />
+          </section>
+        )}
 
         {/* ========================================
             TRIAL PROGRESS - Show free users their journey
             Makes upgrade feel natural, not forced
             ======================================== */}
-        {userTier === 'free' && (
+        {shouldShowTrialProgress && (
           <section>
             <TrialProgressBanner onUpgrade={() => onNavigate?.('paywall')} />
           </section>
@@ -919,7 +1057,7 @@ export function Dashboard10({
             NOTIFICATION PROMPT - Enable push notifications
             Personalized value proposition
             ======================================== */}
-        {shouldShowNotificationPrompt && showNotificationPrompt && (
+        {shouldShowNotificationCard && (
           <section>
             <NotificationPrompt
               childName={child.name}
@@ -934,10 +1072,10 @@ export function Dashboard10({
             SLEEP INSIGHTS - Apple Health / Google Fit
             Automatic data that predicts behavior
             ======================================== */}
-        {userId && (
+        {shouldShowSleepInsights && (
           <section>
             <HealthDataIntegration
-              userId={userId}
+              userId={userId!}
               childId={child.id}
               childName={child.name}
               onSleepDataUpdate={(data) => {
@@ -951,34 +1089,35 @@ export function Dashboard10({
             4. WINS & CELEBRATIONS (10%)
             Easy viral sharing with branded images
             ======================================== */}
-        <section>
-          <Card className="p-4 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border-0 shadow-sm">
-            <div className="flex items-start gap-3 sm:gap-4">
-              <div className="p-2 bg-amber-100 dark:bg-amber-800/50 rounded-full">
-                <Award className="w-6 h-6 text-amber-600 dark:text-amber-400" />
+        {shouldShowWinsCard && (
+          <section>
+            <Card className="p-4 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border-0 shadow-sm">
+              <div className="flex items-start gap-3 sm:gap-4">
+                <div className="p-2 bg-amber-100 dark:bg-amber-800/50 rounded-full">
+                  <Award className="w-6 h-6 text-amber-600 dark:text-amber-400" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-amber-900 dark:text-amber-100">Today's Wins</h3>
+                  <p className="text-sm text-amber-800 dark:text-amber-200 mt-1">
+                    Completed {todaysWins} tasks! {child.name}'s streak: <strong>{streakDays} days</strong>.
+                    You're building consistency — great job!
+                  </p>
+                </div>
+                <QuickShareButton
+                  variant="compact"
+                  win={{
+                    type: 'streak',
+                    title: `${streakDays}-Day Streak!`,
+                    description: `Completed ${todaysWins} tasks today with Aminy. Consistency builds habits!`,
+                    metric: `${streakDays} days`,
+                    date: new Date(),
+                    childName: child.name,
+                  }}
+                />
               </div>
-              <div className="flex-1">
-                <h3 className="font-semibold text-amber-900 dark:text-amber-100">Today's Wins</h3>
-                <p className="text-sm text-amber-800 dark:text-amber-200 mt-1">
-                  Completed {todaysWins} tasks! {child.name}'s streak: <strong>{streakDays} days</strong>.
-                  You're building consistency — great job!
-                </p>
-              </div>
-              {/* Viral Share Button - generates branded shareable image */}
-              <QuickShareButton
-                variant="compact"
-                win={{
-                  type: 'streak',
-                  title: `${streakDays}-Day Streak!`,
-                  description: `Completed ${todaysWins} tasks today with Aminy. Consistency builds habits!`,
-                  metric: `${streakDays} days`,
-                  date: new Date(),
-                  childName: child.name,
-                }}
-              />
-            </div>
-          </Card>
-        </section>
+            </Card>
+          </section>
+        )}
 
         {/* ========================================
             5. QUICK ACTION GRID (15%)
@@ -989,46 +1128,50 @@ export function Dashboard10({
             Quick Actions
           </h2>
 
-          <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {quickActions.map((action) => (
               <button
                 key={action.id}
                 onClick={() => handleQuickAction(action.id)}
-                className={`flex flex-col items-center gap-2 p-4 rounded-xl transition-all hover:scale-105 active:scale-95 ${action.color}`}
+                className="flex min-h-[108px] flex-col items-center gap-2 rounded-xl border border-slate-200 bg-white p-4 text-slate-700 shadow-sm transition-all hover:-translate-y-0.5 hover:border-teal-200 hover:bg-slate-50 hover:shadow-md active:scale-[0.98] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700/70"
               >
-                {action.icon}
-                <span className="text-xs font-medium text-center">{action.label}</span>
+                <span className={`flex h-11 w-11 items-center justify-center rounded-2xl ${action.accent}`}>
+                  {action.icon}
+                </span>
+                <span className="text-sm font-semibold text-center">{action.label}</span>
               </button>
             ))}
           </div>
 
           {/* Provider Reports Card */}
-          <div
-            className="mt-3 p-3.5 rounded-xl bg-gradient-to-r from-teal-50 to-emerald-50 dark:from-teal-900/20 dark:to-emerald-900/20 border border-teal-200 dark:border-teal-800 flex items-center gap-3 cursor-pointer hover:shadow-sm transition-shadow"
-            onClick={() => onNavigate?.('clinical-reports')}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => e.key === 'Enter' && onNavigate?.('clinical-reports')}
-          >
-            <div className="w-10 h-10 rounded-lg bg-teal-100 dark:bg-teal-800/50 flex items-center justify-center flex-shrink-0">
-              <Stethoscope className="w-5 h-5 text-teal-700 dark:text-teal-300" />
+          {shouldShowProviderReportsCard ? (
+            <div
+              className="mt-3 p-3.5 rounded-xl bg-gradient-to-r from-teal-50 to-emerald-50 dark:from-teal-900/20 dark:to-emerald-900/20 border border-teal-200 dark:border-teal-800 flex items-center gap-3 cursor-pointer hover:shadow-sm transition-shadow"
+              onClick={() => onNavigate?.('clinical-reports')}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => e.key === 'Enter' && onNavigate?.('clinical-reports')}
+            >
+              <div className="w-10 h-10 rounded-lg bg-teal-100 dark:bg-teal-800/50 flex items-center justify-center flex-shrink-0">
+                <Stethoscope className="w-5 h-5 text-teal-700 dark:text-teal-300" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <h3 className="font-medium text-sm text-teal-900 dark:text-teal-100">Provider Reports</h3>
+                <p className="text-sm text-teal-700 dark:text-teal-300">Generate clinical PDFs for your child's care team</p>
+              </div>
+              <ChevronRight className="w-4 h-4 text-teal-400 flex-shrink-0" />
             </div>
-            <div className="flex-1 min-w-0">
-              <h3 className="font-medium text-sm text-teal-900 dark:text-teal-100">Provider Reports</h3>
-              <p className="text-xs text-teal-700 dark:text-teal-300">Generate clinical PDFs for your child's care team</p>
-            </div>
-            <ChevronRight className="w-4 h-4 text-teal-400 flex-shrink-0" />
-          </div>
+          ) : null}
         </section>
 
         {/* ========================================
             6. ACTION ITEMS - Organic Data Collection
             Check-ins and screenings via conversational AI
             ======================================== */}
-        {userId && (
+        {shouldShowActionItems && (
           <section>
             <ActionItems
-              userId={userId}
+              userId={userId!}
               childId={child.id}
               childName={child.name}
               childAge={child.age}
@@ -1044,17 +1187,19 @@ export function Dashboard10({
             7. REFERRAL - Viral growth mechanism
             Prominent placement for better K-factor
             ======================================== */}
-        <section>
-          <ReferralCard
-            referralCode={userId?.slice(0, 8) || 'AMINY'}
-            referralCount={0}
-            rewardEarned={0}
-            variant="dashboard"
-            onShare={() => {
-              // Track share event for analytics
-            }}
-          />
-        </section>
+        {shouldShowReferralCard && (
+          <section>
+            <ReferralCard
+              referralCode={userId?.slice(0, 8) || 'AMINY'}
+              referralCount={0}
+              rewardEarned={0}
+              variant="dashboard"
+              onShare={() => {
+                // Track share event for analytics
+              }}
+            />
+          </section>
+        )}
       </main>
 
       {/* ========================================
@@ -1103,10 +1248,10 @@ export function Dashboard10({
                   Chat with Aminy
                 </h3>
                 <div className="flex items-center gap-2">
-                  <Badge className="bg-[#0891b2] text-white text-xs">AI Companion</Badge>
+                  <Badge className="bg-[#0891b2] text-white text-sm">AI Companion</Badge>
                   <button
                     onClick={() => setIsFullScreenChat(!isFullScreenChat)}
-                    className="p-1.5 hover:bg-white/20 rounded-lg transition-colors"
+                    className="h-11 w-11 hover:bg-white/20 rounded-lg transition-colors flex items-center justify-center"
                     aria-label={isFullScreenChat ? 'Exit full screen' : 'Enter full screen'}
                   >
                     {isFullScreenChat ? (
@@ -1121,7 +1266,7 @@ export function Dashboard10({
                         setIsFullScreenChat(false);
                         setShowAIChat(false);
                       }}
-                      className="p-1.5 hover:bg-white/20 rounded-lg transition-colors"
+                      className="h-11 w-11 hover:bg-white/20 rounded-lg transition-colors flex items-center justify-center"
                       aria-label="Close chat"
                     >
                       <X className="w-4 h-4" />
@@ -1129,7 +1274,7 @@ export function Dashboard10({
                   )}
                 </div>
               </div>
-              <p className="text-xs text-gray-300 mt-1">Your always-on parenting support</p>
+              <p className="text-sm text-gray-300 mt-1">Your always-on parenting support</p>
             </div>
 
             {/* Chat Messages - Responsive Height */}
@@ -1182,7 +1327,7 @@ export function Dashboard10({
                       onClick={() => {
                         setChatInput(prompt);
                       }}
-                      className="text-xs px-3 py-1.5 rounded-full bg-[#0891b2]/10 text-[#0891b2] hover:bg-[#0891b2]/20 transition-colors"
+                      className="text-sm px-3 py-1.5 rounded-full bg-[#0891b2]/10 text-[#0891b2] hover:bg-[#0891b2]/20 transition-colors"
                     >
                       {prompt}
                     </button>
@@ -1196,7 +1341,7 @@ export function Dashboard10({
               <div className="flex gap-2">
                 <button
                   onClick={() => onNavigate?.('vision-ai')}
-                  className="p-3 rounded-xl bg-violet-100 hover:bg-violet-200 dark:bg-violet-900/30 dark:hover:bg-violet-800/40 text-violet-600 dark:text-violet-400 transition-all"
+                  className="h-12 w-12 rounded-xl bg-violet-100 hover:bg-violet-200 dark:bg-violet-900/30 dark:hover:bg-violet-800/40 text-violet-600 dark:text-violet-400 transition-all flex items-center justify-center"
                   aria-label="Open Vision AI camera"
                   title="Photo &amp; Video AI"
                 >
@@ -1216,7 +1361,7 @@ export function Dashboard10({
                   size="sm"
                   onClick={handleSendChat}
                   disabled={!chatInput.trim() || isSendingChat}
-                  className="bg-[#0891b2] hover:bg-[#4a6478] px-4 py-3 rounded-xl transition-all disabled:opacity-50"
+                  className="h-12 w-12 bg-[#0891b2] hover:bg-[#4a6478] rounded-xl transition-all disabled:opacity-50 p-0"
                   aria-label="Send message"
                 >
                   {isSendingChat ? (
@@ -1249,6 +1394,7 @@ export function Dashboard10({
         }}
         userTier={userTier}
         userRole={userRole}
+        pilotEligible={Boolean(userData.pilotEligible)}
       />
 
       {/* ========================================

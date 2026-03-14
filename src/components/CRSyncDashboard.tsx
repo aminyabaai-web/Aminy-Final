@@ -37,6 +37,7 @@ import {
   Zap,
 } from 'lucide-react';
 import { syncScheduler } from '../lib/centralreach-sync-scheduler';
+import { buildCentralReachSyncJobs } from '../lib/centralreach-operator';
 import type {
   SyncRecord,
   SyncLogEntry,
@@ -85,6 +86,21 @@ function formatDate(dateStr: string): string {
     hour: 'numeric',
     minute: '2-digit',
   });
+}
+
+
+async function withTimeout<T>(promise: Promise<T>, fallback: T, timeoutMs = 5000): Promise<T> {
+  let timeoutId: ReturnType<typeof setTimeout> | undefined;
+  try {
+    return await Promise.race([
+      promise,
+      new Promise<T>((resolve) => {
+        timeoutId = setTimeout(() => resolve(fallback), timeoutMs);
+      }),
+    ]);
+  } finally {
+    if (timeoutId) clearTimeout(timeoutId);
+  }
 }
 
 const STATUS_CONFIG = {
@@ -142,6 +158,7 @@ function SyncRecordCard({
     <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
       <button
         onClick={() => setExpanded(!expanded)}
+        aria-label={`${expanded ? 'Collapse' : 'Expand'} sync record for ${DATA_TYPE_LABELS[record.dataType] || record.dataType}`}
         className="w-full flex items-center justify-between p-3 text-left hover:bg-gray-50 transition-colors"
       >
         <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -168,7 +185,8 @@ function SyncRecordCard({
               onSync();
             }}
             disabled={syncing || record.status === 'syncing'}
-            className="p-1.5 rounded-md bg-gray-100 hover:bg-gray-200 text-gray-600 disabled:opacity-50 transition-colors"
+            aria-label={`Sync ${DATA_TYPE_LABELS[record.dataType] || record.dataType} now`}
+            className="flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-xl bg-teal-50 p-2 text-teal-700 transition-colors hover:bg-teal-100 disabled:opacity-50"
             title="Sync now"
           >
             {syncing ? (
@@ -239,6 +257,7 @@ function ErrorCard({
     <div className="bg-white rounded-lg border border-red-200 overflow-hidden">
       <button
         onClick={() => setExpanded(!expanded)}
+        aria-label={`${expanded ? 'Collapse' : 'Expand'} error details for ${DATA_TYPE_LABELS[error.data_type] || error.data_type}`}
         className="w-full flex items-center justify-between p-3 text-left hover:bg-red-50/30 transition-colors"
       >
         <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -259,7 +278,7 @@ function ErrorCard({
               onRetry();
             }}
             disabled={retrying}
-            className="px-2 py-1 rounded-md bg-red-100 hover:bg-red-200 text-red-700 text-xs font-medium disabled:opacity-50 transition-colors"
+            className="min-h-11 rounded-xl bg-red-100 px-3 py-2 text-xs font-medium text-red-700 transition-colors hover:bg-red-200 disabled:opacity-50"
           >
             {retrying ? (
               <Loader2 size={10} className="animate-spin" />
@@ -404,6 +423,30 @@ function HistoryTimeline({ entries }: { entries: SyncLogEntry[] }) {
 
 export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
   const [activeTab, setActiveTab] = useState<TabView>('status');
+
+  const storedUserId = (() => {
+    if (typeof window === 'undefined') return '';
+    try {
+      const stored = JSON.parse(window.localStorage.getItem('aminy-user') || '{}') as { id?: string; userId?: string };
+      if (stored.id || stored.userId) {
+        return stored.id || stored.userId || '';
+      }
+
+      const authKey = Object.keys(window.localStorage).find((key) => key.startsWith('sb-') && key.endsWith('-auth-token'));
+      const authRaw = authKey ? window.localStorage.getItem(authKey) : null;
+      const auth = authRaw ? JSON.parse(authRaw) as { access_token?: string } : null;
+      const token = auth?.access_token;
+      if (!token) return '';
+      const [, payload] = token.split('.');
+      if (!payload) return '';
+      const decoded = JSON.parse(window.atob(payload.replace(/-/g, '+').replace(/_/g, '/'))) as { sub?: string };
+      return decoded.sub || '';
+    } catch {
+      return '';
+    }
+  })();
+
+  const effectiveUserId = userId || storedUserId;
   const [syncRecords, setSyncRecords] = useState<SyncRecord[]>([]);
   const [errors, setErrors] = useState<SyncErrorEntry[]>([]);
   const [history, setHistory] = useState<SyncHistorySummary | null>(null);
@@ -413,24 +456,78 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
   const [bulkRetrying, setBulkRetrying] = useState(false);
 
   const loadData = useCallback(async () => {
-    try {
-      // Initialize scheduler if needed
-      await syncScheduler.init(userId);
+    if (!effectiveUserId) {
+      setSyncRecords([]);
+      setErrors([]);
+      setHistory({
+        totalSyncs: 0,
+        successCount: 0,
+        errorCount: 0,
+        partialCount: 0,
+        totalRecordsProcessed: 0,
+        totalRecordsFailed: 0,
+        avgDurationMs: 0,
+        entries: [],
+      });
+      return;
+    }
 
-      // Load all data in parallel
-      const [records, unresolvedErrors, syncHistory] = await Promise.all([
-        Promise.resolve(syncScheduler.getStatus()),
-        syncScheduler.getUnresolvedErrors(),
-        syncScheduler.getSyncHistory(30),
+    try {
+      await withTimeout(syncScheduler.init(effectiveUserId), undefined, 4000);
+
+      const [recordsResult, errorsResult, historyResult] = await Promise.allSettled([
+        withTimeout(Promise.resolve(syncScheduler.getStatus()), [] as SyncRecord[], 1500),
+        withTimeout(syncScheduler.getUnresolvedErrors(), [] as SyncErrorEntry[], 4000),
+        withTimeout(syncScheduler.getSyncHistory(30), {
+          totalSyncs: 0,
+          successCount: 0,
+          errorCount: 0,
+          partialCount: 0,
+          totalRecordsProcessed: 0,
+          totalRecordsFailed: 0,
+          avgDurationMs: 0,
+          entries: [],
+        } as SyncHistorySummary, 4000),
       ]);
+
+      const records = recordsResult.status === 'fulfilled'
+        ? recordsResult.value
+        : syncScheduler.getStatus();
+      const unresolvedErrors = errorsResult.status === 'fulfilled'
+        ? errorsResult.value
+        : [];
+      const syncHistory = historyResult.status === 'fulfilled'
+        ? historyResult.value
+        : {
+            totalSyncs: 0,
+            successCount: 0,
+            errorCount: 0,
+            partialCount: 0,
+            totalRecordsProcessed: 0,
+            totalRecordsFailed: 0,
+            avgDurationMs: 0,
+            entries: [],
+          };
 
       setSyncRecords(records);
       setErrors(unresolvedErrors);
       setHistory(syncHistory);
     } catch (err) {
       console.error('[CRSyncDashboard] Failed to load:', err);
+      setSyncRecords(syncScheduler.getStatus());
+      setErrors([]);
+      setHistory({
+        totalSyncs: 0,
+        successCount: 0,
+        errorCount: 0,
+        partialCount: 0,
+        totalRecordsProcessed: 0,
+        totalRecordsFailed: 0,
+        avgDurationMs: 0,
+        entries: [],
+      });
     }
-  }, [userId]);
+  }, [effectiveUserId]);
 
   useEffect(() => {
     setLoading(true);
@@ -492,54 +589,69 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
   const errorCount = errors.length;
   const pullRecords = syncRecords.filter((r) => r.direction === 'pull');
   const pushRecords = syncRecords.filter((r) => r.direction === 'push');
+  const syncJobs = buildCentralReachSyncJobs(history?.entries ?? [], errors);
+  const attentionJobs = syncJobs.filter((job) => job.reconciliationState !== 'healthy');
 
   return (
-    <div className="max-w-lg mx-auto px-4 py-6 space-y-5">
+    <div className="mx-auto max-w-5xl px-4 py-6 space-y-5 bg-[radial-gradient(circle_at_top,_rgba(45,212,191,0.10),transparent_30%)]">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-lg font-bold text-gray-900">Sync Dashboard</h2>
-          <p className="text-xs text-gray-500 mt-0.5">
-            CentralReach data synchronization
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <button
-            onClick={loadData}
-            className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-600 transition-colors"
-            title="Refresh dashboard"
-          >
-            <RefreshCw size={16} />
-          </button>
-          {onBack && (
+      <div className="rounded-3xl border border-teal-100 bg-white/92 px-5 py-5 shadow-sm">
+        <nav aria-label="CentralReach navigation" className="flex items-center justify-between gap-4">
+          <div>
+            <p className="text-xs uppercase tracking-[0.18em] text-teal-700">CentralReach operator lane</p>
+            <h1 className="mt-1 text-xl font-bold tracking-tight text-slate-900">Sync Dashboard</h1>
+            <h2 className="sr-only">CentralReach sync overview</h2>
+            <h3 className="sr-only">Import, export, and reconciliation status</h3>
+            <p className="mt-1 text-sm text-slate-500">
+              Pull, export, and reconciliation health for the clinic workflow. This is an operator queue, not a hidden background job screen.
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
             <button
-              onClick={onBack}
-              className="text-sm text-gray-500 hover:text-gray-700"
+              type="button"
+              onClick={() => setActiveTab('status')}
+              className="action-button min-h-11 rounded-xl bg-teal-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-teal-700"
             >
-              &larr; Back
+              Review sync health
             </button>
-          )}
-        </div>
+            <button
+              onClick={loadData}
+              aria-label="Refresh CentralReach sync dashboard"
+              className="flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-xl bg-teal-50 p-2 text-teal-700 transition-colors hover:bg-teal-100"
+              title="Refresh dashboard"
+            >
+              <RefreshCw size={16} />
+            </button>
+            {onBack && (
+              <button
+                onClick={onBack}
+                className="min-h-11 rounded-xl border border-slate-200 px-3 py-2 text-sm text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-700"
+              >
+                &larr; Back
+              </button>
+            )}
+          </div>
+        </nav>
       </div>
 
       {/* Summary Stats */}
       {history && (
-        <div className="grid grid-cols-3 gap-2">
-          <div className="bg-white rounded-lg border border-gray-200 p-3 text-center">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+          <div className="rounded-2xl border border-white/80 bg-white/92 p-4 text-center shadow-sm">
             <Activity size={16} className="text-teal-500 mx-auto mb-1" />
             <p className="text-lg font-bold text-gray-900">
               {history.totalSyncs}
             </p>
             <p className="text-xs text-gray-500">Total Syncs</p>
           </div>
-          <div className="bg-white rounded-lg border border-gray-200 p-3 text-center">
+          <div className="rounded-2xl border border-white/80 bg-white/92 p-4 text-center shadow-sm">
             <Zap size={16} className="text-green-500 mx-auto mb-1" />
             <p className="text-lg font-bold text-gray-900">
               {history.totalRecordsProcessed}
             </p>
             <p className="text-xs text-gray-500">Records</p>
           </div>
-          <div className="bg-white rounded-lg border border-gray-200 p-3 text-center">
+          <div className="rounded-2xl border border-white/80 bg-white/92 p-4 text-center shadow-sm">
             <XCircle
               size={16}
               className={`mx-auto mb-1 ${errorCount > 0 ? 'text-red-500' : 'text-gray-300'}`}
@@ -555,7 +667,7 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
       )}
 
       {/* Tab Bar */}
-      <div className="flex border-b border-gray-200">
+      <div className="flex rounded-2xl border border-teal-100 bg-white/92 p-1.5 shadow-sm">
         {(
           [
             { id: 'status', label: 'Status' },
@@ -566,10 +678,10 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`flex-1 py-2 text-sm font-medium transition-colors border-b-2 ${
+            className={`min-h-11 flex-1 rounded-xl px-3 py-2 text-sm font-medium transition-colors ${
               activeTab === tab.id
-                ? 'border-teal-500 text-teal-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700'
+                ? 'bg-teal-600 text-white shadow-sm'
+                : 'text-slate-500 hover:bg-teal-50 hover:text-slate-700'
             }`}
           >
             {tab.label}
@@ -580,6 +692,42 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
       {/* Status Tab */}
       {activeTab === 'status' && (
         <div className="space-y-4">
+          <div className="rounded-3xl border border-white/80 bg-white/92 p-5 shadow-sm">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <p className="text-sm font-semibold text-gray-900">Operator Reconciliation Queue</p>
+                <p className="text-xs text-gray-500 mt-1">Pull and export jobs stay visible until retries are exhausted or the latest sync is healthy.</p>
+              </div>
+              <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${attentionJobs.length > 0 ? 'bg-amber-50 text-amber-700' : 'bg-emerald-50 text-emerald-700'}`}>
+                {attentionJobs.length > 0 ? `${attentionJobs.length} jobs need review` : 'All tracked jobs healthy'}
+              </span>
+            </div>
+            {syncJobs.length > 0 ? (
+              <div className="mt-3 grid gap-2">
+                {syncJobs.slice(0, 6).map((job) => (
+                  <div key={`${job.dataType}:${job.direction}`} className="rounded-2xl border border-slate-100 bg-slate-50/80 px-3 py-3">
+                    <div className="flex items-center justify-between gap-3">
+                      <div>
+                        <p className="text-sm font-medium text-gray-900">{DATA_TYPE_LABELS[job.dataType] || job.dataType}</p>
+                        <p className="text-xs text-gray-500 mt-0.5">{job.direction === 'pull' ? 'CentralReach to Aminy' : 'Aminy to CentralReach'} • {job.operatorMessage}</p>
+                      </div>
+                      <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${job.reconciliationState === 'healthy' ? 'bg-emerald-50 text-emerald-700' : job.reconciliationState === 'retry_required' ? 'bg-amber-50 text-amber-700' : 'bg-rose-50 text-rose-700'}`}>
+                        {job.reconciliationState === 'healthy' ? 'Healthy' : job.reconciliationState === 'retry_required' ? 'Retry required' : 'Attention needed'}
+                      </span>
+                    </div>
+                    <div className="mt-2 flex flex-wrap gap-3 text-xs text-gray-500">
+                      <span>{job.recordsProcessed} processed</span>
+                      <span>{job.recordsFailed} failed</span>
+                      <span>{job.lastAttemptAt ? `${timeAgo(job.lastAttemptAt)} last attempt` : 'No completed attempt yet'}</span>
+                      {job.nextRetryAt ? <span>{timeAgo(job.nextRetryAt)} next retry</span> : null}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="mt-3 text-sm text-gray-500">No sync jobs are available yet. Connect roster and goals pulls before relying on CentralReach operationally.</p>
+            )}
+          </div>
           {/* Pull Data */}
           <div>
             <h3 className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
@@ -633,7 +781,7 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
               <button
                 onClick={handleRetryAll}
                 disabled={bulkRetrying}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-100 hover:bg-red-200 text-red-700 text-xs font-medium disabled:opacity-50 transition-colors"
+                className="flex min-h-11 items-center gap-1.5 rounded-xl bg-red-100 px-3 py-2 text-xs font-medium text-red-700 transition-colors hover:bg-red-200 disabled:opacity-50"
               >
                 {bulkRetrying ? (
                   <Loader2 size={12} className="animate-spin" />

@@ -155,6 +155,7 @@ export {
   formatPrice,
   VISIT_PRICES
 } from '../../lib/stripe-service';
+export type { CareRail, AppointmentFinancials, ProviderSettlement, PartnerInvoice } from '../../lib/telehealth-economics';
 
 // Re-export Referral Packet generator
 export {

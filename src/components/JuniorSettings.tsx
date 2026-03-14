@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Bell, Shield, Clock, Eye, Lock } from 'lucide-react';
+import { ArrowLeft, Bell, Shield, Clock, Eye, Sparkles } from 'lucide-react';
 import { Button } from './ui/button';
 import { Switch } from './ui/switch';
 import { Label } from './ui/label';
@@ -16,7 +16,7 @@ export function JuniorSettings({ onBack, childName }: JuniorSettingsProps) {
     activityNotifications: true,
     timeLimit: 30,
     contentFilter: true,
-    requirePin: false,
+    gentleExitPrompt: true,
     trackingEnabled: true,
   });
 
@@ -43,8 +43,8 @@ export function JuniorSettings({ onBack, childName }: JuniorSettingsProps) {
             Back
           </Button>
           <div className="flex-1">
-            <h1 className="font-semibold text-foreground">Junior Settings</h1>
-            <p className="text-sm text-muted-foreground">Manage {childName}'s Junior mode</p>
+            <h1 className="font-semibold text-foreground">Calm &amp; Rewards Settings</h1>
+            <p className="text-sm text-muted-foreground">Manage {childName}&apos;s calm tools, rewards, and transition supports</p>
           </div>
         </div>
       </div>
@@ -57,18 +57,18 @@ export function JuniorSettings({ onBack, childName }: JuniorSettingsProps) {
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
                 <Shield className="w-5 h-5 text-purple-600" />
-                <h2 className="font-semibold text-foreground">Junior Mode</h2>
+                <h2 className="font-semibold text-foreground">Kid-side support</h2>
               </div>
               <p className="text-sm text-muted-foreground">
                 {settings.enabled 
-                  ? `${childName} can access their personalized activities and games`
-                  : 'Junior mode is currently disabled'}
+                  ? `${childName} can open calm tools, reward progress, and transition helpers anytime`
+                  : 'Kid-side support is currently turned off'}
               </p>
             </div>
             <Switch
               checked={settings.enabled}
               onCheckedChange={() => handleToggle('enabled')}
-              aria-label="Toggle Junior mode"
+              aria-label="Toggle kid-side support"
             />
           </div>
         </div>
@@ -158,19 +158,19 @@ export function JuniorSettings({ onBack, childName }: JuniorSettingsProps) {
             <div className="flex items-start justify-between gap-3 sm:gap-4">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-2">
-                  <Lock className="w-5 h-5 text-amber-600" />
-                  <Label htmlFor="require-pin" className="font-semibold">
-                    Require PIN to Exit
+                  <Sparkles className="w-5 h-5 text-amber-600" />
+                  <Label htmlFor="gentle-exit-prompt" className="font-semibold">
+                    Gentle Exit Reminder
                   </Label>
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  {childName} will need your PIN to leave Junior mode
+                  Show a soft reminder before leaving calm tools or reward boards so transitions feel less abrupt
                 </p>
               </div>
               <Switch
-                id="require-pin"
-                checked={settings.requirePin}
-                onCheckedChange={() => handleToggle('requirePin')}
+                id="gentle-exit-prompt"
+                checked={settings.gentleExitPrompt}
+                onCheckedChange={() => handleToggle('gentleExitPrompt')}
                 disabled={!settings.enabled}
               />
             </div>
@@ -203,7 +203,7 @@ export function JuniorSettings({ onBack, childName }: JuniorSettingsProps) {
         {/* Info Card */}
         <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
           <p className="text-xs text-muted-foreground text-center">
-            All Junior mode activities are designed by developmental specialists and tailored to {childName}'s needs.
+            Calm tools, rewards, and transition supports are designed to lower stress quickly and make daily routines easier for {childName}.
           </p>
         </div>
       </div>

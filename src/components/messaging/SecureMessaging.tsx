@@ -543,6 +543,8 @@ export function SecureMessaging({ userId, userRole, onBack }: SecureMessagingPro
                   <h1 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">
                     Messages
                   </h1>
+                  <h2 className="sr-only">Message overview</h2>
+                  <h3 className="sr-only">Threads and recent conversations</h3>
                   {totalUnread > 0 && (
                     <p className="text-sm text-teal-600">{totalUnread} unread</p>
                   )}

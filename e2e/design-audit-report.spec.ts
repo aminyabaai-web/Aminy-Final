@@ -48,6 +48,8 @@ interface ScreenAudit {
   };
 }
 
+type AuditAuthMode = 'parent' | 'provider' | 'admin';
+
 interface FullAuditReport {
   generatedAt: string;
   totalScreens: number;
@@ -82,6 +84,62 @@ async function setupMockAuth(page: Page) {
   });
 }
 
+async function setupAuditAuth(page: Page, authMode: AuditAuthMode) {
+  if (authMode === 'provider') {
+    await page.addInitScript(() => {
+      localStorage.setItem('aminy-user', JSON.stringify({
+        id: 'test-provider-001',
+        userId: 'test-provider-001',
+        parentName: 'Dr. Test Provider',
+        name: 'Dr. Test Provider',
+        childName: 'Alex',
+        childAge: 8,
+        childId: '11111111-1111-1111-1111-111111111111',
+        activeChildId: '11111111-1111-1111-1111-111111111111',
+        relationship: 'provider',
+        state: 'AZ',
+        email: 'provider@example.com',
+        hasCompletedOnboarding: true,
+        tier: 'pro',
+        role: 'provider',
+        pilotEligible: true,
+        pilotOrganization: 'aact',
+        pilotPayers: ['bcba_of_az', 'mercycare'],
+      }));
+    });
+    return;
+  }
+
+  if (authMode === 'admin') {
+    await page.addInitScript(() => {
+      localStorage.setItem('aminy-user', JSON.stringify({
+        id: 'test-admin-001',
+        userId: 'test-admin-001',
+        parentName: 'Admin User',
+        name: 'Admin User',
+        childName: 'Alex',
+        childAge: 8,
+        childId: '11111111-1111-1111-1111-111111111111',
+        activeChildId: '11111111-1111-1111-1111-111111111111',
+        relationship: 'admin',
+        state: 'AZ',
+        email: 'admin@example.com',
+        hasCompletedOnboarding: true,
+        tier: 'pro',
+        role: 'admin',
+        pilotEligible: true,
+        pilotOrganization: 'aact',
+        pilotPayers: ['bcba_of_az', 'mercycare'],
+        evvSystem: 'spokchoice',
+        systemOfRecord: 'external',
+      }));
+    });
+    return;
+  }
+
+  await setupMockAuth(page);
+}
+
 const REPORT_DIR = path.join(process.cwd(), 'e2e-reports');
 
 // All screens to audit
@@ -90,20 +148,27 @@ const SCREENS_TO_AUDIT = [
   { name: 'Login', path: '/?screen=login', requiresAuth: false },
   { name: 'Create Account', path: '/?screen=create-account', requiresAuth: false },
   { name: 'Forgot Password', path: '/?screen=forgot-password', requiresAuth: false },
-  { name: 'Dashboard', path: '/?screen=dashboard', requiresAuth: true },
-  { name: 'Settings', path: '/?screen=settings', requiresAuth: true },
-  { name: 'Profile', path: '/?screen=profile', requiresAuth: true },
-  { name: 'Telehealth', path: '/?screen=telehealth', requiresAuth: true },
-  { name: 'Vault', path: '/?screen=vault', requiresAuth: true },
-  { name: 'Marketplace', path: '/?screen=marketplace', requiresAuth: true },
-  { name: 'Junior Mode', path: '/?screen=junior', requiresAuth: true },
-  { name: 'Paywall', path: '/?screen=paywall', requiresAuth: true },
-  { name: 'Benefits Navigator', path: '/?screen=benefits', requiresAuth: true },
-  { name: 'Messages', path: '/?screen=messages', requiresAuth: true },
-  { name: 'Crisis Resources', path: '/?screen=crisis-resources', requiresAuth: true },
-  { name: 'Outcomes', path: '/?screen=outcomes', requiresAuth: true },
-  { name: 'Care Plan', path: '/?screen=care-plan', requiresAuth: true },
-  { name: 'Community', path: '/?screen=community', requiresAuth: true },
+  { name: 'Dashboard', path: '/?screen=dashboard', requiresAuth: true, authMode: 'parent' as AuditAuthMode },
+  { name: 'Settings', path: '/?screen=settings', requiresAuth: true, authMode: 'parent' as AuditAuthMode },
+  { name: 'Profile', path: '/?screen=profile', requiresAuth: true, authMode: 'parent' as AuditAuthMode },
+  { name: 'Telehealth', path: '/?screen=telehealth', requiresAuth: true, authMode: 'parent' as AuditAuthMode },
+  { name: 'Vault', path: '/?screen=vault', requiresAuth: true, authMode: 'parent' as AuditAuthMode },
+  { name: 'Marketplace', path: '/?screen=marketplace', requiresAuth: true, authMode: 'parent' as AuditAuthMode },
+  { name: 'Junior Mode', path: '/?screen=junior', requiresAuth: true, authMode: 'parent' as AuditAuthMode },
+  { name: 'Paywall', path: '/?screen=paywall', requiresAuth: true, authMode: 'parent' as AuditAuthMode },
+  { name: 'Benefits Navigator', path: '/?screen=benefits', requiresAuth: true, authMode: 'parent' as AuditAuthMode },
+  { name: 'Messages', path: '/?screen=messages', requiresAuth: true, authMode: 'parent' as AuditAuthMode },
+  { name: 'Crisis Resources', path: '/?screen=crisis-resources', requiresAuth: true, authMode: 'parent' as AuditAuthMode },
+  { name: 'Outcomes', path: '/?screen=outcomes', requiresAuth: true, authMode: 'parent' as AuditAuthMode },
+  { name: 'Care Plan', path: '/?screen=care-plan', requiresAuth: true, authMode: 'parent' as AuditAuthMode },
+  { name: 'Community', path: '/?screen=community', requiresAuth: true, authMode: 'parent' as AuditAuthMode },
+  { name: 'Provider Portal', path: '/?screen=provider-portal&pilotState=AZ&pilotRole=provider&pilot=true&pilotOrg=aact', requiresAuth: true, authMode: 'provider' as AuditAuthMode },
+  { name: 'Provider Onboarding', path: '/?screen=provider-onboarding&pilotState=AZ&pilotRole=provider&pilot=true&pilotOrg=aact', requiresAuth: true, authMode: 'provider' as AuditAuthMode },
+  { name: 'Claims Dashboard', path: '/?screen=claims-dashboard&pilotState=AZ&pilotRole=admin&pilot=true&pilotOrg=aact&pilotPayers=bcba_of_az,mercycare', requiresAuth: true, authMode: 'admin' as AuditAuthMode },
+  { name: 'Payer Dashboard', path: '/?screen=payer-dashboard&pilotState=AZ&pilotRole=admin&pilot=true&pilotOrg=aact&pilotPayers=bcba_of_az,mercycare', requiresAuth: true, authMode: 'admin' as AuditAuthMode },
+  { name: 'EVV Dashboard', path: '/?screen=evv-dashboard&pilotState=AZ&pilotRole=admin&pilot=true&pilotOrg=aact&evvSystem=spokchoice&systemOfRecord=external', requiresAuth: true, authMode: 'admin' as AuditAuthMode },
+  { name: 'Caregiver Timesheet', path: '/?screen=caregiver-timesheet&pilotState=AZ&pilotRole=parent&pilot=true&pilotOrg=aact&evvSystem=spokchoice&systemOfRecord=external', requiresAuth: true, authMode: 'parent' as AuditAuthMode },
+  { name: 'CentralReach Sync', path: '/?screen=cr-sync&pilotState=AZ&pilotRole=admin&pilot=true&pilotOrg=aact', requiresAuth: true, authMode: 'admin' as AuditAuthMode },
 ];
 
 // ============================================
@@ -296,6 +361,9 @@ async function auditAccessibility(page: Page): Promise<DesignIssue[]> {
     // Buttons without accessible names
     document.querySelectorAll('button').forEach((btn) => {
       if ((btn as HTMLElement).offsetParent !== null) {
+        if (btn.classList.contains('sr-only') && !(btn as HTMLElement).matches(':focus, :focus-visible')) {
+          return;
+        }
         const text = btn.textContent?.trim();
         const ariaLabel = btn.getAttribute('aria-label');
         if (!text && !ariaLabel) results.buttonsWithoutLabel++;
@@ -324,6 +392,9 @@ async function auditAccessibility(page: Page): Promise<DesignIssue[]> {
     // Small touch targets
     document.querySelectorAll('button, a, [role="button"]').forEach((el) => {
       if ((el as HTMLElement).offsetParent !== null) {
+        if (el.classList.contains('sr-only') && !(el as HTMLElement).matches(':focus, :focus-visible')) {
+          return;
+        }
         const rect = el.getBoundingClientRect();
         if (rect.width < 44 || rect.height < 44) results.smallTouchTargets++;
       }
@@ -567,6 +638,8 @@ async function getMetrics(page: Page): Promise<ScreenAudit['metrics']> {
 // MAIN AUDIT TEST
 // ============================================
 test.describe('Design Audit Report Generator', () => {
+  test.describe.configure({ mode: 'serial' });
+
   const fullReport: FullAuditReport = {
     generatedAt: new Date().toISOString(),
     totalScreens: 0,
@@ -589,7 +662,7 @@ test.describe('Design Audit Report Generator', () => {
   for (const screen of SCREENS_TO_AUDIT) {
     test(`Audit: ${screen.name}`, async ({ page }) => {
       if (screen.requiresAuth) {
-        await setupMockAuth(page);
+        await setupAuditAuth(page, screen.authMode ?? 'parent');
       }
 
       await page.setViewportSize({ width: 1280, height: 800 });

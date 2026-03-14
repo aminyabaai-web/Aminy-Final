@@ -165,6 +165,7 @@ export function DocumentVaultPage({ userTier, onNavigate }: DocumentVaultPagePro
                 variant="ghost"
                 size="sm"
                 className="text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100"
+                aria-label="Open vault notifications"
               >
                 <Bell className="w-4 h-4" />
               </Button>

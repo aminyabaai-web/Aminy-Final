@@ -14,6 +14,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { X, Download, Smartphone } from 'lucide-react';
+import { supabase } from '../utils/supabase/client';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt(): Promise<void>;
@@ -129,7 +130,6 @@ export function PWAInstallPrompt() {
       // Track installation in analytics (non-blocking)
       (async () => {
         try {
-          const { supabase } = await import('../utils/supabase/client');
           const { data } = await supabase.auth.getUser();
           if (data.user) {
             await supabase.from('screen_analytics').insert({
@@ -169,7 +169,6 @@ export function PWAInstallPrompt() {
 
         // Track prompt acceptance in analytics
         try {
-          const { supabase } = await import('../utils/supabase/client');
           const { data } = await supabase.auth.getUser();
           if (data.user) {
             await supabase.from('screen_analytics').insert({

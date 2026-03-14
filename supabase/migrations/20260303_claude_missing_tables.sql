@@ -9,7 +9,6 @@ CREATE TABLE IF NOT EXISTS orchestration_events (
   error_message text,
   created_at timestamptz DEFAULT now()
 );
-
 -- 2. FHIR export storage
 CREATE TABLE IF NOT EXISTS fhir_exports (
   id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -18,7 +17,6 @@ CREATE TABLE IF NOT EXISTS fhir_exports (
   fhir_bundle jsonb NOT NULL,
   created_at timestamptz DEFAULT now()
 );
-
 -- 3. Screening recommendations from onboarding
 CREATE TABLE IF NOT EXISTS screening_recommendations (
   id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -30,7 +28,6 @@ CREATE TABLE IF NOT EXISTS screening_recommendations (
   status text DEFAULT 'pending',
   created_at timestamptz DEFAULT now()
 );
-
 -- 4. Benefits lookup cache
 CREATE TABLE IF NOT EXISTS benefits_lookups (
   id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -39,7 +36,6 @@ CREATE TABLE IF NOT EXISTS benefits_lookups (
   lookup_results jsonb DEFAULT '{}',
   created_at timestamptz DEFAULT now()
 );
-
 -- 5. Insurance appeal letters
 CREATE TABLE IF NOT EXISTS appeal_letters (
   id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -50,7 +46,6 @@ CREATE TABLE IF NOT EXISTS appeal_letters (
   status text DEFAULT 'draft',
   created_at timestamptz DEFAULT now()
 );
-
 -- 6. Claim submission retry queue
 CREATE TABLE IF NOT EXISTS claim_submission_attempts (
   id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -63,7 +58,6 @@ CREATE TABLE IF NOT EXISTS claim_submission_attempts (
   created_at timestamptz DEFAULT now(),
   updated_at timestamptz DEFAULT now()
 );
-
 -- Enable RLS on all new tables
 ALTER TABLE orchestration_events ENABLE ROW LEVEL SECURITY;
 ALTER TABLE fhir_exports ENABLE ROW LEVEL SECURITY;
@@ -71,7 +65,6 @@ ALTER TABLE screening_recommendations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE benefits_lookups ENABLE ROW LEVEL SECURITY;
 ALTER TABLE appeal_letters ENABLE ROW LEVEL SECURITY;
 ALTER TABLE claim_submission_attempts ENABLE ROW LEVEL SECURITY;
-
 -- Drop existing policies if they exist so we can recreate them safely
 DROP POLICY IF EXISTS "Users see own data" ON orchestration_events;
 DROP POLICY IF EXISTS "Users see own data" ON fhir_exports;
@@ -79,7 +72,6 @@ DROP POLICY IF EXISTS "Users see own data" ON screening_recommendations;
 DROP POLICY IF EXISTS "Users see own data" ON benefits_lookups;
 DROP POLICY IF EXISTS "Users see own data" ON appeal_letters;
 DROP POLICY IF EXISTS "Users see own data" ON claim_submission_attempts;
-
 -- RLS policies: users can only see their own data
 CREATE POLICY "Users see own data" ON orchestration_events FOR ALL USING (auth.uid() = user_id);
 CREATE POLICY "Users see own data" ON fhir_exports FOR ALL USING (auth.uid() = user_id);

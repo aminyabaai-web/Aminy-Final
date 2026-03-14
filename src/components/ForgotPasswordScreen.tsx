@@ -50,7 +50,7 @@ export function ForgotPasswordScreen({ onBack, onBackToLogin }: ForgotPasswordSc
     return (
       <div className="min-h-screen bg-white dark:bg-slate-900 flex flex-col relative overflow-hidden">
         {/* Header with Back Button */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-100">
+        <nav aria-label="Password reset navigation" className="flex items-center justify-between p-6 border-b border-gray-100">
           <button
             onClick={onBack}
             className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 rounded-lg px-2 py-1"
@@ -60,7 +60,7 @@ export function ForgotPasswordScreen({ onBack, onBackToLogin }: ForgotPasswordSc
           </button>
           <Logo size="sm" showText={false} showTagline={false} />
           <div className="w-16"></div>
-        </div>
+        </nav>
 
         {/* Success Content */}
         <div className="flex-1 flex items-center justify-center px-6 py-8">
@@ -109,7 +109,7 @@ export function ForgotPasswordScreen({ onBack, onBackToLogin }: ForgotPasswordSc
             <div className="space-y-3">
               <Button
                 onClick={onBackToLogin}
-                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2"
+                className="action-button w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2"
                 style={{
                   fontSize: '16px',
                   height: '48px',
@@ -139,7 +139,7 @@ export function ForgotPasswordScreen({ onBack, onBackToLogin }: ForgotPasswordSc
   return (
     <div className="min-h-screen bg-white dark:bg-slate-900 flex flex-col relative overflow-hidden">
       {/* Header with Back Button */}
-      <div className="flex items-center justify-between p-6 border-b border-gray-100">
+      <nav aria-label="Password reset navigation" className="flex items-center justify-between p-6 border-b border-gray-100">
         <button
           onClick={onBack}
           className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 rounded-lg px-2 py-1"
@@ -149,7 +149,7 @@ export function ForgotPasswordScreen({ onBack, onBackToLogin }: ForgotPasswordSc
         </button>
         <Logo size="sm" showText={false} showTagline={false} />
         <div className="w-16"></div>
-      </div>
+      </nav>
 
       {/* Reset Form Container */}
       <div className="flex-1 flex items-center justify-center px-6 py-8">
@@ -204,7 +204,7 @@ export function ForgotPasswordScreen({ onBack, onBackToLogin }: ForgotPasswordSc
             <Button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2"
+              className="action-button w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2"
               style={{
                 fontSize: '16px',
                 height: '48px',

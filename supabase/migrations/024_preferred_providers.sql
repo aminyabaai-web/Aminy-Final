@@ -24,32 +24,25 @@ CREATE TABLE IF NOT EXISTS user_preferred_providers (
   -- Ensure unique user-provider pairs
   UNIQUE(user_id, provider_id)
 );
-
 -- Create indexes for fast lookups
 CREATE INDEX IF NOT EXISTS idx_preferred_providers_user ON user_preferred_providers(user_id);
 CREATE INDEX IF NOT EXISTS idx_preferred_providers_provider ON user_preferred_providers(provider_id);
 CREATE INDEX IF NOT EXISTS idx_preferred_providers_priority ON user_preferred_providers(user_id, priority);
-
 -- Enable RLS
 ALTER TABLE user_preferred_providers ENABLE ROW LEVEL SECURITY;
-
 -- RLS Policies
 CREATE POLICY "Users can view own preferred providers"
   ON user_preferred_providers FOR SELECT
   USING (auth.uid() = user_id);
-
 CREATE POLICY "Users can add preferred providers"
   ON user_preferred_providers FOR INSERT
   WITH CHECK (auth.uid() = user_id);
-
 CREATE POLICY "Users can update own preferred providers"
   ON user_preferred_providers FOR UPDATE
   USING (auth.uid() = user_id);
-
 CREATE POLICY "Users can remove preferred providers"
   ON user_preferred_providers FOR DELETE
   USING (auth.uid() = user_id);
-
 -- Function to toggle preferred provider
 CREATE OR REPLACE FUNCTION toggle_preferred_provider(
   p_provider_id UUID
@@ -102,7 +95,6 @@ BEGIN
   RETURN v_result;
 END;
 $$;
-
 -- Function to get providers sorted by preference
 CREATE OR REPLACE FUNCTION get_providers_by_preference(
   p_provider_type TEXT DEFAULT NULL,
@@ -159,7 +151,6 @@ BEGIN
     p.rating DESC NULLS LAST; -- Then by rating
 END;
 $$;
-
 -- Function to update booking count when session is booked
 CREATE OR REPLACE FUNCTION update_preferred_provider_booking()
 RETURNS TRIGGER
@@ -179,7 +170,6 @@ BEGIN
   RETURN NEW;
 END;
 $$;
-
 -- Create trigger on sessions table (if it exists)
 DO $$
 BEGIN
@@ -191,7 +181,6 @@ BEGIN
       EXECUTE FUNCTION update_preferred_provider_booking();
   END IF;
 END $$;
-
 -- Grant execute permissions
 GRANT EXECUTE ON FUNCTION toggle_preferred_provider(UUID) TO authenticated;
 GRANT EXECUTE ON FUNCTION get_providers_by_preference(TEXT, TEXT) TO authenticated;

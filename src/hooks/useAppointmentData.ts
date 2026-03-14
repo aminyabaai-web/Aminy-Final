@@ -9,6 +9,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../utils/supabase/client';
+import { isUpcomingAppointmentStatus, normalizeAppointmentLifecycleStatus, type AppointmentLifecycleStatus } from '../lib/telehealth-ops';
 
 // ============================================================================
 // Types
@@ -26,7 +27,7 @@ export interface Appointment {
   visitFormat: 'video' | 'phone' | 'in-person';
   scheduledTime: string;
   durationMinutes: number;
-  status: 'scheduled' | 'confirmed' | 'in-progress' | 'completed' | 'cancelled' | 'no-show';
+  status: AppointmentLifecycleStatus;
   videoRoomUrl?: string;
   notes?: string;
   cancellationReason?: string;
@@ -114,7 +115,7 @@ export function useAppointmentData(
       const [appointmentsResult, slotHoldsResult] = await Promise.all([
         supabase
           .from('appointments')
-          .select('*, providers(first_name, last_name, photo, credentials)')
+          .select('id, provider_id, concern_id, concern_label, visit_type, visit_format, scheduled_time, duration_minutes, status, video_room_url, notes, cancellation_reason, created_at')
           .eq('user_id', userId)
           .order('scheduled_time', { ascending: false })
           .limit(50)
@@ -139,20 +140,17 @@ export function useAppointmentData(
 
       const safeAppts = Array.isArray(appointmentsResult?.data) ? appointmentsResult.data : [];
       const appointments: Appointment[] = safeAppts.map((a: Record<string, unknown>) => {
-        const prov = a.providers as Record<string, string> | null;
         return {
           id: (a.id as string) || '',
           providerId: (a.provider_id as string) || undefined,
-          providerName: prov ? `${prov.first_name || ''} ${prov.last_name || ''}`.trim() : undefined,
-          providerPhoto: prov?.photo || undefined,
-          providerCredentials: prov?.credentials || undefined,
+          providerName: (a.provider_id as string) ? 'Care team provider' : undefined,
           concernId: (a.concern_id as string) || '',
           concernLabel: (a.concern_label as string) || '',
           visitType: (a.visit_type as Appointment['visitType']) || 'consult',
           visitFormat: (a.visit_format as Appointment['visitFormat']) || 'video',
           scheduledTime: (a.scheduled_time as string) || '',
           durationMinutes: (a.duration_minutes as number) || 25,
-          status: (a.status as Appointment['status']) || 'scheduled',
+          status: normalizeAppointmentLifecycleStatus((a.status as string) || 'draft') as Appointment['status'],
           videoRoomUrl: (a.video_room_url as string) || undefined,
           notes: (a.notes as string) || undefined,
           cancellationReason: (a.cancellation_reason as string) || undefined,
@@ -162,10 +160,10 @@ export function useAppointmentData(
 
       const now = new Date();
       const upcoming = appointments.filter(a =>
-        new Date(a.scheduledTime) >= now && !['cancelled', 'completed', 'no-show'].includes(a.status)
+        new Date(a.scheduledTime) >= now && isUpcomingAppointmentStatus(a.status)
       ).reverse();
       const past = appointments.filter(a =>
-        new Date(a.scheduledTime) < now || ['completed', 'cancelled', 'no-show'].includes(a.status)
+        new Date(a.scheduledTime) < now || !isUpcomingAppointmentStatus(a.status)
       );
 
       const safeHolds = Array.isArray(slotHoldsResult?.data) ? slotHoldsResult.data : [];
@@ -225,7 +223,7 @@ export function useAppointmentData(
           visit_format: details.visitFormat,
           scheduled_time: details.scheduledTime,
           duration_minutes: details.durationMinutes || 25,
-          status: 'scheduled',
+          status: 'confirmed',
         })
         .select()
         .single();
@@ -308,7 +306,11 @@ export function useAppointmentData(
   }, [userId, loadData]);
 
   useEffect(() => {
-    loadData();
+    const timer = setTimeout(() => {
+      void loadData();
+    }, 0);
+
+    return () => clearTimeout(timer);
   }, [loadData]);
 
   return {

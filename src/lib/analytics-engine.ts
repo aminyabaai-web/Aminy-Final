@@ -54,7 +54,7 @@ const ANALYTICS_CONFIG = {
   batchSize: 50,
   flushInterval: 30000, // 30 seconds
   maxRetries: 3,
-  debugMode: process.env.NODE_ENV === 'development',
+  debugMode: import.meta.env.DEV && import.meta.env.VITE_ANALYTICS_DEBUG === 'true',
   enabledEvents: [
     // Core User Journey
     'app_opened',
@@ -480,7 +480,9 @@ class AnalyticsEngine {
       });
     } catch (error) {
       // Fallback to localStorage if backend fails
-      console.warn('Analytics backend unavailable, storing locally');
+      if (ANALYTICS_CONFIG.debugMode) {
+        console.warn('Analytics backend unavailable, storing locally');
+      }
       const existingData = localStorage.getItem('aminy_analytics') || '[]';
       const analyticsData = JSON.parse(existingData);
       analyticsData.push(...events);

@@ -5,65 +5,41 @@
 -- REFERRAL CODES TABLE
 -- ============================================
 
--- [MIGRATION FIX] Table referral_codes created in earlier migration.
--- Adding columns that would have been lost due to IF NOT EXISTS:
--- Original CREATE TABLE commented out below.
-ALTER TABLE referral_codes ADD COLUMN IF NOT EXISTS uses INTEGER NOT NULL DEFAULT 0;
-ALTER TABLE referral_codes ADD COLUMN IF NOT EXISTS reward_type TEXT NOT NULL DEFAULT 'free_month' CHECK (reward_type IN ('free_month', 'discount', 'credits', 'tier_upgrade'));
-ALTER TABLE referral_codes ADD COLUMN IF NOT EXISTS reward_value DECIMAL NOT NULL DEFAULT 1;
-ALTER TABLE referral_codes ADD COLUMN IF NOT EXISTS expires_at TIMESTAMPTZ;
-ALTER TABLE referral_codes ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW();
-
--- Original CREATE TABLE (commented out, columns added above):
--- CREATE TABLE IF NOT EXISTS referral_codes (
---   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
---   code TEXT NOT NULL UNIQUE,
---   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
---   uses INTEGER NOT NULL DEFAULT 0,
---   max_uses INTEGER,
---   reward_type TEXT NOT NULL DEFAULT 'free_month' CHECK (reward_type IN ('free_month', 'discount', 'credits', 'tier_upgrade')),
---   reward_value DECIMAL NOT NULL DEFAULT 1,
---   expires_at TIMESTAMPTZ,
---   is_active BOOLEAN NOT NULL DEFAULT true,
---   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
---   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
--- );
-
-
+CREATE TABLE IF NOT EXISTS referral_codes (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  code TEXT NOT NULL UNIQUE,
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  uses INTEGER NOT NULL DEFAULT 0,
+  max_uses INTEGER,
+  reward_type TEXT NOT NULL DEFAULT 'free_month' CHECK (reward_type IN ('free_month', 'discount', 'credits', 'tier_upgrade')),
+  reward_value DECIMAL NOT NULL DEFAULT 1,
+  expires_at TIMESTAMPTZ,
+  is_active BOOLEAN NOT NULL DEFAULT true,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
 CREATE INDEX IF NOT EXISTS idx_referral_codes_user ON referral_codes(user_id);
 CREATE INDEX IF NOT EXISTS idx_referral_codes_code ON referral_codes(code);
 CREATE INDEX IF NOT EXISTS idx_referral_codes_active ON referral_codes(is_active);
-
 -- ============================================
 -- REFERRALS TABLE
 -- ============================================
 
--- [MIGRATION FIX] Table referrals created in earlier migration.
--- Adding columns that would have been lost due to IF NOT EXISTS:
--- Original CREATE TABLE commented out below.
-ALTER TABLE referrals ADD COLUMN IF NOT EXISTS referred_id UUID REFERENCES auth.users(id) ON DELETE CASCADE;
-ALTER TABLE referrals ADD COLUMN IF NOT EXISTS converted_at TIMESTAMPTZ;
-ALTER TABLE referrals ADD COLUMN IF NOT EXISTS rewarded_at TIMESTAMPTZ;
-
--- Original CREATE TABLE (commented out, columns added above):
--- CREATE TABLE IF NOT EXISTS referrals (
---   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
---   referrer_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
---   referred_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
---   referral_code TEXT NOT NULL,
---   status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'converted', 'rewarded', 'expired')),
---   converted_at TIMESTAMPTZ,
---   rewarded_at TIMESTAMPTZ,
---   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
---   UNIQUE(referred_id)
--- );
-
-
+CREATE TABLE IF NOT EXISTS referrals (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  referrer_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  referred_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  referral_code TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'converted', 'rewarded', 'expired')),
+  converted_at TIMESTAMPTZ,
+  rewarded_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  UNIQUE(referred_id)
+);
 CREATE INDEX IF NOT EXISTS idx_referrals_referrer ON referrals(referrer_id);
 CREATE INDEX IF NOT EXISTS idx_referrals_referred ON referrals(referred_id);
 CREATE INDEX IF NOT EXISTS idx_referrals_status ON referrals(status);
 CREATE INDEX IF NOT EXISTS idx_referrals_code ON referrals(referral_code);
-
 -- ============================================
 -- REFERRAL REWARDS TABLE
 -- ============================================
@@ -79,10 +55,8 @@ CREATE TABLE IF NOT EXISTS referral_rewards (
   expires_at TIMESTAMPTZ,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
-
 CREATE INDEX IF NOT EXISTS idx_referral_rewards_user ON referral_rewards(user_id);
 CREATE INDEX IF NOT EXISTS idx_referral_rewards_status ON referral_rewards(status);
-
 -- ============================================
 -- REFERRAL SHARES TABLE (Analytics)
 -- ============================================
@@ -94,11 +68,9 @@ CREATE TABLE IF NOT EXISTS referral_shares (
   platform TEXT NOT NULL,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
-
 CREATE INDEX IF NOT EXISTS idx_referral_shares_user ON referral_shares(user_id);
 CREATE INDEX IF NOT EXISTS idx_referral_shares_code ON referral_shares(referral_code);
 CREATE INDEX IF NOT EXISTS idx_referral_shares_platform ON referral_shares(platform);
-
 -- ============================================
 -- STATS FUNCTION
 -- ============================================
@@ -119,7 +91,6 @@ BEGIN
   RETURN result;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
-
 -- ============================================
 -- ROW LEVEL SECURITY
 -- ============================================
@@ -128,30 +99,22 @@ ALTER TABLE referral_codes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE referrals ENABLE ROW LEVEL SECURITY;
 ALTER TABLE referral_rewards ENABLE ROW LEVEL SECURITY;
 ALTER TABLE referral_shares ENABLE ROW LEVEL SECURITY;
-
 -- Codes: Users manage own, anyone can validate
 CREATE POLICY "Users can manage own codes" ON referral_codes FOR ALL TO authenticated
   USING (user_id = auth.uid());
-
 CREATE POLICY "Anyone can read active codes" ON referral_codes FOR SELECT TO authenticated
   USING (is_active = true);
-
 -- Referrals: Users can see where they are referrer or referred
-DROP POLICY IF EXISTS "Users can view own referrals" ON referrals;
 CREATE POLICY "Users can view own referrals" ON referrals FOR SELECT TO authenticated
   USING (referrer_id = auth.uid() OR referred_id = auth.uid());
-
 CREATE POLICY "Users can create referrals" ON referrals FOR INSERT TO authenticated
   WITH CHECK (referred_id = auth.uid());
-
 -- Rewards: Users see own
 CREATE POLICY "Users can view own rewards" ON referral_rewards FOR ALL TO authenticated
   USING (user_id = auth.uid());
-
 -- Shares: Users manage own
 CREATE POLICY "Users can manage own shares" ON referral_shares FOR ALL TO authenticated
   USING (user_id = auth.uid());
-
 -- ============================================
 -- TRIGGERS
 -- ============================================
@@ -163,13 +126,11 @@ BEGIN
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
-
 DROP TRIGGER IF EXISTS referral_code_updated ON referral_codes;
 CREATE TRIGGER referral_code_updated
   BEFORE UPDATE ON referral_codes
   FOR EACH ROW
   EXECUTE FUNCTION update_referral_code_timestamp();
-
 -- ============================================
 -- COMMENTS
 -- ============================================

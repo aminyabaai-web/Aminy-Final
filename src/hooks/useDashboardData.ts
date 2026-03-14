@@ -7,11 +7,25 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../utils/supabase/client';
-import { routinesEngine, type DailyRoutine, type RoutineCompletion } from '../lib/routines-engine';
+import { dataService } from '../lib/supabase-data';
+import {
+  completePlanItem as completeWorkflowPlanItem,
+  getOrGenerateDailyPlan,
+  mapSnapshotToRoutineGroups,
+  WORKFLOW_EVENTS,
+} from '../lib/caregiver-workflow';
 import { calmToolsTracking, type CalmToolStats } from '../lib/calm-tools-tracking';
 import { aiMemoryEngine, type MemoryContext } from '../lib/ai-memory-engine';
 import { billingEngine } from '../lib/billing-engine';
 import { retentionEngine } from '../lib/retention-engine';
+
+const UUID_PATTERN =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+function normalizeQueryableChildId(childId?: string | null): string | undefined {
+  if (!childId) return undefined;
+  return UUID_PATTERN.test(childId) ? childId : undefined;
+}
 
 // ============================================================================
 // Types
@@ -73,6 +87,7 @@ interface ChildRow {
   id?: string;
   name?: string;
   age?: number;
+  age_years?: number;
   photo_url?: string;
   is_primary?: boolean;
   user_id?: string;
@@ -125,6 +140,7 @@ export interface DashboardData {
 
   // Routines
   todaysRoutines: RoutineData[];
+  activePlanSnapshotId: string | null;
   routineAdherence: number;
   streak: number;
 
@@ -183,6 +199,7 @@ export function useDashboardData(userId?: string, childId?: string): DashboardDa
     childProfile: null,
     children: [],
     todaysRoutines: [],
+    activePlanSnapshotId: null,
     routineAdherence: 0,
     streak: 0,
     activeGoals: [],
@@ -208,12 +225,9 @@ export function useDashboardData(userId?: string, childId?: string): DashboardDa
     try {
       setData(prev => ({ ...prev, isLoading: true, error: null }));
 
-      // Parallel fetch all data sources
-      // SAFETY: Wrap each Supabase query in error handling to prevent cascading failures
       const [
         profileResult,
-        childrenResult,
-        routinesResult,
+        childrenRows,
         goalsResult,
         appointmentsResult,
         calmStats,
@@ -223,7 +237,6 @@ export function useDashboardData(userId?: string, childId?: string): DashboardDa
         milestonesResult,
         celebrationsResult,
       ] = await Promise.all([
-        // Get user profile
         supabase
           .from('profiles')
           .select('*')
@@ -233,35 +246,10 @@ export function useDashboardData(userId?: string, childId?: string): DashboardDa
             console.warn('[Dashboard] Profile fetch failed:', err);
             return { data: null, error: err };
           }),
-
-        // Get all children for this user
-        // SAFETY: This table may not exist in all environments - handle 404 gracefully
-        supabase
-          .from('children')
-          .select('*')
-          .eq('user_id', userId)
-          .eq('is_active', true)
-          .order('is_primary', { ascending: false })
-          .then((result) => {
-            // Handle 404 or other errors - treat as empty data
-            if (result.error) {
-              // Log once, don't spam console
-              if (import.meta.env.DEV) {
-                console.warn('[Dashboard] Children table query returned error (may not exist):', result.error.message);
-              }
-              return { data: [], error: null };
-            }
-            return result;
-          })
-          .then(null, (err: unknown) => {
-            console.warn('[Dashboard] Children fetch failed:', err);
-            return { data: [], error: err };
-          }),
-
-        // Get today's routines
-        routinesEngine.getTodaysRoutines(userId).catch(() => []),
-
-        // Get active goals (filtered by childId when provided)
+        dataService.getChildren().catch((err) => {
+          console.warn('[Dashboard] Children fetch failed:', err);
+          return [];
+        }),
         (() => {
           let query = supabase
             .from('goals')
@@ -276,11 +264,9 @@ export function useDashboardData(userId?: string, childId?: string): DashboardDa
             return { data: [], error: err };
           });
         })(),
-
-        // Get upcoming appointments
         supabase
           .from('appointments')
-          .select('*, providers(first_name, last_name)')
+          .select('id, provider_id, concern_id, concern_label, visit_type, visit_format, start_time, duration_minutes, status, video_room_url, notes, cancellation_reason, created_at')
           .eq('user_id', userId)
           .eq('status', 'scheduled')
           .gte('start_time', new Date().toISOString())
@@ -290,31 +276,15 @@ export function useDashboardData(userId?: string, childId?: string): DashboardDa
             console.warn('[Dashboard] Appointments fetch failed:', err);
             return { data: [], error: err };
           }),
-
-        // Get calm tool stats
         calmToolsTracking.getToolStats(userId, undefined, 7).catch(() => []),
-
-        // Get AI memory context
         aiMemoryEngine.buildContext(userId).catch(() => null),
-
-        // Get trial status
         billingEngine.getTrialStatus(userId).catch(() => null),
-
-        // Get streak
         retentionEngine.getPrimaryStreak(userId).catch(() => null),
-
-        // Get milestones
         retentionEngine.getEarnedMilestones(userId).catch(() => []),
-
-        // Get pending celebrations
         retentionEngine.getPendingCelebrations(userId).catch(() => []),
       ]);
 
-      // Process profile
       const profile = profileResult.data;
-
-      // Process goals first (needed for child profiles)
-      // SAFETY: Ensure goalsResult.data is an array
       const safeGoalsData: GoalRow[] = Array.isArray(goalsResult?.data) ? goalsResult.data : [];
       const goals = safeGoalsData.map((g) => ({
         id: g?.id || '',
@@ -325,105 +295,105 @@ export function useDashboardData(userId?: string, childId?: string): DashboardDa
         childId: g?.child_id,
       }));
 
-      // Build children array from the children table
-      // SAFETY: Ensure childrenResult.data is an array
-      const safeChildrenData: ChildRow[] = Array.isArray(childrenResult?.data) ? childrenResult.data : [];
-      const childrenFromTable: ChildProfile[] = safeChildrenData.map((c) => ({
-        id: c?.id || '',
-        name: c?.name || 'Child',
-        age: c?.age || 5,
-        photoUrl: c?.photo_url,
-        goals: goals.filter((g) => g.childId === c?.id).map((g) => ({
-          id: g.id,
-          name: g.name,
-          percentMet: g.progress,
-          trend: g.trend,
+      const safeChildrenData: ChildRow[] = Array.isArray(childrenRows) ? childrenRows as ChildRow[] : [];
+      const childrenFromTable: ChildProfile[] = safeChildrenData.map((childRow) => ({
+        id: childRow?.id || '',
+        name: childRow?.name || 'Child',
+        age: childRow?.age_years || childRow?.age || 5,
+        photoUrl: childRow?.photo_url,
+        isPrimary: childRow?.is_primary,
+        goals: goals.filter((goal) => goal.childId === childRow?.id).map((goal) => ({
+          id: goal.id,
+          name: goal.name,
+          percentMet: goal.progress,
+          trend: goal.trend,
         })),
       }));
 
-      // Fallback to profile-based child if no children in table
-      const childProfile: ChildProfile | null = childrenFromTable.length > 0
-        ? childrenFromTable[0]  // Primary child (sorted first)
-        : profile ? {
-            id: profile.child_id || `child-${userId.substring(0, 8)}`,
-            name: profile.child_name || 'Your Child',
-            age: profile.child_age || 5,
-            photoUrl: profile.child_photo_url,
-            goals: goals.map((g) => ({
-              id: g.id,
-              name: g.name,
-              percentMet: g.progress,
-              trend: g.trend,
-            })),
-          } : null;
+      const selectedChildId = childId
+        || childrenFromTable.find((entry) => entry.isPrimary)?.id
+        || childrenFromTable[0]?.id;
 
-      // Build full children array
+      const childProfile: ChildProfile | null = childrenFromTable.find((entry) => entry.id === selectedChildId)
+        || (childrenFromTable.length > 0 ? childrenFromTable[0] : null)
+        || (profile ? {
+          id: (profile.child_id || selectedChildId || `child-${userId.substring(0, 8)}`) as string,
+          name: (profile.child_name || 'Your Child') as string,
+          age: Number(profile.child_age || 5),
+          photoUrl: profile.child_photo_url as string | undefined,
+          goals: goals.map((goal) => ({
+            id: goal.id,
+            name: goal.name,
+            percentMet: goal.progress,
+            trend: goal.trend,
+          })),
+        } : null);
+
       const children: ChildProfile[] = childrenFromTable.length > 0
         ? childrenFromTable
         : (childProfile ? [childProfile] : []);
 
-      // Process routines
-      // SAFETY: Ensure routinesResult is an array
-      const safeRoutinesData = Array.isArray(routinesResult) ? routinesResult : [];
-      const todaysRoutines: RoutineData[] = safeRoutinesData.map((r: RawRoutine) => {
-        const safeSteps: RawRoutineStep[] = Array.isArray(r?.steps) ? r.steps : [];
-        return {
-          timeOfDay: r?.period || 'morning',
-          label: r?.name || 'Routine',
-          tasks: safeSteps.map((s) => ({
-            id: s?.id || '',
-            title: s?.title || '',
-            description: s?.description || '',
-            icon: getRoutineIcon(s?.abaSkillArea),
-            completed: s?.status === 'completed',
-            timeEstimate: `${s?.durationMinutes || 5}m`,
-          })),
-          completedCount: safeSteps.filter((s) => s?.status === 'completed').length,
-          totalCount: safeSteps.length,
-        };
-      });
+      const activeChildId = childProfile?.id || selectedChildId;
+      const queryableChildId = normalizeQueryableChildId(activeChildId);
+      const dailyPlanSnapshot = queryableChildId
+        ? await getOrGenerateDailyPlan({ userId, childId: queryableChildId }).catch((err) => {
+            console.warn('[Dashboard] Daily plan load failed:', err);
+            return null;
+          })
+        : null;
 
-      // Process upcoming events
-      // SAFETY: Ensure appointmentsResult.data is an array
+      const todaysRoutines: RoutineData[] = mapSnapshotToRoutineGroups(dailyPlanSnapshot).map((group) => ({
+        timeOfDay: group.timeOfDay,
+        label: group.label,
+        tasks: group.tasks.map((task) => ({
+          id: task.id,
+          title: task.title,
+          description: task.description,
+          icon: getRoutineIcon(task.description),
+          completed: task.completed,
+          timeEstimate: task.timeEstimate,
+        })),
+        completedCount: group.completedCount,
+        totalCount: group.totalCount,
+      }));
+
       const safeAppointmentsData = Array.isArray(appointmentsResult?.data) ? appointmentsResult.data : [];
       const safeAppointments: AppointmentRow[] = safeAppointmentsData;
-      const upcomingEvents: UpcomingEvent[] = safeAppointments.map((a) => ({
-        id: a?.id || '',
-        title: a?.providers
-          ? `Session with ${a.providers.first_name || ''} ${a.providers.last_name || ''}`
+      const upcomingEvents: UpcomingEvent[] = safeAppointments.map((appointment) => ({
+        id: appointment?.id || '',
+        title: appointment?.providers
+          ? `Session with ${appointment.providers.first_name || ''} ${appointment.providers.last_name || ''}`
           : 'Upcoming Appointment',
-        time: a?.start_time ? new Date(a.start_time).toLocaleString() : 'TBD',
+        time: appointment?.start_time ? new Date(appointment.start_time).toLocaleString() : 'TBD',
         type: 'telehealth' as const,
       }));
 
       const nextAppt = safeAppointmentsData[0];
-
-      // Calculate totals
-      // SAFETY: Ensure calmStats is an array
       const safeCalmStats = Array.isArray(calmStats) ? calmStats : [];
-      const totalCalmMinutes = safeCalmStats.reduce((sum, s) => sum + (s?.totalMinutes || 0), 0);
+      const totalCalmMinutes = safeCalmStats.reduce((sum, stat) => sum + (stat?.totalMinutes || 0), 0);
       const routineAdherence = todaysRoutines.length > 0
         ? Math.round(
-            todaysRoutines.reduce((sum, r) => sum + (r.completedCount / Math.max(r.totalCount, 1)), 0) /
-            todaysRoutines.length * 100
+            todaysRoutines.reduce((sum, routine) => sum + (routine.completedCount / Math.max(routine.totalCount, 1)), 0) /
+            todaysRoutines.length * 100,
           )
         : 0;
 
-      // Count recent conversations
-      // SAFETY: Wrap in try-catch for graceful handling
       let recentConversationCount = 0;
       try {
-        const { count } = await supabase
-          .from('conversations')
+        let conversationCountQuery = supabase
+          .from('ai_conversations')
           .select('id', { count: 'exact', head: true })
           .eq('user_id', userId)
           .gte('created_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString());
+        if (queryableChildId) {
+          conversationCountQuery = conversationCountQuery.eq('child_id', queryableChildId);
+        }
+        const { count } = await conversationCountQuery;
         recentConversationCount = count || 0;
       } catch (err) {
         console.warn('[Dashboard] Conversation count failed:', err);
       }
 
-      // SAFETY: Ensure milestones and celebrations are arrays
       const safeMilestones = Array.isArray(milestonesResult) ? milestonesResult : [];
       const safeCelebrations = Array.isArray(celebrationsResult) ? celebrationsResult as Celebration[] : [];
 
@@ -431,14 +401,13 @@ export function useDashboardData(userId?: string, childId?: string): DashboardDa
         childProfile,
         children,
         todaysRoutines,
+        activePlanSnapshotId: dailyPlanSnapshot?.id || null,
         routineAdherence,
         streak: streakResult?.currentStreak || 0,
         activeGoals: goals,
         upcomingEvents,
         nextAppointment: nextAppt ? {
-          providerName: nextAppt.providers
-            ? `${nextAppt.providers.first_name || ''} ${nextAppt.providers.last_name || ''}`
-            : 'Provider',
+          providerName: nextAppt.provider_id ? 'Care team provider' : 'Provider',
           time: nextAppt.start_time ? new Date(nextAppt.start_time).toLocaleString() : 'TBD',
           type: nextAppt.visit_type || 'session',
         } : undefined,
@@ -453,12 +422,9 @@ export function useDashboardData(userId?: string, childId?: string): DashboardDa
         error: null,
       });
 
-      // Record activity for streak tracking (non-critical)
       await retentionEngine.recordActivity(userId, 'daily_checkin').catch((err) => {
-        // Non-critical - streak tracking failure shouldn't break dashboard
         if (import.meta.env.DEV) console.warn('Streak tracking failed:', err);
       });
-
     } catch (error: unknown) {
       console.error('Failed to load dashboard data:', error);
       setData(prev => ({
@@ -470,49 +436,60 @@ export function useDashboardData(userId?: string, childId?: string): DashboardDa
   }, [userId, childId]);
 
   // Complete a routine step
-  const completeRoutineStep = useCallback(async (routineId: string, stepId: string) => {
+  const completeRoutineStep = useCallback(async (_routineId: string, stepId: string) => {
     if (!userId) return;
 
     try {
-      // Find or create completion record
-      const today = new Date().toISOString().split('T')[0];
-      const { data: existing } = await supabase
-        .from('routine_completions')
-        .select('id')
-        .eq('routine_id', routineId)
-        .eq('scheduled_date', today)
-        .single();
-
-      const completionId = existing?.id || await (async () => {
-        const completion = await routinesEngine.startRoutine(routineId, userId, '');
-        return completion.id;
-      })();
-
-      await routinesEngine.completeStep(completionId, stepId);
-
-      // Refresh data
+      const snapshot = await getOrGenerateDailyPlan({ userId, childId });
+      if (!snapshot) return;
+      await completeWorkflowPlanItem({
+        snapshotId: snapshot.id,
+        itemId: stepId,
+        userId,
+      });
       await loadData();
     } catch (error) {
       console.error('Failed to complete step:', error);
     }
-  }, [userId, loadData]);
+  }, [userId, childId, loadData]);
 
   // Start a routine
-  const startRoutine = useCallback(async (routineId: string) => {
+  const startRoutine = useCallback(async (_routineId: string) => {
     if (!userId) return;
 
     try {
-      await routinesEngine.startRoutine(routineId, userId, '');
+      await getOrGenerateDailyPlan({ userId, childId });
       await loadData();
     } catch (error) {
       console.error('Failed to start routine:', error);
     }
-  }, [userId, loadData]);
+  }, [userId, childId, loadData]);
 
   // Load data on mount and when userId changes
   useEffect(() => {
     loadData();
   }, [loadData]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || !userId) return;
+
+    const handleWorkflowRefresh = (event: Event) => {
+      const detail = (event as CustomEvent<{ userId?: string; childId?: string }>).detail;
+      if (!detail || detail.userId !== userId) return;
+      if (childId && detail.childId && detail.childId !== childId) return;
+      void loadData();
+    };
+
+    window.addEventListener(WORKFLOW_EVENTS.dailyPlanUpdated, handleWorkflowRefresh as EventListener);
+    window.addEventListener(WORKFLOW_EVENTS.juniorProgressUpdated, handleWorkflowRefresh as EventListener);
+    window.addEventListener(WORKFLOW_EVENTS.caregiverSummaryUpdated, handleWorkflowRefresh as EventListener);
+
+    return () => {
+      window.removeEventListener(WORKFLOW_EVENTS.dailyPlanUpdated, handleWorkflowRefresh as EventListener);
+      window.removeEventListener(WORKFLOW_EVENTS.juniorProgressUpdated, handleWorkflowRefresh as EventListener);
+      window.removeEventListener(WORKFLOW_EVENTS.caregiverSummaryUpdated, handleWorkflowRefresh as EventListener);
+    };
+  }, [childId, loadData, userId]);
 
   return {
     ...data,

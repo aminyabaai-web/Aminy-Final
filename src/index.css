@@ -6717,21 +6717,12 @@ img {
   transform: translateZ(0) !important;
 }
 
-@font-face {
-  font-family: Manrope;
-  font-style: normal;
-  font-weight: 400 700;
-  font-display: swap;
-  src: local(""), url("https://fonts.gstatic.com/s/manrope/v15/xn7_YHE41ni1AdIRqAuZuw1Bx9mbZk59FO_F87jxeN7B.woff2") format("woff2");
-  unicode-range: U+??;
-}
-
 body {
   font-family: Manrope, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif;
 }
 
 :root {
-  --font-size: 14px;
+  --font-size: 16px;
   --background: #fff;
   --background-soft: #f8fafc;
   --lcp-image-size: 400px;
@@ -8540,7 +8531,7 @@ html {
 }
 
 .aminy-calm-button {
-  min-height: 36px;
+  min-height: 44px;
   font-weight: 500;
   transition: all .2s;
 }
@@ -14998,7 +14989,7 @@ body:has([role="dialog"]) #global-support-footer, body:has([role="alertdialog"])
   }
 
   .text-xs {
-    font-size: 11px !important;
+    font-size: 12px !important;
   }
 }
 
@@ -15064,8 +15055,8 @@ a:hover, button:hover:not(.aminy-button-primary):not(.aminy-button-secondary) {
 }
 
 .rounded-full.text-xs, .rounded-md.text-xs, .inline-flex.items-center.text-xs {
-  padding: 2px 6px !important;
-  font-size: 10px !important;
+  padding: 4px 8px !important;
+  font-size: 12px !important;
 }
 
 .rounded-full.text-sm, .rounded-md.text-sm, .inline-flex.items-center.text-sm {
@@ -16006,10 +15997,9 @@ body.mobile-optimized {
 .to-\[\#FFE2B6\]\/20 { --tw-gradient-to: rgb(255 226 182 / 0.2); }
 
 
-/* ─── Missing standard Tailwind v4 gradient utilities ─────────────────────
-   These from-*/to-*/via-* + direction classes are used in components but
-   were not compiled by Tailwind JIT. Uses v4 format with
-   --tw-gradient-position for proper direction support.                   */
+/* Missing Tailwind v4 gradient utilities.
+   These gradient stop and direction classes are referenced in components
+   and defined here explicitly so the generated CSS stays consistent. */
 
 /* Missing gradient directions */
 .bg-gradient-to-b {
@@ -16461,3 +16451,33 @@ html.sensory-visual-timers .activity-timer {
   0%, 100% { border-color: #60A5FA; }
   50% { border-color: #93C5FD; }
 }
+
+
+/* === UI audit overrides: button sizing and typography === */
+[data-slot="badge"] {
+  font-size: 12px !important;
+  padding: 4px 8px !important;
+}
+button.inline-flex.items-center.text-sm,
+button.rounded-md.text-sm,
+button.rounded-full.text-sm,
+[data-slot="button"] {
+  font-size: 14px !important;
+}
+[data-slot="button"],
+.aminy-button-primary,
+.aminy-button-secondary,
+.aminy-plan-button,
+.aminy-calm-button {
+  min-height: 44px !important;
+}
+button[class*="bg-primary"] {
+  min-height: 44px !important;
+}
+.h-\[44px\] { height: 44px !important; }
+.w-\[44px\] { width: 44px !important; }
+.h-\[48px\] { height: 48px !important; }
+.w-\[48px\] { width: 48px !important; }
+.min-h-\[52px\] { min-height: 52px !important; }
+.min-h-\[3\.25rem\] { min-height: 3.25rem !important; }
+.min-w-\[3\.25rem\] { min-width: 3.25rem !important; }

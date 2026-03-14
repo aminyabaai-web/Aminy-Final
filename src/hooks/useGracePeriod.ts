@@ -108,6 +108,11 @@ export function useGracePeriod(options: UseGracePeriodOptions = {}): UseGracePer
       );
 
       if (!response.ok) {
+        if (response.status === 404) {
+          setStatus(EMPTY_STATUS);
+          setError(null);
+          return;
+        }
         throw new Error(`HTTP ${response.status}`);
       }
 

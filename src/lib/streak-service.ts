@@ -23,14 +23,14 @@ export async function getStreak(userId: string): Promise<StreakData | null> {
       .from('user_streaks')
       .select('*')
       .eq('user_id', userId)
-      .single();
+      .maybeSingle();
 
     if (error) {
-      if (error.code === 'PGRST116') {
-        // No streak found - this is fine for new users
-        return null;
-      }
       throw error;
+    }
+
+    if (!data) {
+      return null;
     }
 
     return {

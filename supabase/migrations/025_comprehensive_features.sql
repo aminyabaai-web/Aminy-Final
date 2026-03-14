@@ -9,62 +9,37 @@
 -- ============================================================================
 
 -- Children table for multi-child families
--- [MIGRATION FIX] Table children created in earlier migration.
--- Adding columns that would have been lost due to IF NOT EXISTS:
--- Original CREATE TABLE commented out below.
-ALTER TABLE children ADD COLUMN IF NOT EXISTS user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE;
-ALTER TABLE children ADD COLUMN IF NOT EXISTS age INTEGER;
-ALTER TABLE children ADD COLUMN IF NOT EXISTS photo_url TEXT;
-ALTER TABLE children ADD COLUMN IF NOT EXISTS diagnosis TEXT[] DEFAULT '{}';
-ALTER TABLE children ADD COLUMN IF NOT EXISTS conditions TEXT[] DEFAULT '{}';
-ALTER TABLE children ADD COLUMN IF NOT EXISTS goals TEXT[] DEFAULT '{}';
-ALTER TABLE children ADD COLUMN IF NOT EXISTS notes TEXT;
-ALTER TABLE children ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT true;
-
--- Original CREATE TABLE (commented out, columns added above):
--- CREATE TABLE IF NOT EXISTS children (
---   id TEXT PRIMARY KEY,
---   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
---   name TEXT NOT NULL,
---   age INTEGER,
---   date_of_birth DATE,
---   photo_url TEXT,
---   diagnosis TEXT[] DEFAULT '{}',
---   conditions TEXT[] DEFAULT '{}',
---   goals TEXT[] DEFAULT '{}',
---   notes TEXT,
---   is_primary BOOLEAN DEFAULT false,
---   is_active BOOLEAN DEFAULT true,
---   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
---   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
--- );
-
-
+CREATE TABLE IF NOT EXISTS children (
+  id TEXT PRIMARY KEY,
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  name TEXT NOT NULL,
+  age INTEGER,
+  date_of_birth DATE,
+  photo_url TEXT,
+  diagnosis TEXT[] DEFAULT '{}',
+  conditions TEXT[] DEFAULT '{}',
+  goals TEXT[] DEFAULT '{}',
+  notes TEXT,
+  is_primary BOOLEAN DEFAULT false,
+  is_active BOOLEAN DEFAULT true,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
 CREATE INDEX IF NOT EXISTS idx_children_user ON children(user_id);
 CREATE INDEX IF NOT EXISTS idx_children_primary ON children(user_id, is_primary);
-
 ALTER TABLE children ENABLE ROW LEVEL SECURITY;
-
-DROP POLICY IF EXISTS "Users can view own children" ON children;
 CREATE POLICY "Users can view own children"
   ON children FOR SELECT
   USING (auth.uid() = user_id);
-
-DROP POLICY IF EXISTS "Users can insert own children" ON children;
 CREATE POLICY "Users can insert own children"
   ON children FOR INSERT
   WITH CHECK (auth.uid() = user_id);
-
-DROP POLICY IF EXISTS "Users can update own children" ON children;
 CREATE POLICY "Users can update own children"
   ON children FOR UPDATE
   USING (auth.uid() = user_id);
-
-DROP POLICY IF EXISTS "Users can delete own children" ON children;
 CREATE POLICY "Users can delete own children"
   ON children FOR DELETE
   USING (auth.uid() = user_id);
-
 -- ============================================================================
 -- DAILY ROUTINES SYSTEM
 -- ============================================================================
@@ -88,80 +63,51 @@ CREATE TABLE IF NOT EXISTS daily_routines (
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
-
 CREATE INDEX idx_daily_routines_user ON daily_routines(user_id);
 CREATE INDEX idx_daily_routines_period ON daily_routines(period);
 CREATE INDEX idx_daily_routines_active ON daily_routines(is_active);
-
 ALTER TABLE daily_routines ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "Users can view own routines"
   ON daily_routines FOR SELECT
   USING (auth.uid() = user_id);
-
 CREATE POLICY "Users can insert own routines"
   ON daily_routines FOR INSERT
   WITH CHECK (auth.uid() = user_id);
-
 CREATE POLICY "Users can update own routines"
   ON daily_routines FOR UPDATE
   USING (auth.uid() = user_id);
-
 -- Routine completions table (enhances existing routine_completions)
--- [MIGRATION FIX] Table routine_completions created in earlier migration.
--- Adding columns that would have been lost due to IF NOT EXISTS:
--- Original CREATE TABLE commented out below.
-ALTER TABLE routine_completions ADD COLUMN IF NOT EXISTS child_id TEXT;
-ALTER TABLE routine_completions ADD COLUMN IF NOT EXISTS scheduled_date DATE;
-ALTER TABLE routine_completions ADD COLUMN IF NOT EXISTS started_at TIMESTAMPTZ;
-ALTER TABLE routine_completions ADD COLUMN IF NOT EXISTS status TEXT NOT NULL CHECK (status IN ('pending', 'in_progress', 'completed', 'skipped', 'partial')) DEFAULT 'pending';
-ALTER TABLE routine_completions ADD COLUMN IF NOT EXISTS steps_completed INTEGER NOT NULL DEFAULT 0;
-ALTER TABLE routine_completions ADD COLUMN IF NOT EXISTS total_steps INTEGER NOT NULL DEFAULT 0;
-ALTER TABLE routine_completions ADD COLUMN IF NOT EXISTS adherence_score INTEGER NOT NULL DEFAULT 0 CHECK (adherence_score >= 0 AND adherence_score <= 100);
-ALTER TABLE routine_completions ADD COLUMN IF NOT EXISTS notes TEXT;
-ALTER TABLE routine_completions ADD COLUMN IF NOT EXISTS mood_before TEXT CHECK (mood_before IN ('calm', 'neutral', 'agitated'));
-ALTER TABLE routine_completions ADD COLUMN IF NOT EXISTS mood_after TEXT CHECK (mood_after IN ('calm', 'neutral', 'agitated'));
-ALTER TABLE routine_completions ADD COLUMN IF NOT EXISTS challenges_noted TEXT[];
-
--- Original CREATE TABLE (commented out, columns added above):
--- CREATE TABLE IF NOT EXISTS routine_completions (
---   id TEXT PRIMARY KEY,
---   routine_id TEXT NOT NULL REFERENCES daily_routines(id) ON DELETE CASCADE,
---   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
---   child_id TEXT,
---   scheduled_date DATE NOT NULL,
---   started_at TIMESTAMPTZ,
---   completed_at TIMESTAMPTZ,
---   status TEXT NOT NULL CHECK (status IN ('pending', 'in_progress', 'completed', 'skipped', 'partial')) DEFAULT 'pending',
---   steps_completed INTEGER NOT NULL DEFAULT 0,
---   total_steps INTEGER NOT NULL DEFAULT 0,
---   adherence_score INTEGER NOT NULL DEFAULT 0 CHECK (adherence_score >= 0 AND adherence_score <= 100),
---   notes TEXT,
---   mood_before TEXT CHECK (mood_before IN ('calm', 'neutral', 'agitated')),
---   mood_after TEXT CHECK (mood_after IN ('calm', 'neutral', 'agitated')),
---   challenges_noted TEXT[],
---   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
--- );
-
-
+CREATE TABLE IF NOT EXISTS routine_completions (
+  id TEXT PRIMARY KEY,
+  routine_id TEXT NOT NULL REFERENCES daily_routines(id) ON DELETE CASCADE,
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  child_id TEXT,
+  scheduled_date DATE NOT NULL,
+  started_at TIMESTAMPTZ,
+  completed_at TIMESTAMPTZ,
+  status TEXT NOT NULL CHECK (status IN ('pending', 'in_progress', 'completed', 'skipped', 'partial')) DEFAULT 'pending',
+  steps_completed INTEGER NOT NULL DEFAULT 0,
+  total_steps INTEGER NOT NULL DEFAULT 0,
+  adherence_score INTEGER NOT NULL DEFAULT 0 CHECK (adherence_score >= 0 AND adherence_score <= 100),
+  notes TEXT,
+  mood_before TEXT CHECK (mood_before IN ('calm', 'neutral', 'agitated')),
+  mood_after TEXT CHECK (mood_after IN ('calm', 'neutral', 'agitated')),
+  challenges_noted TEXT[],
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
 CREATE INDEX idx_routine_completions_user ON routine_completions(user_id);
 CREATE INDEX idx_routine_completions_date ON routine_completions(scheduled_date);
 CREATE INDEX idx_routine_completions_routine ON routine_completions(routine_id);
-
 ALTER TABLE routine_completions ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "Users can view own completions"
   ON routine_completions FOR SELECT
   USING (auth.uid() = user_id);
-
 CREATE POLICY "Users can insert own completions"
   ON routine_completions FOR INSERT
   WITH CHECK (auth.uid() = user_id);
-
 CREATE POLICY "Users can update own completions"
   ON routine_completions FOR UPDATE
   USING (auth.uid() = user_id);
-
 -- ============================================================================
 -- CALM TOOLS TRACKING
 -- ============================================================================
@@ -183,29 +129,22 @@ CREATE TABLE IF NOT EXISTS calm_tool_sessions (
   coins_earned INTEGER DEFAULT 0,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
-
 CREATE INDEX idx_calm_sessions_user ON calm_tool_sessions(user_id);
 CREATE INDEX idx_calm_sessions_tool ON calm_tool_sessions(tool_type);
 CREATE INDEX idx_calm_sessions_date ON calm_tool_sessions(started_at);
-
 ALTER TABLE calm_tool_sessions ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "Users can view own calm sessions"
   ON calm_tool_sessions FOR SELECT
   USING (auth.uid() = user_id);
-
 CREATE POLICY "Users can insert own calm sessions"
   ON calm_tool_sessions FOR INSERT
   WITH CHECK (auth.uid() = user_id);
-
 CREATE POLICY "Users can update own calm sessions"
   ON calm_tool_sessions FOR UPDATE
   USING (auth.uid() = user_id);
-
 CREATE POLICY "Users can delete own calm sessions"
   ON calm_tool_sessions FOR DELETE
   USING (auth.uid() = user_id);
-
 -- ============================================================================
 -- AI MEMORY SYSTEM
 -- ============================================================================
@@ -227,25 +166,19 @@ CREATE TABLE IF NOT EXISTS memory_facts (
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   UNIQUE(user_id, child_id, key)
 );
-
 CREATE INDEX idx_memory_facts_user ON memory_facts(user_id);
 CREATE INDEX idx_memory_facts_category ON memory_facts(category);
 CREATE INDEX idx_memory_facts_active ON memory_facts(is_active);
-
 ALTER TABLE memory_facts ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "Users can view own facts"
   ON memory_facts FOR SELECT
   USING (auth.uid() = user_id);
-
 CREATE POLICY "Users can insert own facts"
   ON memory_facts FOR INSERT
   WITH CHECK (auth.uid() = user_id);
-
 CREATE POLICY "Users can update own facts"
   ON memory_facts FOR UPDATE
   USING (auth.uid() = user_id);
-
 -- Conversation memories table
 CREATE TABLE IF NOT EXISTS conversation_memories (
   id TEXT PRIMARY KEY,
@@ -259,20 +192,15 @@ CREATE TABLE IF NOT EXISTS conversation_memories (
   facts_extracted TEXT[] DEFAULT '{}',
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
-
 CREATE INDEX idx_conv_memories_user ON conversation_memories(user_id);
 CREATE INDEX idx_conv_memories_conv ON conversation_memories(conversation_id);
-
 ALTER TABLE conversation_memories ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "Users can view own conversation memories"
   ON conversation_memories FOR SELECT
   USING (auth.uid() = user_id);
-
 CREATE POLICY "Users can insert own conversation memories"
   ON conversation_memories FOR INSERT
   WITH CHECK (auth.uid() = user_id);
-
 -- Document insights table
 CREATE TABLE IF NOT EXISTS document_insights (
   id TEXT PRIMARY KEY,
@@ -287,79 +215,47 @@ CREATE TABLE IF NOT EXISTS document_insights (
   facts_extracted TEXT[] DEFAULT '{}',
   processed_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
-
 CREATE INDEX idx_doc_insights_user ON document_insights(user_id);
 CREATE INDEX idx_doc_insights_doc ON document_insights(document_id);
-
 ALTER TABLE document_insights ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "Users can view own document insights"
   ON document_insights FOR SELECT
   USING (auth.uid() = user_id);
-
 CREATE POLICY "Users can insert own document insights"
   ON document_insights FOR INSERT
   WITH CHECK (auth.uid() = user_id);
-
 -- ============================================================================
 -- PROVIDER SESSION NOTES
 -- ============================================================================
 
--- [MIGRATION FIX] Table session_notes created in earlier migration.
--- Adding columns that would have been lost due to IF NOT EXISTS:
--- Original CREATE TABLE commented out below.
-ALTER TABLE session_notes ADD COLUMN IF NOT EXISTS appointment_id TEXT REFERENCES appointments(id) ON DELETE SET NULL;
-ALTER TABLE session_notes ADD COLUMN IF NOT EXISTS client_id UUID REFERENCES auth.users(id) ON DELETE CASCADE;
-ALTER TABLE session_notes ADD COLUMN IF NOT EXISTS child_name TEXT;
-ALTER TABLE session_notes ADD COLUMN IF NOT EXISTS session_date DATE;
-ALTER TABLE session_notes ADD COLUMN IF NOT EXISTS session_duration INTEGER NOT NULL DEFAULT 60;
-ALTER TABLE session_notes ADD COLUMN IF NOT EXISTS status TEXT NOT NULL CHECK (status IN ('draft', 'pending_review', 'approved', 'rejected', 'submitted')) DEFAULT 'draft';
-ALTER TABLE session_notes ADD COLUMN IF NOT EXISTS presenting_concerns TEXT;
-ALTER TABLE session_notes ADD COLUMN IF NOT EXISTS interventions_used TEXT[] DEFAULT '{}';
-ALTER TABLE session_notes ADD COLUMN IF NOT EXISTS client_response TEXT;
-ALTER TABLE session_notes ADD COLUMN IF NOT EXISTS progress_toward_goals TEXT;
-ALTER TABLE session_notes ADD COLUMN IF NOT EXISTS recommendations_for_home TEXT[] DEFAULT '{}';
-ALTER TABLE session_notes ADD COLUMN IF NOT EXISTS next_session_focus TEXT;
-ALTER TABLE session_notes ADD COLUMN IF NOT EXISTS cpt_codes TEXT[] DEFAULT '{}';
-ALTER TABLE session_notes ADD COLUMN IF NOT EXISTS units_provided INTEGER DEFAULT 1;
-ALTER TABLE session_notes ADD COLUMN IF NOT EXISTS submitted_at TIMESTAMPTZ;
-ALTER TABLE session_notes ADD COLUMN IF NOT EXISTS approved_by TEXT;
-ALTER TABLE session_notes ADD COLUMN IF NOT EXISTS approved_at TIMESTAMPTZ;
-ALTER TABLE session_notes ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ NOT NULL DEFAULT NOW();
-
--- Original CREATE TABLE (commented out, columns added above):
--- CREATE TABLE IF NOT EXISTS session_notes (
---   id TEXT PRIMARY KEY,
---   appointment_id TEXT REFERENCES appointments(id) ON DELETE SET NULL,
---   provider_id TEXT NOT NULL REFERENCES providers(id) ON DELETE CASCADE,
---   client_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
---   child_name TEXT,
---   session_date DATE NOT NULL,
---   session_duration INTEGER NOT NULL DEFAULT 60,
---   status TEXT NOT NULL CHECK (status IN ('draft', 'pending_review', 'approved', 'rejected', 'submitted')) DEFAULT 'draft',
---   presenting_concerns TEXT,
---   interventions_used TEXT[] DEFAULT '{}',
---   client_response TEXT,
---   progress_toward_goals TEXT,
---   recommendations_for_home TEXT[] DEFAULT '{}',
---   next_session_focus TEXT,
---   cpt_codes TEXT[] DEFAULT '{}',
---   units_provided INTEGER DEFAULT 1,
---   submitted_at TIMESTAMPTZ,
---   approved_by TEXT,
---   approved_at TIMESTAMPTZ,
---   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
---   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
--- );
-
-
+CREATE TABLE IF NOT EXISTS session_notes (
+  id TEXT PRIMARY KEY,
+  appointment_id TEXT REFERENCES appointments(id) ON DELETE SET NULL,
+  provider_id TEXT NOT NULL REFERENCES providers(id) ON DELETE CASCADE,
+  client_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  child_name TEXT,
+  session_date DATE NOT NULL,
+  session_duration INTEGER NOT NULL DEFAULT 60,
+  status TEXT NOT NULL CHECK (status IN ('draft', 'pending_review', 'approved', 'rejected', 'submitted')) DEFAULT 'draft',
+  presenting_concerns TEXT,
+  interventions_used TEXT[] DEFAULT '{}',
+  client_response TEXT,
+  progress_toward_goals TEXT,
+  recommendations_for_home TEXT[] DEFAULT '{}',
+  next_session_focus TEXT,
+  cpt_codes TEXT[] DEFAULT '{}',
+  units_provided INTEGER DEFAULT 1,
+  submitted_at TIMESTAMPTZ,
+  approved_by TEXT,
+  approved_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
 CREATE INDEX idx_session_notes_provider ON session_notes(provider_id);
 CREATE INDEX idx_session_notes_client ON session_notes(client_id);
 CREATE INDEX idx_session_notes_status ON session_notes(status);
 CREATE INDEX idx_session_notes_date ON session_notes(session_date);
-
 ALTER TABLE session_notes ENABLE ROW LEVEL SECURITY;
-
 -- Providers can view/edit their own notes
 CREATE POLICY "Providers can view own notes"
   ON session_notes FOR SELECT
@@ -370,7 +266,6 @@ CREATE POLICY "Providers can view own notes"
       AND p.user_id = auth.uid()
     )
   );
-
 CREATE POLICY "Providers can insert notes"
   ON session_notes FOR INSERT
   WITH CHECK (
@@ -380,7 +275,6 @@ CREATE POLICY "Providers can insert notes"
       AND p.user_id = auth.uid()
     )
   );
-
 CREATE POLICY "Providers can update own notes"
   ON session_notes FOR UPDATE
   USING (
@@ -390,12 +284,10 @@ CREATE POLICY "Providers can update own notes"
       AND p.user_id = auth.uid()
     )
   );
-
 -- Clients can view notes about them
 CREATE POLICY "Clients can view their notes"
   ON session_notes FOR SELECT
   USING (auth.uid() = client_id AND status = 'approved');
-
 -- ============================================================================
 -- SUBSCRIPTIONS & BILLING
 -- ============================================================================
@@ -416,64 +308,44 @@ CREATE TABLE IF NOT EXISTS subscriptions (
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
-
 CREATE INDEX idx_subscriptions_user ON subscriptions(user_id);
 CREATE INDEX idx_subscriptions_stripe ON subscriptions(stripe_subscription_id);
-
 ALTER TABLE subscriptions ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "Users can view own subscription"
   ON subscriptions FOR SELECT
   USING (auth.uid() = user_id);
-
 -- Service role for webhook updates
 CREATE POLICY "Service role can update subscriptions"
   ON subscriptions FOR ALL
   USING (auth.role() = 'service_role');
-
 -- ============================================================================
 -- USER STREAKS & MILESTONES
 -- ============================================================================
 
--- [MIGRATION FIX] Table user_streaks created in earlier migration.
--- Adding columns that would have been lost due to IF NOT EXISTS:
--- Original CREATE TABLE commented out below.
-ALTER TABLE user_streaks ADD COLUMN IF NOT EXISTS type TEXT;
-ALTER TABLE user_streaks ADD COLUMN IF NOT EXISTS total_activities INTEGER NOT NULL DEFAULT 0;
-ALTER TABLE user_streaks ADD COLUMN IF NOT EXISTS started_at TIMESTAMPTZ NOT NULL DEFAULT NOW();
-
--- Original CREATE TABLE (commented out, columns added above):
--- CREATE TABLE IF NOT EXISTS user_streaks (
---   id TEXT PRIMARY KEY,
---   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
---   type TEXT NOT NULL,
---   current_streak INTEGER NOT NULL DEFAULT 0,
---   longest_streak INTEGER NOT NULL DEFAULT 0,
---   last_activity_date DATE,
---   total_activities INTEGER NOT NULL DEFAULT 0,
---   started_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
---   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
---   UNIQUE(user_id, type)
--- );
-
-
+CREATE TABLE IF NOT EXISTS user_streaks (
+  id TEXT PRIMARY KEY,
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  type TEXT NOT NULL,
+  current_streak INTEGER NOT NULL DEFAULT 0,
+  longest_streak INTEGER NOT NULL DEFAULT 0,
+  last_activity_date DATE,
+  total_activities INTEGER NOT NULL DEFAULT 0,
+  started_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  UNIQUE(user_id, type)
+);
 CREATE INDEX idx_user_streaks_user ON user_streaks(user_id);
 CREATE INDEX idx_user_streaks_type ON user_streaks(type);
-
 ALTER TABLE user_streaks ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "Users can view own streaks"
   ON user_streaks FOR SELECT
   USING (auth.uid() = user_id);
-
 CREATE POLICY "Users can insert own streaks"
   ON user_streaks FOR INSERT
   WITH CHECK (auth.uid() = user_id);
-
 CREATE POLICY "Users can update own streaks"
   ON user_streaks FOR UPDATE
   USING (auth.uid() = user_id);
-
 -- User milestones
 CREATE TABLE IF NOT EXISTS user_milestones (
   id TEXT PRIMARY KEY,
@@ -483,56 +355,37 @@ CREATE TABLE IF NOT EXISTS user_milestones (
   celebration_shown BOOLEAN DEFAULT false,
   UNIQUE(user_id, milestone_type)
 );
-
 CREATE INDEX idx_user_milestones_user ON user_milestones(user_id);
-
 ALTER TABLE user_milestones ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "Users can view own milestones"
   ON user_milestones FOR SELECT
   USING (auth.uid() = user_id);
-
 CREATE POLICY "Users can insert own milestones"
   ON user_milestones FOR INSERT
   WITH CHECK (auth.uid() = user_id);
-
 CREATE POLICY "Users can update own milestones"
   ON user_milestones FOR UPDATE
   USING (auth.uid() = user_id);
-
 -- ============================================================================
 -- CALM COINS (if not exists)
 -- ============================================================================
 
--- [MIGRATION FIX] Table calm_coins created in earlier migration.
--- Adding columns that would have been lost due to IF NOT EXISTS:
--- Original CREATE TABLE commented out below.
-ALTER TABLE calm_coins ADD COLUMN IF NOT EXISTS source TEXT;
-ALTER TABLE calm_coins ADD COLUMN IF NOT EXISTS reference_id TEXT;
-
--- Original CREATE TABLE (commented out, columns added above):
--- CREATE TABLE IF NOT EXISTS calm_coins (
---   id TEXT PRIMARY KEY,
---   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
---   amount INTEGER NOT NULL,
---   source TEXT NOT NULL,
---   reference_id TEXT,
---   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
--- );
-
-
+CREATE TABLE IF NOT EXISTS calm_coins (
+  id TEXT PRIMARY KEY,
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  amount INTEGER NOT NULL,
+  source TEXT NOT NULL,
+  reference_id TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
 CREATE INDEX idx_calm_coins_user ON calm_coins(user_id);
-
 ALTER TABLE calm_coins ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "Users can view own coins"
   ON calm_coins FOR SELECT
   USING (auth.uid() = user_id);
-
 CREATE POLICY "Users can insert own coins"
   ON calm_coins FOR INSERT
   WITH CHECK (auth.uid() = user_id);
-
 -- ============================================================================
 -- TRIAL TRACKING
 -- ============================================================================
@@ -551,60 +404,41 @@ CREATE TABLE IF NOT EXISTS trial_tracking (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   UNIQUE(user_id)
 );
-
 CREATE INDEX IF NOT EXISTS idx_trial_tracking_user ON trial_tracking(user_id);
 CREATE INDEX IF NOT EXISTS idx_trial_tracking_ends ON trial_tracking(trial_ends_at);
-
 ALTER TABLE trial_tracking ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "Users can view own trial"
   ON trial_tracking FOR SELECT
   USING (auth.uid() = user_id);
-
 CREATE POLICY "Users can insert own trial"
   ON trial_tracking FOR INSERT
   WITH CHECK (auth.uid() = user_id);
-
 CREATE POLICY "Users can update own trial"
   ON trial_tracking FOR UPDATE
   USING (auth.uid() = user_id);
-
 CREATE POLICY "Service role can manage trials"
   ON trial_tracking FOR ALL
   USING (auth.role() = 'service_role');
-
 -- ============================================================================
 -- USAGE TRACKING
 -- ============================================================================
 
--- [MIGRATION FIX] Table usage_tracking created in earlier migration.
--- Adding columns that would have been lost due to IF NOT EXISTS:
--- Original CREATE TABLE commented out below.
-ALTER TABLE usage_tracking ADD COLUMN IF NOT EXISTS session_count INTEGER NOT NULL DEFAULT 0;
-ALTER TABLE usage_tracking ADD COLUMN IF NOT EXISTS features_used TEXT[] DEFAULT '{}';
-
--- Original CREATE TABLE (commented out, columns added above):
--- CREATE TABLE IF NOT EXISTS usage_tracking (
---   id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
---   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
---   date DATE NOT NULL,
---   message_count INTEGER NOT NULL DEFAULT 0,
---   session_count INTEGER NOT NULL DEFAULT 0,
---   features_used TEXT[] DEFAULT '{}',
---   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
---   UNIQUE(user_id, date)
--- );
-
-
+CREATE TABLE IF NOT EXISTS usage_tracking (
+  id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  date DATE NOT NULL,
+  message_count INTEGER NOT NULL DEFAULT 0,
+  session_count INTEGER NOT NULL DEFAULT 0,
+  features_used TEXT[] DEFAULT '{}',
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  UNIQUE(user_id, date)
+);
 CREATE INDEX IF NOT EXISTS idx_usage_tracking_user ON usage_tracking(user_id);
 CREATE INDEX IF NOT EXISTS idx_usage_tracking_date ON usage_tracking(date);
-
 ALTER TABLE usage_tracking ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "Users can view own usage"
   ON usage_tracking FOR SELECT
   USING (auth.uid() = user_id);
-
 -- ============================================================================
 -- HELPER FUNCTIONS
 -- ============================================================================
@@ -618,7 +452,6 @@ BEGIN
   WHERE user_id = user_id_param;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
-
 -- Function to increment message count
 CREATE OR REPLACE FUNCTION increment_message_count(user_id_param UUID, date_param DATE)
 RETURNS void AS $$
@@ -629,7 +462,6 @@ BEGIN
   DO UPDATE SET message_count = usage_tracking.message_count + 1;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
-
 -- ============================================================================
 -- GRANT PERMISSIONS
 -- ============================================================================

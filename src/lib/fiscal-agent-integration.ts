@@ -99,6 +99,22 @@ export interface Timesheet {
   createdAt: string;
 }
 
+function isExpectedPilotAuthError(err: unknown): boolean {
+  if (!err || typeof err !== 'object') return false;
+
+  const maybeCode = 'code' in err ? String((err as { code?: unknown }).code || '') : '';
+  const maybeMessage = 'message' in err ? String((err as { message?: unknown }).message || '') : '';
+
+  return (
+    maybeCode === '42P01' ||
+    maybeCode === 'PGRST205' ||
+    maybeCode === 'PGRST116' ||
+    maybeMessage.includes('service_authorizations') ||
+    maybeMessage.includes('relation') ||
+    maybeMessage.includes('schema cache')
+  );
+}
+
 // ============================================
 // AUTHORIZATION TRACKING
 // ============================================
@@ -136,7 +152,9 @@ export async function getAuthorizations(childId: string): Promise<ServiceAuthori
       updatedAt: row.updated_at,
     }));
   } catch (err) {
-    console.error('[FiscalAgent] Error fetching authorizations:', err);
+    if (!isExpectedPilotAuthError(err)) {
+      console.warn('[FiscalAgent] Error fetching authorizations:', err);
+    }
     return [];
   }
 }
@@ -200,7 +218,9 @@ export async function createAuthorization(
       updatedAt: data.updated_at,
     };
   } catch (err) {
-    console.error('[FiscalAgent] Error creating authorization:', err);
+    if (!isExpectedPilotAuthError(err)) {
+      console.warn('[FiscalAgent] Error creating authorization:', err);
+    }
     return null;
   }
 }

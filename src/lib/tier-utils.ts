@@ -12,6 +12,23 @@
  */
 
 export type TierType = 'free' | 'starter' | 'core' | 'pro' | 'proplus';
+export type CanonicalTierName = 'free' | 'core' | 'pro' | 'family';
+
+export interface TierEntitlements {
+  aiMessagesPerDay: number | null;
+  juniorAccess: boolean;
+  maxChildren: number | null;
+  reportExports: 'none' | 'caregiver' | 'provider';
+  providerFeatures: boolean;
+}
+
+const CANONICAL_TIER_MAP: Record<TierType, CanonicalTierName> = {
+  free: 'free',
+  starter: 'core',
+  core: 'core',
+  pro: 'pro',
+  proplus: 'family',
+};
 
 // Map internal tier names to UI-friendly display names
 export const tierDisplayNames: Record<TierType, string> = {
@@ -45,6 +62,46 @@ export const tierPricing: Record<TierType, { monthly: number; yearly: number; sa
   pro: { monthly: 29.99, yearly: 279, savings: 81, hasTrial: true },
   proplus: { monthly: 49.99, yearly: 479, savings: 121, hasTrial: true },
 };
+
+export const tierEntitlements: Record<CanonicalTierName, TierEntitlements> = {
+  free: {
+    aiMessagesPerDay: 5,
+    juniorAccess: true,
+    maxChildren: 1,
+    reportExports: 'none',
+    providerFeatures: false,
+  },
+  core: {
+    aiMessagesPerDay: null,
+    juniorAccess: true,
+    maxChildren: 2,
+    reportExports: 'caregiver',
+    providerFeatures: false,
+  },
+  pro: {
+    aiMessagesPerDay: null,
+    juniorAccess: true,
+    maxChildren: 3,
+    reportExports: 'provider',
+    providerFeatures: true,
+  },
+  family: {
+    aiMessagesPerDay: null,
+    juniorAccess: true,
+    maxChildren: null,
+    reportExports: 'provider',
+    providerFeatures: true,
+  },
+};
+
+export function getCanonicalTierName(tier?: TierType | string | null): CanonicalTierName {
+  if (!tier) return 'free';
+  return CANONICAL_TIER_MAP[normalizeTierName(tier)] || 'free';
+}
+
+export function getTierEntitlements(tier?: TierType | string | null): TierEntitlements {
+  return tierEntitlements[getCanonicalTierName(tier)];
+}
 
 // HSA/FSA eligibility configuration
 export const HSA_FSA_CONFIG = {

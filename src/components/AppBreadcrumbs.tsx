@@ -17,12 +17,9 @@
 
 import React from 'react';
 import { ChevronRight, Home } from 'lucide-react';
+import type { BreadcrumbTrailItem } from '../lib/breadcrumb-trails';
 
-export interface BreadcrumbItem {
-  label: string;
-  /** Screen name to navigate to. Omit for the current (non-clickable) page. */
-  screen?: string;
-}
+export type BreadcrumbItem = BreadcrumbTrailItem;
 
 interface AppBreadcrumbsProps {
   items: BreadcrumbItem[];
@@ -77,76 +74,5 @@ export function AppBreadcrumbs({ items, onNavigate, className = '' }: AppBreadcr
     </nav>
   );
 }
-
-// ── Predefined breadcrumb trails for common deep screens ──
-
-export const BREADCRUMB_TRAILS: Record<string, BreadcrumbItem[]> = {
-  'care-plan': [
-    { label: 'Home', screen: 'dashboard' },
-    { label: 'Care', screen: 'caregivers' },
-    { label: 'Care Plan' },
-  ],
-  'prior-auth': [
-    { label: 'Home', screen: 'dashboard' },
-    { label: 'Benefits', screen: 'benefits' },
-    { label: 'Prior Authorization' },
-  ],
-  'incident-log': [
-    { label: 'Home', screen: 'dashboard' },
-    { label: 'Care', screen: 'caregivers' },
-    { label: 'Incident Log' },
-  ],
-  'medications': [
-    { label: 'Home', screen: 'dashboard' },
-    { label: 'Care', screen: 'caregivers' },
-    { label: 'Medications' },
-  ],
-  'outcomes': [
-    { label: 'Home', screen: 'dashboard' },
-    { label: 'Care', screen: 'caregivers' },
-    { label: 'Outcomes Tracker' },
-  ],
-  'weekly-insights': [
-    { label: 'Home', screen: 'dashboard' },
-    { label: 'Weekly Insights' },
-  ],
-  'insight-report': [
-    { label: 'Home', screen: 'dashboard' },
-    { label: 'Insights', screen: 'weekly-insights' },
-    { label: 'Insight Report' },
-  ],
-  'analytics-charts': [
-    { label: 'Home', screen: 'dashboard' },
-    { label: 'Analytics', screen: 'analytics' },
-    { label: 'Charts & Trends' },
-  ],
-  'access-requests': [
-    { label: 'Home', screen: 'dashboard' },
-    { label: 'Settings', screen: 'settings' },
-    { label: 'Access Requests' },
-  ],
-  'crisis-resources': [
-    { label: 'Home', screen: 'dashboard' },
-    { label: 'Crisis Resources' },
-  ],
-  'conversational-booking': [
-    { label: 'Home', screen: 'dashboard' },
-    { label: 'Appointments', screen: 'my-appointments' },
-    { label: 'Book Appointment' },
-  ],
-  'messages': [
-    { label: 'Home', screen: 'dashboard' },
-    { label: 'Messages' },
-  ],
-  'my-appointments': [
-    { label: 'Home', screen: 'dashboard' },
-    { label: 'Telehealth', screen: 'telehealth' },
-    { label: 'My Appointments' },
-  ],
-  'calm-tools': [
-    { label: 'Home', screen: 'dashboard' },
-    { label: 'Calm Tools' },
-  ],
-};
 
 export default AppBreadcrumbs;

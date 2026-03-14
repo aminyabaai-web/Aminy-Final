@@ -44,29 +44,21 @@ CREATE TABLE IF NOT EXISTS abc_entries (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 ALTER TABLE abc_entries ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "Users can view own ABC entries" ON abc_entries
   FOR SELECT USING (user_id = auth.uid()::text OR user_id = coalesce(auth.jwt() ->> 'sub', ''));
-
 CREATE POLICY "Users can insert own ABC entries" ON abc_entries
   FOR INSERT WITH CHECK (user_id = auth.uid()::text OR user_id = coalesce(auth.jwt() ->> 'sub', ''));
-
 CREATE POLICY "Users can update own ABC entries" ON abc_entries
   FOR UPDATE USING (user_id = auth.uid()::text OR user_id = coalesce(auth.jwt() ->> 'sub', ''));
-
 CREATE POLICY "Users can delete own ABC entries" ON abc_entries
   FOR DELETE USING (user_id = auth.uid()::text OR user_id = coalesce(auth.jwt() ->> 'sub', ''));
-
 -- Providers with access can view
 CREATE POLICY "Providers can view authorized ABC entries" ON abc_entries
   FOR SELECT USING (true);
-
 CREATE INDEX idx_abc_entries_user_child ON abc_entries(user_id, child_id);
 CREATE INDEX idx_abc_entries_occurred ON abc_entries(occurred_at DESC);
 CREATE INDEX idx_abc_entries_behavior ON abc_entries(behavior_category);
-
 -- ============================================
 -- TREATMENT PLANS TABLE
 -- ============================================
@@ -97,24 +89,17 @@ CREATE TABLE IF NOT EXISTS treatment_plans (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 ALTER TABLE treatment_plans ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "Users can view own treatment plans" ON treatment_plans
   FOR SELECT USING (user_id = auth.uid()::text OR user_id = coalesce(auth.jwt() ->> 'sub', ''));
-
 CREATE POLICY "Users can insert own treatment plans" ON treatment_plans
   FOR INSERT WITH CHECK (user_id = auth.uid()::text OR user_id = coalesce(auth.jwt() ->> 'sub', ''));
-
 CREATE POLICY "Users can update own treatment plans" ON treatment_plans
   FOR UPDATE USING (user_id = auth.uid()::text OR user_id = coalesce(auth.jwt() ->> 'sub', ''));
-
 CREATE POLICY "Service role can manage all" ON treatment_plans
   FOR ALL USING (true);
-
 CREATE INDEX idx_treatment_plans_child ON treatment_plans(child_id);
 CREATE INDEX idx_treatment_plans_status ON treatment_plans(status);
-
 -- ============================================
 -- TREATMENT GOALS TABLE
 -- ============================================
@@ -145,15 +130,11 @@ CREATE TABLE IF NOT EXISTS treatment_goals (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 ALTER TABLE treatment_goals ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "Users can manage goals via plan access" ON treatment_goals
   FOR ALL USING (true);
-
 CREATE INDEX idx_treatment_goals_plan ON treatment_goals(plan_id);
 CREATE INDEX idx_treatment_goals_status ON treatment_goals(status);
-
 -- ============================================
 -- GOAL PROGRESS UPDATES TABLE
 -- ============================================
@@ -170,18 +151,13 @@ CREATE TABLE IF NOT EXISTS goal_progress_updates (
 
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 ALTER TABLE goal_progress_updates ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "Anyone can view progress updates" ON goal_progress_updates
   FOR SELECT USING (true);
-
 CREATE POLICY "Anyone can insert progress updates" ON goal_progress_updates
   FOR INSERT WITH CHECK (true);
-
 CREATE INDEX idx_goal_progress_goal ON goal_progress_updates(goal_id);
 CREATE INDEX idx_goal_progress_created ON goal_progress_updates(created_at DESC);
-
 -- ============================================
 -- PROVIDER PROFILES TABLE
 -- ============================================
@@ -234,50 +210,35 @@ CREATE TABLE IF NOT EXISTS provider_profiles (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 ALTER TABLE provider_profiles ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "Anyone can view providers" ON provider_profiles
   FOR SELECT USING (true);
-
 CREATE POLICY "Providers can update own profile" ON provider_profiles
   FOR UPDATE USING (user_id = auth.uid()::text OR user_id = coalesce(auth.jwt() ->> 'sub', ''));
-
 CREATE POLICY "Service role can manage all" ON provider_profiles
   FOR ALL USING (true);
-
 CREATE INDEX idx_provider_profiles_type ON provider_profiles(provider_type);
 CREATE INDEX idx_provider_profiles_state ON provider_profiles(state);
 CREATE INDEX idx_provider_profiles_verified ON provider_profiles(verified);
-
 -- ============================================
 -- PROVIDER AVAILABILITY TABLE
 -- ============================================
--- [MIGRATION FIX] Table provider_availability already created in earlier migration
--- Original CREATE TABLE commented out to prevent silent column loss:
--- CREATE TABLE IF NOT EXISTS provider_availability (
---   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
---   provider_id UUID REFERENCES provider_profiles(id) ON DELETE CASCADE,
--- 
---   day_of_week INTEGER NOT NULL CHECK (day_of_week >= 0 AND day_of_week <= 6), -- 0=Sunday
---   start_time TIME NOT NULL,
---   end_time TIME NOT NULL,
--- 
---   UNIQUE(provider_id, day_of_week, start_time)
--- );
+CREATE TABLE IF NOT EXISTS provider_availability (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  provider_id UUID REFERENCES provider_profiles(id) ON DELETE CASCADE,
 
+  day_of_week INTEGER NOT NULL CHECK (day_of_week >= 0 AND day_of_week <= 6), -- 0=Sunday
+  start_time TIME NOT NULL,
+  end_time TIME NOT NULL,
 
+  UNIQUE(provider_id, day_of_week, start_time)
+);
 ALTER TABLE provider_availability ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "Anyone can view availability" ON provider_availability
   FOR SELECT USING (true);
-
-DROP POLICY IF EXISTS "Providers can manage own availability" ON provider_availability;
 CREATE POLICY "Providers can manage own availability" ON provider_availability
   FOR ALL USING (true);
-
 CREATE INDEX idx_provider_availability_provider ON provider_availability(provider_id);
-
 -- ============================================
 -- PROVIDER PATIENTS TABLE (relationships)
 -- ============================================
@@ -300,19 +261,14 @@ CREATE TABLE IF NOT EXISTS provider_patients (
 
   UNIQUE(provider_id, child_id)
 );
-
 ALTER TABLE provider_patients ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "Providers can view their patients" ON provider_patients
   FOR SELECT USING (true);
-
 CREATE POLICY "Anyone can manage patient relationships" ON provider_patients
   FOR ALL USING (true);
-
 CREATE INDEX idx_provider_patients_provider ON provider_patients(provider_id);
 CREATE INDEX idx_provider_patients_child ON provider_patients(child_id);
 CREATE INDEX idx_provider_patients_parent ON provider_patients(parent_user_id);
-
 -- ============================================
 -- PROVIDER SESSIONS TABLE
 -- ============================================
@@ -347,74 +303,55 @@ CREATE TABLE IF NOT EXISTS provider_sessions (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 ALTER TABLE provider_sessions ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "Anyone can view sessions" ON provider_sessions
   FOR SELECT USING (true);
-
 CREATE POLICY "Anyone can manage sessions" ON provider_sessions
   FOR ALL USING (true);
-
 CREATE INDEX idx_provider_sessions_provider ON provider_sessions(provider_id);
 CREATE INDEX idx_provider_sessions_patient ON provider_sessions(patient_id);
 CREATE INDEX idx_provider_sessions_scheduled ON provider_sessions(scheduled_at);
 CREATE INDEX idx_provider_sessions_status ON provider_sessions(status);
-
 -- ============================================
 -- SESSION NOTES TABLE
 -- ============================================
--- [MIGRATION FIX] Table session_notes created in earlier migration.
--- Adding columns that would have been lost due to IF NOT EXISTS:
--- Original CREATE TABLE commented out below.
-ALTER TABLE session_notes ADD COLUMN IF NOT EXISTS goal_progress JSONB DEFAULT '{}';
-ALTER TABLE session_notes ADD COLUMN IF NOT EXISTS provider_follow_up TEXT;
-ALTER TABLE session_notes ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ DEFAULT NOW();
+CREATE TABLE IF NOT EXISTS session_notes (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  session_id UUID REFERENCES provider_sessions(id) ON DELETE CASCADE,
+  provider_id UUID REFERENCES provider_profiles(id) ON DELETE CASCADE,
 
--- Original CREATE TABLE (commented out, columns added above):
--- CREATE TABLE IF NOT EXISTS session_notes (
---   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
---   session_id UUID REFERENCES provider_sessions(id) ON DELETE CASCADE,
---   provider_id UUID REFERENCES provider_profiles(id) ON DELETE CASCADE,
--- 
---   -- Note content
---   note_type TEXT DEFAULT 'progress' CHECK (note_type IN (
---     'progress', 'intake', 'assessment', 'discharge', 'other'
---   )),
--- 
---   -- Structured fields
---   subjective TEXT, -- Parent/caregiver report
---   objective TEXT, -- Provider observations
---   assessment TEXT, -- Clinical assessment
---   plan TEXT, -- Plan for next session
--- 
---   -- Goals worked on
---   goals_addressed TEXT[] DEFAULT '{}',
---   goal_progress JSONB DEFAULT '{}', -- {goalId: 'improved'|'maintained'|'needs_attention'}
--- 
---   -- Recommendations
---   home_recommendations TEXT,
---   provider_follow_up TEXT,
--- 
---   -- Visibility
---   shared_with_parent BOOLEAN DEFAULT false,
--- 
---   created_at TIMESTAMPTZ DEFAULT NOW(),
---   updated_at TIMESTAMPTZ DEFAULT NOW()
--- );
+  -- Note content
+  note_type TEXT DEFAULT 'progress' CHECK (note_type IN (
+    'progress', 'intake', 'assessment', 'discharge', 'other'
+  )),
 
+  -- Structured fields
+  subjective TEXT, -- Parent/caregiver report
+  objective TEXT, -- Provider observations
+  assessment TEXT, -- Clinical assessment
+  plan TEXT, -- Plan for next session
 
+  -- Goals worked on
+  goals_addressed TEXT[] DEFAULT '{}',
+  goal_progress JSONB DEFAULT '{}', -- {goalId: 'improved'|'maintained'|'needs_attention'}
+
+  -- Recommendations
+  home_recommendations TEXT,
+  provider_follow_up TEXT,
+
+  -- Visibility
+  shared_with_parent BOOLEAN DEFAULT false,
+
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
 ALTER TABLE session_notes ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "Anyone can view session notes" ON session_notes
   FOR SELECT USING (true);
-
 CREATE POLICY "Providers can manage session notes" ON session_notes
   FOR ALL USING (true);
-
 CREATE INDEX idx_session_notes_session ON session_notes(session_id);
 CREATE INDEX idx_session_notes_provider ON session_notes(provider_id);
-
 -- ============================================
 -- SESSION NOTE TEMPLATES TABLE
 -- ============================================
@@ -436,19 +373,14 @@ CREATE TABLE IF NOT EXISTS session_note_templates (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 ALTER TABLE session_note_templates ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "Anyone can view public templates" ON session_note_templates
   FOR SELECT USING (is_public = true OR provider_id IN (
     SELECT id FROM provider_profiles WHERE user_id = auth.uid()::text
   ));
-
 CREATE POLICY "Providers can manage own templates" ON session_note_templates
   FOR ALL USING (true);
-
 CREATE INDEX idx_session_note_templates_provider ON session_note_templates(provider_id);
-
 -- ============================================
 -- PROVIDER EARNINGS TABLE
 -- ============================================
@@ -474,19 +406,14 @@ CREATE TABLE IF NOT EXISTS provider_earnings (
 
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 ALTER TABLE provider_earnings ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "Providers can view own earnings" ON provider_earnings
   FOR SELECT USING (true);
-
 CREATE POLICY "Service role can manage earnings" ON provider_earnings
   FOR ALL USING (true);
-
 CREATE INDEX idx_provider_earnings_provider ON provider_earnings(provider_id);
 CREATE INDEX idx_provider_earnings_status ON provider_earnings(status);
 CREATE INDEX idx_provider_earnings_created ON provider_earnings(created_at DESC);
-
 -- ============================================
 -- CLINICAL OUTCOMES TABLE (enhanced)
 -- ============================================
@@ -520,22 +447,16 @@ CREATE TABLE IF NOT EXISTS clinical_outcomes (
 
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 ALTER TABLE clinical_outcomes ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "Users can view own outcomes" ON clinical_outcomes
   FOR SELECT USING (user_id = auth.uid()::text OR user_id = coalesce(auth.jwt() ->> 'sub', ''));
-
 CREATE POLICY "Anyone can insert outcomes" ON clinical_outcomes
   FOR INSERT WITH CHECK (true);
-
 CREATE POLICY "Service role can manage all" ON clinical_outcomes
   FOR ALL USING (true);
-
 CREATE INDEX idx_clinical_outcomes_child ON clinical_outcomes(child_id);
 CREATE INDEX idx_clinical_outcomes_type ON clinical_outcomes(assessment_type);
 CREATE INDEX idx_clinical_outcomes_created ON clinical_outcomes(created_at DESC);
-
 -- ============================================
 -- VIEWS FOR PROVIDER DASHBOARD
 -- ============================================
@@ -557,7 +478,6 @@ SELECT
    WHERE pe.provider_id = p.id
    AND pe.created_at >= date_trunc('month', now())) as earnings_this_month_cents
 FROM provider_profiles p;
-
 -- ============================================
 -- FUNCTIONS
 -- ============================================
@@ -581,11 +501,9 @@ BEGIN
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
-
 CREATE OR REPLACE TRIGGER trigger_update_provider_session_stats
 AFTER UPDATE ON provider_sessions
 FOR EACH ROW EXECUTE FUNCTION update_provider_session_stats();
-
 -- Update goal progress when update is added
 CREATE OR REPLACE FUNCTION update_goal_progress()
 RETURNS TRIGGER AS $$
@@ -597,11 +515,9 @@ BEGIN
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
-
 CREATE OR REPLACE TRIGGER trigger_update_goal_progress
 AFTER INSERT ON goal_progress_updates
 FOR EACH ROW EXECUTE FUNCTION update_goal_progress();
-
 -- ============================================
 -- SEED DATA: Sample provider
 -- ============================================
@@ -627,7 +543,6 @@ INSERT INTO provider_profiles (
   4.9,
   127
 ) ON CONFLICT DO NOTHING;
-
 -- ============================================
 -- SEED DATA: Session note templates
 -- ============================================
@@ -649,7 +564,6 @@ FROM provider_profiles
 WHERE name = 'Dr. Sarah Mitchell'
 LIMIT 1
 ON CONFLICT DO NOTHING;
-
 INSERT INTO session_note_templates (id, provider_id, name, description, note_type, template_content, is_public)
 SELECT
   gen_random_uuid(),
@@ -668,4 +582,3 @@ FROM provider_profiles
 WHERE name = 'Dr. Sarah Mitchell'
 LIMIT 1
 ON CONFLICT DO NOTHING;
-

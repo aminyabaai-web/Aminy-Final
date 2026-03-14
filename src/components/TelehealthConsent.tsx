@@ -259,7 +259,11 @@ export function TelehealthConsent({
             </li>
             <li className="flex items-start gap-2">
               <span className="font-bold text-gray-900">•</span>
-              <span>Late cancellations (&lt;24 hours) may be charged in full</span>
+              <span>Late cancellations (&lt;24 hours) are charged at <strong>50% of the visit price</strong></span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="font-bold text-gray-900">•</span>
+              <span>No-shows are charged the <strong>full visit amount</strong></span>
             </li>
             <li className="flex items-start gap-2">
               <span className="font-bold text-gray-900">•</span>

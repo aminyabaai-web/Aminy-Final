@@ -36,28 +36,21 @@ CREATE TABLE IF NOT EXISTS community_posts (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- Public read access for approved posts, authenticated write
 ALTER TABLE community_posts ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "Anyone can view approved posts" ON community_posts
   FOR SELECT USING (moderation_status = 'approved');
-
 CREATE POLICY "Authenticated users can create posts" ON community_posts
   FOR INSERT WITH CHECK (true);
-
 CREATE POLICY "Users can update own posts" ON community_posts
   FOR UPDATE USING (user_id = auth.uid()::text OR user_id = coalesce(auth.jwt() ->> 'sub', ''));
-
 CREATE POLICY "Users can delete own posts" ON community_posts
   FOR DELETE USING (user_id = auth.uid()::text OR user_id = coalesce(auth.jwt() ->> 'sub', ''));
-
 -- Indexes
 CREATE INDEX idx_community_posts_category ON community_posts(category);
 CREATE INDEX idx_community_posts_created_at ON community_posts(created_at DESC);
 CREATE INDEX idx_community_posts_user_id ON community_posts(user_id);
 CREATE INDEX idx_community_posts_moderation ON community_posts(moderation_status);
-
 -- ============================================
 -- COMMUNITY COMMENTS TABLE
 -- ============================================
@@ -72,25 +65,18 @@ CREATE TABLE IF NOT EXISTS community_comments (
   provider_credentials TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 ALTER TABLE community_comments ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "Anyone can view comments" ON community_comments
   FOR SELECT USING (true);
-
 CREATE POLICY "Authenticated users can create comments" ON community_comments
   FOR INSERT WITH CHECK (true);
-
 CREATE POLICY "Users can update own comments" ON community_comments
   FOR UPDATE USING (user_id = auth.uid()::text OR user_id = coalesce(auth.jwt() ->> 'sub', ''));
-
 CREATE POLICY "Users can delete own comments" ON community_comments
   FOR DELETE USING (user_id = auth.uid()::text OR user_id = coalesce(auth.jwt() ->> 'sub', ''));
-
 -- Indexes
 CREATE INDEX idx_community_comments_post_id ON community_comments(post_id);
 CREATE INDEX idx_community_comments_created_at ON community_comments(created_at DESC);
-
 -- ============================================
 -- COMMUNITY LIKES TABLE
 -- ============================================
@@ -101,21 +87,15 @@ CREATE TABLE IF NOT EXISTS community_likes (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   UNIQUE(post_id, user_id)
 );
-
 ALTER TABLE community_likes ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "Anyone can view likes" ON community_likes
   FOR SELECT USING (true);
-
 CREATE POLICY "Authenticated users can create likes" ON community_likes
   FOR INSERT WITH CHECK (true);
-
 CREATE POLICY "Users can delete own likes" ON community_likes
   FOR DELETE USING (user_id = auth.uid()::text OR user_id = coalesce(auth.jwt() ->> 'sub', ''));
-
 CREATE INDEX idx_community_likes_post_id ON community_likes(post_id);
 CREATE INDEX idx_community_likes_user_id ON community_likes(user_id);
-
 -- ============================================
 -- USER STREAKS TABLE
 -- ============================================
@@ -129,22 +109,16 @@ CREATE TABLE IF NOT EXISTS user_streaks (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 ALTER TABLE user_streaks ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "Users can view own streaks" ON user_streaks
   FOR SELECT USING (user_id = auth.uid()::text OR user_id = coalesce(auth.jwt() ->> 'sub', ''));
-
 CREATE POLICY "Users can upsert own streaks" ON user_streaks
   FOR INSERT WITH CHECK (user_id = auth.uid()::text OR user_id = coalesce(auth.jwt() ->> 'sub', ''));
-
 CREATE POLICY "Users can update own streaks" ON user_streaks
   FOR UPDATE USING (user_id = auth.uid()::text OR user_id = coalesce(auth.jwt() ->> 'sub', ''));
-
 -- Service role can read all streaks for admin
 CREATE POLICY "Service role can read all streaks" ON user_streaks
   FOR SELECT USING (true);
-
 -- ============================================
 -- ANALYTICS EVENTS TABLE
 -- For tracking user actions and computing metrics
@@ -158,23 +132,18 @@ CREATE TABLE IF NOT EXISTS analytics_events (
   session_id TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 ALTER TABLE analytics_events ENABLE ROW LEVEL SECURITY;
-
 -- Service role can manage all analytics
 CREATE POLICY "Service role can manage analytics" ON analytics_events
   FOR ALL USING (true);
-
 -- Users can insert their own events
 CREATE POLICY "Users can insert own events" ON analytics_events
   FOR INSERT WITH CHECK (true);
-
 -- Indexes for efficient analytics queries
 CREATE INDEX idx_analytics_events_user_id ON analytics_events(user_id);
 CREATE INDEX idx_analytics_events_type ON analytics_events(event_type);
 CREATE INDEX idx_analytics_events_created_at ON analytics_events(created_at DESC);
 CREATE INDEX idx_analytics_events_name ON analytics_events(event_name);
-
 -- ============================================
 -- DAILY ACTIVE USERS VIEW
 -- ============================================
@@ -186,7 +155,6 @@ FROM analytics_events
 WHERE created_at >= NOW() - INTERVAL '30 days'
 GROUP BY DATE(created_at)
 ORDER BY date DESC;
-
 -- ============================================
 -- PILOT METRICS VIEW
 -- Aggregates key metrics for admin dashboard
@@ -210,7 +178,6 @@ SELECT
   (SELECT COUNT(*) FROM profiles WHERE tier = 'starter') as tier_starter,
   (SELECT COUNT(*) FROM profiles WHERE tier IN ('basic', 'core')) as tier_core,
   (SELECT COUNT(*) FROM profiles WHERE tier IN ('pro', 'proplus')) as tier_pro;
-
 -- ============================================
 -- FUNCTION: Update post counters
 -- ============================================
@@ -227,11 +194,9 @@ BEGIN
   RETURN NULL;
 END;
 $$ LANGUAGE plpgsql;
-
 CREATE OR REPLACE TRIGGER trigger_update_post_like_count
 AFTER INSERT OR DELETE ON community_likes
 FOR EACH ROW EXECUTE FUNCTION update_post_like_count();
-
 CREATE OR REPLACE FUNCTION update_post_comment_count()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -245,11 +210,9 @@ BEGIN
   RETURN NULL;
 END;
 $$ LANGUAGE plpgsql;
-
 CREATE OR REPLACE TRIGGER trigger_update_post_comment_count
 AFTER INSERT OR DELETE ON community_comments
 FOR EACH ROW EXECUTE FUNCTION update_post_comment_count();
-
 -- ============================================
 -- FUNCTION: Updated_at trigger for streaks
 -- ============================================
@@ -257,7 +220,6 @@ DROP TRIGGER IF EXISTS update_user_streaks_updated_at ON user_streaks;
 CREATE TRIGGER update_user_streaks_updated_at
   BEFORE UPDATE ON user_streaks
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
 -- ============================================
 -- SEED COMMUNITY POSTS
 -- Add initial content so community doesn't feel empty

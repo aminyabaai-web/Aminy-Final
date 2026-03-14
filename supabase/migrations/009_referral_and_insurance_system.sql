@@ -18,18 +18,14 @@ CREATE TABLE IF NOT EXISTS referral_codes (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   UNIQUE(user_id) -- One active code per user
 );
-
 -- Enable RLS
 ALTER TABLE referral_codes ENABLE ROW LEVEL SECURITY;
-
 -- Users can see their own referral code
 CREATE POLICY "Users can view own referral code" ON referral_codes
   FOR SELECT USING (auth.uid() = user_id);
-
 -- Service role can manage all codes
 CREATE POLICY "Service role can manage referral codes" ON referral_codes
   FOR ALL USING (true);
-
 -- Track all referral relationships
 CREATE TABLE IF NOT EXISTS referrals (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -57,18 +53,14 @@ CREATE TABLE IF NOT EXISTS referrals (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- Enable RLS
 ALTER TABLE referrals ENABLE ROW LEVEL SECURITY;
-
 -- Users can see referrals they made
 CREATE POLICY "Users can view own referrals" ON referrals
   FOR SELECT USING (auth.uid() = referrer_id);
-
 -- Service role can manage all
 CREATE POLICY "Service role can manage referrals" ON referrals
   FOR ALL USING (true);
-
 -- Track referral link clicks for analytics
 CREATE TABLE IF NOT EXISTS referral_clicks (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -81,19 +73,15 @@ CREATE TABLE IF NOT EXISTS referral_clicks (
   conversion_user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
   clicked_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- Enable RLS (no user access needed - admin only)
 ALTER TABLE referral_clicks ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "Service role can manage referral clicks" ON referral_clicks
   FOR ALL USING (true);
-
 -- Add referral tracking to profiles
 ALTER TABLE profiles
   ADD COLUMN IF NOT EXISTS referred_by_code TEXT,
   ADD COLUMN IF NOT EXISTS referred_by_user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
   ADD COLUMN IF NOT EXISTS referral_credits INTEGER DEFAULT 0;
-
 -- ============================================
 -- REFERRAL SYSTEM INDEXES
 -- ============================================
@@ -106,7 +94,6 @@ CREATE INDEX IF NOT EXISTS idx_referrals_code ON referrals(referral_code);
 CREATE INDEX IF NOT EXISTS idx_referrals_status ON referrals(status);
 CREATE INDEX IF NOT EXISTS idx_referral_clicks_code ON referral_clicks(referral_code);
 CREATE INDEX IF NOT EXISTS idx_referral_clicks_time ON referral_clicks(clicked_at);
-
 -- ============================================
 -- REFERRAL SYSTEM FUNCTIONS
 -- ============================================
@@ -141,7 +128,6 @@ BEGIN
   END LOOP;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
-
 -- Process a referral when user signs up with code
 CREATE OR REPLACE FUNCTION process_referral_signup(
   p_new_user_id UUID,
@@ -252,7 +238,6 @@ BEGIN
   );
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
-
 -- Credit referrer when referred user subscribes
 CREATE OR REPLACE FUNCTION credit_referrer_on_subscription(
   p_referred_user_id UUID
@@ -302,7 +287,6 @@ BEGIN
   );
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
-
 -- Get referral stats for a user
 CREATE OR REPLACE FUNCTION get_referral_stats(p_user_id UUID)
 RETURNS JSONB AS $$
@@ -330,7 +314,6 @@ BEGIN
   RETURN v_stats;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
-
 -- ============================================
 -- INSURANCE VERIFICATION INFRASTRUCTURE
 -- ============================================
@@ -381,18 +364,14 @@ CREATE TABLE IF NOT EXISTS insurance_verifications (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- Enable RLS
 ALTER TABLE insurance_verifications ENABLE ROW LEVEL SECURITY;
-
 -- Users can see their own verifications
 CREATE POLICY "Users can view own insurance verifications" ON insurance_verifications
   FOR SELECT USING (auth.uid() = user_id);
-
 -- Service role can manage all
 CREATE POLICY "Service role can manage insurance verifications" ON insurance_verifications
   FOR ALL USING (true);
-
 -- Store user's insurance cards/documents (references to uploaded files)
 CREATE TABLE IF NOT EXISTS insurance_documents (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -411,21 +390,16 @@ CREATE TABLE IF NOT EXISTS insurance_documents (
   uploaded_at TIMESTAMPTZ DEFAULT NOW(),
   processed_at TIMESTAMPTZ
 );
-
 -- Enable RLS
 ALTER TABLE insurance_documents ENABLE ROW LEVEL SECURITY;
-
 -- Users can see their own documents
 CREATE POLICY "Users can view own insurance documents" ON insurance_documents
   FOR SELECT USING (auth.uid() = user_id);
-
 CREATE POLICY "Users can upload insurance documents" ON insurance_documents
   FOR INSERT WITH CHECK (auth.uid() = user_id);
-
 -- Service role can manage all
 CREATE POLICY "Service role can manage insurance documents" ON insurance_documents
   FOR ALL USING (true);
-
 -- Store payer/insurance company information (admin-managed reference data)
 CREATE TABLE IF NOT EXISTS payers (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -443,16 +417,12 @@ CREATE TABLE IF NOT EXISTS payers (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- Enable RLS (read-only for users)
 ALTER TABLE payers ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "Users can view active payers" ON payers
   FOR SELECT USING (is_active = true);
-
 CREATE POLICY "Service role can manage payers" ON payers
   FOR ALL USING (true);
-
 -- ============================================
 -- INSURANCE INDEXES
 -- ============================================
@@ -463,7 +433,6 @@ CREATE INDEX IF NOT EXISTS idx_insurance_verifications_payer ON insurance_verifi
 CREATE INDEX IF NOT EXISTS idx_insurance_documents_user ON insurance_documents(user_id);
 CREATE INDEX IF NOT EXISTS idx_insurance_documents_verification ON insurance_documents(verification_id);
 CREATE INDEX IF NOT EXISTS idx_payers_payer_id ON payers(payer_id);
-
 -- ============================================
 -- SEED COMMON PAYERS (reference data)
 -- ============================================
@@ -480,7 +449,6 @@ INSERT INTO payers (payer_id, name, supports_270_271, supports_278, is_active) V
   ('MEDICARE', 'Medicare', true, true, true),
   ('TRICARE', 'Tricare', true, true, true)
 ON CONFLICT (payer_id) DO NOTHING;
-
 -- ============================================
 -- INSURANCE VERIFICATION FUNCTION (placeholder for API integration)
 -- ============================================

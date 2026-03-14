@@ -20,10 +20,8 @@ export function CookieConsent({ onAccept, onDecline }: CookieConsentProps) {
   const [showBanner, setShowBanner] = useState(false);
 
   useEffect(() => {
-    // Check if user has already made a choice
     const consent = localStorage.getItem(CONSENT_KEY);
     if (!consent) {
-      // Small delay before showing to not interrupt initial load
       const timer = setTimeout(() => setShowBanner(true), 1500);
       return () => clearTimeout(timer);
     }
@@ -49,54 +47,50 @@ export function CookieConsent({ onAccept, onDecline }: CookieConsentProps) {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
           transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-          className="fixed bottom-0 left-0 right-0 z-[9999] p-4 md:p-6"
+          className="fixed inset-x-0 bottom-0 z-[9999] p-4 md:inset-x-auto md:bottom-6 md:left-[21rem] md:right-6 md:w-auto md:max-w-[30rem] md:p-0"
         >
-          <div className="max-w-4xl mx-auto bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-gray-200 dark:border-slate-700 p-4 md:p-6">
-            <div className="flex flex-col md:flex-row md:items-center gap-4">
-              {/* Icon and Text */}
-              <div className="flex-1 flex items-start gap-3">
-                <div className="w-10 h-10 rounded-full bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center flex-shrink-0">
+          <div className="mx-auto rounded-[24px] border border-slate-200/80 bg-white/95 p-4 shadow-[0_28px_60px_rgba(15,23,42,0.14)] backdrop-blur dark:border-slate-700 dark:bg-slate-900/95 md:p-5">
+            <div className="flex flex-col gap-4">
+              <div className="flex items-start gap-3">
+                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-2xl bg-teal-50 dark:bg-teal-900/30">
                   <Cookie className="w-5 h-5 text-teal-600 dark:text-teal-400" />
                 </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white text-sm md:text-base">
+                <div className="min-w-0">
+                  <h3 className="text-sm font-semibold text-gray-900 dark:text-white md:text-[15px]">
                     We value your privacy
                   </h3>
-                  <p className="text-gray-600 dark:text-gray-300 text-xs md:text-sm mt-1">
-                    We use cookies to enhance your experience, analyze site traffic, and for marketing purposes.
-                    By clicking "Accept", you consent to our use of cookies.
-                    Read our{' '}
+                  <p className="mt-1 text-xs leading-5 text-gray-600 dark:text-gray-300 md:text-sm">
+                    We use cookies to personalize your experience, understand product usage, and support outreach.
+                    By clicking “Accept All,” you consent to this use. Read our{' '}
                     <a
                       href="/?screen=privacy-policy"
-                      className="text-teal-600 dark:text-teal-400 underline hover:no-underline"
+                      className="inline-flex min-h-[44px] items-center text-teal-600 underline hover:no-underline dark:text-teal-400"
                     >
                       Privacy Policy
-                    </a>
-                    {' '}for more information.
+                    </a>{' '}
+                    for more information.
                   </p>
                 </div>
               </div>
 
-              {/* Buttons */}
-              <div className="flex items-center gap-3 ml-auto">
+              <div className="flex items-center justify-end gap-2">
                 <button
                   onClick={handleDecline}
-                  className="px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
+                  className="inline-flex min-h-11 items-center justify-center rounded-xl border border-slate-200 px-4 py-2 text-sm font-medium text-gray-600 transition-colors hover:border-slate-300 hover:text-gray-900 dark:border-slate-700 dark:text-gray-300 dark:hover:text-white"
                 >
                   Decline
                 </button>
                 <button
                   onClick={handleAccept}
-                  className="px-5 py-2.5 text-sm font-medium text-white bg-teal-600 hover:bg-teal-700 rounded-xl transition-colors shadow-sm"
+                  className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[#0891b2] px-5 py-2.5 text-sm font-medium text-white transition-colors shadow-sm hover:bg-[#0b7a97]"
                 >
                   Accept All
                 </button>
               </div>
 
-              {/* Close button for mobile */}
               <button
                 onClick={handleDecline}
-                className="absolute top-3 right-3 md:hidden p-1 text-gray-400 hover:text-gray-600"
+                className="absolute right-3 top-3 p-1 text-gray-400 hover:text-gray-600 md:hidden"
                 aria-label="Close"
               >
                 <X className="w-5 h-5" />

@@ -1,0 +1,409 @@
+import { supabase } from '../utils/supabase/client';
+
+function normalizeQueryableChildId(childId?: string): string | undefined {
+  if (!childId) return undefined;
+
+  const normalized = childId.trim();
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(normalized)
+    ? normalized
+    : undefined;
+}
+
+function getStoredSupabaseAccessToken(): string | null {
+  if (typeof window === 'undefined' || !window.localStorage) {
+    return null;
+  }
+
+  const authKey = Object.keys(window.localStorage).find((key) => key.startsWith('sb-') && key.endsWith('-auth-token'));
+  if (!authKey) {
+    return null;
+  }
+
+  try {
+    const raw = window.localStorage.getItem(authKey);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as { access_token?: string };
+    return parsed.access_token || null;
+  } catch {
+    return null;
+  }
+}
+
+export type EVVCutoverState = 'shadow' | 'parallel_run' | 'cutover_ready' | 'primary';
+export type EVVDiscrepancyCategory =
+  | 'time_mismatch'
+  | 'location_mismatch'
+  | 'service_code_mismatch'
+  | 'missing_authorization'
+  | 'export_format_issue';
+
+export interface EVVShift {
+  id: string;
+  recordId: string;
+  childId: string;
+  providerId: string;
+  serviceDate: string;
+  state: EVVCutoverState;
+  authorizationLinked: boolean;
+}
+
+export interface EVVExportBatch {
+  id: string;
+  system: 'spokchoice' | 'dci';
+  periodStart: string;
+  periodEnd: string;
+  exportedAt: string;
+  shiftCount: number;
+  status: 'draft' | 'exported' | 'reconciled' | 'failed';
+}
+
+export interface EVVDiscrepancy {
+  id: string;
+  runId: string;
+  category: EVVDiscrepancyCategory;
+  severity: 'critical' | 'warning';
+  shiftId?: string;
+  details: string;
+}
+
+export interface EVVReconciliationRun {
+  id: string;
+  label: string;
+  systemOfRecord: 'spokchoice' | 'dci';
+  exportedAt: string;
+  payrollDate: string;
+  recordsCompared: number;
+  accuracy: number;
+  criticalExceptions: number;
+  discrepancies: EVVDiscrepancy[];
+  exportBatchIds: string[];
+}
+
+export interface EVVReconciliationCycle {
+  id: string;
+  label: string;
+  systemOfRecord: 'spokchoice' | 'dci';
+  exportedAt: string;
+  payrollDate: string;
+  recordsCompared: number;
+  discrepancies: Partial<Record<EVVDiscrepancyCategory, number>>;
+  accuracy: number;
+  criticalExceptions: number;
+}
+
+export interface EVVCutoverSummary {
+  state: EVVCutoverState;
+  cyclesCompleted: number;
+  cleanCycles: number;
+  averageAccuracy: number;
+  unresolvedCriticalExceptions: number;
+  discrepancyTotals: Record<EVVDiscrepancyCategory, number>;
+  cutoverBlockedReasons: string[];
+}
+
+const DISCREPANCY_CATEGORIES: EVVDiscrepancyCategory[] = [
+  'time_mismatch',
+  'location_mismatch',
+  'service_code_mismatch',
+  'missing_authorization',
+  'export_format_issue',
+];
+
+export function buildEVVReconciliationCycle(run: EVVReconciliationRun): EVVReconciliationCycle {
+  const discrepancies = run.discrepancies.reduce<Partial<Record<EVVDiscrepancyCategory, number>>>(
+    (totals, discrepancy) => {
+      totals[discrepancy.category] = (totals[discrepancy.category] || 0) + 1;
+      return totals;
+    },
+    {},
+  );
+
+  return {
+    id: run.id,
+    label: run.label,
+    systemOfRecord: run.systemOfRecord,
+    exportedAt: run.exportedAt,
+    payrollDate: run.payrollDate,
+    recordsCompared: run.recordsCompared,
+    discrepancies,
+    accuracy: run.accuracy,
+    criticalExceptions: run.criticalExceptions,
+  };
+}
+
+export function summarizeEVVCutover(
+  cycles: EVVReconciliationCycle[],
+): EVVCutoverSummary {
+  const discrepancyTotals = DISCREPANCY_CATEGORIES.reduce<Record<EVVDiscrepancyCategory, number>>(
+    (totals, category) => {
+      totals[category] = cycles.reduce(
+        (sum, cycle) => sum + (cycle.discrepancies[category] || 0),
+        0,
+      );
+      return totals;
+    },
+    {
+      time_mismatch: 0,
+      location_mismatch: 0,
+      service_code_mismatch: 0,
+      missing_authorization: 0,
+      export_format_issue: 0,
+    },
+  );
+
+  const cyclesCompleted = cycles.length;
+  const cleanCycles = cycles.filter(
+    (cycle) => cycle.accuracy >= 99.5 && cycle.criticalExceptions === 0,
+  ).length;
+  const averageAccuracy =
+    cyclesCompleted === 0
+      ? 0
+      : Math.round(
+          (cycles.reduce((sum, cycle) => sum + cycle.accuracy, 0) / cyclesCompleted) * 10,
+        ) / 10;
+  const unresolvedCriticalExceptions = cycles.reduce(
+    (sum, cycle) => sum + cycle.criticalExceptions,
+    0,
+  );
+
+  const cutoverBlockedReasons: string[] = [];
+  if (cyclesCompleted < 3) {
+    cutoverBlockedReasons.push('Three consecutive payroll cycles have not been reconciled yet.');
+  }
+  if (cleanCycles < 3) {
+    cutoverBlockedReasons.push('Three clean payroll cycles at 99.5% accuracy are required before cutover.');
+  }
+  if (averageAccuracy < 99.5) {
+    cutoverBlockedReasons.push('Average reconciliation accuracy is below the 99.5% cutover threshold.');
+  }
+  if (unresolvedCriticalExceptions > 0) {
+    cutoverBlockedReasons.push('Critical EVV exceptions must be resolved before Aminy can become system of record.');
+  }
+
+  const state: EVVCutoverState = cutoverBlockedReasons.length === 0
+    ? 'cutover_ready'
+    : cyclesCompleted === 0
+      ? 'shadow'
+      : 'parallel_run';
+
+  return {
+    state,
+    cyclesCompleted,
+    cleanCycles,
+    averageAccuracy,
+    unresolvedCriticalExceptions,
+    discrepancyTotals,
+    cutoverBlockedReasons,
+  };
+}
+
+export function summarizeEVVCutoverRuns(runs: EVVReconciliationRun[]): EVVCutoverSummary {
+  return summarizeEVVCutover(runs.map(buildEVVReconciliationCycle));
+}
+
+export function getSampleEVVCycles(): EVVReconciliationCycle[] {
+  return [
+    {
+      id: 'cycle-1',
+      label: 'Feb 1-15 Payroll',
+      systemOfRecord: 'spokchoice',
+      exportedAt: '2026-02-16T18:00:00Z',
+      payrollDate: '2026-02-18',
+      recordsCompared: 132,
+      discrepancies: {
+        time_mismatch: 1,
+        location_mismatch: 1,
+        service_code_mismatch: 0,
+        missing_authorization: 0,
+        export_format_issue: 0,
+      },
+      accuracy: 99.2,
+      criticalExceptions: 1,
+    },
+    {
+      id: 'cycle-2',
+      label: 'Feb 16-29 Payroll',
+      systemOfRecord: 'spokchoice',
+      exportedAt: '2026-03-01T18:00:00Z',
+      payrollDate: '2026-03-03',
+      recordsCompared: 141,
+      discrepancies: {
+        time_mismatch: 0,
+        location_mismatch: 1,
+        service_code_mismatch: 0,
+        missing_authorization: 0,
+        export_format_issue: 0,
+      },
+      accuracy: 99.6,
+      criticalExceptions: 0,
+    },
+    {
+      id: 'cycle-3',
+      label: 'Mar 1-15 Payroll',
+      systemOfRecord: 'dci',
+      exportedAt: '2026-03-16T18:00:00Z',
+      payrollDate: '2026-03-18',
+      recordsCompared: 148,
+      discrepancies: {
+        time_mismatch: 0,
+        location_mismatch: 0,
+        service_code_mismatch: 0,
+        missing_authorization: 0,
+        export_format_issue: 1,
+      },
+      accuracy: 99.7,
+      criticalExceptions: 0,
+    },
+  ];
+}
+
+export function getSampleEVVReconciliationRuns(): EVVReconciliationRun[] {
+  return getSampleEVVCycles().map((cycle, index) => ({
+    id: cycle.id,
+    label: cycle.label,
+    systemOfRecord: cycle.systemOfRecord,
+    exportedAt: cycle.exportedAt,
+    payrollDate: cycle.payrollDate,
+    recordsCompared: cycle.recordsCompared,
+    accuracy: cycle.accuracy,
+    criticalExceptions: cycle.criticalExceptions,
+    exportBatchIds: [`batch-${index + 1}`],
+    discrepancies: Object.entries(cycle.discrepancies).flatMap(([category, count]) =>
+      Array.from({ length: count || 0 }, (_, discrepancyIndex) => ({
+        id: `${cycle.id}-${category}-${discrepancyIndex + 1}`,
+        runId: cycle.id,
+        category: category as EVVDiscrepancyCategory,
+        severity: category === 'missing_authorization' ? 'critical' : 'warning',
+        details: `${category.replace(/_/g, ' ')} needs reconciliation before cutover.`,
+      })),
+    ),
+  }));
+}
+
+function mapRunRow(row: Record<string, unknown>, discrepancies: EVVDiscrepancy[]): EVVReconciliationRun {
+  return {
+    id: String(row.id),
+    label: String(row.label || ''),
+    systemOfRecord: String(row.system_of_record || 'spokchoice') as 'spokchoice' | 'dci',
+    exportedAt: String(row.exported_at || row.created_at || new Date().toISOString()),
+    payrollDate: String(row.payroll_date || ''),
+    recordsCompared: Number(row.records_compared || 0),
+    accuracy: Number(row.accuracy || 0),
+    criticalExceptions: Number(row.critical_exceptions || 0),
+    discrepancies,
+    exportBatchIds: Array.isArray(row.export_batch_ids) ? (row.export_batch_ids as string[]) : [],
+  };
+}
+
+async function fetchEVVReconciliationRunsViaRest(childId?: string): Promise<EVVReconciliationRun[]> {
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string | undefined;
+  const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    return [];
+  }
+
+  const accessToken = getStoredSupabaseAccessToken();
+  const authHeaders = {
+    apikey: supabaseAnonKey,
+    Authorization: `Bearer ${accessToken || supabaseAnonKey}`,
+    Accept: 'application/json',
+  };
+
+  const queryableChildId = normalizeQueryableChildId(childId);
+  const runParams = new URLSearchParams({ select: '*', order: 'exported_at.desc', limit: '12' });
+  if (queryableChildId) {
+    runParams.set('child_id', `eq.${queryableChildId}`);
+  }
+
+  const runResponse = await fetch(`${supabaseUrl}/rest/v1/evv_reconciliation_runs?${runParams.toString()}`, {
+    headers: authHeaders,
+  });
+
+  if (!runResponse.ok) {
+    throw new Error(`EVV runs REST fallback failed: ${runResponse.status} ${await runResponse.text()}`);
+  }
+
+  const runRows = await runResponse.json() as Record<string, unknown>[];
+  if (runRows.length === 0) {
+    return [];
+  }
+
+  const runIds = runRows.map((row) => String(row.id)).filter(Boolean);
+  const discrepancyMap = new Map<string, EVVDiscrepancy[]>();
+
+  if (runIds.length > 0) {
+    const discrepancyParams = new URLSearchParams({
+      select: '*',
+      run_id: `in.(${runIds.map((id) => `"${id}"`).join(',')})`,
+      limit: '100',
+    });
+
+    const discrepancyResponse = await fetch(`${supabaseUrl}/rest/v1/evv_discrepancies?${discrepancyParams.toString()}`, {
+      headers: authHeaders,
+    });
+
+    if (!discrepancyResponse.ok) {
+      throw new Error(`EVV discrepancies REST fallback failed: ${discrepancyResponse.status} ${await discrepancyResponse.text()}`);
+    }
+
+    const discrepancyRows = await discrepancyResponse.json() as Record<string, unknown>[];
+    for (const discrepancy of discrepancyRows) {
+      const runId = String(discrepancy.run_id || '');
+      if (!runId) continue;
+      const entries = discrepancyMap.get(runId) || [];
+      entries.push({
+        id: String(discrepancy.id),
+        runId,
+        category: String(discrepancy.category) as EVVDiscrepancyCategory,
+        severity: String(discrepancy.severity || 'warning') as 'critical' | 'warning',
+        shiftId: discrepancy.shift_id ? String(discrepancy.shift_id) : undefined,
+        details: String(discrepancy.details || ''),
+      });
+      discrepancyMap.set(runId, entries);
+    }
+  }
+
+  return runRows.map((row) => mapRunRow(row, discrepancyMap.get(String(row.id)) || []));
+}
+
+export async function listEVVReconciliationRuns(childId?: string): Promise<EVVReconciliationRun[]> {
+  const queryableChildId = normalizeQueryableChildId(childId);
+
+  try {
+    const restRuns = await fetchEVVReconciliationRunsViaRest(queryableChildId);
+    return restRuns;
+  } catch (restError) {
+    try {
+      let query = supabase
+        .from('evv_reconciliation_runs')
+        .select('*, evv_discrepancies(*)')
+        .order('exported_at', { ascending: false })
+        .limit(12);
+
+      if (queryableChildId) {
+        query = query.eq('child_id', queryableChildId);
+      }
+
+      const { data, error } = await query;
+      if (error) throw error;
+
+      return (data || []).map((row) => mapRunRow(
+        row as Record<string, unknown>,
+        Array.isArray((row as { evv_discrepancies?: unknown[] }).evv_discrepancies)
+          ? ((row as { evv_discrepancies: Record<string, unknown>[] }).evv_discrepancies).map((discrepancy) => ({
+              id: String(discrepancy.id),
+              runId: String(discrepancy.run_id || row.id),
+              category: String(discrepancy.category) as EVVDiscrepancyCategory,
+              severity: String(discrepancy.severity || 'warning') as 'critical' | 'warning',
+              shiftId: discrepancy.shift_id ? String(discrepancy.shift_id) : undefined,
+              details: String(discrepancy.details || ''),
+            }))
+          : [],
+      ));
+    } catch (error) {
+      console.warn('[EVV] Falling back to sample reconciliation runs:', restError, error);
+      return getSampleEVVReconciliationRuns();
+    }
+  }
+}

@@ -24,6 +24,7 @@ import {
 } from '../../types/telehealth';
 
 import { BrowseTopConcerns } from './BrowseTopConcerns';
+import { getCashPayVisitEconomics } from '../../lib/telehealth-economics';
 import { GetCareIntakeScreen } from './GetCareIntake';
 import { BookVisitScreen } from './BookVisit';
 import { AppointmentConfirmationScreen } from './AppointmentConfirmation';
@@ -45,6 +46,12 @@ type TelehealthStep =
   | 'video-call';
 
 type BookingPath = 'quick-consult' | 'start-services' | null;
+
+const quickConsultEconomics = getCashPayVisitEconomics('quick_consult');
+const standardSessionEconomics = getCashPayVisitEconomics('standard_session');
+const deepReviewEconomics = getCashPayVisitEconomics('diagnostic_deep_review');
+const publicCashPayRange = `$${quickConsultEconomics.basePriceCents / 100}–$${deepReviewEconomics.basePriceCents / 100}`;
+const cashPayMenuSummary = `${quickConsultEconomics.publicLabel}, ${standardSessionEconomics.publicLabel}, and ${deepReviewEconomics.publicLabel}`;
 
 // Pre-call check component (inline in TelehealthFlow)
 function PreCallCheck({ onReady, onBack }: { onReady: () => void; onBack: () => void }) {
@@ -375,11 +382,11 @@ export function TelehealthFlow({
                       </div>
                       <div className="flex items-center gap-2 text-xs text-gray-500">
                         <CreditCard className="w-3.5 h-3.5" />
-                        <span>$50–$175 per session · Save up to 20% with bundles</span>
+                        <span>{publicCashPayRange} across {cashPayMenuSummary}</span>
                       </div>
                       <div className="flex items-center gap-2 text-xs text-gray-500">
                         <CheckCircle className="w-3.5 h-3.5" />
-                        <span>Any provider, any specialty</span>
+                        <span>Verified experts in supported telehealth states</span>
                       </div>
                     </div>
                   </div>
@@ -401,7 +408,7 @@ export function TelehealthFlow({
                       <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700">Insurance</span>
                     </div>
                     <p className="text-sm text-gray-600 mb-3">
-                      Use your insurance for ongoing therapy. We'll verify coverage, match you with in-network providers, and handle the paperwork.
+                      Use your insurance where Aminy has a supported lane. We'll verify coverage, explain any authorization steps, and route you to the right next step.
                     </p>
                     <div className="space-y-1.5">
                       <div className="flex items-center gap-2 text-xs text-gray-500">
@@ -410,11 +417,11 @@ export function TelehealthFlow({
                       </div>
                       <div className="flex items-center gap-2 text-xs text-gray-500">
                         <CheckCircle className="w-3.5 h-3.5" />
-                        <span>Matched with in-network providers</span>
+                        <span>Matched to supported in-network or partner-billed lanes</span>
                       </div>
                       <div className="flex items-center gap-2 text-xs text-gray-500">
                         <CreditCard className="w-3.5 h-3.5" />
-                        <span>Intake auto-generated from your Aminy profile</span>
+                        <span>Intake and claim-ready context built from your Aminy profile</span>
                       </div>
                     </div>
                   </div>

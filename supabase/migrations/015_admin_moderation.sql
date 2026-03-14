@@ -9,57 +9,39 @@
 -- CONTENT MODERATION QUEUE
 -- ============================================
 
--- [MIGRATION FIX] Table moderation_queue created in earlier migration.
--- Adding columns that would have been lost due to IF NOT EXISTS:
--- Original CREATE TABLE commented out below.
-ALTER TABLE moderation_queue ADD COLUMN IF NOT EXISTS content_text TEXT;
-ALTER TABLE moderation_queue ADD COLUMN IF NOT EXISTS content_author_id UUID REFERENCES auth.users(id);
-ALTER TABLE moderation_queue ADD COLUMN IF NOT EXISTS content_author_name TEXT;
-ALTER TABLE moderation_queue ADD COLUMN IF NOT EXISTS flag_reason TEXT;
-ALTER TABLE moderation_queue ADD COLUMN IF NOT EXISTS flagged_by UUID REFERENCES auth.users(id);
-ALTER TABLE moderation_queue ADD COLUMN IF NOT EXISTS ai_explanation TEXT;
-ALTER TABLE moderation_queue ADD COLUMN IF NOT EXISTS resolved_by UUID REFERENCES auth.users(id);
-ALTER TABLE moderation_queue ADD COLUMN IF NOT EXISTS resolved_at TIMESTAMPTZ;
-ALTER TABLE moderation_queue ADD COLUMN IF NOT EXISTS resolution_notes TEXT;
-ALTER TABLE moderation_queue ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW();
-
--- Original CREATE TABLE (commented out, columns added above):
--- CREATE TABLE IF NOT EXISTS moderation_queue (
---   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
---   -- Content being moderated
---   content_type TEXT NOT NULL CHECK (content_type IN ('post', 'comment', 'message', 'profile', 'document')),
---   content_id UUID NOT NULL,
---   content_text TEXT,
---   content_author_id UUID REFERENCES auth.users(id),
---   content_author_name TEXT,
---   -- Flag information
---   flag_category TEXT NOT NULL CHECK (flag_category IN (
---     'spam', 'harassment', 'misinformation', 'inappropriate',
---     'self_harm', 'privacy', 'copyright', 'other'
---   )),
---   flag_reason TEXT,
---   flagged_by UUID REFERENCES auth.users(id), -- Null if AI-flagged
---   flagged_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
---   -- AI moderation
---   ai_confidence DECIMAL(3,2) CHECK (ai_confidence >= 0 AND ai_confidence <= 1),
---   ai_explanation TEXT,
---   -- Resolution
---   status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected', 'escalated')),
---   resolved_by UUID REFERENCES auth.users(id),
---   resolved_at TIMESTAMPTZ,
---   resolution_notes TEXT,
---   -- Metadata
---   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
---   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
--- );
-
-
+CREATE TABLE IF NOT EXISTS moderation_queue (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  -- Content being moderated
+  content_type TEXT NOT NULL CHECK (content_type IN ('post', 'comment', 'message', 'profile', 'document')),
+  content_id UUID NOT NULL,
+  content_text TEXT,
+  content_author_id UUID REFERENCES auth.users(id),
+  content_author_name TEXT,
+  -- Flag information
+  flag_category TEXT NOT NULL CHECK (flag_category IN (
+    'spam', 'harassment', 'misinformation', 'inappropriate',
+    'self_harm', 'privacy', 'copyright', 'other'
+  )),
+  flag_reason TEXT,
+  flagged_by UUID REFERENCES auth.users(id), -- Null if AI-flagged
+  flagged_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  -- AI moderation
+  ai_confidence DECIMAL(3,2) CHECK (ai_confidence >= 0 AND ai_confidence <= 1),
+  ai_explanation TEXT,
+  -- Resolution
+  status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected', 'escalated')),
+  resolved_by UUID REFERENCES auth.users(id),
+  resolved_at TIMESTAMPTZ,
+  resolution_notes TEXT,
+  -- Metadata
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
 -- Indexes for efficient querying
 CREATE INDEX IF NOT EXISTS idx_moderation_queue_status ON moderation_queue(status);
 CREATE INDEX IF NOT EXISTS idx_moderation_queue_flagged_at ON moderation_queue(flagged_at);
 CREATE INDEX IF NOT EXISTS idx_moderation_queue_content_author ON moderation_queue(content_author_id);
 CREATE INDEX IF NOT EXISTS idx_moderation_queue_content_type ON moderation_queue(content_type);
-
 -- ============================================
 -- USER MODERATION STATUS
 -- ============================================
@@ -88,7 +70,6 @@ BEGIN
     ALTER TABLE profiles ADD COLUMN last_moderation_action TIMESTAMPTZ;
   END IF;
 END $$;
-
 -- User moderation history
 CREATE TABLE IF NOT EXISTS user_moderation_history (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -108,10 +89,8 @@ CREATE TABLE IF NOT EXISTS user_moderation_history (
   -- Auto-expiring actions
   expires_at TIMESTAMPTZ
 );
-
 CREATE INDEX IF NOT EXISTS idx_user_moderation_history_user ON user_moderation_history(user_id);
 CREATE INDEX IF NOT EXISTS idx_user_moderation_history_action ON user_moderation_history(action);
-
 -- ============================================
 -- ADMIN AUDIT LOG
 -- ============================================
@@ -147,14 +126,12 @@ CREATE TABLE IF NOT EXISTS admin_audit_log (
   -- Metadata
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
-
 -- Indexes for audit log queries
 CREATE INDEX IF NOT EXISTS idx_admin_audit_log_admin ON admin_audit_log(admin_id);
 CREATE INDEX IF NOT EXISTS idx_admin_audit_log_created ON admin_audit_log(created_at);
 CREATE INDEX IF NOT EXISTS idx_admin_audit_log_action ON admin_audit_log(action);
 CREATE INDEX IF NOT EXISTS idx_admin_audit_log_category ON admin_audit_log(action_category);
 CREATE INDEX IF NOT EXISTS idx_admin_audit_log_target ON admin_audit_log(target_type, target_id);
-
 -- ============================================
 -- ADMIN ROLES AND PERMISSIONS
 -- ============================================
@@ -168,7 +145,6 @@ CREATE TABLE IF NOT EXISTS admin_roles (
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
-
 -- Default admin roles
 INSERT INTO admin_roles (name, description, permissions, is_system_role)
 VALUES
@@ -178,7 +154,6 @@ VALUES
   ('support', 'Customer support access', '["users.view", "users.impersonate", "support.*", "subscriptions.view"]', true),
   ('analyst', 'Read-only analytics access', '["analytics.view", "users.view"]', true)
 ON CONFLICT (name) DO NOTHING;
-
 -- Admin role assignments
 CREATE TABLE IF NOT EXISTS admin_role_assignments (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -190,16 +165,13 @@ CREATE TABLE IF NOT EXISTS admin_role_assignments (
   notes TEXT,
   UNIQUE(user_id, role_id)
 );
-
 CREATE INDEX IF NOT EXISTS idx_admin_role_assignments_user ON admin_role_assignments(user_id);
-
 -- ============================================
 -- ROW LEVEL SECURITY
 -- ============================================
 
 -- Moderation queue: Only admins and moderators can access
 ALTER TABLE moderation_queue ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "Admins can view all moderation queue items"
   ON moderation_queue FOR SELECT
   TO authenticated
@@ -210,7 +182,6 @@ CREATE POLICY "Admins can view all moderation queue items"
       AND p.role IN ('admin', 'moderator')
     )
   );
-
 CREATE POLICY "Admins can manage moderation queue"
   ON moderation_queue FOR ALL
   TO authenticated
@@ -221,10 +192,8 @@ CREATE POLICY "Admins can manage moderation queue"
       AND p.role = 'admin'
     )
   );
-
 -- User moderation history: Only admins can view
 ALTER TABLE user_moderation_history ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "Admins can view user moderation history"
   ON user_moderation_history FOR SELECT
   TO authenticated
@@ -235,7 +204,6 @@ CREATE POLICY "Admins can view user moderation history"
       AND p.role IN ('admin', 'moderator')
     )
   );
-
 CREATE POLICY "Admins can manage user moderation history"
   ON user_moderation_history FOR ALL
   TO authenticated
@@ -246,10 +214,8 @@ CREATE POLICY "Admins can manage user moderation history"
       AND p.role = 'admin'
     )
   );
-
 -- Admin audit log: Only super admins can view
 ALTER TABLE admin_audit_log ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "Super admins can view audit log"
   ON admin_audit_log FOR SELECT
   TO authenticated
@@ -261,16 +227,13 @@ CREATE POLICY "Super admins can view audit log"
       AND ar.name = 'super_admin'
     )
   );
-
 CREATE POLICY "System can insert audit log"
   ON admin_audit_log FOR INSERT
   TO authenticated
   WITH CHECK (true);
-
 -- Admin roles: Only super admins can manage
 ALTER TABLE admin_roles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE admin_role_assignments ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "All admins can view roles"
   ON admin_roles FOR SELECT
   TO authenticated
@@ -281,7 +244,6 @@ CREATE POLICY "All admins can view roles"
       AND p.role = 'admin'
     )
   );
-
 CREATE POLICY "Super admins can manage roles"
   ON admin_role_assignments FOR ALL
   TO authenticated
@@ -293,7 +255,6 @@ CREATE POLICY "Super admins can manage roles"
       AND ar.name = 'super_admin'
     )
   );
-
 -- ============================================
 -- TRIGGERS
 -- ============================================
@@ -306,13 +267,11 @@ BEGIN
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
-
 DROP TRIGGER IF EXISTS moderation_queue_updated_at ON moderation_queue;
 CREATE TRIGGER moderation_queue_updated_at
   BEFORE UPDATE ON moderation_queue
   FOR EACH ROW
   EXECUTE FUNCTION update_moderation_queue_updated_at();
-
 -- Update user warning count on moderation action
 CREATE OR REPLACE FUNCTION update_user_warning_count()
 RETURNS TRIGGER AS $$
@@ -341,13 +300,11 @@ BEGIN
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
-
 DROP TRIGGER IF EXISTS user_moderation_history_trigger ON user_moderation_history;
 CREATE TRIGGER user_moderation_history_trigger
   AFTER INSERT ON user_moderation_history
   FOR EACH ROW
   EXECUTE FUNCTION update_user_warning_count();
-
 -- ============================================
 -- HELPER FUNCTIONS
 -- ============================================
@@ -370,7 +327,6 @@ BEGIN
   );
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
-
 -- Get user's admin roles
 CREATE OR REPLACE FUNCTION get_user_admin_roles(user_id UUID)
 RETURNS TABLE(role_name TEXT, permissions JSONB) AS $$
@@ -383,7 +339,6 @@ BEGIN
   AND (ara.expires_at IS NULL OR ara.expires_at > NOW());
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
-
 -- ============================================
 -- COMMENTS
 -- ============================================

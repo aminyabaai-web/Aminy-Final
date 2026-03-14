@@ -55,7 +55,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
 
     const errorContext = this.buildErrorContext(error, errorInfo);
 
-    // Track error in analytics
+    const componentName = errorInfo.componentStack?.split('\n')[1]?.trim() || 'Unknown';
     analytics.trackError(error, {
       errorInfo,
       errorContext,
@@ -65,11 +65,8 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
       boundaryType: this.props.isolate ? 'isolated' : 'global',
     });
 
-    // Log error to Supabase for tracking
-    const componentName = errorInfo.componentStack?.split('\n')[1]?.trim() || 'Unknown';
     logError(error, componentName, this.props.critical ? 'error' : 'warning');
 
-    // Send to Sentry for centralized error monitoring
     const sentryEventId = captureError(error, {
       componentName,
       componentStack: errorInfo.componentStack,
@@ -211,7 +208,6 @@ function DefaultErrorFallback({
         userSubmitted: true,
       });
 
-      // Send to Sentry with user-submitted context
       if (error) {
         captureError(error, {
           errorId,

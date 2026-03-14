@@ -1350,15 +1350,6 @@ export function parseERA835(ediContent: string): ERA835ParseResult {
         break;
       }
 
-      case 'DTM': {
-        // Date/Time Reference
-        if (elements[1] === '405') {
-          // Production Date (check date)
-          payment.checkDate = elements[2] || '';
-        }
-        break;
-      }
-
       case 'N1': {
         // Name (Payer or Payee)
         if (elements[1] === 'PR') {
@@ -1494,6 +1485,10 @@ export function parseERA835(ediContent: string): ERA835ParseResult {
 
       case 'DTM_SVC': // Some parsers normalize this
       case 'DTM': {
+        if (elements[1] === '405') {
+          // Payment/check date at the transaction level.
+          payment.checkDate = elements[2] || '';
+        }
         // Within service loop, DTM 472 = service date
         if (inServiceLoop && currentServiceLine && elements[1] === '472') {
           currentServiceLine.serviceDate = elements[2] || '';

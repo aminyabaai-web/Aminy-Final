@@ -547,10 +547,13 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
                   size="sm"
                   onClick={handleClose}
                   className="mr-2"
+                  aria-label="Close records vault"
                 >
                   <X className="w-4 h-4" />
                 </Button>
                 <h1 className="text-lg sm:text-xl font-semibold">Records Vault</h1>
+                <h2 className="sr-only">Records overview</h2>
+                <h3 className="sr-only">Documents, uploads, and sharing controls</h3>
                 <Badge variant="outline" className="text-xs">
                   <Shield className="w-3 h-3 mr-1" />
                   PHI encrypted
@@ -568,6 +571,7 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
+                  aria-label="Search records vault"
                   placeholder="Search titles, tags, or text inside docs…"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}

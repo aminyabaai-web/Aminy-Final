@@ -138,6 +138,21 @@ const VALID_SCREENS: string[] = [
 ];
 
 /**
+ * Direct screen IDs used by Dashboard10 CTA handlers.
+ */
+const DASHBOARD_DIRECT_TARGETS: string[] = [
+  'telehealth',
+  'calm-tools',
+  'incident-log',
+  'care-plan',
+  'resources',
+  'community',
+  'my-appointments',
+  'weekly-insights',
+  'clinical-reports',
+];
+
+/**
  * BottomNavigation tab IDs for parent role.
  */
 const BOTTOM_NAV_PARENT_TABS: string[] = [
@@ -292,6 +307,16 @@ describe('Navigation Integrity', () => {
       }
 
       expect(missingTargets).toEqual([]);
+    });
+  });
+
+  // ========================================================================
+  // Dashboard CTA targets
+  // ========================================================================
+  describe('dashboard CTA targets', () => {
+    it('all direct Dashboard10 navigation targets resolve to real screens', () => {
+      const invalid = DASHBOARD_DIRECT_TARGETS.filter((screen) => !ALL_APP_SCREENS.includes(screen));
+      expect(invalid).toEqual([]);
     });
   });
 

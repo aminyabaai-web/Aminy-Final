@@ -422,12 +422,13 @@ async function getDailyUsage(): Promise<{ message_count: number; tokens_used: nu
     .select('message_count, tokens_used')
     .eq('user_id', userId)
     .eq('date', today)
-    .single();
+    .limit(1);
 
-  if (error && error.code !== 'PGRST116') { // PGRST116 = no rows
+  if (error) {
     console.warn('[DataService] getDailyUsage error:', error.message);
   }
-  return data || { message_count: 0, tokens_used: 0 };
+  const usage = Array.isArray(data) ? data[0] : null;
+  return usage || { message_count: 0, tokens_used: 0 };
 }
 
 async function incrementUsage(tokensUsed: number = 0): Promise<void> {

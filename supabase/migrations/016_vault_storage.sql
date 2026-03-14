@@ -26,40 +26,33 @@ CREATE TABLE IF NOT EXISTS vault_documents (
   -- Indexes
   CONSTRAINT vault_documents_file_path_unique UNIQUE (file_path)
 );
-
 -- Create indexes for common queries
 CREATE INDEX IF NOT EXISTS idx_vault_documents_user_id ON vault_documents(user_id);
 CREATE INDEX IF NOT EXISTS idx_vault_documents_record_type ON vault_documents(record_type);
 CREATE INDEX IF NOT EXISTS idx_vault_documents_uploaded_at ON vault_documents(uploaded_at DESC);
 CREATE INDEX IF NOT EXISTS idx_vault_documents_metadata_child_id ON vault_documents((metadata->>'childId'));
-
 -- RLS Policies for vault_documents
 ALTER TABLE vault_documents ENABLE ROW LEVEL SECURITY;
-
 -- Users can view their own documents
 CREATE POLICY "Users can view own vault documents"
   ON vault_documents
   FOR SELECT
   USING (auth.uid() = user_id);
-
 -- Users can insert their own documents
 CREATE POLICY "Users can insert own vault documents"
   ON vault_documents
   FOR INSERT
   WITH CHECK (auth.uid() = user_id);
-
 -- Users can update their own documents
 CREATE POLICY "Users can update own vault documents"
   ON vault_documents
   FOR UPDATE
   USING (auth.uid() = user_id);
-
 -- Users can delete their own documents
 CREATE POLICY "Users can delete own vault documents"
   ON vault_documents
   FOR DELETE
   USING (auth.uid() = user_id);
-
 -- ============================================================================
 -- Vault Share Links Table
 -- ============================================================================
@@ -76,20 +69,16 @@ CREATE TABLE IF NOT EXISTS vault_share_links (
   created_by UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   is_revoked BOOLEAN NOT NULL DEFAULT FALSE
 );
-
 -- Indexes for share links
 CREATE INDEX IF NOT EXISTS idx_vault_share_links_document_id ON vault_share_links(document_id);
 CREATE INDEX IF NOT EXISTS idx_vault_share_links_expires_at ON vault_share_links(expires_at);
-
 -- RLS Policies for vault_share_links
 ALTER TABLE vault_share_links ENABLE ROW LEVEL SECURITY;
-
 -- Users can view share links they created
 CREATE POLICY "Users can view own share links"
   ON vault_share_links
   FOR SELECT
   USING (auth.uid() = created_by);
-
 -- Users can create share links for their documents
 CREATE POLICY "Users can create share links"
   ON vault_share_links
@@ -101,19 +90,16 @@ CREATE POLICY "Users can create share links"
       WHERE id = document_id AND user_id = auth.uid()
     )
   );
-
 -- Users can update their share links (e.g., revoke)
 CREATE POLICY "Users can update own share links"
   ON vault_share_links
   FOR UPDATE
   USING (auth.uid() = created_by);
-
 -- Users can delete their share links
 CREATE POLICY "Users can delete own share links"
   ON vault_share_links
   FOR DELETE
   USING (auth.uid() = created_by);
-
 -- ============================================================================
 -- Vault Access Log Table (for audit trail)
 -- ============================================================================
@@ -129,14 +115,11 @@ CREATE TABLE IF NOT EXISTS vault_access_log (
   user_agent TEXT,
   metadata JSONB DEFAULT '{}'::jsonb
 );
-
 -- Indexes for access log
 CREATE INDEX IF NOT EXISTS idx_vault_access_log_document_id ON vault_access_log(document_id);
 CREATE INDEX IF NOT EXISTS idx_vault_access_log_accessed_at ON vault_access_log(accessed_at DESC);
-
 -- RLS for access log - users can view logs for their own documents
 ALTER TABLE vault_access_log ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "Users can view access logs for own documents"
   ON vault_access_log
   FOR SELECT
@@ -146,13 +129,11 @@ CREATE POLICY "Users can view access logs for own documents"
       WHERE id = document_id AND user_id = auth.uid()
     )
   );
-
 -- Allow insert for any authenticated user (for logging access)
 CREATE POLICY "Authenticated users can log access"
   ON vault_access_log
   FOR INSERT
   WITH CHECK (auth.role() = 'authenticated');
-
 -- ============================================================================
 -- Storage Bucket Configuration
 -- Note: Bucket creation should be done via Supabase dashboard or CLI
@@ -213,7 +194,6 @@ BEGIN
     AND (max_views IS NULL OR view_count < max_views);
 END;
 $$;
-
 -- Function to get storage usage for a user
 CREATE OR REPLACE FUNCTION get_user_storage_usage(p_user_id UUID)
 RETURNS TABLE(total_bytes BIGINT, file_count BIGINT)
@@ -229,7 +209,6 @@ BEGIN
   WHERE user_id = p_user_id;
 END;
 $$;
-
 -- ============================================================================
 -- Cleanup Function for Expired Share Links
 -- ============================================================================
@@ -252,7 +231,6 @@ BEGIN
     AND is_revoked = FALSE;
 END;
 $$;
-
 -- Comment on tables
 COMMENT ON TABLE vault_documents IS 'Stores metadata for documents uploaded to the vault';
 COMMENT ON TABLE vault_share_links IS 'Stores share links for vault documents with expiration and access control';

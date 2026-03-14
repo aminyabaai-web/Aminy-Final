@@ -687,7 +687,7 @@ export async function getTrialStatus(userId: string): Promise<{
     .from('trial_tracking')
     .select('*')
     .eq('user_id', userId)
-    .single();
+    .maybeSingle();
 
   if (error || !data) return null;
 

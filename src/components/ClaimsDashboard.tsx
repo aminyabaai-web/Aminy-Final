@@ -717,7 +717,7 @@ export default function ClaimsDashboard({
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-gradient-to-r from-teal-700 to-emerald-600 text-white px-4 pt-12 pb-4">
-        <div className="flex items-center gap-3 mb-3">
+        <nav aria-label="Coverage navigation" className="mb-3 flex items-center gap-3">
           <button
             onClick={onBack}
             className="p-1.5 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
@@ -727,11 +727,20 @@ export default function ClaimsDashboard({
           </button>
           <div>
             <h1 className="text-lg font-bold">Costs &amp; Coverage</h1>
+            <h2 className="sr-only">Coverage overview</h2>
+            <h3 className="sr-only">Claims, benefits, and next steps</h3>
             <p className="text-xs text-white/70">
               {childName}&apos;s insurance &amp; expenses
             </p>
           </div>
-        </div>
+          <button
+            type="button"
+            onClick={() => setActiveTab('superbill')}
+            className="action-button ml-auto min-h-11 rounded-xl bg-white px-4 py-2.5 text-sm font-medium text-teal-700 shadow-sm transition-colors hover:bg-teal-50"
+          >
+            Generate superbill
+          </button>
+        </nav>
 
         {/* Tabs */}
         <div className="flex gap-1 bg-white/10 rounded-lg p-1">

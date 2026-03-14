@@ -48,16 +48,6 @@ img {
   contain: layout !important;
 }
 
-/* Font loading optimized - CRITICAL: Use swap for better performance */
-@font-face {
-  font-family: 'Manrope';
-  font-style: normal;
-  font-weight: 400 700;
-  font-display: swap;
-  src: local(''), url('https://fonts.gstatic.com/s/manrope/v15/xn7_YHE41ni1AdIRqAuZuw1Bx9mbZk59FO_F87jxeN7B.woff2') format('woff2');
-  unicode-range: U+0000-00FF;
-}
-
 /* Fallback font stack to prevent invisible text */
 body {
   font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -66,7 +56,7 @@ body {
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --font-size: 14px;
+  --font-size: 16px;
   --background: #ffffff;
   --background-soft: #f8fafc; /* Warmer, slightly grayer background */
   
@@ -2149,7 +2139,7 @@ html {
 
 /* Calm button with enhanced mobile touch */
 .aminy-calm-button {
-  min-height: 36px;
+  min-height: 44px;
   transition: all 0.2s ease;
   font-weight: 500;
 }
@@ -2174,7 +2164,7 @@ html {
 
 /* Plan button consistency - One Medical conservative approach */
 .aminy-plan-button {
-  min-height: 36px;
+  min-height: 44px;
   transition: all 0.15s ease; /* Faster, more professional */
   font-weight: 500;
   min-width: 80px; /* Consistent width */
@@ -9877,20 +9867,24 @@ button:hover:not(.aminy-button-primary):not(.aminy-button-secondary) {
   transition: opacity 0.15s ease !important; /* Faster feedback */
 }
 
-/* Professional chip and badge sizing - consistent 2px reduction */
-.rounded-full.text-xs,
-.rounded-md.text-xs,
-.inline-flex.items-center.text-xs {
-  font-size: 10px !important; /* 2px smaller */
-  padding: 2px 6px !important; /* Tighter padding */
+/* Professional badge sizing without shrinking button typography */
+[data-slot="badge"] {
+  font-size: 12px !important;
+  padding: 4px 8px !important;
 }
 
-.rounded-full.text-sm,
-.rounded-md.text-sm,
-.inline-flex.items-center.text-sm {
-  font-size: 12px !important; /* 2px smaller */
-  padding: 4px 8px !important; /* Tighter padding */
-}
+/* Fallback utility rules for arbitrary size classes used in audited screens */
+.h-\[44px\] { height: 44px !important; }
+.w-\[44px\] { width: 44px !important; }
+.size-\[44px\] { width: 44px !important; height: 44px !important; }
+.h-\[48px\] { height: 48px !important; }
+.w-\[48px\] { width: 48px !important; }
+.size-\[48px\] { width: 48px !important; height: 48px !important; }
+.min-h-\[44px\] { min-height: 44px !important; }
+.min-w-\[44px\] { min-width: 44px !important; }
+.min-h-\[52px\] { min-height: 52px !important; }
+.min-h-\[3\.25rem\] { min-height: 3.25rem !important; }
+.min-w-\[3\.25rem\] { min-width: 3.25rem !important; }
 
 /* MOBILE POLISH ENHANCEMENTS - PRODUCTION READY */
 

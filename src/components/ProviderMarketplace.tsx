@@ -59,8 +59,11 @@ import {
   SlidersHorizontal
 } from 'lucide-react';
 import { EmptyProviders, EmptySearchResults } from './ui/empty-state';
+import { DataProvenanceBadge } from './ui/DataProvenanceBadge';
+import { LaunchStateBadge } from './ui/LaunchStateBadge';
 import { providerTypes, type ProviderType, type ProviderTypeInfo } from '../lib/child-profiles';
 import { brandColors, getColorForProvider } from '../lib/brand-system';
+import { createDataProvenance, getSurfaceLaunchConfig, type DataProvenance } from '../lib/product-truth';
 import { VerifiedBadge } from './provider/CredentialBadge';
 
 // Types
@@ -194,6 +197,10 @@ export function ProviderMarketplace({
   const [selectedProvider, setSelectedProvider] = useState<MarketplaceProvider | null>(null);
   const [showFilters, setShowFilters] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [providerProvenance, setProviderProvenance] = useState<DataProvenance | null>(null);
+  const [providerLoadMessage, setProviderLoadMessage] = useState<string | null>(null);
+
+  const launchConfig = getSurfaceLaunchConfig('marketplace');
 
   // Advanced filters state
   const [filters, setFilters] = useState<MarketplaceFilters>({
@@ -247,7 +254,7 @@ export function ProviderMarketplace({
     });
   };
 
-  // Load providers from Supabase with server-side filtering + fallback to mock data
+  // Load providers from Supabase with verified live data only
   const loadProviders = useCallback(async () => {
     setIsLoading(true);
 
@@ -363,13 +370,21 @@ export function ProviderMarketplace({
           verificationStatus: (p.verification_status || 'verified') as MarketplaceProvider['verificationStatus']
         }));
         setProviders(dbProviders);
+        setProviderProvenance(createDataProvenance('live', 'Verified provider availability', {
+          isVerified: true,
+          lastUpdatedAt: new Date().toISOString(),
+        }));
+        setProviderLoadMessage(null);
       } else {
-        // Fallback to mock data — also apply client-side search to mocks
-        setProviders(generateMockProviders());
+        setProviders([]);
+        setProviderProvenance(null);
+        setProviderLoadMessage('We only show verified provider availability in markets where Aminy has live coverage.');
       }
     } catch (error) {
       console.error('[Marketplace] Failed to load providers:', error);
-      setProviders(generateMockProviders());
+      setProviders([]);
+      setProviderProvenance(null);
+      setProviderLoadMessage('Live provider availability is temporarily unavailable. Use Aminy guidance now and check back for verified openings.');
     } finally {
       setIsLoading(false);
     }
@@ -840,11 +855,22 @@ export function ProviderMarketplace({
             </div>
             <div>
               <h1 className="text-xl sm:text-2xl font-bold">Find Your Guide</h1>
+              <h2 className="sr-only">Provider discovery</h2>
+              <h3 className="sr-only">Recommended care options</h3>
               <p className="text-teal-100">
                 Expert providers to support {childName ? `${childName}'s` : 'your family\'s'} journey
               </p>
             </div>
           </div>
+
+          <div className="mb-4 flex flex-wrap items-center gap-2">
+            <LaunchStateBadge state={launchConfig.state} label={launchConfig.badgeLabel} />
+            {providerProvenance ? <DataProvenanceBadge provenance={providerProvenance} /> : null}
+          </div>
+
+          <p className="mb-4 max-w-2xl text-sm text-teal-50">
+            {launchConfig.message}
+          </p>
 
           {/* Search */}
           <div className="relative">
@@ -933,9 +959,23 @@ export function ProviderMarketplace({
 
       {/* Provider Grid */}
       <div className="max-w-4xl mx-auto px-4 py-6">
+        {providerLoadMessage && (
+          <Card className="mb-4 border-sky-200 bg-sky-50/80 p-4">
+            <div className="flex items-start gap-3">
+              <Info className="mt-0.5 h-4 w-4 text-sky-700" />
+              <div>
+                <p className="text-sm font-medium text-sky-900">Verified network availability only</p>
+                <p className="text-sm text-sky-700">{providerLoadMessage}</p>
+              </div>
+            </div>
+          </Card>
+        )}
+
         <div className="flex items-center justify-between mb-4">
           <p className="text-gray-600">
-            {filteredProviders.length} provider{filteredProviders.length !== 1 ? 's' : ''} available
+            {filteredProviders.length > 0
+              ? `${filteredProviders.length} verified provider${filteredProviders.length !== 1 ? 's' : ''} available`
+              : 'Verified availability updates when Aminy has live coverage in your area.'}
           </p>
           <Button
             variant="outline"
@@ -1182,7 +1222,10 @@ export function ProviderMarketplace({
               onClear={() => setSearchQuery('')}
             />
           ) : (
-            <EmptyProviders />
+            <EmptyProviders
+              headline="Verified providers are not available yet"
+              description="Aminy only shows real provider availability during limited launch. Use AI guidance today and check back when live openings are verified."
+            />
           )
         ) : (
           <div className="space-y-3 sm:space-y-4">

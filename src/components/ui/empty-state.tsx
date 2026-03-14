@@ -198,12 +198,24 @@ export function EmptyCommunityPosts({
   );
 }
 
-export function EmptyProviders() {
+export function EmptyProviders({
+  headline = 'No providers found',
+  description = "We couldn't find providers matching your criteria. Try adjusting your filters or check back later.",
+  actionLabel,
+  onAction,
+}: {
+  headline?: string;
+  description?: string;
+  actionLabel?: string;
+  onAction?: () => void;
+}) {
   return (
     <EmptyState
       icon={require('lucide-react').UserSearch}
-      headline="No providers found"
-      description="We couldn't find providers matching your criteria. Try adjusting your filters or check back later."
+      headline={headline}
+      description={description}
+      actionLabel={actionLabel}
+      onAction={onAction}
       variant="card"
     />
   );

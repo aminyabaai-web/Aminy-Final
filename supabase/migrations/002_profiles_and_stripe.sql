@@ -11,7 +11,6 @@ BEGIN
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
-
 -- ============================================
 -- PROFILES TABLE (for user data)
 -- ============================================
@@ -27,20 +26,15 @@ CREATE TABLE IF NOT EXISTS profiles (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- Enable RLS
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
-
 -- Users can only read/write their own profile
 CREATE POLICY "Users can view own profile" ON profiles
   FOR SELECT USING (auth.uid() = id);
-
 CREATE POLICY "Users can update own profile" ON profiles
   FOR UPDATE USING (auth.uid() = id);
-
 CREATE POLICY "Users can insert own profile" ON profiles
   FOR INSERT WITH CHECK (auth.uid() = id);
-
 -- Trigger to auto-create profile on signup
 CREATE OR REPLACE FUNCTION handle_new_user()
 RETURNS TRIGGER AS $$
@@ -51,19 +45,16 @@ BEGIN
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
-
 -- Only create trigger if it doesn't exist
 DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
 CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW EXECUTE FUNCTION handle_new_user();
-
 -- Updated_at trigger for profiles
 DROP TRIGGER IF EXISTS update_profiles_updated_at ON profiles;
 CREATE TRIGGER update_profiles_updated_at
   BEFORE UPDATE ON profiles
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
 -- ============================================
 -- STRIPE CUSTOMERS TABLE (for payment mapping)
 -- ============================================
@@ -72,21 +63,16 @@ CREATE TABLE IF NOT EXISTS stripe_customers (
   stripe_customer_id TEXT UNIQUE NOT NULL,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- Enable RLS
 ALTER TABLE stripe_customers ENABLE ROW LEVEL SECURITY;
-
 -- Users can only view their own stripe mapping
 CREATE POLICY "Users can view own stripe mapping" ON stripe_customers
   FOR SELECT USING (auth.uid() = user_id);
-
 -- Service role can insert (for webhook handling)
 CREATE POLICY "Service role can insert stripe customers" ON stripe_customers
   FOR INSERT WITH CHECK (true);
-
 CREATE POLICY "Service role can update stripe customers" ON stripe_customers
   FOR UPDATE USING (true);
-
 -- ============================================
 -- CONVERSATIONS TABLE (for AI chat history)
 -- ============================================
@@ -99,23 +85,17 @@ CREATE TABLE IF NOT EXISTS conversations (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- Enable RLS
 ALTER TABLE conversations ENABLE ROW LEVEL SECURITY;
-
 -- Users can only see their own conversations
 CREATE POLICY "Users can view own conversations" ON conversations
   FOR SELECT USING (auth.uid() = user_id);
-
 CREATE POLICY "Users can create conversations" ON conversations
   FOR INSERT WITH CHECK (auth.uid() = user_id);
-
 CREATE POLICY "Users can update own conversations" ON conversations
   FOR UPDATE USING (auth.uid() = user_id);
-
 CREATE POLICY "Users can delete own conversations" ON conversations
   FOR DELETE USING (auth.uid() = user_id);
-
 -- ============================================
 -- MESSAGES TABLE (for AI chat messages)
 -- ============================================
@@ -128,10 +108,8 @@ CREATE TABLE IF NOT EXISTS messages (
   tokens_used INTEGER DEFAULT 0,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- Enable RLS
 ALTER TABLE messages ENABLE ROW LEVEL SECURITY;
-
 -- Users can only see messages in their conversations
 CREATE POLICY "Users can view own messages" ON messages
   FOR SELECT USING (
@@ -141,7 +119,6 @@ CREATE POLICY "Users can view own messages" ON messages
       AND c.user_id = auth.uid()
     )
   );
-
 CREATE POLICY "Users can create messages" ON messages
   FOR INSERT WITH CHECK (
     EXISTS (
@@ -150,11 +127,9 @@ CREATE POLICY "Users can create messages" ON messages
       AND c.user_id = auth.uid()
     )
   );
-
 -- Service role can manage messages (for AI responses)
 CREATE POLICY "Service role can manage messages" ON messages
   FOR ALL USING (true);
-
 -- ============================================
 -- USAGE TRACKING TABLE (for rate limiting)
 -- ============================================
@@ -169,21 +144,16 @@ CREATE TABLE IF NOT EXISTS usage_tracking (
   updated_at TIMESTAMPTZ DEFAULT NOW(),
   UNIQUE(user_id, date)
 );
-
 -- Enable RLS
 ALTER TABLE usage_tracking ENABLE ROW LEVEL SECURITY;
-
 -- Users can only see their own usage
 CREATE POLICY "Users can view own usage" ON usage_tracking
   FOR SELECT USING (auth.uid() = user_id);
-
 -- Service role can insert/update for tracking
 CREATE POLICY "Service role can insert usage" ON usage_tracking
   FOR INSERT WITH CHECK (true);
-
 CREATE POLICY "Service role can update usage" ON usage_tracking
   FOR UPDATE USING (true);
-
 -- ============================================
 -- INDEXES
 -- ============================================

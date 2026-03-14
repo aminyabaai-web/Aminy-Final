@@ -1024,6 +1024,8 @@ export function CommunityForYou({
               <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
                 Community
               </h1>
+              <h2 className="sr-only">Community overview</h2>
+              <h3 className="sr-only">Groups, events, and stories</h3>
               <p className="text-sm text-gray-500 dark:text-gray-400">
                 Connect, learn, and grow together
               </p>

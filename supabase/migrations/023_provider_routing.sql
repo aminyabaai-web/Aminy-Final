@@ -20,26 +20,20 @@ CREATE TABLE IF NOT EXISTS provider_routing_outcomes (
   action_at TIMESTAMPTZ,
   metadata JSONB DEFAULT '{}'
 );
-
 -- ============================================
 -- INDEXES
 -- ============================================
 
 CREATE INDEX IF NOT EXISTS idx_routing_outcomes_user
   ON provider_routing_outcomes(user_id);
-
 CREATE INDEX IF NOT EXISTS idx_routing_outcomes_created
   ON provider_routing_outcomes(created_at);
-
 CREATE INDEX IF NOT EXISTS idx_routing_outcomes_provider
   ON provider_routing_outcomes(provider_type);
-
 CREATE INDEX IF NOT EXISTS idx_routing_outcomes_urgency
   ON provider_routing_outcomes(urgency);
-
 CREATE INDEX IF NOT EXISTS idx_routing_outcomes_action
   ON provider_routing_outcomes(action);
-
 -- ============================================
 -- PROVIDER HANDOFFS TABLE
 -- (For tracking actual provider connections)
@@ -62,55 +56,44 @@ CREATE TABLE IF NOT EXISTS provider_handoffs (
   scheduled_at TIMESTAMPTZ,
   completed_at TIMESTAMPTZ
 );
-
 CREATE INDEX IF NOT EXISTS idx_handoffs_user
   ON provider_handoffs(user_id);
-
 CREATE INDEX IF NOT EXISTS idx_handoffs_status
   ON provider_handoffs(status);
-
 CREATE INDEX IF NOT EXISTS idx_handoffs_created
   ON provider_handoffs(created_at);
-
 -- ============================================
 -- ROW LEVEL SECURITY
 -- ============================================
 
 ALTER TABLE provider_routing_outcomes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE provider_handoffs ENABLE ROW LEVEL SECURITY;
-
 -- Users can view/insert their own routing outcomes
 CREATE POLICY "Users can view own routing outcomes"
   ON provider_routing_outcomes FOR SELECT
   TO authenticated
   USING (user_id = auth.uid());
-
 CREATE POLICY "Users can insert own routing outcomes"
   ON provider_routing_outcomes FOR INSERT
   TO authenticated
   WITH CHECK (user_id = auth.uid());
-
 CREATE POLICY "Users can update own routing outcomes"
   ON provider_routing_outcomes FOR UPDATE
   TO authenticated
   USING (user_id = auth.uid());
-
 -- Users can view/insert their own handoffs
 CREATE POLICY "Users can view own handoffs"
   ON provider_handoffs FOR SELECT
   TO authenticated
   USING (user_id = auth.uid());
-
 CREATE POLICY "Users can insert own handoffs"
   ON provider_handoffs FOR INSERT
   TO authenticated
   WITH CHECK (user_id = auth.uid());
-
 CREATE POLICY "Users can update own handoffs"
   ON provider_handoffs FOR UPDATE
   TO authenticated
   USING (user_id = auth.uid());
-
 -- ============================================
 -- ANALYTICS FUNCTIONS
 -- ============================================
@@ -157,7 +140,6 @@ BEGIN
   WHERE created_at BETWEEN p_start_date AND p_end_date;
 END;
 $$ LANGUAGE plpgsql STABLE SECURITY DEFINER;
-
 -- Get routing metrics by provider type
 CREATE OR REPLACE FUNCTION get_routing_by_provider(
   p_start_date TIMESTAMPTZ DEFAULT NOW() - INTERVAL '30 days',
@@ -188,7 +170,6 @@ BEGIN
   ORDER BY total_shown DESC;
 END;
 $$ LANGUAGE plpgsql STABLE SECURITY DEFINER;
-
 -- Get routing metrics by urgency level
 CREATE OR REPLACE FUNCTION get_routing_by_urgency(
   p_start_date TIMESTAMPTZ DEFAULT NOW() - INTERVAL '30 days',
@@ -225,7 +206,6 @@ BEGIN
     END;
 END;
 $$ LANGUAGE plpgsql STABLE SECURITY DEFINER;
-
 -- Get top routing topics
 CREATE OR REPLACE FUNCTION get_top_routing_topics(
   p_limit INTEGER DEFAULT 10,
@@ -254,7 +234,6 @@ BEGIN
   LIMIT p_limit;
 END;
 $$ LANGUAGE plpgsql STABLE SECURITY DEFINER;
-
 -- ============================================
 -- UPDATE TIMESTAMP TRIGGER
 -- ============================================
@@ -266,13 +245,11 @@ BEGIN
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
-
 DROP TRIGGER IF EXISTS handoff_updated_at ON provider_handoffs;
 CREATE TRIGGER handoff_updated_at
   BEFORE UPDATE ON provider_handoffs
   FOR EACH ROW
   EXECUTE FUNCTION update_handoff_timestamp();
-
 -- ============================================
 -- COMMENTS
 -- ============================================

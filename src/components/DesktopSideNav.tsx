@@ -1,28 +1,23 @@
 /**
- * DesktopSideNav - Vertical sidebar navigation for tablet/desktop screens
- *
- * Only visible on md: breakpoint and up (hidden on mobile).
- * Mirrors the same nav items as BottomNavigation.
+ * DesktopSideNav - premium desktop shell for Aminy
  */
 
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Home,
   Baby,
   MessageCircle,
-  Video,
-  Menu,
   Settings,
   User,
   Heart,
   Sparkles,
-  MoreHorizontal,
   Shield,
   ClipboardList,
   FolderOpen,
   ChevronRight,
-  X
+  Activity,
 } from 'lucide-react';
+import aminyLogoCropped from '../assets/aminy-logo-cropped.png';
 
 interface DesktopSideNavProps {
   currentScreen: string;
@@ -33,142 +28,169 @@ interface DesktopSideNavProps {
 interface NavItem {
   id: string;
   label: string;
+  helper: string;
   icon: React.ElementType;
 }
 
-const primaryNavItems: NavItem[] = [
-  { id: 'home', label: 'Home', icon: Home },
-  { id: 'ask-aminy', label: 'Ask Aminy', icon: Sparkles },
-  { id: 'junior', label: 'Junior', icon: Baby },
-  { id: 'care-plan', label: 'Care Plan', icon: Heart },
-  { id: 'telehealth', label: 'Telehealth', icon: Video },
+const companionItems: NavItem[] = [
+  { id: 'home', label: 'Home', helper: 'Today and next steps', icon: Home },
+  { id: 'ask-aminy', label: 'Ask Aminy', helper: 'AI guidance and memory', icon: Sparkles },
+  { id: 'junior', label: 'Junior', helper: 'Calm, rewards, transitions', icon: Baby },
+  { id: 'care-plan', label: 'Care Plan', helper: 'Goals and routines', icon: Heart },
 ];
 
-const secondaryNavItems: NavItem[] = [
-  { id: 'messages', label: 'Messages', icon: MessageCircle },
-  { id: 'incident-log', label: 'Log Incident', icon: ClipboardList },
-  { id: 'document-vault', label: 'Vault', icon: FolderOpen },
-  { id: 'crisis-resources', label: 'Crisis Help', icon: Shield },
+const supportItems: NavItem[] = [
+  { id: 'messages', label: 'Messages', helper: 'Care team and family', icon: MessageCircle },
+  { id: 'incident-log', label: 'Incident Log', helper: 'Capture what happened', icon: ClipboardList },
+  { id: 'document-vault', label: 'Document Vault', helper: 'Records and uploads', icon: FolderOpen },
+  { id: 'crisis-resources', label: 'Crisis Help', helper: 'Immediate support', icon: Shield },
 ];
 
-const bottomNavItems: NavItem[] = [
-  { id: 'settings', label: 'Settings', icon: Settings },
-  { id: 'profile', label: 'Profile', icon: User },
+const adminItems: NavItem[] = [
+  { id: 'settings', label: 'Settings', helper: 'Preferences and controls', icon: Settings },
+  { id: 'profile', label: 'Profile', helper: 'Account and household', icon: User },
 ];
+
+function NavGroup({
+  title,
+  items,
+  currentScreen,
+  onNavigate,
+}: {
+  title: string;
+  items: NavItem[];
+  currentScreen: string;
+  onNavigate: (screen: string) => void;
+}) {
+  return (
+    <div className="space-y-2.5">
+      <div className="px-1 text-[12px] font-medium tracking-[0.01em] text-slate-500">
+        {title}
+      </div>
+      <div className="space-y-2">
+        {items.map((item) => {
+          const Icon = item.icon;
+          const active = currentScreen === item.id;
+          return (
+            <button
+              key={item.id}
+              type="button"
+              onClick={() => onNavigate(item.id)}
+              aria-current={active ? 'page' : undefined}
+              className={[
+                'group flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-left transition-all duration-200',
+                active
+                  ? 'bg-teal-50 text-slate-900 shadow-[0_14px_32px_rgba(20,184,166,0.12)] ring-1 ring-inset ring-teal-200/80'
+                  : 'bg-transparent text-slate-700 hover:bg-white/85 hover:text-slate-950',
+              ].join(' ')}
+            >
+              <div
+                className={[
+                  'flex h-10 w-10 items-center justify-center rounded-2xl transition-colors',
+                  active
+                    ? 'bg-teal-600 text-white'
+                    : 'bg-white text-slate-500 shadow-sm group-hover:bg-teal-50 group-hover:text-teal-700',
+                ].join(' ')}
+              >
+                <Icon className="h-4.5 w-4.5" strokeWidth={active ? 2.1 : 1.9} />
+              </div>
+
+              <div className="min-w-0 flex-1">
+                <div className="truncate text-[14px] font-semibold tracking-[-0.01em]">{item.label}</div>
+                <div className="truncate text-[12px] text-slate-500 group-hover:text-slate-600">{item.helper}</div>
+              </div>
+
+              <ChevronRight
+                className={[
+                  'h-4 w-4 transition-all',
+                  active ? 'translate-x-0 text-teal-500' : 'text-slate-400 group-hover:translate-x-0.5 group-hover:text-slate-600',
+                ].join(' ')}
+              />
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
 
 export function DesktopSideNav({ currentScreen, onNavigate, userName }: DesktopSideNavProps) {
-  const allNavIds = [
-    ...primaryNavItems,
-    ...secondaryNavItems,
-    ...bottomNavItems,
-  ].map((item) => item.id);
-
-  const isActive = (id: string) => currentScreen === id;
-
   return (
     <nav
-      className="hidden md:flex flex-col w-60 min-h-screen bg-[#0D1B2A] text-white flex-shrink-0 sticky top-0 h-screen overflow-y-auto"
+      className="sticky top-0 hidden h-screen min-h-screen w-[296px] flex-shrink-0 overflow-y-auto border-r border-slate-200/50 px-5 pb-5 pt-6 text-slate-900 md:flex"
+      style={{
+        background:
+          'radial-gradient(circle at top left, rgba(45, 212, 191, 0.16), transparent 24%), linear-gradient(180deg, #f8fbfb 0%, #f1f7f8 46%, #eef4f8 100%)',
+      }}
       aria-label="Desktop navigation"
     >
-      {/* Logo / Brand */}
-      <div className="px-5 pt-6 pb-4 flex items-center gap-3">
-        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-teal-400 to-cyan-500 flex items-center justify-center">
-          <Sparkles className="w-5 h-5 text-white" />
-        </div>
-        <div>
-          <div className="text-lg font-bold tracking-tight">Aminy</div>
-          {userName && (
-            <div className="text-xs text-gray-400 truncate max-w-[140px]">
-              {userName}
+      <div className="flex min-h-full w-full flex-col gap-5">
+        <div
+          className="rounded-[28px] border border-white/90 p-5 shadow-[0_24px_60px_rgba(15,23,42,0.08)] backdrop-blur-xl"
+          style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.92), rgba(248,252,252,0.86))' }}
+        >
+          <div className="min-w-0">
+            <div className="inline-flex rounded-full bg-teal-50 px-3 py-1.5 text-xs font-medium tracking-[0.02em] text-teal-700">
+              Caregiver companion
             </div>
-          )}
+            <div className="mt-4 flex items-center gap-3">
+              <div className="flex h-14 w-14 items-center justify-center rounded-[20px] bg-gradient-to-br from-teal-500 to-cyan-500 shadow-[0_12px_28px_rgba(45,212,191,0.2)]">
+                <img
+                  src={aminyLogoCropped}
+                  alt="Aminy"
+                  style={{ width: 34, height: 34, objectFit: 'contain', filter: 'brightness(0) invert(1)' }}
+                />
+              </div>
+              <div className="min-w-0">
+                <div className="text-[1.75rem] font-semibold tracking-[-0.05em] text-slate-950">Aminy</div>
+                <div className="text-xs uppercase tracking-[0.16em] text-slate-500">
+                  Gentle guidance. Meaningful progress.
+                </div>
+                <div className="mt-1 text-[13px] leading-5 text-slate-600">
+                  Calm guidance, care access, and progress your family can actually use.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-4 grid grid-cols-2 gap-2.5">
+            <div className="rounded-2xl bg-white/85 p-3 ring-1 ring-inset ring-slate-200/70">
+              <div className="text-xs font-medium text-slate-500">Access</div>
+              <div className="mt-1 text-[14px] font-semibold text-slate-900">AZ · MT · TX</div>
+              <div className="text-[12px] text-slate-600">Supported telehealth states</div>
+            </div>
+            <div className="rounded-2xl bg-white/85 p-3 ring-1 ring-inset ring-slate-200/70">
+              <div className="text-xs font-medium text-slate-500">Focus</div>
+              <div className="mt-1 flex items-center gap-1.5 text-[14px] font-semibold text-slate-900">
+                <Activity className="h-3.5 w-3.5 text-teal-600" />
+                Live workflow
+              </div>
+              <div className="text-[12px] text-slate-600">Guidance, care access, records</div>
+            </div>
+          </div>
         </div>
-      </div>
 
-      {/* Divider */}
-      <div className="mx-4 border-t border-white/10 mb-2" />
-
-      {/* Primary nav */}
-      <div className="flex-1 px-3 space-y-1">
-        <div className="px-2 py-2 text-[11px] font-semibold uppercase tracking-wider text-gray-500">
-          Main
+        <div
+          className="flex-1 rounded-[28px] border border-white/90 p-4 shadow-[0_20px_50px_rgba(15,23,42,0.08)] backdrop-blur-xl"
+          style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.82), rgba(247,251,251,0.74))' }}
+        >
+          <div className="space-y-6">
+            <NavGroup title="Companion" items={companionItems} currentScreen={currentScreen} onNavigate={onNavigate} />
+            <NavGroup title="Support" items={supportItems} currentScreen={currentScreen} onNavigate={onNavigate} />
+            <NavGroup title="Account" items={adminItems} currentScreen={currentScreen} onNavigate={onNavigate} />
+          </div>
         </div>
-        {primaryNavItems.map((item) => {
-          const Icon = item.icon;
-          const active = isActive(item.id);
-          return (
-            <button
-              key={item.id}
-              onClick={() => onNavigate(item.id)}
-              className={`
-                w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
-                ${active
-                  ? 'bg-teal-600/20 text-teal-300'
-                  : 'text-gray-300 hover:bg-white/5 hover:text-white'
-                }
-              `}
-              aria-current={active ? 'page' : undefined}
-            >
-              <Icon className="w-5 h-5 flex-shrink-0" strokeWidth={active ? 2 : 1.5} />
-              <span>{item.label}</span>
-              {active && (
-                <div className="ml-auto w-1.5 h-1.5 rounded-full bg-teal-400" />
-              )}
-            </button>
-          );
-        })}
 
-        {/* Secondary section */}
-        <div className="px-2 pt-4 pb-2 text-[11px] font-semibold uppercase tracking-wider text-gray-500">
-          Tools
+        <div
+          className="rounded-[24px] border border-white/90 p-4 shadow-[0_18px_45px_rgba(15,23,42,0.08)]"
+          style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.92), rgba(248,252,252,0.84))' }}
+        >
+          <div className="text-xs font-medium text-slate-500">Signed in</div>
+          <div className="mt-2 text-[15px] font-semibold text-slate-950">{userName || 'Your household'}</div>
+          <div className="mt-1 text-[12px] leading-5 text-slate-600">
+            Guidance, telehealth, and records stay in one calmer place.
+          </div>
         </div>
-        {secondaryNavItems.map((item) => {
-          const Icon = item.icon;
-          const active = isActive(item.id);
-          return (
-            <button
-              key={item.id}
-              onClick={() => onNavigate(item.id)}
-              className={`
-                w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
-                ${active
-                  ? 'bg-teal-600/20 text-teal-300'
-                  : 'text-gray-300 hover:bg-white/5 hover:text-white'
-                }
-              `}
-              aria-current={active ? 'page' : undefined}
-            >
-              <Icon className="w-5 h-5 flex-shrink-0" strokeWidth={active ? 2 : 1.5} />
-              <span>{item.label}</span>
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Bottom items */}
-      <div className="px-3 pb-4 space-y-1 mt-auto">
-        <div className="mx-1 border-t border-white/10 mb-3" />
-        {bottomNavItems.map((item) => {
-          const Icon = item.icon;
-          const active = isActive(item.id);
-          return (
-            <button
-              key={item.id}
-              onClick={() => onNavigate(item.id)}
-              className={`
-                w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
-                ${active
-                  ? 'bg-teal-600/20 text-teal-300'
-                  : 'text-gray-300 hover:bg-white/5 hover:text-white'
-                }
-              `}
-              aria-current={active ? 'page' : undefined}
-            >
-              <Icon className="w-5 h-5 flex-shrink-0" strokeWidth={active ? 2 : 1.5} />
-              <span>{item.label}</span>
-            </button>
-          );
-        })}
       </div>
     </nav>
   );

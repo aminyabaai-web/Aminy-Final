@@ -5,7 +5,7 @@
  * spiraling, or just an "I can't do this alone" moment — this connects them
  * with a real provider in minutes. Not a chatbot. A human who understands.
  *
- * Providers loaded from Supabase with fallback to demo providers.
+ * Providers loaded from Supabase only. Non-live availability is shown as limited launch.
  */
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
@@ -39,7 +39,6 @@ import { TelehealthConsent } from './TelehealthConsent';
 import { supabase } from '../utils/supabase/client';
 import {
   Provider as TelehealthProvider,
-  MOCK_PROVIDERS as TELEHEALTH_MOCK_PROVIDERS,
   PROVIDER_ROLE_DISPLAY
 } from '../types/telehealth';
 import {
@@ -50,6 +49,10 @@ import {
 } from '../lib/daily-video';
 import { isDailyConfigured } from '../lib/daily-config';
 import { DailyVideoFrame, type DailyVideoFrameRef } from './DailyVideoFrame';
+import { LaunchStateBadge } from './ui/LaunchStateBadge';
+import { createDataProvenance, getSurfaceLaunchConfig, type DataProvenance } from '../lib/product-truth';
+import { getDisplayPricingForProvider } from '../lib/telehealth-economics';
+import { DataProvenanceBadge } from './ui/DataProvenanceBadge';
 
 // On-demand display provider — adapter from rich Provider type
 interface OnDemandProvider {
@@ -85,6 +88,8 @@ interface OnDemandTelehealthProps {
 
 /** Convert rich Provider type to display format */
 function toOnDemandProvider(p: TelehealthProvider): OnDemandProvider {
+  const pricing = getDisplayPricingForProvider(p.organization, p.consultPrice, p.deepReviewPrice);
+
   return {
     id: p.id,
     name: `${p.firstName} ${p.lastName}${p.credentials ? ', ' + p.credentials : ''}`,
@@ -95,11 +100,11 @@ function toOnDemandProvider(p: TelehealthProvider): OnDemandProvider {
     reviewCount: p.reviewCount || 0,
     availabilityStatus: p.isActive && p.acceptingNewPatients ? 'available' : 'offline',
     estimatedWait: 0,
-    baseRate: p.consultPrice || 85
+    baseRate: pricing.consultPrice
   };
 }
 
-/** Fetch providers from Supabase, fallback to mock data */
+/** Fetch providers from Supabase only. */
 async function fetchProviders(): Promise<OnDemandProvider[]> {
   try {
     const { data, error } = await supabase
@@ -139,8 +144,19 @@ async function fetchProviders(): Promise<OnDemandProvider[]> {
     console.warn('[Telehealth] Failed to fetch providers from Supabase:', error);
   }
 
-  // Fallback: use rich mock providers from types
-  return TELEHEALTH_MOCK_PROVIDERS.filter(p => p.isActive).map(toOnDemandProvider);
+  return [];
+}
+
+function readStoredTelehealthConsent(): boolean {
+  try {
+    const consent = localStorage.getItem('aminy-telehealth-consent');
+    if (!consent) return false;
+
+    const parsed = JSON.parse(consent) as { accepted?: boolean };
+    return parsed.accepted === true;
+  } catch (_error) {
+    return false;
+  }
 }
 
 // Same-day availability fee
@@ -159,9 +175,11 @@ export function OnDemandTelehealth({
   const [selectedProvider, setSelectedProvider] = useState<OnDemandProvider | null>(null);
   const [selectedDuration, setSelectedDuration] = useState<15 | 30>(30);
   const [loading, setLoading] = useState(true);
+  const [providerProvenance, setProviderProvenance] = useState<DataProvenance | null>(null);
+  const launchConfig = getSurfaceLaunchConfig('on-demand-telehealth');
   const [session, setSession] = useState<OnDemandSession | null>(null);
   const [sessionNotes, setSessionNotes] = useState('');
-  const [hasConsent, setHasConsent] = useState(false);
+  const [hasConsent, setHasConsent] = useState(() => readStoredTelehealthConsent());
   const [connectionProgress, setConnectionProgress] = useState(0);
 
   // ── Real video call state ──
@@ -173,25 +191,21 @@ export function OnDemandTelehealth({
   const [elapsed, setElapsed] = useState(0);
   const videoFrameRef = useRef<DailyVideoFrameRef>(null);
 
-  // Check for existing consent
-  useEffect(() => {
-    const consent = localStorage.getItem('aminy-telehealth-consent');
-    if (consent) {
-      try {
-        const parsed = JSON.parse(consent);
-        setHasConsent(parsed.accepted);
-      } catch (e) {
-        setHasConsent(false);
-      }
-    }
-  }, []);
-
-  // Load available providers from Supabase (fallback to mock)
+  // Load available providers from Supabase.
   useEffect(() => {
     const loadProviders = async () => {
       setLoading(true);
 
       const allProviders = await fetchProviders();
+
+      if (allProviders.length > 0) {
+        setProviderProvenance(createDataProvenance('live', 'Verified real-time provider availability', {
+          isVerified: true,
+          lastUpdatedAt: new Date().toISOString(),
+        }));
+      } else {
+        setProviderProvenance(null);
+      }
 
       // Sort by availability, then wait time
       const sorted = allProviders.sort((a, b) => {
@@ -210,7 +224,6 @@ export function OnDemandTelehealth({
   // Session elapsed timer
   useEffect(() => {
     if (step !== 'session' || !session) return;
-    setElapsed(0);
     const interval = setInterval(() => {
       setElapsed(prev => prev + 1);
     }, 1000);
@@ -312,6 +325,7 @@ export function OnDemandTelehealth({
       setMeetingToken(token);
 
       // Step 6: Create session record
+      setElapsed(0);
       const newSession: OnDemandSession = {
         id: sessionId,
         provider: selectedProvider,
@@ -439,6 +453,14 @@ export function OnDemandTelehealth({
           </div>
         </div>
 
+        <div className="border-b border-sky-200 bg-sky-50 px-4 py-3">
+          <div className="max-w-2xl mx-auto flex flex-wrap items-center gap-2">
+            <LaunchStateBadge state={launchConfig.state} label={launchConfig.badgeLabel} />
+            {providerProvenance ? <DataProvenanceBadge provenance={providerProvenance} /> : null}
+            <p className="text-xs text-sky-700">{launchConfig.message}</p>
+          </div>
+        </div>
+
         <div className="max-w-2xl mx-auto px-4 py-6">
           {/* Loading state */}
           {loading ? (
@@ -452,13 +474,13 @@ export function OnDemandTelehealth({
               <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Clock className="w-8 h-8 text-gray-400" />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Everyone's with a family right now</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Verified expert support is not available right now</h3>
               <p className="text-gray-600 mb-4">
-                All our providers are currently helping other parents — but I can put you first in line, or we can work through this together with Aminy's AI guide.
+                Aminy only shows real-time expert availability during limited launch. If no provider appears here, we do not substitute demo coverage.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <Button variant="outline">
-                  Put me first in line
+                  Notify me when verified slots open
                 </Button>
                 <Button onClick={onBack}>
                   <Brain className="w-4 h-4 mr-2" />

@@ -165,13 +165,13 @@ export function NotificationPrompt({
               onClick={handleEnable}
               disabled={isEnabling}
               size="sm"
-              className="bg-white text-purple-600 hover:bg-purple-50"
+              className="bg-white text-teal-700 hover:bg-teal-50"
             >
               {isEnabling ? 'Enabling...' : 'Enable'}
             </Button>
             <button
               onClick={handleDismiss}
-              className="p-1 hover:bg-white/20 rounded"
+              className="h-12 w-12 p-2.5 hover:bg-white/20 rounded flex items-center justify-center"
             >
               <X className="w-4 h-4" />
             </button>
@@ -224,7 +224,7 @@ export function NotificationPrompt({
             <Button
               onClick={handleEnable}
               disabled={isEnabling}
-              className="w-full py-3 bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white"
+              className="w-full py-3 bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-teal-600 hover:to-cyan-700 text-white"
             >
               {isEnabling ? 'Enabling...' : 'Enable Notifications'}
             </Button>
@@ -260,7 +260,7 @@ export function NotificationPrompt({
               onClick={handleEnable}
               disabled={isEnabling}
               size="sm"
-              className="bg-purple-500 hover:bg-purple-600 text-white"
+              className="bg-teal-600 hover:bg-teal-700 text-white"
             >
               <Bell className="w-4 h-4 mr-1" />
               {isEnabling ? 'Enabling...' : 'Enable'}

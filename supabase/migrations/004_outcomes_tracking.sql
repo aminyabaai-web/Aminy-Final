@@ -14,24 +14,18 @@ CREATE TABLE IF NOT EXISTS stress_logs (
   notes TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- Enable RLS
 ALTER TABLE stress_logs ENABLE ROW LEVEL SECURITY;
-
 -- Users can only access their own stress logs
 CREATE POLICY "Users can view own stress logs" ON stress_logs
   FOR SELECT USING (auth.uid() = user_id);
-
 CREATE POLICY "Users can insert own stress logs" ON stress_logs
   FOR INSERT WITH CHECK (auth.uid() = user_id);
-
 CREATE POLICY "Users can delete own stress logs" ON stress_logs
   FOR DELETE USING (auth.uid() = user_id);
-
 -- Index for efficient queries
 CREATE INDEX idx_stress_logs_user_date ON stress_logs(user_id, created_at DESC);
 CREATE INDEX idx_stress_logs_user_context ON stress_logs(user_id, context);
-
 -- ===========================================
 -- ROUTINE COMPLETIONS TABLE
 -- Track scheduled vs completed routines
@@ -49,27 +43,20 @@ CREATE TABLE IF NOT EXISTS routine_completions (
   notes TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- Enable RLS
 ALTER TABLE routine_completions ENABLE ROW LEVEL SECURITY;
-
 -- Users can only access their own routine completions
 CREATE POLICY "Users can view own routine completions" ON routine_completions
   FOR SELECT USING (auth.uid() = user_id);
-
 CREATE POLICY "Users can insert own routine completions" ON routine_completions
   FOR INSERT WITH CHECK (auth.uid() = user_id);
-
 CREATE POLICY "Users can update own routine completions" ON routine_completions
   FOR UPDATE USING (auth.uid() = user_id);
-
 CREATE POLICY "Users can delete own routine completions" ON routine_completions
   FOR DELETE USING (auth.uid() = user_id);
-
 -- Indexes for efficient queries
 CREATE INDEX idx_routine_completions_user_date ON routine_completions(user_id, scheduled_at DESC);
 CREATE INDEX idx_routine_completions_routine ON routine_completions(user_id, routine_id);
-
 -- ===========================================
 -- GOAL ACHIEVEMENTS TABLE
 -- Track goal progress and completion
@@ -87,24 +74,17 @@ CREATE TABLE IF NOT EXISTS goal_achievements (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- Enable RLS
 ALTER TABLE goal_achievements ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "Users can view own goal achievements" ON goal_achievements
   FOR SELECT USING (auth.uid() = user_id);
-
 CREATE POLICY "Users can insert own goal achievements" ON goal_achievements
   FOR INSERT WITH CHECK (auth.uid() = user_id);
-
 CREATE POLICY "Users can update own goal achievements" ON goal_achievements
   FOR UPDATE USING (auth.uid() = user_id);
-
 CREATE POLICY "Users can delete own goal achievements" ON goal_achievements
   FOR DELETE USING (auth.uid() = user_id);
-
 CREATE INDEX idx_goal_achievements_user ON goal_achievements(user_id, created_at DESC);
-
 -- ===========================================
 -- WEEKLY OUTCOMES SUMMARY VIEW
 -- Aggregate outcomes data for weekly reports
@@ -125,7 +105,6 @@ SELECT
 
 FROM stress_logs
 GROUP BY user_id, DATE_TRUNC('week', created_at);
-
 -- ===========================================
 -- FUNCTIONS FOR OUTCOMES CALCULATIONS
 -- ===========================================
@@ -161,7 +140,6 @@ BEGIN
   RETURN ROUND((completed_count::NUMERIC / total_scheduled) * 100, 1);
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
-
 -- Calculate stress trend (positive = improving, negative = worsening)
 CREATE OR REPLACE FUNCTION calculate_stress_trend(
   p_user_id UUID
@@ -193,7 +171,6 @@ BEGIN
   RETURN ROUND(older_avg - recent_avg, 2);
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
-
 -- ===========================================
 -- CALM COINS TABLE (for gamification)
 -- ===========================================
@@ -207,18 +184,13 @@ CREATE TABLE IF NOT EXISTS calm_coins (
   source_id TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- Enable RLS
 ALTER TABLE calm_coins ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "Users can view own calm coins" ON calm_coins
   FOR SELECT USING (auth.uid() = user_id);
-
 CREATE POLICY "Users can insert own calm coins" ON calm_coins
   FOR INSERT WITH CHECK (auth.uid() = user_id);
-
 CREATE INDEX idx_calm_coins_user ON calm_coins(user_id, created_at DESC);
-
 -- Function to get user's total calm coins
 CREATE OR REPLACE FUNCTION get_calm_coins_balance(p_user_id UUID)
 RETURNS INTEGER AS $$
@@ -229,7 +201,6 @@ BEGIN
   );
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
-
 -- ===========================================
 -- REWARDS TABLE (for calm coins redemption)
 -- ===========================================
@@ -244,22 +215,16 @@ CREATE TABLE IF NOT EXISTS rewards (
   active BOOLEAN DEFAULT true,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- Enable RLS
 ALTER TABLE rewards ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "Users can view own rewards" ON rewards
   FOR SELECT USING (auth.uid() = user_id);
-
 CREATE POLICY "Users can insert own rewards" ON rewards
   FOR INSERT WITH CHECK (auth.uid() = user_id);
-
 CREATE POLICY "Users can update own rewards" ON rewards
   FOR UPDATE USING (auth.uid() = user_id);
-
 CREATE POLICY "Users can delete own rewards" ON rewards
   FOR DELETE USING (auth.uid() = user_id);
-
 -- ===========================================
 -- WINS JOURNAL TABLE (for success stories)
 -- ===========================================
@@ -275,20 +240,14 @@ CREATE TABLE IF NOT EXISTS wins_journal (
   share_approved BOOLEAN DEFAULT false,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- Enable RLS
 ALTER TABLE wins_journal ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "Users can view own wins" ON wins_journal
   FOR SELECT USING (auth.uid() = user_id);
-
 CREATE POLICY "Users can insert own wins" ON wins_journal
   FOR INSERT WITH CHECK (auth.uid() = user_id);
-
 CREATE POLICY "Users can update own wins" ON wins_journal
   FOR UPDATE USING (auth.uid() = user_id);
-
 CREATE POLICY "Users can delete own wins" ON wins_journal
   FOR DELETE USING (auth.uid() = user_id);
-
 CREATE INDEX idx_wins_journal_user ON wins_journal(user_id, created_at DESC);

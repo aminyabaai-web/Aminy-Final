@@ -6,6 +6,10 @@ import { BottomNavigation } from '../../components/BottomNavigation';
 // Mock sonner
 vi.mock('sonner', () => ({ toast: vi.fn() }));
 
+vi.mock('../../lib/feature-flags', () => ({
+  productFlags: { b2bEnabled: true },
+}));
+
 // Mock lucide-react icons as simple span elements
 vi.mock('lucide-react', () => {
   const icon = (name: string) => {
@@ -29,6 +33,8 @@ vi.mock('lucide-react', () => {
     Shield: icon('Shield'),
     Users: icon('Users'),
     BarChart3: icon('BarChart3'),
+    Baby: icon('Baby'),
+    Heart: icon('Heart'),
   };
 });
 
@@ -55,9 +61,9 @@ describe('BottomNavigation', () => {
 
     // Verify parent tab labels are present
     expect(screen.getByText('Home')).toBeInTheDocument();
-    expect(screen.getByText('Messages')).toBeInTheDocument();
-    expect(screen.getByText('Aminy')).toBeInTheDocument();
-    expect(screen.getByText('Calm')).toBeInTheDocument();
+    expect(screen.getByText('Chat')).toBeInTheDocument();
+    expect(screen.getByText('Junior')).toBeInTheDocument();
+    expect(screen.getByText('Care')).toBeInTheDocument();
     expect(screen.getByText('More')).toBeInTheDocument();
   });
 
@@ -78,24 +84,21 @@ describe('BottomNavigation', () => {
     const onNavigate = vi.fn();
     render(<BottomNavigation activeTab="home" onNavigate={onNavigate} />);
 
-    // Click the Messages tab
-    const messagesTab = screen.getByRole('tab', { name: /messages/i });
-    fireEvent.click(messagesTab);
-    expect(onNavigate).toHaveBeenCalledWith('messages');
-
-    // Click the center Aminy tab
-    const aminyTab = screen.getByRole('tab', { name: /aminy/i });
-    fireEvent.click(aminyTab);
+    const chatTab = screen.getByRole('tab', { name: /chat/i });
+    fireEvent.click(chatTab);
     expect(onNavigate).toHaveBeenCalledWith('ask-aminy');
+
+    const juniorTab = screen.getByRole('tab', { name: /junior/i });
+    fireEvent.click(juniorTab);
+    expect(onNavigate).toHaveBeenCalledWith('junior');
   });
 
   it('highlights the active tab', () => {
-    render(<BottomNavigation activeTab="messages" onNavigate={vi.fn()} />);
+    render(<BottomNavigation activeTab="ask-aminy" onNavigate={vi.fn()} />);
 
-    const messagesTab = screen.getByRole('tab', { name: /messages/i });
-    expect(messagesTab).toHaveAttribute('aria-current', 'page');
+    const chatTab = screen.getByRole('tab', { name: /chat/i });
+    expect(chatTab).toHaveAttribute('aria-current', 'page');
 
-    // Non-active tab should not have aria-current
     const homeTab = screen.getByRole('tab', { name: /home/i });
     expect(homeTab).not.toHaveAttribute('aria-current');
   });
@@ -107,6 +110,6 @@ describe('BottomNavigation', () => {
 
     // Should default to parent tabs when no userRole is given
     expect(screen.getByText('Home')).toBeInTheDocument();
-    expect(screen.getByText('Calm')).toBeInTheDocument();
+    expect(screen.getByText('Care')).toBeInTheDocument();
   });
 });

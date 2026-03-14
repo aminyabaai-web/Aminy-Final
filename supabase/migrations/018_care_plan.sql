@@ -4,66 +4,48 @@
 -- ============================================================================
 
 -- Visit Summaries Table
--- [MIGRATION FIX] Table visit_summaries created in earlier migration.
--- Adding columns that would have been lost due to IF NOT EXISTS:
--- Original CREATE TABLE commented out below.
-ALTER TABLE visit_summaries ADD COLUMN IF NOT EXISTS what_we_discussed TEXT[] NOT NULL DEFAULT '{}';
-ALTER TABLE visit_summaries ADD COLUMN IF NOT EXISTS plan_for_next_7_days TEXT[] NOT NULL DEFAULT '{}';
-ALTER TABLE visit_summaries ADD COLUMN IF NOT EXISTS what_to_track TEXT[] NOT NULL DEFAULT '{}';
-ALTER TABLE visit_summaries ADD COLUMN IF NOT EXISTS follow_up_recommendation TEXT;
-ALTER TABLE visit_summaries ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW();
+CREATE TABLE IF NOT EXISTS visit_summaries (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  appointment_id UUID REFERENCES telehealth_appointments(id) ON DELETE SET NULL,
+  provider_id UUID REFERENCES providers(id) ON DELETE SET NULL,
 
--- Original CREATE TABLE (commented out, columns added above):
--- CREATE TABLE IF NOT EXISTS visit_summaries (
---   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
---   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
---   appointment_id UUID REFERENCES telehealth_appointments(id) ON DELETE SET NULL,
---   provider_id UUID REFERENCES providers(id) ON DELETE SET NULL,
--- 
---   -- Visit details
---   reason_for_visit TEXT NOT NULL,
---   what_we_discussed TEXT[] NOT NULL DEFAULT '{}',
---   plan_for_next_7_days TEXT[] NOT NULL DEFAULT '{}',
---   what_to_track TEXT[] NOT NULL DEFAULT '{}',
---   follow_up_recommendation TEXT,
--- 
---   -- Child context (optional)
---   child_id UUID REFERENCES child_profiles(id) ON DELETE SET NULL,
--- 
---   -- Timestamps
---   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
---   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
--- );
+  -- Visit details
+  reason_for_visit TEXT NOT NULL,
+  what_we_discussed TEXT[] NOT NULL DEFAULT '{}',
+  plan_for_next_7_days TEXT[] NOT NULL DEFAULT '{}',
+  what_to_track TEXT[] NOT NULL DEFAULT '{}',
+  follow_up_recommendation TEXT,
 
+  -- Child context (optional)
+  child_id UUID REFERENCES child_profiles(id) ON DELETE SET NULL,
 
+  -- Timestamps
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
 -- Create indexes
 CREATE INDEX IF NOT EXISTS idx_visit_summaries_user_id ON visit_summaries(user_id);
 CREATE INDEX IF NOT EXISTS idx_visit_summaries_provider_id ON visit_summaries(provider_id);
 CREATE INDEX IF NOT EXISTS idx_visit_summaries_created_at ON visit_summaries(created_at DESC);
-
 -- RLS Policies
 ALTER TABLE visit_summaries ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "Users can view own visit summaries"
   ON visit_summaries
   FOR SELECT
   USING (auth.uid() = user_id);
-
 CREATE POLICY "Users can insert own visit summaries"
   ON visit_summaries
   FOR INSERT
   WITH CHECK (auth.uid() = user_id);
-
 CREATE POLICY "Users can update own visit summaries"
   ON visit_summaries
   FOR UPDATE
   USING (auth.uid() = user_id);
-
 CREATE POLICY "Users can delete own visit summaries"
   ON visit_summaries
   FOR DELETE
   USING (auth.uid() = user_id);
-
 -- Providers can view and create summaries for their patients
 CREATE POLICY "Providers can view patient visit summaries"
   ON visit_summaries
@@ -75,7 +57,6 @@ CREATE POLICY "Providers can view patient visit summaries"
       AND providers.user_id = auth.uid()
     )
   );
-
 CREATE POLICY "Providers can create patient visit summaries"
   ON visit_summaries
   FOR INSERT
@@ -86,7 +67,6 @@ CREATE POLICY "Providers can create patient visit summaries"
       AND providers.user_id = auth.uid()
     )
   );
-
 -- ============================================================================
 -- Action Items Table
 -- ============================================================================
@@ -119,36 +99,29 @@ CREATE TABLE IF NOT EXISTS care_plan_action_items (
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
-
 -- Create indexes
 CREATE INDEX IF NOT EXISTS idx_action_items_user_id ON care_plan_action_items(user_id);
 CREATE INDEX IF NOT EXISTS idx_action_items_completed ON care_plan_action_items(completed);
 CREATE INDEX IF NOT EXISTS idx_action_items_due_date ON care_plan_action_items(due_date);
 CREATE INDEX IF NOT EXISTS idx_action_items_visit_summary ON care_plan_action_items(visit_summary_id);
-
 -- RLS Policies
 ALTER TABLE care_plan_action_items ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "Users can view own action items"
   ON care_plan_action_items
   FOR SELECT
   USING (auth.uid() = user_id);
-
 CREATE POLICY "Users can insert own action items"
   ON care_plan_action_items
   FOR INSERT
   WITH CHECK (auth.uid() = user_id);
-
 CREATE POLICY "Users can update own action items"
   ON care_plan_action_items
   FOR UPDATE
   USING (auth.uid() = user_id);
-
 CREATE POLICY "Users can delete own action items"
   ON care_plan_action_items
   FOR DELETE
   USING (auth.uid() = user_id);
-
 -- ============================================================================
 -- Care Plan Goals Table (for daily/living plan goals)
 -- ============================================================================
@@ -184,36 +157,29 @@ CREATE TABLE IF NOT EXISTS care_plan_goals (
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
-
 -- Create indexes
 CREATE INDEX IF NOT EXISTS idx_goals_user_id ON care_plan_goals(user_id);
 CREATE INDEX IF NOT EXISTS idx_goals_child_id ON care_plan_goals(child_id);
 CREATE INDEX IF NOT EXISTS idx_goals_status ON care_plan_goals(status);
 CREATE INDEX IF NOT EXISTS idx_goals_category ON care_plan_goals(category);
-
 -- RLS Policies
 ALTER TABLE care_plan_goals ENABLE ROW LEVEL SECURITY;
-
 CREATE POLICY "Users can view own goals"
   ON care_plan_goals
   FOR SELECT
   USING (auth.uid() = user_id);
-
 CREATE POLICY "Users can insert own goals"
   ON care_plan_goals
   FOR INSERT
   WITH CHECK (auth.uid() = user_id);
-
 CREATE POLICY "Users can update own goals"
   ON care_plan_goals
   FOR UPDATE
   USING (auth.uid() = user_id);
-
 CREATE POLICY "Users can delete own goals"
   ON care_plan_goals
   FOR DELETE
   USING (auth.uid() = user_id);
-
 -- ============================================================================
 -- Helper Functions
 -- ============================================================================
@@ -226,22 +192,18 @@ BEGIN
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
-
 CREATE TRIGGER visit_summaries_updated_at
   BEFORE UPDATE ON visit_summaries
   FOR EACH ROW
   EXECUTE FUNCTION update_care_plan_timestamp();
-
 CREATE TRIGGER action_items_updated_at
   BEFORE UPDATE ON care_plan_action_items
   FOR EACH ROW
   EXECUTE FUNCTION update_care_plan_timestamp();
-
 CREATE TRIGGER goals_updated_at
   BEFORE UPDATE ON care_plan_goals
   FOR EACH ROW
   EXECUTE FUNCTION update_care_plan_timestamp();
-
 -- Function to get user's care plan summary
 CREATE OR REPLACE FUNCTION get_care_plan_summary(p_user_id UUID)
 RETURNS TABLE(
@@ -264,7 +226,6 @@ BEGIN
     (SELECT MAX(created_at) FROM visit_summaries WHERE user_id = p_user_id);
 END;
 $$;
-
 -- Comments
 COMMENT ON TABLE visit_summaries IS 'Provider visit summaries and recommendations';
 COMMENT ON TABLE care_plan_action_items IS 'User action items from visits and self-created';

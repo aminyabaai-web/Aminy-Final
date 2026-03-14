@@ -6,7 +6,6 @@
 -- ============================================
 
 CREATE EXTENSION IF NOT EXISTS vector;
-
 -- ============================================
 -- EMBEDDINGS TABLE
 -- ============================================
@@ -22,32 +21,26 @@ CREATE TABLE IF NOT EXISTS embeddings (
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
-
 -- ============================================
 -- INDEXES
 -- ============================================
 
 -- Index for user lookups
 CREATE INDEX IF NOT EXISTS idx_embeddings_user ON embeddings(user_id);
-
 -- Index for content type filtering
 CREATE INDEX IF NOT EXISTS idx_embeddings_content_type ON embeddings(content_type);
-
 -- Index for timestamp queries
 CREATE INDEX IF NOT EXISTS idx_embeddings_created ON embeddings(created_at);
-
 -- HNSW index for fast approximate nearest neighbor search
 -- Using cosine distance which works well for text embeddings
 CREATE INDEX IF NOT EXISTS idx_embeddings_vector 
   ON embeddings 
   USING hnsw (embedding vector_cosine_ops)
   WITH (m = 16, ef_construction = 64);
-
 -- Full-text search index on content
 CREATE INDEX IF NOT EXISTS idx_embeddings_content_fts 
   ON embeddings 
   USING gin (to_tsvector('english', content));
-
 -- ============================================
 -- SIMILARITY SEARCH FUNCTION
 -- ============================================
@@ -83,7 +76,6 @@ BEGIN
   LIMIT p_match_count;
 END;
 $$ LANGUAGE plpgsql STABLE;
-
 -- ============================================
 -- BATCH SIMILARITY SEARCH
 -- ============================================
@@ -117,7 +109,6 @@ BEGIN
   LIMIT p_match_count * array_length(p_query_embeddings, 1);
 END;
 $$ LANGUAGE plpgsql STABLE;
-
 -- ============================================
 -- UPDATE TIMESTAMP TRIGGER
 -- ============================================
@@ -129,40 +120,33 @@ BEGIN
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
-
 DROP TRIGGER IF EXISTS embedding_updated_at ON embeddings;
 CREATE TRIGGER embedding_updated_at
   BEFORE UPDATE ON embeddings
   FOR EACH ROW
   EXECUTE FUNCTION update_embedding_timestamp();
-
 -- ============================================
 -- ROW LEVEL SECURITY
 -- ============================================
 
 ALTER TABLE embeddings ENABLE ROW LEVEL SECURITY;
-
 -- Users can only access their own embeddings
 CREATE POLICY "Users can view own embeddings"
   ON embeddings FOR SELECT
   TO authenticated
   USING (user_id = auth.uid());
-
 CREATE POLICY "Users can insert own embeddings"
   ON embeddings FOR INSERT
   TO authenticated
   WITH CHECK (user_id = auth.uid());
-
 CREATE POLICY "Users can update own embeddings"
   ON embeddings FOR UPDATE
   TO authenticated
   USING (user_id = auth.uid());
-
 CREATE POLICY "Users can delete own embeddings"
   ON embeddings FOR DELETE
   TO authenticated
   USING (user_id = auth.uid());
-
 -- ============================================
 -- HELPER FUNCTIONS
 -- ============================================
@@ -187,7 +171,6 @@ BEGIN
   GROUP BY e.content_type;
 END;
 $$ LANGUAGE plpgsql STABLE SECURITY DEFINER;
-
 -- Clean up old embeddings (for maintenance)
 CREATE OR REPLACE FUNCTION cleanup_old_embeddings(
   p_user_id UUID,
@@ -208,7 +191,6 @@ BEGIN
   RETURN deleted_count;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
-
 -- ============================================
 -- COMMENTS
 -- ============================================

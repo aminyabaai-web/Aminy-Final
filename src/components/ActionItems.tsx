@@ -220,6 +220,17 @@ Keep it brief. 3-4 exchanges. Validate any struggles - feeding challenges are ex
   },
 ];
 
+
+function dedupeActionItems(items: ActionItem[]): ActionItem[] {
+  const seen = new Set<string>();
+  return items.filter((item) => {
+    const key = `${item.type}:${item.title.trim().toLowerCase()}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
 interface ActionItemsProps {
   userId: string;
   childId: string;
@@ -274,21 +285,21 @@ export function ActionItems({
         .order('priority', { ascending: true });
 
       if (savedItems && savedItems.length > 0) {
-        setItems(savedItems.map(item => ({
+        setItems(dedupeActionItems(savedItems.map(item => ({
           ...item,
           icon: getIconForType(item.type),
-        })));
+        }))));
       } else {
         // Initialize with defaults
         const newItems: ActionItem[] = DEFAULT_ACTION_ITEMS.map((item, i) => ({
           ...item,
-          id: `action-${Date.now()}-${i}`,
+          id: crypto.randomUUID(),
           completed: false,
         }));
-        setItems(newItems);
+        setItems(dedupeActionItems(newItems));
 
         // Save to Supabase
-        await supabase.from('action_items').insert(
+        const { error: insertError } = await supabase.from('action_items').insert(
           newItems.map(item => ({
             id: item.id,
             user_id: userId,
@@ -299,17 +310,25 @@ export function ActionItems({
             estimated_minutes: item.estimatedMinutes,
             completed: false,
             system_prompt: item.systemPrompt,
+            metadata: {},
+            updated_at: new Date().toISOString(),
           }))
         );
+
+        if (insertError && import.meta.env.DEV) {
+          console.warn('Action items running in local fallback mode:', insertError);
+        }
       }
     } catch (error) {
-      console.error('Error loading action items:', error);
+      if (import.meta.env.DEV) {
+        console.warn('Falling back to local action items:', error);
+      }
       // Fall back to defaults
-      setItems(DEFAULT_ACTION_ITEMS.map((item, i) => ({
+      setItems(dedupeActionItems(DEFAULT_ACTION_ITEMS.map((item, i) => ({
         ...item,
-        id: `action-${Date.now()}-${i}`,
+        id: crypto.randomUUID(),
         completed: false,
-      })));
+      }))));
     } finally {
       setIsLoading(false);
     }
@@ -450,7 +469,7 @@ You're starting this check-in now. Begin with a warm greeting and your first que
 
     // Save to Supabase
     try {
-      await supabase
+      const { error: updateError } = await supabase
         .from('action_items')
         .update({
           completed: true,
@@ -459,8 +478,12 @@ You're starting this check-in now. Begin with a warm greeting and your first que
         })
         .eq('id', activeItem.id);
 
+      if (updateError && import.meta.env.DEV) {
+        console.warn('Action item completion is local-only for this account:', updateError);
+      }
+
       // Also save the conversation to memory facts
-      await supabase.from('memory_facts').insert({
+      const { error: memoryFactError } = await supabase.from('memory_facts').insert({
         user_id: userId,
         child_id: childId,
         category: 'profile',
@@ -468,8 +491,14 @@ You're starting this check-in now. Begin with a warm greeting and your first que
         source: 'action_item',
         confidence: 0.9,
       });
+
+      if (memoryFactError && import.meta.env.DEV) {
+        console.warn('Could not persist action-item memory fact:', memoryFactError);
+      }
     } catch (error) {
-      console.error('Error saving completion:', error);
+      if (import.meta.env.DEV) {
+        console.warn('Error saving action item completion:', error);
+      }
     }
 
     onItemComplete?.(updatedItem);
@@ -484,7 +513,11 @@ You're starting this check-in now. Begin with a warm greeting and your first que
         .from('action_items')
         .update({ data: { partial_conversation: conversation } })
         .eq('id', activeItem.id)
-        .then(() => {});
+        .then(({ error }) => {
+          if (error && import.meta.env.DEV) {
+            console.warn('Could not save partial action item progress:', error);
+          }
+        });
     }
     setActiveItem(null);
     setConversation([]);

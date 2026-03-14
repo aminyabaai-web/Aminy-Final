@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
+import { DataProvenanceBadge } from './ui/DataProvenanceBadge';
+import { LaunchStateBadge } from './ui/LaunchStateBadge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import {
   ArrowLeft,
@@ -32,6 +34,7 @@ import {
   type FunnelStage,
   type RetentionCohort
 } from '../lib/analytics-engine';
+import { createDataProvenance, getSurfaceLaunchConfig } from '../lib/product-truth';
 
 interface AnalyticsDashboardProps {
   onBack: () => void;
@@ -91,6 +94,13 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
     aiInteractions: 0,
     goalsCompleted: 0
   });
+
+  const analyticsProvenance = createDataProvenance(
+    useMockData ? 'sample' : 'local',
+    useMockData ? 'Internal sample analytics' : 'Local analytics cache',
+    { isVerified: false, lastUpdatedAt: new Date().toISOString() },
+  );
+  const launchConfig = getSurfaceLaunchConfig('analytics');
 
   // Check if user has admin/investor access
   const hasAdvancedAccess = userRole === 'admin' || userRole === 'investor' || userTier === 'pro+';
@@ -225,6 +235,11 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
             <div>
               <h1 className="text-slate-900 mb-2">Analytics Dashboard</h1>
               <p className="text-slate-600">Track engagement, usage, and outcomes</p>
+              <div className="mt-3 flex flex-wrap items-center gap-2">
+                <LaunchStateBadge state={launchConfig.state} label={launchConfig.badgeLabel} />
+                <DataProvenanceBadge provenance={analyticsProvenance} />
+              </div>
+              <p className="mt-2 text-xs text-slate-500">Internal dashboard only. Do not use these metrics in customer-facing claims until they are live-data backed.</p>
             </div>
             <div className="flex items-center gap-2">
               <Button variant="outline" size="sm">

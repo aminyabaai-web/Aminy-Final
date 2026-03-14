@@ -243,24 +243,42 @@ export default defineConfig(({ mode }) => ({
       outDir: 'build',
       rollupOptions: {
         output: {
-          manualChunks: {
-            'vendor-react': ['react', 'react-dom', 'react/jsx-runtime'],
-            'vendor-supabase': ['@supabase/supabase-js'],
-            'vendor-radix': [
-              '@radix-ui/react-dialog',
-              '@radix-ui/react-dropdown-menu',
-              '@radix-ui/react-popover',
-              '@radix-ui/react-select',
-              '@radix-ui/react-tabs',
-              '@radix-ui/react-tooltip',
-              '@radix-ui/react-accordion',
-              '@radix-ui/react-scroll-area',
-              '@radix-ui/react-switch',
-              '@radix-ui/react-checkbox',
-              '@radix-ui/react-slot',
-            ],
-            'vendor-motion': ['motion/react'],
-            'vendor-ui': ['sonner', 'lucide-react', 'class-variance-authority', 'clsx', 'tailwind-merge'],
+          manualChunks(id) {
+            if (id.includes('/src/lib/analytics-engine.ts')
+              || id.includes('/src/lib/error-logging.ts')
+              || id.includes('/src/lib/sentry.ts')
+              || id.includes('/src/lib/performance-monitor.ts')
+              || id.includes('/src/lib/tracking-init.ts')) {
+              return 'app-telemetry';
+            }
+
+            if (id.includes('node_modules/@supabase/supabase-js')) return 'vendor-supabase';
+            if (id.includes('node_modules/i18next')
+              || id.includes('node_modules/react-i18next')
+              || id.includes('node_modules/i18next-browser-languagedetector')) return 'vendor-i18n';
+            if (id.includes('node_modules/@radix-ui/')) return 'vendor-radix';
+            if (id.includes('node_modules/motion/')) return 'vendor-motion';
+            if (id.includes('node_modules/sonner')
+              || id.includes('node_modules/lucide-react')
+              || id.includes('node_modules/class-variance-authority')
+              || id.includes('node_modules/clsx')
+              || id.includes('node_modules/tailwind-merge')) return 'vendor-ui';
+            if (id.includes('node_modules/react-hook-form')
+              || id.includes('node_modules/@hookform/resolvers')
+              || id.includes('node_modules/zod')) return 'vendor-forms';
+            if (id.includes('node_modules/recharts')) return 'vendor-charts';
+            if (id.includes('node_modules/jspdf')) return 'vendor-pdf';
+            if (id.includes('node_modules/html2canvas')
+              || id.includes('node_modules/dompurify')) return 'vendor-capture';
+            if (id.includes('node_modules/@dnd-kit/')) return 'vendor-dnd';
+            if (id.includes('node_modules/@daily-co/daily-js')
+              || id.includes('node_modules/@daily-co/daily-react')) return 'vendor-telehealth';
+            if (id.includes('node_modules/zustand')
+              || id.includes('node_modules/jotai')) return 'vendor-state';
+            if (id.includes('node_modules/@sentry/react')) return 'vendor-observability';
+            if (id.includes('node_modules/embla-carousel-react')
+              || id.includes('node_modules/canvas-confetti')) return 'vendor-carousel';
+            return undefined;
           },
         },
       },

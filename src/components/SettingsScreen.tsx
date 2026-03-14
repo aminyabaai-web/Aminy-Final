@@ -523,6 +523,8 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
             )}
             <div>
               <h1 className="text-xl font-semibold dark:text-white">Settings</h1>
+              <h2 className="sr-only">Settings overview</h2>
+              <h3 className="sr-only">Preferences and account sections</h3>
               <p className="text-sm text-muted-foreground">
                 Manage your account and preferences
               </p>

@@ -40,9 +40,9 @@ export function useNudgeEngine() {
     return GOAL_NUDGES[index];
   }, [parentStress, currentGoals]);
 
-  const getPersonalizedTip = useCallback(() => {
+  const getPersonalizedTip = useCallback((): string | null => {
     if (!childProfile.neuroType) {
-      return "Add your child's profile for personalized tips.";
+      return null;
     }
 
     const tips: Record<string, string> = {

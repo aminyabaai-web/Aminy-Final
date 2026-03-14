@@ -30,12 +30,10 @@ CREATE TABLE IF NOT EXISTS store_products (
     'books', 'toys', 'tools', 'digital-guides', 'templates', 'courses', 'sensory', 'visual-aids'
   ))
 );
-
 -- Indexes for products
 CREATE INDEX IF NOT EXISTS idx_store_products_category ON store_products(category);
 CREATE INDEX IF NOT EXISTS idx_store_products_featured ON store_products(is_featured) WHERE is_featured = true;
 CREATE INDEX IF NOT EXISTS idx_store_products_tags ON store_products USING GIN(tags);
-
 -- Orders table
 CREATE TABLE IF NOT EXISTS store_orders (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -53,25 +51,19 @@ CREATE TABLE IF NOT EXISTS store_orders (
     'pending', 'paid', 'processing', 'shipped', 'delivered', 'cancelled', 'refunded'
   ))
 );
-
 -- Indexes for orders
 CREATE INDEX IF NOT EXISTS idx_store_orders_user ON store_orders(user_id);
 CREATE INDEX IF NOT EXISTS idx_store_orders_status ON store_orders(status);
-
 -- Enable RLS
 ALTER TABLE store_products ENABLE ROW LEVEL SECURITY;
 ALTER TABLE store_orders ENABLE ROW LEVEL SECURITY;
-
 -- RLS Policies
 CREATE POLICY "Anyone can view active products"
   ON store_products FOR SELECT
   USING (true);
-
 CREATE POLICY "Users can view their own orders"
   ON store_orders FOR SELECT
   USING (auth.uid() = user_id);
-
 CREATE POLICY "Users can create their own orders"
   ON store_orders FOR INSERT
   WITH CHECK (auth.uid() = user_id);
-

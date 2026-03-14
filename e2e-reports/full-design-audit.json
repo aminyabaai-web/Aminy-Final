@@ -1,0 +1,513 @@
+{
+  "generatedAt": "2026-03-14T10:15:39.613Z",
+  "totalScreens": 25,
+  "totalIssues": 0,
+  "criticalIssues": 0,
+  "screens": [
+    {
+      "screen": "Splash/Landing",
+      "path": "/",
+      "timestamp": "2026-03-14T10:15:43.259Z",
+      "issues": [],
+      "metrics": {
+        "loadTime": 1,
+        "elementCount": 137,
+        "interactiveElements": 9,
+        "imageCount": 1,
+        "formFields": 0
+      },
+      "scores": {
+        "accessibility": 100,
+        "performance": 100,
+        "usability": 100,
+        "visualConsistency": 100,
+        "overall": 100
+      }
+    },
+    {
+      "screen": "Login",
+      "path": "/?screen=login",
+      "timestamp": "2026-03-14T10:15:46.218Z",
+      "issues": [],
+      "metrics": {
+        "loadTime": 1,
+        "elementCount": 143,
+        "interactiveElements": 12,
+        "imageCount": 1,
+        "formFields": 2
+      },
+      "scores": {
+        "accessibility": 100,
+        "performance": 100,
+        "usability": 100,
+        "visualConsistency": 100,
+        "overall": 100
+      }
+    },
+    {
+      "screen": "Create Account",
+      "path": "/?screen=create-account",
+      "timestamp": "2026-03-14T10:15:49.666Z",
+      "issues": [],
+      "metrics": {
+        "loadTime": 1,
+        "elementCount": 157,
+        "interactiveElements": 16,
+        "imageCount": 1,
+        "formFields": 4
+      },
+      "scores": {
+        "accessibility": 100,
+        "performance": 100,
+        "usability": 100,
+        "visualConsistency": 100,
+        "overall": 100
+      }
+    },
+    {
+      "screen": "Forgot Password",
+      "path": "/?screen=forgot-password",
+      "timestamp": "2026-03-14T10:15:52.592Z",
+      "issues": [],
+      "metrics": {
+        "loadTime": 0,
+        "elementCount": 126,
+        "interactiveElements": 7,
+        "imageCount": 1,
+        "formFields": 1
+      },
+      "scores": {
+        "accessibility": 100,
+        "performance": 100,
+        "usability": 100,
+        "visualConsistency": 100,
+        "overall": 100
+      }
+    },
+    {
+      "screen": "Dashboard",
+      "path": "/?screen=dashboard",
+      "timestamp": "2026-03-14T10:15:55.521Z",
+      "issues": [],
+      "metrics": {
+        "loadTime": 1,
+        "elementCount": 444,
+        "interactiveElements": 34,
+        "imageCount": 1,
+        "formFields": 0
+      },
+      "scores": {
+        "accessibility": 100,
+        "performance": 100,
+        "usability": 100,
+        "visualConsistency": 100,
+        "overall": 100
+      }
+    },
+    {
+      "screen": "Settings",
+      "path": "/?screen=settings",
+      "timestamp": "2026-03-14T10:15:58.872Z",
+      "issues": [],
+      "metrics": {
+        "loadTime": 1,
+        "elementCount": 444,
+        "interactiveElements": 34,
+        "imageCount": 1,
+        "formFields": 0
+      },
+      "scores": {
+        "accessibility": 100,
+        "performance": 100,
+        "usability": 100,
+        "visualConsistency": 100,
+        "overall": 100
+      }
+    },
+    {
+      "screen": "Profile",
+      "path": "/?screen=profile",
+      "timestamp": "2026-03-14T10:16:01.903Z",
+      "issues": [],
+      "metrics": {
+        "loadTime": 0,
+        "elementCount": 444,
+        "interactiveElements": 34,
+        "imageCount": 1,
+        "formFields": 0
+      },
+      "scores": {
+        "accessibility": 100,
+        "performance": 100,
+        "usability": 100,
+        "visualConsistency": 100,
+        "overall": 100
+      }
+    },
+    {
+      "screen": "Telehealth",
+      "path": "/?screen=telehealth",
+      "timestamp": "2026-03-14T10:16:05.822Z",
+      "issues": [],
+      "metrics": {
+        "loadTime": 0,
+        "elementCount": 386,
+        "interactiveElements": 28,
+        "imageCount": 1,
+        "formFields": 0
+      },
+      "scores": {
+        "accessibility": 100,
+        "performance": 100,
+        "usability": 100,
+        "visualConsistency": 100,
+        "overall": 100
+      }
+    },
+    {
+      "screen": "Vault",
+      "path": "/?screen=vault",
+      "timestamp": "2026-03-14T10:16:08.881Z",
+      "issues": [],
+      "metrics": {
+        "loadTime": 2,
+        "elementCount": 326,
+        "interactiveElements": 21,
+        "imageCount": 1,
+        "formFields": 1
+      },
+      "scores": {
+        "accessibility": 100,
+        "performance": 100,
+        "usability": 100,
+        "visualConsistency": 100,
+        "overall": 100
+      }
+    },
+    {
+      "screen": "Marketplace",
+      "path": "/?screen=marketplace",
+      "timestamp": "2026-03-14T10:16:11.834Z",
+      "issues": [],
+      "metrics": {
+        "loadTime": 1,
+        "elementCount": 444,
+        "interactiveElements": 34,
+        "imageCount": 1,
+        "formFields": 0
+      },
+      "scores": {
+        "accessibility": 100,
+        "performance": 100,
+        "usability": 100,
+        "visualConsistency": 100,
+        "overall": 100
+      }
+    },
+    {
+      "screen": "Junior Mode",
+      "path": "/?screen=junior",
+      "timestamp": "2026-03-14T10:16:16.412Z",
+      "issues": [],
+      "metrics": {
+        "loadTime": 1,
+        "elementCount": 394,
+        "interactiveElements": 22,
+        "imageCount": 1,
+        "formFields": 0
+      },
+      "scores": {
+        "accessibility": 100,
+        "performance": 100,
+        "usability": 100,
+        "visualConsistency": 100,
+        "overall": 100
+      }
+    },
+    {
+      "screen": "Paywall",
+      "path": "/?screen=paywall",
+      "timestamp": "2026-03-14T10:16:19.421Z",
+      "issues": [],
+      "metrics": {
+        "loadTime": 1,
+        "elementCount": 444,
+        "interactiveElements": 34,
+        "imageCount": 1,
+        "formFields": 0
+      },
+      "scores": {
+        "accessibility": 100,
+        "performance": 100,
+        "usability": 100,
+        "visualConsistency": 100,
+        "overall": 100
+      }
+    },
+    {
+      "screen": "Benefits Navigator",
+      "path": "/?screen=benefits",
+      "timestamp": "2026-03-14T10:16:22.440Z",
+      "issues": [],
+      "metrics": {
+        "loadTime": 1,
+        "elementCount": 369,
+        "interactiveElements": 22,
+        "imageCount": 1,
+        "formFields": 1
+      },
+      "scores": {
+        "accessibility": 100,
+        "performance": 100,
+        "usability": 100,
+        "visualConsistency": 100,
+        "overall": 100
+      }
+    },
+    {
+      "screen": "Messages",
+      "path": "/?screen=messages",
+      "timestamp": "2026-03-14T10:16:25.445Z",
+      "issues": [],
+      "metrics": {
+        "loadTime": 1,
+        "elementCount": 444,
+        "interactiveElements": 34,
+        "imageCount": 1,
+        "formFields": 0
+      },
+      "scores": {
+        "accessibility": 100,
+        "performance": 100,
+        "usability": 100,
+        "visualConsistency": 100,
+        "overall": 100
+      }
+    },
+    {
+      "screen": "Crisis Resources",
+      "path": "/?screen=crisis-resources",
+      "timestamp": "2026-03-14T10:16:28.493Z",
+      "issues": [],
+      "metrics": {
+        "loadTime": 1,
+        "elementCount": 478,
+        "interactiveElements": 41,
+        "imageCount": 1,
+        "formFields": 1
+      },
+      "scores": {
+        "accessibility": 100,
+        "performance": 100,
+        "usability": 100,
+        "visualConsistency": 100,
+        "overall": 100
+      }
+    },
+    {
+      "screen": "Outcomes",
+      "path": "/?screen=outcomes",
+      "timestamp": "2026-03-14T10:16:31.539Z",
+      "issues": [],
+      "metrics": {
+        "loadTime": 1,
+        "elementCount": 444,
+        "interactiveElements": 34,
+        "imageCount": 1,
+        "formFields": 0
+      },
+      "scores": {
+        "accessibility": 100,
+        "performance": 100,
+        "usability": 100,
+        "visualConsistency": 100,
+        "overall": 100
+      }
+    },
+    {
+      "screen": "Care Plan",
+      "path": "/?screen=care-plan",
+      "timestamp": "2026-03-14T10:16:34.812Z",
+      "issues": [],
+      "metrics": {
+        "loadTime": 1,
+        "elementCount": 444,
+        "interactiveElements": 34,
+        "imageCount": 1,
+        "formFields": 0
+      },
+      "scores": {
+        "accessibility": 100,
+        "performance": 100,
+        "usability": 100,
+        "visualConsistency": 100,
+        "overall": 100
+      }
+    },
+    {
+      "screen": "Community",
+      "path": "/?screen=community",
+      "timestamp": "2026-03-14T10:16:37.862Z",
+      "issues": [],
+      "metrics": {
+        "loadTime": 0,
+        "elementCount": 444,
+        "interactiveElements": 34,
+        "imageCount": 1,
+        "formFields": 0
+      },
+      "scores": {
+        "accessibility": 100,
+        "performance": 100,
+        "usability": 100,
+        "visualConsistency": 100,
+        "overall": 100
+      }
+    },
+    {
+      "screen": "Provider Portal",
+      "path": "/?screen=provider-portal&pilotState=AZ&pilotRole=provider&pilot=true&pilotOrg=aact",
+      "timestamp": "2026-03-14T10:16:44.047Z",
+      "issues": [],
+      "metrics": {
+        "loadTime": 0,
+        "elementCount": 509,
+        "interactiveElements": 33,
+        "imageCount": 2,
+        "formFields": 0
+      },
+      "scores": {
+        "accessibility": 100,
+        "performance": 100,
+        "usability": 100,
+        "visualConsistency": 100,
+        "overall": 100
+      }
+    },
+    {
+      "screen": "Provider Onboarding",
+      "path": "/?screen=provider-onboarding&pilotState=AZ&pilotRole=provider&pilot=true&pilotOrg=aact",
+      "timestamp": "2026-03-14T10:16:47.482Z",
+      "issues": [],
+      "metrics": {
+        "loadTime": 0,
+        "elementCount": 355,
+        "interactiveElements": 29,
+        "imageCount": 1,
+        "formFields": 7
+      },
+      "scores": {
+        "accessibility": 100,
+        "performance": 100,
+        "usability": 100,
+        "visualConsistency": 100,
+        "overall": 100
+      }
+    },
+    {
+      "screen": "Claims Dashboard",
+      "path": "/?screen=claims-dashboard&pilotState=AZ&pilotRole=admin&pilot=true&pilotOrg=aact&pilotPayers=bcba_of_az,mercycare",
+      "timestamp": "2026-03-14T10:16:51.777Z",
+      "issues": [],
+      "metrics": {
+        "loadTime": 1,
+        "elementCount": 290,
+        "interactiveElements": 18,
+        "imageCount": 1,
+        "formFields": 0
+      },
+      "scores": {
+        "accessibility": 100,
+        "performance": 100,
+        "usability": 100,
+        "visualConsistency": 100,
+        "overall": 100
+      }
+    },
+    {
+      "screen": "Payer Dashboard",
+      "path": "/?screen=payer-dashboard&pilotState=AZ&pilotRole=admin&pilot=true&pilotOrg=aact&pilotPayers=bcba_of_az,mercycare",
+      "timestamp": "2026-03-14T10:16:55.690Z",
+      "issues": [],
+      "metrics": {
+        "loadTime": 0,
+        "elementCount": 403,
+        "interactiveElements": 22,
+        "imageCount": 1,
+        "formFields": 0
+      },
+      "scores": {
+        "accessibility": 100,
+        "performance": 100,
+        "usability": 100,
+        "visualConsistency": 100,
+        "overall": 100
+      }
+    },
+    {
+      "screen": "EVV Dashboard",
+      "path": "/?screen=evv-dashboard&pilotState=AZ&pilotRole=admin&pilot=true&pilotOrg=aact&evvSystem=spokchoice&systemOfRecord=external",
+      "timestamp": "2026-03-14T10:17:00.105Z",
+      "issues": [],
+      "metrics": {
+        "loadTime": 0,
+        "elementCount": 348,
+        "interactiveElements": 20,
+        "imageCount": 1,
+        "formFields": 0
+      },
+      "scores": {
+        "accessibility": 100,
+        "performance": 100,
+        "usability": 100,
+        "visualConsistency": 100,
+        "overall": 100
+      }
+    },
+    {
+      "screen": "Caregiver Timesheet",
+      "path": "/?screen=caregiver-timesheet&pilotState=AZ&pilotRole=parent&pilot=true&pilotOrg=aact&evvSystem=spokchoice&systemOfRecord=external",
+      "timestamp": "2026-03-14T10:17:03.257Z",
+      "issues": [],
+      "metrics": {
+        "loadTime": 1,
+        "elementCount": 444,
+        "interactiveElements": 34,
+        "imageCount": 1,
+        "formFields": 0
+      },
+      "scores": {
+        "accessibility": 100,
+        "performance": 100,
+        "usability": 100,
+        "visualConsistency": 100,
+        "overall": 100
+      }
+    },
+    {
+      "screen": "CentralReach Sync",
+      "path": "/?screen=cr-sync&pilotState=AZ&pilotRole=admin&pilot=true&pilotOrg=aact",
+      "timestamp": "2026-03-14T10:17:07.974Z",
+      "issues": [],
+      "metrics": {
+        "loadTime": 1,
+        "elementCount": 510,
+        "interactiveElements": 37,
+        "imageCount": 1,
+        "formFields": 0
+      },
+      "scores": {
+        "accessibility": 100,
+        "performance": 100,
+        "usability": 100,
+        "visualConsistency": 100,
+        "overall": 100
+      }
+    }
+  ],
+  "summary": {
+    "topIssues": [],
+    "recommendations": [],
+    "overallScore": 100
+  }
+}

@@ -9,6 +9,7 @@ import React, {
 } from "react";
 import { MotionConfig } from "motion/react";
 // CRITICAL PATH - Regular imports for instant FCP (MINIMIZED)
+import { NotificationPrompt, useShouldShowNotificationPrompt } from "./components/NotificationPrompt";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { usePaymentConfirmation, getPaymentStatusFromUrl, clearPaymentParamsFromUrl } from "./hooks/usePaymentConfirmation";
 import { useGracePeriod } from "./hooks/useGracePeriod";
@@ -24,26 +25,41 @@ import { CLSOptimizer } from "./components/CLSOptimizer";
 import { toast } from "sonner";
 import { TierType, getTierDisplayName } from "./lib/tier-utils";
 import { getScreenGateReason } from "./lib/feature-flags";
+import {
+  buildPilotAccessContext,
+  getSurfaceAccessDecision,
+  getSurfaceLaunchConfig,
+  type EVVSystem,
+  type PilotOrganization,
+  type PilotPayer,
+  type SystemOfRecord,
+} from "./lib/product-truth";
+import { LaunchStateBadge } from "./components/ui/LaunchStateBadge";
 import { handleOnboardingComplete as triggerRetentionFlow } from "./lib/store";
 import { AIProvider } from "./context/AIContext";
 import { ConversationProvider } from "./context/ConversationContext";
 import { ThemeProvider } from "./lib/theme-provider";
 import { supabase } from "./utils/supabase/client";
 import { getMFAState } from "./lib/mfa";
-import { FeedbackButton } from "./components/FeedbackButton";
-import { AppBreadcrumbs, BREADCRUMB_TRAILS } from "./components/AppBreadcrumbs";
 import { verifyAdminAccess } from "./hooks/useSecureSession";
 import { setupSessionRefresh } from "./lib/security/session";
 import { syncEncryptedStorage } from "./lib/security/encrypted-storage";
+import { generatePHIAccessReport, getComplianceStatus } from "./lib/hipaa-compliance";
 import { setSentryUser, clearSentryUser, addBreadcrumb } from "./lib/sentry";
 import { setCurrentScreenGlobal } from "./lib/screen-state";
 import { proactiveNudges } from "./lib/proactive-nudges";
-import { orchestrateOnboarding, type OnboardingData } from "./lib/onboarding-orchestrator";
-import { useShouldShowNotificationPrompt } from "./components/NotificationPrompt";
+import { generateDailyPlan } from "./lib/caregiver-workflow";
+import { initAnalytics } from "./lib/analytics-engine";
+import { checkAndAwardBadges } from "./lib/badge-service";
+import { initPerformanceMonitoring } from "./lib/performance-monitor";
+import { recordJuniorProgress } from "./lib/parent-junior-bridge";
+import { incrementStreak } from "./lib/streak-service";
 import { setupDailyCheckIns } from "./lib/push-notifications";
 import { useScreenAnalytics } from "./hooks/useScreenAnalytics";
 import { useBackgroundSync } from "./hooks/useBackgroundSync";
 import { useAccessibilityEnhancements } from "./hooks/useAccessibilityEnhancements";
+import { initTracking } from "./lib/tracking-init";
+import { BREADCRUMB_TRAILS } from "./lib/breadcrumb-trails";
 
 // DEFERRED - Load after first paint
 const SafetyBoundary = lazy(() =>
@@ -100,6 +116,16 @@ const NPSSurveyModal = lazy(() =>
 const FeedbackCollector = lazy(() =>
   import("./components/FeedbackCollector").then((m) => ({
     default: m.FeedbackCollector,
+  })),
+);
+const FeedbackButton = lazy(() =>
+  import("./components/FeedbackButton").then((m) => ({
+    default: m.FeedbackButton,
+  })),
+);
+const AppBreadcrumbs = lazy(() =>
+  import("./components/AppBreadcrumbs").then((m) => ({
+    default: m.AppBreadcrumbs,
   })),
 );
 
@@ -210,11 +236,6 @@ const UrgentHelpModal = lazy(() =>
     default: m.UrgentHelpModal,
   })),
 );
-const NotificationPrompt = lazy(() =>
-  import("./components/NotificationPrompt").then((m) => ({
-    default: m.NotificationPrompt,
-  })),
-);
 const PullToRefresh = lazy(() =>
   import("./components/PullToRefresh").then((m) => ({
     default: m.PullToRefresh,
@@ -248,6 +269,11 @@ const LaunchStatusDashboard = lazy(() =>
 const EnhancedAnalyticsDashboard = lazy(() =>
   import("./components/EnhancedAnalyticsDashboard").then((m) => ({
     default: m.EnhancedAnalyticsDashboard,
+  })),
+);
+const CRSyncDashboard = lazy(() =>
+  import("./components/CRSyncDashboard").then((m) => ({
+    default: m.CRSyncDashboard,
   })),
 );
 const Phase2FeaturesMenu = lazy(() =>
@@ -597,11 +623,6 @@ const VideoCallRoom = lazy(() =>
 );
 
 // === Sprint components: BATCH 1-7 (March 9, 2026) ===
-const CRSyncDashboard = lazy(() =>
-  import("./components/CRSyncDashboard").then((m) => ({
-    default: m.CRSyncDashboard,
-  })),
-);
 const StripeRevenueDashboard = lazy(() =>
   import("./components/StripeRevenueDashboard").then((m) => ({
     default: m.StripeRevenueDashboard,
@@ -656,16 +677,32 @@ const GATE_MESSAGES: Record<string, { title: string; description: string }> = {
     title: 'Developer Tools',
     description: 'This screen is only available in developer mode.',
   },
+  internal: {
+    title: 'Internal Workflow',
+    description: 'This surface is reserved for internal or pilot-only operations until the live workflow is verified.',
+  },
+  pilot: {
+    title: 'Pilot Access Required',
+    description: 'This workflow is live only for invited Arizona pilot users while Aminy validates the operational path.',
+  },
 };
 
 const GatedScreenPlaceholder = React.memo(function GatedScreenPlaceholder({
   gateReason,
   onBack,
+  customTitle,
+  customDescription,
 }: {
   gateReason: string;
   onBack: () => void;
+  customTitle?: string;
+  customDescription?: string;
 }) {
-  const msg = GATE_MESSAGES[gateReason] || GATE_MESSAGES['b2b'];
+  const baseMsg = GATE_MESSAGES[gateReason] || GATE_MESSAGES['b2b'];
+  const msg = {
+    title: customTitle || baseMsg.title,
+    description: customDescription || baseMsg.description,
+  };
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-slate-900 flex items-center justify-center p-4">
       <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-8 max-w-md text-center">
@@ -851,6 +888,100 @@ type AppScreen =
   | "revenue-dashboard" // Stripe revenue metrics (admin)
   | "waiting-room"; // Telehealth waiting room
 
+const AUTH_REDIRECT_SCREENS: AppScreen[] = [
+  "splash",
+  "login",
+  "create-account",
+  "auth-callback",
+  "onboarding",
+  "paywall",
+  "mfa-enrollment",
+  "mfa-verification",
+];
+
+const PUBLIC_NO_REDIRECT_SCREENS: AppScreen[] = [
+  "provider-landing",
+  "provider-apply",
+  "privacy-policy",
+  "terms-of-service",
+];
+
+function getAuthenticatedLandingScreen(): AppScreen {
+  return "dashboard";
+}
+
+function shouldRedirectAfterAuth(screen: AppScreen): boolean {
+  return AUTH_REDIRECT_SCREENS.includes(screen);
+}
+
+const LOCAL_LAUNCH_BADGE_SCREENS = new Set<AppScreen>([
+  'telehealth',
+  'marketplace',
+  'on-demand-telehealth',
+]);
+
+const EVV_SYSTEM_LABELS: Record<EVVSystem, string> = {
+  spokchoice: 'SpokChoice current',
+  dci: 'DCI transition',
+  acumen: 'Acumen workflow',
+  manual: 'Manual workflow',
+};
+
+const SYSTEM_OF_RECORD_LABELS: Record<SystemOfRecord, string> = {
+  external: 'External system of record',
+  aminy_shadow: 'Aminy shadow mode',
+  aminy_primary: 'Aminy primary workflow',
+};
+
+const SurfaceLaunchNotice = React.memo(function SurfaceLaunchNotice({
+  screen,
+}: {
+  screen: AppScreen;
+}) {
+  const launchConfig = getSurfaceLaunchConfig(screen);
+  if (launchConfig.state === 'live' || launchConfig.state === 'hidden' || LOCAL_LAUNCH_BADGE_SCREENS.has(screen)) {
+    return null;
+  }
+
+  return (
+    <div className="border-b border-violet-200 bg-violet-50/80 px-4 py-3">
+      <div className="mx-auto max-w-7xl space-y-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <LaunchStateBadge state={launchConfig.state} label={launchConfig.badgeLabel} />
+          {launchConfig.programLabel ? (
+            <span className="rounded-full border border-violet-200 bg-white px-3 py-1 text-xs font-medium text-violet-700">
+              {launchConfig.programLabel}
+            </span>
+          ) : null}
+          {launchConfig.pathwayLabel ? (
+            <span className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-700">
+              {launchConfig.pathwayLabel}
+            </span>
+          ) : null}
+          {launchConfig.payerLabel ? (
+            <span className="rounded-full border border-sky-200 bg-white px-3 py-1 text-xs font-medium text-sky-700">
+              {launchConfig.payerLabel}
+            </span>
+          ) : null}
+          {launchConfig.evvSystem ? (
+            <span className="rounded-full border border-amber-200 bg-white px-3 py-1 text-xs font-medium text-amber-700">
+              {EVV_SYSTEM_LABELS[launchConfig.evvSystem]}
+            </span>
+          ) : null}
+          {launchConfig.systemOfRecord ? (
+            <span className="rounded-full border border-emerald-200 bg-white px-3 py-1 text-xs font-medium text-emerald-700">
+              {SYSTEM_OF_RECORD_LABELS[launchConfig.systemOfRecord]}
+            </span>
+          ) : null}
+        </div>
+        {launchConfig.message ? (
+          <p className="max-w-4xl text-sm text-violet-900/90">{launchConfig.message}</p>
+        ) : null}
+      </div>
+    </div>
+  );
+});
+
 interface ChildProfile {
   id: string;
   name: string;
@@ -876,6 +1007,11 @@ interface UserData {
   children?: ChildProfile[];
   activeChildId?: string;
   providerName?: string;
+  pilotEligible?: boolean;
+  pilotOrganization?: PilotOrganization | null;
+  pilotPayers?: PilotPayer[];
+  evvSystem?: EVVSystem;
+  systemOfRecord?: SystemOfRecord;
 }
 
 // Screens accessible via deep links (?screen=xxx)
@@ -885,7 +1021,27 @@ const DEEP_LINKABLE_SCREENS: AppScreen[] = [
   "provider-landing", "provider-apply",
   "benefits", "telehealth", "caregivers", "vault", "junior",
   "crisis-resources", "incident-log", "free-screening",
+  "clinical-reports", "weekly-insights",
+  "claims-dashboard", "payer-dashboard", "evv-dashboard",
+  "provider-portal", "provider-onboarding", "cr-sync",
 ];
+
+const CHROMELESS_SCREENS = new Set<AppScreen>([
+  "splash",
+  "login",
+  "create-account",
+  "forgot-password",
+  "reset-password",
+  "auth-callback",
+  "join",
+  "provider-landing",
+  "provider-apply",
+  "terms-of-service",
+  "privacy-policy",
+  "paywall",
+  "free-screening",
+  "mchat-screening",
+]);
 
 // Initialize screen state synchronously to prevent LCP delays
 const getInitialScreen = (): AppScreen => {
@@ -923,17 +1079,11 @@ const getInitialScreen = (): AppScreen => {
     if (storedUser) {
       const user = JSON.parse(storedUser);
       if (user.hasCompletedOnboarding) {
-        // Check tier - free users should see paywall, paid users go to dashboard
-        const userTier = user.tier || 'free';
-        if (userTier === 'free') {
-          // Free user - show paywall to encourage subscription
-          return "paywall";
-        }
-        // Prefetch dashboard immediately if we know user is paid
+        // Prefetch dashboard so the caregiver workflow is reachable on reload.
         if (typeof window !== 'undefined') {
           import(/* webpackPrefetch: true */ "./components/Dashboard10").catch((err) => logger.dev('Prefetch failed', err));
         }
-        return "dashboard";
+        return getAuthenticatedLandingScreen();
       } else if (user.email) {
         return "onboarding";
       }
@@ -996,6 +1146,17 @@ export default function App() {
   }, [currentScreen]);
 
   const [userData, setUserData] = useState<UserData>(getInitialUserData);
+  const showDesktopAppShell = userData.hasCompletedOnboarding && !CHROMELESS_SCREENS.has(currentScreen);
+  const pilotAccessContext = buildPilotAccessContext({
+    state: userData.state,
+    role: userData.role,
+    email: userData.email,
+    organization: userData.pilotOrganization,
+    payers: userData.pilotPayers,
+    pilotEligible: userData.pilotEligible,
+    evvSystem: userData.evvSystem,
+    systemOfRecord: userData.systemOfRecord,
+  });
   const [activeTab, setActiveTab] = useState("home");
   const [messagesLeft, setMessagesLeft] = useState(10);
   const [isInitialized, setIsInitialized] = useState(false);
@@ -1033,7 +1194,10 @@ export default function App() {
     daysRemaining,
     bannerMessage: graceBannerMessage,
     severity: graceSeverity,
-  } = useGracePeriod({ userId: userData.id });
+  } = useGracePeriod({
+    userId: userData.id,
+    autoFetch: Boolean(userData.id && userData.tier && userData.tier !== 'free'),
+  });
 
   // === Sprint hooks (Batch 7 integration) ===
   // Screen analytics — track which screens are visited + time spent
@@ -1160,16 +1324,20 @@ export default function App() {
 
       // Performance monitoring - lowest priority
       setTimeout(() => {
-        import("./lib/performance-monitor")
-          .then((m) => m.initPerformanceMonitoring?.())
-          .catch((err) => logger.dev('Performance monitor load failed', err));
+        try {
+          initPerformanceMonitoring();
+        } catch (err) {
+          logger.dev('Performance monitor load failed', err);
+        }
       }, 3000);
 
       // Analytics - lowest priority
       setTimeout(() => {
-        import("./lib/analytics-engine")
-          .then((m) => m.initAnalytics?.())
-          .catch((err) => logger.dev('Analytics engine load failed', err));
+        try {
+          initAnalytics();
+        } catch (err) {
+          logger.dev('Analytics engine load failed', err);
+        }
       }, 5000);
     };
 
@@ -1267,15 +1435,13 @@ export default function App() {
   // so it's available for admin dashboard, settings, and audit exports
   const [hipaaComplianceScore, setHipaaComplianceScore] = useState<number | null>(null);
   useEffect(() => {
-    import('./lib/hipaa-compliance').then(({ getComplianceStatus }) => {
-      try {
-        const status = getComplianceStatus();
-        setHipaaComplianceScore(status.overallScore);
-        logger.info('[HIPAA] Compliance score loaded on startup:', status.overallScore);
-      } catch (err) {
-        logger.warn('[HIPAA] Compliance status check failed (non-fatal):', err);
-      }
-    });
+    try {
+      const status = getComplianceStatus();
+      setHipaaComplianceScore(status.overallScore);
+      logger.info('[HIPAA] Compliance score loaded on startup:', status.overallScore);
+    } catch (err) {
+      logger.warn('[HIPAA] Compliance status check failed (non-fatal):', err);
+    }
   }, []);
 
   // Listen for DataService errors and show toast notifications
@@ -1329,14 +1495,11 @@ export default function App() {
 
   // Supabase auth state listener - handles session changes from OAuth, login, logout
   useEffect(() => {
-    // Public/auth screens where we should navigate after sign-in
-    const authScreens = ['login', 'create-account', 'auth-callback', 'splash'];
-    // Public screens where we should NOT redirect (e.g. provider browsing)
-    const publicNoRedirect = ['provider-landing', 'provider-apply', 'privacy-policy', 'terms-of-service'];
-
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        if (event === 'SIGNED_IN' && session?.user) {
+      (event, session) => {
+        window.setTimeout(() => {
+          void (async () => {
+        if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && session?.user) {
           hadSessionRef.current = true;
           // Load user profile and children data from Supabase
           try {
@@ -1357,21 +1520,46 @@ export default function App() {
             const primaryChild = children?.find((c: { is_primary?: boolean }) => c.is_primary) || children?.[0];
 
             if (profile) {
-              setUserData(prev => ({
-                ...prev,
-                parentName: profile.parent_name || prev.parentName,
-                childName: primaryChild?.name || profile.child_name || prev.childName,
-                childAge: primaryChild?.age_years || primaryChild?.age || prev.childAge,
-                childId: primaryChild?.id || prev.childId,
-                activeChildId: primaryChild?.id || prev.activeChildId,
-                children: children || prev.children,
-                relationship: profile.relationship || prev.relationship,
-                state: profile.state || prev.state,
-                tier: (profile.tier as TierType) || prev.tier,
-                role: profile.role || prev.role,
-                email: session.user.email || prev.email,
-                hasCompletedOnboarding: profile.has_completed_onboarding || false,
-              }));
+              const sessionEmail = session.user.email || '';
+              const metadataParentName = typeof session.user.user_metadata?.full_name === 'string'
+                ? session.user.user_metadata.full_name
+                : '';
+
+              setUserData(prev => {
+                const sameAccount = Boolean(prev.email && prev.email === sessionEmail);
+
+                return ({
+                  ...prev,
+                  id: session.user.id,
+                  userId: session.user.id,
+                  name: metadataParentName || prev.name,
+                  parentName: profile.parent_name || metadataParentName || (sameAccount ? prev.parentName : ''),
+                  childName: primaryChild?.name || profile.child_name || (sameAccount ? prev.childName : ''),
+                  childAge: primaryChild?.age_years || primaryChild?.age || (sameAccount ? prev.childAge : undefined),
+                  childId: primaryChild?.id || (sameAccount ? prev.childId : undefined),
+                  activeChildId: primaryChild?.id || (sameAccount ? prev.activeChildId : undefined),
+                  children: children || prev.children,
+                  relationship: profile.relationship || (sameAccount ? prev.relationship : ''),
+                  state: profile.state || (sameAccount ? prev.state : ''),
+                  tier: (profile.tier as TierType) || prev.tier,
+                  role: profile.role || prev.role,
+                  email: sessionEmail || prev.email,
+                  hasCompletedOnboarding: profile.has_completed_onboarding || false,
+                  pilotEligible: typeof profile.pilot_eligible === 'boolean' ? profile.pilot_eligible : prev.pilotEligible,
+                pilotOrganization: typeof profile.pilot_organization === 'string'
+                  ? profile.pilot_organization as PilotOrganization
+                  : prev.pilotOrganization,
+                pilotPayers: Array.isArray(profile.pilot_payers)
+                  ? profile.pilot_payers as PilotPayer[]
+                  : prev.pilotPayers,
+                  evvSystem: typeof profile.evv_system === 'string'
+                    ? profile.evv_system as EVVSystem
+                    : prev.evvSystem,
+                  systemOfRecord: typeof profile.system_of_record === 'string'
+                    ? profile.system_of_record as SystemOfRecord
+                    : prev.systemOfRecord,
+                });
+              });
 
               // Set Sentry user context for error tracking
               setSentryUser({
@@ -1387,7 +1575,7 @@ export default function App() {
               // away from public pages like provider-landing.
               // Use ref to get the *current* screen (avoids stale closure).
               const screen = currentScreenRef.current;
-              if (!publicNoRedirect.includes(screen)) {
+              if (!PUBLIC_NO_REDIRECT_SCREENS.includes(screen) && shouldRedirectAfterAuth(screen)) {
                 if (profile.has_completed_onboarding) {
                   // ─── MFA CHECK (HIPAA) ─────────────────────────
                   // For providers/admins, check MFA status before allowing access.
@@ -1434,16 +1622,8 @@ export default function App() {
                   }
                   // ─── END MFA CHECK ─────────────────────────────
 
-                  // Check if returning user is still on free tier - show paywall
-                  const userTier = profile.tier || 'free';
-                  if (userTier === 'free') {
-                    // Returning free user - show paywall to encourage subscription
-                    navigateToScreen('paywall');
-                  } else {
-                    // Paid user - go directly to dashboard
-                    navigateToScreen('dashboard');
-                  }
-                } else if (authScreens.includes(screen)) {
+                  navigateToScreen(getAuthenticatedLandingScreen());
+                } else {
                   navigateToScreen('onboarding');
                 }
               }
@@ -1454,7 +1634,7 @@ export default function App() {
                 email: session.user.email || '',
               }));
               const screen = currentScreenRef.current;
-              if (authScreens.includes(screen)) {
+              if (shouldRedirectAfterAuth(screen)) {
                 navigateToScreen('onboarding');
               }
             }
@@ -1466,7 +1646,7 @@ export default function App() {
               email: session.user.email || '',
             }));
             const screen = currentScreenRef.current;
-            if (authScreens.includes(screen)) {
+            if (shouldRedirectAfterAuth(screen)) {
               navigateToScreen('onboarding');
             }
           }
@@ -1504,6 +1684,8 @@ export default function App() {
         } else if (event === 'TOKEN_REFRESHED') {
           logger.dev('Auth token refreshed successfully');
         }
+          })();
+        }, 0);
       }
     );
 
@@ -1606,9 +1788,7 @@ export default function App() {
       tier: "free",
     }));
 
-    // Navigate to PAYWALL - strike while they're excited from onboarding chat
-    // This is the optimal conversion moment - they've just experienced Aminy's value
-    navigateToScreen("paywall");
+    navigateToScreen(getAuthenticatedLandingScreen());
 
     // Do DB operations in background - don't block the user
     (async () => {
@@ -1617,8 +1797,6 @@ export default function App() {
         const userId = authData?.user?.id;
 
         if (userId) {
-          const childId = `child-${userId.substring(0, 8)}-${Date.now().toString(36)}`;
-
           // Upsert profile - non-blocking (only use columns that exist in profiles table)
           supabase.from('profiles').upsert({
             id: userId,
@@ -1630,6 +1808,25 @@ export default function App() {
             has_completed_onboarding: true,
             updated_at: new Date().toISOString(),
           }, { onConflict: 'id' }).then(null, (err: unknown) => logger.error('Profile upsert error', err));
+
+          const { data: children } = await supabase
+            .from('children')
+            .select('id, name, age_years, is_primary')
+            .eq('parent_id', userId)
+            .order('is_primary', { ascending: false })
+            .order('created_at', { ascending: true });
+
+          const primaryChild = children?.find((child: { is_primary?: boolean }) => child.is_primary) || children?.[0];
+
+          if (primaryChild?.id) {
+            setUserData((prev) => ({
+              ...prev,
+              childId: primaryChild.id,
+              activeChildId: primaryChild.id,
+              childName: primaryChild.name || prev.childName,
+              childAge: primaryChild.age_years || prev.childAge,
+            }));
+          }
 
           // Trial tracking - non-blocking
           const trialEnd = new Date();
@@ -1643,21 +1840,26 @@ export default function App() {
             is_converted: false,
           }, { onConflict: 'user_id' }).then(null, (err: unknown) => logger.error('Trial tracking error', err));
 
-          // Default goals - non-blocking
-          const defaultGoals = [
-            { id: `goal-${childId}-comm`, title: 'Communication', progress: 0, is_active: true },
-            { id: `goal-${childId}-reg`, title: 'Self-Regulation', progress: 0, is_active: true },
-            { id: `goal-${childId}-routine`, title: 'Daily Routines', progress: 0, is_active: true },
-          ];
-          supabase.from('goals').upsert(
-            defaultGoals.map(g => ({
-              ...g,
-              user_id: userId,
-              child_id: childId,
-              created_at: new Date().toISOString(),
-            })),
-            { onConflict: 'id' }
-          ).then(null, (err: unknown) => logger.error('Goals creation error', err));
+          if (primaryChild?.id) {
+            const defaultGoals = [
+              { id: `goal-${primaryChild.id}-comm`, title: 'Communication', progress: 0, is_active: true },
+              { id: `goal-${primaryChild.id}-reg`, title: 'Self-Regulation', progress: 0, is_active: true },
+              { id: `goal-${primaryChild.id}-routine`, title: 'Daily Routines', progress: 0, is_active: true },
+            ];
+            supabase.from('goals').upsert(
+              defaultGoals.map(g => ({
+                ...g,
+                user_id: userId,
+                child_id: primaryChild.id,
+                created_at: new Date().toISOString(),
+              })),
+              { onConflict: 'id' }
+            ).then(null, (err: unknown) => logger.error('Goals creation error', err));
+
+            generateDailyPlan({ userId, childId: primaryChild.id }).catch((err) => {
+              logger.error('Daily plan generation error', err);
+            });
+          }
 
           // Retention flows - non-blocking
           if (updatedData.email && updatedData.childName && updatedData.parentName) {
@@ -1668,34 +1870,6 @@ export default function App() {
               updatedData.parentName
             ).catch(err => logger.error('Retention flow error', err));
           }
-
-          // Onboarding orchestration - non-blocking
-          // Runs child profile setup, screening suggestions, notifications, care plan goals, and AI memory
-          const onboardingData: OnboardingData = {
-            userId,
-            parentName: updatedData.parentName || '',
-            child: {
-              name: updatedData.childName || '',
-              dateOfBirth: '', // Not collected in streamlined onboarding; filled later
-              pronouns: '',
-              concerns: updatedData.children?.[0]?.conditions ?? [],
-            },
-            state: updatedData.state,
-          };
-
-          orchestrateOnboarding(onboardingData)
-            .then(result => {
-              const errorCount = result.errors.length;
-              if (errorCount > 0) {
-                logger.warn('Onboarding orchestration partial errors', result.errors);
-              } else {
-                logger.info('Onboarding orchestration completed', {
-                  childId: result.childProfile?.id,
-                  goalsCreated: result.carePlanGoals?.created ?? 0,
-                });
-              }
-            })
-            .catch(err => logger.error('Onboarding orchestration error', err));
         }
       } catch (error) {
         logger.error('Background onboarding save error', error);
@@ -1818,12 +1992,36 @@ export default function App() {
 
   // Render current screen with lazy loading
   const renderScreen = () => {
-    // Check if this screen is gated behind a product feature flag
+    const launchConfig = getSurfaceLaunchConfig(currentScreen);
+    const surfaceAccess = getSurfaceAccessDecision(currentScreen, pilotAccessContext);
+
+    // Check if this screen is gated behind a product feature flag.
+    // Pilot-authorized Arizona users can bypass the generic env gate for pilot-tagged surfaces.
     const gateReason = getScreenGateReason(currentScreen);
-    if (gateReason) {
+    if (
+      gateReason &&
+      !(
+        (launchConfig.state === "pilot" || launchConfig.state === "limited_launch") &&
+        surfaceAccess.allowed
+      )
+    ) {
+      const shouldUsePilotCopy = launchConfig.state === 'pilot' || launchConfig.state === 'limited_launch';
       return (
         <GatedScreenPlaceholder
-          gateReason={gateReason}
+          gateReason={shouldUsePilotCopy ? "pilot" : gateReason}
+          customTitle={shouldUsePilotCopy ? surfaceAccess.title : undefined}
+          customDescription={shouldUsePilotCopy ? surfaceAccess.message : undefined}
+          onBack={() => navigateToScreen("dashboard")}
+        />
+      );
+    }
+
+    if (!surfaceAccess.allowed) {
+      return (
+        <GatedScreenPlaceholder
+          gateReason={surfaceAccess.gateReason || "pilot"}
+          customTitle={surfaceAccess.title}
+          customDescription={surfaceAccess.message}
           onBack={() => navigateToScreen("dashboard")}
         />
       );
@@ -2219,13 +2417,10 @@ export default function App() {
                       }).then(() => {});
 
                       // Streak + badges
-                      const { incrementStreak } = await import('./lib/streak-service');
-                      const { checkAndAwardBadges } = await import('./lib/badge-service');
                       incrementStreak(uid).catch(() => {});
                       checkAndAwardBadges(uid, 'calm_session').catch(() => {});
 
                       // Record to parent-junior bridge
-                      const { recordJuniorProgress } = await import('./lib/parent-junior-bridge');
                       recordJuniorProgress(userData.childId || 'default', {
                         activityId: `calm-${Date.now()}`,
                         activityTitle: sessionData?.toolType || 'Calm Tool Session',
@@ -2547,8 +2742,9 @@ export default function App() {
           return (
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <EVVDashboard
-                childId={userData.childId || "child-1"}
+                childId={userData.activeChildId || userData.childId || "child-1"}
                 childName={userData.childName || "Your Child"}
+                userRole={userData.role === 'provider' ? 'provider' : userData.role === 'admin' ? 'admin' : 'parent'}
                 onBack={() => navigateToScreen("dashboard")}
               />
             </Suspense>
@@ -2559,7 +2755,7 @@ export default function App() {
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <ClaimsDashboard
                 userId={paymentUserId || "demo-user"}
-                childId={userData.childId || "child-1"}
+                childId={userData.activeChildId || userData.childId || "child-1"}
                 childName={userData.childName || "Your Child"}
                 childDOB={userData.childDOB}
                 onBack={() => navigateToScreen("dashboard")}
@@ -2574,8 +2770,7 @@ export default function App() {
                 organizationName="Aminy Health Plan"
                 organizationType="mco"
                 onExportReport={() => {
-                  // Generate compliance-ready export using audit data
-                  import('./lib/hipaa-compliance').then(({ getComplianceStatus, generatePHIAccessReport }) => {
+                  try {
                     const compliance = getComplianceStatus();
                     const phiReport = generatePHIAccessReport(90);
                     const exportData = {
@@ -2596,7 +2791,9 @@ export default function App() {
                     a.download = `aminy-payer-report-${new Date().toISOString().split('T')[0]}.json`;
                     a.click();
                     URL.revokeObjectURL(url);
-                  }).catch(console.error);
+                  } catch (error) {
+                    console.error(error);
+                  }
                 }}
               />
             </Suspense>
@@ -2674,22 +2871,10 @@ export default function App() {
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <MFAEnrollment
                 onComplete={() => {
-                  // MFA enrolled and verified — proceed to normal post-login flow
-                  const userTier = userData.tier || 'free';
-                  if (userTier === 'free') {
-                    navigateToScreen('paywall');
-                  } else {
-                    navigateToScreen('dashboard');
-                  }
+                  navigateToScreen(getAuthenticatedLandingScreen());
                 }}
                 onSkip={!mfaRequired ? () => {
-                  // Grace period skip — proceed to normal flow
-                  const userTier = userData.tier || 'free';
-                  if (userTier === 'free') {
-                    navigateToScreen('paywall');
-                  } else {
-                    navigateToScreen('dashboard');
-                  }
+                  navigateToScreen(getAuthenticatedLandingScreen());
                 } : undefined}
                 required={mfaRequired}
                 gracePeriodEnds={mfaGracePeriodEnds}
@@ -2702,13 +2887,7 @@ export default function App() {
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <MFAVerification
                 onSuccess={() => {
-                  // MFA verified — proceed to normal post-login flow
-                  const userTier = userData.tier || 'free';
-                  if (userTier === 'free') {
-                    navigateToScreen('paywall');
-                  } else {
-                    navigateToScreen('dashboard');
-                  }
+                  navigateToScreen(getAuthenticatedLandingScreen());
                 }}
                 onCancel={() => {
                   // Cancel MFA — sign out and return to login
@@ -2944,8 +3123,8 @@ export default function App() {
           return (
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <CRSyncDashboard
-                userId={userData.id || userData.userId || ''}
-                childId={userData.childId}
+                userId={paymentUserId || userData.id || userData.userId || ''}
+                childId={userData.activeChildId || userData.childId}
                 onBack={() => navigateToScreen("settings")}
               />
             </Suspense>
@@ -2988,16 +3167,27 @@ export default function App() {
       }
     })();
 
+    const screenWithLaunchNotice = launchConfig.showGlobalBanner !== false && !LOCAL_LAUNCH_BADGE_SCREENS.has(currentScreen)
+      ? (
+          <>
+            {(launchConfig.state === 'pilot' || launchConfig.state === 'limited_launch') ? (
+              <SurfaceLaunchNotice screen={currentScreen} />
+            ) : null}
+            {screen}
+          </>
+        )
+      : screen;
+
     // Wrap screen with Pull-to-Refresh if applicable
     const screenWithPullToRefresh =
       shouldEnablePullToRefresh ? (
-        <Suspense fallback={screen}>
+        <Suspense fallback={screenWithLaunchNotice}>
           <PullToRefresh onRefresh={handleRefresh}>
-            {screen}
+            {screenWithLaunchNotice}
           </PullToRefresh>
         </Suspense>
       ) : (
-        screen
+        screenWithLaunchNotice
       );
 
     // Wrap screen with Swipe Navigation if applicable
@@ -3085,15 +3275,17 @@ export default function App() {
                   </Suspense>
 
                   {/* Desktop layout: sidebar + content; Mobile: content only */}
-                  <div className="mx-auto max-w-7xl md:flex">
+                  <div className={showDesktopAppShell ? "mx-auto max-w-7xl md:flex" : "mx-auto max-w-7xl"}>
                     {/* Desktop sidebar navigation (hidden on mobile via component) */}
-                    <Suspense fallback={null}>
-                      <DesktopSideNav
-                        currentScreen={currentScreen}
-                        onNavigate={(screen: string) => navigateToScreen(screen as AppScreen)}
-                        userName={userData.name}
-                      />
-                    </Suspense>
+                    {showDesktopAppShell ? (
+                      <Suspense fallback={null}>
+                        <DesktopSideNav
+                          currentScreen={currentScreen}
+                          onNavigate={(screen: string) => navigateToScreen(screen as AppScreen)}
+                          userName={userData.name}
+                        />
+                      </Suspense>
+                    ) : null}
 
                     {/* Main content area */}
                     <div className="flex-1 min-w-0">
@@ -3136,11 +3328,13 @@ export default function App() {
                       >
                         {/* Breadcrumbs for deep navigation screens */}
                         {BREADCRUMB_TRAILS[currentScreen] && (
-                          <AppBreadcrumbs
-                            items={BREADCRUMB_TRAILS[currentScreen]}
-                            onNavigate={(screen) => navigateToScreen(screen as AppScreen)}
-                            className="bg-white/80 backdrop-blur-sm border-b border-gray-100"
-                          />
+                          <Suspense fallback={null}>
+                            <AppBreadcrumbs
+                              items={BREADCRUMB_TRAILS[currentScreen]}
+                              onNavigate={(screen) => navigateToScreen(screen as AppScreen)}
+                              className="bg-white/80 backdrop-blur-sm border-b border-gray-100"
+                            />
+                          </Suspense>
                         )}
                         {renderScreen()}
                       </main>
@@ -3170,31 +3364,16 @@ export default function App() {
                   <Suspense fallback={null}>
                     <CookieConsent
                       onAccept={() => {
-                        import('./main').then(m => m.initTracking()).catch(() => {});
+                        try {
+                          initTracking();
+                        } catch {
+                          // Non-blocking: consent persists even if analytics bootstrap hiccups.
+                        }
                       }}
                     />
                   </Suspense>
 
-                  {/* Push Notification Opt-In Prompt */}
-                  {showNotificationPrompt && (
-                    <Suspense fallback={null}>
-                      <NotificationPrompt
-                        variant="modal"
-                        childName={userData.childName || "your child"}
-                        onDismiss={() => setShowNotificationPrompt(false)}
-                        onEnable={() => {
-                          setShowNotificationPrompt(false);
-                          // Initialize daily check-in notifications after subscription
-                          const userId = userData.id || userData.userId || '';
-                          if (userId) {
-                            setupDailyCheckIns(userId, userData.childName || "your child").catch(
-                              (err) => console.error("Failed to setup daily check-ins:", err)
-                            );
-                          }
-                        }}
-                      />
-                    </Suspense>
-                  )}
+                  {/* Notification opt-in lives in the screen flow now to avoid duplicate modal pressure. */}
 
                   {/* Urgent Help Modal */}
                   {showHelpModal && (
@@ -3224,8 +3403,12 @@ export default function App() {
                     </Suspense>
                   )}
 
-                  {/* Feedback Button - Always visible for user feedback */}
-                  <FeedbackButton />
+                  {/* Feedback Button - hidden during immersive child and booking flows */}
+                  {!['junior', 'conversational-booking', 'video-call', 'pre-call-setup'].includes(currentScreen) && (
+                    <Suspense fallback={null}>
+                      <FeedbackButton />
+                    </Suspense>
+                  )}
 
                   {/* App Review Prompt — self-contained, triggered after positive sessions */}
                   <Suspense fallback={null}>

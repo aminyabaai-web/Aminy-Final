@@ -22,11 +22,9 @@ CREATE TABLE IF NOT EXISTS experiments (
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
-
 -- Indexes
 CREATE INDEX IF NOT EXISTS idx_experiments_status ON experiments(status);
 CREATE INDEX IF NOT EXISTS idx_experiments_type ON experiments(type);
-
 -- ============================================
 -- EXPERIMENT ASSIGNMENTS TABLE
 -- ============================================
@@ -39,12 +37,10 @@ CREATE TABLE IF NOT EXISTS experiment_assignments (
   assigned_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   UNIQUE(experiment_id, user_id)
 );
-
 -- Indexes
 CREATE INDEX IF NOT EXISTS idx_experiment_assignments_experiment ON experiment_assignments(experiment_id);
 CREATE INDEX IF NOT EXISTS idx_experiment_assignments_user ON experiment_assignments(user_id);
 CREATE INDEX IF NOT EXISTS idx_experiment_assignments_variant ON experiment_assignments(variant_id);
-
 -- ============================================
 -- EXPERIMENT EVENTS TABLE
 -- ============================================
@@ -60,18 +56,15 @@ CREATE TABLE IF NOT EXISTS experiment_events (
   metadata JSONB DEFAULT '{}',
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
-
 -- Indexes for efficient querying
 CREATE INDEX IF NOT EXISTS idx_experiment_events_experiment ON experiment_events(experiment_id);
 CREATE INDEX IF NOT EXISTS idx_experiment_events_variant ON experiment_events(variant_id);
 CREATE INDEX IF NOT EXISTS idx_experiment_events_user ON experiment_events(user_id);
 CREATE INDEX IF NOT EXISTS idx_experiment_events_type ON experiment_events(event_type);
 CREATE INDEX IF NOT EXISTS idx_experiment_events_created ON experiment_events(created_at);
-
 -- Composite index for results queries
 CREATE INDEX IF NOT EXISTS idx_experiment_events_results 
   ON experiment_events(experiment_id, variant_id, event_type);
-
 -- ============================================
 -- EXPERIMENT RESULTS FUNCTION
 -- ============================================
@@ -129,7 +122,6 @@ BEGIN
   RETURN result;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
-
 -- ============================================
 -- TRIGGERS
 -- ============================================
@@ -141,13 +133,11 @@ BEGIN
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
-
 DROP TRIGGER IF EXISTS experiment_updated_at ON experiments;
 CREATE TRIGGER experiment_updated_at
   BEFORE UPDATE ON experiments
   FOR EACH ROW
   EXECUTE FUNCTION update_experiment_timestamp();
-
 -- ============================================
 -- ROW LEVEL SECURITY
 -- ============================================
@@ -155,7 +145,6 @@ CREATE TRIGGER experiment_updated_at
 ALTER TABLE experiments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE experiment_assignments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE experiment_events ENABLE ROW LEVEL SECURITY;
-
 -- Experiments: Admins can manage, all authenticated users can view running
 CREATE POLICY "Admins can manage experiments"
   ON experiments FOR ALL
@@ -167,29 +156,24 @@ CREATE POLICY "Admins can manage experiments"
       AND p.role = 'admin'
     )
   );
-
 CREATE POLICY "Users can view running experiments"
   ON experiments FOR SELECT
   TO authenticated
   USING (status = 'running');
-
 -- Assignments: Users can view their own
 CREATE POLICY "Users can view own assignments"
   ON experiment_assignments FOR SELECT
   TO authenticated
   USING (user_id = auth.uid());
-
 CREATE POLICY "System can create assignments"
   ON experiment_assignments FOR INSERT
   TO authenticated
   WITH CHECK (true);
-
 -- Events: Anyone can insert, admins can view all
 CREATE POLICY "Anyone can create events"
   ON experiment_events FOR INSERT
   TO authenticated
   WITH CHECK (true);
-
 CREATE POLICY "Admins can view all events"
   ON experiment_events FOR SELECT
   TO authenticated
@@ -200,7 +184,6 @@ CREATE POLICY "Admins can view all events"
       AND p.role = 'admin'
     )
   );
-
 -- ============================================
 -- COMMENTS
 -- ============================================

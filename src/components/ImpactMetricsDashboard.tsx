@@ -14,6 +14,8 @@ import React, { useState, useEffect } from 'react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
+import { DataProvenanceBadge } from './ui/DataProvenanceBadge';
+import { LaunchStateBadge } from './ui/LaunchStateBadge';
 import {
   Users,
   Heart,
@@ -40,6 +42,7 @@ import {
   Shield,
 } from 'lucide-react';
 import { motion } from 'motion/react';
+import { createDataProvenance, getSurfaceLaunchConfig } from '../lib/product-truth';
 
 // IRIS+ Metric Categories based on GIIN taxonomy
 export interface ImpactMetrics {
@@ -153,6 +156,11 @@ export function ImpactMetricsDashboard({
   const [metrics, setMetrics] = useState<ImpactMetrics | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeView, setActiveView] = useState<'dashboard' | 'toc' | 'iris'>('dashboard');
+  const sampleMetricsProvenance = createDataProvenance('sample', 'Internal sample impact metrics', {
+    isVerified: false,
+    lastUpdatedAt: new Date().toISOString(),
+  });
+  const launchConfig = getSurfaceLaunchConfig('analytics');
 
   // Fetch impact metrics
   useEffect(() => {
@@ -275,6 +283,11 @@ export function ImpactMetricsDashboard({
           <p className="text-sm text-gray-600 dark:text-gray-400">
             IRIS+ aligned metrics for {reportingPeriod}
           </p>
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            <LaunchStateBadge state={launchConfig.state} label={launchConfig.badgeLabel} />
+            <DataProvenanceBadge provenance={sampleMetricsProvenance} />
+          </div>
+          <p className="mt-2 text-sm text-amber-700 dark:text-amber-300">These impact metrics are internal sample values until Aminy has live reporting and verified benchmarks.</p>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" onClick={exportImpactReport}>

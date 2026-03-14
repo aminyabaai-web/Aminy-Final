@@ -423,21 +423,21 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
               <path d="M17.05 10.917c-.054-3.478 2.858-5.158 2.988-5.234-1.629-2.374-4.166-2.7-5.067-2.738-2.148-.22-4.208 1.264-5.302 1.264-1.1 0-2.79-1.234-4.59-1.2C2.876 3.044.872 4.417.872 7.723c0 3.117 1.75 7.42 3.15 9.08 1.39 1.65 3.053 1.55 3.79 1.55.737 0 2.137-1 4.037-1s2.95.95 3.95.95 2.4-.55 3.5-2.15c-.05-.05-2.25-1.35-2.25-4.236z" fill="currentColor"/>
               <path d="M14.5 2.05c.93-1.15 1.55-2.7 1.38-4.3-1.34.05-3 .9-3.95 2.05-.85 1-1.6 2.6-1.4 4.1 1.5.1 3.05-.75 3.97-1.85z" fill="currentColor" transform="translate(0, 2)"/>
             </svg>
-            <span className="text-[11px] font-semibold text-gray-600">Apple Pay</span>
+            <span className="text-xs font-semibold text-gray-600">Apple Pay</span>
           </div>
           <div className="flex items-center gap-1.5 bg-gray-100 rounded-full px-3 py-1.5">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill="#4285F4"/>
               <path d="M12 11v2.4h3.97c-.16 1.03-1.2 3.02-3.97 3.02-2.39 0-4.34-1.98-4.34-4.42S9.61 7.58 12 7.58c1.36 0 2.27.58 2.79 1.08l1.9-1.83C15.47 5.69 13.89 5 12 5 8.13 5 5 8.13 5 12s3.13 7 7 7c4.04 0 6.72-2.84 6.72-6.84 0-.46-.05-.81-.11-1.16H12z" fill="white"/>
             </svg>
-            <span className="text-[11px] font-semibold text-gray-600">Google Pay</span>
+            <span className="text-xs font-semibold text-gray-600">Google Pay</span>
           </div>
           <div className="flex items-center gap-1.5 bg-gray-100 rounded-full px-3 py-1.5">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-600" aria-hidden="true">
               <rect width="20" height="14" x="2" y="5" rx="2"/>
               <line x1="2" x2="22" y1="10" y2="10"/>
             </svg>
-            <span className="text-[11px] font-semibold text-gray-600">Cards</span>
+            <span className="text-xs font-semibold text-gray-600">Cards</span>
           </div>
         </div>
 

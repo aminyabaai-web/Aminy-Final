@@ -50,43 +50,57 @@ const MISSION_TEMPLATES = {
     theme: 'Fresh Start',
     greeting: "Let's start the week strong!",
     icon: Zap,
-    gradient: 'from-blue-500 to-cyan-500',
+    badge: 'border-sky-200 bg-sky-50 text-sky-700',
+    iconSurface: 'bg-sky-100 text-sky-700',
+    progress: 'bg-sky-500',
   },
   tuesday: {
     theme: 'Build Momentum',
     greeting: "You're doing great. Keep it up!",
     icon: Target,
-    gradient: 'from-emerald-500 to-teal-500',
+    badge: 'border-emerald-200 bg-emerald-50 text-emerald-700',
+    iconSurface: 'bg-emerald-100 text-emerald-700',
+    progress: 'bg-emerald-500',
   },
   wednesday: {
     theme: 'Midweek Check-in',
     greeting: "Halfway there! How's it going?",
     icon: Brain,
-    gradient: 'from-violet-500 to-purple-500',
+    badge: 'border-violet-200 bg-violet-50 text-violet-700',
+    iconSurface: 'bg-violet-100 text-violet-700',
+    progress: 'bg-violet-500',
   },
   thursday: {
     theme: 'Practice Time',
     greeting: 'Consistency is key. Small steps matter.',
     icon: Star,
-    gradient: 'from-amber-500 to-orange-500',
+    badge: 'border-amber-200 bg-amber-50 text-amber-700',
+    iconSurface: 'bg-amber-100 text-amber-700',
+    progress: 'bg-amber-500',
   },
   friday: {
     theme: 'Celebrate Progress',
     greeting: "Almost weekend! Let's celebrate wins.",
     icon: Sparkles,
-    gradient: 'from-pink-500 to-rose-500',
+    badge: 'border-rose-200 bg-rose-50 text-rose-700',
+    iconSurface: 'bg-rose-100 text-rose-700',
+    progress: 'bg-rose-500',
   },
   saturday: {
     theme: 'Weekend Connection',
     greeting: 'Weekend time for special moments.',
     icon: Heart,
-    gradient: 'from-rose-500 to-pink-500',
+    badge: 'border-pink-200 bg-pink-50 text-pink-700',
+    iconSurface: 'bg-pink-100 text-pink-700',
+    progress: 'bg-pink-500',
   },
   sunday: {
     theme: 'Prep & Reflect',
     greeting: 'Rest and prepare for the week ahead.',
     icon: Coffee,
-    gradient: 'from-indigo-500 to-blue-500',
+    badge: 'border-indigo-200 bg-indigo-50 text-indigo-700',
+    iconSurface: 'bg-indigo-100 text-indigo-700',
+    progress: 'bg-indigo-500',
   },
 };
 
@@ -197,25 +211,22 @@ export function MorningMission({
         animate={{ opacity: 1, scale: 1 }}
         className={className}
       >
-        <Card className="overflow-hidden border-0 shadow-lg">
-          <div className={cn(
-            "p-6 text-white bg-gradient-to-r text-center",
-            template.gradient
-          )}>
+        <Card className="overflow-hidden border border-teal-100 bg-white shadow-[0_18px_50px_rgba(15,23,42,0.10)]">
+          <div className="border-b border-teal-100 bg-[linear-gradient(180deg,#f8fffe_0%,#eefbf8_100%)] p-6 text-center">
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.2, type: 'spring' }}
-              className="inline-flex p-4 bg-white/20 rounded-full mb-4"
+              className="mb-4 inline-flex rounded-full bg-teal-100 p-4 text-teal-700"
             >
               <CheckCircle2 className="w-10 h-10" />
             </motion.div>
-            <h3 className="text-xl font-bold mb-2">Morning Mission Complete!</h3>
-            <p className="text-white/80">
+            <h3 className="mb-2 text-xl font-bold text-slate-900">Morning Mission Complete!</h3>
+            <p className="text-sm text-slate-600">
               You're set for a great day with {childName}
             </p>
             {streakDays > 0 && (
-              <div className="mt-4 inline-flex items-center gap-2 bg-white/20 px-3 py-1.5 rounded-full">
+              <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-teal-200 bg-white px-3 py-1.5 text-teal-700">
                 <Star className="w-4 h-4" />
                 <span className="text-sm font-medium">{streakDays} day streak!</span>
               </div>
@@ -232,36 +243,35 @@ export function MorningMission({
       animate={{ opacity: 1, y: 0 }}
       className={className}
     >
-      <Card className="overflow-hidden border-0 shadow-lg">
+      <Card className="overflow-hidden border border-slate-200/80 bg-white shadow-[0_18px_50px_rgba(15,23,42,0.10)]">
         {/* Header */}
-        <div className={cn(
-          "p-4 text-white bg-gradient-to-r",
-          template.gradient
-        )}>
-          <div className="flex items-center gap-3 mb-3">
-            <div className="p-2 bg-white/20 rounded-xl">
-              <ThemeIcon className="w-6 h-6" />
+        <div className="border-b border-slate-200/70 bg-[linear-gradient(180deg,#fbfdff_0%,#f4f7fb_100%)] p-5">
+          <div className="mb-4 flex items-start gap-3">
+            <div className={cn('rounded-2xl p-2.5 shadow-sm', template.iconSurface)}>
+              <ThemeIcon className="w-5 h-5" />
             </div>
-            <div>
-              <p className="text-sm text-white/80">{template.theme}</p>
-              <h3 className="text-lg font-bold">
+            <div className="min-w-0 flex-1">
+              <div className={cn('inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.16em]', template.badge)}>
+                {template.theme}
+              </div>
+              <h3 className="mt-3 text-lg font-semibold tracking-[-0.02em] text-slate-900">
                 {getTimeOfDayGreeting()}, {parentName.split(' ')[0]}!
               </h3>
+              <p className="mt-1 text-sm leading-6 text-slate-600">{template.greeting}</p>
             </div>
           </div>
-          <p className="text-white/80 text-sm">{template.greeting}</p>
 
           {/* Progress bar */}
-          <div className="mt-4">
-            <div className="flex justify-between text-xs text-white/70 mb-1">
-              <span>Morning Mission</span>
+          <div className="rounded-2xl border border-slate-200 bg-white/90 p-3 shadow-[0_8px_24px_rgba(15,23,42,0.05)]">
+            <div className="mb-2 flex justify-between text-sm text-slate-500">
+              <span className="font-medium text-slate-700">Morning Mission</span>
               <span>{completedSteps.size}/{missionSteps.length} complete</span>
             </div>
-            <div className="h-2 bg-white/20 rounded-full overflow-hidden">
+            <div className="h-2 overflow-hidden rounded-full bg-slate-100">
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: `${progress}%` }}
-                className="h-full bg-white rounded-full"
+                className={cn('h-full rounded-full', template.progress)}
                 transition={{ duration: 0.5 }}
               />
             </div>
@@ -269,7 +279,7 @@ export function MorningMission({
         </div>
 
         {/* Mission Steps */}
-        <div className="p-4 bg-white space-y-3">
+        <div className="space-y-3 bg-white p-4">
           {missionSteps.map((step, index) => {
             const StepIcon = step.icon;
             return (
@@ -279,33 +289,33 @@ export function MorningMission({
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.1 }}
                 className={cn(
-                  "flex items-center gap-3 p-3 rounded-xl transition-all",
+                  'flex items-center gap-3 rounded-2xl p-3 transition-all',
                   step.completed
-                    ? "bg-green-50 border border-green-200"
-                    : "bg-gray-50 border border-gray-200 hover:border-gray-300"
+                    ? 'border border-emerald-200 bg-emerald-50/80'
+                    : 'border border-slate-200 bg-slate-50/90 hover:border-slate-300 hover:bg-white'
                 )}
               >
                 <div className={cn(
-                  "p-2 rounded-lg",
+                  'rounded-xl p-2',
                   step.completed
-                    ? "bg-green-100"
-                    : "bg-white border border-gray-200"
+                    ? 'bg-emerald-100'
+                    : 'border border-slate-200 bg-white'
                 )}>
                   {step.completed ? (
-                    <CheckCircle2 className="w-5 h-5 text-green-600" />
+                    <CheckCircle2 className="w-5 h-5 text-emerald-600" />
                   ) : (
-                    <StepIcon className="w-5 h-5 text-gray-600" />
+                    <StepIcon className="w-5 h-5 text-slate-600" />
                   )}
                 </div>
 
                 <div className="flex-1 min-w-0">
                   <p className={cn(
-                    "font-medium text-sm",
-                    step.completed && "text-green-700"
+                    'font-medium text-sm',
+                    step.completed ? 'text-emerald-700' : 'text-slate-900'
                   )}>
                     {step.title}
                   </p>
-                  <p className="text-xs text-muted-foreground truncate">
+                  <p className="truncate text-sm text-slate-500">
                     {step.description}
                   </p>
                 </div>
@@ -314,16 +324,18 @@ export function MorningMission({
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => handleQuickComplete(step.id)}
-                      className="p-1.5 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                      className="flex h-11 w-11 items-center justify-center rounded-xl p-2.5 text-slate-400 transition-colors hover:bg-emerald-50 hover:text-emerald-600"
+                      aria-label={`Mark ${step.title} as done`}
                       title="Mark as done"
                     >
                       <CheckCircle2 className="w-5 h-5" />
                     </button>
                     <Button
-                      size="sm"
+                      size="icon"
                       variant="ghost"
                       onClick={() => handleStepAction(step)}
-                      className="text-gray-600"
+                      className="h-11 w-11 text-gray-600"
+                      aria-label={`Open ${step.title}`}
                     >
                       <ChevronRight className="w-4 h-4" />
                     </Button>
@@ -337,10 +349,7 @@ export function MorningMission({
           <div className="pt-2">
             <Button
               onClick={onOpenChat}
-              className={cn(
-                "w-full text-white bg-gradient-to-r",
-                template.gradient
-              )}
+              className="h-12 w-full rounded-2xl bg-slate-950 text-white shadow-[0_10px_24px_rgba(15,23,42,0.14)] hover:bg-slate-800"
             >
               <MessageCircle className="w-4 h-4 mr-2" />
               Chat with Aminy

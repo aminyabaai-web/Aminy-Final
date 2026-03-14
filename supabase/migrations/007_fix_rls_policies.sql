@@ -19,7 +19,6 @@
 -- Drop overly permissive policies
 DROP POLICY IF EXISTS "Service role can insert stripe customers" ON stripe_customers;
 DROP POLICY IF EXISTS "Service role can update stripe customers" ON stripe_customers;
-
 -- Create proper service-role-only policies
 -- Note: In Supabase, service role bypasses RLS by default, but we add
 -- explicit policies for documentation and if RLS is ever enforced for service role
@@ -31,10 +30,8 @@ DROP POLICY IF EXISTS "Service role can update stripe customers" ON stripe_custo
 -- This means users can only create/update their own record
 CREATE POLICY "Users can create own stripe mapping" ON stripe_customers
   FOR INSERT WITH CHECK (auth.uid() = user_id);
-
 CREATE POLICY "Users can update own stripe mapping" ON stripe_customers
   FOR UPDATE USING (auth.uid() = user_id);
-
 -- ============================================
 -- FIX MESSAGES RLS
 -- ============================================
@@ -42,7 +39,6 @@ CREATE POLICY "Users can update own stripe mapping" ON stripe_customers
 -- Solution: Remove overly permissive policy, rely on conversation-based checks
 
 DROP POLICY IF EXISTS "Service role can manage messages" ON messages;
-
 -- Add policy for assistant messages (system inserting AI responses)
 -- The backend uses service role which bypasses RLS, so this is mainly
 -- for documentation and ensuring proper structure
@@ -57,7 +53,6 @@ CREATE POLICY "Allow insert for AI responses" ON messages
     -- OR role is 'assistant' or 'system' (AI responses)
     OR role IN ('assistant', 'system')
   );
-
 -- ============================================
 -- FIX USAGE_TRACKING RLS
 -- ============================================
@@ -66,15 +61,12 @@ CREATE POLICY "Allow insert for AI responses" ON messages
 
 DROP POLICY IF EXISTS "Service role can insert usage" ON usage_tracking;
 DROP POLICY IF EXISTS "Service role can update usage" ON usage_tracking;
-
 -- Users can insert their own usage tracking
 CREATE POLICY "Users can insert own usage" ON usage_tracking
   FOR INSERT WITH CHECK (auth.uid() = user_id);
-
 -- Users can update their own usage tracking
 CREATE POLICY "Users can update own usage" ON usage_tracking
   FOR UPDATE USING (auth.uid() = user_id);
-
 -- ============================================
 -- ADD MISSING TABLES
 -- ============================================
@@ -94,24 +86,18 @@ CREATE TABLE IF NOT EXISTS ai_token_usage (
   updated_at TIMESTAMPTZ DEFAULT NOW(),
   UNIQUE(user_id, date, model)
 );
-
 -- Enable RLS
 ALTER TABLE ai_token_usage ENABLE ROW LEVEL SECURITY;
-
 -- Users can only view their own token usage
 CREATE POLICY "Users can view own token usage" ON ai_token_usage
   FOR SELECT USING (auth.uid() = user_id);
-
 -- Users can insert/update their own token usage
 CREATE POLICY "Users can insert own token usage" ON ai_token_usage
   FOR INSERT WITH CHECK (auth.uid() = user_id);
-
 CREATE POLICY "Users can update own token usage" ON ai_token_usage
   FOR UPDATE USING (auth.uid() = user_id);
-
 -- Index for efficient queries
 CREATE INDEX IF NOT EXISTS idx_ai_token_usage_user_date ON ai_token_usage(user_id, date);
-
 -- ============================================
 -- PROMO CODES TABLE (for secure promo validation)
 -- ============================================
@@ -127,10 +113,8 @@ CREATE TABLE IF NOT EXISTS promo_codes (
   is_active BOOLEAN DEFAULT true,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- Enable RLS
 ALTER TABLE promo_codes ENABLE ROW LEVEL SECURITY;
-
 -- No policies for regular users - only service role can access
 -- Service role bypasses RLS, so promo codes are only accessible via backend
 
@@ -141,7 +125,6 @@ INSERT INTO promo_codes (code, discount_type, discount_value, description, expir
   ('AMINY50', 'percent', 50, '50% off (limited time)', '2025-12-31 23:59:59+00'),
   ('AACT25', 'percent', 25, '25% AACT partner discount', NULL)
 ON CONFLICT (code) DO NOTHING;
-
 -- ============================================
 -- AUDIT LOG TABLE (for security monitoring)
 -- ============================================
@@ -157,17 +140,14 @@ CREATE TABLE IF NOT EXISTS audit_log (
   user_agent TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- Enable RLS
 ALTER TABLE audit_log ENABLE ROW LEVEL SECURITY;
-
 -- No direct user access to audit log - service role only
 
 -- Index for efficient querying
 CREATE INDEX IF NOT EXISTS idx_audit_log_user_id ON audit_log(user_id);
 CREATE INDEX IF NOT EXISTS idx_audit_log_action ON audit_log(action);
 CREATE INDEX IF NOT EXISTS idx_audit_log_created_at ON audit_log(created_at);
-
 -- ============================================
 -- Add role column to profiles if not exists
 -- ============================================
@@ -180,7 +160,6 @@ BEGIN
     ALTER TABLE profiles ADD COLUMN role TEXT DEFAULT 'parent' CHECK (role IN ('parent', 'provider', 'admin'));
   END IF;
 END $$;
-
 -- ============================================
 -- Add children support to profiles
 -- ============================================
@@ -207,7 +186,6 @@ BEGIN
     ALTER TABLE profiles ADD COLUMN child_id UUID;
   END IF;
 END $$;
-
 -- ============================================
 -- GRANT STATEMENTS (ensure service role access)
 -- ============================================

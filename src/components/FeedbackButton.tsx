@@ -55,11 +55,12 @@ export function FeedbackButton() {
       {/* Floating button - fixed position, always visible */}
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-20 right-4 z-40 bg-gradient-to-r from-purple-500 to-indigo-600 text-white p-3 rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200 group"
+        className="group fixed bottom-20 right-4 z-40 flex h-12 items-center justify-center gap-2 rounded-full border border-white/80 bg-white px-4 text-slate-700 shadow-[0_16px_40px_rgba(15,23,42,0.16)] backdrop-blur-xl transition-all duration-200 hover:-translate-y-0.5 hover:bg-slate-50"
         aria-label="Send feedback"
         title="Send feedback"
       >
-        <MessageCircle className="w-5 h-5 group-hover:scale-110 transition-transform" />
+        <MessageCircle className="w-4.5 h-4.5 text-teal-600 group-hover:scale-110 transition-transform" />
+        <span className="hidden text-sm font-medium sm:inline">Feedback</span>
       </button>
 
       {/* Feedback modal */}
@@ -76,7 +77,7 @@ export function FeedbackButton() {
               <h3 className="text-lg font-semibold text-gray-900">Share Feedback</h3>
               <button
                 onClick={handleClose}
-                className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+                className="h-11 w-11 hover:bg-gray-100 rounded-full transition-colors flex items-center justify-center"
               >
                 <X className="w-5 h-5 text-gray-500" />
               </button>
@@ -129,15 +130,15 @@ export function FeedbackButton() {
             <Button
               onClick={handleSubmit}
               disabled={isSubmitting || !message.trim()}
-              className="w-full bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700"
+              className="w-full bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-700 hover:to-cyan-700"
             >
               <Send className="w-4 h-4 mr-2" />
               {isSubmitting ? 'Sending...' : 'Send Feedback'}
             </Button>
 
             {/* Warm footer message */}
-            <p className="text-xs text-center text-gray-400 mt-3">
-              We read every message. Thank you for helping us improve! 💜
+            <p className="mt-3 text-center text-xs text-gray-400">
+              We read every message. Thank you for helping us keep Aminy calmer and clearer.
             </p>
           </div>
         </div>

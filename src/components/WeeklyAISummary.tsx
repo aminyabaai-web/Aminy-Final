@@ -38,6 +38,7 @@ import { Progress } from './ui/progress';
 import { toast } from 'sonner';
 import { supabase } from '../utils/supabase/client';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
+import { generateCaregiverSummary, getLatestCaregiverSummary } from '../lib/caregiver-workflow';
 
 interface WeeklySummary {
   weekOf: string;
@@ -129,25 +130,19 @@ export function WeeklyAISummary({
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      // Try to load cached summary
-      const weekStart = getWeekStart();
-      const { data: cachedSummary } = await supabase
-        .from('weekly_summaries')
-        .select('*')
-        .eq('user_id', user.id)
-        .eq('week_of', weekStart)
-        .single();
+      const latestSummary = await getLatestCaregiverSummary({
+        userId: user.id,
+        childId,
+        periodStart: getWeekStart(),
+      });
 
-      if (cachedSummary) {
-        setSummary(parseSummary(cachedSummary as CachedSummaryRow));
+      if (latestSummary?.snapshot?.weeklySummary) {
+        setSummary(latestSummary.snapshot.weeklySummary);
       } else {
-        // Generate new summary
-        await generateSummary();
+        setSummary(null);
       }
     } catch (err) {
       console.error('Error loading summary:', err);
-      // No cached summary and load failed — leave summary null so the
-      // "Generate Weekly Summary" button is shown instead of stale mock data.
       setSummary(null);
     } finally {
       setIsLoading(false);
@@ -363,37 +358,15 @@ Please generate the weekly summary JSON now.`;
         return;
       }
 
-      // 1. Fetch this week's data from Supabase
-      const weeklyData = await fetchWeeklyData(user.id);
+      const generated = await generateCaregiverSummary({
+        userId: user.id,
+        childId,
+        periodStart: getWeekStart(),
+        forceRegenerate: true,
+      });
 
-      // 2. Call the AI Edge Function with the real data
-      let newSummary: WeeklySummary;
-      try {
-        newSummary = await callAIForSummary(weeklyData);
-      } catch (aiErr) {
-        console.error('AI summary generation failed, using fallback:', aiErr);
-        // If AI call fails (no edge function, network error, etc.), build a data-driven fallback
-        newSummary = buildFallbackSummary(weeklyData);
-      }
-
-      setSummary(newSummary);
-
-      // 3. Cache the summary in Supabase
-      try {
-        await supabase
-          .from('weekly_summaries')
-          .upsert({
-            user_id: user.id,
-            week_of: getWeekStart(),
-            summary_data: newSummary,
-            generated_at: new Date().toISOString(),
-          });
-      } catch (cacheErr) {
-        // Non-critical — summary is already displayed
-        console.warn('Failed to cache weekly summary:', cacheErr);
-      }
-
-      toast.success('Weekly insights generated!');
+      setSummary(generated.snapshot.weeklySummary);
+      toast.success('Weekly insights generated from stored caregiver records.');
     } catch (err) {
       console.error('Error generating summary:', err);
       setError('Failed to generate summary. Please try again.');

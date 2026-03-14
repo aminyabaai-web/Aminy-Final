@@ -35,14 +35,12 @@ CREATE TABLE IF NOT EXISTS provider_credentials (
     'pending', 'verified', 'failed', 'expired', 'manual_review'
   ))
 );
-
 -- Indexes
 CREATE INDEX IF NOT EXISTS idx_provider_credentials_provider ON provider_credentials(provider_id);
 CREATE INDEX IF NOT EXISTS idx_provider_credentials_status ON provider_credentials(verification_status);
 CREATE INDEX IF NOT EXISTS idx_provider_credentials_type ON provider_credentials(credential_type);
 CREATE INDEX IF NOT EXISTS idx_provider_credentials_expiry ON provider_credentials(expiration_date)
   WHERE expiration_date IS NOT NULL;
-
 -- Admin tasks table for manual verification
 CREATE TABLE IF NOT EXISTS admin_tasks (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -58,24 +56,19 @@ CREATE TABLE IF NOT EXISTS admin_tasks (
   CONSTRAINT valid_priority CHECK (priority IN ('low', 'medium', 'high', 'urgent')),
   CONSTRAINT valid_task_status CHECK (status IN ('pending', 'in_progress', 'completed', 'cancelled'))
 );
-
 CREATE INDEX IF NOT EXISTS idx_admin_tasks_status ON admin_tasks(status);
 CREATE INDEX IF NOT EXISTS idx_admin_tasks_type ON admin_tasks(task_type);
 CREATE INDEX IF NOT EXISTS idx_admin_tasks_priority ON admin_tasks(priority);
-
 -- Enable RLS
 ALTER TABLE provider_credentials ENABLE ROW LEVEL SECURITY;
 ALTER TABLE admin_tasks ENABLE ROW LEVEL SECURITY;
-
 -- RLS Policies for provider_credentials
 CREATE POLICY "Providers can view own credentials"
   ON provider_credentials FOR SELECT
   USING (auth.uid() = provider_id);
-
 CREATE POLICY "Providers can insert own credentials"
   ON provider_credentials FOR INSERT
   WITH CHECK (auth.uid() = provider_id);
-
 CREATE POLICY "Admins can view all credentials"
   ON provider_credentials FOR ALL
   USING (
@@ -85,7 +78,6 @@ CREATE POLICY "Admins can view all credentials"
       AND user_profiles.role IN ('admin', 'super_admin')
     )
   );
-
 -- RLS Policies for admin_tasks (admin only)
 CREATE POLICY "Admins can manage tasks"
   ON admin_tasks FOR ALL
@@ -96,7 +88,6 @@ CREATE POLICY "Admins can manage tasks"
       AND user_profiles.role IN ('admin', 'super_admin')
     )
   );
-
 -- Function to check for expiring credentials (run daily)
 CREATE OR REPLACE FUNCTION check_expiring_credentials()
 RETURNS void AS $$
@@ -136,7 +127,6 @@ BEGIN
   AND expiration_date < CURRENT_DATE;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
-
 -- View for provider verification summary
 CREATE OR REPLACE VIEW provider_verification_summary AS
 SELECT
@@ -157,6 +147,5 @@ SELECT
   END as badge_level
 FROM provider_credentials pc
 GROUP BY pc.provider_id;
-
 COMMENT ON TABLE provider_credentials IS 'Stores provider credential verification status and history';
 COMMENT ON TABLE admin_tasks IS 'Admin task queue for manual verifications and other admin actions';

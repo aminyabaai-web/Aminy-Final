@@ -8,8 +8,10 @@
 import { supabase } from '../utils/supabase/client';
 import { syncEncryptedStorage } from './security/encrypted-storage';
 
-// Environment check for production logging
-const IS_PRODUCTION = import.meta.env.PROD || import.meta.env.VITE_USE_MOCK_DATA === 'false';
+// Remote audit persistence should only run in actual production builds.
+// Local dev against real data should stay quiet and rely on the encrypted local backup.
+const SHOULD_PERSIST_REMOTE_AUDIT =
+  import.meta.env.PROD && import.meta.env.VITE_USE_MOCK_DATA === 'false';
 
 // Audit action types
 export type AuditAction =
@@ -117,12 +119,13 @@ export type AuditEventInput = Omit<AuditEvent, 'id' | 'timestamp'>;
 
 // In-memory audit log for development (will be replaced with Supabase in production)
 const AUDIT_LOG_KEY = 'aminy_audit_log';
+let remoteAuditPersistenceDisabled = false;
 
 /**
  * Generate a unique ID for audit events
  */
 function generateAuditId(): string {
-  return `audit_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  return crypto.randomUUID();
 }
 
 /**
@@ -182,7 +185,12 @@ async function saveAuditEvent(event: AuditEvent): Promise<void> {
     syncEncryptedStorage.setItem(AUDIT_LOG_KEY, JSON.stringify(trimmedLog));
 
     // In production, also persist to Supabase for HIPAA compliance
-    if (IS_PRODUCTION) {
+    if (SHOULD_PERSIST_REMOTE_AUDIT && !remoteAuditPersistenceDisabled) {
+      const { data: sessionData } = await supabase.auth.getSession();
+      if (!sessionData.session?.access_token) {
+        return;
+      }
+
       const { error } = await supabase.from('audit_log').insert({
         id: event.id,
         timestamp: event.timestamp,
@@ -202,7 +210,10 @@ async function saveAuditEvent(event: AuditEvent): Promise<void> {
       });
 
       if (error) {
-        console.error('[AUDIT] Failed to persist to Supabase:', error);
+        remoteAuditPersistenceDisabled = true;
+        if (import.meta.env.DEV) {
+          console.info('[AUDIT] Remote persistence unavailable, using local backup only.');
+        }
         // Event is still in localStorage as backup
       }
     }

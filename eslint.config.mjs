@@ -66,6 +66,21 @@ export default tseslint.config(
       'no-console': ['warn', { allow: ['warn', 'error', 'info'] }],
       'prefer-const': 'warn',
       'no-var': 'error',
+      'react-hooks/preserve-manual-memoization': 'off',
+    },
+  },
+  // Node scripts configuration
+  {
+    files: ['scripts/**/*.{js,mjs,cjs}'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+        ...globals.es2022,
+      },
+    },
+    rules: {
+      '@typescript-eslint/no-require-imports': 'off',
+      'no-console': 'off',
     },
   },
   // Test files configuration

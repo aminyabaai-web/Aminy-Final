@@ -1,4 +1,3 @@
-
 -- SPRINT 1: Medicaid EVV (Electronic Visit Verification) Schema
 CREATE TABLE evv_timesheets (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -14,7 +13,6 @@ CREATE TABLE evv_timesheets (
     acumen_dci_export_id TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- Preventive Audit Trigger for Medicaid EVV (No Overlaps)
 CREATE OR REPLACE FUNCTION prevent_shift_overlap()
 RETURNS TRIGGER AS $$
@@ -35,8 +33,6 @@ BEGIN
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
-
 CREATE TRIGGER check_shift_overlap
 BEFORE INSERT OR UPDATE ON evv_timesheets
 FOR EACH ROW EXECUTE FUNCTION prevent_shift_overlap();
-

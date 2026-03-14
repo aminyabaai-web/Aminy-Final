@@ -253,7 +253,8 @@ export function ProactiveNudgeSystem(props: ProactiveNudgeSystemProps) {
               {topNudge.dismissable && (
                 <button
                   onClick={() => dismissNudge(topNudge.id)}
-                  className="p-1 hover:bg-white/20 rounded-full flex-shrink-0"
+                  className="h-11 w-11 hover:bg-white/20 rounded-full flex-shrink-0 flex items-center justify-center"
+                  aria-label={`Dismiss ${topNudge.title}`}
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -265,7 +266,7 @@ export function ProactiveNudgeSystem(props: ProactiveNudgeSystemProps) {
             <div className="p-3 bg-white">
               <Button
                 onClick={() => handleAction(topNudge)}
-                className={`w-full bg-gradient-to-r ${topNudge.gradient} text-white border-0`}
+                className={`w-full h-12 bg-gradient-to-r ${topNudge.gradient} text-white border-0`}
               >
                 {topNudge.action.label}
                 <ChevronRight className="w-4 h-4 ml-2" />
@@ -277,7 +278,7 @@ export function ProactiveNudgeSystem(props: ProactiveNudgeSystemProps) {
         {/* Count indicator if multiple nudges */}
         {activeNudges.length > 1 && (
           <div className="mt-2 text-center">
-            <Badge variant="outline" className="text-xs">
+            <Badge variant="outline" className="text-sm">
               +{activeNudges.length - 1} more notification{activeNudges.length > 2 ? 's' : ''}
             </Badge>
           </div>

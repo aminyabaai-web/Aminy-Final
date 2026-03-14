@@ -9,6 +9,11 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../utils/supabase/client';
+import {
+  getRoomReadyStatus,
+  isUpcomingAppointmentStatus,
+  normalizeAppointmentLifecycleStatus,
+} from '../lib/telehealth-ops';
 
 // ============================================================================
 // Types
@@ -26,7 +31,7 @@ export interface VideoSession {
   patientId?: string;
   familyId?: string;
   sessionType: 'telehealth' | 'in-person';
-  status: 'scheduled' | 'confirmed' | 'in-progress' | 'completed' | 'cancelled';
+  status: 'draft' | 'pending_payment_or_verification' | 'confirmed' | 'ready_to_join' | 'in_progress' | 'completed' | 'settled' | 'cancelled' | 'refunded' | 'failed_verification' | 'no_show' | 'partner_followup_required';
   scheduledAt?: string;
   durationMinutes: number;
   startedAt?: string;
@@ -100,9 +105,9 @@ export function useVideoSessionData(
         // Get upcoming telehealth appointments with video rooms
         supabase
           .from('appointments')
-          .select('*, providers(first_name, last_name)')
+          .select('id, provider_id, video_room_url, video_room_name, status, scheduled_time, duration_minutes, visit_format')
           .eq('user_id', userId)
-          .in('status', ['scheduled', 'confirmed', 'in-progress'])
+          .in('status', ['draft', 'pending_payment_or_verification', 'confirmed', 'ready_to_join', 'in_progress'])
           .eq('visit_format', 'video')
           .gte('scheduled_time', new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString())
           .order('scheduled_time', { ascending: true })
@@ -116,7 +121,7 @@ export function useVideoSessionData(
         supabase
           .from('provider_sessions')
           .select('*')
-          .in('status', ['scheduled', 'confirmed', 'in-progress'])
+          .in('status', ['draft', 'pending_payment_or_verification', 'confirmed', 'ready_to_join', 'in_progress'])
           .eq('session_type', 'telehealth')
           .gte('scheduled_at', new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString())
           .order('scheduled_at', { ascending: true })
@@ -132,18 +137,15 @@ export function useVideoSessionData(
       // Map appointments to VideoSession format
       const safeAppointments = Array.isArray(appointmentsResult?.data) ? appointmentsResult.data : [];
       const appointmentSessions: VideoSession[] = safeAppointments.map((a: Record<string, unknown>) => {
-        const providers = a.providers as Record<string, string> | null;
         return {
           id: (a.id as string) || '',
           appointmentId: (a.id as string) || '',
           roomUrl: (a.video_room_url as string) || '',
           roomName: (a.video_room_name as string) || undefined,
           providerId: (a.provider_id as string) || undefined,
-          providerName: providers
-            ? `${providers.first_name || ''} ${providers.last_name || ''}`.trim()
-            : undefined,
+          providerName: (a.provider_id as string) ? 'Care team provider' : undefined,
           sessionType: 'telehealth' as const,
-          status: (a.status as VideoSession['status']) || 'scheduled',
+          status: getRoomReadyStatus((a.status as string) || 'draft') as VideoSession['status'],
           scheduledAt: (a.scheduled_time as string) || undefined,
           durationMinutes: (a.duration_minutes as number) || 25,
         };
@@ -158,7 +160,7 @@ export function useVideoSessionData(
         roomExpiresAt: (s.room_expires_at as string) || undefined,
         patientId: (s.patient_id as string) || undefined,
         sessionType: 'telehealth' as const,
-        status: (s.status as VideoSession['status']) || 'scheduled',
+        status: normalizeAppointmentLifecycleStatus((s.status as string) || 'draft') as VideoSession['status'],
         scheduledAt: (s.scheduled_at as string) || undefined,
         durationMinutes: (s.duration_minutes as number) || 50,
       }));
@@ -166,16 +168,14 @@ export function useVideoSessionData(
       const allSessions = [...appointmentSessions, ...provSessions];
 
       // Find active session (in-progress or upcoming within 15 min)
-      const activeSession = allSessions.find(s => s.status === 'in-progress') ||
+      const activeSession = allSessions.find(s => s.status === 'in_progress') ||
         allSessions.find(s => {
           if (!s.scheduledAt) return false;
           const diff = new Date(s.scheduledAt).getTime() - Date.now();
           return diff <= 15 * 60 * 1000 && diff >= -60 * 60 * 1000;
         }) || null;
 
-      const upcomingSessions = allSessions.filter(s =>
-        s.status === 'scheduled' || s.status === 'confirmed'
-      );
+      const upcomingSessions = allSessions.filter(s => isUpcomingAppointmentStatus(s.status));
 
       // Cache active session for offline
       if (activeSession) {
@@ -209,7 +209,7 @@ export function useVideoSessionData(
       try {
         await supabase
           .from('appointments')
-          .update({ status: 'in-progress', video_room_url: roomUrl })
+          .update({ status: 'in_progress', video_room_url: roomUrl })
           .eq('id', sessionId)
           .eq('user_id', userId);
       } catch (err) {
@@ -244,7 +244,11 @@ export function useVideoSessionData(
   }, [userId, setActiveSession]);
 
   useEffect(() => {
-    loadData();
+    const timer = setTimeout(() => {
+      void loadData();
+    }, 0);
+
+    return () => clearTimeout(timer);
   }, [loadData]);
 
   return {

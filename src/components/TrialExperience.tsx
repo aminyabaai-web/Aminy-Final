@@ -109,24 +109,27 @@ export function TrialProvider({ userId, userTier, children }: TrialProviderProps
         .from('trial_tracking')
         .select('*')
         .eq('user_id', userId)
-        .single();
+        .limit(1);
 
-      if (data) {
+      const trial = Array.isArray(data) ? data[0] : null;
+
+      if (trial) {
         setTrialState({
-          conversationsUsed: data.conversations_used || 0,
-          conversationsRemaining: Math.max(0, TRIAL_CONFIG.freeConversations - (data.conversations_used || 0)),
-          isTrialActive: (data.conversations_used || 0) < TRIAL_CONFIG.freeConversations,
-          hasSeenNudge: data.has_seen_nudge || false,
-          trialStartDate: data.trial_start_date ? new Date(data.trial_start_date) : null,
-          lastConversationDate: data.last_conversation_date ? new Date(data.last_conversation_date) : null,
-          insights: data.insights || [],
+          conversationsUsed: trial.conversations_used || 0,
+          conversationsRemaining: Math.max(0, TRIAL_CONFIG.freeConversations - (trial.conversations_used || 0)),
+          isTrialActive: (trial.conversations_used || 0) < TRIAL_CONFIG.freeConversations,
+          hasSeenNudge: trial.has_seen_nudge || false,
+          trialStartDate: trial.trial_started_at ? new Date(trial.trial_started_at) : null,
+          lastConversationDate: null,
+          insights: [],
         });
       } else {
         // Initialize trial tracking
         await supabase.from('trial_tracking').insert({
           user_id: userId,
           conversations_used: 0,
-          trial_start_date: new Date().toISOString(),
+          trial_started_at: new Date().toISOString(),
+          trial_ends_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
           has_seen_nudge: false,
         });
       }
@@ -151,7 +154,7 @@ export function TrialProvider({ userId, userTier, children }: TrialProviderProps
         .from('trial_tracking')
         .update({
           conversations_used: newCount,
-          last_conversation_date: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
         })
         .eq('user_id', userId);
     } catch (error) {
@@ -233,23 +236,28 @@ export function TrialProgressBanner({ onUpgrade }: TrialProgressBannerProps) {
   const remaining = trialState.conversationsRemaining;
 
   return (
-    <Card className="p-4 bg-gradient-to-r from-purple-50 to-pink-50 border-purple-200">
-      <div className="flex items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center">
-            <Gift className="w-5 h-5 text-purple-600" />
+    <Card className="border border-slate-200 bg-[linear-gradient(180deg,_rgba(255,255,255,0.96)_0%,_rgba(249,247,255,0.98)_100%)] p-4 shadow-sm">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-start gap-3">
+          <div className="mt-0.5 flex h-10 w-10 items-center justify-center rounded-full bg-violet-100 text-violet-600">
+            <Gift className="h-5 w-5" />
           </div>
-          <div>
-            <p className="font-medium text-gray-900">
+          <div className="min-w-0 flex-1">
+            <p className="font-medium text-slate-900">
               {remaining > 0 ? (
-                <>Free trial: <span className="text-purple-600">{remaining} conversations left</span></>
+                <>
+                  Calm start plan: <span className="text-violet-700">{remaining} guided chats left</span>
+                </>
               ) : (
-                <span className="text-purple-600">Trial complete!</span>
+                <span className="text-violet-700">Trial complete</span>
               )}
             </p>
-            <div className="w-32 h-1.5 bg-purple-200 rounded-full mt-1.5">
+            <p className="mt-1 text-sm text-slate-600">
+              Upgrade only when you need deeper support, more conversations, and premium care tools.
+            </p>
+            <div className="mt-2 h-1.5 w-40 rounded-full bg-violet-100">
               <div
-                className="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full transition-all"
+                className="h-full rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 transition-all"
                 style={{ width: `${Math.min(progress, 100)}%` }}
               />
             </div>
@@ -259,9 +267,9 @@ export function TrialProgressBanner({ onUpgrade }: TrialProgressBannerProps) {
         <Button
           onClick={onUpgrade}
           size="sm"
-          className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white"
+          className="h-10 rounded-full bg-slate-950 px-4 text-white hover:bg-slate-900"
         >
-          <Crown className="w-4 h-4 mr-1" />
+          <Crown className="mr-1 h-4 w-4" />
           Upgrade
         </Button>
       </div>

@@ -31,6 +31,7 @@ import { Card } from './ui/card';
 import { supabase } from '../utils/supabase/client';
 import { sendMessageToClaude, type ClaudeMessage, type ConversationContext } from '../lib/ai-engine/claude-client';
 import { useVoiceInput } from '../hooks/useVoiceInput';
+import { saveChildProfile, generateDailyPlan } from '../lib/caregiver-workflow';
 
 // Types
 interface OnboardingData {
@@ -150,14 +151,15 @@ export function OnboardingStreamlined({ onComplete, initialEmail = '' }: Onboard
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const { data: { user } } = await supabase.auth.getUser();
+        const { data: { session } } = await supabase.auth.getSession();
+        const user = session?.user;
         if (user) {
           setIsAuthenticated(true);
 
           // Check for existing profile and child data
           const [profileResult, childResult] = await Promise.all([
-            supabase.from('profiles').select('name, has_completed_onboarding, onboarding_data').eq('id', user.id).single(),
-            supabase.from('children').select('name, age_years').eq('parent_id', user.id).eq('is_primary', true).single()
+            supabase.from('profiles').select('name, has_completed_onboarding, onboarding_data').eq('id', user.id).maybeSingle(),
+            supabase.from('children').select('name, age_years').eq('parent_id', user.id).eq('is_primary', true).maybeSingle()
           ]);
 
           const profile = profileResult.data;
@@ -183,7 +185,9 @@ export function OnboardingStreamlined({ onComplete, initialEmail = '' }: Onboard
           }
         }
       } catch (e) {
-        console.error('Auth check error:', e);
+        if (!(e instanceof DOMException && e.name === 'AbortError') && import.meta.env.DEV) {
+          console.warn('Onboarding auth check skipped:', e);
+        }
       } finally {
         setIsLoading(false);
       }
@@ -380,29 +384,16 @@ export function OnboardingStreamlined({ onComplete, initialEmail = '' }: Onboard
         console.error('Profile update error:', profileError);
       }
 
-      // Check if child already exists, if so update, otherwise insert
-      const { data: existingChild } = await supabase
-        .from('children')
-        .select('id')
-        .eq('parent_id', user.id)
-        .eq('is_primary', true)
-        .single();
-
-      if (existingChild) {
-        // Update existing child
-        await supabase.from('children').update({
-          name: data.childName,
-          age_years: data.childAge,
-        }).eq('id', existingChild.id);
-      } else {
-        // Create new child record
-        await supabase.from('children').insert({
-          parent_id: user.id,
-          name: data.childName,
-          age_years: data.childAge,
-          is_primary: true,
-        });
-      }
+      const savedChild = await saveChildProfile({
+        userId: user.id,
+        parentName: data.parentName,
+        childName: data.childName,
+        childAge: data.childAge,
+        concerns: data.initialConcern ? [data.initialConcern] : [],
+        challenges: data.initialConcern ? [data.initialConcern] : [],
+        isPrimary: true,
+        hasCompletedOnboarding: true,
+      });
 
       // ─── Seed initial streak (day 1!) ───────────────
       const today = new Date().toISOString().split('T')[0];
@@ -414,23 +405,10 @@ export function OnboardingStreamlined({ onComplete, initialEmail = '' }: Onboard
         longest_streak: 1,
         last_activity_date: today,
         total_activities: 1,
-        started_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
-      }, { onConflict: 'user_id,type' }).then(({ error }) => {
+      }, { onConflict: 'user_id' }).then(({ error }) => {
         if (error) console.warn('[Onboarding] Streak seed error:', error.message);
       });
-
-      // ─── Persist initial concern to child record ───────────────
-      if (data.initialConcern) {
-        const childId = existingChild?.id;
-        if (childId) {
-          await supabase.from('children').update({
-            challenges: [data.initialConcern],
-          }).eq('id', childId).then(({ error }) => {
-            if (error) console.warn('[Onboarding] Challenge update error:', error.message);
-          });
-        }
-      }
 
       // ─── Seed 2-3 initial treatment goals from concerns ───────────────
       const concernGoals = [
@@ -444,6 +422,7 @@ export function OnboardingStreamlined({ onComplete, initialEmail = '' }: Onboard
       for (const goal of concernGoals) {
         await supabase.from('treatment_goals').insert({
           user_id: user.id,
+          child_id: savedChild.id,
           title: goal.title,
           domain: goal.domain,
           description: goal.description,
@@ -459,6 +438,14 @@ export function OnboardingStreamlined({ onComplete, initialEmail = '' }: Onboard
       }
 
       // ─── Migrate any pre-signup screening results ───────────────
+      await generateDailyPlan({
+        userId: user.id,
+        childId: savedChild.id,
+        forceRegenerate: true,
+      }).catch((planError) => {
+        console.warn('[Onboarding] Daily plan seed error:', planError);
+      });
+
       try {
         const { getScreeningResults, clearLocalScreeningResults } = await import('../lib/screening-instruments');
         const screeningResults = getScreeningResults();

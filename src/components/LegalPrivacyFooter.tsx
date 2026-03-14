@@ -123,8 +123,8 @@ export function LegalPrivacyFooter({
               </div>
               
               <p className="text-xs text-slate-500">
-                Read our <a href="/privacy" className="text-accent hover:underline">Privacy Policy</a> and{' '}
-                <a href="/terms" className="text-accent hover:underline">Terms of Service</a> for full details.
+                Read our <a href="/privacy" className="inline-flex min-h-11 items-center text-accent hover:underline">Privacy Policy</a> and{' '}
+                <a href="/terms" className="inline-flex min-h-11 items-center text-accent hover:underline">Terms of Service</a> for full details.
               </p>
             </div>
           </Card>
@@ -133,15 +133,15 @@ export function LegalPrivacyFooter({
         {/* Footer Links */}
         <div className="mt-4 sm:mt-6 pt-6 border-t border-slate-200 text-center">
           <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-xs text-slate-500">
-            <a href="/about" className="hover:text-accent transition-colors">About Aminy</a>
+            <a href="/about" className="inline-flex min-h-11 items-center hover:text-accent transition-colors">About Aminy</a>
             <span>•</span>
-            <a href="/privacy" className="hover:text-accent transition-colors">Privacy Policy</a>
+            <a href="/privacy" className="inline-flex min-h-11 items-center hover:text-accent transition-colors">Privacy Policy</a>
             <span>•</span>
-            <a href="/terms" className="hover:text-accent transition-colors">Terms of Service</a>
+            <a href="/terms" className="inline-flex min-h-11 items-center hover:text-accent transition-colors">Terms of Service</a>
             <span>•</span>
-            <a href="/contact" className="hover:text-accent transition-colors">Contact Us</a>
+            <a href="/contact" className="inline-flex min-h-11 items-center hover:text-accent transition-colors">Contact Us</a>
             <span>•</span>
-            <a href="/support" className="hover:text-accent transition-colors">Help Center</a>
+            <a href="/support" className="inline-flex min-h-11 items-center hover:text-accent transition-colors">Help Center</a>
           </div>
           
           <p className="text-xs text-slate-400 mt-4">
@@ -189,11 +189,11 @@ export function MinimalLegalFooter({ className = '' }: { className?: string }) {
         Your data supports your family's progress — never sold, always private.
       </p>
       <div className="mt-3 flex items-center justify-center gap-3">
-        <a href="/privacy" className="hover:text-accent transition-colors">Privacy</a>
+        <a href="/privacy" className="inline-flex min-h-11 items-center hover:text-accent transition-colors">Privacy</a>
         <span>•</span>
-        <a href="/terms" className="hover:text-accent transition-colors">Terms</a>
+        <a href="/terms" className="inline-flex min-h-11 items-center hover:text-accent transition-colors">Terms</a>
         <span>•</span>
-        <a href="/contact" className="hover:text-accent transition-colors">Contact</a>
+        <a href="/contact" className="inline-flex min-h-11 items-center hover:text-accent transition-colors">Contact</a>
       </div>
     </div>
   );

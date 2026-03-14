@@ -53,6 +53,5 @@ BEGIN
     p_limit;
 END;
 $$;
-
 -- Grant access to authenticated users
 GRANT EXECUTE ON FUNCTION find_matching_providers(TEXT, TEXT, TEXT, INT) TO authenticated;

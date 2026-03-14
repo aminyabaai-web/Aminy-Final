@@ -196,7 +196,7 @@ export function ProactiveCheckIn({
             )}>
               <button
                 onClick={onClose}
-                className="absolute top-2 right-2 p-1.5 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
+                className="absolute top-2 right-2 min-h-[44px] min-w-[44px] p-2.5 rounded-full bg-white/20 hover:bg-white/30 transition-colors flex items-center justify-center"
               >
                 <X className="w-4 h-4" />
               </button>

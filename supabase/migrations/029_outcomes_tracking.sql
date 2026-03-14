@@ -22,13 +22,11 @@ CREATE TABLE IF NOT EXISTS outcome_events (
     'meltdown_duration', 'transition_success'
   ))
 );
-
 -- Index for user queries
 CREATE INDEX IF NOT EXISTS idx_outcome_events_user ON outcome_events(user_id);
 CREATE INDEX IF NOT EXISTS idx_outcome_events_type ON outcome_events(event_type);
 CREATE INDEX IF NOT EXISTS idx_outcome_events_created ON outcome_events(created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_outcome_events_user_type ON outcome_events(user_id, event_type);
-
 -- User baselines table - stores initial measurements at onboarding
 CREATE TABLE IF NOT EXISTS user_baselines (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -44,9 +42,7 @@ CREATE TABLE IF NOT EXISTS user_baselines (
   -- Unique constraint to prevent duplicate baselines
   UNIQUE(user_id, metric_name)
 );
-
 CREATE INDEX IF NOT EXISTS idx_baselines_user ON user_baselines(user_id);
-
 -- Aggregated daily metrics (for faster dashboard queries)
 CREATE TABLE IF NOT EXISTS daily_metrics (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -62,23 +58,18 @@ CREATE TABLE IF NOT EXISTS daily_metrics (
 
   UNIQUE(date)
 );
-
 CREATE INDEX IF NOT EXISTS idx_daily_metrics_date ON daily_metrics(date DESC);
-
 -- Enable Row Level Security
 ALTER TABLE outcome_events ENABLE ROW LEVEL SECURITY;
 ALTER TABLE user_baselines ENABLE ROW LEVEL SECURITY;
 ALTER TABLE daily_metrics ENABLE ROW LEVEL SECURITY;
-
 -- RLS Policies for outcome_events
 CREATE POLICY "Users can view own outcome events"
   ON outcome_events FOR SELECT
   USING (auth.uid() = user_id);
-
 CREATE POLICY "Users can insert own outcome events"
   ON outcome_events FOR INSERT
   WITH CHECK (auth.uid() = user_id);
-
 -- Admin can view all
 CREATE POLICY "Admins can view all outcome events"
   ON outcome_events FOR SELECT
@@ -89,16 +80,13 @@ CREATE POLICY "Admins can view all outcome events"
       AND user_profiles.role IN ('admin', 'super_admin')
     )
   );
-
 -- RLS Policies for user_baselines
 CREATE POLICY "Users can view own baselines"
   ON user_baselines FOR SELECT
   USING (auth.uid() = user_id);
-
 CREATE POLICY "Users can manage own baselines"
   ON user_baselines FOR ALL
   USING (auth.uid() = user_id);
-
 -- RLS Policies for daily_metrics (admin only)
 CREATE POLICY "Admins can view daily metrics"
   ON daily_metrics FOR SELECT
@@ -109,7 +97,6 @@ CREATE POLICY "Admins can view daily metrics"
       AND user_profiles.role IN ('admin', 'super_admin')
     )
   );
-
 -- Function to aggregate daily metrics (run via cron job)
 CREATE OR REPLACE FUNCTION aggregate_daily_metrics()
 RETURNS void AS $$
@@ -151,7 +138,6 @@ BEGIN
     avg_stress_level = EXCLUDED.avg_stress_level;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
-
 -- Create a cron job to run daily (requires pg_cron extension)
 -- SELECT cron.schedule('aggregate-daily-metrics', '0 1 * * *', 'SELECT aggregate_daily_metrics()');
 

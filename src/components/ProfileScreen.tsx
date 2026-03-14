@@ -542,6 +542,8 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
             )}
             <div className="flex-1">
               <h1 className="text-xl font-semibold dark:text-white">Profile</h1>
+              <h2 className="sr-only">Profile overview</h2>
+              <h3 className="sr-only">Account and household sections</h3>
               <p className="text-sm text-muted-foreground">
                 Manage your account and family
               </p>

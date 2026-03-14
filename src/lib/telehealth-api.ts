@@ -27,6 +27,13 @@ import {
 } from '../types/telehealth';
 import { generateSlots, holdSlot, confirmSlot, releaseHold } from './availability-engine';
 import { secureFetch } from './security/secure-fetch';
+import { calculateAppointmentFinancials, visitClassForVisitType } from './telehealth-economics';
+import {
+  deriveAppointmentLifecycleOutcome,
+  getRoomReadyStatus,
+  isUpcomingAppointmentStatus,
+  normalizeAppointmentLifecycleStatus,
+} from './telehealth-ops';
 
 // API Configuration
 const API_BASE_URL = import.meta.env.VITE_API_URL ||
@@ -136,10 +143,7 @@ export async function getUpcomingAppointments(userId: string): Promise<Appointme
   const now = new Date();
 
   return appointments
-    .filter(apt =>
-      apt.status === 'scheduled' &&
-      new Date(apt.startTime ?? apt.scheduledAt) > now
-    )
+    .filter(apt => isUpcomingAppointmentStatus(apt.status) && new Date(apt.startTime ?? apt.scheduledAt) > now)
     .sort((a, b) => new Date(a.startTime ?? a.scheduledAt).getTime() - new Date(b.startTime ?? b.scheduledAt).getTime());
 }
 
@@ -545,6 +549,18 @@ if (typeof window !== 'undefined') {
 function createMockAppointment(params: CreateAppointmentParams): Appointment {
   const provider = MOCK_PROVIDERS.find(p => p.id === params.providerId);
   const now = new Date().toISOString();
+  const visitClass = visitClassForVisitType(params.visitType);
+  const financials = calculateAppointmentFinancials({
+    rail: 'cash_pay_direct',
+    visitClass,
+    applyMemberDiscount: Boolean(params.intake?.userTier && params.intake.userTier !== 'free'),
+  });
+  const lifecycle = deriveAppointmentLifecycleOutcome({
+    rail: 'cash_pay_direct',
+    status: params.paymentIntentId ? 'confirmed' : 'pending_payment_or_verification',
+    paymentStatus: params.paymentIntentId ? 'completed' : 'pending',
+    financials,
+  });
 
   const appointment: Appointment = {
     id: `apt-${Date.now()}`,
@@ -560,11 +576,14 @@ function createMockAppointment(params: CreateAppointmentParams): Appointment {
     visitReason: params.intake.visitReason,
     whoIsThisFor: params.intake.whoIsThisFor ?? 'child',
     userState: params.intake.userState ?? '',
-    price: 0,
-    paymentStatus: 'pending',
+    price: financials.totalCents / 100,
+    careRail: 'cash_pay_direct',
+    financials,
+    paymentStatus: lifecycle.paymentStatus,
+    paymentIntentId: params.paymentIntentId,
     videoJoinUrl: `https://meet.aminy.ai/room/${Date.now()}`,
     videoProvider: 'zoom',
-    status: 'scheduled',
+    status: lifecycle.status,
     createdAt: now,
     updatedAt: now,
   };
@@ -591,7 +610,17 @@ function updateMockAppointmentStatus(
   const apt = mockAppointments.get(id);
   if (!apt) throw new Error('Appointment not found');
 
-  apt.status = status;
+  const normalized = normalizeAppointmentLifecycleStatus(status);
+  apt.status = normalized;
+  if (normalized === 'ready_to_join') {
+    apt.status = getRoomReadyStatus(normalized);
+  }
+  if (normalized === 'settled') {
+    apt.paymentStatus = apt.paymentStatus === 'pending' ? 'completed' : apt.paymentStatus;
+  }
+  if (normalized === 'cancelled' && apt.paymentStatus === 'completed') {
+    apt.paymentStatus = 'refunded';
+  }
   apt.updatedAt = new Date().toISOString();
   mockAppointments.set(id, apt);
   saveMockData();

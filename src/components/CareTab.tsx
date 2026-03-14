@@ -863,6 +863,8 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
             </div>
             <div className="flex-1">
               <h1 className="text-xl font-medium text-primary">Care</h1>
+              <h2 className="sr-only">Care overview</h2>
+              <h3 className="sr-only">Messages, scheduling, and minutes</h3>
               <p className="text-sm text-muted-foreground">ABA-informed Behavior Coaching</p>
             </div>
             {userTier === 'pro' && (

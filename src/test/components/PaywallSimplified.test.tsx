@@ -26,7 +26,12 @@ vi.mock('motion/react', () => ({
 vi.mock('../../utils/supabase/client', () => ({
   supabase: {
     auth: { getUser: vi.fn().mockResolvedValue({ data: { user: null }, error: null }) },
-    from: vi.fn(() => ({ select: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(), single: vi.fn().mockResolvedValue({ data: null, error: null }) })),
+    from: vi.fn(() => ({
+      select: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      single: vi.fn().mockResolvedValue({ data: null, error: null }),
+      maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }),
+    })),
   },
 }));
 
@@ -35,26 +40,17 @@ vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
 
 // Mock lucide-react icons
 vi.mock('lucide-react', () => {
-  const icon = (name: string) =>
-    function MockIcon(props: Record<string, unknown>) {
-      return React.createElement('svg', { 'data-testid': `icon-${name}`, ...props });
-    };
-  return {
-    Crown: icon('Crown'),
-    Check: icon('Check'),
-    Sparkles: icon('Sparkles'),
-    Heart: icon('Heart'),
-    Shield: icon('Shield'),
-    MessageSquare: icon('MessageSquare'),
-    Brain: icon('Brain'),
-    Users: icon('Users'),
-    Star: icon('Star'),
-    ChevronDown: icon('ChevronDown'),
-    X: icon('X'),
-    Gift: icon('Gift'),
-    CreditCard: icon('CreditCard'),
-    Minus: icon('Minus'),
-  };
+  const cache = new Map<string, React.ComponentType<Record<string, unknown>>>();
+  return new Proxy({}, {
+    get: (_target, prop: string) => {
+      if (!cache.has(prop)) {
+        cache.set(prop, function MockIcon(props: Record<string, unknown>) {
+          return React.createElement('svg', { 'data-testid': `icon-${prop}`, ...props });
+        });
+      }
+      return cache.get(prop);
+    },
+  });
 });
 
 // Mock UI components
@@ -66,11 +62,6 @@ vi.mock('../../components/ui/button', () => ({
 vi.mock('../../components/ui/card', () => ({
   Card: ({ children, ...props }: React.PropsWithChildren<Record<string, unknown>>) =>
     React.createElement('div', { 'data-testid': 'card', ...props }, children),
-}));
-
-// Mock tier-utils
-vi.mock('../../lib/tier-utils', () => ({
-  TierType: undefined,
 }));
 
 // Mock stripe-service
@@ -123,11 +114,9 @@ describe('PaywallSimplified', () => {
   it('shows pricing amounts for each tier', () => {
     render(<PaywallSimplified onSubscribe={mockOnSubscribe} />);
 
-    // Monthly prices displayed as per-month values
-    // Core: $24.99/mo, Pro: $49.99/mo, Pro+: $79.99/mo
-    expect(screen.getByText('$24.99')).toBeInTheDocument();
+    expect(screen.getByText('$14.99')).toBeInTheDocument();
+    expect(screen.getByText('$29.99')).toBeInTheDocument();
     expect(screen.getByText('$49.99')).toBeInTheDocument();
-    expect(screen.getByText('$79.99')).toBeInTheDocument();
   });
 
   it('calls onSubscribe when a tier subscribe button is clicked', async () => {
@@ -212,10 +201,10 @@ describe('PaywallSimplified', () => {
     expect(screen.getByText('Children Supported')).toBeInTheDocument();
   });
 
-  it('displays testimonial content', () => {
+  it('shows truthful live-data messaging instead of testimonials', () => {
     render(<PaywallSimplified onSubscribe={mockOnSubscribe} />);
 
-    // The first testimonial should be visible by default (index 0)
-    expect(screen.getByText(/Sarah M\./)).toBeInTheDocument();
+    expect(screen.getByText('Verified family metrics pending')).toBeInTheDocument();
+    expect(screen.getByText(/We only show community proof after it comes from verified live data/i)).toBeInTheDocument();
   });
 });

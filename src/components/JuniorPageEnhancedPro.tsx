@@ -38,7 +38,6 @@ import {
   PartyPopper,
   Headphones,
   Smile,
-  Baby,
   Bot,
   Pause,
   Square,
@@ -84,6 +83,7 @@ import {
   Wind
 } from 'lucide-react';
 import { JrCalmCorner } from './JrCalmCorner';
+import { TokenRewardsBoard } from './TokenRewardsBoard';
 import { AACBoard } from './junior/AACBoard';
 import { VisualSchedule } from './junior/VisualSchedule';
 import {
@@ -275,7 +275,7 @@ const TRACK_FILTERS = [
 ];
 
 export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: JuniorPageProps) {
-  const [activeView, setActiveView] = useState<'kid-login' | 'home' | 'buddy-select' | 'activity-select' | 'activity' | 'celebration' | 'calm-corner' | 'parent-education' | 'visual-coaching' | 'offline-manager' | 'parent-controls' | 'aac-board' | 'visual-schedule'>('kid-login');
+  const [activeView, setActiveView] = useState<'kid-login' | 'home' | 'buddy-select' | 'activity-select' | 'activity' | 'celebration' | 'calm-corner' | 'rewards' | 'parent-education' | 'visual-coaching' | 'offline-manager' | 'parent-controls' | 'aac-board' | 'visual-schedule'>('home');
   const [selectedBuddy, setSelectedBuddy] = useState<string>('sunny');
   const [currentSpeechLevel, setCurrentSpeechLevel] = useState<number>(2);
   const [isRecording, setIsRecording] = useState(false);
@@ -290,9 +290,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
   const [successStreak, setSuccessStreak] = useState(0);
   const [needsBreak, setNeedsBreak] = useState(false);
   const [speechAnalysis, setSpeechAnalysis] = useState<SpeechAnalysis | null>(null);
-  const [isKidMode, setIsKidMode] = useState(false);
-  const [pairingCode, setPairingCode] = useState('');
-  const [showExitPIN, setShowExitPIN] = useState(false);
+  const [isKidMode, setIsKidMode] = useState(true);
   const [voiceNavEnabled, setVoiceNavEnabled] = useState(true);
   const [practiceReps, setPracticeReps] = useState(23);
   const [generalizationWins, setGeneralizationWins] = useState(7);
@@ -481,6 +479,15 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
     requiresParentConfirmation: true,
     contextualCues: ['cereal', 'syrup', 'spoon'],
     generalizationTarget: '/s/ in daily routines'
+  });
+
+  const [motivationGoal, setMotivationGoal] = useState({
+    title: 'Puzzle toy',
+    goal: '10 dry days with no potty accidents',
+    current: 4,
+    target: 10,
+    emoji: '🧩',
+    celebrationLabel: 'Earn puzzle toy',
   });
 
   // Child energy detection and adaptive AI
@@ -1352,6 +1359,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
       'needs_coaching': 'speech',
       'mission_completed': 'speech',
       'regulation_success': 'regulation',
+      'reward_progress': 'routines',
       'social_activity': 'social',
       'sensory_activity': 'sensory',
       'routine_activity': 'routines',
@@ -1373,30 +1381,6 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
       emotionAfter: data.emotionAfter || emotionDetected,
       notes: data.context || undefined,
     });
-  };
-
-  // Handle Kid Mode login with enhanced security
-  const handleKidLogin = (code: string) => {
-    if (code === '123456' || code.length === 6) {
-      setIsKidMode(true);
-      setActiveView('home');
-      toast.success(`Hi ${childName}! So glad you're here 🌟`, {
-        description: "Ready to play and learn together?",
-        duration: 2000,
-      });
-      
-      // Voice greeting if enabled
-      if (voiceNavEnabled) {
-        setTimeout(() => {
-          toast(`🎵 Hi ${childName}! Your buddy ${buddyVoices.find(b => b.id === selectedBuddy)?.name} is excited to see you!`, {
-            description: "What would you like to practice today?",
-            duration: 3000,
-          });
-        }, 1000);
-      }
-    } else {
-      toast.error("Let's try that code again! 🔢");
-    }
   };
 
   // Voice navigation for 6-8 year olds
@@ -1455,6 +1439,52 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
     }
   };
 
+  const motivationProgress = Math.round((motivationGoal.current / motivationGoal.target) * 100);
+
+  const handleRewardGoalProgress = () => {
+    if (motivationGoal.current >= motivationGoal.target) {
+      toast.success(`${childName} already earned ${motivationGoal.title}. Pick the next reward in the shop!`);
+      setActiveView('rewards');
+      return;
+    }
+
+    const nextCurrent = Math.min(motivationGoal.target, motivationGoal.current + 1);
+    const completed = nextCurrent >= motivationGoal.target;
+    const tokensAwarded = completed ? 5 : 2;
+
+    setMotivationGoal((prev) => ({ ...prev, current: nextCurrent }));
+    setTodayTokens((prev) => prev + tokensAwarded);
+
+    const microCard = {
+      id: `reward-goal-${Date.now()}`,
+      title: completed ? `${childName} earned ${motivationGoal.title}` : `${childName} moved closer to ${motivationGoal.title}`,
+      message: completed
+        ? `${motivationGoal.goal} is complete. Time to celebrate and reset the goal.`
+        : `${nextCurrent} of ${motivationGoal.target} days complete toward ${motivationGoal.title}.`,
+      timestamp: new Date(),
+      type: completed ? 'celebration' : 'milestone',
+      actionable: completed,
+      priority: completed ? 'high' : 'medium',
+      category: 'behavior',
+    } satisfies ParentMicroCard;
+    setParentMicroCards((prev) => [microCard, ...prev.slice(0, 5)]);
+
+    syncToParentEnhanced('reward_progress', {
+      rewardTitle: motivationGoal.title,
+      target: motivationGoal.target,
+      current: nextCurrent,
+      completed,
+      tokensEarned: tokensAwarded,
+      context: motivationGoal.goal,
+    });
+
+    toast.success(
+      completed
+        ? `🎉 ${childName} earned ${motivationGoal.title}!`
+        : `⭐ ${childName} is now ${nextCurrent} of ${motivationGoal.target} days in.`
+    );
+  };
+
   // Enhanced activity filtering with AI recommendations
   const getEnhancedJustForYouActivities = (): Activity[] => {
     const journey = getPersonalizedJourney();
@@ -1465,94 +1495,12 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
     }));
   };
 
-  // Kid Mode Login Screen
-  if (activeView === 'kid-login' && !isKidMode) {
-    return (
-      <div className="h-screen bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center p-4">
-        <motion.div 
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          className="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full"
-        >
-          <div className="text-center mb-8">
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-              className="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mx-auto mb-4 flex items-center justify-center"
-            >
-              <Baby className="w-10 h-10 text-white" />
-            </motion.div>
-            <h1 className="text-3xl mb-2">Hi {childName}! 👋</h1>
-            <p className="text-gray-600">Enter your special code to start</p>
-          </div>
-          
-          <div className="space-y-3 sm:space-y-4">
-            <div className="flex justify-center space-x-2">
-              {[...Array(6)].map((_, i) => (
-                <motion.div
-                  key={i}
-                  whileHover={{ scale: 1.1 }}
-                  className="w-12 h-12 border-2 border-gray-300 rounded-lg flex items-center justify-center text-xl"
-                  style={{
-                    backgroundColor: i < pairingCode.length ? '#0891b2' : 'white',
-                    color: i < pairingCode.length ? 'white' : '#666'
-                  }}
-                >
-                  {i < pairingCode.length ? '●' : ''}
-                </motion.div>
-              ))}
-            </div>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mt-4 sm:mt-6">
-              {[1,2,3,4,5,6,7,8,9,'🔄',0,'✓'].map((num, index) => (
-                <motion.button
-                  key={index}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="h-14 bg-gray-100 rounded-xl text-xl"
-                  onClick={() => {
-                    if (num === '🔄') {
-                      setPairingCode('');
-                    } else if (num === '✓') {
-                      handleKidLogin(pairingCode);
-                    } else if (typeof num === 'number' && pairingCode.length < 6) {
-                      setPairingCode(prev => prev + num);
-                    }
-                  }}
-                >
-                  {num}
-                </motion.button>
-              ))}
-            </div>
-            
-            {voiceNavEnabled && (
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                className="w-full bg-gradient-to-r from-purple-500 to-blue-500 text-white rounded-xl py-3 mt-4 flex items-center justify-center space-x-2"
-                onClick={() => toast("🎤 Try saying 'Help me login' to get started!")}
-              >
-                <Mic className="w-5 h-5" />
-                <span>Voice Help</span>
-              </motion.button>
-            )}
-          </div>
-          
-          <div className="mt-4 sm:mt-6 text-center">
-            <p className="text-sm text-gray-500">
-              Parent? Hold power button + volume up for 3 seconds
-            </p>
-          </div>
-        </motion.div>
-      </div>
-    );
-  }
-
   // Main Kid Mode Interface
   if (isKidMode) {
     return (
-      <div className="h-screen bg-gradient-to-br from-blue-50 to-purple-50 flex flex-col">
+      <div className="flex h-screen flex-col bg-[radial-gradient(circle_at_top,_rgba(45,212,191,0.18),_transparent_28%),linear-gradient(180deg,_#f7fbfb_0%,_#eef7f8_56%,_#eef2f8_100%)]">
         {/* Kid-Safe Header */}
-        <div className="bg-white shadow-sm p-4 flex items-center justify-between">
+        <div className="flex items-center justify-between border-b border-white/70 bg-white/90 p-4 backdrop-blur">
           <div className="flex items-center space-x-3">
             <motion.div
               animate={{ scale: [1, 1.1, 1] }}
@@ -1562,7 +1510,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
               {buddyVoices.find(b => b.id === selectedBuddy)?.icon}
             </motion.div>
             <div>
-              <h2 className="text-xl">Hi {childName}!</h2>
+              <p className="text-xl font-semibold text-slate-950">Hi {childName}!</p>
               <p className="text-sm text-gray-600">
                 With {buddyVoices.find(b => b.id === selectedBuddy)?.name}
               </p>
@@ -1586,206 +1534,278 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
               </div>
             )}
             
-            {/* Parent Exit - Hidden */}
-            <div 
-              className="w-8 h-8 opacity-0" 
-              onDoubleClick={() => setShowExitPIN(true)}
-            />
+            <button
+              type="button"
+              onClick={() => setActiveView('parent-controls')}
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white/90 text-slate-400 shadow-sm transition-colors hover:border-slate-300 hover:text-slate-600"
+              aria-label="Open parent controls"
+            >
+              <Shield className="h-4 w-4" />
+            </button>
           </div>
         </div>
 
         {/* Main Content Area */}
         <div className="flex-1 overflow-y-auto">
           {activeView === 'home' && (
-            <div className="p-6 space-y-3 sm:space-y-4 sm:space-y-6">
-              {/* Today's Mission */}
-              {currentMission && !currentMission.completed && (
-                <motion.div
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  className="bg-gradient-to-r from-teal-400 to-blue-500 rounded-2xl p-6 text-white"
-                >
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-lg">🌟 Today's Mission</h3>
-                    <Badge className="bg-white text-teal-600">
-                      +{currentMission.tokens} tokens
-                    </Badge>
-                  </div>
-                  <p className="mb-4">{currentMission.description}</p>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {currentMission.contextualCues.map((cue, index) => (
-                      <span key={index} className="bg-white/20 px-2 py-1 rounded-lg text-sm">
-                        {cue}
-                      </span>
-                    ))}
-                  </div>
-                  <Button 
-                    onClick={completeRealWorldMission}
-                    className="bg-white text-teal-600 hover:bg-gray-100"
-                  >
-                    I did it! ✓
-                  </Button>
-                </motion.div>
-              )}
+            <div className="p-4 sm:p-6 md:p-8">
+              <div className="mx-auto max-w-5xl space-y-5">
+                <div className="overflow-hidden rounded-[32px] border border-white/70 bg-[radial-gradient(circle_at_top_left,_rgba(45,212,191,0.26),_transparent_32%),linear-gradient(180deg,_#f7fbfb_0%,_#eef7f8_100%)] p-6 shadow-[0_24px_80px_rgba(15,23,42,0.10)]">
+                  <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+                    <div className="max-w-2xl">
+                      <Badge variant="outline" className="border-cyan-200 bg-white/70 text-slate-600">
+                        Calm &amp; rewards
+                      </Badge>
+                      <h1 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-slate-950">
+                        Calm first. Then celebrate the win.
+                      </h1>
+                      <h2 className="sr-only">Calm Corner overview</h2>
+                      <h3 className="sr-only">Rewards and transition support</h3>
+                      <p className="mt-3 max-w-xl text-sm leading-6 text-slate-600">
+                        This space is focused on helping {childName} regulate, work toward a reward, and move through tough transitions without turning the app into one more noisy distraction.
+                      </p>
+                    </div>
 
-              {/* Progress Tiles */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                <motion.div
-                  whileHover={{ scale: 1.02 }}
-                  className="bg-white rounded-2xl p-4 shadow-sm"
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <Trophy className="w-6 h-6 text-yellow-500" />
-                    <span className="text-2xl">{weekStreak}</span>
+                    <div className="grid min-w-[220px] grid-cols-2 gap-3 self-stretch lg:w-[280px]">
+                      <div className="rounded-3xl border border-white/70 bg-white/80 p-4 shadow-sm">
+                        <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Stars today</div>
+                        <div className="mt-2 flex items-center gap-2 text-2xl font-semibold text-slate-950">
+                          <Star className="h-5 w-5 text-amber-500" />
+                          {todayTokens}
+                        </div>
+                        <div className="mt-1 text-xs text-slate-500">Earned for calm moments and progress.</div>
+                      </div>
+                      <div className="rounded-3xl border border-white/70 bg-white/80 p-4 shadow-sm">
+                        <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Current feeling</div>
+                        <div className="mt-2 text-2xl">{emotionDetected === 'calm' ? '😌' : emotionDetected === 'frustrated' ? '😤' : emotionDetected === 'anxious' ? '😰' : '🤩'}</div>
+                        <div className="mt-1 text-xs capitalize text-slate-500">{emotionDetected}</div>
+                      </div>
+                    </div>
                   </div>
-                  <p className="text-sm text-gray-600">Day Streak</p>
-                </motion.div>
-                
-                <motion.div
-                  whileHover={{ scale: 1.02 }}
-                  className="bg-white rounded-2xl p-4 shadow-sm"
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <Target className="w-6 h-6 text-blue-500" />
-                    <span className="text-2xl">{practiceReps}</span>
-                  </div>
-                  <p className="text-sm text-gray-600">Practice Reps</p>
-                </motion.div>
-                
-                <motion.div
-                  whileHover={{ scale: 1.02 }}
-                  className="bg-white rounded-2xl p-4 shadow-sm"
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <CheckCircle className="w-6 h-6 text-green-500" />
-                    <span className="text-2xl">{Math.round((speechAnalysis?.accuracy || 0.8) * 100)}%</span>
-                  </div>
-                  <p className="text-sm text-gray-600">Accuracy</p>
-                </motion.div>
-                
-                <motion.div
-                  whileHover={{ scale: 1.02 }}
-                  className="bg-white rounded-2xl p-4 shadow-sm"
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <Sparkles className="w-6 h-6 text-purple-500" />
-                    <span className="text-2xl">{generalizationWins}</span>
-                  </div>
-                  <p className="text-sm text-gray-600">Real-world Wins</p>
-                </motion.div>
-              </div>
 
-              {/* Just For You Activities */}
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg">🎯 Just For You</h3>
-                  <div className="text-sm text-gray-600">
-                    Based on: {todaysFocus.join(' • ')}
-                  </div>
-                </div>
-                
-                <div className="space-y-3">
-                  {getEnhancedJustForYouActivities().map((activity, index) => (
-                    <motion.div
-                      key={activity.id}
-                      initial={{ x: -20, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      transition={{ delay: index * 0.1 }}
-                      whileHover={{ scale: 1.02 }}
-                      onClick={() => {
-                        setSelectedActivity(activity);
-                        setActiveView('activity');
-                        setCurrentWord('star'); // Set practice word
-                      }}
-                      className={`${activity.color} rounded-2xl p-4 cursor-pointer shadow-sm`}
+                  <div className="mt-6 grid gap-3 lg:grid-cols-[1.4fr_0.8fr]">
+                    <button
+                      type="button"
+                      onClick={() => setActiveView('calm-corner')}
+                      className="group flex min-h-[152px] items-center justify-between rounded-[28px] border border-slate-900/5 bg-slate-950 px-5 py-5 text-left text-white shadow-[0_20px_50px_rgba(15,23,42,0.22)] transition-transform duration-200 hover:-translate-y-0.5"
                     >
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center space-x-3">
-                          {activity.icon}
-                          <div>
-                            <h4 className="text-sm">{activity.title}</h4>
-                            <p className="text-xs opacity-75">{activity.duration}</p>
-                          </div>
+                      <div className="max-w-sm">
+                        <div className="flex items-center gap-2 text-sm font-medium text-cyan-200">
+                          <Wind className="h-4 w-4" />
+                          Calm Corner
                         </div>
-                        <div className="flex items-center space-x-2">
-                          {activity.energyLevel === 'quick-wins' && (
-                            <Badge variant="secondary" className="text-xs">Quick Win</Badge>
-                          )}
-                          {activity.energyLevel === 'challenge' && (
-                            <Badge variant="secondary" className="text-xs">Challenge</Badge>
-                          )}
-                          {activity.offlineReady && (
-                            <Download className="w-4 h-4 opacity-60" />
-                          )}
-                          <ChevronRight className="w-4 h-4" />
+                        <div className="mt-2 text-2xl font-semibold tracking-[-0.03em]">Open a one-tap reset</div>
+                        <div className="mt-2 text-sm leading-6 text-slate-300">
+                          Bubbles, breathing, tactile soothing, and quick relief when things start going sideways.
                         </div>
                       </div>
-                      {activity.whyToday && (
-                        <p className="text-xs opacity-75 mb-2">💡 {activity.whyToday}</p>
-                      )}
-                      <div className="flex items-center space-x-2">
-                        <Badge variant="outline" className="text-xs">
-                          {activity.track}
-                        </Badge>
-                        {activity.prosodyFocus && (
-                          <Badge variant="outline" className="text-xs bg-cyan-50">
-                            Prosody
-                          </Badge>
-                        )}
-                        {activity.naturalisticMission && (
-                          <Badge variant="outline" className="text-xs bg-green-50">
-                            Real-world
-                          </Badge>
-                        )}
+                      <div className="rounded-[26px] border border-white/10 bg-white/5 p-4 text-right">
+                        <div className="text-5xl">🫧</div>
+                        <div className="mt-2 text-xs uppercase tracking-[0.18em] text-slate-400">One tap</div>
                       </div>
-                    </motion.div>
-                  ))}
+                    </button>
+
+                    <div className="rounded-[28px] border border-white/70 bg-white/85 p-5 shadow-sm">
+                      <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Quick support</div>
+                      <div className="mt-2 text-lg font-semibold tracking-[-0.02em] text-slate-950">What helps right now?</div>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        <Badge variant="outline" className="border-cyan-100 bg-cyan-50 text-cyan-700">Waiting room mode</Badge>
+                        <Badge variant="outline" className="border-purple-100 bg-purple-50 text-purple-700">Transition timer</Badge>
+                        <Badge variant="outline" className="border-amber-100 bg-amber-50 text-amber-700">Reward ready</Badge>
+                      </div>
+                      <Button
+                        variant="outline"
+                        onClick={() => setActiveView('visual-schedule')}
+                        className="mt-5 h-12 w-full justify-between rounded-2xl border-slate-200 bg-white px-4 text-slate-700 hover:bg-slate-50"
+                      >
+                        Open today’s transition board
+                        <ArrowRight className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
                 </div>
-              </div>
 
-              {/* Quick Actions */}
-              <div className="grid grid-cols-2 gap-3 sm:gap-4">
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => setActiveView('aac-board')}
-                  className="bg-gradient-to-br from-blue-500 to-purple-500 rounded-2xl p-4 shadow-sm flex flex-col items-center space-y-2 text-white min-h-[88px]"
-                >
-                  <Layers className="w-7 h-7" />
-                  <span className="text-sm font-medium">My Words</span>
-                </motion.button>
+                <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
+                  <Card className="overflow-hidden rounded-[28px] border-white/80 bg-white/95 shadow-[0_16px_50px_rgba(15,23,42,0.08)]">
+                    <div className="p-6">
+                      <div className="flex items-start justify-between gap-4">
+                        <div>
+                          <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Current reward goal</div>
+                          <h3 className="mt-2 text-2xl font-semibold tracking-[-0.03em] text-slate-950">
+                            {motivationGoal.emoji} {motivationGoal.title}
+                          </h3>
+                          <p className="mt-2 text-sm leading-6 text-slate-600">{motivationGoal.goal}</p>
+                        </div>
+                        <Badge className="bg-amber-100 text-amber-700">{motivationGoal.current}/{motivationGoal.target}</Badge>
+                      </div>
 
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => setActiveView('visual-schedule')}
-                  className="bg-gradient-to-br from-green-500 to-teal-500 rounded-2xl p-4 shadow-sm flex flex-col items-center space-y-2 text-white min-h-[88px]"
-                >
-                  <Clock className="w-7 h-7" />
-                  <span className="text-sm font-medium">My Schedule</span>
-                </motion.button>
+                      <div className="mt-4 flex items-center gap-3 rounded-2xl border border-amber-100 bg-amber-50/70 px-4 py-3">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-2xl shadow-sm">
+                          {motivationGoal.emoji}
+                        </div>
+                        <div>
+                          <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-700">Reward snapshot</div>
+                          <p className="mt-1 text-sm font-medium text-amber-950">{motivationGoal.celebrationLabel}</p>
+                          <p className="text-xs text-amber-800">Keep the prize visible so the next yes feels easier.</p>
+                        </div>
+                      </div>
 
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => setActiveView('activity-select')}
-                  className="bg-white rounded-2xl p-4 shadow-sm flex items-center space-x-3"
-                >
-                  <Gamepad2 className="w-6 h-6 text-blue-500" />
-                  <span>All Activities</span>
-                </motion.button>
+                      <div className="mt-5">
+                        <Progress value={motivationProgress} className="h-3 bg-slate-100" />
+                        <div className="mt-2 flex items-center justify-between text-xs text-slate-500">
+                          <span>{motivationGoal.current} days complete</span>
+                          <span>{motivationGoal.target - motivationGoal.current} to go</span>
+                        </div>
+                      </div>
 
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => setActiveView('calm-corner')}
-                  className="bg-white rounded-2xl p-4 shadow-sm flex items-center space-x-3"
-                >
-                  <Brain className="w-6 h-6 text-purple-500" />
-                  <span>Calm Corner</span>
-                </motion.button>
+                      <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                        <Button
+                          onClick={handleRewardGoalProgress}
+                          className="h-12 rounded-2xl bg-slate-950 text-white hover:bg-slate-900"
+                        >
+                          <Confetti className="h-4 w-4" />
+                          Count today
+                        </Button>
+                        <Button
+                          variant="outline"
+                          onClick={() => setActiveView('rewards')}
+                          className="h-12 rounded-2xl border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                        >
+                          <Gift className="mr-2 h-4 w-4" />
+                          Open rewards
+                        </Button>
+                      </div>
+                    </div>
+                  </Card>
+
+                  <Card className="overflow-hidden rounded-[28px] border-white/80 bg-[linear-gradient(180deg,_#ffffff_0%,_#f6f8fb_100%)] shadow-[0_16px_50px_rgba(15,23,42,0.08)]">
+                    <div className="p-6">
+                      <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Transition support</div>
+                      <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-slate-950">Make the next step obvious</h3>
+                      <div className="mt-4 space-y-3">
+                        <div className="rounded-2xl border border-slate-200 bg-white px-4 py-3">
+                          <div className="text-xs uppercase tracking-[0.18em] text-slate-400">First</div>
+                          <div className="mt-1 text-sm font-medium text-slate-900">Bathroom and dry check</div>
+                        </div>
+                        <div className="rounded-2xl border border-cyan-100 bg-cyan-50 px-4 py-3">
+                          <div className="text-xs uppercase tracking-[0.18em] text-cyan-700">Then</div>
+                          <div className="mt-1 text-sm font-medium text-cyan-900">Play with the puzzle toy countdown</div>
+                        </div>
+                      </div>
+
+                      <Button
+                        variant="outline"
+                        onClick={() => setActiveView('visual-schedule')}
+                        className="mt-5 h-12 w-full justify-between rounded-2xl border-slate-200 bg-white px-4 text-slate-700 hover:bg-slate-50"
+                      >
+                        Open visual schedule
+                        <ArrowRight className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </Card>
+                </div>
+
+                <div className="grid gap-4 md:grid-cols-2">
+                  <button
+                    type="button"
+                    onClick={() => setActiveView('rewards')}
+                    className="rounded-[28px] border border-white/80 bg-white p-5 text-left shadow-[0_16px_50px_rgba(15,23,42,0.06)] transition-transform duration-200 hover:-translate-y-0.5"
+                  >
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-100 text-amber-700">
+                      <Gift className="h-6 w-6" />
+                    </div>
+                    <div className="mt-4 text-lg font-semibold tracking-[-0.02em] text-slate-950">Rewards</div>
+                    <p className="mt-2 text-sm leading-6 text-slate-600">Spend stars, celebrate wins, and keep the goal visible.</p>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setActiveView('visual-schedule')}
+                    className="rounded-[28px] border border-white/80 bg-white p-5 text-left shadow-[0_16px_50px_rgba(15,23,42,0.06)] transition-transform duration-200 hover:-translate-y-0.5"
+                  >
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700">
+                      <Clock className="h-6 w-6" />
+                    </div>
+                    <div className="mt-4 text-lg font-semibold tracking-[-0.02em] text-slate-950">Transitions</div>
+                    <p className="mt-2 text-sm leading-6 text-slate-600">Use first/then boards, routines, and countdowns to lower friction.</p>
+                  </button>
+                </div>
+
+                <Card className="rounded-[28px] border-white/80 bg-white/95 shadow-[0_16px_50px_rgba(15,23,42,0.06)]">
+                  <div className="p-6">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                      <div>
+                        <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Only if helpful</div>
+                        <h2 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-slate-950">Optional practice</h2>
+                        <p className="mt-1 text-sm text-slate-600">Calm, rewards, and transitions stay first. Practice stays secondary and only comes in when it actually helps the day.</p>
+                      </div>
+                      <Button variant="ghost" onClick={() => setActiveView('buddy-select')} className="h-11 rounded-2xl px-4 text-slate-600 hover:bg-slate-100">
+                        Change buddy voice
+                      </Button>
+                    </div>
+
+                    <div className="mt-5 grid gap-3 md:grid-cols-2">
+                      {getEnhancedJustForYouActivities().slice(0, 2).map((activity) => (
+                        <button
+                          key={activity.id}
+                          type="button"
+                          onClick={() => {
+                            setSelectedActivity(activity);
+                            setActiveView('activity');
+                            setCurrentWord('star');
+                          }}
+                          className={`${activity.color} rounded-[24px] p-4 text-left shadow-sm transition-transform duration-200 hover:-translate-y-0.5`}
+                        >
+                          <div className="flex items-start justify-between gap-3">
+                            <div className="flex items-center gap-3">
+                              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/70">{activity.icon}</div>
+                              <div>
+                                <div className="text-sm font-semibold text-slate-900">{activity.title}</div>
+                                <div className="text-xs text-slate-600">{activity.duration}</div>
+                              </div>
+                            </div>
+                            <ChevronRight className="h-4 w-4 text-slate-500" />
+                          </div>
+                          {activity.whyToday && (
+                            <p className="mt-3 text-xs leading-5 text-slate-700">{activity.whyToday}</p>
+                          )}
+                        </button>
+                      ))}
+                    </div>
+
+                    <div className="mt-5">
+                      <Button
+                        variant="outline"
+                        onClick={() => setActiveView('activity-select')}
+                        className="h-12 rounded-2xl border-slate-200 bg-white px-4 text-slate-600 hover:bg-slate-50"
+                      >
+                        <Gamepad2 className="mr-2 h-4 w-4" />
+                        Open optional practice
+                      </Button>
+                    </div>
+                  </div>
+                </Card>
               </div>
             </div>
+          )}
+
+          {activeView === 'rewards' && (
+            <TokenRewardsBoard
+              onBack={() => setActiveView('home')}
+              availableTokens={todayTokens}
+              onSpendTokens={(amount) => {
+                setTodayTokens((prev) => Math.max(0, prev - amount));
+                syncToParentEnhanced('reward_progress', {
+                  rewardTitle: 'reward_redeemed',
+                  current: Math.max(0, todayTokens - amount),
+                  target: todayTokens,
+                  completed: false,
+                  tokensEarned: 0,
+                  context: `Spent ${amount} stars in the rewards board`,
+                });
+              }}
+              childName={childName}
+            />
           )}
 
           {activeView === 'aac-board' && (
@@ -2370,56 +2390,6 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
           )}
         </div>
 
-        {/* Exit PIN Modal */}
-        {showExitPIN && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
-          >
-            <motion.div
-              initial={{ scale: 0.8 }}
-              animate={{ scale: 1 }}
-              className="bg-white rounded-2xl p-6 max-w-sm w-full"
-            >
-              <h3 className="text-lg mb-4 text-center">Parent Access</h3>
-              <p className="text-sm text-gray-600 mb-4 text-center">
-                Enter parent PIN to exit Kid Mode
-              </p>
-              
-              <div className="grid grid-cols-3 gap-2">
-                {[1,2,3,4,5,6,7,8,9,'C',0,'✓'].map((num, index) => (
-                  <Button
-                    key={index}
-                    variant="outline"
-                    className="h-12"
-                    onClick={() => {
-                      if (num === '✓') {
-                        setIsKidMode(false);
-                        setShowExitPIN(false);
-                        setActiveView('kid-login');
-                      } else if (num === 'C') {
-                        // Clear PIN
-                      } else {
-                        // Add to PIN
-                      }
-                    }}
-                  >
-                    {num}
-                  </Button>
-                ))}
-              </div>
-              
-              <Button
-                variant="ghost"
-                onClick={() => setShowExitPIN(false)}
-                className="w-full mt-4"
-              >
-                Cancel
-              </Button>
-            </motion.div>
-          </motion.div>
-        )}
       </div>
     );
   }

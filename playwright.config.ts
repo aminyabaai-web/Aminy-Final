@@ -1,5 +1,8 @@
 import { defineConfig, devices } from '@playwright/test';
 
+const baseURL = process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:5173';
+const useManagedWebServer = !process.env.PLAYWRIGHT_BASE_URL;
+
 export default defineConfig({
   testDir: './e2e',
   fullyParallel: true,
@@ -12,7 +15,7 @@ export default defineConfig({
     ['json', { outputFile: 'test-results/results.json' }],
   ],
   use: {
-    baseURL: 'http://localhost:5173',
+    baseURL,
     trace: 'on-first-retry',
     screenshot: 'on',
     video: 'retain-on-failure',
@@ -80,12 +83,14 @@ export default defineConfig({
       use: { ...devices['iPad (gen 7)'] },
     },
   ],
-  webServer: {
-    command: 'npm run dev -- --host 0.0.0.0 --port 5173',
-    url: 'http://localhost:5173',
-    reuseExistingServer: !process.env.CI,
-    timeout: 120 * 1000,
-    stdout: 'pipe',
-    stderr: 'pipe',
-  },
+  webServer: useManagedWebServer
+    ? {
+        command: 'npm run dev -- --host 0.0.0.0 --port 5173',
+        url: 'http://localhost:5173',
+        reuseExistingServer: !process.env.CI,
+        timeout: 120 * 1000,
+        stdout: 'pipe',
+        stderr: 'pipe',
+      }
+    : undefined,
 });

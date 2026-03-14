@@ -23,7 +23,6 @@ CREATE TABLE IF NOT EXISTS providers (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- ============================================
 -- PROVIDER AVAILABILITY TABLE
 -- ============================================
@@ -37,7 +36,6 @@ CREATE TABLE IF NOT EXISTS provider_availability (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   UNIQUE(provider_id, day_of_week, start_time)
 );
-
 -- ============================================
 -- PROVIDER TIME OFF TABLE
 -- ============================================
@@ -49,7 +47,6 @@ CREATE TABLE IF NOT EXISTS provider_time_off (
   reason TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- ============================================
 -- APPOINTMENTS TABLE
 -- ============================================
@@ -74,7 +71,6 @@ CREATE TABLE IF NOT EXISTS appointments (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- ============================================
 -- PAYMENTS TABLE
 -- ============================================
@@ -95,7 +91,6 @@ CREATE TABLE IF NOT EXISTS payments (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- ============================================
 -- VISIT SUMMARIES TABLE
 -- ============================================
@@ -115,7 +110,6 @@ CREATE TABLE IF NOT EXISTS visit_summaries (
   attachments JSONB DEFAULT '[]',
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- ============================================
 -- ACTION ITEMS TABLE
 -- ============================================
@@ -131,7 +125,6 @@ CREATE TABLE IF NOT EXISTS action_items (
   completed_at TIMESTAMPTZ,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- ============================================
 -- SCHEDULED REMINDERS TABLE
 -- ============================================
@@ -148,7 +141,6 @@ CREATE TABLE IF NOT EXISTS scheduled_reminders (
   metadata JSONB DEFAULT '{}',
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- ============================================
 -- SLOT HOLDS TABLE (for checkout flow)
 -- ============================================
@@ -163,7 +155,6 @@ CREATE TABLE IF NOT EXISTS slot_holds (
   converted_to_appointment_id UUID REFERENCES appointments(id) ON DELETE SET NULL,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- ============================================
 -- WAITLIST TABLE
 -- ============================================
@@ -179,7 +170,6 @@ CREATE TABLE IF NOT EXISTS waitlist (
   notified_at TIMESTAMPTZ,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- ============================================
 -- INDEXES
 -- ============================================
@@ -195,7 +185,6 @@ CREATE INDEX IF NOT EXISTS idx_scheduled_reminders_scheduled_for ON scheduled_re
 CREATE INDEX IF NOT EXISTS idx_scheduled_reminders_status ON scheduled_reminders(status);
 CREATE INDEX IF NOT EXISTS idx_slot_holds_expires_at ON slot_holds(expires_at);
 CREATE INDEX IF NOT EXISTS idx_provider_availability_provider_id ON provider_availability(provider_id);
-
 -- ============================================
 -- ROW LEVEL SECURITY POLICIES
 -- ============================================
@@ -211,17 +200,14 @@ ALTER TABLE action_items ENABLE ROW LEVEL SECURITY;
 ALTER TABLE scheduled_reminders ENABLE ROW LEVEL SECURITY;
 ALTER TABLE slot_holds ENABLE ROW LEVEL SECURITY;
 ALTER TABLE waitlist ENABLE ROW LEVEL SECURITY;
-
 -- Providers: Public read, owner write
 CREATE POLICY "Providers are viewable by everyone" ON providers FOR SELECT USING (true);
 CREATE POLICY "Providers can update own profile" ON providers FOR UPDATE USING (auth.uid() = user_id);
-
 -- Provider availability: Public read
 CREATE POLICY "Availability is viewable by everyone" ON provider_availability FOR SELECT USING (true);
 CREATE POLICY "Providers can manage own availability" ON provider_availability FOR ALL USING (
   provider_id IN (SELECT id FROM providers WHERE user_id = auth.uid())
 );
-
 -- Provider time off: Provider only
 CREATE POLICY "Time off viewable by provider" ON provider_time_off FOR SELECT USING (
   provider_id IN (SELECT id FROM providers WHERE user_id = auth.uid())
@@ -229,7 +215,6 @@ CREATE POLICY "Time off viewable by provider" ON provider_time_off FOR SELECT US
 CREATE POLICY "Providers can manage own time off" ON provider_time_off FOR ALL USING (
   provider_id IN (SELECT id FROM providers WHERE user_id = auth.uid())
 );
-
 -- Appointments: User and provider can view their own
 CREATE POLICY "Users can view own appointments" ON appointments FOR SELECT USING (
   auth.uid() = user_id OR
@@ -237,34 +222,27 @@ CREATE POLICY "Users can view own appointments" ON appointments FOR SELECT USING
 );
 CREATE POLICY "Users can create appointments" ON appointments FOR INSERT WITH CHECK (auth.uid() = user_id);
 CREATE POLICY "Users can update own appointments" ON appointments FOR UPDATE USING (auth.uid() = user_id);
-
 -- Payments: User only
 CREATE POLICY "Users can view own payments" ON payments FOR SELECT USING (auth.uid() = user_id);
 CREATE POLICY "Users can create payments" ON payments FOR INSERT WITH CHECK (auth.uid() = user_id);
-
 -- Visit summaries: User and provider
 CREATE POLICY "Users can view own visit summaries" ON visit_summaries FOR SELECT USING (
   auth.uid() = user_id OR
   provider_id IN (SELECT id FROM providers WHERE user_id = auth.uid())
 );
-
 -- Action items: User only
 CREATE POLICY "Users can view own action items" ON action_items FOR SELECT USING (auth.uid() = user_id);
 CREATE POLICY "Users can update own action items" ON action_items FOR UPDATE USING (auth.uid() = user_id);
-
 -- Scheduled reminders: User only
 CREATE POLICY "Users can view own reminders" ON scheduled_reminders FOR SELECT USING (auth.uid() = user_id);
-
 -- Slot holds: User only
 CREATE POLICY "Users can view own slot holds" ON slot_holds FOR SELECT USING (auth.uid() = user_id);
 CREATE POLICY "Users can create slot holds" ON slot_holds FOR INSERT WITH CHECK (auth.uid() = user_id);
 CREATE POLICY "Users can release own slot holds" ON slot_holds FOR UPDATE USING (auth.uid() = user_id);
-
 -- Waitlist: User only
 CREATE POLICY "Users can view own waitlist entries" ON waitlist FOR SELECT USING (auth.uid() = user_id);
 CREATE POLICY "Users can join waitlist" ON waitlist FOR INSERT WITH CHECK (auth.uid() = user_id);
 CREATE POLICY "Users can update own waitlist entries" ON waitlist FOR UPDATE USING (auth.uid() = user_id);
-
 -- ============================================
 -- FUNCTIONS
 -- ============================================
@@ -278,7 +256,6 @@ BEGIN
   WHERE expires_at < NOW() AND released = false;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
-
 -- Function to update timestamps
 CREATE OR REPLACE FUNCTION update_updated_at_column()
 RETURNS TRIGGER AS $$
@@ -287,20 +264,16 @@ BEGIN
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
-
 -- Triggers for updated_at
 CREATE TRIGGER update_providers_updated_at
   BEFORE UPDATE ON providers
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
 CREATE TRIGGER update_appointments_updated_at
   BEFORE UPDATE ON appointments
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
 CREATE TRIGGER update_payments_updated_at
   BEFORE UPDATE ON payments
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
 -- ============================================
 -- SEED DATA: Sample Providers
 -- ============================================
@@ -311,7 +284,6 @@ VALUES
   ('Jessica Williams', 'NP, FNP-BC', 'np', 'Primary Care', 'Jessica is a family nurse practitioner passionate about accessible healthcare for all.', ARRAY['English'], 4.9, 156, ARRAY['CA', 'TX', 'FL', 'NY', 'IL'], 12500),
   ('Dr. Emily Park', 'PsyD', 'therapist', 'Mental Health', 'Dr. Park specializes in anxiety, depression, and stress management using evidence-based approaches.', ARRAY['English', 'Korean'], 5.0, 203, ARRAY['CA', 'WA', 'OR', 'CO', 'NY'], 17500)
 ON CONFLICT DO NOTHING;
-
 -- Add availability for sample providers
 DO $$
 DECLARE

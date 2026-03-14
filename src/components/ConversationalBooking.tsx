@@ -123,6 +123,8 @@ const CONCERN_OPTIONS: ConcernType[] = [
   },
 ];
 
+const LIVE_TELEHEALTH_STATES = new Set(['AZ', 'MT', 'TX']);
+
 // Fallback providers (only used if database is empty)
 const FALLBACK_PROVIDERS: Provider[] = [
   {
@@ -132,7 +134,7 @@ const FALLBACK_PROVIDERS: Provider[] = [
     specialty: 'Behavior Analysis',
     rating: 4.9,
     reviewCount: 47,
-    nextAvailable: 'Tomorrow',
+    nextAvailable: 'Licensed in AZ',
     isAssigned: true,
   },
 ];
@@ -232,8 +234,8 @@ function ChatMessage({
       <div
         className={`max-w-[85%] rounded-2xl px-4 py-3 ${
           isAI
-            ? 'bg-white border border-gray-200 text-gray-800'
-            : 'bg-teal-600 text-white'
+            ? 'border border-teal-100 bg-white/95 text-slate-800 shadow-sm'
+            : 'bg-teal-600 text-white shadow-sm'
         }`}
       >
         {children}
@@ -259,10 +261,10 @@ function OptionChip({
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
       onClick={onClick}
-      className={`flex items-center gap-2 px-4 py-3 rounded-xl text-left transition-all ${
+      className={`flex items-center gap-3 px-4 py-3 rounded-2xl text-left transition-all shadow-sm ${
         selected
-          ? 'bg-teal-600 text-white border-2 border-teal-600'
-          : 'bg-white border-2 border-gray-200 text-gray-700 hover:border-teal-300 hover:bg-teal-50'
+          ? 'border-2 border-teal-500 bg-teal-500 text-white'
+          : 'border border-slate-200 bg-white/95 text-slate-700 hover:border-teal-200 hover:bg-teal-50/70'
       }`}
     >
       {icon && <span className={selected ? 'text-white' : 'text-teal-600'}>{icon}</span>}
@@ -287,10 +289,10 @@ function ProviderCardMini({
       whileHover={{ scale: 1.01 }}
       whileTap={{ scale: 0.99 }}
       onClick={onClick}
-      className={`w-full flex items-center gap-3 p-3 rounded-xl text-left transition-all ${
+      className={`w-full flex items-center gap-3 p-4 rounded-2xl text-left transition-all shadow-sm ${
         selected
-          ? 'bg-teal-50 border-2 border-teal-500'
-          : 'bg-white border-2 border-gray-200 hover:border-teal-300'
+          ? 'border-2 border-teal-500 bg-teal-50'
+          : 'border border-slate-200 bg-white/95 hover:border-teal-200 hover:bg-teal-50/70'
       }`}
     >
       <div className="w-12 h-12 rounded-full bg-gradient-to-br from-teal-400 to-teal-600 flex items-center justify-center text-white font-bold text-lg">
@@ -345,32 +347,58 @@ export function ConversationalBooking({
           .from('provider_profiles')
           .select(`
             id,
-            user_id,
             full_name,
+            name,
             credentials,
-            specialty,
+            provider_type,
+            specialties,
             bio,
             rating,
             review_count,
-            status
+            verified,
+            accepting_new_patients,
+            offers_telehealth,
+            license_state,
+            state,
+            hourly_rate
           `)
-          .eq('status', 'active')
+          .eq('verified', true)
+          .eq('accepting_new_patients', true)
+          .eq('offers_telehealth', true)
           .limit(20);
 
         if (error) {
           console.error('Error loading providers:', error.message);
           setProviders(FALLBACK_PROVIDERS);
         } else if (data && data.length > 0) {
-          setProviders(data.map(p => ({
-            id: p.id,
-            name: p.full_name,
-            title: p.credentials || 'Provider',
-            specialty: p.specialty || 'General',
-            rating: p.rating || 4.8,
-            reviewCount: p.review_count || 0,
-            nextAvailable: 'Soon',
-            isAssigned: false,
-          })));
+          const supportedProviders = data
+            .filter((provider: { license_state?: string | null; state?: string | null }) => {
+              const providerState = (provider.license_state || provider.state || '').toUpperCase();
+              return LIVE_TELEHEALTH_STATES.has(providerState);
+            })
+            .map((p: {
+              id: string;
+              full_name?: string | null;
+              name?: string | null;
+              credentials?: string | null;
+              provider_type?: string | null;
+              specialties?: string[] | null;
+              rating?: number | string | null;
+              review_count?: number | null;
+              license_state?: string | null;
+              state?: string | null;
+            }) => ({
+              id: p.id,
+              name: p.full_name || p.name || 'Provider',
+              title: p.credentials || 'Provider',
+              specialty: p.specialties?.[0] || p.provider_type || 'General',
+              rating: typeof p.rating === 'number' ? p.rating : parseFloat(String(p.rating || 4.8)) || 4.8,
+              reviewCount: p.review_count || 0,
+              nextAvailable: p.license_state || p.state ? `Licensed in ${(p.license_state || p.state)?.toUpperCase()}` : 'Telehealth available',
+              isAssigned: false,
+            }));
+
+          setProviders(supportedProviders.length > 0 ? supportedProviders : FALLBACK_PROVIDERS);
         } else {
           setProviders(FALLBACK_PROVIDERS);
         }
@@ -413,7 +441,7 @@ export function ConversationalBooking({
     loadGoals();
   }, [childId]);
 
-  const assignedProvider = propAssignedProvider || providers[0] || FALLBACK_PROVIDERS[0];
+  const assignedProvider = propAssignedProvider?.isAssigned ? propAssignedProvider : undefined;
 
   // Scroll to bottom on new messages
   useEffect(() => {
@@ -465,7 +493,7 @@ export function ConversationalBooking({
       if (user) {
         const { data: profile } = await supabase
           .from('profiles')
-          .select('state, insurance_provider, child_age, diagnoses')
+          .select('state, child_age')
           .eq('id', user.id)
           .single();
 
@@ -473,7 +501,7 @@ export function ConversationalBooking({
           const result = await checkEligibility(
             profile.state,
             profile.child_age || 8,
-            profile.diagnoses || []
+            []
           );
           setInsuranceResult(result);
           return;
@@ -567,40 +595,57 @@ export function ConversationalBooking({
     });
   };
 
+  const recommendedProviders = getRecommendedProviders();
+  const featuredProvider = assignedProvider || recommendedProviders[0] || providers[0] || FALLBACK_PROVIDERS[0];
+  const hasAssignedProvider = Boolean(assignedProvider?.isAssigned);
+  const stepOrder: BookingStep[] = ['concern', 'history', 'provider-pref', 'insurance-check', 'time-select', 'details', 'confirm'];
+  const currentStepIndex = stepOrder.indexOf(state.step);
+
   return (
-    <div className="flex flex-col h-full bg-gradient-to-b from-gray-50 to-white">
+    <div className="flex h-full flex-col bg-[radial-gradient(circle_at_top,_rgba(153,246,228,0.22),_transparent_42%),linear-gradient(180deg,_#f5fbfa_0%,_#ffffff_38%,_#f8fafc_100%)]">
       {/* Header */}
-      <div className="flex items-center gap-3 px-4 py-3 bg-white border-b border-gray-200">
-        <button
-          onClick={goBack}
-          className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-        >
-          <ArrowLeft className="w-5 h-5 text-gray-600" />
-        </button>
-        <div className="flex-1">
-          <h2 className="font-semibold text-gray-900">Book a Session</h2>
-          <p className="text-sm text-gray-500">for {childName}</p>
-        </div>
-        <div className="flex items-center gap-1">
-          {['concern', 'history', 'provider-pref', 'insurance-check', 'time-select', 'details', 'confirm'].map((step, i) => (
-            <div
-              key={step}
-              className={`w-2 h-2 rounded-full transition-colors ${
-                ['concern', 'history', 'provider-pref', 'insurance-check', 'time-select', 'details', 'confirm'].indexOf(state.step) >= i
-                  ? 'bg-teal-600'
-                  : 'bg-gray-200'
-              }`}
-            />
-          ))}
+      <div className="border-b border-teal-100/80 bg-white/90 px-4 py-4 backdrop-blur">
+        <div className="mx-auto flex max-w-5xl items-start gap-3">
+          <button
+            onClick={goBack}
+            className="rounded-2xl border border-slate-200 bg-white p-2.5 transition-colors hover:bg-slate-50"
+          >
+            <ArrowLeft className="h-5 w-5 text-slate-600" />
+          </button>
+          <div className="flex-1">
+            <div className="flex flex-wrap items-center gap-3">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-teal-600">Guided booking</p>
+                <h2 className="text-lg font-semibold text-slate-900 sm:text-xl">Book calm, supportive care</h2>
+                <p className="mt-1 text-sm text-slate-600">
+                  We will keep this simple for {childName} and only show providers available in supported states.
+                </p>
+              </div>
+              <div className="ml-auto rounded-2xl border border-teal-100 bg-teal-50/80 px-3 py-2 text-xs text-teal-700">
+                AZ, MT, and TX cash-pay telehealth are available now.
+              </div>
+            </div>
+            <div className="mt-4 flex items-center gap-2">
+              {stepOrder.map((step, i) => (
+                <div
+                  key={step}
+                  className={`h-2 flex-1 rounded-full transition-colors ${
+                    currentStepIndex >= i ? 'bg-teal-500' : 'bg-slate-200'
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Chat Area */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-3 sm:space-y-4">
+      <div className="flex-1 overflow-y-auto px-4 py-5">
+        <div className="mx-auto max-w-5xl space-y-4 sm:space-y-5">
         {/* Step 1: Concern Selection */}
         <ChatMessage isAI>
-          <p className="font-medium">Hi! I'd love to help you book a session. 👋</p>
-          <p className="text-gray-600 mt-1">What would you like to discuss?</p>
+          <p className="font-medium">Let&apos;s match today&apos;s concern to the right kind of support.</p>
+          <p className="mt-1 text-slate-600">Choose what feels most urgent right now. You can still change it in the next step.</p>
         </ChatMessage>
 
         <div className="grid gap-2 ml-11">
@@ -628,7 +673,7 @@ export function ConversationalBooking({
               </ChatMessage>
 
               <ChatMessage isAI>
-                <p>Got it! Is this something new, or are we following up on something we've been working on?</p>
+                <p>Is this something new, or are you following up on something already in progress?</p>
               </ChatMessage>
 
               <div className="space-y-2 ml-11">
@@ -669,25 +714,34 @@ export function ConversationalBooking({
 
               <ChatMessage isAI>
                 <p>
-                  Would you like to meet with{' '}
-                  <strong>{assignedProvider.name}</strong> ({assignedProvider.title}),
-                  or are you open to any available provider?
+                  {hasAssignedProvider ? (
+                    <>
+                      You can stay with{' '}
+                      <strong>{featuredProvider.name}</strong> ({featuredProvider.title}),
+                      or browse the next available provider who fits this concern.
+                    </>
+                  ) : (
+                    <>
+                      A strong match for this concern is <strong>{featuredProvider.name}</strong> ({featuredProvider.title}).
+                      You can start there or browse the rest of the available providers.
+                    </>
+                  )}
                 </p>
               </ChatMessage>
 
               <div className="space-y-2 ml-11">
                 <ProviderCardMini
-                  provider={assignedProvider}
+                  provider={{ ...featuredProvider, isAssigned: hasAssignedProvider }}
                   selected={state.providerPreference === 'assigned'}
-                  onClick={() => handleProviderPrefSelect('assigned', assignedProvider)}
+                  onClick={() => handleProviderPrefSelect('assigned', featuredProvider)}
                 />
 
                 <button
                   onClick={() => handleProviderPrefSelect('any-available')}
-                  className={`w-full p-3 rounded-xl text-center transition-all ${
+                  className={`w-full rounded-2xl p-4 text-center transition-all shadow-sm ${
                     state.providerPreference === 'any-available'
-                      ? 'bg-teal-50 border-2 border-teal-500 text-teal-700'
-                      : 'bg-white border-2 border-gray-200 text-gray-600 hover:border-teal-300'
+                      ? 'border-2 border-teal-500 bg-teal-50 text-teal-700'
+                      : 'border border-slate-200 bg-white/95 text-slate-600 hover:border-teal-200 hover:bg-teal-50/70'
                   }`}
                 >
                   Show me all available providers
@@ -721,17 +775,17 @@ export function ConversationalBooking({
               <ChatMessage isAI>
                 <div className="flex items-center gap-2 mb-2">
                   <Shield className="w-5 h-5 text-teal-600" />
-                  <p className="font-medium">Insurance Coverage Check</p>
+                  <p className="font-medium">Coverage Coach check</p>
                 </div>
                 {insuranceLoading ? (
                   <div className="flex items-center gap-2 text-gray-500">
                     <Loader2 className="w-4 h-4 animate-spin" />
-                    <span className="text-sm">Checking your coverage...</span>
+                    <span className="text-sm">Checking whether insurance changes today&apos;s best route...</span>
                   </div>
                 ) : insuranceResult?.eligible ? (
                   <div className="space-y-2">
-                    <div className="p-3 bg-green-50 rounded-lg border border-green-200">
-                      <p className="text-sm text-green-800 font-medium">Your insurance likely covers this session</p>
+                    <div className="rounded-2xl border border-emerald-200 bg-emerald-50/80 p-3">
+                      <p className="text-sm font-medium text-emerald-800">Insurance may help cover this visit</p>
                       <div className="mt-2 space-y-1">
                         {insuranceResult.programs.slice(0, 2).map((prog, i) => (
                           <p key={i} className="text-xs text-green-700">
@@ -753,14 +807,14 @@ export function ConversationalBooking({
                         className="w-4 h-4 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
                       />
                       <FileText className="w-4 h-4" />
-                      Generate superbill for insurance reimbursement
+                      Prepare a superbill after the visit for reimbursement support
                     </label>
                   </div>
                 ) : (
                   <div className="space-y-2">
-                    <div className="p-3 bg-amber-50 rounded-lg border border-amber-200">
-                      <p className="text-sm text-amber-800">We couldn't verify insurance coverage. You can still book as self-pay.</p>
-                      <p className="text-xs text-amber-600 mt-1">Tip: Update your insurance info in Settings for future checks.</p>
+                    <div className="rounded-2xl border border-amber-200 bg-amber-50/80 p-3">
+                      <p className="text-sm text-amber-800">We could not verify coverage cleanly, so the safest route today is self-pay.</p>
+                      <p className="mt-1 text-xs text-amber-700">You can still book now and keep a reimbursement packet for later.</p>
                     </div>
                     <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
                       <input
@@ -770,7 +824,7 @@ export function ConversationalBooking({
                         className="w-4 h-4 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
                       />
                       <FileText className="w-4 h-4" />
-                      Generate superbill to submit to insurance yourself
+                      Prepare a superbill for you to submit later
                     </label>
                   </div>
                 )}
@@ -782,10 +836,10 @@ export function ConversationalBooking({
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={handleInsuranceNext}
-                    className="w-full py-3 bg-teal-600 text-white font-medium rounded-xl transition-colors hover:bg-teal-700 flex items-center justify-center gap-2"
+                    className="flex w-full items-center justify-center gap-2 rounded-2xl bg-teal-600 py-3 text-white shadow-sm transition-colors hover:bg-teal-700"
                   >
                     <Calendar className="w-4 h-4" />
-                    Continue to Scheduling
+                    See available times
                   </motion.button>
                 </div>
               )}
@@ -802,7 +856,7 @@ export function ConversationalBooking({
               </ChatMessage>
 
               <ChatMessage isAI>
-                <p>Great choice! Here's {state.selectedProvider.name}'s availability:</p>
+                <p>Here are the next openings for {state.selectedProvider.name}. Pick the calmest time for your family.</p>
               </ChatMessage>
 
               <div className="ml-11">
@@ -824,7 +878,7 @@ export function ConversationalBooking({
           {state.selectedSlot && (state.step === 'details' || state.step === 'confirm') && (
             <>
               <ChatMessage isAI>
-                <p>Perfect! One last thing - how would you like to meet?</p>
+                <p>Last step before confirmation. Choose how you would like to meet.</p>
               </ChatMessage>
 
               <div className="space-y-2 ml-11">
@@ -857,8 +911,8 @@ export function ConversationalBooking({
               </ChatMessage>
 
               <ChatMessage isAI>
-                <p className="font-medium">Here's your booking summary:</p>
-                <div className="mt-3 p-3 bg-gray-50 rounded-lg space-y-2">
+                <p className="font-medium">Here is your booking summary.</p>
+                <div className="mt-3 space-y-2 rounded-2xl border border-slate-200 bg-slate-50/90 p-4">
                   <div className="flex items-center gap-2">
                     <User className="w-4 h-4 text-gray-400" />
                     <span className="text-sm">{state.selectedProvider?.name}</span>
@@ -901,9 +955,12 @@ export function ConversationalBooking({
                   {generateSuperbill && (
                     <div className="flex items-center gap-2 mt-1">
                       <FileText className="w-4 h-4 text-teal-500" />
-                      <span className="text-xs text-teal-600">Superbill will be generated after session</span>
+                      <span className="text-xs text-teal-600">Superbill will be prepared after the session</span>
                     </div>
                   )}
+                  <div className="rounded-xl border border-slate-200 bg-white/90 px-3 py-2 text-xs text-slate-600">
+                    Free changes at least 24 hours ahead. Late changes and no-shows can reduce the refund amount.
+                  </div>
                 </div>
               </ChatMessage>
 
@@ -912,14 +969,14 @@ export function ConversationalBooking({
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={handleConfirm}
-                  className="w-full py-4 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2"
+                  className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-teal-500 to-teal-600 py-4 font-semibold text-white shadow-lg transition-all hover:shadow-xl"
                 >
                   <Check className="w-5 h-5" />
                   Confirm Booking
                 </motion.button>
 
-                <p className="text-xs text-center text-gray-500 mt-3">
-                  You'll receive a confirmation email with video call details
+                <p className="mt-3 text-center text-xs text-slate-500">
+                  You will receive a confirmation email, reminder, and secure video-room link.
                 </p>
               </div>
             </>
@@ -927,6 +984,7 @@ export function ConversationalBooking({
         </AnimatePresence>
 
         <div ref={chatEndRef} />
+        </div>
       </div>
     </div>
   );

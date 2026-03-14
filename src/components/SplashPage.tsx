@@ -17,7 +17,7 @@ interface SplashPageProps {
   onFreeScreening?: () => void;
 }
 
-const fontStack = 'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", "Helvetica Neue", Arial, "Noto Sans", sans-serif';
+const fontStack = 'Manrope, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", "Helvetica Neue", Arial, "Noto Sans", sans-serif';
 
 const fontSmoothing: React.CSSProperties = {
   WebkitFontSmoothing: 'antialiased',
@@ -54,6 +54,81 @@ export function SplashPage({
         ...fontSmoothing,
       }}
     >
+      <nav
+        aria-label="Primary"
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          padding: '18px 24px 0',
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            width: '100%',
+            maxWidth: '920px',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '12px',
+          }}
+        >
+          <span
+            style={{
+              color: 'rgba(17, 24, 39, 0.52)',
+              fontFamily: fontStack,
+              fontSize: '12px',
+              fontWeight: 600,
+              letterSpacing: '0.16em',
+              textTransform: 'uppercase',
+              ...fontSmoothing,
+            }}
+          >
+            Aminy
+          </span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            {onForProviders && (
+              <button
+                onClick={onForProviders}
+                style={{
+                  border: 'none',
+                  background: 'transparent',
+                  color: 'rgba(17, 24, 39, 0.6)',
+                  fontFamily: fontStack,
+                  fontSize: '13px',
+                  fontWeight: 500,
+                  cursor: 'pointer',
+                  padding: '10px 14px',
+                  borderRadius: '12px',
+                  ...fontSmoothing,
+                }}
+              >
+                For providers
+              </button>
+            )}
+            {onSignIn && (
+              <button
+                onClick={onSignIn}
+                className="action-button"
+                style={{
+                  border: '1px solid rgba(17, 24, 39, 0.08)',
+                  background: 'rgba(255,255,255,0.72)',
+                  color: 'rgba(17, 24, 39, 0.82)',
+                  fontFamily: fontStack,
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  padding: '10px 16px',
+                  borderRadius: '12px',
+                  ...fontSmoothing,
+                }}
+              >
+                Sign in
+              </button>
+            )}
+          </div>
+        </div>
+      </nav>
+
       {/* Main Content */}
       <main
         className="flex-1 flex flex-col items-center px-6 sm:px-8"
@@ -84,7 +159,7 @@ export function SplashPage({
                 borderRadius: '14px',
                 color: 'rgba(17, 24, 39, 0.42)',
                 fontFamily: fontStack,
-                fontSize: '10px',
+                fontSize: '12px',
                 fontWeight: 450,
                 letterSpacing: '0.015em',
                 ...fontSmoothing,
@@ -157,7 +232,7 @@ export function SplashPage({
               ...fontSmoothing,
             }}
           >
-            Real ABA strategies and real providers who understand your world — together in one calm place. Start seeing small wins today.
+            AI caregiver guidance, home support tools, and limited-launch expert care access in one calm place. Start seeing small wins today.
           </motion.p>
 
           {/* Primary CTA */}
@@ -173,6 +248,7 @@ export function SplashPage({
           >
             <button
               onClick={onStartTrial}
+              className="action-button"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -318,7 +394,7 @@ export function SplashPage({
                   onMouseEnter={(e) => e.currentTarget.style.color = 'rgba(13, 148, 136, 1)'}
                   onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(13, 148, 136, 0.7)'}
                 >
-                  Are you a provider? Join our network →
+                  Provider pilot by invitation →
                 </button>
               </div>
             )}
@@ -348,7 +424,7 @@ export function SplashPage({
                   borderRadius: '12px',
                   color: 'rgba(17, 24, 39, 0.38)',
                   fontFamily: fontStack,
-                  fontSize: '10px',
+                  fontSize: '12px',
                   fontWeight: 450,
                   letterSpacing: '0.01em',
                   ...fontSmoothing,
@@ -396,7 +472,7 @@ export function SplashPage({
                     style={{
                       color: 'rgba(17, 24, 39, 0.55)',
                       fontFamily: fontStack,
-                      fontSize: '11px',
+                      fontSize: '12px',
                       fontWeight: 500,
                       letterSpacing: '0.01em',
                       ...fontSmoothing,
@@ -408,7 +484,7 @@ export function SplashPage({
                     style={{
                       color: 'rgba(17, 24, 39, 0.35)',
                       fontFamily: fontStack,
-                      fontSize: '10px',
+                      fontSize: '12px',
                       fontWeight: 400,
                       ...fontSmoothing,
                     }}

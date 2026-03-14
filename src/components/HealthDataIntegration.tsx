@@ -116,11 +116,12 @@ export function HealthDataIntegration({
         .from('health_integrations')
         .select('*')
         .eq('user_id', userId)
-        .single();
+        .limit(1);
 
-      if (data && data.is_connected) {
+      const integration = Array.isArray(data) ? data[0] : null;
+      if (integration && integration.is_connected) {
         setIsConnected(true);
-        setLastSync(new Date(data.last_sync));
+        setLastSync(integration.last_sync ? new Date(integration.last_sync) : null);
         loadRecentSleepData();
       }
     } catch (error) {

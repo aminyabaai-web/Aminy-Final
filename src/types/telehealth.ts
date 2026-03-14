@@ -1,8 +1,12 @@
+import type { AppointmentFinancials, CareRail } from '../lib/telehealth-economics';
+import type { AppointmentLifecycleStatus, AppointmentPaymentStatus } from '../lib/telehealth-ops';
+
 /**
  * Telehealth Types for One Medical-style "Get Care" Experience
  *
  * This is an ACCESS + ENGAGEMENT layer, NOT an EHR replacement.
- * Cash-pay only for MVP. No insurance billing, no prescribing, no clinical charting.
+ * Aminy owns the family-facing booking and telehealth experience across cash-pay and
+ * partner-billed insured rails in supported markets.
  */
 
 // ============================================================================
@@ -339,32 +343,23 @@ export interface VisitTypeConfig {
 export const VISIT_TYPES: Record<VisitType, VisitTypeConfig> = {
   'consult': {
     type: 'consult',
-    displayName: '25-min Consult',
+    displayName: '25-min Quick Consult',
     duration: 25,
     bufferTime: 5,
-    defaultPrice: 75,
+    defaultPrice: 79,
     description: 'Quick guidance session for specific questions'
   },
   'deep-review': {
     type: 'deep-review',
-    displayName: '50-min Deep Review',
+    displayName: '50-min Standard Session',
     duration: 50,
     bufferTime: 10,
-    defaultPrice: 150,
+    defaultPrice: 149,
     description: 'Comprehensive session for complex challenges'
   }
 };
 
-export type AppointmentStatus =
-  | 'pending-payment'
-  | 'confirmed'
-  | 'reminder-sent'
-  | 'in-progress'
-  | 'completed'
-  | 'cancelled'
-  | 'no-show'
-  | 'rescheduled'
-  | 'scheduled';
+export type AppointmentStatus = AppointmentLifecycleStatus;
 
 export interface Appointment {
   id: string;
@@ -385,7 +380,9 @@ export interface Appointment {
   userState: string;
   // Payment
   price: number;
-  paymentStatus: 'pending' | 'completed' | 'refunded' | 'failed';
+  careRail?: CareRail;
+  financials?: AppointmentFinancials;
+  paymentStatus: AppointmentPaymentStatus;
   paymentIntentId?: string;
   // Video
   videoJoinUrl?: string;

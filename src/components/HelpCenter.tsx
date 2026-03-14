@@ -44,9 +44,9 @@ export function HelpCenter({ onClose, onAnalytics }: HelpCenterProps) {
       { 
         title: "Welcome to Aminy", 
         bullets: [
-          "What you can do in Aminy (Plan, Junior, Reports).",
+          "What you can do in Aminy (Plan, Calm & Rewards, Reports).",
           "Finish onboarding to personalize your plan.",
-          "Turn on Connector to sync Junior ↔ Plan."
+          "Use Calm & Rewards to support tough moments, transitions, and reward goals."
         ]
       },
       { 
@@ -61,7 +61,7 @@ export function HelpCenter({ onClose, onAnalytics }: HelpCenterProps) {
         title: "Navigating Aminy", 
         bullets: [
           "Home shows Today's Plan & Connector.",
-          "Junior is kid mode (PIN required).",
+          "Calm & Rewards opens the child-facing calm corner, reward board, and transition tools.",
           "Reports exports parent PDF / provider packet."
         ]
       }

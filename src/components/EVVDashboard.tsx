@@ -1,17 +1,17 @@
 /**
  * EVV (Electronic Visit Verification) Dashboard
  *
- * Comprehensive dashboard for Medicaid waiver compliance:
+ * Arizona pilot dashboard for EVV shadow capture and reconciliation:
  * - Real-time clock-in/out with GPS verification
  * - Service authorization tracking & budget monitoring
- * - Timesheet generation & fiscal agent submission
+ * - Timesheet generation and reconciliation export
  * - EVV record history with verification status
  *
- * Required by 21st Century Cures Act for all Medicaid
+ * Designed for the Arizona DDD pilot while SpokChoice remains primary and DCI transition workflows are validated
  * home/community-based services (HCBS).
  *
  * ⚠️ This tool tracks service hours for documentation purposes only.
- * All submissions must be reviewed by the fiscal agent before payment.
+ * Aminy remains a shadow workflow until the external EVV path is validated for payroll-critical use.
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
@@ -36,6 +36,7 @@ import {
   generateTimesheet,
   exportTimesheetToPDF,
 } from '../lib/fiscal-agent-integration';
+import { listEVVReconciliationRuns, summarizeEVVCutoverRuns, type EVVReconciliationRun } from '../lib/evv-cutover';
 
 // ============================================
 // TYPES
@@ -46,7 +47,7 @@ interface EVVDashboardProps {
   childName?: string;
   providerId?: string;
   providerName?: string;
-  userRole?: 'parent' | 'provider';
+  userRole?: 'parent' | 'provider' | 'admin';
   onBack?: () => void;
 }
 
@@ -202,6 +203,7 @@ export default function EVVDashboard({
   const [evvRecords, setEvvRecords] = useState<EVVRecord[]>(getDemoEVVRecords);
   const [isClockingIn, setIsClockingIn] = useState(false);
   const [activeSession, setActiveSession] = useState<EVVRecord | null>(null);
+  const [reconciliationRuns, setReconciliationRuns] = useState<EVVReconciliationRun[]>([]);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [selectedAuth, setSelectedAuth] = useState<string>(() => {
     const demo = getDemoAuthorizations();
@@ -210,20 +212,48 @@ export default function EVVDashboard({
 
   // Load data from Supabase (falls back to demo)
   useEffect(() => {
-    async function loadData() {
-      try {
-        const [authData, evvData] = await Promise.all([
-          getAuthorizations(childId),
-          getEVVRecords(childId),
-        ]);
-        if (authData.length > 0) setAuthorizations(authData);
-        if (evvData.length > 0) setEvvRecords(evvData);
-      } catch {
-        // Use demo data on error
-      }
+    if (childId === 'child-1') {
+      return;
     }
-    loadData();
+
+    let cancelled = false;
+
+    void getAuthorizations(childId)
+      .then((authData) => {
+        if (!cancelled && authData.length > 0) {
+          setAuthorizations(authData);
+        }
+      })
+      .catch(() => {});
+
+    void getEVVRecords(childId)
+      .then((evvData) => {
+        if (!cancelled && evvData.length > 0) {
+          setEvvRecords(evvData);
+        }
+      })
+      .catch(() => {});
+
+    return () => {
+      cancelled = true;
+    };
   }, [childId]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    void listEVVReconciliationRuns(userRole === 'parent' ? childId : undefined)
+      .then((runs) => {
+        if (!cancelled) {
+          setReconciliationRuns(runs);
+        }
+      })
+      .catch(() => {});
+
+    return () => {
+      cancelled = true;
+    };
+  }, [childId, userRole]);
 
   // Timer for active session
   useEffect(() => {
@@ -374,42 +404,56 @@ export default function EVVDashboard({
     .filter(a => a.status === 'active')
     .map(auth => calculateBudgetSummary(auth, evvRecords));
 
+  const cutoverSummary = summarizeEVVCutoverRuns(reconciliationRuns);
+
   const tabs: { id: TabType; label: string; icon: React.ReactNode }[] = [
     { id: 'clock', label: 'Clock In/Out', icon: <Timer className="w-4 h-4" /> },
     { id: 'records', label: 'Records', icon: <ClipboardList className="w-4 h-4" /> },
     { id: 'budget', label: 'Budget', icon: <BarChart3 className="w-4 h-4" /> },
-    { id: 'timesheets', label: 'Submit', icon: <Send className="w-4 h-4" /> },
+    { id: 'timesheets', label: 'Export', icon: <Send className="w-4 h-4" /> },
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(45,212,191,0.12),transparent_32%),linear-gradient(180deg,#f7fffd_0%,#f4f7f8_100%)]">
       {/* Header */}
-      <div className="sticky top-0 z-10 bg-gradient-to-r from-slate-800 to-slate-900 text-white">
+      <div className="sticky top-0 z-10 border-b border-teal-100/80 bg-white/88 backdrop-blur supports-[backdrop-filter]:bg-white/78">
         <div className="max-w-2xl mx-auto px-4 py-4">
-          <div className="flex items-center gap-3">
+          <nav aria-label="EVV navigation" className="flex items-center gap-3">
             {onBack && (
-              <button onClick={onBack} className="p-2 hover:bg-white/10 rounded-lg transition-colors">
+              <button
+                type="button"
+                onClick={onBack}
+                aria-label="Go back"
+                className="min-h-11 min-w-11 rounded-xl p-2 text-slate-600 transition-colors hover:bg-teal-50"
+              >
                 <ArrowLeft className="w-5 h-5" />
               </button>
             )}
             <div className="flex-1">
-              <h1 className="text-lg font-semibold flex items-center gap-2">
-                <Shield className="w-5 h-5 text-teal-400" />
+              <h1 className="flex items-center gap-2 text-lg font-semibold text-slate-900">
+                <Shield className="w-5 h-5 text-teal-500" />
                 Visit Verification
               </h1>
-              <p className="text-xs text-slate-300">
-                EVV &bull; Medicaid Compliance &bull; {childName}
+              <p className="text-xs text-slate-500">
+                Arizona DDD Pilot &bull; Shadow EVV Export &bull; {childName}
               </p>
             </div>
+            <button
+              type="button"
+              onClick={() => setActiveTab('clock')}
+              className="action-button min-h-11 rounded-xl bg-teal-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-teal-700"
+            >
+              Open live clock
+            </button>
             {activeSession && (
-              <div className="flex items-center gap-2 bg-red-500/20 border border-red-400/30 px-3 py-1.5 rounded-full">
-                <div className="w-2 h-2 bg-red-400 rounded-full animate-pulse" />
-                <span className="text-sm font-mono font-medium text-red-200">
+              <div className="flex items-center gap-2 rounded-full border border-rose-200 bg-rose-50 px-3 py-1.5">
+                <div className="w-2 h-2 bg-rose-500 rounded-full animate-pulse" />
+                <span className="text-sm font-mono font-medium text-rose-700">
                   {formatElapsed(elapsedSeconds)}
                 </span>
               </div>
             )}
-          </div>
+          </nav>
         </div>
       </div>
 
@@ -418,24 +462,67 @@ export default function EVVDashboard({
         <div className="flex items-start gap-2 p-2.5 bg-amber-50 border border-amber-200 rounded-lg">
           <AlertTriangle className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
           <p className="text-xs text-amber-800 leading-relaxed">
-            EVV records are subject to audit by your fiscal agent and state Medicaid agency.
-            Ensure clock-in/out times and locations are accurate. Falsifying records may result
-            in loss of benefits and legal consequences.
+            Aminy captures Arizona pilot EVV records in shadow mode for reconciliation. Confirm payroll-critical submissions in SpokChoice today and treat DCI as the transition path until your agency changes systems.
           </p>
+        </div>
+      </div>
+
+      <div className="max-w-2xl mx-auto px-4 pt-3">
+        <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+            <div>
+              <p className="text-xs uppercase tracking-wide text-gray-500">EVV Cutover Readiness</p>
+              <h2 className="text-lg font-semibold text-gray-900 mt-1">
+                {cutoverSummary.state === 'cutover_ready' ? 'Ready for primary EVV cutover' : 'Parallel run still required'}
+              </h2>
+              <p className="text-sm text-gray-500 mt-1">
+                Aminy should not become system of record until three clean payroll cycles reach 99.5% reconciliation accuracy with no critical exceptions.
+              </p>
+            </div>
+            <div className="grid grid-cols-2 gap-3 min-w-[220px]">
+              <div>
+                <p className="text-xs text-gray-500">Cycles</p>
+                <p className="text-2xl font-semibold text-gray-900">{cutoverSummary.cyclesCompleted}</p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500">Clean cycles</p>
+                <p className="text-2xl font-semibold text-emerald-600">{cutoverSummary.cleanCycles}</p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500">Avg accuracy</p>
+                <p className="text-2xl font-semibold text-blue-600">{cutoverSummary.averageAccuracy}%</p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500">Critical exceptions</p>
+                <p className="text-2xl font-semibold text-rose-600">{cutoverSummary.unresolvedCriticalExceptions}</p>
+              </div>
+            </div>
+          </div>
+          {cutoverSummary.cutoverBlockedReasons.length > 0 ? (
+            <ul className="mt-4 rounded-xl bg-amber-50 border border-amber-200 p-3 space-y-1 text-sm text-amber-800">
+              {cutoverSummary.cutoverBlockedReasons.map((reason) => (
+                <li key={reason} className="flex items-start gap-2">
+                  <AlertTriangle className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                  <span>{reason}</span>
+                </li>
+              ))}
+            </ul>
+          ) : null}
         </div>
       </div>
 
       {/* Tabs */}
       <div className="max-w-2xl mx-auto px-4 pt-3">
-        <div className="flex gap-1 bg-white rounded-xl p-1 border border-gray-200 shadow-sm">
+        <div className="flex gap-1 rounded-2xl border border-teal-100 bg-white/92 p-1.5 shadow-sm">
           {tabs.map(tab => (
             <button
+              type="button"
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 px-2 rounded-lg text-xs font-medium transition-all ${
+              className={`min-h-11 flex-1 flex items-center justify-center gap-1.5 rounded-xl px-2 py-2.5 text-xs font-medium transition-all ${
                 activeTab === tab.id
-                  ? 'bg-slate-800 text-white shadow-sm'
-                  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+                  ? 'bg-teal-600 text-white shadow-sm'
+                  : 'text-slate-500 hover:text-slate-700 hover:bg-teal-50'
               }`}
             >
               {tab.icon}
@@ -512,7 +599,7 @@ function ClockTab({
     >
       {/* Service Authorization Selector */}
       {!activeSession && (
-        <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+        <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm">
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Service Authorization
           </label>
@@ -524,7 +611,7 @@ function ClockTab({
                 className={`w-full text-left p-3 rounded-lg border-2 transition-all ${
                   selectedAuth === auth.id
                     ? 'border-teal-500 bg-teal-50'
-                    : 'border-gray-200 hover:border-gray-300'
+                    : 'border-slate-200 hover:border-teal-200 hover:bg-teal-50/40'
                 }`}
               >
                 <div className="flex items-center justify-between">
@@ -550,7 +637,7 @@ function ClockTab({
       )}
 
       {/* Clock In/Out Button */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm text-center">
+      <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm text-center">
         {activeSession ? (
           <>
             <div className="mb-4">
@@ -565,7 +652,7 @@ function ClockTab({
             </div>
             <button
               onClick={onClockOut}
-              className="w-full py-4 bg-red-600 hover:bg-red-700 text-white rounded-xl font-semibold text-lg flex items-center justify-center gap-2 transition-colors shadow-lg shadow-red-200"
+              className="w-full py-4 bg-rose-600 hover:bg-rose-700 text-white rounded-2xl font-semibold text-lg flex items-center justify-center gap-2 transition-colors shadow-lg shadow-rose-100"
             >
               <Square className="w-5 h-5" />
               Clock Out
@@ -587,7 +674,7 @@ function ClockTab({
             <button
               onClick={onClockIn}
               disabled={isClockingIn || !selectedAuth}
-              className="w-full py-4 bg-teal-600 hover:bg-teal-700 disabled:bg-gray-300 text-white rounded-xl font-semibold text-lg flex items-center justify-center gap-2 transition-colors shadow-lg shadow-teal-200"
+              className="w-full py-4 bg-teal-600 hover:bg-teal-700 disabled:bg-slate-300 text-white rounded-2xl font-semibold text-lg flex items-center justify-center gap-2 transition-colors shadow-lg shadow-teal-100"
             >
               {isClockingIn ? (
                 <>
@@ -789,7 +876,7 @@ function BudgetTab({
         <div className="bg-white rounded-xl border border-gray-200 p-8 text-center">
           <DollarSign className="w-10 h-10 mx-auto text-gray-300 mb-3" />
           <p className="text-gray-500 text-sm">No active authorizations</p>
-          <p className="text-gray-400 text-xs mt-1">Contact your fiscal agent to set up service authorizations</p>
+          <p className="text-gray-400 text-xs mt-1">Confirm authorizations in your external EVV system while the Arizona pilot workflow is being validated.</p>
         </div>
       )}
     </motion.div>
@@ -871,9 +958,10 @@ function TimesheetsTab({
 
             <div className="flex gap-2">
               <button
+                type="button"
                 onClick={() => handleGenerateTimesheet(weekKey)}
                 disabled={generating}
-                className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-lg text-xs font-medium transition-colors"
+                className="flex min-h-11 flex-1 items-center justify-center gap-1.5 rounded-lg bg-slate-800 py-2 text-xs font-medium text-white transition-colors hover:bg-slate-900"
               >
                 {generating ? (
                   <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -882,7 +970,10 @@ function TimesheetsTab({
                 )}
                 Generate Timesheet
               </button>
-              <button className="flex items-center justify-center gap-1.5 py-2 px-3 border border-gray-200 hover:bg-gray-50 rounded-lg text-xs font-medium text-gray-600 transition-colors">
+              <button
+                type="button"
+                className="flex min-h-11 items-center justify-center gap-1.5 rounded-lg border border-gray-200 px-3 py-2 text-xs font-medium text-gray-600 transition-colors hover:bg-gray-50"
+              >
                 <Download className="w-3.5 h-3.5" />
                 PDF
               </button>

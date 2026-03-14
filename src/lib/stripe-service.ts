@@ -11,8 +11,10 @@
  */
 
 import { projectId, publicAnonKey } from '../utils/supabase/info';
+import { supabase } from '../utils/supabase/client';
 import { tierPricing, type TierType } from './tier-utils';
 import { secureFetch } from './security/secure-fetch';
+import { getStripeVisitPrices } from './telehealth-economics';
 
 // Edge function base URL for API calls
 const EDGE_FUNCTION_BASE = `https://${projectId}.supabase.co/functions/v1/make-server-8a022548`;
@@ -105,7 +107,7 @@ const getAccessToken = async (): Promise<string> => {
 
   // Use Supabase's secure session management instead of localStorage
   try {
-    const { data: { session } } = await (await import('../utils/supabase/client')).supabase.auth.getSession();
+    const { data: { session } } = await supabase.auth.getSession();
     if (session?.access_token) {
       return session.access_token;
     }
@@ -146,10 +148,7 @@ export async function createCheckoutSession({
     );
   }
 
-  // Import supabase client lazily to avoid circular dependency
-  const { supabase: sb } = await import('../utils/supabase/client');
-
-  const { data, error } = await sb.functions.invoke('stripe-checkout', {
+  const { data, error } = await supabase.functions.invoke('stripe-checkout', {
     body: {
       priceId,
       userId,
@@ -389,27 +388,8 @@ export function useStripeCheckout() {
 // Telehealth Visit Payment Functions
 // ============================================================================
 
-// Visit type pricing for cash-pay telehealth
-export const VISIT_PRICES = {
-  consult: {
-    name: '25-minute Consult',
-    basePrice: 7500, // $75.00 in cents
-    memberDiscount: 2500, // $25 off for members
-    duration: 25,
-  },
-  extended: {
-    name: '50-minute Session',
-    basePrice: 12500, // $125.00 in cents
-    memberDiscount: 3500, // $35 off for members
-    duration: 50,
-  },
-  'follow-up': {
-    name: '15-minute Follow-up',
-    basePrice: 5000, // $50.00 in cents
-    memberDiscount: 1500, // $15 off for members
-    duration: 15,
-  },
-} as const;
+// Canonical visit pricing for family-facing telehealth.
+export const VISIT_PRICES = getStripeVisitPrices();
 
 export type VisitPriceType = keyof typeof VISIT_PRICES;
 

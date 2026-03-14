@@ -24,12 +24,14 @@ import {
   ChevronRight,
   Loader2,
 } from 'lucide-react';
-import { getDemoClinicalReportData } from '../lib/clinical-report-demo-data';
 import type { ClinicalReportData } from '../lib/clinical-report-demo-data';
-import { getClinicalReportData } from '../lib/clinical-report-data';
-import { generateClinicalReportPDF, DEFAULT_SECTIONS } from '../lib/clinical-pdf-generator';
+import { DEFAULT_SECTIONS } from '../lib/clinical-pdf-generator';
 import type { ReportSections } from '../lib/clinical-pdf-generator';
-import { screeningResultsToClinicalAssessments } from '../lib/screening-instruments';
+import {
+  exportCaregiverSummaryPdf,
+  generateCaregiverSummary,
+  mapCaregiverSummaryToClinicalReportData,
+} from '../lib/caregiver-workflow';
 import { useAuditedAction } from '../hooks/useAuditedAction';
 
 // ============================================================================
@@ -72,44 +74,19 @@ export function ClinicalReportExport({
   const [loading, setLoading] = useState(true);
   const [reportData, setReportData] = useState<ClinicalReportData | null>(null);
 
-  // Load real data from Supabase, fall back to demo if not authenticated
+  // Load report data from stored caregiver-summary records only.
   useEffect(() => {
     let cancelled = false;
 
     async function loadData() {
       setLoading(true);
       try {
-        const data = await getClinicalReportData(childId);
-
-        // Also merge localStorage screening results (legacy path)
-        try {
-          const localScreenings = screeningResultsToClinicalAssessments();
-          if (localScreenings.length > 0) {
-            // Deduplicate by type+date to avoid showing both Supabase and localStorage copies
-            const existing = new Set(data.assessments.map(a => `${a.type}-${a.date}`));
-            const unique = localScreenings.filter(s => !existing.has(`${s.type}-${s.date}`));
-            if (unique.length > 0) {
-              data.assessments = [...data.assessments, ...unique];
-            }
-          }
-        } catch {
-          // localStorage screening data not available — fine
-        }
-
+        const summary = await generateCaregiverSummary({ childId });
+        const data = mapCaregiverSummaryToClinicalReportData(summary);
         if (!cancelled) setReportData(data);
       } catch (err) {
-        console.warn('Failed to load real clinical data, using demo:', err);
-        // Fall back to demo data for unauthenticated users
-        if (!cancelled) {
-          const demo = getDemoClinicalReportData();
-          try {
-            const screeningAssessments = screeningResultsToClinicalAssessments();
-            if (screeningAssessments.length > 0) {
-              demo.assessments = [...demo.assessments, ...screeningAssessments];
-            }
-          } catch { /* ignore */ }
-          setReportData(demo);
-        }
+        console.warn('Failed to load caregiver summary report data:', err);
+        if (!cancelled) setReportData(null);
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -126,13 +103,15 @@ export function ClinicalReportExport({
   const handleGenerate = useCallback(async () => {
     if (!reportData) return;
     setGenerating(true);
-    // Small delay for UX feedback
     await new Promise(r => setTimeout(r, 600));
 
     try {
-      const doc = generateClinicalReportPDF(reportData, sections, recipient);
-      const dateStr = new Date().toISOString().split('T')[0];
-      const filename = `${reportData.child.firstName}-${reportData.child.lastName}-Clinical-Report-${dateStr}.pdf`;
+      const { doc, filename, reportData: generatedReportData } = await exportCaregiverSummaryPdf({
+        childId,
+        recipientType: recipient,
+        sections,
+      });
+      setReportData(generatedReportData);
       doc.save(filename);
       setStep('success');
     } catch (err) {
@@ -140,16 +119,31 @@ export function ClinicalReportExport({
     } finally {
       setGenerating(false);
     }
-  }, [reportData, sections, recipient]);
+  }, [childId, reportData, sections, recipient]);
 
   const enabledSectionCount = Object.values(sections).filter(Boolean).length;
 
-  // Loading state while fetching real data from Supabase
-  if (loading || !reportData) {
+  if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-teal-600 mb-3" />
         <p className="text-sm text-gray-500">Loading your clinical data...</p>
+      </div>
+    );
+  }
+
+  if (!reportData) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-6 text-center">
+        <FileText className="w-10 h-10 text-teal-600 mb-3" />
+        <h1 className="text-lg font-semibold text-gray-900 mb-2">No caregiver summary available yet</h1>
+        <p className="text-sm text-gray-500 mb-4">Complete onboarding, ask Aminy a question, or finish a daily-plan item before generating a provider report.</p>
+        <button
+          onClick={onBack}
+          className="px-4 py-2 rounded-lg bg-teal-600 text-white text-sm font-medium hover:bg-teal-700 transition-colors"
+        >
+          Back
+        </button>
       </div>
     );
   }

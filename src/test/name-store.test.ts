@@ -10,6 +10,7 @@ import {
   CHILD_KEY,
   NAMES_UPDATED_EVENT,
 } from '../lib/name-store';
+import { syncEncryptedStorage } from '../lib/security/encrypted-storage';
 
 describe('name-store', () => {
   beforeEach(() => {
@@ -62,7 +63,7 @@ describe('name-store', () => {
   describe('setCaregiverName', () => {
     it('stores caregiver name in localStorage', () => {
       setCaregiverName('Jane Smith');
-      const stored = JSON.parse(localStorage.getItem(CAREGIVER_KEY) || '{}');
+      const stored = JSON.parse(syncEncryptedStorage.getItem(CAREGIVER_KEY) || '{}');
       expect(stored.name).toBe('Jane Smith');
     });
 
@@ -78,7 +79,7 @@ describe('name-store', () => {
   describe('setChildName', () => {
     it('stores child name in localStorage', () => {
       setChildName('Alex Johnson');
-      const stored = JSON.parse(localStorage.getItem(CHILD_KEY) || '{}');
+      const stored = JSON.parse(syncEncryptedStorage.getItem(CHILD_KEY) || '{}');
       expect(stored.name).toBe('Alex Johnson');
     });
 

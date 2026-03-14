@@ -18,7 +18,7 @@ import { supabase } from '../utils/supabase/client';
 import { useFormValidation } from '../lib/use-form-validation';
 import { createAccountSchema } from '../lib/schemas';
 
-const fontStack = 'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", "Helvetica Neue", Arial, "Noto Sans", sans-serif';
+const fontStack = 'Manrope, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", "Helvetica Neue", Arial, "Noto Sans", sans-serif';
 
 const fontSmoothing: React.CSSProperties = {
   WebkitFontSmoothing: 'antialiased',
@@ -235,7 +235,8 @@ export function CreateAccountScreen({
               background: 'none',
               border: 'none',
               cursor: 'pointer',
-              padding: 0,
+              minHeight: '44px',
+              padding: '10px 6px',
               transition: 'color 0.2s ease',
               ...fontSmoothing,
             }}
@@ -327,6 +328,9 @@ export function CreateAccountScreen({
             Start your 7-day free trial
           </motion.p>
 
+          <h2 className="sr-only">Create your Aminy account</h2>
+          <h3 className="sr-only">Choose how you want to get started</h3>
+
           {/* Social Auth Buttons - Side by side to save space */}
           <motion.div
             initial={{ opacity: 0, y: 8 }}
@@ -401,7 +405,7 @@ export function CreateAccountScreen({
           {/* Divider */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
             <div style={{ flex: 1, height: '1px', backgroundColor: 'rgba(17, 24, 39, 0.08)' }} />
-            <span style={{ color: 'rgba(17, 24, 39, 0.35)', fontSize: '11px', fontFamily: fontStack }}>or</span>
+            <span style={{ color: 'rgba(17, 24, 39, 0.35)', fontSize: '12px', fontFamily: fontStack }}>or</span>
             <div style={{ flex: 1, height: '1px', backgroundColor: 'rgba(17, 24, 39, 0.08)' }} />
           </div>
 
@@ -437,6 +441,7 @@ export function CreateAccountScreen({
           )}
 
           {/* Form */}
+          <h3 className="sr-only">Sign up with email</h3>
           <motion.form
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -464,7 +469,7 @@ export function CreateAccountScreen({
                 }}
               />
               {errors.fullName && (
-                <p style={{ marginTop: '4px', fontSize: '11px', color: 'rgba(180, 90, 90, 0.85)', fontFamily: fontStack }}>
+                <p style={{ marginTop: '4px', fontSize: '12px', color: 'rgba(180, 90, 90, 0.85)', fontFamily: fontStack }}>
                   {errors.fullName}
                 </p>
               )}
@@ -493,7 +498,7 @@ export function CreateAccountScreen({
                 }}
               />
               {errors.email && (
-                <p id="signup-email-error" role="alert" style={{ marginTop: '4px', fontSize: '11px', color: 'rgba(180, 90, 90, 0.85)', fontFamily: fontStack }}>
+                <p id="signup-email-error" role="alert" style={{ marginTop: '4px', fontSize: '12px', color: 'rgba(180, 90, 90, 0.85)', fontFamily: fontStack }}>
                   {errors.email}
                 </p>
               )}
@@ -531,24 +536,26 @@ export function CreateAccountScreen({
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
                   style={{
                     position: 'absolute',
-                    right: '14px',
+                    right: '8px',
                     top: '50%',
                     transform: 'translateY(-50%)',
                     color: 'rgba(17, 24, 39, 0.3)',
                     background: 'none',
                     border: 'none',
                     cursor: 'pointer',
-                    padding: '4px',
+                    width: '44px',
+                    height: '44px',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
+                    borderRadius: '10px',
                   }}
                 >
                   {showPassword ? <EyeOff style={{ width: '18px', height: '18px', strokeWidth: 1.5 }} aria-hidden="true" /> : <Eye style={{ width: '18px', height: '18px', strokeWidth: 1.5 }} aria-hidden="true" />}
                 </button>
               </div>
               {errors.password && (
-                <p id="signup-password-error" role="alert" style={{ marginTop: '4px', fontSize: '11px', color: 'rgba(180, 90, 90, 0.85)', fontFamily: fontStack }}>
+                <p id="signup-password-error" role="alert" style={{ marginTop: '4px', fontSize: '12px', color: 'rgba(180, 90, 90, 0.85)', fontFamily: fontStack }}>
                   {errors.password}
                 </p>
               )}
@@ -585,24 +592,26 @@ export function CreateAccountScreen({
                   aria-label={showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'}
                   style={{
                     position: 'absolute',
-                    right: '14px',
+                    right: '8px',
                     top: '50%',
                     transform: 'translateY(-50%)',
                     color: 'rgba(17, 24, 39, 0.3)',
                     background: 'none',
                     border: 'none',
                     cursor: 'pointer',
-                    padding: '4px',
+                    width: '44px',
+                    height: '44px',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
+                    borderRadius: '10px',
                   }}
                 >
                   {showConfirmPassword ? <EyeOff style={{ width: '18px', height: '18px', strokeWidth: 1.5 }} aria-hidden="true" /> : <Eye style={{ width: '18px', height: '18px', strokeWidth: 1.5 }} aria-hidden="true" />}
                 </button>
               </div>
               {errors.confirmPassword && (
-                <p id="signup-confirm-error" role="alert" style={{ marginTop: '4px', fontSize: '11px', color: 'rgba(180, 90, 90, 0.85)', fontFamily: fontStack }}>
+                <p id="signup-confirm-error" role="alert" style={{ marginTop: '4px', fontSize: '12px', color: 'rgba(180, 90, 90, 0.85)', fontFamily: fontStack }}>
                   {errors.confirmPassword}
                 </p>
               )}
@@ -617,6 +626,7 @@ export function CreateAccountScreen({
                   gap: '10px',
                   cursor: 'pointer',
                   userSelect: 'none',
+                  minHeight: '44px',
                 }}
                 onClick={() => {
                   setAcceptedTerms(!acceptedTerms);
@@ -656,6 +666,9 @@ export function CreateAccountScreen({
                     role="button"
                     tabIndex={0}
                     style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      minHeight: '24px',
                       color: '#5a7380',
                       textDecoration: 'underline',
                       cursor: 'pointer',
@@ -676,6 +689,9 @@ export function CreateAccountScreen({
                     role="button"
                     tabIndex={0}
                     style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      minHeight: '24px',
                       color: '#5a7380',
                       textDecoration: 'underline',
                       cursor: 'pointer',
@@ -694,7 +710,7 @@ export function CreateAccountScreen({
                 </span>
               </div>
               {errors.terms && (
-                <p style={{ marginTop: '6px', marginLeft: '28px', fontSize: '11px', color: 'rgba(180, 90, 90, 0.85)', fontFamily: fontStack }}>
+                <p style={{ marginTop: '6px', marginLeft: '28px', fontSize: '12px', color: 'rgba(180, 90, 90, 0.85)', fontFamily: fontStack }}>
                   {errors.terms}
                 </p>
               )}
@@ -704,6 +720,7 @@ export function CreateAccountScreen({
             <button
               type="submit"
               disabled={isLoading}
+              className="action-button"
               style={{
                 width: '100%',
                 display: 'flex',

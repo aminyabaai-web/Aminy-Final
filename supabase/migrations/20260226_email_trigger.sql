@@ -20,11 +20,8 @@ BEGIN
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
-
 DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
-
 CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
-
--- We will also need to add the `/email/welcome` route to our Edge Function
+-- We will also need to add the `/email/welcome` route to our Edge Function;

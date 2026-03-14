@@ -155,7 +155,7 @@ export function BenefitsNavigatorScreen({ onBack, onNavigate, userTier = 'core' 
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center gap-3 mb-4">
             {onBack && (
-              <Button variant="ghost" size="sm" onClick={onBack}>
+              <Button variant="ghost" size="sm" onClick={onBack} aria-label="Go back">
                 <ArrowLeft className="w-4 h-4" />
               </Button>
             )}
@@ -201,8 +201,10 @@ export function BenefitsNavigatorScreen({ onBack, onNavigate, userTier = 'core' 
           <div className="flex flex-col sm:flex-row sm:items-center gap-3">
             <div className="flex items-center gap-2 flex-1">
               <MapPin className="w-4 h-4 text-blue-600" />
-              <label className="text-sm font-medium">Your State:</label>
+              <label htmlFor="benefits-state" className="text-sm font-medium">Your State:</label>
               <select
+                id="benefits-state"
+                aria-label="Select your state"
                 value={userState}
                 onChange={(e) => setUserState(e.target.value)}
                 className="flex h-9 rounded-md border border-input bg-background px-3 py-1 text-sm ring-offset-background"

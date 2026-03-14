@@ -36,8 +36,10 @@ import {
 } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
+import { DataProvenanceBadge } from './ui/DataProvenanceBadge';
 import { toast } from 'sonner';
 import { TierType, tierPricing } from '../lib/tier-utils';
+import { createDataProvenance, type DataProvenance } from '../lib/product-truth';
 import { createCheckoutSession, isStripeConfigured, STRIPE_PRICES } from '../lib/stripe-service';
 import { supabase } from '../utils/supabase/client';
 import { billingEngine } from '../lib/billing-engine';
@@ -50,24 +52,27 @@ interface SocialProofData {
   familyCount: number;
   averageRating: number;
   reviewCount: number;
-  recentSignupName: string; // e.g., "Sarah from TX" — anonymized
-  recentSignupMinutesAgo: number;
 }
 
-const DEFAULT_SOCIAL_PROOF: SocialProofData = {
-  familyCount: 537,
-  averageRating: 4.8,
-  reviewCount: 124,
-  recentSignupName: 'A family in Arizona',
-  recentSignupMinutesAgo: 12,
-};
+interface SocialProofState {
+  data: SocialProofData | null;
+  provenance: DataProvenance;
+}
 
-function useSocialProof(): SocialProofData {
-  const [data, setData] = useState<SocialProofData>(DEFAULT_SOCIAL_PROOF);
+const VERIFIED_SOCIAL_PROOF_PENDING = createDataProvenance(
+  'live',
+  'Verified family metrics pending',
+  { isVerified: false },
+);
+
+function useSocialProof(): SocialProofState {
+  const [state, setState] = useState<SocialProofState>({
+    data: null,
+    provenance: VERIFIED_SOCIAL_PROOF_PENDING,
+  });
 
   useEffect(() => {
     let cancelled = false;
-    // Attempt to fetch live social proof from Supabase
     (async () => {
       try {
         const { data: row } = await supabase
@@ -76,48 +81,36 @@ function useSocialProof(): SocialProofData {
           .eq('id', 'global')
           .maybeSingle();
 
-        if (!cancelled && row) {
-          setData({
-            familyCount: row.family_count ?? DEFAULT_SOCIAL_PROOF.familyCount,
-            averageRating: row.average_rating ?? DEFAULT_SOCIAL_PROOF.averageRating,
-            reviewCount: row.review_count ?? DEFAULT_SOCIAL_PROOF.reviewCount,
-            recentSignupName: row.recent_signup_label ?? DEFAULT_SOCIAL_PROOF.recentSignupName,
-            recentSignupMinutesAgo: row.recent_signup_minutes_ago ?? DEFAULT_SOCIAL_PROOF.recentSignupMinutesAgo,
+        if (!cancelled && row?.family_count && row?.average_rating && row?.review_count) {
+          setState({
+            data: {
+              familyCount: row.family_count,
+              averageRating: row.average_rating,
+              reviewCount: row.review_count,
+            },
+            provenance: createDataProvenance('live', 'Verified live member metrics', {
+              isVerified: true,
+              lastUpdatedAt: new Date().toISOString(),
+            }),
           });
         }
       } catch {
-        // Table may not exist yet — use defaults
+        if (!cancelled) {
+          setState({
+            data: null,
+            provenance: VERIFIED_SOCIAL_PROOF_PENDING,
+          });
+        }
       }
     })();
-    return () => { cancelled = true; };
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
-  return data;
+  return state;
 }
-
-// Testimonials
-const TESTIMONIALS = [
-  {
-    text: "Finally, an app that actually understands my child.",
-    author: "Sarah M.",
-    context: "parent of a 6-year-old with autism",
-  },
-  {
-    text: "The AI suggestions have transformed our daily routines.",
-    author: "Michael R.",
-    context: "father of twins with ADHD",
-  },
-  {
-    text: "Worth every penny. The BCBA sessions are a game-changer.",
-    author: "Jennifer L.",
-    context: "mom of a 4-year-old in ABA therapy",
-  },
-  {
-    text: "I finally feel like I have support that's available 24/7.",
-    author: "David K.",
-    context: "single dad navigating an autism diagnosis",
-  }
-];
 
 // Simplified tier features for comparison
 const TIER_FEATURES = [
@@ -154,17 +147,8 @@ export function PaywallSimplified({
   const [promoCode, setPromoCode] = useState('');
   const [appliedPromo, setAppliedPromo] = useState<{ code: string; discount: number; type: 'percent' | 'fixed'; description: string } | null>(null);
   const [promoError, setPromoError] = useState('');
-  const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [isValidatingPromo, setIsValidatingPromo] = useState(false);
   const socialProof = useSocialProof();
-
-  // Rotate testimonials
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTestimonial((prev) => (prev + 1) % TESTIMONIALS.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
 
   // Pricing — derived from tier-utils.ts (single source of truth)
   const coreMonthly = tierPricing.core.monthly;
@@ -309,6 +293,9 @@ export function PaywallSimplified({
           <button
             onClick={onClose}
             className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
+            aria-label="Close pricing and return to dashboard"
+            title="Close pricing and return to dashboard"
+            data-testid="close-paywall"
           >
             <X className="w-6 h-6" />
           </button>
@@ -316,76 +303,66 @@ export function PaywallSimplified({
       )}
 
       {/* Main content */}
-      <div className="flex-1 flex flex-col items-center px-4 py-6 overflow-y-auto">
+      <div className="flex-1 flex flex-col items-center overflow-y-auto px-4 py-6 bg-[radial-gradient(circle_at_top,_rgba(153,246,228,0.16),_transparent_40%),linear-gradient(180deg,_#f9fcfb_0%,_#ffffff_42%,_#f8fafc_100%)]">
         {/* Hero */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-8"
+          className="mb-8 text-center"
         >
-          <div className="w-16 h-16 mx-auto mb-5 rounded-full bg-gradient-to-br from-teal-400 to-cyan-500 flex items-center justify-center shadow-lg">
+          <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-teal-400 to-cyan-500 shadow-lg">
             <Crown className="w-8 h-8 text-white" />
           </div>
 
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-teal-600">
+            Calm support, without guessing
+          </p>
+          <h1 className="mb-2 text-2xl font-bold text-gray-900 sm:text-3xl">
             Continue Supporting {childName}
           </h1>
+          <h2 className="sr-only">Membership overview</h2>
+          <h3 className="sr-only">Plans, savings, and caregiver support options</h3>
 
-          <p className="text-gray-600 max-w-sm mx-auto text-sm sm:text-base">
-            Get unlimited AI support, personalized strategies, and tools designed by BCBAs to help your family thrive.
+          <p className="mx-auto max-w-md text-sm text-gray-600 sm:text-base">
+            Keep Aminy as your calmer daily layer for guidance, routines, telehealth savings, and provider-ready summaries.
           </p>
         </motion.div>
 
-        {/* Social Proof Banner */}
+        {/* Truth-forward trust note */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
           className="w-full max-w-md mb-6"
         >
-          {/* Family counter + rating row */}
-          <div className="flex items-center justify-center gap-4 mb-3">
-            <div className="flex items-center gap-1.5 bg-white rounded-full px-3.5 py-1.5 shadow-sm border border-gray-100">
-              <Users className="w-4 h-4 text-teal-600" />
-              <span className="text-sm font-semibold text-gray-900">
-                {socialProof.familyCount.toLocaleString()}+
-              </span>
-              <span className="text-xs text-gray-500">families</span>
-            </div>
-
-            <div className="flex items-center gap-1 bg-white rounded-full px-3.5 py-1.5 shadow-sm border border-gray-100">
-              <div className="flex items-center gap-0.5">
-                {[1, 2, 3, 4, 5].map((i) => (
-                  <Star
-                    key={i}
-                    className={`w-3.5 h-3.5 ${
-                      i <= Math.floor(socialProof.averageRating)
-                        ? 'fill-amber-400 text-amber-400'
-                        : i - 0.5 <= socialProof.averageRating
-                        ? 'fill-amber-400/50 text-amber-400'
-                        : 'text-gray-200'
-                    }`}
-                  />
-                ))}
+          <div className="rounded-2xl border border-gray-200 bg-white px-4 py-4 shadow-sm">
+            <div className="mb-3 flex flex-wrap items-center justify-center gap-2">
+              <DataProvenanceBadge provenance={socialProof.provenance} />
+              <div className="inline-flex items-center gap-1 rounded-full border border-teal-100 bg-teal-50 px-3 py-1 text-xs font-medium text-teal-700">
+                <TrendingUp className="h-3.5 w-3.5" />
+                Built for caregiver support between sessions
               </div>
-              <span className="text-sm font-semibold text-gray-900 ml-0.5">
-                {socialProof.averageRating}
-              </span>
-              <span className="text-xs text-gray-400">
-                ({socialProof.reviewCount})
-              </span>
             </div>
-          </div>
-
-          {/* Recent signup notification */}
-          <div className="flex items-center justify-center gap-1.5 text-xs text-gray-500">
-            <TrendingUp className="w-3 h-3 text-emerald-500" />
-            <span>
-              {socialProof.recentSignupName} joined{' '}
-              {socialProof.recentSignupMinutesAgo < 60
-                ? `${socialProof.recentSignupMinutesAgo} min ago`
-                : `${Math.floor(socialProof.recentSignupMinutesAgo / 60)}h ago`}
-            </span>
+            {socialProof.data ? (
+              <div className="flex items-center justify-center gap-4 text-sm text-gray-600">
+                <div className="flex items-center gap-1.5">
+                  <Users className="w-4 h-4 text-teal-600" />
+                  <span className="font-semibold text-gray-900">
+                    {socialProof.data.familyCount.toLocaleString()}+
+                  </span>
+                  <span>verified families</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+                  <span className="font-semibold text-gray-900">{socialProof.data.averageRating}</span>
+                  <span>({socialProof.data.reviewCount} reviews)</span>
+                </div>
+              </div>
+            ) : (
+              <p className="text-center text-sm text-gray-600">
+                We only show community proof after it comes from verified live data. Pricing and plan details below reflect the product available today.
+              </p>
+            )}
           </div>
         </motion.div>
 
@@ -628,7 +605,7 @@ export function PaywallSimplified({
               <path d="M17.05 10.917c-.054-3.478 2.858-5.158 2.988-5.234-1.629-2.374-4.166-2.7-5.067-2.738-2.148-.22-4.208 1.264-5.302 1.264-1.1 0-2.79-1.234-4.59-1.2C2.876 3.044.872 4.417.872 7.723c0 3.117 1.75 7.42 3.15 9.08 1.39 1.65 3.053 1.55 3.79 1.55.737 0 2.137-1 4.037-1s2.95.95 3.95.95 2.4-.55 3.5-2.15c-.05-.05-2.25-1.35-2.25-4.236z" fill="currentColor"/>
               <path d="M14.5 2.05c.93-1.15 1.55-2.7 1.38-4.3-1.34.05-3 .9-3.95 2.05-.85 1-1.6 2.6-1.4 4.1 1.5.1 3.05-.75 3.97-1.85z" fill="currentColor" transform="translate(0, 2)"/>
             </svg>
-            <span className="text-[11px] font-semibold text-gray-700">Apple Pay</span>
+            <span className="text-xs font-semibold text-gray-700">Apple Pay</span>
           </div>
           <div className="flex items-center gap-1.5 bg-gray-100 rounded-full px-3 py-1.5">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -642,11 +619,11 @@ export function PaywallSimplified({
                 </radialGradient>
               </defs>
             </svg>
-            <span className="text-[11px] font-semibold text-gray-700">Google Pay</span>
+            <span className="text-xs font-semibold text-gray-700">Google Pay</span>
           </div>
           <div className="flex items-center gap-1.5 bg-gray-100 rounded-full px-3 py-1.5">
             <CreditCard className="w-3.5 h-3.5 text-gray-600" />
-            <span className="text-[11px] font-semibold text-gray-700">Cards</span>
+            <span className="text-xs font-semibold text-gray-700">Cards</span>
           </div>
         </div>
 
@@ -755,64 +732,39 @@ export function PaywallSimplified({
           )}
         </AnimatePresence>
 
-        {/* Testimonial */}
-        <div className="text-center mb-6">
-          <div className="flex items-center justify-center gap-0.5 mb-2">
-            {[...Array(5)].map((_, i) => (
-              <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
-            ))}
-          </div>
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentTestimonial}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.3 }}
-            >
-              <p className="text-gray-700 text-sm max-w-md mx-auto italic">
-                "{TESTIMONIALS[currentTestimonial].text}"
-              </p>
-              <p className="text-gray-500 text-xs mt-1">
-                — {TESTIMONIALS[currentTestimonial].author}, {TESTIMONIALS[currentTestimonial].context}
-              </p>
-            </motion.div>
-          </AnimatePresence>
-        </div>
-
-        {/* Trust badges */}
+        {/* Truth-forward trust badges */}
         <div className="flex items-center justify-center gap-4 text-gray-400 mb-4">
           <div className="flex items-center gap-1 text-xs">
             <Shield className="w-4 h-4" />
-            <span>HIPAA Compliant</span>
+            <span>Secure account access</span>
           </div>
           <div className="flex items-center gap-1 text-xs">
-            <Users className="w-4 h-4" />
-            <span>{socialProof.familyCount.toLocaleString()}+ Families</span>
+            <Sparkles className="w-4 h-4" />
+            <span>AI coaching + daily plans</span>
           </div>
           <div className="flex items-center gap-1 text-xs">
             <Heart className="w-4 h-4" />
-            <span>BCBA Designed</span>
+            <span>BCBA-informed guidance</span>
           </div>
         </div>
 
-        {/* Social proof: "Families like yours" block */}
+        {/* Product truth block */}
         <div className="w-full max-w-md bg-white rounded-xl border border-gray-100 p-4 mb-6">
           <p className="text-xs font-medium text-gray-500 uppercase tracking-wider text-center mb-3">
-            Families like yours
+            What is live today
           </p>
-          <div className="grid grid-cols-3 gap-3 text-center">
+          <div className="grid grid-cols-1 gap-3 text-sm text-gray-600">
             <div>
-              <p className="text-lg font-bold text-teal-700">{socialProof.familyCount}+</p>
-              <p className="text-xs text-gray-500">Active families</p>
+              <p className="font-semibold text-gray-900">Onboarding + child profile</p>
+              <p>Start with your child’s needs, concerns, and daily context.</p>
             </div>
             <div>
-              <p className="text-lg font-bold text-teal-700">92%</p>
-              <p className="text-xs text-gray-500">Recommend to a friend</p>
+              <p className="font-semibold text-gray-900">AI guidance + daily plans</p>
+              <p>Use Aminy for day-to-day caregiver coaching and structured support.</p>
             </div>
             <div>
-              <p className="text-lg font-bold text-teal-700">4.8/5</p>
-              <p className="text-xs text-gray-500">Average rating</p>
+              <p className="font-semibold text-gray-900">Junior + summaries</p>
+              <p>Track child activities and generate provider-ready recap materials on paid tiers.</p>
             </div>
           </div>
         </div>

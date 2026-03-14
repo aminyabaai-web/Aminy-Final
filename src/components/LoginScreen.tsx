@@ -19,7 +19,7 @@ interface LoginScreenProps {
   onCreateAccount: () => void;
 }
 
-const fontStack = 'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", "Helvetica Neue", Arial, "Noto Sans", sans-serif';
+const fontStack = 'Manrope, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", "Helvetica Neue", Arial, "Noto Sans", sans-serif';
 
 const fontSmoothing: React.CSSProperties = {
   WebkitFontSmoothing: 'antialiased',
@@ -239,6 +239,8 @@ export function LoginScreen({
             >
               Welcome back
             </h1>
+            <h2 className="sr-only">Sign in options</h2>
+            <h3 className="sr-only">Email sign in form</h3>
             <p
               style={{
                 color: 'rgba(17, 24, 39, 0.5)',
@@ -298,21 +300,25 @@ export function LoginScreen({
                 gap: '12px',
                 width: '100%',
                 height: '52px',
-                backgroundColor: '#000000',
-                color: '#FFFFFF',
+                backgroundColor: '#FFFFFF',
+                color: 'rgba(17, 24, 39, 0.88)',
                 fontFamily: fontStack,
                 fontWeight: 500,
                 fontSize: '15px',
                 borderRadius: '14px',
-                border: 'none',
+                border: '1px solid rgba(17, 24, 39, 0.12)',
                 cursor: isLoading ? 'not-allowed' : 'pointer',
                 opacity: isLoading ? 0.6 : 1,
-                transition: 'opacity 0.2s ease, transform 0.1s ease',
+                transition: 'opacity 0.2s ease, transform 0.1s ease, background-color 0.2s ease',
                 ...fontSmoothing,
+              }}
+              onMouseEnter={(e) => !isLoading && (e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.02)')}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#FFFFFF';
+                e.currentTarget.style.transform = 'scale(1)';
               }}
               onMouseDown={(e) => !isLoading && (e.currentTarget.style.transform = 'scale(0.98)')}
               onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}
-              onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09z"/>
@@ -590,6 +596,7 @@ export function LoginScreen({
             <button
               type="submit"
               disabled={isLoading}
+              className="action-button"
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -702,7 +709,7 @@ export function LoginScreen({
                   borderRadius: '10px',
                   color: 'rgba(17, 24, 39, 0.35)',
                   fontFamily: fontStack,
-                  fontSize: '10px',
+                  fontSize: '12px',
                   fontWeight: 450,
                   letterSpacing: '0.01em',
                   ...fontSmoothing,
