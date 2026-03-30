@@ -2171,6 +2171,7 @@ export default function App() {
                     "evv-dashboard", "claims-dashboard", "payer-dashboard", "clinical-reports",
                     "prior-auth", "vision-ai", "caregiver-enrollment", "b2b-partner", "b2b-setup",
                     "outcome-measures", "cr-sync", "revenue-dashboard", "waiting-room",
+                    "referral-dashboard",
                   ];
                   if (validScreens.includes(resolved as AppScreen)) {
                     navigateToScreen(resolved as AppScreen);
@@ -3351,6 +3352,8 @@ export default function App() {
                         position="bottom-right"
                         isOpen={fabOpen}
                         onOpenChange={setFabOpen}
+                        onNavigate={(screen) => navigateToScreen(screen as AppScreen)}
+                        childName={userData.childName || userData.parentName || 'your child'}
                       />
                     </Suspense>
                   )}

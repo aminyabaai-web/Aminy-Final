@@ -35,6 +35,7 @@ import {
   type RetentionCohort
 } from '../lib/analytics-engine';
 import { createDataProvenance, getSurfaceLaunchConfig } from '../lib/product-truth';
+import { getAggregatedMetrics } from '../lib/outcomes-tracking';
 
 interface AnalyticsDashboardProps {
   onBack: () => void;
@@ -85,7 +86,7 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
   const [funnelData, setFunnelData] = useState<ConversionFunnel | null>(null);
   const [retentionData, setRetentionData] = useState<RetentionMetrics | null>(null);
   const [isLoadingFunnel, setIsLoadingFunnel] = useState(false);
-  const [useMockData, setUseMockData] = useState(true); // Use mock data for demo
+  const [useMockData, setUseMockData] = useState(false); // Real data by default
   const [data, setData] = useState<AnalyticsData>({
     totalSessions: 0,
     activeUsers: 0,
@@ -117,16 +118,30 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
     }
   }, [activeTab, timeRange]);
 
-  const loadAnalytics = () => {
-    // Mock data - in production, this would come from backend
-    setData({
-      totalSessions: 1247,
-      activeUsers: 423,
-      avgSessionTime: '8m 34s',
-      completionRate: 76,
-      aiInteractions: 3891,
-      goalsCompleted: 189
-    });
+  const loadAnalytics = async () => {
+    if (useMockData) {
+      setData({
+        totalSessions: 1247, activeUsers: 423, avgSessionTime: '8m 34s',
+        completionRate: 76, aiInteractions: 3891, goalsCompleted: 189
+      });
+      return;
+    }
+    try {
+      const metrics = await getAggregatedMetrics();
+      if (metrics) {
+        setData({
+          totalSessions: metrics.totalBehaviorLogs,
+          activeUsers: metrics.activeUsersWeek,
+          avgSessionTime: metrics.activeUsersToday > 0 ? `${metrics.activeUsersToday} today` : '0 today',
+          completionRate: metrics.avgStressReduction,
+          aiInteractions: metrics.aiInteractionsToday,
+          goalsCompleted: metrics.goalsCompletedThisMonth
+        });
+      }
+      // If metrics is null (no data yet), keep the zero defaults — honest empty state
+    } catch (err) {
+      console.warn('Analytics: falling back to empty state', err);
+    }
   };
 
   const loadFunnelAndRetention = () => {
@@ -152,46 +167,47 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
     }
   };
 
+  const hasRealData = !useMockData && (data.totalSessions > 0 || data.activeUsers > 0);
   const metrics = [
     {
-      label: 'Total Sessions',
+      label: 'Behavior Logs',
       value: data.totalSessions.toLocaleString(),
-      change: '+12%',
+      change: hasRealData ? '' : 'No data yet',
       trend: 'up' as const,
       icon: Activity
     },
     {
-      label: 'Active Users',
+      label: 'Active Users (7d)',
       value: data.activeUsers.toLocaleString(),
-      change: '+8%',
+      change: hasRealData ? '' : 'No data yet',
       trend: 'up' as const,
       icon: Users
     },
     {
-      label: 'Avg Session Time',
+      label: 'Active Today',
       value: data.avgSessionTime,
-      change: '+2%',
+      change: '',
       trend: 'up' as const,
       icon: Clock
     },
     {
-      label: 'Completion Rate',
+      label: 'Stress Reduction',
       value: `${data.completionRate}%`,
-      change: '-3%',
-      trend: 'down' as const,
+      change: hasRealData ? '' : 'Needs baseline',
+      trend: data.completionRate > 0 ? 'up' as const : 'down' as const,
       icon: Target
     },
     {
       label: 'AI Interactions',
       value: data.aiInteractions.toLocaleString(),
-      change: '+15%',
+      change: hasRealData ? 'today' : 'No data yet',
       trend: 'up' as const,
       icon: Sparkles
     },
     {
       label: 'Goals Completed',
       value: data.goalsCompleted.toLocaleString(),
-      change: '+10%',
+      change: hasRealData ? 'this month' : 'No data yet',
       trend: 'up' as const,
       icon: Target
     }

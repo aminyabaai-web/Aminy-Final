@@ -395,18 +395,18 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
               Application Submitted!
             </h2>
             <p className="text-neutral-600 dark:text-slate-400 mb-6 max-w-md mx-auto">
-              Thank you for applying to join Aminy's provider network. Our AI has begun verifying your credentials,
-              and you'll receive an email update within 1-2 business days.
+              Thank you for applying to join Aminy's provider network. Our credentialing team will review your
+              application and verify your credentials. You'll receive an email update within 2-3 business days.
             </p>
 
-            {verificationResult && verificationResult.license_valid && (
-              <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4 mb-6">
-                <div className="flex items-center gap-2 text-green-700 dark:text-green-400">
+            {verificationResult && (
+              <div className="bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 rounded-lg p-4 mb-6">
+                <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
                   <Sparkles className="w-5 h-5" />
-                  <span className="font-medium">High confidence verification</span>
+                  <span className="font-medium">Application received</span>
                 </div>
-                <p className="text-sm text-green-600 dark:text-green-500 mt-1">
-                  Your credentials passed initial AI verification. Approval is likely within 24 hours.
+                <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+                  Your information has been submitted for manual review. We verify all licenses, certifications, and credentials before network approval.
                 </p>
               </div>
             )}

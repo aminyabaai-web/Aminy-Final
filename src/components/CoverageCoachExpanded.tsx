@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
+import { checkEligibilityAvaility, isAvailityConfigured } from '../lib/clearinghouse-integration';
 
 interface CoverageCoachExpandedProps {
   userData: {
@@ -120,39 +121,69 @@ export function CoverageCoachExpanded({ userData, onSaveReport }: CoverageCoachE
     }, 500);
   };
 
-  const generateReport = () => {
+  const generateReport = async () => {
     setIsGenerating(true);
     addMessage('ai', "Generating your Coverage Clarity Report... This will take just a moment.");
-    
-    // Simulate AI processing
-    setTimeout(() => {
-      const report: CoverageReport = {
-        insuranceProvider,
-        planType,
-        state,
-        childNeeds,
-        coverageSummary: {
-          abaServices: getABACoverage(),
-          speechTherapy: getSpeechCoverage(),
-          occupationalTherapy: getOTCoverage(),
-          assessments: getAssessmentCoverage()
-        },
-        nextSteps: getNextSteps(),
-        generatedAt: new Date().toISOString()
-      };
-      
-      setGeneratedReport(report);
-      setCurrentStep('report');
-      setIsGenerating(false);
-      
-      addMessage('ai', "Your Coverage Clarity Report is ready! 🎉 I've summarized what your plan likely covers, based on your state's regulations and common plan structures.");
-      
-      if (onSaveReport) {
-        onSaveReport(report);
+
+    let realEligibility: { isActive: boolean; planName: string; planType: string; deductibleRemaining: number } | null = null;
+
+    // Attempt real Availity eligibility check if configured
+    if (isAvailityConfigured()) {
+      try {
+        addMessage('ai', "Checking eligibility with your insurance provider...");
+        const result = await checkEligibilityAvaility({
+          memberId: '', // Would come from user input — placeholder for now
+          memberDob: '',
+          memberFirstName: userData.parentName.split(' ')[0] || '',
+          memberLastName: userData.parentName.split(' ')[1] || '',
+          providerId: '',
+          payerId: insuranceProvider.toUpperCase().replace(/\s+/g, ''),
+          serviceDate: new Date().toISOString().split('T')[0],
+          serviceCodes: ['97153', '97155'], // ABA CPT codes
+          placeOfService: '02', // Telehealth
+        });
+        if (result.success && result.coverage) {
+          realEligibility = {
+            isActive: result.coverage.isActive,
+            planName: result.plan?.planName || planType,
+            planType: result.plan?.planType || planType,
+            deductibleRemaining: result.coverage.deductible?.remaining || 0,
+          };
+        }
+      } catch (err) {
+        console.warn('Availity eligibility check failed, using general guidance:', err);
       }
-      
-      toast.success('Report generated and saved to your Records!');
-    }, 3000);
+    }
+
+    const report: CoverageReport = {
+      insuranceProvider,
+      planType: realEligibility?.planName || planType,
+      state,
+      childNeeds,
+      coverageSummary: {
+        abaServices: realEligibility?.isActive
+          ? `✓ Active coverage confirmed. Plan type: ${realEligibility.planType}. Deductible remaining: $${realEligibility.deductibleRemaining.toLocaleString()}.`
+          : getABACoverage(),
+        speechTherapy: getSpeechCoverage(),
+        occupationalTherapy: getOTCoverage(),
+        assessments: getAssessmentCoverage()
+      },
+      nextSteps: getNextSteps(),
+      generatedAt: new Date().toISOString()
+    };
+
+    setGeneratedReport(report);
+    setCurrentStep('report');
+    setIsGenerating(false);
+
+    const source = realEligibility ? "real-time eligibility data" : "general plan guidance for your state";
+    addMessage('ai', `Your Coverage Clarity Report is ready! I've summarized what your plan covers based on ${source}.`);
+
+    if (onSaveReport) {
+      onSaveReport(report);
+    }
+
+    toast.success('Report generated and saved to your Records!');
   };
 
   const getABACoverage = () => {

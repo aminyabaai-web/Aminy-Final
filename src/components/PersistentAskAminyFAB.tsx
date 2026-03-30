@@ -1,16 +1,65 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { MessageSquare, X, Send, Mic, Brain } from 'lucide-react';
+import { MessageSquare, X, Send, Mic, Brain, Calendar, Shield, TrendingUp, AlertTriangle, ChevronRight } from 'lucide-react';
 import { Button } from './ui/button';
 import { Textarea } from './ui/textarea';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
 
+interface ChatCTA {
+  type: 'book' | 'coverage' | 'crisis' | 'outcomes';
+  label: string;
+  screen: string;
+  description: string;
+}
+
 interface ChatMsg {
   id: string;
   text: string;
   isUser: boolean;
+  cta?: ChatCTA;
 }
+
+// Detect user intent from conversation text to surface relevant action CTAs
+function detectIntent(userText: string, aiText: string): ChatCTA | null {
+  const combined = (userText + ' ' + aiText).toLowerCase();
+
+  // Crisis first — highest priority
+  if (/\b(crisis|emergency|hurt|danger|harm|suicid|911|unsafe|meltdown.*severe|hurt.*self)\b/.test(combined)) {
+    return { type: 'crisis', label: 'Crisis Resources', screen: 'crisis-resources', description: 'Get immediate support' };
+  }
+
+  // Schedule / booking
+  if (/\b(schedule|book|appointment|session|telehealth|provider|therapist|bcba|see someone|meet with)\b/.test(combined)) {
+    return { type: 'book', label: 'Book a Visit', screen: 'telehealth', description: 'Schedule time with an expert' };
+  }
+
+  // Coverage / insurance
+  if (/\b(coverage|insurance|benefits|eligible|eligib|copay|deductible|claim|prior auth|authorization|pay for)\b/.test(combined)) {
+    return { type: 'coverage', label: 'Check Coverage', screen: 'benefits', description: 'See your ABA benefits' };
+  }
+
+  // Progress / goals / outcomes
+  if (/\b(goal|progress|data|outcome|report|tracking|how.*doing|improvement|measure)\b/.test(combined)) {
+    return { type: 'outcomes', label: 'View Progress', screen: 'outcomes', description: 'See your child\'s outcomes' };
+  }
+
+  return null;
+}
+
+const CTA_ICONS: Record<string, React.ReactNode> = {
+  book: <Calendar className="w-4 h-4" />,
+  coverage: <Shield className="w-4 h-4" />,
+  outcomes: <TrendingUp className="w-4 h-4" />,
+  crisis: <AlertTriangle className="w-4 h-4" />,
+};
+
+const CTA_COLORS: Record<string, string> = {
+  book: 'bg-teal-50 text-teal-700 border-teal-200 hover:bg-teal-100',
+  coverage: 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100',
+  outcomes: 'bg-purple-50 text-purple-700 border-purple-200 hover:bg-purple-100',
+  crisis: 'bg-red-50 text-red-700 border-red-200 hover:bg-red-100',
+};
 
 interface PersistentAskAminyFABProps {
   tier?: string;
@@ -20,6 +69,7 @@ interface PersistentAskAminyFABProps {
   childName?: string;
   isOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
+  onNavigate?: (screen: string) => void;
 }
 
 // Build the conversation history for the AI endpoint
@@ -45,7 +95,8 @@ export function PersistentAskAminyFAB({
   position = 'bottom-right',
   childName = 'your child',
   isOpen: isOpenProp,
-  onOpenChange
+  onOpenChange,
+  onNavigate,
 }: PersistentAskAminyFABProps) {
   const [localOpen, setLocalOpen] = useState(false);
   const isOpen = isOpenProp ?? localOpen;
@@ -128,10 +179,12 @@ export function PersistentAskAminyFAB({
         aiText = `That's a great question about ${childName}. While I'm having a brief connection hiccup, here's what I'd suggest: start with small, consistent steps and celebrate every bit of progress. I'll be back to full speed shortly!`;
       }
 
+      const cta = detectIntent(userText, aiText);
       const aiResponse: ChatMsg = {
         id: (Date.now() + 1).toString(),
         text: aiText,
         isUser: false,
+        cta: cta ?? undefined,
       };
       setMessages((prev) => [...prev, aiResponse]);
     } catch (err: unknown) {
@@ -235,7 +288,7 @@ export function PersistentAskAminyFAB({
             {messages.map((message) => (
               <div
                 key={message.id}
-                className={`flex ${message.isUser ? 'justify-end' : 'justify-start'}`}
+                className={`flex flex-col ${message.isUser ? 'items-end' : 'items-start'}`}
               >
                 <div
                   className={`max-w-[80%] px-4 py-2 rounded-2xl ${
@@ -246,6 +299,22 @@ export function PersistentAskAminyFAB({
                 >
                   <p className="text-sm">{message.text}</p>
                 </div>
+                {message.cta && onNavigate && (
+                  <button
+                    onClick={() => {
+                      onNavigate(message.cta!.screen);
+                      setIsOpen(false);
+                    }}
+                    className={`mt-2 flex items-center gap-2 px-3 py-2 rounded-xl border text-xs font-medium transition-colors ${CTA_COLORS[message.cta.type]}`}
+                  >
+                    {CTA_ICONS[message.cta.type]}
+                    <div className="text-left">
+                      <div className="font-semibold">{message.cta.label}</div>
+                      <div className="opacity-70">{message.cta.description}</div>
+                    </div>
+                    <ChevronRight className="w-3 h-3 ml-auto opacity-60" />
+                  </button>
+                )}
               </div>
             ))}
 

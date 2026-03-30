@@ -10,7 +10,7 @@
  * - Favorites/wishlist functionality
  */
 
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Search,
@@ -40,6 +40,7 @@ import { Badge } from './ui/badge';
 import { Input } from './ui/input';
 import { toast } from 'sonner';
 import { TierType } from '../lib/tier-utils';
+import { supabase } from '../utils/supabase/client';
 
 // Types
 interface Product {
@@ -91,8 +92,8 @@ const CATEGORIES: { id: ProductCategory; name: string; icon: React.ReactNode }[]
   { id: 'tools', name: 'Parent Tools', icon: <Tag className="w-4 h-4" /> },
 ];
 
-// Mock products data
-const PRODUCTS: Product[] = [
+// Curated affiliate catalog — shown when no store_products found in Supabase
+const CURATED_PRODUCTS: Product[] = [
   {
     id: '1',
     name: 'The Explosive Child',
@@ -276,12 +277,36 @@ export function StoreMarketplace({
   const [selectedCategory, setSelectedCategory] = useState<ProductCategory | 'all'>('all');
   const [showFilters, setShowFilters] = useState(false);
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
+  const [products, setProducts] = useState<Product[]>(CURATED_PRODUCTS);
+  const [usingCuratedFallback, setUsingCuratedFallback] = useState(true);
   const [filters, setFilters] = useState({
     freeOnly: false,
     bcbaRecommended: false,
     digitalOnly: false,
     newOnly: false,
   });
+
+  // Attempt to fetch real products from Supabase store_products table
+  useEffect(() => {
+    async function loadProducts() {
+      try {
+        const { data, error } = await supabase
+          .from('store_products')
+          .select('*')
+          .eq('active', true)
+          .order('featured', { ascending: false });
+
+        if (!error && data && data.length > 0) {
+          setProducts(data as Product[]);
+          setUsingCuratedFallback(false);
+        }
+        // On error or empty, keep CURATED_PRODUCTS (already set as default state)
+      } catch {
+        // Silent fallback — curated catalog already loaded
+      }
+    }
+    loadProducts();
+  }, []);
 
   // Check if user has premium access
   const hasPremiumAccess = useMemo(() =>
@@ -290,7 +315,7 @@ export function StoreMarketplace({
 
   // Filter products
   const filteredProducts = useMemo(() => {
-    return PRODUCTS.filter((product) => {
+    return products.filter((product) => {
       // Search filter
       if (searchQuery) {
         const query = searchQuery.toLowerCase();
@@ -326,8 +351,8 @@ export function StoreMarketplace({
 
   // Featured products
   const featuredProducts = useMemo(() =>
-    PRODUCTS.filter(p => p.isFeatured).slice(0, 4),
-  []);
+    products.filter(p => p.isFeatured).slice(0, 4),
+  [products]);
 
   // Toggle favorite
   const toggleFavorite = useCallback((productId: string) => {
@@ -436,7 +461,9 @@ export function StoreMarketplace({
               )}
               <div>
                 <h1 className="text-xl font-bold text-slate-900 dark:text-white">Resource Store</h1>
-                <p className="text-sm text-slate-500">BCBA-curated tools and resources</p>
+                <p className="text-sm text-slate-500">
+                  {usingCuratedFallback ? 'Curated affiliate recommendations' : 'BCBA-curated tools and resources'}
+                </p>
               </div>
             </div>
             <Button

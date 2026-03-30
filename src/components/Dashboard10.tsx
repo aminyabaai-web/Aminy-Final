@@ -1195,7 +1195,7 @@ export function Dashboard10({
               rewardEarned={0}
               variant="dashboard"
               onShare={() => {
-                // Track share event for analytics
+                onNavigate?.('referral-dashboard');
               }}
             />
           </section>

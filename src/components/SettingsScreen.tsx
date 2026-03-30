@@ -48,7 +48,9 @@ import {
   Info,
   CalendarDays,
   RefreshCw,
-  Unplug
+  Unplug,
+  Users,
+  Gift
 } from 'lucide-react';
 import { ThemeSelector } from '../lib/theme-provider';
 import { Button } from './ui/button';
@@ -629,6 +631,40 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
               </p>
             </div>
           )}
+        </Card>
+
+        {/* Invite Families Section */}
+        <Card className="p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-teal-400 to-cyan-500 rounded-full flex items-center justify-center">
+                <Users className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <h3 className="font-semibold dark:text-white">Invite Families</h3>
+                <p className="text-sm text-muted-foreground">Share Aminy with other families</p>
+              </div>
+            </div>
+            <button
+              onClick={() => onNavigate?.('referral-dashboard')}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-teal-50 hover:bg-teal-100 text-teal-700 rounded-lg text-sm font-medium transition-colors"
+            >
+              <Gift className="w-4 h-4" />
+              View Rewards
+            </button>
+          </div>
+          <div className="mt-3 pt-3 border-t border-gray-100 dark:border-slate-700">
+            <p className="text-sm text-muted-foreground">
+              Refer a family and earn rewards when they join. Every family you help builds a stronger community.
+            </p>
+            <button
+              onClick={() => onNavigate?.('referral-dashboard')}
+              className="mt-3 w-full py-2.5 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
+            >
+              <Users className="w-4 h-4" />
+              Invite Families & Track Rewards
+            </button>
+          </div>
         </Card>
 
         {/* Notifications Section */}
