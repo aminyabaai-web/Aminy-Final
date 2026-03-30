@@ -70,6 +70,7 @@ import { useDashboardData, getDefaultRoutines, getDefaultGoals } from '../hooks/
 import { getUserBadges, type EarnedBadge } from '../lib/badge-service';
 import { useNudgeEngine } from '../hooks/useNudgeEngine';
 import { subscribeToPush, isPushSupported, getNotificationPermission } from '../lib/push-notifications';
+import { triggerHaptic } from '../lib/haptics';
 
 // Types
 interface ChildProfile {
@@ -510,6 +511,7 @@ export function Dashboard10({
   ];
 
   const handleQuickAction = (actionId: string) => {
+    triggerHaptic('light');
     if (!onNavigate) return;
 
     switch (actionId) {

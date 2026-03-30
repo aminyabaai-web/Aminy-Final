@@ -6,7 +6,7 @@
  * - Wire the communication bridge (Junior reports behaviors back to Parent AI)
  */
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
     ArrowLeft,
@@ -17,7 +17,11 @@ import {
     Tv,
     Music,
     IceCream,
-    CheckCircle2
+    CheckCircle2,
+    Camera,
+    Plus,
+    Clock,
+    X
 } from 'lucide-react';
 import { Button } from './ui/button';
 import { toast } from 'sonner';
@@ -38,6 +42,16 @@ interface RewardItem {
     cost: number;
     icon: React.ReactNode;
     color: string;
+    photoUrl?: string;       // parent-uploaded photo of the actual reward
+    isCustom?: boolean;      // added by parent via camera
+    needsApproval?: boolean; // custom rewards require parent sign-off
+}
+
+interface PendingRedemption {
+    rewardId: string;
+    rewardName: string;
+    timestamp: number;
+    approved: boolean;
 }
 
 interface TokenRewardsBoardProps {
@@ -45,12 +59,28 @@ interface TokenRewardsBoardProps {
     availableTokens: number;
     onSpendTokens: (amount: number) => void;
     childName?: string;
+    isParentView?: boolean; // set true when parent is viewing to show approval controls
 }
 
-export function TokenRewardsBoard({ onBack, availableTokens, onSpendTokens, childName = "Emma" }: TokenRewardsBoardProps) {
+export function TokenRewardsBoard({ onBack, availableTokens, onSpendTokens, childName = "Emma", isParentView = false }: TokenRewardsBoardProps) {
     const [selectedReward, setSelectedReward] = useState<RewardItem | null>(null);
     const [isProcessing, setIsProcessing] = useState(false);
     const [redeemedReward, setRedeemedReward] = useState<RewardItem | null>(null);
+    const [showAddReward, setShowAddReward] = useState(false);
+    const [newRewardName, setNewRewardName] = useState('');
+    const [newRewardCost, setNewRewardCost] = useState('10');
+    const [newRewardPhoto, setNewRewardPhoto] = useState<string | null>(null);
+    const [customRewards, setCustomRewards] = useState<RewardItem[]>(() => {
+        try {
+            return JSON.parse(localStorage.getItem('aminy-custom-rewards') || '[]');
+        } catch { return []; }
+    });
+    const [pendingRedemptions, setPendingRedemptions] = useState<PendingRedemption[]>(() => {
+        try {
+            return JSON.parse(localStorage.getItem('aminy-pending-redemptions') || '[]');
+        } catch { return []; }
+    });
+    const cameraInputRef = useRef<HTMLInputElement>(null);
 
     const rewards: RewardItem[] = [
         { id: 'screen_time', name: '15 Min Extra Play', cost: 10, icon: <Gamepad2 size={32} />, color: 'from-blue-400 to-indigo-500' },
@@ -58,6 +88,39 @@ export function TokenRewardsBoard({ onBack, availableTokens, onSpendTokens, chil
         { id: 'dance_party', name: 'Dance Party', cost: 5, icon: <Music size={32} />, color: 'from-emerald-400 to-teal-500' },
         { id: 'special_treat', name: 'Special Treat', cost: 15, icon: <IceCream size={32} />, color: 'from-pink-400 to-rose-500' },
     ];
+
+    const handleCapurePhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+            setNewRewardPhoto(ev.target?.result as string);
+        };
+        reader.readAsDataURL(file);
+    };
+
+    const handleAddCustomReward = () => {
+        if (!newRewardName.trim()) { toast.error('Enter a reward name'); return; }
+        const cost = parseInt(newRewardCost) || 10;
+        const newReward: RewardItem = {
+            id: `custom-${Date.now()}`,
+            name: newRewardName.trim(),
+            cost,
+            icon: newRewardPhoto ? null : <Gift size={32} />,
+            color: 'from-amber-400 to-orange-500',
+            photoUrl: newRewardPhoto ?? undefined,
+            isCustom: true,
+            needsApproval: true,
+        };
+        const updated = [...customRewards, newReward];
+        setCustomRewards(updated);
+        localStorage.setItem('aminy-custom-rewards', JSON.stringify(updated.map(r => ({ ...r, icon: null }))));
+        setNewRewardName('');
+        setNewRewardCost('10');
+        setNewRewardPhoto(null);
+        setShowAddReward(false);
+        toast.success(`Added "${newReward.name}" to rewards!`);
+    };
 
     const handleRedeem = (reward: RewardItem) => {
         if (availableTokens < reward.cost) {
@@ -70,25 +133,57 @@ export function TokenRewardsBoard({ onBack, availableTokens, onSpendTokens, chil
 
         setIsProcessing(true);
 
-        // Simulate transaction delay
         setTimeout(() => {
             onSpendTokens(reward.cost);
+
+            if (reward.needsApproval) {
+                // Custom reward — needs parent sign-off before delivery
+                const pending: PendingRedemption = {
+                    rewardId: reward.id,
+                    rewardName: reward.name,
+                    timestamp: Date.now(),
+                    approved: false,
+                };
+                const updated = [...pendingRedemptions, pending];
+                setPendingRedemptions(updated);
+                localStorage.setItem('aminy-pending-redemptions', JSON.stringify(updated));
+                connectorHub.publish('jr.milestone.reached', {
+                    childId: childName.toLowerCase(),
+                    type: 'reward_pending_approval',
+                    rewardId: reward.id,
+                    rewardName: reward.name,
+                    value: reward.cost,
+                    requiresParentApproval: true,
+                }, 'rewards-board');
+            } else {
+                // Built-in reward — immediate
+                connectorHub.publish('jr.milestone.reached', {
+                    childId: childName.toLowerCase(),
+                    type: 'reward_redeemed',
+                    rewardId: reward.id,
+                    value: reward.cost,
+                }, 'rewards-board');
+            }
+
             setRedeemedReward(reward);
             setIsProcessing(false);
-
-            // Phase 4 Communication Bridge: Log to Parent AI Context
-            connectorHub.publish('jr.milestone.reached', {
-                childId: childName.toLowerCase(),
-                type: 'reward_redeemed',
-                rewardId: reward.id,
-                value: reward.cost,
-            }, 'rewards-board');
 
             if (window.navigator && window.navigator.vibrate) {
                 window.navigator.vibrate([100, 50, 200]);
             }
-
         }, 800);
+    };
+
+    const handleParentApprove = (rewardId: string) => {
+        const updated = pendingRedemptions.map(r =>
+            r.rewardId === rewardId ? { ...r, approved: true } : r
+        );
+        setPendingRedemptions(updated);
+        localStorage.setItem('aminy-pending-redemptions', JSON.stringify(updated));
+        toast.success('Reward approved! Your child can enjoy it now.');
+        if (window.navigator && window.navigator.vibrate) {
+            window.navigator.vibrate([100]);
+        }
     };
 
     return (
@@ -141,10 +236,21 @@ export function TokenRewardsBoard({ onBack, availableTokens, onSpendTokens, chil
                 </motion.div>
 
                 {/* Rewards Grid */}
-                <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#111827', marginBottom: '16px' }}>Available Rewards</h3>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+                    <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#111827' }}>Available Rewards</h3>
+                    {isParentView && (
+                        <button
+                            onClick={() => setShowAddReward(true)}
+                            style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 16px', backgroundColor: '#0D1B2A', color: '#FFF', borderRadius: '12px', border: 'none', cursor: 'pointer', fontSize: '14px', fontWeight: 600 }}
+                        >
+                            <Camera size={16} />
+                            Add Reward
+                        </button>
+                    )}
+                </div>
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: '16px' }}>
-                    {rewards.map(reward => {
+                    {[...rewards, ...customRewards.map(r => ({ ...r, icon: r.icon || <Gift size={32} /> }))].map(reward => {
                         const canAfford = availableTokens >= reward.cost;
                         return (
                             <motion.button
@@ -153,31 +259,147 @@ export function TokenRewardsBoard({ onBack, availableTokens, onSpendTokens, chil
                                 whileTap={{ scale: 0.98 }}
                                 onClick={() => setSelectedReward(reward)}
                                 style={{
-                                    backgroundColor: '#FFFFFF', borderRadius: '24px', padding: '24px',
+                                    backgroundColor: '#FFFFFF', borderRadius: '24px', padding: '20px',
                                     border: '2px solid ' + (selectedReward?.id === reward.id ? '#3B82F6' : 'transparent'),
                                     boxShadow: '0 4px 12px rgba(0,0,0,0.03)', cursor: 'pointer',
-                                    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px',
+                                    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px',
                                     opacity: canAfford ? 1 : 0.6,
                                     transition: 'all 0.2s',
                                     position: 'relative'
                                 }}
                             >
-                                <div style={{ width: '64px', height: '64px', borderRadius: '20px', backgroundImage: 'linear-gradient(to bottom right, var(--tw-gradient-stops))', background: 'var(--tw-gradient-from, #E5E7EB)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#FFF' }} className={'bg-gradient-to-br ' + reward.color}>
-                                    {reward.icon}
-                                </div>
+                                {/* Photo or icon */}
+                                {reward.photoUrl ? (
+                                    <div style={{ width: '72px', height: '72px', borderRadius: '20px', overflow: 'hidden', flexShrink: 0 }}>
+                                        <img src={reward.photoUrl} alt={reward.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                    </div>
+                                ) : (
+                                    <div style={{ width: '64px', height: '64px', borderRadius: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#FFF' }} className={'bg-gradient-to-br ' + reward.color}>
+                                        {reward.icon}
+                                    </div>
+                                )}
                                 <div style={{ textAlign: 'center' }}>
-                                    <p style={{ fontSize: '15px', fontWeight: 600, color: '#111827', marginBottom: '4px' }}>{reward.name}</p>
+                                    <p style={{ fontSize: '14px', fontWeight: 600, color: '#111827', marginBottom: '4px' }}>{reward.name}</p>
                                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}>
-                                        <span style={{ fontSize: '14px', fontWeight: 600, color: canAfford ? '#059669' : '#DC2626' }}>{reward.cost}</span>
+                                        <span style={{ fontSize: '13px', fontWeight: 600, color: canAfford ? '#059669' : '#DC2626' }}>{reward.cost}</span>
                                         <Star size={12} fill={canAfford ? '#10B981' : '#EF4444'} color={canAfford ? '#10B981' : '#EF4444'} />
                                     </div>
+                                    {reward.needsApproval && (
+                                        <p style={{ fontSize: '10px', color: '#92400E', marginTop: '2px' }}>Parent approves</p>
+                                    )}
                                 </div>
                             </motion.button>
                         );
                     })}
                 </div>
 
+                {/* Parent approval queue */}
+                {isParentView && pendingRedemptions.filter(r => !r.approved).length > 0 && (
+                    <div style={{ marginTop: '32px' }}>
+                        <h3 style={{ fontSize: '16px', fontWeight: 600, color: '#92400E', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <Clock size={16} />
+                            Waiting for Your Approval
+                        </h3>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                            {pendingRedemptions.filter(r => !r.approved).map(pending => (
+                                <div key={`${pending.rewardId}-${pending.timestamp}`} style={{ backgroundColor: '#FEF3C7', borderRadius: '16px', padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                    <div>
+                                        <p style={{ fontSize: '14px', fontWeight: 600, color: '#92400E' }}>{childName} wants: {pending.rewardName}</p>
+                                        <p style={{ fontSize: '12px', color: '#B45309' }}>{new Date(pending.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                                    </div>
+                                    <button
+                                        onClick={() => handleParentApprove(pending.rewardId)}
+                                        style={{ padding: '8px 16px', backgroundColor: '#059669', color: '#FFF', borderRadius: '10px', border: 'none', cursor: 'pointer', fontSize: '13px', fontWeight: 600 }}
+                                    >
+                                        Approve
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
             </div>
+
+            {/* Hidden camera input */}
+            <input
+                ref={cameraInputRef}
+                type="file"
+                accept="image/*"
+                capture="environment"
+                style={{ display: 'none' }}
+                onChange={handleCapurePhoto}
+            />
+
+            {/* Add Custom Reward Modal */}
+            <AnimatePresence>
+                {showAddReward && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(8px)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}
+                        onClick={() => setShowAddReward(false)}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.9, y: 20 }}
+                            animate={{ scale: 1, y: 0 }}
+                            exit={{ scale: 0.9, y: 20 }}
+                            onClick={(e) => e.stopPropagation()}
+                            style={{ backgroundColor: '#FFFFFF', borderRadius: '32px', padding: '28px', maxWidth: '360px', width: '100%' }}
+                        >
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
+                                <h2 style={{ fontSize: '18px', fontWeight: 700, color: '#111827' }}>Add Custom Reward</h2>
+                                <button onClick={() => setShowAddReward(false)} style={{ padding: '6px', borderRadius: '8px', border: 'none', backgroundColor: '#F3F4F6', cursor: 'pointer' }}>
+                                    <X size={16} color="#6B7280" />
+                                </button>
+                            </div>
+
+                            {/* Photo picker */}
+                            <div
+                                onClick={() => cameraInputRef.current?.click()}
+                                style={{ width: '100%', height: '140px', borderRadius: '20px', border: '2px dashed #D1D5DB', backgroundColor: '#F9FAFB', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', marginBottom: '16px', overflow: 'hidden' }}
+                            >
+                                {newRewardPhoto ? (
+                                    <img src={newRewardPhoto} alt="Reward preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                ) : (
+                                    <>
+                                        <Camera size={28} color="#9CA3AF" />
+                                        <p style={{ fontSize: '13px', color: '#9CA3AF', marginTop: '8px' }}>Tap to take or upload photo</p>
+                                    </>
+                                )}
+                            </div>
+
+                            <input
+                                type="text"
+                                placeholder="Reward name (e.g. Ice cream trip)"
+                                value={newRewardName}
+                                onChange={(e) => setNewRewardName(e.target.value)}
+                                style={{ width: '100%', padding: '12px 16px', borderRadius: '14px', border: '1.5px solid #E5E7EB', fontSize: '14px', marginBottom: '12px', outline: 'none', boxSizing: 'border-box' }}
+                            />
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
+                                <label style={{ fontSize: '13px', color: '#6B7280', whiteSpace: 'nowrap' }}>Star cost:</label>
+                                <input
+                                    type="number"
+                                    min="1"
+                                    max="100"
+                                    value={newRewardCost}
+                                    onChange={(e) => setNewRewardCost(e.target.value)}
+                                    style={{ flex: 1, padding: '10px 14px', borderRadius: '12px', border: '1.5px solid #E5E7EB', fontSize: '14px', outline: 'none' }}
+                                />
+                                <Star size={16} fill="#FCD34D" color="#FCD34D" />
+                            </div>
+
+                            <Button
+                                onClick={handleAddCustomReward}
+                                style={{ width: '100%', borderRadius: '16px', backgroundColor: '#0D1B2A', padding: '14px 0', fontSize: '15px' }}
+                            >
+                                Add to Rewards Board
+                            </Button>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             {/* Redemption Confirmation Modal */}
             <AnimatePresence>
@@ -235,7 +457,8 @@ export function TokenRewardsBoard({ onBack, availableTokens, onSpendTokens, chil
                             </div>
                             <h2 style={{ fontSize: '24px', fontWeight: 700, color: '#111827', marginBottom: '12px' }}>Yay! 🎉</h2>
                             <p style={{ fontSize: '16px', color: '#4B5563', marginBottom: '32px' }}>
-                                You successfully traded your stars for <strong style={{ color: '#111827' }}>{redeemedReward.name}</strong>! Your parent has been notified.
+                                You successfully traded your stars for <strong style={{ color: '#111827' }}>{redeemedReward.name}</strong>!{' '}
+                                {redeemedReward.needsApproval ? 'Waiting for a parent to approve — ask them to check Aminy!' : 'Your parent has been notified.'}
                             </p>
 
                             <Button onClick={() => { setRedeemedReward(null); setSelectedReward(null); }} style={{ width: '100%', borderRadius: '16px', backgroundColor: '#111827', padding: '16px 0', fontSize: '16px' }}>
