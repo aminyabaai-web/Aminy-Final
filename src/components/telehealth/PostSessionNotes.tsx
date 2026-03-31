@@ -33,6 +33,14 @@ import {
 } from 'lucide-react';
 import { createVisitSummary, type VisitSummary } from '../../lib/care-plan';
 import { projectId, publicAnonKey } from '../../utils/supabase/info';
+import { toast } from 'sonner';
+import {
+  generateSuperbillFromSession,
+  saveSuperbillToSupabase,
+  type SessionForSuperbill,
+  type ClinicalNoteForSuperbill,
+  type ProviderForSuperbill,
+} from '../../lib/superbill-service';
 import {
   suggestCPTCodes,
   validateNoteForCPT,
@@ -648,26 +656,124 @@ export function PostSessionNotes({
           </div>
         )}
 
-        {/* Footer */}
-        <div className="p-5 border-t border-gray-100 flex gap-3">
-          <button
-            onClick={onSkip}
-            className="flex-1 py-3 px-4 border border-gray-200 rounded-xl font-medium text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-          >
-            Skip for Now
-          </button>
-          <button
-            onClick={handleSave}
-            disabled={isSaving}
-            className={`flex-1 py-3 px-4 rounded-xl font-medium text-sm flex items-center justify-center gap-2 transition-colors ${
-              isSaving
-                ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                : 'bg-blue-600 text-white hover:bg-blue-700'
-            }`}
-          >
-            <Save size={16} />
-            {isSaving ? 'Saving...' : 'Save Notes'}
-          </button>
+        {/* Footer — Sign & Submit for Billing */}
+        <div className="p-5 border-t border-gray-100 space-y-3">
+          <div className="flex gap-3">
+            <button
+              onClick={onSkip}
+              className="py-3 px-4 border border-gray-200 rounded-xl font-medium text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+            >
+              Skip
+            </button>
+            <button
+              onClick={handleSave}
+              disabled={isSaving}
+              className="flex-1 py-3 px-4 border border-gray-200 rounded-xl font-medium text-sm text-gray-700 hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
+            >
+              <Save size={16} />
+              {isSaving ? 'Saving...' : 'Save Draft'}
+            </button>
+            <button
+              onClick={async () => {
+                // Sign + generate superbill + save
+                if (selectedCPT) {
+                  const validation = runCPTValidation();
+                  setCptValidation(validation);
+                  if (validation && !validation.valid) {
+                    setShowBillingQuestions(true);
+                    return;
+                  }
+                }
+
+                setIsSaving(true);
+                setSaveError(null);
+
+                try {
+                  const followUpText = followUp === 'Other' ? customFollowUp : followUp;
+
+                  // 1. Save the visit summary
+                  const summary = await createVisitSummary(patientId, {
+                    appointmentId,
+                    providerId,
+                    reasonForVisit: reason || 'Telehealth session',
+                    whatWeDiscussed: discussed.map(b => b.text.trim()).filter(Boolean),
+                    planForNext7Days: plan.map(b => b.text.trim()).filter(Boolean),
+                    whatToTrack: tracking.map(b => b.text.trim()).filter(Boolean),
+                    followUpRecommendation: followUpText,
+                    childId,
+                    cptCode: selectedCPT || undefined,
+                  });
+
+                  // 2. Generate superbill from session data
+                  if (selectedCPT) {
+                    const session: SessionForSuperbill = {
+                      id: appointmentId,
+                      patientId,
+                      patientName: childId || patientId,
+                      scheduledAt: new Date().toISOString(),
+                      duration: sessionDurationSeconds ? Math.floor(sessionDurationSeconds / 60) : 50,
+                      type: 'Telehealth Session',
+                      status: 'completed',
+                    };
+                    const clinicalNote: ClinicalNoteForSuperbill = {
+                      noteType: 'telehealth',
+                      content: {
+                        reason,
+                        discussed: discussed.map(b => b.text.trim()).filter(Boolean).join('; '),
+                        plan: plan.map(b => b.text.trim()).filter(Boolean).join('; '),
+                        tracking: tracking.map(b => b.text.trim()).filter(Boolean).join('; '),
+                      },
+                      cptCode: selectedCPT,
+                      patientName: childId || patientId,
+                      sessionId: appointmentId,
+                    };
+                    const provider: ProviderForSuperbill = {
+                      id: providerId,
+                      name: userId,
+                      credentials: '',
+                      type: providerType || 'therapist',
+                    };
+
+                    const superbill = generateSuperbillFromSession(session, clinicalNote, provider);
+                    const superbillId = await saveSuperbillToSupabase(superbill);
+
+                    if (superbillId) {
+                      toast.success('Signed, saved & superbill generated', {
+                        description: 'Claim is ready for submission. View in Claims Dashboard.',
+                      });
+                    } else {
+                      toast.success('Notes signed & saved', {
+                        description: 'Superbill generation failed — you can retry from the provider portal.',
+                      });
+                    }
+                  } else {
+                    toast.success('Notes signed & saved');
+                  }
+
+                  onSaved?.(summary);
+                } catch (err) {
+                  console.error('[PostSessionNotes] Sign & submit failed:', err);
+                  setSaveError(err instanceof Error ? err.message : 'Failed to save');
+                } finally {
+                  setIsSaving(false);
+                }
+              }}
+              disabled={isSaving}
+              className={`flex-1 py-3 px-4 rounded-xl font-medium text-sm flex items-center justify-center gap-2 transition-colors ${
+                isSaving
+                  ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                  : 'bg-green-600 text-white hover:bg-green-700'
+              }`}
+            >
+              <CheckCircle size={16} />
+              {isSaving ? 'Submitting...' : 'Sign & Submit for Billing'}
+            </button>
+          </div>
+          {selectedCPT && (
+            <p className="text-xs text-center text-gray-500">
+              Signing will lock notes, generate a superbill for <strong>{selectedCPT}</strong>, and queue for claim submission.
+            </p>
+          )}
         </div>
       </div>
     </div>

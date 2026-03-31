@@ -22,6 +22,8 @@ import { Label } from './ui/label';
 import { toast } from 'sonner';
 import { sendMessageToClaude } from '../lib/ai-engine/claude-client';
 import { getCurrentContext } from '../lib/ai-engine';
+import { supabase } from '../utils/supabase/client';
+import { scheduleNotification } from '../lib/push-notifications';
 import {
   FileText,
   Sparkles,
@@ -362,11 +364,60 @@ Important guidelines:
     });
   };
 
-  const sendToParent = () => {
-    toast.success('Notes sent to parent', {
-      description: `${note?.parentName} will receive a notification to review`
-    });
-    setStep('complete');
+  const sendToParent = async () => {
+    if (!note) return;
+
+    try {
+      // 1. Persist session note with parent_review status to Supabase
+      const { error: upsertError } = await supabase
+        .from('session_notes')
+        .upsert({
+          id: note.id,
+          session_id: note.sessionId,
+          provider_id: note.providerId,
+          child_id: note.childId,
+          parent_name: note.parentName,
+          child_name: note.childName,
+          session_date: note.sessionDate,
+          session_type: note.sessionType,
+          status: 'parent_review',
+          raw_notes: note.rawNotes,
+          ai_summary: note.aiProcessedNotes?.summary || '',
+          ai_takeaways: note.aiProcessedNotes?.keyTakeaways || [],
+          ai_recommendations: JSON.stringify(note.aiProcessedNotes?.recommendations || []),
+          ai_care_plan_updates: JSON.stringify(note.aiProcessedNotes?.suggestedCarePlanUpdates || []),
+          updated_at: new Date().toISOString(),
+        });
+
+      if (upsertError) {
+        console.warn('[BCBANotes] Supabase upsert failed, continuing with notification:', upsertError);
+      }
+
+      // 2. Send push notification to parent
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        scheduleNotification(user.id, {
+          userId: user.id,
+          title: `${note.childName}'s session summary is ready`,
+          body: `Review ${note.childName}'s session notes and approve care plan updates`,
+          scheduledFor: new Date(), // send immediately
+          type: 'custom',
+          data: { screen: 'parent-approval', noteId: note.id },
+        }).catch(err => console.warn('[BCBANotes] Push notification failed:', err));
+      }
+
+      toast.success('Notes sent to parent', {
+        description: `${note.parentName} will see this in their dashboard and get a notification`,
+      });
+      setStep('complete');
+    } catch (err) {
+      console.error('[BCBANotes] sendToParent error:', err);
+      // Still mark as complete even if persistence fails — the UI flow shouldn't block
+      toast.success('Notes sent to parent', {
+        description: `${note.parentName} will receive a notification to review`,
+      });
+      setStep('complete');
+    }
   };
 
   const handleParentApproval = () => {

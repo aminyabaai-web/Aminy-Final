@@ -205,6 +205,27 @@ export function Dashboard10({
   // Morning mission state
   const { shouldShow: showMorningMission, isCompleted: missionCompleted } = useMorningMission();
 
+  // Pending session reviews for parent approval
+  const [pendingReviews, setPendingReviews] = useState<Array<{ id: string; childName: string; sessionDate: string; providerName?: string }>>([]);
+  useEffect(() => {
+    if (!userId) return;
+    supabase
+      .from('session_notes')
+      .select('id, child_name, session_date, provider_id')
+      .eq('status', 'parent_review')
+      .order('session_date', { ascending: false })
+      .limit(5)
+      .then(({ data }) => {
+        if (data && data.length > 0) {
+          setPendingReviews(data.map(d => ({
+            id: d.id,
+            childName: d.child_name || child.name,
+            sessionDate: d.session_date,
+          })));
+        }
+      });
+  }, [userId]);
+
   // Notification prompt state
   const shouldShowNotificationPrompt = useShouldShowNotificationPrompt();
   const [showNotificationPrompt, setShowNotificationPrompt] = useState(true);
@@ -745,6 +766,36 @@ export function Dashboard10({
 
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 py-6 space-y-3 sm:space-y-4 sm:space-y-6">
+        {/* Pending Session Reviews — parent needs to approve */}
+        {pendingReviews.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-gradient-to-r from-violet-50 to-purple-50 dark:from-violet-900/20 dark:to-purple-900/20 border border-violet-200 dark:border-violet-700 rounded-xl p-4"
+          >
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-8 h-8 bg-violet-100 dark:bg-violet-800 rounded-full flex items-center justify-center">
+                <FileText className="w-4 h-4 text-violet-600 dark:text-violet-300" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-violet-800 dark:text-violet-200">
+                  {pendingReviews.length === 1 ? 'Session summary ready for review' : `${pendingReviews.length} session summaries to review`}
+                </p>
+                <p className="text-xs text-violet-600 dark:text-violet-400">
+                  Your provider shared notes from {pendingReviews[0].childName}'s session
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => onNavigate?.('parent-approval')}
+              className="w-full mt-2 py-2.5 bg-violet-600 hover:bg-violet-700 text-white rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
+            >
+              <CheckCircle2 className="w-4 h-4" />
+              Review & Approve
+            </button>
+          </motion.div>
+        )}
+
         {/* ========================================
             PROACTIVE NUDGES - AI that reaches out
             (Aminy's unique proactive support)
