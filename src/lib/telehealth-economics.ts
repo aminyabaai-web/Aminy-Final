@@ -374,3 +374,81 @@ export function calculateAppointmentSettlementBreakdown(options: {
     platformFeeCents: Math.max(0, memberChargeCents - providerPayoutCents),
   };
 }
+
+// ============================================================================
+// Telehealth Modifier Impact on Insured Reimbursement
+// ============================================================================
+
+/**
+ * Estimated reimbursement rates per CPT code (Arizona Medicaid / commercial avg).
+ * Modifier 95 (synchronous telehealth) typically reimburses at 100% of in-person
+ * rate for behavioral health in AZ. GT modifier is legacy but some payers still use it.
+ *
+ * Source: CMS Physician Fee Schedule + AZ AHCCCS rate tables
+ */
+export const ESTIMATED_REIMBURSEMENT_CENTS: Record<string, { inPerson: number; modifier95: number; modifierGT: number }> = {
+  '97151': { inPerson: 4800, modifier95: 4800, modifierGT: 4800 },   // ABA Assessment (per 15-min unit)
+  '97153': { inPerson: 3200, modifier95: 3200, modifierGT: 3200 },   // ABA Direct RBT (per 15-min unit)
+  '97155': { inPerson: 5600, modifier95: 5600, modifierGT: 5600 },   // ABA Protocol Mod BCBA (per 15-min unit)
+  '97156': { inPerson: 5200, modifier95: 5200, modifierGT: 5200 },   // ABA Family Guidance (per 15-min unit)
+  '90834': { inPerson: 10800, modifier95: 10800, modifierGT: 10260 }, // Psychotherapy 45 min (GT = 95% in some plans)
+  '90837': { inPerson: 14400, modifier95: 14400, modifierGT: 13680 }, // Psychotherapy 60 min
+  '92507': { inPerson: 7200, modifier95: 7200, modifierGT: 7200 },   // SLP Treatment
+};
+
+export interface TelehealthMarginAnalysis {
+  cptCode: string;
+  modifier: '95' | 'GT' | 'none';
+  estimatedReimbursementCents: number;
+  providerPayoutCents: number;
+  platformFeeCents: number;
+  netMarginCents: number;
+  marginPercent: number;
+}
+
+/**
+ * Calculate profitability for a telehealth session including modifier impact.
+ * This is the function that answers: "Given this CPT code and telehealth modifier,
+ * what is our margin after paying the provider?"
+ */
+export function calculateTelehealthMargin(options: {
+  cptCode: string;
+  modifier?: '95' | 'GT';
+  units?: number;
+  providerPayoutCents: number;
+}): TelehealthMarginAnalysis {
+  const { cptCode, modifier = '95', units = 1, providerPayoutCents } = options;
+  const rates = ESTIMATED_REIMBURSEMENT_CENTS[cptCode];
+
+  if (!rates) {
+    return {
+      cptCode,
+      modifier,
+      estimatedReimbursementCents: 0,
+      providerPayoutCents,
+      platformFeeCents: 0,
+      netMarginCents: -providerPayoutCents,
+      marginPercent: -100,
+    };
+  }
+
+  const reimbursement = modifier === 'GT'
+    ? rates.modifierGT * units
+    : modifier === '95'
+      ? rates.modifier95 * units
+      : rates.inPerson * units;
+
+  const platformFeeCents = Math.max(0, reimbursement - providerPayoutCents);
+  const netMarginCents = reimbursement - providerPayoutCents;
+  const marginPercent = reimbursement > 0 ? Math.round((netMarginCents / reimbursement) * 100) : 0;
+
+  return {
+    cptCode,
+    modifier,
+    estimatedReimbursementCents: reimbursement,
+    providerPayoutCents,
+    platformFeeCents,
+    netMarginCents,
+    marginPercent,
+  };
+}

@@ -27,8 +27,12 @@ import {
   ChevronUp,
   Save,
   Target,
+  MessageSquare,
+  Send,
+  Loader2,
 } from 'lucide-react';
 import { createVisitSummary, type VisitSummary } from '../../lib/care-plan';
+import { projectId, publicAnonKey } from '../../utils/supabase/info';
 import {
   suggestCPTCodes,
   validateNoteForCPT,
@@ -132,6 +136,48 @@ export function PostSessionNotes({
   const [selectedCPT, setSelectedCPT] = useState<string>(suggestedCPTs[0]?.code || '');
   const [cptValidation, setCptValidation] = useState<{ valid: boolean; missingFields: string[]; warnings: string[] } | null>(null);
   const [showBillingQuestions, setShowBillingQuestions] = useState(false);
+
+  // AI billing Q&A
+  const [showBillingChat, setShowBillingChat] = useState(false);
+  const [billingQuestion, setBillingQuestion] = useState('');
+  const [billingAnswer, setBillingAnswer] = useState('');
+  const [billingLoading, setBillingLoading] = useState(false);
+
+  const askBillingAI = useCallback(async () => {
+    if (!billingQuestion.trim() || billingLoading) return;
+    setBillingLoading(true);
+    setBillingAnswer('');
+    try {
+      const cpt = selectedCPT ? getCPTByCode(selectedCPT) : null;
+      const response = await fetch(
+        `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/ai/chat`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${publicAnonKey}` },
+          body: JSON.stringify({
+            messages: [
+              {
+                role: 'system',
+                content: `You are a billing compliance assistant for behavioral health providers. You help with CPT code selection, modifier usage, and documentation requirements for clean claim submission. Be concise (2-3 paragraphs max). Always cite specific CPT codes and modifiers. If unsure, say so and recommend checking with a billing specialist.\n\nContext: Provider type: ${providerType || 'unknown'}. Session: ${sessionType}, ${sessionDurationSeconds ? Math.floor(sessionDurationSeconds / 60) : '?'} minutes, telehealth: ${isTelehealth}. ${cpt ? `Currently selected CPT: ${cpt.code} (${cpt.shortName}). Required fields: ${cpt.requiredFields.join(', ')}. Billing tip: ${cpt.billingTip}` : 'No CPT code selected yet.'}`
+              },
+              { role: 'user', content: billingQuestion.trim() }
+            ],
+            stream: false,
+          }),
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setBillingAnswer(data.message || data.response || data.choices?.[0]?.message?.content || 'No response received.');
+      } else {
+        setBillingAnswer('Could not reach billing assistant. Try again or consult your billing team.');
+      }
+    } catch {
+      setBillingAnswer('Connection error. Please try again.');
+    } finally {
+      setBillingLoading(false);
+    }
+  }, [billingQuestion, billingLoading, selectedCPT, providerType, sessionType, sessionDurationSeconds, isTelehealth]);
 
   // Form state
   const [reason, setReason] = useState(initialReason);
@@ -502,6 +548,67 @@ export function PostSessionNotes({
                   >
                     I've updated my notes — re-check
                   </button>
+                </div>
+              )}
+
+              {/* AI Billing Q&A */}
+              <button
+                type="button"
+                onClick={() => setShowBillingChat(!showBillingChat)}
+                className="mt-3 flex items-center gap-2 text-xs font-medium text-blue-600 hover:text-blue-800 transition-colors"
+              >
+                <MessageSquare size={14} />
+                {showBillingChat ? 'Hide billing assistant' : 'Ask about billing & CPT codes'}
+              </button>
+
+              {showBillingChat && (
+                <div className="mt-2 bg-white rounded-lg p-3 border border-blue-200">
+                  <p className="text-xs text-blue-600 mb-2">
+                    Ask about CPT selection, modifiers, documentation requirements, or split billing scenarios.
+                  </p>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={billingQuestion}
+                      onChange={e => setBillingQuestion(e.target.value)}
+                      onKeyDown={e => { if (e.key === 'Enter') askBillingAI(); }}
+                      placeholder="e.g. Can I bill 97155 and 97156 same session?"
+                      className="flex-1 px-3 py-2 text-sm border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400/30"
+                    />
+                    <button
+                      type="button"
+                      onClick={askBillingAI}
+                      disabled={billingLoading || !billingQuestion.trim()}
+                      className="px-3 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
+                    >
+                      {billingLoading ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />}
+                    </button>
+                  </div>
+                  {billingAnswer && (
+                    <div className="mt-2 p-2.5 bg-blue-50 rounded-lg text-xs text-blue-800 leading-relaxed whitespace-pre-wrap">
+                      {billingAnswer}
+                    </div>
+                  )}
+                  {/* Quick billing questions */}
+                  {!billingAnswer && (
+                    <div className="mt-2 flex flex-wrap gap-1.5">
+                      {[
+                        'What modifier for telehealth?',
+                        'Can I bill parent training + direct same day?',
+                        'What documentation for this CPT?',
+                        'Units vs time-based billing?',
+                      ].map(q => (
+                        <button
+                          key={q}
+                          type="button"
+                          onClick={() => { setBillingQuestion(q); }}
+                          className="text-[11px] px-2 py-1 bg-blue-50 text-blue-600 rounded-md hover:bg-blue-100 transition-colors"
+                        >
+                          {q}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
             </section>
