@@ -486,7 +486,7 @@ export function Dashboard10({
   const quickActions = [
     {
       id: 'plan',
-      label: 'Our Plan',
+      label: 'My Plan',
       icon: <FileText className="w-5 h-5 text-teal-700 dark:text-teal-300" />,
       accent: 'bg-teal-100 dark:bg-teal-900/30',
     },
@@ -877,7 +877,7 @@ export function Dashboard10({
                 className="rounded-full bg-[#0891b2] text-white hover:bg-[#0b7895]"
                 onClick={() => onNavigate?.('care-plan')}
               >
-                See our plan
+                See my plan
               </Button>
               <Button
                 size="sm"

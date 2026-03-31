@@ -418,9 +418,15 @@ export function TokenRewardsBoard({ onBack, availableTokens, onSpendTokens, chil
                             onClick={(e) => e.stopPropagation()}
                             style={{ backgroundColor: '#FFFFFF', borderRadius: '32px', padding: '32px', maxWidth: '360px', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}
                         >
-                            <div style={{ width: '80px', height: '80px', borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#FFF', marginBottom: '24px' }} className={'bg-gradient-to-br ' + selectedReward.color}>
-                                {selectedReward.icon}
-                            </div>
+                            {selectedReward.photoUrl ? (
+                                <div style={{ width: '80px', height: '80px', borderRadius: '24px', overflow: 'hidden', marginBottom: '24px' }}>
+                                    <img src={selectedReward.photoUrl} alt={selectedReward.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                </div>
+                            ) : (
+                                <div style={{ width: '80px', height: '80px', borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#FFF', marginBottom: '24px' }} className={'bg-gradient-to-br ' + selectedReward.color}>
+                                    {selectedReward.icon}
+                                </div>
+                            )}
                             <h2 style={{ fontSize: '20px', fontWeight: 600, color: '#111827', marginBottom: '8px' }}>Get {selectedReward.name}?</h2>
                             <p style={{ fontSize: '15px', color: '#6B7280', marginBottom: '24px' }}>
                                 This will cost <strong style={{ color: '#111827' }}>{selectedReward.cost}</strong> stars. You have <strong style={{ color: '#059669' }}>{availableTokens}</strong> stars right now.
@@ -438,14 +444,38 @@ export function TokenRewardsBoard({ onBack, availableTokens, onSpendTokens, chil
                     </motion.div>
                 )}
 
-                {/* Success Modal */}
+                {/* Success Modal with confetti burst */}
                 {redeemedReward && (
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(16, 185, 129, 0.95)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}
+                        style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(16, 185, 129, 0.95)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px', overflow: 'hidden' }}
                     >
+                        {/* Confetti particles */}
+                        {Array.from({ length: 24 }).map((_, i) => (
+                            <motion.div
+                                key={`confetti-${i}`}
+                                initial={{ x: 0, y: 0, opacity: 1, scale: 1 }}
+                                animate={{
+                                    x: (Math.random() - 0.5) * 400,
+                                    y: (Math.random() - 0.5) * 600,
+                                    opacity: 0,
+                                    scale: 0,
+                                    rotate: Math.random() * 720,
+                                }}
+                                transition={{ duration: 1.2 + Math.random() * 0.8, ease: 'easeOut', delay: Math.random() * 0.3 }}
+                                style={{
+                                    position: 'absolute',
+                                    top: '50%',
+                                    left: '50%',
+                                    width: `${8 + Math.random() * 10}px`,
+                                    height: `${8 + Math.random() * 10}px`,
+                                    borderRadius: Math.random() > 0.5 ? '50%' : '2px',
+                                    backgroundColor: ['#FCD34D', '#F472B6', '#60A5FA', '#34D399', '#A78BFA', '#FB923C'][i % 6],
+                                }}
+                            />
+                        ))}
                         <motion.div
                             initial={{ scale: 0.5, opacity: 0, rotate: -10 }}
                             animate={{ scale: 1, opacity: 1, rotate: 0 }}

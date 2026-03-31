@@ -6,7 +6,7 @@
  * - Book a Visit CTA
  * - Browse Top Concerns
  * - Messages / Ask Aminy
- * - Care Plan access
+ * - My Plan access
  * - Monthly Q&A promo
  * - Resources library
  */
@@ -274,8 +274,8 @@ export function TelehealthHome({
             <div className="w-12 h-12 bg-[#0891b2]/10 rounded-full flex items-center justify-center mb-3">
               <FileText className="w-6 h-6 text-[#0891b2]" />
             </div>
-            <h3 className="font-semibold text-gray-900">Care Plan</h3>
-            <p className="text-sm text-gray-500 mt-1">Summaries & tasks</p>
+            <h3 className="font-semibold text-gray-900">My Plan</h3>
+            <p className="text-sm text-gray-500 mt-1">Goals, routines & progress</p>
           </button>
 
           <button

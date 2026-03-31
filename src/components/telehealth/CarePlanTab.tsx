@@ -139,8 +139,8 @@ export function CarePlanTabScreen({
             <ArrowLeft className="w-5 h-5 text-gray-700" />
           </button>
           <div>
-            <h1 className="text-lg font-semibold text-gray-900">Care Plan</h1>
-            <p className="text-sm text-gray-500">Goals, visits, and action items</p>
+            <h1 className="text-lg font-semibold text-gray-900">My Plan</h1>
+            <p className="text-sm text-gray-500">Goals, routines, and progress</p>
           </div>
         </div>
 

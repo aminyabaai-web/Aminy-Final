@@ -36,7 +36,7 @@ const companionItems: NavItem[] = [
   { id: 'home', label: 'Home', helper: 'Today and next steps', icon: Home },
   { id: 'ask-aminy', label: 'Ask Aminy', helper: 'AI guidance and memory', icon: Sparkles },
   { id: 'junior', label: 'Ease', helper: 'Calm, rewards, transitions', icon: Baby },
-  { id: 'care-plan', label: 'Care Plan', helper: 'Goals and routines', icon: Heart },
+  { id: 'care-plan', label: 'My Plan', helper: 'Goals, routines & progress', icon: Heart },
 ];
 
 const supportItems: NavItem[] = [

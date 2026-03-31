@@ -107,9 +107,9 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
     },
     {
       id: 'care-plan',
-      label: 'Care',
+      label: 'My Plan',
       icon: Heart,
-      ariaLabel: 'Care - Your care plan',
+      ariaLabel: 'My Plan - Goals, routines and progress',
       enabled: true,
       isCenter: false
     },
