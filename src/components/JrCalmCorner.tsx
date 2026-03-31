@@ -31,6 +31,7 @@ import {
   Hand,
   Circle
 } from 'lucide-react';
+import { playBreath, playTap, playComplete, haptic } from './junior/activities/sounds';
 
 // ============================================
 // TYPES
@@ -136,12 +137,16 @@ export function JrCalmCorner({
 
   // ── Emotion Check-in ──
   const handleEmotionSelect = (emotion: Emotion) => {
+    playTap();
+    haptic(25);
     setEmotionBefore(emotion);
     setPhase('pick-activity');
   };
 
   // ── Activity Selection ──
   const handleActivitySelect = (activity: CalmActivity) => {
+    playTap();
+    haptic(30);
     setSelectedActivity(activity);
     setPhase('activity');
     if (activity === 'bubble-pop') {
@@ -166,11 +171,18 @@ export function JrCalmCorner({
     const advance = () => {
       currentIdx = (currentIdx + 1) % phases.length;
       setBreathPhase(phases[currentIdx].phase);
-      if (currentIdx === 0) setBreathCycle(c => c + 1);
+      // Gentle sound + haptic on each inhale cycle
+      if (phases[currentIdx].phase === 'inhale') {
+        playBreath();
+        haptic(15);
+        setBreathCycle(c => c + 1);
+      }
       timeout = setTimeout(advance, phases[currentIdx].duration);
     };
 
     setBreathPhase('inhale');
+    playBreath();
+    haptic(15);
     timeout = setTimeout(advance, phases[0].duration);
 
     return () => clearTimeout(timeout);
@@ -226,6 +238,8 @@ export function JrCalmCorner({
 
   // ── Completion ──
   const handleCheckOut = (emotion: Emotion) => {
+    playComplete();
+    haptic([60, 30, 60, 30, 120]);
     setEmotionAfter(emotion);
     const duration = Math.round((Date.now() - startTime) / 1000);
 

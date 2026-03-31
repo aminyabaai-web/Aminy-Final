@@ -1592,6 +1592,39 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
                     </div>
                   </div>
 
+                  {/* Daily Engagement Hook — "Today's Mission" */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="mt-5 rounded-[24px] border border-amber-200/60 bg-gradient-to-r from-amber-50 to-orange-50 p-4 shadow-sm"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-100 text-xl">
+                        {weekStreak >= 5 ? '🔥' : weekStreak >= 3 ? '⭐' : '🌱'}
+                      </div>
+                      <div className="flex-1">
+                        <div className="text-xs font-medium uppercase tracking-[0.12em] text-amber-600">
+                          {new Date().getHours() < 12 ? 'Good morning' : new Date().getHours() < 17 ? 'Good afternoon' : 'Good evening'}, {childName}!
+                        </div>
+                        <div className="mt-0.5 text-sm font-semibold text-slate-900">
+                          {weekStreak >= 5
+                            ? `${weekStreak}-day streak! You're on fire 🔥`
+                            : weekStreak >= 3
+                              ? `${weekStreak} days in a row — keep it going!`
+                              : "Let's earn some stars today!"}
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setActiveView('activity-select')}
+                        className="rounded-2xl bg-amber-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-amber-600"
+                      >
+                        Let's go!
+                      </button>
+                    </div>
+                  </motion.div>
+
                   <div className="mt-6 grid gap-3 lg:grid-cols-[1.4fr_0.8fr]">
                     <button
                       type="button"

@@ -14,6 +14,7 @@ import {
   ChevronRight,
   Sparkles,
 } from 'lucide-react';
+import { playTap, playComplete, playSuccess, haptic } from './activities/sounds';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -189,6 +190,9 @@ export function VisualSchedule({ childName, onBack }: VisualScheduleProps) {
   // ---- Handlers ----
 
   const handleMarkDone = useCallback((id: string) => {
+    playComplete();
+    haptic([80, 40, 120]);
+
     setJustCompletedId(id);
     setTimeout(() => setJustCompletedId(null), 800);
 

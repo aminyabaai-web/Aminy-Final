@@ -11,6 +11,7 @@ import {
   X,
   Check,
 } from 'lucide-react';
+import { playTap, playSuccess, haptic } from './activities/sounds';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -264,6 +265,10 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
 
   const handleSymbolTap = useCallback(
     (symbol: AACSymbol) => {
+      // Tactile + audio feedback
+      playTap();
+      haptic(20);
+
       // Visual feedback
       setSpeakingId(symbol.id);
       setTimeout(() => setSpeakingId(null), 400);
@@ -279,6 +284,8 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
 
   const handleSpeakSentence = useCallback(() => {
     if (sentenceStrip.length === 0) return;
+    playSuccess();
+    haptic([50, 30, 50]);
     const sentence = sentenceStrip.map((s) => s.phrase).join(' ');
     speak(sentence, 0.85);
   }, [sentenceStrip]);
