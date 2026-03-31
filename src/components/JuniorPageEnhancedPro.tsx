@@ -86,6 +86,7 @@ import { JrCalmCorner } from './JrCalmCorner';
 import { TokenRewardsBoard } from './TokenRewardsBoard';
 import { AACBoard } from './junior/AACBoard';
 import { VisualSchedule } from './junior/VisualSchedule';
+import { playTap, playSuccess, haptic } from './junior/activities/sounds';
 import {
   recordJuniorProgress,
   getFocusAreas,
@@ -275,7 +276,13 @@ const TRACK_FILTERS = [
 ];
 
 export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: JuniorPageProps) {
-  const [activeView, setActiveView] = useState<'kid-login' | 'home' | 'buddy-select' | 'activity-select' | 'activity' | 'celebration' | 'calm-corner' | 'rewards' | 'parent-education' | 'visual-coaching' | 'offline-manager' | 'parent-controls' | 'aac-board' | 'visual-schedule'>('home');
+  const [activeView, _setActiveView] = useState<'kid-login' | 'home' | 'buddy-select' | 'activity-select' | 'activity' | 'celebration' | 'calm-corner' | 'rewards' | 'parent-education' | 'visual-coaching' | 'offline-manager' | 'parent-controls' | 'aac-board' | 'visual-schedule'>('home');
+  // Wrap setActiveView to fire haptic + sound on every navigation
+  const setActiveView: typeof _setActiveView = (view) => {
+    playTap();
+    haptic(30);
+    _setActiveView(view);
+  };
   const [selectedBuddy, setSelectedBuddy] = useState<string>('sunny');
   const [currentSpeechLevel, setCurrentSpeechLevel] = useState<number>(2);
   const [isRecording, setIsRecording] = useState(false);
@@ -1064,6 +1071,8 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
 
         if (visualCoaching.spectrogramFireworks) {
           setShowConfetti(true);
+          playSuccess();
+          haptic([100, 50, 100, 50, 200]);
           setTimeout(() => setShowConfetti(false), 3000);
         }
 
