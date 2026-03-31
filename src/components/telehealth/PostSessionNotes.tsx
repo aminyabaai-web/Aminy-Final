@@ -29,6 +29,12 @@ import {
   Target,
 } from 'lucide-react';
 import { createVisitSummary, type VisitSummary } from '../../lib/care-plan';
+import {
+  suggestCPTCodes,
+  validateNoteForCPT,
+  getCPTByCode,
+  type CPTCode,
+} from '../../lib/cpt-codes';
 
 // ---------------------------------------------------------------------------
 // Props
@@ -55,6 +61,12 @@ export interface PostSessionNotesProps {
   onSkip?: () => void;
   /** Child ID (for family-based care plans) */
   childId?: string;
+  /** Provider type for CPT code suggestion */
+  providerType?: 'bcba' | 'rbt' | 'slp' | 'psychologist' | 'therapist' | 'dev-ped';
+  /** Session type for CPT code suggestion */
+  sessionType?: 'individual' | 'family' | 'group' | 'evaluation' | 'follow-up';
+  /** Whether this was a telehealth session */
+  isTelehealth?: boolean;
 }
 
 // ---------------------------------------------------------------------------
@@ -106,7 +118,21 @@ export function PostSessionNotes({
   onSaved,
   onSkip,
   childId,
+  providerType,
+  sessionType = 'individual',
+  isTelehealth = true,
 }: PostSessionNotesProps) {
+  // CPT code suggestion based on session context
+  const suggestedCPTs = suggestCPTCodes({
+    providerType,
+    sessionType,
+    duration: sessionDurationSeconds ? Math.floor(sessionDurationSeconds / 60) : undefined,
+    isTelemedicine: isTelehealth,
+  });
+  const [selectedCPT, setSelectedCPT] = useState<string>(suggestedCPTs[0]?.code || '');
+  const [cptValidation, setCptValidation] = useState<{ valid: boolean; missingFields: string[]; warnings: string[] } | null>(null);
+  const [showBillingQuestions, setShowBillingQuestions] = useState(false);
+
   // Form state
   const [reason, setReason] = useState(initialReason);
   const [discussed, setDiscussed] = useState<BulletItem[]>([
@@ -166,7 +192,39 @@ export function PostSessionNotes({
   // Save handler
   // -----------------------------------------------------------------------
 
+  // Validate note against selected CPT code before save
+  const runCPTValidation = useCallback(() => {
+    if (!selectedCPT) return null;
+    const noteContent: Record<string, string> = {
+      reason,
+      targets: discussed.map(b => b.text.trim()).filter(Boolean).join('; '),
+      data: tracking.map(b => b.text.trim()).filter(Boolean).join('; '),
+      plan: plan.map(b => b.text.trim()).filter(Boolean).join('; '),
+      trials: discussed.some(b => b.text.toLowerCase().includes('trial')) ? 'present' : '',
+      subjective: reason,
+      objective: discussed.map(b => b.text.trim()).filter(Boolean).join('; '),
+      presenting: reason,
+      intervention: discussed.map(b => b.text.trim()).filter(Boolean).join('; '),
+      progress: tracking.map(b => b.text.trim()).filter(Boolean).join('; '),
+      risk_assessment: discussed.some(b => b.text.toLowerCase().includes('safety') || b.text.toLowerCase().includes('risk')) ? 'present' : '',
+      prompting: discussed.some(b => b.text.toLowerCase().includes('prompt')) ? 'present' : '',
+      articulation: discussed.some(b => b.text.toLowerCase().includes('artic') || b.text.toLowerCase().includes('sound')) ? 'present' : '',
+      language: discussed.some(b => b.text.toLowerCase().includes('language') || b.text.toLowerCase().includes('comprehension')) ? 'present' : '',
+    };
+    return validateNoteForCPT(selectedCPT, noteContent);
+  }, [selectedCPT, reason, discussed, tracking, plan]);
+
   const handleSave = useCallback(async () => {
+    // Run CPT validation before save
+    if (selectedCPT) {
+      const validation = runCPTValidation();
+      setCptValidation(validation);
+      if (validation && !validation.valid) {
+        setShowBillingQuestions(true);
+        return; // Don't save yet — show provider what's missing
+      }
+    }
+
     setIsSaving(true);
     setSaveError(null);
 
@@ -183,6 +241,7 @@ export function PostSessionNotes({
         whatToTrack: tracking.map(b => b.text.trim()).filter(Boolean),
         followUpRecommendation: followUpText,
         childId,
+        cptCode: selectedCPT || undefined,
       });
 
       onSaved?.(summary);
@@ -205,6 +264,8 @@ export function PostSessionNotes({
     followUp,
     customFollowUp,
     childId,
+    selectedCPT,
+    runCPTValidation,
     onSaved,
   ]);
 
@@ -379,6 +440,72 @@ export function PostSessionNotes({
               />
             )}
           </section>
+
+          {/* CPT Code Selection + Billing Compliance */}
+          {suggestedCPTs.length > 0 && (
+            <section className="bg-blue-50 rounded-xl p-4 border border-blue-200">
+              <label className="block text-sm font-semibold text-blue-800 mb-2">
+                Recommended CPT Code
+              </label>
+              <p className="text-xs text-blue-600 mb-3">
+                AI-selected based on provider type, session type, and duration. Choose the best fit for clean billing.
+              </p>
+              <div className="space-y-2">
+                {suggestedCPTs.map((cpt) => {
+                  const isSelected = selectedCPT === cpt.code;
+                  return (
+                    <button
+                      key={cpt.code}
+                      type="button"
+                      onClick={() => { setSelectedCPT(cpt.code); setCptValidation(null); setShowBillingQuestions(false); }}
+                      className={`w-full text-left p-3 rounded-lg border transition-colors ${
+                        isSelected
+                          ? 'border-blue-400 bg-blue-100'
+                          : 'border-blue-200 bg-white hover:bg-blue-50'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-semibold text-blue-900">{cpt.code} — {cpt.shortName}</span>
+                        {isSelected && <CheckCircle size={16} className="text-blue-600" />}
+                      </div>
+                      <p className="text-xs text-blue-700 mt-1">{cpt.description}</p>
+                      <p className="text-xs text-blue-500 mt-1 italic">{cpt.billingTip}</p>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Billing Compliance Warnings */}
+              {showBillingQuestions && cptValidation && (
+                <div className="mt-3 bg-amber-50 rounded-lg p-3 border border-amber-200">
+                  <p className="text-sm font-semibold text-amber-800 mb-2 flex items-center gap-1.5">
+                    <AlertCircle size={14} />
+                    Complete these for clean billing ({selectedCPT})
+                  </p>
+                  {cptValidation.missingFields.length > 0 && (
+                    <div className="mb-2">
+                      <p className="text-xs font-medium text-amber-700">Required documentation missing:</p>
+                      <ul className="text-xs text-amber-600 mt-1 space-y-0.5">
+                        {cptValidation.missingFields.map(f => (
+                          <li key={f}>• Add <strong>{f.replace(/_/g, ' ')}</strong> to your notes above</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  {cptValidation.warnings.map((w, i) => (
+                    <p key={i} className="text-xs text-amber-600">⚠ {w}</p>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={() => setShowBillingQuestions(false)}
+                    className="mt-2 text-xs text-amber-700 underline hover:no-underline"
+                  >
+                    I've updated my notes — re-check
+                  </button>
+                </div>
+              )}
+            </section>
+          )}
 
           {/* Update care-plan goals (collapsible) */}
           <section>

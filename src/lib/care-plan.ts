@@ -23,6 +23,7 @@ export interface VisitSummary {
   whatToTrack: string[];
   followUpRecommendation?: string;
   childId?: string;
+  cptCode?: string;
   createdAt: string;
   updatedAt: string;
   // Joined data
@@ -308,6 +309,7 @@ export async function createVisitSummary(
         what_to_track: summary.whatToTrack,
         follow_up_recommendation: summary.followUpRecommendation,
         child_id: summary.childId,
+        cpt_code: summary.cptCode,
       })
       .select()
       .single();
