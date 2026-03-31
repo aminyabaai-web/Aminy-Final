@@ -661,7 +661,7 @@ export function CreateAccountScreen({
                     ...fontSmoothing,
                   }}
                 >
-                  I accept the{' '}
+                  I am 18+ and the parent/legal guardian of any child whose data I enter. I accept the{' '}
                   <span
                     role="button"
                     tabIndex={0}

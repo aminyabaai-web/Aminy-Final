@@ -113,8 +113,21 @@ export function PersistentAskAminyFAB({
     onOpenChange?.(value);
   };
   const [input, setInput] = useState('');
-  const [messages, setMessages] = useState<ChatMsg[]>([]);
+  const [messages, setMessages] = useState<ChatMsg[]>(() => {
+    try {
+      const saved = localStorage.getItem('aminy-fab-history');
+      return saved ? JSON.parse(saved) : [];
+    } catch { return []; }
+  });
   const [isReplying, setIsReplying] = useState(false);
+
+  // Persist conversation history (keep last 20 messages)
+  useEffect(() => {
+    if (messages.length > 0) {
+      const toSave = messages.slice(-20).map(m => ({ id: m.id, text: m.text, isUser: m.isUser }));
+      localStorage.setItem('aminy-fab-history', JSON.stringify(toSave));
+    }
+  }, [messages]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
 

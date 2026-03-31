@@ -93,6 +93,7 @@ export function AppointmentConfirmationScreen({
   const [promoError, setPromoError] = useState<string | null>(null);
   const [showCalendarOptions, setShowCalendarOptions] = useState(false);
   const [calendarAutoSynced, setCalendarAutoSynced] = useState(false);
+  const [telehealthConsent, setTelehealthConsent] = useState(false);
 
   const visitConfig = VISIT_TYPES[visitType];
 
@@ -536,11 +537,29 @@ export function AppointmentConfirmationScreen({
           </div>
         </div>
 
-        {/* Footer CTA */}
+        {/* Telehealth Consent + Footer CTA */}
         <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-100 safe-area-bottom">
+          <label className="flex items-start gap-3 mb-3 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={telehealthConsent}
+              onChange={e => setTelehealthConsent(e.target.checked)}
+              className="mt-1 h-4 w-4 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+            />
+            <span className="text-xs text-gray-600 leading-5">
+              I consent to receive care via telehealth. I understand this session uses secure video, is not a substitute for emergency care, and that I should call 911 for emergencies. I have reviewed the{' '}
+              <a href="/?screen=privacy-policy" className="text-teal-600 underline">Privacy Policy</a> and{' '}
+              <a href="/?screen=terms-of-service" className="text-teal-600 underline">Terms of Service</a>.
+            </span>
+          </label>
           <button
             onClick={handleProceedToPayment}
-            className="w-full rounded-2xl bg-teal-600 py-4 text-lg font-semibold text-white transition-all hover:bg-teal-700 active:scale-[0.98]"
+            disabled={!telehealthConsent}
+            className={`w-full rounded-2xl py-4 text-lg font-semibold transition-all active:scale-[0.98] ${
+              telehealthConsent
+                ? 'bg-teal-600 text-white hover:bg-teal-700'
+                : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+            }`}
           >
             Continue to secure checkout
           </button>
