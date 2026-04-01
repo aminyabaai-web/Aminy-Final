@@ -47,8 +47,22 @@ import { getAggregatedMetrics, getRetentionMetrics } from '../lib/outcomes-track
 import { MRRDashboard } from './MRRDashboard';
 import { useAuditedAction } from '../hooks/useAuditedAction';
 
+interface PartnerOrg {
+  id: string;
+  name: string;
+  logo?: string;
+  state: string;
+}
+
+const PARTNER_ORGS: PartnerOrg[] = [
+  { id: 'aact', name: 'AACT Arizona', state: 'AZ' },
+  { id: 'rise', name: 'Rise Services', state: 'AZ' },
+  { id: 'dci', name: 'DCI / Acumen', state: 'AZ' },
+];
+
 interface AdminPortalProps {
   onBack?: () => void;
+  orgId?: string;
 }
 
 // Type for pilot data
@@ -186,8 +200,9 @@ const getStatusIcon = (value: number, target: number, isInverse = false) => {
   return <AlertCircle className="w-4 h-4 text-red-600" />;
 };
 
-export function AdminPortal({ onBack }: AdminPortalProps) {
+export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
   useAuditedAction('user_account');
+  const [selectedOrg, setSelectedOrg] = useState<string>(orgId || 'aact');
   const [activeSection, setActiveSection] = useState<'overview' | 'engagement' | 'ai' | 'clinical' | 'marketplace' | 'b2b' | 'users' | 'moderation' | 'revenue' | 'insights' | 'applications'>('overview');
   const [dateRange, setDateRange] = useState<'7d' | '30d' | 'all'>('all');
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -607,7 +622,18 @@ export function AdminPortal({ onBack }: AdminPortalProps) {
                 </button>
               )}
               <div>
-                <h1 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">AACT Pilot Dashboard</h1>
+                <div className="flex items-center gap-3">
+                  <h1 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">Operator Dashboard</h1>
+                  <select
+                    value={selectedOrg}
+                    onChange={(e) => setSelectedOrg(e.target.value)}
+                    className="text-sm bg-gray-100 dark:bg-slate-700 border-0 rounded-lg px-2 py-1 text-gray-700 dark:text-gray-200 font-medium"
+                  >
+                    {PARTNER_ORGS.map(org => (
+                      <option key={org.id} value={org.id}>{org.name}</option>
+                    ))}
+                  </select>
+                </div>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
                   {pilotData.overview.totalFamilies} Families | {pilotData.overview.daysRemaining} Days Left
                   {lastUpdated && (

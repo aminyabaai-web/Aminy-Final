@@ -91,9 +91,9 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
     },
     {
       id: 'ask-aminy',
-      label: 'Chat',
+      label: 'Aminy',
       icon: Sparkles,
-      ariaLabel: 'Chat - Talk to Aminy AI',
+      ariaLabel: 'Aminy - Your AI companion',
       enabled: true,
       isCenter: false
     },
