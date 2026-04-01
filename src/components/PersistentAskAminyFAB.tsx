@@ -73,7 +73,45 @@ interface PersistentAskAminyFABProps {
 }
 
 // Build the conversation history for the AI endpoint
-function buildApiMessages(messages: ChatMsg[], childName: string): Array<{ role: string; content: string }> {
+// Includes vault documents and child memories when available
+async function buildApiMessages(messages: ChatMsg[], childName: string, userQuery?: string): Promise<Array<{ role: string; content: string }>> {
+  // Fetch relevant vault documents and conversation memories for context
+  let vaultContext = '';
+  let memoryContext = '';
+  try {
+    // RAG search vault documents based on the user's latest message
+    if (userQuery) {
+      const { ragSearch } = await import('../lib/rag-engine');
+      // ragSearch returns a pre-formatted string of relevant context
+      const userId = localStorage.getItem('user-id') || '';
+      if (userId) {
+        const ragResult = await ragSearch(userQuery, userId);
+        if (ragResult && ragResult.length > 10) {
+          vaultContext = '\n\nRELEVANT DOCUMENTS FROM FAMILY VAULT:\n' + ragResult.slice(0, 1500);
+        }
+      }
+    }
+  } catch { /* RAG not available — skip silently */ }
+
+  try {
+    // Load recent conversation context for continuity
+    const { loadRecentConversations } = await import('../lib/ai-engine/conversation-memory');
+    const userId = localStorage.getItem('user-id') || '';
+    if (userId) {
+      const recent = await loadRecentConversations(userId, 3);
+      if (recent && recent.length > 0) {
+        const summaries = recent
+          .filter((c: { summary?: string }) => c.summary)
+          .map((c: { summary?: string }) => c.summary!)
+          .slice(0, 3);
+        if (summaries.length > 0) {
+          memoryContext = '\n\nPREVIOUS CONVERSATION CONTEXT:\n' +
+            summaries.map((s: string) => `- ${s}`).join('\n');
+        }
+      }
+    }
+  } catch { /* Memory not available — skip silently */ }
+
   const systemMsg = {
     role: 'system',
     content: `You are Aminy, a warm and knowledgeable AI companion for parents of neurodivergent children. You combine the expertise of a BCBA with the warmth of a best friend. Be brief (2-3 paragraphs max), actionable, and always end with encouragement. The child's name is ${childName}. Use their name naturally. Never recommend phone calls or scheduling appointments with yourself — you are an AI companion.
@@ -84,7 +122,7 @@ CRITICAL SAFETY RULES:
 - If a parent describes a safety concern (self-harm, harm to others, abuse, neglect), immediately provide 911 and 988 Suicide & Crisis Lifeline and urge them to contact a professional — do not attempt to manage the crisis yourself.
 - You do NOT recommend medication changes or dosage adjustments.
 - You do NOT provide therapy. You provide psychoeducation, ABA-informed strategies, and emotional support.
-- Be transparent that you are an AI. If asked "are you a real person" or similar, be honest.`,
+- Be transparent that you are an AI. If asked "are you a real person" or similar, be honest.${vaultContext}${memoryContext}`,
   };
 
   const history = messages.map((m) => ({
@@ -176,7 +214,7 @@ export function PersistentAskAminyFAB({
             Authorization: `Bearer ${publicAnonKey}`,
           },
           body: JSON.stringify({
-            messages: buildApiMessages(updatedMessages, childName),
+            messages: await buildApiMessages(updatedMessages, childName, userText),
             stream: false,
             context: { childName, tier },
           }),
