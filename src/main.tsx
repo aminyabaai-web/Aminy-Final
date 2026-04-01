@@ -5,6 +5,32 @@ import App from "./App.tsx";
 import "./index.css";
 import { initEnvValidation } from "./lib/env-validation.ts";
 import { initTracking } from "./lib/tracking-init";
+import { initSentry } from "./lib/sentry";
+
+// Initialize error monitoring before anything else
+initSentry();
+
+// Capacitor native platform initialization
+async function initNativePlatform() {
+  try {
+    const { Capacitor } = await import('@capacitor/core');
+    if (Capacitor.isNativePlatform()) {
+      // Hide splash screen after app renders
+      const { SplashScreen } = await import('@capacitor/splash-screen');
+      setTimeout(() => SplashScreen.hide(), 300);
+
+      // Configure status bar for dark nav
+      const { StatusBar, Style } = await import('@capacitor/status-bar');
+      await StatusBar.setStyle({ style: Style.Light });
+      if (Capacitor.getPlatform() === 'android') {
+        await StatusBar.setBackgroundColor({ color: '#0D1B2A' });
+      }
+    }
+  } catch {
+    // Not running in Capacitor — web PWA mode, skip silently
+  }
+}
+initNativePlatform();
 // Initialize i18n for internationalization
 import "./i18n";
 // Mobile safe area support

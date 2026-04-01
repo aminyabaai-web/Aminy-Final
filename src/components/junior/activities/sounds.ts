@@ -92,6 +92,27 @@ export function playBreath() {
   osc.stop(ctx.currentTime + 2.1);
 }
 
-export function haptic(pattern: number | number[] = 50) {
+/**
+ * Native haptic feedback — uses Capacitor Haptics when available (iOS/Android),
+ * falls back to Web Vibration API for PWA.
+ */
+export async function haptic(pattern: number | number[] = 50) {
+  try {
+    // Try Capacitor native haptics first (much better on iOS)
+    const { Haptics, ImpactStyle } = await import('@capacitor/haptics').catch(() => ({ Haptics: null, ImpactStyle: null }));
+    if (Haptics) {
+      const intensity = typeof pattern === 'number' ? pattern : pattern[0] || 50;
+      if (intensity <= 30) {
+        await Haptics.impact({ style: ImpactStyle!.Light });
+      } else if (intensity <= 80) {
+        await Haptics.impact({ style: ImpactStyle!.Medium });
+      } else {
+        await Haptics.impact({ style: ImpactStyle!.Heavy });
+      }
+      return;
+    }
+  } catch { /* Capacitor not available — fall through to web */ }
+
+  // Web Vibration API fallback
   try { navigator.vibrate?.(pattern); } catch { /* no vibrate */ }
 }
