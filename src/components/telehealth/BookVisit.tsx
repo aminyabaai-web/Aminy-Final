@@ -189,7 +189,7 @@ export function BookVisitScreen({
     return dates;
   }, []);
 
-  // Filter providers by user's state
+  // Filter providers by user's state + insurance (Headway-style)
   const availableProviders = useMemo(() => {
     return allProviders.filter(provider => {
       // Check if provider is licensed in user's state
@@ -199,10 +199,21 @@ export function BookVisitScreen({
       // Check if provider offers selected visit type
       if (visitType === 'consult' && !provider.offersConsult) return false;
       if (visitType === 'deep-review' && !provider.offersDeepReview) return false;
+      // Insurance filter — show providers who accept the user's plan
+      if (intake.insurancePlan && intake.paymentPreference === 'insurance') {
+        const planLower = intake.insurancePlan.toLowerCase();
+        const acceptsPlan = provider.acceptedInsurance?.some(
+          ins => ins.toLowerCase().includes(planLower) || planLower.includes(ins.toLowerCase())
+        );
+        // If provider doesn't list any insurance panels, include them (may accept)
+        if (provider.acceptedInsurance && provider.acceptedInsurance.length > 0 && !acceptsPlan) {
+          return false;
+        }
+      }
       // Check if provider is active and accepting
       return provider.isActive && provider.acceptingNewPatients;
     });
-  }, [allProviders, intake.userState, visitType]);
+  }, [allProviders, intake.userState, intake.insurancePlan, intake.paymentPreference, visitType]);
 
   // Load real slots from provider availability
   const [providerSlots, setProviderSlots] = useState<Record<string, TimeSlot[]>>({});

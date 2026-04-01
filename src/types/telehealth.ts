@@ -259,6 +259,9 @@ export interface Provider {
   // Ratings
   rating?: number;
   reviewCount?: number;
+  // Insurance panels accepted
+  acceptedInsurance?: string[]; // e.g., ["Aetna", "BCBS", "Mercy Care", "AHCCCS"]
+  acceptsCashPay?: boolean;
   // Status
   isActive: boolean;
   acceptingNewPatients: boolean;
@@ -834,6 +837,9 @@ export interface GetCareIntake {
   // Step 4: Visit type
   visitFormat: VisitFormat;
   preferredVisitType?: VisitType;
+  // Step 5: Insurance (Headway-style filtering)
+  insurancePlan?: string; // e.g., "Aetna", "BCBS", "Mercy Care", "cash-pay"
+  paymentPreference?: 'insurance' | 'cash-pay';
   // User subscription info
   userTier?: string;
 }
