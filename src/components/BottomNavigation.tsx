@@ -16,7 +16,8 @@ import {
   Users,
   BarChart3,
   Baby,
-  Heart
+  Heart,
+  Video
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { productFlags } from '../lib/feature-flags';
@@ -90,26 +91,26 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
       isCenter: false
     },
     {
+      id: 'care-plan',
+      label: 'My Plan',
+      icon: Heart,
+      ariaLabel: 'My Plan - Goals, routines and progress',
+      enabled: true,
+      isCenter: false
+    },
+    {
       id: 'ask-aminy',
       label: 'Aminy',
       icon: Sparkles,
       ariaLabel: 'Aminy - Your AI companion',
       enabled: true,
-      isCenter: false
-    },
-    {
-      id: 'junior',
-      label: 'Ease',
-      icon: Baby,
-      ariaLabel: 'Ease - Calm corner, rewards, and transitions',
-      enabled: true,
       isCenter: true
     },
     {
-      id: 'care-plan',
-      label: 'My Plan',
-      icon: Heart,
-      ariaLabel: 'My Plan - Goals, routines and progress',
+      id: 'telehealth',
+      label: 'Care',
+      icon: Video,
+      ariaLabel: 'Care - Book visits with experts',
       enabled: true,
       isCenter: false
     },
@@ -165,16 +166,16 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
     }
   ] : [
     {
+      id: 'junior',
+      label: 'Ease',
+      icon: Baby,
+      description: 'Calm corner, rewards, and transitions'
+    },
+    {
       id: 'incident-log',
       label: 'Log Incident',
       icon: ClipboardList,
       description: 'Track behaviors and triggers'
-    },
-    {
-      id: 'telehealth',
-      label: 'Expert Care',
-      icon: Users,
-      description: 'Live in supported provider states with verified clinicians'
     },
     {
       id: 'document-vault',
@@ -183,16 +184,22 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
       description: 'Your digital medical binder'
     },
     {
+      id: 'benefits',
+      label: 'Coverage',
+      icon: Shield,
+      description: 'Insurance and benefits navigator'
+    },
+    {
       id: 'crisis-resources',
       label: 'Crisis Help',
       icon: Shield,
       description: 'Emergency contacts and calming'
     },
     {
-      id: 'benefits',
-      label: 'Coverage',
-      icon: Shield,
-      description: 'Insurance and benefits navigator'
+      id: 'community',
+      label: 'Community',
+      icon: Users,
+      description: 'Connect with other families'
     },
     {
       id: 'settings',

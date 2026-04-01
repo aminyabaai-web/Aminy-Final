@@ -16,6 +16,7 @@ import {
   FolderOpen,
   ChevronRight,
   Activity,
+  Video,
 } from 'lucide-react';
 import aminyLogoCropped from '../assets/aminy-logo-cropped.png';
 
@@ -34,9 +35,10 @@ interface NavItem {
 
 const companionItems: NavItem[] = [
   { id: 'home', label: 'Home', helper: 'Today and next steps', icon: Home },
-  { id: 'ask-aminy', label: 'Aminy', helper: 'AI guidance and memory', icon: Sparkles },
-  { id: 'junior', label: 'Ease', helper: 'Calm, rewards, transitions', icon: Baby },
   { id: 'care-plan', label: 'My Plan', helper: 'Goals, routines & progress', icon: Heart },
+  { id: 'ask-aminy', label: 'Aminy', helper: 'AI guidance and memory', icon: Sparkles },
+  { id: 'telehealth', label: 'Care', helper: 'Book visits with experts', icon: Video },
+  { id: 'junior', label: 'Ease', helper: 'Calm, rewards, transitions', icon: Baby },
 ];
 
 const supportItems: NavItem[] = [

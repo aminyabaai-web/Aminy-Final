@@ -206,7 +206,7 @@ export function PersistentAskAminyFAB({
 
     try {
       const response = await fetch(
-        `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/ai/chat`,
+        `https://${projectId}.supabase.co/functions/v1/chat`,
         {
           method: 'POST',
           headers: {
