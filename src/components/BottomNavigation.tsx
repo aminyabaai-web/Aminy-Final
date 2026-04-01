@@ -219,7 +219,7 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
     <nav
       id="main-navigation"
       tabIndex={-1}
-      className="fixed bottom-0 left-0 right-0 bg-white/98 dark:bg-slate-900/98 backdrop-blur-xl border-t border-gray-100 dark:border-slate-700 z-50 shadow-lg outline-none md:hidden"
+      className="fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 border-t border-gray-200 dark:border-slate-700 z-50 outline-none md:hidden"
       style={{
         paddingBottom: 'max(12px, env(safe-area-inset-bottom))'
       }}
@@ -235,46 +235,7 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
               (tab.id === 'more' && moreTabIds.includes(activeTab));
             const isDisabled = !tab.enabled;
 
-            // Center AI button gets special treatment
-            if (tab.isCenter) {
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => onNavigate(tab.id)}
-                  className="relative flex flex-col items-center justify-center"
-                  aria-label={tab.ariaLabel}
-                  aria-current={isActive ? 'page' : undefined}
-                  role="tab"
-                >
-                  {/* Elevated center button */}
-                  <div
-                    className={`
-                      absolute -top-5 w-14 h-14 rounded-full flex items-center justify-center
-                      shadow-lg transition-all duration-200
-                      ${isActive
-                        ? 'bg-gradient-to-br from-teal-500 to-cyan-600 scale-105'
-                        : 'bg-gradient-to-br from-teal-400 to-cyan-500 hover:scale-105'
-                      }
-                    `}
-                  >
-                    <Icon
-                      className="w-6 h-6 text-white"
-                      strokeWidth={2}
-                    />
-                  </div>
-                  {/* Label below */}
-                  <span
-                    className={`
-                      text-xs font-semibold mt-8 transition-colors
-                      ${isActive ? 'text-teal-600 dark:text-teal-400' : 'text-gray-500 dark:text-slate-400'}
-                    `}
-                  >
-                    {tab.label}
-                  </span>
-                </button>
-              );
-            }
-
+            // One Medical-style flat nav — all items equal weight, no elevated center
             return (
               <button
                 key={tab.id}
@@ -312,9 +273,9 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                 role="tab"
                 disabled={isDisabled}
               >
-                {/* Active indicator */}
-                {isActive && !tab.isCenter && (
-                  <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-8 h-1 bg-teal-500 dark:bg-teal-400 rounded-full" />
+                {/* Active indicator — One Medical style top bar */}
+                {isActive && (
+                  <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-8 h-0.5 bg-teal-600 dark:bg-teal-400 rounded-full" />
                 )}
 
                 {/* Disabled lock icon */}
