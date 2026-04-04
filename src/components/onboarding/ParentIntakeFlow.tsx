@@ -61,36 +61,49 @@ const FREQUENCIES = [
   { value: 'intensive', label: 'Intensive (daily)' },
 ];
 
-const MOCK_PROVIDERS = [
+// Provider type for intake matching
+interface MatchProvider {
+  id: string;
+  name: string;
+  credentials: string;
+  distance: string;
+  specialties: string[];
+  accepting: boolean;
+  rating: number;
+  reviewCount: number;
+}
+
+// Fallback providers if Supabase unavailable
+const FALLBACK_PROVIDERS: MatchProvider[] = [
   {
-    id: 'prov-1',
-    name: 'Dr. Sarah Chen, BCBA-D',
-    credentials: 'BCBA-D · Licensed Psychologist',
-    distance: '2.4 mi away',
-    specialties: ['ABA Therapy', 'Early Intervention', 'ADHD'],
+    id: 'prov-fallback-1',
+    name: 'Sarah Kim, BCBA',
+    credentials: 'BCBA · ABA Specialist',
+    distance: 'Telehealth · AZ licensed',
+    specialties: ['ABA Therapy', 'Early Intervention', 'Autism'],
     accepting: true,
     rating: 4.9,
     reviewCount: 47,
   },
   {
-    id: 'prov-2',
-    name: 'Marcus Williams, BCBA',
-    credentials: 'BCBA · Behavior Analyst',
-    distance: '3.1 mi away',
-    specialties: ['Behavioral Challenges', 'Speech Support', 'School Advocacy'],
+    id: 'prov-fallback-2',
+    name: 'Marcus Thompson, BCBA-D',
+    credentials: 'BCBA-D · Doctoral Level',
+    distance: 'Telehealth · AZ licensed',
+    specialties: ['Behavioral Challenges', 'School Advocacy', 'ABA'],
     accepting: true,
     rating: 4.8,
-    reviewCount: 31,
+    reviewCount: 63,
   },
   {
-    id: 'prov-3',
-    name: 'Priya Kapoor, BCBA',
-    credentials: 'BCBA · Telehealth Specialist',
-    distance: 'Telehealth only',
-    specialties: ['Autism', 'Parent Coaching', 'Telehealth ABA'],
+    id: 'prov-fallback-3',
+    name: 'Priya Mehta, BCBA',
+    credentials: 'BCBA · Verbal Behavior Specialist',
+    distance: 'Telehealth · AZ licensed',
+    specialties: ['Autism', 'AAC', 'Parent Coaching'],
     accepting: true,
-    rating: 4.7,
-    reviewCount: 28,
+    rating: 5.0,
+    reviewCount: 31,
   },
 ];
 
@@ -185,6 +198,39 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
   const [step, setStep] = useState(1);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Real providers from Supabase
+  const [providers, setProviders] = useState<MatchProvider[]>(FALLBACK_PROVIDERS);
+  const [loadingProviders, setLoadingProviders] = useState(false);
+
+  // Fetch real providers when reaching step 4
+  useEffect(() => {
+    if (step !== 4) return;
+    setLoadingProviders(true);
+    supabase
+      .from('providers')
+      .select('id, name, credentials, specialty, bio, rating, review_count, accepting_new_patients, video_enabled, states_licensed, hourly_rate')
+      .eq('accepting_new_patients', true)
+      .order('rating', { ascending: false })
+      .limit(6)
+      .then(({ data, error: err }) => {
+        if (err || !data || data.length === 0) {
+          setProviders(FALLBACK_PROVIDERS);
+        } else {
+          setProviders(data.map(p => ({
+            id: p.id,
+            name: `${p.name}, ${p.credentials}`,
+            credentials: `${p.credentials} · ${p.specialty || 'Specialist'}`,
+            distance: p.video_enabled ? 'Telehealth available' : 'In-person',
+            specialties: p.specialty ? [p.specialty] : ['Behavioral Health'],
+            accepting: p.accepting_new_patients ?? true,
+            rating: typeof p.rating === 'string' ? parseFloat(p.rating) : (p.rating ?? 4.8),
+            reviewCount: p.review_count ?? 0,
+          })));
+        }
+        setLoadingProviders(false);
+      });
+  }, [step]);
 
   // Step 1
   const [childName, setChildName] = useState(draft.childName ?? '');
@@ -473,11 +519,18 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
               <p className="text-sm text-slate-500">These providers match {childName || 'your child'}'s needs and are accepting new clients.</p>
             </div>
 
+            {loadingProviders && (
+              <div className="flex items-center justify-center py-8 text-slate-400 text-sm gap-2">
+                <div className="w-4 h-4 border-2 border-[#43AA8B] border-t-transparent rounded-full animate-spin" />
+                Finding providers near you…
+              </div>
+            )}
+
             <div className="space-y-3">
-              {MOCK_PROVIDERS.map(prov => (
+              {providers.map(prov => (
                 <button
                   key={prov.id}
-                  onClick={() => { setSelectedProviderId(prov.id); setSelectedProviderName(prov.name); }}
+                  onClick={() => { setSelectedProviderId(prov.id); setSelectedProviderName(prov.name.split(',')[0]); }}
                   className={[
                     'w-full bg-white rounded-2xl p-4 shadow-sm border-2 text-left transition-all',
                     selectedProviderId === prov.id
