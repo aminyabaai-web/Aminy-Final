@@ -161,7 +161,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
             </h3>
             <p className="text-gray-600 dark:text-slate-300 mb-4 text-sm">
               {childName ? `${childName}'s personalized plan is ready.` : 'Your personalized plan is ready.'}
-              {' '}The free trial gives you full access for 7 days with no commitment.
+              {' '}The free trial gives you full access for 14 days with no commitment.
             </p>
             <div className="space-y-2">
               <Button
@@ -412,7 +412,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
           </div>
           <div className="flex items-center gap-2 text-sm text-gray-500">
             <Sparkles className="w-4 h-4" />
-            <span>7-day trial on paid plans</span>
+            <span>14-day trial on paid plans</span>
           </div>
         </div>
 

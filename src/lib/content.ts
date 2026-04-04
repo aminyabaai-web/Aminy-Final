@@ -13,8 +13,8 @@ export const CONTENT = {
   SPLASH: {
     HEADLINE: 'Aminy: AI Home Operating System for Neurodivergent Families',
     DESCRIPTION: 'Aminy is your daily AI companion for families navigating autism—turning chaos into calm. With routines, speech & social practice, and progress reports you can share, you can breathe easier while Aminy does the heavy lifting.',
-    CTA_PRIMARY: 'Start your free 7-day Core trial',
-    CTA_TRIAL_NOTE: 'No credit card needed. After 7 days, you will automatically move to the Starter tier unless you upgrade.',
+    CTA_PRIMARY: 'Start your free 14-day Core trial',
+    CTA_TRIAL_NOTE: 'No credit card needed. After 14 days, you will automatically move to the Starter tier unless you upgrade.',
     CTA_SECONDARY: 'See how Aminy works',
     LOGIN_LINK: 'Already have an account?',
     LOGIN_ACTION: 'Sign in',

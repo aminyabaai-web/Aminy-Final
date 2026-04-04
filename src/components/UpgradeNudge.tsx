@@ -154,7 +154,7 @@ export function UpgradeNudge({
             </p>
             <Button onClick={onUpgrade} className="bg-accent hover:bg-accent/90">
               <Star className="w-4 h-4 mr-2" />
-              Try Free for 7 Days
+              Try Free for 14 Days
             </Button>
           </div>
         </div>

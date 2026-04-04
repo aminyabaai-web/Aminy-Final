@@ -102,7 +102,7 @@ export function UpgradePrompt({
               {prompt.showFreeTrial && (
                 <Badge className="bg-emerald-100 text-emerald-700">
                   <Gift className="w-3 h-3 mr-1" />
-                  7-day free trial
+                  14-day free trial
                 </Badge>
               )}
               {prompt.dismissable && (
@@ -225,7 +225,7 @@ export function UpgradePrompt({
                   <div className="flex items-center justify-center gap-2 mb-6 p-3 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg">
                     <Gift className="w-5 h-5 text-emerald-600" />
                     <span className="font-medium text-emerald-700 dark:text-emerald-400">
-                      Start with a 7-day free trial
+                      Start with a 14-day free trial
                     </span>
                   </div>
                 )}

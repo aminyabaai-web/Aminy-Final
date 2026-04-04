@@ -1075,10 +1075,10 @@ export function getTierFeatureDescriptions(tier: TierType): string[] {
       '5 AI chat messages per day',
       'Core calm tools (breathing, timer, bubbles)',
       'Track daily progress',
-      '7-day free trial of Core included',
+      '14-day free trial of Core included',
     ],
     starter: [ // Legacy: Same as Core
-      '7-day free trial included',
+      '14-day free trial included',
       'Unlimited AI chat (text & voice)',
       'AI reads your IEPs & medical records',
       'Adaptive plans that learn what works',
@@ -1088,7 +1088,7 @@ export function getTierFeatureDescriptions(tier: TierType): string[] {
       'HSA/FSA eligible',
     ],
     core: [
-      '7-day free trial included',
+      '14-day free trial included',
       'Unlimited AI chat (text & voice)',
       'AI reads your IEPs & medical records',
       'Adaptive plans that learn what works',
