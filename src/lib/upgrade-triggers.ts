@@ -53,7 +53,7 @@ export interface UsageState {
   documentsUsed: number;
   documentsLimit: number;
   memoryDays: number;
-  tier: 'free' | 'starter' | 'core' | 'pro' | 'proplus';
+  tier: 'trial' | 'starter' | 'core' | 'pro' | 'proplus';
   sessionStartTime: number;
   promptsShownThisSession: number;
   lastTriggerTime?: number;
@@ -234,7 +234,7 @@ export function shouldShowTrigger(
   config: TriggerConfig = DEFAULT_CONFIG
 ): boolean {
   if (!config.enabled) return false;
-  if (usage.tier !== 'free') return false; // Only show to free users
+  if (usage.tier !== 'trial') return false; // Only show upgrade prompts to trial users
 
   const stored = getStoredState();
   const now = Date.now();
@@ -342,7 +342,7 @@ export function useUpgradeTrigger(
 
   // Check for triggers
   useEffect(() => {
-    if (tier !== 'free') {
+    if (tier !== 'trial') {
       setCurrentTrigger(null);
       return;
     }
