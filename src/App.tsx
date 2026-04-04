@@ -23,7 +23,7 @@ const SplashPage = lazy(() =>
 );
 import { CLSOptimizer } from "./components/CLSOptimizer";
 import { toast } from "sonner";
-import { TierType, getTierDisplayName } from "./lib/tier-utils";
+import { TierType, getTierDisplayName, getEffectiveTier, isTrialActive, getTrialDaysRemaining } from "./lib/tier-utils";
 import { getScreenGateReason } from "./lib/feature-flags";
 import {
   buildPilotAccessContext,
@@ -1243,6 +1243,13 @@ export default function App() {
   useBackgroundSync();
   // Accessibility enhancements — runtime a11y improvements (focus management, announcements)
   useAccessibilityEnhancements(currentScreen);
+
+  // === Trial-aware effective tier ===
+  // Use this everywhere instead of raw userData.tier for feature gating.
+  // Free users in active trial → treated as 'core'. Expired trial → 'free' (hard paywall).
+  const effectiveUserTier = getEffectiveTier(userData.tier, (userData as any).trial_ends_at);
+  const userTrialActive = isTrialActive((userData as any).trial_ends_at);
+  const userTrialDaysRemaining = getTrialDaysRemaining((userData as any).trial_ends_at);
   // App review prompt — self-contained component manages its own visibility
 
   useEffect(() => {
@@ -2172,7 +2179,7 @@ export default function App() {
                   parentName: userData.parentName,
                   childName: userData.childName,
                 }}
-                userTier={userData.tier}
+                userTier={effectiveUserTier}
                 userRole={userData.role || 'parent'}
                 onNavigate={(destination) => {
                   // Handle paywall specially
@@ -2267,7 +2274,7 @@ export default function App() {
                 onBack={() => navigateToScreen("dashboard")}
                 onLogout={handleLogout}
                 onNavigate={(screen) => navigateToScreen(screen as AppScreen)}
-                userTier={userData.tier || 'free'}
+                userTier={effectiveUserTier}
               />
             </Suspense>
           );
@@ -2428,7 +2435,7 @@ export default function App() {
                   toast.success("Session completed successfully!");
                 }}
                 childName={userData.childName || "your child"}
-                userTier={userData.tier as string}
+                userTier={effectiveUserTier}
               />
             </Suspense>
           );
@@ -2493,7 +2500,7 @@ export default function App() {
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <CareTab
                 childName={userData.childName}
-                userTier={userData.tier as string}
+                userTier={effectiveUserTier}
                 onBack={() => navigateToScreen("dashboard")}
               />
             </Suspense>
@@ -2525,7 +2532,7 @@ export default function App() {
               <ProfileScreen
                 onBack={() => navigateToScreen("dashboard")}
                 onNavigate={(screen) => navigateToScreen(screen as AppScreen)}
-                userTier={userData.tier || 'free'}
+                userTier={effectiveUserTier}
               />
             </Suspense>
           );
@@ -2559,7 +2566,7 @@ export default function App() {
                   parentName: userData.parentName || "Parent",
                   childName: userData.childName || "Alex"
                 }}
-                userTier={userData.tier || "starter"}
+                userTier={effectiveUserTier}
               />
             </Suspense>
           );
@@ -2748,7 +2755,7 @@ export default function App() {
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <StoreMarketplace
                 onBack={() => navigateToScreen("dashboard")}
-                userTier={userData.tier || 'free'}
+                userTier={effectiveUserTier}
                 onUpgrade={() => navigateToScreen("paywall")}
               />
             </Suspense>
@@ -2759,7 +2766,7 @@ export default function App() {
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <CommunityHub
                 onBack={() => navigateToScreen("dashboard")}
-                userTier={userData.tier || 'free'}
+                userTier={effectiveUserTier}
                 userName={userData.parentName || 'Parent'}
                 userId={userData.userId || ''}
                 onUpgrade={() => navigateToScreen("paywall")}
@@ -2844,7 +2851,7 @@ export default function App() {
               <ClinicalReportExport
                 childName={userData.childName || "Your Child"}
                 childId={userData.childId || "child-1"}
-                userTier={userData.tier || "free"}
+                userTier={effectiveUserTier}
                 onBack={() => navigateToScreen("dashboard")}
               />
             </Suspense>
@@ -3018,7 +3025,7 @@ export default function App() {
                 onBack={() => navigateToScreen("settings")}
                 onLogout={handleLogout}
                 onNavigate={(screen) => navigateToScreen(screen as AppScreen)}
-                userTier={userData.tier}
+                userTier={effectiveUserTier}
               />
             </Suspense>
           );

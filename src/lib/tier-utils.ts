@@ -73,12 +73,12 @@ export function getTrialDaysRemaining(trialEndsAt: string | null | undefined): n
   return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
 }
 
-export function getEffectiveTier(tier: TierType | string | null | undefined, trialEndsAt: string | null | undefined): CanonicalTierName {
+export function getEffectiveTier(tier: TierType | string | null | undefined, trialEndsAt: string | null | undefined): TierType {
   if (!tier || tier === 'free') {
     // During active trial → treat as core; after expiry → hard paywall (stays 'free')
     return isTrialActive(trialEndsAt) ? 'core' : 'free';
   }
-  return getCanonicalTierName(tier as TierType);
+  return normalizeTierName(tier);
 }
 
 export function getTrialDisplayLabel(trialEndsAt: string | null | undefined): string {
@@ -138,7 +138,8 @@ export function getCanonicalTierName(tier?: TierType | string | null): Canonical
 export function getTierEntitlements(tier?: TierType | string | null, trialEndsAt?: string | null): TierEntitlements {
   // If trialEndsAt is provided, use effective tier (trial-aware) instead of raw tier
   if (trialEndsAt !== undefined) {
-    return tierEntitlements[getEffectiveTier(tier, trialEndsAt)];
+    const effective = getEffectiveTier(tier, trialEndsAt);
+    return tierEntitlements[getCanonicalTierName(effective)];
   }
   return tierEntitlements[getCanonicalTierName(tier)];
 }
