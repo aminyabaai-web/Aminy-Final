@@ -18,6 +18,9 @@ import {
   History,
   TrendingUp,
   Shield,
+  Building2,
+  Pencil,
+  Save,
 } from 'lucide-react';
 import { Card } from '../ui/card';
 import { Button } from '../ui/button';
@@ -33,6 +36,218 @@ import {
   type PayoutRecord,
   type ProviderBalance,
 } from '../../lib/stripe-connect';
+
+// ============================================================================
+// Practice Information — NPI / Taxonomy / Practice Name
+// ============================================================================
+
+const ABA_TAXONOMY_CODES = [
+  { code: '103T00000X', label: 'BCBA — Board Certified Behavior Analyst' },
+  { code: '103K00000X', label: 'BCBA-D — Board Certified Behavior Analyst (Doctoral)' },
+  { code: '106S00000X', label: 'Behavior Technician / RBT' },
+  { code: '235Z00000X', label: 'Speech-Language Pathologist' },
+  { code: '2278P3900X', label: 'Occupational Therapist (Pediatrics)' },
+  { code: '261QR0405X', label: 'Applied Behavior Analysis Clinic' },
+  { code: '101YA0400X', label: 'Addiction (Behavioral Health) Counselor' },
+  { code: '101YM0800X', label: 'Mental Health Counselor' },
+  { code: '163WP0218X', label: 'Registered Nurse — Psychiatric/Mental Health (Pediatric)' },
+  { code: '207QA0505X', label: 'Family Medicine — Adolescent Medicine' },
+] as const;
+
+interface PracticeInfo {
+  npi: string;
+  taxonomyCode: string;
+  practiceName: string;
+}
+
+function PracticeInfoSection({ providerId }: { providerId: string | null }) {
+  const [info, setInfo] = useState<PracticeInfo>({ npi: '', taxonomyCode: '', practiceName: '' });
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState<PracticeInfo>({ npi: '', taxonomyCode: '', practiceName: '' });
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const [saved, setSaved] = useState(false);
+
+  // Load existing data
+  useEffect(() => {
+    if (!providerId) return;
+    async function load() {
+      const { data } = await supabase
+        .from('provider_profiles')
+        .select('npi, taxonomy_code, practice_name')
+        .eq('provider_id', providerId)
+        .maybeSingle();
+      if (data) {
+        const loaded: PracticeInfo = {
+          npi: (data as Record<string, string>).npi ?? '',
+          taxonomyCode: (data as Record<string, string>).taxonomy_code ?? '',
+          practiceName: (data as Record<string, string>).practice_name ?? '',
+        };
+        setInfo(loaded);
+        setDraft(loaded);
+      } else {
+        setEditing(true); // auto-open edit mode if no data yet
+      }
+    }
+    load();
+  }, [providerId]);
+
+  const npiValid = (v: string) => /^\d{10}$/.test(v.replace(/\s/g, ''));
+
+  const handleSave = async () => {
+    if (!providerId) return;
+    const npiClean = draft.npi.replace(/\s/g, '');
+    if (!npiValid(npiClean)) {
+      setSaveError('NPI must be exactly 10 digits.');
+      return;
+    }
+    setSaving(true);
+    setSaveError(null);
+    try {
+      const upsertData = {
+        provider_id: providerId,
+        npi: npiClean,
+        taxonomy_code: draft.taxonomyCode,
+        practice_name: draft.practiceName,
+        updated_at: new Date().toISOString(),
+      };
+      const { error } = await supabase
+        .from('provider_profiles')
+        .upsert(upsertData, { onConflict: 'provider_id' });
+      if (error) throw error;
+      setInfo({ npi: npiClean, taxonomyCode: draft.taxonomyCode, practiceName: draft.practiceName });
+      setEditing(false);
+      setSaved(true);
+      setTimeout(() => setSaved(false), 3000);
+    } catch (e) {
+      setSaveError(e instanceof Error ? e.message : 'Failed to save practice info');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const taxLabel = ABA_TAXONOMY_CODES.find((t) => t.code === info.taxonomyCode)?.label ?? info.taxonomyCode;
+
+  return (
+    <Card className="p-5 rounded-2xl border-0 shadow-sm bg-white mb-4">
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center">
+            <Building2 className="w-4 h-4 text-blue-600" />
+          </div>
+          <span className="font-semibold text-gray-800 text-sm">Practice Information</span>
+        </div>
+        {!editing && info.npi && (
+          <button
+            onClick={() => { setDraft({ ...info }); setEditing(true); setSaveError(null); }}
+            className="flex items-center gap-1 text-xs text-blue-600 hover:text-blue-700 px-2 py-1 rounded-lg hover:bg-blue-50 transition-colors"
+          >
+            <Pencil className="w-3 h-3" />
+            Edit
+          </button>
+        )}
+      </div>
+
+      {/* Saved confirmation */}
+      {saved && (
+        <div className="mb-3 flex items-center gap-2 text-xs text-green-700 bg-green-50 rounded-lg px-3 py-2">
+          <CheckCircle className="w-3.5 h-3.5" />
+          Practice information saved.
+        </div>
+      )}
+
+      {!editing ? (
+        // Read-only view
+        <div className="space-y-2">
+          {[
+            { label: 'NPI Number', value: info.npi || '—' },
+            { label: 'Taxonomy Code', value: info.taxonomyCode ? `${info.taxonomyCode} — ${taxLabel}` : '—' },
+            { label: 'Practice Name', value: info.practiceName || '—' },
+          ].map(({ label, value }) => (
+            <div key={label} className="flex justify-between items-center text-sm py-1 border-b border-gray-50 last:border-0">
+              <span className="text-gray-500 text-xs">{label}</span>
+              <span className="font-medium text-gray-700 text-xs text-right max-w-[60%] truncate">{value}</span>
+            </div>
+          ))}
+        </div>
+      ) : (
+        // Edit form
+        <div className="space-y-3">
+          {/* Practice Name */}
+          <div>
+            <label className="block text-xs font-medium text-gray-600 mb-1">Practice Name</label>
+            <input
+              type="text"
+              value={draft.practiceName}
+              onChange={(e) => setDraft((d) => ({ ...d, practiceName: e.target.value }))}
+              placeholder="e.g. Sunshine ABA Therapy"
+              className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent bg-gray-50"
+            />
+          </div>
+
+          {/* NPI */}
+          <div>
+            <label className="block text-xs font-medium text-gray-600 mb-1">
+              NPI Number <span className="text-gray-400">(10 digits)</span>
+            </label>
+            <input
+              type="text"
+              inputMode="numeric"
+              value={draft.npi}
+              onChange={(e) => setDraft((d) => ({ ...d, npi: e.target.value.replace(/[^\d]/g, '').slice(0, 10) }))}
+              placeholder="1234567890"
+              maxLength={10}
+              className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm font-mono text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent bg-gray-50"
+            />
+            {draft.npi.length > 0 && draft.npi.length < 10 && (
+              <p className="text-xs text-amber-600 mt-1">{10 - draft.npi.length} more digit{10 - draft.npi.length !== 1 ? 's' : ''} needed</p>
+            )}
+            {draft.npi.length === 10 && (
+              <p className="text-xs text-green-600 mt-1 flex items-center gap-1"><CheckCircle className="w-3 h-3" /> Valid NPI format</p>
+            )}
+          </div>
+
+          {/* Taxonomy */}
+          <div>
+            <label className="block text-xs font-medium text-gray-600 mb-1">Taxonomy Code</label>
+            <select
+              value={draft.taxonomyCode}
+              onChange={(e) => setDraft((d) => ({ ...d, taxonomyCode: e.target.value }))}
+              className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent bg-gray-50"
+            >
+              <option value="">Select taxonomy code…</option>
+              {ABA_TAXONOMY_CODES.map((t) => (
+                <option key={t.code} value={t.code}>{t.code} — {t.label.split(' — ')[0]}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Error */}
+          {saveError && (
+            <div className="flex items-start gap-2 text-xs text-red-700 bg-red-50 rounded-lg px-3 py-2">
+              <AlertCircle className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+              {saveError}
+            </div>
+          )}
+
+          {/* Save button */}
+          <button
+            onClick={handleSave}
+            disabled={saving || draft.npi.length !== 10}
+            className="w-full flex items-center justify-center gap-2 h-10 rounded-xl text-sm font-semibold text-white transition-opacity disabled:opacity-50"
+            style={{ backgroundColor: '#43AA8B' }}
+          >
+            {saving ? (
+              <><Loader2 className="w-4 h-4 animate-spin" />Saving…</>
+            ) : (
+              <><Save className="w-4 h-4" />Save Practice Info</>
+            )}
+          </button>
+        </div>
+      )}
+    </Card>
+  );
+}
 
 // ============================================================================
 // Props
@@ -206,7 +421,12 @@ export function ProviderPayoutSetup({ onBack }: ProviderPayoutSetupProps) {
         </button>
       </header>
 
-      <main className="flex-1 px-4 py-5 space-y-4 max-w-lg mx-auto w-full">
+      <main className="flex-1 px-4 py-5 max-w-lg mx-auto w-full">
+
+        {/* Practice Information — NPI / Taxonomy / Practice Name */}
+        <PracticeInfoSection providerId={providerId} />
+
+        <div className="space-y-4">
 
         {/* Error banner */}
         {error && (
@@ -378,6 +598,7 @@ export function ProviderPayoutSetup({ onBack }: ProviderPayoutSetupProps) {
             </div>
           )}
         </Card>
+        </div>{/* end space-y-4 */}
       </main>
     </div>
   );

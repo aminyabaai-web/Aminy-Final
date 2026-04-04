@@ -165,7 +165,7 @@ export function SplashPage({
                 ...fontSmoothing,
               }}
             >
-              Powered by Adaptive AI · Grounded in ABA Science
+              ABA-Based · Clinically Grounded · Built for Families
             </span>
           </motion.div>
 
@@ -232,7 +232,7 @@ export function SplashPage({
               ...fontSmoothing,
             }}
           >
-            AI caregiver guidance, home support tools, and limited-launch expert care access in one calm place. Start seeing small wins today.
+            From finding the right BCBA to tracking your child's progress — Aminy brings together everything families need for ABA therapy and pediatric behavioral health.
           </motion.p>
 
           {/* Primary CTA */}
@@ -287,7 +287,7 @@ export function SplashPage({
             transition={{ duration: 1, delay: 0.7 }}
             style={{
               textAlign: 'center',
-              marginBottom: '20px',
+              marginBottom: '12px',
               color: 'rgba(17, 24, 39, 0.38)',
               fontFamily: fontStack,
               fontSize: '12.5px',
@@ -298,6 +298,36 @@ export function SplashPage({
           >
             7-day free trial · No credit card required
           </motion.p>
+
+          {/* Provider secondary CTA */}
+          {onForProviders && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1, delay: 0.72 }}
+              style={{ textAlign: 'center', marginBottom: '20px' }}
+            >
+              <button
+                onClick={onForProviders}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: 'rgba(13, 148, 136, 0.75)',
+                  fontFamily: fontStack,
+                  fontSize: '13px',
+                  fontWeight: 500,
+                  cursor: 'pointer',
+                  padding: '4px 8px',
+                  transition: 'color 0.2s ease',
+                  ...fontSmoothing,
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.color = 'rgba(13, 148, 136, 1)'}
+                onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(13, 148, 136, 0.75)'}
+              >
+                Are you a provider? →
+              </button>
+            </motion.div>
+          )}
 
           {/* Free Screening CTA — the acquisition hook */}
           {onFreeScreening && (
@@ -499,6 +529,26 @@ export function SplashPage({
         </div>
       </main>
 
+      {/* Trust line */}
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1, delay: 1.25 }}
+        style={{
+          textAlign: 'center',
+          color: 'rgba(17, 24, 39, 0.32)',
+          fontFamily: fontStack,
+          fontSize: '11.5px',
+          fontWeight: 400,
+          letterSpacing: '0.01em',
+          padding: '0 24px',
+          marginTop: '28px',
+          ...fontSmoothing,
+        }}
+      >
+        Trusted by ABA providers and pediatric behavioral health families
+      </motion.p>
+
       {/* Medical Disclaimer */}
       <motion.div
         initial={{ opacity: 0 }}
@@ -506,7 +556,7 @@ export function SplashPage({
         transition={{ duration: 1, delay: 1.3 }}
         style={{
           padding: '0 24px',
-          marginTop: '32px',
+          marginTop: '12px',
         }}
       >
         <MedicalDisclaimer variant="inline" className="text-center max-w-md mx-auto" />

@@ -679,6 +679,16 @@ const JuniorMilestoneShare = lazy(() =>
     default: m.JuniorMilestoneShare,
   })),
 );
+const ParentIntakeFlow = lazy(() =>
+  import("./components/onboarding/ParentIntakeFlow").then((m) => ({
+    default: m.ParentIntakeFlow,
+  })),
+);
+const OutcomesDashboard = lazy(() =>
+  import("./components/analytics/OutcomesDashboard").then((m) => ({
+    default: m.OutcomesDashboard,
+  })),
+);
 
 // GATED SCREEN PLACEHOLDER - Shown when a screen is behind a disabled feature flag
 const GATE_MESSAGES: Record<string, { title: string; description: string }> = {
@@ -911,7 +921,9 @@ type AppScreen =
   | "data-collection" // DTT/NET/Behavior data collection for BCBAs/RBTs
   | "treatment-plan-editor" // Treatment plan clinical authoring tool for BCBAs
   | "provider-payout-setup" // Stripe Connect onboarding & balance for providers
-  | "session-payout"; // Admin UI to release payment after session completion
+  | "session-payout" // Admin UI to release payment after session completion
+  | "parent-intake" // Connected parent onboarding intake flow
+  | "outcomes-dashboard"; // VC-ready outcomes metrics dashboard
 
 const AUTH_REDIRECT_SCREENS: AppScreen[] = [
   "splash",
@@ -3219,6 +3231,25 @@ export default function App() {
                 sessionAmountCents={15000}
                 sessionDescription="Demo Session"
                 onCancel={() => navigateToScreen("bcba-portal")}
+              />
+            </Suspense>
+          );
+
+        case "parent-intake":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <ParentIntakeFlow
+                onComplete={() => navigateToScreen("dashboard")}
+                onSkip={() => navigateToScreen("dashboard")}
+              />
+            </Suspense>
+          );
+
+        case "outcomes-dashboard":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <OutcomesDashboard
+                onBack={() => navigateToScreen("dashboard")}
               />
             </Suspense>
           );
