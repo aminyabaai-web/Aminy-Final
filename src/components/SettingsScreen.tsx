@@ -50,7 +50,8 @@ import {
   RefreshCw,
   Unplug,
   Users,
-  Gift
+  Gift,
+  DollarSign
 } from 'lucide-react';
 import { ThemeSelector } from '../lib/theme-provider';
 import { Button } from './ui/button';
@@ -1175,6 +1176,26 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
             <h3 className="font-semibold dark:text-white">Appearance</h3>
           </div>
           <ThemeSelector />
+        </Card>
+
+        {/* Resources & Funding */}
+        <Card className="divide-y divide-gray-200 dark:divide-slate-700">
+          <button
+            onClick={() => onNavigate?.('grant-navigator')}
+            className="w-full p-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
+          >
+            <div className="flex items-center gap-3">
+              <DollarSign className="w-5 h-5 text-teal-500" />
+              <div className="text-left">
+                <div className="flex items-center gap-2">
+                  <p className="font-medium dark:text-white">Grant Navigator</p>
+                  <span className="text-xs font-semibold px-1.5 py-0.5 rounded-full bg-teal-100 text-teal-700 dark:bg-teal-900 dark:text-teal-300">Pro</span>
+                </div>
+                <p className="text-sm text-muted-foreground">Find funding for ABA &amp; behavioral health</p>
+              </div>
+            </div>
+            <ChevronRight className="w-4 h-4 text-muted-foreground" />
+          </button>
         </Card>
 
         {/* Help Section */}

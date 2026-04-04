@@ -86,7 +86,7 @@ export function CookieConsent({ onAccept, onDecline }: CookieConsentProps) {
               <Cookie className="w-4 h-4 flex-shrink-0 text-teal-600 dark:text-teal-400" />
               <p className="flex-1 text-xs leading-4 text-gray-600 dark:text-gray-300">
                 We use cookies for app functionality &amp; analytics.{' '}
-                <a href="/?screen=privacy-policy" className="text-teal-600 underline hover:no-underline dark:text-teal-400">Privacy Policy</a>
+                <a href="/?screen=privacy-policy" className="text-teal-600 underline hover:no-underline dark:text-teal-400 py-2 inline-block">Privacy Policy</a>
               </p>
             </div>
 
