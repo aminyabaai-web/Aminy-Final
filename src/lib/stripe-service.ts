@@ -944,6 +944,55 @@ export async function changeTier(
   };
 }
 
+// ============================================================================
+// Care Package Checkout
+// ============================================================================
+
+export interface CarePackageCheckoutParams {
+  userId: string;
+  email: string;
+  carePackage: {
+    id: string;
+    name: string;
+    description: string;
+    amount: number; // cents
+    recurring: boolean;
+    serviceType: string;
+  };
+}
+
+export async function createCarePackageCheckoutSession(
+  params: CarePackageCheckoutParams
+): Promise<{ url: string }> {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) throw new Error('Not authenticated');
+
+  const response = await fetch(
+    `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/stripe-checkout`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${session.access_token}`,
+      },
+      body: JSON.stringify({
+        carePackage: params.carePackage,
+        userId: params.userId,
+        email: params.email,
+      }),
+    }
+  );
+
+  if (!response.ok) {
+    const err = await response.json().catch(() => ({}));
+    throw new Error(err.error || 'Checkout failed');
+  }
+
+  const data = await response.json();
+  if (!data.url) throw new Error('No checkout URL returned');
+  return { url: data.url };
+}
+
 export default {
   createCheckoutSession,
   createPortalSession,

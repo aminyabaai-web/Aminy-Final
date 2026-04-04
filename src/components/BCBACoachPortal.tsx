@@ -54,9 +54,10 @@ interface Note {
 interface BCBACoachPortalProps {
   onBack: () => void;
   coachName?: string;
+  onNavigate?: (screen: string) => void;
 }
 
-export function BCBACoachPortal({ onBack, coachName = "Dr. Coach" }: BCBACoachPortalProps) {
+export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }: BCBACoachPortalProps) {
   const [activeView, setActiveView] = useState<'dashboard' | 'family'>('dashboard');
   const [selectedFamily, setSelectedFamily] = useState<Family | null>(null);
   const [families, setFamilies] = useState<Family[]>([]);
@@ -499,6 +500,39 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach" }: BCBACoachPo
             <div className="text-sm text-slate-600">Avg Progress</div>
           </Card>
         </div>
+
+        {/* Clinical Tools Quick Access */}
+        {onNavigate && (
+          <div className="mb-4 sm:mb-6">
+            <h3 className="text-slate-700 text-sm font-semibold mb-3">Clinical Tools</h3>
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                onClick={() => onNavigate('data-collection')}
+                className="flex items-center gap-3 p-4 rounded-xl border-2 border-slate-200 bg-white hover:border-[#43AA8B] hover:shadow-sm transition-all text-left"
+              >
+                <div className="w-10 h-10 rounded-lg bg-[#43AA8B]/10 flex items-center justify-center flex-shrink-0">
+                  <svg className="w-5 h-5 text-[#43AA8B]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
+                </div>
+                <div>
+                  <p className="font-semibold text-slate-900 text-sm">Data Collection</p>
+                  <p className="text-xs text-slate-500">DTT · NET · Behavior</p>
+                </div>
+              </button>
+              <button
+                onClick={() => onNavigate('treatment-plan-editor')}
+                className="flex items-center gap-3 p-4 rounded-xl border-2 border-slate-200 bg-white hover:border-[#0D1B2A] hover:shadow-sm transition-all text-left"
+              >
+                <div className="w-10 h-10 rounded-lg bg-[#0D1B2A]/10 flex items-center justify-center flex-shrink-0">
+                  <svg className="w-5 h-5 text-[#0D1B2A]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                </div>
+                <div>
+                  <p className="font-semibold text-slate-900 text-sm">Treatment Plan</p>
+                  <p className="text-xs text-slate-500">Author · Finalize · Export</p>
+                </div>
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Families List */}
         <div className="space-y-3">

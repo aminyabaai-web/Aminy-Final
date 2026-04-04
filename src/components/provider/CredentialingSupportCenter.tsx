@@ -1,0 +1,1777 @@
+/**
+ * CredentialingSupportCenter.tsx
+ *
+ * Headway-quality credentialing support center for providers.
+ * Tabs: CAQH, Enrollment, Roster, AI Playbooks, Claim Queue, Denial Ops, Status, Help.
+ *
+ * Enhanced with:
+ * - AI Enrollment Workflow (step-by-step wizard per payer)
+ * - AI QA Checklist (NPI, TaxID, malpractice, license, DEA, CAQH completeness)
+ * - AI Denial Ops (auto-categorize, appeal letter gen, deadline tracking, success probability)
+ * - Smart Status Dashboard (per-payer status, days since submission, missing docs, re-cred calendar)
+ */
+
+import React, { useState, useMemo } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import {
+  Shield,
+  FileCheck,
+  Building2,
+  Bot,
+  Receipt,
+  HelpCircle,
+  CheckCircle,
+  Clock,
+  AlertTriangle,
+  XCircle,
+  ChevronRight,
+  ChevronDown,
+  Search,
+  Plus,
+  Send,
+  ArrowLeft,
+  Calendar,
+  Upload,
+  Zap,
+  BookOpen,
+  Users,
+  FileText,
+  ArrowRight,
+  Sparkles,
+  MessageSquare,
+  BarChart3,
+  Copy,
+  TrendingUp,
+  ClipboardCheck,
+  Gauge,
+} from 'lucide-react';
+import { Card } from '../ui/card';
+import { Button } from '../ui/button';
+import { Progress } from '../ui/progress';
+import { Input } from '../ui/input';
+
+// ============================================================================
+// Types
+// ============================================================================
+
+type TabId = 'caqh' | 'enrollment' | 'roster' | 'playbooks' | 'claims' | 'denial-ops' | 'status' | 'help';
+
+export interface CredentialingSupportCenterProps {
+  providerId?: string;
+  providerName?: string;
+  onBack?: () => void;
+}
+
+export interface CAQHDocument {
+  id: string;
+  name: string;
+  required: boolean;
+  uploaded: boolean;
+  expiresAt?: string;
+  status: 'valid' | 'expiring' | 'expired' | 'missing';
+}
+
+export interface EnrollmentApplication {
+  id: string;
+  payerName: string;
+  payerLogo?: string;
+  submittedAt: string;
+  stage: 'application' | 'processing' | 'credentialing' | 'active' | 'denied';
+  estimatedCompletion?: string;
+  notes?: string;
+}
+
+export interface RosterEntry {
+  id: string;
+  payerName: string;
+  effectiveDate: string;
+  recredentialingDate: string;
+  status: 'active' | 'pending' | 'expiring' | 'expired';
+  contractType: string;
+}
+
+export interface ClaimQueueItem {
+  id: string;
+  patientName: string;
+  dateOfService: string;
+  cptCode: string;
+  payer: string;
+  amount: number;
+  validationStatus: 'ready' | 'warning' | 'error';
+  validationMessage?: string;
+}
+
+export interface FAQ {
+  question: string;
+  answer: string;
+}
+
+/** Payer enrollment workflow step */
+export interface EnrollmentWizardStep {
+  id: string;
+  title: string;
+  description: string;
+  estimatedDays: number;
+  requiredDocs: string[];
+  commonPitfalls: string[];
+  completed: boolean;
+}
+
+/** Payer-specific enrollment workflow */
+export interface PayerEnrollmentWorkflow {
+  payerId: string;
+  payerName: string;
+  totalEstimatedDays: number;
+  steps: EnrollmentWizardStep[];
+}
+
+/** QA checklist item */
+export interface QAChecklistItem {
+  id: string;
+  label: string;
+  category: 'identity' | 'license' | 'insurance' | 'compliance' | 'profile';
+  status: 'pass' | 'fail' | 'warning' | 'pending';
+  detail: string;
+  actionRequired?: string;
+}
+
+/** Denial record */
+export interface DenialRecord {
+  id: string;
+  claimId: string;
+  patientName: string;
+  dateOfService: string;
+  payer: string;
+  denialCode: string;
+  denialCategory: DenialCategory;
+  amount: number;
+  deniedAt: string;
+  appealDeadline: string;
+  daysUntilDeadline: number;
+  successProbability: number;
+  status: 'new' | 'appealing' | 'won' | 'lost' | 'expired';
+  appealLetter?: string;
+}
+
+export type DenialCategory =
+  | 'auth-expired'
+  | 'wrong-cpt'
+  | 'timely-filing'
+  | 'medical-necessity'
+  | 'missing-info'
+  | 'coding-error'
+  | 'duplicate-claim'
+  | 'patient-eligibility'
+  | 'out-of-network'
+  | 'other';
+
+/** Smart status entry */
+export interface CredentialingStatusEntry {
+  id: string;
+  payerName: string;
+  enrollmentStatus: 'pending' | 'approved' | 'rejected' | 're-credentialing-due';
+  daysSinceSubmission: number;
+  missingDocuments: string[];
+  reCredentialingDate?: string;
+  lastUpdated: string;
+  nextAction?: string;
+}
+
+// ============================================================================
+// Mock Data
+// ============================================================================
+
+const MOCK_CAQH_DOCS: CAQHDocument[] = [
+  { id: '1', name: 'Medical License', required: true, uploaded: true, expiresAt: '2027-03-15', status: 'valid' },
+  { id: '2', name: 'DEA Certificate', required: true, uploaded: true, expiresAt: '2026-06-30', status: 'expiring' },
+  { id: '3', name: 'Board Certification', required: true, uploaded: true, expiresAt: '2028-12-01', status: 'valid' },
+  { id: '4', name: 'Malpractice Insurance', required: true, uploaded: true, expiresAt: '2026-09-01', status: 'valid' },
+  { id: '5', name: 'CV/Resume', required: true, uploaded: true, status: 'valid' },
+  { id: '6', name: 'Professional References', required: true, uploaded: false, status: 'missing' },
+  { id: '7', name: 'ECFMG Certificate', required: false, uploaded: false, status: 'missing' },
+  { id: '8', name: 'W-9 Form', required: true, uploaded: true, status: 'valid' },
+  { id: '9', name: 'Disclosure Attestation', required: true, uploaded: true, status: 'valid' },
+  { id: '10', name: 'Work History', required: true, uploaded: false, status: 'missing' },
+];
+
+const MOCK_ENROLLMENTS: EnrollmentApplication[] = [
+  { id: '1', payerName: 'Aetna', submittedAt: '2026-01-15', stage: 'active', notes: 'Fully credentialed' },
+  { id: '2', payerName: 'BCBS Arizona', submittedAt: '2026-02-01', stage: 'credentialing', estimatedCompletion: '2026-05-01', notes: 'Committee review scheduled' },
+  { id: '3', payerName: 'UnitedHealthcare', submittedAt: '2026-02-20', stage: 'processing', estimatedCompletion: '2026-06-15' },
+  { id: '4', payerName: 'Cigna', submittedAt: '2026-03-01', stage: 'application', estimatedCompletion: '2026-07-01' },
+  { id: '5', payerName: 'Humana', submittedAt: '2026-03-10', stage: 'denied', notes: 'Network at capacity — appeal submitted' },
+];
+
+const MOCK_ROSTER: RosterEntry[] = [
+  { id: '1', payerName: 'Aetna', effectiveDate: '2025-06-01', recredentialingDate: '2027-06-01', status: 'active', contractType: 'In-Network' },
+  { id: '2', payerName: 'Medicare', effectiveDate: '2024-01-15', recredentialingDate: '2026-07-15', status: 'expiring', contractType: 'Par Provider' },
+  { id: '3', payerName: 'AHCCCS', effectiveDate: '2025-09-01', recredentialingDate: '2027-09-01', status: 'active', contractType: 'Medicaid' },
+  { id: '4', payerName: 'Tricare', effectiveDate: '2025-03-01', recredentialingDate: '2026-04-20', status: 'expiring', contractType: 'Network' },
+];
+
+const MOCK_CLAIM_QUEUE: ClaimQueueItem[] = [
+  { id: '1', patientName: 'Alex M.', dateOfService: '2026-03-28', cptCode: '90834', payer: 'Aetna', amount: 150, validationStatus: 'ready' },
+  { id: '2', patientName: 'Jordan K.', dateOfService: '2026-03-28', cptCode: '90837', payer: 'BCBS Arizona', amount: 185, validationStatus: 'warning', validationMessage: 'Prior auth expires in 3 days' },
+  { id: '3', patientName: 'Sam R.', dateOfService: '2026-03-27', cptCode: '97153', payer: 'AHCCCS', amount: 240, validationStatus: 'ready' },
+  { id: '4', patientName: 'Taylor P.', dateOfService: '2026-03-27', cptCode: '90791', payer: 'Aetna', amount: 200, validationStatus: 'error', validationMessage: 'Missing diagnosis code' },
+  { id: '5', patientName: 'Riley C.', dateOfService: '2026-03-26', cptCode: '90834', payer: 'UnitedHealthcare', amount: 150, validationStatus: 'warning', validationMessage: 'Out-of-network — superbill recommended' },
+];
+
+const MOCK_DENIALS: DenialRecord[] = [
+  {
+    id: 'd1', claimId: 'CLM-1042', patientName: 'Alex M.', dateOfService: '2026-02-15',
+    payer: 'BCBS Arizona', denialCode: 'CO-197', denialCategory: 'auth-expired',
+    amount: 185, deniedAt: '2026-03-10', appealDeadline: '2026-06-10',
+    daysUntilDeadline: 69, successProbability: 72, status: 'new',
+  },
+  {
+    id: 'd2', claimId: 'CLM-1058', patientName: 'Jordan K.', dateOfService: '2026-02-20',
+    payer: 'Aetna', denialCode: 'CO-50', denialCategory: 'medical-necessity',
+    amount: 240, deniedAt: '2026-03-15', appealDeadline: '2026-06-15',
+    daysUntilDeadline: 74, successProbability: 45, status: 'appealing',
+    appealLetter: 'Appeal letter submitted 03/20/2026 with updated treatment plan and progress notes.',
+  },
+  {
+    id: 'd3', claimId: 'CLM-1071', patientName: 'Sam R.', dateOfService: '2026-01-10',
+    payer: 'AHCCCS', denialCode: 'CO-29', denialCategory: 'timely-filing',
+    amount: 150, deniedAt: '2026-03-25', appealDeadline: '2026-04-25',
+    daysUntilDeadline: 23, successProbability: 35, status: 'new',
+  },
+  {
+    id: 'd4', claimId: 'CLM-1085', patientName: 'Taylor P.', dateOfService: '2026-03-01',
+    payer: 'UnitedHealthcare', denialCode: 'CO-16', denialCategory: 'missing-info',
+    amount: 200, deniedAt: '2026-03-28', appealDeadline: '2026-06-28',
+    daysUntilDeadline: 87, successProbability: 88, status: 'new',
+  },
+  {
+    id: 'd5', claimId: 'CLM-0998', patientName: 'Riley C.', dateOfService: '2025-12-15',
+    payer: 'Cigna', denialCode: 'CO-97', denialCategory: 'coding-error',
+    amount: 175, deniedAt: '2026-02-01', appealDeadline: '2026-05-01',
+    daysUntilDeadline: 29, successProbability: 65, status: 'appealing',
+  },
+];
+
+const MOCK_QA_CHECKLIST: QAChecklistItem[] = [
+  { id: 'q1', label: 'NPI Verification (Type 1)', category: 'identity', status: 'pass', detail: 'NPI 1234567890 verified via NPPES. Type 1 (individual) confirmed.' },
+  { id: 'q2', label: 'NPI Verification (Type 2)', category: 'identity', status: 'warning', detail: 'Type 2 NPI (organizational) not on file. Required if billing under a group.', actionRequired: 'Add Type 2 NPI if applicable' },
+  { id: 'q3', label: 'Tax ID / EIN Validation', category: 'identity', status: 'pass', detail: 'EIN 82-1234567 validated. Matches IRS records.' },
+  { id: 'q4', label: 'Malpractice Insurance', category: 'insurance', status: 'pass', detail: 'Professional liability policy active through 09/01/2026. Coverage: $1M/$3M.' },
+  { id: 'q5', label: 'State License Expiry', category: 'license', status: 'pass', detail: 'AZ license #PSY-12345 valid through 03/15/2027.' },
+  { id: 'q6', label: 'DEA Number', category: 'license', status: 'warning', detail: 'DEA certificate expires 06/30/2026 (89 days). Renewal recommended.', actionRequired: 'Renew DEA certificate' },
+  { id: 'q7', label: 'CAQH Profile Completeness', category: 'profile', status: 'fail', detail: 'CAQH profile 75% complete. Missing: Professional References, Work History.', actionRequired: 'Upload missing documents to CAQH' },
+  { id: 'q8', label: 'Background Check', category: 'compliance', status: 'pass', detail: 'OIG/SAM exclusion check passed. Last run: 03/01/2026.' },
+  { id: 'q9', label: 'Board Certification', category: 'license', status: 'pass', detail: 'Board certified in Clinical Psychology. Valid through 12/01/2028.' },
+  { id: 'q10', label: 'Disclosure Attestation', category: 'compliance', status: 'pass', detail: 'Disclosure form signed 01/15/2026. No adverse actions reported.' },
+];
+
+const MOCK_STATUS_ENTRIES: CredentialingStatusEntry[] = [
+  { id: 's1', payerName: 'Aetna', enrollmentStatus: 'approved', daysSinceSubmission: 77, missingDocuments: [], reCredentialingDate: '2028-01-15', lastUpdated: '2026-01-15', nextAction: 'No action needed until re-credentialing' },
+  { id: 's2', payerName: 'BCBS Arizona', enrollmentStatus: 'pending', daysSinceSubmission: 60, missingDocuments: [], reCredentialingDate: undefined, lastUpdated: '2026-03-20', nextAction: 'Committee review scheduled for April 15' },
+  { id: 's3', payerName: 'UnitedHealthcare', enrollmentStatus: 'pending', daysSinceSubmission: 41, missingDocuments: ['Work History'], reCredentialingDate: undefined, lastUpdated: '2026-03-10', nextAction: 'Upload Work History to complete application' },
+  { id: 's4', payerName: 'Cigna', enrollmentStatus: 'pending', daysSinceSubmission: 32, missingDocuments: ['Professional References', 'Work History'], reCredentialingDate: undefined, lastUpdated: '2026-03-28', nextAction: 'Upload 2 missing documents' },
+  { id: 's5', payerName: 'Humana', enrollmentStatus: 'rejected', daysSinceSubmission: 23, missingDocuments: [], reCredentialingDate: undefined, lastUpdated: '2026-03-25', nextAction: 'Appeal submitted — awaiting payer response' },
+  { id: 's6', payerName: 'Medicare', enrollmentStatus: 're-credentialing-due', daysSinceSubmission: 440, missingDocuments: [], reCredentialingDate: '2026-07-15', lastUpdated: '2026-03-01', nextAction: 'Begin re-credentialing process (due in 105 days)' },
+  { id: 's7', payerName: 'AHCCCS', enrollmentStatus: 'approved', daysSinceSubmission: 213, missingDocuments: [], reCredentialingDate: '2027-09-01', lastUpdated: '2025-09-01', nextAction: 'No action needed until re-credentialing' },
+  { id: 's8', payerName: 'Tricare', enrollmentStatus: 're-credentialing-due', daysSinceSubmission: 397, missingDocuments: [], reCredentialingDate: '2026-04-20', lastUpdated: '2026-03-15', nextAction: 'Re-credentialing due in 18 days — urgent' },
+];
+
+const FAQS: FAQ[] = [
+  { question: 'How long does credentialing typically take?', answer: 'Initial credentialing with most commercial payers takes 60-120 days from application submission. Medicare can take 60-90 days. Medicaid varies by state but typically 30-90 days. Aminy tracks each timeline and alerts you to delays.' },
+  { question: 'What is CAQH and do I need it?', answer: 'CAQH ProView is a universal credentialing database used by most payers. Keeping your CAQH profile current (re-attested every 120 days) dramatically speeds up enrollment with new payers. Aminy monitors your attestation status automatically.' },
+  { question: 'How do I add a new insurance payer?', answer: 'Go to the Enrollment tab and click "Start New Enrollment." Aminy will guide you through the application, pre-fill from your CAQH profile, and track the application through completion.' },
+  { question: 'What happens when my credentials expire?', answer: 'Aminy sends alerts at 90, 60, and 30 days before expiration. Expired credentials can result in claim denials and payer disenrollment. Use the CAQH tab to see all upcoming expirations.' },
+  { question: 'Can Aminy help with claim denials?', answer: 'Yes. The Denial Ops tab auto-categorizes denials, suggests corrections, generates payer-specific appeal letters, and tracks appeal deadlines with success probability estimates.' },
+  { question: 'How do I submit claims through Aminy?', answer: 'The Claim Queue tab shows all sessions ready for billing. Aminy validates claims before submission, checking for missing info, expired auths, and coding issues. You can submit individually or batch-submit.' },
+];
+
+// ============================================================================
+// Payer Enrollment Workflows
+// ============================================================================
+
+const PAYER_WORKFLOWS: PayerEnrollmentWorkflow[] = [
+  {
+    payerId: 'ahcccs',
+    payerName: 'AHCCCS (Arizona Medicaid)',
+    totalEstimatedDays: 90,
+    steps: [
+      {
+        id: 'ahcccs-1', title: 'Submit DDD Provider Application', description: 'Complete the AHCCCS Provider Enrollment Portal application. Select "Behavioral Health" category. You will need your NPI, Tax ID, and practice information.',
+        estimatedDays: 1, requiredDocs: ['NPI Confirmation', 'Tax ID/EIN Letter', 'Practice Address Verification'], commonPitfalls: ['Selecting wrong provider category', 'Mismatched NPI/Tax ID', 'Incomplete practice address'], completed: false,
+      },
+      {
+        id: 'ahcccs-2', title: 'Background Check & Fingerprinting', description: 'Schedule Level 1 fingerprint clearance through AZ DPS. AHCCCS requires all providers to pass OIG/SAM exclusion screening.',
+        estimatedDays: 14, requiredDocs: ['Fingerprint Clearance Card', 'OIG Exclusion Check', 'SAM Registration'], commonPitfalls: ['Expired fingerprint card', 'Name mismatch on clearance card', 'Not checking OIG monthly'], completed: false,
+      },
+      {
+        id: 'ahcccs-3', title: 'Obtain AHCCCS Provider ID', description: 'Once background check clears, AHCCCS issues a provider ID. This can take 30-45 days. Check the Provider Enrollment Portal weekly for status updates.',
+        estimatedDays: 45, requiredDocs: [], commonPitfalls: ['Not checking portal for requests for additional info', 'Missing the 30-day response window for RFIs'], completed: false,
+      },
+      {
+        id: 'ahcccs-4', title: 'NPI Linkage & Taxonomy Update', description: 'Link your AHCCCS Provider ID to your NPI via NPPES. Update your taxonomy code to match AHCCCS requirements (e.g., 103T00000X for Psychologist).',
+        estimatedDays: 7, requiredDocs: ['NPPES Login Credentials', 'Taxonomy Code Reference'], commonPitfalls: ['Wrong taxonomy code for specialty', 'Not linking both Type 1 and Type 2 NPI'], completed: false,
+      },
+      {
+        id: 'ahcccs-5', title: 'Contract Execution & Rate Sheet', description: 'Review and sign the AHCCCS provider agreement. Confirm your rate schedule matches the AHCCCS fee-for-service rates for your CPT codes.',
+        estimatedDays: 14, requiredDocs: ['Signed Provider Agreement', 'Rate Schedule Acknowledgment'], commonPitfalls: ['Not reviewing rate sheet before signing', 'Missing effective date requirements'], completed: false,
+      },
+    ],
+  },
+  {
+    payerId: 'bcbs-az',
+    payerName: 'BCBS of Arizona',
+    totalEstimatedDays: 120,
+    steps: [
+      {
+        id: 'bcbs-1', title: 'Verify CAQH Profile', description: 'Ensure your CAQH ProView profile is 100% complete and attested within the last 120 days. BCBS pulls directly from CAQH.',
+        estimatedDays: 3, requiredDocs: ['CAQH ProView Login', 'Current Attestation'], commonPitfalls: ['Stale attestation (>120 days)', 'Missing malpractice COI in CAQH', 'Incorrect practice addresses'], completed: false,
+      },
+      {
+        id: 'bcbs-2', title: 'Submit Panel Application', description: 'Apply via the BCBS Arizona provider portal. Select "New Provider Application" and choose your specialty panel. BCBS may not be accepting new providers in all panels.',
+        estimatedDays: 1, requiredDocs: ['CAQH Provider ID', 'NPI Number', 'Practice W-9'], commonPitfalls: ['Panel may be closed in your area', 'Applying to wrong specialty panel', 'Not including group NPI if applicable'], completed: false,
+      },
+      {
+        id: 'bcbs-3', title: 'Primary Source Verification', description: 'BCBS verifies your licenses, certifications, education, and malpractice history directly with issuing organizations. This is the longest phase.',
+        estimatedDays: 60, requiredDocs: [], commonPitfalls: ['Outdated information on state licensing board', 'Education institution slow to respond', 'Gaps in work history not explained'], completed: false,
+      },
+      {
+        id: 'bcbs-4', title: 'Credentialing Committee Review', description: 'Your application goes before the credentialing committee. They meet monthly. If additional info is needed, this can add 30+ days.',
+        estimatedDays: 30, requiredDocs: [], commonPitfalls: ['Missing the committee cycle', 'Not responding to RFI within 14 days'], completed: false,
+      },
+      {
+        id: 'bcbs-5', title: 'Contract & Effective Date', description: 'Upon approval, review and sign the provider agreement. Your effective date is typically the committee approval date (not retroactive to application).',
+        estimatedDays: 14, requiredDocs: ['Signed Provider Agreement'], commonPitfalls: ['Expecting retroactive effective date', 'Not confirming rates before signing', 'Missing the contract return deadline'], completed: false,
+      },
+    ],
+  },
+];
+
+// ============================================================================
+// Denial Category Metadata
+// ============================================================================
+
+const DENIAL_CATEGORY_META: Record<DenialCategory, { label: string; icon: string; color: string; avgSuccessRate: number }> = {
+  'auth-expired': { label: 'Authorization Expired', icon: 'clock', color: 'amber', avgSuccessRate: 70 },
+  'wrong-cpt': { label: 'Wrong CPT Code', icon: 'code', color: 'blue', avgSuccessRate: 75 },
+  'timely-filing': { label: 'Timely Filing', icon: 'calendar', color: 'red', avgSuccessRate: 30 },
+  'medical-necessity': { label: 'Medical Necessity', icon: 'stethoscope', color: 'violet', avgSuccessRate: 45 },
+  'missing-info': { label: 'Missing Information', icon: 'file', color: 'slate', avgSuccessRate: 85 },
+  'coding-error': { label: 'Coding Error', icon: 'hash', color: 'blue', avgSuccessRate: 70 },
+  'duplicate-claim': { label: 'Duplicate Claim', icon: 'copy', color: 'slate', avgSuccessRate: 60 },
+  'patient-eligibility': { label: 'Patient Eligibility', icon: 'user', color: 'red', avgSuccessRate: 40 },
+  'out-of-network': { label: 'Out of Network', icon: 'globe', color: 'amber', avgSuccessRate: 25 },
+  'other': { label: 'Other', icon: 'help', color: 'slate', avgSuccessRate: 50 },
+};
+
+// ============================================================================
+// Tab Config
+// ============================================================================
+
+const TABS: { id: TabId; label: string; icon: React.ReactNode }[] = [
+  { id: 'caqh', label: 'CAQH', icon: <Shield className="w-4 h-4" /> },
+  { id: 'enrollment', label: 'Enrollment', icon: <Building2 className="w-4 h-4" /> },
+  { id: 'roster', label: 'Roster', icon: <Users className="w-4 h-4" /> },
+  { id: 'playbooks', label: 'AI Playbooks', icon: <Bot className="w-4 h-4" /> },
+  { id: 'claims', label: 'Claims', icon: <Receipt className="w-4 h-4" /> },
+  { id: 'denial-ops', label: 'Denial Ops', icon: <BarChart3 className="w-4 h-4" /> },
+  { id: 'status', label: 'Status', icon: <Gauge className="w-4 h-4" /> },
+  { id: 'help', label: 'Help', icon: <HelpCircle className="w-4 h-4" /> },
+];
+
+// ============================================================================
+// Status Helpers
+// ============================================================================
+
+function statusIcon(status: string) {
+  switch (status) {
+    case 'valid':
+    case 'active':
+    case 'ready':
+    case 'pass':
+    case 'approved':
+      return <CheckCircle className="w-4 h-4 text-emerald-500" />;
+    case 'expiring':
+    case 'warning':
+    case 're-credentialing-due':
+      return <AlertTriangle className="w-4 h-4 text-amber-500" />;
+    case 'expired':
+    case 'error':
+    case 'denied':
+    case 'fail':
+    case 'rejected':
+      return <XCircle className="w-4 h-4 text-red-500" />;
+    case 'missing':
+    case 'pending':
+      return <Clock className="w-4 h-4 text-slate-400" />;
+    default:
+      return <Clock className="w-4 h-4 text-slate-400" />;
+  }
+}
+
+function statusBadge(status: string) {
+  const colors: Record<string, string> = {
+    valid: 'bg-emerald-100 text-emerald-700',
+    active: 'bg-emerald-100 text-emerald-700',
+    ready: 'bg-emerald-100 text-emerald-700',
+    pass: 'bg-emerald-100 text-emerald-700',
+    approved: 'bg-emerald-100 text-emerald-700',
+    expiring: 'bg-amber-100 text-amber-700',
+    warning: 'bg-amber-100 text-amber-700',
+    're-credentialing-due': 'bg-amber-100 text-amber-700',
+    expired: 'bg-red-100 text-red-700',
+    error: 'bg-red-100 text-red-700',
+    denied: 'bg-red-100 text-red-700',
+    fail: 'bg-red-100 text-red-700',
+    rejected: 'bg-red-100 text-red-700',
+    missing: 'bg-slate-100 text-slate-500',
+    pending: 'bg-blue-100 text-blue-700',
+    application: 'bg-slate-100 text-slate-600',
+    processing: 'bg-blue-100 text-blue-700',
+    credentialing: 'bg-violet-100 text-violet-700',
+    new: 'bg-blue-100 text-blue-700',
+    appealing: 'bg-violet-100 text-violet-700',
+    won: 'bg-emerald-100 text-emerald-700',
+    lost: 'bg-red-100 text-red-700',
+  };
+  const cls = colors[status] || 'bg-slate-100 text-slate-500';
+  const label = status.replace(/-/g, ' ');
+  return (
+    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${cls}`}>
+      {label.charAt(0).toUpperCase() + label.slice(1)}
+    </span>
+  );
+}
+
+// ============================================================================
+// CAQH Tab
+// ============================================================================
+
+function CAQHTab() {
+  const docs = MOCK_CAQH_DOCS;
+  const requiredDocs = docs.filter((d) => d.required);
+  const uploadedRequired = requiredDocs.filter((d) => d.uploaded).length;
+  const completionPct = Math.round((uploadedRequired / requiredDocs.length) * 100);
+  const expiringDocs = docs.filter((d) => d.status === 'expiring');
+  const missingDocs = docs.filter((d) => d.status === 'missing' && d.required);
+
+  return (
+    <div className="space-y-4">
+      {/* Profile Completion */}
+      <Card className="p-4">
+        <div className="flex items-center justify-between mb-2">
+          <h3 className="text-sm font-semibold text-slate-800">CAQH Profile Completion</h3>
+          <span className="text-sm font-bold text-slate-700">{completionPct}%</span>
+        </div>
+        <Progress value={completionPct} className="h-2 mb-3" />
+        <p className="text-xs text-slate-500">
+          {uploadedRequired} of {requiredDocs.length} required documents uploaded.
+          {completionPct === 100
+            ? ' Your profile is complete.'
+            : ` Upload ${requiredDocs.length - uploadedRequired} more to finish.`}
+        </p>
+      </Card>
+
+      {/* AI QA Pre-Check */}
+      <Card className="p-4 border-violet-200 bg-violet-50">
+        <div className="flex items-center gap-2 mb-3">
+          <ClipboardCheck className="w-4 h-4 text-violet-600" />
+          <h3 className="text-sm font-semibold text-violet-800">AI QA Pre-Submission Checklist</h3>
+        </div>
+        <div className="space-y-2">
+          {MOCK_QA_CHECKLIST.map((item) => (
+            <div key={item.id} className="flex items-start gap-2 py-1.5">
+              {statusIcon(item.status)}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2">
+                  <p className="text-xs font-medium text-slate-700">{item.label}</p>
+                  {statusBadge(item.status)}
+                </div>
+                <p className="text-xs text-slate-500 mt-0.5">{item.detail}</p>
+                {item.actionRequired && (
+                  <p className="text-xs text-violet-600 font-medium mt-0.5">Action: {item.actionRequired}</p>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="mt-3 pt-3 border-t border-violet-200 flex items-center justify-between">
+          <div className="text-xs text-violet-700">
+            {MOCK_QA_CHECKLIST.filter(i => i.status === 'pass').length}/{MOCK_QA_CHECKLIST.length} checks passing
+          </div>
+          <Button variant="outline" size="sm" className="h-7 text-xs border-violet-300 text-violet-700">
+            Re-run QA Check
+          </Button>
+        </div>
+      </Card>
+
+      {/* Alerts */}
+      {(expiringDocs.length > 0 || missingDocs.length > 0) && (
+        <Card className="p-4 border-amber-200 bg-amber-50">
+          <h3 className="text-sm font-semibold text-amber-800 mb-2 flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4" />
+            Action Required
+          </h3>
+          <div className="space-y-2">
+            {expiringDocs.map((d) => (
+              <div key={d.id} className="flex items-center justify-between text-xs">
+                <span className="text-amber-700">{d.name} expires {d.expiresAt}</span>
+                <Button variant="ghost" size="sm" className="h-6 text-xs text-amber-700">
+                  Renew <ArrowRight className="w-3 h-3 ml-1" />
+                </Button>
+              </div>
+            ))}
+            {missingDocs.map((d) => (
+              <div key={d.id} className="flex items-center justify-between text-xs">
+                <span className="text-amber-700">{d.name} — required, not uploaded</span>
+                <Button variant="ghost" size="sm" className="h-6 text-xs text-amber-700">
+                  Upload <Upload className="w-3 h-3 ml-1" />
+                </Button>
+              </div>
+            ))}
+          </div>
+        </Card>
+      )}
+
+      {/* Document Checklist */}
+      <Card className="p-4">
+        <h3 className="text-sm font-semibold text-slate-800 mb-3">Document Checklist</h3>
+        <div className="space-y-2">
+          {docs.map((doc) => (
+            <div
+              key={doc.id}
+              className="flex items-center justify-between py-2 border-b border-slate-100 last:border-0"
+            >
+              <div className="flex items-center gap-2">
+                {statusIcon(doc.status)}
+                <div>
+                  <p className="text-sm text-slate-700">{doc.name}</p>
+                  {doc.expiresAt && (
+                    <p className="text-xs text-slate-400">Expires: {doc.expiresAt}</p>
+                  )}
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                {doc.required && (
+                  <span className="text-xs text-slate-400 font-medium">Required</span>
+                )}
+                {statusBadge(doc.status)}
+              </div>
+            </div>
+          ))}
+        </div>
+      </Card>
+
+      {/* Re-attestation Reminder */}
+      <Card className="p-4 bg-blue-50 border-blue-200">
+        <div className="flex items-start gap-3">
+          <Calendar className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+          <div>
+            <h3 className="text-sm font-semibold text-blue-800">CAQH Re-Attestation</h3>
+            <p className="text-xs text-blue-600 mt-1">
+              CAQH requires re-attestation every 120 days. Your next attestation is due
+              around <span className="font-semibold">June 15, 2026</span>. Aminy will remind
+              you 30 days in advance.
+            </p>
+          </div>
+        </div>
+      </Card>
+    </div>
+  );
+}
+
+// ============================================================================
+// Enrollment Tab (Enhanced with AI Wizard)
+// ============================================================================
+
+const ENROLLMENT_STAGES = ['application', 'processing', 'credentialing', 'active'] as const;
+
+function EnrollmentTab() {
+  const enrollments = MOCK_ENROLLMENTS;
+  const [wizardPayer, setWizardPayer] = useState<string | null>(null);
+
+  function stageIndex(stage: string): number {
+    const idx = ENROLLMENT_STAGES.indexOf(stage as (typeof ENROLLMENT_STAGES)[number]);
+    return idx >= 0 ? idx : -1;
+  }
+
+  const activeWorkflow = wizardPayer ? PAYER_WORKFLOWS.find(w => w.payerId === wizardPayer) : null;
+
+  if (activeWorkflow) {
+    return (
+      <div className="space-y-4">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setWizardPayer(null)}
+          className="text-xs text-slate-500"
+        >
+          <ArrowLeft className="w-3 h-3 mr-1" /> Back to Enrollment
+        </Button>
+
+        <Card className="p-4">
+          <div className="flex items-center gap-2 mb-1">
+            <Sparkles className="w-5 h-5 text-blue-500" />
+            <h3 className="text-sm font-semibold text-slate-800">{activeWorkflow.payerName} Enrollment</h3>
+          </div>
+          <p className="text-xs text-slate-500 mb-4">
+            Estimated timeline: {activeWorkflow.totalEstimatedDays} days total
+          </p>
+
+          <div className="space-y-4">
+            {activeWorkflow.steps.map((step, i) => (
+              <div key={step.id} className="border border-slate-200 rounded-lg p-3">
+                <div className="flex items-start gap-3">
+                  <div className="w-7 h-7 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
+                    {i + 1}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <p className="text-sm font-semibold text-slate-800">{step.title}</p>
+                      <span className="text-xs text-slate-400">~{step.estimatedDays}d</span>
+                    </div>
+                    <p className="text-xs text-slate-600 mt-1 leading-relaxed">{step.description}</p>
+
+                    {step.requiredDocs.length > 0 && (
+                      <div className="mt-2">
+                        <p className="text-xs font-medium text-slate-500 mb-1">Required Documents:</p>
+                        <div className="flex flex-wrap gap-1">
+                          {step.requiredDocs.map((doc, di) => (
+                            <span key={di} className="inline-flex items-center px-2 py-0.5 rounded-full text-xs bg-blue-50 text-blue-700">
+                              <FileCheck className="w-3 h-3 mr-1" />{doc}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {step.commonPitfalls.length > 0 && (
+                      <div className="mt-2 p-2 rounded bg-amber-50 border border-amber-100">
+                        <p className="text-xs font-medium text-amber-700 mb-1">Common Pitfalls:</p>
+                        <ul className="text-xs text-amber-600 space-y-0.5">
+                          {step.commonPitfalls.map((pitfall, pi) => (
+                            <li key={pi} className="flex items-start gap-1">
+                              <span className="shrink-0">-</span>
+                              <span>{pitfall}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <Button size="sm" className="mt-4 w-full">
+            <Plus className="w-3 h-3 mr-1" /> Begin {activeWorkflow.payerName} Application
+          </Button>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h3 className="text-sm font-semibold text-slate-800">Payer Enrollment Pipeline</h3>
+        <Button variant="outline" size="sm" className="h-7 text-xs">
+          <Plus className="w-3 h-3 mr-1" /> Start New Enrollment
+        </Button>
+      </div>
+
+      {/* AI Enrollment Wizard Links */}
+      <Card className="p-3 bg-blue-50 border-blue-200">
+        <p className="text-xs font-semibold text-blue-800 mb-2">AI-Guided Enrollment Wizards</p>
+        <div className="flex flex-wrap gap-2">
+          {PAYER_WORKFLOWS.map((wf) => (
+            <Button
+              key={wf.payerId}
+              variant="outline"
+              size="sm"
+              className="h-7 text-xs border-blue-300 text-blue-700"
+              onClick={() => setWizardPayer(wf.payerId)}
+            >
+              <Sparkles className="w-3 h-3 mr-1" /> {wf.payerName}
+            </Button>
+          ))}
+        </div>
+      </Card>
+
+      {enrollments.map((enrollment) => {
+        const currentStage = stageIndex(enrollment.stage);
+        const isDenied = enrollment.stage === 'denied';
+
+        return (
+          <Card key={enrollment.id} className={`p-4 ${isDenied ? 'border-red-200 bg-red-50' : ''}`}>
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <Building2 className="w-4 h-4 text-slate-500" />
+                <span className="text-sm font-semibold text-slate-800">{enrollment.payerName}</span>
+              </div>
+              {statusBadge(enrollment.stage)}
+            </div>
+
+            {!isDenied && (
+              <div className="flex items-center gap-1 mb-3">
+                {ENROLLMENT_STAGES.map((stage, i) => {
+                  const isComplete = i <= currentStage;
+                  const isCurrent = i === currentStage;
+                  return (
+                    <React.Fragment key={stage}>
+                      <div
+                        className={`flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold
+                          ${isComplete
+                            ? 'bg-emerald-500 text-white'
+                            : 'bg-slate-200 text-slate-500'
+                          }
+                          ${isCurrent ? 'ring-2 ring-emerald-300' : ''}`}
+                      >
+                        {isComplete ? <CheckCircle className="w-3.5 h-3.5" /> : i + 1}
+                      </div>
+                      {i < ENROLLMENT_STAGES.length - 1 && (
+                        <div
+                          className={`flex-1 h-1 rounded ${
+                            i < currentStage ? 'bg-emerald-400' : 'bg-slate-200'
+                          }`}
+                        />
+                      )}
+                    </React.Fragment>
+                  );
+                })}
+              </div>
+            )}
+
+            {!isDenied && (
+              <div className="flex items-center justify-between text-xs text-slate-500">
+                <div className="flex gap-4">
+                  {ENROLLMENT_STAGES.map((stage) => (
+                    <span key={stage} className="capitalize">{stage}</span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="flex items-center justify-between mt-2 text-xs text-slate-500">
+              <span>Submitted: {enrollment.submittedAt}</span>
+              {enrollment.estimatedCompletion && (
+                <span>Est. completion: {enrollment.estimatedCompletion}</span>
+              )}
+            </div>
+            {enrollment.notes && (
+              <p className="text-xs text-slate-500 mt-1 italic">{enrollment.notes}</p>
+            )}
+            {isDenied && (
+              <Button variant="outline" size="sm" className="mt-2 h-7 text-xs text-red-700 border-red-300">
+                File Appeal <ArrowRight className="w-3 h-3 ml-1" />
+              </Button>
+            )}
+          </Card>
+        );
+      })}
+    </div>
+  );
+}
+
+// ============================================================================
+// Roster Tab
+// ============================================================================
+
+function RosterTab() {
+  const roster = MOCK_ROSTER;
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h3 className="text-sm font-semibold text-slate-800">Active Payer Roster</h3>
+        <Button variant="outline" size="sm" className="h-7 text-xs">
+          <Plus className="w-3 h-3 mr-1" /> Add Payer
+        </Button>
+      </div>
+
+      <Card className="overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-xs">
+            <thead>
+              <tr className="border-b border-slate-200 bg-slate-50">
+                <th className="text-left py-2 px-3 font-semibold text-slate-600">Payer</th>
+                <th className="text-left py-2 px-3 font-semibold text-slate-600">Type</th>
+                <th className="text-left py-2 px-3 font-semibold text-slate-600">Effective</th>
+                <th className="text-left py-2 px-3 font-semibold text-slate-600">Re-Cred</th>
+                <th className="text-left py-2 px-3 font-semibold text-slate-600">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {roster.map((entry) => (
+                <tr key={entry.id} className="border-b border-slate-100 last:border-0">
+                  <td className="py-2.5 px-3 font-medium text-slate-700">{entry.payerName}</td>
+                  <td className="py-2.5 px-3 text-slate-500">{entry.contractType}</td>
+                  <td className="py-2.5 px-3 text-slate-500">{entry.effectiveDate}</td>
+                  <td className="py-2.5 px-3 text-slate-500">{entry.recredentialingDate}</td>
+                  <td className="py-2.5 px-3">{statusBadge(entry.status)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </Card>
+
+      {/* Re-credentialing schedule */}
+      <Card className="p-4">
+        <h3 className="text-sm font-semibold text-slate-800 mb-3 flex items-center gap-2">
+          <Calendar className="w-4 h-4 text-violet-500" />
+          Upcoming Re-Credentialing
+        </h3>
+        <div className="space-y-2">
+          {roster
+            .filter((e) => e.status === 'expiring')
+            .map((entry) => (
+              <div
+                key={entry.id}
+                className="flex items-center justify-between py-2 px-3 rounded-lg bg-amber-50 border border-amber-200"
+              >
+                <div className="flex items-center gap-2">
+                  <AlertTriangle className="w-4 h-4 text-amber-500" />
+                  <div>
+                    <p className="text-sm font-medium text-amber-800">{entry.payerName}</p>
+                    <p className="text-xs text-amber-600">Due: {entry.recredentialingDate}</p>
+                  </div>
+                </div>
+                <Button variant="outline" size="sm" className="h-7 text-xs border-amber-300 text-amber-700">
+                  Start Renewal
+                </Button>
+              </div>
+            ))}
+          {roster.filter((e) => e.status === 'expiring').length === 0 && (
+            <p className="text-xs text-slate-500">No upcoming re-credentialing deadlines.</p>
+          )}
+        </div>
+      </Card>
+    </div>
+  );
+}
+
+// ============================================================================
+// AI Playbooks Tab
+// ============================================================================
+
+interface PlaybookNode {
+  id: string;
+  text: string;
+  options?: { label: string; nextId: string }[];
+  guidance?: string;
+  action?: string;
+}
+
+const DENIAL_PLAYBOOK: PlaybookNode[] = [
+  {
+    id: 'start',
+    text: 'What type of denial did you receive?',
+    options: [
+      { label: 'Missing/Invalid Information', nextId: 'missing-info' },
+      { label: 'Authorization Issue', nextId: 'auth-issue' },
+      { label: 'Coding Error', nextId: 'coding-error' },
+      { label: 'Not Medically Necessary', nextId: 'medical-necessity' },
+      { label: 'Timely Filing', nextId: 'timely-filing' },
+      { label: 'Other / Not Sure', nextId: 'other' },
+    ],
+  },
+  {
+    id: 'missing-info',
+    text: 'Missing or invalid information denials (CO-16, CO-4)',
+    guidance:
+      'These are the most correctable denials. Check the remittance advice for the specific field that is missing or incorrect. Common causes: wrong patient DOB, missing NPI, incorrect subscriber ID, missing modifier.',
+    action: 'Open Correction Form',
+  },
+  {
+    id: 'auth-issue',
+    text: 'Authorization denials (CO-197, CO-15)',
+    guidance:
+      'If the auth expired before the service date, you can request a retro-auth from the payer. If no auth was obtained, check whether the service type requires prior auth under the patient plan. Some plans exempt telehealth from auth requirements.',
+    action: 'Request Auth Extension',
+  },
+  {
+    id: 'coding-error',
+    text: 'Coding error denials (CO-97, CO-11)',
+    guidance:
+      'Review the CPT/ICD-10 pairing. Common issues: bundled codes billed separately, wrong place of service (use 02 for telehealth), incorrect modifier. Aminy can suggest the correct code based on session notes.',
+    action: 'Review Suggested Codes',
+  },
+  {
+    id: 'medical-necessity',
+    text: 'Medical necessity denials (CO-50, PR-96)',
+    guidance:
+      'These require a clinical appeal. You will need: treatment plan, progress notes showing medical necessity, and peer-reviewed literature if available. Aminy can generate an appeal letter template.',
+    action: 'Generate Appeal Letter',
+  },
+  {
+    id: 'timely-filing',
+    text: 'Timely filing denials (CO-29)',
+    guidance:
+      'Check the payer contract for filing deadlines (typically 90-180 days). If you can prove the claim was submitted on time (submission receipt, clearinghouse confirmation), you can appeal. If it was genuinely late, this is usually not recoverable.',
+    action: 'Check Filing Receipt',
+  },
+  {
+    id: 'other',
+    text: 'Enter your denial code for specific guidance',
+    guidance:
+      'Enter the CARC (Claim Adjustment Reason Code) from your remittance advice. Aminy will look up the code and provide specific next steps.',
+    action: 'Look Up Denial Code',
+  },
+];
+
+function AIPlaybooksTab() {
+  const [activePlaybook, setActivePlaybook] = useState<string | null>(null);
+  const [currentNode, setCurrentNode] = useState<string>('start');
+  const [denialCode, setDenialCode] = useState('');
+
+  const playbooks = [
+    { id: 'denial', title: 'I got a denial', icon: <XCircle className="w-5 h-5 text-red-500" />, description: 'Walk through denial resolution step by step' },
+    { id: 'new-payer', title: 'I need a new payer', icon: <Plus className="w-5 h-5 text-blue-500" />, description: 'Guided enrollment wizard for new payer applications' },
+    { id: 'expiring', title: 'Credential expiring', icon: <Clock className="w-5 h-5 text-amber-500" />, description: 'Renewal checklist and timeline for expiring credentials' },
+  ];
+
+  const node = DENIAL_PLAYBOOK.find((n) => n.id === currentNode);
+
+  if (activePlaybook === 'denial' && node) {
+    return (
+      <div className="space-y-4">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => {
+            setActivePlaybook(null);
+            setCurrentNode('start');
+          }}
+          className="text-xs text-slate-500"
+        >
+          <ArrowLeft className="w-3 h-3 mr-1" /> Back to Playbooks
+        </Button>
+
+        <Card className="p-4">
+          <div className="flex items-center gap-2 mb-3">
+            <Bot className="w-5 h-5 text-violet-500" />
+            <h3 className="text-sm font-semibold text-slate-800">Denial Resolution Guide</h3>
+          </div>
+
+          <motion.div
+            key={currentNode}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <p className="text-sm text-slate-700 mb-4">{node.text}</p>
+
+            {node.options && (
+              <div className="space-y-2">
+                {node.options.map((opt) => (
+                  <button
+                    key={opt.nextId}
+                    onClick={() => setCurrentNode(opt.nextId)}
+                    className="w-full text-left px-3 py-2.5 rounded-lg border border-slate-200 text-sm text-slate-700 hover:bg-violet-50 hover:border-violet-300 transition-colors flex items-center justify-between"
+                  >
+                    {opt.label}
+                    <ChevronRight className="w-4 h-4 text-slate-400" />
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {node.guidance && (
+              <div className="mt-3 p-3 rounded-lg bg-violet-50 border border-violet-200">
+                <p className="text-xs text-violet-800 leading-relaxed">{node.guidance}</p>
+              </div>
+            )}
+
+            {node.id === 'other' && (
+              <div className="mt-3 flex gap-2">
+                <Input
+                  placeholder="Enter CARC code (e.g., CO-16)"
+                  value={denialCode}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDenialCode(e.target.value)}
+                  className="text-sm"
+                />
+                <Button size="sm" className="shrink-0">
+                  <Search className="w-3 h-3 mr-1" /> Look Up
+                </Button>
+              </div>
+            )}
+
+            {node.action && (
+              <Button variant="outline" size="sm" className="mt-3 text-xs">
+                <Zap className="w-3 h-3 mr-1" /> {node.action}
+              </Button>
+            )}
+
+            {currentNode !== 'start' && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setCurrentNode('start')}
+                className="mt-2 text-xs text-slate-400"
+              >
+                <ArrowLeft className="w-3 h-3 mr-1" /> Start Over
+              </Button>
+            )}
+          </motion.div>
+        </Card>
+      </div>
+    );
+  }
+
+  if (activePlaybook === 'new-payer') {
+    return (
+      <div className="space-y-4">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setActivePlaybook(null)}
+          className="text-xs text-slate-500"
+        >
+          <ArrowLeft className="w-3 h-3 mr-1" /> Back to Playbooks
+        </Button>
+        <Card className="p-4">
+          <div className="flex items-center gap-2 mb-3">
+            <Sparkles className="w-5 h-5 text-blue-500" />
+            <h3 className="text-sm font-semibold text-slate-800">New Payer Enrollment Wizard</h3>
+          </div>
+          <div className="space-y-3">
+            {['Verify CAQH profile is current', 'Check payer network availability in your state', 'Gather required documents (license, DEA, malpractice)', 'Complete payer-specific application', 'Submit via payer portal or clearinghouse', 'Track application status in Enrollment tab'].map((step, i) => (
+              <div key={i} className="flex items-start gap-3">
+                <div className="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-bold shrink-0">
+                  {i + 1}
+                </div>
+                <p className="text-sm text-slate-700 pt-0.5">{step}</p>
+              </div>
+            ))}
+          </div>
+          <Button size="sm" className="mt-4 w-full">
+            <Plus className="w-3 h-3 mr-1" /> Start Enrollment Application
+          </Button>
+        </Card>
+      </div>
+    );
+  }
+
+  if (activePlaybook === 'expiring') {
+    return (
+      <div className="space-y-4">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setActivePlaybook(null)}
+          className="text-xs text-slate-500"
+        >
+          <ArrowLeft className="w-3 h-3 mr-1" /> Back to Playbooks
+        </Button>
+        <Card className="p-4">
+          <div className="flex items-center gap-2 mb-3">
+            <Clock className="w-5 h-5 text-amber-500" />
+            <h3 className="text-sm font-semibold text-slate-800">Credential Renewal Checklist</h3>
+          </div>
+          <div className="space-y-2">
+            {[
+              { task: 'Check expiration dates for all licenses and certifications', timeline: '90 days before' },
+              { task: 'Gather renewal applications from licensing boards', timeline: '60 days before' },
+              { task: 'Complete CME/CE requirements if needed', timeline: '60 days before' },
+              { task: 'Submit renewal applications and fees', timeline: '45 days before' },
+              { task: 'Update CAQH profile with new expiration dates', timeline: 'Upon receipt' },
+              { task: 'Upload renewed documents to Aminy', timeline: 'Upon receipt' },
+              { task: 'Notify payers of updated credentials', timeline: 'Within 30 days' },
+            ].map((item, i) => (
+              <div key={i} className="flex items-center justify-between py-2 border-b border-slate-100 last:border-0">
+                <div className="flex items-center gap-2">
+                  <div className="w-5 h-5 rounded border-2 border-slate-300" />
+                  <span className="text-sm text-slate-700">{item.task}</span>
+                </div>
+                <span className="text-xs text-slate-400 whitespace-nowrap ml-2">{item.timeline}</span>
+              </div>
+            ))}
+          </div>
+        </Card>
+      </div>
+    );
+  }
+
+  // Playbook selection
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center gap-2 mb-1">
+        <Bot className="w-5 h-5 text-violet-500" />
+        <h3 className="text-sm font-semibold text-slate-800">AI-Guided Playbooks</h3>
+      </div>
+      <p className="text-xs text-slate-500">
+        Interactive decision trees to help you navigate common credentialing and billing scenarios.
+      </p>
+      <div className="space-y-3">
+        {playbooks.map((pb) => (
+          <button
+            key={pb.id}
+            onClick={() => {
+              setActivePlaybook(pb.id);
+              setCurrentNode('start');
+            }}
+            className="w-full text-left"
+          >
+            <Card className="p-4 hover:border-violet-300 hover:shadow-sm transition-all cursor-pointer">
+              <div className="flex items-center gap-3">
+                {pb.icon}
+                <div className="flex-1">
+                  <p className="text-sm font-semibold text-slate-800">{pb.title}</p>
+                  <p className="text-xs text-slate-500">{pb.description}</p>
+                </div>
+                <ChevronRight className="w-4 h-4 text-slate-400" />
+              </div>
+            </Card>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ============================================================================
+// Claim Queue Tab
+// ============================================================================
+
+function ClaimQueueTab() {
+  const claims = MOCK_CLAIM_QUEUE;
+  const readyCount = claims.filter((c) => c.validationStatus === 'ready').length;
+  const warningCount = claims.filter((c) => c.validationStatus === 'warning').length;
+  const errorCount = claims.filter((c) => c.validationStatus === 'error').length;
+  const totalAmount = claims.reduce((s, c) => s + c.amount, 0);
+  const [selectedClaims, setSelectedClaims] = useState<Set<string>>(new Set());
+
+  function toggleClaim(id: string) {
+    setSelectedClaims((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }
+
+  function selectAllReady() {
+    setSelectedClaims(new Set(claims.filter((c) => c.validationStatus === 'ready').map((c) => c.id)));
+  }
+
+  return (
+    <div className="space-y-4">
+      {/* Summary Cards */}
+      <div className="grid grid-cols-3 gap-2">
+        <Card className="p-3 text-center">
+          <p className="text-lg font-bold text-emerald-600">{readyCount}</p>
+          <p className="text-xs text-slate-500">Ready</p>
+        </Card>
+        <Card className="p-3 text-center">
+          <p className="text-lg font-bold text-amber-600">{warningCount}</p>
+          <p className="text-xs text-slate-500">Warnings</p>
+        </Card>
+        <Card className="p-3 text-center">
+          <p className="text-lg font-bold text-red-600">{errorCount}</p>
+          <p className="text-xs text-slate-500">Errors</p>
+        </Card>
+      </div>
+
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-xs text-slate-500">
+            Total pending: <span className="font-semibold text-slate-700">${totalAmount.toLocaleString()}</span>
+          </p>
+        </div>
+        <div className="flex gap-2">
+          <Button variant="ghost" size="sm" className="h-7 text-xs" onClick={selectAllReady}>
+            Select Ready
+          </Button>
+          <Button
+            size="sm"
+            className="h-7 text-xs"
+            disabled={selectedClaims.size === 0}
+          >
+            <Send className="w-3 h-3 mr-1" /> Submit ({selectedClaims.size})
+          </Button>
+        </div>
+      </div>
+
+      {/* Claims List */}
+      <div className="space-y-2">
+        {claims.map((claim) => (
+          <Card
+            key={claim.id}
+            className={`p-3 cursor-pointer transition-all ${
+              selectedClaims.has(claim.id)
+                ? 'border-violet-300 bg-violet-50'
+                : ''
+            } ${
+              claim.validationStatus === 'error'
+                ? 'border-red-200'
+                : ''
+            }`}
+            onClick={() => claim.validationStatus !== 'error' && toggleClaim(claim.id)}
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                {statusIcon(claim.validationStatus)}
+                <div>
+                  <p className="text-sm font-medium text-slate-700">{claim.patientName}</p>
+                  <p className="text-xs text-slate-400">
+                    {claim.dateOfService} &middot; {claim.cptCode} &middot; {claim.payer}
+                  </p>
+                </div>
+              </div>
+              <div className="text-right">
+                <p className="text-sm font-semibold text-slate-700">${claim.amount}</p>
+                {claim.validationMessage && (
+                  <p className={`text-xs ${claim.validationStatus === 'error' ? 'text-red-500' : 'text-amber-500'}`}>
+                    {claim.validationMessage}
+                  </p>
+                )}
+              </div>
+            </div>
+          </Card>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ============================================================================
+// Denial Ops Tab (NEW)
+// ============================================================================
+
+function DenialOpsTab() {
+  const denials = MOCK_DENIALS;
+  const [expandedDenial, setExpandedDenial] = useState<string | null>(null);
+
+  const totalDenied = denials.reduce((s, d) => s + d.amount, 0);
+  const recoverable = denials.filter(d => d.status !== 'lost' && d.status !== 'expired');
+  const recoverableAmount = recoverable.reduce((s, d) => s + d.amount, 0);
+  const urgentAppeals = denials.filter(d => d.daysUntilDeadline <= 30 && d.status !== 'won' && d.status !== 'lost');
+
+  // Group by category
+  const categoryBreakdown = useMemo(() => {
+    const groups: Record<string, { count: number; amount: number }> = {};
+    for (const d of denials) {
+      if (!groups[d.denialCategory]) {
+        groups[d.denialCategory] = { count: 0, amount: 0 };
+      }
+      groups[d.denialCategory].count++;
+      groups[d.denialCategory].amount += d.amount;
+    }
+    return groups;
+  }, []);
+
+  return (
+    <div className="space-y-4">
+      {/* Summary */}
+      <div className="grid grid-cols-3 gap-2">
+        <Card className="p-3 text-center">
+          <p className="text-lg font-bold text-red-600">${totalDenied.toLocaleString()}</p>
+          <p className="text-xs text-slate-500">Total Denied</p>
+        </Card>
+        <Card className="p-3 text-center">
+          <p className="text-lg font-bold text-violet-600">${recoverableAmount.toLocaleString()}</p>
+          <p className="text-xs text-slate-500">Recoverable</p>
+        </Card>
+        <Card className="p-3 text-center">
+          <p className="text-lg font-bold text-amber-600">{urgentAppeals.length}</p>
+          <p className="text-xs text-slate-500">Urgent Appeals</p>
+        </Card>
+      </div>
+
+      {/* Category Breakdown */}
+      <Card className="p-4">
+        <h3 className="text-sm font-semibold text-slate-800 mb-3 flex items-center gap-2">
+          <BarChart3 className="w-4 h-4 text-slate-500" />
+          Denial Categories
+        </h3>
+        <div className="space-y-2">
+          {Object.entries(categoryBreakdown).map(([cat, data]) => {
+            const meta = DENIAL_CATEGORY_META[cat as DenialCategory] || DENIAL_CATEGORY_META['other'];
+            return (
+              <div key={cat} className="flex items-center justify-between py-1.5">
+                <div className="flex items-center gap-2">
+                  <span className={`w-2 h-2 rounded-full bg-${meta.color}-500`} />
+                  <span className="text-xs text-slate-700">{meta.label}</span>
+                  <span className="text-xs text-slate-400">({data.count})</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="text-xs font-medium text-slate-700">${data.amount}</span>
+                  <span className="text-xs text-emerald-600">{meta.avgSuccessRate}% win rate</span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </Card>
+
+      {/* Individual Denials */}
+      <div className="space-y-2">
+        <h3 className="text-sm font-semibold text-slate-800">Active Denials</h3>
+        {denials.map((denial) => {
+          const meta = DENIAL_CATEGORY_META[denial.denialCategory] || DENIAL_CATEGORY_META['other'];
+          const isExpanded = expandedDenial === denial.id;
+          const isUrgent = denial.daysUntilDeadline <= 30;
+
+          return (
+            <Card
+              key={denial.id}
+              className={`overflow-hidden ${isUrgent ? 'border-amber-200' : ''}`}
+            >
+              <button
+                onClick={() => setExpandedDenial(isExpanded ? null : denial.id)}
+                className="w-full text-left p-3"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    {statusIcon(denial.status)}
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <p className="text-sm font-medium text-slate-700">{denial.patientName}</p>
+                        {statusBadge(denial.status)}
+                      </div>
+                      <p className="text-xs text-slate-400">
+                        {denial.denialCode} &middot; {meta.label} &middot; {denial.payer}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="text-right flex items-center gap-2">
+                    <div>
+                      <p className="text-sm font-semibold text-slate-700">${denial.amount}</p>
+                      <p className={`text-xs ${isUrgent ? 'text-amber-600 font-medium' : 'text-slate-400'}`}>
+                        {denial.daysUntilDeadline}d to appeal
+                      </p>
+                    </div>
+                    {isExpanded ? (
+                      <ChevronDown className="w-4 h-4 text-slate-400" />
+                    ) : (
+                      <ChevronRight className="w-4 h-4 text-slate-400" />
+                    )}
+                  </div>
+                </div>
+              </button>
+
+              <AnimatePresence>
+                {isExpanded && (
+                  <motion.div
+                    initial={{ height: 0 }}
+                    animate={{ height: 'auto' }}
+                    exit={{ height: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="px-3 pb-3 border-t border-slate-100 pt-3 space-y-3">
+                      {/* Details */}
+                      <div className="grid grid-cols-2 gap-2 text-xs">
+                        <div>
+                          <p className="text-slate-400">Claim ID</p>
+                          <p className="text-slate-700 font-medium">{denial.claimId}</p>
+                        </div>
+                        <div>
+                          <p className="text-slate-400">Date of Service</p>
+                          <p className="text-slate-700 font-medium">{denial.dateOfService}</p>
+                        </div>
+                        <div>
+                          <p className="text-slate-400">Denied On</p>
+                          <p className="text-slate-700 font-medium">{denial.deniedAt}</p>
+                        </div>
+                        <div>
+                          <p className="text-slate-400">Appeal Deadline</p>
+                          <p className={`font-medium ${isUrgent ? 'text-amber-700' : 'text-slate-700'}`}>{denial.appealDeadline}</p>
+                        </div>
+                      </div>
+
+                      {/* Success Probability */}
+                      <div className="p-2 rounded bg-slate-50">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-xs text-slate-500">AI Appeal Success Estimate</span>
+                          <span className={`text-xs font-bold ${
+                            denial.successProbability >= 70 ? 'text-emerald-600' :
+                            denial.successProbability >= 40 ? 'text-amber-600' : 'text-red-600'
+                          }`}>{denial.successProbability}%</span>
+                        </div>
+                        <Progress value={denial.successProbability} className="h-1.5" />
+                      </div>
+
+                      {/* Appeal Status */}
+                      {denial.appealLetter && (
+                        <div className="p-2 rounded bg-violet-50 border border-violet-100">
+                          <p className="text-xs text-violet-700">{denial.appealLetter}</p>
+                        </div>
+                      )}
+
+                      {/* Actions */}
+                      <div className="flex gap-2">
+                        {denial.status === 'new' && (
+                          <Button size="sm" className="h-7 text-xs flex-1">
+                            <Sparkles className="w-3 h-3 mr-1" /> Generate Appeal Letter
+                          </Button>
+                        )}
+                        {denial.status === 'new' && (
+                          <Button variant="outline" size="sm" className="h-7 text-xs">
+                            <Copy className="w-3 h-3 mr-1" /> Copy Denial Code
+                          </Button>
+                        )}
+                        {denial.status === 'appealing' && (
+                          <Button variant="outline" size="sm" className="h-7 text-xs flex-1">
+                            <TrendingUp className="w-3 h-3 mr-1" /> Check Appeal Status
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </Card>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ============================================================================
+// Smart Status Dashboard Tab (NEW)
+// ============================================================================
+
+function StatusDashboardTab() {
+  const entries = MOCK_STATUS_ENTRIES;
+
+  const approved = entries.filter(e => e.enrollmentStatus === 'approved').length;
+  const pending = entries.filter(e => e.enrollmentStatus === 'pending').length;
+  const rejected = entries.filter(e => e.enrollmentStatus === 'rejected').length;
+  const reCredDue = entries.filter(e => e.enrollmentStatus === 're-credentialing-due').length;
+  const totalMissing = entries.reduce((s, e) => s + e.missingDocuments.length, 0);
+
+  return (
+    <div className="space-y-4">
+      {/* Overview Cards */}
+      <div className="grid grid-cols-4 gap-2">
+        <Card className="p-2.5 text-center">
+          <p className="text-lg font-bold text-emerald-600">{approved}</p>
+          <p className="text-xs text-slate-500">Active</p>
+        </Card>
+        <Card className="p-2.5 text-center">
+          <p className="text-lg font-bold text-blue-600">{pending}</p>
+          <p className="text-xs text-slate-500">Pending</p>
+        </Card>
+        <Card className="p-2.5 text-center">
+          <p className="text-lg font-bold text-red-600">{rejected}</p>
+          <p className="text-xs text-slate-500">Rejected</p>
+        </Card>
+        <Card className="p-2.5 text-center">
+          <p className="text-lg font-bold text-amber-600">{reCredDue}</p>
+          <p className="text-xs text-slate-500">Re-Cred</p>
+        </Card>
+      </div>
+
+      {/* Missing Documents Alert */}
+      {totalMissing > 0 && (
+        <Card className="p-3 border-amber-200 bg-amber-50">
+          <div className="flex items-center gap-2 mb-2">
+            <AlertTriangle className="w-4 h-4 text-amber-600" />
+            <p className="text-xs font-semibold text-amber-800">{totalMissing} Missing Document{totalMissing > 1 ? 's' : ''} Blocking Enrollment</p>
+          </div>
+          <div className="space-y-1">
+            {entries
+              .filter(e => e.missingDocuments.length > 0)
+              .map(e => (
+                <div key={e.id} className="flex items-center justify-between text-xs">
+                  <span className="text-amber-700">{e.payerName}: {e.missingDocuments.join(', ')}</span>
+                  <Button variant="ghost" size="sm" className="h-5 text-xs text-amber-700 px-2">
+                    Fix
+                  </Button>
+                </div>
+              ))}
+          </div>
+        </Card>
+      )}
+
+      {/* Per-Payer Status */}
+      <div className="space-y-2">
+        <h3 className="text-sm font-semibold text-slate-800">Enrollment Status by Payer</h3>
+        {entries.map((entry) => (
+          <Card key={entry.id} className="p-3">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2">
+                {statusIcon(entry.enrollmentStatus)}
+                <span className="text-sm font-medium text-slate-700">{entry.payerName}</span>
+              </div>
+              {statusBadge(entry.enrollmentStatus)}
+            </div>
+
+            <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
+              <div className="flex justify-between">
+                <span className="text-slate-400">Days since submission:</span>
+                <span className="text-slate-700 font-medium">{entry.daysSinceSubmission}d</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-400">Last updated:</span>
+                <span className="text-slate-700 font-medium">{entry.lastUpdated}</span>
+              </div>
+              {entry.reCredentialingDate && (
+                <div className="flex justify-between col-span-2">
+                  <span className="text-slate-400">Re-credentialing due:</span>
+                  <span className={`font-medium ${entry.enrollmentStatus === 're-credentialing-due' ? 'text-amber-700' : 'text-slate-700'}`}>
+                    {entry.reCredentialingDate}
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {entry.nextAction && (
+              <div className="mt-2 p-2 rounded bg-slate-50 text-xs text-slate-600">
+                <span className="font-medium">Next action:</span> {entry.nextAction}
+              </div>
+            )}
+          </Card>
+        ))}
+      </div>
+
+      {/* Re-Credentialing Calendar */}
+      <Card className="p-4">
+        <h3 className="text-sm font-semibold text-slate-800 mb-3 flex items-center gap-2">
+          <Calendar className="w-4 h-4 text-violet-500" />
+          Re-Credentialing Calendar
+        </h3>
+        <p className="text-xs text-slate-500 mb-3">
+          Most payers require re-credentialing every 3 years. Start the process 90 days before the due date.
+        </p>
+        <div className="space-y-2">
+          {entries
+            .filter(e => e.reCredentialingDate)
+            .sort((a, b) => (a.reCredentialingDate || '').localeCompare(b.reCredentialingDate || ''))
+            .map(entry => (
+              <div
+                key={entry.id}
+                className={`flex items-center justify-between py-2 px-3 rounded-lg border ${
+                  entry.enrollmentStatus === 're-credentialing-due'
+                    ? 'bg-amber-50 border-amber-200'
+                    : 'bg-slate-50 border-slate-200'
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  {entry.enrollmentStatus === 're-credentialing-due' ? (
+                    <AlertTriangle className="w-4 h-4 text-amber-500" />
+                  ) : (
+                    <Calendar className="w-4 h-4 text-slate-400" />
+                  )}
+                  <div>
+                    <p className="text-sm font-medium text-slate-700">{entry.payerName}</p>
+                    <p className="text-xs text-slate-500">Due: {entry.reCredentialingDate}</p>
+                  </div>
+                </div>
+                {entry.enrollmentStatus === 're-credentialing-due' && (
+                  <Button variant="outline" size="sm" className="h-7 text-xs border-amber-300 text-amber-700">
+                    Start Renewal
+                  </Button>
+                )}
+              </div>
+            ))}
+        </div>
+      </Card>
+    </div>
+  );
+}
+
+// ============================================================================
+// Help Tab
+// ============================================================================
+
+function HelpTab() {
+  const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredFaqs = searchQuery
+    ? FAQS.filter(
+        (f) =>
+          f.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          f.answer.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : FAQS;
+
+  return (
+    <div className="space-y-4">
+      {/* AI Search */}
+      <Card className="p-4">
+        <div className="flex items-center gap-2 mb-2">
+          <Sparkles className="w-4 h-4 text-violet-500" />
+          <h3 className="text-sm font-semibold text-slate-800">AI Credentialing Assistant</h3>
+        </div>
+        <div className="flex gap-2">
+          <Input
+            placeholder="Ask anything about credentialing, billing, or enrollment..."
+            value={searchQuery}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
+            className="text-sm"
+          />
+          <Button size="sm" className="shrink-0">
+            <Search className="w-3 h-3" />
+          </Button>
+        </div>
+      </Card>
+
+      {/* FAQ */}
+      <div className="space-y-2">
+        <h3 className="text-sm font-semibold text-slate-800 px-1">Frequently Asked Questions</h3>
+        {filteredFaqs.map((faq, i) => (
+          <Card key={i} className="overflow-hidden">
+            <button
+              onClick={() => setExpandedFaq(expandedFaq === i ? null : i)}
+              className="w-full text-left p-3 flex items-center justify-between"
+            >
+              <span className="text-sm text-slate-700 pr-4">{faq.question}</span>
+              {expandedFaq === i ? (
+                <ChevronDown className="w-4 h-4 text-slate-400 shrink-0" />
+              ) : (
+                <ChevronRight className="w-4 h-4 text-slate-400 shrink-0" />
+              )}
+            </button>
+            <AnimatePresence>
+              {expandedFaq === i && (
+                <motion.div
+                  initial={{ height: 0 }}
+                  animate={{ height: 'auto' }}
+                  exit={{ height: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="overflow-hidden"
+                >
+                  <div className="px-3 pb-3 text-xs text-slate-600 leading-relaxed border-t border-slate-100 pt-2">
+                    {faq.answer}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </Card>
+        ))}
+        {filteredFaqs.length === 0 && (
+          <p className="text-xs text-slate-400 text-center py-4">No matching FAQs found. Try a different search.</p>
+        )}
+      </div>
+
+      {/* Contact Support */}
+      <Card className="p-4 bg-slate-50">
+        <h3 className="text-sm font-semibold text-slate-800 mb-2">Need More Help?</h3>
+        <div className="space-y-2">
+          <Button variant="outline" size="sm" className="w-full justify-start text-xs h-8">
+            <MessageSquare className="w-3 h-3 mr-2" /> Chat with Support Team
+          </Button>
+          <Button variant="outline" size="sm" className="w-full justify-start text-xs h-8">
+            <BookOpen className="w-3 h-3 mr-2" /> Credentialing Knowledge Base
+          </Button>
+          <Button variant="outline" size="sm" className="w-full justify-start text-xs h-8">
+            <FileText className="w-3 h-3 mr-2" /> Download Payer Requirements Guide
+          </Button>
+        </div>
+      </Card>
+    </div>
+  );
+}
+
+// ============================================================================
+// Main Component
+// ============================================================================
+
+export default function CredentialingSupportCenter({
+  providerId = 'demo-provider',
+  providerName = 'Dr. Provider',
+  onBack,
+}: CredentialingSupportCenterProps) {
+  const [activeTab, setActiveTab] = useState<TabId>('caqh');
+
+  // Badge counts
+  const caqhAlerts = MOCK_CAQH_DOCS.filter(
+    (d) => d.required && (d.status === 'expiring' || d.status === 'missing')
+  ).length;
+  const enrollmentPending = MOCK_ENROLLMENTS.filter(
+    (e) => e.stage !== 'active' && e.stage !== 'denied'
+  ).length;
+  const rosterExpiring = MOCK_ROSTER.filter((r) => r.status === 'expiring').length;
+  const claimErrors = MOCK_CLAIM_QUEUE.filter((c) => c.validationStatus === 'error').length;
+  const denialCount = MOCK_DENIALS.filter(d => d.status === 'new').length;
+  const reCredCount = MOCK_STATUS_ENTRIES.filter(e => e.enrollmentStatus === 're-credentialing-due').length;
+
+  const tabBadges: Partial<Record<TabId, number>> = {
+    caqh: caqhAlerts || undefined,
+    enrollment: enrollmentPending || undefined,
+    roster: rosterExpiring || undefined,
+    claims: claimErrors || undefined,
+    'denial-ops': denialCount || undefined,
+    status: reCredCount || undefined,
+  };
+
+  // Suppress unused variable warnings for props used in future Supabase integration
+  void providerId;
+  void providerName;
+
+  return (
+    <div className="min-h-screen bg-slate-50 pb-20">
+      {/* Header */}
+      <div className="bg-white border-b border-slate-200 px-4 pt-12 pb-4">
+        <div className="flex items-center gap-3 mb-3">
+          {onBack && (
+            <button onClick={onBack} className="text-slate-500">
+              <ArrowLeft className="w-5 h-5" />
+            </button>
+          )}
+          <div>
+            <h1 className="text-lg font-bold text-slate-900">Credentialing Center</h1>
+            <p className="text-xs text-slate-500">Manage enrollments, credentials, denials, and claims</p>
+          </div>
+        </div>
+
+        {/* Tab Bar */}
+        <div className="flex overflow-x-auto gap-1 -mx-1 px-1 pb-1 scrollbar-hide">
+          {TABS.map((tab) => {
+            const badge = tabBadges[tab.id];
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
+                  isActive
+                    ? 'bg-slate-900 text-white'
+                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                }`}
+              >
+                {tab.icon}
+                {tab.label}
+                {badge != null && badge > 0 && (
+                  <span
+                    className={`ml-1 w-4 h-4 rounded-full text-[10px] font-bold flex items-center justify-center ${
+                      isActive ? 'bg-white text-slate-900' : 'bg-red-500 text-white'
+                    }`}
+                  >
+                    {badge}
+                  </span>
+                )}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Tab Content */}
+      <div className="p-4">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, x: 10 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -10 }}
+            transition={{ duration: 0.15 }}
+          >
+            {activeTab === 'caqh' && <CAQHTab />}
+            {activeTab === 'enrollment' && <EnrollmentTab />}
+            {activeTab === 'roster' && <RosterTab />}
+            {activeTab === 'playbooks' && <AIPlaybooksTab />}
+            {activeTab === 'claims' && <ClaimQueueTab />}
+            {activeTab === 'denial-ops' && <DenialOpsTab />}
+            {activeTab === 'status' && <StatusDashboardTab />}
+            {activeTab === 'help' && <HelpTab />}
+          </motion.div>
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+}

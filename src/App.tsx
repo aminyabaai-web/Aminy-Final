@@ -282,6 +282,17 @@ const Phase2FeaturesMenu = lazy(() =>
   })),
 );
 
+const DataCollectionSheet = lazy(() =>
+  import("./components/provider/DataCollectionSheet").then((m) => ({
+    default: m.DataCollectionSheet,
+  })),
+);
+const TreatmentPlanEditor = lazy(() =>
+  import("./components/provider/TreatmentPlanEditor").then((m) => ({
+    default: m.TreatmentPlanEditor,
+  })),
+);
+
 // New marketplace and provider components
 const ProviderMarketplace = lazy(() =>
   import("./components/ProviderMarketplace").then((m) => ({
@@ -886,7 +897,9 @@ type AppScreen =
   | "video-call-room" // Telehealth video call room
   | "cr-sync" // CentralReach sync dashboard
   | "revenue-dashboard" // Stripe revenue metrics (admin)
-  | "waiting-room"; // Telehealth waiting room
+  | "waiting-room" // Telehealth waiting room
+  | "data-collection" // DTT/NET/Behavior data collection for BCBAs/RBTs
+  | "treatment-plan-editor"; // Treatment plan clinical authoring tool for BCBAs
 
 const AUTH_REDIRECT_SCREENS: AppScreen[] = [
   "splash",
@@ -2251,6 +2264,7 @@ export default function App() {
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <BCBACoachPortal
                 onBack={() => navigateToScreen("dashboard")}
+                onNavigate={(screen) => navigateToScreen(screen as AppScreen)}
               />
             </Suspense>
           );
@@ -3150,6 +3164,25 @@ export default function App() {
                 userId={userData.id || userData.userId || ''}
                 onAdmitted={() => navigateToScreen("video-call-room")}
                 onCancel={() => navigateToScreen("telehealth")}
+              />
+            </Suspense>
+          );
+
+        case "data-collection":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <DataCollectionSheet
+                onBack={() => navigateToScreen("bcba-portal")}
+              />
+            </Suspense>
+          );
+
+        case "treatment-plan-editor":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <TreatmentPlanEditor
+                onBack={() => navigateToScreen("bcba-portal")}
+                onFinalize={() => navigateToScreen("bcba-portal")}
               />
             </Suspense>
           );

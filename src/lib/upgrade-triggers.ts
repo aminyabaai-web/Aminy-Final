@@ -396,6 +396,24 @@ export function useUpgradeTrigger(
 }
 
 // ============================================================================
+// Contextual types (used by UpgradeModal)
+// ============================================================================
+
+export type ContextualTrigger = TriggerType;
+
+export interface ContextualUpgradePrompt {
+  targetTier: 'core' | 'pro';
+  headline: string;
+  subtext: string;
+  valueProp: string;
+  ctaLabel: string;
+}
+
+export function dismissContextualUpgrade(triggerType: ContextualTrigger): void {
+  recordTriggerDismissed(triggerType);
+}
+
+// ============================================================================
 // Export
 // ============================================================================
 
