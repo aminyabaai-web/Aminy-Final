@@ -545,7 +545,7 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, initialC
               Save Results & Get Started Free <ArrowRight style={{ width: 16, height: 16 }} />
             </button>
             <p style={{ textAlign: 'center', ...S.caption, marginTop: 12 }}>
-              7-day free trial · No credit card required · Results saved automatically
+              14-day free trial · No credit card required · Results saved automatically
             </p>
           </div>
 

@@ -130,7 +130,7 @@ export function SplashScreen({ onGetStarted, onLogin }: SplashScreenProps) {
               onClick={onGetStarted}
               size="lg"
               className="bg-accent hover:bg-accent/90 text-white px-8 py-3.5 text-[16px] leading-[20px] font-semibold rounded-xl shadow-sm hover:shadow-md transition-all duration-200 min-w-[280px] h-[52px]"
-              aria-label="Start your 7-day free trial - no credit card needed"
+              aria-label="Start your 14-day free trial - no credit card needed"
             >
               Start Your 7-Day Free Trial
               <ArrowRight className="w-4 h-4 ml-2" aria-hidden="true" />
@@ -195,7 +195,7 @@ export function SplashScreen({ onGetStarted, onLogin }: SplashScreenProps) {
               onClick={onGetStarted}
               size="lg"
               className="bg-accent hover:bg-accent/90 text-white px-8 sm:px-10 py-4 sm:py-4 text-[16px] leading-[20px] font-semibold rounded-lg shadow-sm hover:shadow-md transition-all duration-200 min-w-[280px] sm:min-w-[320px] h-[52px] sm:h-[56px]"
-              aria-label="Start your 7-day free trial - no credit card needed"
+              aria-label="Start your 14-day free trial - no credit card needed"
             >
               Start Your 7-Day Free Trial
               <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2" aria-hidden="true" />

@@ -274,7 +274,7 @@ export function PaywallSimplified({
         console.info('[Paywall] Stripe not configured — using demo mode');
       }
       onSubscribe(tier);
-      toast.success(`Welcome to Aminy ${tierDisplayName(tier)}! Your 7-day trial has started.`);
+      toast.success(`Welcome to Aminy ${tierDisplayName(tier)}! Your 14-day trial has started.`);
     } catch (error) {
       console.error('Subscription error:', error);
       // Still proceed with local subscription on any error
@@ -428,7 +428,7 @@ export function PaywallSimplified({
                     <span className="text-gray-500 text-sm">/month</span>
                   </div>
                   <p className="text-teal-600 text-sm font-medium mt-1">
-                    7-day free trial included
+                    14-day free trial included
                   </p>
                 </div>
 
@@ -490,7 +490,7 @@ export function PaywallSimplified({
                     <span className="text-gray-500 text-sm">/month</span>
                   </div>
                   <p className="text-teal-600 text-sm font-medium mt-1">
-                    7-day free trial included
+                    14-day free trial included
                   </p>
                 </div>
 
@@ -555,7 +555,7 @@ export function PaywallSimplified({
                     <span className="text-gray-500 text-sm">/month</span>
                   </div>
                   <p className="text-teal-600 text-sm font-medium mt-1">
-                    7-day free trial included
+                    14-day free trial included
                   </p>
                 </div>
 
@@ -636,9 +636,9 @@ export function PaywallSimplified({
             }}
             className="text-sm text-teal-600 hover:text-teal-700 font-medium underline underline-offset-2 transition-colors"
           >
-            Start 7-day free trial of Core — no credit card required
+            Start 14-day free trial of Core — no credit card required
           </button>
-          <p className="text-xs text-gray-400 mt-1">Full Core access for 7 days, then ${tierPricing.core.monthly}/mo</p>
+          <p className="text-xs text-gray-400 mt-1">Full Core access for 14 days, then ${tierPricing.core.monthly}/mo</p>
         </div>
 
         {/* Promo Code */}

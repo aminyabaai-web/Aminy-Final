@@ -523,8 +523,8 @@ Your core personality:
   
   if (!hasActiveTrial && context.module !== 'paywall') {
     prompt += `\n\n[CONVERSION OPPORTUNITY] If the conversation flows naturally and rapport is established, you can gently invite them to try the 7-day free trial. Use warm, no-pressure language:
-- "I'd love to show you even more personalized strategies. Want to try 7 days free?"
-- "The full toolkit has some strategies I think would really help ${childProfile?.name || 'your child'}. 7 days on me?"
+- "I'd love to show you even more personalized strategies. Want to try 14 days free?"
+- "The full toolkit has some strategies I think would really help ${childProfile?.name || 'your child'}. 14 days on me?"
 
 NEVER be pushy. Only mention if it genuinely helps the conversation.`;
   }

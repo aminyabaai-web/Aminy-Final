@@ -58,7 +58,7 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
       price: tierPricing.free.monthly,
       yearlyPrice: tierPricing.free.yearly,
       period: 'month',
-      description: 'Discover Aminy with a 7-day Core trial.',
+      description: 'Discover Aminy with a 14-day Core trial.',
       icon: Heart,
       hsaEligible: false,
       features: getTierFeatureDescriptions('free'),
@@ -142,7 +142,7 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
           </h1>
           
           <p className="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto mb-2">
-            Start with a 7-day free trial of Core or Plus — no credit card needed.
+            Start with a 14-day free trial of Core or Plus — no credit card needed.
           </p>
           
           <p className="text-sm text-slate-500 dark:text-slate-400 max-w-xl mx-auto">
@@ -425,7 +425,7 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
             <Card className="p-3 sm:p-4">
               <h4 className="font-semibold text-slate-900 mb-2">What happens after my free trial?</h4>
               <p className="text-sm text-slate-600">
-                After your 7-day trial, you'll continue on your chosen plan (Core ${tierPricing.core.monthly}/mo, Pro ${tierPricing.pro.monthly}/mo, or Pro+ ${tierPricing.proplus.monthly}/mo).
+                After your 14-day trial, you'll continue on your chosen plan (Core ${tierPricing.core.monthly}/mo, Pro ${tierPricing.pro.monthly}/mo, or Pro+ ${tierPricing.proplus.monthly}/mo).
                 You'll receive reminder emails at days 4 and 6, and can cancel anytime before the trial ends.
               </p>
             </Card>

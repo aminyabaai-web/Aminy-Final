@@ -296,7 +296,7 @@ export function SplashPage({
               ...fontSmoothing,
             }}
           >
-            7-day free trial · No credit card required
+            14-day free trial · No credit card required
           </motion.p>
 
           {/* Provider secondary CTA */}
@@ -562,8 +562,8 @@ export function SplashPage({
         <MedicalDisclaimer variant="inline" className="text-center max-w-md mx-auto" />
       </motion.div>
 
-      {/* Footer spacer with safe area */}
-      <div style={{ height: 'max(40px, calc(env(safe-area-inset-bottom, 0px) + 24px))' }} />
+      {/* Footer spacer — extra room for cookie consent banner on mobile */}
+      <div style={{ height: 'max(96px, calc(env(safe-area-inset-bottom, 0px) + 80px))' }} />
     </div>
   );
 }

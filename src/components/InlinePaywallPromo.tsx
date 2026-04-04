@@ -163,7 +163,7 @@ export function InlinePaywallPromo({
       </Button>
 
       <p className="text-xs text-center text-muted-foreground mt-3">
-        Plans start at $19/mo • Try any tier free for 7 days
+        Plans start at $19/mo • Try any tier free for 14 days
       </p>
     </Card>
   );
