@@ -88,6 +88,17 @@ export interface PlanVersion {
   snapshot: TreatmentPlanData;
 }
 
+export type CobOrder = 'medicaid_secondary' | 'commercial_secondary' | 'other';
+
+export interface SecondaryPayer {
+  hasSecondary: boolean;
+  payerName: string;
+  payerId: string;
+  memberId: string;
+  cobOrder: CobOrder;
+  notes: string;
+}
+
 export interface TreatmentPlanData {
   planId: string;
   clientId?: string;
@@ -102,6 +113,7 @@ export interface TreatmentPlanData {
   authEndDate: string;
   authorizedHours: string;
   payer: string;
+  secondaryPayer: SecondaryPayer;
   assessmentSummary: string;
   skillAssessmentResults: string;
   behaviorAssessmentResults: string;
@@ -217,6 +229,14 @@ function makeBlankPlan(clientId?: string): TreatmentPlanData {
     authEndDate: '',
     authorizedHours: '',
     payer: '',
+    secondaryPayer: {
+      hasSecondary: false,
+      payerName: '',
+      payerId: '',
+      memberId: '',
+      cobOrder: 'medicaid_secondary',
+      notes: '',
+    },
     assessmentSummary: '',
     skillAssessmentResults: '',
     behaviorAssessmentResults: '',
@@ -1080,6 +1100,99 @@ export function TreatmentPlanEditor({
               <Field label="Authorized Hours / Units">
                 <input type="text" value={plan.authorizedHours} onChange={e => updatePlan({ authorizedHours: e.target.value })} disabled={plan.isFinalized} placeholder="e.g., 120 hrs / 480 units" className={inputCls} />
               </Field>
+            </div>
+
+            {/* Secondary Payer (COB) */}
+            <div className="mt-4 border-t border-slate-100 pt-4">
+              <p className="text-sm font-semibold text-slate-700 mb-3">Secondary Payer (COB)</p>
+              <label className="flex items-center gap-3 mb-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={plan.secondaryPayer.hasSecondary}
+                  disabled={plan.isFinalized}
+                  onChange={e =>
+                    updatePlan({
+                      secondaryPayer: { ...plan.secondaryPayer, hasSecondary: e.target.checked },
+                    })
+                  }
+                  className="w-4 h-4 accent-[#43AA8B]"
+                />
+                <span className="text-sm text-slate-600">Has secondary insurance?</span>
+              </label>
+
+              {plan.secondaryPayer.hasSecondary && (
+                <div className="grid grid-cols-2 gap-3 bg-slate-50 rounded-xl p-3">
+                  <Field label="Secondary Payer Name">
+                    <input
+                      type="text"
+                      value={plan.secondaryPayer.payerName}
+                      onChange={e =>
+                        updatePlan({ secondaryPayer: { ...plan.secondaryPayer, payerName: e.target.value } })
+                      }
+                      disabled={plan.isFinalized}
+                      placeholder="e.g., Blue Cross Blue Shield"
+                      className={inputCls}
+                    />
+                  </Field>
+                  <Field label="Secondary Payer ID">
+                    <input
+                      type="text"
+                      value={plan.secondaryPayer.payerId}
+                      onChange={e =>
+                        updatePlan({ secondaryPayer: { ...plan.secondaryPayer, payerId: e.target.value } })
+                      }
+                      disabled={plan.isFinalized}
+                      placeholder="e.g., BCBS-IL"
+                      className={inputCls}
+                    />
+                  </Field>
+                  <Field label="Secondary Member ID">
+                    <input
+                      type="text"
+                      value={plan.secondaryPayer.memberId}
+                      onChange={e =>
+                        updatePlan({ secondaryPayer: { ...plan.secondaryPayer, memberId: e.target.value } })
+                      }
+                      disabled={plan.isFinalized}
+                      placeholder="Member ID"
+                      className={inputCls}
+                    />
+                  </Field>
+                  <Field label="COB Order">
+                    <select
+                      value={plan.secondaryPayer.cobOrder}
+                      onChange={e =>
+                        updatePlan({
+                          secondaryPayer: {
+                            ...plan.secondaryPayer,
+                            cobOrder: e.target.value as CobOrder,
+                          },
+                        })
+                      }
+                      disabled={plan.isFinalized}
+                      className={selectCls}
+                    >
+                      <option value="medicaid_secondary">Medicaid Secondary</option>
+                      <option value="commercial_secondary">Commercial Secondary</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </Field>
+                  <div className="col-span-2">
+                    <Field label="COB Notes">
+                      <textarea
+                        value={plan.secondaryPayer.notes}
+                        onChange={e =>
+                          updatePlan({ secondaryPayer: { ...plan.secondaryPayer, notes: e.target.value } })
+                        }
+                        disabled={plan.isFinalized}
+                        placeholder="e.g., Medicaid as secondary to commercial — submit EOB with crossover claim"
+                        rows={2}
+                        className={textareaCls}
+                      />
+                    </Field>
+                  </div>
+                </div>
+              )}
             </div>
           </Section>
 

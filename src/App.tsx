@@ -609,6 +609,16 @@ const ProviderClinicalTemplates = lazy(() =>
     default: m.ProviderClinicalTemplates,
   })),
 );
+const ProviderPayoutSetup = lazy(() =>
+  import("./components/provider/ProviderPayoutSetup").then((m) => ({
+    default: m.ProviderPayoutSetup,
+  })),
+);
+const SessionPayoutTrigger = lazy(() =>
+  import("./components/provider/SessionPayoutTrigger").then((m) => ({
+    default: m.SessionPayoutTrigger,
+  })),
+);
 const DailyVideoRoom = lazy(() =>
   import("./components/DailyVideoRoom").then((m) => ({
     default: m.DailyVideoRoom,
@@ -899,7 +909,9 @@ type AppScreen =
   | "revenue-dashboard" // Stripe revenue metrics (admin)
   | "waiting-room" // Telehealth waiting room
   | "data-collection" // DTT/NET/Behavior data collection for BCBAs/RBTs
-  | "treatment-plan-editor"; // Treatment plan clinical authoring tool for BCBAs
+  | "treatment-plan-editor" // Treatment plan clinical authoring tool for BCBAs
+  | "provider-payout-setup" // Stripe Connect onboarding & balance for providers
+  | "session-payout"; // Admin UI to release payment after session completion
 
 const AUTH_REDIRECT_SCREENS: AppScreen[] = [
   "splash",
@@ -3183,6 +3195,30 @@ export default function App() {
               <TreatmentPlanEditor
                 onBack={() => navigateToScreen("bcba-portal")}
                 onFinalize={() => navigateToScreen("bcba-portal")}
+              />
+            </Suspense>
+          );
+
+        case "provider-payout-setup":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <ProviderPayoutSetup
+                onBack={() => navigateToScreen("bcba-portal")}
+              />
+            </Suspense>
+          );
+
+        case "session-payout":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <SessionPayoutTrigger
+                sessionId="demo-session-id"
+                providerId="demo-provider-id"
+                providerName="Provider"
+                stripeConnectAccountId=""
+                sessionAmountCents={15000}
+                sessionDescription="Demo Session"
+                onCancel={() => navigateToScreen("bcba-portal")}
               />
             </Suspense>
           );
