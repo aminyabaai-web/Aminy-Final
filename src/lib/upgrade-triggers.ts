@@ -53,7 +53,7 @@ export interface UsageState {
   documentsUsed: number;
   documentsLimit: number;
   memoryDays: number;
-  tier: 'free' | 'plus' | 'pro' | 'provider';
+  tier: 'free' | 'starter' | 'core' | 'pro' | 'proplus';
   sessionStartTime: number;
   promptsShownThisSession: number;
   lastTriggerTime?: number;
@@ -91,7 +91,7 @@ const TRIGGER_MESSAGES: Record<TriggerType, UpgradeTrigger[]> = {
     {
       type: 'message_limit',
       title: "You're on a roll!",
-      message: "You've used all your daily messages. Upgrade to Plus for unlimited conversations with Aminy.",
+      message: "You've used all your daily messages. Upgrade to Core for unlimited conversations with Aminy.",
       ctaText: 'Unlock Unlimited',
       ctaAction: 'upgrade',
       variant: 'standard',
@@ -101,7 +101,7 @@ const TRIGGER_MESSAGES: Record<TriggerType, UpgradeTrigger[]> = {
     {
       type: 'message_limit',
       title: 'Daily limit reached',
-      message: "Want to keep the conversation going? Plus members get unlimited messages.",
+      message: "Want to keep the conversation going? Core members get unlimited messages.",
       ctaText: 'Try Plus Free',
       ctaAction: 'trial',
       variant: 'soft',
@@ -137,7 +137,7 @@ const TRIGGER_MESSAGES: Record<TriggerType, UpgradeTrigger[]> = {
     {
       type: 'memory_limit',
       title: 'Want Aminy to remember more?',
-      message: 'Plus members get 30 days of memory, so Aminy truly understands your journey.',
+      message: 'Core members get 30 days of memory, so Aminy truly understands your journey.',
       ctaText: 'Extend Memory',
       ctaAction: 'upgrade',
       variant: 'soft',
