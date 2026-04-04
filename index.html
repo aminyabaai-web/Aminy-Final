@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Aminy — AI-powered care coordination for autism and pediatric behavioral health families." />
+  <meta name="theme-color" content="#0D1B2A" />
+  <title>Aminy — Coming Soon</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── Reset & Base ─────────────────────────────────────── */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --navy:       #0D1B2A;
+      --navy-light: #142338;
+      --teal:       #43AA8B;
+      --teal-dark:  #339e7f;
+      --white:      #ffffff;
+      --muted:      rgba(255, 255, 255, 0.65);
+      --border:     rgba(255, 255, 255, 0.10);
+      --pill-bg:    rgba(67, 170, 139, 0.12);
+      --input-bg:   rgba(255, 255, 255, 0.06);
+      --input-border: rgba(255, 255, 255, 0.15);
+    }
+
+    html, body {
+      min-height: 100%;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background-color: var(--navy);
+      color: var(--white);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    /* ─── Animated Gradient Orb ────────────────────────────── */
+    @keyframes orbFloat {
+      0%   { transform: translate(0, 0) scale(1); opacity: 0.55; }
+      33%  { transform: translate(30px, -40px) scale(1.08); opacity: 0.45; }
+      66%  { transform: translate(-20px, 20px) scale(0.96); opacity: 0.60; }
+      100% { transform: translate(0, 0) scale(1); opacity: 0.55; }
+    }
+
+    @keyframes orbFloat2 {
+      0%   { transform: translate(0, 0) scale(1); opacity: 0.35; }
+      50%  { transform: translate(-40px, 30px) scale(1.12); opacity: 0.25; }
+      100% { transform: translate(0, 0) scale(1); opacity: 0.35; }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse-ring {
+      0%   { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(67, 170, 139, 0.4); }
+      70%  { transform: scale(1);    box-shadow: 0 0 0 12px rgba(67, 170, 139, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(67, 170, 139, 0); }
+    }
+
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .orb-1 {
+      width: 480px;
+      height: 480px;
+      background: radial-gradient(circle, rgba(67, 170, 139, 0.4) 0%, transparent 70%);
+      top: -100px;
+      right: -100px;
+      animation: orbFloat 12s ease-in-out infinite;
+    }
+
+    .orb-2 {
+      width: 360px;
+      height: 360px;
+      background: radial-gradient(circle, rgba(67, 100, 180, 0.25) 0%, transparent 70%);
+      bottom: -80px;
+      left: -80px;
+      animation: orbFloat2 18s ease-in-out infinite;
+    }
+
+    /* ─── Layout ───────────────────────────────────────────── */
+    .page {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 24px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 520px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      animation: fadeInUp 0.7s ease both;
+    }
+
+    /* ─── Wordmark ─────────────────────────────────────────── */
+    .wordmark {
+      font-size: clamp(3rem, 12vw, 5.5rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #ffffff 0%, rgba(255,255,255,0.85) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ─── Tagline ──────────────────────────────────────────── */
+    .tagline {
+      font-size: clamp(1.05rem, 3.5vw, 1.35rem);
+      font-weight: 600;
+      color: var(--white);
+      text-align: center;
+      line-height: 1.35;
+      margin-bottom: 14px;
+      letter-spacing: -0.01em;
+    }
+
+    .subtext {
+      font-size: clamp(0.875rem, 2.5vw, 1rem);
+      font-weight: 400;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.65;
+      max-width: 440px;
+      margin-bottom: 36px;
+    }
+
+    /* ─── Value Prop Pills ─────────────────────────────────── */
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 36px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--pill-bg);
+      border: 1px solid rgba(67, 170, 139, 0.25);
+      border-radius: 100px;
+      padding: 6px 14px;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--teal);
+      white-space: nowrap;
+    }
+
+    .pill-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--teal);
+      animation: pulse-ring 2.4s ease infinite;
+      flex-shrink: 0;
+    }
+
+    /* ─── Email Form ───────────────────────────────────────── */
+    .form-wrapper {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 28px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--muted);
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .form-input {
+      flex: 1;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-family: inherit;
+      font-size: 0.9375rem;
+      color: var(--white);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      min-width: 0;
+    }
+
+    .form-input::placeholder {
+      color: rgba(255, 255, 255, 0.35);
+    }
+
+    .form-input:focus {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px rgba(67, 170, 139, 0.18);
+    }
+
+    .form-btn {
+      background: var(--teal);
+      color: #ffffff;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 20px;
+      font-family: inherit;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .form-btn:hover {
+      background: var(--teal-dark);
+    }
+
+    .form-btn:active {
+      transform: scale(0.97);
+    }
+
+    .form-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .form-success {
+      text-align: center;
+      color: var(--teal);
+      font-size: 0.9375rem;
+      font-weight: 500;
+      padding: 8px 0 4px;
+    }
+
+    .form-error {
+      text-align: center;
+      color: #f87171;
+      font-size: 0.875rem;
+      margin-top: 8px;
+    }
+
+    /* ─── Trust Line ───────────────────────────────────────── */
+    .trust-line {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 8px 16px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.4);
+      margin-bottom: 40px;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    .trust-sep {
+      width: 1px;
+      height: 12px;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* ─── Footer ───────────────────────────────────────────── */
+    footer {
+      margin-top: auto;
+      text-align: center;
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.3);
+      padding-top: 16px;
+    }
+
+    footer a {
+      color: rgba(255, 255, 255, 0.45);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      color: var(--white);
+    }
+
+    /* ─── Mobile Adjustments ───────────────────────────────── */
+    @media (max-width: 480px) {
+      .page {
+        padding: 40px 20px;
+        justify-content: flex-start;
+        padding-top: 72px;
+      }
+
+      .form-row {
+        flex-direction: column;
+      }
+
+      .form-btn {
+        width: 100%;
+        padding: 13px 20px;
+      }
+
+      .orb-1 {
+        width: 300px;
+        height: 300px;
+        top: -60px;
+        right: -60px;
+      }
+
+      .orb-2 {
+        width: 240px;
+        height: 240px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Orbs -->
+  <div class="orb orb-1" aria-hidden="true"></div>
+  <div class="orb orb-2" aria-hidden="true"></div>
+
+  <div class="page">
+    <main class="card" role="main">
+
+      <!-- Wordmark -->
+      <h1 class="wordmark" aria-label="Aminy">Aminy</h1>
+
+      <!-- Tagline -->
+      <p class="tagline">Autism &amp; Pediatric Behavioral Health, Reimagined.</p>
+
+      <!-- Subtext -->
+      <p class="subtext">
+        AI-powered care coordination for families, therapists,<br>
+        and the children who deserve better.
+      </p>
+
+      <!-- Value Prop Pills -->
+      <div class="pills" aria-label="Services">
+        <span class="pill"><span class="pill-dot" aria-hidden="true"></span>ABA Therapy</span>
+        <span class="pill"><span class="pill-dot" aria-hidden="true"></span>Speech Therapy</span>
+        <span class="pill"><span class="pill-dot" aria-hidden="true"></span>Mental Health</span>
+      </div>
+
+      <!-- Email Capture Form -->
+      <div class="form-wrapper">
+        <label class="form-label" for="email-input">
+          Be the first to know when we launch
+        </label>
+        <form
+          id="notify-form"
+          action="https://formspree.io/f/placeholder"
+          method="POST"
+          novalidate
+        >
+          <div class="form-row">
+            <input
+              id="email-input"
+              class="form-input"
+              type="email"
+              name="email"
+              placeholder="your@email.com"
+              required
+              autocomplete="email"
+              aria-label="Email address"
+            />
+            <button class="form-btn" type="submit" id="notify-btn">
+              Notify Me
+            </button>
+          </div>
+          <div id="form-message" aria-live="polite"></div>
+        </form>
+      </div>
+
+      <!-- Trust Line -->
+      <div class="trust-line" aria-label="Trust indicators">
+        <span>HIPAA-Compliant</span>
+        <span class="trust-sep" aria-hidden="true"></span>
+        <span>Built for Families</span>
+        <span class="trust-sep" aria-hidden="true"></span>
+        <span>Powered by AI</span>
+      </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <p>&copy; 2026 Aminy Health, Inc. &middot; <a href="mailto:hello@aminy.ai">hello@aminy.ai</a></p>
+    </footer>
+  </div>
+
+  <script>
+    (function () {
+      var form = document.getElementById('notify-form');
+      var btn  = document.getElementById('notify-btn');
+      var msg  = document.getElementById('form-message');
+
+      if (!form) return;
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        var email = document.getElementById('email-input').value.trim();
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          msg.innerHTML = '<p class="form-error">Please enter a valid email address.</p>';
+          return;
+        }
+
+        btn.disabled = true;
+        btn.textContent = 'Sending\u2026';
+        msg.innerHTML = '';
+
+        var data = new FormData(form);
+
+        fetch(form.action, {
+          method: 'POST',
+          body: data,
+          headers: { 'Accept': 'application/json' }
+        })
+        .then(function (res) {
+          if (res.ok) {
+            msg.innerHTML = '<p class="form-success">\u2713 You\u2019re on the list! We\u2019ll be in touch soon.</p>';
+            form.reset();
+          } else {
+            return res.json().then(function (body) {
+              var errText = (body && body.errors && body.errors.map(function(e){ return e.message; }).join(', ')) || 'Something went wrong. Please try again.';
+              throw new Error(errText);
+            });
+          }
+        })
+        .catch(function (err) {
+          msg.innerHTML = '<p class="form-error">' + err.message + '</p>';
+        })
+        .finally(function () {
+          btn.disabled = false;
+          btn.textContent = 'Notify Me';
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
