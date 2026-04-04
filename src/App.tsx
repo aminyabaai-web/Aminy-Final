@@ -23,7 +23,7 @@ const SplashPage = lazy(() =>
 );
 import { CLSOptimizer } from "./components/CLSOptimizer";
 import { toast } from "sonner";
-import { TierType, getTierDisplayName } from "./lib/tier-utils";
+import { TierType, getTierDisplayName, getEffectiveTier, isTrialActive, getTrialDaysRemaining } from "./lib/tier-utils";
 import { getScreenGateReason } from "./lib/feature-flags";
 import {
   buildPilotAccessContext,
@@ -279,6 +279,17 @@ const CRSyncDashboard = lazy(() =>
 const Phase2FeaturesMenu = lazy(() =>
   import("./components/Phase2FeaturesMenu").then((m) => ({
     default: m.Phase2FeaturesMenu,
+  })),
+);
+
+const DataCollectionSheet = lazy(() =>
+  import("./components/provider/DataCollectionSheet").then((m) => ({
+    default: m.DataCollectionSheet,
+  })),
+);
+const TreatmentPlanEditor = lazy(() =>
+  import("./components/provider/TreatmentPlanEditor").then((m) => ({
+    default: m.TreatmentPlanEditor,
   })),
 );
 
@@ -598,6 +609,16 @@ const ProviderClinicalTemplates = lazy(() =>
     default: m.ProviderClinicalTemplates,
   })),
 );
+const ProviderPayoutSetup = lazy(() =>
+  import("./components/provider/ProviderPayoutSetup").then((m) => ({
+    default: m.ProviderPayoutSetup,
+  })),
+);
+const SessionPayoutTrigger = lazy(() =>
+  import("./components/provider/SessionPayoutTrigger").then((m) => ({
+    default: m.SessionPayoutTrigger,
+  })),
+);
 const DailyVideoRoom = lazy(() =>
   import("./components/DailyVideoRoom").then((m) => ({
     default: m.DailyVideoRoom,
@@ -656,6 +677,16 @@ const OnboardingQuickStart = lazy(() =>
 const JuniorMilestoneShare = lazy(() =>
   import("./components/JuniorMilestoneShare").then((m) => ({
     default: m.JuniorMilestoneShare,
+  })),
+);
+const ParentIntakeFlow = lazy(() =>
+  import("./components/onboarding/ParentIntakeFlow").then((m) => ({
+    default: m.ParentIntakeFlow,
+  })),
+);
+const OutcomesDashboard = lazy(() =>
+  import("./components/analytics/OutcomesDashboard").then((m) => ({
+    default: m.OutcomesDashboard,
   })),
 );
 
@@ -886,7 +917,13 @@ type AppScreen =
   | "video-call-room" // Telehealth video call room
   | "cr-sync" // CentralReach sync dashboard
   | "revenue-dashboard" // Stripe revenue metrics (admin)
-  | "waiting-room"; // Telehealth waiting room
+  | "waiting-room" // Telehealth waiting room
+  | "data-collection" // DTT/NET/Behavior data collection for BCBAs/RBTs
+  | "treatment-plan-editor" // Treatment plan clinical authoring tool for BCBAs
+  | "provider-payout-setup" // Stripe Connect onboarding & balance for providers
+  | "session-payout" // Admin UI to release payment after session completion
+  | "parent-intake" // Connected parent onboarding intake flow
+  | "outcomes-dashboard"; // VC-ready outcomes metrics dashboard
 
 const AUTH_REDIRECT_SCREENS: AppScreen[] = [
   "splash",
@@ -1206,6 +1243,13 @@ export default function App() {
   useBackgroundSync();
   // Accessibility enhancements — runtime a11y improvements (focus management, announcements)
   useAccessibilityEnhancements(currentScreen);
+
+  // === Trial-aware effective tier ===
+  // Use this everywhere instead of raw userData.tier for feature gating.
+  // Free users in active trial → treated as 'core'. Expired trial → 'free' (hard paywall).
+  const effectiveUserTier = getEffectiveTier(userData.tier, (userData as any).trial_ends_at);
+  const userTrialActive = isTrialActive((userData as any).trial_ends_at);
+  const userTrialDaysRemaining = getTrialDaysRemaining((userData as any).trial_ends_at);
   // App review prompt — self-contained component manages its own visibility
 
   useEffect(() => {
@@ -2135,7 +2179,7 @@ export default function App() {
                   parentName: userData.parentName,
                   childName: userData.childName,
                 }}
-                userTier={userData.tier}
+                userTier={effectiveUserTier}
                 userRole={userData.role || 'parent'}
                 onNavigate={(destination) => {
                   // Handle paywall specially
@@ -2230,7 +2274,7 @@ export default function App() {
                 onBack={() => navigateToScreen("dashboard")}
                 onLogout={handleLogout}
                 onNavigate={(screen) => navigateToScreen(screen as AppScreen)}
-                userTier={userData.tier || 'free'}
+                userTier={effectiveUserTier}
               />
             </Suspense>
           );
@@ -2251,6 +2295,7 @@ export default function App() {
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <BCBACoachPortal
                 onBack={() => navigateToScreen("dashboard")}
+                onNavigate={(screen) => navigateToScreen(screen as AppScreen)}
               />
             </Suspense>
           );
@@ -2390,7 +2435,7 @@ export default function App() {
                   toast.success("Session completed successfully!");
                 }}
                 childName={userData.childName || "your child"}
-                userTier={userData.tier as string}
+                userTier={effectiveUserTier}
               />
             </Suspense>
           );
@@ -2455,7 +2500,7 @@ export default function App() {
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <CareTab
                 childName={userData.childName}
-                userTier={userData.tier as string}
+                userTier={effectiveUserTier}
                 onBack={() => navigateToScreen("dashboard")}
               />
             </Suspense>
@@ -2487,7 +2532,7 @@ export default function App() {
               <ProfileScreen
                 onBack={() => navigateToScreen("dashboard")}
                 onNavigate={(screen) => navigateToScreen(screen as AppScreen)}
-                userTier={userData.tier || 'free'}
+                userTier={effectiveUserTier}
               />
             </Suspense>
           );
@@ -2521,7 +2566,7 @@ export default function App() {
                   parentName: userData.parentName || "Parent",
                   childName: userData.childName || "Alex"
                 }}
-                userTier={userData.tier || "starter"}
+                userTier={effectiveUserTier}
               />
             </Suspense>
           );
@@ -2710,7 +2755,7 @@ export default function App() {
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <StoreMarketplace
                 onBack={() => navigateToScreen("dashboard")}
-                userTier={userData.tier || 'free'}
+                userTier={effectiveUserTier}
                 onUpgrade={() => navigateToScreen("paywall")}
               />
             </Suspense>
@@ -2721,7 +2766,7 @@ export default function App() {
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <CommunityHub
                 onBack={() => navigateToScreen("dashboard")}
-                userTier={userData.tier || 'free'}
+                userTier={effectiveUserTier}
                 userName={userData.parentName || 'Parent'}
                 userId={userData.userId || ''}
                 onUpgrade={() => navigateToScreen("paywall")}
@@ -2806,7 +2851,7 @@ export default function App() {
               <ClinicalReportExport
                 childName={userData.childName || "Your Child"}
                 childId={userData.childId || "child-1"}
-                userTier={userData.tier || "free"}
+                userTier={effectiveUserTier}
                 onBack={() => navigateToScreen("dashboard")}
               />
             </Suspense>
@@ -2980,7 +3025,7 @@ export default function App() {
                 onBack={() => navigateToScreen("settings")}
                 onLogout={handleLogout}
                 onNavigate={(screen) => navigateToScreen(screen as AppScreen)}
-                userTier={userData.tier}
+                userTier={effectiveUserTier}
               />
             </Suspense>
           );
@@ -3150,6 +3195,68 @@ export default function App() {
                 userId={userData.id || userData.userId || ''}
                 onAdmitted={() => navigateToScreen("video-call-room")}
                 onCancel={() => navigateToScreen("telehealth")}
+              />
+            </Suspense>
+          );
+
+        case "data-collection":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <DataCollectionSheet
+                onBack={() => navigateToScreen("bcba-portal")}
+              />
+            </Suspense>
+          );
+
+        case "treatment-plan-editor":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <TreatmentPlanEditor
+                onBack={() => navigateToScreen("bcba-portal")}
+                onFinalize={() => navigateToScreen("bcba-portal")}
+              />
+            </Suspense>
+          );
+
+        case "provider-payout-setup":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <ProviderPayoutSetup
+                onBack={() => navigateToScreen("bcba-portal")}
+              />
+            </Suspense>
+          );
+
+        case "session-payout":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <SessionPayoutTrigger
+                sessionId="demo-session-id"
+                providerId="demo-provider-id"
+                providerName="Provider"
+                stripeConnectAccountId=""
+                sessionAmountCents={15000}
+                sessionDescription="Demo Session"
+                onCancel={() => navigateToScreen("bcba-portal")}
+              />
+            </Suspense>
+          );
+
+        case "parent-intake":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <ParentIntakeFlow
+                onComplete={() => navigateToScreen("dashboard")}
+                onSkip={() => navigateToScreen("dashboard")}
+              />
+            </Suspense>
+          );
+
+        case "outcomes-dashboard":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <OutcomesDashboard
+                onBack={() => navigateToScreen("dashboard")}
               />
             </Suspense>
           );

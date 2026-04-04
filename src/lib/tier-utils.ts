@@ -31,8 +31,9 @@ const CANONICAL_TIER_MAP: Record<TierType, CanonicalTierName> = {
 };
 
 // Map internal tier names to UI-friendly display names
+// Note: 'free' label is context-dependent — use getTrialDisplayLabel() for trial state
 export const tierDisplayNames: Record<TierType, string> = {
-  free: 'Free',
+  free: 'Start Free Trial',
   starter: 'Core', // Legacy: Starter now maps to Core
   core: 'Core',
   pro: 'Pro',
@@ -41,17 +42,51 @@ export const tierDisplayNames: Record<TierType, string> = {
 
 // Trial configuration
 export const TRIAL_CONFIG = {
-  durationDays: 7,
+  durationDays: 14,
   trialTier: 'core' as TierType,
   requiresCreditCard: false,
   features: [
-    'Full Core tier access',
-    'Unlimited AI chat',
-    'Adaptive daily plans',
-    'Document analysis',
+    'Full Core tier access for 14 days',
+    'Unlimited AI chat with Aminy',
+    'Adaptive daily plans for your child',
+    'Document vault & analysis',
+    'Provider matching & booking',
     'No credit card required',
   ],
 };
+
+// Trial state helpers — use these everywhere instead of raw tier checks
+export function isTrialActive(trialEndsAt: string | null | undefined): boolean {
+  if (!trialEndsAt) return false;
+  return new Date(trialEndsAt) > new Date();
+}
+
+export function isTrialExpired(tier: TierType | string | null | undefined, trialEndsAt: string | null | undefined): boolean {
+  if (tier !== 'free') return false; // paid users are never in expired-trial state
+  if (!trialEndsAt) return true; // no trial date = treat as expired
+  return new Date(trialEndsAt) <= new Date();
+}
+
+export function getTrialDaysRemaining(trialEndsAt: string | null | undefined): number {
+  if (!trialEndsAt) return 0;
+  const diff = new Date(trialEndsAt).getTime() - Date.now();
+  return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
+}
+
+export function getEffectiveTier(tier: TierType | string | null | undefined, trialEndsAt: string | null | undefined): TierType {
+  if (!tier || tier === 'free') {
+    // During active trial → treat as core; after expiry → hard paywall (stays 'free')
+    return isTrialActive(trialEndsAt) ? 'core' : 'free';
+  }
+  return normalizeTierName(tier);
+}
+
+export function getTrialDisplayLabel(trialEndsAt: string | null | undefined): string {
+  const days = getTrialDaysRemaining(trialEndsAt);
+  if (days <= 0) return 'Trial Expired';
+  if (days === 1) return '1 day left in trial';
+  return `${days} days left in trial`;
+}
 
 // Pricing configuration (simplified - Starter removed)
 // Optimized for ~60% marketplace margins, 80%+ SaaS margins
@@ -64,10 +99,11 @@ export const tierPricing: Record<TierType, { monthly: number; yearly: number; sa
 };
 
 export const tierEntitlements: Record<CanonicalTierName, TierEntitlements> = {
+  // free = hard paywall. No features. Use getEffectiveTier() to give trial users core access.
   free: {
-    aiMessagesPerDay: 5,
-    juniorAccess: true,
-    maxChildren: 1,
+    aiMessagesPerDay: 0,
+    juniorAccess: false,
+    maxChildren: 0,
     reportExports: 'none',
     providerFeatures: false,
   },
@@ -99,7 +135,12 @@ export function getCanonicalTierName(tier?: TierType | string | null): Canonical
   return CANONICAL_TIER_MAP[normalizeTierName(tier)] || 'free';
 }
 
-export function getTierEntitlements(tier?: TierType | string | null): TierEntitlements {
+export function getTierEntitlements(tier?: TierType | string | null, trialEndsAt?: string | null): TierEntitlements {
+  // If trialEndsAt is provided, use effective tier (trial-aware) instead of raw tier
+  if (trialEndsAt !== undefined) {
+    const effective = getEffectiveTier(tier, trialEndsAt);
+    return tierEntitlements[getCanonicalTierName(effective)];
+  }
   return tierEntitlements[getCanonicalTierName(tier)];
 }
 

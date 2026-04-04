@@ -5,6 +5,7 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import { toast } from 'sonner';
+import { isTrialActive, isTrialExpired, getTrialDaysRemaining, getEffectiveTier } from '../lib/tier-utils';
 
 const API_BASE = import.meta.env.VITE_SUPABASE_URL
   ? `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/make-server-8a022548`
@@ -247,6 +248,12 @@ export function useSubscription(options: UseSubscriptionOptions = {}) {
     }
   }, [autoFetch, fetchSubscription]);
 
+  // Trial-aware effective tier — use this for all feature gating
+  const effectiveTier = getEffectiveTier(subscription?.tier, subscription?.trialEndsAt);
+  const trialActive = isTrialActive(subscription?.trialEndsAt);
+  const trialExpired = isTrialExpired(subscription?.tier, subscription?.trialEndsAt);
+  const trialDaysRemaining = getTrialDaysRemaining(subscription?.trialEndsAt);
+
   return {
     subscription,
     referralInfo,
@@ -257,11 +264,17 @@ export function useSubscription(options: UseSubscriptionOptions = {}) {
     manageSubscription,
     cancel,
     resume,
-    // Convenience getters
-    isActive: subscription?.status === 'active' || subscription?.status === 'trialing',
-    isProPlus: subscription?.tier === 'proplus',
-    isPro: subscription?.tier === 'pro' || subscription?.tier === 'proplus',
-    isCore: subscription?.tier === 'core' || subscription?.tier === 'pro' || subscription?.tier === 'proplus',
-    isFree: !subscription || subscription.tier === 'free',
+    // Trial state
+    trialActive,
+    trialExpired,
+    trialDaysRemaining,
+    effectiveTier,
+    // Convenience getters — all trial-aware via effectiveTier
+    isActive: subscription?.status === 'active' || subscription?.status === 'trialing' || trialActive,
+    isProPlus: effectiveTier === 'proplus',
+    isPro: effectiveTier === 'pro' || effectiveTier === 'proplus',
+    isCore: effectiveTier === 'core' || effectiveTier === 'pro' || effectiveTier === 'proplus',
+    // isFree = true only when trial is expired AND no paid subscription
+    isFree: !subscription || (subscription.tier === 'free' && trialExpired),
   };
 }
