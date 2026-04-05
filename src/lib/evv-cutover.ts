@@ -393,6 +393,287 @@ async function fetchEVVReconciliationRunsViaRest(childId?: string): Promise<EVVR
   return runRows.map((row) => mapRunRow(row, discrepancyMap.get(String(row.id)) || []));
 }
 
+// ============================================
+// CUTOVER CONFIDENCE SCORING
+// ============================================
+
+export interface CutoverConfidenceResult {
+  confidenceScore: number; // 0-100
+  recommendation: 'proceed' | 'delay' | 'not_ready';
+  factors: {
+    factor: string;
+    score: number; // 0-100
+    weight: number;
+    details: string;
+  }[];
+  shadowCycleSummary: {
+    totalCycles: number;
+    cleanCycles: number;
+    averageAccuracy: number;
+    consecutiveClean: number;
+  };
+  riskAssessment: string;
+}
+
+/**
+ * Calculate a confidence score (0-100) for proceeding with EVV cutover,
+ * based on shadow mode reconciliation results.
+ */
+export function calculateCutoverConfidence(
+  shadowResults: EVVReconciliationCycle[],
+  targetCleanRate: number = 99.5
+): CutoverConfidenceResult {
+  const factors: CutoverConfidenceResult['factors'] = [];
+
+  // Factor 1: Number of completed cycles (weight 20%)
+  const cycleCountScore = Math.min(100, (shadowResults.length / 3) * 100);
+  factors.push({
+    factor: 'Completed Reconciliation Cycles',
+    score: Math.round(cycleCountScore),
+    weight: 0.2,
+    details: `${shadowResults.length} of 3 minimum cycles completed`,
+  });
+
+  // Factor 2: Average accuracy across all cycles (weight 30%)
+  const avgAccuracy = shadowResults.length > 0
+    ? shadowResults.reduce((sum, c) => sum + c.accuracy, 0) / shadowResults.length
+    : 0;
+  const accuracyScore = Math.min(100, (avgAccuracy / targetCleanRate) * 100);
+  factors.push({
+    factor: 'Average Accuracy',
+    score: Math.round(accuracyScore),
+    weight: 0.3,
+    details: `${avgAccuracy.toFixed(1)}% average vs ${targetCleanRate}% target`,
+  });
+
+  // Factor 3: Consecutive clean cycles (weight 25%)
+  const sorted = [...shadowResults].sort((a, b) =>
+    new Date(b.payrollDate || b.exportedAt).getTime() - new Date(a.payrollDate || a.exportedAt).getTime()
+  );
+  let consecutiveClean = 0;
+  for (const cycle of sorted) {
+    if (cycle.accuracy >= targetCleanRate && cycle.criticalExceptions === 0) {
+      consecutiveClean++;
+    } else {
+      break;
+    }
+  }
+  const consecutiveScore = Math.min(100, (consecutiveClean / 3) * 100);
+  factors.push({
+    factor: 'Consecutive Clean Cycles',
+    score: Math.round(consecutiveScore),
+    weight: 0.25,
+    details: `${consecutiveClean} consecutive clean cycles (3 required)`,
+  });
+
+  // Factor 4: No unresolved critical exceptions (weight 25%)
+  const recentCriticals = sorted.slice(0, 3).reduce((sum, c) => sum + c.criticalExceptions, 0);
+  const criticalScore = recentCriticals === 0 ? 100 : Math.max(0, 100 - recentCriticals * 33);
+  factors.push({
+    factor: 'Critical Exceptions Resolved',
+    score: Math.round(criticalScore),
+    weight: 0.25,
+    details: recentCriticals === 0
+      ? 'No unresolved critical exceptions in recent cycles'
+      : `${recentCriticals} unresolved critical exceptions in recent cycles`,
+  });
+
+  // Weighted confidence score
+  const confidenceScore = Math.round(
+    factors.reduce((sum, f) => sum + f.score * f.weight, 0)
+  );
+
+  // Recommendation
+  const recommendation: CutoverConfidenceResult['recommendation'] =
+    confidenceScore >= 90 ? 'proceed'
+    : confidenceScore >= 70 ? 'delay'
+    : 'not_ready';
+
+  // Risk assessment
+  const riskAssessment =
+    recommendation === 'proceed'
+      ? 'Shadow mode results meet all cutover criteria. Proceeding to primary is low risk.'
+      : recommendation === 'delay'
+        ? 'Some criteria are not yet met. Continue shadow mode for additional cycles to build confidence.'
+        : 'Significant gaps remain. Address critical exceptions and improve accuracy before considering cutover.';
+
+  const cleanCycles = shadowResults.filter(
+    c => c.accuracy >= targetCleanRate && c.criticalExceptions === 0
+  ).length;
+
+  return {
+    confidenceScore,
+    recommendation,
+    factors,
+    shadowCycleSummary: {
+      totalCycles: shadowResults.length,
+      cleanCycles,
+      averageAccuracy: Math.round(avgAccuracy * 10) / 10,
+      consecutiveClean,
+    },
+    riskAssessment,
+  };
+}
+
+// ============================================
+// SHADOW vs PRIMARY COMPARISON
+// ============================================
+
+export interface ShadowPrimaryDiscrepancy {
+  shiftId: string;
+  field: string;
+  shadowValue: string;
+  primaryValue: string;
+  severity: 'critical' | 'warning' | 'info';
+  description: string;
+}
+
+export interface ShadowPrimaryComparison {
+  totalCompared: number;
+  matchedPerfectly: number;
+  withDiscrepancies: number;
+  matchRate: number; // 0-100
+  discrepancies: ShadowPrimaryDiscrepancy[];
+  discrepancySummary: Record<string, number>; // field -> count
+  recommendation: string;
+}
+
+/**
+ * Compare shadow EVV records against primary system records to identify
+ * discrepancies that need resolution before cutover.
+ */
+export function compareShadowToPrimary(
+  shadowRecords: EVVShift[],
+  primaryRecords: EVVShift[]
+): ShadowPrimaryComparison {
+  const discrepancies: ShadowPrimaryDiscrepancy[] = [];
+
+  // Index primary records by recordId for fast lookup
+  const primaryMap = new Map<string, EVVShift>();
+  for (const pr of primaryRecords) {
+    primaryMap.set(pr.recordId, pr);
+  }
+
+  let matchedPerfectly = 0;
+
+  for (const shadow of shadowRecords) {
+    const primary = primaryMap.get(shadow.recordId);
+
+    if (!primary) {
+      discrepancies.push({
+        shiftId: shadow.id,
+        field: 'existence',
+        shadowValue: 'present',
+        primaryValue: 'missing',
+        severity: 'critical',
+        description: `Record ${shadow.recordId} exists in shadow but not in primary system`,
+      });
+      continue;
+    }
+
+    let hasDiscrepancy = false;
+
+    // Compare service date
+    if (shadow.serviceDate !== primary.serviceDate) {
+      hasDiscrepancy = true;
+      discrepancies.push({
+        shiftId: shadow.id,
+        field: 'serviceDate',
+        shadowValue: shadow.serviceDate,
+        primaryValue: primary.serviceDate,
+        severity: 'critical',
+        description: `Service date mismatch: shadow=${shadow.serviceDate}, primary=${primary.serviceDate}`,
+      });
+    }
+
+    // Compare child linkage
+    if (shadow.childId !== primary.childId) {
+      hasDiscrepancy = true;
+      discrepancies.push({
+        shiftId: shadow.id,
+        field: 'childId',
+        shadowValue: shadow.childId,
+        primaryValue: primary.childId,
+        severity: 'critical',
+        description: `Client/child ID mismatch between shadow and primary`,
+      });
+    }
+
+    // Compare provider linkage
+    if (shadow.providerId !== primary.providerId) {
+      hasDiscrepancy = true;
+      discrepancies.push({
+        shiftId: shadow.id,
+        field: 'providerId',
+        shadowValue: shadow.providerId,
+        primaryValue: primary.providerId,
+        severity: 'warning',
+        description: `Provider ID mismatch between shadow and primary`,
+      });
+    }
+
+    // Compare authorization linkage
+    if (shadow.authorizationLinked !== primary.authorizationLinked) {
+      hasDiscrepancy = true;
+      discrepancies.push({
+        shiftId: shadow.id,
+        field: 'authorizationLinked',
+        shadowValue: String(shadow.authorizationLinked),
+        primaryValue: String(primary.authorizationLinked),
+        severity: shadow.authorizationLinked && !primary.authorizationLinked ? 'warning' : 'critical',
+        description: `Authorization linkage differs: shadow=${shadow.authorizationLinked}, primary=${primary.authorizationLinked}`,
+      });
+    }
+
+    if (!hasDiscrepancy) {
+      matchedPerfectly++;
+    }
+  }
+
+  // Check for records in primary but not in shadow
+  for (const primary of primaryRecords) {
+    const hasShadow = shadowRecords.some(s => s.recordId === primary.recordId);
+    if (!hasShadow) {
+      discrepancies.push({
+        shiftId: primary.id,
+        field: 'existence',
+        shadowValue: 'missing',
+        primaryValue: 'present',
+        severity: 'warning',
+        description: `Record ${primary.recordId} exists in primary but not captured in shadow`,
+      });
+    }
+  }
+
+  const totalCompared = shadowRecords.length;
+  const withDiscrepancies = totalCompared - matchedPerfectly;
+  const matchRate = totalCompared > 0 ? Math.round((matchedPerfectly / totalCompared) * 1000) / 10 : 0;
+
+  // Discrepancy summary by field
+  const discrepancySummary: Record<string, number> = {};
+  for (const d of discrepancies) {
+    discrepancySummary[d.field] = (discrepancySummary[d.field] || 0) + 1;
+  }
+
+  const criticalCount = discrepancies.filter(d => d.severity === 'critical').length;
+  const recommendation =
+    criticalCount === 0 && matchRate >= 99.5
+      ? 'Shadow and primary systems are aligned. Safe to proceed with cutover.'
+      : criticalCount === 0 && matchRate >= 95
+        ? 'Minor discrepancies exist but no critical issues. Review warnings before cutover.'
+        : `${criticalCount} critical discrepancies found. Resolve all critical issues before cutover.`;
+
+  return {
+    totalCompared,
+    matchedPerfectly,
+    withDiscrepancies,
+    matchRate,
+    discrepancies,
+    discrepancySummary,
+    recommendation,
+  };
+}
+
 export async function listEVVReconciliationRuns(childId?: string): Promise<EVVReconciliationRun[]> {
   const queryableChildId = normalizeQueryableChildId(childId);
 

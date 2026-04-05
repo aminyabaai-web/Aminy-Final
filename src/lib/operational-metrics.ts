@@ -573,6 +573,111 @@ export function getDateRangePresets(): DateRange[] {
   ];
 }
 
+// ─── Executive Summary Generator ────────────────────────────────────
+
+export interface ExecutiveSummary {
+  headline: string;
+  healthStatus: 'healthy' | 'warning' | 'critical';
+  topWins: string[];
+  topRisks: string[];
+  actionItems: string[];
+  investorReady: boolean;
+  investorReadyReasons: string[];
+}
+
+export function generateExecutiveSummary(data: OperationalMetricsData): ExecutiveSummary {
+  const wins: string[] = [];
+  const risks: string[] = [];
+  const actions: string[] = [];
+
+  // Family retention analysis
+  if (data.familyRetention.retentionRate >= 85) {
+    wins.push(`Family retention at ${data.familyRetention.retentionRate}% — strong product-market fit`);
+  }
+  if (data.familyRetention.nps >= 50) {
+    wins.push(`NPS of ${data.familyRetention.nps} — families are promoters`);
+  }
+  if (data.familyRetention.churnRate > 5) {
+    risks.push(`Churn rate ${data.familyRetention.churnRate}% needs attention`);
+    actions.push('Analyze top churn reasons and create targeted retention campaigns');
+  }
+
+  // Telehealth liquidity analysis
+  if (data.telehealthLiquidity.fillRate >= 85) {
+    wins.push(`Telehealth fill rate ${data.telehealthLiquidity.fillRate}% — strong provider-family matching`);
+  }
+  if (data.telehealthLiquidity.completionRate >= 90) {
+    wins.push(`Session completion rate ${data.telehealthLiquidity.completionRate}%`);
+  }
+  if (data.telehealthLiquidity.noShowRate > 8) {
+    risks.push(`No-show rate ${data.telehealthLiquidity.noShowRate}% above target`);
+    actions.push('Implement 24hr + 1hr appointment reminders via push + SMS');
+  }
+
+  // Provider launch analysis
+  if (data.providerLaunch.averageDaysToLaunch <= 21) {
+    wins.push(`Provider launch in ${data.providerLaunch.averageDaysToLaunch} days — competitive with Headway`);
+  } else {
+    risks.push(`Provider launch taking ${data.providerLaunch.averageDaysToLaunch} days`);
+    actions.push('Streamline credentialing bottleneck — target 14 days');
+  }
+
+  // Payer/EVV analysis
+  if (data.payerEVV.cleanClaimRate >= 93) {
+    wins.push(`Clean claim rate ${data.payerEVV.cleanClaimRate}% — revenue cycle healthy`);
+  }
+  if (data.payerEVV.evvMatchRate >= 95) {
+    wins.push(`EVV match rate ${data.payerEVV.evvMatchRate}% — Medicaid compliant`);
+  }
+  if (data.payerEVV.denialRate > 8) {
+    risks.push(`Denial rate ${data.payerEVV.denialRate}% leaking revenue`);
+    actions.push('Deploy AI denial ops with auto-appeal for top 3 CARC codes');
+  }
+
+  // Investor readiness check
+  const investorReadyReasons: string[] = [];
+  const investorChecks = [
+    { check: data.familyRetention.retentionRate >= 80, reason: 'Family retention above 80%' },
+    { check: data.telehealthLiquidity.fillRate >= 75, reason: 'Telehealth liquidity proven' },
+    { check: data.providerLaunch.credentialingSuccessRate >= 85, reason: 'Credentialing pipeline working' },
+    { check: data.payerEVV.cleanClaimRate >= 90, reason: 'Revenue cycle clean' },
+    { check: data.familyRetention.nps >= 40, reason: 'Strong NPS' },
+    { check: data.overallHealth.trend !== 'declining', reason: 'Metrics trending up or stable' },
+  ];
+
+  for (const { check, reason } of investorChecks) {
+    if (check) investorReadyReasons.push(reason);
+  }
+
+  const investorReady = investorReadyReasons.length >= 5;
+
+  const headline = data.overallHealth.status === 'healthy'
+    ? `Platform health score: ${data.overallHealth.composite}/100 — All systems healthy`
+    : data.overallHealth.status === 'warning'
+      ? `Platform health score: ${data.overallHealth.composite}/100 — Attention needed`
+      : `Platform health score: ${data.overallHealth.composite}/100 — Critical issues`;
+
+  return { headline, healthStatus: data.overallHealth.status, topWins: wins, topRisks: risks, actionItems: actions, investorReady, investorReadyReasons };
+}
+
+// ─── CSV Export ──────────────────────────────────────────────────────
+
+export function exportMetricsToCSV(data: OperationalMetricsData): string {
+  const rows: string[][] = [
+    ['Category', 'Metric', 'Value', 'Unit', 'Status'],
+  ];
+
+  const allKPIs = [
+    ...buildRetentionKPIs(data.familyRetention).map(k => ['Retention', k.label, String(k.value), k.unit ?? '', k.status]),
+    ...buildTelehealthKPIs(data.telehealthLiquidity).map(k => ['Telehealth', k.label, String(k.value), k.unit ?? '', k.status]),
+    ...buildProviderLaunchKPIs(data.providerLaunch).map(k => ['Provider', k.label, String(k.value), k.unit ?? '', k.status]),
+    ...buildPayerEVVKPIs(data.payerEVV).map(k => ['Payer/EVV', k.label, String(k.value), k.unit ?? '', k.status]),
+  ];
+
+  rows.push(...allKPIs);
+  return rows.map(r => r.map(c => `"${c}"`).join(',')).join('\n');
+}
+
 // ─── Demo Data Generator ─────────────────────────────────────────────
 
 export function generateDemoOperationalData(): OperationalMetricsData {

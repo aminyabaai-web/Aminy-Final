@@ -534,6 +534,164 @@ export function generateCarePlan(sources: CarePlanSources): AICarePlan {
   };
 }
 
+// ─── Treatment Plan Translation for Parents ─────────────────────────────
+
+export interface TranslatedGoal {
+  clinicalGoal: string;
+  parentFriendlyGoal: string;
+  whyItMatters: string;
+  whatYouCanDo: string[];
+  progressDescription: string;
+  celebrationSuggestion: string;
+}
+
+const CLINICAL_TRANSLATIONS: Record<string, { friendly: string; why: string }> = {
+  'independent transitions': {
+    friendly: 'Moving from one activity to another without a meltdown',
+    why: 'Transitions are one of the hardest parts of the day for many kids. When your child can handle transitions calmly, it means less stress for the whole family — and more independence at school.',
+  },
+  'peer social engagement': {
+    friendly: 'Playing and interacting with other kids',
+    why: 'Social skills are the foundation of friendships, teamwork at school, and feeling confident in group settings. Every small interaction builds this muscle.',
+  },
+  'expressive language': {
+    friendly: 'Using longer sentences to tell you what they want and need',
+    why: 'When kids can express themselves clearly, frustration goes down and connection goes up. More words = fewer meltdowns.',
+  },
+  'narrative retell': {
+    friendly: 'Telling you about something that happened in order',
+    why: 'This skill helps at school (following stories, answering questions) and in daily life (telling you about their day, explaining what happened).',
+  },
+  'sensory self-regulation': {
+    friendly: 'Calming themselves down when things feel overwhelming',
+    why: 'Self-regulation is a superpower. When your child can recognize "I feel overwhelmed" and use a strategy to calm down, it changes everything.',
+  },
+  'on-task behavior': {
+    friendly: 'Staying focused on an activity without constant reminders',
+    why: 'Focus and attention are crucial for learning at school and completing daily tasks. Building this skill now pays off for years.',
+  },
+  'joint attention': {
+    friendly: 'Looking at and sharing interest in something with another person',
+    why: 'Joint attention is the building block of communication. When your child shares a moment with you — pointing at something cool, looking at you to share excitement — that\'s connection.',
+  },
+  'functional communication': {
+    friendly: 'Asking for what they need instead of acting out',
+    why: 'Many challenging behaviors happen because a child can\'t tell you what they want. Teaching alternative ways to communicate reduces frustration for everyone.',
+  },
+  'daily living skills': {
+    friendly: 'Taking care of themselves (dressing, teeth brushing, eating)',
+    why: 'Independence in daily tasks builds confidence and reduces the load on parents. Every small step toward independence is a win.',
+  },
+  'following directions': {
+    friendly: 'Understanding and doing what\'s asked the first time',
+    why: 'This skill is essential for school, safety, and daily routines. It\'s not about obedience — it\'s about comprehension and cooperation.',
+  },
+};
+
+/**
+ * Translate a clinical treatment goal into parent-friendly language
+ * with actionable "what you can do at home" suggestions
+ */
+export function translateGoalForParent(goal: {
+  title: string;
+  domain: string;
+  currentPct: number;
+  targetPct: number;
+  status: string;
+}, childName: string = 'your child'): TranslatedGoal {
+  // Find best matching translation
+  const titleLower = goal.title.toLowerCase();
+  let translation = { friendly: goal.title, why: 'This skill helps your child grow and become more independent.' };
+
+  for (const [key, value] of Object.entries(CLINICAL_TRANSLATIONS)) {
+    if (titleLower.includes(key)) {
+      translation = value;
+      break;
+    }
+  }
+
+  // Generate "what you can do" based on domain
+  const domainTasks = DOMAIN_HOME_TASKS[goal.domain.toLowerCase()] || DOMAIN_HOME_TASKS.behavioral;
+  const whatYouCanDo = pickRandom(domainTasks, 3);
+
+  // Progress description
+  let progressDescription: string;
+  if (goal.currentPct >= goal.targetPct) {
+    progressDescription = `${childName} has reached the target! Time to celebrate and set a new goal.`;
+  } else if (goal.currentPct >= goal.targetPct * 0.8) {
+    progressDescription = `${childName} is SO close — ${goal.currentPct}% of the way to ${goal.targetPct}%. Keep going!`;
+  } else if (goal.currentPct >= goal.targetPct * 0.5) {
+    progressDescription = `${childName} is making solid progress — ${goal.currentPct}% of the way there. This is where consistency really matters.`;
+  } else {
+    progressDescription = `${childName} is at ${goal.currentPct}% — still early in the journey, but every session builds on the last.`;
+  }
+
+  // Celebration suggestion
+  const celebrations = [
+    `When ${childName} reaches ${Math.min(goal.currentPct + 10, goal.targetPct)}%, plan a special activity they love.`,
+    `Catch ${childName} using this skill in daily life and make a big deal about it — specific praise works best.`,
+    `Take a photo or video of ${childName} showing this skill to share with family — it makes progress tangible.`,
+    `Create a "win wall" at home where you post notes about ${childName}'s progress. Kids love seeing their growth.`,
+  ];
+
+  return {
+    clinicalGoal: goal.title,
+    parentFriendlyGoal: translation.friendly,
+    whyItMatters: translation.why,
+    whatYouCanDo,
+    progressDescription,
+    celebrationSuggestion: pickRandom(celebrations, 1)[0],
+  };
+}
+
+/**
+ * Generate a complete parent empowerment report from a care plan
+ */
+export function generateParentEmpowermentReport(plan: AICarePlan): {
+  translatedGoals: TranslatedGoal[];
+  weeklyMessage: string;
+  topPriority: string;
+  encouragement: string;
+} {
+  const translatedGoals = plan.goalProgress.map(g =>
+    translateGoalForParent({
+      title: g.title,
+      domain: 'behavioral', // default
+      currentPct: g.currentPct,
+      targetPct: 100,
+      status: g.change > 0 ? 'improving' : g.change < 0 ? 'needs-focus' : 'steady',
+    }, plan.childName)
+  );
+
+  const improvingGoals = plan.goalProgress.filter(g => g.change > 0);
+  const needsFocusGoals = plan.goalProgress.filter(g => g.change < 0);
+
+  let weeklyMessage: string;
+  if (improvingGoals.length >= needsFocusGoals.length) {
+    weeklyMessage = `Great week! ${plan.childName} showed improvement in ${improvingGoals.length} area${improvingGoals.length > 1 ? 's' : ''}. Your consistency is paying off.`;
+  } else {
+    weeklyMessage = `This week had some challenges, and that's completely normal. ${plan.childName} is still making progress overall. Focus on the wins, no matter how small.`;
+  }
+
+  const topPriority = plan.weeklyFocus.length > 0
+    ? `This week's #1 focus: ${plan.weeklyFocus[0].title}. ${plan.weeklyFocus[0].description}`
+    : `Keep up your daily routine with ${plan.childName}. Consistency is the most powerful tool you have.`;
+
+  const encouragements = [
+    `Remember: you are ${plan.childName}'s biggest advocate and most important teacher. What you do at home matters just as much as therapy.`,
+    `Progress isn't always linear. Some weeks are harder than others. What matters is that you keep showing up.`,
+    `You're doing an incredible job. The fact that you're tracking ${plan.childName}'s progress shows how much you care.`,
+    `Every small win adds up. A year from now, you'll look back and be amazed at how far ${plan.childName} has come.`,
+  ];
+
+  return {
+    translatedGoals,
+    weeklyMessage,
+    topPriority,
+    encouragement: pickRandom(encouragements, 1)[0],
+  };
+}
+
 // ─── Demo Data Generator ────────────────────────────────────────────────
 
 export function generateDemoCarePlan(childName = 'Aiden'): AICarePlan {

@@ -1881,6 +1881,563 @@ function getMockHomePrograms(clientId: string): CRHomeProgram[] {
 }
 
 // ============================================================================
+// Session Note Format Mapping (Aminy SOAP -> CentralReach)
+// ============================================================================
+
+/** Aminy SOAP note structure */
+export interface AminySoapNote {
+  subjective: string;
+  objective: string;
+  assessment: string;
+  plan: string;
+  dateOfService: string;
+  startTime: string;
+  endTime: string;
+  durationMinutes: number;
+  goalsAddressed: string[];
+  dataCollection?: {
+    goalId: string;
+    trials: number;
+    successes: number;
+    accuracy: number;
+    promptLevel: string;
+    notes: string;
+  }[];
+  providerId: string;
+  clientId: string;
+}
+
+/** CentralReach session note template format */
+export interface CRNoteTemplate {
+  dateOfService: string;
+  serviceCode: string;
+  sessionDuration: {
+    startTime: string;
+    endTime: string;
+    totalMinutes: number;
+    billingUnits: number;
+  };
+  goalsAddressed: {
+    goalId: string;
+    goalDescription: string;
+    dataPoints: {
+      trials: number;
+      successes: number;
+      accuracy: number;
+      promptLevel: string;
+    };
+    notes: string;
+  }[];
+  dataCollection: {
+    type: 'trial_by_trial' | 'frequency' | 'duration' | 'interval';
+    summary: string;
+  };
+  clinicalNarrative: {
+    subjective: string;
+    objective: string;
+    assessment: string;
+  };
+  planRecommendations: string;
+  sessionType: string;
+  providerSignature: {
+    providerId: string;
+    signedAt: string;
+  };
+}
+
+/**
+ * Map an Aminy SOAP note to CentralReach's note template format.
+ *
+ * Translates Aminy's SOAP note structure into the structured fields that
+ * CentralReach expects for session documentation, including service code
+ * mapping based on session type.
+ */
+export function mapToCRNoteFormat(
+  soapNote: AminySoapNote,
+  sessionType: CRSessionType,
+): CRNoteTemplate {
+  // Map session type to CPT service code
+  const serviceCodeMap: Record<CRSessionType, string> = {
+    direct_therapy: '97153',
+    supervision: '97155',
+    parent_training: '97156',
+    assessment: '97151',
+    group_therapy: '97154',
+    telehealth: '97153',
+    consultation: '97155',
+  };
+
+  // Calculate billing units (1 unit = 15 minutes)
+  const billingUnits = Math.ceil(soapNote.durationMinutes / 15);
+
+  // Map goal data collection
+  const goalsAddressed = (soapNote.dataCollection || []).map((dc) => ({
+    goalId: dc.goalId,
+    goalDescription: '', // Would be resolved via goal lookup in production
+    dataPoints: {
+      trials: dc.trials,
+      successes: dc.successes,
+      accuracy: dc.accuracy,
+      promptLevel: dc.promptLevel,
+    },
+    notes: dc.notes,
+  }));
+
+  // Build data collection summary
+  const totalTrials = (soapNote.dataCollection || []).reduce((sum, dc) => sum + dc.trials, 0);
+  const totalSuccesses = (soapNote.dataCollection || []).reduce((sum, dc) => sum + dc.successes, 0);
+  const overallAccuracy = totalTrials > 0 ? Math.round((totalSuccesses / totalTrials) * 100) : 0;
+
+  return {
+    dateOfService: soapNote.dateOfService,
+    serviceCode: serviceCodeMap[sessionType] || '97153',
+    sessionDuration: {
+      startTime: soapNote.startTime,
+      endTime: soapNote.endTime,
+      totalMinutes: soapNote.durationMinutes,
+      billingUnits,
+    },
+    goalsAddressed,
+    dataCollection: {
+      type: 'trial_by_trial',
+      summary: `${totalTrials} total trials, ${totalSuccesses} correct (${overallAccuracy}% overall accuracy)`,
+    },
+    clinicalNarrative: {
+      subjective: soapNote.subjective,
+      objective: soapNote.objective,
+      assessment: soapNote.assessment,
+    },
+    planRecommendations: soapNote.plan,
+    sessionType,
+    providerSignature: {
+      providerId: soapNote.providerId,
+      signedAt: new Date().toISOString(),
+    },
+  };
+}
+
+// ============================================================================
+// Goal/Objective Sync Structure
+// ============================================================================
+
+/** Aminy treatment goal format */
+export interface AminyTreatmentGoal {
+  id: string;
+  clientId: string;
+  title: string;
+  description: string;
+  domain: string;
+  baseline: number;
+  currentLevel: number;
+  targetLevel: number;
+  targetDate: string;
+  measurementMethod: string;
+  status: 'active' | 'mastered' | 'on_hold' | 'discontinued';
+  objectives: {
+    id: string;
+    description: string;
+    criterionLevel: number;
+    criterionSessions: number;
+    status: string;
+  }[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+/** CentralReach goal sync payload */
+export interface CRGoalSync {
+  clientId: string;
+  goals: {
+    externalId: string;
+    targetBehavior: string;
+    description: string;
+    domain: CRGoalDomain;
+    baseline: number;
+    currentLevel: number;
+    target: number;
+    targetDate: string;
+    measurementMethod: string;
+    status: string;
+    objectives: {
+      externalId: string;
+      description: string;
+      criterionLevel: number;
+      criterionSessions: number;
+      status: string;
+    }[];
+    lastUpdated: string;
+  }[];
+  syncTimestamp: string;
+  source: 'aminy';
+}
+
+/**
+ * Prepare Aminy treatment goals for CentralReach import.
+ *
+ * Formats goals and their nested objectives into the structure
+ * CentralReach expects for goal/objective synchronization.
+ */
+export function prepareGoalSyncPayload(goals: AminyTreatmentGoal[]): CRGoalSync {
+  if (goals.length === 0) {
+    return {
+      clientId: '',
+      goals: [],
+      syncTimestamp: new Date().toISOString(),
+      source: 'aminy',
+    };
+  }
+
+  // Map Aminy domain strings to CR domain enum
+  const domainMap: Record<string, CRGoalDomain> = {
+    communication: 'communication',
+    social: 'social_skills',
+    'social skills': 'social_skills',
+    'social-skills': 'social_skills',
+    'daily living': 'daily_living',
+    'daily-living': 'daily_living',
+    behavior: 'behavior_reduction',
+    'behavior reduction': 'behavior_reduction',
+    'behavior-reduction': 'behavior_reduction',
+    academic: 'academic',
+    motor: 'motor_skills',
+    'motor skills': 'motor_skills',
+    'motor-skills': 'motor_skills',
+    play: 'play_leisure',
+    'play & leisure': 'play_leisure',
+    'play-leisure': 'play_leisure',
+    'self-management': 'self_management',
+    'self management': 'self_management',
+  };
+
+  const clientId = goals[0].clientId;
+
+  const mappedGoals = goals.map((goal) => ({
+    externalId: goal.id,
+    targetBehavior: goal.title,
+    description: goal.description,
+    domain: domainMap[goal.domain.toLowerCase()] || 'daily_living' as CRGoalDomain,
+    baseline: goal.baseline,
+    currentLevel: goal.currentLevel,
+    target: goal.targetLevel,
+    targetDate: goal.targetDate,
+    measurementMethod: goal.measurementMethod,
+    status: goal.status,
+    objectives: goal.objectives.map((obj) => ({
+      externalId: obj.id,
+      description: obj.description,
+      criterionLevel: obj.criterionLevel,
+      criterionSessions: obj.criterionSessions,
+      status: obj.status,
+    })),
+    lastUpdated: goal.updatedAt,
+  }));
+
+  return {
+    clientId,
+    goals: mappedGoals,
+    syncTimestamp: new Date().toISOString(),
+    source: 'aminy',
+  };
+}
+
+// ============================================================================
+// Billing Data Export
+// ============================================================================
+
+/** CentralReach-compatible billing record */
+export interface CRBillingRecord {
+  clientId: string;
+  providerId: string;
+  renderingProvider: {
+    id: string;
+    npi: string;
+    name: string;
+    credential: string;
+  };
+  dateOfService: string;
+  placeOfService: string;
+  cptCode: string;
+  modifiers: string[];
+  units: number;
+  authorizationNumber: string;
+  diagnosisCodes: string[];
+  sessionDuration: {
+    startTime: string;
+    endTime: string;
+    totalMinutes: number;
+  };
+  serviceDescription: string;
+  claimNotes: string;
+  source: 'aminy';
+  createdAt: string;
+}
+
+/** Session data used for billing export */
+export interface AminySessionForBilling {
+  sessionId: string;
+  clientId: string;
+  providerId: string;
+  dateOfService: string;
+  startTime: string;
+  endTime: string;
+  durationMinutes: number;
+  sessionType: CRSessionType;
+  placeOfService?: string;
+  diagnosisCodes?: string[];
+  notes?: string;
+}
+
+/** Rendering provider info */
+export interface RenderingProviderInfo {
+  id: string;
+  npi: string;
+  name: string;
+  credential: string;
+}
+
+/**
+ * Prepare a CentralReach-compatible billing record from an Aminy session.
+ *
+ * Creates a structured billing export that includes CPT codes, authorization
+ * numbers, rendering provider details, and all fields required for insurance
+ * claim submission through CentralReach.
+ */
+export function prepareBillingExport(
+  session: AminySessionForBilling,
+  cptCodes: string[],
+  authNumber: string,
+  renderingProvider: RenderingProviderInfo,
+): CRBillingRecord {
+  // Determine primary CPT code and modifiers
+  const primaryCpt = cptCodes[0] || '97153';
+  const modifiers: string[] = [];
+
+  // Add telehealth modifier if applicable
+  if (session.sessionType === 'telehealth') {
+    modifiers.push('95'); // Synchronous telehealth
+    modifiers.push('GT'); // Via interactive telecommunications
+  }
+
+  // Add supervision modifier
+  if (session.sessionType === 'supervision') {
+    modifiers.push('HN'); // Bachelor's degree level
+  }
+
+  // Calculate billing units (1 unit = 15 minutes)
+  const units = Math.ceil(session.durationMinutes / 15);
+
+  // Map session type to service description
+  const serviceDescriptions: Record<CRSessionType, string> = {
+    direct_therapy: 'Adaptive behavior treatment by protocol',
+    supervision: 'Adaptive behavior treatment with protocol modification',
+    parent_training: 'Family adaptive behavior treatment guidance',
+    assessment: 'Behavior identification assessment',
+    group_therapy: 'Group adaptive behavior treatment by protocol',
+    telehealth: 'Adaptive behavior treatment by protocol (telehealth)',
+    consultation: 'Adaptive behavior treatment with protocol modification',
+  };
+
+  return {
+    clientId: session.clientId,
+    providerId: session.providerId,
+    renderingProvider: {
+      id: renderingProvider.id,
+      npi: renderingProvider.npi,
+      name: renderingProvider.name,
+      credential: renderingProvider.credential,
+    },
+    dateOfService: session.dateOfService,
+    placeOfService: session.placeOfService || (session.sessionType === 'telehealth' ? '02' : '12'),
+    cptCode: primaryCpt,
+    modifiers,
+    units,
+    authorizationNumber: authNumber,
+    diagnosisCodes: session.diagnosisCodes || ['F84.0'], // Default: Autistic disorder
+    sessionDuration: {
+      startTime: session.startTime,
+      endTime: session.endTime,
+      totalMinutes: session.durationMinutes,
+    },
+    serviceDescription: serviceDescriptions[session.sessionType] || 'Adaptive behavior treatment',
+    claimNotes: session.notes || '',
+    source: 'aminy',
+    createdAt: new Date().toISOString(),
+  };
+}
+
+// ============================================================================
+// Pre-Sync Validation
+// ============================================================================
+
+/** Validation result for CentralReach sync payloads */
+export interface CRSyncValidationResult {
+  valid: boolean;
+  errors: string[];
+  warnings: string[];
+}
+
+/**
+ * Validate a payload before syncing to CentralReach.
+ *
+ * Checks that all required CentralReach fields are present and well-formed.
+ * Returns errors (blocking) and warnings (non-blocking) for the caller to handle.
+ */
+export function validateForCRSync(
+  payload: Record<string, unknown>,
+): CRSyncValidationResult {
+  const errors: string[] = [];
+  const warnings: string[] = [];
+
+  // Required fields check
+  if (!payload.clientId || typeof payload.clientId !== 'string') {
+    errors.push('Missing or invalid clientId');
+  }
+
+  // Date validation
+  if (payload.dateOfService) {
+    const dateStr = String(payload.dateOfService);
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+      errors.push('dateOfService must be in YYYY-MM-DD format');
+    } else {
+      const date = new Date(dateStr);
+      if (isNaN(date.getTime())) {
+        errors.push('dateOfService is not a valid date');
+      }
+      // Warn if date is in the future
+      if (date > new Date()) {
+        warnings.push('dateOfService is in the future');
+      }
+      // Warn if date is more than 90 days old
+      const ninetyDaysAgo = new Date();
+      ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
+      if (date < ninetyDaysAgo) {
+        warnings.push('dateOfService is more than 90 days ago; may be rejected by payer');
+      }
+    }
+  }
+
+  // Provider validation
+  if (payload.providerId && typeof payload.providerId !== 'string') {
+    errors.push('providerId must be a string');
+  }
+
+  // CPT code validation
+  if (payload.cptCode) {
+    const validCptCodes = ['97151', '97152', '97153', '97154', '97155', '97156', '97157', '97158'];
+    if (!validCptCodes.includes(String(payload.cptCode))) {
+      warnings.push(`CPT code ${payload.cptCode} may not be a recognized ABA billing code`);
+    }
+  }
+
+  // Authorization number validation
+  if (payload.authorizationNumber) {
+    if (typeof payload.authorizationNumber !== 'string' || String(payload.authorizationNumber).trim() === '') {
+      errors.push('authorizationNumber must be a non-empty string');
+    }
+  } else if (payload.cptCode) {
+    // Billing records should have an auth number
+    warnings.push('No authorizationNumber provided; claim may be denied');
+  }
+
+  // Units validation
+  if (payload.units !== undefined) {
+    const units = Number(payload.units);
+    if (isNaN(units) || units <= 0) {
+      errors.push('units must be a positive number');
+    }
+    if (units > 32) {
+      warnings.push('More than 32 units (8 hours) in a single session; verify accuracy');
+    }
+  }
+
+  // Billing record specific validations
+  if (payload.renderingProvider) {
+    const rp = payload.renderingProvider as Record<string, unknown>;
+    if (!rp.npi || typeof rp.npi !== 'string') {
+      errors.push('renderingProvider.npi is required');
+    } else if (!/^\d{10}$/.test(String(rp.npi))) {
+      errors.push('renderingProvider.npi must be a 10-digit number');
+    }
+    if (!rp.name || typeof rp.name !== 'string') {
+      errors.push('renderingProvider.name is required');
+    }
+  }
+
+  // Session duration validation
+  if (payload.sessionDuration) {
+    const sd = payload.sessionDuration as Record<string, unknown>;
+    if (sd.totalMinutes !== undefined) {
+      const mins = Number(sd.totalMinutes);
+      if (isNaN(mins) || mins <= 0) {
+        errors.push('sessionDuration.totalMinutes must be a positive number');
+      }
+      if (mins > 480) {
+        warnings.push('Session duration exceeds 8 hours; verify accuracy');
+      }
+    }
+    if (sd.startTime && sd.endTime) {
+      const startStr = String(sd.startTime);
+      const endStr = String(sd.endTime);
+      if (!/^\d{2}:\d{2}$/.test(startStr)) {
+        errors.push('sessionDuration.startTime must be in HH:MM format');
+      }
+      if (!/^\d{2}:\d{2}$/.test(endStr)) {
+        errors.push('sessionDuration.endTime must be in HH:MM format');
+      }
+    }
+  }
+
+  // Goal sync specific validations
+  if (payload.goals && Array.isArray(payload.goals)) {
+    const goals = payload.goals as Record<string, unknown>[];
+    if (goals.length === 0) {
+      warnings.push('Goals array is empty; nothing will be synced');
+    }
+    for (let i = 0; i < goals.length; i++) {
+      const goal = goals[i];
+      if (!goal.targetBehavior || typeof goal.targetBehavior !== 'string') {
+        errors.push(`goals[${i}].targetBehavior is required`);
+      }
+      if (!goal.domain || typeof goal.domain !== 'string') {
+        errors.push(`goals[${i}].domain is required`);
+      }
+      if (goal.target !== undefined && goal.currentLevel !== undefined) {
+        if (Number(goal.currentLevel) > Number(goal.target)) {
+          warnings.push(`goals[${i}] currentLevel exceeds target; goal may already be mastered`);
+        }
+      }
+    }
+  }
+
+  // SOAP note specific validations
+  if (payload.clinicalNarrative) {
+    const cn = payload.clinicalNarrative as Record<string, unknown>;
+    if (!cn.subjective || String(cn.subjective).trim().length < 10) {
+      warnings.push('Clinical narrative subjective section is very short');
+    }
+    if (!cn.objective || String(cn.objective).trim().length < 10) {
+      warnings.push('Clinical narrative objective section is very short');
+    }
+  }
+
+  // Diagnosis code validation
+  if (payload.diagnosisCodes && Array.isArray(payload.diagnosisCodes)) {
+    const codes = payload.diagnosisCodes as string[];
+    for (const code of codes) {
+      if (!/^[A-Z]\d{2}(\.\d{1,4})?$/.test(code)) {
+        warnings.push(`Diagnosis code "${code}" may not be in valid ICD-10 format`);
+      }
+    }
+  }
+
+  return {
+    valid: errors.length === 0,
+    errors,
+    warnings,
+  };
+}
+
+// ============================================================================
 // Default Export
 // ============================================================================
 
@@ -1921,6 +2478,18 @@ export default {
   mapSessionToCard,
   mapGoalToCareGoal,
   mapInsuranceToCoverage,
+
+  // Session note format mapping
+  mapToCRNoteFormat,
+
+  // Goal sync
+  prepareGoalSyncPayload,
+
+  // Billing export
+  prepareBillingExport,
+
+  // Pre-sync validation
+  validateForCRSync,
 
   // Client class (for advanced usage)
   CentralReachClient,

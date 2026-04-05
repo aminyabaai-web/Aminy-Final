@@ -540,6 +540,417 @@ export function buildCoverageRouteDecision(options: {
   };
 }
 
+// ============================================================================
+// Claim Maturity Scoring
+// ============================================================================
+
+export interface ClaimMaturityScore {
+  score: number; // 0-100
+  breakdown: Array<{
+    criterion: string;
+    points: number;
+    maxPoints: number;
+    passed: boolean;
+    detail: string;
+  }>;
+  readyForSubmission: boolean;
+}
+
+/**
+ * Scores a claim's maturity / readiness for submission on a 0-100 scale.
+ * Checks: required fields, NPI validity, auth linkage, CPT/ICD match,
+ * timely filing, and rendering provider identification.
+ */
+export function scoreClaimMaturity(claim: {
+  patientName?: string;
+  payerId?: string;
+  payerName?: string;
+  providerName?: string;
+  providerNpi?: string;
+  visitType?: string;
+  serviceDate?: string;
+  cptCode?: string;
+  icdCodes?: string[];
+  authorizationNumber?: string;
+  authRequired?: boolean;
+  renderingProviderNpi?: string;
+  renderingProviderName?: string;
+  primaryPolicyId?: string;
+  amountCents?: number;
+  timelyFilingLimitDays?: number;
+}): ClaimMaturityScore {
+  const breakdown: ClaimMaturityScore['breakdown'] = [];
+  let totalPoints = 0;
+  const maxTotal = 100;
+
+  // 1. Required fields present (25 points)
+  const requiredFields = [
+    { name: 'patientName', value: claim.patientName },
+    { name: 'payerId', value: claim.payerId },
+    { name: 'providerName', value: claim.providerName },
+    { name: 'serviceDate', value: claim.serviceDate },
+    { name: 'cptCode', value: claim.cptCode },
+    { name: 'amountCents', value: claim.amountCents },
+    { name: 'primaryPolicyId', value: claim.primaryPolicyId },
+  ];
+  const presentFields = requiredFields.filter(f => f.value != null && f.value !== '');
+  const fieldPoints = Math.round((presentFields.length / requiredFields.length) * 25);
+  totalPoints += fieldPoints;
+  breakdown.push({
+    criterion: 'Required Fields Present',
+    points: fieldPoints,
+    maxPoints: 25,
+    passed: presentFields.length === requiredFields.length,
+    detail: `${presentFields.length}/${requiredFields.length} required fields populated.${
+      presentFields.length < requiredFields.length
+        ? ' Missing: ' + requiredFields.filter(f => f.value == null || f.value === '').map(f => f.name).join(', ')
+        : ''
+    }`,
+  });
+
+  // 2. NPI valid (15 points) — Luhn check for 10-digit NPI
+  const npiToCheck = claim.providerNpi || '';
+  const npiValid = /^\d{10}$/.test(npiToCheck) && validateNpiLuhn(npiToCheck);
+  const npiPoints = npiValid ? 15 : 0;
+  totalPoints += npiPoints;
+  breakdown.push({
+    criterion: 'Provider NPI Valid',
+    points: npiPoints,
+    maxPoints: 15,
+    passed: npiValid,
+    detail: npiValid
+      ? `NPI ${npiToCheck} passes Luhn validation.`
+      : npiToCheck ? `NPI ${npiToCheck} is invalid or fails Luhn check.` : 'Provider NPI not provided.',
+  });
+
+  // 3. Authorization number linked (15 points)
+  const authNotRequired = claim.authRequired === false;
+  const authLinked = authNotRequired || (!!claim.authorizationNumber && claim.authorizationNumber.length > 0);
+  const authPoints = authLinked ? 15 : 0;
+  totalPoints += authPoints;
+  breakdown.push({
+    criterion: 'Authorization Linked',
+    points: authPoints,
+    maxPoints: 15,
+    passed: authLinked,
+    detail: authNotRequired
+      ? 'Authorization not required for this payer/service.'
+      : authLinked
+        ? `Auth # ${claim.authorizationNumber} linked.`
+        : 'Authorization required but not linked. Claim will be denied without auth.',
+  });
+
+  // 4. CPT/ICD codes matched (15 points)
+  const hasCpt = !!claim.cptCode && claim.cptCode.length > 0;
+  const hasIcd = Array.isArray(claim.icdCodes) && claim.icdCodes.length > 0;
+  const codesMatched = hasCpt && hasIcd;
+  const codePoints = codesMatched ? 15 : hasCpt || hasIcd ? 7 : 0;
+  totalPoints += codePoints;
+  breakdown.push({
+    criterion: 'CPT/ICD Codes Matched',
+    points: codePoints,
+    maxPoints: 15,
+    passed: codesMatched,
+    detail: codesMatched
+      ? `CPT ${claim.cptCode} with ${claim.icdCodes!.length} ICD code(s).`
+      : !hasCpt && !hasIcd
+        ? 'Neither CPT nor ICD codes provided.'
+        : !hasCpt ? 'CPT code missing.' : 'ICD diagnosis code(s) missing.',
+  });
+
+  // 5. Timely filing check (15 points)
+  let timelyPoints = 0;
+  let timelyPassed = true;
+  let timelyDetail = 'Service date or filing limit not provided.';
+  if (claim.serviceDate) {
+    const serviceDate = new Date(claim.serviceDate);
+    const today = new Date();
+    const daysSinceService = Math.floor((today.getTime() - serviceDate.getTime()) / (1000 * 60 * 60 * 24));
+    const filingLimit = claim.timelyFilingLimitDays || 90; // Default 90 days
+    const daysRemaining = filingLimit - daysSinceService;
+
+    if (daysRemaining <= 0) {
+      timelyPassed = false;
+      timelyDetail = `PAST FILING DEADLINE: ${daysSinceService} days since service (limit: ${filingLimit} days). Claim will likely be denied for timely filing.`;
+    } else if (daysRemaining <= 14) {
+      timelyPoints = 8;
+      timelyDetail = `URGENT: Only ${daysRemaining} days remaining to file (limit: ${filingLimit} days).`;
+    } else {
+      timelyPoints = 15;
+      timelyDetail = `${daysRemaining} days remaining within ${filingLimit}-day filing limit.`;
+    }
+  }
+  totalPoints += timelyPoints;
+  breakdown.push({
+    criterion: 'Timely Filing Check',
+    points: timelyPoints,
+    maxPoints: 15,
+    passed: timelyPassed,
+    detail: timelyDetail,
+  });
+
+  // 6. Rendering provider identified (15 points)
+  const hasRenderingProvider = !!(claim.renderingProviderNpi || claim.renderingProviderName);
+  const renderingPoints = hasRenderingProvider ? 15 : 0;
+  totalPoints += renderingPoints;
+  breakdown.push({
+    criterion: 'Rendering Provider Identified',
+    points: renderingPoints,
+    maxPoints: 15,
+    passed: hasRenderingProvider,
+    detail: hasRenderingProvider
+      ? `Rendering provider: ${claim.renderingProviderName || claim.renderingProviderNpi}.`
+      : 'Rendering provider not identified. Some payers require rendering provider for payment.',
+  });
+
+  const score = Math.min(maxTotal, totalPoints);
+
+  return {
+    score,
+    breakdown,
+    readyForSubmission: score >= 85 && breakdown.every(b => b.criterion !== 'Timely Filing Check' || b.passed),
+  };
+}
+
+/**
+ * Luhn check for NPI (10-digit, prefixed with 80840 per CMS spec).
+ */
+function validateNpiLuhn(npi: string): boolean {
+  if (!/^\d{10}$/.test(npi)) return false;
+  const prefixed = '80840' + npi;
+  let sum = 0;
+  let alternate = false;
+  for (let i = prefixed.length - 1; i >= 0; i--) {
+    let n = parseInt(prefixed[i], 10);
+    if (alternate) {
+      n *= 2;
+      if (n > 9) n -= 9;
+    }
+    sum += n;
+    alternate = !alternate;
+  }
+  return sum % 10 === 0;
+}
+
+// ============================================================================
+// Auto-Validation Rules
+// ============================================================================
+
+export interface ClaimValidationResult {
+  valid: boolean;
+  errors: string[];
+  warnings: string[];
+}
+
+/**
+ * Runs all validation checks on a claim and returns pass/fail with
+ * detailed errors and warnings.
+ */
+export function validateClaimForSubmission(claim: {
+  patientName?: string;
+  payerId?: string;
+  payerName?: string;
+  providerName?: string;
+  providerNpi?: string;
+  visitType?: string;
+  serviceDate?: string;
+  cptCode?: string;
+  icdCodes?: string[];
+  authorizationNumber?: string;
+  authRequired?: boolean;
+  renderingProviderNpi?: string;
+  renderingProviderName?: string;
+  primaryPolicyId?: string;
+  amountCents?: number;
+  timelyFilingLimitDays?: number;
+  placeOfService?: string;
+  modifiers?: string[];
+  patientDob?: string;
+  subscriberId?: string;
+}): ClaimValidationResult {
+  const errors: string[] = [];
+  const warnings: string[] = [];
+
+  // --- Hard errors (will cause denial) ---
+
+  if (!claim.patientName || claim.patientName.trim() === '') {
+    errors.push('Patient name is required.');
+  }
+  if (!claim.payerId || claim.payerId.trim() === '') {
+    errors.push('Payer ID is required.');
+  }
+  if (!claim.providerNpi || !/^\d{10}$/.test(claim.providerNpi)) {
+    errors.push('Valid 10-digit provider NPI is required.');
+  } else if (!validateNpiLuhn(claim.providerNpi)) {
+    errors.push(`Provider NPI ${claim.providerNpi} fails Luhn check digit validation.`);
+  }
+  if (!claim.serviceDate || !/^\d{4}-\d{2}-\d{2}$/.test(claim.serviceDate)) {
+    errors.push('Valid service date (YYYY-MM-DD) is required.');
+  }
+  if (!claim.cptCode || claim.cptCode.trim() === '') {
+    errors.push('CPT procedure code is required.');
+  } else if (!/^\d{5}$/.test(claim.cptCode)) {
+    errors.push(`CPT code "${claim.cptCode}" is not a valid 5-digit code.`);
+  }
+  if (!claim.icdCodes || claim.icdCodes.length === 0) {
+    errors.push('At least one ICD-10 diagnosis code is required.');
+  }
+  if (!claim.primaryPolicyId || claim.primaryPolicyId.trim() === '') {
+    errors.push('Primary policy/member ID is required.');
+  }
+  if (claim.authRequired && (!claim.authorizationNumber || claim.authorizationNumber.trim() === '')) {
+    errors.push('Prior authorization number is required for this payer/service but not provided.');
+  }
+  if (claim.amountCents == null || claim.amountCents <= 0) {
+    errors.push('Billed amount must be greater than zero.');
+  }
+
+  // Timely filing check
+  if (claim.serviceDate && /^\d{4}-\d{2}-\d{2}$/.test(claim.serviceDate)) {
+    const serviceDate = new Date(claim.serviceDate);
+    const today = new Date();
+    const daysSince = Math.floor((today.getTime() - serviceDate.getTime()) / (1000 * 60 * 60 * 24));
+    const limit = claim.timelyFilingLimitDays || 90;
+    if (daysSince > limit) {
+      errors.push(`Timely filing limit exceeded: ${daysSince} days since service date (limit: ${limit} days).`);
+    } else if (daysSince > limit - 14) {
+      warnings.push(`Timely filing deadline approaching: ${limit - daysSince} days remaining.`);
+    }
+
+    // Future date check
+    if (serviceDate > today) {
+      errors.push('Service date is in the future.');
+    }
+  }
+
+  // --- Warnings (may cause issues) ---
+
+  if (!claim.renderingProviderNpi && !claim.renderingProviderName) {
+    warnings.push('Rendering provider not specified. Some payers require rendering provider for payment.');
+  }
+  if (claim.renderingProviderNpi && !validateNpiLuhn(claim.renderingProviderNpi)) {
+    warnings.push(`Rendering provider NPI ${claim.renderingProviderNpi} may be invalid (Luhn check failed).`);
+  }
+  if (!claim.placeOfService) {
+    warnings.push('Place of service not specified. Default (11 - Office) will be used. Use 02 for telehealth.');
+  }
+  if (!claim.subscriberId) {
+    warnings.push('Subscriber ID not provided. If patient is a dependent, subscriber ID may be required.');
+  }
+  if (!claim.patientDob) {
+    warnings.push('Patient date of birth not provided. Some payers require DOB for eligibility matching.');
+  }
+  if (claim.modifiers && claim.modifiers.length > 4) {
+    warnings.push('More than 4 modifiers specified. Most payers only accept up to 4 modifiers per line.');
+  }
+  if (claim.icdCodes && claim.icdCodes.length > 12) {
+    warnings.push('More than 12 diagnosis codes. CMS-1500 form supports a maximum of 12 diagnosis pointers.');
+  }
+
+  return {
+    valid: errors.length === 0,
+    errors,
+    warnings,
+  };
+}
+
+// ============================================================================
+// Pre-Submission Batch Scrub
+// ============================================================================
+
+export interface BatchScrubResult {
+  totalClaims: number;
+  passCount: number;
+  failCount: number;
+  warningCount: number;
+  totalBilledCents: number;
+  readyBilledCents: number;
+  blockedBilledCents: number;
+  results: Array<{
+    index: number;
+    patientName: string;
+    serviceDate: string;
+    cptCode: string;
+    validation: ClaimValidationResult;
+  }>;
+}
+
+/**
+ * Validates all claims in a batch and returns a summary
+ * with pass/fail/warning counts and per-claim details.
+ */
+export function scrubClaimBatch(claims: Array<{
+  patientName?: string;
+  payerId?: string;
+  payerName?: string;
+  providerName?: string;
+  providerNpi?: string;
+  visitType?: string;
+  serviceDate?: string;
+  cptCode?: string;
+  icdCodes?: string[];
+  authorizationNumber?: string;
+  authRequired?: boolean;
+  renderingProviderNpi?: string;
+  renderingProviderName?: string;
+  primaryPolicyId?: string;
+  amountCents?: number;
+  timelyFilingLimitDays?: number;
+  placeOfService?: string;
+  modifiers?: string[];
+  patientDob?: string;
+  subscriberId?: string;
+}>): BatchScrubResult {
+  const results: BatchScrubResult['results'] = [];
+  let passCount = 0;
+  let failCount = 0;
+  let warningCount = 0;
+  let totalBilledCents = 0;
+  let readyBilledCents = 0;
+  let blockedBilledCents = 0;
+
+  for (let i = 0; i < claims.length; i++) {
+    const claim = claims[i];
+    const validation = validateClaimForSubmission(claim);
+    const amount = claim.amountCents || 0;
+    totalBilledCents += amount;
+
+    if (validation.valid && validation.warnings.length === 0) {
+      passCount++;
+      readyBilledCents += amount;
+    } else if (validation.valid) {
+      warningCount++;
+      readyBilledCents += amount; // warnings don't block submission
+    } else {
+      failCount++;
+      blockedBilledCents += amount;
+    }
+
+    results.push({
+      index: i,
+      patientName: claim.patientName || 'Unknown',
+      serviceDate: claim.serviceDate || 'N/A',
+      cptCode: claim.cptCode || 'N/A',
+      validation,
+    });
+  }
+
+  return {
+    totalClaims: claims.length,
+    passCount,
+    failCount,
+    warningCount,
+    totalBilledCents,
+    readyBilledCents,
+    blockedBilledCents,
+    results,
+  };
+}
+
+// ============================================================================
+// Row Mapper
+// ============================================================================
+
 function mapRowToClaimReadyCase(row: Record<string, unknown>): ClaimReadyCase {
   return {
     id: String(row.id),

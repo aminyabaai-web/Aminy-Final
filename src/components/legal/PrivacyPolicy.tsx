@@ -75,8 +75,11 @@ export default function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
               ['#breach', '10. Breach Notification'],
               ['#cookies', '11. Cookies & Tracking'],
               ['#international', '12. International Users'],
-              ['#changes', '13. Changes to This Policy'],
-              ['#contact', '14. Contact Us'],
+              ['#ai-data', '13. AI Data Usage Disclosure'],
+              ['#telehealth-consent', '14. Telehealth Consent'],
+              ['#biometric-data', '15. Biometric Data Notice'],
+              ['#changes', '16. Changes to This Policy'],
+              ['#contact', '17. Contact Us'],
             ].map(([href, label]) => (
               <li key={href}>
                 <a href={href} className="hover:underline">{label}</a>
@@ -300,7 +303,107 @@ export default function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
           </p>
         </Section>
 
-        <Section title="13. Changes to This Policy" id="changes">
+        <Section title="13. AI Data Usage Disclosure" id="ai-data">
+          <p>
+            The Platform includes an AI-powered assistant (&quot;Ask Aminy&quot;) that provides
+            informational support and guidance. By using this feature, you acknowledge the following:
+          </p>
+          <p><strong>a. Data Processing</strong></p>
+          <ul className="ml-4 list-disc space-y-1">
+            <li>Conversations with Ask Aminy are processed via the Claude API, provided by Anthropic</li>
+            <li>Conversation data is transmitted securely over encrypted connections (TLS 1.2+) to Anthropic&apos;s servers for processing</li>
+            <li>Anthropic processes data in accordance with its own privacy policy and our Business Associate Agreement</li>
+          </ul>
+          <p><strong>b. Data Storage & Continuity</strong></p>
+          <ul className="ml-4 list-disc space-y-1">
+            <li>Conversation history is stored in our database to provide continuity across sessions</li>
+            <li>You may delete individual conversations or your entire conversation history at any time from Settings &gt; AI Assistant &gt; Conversation History</li>
+            <li>The AI may store &quot;memory facts&quot; — key details you share (e.g., your child&apos;s name, diagnoses, preferences) to personalize future interactions</li>
+            <li>Memory facts can be reviewed, edited, or deleted at any time from Settings &gt; AI Assistant &gt; Memory</li>
+          </ul>
+          <p><strong>c. AI Limitations & Clinical Disclaimer</strong></p>
+          <ul className="ml-4 list-disc space-y-1">
+            <li>AI-generated responses are informational only and do not constitute medical advice, diagnosis, or treatment recommendations</li>
+            <li>The AI does not make clinical decisions and cannot replace the judgment of a licensed healthcare professional</li>
+            <li>Always consult your child&apos;s BCBA, pediatrician, or other qualified provider for clinical concerns</li>
+          </ul>
+          <p><strong>d. Training & Model Improvement</strong></p>
+          <ul className="ml-4 list-disc space-y-1">
+            <li>Your conversation data is <strong>not</strong> used to train, fine-tune, or improve AI models</li>
+            <li>Aminy has a zero-data-retention agreement with Anthropic; your conversations are not retained by the AI provider after processing</li>
+            <li>De-identified, aggregate usage metrics (e.g., feature usage frequency) may be used to improve the Platform experience, but never the content of your conversations</li>
+          </ul>
+        </Section>
+
+        <Section title="14. Telehealth Consent" id="telehealth-consent">
+          <p>
+            By using the telehealth features of the Platform, you provide informed consent to receive
+            healthcare services via audio and/or video technology. The following disclosures apply:
+          </p>
+          <p><strong>a. State-Specific Consent (Arizona)</strong></p>
+          <ul className="ml-4 list-disc space-y-1">
+            <li>In accordance with Arizona Revised Statutes &sect; 36-3602, telehealth services are provided by licensed healthcare professionals authorized to practice in the State of Arizona</li>
+            <li>You have the right to receive telehealth services and may withdraw consent at any time</li>
+            <li>Telehealth services are subject to the same standard of care as in-person services</li>
+            <li>Your provider will verify your physical location at the start of each session to ensure compliance with state licensing requirements</li>
+            <li>You may request an in-person visit in lieu of a telehealth session at any time</li>
+          </ul>
+          <p><strong>b. Recording Consent</strong></p>
+          <ul className="ml-4 list-disc space-y-1">
+            <li>Telehealth sessions may be recorded for clinical documentation purposes only with your explicit, prior consent</li>
+            <li>You will be prompted to provide or decline recording consent before each session</li>
+            <li>Recordings are encrypted, stored in HIPAA-compliant infrastructure, and accessible only to authorized clinical staff</li>
+            <li>You may request deletion of any recording by contacting privacy@aminy.app</li>
+            <li>If you decline recording, the session will proceed without recording and no penalty will apply</li>
+          </ul>
+          <p><strong>c. Limitations of Telehealth</strong></p>
+          <ul className="ml-4 list-disc space-y-1">
+            <li>Telehealth may not be suitable for all clinical situations, including emergencies or conditions requiring physical examination</li>
+            <li>Technical issues (internet connectivity, device compatibility, audio/video quality) may affect session quality or require rescheduling</li>
+            <li>There is a risk that information transmitted during a telehealth session could be intercepted, despite encryption safeguards</li>
+            <li>Your provider will advise you if your clinical needs require in-person evaluation</li>
+          </ul>
+          <p><strong>d. Emergency Procedures During Telehealth</strong></p>
+          <ul className="ml-4 list-disc space-y-1">
+            <li>Telehealth is <strong>not</strong> a substitute for emergency medical services</li>
+            <li>If you or your child experience a medical or behavioral emergency during a session, call 911 immediately</li>
+            <li>At the start of each session, you will be asked to confirm your physical address so emergency services can be dispatched if needed</li>
+            <li>Your provider may discontinue the telehealth session and direct you to emergency services if they determine an emergency exists</li>
+            <li>Emergency contact information should be kept current in your account settings</li>
+          </ul>
+        </Section>
+
+        <Section title="15. Biometric Data Notice" id="biometric-data">
+          <p>
+            The Platform may interact with biometric-adjacent data during certain features.
+            We are committed to transparency about how this data is handled:
+          </p>
+          <p><strong>a. Voice Data During Telehealth</strong></p>
+          <ul className="ml-4 list-disc space-y-1">
+            <li>Audio from telehealth sessions is transmitted in real-time for the purpose of conducting the clinical session</li>
+            <li>Voice data is <strong>not stored</strong> unless you have explicitly consented to session recording</li>
+            <li>We do not perform voice recognition, voiceprint analysis, or speaker identification</li>
+            <li>Audio streams are encrypted end-to-end during transmission</li>
+          </ul>
+          <p><strong>b. Camera Data During Video Calls</strong></p>
+          <ul className="ml-4 list-disc space-y-1">
+            <li>Video from telehealth sessions is transmitted in real-time only for the purpose of the clinical session</li>
+            <li>Video data is <strong>not stored</strong> unless you have explicitly consented to session recording</li>
+            <li>Video streams are processed in real-time and discarded after transmission</li>
+          </ul>
+          <p><strong>c. No Facial Recognition</strong></p>
+          <ul className="ml-4 list-disc space-y-1">
+            <li>Aminy does <strong>not</strong> use facial recognition technology</li>
+            <li>We do not create, store, or analyze facial geometry, faceprints, or any biometric identifiers derived from video</li>
+            <li>No computer vision or image analysis is performed on video streams for identification purposes</li>
+          </ul>
+          <p>
+            If you have questions about how biometric-adjacent data is handled, contact our
+            Privacy Officer at privacy-officer@aminy.app.
+          </p>
+        </Section>
+
+        <Section title="16. Changes to This Policy" id="changes">
           <p>
             We may update this Privacy Policy periodically. Material changes will be communicated
             via in-app notification and email at least 30 days before taking effect. Continued
@@ -309,7 +412,7 @@ export default function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
           </p>
         </Section>
 
-        <Section title="14. Contact Us" id="contact">
+        <Section title="17. Contact Us" id="contact">
           <p>For privacy-related inquiries or to exercise your rights:</p>
           <div className="mt-2 rounded-lg bg-gray-50 p-4 text-sm">
             <p><strong>Aminy Privacy Team</strong></p>
