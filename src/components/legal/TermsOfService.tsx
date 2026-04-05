@@ -323,36 +323,62 @@ export default function TermsOfService({ onBack }: TermsOfServiceProps) {
           </ul>
         </Section>
 
-        <Section title="10. Dispute Resolution & Arbitration" id="arbitration">
+        <Section title="12. Dispute Resolution & Arbitration" id="arbitration">
+          <p>
+            <strong>PLEASE READ THIS SECTION CAREFULLY. IT AFFECTS YOUR LEGAL RIGHTS, INCLUDING
+            YOUR RIGHT TO FILE A LAWSUIT IN COURT AND TO HAVE A JURY TRIAL.</strong>
+          </p>
           <p>
             <strong>a. Informal Resolution.</strong> Before filing any formal dispute, you agree to
             contact us at legal@aminy.app and attempt to resolve the dispute informally for at
-            least 30 days.
+            least 30 days. During this period, both parties agree to negotiate in good faith.
           </p>
           <p>
-            <strong>b. Binding Arbitration.</strong> Any dispute not resolved informally shall be
-            resolved by binding arbitration administered by the American Arbitration Association
-            (AAA) under its Consumer Arbitration Rules. Arbitration will take place in Maricopa
-            County, Arizona, unless otherwise agreed.
+            <strong>b. Binding Arbitration.</strong> Any dispute, claim, or controversy arising out
+            of or relating to these Terms, your use of the Platform, or any services obtained through
+            the Platform that cannot be resolved informally shall be resolved by <strong>binding
+            individual arbitration</strong> administered by the American Arbitration Association (AAA)
+            under its Consumer Arbitration Rules. The arbitrator shall have exclusive authority to
+            resolve all disputes, including the scope and enforceability of this arbitration clause.
+            Arbitration will take place in Maricopa County, Arizona, unless otherwise agreed. The
+            arbitrator&apos;s decision shall be final and binding and may be entered as a judgment
+            in any court of competent jurisdiction.
           </p>
           <p>
-            <strong>c. Class Action Waiver.</strong> YOU AGREE THAT ANY DISPUTE RESOLUTION WILL
-            BE CONDUCTED ONLY ON AN INDIVIDUAL BASIS AND NOT IN A CLASS, CONSOLIDATED, OR
-            REPRESENTATIVE ACTION. If this waiver is found unenforceable, the entire arbitration
-            agreement shall be void.
+            <strong>c. Class Action Waiver.</strong> YOU AND AMINY AGREE THAT EACH MAY BRING CLAIMS
+            AGAINST THE OTHER ONLY IN YOUR OR ITS INDIVIDUAL CAPACITY, AND NOT AS A PLAINTIFF OR
+            CLASS MEMBER IN ANY PURPORTED CLASS, CONSOLIDATED, OR REPRESENTATIVE ACTION. Unless both
+            you and Aminy agree otherwise, the arbitrator may not consolidate more than one person&apos;s
+            claims and may not preside over any form of a class, consolidated, or representative
+            proceeding. If this class action waiver is found to be unenforceable, then the entirety
+            of this arbitration provision shall be null and void.
           </p>
           <p>
-            <strong>d. Exceptions.</strong> Either party may bring claims in small claims court.
-            Either party may seek injunctive relief in any court of competent jurisdiction for
-            intellectual property infringement or unauthorized data access.
+            <strong>d. Small Claims Exception.</strong> Notwithstanding the foregoing, either party
+            may bring an individual action in small claims court for disputes within the jurisdictional
+            limits of such court. Either party may also seek injunctive or other equitable relief in
+            any court of competent jurisdiction to prevent the actual or threatened infringement,
+            misappropriation, or violation of intellectual property rights or unauthorized data access.
           </p>
           <p>
-            <strong>e. Opt-Out.</strong> You may opt out of this arbitration agreement by sending
-            written notice to legal@aminy.app within 30 days of creating your account.
+            <strong>e. 30-Day Opt-Out Period.</strong> You have the right to opt out of this
+            arbitration agreement. To opt out, you must send written notice to legal@aminy.app
+            within <strong>30 days of creating your account</strong>. Your notice must include your
+            name, email address associated with your account, and a clear statement that you wish
+            to opt out of the arbitration agreement. If you opt out, neither you nor Aminy will be
+            required to arbitrate disputes, and both parties retain the right to pursue claims in
+            court. Opting out of arbitration will not affect any other provision of these Terms.
+          </p>
+          <p>
+            <strong>f. Arbitration Fees.</strong> Payment of all filing, administration, and
+            arbitrator fees will be governed by the AAA&apos;s Consumer Arbitration Rules. If the
+            arbitrator finds that either the substance of your claim or the relief sought is
+            frivolous or brought for an improper purpose, then the payment of fees will be
+            governed by the AAA Rules.
           </p>
         </Section>
 
-        <Section title="11. Governing Law" id="governing-law">
+        <Section title="13. Governing Law" id="governing-law">
           <p>
             These Terms shall be governed by and construed in accordance with the laws of the
             State of Arizona, without regard to conflict of law principles. For any disputes not
@@ -361,7 +387,7 @@ export default function TermsOfService({ onBack }: TermsOfServiceProps) {
           </p>
         </Section>
 
-        <Section title="12. Termination" id="termination">
+        <Section title="14. Termination" id="termination">
           <p><strong>a. By You.</strong> You may terminate your account at any time through
             Settings &gt; Account &gt; Delete Account. Active subscriptions will continue through
             the end of the current billing period.</p>
@@ -382,7 +408,7 @@ export default function TermsOfService({ onBack }: TermsOfServiceProps) {
           </ul>
         </Section>
 
-        <Section title="13. Modifications" id="modifications">
+        <Section title="15. Modifications" id="modifications">
           <p>
             We may modify these Terms at any time. Material changes will be communicated via email
             and in-app notification at least 30 days before taking effect. Continued use of the
@@ -391,7 +417,7 @@ export default function TermsOfService({ onBack }: TermsOfServiceProps) {
           </p>
         </Section>
 
-        <Section title="14. Miscellaneous" id="miscellaneous">
+        <Section title="16. Miscellaneous" id="miscellaneous">
           <ul className="ml-4 list-disc space-y-1">
             <li><strong>Entire Agreement:</strong> These Terms, together with the Privacy Policy and any consents you sign, constitute the entire agreement between you and Aminy</li>
             <li><strong>Severability:</strong> If any provision is found unenforceable, the remaining provisions remain in full force</li>
@@ -401,7 +427,7 @@ export default function TermsOfService({ onBack }: TermsOfServiceProps) {
           </ul>
         </Section>
 
-        <Section title="15. Contact" id="contact">
+        <Section title="17. Contact" id="contact">
           <div className="rounded-lg bg-gray-50 p-4 text-sm">
             <p><strong>Aminy Inc.</strong></p>
             <p>5070 N. 40th Street, Suite 105</p>
