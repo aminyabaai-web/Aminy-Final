@@ -285,6 +285,466 @@ const FAQS: FAQ[] = [
 ];
 
 // ============================================================================
+// Payer Playbooks — step-by-step enrollment guides per payer
+// ============================================================================
+
+export interface PayerPlaybook {
+  payerId: string;
+  payerName: string;
+  enrollmentUrl: string;
+  requiredDocuments: string[];
+  estimatedProcessingTime: string;
+  callScript: string;
+  commonRejectionReasons: string[];
+  tips: string[];
+}
+
+export const PAYER_PLAYBOOKS: PayerPlaybook[] = [
+  {
+    payerId: 'ahcccs',
+    payerName: 'AHCCCS (Arizona Medicaid)',
+    enrollmentUrl: 'https://azahcccs.gov/PlansProviders/NewProviders/EnrollmentProcess.html',
+    requiredDocuments: [
+      'NPI Confirmation Letter',
+      'Tax ID/EIN Letter (IRS CP-575 or 147C)',
+      'Arizona Fingerprint Clearance Card (Level 1)',
+      'OIG/SAM Exclusion Check (current month)',
+      'Professional License (AZ Board verified)',
+      'Malpractice Insurance COI ($1M/$3M minimum)',
+      'W-9 Form',
+      'Practice Address Verification',
+      'CAQH ProView Attestation (within 120 days)',
+    ],
+    estimatedProcessingTime: '60-90 days from complete application',
+    callScript:
+      'Hello, I am calling to check on the status of a provider enrollment application for [Provider Name], NPI [NPI Number]. The application was submitted on [Date] through the AHCCCS Provider Enrollment Portal. Can you confirm it has been received and advise on the current status and any outstanding items? My provider ID reference is [AHCCCS ID if issued].',
+    commonRejectionReasons: [
+      'Expired fingerprint clearance card',
+      'NPI/Tax ID mismatch between application and NPPES',
+      'Wrong provider category selected (must be Behavioral Health)',
+      'Missing OIG exclusion check documentation',
+      'Incomplete practice address (must match NPI registry)',
+      'Failed to respond to Request for Information (RFI) within 30 days',
+    ],
+    tips: [
+      'Check the AHCCCS Provider Enrollment Portal weekly for RFI notices — they have a 30-day response window.',
+      'Ensure your Level 1 fingerprint card is current before applying; renewals take 2-4 weeks.',
+      'Link your AHCCCS Provider ID to your NPI in NPPES as soon as it is issued.',
+      'Use taxonomy code 103T00000X for Psychologist or 106H00000X for Marriage & Family Therapist.',
+      'If you serve DDD/HCBS members, a separate DDD provider enrollment is also required.',
+    ],
+  },
+  {
+    payerId: 'bcbs-az',
+    payerName: 'BCBS Arizona',
+    enrollmentUrl: 'https://www.azblue.com/providers/join-our-network',
+    requiredDocuments: [
+      'CAQH ProView Profile (100% complete, attested within 120 days)',
+      'NPI Confirmation Letter (Type 1 and Type 2 if applicable)',
+      'Arizona Professional License',
+      'Board Certification (if applicable)',
+      'Malpractice Insurance COI (current)',
+      'DEA Certificate (if applicable)',
+      'W-9 Form',
+      'CV/Resume with complete work history',
+      'Professional References (3 minimum)',
+      'Disclosure Attestation',
+    ],
+    estimatedProcessingTime: '90-120 days from complete application',
+    callScript:
+      'Hello, I am calling to follow up on a provider credentialing application for [Provider Name], NPI [NPI Number], CAQH ID [CAQH ID]. The application was submitted on [Date]. Can you confirm the current stage of review and whether any additional documentation is needed? I would also like to confirm the next credentialing committee meeting date.',
+    commonRejectionReasons: [
+      'CAQH profile not attested within 120 days',
+      'Panel closed in the provider geographic area',
+      'Applied to wrong specialty panel',
+      'Missing malpractice COI in CAQH profile',
+      'Gaps in work history not explained',
+      'Education verification delays from institutions',
+      'Failed to respond to committee RFI within 14 days',
+    ],
+    tips: [
+      'BCBS pulls directly from CAQH — ensure your CAQH profile is 100% complete before applying.',
+      'Credentialing committee meets monthly; missing a cycle adds 30+ days.',
+      'The effective date is typically the committee approval date, NOT retroactive to application date.',
+      'Call Provider Relations to confirm your specialty panel is open before applying.',
+      'Keep your CAQH re-attested every 90 days during the credentialing process.',
+    ],
+  },
+  {
+    payerId: 'uhc',
+    payerName: 'UnitedHealthcare',
+    enrollmentUrl: 'https://www.uhcprovider.com/en/resource-library/join-our-network.html',
+    requiredDocuments: [
+      'CAQH ProView Profile (complete and attested)',
+      'NPI Confirmation Letter',
+      'State Professional License',
+      'Board Certification',
+      'Malpractice Insurance COI',
+      'DEA Certificate (if prescribing)',
+      'W-9 Form',
+      'Practice Information (TIN, address, phone)',
+    ],
+    estimatedProcessingTime: '90-120 days from complete application',
+    callScript:
+      'Hello, I am calling UnitedHealthcare Provider Services to check on a credentialing application for [Provider Name], NPI [NPI Number]. The application was submitted on [Date] via [portal/CAQH]. Can you provide the current status, any pending items, and an estimated completion date?',
+    commonRejectionReasons: [
+      'Network at capacity in the provider service area',
+      'Incomplete CAQH profile',
+      'Malpractice insurance limits below UHC minimum requirements',
+      'Specialty not currently being credentialed',
+      'Application submitted for wrong UHC product line (Commercial vs Optum Behavioral)',
+    ],
+    tips: [
+      'UHC has separate credentialing for Commercial, Medicare Advantage, and Optum Behavioral Health.',
+      'Apply through both UHC and Optum if you want to see behavioral health members.',
+      'Use the UHC Provider Portal to track application status — phone hold times can exceed 45 minutes.',
+      'UHC allows 180 days for appeals if your application is denied.',
+      'Modifier validation is strict for therapy services — verify payer-specific modifier requirements.',
+    ],
+  },
+  {
+    payerId: 'aetna',
+    payerName: 'Aetna',
+    enrollmentUrl: 'https://www.aetna.com/health-care-professionals/join-aetna-network.html',
+    requiredDocuments: [
+      'CAQH ProView Profile (complete and attested)',
+      'NPI Confirmation Letter',
+      'State Professional License',
+      'Board Certification',
+      'Malpractice Insurance COI ($1M/$3M)',
+      'DEA Certificate (if applicable)',
+      'W-9 Form',
+      'Signed Aetna Provider Agreement',
+    ],
+    estimatedProcessingTime: '60-90 days from complete application',
+    callScript:
+      'Hello, I am calling Aetna Provider Relations to follow up on a credentialing application for [Provider Name], NPI [NPI Number], CAQH ID [CAQH ID]. The application was submitted on [Date]. Can you confirm it is in process and advise on any outstanding requirements or the expected credentialing timeline?',
+    commonRejectionReasons: [
+      'Network at capacity for the provider specialty and geography',
+      'CAQH profile incomplete or attestation expired',
+      'Malpractice insurance does not meet minimum requirements',
+      'Missing autism mandate documentation for ABA providers',
+      'Incorrect taxonomy code on NPPES',
+    ],
+    tips: [
+      'Aetna typically processes faster than BCBS or UHC — 60-90 days is common.',
+      'Check the autism mandate routing for your state before applying for ABA services.',
+      'Aetna allows 180 days for first-level appeals on credentialing denials.',
+      'Ensure your medical necessity packet is ready if providing autism/behavioral services.',
+      'Aetna shares credentialing with CVS Health — one application may cover multiple products.',
+    ],
+  },
+  {
+    payerId: 'cigna',
+    payerName: 'Cigna',
+    enrollmentUrl: 'https://www.cigna.com/health-care-providers/coverage-and-claims/join-our-network',
+    requiredDocuments: [
+      'CAQH ProView Profile (complete and attested)',
+      'NPI Confirmation Letter',
+      'State Professional License',
+      'Board Certification (if applicable)',
+      'Malpractice Insurance COI',
+      'DEA Certificate (if applicable)',
+      'W-9 Form',
+      'Treatment Plan Template (for behavioral health)',
+      'Provider Attestation Form',
+    ],
+    estimatedProcessingTime: '90-120 days from complete application',
+    callScript:
+      'Hello, I am calling Cigna Provider Services to check on a credentialing application for [Provider Name], NPI [NPI Number]. The application was submitted on [Date]. Can you provide the current review status, any pending document requests, and the expected timeline to completion?',
+    commonRejectionReasons: [
+      'Network adequacy met for the provider specialty and area',
+      'Incomplete prior-authorization packet',
+      'Missing treatment plan documentation',
+      'Provider attestation form not signed',
+      'CAQH profile not fully verified',
+    ],
+    tips: [
+      'Cigna requires a treatment plan and provider attestation for behavioral health credentialing.',
+      'Prior-auth packets should include the treatment plan AND progress notes.',
+      'Cigna Behavioral Health is separate from Cigna Medical — apply to both if needed.',
+      'Cigna allows 180 days for appeal of credentialing decisions.',
+      'Evernorth (Cigna behavioral) may have different network availability than Cigna Medical.',
+    ],
+  },
+];
+
+// ============================================================================
+// AI QA Checklist — NPI, Tax ID, license, malpractice, CAQH, DEA validation
+// ============================================================================
+
+export interface ProviderQAInput {
+  npi?: string;
+  taxId?: string;
+  licenseExpirationDate?: string; // ISO date
+  malpracticeCoverageStart?: string; // ISO date
+  malpracticeCoverageEnd?: string; // ISO date
+  caqhCompletenessPercent?: number;
+  deaNumber?: string;
+  deaExpirationDate?: string; // ISO date
+}
+
+export interface ProviderQAResult {
+  overallStatus: 'pass' | 'warning' | 'fail';
+  checks: QAChecklistItem[];
+  passCount: number;
+  failCount: number;
+  warningCount: number;
+}
+
+/**
+ * Validates NPI using the Luhn algorithm (10-digit NPI check).
+ * NPI is prefixed with "80840" for the Luhn check per CMS spec.
+ */
+function validateNPILuhn(npi: string): boolean {
+  if (!/^\d{10}$/.test(npi)) return false;
+  const prefixed = '80840' + npi;
+  let sum = 0;
+  let alternate = false;
+  for (let i = prefixed.length - 1; i >= 0; i--) {
+    let n = parseInt(prefixed[i], 10);
+    if (alternate) {
+      n *= 2;
+      if (n > 9) n -= 9;
+    }
+    sum += n;
+    alternate = !alternate;
+  }
+  return sum % 10 === 0;
+}
+
+/**
+ * Validates Tax ID format (XX-XXXXXXX) and basic structure.
+ */
+function validateTaxIdFormat(taxId: string): boolean {
+  return /^\d{2}-\d{7}$/.test(taxId);
+}
+
+/**
+ * Runs a comprehensive QA validation on provider credentialing data.
+ * Returns pass/fail/warning for each check with actionable details.
+ */
+export function validateProviderQA(input: ProviderQAInput): ProviderQAResult {
+  const checks: QAChecklistItem[] = [];
+  const today = new Date();
+
+  // 1. NPI Format (10-digit Luhn)
+  if (input.npi) {
+    const isValidFormat = /^\d{10}$/.test(input.npi);
+    const isValidLuhn = validateNPILuhn(input.npi);
+    checks.push({
+      id: 'qa-npi',
+      label: 'NPI Validation (Luhn Check)',
+      category: 'identity',
+      status: isValidFormat && isValidLuhn ? 'pass' : 'fail',
+      detail: isValidFormat && isValidLuhn
+        ? `NPI ${input.npi} passes 10-digit Luhn validation.`
+        : !isValidFormat
+          ? `NPI "${input.npi}" is not a valid 10-digit number.`
+          : `NPI ${input.npi} fails Luhn check digit validation.`,
+      actionRequired: !(isValidFormat && isValidLuhn) ? 'Verify NPI at https://npiregistry.cms.hhs.gov/' : undefined,
+    });
+  } else {
+    checks.push({
+      id: 'qa-npi',
+      label: 'NPI Validation (Luhn Check)',
+      category: 'identity',
+      status: 'fail',
+      detail: 'NPI number is not provided.',
+      actionRequired: 'Enter NPI number for validation.',
+    });
+  }
+
+  // 2. Tax ID Format (XX-XXXXXXX)
+  if (input.taxId) {
+    const isValid = validateTaxIdFormat(input.taxId);
+    checks.push({
+      id: 'qa-taxid',
+      label: 'Tax ID / EIN Format',
+      category: 'identity',
+      status: isValid ? 'pass' : 'fail',
+      detail: isValid
+        ? `Tax ID ${input.taxId} matches expected format (XX-XXXXXXX).`
+        : `Tax ID "${input.taxId}" does not match format XX-XXXXXXX.`,
+      actionRequired: !isValid ? 'Correct Tax ID to format XX-XXXXXXX (e.g., 82-1234567).' : undefined,
+    });
+  } else {
+    checks.push({
+      id: 'qa-taxid',
+      label: 'Tax ID / EIN Format',
+      category: 'identity',
+      status: 'fail',
+      detail: 'Tax ID / EIN is not provided.',
+      actionRequired: 'Enter Tax ID for validation.',
+    });
+  }
+
+  // 3. License expiration (flag if < 90 days)
+  if (input.licenseExpirationDate) {
+    const expDate = new Date(input.licenseExpirationDate);
+    const daysUntilExp = Math.floor((expDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+    let status: QAChecklistItem['status'] = 'pass';
+    let detail = `License expires ${input.licenseExpirationDate} (${daysUntilExp} days from today).`;
+    let actionRequired: string | undefined;
+    if (daysUntilExp < 0) {
+      status = 'fail';
+      detail = `License EXPIRED on ${input.licenseExpirationDate} (${Math.abs(daysUntilExp)} days ago).`;
+      actionRequired = 'License is expired. Renew immediately — claims will be denied.';
+    } else if (daysUntilExp < 90) {
+      status = 'warning';
+      detail = `License expires in ${daysUntilExp} days (${input.licenseExpirationDate}). Less than 90-day threshold.`;
+      actionRequired = 'Begin license renewal process now to avoid lapse.';
+    }
+    checks.push({ id: 'qa-license', label: 'State License Expiration', category: 'license', status, detail, actionRequired });
+  } else {
+    checks.push({
+      id: 'qa-license',
+      label: 'State License Expiration',
+      category: 'license',
+      status: 'fail',
+      detail: 'License expiration date not provided.',
+      actionRequired: 'Enter license expiration date for validation.',
+    });
+  }
+
+  // 4. Malpractice coverage dates
+  if (input.malpracticeCoverageStart && input.malpracticeCoverageEnd) {
+    const startDate = new Date(input.malpracticeCoverageStart);
+    const endDate = new Date(input.malpracticeCoverageEnd);
+    const daysUntilEnd = Math.floor((endDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+    const isCurrentlyCovered = startDate <= today && endDate >= today;
+    let status: QAChecklistItem['status'] = isCurrentlyCovered ? 'pass' : 'fail';
+    let detail = isCurrentlyCovered
+      ? `Malpractice coverage active: ${input.malpracticeCoverageStart} to ${input.malpracticeCoverageEnd} (${daysUntilEnd} days remaining).`
+      : `Malpractice coverage gap detected. Coverage: ${input.malpracticeCoverageStart} to ${input.malpracticeCoverageEnd}.`;
+    let actionRequired: string | undefined;
+    if (!isCurrentlyCovered) {
+      actionRequired = 'Malpractice coverage is not active for today. Update policy immediately.';
+    } else if (daysUntilEnd < 90) {
+      status = 'warning';
+      detail = `Malpractice coverage expires in ${daysUntilEnd} days (${input.malpracticeCoverageEnd}).`;
+      actionRequired = 'Renew malpractice policy before expiration to avoid credentialing disruption.';
+    }
+    checks.push({ id: 'qa-malpractice', label: 'Malpractice Coverage Dates', category: 'insurance', status, detail, actionRequired });
+  } else {
+    checks.push({
+      id: 'qa-malpractice',
+      label: 'Malpractice Coverage Dates',
+      category: 'insurance',
+      status: 'fail',
+      detail: 'Malpractice coverage dates not provided.',
+      actionRequired: 'Enter malpractice coverage start and end dates.',
+    });
+  }
+
+  // 5. CAQH completeness percentage
+  if (input.caqhCompletenessPercent != null) {
+    const pct = input.caqhCompletenessPercent;
+    let status: QAChecklistItem['status'] = 'pass';
+    let actionRequired: string | undefined;
+    if (pct < 80) {
+      status = 'fail';
+      actionRequired = `CAQH profile is only ${pct}% complete. Most payers require 100% to begin credentialing.`;
+    } else if (pct < 100) {
+      status = 'warning';
+      actionRequired = `CAQH profile is ${pct}% complete. Upload remaining documents to reach 100%.`;
+    }
+    checks.push({
+      id: 'qa-caqh',
+      label: 'CAQH Profile Completeness',
+      category: 'profile',
+      status,
+      detail: `CAQH profile is ${pct}% complete.`,
+      actionRequired,
+    });
+  } else {
+    checks.push({
+      id: 'qa-caqh',
+      label: 'CAQH Profile Completeness',
+      category: 'profile',
+      status: 'pending',
+      detail: 'CAQH completeness percentage not available.',
+      actionRequired: 'Check your CAQH ProView profile and enter completeness percentage.',
+    });
+  }
+
+  // 6. DEA registration (if applicable)
+  if (input.deaNumber) {
+    const deaValid = /^[A-Z]{2}\d{7}$/.test(input.deaNumber);
+    let status: QAChecklistItem['status'] = deaValid ? 'pass' : 'fail';
+    let detail = deaValid
+      ? `DEA number ${input.deaNumber} matches expected format.`
+      : `DEA number "${input.deaNumber}" does not match format (2 letters + 7 digits).`;
+    let actionRequired: string | undefined;
+    if (!deaValid) {
+      actionRequired = 'Verify DEA registration number format.';
+    }
+    // Check DEA expiration if provided
+    if (deaValid && input.deaExpirationDate) {
+      const deaExpDate = new Date(input.deaExpirationDate);
+      const daysUntilDeaExp = Math.floor((deaExpDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+      if (daysUntilDeaExp < 0) {
+        status = 'fail';
+        detail = `DEA certificate EXPIRED on ${input.deaExpirationDate}.`;
+        actionRequired = 'DEA certificate is expired. Renew via DEA online portal immediately.';
+      } else if (daysUntilDeaExp < 90) {
+        status = 'warning';
+        detail = `DEA certificate expires in ${daysUntilDeaExp} days (${input.deaExpirationDate}).`;
+        actionRequired = 'Begin DEA renewal — processing takes 4-6 weeks.';
+      }
+    }
+    checks.push({ id: 'qa-dea', label: 'DEA Registration', category: 'license', status, detail, actionRequired });
+  }
+
+  const passCount = checks.filter(c => c.status === 'pass').length;
+  const failCount = checks.filter(c => c.status === 'fail').length;
+  const warningCount = checks.filter(c => c.status === 'warning').length;
+
+  let overallStatus: ProviderQAResult['overallStatus'] = 'pass';
+  if (failCount > 0) overallStatus = 'fail';
+  else if (warningCount > 0) overallStatus = 'warning';
+
+  return { overallStatus, checks, passCount, failCount, warningCount };
+}
+
+// ============================================================================
+// Enrollment Status Tracker
+// ============================================================================
+
+export type EnrollmentStatusPhase =
+  | 'not-started'
+  | 'application-submitted'
+  | 'under-review'
+  | 'credentialed'
+  | 'effective';
+
+export interface EnrollmentStatusRecord {
+  payerId: string;
+  payerName: string;
+  phase: EnrollmentStatusPhase;
+  submittedDate?: string;
+  estimatedDaysRemaining: number;
+  nextAction: string;
+  notes?: string;
+}
+
+export const ENROLLMENT_STATUS_PHASES: { phase: EnrollmentStatusPhase; label: string; description: string }[] = [
+  { phase: 'not-started', label: 'Not Started', description: 'Application has not been submitted yet.' },
+  { phase: 'application-submitted', label: 'Application Submitted', description: 'Application received by payer; awaiting initial review.' },
+  { phase: 'under-review', label: 'Under Review', description: 'Payer is conducting primary source verification and committee review.' },
+  { phase: 'credentialed', label: 'Credentialed', description: 'Provider has been approved; contract pending.' },
+  { phase: 'effective', label: 'Effective', description: 'Provider is active on payer panel and can submit claims.' },
+];
+
+export const MOCK_ENROLLMENT_STATUS_TRACKER: EnrollmentStatusRecord[] = [
+  { payerId: 'ahcccs', payerName: 'AHCCCS (Arizona Medicaid)', phase: 'effective', estimatedDaysRemaining: 0, nextAction: 'No action needed. Active on AHCCCS panel.', submittedDate: '2025-06-15' },
+  { payerId: 'bcbs-az', payerName: 'BCBS Arizona', phase: 'under-review', estimatedDaysRemaining: 45, nextAction: 'Credentialing committee review scheduled April 15. No action required unless RFI received.', submittedDate: '2026-02-01' },
+  { payerId: 'uhc', payerName: 'UnitedHealthcare', phase: 'application-submitted', estimatedDaysRemaining: 75, nextAction: 'Upload Work History to CAQH to complete application.', submittedDate: '2026-02-20' },
+  { payerId: 'aetna', payerName: 'Aetna', phase: 'effective', estimatedDaysRemaining: 0, nextAction: 'No action needed. Active on Aetna panel.', submittedDate: '2025-10-01' },
+  { payerId: 'cigna', payerName: 'Cigna', phase: 'not-started', estimatedDaysRemaining: 120, nextAction: 'Begin application: upload Professional References and Work History to CAQH first.' },
+];
+
+// ============================================================================
 // Payer Enrollment Workflows
 // ============================================================================
 
@@ -340,6 +800,83 @@ const PAYER_WORKFLOWS: PayerEnrollmentWorkflow[] = [
       {
         id: 'bcbs-5', title: 'Contract & Effective Date', description: 'Upon approval, review and sign the provider agreement. Your effective date is typically the committee approval date (not retroactive to application).',
         estimatedDays: 14, requiredDocs: ['Signed Provider Agreement'], commonPitfalls: ['Expecting retroactive effective date', 'Not confirming rates before signing', 'Missing the contract return deadline'], completed: false,
+      },
+    ],
+  },
+  {
+    payerId: 'uhc',
+    payerName: 'UnitedHealthcare',
+    totalEstimatedDays: 120,
+    steps: [
+      {
+        id: 'uhc-1', title: 'Complete CAQH ProView Profile', description: 'Ensure CAQH profile is 100% complete and attested. UHC pulls credentialing data from CAQH.',
+        estimatedDays: 3, requiredDocs: ['CAQH ProView Login', 'Current Attestation', 'All supporting documents uploaded'], commonPitfalls: ['Stale attestation', 'Missing malpractice COI', 'Incomplete work history'], completed: false,
+      },
+      {
+        id: 'uhc-2', title: 'Submit Network Application', description: 'Apply via the UHC Provider Portal or through Optum Behavioral Health for behavioral services. Specify your specialty panel and geographic service area.',
+        estimatedDays: 1, requiredDocs: ['NPI Number', 'CAQH Provider ID', 'Practice W-9', 'Specialty Panel Selection'], commonPitfalls: ['Applying to wrong product line (Commercial vs Optum)', 'Not specifying telehealth capability', 'Missing group NPI'], completed: false,
+      },
+      {
+        id: 'uhc-3', title: 'Primary Source Verification', description: 'UHC verifies licenses, board certifications, education, and malpractice history. This is automated through CAQH but may require manual follow-up.',
+        estimatedDays: 60, requiredDocs: [], commonPitfalls: ['Outdated info on licensing board website', 'Education institution unresponsive', 'Malpractice carrier slow to verify'], completed: false,
+      },
+      {
+        id: 'uhc-4', title: 'Network Adequacy Review', description: 'UHC evaluates whether your specialty and geographic area need additional providers. If the network is adequate, your application may be waitlisted.',
+        estimatedDays: 30, requiredDocs: [], commonPitfalls: ['Network at capacity in your area', 'Not following up on waitlist status', 'Missing the opportunity to appeal a capacity denial'], completed: false,
+      },
+      {
+        id: 'uhc-5', title: 'Contract Execution & Go-Live', description: 'Review and sign the provider agreement. Confirm rates, effective date, and panel listing. Update your Aminy profile with the effective date.',
+        estimatedDays: 14, requiredDocs: ['Signed Provider Agreement'], commonPitfalls: ['Not verifying rate schedule before signing', 'Expecting retroactive effective date', 'Not updating NPI registry with new payer'], completed: false,
+      },
+    ],
+  },
+  {
+    payerId: 'aetna',
+    payerName: 'Aetna',
+    totalEstimatedDays: 90,
+    steps: [
+      {
+        id: 'aetna-1', title: 'Verify CAQH & Gather Documents', description: 'Ensure CAQH profile is 100% complete. Gather Arizona-specific documents including autism mandate documentation if providing ABA services.',
+        estimatedDays: 3, requiredDocs: ['CAQH ProView (attested)', 'AZ Professional License', 'Malpractice COI ($1M/$3M)', 'Board Certification'], commonPitfalls: ['CAQH not attested recently', 'Malpractice limits below Aetna minimum', 'Missing board certification documentation'], completed: false,
+      },
+      {
+        id: 'aetna-2', title: 'Submit Application via Aetna Portal', description: 'Complete the Aetna provider application online. Select behavioral health specialty and specify service types (individual therapy, ABA, assessment, etc.).',
+        estimatedDays: 1, requiredDocs: ['NPI Number', 'CAQH Provider ID', 'W-9'], commonPitfalls: ['Wrong specialty selection', 'Not specifying telehealth modality', 'Incomplete service type selection'], completed: false,
+      },
+      {
+        id: 'aetna-3', title: 'Credentialing Review', description: 'Aetna conducts primary source verification and credentialing review. Aetna is typically faster than BCBS or UHC, but monitor for RFI notices.',
+        estimatedDays: 60, requiredDocs: [], commonPitfalls: ['Missing RFI email notifications', 'Not responding within 14-day RFI window', 'Outdated licensing board records'], completed: false,
+      },
+      {
+        id: 'aetna-4', title: 'Contract & Effective Date', description: 'Upon approval, review the Aetna provider agreement. Confirm fee schedule and effective date. Aetna effective dates are typically the approval date.',
+        estimatedDays: 14, requiredDocs: ['Signed Provider Agreement'], commonPitfalls: ['Not reviewing fee schedule thoroughly', 'Missing contract return deadline', 'Not confirming autism mandate coverage'], completed: false,
+      },
+    ],
+  },
+  {
+    payerId: 'cigna',
+    payerName: 'Cigna',
+    totalEstimatedDays: 120,
+    steps: [
+      {
+        id: 'cigna-1', title: 'Prepare CAQH & Required Documents', description: 'Complete CAQH profile and prepare Cigna-specific documents including treatment plan template and provider attestation form.',
+        estimatedDays: 5, requiredDocs: ['CAQH ProView (attested)', 'Treatment Plan Template', 'Provider Attestation Form', 'AZ Professional License'], commonPitfalls: ['Missing treatment plan template', 'Provider attestation not signed', 'CAQH incomplete'], completed: false,
+      },
+      {
+        id: 'cigna-2', title: 'Submit Network Application', description: 'Apply through Cigna Provider Portal. Note: Cigna Behavioral Health (Evernorth) is separate from Cigna Medical. Apply to both if needed.',
+        estimatedDays: 1, requiredDocs: ['NPI Number', 'CAQH Provider ID', 'W-9', 'Specialty Panel Selection'], commonPitfalls: ['Only applying to Cigna Medical (missing Evernorth/Behavioral)', 'Wrong specialty panel', 'Not specifying telehealth services'], completed: false,
+      },
+      {
+        id: 'cigna-3', title: 'Primary Source Verification', description: 'Cigna verifies all credentials, licenses, and certifications. Treatment plan documentation is reviewed for behavioral health providers.',
+        estimatedDays: 60, requiredDocs: [], commonPitfalls: ['Treatment plan not meeting Cigna standards', 'Education verification delays', 'Board certification lapse during verification'], completed: false,
+      },
+      {
+        id: 'cigna-4', title: 'Committee Review & Network Decision', description: 'Cigna credentialing committee reviews the application. Network adequacy is assessed for your specialty and geography.',
+        estimatedDays: 30, requiredDocs: [], commonPitfalls: ['Network at capacity', 'Committee meeting delay', 'RFI not addressed in time'], completed: false,
+      },
+      {
+        id: 'cigna-5', title: 'Contract Execution & Panel Listing', description: 'Sign the Cigna provider agreement. Confirm rates and effective date. Verify you appear in the Cigna provider directory.',
+        estimatedDays: 14, requiredDocs: ['Signed Provider Agreement'], commonPitfalls: ['Not verifying directory listing', 'Rate schedule discrepancies', 'Missing effective date on claims'], completed: false,
       },
     ],
   },

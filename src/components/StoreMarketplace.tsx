@@ -33,6 +33,11 @@ import {
   Crown,
   Sparkles,
   ArrowLeft,
+  MessageCircle,
+  Wind,
+  Gift,
+  Zap,
+  Shield,
 } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
@@ -61,7 +66,19 @@ interface Product {
   isNew: boolean;
   isFeatured: boolean;
   bcbaRecommended: boolean;
+  hsaFsaEligible?: boolean;
+  recommendedAgeRange?: string;
+  matchesChildNeeds?: boolean;
 }
+
+interface ChildProfile {
+  name: string;
+  age: number;
+  diagnoses: string[];
+  treatmentGoals?: string[];
+}
+
+const WISHLIST_STORAGE_KEY = 'aminy.store.wishlist';
 
 type ProductCategory =
   | 'books'
@@ -71,31 +88,430 @@ type ProductCategory =
   | 'templates'
   | 'courses'
   | 'sensory'
-  | 'visual-aids';
+  | 'visual-aids'
+  | 'communication-aids'
+  | 'calm-kits'
+  | 'reward-items';
 
 interface StoreMarketplaceProps {
   userTier?: TierType;
   onBack?: () => void;
   onNavigate?: (screen: string) => void;
   onUpgrade?: () => void;
+  childProfile?: ChildProfile;
 }
 
 // Category definitions
 const CATEGORIES: { id: ProductCategory; name: string; icon: React.ReactNode }[] = [
-  { id: 'books', name: 'Books', icon: <BookOpen className="w-4 h-4" /> },
-  { id: 'toys', name: 'Toys & Games', icon: <Puzzle className="w-4 h-4" /> },
   { id: 'sensory', name: 'Sensory Tools', icon: <Headphones className="w-4 h-4" /> },
+  { id: 'visual-aids', name: 'Visual Supports', icon: <Package className="w-4 h-4" /> },
+  { id: 'communication-aids', name: 'Communication Aids', icon: <MessageCircle className="w-4 h-4" /> },
+  { id: 'calm-kits', name: 'Calm Kits', icon: <Wind className="w-4 h-4" /> },
+  { id: 'books', name: 'Books & Guides', icon: <BookOpen className="w-4 h-4" /> },
+  { id: 'reward-items', name: 'Reward Items', icon: <Gift className="w-4 h-4" /> },
+  { id: 'toys', name: 'Toys & Games', icon: <Puzzle className="w-4 h-4" /> },
   { id: 'digital-guides', name: 'Digital Guides', icon: <FileText className="w-4 h-4" /> },
   { id: 'templates', name: 'Templates', icon: <Download className="w-4 h-4" /> },
   { id: 'courses', name: 'Courses', icon: <Video className="w-4 h-4" /> },
-  { id: 'visual-aids', name: 'Visual Aids', icon: <Package className="w-4 h-4" /> },
   { id: 'tools', name: 'Parent Tools', icon: <Tag className="w-4 h-4" /> },
 ];
 
 // Curated affiliate catalog — shown when no store_products found in Supabase
 const CURATED_PRODUCTS: Product[] = [
+  // ---- Sensory Tools ----
   {
-    id: '1',
+    id: 'sensory-1',
+    name: 'Weighted Compression Vest',
+    description: 'Adjustable weighted vest providing deep pressure input. Helps with body awareness and self-regulation during transitions and focused tasks.',
+    category: 'sensory',
+    price: 42.99,
+    originalPrice: 54.99,
+    image: '/images/products/weighted-vest.jpg',
+    rating: 4.8,
+    reviewCount: 1245,
+    tags: ['sensory', 'deep-pressure', 'regulation', 'vestibular'],
+    affiliateUrl: 'https://amazon.com/dp/B09SENSORY1',
+    isDigital: false,
+    isPremium: false,
+    isNew: false,
+    isFeatured: true,
+    bcbaRecommended: true,
+    hsaFsaEligible: true,
+    recommendedAgeRange: '3-12',
+    matchesChildNeeds: false,
+  },
+  {
+    id: 'sensory-2',
+    name: 'Noise-Canceling Kids Headphones',
+    description: 'Over-ear noise-canceling headphones sized for children. Reduces auditory overstimulation in loud environments like stores and classrooms.',
+    category: 'sensory',
+    price: 34.95,
+    image: '/images/products/noise-canceling-headphones.jpg',
+    rating: 4.7,
+    reviewCount: 2890,
+    tags: ['sensory', 'auditory', 'noise-reduction', 'school'],
+    affiliateUrl: 'https://amazon.com/dp/B09SENSORY2',
+    isDigital: false,
+    isPremium: false,
+    isNew: false,
+    isFeatured: false,
+    bcbaRecommended: true,
+    hsaFsaEligible: true,
+    recommendedAgeRange: '3-15',
+    matchesChildNeeds: false,
+  },
+  {
+    id: 'sensory-3',
+    name: 'Tactile Sensory Bin Kit',
+    description: 'Complete sensory bin with kinetic sand, water beads, textured balls, and scoops. Supports fine motor development and tactile exploration.',
+    category: 'sensory',
+    price: 29.99,
+    image: '/images/products/sensory-bin.jpg',
+    rating: 4.6,
+    reviewCount: 678,
+    tags: ['sensory', 'tactile', 'fine-motor', 'play'],
+    affiliateUrl: 'https://amazon.com/dp/B09SENSORY3',
+    isDigital: false,
+    isPremium: false,
+    isNew: true,
+    isFeatured: false,
+    bcbaRecommended: true,
+    hsaFsaEligible: false,
+    recommendedAgeRange: '2-8',
+    matchesChildNeeds: false,
+  },
+  {
+    id: 'sensory-4',
+    name: 'Chewable Sensory Necklace (6-Pack)',
+    description: 'Food-grade silicone chew necklaces in assorted shapes. Safe oral sensory input for children who chew on clothing or non-food items.',
+    category: 'sensory',
+    price: 14.99,
+    image: '/images/products/chew-necklace.jpg',
+    rating: 4.5,
+    reviewCount: 1567,
+    tags: ['sensory', 'oral', 'chewing', 'safe'],
+    affiliateUrl: 'https://amazon.com/dp/B09SENSORY4',
+    isDigital: false,
+    isPremium: false,
+    isNew: false,
+    isFeatured: false,
+    bcbaRecommended: true,
+    hsaFsaEligible: true,
+    recommendedAgeRange: '3-12',
+    matchesChildNeeds: false,
+  },
+  {
+    id: 'sensory-5',
+    name: 'Vibrating Sensory Pillow',
+    description: 'Soft, vibrating pillow that provides soothing proprioceptive input. Battery-operated with variable intensity settings.',
+    category: 'sensory',
+    price: 27.99,
+    image: '/images/products/vibrating-pillow.jpg',
+    rating: 4.4,
+    reviewCount: 412,
+    tags: ['sensory', 'proprioceptive', 'calming', 'vibration'],
+    affiliateUrl: 'https://amazon.com/dp/B09SENSORY5',
+    isDigital: false,
+    isPremium: false,
+    isNew: true,
+    isFeatured: false,
+    bcbaRecommended: false,
+    hsaFsaEligible: true,
+    recommendedAgeRange: '2-10',
+    matchesChildNeeds: false,
+  },
+
+  // ---- Visual Supports ----
+  {
+    id: 'visual-1',
+    name: 'Visual Schedule Cards (Printable)',
+    description: '50+ visual schedule cards for daily routines. Includes morning, bedtime, school, and therapy activities.',
+    category: 'visual-aids',
+    price: 'included',
+    image: '/images/products/visual-cards.jpg',
+    rating: 4.9,
+    reviewCount: 156,
+    tags: ['visual-supports', 'routine', 'printable'],
+    downloadUrl: '/downloads/visual-schedule-cards.pdf',
+    isDigital: true,
+    isPremium: false,
+    isNew: false,
+    isFeatured: true,
+    bcbaRecommended: true,
+    hsaFsaEligible: false,
+    recommendedAgeRange: '2-12',
+    matchesChildNeeds: false,
+  },
+  {
+    id: 'visual-2',
+    name: 'Emotion Flashcards (Printable)',
+    description: '40 emotion flashcards with real photos. Helps children identify and label feelings across different situations.',
+    category: 'visual-aids',
+    price: 'included',
+    image: '/images/products/emotion-cards.jpg',
+    rating: 4.8,
+    reviewCount: 234,
+    tags: ['emotions', 'feelings', 'flashcards', 'social-emotional'],
+    downloadUrl: '/downloads/emotion-flashcards.pdf',
+    isDigital: true,
+    isPremium: false,
+    isNew: false,
+    isFeatured: false,
+    bcbaRecommended: true,
+    hsaFsaEligible: false,
+    recommendedAgeRange: '3-10',
+    matchesChildNeeds: false,
+  },
+  {
+    id: 'visual-3',
+    name: 'First-Then Board (Magnetic)',
+    description: 'Portable magnetic first-then board with 30 interchangeable picture cards. Helps with transitions and building expectations.',
+    category: 'visual-aids',
+    price: 19.99,
+    image: '/images/products/first-then-board.jpg',
+    rating: 4.7,
+    reviewCount: 890,
+    tags: ['visual-supports', 'transitions', 'first-then', 'magnetic'],
+    affiliateUrl: 'https://amazon.com/dp/B09VISUAL3',
+    isDigital: false,
+    isPremium: false,
+    isNew: false,
+    isFeatured: false,
+    bcbaRecommended: true,
+    hsaFsaEligible: false,
+    recommendedAgeRange: '2-8',
+    matchesChildNeeds: false,
+  },
+  {
+    id: 'visual-4',
+    name: 'Social Stories Collection',
+    description: '25 customizable social stories covering common scenarios: going to the doctor, making friends, handling changes.',
+    category: 'visual-aids',
+    price: 'included',
+    image: '/images/products/social-stories.jpg',
+    rating: 4.7,
+    reviewCount: 445,
+    tags: ['social-stories', 'customizable', 'scenarios'],
+    downloadUrl: '/downloads/social-stories-collection.pdf',
+    isDigital: true,
+    isPremium: true,
+    isNew: false,
+    isFeatured: false,
+    bcbaRecommended: true,
+    hsaFsaEligible: false,
+    recommendedAgeRange: '3-12',
+    matchesChildNeeds: false,
+  },
+  {
+    id: 'visual-5',
+    name: 'Token Board Starter Kit',
+    description: 'Reusable token board system with stars, smiley faces, and custom tokens. Velcro-backed for easy use during sessions and at home.',
+    category: 'visual-aids',
+    price: 12.99,
+    image: '/images/products/token-board.jpg',
+    rating: 4.6,
+    reviewCount: 723,
+    tags: ['token-board', 'reinforcement', 'visual-supports'],
+    affiliateUrl: 'https://amazon.com/dp/B09VISUAL5',
+    isDigital: false,
+    isPremium: false,
+    isNew: false,
+    isFeatured: false,
+    bcbaRecommended: true,
+    hsaFsaEligible: false,
+    recommendedAgeRange: '2-10',
+    matchesChildNeeds: false,
+  },
+
+  // ---- Communication Aids ----
+  {
+    id: 'comm-1',
+    name: 'AAC Communication Board (Printable)',
+    description: 'Core vocabulary AAC board with 60 high-frequency words. Designed for beginning communicators using picture exchange.',
+    category: 'communication-aids',
+    price: 'included',
+    image: '/images/products/aac-board.jpg',
+    rating: 4.9,
+    reviewCount: 567,
+    tags: ['AAC', 'communication', 'PECS', 'core-vocabulary'],
+    downloadUrl: '/downloads/aac-communication-board.pdf',
+    isDigital: true,
+    isPremium: false,
+    isNew: false,
+    isFeatured: true,
+    bcbaRecommended: true,
+    hsaFsaEligible: false,
+    recommendedAgeRange: '2-10',
+    matchesChildNeeds: false,
+  },
+  {
+    id: 'comm-2',
+    name: 'Recordable Answer Buzzers (4-Pack)',
+    description: 'Record custom messages up to 30 seconds each. Great for choice-making, requesting, and turn-taking activities.',
+    category: 'communication-aids',
+    price: 22.99,
+    image: '/images/products/answer-buzzers.jpg',
+    rating: 4.6,
+    reviewCount: 1234,
+    tags: ['communication', 'requesting', 'choice-making', 'recordable'],
+    affiliateUrl: 'https://amazon.com/dp/B09COMM2',
+    isDigital: false,
+    isPremium: false,
+    isNew: false,
+    isFeatured: false,
+    bcbaRecommended: true,
+    hsaFsaEligible: true,
+    recommendedAgeRange: '2-12',
+    matchesChildNeeds: false,
+  },
+  {
+    id: 'comm-3',
+    name: 'Picture Exchange Communication Cards',
+    description: '200+ laminated PECS-style cards with velcro strips. Covers food, activities, feelings, places, and people categories.',
+    category: 'communication-aids',
+    price: 34.99,
+    originalPrice: 44.99,
+    image: '/images/products/pecs-cards.jpg',
+    rating: 4.8,
+    reviewCount: 892,
+    tags: ['PECS', 'communication', 'requesting', 'laminated'],
+    affiliateUrl: 'https://amazon.com/dp/B09COMM3',
+    isDigital: false,
+    isPremium: false,
+    isNew: false,
+    isFeatured: false,
+    bcbaRecommended: true,
+    hsaFsaEligible: true,
+    recommendedAgeRange: '2-8',
+    matchesChildNeeds: false,
+  },
+  {
+    id: 'comm-4',
+    name: 'Conversation Starter Cards for Kids',
+    description: '80 illustrated prompt cards for practicing conversational skills. Includes topics, questions, and role-play scenarios.',
+    category: 'communication-aids',
+    price: 15.99,
+    image: '/images/products/conversation-cards.jpg',
+    rating: 4.5,
+    reviewCount: 345,
+    tags: ['social-skills', 'conversation', 'pragmatic-language'],
+    affiliateUrl: 'https://amazon.com/dp/B09COMM4',
+    isDigital: false,
+    isPremium: false,
+    isNew: true,
+    isFeatured: false,
+    bcbaRecommended: true,
+    hsaFsaEligible: false,
+    recommendedAgeRange: '5-14',
+    matchesChildNeeds: false,
+  },
+
+  // ---- Calm Kits ----
+  {
+    id: 'calm-1',
+    name: 'Calm Down Kit - Complete',
+    description: 'Curated sensory kit with fidget toys, weighted lap pad, noise-canceling headphones, breathing cards, and calm-down strategy posters.',
+    category: 'calm-kits',
+    price: 49.99,
+    originalPrice: 65.99,
+    image: '/images/products/calm-kit.jpg',
+    rating: 4.7,
+    reviewCount: 892,
+    tags: ['sensory', 'calming', 'kit', 'regulation'],
+    affiliateUrl: 'https://amazon.com/dp/B09CALM1',
+    isDigital: false,
+    isPremium: false,
+    isNew: false,
+    isFeatured: true,
+    bcbaRecommended: true,
+    hsaFsaEligible: true,
+    recommendedAgeRange: '3-12',
+    matchesChildNeeds: false,
+  },
+  {
+    id: 'calm-2',
+    name: 'Portable Travel Calm Kit',
+    description: 'Compact calm-down kit for on-the-go. Includes mini fidgets, breathing exercise cards, noise-reducing ear plugs, and a comfort item.',
+    category: 'calm-kits',
+    price: 24.99,
+    image: '/images/products/travel-calm-kit.jpg',
+    rating: 4.6,
+    reviewCount: 567,
+    tags: ['calming', 'travel', 'portable', 'kit'],
+    affiliateUrl: 'https://amazon.com/dp/B09CALM2',
+    isDigital: false,
+    isPremium: false,
+    isNew: true,
+    isFeatured: false,
+    bcbaRecommended: true,
+    hsaFsaEligible: false,
+    recommendedAgeRange: '3-10',
+    matchesChildNeeds: false,
+  },
+  {
+    id: 'calm-3',
+    name: 'Weighted Lap Pad (5 lbs)',
+    description: 'Soft weighted lap pad providing calming deep pressure. Great for circle time, homework, meals, and car rides.',
+    category: 'calm-kits',
+    price: 29.99,
+    image: '/images/products/lap-pad.jpg',
+    rating: 4.8,
+    reviewCount: 1456,
+    tags: ['weighted', 'calming', 'deep-pressure', 'lap-pad'],
+    affiliateUrl: 'https://amazon.com/dp/B09CALM3',
+    isDigital: false,
+    isPremium: false,
+    isNew: false,
+    isFeatured: false,
+    bcbaRecommended: true,
+    hsaFsaEligible: true,
+    recommendedAgeRange: '4-12',
+    matchesChildNeeds: false,
+  },
+  {
+    id: 'calm-4',
+    name: 'Breathing Exercise Cards (Printable)',
+    description: '20 illustrated breathing technique cards for children. Includes belly breathing, square breathing, star breathing, and more.',
+    category: 'calm-kits',
+    price: 'free',
+    image: '/images/products/breathing-cards.jpg',
+    rating: 4.9,
+    reviewCount: 345,
+    tags: ['breathing', 'calming', 'regulation', 'printable'],
+    downloadUrl: '/downloads/breathing-exercise-cards.pdf',
+    isDigital: true,
+    isPremium: false,
+    isNew: false,
+    isFeatured: false,
+    bcbaRecommended: true,
+    hsaFsaEligible: false,
+    recommendedAgeRange: '3-14',
+    matchesChildNeeds: false,
+  },
+  {
+    id: 'calm-5',
+    name: 'Calm Corner Setup Guide & Poster',
+    description: 'Step-by-step guide to creating a calm corner at home or school. Includes printable posters, zone charts, and strategy cards.',
+    category: 'calm-kits',
+    price: 'included',
+    image: '/images/products/calm-corner-guide.jpg',
+    rating: 4.7,
+    reviewCount: 234,
+    tags: ['calm-corner', 'regulation', 'setup-guide', 'zones'],
+    downloadUrl: '/downloads/calm-corner-setup-guide.pdf',
+    isDigital: true,
+    isPremium: false,
+    isNew: false,
+    isFeatured: false,
+    bcbaRecommended: true,
+    hsaFsaEligible: false,
+    recommendedAgeRange: '3-12',
+    matchesChildNeeds: false,
+  },
+
+  // ---- Books & Guides ----
+  {
+    id: 'book-1',
     name: 'The Explosive Child',
     description: 'A new approach for understanding and parenting easily frustrated, chronically inflexible children by Dr. Ross Greene.',
     category: 'books',
@@ -111,44 +527,176 @@ const CURATED_PRODUCTS: Product[] = [
     isNew: false,
     isFeatured: true,
     bcbaRecommended: true,
+    hsaFsaEligible: false,
+    recommendedAgeRange: 'Parents',
+    matchesChildNeeds: false,
   },
   {
-    id: '2',
-    name: 'Visual Schedule Cards (Printable)',
-    description: '50+ visual schedule cards for daily routines. Includes morning, bedtime, school, and therapy activities.',
-    category: 'visual-aids',
-    price: 'included',
-    image: '/images/products/visual-cards.jpg',
+    id: 'book-2',
+    name: 'Uniquely Human: A Different Way of Seeing Autism',
+    description: 'Dr. Barry Prizant reframes autism as a different way of being rather than a deficit. Essential reading for families.',
+    category: 'books',
+    price: 14.99,
+    image: '/images/products/uniquely-human.jpg',
     rating: 4.9,
-    reviewCount: 156,
-    tags: ['visual-supports', 'routine', 'printable'],
-    downloadUrl: '/downloads/visual-schedule-cards.pdf',
-    isDigital: true,
+    reviewCount: 1890,
+    tags: ['autism', 'parenting', 'understanding', 'bestseller'],
+    affiliateUrl: 'https://amazon.com/dp/B09BOOK2',
+    isDigital: false,
     isPremium: false,
-    isNew: true,
-    isFeatured: true,
+    isNew: false,
+    isFeatured: false,
     bcbaRecommended: true,
+    hsaFsaEligible: false,
+    recommendedAgeRange: 'Parents',
+    matchesChildNeeds: false,
   },
   {
-    id: '3',
-    name: 'Calm Down Kit',
-    description: 'Curated sensory kit with fidget toys, weighted lap pad, noise-canceling headphones, and calm-down cards.',
-    category: 'sensory',
-    price: 49.99,
-    originalPrice: 65.99,
-    image: '/images/products/calm-kit.jpg',
-    rating: 4.7,
-    reviewCount: 892,
-    tags: ['sensory', 'calming', 'kit'],
-    affiliateUrl: 'https://amazon.com/dp/B09XYZ123',
-    isDigital: false,
+    id: 'book-3',
+    name: 'IEP Meeting Preparation Guide',
+    description: 'Comprehensive guide to preparing for IEP meetings. Includes checklists, question templates, and rights overview.',
+    category: 'books',
+    price: 'free',
+    image: '/images/products/iep-guide.jpg',
+    rating: 4.9,
+    reviewCount: 678,
+    tags: ['IEP', 'advocacy', 'school'],
+    downloadUrl: '/downloads/iep-preparation-guide.pdf',
+    isDigital: true,
     isPremium: false,
     isNew: false,
     isFeatured: true,
     bcbaRecommended: true,
+    hsaFsaEligible: false,
+    recommendedAgeRange: 'Parents',
+    matchesChildNeeds: false,
   },
   {
-    id: '4',
+    id: 'book-4',
+    name: 'ABA Fundamentals for Parents (Video Course)',
+    description: 'Self-paced video course covering ABA basics, reinforcement strategies, and behavior management techniques.',
+    category: 'books',
+    price: 'included',
+    image: '/images/products/aba-course.jpg',
+    rating: 4.9,
+    reviewCount: 1203,
+    tags: ['ABA', 'course', 'video', 'parent-training'],
+    downloadUrl: '/courses/aba-fundamentals',
+    isDigital: true,
+    isPremium: true,
+    isNew: false,
+    isFeatured: false,
+    bcbaRecommended: true,
+    hsaFsaEligible: false,
+    recommendedAgeRange: 'Parents',
+    matchesChildNeeds: false,
+  },
+  {
+    id: 'book-5',
+    name: 'The Out-of-Sync Child',
+    description: 'Recognizing and coping with sensory processing differences. Practical strategies for parents and educators.',
+    category: 'books',
+    price: 15.99,
+    image: '/images/products/out-of-sync-child.jpg',
+    rating: 4.7,
+    reviewCount: 3456,
+    tags: ['sensory', 'SPD', 'parenting', 'classic'],
+    affiliateUrl: 'https://amazon.com/dp/B09BOOK5',
+    isDigital: false,
+    isPremium: false,
+    isNew: false,
+    isFeatured: false,
+    bcbaRecommended: true,
+    hsaFsaEligible: false,
+    recommendedAgeRange: 'Parents',
+    matchesChildNeeds: false,
+  },
+
+  // ---- Reward Items ----
+  {
+    id: 'reward-1',
+    name: 'Token Reward Treasure Chest (50 Prizes)',
+    description: '50 small prize items for token economy systems. Includes stickers, mini toys, stamps, and trinkets appropriate for all ages.',
+    category: 'reward-items',
+    price: 19.99,
+    image: '/images/products/treasure-chest.jpg',
+    rating: 4.5,
+    reviewCount: 890,
+    tags: ['rewards', 'token-economy', 'prizes', 'reinforcement'],
+    affiliateUrl: 'https://amazon.com/dp/B09REWARD1',
+    isDigital: false,
+    isPremium: false,
+    isNew: false,
+    isFeatured: false,
+    bcbaRecommended: true,
+    hsaFsaEligible: false,
+    recommendedAgeRange: '3-12',
+    matchesChildNeeds: false,
+  },
+  {
+    id: 'reward-2',
+    name: 'Motivational Sticker Chart Bundle',
+    description: '10 themed sticker charts with 500+ reward stickers. Themes include space, animals, superheroes, and nature.',
+    category: 'reward-items',
+    price: 9.99,
+    image: '/images/products/sticker-charts.jpg',
+    rating: 4.6,
+    reviewCount: 2345,
+    tags: ['stickers', 'charts', 'motivation', 'reinforcement'],
+    affiliateUrl: 'https://amazon.com/dp/B09REWARD2',
+    isDigital: false,
+    isPremium: false,
+    isNew: false,
+    isFeatured: false,
+    bcbaRecommended: true,
+    hsaFsaEligible: false,
+    recommendedAgeRange: '2-10',
+    matchesChildNeeds: false,
+  },
+  {
+    id: 'reward-3',
+    name: 'Printable Reward Coupons for Kids',
+    description: '30 customizable reward coupons: extra screen time, pick the dinner, stay up late, choose a game, and more.',
+    category: 'reward-items',
+    price: 'free',
+    image: '/images/products/reward-coupons.jpg',
+    rating: 4.8,
+    reviewCount: 456,
+    tags: ['rewards', 'coupons', 'printable', 'customizable'],
+    downloadUrl: '/downloads/reward-coupons.pdf',
+    isDigital: true,
+    isPremium: false,
+    isNew: true,
+    isFeatured: false,
+    bcbaRecommended: false,
+    hsaFsaEligible: false,
+    recommendedAgeRange: '3-14',
+    matchesChildNeeds: false,
+  },
+  {
+    id: 'reward-4',
+    name: 'Marble Maze Fidget Board',
+    description: 'Wooden marble maze for focus and calm. Great for waiting rooms, car rides, and quiet time. Works well as an earned reward.',
+    category: 'reward-items',
+    price: 24.99,
+    image: '/images/products/marble-maze.jpg',
+    rating: 4.5,
+    reviewCount: 312,
+    tags: ['fidget', 'focus', 'toy', 'reward'],
+    affiliateUrl: 'https://amazon.com/dp/B08XYZ789',
+    isDigital: false,
+    isPremium: false,
+    isNew: false,
+    isFeatured: false,
+    bcbaRecommended: false,
+    hsaFsaEligible: false,
+    recommendedAgeRange: '4-12',
+    matchesChildNeeds: false,
+  },
+
+  // ---- Remaining original products (other categories) ----
+  {
+    id: 'template-1',
     name: 'Behavior Tracking Template Bundle',
     description: 'Complete bundle of behavior tracking sheets, ABC data forms, and progress monitoring templates.',
     category: 'templates',
@@ -163,26 +711,12 @@ const CURATED_PRODUCTS: Product[] = [
     isNew: false,
     isFeatured: false,
     bcbaRecommended: true,
+    hsaFsaEligible: false,
+    recommendedAgeRange: 'Parents',
+    matchesChildNeeds: false,
   },
   {
-    id: '5',
-    name: 'ABA Fundamentals for Parents',
-    description: 'Self-paced video course covering ABA basics, reinforcement strategies, and behavior management.',
-    category: 'courses',
-    price: 'included',
-    image: '/images/products/aba-course.jpg',
-    rating: 4.9,
-    reviewCount: 1203,
-    tags: ['ABA', 'course', 'video'],
-    downloadUrl: '/courses/aba-fundamentals',
-    isDigital: true,
-    isPremium: true,
-    isNew: false,
-    isFeatured: true,
-    bcbaRecommended: true,
-  },
-  {
-    id: '6',
+    id: 'tool-1',
     name: 'Time Timer MOD',
     description: 'Visual timer that shows the passage of time. Perfect for transitions, tasks, and building time awareness.',
     category: 'tools',
@@ -197,93 +731,142 @@ const CURATED_PRODUCTS: Product[] = [
     isNew: false,
     isFeatured: false,
     bcbaRecommended: true,
-  },
-  {
-    id: '7',
-    name: 'Social Stories Collection',
-    description: '25 customizable social stories covering common scenarios: going to the doctor, making friends, handling changes.',
-    category: 'digital-guides',
-    price: 'included',
-    image: '/images/products/social-stories.jpg',
-    rating: 4.7,
-    reviewCount: 445,
-    tags: ['social-stories', 'customizable', 'scenarios'],
-    downloadUrl: '/downloads/social-stories-collection.pdf',
-    isDigital: true,
-    isPremium: true,
-    isNew: true,
-    isFeatured: false,
-    bcbaRecommended: true,
-  },
-  {
-    id: '8',
-    name: 'Marble Maze Fidget Board',
-    description: 'Wooden marble maze for focus and calm. Great for waiting rooms, car rides, and quiet time.',
-    category: 'toys',
-    price: 24.99,
-    image: '/images/products/marble-maze.jpg',
-    rating: 4.5,
-    reviewCount: 312,
-    tags: ['fidget', 'focus', 'toy'],
-    affiliateUrl: 'https://amazon.com/dp/B08XYZ789',
-    isDigital: false,
-    isPremium: false,
-    isNew: true,
-    isFeatured: false,
-    bcbaRecommended: false,
-  },
-  {
-    id: '9',
-    name: 'IEP Meeting Preparation Guide',
-    description: 'Comprehensive guide to preparing for IEP meetings. Includes checklists, question templates, and rights overview.',
-    category: 'digital-guides',
-    price: 'free',
-    image: '/images/products/iep-guide.jpg',
-    rating: 4.9,
-    reviewCount: 678,
-    tags: ['IEP', 'advocacy', 'school'],
-    downloadUrl: '/downloads/iep-preparation-guide.pdf',
-    isDigital: true,
-    isPremium: false,
-    isNew: false,
-    isFeatured: true,
-    bcbaRecommended: true,
-  },
-  {
-    id: '10',
-    name: 'Emotion Flashcards (Printable)',
-    description: '40 emotion flashcards with real photos. Helps children identify and label feelings.',
-    category: 'visual-aids',
-    price: 'included',
-    image: '/images/products/emotion-cards.jpg',
-    rating: 4.8,
-    reviewCount: 234,
-    tags: ['emotions', 'feelings', 'flashcards'],
-    downloadUrl: '/downloads/emotion-flashcards.pdf',
-    isDigital: true,
-    isPremium: false,
-    isNew: false,
-    isFeatured: false,
-    bcbaRecommended: true,
+    hsaFsaEligible: false,
+    recommendedAgeRange: '3-Adult',
+    matchesChildNeeds: false,
   },
 ];
+
+// ============================================================================
+// AI-Recommended Products Logic
+// ============================================================================
+
+/**
+ * Generate AI-recommended products based on a child profile.
+ * Matches products by diagnosis, age range, and treatment goal relevance.
+ */
+function getAIRecommendedProducts(
+  products: Product[],
+  childProfile: ChildProfile | null,
+): Product[] {
+  if (!childProfile) return [];
+
+  const diagnosisKeywordMap: Record<string, string[]> = {
+    autism: ['sensory', 'communication', 'social-skills', 'visual-supports', 'AAC', 'PECS', 'social-stories'],
+    asd: ['sensory', 'communication', 'social-skills', 'visual-supports', 'AAC', 'PECS', 'social-stories'],
+    adhd: ['fidget', 'focus', 'timer', 'transitions', 'visual', 'regulation'],
+    'sensory processing': ['sensory', 'deep-pressure', 'weighted', 'calming', 'noise-reduction', 'tactile'],
+    'speech delay': ['communication', 'AAC', 'PECS', 'requesting', 'conversation', 'pragmatic-language'],
+    'language delay': ['communication', 'AAC', 'PECS', 'requesting', 'core-vocabulary'],
+    anxiety: ['calming', 'breathing', 'regulation', 'calm-corner', 'weighted', 'deep-pressure'],
+    odd: ['behavior', 'parenting', 'regulation', 'token-economy', 'reinforcement'],
+  };
+
+  const relevantTags = new Set<string>();
+  for (const diagnosis of childProfile.diagnoses) {
+    const lower = diagnosis.toLowerCase();
+    for (const [key, tags] of Object.entries(diagnosisKeywordMap)) {
+      if (lower.includes(key)) {
+        tags.forEach((tag) => relevantTags.add(tag));
+      }
+    }
+  }
+
+  if (childProfile.treatmentGoals) {
+    for (const goal of childProfile.treatmentGoals) {
+      const lower = goal.toLowerCase();
+      if (lower.includes('communicat') || lower.includes('mand') || lower.includes('request')) {
+        relevantTags.add('communication');
+        relevantTags.add('AAC');
+        relevantTags.add('requesting');
+      }
+      if (lower.includes('social') || lower.includes('peer') || lower.includes('play')) {
+        relevantTags.add('social-skills');
+        relevantTags.add('social-stories');
+      }
+      if (lower.includes('sensory') || lower.includes('regulation') || lower.includes('calm')) {
+        relevantTags.add('sensory');
+        relevantTags.add('calming');
+        relevantTags.add('regulation');
+      }
+      if (lower.includes('routine') || lower.includes('daily living') || lower.includes('independence')) {
+        relevantTags.add('visual-supports');
+        relevantTags.add('routine');
+        relevantTags.add('transitions');
+      }
+    }
+  }
+
+  if (relevantTags.size === 0) return [];
+
+  const scored = products
+    .map((product) => {
+      let score = 0;
+      for (const tag of product.tags) {
+        if (relevantTags.has(tag)) score += 2;
+      }
+      if (product.bcbaRecommended) score += 1;
+
+      // Check age range match
+      if (product.recommendedAgeRange && product.recommendedAgeRange !== 'Parents') {
+        const ageParts = product.recommendedAgeRange.split('-').map((s) => parseInt(s.replace(/\D/g, ''), 10));
+        if (ageParts.length === 2 && !isNaN(ageParts[0]) && !isNaN(ageParts[1])) {
+          if (childProfile.age >= ageParts[0] && childProfile.age <= ageParts[1]) {
+            score += 1;
+          }
+        }
+      }
+
+      return { product: { ...product, matchesChildNeeds: score > 0 }, score };
+    })
+    .filter((item) => item.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 6);
+
+  return scored.map((s) => s.product);
+}
+
+// Helper: load wishlist from localStorage
+function loadWishlist(): Set<string> {
+  try {
+    const stored = localStorage.getItem(WISHLIST_STORAGE_KEY);
+    if (stored) {
+      return new Set(JSON.parse(stored));
+    }
+  } catch {
+    // Ignore parse errors
+  }
+  return new Set();
+}
+
+// Helper: save wishlist to localStorage
+function saveWishlist(ids: Set<string>): void {
+  try {
+    localStorage.setItem(WISHLIST_STORAGE_KEY, JSON.stringify([...ids]));
+  } catch {
+    // Ignore storage errors
+  }
+}
 
 export function StoreMarketplace({
   userTier = 'free',
   onBack,
   onNavigate,
-}: StoreMarketplaceProps) {
+  childProfile = null,
+}: StoreMarketplaceProps & { childProfile?: ChildProfile | null }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<ProductCategory | 'all'>('all');
   const [showFilters, setShowFilters] = useState(false);
-  const [favorites, setFavorites] = useState<Set<string>>(new Set());
+  const [favorites, setFavorites] = useState<Set<string>>(() => loadWishlist());
   const [products, setProducts] = useState<Product[]>(CURATED_PRODUCTS);
   const [usingCuratedFallback, setUsingCuratedFallback] = useState(true);
+  const [showWishlistOnly, setShowWishlistOnly] = useState(false);
   const [filters, setFilters] = useState({
     freeOnly: false,
     bcbaRecommended: false,
     digitalOnly: false,
     newOnly: false,
+    hsaFsaOnly: false,
   });
 
   // Attempt to fetch real products from Supabase store_products table
@@ -313,9 +896,22 @@ export function StoreMarketplace({
     ['core', 'pro', 'proplus'].includes(userTier),
   [userTier]);
 
+  // AI-recommended products
+  const aiRecommendedProducts = useMemo(
+    () => getAIRecommendedProducts(products, childProfile ?? null),
+    [products, childProfile],
+  );
+
   // Filter products
   const filteredProducts = useMemo(() => {
-    return products.filter((product) => {
+    let filtered = products;
+
+    // Wishlist filter
+    if (showWishlistOnly) {
+      filtered = filtered.filter((p) => favorites.has(p.id));
+    }
+
+    return filtered.filter((product) => {
       // Search filter
       if (searchQuery) {
         const query = searchQuery.toLowerCase();
@@ -344,27 +940,31 @@ export function StoreMarketplace({
       if (filters.newOnly && !product.isNew) {
         return false;
       }
+      if (filters.hsaFsaOnly && !product.hsaFsaEligible) {
+        return false;
+      }
 
       return true;
     });
-  }, [searchQuery, selectedCategory, filters]);
+  }, [searchQuery, selectedCategory, filters, showWishlistOnly, favorites]);
 
   // Featured products
   const featuredProducts = useMemo(() =>
     products.filter(p => p.isFeatured).slice(0, 4),
   [products]);
 
-  // Toggle favorite
+  // Toggle favorite (persists to localStorage as wishlist)
   const toggleFavorite = useCallback((productId: string) => {
     setFavorites(prev => {
       const next = new Set(prev);
       if (next.has(productId)) {
         next.delete(productId);
-        toast.success('Removed from favorites');
+        toast.success('Removed from wishlist');
       } else {
         next.add(productId);
-        toast.success('Added to favorites');
+        toast.success('Added to wishlist');
       }
+      saveWishlist(next);
       return next;
     });
   }, []);
@@ -466,20 +1066,33 @@ export function StoreMarketplace({
                 </p>
               </div>
             </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-2"
-            >
-              <Filter className="w-4 h-4" />
-              Filters
-              {Object.values(filters).some(Boolean) && (
-                <Badge className="bg-teal-500 text-white text-xs px-1.5">
-                  {Object.values(filters).filter(Boolean).length}
-                </Badge>
-              )}
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                variant={showWishlistOnly ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setShowWishlistOnly(!showWishlistOnly)}
+                className="flex items-center gap-1.5"
+              >
+                <Heart className={`w-4 h-4 ${showWishlistOnly ? 'fill-white' : ''}`} />
+                {favorites.size > 0 && (
+                  <span className="text-xs">{favorites.size}</span>
+                )}
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowFilters(!showFilters)}
+                className="flex items-center gap-2"
+              >
+                <Filter className="w-4 h-4" />
+                Filters
+                {Object.values(filters).some(Boolean) && (
+                  <Badge className="bg-teal-500 text-white text-xs px-1.5">
+                    {Object.values(filters).filter(Boolean).length}
+                  </Badge>
+                )}
+              </Button>
+            </div>
           </div>
 
           {/* Search */}
@@ -566,6 +1179,15 @@ export function StoreMarketplace({
                     />
                     <span className="text-sm">New arrivals</span>
                   </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={filters.hsaFsaOnly}
+                      onChange={(e) => setFilters(prev => ({ ...prev, hsaFsaOnly: e.target.checked }))}
+                      className="rounded border-slate-300"
+                    />
+                    <span className="text-sm">HSA/FSA eligible</span>
+                  </label>
                 </div>
               </div>
             </motion.div>
@@ -575,8 +1197,77 @@ export function StoreMarketplace({
 
       {/* Main Content */}
       <div className="max-w-6xl mx-auto px-4 py-6">
+        {/* AI-Recommended Section (when child profile is available) */}
+        {selectedCategory === 'all' && !searchQuery && !showWishlistOnly && aiRecommendedProducts.length > 0 && (
+          <div className="mb-8">
+            <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+              <Zap className="w-5 h-5 text-teal-500" />
+              Recommended for {childProfile?.name || 'Your Child'}
+            </h2>
+            <p className="text-sm text-slate-500 mb-4">
+              Based on {childProfile?.diagnoses?.join(', ')} profile, age {childProfile?.age}
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {aiRecommendedProducts.map((product) => (
+                <Card
+                  key={`ai-${product.id}`}
+                  className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer border-teal-200 dark:border-teal-800"
+                  onClick={() => handleProductAction(product)}
+                >
+                  <div className="aspect-video bg-teal-50 dark:bg-teal-900/20 relative">
+                    <div className="absolute inset-0 flex items-center justify-center text-teal-300">
+                      {CATEGORIES.find(c => c.id === product.category)?.icon}
+                    </div>
+                    <Badge className="absolute top-2 left-2 bg-teal-500 text-white">
+                      <Zap className="w-3 h-3 mr-1" />
+                      AI Pick
+                    </Badge>
+                    {product.hsaFsaEligible && (
+                      <Badge className="absolute bottom-2 left-2 bg-emerald-100 text-emerald-700 text-xs">
+                        <Shield className="w-3 h-3 mr-1" />
+                        HSA/FSA
+                      </Badge>
+                    )}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleFavorite(product.id);
+                      }}
+                      className="absolute top-2 right-2 p-2 bg-white/90 rounded-full hover:bg-white transition-colors"
+                    >
+                      <Heart
+                        className={`w-4 h-4 ${
+                          favorites.has(product.id)
+                            ? 'fill-red-500 text-red-500'
+                            : 'text-slate-400'
+                        }`}
+                      />
+                    </button>
+                  </div>
+                  <div className="p-4">
+                    <h3 className="font-medium text-slate-900 dark:text-white line-clamp-1">
+                      {product.name}
+                    </h3>
+                    <p className="text-xs text-slate-500 line-clamp-2 mt-1">{product.description}</p>
+                    <div className="flex items-center gap-2 mt-2">
+                      <div className="flex items-center gap-1">
+                        <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+                        <span className="text-xs text-slate-500">{product.rating}</span>
+                      </div>
+                      {product.recommendedAgeRange && (
+                        <span className="text-xs text-slate-400">Ages {product.recommendedAgeRange}</span>
+                      )}
+                    </div>
+                    <div className="mt-2">{renderPrice(product)}</div>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Featured Section (only on "all" category) */}
-        {selectedCategory === 'all' && !searchQuery && (
+        {selectedCategory === 'all' && !searchQuery && !showWishlistOnly && (
           <div className="mb-8">
             <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
               <Sparkles className="w-5 h-5 text-amber-500" />
@@ -645,7 +1336,8 @@ export function StoreMarketplace({
                 onClick={() => {
                   setSearchQuery('');
                   setSelectedCategory('all');
-                  setFilters({ freeOnly: false, bcbaRecommended: false, digitalOnly: false, newOnly: false });
+                  setShowWishlistOnly(false);
+                  setFilters({ freeOnly: false, bcbaRecommended: false, digitalOnly: false, newOnly: false, hsaFsaOnly: false });
                 }}
               >
                 Clear all filters
@@ -700,9 +1392,28 @@ export function StoreMarketplace({
                         </Badge>
                       )}
                     </div>
-                    <p className="text-sm text-slate-500 line-clamp-2 mb-3">
+                    <p className="text-sm text-slate-500 line-clamp-2 mb-2">
                       {product.description}
                     </p>
+                    <div className="flex flex-wrap items-center gap-1.5 mb-2">
+                      {product.hsaFsaEligible && (
+                        <Badge className="bg-emerald-100 text-emerald-700 text-xs">
+                          <Shield className="w-3 h-3 mr-0.5" />
+                          HSA/FSA
+                        </Badge>
+                      )}
+                      {product.recommendedAgeRange && (
+                        <Badge className="bg-slate-100 text-slate-600 text-xs">
+                          Ages {product.recommendedAgeRange}
+                        </Badge>
+                      )}
+                      {product.matchesChildNeeds && (
+                        <Badge className="bg-teal-100 text-teal-700 text-xs">
+                          <Zap className="w-3 h-3 mr-0.5" />
+                          Matches needs
+                        </Badge>
+                      )}
+                    </div>
                     <div className="flex items-center gap-1 mb-3">
                       <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
                       <span className="text-xs text-slate-500">{product.rating}</span>

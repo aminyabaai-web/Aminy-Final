@@ -571,6 +571,482 @@ export function exportTimesheetToPDF(timesheet: Timesheet): {
 }
 
 // ============================================
+// FISCAL AGENT VALIDATION RULES
+// ============================================
+
+import type { EVVRecord as ReconciliationEVVRecord, FiscalAgentSubmission } from './evv-reconciliation';
+
+export interface FiscalAgentValidationError {
+  recordId: string;
+  agent: FiscalAgentType;
+  rule: string;
+  description: string;
+  severity: 'blocking' | 'warning';
+  resolution: string;
+}
+
+export interface FiscalAgentValidationResult {
+  agent: FiscalAgentType;
+  totalRecords: number;
+  passedRecords: number;
+  failedRecords: number;
+  errors: FiscalAgentValidationError[];
+  overallPass: boolean;
+}
+
+/**
+ * Validate EVV records against fiscal-agent-specific rules.
+ * - Acumen: GPS within 0.25 miles of service location
+ * - DCI: Exact unit matching (billed must equal EVV-calculated)
+ * - PPL: Caregiver credential verification required
+ */
+export function validateForFiscalAgent(
+  records: ReconciliationEVVRecord[],
+  agent: FiscalAgentType
+): FiscalAgentValidationResult {
+  const errors: FiscalAgentValidationError[] = [];
+
+  for (const record of records) {
+    // Common validations for all agents
+    if (!record.actualCheckIn) {
+      errors.push({
+        recordId: record.id,
+        agent,
+        rule: 'checkin_required',
+        description: 'EVV check-in is missing',
+        severity: 'blocking',
+        resolution: 'Provider must record check-in via EVV device before session can be submitted.',
+      });
+    }
+    if (!record.actualCheckOut) {
+      errors.push({
+        recordId: record.id,
+        agent,
+        rule: 'checkout_required',
+        description: 'EVV check-out is missing',
+        severity: 'blocking',
+        resolution: 'Provider must submit a manual attestation for the checkout time.',
+      });
+    }
+
+    // Agent-specific rules
+    if (agent === 'acumen') {
+      // Acumen requires GPS within 0.25 miles
+      if (record.checkInLatitude != null && record.checkInLongitude != null) {
+        const dist = haversineDistance(
+          record.checkInLatitude, record.checkInLongitude,
+          record.expectedLatitude, record.expectedLongitude
+        );
+        if (dist > 0.25) {
+          errors.push({
+            recordId: record.id,
+            agent,
+            rule: 'acumen_gps_proximity',
+            description: `Check-in GPS is ${dist.toFixed(2)} miles from service location (Acumen max: 0.25 miles)`,
+            severity: 'blocking',
+            resolution: 'Verify service was delivered at the authorized address. If community-based, attach a location override form signed by the BCBA.',
+          });
+        }
+      } else {
+        errors.push({
+          recordId: record.id,
+          agent,
+          rule: 'acumen_gps_required',
+          description: 'Acumen requires GPS coordinates for check-in',
+          severity: 'blocking',
+          resolution: 'Ensure EVV device has location services enabled before check-in.',
+        });
+      }
+    }
+
+    if (agent === 'dci') {
+      // DCI requires exact unit matching
+      if (record.actualCheckIn && record.actualCheckOut) {
+        const actualStart = new Date(record.actualCheckIn);
+        const actualEnd = new Date(record.actualCheckOut);
+        const durationHours = (actualEnd.getTime() - actualStart.getTime()) / 3600000;
+        const evvUnits = Math.floor(durationHours * 4); // 15-min units
+        const billedUnits = record.actualUnits ?? record.scheduledUnits;
+
+        if (billedUnits !== evvUnits) {
+          errors.push({
+            recordId: record.id,
+            agent,
+            rule: 'dci_exact_unit_match',
+            description: `Billed ${billedUnits} units but EVV clock time supports exactly ${evvUnits} units (DCI requires exact match)`,
+            severity: 'blocking',
+            resolution: `Adjust billed units to ${evvUnits} to match EVV-verified duration. DCI does not allow rounding up.`,
+          });
+        }
+      }
+    }
+
+    if (agent === 'ppl') {
+      // PPL requires caregiver credential verification
+      if (!record.providerId || record.providerId.trim() === '') {
+        errors.push({
+          recordId: record.id,
+          agent,
+          rule: 'ppl_provider_id_required',
+          description: 'PPL requires a valid provider/caregiver ID on every record',
+          severity: 'blocking',
+          resolution: 'Link the caregiver profile with their PPL-registered employee ID before submission.',
+        });
+      }
+      // PPL also requires authorization linkage
+      if (!record.authorizationNumber || record.authorizationNumber.trim() === '') {
+        errors.push({
+          recordId: record.id,
+          agent,
+          rule: 'ppl_authorization_required',
+          description: 'PPL requires an active authorization number',
+          severity: 'blocking',
+          resolution: 'Attach a valid AHCCCS authorization number. Contact PPL if the authorization has not been loaded.',
+        });
+      }
+    }
+  }
+
+  const failedRecordIds = new Set(errors.filter(e => e.severity === 'blocking').map(e => e.recordId));
+
+  return {
+    agent,
+    totalRecords: records.length,
+    passedRecords: records.length - failedRecordIds.size,
+    failedRecords: failedRecordIds.size,
+    errors,
+    overallPass: failedRecordIds.size === 0,
+  };
+}
+
+/** Haversine distance in miles (local helper for fiscal agent validation) */
+function haversineDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
+  const R = 3959;
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLon = ((lon2 - lon1) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) *
+    Math.sin(dLon / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+// ============================================
+// ACCEPTANCE RATE TRACKING
+// ============================================
+
+export interface AcceptanceRateReport {
+  totalSubmissions: number;
+  acceptedCount: number;
+  rejectedCount: number;
+  acceptanceRate: number; // 0-100
+  commonRejectionReasons: { reason: string; count: number; percentage: number }[];
+  trend: {
+    direction: 'improving' | 'declining' | 'stable';
+    recentRate: number; // last 3 submissions
+    overallRate: number;
+  };
+}
+
+export function trackAcceptanceRate(submissions: FiscalAgentSubmission[]): AcceptanceRateReport {
+  const accepted = submissions.filter(s => s.readyForSubmission && s.blockingIssues.length === 0);
+  const rejected = submissions.filter(s => !s.readyForSubmission || s.blockingIssues.length > 0);
+
+  // Common rejection reasons
+  const reasonCounts = new Map<string, number>();
+  for (const sub of rejected) {
+    for (const issue of sub.blockingIssues) {
+      reasonCounts.set(issue, (reasonCounts.get(issue) || 0) + 1);
+    }
+  }
+  const totalRejections = rejected.length || 1;
+  const commonRejectionReasons = Array.from(reasonCounts.entries())
+    .map(([reason, count]) => ({
+      reason,
+      count,
+      percentage: Math.round((count / totalRejections) * 100),
+    }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 10);
+
+  // Trend: compare recent (last 3) vs overall
+  const recent = submissions.slice(-3);
+  const recentAccepted = recent.filter(s => s.readyForSubmission && s.blockingIssues.length === 0);
+  const recentRate = recent.length > 0 ? Math.round((recentAccepted.length / recent.length) * 100) : 0;
+  const overallRate = submissions.length > 0 ? Math.round((accepted.length / submissions.length) * 100) : 0;
+
+  const direction: AcceptanceRateReport['trend']['direction'] =
+    recentRate > overallRate + 5 ? 'improving'
+    : recentRate < overallRate - 5 ? 'declining'
+    : 'stable';
+
+  return {
+    totalSubmissions: submissions.length,
+    acceptedCount: accepted.length,
+    rejectedCount: rejected.length,
+    acceptanceRate: overallRate,
+    commonRejectionReasons,
+    trend: { direction, recentRate, overallRate },
+  };
+}
+
+// ============================================
+// BUDGET UTILIZATION ALERTS
+// ============================================
+
+export type BudgetAlertLevel = 'none' | 'warning' | 'critical' | 'exhausted';
+
+export interface BudgetAlert {
+  authorizationId: string;
+  serviceName: string;
+  alertLevel: BudgetAlertLevel;
+  percentUsed: number;
+  remainingUnits: number;
+  totalAuthorized: number;
+  estimatedDepletionDate: string | null; // ISO date
+  daysUntilDepletion: number | null;
+  message: string;
+}
+
+export function checkBudgetAlerts(authorization: ServiceAuthorization): BudgetAlert {
+  const percentUsed = authorization.authorizedUnits > 0
+    ? Math.round((authorization.usedUnits / authorization.authorizedUnits) * 1000) / 10
+    : 0;
+
+  // Alert thresholds: 80% warning, 90% critical, 95%+ exhausted at 100%
+  let alertLevel: BudgetAlertLevel = 'none';
+  if (percentUsed >= 100) {
+    alertLevel = 'exhausted';
+  } else if (percentUsed >= 95) {
+    alertLevel = 'critical';
+  } else if (percentUsed >= 90) {
+    alertLevel = 'critical';
+  } else if (percentUsed >= 80) {
+    alertLevel = 'warning';
+  }
+
+  // Estimate depletion date based on burn rate
+  const effectiveDate = new Date(authorization.effectiveDate);
+  const now = new Date();
+  const daysSinceStart = Math.max(1, (now.getTime() - effectiveDate.getTime()) / (1000 * 60 * 60 * 24));
+  const unitsPerDay = authorization.usedUnits / daysSinceStart;
+
+  let estimatedDepletionDate: string | null = null;
+  let daysUntilDepletion: number | null = null;
+
+  if (unitsPerDay > 0 && authorization.remainingUnits > 0) {
+    const daysLeft = Math.ceil(authorization.remainingUnits / unitsPerDay);
+    daysUntilDepletion = daysLeft;
+    const depletionDate = new Date(now.getTime() + daysLeft * 24 * 60 * 60 * 1000);
+    estimatedDepletionDate = depletionDate.toISOString().split('T')[0];
+  }
+
+  // Build message
+  let message = '';
+  switch (alertLevel) {
+    case 'exhausted':
+      message = `Authorization ${authorization.authorizationNumber} is fully exhausted. No remaining units available for ${authorization.serviceName}.`;
+      break;
+    case 'critical':
+      message = `Authorization ${authorization.authorizationNumber} is at ${percentUsed}% utilization. Only ${authorization.remainingUnits} units remain for ${authorization.serviceName}.${daysUntilDepletion != null ? ` Estimated depletion in ${daysUntilDepletion} days.` : ''}`;
+      break;
+    case 'warning':
+      message = `Authorization ${authorization.authorizationNumber} has reached ${percentUsed}% utilization. ${authorization.remainingUnits} units remain for ${authorization.serviceName}.${daysUntilDepletion != null ? ` Projected depletion: ${estimatedDepletionDate}.` : ''}`;
+      break;
+    default:
+      message = `Authorization ${authorization.authorizationNumber} is on track with ${percentUsed}% utilization.`;
+  }
+
+  return {
+    authorizationId: authorization.id,
+    serviceName: authorization.serviceName,
+    alertLevel,
+    percentUsed,
+    remainingUnits: authorization.remainingUnits,
+    totalAuthorized: authorization.authorizedUnits,
+    estimatedDepletionDate,
+    daysUntilDepletion,
+    message,
+  };
+}
+
+// ============================================
+// FISCAL AGENT ERROR CODES
+// ============================================
+
+export interface FiscalAgentErrorCode {
+  code: string;
+  agent: FiscalAgentType;
+  description: string;
+  commonCause: string;
+  resolutionSteps: string[];
+}
+
+export const FISCAL_AGENT_ERROR_CODES: FiscalAgentErrorCode[] = [
+  // Acumen error codes
+  {
+    code: 'ACU-001',
+    agent: 'acumen',
+    description: 'GPS location out of range',
+    commonCause: 'Provider checked in from a location more than 0.25 miles from the authorized service address.',
+    resolutionSteps: [
+      'Verify the service address on the authorization matches the actual service location.',
+      'If community-based service, submit a Location Override Form (Acumen Form LO-7).',
+      'Ensure the provider GPS/location services were enabled at check-in.',
+    ],
+  },
+  {
+    code: 'ACU-002',
+    agent: 'acumen',
+    description: 'Missing caregiver credential',
+    commonCause: 'The provider NPI or employee ID is not registered with Acumen.',
+    resolutionSteps: [
+      'Verify the provider is enrolled with Acumen as an active caregiver.',
+      'Submit provider enrollment form if not yet registered.',
+      'Allow 5-7 business days for Acumen to process new enrollments.',
+    ],
+  },
+  {
+    code: 'ACU-003',
+    agent: 'acumen',
+    description: 'Authorization expired or not found',
+    commonCause: 'The authorization number does not match any active authorization in Acumen system.',
+    resolutionSteps: [
+      'Verify the authorization number is correct and active.',
+      'Check if the authorization has been renewed — use the new authorization number.',
+      'Contact Acumen support to confirm authorization status.',
+    ],
+  },
+  {
+    code: 'ACU-004',
+    agent: 'acumen',
+    description: 'Duplicate submission detected',
+    commonCause: 'A record with the same date, provider, and client was already submitted.',
+    resolutionSteps: [
+      'Check if a previous submission for this service date was already accepted.',
+      'If this is a correction, use the void-and-replace workflow.',
+      'Contact Acumen to confirm the original submission status.',
+    ],
+  },
+  // DCI error codes
+  {
+    code: 'DCI-001',
+    agent: 'dci',
+    description: 'Unit count mismatch',
+    commonCause: 'Billed units do not exactly match EVV-calculated units from clock times.',
+    resolutionSteps: [
+      'Recalculate units from actual clock-in and clock-out times (15-minute increments).',
+      'Adjust billed units to match the EVV-verified duration exactly.',
+      'DCI does not allow rounding — ensure units are truncated, not rounded.',
+    ],
+  },
+  {
+    code: 'DCI-002',
+    agent: 'dci',
+    description: 'Service code not authorized',
+    commonCause: 'The submitted service code is not listed on the client authorization.',
+    resolutionSteps: [
+      'Verify the service code matches the authorization (e.g., H2019 vs H2019-HQ).',
+      'Check for modifier requirements — DCI requires exact code+modifier matching.',
+      'Request authorization amendment if service code needs to change.',
+    ],
+  },
+  {
+    code: 'DCI-003',
+    agent: 'dci',
+    description: 'Overlapping service dates',
+    commonCause: 'Two records for the same client overlap in time on the same service date.',
+    resolutionSteps: [
+      'Review the schedule for duplicate or overlapping appointments.',
+      'Adjust clock times so sessions do not overlap.',
+      'If concurrent services are authorized, ensure different service codes are used.',
+    ],
+  },
+  // PPL error codes
+  {
+    code: 'PPL-001',
+    agent: 'ppl',
+    description: 'Caregiver not enrolled',
+    commonCause: 'The caregiver/provider is not registered in the PPL employer system.',
+    resolutionSteps: [
+      'Complete PPL caregiver enrollment packet.',
+      'Submit background check and required training documentation.',
+      'Wait for PPL confirmation of enrollment before submitting timesheets.',
+    ],
+  },
+  {
+    code: 'PPL-002',
+    agent: 'ppl',
+    description: 'Missing parent/employer signature',
+    commonCause: 'The timesheet was submitted without the parent (employer of record) signature.',
+    resolutionSteps: [
+      'Obtain parent/guardian signature on the timesheet before resubmission.',
+      'PPL accepts electronic signatures via the PPL portal or Aminy app.',
+      'Ensure the signing parent matches the employer of record on file with PPL.',
+    ],
+  },
+  {
+    code: 'PPL-003',
+    agent: 'ppl',
+    description: 'Overtime limit exceeded',
+    commonCause: 'Caregiver hours exceed the weekly overtime cap set by PPL.',
+    resolutionSteps: [
+      'Review total weekly hours across all clients served by this caregiver.',
+      'PPL enforces a 40-hour weekly cap unless overtime is pre-approved.',
+      'Request overtime authorization from PPL before submission if needed.',
+    ],
+  },
+  {
+    code: 'PPL-004',
+    agent: 'ppl',
+    description: 'Invalid pay period',
+    commonCause: 'Timesheet dates do not align with the PPL pay period calendar.',
+    resolutionSteps: [
+      'Verify the pay period start/end dates match the PPL biweekly calendar.',
+      'PPL pay periods start on Monday and end on the following Sunday (biweekly).',
+      'Split timesheets that span two pay periods into separate submissions.',
+    ],
+  },
+  // Conduent error codes
+  {
+    code: 'CON-001',
+    agent: 'conduent',
+    description: 'Claim format rejected',
+    commonCause: 'The export file does not conform to the Conduent 837P format requirements.',
+    resolutionSteps: [
+      'Verify the export uses the correct ANSI X12 837P format.',
+      'Check required segments: ISA, GS, ST, CLM, SV1 are all populated.',
+      'Run the Conduent pre-submission validator before uploading.',
+    ],
+  },
+  {
+    code: 'CON-002',
+    agent: 'conduent',
+    description: 'Member not eligible',
+    commonCause: 'The client AHCCCS ID is not active or is not eligible for the service date.',
+    resolutionSteps: [
+      'Verify the client AHCCCS eligibility for the date of service.',
+      'Check if the client coverage has lapsed or changed MCOs.',
+      'Contact AHCCCS member services to confirm eligibility.',
+    ],
+  },
+];
+
+/**
+ * Look up error codes for a specific fiscal agent
+ */
+export function getErrorCodesForAgent(agent: FiscalAgentType): FiscalAgentErrorCode[] {
+  return FISCAL_AGENT_ERROR_CODES.filter(e => e.agent === agent);
+}
+
+/**
+ * Look up a specific error code
+ */
+export function resolveErrorCode(code: string): FiscalAgentErrorCode | undefined {
+  return FISCAL_AGENT_ERROR_CODES.find(e => e.code === code);
+}
+
+// ============================================
 // EXPORTS
 // ============================================
 
@@ -584,4 +1060,10 @@ export default {
   getAllBudgetSummaries,
   generateTimesheet,
   exportTimesheetToPDF,
+  validateForFiscalAgent,
+  trackAcceptanceRate,
+  checkBudgetAlerts,
+  getErrorCodesForAgent,
+  resolveErrorCode,
+  FISCAL_AGENT_ERROR_CODES,
 };

@@ -304,6 +304,233 @@ export function calculateMetrics(session: SessionData): SessionMetrics {
 // Internal Helpers
 // ============================================================================
 
+// ============================================================================
+// Enhanced Note Pipeline: Draft → Provider Edit → Parent Approval → CR Export
+// ============================================================================
+
+export interface NoteEdit {
+  field: 'subjective' | 'objective' | 'assessment' | 'plan' | 'parentSummary';
+  originalText: string;
+  editedText: string;
+  editedBy: string;
+  editedAt: string;
+  reason?: string;
+}
+
+export interface NoteApproval {
+  noteId: string;
+  status: NoteStatus;
+  providerEdits: NoteEdit[];
+  parentSignature?: string;
+  parentSignedAt?: string;
+  parentQuestions?: string[];
+  providerApprovedAt?: string;
+  crExportedAt?: string;
+  crExportFormat?: 'cr-soap' | 'cr-narrative' | 'cr-structured';
+}
+
+export interface CRExportPayload {
+  clientId: string;
+  sessionDate: string;
+  sessionDuration: number;
+  serviceType: string;
+  cptCodes: { code: string; units: number }[];
+  soapNote: AISessionNote['soapNote'];
+  providerNpi: string;
+  authorizationNumber?: string;
+  renderingProviderId: string;
+  supervisingProviderId?: string;
+  placeOfService: '02' | '11' | '12'; // 02=telehealth, 11=office, 12=home
+  diagnosisCodes: string[];
+  goalProgress: { goalId: string; baseline: number; current: number; target: number }[];
+}
+
+/**
+ * Create the full note pipeline: generate draft, track edits, handle approvals
+ */
+export function createNotePipeline(session: SessionData): NoteApproval {
+  return {
+    noteId: `note-${session.sessionId}`,
+    status: 'draft',
+    providerEdits: [],
+    parentQuestions: [],
+  };
+}
+
+/**
+ * Apply a provider edit to the note and track the change
+ */
+export function applyProviderEdit(
+  note: AISessionNote,
+  approval: NoteApproval,
+  field: NoteEdit['field'],
+  newText: string,
+  providerId: string,
+  reason?: string
+): { note: AISessionNote; approval: NoteApproval } {
+  const originalText =
+    field === 'parentSummary'
+      ? note.parentSummary
+      : note.soapNote[field as keyof AISessionNote['soapNote']];
+
+  const edit: NoteEdit = {
+    field,
+    originalText,
+    editedText: newText,
+    editedBy: providerId,
+    editedAt: new Date().toISOString(),
+    reason,
+  };
+
+  const updatedNote = { ...note };
+  if (field === 'parentSummary') {
+    updatedNote.parentSummary = newText;
+  } else {
+    updatedNote.soapNote = { ...updatedNote.soapNote, [field]: newText };
+  }
+
+  return {
+    note: { ...updatedNote, status: 'provider_review' },
+    approval: {
+      ...approval,
+      providerEdits: [...approval.providerEdits, edit],
+      status: 'provider_review',
+    },
+  };
+}
+
+/**
+ * Provider approves the note and sends to parent
+ */
+export function providerApproveNote(approval: NoteApproval): NoteApproval {
+  return {
+    ...approval,
+    status: 'sent_to_parent',
+    providerApprovedAt: new Date().toISOString(),
+  };
+}
+
+/**
+ * Parent acknowledges the note with optional signature
+ */
+export function parentAcknowledgeNote(
+  approval: NoteApproval,
+  signature?: string,
+  questions?: string[]
+): NoteApproval {
+  return {
+    ...approval,
+    status: 'parent_acknowledged',
+    parentSignature: signature,
+    parentSignedAt: new Date().toISOString(),
+    parentQuestions: questions ?? approval.parentQuestions,
+  };
+}
+
+/**
+ * Translate clinical SOAP note to plain-English parent-friendly language.
+ * Goes beyond generateParentSummary by softening ALL clinical jargon.
+ */
+export function translateNoteForParent(note: AISessionNote, childName: string = 'your child'): string {
+  const replacements: [RegExp, string][] = [
+    [/\bclient\b/gi, childName],
+    [/\bmaladaptive\b/gi, 'challenging'],
+    [/\bnon-?complian\w*/gi, 'had difficulty following directions'],
+    [/\bextinction burst\b/gi, 'temporary increase in behavior (this is actually normal and expected!)'],
+    [/\belopement\b/gi, 'leaving the activity area'],
+    [/\bstereotypy\b/gi, 'repetitive movements'],
+    [/\bself-?injurious\b/gi, 'self-directed behavior'],
+    [/\btantrum\b/gi, 'emotional moment'],
+    [/\bprompting hierarchy\b/gi, 'level of support'],
+    [/\bfull physical prompt\b/gi, 'hand-over-hand help'],
+    [/\bpartial physical prompt\b/gi, 'gentle physical guidance'],
+    [/\bgestural prompt\b/gi, 'pointing or gesturing'],
+    [/\bvisual prompt\b/gi, 'picture or visual cue'],
+    [/\bindependent\b/gi, 'on their own'],
+    [/\breinforcer\b/gi, 'reward or motivator'],
+    [/\bdiscrete trial\b/gi, 'structured practice activity'],
+    [/\bNET\b/g, 'natural play-based teaching'],
+    [/\bVB\b/g, 'verbal behavior approach'],
+    [/\bDTT\b/g, 'structured practice'],
+    [/\bFCT\b/g, 'teaching replacement communication'],
+    [/\bBIP\b/g, 'behavior support plan'],
+    [/\bABC data\b/gi, 'behavior tracking notes'],
+    [/\bbaseline\b/gi, 'starting point'],
+    [/\bmastery criterion\b/gi, 'goal for this skill'],
+    [/\bgeneralization\b/gi, 'using the skill in different situations'],
+    [/\bmaintenance\b/gi, 'keeping skills strong over time'],
+    [/\bSLP\b/g, 'speech therapist'],
+    [/\bOT\b/g, 'occupational therapist'],
+    [/\bBCBA\b/g, 'behavior analyst'],
+    [/\bRBT\b/g, 'behavior technician'],
+  ];
+
+  let text = [
+    note.soapNote.subjective,
+    note.soapNote.objective,
+    note.soapNote.assessment,
+    note.soapNote.plan,
+  ].join('\n\n');
+
+  for (const [pattern, replacement] of replacements) {
+    text = text.replace(pattern, replacement);
+  }
+
+  return text;
+}
+
+/**
+ * Export note in CentralReach-compatible format
+ */
+export function exportForCentralReach(
+  session: SessionData,
+  note: AISessionNote,
+  providerNpi: string,
+  diagnosisCodes: string[],
+  authorizationNumber?: string,
+  placeOfService: CRExportPayload['placeOfService'] = '02'
+): CRExportPayload {
+  return {
+    clientId: session.childId,
+    sessionDate: new Date().toISOString().split('T')[0],
+    sessionDuration: session.duration,
+    serviceType: session.sessionType,
+    cptCodes: note.cptSuggestions
+      .filter(s => s.confidence >= 0.7)
+      .map(s => ({ code: s.code, units: s.units })),
+    soapNote: note.soapNote,
+    providerNpi,
+    authorizationNumber,
+    renderingProviderId: session.providerId,
+    placeOfService,
+    diagnosisCodes,
+    goalProgress: session.goalsAddressed.map(g => ({
+      goalId: g.goalId,
+      baseline: 0,
+      current: g.progressPct,
+      target: 100,
+    })),
+  };
+}
+
+/**
+ * Validate note is complete and ready for submission/export
+ */
+export function validateNoteCompleteness(note: AISessionNote): { ready: boolean; missing: string[] } {
+  const missing: string[] = [];
+  if (!note.soapNote.subjective?.trim()) missing.push('Subjective section');
+  if (!note.soapNote.objective?.trim()) missing.push('Objective section');
+  if (!note.soapNote.assessment?.trim()) missing.push('Assessment section');
+  if (!note.soapNote.plan?.trim()) missing.push('Plan section');
+  if (note.cptSuggestions.length === 0) missing.push('CPT codes');
+  if (!note.parentSummary?.trim()) missing.push('Parent summary');
+  return { ready: missing.length === 0, missing };
+}
+
+// ============================================================================
+// Internal Helpers
+// ============================================================================
+
 function generateSOAP(
   session: SessionData,
   metrics: SessionMetrics

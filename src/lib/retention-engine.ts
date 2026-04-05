@@ -737,6 +737,173 @@ export async function recordActivity(userId: string, activityType: string): Prom
   }
 }
 
+// ============================================================================
+// Streak Milestone System
+// ============================================================================
+
+export interface StreakMilestone {
+  days: number;
+  title: string;
+  description: string;
+  reward: 'badge' | 'coins' | 'feature-unlock' | 'celebration';
+  rewardValue: number; // coins earned or badge level
+  emoji: string;
+  celebrationMessage: string;
+}
+
+export const STREAK_MILESTONES: StreakMilestone[] = [
+  { days: 3, title: 'Getting Started', description: '3 days in a row!', reward: 'coins', rewardValue: 5, emoji: '\u{1F31F}', celebrationMessage: 'You\'re building a habit! 3 days of showing up for your family.' },
+  { days: 7, title: 'One Week Strong', description: 'A full week of consistency!', reward: 'coins', rewardValue: 15, emoji: '\u{1F525}', celebrationMessage: 'One week! Consistency is the #1 predictor of positive outcomes.' },
+  { days: 14, title: 'Two Week Champion', description: '14 days of dedication', reward: 'badge', rewardValue: 1, emoji: '\u{1F3C6}', celebrationMessage: 'Two weeks! Research shows habits start forming at this point.' },
+  { days: 21, title: 'Habit Formed', description: 'Science says this is a habit now!', reward: 'coins', rewardValue: 30, emoji: '\u{1F9E0}', celebrationMessage: '21 days! You\'ve officially built a wellness habit.' },
+  { days: 30, title: 'Monthly Master', description: 'A full month of commitment', reward: 'badge', rewardValue: 2, emoji: '\u{1F48E}', celebrationMessage: 'One month! Your consistency is making a real difference.' },
+  { days: 60, title: 'Two Month Hero', description: '60 days of showing up', reward: 'feature-unlock', rewardValue: 1, emoji: '\u{1F680}', celebrationMessage: '60 days! You\'re in the top 5% of families using Aminy.' },
+  { days: 90, title: 'Quarter Champion', description: '90 days — extraordinary!', reward: 'celebration', rewardValue: 100, emoji: '\u{1F451}', celebrationMessage: '90 days! Studies show families who engage this long see 3x better outcomes.' },
+  { days: 180, title: 'Half-Year Legend', description: '6 months of unwavering commitment', reward: 'celebration', rewardValue: 250, emoji: '\u{2B50}', celebrationMessage: 'Half a year! You are an Aminy legend. Your child\'s progress is extraordinary.' },
+  { days: 365, title: 'Year of Growth', description: 'A full year together', reward: 'celebration', rewardValue: 500, emoji: '\u{1F308}', celebrationMessage: 'ONE YEAR! What an incredible journey. Look how far you\'ve come.' },
+];
+
+/**
+ * Check if user has hit a new streak milestone
+ */
+export function checkStreakMilestone(currentStreak: number, previousStreak: number): StreakMilestone | null {
+  for (const milestone of STREAK_MILESTONES) {
+    if (currentStreak >= milestone.days && previousStreak < milestone.days) {
+      return milestone;
+    }
+  }
+  return null;
+}
+
+/**
+ * Get next upcoming milestone for a given streak
+ */
+export function getNextMilestone(currentStreak: number): StreakMilestone | null {
+  return STREAK_MILESTONES.find(m => m.days > currentStreak) ?? null;
+}
+
+/**
+ * Calculate days until next milestone
+ */
+export function daysUntilNextMilestone(currentStreak: number): { milestone: StreakMilestone; daysRemaining: number } | null {
+  const next = getNextMilestone(currentStreak);
+  if (!next) return null;
+  return { milestone: next, daysRemaining: next.days - currentStreak };
+}
+
+// ============================================================================
+// Engagement Scoring
+// ============================================================================
+
+export interface EngagementScore {
+  score: number; // 0-100
+  level: 'power-user' | 'engaged' | 'casual' | 'at-risk' | 'churning';
+  factors: {
+    recency: number;     // 0-25 — how recently they used the app
+    frequency: number;   // 0-25 — how often they use it
+    depth: number;       // 0-25 — how many features they use
+    consistency: number; // 0-25 — streak and regularity
+  };
+  recommendations: string[];
+}
+
+export function calculateEngagementScore(profile: UserEngagementProfile): EngagementScore {
+  const daysSinceActive = Math.floor(
+    (Date.now() - new Date(profile.lastActiveAt).getTime()) / (1000 * 60 * 60 * 24)
+  );
+
+  // Recency score (0-25)
+  let recency = 25;
+  if (daysSinceActive >= 14) recency = 0;
+  else if (daysSinceActive >= 7) recency = 5;
+  else if (daysSinceActive >= 3) recency = 10;
+  else if (daysSinceActive >= 1) recency = 20;
+
+  // Frequency score (0-25)
+  const sessionsPerWeek = profile.totalSessions / Math.max(1, Math.ceil(
+    (Date.now() - new Date(profile.lastActiveAt).getTime()) / (7 * 24 * 60 * 60 * 1000)
+  ));
+  let frequency = Math.min(25, Math.round(sessionsPerWeek * 5));
+
+  // Depth score (0-25) — based on feature usage
+  let depth = 0;
+  if (profile.aiConversations > 0) depth += 8;
+  if (profile.goalsCompleted > 0) depth += 8;
+  if (profile.onboardingCompleted) depth += 5;
+  if (profile.notificationsEnabled) depth += 4;
+  depth = Math.min(25, depth);
+
+  // Consistency score (0-25)
+  let consistency = Math.min(25, Math.round((profile.streakDays / 30) * 25));
+
+  const score = recency + frequency + depth + consistency;
+
+  let level: EngagementScore['level'];
+  if (score >= 80) level = 'power-user';
+  else if (score >= 60) level = 'engaged';
+  else if (score >= 40) level = 'casual';
+  else if (score >= 20) level = 'at-risk';
+  else level = 'churning';
+
+  const recommendations: string[] = [];
+  if (recency < 15) recommendations.push('Send personalized re-engagement notification');
+  if (frequency < 10) recommendations.push('Suggest daily check-in routine');
+  if (depth < 10) recommendations.push('Introduce unused features via guided walkthrough');
+  if (consistency < 10) recommendations.push('Enable streak reminders');
+  if (!profile.notificationsEnabled) recommendations.push('Prompt for notification permission');
+  if (profile.tier === 'free' && score >= 40) recommendations.push('Show upgrade prompt — engaged free user');
+
+  return {
+    score,
+    level,
+    factors: { recency, frequency, depth, consistency },
+    recommendations,
+  };
+}
+
+// ============================================================================
+// Virality & Referral Triggers
+// ============================================================================
+
+export interface ViralMoment {
+  trigger: string;
+  shareMessage: string;
+  channel: 'sms' | 'email' | 'social' | 'link';
+}
+
+/**
+ * Identify viral moments — times when a user is most likely to share
+ */
+export function identifyViralMoments(profile: UserEngagementProfile, childName: string): ViralMoment[] {
+  const moments: ViralMoment[] = [];
+
+  if (profile.streakDays >= 7) {
+    moments.push({
+      trigger: 'streak-milestone',
+      shareMessage: `I've been using Aminy for ${profile.streakDays} days straight to support ${childName}. It's been incredible for our family!`,
+      channel: 'social',
+    });
+  }
+
+  if (profile.goalsCompleted >= 5) {
+    moments.push({
+      trigger: 'goal-achievement',
+      shareMessage: `${childName} just hit their ${profile.goalsCompleted}th goal on Aminy! So proud of their progress.`,
+      channel: 'social',
+    });
+  }
+
+  if (profile.aiConversations >= 10) {
+    moments.push({
+      trigger: 'ai-power-user',
+      shareMessage: `Aminy's AI has been like having a behavior consultant on-call 24/7. Game changer for our family.`,
+      channel: 'sms',
+    });
+  }
+
+  return moments;
+}
+
 // Named export for retentionEngine object
 export const retentionEngine = {
   trackRetentionEvent,
@@ -755,6 +922,11 @@ export const retentionEngine = {
   getEarnedMilestones,
   getPendingCelebrations,
   recordActivity,
+  checkStreakMilestone,
+  getNextMilestone,
+  daysUntilNextMilestone,
+  calculateEngagementScore,
+  identifyViralMoments,
 };
 
 export default retentionEngine;

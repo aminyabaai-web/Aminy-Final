@@ -1027,6 +1027,487 @@ export async function calculateDenialMetrics(
 }
 
 // ============================================================================
+// Appeal Letter Generation
+// ============================================================================
+
+/** Template appeal letter content per CARC code */
+const APPEAL_LETTER_TEMPLATES: Record<string, {
+  clinicalJustification: string;
+  supportingDocChecklist: string[];
+}> = {
+  '4': {
+    clinicalJustification:
+      'The procedure code billed accurately reflects the service rendered. The modifier used is consistent with the clinical documentation and payer guidelines. We respectfully request reconsideration, as the service was medically necessary and properly coded per the treating provider\'s clinical judgment and the applicable CPT coding guidelines.',
+    supportingDocChecklist: ['Clinical notes for date of service', 'CPT code rationale from coding reference', 'Modifier documentation', 'Payer-specific billing guidelines'],
+  },
+  '11': {
+    clinicalJustification:
+      'The diagnosis code(s) listed on the claim are consistent with the procedure performed. The clinical documentation supports the medical necessity of the billed procedure for the documented diagnosis. The ICD-10 code accurately reflects the patient\'s condition as assessed during the encounter.',
+    supportingDocChecklist: ['Clinical notes with diagnosis documentation', 'ICD-10 code rationale', 'Treatment plan linking diagnosis to procedure', 'Prior assessment/evaluation results'],
+  },
+  '15': {
+    clinicalJustification:
+      'We acknowledge that prior authorization is required for this service. [If retro-auth obtained]: A retroactive authorization has been obtained (Auth # [AUTH_NUMBER]). [If no auth]: We request an exception based on the urgent/emergent nature of the service, or the authorization was in process at the time of service. The clinical documentation demonstrates that delaying the service would have resulted in adverse patient outcomes.',
+    supportingDocChecklist: ['Prior authorization number (if obtained retroactively)', 'Clinical notes demonstrating urgency', 'Authorization request submission confirmation', 'Payer auth requirements reference'],
+  },
+  '16': {
+    clinicalJustification:
+      'We are resubmitting this claim with the previously missing information now included. The claim has been reviewed and all required data fields have been completed. We request that the claim be reprocessed with the corrected information.',
+    supportingDocChecklist: ['Corrected claim form (CMS-1500 or 837P)', 'Identification of previously missing fields', 'Supporting documentation for corrected fields', 'Original remittance advice/EOB'],
+  },
+  '18': {
+    clinicalJustification:
+      'This claim is not a duplicate. [If different dates of service]: The services were rendered on different dates. [If same date, different services]: The services billed are distinct procedures with separate clinical documentation. [If modifier needed]: The appropriate modifier has been added to distinguish the services.',
+    supportingDocChecklist: ['Clinical notes for each date of service', 'Side-by-side comparison of billed services', 'Modifier documentation if applicable', 'Original claim submission confirmation'],
+  },
+  '29': {
+    clinicalJustification:
+      'We respectfully appeal this timely filing denial. The original claim was submitted within the contractual filing deadline. [If proof available]: Attached is the clearinghouse submission confirmation dated [DATE], which is within the [X]-day filing limit. [If extenuating circumstances]: Extenuating circumstances prevented timely filing, including [REASON].',
+    supportingDocChecklist: ['Clearinghouse submission confirmation/receipt', 'Electronic submission acknowledgment', 'Payer contract showing filing deadline', 'Documentation of extenuating circumstances (if applicable)'],
+  },
+  '50': {
+    clinicalJustification:
+      'The services rendered were medically necessary for the treatment of the patient\'s diagnosed condition(s). The treatment plan was developed based on a comprehensive assessment and is consistent with evidence-based clinical guidelines. The patient demonstrated [CLINICAL_INDICATORS] warranting the level and frequency of treatment provided. Enclosed are the clinical notes, treatment plan, and progress documentation supporting the medical necessity of these services.',
+    supportingDocChecklist: ['Comprehensive treatment plan', 'Progress notes demonstrating medical necessity', 'Assessment/evaluation results', 'Peer-reviewed literature supporting treatment approach', 'Prior authorization documentation (if applicable)'],
+  },
+  '97': {
+    clinicalJustification:
+      'The services billed were not bundled and represent distinct clinical services. [If modifier needed]: The appropriate modifier (59/XE/XS/XP/XU) has been added to indicate that the services are separate and distinct. The clinical documentation supports that each service was performed independently and was medically necessary.',
+    supportingDocChecklist: ['Clinical notes documenting each distinct service', 'NCCI edit reference showing unbundling rationale', 'Modifier documentation', 'CCI edits policy reference'],
+  },
+  '1': {
+    clinicalJustification:
+      'We are contacting the patient regarding their deductible responsibility. However, we believe the patient responsibility amount calculated may be incorrect based on the plan benefits. We request a review of the deductible application for this claim to ensure it aligns with the patient\'s plan year accumulations.',
+    supportingDocChecklist: ['Patient\'s benefit summary', 'Deductible accumulation statement', 'EOB from payer', 'Prior claims applied to deductible for the plan year'],
+  },
+  '2': {
+    clinicalJustification:
+      'We are contacting the patient regarding their coinsurance responsibility. We request verification that the coinsurance percentage applied is consistent with the patient\'s plan benefits for in-network behavioral health services. The contracted rate and coinsurance split should reflect the negotiated agreement.',
+    supportingDocChecklist: ['Patient\'s benefit summary showing coinsurance rates', 'Contracted rate documentation', 'EOB showing coinsurance calculation', 'In-network verification'],
+  },
+};
+
+/**
+ * Generates a structured appeal letter for a denied claim.
+ * Includes patient info, claim details, clinical justification template
+ * per CARC code, supporting documentation checklist, and deadline reminder.
+ */
+export function generateAppealLetter(denial: DenialRecord): string {
+  const today = new Date().toISOString().split('T')[0];
+
+  // Extract primary CARC code (without group prefix)
+  const primaryAdjustment = denial.adjustmentReasons.find(a => a.groupCode !== 'PR') || denial.adjustmentReasons[0];
+  const carcCode = primaryAdjustment?.reasonCode || '';
+  const carcDescription = primaryAdjustment?.description || CARC_DESCRIPTIONS[carcCode] || `Reason Code ${carcCode}`;
+
+  // Get template for this CARC code, fall back to generic
+  const template = APPEAL_LETTER_TEMPLATES[carcCode] || {
+    clinicalJustification:
+      'The services rendered were medically necessary and appropriately coded. The clinical documentation supports the billed services. We respectfully request reconsideration of this denial and ask that the claim be reprocessed for payment.',
+    supportingDocChecklist: ['Clinical notes for date of service', 'Treatment plan', 'Original remittance advice/EOB', 'Any additional supporting documentation'],
+  };
+
+  const deniedServiceSummary = denial.deniedServiceLines.map(sl =>
+    `  - CPT ${sl.procedureCode}: Charged $${sl.chargedAmount.toFixed(2)}, Paid $${sl.paidAmount.toFixed(2)}, Denied $${sl.deniedAmount.toFixed(2)} (${sl.adjustmentReasonCodes.join(', ')})`
+  ).join('\n');
+
+  const docChecklist = template.supportingDocChecklist.map(doc => `  [ ] ${doc}`).join('\n');
+
+  const daysUntilDeadline = denial.appealDeadline
+    ? Math.floor((new Date(denial.appealDeadline).getTime() - new Date(today).getTime()) / (1000 * 60 * 60 * 24))
+    : null;
+
+  const letter = `
+APPEAL LETTER — ${denial.payerName}
+Date: ${today}
+${'='.repeat(60)}
+
+To: ${denial.payerName} Appeals Department
+From: ${denial.providerName} (NPI on file)
+Re: Appeal of Claim Denial
+
+PATIENT INFORMATION
+-------------------
+Patient Name: ${denial.patientName}
+Member ID: ${denial.patientMemberId}
+Date of Service: ${denial.dateOfService}
+
+CLAIM DETAILS
+-------------
+Claim Control Number: ${denial.claimControlNumber}
+Total Charged: $${denial.totalChargedAmount.toFixed(2)}
+Total Paid: $${denial.totalPaidAmount.toFixed(2)}
+Denied Amount: $${denial.deniedAmount.toFixed(2)}
+
+Denied Service Lines:
+${deniedServiceSummary || '  (No service line detail available)'}
+
+DENIAL REASON
+-------------
+Primary CARC Code: ${primaryAdjustment ? `${primaryAdjustment.groupCode}-${carcCode}` : 'N/A'}
+Description: ${carcDescription}
+Category: ${denial.category}
+
+CLINICAL JUSTIFICATION
+----------------------
+${template.clinicalJustification}
+
+SUPPORTING DOCUMENTATION ENCLOSED
+----------------------------------
+${docChecklist}
+
+APPEAL DEADLINE
+---------------
+${denial.appealDeadline
+    ? `Appeal Deadline: ${denial.appealDeadline}${daysUntilDeadline != null ? ` (${daysUntilDeadline} days remaining)` : ''}`
+    : 'Appeal deadline not specified. Please confirm with payer.'}
+${daysUntilDeadline != null && daysUntilDeadline <= 14
+    ? '*** URGENT: Appeal deadline is approaching. Submit immediately. ***'
+    : ''}
+
+We respectfully request that this claim be reconsidered and reprocessed
+for payment. Please contact our office if additional information is needed.
+
+Sincerely,
+${denial.providerName}
+Provider ID: ${denial.providerId}
+`.trim();
+
+  return letter;
+}
+
+// ============================================================================
+// Appeal Success Probability Scoring
+// ============================================================================
+
+/** Success probability ranges by denial category */
+const CATEGORY_SUCCESS_RATES: Record<DenialCategory, { base: number; description: string }> = {
+  'eligibility': { base: 70, description: 'Eligibility denials are often resolved by verifying correct member ID and coverage dates.' },
+  'authorization': { base: 50, description: 'Authorization denials succeed when retro-auth is obtainable or the service was emergent.' },
+  'coding': { base: 65, description: 'Coding denials are correctable by reviewing CPT/ICD pairing and modifier usage.' },
+  'timely-filing': { base: 20, description: 'Timely filing appeals rarely succeed unless you have proof of original timely submission.' },
+  'duplicate': { base: 55, description: 'Duplicate denials can be resolved by demonstrating services are distinct.' },
+  'medical-necessity': { base: 40, description: 'Medical necessity appeals require strong clinical documentation and may need peer-to-peer review.' },
+  'bundling': { base: 60, description: 'Bundling denials often succeed with correct modifier application (59/XE/XS/XP/XU).' },
+  'coordination-of-benefits': { base: 55, description: 'COB denials resolve by submitting to the correct primary/secondary order.' },
+  'missing-info': { base: 80, description: 'Missing info denials are highly recoverable by resubmitting with complete information.' },
+  'contractual': { base: 10, description: 'Contractual adjustments are usually valid per the provider agreement and rarely overturned.' },
+  'patient-responsibility': { base: 15, description: 'Patient responsibility amounts (deductible/coinsurance) are typically correct per plan design.' },
+  'other': { base: 35, description: 'Success rate varies. Review the specific CARC/RARC codes for targeted appeal strategy.' },
+};
+
+/** Payer-specific modifiers to base success rate */
+const PAYER_SUCCESS_MODIFIERS: Record<string, number> = {
+  'bcbs': 5,      // BCBS tends to be slightly more responsive to appeals
+  'aetna': 3,     // Aetna moderate
+  'uhc': -2,      // UHC slightly harder
+  'united': -2,
+  'cigna': 0,
+  'medicaid': -5,  // Medicaid has stricter rules
+  'ahcccs': -5,
+  'medicare': -3,
+  'tricare': -5,
+};
+
+/**
+ * Estimates the probability of a successful appeal for a denied claim.
+ * Based on denial category, payer, CARC code, and denied amount.
+ * Returns a percentage (0-100) and explanation.
+ */
+export function estimateAppealSuccess(denial: DenialRecord): {
+  probability: number;
+  explanation: string;
+  factors: string[];
+} {
+  const categoryInfo = CATEGORY_SUCCESS_RATES[denial.category] || CATEGORY_SUCCESS_RATES['other'];
+  let probability = categoryInfo.base;
+  const factors: string[] = [];
+
+  factors.push(`Base rate for ${denial.category}: ${categoryInfo.base}%`);
+
+  // Payer modifier
+  const payerLower = (denial.payerName + denial.payerId).toLowerCase();
+  for (const [key, modifier] of Object.entries(PAYER_SUCCESS_MODIFIERS)) {
+    if (payerLower.includes(key)) {
+      probability += modifier;
+      if (modifier !== 0) {
+        factors.push(`Payer adjustment (${denial.payerName}): ${modifier > 0 ? '+' : ''}${modifier}%`);
+      }
+      break;
+    }
+  }
+
+  // Higher-value claims get slightly more attention from payers on appeal
+  if (denial.deniedAmount >= 500) {
+    probability += 5;
+    factors.push('High-value claim ($500+): +5%');
+  } else if (denial.deniedAmount < 50) {
+    probability -= 5;
+    factors.push('Low-value claim (<$50): -5% (less payer attention)');
+  }
+
+  // Check if appeal deadline is near (urgency factor)
+  if (denial.appealDeadline) {
+    const daysLeft = Math.floor(
+      (new Date(denial.appealDeadline).getTime() - Date.now()) / (1000 * 60 * 60 * 24)
+    );
+    if (daysLeft < 0) {
+      probability = 0;
+      factors.push('Appeal deadline has passed: 0% (expired)');
+    } else if (daysLeft < 7) {
+      probability -= 10;
+      factors.push('Appeal deadline within 7 days: -10% (rushed submission risk)');
+    }
+  }
+
+  // Clamp to 0-95 range (never guarantee success)
+  probability = Math.max(0, Math.min(95, probability));
+
+  return {
+    probability,
+    explanation: categoryInfo.description,
+    factors,
+  };
+}
+
+// ============================================================================
+// Batch Rework Support
+// ============================================================================
+
+/**
+ * Result of a batch rework operation.
+ */
+export interface BatchReworkResult {
+  totalProcessed: number;
+  successCount: number;
+  failCount: number;
+  results: Array<{
+    denialId: string;
+    success: boolean;
+    error?: string;
+  }>;
+}
+
+/**
+ * Applies the same corrective action to multiple denials in batch.
+ * Updates each denial's status and selected action, then persists to Supabase.
+ */
+export async function createBatchRework(
+  denialIds: string[],
+  correction: CorrectiveAction
+): Promise<BatchReworkResult> {
+  const results: BatchReworkResult['results'] = [];
+  let successCount = 0;
+  let failCount = 0;
+
+  // Determine the new status based on the correction action type
+  let newStatus: DenialStatus;
+  switch (correction.actionType) {
+    case 'resubmit-corrected':
+      newStatus = 'resubmitted';
+      break;
+    case 'appeal':
+      newStatus = 'appealed';
+      break;
+    case 'write-off':
+      newStatus = 'written-off';
+      break;
+    default:
+      newStatus = 'corrective-action';
+  }
+
+  for (const denialId of denialIds) {
+    try {
+      const success = await updateDenialStatus(denialId, {
+        status: newStatus,
+        selectedAction: correction.actionType,
+        ...(correction.actionType === 'appeal'
+          ? { appealSubmittedDate: new Date().toISOString().split('T')[0] }
+          : {}),
+        ...(correction.actionType === 'resubmit-corrected'
+          ? { resubmissionDate: new Date().toISOString().split('T')[0] }
+          : {}),
+        ...(correction.actionType === 'write-off'
+          ? {
+              resolvedDate: new Date().toISOString().split('T')[0],
+              resolvedAmount: 0,
+              resolutionNotes: `Written off via batch rework: ${correction.description}`,
+            }
+          : {}),
+      });
+
+      if (success) {
+        successCount++;
+        results.push({ denialId, success: true });
+      } else {
+        failCount++;
+        results.push({ denialId, success: false, error: 'Update returned false' });
+      }
+    } catch (err) {
+      failCount++;
+      results.push({
+        denialId,
+        success: false,
+        error: err instanceof Error ? err.message : 'Unknown error',
+      });
+    }
+  }
+
+  return {
+    totalProcessed: denialIds.length,
+    successCount,
+    failCount,
+    results,
+  };
+}
+
+// ============================================================================
+// Recovery Rate Metrics
+// ============================================================================
+
+/**
+ * Recovery metrics calculated from a set of denial records.
+ */
+export interface RecoveryMetrics {
+  totalDeniedAmount: number;
+  totalRecoveredAmount: number;
+  overallRecoveryRate: number;
+  recoveryByCategory: Array<{
+    category: DenialCategory;
+    deniedAmount: number;
+    recoveredAmount: number;
+    recoveryRate: number;
+    count: number;
+  }>;
+  averageDaysToResolution: number;
+  topDenialReasons: Array<{
+    reasonCode: string;
+    description: string;
+    count: number;
+    totalAmount: number;
+  }>;
+  statusBreakdown: Record<DenialStatus, { count: number; amount: number }>;
+}
+
+/**
+ * Calculates comprehensive recovery metrics from a set of denial records.
+ * Returns total denied, total recovered, recovery rate by category,
+ * average days to resolution, and top denial reasons.
+ */
+export function calculateRecoveryMetrics(denials: DenialRecord[]): RecoveryMetrics {
+  if (denials.length === 0) {
+    return {
+      totalDeniedAmount: 0,
+      totalRecoveredAmount: 0,
+      overallRecoveryRate: 0,
+      recoveryByCategory: [],
+      averageDaysToResolution: 0,
+      topDenialReasons: [],
+      statusBreakdown: {
+        'new': { count: 0, amount: 0 },
+        'under-review': { count: 0, amount: 0 },
+        'corrective-action': { count: 0, amount: 0 },
+        'resubmitted': { count: 0, amount: 0 },
+        'appealed': { count: 0, amount: 0 },
+        'resolved': { count: 0, amount: 0 },
+        'written-off': { count: 0, amount: 0 },
+      },
+    };
+  }
+
+  const totalDeniedAmount = denials.reduce((sum, d) => sum + d.deniedAmount, 0);
+  const resolvedDenials = denials.filter(d => d.status === 'resolved' && d.resolvedAmount != null);
+  const totalRecoveredAmount = resolvedDenials.reduce((sum, d) => sum + (d.resolvedAmount ?? 0), 0);
+  const overallRecoveryRate = totalDeniedAmount > 0
+    ? Math.round((totalRecoveredAmount / totalDeniedAmount) * 10000) / 100
+    : 0;
+
+  // Recovery by category
+  const categoryMap = new Map<DenialCategory, { denied: number; recovered: number; count: number }>();
+  for (const d of denials) {
+    const existing = categoryMap.get(d.category) ?? { denied: 0, recovered: 0, count: 0 };
+    existing.denied += d.deniedAmount;
+    existing.count += 1;
+    if (d.status === 'resolved' && d.resolvedAmount != null) {
+      existing.recovered += d.resolvedAmount;
+    }
+    categoryMap.set(d.category, existing);
+  }
+  const recoveryByCategory = Array.from(categoryMap.entries()).map(([category, data]) => ({
+    category,
+    deniedAmount: data.denied,
+    recoveredAmount: data.recovered,
+    recoveryRate: data.denied > 0 ? Math.round((data.recovered / data.denied) * 10000) / 100 : 0,
+    count: data.count,
+  })).sort((a, b) => b.deniedAmount - a.deniedAmount);
+
+  // Average days to resolution
+  const resolvedWithDates = denials.filter(d => d.resolvedDate && d.createdAt);
+  const averageDaysToResolution = resolvedWithDates.length > 0
+    ? Math.round(
+        resolvedWithDates.reduce((sum, d) => {
+          const created = new Date(d.createdAt).getTime();
+          const resolved = new Date(d.resolvedDate!).getTime();
+          return sum + (resolved - created) / (1000 * 60 * 60 * 24);
+        }, 0) / resolvedWithDates.length * 10
+      ) / 10
+    : 0;
+
+  // Top denial reasons
+  const reasonMap = new Map<string, { description: string; count: number; totalAmount: number }>();
+  for (const d of denials) {
+    for (const adj of d.adjustmentReasons) {
+      if (adj.groupCode === 'PR') continue;
+      const key = adj.reasonCode;
+      const existing = reasonMap.get(key) ?? {
+        description: adj.description || CARC_DESCRIPTIONS[key] || `Code ${key}`,
+        count: 0,
+        totalAmount: 0,
+      };
+      existing.count++;
+      existing.totalAmount += adj.amount;
+      reasonMap.set(key, existing);
+    }
+  }
+  const topDenialReasons = Array.from(reasonMap.entries())
+    .map(([reasonCode, data]) => ({
+      reasonCode,
+      description: data.description,
+      count: data.count,
+      totalAmount: data.totalAmount,
+    }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 10);
+
+  // Status breakdown
+  const statusBreakdown: RecoveryMetrics['statusBreakdown'] = {
+    'new': { count: 0, amount: 0 },
+    'under-review': { count: 0, amount: 0 },
+    'corrective-action': { count: 0, amount: 0 },
+    'resubmitted': { count: 0, amount: 0 },
+    'appealed': { count: 0, amount: 0 },
+    'resolved': { count: 0, amount: 0 },
+    'written-off': { count: 0, amount: 0 },
+  };
+  for (const d of denials) {
+    if (statusBreakdown[d.status]) {
+      statusBreakdown[d.status].count += 1;
+      statusBreakdown[d.status].amount += d.deniedAmount;
+    }
+  }
+
+  return {
+    totalDeniedAmount,
+    totalRecoveredAmount,
+    overallRecoveryRate,
+    recoveryByCategory,
+    averageDaysToResolution,
+    topDenialReasons,
+    statusBreakdown,
+  };
+}
+
+// ============================================================================
 // Row Mapper
 // ============================================================================
 
