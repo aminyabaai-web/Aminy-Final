@@ -1,3 +1,8 @@
+// Copyright (c) 2024-2026 Aminy LLC. All Rights Reserved.
+// CONFIDENTIAL AND PROPRIETARY — Trade Secret of Aminy LLC
+// Unauthorized use, reproduction, or distribution is strictly prohibited.
+// See LICENSE file for details.
+
 // elite-insured-lane.ts — Deep AZ Medicaid (AHCCCS) + BCBS AZ insurance support
 // Real AZ-specific plan types, covered services, auth requirements, billing codes,
 // EVV requirements, denial guidance, and validation functions.

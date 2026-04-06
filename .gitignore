@@ -66,3 +66,10 @@ e2e-screenshots/
 TUESDAY_PLAN_10_10.md
 AuthKey.p8
 *.p8
+
+# IP Protection — Trade secret documents (move to separate secure storage)
+# These files contain proprietary algorithms, competitive analysis, and business strategy
+# They should NOT be in a source code repository
+docs/internal/AMINY_AI_BRAIN_ARCHITECTURE.md
+docs/PARTNER_STRATEGY.md
+IP_TRADE_SECRET_REGISTRY.md
