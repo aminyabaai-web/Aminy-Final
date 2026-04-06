@@ -1,3 +1,8 @@
+// Copyright (c) 2024-2026 Aminy LLC. All Rights Reserved.
+// CONFIDENTIAL AND PROPRIETARY — Trade Secret of Aminy LLC
+// Unauthorized use, reproduction, or distribution is strictly prohibited.
+// See LICENSE file for details.
+
 import React, { useEffect, useState, useRef } from 'react';
 // @ts-expect-error - @types/react-dom not installed
 import { createPortal } from 'react-dom';

@@ -1,3 +1,8 @@
+// Copyright (c) 2024-2026 Aminy LLC. All Rights Reserved.
+// CONFIDENTIAL AND PROPRIETARY — Trade Secret of Aminy LLC
+// Unauthorized use, reproduction, or distribution is strictly prohibited.
+// See LICENSE file for details.
+
 import React, { useState } from 'react';
 import { Check, Copy, Palette, Type, Component, Grid, Moon, Sun, Heart, Star, Shield, Users, ChevronRight, Settings, Home, Bell, User, Search, Calendar, FileText, BarChart3, MessageCircle, Phone, Mail, Camera, Paperclip, Send, ArrowLeft, ArrowRight, Plus, Minus, X, Menu, Filter, Download, Upload, Edit, Trash2, Save, PlayCircle, PauseCircle, RotateCcw, RefreshCw, AlertCircle, CheckCircle, Info, AlertTriangle, Zap, Sparkles } from 'lucide-react';
 

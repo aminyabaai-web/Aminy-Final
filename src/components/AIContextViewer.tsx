@@ -1,3 +1,8 @@
+// Copyright (c) 2024-2026 Aminy LLC. All Rights Reserved.
+// CONFIDENTIAL AND PROPRIETARY — Trade Secret of Aminy LLC
+// Unauthorized use, reproduction, or distribution is strictly prohibited.
+// See LICENSE file for details.
+
 import React, { useState, useEffect } from 'react';
 import { Brain, Eye, FileText, Target, Activity, MessageSquare, Sparkles, ChevronDown } from 'lucide-react';
 import { Card } from './ui/card';

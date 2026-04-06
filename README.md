@@ -197,4 +197,31 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for development guidelines, code style, a
 
 ## License
 
-Proprietary — All rights reserved.
+**Proprietary — All rights reserved.**
+
+Copyright (c) 2024-2026 Aminy LLC. This software and its source code are
+confidential and proprietary. See [LICENSE](LICENSE) for full terms.
+
+This software contains patented and patent-pending technology. Unauthorized use,
+reproduction, reverse engineering, or distribution is strictly prohibited and may
+result in civil and criminal penalties.
+
+## Intellectual Property Notice
+
+Aminy, Ask Aminy, Aminy Jr, Calm Corner, and Ease are trademarks of Aminy LLC.
+
+This software embodies trade secrets of Aminy LLC including but not limited to
+proprietary algorithms for AI-powered behavioral health, provider matching,
+clinical documentation, care planning, and electronic visit verification.
+
+## DMCA & IP Enforcement
+
+If you believe any content infringes on Aminy LLC's intellectual property, or if
+you have discovered unauthorized copies of this software, contact:
+
+**Aminy LLC — Legal Department**
+Email: legal@aminy.app
+Address: 5070 N. 40th Street, Suite 105, Phoenix, AZ 85018
+
+Aminy LLC actively monitors for unauthorized use of its proprietary technology
+and will pursue all available legal remedies.
