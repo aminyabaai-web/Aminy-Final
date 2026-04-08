@@ -695,6 +695,32 @@ const OutcomesDashboard = lazy(() =>
   })),
 );
 
+// Pre-diagnosis and developmental screener — acquisition funnel for undiagnosed families
+const PreDiagnosisEntry = lazy(() =>
+  import("./components/screening/PreDiagnosisEntry").then((m) => ({
+    default: m.PreDiagnosisEntry,
+  })),
+);
+const DevelopmentalScreener = lazy(() =>
+  import("./components/screening/DevelopmentalScreener").then((m) => ({
+    default: m.DevelopmentalScreener,
+  })),
+);
+
+// Sensory Fidget — Calm Corner tool for neurodivergent children
+const SensoryFidget = lazy(() =>
+  import("./components/junior/SensoryFidget").then((m) => ({
+    default: m.SensoryFidget,
+  })),
+);
+
+// Grant Navigator — Funding finder for families (Pro feature)
+const GrantNavigator = lazy(() =>
+  import("./components/resources/GrantNavigator").then((m) => ({
+    default: m.GrantNavigator,
+  })),
+);
+
 // GATED SCREEN PLACEHOLDER - Shown when a screen is behind a disabled feature flag
 const GATE_MESSAGES: Record<string, { title: string; description: string }> = {
   'b2b': {
@@ -928,7 +954,11 @@ type AppScreen =
   | "provider-payout-setup" // Stripe Connect onboarding & balance for providers
   | "session-payout" // Admin UI to release payment after session completion
   | "parent-intake" // Connected parent onboarding intake flow
-  | "outcomes-dashboard"; // VC-ready outcomes metrics dashboard
+  | "outcomes-dashboard" // VC-ready outcomes metrics dashboard
+  | "pre-diagnosis" // Landing for parents with concerns, no diagnosis yet
+  | "developmental-screener" // AI developmental screener tool
+  | "sensory-fidget" // Calm Corner sensory fidget tool for kids
+  | "grant-navigator"; // Grant & funding finder for families (Pro)
 
 const AUTH_REDIRECT_SCREENS: AppScreen[] = [
   "splash",
@@ -1083,6 +1113,8 @@ const CHROMELESS_SCREENS = new Set<AppScreen>([
   "paywall",
   "free-screening",
   "mchat-screening",
+  "pre-diagnosis",
+  "developmental-screener",
 ]);
 
 // Initialize screen state synchronously to prevent LCP delays
@@ -2087,6 +2119,7 @@ export default function App() {
                 onStartReflection={handleGetStarted}
                 onForProviders={() => navigateToScreen("provider-landing")}
                 onFreeScreening={() => navigateToScreen("free-screening")}
+                onPreDiagnosis={() => navigateToScreen("pre-diagnosis")}
               />
             </Suspense>
           );
@@ -2572,6 +2605,7 @@ export default function App() {
                   childName: userData.childName || "Alex"
                 }}
                 userTier={effectiveUserTier}
+                onNavigate={(screen) => navigateToScreen(screen as AppScreen)}
               />
             </Suspense>
           );
@@ -3262,6 +3296,53 @@ export default function App() {
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <OutcomesDashboard
                 onBack={() => navigateToScreen("dashboard")}
+              />
+            </Suspense>
+          );
+
+        case "pre-diagnosis":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <PreDiagnosisEntry
+                onNavigate={(screen) => navigateToScreen(screen as AppScreen)}
+                childName={userData.childName || undefined}
+                childAge={userData.childAge || undefined}
+              />
+            </Suspense>
+          );
+
+        case "developmental-screener":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <DevelopmentalScreener
+                onComplete={(result) => {
+                  logger.info('Developmental screener complete', result);
+                }}
+                onNavigate={(screen) => navigateToScreen(screen as AppScreen)}
+                childName={userData.childName || undefined}
+                childAge={userData.childAge || undefined}
+              />
+            </Suspense>
+          );
+
+        case "sensory-fidget":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen="calm-tools" />}>
+              <SensoryFidget
+                onBack={() => navigateToScreen("junior")}
+                childName={userData.childName}
+              />
+            </Suspense>
+          );
+
+        case "grant-navigator":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <GrantNavigator
+                onBack={() => navigateToScreen("dashboard")}
+                onUpgrade={() => navigateToScreen("paywall")}
+                userTier={effectiveUserTier}
+                userState={userData.state}
               />
             </Suspense>
           );
