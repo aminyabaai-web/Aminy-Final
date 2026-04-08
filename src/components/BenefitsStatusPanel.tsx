@@ -1,3 +1,8 @@
+// Copyright (c) 2024-2026 Aminy LLC. All Rights Reserved.
+// CONFIDENTIAL AND PROPRIETARY — Trade Secret of Aminy LLC
+// Unauthorized use, reproduction, or distribution is strictly prohibited.
+// See LICENSE file for details.
+
 import React from 'react';
 import { CheckCircle, Clock, FileQuestion } from 'lucide-react';
 import { Badge } from './ui/badge';

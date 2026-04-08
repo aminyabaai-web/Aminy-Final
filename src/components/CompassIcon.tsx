@@ -1,3 +1,8 @@
+// Copyright (c) 2024-2026 Aminy LLC. All Rights Reserved.
+// CONFIDENTIAL AND PROPRIETARY — Trade Secret of Aminy LLC
+// Unauthorized use, reproduction, or distribution is strictly prohibited.
+// See LICENSE file for details.
+
 import React from 'react';
 import compassImage from "figma:asset/2e39d2a71ccd340d3accf6a7d306e6a6a6781942.png";
 

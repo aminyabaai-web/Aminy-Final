@@ -1,3 +1,8 @@
+// Copyright (c) 2024-2026 Aminy LLC. All Rights Reserved.
+// CONFIDENTIAL AND PROPRIETARY — Trade Secret of Aminy LLC
+// Unauthorized use, reproduction, or distribution is strictly prohibited.
+// See LICENSE file for details.
+
 /**
  * era-835-parser.ts — ERA/835 Remittance Parsing
  * Parses X12 835 EDI remittance advice from Stedi or raw X12 strings.

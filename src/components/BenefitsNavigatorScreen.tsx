@@ -1,3 +1,8 @@
+// Copyright (c) 2024-2026 Aminy LLC. All Rights Reserved.
+// CONFIDENTIAL AND PROPRIETARY — Trade Secret of Aminy LLC
+// Unauthorized use, reproduction, or distribution is strictly prohibited.
+// See LICENSE file for details.
+
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, CheckCircle, Clock, AlertCircle, FileText, Send, Download, RefreshCw, Edit, MapPin, ExternalLink, ChevronRight } from 'lucide-react';
 import { Button } from './ui/button';

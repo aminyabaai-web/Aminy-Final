@@ -1,3 +1,8 @@
+// Copyright (c) 2024-2026 Aminy LLC. All Rights Reserved.
+// CONFIDENTIAL AND PROPRIETARY — Trade Secret of Aminy LLC
+// Unauthorized use, reproduction, or distribution is strictly prohibited.
+// See LICENSE file for details.
+
 /**
  * ToggleSwitches — 4x3 grid of satisfying toggle switches
  * Row 1: iOS-style, Row 2: Slider bars, Row 3: Rocker switches.

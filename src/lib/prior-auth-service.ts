@@ -1,3 +1,8 @@
+// Copyright (c) 2024-2026 Aminy LLC. All Rights Reserved.
+// CONFIDENTIAL AND PROPRIETARY — Trade Secret of Aminy LLC
+// Unauthorized use, reproduction, or distribution is strictly prohibited.
+// See LICENSE file for details.
+
 // Prior Authorization service — Supabase-backed with localStorage fallback + PDF generation
 import jsPDF from 'jspdf';
 import { supabase } from '../utils/supabase/client';

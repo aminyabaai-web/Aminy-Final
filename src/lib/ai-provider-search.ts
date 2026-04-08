@@ -1,3 +1,8 @@
+// Copyright (c) 2024-2026 Aminy LLC. All Rights Reserved.
+// CONFIDENTIAL AND PROPRIETARY — Trade Secret of Aminy LLC
+// Unauthorized use, reproduction, or distribution is strictly prohibited.
+// See LICENSE file for details.
+
 // ai-provider-search.ts — AI-powered provider search engine with intent detection,
 // urgency scoring, rail selection, and provider fit ranking for Aminy platform.
 // Enhanced with Headway-level intent routing, 5-level urgency, care-path rails,

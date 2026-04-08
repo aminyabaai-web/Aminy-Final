@@ -1,3 +1,8 @@
+// Copyright (c) 2024-2026 Aminy LLC. All Rights Reserved.
+// CONFIDENTIAL AND PROPRIETARY — Trade Secret of Aminy LLC
+// Unauthorized use, reproduction, or distribution is strictly prohibited.
+// See LICENSE file for details.
+
 /**
  * Screener Service
  * Saves PHQ-9, GAD-7, and BRIEF-2 results to localStorage + Supabase outcomes_tracking.

@@ -1,3 +1,8 @@
+// Copyright (c) 2024-2026 Aminy LLC. All Rights Reserved.
+// CONFIDENTIAL AND PROPRIETARY — Trade Secret of Aminy LLC
+// Unauthorized use, reproduction, or distribution is strictly prohibited.
+// See LICENSE file for details.
+
 /**
  * @deprecated — StreamingAIChat.tsx now imports via `src/lib/ai-engine/`.
  * This file is still re-exported from ai-engine/index.ts for compatibility.

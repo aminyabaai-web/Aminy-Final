@@ -1,0 +1,72 @@
+PROPRIETARY SOFTWARE LICENSE
+
+Copyright (c) 2024-2026 Aminy LLC All Rights Reserved.
+
+CONFIDENTIAL AND PROPRIETARY
+
+This software, including all source code, documentation, algorithms, data
+structures, user interface designs, business logic, and associated
+intellectual property (collectively, the "Software"), is the confidential
+and proprietary property of Aminy LLC
+
+UNAUTHORIZED USE PROHIBITED
+
+No part of this Software may be reproduced, distributed, transmitted,
+displayed, published, or broadcast in any form or by any means, including
+photocopying, recording, or other electronic or mechanical methods, without
+the prior written permission of Aminy LLC, except in the case of brief
+quotations embodied in critical reviews and certain other noncommercial
+uses permitted by copyright law.
+
+RESTRICTIONS
+
+You may NOT:
+- Copy, modify, or distribute this Software
+- Reverse engineer, decompile, or disassemble this Software
+- Create derivative works based on this Software
+- Use this Software to develop competing products or services
+- Sublicense, sell, rent, lease, or lend this Software
+- Remove or alter any proprietary notices, labels, or marks
+
+TRADE SECRETS
+
+This Software contains trade secrets of Aminy LLC including but not
+limited to: AI context injection algorithms, provider matching scoring
+systems, clinical note generation methods, treatment plan translation
+engines, EVV reconciliation systems, denial management algorithms,
+engagement scoring models, care pathway routing systems, and parent-child
+bidirectional data bridge architectures.
+
+Unauthorized disclosure of any trade secrets contained herein may result
+in irreparable harm and entitle Aminy LLC to injunctive relief in
+addition to all other legal remedies.
+
+PATENTS
+
+Certain features and methods embodied in this Software may be subject to
+one or more pending or issued patents. Use of patented features without
+license is strictly prohibited.
+
+TRADEMARKS
+
+"Aminy", "Aminy Jr", "Ask Aminy", "Calm Corner", "Ease", and the Aminy
+logo are trademarks of Aminy LLC Use without authorization is prohibited.
+
+WARRANTY DISCLAIMER
+
+THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS
+OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT.
+
+LIMITATION OF LIABILITY
+
+IN NO EVENT SHALL AMINY INC. BE LIABLE FOR ANY INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES ARISING OUT OF OR IN
+CONNECTION WITH THIS SOFTWARE.
+
+GOVERNING LAW
+
+This License shall be governed by the laws of the State of Arizona,
+without regard to its conflict of laws provisions.
+
+For licensing inquiries: legal@aminy.app

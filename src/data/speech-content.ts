@@ -1,3 +1,8 @@
+// Copyright (c) 2024-2026 Aminy LLC. All Rights Reserved.
+// CONFIDENTIAL AND PROPRIETARY — Trade Secret of Aminy LLC
+// Unauthorized use, reproduction, or distribution is strictly prohibited.
+// See LICENSE file for details.
+
 // =============================================================================
 // Speech Content — Clinically-appropriate phoneme word lists for ages 2-8
 // Organized by difficulty level (CV → CVC → Blends → Multisyllabic)

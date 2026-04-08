@@ -1,3 +1,8 @@
+// Copyright (c) 2024-2026 Aminy LLC. All Rights Reserved.
+// CONFIDENTIAL AND PROPRIETARY — Trade Secret of Aminy LLC
+// Unauthorized use, reproduction, or distribution is strictly prohibited.
+// See LICENSE file for details.
+
 // operational-metrics.ts — Types and utility functions for operational KPIs
 // across family retention, telehealth liquidity, provider launch, and payer/EVV proof.
 
