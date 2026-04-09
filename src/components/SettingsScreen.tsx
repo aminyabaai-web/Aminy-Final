@@ -564,7 +564,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                     : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700'
                 }`}
               >
-                <Icon className="w-4 h-4" />
+                <Icon aria-hidden="true" className="w-4 h-4" />
                 {item.label}
               </button>
             );
@@ -579,7 +579,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
-                <Crown className="w-5 h-5 text-white" />
+                <Crown aria-hidden="true" className="w-5 h-5 text-white" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
@@ -601,7 +601,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
             </div>
             <Button variant="outline" size="sm" onClick={handleManageSubscription}>
               Manage
-              <ChevronRight className="w-4 h-4 ml-1" />
+              <ChevronRight aria-hidden="true" className="w-4 h-4 ml-1" />
             </Button>
           </div>
 
@@ -627,7 +627,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                 }}
               >
                 <span className="flex items-center gap-2">
-                  <CreditCard className="w-4 h-4" />
+                  <CreditCard aria-hidden="true" className="w-4 h-4" />
                   Manage Subscription
                 </span>
                 <ExternalLink className="w-3.5 h-3.5 text-gray-400" />

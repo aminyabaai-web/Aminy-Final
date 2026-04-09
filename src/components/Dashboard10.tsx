@@ -436,7 +436,7 @@ export function Dashboard10({
   const currentRoutine = dailyRoutines.find(r => r.timeOfDay === activeRoutine) || dailyRoutines[0] || {
     timeOfDay: 'morning' as const,
     label: 'Morning Routine',
-    icon: <Sun className="w-4 h-4" />,
+    icon: <Sun aria-hidden="true" className="w-4 h-4" />,
     tasks: [],
     completedCount: 0,
   };
