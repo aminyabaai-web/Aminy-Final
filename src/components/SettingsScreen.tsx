@@ -701,7 +701,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                   {/* Push Notifications */}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <Smartphone className="w-4 h-4 text-muted-foreground" />
+                      <Smartphone aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
                       <div>
                         <p className="font-medium dark:text-white">Push Notifications</p>
                         <p className="text-sm text-muted-foreground">
@@ -744,7 +744,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                   {/* Email Digest */}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <Mail className="w-4 h-4 text-muted-foreground" />
+                      <Mail aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
                       <div>
                         <p className="font-medium dark:text-white">Email Digest</p>
                         <p className="text-sm text-muted-foreground">Weekly progress summary</p>
@@ -762,7 +762,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                   {/* Appointment Reminders */}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <Clock className="w-4 h-4 text-muted-foreground" />
+                      <Clock aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
                       <div>
                         <p className="font-medium dark:text-white">Appointment Reminders</p>
                         <p className="text-sm text-muted-foreground">Before telehealth sessions</p>
@@ -780,7 +780,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                   {/* Progress Updates */}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <Info className="w-4 h-4 text-muted-foreground" />
+                      <Info aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
                       <div>
                         <p className="font-medium dark:text-white">Progress Updates</p>
                         <p className="text-sm text-muted-foreground">Goal achievements and milestones</p>
@@ -798,7 +798,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                   {/* Community Activity */}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <MessageSquare className="w-4 h-4 text-muted-foreground" />
+                      <MessageSquare aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
                       <div>
                         <p className="font-medium dark:text-white">Community Activity</p>
                         <p className="text-sm text-muted-foreground">Replies and mentions</p>
@@ -816,7 +816,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                   {/* Marketing */}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <Mail className="w-4 h-4 text-muted-foreground" />
+                      <Mail aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
                       <div>
                         <p className="font-medium dark:text-white">Marketing Emails</p>
                         <p className="text-sm text-muted-foreground">Tips, features, and promotions</p>
@@ -843,13 +843,13 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
             className="w-full p-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
           >
             <div className="flex items-center gap-3">
-              <Shield className="w-5 h-5 text-teal-500" />
+              <Shield aria-hidden="true" className="w-5 h-5 text-teal-500" />
               <div className="text-left">
                 <h3 className="font-semibold dark:text-white">Security</h3>
                 <p className="text-sm text-muted-foreground">Password and two-factor authentication</p>
               </div>
             </div>
-            <ChevronRight className={`w-5 h-5 text-muted-foreground transition-transform ${activeSection === 'security' ? 'rotate-90' : ''}`} />
+            <ChevronRight aria-hidden="true" className={`w-5 h-5 text-muted-foreground transition-transform ${activeSection === 'security' ? 'rotate-90' : ''}`} />
           </button>
 
           <AnimatePresence>
@@ -867,19 +867,19 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                     className="w-full flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-800 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
                   >
                     <div className="flex items-center gap-3">
-                      <Key className="w-4 h-4 text-muted-foreground" />
+                      <Key aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
                       <div className="text-left">
                         <p className="font-medium dark:text-white">Change Password</p>
                         <p className="text-sm text-muted-foreground">Update your password</p>
                       </div>
                     </div>
-                    <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                    <ChevronRight aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
                   </button>
 
                   {/* Two-Factor Authentication */}
                   <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-800 rounded-lg">
                     <div className="flex items-center gap-3">
-                      <Fingerprint className="w-4 h-4 text-muted-foreground" />
+                      <Fingerprint aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
                       <div>
                         <p className="font-medium dark:text-white">Two-Factor Authentication</p>
                         <p className="text-sm text-muted-foreground">
@@ -901,7 +901,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
 
                   {mfaEnabled && (
                     <div className="flex items-center gap-2 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                      <ShieldCheck className="w-4 h-4 text-green-600" />
+                      <ShieldCheck aria-hidden="true" className="w-4 h-4 text-green-600" />
                       <p className="text-sm text-green-700 dark:text-green-400">
                         Your account is protected with two-factor authentication
                       </p>
@@ -920,7 +920,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
             className="w-full p-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
           >
             <div className="flex items-center gap-3">
-              <CalendarDays className="w-5 h-5 text-teal-500" />
+              <CalendarDays aria-hidden="true" className="w-5 h-5 text-teal-500" />
               <div className="text-left">
                 <h3 className="font-semibold dark:text-white">Connected Calendars</h3>
                 <p className="text-sm text-muted-foreground">
@@ -932,7 +932,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
               {calendarConnected && (
                 <Badge className="bg-green-100 text-green-700">Connected</Badge>
               )}
-              <ChevronRight className={`w-5 h-5 text-muted-foreground transition-transform ${activeSection === 'calendars' ? 'rotate-90' : ''}`} />
+              <ChevronRight aria-hidden="true" className={`w-5 h-5 text-muted-foreground transition-transform ${activeSection === 'calendars' ? 'rotate-90' : ''}`} />
             </div>
           </button>
 
@@ -949,7 +949,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                     /* Not Connected State */
                     <div className="text-center py-4">
                       <div className="w-12 h-12 bg-teal-50 dark:bg-teal-900/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <CalendarDays className="w-6 h-6 text-teal-600" />
+                        <CalendarDays aria-hidden="true" className="w-6 h-6 text-teal-600" />
                       </div>
                       <h4 className="font-medium dark:text-white mb-1">Connect Google Calendar</h4>
                       <p className="text-sm text-muted-foreground mb-4 max-w-xs mx-auto">
