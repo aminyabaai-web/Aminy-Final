@@ -630,7 +630,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                   <CreditCard aria-hidden="true" className="w-4 h-4" />
                   Manage Subscription
                 </span>
-                <ExternalLink className="w-3.5 h-3.5 text-gray-400" />
+                <ExternalLink aria-hidden="true" className="w-3.5 h-3.5 text-gray-400" />
               </Button>
               <p className="text-[11px] text-muted-foreground">
                 Update payment method, switch plans, view invoices, or cancel
@@ -644,7 +644,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-gradient-to-br from-teal-400 to-cyan-500 rounded-full flex items-center justify-center">
-                <Users className="w-5 h-5 text-white" />
+                <Users aria-hidden="true" className="w-5 h-5 text-white" />
               </div>
               <div>
                 <h3 className="font-semibold dark:text-white">Invite Families</h3>
