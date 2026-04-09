@@ -86,7 +86,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
       id: 'junior-setup',
       title: 'Set up Aminy Ease',
       description: 'Pair your child\'s device',
-      icon: <Smartphone className="w-5 h-5" />,
+      icon: <Smartphone aria-hidden="true" className="w-5 h-5" />,
       category: 'setup',
       popular: true
     },
@@ -94,7 +94,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
       id: 'schedule-session',
       title: 'Schedule a Session',
       description: 'Book live telehealth',
-      icon: <Video className="w-5 h-5" />,
+      icon: <Video aria-hidden="true" className="w-5 h-5" />,
       category: 'sessions',
       popular: true
     }] : []),
@@ -102,7 +102,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
       id: 'billing',
       title: 'Manage Plan & Billing',
       description: 'Update payment & subscription',
-      icon: <CreditCard className="w-5 h-5" />,
+      icon: <CreditCard aria-hidden="true" className="w-5 h-5" />,
       category: 'billing',
       popular: true
     },
@@ -110,7 +110,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
       id: 'reports',
       title: 'Reports & Exports',
       description: 'Download and share data',
-      icon: <Download className="w-5 h-5" />,
+      icon: <Download aria-hidden="true" className="w-5 h-5" />,
       category: 'reports',
       popular: false
     },
@@ -118,7 +118,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
       id: 'privacy',
       title: 'Privacy & Sharing',
       description: 'Control data access',
-      icon: <Shield className="w-5 h-5" />,
+      icon: <Shield aria-hidden="true" className="w-5 h-5" />,
       category: 'privacy',
       popular: false
     }
@@ -129,7 +129,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
     {
       id: 'junior-pairing',
       title: 'Ease Pairing Not Working',
-      icon: <Smartphone className="w-5 h-5" />,
+      icon: <Smartphone aria-hidden="true" className="w-5 h-5" />,
       steps: [
         { id: 'wifi', title: 'Check Wi-Fi Connection', instruction: 'Make sure both devices are on the same Wi-Fi network' },
         { id: 'update', title: 'Update App', instruction: 'Check for app updates in the App Store or Play Store' },
@@ -140,7 +140,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
     {
       id: 'signin-issues',
       title: 'Can\'t Sign In / Verification Emails',
-      icon: <Mail className="w-5 h-5" />,
+      icon: <Mail aria-hidden="true" className="w-5 h-5" />,
       steps: [
         { id: 'email', title: 'Check Email Address', instruction: 'Verify you\'re using the correct email address' },
         { id: 'spam', title: 'Check Spam Folder', instruction: 'Look for emails from support@aminy.ai' },
@@ -150,7 +150,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
     ...(userTier === 'pro' ? [{
       id: 'session-booking',
       title: 'Session Booking / Reschedule / Credits',
-      icon: <Video className="w-5 h-5" />,
+      icon: <Video aria-hidden="true" className="w-5 h-5" />,
       steps: [
         { id: 'balance', title: 'Check Credit Balance', instruction: 'Go to Settings > Sessions to view remaining credits' },
         { id: 'calendar', title: 'Select Available Time', instruction: 'Choose from available time slots in your preferred window' }
@@ -159,7 +159,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
     {
       id: 'exports-pdfs',
       title: 'Exports & PDFs Not Downloading',
-      icon: <Download className="w-5 h-5" />,
+      icon: <Download aria-hidden="true" className="w-5 h-5" />,
       steps: [
         { id: 'browser', title: 'Check Browser Settings', instruction: 'Allow downloads and pop-ups for aminy.com' },
         { id: 'space', title: 'Check Storage Space', instruction: 'Ensure you have enough space on your device' }
@@ -290,7 +290,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
       <div className="text-center space-y-3 sm:space-y-4">
         <h1 className="text-2xl font-semibold text-slate-900">How can we help you?</h1>
         <div className="relative max-w-lg mx-auto">
-          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
+          <Search aria-hidden="true" className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
           <Input
             placeholder="Ask about routines, billing, pairing Ease..."
             value={searchQuery}
@@ -322,7 +322,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
                 </div>
                 <p className="text-sm text-slate-600">{tile.description}</p>
               </div>
-              <ChevronRight className="w-4 h-4 text-slate-400" />
+              <ChevronRight aria-hidden="true" className="w-4 h-4 text-slate-400" />
             </div>
           </Card>
         ))}
@@ -332,7 +332,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
       <Card className="p-4 sm:p-5 md:p-6">
         <div className="flex items-center gap-3 mb-4">
           <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
-            <Brain className="w-4 h-4 text-white" />
+            <Brain aria-hidden="true" className="w-4 h-4 text-white" />
           </div>
           <h2 className="text-lg font-semibold text-slate-900">AI Assistant</h2>
           <Badge className="bg-accent/10 text-accent text-xs">Instant Help</Badge>
@@ -378,7 +378,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
           <div className="mt-4 sm:mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
             <div className="flex items-start gap-3 mb-3">
               <div className="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center">
-                <Brain className="w-3 h-3 text-white" />
+                <Brain aria-hidden="true" className="w-3 h-3 text-white" />
               </div>
               <div>
                 <h3 className="font-semibold text-blue-900">AI Solution</h3>
@@ -420,7 +420,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
       {/* Support SLA Notice */}
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
         <div className="flex items-start gap-3">
-          <Clock className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+          <Clock aria-hidden="true" className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
           <div className="text-sm text-blue-900">
             <strong>Response Times:</strong> We reply within {userTier === 'pro' ? '4-8 hours' : '24-48 business hours'}. 
             {userTier === 'pro' ? ' Pro plans receive priority support.' : ' Pro plans get faster response times and priority handling.'}
@@ -475,7 +475,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
                 setStepResults({});
               }}
             >
-              <ArrowLeft className="w-4 h-4 mr-2" />
+              <ArrowLeft aria-hidden="true" className="w-4 h-4 mr-2" />
               Back to Troubleshooters
             </Button>
             <h1 className="text-2xl font-semibold text-slate-900">{troubleshooter.title}</h1>
@@ -510,7 +510,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
               {step.id === 'code' && (
                 <div className="bg-gray-50 rounded-lg p-4 my-4">
                   <div className="flex items-center justify-center gap-3 sm:gap-4">
-                    <QrCode className="w-16 h-16 text-slate-400" />
+                    <QrCode aria-hidden="true" className="w-16 h-16 text-slate-400" />
                     <div className="text-center">
                       <p className="text-sm font-medium text-slate-900">Sample QR Code</p>
                       <p className="text-xs text-slate-500">This would show your actual pairing code</p>
@@ -525,7 +525,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
                   className="mt-4"
                   onClick={() => handleTryFix('resend-verification')}
                 >
-                  <Mail className="w-4 h-4 mr-2" />
+                  <Mail aria-hidden="true" className="w-4 h-4 mr-2" />
                   Resend Verification Email
                 </Button>
               )}
@@ -536,7 +536,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
                 className="bg-green-600 hover:bg-green-700 text-white min-w-[120px]"
                 onClick={() => handleStepResult(step.id, 'worked')}
               >
-                <CheckCircle className="w-4 h-4 mr-2" />
+                <CheckCircle aria-hidden="true" className="w-4 h-4 mr-2" />
                 It Worked
               </Button>
               <Button 
@@ -544,7 +544,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
                 className="min-w-[120px]"
                 onClick={() => handleStepResult(step.id, 'failed')}
               >
-                <X className="w-4 h-4 mr-2" />
+                <X aria-hidden="true" className="w-4 h-4 mr-2" />
                 It Didn't Work
               </Button>
             </div>
@@ -588,7 +588,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
                 }}
               >
                 Start Troubleshooter
-                <ChevronRight className="w-4 h-4 ml-2" />
+                <ChevronRight aria-hidden="true" className="w-4 h-4 ml-2" />
               </Button>
             </Card>
           ))}
@@ -597,7 +597,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
         {/* Self-Service Success Stats */}
         <div className="bg-green-50 border border-green-200 rounded-lg p-4">
           <div className="flex items-center gap-3">
-            <CheckCircle className="w-5 h-5 text-green-600" />
+            <CheckCircle aria-hidden="true" className="w-5 h-5 text-green-600" />
             <div className="text-sm text-green-900">
               <strong>90% of issues</strong> are resolved using our guided troubleshooters. Average resolution time: <strong>3 minutes</strong>.
             </div>
@@ -638,7 +638,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
           {userTier === 'pro' && (
             <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
               <div className="flex items-center gap-3">
-                <Crown className="w-5 h-5 text-purple-600" />
+                <Crown aria-hidden="true" className="w-5 h-5 text-purple-600" />
                 <div>
                   <h3 className="font-semibold text-purple-900">Message Your Aminy Coach</h3>
                   <p className="text-sm text-purple-700">Get personalized guidance from your assigned coach</p>
@@ -669,7 +669,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
           <div>
             <label className="text-sm font-medium text-slate-700 block mb-2">Attachments (optional)</label>
             <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-              <Paperclip className="w-6 h-6 text-gray-400 mx-auto mb-2" />
+              <Paperclip aria-hidden="true" className="w-6 h-6 text-gray-400 mx-auto mb-2" />
               <p className="text-sm text-slate-600">Drop screenshots or files here</p>
               <p className="text-xs text-slate-500">Helps us understand your issue better</p>
             </div>
@@ -700,7 +700,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
               disabled={!selectedTopic || !contactMessage.trim()}
               className="bg-accent hover:bg-accent/90 text-white"
             >
-              <Send className="w-4 h-4 mr-2" />
+              <Send aria-hidden="true" className="w-4 h-4 mr-2" />
               Submit Request
             </Button>
           </div>
@@ -723,19 +723,19 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
               className="w-full justify-start"
               onClick={() => onNavigate?.('settings')}
             >
-              <CreditCard className="w-4 h-4 mr-3" />
+              <CreditCard aria-hidden="true" className="w-4 h-4 mr-3" />
               Update Payment Method
             </Button>
             <Button variant="outline" className="w-full justify-start">
-              <Download className="w-4 h-4 mr-3" />
+              <Download aria-hidden="true" className="w-4 h-4 mr-3" />
               Download Invoice
             </Button>
             <Button variant="outline" className="w-full justify-start">
-              <RefreshCw className="w-4 h-4 mr-3" />
+              <RefreshCw aria-hidden="true" className="w-4 h-4 mr-3" />
               Change Subscription
             </Button>
             <Button variant="outline" className="w-full justify-start">
-              <AlertTriangle className="w-4 h-4 mr-3" />
+              <AlertTriangle aria-hidden="true" className="w-4 h-4 mr-3" />
               Dispute a Charge
             </Button>
           </div>
@@ -746,19 +746,19 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
           <h2 className="font-semibold text-slate-900 mb-4">Refund Policy</h2>
           <div className="space-y-3 text-sm text-slate-600">
             <div className="flex items-start gap-2">
-              <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
+              <CheckCircle aria-hidden="true" className="w-4 h-4 text-green-600 mt-0.5" />
               <p><strong>30-day money-back guarantee</strong> for new subscriptions</p>
             </div>
             <div className="flex items-start gap-2">
-              <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
+              <CheckCircle aria-hidden="true" className="w-4 h-4 text-green-600 mt-0.5" />
               <p><strong>Pro sessions:</strong> Full refund if cancelled 24+ hours before</p>
             </div>
             <div className="flex items-start gap-2">
-              <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
+              <CheckCircle aria-hidden="true" className="w-4 h-4 text-green-600 mt-0.5" />
               <p><strong>Digital purchases:</strong> 7-day refund window</p>
             </div>
             <div className="flex items-start gap-2">
-              <Info className="w-4 h-4 text-blue-600 mt-0.5" />
+              <Info aria-hidden="true" className="w-4 h-4 text-blue-600 mt-0.5" />
               <p>Refunds processed within 5-7 business days</p>
             </div>
           </div>
@@ -805,7 +805,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
       <div className="bg-red-50 border-2 border-red-200 rounded-lg p-6">
         <div className="flex items-start gap-3 sm:gap-4">
           <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
-            <Shield className="w-6 h-6 text-red-600" />
+            <Shield aria-hidden="true" className="w-6 h-6 text-red-600" />
           </div>
           <div>
             <h2 className="text-lg font-semibold text-red-900 mb-2">Emergency Guidance</h2>
@@ -814,15 +814,15 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
             </p>
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <Phone className="w-4 h-4 text-red-600" />
+                <Phone aria-hidden="true" className="w-4 h-4 text-red-600" />
                 <span className="text-sm font-medium text-red-800">Emergency: 911</span>
               </div>
               <div className="flex items-center gap-2">
-                <Phone className="w-4 h-4 text-red-600" />
+                <Phone aria-hidden="true" className="w-4 h-4 text-red-600" />
                 <span className="text-sm font-medium text-red-800">Crisis Text Line: Text HOME to 741741</span>
               </div>
               <div className="flex items-center gap-2">
-                <Phone className="w-4 h-4 text-red-600" />
+                <Phone aria-hidden="true" className="w-4 h-4 text-red-600" />
                 <span className="text-sm font-medium text-red-800">National Suicide Prevention Lifeline: 988</span>
               </div>
             </div>
@@ -837,15 +837,15 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
           <div className="space-y-3">
             <Button variant="outline" className="w-full justify-between">
               <span>Early Intervention Services</span>
-              <ExternalLink className="w-4 h-4" />
+              <ExternalLink aria-hidden="true" className="w-4 h-4" />
             </Button>
             <Button variant="outline" className="w-full justify-between">
               <span>Autism Support Networks</span>
-              <ExternalLink className="w-4 h-4" />
+              <ExternalLink aria-hidden="true" className="w-4 h-4" />
             </Button>
             <Button variant="outline" className="w-full justify-between">
               <span>Special Education Resources</span>
-              <ExternalLink className="w-4 h-4" />
+              <ExternalLink aria-hidden="true" className="w-4 h-4" />
             </Button>
           </div>
         </Card>
@@ -855,15 +855,15 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
           <div className="space-y-3">
             <Button variant="outline" className="w-full justify-between">
               <span>Parent Support Groups</span>
-              <ExternalLink className="w-4 h-4" />
+              <ExternalLink aria-hidden="true" className="w-4 h-4" />
             </Button>
             <Button variant="outline" className="w-full justify-between">
               <span>Family Counseling Resources</span>
-              <ExternalLink className="w-4 h-4" />
+              <ExternalLink aria-hidden="true" className="w-4 h-4" />
             </Button>
             <Button variant="outline" className="w-full justify-between">
               <span>Respite Care Services</span>
-              <ExternalLink className="w-4 h-4" />
+              <ExternalLink aria-hidden="true" className="w-4 h-4" />
             </Button>
           </div>
         </Card>
@@ -874,15 +874,15 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
         <h2 className="font-semibold text-slate-900 mb-4">Safety Guidelines</h2>
         <div className="space-y-3 sm:space-y-4 text-sm text-slate-600">
           <div className="flex items-start gap-2">
-            <Shield className="w-4 h-4 text-green-600 mt-0.5" />
+            <Shield aria-hidden="true" className="w-4 h-4 text-green-600 mt-0.5" />
             <p><strong>Data Protection:</strong> All information shared with Aminy is encrypted and handled according to HIPAA-conscious practices.</p>
           </div>
           <div className="flex items-start gap-2">
-            <Eye className="w-4 h-4 text-blue-600 mt-0.5" />
+            <Eye aria-hidden="true" className="w-4 h-4 text-blue-600 mt-0.5" />
             <p><strong>Privacy:</strong> You control who sees your child's information through our granular sharing controls.</p>
           </div>
           <div className="flex items-start gap-2">
-            <Users className="w-4 h-4 text-purple-600 mt-0.5" />
+            <Users aria-hidden="true" className="w-4 h-4 text-purple-600 mt-0.5" />
             <p><strong>Professional Boundaries:</strong> Our coaches provide educational guidance, not medical treatment.</p>
           </div>
         </div>
@@ -979,7 +979,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
         <div className="border-t pt-4 mt-4">
           <Button variant="outline" size="sm">
             View All Release Notes
-            <ExternalLink className="w-4 h-4 ml-2" />
+            <ExternalLink aria-hidden="true" className="w-4 h-4 ml-2" />
           </Button>
         </div>
       </Card>
@@ -987,7 +987,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
       {/* Beta Features */}
       <Card className="p-4 sm:p-5 md:p-6">
         <div className="flex items-center gap-3 mb-4">
-          <Zap className="w-5 h-5 text-amber-500" />
+          <Zap aria-hidden="true" className="w-5 h-5 text-amber-500" />
           <h2 className="text-lg font-semibold text-slate-900">Beta Features</h2>
         </div>
         
@@ -1016,7 +1016,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
         {/* Feature Requests */}
         <Card className="p-4 sm:p-5 md:p-6">
           <div className="flex items-center gap-3 mb-4">
-            <Lightbulb className="w-5 h-5 text-yellow-500" />
+            <Lightbulb aria-hidden="true" className="w-5 h-5 text-yellow-500" />
             <h2 className="text-lg font-semibold text-slate-900">Suggest a Feature</h2>
           </div>
           
@@ -1040,7 +1040,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
             />
             
             <Button className="w-full bg-yellow-500 hover:bg-yellow-600 text-white">
-              <Lightbulb className="w-4 h-4 mr-2" />
+              <Lightbulb aria-hidden="true" className="w-4 h-4 mr-2" />
               Submit Suggestion
             </Button>
           </div>
@@ -1049,7 +1049,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
         {/* Bug Reports */}
         <Card className="p-4 sm:p-5 md:p-6">
           <div className="flex items-center gap-3 mb-4">
-            <Bug className="w-5 h-5 text-red-500" />
+            <Bug aria-hidden="true" className="w-5 h-5 text-red-500" />
             <h2 className="text-lg font-semibold text-slate-900">Report a Bug</h2>
           </div>
           
@@ -1070,7 +1070,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
             />
             
             <Button className="w-full bg-red-500 hover:bg-red-600 text-white">
-              <Bug className="w-4 h-4 mr-2" />
+              <Bug aria-hidden="true" className="w-4 h-4 mr-2" />
               Report Bug
             </Button>
           </div>
@@ -1080,7 +1080,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
       {/* Share Your Story */}
       <Card className="p-4 sm:p-5 md:p-6">
         <div className="flex items-center gap-3 mb-4">
-          <Heart className="w-5 h-5 text-pink-500" />
+          <Heart aria-hidden="true" className="w-5 h-5 text-pink-500" />
           <h2 className="text-lg font-semibold text-slate-900">Share Your Story</h2>
         </div>
         
@@ -1099,7 +1099,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
             <span>I consent to sharing my story publicly</span>
           </label>
           <Button className="bg-pink-500 hover:bg-pink-600 text-white">
-            <Heart className="w-4 h-4 mr-2" />
+            <Heart aria-hidden="true" className="w-4 h-4 mr-2" />
             Share Story
           </Button>
         </div>
@@ -1125,7 +1125,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
                 </Button>
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center">
-                    <HelpCircle className="w-5 h-5 text-white" />
+                    <HelpCircle aria-hidden="true" className="w-5 h-5 text-white" />
                   </div>
                   <div>
                     <h1 className="text-lg sm:text-xl font-semibold text-slate-900">Support</h1>
@@ -1241,7 +1241,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
       {/* Empty States */}
       {activeView === 'home' && quickTiles.length === 0 && (
         <div className="text-center py-12">
-          <HelpCircle className="w-12 h-12 text-slate-400 mx-auto mb-4" />
+          <HelpCircle aria-hidden="true" className="w-12 h-12 text-slate-400 mx-auto mb-4" />
           <h3 className="text-lg font-medium text-slate-900 mb-2">No support cases yet</h3>
           <p className="text-slate-600">Search the Help Center or contact us—real people read and reply.</p>
         </div>
@@ -1251,7 +1251,7 @@ export function SupportPage({ onNavigate, userTier = 'core' }: SupportPageProps)
       <div className="bg-blue-50 border-t border-blue-200 mt-12">
         <div className="px-4 py-4 sm:px-6 max-w-6xl mx-auto">
           <div className="flex items-center gap-3">
-            <Shield className="w-5 h-5 text-blue-600 flex-shrink-0" />
+            <Shield aria-hidden="true" className="w-5 h-5 text-blue-600 flex-shrink-0" />
             <div className="text-sm text-blue-900">
               <strong>Important:</strong> Aminy provides educational support and guidance. For medical emergencies or urgent clinical needs, always contact your healthcare provider or local emergency services.
             </div>

@@ -1068,7 +1068,7 @@ export function Dashboard10({
                   <div className="flex items-center gap-2">
                     <span className="text-sm text-gray-400">{task.timeEstimate}</span>
                     {task.completed ? (
-                      <CheckCircle2 className="w-6 h-6 text-green-500" />
+                      <CheckCircle2 aria-hidden="true" className="w-6 h-6 text-green-500" />
                     ) : (
                       <div className="w-6 h-6 rounded-full border-2 border-gray-300 dark:border-gray-600" />
                     )}

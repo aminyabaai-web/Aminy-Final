@@ -997,7 +997,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                               : 'Connected — not yet synced'}
                           </p>
                         </div>
-                        <ShieldCheck className="w-4 h-4 text-green-600" />
+                        <ShieldCheck aria-hidden="true" className="w-4 h-4 text-green-600" />
                       </div>
 
                       {/* Auto-Sync Toggle */}
@@ -1136,7 +1136,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                         <p className="text-sm text-muted-foreground">Download all your data (GDPR)</p>
                       </div>
                     </div>
-                    <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                    <ChevronRight aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
                   </button>
 
                   {/* Privacy Policy */}
@@ -1145,13 +1145,13 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                     className="w-full flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-800 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
                   >
                     <div className="flex items-center gap-3">
-                      <FileText className="w-4 h-4 text-muted-foreground" />
+                      <FileText aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
                       <div className="text-left">
                         <p className="font-medium dark:text-white">Privacy Policy</p>
                         <p className="text-sm text-muted-foreground">How we handle your data</p>
                       </div>
                     </div>
-                    <ExternalLink className="w-4 h-4 text-muted-foreground" />
+                    <ExternalLink aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
                   </button>
 
                   {/* Terms of Service */}
@@ -1160,13 +1160,13 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                     className="w-full flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-800 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
                   >
                     <div className="flex items-center gap-3">
-                      <FileText className="w-4 h-4 text-muted-foreground" />
+                      <FileText aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
                       <div className="text-left">
                         <p className="font-medium dark:text-white">Terms of Service</p>
                         <p className="text-sm text-muted-foreground">Our terms and conditions</p>
                       </div>
                     </div>
-                    <ExternalLink className="w-4 h-4 text-muted-foreground" />
+                    <ExternalLink aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
                   </button>
                 </div>
               </motion.div>
@@ -1177,7 +1177,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
         {/* Appearance Section */}
         <Card className="p-4">
           <div className="flex items-center gap-3 mb-4">
-            <Palette className="w-5 h-5 text-teal-500" />
+            <Palette aria-hidden="true" className="w-5 h-5 text-teal-500" />
             <h3 className="font-semibold dark:text-white">Appearance</h3>
           </div>
           <ThemeSelector />
@@ -1190,7 +1190,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
             className="w-full p-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
           >
             <div className="flex items-center gap-3">
-              <DollarSign className="w-5 h-5 text-teal-500" />
+              <DollarSign aria-hidden="true" className="w-5 h-5 text-teal-500" />
               <div className="text-left">
                 <div className="flex items-center gap-2">
                   <p className="font-medium dark:text-white">Grant Navigator</p>
@@ -1199,7 +1199,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                 <p className="text-sm text-muted-foreground">Find funding for ABA &amp; behavioral health</p>
               </div>
             </div>
-            <ChevronRight className="w-4 h-4 text-muted-foreground" />
+            <ChevronRight aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
           </button>
         </Card>
 
@@ -1210,13 +1210,13 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
             className="w-full p-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
           >
             <div className="flex items-center gap-3">
-              <HelpCircle className="w-5 h-5 text-teal-500" />
+              <HelpCircle aria-hidden="true" className="w-5 h-5 text-teal-500" />
               <div className="text-left">
                 <p className="font-medium dark:text-white">Help & Support</p>
                 <p className="text-sm text-muted-foreground">Contact us for assistance</p>
               </div>
             </div>
-            <ExternalLink className="w-4 h-4 text-muted-foreground" />
+            <ExternalLink aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
           </button>
         </Card>
 
@@ -1224,7 +1224,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
         <Card className="border-red-200 dark:border-red-900">
           <div className="p-4">
             <h3 className="font-semibold text-red-600 dark:text-red-400 mb-4 flex items-center gap-2">
-              <AlertTriangle className="w-5 h-5" />
+              <AlertTriangle aria-hidden="true" className="w-5 h-5" />
               Danger Zone
             </h3>
 
@@ -1233,7 +1233,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
               className="w-full flex items-center justify-between p-3 bg-red-50 dark:bg-red-900/20 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors"
             >
               <div className="flex items-center gap-3">
-                <Trash2 className="w-4 h-4 text-red-600" />
+                <Trash2 aria-hidden="true" className="w-4 h-4 text-red-600" />
                 <div className="text-left">
                   <p className="font-medium text-red-600">Delete Account</p>
                   <p className="text-sm text-red-500">Permanently delete your account and all data</p>
@@ -1250,7 +1250,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
             className="w-full text-red-600 border-red-200 hover:bg-red-50"
             onClick={onLogout}
           >
-            <LogOut className="w-4 h-4 mr-2" />
+            <LogOut aria-hidden="true" className="w-4 h-4 mr-2" />
             Sign Out
           </Button>
         )}
@@ -1327,7 +1327,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
 
             {passwordError && (
               <p className="text-sm text-red-600 flex items-center gap-1">
-                <AlertCircle className="w-4 h-4" />
+                <AlertCircle aria-hidden="true" className="w-4 h-4" />
                 {passwordError}
               </p>
             )}
@@ -1338,7 +1338,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
               Cancel
             </Button>
             <Button onClick={handlePasswordChange} disabled={isSaving}>
-              {isSaving && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+              {isSaving && <Loader2 aria-hidden="true" className="w-4 h-4 mr-2 animate-spin" />}
               Update Password
             </Button>
           </DialogFooter>
@@ -1361,19 +1361,19 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
             </p>
             <ul className="text-sm space-y-2 mb-4">
               <li className="flex items-center gap-2">
-                <Check className="w-4 h-4 text-green-500" />
+                <Check aria-hidden="true" className="w-4 h-4 text-green-500" />
                 Profile information
               </li>
               <li className="flex items-center gap-2">
-                <Check className="w-4 h-4 text-green-500" />
+                <Check aria-hidden="true" className="w-4 h-4 text-green-500" />
                 Children's profiles and progress
               </li>
               <li className="flex items-center gap-2">
-                <Check className="w-4 h-4 text-green-500" />
+                <Check aria-hidden="true" className="w-4 h-4 text-green-500" />
                 Conversation history with Aminy
               </li>
               <li className="flex items-center gap-2">
-                <Check className="w-4 h-4 text-green-500" />
+                <Check aria-hidden="true" className="w-4 h-4 text-green-500" />
                 Vault documents and records
               </li>
             </ul>
@@ -1401,12 +1401,12 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
             <Button onClick={handleExportData} disabled={isExporting}>
               {isExporting ? (
                 <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  <Loader2 aria-hidden="true" className="w-4 h-4 mr-2 animate-spin" />
                   Exporting...
                 </>
               ) : (
                 <>
-                  <Download className="w-4 h-4 mr-2" />
+                  <Download aria-hidden="true" className="w-4 h-4 mr-2" />
                   Export Data
                 </>
               )}
@@ -1420,7 +1420,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
         <DialogContent>
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-red-600">
-              <AlertTriangle className="w-5 h-5" />
+              <AlertTriangle aria-hidden="true" className="w-5 h-5" />
               Delete Account
             </DialogTitle>
             <DialogDescription>
@@ -1459,7 +1459,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
               onClick={handleDeleteAccount}
               disabled={deleteConfirmText !== 'DELETE' || isLoading}
             >
-              {isLoading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+              {isLoading && <Loader2 aria-hidden="true" className="w-4 h-4 mr-2 animate-spin" />}
               Delete Account
             </Button>
           </DialogFooter>
@@ -1495,7 +1495,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
               Cancel
             </Button>
             <Button onClick={handleEnableMfa}>
-              <Fingerprint className="w-4 h-4 mr-2" />
+              <Fingerprint aria-hidden="true" className="w-4 h-4 mr-2" />
               Set Up 2FA
             </Button>
           </DialogFooter>
