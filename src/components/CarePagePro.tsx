@@ -658,7 +658,7 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
       {/* Empty state */}
       {mockThreads.length === 0 && (
         <div className="text-center py-8 text-gray-500 dark:text-slate-400">
-          <MessageCircle className="w-8 h-8 mx-auto mb-2 text-gray-300 dark:text-slate-600" />
+          <MessageCircle className="w-8 h-8 mx-auto mb-2 text-gray-400 dark:text-slate-600" />
           <p>Select a conversation to start messaging</p>
         </div>
       )}
@@ -727,7 +727,7 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
       return (
         <div className="flex-1 flex items-center justify-center text-gray-500 dark:text-slate-400">
           <div className="text-center">
-            <MessageCircle className="w-12 h-12 mx-auto mb-4 text-gray-300 dark:text-slate-600" />
+            <MessageCircle className="w-12 h-12 mx-auto mb-4 text-gray-400 dark:text-slate-600" />
             <h3 className="text-lg font-medium mb-2 text-gray-700 dark:text-slate-300">Start a conversation</h3>
             <p className="text-sm">Send a message to begin chatting with your care team</p>
           </div>
@@ -1041,7 +1041,7 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
           ) : (
             <div className="flex-1 flex items-center justify-center text-gray-500 dark:text-slate-400">
               <div className="text-center">
-                <MessageCircle className="w-12 h-12 mx-auto mb-4 text-gray-300 dark:text-slate-600" />
+                <MessageCircle className="w-12 h-12 mx-auto mb-4 text-gray-400 dark:text-slate-600" />
                 <h3 className="text-lg font-medium mb-2 text-gray-700 dark:text-slate-300">Select a conversation</h3>
                 <p className="text-sm">Choose a thread from the left to start messaging</p>
               </div>

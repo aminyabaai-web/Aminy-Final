@@ -404,10 +404,10 @@ export function Dashboard10({
 
   // Build routines from real data or use defaults
   const routineIcons: Record<string, React.ReactNode> = {
-    morning: <Sun className="w-4 h-4" />,
-    afternoon: <Sunset className="w-4 h-4" />,
-    evening: <Moon className="w-4 h-4" />,
-    bedtime: <Star className="w-4 h-4" />,
+    morning: <Sun aria-hidden="true" className="w-4 h-4" />,
+    afternoon: <Sunset aria-hidden="true" className="w-4 h-4" />,
+    evening: <Moon aria-hidden="true" className="w-4 h-4" />,
+    bedtime: <Star aria-hidden="true" className="w-4 h-4" />,
   };
 
   // SAFETY: Ensure todaysRoutines is always an array
@@ -416,7 +416,7 @@ export function Dashboard10({
     ? safeTodaysRoutines.map(r => ({
         timeOfDay: r.timeOfDay,
         label: r.label,
-        icon: routineIcons[r.timeOfDay] || <Sun className="w-4 h-4" />,
+        icon: routineIcons[r.timeOfDay] || <Sun aria-hidden="true" className="w-4 h-4" />,
         tasks: Array.isArray(r.tasks) ? r.tasks.map(t => ({
           id: t.id,
           title: t.title,
@@ -429,7 +429,7 @@ export function Dashboard10({
       }))
     : getDefaultRoutines(userData.childName).map(r => ({
         ...r,
-        icon: routineIcons[r.timeOfDay] || <Sun className="w-4 h-4" />,
+        icon: routineIcons[r.timeOfDay] || <Sun aria-hidden="true" className="w-4 h-4" />,
       }));
 
   // SAFETY: Ensure currentRoutine and tasks are always defined
@@ -513,25 +513,25 @@ export function Dashboard10({
     {
       id: 'plan',
       label: 'My Plan',
-      icon: <FileText className="w-5 h-5 text-teal-700 dark:text-teal-300" />,
+      icon: <FileText aria-hidden="true" className="w-5 h-5 text-teal-700 dark:text-teal-300" />,
       accent: 'bg-teal-100 dark:bg-teal-900/30',
     },
     {
       id: 'calm',
       label: 'Calm Corner',
-      icon: <Wind className="w-5 h-5 text-sky-700 dark:text-sky-300" />,
+      icon: <Wind aria-hidden="true" className="w-5 h-5 text-sky-700 dark:text-sky-300" />,
       accent: 'bg-sky-100 dark:bg-sky-900/30',
     },
     {
       id: 'log',
       label: 'Note a Moment',
-      icon: <AlertCircle className="w-5 h-5 text-amber-700 dark:text-amber-300" />,
+      icon: <AlertCircle aria-hidden="true" className="w-5 h-5 text-amber-700 dark:text-amber-300" />,
       accent: 'bg-amber-100 dark:bg-amber-900/30',
     },
     {
       id: 'telehealth',
       label: 'Expert Care',
-      icon: <Video className="w-5 h-5 text-violet-700 dark:text-violet-300" />,
+      icon: <Video aria-hidden="true" className="w-5 h-5 text-violet-700 dark:text-violet-300" />,
       accent: 'bg-violet-100 dark:bg-violet-900/30',
     },
   ];
