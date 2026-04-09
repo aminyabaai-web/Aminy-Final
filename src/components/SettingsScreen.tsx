@@ -962,12 +962,12 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                       >
                         {calendarConnecting ? (
                           <>
-                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                            <Loader2 aria-hidden="true" className="w-4 h-4 mr-2 animate-spin" />
                             Connecting...
                           </>
                         ) : (
                           <>
-                            <CalendarDays className="w-4 h-4 mr-2" />
+                            <CalendarDays aria-hidden="true" className="w-4 h-4 mr-2" />
                             Connect Google Calendar
                           </>
                         )}
@@ -1003,7 +1003,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                       {/* Auto-Sync Toggle */}
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <RefreshCw className="w-4 h-4 text-muted-foreground" />
+                          <RefreshCw aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
                           <div>
                             <p className="font-medium dark:text-white">Auto-sync</p>
                             <p className="text-sm text-muted-foreground">
