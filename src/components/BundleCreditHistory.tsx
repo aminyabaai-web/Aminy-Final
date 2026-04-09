@@ -199,7 +199,7 @@ export function BundleCreditHistory({ userId, onBack }: BundleCreditHistoryProps
         <button
           onClick={handleRefresh}
           disabled={refreshing}
-          className="p-2 text-gray-400 hover:text-gray-600 disabled:text-gray-300"
+          className="p-2 text-gray-400 hover:text-gray-600 disabled:text-gray-400"
           aria-label="Refresh"
         >
           <RefreshCw size={16} className={refreshing ? 'animate-spin' : ''} />

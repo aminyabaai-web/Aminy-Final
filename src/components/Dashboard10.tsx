@@ -930,7 +930,7 @@ export function Dashboard10({
             <div className="mt-4 flex flex-wrap gap-2">
               <Button
                 size="sm"
-                className="rounded-full bg-[#0891b2] text-white hover:bg-[#0b7895]"
+                className="rounded-full bg-cyan-600 text-white hover:bg-[#0b7895]"
                 onClick={() => onNavigate?.('care-plan')}
               >
                 See my plan
@@ -1010,7 +1010,7 @@ export function Dashboard10({
                 onClick={() => setActiveRoutine(routine.timeOfDay)}
                 className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${
                   activeRoutine === routine.timeOfDay
-                    ? 'bg-[#0891b2] text-white shadow-md'
+                    ? 'bg-cyan-600 text-white shadow-md'
                     : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700'
                 }`}
               >
@@ -1081,7 +1081,7 @@ export function Dashboard10({
             {completedTasks > 0 && completedTasks < totalTasks && (
               <div className="mt-4 p-3 bg-teal-50 dark:bg-teal-900/20 rounded-lg border border-teal-200 dark:border-teal-800">
                 <p className="text-sm text-teal-800 dark:text-teal-200 flex items-center gap-2">
-                  <Sparkles className="w-4 h-4" />
+                  <Sparkles aria-hidden="true" className="w-4 h-4" />
                   One task away from completing {currentRoutine.label.toLowerCase()}!
                 </p>
               </div>
@@ -1152,7 +1152,7 @@ export function Dashboard10({
             <Card className="p-4 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border-0 shadow-sm">
               <div className="flex items-start gap-3 sm:gap-4">
                 <div className="p-2 bg-amber-100 dark:bg-amber-800/50 rounded-full">
-                  <Award className="w-6 h-6 text-amber-600 dark:text-amber-400" />
+                  <Award aria-hidden="true" className="w-6 h-6 text-amber-600 dark:text-amber-400" />
                 </div>
                 <div className="flex-1">
                   <h3 className="font-semibold text-amber-900 dark:text-amber-100">Today's Wins</h3>
@@ -1182,7 +1182,7 @@ export function Dashboard10({
             ======================================== */}
         <section>
           <h2 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-            <Zap className="w-5 h-5 text-[#0891b2]" />
+            <Zap aria-hidden="true" className="w-5 h-5 text-[#0891b2]" />
             Quick Actions
           </h2>
 
@@ -1211,13 +1211,13 @@ export function Dashboard10({
               onKeyDown={(e) => e.key === 'Enter' && onNavigate?.('clinical-reports')}
             >
               <div className="w-10 h-10 rounded-lg bg-teal-100 dark:bg-teal-800/50 flex items-center justify-center flex-shrink-0">
-                <Stethoscope className="w-5 h-5 text-teal-700 dark:text-teal-300" />
+                <Stethoscope aria-hidden="true" className="w-5 h-5 text-teal-700 dark:text-teal-300" />
               </div>
               <div className="flex-1 min-w-0">
                 <h3 className="font-medium text-sm text-teal-900 dark:text-teal-100">Provider Reports</h3>
                 <p className="text-sm text-teal-700 dark:text-teal-300">Generate clinical PDFs for your child's care team</p>
               </div>
-              <ChevronRight className="w-4 h-4 text-teal-400 flex-shrink-0" />
+              <ChevronRight aria-hidden="true" className="w-4 h-4 text-teal-400 flex-shrink-0" />
             </div>
           ) : null}
         </section>
@@ -1271,7 +1271,7 @@ export function Dashboard10({
           className={`fixed bottom-24 right-4 z-40 w-14 h-14 rounded-full shadow-lg transition-all duration-300 ${
             showAIChat
               ? 'bg-gray-700 text-white rotate-0'
-              : 'bg-[#0891b2] text-white hover:bg-[#4a6478]'
+              : 'bg-cyan-600 text-white hover:bg-[#4a6478]'
           }`}
           aria-label={showAIChat ? 'Minimize chat' : 'Open chat with Aminy'}
           aria-expanded={showAIChat}
@@ -1302,11 +1302,11 @@ export function Dashboard10({
             <div className="p-4 bg-gradient-to-r from-[#0D1B2A] to-[#1a3a5c] text-white">
               <div className="flex items-center justify-between">
                 <h3 className="font-semibold flex items-center gap-2 text-lg">
-                  <Sparkles className="w-5 h-5 text-[#E07A5F]" />
+                  <Sparkles aria-hidden="true" className="w-5 h-5 text-[#E07A5F]" />
                   Chat with Aminy
                 </h3>
                 <div className="flex items-center gap-2">
-                  <Badge className="bg-[#0891b2] text-white text-sm">AI Companion</Badge>
+                  <Badge className="bg-cyan-600 text-white text-sm">AI Companion</Badge>
                   <button
                     onClick={() => setIsFullScreenChat(!isFullScreenChat)}
                     className="h-11 w-11 hover:bg-white/20 rounded-lg transition-colors flex items-center justify-center"
@@ -1368,7 +1368,7 @@ export function Dashboard10({
               {isSendingChat && (
                 <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-700 dark:to-slate-600 rounded-xl p-3 text-sm shadow-sm mr-8">
                   <div className="flex items-center gap-2">
-                    <Loader2 className="w-4 h-4 animate-spin text-[#0891b2]" />
+                    <Loader2 aria-hidden="true" className="w-4 h-4 animate-spin text-[#0891b2]" />
                     <span className="text-gray-500 dark:text-gray-400">Aminy is thinking...</span>
                   </div>
                 </div>
@@ -1385,7 +1385,7 @@ export function Dashboard10({
                       onClick={() => {
                         setChatInput(prompt);
                       }}
-                      className="text-sm px-3 py-1.5 rounded-full bg-[#0891b2]/10 text-[#0891b2] hover:bg-[#0891b2]/20 transition-colors"
+                      className="text-sm px-3 py-1.5 rounded-full bg-cyan-600/10 text-[#0891b2] hover:bg-cyan-600/20 transition-colors"
                     >
                       {prompt}
                     </button>
@@ -1419,7 +1419,7 @@ export function Dashboard10({
                   size="sm"
                   onClick={handleSendChat}
                   disabled={!chatInput.trim() || isSendingChat}
-                  className="h-12 w-12 bg-[#0891b2] hover:bg-[#4a6478] rounded-xl transition-all disabled:opacity-50 p-0"
+                  className="h-12 w-12 bg-cyan-600 hover:bg-[#4a6478] rounded-xl transition-all disabled:opacity-50 p-0"
                   aria-label="Send message"
                 >
                   {isSendingChat ? (

@@ -252,10 +252,10 @@ export function TelehealthHome({
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <button
             onClick={() => startFlow('choose-path')}
-            className="bg-white/92 rounded-[24px] border border-slate-200 p-4 text-left shadow-sm hover:shadow-md hover:border-[#0891b2]/30 transition-all"
+            className="bg-white/92 rounded-[24px] border border-slate-200 p-4 text-left shadow-sm hover:shadow-md hover:border-cyan-600/30 transition-all"
           >
-            <div className="w-12 h-12 bg-[#0891b2]/10 rounded-full flex items-center justify-center mb-3">
-              <Calendar className="w-6 h-6 text-[#0891b2]" />
+            <div className="w-12 h-12 bg-cyan-600/10 rounded-full flex items-center justify-center mb-3">
+              <Calendar className="w-6 h-6 text-cyan-600" />
             </div>
             <h3 className="font-semibold text-gray-900">Book a Visit</h3>
             <p className="text-sm text-gray-500 mt-1">1:1 with an expert</p>
@@ -263,10 +263,10 @@ export function TelehealthHome({
 
           <button
             onClick={() => onNavigate?.('messages')}
-            className="bg-white/92 rounded-[24px] border border-slate-200 p-4 text-left shadow-sm hover:shadow-md hover:border-[#0891b2]/30 transition-all"
+            className="bg-white/92 rounded-[24px] border border-slate-200 p-4 text-left shadow-sm hover:shadow-md hover:border-cyan-600/30 transition-all"
           >
-            <div className="w-12 h-12 bg-[#0891b2]/10 rounded-full flex items-center justify-center mb-3">
-              <MessageCircle className="w-6 h-6 text-[#0891b2]" />
+            <div className="w-12 h-12 bg-cyan-600/10 rounded-full flex items-center justify-center mb-3">
+              <MessageCircle className="w-6 h-6 text-cyan-600" />
             </div>
             <h3 className="font-semibold text-gray-900">Aminy</h3>
             <p className="text-sm text-gray-500 mt-1">AI guidance 24/7</p>
@@ -274,10 +274,10 @@ export function TelehealthHome({
 
           <button
             onClick={() => startFlow('care-plan')}
-            className="bg-white rounded-2xl border border-gray-100 p-4 text-left hover:shadow-md hover:border-[#0891b2]/30 transition-all"
+            className="bg-white rounded-2xl border border-gray-100 p-4 text-left hover:shadow-md hover:border-cyan-600/30 transition-all"
           >
-            <div className="w-12 h-12 bg-[#0891b2]/10 rounded-full flex items-center justify-center mb-3">
-              <FileText className="w-6 h-6 text-[#0891b2]" />
+            <div className="w-12 h-12 bg-cyan-600/10 rounded-full flex items-center justify-center mb-3">
+              <FileText className="w-6 h-6 text-cyan-600" />
             </div>
             <h3 className="font-semibold text-gray-900">My Plan</h3>
             <p className="text-sm text-gray-500 mt-1">Goals, routines & progress</p>
@@ -285,10 +285,10 @@ export function TelehealthHome({
 
           <button
             onClick={() => onNavigate?.('resources')}
-            className="bg-white rounded-2xl border border-gray-100 p-4 text-left hover:shadow-md hover:border-[#0891b2]/30 transition-all"
+            className="bg-white rounded-2xl border border-gray-100 p-4 text-left hover:shadow-md hover:border-cyan-600/30 transition-all"
           >
-            <div className="w-12 h-12 bg-[#0891b2]/10 rounded-full flex items-center justify-center mb-3">
-              <BookOpen className="w-6 h-6 text-[#0891b2]" />
+            <div className="w-12 h-12 bg-cyan-600/10 rounded-full flex items-center justify-center mb-3">
+              <BookOpen className="w-6 h-6 text-cyan-600" />
             </div>
             <h3 className="font-semibold text-gray-900">Resources</h3>
             <p className="text-sm text-gray-500 mt-1">Guides & tools</p>
@@ -301,7 +301,7 @@ export function TelehealthHome({
             <h3 className="font-semibold text-gray-900">Common starting points</h3>
             <button
               onClick={() => startFlow('browse-concerns')}
-              className="text-sm text-[#0891b2] font-medium flex items-center gap-1 hover:underline"
+              className="text-sm text-cyan-600 font-medium flex items-center gap-1 hover:underline"
             >
               See all
               <ChevronRight className="w-4 h-4" />
@@ -315,9 +315,9 @@ export function TelehealthHome({
                   setFlowEntry('get-care');
                   setCurrentView('flow');
                 }}
-                className="flex w-40 flex-shrink-0 flex-col rounded-[22px] border border-slate-200 bg-white/95 p-4 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:border-[#0891b2]/30 hover:shadow-md"
+                className="flex w-40 flex-shrink-0 flex-col rounded-[22px] border border-slate-200 bg-white/95 p-4 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:border-cyan-600/30 hover:shadow-md"
               >
-                <span className="mb-3 flex h-11 w-11 items-center justify-center rounded-2xl bg-[#0891b2]/10 text-xl">
+                <span className="mb-3 flex h-11 w-11 items-center justify-center rounded-2xl bg-cyan-600/10 text-xl">
                   {concern.icon}
                 </span>
                 <span className="text-sm font-medium leading-5 text-gray-900 line-clamp-2">{concern.name}</span>
@@ -380,7 +380,7 @@ export function TelehealthHome({
               <h3 className="font-semibold text-gray-900">Available Providers</h3>
               <button
                 onClick={() => startFlow('browse-concerns')}
-                className="text-sm text-[#0891b2] font-medium flex items-center gap-1 hover:underline"
+                className="text-sm text-cyan-600 font-medium flex items-center gap-1 hover:underline"
               >
                 View all
                 <ChevronRight className="w-4 h-4" />
@@ -391,7 +391,7 @@ export function TelehealthHome({
                 <button
                   key={provider.id}
                   onClick={() => startFlow('browse-concerns')}
-                  className="w-full bg-white rounded-xl border border-gray-100 p-4 text-left hover:shadow-md hover:border-[#0891b2]/30 transition-all"
+                  className="w-full bg-white rounded-xl border border-gray-100 p-4 text-left hover:shadow-md hover:border-cyan-600/30 transition-all"
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 rounded-full bg-gray-200 overflow-hidden flex-shrink-0">
@@ -402,7 +402,7 @@ export function TelehealthHome({
                           className="w-full h-full object-cover"
                         />
                       ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-[#0891b2] to-[#466379] flex items-center justify-center text-white font-semibold">
+                        <div className="w-full h-full bg-gradient-to-br from-cyan-600 to-[#466379] flex items-center justify-center text-white font-semibold">
                           {provider.firstName[0]}{provider.lastName[0]}
                         </div>
                       )}
@@ -446,7 +446,7 @@ export function TelehealthHome({
               </p>
               <button
                 onClick={() => onNavigate?.('find-care')}
-                className="mt-3 text-sm font-medium text-[#0891b2] hover:underline flex items-center gap-1"
+                className="mt-3 text-sm font-medium text-cyan-600 hover:underline flex items-center gap-1"
               >
                 Explore local providers
                 <ChevronRight className="w-4 h-4" />
