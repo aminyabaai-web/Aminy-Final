@@ -585,9 +585,9 @@ export function Dashboard10({
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-            className="w-12 h-12 border-4 border-[#0891b2] border-t-transparent rounded-full mx-auto mb-4"
+            className="w-12 h-12 border-4 border-cyan-600 border-t-transparent rounded-full mx-auto mb-4"
           />
-          <p className="text-[#0D1B2A] dark:text-white font-medium">Loading your calm hub...</p>
+          <p className="text-slate-900 dark:text-white font-medium">Loading your calm hub...</p>
         </div>
       </div>
     );
@@ -1182,7 +1182,7 @@ export function Dashboard10({
             ======================================== */}
         <section>
           <h2 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-            <Zap aria-hidden="true" className="w-5 h-5 text-[#0891b2]" />
+            <Zap aria-hidden="true" className="w-5 h-5 text-cyan-600" />
             Quick Actions
           </h2>
 
@@ -1299,7 +1299,7 @@ export function Dashboard10({
             }`}
           >
             {/* Chat Header - Branded with Full-Screen Toggle */}
-            <div className="p-4 bg-gradient-to-r from-[#0D1B2A] to-[#1a3a5c] text-white">
+            <div className="p-4 bg-gradient-to-r from-slate-900 to-[#1a3a5c] text-white">
               <div className="flex items-center justify-between">
                 <h3 className="font-semibold flex items-center gap-2 text-lg">
                   <Sparkles aria-hidden="true" className="w-5 h-5 text-[#E07A5F]" />
@@ -1368,7 +1368,7 @@ export function Dashboard10({
               {isSendingChat && (
                 <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-700 dark:to-slate-600 rounded-xl p-3 text-sm shadow-sm mr-8">
                   <div className="flex items-center gap-2">
-                    <Loader2 aria-hidden="true" className="w-4 h-4 animate-spin text-[#0891b2]" />
+                    <Loader2 aria-hidden="true" className="w-4 h-4 animate-spin text-cyan-600" />
                     <span className="text-gray-500 dark:text-gray-400">Aminy is thinking...</span>
                   </div>
                 </div>
@@ -1385,7 +1385,7 @@ export function Dashboard10({
                       onClick={() => {
                         setChatInput(prompt);
                       }}
-                      className="text-sm px-3 py-1.5 rounded-full bg-cyan-600/10 text-[#0891b2] hover:bg-cyan-600/20 transition-colors"
+                      className="text-sm px-3 py-1.5 rounded-full bg-cyan-600/10 text-cyan-600 hover:bg-cyan-600/20 transition-colors"
                     >
                       {prompt}
                     </button>
@@ -1411,7 +1411,7 @@ export function Dashboard10({
                   onChange={(e) => setChatInput(e.target.value)}
                   onKeyDown={handleChatKeyDown}
                   placeholder="Ask Aminy anything..."
-                  className="flex-1 px-4 py-3 text-sm rounded-xl border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:border-[#0891b2] focus:ring-2 focus:ring-[#0891b2]/20 transition-all"
+                  className="flex-1 px-4 py-3 text-sm rounded-xl border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:border-cyan-600 focus:ring-2 focus:ring-cyan-600/20 transition-all"
                   aria-label="Chat message input"
                   disabled={isSendingChat}
                 />
