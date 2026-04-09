@@ -1066,7 +1066,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                 <p className="text-sm text-muted-foreground">Export data and manage privacy</p>
               </div>
             </div>
-            <ChevronRight className={`w-5 h-5 text-muted-foreground transition-transform ${activeSection === 'privacy' ? 'rotate-90' : ''}`} />
+            <ChevronRight aria-hidden="true" className={`w-5 h-5 text-muted-foreground transition-transform ${activeSection === 'privacy' ? 'rotate-90' : ''}`} />
           </button>
 
           <AnimatePresence>
@@ -1082,7 +1082,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                   <div className="p-3 bg-gray-50 dark:bg-slate-800 rounded-lg">
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-3">
-                        <CreditCard className="w-4 h-4 text-muted-foreground" />
+                        <CreditCard aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
                         <div>
                           <p className="font-medium dark:text-white">Insurance Information</p>
                           <p className="text-sm text-muted-foreground">
@@ -1101,7 +1101,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                           size="sm"
                           onClick={() => setShowInsuranceDetails(!showInsuranceDetails)}
                         >
-                          {showInsuranceDetails ? <EyeOff className="w-3 h-3 mr-1" /> : <Eye className="w-3 h-3 mr-1" />}
+                          {showInsuranceDetails ? <EyeOff aria-hidden="true" className="w-3 h-3 mr-1" /> : <Eye aria-hidden="true" className="w-3 h-3 mr-1" />}
                           {showInsuranceDetails ? 'Hide' : 'View'}
                         </Button>
                         <Button
@@ -1110,7 +1110,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                           className="text-red-600 hover:bg-red-50"
                           onClick={() => setHasInsurance(false)}
                         >
-                          <Trash2 className="w-3 h-3 mr-1" />
+                          <Trash2 aria-hidden="true" className="w-3 h-3 mr-1" />
                           Delete
                         </Button>
                       </div>
@@ -1130,7 +1130,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                     className="w-full flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-800 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
                   >
                     <div className="flex items-center gap-3">
-                      <Download className="w-4 h-4 text-muted-foreground" />
+                      <Download aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
                       <div className="text-left">
                         <p className="font-medium dark:text-white">Export My Data</p>
                         <p className="text-sm text-muted-foreground">Download all your data (GDPR)</p>
