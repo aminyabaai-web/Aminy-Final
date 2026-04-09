@@ -404,12 +404,17 @@ async function handlePayments(
     // Calculate discount if promo code provided
     let discountAmount = 0;
     if (promoCode) {
-      // Simple promo code validation (in production, use Stripe coupons)
-      const validPromoCodes: Record<string, number> = {
-        'FIRST10': 1000, // $10 off
-        'AMINY20': 2000, // $20 off
-      };
-      discountAmount = validPromoCodes[promoCode.toUpperCase()] || 0;
+      // Validate promo code against database (not hardcoded)
+      const { data: promoData } = await supabase
+        .from('promo_codes')
+        .select('discount_cents, is_active, max_uses, current_uses')
+        .eq('code', promoCode.toUpperCase())
+        .eq('is_active', true)
+        .maybeSingle();
+
+      if (promoData && (promoData.max_uses === null || promoData.current_uses < promoData.max_uses)) {
+        discountAmount = promoData.discount_cents || 0;
+      }
     }
 
     const finalAmount = Math.max(0, amount - discountAmount);
