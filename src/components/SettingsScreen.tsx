@@ -1026,12 +1026,12 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                       >
                         {calendarSyncing ? (
                           <>
-                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                            <Loader2 aria-hidden="true" className="w-4 h-4 mr-2 animate-spin" />
                             Syncing...
                           </>
                         ) : (
                           <>
-                            <RefreshCw className="w-4 h-4 mr-2" />
+                            <RefreshCw aria-hidden="true" className="w-4 h-4 mr-2" />
                             Sync Now
                           </>
                         )}
@@ -1042,7 +1042,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                         onClick={handleDisconnectCalendar}
                         className="w-full flex items-center justify-center gap-2 p-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
                       >
-                        <Unplug className="w-4 h-4" />
+                        <Unplug aria-hidden="true" className="w-4 h-4" />
                         Disconnect Google Calendar
                       </button>
                     </>
@@ -1060,7 +1060,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
             className="w-full p-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
           >
             <div className="flex items-center gap-3">
-              <Lock className="w-5 h-5 text-teal-500" />
+              <Lock aria-hidden="true" className="w-5 h-5 text-teal-500" />
               <div className="text-left">
                 <h3 className="font-semibold dark:text-white">Privacy & Data</h3>
                 <p className="text-sm text-muted-foreground">Export data and manage privacy</p>
