@@ -796,7 +796,7 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
                                 <div className="text-xs opacity-75">{attachment.size}</div>
                               )}
                             </div>
-                            <button className="p-1 hover:bg-white/20 rounded">
+                            <button className="p-1 min-h-[44px] min-w-[44px] flex items-center justify-center hover:bg-white/20 rounded">
                               <Download className="w-3 h-3" />
                             </button>
                           </div>
@@ -854,7 +854,7 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
               <span className="text-sm font-medium text-blue-800 dark:text-blue-200">Quick Templates</span>
               <button
                 onClick={() => setShowQuickReplies(false)}
-                className="p-1 hover:bg-blue-100 dark:hover:bg-blue-800 rounded"
+                className="p-1 min-h-[44px] min-w-[44px] flex items-center justify-center hover:bg-blue-100 dark:hover:bg-blue-800 rounded"
               >
                 <X className="w-4 h-4 text-blue-600 dark:text-blue-400" />
               </button>
@@ -881,7 +881,7 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
               <span className="text-sm font-medium text-purple-800 dark:text-purple-200">Schedule Message</span>
               <button
                 onClick={() => setShowScheduleModal(false)}
-                className="p-1 hover:bg-purple-100 dark:hover:bg-purple-800 rounded"
+                className="p-1 min-h-[44px] min-w-[44px] flex items-center justify-center hover:bg-purple-100 dark:hover:bg-purple-800 rounded"
               >
                 <X className="w-4 h-4 text-purple-600 dark:text-purple-400" />
               </button>
@@ -955,20 +955,20 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
             <div className="flex items-center gap-1">
               <button
                 onClick={() => setShowAttachmentMenu(!showAttachmentMenu)}
-                className="p-1.5 hover:bg-gray-200 dark:hover:bg-slate-700 rounded-lg transition-colors"
+                className="p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center hover:bg-gray-200 dark:hover:bg-slate-700 rounded-lg transition-colors"
                 aria-label="Attach file"
               >
                 <Paperclip className="w-4 h-4 text-gray-600 dark:text-slate-400" />
               </button>
               <button
-                className="p-1.5 hover:bg-gray-200 dark:hover:bg-slate-700 rounded-lg transition-colors"
+                className="p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center hover:bg-gray-200 dark:hover:bg-slate-700 rounded-lg transition-colors"
                 aria-label="Voice input"
               >
                 <Mic className="w-4 h-4 text-gray-600 dark:text-slate-400" />
               </button>
               <button
                 onClick={() => setShowQuickReplies(!showQuickReplies)}
-                className={`p-1.5 rounded-lg transition-colors ${
+                className={`p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg transition-colors ${
                   showQuickReplies
                     ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600'
                     : 'hover:bg-gray-200 dark:hover:bg-slate-700 text-gray-600 dark:text-slate-400'
@@ -980,7 +980,7 @@ export default function CarePagePro({ userData, onNavigate, userTier, freeMessag
               </button>
               <button
                 onClick={() => setShowScheduleModal(!showScheduleModal)}
-                className={`p-1.5 rounded-lg transition-colors ${
+                className={`p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg transition-colors ${
                   showScheduleModal
                     ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-600'
                     : 'hover:bg-gray-200 dark:hover:bg-slate-700 text-gray-600 dark:text-slate-400'

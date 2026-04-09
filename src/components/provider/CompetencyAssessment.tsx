@@ -344,7 +344,7 @@ function HistoryView({
   if (assessments.length === 0) {
     return (
       <div className="text-center py-12">
-        <FileText className="w-8 h-8 text-slate-300 mx-auto mb-2" />
+        <FileText className="w-8 h-8 text-slate-400 mx-auto mb-2" />
         <p className="text-sm text-slate-500">No assessments yet for {rbtName}</p>
         <p className="text-xs text-slate-400 mt-1">Create a new assessment to start tracking</p>
       </div>
@@ -460,7 +460,7 @@ function DevelopmentPlanView({
   if (assessments.length === 0) {
     return (
       <div className="text-center py-12">
-        <BarChart3 className="w-8 h-8 text-slate-300 mx-auto mb-2" />
+        <BarChart3 className="w-8 h-8 text-slate-400 mx-auto mb-2" />
         <p className="text-sm text-slate-500">No assessments available</p>
         <p className="text-xs text-slate-400 mt-1">Complete an assessment to generate a development plan</p>
       </div>

@@ -610,7 +610,7 @@ export function CrisisSupportBanner({
           {onDismiss && (
             <button
               onClick={onDismiss}
-              className="p-1 hover:bg-white/20 rounded transition-colors"
+              className="p-1 min-h-[44px] min-w-[44px] flex items-center justify-center hover:bg-white/20 rounded transition-colors"
             >
               <X className="w-4 h-4" />
             </button>

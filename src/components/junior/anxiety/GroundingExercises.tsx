@@ -24,6 +24,27 @@ import {
 import { playTap, playSuccess, haptic } from '../activities/sounds';
 
 // ---------------------------------------------------------------------------
+// SVG color constants — mapped to Tailwind palette for consistency
+// ---------------------------------------------------------------------------
+
+/** Tailwind slate-200 (#e2e8f0) — body part default fill */
+const SLATE_200 = '#e2e8f0';
+/** Tailwind slate-400 (#94a3b8) — body outline stroke */
+const SLATE_400 = '#94a3b8';
+/** Tailwind teal-300 (#5eead4) — body part completed fill */
+const TEAL_300 = '#5eead4';
+/** Tailwind teal-600 (#0d9488) — face detail accent */
+const TEAL_600 = '#0d9488';
+/** Tailwind indigo-100 (#e0e7ff) — inactive corner fill */
+const INDIGO_100 = '#e0e7ff';
+/** Tailwind indigo-200 (#c7d2fe) — square border stroke */
+const INDIGO_200 = '#c7d2fe';
+/** Tailwind indigo-300 (#a5b4fc) — corner stroke */
+const INDIGO_300 = '#a5b4fc';
+/** Tailwind indigo-500 (#6366f1) — active dot / active corner fill */
+const INDIGO_500 = '#6366f1';
+
+// ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
 
@@ -225,26 +246,26 @@ function BodyScan({ onFinish }: { onFinish: () => void }) {
         {/* Simple body SVG */}
         <svg viewBox="0 0 100 200" className="absolute inset-0 h-full w-full">
           {/* Head */}
-          <circle cx="50" cy="20" r="15" fill={completed.has('head') ? '#5eead4' : '#e2e8f0'} stroke="#94a3b8" strokeWidth="1.5" />
+          <circle cx="50" cy="20" r="15" fill={completed.has('head') ? TEAL_300 : SLATE_200} stroke={SLATE_400} strokeWidth="1.5" />
           {/* Body */}
-          <rect x="35" y="38" width="30" height="50" rx="10" fill={completed.has('chest') || completed.has('belly') ? '#5eead4' : '#e2e8f0'} stroke="#94a3b8" strokeWidth="1.5" />
+          <rect x="35" y="38" width="30" height="50" rx="10" fill={completed.has('chest') || completed.has('belly') ? TEAL_300 : SLATE_200} stroke={SLATE_400} strokeWidth="1.5" />
           {/* Arms */}
-          <rect x="10" y="42" width="22" height="8" rx="4" fill={completed.has('hands') ? '#5eead4' : '#e2e8f0'} stroke="#94a3b8" strokeWidth="1.5" />
-          <rect x="68" y="42" width="22" height="8" rx="4" fill={completed.has('hands') ? '#5eead4' : '#e2e8f0'} stroke="#94a3b8" strokeWidth="1.5" />
+          <rect x="10" y="42" width="22" height="8" rx="4" fill={completed.has('hands') ? TEAL_300 : SLATE_200} stroke={SLATE_400} strokeWidth="1.5" />
+          <rect x="68" y="42" width="22" height="8" rx="4" fill={completed.has('hands') ? TEAL_300 : SLATE_200} stroke={SLATE_400} strokeWidth="1.5" />
           {/* Shoulders */}
-          <rect x="28" y="35" width="44" height="8" rx="4" fill={completed.has('shoulders') ? '#5eead4' : '#e2e8f0'} stroke="#94a3b8" strokeWidth="1.5" />
+          <rect x="28" y="35" width="44" height="8" rx="4" fill={completed.has('shoulders') ? TEAL_300 : SLATE_200} stroke={SLATE_400} strokeWidth="1.5" />
           {/* Legs */}
-          <rect x="37" y="90" width="10" height="45" rx="5" fill={completed.has('legs') ? '#5eead4' : '#e2e8f0'} stroke="#94a3b8" strokeWidth="1.5" />
-          <rect x="53" y="90" width="10" height="45" rx="5" fill={completed.has('legs') ? '#5eead4' : '#e2e8f0'} stroke="#94a3b8" strokeWidth="1.5" />
+          <rect x="37" y="90" width="10" height="45" rx="5" fill={completed.has('legs') ? TEAL_300 : SLATE_200} stroke={SLATE_400} strokeWidth="1.5" />
+          <rect x="53" y="90" width="10" height="45" rx="5" fill={completed.has('legs') ? TEAL_300 : SLATE_200} stroke={SLATE_400} strokeWidth="1.5" />
           {/* Feet */}
-          <ellipse cx="42" cy="140" rx="8" ry="5" fill={completed.has('feet') ? '#5eead4' : '#e2e8f0'} stroke="#94a3b8" strokeWidth="1.5" />
-          <ellipse cx="58" cy="140" rx="8" ry="5" fill={completed.has('feet') ? '#5eead4' : '#e2e8f0'} stroke="#94a3b8" strokeWidth="1.5" />
+          <ellipse cx="42" cy="140" rx="8" ry="5" fill={completed.has('feet') ? TEAL_300 : SLATE_200} stroke={SLATE_400} strokeWidth="1.5" />
+          <ellipse cx="58" cy="140" rx="8" ry="5" fill={completed.has('feet') ? TEAL_300 : SLATE_200} stroke={SLATE_400} strokeWidth="1.5" />
           {/* Face detail */}
           {completed.has('face') && (
             <>
-              <circle cx="44" cy="18" r="2" fill="#0d9488" />
-              <circle cx="56" cy="18" r="2" fill="#0d9488" />
-              <path d="M44 24 Q50 28 56 24" stroke="#0d9488" strokeWidth="1.5" fill="none" />
+              <circle cx="44" cy="18" r="2" fill={TEAL_600} />
+              <circle cx="56" cy="18" r="2" fill={TEAL_600} />
+              <path d="M44 24 Q50 28 56 24" stroke={TEAL_600} strokeWidth="1.5" fill="none" />
             </>
           )}
         </svg>
@@ -510,14 +531,14 @@ function SquareBreathing({ onFinish }: { onFinish: () => void }) {
       <div className="relative mx-auto h-48 w-48">
         <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full">
           {/* Square border */}
-          <rect x="15" y="15" width="70" height="70" rx="8" fill="none" stroke="#c7d2fe" strokeWidth="3" />
+          <rect x="15" y="15" width="70" height="70" rx="8" fill="none" stroke={INDIGO_200} strokeWidth="3" />
           {/* Traced path */}
           {running && (
             <motion.circle
               cx={dotX}
               cy={dotY}
               r="6"
-              fill="#6366f1"
+              fill={INDIGO_500}
             />
           )}
           {/* Corner labels */}
@@ -527,8 +548,8 @@ function SquareBreathing({ onFinish }: { onFinish: () => void }) {
               cx={pos.x}
               cy={pos.y}
               r="4"
-              fill={phaseIndex === i && running ? '#6366f1' : '#e0e7ff'}
-              stroke="#a5b4fc"
+              fill={phaseIndex === i && running ? INDIGO_500 : INDIGO_100}
+              stroke={INDIGO_300}
               strokeWidth="1"
             />
           ))}

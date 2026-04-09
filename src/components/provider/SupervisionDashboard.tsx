@@ -623,7 +623,7 @@ function QuickLogModal({
       >
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-bold text-slate-800">Log Supervision Session</h3>
-          <button onClick={onClose} className="p-1"><X className="w-5 h-5 text-slate-400" /></button>
+          <button onClick={onClose} className="p-1 min-h-[44px] min-w-[44px] flex items-center justify-center"><X className="w-5 h-5 text-slate-400" /></button>
         </div>
 
         <div className="space-y-3">

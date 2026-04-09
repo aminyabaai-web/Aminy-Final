@@ -750,9 +750,9 @@ export function Dashboard10({
                   className="flex-shrink-0 rounded-2xl border border-slate-200 bg-white/85 px-3 py-2.5 shadow-sm transition-colors hover:bg-white"
                 >
                   {event.type === 'telehealth' ? (
-                    <Video className="w-4 h-4 text-teal-600" />
+                    <Video aria-hidden="true" className="w-4 h-4 text-teal-600" />
                   ) : (
-                    <Calendar className="w-4 h-4 text-amber-500" />
+                    <Calendar aria-hidden="true" className="w-4 h-4 text-amber-500" />
                   )}
                   <div className="text-left">
                     <div className="text-sm font-medium text-slate-900">{event.title}</div>
@@ -795,7 +795,7 @@ export function Dashboard10({
               onClick={() => onNavigate?.('parent-approval')}
               className="w-full mt-2 py-2.5 bg-violet-600 hover:bg-violet-700 text-white rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
             >
-              <CheckCircle2 className="w-4 h-4" />
+              <CheckCircle2 aria-hidden="true" className="w-4 h-4" />
               Review & Approve
             </button>
           </motion.div>

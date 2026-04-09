@@ -159,7 +159,7 @@ export function StreakCelebration({
               {/* Close button */}
               <button
                 onClick={onClose}
-                className="absolute top-3 right-3 p-1 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
+                className="absolute top-3 right-3 p-1 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full bg-white/20 hover:bg-white/30 transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>

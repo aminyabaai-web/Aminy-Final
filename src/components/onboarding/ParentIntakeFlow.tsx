@@ -427,7 +427,7 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
               </div>
             ) : (
               <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 text-center">
-                <Shield className="w-10 h-10 text-slate-300 mx-auto mb-3" />
+                <Shield className="w-10 h-10 text-slate-400 mx-auto mb-3" />
                 <p className="text-sm text-slate-600 font-medium">Paying out of pocket</p>
                 <p className="text-xs text-slate-400 mt-1">You can add insurance information later in your profile.</p>
               </div>

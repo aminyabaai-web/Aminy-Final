@@ -514,7 +514,7 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
           <div className="flex flex-col items-center justify-center h-full text-center px-6">
             {activeCategory === 'favorites' ? (
               <>
-                <Heart className="w-12 h-12 text-gray-300 mb-3" />
+                <Heart className="w-12 h-12 text-gray-400 mb-3" />
                 <p className="text-gray-500 text-sm">
                   No favorite words yet.
                 </p>

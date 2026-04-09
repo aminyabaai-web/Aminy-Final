@@ -240,7 +240,7 @@ export function ALaCarteMenu({ onBookSession, userTier = 'free', isProUser = fal
           By booking, you agree to our <button className="underline hover:text-gray-600">Terms of Service</button> and <button className="underline hover:text-gray-600">Telehealth Consent</button>.
           Prepaid sessions never expire. Cancellations require 24-hour notice for full refund.
         </p>
-        <p className="text-gray-300">
+        <p className="text-gray-400">
           Aminy facilitates connections with providers but is not the provider of clinical services.
           Providers are independently licensed professionals responsible for their own clinical decisions.
         </p>

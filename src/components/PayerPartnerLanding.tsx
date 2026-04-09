@@ -149,7 +149,7 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
           {onBack && (
             <button
               onClick={onBack}
-              className="p-1.5 rounded-lg hover:bg-slate-100 transition-colors"
+              className="p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors"
             >
               <ArrowLeft className="w-5 h-5 text-slate-600" />
             </button>

@@ -229,10 +229,10 @@ function ProgressBar({ current }: { current: WizardStep }) {
                 {isPast ? (
                   <Check className="w-3 h-3 text-white" />
                 ) : (
-                  <Icon className={`w-3 h-3 ${isActive ? 'text-teal-600' : 'text-slate-300'}`} />
+                  <Icon className={`w-3 h-3 ${isActive ? 'text-teal-600' : 'text-slate-400'}`} />
                 )}
               </div>
-              <span className={`text-[9px] font-medium hidden sm:block ${isActive ? 'text-teal-600' : isPast ? 'text-teal-400' : 'text-slate-300'}`}>
+              <span className={`text-[9px] font-medium hidden sm:block ${isActive ? 'text-teal-600' : isPast ? 'text-teal-400' : 'text-slate-400'}`}>
                 {meta.label}
               </span>
             </div>
@@ -289,7 +289,7 @@ function StepProfile({
           {p.photoBase64 ? (
             <img src={p.photoBase64} alt="Profile" className="w-full h-full object-cover" />
           ) : (
-            <Camera className="w-8 h-8 text-slate-300" />
+            <Camera className="w-8 h-8 text-slate-400" />
           )}
         </div>
         <div>

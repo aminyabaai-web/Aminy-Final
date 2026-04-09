@@ -405,7 +405,7 @@ function ActionItemCard({ item, onToggle, formatDate }: ActionItemCardProps) {
           {item.completed ? (
             <CheckCircle className="w-6 h-6 text-green-500" />
           ) : (
-            <Circle className="w-6 h-6 text-gray-300 hover:text-[#0891b2] transition-colors" />
+            <Circle className="w-6 h-6 text-gray-400 hover:text-[#0891b2] transition-colors" />
           )}
         </button>
 

@@ -745,7 +745,7 @@ function RecordsTab({ records }: { records: EVVRecord[] }) {
 
       {records.length === 0 ? (
         <div className="bg-white rounded-xl border border-gray-200 p-8 text-center">
-          <ClipboardList className="w-10 h-10 mx-auto text-gray-300 mb-3" />
+          <ClipboardList className="w-10 h-10 mx-auto text-gray-400 mb-3" />
           <p className="text-gray-500 text-sm">No EVV records yet</p>
           <p className="text-gray-400 text-xs mt-1">Clock in to start your first visit</p>
         </div>
@@ -891,7 +891,7 @@ function BudgetTab({
 
       {summaries.length === 0 && (
         <div className="bg-white rounded-xl border border-gray-200 p-8 text-center">
-          <DollarSign className="w-10 h-10 mx-auto text-gray-300 mb-3" />
+          <DollarSign className="w-10 h-10 mx-auto text-gray-400 mb-3" />
           <p className="text-gray-500 text-sm">No active authorizations</p>
           <p className="text-gray-400 text-xs mt-1">Confirm authorizations in your external EVV system while the Arizona pilot workflow is being validated.</p>
         </div>
@@ -1001,7 +1001,7 @@ function TimesheetsTab({
 
       {Object.keys(weeklyGroups).length === 0 && (
         <div className="bg-white rounded-xl border border-gray-200 p-8 text-center">
-          <FileText className="w-10 h-10 mx-auto text-gray-300 mb-3" />
+          <FileText className="w-10 h-10 mx-auto text-gray-400 mb-3" />
           <p className="text-gray-500 text-sm">No visits to submit</p>
           <p className="text-gray-400 text-xs mt-1">Complete some visits first to generate timesheets</p>
         </div>

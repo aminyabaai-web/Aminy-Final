@@ -592,7 +592,7 @@ export function SettingsPage({ onNavigate, userTier = 'core', accessToken: propA
 
       {childProfiles.length === 0 && (
         <div className="text-center py-12">
-          <Users className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+          <Users className="w-12 h-12 text-slate-400 mx-auto mb-4" />
           <h3 className="text-lg text-slate-900 mb-2">No child profiles</h3>
           <p className="text-slate-600 mb-4">Add your child to personalize Aminy Ease and your Plan.</p>
           <Button onClick={() => setShowAddChildModal(true)}>
@@ -620,7 +620,7 @@ export function SettingsPage({ onNavigate, userTier = 'core', accessToken: propA
       case 'notifications':
         return (
           <div className="text-center py-12">
-            <Bell className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+            <Bell className="w-12 h-12 text-slate-400 mx-auto mb-4" />
             <h3 className="text-lg text-slate-900 mb-2">Notification Settings</h3>
             <p className="text-slate-600">Manage your notification preferences here.</p>
           </div>
@@ -628,7 +628,7 @@ export function SettingsPage({ onNavigate, userTier = 'core', accessToken: propA
       case 'privacy':
         return (
           <div className="text-center py-12">
-            <Shield className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+            <Shield className="w-12 h-12 text-slate-400 mx-auto mb-4" />
             <h3 className="text-lg text-slate-900 mb-2">Privacy & Sharing</h3>
             <p className="text-slate-600">Control your privacy settings and data sharing preferences.</p>
           </div>
@@ -716,7 +716,7 @@ export function SettingsPage({ onNavigate, userTier = 'core', accessToken: propA
       default:
         return (
           <div className="text-center py-12">
-            <Settings className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+            <Settings className="w-12 h-12 text-slate-400 mx-auto mb-4" />
             <h3 className="text-lg text-slate-900 mb-2">Coming Soon</h3>
             <p className="text-slate-600">This section is being developed.</p>
           </div>

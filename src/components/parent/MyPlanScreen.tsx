@@ -208,7 +208,7 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
                       <p className="text-sm font-semibold text-gray-900">{update.provider}</p>
                       <p className="text-xs text-gray-500">{formatDate(update.date)}</p>
                     </div>
-                    <ChevronRight className="h-4 w-4 text-gray-300" />
+                    <ChevronRight className="h-4 w-4 text-gray-400" />
                   </div>
                   <p className="mt-2 text-xs leading-relaxed text-gray-600">{update.summary}</p>
                   {update.wins.length > 0 && (

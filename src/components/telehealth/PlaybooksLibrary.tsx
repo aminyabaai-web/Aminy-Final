@@ -523,7 +523,7 @@ export function PlaybooksLibrary({
           ))
         ) : (
           <div className="text-center py-12">
-            <BookOpen className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+            <BookOpen className="w-12 h-12 text-gray-400 mx-auto mb-4" />
             <p className="text-gray-500">No playbooks found</p>
             <p className="text-sm text-gray-400 mt-1">Try adjusting your search or filters</p>
           </div>

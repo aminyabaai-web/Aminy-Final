@@ -286,12 +286,13 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                 {/* Disabled lock icon */}
                 {isDisabled && (
                   <div className="absolute top-1 right-1 z-10">
-                    <Lock className="w-3 h-3 text-gray-400 dark:text-slate-600" />
+                    <Lock aria-hidden="true" className="w-3 h-3 text-gray-400 dark:text-slate-600" />
                   </div>
                 )}
 
                 {/* Icon */}
                 <Icon
+                  aria-hidden="true"
                   className={`w-5 h-5 ${isDisabled ? 'opacity-40' : 'opacity-100'} transition-all duration-200`}
                   strokeWidth={isActive ? 2 : 1.5}
                 />
@@ -375,6 +376,7 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                           }
                         `}>
                           <Icon
+                            aria-hidden="true"
                             className={`w-5 h-5 ${isItemActive ? 'text-teal-600 dark:text-teal-300' : 'text-gray-600 dark:text-gray-300'}`}
                             strokeWidth={1.5}
                           />
@@ -388,7 +390,7 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                         </div>
                       </div>
 
-                      <ChevronRight className={`w-4 h-4 ${isItemActive ? 'text-teal-500' : 'text-gray-400 dark:text-gray-500'} group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors`} />
+                      <ChevronRight aria-hidden="true" className={`w-4 h-4 ${isItemActive ? 'text-teal-500' : 'text-gray-400 dark:text-gray-500'} group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors`} />
                     </button>
                   );
                 })}

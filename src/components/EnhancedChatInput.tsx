@@ -583,7 +583,7 @@ export function EnhancedChatInput({
             placeholder={isRecording ? 'Speak now or type...' : placeholder}
             disabled={disabled}
             rows={1}
-            className="w-full px-4 py-3 pr-12 rounded-2xl border border-gray-200 dark:border-slate-600 bg-gray-50 dark:bg-slate-700 focus:ring-2 focus:ring-teal-500 focus:border-transparent resize-none text-sm placeholder:text-gray-400 dark:text-white dark:placeholder:text-gray-500 disabled:opacity-50"
+            className="w-full px-4 py-3 pr-12 rounded-2xl border border-gray-200 dark:border-slate-600 bg-gray-50 dark:bg-slate-700 focus:ring-2 focus:ring-teal-500 focus:border-transparent resize-none text-sm placeholder:text-gray-500 dark:text-white dark:placeholder:text-gray-500 disabled:opacity-50"
             style={{ minHeight: '48px', maxHeight: '150px' }}
           />
         </div>

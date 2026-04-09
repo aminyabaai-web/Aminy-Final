@@ -478,7 +478,7 @@ export function VisualSchedule({ childName, onBack }: VisualScheduleProps) {
           <div className="p-4">
             {items.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-16 text-center">
-                <Clock className="w-14 h-14 text-gray-300 mb-4" />
+                <Clock className="w-14 h-14 text-gray-400 mb-4" />
                 <p className="text-gray-500 font-medium mb-1">No schedule yet</p>
                 <p className="text-gray-400 text-sm mb-4">
                   Create a schedule or pick a template
@@ -537,7 +537,7 @@ export function VisualSchedule({ childName, onBack }: VisualScheduleProps) {
                         className="flex-shrink-0 cursor-grab active:cursor-grabbing touch-none"
                         onTouchStart={(e) => handleTouchDragStart(index, e)}
                       >
-                        <GripVertical className="w-5 h-5 text-gray-300" />
+                        <GripVertical className="w-5 h-5 text-gray-400" />
                       </div>
 
                       {/* Timeline dot */}

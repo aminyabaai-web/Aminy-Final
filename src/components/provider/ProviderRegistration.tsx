@@ -277,7 +277,7 @@ function StepProfile({ profile, onChange }: StepProfileProps) {
           {profile.photoUrl ? (
             <img src={profile.photoUrl} alt="Profile" className="w-full h-full object-cover" />
           ) : (
-            <Camera className="w-8 h-8 text-slate-300" />
+            <Camera className="w-8 h-8 text-slate-400" />
           )}
         </div>
         <button className="text-sm text-teal-600 font-medium flex items-center gap-1.5 hover:text-teal-700">
@@ -753,7 +753,7 @@ function StepPreview({ profile, selectedServices }: StepPreviewProps) {
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center overflow-hidden border-2 border-white/30">
               {profile.photoUrl ? (
-                <img src={profile.photoUrl} alt="" className="w-full h-full object-cover" />
+                <img src={profile.photoUrl} alt="Provider profile photo" className="w-full h-full object-cover" />
               ) : (
                 <User className="w-8 h-8 text-white/60" />
               )}

@@ -494,7 +494,7 @@ export default function ProviderBillingHelp({ onBack }: ProviderBillingHelpProps
                 value={aiQuery}
                 onChange={e => setAiQuery(e.target.value)}
                 placeholder="Type your billing question here…"
-                className="w-full text-sm text-gray-800 placeholder:text-gray-400 resize-none focus:outline-none min-h-[80px]"
+                className="w-full text-sm text-gray-800 placeholder:text-gray-500 resize-none focus:outline-none min-h-[80px]"
               />
               <div className="flex justify-end mt-2">
                 <button
@@ -559,7 +559,7 @@ export default function ProviderBillingHelp({ onBack }: ProviderBillingHelpProps
           <div className="space-y-2">
             {filteredFAQs.length === 0 ? (
               <div className="text-center py-8">
-                <Search size={28} className="text-gray-300 mx-auto mb-2" />
+                <Search size={28} className="text-gray-400 mx-auto mb-2" />
                 <p className="text-sm text-gray-500">No results for "{searchQuery}"</p>
               </div>
             ) : (

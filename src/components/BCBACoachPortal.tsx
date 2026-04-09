@@ -405,7 +405,7 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
 
             <TabsContent value="reports" className="space-y-3 sm:space-y-4">
               <Card className="p-6 text-center">
-                <FileText className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+                <FileText className="w-12 h-12 text-slate-400 mx-auto mb-3" />
                 <p className="text-slate-600 mb-4">Reports integration coming soon</p>
                 <Button variant="outline">
                   <Plus className="w-4 h-4 mr-2" />

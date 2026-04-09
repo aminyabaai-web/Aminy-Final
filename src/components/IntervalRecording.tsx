@@ -703,7 +703,7 @@ export function IntervalRecording({
                     {currentBehaviors[behavior.id] ? (
                       <CheckCircle className="w-5 h-5 text-green-500" />
                     ) : (
-                      <XCircle className="w-5 h-5 text-gray-300" />
+                      <XCircle className="w-5 h-5 text-gray-400" />
                     )}
                   </div>
                   <div className="font-medium text-gray-900 dark:text-white text-sm">

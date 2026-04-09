@@ -372,7 +372,7 @@ function DenialInbox({
 
         {filtered.length === 0 && (
           <div className="text-center py-8">
-            <Inbox className="w-8 h-8 text-slate-300 mx-auto mb-2" />
+            <Inbox className="w-8 h-8 text-slate-400 mx-auto mb-2" />
             <p className="text-sm text-slate-400">No denials match your filters</p>
           </div>
         )}

@@ -252,7 +252,7 @@ export function BrandGuideComponent() {
                   <h3 className="font-semibold text-slate-900 mb-4">Primary Accent</h3>
                   <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">
                     <div className="space-y-2">
-                      <div className="h-24 rounded-lg bg-[#0891b2] border-2 border-slate-200"></div>
+                      <div className="h-24 rounded-lg bg-cyan-600 border-2 border-slate-200"></div>
                       <div className="text-sm">
                         <p className="font-semibold text-slate-900">Teal Accent</p>
                         <p className="text-slate-500 font-mono text-xs">#0891b2</p>
@@ -298,7 +298,7 @@ export function BrandGuideComponent() {
                     </div>
 
                     <div className="space-y-2">
-                      <div className="h-16 rounded-lg bg-[#0891b2] border-2 border-slate-200"></div>
+                      <div className="h-16 rounded-lg bg-cyan-600 border-2 border-slate-200"></div>
                       <div className="text-sm">
                         <p className="font-semibold text-slate-900">Core Teal</p>
                         <p className="text-slate-500 font-mono text-xs">#0891b2</p>

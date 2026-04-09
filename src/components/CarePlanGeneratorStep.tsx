@@ -761,10 +761,10 @@ export function CarePlanGeneratorStep({ formData, onComplete }: CarePlanGenerato
                           autoFocus
                           onKeyDown={(e) => { if (e.key === 'Enter') saveEdit(); if (e.key === 'Escape') cancelEdit(); }}
                         />
-                        <button onClick={saveEdit} className="p-1 text-green-600 hover:bg-green-50 rounded" aria-label="Save">
+                        <button onClick={saveEdit} className="p-1 min-h-[44px] min-w-[44px] flex items-center justify-center text-green-600 hover:bg-green-50 rounded" aria-label="Save goal name">
                           <Check className="w-4 h-4" />
                         </button>
-                        <button onClick={cancelEdit} className="p-1 text-gray-400 hover:bg-gray-50 rounded" aria-label="Cancel">
+                        <button onClick={cancelEdit} className="p-1 min-h-[44px] min-w-[44px] flex items-center justify-center text-gray-400 hover:bg-gray-50 rounded" aria-label="Cancel editing goal name">
                           <X className="w-4 h-4" />
                         </button>
                       </div>
@@ -773,7 +773,7 @@ export function CarePlanGeneratorStep({ formData, onComplete }: CarePlanGenerato
                         <h4 className="text-base font-semibold text-primary">{goal.goal}</h4>
                         <button
                           onClick={() => startEditing(index, 'goal')}
-                          className="opacity-0 group-hover:opacity-100 p-1 text-gray-400 hover:text-accent transition-opacity"
+                          className="opacity-0 group-hover:opacity-100 p-1 min-h-[44px] min-w-[44px] flex items-center justify-center text-gray-400 hover:text-accent transition-opacity"
                           aria-label="Edit goal"
                         >
                           <Pencil className="w-3 h-3" />
@@ -821,8 +821,8 @@ export function CarePlanGeneratorStep({ formData, onComplete }: CarePlanGenerato
                           onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); saveEdit(); } if (e.key === 'Escape') cancelEdit(); }}
                         />
                         <div className="flex flex-col gap-1">
-                          <button onClick={saveEdit} className="p-1 text-green-600 hover:bg-green-50 rounded" aria-label="Save"><Check className="w-3 h-3" /></button>
-                          <button onClick={cancelEdit} className="p-1 text-gray-400 hover:bg-gray-50 rounded" aria-label="Cancel"><X className="w-3 h-3" /></button>
+                          <button onClick={saveEdit} className="p-1 min-h-[44px] min-w-[44px] flex items-center justify-center text-green-600 hover:bg-green-50 rounded" aria-label="Save baseline"><Check className="w-3 h-3" /></button>
+                          <button onClick={cancelEdit} className="p-1 min-h-[44px] min-w-[44px] flex items-center justify-center text-gray-400 hover:bg-gray-50 rounded" aria-label="Cancel editing baseline"><X className="w-3 h-3" /></button>
                         </div>
                       </div>
                     ) : (
@@ -850,8 +850,8 @@ export function CarePlanGeneratorStep({ formData, onComplete }: CarePlanGenerato
                           onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); saveEdit(); } if (e.key === 'Escape') cancelEdit(); }}
                         />
                         <div className="flex flex-col gap-1">
-                          <button onClick={saveEdit} className="p-1 text-green-600 hover:bg-green-50 rounded" aria-label="Save"><Check className="w-3 h-3" /></button>
-                          <button onClick={cancelEdit} className="p-1 text-gray-400 hover:bg-gray-50 rounded" aria-label="Cancel"><X className="w-3 h-3" /></button>
+                          <button onClick={saveEdit} className="p-1 min-h-[44px] min-w-[44px] flex items-center justify-center text-green-600 hover:bg-green-50 rounded" aria-label="Save target"><Check className="w-3 h-3" /></button>
+                          <button onClick={cancelEdit} className="p-1 min-h-[44px] min-w-[44px] flex items-center justify-center text-gray-400 hover:bg-gray-50 rounded" aria-label="Cancel editing target"><X className="w-3 h-3" /></button>
                         </div>
                       </div>
                     ) : (

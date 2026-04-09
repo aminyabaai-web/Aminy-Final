@@ -248,7 +248,7 @@ export function ReferralAnalytics({
                   </div>
                   {i < funnel.length - 1 && (
                     <div className="flex justify-center my-0.5">
-                      <ArrowRight className="w-3 h-3 text-gray-300 rotate-90" />
+                      <ArrowRight className="w-3 h-3 text-gray-400 rotate-90" />
                     </div>
                   )}
                 </div>

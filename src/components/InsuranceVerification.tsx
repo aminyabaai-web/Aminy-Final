@@ -342,7 +342,7 @@ export function InsuranceVerification({
                         e.stopPropagation();
                         setFrontImage(null);
                       }}
-                      className="absolute top-2 right-2 p-1 bg-white rounded-full shadow"
+                      className="absolute top-2 right-2 p-1 min-h-[44px] min-w-[44px] flex items-center justify-center bg-white rounded-full shadow"
                     >
                       <X className="w-4 h-4 text-gray-500" />
                     </button>
@@ -434,7 +434,7 @@ export function InsuranceVerification({
                         e.stopPropagation();
                         setBackImage(null);
                       }}
-                      className="absolute top-2 right-2 p-1 bg-white rounded-full shadow"
+                      className="absolute top-2 right-2 p-1 min-h-[44px] min-w-[44px] flex items-center justify-center bg-white rounded-full shadow"
                     >
                       <X className="w-4 h-4 text-gray-500" />
                     </button>

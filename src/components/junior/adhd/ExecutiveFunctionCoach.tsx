@@ -221,7 +221,7 @@ function TaskChunker({ onComplete }: { onComplete: () => void }) {
                 step.done ? 'border-green-200 bg-green-50' : 'border-slate-200 bg-white'
               }`}
             >
-              <GripVertical className="h-4 w-4 cursor-grab text-slate-300" />
+              <GripVertical className="h-4 w-4 cursor-grab text-slate-400" />
               <button type="button" onClick={() => toggleStep(step.id)} className="flex-shrink-0">
                 <div className={`flex h-7 w-7 items-center justify-center rounded-full border-2 transition-colors ${
                   step.done ? 'border-green-500 bg-green-500 text-white' : 'border-slate-300'
@@ -232,7 +232,7 @@ function TaskChunker({ onComplete }: { onComplete: () => void }) {
               <span className={`flex-1 text-sm ${step.done ? 'text-slate-400 line-through' : 'text-slate-800'}`}>
                 {step.text}
               </span>
-              <button type="button" onClick={() => removeStep(step.id)} className="text-slate-300 hover:text-red-400">
+              <button type="button" onClick={() => removeStep(step.id)} className="text-slate-400 hover:text-red-400">
                 <Trash2 className="h-4 w-4" />
               </button>
             </motion.div>
@@ -540,7 +540,7 @@ function ImpulsePause({ onComplete }: { onComplete: () => void }) {
                 initial={{ scale: 0.5, opacity: 0.3 }}
                 animate={count >= n ? { scale: 1, opacity: 1 } : { scale: 0.5, opacity: 0.3 }}
                 className={`flex h-14 w-14 items-center justify-center rounded-full text-xl font-bold shadow-sm ${
-                  count >= n ? 'bg-blue-500 text-white' : 'bg-slate-100 text-slate-300'
+                  count >= n ? 'bg-blue-500 text-white' : 'bg-slate-100 text-slate-400'
                 }`}
               >
                 {n}

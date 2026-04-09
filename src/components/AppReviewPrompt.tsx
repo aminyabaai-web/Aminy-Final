@@ -99,7 +99,7 @@ export function AppReviewPrompt() {
                   className={`transition-colors ${
                     rating <= (hoveredRating || selectedRating)
                       ? 'text-amber-400 fill-amber-400'
-                      : 'text-gray-300'
+                      : 'text-gray-400'
                   }`}
                 />
               </button>

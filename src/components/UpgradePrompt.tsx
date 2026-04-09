@@ -288,7 +288,7 @@ export function UpgradePrompt({
               </Button>
             </div>
             {prompt.dismissable && (
-              <button onClick={handleDismiss} className="text-neutral-400 hover:text-neutral-600">
+              <button onClick={handleDismiss} className="min-h-[44px] min-w-[44px] flex items-center justify-center text-neutral-400 hover:text-neutral-600">
                 <X className="w-4 h-4" />
               </button>
             )}

@@ -1554,7 +1554,7 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
                     <p className="text-xs text-neutral-500 dark:text-slate-400 mb-2">Preview:</p>
                     <div className="flex items-center gap-2">
                       {branding.logoUrl ? (
-                        <img src={branding.logoUrl} alt="" className="w-6 h-6 rounded object-contain" />
+                        <img src={branding.logoUrl} alt="Provider branding logo" className="w-6 h-6 rounded object-contain" />
                       ) : (
                         <div className="w-6 h-6 rounded flex items-center justify-center text-white text-[10px] font-bold" style={{ backgroundColor: branding.primaryColor || '#0891b2' }}>
                           {branding.orgName.slice(0, 2).toUpperCase()}

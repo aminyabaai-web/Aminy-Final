@@ -281,7 +281,7 @@ export function Phase2TestHarness({ onBack, onNavigate }: Phase2TestHarnessProps
       case 'pending':
         return <Circle className="w-4 h-4 text-amber-600 animate-pulse" />;
       default:
-        return <Circle className="w-4 h-4 text-slate-300" />;
+        return <Circle className="w-4 h-4 text-slate-400" />;
     }
   };
 

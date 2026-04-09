@@ -636,7 +636,7 @@ export function RecordingPlayback({
                         </button>
                         <button
                           onClick={() => removeBookmark(bm.id)}
-                          className="p-1 text-gray-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all"
+                          className="p-1 text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all"
                           aria-label="Remove bookmark"
                         >
                           <X size={12} />
@@ -692,7 +692,7 @@ export function RecordingPlayback({
         {/* No recordings */}
         {!loadingList && recordings.length === 0 && !error && (
           <div className="p-12 text-center">
-            <Video className="w-10 h-10 text-gray-300 mx-auto mb-3" />
+            <Video className="w-10 h-10 text-gray-400 mx-auto mb-3" />
             <p className="text-sm text-gray-500">No recordings available.</p>
             <p className="text-xs text-gray-400 mt-1">
               Recordings appear here after a session with recording consent enabled.

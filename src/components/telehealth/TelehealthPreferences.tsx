@@ -127,7 +127,7 @@ export function TelehealthPreferences({ onBack }: TelehealthPreferencesProps) {
                       onClick={() => togglePreference(pref.id)}
                       disabled={pref.comingSoon}
                       className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                        pref.enabled ? 'bg-[#0891b2]' : 'bg-gray-200'
+                        pref.enabled ? 'bg-cyan-600' : 'bg-gray-200'
                       } ${pref.comingSoon ? 'opacity-50 cursor-not-allowed' : ''}`}
                     >
                       <span

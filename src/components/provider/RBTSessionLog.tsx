@@ -161,7 +161,7 @@ function SessionsList({ sessions }: { sessions: RBTDirectSession[] }) {
   if (sorted.length === 0) {
     return (
       <div className="text-center py-12">
-        <FileText className="w-8 h-8 text-slate-300 mx-auto mb-2" />
+        <FileText className="w-8 h-8 text-slate-400 mx-auto mb-2" />
         <p className="text-sm text-slate-500">No sessions logged yet</p>
         <p className="text-xs text-slate-400 mt-1">Tap + to log your first session</p>
       </div>
@@ -359,7 +359,7 @@ function HoursView({ rbtId, sessions }: { rbtId: string; sessions: RBTDirectSess
 
       {months.length === 0 && (
         <div className="text-center py-8">
-          <Clock className="w-8 h-8 text-slate-300 mx-auto mb-2" />
+          <Clock className="w-8 h-8 text-slate-400 mx-auto mb-2" />
           <p className="text-sm text-slate-500">No session history yet</p>
         </div>
       )}
@@ -462,7 +462,7 @@ function NewSessionModal({
       >
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-bold text-slate-800">Log Session</h3>
-          <button onClick={onClose} className="p-1"><X className="w-5 h-5 text-slate-400" /></button>
+          <button onClick={onClose} className="p-1 min-h-[44px] min-w-[44px] flex items-center justify-center"><X className="w-5 h-5 text-slate-400" /></button>
         </div>
 
         <div className="space-y-3">

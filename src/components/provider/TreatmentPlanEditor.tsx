@@ -280,8 +280,8 @@ function Section({
         className="w-full flex items-center justify-between px-5 py-4 text-left print:hidden"
       >
         <div className="flex items-center gap-3">
-          {icon && <span className="text-[#43AA8B]">{icon}</span>}
-          <span className="font-bold text-[#0D1B2A] text-base">{title}</span>
+          {icon && <span className="text-emerald-500">{icon}</span>}
+          <span className="font-bold text-slate-900 text-base">{title}</span>
         </div>
         {open ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
       </button>
@@ -312,11 +312,11 @@ function Field({
 }
 
 const inputCls =
-  'w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#43AA8B] disabled:bg-slate-50 disabled:text-slate-500 transition-colors';
+  'w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-emerald-500 disabled:bg-slate-50 disabled:text-slate-500 transition-colors';
 const textareaCls =
-  'w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#43AA8B] disabled:bg-slate-50 disabled:text-slate-500 resize-none transition-colors';
+  'w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-emerald-500 disabled:bg-slate-50 disabled:text-slate-500 resize-none transition-colors';
 const selectCls =
-  'w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#43AA8B] disabled:bg-slate-50 bg-white transition-colors';
+  'w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-emerald-500 disabled:bg-slate-50 bg-white transition-colors';
 
 // ============================================================================
 // Goal Card
@@ -350,14 +350,14 @@ function GoalCard({
       {/* Goal header */}
       <div className="bg-slate-50 px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="bg-[#0D1B2A] text-white text-xs font-bold px-2 py-0.5 rounded">
+          <span className="bg-slate-900 text-white text-xs font-bold px-2 py-0.5 rounded">
             {goal.goalId}
           </span>
           <select
             value={goal.domain}
             onChange={e => update({ domain: e.target.value as GoalDomain })}
             disabled={isFinalized}
-            className="text-xs border border-slate-300 rounded-lg px-2 py-1 outline-none focus:border-[#43AA8B] bg-white disabled:bg-slate-50"
+            className="text-xs border border-slate-300 rounded-lg px-2 py-1 outline-none focus:border-emerald-500 bg-white disabled:bg-slate-50"
           >
             {Object.entries(DOMAIN_LABELS).map(([val, label]) => (
               <option key={val} value={val}>{label}</option>
@@ -367,7 +367,7 @@ function GoalCard({
             value={goal.masteryStatus}
             onChange={e => update({ masteryStatus: e.target.value as MasteryStatus })}
             disabled={isFinalized}
-            className={`text-xs border rounded-lg px-2 py-1 outline-none focus:border-[#43AA8B] disabled:opacity-60 ${MASTERY_CONFIG[goal.masteryStatus].color}`}
+            className={`text-xs border rounded-lg px-2 py-1 outline-none focus:border-emerald-500 disabled:opacity-60 ${MASTERY_CONFIG[goal.masteryStatus].color}`}
           >
             {Object.entries(MASTERY_CONFIG).map(([val, cfg]) => (
               <option key={val} value={val}>{cfg.label}</option>
@@ -375,7 +375,7 @@ function GoalCard({
           </select>
         </div>
         {!isFinalized && (
-          <button onClick={onRemove} className="text-red-400 hover:text-red-600 p-1">
+          <button onClick={onRemove} className="text-red-400 hover:text-red-600 p-1 min-h-[44px] min-w-[44px] flex items-center justify-center">
             <Trash2 className="w-4 h-4" />
           </button>
         )}
@@ -430,7 +430,7 @@ function GoalCard({
         <div>
           <button
             onClick={() => update({ objectivesExpanded: !goal.objectivesExpanded })}
-            className="flex items-center gap-1 text-xs text-[#43AA8B] font-medium"
+            className="flex items-center gap-1 text-xs text-emerald-500 font-medium"
           >
             {goal.objectivesExpanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
             Short-term Objectives ({goal.objectives.length})
@@ -489,7 +489,7 @@ function GoalCard({
               {!isFinalized && (
                 <button
                   onClick={addObjective}
-                  className="flex items-center gap-1 text-xs text-[#43AA8B] font-medium mt-2"
+                  className="flex items-center gap-1 text-xs text-emerald-500 font-medium mt-2"
                 >
                   <Plus className="w-3 h-3" />
                   Add Objective
@@ -532,7 +532,7 @@ function BehaviorPlanCard({
             value={plan.hypothesizedFunction}
             onChange={e => update({ hypothesizedFunction: e.target.value as BehaviorFunction })}
             disabled={isFinalized}
-            className="text-xs border border-slate-300 rounded-lg px-2 py-1 outline-none focus:border-[#43AA8B] bg-white disabled:bg-slate-50"
+            className="text-xs border border-slate-300 rounded-lg px-2 py-1 outline-none focus:border-emerald-500 bg-white disabled:bg-slate-50"
           >
             {BEHAVIOR_FUNCTIONS.map(f => (
               <option key={f.value} value={f.value}>{f.label}</option>
@@ -540,7 +540,7 @@ function BehaviorPlanCard({
           </select>
         </div>
         {!isFinalized && (
-          <button onClick={onRemove} className="text-red-400 hover:text-red-600 p-1">
+          <button onClick={onRemove} className="text-red-400 hover:text-red-600 p-1 min-h-[44px] min-w-[44px] flex items-center justify-center">
             <Trash2 className="w-4 h-4" />
           </button>
         )}
@@ -618,7 +618,7 @@ function VersionHistoryModal({
     <div className="fixed inset-0 z-50 bg-black/50 flex items-end justify-center">
       <div className="bg-white rounded-t-2xl w-full max-w-lg max-h-[80vh] flex flex-col">
         <div className="flex items-center justify-between px-5 py-4 border-b border-slate-200">
-          <h3 className="font-bold text-[#0D1B2A]">Version History</h3>
+          <h3 className="font-bold text-slate-900">Version History</h3>
           <button onClick={onClose} className="text-slate-400 hover:text-slate-600">
             <X className="w-5 h-5" />
           </button>
@@ -637,7 +637,7 @@ function VersionHistoryModal({
                 </div>
                 <button
                   onClick={() => { onRestore(v); onClose(); }}
-                  className="text-xs text-[#43AA8B] font-medium px-3 py-1.5 border border-[#43AA8B] rounded-lg"
+                  className="text-xs text-emerald-500 font-medium px-3 py-1.5 border border-emerald-500 rounded-lg"
                 >
                   Restore
                 </button>
@@ -837,7 +837,7 @@ export function TreatmentPlanEditor({
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-8 h-8 border-2 border-[#43AA8B] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+          <div className="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
           <p className="text-slate-500 text-sm">Loading treatment plan...</p>
         </div>
       </div>
@@ -857,7 +857,7 @@ export function TreatmentPlanEditor({
 
       <div className="min-h-screen bg-slate-50">
         {/* Header */}
-        <div className="bg-[#0D1B2A] sticky top-0 z-20 no-print">
+        <div className="bg-slate-900 sticky top-0 z-20 no-print">
           <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
             <button
               onClick={onBack}
@@ -903,7 +903,7 @@ export function TreatmentPlanEditor({
                 <button
                   onClick={() => savePlan(true)}
                   disabled={isSaving}
-                  className="flex items-center gap-1.5 bg-[#43AA8B] text-white px-3 py-1.5 rounded-lg text-sm font-medium disabled:opacity-60"
+                  className="flex items-center gap-1.5 bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-sm font-medium disabled:opacity-60"
                 >
                   <Save className="w-3.5 h-3.5" />
                   Save
@@ -971,7 +971,7 @@ export function TreatmentPlanEditor({
           <Section title="Treatment Goals" icon={<Target className="w-5 h-5" />}>
             {plan.goals.length === 0 ? (
               <div className="text-center py-6 bg-slate-50 rounded-xl">
-                <Target className="w-8 h-8 text-slate-300 mx-auto mb-2" />
+                <Target className="w-8 h-8 text-slate-400 mx-auto mb-2" />
                 <p className="text-sm text-slate-400">No goals yet. Add your first goal below.</p>
               </div>
             ) : (
@@ -991,7 +991,7 @@ export function TreatmentPlanEditor({
             {!plan.isFinalized && (
               <button
                 onClick={addGoal}
-                className="w-full flex items-center justify-center gap-2 py-3 border-2 border-dashed border-[#43AA8B] text-[#43AA8B] rounded-xl font-medium text-sm hover:bg-green-50 transition-colors mt-2"
+                className="w-full flex items-center justify-center gap-2 py-3 border-2 border-dashed border-emerald-500 text-emerald-500 rounded-xl font-medium text-sm hover:bg-green-50 transition-colors mt-2"
               >
                 <Plus className="w-4 h-4" />
                 Add Goal
@@ -1003,7 +1003,7 @@ export function TreatmentPlanEditor({
           <Section title="Behavior Intervention Plan" icon={<Shield className="w-5 h-5" />} defaultOpen={false}>
             {plan.behaviorPlans.length === 0 ? (
               <div className="text-center py-6 bg-slate-50 rounded-xl">
-                <Shield className="w-8 h-8 text-slate-300 mx-auto mb-2" />
+                <Shield className="w-8 h-8 text-slate-400 mx-auto mb-2" />
                 <p className="text-sm text-slate-400">No behavior plans. Add one below if needed.</p>
               </div>
             ) : (
@@ -1040,7 +1040,7 @@ export function TreatmentPlanEditor({
                   {!plan.isFinalized && (
                     <button
                       onClick={() => updatePlan({ reinforcers: [...plan.reinforcers, { id: generateId(), item: '', category: 'tangible' }] })}
-                      className="flex items-center gap-1 text-xs text-[#43AA8B] font-medium"
+                      className="flex items-center gap-1 text-xs text-emerald-500 font-medium"
                     >
                       <Plus className="w-3 h-3" /> Add
                     </button>
@@ -1120,7 +1120,7 @@ export function TreatmentPlanEditor({
                       secondaryPayer: { ...plan.secondaryPayer, hasSecondary: e.target.checked },
                     })
                   }
-                  className="w-4 h-4 accent-[#43AA8B]"
+                  className="w-4 h-4 accent-emerald-500"
                 />
                 <span className="text-sm text-slate-600">Has secondary insurance?</span>
               </label>
@@ -1211,7 +1211,7 @@ export function TreatmentPlanEditor({
                     checked={plan.bcbaAttestation}
                     onChange={e => updatePlan({ bcbaAttestation: e.target.checked })}
                     disabled={plan.isFinalized}
-                    className="mt-0.5 w-4 h-4 accent-[#43AA8B]"
+                    className="mt-0.5 w-4 h-4 accent-emerald-500"
                   />
                   <span className="text-sm text-slate-700">
                     I, the BCBA of record, attest that this treatment plan is medically necessary, based on assessment data, and meets applicable professional and regulatory standards. I am licensed/certified and authorized to provide or supervise ABA services for this client.
@@ -1238,7 +1238,7 @@ export function TreatmentPlanEditor({
               <button
                 onClick={() => setShowFinalizeConfirm(true)}
                 disabled={!plan.bcbaAttestation || plan.goals.length === 0}
-                className="w-full bg-[#0D1B2A] text-white py-4 rounded-2xl font-bold text-base flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed"
+                className="w-full bg-slate-900 text-white py-4 rounded-2xl font-bold text-base flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 <Lock className="w-5 h-5" />
                 Finalize Plan
@@ -1283,7 +1283,7 @@ export function TreatmentPlanEditor({
           <div className="bg-white rounded-2xl p-6 max-w-sm w-full">
             <div className="flex items-center gap-3 mb-4">
               <Lock className="w-6 h-6 text-amber-600" />
-              <h3 className="font-bold text-[#0D1B2A] text-lg">Finalize Plan?</h3>
+              <h3 className="font-bold text-slate-900 text-lg">Finalize Plan?</h3>
             </div>
             <p className="text-sm text-slate-600 mb-6">
               Finalizing will lock this plan for editing. You will be able to view and print it, but cannot make changes. This action triggers the parent review flow.
@@ -1297,7 +1297,7 @@ export function TreatmentPlanEditor({
               </button>
               <button
                 onClick={handleFinalize}
-                className="flex-1 py-3 bg-[#0D1B2A] text-white rounded-xl font-medium"
+                className="flex-1 py-3 bg-slate-900 text-white rounded-xl font-medium"
               >
                 Finalize
               </button>

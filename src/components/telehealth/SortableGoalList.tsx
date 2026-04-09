@@ -287,10 +287,10 @@ export function SortableGoalList({ goals, onReorder, renderGoalCard }: SortableG
       {/* DragOverlay: renders a non-interactive preview of the card being dragged */}
       <DragOverlay>
         {activeGoal ? (
-          <div className="opacity-90 shadow-xl rounded-2xl ring-2 ring-[#0891b2]/40">
+          <div className="opacity-90 shadow-xl rounded-2xl ring-2 ring-cyan-600/40">
             {renderGoalCard(
               activeGoal,
-              <div className="p-1.5 -ml-1 text-[#0891b2]">
+              <div className="p-1.5 -ml-1 text-cyan-600">
                 <GripVertical className="w-5 h-5" />
               </div>
             )}

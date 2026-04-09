@@ -67,7 +67,7 @@ export function TierComparisonTable({ compact = false }: TierComparisonTableProp
       return <Check className="w-4 h-4 text-green-600 mx-auto" />;
     }
     if (value === false) {
-      return <X className="w-4 h-4 text-gray-300 mx-auto" />;
+      return <X className="w-4 h-4 text-gray-400 mx-auto" />;
     }
     return <span className="text-xs text-center text-primary font-medium">{value}</span>;
   };
@@ -108,14 +108,14 @@ export function TierComparisonTable({ compact = false }: TierComparisonTableProp
             </tr>
             <tr className="border-b border-gray-100">
               <td className="py-2 text-muted-foreground">Video AI</td>
-              <td className="text-center"><X className="w-3 h-3 text-gray-300 mx-auto" /></td>
-              <td className="text-center"><X className="w-3 h-3 text-gray-300 mx-auto" /></td>
+              <td className="text-center"><X className="w-3 h-3 text-gray-400 mx-auto" /></td>
+              <td className="text-center"><X className="w-3 h-3 text-gray-400 mx-auto" /></td>
               <td className="text-center"><Check className="w-3 h-3 text-green-600 mx-auto" /></td>
             </tr>
             <tr>
               <td className="py-2 text-muted-foreground">BCBA consult</td>
-              <td className="text-center"><X className="w-3 h-3 text-gray-300 mx-auto" /></td>
-              <td className="text-center"><X className="w-3 h-3 text-gray-300 mx-auto" /></td>
+              <td className="text-center"><X className="w-3 h-3 text-gray-400 mx-auto" /></td>
+              <td className="text-center"><X className="w-3 h-3 text-gray-400 mx-auto" /></td>
               <td className="text-center"><Check className="w-3 h-3 text-green-600 mx-auto" /></td>
             </tr>
           </tbody>

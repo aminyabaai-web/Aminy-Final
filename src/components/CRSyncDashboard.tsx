@@ -345,7 +345,7 @@ function HistoryTimeline({ entries }: { entries: SyncLogEntry[] }) {
   if (entries.length === 0) {
     return (
       <div className="text-center py-8">
-        <Calendar className="w-8 h-8 text-gray-300 mx-auto mb-2" />
+        <Calendar className="w-8 h-8 text-gray-400 mx-auto mb-2" />
         <p className="text-sm text-gray-500">No sync history yet</p>
       </div>
     );
@@ -652,7 +652,7 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
           <div className="rounded-2xl border border-white/80 bg-white/92 p-4 text-center shadow-sm">
             <XCircle
               size={16}
-              className={`mx-auto mb-1 ${errorCount > 0 ? 'text-red-500' : 'text-gray-300'}`}
+              className={`mx-auto mb-1 ${errorCount > 0 ? 'text-red-500' : 'text-gray-400'}`}
             />
             <p
               className={`text-lg font-bold ${errorCount > 0 ? 'text-red-600' : 'text-gray-900'}`}

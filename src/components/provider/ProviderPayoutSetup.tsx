@@ -570,7 +570,7 @@ export function ProviderPayoutSetup({ onBack }: ProviderPayoutSetupProps) {
                 <div className="px-5 py-6 text-center">
                   <DollarSign className="w-8 h-8 text-gray-200 mx-auto mb-2" />
                   <p className="text-sm text-gray-400">No payouts yet</p>
-                  <p className="text-xs text-gray-300 mt-1">Payouts appear here after sessions are completed and paid</p>
+                  <p className="text-xs text-gray-400 mt-1">Payouts appear here after sessions are completed and paid</p>
                 </div>
               ) : (
                 <div className="divide-y divide-gray-50">

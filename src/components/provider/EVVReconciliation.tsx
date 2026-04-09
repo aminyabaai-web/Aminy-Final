@@ -421,7 +421,7 @@ export default function EVVReconciliation({
 
           {cycleVisits.length === 0 && (
             <div className="text-center py-12">
-              <FileText className="mx-auto h-12 w-12 text-gray-300" />
+              <FileText className="mx-auto h-12 w-12 text-gray-400" />
               <p className="mt-3 text-sm text-gray-500">No visits found for this filter.</p>
             </div>
           )}

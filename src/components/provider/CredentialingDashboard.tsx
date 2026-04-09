@@ -511,7 +511,7 @@ function EnrollmentRow({ app }: { app: CredentialingApplication }) {
                               <CheckCircle className="h-3 w-3 text-green-500 flex-shrink-0" />
                             )
                           ) : (
-                            <Clock className="h-3 w-3 text-gray-300 flex-shrink-0" />
+                            <Clock className="h-3 w-3 text-gray-400 flex-shrink-0" />
                           )}
                           <span className={submitted ? '' : 'text-gray-400'}>{doc.name}</span>
                         </div>

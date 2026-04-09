@@ -716,7 +716,7 @@ export function PaywallSimplified({
                               {value === true ? (
                                 <Check className="w-4 h-4 text-emerald-500 mx-auto" />
                               ) : value === false ? (
-                                <Minus className="w-4 h-4 text-gray-300 mx-auto" />
+                                <Minus className="w-4 h-4 text-gray-400 mx-auto" />
                               ) : (
                                 <span className="text-xs text-gray-600">{value}</span>
                               )}

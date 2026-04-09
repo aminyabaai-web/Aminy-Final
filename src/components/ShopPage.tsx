@@ -1026,7 +1026,7 @@ export function ShopPage({ onNavigate, userTier = 'starter' }: ShopPageProps) {
           
           {cartItems.length === 0 ? (
             <div className="text-center py-12">
-              <ShoppingCart className="w-16 h-16 text-slate-300 mx-auto mb-4" />
+              <ShoppingCart className="w-16 h-16 text-slate-400 mx-auto mb-4" />
               <h3 className="text-lg font-medium text-slate-900 mb-2">Your cart is empty</h3>
               <p className="text-slate-600 mb-4">Add some items to get started!</p>
               <Button onClick={() => setActiveView('home')}>
@@ -1331,7 +1331,7 @@ export function ShopPage({ onNavigate, userTier = 'starter' }: ShopPageProps) {
                 <Star
                   key={i}
                   className={`w-3 h-3 ${
-                    i < Math.floor(product.rating) ? 'fill-yellow-400 text-yellow-400' : 'text-slate-300'
+                    i < Math.floor(product.rating) ? 'fill-yellow-400 text-yellow-400' : 'text-slate-400'
                   }`}
                 />
               ))}
