@@ -331,7 +331,7 @@ export function QASessionsHub({
             ))
           ) : (
             <div className="text-center py-12">
-              <Calendar className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+              <Calendar className="w-12 h-12 text-gray-400 mx-auto mb-4" />
               <p className="text-gray-500">No upcoming sessions scheduled</p>
               <p className="text-sm text-gray-400 mt-1">Check back soon for new sessions!</p>
             </div>
@@ -348,7 +348,7 @@ export function QASessionsHub({
             ))
           ) : (
             <div className="text-center py-12">
-              <Video className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+              <Video className="w-12 h-12 text-gray-400 mx-auto mb-4" />
               <p className="text-gray-500">No replays available yet</p>
               <p className="text-sm text-gray-400 mt-1">Past sessions will appear here</p>
             </div>

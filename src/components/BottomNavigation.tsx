@@ -261,7 +261,7 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                 className={`
                   flex flex-col items-center justify-center space-y-1 py-2 px-2 rounded-xl relative group transition-all duration-200
                   ${isDisabled
-                    ? 'text-gray-300 dark:text-slate-600 cursor-not-allowed'
+                    ? 'text-gray-400 dark:text-slate-600 cursor-not-allowed'
                     : isActive
                       ? 'text-teal-600 dark:text-teal-400'
                       : 'text-gray-500 hover:text-gray-700 dark:text-slate-400 dark:hover:text-slate-200'

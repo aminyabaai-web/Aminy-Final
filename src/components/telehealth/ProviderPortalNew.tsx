@@ -276,7 +276,7 @@ export function ProviderPortalNew({ providerId, onLogout }: ProviderPortalProps)
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 text-[#0891b2] animate-spin mx-auto mb-3" />
+          <Loader2 className="w-8 h-8 text-cyan-600 animate-spin mx-auto mb-3" />
           <p className="text-gray-600">Loading your portal...</p>
         </div>
       </div>
@@ -293,7 +293,7 @@ export function ProviderPortalNew({ providerId, onLogout }: ProviderPortalProps)
           <p className="text-gray-600 mb-4">{loadError}</p>
           <button
             onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-[#0891b2] text-white font-medium rounded-lg hover:bg-[#466379]"
+            className="px-4 py-2 bg-cyan-600 text-white font-medium rounded-lg hover:bg-[#466379]"
           >
             Try Again
           </button>
@@ -308,7 +308,7 @@ export function ProviderPortalNew({ providerId, onLogout }: ProviderPortalProps)
       <header className="bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-[#0891b2] to-[#466379] rounded-full flex items-center justify-center text-white font-semibold">
+            <div className="w-10 h-10 bg-gradient-to-br from-cyan-600 to-[#466379] rounded-full flex items-center justify-center text-white font-semibold">
               {provider.firstName[0]}{provider.lastName[0]}
             </div>
             <div>
@@ -327,7 +327,7 @@ export function ProviderPortalNew({ providerId, onLogout }: ProviderPortalProps)
             <button
               onClick={handleSave}
               disabled={isSaving}
-              className="flex items-center gap-2 px-4 py-2 bg-[#0891b2] text-white font-medium rounded-lg hover:bg-[#466379] disabled:opacity-50 transition-all"
+              className="flex items-center gap-2 px-4 py-2 bg-cyan-600 text-white font-medium rounded-lg hover:bg-[#466379] disabled:opacity-50 transition-all"
             >
               {isSaving ? (
                 <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -364,14 +364,14 @@ export function ProviderPortalNew({ providerId, onLogout }: ProviderPortalProps)
                   onClick={() => setActiveTab(id as PortalTab)}
                   className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors ${
                     activeTab === id
-                      ? 'bg-[#0891b2]/10 text-[#0891b2] border-l-4 border-[#0891b2]'
+                      ? 'bg-cyan-600/10 text-cyan-600 border-l-4 border-cyan-600'
                       : 'text-gray-600 hover:bg-gray-50 border-l-4 border-transparent'
                   }`}
                 >
                   <Icon className="w-5 h-5" />
                   <span className="font-medium">{label}</span>
                   {id === 'appointments' && appointments.length > 0 && (
-                    <span className="ml-auto px-2 py-0.5 bg-[#0891b2] text-white text-xs rounded-full">
+                    <span className="ml-auto px-2 py-0.5 bg-cyan-600 text-white text-xs rounded-full">
                       {appointments.length}
                     </span>
                   )}
@@ -439,7 +439,7 @@ function ProfileTab({
               type="text"
               value={provider.firstName}
               onChange={(e) => onUpdate({ ...provider, firstName: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0891b2]/20 focus:border-[#0891b2]"
+              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600"
             />
           </div>
           <div>
@@ -448,7 +448,7 @@ function ProfileTab({
               type="text"
               value={provider.lastName}
               onChange={(e) => onUpdate({ ...provider, lastName: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0891b2]/20 focus:border-[#0891b2]"
+              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600"
             />
           </div>
           <div>
@@ -458,7 +458,7 @@ function ProfileTab({
               value={provider.credentials}
               onChange={(e) => onUpdate({ ...provider, credentials: e.target.value })}
               placeholder="e.g., BCBA, LCSW, PhD"
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0891b2]/20 focus:border-[#0891b2]"
+              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600"
             />
           </div>
           <div>
@@ -470,7 +470,7 @@ function ProfileTab({
                 role: e.target.value as ProviderRole,
                 roleDisplayName: PROVIDER_ROLE_DISPLAY[e.target.value as ProviderRole]
               })}
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0891b2]/20 focus:border-[#0891b2]"
+              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600"
             >
               {Object.entries(PROVIDER_ROLE_DISPLAY).map(([value, label]) => (
                 <option key={value} value={value}>{label}</option>
@@ -483,7 +483,7 @@ function ProfileTab({
               value={provider.bio}
               onChange={(e) => onUpdate({ ...provider, bio: e.target.value })}
               rows={3}
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0891b2]/20 focus:border-[#0891b2] resize-none"
+              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600 resize-none"
             />
           </div>
         </div>
@@ -498,7 +498,7 @@ function ProfileTab({
           </div>
           <button
             onClick={() => setShowStateSelector(!showStateSelector)}
-            className="text-sm text-[#0891b2] font-medium hover:underline"
+            className="text-sm text-cyan-600 font-medium hover:underline"
           >
             {showStateSelector ? 'Done' : 'Edit States'}
           </button>
@@ -511,7 +511,7 @@ function ProfileTab({
                 key={state.code}
                 className={`flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-colors ${
                   provider.licensedStates.includes(state.code)
-                    ? 'bg-[#0891b2]/10 text-[#0891b2]'
+                    ? 'bg-cyan-600/10 text-cyan-600'
                     : 'hover:bg-gray-50'
                 }`}
               >
@@ -519,7 +519,7 @@ function ProfileTab({
                   type="checkbox"
                   checked={provider.licensedStates.includes(state.code)}
                   onChange={() => toggleState(state.code)}
-                  className="rounded border-gray-300 text-[#0891b2] focus:ring-[#0891b2]"
+                  className="rounded border-gray-300 text-cyan-600 focus:ring-cyan-600"
                 />
                 <span className="text-sm">{state.code}</span>
               </label>
@@ -531,7 +531,7 @@ function ProfileTab({
               provider.licensedStates.map((code) => (
                 <span
                   key={code}
-                  className="px-3 py-1 bg-[#0891b2]/10 text-[#0891b2] text-sm font-medium rounded-full"
+                  className="px-3 py-1 bg-cyan-600/10 text-cyan-600 text-sm font-medium rounded-full"
                 >
                   {code}
                 </span>
@@ -554,7 +554,7 @@ function ProfileTab({
                 type="checkbox"
                 checked={provider.offersConsult}
                 onChange={(e) => onUpdate({ ...provider, offersConsult: e.target.checked })}
-                className="rounded border-gray-300 text-[#0891b2] focus:ring-[#0891b2]"
+                className="rounded border-gray-300 text-cyan-600 focus:ring-cyan-600"
               />
               <div>
                 <p className="font-medium text-gray-900">25-min Consult</p>
@@ -578,7 +578,7 @@ function ProfileTab({
                 type="checkbox"
                 checked={provider.offersDeepReview}
                 onChange={(e) => onUpdate({ ...provider, offersDeepReview: e.target.checked })}
-                className="rounded border-gray-300 text-[#0891b2] focus:ring-[#0891b2]"
+                className="rounded border-gray-300 text-cyan-600 focus:ring-cyan-600"
               />
               <div>
                 <p className="font-medium text-gray-900">50-min Deep Review</p>
@@ -652,7 +652,7 @@ function AvailabilityTab({
           </div>
           <button
             onClick={addBlock}
-            className="flex items-center gap-2 px-4 py-2 bg-[#0891b2] text-white font-medium rounded-lg hover:bg-[#466379] transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-cyan-600 text-white font-medium rounded-lg hover:bg-[#466379] transition-colors"
           >
             <Plus className="w-4 h-4" />
             Add Time Block
@@ -746,8 +746,8 @@ function AppointmentsTab({ appointments }: { appointments: Appointment[] }) {
         <div className="space-y-3 sm:space-y-4">
           {appointments.map((apt) => (
             <div key={apt.id} className="flex items-center gap-3 sm:gap-4 p-4 bg-gray-50 rounded-lg">
-              <div className="w-12 h-12 bg-[#0891b2]/10 rounded-full flex items-center justify-center">
-                <Video className="w-6 h-6 text-[#0891b2]" />
+              <div className="w-12 h-12 bg-cyan-600/10 rounded-full flex items-center justify-center">
+                <Video className="w-6 h-6 text-cyan-600" />
               </div>
               <div className="flex-1">
                 <p className="font-medium text-gray-900">{apt.visitReason}</p>
@@ -762,7 +762,7 @@ function AppointmentsTab({ appointments }: { appointments: Appointment[] }) {
                 }`}>
                   {apt.status}
                 </span>
-                <button className="p-2 text-[#0891b2] hover:bg-[#0891b2]/10 rounded-lg transition-colors">
+                <button className="p-2 text-cyan-600 hover:bg-cyan-600/10 rounded-lg transition-colors">
                   <ChevronRight className="w-5 h-5" />
                 </button>
               </div>

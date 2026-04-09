@@ -731,7 +731,7 @@ export function Dashboard10({
                 )}
               </div>
             </div>
-            <ChevronRight className="w-5 h-5 text-slate-400" />
+            <ChevronRight aria-hidden="true" className="w-5 h-5 text-slate-400" />
           </div>
 
           {/* Upcoming Events Carousel */}
@@ -780,7 +780,7 @@ export function Dashboard10({
           >
             <div className="flex items-center gap-3 mb-2">
               <div className="w-8 h-8 bg-violet-100 dark:bg-violet-800 rounded-full flex items-center justify-center">
-                <FileText className="w-4 h-4 text-violet-600 dark:text-violet-300" />
+                <FileText aria-hidden="true" className="w-4 h-4 text-violet-600 dark:text-violet-300" />
               </div>
               <div>
                 <p className="text-sm font-semibold text-violet-800 dark:text-violet-200">
@@ -844,7 +844,7 @@ export function Dashboard10({
             className="bg-gradient-to-r from-teal-50 to-cyan-50 dark:from-teal-900/20 dark:to-cyan-900/20 border border-teal-200 dark:border-teal-700 rounded-xl p-3"
           >
             <div className="flex items-start gap-2">
-              <Sparkles className="w-4 h-4 text-teal-600 dark:text-teal-400 mt-0.5 flex-shrink-0" />
+              <Sparkles aria-hidden="true" className="w-4 h-4 text-teal-600 dark:text-teal-400 mt-0.5 flex-shrink-0" />
               <p className="text-sm text-teal-800 dark:text-teal-200 flex-1">{activeTip}</p>
               <button
                 onClick={() => setShowTip(false)}
@@ -879,7 +879,7 @@ export function Dashboard10({
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center">
-                  <Video className="w-5 h-5 text-teal-600" />
+                  <Video aria-hidden="true" className="w-5 h-5 text-teal-600" />
                 </div>
                 <div>
                   <p className="text-sm font-medium">Next: {dashboardData.nextAppointment.providerName}</p>
@@ -915,7 +915,7 @@ export function Dashboard10({
           <div className="rounded-2xl border border-teal-100 bg-gradient-to-br from-white via-teal-50/60 to-sky-50/70 p-5 shadow-sm dark:border-teal-900/40 dark:from-slate-800 dark:via-teal-950/20 dark:to-slate-900">
             <div className="flex items-start gap-3">
               <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-300">
-                <Wind className="h-5 w-5" />
+                <Wind aria-hidden="true" className="h-5 w-5" />
               </div>
               <div className="flex-1">
                 <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">

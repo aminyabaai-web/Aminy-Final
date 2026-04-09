@@ -76,7 +76,7 @@ interface DragHandleProps {
 function DragHandle({ listeners, attributes }: DragHandleProps) {
   return (
     <button
-      className="touch-none p-1.5 -ml-1 rounded-lg text-gray-300 hover:text-gray-500 hover:bg-gray-50 transition-colors cursor-grab active:cursor-grabbing"
+      className="touch-none p-1.5 -ml-1 rounded-lg text-gray-400 hover:text-gray-500 hover:bg-gray-50 transition-colors cursor-grab active:cursor-grabbing"
       aria-label="Drag to reorder"
       {...attributes}
       {...listeners}
