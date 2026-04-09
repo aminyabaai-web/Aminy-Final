@@ -655,7 +655,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
               onClick={() => onNavigate?.('referral-dashboard')}
               className="flex items-center gap-1.5 px-3 py-1.5 bg-teal-50 hover:bg-teal-100 text-teal-700 rounded-lg text-sm font-medium transition-colors"
             >
-              <Gift className="w-4 h-4" />
+              <Gift aria-hidden="true" className="w-4 h-4" />
               View Rewards
             </button>
           </div>
@@ -667,7 +667,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
               onClick={() => onNavigate?.('referral-dashboard')}
               className="mt-3 w-full py-2.5 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
             >
-              <Users className="w-4 h-4" />
+              <Users aria-hidden="true" className="w-4 h-4" />
               Invite Families & Track Rewards
             </button>
           </div>
@@ -680,13 +680,13 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
             className="w-full p-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
           >
             <div className="flex items-center gap-3">
-              <Bell className="w-5 h-5 text-teal-500" />
+              <Bell aria-hidden="true" className="w-5 h-5 text-teal-500" />
               <div className="text-left">
                 <h3 className="font-semibold dark:text-white">Notifications</h3>
                 <p className="text-sm text-muted-foreground">Push, email, and SMS preferences</p>
               </div>
             </div>
-            <ChevronRight className={`w-5 h-5 text-muted-foreground transition-transform ${activeSection === 'notifications' ? 'rotate-90' : ''}`} />
+            <ChevronRight aria-hidden="true" className={`w-5 h-5 text-muted-foreground transition-transform ${activeSection === 'notifications' ? 'rotate-90' : ''}`} />
           </button>
 
           <AnimatePresence>

@@ -51,8 +51,8 @@ export function ProviderInviteShare(): React.JSX.Element {
   return (
     <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-5 shadow-sm">
       <div className="flex items-center gap-2 mb-1">
-        <div className="w-8 h-8 rounded-lg bg-[#43AA8B]/10 flex items-center justify-center">
-          <Mail className="w-4 h-4 text-[#43AA8B]" />
+        <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center">
+          <Mail className="w-4 h-4 text-emerald-500" />
         </div>
         <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
           Invite Providers
@@ -71,7 +71,7 @@ export function ProviderInviteShare(): React.JSX.Element {
       <div className="flex gap-2">
         <button
           onClick={handleCopy}
-          className="flex items-center gap-2 flex-1 justify-center bg-[#43AA8B] hover:bg-[#43AA8B]/90 text-white text-sm font-medium px-4 py-2.5 rounded-lg transition-colors"
+          className="flex items-center gap-2 flex-1 justify-center bg-emerald-500 hover:bg-emerald-500/90 text-white text-sm font-medium px-4 py-2.5 rounded-lg transition-colors"
         >
           {copied ? (
             <>
