@@ -3644,8 +3644,8 @@ export default function App() {
                     </div>
                   </div>
 
-                  {/* Persistent Ask Aminy quick-access button — navigates to full-page chat, no popup */}
-                  {showFAB && currentScreen !== 'ask-aminy' && (
+                  {/* Aminy AI quick-access FAB — hidden on screens with bottom nav (center tab handles it) and on the chat itself */}
+                  {showFAB && currentScreen !== 'ask-aminy' && currentScreen !== 'dashboard' && currentScreen !== 'junior' && currentScreen !== 'care-plan' && currentScreen !== 'telehealth' && (
                     <button
                       onClick={() => navigateToScreen('ask-aminy')}
                       className="fixed bottom-20 right-4 z-40 w-14 h-14 rounded-full shadow-lg hover:shadow-xl active:scale-95 transition-all flex items-center justify-center bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] text-white"

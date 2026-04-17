@@ -616,7 +616,7 @@ export function ProviderCaseloadView({ onBack, providerName = "Dr. Sarah", role 
                                 <Input
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
-                                    placeholder="Search patients or assigned RBTs..."
+                                    placeholder="Search Clients or assigned RBTs..."
                                     style={{ paddingLeft: '44px', height: '48px', borderRadius: '16px', border: 'none', backgroundColor: '#FFFFFF', boxShadow: '0 2px 8px rgba(0,0,0,0.02)', fontSize: '15px' }}
                                 />
                             </div>
