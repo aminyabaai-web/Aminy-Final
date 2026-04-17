@@ -16481,3 +16481,62 @@ button[class*="bg-primary"] {
 .min-h-\[52px\] { min-height: 52px !important; }
 .min-h-\[3\.25rem\] { min-height: 3.25rem !important; }
 .min-w-\[3\.25rem\] { min-width: 3.25rem !important; }
+
+/* ============================================================================
+   AMINY WARM PALETTE — Neurodivergent-First Design System
+   ============================================================================
+   Warm cream backgrounds, sage green accents, human-feeling typography.
+   These override the original cold teal/navy palette. */
+
+:root {
+  --aminy-bg: #FAF7F2;
+  --aminy-bg-jr: #FFF8F0;
+  --aminy-bg-provider: #F5F7F9;
+  --aminy-text: #1B2733;
+  --aminy-text-secondary: #5A6B7A;
+  --aminy-text-muted: #8E9BAA;
+  --aminy-sage: #6B9080;
+  --aminy-teal: #43AA8B;
+  --aminy-terracotta: #E07A5F;
+  --aminy-calm-blue: #7BA7BC;
+  --aminy-card: #FFFFFF;
+  --aminy-surface: #F0EDE8;
+}
+
+/* Background utilities */
+.bg-aminy { background-color: var(--aminy-bg) !important; }
+.bg-aminy-jr { background-color: var(--aminy-bg-jr) !important; }
+.bg-aminy-provider { background-color: var(--aminy-bg-provider) !important; }
+.bg-aminy-card { background-color: var(--aminy-card) !important; }
+.bg-aminy-surface { background-color: var(--aminy-surface) !important; }
+
+/* Text utilities */
+.text-aminy { color: var(--aminy-text) !important; }
+.text-aminy-secondary { color: var(--aminy-text-secondary) !important; }
+.text-aminy-muted { color: var(--aminy-text-muted) !important; }
+
+/* Accent utilities */
+.bg-aminy-sage { background-color: var(--aminy-sage) !important; }
+.bg-aminy-teal { background-color: var(--aminy-teal) !important; }
+.bg-aminy-terracotta { background-color: var(--aminy-terracotta) !important; }
+.text-aminy-sage { color: var(--aminy-sage) !important; }
+.text-aminy-teal { color: var(--aminy-teal) !important; }
+.text-aminy-terracotta { color: var(--aminy-terracotta) !important; }
+.border-aminy-sage { border-color: var(--aminy-sage) !important; }
+
+/* Hex utilities for Tailwind v4 (manually defined) */
+.bg-\[\#FAF7F2\] { background-color: #FAF7F2; }
+.bg-\[\#FFF8F0\] { background-color: #FFF8F0; }
+.bg-\[\#F0EDE8\] { background-color: #F0EDE8; }
+.bg-\[\#6B9080\] { background-color: #6B9080; }
+.bg-\[\#7BA7BC\] { background-color: #7BA7BC; }
+.text-\[\#1B2733\] { color: #1B2733; }
+.text-\[\#5A6B7A\] { color: #5A6B7A; }
+.text-\[\#8E9BAA\] { color: #8E9BAA; }
+.text-\[\#6B9080\] { color: #6B9080; }
+.border-\[\#6B9080\] { border-color: #6B9080; }
+.from-\[\#6B9080\] { --tw-gradient-from: #6B9080; }
+.to-\[\#7BA7BC\] { --tw-gradient-to: #7BA7BC; }
+.from-\[\#FAF7F2\] { --tw-gradient-from: #FAF7F2; }
+.ring-\[\#6B9080\] { --tw-ring-color: #6B9080; }
+.focus\:ring-\[\#6B9080\]:focus { --tw-ring-color: #6B9080; }

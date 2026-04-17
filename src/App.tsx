@@ -3648,7 +3648,7 @@ export default function App() {
                   {showFAB && currentScreen !== 'ask-aminy' && (
                     <button
                       onClick={() => navigateToScreen('ask-aminy')}
-                      className="fixed bottom-20 right-4 z-40 w-14 h-14 rounded-full shadow-lg hover:shadow-xl active:scale-95 transition-all flex items-center justify-center bg-gradient-to-br from-[#43AA8B] to-[#577590] text-white"
+                      className="fixed bottom-20 right-4 z-40 w-14 h-14 rounded-full shadow-lg hover:shadow-xl active:scale-95 transition-all flex items-center justify-center bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] text-white"
                       aria-label="Open Ask Aminy chat"
                       title="Ask Aminy"
                     >
