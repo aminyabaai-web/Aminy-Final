@@ -699,6 +699,26 @@ const AskAminyChatScreen = lazy(() =>
     default: m.AskAminyChatScreen,
   })),
 );
+const CredentialingSupportCenter = lazy(() =>
+  import("./components/provider/CredentialingSupportCenter").then((m) => ({
+    default: m.default,
+  })),
+);
+const DenialWorkbench = lazy(() =>
+  import("./components/provider/DenialWorkbench").then((m) => ({
+    default: m.default,
+  })),
+);
+const FiscalAgentSubmissionFlow = lazy(() =>
+  import("./components/FiscalAgentSubmissionFlow").then((m) => ({
+    default: m.default,
+  })),
+);
+const InvestorDemoMode = lazy(() =>
+  import("./components/InvestorDemoMode").then((m) => ({
+    default: m.InvestorDemoMode,
+  })),
+);
 
 // GATED SCREEN PLACEHOLDER - Shown when a screen is behind a disabled feature flag
 const GATE_MESSAGES: Record<string, { title: string; description: string }> = {
@@ -934,7 +954,10 @@ type AppScreen =
   | "session-payout" // Admin UI to release payment after session completion
   | "parent-intake" // Connected parent onboarding intake flow
   | "outcomes-dashboard" // VC-ready outcomes metrics dashboard
-  | "ask-aminy"; // Full-page AI chat experience (Claude-style)
+  | "ask-aminy" // Full-page AI chat experience (Claude-style)
+  | "credentialing-support" // Provider credentialing support center (Headway-level)
+  | "denial-workbench" // Payer denial management workbench
+  | "fiscal-agent-submission"; // Fiscal agent (Acumen/DCI) submission flow
 
 const AUTH_REDIRECT_SCREENS: AppScreen[] = [
   "splash",
@@ -1220,6 +1243,21 @@ export default function App() {
   const [showPaymentConfirmation, setShowPaymentConfirmation] = useState(false);
   const [paymentUserId, setPaymentUserId] = useState<string | null>(null);
   const [fabOpen, setFabOpen] = useState(false);
+
+  // Investor demo mode — activate via ?demo=investor or window.__startInvestorDemo()
+  const [investorDemoActive, setInvestorDemoActive] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    const params = new URLSearchParams(window.location.search);
+    return params.get('demo') === 'investor';
+  });
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      (window as unknown as { __startInvestorDemo: () => void }).__startInvestorDemo = () => {
+        setInvestorDemoActive(true);
+      };
+    }
+  }, []);
   // MFA state — tracks whether we need enrollment or verification after login
   const [mfaGracePeriodEnds, setMfaGracePeriodEnds] = useState<Date | undefined>(undefined);
   const [mfaRequired, setMfaRequired] = useState(false);
@@ -3305,6 +3343,38 @@ export default function App() {
             </Suspense>
           );
 
+        case "credentialing-support":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <CredentialingSupportCenter />
+            </Suspense>
+          );
+
+        case "denial-workbench":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <DenialWorkbench />
+            </Suspense>
+          );
+
+        case "fiscal-agent-submission":
+          if (!userData.id) {
+            navigateToScreen("login");
+            return null;
+          }
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <FiscalAgentSubmissionFlow
+                userId={userData.id}
+                waiverProfileId={(userData as Record<string, unknown>).waiverProfileId as string || ''}
+                fiscalAgentId={(userData as Record<string, unknown>).fiscalAgentId as string || 'acumen'}
+                participantId={userData.activeChildId || userData.childId || ''}
+                onComplete={() => navigateToScreen("evv-dashboard")}
+                onCancel={() => navigateToScreen("evv-dashboard")}
+              />
+            </Suspense>
+          );
+
         default:
           return (
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
@@ -3521,6 +3591,17 @@ export default function App() {
                         </span>
                       )}
                     </button>
+                  )}
+
+                  {/* Investor demo mode overlay — activate with ?demo=investor */}
+                  {investorDemoActive && (
+                    <Suspense fallback={null}>
+                      <InvestorDemoMode
+                        currentScreen={currentScreen}
+                        onNavigate={(screen) => navigateToScreen(screen as AppScreen)}
+                        onClose={() => setInvestorDemoActive(false)}
+                      />
+                    </Suspense>
                   )}
 
                   {/* Toast notifications - Deferred */}
