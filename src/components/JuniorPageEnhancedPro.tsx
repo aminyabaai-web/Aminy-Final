@@ -136,6 +136,8 @@ interface JuniorPageProps {
     childName: string;
   };
   userTier?: string | null;
+  /** Navigate to a top-level app screen (e.g. 'sensory-fidget') */
+  onNavigate?: (screen: string) => void;
 }
 
 interface BuddyVoice {
@@ -280,7 +282,7 @@ const TRACK_FILTERS = [
   { id: 'fluency', label: 'Fluency', icon: Waves, color: 'teal' }
 ];
 
-export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: JuniorPageProps) {
+export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNavigate }: JuniorPageProps) {
   const [activeView, _setActiveView] = useState<'kid-login' | 'home' | 'buddy-select' | 'activity-select' | 'activity' | 'celebration' | 'calm-corner' | 'rewards' | 'parent-education' | 'visual-coaching' | 'offline-manager' | 'parent-controls' | 'aac-board' | 'visual-schedule'>('home');
   // Wrap setActiveView to fire haptic + sound on every navigation
   const setActiveView: typeof _setActiveView = (view) => {
@@ -1631,6 +1633,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
                   </motion.div>
 
                   <div className="mt-6 grid gap-3 lg:grid-cols-[1.4fr_0.8fr]">
+                    <div className="flex flex-col gap-3">
                     <button
                       type="button"
                       onClick={() => setActiveView('calm-corner')}
@@ -1651,6 +1654,24 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter' }: Junior
                         <div className="mt-2 text-xs uppercase tracking-[0.18em] text-slate-400">One tap</div>
                       </div>
                     </button>
+                    {onNavigate && (
+                      <button
+                        type="button"
+                        onClick={() => onNavigate('sensory-fidget')}
+                        className="group flex items-center justify-between rounded-[24px] border border-teal-900/30 bg-gradient-to-br from-teal-950 to-slate-950 px-5 py-4 text-left text-white shadow-[0_8px_24px_rgba(67,170,139,0.18)] transition-transform duration-200 hover:-translate-y-0.5"
+                      >
+                        <div>
+                          <div className="flex items-center gap-2 text-sm font-medium text-teal-300">
+                            <span>✨</span>
+                            Sensory Fidget
+                          </div>
+                          <div className="mt-1 text-base font-semibold">Tap, Breathe, Spin, Colors</div>
+                          <div className="mt-1 text-xs text-slate-400">Immersive calm tools</div>
+                        </div>
+                        <div className="text-3xl ml-4">🌀</div>
+                      </button>
+                    )}
+                    </div>
 
                     <div className="rounded-[28px] border border-white/70 bg-white/85 p-5 shadow-sm">
                       <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Quick support</div>
