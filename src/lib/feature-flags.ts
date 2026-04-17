@@ -28,6 +28,8 @@ export const productFlags = {
   fiscalAgentEnabled: import.meta.env.VITE_FISCAL_AGENT_ENABLED === 'true',
   /** Enable developer-only screens (launch status, developer mode panel) */
   devModeEnabled: import.meta.env.VITE_DEV_MODE === 'true',
+  /** Enable CentralReach integration screens */
+  crSyncEnabled: import.meta.env.VITE_CR_SYNC_ENABLED === 'true',
 } as const;
 
 export type ProductFlagKey = keyof typeof productFlags;
@@ -69,10 +71,9 @@ export const B2G_GATED_SCREENS: readonly string[] = [
  * Screens that are gated behind fiscal agent flag
  */
 export const FISCAL_AGENT_GATED_SCREENS: readonly string[] = [
-  'evv-dashboard',
-  'caregiver-enrollment',
-  'caregiver-credentialing',
-  'caregiver-timesheet',
+  // EVV, caregiver enrollment/credentialing/timesheet are NO LONGER gated
+  // because Acumen/DCI (J. Auer) needs them from day 1.
+  // Keeping the array for backwards compatibility but items moved to always-on.
 ] as const;
 
 /**
@@ -81,7 +82,10 @@ export const FISCAL_AGENT_GATED_SCREENS: readonly string[] = [
 export const DEV_GATED_SCREENS: readonly string[] = [
   'launch-status',
   'phase2-menu',
-  'analytics',
+] as const;
+
+export const CR_GATED_SCREENS: readonly string[] = [
+  'cr-sync',
 ] as const;
 
 /**
@@ -99,6 +103,9 @@ export function getScreenGateReason(screen: string): string | null {
   }
   if (DEV_GATED_SCREENS.includes(screen) && !productFlags.devModeEnabled) {
     return 'dev-mode';
+  }
+  if (CR_GATED_SCREENS.includes(screen) && !productFlags.crSyncEnabled) {
+    return 'cr-sync';
   }
   return null;
 }
