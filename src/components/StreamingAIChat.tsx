@@ -206,17 +206,41 @@ export function StreamingAIChat({
         aria-label="Chat messages"
       >
         {messages.length === 0 && (
-          <div className="text-center py-12">
+          <div className="text-center py-8">
             <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4">
               <Sparkles className="w-8 h-8 text-accent" />
             </div>
             <h3 className="text-lg font-semibold text-slate-900 mb-2">
               Hi! I'm Aminy 💙
             </h3>
-            <p className="text-sm text-slate-600 max-w-md mx-auto">
-              I'm here to help you navigate your child's development journey. 
+            <p className="text-sm text-slate-600 max-w-md mx-auto mb-6">
+              I'm here to help you navigate your child's development journey.
               I remember everything we've talked about, so feel free to pick up where we left off.
             </p>
+
+            {/* Suggested prompts — reduce blank-page friction */}
+            <div className="max-w-md mx-auto space-y-2">
+              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">
+                Try asking me
+              </p>
+              {[
+                { emoji: '\u{1F319}', text: `Why is ${context.childName || 'my child'} melting down at bedtime?` },
+                { emoji: '\u{1F4DD}', text: 'Help me write an email to my child\u2019s teacher' },
+                { emoji: '\u{1F4C5}', text: 'Plan tomorrow\u2019s morning routine with me' },
+                { emoji: '\u{1F3AF}', text: 'What should I work on this week?' },
+                { emoji: '\u{1F4AA}', text: 'My child won\u2019t follow directions \u2014 what do I do?' },
+                { emoji: '\u{1F4A1}', text: 'Translate this IEP jargon for me' },
+              ].map((prompt) => (
+                <button
+                  key={prompt.text}
+                  onClick={() => handleSend(prompt.text, [])}
+                  className="w-full text-left px-4 py-3 bg-slate-50 hover:bg-slate-100 active:bg-slate-200 rounded-xl border border-slate-200 transition-all text-sm text-slate-700 flex items-start gap-2"
+                >
+                  <span className="text-base flex-shrink-0">{prompt.emoji}</span>
+                  <span className="flex-1">{prompt.text}</span>
+                </button>
+              ))}
+            </div>
           </div>
         )}
 

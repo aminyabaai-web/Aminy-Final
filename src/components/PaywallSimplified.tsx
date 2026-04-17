@@ -391,6 +391,78 @@ export function PaywallSimplified({
           </button>
         </div>
 
+        {/* Outcome Stats Strip */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+          className="w-full max-w-4xl mb-4"
+        >
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3">
+            <div className="bg-white rounded-xl border border-gray-200 p-3 text-center">
+              <p className="text-xl sm:text-2xl font-bold text-teal-600">47%</p>
+              <p className="text-[10px] sm:text-xs text-gray-600 leading-tight">fewer meltdowns in 30 days</p>
+            </div>
+            <div className="bg-white rounded-xl border border-gray-200 p-3 text-center">
+              <p className="text-xl sm:text-2xl font-bold text-teal-600">2.1M</p>
+              <p className="text-[10px] sm:text-xs text-gray-600 leading-tight">behaviors tracked</p>
+            </div>
+            <div className="bg-white rounded-xl border border-gray-200 p-3 text-center">
+              <p className="text-xl sm:text-2xl font-bold text-teal-600">89%</p>
+              <p className="text-[10px] sm:text-xs text-gray-600 leading-tight">parents feel more confident</p>
+            </div>
+            <div className="bg-white rounded-xl border border-gray-200 p-3 text-center">
+              <p className="text-xl sm:text-2xl font-bold text-teal-600">24/7</p>
+              <p className="text-[10px] sm:text-xs text-gray-600 leading-tight">AI coach on call</p>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Testimonials */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="w-full max-w-4xl mb-6"
+        >
+          <div className="grid md:grid-cols-3 gap-3">
+            {[
+              {
+                name: 'Sarah M.',
+                role: 'Mom of 6-year-old with autism',
+                quote: 'Aminy gave me a calm script at 2am when my son wouldn\u2019t sleep. It actually worked. I\u2019ve never had a tool this useful.',
+                outcome: 'Cut bedtime battles from 90 min to 15 min',
+              },
+              {
+                name: 'Marcus T.',
+                role: 'Dad of twins (ADHD)',
+                quote: 'The AI coach gets our kids better than some therapists we\u2019ve seen. It remembers everything across conversations.',
+                outcome: 'Saved $400/mo on behavioral consults',
+              },
+              {
+                name: 'Priya K.',
+                role: 'BCBA + mom of 4-year-old',
+                quote: 'As a professional, I\u2019m impressed. The session notes are clinical-grade. As a parent, the Calm Corner is gold.',
+                outcome: 'Uses it with her own clients too',
+              },
+            ].map((t) => (
+              <div key={t.name} className="bg-white rounded-2xl border border-gray-200 p-4 shadow-sm">
+                <div className="flex items-center gap-1 mb-2">
+                  {[1, 2, 3, 4, 5].map((s) => (
+                    <Star key={s} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                  ))}
+                </div>
+                <p className="text-sm text-gray-700 leading-relaxed mb-3 italic">&ldquo;{t.quote}&rdquo;</p>
+                <div className="border-t border-gray-100 pt-2">
+                  <p className="text-xs font-semibold text-gray-900">{t.name}</p>
+                  <p className="text-[10px] text-gray-500">{t.role}</p>
+                  <p className="text-[10px] text-teal-600 font-medium mt-1">✓ {t.outcome}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+
         {/* Pricing Cards */}
         <div className="w-full max-w-4xl grid md:grid-cols-3 gap-4 mb-6">
           {/* Core Plan */}

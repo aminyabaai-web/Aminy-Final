@@ -217,19 +217,24 @@ export function Dashboard10({
     supabase
       .from('session_notes')
       .select('id, child_name, session_date, provider_id')
+      .eq('parent_id', userId)
       .eq('status', 'parent_review')
       .order('session_date', { ascending: false })
       .limit(5)
-      .then(({ data }) => {
+      .then(({ data, error }) => {
+        if (error) {
+          console.error('[Dashboard] session_notes query error:', error);
+          return;
+        }
         if (data && data.length > 0) {
           setPendingReviews(data.map(d => ({
             id: d.id,
-            childName: d.child_name || child.name,
+            childName: d.child_name || userData?.childName || 'Your Child',
             sessionDate: d.session_date,
           })));
         }
       });
-  }, [userId]);
+  }, [userId, userData?.childName]);
 
   // Notification prompt state
   const shouldShowNotificationPrompt = useShouldShowNotificationPrompt();

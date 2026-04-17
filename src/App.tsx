@@ -694,6 +694,11 @@ const OutcomesDashboard = lazy(() =>
     default: m.OutcomesDashboard,
   })),
 );
+const AskAminyChatScreen = lazy(() =>
+  import("./components/AskAminyChatScreen").then((m) => ({
+    default: m.AskAminyChatScreen,
+  })),
+);
 
 // GATED SCREEN PLACEHOLDER - Shown when a screen is behind a disabled feature flag
 const GATE_MESSAGES: Record<string, { title: string; description: string }> = {
@@ -928,7 +933,8 @@ type AppScreen =
   | "provider-payout-setup" // Stripe Connect onboarding & balance for providers
   | "session-payout" // Admin UI to release payment after session completion
   | "parent-intake" // Connected parent onboarding intake flow
-  | "outcomes-dashboard"; // VC-ready outcomes metrics dashboard
+  | "outcomes-dashboard" // VC-ready outcomes metrics dashboard
+  | "ask-aminy"; // Full-page AI chat experience (Claude-style)
 
 const AUTH_REDIRECT_SCREENS: AppScreen[] = [
   "splash",
@@ -2192,9 +2198,9 @@ export default function App() {
                     handlePaywallTrigger();
                     return;
                   }
-                  // Handle AI center button — open the floating chat panel
+                  // Handle AI center button — navigate to the full-page chat screen
                   if (destination === "ask-aminy") {
-                    setFabOpen(true);
+                    navigateToScreen("ask-aminy");
                     return;
                   }
                   // Map nav IDs to screen IDs (bottom nav / More menu aliases)
@@ -2241,8 +2247,7 @@ export default function App() {
                   if (destination === "on-demand-telehealth") {
                     navigateToScreen("on-demand-telehealth");
                   } else if (destination === "messages") {
-                    // Navigate to Ask Aminy / messages
-                    navigateToScreen("dashboard");
+                    navigateToScreen("messages");
                   } else if (destination === "resources") {
                     navigateToScreen("resources");
                   } else if (destination === "find-care") {
@@ -2364,7 +2369,7 @@ export default function App() {
           return (
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <ProviderPortal
-                providerId={userData.id || '00000000-0000-0000-0000-000000000000'}
+                providerId={userData.id ?? ''}
               />
             </Suspense>
           );
@@ -2783,7 +2788,7 @@ export default function App() {
           return (
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <ProviderAnalytics
-                providerId={userData.id || '00000000-0000-0000-0000-000000000000'}
+                providerId={userData.id ?? ''}
                 onBack={() => navigateToScreen("provider-portal")}
               />
             </Suspense>
@@ -2802,10 +2807,29 @@ export default function App() {
           );
 
         case "claims-dashboard":
+          // Guard: claims dashboard contains PHI — require a real authenticated user
+          if (!paymentUserId && !userData?.id) {
+            return (
+              <div className="min-h-screen flex items-center justify-center p-6">
+                <div className="max-w-md text-center">
+                  <h2 className="text-lg font-semibold text-slate-900 mb-2">Sign in required</h2>
+                  <p className="text-sm text-slate-600 mb-4">
+                    Your claims dashboard contains private health information. Please sign in to continue.
+                  </p>
+                  <button
+                    onClick={() => navigateToScreen("login")}
+                    className="px-4 py-2 bg-[#43AA8B] text-white rounded-xl text-sm font-medium"
+                  >
+                    Sign In
+                  </button>
+                </div>
+              </div>
+            );
+          }
           return (
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <ClaimsDashboard
-                userId={paymentUserId || "demo-user"}
+                userId={paymentUserId || userData.id!}
                 childId={userData.activeChildId || userData.childId || "child-1"}
                 childName={userData.childName || "Your Child"}
                 childDOB={userData.childDOB}
@@ -3266,6 +3290,21 @@ export default function App() {
             </Suspense>
           );
 
+        case "ask-aminy":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <AskAminyChatScreen
+                onBack={() => navigateToScreen("dashboard")}
+                onNavigate={(screen) => navigateToScreen(screen as AppScreen)}
+                onPaywallTrigger={handlePaywallTrigger}
+                userTier={effectiveUserTier}
+                messagesLeft={messagesLeft}
+                childName={userData.childName}
+                parentName={userData.parentName}
+              />
+            </Suspense>
+          );
+
         default:
           return (
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
@@ -3454,20 +3493,34 @@ export default function App() {
                     </div>
                   </div>
 
-                  {/* Persistent Ask Aminy FAB */}
-                  {showFAB && (
-                    <Suspense fallback={null}>
-                      <PersistentAskAminyFAB
-                        tier={userData.tier}
-                        messagesLeft={messagesLeft}
-                        onPaywallTrigger={handlePaywallTrigger}
-                        position="bottom-right"
-                        isOpen={fabOpen}
-                        onOpenChange={setFabOpen}
-                        onNavigate={(screen) => navigateToScreen(screen as AppScreen)}
-                        childName={userData.childName || userData.parentName || 'your child'}
-                      />
-                    </Suspense>
+                  {/* Persistent Ask Aminy quick-access button — navigates to full-page chat, no popup */}
+                  {showFAB && currentScreen !== 'ask-aminy' && (
+                    <button
+                      onClick={() => navigateToScreen('ask-aminy')}
+                      className="fixed bottom-20 right-4 z-40 w-14 h-14 rounded-full shadow-lg hover:shadow-xl active:scale-95 transition-all flex items-center justify-center bg-gradient-to-br from-[#43AA8B] to-[#577590] text-white"
+                      aria-label="Open Ask Aminy chat"
+                      title="Ask Aminy"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M12 3a6 6 0 0 0-6 6c0 1.5.4 2.8 1.1 4L6 16l3-1.1c1.2.7 2.5 1.1 4 1.1a6 6 0 0 0 0-12z" />
+                        <circle cx="12" cy="9" r="1" fill="currentColor" />
+                      </svg>
+                      {userData.tier === 'free' && messagesLeft !== undefined && messagesLeft > 0 && (
+                        <span className="absolute -top-1 -right-1 bg-white text-[#43AA8B] text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center border-2 border-[#43AA8B]">
+                          {messagesLeft}
+                        </span>
+                      )}
+                    </button>
                   )}
 
                   {/* Toast notifications - Deferred */}
