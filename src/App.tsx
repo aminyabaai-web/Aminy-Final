@@ -156,8 +156,8 @@ const CreateAccountScreen = lazy(() =>
   ).then((m) => ({ default: m.CreateAccountScreen })),
 );
 const PaywallScreen = lazy(() =>
-  import("./components/PaywallSimplified").then((m) => ({
-    default: m.PaywallSimplified,
+  import("./components/PaywallScreen").then((m) => ({
+    default: m.PaywallScreen,
   })),
 );
 const BenefitsNavigatorScreen = lazy(() =>
@@ -1790,10 +1790,10 @@ export default function App() {
     return () => clearInterval(interval);
   }, []);
 
-  // Save user data to localStorage whenever it changes
+  // Save user data to ENCRYPTED storage whenever it changes (HIPAA — no plaintext PHI)
   useEffect(() => {
     if (userData.parentName || userData.childName) {
-      localStorage.setItem(
+      syncEncryptedStorage.setItem(
         "aminy-user",
         JSON.stringify(userData),
       );

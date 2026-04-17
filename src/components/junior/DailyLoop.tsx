@@ -6,6 +6,8 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Gift, Star, Moon, Sun, Sunrise, Sunset, ChevronRight } from 'lucide-react';
 import { playTap, playSuccess, playComplete, haptic } from './activities/sounds';
+import { recordActivity } from '../../lib/retention-engine';
+import { supabase } from '../../utils/supabase/client';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -136,6 +138,15 @@ export default function DailyLoop({ childName = 'friend', onStartChallenge, onOp
       };
       saveState(updated);
       setState(updated);
+
+      // Sync to Supabase so streak survives device/browser changes
+      supabase.auth.getUser().then(({ data }) => {
+        if (data?.user?.id) {
+          recordActivity(data.user.id, 'daily_checkin').catch(() => {
+            // Non-critical — localStorage is source of truth
+          });
+        }
+      });
     } else {
       const updated = { ...prevState, lastVisit: new Date().toISOString() };
       saveState(updated);
