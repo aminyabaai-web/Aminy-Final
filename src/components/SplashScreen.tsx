@@ -36,7 +36,7 @@ export function SplashScreen({ onGetStarted, onLogin }: SplashScreenProps) {
 
   return (
     <div 
-      className="min-h-screen bg-white dark:bg-slate-900 overflow-hidden" 
+      className="min-h-screen bg-[#FAF7F2] overflow-hidden" 
       role="main"
       aria-label="Aminy welcome page"
       style={{ 
@@ -236,40 +236,40 @@ export function SplashScreen({ onGetStarted, onLogin }: SplashScreenProps) {
             {/* Desktop Layout - Single Row */}
             <div className="hidden md:flex items-center justify-center gap-8 text-sm">
               <div className="flex items-center gap-2 px-3 py-2 bg-slate-50 rounded-full">
-                <Users className="w-4 h-4" style={{ color: '#90A3B3' }} aria-hidden="true" />
-                <span className="font-medium" style={{ color: '#2E3B4E', fontSize: '14px', letterSpacing: '0.2px' }}>Parent-tested</span>
+                <Users className="w-4 h-4" style={{ color: '#6B9080' }} aria-hidden="true" />
+                <span className="font-medium" style={{ color: '#1B2733', fontSize: '14px', letterSpacing: '0.2px' }}>Parent-tested</span>
               </div>
               <div className="flex items-center gap-2 px-3 py-2 bg-slate-50 rounded-full">
-                <Shield className="w-4 h-4" style={{ color: '#90A3B3' }} aria-hidden="true" />
-                <span className="font-medium" style={{ color: '#2E3B4E', fontSize: '14px', letterSpacing: '0.2px' }}>HIPAA-conscious</span>
+                <Shield className="w-4 h-4" style={{ color: '#6B9080' }} aria-hidden="true" />
+                <span className="font-medium" style={{ color: '#1B2733', fontSize: '14px', letterSpacing: '0.2px' }}>HIPAA-conscious</span>
               </div>
               <div className="flex items-center gap-2 px-3 py-2 bg-slate-50 rounded-full">
-                <GraduationCap className="w-4 h-4" style={{ color: '#90A3B3' }} aria-hidden="true" />
-                <span className="font-medium" style={{ color: '#2E3B4E', fontSize: '14px', letterSpacing: '0.2px' }}>Designed with BCBAs</span>
+                <GraduationCap className="w-4 h-4" style={{ color: '#6B9080' }} aria-hidden="true" />
+                <span className="font-medium" style={{ color: '#1B2733', fontSize: '14px', letterSpacing: '0.2px' }}>Designed with BCBAs</span>
               </div>
               <div className="flex items-center gap-2 px-3 py-2 bg-slate-50 rounded-full">
-                <Sparkles className="w-4 h-4" style={{ color: '#90A3B3' }} aria-hidden="true" />
-                <span className="font-medium" style={{ color: '#2E3B4E', fontSize: '14px', letterSpacing: '0.2px' }}>AI-powered</span>
+                <Sparkles className="w-4 h-4" style={{ color: '#6B9080' }} aria-hidden="true" />
+                <span className="font-medium" style={{ color: '#1B2733', fontSize: '14px', letterSpacing: '0.2px' }}>AI-powered</span>
               </div>
             </div>
             
             {/* Mobile Layout - 2×2 Grid */}
             <div className="md:hidden grid grid-cols-1 sm:grid-cols-2 gap-x-3 gap-y-4 max-w-sm mx-auto">
               <div className="flex items-center gap-2 px-3 py-2 bg-slate-50 rounded-full">
-                <Users className="w-3 h-3" style={{ color: '#90A3B3' }} aria-hidden="true" />
-                <span className="font-medium text-xs" style={{ color: '#2E3B4E' }}>Parent-tested</span>
+                <Users className="w-3 h-3" style={{ color: '#6B9080' }} aria-hidden="true" />
+                <span className="font-medium text-xs" style={{ color: '#1B2733' }}>Parent-tested</span>
               </div>
               <div className="flex items-center gap-2 px-3 py-2 bg-slate-50 rounded-full">
-                <Shield className="w-3 h-3" style={{ color: '#90A3B3' }} aria-hidden="true" />
-                <span className="font-medium text-xs" style={{ color: '#2E3B4E' }}>HIPAA-conscious</span>
+                <Shield className="w-3 h-3" style={{ color: '#6B9080' }} aria-hidden="true" />
+                <span className="font-medium text-xs" style={{ color: '#1B2733' }}>HIPAA-conscious</span>
               </div>
               <div className="flex items-center gap-2 px-3 py-2 bg-slate-50 rounded-full">
-                <GraduationCap className="w-3 h-3" style={{ color: '#90A3B3' }} aria-hidden="true" />
-                <span className="font-medium text-xs" style={{ color: '#2E3B4E' }}>Designed with BCBAs</span>
+                <GraduationCap className="w-3 h-3" style={{ color: '#6B9080' }} aria-hidden="true" />
+                <span className="font-medium text-xs" style={{ color: '#1B2733' }}>Designed with BCBAs</span>
               </div>
               <div className="flex items-center gap-2 px-3 py-2 bg-slate-50 rounded-full">
-                <Sparkles className="w-3 h-3" style={{ color: '#90A3B3' }} aria-hidden="true" />
-                <span className="font-medium text-xs" style={{ color: '#2E3B4E' }}>AI-powered</span>
+                <Sparkles className="w-3 h-3" style={{ color: '#6B9080' }} aria-hidden="true" />
+                <span className="font-medium text-xs" style={{ color: '#1B2733' }}>AI-powered</span>
               </div>
             </div>
           </div>

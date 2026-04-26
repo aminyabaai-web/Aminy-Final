@@ -307,7 +307,7 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                   ${isDisabled
                     ? 'text-gray-300 dark:text-slate-600 cursor-not-allowed'
                     : isActive
-                      ? 'text-teal-600 dark:text-teal-400'
+                      ? 'text-[#6B9080] dark:text-[#7BA7BC]'
                       : 'text-gray-500 hover:text-gray-700 dark:text-slate-400 dark:hover:text-slate-200'
                   }
                 `}
@@ -324,7 +324,7 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
               >
                 {/* Active indicator — One Medical style top bar */}
                 {isActive && (
-                  <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-8 h-0.5 bg-teal-600 dark:bg-teal-400 rounded-full" />
+                  <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-8 h-0.5 bg-[#6B9080] dark:bg-teal-400 rounded-full" />
                 )}
 
                 {/* Disabled lock icon */}
@@ -419,7 +419,7 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                           }
                         `}>
                           <Icon
-                            className={`w-5 h-5 ${isItemActive ? 'text-teal-600 dark:text-teal-300' : 'text-gray-600 dark:text-gray-300'}`}
+                            className={`w-5 h-5 ${isItemActive ? 'text-[#6B9080] dark:text-teal-300' : 'text-gray-600 dark:text-gray-300'}`}
                             strokeWidth={1.5}
                           />
                         </div>

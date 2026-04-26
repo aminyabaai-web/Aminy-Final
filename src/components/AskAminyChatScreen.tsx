@@ -47,9 +47,9 @@ export function AskAminyChatScreen({
 
   if (!context) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
+      <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center">
         <div className="text-center">
-          <Sparkles className="w-8 h-8 text-[#43AA8B] mx-auto mb-3 animate-pulse" />
+          <Sparkles className="w-8 h-8 text-[#6B9080] mx-auto mb-3 animate-pulse" />
           <p className="text-sm text-slate-500">Loading your conversation...</p>
         </div>
       </div>
