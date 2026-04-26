@@ -215,8 +215,7 @@ export function SplashPage({
               ...fontSmoothing,
             }}
           >
-            Your AI companion for raising<br />
-            a neurodivergent child.
+            The AI companion for neurodivergent families.
           </motion.h1>
 
           {/* Context line */}
