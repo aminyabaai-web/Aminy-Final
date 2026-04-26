@@ -298,7 +298,7 @@ export function GAD7Screener({
           </div>
         ) : history.length === 0 ? (
           <div className="text-center py-12">
-            <Heart className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+            <Heart className="w-12 h-12 text-gray-400 mx-auto mb-4" />
             <p className="text-gray-500 dark:text-slate-400">No previous assessments</p>
             <Button className="mt-4" onClick={() => setShowHistoryView(false)}>
               Take Assessment

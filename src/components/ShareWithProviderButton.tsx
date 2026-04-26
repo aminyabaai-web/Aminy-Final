@@ -349,7 +349,7 @@ function ShareModal({
                   <FileText className="w-5 h-5" />
                   <span className="font-semibold">Share Progress Report</span>
                 </div>
-                <button onClick={onClose} className="p-1 hover:bg-white/20 rounded-full">
+                <button onClick={onClose} className="p-1 min-h-[44px] min-w-[44px] flex items-center justify-center hover:bg-white/20 rounded-full">
                   <X className="w-5 h-5" />
                 </button>
               </div>

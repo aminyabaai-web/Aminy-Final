@@ -596,7 +596,7 @@ export function RewardsBoard({ onBack, onNavigateToActivity, dailyMissionSteps =
                               )}
                             </>
                           ) : (
-                            <div className="flex flex-col items-center gap-2 text-gray-300">
+                            <div className="flex flex-col items-center gap-2 text-gray-400">
                               <Camera className="w-8 h-8" />
                               <span className="text-[10px] font-medium text-center px-2">Tap to add reward photo</span>
                             </div>

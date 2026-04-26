@@ -230,7 +230,7 @@ export function NotificationEmailSystem({ userData }: NotificationEmailSystemPro
           <div className="overflow-y-auto h-[calc(100vh-80px)]">
             {notifications.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-64 text-center px-6">
-                <Bell className="w-12 h-12 text-slate-300 mb-4" />
+                <Bell className="w-12 h-12 text-slate-400 mb-4" />
                 <p className="text-slate-600 mb-2">No notifications yet</p>
                 <p className="text-sm text-slate-500">
                   We'll send you helpful reminders and updates

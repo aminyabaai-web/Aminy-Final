@@ -222,7 +222,7 @@ export function VisionAI({ tier, userId, onClose, onBack, onAnalysisComplete, in
       {/* Header */}
       <div className="bg-gradient-to-r from-violet-600 to-purple-600 px-4 py-3 flex items-center gap-3">
         {(onClose || onBack) && (
-          <button onClick={handleClose} className="p-1.5 text-white/80 hover:text-white rounded-lg hover:bg-white/10">
+          <button onClick={handleClose} className="p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center text-white/80 hover:text-white rounded-lg hover:bg-white/10">
             <X className="w-5 h-5" />
           </button>
         )}
@@ -282,7 +282,7 @@ export function VisionAI({ tier, userId, onClose, onBack, onAnalysisComplete, in
                   <img src={capturedImage} alt="Captured" className="w-full rounded-xl" />
                   <button
                     onClick={resetPhoto}
-                    className="absolute top-2 right-2 p-1.5 bg-black/50 text-white rounded-full"
+                    className="absolute top-2 right-2 p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center bg-black/50 text-white rounded-full"
                   >
                     <X className="w-4 h-4" />
                   </button>

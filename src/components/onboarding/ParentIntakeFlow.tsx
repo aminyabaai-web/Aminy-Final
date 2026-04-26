@@ -163,8 +163,8 @@ function StepIndicator({ current, total }: { current: number; total: number }) {
               <div
                 className={[
                   'w-9 h-9 rounded-full flex items-center justify-center border-2 transition-all duration-300',
-                  done   ? 'bg-[#43AA8B] border-[#43AA8B] text-white' : '',
-                  active ? 'bg-white border-[#43AA8B] text-[#43AA8B]' : '',
+                  done   ? 'bg-emerald-500 border-emerald-500 text-white' : '',
+                  active ? 'bg-white border-emerald-500 text-emerald-500' : '',
                   !done && !active ? 'bg-white border-slate-200 text-slate-400' : '',
                 ].join(' ')}
               >
@@ -174,12 +174,12 @@ function StepIndicator({ current, total }: { current: number; total: number }) {
                   <IconComp className="w-4 h-4" />
                 )}
               </div>
-              <span className={`text-[10px] font-medium hidden sm:block ${active ? 'text-[#43AA8B]' : 'text-slate-400'}`}>
+              <span className={`text-[10px] font-medium hidden sm:block ${active ? 'text-emerald-500' : 'text-slate-400'}`}>
                 {step.label}
               </span>
             </div>
             {idx < total - 1 && (
-              <div className={`h-0.5 w-8 sm:w-12 mx-1 mt-[-14px] transition-all duration-300 ${done ? 'bg-[#43AA8B]' : 'bg-slate-200'}`} />
+              <div className={`h-0.5 w-8 sm:w-12 mx-1 mt-[-14px] transition-all duration-300 ${done ? 'bg-emerald-500' : 'bg-slate-200'}`} />
             )}
           </React.Fragment>
         );
@@ -333,8 +333,8 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
   const canAdvanceStep3 = serviceSettings.length > 0 && sessionFrequency.length > 0;
   const canAdvanceStep4 = selectedProviderId.length > 0;
 
-  const inputCls = 'w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-slate-800 outline-none focus:border-[#43AA8B] focus:ring-1 focus:ring-[#43AA8B]/20 transition-colors bg-white';
-  const selectCls = 'w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-slate-800 outline-none focus:border-[#43AA8B] focus:ring-1 focus:ring-[#43AA8B]/20 bg-white transition-colors';
+  const inputCls = 'w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-slate-800 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20 transition-colors bg-white';
+  const selectCls = 'w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-slate-800 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20 bg-white transition-colors';
   const labelCls = 'block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wide';
 
   return (
@@ -403,7 +403,7 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
             <button
               onClick={() => setStep(2)}
               disabled={!canAdvanceStep1}
-              className="w-full bg-[#43AA8B] hover:bg-[#3a967a] disabled:bg-slate-200 disabled:text-slate-400 text-white font-semibold rounded-xl py-3.5 flex items-center justify-center gap-2 transition-colors"
+              className="w-full bg-emerald-500 hover:bg-[#3a967a] disabled:bg-slate-200 disabled:text-slate-400 text-white font-semibold rounded-xl py-3.5 flex items-center justify-center gap-2 transition-colors"
             >
               Continue
               <ArrowRight className="w-4 h-4" />
@@ -427,7 +427,7 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
               </div>
             ) : (
               <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 text-center">
-                <Shield className="w-10 h-10 text-slate-300 mx-auto mb-3" />
+                <Shield className="w-10 h-10 text-slate-400 mx-auto mb-3" />
                 <p className="text-sm text-slate-600 font-medium">Paying out of pocket</p>
                 <p className="text-xs text-slate-400 mt-1">You can add insurance information later in your profile.</p>
               </div>
@@ -436,7 +436,7 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
             <div className="space-y-3">
               <button
                 onClick={() => setStep(3)}
-                className="w-full bg-[#43AA8B] hover:bg-[#3a967a] text-white font-semibold rounded-xl py-3.5 flex items-center justify-center gap-2 transition-colors"
+                className="w-full bg-emerald-500 hover:bg-[#3a967a] text-white font-semibold rounded-xl py-3.5 flex items-center justify-center gap-2 transition-colors"
               >
                 Continue
                 <ArrowRight className="w-4 h-4" />
@@ -473,7 +473,7 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
                       className={[
                         'rounded-xl px-3 py-2.5 text-sm font-medium border-2 transition-all text-left',
                         serviceSettings.includes(opt.value)
-                          ? 'border-[#43AA8B] bg-[#43AA8B]/10 text-[#43AA8B]'
+                          ? 'border-emerald-500 bg-emerald-500/10 text-emerald-500'
                           : 'border-slate-200 text-slate-600 hover:border-slate-300',
                       ].join(' ')}
                     >
@@ -494,7 +494,7 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
                       className={[
                         'rounded-xl px-3 py-2.5 text-sm font-medium border-2 transition-all',
                         sessionFrequency === opt.value
-                          ? 'border-[#43AA8B] bg-[#43AA8B]/10 text-[#43AA8B]'
+                          ? 'border-emerald-500 bg-emerald-500/10 text-emerald-500'
                           : 'border-slate-200 text-slate-600 hover:border-slate-300',
                       ].join(' ')}
                     >
@@ -508,7 +508,7 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
             <button
               onClick={() => setStep(4)}
               disabled={!canAdvanceStep3}
-              className="w-full bg-[#43AA8B] hover:bg-[#3a967a] disabled:bg-slate-200 disabled:text-slate-400 text-white font-semibold rounded-xl py-3.5 flex items-center justify-center gap-2 transition-colors"
+              className="w-full bg-emerald-500 hover:bg-[#3a967a] disabled:bg-slate-200 disabled:text-slate-400 text-white font-semibold rounded-xl py-3.5 flex items-center justify-center gap-2 transition-colors"
             >
               Find Providers
               <ArrowRight className="w-4 h-4" />
@@ -526,7 +526,7 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
 
             {loadingProviders && (
               <div className="flex items-center justify-center py-8 text-slate-400 text-sm gap-2">
-                <div className="w-4 h-4 border-2 border-[#43AA8B] border-t-transparent rounded-full animate-spin" />
+                <div className="w-4 h-4 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" />
                 Finding providers near you…
               </div>
             )}
@@ -539,7 +539,7 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
                   className={[
                     'w-full bg-white rounded-2xl p-4 shadow-sm border-2 text-left transition-all',
                     selectedProviderId === prov.id
-                      ? 'border-[#43AA8B] ring-2 ring-[#43AA8B]/20'
+                      ? 'border-emerald-500 ring-2 ring-emerald-500/20'
                       : 'border-slate-100 hover:border-slate-200',
                   ].join(' ')}
                 >
@@ -571,8 +571,8 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
                   </div>
 
                   {selectedProviderId === prov.id && (
-                    <div className="mt-3 pt-3 border-t border-[#43AA8B]/20">
-                      <span className="text-xs font-semibold text-[#43AA8B] flex items-center gap-1">
+                    <div className="mt-3 pt-3 border-t border-emerald-500/20">
+                      <span className="text-xs font-semibold text-emerald-500 flex items-center gap-1">
                         <CheckCircle className="w-3 h-3" />
                         Selected — Request This Provider
                       </span>
@@ -585,7 +585,7 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
             <button
               onClick={() => setStep(5)}
               disabled={!canAdvanceStep4}
-              className="w-full bg-[#43AA8B] hover:bg-[#3a967a] disabled:bg-slate-200 disabled:text-slate-400 text-white font-semibold rounded-xl py-3.5 flex items-center justify-center gap-2 transition-colors"
+              className="w-full bg-emerald-500 hover:bg-[#3a967a] disabled:bg-slate-200 disabled:text-slate-400 text-white font-semibold rounded-xl py-3.5 flex items-center justify-center gap-2 transition-colors"
             >
               Continue
               <ArrowRight className="w-4 h-4" />
@@ -604,8 +604,8 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
         {step === 5 && (
           <div className="space-y-6">
             <div className="text-center mb-6">
-              <div className="w-16 h-16 bg-[#43AA8B]/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <CheckCircle className="w-8 h-8 text-[#43AA8B]" />
+              <div className="w-16 h-16 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <CheckCircle className="w-8 h-8 text-emerald-500" />
               </div>
               <h1 className="text-2xl font-bold text-slate-800 mb-2">You're all set!</h1>
               <p className="text-sm text-slate-500">Here's a summary of your profile. We'll match {childName || 'your child'} with the best care team.</p>
@@ -659,7 +659,7 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
             <button
               onClick={handleComplete}
               disabled={saving}
-              className="w-full bg-[#43AA8B] hover:bg-[#3a967a] disabled:bg-slate-200 disabled:text-slate-400 text-white font-semibold rounded-xl py-3.5 flex items-center justify-center gap-2 transition-colors"
+              className="w-full bg-emerald-500 hover:bg-[#3a967a] disabled:bg-slate-200 disabled:text-slate-400 text-white font-semibold rounded-xl py-3.5 flex items-center justify-center gap-2 transition-colors"
             >
               {saving ? (
                 <span className="flex items-center gap-2">

@@ -340,7 +340,7 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
                 <p className="text-sm font-medium text-gray-900">Text Message</p>
                 <p className="text-xs text-gray-500">Send a pre-filled SMS invite</p>
               </div>
-              <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-teal-500 transition-colors" />
+              <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-teal-500 transition-colors" />
             </button>
 
             {/* Email */}
@@ -356,7 +356,7 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
                 <p className="text-sm font-medium text-gray-900">Email</p>
                 <p className="text-xs text-gray-500">Share via your email app</p>
               </div>
-              <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-teal-500 transition-colors" />
+              <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-teal-500 transition-colors" />
             </button>
 
             {/* Native share (mobile) */}
@@ -373,7 +373,7 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
                   <p className="text-sm font-medium text-gray-900">More Options</p>
                   <p className="text-xs text-gray-500">WhatsApp, Messenger, and more</p>
                 </div>
-                <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-teal-500 transition-colors" />
+                <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-teal-500 transition-colors" />
               </button>
             )}
 
@@ -390,7 +390,7 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
                   <p className="text-sm font-medium text-gray-900">Choose from Contacts</p>
                   <p className="text-xs text-gray-500">Pick friends directly from your address book</p>
                 </div>
-                <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-teal-500 transition-colors" />
+                <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-teal-500 transition-colors" />
               </button>
             )}
           </div>

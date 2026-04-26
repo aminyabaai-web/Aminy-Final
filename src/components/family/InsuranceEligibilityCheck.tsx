@@ -68,9 +68,9 @@ export interface InsuranceEligibilityCheckProps {
 // ============================================================================
 
 const inputCls =
-  'w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#43AA8B] transition-colors';
+  'w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-emerald-500 transition-colors';
 const selectCls =
-  'w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#43AA8B] bg-white transition-colors';
+  'w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-emerald-500 bg-white transition-colors';
 const labelCls = 'block text-xs font-medium text-slate-600 mb-1';
 
 function fmt(n: number) {
@@ -131,7 +131,7 @@ function ResultCard({ result }: { result: EligibilityResult }) {
             <div className="flex items-center gap-2">
               <div className="flex-1 bg-slate-100 rounded-full h-2 overflow-hidden">
                 <div
-                  className="h-full bg-[#43AA8B] rounded-full transition-all"
+                  className="h-full bg-emerald-500 rounded-full transition-all"
                   style={{
                     width: `${Math.min(100, (result.deductible.met / Math.max(result.deductible.individual, 1)) * 100)}%`,
                   }}
@@ -331,7 +331,7 @@ export default function InsuranceEligibilityCheck({ onResult, prefill }: Insuran
         <button
           onClick={handleCheck}
           disabled={loading}
-          className="w-full flex items-center justify-center gap-2 bg-[#43AA8B] hover:bg-[#3a9a7d] disabled:opacity-60 text-white font-semibold text-sm rounded-xl py-3 transition-colors"
+          className="w-full flex items-center justify-center gap-2 bg-emerald-500 hover:bg-[#3a9a7d] disabled:opacity-60 text-white font-semibold text-sm rounded-xl py-3 transition-colors"
         >
           {loading ? (
             <>

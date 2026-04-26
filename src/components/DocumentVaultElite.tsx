@@ -225,7 +225,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
         <div className="max-w-lg mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             {onBack && (
-              <button onClick={onBack} className="p-1.5 rounded-lg hover:bg-slate-100 transition-colors">
+              <button onClick={onBack} className="p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors">
                 <ArrowLeft className="w-5 h-5 text-slate-600" />
               </button>
             )}
@@ -365,7 +365,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
                           <p className="text-xs text-slate-400 mt-0.5">{doc.source}</p>
                           <div className="flex items-center gap-2 mt-1">
                             <span className="text-xs text-slate-400">{formatDate(doc.dateUploaded)}</span>
-                            <span className="text-xs text-slate-300">·</span>
+                            <span className="text-xs text-slate-400">·</span>
                             <span className="text-xs text-slate-400">{formatSize(doc.sizeKB)}</span>
                             <span className="text-xs font-medium text-slate-500 uppercase">{doc.fileType}</span>
                           </div>
@@ -483,7 +483,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
                   className="border-2 border-dashed border-slate-200 rounded-xl p-6 text-center cursor-pointer hover:border-teal-300 hover:bg-teal-50/30 transition-all"
                   onClick={() => toast.info('File picker coming soon')}
                 >
-                  <Upload className="w-6 h-6 text-slate-300 mx-auto mb-2" />
+                  <Upload className="w-6 h-6 text-slate-400 mx-auto mb-2" />
                   <p className="text-sm text-slate-500">Tap to select file</p>
                   <p className="text-xs text-slate-400 mt-0.5">PDF, images, Word documents</p>
                 </div>

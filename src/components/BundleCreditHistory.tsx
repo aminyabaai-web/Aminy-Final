@@ -187,7 +187,7 @@ export function BundleCreditHistory({ userId, onBack }: BundleCreditHistoryProps
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           {onBack && (
-            <button onClick={onBack} className="p-1 text-gray-400 hover:text-gray-600">
+            <button onClick={onBack} className="p-1 min-h-[44px] min-w-[44px] flex items-center justify-center text-gray-400 hover:text-gray-600">
               <ArrowLeft size={18} />
             </button>
           )}
@@ -199,7 +199,7 @@ export function BundleCreditHistory({ userId, onBack }: BundleCreditHistoryProps
         <button
           onClick={handleRefresh}
           disabled={refreshing}
-          className="p-2 text-gray-400 hover:text-gray-600 disabled:text-gray-300"
+          className="p-2 text-gray-400 hover:text-gray-600 disabled:text-gray-400"
           aria-label="Refresh"
         >
           <RefreshCw size={16} className={refreshing ? 'animate-spin' : ''} />
@@ -337,7 +337,7 @@ export function BundleCreditHistory({ userId, onBack }: BundleCreditHistoryProps
           </div>
         ) : (
           <div className="text-center py-6">
-            <Package className="w-10 h-10 text-gray-300 mx-auto mb-2" />
+            <Package className="w-10 h-10 text-gray-400 mx-auto mb-2" />
             <p className="text-sm text-gray-500">No credit history yet</p>
             <p className="text-xs text-gray-400 mt-1">
               Purchase a session bundle to see transactions here

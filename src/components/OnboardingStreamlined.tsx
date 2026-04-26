@@ -788,7 +788,7 @@ export function OnboardingStreamlined({ onComplete, initialEmail = '' }: Onboard
                             ? "Share what's on your mind..."
                             : "Type your reply..."
                         }
-                        className="w-full px-4 py-3 rounded-2xl bg-gray-50 border border-gray-200 focus:border-teal-400 focus:ring-2 focus:ring-teal-100 focus:outline-none resize-none transition-all min-h-[48px] max-h-[120px] text-[16px] leading-relaxed placeholder:text-gray-400 scrollbar-hide"
+                        className="w-full px-4 py-3 rounded-2xl bg-gray-50 border border-gray-200 focus:border-teal-400 focus:ring-2 focus:ring-teal-100 focus:outline-none resize-none transition-all min-h-[48px] max-h-[120px] text-[16px] leading-relaxed placeholder:text-gray-500 scrollbar-hide"
                         style={{
                           lineHeight: '1.5',
                         }}

@@ -174,7 +174,7 @@ export function ViralMetricsDashboard({ className }: ViralMetricsDashboardProps)
             <p className="text-xs text-gray-500 dark:text-slate-400">Sent</p>
           </div>
 
-          <ArrowRight className="w-4 h-4 text-gray-300" />
+          <ArrowRight className="w-4 h-4 text-gray-400" />
 
           {/* Clicked */}
           <div className="flex-1 text-center">
@@ -185,7 +185,7 @@ export function ViralMetricsDashboard({ className }: ViralMetricsDashboardProps)
             <p className="text-xs text-gray-500 dark:text-slate-400">Clicked ({clickRate}%)</p>
           </div>
 
-          <ArrowRight className="w-4 h-4 text-gray-300" />
+          <ArrowRight className="w-4 h-4 text-gray-400" />
 
           {/* Converted */}
           <div className="flex-1 text-center">

@@ -842,7 +842,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
 
       {pastSessions.length === 0 && (
         <div className="text-center py-8">
-          <Calendar className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+          <Calendar className="w-12 h-12 text-gray-400 mx-auto mb-3" />
           <p className="text-gray-600">No completed sessions yet</p>
           <p className="text-sm text-gray-500">Your session summaries will appear here</p>
         </div>
@@ -892,7 +892,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
         {/* Pro Gate Check */}
         {userTier !== 'pro' ? (
           <div className="text-center py-12">
-            <Stethoscope className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+            <Stethoscope className="w-16 h-16 text-gray-400 mx-auto mb-4" />
             <h2 className="text-lg font-semibold text-gray-900 mb-2">Upgrade to Pro</h2>
             <p className="text-gray-600 mb-4 sm:mb-6 max-w-xs mx-auto">
               Access 1-on-1 coaching with certified developmental specialists

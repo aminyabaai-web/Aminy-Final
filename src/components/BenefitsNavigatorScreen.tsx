@@ -442,7 +442,7 @@ export function BenefitsNavigatorScreen({ onBack, onNavigate, userTier = 'core' 
 
             {trackedRequests.length === 0 && (
               <div className="text-center py-8">
-                <Clock className="w-10 h-10 text-gray-300 mx-auto mb-3" />
+                <Clock className="w-10 h-10 text-gray-400 mx-auto mb-3" />
                 <p className="text-sm text-muted-foreground mb-3">No requests tracked yet</p>
                 <div className="flex flex-col gap-2 items-center">
                   <Button size="sm" onClick={() => setActiveView('letters')}>

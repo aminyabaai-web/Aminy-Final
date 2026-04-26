@@ -155,7 +155,7 @@ function TimeSlotButton({
     return (
       <button
         disabled
-        className="px-3 py-2 text-sm text-gray-300 bg-gray-50 rounded-lg cursor-not-allowed"
+        className="px-3 py-2 text-sm text-gray-400 bg-gray-50 rounded-lg cursor-not-allowed"
       >
         {formatTime(slot.startTime)}
       </button>
@@ -298,14 +298,14 @@ function DateSelector({
                   ? 'bg-teal-600 text-white shadow-md'
                   : hasAvailability
                   ? 'bg-white border border-gray-200 hover:border-teal-300 hover:bg-teal-50'
-                  : 'bg-gray-50 text-gray-300 cursor-not-allowed'
+                  : 'bg-gray-50 text-gray-400 cursor-not-allowed'
               }`}
               style={{ scrollSnapAlign: 'start' }}
             >
               <div className={`text-xs font-medium ${isSelected ? 'text-teal-100' : 'text-gray-500'}`}>
                 {isToday(day.date) ? 'Today' : isTomorrow(day.date) ? 'Tmrw' : formatDayOfWeek(day.date)}
               </div>
-              <div className={`text-lg font-bold ${isSelected ? 'text-white' : hasAvailability ? 'text-gray-900' : 'text-gray-300'}`}>
+              <div className={`text-lg font-bold ${isSelected ? 'text-white' : hasAvailability ? 'text-gray-900' : 'text-gray-400'}`}>
                 {formatDayNumber(day.date)}
               </div>
               {hasAvailability && (
@@ -415,7 +415,7 @@ export function AvailabilityPicker({
             <div className="text-sm text-gray-500 mb-4 flex items-center gap-2">
               <Clock className="w-4 h-4" />
               {formatDate(selectedDate)}
-              <span className="text-gray-300">|</span>
+              <span className="text-gray-400">|</span>
               <span>Timezone: {timezone}</span>
             </div>
 
@@ -450,7 +450,7 @@ export function AvailabilityPicker({
                 {/* No availability message */}
                 {morningSlots.length === 0 && afternoonSlots.length === 0 && eveningSlots.length === 0 && (
                   <div className="py-8 text-center text-gray-500">
-                    <Calendar className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+                    <Calendar className="w-12 h-12 mx-auto mb-3 text-gray-400" />
                     <p className="font-medium">No availability on this day</p>
                     <p className="text-sm mt-1">Try selecting a different date</p>
                   </div>
@@ -475,7 +475,7 @@ export function AvailabilityPicker({
           </>
         ) : (
           <div className="py-8 text-center text-gray-500">
-            <Loader2 className="w-8 h-8 mx-auto mb-3 animate-spin text-gray-300" />
+            <Loader2 className="w-8 h-8 mx-auto mb-3 animate-spin text-gray-400" />
             <p>Loading times...</p>
           </div>
         )}

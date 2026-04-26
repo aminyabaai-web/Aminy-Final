@@ -12,7 +12,7 @@
  * and care_plans tables via Supabase.
  */
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '../utils/supabase/client';
 import type { OutcomeCategory } from '../lib/outcome-tracking';
 
@@ -199,52 +199,47 @@ export default function ClinicalOutcomesDashboard() {
     : children[0];
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#f8f9fa', padding: '16px' }}>
+    <div className="min-h-screen bg-gray-50 p-4">
       {/* Header */}
-      <div style={{ marginBottom: '20px' }}>
-        <h1 style={{ fontSize: '22px', fontWeight: 700, color: '#0D1B2A', margin: '0 0 4px 0' }}>
+      <div className="mb-5">
+        <h1 className="text-[22px] font-bold text-[#0D1B2A] mb-1">
           Clinical Outcomes
         </h1>
-        <p style={{ fontSize: '14px', color: '#577590', margin: 0 }}>
+        <p className="text-sm text-slate-500">
           Track progress, measure impact, demonstrate results
         </p>
       </div>
 
       {/* View Mode + Time Range */}
-      <div style={{ display: 'flex', gap: '8px', marginBottom: '16px', flexWrap: 'wrap' }}>
-        <div style={{ display: 'flex', borderRadius: '8px', overflow: 'hidden', border: '1px solid #e0e0e0' }}>
+      <div className="flex gap-2 mb-4 flex-wrap">
+        <div className="flex rounded-lg overflow-hidden border border-gray-300">
           <button
             onClick={() => setViewMode('individual')}
-            style={{
-              padding: '8px 16px', fontSize: '13px', fontWeight: 600, border: 'none', cursor: 'pointer',
-              backgroundColor: viewMode === 'individual' ? '#0D1B2A' : '#fff',
-              color: viewMode === 'individual' ? '#fff' : '#577590',
-            }}
+            className={`px-4 py-2 text-[13px] font-semibold border-none cursor-pointer ${
+              viewMode === 'individual' ? 'bg-[#0D1B2A] text-white' : 'bg-white text-slate-500'
+            }`}
           >
             Per Child
           </button>
           <button
             onClick={() => setViewMode('aggregate')}
-            style={{
-              padding: '8px 16px', fontSize: '13px', fontWeight: 600, border: 'none', cursor: 'pointer',
-              backgroundColor: viewMode === 'aggregate' ? '#0D1B2A' : '#fff',
-              color: viewMode === 'aggregate' ? '#fff' : '#577590',
-            }}
+            className={`px-4 py-2 text-[13px] font-semibold border-none cursor-pointer ${
+              viewMode === 'aggregate' ? 'bg-[#0D1B2A] text-white' : 'bg-white text-slate-500'
+            }`}
           >
             All Clients
           </button>
         </div>
-        <div style={{ display: 'flex', gap: '4px', marginLeft: 'auto' }}>
+        <div className="flex gap-1 ml-auto">
           {([30, 60, 90] as TimeRange[]).map((range) => (
             <button
               key={range}
               onClick={() => setTimeRange(range)}
-              style={{
-                padding: '8px 12px', fontSize: '12px', fontWeight: 600, borderRadius: '6px', cursor: 'pointer',
-                border: timeRange === range ? '2px solid #43AA8B' : '1px solid #e0e0e0',
-                backgroundColor: timeRange === range ? '#e8f5f0' : '#fff',
-                color: timeRange === range ? '#43AA8B' : '#577590',
-              }}
+              className={`px-3 py-2 text-xs font-semibold rounded-md cursor-pointer ${
+                timeRange === range
+                  ? 'border-2 border-emerald-500 bg-emerald-50 text-emerald-500'
+                  : 'border border-gray-300 bg-white text-slate-500'
+              }`}
             >
               {range}d
             </button>
@@ -283,18 +278,16 @@ function IndividualView({
   return (
     <>
       {/* Child Selector */}
-      <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', marginBottom: '16px', paddingBottom: '4px' }}>
+      <div className="flex gap-2 overflow-x-auto mb-4 pb-1">
         {children.map((child) => (
           <button
             key={child.childId}
             onClick={() => onSelectChild(child.childId)}
-            style={{
-              padding: '10px 16px', borderRadius: '10px', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap',
-              backgroundColor: activeChild?.childId === child.childId ? '#0D1B2A' : '#fff',
-              color: activeChild?.childId === child.childId ? '#fff' : '#0D1B2A',
-              boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
-              fontWeight: 600, fontSize: '13px',
-            }}
+            className={`px-4 py-2.5 rounded-lg border-none cursor-pointer whitespace-nowrap shadow-sm font-semibold text-[13px] ${
+              activeChild?.childId === child.childId
+                ? 'bg-[#0D1B2A] text-white'
+                : 'bg-white text-[#0D1B2A]'
+            }`}
           >
             {child.childName} ({child.age}y)
           </button>
@@ -307,8 +300,8 @@ function IndividualView({
           <PrePostCard child={activeChild} />
 
           {/* Goal Progress */}
-          <div style={{ ...cardStyle, marginTop: '12px' }}>
-            <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#0D1B2A', margin: '0 0 12px 0' }}>
+          <div className="bg-white rounded-xl p-4 shadow-sm mt-3">
+            <h3 className="text-[15px] font-bold text-[#0D1B2A] mb-3">
               Goal Progress
             </h3>
             {activeChild.goals.map((goal) => (
@@ -317,8 +310,8 @@ function IndividualView({
           </div>
 
           {/* Behavior Trends */}
-          <div style={{ ...cardStyle, marginTop: '12px' }}>
-            <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#0D1B2A', margin: '0 0 12px 0' }}>
+          <div className="bg-white rounded-xl p-4 shadow-sm mt-3">
+            <h3 className="text-[15px] font-bold text-[#0D1B2A] mb-3">
               Behavior Trends
             </h3>
             {activeChild.behaviorTrends.map((trend, i) => (
@@ -338,33 +331,30 @@ function IndividualView({
 function PrePostCard({ child }: { child: ChildOutcome }) {
   const improved = child.postScore < child.preScore; // Lower is better for most assessments
   return (
-    <div style={cardStyle}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-        <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#0D1B2A', margin: 0 }}>
+    <div className="bg-white rounded-xl p-4 shadow-sm">
+      <div className="flex justify-between items-center mb-3">
+        <h3 className="text-[15px] font-bold text-[#0D1B2A]">
           Assessment Comparison
         </h3>
-        <span style={{ fontSize: '11px', color: '#577590', backgroundColor: '#f0f0f0', padding: '2px 8px', borderRadius: '4px' }}>
+        <span className="text-[11px] text-slate-500 bg-gray-100 px-2 py-0.5 rounded">
           {child.assessmentType}
         </span>
       </div>
 
-      <div style={{ display: 'flex', gap: '12px', marginBottom: '12px' }}>
-        <div style={{ flex: 1, textAlign: 'center', backgroundColor: '#fff5f5', borderRadius: '8px', padding: '12px' }}>
-          <div style={{ fontSize: '11px', color: '#E07A5F', fontWeight: 600, marginBottom: '4px' }}>PRE</div>
-          <div style={{ fontSize: '28px', fontWeight: 800, color: '#E07A5F' }}>{child.preScore}</div>
+      <div className="flex gap-3 mb-3">
+        <div className="flex-1 text-center bg-red-50 rounded-lg p-3">
+          <div className="text-[11px] text-[#E07A5F] font-semibold mb-1">PRE</div>
+          <div className="text-[28px] font-extrabold text-[#E07A5F]">{child.preScore}</div>
         </div>
-        <div style={{ flex: 1, textAlign: 'center', backgroundColor: '#e8f5f0', borderRadius: '8px', padding: '12px' }}>
-          <div style={{ fontSize: '11px', color: '#43AA8B', fontWeight: 600, marginBottom: '4px' }}>POST</div>
-          <div style={{ fontSize: '28px', fontWeight: 800, color: '#43AA8B' }}>{child.postScore}</div>
+        <div className="flex-1 text-center bg-emerald-50 rounded-lg p-3">
+          <div className="text-[11px] text-emerald-500 font-semibold mb-1">POST</div>
+          <div className="text-[28px] font-extrabold text-emerald-500">{child.postScore}</div>
         </div>
       </div>
 
-      <div style={{
-        textAlign: 'center', padding: '8px', borderRadius: '6px',
-        backgroundColor: improved ? '#e8f5f0' : '#fff5f5',
-        color: improved ? '#2d8a6e' : '#c0564a',
-        fontSize: '13px', fontWeight: 600,
-      }}>
+      <div className={`text-center p-2 rounded-md text-[13px] font-semibold ${
+        improved ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'
+      }`}>
         {improved ? '\u2191' : '\u2193'} {child.improvementPct.toFixed(1)}% improvement
       </div>
     </div>
@@ -376,34 +366,32 @@ function PrePostCard({ child }: { child: ChildOutcome }) {
 // ============================================================================
 
 function GoalBar({ goal }: { goal: GoalProgress }) {
-  const trendColors = { improving: '#43AA8B', stable: '#F4A261', declining: '#E07A5F' };
+  const trendColorClasses = { improving: 'text-emerald-500', stable: 'text-amber-400', declining: 'text-[#E07A5F]' };
+  const trendBgClasses = { improving: 'bg-emerald-500', stable: 'bg-amber-400', declining: 'bg-[#E07A5F]' };
   const trendLabels = { improving: 'Improving', stable: 'Stable', declining: 'Needs attention' };
 
   return (
-    <div style={{ marginBottom: '14px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-        <span style={{ fontSize: '13px', fontWeight: 600, color: '#0D1B2A' }}>{goal.title}</span>
-        <span style={{ fontSize: '11px', fontWeight: 600, color: trendColors[goal.trend] }}>
+    <div className="mb-3.5">
+      <div className="flex justify-between mb-1">
+        <span className="text-[13px] font-semibold text-[#0D1B2A]">{goal.title}</span>
+        <span className={`text-[11px] font-semibold ${trendColorClasses[goal.trend]}`}>
           {trendLabels[goal.trend]}
         </span>
       </div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-        <div style={{ flex: 1, height: '10px', backgroundColor: '#e9ecef', borderRadius: '5px', overflow: 'hidden' }}>
-          <div style={{
-            height: '100%',
-            width: `${Math.min(goal.percentComplete, 100)}%`,
-            backgroundColor: trendColors[goal.trend],
-            borderRadius: '5px',
-            transition: 'width 0.5s ease',
-          }} />
+      <div className="flex items-center gap-2">
+        <div className="flex-1 h-2.5 bg-gray-200 rounded-full overflow-hidden">
+          <div
+            className={`h-full rounded-full transition-[width] duration-500 ease-in-out ${trendBgClasses[goal.trend]}`}
+            style={{ width: `${Math.min(goal.percentComplete, 100)}%` }}
+          />
         </div>
-        <span style={{ fontSize: '12px', fontWeight: 700, color: '#0D1B2A', minWidth: '36px', textAlign: 'right' }}>
+        <span className="text-xs font-bold text-[#0D1B2A] min-w-[36px] text-right">
           {goal.percentComplete}%
         </span>
       </div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '2px' }}>
-        <span style={{ fontSize: '10px', color: '#999' }}>Baseline: {goal.baseline} {goal.unit}</span>
-        <span style={{ fontSize: '10px', color: '#999' }}>Current: {goal.current} / Target: {goal.target} {goal.unit}</span>
+      <div className="flex justify-between mt-0.5">
+        <span className="text-[10px] text-gray-400">Baseline: {goal.baseline} {goal.unit}</span>
+        <span className="text-[10px] text-gray-400">Current: {goal.current} / Target: {goal.target} {goal.unit}</span>
       </div>
     </div>
   );
@@ -416,38 +404,34 @@ function GoalBar({ goal }: { goal: GoalProgress }) {
 function BehaviorTrendChart({ trend }: { trend: BehaviorTrend }) {
   const isTarget = trend.type === 'target';
   const isPositive = isTarget ? trend.changePercent > 0 : trend.changePercent < 0;
-  const color = isPositive ? '#43AA8B' : '#E07A5F';
+  const colorClass = isPositive ? 'text-emerald-500' : 'text-[#E07A5F]';
+  const barBgClass = isPositive ? 'bg-emerald-500' : 'bg-[#E07A5F]';
   const maxVal = Math.max(...trend.dataPoints.map((d) => d.value), 1);
 
   return (
-    <div style={{ marginBottom: '16px', paddingBottom: '12px', borderBottom: '1px solid #f0f0f0' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+    <div className="mb-4 pb-3 border-b border-gray-100">
+      <div className="flex justify-between items-center mb-2">
         <div>
-          <span style={{ fontSize: '13px', fontWeight: 600, color: '#0D1B2A' }}>{trend.behavior}</span>
-          <span style={{
-            fontSize: '10px', fontWeight: 600, marginLeft: '6px', padding: '1px 6px', borderRadius: '3px',
-            backgroundColor: isTarget ? '#e8f5f0' : '#fff5f5',
-            color: isTarget ? '#43AA8B' : '#E07A5F',
-          }}>
+          <span className="text-[13px] font-semibold text-[#0D1B2A]">{trend.behavior}</span>
+          <span className={`text-[10px] font-semibold ml-1.5 px-1.5 py-px rounded-sm ${
+            isTarget ? 'bg-emerald-50 text-emerald-500' : 'bg-red-50 text-[#E07A5F]'
+          }`}>
             {isTarget ? 'TARGET' : 'CHALLENGING'}
           </span>
         </div>
-        <span style={{ fontSize: '12px', fontWeight: 700, color }}>
+        <span className={`text-xs font-bold ${colorClass}`}>
           {trend.changePercent > 0 ? '+' : ''}{trend.changePercent.toFixed(1)}%
         </span>
       </div>
 
       {/* Mini bar chart */}
-      <div style={{ display: 'flex', alignItems: 'flex-end', gap: '2px', height: '40px' }}>
+      <div className="flex items-end gap-0.5 h-10">
         {trend.dataPoints.map((point, i) => (
           <div
             key={i}
+            className={`flex-1 min-h-[2px] rounded-t-sm ${barBgClass}`}
             style={{
-              flex: 1,
               height: `${(point.value / maxVal) * 100}%`,
-              minHeight: '2px',
-              backgroundColor: color,
-              borderRadius: '2px 2px 0 0',
               opacity: 0.5 + (i / trend.dataPoints.length) * 0.5,
             }}
             title={`${point.date}: ${point.value}`}
@@ -455,11 +439,11 @@ function BehaviorTrendChart({ trend }: { trend: BehaviorTrend }) {
         ))}
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '4px' }}>
-        <span style={{ fontSize: '10px', color: '#999' }}>
+      <div className="flex justify-between mt-1">
+        <span className="text-[10px] text-gray-400">
           Prev 30d avg: {trend.avgPrevious30.toFixed(1)}
         </span>
-        <span style={{ fontSize: '10px', color: '#999' }}>
+        <span className="text-[10px] text-gray-400">
           Last 30d avg: {trend.avgLast30.toFixed(1)}
         </span>
       </div>
@@ -477,55 +461,50 @@ function AggregateView({ aggregate }: { aggregate: AggregateMetrics | null }) {
   return (
     <>
       {/* Summary Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '16px' }}>
-        <MetricCard label="Active Clients" value={aggregate.totalClients.toString()} color="#0D1B2A" />
-        <MetricCard label="Active Goals" value={aggregate.activeGoals.toString()} color="#577590" />
-        <MetricCard label="Goals Met" value={aggregate.goalsCompleted.toString()} color="#43AA8B" />
-        <MetricCard label="Avg Improvement" value={`${aggregate.avgImprovement.toFixed(1)}%`} color="#E07A5F" />
+      <div className="grid grid-cols-2 gap-2.5 mb-4">
+        <MetricCard label="Active Clients" value={aggregate.totalClients.toString()} colorClass="text-[#0D1B2A]" />
+        <MetricCard label="Active Goals" value={aggregate.activeGoals.toString()} colorClass="text-slate-500" />
+        <MetricCard label="Goals Met" value={aggregate.goalsCompleted.toString()} colorClass="text-emerald-500" />
+        <MetricCard label="Avg Improvement" value={`${aggregate.avgImprovement.toFixed(1)}%`} colorClass="text-[#E07A5F]" />
       </div>
 
       {/* Category Breakdown */}
-      <div style={cardStyle}>
-        <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#0D1B2A', margin: '0 0 14px 0' }}>
+      <div className="bg-white rounded-xl p-4 shadow-sm">
+        <h3 className="text-[15px] font-bold text-[#0D1B2A] mb-3.5">
           Progress by Category
         </h3>
         {aggregate.categoryBreakdown.map((cat, i) => (
-          <div key={i} style={{ marginBottom: '12px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-              <span style={{ fontSize: '13px', fontWeight: 600, color: '#0D1B2A' }}>{cat.category}</span>
-              <span style={{ fontSize: '12px', color: '#577590' }}>{cat.count} goals / {cat.avgProgress}% avg</span>
+          <div key={i} className="mb-3">
+            <div className="flex justify-between mb-1">
+              <span className="text-[13px] font-semibold text-[#0D1B2A]">{cat.category}</span>
+              <span className="text-xs text-slate-500">{cat.count} goals / {cat.avgProgress}% avg</span>
             </div>
-            <div style={{ height: '8px', backgroundColor: '#e9ecef', borderRadius: '4px', overflow: 'hidden' }}>
-              <div style={{
-                height: '100%',
-                width: `${cat.avgProgress}%`,
-                backgroundColor: getCategoryColor(i),
-                borderRadius: '4px',
-              }} />
+            <div className="h-2 bg-gray-200 rounded overflow-hidden">
+              <div
+                className={`h-full rounded ${getCategoryBgClass(i)}`}
+                style={{ width: `${cat.avgProgress}%` }}
+              />
             </div>
           </div>
         ))}
       </div>
 
       {/* Client Overview */}
-      <div style={{ ...cardStyle, marginTop: '12px' }}>
-        <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#0D1B2A', margin: '0 0 12px 0' }}>
+      <div className="bg-white rounded-xl p-4 shadow-sm mt-3">
+        <h3 className="text-[15px] font-bold text-[#0D1B2A] mb-3">
           Client Outcomes Summary
         </h3>
         {DEMO_CHILDREN.map((child) => (
-          <div key={child.childId} style={{
-            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-            padding: '10px 0', borderBottom: '1px solid #f0f0f0',
-          }}>
+          <div key={child.childId} className="flex justify-between items-center py-2.5 border-b border-gray-100">
             <div>
-              <div style={{ fontSize: '13px', fontWeight: 600, color: '#0D1B2A' }}>{child.childName}</div>
-              <div style={{ fontSize: '11px', color: '#577590' }}>{child.goals.length} active goals</div>
+              <div className="text-[13px] font-semibold text-[#0D1B2A]">{child.childName}</div>
+              <div className="text-[11px] text-slate-500">{child.goals.length} active goals</div>
             </div>
-            <div style={{ textAlign: 'right' }}>
-              <div style={{ fontSize: '14px', fontWeight: 700, color: '#43AA8B' }}>
+            <div className="text-right">
+              <div className="text-sm font-bold text-emerald-500">
                 +{child.improvementPct.toFixed(1)}%
               </div>
-              <div style={{ fontSize: '10px', color: '#999' }}>{child.assessmentType}</div>
+              <div className="text-[10px] text-gray-400">{child.assessmentType}</div>
             </div>
           </div>
         ))}
@@ -538,28 +517,22 @@ function AggregateView({ aggregate }: { aggregate: AggregateMetrics | null }) {
 // Sub-components
 // ============================================================================
 
-function MetricCard({ label, value, color }: { label: string; value: string; color: string }) {
+function MetricCard({ label, value, colorClass }: { label: string; value: string; colorClass: string }) {
   return (
-    <div style={{
-      backgroundColor: '#fff', borderRadius: '12px', padding: '14px',
-      boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
-    }}>
-      <div style={{ fontSize: '11px', color: '#577590', fontWeight: 600, marginBottom: '4px' }}>{label}</div>
-      <div style={{ fontSize: '24px', fontWeight: 800, color }}>{value}</div>
+    <div className="bg-white rounded-xl p-3.5 shadow-sm">
+      <div className="text-[11px] text-slate-500 font-semibold mb-1">{label}</div>
+      <div className={`text-2xl font-extrabold ${colorClass}`}>{value}</div>
     </div>
   );
 }
 
 function LoadingSkeleton() {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+    <div className="flex flex-col gap-3">
       {[1, 2, 3].map((i) => (
-        <div key={i} style={{
-          backgroundColor: '#fff', borderRadius: '12px', padding: '20px', height: '100px',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
-        }}>
-          <div style={{ width: '60%', height: '14px', backgroundColor: '#e9ecef', borderRadius: '4px', marginBottom: '12px' }} />
-          <div style={{ width: '40%', height: '10px', backgroundColor: '#e9ecef', borderRadius: '4px' }} />
+        <div key={i} className="bg-white rounded-xl p-5 h-[100px] shadow-sm">
+          <div className="w-3/5 h-3.5 bg-gray-200 rounded mb-3" />
+          <div className="w-2/5 h-2.5 bg-gray-200 rounded" />
         </div>
       ))}
     </div>
@@ -570,14 +543,7 @@ function LoadingSkeleton() {
 // Helpers
 // ============================================================================
 
-const cardStyle: React.CSSProperties = {
-  backgroundColor: '#fff',
-  borderRadius: '12px',
-  padding: '16px',
-  boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
-};
-
-function getCategoryColor(index: number): string {
-  const colors = ['#43AA8B', '#577590', '#E07A5F', '#F4A261', '#264653'];
-  return colors[index % colors.length];
+function getCategoryBgClass(index: number): string {
+  const classes = ['bg-emerald-500', 'bg-slate-500', 'bg-[#E07A5F]', 'bg-amber-400', 'bg-[#264653]'];
+  return classes[index % classes.length];
 }

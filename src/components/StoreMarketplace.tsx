@@ -1329,7 +1329,7 @@ export function StoreMarketplace({
 
           {filteredProducts.length === 0 ? (
             <Card className="p-12 text-center">
-              <Package className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+              <Package className="w-12 h-12 text-slate-400 mx-auto mb-4" />
               <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2">
                 No resources found
               </h3>

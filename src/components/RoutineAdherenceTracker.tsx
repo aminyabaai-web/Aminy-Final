@@ -396,7 +396,7 @@ export function RoutineAdherenceTracker({
 
         {routines.length === 0 && (
           <Card className="p-8 text-center">
-            <Calendar className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+            <Calendar className="w-12 h-12 text-slate-400 mx-auto mb-4" />
             <h3 className="font-medium text-slate-700 mb-2">No routines yet</h3>
             <p className="text-sm text-slate-500 mb-4">Add routines to start tracking progress</p>
             {onAddRoutine && (

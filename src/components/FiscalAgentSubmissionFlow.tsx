@@ -345,7 +345,7 @@ export function FiscalAgentSubmissionFlow({
               {/* Entries List */}
               {entries.length === 0 ? (
                 <Card className="p-6 text-center">
-                  <Clock className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+                  <Clock className="w-12 h-12 mx-auto mb-3 text-gray-400" />
                   <h3 className="font-medium text-gray-900 mb-1">No Hours to Submit</h3>
                   <p className="text-sm text-gray-600">
                     Complete your shifts by clocking out to see them here.

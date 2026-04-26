@@ -265,7 +265,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
           {/* RBT List */}
           {data.rbts.length === 0 ? (
             <div className="text-center py-12 bg-white rounded-xl border border-gray-200">
-              <Users className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+              <Users className="w-12 h-12 text-gray-400 mx-auto mb-3" />
               <p className="font-medium text-gray-600">No RBTs yet</p>
               <p className="text-sm text-gray-400 mt-1">Invite RBTs to manage your practice roster</p>
             </div>
@@ -453,7 +453,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
           {/* RBT Compliance Cards */}
           {data.rbts.length === 0 ? (
             <div className="text-center py-8 text-gray-400">
-              <Clock className="w-10 h-10 mx-auto mb-2 text-gray-300" />
+              <Clock className="w-10 h-10 mx-auto mb-2 text-gray-400" />
               <p className="text-sm">Add RBTs to track supervision</p>
             </div>
           ) : (
@@ -537,7 +537,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
 
           {data.invoices.length === 0 ? (
             <div className="text-center py-12 bg-white rounded-xl border border-gray-200">
-              <FileText className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+              <FileText className="w-12 h-12 text-gray-400 mx-auto mb-3" />
               <p className="font-medium text-gray-600">No invoices yet</p>
               <p className="text-sm text-gray-400 mt-1">Create invoices for your clients</p>
               <div className="mt-4 space-y-2 text-sm text-gray-500 max-w-sm mx-auto text-left">

@@ -179,7 +179,7 @@ export function OfflineIndicator({ onCrisisResourcesClick }: OfflineIndicatorPro
               )}
               <button
                 onClick={() => setDismissed(true)}
-                className="p-1.5 hover:bg-white/20 rounded-lg transition-colors"
+                className="p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center hover:bg-white/20 rounded-lg transition-colors"
                 aria-label="Dismiss offline notification"
               >
                 <X className="w-4 h-4" />

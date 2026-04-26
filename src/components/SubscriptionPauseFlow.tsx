@@ -157,7 +157,7 @@ export function SubscriptionPauseFlow({
           </h3>
         </div>
         {onClose && (
-          <button onClick={onClose} className="p-1 text-gray-400 hover:text-gray-600">
+          <button onClick={onClose} className="p-1 min-h-[44px] min-w-[44px] flex items-center justify-center text-gray-400 hover:text-gray-600">
             <X size={16} />
           </button>
         )}

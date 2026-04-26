@@ -294,7 +294,7 @@ export function QASessionsHub({
             onClick={() => setActiveTab('upcoming')}
             className={`pb-2 text-sm font-medium border-b-2 transition-colors ${
               activeTab === 'upcoming'
-                ? 'border-[#0891b2] text-[#0891b2]'
+                ? 'border-cyan-600 text-cyan-600'
                 : 'border-transparent text-gray-500 hover:text-gray-700'
             }`}
           >
@@ -304,7 +304,7 @@ export function QASessionsHub({
             onClick={() => setActiveTab('replays')}
             className={`pb-2 text-sm font-medium border-b-2 transition-colors ${
               activeTab === 'replays'
-                ? 'border-[#0891b2] text-[#0891b2]'
+                ? 'border-cyan-600 text-cyan-600'
                 : 'border-transparent text-gray-500 hover:text-gray-700'
             }`}
           >
@@ -331,7 +331,7 @@ export function QASessionsHub({
             ))
           ) : (
             <div className="text-center py-12">
-              <Calendar className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+              <Calendar className="w-12 h-12 text-gray-400 mx-auto mb-4" />
               <p className="text-gray-500">No upcoming sessions scheduled</p>
               <p className="text-sm text-gray-400 mt-1">Check back soon for new sessions!</p>
             </div>
@@ -348,7 +348,7 @@ export function QASessionsHub({
             ))
           ) : (
             <div className="text-center py-12">
-              <Video className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+              <Video className="w-12 h-12 text-gray-400 mx-auto mb-4" />
               <p className="text-gray-500">No replays available yet</p>
               <p className="text-sm text-gray-400 mt-1">Past sessions will appear here</p>
             </div>
@@ -388,7 +388,7 @@ function UpcomingSessionCard({
   return (
     <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
       {/* Date Banner */}
-      <div className="bg-[#0891b2] px-4 py-2 flex items-center justify-between">
+      <div className="bg-cyan-600 px-4 py-2 flex items-center justify-between">
         <div className="flex items-center gap-2 text-white">
           <Calendar className="w-4 h-4" />
           <span className="text-sm font-medium">{formatDate(session.date)}</span>
@@ -412,7 +412,7 @@ function UpcomingSessionCard({
             {session.hosts.map((host, idx) => (
               <div
                 key={idx}
-                className="w-8 h-8 rounded-full bg-gradient-to-br from-[#0891b2] to-[#466379] flex items-center justify-center text-white text-xs font-medium border-2 border-white"
+                className="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-600 to-[#466379] flex items-center justify-center text-white text-xs font-medium border-2 border-white"
               >
                 {host.name.split(' ').map(n => n[0]).join('')}
               </div>
@@ -459,7 +459,7 @@ function UpcomingSessionCard({
                 onClick={onToggleReminder}
                 className={`flex-1 py-2 px-4 rounded-xl text-sm font-medium flex items-center justify-center gap-2 transition-colors ${
                   session.hasReminder
-                    ? 'bg-[#0891b2] text-white'
+                    ? 'bg-cyan-600 text-white'
                     : 'border border-gray-200 text-gray-700 hover:bg-gray-50'
                 }`}
               >
@@ -495,7 +495,7 @@ function UpcomingSessionCard({
         ) : (
           <button
             onClick={onRegister}
-            className="w-full py-3 bg-[#0891b2] text-white font-medium rounded-xl hover:bg-[#466379] transition-colors flex items-center justify-center gap-2"
+            className="w-full py-3 bg-cyan-600 text-white font-medium rounded-xl hover:bg-[#466379] transition-colors flex items-center justify-center gap-2"
           >
             <Video className="w-4 h-4" />
             Register for Free
@@ -520,7 +520,7 @@ function ReplayCard({ session, onWatch, formatDate }: ReplayCardProps) {
   return (
     <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
       {/* Thumbnail Area */}
-      <div className="relative bg-gradient-to-br from-[#0891b2] to-[#43AA8B] h-32 flex items-center justify-center">
+      <div className="relative bg-gradient-to-br from-cyan-600 to-emerald-500 h-32 flex items-center justify-center">
         <button
           onClick={onWatch}
           className="w-14 h-14 bg-white/20 backdrop-blur rounded-full flex items-center justify-center hover:bg-white/30 transition-colors"
@@ -555,7 +555,7 @@ function ReplayCard({ session, onWatch, formatDate }: ReplayCardProps) {
             {session.hosts.map((host, idx) => (
               <div
                 key={idx}
-                className="w-6 h-6 rounded-full bg-gradient-to-br from-[#0891b2] to-[#466379] flex items-center justify-center text-white text-[10px] font-medium border-2 border-white"
+                className="w-6 h-6 rounded-full bg-gradient-to-br from-cyan-600 to-[#466379] flex items-center justify-center text-white text-[10px] font-medium border-2 border-white"
               >
                 {host.name.split(' ').map(n => n[0]).join('')}
               </div>
@@ -586,7 +586,7 @@ function ReplayCard({ session, onWatch, formatDate }: ReplayCardProps) {
         {/* Watch Button */}
         <button
           onClick={onWatch}
-          className="w-full py-2.5 bg-[#0891b2] text-white font-medium rounded-xl hover:bg-[#466379] transition-colors flex items-center justify-center gap-2"
+          className="w-full py-2.5 bg-cyan-600 text-white font-medium rounded-xl hover:bg-[#466379] transition-colors flex items-center justify-center gap-2"
         >
           <Play className="w-4 h-4" />
           Watch Replay

@@ -53,15 +53,6 @@ import { toast } from 'sonner';
 import { supabase } from '../utils/supabase/client';
 import { TierType } from '../lib/tier-utils';
 
-const fontStack = 'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", "Helvetica Neue", Arial, "Noto Sans", sans-serif';
-
-const fontSmoothing: React.CSSProperties = {
-    WebkitFontSmoothing: 'antialiased',
-    MozOsxFontSmoothing: 'grayscale',
-    textRendering: 'geometricPrecision',
-    fontFamily: fontStack,
-} as React.CSSProperties;
-
 interface AccountSettingsPremiumProps {
     onBack?: () => void;
     onLogout?: () => void;
@@ -361,31 +352,18 @@ export function AccountSettingsPremium({ onBack, onLogout, onNavigate, userTier 
     }) => (
         <button
             onClick={onClick}
-            style={{
-                width: '100%',
-                padding: '16px 20px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                backgroundColor: '#FFFFFF',
-                borderBottom: '1px solid rgba(17, 24, 39, 0.04)',
-                cursor: 'pointer',
-                transition: 'background-color 0.2s ease',
-                ...fontSmoothing
-            }}
-            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#FAFAFA'}
-            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#FFFFFF'}
+            className="w-full px-5 py-4 flex items-center justify-between bg-white border-b border-gray-900/4 cursor-pointer transition-colors duration-200 font-sans antialiased hover:bg-[#FAFAFA]"
         >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                <div style={{
-                    width: '32px', height: '32px', borderRadius: '10px', backgroundColor: `${color}15`,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center'
-                }}>
+            <div className="flex items-center gap-4">
+                <div
+                    className="w-8 h-8 rounded-[10px] flex items-center justify-center"
+                    style={{ backgroundColor: `${color}15` }}
+                >
                     <Icon size={18} color={color} />
                 </div>
-                <div style={{ textAlign: 'left' }}>
-                    <h3 style={{ fontSize: '15px', fontWeight: 500, color: 'rgba(17, 24, 39, 0.9)' }}>{title}</h3>
-                    <p style={{ fontSize: '13px', color: 'rgba(17, 24, 39, 0.45)', marginTop: '2px' }}>{subtitle}</p>
+                <div className="text-left">
+                    <h3 className="text-[15px] font-medium text-gray-900/90">{title}</h3>
+                    <p className="text-[13px] text-gray-900/45 mt-0.5">{subtitle}</p>
                 </div>
             </div>
             <ChevronRight size={18} color="rgba(17, 24, 39, 0.3)" style={{
@@ -396,98 +374,60 @@ export function AccountSettingsPremium({ onBack, onLogout, onNavigate, userTier 
     );
 
     return (
-        <div style={{
-            minHeight: '100vh',
-            backgroundColor: '#F8F8F6',
-            paddingBottom: '100px',
-            ...fontSmoothing
-        }}>
+        <div className="min-h-screen bg-[#F8F8F6] pb-[100px] font-sans antialiased">
             {/* Header */}
-            <div style={{
-                position: 'sticky',
-                top: 0,
-                zIndex: 10,
-                backgroundColor: 'rgba(248, 248, 246, 0.85)',
-                backdropFilter: 'blur(12px)',
-                WebkitBackdropFilter: 'blur(12px)',
-                borderBottom: '1px solid rgba(17, 24, 39, 0.04)',
-            }}>
-                <div style={{ maxWidth: '640px', margin: '0 auto', padding: '16px 20px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div className="sticky top-0 z-10 bg-[#F8F8F6]/85 backdrop-blur-md border-b border-gray-900/4">
+                <div className="max-w-[640px] mx-auto px-5 py-4 flex items-center gap-3">
                     {onBack && (
                         <button
                             onClick={onBack}
-                            style={{
-                                width: '36px', height: '36px', borderRadius: '50%', border: 'none', backgroundColor: '#FFFFFF',
-                                boxShadow: '0 1px 3px rgba(0,0,0,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                cursor: 'pointer'
-                            }}
+                            className="w-9 h-9 rounded-full border-none bg-white shadow-back-btn flex items-center justify-center cursor-pointer"
                         >
                             <ArrowLeft size={18} color="rgba(17, 24, 39, 0.7)" />
                         </button>
                     )}
                     <div>
-                        <h1 style={{ fontSize: '20px', fontWeight: 600, color: 'rgba(17, 24, 39, 0.9)', letterSpacing: '-0.01em' }}>Account</h1>
+                        <h1 className="text-[20px] font-semibold text-gray-900/90 tracking-[-0.01em]">Account</h1>
                     </div>
                 </div>
             </div>
 
-            <div style={{ maxWidth: '640px', margin: '0 auto', padding: '24px 20px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+            <div className="max-w-[640px] mx-auto px-5 py-6 flex flex-col gap-6">
 
                 {/* Plan & Subscription Card */}
-                <div style={{
-                    backgroundColor: '#FFFFFF',
-                    borderRadius: '20px',
-                    padding: '20px',
-                    boxShadow: '0 2px 10px rgba(0,0,0,0.02), 0 1px 3px rgba(0,0,0,0.01)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between'
-                }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                        <div style={{
-                            width: '44px', height: '44px', borderRadius: '12px',
-                            background: 'linear-gradient(135deg, #5a7380 0%, #4a6370 100%)',
-                            display: 'flex', alignItems: 'center', justifyContent: 'center'
-                        }}>
+                <div className="bg-white rounded-[20px] p-5 shadow-card flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                        <div className="w-11 h-11 rounded-[12px] bg-gradient-to-br from-[#5a7380] to-[#4a6370] flex items-center justify-center">
                             <Crown size={22} color="#FFFFFF" />
                         </div>
                         <div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                                <h2 style={{ fontSize: '17px', fontWeight: 600, color: 'rgba(17, 24, 39, 0.9)' }}>
+                            <div className="flex items-center gap-2 mb-1">
+                                <h2 className="text-[17px] font-semibold text-gray-900/90">
                                     {subscription.tier.charAt(0).toUpperCase() + subscription.tier.slice(1)} Plan
                                 </h2>
-                                <span style={{
-                                    padding: '3px 8px', borderRadius: '8px', fontSize: '11px', fontWeight: 500,
-                                    backgroundColor: subscription.status === 'active' ? 'rgba(13, 148, 136, 0.1)' : 'rgba(245, 158, 11, 0.1)',
-                                    color: subscription.status === 'active' ? '#0d9488' : '#d97706'
-                                }}>
+                                <span className={`px-2 py-0.5 rounded-lg text-[11px] font-medium ${
+                                    subscription.status === 'active'
+                                        ? 'bg-teal-600/10 text-teal-600'
+                                        : 'bg-amber-500/10 text-amber-600'
+                                }`}>
                                     {subscription.status.toUpperCase()}
                                 </span>
                             </div>
-                            <p style={{ fontSize: '13px', color: 'rgba(17, 24, 39, 0.45)' }}>
+                            <p className="text-[13px] text-gray-900/45">
                                 {subscription.cancelAtPeriodEnd ? 'Cancels on' : 'Renews on'} {new Date(subscription.currentPeriodEnd || '').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
                             </p>
                         </div>
                     </div>
                     <button
                         onClick={() => onNavigate?.('paywall')}
-                        style={{
-                            padding: '8px 16px', borderRadius: '12px', border: '1px solid rgba(17, 24, 39, 0.1)',
-                            backgroundColor: '#FFFFFF', fontSize: '13px', fontWeight: 500, color: 'rgba(17, 24, 39, 0.8)',
-                            cursor: 'pointer'
-                        }}
+                        className="px-4 py-2 rounded-[12px] border border-gray-900/10 bg-white text-[13px] font-medium text-gray-900/80 cursor-pointer"
                     >
                         Manage
                     </button>
                 </div>
 
                 {/* Trust Engine Settings Group */}
-                <div style={{
-                    backgroundColor: '#FFFFFF',
-                    borderRadius: '20px',
-                    boxShadow: '0 2px 10px rgba(0,0,0,0.02), 0 1px 3px rgba(0,0,0,0.01)',
-                    overflow: 'hidden'
-                }}>
+                <div className="bg-white rounded-[20px] shadow-card overflow-hidden">
                     <SectionButton
                         title="Privacy & Data Control"
                         subtitle="HIPAA, BAA, Export"
@@ -502,55 +442,48 @@ export function AccountSettingsPremium({ onBack, onLogout, onNavigate, userTier 
                                 initial={{ height: 0, opacity: 0 }}
                                 animate={{ height: 'auto', opacity: 1 }}
                                 exit={{ height: 0, opacity: 0 }}
-                                style={{ backgroundColor: '#FAFAFA' }}
+                                className="bg-[#FAFAFA]"
                             >
-                                <div style={{ padding: '16px 20px', borderBottom: '1px solid rgba(17, 24, 39, 0.04)', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                                <div className="px-5 py-4 border-b border-gray-900/4 flex flex-col gap-5">
 
                                     {/* HIPAA Notice */}
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <div className="flex justify-between items-center">
                                         <div>
-                                            <p style={{ fontSize: '14px', fontWeight: 500, color: 'rgba(17, 24, 39, 0.9)' }}>HIPAA Data Privacy</p>
-                                            <p style={{ fontSize: '13px', color: 'rgba(17, 24, 39, 0.5)', marginTop: '2px' }}>Your data is encrypted and covered under our policy.</p>
+                                            <p className="text-sm font-medium text-gray-900/90">HIPAA Data Privacy</p>
+                                            <p className="text-[13px] text-gray-900/50 mt-0.5">Your data is encrypted and covered under our policy.</p>
                                         </div>
                                         <Switch checked={hipaaConsentSigned} onCheckedChange={setHipaaConsentSigned} />
                                     </div>
 
                                     {/* BAA Document */}
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <div className="flex justify-between items-center">
                                         <div>
-                                            <p style={{ fontSize: '14px', fontWeight: 500, color: 'rgba(17, 24, 39, 0.9)' }}>Business Associate Agreement</p>
-                                            <p style={{ fontSize: '13px', color: 'rgba(17, 24, 39, 0.5)', marginTop: '2px' }}>For clinical providers & agencies.</p>
+                                            <p className="text-sm font-medium text-gray-900/90">Business Associate Agreement</p>
+                                            <p className="text-[13px] text-gray-900/50 mt-0.5">For clinical providers & agencies.</p>
                                         </div>
-                                        <button style={{
-                                            padding: '6px 12px', borderRadius: '8px', border: '1px solid rgba(17, 24, 39, 0.1)',
-                                            backgroundColor: '#FFFFFF', fontSize: '12px', fontWeight: 500, color: 'rgba(17, 24, 39, 0.8)',
-                                            cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px'
-                                        }}>
+                                        <button className="px-3 py-1.5 rounded-lg border border-gray-900/10 bg-white text-[12px] font-medium text-gray-900/80 cursor-pointer flex items-center gap-1">
                                             <FileSignature size={14} /> View BAA
                                         </button>
                                     </div>
 
                                     {/* Export */}
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <div className="flex justify-between items-center">
                                         <div>
-                                            <p style={{ fontSize: '14px', fontWeight: 500, color: 'rgba(17, 24, 39, 0.9)' }}>Export Account Data</p>
-                                            <p style={{ fontSize: '13px', color: 'rgba(17, 24, 39, 0.5)', marginTop: '2px' }}>Download a complete JSON archive of all logs.</p>
+                                            <p className="text-sm font-medium text-gray-900/90">Export Account Data</p>
+                                            <p className="text-[13px] text-gray-900/50 mt-0.5">Download a complete JSON archive of all logs.</p>
                                         </div>
                                         <button
                                             onClick={() => setShowExportDialog(true)}
-                                            style={{
-                                                padding: '6px 12px', borderRadius: '8px', border: '1px solid rgba(17, 24, 39, 0.1)',
-                                                backgroundColor: '#FFFFFF', fontSize: '12px', fontWeight: 500, color: 'rgba(17, 24, 39, 0.8)',
-                                                cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px'
-                                            }}>
+                                            className="px-3 py-1.5 rounded-lg border border-gray-900/10 bg-white text-[12px] font-medium text-gray-900/80 cursor-pointer flex items-center gap-1"
+                                        >
                                             <Download size={14} /> Request
                                         </button>
                                     </div>
 
                                     {/* Legal Links */}
-                                    <div style={{ paddingTop: '12px', borderTop: '1px solid rgba(17, 24, 39, 0.05)', display: 'flex', gap: '16px' }}>
-                                        <span onClick={() => onNavigate?.('privacy-policy')} style={{ fontSize: '13px', color: '#5a7380', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}><FileText size={14} /> Privacy Policy</span>
-                                        <span onClick={() => onNavigate?.('terms-of-service')} style={{ fontSize: '13px', color: '#5a7380', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}><FileText size={14} /> Terms of Service</span>
+                                    <div className="pt-3 border-t border-gray-900/5 flex gap-4">
+                                        <span onClick={() => onNavigate?.('privacy-policy')} className="text-[13px] text-[#5a7380] cursor-pointer flex items-center gap-1"><FileText size={14} /> Privacy Policy</span>
+                                        <span onClick={() => onNavigate?.('terms-of-service')} className="text-[13px] text-[#5a7380] cursor-pointer flex items-center gap-1"><FileText size={14} /> Terms of Service</span>
                                     </div>
                                 </div>
                             </motion.div>
@@ -571,26 +504,26 @@ export function AccountSettingsPremium({ onBack, onLogout, onNavigate, userTier 
                                 initial={{ height: 0, opacity: 0 }}
                                 animate={{ height: 'auto', opacity: 1 }}
                                 exit={{ height: 0, opacity: 0 }}
-                                style={{ backgroundColor: '#FAFAFA' }}
+                                className="bg-[#FAFAFA]"
                             >
-                                <div style={{ padding: '16px 20px', borderBottom: '1px solid rgba(17, 24, 39, 0.04)', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                <div className="px-5 py-4 border-b border-gray-900/4 flex flex-col gap-5">
+                                    <div className="flex justify-between items-center">
+                                        <div className="flex items-center gap-3">
                                             <Smartphone size={16} color="rgba(17, 24, 39, 0.4)" />
                                             <div>
-                                                <p style={{ fontSize: '14px', fontWeight: 500, color: 'rgba(17, 24, 39, 0.9)' }}>Push Notifications</p>
-                                                <p style={{ fontSize: '13px', color: 'rgba(17, 24, 39, 0.5)' }}>Instant alerts on your device</p>
+                                                <p className="text-sm font-medium text-gray-900/90">Push Notifications</p>
+                                                <p className="text-[13px] text-gray-900/50">Instant alerts on your device</p>
                                             </div>
                                         </div>
                                         <Switch checked={notifications.pushEnabled} onCheckedChange={(checked) => saveNotificationSettings({ ...notifications, pushEnabled: checked })} />
                                     </div>
 
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                    <div className="flex justify-between items-center">
+                                        <div className="flex items-center gap-3">
                                             <Mail size={16} color="rgba(17, 24, 39, 0.4)" />
                                             <div>
-                                                <p style={{ fontSize: '14px', fontWeight: 500, color: 'rgba(17, 24, 39, 0.9)' }}>Weekly AI Digest</p>
-                                                <p style={{ fontSize: '13px', color: 'rgba(17, 24, 39, 0.5)' }}>Summaries of your child's progress</p>
+                                                <p className="text-sm font-medium text-gray-900/90">Weekly AI Digest</p>
+                                                <p className="text-[13px] text-gray-900/50">Summaries of your child's progress</p>
                                             </div>
                                         </div>
                                         <Switch checked={notifications.emailDigest} onCheckedChange={(checked) => saveNotificationSettings({ ...notifications, emailDigest: checked })} />
@@ -614,26 +547,26 @@ export function AccountSettingsPremium({ onBack, onLogout, onNavigate, userTier 
                                 initial={{ height: 0, opacity: 0 }}
                                 animate={{ height: 'auto', opacity: 1 }}
                                 exit={{ height: 0, opacity: 0 }}
-                                style={{ backgroundColor: '#FAFAFA' }}
+                                className="bg-[#FAFAFA]"
                             >
-                                <div style={{ padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                <div className="px-5 py-4 flex flex-col gap-5">
+                                    <div className="flex justify-between items-center">
+                                        <div className="flex items-center gap-3">
                                             <Key size={16} color="rgba(17, 24, 39, 0.4)" />
                                             <div>
-                                                <p style={{ fontSize: '14px', fontWeight: 500, color: 'rgba(17, 24, 39, 0.9)' }}>Change Password</p>
-                                                <p style={{ fontSize: '13px', color: 'rgba(17, 24, 39, 0.5)' }}>Update your login credentials</p>
+                                                <p className="text-sm font-medium text-gray-900/90">Change Password</p>
+                                                <p className="text-[13px] text-gray-900/50">Update your login credentials</p>
                                             </div>
                                         </div>
-                                        <button onClick={() => setShowPasswordDialog(true)} style={{ padding: '6px 12px', borderRadius: '8px', border: '1px solid rgba(17, 24, 39, 0.1)', backgroundColor: '#FFFFFF', fontSize: '12px', fontWeight: 500, cursor: 'pointer' }}>Update</button>
+                                        <button onClick={() => setShowPasswordDialog(true)} className="px-3 py-1.5 rounded-lg border border-gray-900/10 bg-white text-[12px] font-medium cursor-pointer">Update</button>
                                     </div>
 
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                    <div className="flex justify-between items-center">
+                                        <div className="flex items-center gap-3">
                                             <Fingerprint size={16} color="rgba(17, 24, 39, 0.4)" />
                                             <div>
-                                                <p style={{ fontSize: '14px', fontWeight: 500, color: 'rgba(17, 24, 39, 0.9)' }}>Two-Factor Authentication (2FA)</p>
-                                                <p style={{ fontSize: '13px', color: 'rgba(17, 24, 39, 0.5)' }}>{mfaEnabled ? 'Extra security active' : 'Add extra security'}</p>
+                                                <p className="text-sm font-medium text-gray-900/90">Two-Factor Authentication (2FA)</p>
+                                                <p className="text-[13px] text-gray-900/50">{mfaEnabled ? 'Extra security active' : 'Add extra security'}</p>
                                             </div>
                                         </div>
                                         <Switch checked={mfaEnabled} onCheckedChange={(checked) => checked ? setShowMfaSetup(true) : handleDisableMfa()} />
@@ -645,22 +578,14 @@ export function AccountSettingsPremium({ onBack, onLogout, onNavigate, userTier 
                 </div>
 
                 {/* Support & Logout */}
-                <div style={{
-                    backgroundColor: '#FFFFFF',
-                    borderRadius: '20px',
-                    boxShadow: '0 2px 10px rgba(0,0,0,0.02), 0 1px 3px rgba(0,0,0,0.01)',
-                    overflow: 'hidden'
-                }}>
+                <div className="bg-white rounded-[20px] shadow-card overflow-hidden">
                     <button
                         onClick={() => window.open('mailto:support@aminy.ai', '_blank')}
-                        style={{
-                            width: '100%', padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                            backgroundColor: '#FFFFFF', borderBottom: '1px solid rgba(17, 24, 39, 0.04)', cursor: 'pointer'
-                        }}
+                        className="w-full px-5 py-4 flex items-center justify-between bg-white border-b border-gray-900/4 cursor-pointer"
                     >
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <div className="flex items-center gap-3">
                             <HelpCircle size={18} color="rgba(17, 24, 39, 0.6)" />
-                            <span style={{ fontSize: '15px', fontWeight: 500, color: 'rgba(17, 24, 39, 0.9)' }}>Contact Support</span>
+                            <span className="text-[15px] font-medium text-gray-900/90">Contact Support</span>
                         </div>
                         <ExternalLink size={16} color="rgba(17, 24, 39, 0.3)" />
                     </button>
@@ -668,19 +593,16 @@ export function AccountSettingsPremium({ onBack, onLogout, onNavigate, userTier 
                     {onLogout && (
                         <button
                             onClick={onLogout}
-                            style={{
-                                width: '100%', padding: '16px 20px', display: 'flex', alignItems: 'center', gap: '12px',
-                                backgroundColor: '#FFFFFF', cursor: 'pointer', border: 'none'
-                            }}
+                            className="w-full px-5 py-4 flex items-center gap-3 bg-white cursor-pointer border-none"
                         >
                             <LogOut size={18} color="rgba(220, 38, 38, 0.8)" />
-                            <span style={{ fontSize: '15px', fontWeight: 500, color: 'rgba(220, 38, 38, 0.9)' }}>Sign Out</span>
+                            <span className="text-[15px] font-medium text-red-600/90">Sign Out</span>
                         </button>
                     )}
                 </div>
 
                 {/* App Version */}
-                <p style={{ textAlign: 'center', fontSize: '12px', color: 'rgba(17, 24, 39, 0.3)', marginTop: '8px' }}>
+                <p className="text-center text-[12px] text-gray-900/30 mt-2">
                     Aminy v1.1.0 • Built for families
                 </p>
 
@@ -688,24 +610,24 @@ export function AccountSettingsPremium({ onBack, onLogout, onNavigate, userTier 
 
             {/* Dialogs remain identical state-wise, updating just visual layout lightly */}
             <Dialog open={showExportDialog} onOpenChange={setShowExportDialog}>
-                <DialogContent style={{ borderRadius: '24px', padding: '24px', ...fontSmoothing }}>
+                <DialogContent className="rounded-[24px] p-6 font-sans antialiased">
                     <DialogHeader>
                         <DialogTitle>Export Your Data</DialogTitle>
                         <DialogDescription>Download a complete JSON archive of all logs according to GDPR/HIPAA standards.</DialogDescription>
                     </DialogHeader>
-                    <div style={{ padding: '20px 0' }}>
+                    <div className="py-5">
                         {isExporting ? (
-                            <div style={{ textAlign: 'center' }}>
+                            <div className="text-center">
                                 <Loader2 className="animate-spin mx-auto mb-4" color="#5a7380" />
-                                <p style={{ fontSize: '14px', color: 'rgba(17, 24, 39, 0.6)' }}>Generating your archive... {exportProgress}%</p>
+                                <p className="text-sm text-gray-900/60">Generating your archive... {exportProgress}%</p>
                             </div>
                         ) : (
-                            <p style={{ fontSize: '14px', color: 'rgba(17, 24, 39, 0.7)' }}>This will export all child profiles, chat logs, forms, and vault documents.</p>
+                            <p className="text-sm text-gray-900/70">This will export all child profiles, chat logs, forms, and vault documents.</p>
                         )}
                     </div>
                     <DialogFooter>
-                        <Button variant="outline" onClick={() => setShowExportDialog(false)} style={{ borderRadius: '12px' }}>Cancel</Button>
-                        <Button onClick={handleExportData} disabled={isExporting} style={{ backgroundColor: '#5a7380', borderRadius: '12px', color: '#FFF' }}>
+                        <Button variant="outline" onClick={() => setShowExportDialog(false)} className="rounded-[12px]">Cancel</Button>
+                        <Button onClick={handleExportData} disabled={isExporting} className="bg-[#5a7380] rounded-[12px] text-white">
                             Start Export
                         </Button>
                     </DialogFooter>

@@ -209,7 +209,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
             {onClose && isPostOnboarding && (
               <button
                 onClick={handleClose}
-                className="p-1 text-gray-300 hover:text-gray-400 transition-colors"
+                className="p-1 text-gray-400 hover:text-gray-500 transition-colors"
                 aria-label="Skip"
               >
                 <span className="text-xs">Skip</span>

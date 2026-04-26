@@ -342,7 +342,7 @@ export default function ClaimReadyQueue({ providerId, onBack, onNavigateTo }: Cl
         {/* Claims list */}
         {filteredClaims.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-10 text-center">
-            <CheckCircle size={32} className="text-gray-300 mb-3" />
+            <CheckCircle size={32} className="text-gray-400 mb-3" />
             <p className="text-sm text-gray-500">No claims in this category</p>
           </div>
         ) : (

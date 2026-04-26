@@ -459,7 +459,7 @@ export function EnhancedReferralDashboard({
           >
             {stats.chain.length === 0 ? (
               <Card className="p-6 text-center">
-                <Users className="w-10 h-10 mx-auto mb-3 text-gray-300" />
+                <Users className="w-10 h-10 mx-auto mb-3 text-gray-400" />
                 <h3 className="font-medium text-gray-700 mb-1">No referrals yet</h3>
                 <p className="text-sm text-gray-500 mb-4">Share your code to start earning rewards</p>
                 <Button

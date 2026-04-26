@@ -169,7 +169,7 @@ export function VideoAccessStatus({
       {!hasAccess && showUpgrade && onUpgradeClick && (
         <button
           onClick={onUpgradeClick}
-          className="text-sm text-[#0891b2] hover:text-[#4a6478] font-medium transition-colors"
+          className="text-sm text-cyan-600 hover:text-[#4a6478] font-medium transition-colors"
         >
           Upgrade to {getTierDisplayName('pro')} for Live AI Video coaching →
         </button>

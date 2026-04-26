@@ -313,7 +313,7 @@ export function SocialProofBanner({ proof }: SocialProofBannerProps) {
         {[1, 2, 3, 4, 5].map(i => (
           <Star
             key={i}
-            className={`h-4 w-4 ${i <= Math.floor(proof.averageRating) ? 'fill-amber-400 text-amber-400' : 'text-gray-300'}`}
+            className={`h-4 w-4 ${i <= Math.floor(proof.averageRating) ? 'fill-amber-400 text-amber-400' : 'text-gray-400'}`}
           />
         ))}
         <span className="ml-1 text-xs text-gray-600">{proof.averageRating.toFixed(1)}</span>
@@ -461,7 +461,7 @@ export function CommunityChallenges({ challenges, onJoin, onBack }: CommunityCha
 
         {challenges.length === 0 && (
           <div className="text-center py-12">
-            <Trophy className="mx-auto h-12 w-12 text-gray-300" />
+            <Trophy className="mx-auto h-12 w-12 text-gray-400" />
             <p className="mt-3 text-sm text-gray-500">No active challenges right now. Check back soon!</p>
           </div>
         )}

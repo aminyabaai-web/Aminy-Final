@@ -252,7 +252,7 @@ export function ModeratorQueue({ reports, onAction, onBack }: CommunityModeratio
       <div className="sticky top-0 z-10 border-b border-gray-200 bg-white px-4 py-3">
         <div className="flex items-center gap-3">
           {onBack && (
-            <button onClick={onBack} className="rounded-full p-1 hover:bg-gray-100">
+            <button onClick={onBack} className="rounded-full p-1 min-h-[44px] min-w-[44px] flex items-center justify-center hover:bg-gray-100">
               <ArrowLeft className="h-5 w-5 text-gray-600" />
             </button>
           )}
@@ -370,7 +370,7 @@ export function ModeratorQueue({ reports, onAction, onBack }: CommunityModeratio
 
         {filteredReports.length === 0 && (
           <div className="text-center py-12">
-            <Shield className="mx-auto h-12 w-12 text-gray-300" />
+            <Shield className="mx-auto h-12 w-12 text-gray-400" />
             <p className="mt-3 text-sm text-gray-500">
               {filterStatus === 'pending' ? 'No pending reports. Community is healthy!' : 'No reports found.'}
             </p>
@@ -489,7 +489,7 @@ export function CommunityGuidelines({ onBack }: CommunityGuidelinesProps) {
       <div className="sticky top-0 z-10 border-b border-gray-200 bg-white px-4 py-3">
         <div className="flex items-center gap-3">
           {onBack && (
-            <button onClick={onBack} className="rounded-full p-1 hover:bg-gray-100">
+            <button onClick={onBack} className="rounded-full p-1 min-h-[44px] min-w-[44px] flex items-center justify-center hover:bg-gray-100">
               <ArrowLeft className="h-5 w-5 text-gray-600" />
             </button>
           )}
