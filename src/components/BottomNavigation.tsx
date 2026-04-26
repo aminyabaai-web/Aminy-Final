@@ -56,17 +56,17 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
     },
     {
       id: 'messages',
-      label: 'Patients',
+      label: 'Clients',
       icon: Users,
-      ariaLabel: 'Patients - Your caseload',
+      ariaLabel: 'Clients - Your caseload',
       enabled: true,
       isCenter: false
     },
     {
       id: 'ask-aminy',
-      label: 'Aminy',
+      label: 'Aminy AI',
       icon: Sparkles,
-      ariaLabel: 'Aminy - Clinical AI assistant',
+      ariaLabel: 'Aminy AI - Clinical AI assistant',
       enabled: true,
       isCenter: true
     },
@@ -105,9 +105,9 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
     },
     {
       id: 'ask-aminy',
-      label: 'Aminy',
+      label: 'Aminy AI',
       icon: Sparkles,
-      ariaLabel: 'Aminy - Your AI companion',
+      ariaLabel: 'Aminy AI - Your AI companion',
       enabled: true,
       isCenter: true
     },
@@ -224,9 +224,10 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
     <nav
       id="main-navigation"
       tabIndex={-1}
-      className="fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 border-t border-gray-200 dark:border-slate-700 z-50 outline-none md:hidden"
+      className="fixed bottom-0 left-0 right-0 bg-[#FAF7F2] dark:bg-slate-900 border-t border-[#F0EDE8] dark:border-slate-700 z-50 outline-none md:hidden"
       style={{
-        paddingBottom: 'max(12px, env(safe-area-inset-bottom))'
+        paddingBottom: 'max(12px, env(safe-area-inset-bottom))',
+        overflow: 'visible',
       }}
       role="navigation"
       aria-label="Main navigation"
@@ -240,7 +241,50 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
               (tab.id === 'more' && moreTabIds.includes(activeTab));
             const isDisabled = !tab.enabled;
 
-            // One Medical-style flat nav — all items equal weight, no elevated center
+            // One Medical-style: elevated center AI button (sage gradient), flat for other tabs
+            if (tab.isCenter) {
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => {
+                    if (isDisabled) {
+                      toast('This feature requires Aminy Pro', {
+                        description: 'Upgrade to access all features.',
+                      });
+                      return;
+                    }
+                    onNavigate(tab.id);
+                  }}
+                  className="relative flex flex-col items-center justify-center group"
+                  style={{ minHeight: '56px', minWidth: '48px' }}
+                  aria-label={tab.ariaLabel}
+                  aria-current={isActive ? 'page' : undefined}
+                  role="tab"
+                  disabled={isDisabled}
+                >
+                  {/* Elevated circular button — One Medical style */}
+                  <div
+                    className={`
+                      flex items-center justify-center w-14 h-14 rounded-full -mt-6 shadow-lg transition-all duration-200
+                      ${isActive
+                        ? 'bg-gradient-to-br from-[#43AA8B] to-[#577590] scale-110'
+                        : 'bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] hover:scale-105 active:scale-95'
+                      }
+                    `}
+                  >
+                    <Icon className="w-6 h-6 text-white" strokeWidth={2} />
+                  </div>
+                  <span
+                    className={`text-xs font-semibold mt-1 transition-colors ${
+                      isActive ? 'text-[#43AA8B] dark:text-[#6B9080]' : 'text-gray-600 dark:text-slate-400'
+                    }`}
+                  >
+                    {tab.label}
+                  </span>
+                </button>
+              );
+            }
+
             return (
               <button
                 key={tab.id}
@@ -261,9 +305,9 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                 className={`
                   flex flex-col items-center justify-center space-y-1 py-2 px-2 rounded-xl relative group transition-all duration-200
                   ${isDisabled
-                    ? 'text-gray-400 dark:text-slate-600 cursor-not-allowed'
+                    ? 'text-gray-300 dark:text-slate-600 cursor-not-allowed'
                     : isActive
-                      ? 'text-teal-600 dark:text-teal-400'
+                      ? 'text-[#6B9080] dark:text-[#7BA7BC]'
                       : 'text-gray-500 hover:text-gray-700 dark:text-slate-400 dark:hover:text-slate-200'
                   }
                 `}
@@ -280,19 +324,18 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
               >
                 {/* Active indicator — One Medical style top bar */}
                 {isActive && (
-                  <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-8 h-0.5 bg-teal-600 dark:bg-teal-400 rounded-full" />
+                  <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-8 h-0.5 bg-[#6B9080] dark:bg-teal-400 rounded-full" />
                 )}
 
                 {/* Disabled lock icon */}
                 {isDisabled && (
                   <div className="absolute top-1 right-1 z-10">
-                    <Lock aria-hidden="true" className="w-3 h-3 text-gray-400 dark:text-slate-600" />
+                    <Lock className="w-3 h-3 text-gray-400 dark:text-slate-600" />
                   </div>
                 )}
 
                 {/* Icon */}
                 <Icon
-                  aria-hidden="true"
                   className={`w-5 h-5 ${isDisabled ? 'opacity-40' : 'opacity-100'} transition-all duration-200`}
                   strokeWidth={isActive ? 2 : 1.5}
                 />
@@ -376,8 +419,7 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                           }
                         `}>
                           <Icon
-                            aria-hidden="true"
-                            className={`w-5 h-5 ${isItemActive ? 'text-teal-600 dark:text-teal-300' : 'text-gray-600 dark:text-gray-300'}`}
+                            className={`w-5 h-5 ${isItemActive ? 'text-[#6B9080] dark:text-teal-300' : 'text-gray-600 dark:text-gray-300'}`}
                             strokeWidth={1.5}
                           />
                         </div>
@@ -390,7 +432,7 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                         </div>
                       </div>
 
-                      <ChevronRight aria-hidden="true" className={`w-4 h-4 ${isItemActive ? 'text-teal-500' : 'text-gray-400 dark:text-gray-500'} group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors`} />
+                      <ChevronRight className={`w-4 h-4 ${isItemActive ? 'text-teal-500' : 'text-gray-400 dark:text-gray-500'} group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors`} />
                     </button>
                   );
                 })}

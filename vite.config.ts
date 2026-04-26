@@ -14,6 +14,9 @@ export default defineConfig(({ mode }) => ({
   esbuild: {
     // Strip console.log/debug/warn from production builds (keeps console.error)
     pure: mode === 'production' ? ['console.log', 'console.debug', 'console.warn'] : [],
+    // Additional IP protection: strip debugger statements and minimize variable names
+    drop: mode === 'production' ? ['debugger'] : [],
+    legalComments: mode === 'production' ? 'none' : 'inline',
   },
   plugins: [
     react(),

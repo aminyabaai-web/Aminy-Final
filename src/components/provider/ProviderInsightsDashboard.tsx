@@ -250,7 +250,7 @@ export function ProviderInsightsDashboard({
           <p className="text-2xl font-bold text-neutral-900 dark:text-white mt-3">
             {aggregateData?.totalPatients || 0}
           </p>
-          <p className="text-sm text-neutral-500 dark:text-slate-400">Active Patients</p>
+          <p className="text-sm text-neutral-500 dark:text-slate-400">Active Clients</p>
         </Card>
 
         <Card className="p-4">

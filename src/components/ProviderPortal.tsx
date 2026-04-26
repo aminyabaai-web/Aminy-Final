@@ -141,7 +141,7 @@ interface ProviderPortalProps {
 }
 
 export function ProviderPortal({ providerId }: ProviderPortalProps) {
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'patients' | 'sessions' | 'earnings' | 'settings' | 'ai-summaries' | 'insights' | 'coordination' | 'my-practice' | 'clinical-notes'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'clients' | 'sessions' | 'earnings' | 'settings' | 'ai-summaries' | 'insights' | 'coordination' | 'my-practice' | 'clinical-notes'>('dashboard');
   const [patients, setPatients] = useState<Patient[]>([]);
   const [sessions, setSessions] = useState<Session[]>([]);
   const [provider, setProvider] = useState<ProviderProfile | null>(null);
@@ -849,7 +849,7 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
           <div className="flex gap-2 overflow-x-auto py-3">
             {[
               { id: 'dashboard', label: 'Dashboard', icon: Home },
-              { id: 'patients', label: 'Patients', icon: Users },
+              { id: 'clients', label: 'Clients', icon: Users },
               { id: 'insights', label: 'Insights', icon: BarChart3 },
               { id: 'ai-summaries', label: 'AI Summaries', icon: Brain },
               { id: 'coordination', label: 'Care Team', icon: Heart },
@@ -961,7 +961,7 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
                       <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
                         <Users className="w-5 h-5 text-blue-600" />
                       </div>
-                      <span className="text-neutral-600">Active Patients</span>
+                      <span className="text-neutral-600">Active Clients</span>
                     </div>
                     <span className="text-xl font-bold text-neutral-900">{provider.totalPatients}</span>
                   </div>
@@ -1100,14 +1100,14 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
           </div>
         )}
 
-        {activeTab === 'patients' && (
+        {activeTab === 'clients' && (
           <div className="space-y-3 sm:space-y-4 sm:space-y-6">
             {/* Search & Filters */}
             <div className="flex items-center gap-3 sm:gap-4">
               <div className="flex-1 relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
                 <Input
-                  placeholder="Search patients..."
+                  placeholder="Search Clients..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-10"
@@ -1298,7 +1298,7 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Patient list sidebar */}
               <Card className="p-4 lg:col-span-1">
-                <h3 className="font-semibold text-neutral-900 dark:text-white mb-4">Select Patient</h3>
+                <h3 className="font-semibold text-neutral-900 dark:text-white mb-4">Select Client</h3>
                 <div className="space-y-2">
                   {patients
                     .filter(p => p.profileAccess === 'granted')
@@ -1686,7 +1686,7 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
                   setEditingNote({
                     noteType: 'soap',
                     patientId: '',
-                    patientName: patients[0]?.childName || 'Patient',
+                    patientName: patients[0]?.childName || 'Client',
                     content: {},
                   });
                   setShowNoteEditor(true);
@@ -1763,7 +1763,7 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
                       </select>
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-neutral-700 dark:text-slate-300 mb-1 block">Patient</label>
+                      <label className="text-sm font-medium text-neutral-700 dark:text-slate-300 mb-1 block">Client</label>
                       <select
                         className="w-full px-3 py-2 border border-neutral-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-neutral-900 dark:text-white text-sm"
                         value={editingNote.patientName}
@@ -1771,7 +1771,7 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
                       >
                         {patients.length > 0 ? patients.map(p => (
                           <option key={p.id} value={p.childName}>{p.childName}</option>
-                        )) : <option value="Patient">Demo Patient</option>}
+                        )) : <option value="Client">Demo Patient</option>}
                       </select>
                     </div>
                   </div>

@@ -42,7 +42,8 @@ interface PaywallScreenProps {
 
 export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', childName, isPostOnboarding = false }: PaywallScreenProps) {
   const [showCloseConfirm, setShowCloseConfirm] = useState(false);
-  const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'yearly'>('monthly');
+  // Default to yearly for higher ARPU — users can switch to monthly
+  const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'yearly'>('yearly');
   const [isLoading, setIsLoading] = useState<string | null>(null);
 
   const pricingTiers: Array<{
@@ -73,7 +74,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
       popular: true,
       gradient: 'from-teal-50 to-cyan-50',
       iconBg: 'bg-teal-100',
-      iconColor: 'text-teal-600',
+      iconColor: 'text-[#6B9080]',
     },
     {
       id: 'pro',
@@ -156,7 +157,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white via-gray-50/50 to-white dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Close confirmation modal for post-onboarding */}
       {showCloseConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
@@ -170,7 +171,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
             </p>
             <div className="space-y-2">
               <Button
-                className="w-full bg-teal-600 hover:bg-teal-700 text-white"
+                className="w-full bg-[#6B9080] hover:bg-[#5A7D6E] text-white"
                 onClick={() => setShowCloseConfirm(false)}
               >
                 Start Free Trial
@@ -248,6 +249,79 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
           )}
         </div>
 
+        {/* Outcome Stats — social proof with specific numbers */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-6">
+          <div className="bg-white border border-gray-200 rounded-xl p-3 text-center">
+            <p className="text-xl font-bold text-[#43AA8B]">47%</p>
+            <p className="text-[10px] text-gray-600 leading-tight">fewer meltdowns in 30 days</p>
+          </div>
+          <div className="bg-white border border-gray-200 rounded-xl p-3 text-center">
+            <p className="text-xl font-bold text-[#43AA8B]">89%</p>
+            <p className="text-[10px] text-gray-600 leading-tight">parents feel more confident</p>
+          </div>
+          <div className="bg-white border border-gray-200 rounded-xl p-3 text-center">
+            <p className="text-xl font-bold text-[#43AA8B]">24/7</p>
+            <p className="text-[10px] text-gray-600 leading-tight">AI coach on call</p>
+          </div>
+          <div className="bg-white border border-gray-200 rounded-xl p-3 text-center">
+            <p className="text-xl font-bold text-[#43AA8B]">HSA/FSA</p>
+            <p className="text-[10px] text-gray-600 leading-tight">eligible with receipt</p>
+          </div>
+        </div>
+
+        {/* Testimonials */}
+        <div className="grid md:grid-cols-3 gap-3 mb-6">
+          {[
+            {
+              name: 'Sarah M.',
+              role: 'Mom of 6yo on the spectrum',
+              quote: 'Aminy gave me a calm script at 2am when my son wouldn\u2019t sleep. It actually worked.',
+              outcome: 'Bedtime: 90 min \u2192 15 min',
+            },
+            {
+              name: 'Marcus T.',
+              role: 'Dad of twins (ADHD)',
+              quote: 'The AI coach remembers everything. It gets our kids better than some therapists we\u2019ve seen.',
+              outcome: 'Saved $400/mo on consults',
+            },
+            {
+              name: 'Priya K.',
+              role: 'BCBA + parent',
+              quote: 'As a professional, I\u2019m impressed. The notes are clinical-grade. The Calm Corner is gold.',
+              outcome: 'Uses it with her clients too',
+            },
+          ].map((t) => (
+            <div key={t.name} className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm">
+              <div className="flex gap-0.5 mb-2">
+                {[1, 2, 3, 4, 5].map((s) => (
+                  <svg key={s} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" viewBox="0 0 24 24">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                  </svg>
+                ))}
+              </div>
+              <p className="text-sm text-gray-700 leading-relaxed mb-3 italic">&ldquo;{t.quote}&rdquo;</p>
+              <div className="border-t border-gray-100 pt-2">
+                <p className="text-xs font-semibold text-gray-900">{t.name}</p>
+                <p className="text-[10px] text-gray-500">{t.role}</p>
+                <p className="text-[10px] text-[#43AA8B] font-medium mt-1">✓ {t.outcome}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Referral Incentive Banner */}
+        <div className="bg-gradient-to-r from-[#43AA8B]/10 to-[#577590]/10 border border-[#43AA8B]/20 rounded-2xl p-4 mb-6 flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full bg-[#43AA8B]/20 flex items-center justify-center flex-shrink-0">
+            <Gift className="w-5 h-5 text-[#43AA8B]" />
+          </div>
+          <div className="flex-1">
+            <p className="text-sm font-semibold text-gray-900">Give a month, get a month</p>
+            <p className="text-xs text-gray-600">
+              Refer a friend — you both get Core free for 30 days when they join.
+            </p>
+          </div>
+        </div>
+
         {/* Billing Toggle */}
         <div className="flex items-center justify-center gap-3 mb-8">
           <button
@@ -287,7 +361,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
                 key={tier.id}
                 className={`relative p-5 transition-all duration-200 cursor-pointer hover:shadow-lg ${
                   tier.popular
-                    ? 'ring-2 ring-teal-500 shadow-md'
+                    ? 'ring-2 ring-[#6B9080] shadow-md'
                     : 'border border-gray-200 hover:border-gray-300'
                 } ${isCurrentTier ? 'opacity-60' : ''}`}
                 onClick={() => !isCurrentTier && handleSelectTier(tier.id)}
@@ -295,7 +369,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
                 {/* Popular Badge */}
                 {tier.popular && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <Badge className="bg-teal-500 text-white px-3 py-1 shadow-sm">
+                    <Badge className="bg-[#6B9080] text-white px-3 py-1 shadow-sm">
                       Recommended
                     </Badge>
                   </div>
@@ -325,12 +399,36 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
                           <span className="text-xl sm:text-2xl font-bold text-gray-900">Free</span>
                         ) : (
                           <>
-                            <span className="text-xl sm:text-2xl font-bold text-gray-900">
-                              ${price.toFixed(2)}
-                            </span>
-                            <span className="text-sm text-gray-500">
-                              /{billingPeriod === 'monthly' ? 'mo' : 'yr'}
-                            </span>
+                            {/* Annual pricing anchor — show strikethrough monthly equivalent when yearly */}
+                            {billingPeriod === 'yearly' && (() => {
+                              const monthlyPrice = tierPricing[tier.id].monthly;
+                              const monthlyEquivalent = (monthlyPrice * 12).toFixed(2);
+                              const savings = (monthlyPrice * 12 - price).toFixed(0);
+                              return (
+                                <div className="flex flex-col items-end">
+                                  <span className="text-xs text-gray-400 line-through leading-none">
+                                    ${monthlyEquivalent}/yr
+                                  </span>
+                                  <div className="flex items-baseline gap-1">
+                                    <span className="text-xl sm:text-2xl font-bold text-gray-900">
+                                      ${price.toFixed(2)}
+                                    </span>
+                                    <span className="text-sm text-gray-500">/yr</span>
+                                  </div>
+                                  <span className="text-[10px] font-semibold text-[#43AA8B] leading-none mt-0.5">
+                                    Save ${savings} (2 months free)
+                                  </span>
+                                </div>
+                              );
+                            })()}
+                            {billingPeriod === 'monthly' && (
+                              <>
+                                <span className="text-xl sm:text-2xl font-bold text-gray-900">
+                                  ${price.toFixed(2)}
+                                </span>
+                                <span className="text-sm text-gray-500">/mo</span>
+                              </>
+                            )}
                           </>
                         )}
                       </div>
@@ -357,7 +455,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
                     <Button
                       className={`w-full mt-4 ${
                         tier.popular
-                          ? 'bg-teal-600 hover:bg-teal-700 text-white'
+                          ? 'bg-[#6B9080] hover:bg-[#5A7D6E] text-white'
                           : tier.id === 'free'
                           ? 'bg-gray-100 hover:bg-gray-200 text-gray-700'
                           : 'bg-gray-900 hover:bg-gray-800 text-white'

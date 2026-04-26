@@ -205,7 +205,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
   };
 
   return (
-    <div className="min-h-screen bg-slate-50" style={{ overflowX: 'hidden', overflowY: 'auto' }}>
+    <div className="min-h-screen bg-[#FAF7F2]" style={{ overflowX: 'hidden', overflowY: 'auto' }}>
       {/* Header */}
       <div className="sticky top-0 z-10 bg-white/90 backdrop-blur-md border-b border-slate-100">
         <div className="max-w-lg mx-auto px-4 py-3 flex items-center gap-3">

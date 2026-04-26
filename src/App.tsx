@@ -156,8 +156,8 @@ const CreateAccountScreen = lazy(() =>
   ).then((m) => ({ default: m.CreateAccountScreen })),
 );
 const PaywallScreen = lazy(() =>
-  import("./components/PaywallSimplified").then((m) => ({
-    default: m.PaywallSimplified,
+  import("./components/PaywallScreen").then((m) => ({
+    default: m.PaywallScreen,
   })),
 );
 const BenefitsNavigatorScreen = lazy(() =>
@@ -694,6 +694,31 @@ const OutcomesDashboard = lazy(() =>
     default: m.OutcomesDashboard,
   })),
 );
+const AskAminyChatScreen = lazy(() =>
+  import("./components/AskAminyChatScreen").then((m) => ({
+    default: m.AskAminyChatScreen,
+  })),
+);
+const CredentialingSupportCenter = lazy(() =>
+  import("./components/provider/CredentialingSupportCenter").then((m) => ({
+    default: m.default,
+  })),
+);
+const DenialWorkbench = lazy(() =>
+  import("./components/provider/DenialWorkbench").then((m) => ({
+    default: m.default,
+  })),
+);
+const FiscalAgentSubmissionFlow = lazy(() =>
+  import("./components/FiscalAgentSubmissionFlow").then((m) => ({
+    default: m.default,
+  })),
+);
+const InvestorDemoMode = lazy(() =>
+  import("./components/InvestorDemoMode").then((m) => ({
+    default: m.InvestorDemoMode,
+  })),
+);
 
 // Pre-diagnosis and developmental screener — acquisition funnel for undiagnosed families
 const PreDiagnosisEntry = lazy(() =>
@@ -955,6 +980,10 @@ type AppScreen =
   | "session-payout" // Admin UI to release payment after session completion
   | "parent-intake" // Connected parent onboarding intake flow
   | "outcomes-dashboard" // VC-ready outcomes metrics dashboard
+  | "ask-aminy" // Full-page AI chat experience (Claude-style)
+  | "credentialing-support" // Provider credentialing support center (Headway-level)
+  | "denial-workbench" // Payer denial management workbench
+  | "fiscal-agent-submission" // Fiscal agent (Acumen/DCI) submission flow
   | "pre-diagnosis" // Landing for parents with concerns, no diagnosis yet
   | "developmental-screener" // AI developmental screener tool
   | "sensory-fidget" // Calm Corner sensory fidget tool for kids
@@ -1246,6 +1275,21 @@ export default function App() {
   const [showPaymentConfirmation, setShowPaymentConfirmation] = useState(false);
   const [paymentUserId, setPaymentUserId] = useState<string | null>(null);
   const [fabOpen, setFabOpen] = useState(false);
+
+  // Investor demo mode — activate via ?demo=investor or window.__startInvestorDemo()
+  const [investorDemoActive, setInvestorDemoActive] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    const params = new URLSearchParams(window.location.search);
+    return params.get('demo') === 'investor';
+  });
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      (window as unknown as { __startInvestorDemo: () => void }).__startInvestorDemo = () => {
+        setInvestorDemoActive(true);
+      };
+    }
+  }, []);
   // MFA state — tracks whether we need enrollment or verification after login
   const [mfaGracePeriodEnds, setMfaGracePeriodEnds] = useState<Date | undefined>(undefined);
   const [mfaRequired, setMfaRequired] = useState(false);
@@ -1816,10 +1860,10 @@ export default function App() {
     return () => clearInterval(interval);
   }, []);
 
-  // Save user data to localStorage whenever it changes
+  // Save user data to ENCRYPTED storage whenever it changes (HIPAA — no plaintext PHI)
   useEffect(() => {
     if (userData.parentName || userData.childName) {
-      localStorage.setItem(
+      syncEncryptedStorage.setItem(
         "aminy-user",
         JSON.stringify(userData),
       );
@@ -2225,9 +2269,9 @@ export default function App() {
                     handlePaywallTrigger();
                     return;
                   }
-                  // Handle AI center button — open the floating chat panel
+                  // Handle AI center button — navigate to the full-page chat screen
                   if (destination === "ask-aminy") {
-                    setFabOpen(true);
+                    navigateToScreen("ask-aminy");
                     return;
                   }
                   // Map nav IDs to screen IDs (bottom nav / More menu aliases)
@@ -2274,8 +2318,7 @@ export default function App() {
                   if (destination === "on-demand-telehealth") {
                     navigateToScreen("on-demand-telehealth");
                   } else if (destination === "messages") {
-                    // Navigate to Ask Aminy / messages
-                    navigateToScreen("dashboard");
+                    navigateToScreen("messages");
                   } else if (destination === "resources") {
                     navigateToScreen("resources");
                   } else if (destination === "find-care") {
@@ -2397,7 +2440,7 @@ export default function App() {
           return (
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <ProviderPortal
-                providerId={userData.id || '00000000-0000-0000-0000-000000000000'}
+                providerId={userData.id ?? ''}
               />
             </Suspense>
           );
@@ -2817,7 +2860,7 @@ export default function App() {
           return (
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <ProviderAnalytics
-                providerId={userData.id || '00000000-0000-0000-0000-000000000000'}
+                providerId={userData.id ?? ''}
                 onBack={() => navigateToScreen("provider-portal")}
               />
             </Suspense>
@@ -2836,10 +2879,29 @@ export default function App() {
           );
 
         case "claims-dashboard":
+          // Guard: claims dashboard contains PHI — require a real authenticated user
+          if (!paymentUserId && !userData?.id) {
+            return (
+              <div className="min-h-screen flex items-center justify-center p-6">
+                <div className="max-w-md text-center">
+                  <h2 className="text-lg font-semibold text-slate-900 mb-2">Sign in required</h2>
+                  <p className="text-sm text-slate-600 mb-4">
+                    Your claims dashboard contains private health information. Please sign in to continue.
+                  </p>
+                  <button
+                    onClick={() => navigateToScreen("login")}
+                    className="px-4 py-2 bg-[#43AA8B] text-white rounded-xl text-sm font-medium"
+                  >
+                    Sign In
+                  </button>
+                </div>
+              </div>
+            );
+          }
           return (
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <ClaimsDashboard
-                userId={paymentUserId || "demo-user"}
+                userId={paymentUserId || userData.id!}
                 childId={userData.activeChildId || userData.childId || "child-1"}
                 childName={userData.childName || "Your Child"}
                 childDOB={userData.childDOB}
@@ -3300,6 +3362,21 @@ export default function App() {
             </Suspense>
           );
 
+        case "ask-aminy":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <AskAminyChatScreen
+                onBack={() => navigateToScreen("dashboard")}
+                onNavigate={(screen) => navigateToScreen(screen as AppScreen)}
+                onPaywallTrigger={handlePaywallTrigger}
+                userTier={effectiveUserTier}
+                messagesLeft={messagesLeft}
+                childName={userData.childName}
+                parentName={userData.parentName}
+              />
+            </Suspense>
+          );
+
         case "pre-diagnosis":
           return (
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
@@ -3331,6 +3408,38 @@ export default function App() {
               <SensoryFidget
                 onBack={() => navigateToScreen("junior")}
                 childName={userData.childName}
+              />
+            </Suspense>
+          );
+
+        case "credentialing-support":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <CredentialingSupportCenter />
+            </Suspense>
+          );
+
+        case "denial-workbench":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <DenialWorkbench />
+            </Suspense>
+          );
+
+        case "fiscal-agent-submission":
+          if (!userData.id) {
+            navigateToScreen("login");
+            return null;
+          }
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <FiscalAgentSubmissionFlow
+                userId={userData.id}
+                waiverProfileId={(userData as Record<string, unknown>).waiverProfileId as string || ''}
+                fiscalAgentId={(userData as Record<string, unknown>).fiscalAgentId as string || 'acumen'}
+                participantId={userData.activeChildId || userData.childId || ''}
+                onComplete={() => navigateToScreen("evv-dashboard")}
+                onCancel={() => navigateToScreen("evv-dashboard")}
               />
             </Suspense>
           );
@@ -3535,18 +3644,43 @@ export default function App() {
                     </div>
                   </div>
 
-                  {/* Persistent Ask Aminy FAB */}
-                  {showFAB && (
+                  {/* Aminy AI quick-access FAB — hidden on screens with bottom nav (center tab handles it) and on the chat itself */}
+                  {showFAB && currentScreen !== 'ask-aminy' && currentScreen !== 'dashboard' && currentScreen !== 'junior' && currentScreen !== 'care-plan' && currentScreen !== 'telehealth' && (
+                    <button
+                      onClick={() => navigateToScreen('ask-aminy')}
+                      className="fixed bottom-20 right-4 z-40 w-14 h-14 rounded-full shadow-lg hover:shadow-xl active:scale-95 transition-all flex items-center justify-center bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] text-white"
+                      aria-label="Open Ask Aminy chat"
+                      title="Ask Aminy"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M12 3a6 6 0 0 0-6 6c0 1.5.4 2.8 1.1 4L6 16l3-1.1c1.2.7 2.5 1.1 4 1.1a6 6 0 0 0 0-12z" />
+                        <circle cx="12" cy="9" r="1" fill="currentColor" />
+                      </svg>
+                      {userData.tier === 'free' && messagesLeft !== undefined && messagesLeft > 0 && (
+                        <span className="absolute -top-1 -right-1 bg-white text-[#43AA8B] text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center border-2 border-[#43AA8B]">
+                          {messagesLeft}
+                        </span>
+                      )}
+                    </button>
+                  )}
+
+                  {/* Investor demo mode overlay — activate with ?demo=investor */}
+                  {investorDemoActive && (
                     <Suspense fallback={null}>
-                      <PersistentAskAminyFAB
-                        tier={userData.tier}
-                        messagesLeft={messagesLeft}
-                        onPaywallTrigger={handlePaywallTrigger}
-                        position="bottom-right"
-                        isOpen={fabOpen}
-                        onOpenChange={setFabOpen}
+                      <InvestorDemoMode
+                        currentScreen={currentScreen}
                         onNavigate={(screen) => navigateToScreen(screen as AppScreen)}
-                        childName={userData.childName || userData.parentName || 'your child'}
+                        onClose={() => setInvestorDemoActive(false)}
                       />
                     </Suspense>
                   )}

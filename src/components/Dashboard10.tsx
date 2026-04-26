@@ -10,7 +10,7 @@
  * - Every element should pass the "exhale test" — does seeing this help the parent breathe easier?
  * - CTCA Child Standard: treat every family like YOUR child is the patient
  * - Single-scroll calm hub that celebrates consistency, not perfection
- * - Brand colors: #0D1B2A navy, #F5F5F5 cream, #0891b2 teal accents
+ * - Brand colors: #0D1B2A navy, #F5F5F5 cream, #6B9080 teal accents
  * - Inter font, 8-12px corners, soft shadows
  */
 
@@ -217,19 +217,24 @@ export function Dashboard10({
     supabase
       .from('session_notes')
       .select('id, child_name, session_date, provider_id')
+      .eq('parent_id', userId)
       .eq('status', 'parent_review')
       .order('session_date', { ascending: false })
       .limit(5)
-      .then(({ data }) => {
+      .then(({ data, error }) => {
+        if (error) {
+          console.error('[Dashboard] session_notes query error:', error);
+          return;
+        }
         if (data && data.length > 0) {
           setPendingReviews(data.map(d => ({
             id: d.id,
-            childName: d.child_name || child.name,
+            childName: d.child_name || userData?.childName || 'Your Child',
             sessionDate: d.session_date,
           })));
         }
       });
-  }, [userId]);
+  }, [userId, userData?.childName]);
 
   // Notification prompt state
   const shouldShowNotificationPrompt = useShouldShowNotificationPrompt();
@@ -404,10 +409,10 @@ export function Dashboard10({
 
   // Build routines from real data or use defaults
   const routineIcons: Record<string, React.ReactNode> = {
-    morning: <Sun aria-hidden="true" className="w-4 h-4" />,
-    afternoon: <Sunset aria-hidden="true" className="w-4 h-4" />,
-    evening: <Moon aria-hidden="true" className="w-4 h-4" />,
-    bedtime: <Star aria-hidden="true" className="w-4 h-4" />,
+    morning: <Sun className="w-4 h-4" />,
+    afternoon: <Sunset className="w-4 h-4" />,
+    evening: <Moon className="w-4 h-4" />,
+    bedtime: <Star className="w-4 h-4" />,
   };
 
   // SAFETY: Ensure todaysRoutines is always an array
@@ -416,7 +421,7 @@ export function Dashboard10({
     ? safeTodaysRoutines.map(r => ({
         timeOfDay: r.timeOfDay,
         label: r.label,
-        icon: routineIcons[r.timeOfDay] || <Sun aria-hidden="true" className="w-4 h-4" />,
+        icon: routineIcons[r.timeOfDay] || <Sun className="w-4 h-4" />,
         tasks: Array.isArray(r.tasks) ? r.tasks.map(t => ({
           id: t.id,
           title: t.title,
@@ -429,14 +434,14 @@ export function Dashboard10({
       }))
     : getDefaultRoutines(userData.childName).map(r => ({
         ...r,
-        icon: routineIcons[r.timeOfDay] || <Sun aria-hidden="true" className="w-4 h-4" />,
+        icon: routineIcons[r.timeOfDay] || <Sun className="w-4 h-4" />,
       }));
 
   // SAFETY: Ensure currentRoutine and tasks are always defined
   const currentRoutine = dailyRoutines.find(r => r.timeOfDay === activeRoutine) || dailyRoutines[0] || {
     timeOfDay: 'morning' as const,
     label: 'Morning Routine',
-    icon: <Sun aria-hidden="true" className="w-4 h-4" />,
+    icon: <Sun className="w-4 h-4" />,
     tasks: [],
     completedCount: 0,
   };
@@ -513,25 +518,25 @@ export function Dashboard10({
     {
       id: 'plan',
       label: 'My Plan',
-      icon: <FileText aria-hidden="true" className="w-5 h-5 text-teal-700 dark:text-teal-300" />,
+      icon: <FileText className="w-5 h-5 text-teal-700 dark:text-teal-300" />,
       accent: 'bg-teal-100 dark:bg-teal-900/30',
     },
     {
       id: 'calm',
       label: 'Calm Corner',
-      icon: <Wind aria-hidden="true" className="w-5 h-5 text-sky-700 dark:text-sky-300" />,
+      icon: <Wind className="w-5 h-5 text-sky-700 dark:text-sky-300" />,
       accent: 'bg-sky-100 dark:bg-sky-900/30',
     },
     {
       id: 'log',
       label: 'Note a Moment',
-      icon: <AlertCircle aria-hidden="true" className="w-5 h-5 text-amber-700 dark:text-amber-300" />,
+      icon: <AlertCircle className="w-5 h-5 text-amber-700 dark:text-amber-300" />,
       accent: 'bg-amber-100 dark:bg-amber-900/30',
     },
     {
       id: 'telehealth',
       label: 'Expert Care',
-      icon: <Video aria-hidden="true" className="w-5 h-5 text-violet-700 dark:text-violet-300" />,
+      icon: <Video className="w-5 h-5 text-violet-700 dark:text-violet-300" />,
       accent: 'bg-violet-100 dark:bg-violet-900/30',
     },
   ];
@@ -580,14 +585,14 @@ export function Dashboard10({
   // Show loading state while data is being fetched
   if (dashboardData.isLoading && userId) {
     return (
-      <div className="min-h-screen flex items-center justify-center dark:bg-slate-900" style={{ background: 'linear-gradient(180deg, #f5fbfb 0%, #f6faf8 45%, #eef4f7 100%)' }}>
+      <div className="min-h-screen flex items-center justify-center dark:bg-slate-900" style={{ background: '#FAF7F2' }}>
         <div className="text-center">
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-            className="w-12 h-12 border-4 border-cyan-600 border-t-transparent rounded-full mx-auto mb-4"
+            className="w-12 h-12 border-4 border-[#6B9080] border-t-transparent rounded-full mx-auto mb-4"
           />
-          <p className="text-slate-900 dark:text-white font-medium">Loading your calm hub...</p>
+          <p className="text-[#0D1B2A] dark:text-white font-medium">Loading your calm hub...</p>
         </div>
       </div>
     );
@@ -596,7 +601,7 @@ export function Dashboard10({
   return (
     <div
       className="min-h-screen dark:bg-slate-900 pb-24"
-      style={{ background: 'linear-gradient(180deg, #f6fbfb 0%, #f6faf8 42%, #edf4f7 100%)' }}
+      style={{ background: '#FAF7F2' }}
     >
       {/* ========================================
           STREAK CELEBRATION OVERLAY
@@ -670,7 +675,7 @@ export function Dashboard10({
                       : 'border border-slate-200 bg-white/85 text-slate-600 hover:bg-white'
                   }`}
                 >
-                  <span className="w-5 h-5 rounded-full bg-gradient-to-br from-teal-400 to-cyan-500 flex items-center justify-center text-sm font-bold text-white">
+                  <span className="w-5 h-5 rounded-full bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] flex items-center justify-center text-sm font-bold text-white">
                     {c.name?.[0] || '?'}
                   </span>
                   {c.name}
@@ -698,7 +703,7 @@ export function Dashboard10({
 
           {/* Child Profile Snapshot */}
           <div className="flex items-center gap-3 rounded-[22px] border border-white/80 bg-white/80 p-4 shadow-[0_18px_40px_rgba(15,23,42,0.06)] sm:gap-4">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-teal-400 to-cyan-500 flex items-center justify-center text-xl font-bold text-white shadow-sm">
+            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] flex items-center justify-center text-xl font-bold text-white shadow-sm">
               {child.name[0]}
             </div>
             <div className="flex-1">
@@ -731,7 +736,7 @@ export function Dashboard10({
                 )}
               </div>
             </div>
-            <ChevronRight aria-hidden="true" className="w-5 h-5 text-slate-400" />
+            <ChevronRight className="w-5 h-5 text-slate-400" />
           </div>
 
           {/* Upcoming Events Carousel */}
@@ -750,9 +755,9 @@ export function Dashboard10({
                   className="flex-shrink-0 rounded-2xl border border-slate-200 bg-white/85 px-3 py-2.5 shadow-sm transition-colors hover:bg-white"
                 >
                   {event.type === 'telehealth' ? (
-                    <Video aria-hidden="true" className="w-4 h-4 text-teal-600" />
+                    <Video className="w-4 h-4 text-teal-600" />
                   ) : (
-                    <Calendar aria-hidden="true" className="w-4 h-4 text-amber-500" />
+                    <Calendar className="w-4 h-4 text-amber-500" />
                   )}
                   <div className="text-left">
                     <div className="text-sm font-medium text-slate-900">{event.title}</div>
@@ -780,7 +785,7 @@ export function Dashboard10({
           >
             <div className="flex items-center gap-3 mb-2">
               <div className="w-8 h-8 bg-violet-100 dark:bg-violet-800 rounded-full flex items-center justify-center">
-                <FileText aria-hidden="true" className="w-4 h-4 text-violet-600 dark:text-violet-300" />
+                <FileText className="w-4 h-4 text-violet-600 dark:text-violet-300" />
               </div>
               <div>
                 <p className="text-sm font-semibold text-violet-800 dark:text-violet-200">
@@ -795,7 +800,7 @@ export function Dashboard10({
               onClick={() => onNavigate?.('parent-approval')}
               className="w-full mt-2 py-2.5 bg-violet-600 hover:bg-violet-700 text-white rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
             >
-              <CheckCircle2 aria-hidden="true" className="w-4 h-4" />
+              <CheckCircle2 className="w-4 h-4" />
               Review & Approve
             </button>
           </motion.div>
@@ -844,7 +849,7 @@ export function Dashboard10({
             className="bg-gradient-to-r from-teal-50 to-cyan-50 dark:from-teal-900/20 dark:to-cyan-900/20 border border-teal-200 dark:border-teal-700 rounded-xl p-3"
           >
             <div className="flex items-start gap-2">
-              <Sparkles aria-hidden="true" className="w-4 h-4 text-teal-600 dark:text-teal-400 mt-0.5 flex-shrink-0" />
+              <Sparkles className="w-4 h-4 text-teal-600 dark:text-teal-400 mt-0.5 flex-shrink-0" />
               <p className="text-sm text-teal-800 dark:text-teal-200 flex-1">{activeTip}</p>
               <button
                 onClick={() => setShowTip(false)}
@@ -879,7 +884,7 @@ export function Dashboard10({
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center">
-                  <Video aria-hidden="true" className="w-5 h-5 text-teal-600" />
+                  <Video className="w-5 h-5 text-teal-600" />
                 </div>
                 <div>
                   <p className="text-sm font-medium">Next: {dashboardData.nextAppointment.providerName}</p>
@@ -915,7 +920,7 @@ export function Dashboard10({
           <div className="rounded-2xl border border-teal-100 bg-gradient-to-br from-white via-teal-50/60 to-sky-50/70 p-5 shadow-sm dark:border-teal-900/40 dark:from-slate-800 dark:via-teal-950/20 dark:to-slate-900">
             <div className="flex items-start gap-3">
               <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-300">
-                <Wind aria-hidden="true" className="h-5 w-5" />
+                <Wind className="h-5 w-5" />
               </div>
               <div className="flex-1">
                 <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
@@ -930,7 +935,7 @@ export function Dashboard10({
             <div className="mt-4 flex flex-wrap gap-2">
               <Button
                 size="sm"
-                className="rounded-full bg-cyan-600 text-white hover:bg-[#0b7895]"
+                className="rounded-full bg-[#6B9080] text-white hover:bg-[#5A7D6E]"
                 onClick={() => onNavigate?.('care-plan')}
               >
                 See my plan
@@ -1010,7 +1015,7 @@ export function Dashboard10({
                 onClick={() => setActiveRoutine(routine.timeOfDay)}
                 className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${
                   activeRoutine === routine.timeOfDay
-                    ? 'bg-cyan-600 text-white shadow-md'
+                    ? 'bg-[#6B9080] text-white shadow-md'
                     : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700'
                 }`}
               >
@@ -1068,7 +1073,7 @@ export function Dashboard10({
                   <div className="flex items-center gap-2">
                     <span className="text-sm text-gray-400">{task.timeEstimate}</span>
                     {task.completed ? (
-                      <CheckCircle2 aria-hidden="true" className="w-6 h-6 text-green-500" />
+                      <CheckCircle2 className="w-6 h-6 text-green-500" />
                     ) : (
                       <div className="w-6 h-6 rounded-full border-2 border-gray-300 dark:border-gray-600" />
                     )}
@@ -1081,7 +1086,7 @@ export function Dashboard10({
             {completedTasks > 0 && completedTasks < totalTasks && (
               <div className="mt-4 p-3 bg-teal-50 dark:bg-teal-900/20 rounded-lg border border-teal-200 dark:border-teal-800">
                 <p className="text-sm text-teal-800 dark:text-teal-200 flex items-center gap-2">
-                  <Sparkles aria-hidden="true" className="w-4 h-4" />
+                  <Sparkles className="w-4 h-4" />
                   One task away from completing {currentRoutine.label.toLowerCase()}!
                 </p>
               </div>
@@ -1152,7 +1157,7 @@ export function Dashboard10({
             <Card className="p-4 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border-0 shadow-sm">
               <div className="flex items-start gap-3 sm:gap-4">
                 <div className="p-2 bg-amber-100 dark:bg-amber-800/50 rounded-full">
-                  <Award aria-hidden="true" className="w-6 h-6 text-amber-600 dark:text-amber-400" />
+                  <Award className="w-6 h-6 text-amber-600 dark:text-amber-400" />
                 </div>
                 <div className="flex-1">
                   <h3 className="font-semibold text-amber-900 dark:text-amber-100">Today's Wins</h3>
@@ -1182,7 +1187,7 @@ export function Dashboard10({
             ======================================== */}
         <section>
           <h2 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-            <Zap aria-hidden="true" className="w-5 h-5 text-cyan-600" />
+            <Zap className="w-5 h-5 text-[#6B9080]" />
             Quick Actions
           </h2>
 
@@ -1211,13 +1216,13 @@ export function Dashboard10({
               onKeyDown={(e) => e.key === 'Enter' && onNavigate?.('clinical-reports')}
             >
               <div className="w-10 h-10 rounded-lg bg-teal-100 dark:bg-teal-800/50 flex items-center justify-center flex-shrink-0">
-                <Stethoscope aria-hidden="true" className="w-5 h-5 text-teal-700 dark:text-teal-300" />
+                <Stethoscope className="w-5 h-5 text-teal-700 dark:text-teal-300" />
               </div>
               <div className="flex-1 min-w-0">
                 <h3 className="font-medium text-sm text-teal-900 dark:text-teal-100">Provider Reports</h3>
                 <p className="text-sm text-teal-700 dark:text-teal-300">Generate clinical PDFs for your child's care team</p>
               </div>
-              <ChevronRight aria-hidden="true" className="w-4 h-4 text-teal-400 flex-shrink-0" />
+              <ChevronRight className="w-4 h-4 text-teal-400 flex-shrink-0" />
             </div>
           ) : null}
         </section>
@@ -1271,7 +1276,7 @@ export function Dashboard10({
           className={`fixed bottom-24 right-4 z-40 w-14 h-14 rounded-full shadow-lg transition-all duration-300 ${
             showAIChat
               ? 'bg-gray-700 text-white rotate-0'
-              : 'bg-cyan-600 text-white hover:bg-[#4a6478]'
+              : 'bg-[#6B9080] text-white hover:bg-[#4a6478]'
           }`}
           aria-label={showAIChat ? 'Minimize chat' : 'Open chat with Aminy'}
           aria-expanded={showAIChat}
@@ -1299,14 +1304,14 @@ export function Dashboard10({
             }`}
           >
             {/* Chat Header - Branded with Full-Screen Toggle */}
-            <div className="p-4 bg-gradient-to-r from-slate-900 to-[#1a3a5c] text-white">
+            <div className="p-4 bg-gradient-to-r from-[#1B2733] to-[#2D3F4F] text-white">
               <div className="flex items-center justify-between">
                 <h3 className="font-semibold flex items-center gap-2 text-lg">
-                  <Sparkles aria-hidden="true" className="w-5 h-5 text-[#E07A5F]" />
+                  <Sparkles className="w-5 h-5 text-[#E07A5F]" />
                   Chat with Aminy
                 </h3>
                 <div className="flex items-center gap-2">
-                  <Badge className="bg-cyan-600 text-white text-sm">AI Companion</Badge>
+                  <Badge className="bg-[#6B9080] text-white text-sm">AI Companion</Badge>
                   <button
                     onClick={() => setIsFullScreenChat(!isFullScreenChat)}
                     className="h-11 w-11 hover:bg-white/20 rounded-lg transition-colors flex items-center justify-center"
@@ -1356,7 +1361,7 @@ export function Dashboard10({
                   key={msg.id}
                   className={`rounded-xl p-3 text-sm shadow-sm ${
                     msg.role === 'user'
-                      ? 'bg-[#577590] text-white ml-8'
+                      ? 'bg-[#6B9080] text-white ml-8'
                       : 'bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-700 dark:to-slate-600 text-gray-700 dark:text-gray-200 mr-8'
                   }`}
                 >
@@ -1368,7 +1373,7 @@ export function Dashboard10({
               {isSendingChat && (
                 <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-700 dark:to-slate-600 rounded-xl p-3 text-sm shadow-sm mr-8">
                   <div className="flex items-center gap-2">
-                    <Loader2 aria-hidden="true" className="w-4 h-4 animate-spin text-cyan-600" />
+                    <Loader2 className="w-4 h-4 animate-spin text-[#6B9080]" />
                     <span className="text-gray-500 dark:text-gray-400">Aminy is thinking...</span>
                   </div>
                 </div>
@@ -1385,7 +1390,7 @@ export function Dashboard10({
                       onClick={() => {
                         setChatInput(prompt);
                       }}
-                      className="text-sm px-3 py-1.5 rounded-full bg-cyan-600/10 text-cyan-600 hover:bg-cyan-600/20 transition-colors"
+                      className="text-sm px-3 py-1.5 rounded-full bg-[#6B9080]/10 text-[#6B9080] hover:bg-[#6B9080]/20 transition-colors"
                     >
                       {prompt}
                     </button>
@@ -1411,7 +1416,7 @@ export function Dashboard10({
                   onChange={(e) => setChatInput(e.target.value)}
                   onKeyDown={handleChatKeyDown}
                   placeholder="Ask Aminy anything..."
-                  className="flex-1 px-4 py-3 text-sm rounded-xl border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:border-cyan-600 focus:ring-2 focus:ring-cyan-600/20 transition-all"
+                  className="flex-1 px-4 py-3 text-sm rounded-xl border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:border-[#6B9080] focus:ring-2 focus:ring-[#6B9080]/20 transition-all"
                   aria-label="Chat message input"
                   disabled={isSendingChat}
                 />
@@ -1419,7 +1424,7 @@ export function Dashboard10({
                   size="sm"
                   onClick={handleSendChat}
                   disabled={!chatInput.trim() || isSendingChat}
-                  className="h-12 w-12 bg-cyan-600 hover:bg-[#4a6478] rounded-xl transition-all disabled:opacity-50 p-0"
+                  className="h-12 w-12 bg-[#6B9080] hover:bg-[#4a6478] rounded-xl transition-all disabled:opacity-50 p-0"
                   aria-label="Send message"
                 >
                   {isSendingChat ? (

@@ -6,6 +6,8 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Gift, Star, Moon, Sun, Sunrise, Sunset, ChevronRight } from 'lucide-react';
 import { playTap, playSuccess, playComplete, haptic } from './activities/sounds';
+import { recordActivity } from '../../lib/retention-engine';
+import { supabase } from '../../utils/supabase/client';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -136,6 +138,15 @@ export default function DailyLoop({ childName = 'friend', onStartChallenge, onOp
       };
       saveState(updated);
       setState(updated);
+
+      // Sync to Supabase so streak survives device/browser changes
+      supabase.auth.getUser().then(({ data }) => {
+        if (data?.user?.id) {
+          recordActivity(data.user.id, 'daily_checkin').catch(() => {
+            // Non-critical — localStorage is source of truth
+          });
+        }
+      });
     } else {
       const updated = { ...prevState, lastVisit: new Date().toISOString() };
       saveState(updated);
@@ -239,7 +250,7 @@ export default function DailyLoop({ childName = 'friend', onStartChallenge, onOp
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800 p-5 pb-24">
+    <div className="min-h-screen bg-gradient-to-b bg-[#FFF8F0] p-5 pb-24">
       {/* Greeting */}
       <div className="flex items-center gap-3 mb-6">
         {greeting.icon}
@@ -292,7 +303,7 @@ export default function DailyLoop({ childName = 'friend', onStartChallenge, onOp
           haptic(30);
           onStartChallenge?.(challenge);
         }}
-        className="w-full bg-gradient-to-r from-teal-600 to-cyan-600 rounded-2xl p-5 mb-5 text-left"
+        className="w-full bg-gradient-to-r bg-[#6B9080] rounded-2xl p-5 mb-5 text-left"
       >
         <p className="text-white/70 text-xs uppercase tracking-wider mb-2">Today's Challenge</p>
         <div className="flex items-center gap-3">

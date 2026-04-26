@@ -114,7 +114,7 @@ interface MessageThread {
 interface Message {
   id: string;
   threadId: string;
-  sender: 'coach' | 'patient';
+  sender: 'coach' | 'Client';
   content: string;
   timestamp: Date;
   senderName?: string;
@@ -226,14 +226,14 @@ const mockMessages: Record<string, Message[]> = {
         }
       ],
       reactions: [
-        { type: '👍', users: ['patient'], count: 1 },
-        { type: '❤️', users: ['patient'], count: 1 }
+        { type: '👍', users: ['Client'], count: 1 },
+        { type: '❤️', users: ['Client'], count: 1 }
       ]
     },
     {
       id: 'msg-2',
       threadId: 'thread-1',
-      sender: 'patient',
+      sender: 'Client',
       content: 'Hi Sarah! Maya has been doing incredibly well with the visual schedule. Thank you for the detailed report!',
       timestamp: new Date('2024-12-16T09:15:00'),
       deliveryStatus: 'read',
