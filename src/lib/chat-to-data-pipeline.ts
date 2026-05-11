@@ -433,3 +433,221 @@ function formatCategory(cat: string): string {
  *   }
  */
 export { extractDataFromMessage as extractFromChat };
+
+// ─── Three-Way Data Flow ────────────────────────────────────────────
+//
+// The Aminy Loop: Parent ↔ AI ↔ Provider ↔ Jr App ↔ Parent
+//
+// When a PARENT tells the AI something:
+//   1. Data persists to structured tables (above)
+//   2. Provider gets notified: "Parent reported: meltdown at Target today"
+//   3. Jr app adapts: if parent says "transitions are hard" → Jr bumps
+//      transition routine activities to top of daily challenges
+//   4. AI context updates: future conversations reference this data
+//
+// When a PROVIDER documents something:
+//   1. Parent gets plain-English summary: "Dr. Mitchell says Aiden is
+//      mastering transitions! Here's what to practice at home."
+//   2. Jr app adapts: mastered skills get harder, struggling areas get
+//      more scaffolding
+//   3. Care plan updates automatically
+//
+// When the CHILD completes Jr activities:
+//   1. Parent sees progress on dashboard
+//   2. Provider sees engagement data in session prep
+//   3. AI references it: "Aiden completed 12 sensory activities this
+//      week — that's 3x more than last week"
+
+export interface DataFlowEvent {
+  source: 'parent-chat' | 'provider-note' | 'jr-activity' | 'system';
+  category: DataCategory;
+  data: Record<string, unknown>;
+  timestamp: string;
+  childId?: string;
+}
+
+export interface DataFlowTarget {
+  target: 'provider-dashboard' | 'jr-app' | 'parent-dashboard' | 'ai-context' | 'care-plan';
+  action: string;
+  payload: Record<string, unknown>;
+}
+
+/**
+ * Given a data flow event, determine where the data should propagate.
+ * This is the core of the Aminy Loop.
+ */
+export function calculateDataFlowTargets(event: DataFlowEvent): DataFlowTarget[] {
+  const targets: DataFlowTarget[] = [];
+
+  // ALWAYS update AI context (every data point enriches future conversations)
+  targets.push({
+    target: 'ai-context',
+    action: 'update-memory',
+    payload: { category: event.category, data: event.data },
+  });
+
+  switch (event.source) {
+    case 'parent-chat':
+      // Parent → Provider: notify provider of parent-reported data
+      if (['incident', 'medication', 'concern', 'trigger', 'milestone'].includes(event.category)) {
+        targets.push({
+          target: 'provider-dashboard',
+          action: 'parent-reported-update',
+          payload: {
+            type: event.category,
+            summary: generateProviderAlert(event),
+            urgency: event.category === 'incident' ? 'high' : 'normal',
+            requiresAcknowledgement: event.category === 'medication',
+          },
+        });
+      }
+
+      // Parent → Jr App: adapt child experience based on parent input
+      if (['trigger', 'routine', 'strategy', 'goal-progress', 'preference'].includes(event.category)) {
+        targets.push({
+          target: 'jr-app',
+          action: 'adapt-experience',
+          payload: {
+            adaptationType: getJrAdaptation(event),
+          },
+        });
+      }
+
+      // Parent → Care Plan: update active care plan
+      if (['goal-progress', 'strategy', 'concern'].includes(event.category)) {
+        targets.push({
+          target: 'care-plan',
+          action: 'incorporate-parent-input',
+          payload: { category: event.category, data: event.data },
+        });
+      }
+      break;
+
+    case 'provider-note':
+      // Provider → Parent: translate to plain English and notify
+      targets.push({
+        target: 'parent-dashboard',
+        action: 'provider-update',
+        payload: {
+          summary: generateParentSummary(event),
+          actionItems: generateHomeActivities(event),
+        },
+      });
+
+      // Provider → Jr App: adjust difficulty, focus areas
+      targets.push({
+        target: 'jr-app',
+        action: 'clinical-adjustment',
+        payload: {
+          adjustments: getClinicalAdjustments(event),
+        },
+      });
+
+      // Provider → Care Plan: update goals and objectives
+      targets.push({
+        target: 'care-plan',
+        action: 'clinical-update',
+        payload: { category: event.category, data: event.data },
+      });
+      break;
+
+    case 'jr-activity':
+      // Jr → Parent: show engagement on dashboard
+      targets.push({
+        target: 'parent-dashboard',
+        action: 'child-activity-update',
+        payload: {
+          summary: `Completed ${(event.data as { activityName?: string }).activityName || 'activity'} with ${(event.data as { accuracy?: number }).accuracy || 0}% accuracy`,
+        },
+      });
+
+      // Jr → Provider: engagement data for session prep
+      targets.push({
+        target: 'provider-dashboard',
+        action: 'engagement-data',
+        payload: {
+          type: 'jr-session-data',
+          data: event.data,
+        },
+      });
+      break;
+  }
+
+  return targets;
+}
+
+// ─── Helper functions for data flow ─────────────────────────────────
+
+function generateProviderAlert(event: DataFlowEvent): string {
+  const data = event.data as Record<string, string>;
+  switch (event.category) {
+    case 'incident':
+      return `Parent reported behavioral incident: ${data.description || 'See details'}`;
+    case 'medication':
+      return `Medication change: ${data.action || 'updated'} ${data.name || ''} ${data.dosage || ''}`;
+    case 'trigger':
+      return `New trigger identified: ${data.trigger || 'See details'}`;
+    case 'milestone':
+      return `Milestone reached: ${data.milestone || 'See details'}`;
+    case 'concern':
+      return `Parent concern: ${data.concern || 'See details'}`;
+    default:
+      return `Parent update: ${event.category}`;
+  }
+}
+
+function generateParentSummary(event: DataFlowEvent): string {
+  const data = event.data as Record<string, string>;
+  return data.parentSummary
+    || `Your provider updated ${event.category === 'goal-progress' ? 'goal progress' : 'session notes'}. Check your care plan for details.`;
+}
+
+function generateHomeActivities(event: DataFlowEvent): string[] {
+  const data = event.data as Record<string, string[]>;
+  return data.homeActivities || [
+    'Practice what was worked on today for 5 minutes',
+    'Use the strategies discussed in your next challenging moment',
+  ];
+}
+
+function getJrAdaptation(event: DataFlowEvent): Record<string, unknown> {
+  const data = event.data as Record<string, string>;
+  switch (event.category) {
+    case 'trigger':
+      return {
+        type: 'avoid-trigger',
+        triggerDescription: data.trigger,
+        action: 'reduce-exposure-to-triggering-activities',
+      };
+    case 'routine':
+      return {
+        type: 'update-schedule',
+        routineType: data.routineType,
+        newTime: data.time,
+      };
+    case 'strategy':
+      return {
+        type: 'reinforce-strategy',
+        strategy: data.strategy,
+        action: 'surface-related-activities',
+      };
+    case 'goal-progress':
+      return {
+        type: 'adjust-difficulty',
+        goalArea: data.goalArea,
+        direction: data.status === 'mastered' ? 'increase' : 'maintain',
+      };
+    default:
+      return { type: 'general-update', category: event.category };
+  }
+}
+
+function getClinicalAdjustments(event: DataFlowEvent): Record<string, unknown> {
+  const data = event.data as Record<string, string>;
+  return {
+    source: 'provider',
+    goalArea: data.goalArea || event.category,
+    adjustmentType: data.status === 'mastered' ? 'advance-difficulty' : 'increase-scaffolding',
+    effectiveDate: new Date().toISOString(),
+  };
+}
