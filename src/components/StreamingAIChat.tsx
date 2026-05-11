@@ -122,6 +122,22 @@ export function StreamingAIChat({
     // Save user message
     await saveMessageToHistory(userId, userMessage);
 
+    // Bevel-style: Extract structured data from chat and route to app data stores
+    try {
+      const { extractFromChat, routeExtractedData } = await import('../lib/chat-to-data-pipeline');
+      const extracted = extractFromChat(content);
+      if (extracted.length > 0) {
+        const result = await routeExtractedData(extracted, userId, childId);
+        if (result.toast) {
+          // Dynamic import to avoid circular dependency
+          const { toast } = await import('sonner');
+          toast.success(result.toast, { duration: 3000 });
+        }
+      }
+    } catch {
+      // Chat-to-data is best-effort — never block the chat flow
+    }
+
     // Generate AI response with streaming
     try {
       const fullResponse = await generateAIResponse(
