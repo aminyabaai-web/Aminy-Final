@@ -167,6 +167,28 @@ export function StreamingAIChat({
             // Save assistant message
             await saveMessageToHistory(userId, assistantMessage);
 
+            // Bevel-style: detect if response should become a persistent artifact
+            try {
+              const { shouldCreateArtifact, createArtifactFromResponse, saveArtifact } = await import('../lib/ai-artifacts');
+              const artifactCheck = shouldCreateArtifact(fullText);
+              if (artifactCheck.shouldCreate && artifactCheck.suggestedType) {
+                const artifact = createArtifactFromResponse(
+                  fullText,
+                  artifactCheck.suggestedType,
+                  artifactCheck.suggestedTitle || 'Saved from Aminy AI',
+                  childId
+                );
+                await saveArtifact(artifact, userId);
+                const { toast } = await import('sonner');
+                toast.success(`Saved: ${artifactCheck.suggestedTitle}`, {
+                  description: 'Find it in your Files anytime',
+                  duration: 4000,
+                });
+              }
+            } catch {
+              // Artifact detection is best-effort
+            }
+
             // Check if AI mentioned trial (gentle conversion)
             if (fullText.toLowerCase().includes('trial') || 
                 fullText.toLowerCase().includes('7 days')) {
