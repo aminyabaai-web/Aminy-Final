@@ -288,22 +288,53 @@ export function generateOnboardingChecklist(
   };
 }
 
-// ─── Payment Guarantee (Headway's Killer Feature) ───────────────────
+// ─── Phased Payment Protection ──────────────────────────────────────
+//
+// Phase 1 (0-20 providers): No clawback guarantee. We bill, fight denials,
+//   and maintain 97%+ clean claim rate. Provider bears denial risk.
+// Phase 2 (20+ providers, $100K+/mo claims): Limited no-clawback for
+//   payers with <5% denial rate. Capped at $X/provider/month.
+// Phase 3 ($1M+/mo claims): Full Headway-style no-clawback.
+//   Reserve fund = 15% of monthly claims.
+
+export type ClawbackPhase = 'standard' | 'limited-protection' | 'full-protection';
 
 export interface PaymentGuarantee {
-  guaranteedRate: number; // cents
+  guaranteedRate: number; // cents per unit
   payer: string;
   cptCode: string;
   effectiveDate: string;
-  noClawback: boolean;
+  clawbackPhase: ClawbackPhase;
+  clawbackProtected: boolean; // whether THIS specific payer qualifies
+  protectionCap?: number; // max monthly clawback absorption in cents
   paymentSchedule: 'biweekly';
   estimatedPayDate: string;
+  denialRiskNote: string;
+}
+
+export interface ClawbackConfig {
+  phase: ClawbackPhase;
+  providerCount: number;
+  monthlyClaimVolume: number;
+  reserveFundBalance: number;
+  protectedPayers: string[]; // payers with <5% denial rate
+  maxMonthlyAbsorption: number; // cents
+}
+
+export function getClawbackPhase(config: {
+  providerCount: number;
+  monthlyClaimVolume: number;
+}): ClawbackPhase {
+  if (config.monthlyClaimVolume >= 100000000) return 'full-protection'; // $1M+
+  if (config.providerCount >= 20 && config.monthlyClaimVolume >= 10000000) return 'limited-protection'; // $100K+
+  return 'standard';
 }
 
 export function calculateGuaranteedRate(
   cptCode: string,
   payer: string,
-  state: string
+  _state: string,
+  clawbackConfig?: ClawbackConfig
 ): PaymentGuarantee {
   // ABA-specific contracted rates (AZ market)
   const rates: Record<string, Record<string, number>> = {
@@ -346,14 +377,34 @@ export function calculateGuaranteedRate(
 
   const nextPayDate = getNextBiweeklyPayDate();
 
+  const phase = clawbackConfig
+    ? getClawbackPhase(clawbackConfig)
+    : 'standard';
+
+  const isProtectedPayer = clawbackConfig?.protectedPayers.includes(payer) ?? false;
+  const clawbackProtected = phase === 'full-protection'
+    || (phase === 'limited-protection' && isProtectedPayer);
+
+  let denialRiskNote: string;
+  if (clawbackProtected) {
+    denialRiskNote = 'Payment protected — if this claim is denied, you still get paid. We handle the appeal.';
+  } else if (phase === 'limited-protection') {
+    denialRiskNote = `Payment protection not yet available for ${payer}. We submit claims and fight every denial, but you bear the risk until this payer qualifies (<5% denial rate).`;
+  } else {
+    denialRiskNote = 'We submit your claims and file appeals on denials. You get paid when the payer pays. 97%+ clean claim rate.';
+  }
+
   return {
     guaranteedRate: rate,
     payer,
     cptCode,
     effectiveDate: new Date().toISOString().split('T')[0],
-    noClawback: true,
+    clawbackPhase: phase,
+    clawbackProtected,
+    protectionCap: clawbackProtected ? clawbackConfig?.maxMonthlyAbsorption : undefined,
     paymentSchedule: 'biweekly',
     estimatedPayDate: nextPayDate,
+    denialRiskNote,
   };
 }
 
