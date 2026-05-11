@@ -47,9 +47,9 @@ export function AskAminyChatScreen({
 
   if (!context) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
+      <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center">
         <div className="text-center">
-          <Sparkles className="w-8 h-8 text-[#43AA8B] mx-auto mb-3 animate-pulse" />
+          <Sparkles className="w-8 h-8 text-[#6B9080] mx-auto mb-3 animate-pulse" />
           <p className="text-sm text-slate-500">Loading your conversation...</p>
         </div>
       </div>
@@ -57,9 +57,9 @@ export function AskAminyChatScreen({
   }
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
-      {/* Header — minimal, Claude-style */}
-      <div className="sticky top-0 z-10 bg-white/90 backdrop-blur-md border-b border-slate-100">
+    <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
+      {/* Header — minimal, Claude-style, warm palette */}
+      <div className="sticky top-0 z-10 bg-[#FAF7F2]/90 backdrop-blur-md border-b border-[#F0EDE8]">
         <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
             {onBack && (
@@ -72,11 +72,11 @@ export function AskAminyChatScreen({
               </button>
             )}
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#43AA8B] to-[#577590] flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] flex items-center justify-center">
                 <Sparkles className="w-4 h-4 text-white" />
               </div>
               <div>
-                <h1 className="text-base font-semibold text-slate-900">Ask Aminy</h1>
+                <h1 className="text-base font-semibold text-slate-900">Aminy AI</h1>
                 {messagesLeft !== undefined && userTier === 'free' && (
                   <p className="text-xs text-slate-500">
                     {messagesLeft} {messagesLeft === 1 ? 'message' : 'messages'} left today

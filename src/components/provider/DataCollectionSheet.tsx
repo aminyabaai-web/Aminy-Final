@@ -254,7 +254,7 @@ function DTTMode({
               onClick={() => onSelectPromptLevel(pl.value)}
               className={`text-xs px-3 py-1.5 rounded-lg border transition-all ${
                 selectedPromptLevel === pl.value
-                  ? 'bg-[#43AA8B] text-white border-[#43AA8B]'
+                  ? 'bg-emerald-500 text-white border-emerald-500'
                   : 'bg-white text-slate-700 border-slate-300'
               }`}
             >
@@ -272,7 +272,7 @@ function DTTMode({
           value={contextNote}
           onChange={e => onContextNoteChange(e.target.value)}
           placeholder="e.g., Touch nose..."
-          className="w-full border border-slate-300 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#43AA8B]"
+          className="w-full border border-slate-300 rounded-xl px-4 py-3 text-sm outline-none focus:border-emerald-500"
         />
       </div>
 
@@ -336,14 +336,14 @@ function NETMode({
       </div>
 
       {/* Running tally — always visible */}
-      <div className="bg-[#0D1B2A] rounded-2xl p-5 flex items-center justify-around">
+      <div className="bg-slate-900 rounded-2xl p-5 flex items-center justify-around">
         <div className="text-center">
           <p className="text-4xl font-bold text-white">{trials.length}</p>
           <p className="text-xs text-slate-400 mt-1">Opportunities</p>
         </div>
         <div className="w-px h-12 bg-slate-600" />
         <div className="text-center">
-          <p className="text-4xl font-bold text-[#43AA8B]">{correct}</p>
+          <p className="text-4xl font-bold text-emerald-500">{correct}</p>
           <p className="text-xs text-slate-400 mt-1">Correct</p>
         </div>
         <div className="w-px h-12 bg-slate-600" />
@@ -361,7 +361,7 @@ function NETMode({
           value={contextNote}
           onChange={e => onContextNoteChange(e.target.value)}
           placeholder="e.g., During play, snack time..."
-          className="w-full border border-slate-300 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#43AA8B]"
+          className="w-full border border-slate-300 rounded-xl px-4 py-3 text-sm outline-none focus:border-emerald-500"
         />
       </div>
 
@@ -375,7 +375,7 @@ function NETMode({
               onClick={() => onSelectPromptLevel(pl.value)}
               className={`text-xs px-3 py-1.5 rounded-lg border transition-all ${
                 selectedPromptLevel === pl.value
-                  ? 'bg-[#43AA8B] text-white border-[#43AA8B]'
+                  ? 'bg-emerald-500 text-white border-emerald-500'
                   : 'bg-white text-slate-700 border-slate-300'
               }`}
             >
@@ -468,7 +468,7 @@ function BehaviorMode({
             onClick={() => onChangeRecordingType(t)}
             className={`flex-1 py-2 rounded-lg text-sm font-medium transition-all capitalize ${
               recordingType === t
-                ? 'bg-[#0D1B2A] text-white'
+                ? 'bg-slate-900 text-white'
                 : 'text-slate-600'
             }`}
           >
@@ -483,7 +483,7 @@ function BehaviorMode({
           <p className="text-xs text-slate-500 uppercase tracking-wide">ABC Data</p>
           <button
             onClick={onAddIncident}
-            className="flex items-center gap-1 text-xs text-[#43AA8B] font-medium"
+            className="flex items-center gap-1 text-xs text-emerald-500 font-medium"
           >
             <Plus className="w-3 h-3" />
             Add Incident
@@ -511,7 +511,7 @@ function BehaviorMode({
                     value={incident.antecedent}
                     onChange={e => onUpdateIncident(incident.id, 'antecedent', e.target.value)}
                     placeholder="What happened before..."
-                    className="w-full mt-1 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-[#43AA8B]"
+                    className="w-full mt-1 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-emerald-500"
                   />
                 </div>
                 <div>
@@ -521,7 +521,7 @@ function BehaviorMode({
                     value={incident.behavior}
                     onChange={e => onUpdateIncident(incident.id, 'behavior', e.target.value)}
                     placeholder="Describe the behavior..."
-                    className="w-full mt-1 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-[#43AA8B]"
+                    className="w-full mt-1 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-emerald-500"
                   />
                 </div>
                 <div>
@@ -531,7 +531,7 @@ function BehaviorMode({
                     value={incident.consequence}
                     onChange={e => onUpdateIncident(incident.id, 'consequence', e.target.value)}
                     placeholder="What happened after..."
-                    className="w-full mt-1 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-[#43AA8B]"
+                    className="w-full mt-1 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-emerald-500"
                   />
                 </div>
               </div>
@@ -544,7 +544,7 @@ function BehaviorMode({
       {recordingType === 'frequency' && (
         <div className="bg-white border border-slate-200 rounded-2xl p-6 text-center">
           <p className="text-xs text-slate-500 uppercase tracking-wide mb-4">Frequency Count</p>
-          <p className="text-7xl font-bold text-[#0D1B2A] mb-6">{frequencyCount}</p>
+          <p className="text-7xl font-bold text-slate-900 mb-6">{frequencyCount}</p>
           <div className="flex items-center justify-center gap-6">
             <button
               onClick={onDecrementFrequency}
@@ -554,7 +554,7 @@ function BehaviorMode({
             </button>
             <button
               onClick={onIncrementFrequency}
-              className="w-20 h-20 rounded-full bg-[#43AA8B] flex items-center justify-center text-white active:opacity-80"
+              className="w-20 h-20 rounded-full bg-emerald-500 flex items-center justify-center text-white active:opacity-80"
             >
               <Plus className="w-8 h-8" />
             </button>
@@ -566,7 +566,7 @@ function BehaviorMode({
       {recordingType === 'duration' && (
         <div className="bg-white border border-slate-200 rounded-2xl p-6 text-center">
           <p className="text-xs text-slate-500 uppercase tracking-wide mb-4">Duration Recording</p>
-          <p className="text-6xl font-mono font-bold text-[#0D1B2A] mb-2">
+          <p className="text-6xl font-mono font-bold text-slate-900 mb-2">
             {formatSeconds(isDurationRunning ? durationElapsed : 0)}
           </p>
           {isDurationRunning && (
@@ -581,7 +581,7 @@ function BehaviorMode({
               className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all ${
                 isDurationRunning
                   ? 'bg-red-100 text-red-700 border border-red-300'
-                  : 'bg-[#43AA8B] text-white'
+                  : 'bg-emerald-500 text-white'
               }`}
             >
               {isDurationRunning ? <><Square className="w-4 h-4" /> Stop</> : <><Play className="w-4 h-4" /> Start</>}
@@ -621,7 +621,7 @@ function BehaviorMode({
                 disabled={isIntervalRunning}
                 className={`flex-1 py-2 rounded-lg text-sm font-medium border transition-all ${
                   intervalSize === s
-                    ? 'bg-[#0D1B2A] text-white border-[#0D1B2A]'
+                    ? 'bg-slate-900 text-white border-slate-900'
                     : 'text-slate-600 border-slate-300'
                 } disabled:opacity-50`}
               >
@@ -633,7 +633,7 @@ function BehaviorMode({
           {/* Timer display */}
           {isIntervalRunning && (
             <div className="text-center mb-4">
-              <p className="text-3xl font-mono font-bold text-[#0D1B2A]">{intervalTimeLeft}s</p>
+              <p className="text-3xl font-mono font-bold text-slate-900">{intervalTimeLeft}s</p>
               <p className="text-xs text-slate-500">Interval {currentIntervalIndex + 1} — tap to mark</p>
             </div>
           )}
@@ -663,7 +663,7 @@ function BehaviorMode({
             className={`w-full py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 ${
               isIntervalRunning
                 ? 'bg-red-100 text-red-700 border border-red-300'
-                : 'bg-[#43AA8B] text-white'
+                : 'bg-emerald-500 text-white'
             }`}
           >
             {isIntervalRunning ? <><Square className="w-4 h-4" /> Stop Intervals</> : <><Play className="w-4 h-4" /> Start Intervals</>}
@@ -937,14 +937,14 @@ export function DataCollectionSheet({
 <title>Data Collection — ${data.programName}</title>
 <style>
 body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 24px; color: #1e293b; }
-h1 { font-size: 22px; color: #0D1B2A; margin-bottom: 4px; }
+h1 { font-size: 22px; color: #0f172a; margin-bottom: 4px; }
 .meta { color: #64748b; font-size: 14px; margin-bottom: 20px; }
 table { width: 100%; border-collapse: collapse; margin-top: 16px; }
-th { background: #0D1B2A; color: white; padding: 8px 12px; text-align: left; }
+th { background: #0f172a; color: white; padding: 8px 12px; text-align: left; }
 td { padding: 8px 12px; border-bottom: 1px solid #e2e8f0; font-size: 13px; }
 .summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 16px 0; }
 .stat { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; text-align: center; }
-.stat-value { font-size: 28px; font-weight: bold; color: #0D1B2A; }
+.stat-value { font-size: 28px; font-weight: bold; color: #0f172a; }
 .stat-label { font-size: 12px; color: #64748b; margin-top: 4px; }
 @media print { body { padding: 12px; } }
 </style>
@@ -999,7 +999,7 @@ ${data.notes ? `<p style="margin-top:16px"><strong>Notes:</strong> ${data.notes}
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Header */}
-      <div className="bg-[#0D1B2A] sticky top-0 z-20">
+      <div className="bg-slate-900 sticky top-0 z-20">
         <div className="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between">
           <button
             onClick={onBack}
@@ -1022,7 +1022,7 @@ ${data.notes ? `<p style="margin-top:16px"><strong>Notes:</strong> ${data.notes}
               <button
                 onClick={handleSave}
                 disabled={isSaving}
-                className="flex items-center gap-1 bg-[#43AA8B] text-white px-3 py-1.5 rounded-lg text-sm font-medium disabled:opacity-60"
+                className="flex items-center gap-1 bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-sm font-medium disabled:opacity-60"
               >
                 <Save className="w-3.5 h-3.5" />
                 {isSaving ? 'Saving...' : 'Save'}
@@ -1036,7 +1036,7 @@ ${data.notes ? `<p style="margin-top:16px"><strong>Notes:</strong> ${data.notes}
         {/* Setup card */}
         {!sessionStarted ? (
           <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 space-y-4">
-            <h2 className="text-[#0D1B2A] font-bold text-lg">Session Setup</h2>
+            <h2 className="text-slate-900 font-bold text-lg">Session Setup</h2>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
@@ -1046,7 +1046,7 @@ ${data.notes ? `<p style="margin-top:16px"><strong>Notes:</strong> ${data.notes}
                   value={clientName}
                   onChange={e => setClientName(e.target.value)}
                   placeholder="Client name"
-                  className="w-full mt-1 border border-slate-300 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#43AA8B]"
+                  className="w-full mt-1 border border-slate-300 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-emerald-500"
                 />
               </div>
               <div>
@@ -1056,7 +1056,7 @@ ${data.notes ? `<p style="margin-top:16px"><strong>Notes:</strong> ${data.notes}
                   value={staffName}
                   onChange={e => setStaffName(e.target.value)}
                   placeholder="Your name"
-                  className="w-full mt-1 border border-slate-300 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#43AA8B]"
+                  className="w-full mt-1 border border-slate-300 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-emerald-500"
                 />
               </div>
             </div>
@@ -1068,7 +1068,7 @@ ${data.notes ? `<p style="margin-top:16px"><strong>Notes:</strong> ${data.notes}
                 value={programName}
                 onChange={e => setProgramName(e.target.value)}
                 placeholder="e.g., Manding for Preferred Items"
-                className="w-full mt-1 border border-slate-300 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#43AA8B]"
+                className="w-full mt-1 border border-slate-300 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-emerald-500"
               />
             </div>
 
@@ -1079,7 +1079,7 @@ ${data.notes ? `<p style="margin-top:16px"><strong>Notes:</strong> ${data.notes}
                 onChange={e => setGoalDescription(e.target.value)}
                 placeholder="e.g., Client will independently request preferred items using 2-word phrases..."
                 rows={2}
-                className="w-full mt-1 border border-slate-300 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#43AA8B] resize-none"
+                className="w-full mt-1 border border-slate-300 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-emerald-500 resize-none"
               />
             </div>
 
@@ -1093,7 +1093,7 @@ ${data.notes ? `<p style="margin-top:16px"><strong>Notes:</strong> ${data.notes}
                     onClick={() => setMode(m)}
                     className={`flex-1 py-3 rounded-xl font-medium text-sm border-2 transition-all uppercase tracking-wide ${
                       mode === m
-                        ? 'bg-[#0D1B2A] text-white border-[#0D1B2A]'
+                        ? 'bg-slate-900 text-white border-slate-900'
                         : 'text-slate-600 border-slate-200 bg-white'
                     }`}
                   >
@@ -1105,7 +1105,7 @@ ${data.notes ? `<p style="margin-top:16px"><strong>Notes:</strong> ${data.notes}
 
             <button
               onClick={handleStartSession}
-              className="w-full bg-[#43AA8B] text-white py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2"
+              className="w-full bg-emerald-500 text-white py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2"
             >
               <Play className="w-5 h-5" />
               Start Session
@@ -1116,7 +1116,7 @@ ${data.notes ? `<p style="margin-top:16px"><strong>Notes:</strong> ${data.notes}
             {/* Mode badge */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className="bg-[#0D1B2A] text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
+                <span className="bg-slate-900 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
                   {mode}
                 </span>
                 <span className="text-sm text-slate-500">
@@ -1193,9 +1193,9 @@ ${data.notes ? `<p style="margin-top:16px"><strong>Notes:</strong> ${data.notes}
 
             {/* Session summary bar */}
             {(mode === 'dtt' || mode === 'net') && trials.length > 0 && (
-              <div className="bg-[#0D1B2A] rounded-2xl p-4">
+              <div className="bg-slate-900 rounded-2xl p-4">
                 <div className="flex items-center gap-2 mb-3">
-                  <BarChart2 className="w-4 h-4 text-[#43AA8B]" />
+                  <BarChart2 className="w-4 h-4 text-emerald-500" />
                   <p className="text-white text-sm font-semibold">Session Summary</p>
                 </div>
                 <div className="grid grid-cols-3 gap-3 text-center">
@@ -1204,7 +1204,7 @@ ${data.notes ? `<p style="margin-top:16px"><strong>Notes:</strong> ${data.notes}
                     <p className="text-xs text-slate-400">Trials</p>
                   </div>
                   <div>
-                    <p className="text-2xl font-bold text-[#43AA8B]">{sessionSummary.correct}</p>
+                    <p className="text-2xl font-bold text-emerald-500">{sessionSummary.correct}</p>
                     <p className="text-xs text-slate-400">Correct</p>
                   </div>
                   <div>
@@ -1233,7 +1233,7 @@ ${data.notes ? `<p style="margin-top:16px"><strong>Notes:</strong> ${data.notes}
                 onChange={e => setSessionNotes(e.target.value)}
                 placeholder="Clinical observations, next steps, parent communication..."
                 rows={3}
-                className="w-full mt-2 border border-slate-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#43AA8B] resize-none"
+                className="w-full mt-2 border border-slate-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-emerald-500 resize-none"
               />
             </div>
 
@@ -1242,7 +1242,7 @@ ${data.notes ? `<p style="margin-top:16px"><strong>Notes:</strong> ${data.notes}
               <button
                 onClick={handleSave}
                 disabled={isSaving}
-                className="flex-1 bg-[#43AA8B] text-white py-4 rounded-xl font-bold flex items-center justify-center gap-2 disabled:opacity-60"
+                className="flex-1 bg-emerald-500 text-white py-4 rounded-xl font-bold flex items-center justify-center gap-2 disabled:opacity-60"
               >
                 <Save className="w-5 h-5" />
                 {isSaving ? 'Saving...' : 'Save Session'}

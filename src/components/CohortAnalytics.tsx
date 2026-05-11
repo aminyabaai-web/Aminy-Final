@@ -316,7 +316,7 @@ export function CohortAnalytics({ organizationId }: CohortAnalyticsProps) {
                       {cohort.d90Retention > 0 ? (
                         <RetentionCell value={cohort.d90Retention} />
                       ) : (
-                        <span className="text-gray-300 dark:text-gray-600">—</span>
+                        <span className="text-gray-400 dark:text-gray-600">—</span>
                       )}
                     </td>
                     <td className="py-3 px-4 text-center">
@@ -377,7 +377,7 @@ export function CohortAnalytics({ organizationId }: CohortAnalyticsProps) {
                   </div>
                   {idx < funnelData.length - 1 && (
                     <div className="flex justify-center my-2">
-                      <ArrowRight className="w-4 h-4 text-gray-300 dark:text-gray-600 transform rotate-90" />
+                      <ArrowRight className="w-4 h-4 text-gray-400 dark:text-gray-600 transform rotate-90" />
                     </div>
                   )}
                 </div>

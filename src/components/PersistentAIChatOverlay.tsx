@@ -297,7 +297,7 @@ Respond naturally, showing you remember their journey. Be brief (2-3 sentences) 
                     </span>
                     <button
                       onClick={() => setShowMemoryCallout(false)}
-                      className="ml-auto p-1 hover:bg-violet-100 dark:hover:bg-violet-800 rounded-full"
+                      className="ml-auto p-1 min-h-[44px] min-w-[44px] flex items-center justify-center hover:bg-violet-100 dark:hover:bg-violet-800 rounded-full"
                     >
                       <X className="w-3 h-3 text-violet-500" />
                     </button>

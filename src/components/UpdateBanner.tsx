@@ -123,7 +123,7 @@ export function UpdateBanner() {
           </button>
           <button
             onClick={handleDismiss}
-            className="rounded-lg p-1.5 text-blue-600 transition-colors hover:bg-blue-100 hover:text-blue-700"
+            className="rounded-lg p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center text-blue-600 transition-colors hover:bg-blue-100 hover:text-blue-700"
             aria-label="Dismiss update notification"
           >
             <X className="w-4 h-4" />

@@ -55,7 +55,8 @@ import {
   RefreshCw,
   Unplug,
   Users,
-  Gift
+  Gift,
+  DollarSign
 } from 'lucide-react';
 import { ThemeSelector } from '../lib/theme-provider';
 import { Button } from './ui/button';
@@ -563,7 +564,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                     : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700'
                 }`}
               >
-                <Icon className="w-4 h-4" />
+                <Icon aria-hidden="true" className="w-4 h-4" />
                 {item.label}
               </button>
             );
@@ -578,7 +579,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
-                <Crown className="w-5 h-5 text-white" />
+                <Crown aria-hidden="true" className="w-5 h-5 text-white" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
@@ -600,7 +601,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
             </div>
             <Button variant="outline" size="sm" onClick={handleManageSubscription}>
               Manage
-              <ChevronRight className="w-4 h-4 ml-1" />
+              <ChevronRight aria-hidden="true" className="w-4 h-4 ml-1" />
             </Button>
           </div>
 
@@ -626,10 +627,10 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                 }}
               >
                 <span className="flex items-center gap-2">
-                  <CreditCard className="w-4 h-4" />
+                  <CreditCard aria-hidden="true" className="w-4 h-4" />
                   Manage Subscription
                 </span>
-                <ExternalLink className="w-3.5 h-3.5 text-gray-400" />
+                <ExternalLink aria-hidden="true" className="w-3.5 h-3.5 text-gray-400" />
               </Button>
               <p className="text-[11px] text-muted-foreground">
                 Update payment method, switch plans, view invoices, or cancel
@@ -643,7 +644,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-gradient-to-br from-teal-400 to-cyan-500 rounded-full flex items-center justify-center">
-                <Users className="w-5 h-5 text-white" />
+                <Users aria-hidden="true" className="w-5 h-5 text-white" />
               </div>
               <div>
                 <h3 className="font-semibold dark:text-white">Invite Families</h3>
@@ -654,7 +655,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
               onClick={() => onNavigate?.('referral-dashboard')}
               className="flex items-center gap-1.5 px-3 py-1.5 bg-teal-50 hover:bg-teal-100 text-teal-700 rounded-lg text-sm font-medium transition-colors"
             >
-              <Gift className="w-4 h-4" />
+              <Gift aria-hidden="true" className="w-4 h-4" />
               View Rewards
             </button>
           </div>
@@ -666,7 +667,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
               onClick={() => onNavigate?.('referral-dashboard')}
               className="mt-3 w-full py-2.5 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
             >
-              <Users className="w-4 h-4" />
+              <Users aria-hidden="true" className="w-4 h-4" />
               Invite Families & Track Rewards
             </button>
           </div>
@@ -679,13 +680,13 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
             className="w-full p-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
           >
             <div className="flex items-center gap-3">
-              <Bell className="w-5 h-5 text-teal-500" />
+              <Bell aria-hidden="true" className="w-5 h-5 text-teal-500" />
               <div className="text-left">
                 <h3 className="font-semibold dark:text-white">Notifications</h3>
                 <p className="text-sm text-muted-foreground">Push, email, and SMS preferences</p>
               </div>
             </div>
-            <ChevronRight className={`w-5 h-5 text-muted-foreground transition-transform ${activeSection === 'notifications' ? 'rotate-90' : ''}`} />
+            <ChevronRight aria-hidden="true" className={`w-5 h-5 text-muted-foreground transition-transform ${activeSection === 'notifications' ? 'rotate-90' : ''}`} />
           </button>
 
           <AnimatePresence>
@@ -700,7 +701,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                   {/* Push Notifications */}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <Smartphone className="w-4 h-4 text-muted-foreground" />
+                      <Smartphone aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
                       <div>
                         <p className="font-medium dark:text-white">Push Notifications</p>
                         <p className="text-sm text-muted-foreground">
@@ -743,7 +744,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                   {/* Email Digest */}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <Mail className="w-4 h-4 text-muted-foreground" />
+                      <Mail aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
                       <div>
                         <p className="font-medium dark:text-white">Email Digest</p>
                         <p className="text-sm text-muted-foreground">Weekly progress summary</p>
@@ -761,7 +762,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                   {/* Appointment Reminders */}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <Clock className="w-4 h-4 text-muted-foreground" />
+                      <Clock aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
                       <div>
                         <p className="font-medium dark:text-white">Appointment Reminders</p>
                         <p className="text-sm text-muted-foreground">Before telehealth sessions</p>
@@ -779,7 +780,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                   {/* Progress Updates */}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <Info className="w-4 h-4 text-muted-foreground" />
+                      <Info aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
                       <div>
                         <p className="font-medium dark:text-white">Progress Updates</p>
                         <p className="text-sm text-muted-foreground">Goal achievements and milestones</p>
@@ -797,7 +798,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                   {/* Community Activity */}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <MessageSquare className="w-4 h-4 text-muted-foreground" />
+                      <MessageSquare aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
                       <div>
                         <p className="font-medium dark:text-white">Community Activity</p>
                         <p className="text-sm text-muted-foreground">Replies and mentions</p>
@@ -815,7 +816,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                   {/* Marketing */}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <Mail className="w-4 h-4 text-muted-foreground" />
+                      <Mail aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
                       <div>
                         <p className="font-medium dark:text-white">Marketing Emails</p>
                         <p className="text-sm text-muted-foreground">Tips, features, and promotions</p>
@@ -842,13 +843,13 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
             className="w-full p-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
           >
             <div className="flex items-center gap-3">
-              <Shield className="w-5 h-5 text-teal-500" />
+              <Shield aria-hidden="true" className="w-5 h-5 text-teal-500" />
               <div className="text-left">
                 <h3 className="font-semibold dark:text-white">Security</h3>
                 <p className="text-sm text-muted-foreground">Password and two-factor authentication</p>
               </div>
             </div>
-            <ChevronRight className={`w-5 h-5 text-muted-foreground transition-transform ${activeSection === 'security' ? 'rotate-90' : ''}`} />
+            <ChevronRight aria-hidden="true" className={`w-5 h-5 text-muted-foreground transition-transform ${activeSection === 'security' ? 'rotate-90' : ''}`} />
           </button>
 
           <AnimatePresence>
@@ -866,19 +867,19 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                     className="w-full flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-800 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
                   >
                     <div className="flex items-center gap-3">
-                      <Key className="w-4 h-4 text-muted-foreground" />
+                      <Key aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
                       <div className="text-left">
                         <p className="font-medium dark:text-white">Change Password</p>
                         <p className="text-sm text-muted-foreground">Update your password</p>
                       </div>
                     </div>
-                    <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                    <ChevronRight aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
                   </button>
 
                   {/* Two-Factor Authentication */}
                   <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-800 rounded-lg">
                     <div className="flex items-center gap-3">
-                      <Fingerprint className="w-4 h-4 text-muted-foreground" />
+                      <Fingerprint aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
                       <div>
                         <p className="font-medium dark:text-white">Two-Factor Authentication</p>
                         <p className="text-sm text-muted-foreground">
@@ -900,7 +901,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
 
                   {mfaEnabled && (
                     <div className="flex items-center gap-2 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                      <ShieldCheck className="w-4 h-4 text-green-600" />
+                      <ShieldCheck aria-hidden="true" className="w-4 h-4 text-green-600" />
                       <p className="text-sm text-green-700 dark:text-green-400">
                         Your account is protected with two-factor authentication
                       </p>
@@ -919,7 +920,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
             className="w-full p-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
           >
             <div className="flex items-center gap-3">
-              <CalendarDays className="w-5 h-5 text-teal-500" />
+              <CalendarDays aria-hidden="true" className="w-5 h-5 text-teal-500" />
               <div className="text-left">
                 <h3 className="font-semibold dark:text-white">Connected Calendars</h3>
                 <p className="text-sm text-muted-foreground">
@@ -931,7 +932,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
               {calendarConnected && (
                 <Badge className="bg-green-100 text-green-700">Connected</Badge>
               )}
-              <ChevronRight className={`w-5 h-5 text-muted-foreground transition-transform ${activeSection === 'calendars' ? 'rotate-90' : ''}`} />
+              <ChevronRight aria-hidden="true" className={`w-5 h-5 text-muted-foreground transition-transform ${activeSection === 'calendars' ? 'rotate-90' : ''}`} />
             </div>
           </button>
 
@@ -948,7 +949,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                     /* Not Connected State */
                     <div className="text-center py-4">
                       <div className="w-12 h-12 bg-teal-50 dark:bg-teal-900/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <CalendarDays className="w-6 h-6 text-teal-600" />
+                        <CalendarDays aria-hidden="true" className="w-6 h-6 text-teal-600" />
                       </div>
                       <h4 className="font-medium dark:text-white mb-1">Connect Google Calendar</h4>
                       <p className="text-sm text-muted-foreground mb-4 max-w-xs mx-auto">
@@ -961,12 +962,12 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                       >
                         {calendarConnecting ? (
                           <>
-                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                            <Loader2 aria-hidden="true" className="w-4 h-4 mr-2 animate-spin" />
                             Connecting...
                           </>
                         ) : (
                           <>
-                            <CalendarDays className="w-4 h-4 mr-2" />
+                            <CalendarDays aria-hidden="true" className="w-4 h-4 mr-2" />
                             Connect Google Calendar
                           </>
                         )}
@@ -996,13 +997,13 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                               : 'Connected — not yet synced'}
                           </p>
                         </div>
-                        <ShieldCheck className="w-4 h-4 text-green-600" />
+                        <ShieldCheck aria-hidden="true" className="w-4 h-4 text-green-600" />
                       </div>
 
                       {/* Auto-Sync Toggle */}
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <RefreshCw className="w-4 h-4 text-muted-foreground" />
+                          <RefreshCw aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
                           <div>
                             <p className="font-medium dark:text-white">Auto-sync</p>
                             <p className="text-sm text-muted-foreground">
@@ -1025,12 +1026,12 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                       >
                         {calendarSyncing ? (
                           <>
-                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                            <Loader2 aria-hidden="true" className="w-4 h-4 mr-2 animate-spin" />
                             Syncing...
                           </>
                         ) : (
                           <>
-                            <RefreshCw className="w-4 h-4 mr-2" />
+                            <RefreshCw aria-hidden="true" className="w-4 h-4 mr-2" />
                             Sync Now
                           </>
                         )}
@@ -1041,7 +1042,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                         onClick={handleDisconnectCalendar}
                         className="w-full flex items-center justify-center gap-2 p-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
                       >
-                        <Unplug className="w-4 h-4" />
+                        <Unplug aria-hidden="true" className="w-4 h-4" />
                         Disconnect Google Calendar
                       </button>
                     </>
@@ -1059,13 +1060,13 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
             className="w-full p-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
           >
             <div className="flex items-center gap-3">
-              <Lock className="w-5 h-5 text-teal-500" />
+              <Lock aria-hidden="true" className="w-5 h-5 text-teal-500" />
               <div className="text-left">
                 <h3 className="font-semibold dark:text-white">Privacy & Data</h3>
                 <p className="text-sm text-muted-foreground">Export data and manage privacy</p>
               </div>
             </div>
-            <ChevronRight className={`w-5 h-5 text-muted-foreground transition-transform ${activeSection === 'privacy' ? 'rotate-90' : ''}`} />
+            <ChevronRight aria-hidden="true" className={`w-5 h-5 text-muted-foreground transition-transform ${activeSection === 'privacy' ? 'rotate-90' : ''}`} />
           </button>
 
           <AnimatePresence>
@@ -1081,7 +1082,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                   <div className="p-3 bg-gray-50 dark:bg-slate-800 rounded-lg">
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-3">
-                        <CreditCard className="w-4 h-4 text-muted-foreground" />
+                        <CreditCard aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
                         <div>
                           <p className="font-medium dark:text-white">Insurance Information</p>
                           <p className="text-sm text-muted-foreground">
@@ -1100,7 +1101,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                           size="sm"
                           onClick={() => setShowInsuranceDetails(!showInsuranceDetails)}
                         >
-                          {showInsuranceDetails ? <EyeOff className="w-3 h-3 mr-1" /> : <Eye className="w-3 h-3 mr-1" />}
+                          {showInsuranceDetails ? <EyeOff aria-hidden="true" className="w-3 h-3 mr-1" /> : <Eye aria-hidden="true" className="w-3 h-3 mr-1" />}
                           {showInsuranceDetails ? 'Hide' : 'View'}
                         </Button>
                         <Button
@@ -1109,7 +1110,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                           className="text-red-600 hover:bg-red-50"
                           onClick={() => setHasInsurance(false)}
                         >
-                          <Trash2 className="w-3 h-3 mr-1" />
+                          <Trash2 aria-hidden="true" className="w-3 h-3 mr-1" />
                           Delete
                         </Button>
                       </div>
@@ -1129,13 +1130,13 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                     className="w-full flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-800 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
                   >
                     <div className="flex items-center gap-3">
-                      <Download className="w-4 h-4 text-muted-foreground" />
+                      <Download aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
                       <div className="text-left">
                         <p className="font-medium dark:text-white">Export My Data</p>
                         <p className="text-sm text-muted-foreground">Download all your data (GDPR)</p>
                       </div>
                     </div>
-                    <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                    <ChevronRight aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
                   </button>
 
                   {/* Privacy Policy */}
@@ -1144,13 +1145,13 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                     className="w-full flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-800 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
                   >
                     <div className="flex items-center gap-3">
-                      <FileText className="w-4 h-4 text-muted-foreground" />
+                      <FileText aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
                       <div className="text-left">
                         <p className="font-medium dark:text-white">Privacy Policy</p>
                         <p className="text-sm text-muted-foreground">How we handle your data</p>
                       </div>
                     </div>
-                    <ExternalLink className="w-4 h-4 text-muted-foreground" />
+                    <ExternalLink aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
                   </button>
 
                   {/* Terms of Service */}
@@ -1159,13 +1160,13 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                     className="w-full flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-800 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
                   >
                     <div className="flex items-center gap-3">
-                      <FileText className="w-4 h-4 text-muted-foreground" />
+                      <FileText aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
                       <div className="text-left">
                         <p className="font-medium dark:text-white">Terms of Service</p>
                         <p className="text-sm text-muted-foreground">Our terms and conditions</p>
                       </div>
                     </div>
-                    <ExternalLink className="w-4 h-4 text-muted-foreground" />
+                    <ExternalLink aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
                   </button>
                 </div>
               </motion.div>
@@ -1176,10 +1177,30 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
         {/* Appearance Section */}
         <Card className="p-4">
           <div className="flex items-center gap-3 mb-4">
-            <Palette className="w-5 h-5 text-teal-500" />
+            <Palette aria-hidden="true" className="w-5 h-5 text-teal-500" />
             <h3 className="font-semibold dark:text-white">Appearance</h3>
           </div>
           <ThemeSelector />
+        </Card>
+
+        {/* Resources & Funding */}
+        <Card className="divide-y divide-gray-200 dark:divide-slate-700">
+          <button
+            onClick={() => onNavigate?.('grant-navigator')}
+            className="w-full p-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
+          >
+            <div className="flex items-center gap-3">
+              <DollarSign aria-hidden="true" className="w-5 h-5 text-teal-500" />
+              <div className="text-left">
+                <div className="flex items-center gap-2">
+                  <p className="font-medium dark:text-white">Grant Navigator</p>
+                  <span className="text-xs font-semibold px-1.5 py-0.5 rounded-full bg-teal-100 text-teal-700 dark:bg-teal-900 dark:text-teal-300">Pro</span>
+                </div>
+                <p className="text-sm text-muted-foreground">Find funding for ABA &amp; behavioral health</p>
+              </div>
+            </div>
+            <ChevronRight aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
+          </button>
         </Card>
 
         {/* Help Section */}
@@ -1189,13 +1210,13 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
             className="w-full p-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
           >
             <div className="flex items-center gap-3">
-              <HelpCircle className="w-5 h-5 text-teal-500" />
+              <HelpCircle aria-hidden="true" className="w-5 h-5 text-teal-500" />
               <div className="text-left">
                 <p className="font-medium dark:text-white">Help & Support</p>
                 <p className="text-sm text-muted-foreground">Contact us for assistance</p>
               </div>
             </div>
-            <ExternalLink className="w-4 h-4 text-muted-foreground" />
+            <ExternalLink aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
           </button>
         </Card>
 
@@ -1203,7 +1224,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
         <Card className="border-red-200 dark:border-red-900">
           <div className="p-4">
             <h3 className="font-semibold text-red-600 dark:text-red-400 mb-4 flex items-center gap-2">
-              <AlertTriangle className="w-5 h-5" />
+              <AlertTriangle aria-hidden="true" className="w-5 h-5" />
               Danger Zone
             </h3>
 
@@ -1212,7 +1233,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
               className="w-full flex items-center justify-between p-3 bg-red-50 dark:bg-red-900/20 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors"
             >
               <div className="flex items-center gap-3">
-                <Trash2 className="w-4 h-4 text-red-600" />
+                <Trash2 aria-hidden="true" className="w-4 h-4 text-red-600" />
                 <div className="text-left">
                   <p className="font-medium text-red-600">Delete Account</p>
                   <p className="text-sm text-red-500">Permanently delete your account and all data</p>
@@ -1229,7 +1250,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
             className="w-full text-red-600 border-red-200 hover:bg-red-50"
             onClick={onLogout}
           >
-            <LogOut className="w-4 h-4 mr-2" />
+            <LogOut aria-hidden="true" className="w-4 h-4 mr-2" />
             Sign Out
           </Button>
         )}
@@ -1306,7 +1327,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
 
             {passwordError && (
               <p className="text-sm text-red-600 flex items-center gap-1">
-                <AlertCircle className="w-4 h-4" />
+                <AlertCircle aria-hidden="true" className="w-4 h-4" />
                 {passwordError}
               </p>
             )}
@@ -1317,7 +1338,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
               Cancel
             </Button>
             <Button onClick={handlePasswordChange} disabled={isSaving}>
-              {isSaving && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+              {isSaving && <Loader2 aria-hidden="true" className="w-4 h-4 mr-2 animate-spin" />}
               Update Password
             </Button>
           </DialogFooter>
@@ -1340,19 +1361,19 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
             </p>
             <ul className="text-sm space-y-2 mb-4">
               <li className="flex items-center gap-2">
-                <Check className="w-4 h-4 text-green-500" />
+                <Check aria-hidden="true" className="w-4 h-4 text-green-500" />
                 Profile information
               </li>
               <li className="flex items-center gap-2">
-                <Check className="w-4 h-4 text-green-500" />
+                <Check aria-hidden="true" className="w-4 h-4 text-green-500" />
                 Children's profiles and progress
               </li>
               <li className="flex items-center gap-2">
-                <Check className="w-4 h-4 text-green-500" />
+                <Check aria-hidden="true" className="w-4 h-4 text-green-500" />
                 Conversation history with Aminy
               </li>
               <li className="flex items-center gap-2">
-                <Check className="w-4 h-4 text-green-500" />
+                <Check aria-hidden="true" className="w-4 h-4 text-green-500" />
                 Vault documents and records
               </li>
             </ul>
@@ -1380,12 +1401,12 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
             <Button onClick={handleExportData} disabled={isExporting}>
               {isExporting ? (
                 <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  <Loader2 aria-hidden="true" className="w-4 h-4 mr-2 animate-spin" />
                   Exporting...
                 </>
               ) : (
                 <>
-                  <Download className="w-4 h-4 mr-2" />
+                  <Download aria-hidden="true" className="w-4 h-4 mr-2" />
                   Export Data
                 </>
               )}
@@ -1399,7 +1420,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
         <DialogContent>
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-red-600">
-              <AlertTriangle className="w-5 h-5" />
+              <AlertTriangle aria-hidden="true" className="w-5 h-5" />
               Delete Account
             </DialogTitle>
             <DialogDescription>
@@ -1438,7 +1459,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
               onClick={handleDeleteAccount}
               disabled={deleteConfirmText !== 'DELETE' || isLoading}
             >
-              {isLoading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+              {isLoading && <Loader2 aria-hidden="true" className="w-4 h-4 mr-2 animate-spin" />}
               Delete Account
             </Button>
           </DialogFooter>
@@ -1474,7 +1495,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
               Cancel
             </Button>
             <Button onClick={handleEnableMfa}>
-              <Fingerprint className="w-4 h-4 mr-2" />
+              <Fingerprint aria-hidden="true" className="w-4 h-4 mr-2" />
               Set Up 2FA
             </Button>
           </DialogFooter>

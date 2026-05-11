@@ -379,7 +379,7 @@ export default function PriorAuthFlow({ onBack, onComplete, childName: initialCh
               </div>
             ) : (
               <Card className="p-6 text-center">
-                <FileText className="w-8 h-8 text-gray-300 mx-auto mb-2" />
+                <FileText className="w-8 h-8 text-gray-400 mx-auto mb-2" />
                 <p className="text-sm text-muted-foreground">No documents in your vault yet</p>
                 <p className="text-xs text-muted-foreground mt-1">
                   You can still proceed — documents can be added later

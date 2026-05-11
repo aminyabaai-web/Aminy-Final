@@ -393,7 +393,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
             type="button"
             onClick={currentStep === 'review' ? handleSubmit : nextStep}
             disabled={(currentStep !== 'review' && !canAdvance()) || isSubmitting}
-            className="action-button ml-auto hidden min-h-11 items-center gap-2 rounded-xl bg-[#0891b2] px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#0c7791] disabled:cursor-not-allowed disabled:opacity-50 sm:inline-flex"
+            className="action-button ml-auto hidden min-h-11 items-center gap-2 rounded-xl bg-cyan-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-cyan-700 disabled:cursor-not-allowed disabled:opacity-50 sm:inline-flex"
           >
             {currentStep === 'review' ? 'Submit for verification' : 'Continue'}
             <ArrowRight className="w-4 h-4" />
@@ -417,7 +417,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                   aria-label={`Open ${step.label} step`}
                   className={`flex h-11 min-w-[6.5rem] items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                     isCurrent
-                      ? 'bg-[#0891b2]/10 text-[#0891b2]'
+                      ? 'bg-cyan-600/10 text-cyan-600'
                       : isCompleted
                         ? 'text-green-600 hover:bg-green-50'
                         : 'text-gray-400'
@@ -453,7 +453,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                     type="text"
                     value={form.firstName}
                     onChange={e => updateForm({ firstName: e.target.value })}
-                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0891b2]/20 focus:border-[#0891b2]"
+                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600"
                   />
                 </div>
                 <div>
@@ -463,7 +463,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                     type="text"
                     value={form.lastName}
                     onChange={e => updateForm({ lastName: e.target.value })}
-                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0891b2]/20 focus:border-[#0891b2]"
+                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600"
                   />
                 </div>
                 <div>
@@ -473,7 +473,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                     type="email"
                     value={form.email}
                     onChange={e => updateForm({ email: e.target.value })}
-                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0891b2]/20 focus:border-[#0891b2]"
+                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600"
                   />
                 </div>
                 <div>
@@ -483,7 +483,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                     type="tel"
                     value={form.phone}
                     onChange={e => updateForm({ phone: e.target.value })}
-                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0891b2]/20 focus:border-[#0891b2]"
+                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600"
                   />
                 </div>
                 <div>
@@ -494,7 +494,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                     value={form.credentials}
                     onChange={e => updateForm({ credentials: e.target.value })}
                     placeholder="e.g., BCBA, LCSW, MS CCC-SLP"
-                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0891b2]/20 focus:border-[#0891b2]"
+                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600"
                   />
                 </div>
                 <div>
@@ -503,7 +503,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                     id={fieldId('role')}
                     value={form.role}
                     onChange={e => updateForm({ role: e.target.value as ProviderRole })}
-                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0891b2]/20 focus:border-[#0891b2]"
+                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600"
                   >
                     {Object.entries(PROVIDER_ROLE_DISPLAY).map(([value, label]) => (
                       <option key={value} value={value}>{label}</option>
@@ -518,7 +518,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                     onChange={e => updateForm({ bio: e.target.value })}
                     rows={3}
                     placeholder="Tell families about your experience and approach..."
-                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0891b2]/20 focus:border-[#0891b2] resize-none"
+                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600 resize-none"
                   />
                 </div>
               </div>
@@ -541,7 +541,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                     value={form.primaryCredentialNumber}
                     onChange={e => updateForm({ primaryCredentialNumber: e.target.value })}
                     placeholder="Used for verification before you go live"
-                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0891b2]/20 focus:border-[#0891b2]"
+                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600"
                   />
                 </div>
                 <div>
@@ -553,7 +553,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                     onChange={e => updateForm({ npiNumber: e.target.value })}
                     placeholder="10-digit NPI"
                     maxLength={10}
-                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0891b2]/20 focus:border-[#0891b2]"
+                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600"
                   />
                 </div>
               </div>
@@ -571,7 +571,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                       key={state.code}
                       className={`flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-colors text-sm ${
                         form.licensedStates.includes(state.code)
-                          ? 'bg-[#0891b2]/10 text-[#0891b2] font-medium'
+                          ? 'bg-cyan-600/10 text-cyan-600 font-medium'
                           : 'hover:bg-gray-50 text-gray-600'
                       }`}
                     >
@@ -579,14 +579,14 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                         type="checkbox"
                         checked={form.licensedStates.includes(state.code)}
                         onChange={() => toggleState(state.code)}
-                        className="rounded border-gray-300 text-[#0891b2] focus:ring-[#0891b2]"
+                        className="rounded border-gray-300 text-cyan-600 focus:ring-cyan-600"
                       />
                       {state.code}
                     </label>
                   ))}
                 </div>
                 {form.licensedStates.length > 0 && (
-                  <p className="text-sm text-[#0891b2] mt-3 font-medium">
+                  <p className="text-sm text-cyan-600 mt-3 font-medium">
                     {form.licensedStates.length} state{form.licensedStates.length > 1 ? 's' : ''} selected
                   </p>
                 )}
@@ -607,7 +607,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                       type="checkbox"
                       checked={form.offersConsult}
                       onChange={e => updateForm({ offersConsult: e.target.checked })}
-                      className="rounded border-gray-300 text-[#0891b2] focus:ring-[#0891b2]"
+                      className="rounded border-gray-300 text-cyan-600 focus:ring-cyan-600"
                     />
                     <div>
                       <p className="font-medium text-gray-900">25-min Consult</p>
@@ -631,7 +631,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                       type="checkbox"
                       checked={form.offersDeepReview}
                       onChange={e => updateForm({ offersDeepReview: e.target.checked })}
-                      className="rounded border-gray-300 text-[#0891b2] focus:ring-[#0891b2]"
+                      className="rounded border-gray-300 text-cyan-600 focus:ring-cyan-600"
                     />
                     <div>
                       <p className="font-medium text-gray-900">50-min Deep Review</p>
@@ -666,7 +666,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                               : [...form.acceptedInsurance, plan],
                           })}
                           aria-pressed={active}
-                          className={`min-h-11 rounded-full border px-3 py-2 text-sm transition-colors ${active ? 'border-[#0891b2] bg-[#0891b2]/10 text-[#0891b2]' : 'border-gray-200 text-gray-600 hover:border-gray-300'}`}
+                          className={`min-h-11 rounded-full border px-3 py-2 text-sm transition-colors ${active ? 'border-cyan-600 bg-cyan-600/10 text-cyan-600' : 'border-gray-200 text-gray-600 hover:border-gray-300'}`}
                         >
                           {plan}
                         </button>
@@ -699,7 +699,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                 <button
                   type="button"
                   onClick={addAvailability}
-                  className="flex min-h-11 items-center gap-2 rounded-lg bg-[#0891b2] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#0891b2]/90"
+                  className="flex min-h-11 items-center gap-2 rounded-lg bg-cyan-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-cyan-600/90"
                 >
                   + Add Time Block
                 </button>
@@ -707,7 +707,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
 
               {form.availability.length === 0 ? (
                 <div className="text-center py-8 text-gray-500">
-                  <Calendar className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+                  <Calendar className="w-12 h-12 mx-auto mb-3 text-gray-400" />
                   <p className="font-medium">No availability set yet</p>
                   <p className="text-sm mt-1">Add time blocks when you're available for sessions</p>
                 </div>
@@ -775,7 +775,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                   <h3 className="text-sm font-medium text-gray-500 mb-2">Licensing</h3>
                   <div className="flex flex-wrap gap-1">
                     {form.licensedStates.map(code => (
-                      <span key={code} className="px-2 py-0.5 bg-[#0891b2]/10 text-[#0891b2] text-xs font-medium rounded-full">
+                      <span key={code} className="px-2 py-0.5 bg-cyan-600/10 text-cyan-600 text-xs font-medium rounded-full">
                         {code}
                       </span>
                     ))}
@@ -848,7 +848,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
               type="button"
               onClick={handleSubmit}
               disabled={isSubmitting}
-              className="action-button flex min-h-11 items-center gap-2 rounded-lg bg-[#0891b2] px-6 py-2.5 font-medium text-white transition-colors hover:bg-[#0891b2]/90 disabled:opacity-50"
+              className="action-button flex min-h-11 items-center gap-2 rounded-lg bg-cyan-600 px-6 py-2.5 font-medium text-white transition-colors hover:bg-cyan-600/90 disabled:opacity-50"
             >
               {isSubmitting ? (
                 <>
@@ -867,7 +867,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
               type="button"
               onClick={nextStep}
               disabled={!canAdvance()}
-              className="action-button flex min-h-11 items-center gap-2 rounded-lg bg-[#0891b2] px-6 py-2.5 font-medium text-white transition-colors hover:bg-[#0891b2]/90 disabled:opacity-50"
+              className="action-button flex min-h-11 items-center gap-2 rounded-lg bg-cyan-600 px-6 py-2.5 font-medium text-white transition-colors hover:bg-cyan-600/90 disabled:opacity-50"
             >
               Continue to {STEPS[Math.min(stepIndex + 1, STEPS.length - 1)].label}
               <ArrowRight className="w-4 h-4" />

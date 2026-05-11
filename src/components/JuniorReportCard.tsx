@@ -408,7 +408,7 @@ export function JuniorReportCard({
           </div>
 
           {/* Privacy note */}
-          <p className="text-[10px] text-gray-300 text-center mt-3">
+          <p className="text-[10px] text-gray-400 text-center mt-3">
             Aminy Ease | Privacy-first: initials only, no PII shared
           </p>
         </div>

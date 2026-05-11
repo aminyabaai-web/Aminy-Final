@@ -74,7 +74,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
       popular: true,
       gradient: 'from-teal-50 to-cyan-50',
       iconBg: 'bg-teal-100',
-      iconColor: 'text-teal-600',
+      iconColor: 'text-[#6B9080]',
     },
     {
       id: 'pro',
@@ -157,7 +157,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white via-gray-50/50 to-white dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Close confirmation modal for post-onboarding */}
       {showCloseConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
@@ -171,7 +171,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
             </p>
             <div className="space-y-2">
               <Button
-                className="w-full bg-teal-600 hover:bg-teal-700 text-white"
+                className="w-full bg-[#6B9080] hover:bg-[#5A7D6E] text-white"
                 onClick={() => setShowCloseConfirm(false)}
               >
                 Start Free Trial
@@ -209,7 +209,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
             {onClose && isPostOnboarding && (
               <button
                 onClick={handleClose}
-                className="p-1 text-gray-300 hover:text-gray-400 transition-colors"
+                className="p-1 text-gray-400 hover:text-gray-500 transition-colors"
                 aria-label="Skip"
               >
                 <span className="text-xs">Skip</span>
@@ -361,7 +361,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
                 key={tier.id}
                 className={`relative p-5 transition-all duration-200 cursor-pointer hover:shadow-lg ${
                   tier.popular
-                    ? 'ring-2 ring-teal-500 shadow-md'
+                    ? 'ring-2 ring-[#6B9080] shadow-md'
                     : 'border border-gray-200 hover:border-gray-300'
                 } ${isCurrentTier ? 'opacity-60' : ''}`}
                 onClick={() => !isCurrentTier && handleSelectTier(tier.id)}
@@ -369,7 +369,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
                 {/* Popular Badge */}
                 {tier.popular && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <Badge className="bg-teal-500 text-white px-3 py-1 shadow-sm">
+                    <Badge className="bg-[#6B9080] text-white px-3 py-1 shadow-sm">
                       Recommended
                     </Badge>
                   </div>
@@ -455,7 +455,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
                     <Button
                       className={`w-full mt-4 ${
                         tier.popular
-                          ? 'bg-teal-600 hover:bg-teal-700 text-white'
+                          ? 'bg-[#6B9080] hover:bg-[#5A7D6E] text-white'
                           : tier.id === 'free'
                           ? 'bg-gray-100 hover:bg-gray-200 text-gray-700'
                           : 'bg-gray-900 hover:bg-gray-800 text-white'

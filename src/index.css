@@ -15992,6 +15992,54 @@ body.mobile-optimized {
 /* #E6E0F8 — soft lavender (decorative gradient backgrounds) */
 .to-\[\#E6E0F8\] { --tw-gradient-to: #E6E0F8; }
 
+/* #5a7380 — slate-teal accent (AccountSettings, buttons) */
+.bg-\[\#5a7380\] { background-color: #5a7380; }
+.text-\[\#5a7380\] { color: #5a7380; }
+.from-\[\#5a7380\] { --tw-gradient-from: #5a7380; --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.to-\[\#5a7380\] { --tw-gradient-to: #5a7380; }
+
+/* #4a6370 — dark slate-teal (gradient endpoint) */
+.to-\[\#4a6370\] { --tw-gradient-to: #4a6370; }
+.from-\[\#4a6370\] { --tw-gradient-from: #4a6370; --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+
+/* AccountSettings — semantic color utilities for rgba-based design tokens */
+.text-gray-900\/90 { color: rgba(17, 24, 39, 0.9); }
+.text-gray-900\/80 { color: rgba(17, 24, 39, 0.8); }
+.text-gray-900\/70 { color: rgba(17, 24, 39, 0.7); }
+.text-gray-900\/60 { color: rgba(17, 24, 39, 0.6); }
+.text-gray-900\/50 { color: rgba(17, 24, 39, 0.5); }
+.text-gray-900\/45 { color: rgba(17, 24, 39, 0.45); }
+.text-gray-900\/40 { color: rgba(17, 24, 39, 0.4); }
+.text-gray-900\/30 { color: rgba(17, 24, 39, 0.3); }
+.text-red-600\/80 { color: rgba(220, 38, 38, 0.8); }
+.text-red-600\/90 { color: rgba(220, 38, 38, 0.9); }
+.border-gray-900\/4 { border-color: rgba(17, 24, 39, 0.04); }
+.border-gray-900\/5 { border-color: rgba(17, 24, 39, 0.05); }
+.border-gray-900\/10 { border-color: rgba(17, 24, 39, 0.1); }
+.bg-gray-900\/4 { background-color: rgba(17, 24, 39, 0.04); }
+.bg-teal-600\/10 { background-color: rgba(13, 148, 136, 0.1); }
+.text-teal-600 { color: #0d9488; }
+.bg-amber-500\/10 { background-color: rgba(245, 158, 11, 0.1); }
+.text-amber-600 { color: #d97706; }
+.bg-\[\#F8F8F6\]\/85 { background-color: rgba(248, 248, 246, 0.85); }
+.hover\:bg-\[\#FAFAFA\]:hover { background-color: #FAFAFA; }
+.shadow-card { box-shadow: 0 2px 10px rgba(0,0,0,0.02), 0 1px 3px rgba(0,0,0,0.01); }
+
+/* AccountSettingsPremium — additional arbitrary-value utilities */
+.text-\[13px\] { font-size: 13px; }
+.text-\[11px\] { font-size: 11px; }
+.text-\[20px\] { font-size: 20px; }
+.rounded-\[10px\] { border-radius: 10px; }
+.rounded-\[12px\] { border-radius: 12px; }
+.rounded-\[20px\] { border-radius: 20px; }
+.rounded-\[24px\] { border-radius: 24px; }
+.bg-\[\#FAFAFA\] { background-color: #FAFAFA; }
+.w-9 { width: 2.25rem; }
+.max-w-\[640px\] { max-width: 640px; }
+.pb-\[100px\] { padding-bottom: 100px; }
+.tracking-\[-0\.01em\] { letter-spacing: -0.01em; }
+.shadow-back-btn { box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+
 /* Opacity variants for gradient stops */
 .from-\[\#C9EAD9\]\/20 { --tw-gradient-from: rgb(201 234 217 / 0.2); --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
 .to-\[\#FFE2B6\]\/20 { --tw-gradient-to: rgb(255 226 182 / 0.2); }
@@ -16481,3 +16529,62 @@ button[class*="bg-primary"] {
 .min-h-\[52px\] { min-height: 52px !important; }
 .min-h-\[3\.25rem\] { min-height: 3.25rem !important; }
 .min-w-\[3\.25rem\] { min-width: 3.25rem !important; }
+
+/* ============================================================================
+   AMINY WARM PALETTE — Neurodivergent-First Design System
+   ============================================================================
+   Warm cream backgrounds, sage green accents, human-feeling typography.
+   These override the original cold teal/navy palette. */
+
+:root {
+  --aminy-bg: #FAF7F2;
+  --aminy-bg-jr: #FFF8F0;
+  --aminy-bg-provider: #F5F7F9;
+  --aminy-text: #1B2733;
+  --aminy-text-secondary: #5A6B7A;
+  --aminy-text-muted: #8E9BAA;
+  --aminy-sage: #6B9080;
+  --aminy-teal: #43AA8B;
+  --aminy-terracotta: #E07A5F;
+  --aminy-calm-blue: #7BA7BC;
+  --aminy-card: #FFFFFF;
+  --aminy-surface: #F0EDE8;
+}
+
+/* Background utilities */
+.bg-aminy { background-color: var(--aminy-bg) !important; }
+.bg-aminy-jr { background-color: var(--aminy-bg-jr) !important; }
+.bg-aminy-provider { background-color: var(--aminy-bg-provider) !important; }
+.bg-aminy-card { background-color: var(--aminy-card) !important; }
+.bg-aminy-surface { background-color: var(--aminy-surface) !important; }
+
+/* Text utilities */
+.text-aminy { color: var(--aminy-text) !important; }
+.text-aminy-secondary { color: var(--aminy-text-secondary) !important; }
+.text-aminy-muted { color: var(--aminy-text-muted) !important; }
+
+/* Accent utilities */
+.bg-aminy-sage { background-color: var(--aminy-sage) !important; }
+.bg-aminy-teal { background-color: var(--aminy-teal) !important; }
+.bg-aminy-terracotta { background-color: var(--aminy-terracotta) !important; }
+.text-aminy-sage { color: var(--aminy-sage) !important; }
+.text-aminy-teal { color: var(--aminy-teal) !important; }
+.text-aminy-terracotta { color: var(--aminy-terracotta) !important; }
+.border-aminy-sage { border-color: var(--aminy-sage) !important; }
+
+/* Hex utilities for Tailwind v4 (manually defined) */
+.bg-\[\#FAF7F2\] { background-color: #FAF7F2; }
+.bg-\[\#FFF8F0\] { background-color: #FFF8F0; }
+.bg-\[\#F0EDE8\] { background-color: #F0EDE8; }
+.bg-\[\#6B9080\] { background-color: #6B9080; }
+.bg-\[\#7BA7BC\] { background-color: #7BA7BC; }
+.text-\[\#1B2733\] { color: #1B2733; }
+.text-\[\#5A6B7A\] { color: #5A6B7A; }
+.text-\[\#8E9BAA\] { color: #8E9BAA; }
+.text-\[\#6B9080\] { color: #6B9080; }
+.border-\[\#6B9080\] { border-color: #6B9080; }
+.from-\[\#6B9080\] { --tw-gradient-from: #6B9080; }
+.to-\[\#7BA7BC\] { --tw-gradient-to: #7BA7BC; }
+.from-\[\#FAF7F2\] { --tw-gradient-from: #FAF7F2; }
+.ring-\[\#6B9080\] { --tw-ring-color: #6B9080; }
+.focus\:ring-\[\#6B9080\]:focus { --tw-ring-color: #6B9080; }

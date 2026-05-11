@@ -211,7 +211,7 @@ function CohortTable({ cohorts }: { cohorts: CohortData[] }) {
               ))}
               {Array.from({ length: maxMonths - cohort.retained.length }).map((_, i) => (
                 <td key={`empty-${i}`} className="text-center py-1 px-1">
-                  <span className="text-gray-300">-</span>
+                  <span className="text-gray-400">-</span>
                 </td>
               ))}
             </tr>

@@ -469,7 +469,7 @@ export function PlaybooksLibrary({
             placeholder="Search playbooks..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0891b2]/20 focus:border-[#0891b2]"
+            className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600"
           />
         </div>
 
@@ -479,7 +479,7 @@ export function PlaybooksLibrary({
             onClick={() => setSelectedCategory('all')}
             className={`flex-shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
               selectedCategory === 'all'
-                ? 'bg-[#0891b2] text-white'
+                ? 'bg-cyan-600 text-white'
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
           >
@@ -491,7 +491,7 @@ export function PlaybooksLibrary({
               onClick={() => setSelectedCategory(cat)}
               className={`flex-shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-all flex items-center gap-1 ${
                 selectedCategory === cat
-                  ? 'bg-[#0891b2] text-white'
+                  ? 'bg-cyan-600 text-white'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
             >
@@ -503,7 +503,7 @@ export function PlaybooksLibrary({
 
         {/* Bookmarked Quick Access */}
         {bookmarkedCount > 0 && (
-          <button className="flex items-center gap-2 text-sm text-[#0891b2] hover:underline">
+          <button className="flex items-center gap-2 text-sm text-cyan-600 hover:underline">
             <BookmarkCheck className="w-4 h-4" />
             {bookmarkedCount} bookmarked
           </button>
@@ -523,7 +523,7 @@ export function PlaybooksLibrary({
           ))
         ) : (
           <div className="text-center py-12">
-            <BookOpen className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+            <BookOpen className="w-12 h-12 text-gray-400 mx-auto mb-4" />
             <p className="text-gray-500">No playbooks found</p>
             <p className="text-sm text-gray-400 mt-1">Try adjusting your search or filters</p>
           </div>
@@ -575,7 +575,7 @@ function PlaybookCard({ playbook, onSelect, onToggleBookmark }: PlaybookCardProp
 
             {/* Title & Subtitle */}
             <h3 className="font-semibold text-gray-900 mb-1">{playbook.title}</h3>
-            <p className="text-sm text-[#0891b2] mb-2">{playbook.subtitle}</p>
+            <p className="text-sm text-cyan-600 mb-2">{playbook.subtitle}</p>
 
             {/* Description */}
             <p className="text-sm text-gray-600 line-clamp-2 mb-3">{playbook.description}</p>
@@ -596,11 +596,11 @@ function PlaybookCard({ playbook, onSelect, onToggleBookmark }: PlaybookCardProp
               <div className="mt-3">
                 <div className="flex items-center justify-between text-xs mb-1">
                   <span className="text-gray-500">Progress</span>
-                  <span className="text-[#0891b2] font-medium">{playbook.progress}%</span>
+                  <span className="text-cyan-600 font-medium">{playbook.progress}%</span>
                 </div>
                 <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-[#0891b2] rounded-full transition-all"
+                    className="h-full bg-cyan-600 rounded-full transition-all"
                     style={{ width: `${playbook.progress}%` }}
                   />
                 </div>
@@ -628,7 +628,7 @@ function PlaybookCard({ playbook, onSelect, onToggleBookmark }: PlaybookCardProp
             onToggleBookmark();
           }}
           className={`flex items-center gap-2 text-sm ${
-            playbook.isBookmarked ? 'text-[#0891b2]' : 'text-gray-500 hover:text-gray-700'
+            playbook.isBookmarked ? 'text-cyan-600' : 'text-gray-500 hover:text-gray-700'
           }`}
         >
           {playbook.isBookmarked ? (

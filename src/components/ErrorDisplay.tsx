@@ -95,7 +95,7 @@ export function ErrorDisplay({
           )}
         </div>
         {onDismiss && (
-          <button onClick={onDismiss} className="text-gray-400 hover:text-gray-600">
+          <button onClick={onDismiss} className="min-h-[44px] min-w-[44px] flex items-center justify-center text-gray-400 hover:text-gray-600">
             <X className="w-4 h-4" />
           </button>
         )}

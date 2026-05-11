@@ -295,7 +295,7 @@ export default function CAQHManager({ providerId = 'prov-001', onBack }: CAQHMan
                                 {field.required && (
                                   <span className="text-xs text-red-500 font-medium">Required</span>
                                 )}
-                                <button className="p-1 rounded hover:bg-gray-100">
+                                <button className="p-1 min-h-[44px] min-w-[44px] flex items-center justify-center rounded hover:bg-gray-100">
                                   <Upload size={12} className="text-gray-400" />
                                 </button>
                               </div>

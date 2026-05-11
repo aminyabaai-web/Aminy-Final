@@ -112,7 +112,7 @@ export function ActivityLog({ activities = [], maxItems = 10, onBack }: Activity
 
         {activities.length === 0 && (
           <div className="text-center py-8">
-            <Clock className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+            <Clock className="w-12 h-12 mx-auto mb-3 text-gray-400" />
             <p className="text-sm text-muted-foreground">No recent activity</p>
           </div>
         )}

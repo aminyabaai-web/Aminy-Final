@@ -63,7 +63,7 @@ export function MicroAffirmationBanner({ parentName }: MicroAffirmationBannerPro
       <div className="p-3 sm:p-4">
         <button
           onClick={() => setDismissed(true)}
-          className="absolute top-2 right-2 p-1 rounded-full hover:bg-teal-100 transition-colors"
+          className="absolute top-2 right-2 p-1 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full hover:bg-teal-100 transition-colors"
           aria-label="Dismiss affirmation"
         >
           <X className="w-4 h-4 text-slate-400" />

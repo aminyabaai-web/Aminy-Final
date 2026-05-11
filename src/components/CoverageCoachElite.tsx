@@ -205,12 +205,12 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
   };
 
   return (
-    <div className="min-h-screen bg-slate-50" style={{ overflowX: 'hidden', overflowY: 'auto' }}>
+    <div className="min-h-screen bg-[#FAF7F2]" style={{ overflowX: 'hidden', overflowY: 'auto' }}>
       {/* Header */}
       <div className="sticky top-0 z-10 bg-white/90 backdrop-blur-md border-b border-slate-100">
         <div className="max-w-lg mx-auto px-4 py-3 flex items-center gap-3">
           {onBack && (
-            <button onClick={onBack} className="p-1.5 rounded-lg hover:bg-slate-100 transition-colors">
+            <button onClick={onBack} className="p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors">
               <ArrowLeft className="w-5 h-5 text-slate-600" />
             </button>
           )}
@@ -259,7 +259,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
                     <div className="font-semibold text-slate-900 text-sm">Yes, I believe so</div>
                     <div className="text-xs text-slate-400 mt-0.5">Let's maximize your benefits</div>
                   </div>
-                  <ChevronRight className="w-4 h-4 text-slate-300 ml-auto group-hover:text-teal-400 transition-colors" />
+                  <ChevronRight className="w-4 h-4 text-slate-400 ml-auto group-hover:text-teal-400 transition-colors" />
                 </div>
               </button>
 
@@ -275,7 +275,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
                     <div className="font-semibold text-slate-900 text-sm">No, it doesn't</div>
                     <div className="text-xs text-slate-400 mt-0.5">Let's explore your options</div>
                   </div>
-                  <ChevronRight className="w-4 h-4 text-slate-300 ml-auto group-hover:text-orange-400 transition-colors" />
+                  <ChevronRight className="w-4 h-4 text-slate-400 ml-auto group-hover:text-orange-400 transition-colors" />
                 </div>
               </button>
 
@@ -291,14 +291,14 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
                     <div className="font-semibold text-slate-900 text-sm">I'm not sure</div>
                     <div className="text-xs text-slate-400 mt-0.5">We'll help you find out in 3 minutes</div>
                   </div>
-                  <ChevronRight className="w-4 h-4 text-slate-300 ml-auto group-hover:text-blue-400 transition-colors" />
+                  <ChevronRight className="w-4 h-4 text-slate-400 ml-auto group-hover:text-blue-400 transition-colors" />
                 </div>
               </button>
             </div>
 
             {/* Insurance card scan prompt */}
             <Card className="p-4 border-dashed border-slate-200 bg-white text-center">
-              <Camera className="w-8 h-8 text-slate-300 mx-auto mb-2" />
+              <Camera className="w-8 h-8 text-slate-400 mx-auto mb-2" />
               <p className="text-sm font-medium text-slate-600 mb-1">Scan your insurance card</p>
               <p className="text-xs text-slate-400 mb-3">We'll pre-fill your plan details automatically</p>
               <Button variant="outline" size="sm" className="text-xs" onClick={() => toast.info('Camera access coming soon')}>
@@ -663,7 +663,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
                       <p className="font-semibold text-slate-900 text-sm">{waiver.name}</p>
                       <p className="text-xs text-slate-400 mt-0.5">Wait: {waiver.waitlistMonths}</p>
                     </div>
-                    <ChevronRight className={`w-4 h-4 text-slate-300 transition-transform ${expandedWaiver === waiver.code ? 'rotate-90' : ''}`} />
+                    <ChevronRight className={`w-4 h-4 text-slate-400 transition-transform ${expandedWaiver === waiver.code ? 'rotate-90' : ''}`} />
                   </button>
 
                   <AnimatePresence>

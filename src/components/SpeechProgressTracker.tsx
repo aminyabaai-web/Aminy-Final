@@ -292,7 +292,7 @@ export const SpeechProgressTracker: React.FC<SpeechProgressTrackerProps> = ({
           <div className="space-y-3 sm:space-y-4 sm:space-y-6">
             {!articulationProfile ? (
               <div className="text-center py-8">
-                <Volume2 className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+                <Volume2 className="w-12 h-12 mx-auto mb-3 text-gray-400" />
                 <p className="text-gray-500 mb-4">No articulation profile set up yet.</p>
                 <button
                   onClick={initializeProfile}
@@ -529,7 +529,7 @@ export const SpeechProgressTracker: React.FC<SpeechProgressTrackerProps> = ({
 
             {sessions.length === 0 ? (
               <div className="text-center py-8">
-                <BookOpen className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+                <BookOpen className="w-12 h-12 mx-auto mb-3 text-gray-400" />
                 <p className="text-gray-500">No sessions recorded yet.</p>
                 <p className="text-sm text-gray-400 mt-1">
                   Start tracking therapy sessions to see progress over time.

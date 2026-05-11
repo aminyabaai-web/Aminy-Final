@@ -538,7 +538,7 @@ export default function CredentialingOrchestrator({
 
               {!selectedPlaybook && !selectedPayer && (
                 <div className="flex flex-col items-center justify-center py-10 text-center">
-                  <Sparkles size={32} className="text-gray-300 mb-3" />
+                  <Sparkles size={32} className="text-gray-400 mb-3" />
                   <p className="text-sm text-gray-500">Select a payer above to see the step-by-step enrollment playbook</p>
                 </div>
               )}

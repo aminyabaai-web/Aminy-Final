@@ -230,7 +230,7 @@ export function EmptyState({
   return (
     <div className={`flex flex-col items-center justify-center text-center ${sizeClasses.container} ${className}`}>
       {icon && (
-        <div className={`${sizeClasses.icon} text-gray-300 dark:text-gray-600 mb-4`}>
+        <div className={`${sizeClasses.icon} text-gray-400 dark:text-gray-600 mb-4`}>
           {icon}
         </div>
       )}

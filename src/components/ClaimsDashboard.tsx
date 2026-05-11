@@ -720,7 +720,7 @@ export default function ClaimsDashboard({
         <nav aria-label="Coverage navigation" className="mb-3 flex items-center gap-3">
           <button
             onClick={onBack}
-            className="p-1.5 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+            className="p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors"
             aria-label="Go back"
           >
             <ArrowLeft className="w-5 h-5" />

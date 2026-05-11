@@ -207,7 +207,7 @@ export function ReportsHub({ childId, childName, accessToken, userTier = 'free' 
         </Card>
       ) : reports.length === 0 ? (
         <Card className="p-12 text-center">
-          <FileText className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+          <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
           <h3 className="text-lg text-primary mb-2">No reports yet</h3>
           <p className="text-sm text-muted-foreground mb-4">
             Generate your first report to see {childName}'s progress over time

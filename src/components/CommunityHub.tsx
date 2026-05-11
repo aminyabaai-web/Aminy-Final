@@ -739,7 +739,7 @@ export function CommunityHub({
             <div className="space-y-4">
               {filteredPosts.length === 0 ? (
                 <Card className="p-12 text-center">
-                  <MessageCircle className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+                  <MessageCircle className="w-12 h-12 text-slate-400 mx-auto mb-4" />
                   <h3 className="text-lg font-medium mb-2">No posts found</h3>
                   <p className="text-slate-500 mb-4">Be the first to start a conversation!</p>
                   <Button onClick={() => setShowNewPost(true)}>Create Post</Button>

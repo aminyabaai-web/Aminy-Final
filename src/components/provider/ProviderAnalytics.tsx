@@ -306,7 +306,7 @@ async function fetchPatientMetrics(providerId: string): Promise<PatientMetric[]>
 
   for (const pp of patientsData) {
     // Get child name
-    let childName = 'Patient';
+    let childName = 'Client';
     if (pp.child_id) {
       const { data: childData } = await supabase
         .from('children')
@@ -913,7 +913,7 @@ export function ProviderAnalytics({
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center">
                   <p className="text-2xl font-bold">{patients.length}</p>
-                  <p className="text-xs text-slate-500">Patients</p>
+                  <p className="text-xs text-slate-500">Clients</p>
                 </div>
               </div>
             </div>

@@ -266,7 +266,7 @@ export function LaunchStatusDashboard({ onBack }: LaunchStatusDashboardProps) {
                     {subItem.done ? (
                       <CheckCircle className="w-4 h-4 text-green-600" />
                     ) : (
-                      <Circle className="w-4 h-4 text-slate-300" />
+                      <Circle className="w-4 h-4 text-slate-400" />
                     )}
                     <span className={subItem.done ? 'text-slate-700' : 'text-slate-400'}>
                       {subItem.name}

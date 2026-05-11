@@ -120,7 +120,7 @@ export function TrialCountdown({
         {dismissible && (
           <button
             onClick={() => setDismissed(true)}
-            className="absolute top-2 right-2 p-1 rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+            className="absolute top-2 right-2 p-1 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
           >
             <X className="w-4 h-4 text-neutral-400" />
           </button>

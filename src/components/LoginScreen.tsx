@@ -160,7 +160,7 @@ export function LoginScreen({
     <div
       className="min-h-screen min-h-[100dvh] flex flex-col overflow-y-auto pb-6"
       style={{
-        backgroundColor: '#F8F8F6',
+        backgroundColor: '#FAF7F2',
         fontFamily: fontStack,
         ...fontSmoothing,
       }}
@@ -445,8 +445,8 @@ export function LoginScreen({
                 }}
                 onFocus={(e) => {
                   if (!errors.email) {
-                    e.currentTarget.style.borderColor = '#5a7380';
-                    e.currentTarget.style.boxShadow = '0 0 0 3px rgba(90, 115, 128, 0.1)';
+                    e.currentTarget.style.borderColor = '#6B9080';
+                    e.currentTarget.style.boxShadow = '0 0 0 3px rgba(107, 144, 128, 0.1)';
                   }
                 }}
                 onBlur={(e) => {
@@ -518,8 +518,8 @@ export function LoginScreen({
                   }}
                   onFocus={(e) => {
                     if (!errors.password) {
-                      e.currentTarget.style.borderColor = '#5a7380';
-                      e.currentTarget.style.boxShadow = '0 0 0 3px rgba(90, 115, 128, 0.1)';
+                      e.currentTarget.style.borderColor = '#6B9080';
+                      e.currentTarget.style.boxShadow = '0 0 0 3px rgba(107, 144, 128, 0.1)';
                     }
                   }}
                   onBlur={(e) => {
@@ -581,7 +581,7 @@ export function LoginScreen({
                   style={{
                     background: 'none',
                     border: 'none',
-                    color: '#5a7380',
+                    color: '#6B9080',
                     fontSize: '13px',
                     fontWeight: 500,
                     cursor: 'pointer',
@@ -610,7 +610,7 @@ export function LoginScreen({
                 width: '100%',
                 height: '52px',
                 marginTop: '8px',
-                backgroundColor: '#5a7380',
+                backgroundColor: '#6B9080',
                 color: '#FFFFFF',
                 fontFamily: fontStack,
                 fontWeight: 500,
@@ -623,8 +623,8 @@ export function LoginScreen({
                 transition: 'background-color 0.2s ease, transform 0.1s ease',
                 ...fontSmoothing,
               }}
-              onMouseEnter={(e) => !isLoading && (e.currentTarget.style.backgroundColor = '#4f6872')}
-              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#5a7380'}
+              onMouseEnter={(e) => !isLoading && (e.currentTarget.style.backgroundColor = '#5A7D6E')}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#6B9080'}
               onMouseDown={(e) => !isLoading && (e.currentTarget.style.transform = 'scale(0.98)')}
               onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}
             >
@@ -674,12 +674,12 @@ export function LoginScreen({
                 background: 'none',
                 border: 'none',
                 padding: 0,
-                color: '#5a7380',
+                color: '#6B9080',
                 fontSize: '14px',
                 fontWeight: 500,
                 cursor: 'pointer',
                 textDecoration: 'underline',
-                textDecorationColor: 'rgba(90, 115, 128, 0.3)',
+                textDecorationColor: 'rgba(107, 144, 128, 0.3)',
                 textUnderlineOffset: '2px',
                 transition: 'opacity 0.2s ease',
                 ...fontSmoothing,

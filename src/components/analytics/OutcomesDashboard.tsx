@@ -192,7 +192,7 @@ function LineChart({ points }: { points: WeeklyPoint[] }) {
           <g>
             <circle cx={lx} cy={ly} r={5} fill="#43AA8B" />
             <circle cx={lx} cy={ly} r={3} fill="white" />
-            <text x={lx + 8} y={ly} dominantBaseline="middle" className="fill-[#43AA8B] font-bold" style={{ fontSize: 10 }}>
+            <text x={lx + 8} y={ly} dominantBaseline="middle" className="fill-emerald-500 font-bold" style={{ fontSize: 10 }}>
               {last.masteryPct}%
             </text>
           </g>
@@ -393,27 +393,27 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
               label="Active Clients"
               value={kpi.activeClients}
               sub="enrolled families"
-              color="text-[#0D1B2A]"
+              color="text-slate-900"
             />
             <KPITile
               label="Sessions This Month"
               value={kpi.sessionsThisMonth}
               sub="completed sessions"
-              color="text-[#0D1B2A]"
+              color="text-slate-900"
             />
             <KPITile
               label="Goals at Mastery"
               value={kpi.goalsAtMastery}
               unit="%"
               sub="> 80% criterion met"
-              color="text-[#43AA8B]"
+              color="text-emerald-500"
             />
             <KPITile
               label="Avg to First Mastery"
               value={kpi.avgWeeksToFirstMastery}
               unit="wks"
               sub="from program start"
-              color="text-[#0D1B2A]"
+              color="text-slate-900"
             />
           </div>
         </section>

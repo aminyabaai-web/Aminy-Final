@@ -344,7 +344,7 @@ export function ABCTrendAnalysis({
   if (!analytics) {
     return (
       <Card className="p-8 text-center">
-        <BarChart3 className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+        <BarChart3 className="w-12 h-12 text-gray-400 mx-auto mb-4" />
         <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No Data to Analyze</h3>
         <p className="text-gray-500 dark:text-slate-400">
           Start logging ABC entries to see trend analysis and insights.

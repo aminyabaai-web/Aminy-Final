@@ -132,7 +132,7 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
           <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Active Roster</h2>
           {rosterEntries.length === 0 ? (
             <div className="bg-white rounded-2xl p-6 text-center border border-gray-100">
-              <Shield size={32} className="text-gray-300 mx-auto mb-2" />
+              <Shield size={32} className="text-gray-400 mx-auto mb-2" />
               <p className="text-sm text-gray-500">No active roster entries yet.</p>
               <p className="text-xs text-gray-400 mt-1">Complete credentialing with a payer to appear on their roster.</p>
             </div>
@@ -318,7 +318,7 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
                             : 'border-gray-200 hover:bg-gray-50'
                         }`}
                       >
-                        <CheckCircle size={16} className={selectedPayer === p.payerId ? 'text-teal-600' : 'text-gray-300'} />
+                        <CheckCircle size={16} className={selectedPayer === p.payerId ? 'text-teal-600' : 'text-gray-400'} />
                         <span className="text-sm font-medium text-gray-800">{p.payer}</span>
                       </button>
                     ))}

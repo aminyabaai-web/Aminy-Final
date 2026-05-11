@@ -356,7 +356,7 @@ export function BookVisitScreen({
     return (
       <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(45,212,191,0.12),transparent_30%),linear-gradient(180deg,#f7fffd_0%,#f4f7f8_100%)] flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 text-[#0891b2] animate-spin mx-auto mb-3" />
+          <Loader2 className="w-8 h-8 text-cyan-600 animate-spin mx-auto mb-3" />
           <p className="text-gray-600 font-medium">Finding providers in your area...</p>
           <p className="text-sm text-gray-400 mt-1">This only takes a moment</p>
         </div>
@@ -389,12 +389,12 @@ export function BookVisitScreen({
             </span>
             <span className="text-xs font-medium text-green-600">Tell us more</span>
           </div>
-          <ChevronRight className="w-4 h-4 text-gray-300" aria-hidden="true" />
+          <ChevronRight className="w-4 h-4 text-gray-400" aria-hidden="true" />
           <div className="flex items-center gap-1.5">
             <span className="w-5 h-5 rounded-full bg-teal-600 flex items-center justify-center text-white text-xs font-bold">2</span>
             <span className="text-xs font-medium text-teal-700">Choose provider</span>
           </div>
-          <ChevronRight className="w-4 h-4 text-gray-300" aria-hidden="true" />
+          <ChevronRight className="w-4 h-4 text-gray-400" aria-hidden="true" />
           <div className="flex items-center gap-1.5">
             <span className="w-5 h-5 bg-gray-200 rounded-full flex items-center justify-center text-gray-500 text-xs font-bold">3</span>
             <span className="text-xs text-gray-400">Confirm</span>

@@ -181,7 +181,7 @@ export function SocialProofToast({ disabled = false }: SocialProofToastProps) {
                 {/* Dismiss */}
                 <button
                   onClick={handleDismiss}
-                  className="text-gray-300 hover:text-gray-500 flex-shrink-0 p-0.5"
+                  className="text-gray-400 hover:text-gray-500 flex-shrink-0 p-0.5"
                   aria-label="Dismiss notification"
                 >
                   <X className="w-3.5 h-3.5" />

@@ -277,7 +277,7 @@ export function MFAEnrollment({
                 </code>
                 <button
                   onClick={handleCopySecret}
-                  className="p-1.5 rounded hover:bg-white/50 transition-colors"
+                  className="p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded hover:bg-white/50 transition-colors"
                   aria-label="Copy secret"
                 >
                   {copiedSecret ? (

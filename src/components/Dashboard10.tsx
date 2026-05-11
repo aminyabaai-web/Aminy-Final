@@ -10,7 +10,7 @@
  * - Every element should pass the "exhale test" — does seeing this help the parent breathe easier?
  * - CTCA Child Standard: treat every family like YOUR child is the patient
  * - Single-scroll calm hub that celebrates consistency, not perfection
- * - Brand colors: #0D1B2A navy, #F5F5F5 cream, #0891b2 teal accents
+ * - Brand colors: #0D1B2A navy, #F5F5F5 cream, #6B9080 teal accents
  * - Inter font, 8-12px corners, soft shadows
  */
 
@@ -585,12 +585,12 @@ export function Dashboard10({
   // Show loading state while data is being fetched
   if (dashboardData.isLoading && userId) {
     return (
-      <div className="min-h-screen flex items-center justify-center dark:bg-slate-900" style={{ background: 'linear-gradient(180deg, #f5fbfb 0%, #f6faf8 45%, #eef4f7 100%)' }}>
+      <div className="min-h-screen flex items-center justify-center dark:bg-slate-900" style={{ background: '#FAF7F2' }}>
         <div className="text-center">
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-            className="w-12 h-12 border-4 border-[#0891b2] border-t-transparent rounded-full mx-auto mb-4"
+            className="w-12 h-12 border-4 border-[#6B9080] border-t-transparent rounded-full mx-auto mb-4"
           />
           <p className="text-[#0D1B2A] dark:text-white font-medium">Loading your calm hub...</p>
         </div>
@@ -601,7 +601,7 @@ export function Dashboard10({
   return (
     <div
       className="min-h-screen dark:bg-slate-900 pb-24"
-      style={{ background: 'linear-gradient(180deg, #f6fbfb 0%, #f6faf8 42%, #edf4f7 100%)' }}
+      style={{ background: '#FAF7F2' }}
     >
       {/* ========================================
           STREAK CELEBRATION OVERLAY
@@ -675,7 +675,7 @@ export function Dashboard10({
                       : 'border border-slate-200 bg-white/85 text-slate-600 hover:bg-white'
                   }`}
                 >
-                  <span className="w-5 h-5 rounded-full bg-gradient-to-br from-teal-400 to-cyan-500 flex items-center justify-center text-sm font-bold text-white">
+                  <span className="w-5 h-5 rounded-full bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] flex items-center justify-center text-sm font-bold text-white">
                     {c.name?.[0] || '?'}
                   </span>
                   {c.name}
@@ -703,7 +703,7 @@ export function Dashboard10({
 
           {/* Child Profile Snapshot */}
           <div className="flex items-center gap-3 rounded-[22px] border border-white/80 bg-white/80 p-4 shadow-[0_18px_40px_rgba(15,23,42,0.06)] sm:gap-4">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-teal-400 to-cyan-500 flex items-center justify-center text-xl font-bold text-white shadow-sm">
+            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] flex items-center justify-center text-xl font-bold text-white shadow-sm">
               {child.name[0]}
             </div>
             <div className="flex-1">
@@ -935,7 +935,7 @@ export function Dashboard10({
             <div className="mt-4 flex flex-wrap gap-2">
               <Button
                 size="sm"
-                className="rounded-full bg-[#0891b2] text-white hover:bg-[#0b7895]"
+                className="rounded-full bg-[#6B9080] text-white hover:bg-[#5A7D6E]"
                 onClick={() => onNavigate?.('care-plan')}
               >
                 See my plan
@@ -1015,7 +1015,7 @@ export function Dashboard10({
                 onClick={() => setActiveRoutine(routine.timeOfDay)}
                 className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${
                   activeRoutine === routine.timeOfDay
-                    ? 'bg-[#0891b2] text-white shadow-md'
+                    ? 'bg-[#6B9080] text-white shadow-md'
                     : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700'
                 }`}
               >
@@ -1187,7 +1187,7 @@ export function Dashboard10({
             ======================================== */}
         <section>
           <h2 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-            <Zap className="w-5 h-5 text-[#0891b2]" />
+            <Zap className="w-5 h-5 text-[#6B9080]" />
             Quick Actions
           </h2>
 
@@ -1276,7 +1276,7 @@ export function Dashboard10({
           className={`fixed bottom-24 right-4 z-40 w-14 h-14 rounded-full shadow-lg transition-all duration-300 ${
             showAIChat
               ? 'bg-gray-700 text-white rotate-0'
-              : 'bg-[#0891b2] text-white hover:bg-[#4a6478]'
+              : 'bg-[#6B9080] text-white hover:bg-[#4a6478]'
           }`}
           aria-label={showAIChat ? 'Minimize chat' : 'Open chat with Aminy'}
           aria-expanded={showAIChat}
@@ -1304,14 +1304,14 @@ export function Dashboard10({
             }`}
           >
             {/* Chat Header - Branded with Full-Screen Toggle */}
-            <div className="p-4 bg-gradient-to-r from-[#0D1B2A] to-[#1a3a5c] text-white">
+            <div className="p-4 bg-gradient-to-r from-[#1B2733] to-[#2D3F4F] text-white">
               <div className="flex items-center justify-between">
                 <h3 className="font-semibold flex items-center gap-2 text-lg">
                   <Sparkles className="w-5 h-5 text-[#E07A5F]" />
                   Chat with Aminy
                 </h3>
                 <div className="flex items-center gap-2">
-                  <Badge className="bg-[#0891b2] text-white text-sm">AI Companion</Badge>
+                  <Badge className="bg-[#6B9080] text-white text-sm">AI Companion</Badge>
                   <button
                     onClick={() => setIsFullScreenChat(!isFullScreenChat)}
                     className="h-11 w-11 hover:bg-white/20 rounded-lg transition-colors flex items-center justify-center"
@@ -1361,7 +1361,7 @@ export function Dashboard10({
                   key={msg.id}
                   className={`rounded-xl p-3 text-sm shadow-sm ${
                     msg.role === 'user'
-                      ? 'bg-[#577590] text-white ml-8'
+                      ? 'bg-[#6B9080] text-white ml-8'
                       : 'bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-700 dark:to-slate-600 text-gray-700 dark:text-gray-200 mr-8'
                   }`}
                 >
@@ -1373,7 +1373,7 @@ export function Dashboard10({
               {isSendingChat && (
                 <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-700 dark:to-slate-600 rounded-xl p-3 text-sm shadow-sm mr-8">
                   <div className="flex items-center gap-2">
-                    <Loader2 className="w-4 h-4 animate-spin text-[#0891b2]" />
+                    <Loader2 className="w-4 h-4 animate-spin text-[#6B9080]" />
                     <span className="text-gray-500 dark:text-gray-400">Aminy is thinking...</span>
                   </div>
                 </div>
@@ -1390,7 +1390,7 @@ export function Dashboard10({
                       onClick={() => {
                         setChatInput(prompt);
                       }}
-                      className="text-sm px-3 py-1.5 rounded-full bg-[#0891b2]/10 text-[#0891b2] hover:bg-[#0891b2]/20 transition-colors"
+                      className="text-sm px-3 py-1.5 rounded-full bg-[#6B9080]/10 text-[#6B9080] hover:bg-[#6B9080]/20 transition-colors"
                     >
                       {prompt}
                     </button>
@@ -1416,7 +1416,7 @@ export function Dashboard10({
                   onChange={(e) => setChatInput(e.target.value)}
                   onKeyDown={handleChatKeyDown}
                   placeholder="Ask Aminy anything..."
-                  className="flex-1 px-4 py-3 text-sm rounded-xl border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:border-[#0891b2] focus:ring-2 focus:ring-[#0891b2]/20 transition-all"
+                  className="flex-1 px-4 py-3 text-sm rounded-xl border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:border-[#6B9080] focus:ring-2 focus:ring-[#6B9080]/20 transition-all"
                   aria-label="Chat message input"
                   disabled={isSendingChat}
                 />
@@ -1424,7 +1424,7 @@ export function Dashboard10({
                   size="sm"
                   onClick={handleSendChat}
                   disabled={!chatInput.trim() || isSendingChat}
-                  className="h-12 w-12 bg-[#0891b2] hover:bg-[#4a6478] rounded-xl transition-all disabled:opacity-50 p-0"
+                  className="h-12 w-12 bg-[#6B9080] hover:bg-[#4a6478] rounded-xl transition-all disabled:opacity-50 p-0"
                   aria-label="Send message"
                 >
                   {isSendingChat ? (

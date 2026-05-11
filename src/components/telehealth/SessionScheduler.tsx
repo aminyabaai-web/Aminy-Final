@@ -361,7 +361,7 @@ export function SessionScheduler({
                         {durations.join(' or ')} min
                       </p>
                     </div>
-                    <ChevronRight size={16} className="text-gray-300" />
+                    <ChevronRight size={16} className="text-gray-400" />
                   </button>
                 );
               })}
@@ -463,7 +463,7 @@ export function SessionScheduler({
 
               {!loadingSlots && availableSlots.length === 0 && (
                 <div className="text-center py-8">
-                  <Clock className="w-8 h-8 text-gray-300 mx-auto mb-2" />
+                  <Clock className="w-8 h-8 text-gray-400 mx-auto mb-2" />
                   <p className="text-sm text-gray-500">No available slots on this date.</p>
                   <button
                     onClick={goBack}

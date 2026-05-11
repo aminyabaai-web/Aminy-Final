@@ -450,7 +450,7 @@ export function FamilyHelpCenter({ onBack, childName = 'your child', memberPlan 
                         <p className="font-semibold text-slate-900 text-sm leading-tight">{cat.label}</p>
                         <p className="text-xs text-slate-400 mt-0.5">{cat.faqs.length} topics</p>
                       </div>
-                      <ChevronRight className="w-4 h-4 text-slate-300" />
+                      <ChevronRight className="w-4 h-4 text-slate-400" />
                     </motion.button>
                   );
                 })}
@@ -472,7 +472,7 @@ export function FamilyHelpCenter({ onBack, childName = 'your child', memberPlan 
                     <p className="font-semibold text-slate-900 text-sm">Talk to Aminy Support</p>
                     <p className="text-xs text-slate-400">Typically responds in under 2 hours</p>
                   </div>
-                  <ChevronRight className="w-4 h-4 text-slate-300" />
+                  <ChevronRight className="w-4 h-4 text-slate-400" />
                 </button>
 
                 <button
@@ -491,7 +491,7 @@ export function FamilyHelpCenter({ onBack, childName = 'your child', memberPlan 
                     <p className="font-semibold text-slate-900 text-sm">Get a Benefits Explanation Letter</p>
                     <p className="text-xs text-slate-400">Letter explaining {memberPlan} coverage for employers or schools</p>
                   </div>
-                  <ChevronRight className="w-4 h-4 text-slate-300" />
+                  <ChevronRight className="w-4 h-4 text-slate-400" />
                 </button>
               </div>
             )}
@@ -523,7 +523,7 @@ export function FamilyHelpCenter({ onBack, childName = 'your child', memberPlan 
                   <p className={`text-sm font-bold ${resource.color}`}>{resource.number}</p>
                   <p className="text-xs text-slate-500 mt-0.5">{resource.note}</p>
                 </div>
-                <ExternalLink className="w-4 h-4 text-slate-300 shrink-0 mt-0.5" />
+                <ExternalLink className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
               </div>
             ))}
           </div>

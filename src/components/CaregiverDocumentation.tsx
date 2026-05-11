@@ -529,7 +529,7 @@ export function CaregiverDocumentation({
 
           {entries.length === 0 ? (
             <Card className="p-8 text-center">
-              <Clock className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+              <Clock className="w-12 h-12 text-slate-400 mx-auto mb-4" />
               <p className="text-slate-500">No entries for this period</p>
             </Card>
           ) : (

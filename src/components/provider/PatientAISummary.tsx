@@ -96,7 +96,7 @@ export function PatientAISummary({ patient: patientProp, patientId, childName, p
   // Build patient from either the patient prop or individual props
   const patient = (patientProp ?? {
     id: patientId || 'unknown',
-    childName: childName || 'Patient',
+    childName: childName || 'Client',
     parentName: 'Parent',
     age: 0,
     diagnoses: [],

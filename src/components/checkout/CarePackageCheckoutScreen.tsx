@@ -227,7 +227,7 @@ export function CarePackageCheckoutScreen({
       )}
 
       {/* Header */}
-      <div className="bg-[#0D1B2A] px-4 pt-12 pb-6 flex items-center justify-between">
+      <div className="bg-slate-900 px-4 pt-12 pb-6 flex items-center justify-between">
         <button
           onClick={onBack}
           className="flex items-center gap-1.5 text-white/80 hover:text-white transition-colors"
