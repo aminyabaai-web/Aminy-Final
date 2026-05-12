@@ -255,38 +255,64 @@ export function StreamingAIChat({
         aria-label="Chat messages"
       >
         {messages.length === 0 && (
-          <div className="text-center py-8">
-            <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Sparkles className="w-8 h-8 text-accent" />
-            </div>
-            <h3 className="text-lg font-semibold text-slate-900 mb-2">
-              Hi! I'm Aminy 💙
-            </h3>
-            <p className="text-sm text-slate-600 max-w-md mx-auto mb-6">
-              I'm here to help you navigate your child's development journey.
-              I remember everything we've talked about, so feel free to pick up where we left off.
-            </p>
-
-            {/* Suggested prompts — reduce blank-page friction */}
-            <div className="max-w-md mx-auto space-y-2">
-              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">
-                Try asking me
+          <div className="py-8">
+            {/* Bevel-style greeting */}
+            <div className="text-center mb-8">
+              <div className="w-16 h-16 bg-gradient-to-br from-[#6B9080]/20 to-[#7BA7BC]/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Sparkles className="w-8 h-8 text-[#6B9080]" />
+              </div>
+              <p className="text-xs text-[#8E9BAA] mb-1">
+                {new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
               </p>
+              <h3 className="text-xl font-semibold text-[#1B2733]">
+                {(() => {
+                  const hour = new Date().getHours();
+                  const name = context.childName ? `about ${context.childName}` : '';
+                  if (hour < 12) return `Good morning! What's on your mind ${name}?`;
+                  if (hour < 17) return `Good afternoon! How can I help ${name}?`;
+                  return `Good evening! What's going on ${name}?`;
+                })()}
+              </h3>
+            </div>
+
+            {/* Bevel-style horizontal scrolling action cards */}
+            <div className="overflow-x-auto -mx-4 px-4 pb-4" style={{ scrollbarWidth: 'none' }}>
+              <div className="flex gap-3" style={{ minWidth: 'max-content' }}>
+                {[
+                  { icon: '\u{1F4CB}', title: 'Create a care plan', subtitle: 'Personalized for your child', prompt: `Create a weekly care plan for ${context.childName || 'my child'}` },
+                  { icon: '\u{1F4DD}', title: 'Log an incident', subtitle: 'Track what happened', prompt: 'I need to log a behavioral incident' },
+                  { icon: '\u{1F319}', title: 'Bedtime help', subtitle: 'Calmer nights start here', prompt: `${context.childName || 'My child'} won't go to sleep. Help.` },
+                  { icon: '\u{1F3EB}', title: 'School email', subtitle: 'Write to the teacher', prompt: "Help me write an email to my child's teacher" },
+                  { icon: '\u{1F4CA}', title: 'Weekly progress', subtitle: 'See how things are going', prompt: 'How is my child doing this week?' },
+                  { icon: '\u{1F6E1}️', title: 'Insurance help', subtitle: 'Coverage questions', prompt: 'Help me understand my ABA coverage' },
+                ].map((card) => (
+                  <button
+                    key={card.title}
+                    onClick={() => handleSend(card.prompt, [])}
+                    className="flex-shrink-0 w-[160px] text-left bg-white hover:bg-[#F0EDE8] active:scale-[0.97] border border-[#F0EDE8] rounded-2xl p-4 transition-all shadow-sm"
+                  >
+                    <span className="text-2xl block mb-2">{card.icon}</span>
+                    <p className="text-sm font-semibold text-[#1B2733] leading-tight">{card.title}</p>
+                    <p className="text-xs text-[#8E9BAA] mt-1 leading-tight">{card.subtitle}</p>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Quick text prompts below cards */}
+            <div className="mt-4 space-y-2 max-w-md mx-auto">
               {[
-                { emoji: '\u{1F319}', text: `Why is ${context.childName || 'my child'} melting down at bedtime?` },
-                { emoji: '\u{1F4DD}', text: 'Help me write an email to my child\u2019s teacher' },
-                { emoji: '\u{1F4C5}', text: 'Plan tomorrow\u2019s morning routine with me' },
-                { emoji: '\u{1F3AF}', text: 'What should I work on this week?' },
-                { emoji: '\u{1F4AA}', text: 'My child won\u2019t follow directions \u2014 what do I do?' },
-                { emoji: '\u{1F4A1}', text: 'Translate this IEP jargon for me' },
+                `What should I work on with ${context.childName || 'my child'} this week?`,
+                "My child won't follow directions — what do I do?",
+                'Translate this IEP jargon for me',
               ].map((prompt) => (
                 <button
-                  key={prompt.text}
-                  onClick={() => handleSend(prompt.text, [])}
-                  className="w-full text-left px-4 py-3 bg-slate-50 hover:bg-slate-100 active:bg-slate-200 rounded-xl border border-slate-200 transition-all text-sm text-slate-700 flex items-start gap-2"
+                  key={prompt}
+                  onClick={() => handleSend(prompt, [])}
+                  className="w-full text-left px-4 py-2.5 bg-white/80 hover:bg-white active:bg-[#F0EDE8] rounded-xl border border-[#F0EDE8] transition-all text-sm text-[#5A6B7A] flex items-center gap-2"
                 >
-                  <span className="text-base flex-shrink-0">{prompt.emoji}</span>
-                  <span className="flex-1">{prompt.text}</span>
+                  <span className="text-[#6B9080] flex-shrink-0">&rarr;</span>
+                  <span>{prompt}</span>
                 </button>
               ))}
             </div>
