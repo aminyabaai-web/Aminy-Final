@@ -6,7 +6,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { syncEncryptedStorage } from '../lib/security/encrypted-storage';
 import { Send, Paperclip, Mic, Sparkles, X, Minimize2, Maximize2, Brain, RotateCcw, Copy, MessageSquare, Zap, Volume2, Clock } from 'lucide-react';
-import { ChatHistory } from './ChatHistory';
+import { ChatSidebarDrawer } from './ChatSidebarDrawer';
 import { AttachmentPicker } from './AttachmentPicker';
 import { VoiceInput } from './VoiceInput';
 import { Button } from './ui/button';
@@ -835,11 +835,12 @@ export function PersistentAskAminy({
         )}
       </Card>
 
-      {/* Chat History Modal */}
-      <ChatHistory
+      {/* Chat History Sidebar Drawer */}
+      <ChatSidebarDrawer
         isOpen={showChatHistory}
         onClose={() => setShowChatHistory(false)}
         onSelectConversation={handleSelectConversation}
+        onNewChat={handleClearConversation}
         currentConversationId={conversationId}
       />
 

@@ -9,10 +9,12 @@
  */
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Loader2, Sparkles } from 'lucide-react';
+import { Loader2, Sparkles, Inbox } from 'lucide-react';
 import { ThinkingStepsDisplay, useThinkingSteps, generateFollowUpSuggestions } from './ThinkingSteps';
 import { Button } from './ui/button';
 import { EnhancedChatInput, type Attachment } from './EnhancedChatInput';
+import { DataConfirmationModal } from './DataConfirmationModal';
+import type { ExtractedDataPoint } from '../lib/chat-to-data-pipeline';
 import {
   loadConversationHistory,
   saveMessageToHistory,
@@ -51,6 +53,8 @@ export function StreamingAIChat({
   const [isLoadingHistory, setIsLoadingHistory] = useState(true);
   const [lastUserMessage, setLastUserMessage] = useState('');
   const [followUpSuggestions, setFollowUpSuggestions] = useState<string[]>([]);
+  const [pendingReview, setPendingReview] = useState<ExtractedDataPoint[]>([]);
+  const [showReviewModal, setShowReviewModal] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
@@ -140,6 +144,9 @@ export function StreamingAIChat({
           // Dynamic import to avoid circular dependency
           const { toast } = await import('sonner');
           toast.success(result.toast, { duration: 3000 });
+        }
+        if (result.pendingConfirmation.length > 0) {
+          setPendingReview((prev) => [...prev, ...result.pendingConfirmation]);
         }
       }
     } catch {
@@ -389,6 +396,29 @@ export function StreamingAIChat({
         <div ref={messagesEndRef} />
       </div>
 
+      {/* Ready for review badge (Bevel-style inbox affordance) */}
+      {pendingReview.length > 0 && (
+        <div className="px-4 pb-1">
+          <button
+            onClick={() => setShowReviewModal(true)}
+            className="w-full max-w-4xl mx-auto flex items-center gap-3 px-3.5 py-2.5 rounded-2xl bg-[#6B9080]/10 border border-[#6B9080]/20 text-left active:scale-[0.99] transition-transform"
+          >
+            <div className="w-8 h-8 rounded-xl bg-[#6B9080] flex items-center justify-center flex-shrink-0">
+              <Inbox className="w-4 h-4 text-white" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-[#1B2733] leading-tight">
+                {pendingReview.length} {pendingReview.length === 1 ? 'thing' : 'things'} ready for review
+              </p>
+              <p className="text-xs text-[#5A6B7A] truncate">
+                Aminy heard something — confirm what to save
+              </p>
+            </div>
+            <span className="text-xs font-semibold text-[#6B9080] flex-shrink-0">Review →</span>
+          </button>
+        </div>
+      )}
+
       {/* Rate limit indicator */}
       {showRateLimitIndicator && (
         <RateLimitInline onUpgradeClick={onUpgradeClick} />
@@ -406,6 +436,48 @@ export function StreamingAIChat({
           />
         </div>
       </div>
+
+      {/* Ready-for-Review modal */}
+      <DataConfirmationModal
+        isOpen={showReviewModal}
+        pending={pendingReview}
+        onClose={() => setShowReviewModal(false)}
+        onConfirm={async (item) => {
+          const userId = store.getState().user?.id;
+          if (!userId) return;
+          const { confirmAndPersist } = await import('../lib/chat-to-data-pipeline');
+          try {
+            await confirmAndPersist(item, userId, childId);
+            setPendingReview((prev) => prev.filter((p) => p !== item));
+            const { toast } = await import('sonner');
+            toast.success('Saved');
+          } catch {
+            const { toast } = await import('sonner');
+            toast.error("Couldn't save. Try again.");
+          }
+        }}
+        onSkip={(item) => {
+          setPendingReview((prev) => prev.filter((p) => p !== item));
+        }}
+        onConfirmAll={async (items) => {
+          const userId = store.getState().user?.id;
+          if (!userId) return;
+          const { confirmAndPersist } = await import('../lib/chat-to-data-pipeline');
+          const remaining: ExtractedDataPoint[] = [];
+          for (const item of items) {
+            try {
+              await confirmAndPersist(item, userId, childId);
+            } catch {
+              remaining.push(item);
+            }
+          }
+          setPendingReview(remaining);
+          setShowReviewModal(false);
+          const { toast } = await import('sonner');
+          if (remaining.length === 0) toast.success(`Saved ${items.length}`);
+          else toast.error(`Saved ${items.length - remaining.length} of ${items.length}`);
+        }}
+      />
     </div>
   );
 }
