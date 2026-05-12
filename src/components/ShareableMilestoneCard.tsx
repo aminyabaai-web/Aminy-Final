@@ -23,8 +23,6 @@ import {
   CheckCircle,
   Copy,
   Instagram,
-  Twitter,
-  Facebook,
   MessageCircle,
 } from 'lucide-react';
 import { Button } from './ui/button';
@@ -403,7 +401,7 @@ export function ShareableMilestoneCard({
                       className="flex flex-col items-center gap-1 p-3 rounded-xl hover:bg-gray-100 transition-colors"
                     >
                       <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
-                        <Facebook className="w-5 h-5 text-white" />
+                        <Share2 className="w-5 h-5 text-white" />
                       </div>
                       <span className="text-xs text-muted-foreground">Facebook</span>
                     </a>
@@ -414,7 +412,7 @@ export function ShareableMilestoneCard({
                       className="flex flex-col items-center gap-1 p-3 rounded-xl hover:bg-gray-100 transition-colors"
                     >
                       <div className="w-10 h-10 bg-black rounded-full flex items-center justify-center">
-                        <Twitter className="w-5 h-5 text-white" />
+                        <X className="w-5 h-5 text-white" />
                       </div>
                       <span className="text-xs text-muted-foreground">X</span>
                     </a>

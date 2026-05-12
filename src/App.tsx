@@ -135,10 +135,10 @@ const AppBreadcrumbs = lazy(() =>
 );
 
 // OPTIMIZED LAZY LOADING - With prefetch hints
-const OnboardingStreamlined = lazy(() =>
+const AIOnboarding = lazy(() =>
   import(
-    /* webpackPrefetch: true */ "./components/OnboardingStreamlined"
-  ).then((m) => ({ default: m.OnboardingStreamlined })),
+    /* webpackPrefetch: true */ "./components/AIOnboarding"
+  ).then((m) => ({ default: m.AIOnboarding })),
 );
 const Dashboard = lazy(() =>
   import(
@@ -1887,7 +1887,7 @@ export default function App() {
   }, [userData]);
 
   const handleGetStarted = () => {
-    navigateToScreen("create-account");
+    navigateToScreen("free-screening");
   };
 
   const handleLogin = () => {
@@ -2010,6 +2010,29 @@ export default function App() {
               updatedData.childName,
               updatedData.parentName
             ).catch(err => logger.error('Retention flow error', err));
+          }
+
+          // Migrate pre-signup screening results from FreeScreeningFlow
+          try {
+            const { getScreeningResults, clearLocalScreeningResults } = await import('./lib/screening-instruments');
+            const screeningResults = getScreeningResults();
+            if (screeningResults.length > 0) {
+              for (const sr of screeningResults) {
+                supabase.from('screening_results').insert({
+                  user_id: userId,
+                  instrument_id: sr.instrumentId,
+                  instrument_name: sr.instrumentName,
+                  total_score: sr.totalScore,
+                  risk_level: sr.riskLevel,
+                  answers: sr.answers,
+                  summary: sr.summary,
+                  completed_at: sr.completedAt,
+                }).then(null, (err: unknown) => logger.dev('Screening migration error', err));
+              }
+              clearLocalScreeningResults();
+            }
+          } catch (err) {
+            logger.dev('Screening migration skipped', err);
           }
         }
       } catch (error) {
@@ -2262,9 +2285,14 @@ export default function App() {
         case "onboarding":
           return (
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
-              <OnboardingStreamlined
-                onComplete={handleOnboardingComplete}
-                initialEmail={userData.email || ""}
+              <AIOnboarding
+                parentName={userData.parentName || ""}
+                onComplete={(profile) =>
+                  handleOnboardingComplete({
+                    childName: profile.childName,
+                    childAge: profile.childAge ?? undefined,
+                  })
+                }
               />
             </Suspense>
           );

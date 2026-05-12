@@ -13,8 +13,6 @@ import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Share2,
-  Twitter,
-  Facebook,
   Instagram,
   Copy,
   Check,
@@ -227,8 +225,8 @@ export function ShareWinFlow({ win, onClose, isOpen = true }: ShareWinFlowProps)
                   className="flex flex-col items-center gap-1 h-auto py-3"
                   onClick={handleShareTwitter}
                 >
-                  <Twitter className="w-5 h-5 text-blue-400" />
-                  <span className="text-xs">Twitter</span>
+                  <X className="w-5 h-5 text-gray-900" />
+                  <span className="text-xs">X</span>
                 </Button>
 
                 <Button
@@ -236,7 +234,7 @@ export function ShareWinFlow({ win, onClose, isOpen = true }: ShareWinFlowProps)
                   className="flex flex-col items-center gap-1 h-auto py-3"
                   onClick={handleShareFacebook}
                 >
-                  <Facebook className="w-5 h-5 text-blue-600" />
+                  <Share2 className="w-5 h-5 text-blue-600" />
                   <span className="text-xs">Facebook</span>
                 </Button>
 
