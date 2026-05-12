@@ -45,7 +45,7 @@ const DEMO_STEPS: DemoStep[] = [
   {
     id: 'ask-aminy',
     title: '2. The AI Companion',
-    description: 'Ask Aminy — a Claude-powered assistant that remembers your child, translates clinical jargon, and coaches parents in real-time.',
+    description: 'Aminy AI — a Claude-powered assistant that remembers your child, translates clinical jargon, and coaches parents in real-time.',
     targetScreen: 'ask-aminy',
     highlight: 'Notice the suggested prompts — personalized to the child',
     talkingPoints: [

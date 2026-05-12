@@ -174,7 +174,7 @@ const SCREEN_DISPLAY_NAMES: Record<string, string> = {
   'onboarding': 'Onboarding',
   'home': 'Home Dashboard',
   'dashboard': 'Dashboard',
-  'ask-aminy': 'Ask Aminy',
+  'ask-aminy': 'Aminy AI',
   'chat': 'Chat',
   'plan': 'Care Plan',
   'care-plans': 'Care Plans',

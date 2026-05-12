@@ -428,7 +428,7 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
             className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-teal-600 to-cyan-600 px-6 py-4 text-sm font-bold text-white shadow-lg transition-transform hover:scale-[1.02] active:scale-[0.98]"
           >
             <Sparkles className="h-5 w-5" />
-            Ask Aminy about this plan
+            Ask Aminy AI about this plan
           </button>
           <p className="mt-2 text-center text-[11px] text-gray-400">
             Get personalized answers about your child's care plan

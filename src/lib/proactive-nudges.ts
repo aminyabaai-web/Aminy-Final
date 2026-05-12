@@ -337,7 +337,7 @@ class ProactiveNudgeManager {
               type: 'suggestion',
               priority: 'medium',
               message: `I see a pattern with task-related triggers. Collaborative problem-solving or offering choices might help reduce resistance.`,
-              actionLabel: 'Ask Aminy for tips',
+              actionLabel: 'Ask Aminy AI for tips',
               onAction: () => {
                 useAminyStore.getState().setShowUnloadMindModal(true);
               },

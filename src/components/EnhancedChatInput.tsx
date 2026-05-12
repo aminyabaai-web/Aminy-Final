@@ -65,7 +65,7 @@ const SpeechRecognitionCtor = typeof globalThis.SpeechRecognition !== 'undefined
 
 export function EnhancedChatInput({
   onSend,
-  placeholder = "Ask Aminy anything...",
+  placeholder = "Message Aminy AI...",
   disabled = false,
   isLoading = false,
   maxAttachments = 5,

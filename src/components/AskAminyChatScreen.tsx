@@ -12,8 +12,9 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Sparkles, MessageSquare, Plus, Settings } from 'lucide-react';
+import { ArrowLeft, Sparkles, MessageSquare, Plus, Settings, PanelLeftOpen } from 'lucide-react';
 import { StreamingAIChat } from './StreamingAIChat';
+import { ChatSidebarDrawer } from './ChatSidebarDrawer';
 import { getCurrentContext } from '../lib/ai-engine';
 import type { StreamingChatContext } from '../lib/ai-engine';
 
@@ -38,6 +39,7 @@ export function AskAminyChatScreen({
 }: AskAminyChatScreenProps) {
   const [context, setContext] = useState<StreamingChatContext | null>(null);
   const [showSettings, setShowSettings] = useState(false);
+  const [showSidebar, setShowSidebar] = useState(false);
 
   useEffect(() => {
     // Build conversation context from current user data
@@ -71,6 +73,14 @@ export function AskAminyChatScreen({
                 <ArrowLeft className="w-5 h-5 text-slate-600" />
               </button>
             )}
+            <button
+              onClick={() => setShowSidebar(true)}
+              className="p-2 rounded-lg hover:bg-slate-100 transition-colors"
+              aria-label="Open chat history"
+              title="Chat history"
+            >
+              <PanelLeftOpen className="w-5 h-5 text-slate-600" />
+            </button>
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] flex items-center justify-center">
                 <Sparkles className="w-4 h-4 text-white" />

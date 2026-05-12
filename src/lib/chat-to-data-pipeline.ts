@@ -329,6 +329,18 @@ export async function routeExtractedData(
 }
 
 /**
+ * Persist a single confirmed item (called from the "Ready for Review" modal).
+ * Forces persist regardless of the requiresConfirmation flag.
+ */
+export async function confirmAndPersist(
+  dp: ExtractedDataPoint,
+  userId: string,
+  childId?: string,
+): Promise<void> {
+  return persistDataPoint(dp, userId, childId);
+}
+
+/**
  * Persist a data point to the appropriate Supabase table
  */
 async function persistDataPoint(

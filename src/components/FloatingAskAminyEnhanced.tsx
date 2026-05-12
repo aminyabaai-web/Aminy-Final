@@ -156,7 +156,7 @@ export function FloatingAskAminyEnhanced({
         {/* Safe hover tooltip - only when context detection is enabled */}
         {enableContextDetection && (
           <div className="absolute right-full mr-3 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
-            {hasNewContext ? 'New insights available!' : 'Ask Aminy anything'}
+            {hasNewContext ? 'New insights available!' : 'Message Aminy AI'}
             <div className="absolute top-1/2 left-full w-0 h-0 border-l-4 border-l-gray-900 border-t-2 border-b-2 border-t-transparent border-b-transparent transform -translate-y-1/2"></div>
           </div>
         )}

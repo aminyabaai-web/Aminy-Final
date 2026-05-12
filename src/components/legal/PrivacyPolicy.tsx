@@ -315,7 +315,7 @@ export default function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
           </p>
           <p><strong>a. Data Processing</strong></p>
           <ul className="ml-4 list-disc space-y-1">
-            <li>Conversations with Ask Aminy are processed via the Claude API, provided by Anthropic</li>
+            <li>Conversations with Aminy AI are processed via the Claude API, provided by Anthropic</li>
             <li>Conversation data is transmitted securely over encrypted connections (TLS 1.2+) to Anthropic&apos;s servers for processing</li>
             <li>Anthropic processes data in accordance with its own privacy policy and our Business Associate Agreement</li>
           </ul>

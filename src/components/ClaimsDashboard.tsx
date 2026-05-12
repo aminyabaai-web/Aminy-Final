@@ -601,7 +601,7 @@ function CoverageTab({ benefits }: { benefits: CoverageBenefit[] }) {
         <div>
           <p className="text-xs font-medium text-blue-800">Need help understanding your benefits?</p>
           <p className="text-xs text-blue-700 mt-0.5">
-            Ask Aminy to explain any coverage terms, or contact your insurance company using the number on the back of your card.
+            Ask Aminy AI to explain any coverage terms, or contact your insurance company using the number on the back of your card.
           </p>
         </div>
       </div>

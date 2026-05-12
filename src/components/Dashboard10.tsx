@@ -14,7 +14,7 @@
  * - Inter font, 8-12px corners, soft shadows
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
@@ -58,6 +58,8 @@ import { useWorkflowSyncState } from '../lib/core-workflow-sync';
 
 // Supporting components
 import { OutcomesDashboardWidget } from './OutcomesDashboardWidget';
+import { WellnessScoreWidget } from './WellnessScoreWidget';
+import { calculateWellnessScore } from '../lib/developmental-wellness-score';
 import { QuickShareButton } from './ShareWinFlow';
 import { ProactiveNudgeSystem } from './ProactiveNudgeSystem';
 import { ProactiveCheckIn, useProactiveCheckIns } from './ProactiveCheckIn';
@@ -457,6 +459,36 @@ export function Dashboard10({
   // Real streak data from database
   const streakDays = dashboardData.streak;
   const todaysWins = dashboardData.milestonesEarned;
+
+  const wellnessScore = useMemo(() => {
+    const completedToday = safeTodaysRoutines.reduce(
+      (sum, r) => sum + (r.completedCount ?? 0),
+      0,
+    );
+    return calculateWellnessScore({
+      goalProgress: dashboardData.activeGoals.map((g) => ({
+        domain: g.name,
+        currentPct: g.progress,
+        baselinePct: 0,
+        targetPct: 100,
+      })),
+      streakDays,
+      activitiesThisWeek: completedToday + Math.round((dashboardData.routineAdherence / 100) * 7),
+      calmCornerSessions: Math.round(dashboardData.totalCalmMinutes / 5),
+      providerSessionsAttended: 0,
+      providerSessionsScheduled: 0,
+      parentEngagementDays: Math.min(7, streakDays),
+      incidentsTrend: 0,
+    });
+  }, [
+    dashboardData.activeGoals,
+    dashboardData.routineAdherence,
+    dashboardData.totalCalmMinutes,
+    streakDays,
+    safeTodaysRoutines,
+  ]);
+
+  const shouldShowWellnessScore = wellnessScore.confidence >= 25;
   const hasRoutineHistory =
     dashboardData.routineAdherence > 0 ||
     safeTodaysRoutines.some((routine) => (routine.completedCount ?? 0) > 0) ||
@@ -776,6 +808,14 @@ export function Dashboard10({
 
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 py-6 space-y-3 sm:space-y-4 sm:space-y-6">
+        {shouldShowWellnessScore && (
+          <WellnessScoreWidget
+            score={wellnessScore}
+            childName={child.name}
+            onViewDetails={() => onNavigate?.('analytics-charts')}
+          />
+        )}
+
         {/* Pending Session Reviews — parent needs to approve */}
         {pendingReviews.length > 0 && (
           <motion.div
@@ -1415,7 +1455,7 @@ export function Dashboard10({
                   value={chatInput}
                   onChange={(e) => setChatInput(e.target.value)}
                   onKeyDown={handleChatKeyDown}
-                  placeholder="Ask Aminy anything..."
+                  placeholder="Message Aminy AI..."
                   className="flex-1 px-4 py-3 text-sm rounded-xl border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:border-[#6B9080] focus:ring-2 focus:ring-[#6B9080]/20 transition-all"
                   aria-label="Chat message input"
                   disabled={isSendingChat}

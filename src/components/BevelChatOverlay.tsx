@@ -320,7 +320,7 @@ Respond naturally, showing you understand where they are in the app. Be brief (2
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={handleKeyDown}
-                    placeholder={currentContext?.placeholder || 'Ask Aminy anything...'}
+                    placeholder={currentContext?.placeholder || 'Message Aminy AI...'}
                     className="w-full px-4 py-3 pr-12 bg-slate-50 border-0 rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-cyan-400 text-sm placeholder:text-slate-500"
                     style={{
                       maxHeight: '120px',
