@@ -55,7 +55,7 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
       isCenter: false
     },
     {
-      id: 'messages',
+      id: 'clients',
       label: 'Clients',
       icon: Users,
       ariaLabel: 'Clients - Your caseload',
@@ -172,52 +172,34 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
   ] : [
     {
       id: 'junior',
-      label: 'Ease',
+      label: 'Aminy Jr',
       icon: Baby,
-      description: 'Calm corner, rewards, and transitions'
-    },
-    {
-      id: 'incident-log',
-      label: 'Log Incident',
-      icon: ClipboardList,
-      description: 'Track behaviors and triggers'
+      description: 'Calm corner, rewards, and activities'
     },
     {
       id: 'document-vault',
       label: 'Vault',
       icon: FolderOpen,
-      description: 'Your digital medical binder'
+      description: 'Documents and medical binder'
     },
     {
       id: 'benefits',
       label: 'Coverage',
       icon: Shield,
-      description: 'Insurance and benefits navigator'
-    },
-    {
-      id: 'crisis-resources',
-      label: 'Crisis Help',
-      icon: Shield,
-      description: 'Emergency contacts and calming'
+      description: 'Insurance and benefits'
     },
     {
       id: 'community',
       label: 'Community',
       icon: Users,
-      description: 'Connect with other families'
+      description: 'Connect with families'
     },
     {
       id: 'settings',
       label: 'Settings',
       icon: Settings,
-      description: 'Privacy and preferences'
+      description: 'Account and preferences'
     },
-    {
-      id: 'profile',
-      label: 'Profile',
-      icon: User,
-      description: 'Account settings'
-    }
   ];
 
   return (

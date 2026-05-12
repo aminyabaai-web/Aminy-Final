@@ -82,10 +82,34 @@ export const FISCAL_AGENT_GATED_SCREENS: readonly string[] = [
 export const DEV_GATED_SCREENS: readonly string[] = [
   'launch-status',
   'phase2-menu',
+  'analytics-charts', // redundant with outcomes-dashboard
+  'vision-ai',        // scaffold only
+  'share-viewer',     // edge case
+  'revenue-dashboard', // internal admin
 ] as const;
 
 export const CR_GATED_SCREENS: readonly string[] = [
   'cr-sync',
+] as const;
+
+/** Screens hidden until Stripe Connect is live */
+export const PAYMENTS_GATED_SCREENS: readonly string[] = [
+  'session-payout',
+  'provider-payout-setup',
+] as const;
+
+/** Screens hidden until Checkr/MFA integrations are live */
+export const INTEGRATION_GATED_SCREENS: readonly string[] = [
+  'provider-identity-verification',
+  'mfa-enrollment',
+  'mfa-verification',
+] as const;
+
+/** Consolidate telehealth — hide duplicate video screens */
+export const TELEHEALTH_DUPLICATE_SCREENS: readonly string[] = [
+  'daily-video-room',
+  'multi-role-telehealth',
+  'video-call-room',
 ] as const;
 
 /**
@@ -106,6 +130,15 @@ export function getScreenGateReason(screen: string): string | null {
   }
   if (CR_GATED_SCREENS.includes(screen) && !productFlags.crSyncEnabled) {
     return 'cr-sync';
+  }
+  if (PAYMENTS_GATED_SCREENS.includes(screen)) {
+    return 'payments-not-ready';
+  }
+  if (INTEGRATION_GATED_SCREENS.includes(screen)) {
+    return 'integration-not-ready';
+  }
+  if (TELEHEALTH_DUPLICATE_SCREENS.includes(screen)) {
+    return 'use-video-call';
   }
   return null;
 }

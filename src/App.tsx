@@ -764,6 +764,22 @@ const GATE_MESSAGES: Record<string, { title: string; description: string }> = {
     title: 'Developer Tools',
     description: 'This screen is only available in developer mode.',
   },
+  'payments-not-ready': {
+    title: 'Payment Processing Coming Soon',
+    description: 'Provider payouts will be available once Stripe Connect is configured.',
+  },
+  'integration-not-ready': {
+    title: 'Coming Soon',
+    description: 'This feature requires additional setup and will be available shortly.',
+  },
+  'use-video-call': {
+    title: 'Use Telehealth',
+    description: 'Video sessions are available through the main Telehealth screen.',
+  },
+  'cr-sync': {
+    title: 'CentralReach Sync',
+    description: 'EHR synchronization will be available after partnership confirmation.',
+  },
   internal: {
     title: 'Internal Workflow',
     description: 'This surface is reserved for internal or pilot-only operations until the live workflow is verified.',
