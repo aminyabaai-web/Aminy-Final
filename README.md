@@ -1,13 +1,30 @@
 # Aminy
 
-Behavioral wellness platform for neurodivergent families — AI-powered coaching, telehealth, care planning, and daily routine management.
+**The AI companion for neurodivergent families. Headway for ABA.**
 
-[![CI](https://github.com/estaren/aminy/actions/workflows/ci.yml/badge.svg)](https://github.com/estaren/aminy/actions/workflows/ci.yml)
-[![E2E](https://github.com/estaren/aminy/actions/workflows/e2e-playwright.yml/badge.svg)](https://github.com/estaren/aminy/actions/workflows/e2e-playwright.yml)
+Aminy is a two-sided platform: **Bevel-style AI for families** (daily coaching, care plans, child activities) and **Headway-style practice OS for ABA providers** (credentialing, billing, RBT management, AI notes).
 
-## What is Aminy?
+## What Makes Aminy Different
 
-Aminy is a Progressive Web App that helps parents of neurodivergent children manage behavioral goals, track progress, access telehealth consultations, and get AI-powered coaching — all in one place. It also includes a provider portal for BCBAs (Board Certified Behavior Analysts) to manage caseloads and clinical reports.
+| | CentralReach | Rethink | Forta Health | **Aminy** |
+|---|---|---|---|---|
+| Family-facing AI | No | No | Limited | **Yes — Aminy AI (Claude-powered)** |
+| Child app | No | No | No | **Yes — Aminy Jr (therapeutic activities)** |
+| Bidirectional data | No | No | No | **Yes — parent ↔ provider ↔ child** |
+| Practice-in-a-box | No | No | No | **Yes — credentialing, billing, RBT mgmt** |
+| Chat-to-data pipeline | No | No | No | **Yes — Bevel 3.0-style** |
+| Patents pending | No | No | No | **5 provisionals ready** |
+
+## Platform Architecture
+
+**B2C (Families):** AI coaching, care plans, telehealth, Calm Corner, rewards, coverage navigation, community
+**B2B (Providers):** Credentialing, AI notes, CPT billing, denial management, EVV, RBT supervision, practice KPIs
+**AI Engine:** Claude-powered with 7-layer context injection, memory persistence, crisis detection, clinical translation
+
+## Demo
+
+Activate investor demo mode: `?demo=investor` or `window.__startInvestorDemo()`
+Partner branding: `?partner=aact` (AACT), `?partner=rise` (Rise Services)
 
 ## Tech Stack
 
