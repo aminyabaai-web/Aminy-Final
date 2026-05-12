@@ -253,7 +253,7 @@ export function getCurrentContext(pathname: string, userContext?: UserContext): 
   // Detect module
   let module: CurrentContext['module'] = 'dashboard';
   let moduleName = 'Dashboard';
-  let placeholder = 'Ask Aminy anything...';
+  let placeholder = 'Message Aminy AI...';
   let contextHint = "I'm here to help with anything on your mind.";
   
   if (path.includes('/jr')) {

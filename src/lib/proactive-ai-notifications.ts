@@ -210,7 +210,7 @@ export function generateRealtimeInsights(
           cadence: 'realtime',
           category: 'accuracy-alert',
           actionUrl: '/?screen=ask-aminy',
-          actionLabel: 'Ask Aminy about this',
+          actionLabel: 'Ask Aminy AI about this',
           generatedAt: new Date().toISOString(),
         });
       }

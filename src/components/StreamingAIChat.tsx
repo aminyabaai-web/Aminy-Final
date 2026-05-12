@@ -39,7 +39,7 @@ interface StreamingAIChatProps {
 
 export function StreamingAIChat({
   context,
-  placeholder = "Ask Aminy anything...",
+  placeholder = "Message Aminy AI...",
   className = "",
   onConversionPrompt,
   childId,

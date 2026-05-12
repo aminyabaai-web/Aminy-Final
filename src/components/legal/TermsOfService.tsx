@@ -292,7 +292,7 @@ export default function TermsOfService({ onBack }: TermsOfServiceProps) {
           </ul>
           <p><strong>b. AI Responses Are Informational Only.</strong></p>
           <ul className="ml-4 list-disc space-y-1">
-            <li>The Ask Aminy AI assistant and all AI-powered features provide general informational guidance only</li>
+            <li>The Aminy AI assistant and all AI-powered features provide general informational guidance only</li>
             <li>AI-generated content may contain inaccuracies, omissions, or outdated information</li>
             <li>AI responses are not reviewed by a licensed professional before delivery and should not be relied upon for clinical decisions</li>
             <li>You use AI features at your own risk and should verify any information with a qualified professional</li>

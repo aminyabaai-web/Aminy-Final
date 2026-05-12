@@ -182,7 +182,7 @@ const FEATURE_CATALOG: Array<{
 }> = [
   {
     featureId: 'ask_aminy',
-    name: 'Ask Aminy (AI Assistant)',
+    name: 'Aminy AI (Assistant)',
     category: 'ai',
     events: ['ai_chat_sent', 'ai_interaction'],
     careCompanionHasEquivalent: false,

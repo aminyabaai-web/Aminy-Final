@@ -1455,7 +1455,7 @@ export function Dashboard10({
                   value={chatInput}
                   onChange={(e) => setChatInput(e.target.value)}
                   onKeyDown={handleChatKeyDown}
-                  placeholder="Ask Aminy anything..."
+                  placeholder="Message Aminy AI..."
                   className="flex-1 px-4 py-3 text-sm rounded-xl border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:border-[#6B9080] focus:ring-2 focus:ring-[#6B9080]/20 transition-all"
                   aria-label="Chat message input"
                   disabled={isSendingChat}

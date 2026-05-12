@@ -3665,8 +3665,8 @@ export default function App() {
                     <button
                       onClick={() => navigateToScreen('ask-aminy')}
                       className="fixed bottom-20 right-4 z-40 w-14 h-14 rounded-full shadow-lg hover:shadow-xl active:scale-95 transition-all flex items-center justify-center bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] text-white"
-                      aria-label="Open Ask Aminy chat"
-                      title="Ask Aminy"
+                      aria-label="Open Aminy AI chat"
+                      title="Aminy AI"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
