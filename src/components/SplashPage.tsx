@@ -260,7 +260,7 @@ export function SplashPage({
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '8px',
-                backgroundColor: '#5a7380',
+                backgroundColor: '#6B9080',
                 color: '#FFFFFF',
                 fontFamily: fontStack,
                 fontWeight: 500,
@@ -275,13 +275,13 @@ export function SplashPage({
                 ...fontSmoothing,
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#4f6872';
+                e.currentTarget.style.backgroundColor = '#5A7D6E';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#5a7380';
+                e.currentTarget.style.backgroundColor = '#6B9080';
               }}
             >
-              Begin calmly
+              Start free
               <ArrowRight style={{ width: '15px', height: '15px', strokeWidth: 2 }} />
             </button>
           </motion.div>
