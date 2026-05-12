@@ -82,6 +82,7 @@ export const FISCAL_AGENT_GATED_SCREENS: readonly string[] = [
 export const DEV_GATED_SCREENS: readonly string[] = [
   'launch-status',
   'phase2-menu',
+  'vision-ai', // hide until document-to-data pipeline replaces it
 ] as const;
 
 export const CR_GATED_SCREENS: readonly string[] = [
