@@ -10,6 +10,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Loader2, Sparkles } from 'lucide-react';
+import { ThinkingStepsDisplay, useThinkingSteps, generateFollowUpSuggestions } from './ThinkingSteps';
 import { Button } from './ui/button';
 import { EnhancedChatInput, type Attachment } from './EnhancedChatInput';
 import {
@@ -48,8 +49,13 @@ export function StreamingAIChat({
   const [isStreaming, setIsStreaming] = useState(false);
   const [streamingContent, setStreamingContent] = useState('');
   const [isLoadingHistory, setIsLoadingHistory] = useState(true);
+  const [lastUserMessage, setLastUserMessage] = useState('');
+  const [followUpSuggestions, setFollowUpSuggestions] = useState<string[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
+
+  // Bevel-style thinking steps
+  const { steps: thinkingSteps, isExpanded: thinkingExpanded, toggleExpanded: toggleThinking } = useThinkingSteps(lastUserMessage, isStreaming);
 
   // Rate limit tracking
   const { dailyUsage, setDailyUsage, fetchUsage } = useRateLimitStore();
@@ -118,6 +124,8 @@ export function StreamingAIChat({
     setMessages(prev => [...prev, userMessage]);
     setIsStreaming(true);
     setStreamingContent('');
+    setLastUserMessage(content);
+    setFollowUpSuggestions([]); // clear old suggestions
 
     // Save user message
     await saveMessageToHistory(userId, userMessage);
@@ -188,6 +196,9 @@ export function StreamingAIChat({
             } catch {
               // Artifact detection is best-effort
             }
+
+            // Generate context-aware follow-up suggestions (Bevel-style)
+            setFollowUpSuggestions(generateFollowUpSuggestions(fullText, content));
 
             // Check if AI mentioned trial (gentle conversion)
             if (fullText.toLowerCase().includes('trial') || 
@@ -313,23 +324,39 @@ export function StreamingAIChat({
           </div>
         ))}
 
-        {/* Streaming message */}
+        {/* Streaming message — Bevel-style thinking steps */}
         {isStreaming && (
           <div className="flex justify-start">
-            <div className="max-w-[80%] rounded-2xl px-4 py-3 bg-slate-100 text-slate-900">
+            <div className="max-w-[85%] rounded-2xl px-4 py-3 bg-white border border-[#F0EDE8] shadow-sm text-[#1B2733]">
               {streamingContent ? (
                 <div className="text-sm leading-relaxed whitespace-pre-wrap">
                   {streamingContent}
-                  <span className="inline-block w-2 h-4 bg-accent/50 ml-1 animate-pulse" />
+                  <span className="inline-block w-2 h-4 bg-[#6B9080]/50 ml-1 animate-pulse" />
                 </div>
               ) : (
-                <div className="flex items-center gap-1">
-                  <div className="w-2 h-2 bg-accent rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                  <div className="w-2 h-2 bg-accent rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                  <div className="w-2 h-2 bg-accent rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
-                </div>
+                <ThinkingStepsDisplay
+                  steps={thinkingSteps}
+                  isExpanded={thinkingExpanded}
+                  onToggle={toggleThinking}
+                />
               )}
             </div>
+          </div>
+        )}
+
+        {/* Context-aware follow-up suggestions (Bevel-style) */}
+        {!isStreaming && followUpSuggestions.length > 0 && messages.length > 0 && (
+          <div className="space-y-2 pt-2">
+            {followUpSuggestions.map((suggestion, i) => (
+              <button
+                key={i}
+                onClick={() => handleSend(suggestion, [])}
+                className="w-full text-left flex items-start gap-2 px-4 py-2.5 bg-white/80 hover:bg-white active:bg-[#F0EDE8] rounded-xl border border-[#F0EDE8] transition-all text-sm text-[#5A6B7A]"
+              >
+                <span className="text-[#6B9080] mt-0.5 flex-shrink-0">&rarr;</span>
+                <span className="font-medium">{suggestion}</span>
+              </button>
+            ))}
           </div>
         )}
 
