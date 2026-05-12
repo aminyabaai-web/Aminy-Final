@@ -138,6 +138,30 @@ export function CreateAccountScreen({
   };
 
   const [socialAuthLoading, setSocialAuthLoading] = useState<'apple' | 'google' | null>(null);
+  const [magicLinkState, setMagicLinkState] = useState<'idle' | 'sending' | 'sent'>('idle');
+
+  const handleMagicLink = async () => {
+    if (!email || !email.includes('@')) {
+      setFieldError('email', 'Enter your email above to get a sign-in link.');
+      return;
+    }
+    setMagicLinkState('sending');
+    clearErrors();
+    try {
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+      if (error) throw error;
+      setMagicLinkState('sent');
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unable to send sign-in link. Please try again.';
+      setErrors({ signup: errorMessage });
+      setMagicLinkState('idle');
+    }
+  };
 
   const handleSocialAuth = async (provider: 'apple' | 'google') => {
     setSocialAuthLoading(provider);
@@ -406,6 +430,44 @@ export function CreateAccountScreen({
               {socialAuthLoading === 'google' ? 'Connecting...' : 'Google'}
             </button>
           </motion.div>
+
+          {/* Magic link CTA */}
+          <motion.button
+            type="button"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.35 }}
+            onClick={handleMagicLink}
+            disabled={isLoading || socialAuthLoading !== null || magicLinkState !== 'idle'}
+            style={{
+              width: '100%',
+              height: '42px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+              backgroundColor: 'rgba(107, 144, 128, 0.08)',
+              color: '#3F5C50',
+              fontFamily: fontStack,
+              fontWeight: 500,
+              fontSize: '13px',
+              borderRadius: '10px',
+              border: '1px solid rgba(107, 144, 128, 0.18)',
+              cursor: magicLinkState !== 'idle' ? 'default' : 'pointer',
+              marginBottom: '12px',
+              transition: 'background-color 0.2s ease',
+              ...fontSmoothing,
+            }}
+          >
+            {magicLinkState === 'sending' && (
+              <Loader2 style={{ width: '15px', height: '15px', animation: 'spin 1s linear infinite' }} />
+            )}
+            {magicLinkState === 'sent'
+              ? 'Check your email for the link'
+              : magicLinkState === 'sending'
+              ? 'Sending...'
+              : 'Email me a sign-in link — no password needed'}
+          </motion.button>
 
           {/* Divider */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>

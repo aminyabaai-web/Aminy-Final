@@ -1887,7 +1887,7 @@ export default function App() {
   }, [userData]);
 
   const handleGetStarted = () => {
-    navigateToScreen("create-account");
+    navigateToScreen("free-screening");
   };
 
   const handleLogin = () => {
@@ -2010,6 +2010,29 @@ export default function App() {
               updatedData.childName,
               updatedData.parentName
             ).catch(err => logger.error('Retention flow error', err));
+          }
+
+          // Migrate pre-signup screening results from FreeScreeningFlow
+          try {
+            const { getScreeningResults, clearLocalScreeningResults } = await import('./lib/screening-instruments');
+            const screeningResults = getScreeningResults();
+            if (screeningResults.length > 0) {
+              for (const sr of screeningResults) {
+                supabase.from('screening_results').insert({
+                  user_id: userId,
+                  instrument_id: sr.instrumentId,
+                  instrument_name: sr.instrumentName,
+                  total_score: sr.totalScore,
+                  risk_level: sr.riskLevel,
+                  answers: sr.answers,
+                  summary: sr.summary,
+                  completed_at: sr.completedAt,
+                }).then(null, (err: unknown) => logger.dev('Screening migration error', err));
+              }
+              clearLocalScreeningResults();
+            }
+          } catch (err) {
+            logger.dev('Screening migration skipped', err);
           }
         }
       } catch (error) {
