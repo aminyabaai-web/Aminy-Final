@@ -135,10 +135,10 @@ const AppBreadcrumbs = lazy(() =>
 );
 
 // OPTIMIZED LAZY LOADING - With prefetch hints
-const OnboardingStreamlined = lazy(() =>
+const AIOnboarding = lazy(() =>
   import(
-    /* webpackPrefetch: true */ "./components/OnboardingStreamlined"
-  ).then((m) => ({ default: m.OnboardingStreamlined })),
+    /* webpackPrefetch: true */ "./components/AIOnboarding"
+  ).then((m) => ({ default: m.AIOnboarding })),
 );
 const Dashboard = lazy(() =>
   import(
@@ -2262,9 +2262,14 @@ export default function App() {
         case "onboarding":
           return (
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
-              <OnboardingStreamlined
-                onComplete={handleOnboardingComplete}
-                initialEmail={userData.email || ""}
+              <AIOnboarding
+                parentName={userData.parentName || ""}
+                onComplete={(profile) =>
+                  handleOnboardingComplete({
+                    childName: profile.childName,
+                    childAge: profile.childAge ?? undefined,
+                  })
+                }
               />
             </Suspense>
           );
