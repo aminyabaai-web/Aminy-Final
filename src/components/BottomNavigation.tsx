@@ -178,9 +178,9 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
     },
     {
       id: 'document-vault',
-      label: 'Vault',
+      label: 'Records',
       icon: FolderOpen,
-      description: 'Documents and medical binder'
+      description: "Your child's medical binder"
     },
     {
       id: 'benefits',
