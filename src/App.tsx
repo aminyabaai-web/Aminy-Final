@@ -54,7 +54,7 @@ import { setSentryUser, clearSentryUser, addBreadcrumb } from "./lib/sentry";
 import { setCurrentScreenGlobal } from "./lib/screen-state";
 import { proactiveNudges } from "./lib/proactive-nudges";
 import { generateDailyPlan } from "./lib/caregiver-workflow";
-import { initAnalytics } from "./lib/analytics-engine";
+import { initAnalytics } from "./lib/analytics-engine"; // Deferred in useEffect
 import { checkAndAwardBadges } from "./lib/badge-service";
 import { initPerformanceMonitoring } from "./lib/performance-monitor";
 import { recordJuniorProgress } from "./lib/parent-junior-bridge";
