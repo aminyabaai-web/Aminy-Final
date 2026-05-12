@@ -132,7 +132,7 @@ export function AskAminyChatScreen({
                 onClick={() => onNavigate?.('vault')}
                 className="text-xs px-3 py-1.5 bg-white border border-slate-200 rounded-lg hover:border-slate-300 transition-colors"
               >
-                Upload Document
+                Upload Records
               </button>
             </div>
           </div>
