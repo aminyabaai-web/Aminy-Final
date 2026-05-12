@@ -20,8 +20,6 @@ import {
   Check,
   Download,
   MessageCircle,
-  Twitter,
-  Facebook,
   X,
   Sparkles,
   Heart,
@@ -165,9 +163,9 @@ export function ShareInsight({
                   <button
                     onClick={handleTwitterShare}
                     className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-                    title="Share on Twitter"
+                    title="Share on X"
                   >
-                    <Twitter className="w-4 h-4 text-gray-600" />
+                    <X className="w-4 h-4 text-gray-600" />
                   </button>
                   <button
                     onClick={handleWhatsAppShare}
@@ -181,7 +179,7 @@ export function ShareInsight({
                     className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
                     title="Share on Facebook"
                   >
-                    <Facebook className="w-4 h-4 text-gray-600" />
+                    <Share2 className="w-4 h-4 text-gray-600" />
                   </button>
                   <button
                     onClick={() => setShowShareMenu(false)}
@@ -299,8 +297,8 @@ export function ShareInsight({
                     onClick={handleTwitterShare}
                     className="flex flex-col items-center gap-1 p-3 hover:bg-gray-100 rounded-xl transition-colors"
                   >
-                    <Twitter className="w-6 h-6 text-blue-400" />
-                    <span className="text-xs text-gray-500">Twitter</span>
+                    <X className="w-6 h-6 text-gray-900" />
+                    <span className="text-xs text-gray-500">X</span>
                   </button>
                   <button
                     onClick={handleWhatsAppShare}
@@ -313,7 +311,7 @@ export function ShareInsight({
                     onClick={handleFacebookShare}
                     className="flex flex-col items-center gap-1 p-3 hover:bg-gray-100 rounded-xl transition-colors"
                   >
-                    <Facebook className="w-6 h-6 text-blue-600" />
+                    <Share2 className="w-6 h-6 text-blue-600" />
                     <span className="text-xs text-gray-500">Facebook</span>
                   </button>
                 </div>

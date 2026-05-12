@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Share2, Copy, Check, Download, Twitter, Facebook, Star, Trophy, Heart, Sparkles } from 'lucide-react';
+import { Share2, Copy, Check, Download, X, Star, Trophy, Heart, Sparkles } from 'lucide-react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 
@@ -145,9 +145,9 @@ export function ShareWinCard({
           variant="outline"
           size="sm"
           className="bg-white/60 dark:bg-black/20 hover:bg-sky-50 dark:hover:bg-sky-900/30"
-          aria-label="Share on Twitter"
+          aria-label="Share on X"
         >
-          <Twitter className="w-4 h-4 text-sky-500" />
+          <X className="w-4 h-4 text-gray-900" />
         </Button>
         <Button
           onClick={shareToFacebook}
@@ -156,7 +156,7 @@ export function ShareWinCard({
           className="bg-white/60 dark:bg-black/20 hover:bg-blue-50 dark:hover:bg-blue-900/30"
           aria-label="Share on Facebook"
         >
-          <Facebook className="w-4 h-4 text-blue-600" />
+          <Share2 className="w-4 h-4 text-blue-600" />
         </Button>
         <Button
           onClick={handleCopyLink}

@@ -27,8 +27,7 @@ import {
   QrCode,
   CheckCircle,
   AlertCircle,
-  Twitter,
-  Facebook,
+  X,
 } from 'lucide-react';
 import {
   type Referral,
@@ -261,14 +260,14 @@ export function ReferralDashboard({
                 onClick={handleTwitterShare}
                 className="flex flex-col items-center p-3 bg-white/10 rounded-lg hover:bg-white/20 transition-colors"
               >
-                <Twitter className="w-5 h-5 mb-1" />
-                <span className="text-xs">Twitter</span>
+                <X className="w-5 h-5 mb-1" />
+                <span className="text-xs">X</span>
               </button>
               <button
                 onClick={handleFacebookShare}
                 className="flex flex-col items-center p-3 bg-white/10 rounded-lg hover:bg-white/20 transition-colors"
               >
-                <Facebook className="w-5 h-5 mb-1" />
+                <Share2 className="w-5 h-5 mb-1" />
                 <span className="text-xs">Facebook</span>
               </button>
               <button
