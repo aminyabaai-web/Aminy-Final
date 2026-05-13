@@ -224,7 +224,7 @@ Would you like me to look at a specific part of your child's Ease data?`,
     'I\'m here to help with anything related to your family\'s journey. I can assist with:\n\n- **Behavioral strategies** — managing meltdowns, transitions, routines\n- **Communication support** — speech development, AAC tools, language tips\n- **Sensory regulation** — sensory diets, calming strategies, OT activities\n- **Insurance navigation** — appeals, authorization, coverage questions\n- **Ease insights** — understanding your child\'s calm, rewards, transition, and practice data\n- **Care planning** — goal setting, therapy coordination, home programs\n- **Caregiver wellness** — burnout, self-care, support resources\n- **School & transitions** — IEPs, inclusion, new environments\n\nWhat would be most helpful for you right now?',
   ],
   greeting: [
-    'Hi there! I\'m Ask Aminy, your family\'s AI companion. I\'m here to help with anything from behavioral strategies to insurance questions to just being a supportive listener.\n\nWhat\'s on your mind today?',
+    'Hi there! I\'m Aminy AI, your family\'s AI companion. I\'m here to help with anything from behavioral strategies to insurance questions to just being a supportive listener.\n\nWhat\'s on your mind today?',
     'Hello! Welcome back. I\'m here whenever you need support, advice, or just want to talk through something. No question is too small.\n\nHow can I help today?',
   ],
   unknown: [

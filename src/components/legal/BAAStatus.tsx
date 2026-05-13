@@ -52,7 +52,7 @@ const VENDORS: VendorBAA[] = [
   },
   {
     name: 'OpenAI',
-    role: 'AI Features (Ask Aminy)',
+    role: 'AI Features (Aminy AI)',
     baaStatus: 'unconfirmed',
     plan: 'Enterprise only — not on standard API',
     notes: 'Current plan: Standard API. OpenAI BAA only available on Enterprise tier. PHI must NOT be sent to OpenAI until Enterprise + BAA is in place. Use de-identified data for AI features.',
