@@ -294,12 +294,16 @@ export async function createOneTimePayment({
   amount, // in cents
   description,
   metadata = {},
+  successUrl,
+  cancelUrl,
 }: {
   userId: string;
   email: string;
   amount: number;
   description: string;
   metadata?: Record<string, string>;
+  successUrl?: string;
+  cancelUrl?: string;
 }): Promise<CheckoutResponse> {
   const accessToken = await getAccessToken();
 
@@ -316,8 +320,8 @@ export async function createOneTimePayment({
         amount,
         description,
         metadata,
-        successUrl: `${getOrigin()}/?screen=dashboard&payment=success`,
-        cancelUrl: `${getOrigin()}/?screen=telehealth&payment=cancelled`,
+        successUrl: successUrl ?? `${getOrigin()}/?screen=dashboard&payment=success`,
+        cancelUrl: cancelUrl ?? `${getOrigin()}/?screen=telehealth&payment=cancelled`,
       }),
     }
   );
