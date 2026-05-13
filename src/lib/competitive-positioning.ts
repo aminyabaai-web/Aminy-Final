@@ -147,7 +147,7 @@ const COMPETITIVE_ADVANTAGES: CompetitiveAdvantage[] = [
   // --- AI ---
   {
     id: 'ask_aminy_ai',
-    name: 'AI Behavioral Assistant (Ask Aminy)',
+    name: 'AI Behavioral Assistant (Aminy AI)',
     category: 'ai',
     aminyCapability:
       'Context-aware AI chat trained on ABA principles, crisis de-escalation, insurance navigation, and parent coaching. Uses RAG with user history for personalized responses.',
@@ -523,7 +523,7 @@ export function getCompetitiveAdvantages(): CompetitivePositioningSummary {
     `${unique.length} features Aminy has that CareCompanion completely lacks.`,
     `Outcome Correlation Engine is unique in the market — proves family engagement drives clinical improvement.`,
     `Estimated $${(totalBuildCost / 1_000_000).toFixed(1)}M and ${maxBuildMonths}+ months for CentralReach to build equivalent features internally.`,
-    `AI behavioral assistant (Ask Aminy) and Junior therapy games have no equivalent in any ABA family app.`,
+    `AI behavioral assistant (Aminy AI) and Junior therapy games have no equivalent in any ABA family app.`,
     `B2B clinic white-label enables immediate revenue from CentralReach's 3,000+ clinic customer base.`,
   ];
 

@@ -813,8 +813,9 @@ export async function createOneTimePayment(req: Request): Promise<Response> {
       'line_items[0][quantity]': '1',
       'success_url': successUrl,
       'cancel_url': cancelUrl,
-      ...Object.entries(metadata || {}).reduce((acc, [key, value], i) => ({
+      ...Object.entries(metadata || {}).reduce((acc, [key, value]) => ({
         ...acc,
+        [`metadata[${key}]`]: value,
         [`payment_intent_data[metadata][${key}]`]: value,
       }), {}),
     });
@@ -1015,6 +1016,28 @@ export async function handleWebhook(req: Request): Promise<Response> {
           });
           const template = emailTemplates.paymentSucceeded(customerName, amount, date);
           await sendEmail(customerEmail, template.subject, template.html, template.text);
+        }
+
+        // Mark marketplace booking as paid if this session was for one
+        if (session.metadata?.type === 'marketplace_booking' && session.metadata?.booking_id) {
+          try {
+            const { error: bookingError } = await supabase
+              .from('marketplace_bookings')
+              .update({
+                payment_status: 'paid',
+                stripe_payment_intent_id: session.payment_intent,
+                stripe_checkout_session_id: session.id,
+                paid_at: new Date().toISOString(),
+              })
+              .eq('id', session.metadata.booking_id);
+            if (bookingError) {
+              console.error('Failed to mark booking paid:', bookingError);
+            } else {
+              console.log(`Marked booking ${session.metadata.booking_id} as paid`);
+            }
+          } catch (err) {
+            console.error('Booking payment update error:', err);
+          }
         }
 
         break;

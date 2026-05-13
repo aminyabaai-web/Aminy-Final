@@ -35,6 +35,7 @@ import { supabase } from '../utils/supabase/client';
 import { toast } from 'sonner';
 import { SESSION_PRICING } from '../lib/pricing';
 import { checkEligibility, type EligibilityResult } from '../lib/benefits-service';
+import { createOneTimePayment } from '../lib/stripe-service';
 import { Shield, FileText, DollarSign } from 'lucide-react';
 
 // Types
@@ -573,9 +574,42 @@ export function ConversationalBooking({
         providerPay,
       });
 
-      if (result.success) {
-        toast.success('Session booked successfully! You will receive a confirmation email.');
-        onComplete?.({ ...state } as BookingState);
+      if (result.success && result.bookingId) {
+        // Redirect to Stripe Checkout to collect payment for the just-created booking.
+        // Webhook (checkout.session.completed) will mark payment_status='paid' once
+        // the user completes checkout.
+        try {
+          const { data: { user } } = await supabase.auth.getUser();
+          const email = user?.email;
+          if (!email) {
+            toast.error('Could not load your account email — please refresh and try again.');
+            return;
+          }
+          const origin = window.location.origin;
+          const { url } = await createOneTimePayment({
+            userId: currentUserId,
+            email,
+            amount: Math.round(price * 100), // cents
+            description: `${state.selectedProvider.title} with ${state.selectedProvider.name}`,
+            metadata: {
+              type: 'marketplace_booking',
+              booking_id: result.bookingId,
+              provider_id: state.selectedProvider.id,
+              session_type: state.visitType || 'video',
+              scheduled_at: state.selectedSlot.startTime,
+            },
+            successUrl: `${origin}/?screen=my-appointments&payment=success`,
+            cancelUrl: `${origin}/?screen=conversational-booking&payment=cancelled`,
+          });
+          if (url) {
+            window.location.href = url;
+            return;
+          }
+          toast.error('Could not start payment. Your booking is held — please contact support.');
+        } catch (payErr) {
+          console.error('Stripe checkout failed:', payErr);
+          toast.error('Payment setup failed. Your booking is held — please contact support.');
+        }
       } else {
         toast.error(result.error || 'Failed to book session. Please try again.');
       }

@@ -310,7 +310,7 @@ export default function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
 
         <Section title="13. AI Data Usage Disclosure" id="ai-data">
           <p>
-            The Platform includes an AI-powered assistant (&quot;Ask Aminy&quot;) that provides
+            The Platform includes an AI-powered assistant (&quot;Aminy AI&quot;) that provides
             informational support and guidance. By using this feature, you acknowledge the following:
           </p>
           <p><strong>a. Data Processing</strong></p>

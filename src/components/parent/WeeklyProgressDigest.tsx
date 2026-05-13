@@ -327,7 +327,7 @@ export function WeeklyProgressDigest({
             className="w-full bg-teal-600 text-white rounded-xl py-3 px-4 font-medium text-sm flex items-center justify-center gap-2"
           >
             <Sparkles size={16} />
-            Questions? Ask Aminy
+            Questions? Ask Aminy AI
           </button>
         )}
       </div>
