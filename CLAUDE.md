@@ -1,5 +1,5 @@
 # Aminy — Claude Project Instructions
-Updated: 2026-03-06
+Updated: 2026-05-12
 
 ## What is Aminy?
 Behavioral wellness PWA for neurodivergent families. React 19 + TypeScript + Vite + Tailwind CSS v4.
@@ -52,12 +52,19 @@ Behavioral wellness PWA for neurodivergent families. React 19 + TypeScript + Vit
 - All 42/42 screens verified rendering (Feb 25)
 
 ## GitHub
-- **Repo:** `edgarstaren/Aminy-Final` (private)
-- **Goal:** Transfer to `aminyabaai-web` org
-- **Branches:** `main` (stable), `claude/scorecard-push-to-9plus` (dev)
+- **Repo:** `aminyabaai-web/Aminy-Final` (private; transfer from `edgarstaren` complete)
+- **Branching:** Feature branches off `main`, opened as PRs. `main` is the only long-lived branch.
+
+## Signup Funnel (Noom-style, live as of PR #174)
+- Splash "Start free" → `FreeScreeningFlow` (pre-auth value: empathy first, validated screening, "Aminy Insights" interludes, results) → soft signup wall → `AIOnboarding` chat → first AI suggestion → dashboard.
+- Pre-signup screening data persists in `localStorage` (`aminy_screening_results`); migration to Supabase happens inside `handleOnboardingComplete` in `App.tsx`.
+- `CreateAccountScreen` offers Apple OAuth + Google OAuth + magic-link (`signInWithOtp`) alongside password signup.
+- Magic-link delivery requires Supabase Auth → URL Configuration to include `${origin}/auth/callback`.
 
 ## What Still Needs Work
+- AI/Supabase integration (Ask Aminy chat, weekly summary, booking)
+- Production cleanup: remove debug hooks (`window.__navigateToScreen`), opacity hack (`* { opacity: 1 !important }`), restore animations once motion/react WAAPI bug is fixed
 - Gradient verification on less-visited screens (settings, paywall, analytics-charts)
 - Interactive flow testing (buttons, forms, tabs, modals)
-- AI/Supabase integration (Ask Aminy chat, weekly summary, booking)
-- Production cleanup: remove debug hooks, opacity hack, restore animations
+- Branch protection on `main` (GitHub → Settings → Branches, require PR + checks)
+- Decide fate of `OnboardingStreamlined.tsx` (deprecated, kept as fallback)

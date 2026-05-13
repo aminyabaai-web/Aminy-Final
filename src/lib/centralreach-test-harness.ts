@@ -472,7 +472,7 @@ export class CRTestHarness {
 // Dev Tools Integration
 // ============================================================================
 
-if (typeof window !== 'undefined') {
+if (typeof window !== 'undefined' && import.meta.env.DEV) {
   const harness = new CRTestHarness();
   (window as unknown as Record<string, unknown>).__crTestHarness = harness;
   (window as unknown as Record<string, unknown>).__simulateCRWebhook = (

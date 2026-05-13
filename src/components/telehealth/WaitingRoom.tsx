@@ -248,13 +248,17 @@ export function WaitingRoom({
       };
     }
 
-    // Fallback: expose a global hook for testing
-    // @ts-expect-error Debug hook
-    window.__admitPatient = handleAdmit;
+    // Fallback: expose a global hook for testing (dev only)
+    if (import.meta.env.DEV) {
+      // @ts-expect-error Debug hook
+      window.__admitPatient = handleAdmit;
+    }
 
     return () => {
-      // @ts-expect-error Debug hook cleanup
-      delete window.__admitPatient;
+      if (import.meta.env.DEV) {
+        // @ts-expect-error Debug hook cleanup
+        delete window.__admitPatient;
+      }
     };
   }, [dailyCallObject, onAdmitted]);
 
