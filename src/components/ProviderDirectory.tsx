@@ -3,7 +3,8 @@
 // Unauthorized use, reproduction, or distribution is strictly prohibited.
 // See LICENSE file for details.
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { supabase } from '../utils/supabase/client';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
@@ -97,141 +98,45 @@ export function ProviderDirectory({
   const safeChildName = safeUserData.childName || childShort || 'Child';
   const safeCaregiverName = safeUserData.parentName || caregiverShort || 'Parent';
 
-  // Aminy Provider Network - Verified providers available through the platform
-  const [providers, setProviders] = useState<Provider[]>([
-    {
-      id: '1',
-      name: 'Dr. Sarah Chen, BCBA-D',
-      title: 'Clinical Director & Board Certified Behavior Analyst - Doctoral',
-      practice: 'Aminy Provider Network',
-      specialty: ['ABA Therapy', 'Autism Spectrum Disorders', 'Parent Training', 'Early Intervention'],
-      rating: 4.9,
-      reviewCount: 156,
-      distance: 'Gilbert, AZ',
-      address: 'Available via Telehealth',
-      phone: '(480) 555-0101',
-      email: 'providers@aminy.ai',
-      acceptingNew: true,
-      insuranceAccepted: ['AHCCCS/DDD', 'Blue Cross Blue Shield', 'Aetna', 'Cigna', 'UnitedHealth', 'Cash Pay'],
-      languages: ['English', 'Mandarin'],
-      availability: 'Telehealth: Mon-Fri 7AM-7PM MST',
-      experience: '15+ years',
-      approach: 'Family-centered ABA with focus on naturalistic teaching and parent empowerment. Specializes in early intervention and complex cases.',
-      isBookmarked: false,
-      badges: ['BHCOE Accredited', 'Telehealth', 'Clinical Director', 'From $149/session'],
-      verificationStatus: 'verified'
-    },
-    {
-      id: '2',
-      name: 'Marcus Johnson, BCBA',
-      title: 'Senior Board Certified Behavior Analyst',
-      practice: 'Aminy Provider Network',
-      specialty: ['ABA Therapy', 'Social Skills', 'Transition Planning', 'Teen/Adult Services'],
-      rating: 4.8,
-      reviewCount: 98,
-      distance: 'Mesa, AZ',
-      address: 'Available via Telehealth',
-      phone: '(480) 555-0102',
-      email: 'providers@aminy.ai',
-      acceptingNew: true,
-      insuranceAccepted: ['AHCCCS/DDD', 'Blue Cross Blue Shield', 'Aetna', 'Cash Pay'],
-      languages: ['English', 'Spanish'],
-      availability: 'Telehealth: Mon-Thu 8AM-6PM MST',
-      experience: '10+ years',
-      approach: 'Specializes in teens and young adults with autism. Focus on social skills, independence, and life transitions.',
-      isBookmarked: false,
-      badges: ['BHCOE Accredited', 'Telehealth', 'Teen Specialist', 'From $149/session'],
-      verificationStatus: 'verified'
-    },
-    {
-      id: '3',
-      name: 'Dr. Emily Rodriguez, BCBA-D',
-      title: 'Board Certified Behavior Analyst - Doctoral',
-      practice: 'Aminy Provider Network',
-      specialty: ['ABA Therapy', 'Speech/Communication', 'Feeding Challenges', 'Sensory Integration'],
-      rating: 4.9,
-      reviewCount: 134,
-      distance: 'Gilbert, AZ',
-      address: 'Available via Telehealth',
-      phone: '(480) 555-0103',
-      email: 'providers@aminy.ai',
-      acceptingNew: true,
-      insuranceAccepted: ['AHCCCS/DDD', 'Cigna', 'UnitedHealth', 'Cash Pay'],
-      languages: ['English', 'Spanish'],
-      availability: 'Telehealth: Tue-Sat 9AM-5PM MST',
-      experience: '12+ years',
-      approach: 'Integrates speech and language goals with ABA. Expert in feeding therapy and sensory challenges.',
-      isBookmarked: false,
-      badges: ['BHCOE Accredited', 'Telehealth', 'Feeding Specialist', 'From $149/session'],
-      verificationStatus: 'verified'
-    },
-    {
-      id: '4',
-      name: 'Ashley Thompson, RBT',
-      title: 'Registered Behavior Technician',
-      practice: 'Aminy Provider Network',
-      specialty: ['ABA Therapy', 'Play-Based Learning', 'Daily Living Skills', 'Routine Building'],
-      rating: 4.9,
-      reviewCount: 87,
-      distance: 'Mesa, AZ',
-      address: 'Available via Telehealth',
-      phone: '(480) 555-0104',
-      email: 'providers@aminy.ai',
-      acceptingNew: true,
-      insuranceAccepted: ['AHCCCS/DDD', 'Cash Pay'],
-      languages: ['English'],
-      availability: 'Telehealth: Mon-Fri 3PM-7PM MST',
-      experience: '5+ years',
-      approach: 'Energetic and creative approach. Specializes in making learning fun through play-based interventions.',
-      isBookmarked: false,
-      badges: ['BHCOE Accredited', 'Telehealth', 'Great with Kids', 'From $49/session'],
-      verificationStatus: 'verified'
-    },
-    {
-      id: '5',
-      name: 'David Park, BCBA',
-      title: 'Board Certified Behavior Analyst',
-      practice: 'Aminy Provider Network',
-      specialty: ['ABA Therapy', 'Challenging Behaviors', 'Crisis Prevention', 'School Consultation'],
-      rating: 4.8,
-      reviewCount: 112,
-      distance: 'Gilbert, AZ',
-      address: 'Available via Telehealth',
-      phone: '(480) 555-0105',
-      email: 'providers@aminy.ai',
-      acceptingNew: true,
-      insuranceAccepted: ['AHCCCS/DDD', 'Blue Cross Blue Shield', 'Aetna', 'Cash Pay'],
-      languages: ['English', 'Korean'],
-      availability: 'Telehealth: Mon-Fri 8AM-4PM MST',
-      experience: '8+ years',
-      approach: 'Expert in functional behavior assessments and behavior intervention plans. Works closely with schools.',
-      isBookmarked: false,
-      badges: ['BHCOE Accredited', 'Telehealth', 'Behavior Specialist', 'From $149/session'],
-      verificationStatus: 'verified'
-    },
-    {
-      id: '6',
-      name: 'Jennifer Martinez, RBT',
-      title: 'Registered Behavior Technician',
-      practice: 'Aminy Provider Network',
-      specialty: ['ABA Therapy', 'Early Childhood', 'Communication', 'Parent Coaching'],
-      rating: 4.9,
-      reviewCount: 76,
-      distance: 'Mesa, AZ',
-      address: 'Available via Telehealth',
-      phone: '(480) 555-0106',
-      email: 'providers@aminy.ai',
-      acceptingNew: true,
-      insuranceAccepted: ['AHCCCS/DDD', 'Cash Pay'],
-      languages: ['English', 'Spanish'],
-      availability: 'Telehealth: Mon-Wed-Fri 9AM-3PM MST',
-      experience: '4+ years',
-      approach: 'Bilingual specialist focusing on early learners. Strong emphasis on parent coaching and home strategies.',
-      isBookmarked: false,
-      badges: ['BHCOE Accredited', 'Telehealth', 'Bilingual', 'From $49/session'],
-      verificationStatus: 'pending'
-    }
-  ]);
+  const [providers, setProviders] = useState<Provider[]>([]);
+  const [providersLoading, setProvidersLoading] = useState(true);
+
+  useEffect(() => {
+    supabase
+      .from('providers')
+      .select('id, name, credentials, specialty, rating, review_count, accepting_new_patients, languages, bio, hourly_rate, photo')
+      .eq('accepting_new_patients', true)
+      .order('rating', { ascending: false })
+      .limit(20)
+      .then(({ data, error }) => {
+        if (!error && data && data.length > 0) {
+          setProviders(data.map(p => ({
+            id: p.id,
+            name: `${p.name}, ${p.credentials}`,
+            title: p.credentials,
+            practice: 'Aminy Provider Network',
+            specialty: p.specialty ? [p.specialty] : ['ABA Therapy'],
+            rating: p.rating || 5.0,
+            reviewCount: p.review_count || 0,
+            distance: 'Telehealth',
+            address: 'Available via Telehealth',
+            phone: '',
+            email: 'providers@aminy.ai',
+            acceptingNew: p.accepting_new_patients ?? true,
+            insuranceAccepted: ['AHCCCS/DDD', 'Cash Pay'],
+            languages: p.languages || ['English'],
+            availability: 'Telehealth',
+            experience: '',
+            approach: p.bio || '',
+            isBookmarked: false,
+            badges: ['Telehealth', p.hourly_rate ? `From $${Math.round(p.hourly_rate / 100)}/session` : ''],
+            verificationStatus: 'verified' as const,
+          })));
+        }
+        setProvidersLoading(false);
+      });
+  }, []);
+
 
   const filteredProviders = providers.filter(provider => {
     const matchesSearch = searchQuery === '' || 
@@ -614,14 +519,20 @@ export function ProviderDirectory({
           <Card className="p-8 text-center">
             <Users className="w-12 h-12 text-slate-400 mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-2">
-              No providers found
+              {providersLoading ? 'Loading providers…' : providers.length === 0 ? 'No providers available yet' : 'No providers found'}
             </h3>
             <p className="text-slate-600 dark:text-slate-400 mb-4">
-              Try adjusting your search criteria or filters to find more providers.
+              {providersLoading
+                ? 'Finding providers in your area.'
+                : providers.length === 0
+                ? 'Our provider network is growing. Check back soon or contact support to be matched with a BCBA.'
+                : 'Try adjusting your search criteria or filters to find more providers.'}
             </p>
-            <Button onClick={() => { setSearchQuery(''); setSelectedFilter('all'); }}>
-              Clear Filters
-            </Button>
+            {!providersLoading && providers.length > 0 && (
+              <Button onClick={() => { setSearchQuery(''); setSelectedFilter('all'); }}>
+                Clear Filters
+              </Button>
+            )}
           </Card>
         )}
 

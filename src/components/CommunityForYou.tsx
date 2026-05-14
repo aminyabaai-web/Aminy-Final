@@ -342,11 +342,11 @@ export function CommunityForYou({
   const [likedSpotlights, setLikedSpotlights] = useState<Set<string>>(new Set());
   const [remindedQA, setRemindedQA] = useState<Set<string>>(new Set());
 
-  // Live data state (falls back to mocks)
-  const [liveGroups, setLiveGroups] = useState<LocalGroup[]>(MOCK_LOCAL_GROUPS);
-  const [liveEvents, setLiveEvents] = useState<VirtualEvent[]>(MOCK_EVENTS);
-  const [liveSpotlights, setLiveSpotlights] = useState<ParentSpotlight[]>(MOCK_SPOTLIGHTS);
-  const [liveQASessions, setLiveQASessions] = useState<BCBAQASession[]>(MOCK_QA_SESSIONS);
+  // Live data state — empty until Supabase responds
+  const [liveGroups, setLiveGroups] = useState<LocalGroup[]>([]);
+  const [liveEvents, setLiveEvents] = useState<VirtualEvent[]>([]);
+  const [liveSpotlights, setLiveSpotlights] = useState<ParentSpotlight[]>([]);
+  const [liveQASessions, setLiveQASessions] = useState<BCBAQASession[]>([]);
   const [dataLoading, setDataLoading] = useState(true);
 
   // Fetch community data from Supabase on mount, fall back to mocks
@@ -370,8 +370,6 @@ export function CommunityForYou({
             isVirtual: g.is_virtual ?? true,
             nextMeeting: g.next_meeting ? new Date(g.next_meeting) : undefined,
           })));
-        } else {
-          console.warn('CommunityForYou: Using mock groups data', groupsErr);
         }
 
         // Fetch upcoming events
@@ -395,8 +393,6 @@ export function CommunityForYou({
             topics: e.topics || [],
             isRegistered: e.is_registered ?? false,
           })));
-        } else {
-          console.warn('CommunityForYou: Using mock events data', eventsErr);
         }
 
         // Fetch parent spotlights
@@ -417,8 +413,6 @@ export function CommunityForYou({
             likes: s.like_count || 0,
             comments: s.comment_count || 0,
           })));
-        } else {
-          console.warn('CommunityForYou: Using mock spotlights data', spotlightsErr);
         }
 
         // Fetch BCBA Q&A sessions
@@ -440,12 +434,9 @@ export function CommunityForYou({
             isLive: q.is_live ?? false,
             isUpcoming: new Date(q.date) > now,
           })));
-        } else {
-          console.warn('CommunityForYou: Using mock Q&A sessions data', qaErr);
         }
-      } catch (err) {
-        console.warn('CommunityForYou: Supabase fetch failed, using all mock data', err);
-        // All mocks are already the initial values, no need to reset
+      } catch {
+        // Leave all arrays empty — empty states render below
       } finally {
         setDataLoading(false);
       }
@@ -702,6 +693,12 @@ export function CommunityForYou({
         </div>
       </div>
 
+      {localGroups.length === 0 && !dataLoading && (
+        <div className="text-center py-8 text-gray-400">
+          <p className="text-sm font-medium">No local groups yet</p>
+          <p className="text-xs mt-1">We're building your community — check back soon.</p>
+        </div>
+      )}
       {localGroups.map((group) => (
         <Card key={group.id} className="p-4 hover:shadow-md transition-shadow">
           <div className="flex items-start justify-between gap-3">
@@ -764,6 +761,12 @@ export function CommunityForYou({
         </Button>
       </div>
 
+      {liveEvents.length === 0 && !dataLoading && (
+        <div className="text-center py-8 text-gray-400">
+          <p className="text-sm font-medium">No upcoming events</p>
+          <p className="text-xs mt-1">Live BCBA webinars and workshops are coming soon.</p>
+        </div>
+      )}
       {liveEvents.map((event) => (
         <Card key={event.id} className="p-4 hover:shadow-md transition-shadow">
           <div className="flex items-start justify-between gap-3 mb-3">
@@ -844,6 +847,12 @@ export function CommunityForYou({
         Real wins from parents like you. Get inspired by their journeys.
       </p>
 
+      {liveSpotlights.length === 0 && !dataLoading && (
+        <div className="text-center py-8 text-gray-400">
+          <p className="text-sm font-medium">No spotlights yet</p>
+          <p className="text-xs mt-1">Parent success stories will appear here as our community grows.</p>
+        </div>
+      )}
       {liveSpotlights.map((spotlight) => (
         <Card key={spotlight.id} className="p-4 hover:shadow-md transition-shadow bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/10 dark:to-orange-900/10 border-amber-200 dark:border-amber-800">
           <div className="flex items-start gap-3 mb-3">
@@ -928,6 +937,12 @@ export function CommunityForYou({
         Free live sessions with certified BCBAs. Ask your questions, get expert answers.
       </p>
 
+      {liveQASessions.length === 0 && !dataLoading && (
+        <div className="text-center py-8 text-gray-400">
+          <p className="text-sm font-medium">No Q&A sessions scheduled</p>
+          <p className="text-xs mt-1">Live BCBA Q&A sessions are coming. You'll be notified when one is booked.</p>
+        </div>
+      )}
       {liveQASessions.map((session) => (
         <Card key={session.id} className="p-4 hover:shadow-md transition-shadow border-purple-200 dark:border-purple-800">
           <div className="flex items-start justify-between gap-3 mb-3">
