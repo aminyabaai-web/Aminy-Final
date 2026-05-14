@@ -231,9 +231,9 @@ const PaymentConfirmation = lazy(() =>
     default: m.PaymentConfirmation,
   })),
 );
-const PersistentAskAminyFAB = lazy(() =>
-  import("./components/PersistentAskAminyFAB").then((m) => ({
-    default: m.PersistentAskAminyFAB,
+const BevelChatOverlay = lazy(() =>
+  import("./components/BevelChatOverlay").then((m) => ({
+    default: m.BevelChatOverlay,
   })),
 );
 const UrgentHelpModal = lazy(() =>
@@ -1265,6 +1265,7 @@ export default function App() {
   }, [currentScreen]);
 
   const [userData, setUserData] = useState<UserData>(getInitialUserData);
+  const [bevelChatOpen, setBevelChatOpen] = useState(false);
   const showDesktopAppShell = userData.hasCompletedOnboarding && !CHROMELESS_SCREENS.has(currentScreen);
   const pilotAccessContext = buildPilotAccessContext({
     state: userData.state,
@@ -2129,14 +2130,6 @@ export default function App() {
     }
   };
 
-  // Show FAB on feature screens (but NOT on Dashboard since it has its own integrated chat)
-  // Also NOT on Junior - kids don't need Ask Aminy
-  const showFAB =
-    currentScreen === "benefits" ||
-    currentScreen === "telehealth" ||
-    currentScreen === "caregivers" ||
-    currentScreen === "vault";
-
   // Determine if screen should have swipe navigation
   // Exclude public/standalone pages that need native scrolling
   const shouldEnableSwipe =
@@ -2313,9 +2306,9 @@ export default function App() {
                     handlePaywallTrigger();
                     return;
                   }
-                  // Handle AI center button — navigate to the full-page chat screen
+                  // Handle AI center button — open Bevel-style overlay (not full-page navigate)
                   if (destination === "ask-aminy") {
-                    navigateToScreen("ask-aminy");
+                    setBevelChatOpen(true);
                     return;
                   }
                   // Map nav IDs to screen IDs (bottom nav / More menu aliases)
@@ -3688,34 +3681,16 @@ export default function App() {
                     </div>
                   </div>
 
-                  {/* Aminy AI quick-access FAB — hidden on screens with bottom nav (center tab handles it) and on the chat itself */}
-                  {showFAB && currentScreen !== 'ask-aminy' && currentScreen !== 'dashboard' && currentScreen !== 'junior' && currentScreen !== 'care-plan' && currentScreen !== 'telehealth' && (
-                    <button
-                      onClick={() => navigateToScreen('ask-aminy')}
-                      className="fixed bottom-20 right-4 z-40 w-14 h-14 rounded-full shadow-lg hover:shadow-xl active:scale-95 transition-all flex items-center justify-center bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] text-white"
-                      aria-label="Open Aminy AI chat"
-                      title="Aminy AI"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M12 3a6 6 0 0 0-6 6c0 1.5.4 2.8 1.1 4L6 16l3-1.1c1.2.7 2.5 1.1 4 1.1a6 6 0 0 0 0-12z" />
-                        <circle cx="12" cy="9" r="1" fill="currentColor" />
-                      </svg>
-                      {userData.tier === 'free' && messagesLeft !== undefined && messagesLeft > 0 && (
-                        <span className="absolute -top-1 -right-1 bg-white text-[#43AA8B] text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center border-2 border-[#43AA8B]">
-                          {messagesLeft}
-                        </span>
-                      )}
-                    </button>
+                  {/* Bevel-style AI chat overlay — triggered by center nav tab */}
+                  {userData.id && (
+                    <Suspense fallback={null}>
+                      <BevelChatOverlay
+                        isOpen={bevelChatOpen}
+                        onClose={() => setBevelChatOpen(false)}
+                        userId={userData.id}
+                        currentPath={currentScreen}
+                      />
+                    </Suspense>
                   )}
 
                   {/* Investor demo mode overlay — activate with ?demo=investor */}
