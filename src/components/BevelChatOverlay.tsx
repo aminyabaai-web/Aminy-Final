@@ -30,11 +30,12 @@ interface BevelChatOverlayProps {
   onClose: () => void;
   userId: string;
   currentPath: string;
+  childName?: string;
 }
 
 // Generate contextual follow-up chips based on screen and child's context
-function getFollowUpChips(context: UserContext | null, currentPath: string): string[] {
-  const name = context?.childName || 'your child';
+function getFollowUpChips(context: UserContext | null, currentPath: string, fallbackName?: string): string[] {
+  const name = context?.childName || fallbackName || 'your child';
 
   if (currentPath.includes('session') || currentPath.includes('appointment')) {
     return [
@@ -74,8 +75,8 @@ function getFollowUpChips(context: UserContext | null, currentPath: string): str
 }
 
 // Build the proactive opening prompt
-function buildProactivePrompt(context: UserContext | null, currentContext: CurrentContext | null): string {
-  const name = context?.childName || 'your child';
+function buildProactivePrompt(context: UserContext | null, currentContext: CurrentContext | null, fallbackName?: string): string {
+  const name = context?.childName || fallbackName || 'your child';
   const screen = currentContext?.moduleName || 'the app';
   const struggles = context?.strugglingWith?.join(', ') || null;
   const wins = context?.celebratingWins?.join(', ') || null;
@@ -98,7 +99,8 @@ export function BevelChatOverlay({
   isOpen,
   onClose,
   userId,
-  currentPath
+  currentPath,
+  childName: propChildName
 }: BevelChatOverlayProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -153,7 +155,7 @@ export function BevelChatOverlay({
   ) => {
     setIsProactiveLoading(true);
     try {
-      const proactivePrompt = buildProactivePrompt(context, current);
+      const proactivePrompt = buildProactivePrompt(context, current, propChildName);
       const response = await fetch(
         `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/ai/brain`,
         {
@@ -178,18 +180,18 @@ export function BevelChatOverlay({
         role: 'assistant',
         content: data.message || data.response || 'Hi! Ready to support you today.',
         timestamp: new Date(),
-        chips: getFollowUpChips(context, currentPath)
+        chips: getFollowUpChips(context, currentPath, propChildName)
       };
       setMessages([openingMessage]);
     } catch {
       // Graceful fallback — still show chips even if AI call fails
-      const name = context?.childName || 'your child';
+      const name = context?.childName || propChildName || 'your child';
       const fallback: Message = {
         id: 'proactive-fallback',
         role: 'assistant',
         content: `👋 Ready to help with ${name}'s treatment journey. What's on your mind today?`,
         timestamp: new Date(),
-        chips: getFollowUpChips(context, currentPath)
+        chips: getFollowUpChips(context, currentPath, propChildName)
       };
       setMessages([fallback]);
     } finally {
@@ -261,7 +263,7 @@ RESPONSE RULES:
         role: 'assistant',
         content: aiText,
         timestamp: new Date(),
-        chips: getFollowUpChips(userContext, currentPath)
+        chips: getFollowUpChips(userContext, currentPath, propChildName)
       };
       setMessages(prev => [...prev, aiMsg]);
 

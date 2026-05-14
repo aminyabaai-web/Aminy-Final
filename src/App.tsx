@@ -3689,6 +3689,7 @@ export default function App() {
                         onClose={() => setBevelChatOpen(false)}
                         userId={userData.id}
                         currentPath={currentScreen}
+                        childName={userData.childName || undefined}
                       />
                     </Suspense>
                   )}
