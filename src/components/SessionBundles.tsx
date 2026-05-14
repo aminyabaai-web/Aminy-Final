@@ -67,8 +67,13 @@ export function SessionBundles({
       if (onPurchaseBundle) {
         await onPurchaseBundle(bundle);
       } else {
-        // Get user email from localStorage or context
-        const userEmail = localStorage.getItem('user_email') || 'user@example.com';
+        // Get user email — require real email, never use placeholder
+        const userEmail = localStorage.getItem('user_email') || localStorage.getItem('user-email');
+        if (!userEmail) {
+          toast.error('Unable to retrieve your email. Please sign out and sign back in.');
+          setPurchasingBundle(null);
+          return;
+        }
 
         // Use the centralized Stripe service
         const { url } = await createBundleCheckoutSession({

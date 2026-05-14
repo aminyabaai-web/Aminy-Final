@@ -67,6 +67,7 @@ import {
   syncAppointmentToCalendar,
 } from '../../lib/google-calendar-sync';
 import { supabase } from '../../utils/supabase/client';
+import { toast } from 'sonner';
 
 interface AppointmentConfirmationProps {
   provider: Provider;
@@ -197,8 +198,14 @@ export function AppointmentConfirmationScreen({
     try {
       // Get real user data from Supabase auth
       const { data: { user } } = await supabase.auth.getUser();
-      const userId = user?.id || localStorage.getItem('user-id') || 'user-temp';
-      const userEmail = user?.email || localStorage.getItem('user-email') || 'user@example.com';
+      const userId = user?.id || localStorage.getItem('user-id');
+      const userEmail = user?.email || localStorage.getItem('user-email');
+
+      if (!userId || !userEmail) {
+        toast.error('Session expired. Please sign out and sign back in to book.');
+        setIsProcessing(false);
+        return;
+      }
 
       // Store pending appointment info for after payment
       const pendingAppointment = {

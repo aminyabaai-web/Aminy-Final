@@ -287,9 +287,27 @@ const ShareModal: React.FC<ShareModalProps> = ({ record, isOpen, onClose, userTi
   const [hasWatermark, setHasWatermark] = useState(true);
   const [audienceLabel, setAudienceLabel] = useState('');
 
-  const generateShareLink = () => {
-    const mockLink = `https://aminy.ai/shared/${record.id}?key=abc123`;
-    setShareLink(mockLink);
+  const generateShareLink = async () => {
+    const expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDate() + parseInt(expiresIn, 10));
+
+    const { data, error } = await supabase
+      .from('vault_share_links')
+      .insert({
+        document_id: record.id,
+        expires_at: expiresAt.toISOString(),
+        passcode: hasPasscode ? crypto.randomUUID().slice(0, 8) : null,
+      })
+      .select('id')
+      .single();
+
+    if (error || !data) {
+      toast.error('Could not create share link. Please try again.');
+      return;
+    }
+
+    const link = `${window.location.origin}/shared/${data.id}`;
+    setShareLink(link);
     toast.success('Secure share link created • Expires in ' + expiresIn + ' days');
   };
 

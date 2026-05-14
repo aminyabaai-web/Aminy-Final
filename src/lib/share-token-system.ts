@@ -3,12 +3,7 @@
 // Unauthorized use, reproduction, or distribution is strictly prohibited.
 // See LICENSE file for details.
 
-/**
- * Share Token System
- *
- * Manages shareable content tokens for non-authenticated viewers.
- * Supports weekly snapshots, plan summaries, and streak cards.
- */
+import { supabase } from '../utils/supabase/client';
 
 export interface ShareToken {
   id: string;
@@ -35,27 +30,58 @@ export async function getSharedContent(token: string): Promise<{
   shareToken?: ShareToken;
   error?: string;
 }> {
-  // TODO: Implement real API call to fetch shared content by token
-  // For now, return a placeholder response
   if (!token) {
     return { success: false, error: 'No token provided' };
   }
+
+  const { data: link, error } = await supabase
+    .from('vault_share_links')
+    .select(`
+      id,
+      expires_at,
+      created_at,
+      vault_documents (
+        id,
+        file_name,
+        file_type,
+        category,
+        user_id,
+        profiles:user_id (
+          first_name,
+          child_name
+        )
+      )
+    `)
+    .eq('id', token)
+    .single();
+
+  if (error || !link) {
+    return { success: false, error: 'Link not found or expired' };
+  }
+
+  if (link.expires_at && new Date(link.expires_at) < new Date()) {
+    return { success: false, error: 'This link has expired' };
+  }
+
+  const doc = link.vault_documents as Record<string, unknown> | null;
+  const profile = doc?.profiles as Record<string, string> | null;
+
   return {
     success: true,
     content: {
       type: 'weekly_snapshot',
-      data: {},
-      createdAt: new Date().toISOString(),
+      data: doc || {},
+      createdAt: link.created_at,
     },
     shareToken: {
-      id: token,
+      id: link.id,
       token,
-      contentType: 'weekly_snapshot',
-      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-      createdAt: new Date().toISOString(),
+      contentType: doc?.file_type as string || 'document',
+      expiresAt: link.expires_at || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+      createdAt: link.created_at,
       metadata: {
-        parentFirstName: 'Parent',
-        childFirstName: 'Child',
+        parentFirstName: profile?.first_name || '',
+        childFirstName: profile?.child_name || '',
       },
     },
   };
