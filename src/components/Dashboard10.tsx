@@ -406,7 +406,7 @@ export function Dashboard10({
   const upcomingEvents: UpcomingEvent[] = safeUpcomingEvents.length > 0
     ? safeUpcomingEvents
     : [
-        { id: '1', title: 'Check expert care availability', time: 'Limited launch support', type: 'telehealth' as const },
+        { id: '1', title: 'Book your first expert session', time: 'Free consultation available', type: 'telehealth' as const },
       ];
 
   // Build routines from real data or use defaults
@@ -978,7 +978,7 @@ export function Dashboard10({
                 className="rounded-full bg-[#6B9080] text-white hover:bg-[#5A7D6E]"
                 onClick={() => onNavigate?.('care-plan')}
               >
-                See my plan
+                My treatment plan
               </Button>
               <Button
                 size="sm"
@@ -986,7 +986,7 @@ export function Dashboard10({
                 className="rounded-full border-slate-200 bg-white text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
                 onClick={() => onNavigate?.('calm-tools')}
               >
-                Open Calm Corner
+                Calm Corner
               </Button>
             </div>
           </div>
@@ -1079,7 +1079,7 @@ export function Dashboard10({
             <div className="flex items-center justify-between mb-4">
               <h2 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                 {currentRoutine.icon}
-                {currentRoutine.label} Routine
+                {currentRoutine.label}
               </h2>
               <span className="text-sm text-gray-500 dark:text-gray-400">
                 {completedTasks}/{totalTasks} complete
