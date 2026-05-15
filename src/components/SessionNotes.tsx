@@ -18,6 +18,7 @@
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
+import { AISparkleButton } from './AISparkleButton';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
@@ -318,7 +319,10 @@ export function SessionNotes({
         <div className="p-6 border-b border-neutral-100 sticky top-0 bg-white z-10">
           <div className="flex items-start justify-between">
             <div>
-              <h2 className="text-lg font-semibold text-neutral-900">Session Notes</h2>
+              <div className="flex items-center gap-2 flex-wrap">
+                <h2 className="text-lg font-semibold text-neutral-900">Session Notes</h2>
+                <AISparkleButton prompt={`Based on this session with ${patientName} (${sessionType}), what are the most important things for the family to follow up on at home?`} label="Summarize for family" />
+              </div>
               <p className="text-sm text-neutral-500 mt-1">
                 <User className="w-3.5 h-3.5 inline mr-1" />
                 {patientName} • {sessionType}

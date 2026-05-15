@@ -14,6 +14,7 @@
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
+import { AISparkleButton } from './AISparkleButton';
 import {
   getCareTeam,
   addTeamMember,
@@ -106,10 +107,16 @@ export default function CareTeamView() {
     <div style={{ minHeight: '100vh', backgroundColor: '#f8f9fa', padding: '16px' }}>
       {/* Header */}
       <div style={{ marginBottom: '16px' }}>
-        <h1 style={{ fontSize: '22px', fontWeight: 700, color: '#0D1B2A', margin: '0 0 4px 0' }}>
-          Care Team
-        </h1>
-        <p style={{ fontSize: '14px', color: '#577590', margin: 0 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+          <h1 style={{ fontSize: '22px', fontWeight: 700, color: '#0D1B2A', margin: 0 }}>
+            Care Team
+          </h1>
+          <AISparkleButton
+            prompt={selectedChild ? `Tell me about ${selectedChild.name}'s care team — how can I get the most out of their providers?` : "How do I build and manage an effective ABA care team?"}
+            label="Ask Aminy"
+          />
+        </div>
+        <p style={{ fontSize: '14px', color: '#577590', margin: '4px 0 0 0' }}>
           {selectedChild ? `${selectedChild.name}'s providers` : 'Your child\'s provider network'}
         </p>
       </div>

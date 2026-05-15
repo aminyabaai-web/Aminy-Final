@@ -13,6 +13,7 @@
  */
 
 import React, { useState, useEffect, useMemo } from 'react';
+import { AISparkleButton } from './AISparkleButton';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
@@ -389,10 +390,13 @@ export function HomeProgramTracker({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-semibold text-neutral-900 dark:text-white flex items-center gap-2">
-            <Home className="w-5 h-5 text-teal-600" />
-            Home Program
-          </h2>
+          <div className="flex items-center gap-2 flex-wrap">
+            <h2 className="text-xl font-semibold text-neutral-900 dark:text-white flex items-center gap-2">
+              <Home className="w-5 h-5 text-teal-600" />
+              Home Program
+            </h2>
+            <AISparkleButton prompt={`How do I make the most of ${childName}'s home program activities? Any tips for practice between ABA sessions?`} label="Ask Aminy" />
+          </div>
           <p className="text-neutral-500 dark:text-neutral-400 text-sm mt-1">
             Practice activities for {childName}
           </p>

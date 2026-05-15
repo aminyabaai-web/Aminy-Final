@@ -4,6 +4,7 @@
 // See LICENSE file for details.
 
 import React, { useState, useEffect } from 'react';
+import { AISparkleButton } from './AISparkleButton';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
@@ -582,6 +583,7 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
                 <h1 className="text-lg sm:text-xl font-semibold">Records Vault</h1>
                 <h2 className="sr-only">Records overview</h2>
                 <h3 className="sr-only">Documents, uploads, and sharing controls</h3>
+                <AISparkleButton prompt="What documents should every ABA family keep organized, and how should I use the records vault effectively?" label="Ask Aminy" />
                 <Badge variant="outline" className="text-xs">
                   <Shield className="w-3 h-3 mr-1" />
                   PHI encrypted

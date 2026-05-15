@@ -16,6 +16,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { AISparkleButton } from './AISparkleButton';
 import { supabase } from '../utils/supabase/client';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
@@ -286,7 +287,10 @@ export function OutcomesTracking({
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Progress & Outcomes</h2>
+            <div className="flex items-center gap-2 flex-wrap">
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Progress & Outcomes</h2>
+              <AISparkleButton prompt="Analyze our progress and outcomes — what patterns do you see and what should we focus on next?" label="Analyze" />
+            </div>
             <p className="text-gray-600">See how far you've come together</p>
           </div>
           <div className="flex gap-2">

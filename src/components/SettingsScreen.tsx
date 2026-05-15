@@ -85,6 +85,13 @@ import {
   getCalendarIntegration,
   type CalendarIntegration,
 } from '../lib/google-calendar-sync';
+import {
+  AI_PERSONALITIES,
+  loadAISettings,
+  saveAISettings,
+  type AIPersonality,
+} from '../lib/ai-personality';
+import { fetchUserContext, updateUserContext, type UserContext } from '../ai/contextLayer';
 
 interface SettingsScreenProps {
   onBack?: () => void;
@@ -169,6 +176,47 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
   const [calendarIntegration, setCalendarIntegration] = useState<CalendarIntegration | null>(null);
   const [calendarSyncing, setCalendarSyncing] = useState(false);
   const [calendarConnecting, setCalendarConnecting] = useState(false);
+  const [selectedPersonality, setSelectedPersonality] = useState<AIPersonality>(() => loadAISettings().personality);
+  const [aiMemory, setAiMemory] = useState<UserContext | null>(null);
+  const [aiMemoryLoading, setAiMemoryLoading] = useState(false);
+  const [aiMemoryExpanded, setAiMemoryExpanded] = useState(false);
+
+  const handlePersonalityChange = (p: AIPersonality) => {
+    setSelectedPersonality(p);
+    const current = loadAISettings();
+    saveAISettings({ ...current, personality: p });
+    toast.success(`${AI_PERSONALITIES[p].emoji} ${AI_PERSONALITIES[p].name} mode activated`);
+  };
+
+  const loadAIMemory = async () => {
+    if (aiMemory) return;
+    setAiMemoryLoading(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+      const ctx = await fetchUserContext(user.id);
+      setAiMemory(ctx);
+    } catch { /* ignore */ }
+    finally { setAiMemoryLoading(false); }
+  };
+
+  const clearAIMemory = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+      await updateUserContext(user.id, {
+        lastCalmCue: undefined,
+        strugglingWith: [],
+        celebratingWins: [],
+        bestTimeOfDay: undefined,
+        lastJrSession: undefined,
+        lastShopPurchase: undefined,
+        lastHubPost: undefined,
+      });
+      setAiMemory(prev => prev ? { ...prev, lastCalmCue: undefined, strugglingWith: [], celebratingWins: [] } : prev);
+      toast.success('AI memory cleared');
+    } catch { toast.error('Could not clear memory'); }
+  };
 
   // Load settings
   useEffect(() => {
@@ -591,6 +639,153 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
             </div>
             <ChevronRight aria-hidden="true" className="w-5 h-5 text-gray-400 group-hover:text-teal-500 transition-colors" />
           </button>
+        </Card>
+
+        {/* AI Personality Card */}
+        <Card className="p-4">
+          <div className="flex items-center gap-3 mb-4">
+            <div
+              className="w-10 h-10 rounded-full flex items-center justify-center text-lg shrink-0"
+              style={{ background: 'linear-gradient(135deg, #43AA8B 0%, #577590 100%)' }}
+            >
+              ✦
+            </div>
+            <div>
+              <p className="font-semibold dark:text-white">Aminy AI Personality</p>
+              <p className="text-sm text-muted-foreground">Choose how Aminy talks with you</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-2">
+            {(Object.values(AI_PERSONALITIES) as typeof AI_PERSONALITIES[AIPersonality][]).map((p) => {
+              const isActive = selectedPersonality === p.id;
+              return (
+                <button
+                  key={p.id}
+                  onClick={() => handlePersonalityChange(p.id)}
+                  className={`relative flex flex-col gap-1 p-3 rounded-xl border-2 text-left transition-all ${
+                    isActive
+                      ? 'border-[#43AA8B] bg-[#43AA8B]/5'
+                      : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
+                  }`}
+                >
+                  {isActive && (
+                    <span className="absolute top-2 right-2 w-4 h-4 rounded-full bg-[#43AA8B] flex items-center justify-center">
+                      <Check className="w-2.5 h-2.5 text-white" strokeWidth={3} />
+                    </span>
+                  )}
+                  <span className="text-xl">{p.emoji}</span>
+                  <span className="text-sm font-semibold dark:text-white">{p.name}</span>
+                  <span className="text-xs text-muted-foreground leading-snug">{p.tagline}</span>
+                </button>
+              );
+            })}
+          </div>
+          {selectedPersonality && (
+            <p className="mt-3 text-xs text-slate-500 dark:text-slate-400 text-center">
+              {AI_PERSONALITIES[selectedPersonality].description}
+            </p>
+          )}
+        </Card>
+
+        {/* What Aminy Knows Card */}
+        <Card className="p-4">
+          <button
+            className="w-full flex items-center justify-between"
+            onClick={() => {
+              setAiMemoryExpanded(!aiMemoryExpanded);
+              if (!aiMemoryExpanded && !aiMemory) loadAIMemory();
+            }}
+          >
+            <div className="flex items-center gap-3">
+              <div
+                className="w-10 h-10 rounded-full flex items-center justify-center text-white text-base shrink-0"
+                style={{ background: 'linear-gradient(135deg, #577590 0%, #0D1B2A 100%)' }}
+              >
+                🧠
+              </div>
+              <div className="text-left">
+                <p className="font-semibold dark:text-white">What Aminy Knows</p>
+                <p className="text-sm text-muted-foreground">
+                  {aiMemory?.childName ? `${aiMemory.childName}'s AI memory` : 'View your AI context'}
+                </p>
+              </div>
+            </div>
+            <ChevronRight
+              aria-hidden="true"
+              className={`w-5 h-5 text-gray-400 transition-transform ${aiMemoryExpanded ? 'rotate-90' : ''}`}
+            />
+          </button>
+
+          {aiMemoryExpanded && (
+            <div className="mt-4 space-y-3">
+              {aiMemoryLoading && (
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Loading memory…
+                </div>
+              )}
+              {aiMemory && !aiMemoryLoading && (
+                <>
+                  {aiMemory.childName && (
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-medium text-slate-500 w-24 shrink-0">Child</span>
+                      <span className="text-sm dark:text-white">{aiMemory.childName}{aiMemory.childAge ? `, age ${aiMemory.childAge}` : ''}{aiMemory.diagnosis ? ` · ${aiMemory.diagnosis}` : ''}</span>
+                    </div>
+                  )}
+                  {(aiMemory.activeGoals?.length ?? 0) > 0 && (
+                    <div className="flex items-start gap-2">
+                      <span className="text-xs font-medium text-slate-500 w-24 shrink-0 mt-0.5">Goals</span>
+                      <div className="flex flex-wrap gap-1">
+                        {aiMemory.activeGoals!.map((g, i) => (
+                          <span key={i} className="text-xs bg-teal-50 text-teal-700 border border-teal-200 rounded-full px-2 py-0.5">{g}</span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {aiMemory.lastCalmCue && (
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-medium text-slate-500 w-24 shrink-0">Calm cue</span>
+                      <span className="text-sm dark:text-white">"{aiMemory.lastCalmCue}"</span>
+                    </div>
+                  )}
+                  {(aiMemory.celebratingWins?.length ?? 0) > 0 && (
+                    <div className="flex items-start gap-2">
+                      <span className="text-xs font-medium text-slate-500 w-24 shrink-0 mt-0.5">Wins</span>
+                      <div className="flex flex-wrap gap-1">
+                        {aiMemory.celebratingWins!.map((w, i) => (
+                          <span key={i} className="text-xs bg-green-50 text-green-700 border border-green-200 rounded-full px-2 py-0.5">{w}</span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {(aiMemory.strugglingWith?.length ?? 0) > 0 && (
+                    <div className="flex items-start gap-2">
+                      <span className="text-xs font-medium text-slate-500 w-24 shrink-0 mt-0.5">Working on</span>
+                      <div className="flex flex-wrap gap-1">
+                        {aiMemory.strugglingWith!.map((s, i) => (
+                          <span key={i} className="text-xs bg-amber-50 text-amber-700 border border-amber-200 rounded-full px-2 py-0.5">{s}</span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {aiMemory.progressThisWeek && (
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-medium text-slate-500 w-24 shrink-0">This week</span>
+                      <span className="text-sm dark:text-white">{aiMemory.progressThisWeek.sessionsCompleted} sessions · {aiMemory.progressThisWeek.calmMoments} calm moments</span>
+                    </div>
+                  )}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full mt-2 text-red-600 border-red-200 hover:bg-red-50"
+                    onClick={clearAIMemory}
+                  >
+                    Clear AI Memory
+                  </Button>
+                </>
+              )}
+            </div>
+          )}
         </Card>
 
         {/* Subscription Section */}

@@ -16,6 +16,66 @@ import {
   type CurrentContext
 } from '../ai/contextLayer';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
+import {
+  loadAISettings,
+  getPersonalitySystemPrompt,
+  AI_PERSONALITIES,
+  type AIPersonality
+} from '../lib/ai-personality';
+import { AIChart, parseAIResponseParts } from './AIChart';
+import { supabase } from '../utils/supabase/client';
+import { updateUserContext } from '../ai/contextLayer';
+
+// ─── Smart Action execution ──────────────────────────────────────────────────
+
+type SmartAction =
+  | { type: 'LOG_BEHAVIOR'; payload: { behavior_type: string; trigger?: string; intensity?: number; notes?: string; is_positive?: boolean } }
+  | { type: 'SET_CALM_CUE'; payload: { cue: string } }
+  | { type: 'ADD_WIN'; payload: { win: string } }
+  | { type: 'ADD_STRUGGLE'; payload: { struggle: string } };
+
+function parseSmartActions(text: string): { cleanText: string; actions: SmartAction[] } {
+  const actions: SmartAction[] = [];
+  const cleaned = text.replace(/\[ACTION:([A-Z_]+):(\{.*?\})\]/gs, (_match, type, json) => {
+    try {
+      actions.push({ type, payload: JSON.parse(json) } as SmartAction);
+    } catch { /* ignore malformed */ }
+    return '';
+  }).trim();
+  return { cleanText: cleaned, actions };
+}
+
+async function executeSmartAction(action: SmartAction, userId: string): Promise<string> {
+  switch (action.type) {
+    case 'LOG_BEHAVIOR': {
+      const { error } = await supabase.from('behavior_logs').insert({
+        user_id: userId,
+        behavior_type: action.payload.behavior_type,
+        trigger: action.payload.trigger || null,
+        intensity: action.payload.intensity || null,
+        notes: action.payload.notes || null,
+        is_positive: action.payload.is_positive ?? false,
+        logged_at: new Date().toISOString(),
+      });
+      if (error) throw error;
+      return `✓ Behavior logged: ${action.payload.behavior_type}`;
+    }
+    case 'SET_CALM_CUE': {
+      await updateUserContext(userId, { lastCalmCue: action.payload.cue });
+      return `✓ Calm cue saved: "${action.payload.cue}"`;
+    }
+    case 'ADD_WIN': {
+      await updateUserContext(userId, { celebratingWins: [action.payload.win] });
+      return `✓ Win recorded: ${action.payload.win}`;
+    }
+    case 'ADD_STRUGGLE': {
+      await updateUserContext(userId, { strugglingWith: [action.payload.struggle] });
+      return `✓ Noted: working through ${action.payload.struggle}`;
+    }
+    default:
+      return '';
+  }
+}
 
 interface Message {
   id: string;
@@ -119,6 +179,7 @@ export function BevelChatOverlay({
   const [isProactiveLoading, setIsProactiveLoading] = useState(false);
   const [userContext, setUserContext] = useState<UserContext | null>(null);
   const [currentContext, setCurrentContext] = useState<CurrentContext | null>(null);
+  const [personality, setPersonality] = useState<AIPersonality>('caregiver');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const hasGeneratedProactive = useRef(false);
@@ -151,6 +212,9 @@ export function BevelChatOverlay({
   }, [messages, isProactiveLoading]);
 
   const loadContextAndOpenChat = async () => {
+    const aiSettings = loadAISettings();
+    setPersonality(aiSettings.personality);
+
     const context = await fetchUserContext(userId);
     setUserContext(context);
     const current = getCurrentContext(currentPath, context);
@@ -242,6 +306,8 @@ export function BevelChatOverlay({
         ? `Currently in: ${ctxCurrent.moduleName}. ${ctxCurrent.contextHint}`
         : '';
       const childName = ctxUser?.childName || propChildName || 'their child';
+      const currentPersonality = loadAISettings().personality;
+      const personalityBlock = getPersonalitySystemPrompt(currentPersonality);
 
       const systemPrompt = `You are Aminy — a board-certified behavioral analyst (BCBA) and developmental pediatrician combined into one deeply expert AI guide for families of neurodivergent children. You have 15+ years of clinical experience and you speak warmly, specifically, and practically.
 
@@ -249,6 +315,8 @@ FAMILY CONTEXT:
 ${contextString || `Supporting a family of a neurodivergent child.`}
 
 CURRENT APP SECTION: ${moduleCtx || 'Dashboard'}
+
+${personalityBlock}
 
 YOUR CLINICAL KNOWLEDGE BASE:
 • Behavioral assessment: VB-MAPP, ABLLS-R, AFLS, Vineland, ADOS-2, ABC behavior chains
@@ -262,7 +330,7 @@ YOUR CLINICAL KNOWLEDGE BASE:
 • Crisis: NVCI, proactive vs reactive strategies, safety plans, environmental modification
 
 RESPONSE RULES:
-1. Always validate the parent's emotional experience before giving strategies
+1. Adapt your tone to the personality style specified above
 2. Be specific to ${childName}, not generic
 3. Translate clinical terms into plain language unless the parent uses them first
 4. Give 1 concrete, actionable strategy per response
@@ -271,7 +339,18 @@ RESPONSE RULES:
 7. End with an insight or a single focused question
 8. Never say "consult a professional" — YOU are the expert
 9. Never say "I'm just an AI" — you are Aminy
-10. If you notice a pattern, name it`;
+10. If you notice a pattern, name it
+
+CHART CAPABILITY: When showing data trends, you MAY embed a chart inline:
+[CHART:{"type":"bar","title":"Sessions This Month","data":[{"week":"Wk1","sessions":3},{"week":"Wk2","sessions":5}],"xKey":"week","yKey":"sessions"}]
+Types: "bar", "line", or "pie". Use sparingly — only when data genuinely clarifies your point.
+
+ACTION CAPABILITY: When a parent describes a behavior incident or you identify something worth saving, you MAY embed an action token (silently executed, confirmation shown to parent):
+[ACTION:LOG_BEHAVIOR:{"behavior_type":"meltdown","trigger":"transition","intensity":3,"notes":"occurred after lunch","is_positive":false}]
+[ACTION:SET_CALM_CUE:{"cue":"deep pressure vest + counting to 10"}]
+[ACTION:ADD_WIN:{"win":"completed morning routine independently for first time"}]
+[ACTION:ADD_STRUGGLE:{"struggle":"transition meltdowns after lunch"}]
+Only use action tokens when the parent has clearly described something worth persisting. Never invent data.`;
 
       const response = await fetch(
         `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/ai/brain`,
@@ -292,7 +371,10 @@ RESPONSE RULES:
       if (!response.ok) throw new Error('AI connection hiccup');
 
       const data = await response.json();
-      const aiText = data.message || data.response || '';
+      const rawText = data.message || data.response || '';
+
+      // Parse and execute smart actions before displaying text
+      const { cleanText: aiText, actions } = parseSmartActions(rawText);
 
       const aiMsg: Message = {
         id: (Date.now() + 1).toString(),
@@ -302,6 +384,24 @@ RESPONSE RULES:
         chips: getFollowUpChips(ctxUser, currentPath, propChildName)
       };
       setMessages(prev => [...prev, aiMsg]);
+
+      // Execute actions and append confirmation messages
+      for (const action of actions) {
+        try {
+          const confirmation = await executeSmartAction(action, userId);
+          if (confirmation) {
+            const confirmMsg: Message = {
+              id: Date.now().toString() + '-action',
+              role: 'assistant',
+              content: confirmation,
+              timestamp: new Date(),
+            };
+            setMessages(prev => [...prev, confirmMsg]);
+          }
+        } catch {
+          toast.error('Could not save — try again?');
+        }
+      }
 
       if (aiText.length > 50) {
         storeMemory(userId, {
@@ -339,12 +439,16 @@ RESPONSE RULES:
         : '';
 
       const childName = userContext?.childName || propChildName || 'their child';
+      const personalityBlock = getPersonalitySystemPrompt(personality);
+
       const systemPrompt = `You are Aminy — a board-certified behavioral analyst (BCBA) and developmental pediatrician combined into one deeply expert AI guide for families of neurodivergent children. You have 15+ years of clinical experience and you speak warmly, specifically, and practically.
 
 FAMILY CONTEXT:
 ${contextString || `Supporting a family of a neurodivergent child.`}
 
 CURRENT APP SECTION: ${moduleCtx || 'Dashboard'}
+
+${personalityBlock}
 
 YOUR CLINICAL KNOWLEDGE BASE:
 • Behavioral assessment: VB-MAPP, ABLLS-R, AFLS, Vineland, ADOS-2, ABC behavior chains
@@ -358,7 +462,7 @@ YOUR CLINICAL KNOWLEDGE BASE:
 • Crisis: NVCI, proactive vs reactive strategies, safety plans, environmental modification
 
 RESPONSE RULES:
-1. Always validate the parent's emotional experience before giving strategies — they're under enormous stress
+1. Adapt your tone to the personality style specified above
 2. Be specific to ${childName}, not generic platitudes
 3. Translate clinical terms into plain language unless the parent uses them first
 4. Give 1 concrete, actionable strategy per response — not a list of 10
@@ -391,7 +495,8 @@ RESPONSE RULES:
       if (!response.ok) throw new Error('AI connection hiccup');
 
       const data = await response.json();
-      const aiText = data.message || data.response || '';
+      const rawText = data.message || data.response || '';
+      const { cleanText: aiText, actions } = parseSmartActions(rawText);
 
       const aiMsg: Message = {
         id: (Date.now() + 1).toString(),
@@ -401,6 +506,22 @@ RESPONSE RULES:
         chips: getFollowUpChips(userContext, currentPath, propChildName)
       };
       setMessages(prev => [...prev, aiMsg]);
+
+      for (const action of actions) {
+        try {
+          const confirmation = await executeSmartAction(action, userId);
+          if (confirmation) {
+            setMessages(prev => [...prev, {
+              id: Date.now().toString() + '-action',
+              role: 'assistant',
+              content: confirmation,
+              timestamp: new Date(),
+            }]);
+          }
+        } catch {
+          toast.error('Could not save — try again?');
+        }
+      }
 
       if (aiText.length > 50) {
         storeMemory(userId, {
@@ -472,8 +593,9 @@ RESPONSE RULES:
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-slate-900 leading-tight">Aminy Intelligence</p>
-                  <p className="text-xs text-slate-500 leading-tight">
-                    {isProactiveLoading ? 'Thinking…' : (currentContext?.moduleName || 'New chat')}
+                  <p className="text-xs text-slate-500 leading-tight flex items-center gap-1">
+                    <span>{AI_PERSONALITIES[personality].emoji}</span>
+                    <span>{isProactiveLoading ? 'Thinking…' : (currentContext?.moduleName || AI_PERSONALITIES[personality].name)}</span>
                   </p>
                 </div>
               </div>
@@ -515,7 +637,15 @@ RESPONSE RULES:
                           : 'bg-slate-50 text-slate-900 rounded-bl-md border border-slate-100'
                       }`}
                     >
-                      <p className="whitespace-pre-wrap">{msg.content}</p>
+                      {msg.role === 'assistant' ? (
+                        parseAIResponseParts(msg.content).map((part, pi) =>
+                          part.type === 'chart'
+                            ? <AIChart key={pi} spec={part.content} />
+                            : <p key={pi} className="whitespace-pre-wrap">{part.content}</p>
+                        )
+                      ) : (
+                        <p className="whitespace-pre-wrap">{msg.content}</p>
+                      )}
                     </div>
                   </div>
 

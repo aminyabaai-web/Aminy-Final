@@ -10,6 +10,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { AISparkleButton } from './AISparkleButton';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Calendar,
@@ -484,7 +485,10 @@ export function MyAppointments({
         <div className="px-4 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-xl font-bold text-gray-900">My Appointments</h1>
+              <div className="flex items-center gap-2 flex-wrap">
+                <h1 className="text-xl font-bold text-gray-900">My Appointments</h1>
+                <AISparkleButton prompt={childName ? `Help me prepare for ${childName}'s upcoming ABA appointment — what questions should I ask the provider?` : "What should I bring to and ask at an ABA appointment?"} label="Prepare" />
+              </div>
               {childName && (
                 <p className="text-sm text-gray-500">for {childName}</p>
               )}
