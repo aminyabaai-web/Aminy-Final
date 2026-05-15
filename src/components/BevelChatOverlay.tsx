@@ -31,6 +31,7 @@ interface BevelChatOverlayProps {
   userId: string;
   currentPath: string;
   childName?: string;
+  initialPrompt?: string;
 }
 
 // Generate contextual follow-up chips based on screen and child's context
@@ -109,7 +110,8 @@ export function BevelChatOverlay({
   onClose,
   userId,
   currentPath,
-  childName: propChildName
+  childName: propChildName,
+  initialPrompt
 }: BevelChatOverlayProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -121,10 +123,13 @@ export function BevelChatOverlay({
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const hasGeneratedProactive = useRef(false);
 
-  // Reset state when closed
+  // Reset state when opened or closed
   useEffect(() => {
     if (!isOpen) {
       hasGeneratedProactive.current = false;
+    } else {
+      // Fresh start each time the overlay opens
+      setMessages([]);
     }
   }, [isOpen]);
 
@@ -151,10 +156,15 @@ export function BevelChatOverlay({
     const current = getCurrentContext(currentPath, context);
     setCurrentContext(current);
 
-    // Fire proactive message only once per open session
-    if (!hasGeneratedProactive.current && messages.length === 0) {
+    if (!hasGeneratedProactive.current) {
       hasGeneratedProactive.current = true;
-      await generateProactiveMessage(context, current);
+      if (initialPrompt) {
+        // When an initialPrompt is provided, send it directly as the first user message
+        // Pass freshly-loaded context so we don't rely on state update timing
+        await sendMessageWithContext(initialPrompt, context, current, []);
+      } else {
+        await generateProactiveMessage(context, current);
+      }
     }
   };
 
@@ -205,6 +215,106 @@ export function BevelChatOverlay({
       setMessages([fallback]);
     } finally {
       setIsProactiveLoading(false);
+    }
+  };
+
+  // Internal helper: send a message using freshly-loaded context (bypasses state timing issues)
+  const sendMessageWithContext = async (
+    text: string,
+    ctxUser: UserContext | null,
+    ctxCurrent: CurrentContext | null,
+    history: Message[]
+  ) => {
+    if (!text.trim()) return;
+
+    const userMsg: Message = {
+      id: Date.now().toString(),
+      role: 'user',
+      content: text,
+      timestamp: new Date()
+    };
+    setMessages([userMsg]);
+    setIsLoading(true);
+
+    try {
+      const contextString = ctxUser ? buildAIContextString(ctxUser) : '';
+      const moduleCtx = ctxCurrent
+        ? `Currently in: ${ctxCurrent.moduleName}. ${ctxCurrent.contextHint}`
+        : '';
+      const childName = ctxUser?.childName || propChildName || 'their child';
+
+      const systemPrompt = `You are Aminy — a board-certified behavioral analyst (BCBA) and developmental pediatrician combined into one deeply expert AI guide for families of neurodivergent children. You have 15+ years of clinical experience and you speak warmly, specifically, and practically.
+
+FAMILY CONTEXT:
+${contextString || `Supporting a family of a neurodivergent child.`}
+
+CURRENT APP SECTION: ${moduleCtx || 'Dashboard'}
+
+YOUR CLINICAL KNOWLEDGE BASE:
+• Behavioral assessment: VB-MAPP, ABLLS-R, AFLS, Vineland, ADOS-2, ABC behavior chains
+• Function of behavior: escape/avoidance, attention-seeking, tangible access, automatic/sensory reinforcement
+• Intervention frameworks: DTT, NET, PRT, EIBI, PBIS, PCIT, RUBI
+• Prompting: most-to-least, least-to-most, time delay, graduated guidance, prompt fading
+• Reinforcement: DRO, DRI, DRA, DRL, extinction, schedules of reinforcement, token economies
+• Data: frequency/rate, duration, latency, IOA, ABC narrative, interval recording
+• Regulation: co-regulation, interoception, proprioceptive input, sensory diet, zones of regulation
+• School: IEP goal structure, LRE, accommodation vs modification, ESY services, 504 plans
+• Crisis: NVCI, proactive vs reactive strategies, safety plans, environmental modification
+
+RESPONSE RULES:
+1. Always validate the parent's emotional experience before giving strategies
+2. Be specific to ${childName}, not generic
+3. Translate clinical terms into plain language unless the parent uses them first
+4. Give 1 concrete, actionable strategy per response
+5. Identify the likely FUNCTION of behavior before recommending a strategy
+6. 3-5 sentences for most responses; longer only if explicitly asked
+7. End with an insight or a single focused question
+8. Never say "consult a professional" — YOU are the expert
+9. Never say "I'm just an AI" — you are Aminy
+10. If you notice a pattern, name it`;
+
+      const response = await fetch(
+        `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/ai/brain`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${publicAnonKey}`
+          },
+          body: JSON.stringify({
+            userMessage: text,
+            conversationHistory: history.map(m => ({ role: m.role, content: m.content })),
+            systemPrompt
+          })
+        }
+      );
+
+      if (!response.ok) throw new Error('AI connection hiccup');
+
+      const data = await response.json();
+      const aiText = data.message || data.response || '';
+
+      const aiMsg: Message = {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: aiText,
+        timestamp: new Date(),
+        chips: getFollowUpChips(ctxUser, currentPath, propChildName)
+      };
+      setMessages(prev => [...prev, aiMsg]);
+
+      if (aiText.length > 50) {
+        storeMemory(userId, {
+          timestamp: new Date(),
+          category: 'insight',
+          content: aiText,
+          context: { userQuery: text, module: ctxCurrent?.module }
+        }).catch(() => {});
+      }
+    } catch {
+      toast.error('Connection hiccup — try again?');
+    } finally {
+      setIsLoading(false);
     }
   };
 

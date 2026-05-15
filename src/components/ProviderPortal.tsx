@@ -52,6 +52,7 @@ import {
   ClipboardList,
   BarChart3,
   Shield,
+  ShieldCheck,
   UserCheck,
   Play,
   Pause,
@@ -79,6 +80,11 @@ import { getStateMarketCoverage, isSupportedProviderState } from '../lib/insuran
 import { ProviderInsightsDashboard } from './provider/ProviderInsightsDashboard';
 import { CareCoordination } from './provider/CareCoordination';
 import { RBTManagement } from './provider/RBTManagement';
+import { SupervisionDashboard } from './provider/SupervisionDashboard';
+import { ProviderPerformanceTab } from './provider/ProviderPerformanceTab';
+import { TelehealthSessionEngine } from './provider/TelehealthSessionEngine';
+import CredentialingOrchestrator from './provider/CredentialingOrchestrator';
+import ClaimReadyQueue from './provider/ClaimReadyQueue';
 import {
   generateSuperbillFromSession,
   saveSuperbillToSupabase,
@@ -138,10 +144,11 @@ interface ProviderProfile {
 
 interface ProviderPortalProps {
   providerId: string;
+  onNavigate?: (screen: string) => void;
 }
 
-export function ProviderPortal({ providerId }: ProviderPortalProps) {
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'clients' | 'sessions' | 'earnings' | 'settings' | 'ai-summaries' | 'insights' | 'coordination' | 'my-practice' | 'clinical-notes'>('dashboard');
+export function ProviderPortal({ providerId, onNavigate }: ProviderPortalProps) {
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'clients' | 'sessions' | 'start-session' | 'earnings' | 'settings' | 'ai-summaries' | 'insights' | 'coordination' | 'my-practice' | 'clinical-notes' | 'supervision' | 'credentialing' | 'claims' | 'performance'>('dashboard');
   const [patients, setPatients] = useState<Patient[]>([]);
   const [sessions, setSessions] = useState<Session[]>([]);
   const [provider, setProvider] = useState<ProviderProfile | null>(null);
@@ -854,8 +861,13 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
               { id: 'ai-summaries', label: 'AI Summaries', icon: Brain },
               { id: 'coordination', label: 'Care Team', icon: Heart },
               { id: 'sessions', label: 'Sessions', icon: Calendar },
+              { id: 'start-session', label: 'Start Session', icon: Video },
               { id: 'earnings', label: 'Earnings', icon: DollarSign },
               { id: 'clinical-notes', label: 'Notes', icon: ClipboardList },
+              { id: 'supervision', label: 'Supervision', icon: UserCheck },
+              { id: 'credentialing', label: 'Credentialing', icon: ShieldCheck },
+              { id: 'claims', label: 'Claims', icon: FileText },
+              { id: 'performance', label: 'Performance', icon: TrendingUp },
               { id: 'my-practice', label: 'My Practice', icon: Briefcase },
               { id: 'settings', label: 'Settings', icon: Settings }
             ].map(tab => (
@@ -1281,6 +1293,23 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
               )}
             </div>
           </div>
+        )}
+
+        {activeTab === 'start-session' && (
+          <TelehealthSessionEngine
+            providerId={providerId}
+            providerType={provider?.type === 'rbt' ? 'rbt' : 'bcba'}
+            patients={patients.map(p => ({
+              id: p.id,
+              name: p.childName,
+              insurancePayer: 'Verify with payer',
+            }))}
+            onBack={() => setActiveTab('sessions')}
+            onStartSession={(config) => {
+              // TODO: create Daily.co room with config, navigate to video room
+              setActiveTab('sessions');
+            }}
+          />
         )}
 
         {activeTab === 'ai-summaries' && (
@@ -1968,6 +1997,80 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
           </div>
         )}
 
+        {/* Supervision Tab */}
+        {activeTab === 'supervision' && (
+          <SupervisionDashboard
+            onBack={() => setActiveTab('dashboard')}
+            onNavigateToRBTLog={() => setActiveTab('my-practice')}
+            onNavigateToAssessment={() => onNavigate?.('credentialing-support')}
+          />
+        )}
+
+        {/* Credentialing Tab */}
+        {activeTab === 'credentialing' && (
+          <div className="space-y-6">
+            <CredentialingOrchestrator
+              providerId={providerId}
+              onBack={() => setActiveTab('dashboard')}
+            />
+            <Card className="p-5 rounded-2xl border border-neutral-200 dark:border-slate-700">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-semibold text-neutral-900 dark:text-white">Payout Setup</h3>
+                  <p className="text-sm text-neutral-500 dark:text-slate-400 mt-1">
+                    Configure your bank account for guaranteed biweekly payments via Aminy
+                  </p>
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => onNavigate?.('provider-payout-setup')}
+                  className="flex items-center gap-2"
+                >
+                  <DollarSign className="w-4 h-4" />
+                  Set Up Payouts
+                </Button>
+              </div>
+            </Card>
+          </div>
+        )}
+
+        {/* Claims Tab */}
+        {activeTab === 'claims' && (
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-xl font-semibold text-neutral-900 dark:text-white">Claims & Billing</h2>
+              <p className="text-neutral-500 dark:text-slate-400 mt-1">
+                Aminy submits all claims under the Aminy Network group NPI. You get paid biweekly regardless of payer timing.
+              </p>
+            </div>
+            <ClaimReadyQueue
+              providerId={providerId}
+              onBack={() => setActiveTab('dashboard')}
+              onNavigateTo={(screen) => onNavigate?.(screen)}
+            />
+            <Card className="p-5 rounded-2xl border border-neutral-200 dark:border-slate-700">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-semibold text-neutral-900 dark:text-white">Denial Workbench</h3>
+                  <p className="text-sm text-neutral-500 dark:text-slate-400 mt-1">
+                    Review and appeal denied claims with AI-assisted justifications
+                  </p>
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => onNavigate?.('denial-workbench')}
+                  className="flex items-center gap-2"
+                >
+                  <AlertCircle className="w-4 h-4" />
+                  Open Workbench
+                </Button>
+              </div>
+            </Card>
+          </div>
+        )}
+
         {/* My Practice (BCBA Practice Management) */}
         {activeTab === 'my-practice' && (
           <div className="space-y-6">
@@ -2062,6 +2165,10 @@ export function ProviderPortal({ providerId }: ProviderPortalProps) {
             )}
             <RBTManagement providerId={providerId} />
           </div>
+        )}
+
+        {activeTab === 'performance' && (
+          <ProviderPerformanceTab providerId={providerId} />
         )}
       </main>
 

@@ -16,6 +16,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { supabase } from '../utils/supabase/client';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
@@ -164,113 +165,95 @@ export function OutcomesTracking({
 
   const loadMetrics = async () => {
     setIsLoading(true);
-    await new Promise(resolve => setTimeout(resolve, 800));
-
-    // Load appropriate metrics based on view
-    if (view === 'caregiver') {
-      setCaregiverMetrics(generateMockCaregiverMetrics());
-    } else if (view === 'payer') {
-      setPayerMetrics(generateMockPayerMetrics());
-    } else {
-      setInvestorMetrics(generateMockInvestorMetrics());
+    try {
+      if (view === 'caregiver') {
+        await loadCaregiverMetrics();
+      }
+      // Payer and investor views need aggregate data that isn't available yet.
+      // They will render their own empty states via the null check below.
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
-  const generateMockCaregiverMetrics = (): CaregiverMetrics => ({
-    childProgress: {
-      goalsAchieved: 7,
-      totalGoals: 10,
-      currentStreakDays: 12,
-      improvementAreas: [
-        { name: 'Morning Routine', baseline: 40, current: 82, target: 90 },
-        { name: 'Communication', baseline: 30, current: 65, target: 80 },
-        { name: 'Emotional Regulation', baseline: 25, current: 55, target: 70 },
-        { name: 'Social Interaction', baseline: 35, current: 50, target: 75 }
-      ]
-    },
-    parentWellbeing: {
-      stressLevel: 'moderate',
-      stressTrend: 'improving',
-      confidenceScore: 72,
-      supportSessions: 4
-    },
-    engagement: {
-      daysActiveThisWeek: 6,
-      aiConversations: 23,
-      calmToolsUsed: 8,
-      carePlanUpdates: 3
-    },
-    recentWins: [
-      'Alex got dressed independently 3 days in a row!',
-      'Successfully used calm-down corner during meltdown',
-      'Made eye contact with new person at therapy',
-      'Completed full morning routine in under 30 minutes'
-    ]
-  });
+  const loadCaregiverMetrics = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
 
-  const generateMockPayerMetrics = (): PayerMetrics => ({
-    costMetrics: {
-      estimatedSavingsPerMember: 2400,
-      crisisInterventionsAvoided: 156,
-      erVisitsReduced: 42,
-      workdaysSaved: 890
-    },
-    utilization: {
-      memberEngagementRate: 78,
-      avgSessionsPerMember: 4.2,
-      retentionRate: 89,
-      npsScore: 72
-    },
-    clinicalOutcomes: {
-      behaviorImprovementRate: 67,
-      parentConfidenceIncrease: 45,
-      goalsMetRate: 73,
-      satisfactionRate: 91
-    },
-    roi: {
-      costPerMember: 180,
-      valueDelivered: 2400,
-      roiMultiple: 13.3
-    }
-  });
+    const periodStart = getPeriodStart(selectedPeriod);
 
-  const generateMockInvestorMetrics = (): InvestorMetrics => ({
-    growth: {
-      totalUsers: 12847,
-      userGrowthRate: 23,
-      mrr: 156000,
-      mrrGrowth: 18,
-      arr: 1872000
-    },
-    retention: {
-      day1Retention: 78,
-      day7Retention: 62,
-      day30Retention: 48,
-      monthlyChurn: 4.2,
-      ltv: 420
-    },
-    engagement: {
-      dau: 4250,
-      mau: 9800,
-      dauMauRatio: 43,
-      avgSessionLength: 12.5,
-      sessionsPerUser: 4.8
-    },
-    revenue: {
-      subscriptionRevenue: 128000,
-      telehealthRevenue: 24000,
-      b2bRevenue: 4000,
-      revenuePerUser: 12.14
-    },
-    impact: {
-      familiesHelped: 12847,
-      goalsAchieved: 45230,
-      crisisesAverted: 2340,
-      parentHoursReclaimed: 38500
-    }
-  });
+    const [goalsResult, sessionsResult, aiChatsResult] = await Promise.allSettled([
+      supabase
+        .from('goals')
+        .select('id, title, category, is_active, status, progress_percent, baseline_value, current_value, target_value')
+        .eq('user_id', user.id),
+      supabase
+        .from('session_notes')
+        .select('id, session_date, billing_status, goals_addressed')
+        .eq('user_id', user.id)
+        .gte('session_date', periodStart),
+      supabase
+        .from('audit_log')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('event_type', 'AI_CHAT')
+        .gte('created_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()),
+    ]);
+
+    const goals = goalsResult.status === 'fulfilled' ? (goalsResult.value.data ?? []) : [];
+    const sessions = sessionsResult.status === 'fulfilled' ? (sessionsResult.value.data ?? []) : [];
+    const aiChats = aiChatsResult.status === 'fulfilled' ? (aiChatsResult.value.data ?? []) : [];
+
+    const activeGoals = goals.filter((g: { is_active: boolean }) => g.is_active);
+    const masteredGoals = goals.filter((g: { status: string }) => g.status === 'mastered' || g.status === 'completed');
+
+    const improvementAreas = activeGoals.slice(0, 4).map((g: {
+      title: string; category: string; baseline_value?: number;
+      current_value?: number; target_value?: number; progress_percent?: number;
+    }) => ({
+      name: g.title || g.category || 'Goal',
+      baseline: g.baseline_value ?? 0,
+      current: g.current_value ?? (g.progress_percent ?? 0),
+      target: g.target_value ?? 100,
+    }));
+
+    setCaregiverMetrics({
+      childProgress: {
+        goalsAchieved: masteredGoals.length,
+        totalGoals: goals.length,
+        currentStreakDays: 0, // requires daily activity tracking — set to 0 until that's wired
+        improvementAreas,
+      },
+      parentWellbeing: {
+        stressLevel: 'moderate',
+        stressTrend: 'stable',
+        confidenceScore: 0,
+        supportSessions: sessions.length,
+      },
+      engagement: {
+        daysActiveThisWeek: 0,
+        aiConversations: aiChats.length,
+        calmToolsUsed: 0,
+        carePlanUpdates: 0,
+      },
+      recentWins: [],
+    });
+  };
+
+  // Payer / investor views need aggregate data — show empty state until pipeline is built
+  if (!isLoading && (view === 'payer' || view === 'investor')) {
+    return (
+      <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
+        <BarChart3 className="w-12 h-12 text-slate-300 mb-4" />
+        <h3 className="text-lg font-semibold text-slate-700 mb-2">Aggregate Data Coming Soon</h3>
+        <p className="text-sm text-slate-500 max-w-xs">
+          {view === 'payer'
+            ? 'Payer-level outcomes reporting requires population data across enrolled members. Available once your cohort reaches 10+ families.'
+            : 'Investor metrics are populated from your Stripe and Supabase analytics pipeline. Set up the reporting cron to enable this view.'}
+        </p>
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (
@@ -279,6 +262,19 @@ export function OutcomesTracking({
           <RefreshCw className="w-8 h-8 animate-spin text-teal-500 mx-auto mb-4" />
           <p className="text-gray-600">Loading outcomes data...</p>
         </div>
+      </div>
+    );
+  }
+
+  // Caregiver: no data yet
+  if (view === 'caregiver' && !caregiverMetrics) {
+    return (
+      <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
+        <Target className="w-12 h-12 text-slate-300 mb-4" />
+        <h3 className="text-lg font-semibold text-slate-700 mb-2">No progress data yet</h3>
+        <p className="text-sm text-slate-500 max-w-xs">
+          Complete your first session and set therapy goals to start seeing outcomes here.
+        </p>
       </div>
     );
   }
@@ -871,4 +867,18 @@ export function OutcomesWidget({
       </div>
     </Card>
   );
+}
+
+function getPeriodStart(period: 'week' | 'month' | 'quarter' | 'year'): string {
+  const now = new Date();
+  if (period === 'week') {
+    now.setDate(now.getDate() - 7);
+  } else if (period === 'month') {
+    now.setMonth(now.getMonth() - 1);
+  } else if (period === 'quarter') {
+    now.setMonth(now.getMonth() - 3);
+  } else {
+    now.setFullYear(now.getFullYear() - 1);
+  }
+  return now.toISOString().split('T')[0];
 }

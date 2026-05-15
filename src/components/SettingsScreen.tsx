@@ -574,6 +574,25 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
         {/* Settings content cards */}
         <div className="space-y-6">
 
+        {/* Account Profile Card */}
+        <Card className="p-4">
+          <button
+            onClick={() => onNavigate?.('account-settings')}
+            className="w-full flex items-center justify-between group"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-teal-500 to-cyan-500 rounded-full flex items-center justify-center">
+                <Users aria-hidden="true" className="w-5 h-5 text-white" />
+              </div>
+              <div className="text-left">
+                <p className="font-semibold dark:text-white">Account &amp; Profile</p>
+                <p className="text-sm text-muted-foreground">Edit name, email, photo, password</p>
+              </div>
+            </div>
+            <ChevronRight aria-hidden="true" className="w-5 h-5 text-gray-400 group-hover:text-teal-500 transition-colors" />
+          </button>
+        </Card>
+
         {/* Subscription Section */}
         <Card className="p-4">
           <div className="flex items-center justify-between">

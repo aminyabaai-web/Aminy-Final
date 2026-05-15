@@ -166,6 +166,9 @@ export interface ComplianceReport {
   }>;
 }
 
+// Supabase client for durable server-side audit writes
+import { supabase } from '../../utils/supabase/client';
+
 // ============================================================================
 // Constants
 // ============================================================================
@@ -339,6 +342,33 @@ export async function logPHIAccess(input: PHIAuditInput): Promise<PHIAuditEntry>
 
   chain.push(entry);
   saveAuditChain(chain);
+
+  // Durable server-side write — fire-and-forget so UI is never blocked.
+  // Writes to audit_log table (migration 007). If the table doesn't exist yet,
+  // the error is caught silently — localStorage chain remains the fallback.
+  supabase.from('audit_log').insert({
+    event_type: entry.eventType,
+    user_id: entry.userId === 'unknown' ? null : entry.userId,
+    user_role: entry.userRole,
+    user_email: entry.userEmail,
+    resource_type: entry.resourceType,
+    resource_id: entry.resourceId,
+    child_id: entry.childId ?? null,
+    screen_context: entry.screenContext,
+    action_description: entry.actionDescription,
+    sensitivity: entry.sensitivity,
+    success: entry.success,
+    error_message: entry.errorMessage ?? null,
+    session_id: entry.sessionId,
+    entry_hash: entry.entryHash,
+    previous_hash: entry.previousHash,
+    ip_address: entry.ipAddress,
+    user_agent: entry.userAgent,
+  }).then(({ error }) => {
+    if (error && import.meta.env.DEV) {
+      console.warn('[HIPAA-AUDIT] Supabase write failed (localStorage preserved):', error.message);
+    }
+  });
 
   // Console log in development
   if (import.meta.env.DEV) {

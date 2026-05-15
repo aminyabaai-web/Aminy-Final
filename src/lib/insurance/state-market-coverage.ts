@@ -5,7 +5,7 @@
 
 import { getPayerConfig, type PayerConfig } from './payer-configs';
 
-export type SupportedProviderState = 'AZ' | 'MT' | 'TX';
+export type SupportedProviderState = 'AZ' | 'MT' | 'TX' | 'FL' | 'NV';
 export type MarketLaunchState = 'pilot' | 'limited_launch' | 'live';
 
 export interface PayerProduct {
@@ -31,7 +31,7 @@ export interface PayerNetworkCatalog {
   notes: string[];
 }
 
-export const SUPPORTED_PROVIDER_STATES: SupportedProviderState[] = ['AZ', 'MT', 'TX'];
+export const SUPPORTED_PROVIDER_STATES: SupportedProviderState[] = ['AZ', 'MT', 'TX', 'FL', 'NV'];
 export const SUPPORTED_PROVIDER_STATE_LABEL = SUPPORTED_PROVIDER_STATES.join(' · ');
 
 function createPayerProduct(state: SupportedProviderState, payerId: string, overrides?: Partial<PayerProduct>): PayerProduct {
@@ -54,6 +54,47 @@ function createPayerProduct(state: SupportedProviderState, payerId: string, over
 }
 
 export const STATE_MARKET_COVERAGE: Record<SupportedProviderState, PayerNetworkCatalog> = {
+  FL: {
+    state: 'FL',
+    label: 'Florida',
+    coverageTargetPct: 80,
+    launchState: 'limited_launch',
+    cashPayTelehealth: true,
+    coverageCoach: true,
+    insuredPartnerBilled: true,
+    payerProducts: [
+      createPayerProduct('FL', 'fl-medicaid'),
+      createPayerProduct('FL', 'bcbs-anthem'),
+      createPayerProduct('FL', 'uhc'),
+      createPayerProduct('FL', 'aetna'),
+      createPayerProduct('FL', 'cigna'),
+      createPayerProduct('FL', 'humana'),
+    ],
+    notes: [
+      'Florida expansion leverages AACT group NPI contracts across FL Medicaid MCOs and all major commercial carriers.',
+      'Humana is a meaningful Florida commercial book — included given AACT network status in state.',
+    ],
+  },
+  NV: {
+    state: 'NV',
+    label: 'Nevada',
+    coverageTargetPct: 80,
+    launchState: 'limited_launch',
+    cashPayTelehealth: true,
+    coverageCoach: true,
+    insuredPartnerBilled: true,
+    payerProducts: [
+      createPayerProduct('NV', 'molina'),
+      createPayerProduct('NV', 'bcbs-anthem'),
+      createPayerProduct('NV', 'uhc'),
+      createPayerProduct('NV', 'aetna'),
+      createPayerProduct('NV', 'cigna'),
+    ],
+    notes: [
+      'Nevada launch routes NV Medicaid volume through Molina (dominant Medicaid MCO in state) and Anthem BCBS NV for commercial.',
+      'Telehealth-first posture — no in-person supply constraints; cash-pay live on day 1 for families outside AACT network.',
+    ],
+  },
   AZ: {
     state: 'AZ',
     label: 'Arizona',

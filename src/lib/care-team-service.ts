@@ -77,118 +77,6 @@ export interface ProviderSearchForTeam {
   rating: number;
 }
 
-// ============================================================================
-// Demo Data
-// ============================================================================
-
-const DEMO_CARE_TEAM: CareTeamMember[] = [
-  {
-    id: 'ct-001',
-    childId: 'child-001',
-    providerId: 'prov-001',
-    role: 'BCBA',
-    specialty: 'Applied Behavior Analysis',
-    isPrimary: true,
-    status: 'active',
-    startDate: '2025-09-15',
-    endDate: null,
-    notes: 'Supervising BCBA for ABA program',
-    lastSessionDate: '2026-03-07T10:00:00Z',
-    nextAppointment: '2026-03-14T10:00:00Z',
-    createdAt: '2025-09-15T00:00:00Z',
-    updatedAt: '2026-03-07T00:00:00Z',
-    provider: {
-      id: 'prov-001',
-      name: 'Dr. Sarah Chen',
-      credentials: 'BCBA, LBA',
-      email: 'sarah.chen@example.com',
-      phone: '(602) 555-0101',
-      photo: null,
-      rating: 4.9,
-    },
-  },
-  {
-    id: 'ct-002',
-    childId: 'child-001',
-    providerId: 'prov-005',
-    role: 'RBT',
-    specialty: 'ABA Direct Therapy',
-    isPrimary: false,
-    status: 'active',
-    startDate: '2025-10-01',
-    endDate: null,
-    notes: 'Direct therapy 3x/week',
-    lastSessionDate: '2026-03-08T14:00:00Z',
-    nextAppointment: '2026-03-10T14:00:00Z',
-    createdAt: '2025-10-01T00:00:00Z',
-    updatedAt: '2026-03-08T00:00:00Z',
-    provider: {
-      id: 'prov-005',
-      name: 'Rachel Kim',
-      credentials: 'RBT',
-      email: 'rachel.kim@example.com',
-      phone: '(602) 555-0105',
-      photo: null,
-      rating: 4.6,
-    },
-  },
-  {
-    id: 'ct-003',
-    childId: 'child-001',
-    providerId: 'prov-002',
-    role: 'SLP',
-    specialty: 'Pediatric Speech-Language Pathology',
-    isPrimary: false,
-    status: 'active',
-    startDate: '2025-11-10',
-    endDate: null,
-    notes: 'Articulation and expressive language goals',
-    lastSessionDate: '2026-03-06T11:00:00Z',
-    nextAppointment: '2026-03-13T11:00:00Z',
-    createdAt: '2025-11-10T00:00:00Z',
-    updatedAt: '2026-03-06T00:00:00Z',
-    provider: {
-      id: 'prov-002',
-      name: 'Maria Rodriguez',
-      credentials: 'CCC-SLP',
-      email: 'maria.rodriguez@example.com',
-      phone: '(480) 555-0202',
-      photo: null,
-      rating: 4.8,
-    },
-  },
-  {
-    id: 'ct-004',
-    childId: 'child-001',
-    providerId: 'prov-003',
-    role: 'OT',
-    specialty: 'Pediatric Occupational Therapy',
-    isPrimary: false,
-    status: 'pending',
-    startDate: '2026-03-15',
-    endDate: null,
-    notes: 'Referral accepted — intake scheduled',
-    lastSessionDate: null,
-    nextAppointment: '2026-03-15T09:00:00Z',
-    createdAt: '2026-03-08T00:00:00Z',
-    updatedAt: '2026-03-08T00:00:00Z',
-    provider: {
-      id: 'prov-003',
-      name: 'James Park',
-      credentials: 'OTR/L',
-      email: 'james.park@example.com',
-      phone: '(480) 555-0303',
-      photo: null,
-      rating: 4.7,
-    },
-  },
-];
-
-const DEMO_SEARCHABLE_PROVIDERS: ProviderSearchForTeam[] = [
-  { id: 'prov-004', name: 'Dr. Amanda Foster', credentials: 'PhD, Licensed Psychologist', type: 'psychologist', specialty: 'Developmental Psychology', acceptingNewPatients: true, rating: 4.9 },
-  { id: 'prov-006', name: 'Dr. Kevin Nguyen', credentials: 'DPT', type: 'pt', specialty: 'Pediatric Physical Therapy', acceptingNewPatients: true, rating: 4.5 },
-  { id: 'prov-007', name: 'Lisa Martinez, LCSW', credentials: 'LCSW', type: 'lcsw', specialty: 'Family Counseling', acceptingNewPatients: true, rating: 4.8 },
-];
 
 // ============================================================================
 // Care Team CRUD
@@ -216,7 +104,7 @@ export async function getCareTeam(childId: string): Promise<{ data: CareTeam | n
       return {
         data: {
           childId,
-          childName: '', // Would be joined from children table
+          childName: '',
           members,
           totalMembers: members.length,
           activeSince: members[0]?.startDate || '',
@@ -225,28 +113,9 @@ export async function getCareTeam(childId: string): Promise<{ data: CareTeam | n
       };
     }
 
-    // Fall back to demo data
-    return {
-      data: {
-        childId,
-        childName: 'Alex M.',
-        members: DEMO_CARE_TEAM,
-        totalMembers: DEMO_CARE_TEAM.length,
-        activeSince: '2025-09-15',
-      },
-      error: null,
-    };
-  } catch {
-    return {
-      data: {
-        childId,
-        childName: 'Alex M.',
-        members: DEMO_CARE_TEAM,
-        totalMembers: DEMO_CARE_TEAM.length,
-        activeSince: '2025-09-15',
-      },
-      error: null,
-    };
+    return { data: { childId, childName: '', members: [], totalMembers: 0, activeSince: '' }, error: null };
+  } catch (err) {
+    return { data: null, error: err instanceof Error ? err.message : 'Failed to load care team' };
   }
 }
 
@@ -277,24 +146,7 @@ export async function addTeamMember(params: AddTeamMemberParams): Promise<{ data
     if (err instanceof Error && err.message.includes('duplicate key')) {
       return { data: null, error: 'This provider is already on the care team' };
     }
-
-    const mockMember: CareTeamMember = {
-      id: `ct-${Date.now()}`,
-      childId: params.childId,
-      providerId: params.providerId,
-      role: params.role,
-      specialty: params.specialty || null,
-      isPrimary: params.isPrimary || false,
-      status: 'pending',
-      startDate: params.startDate || new Date().toISOString().split('T')[0],
-      endDate: null,
-      notes: params.notes || null,
-      lastSessionDate: null,
-      nextAppointment: null,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-    return { data: mockMember, error: null };
+    return { data: null, error: err instanceof Error ? err.message : 'Failed to add team member' };
   }
 }
 
@@ -388,10 +240,9 @@ export async function searchProvidersForTeam(
       };
     }
 
-    // Demo fallback
-    return { data: filterDemoProviders(query, role), error: null };
-  } catch {
-    return { data: filterDemoProviders(query, role), error: null };
+    return { data: [], error: null };
+  } catch (err) {
+    return { data: [], error: err instanceof Error ? err.message : 'Failed to search providers' };
   }
 }
 
@@ -418,22 +269,9 @@ export async function getChildren(): Promise<{ data: { id: string; name: string;
       };
     }
 
-    // Demo fallback
-    return {
-      data: [
-        { id: 'child-001', name: 'Alex M.', age: 4 },
-        { id: 'child-002', name: 'Jordan K.', age: 6 },
-      ],
-      error: null,
-    };
-  } catch {
-    return {
-      data: [
-        { id: 'child-001', name: 'Alex M.', age: 4 },
-        { id: 'child-002', name: 'Jordan K.', age: 6 },
-      ],
-      error: null,
-    };
+    return { data: [], error: null };
+  } catch (err) {
+    return { data: [], error: err instanceof Error ? err.message : 'Failed to load children' };
   }
 }
 
@@ -473,18 +311,3 @@ function mapMemberFromDb(row: Record<string, unknown>): CareTeamMember {
   };
 }
 
-function filterDemoProviders(query?: string, role?: CareTeamRole): ProviderSearchForTeam[] {
-  return DEMO_SEARCHABLE_PROVIDERS.filter((p) => {
-    if (query && !p.name.toLowerCase().includes(query.toLowerCase()) && !p.credentials.toLowerCase().includes(query.toLowerCase())) {
-      return false;
-    }
-    if (role) {
-      const roleTypeMap: Record<string, string> = {
-        'BCBA': 'bcba', 'RBT': 'rbt', 'SLP': 'slp', 'OT': 'ot',
-        'PT': 'pt', 'Psychologist': 'psychologist', 'LCSW': 'lcsw',
-      };
-      if (roleTypeMap[role] && p.type !== roleTypeMap[role]) return false;
-    }
-    return true;
-  });
-}

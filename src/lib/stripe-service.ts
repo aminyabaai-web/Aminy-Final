@@ -40,14 +40,15 @@ if (import.meta.env.DEV && !STRIPE_PUBLISHABLE_KEY) {
 // Env var lookup order: VITE_STRIPE_PRICE_* (preferred) > VITE_PRICE_* (legacy)
 export const STRIPE_PRICES = {
   // Subscription prices
-  starter_monthly: import.meta.env.VITE_STRIPE_PRICE_CORE_MONTHLY || import.meta.env.VITE_PRICE_STARTER_MONTHLY || '',
-  starter_annual: import.meta.env.VITE_STRIPE_PRICE_CORE_YEARLY || import.meta.env.VITE_PRICE_STARTER_ANNUAL || '',
-  core_monthly: import.meta.env.VITE_STRIPE_PRICE_CORE_MONTHLY || import.meta.env.VITE_PRICE_CORE_MONTHLY || '',
-  core_annual: import.meta.env.VITE_STRIPE_PRICE_CORE_YEARLY || import.meta.env.VITE_PRICE_CORE_ANNUAL || '',
-  pro_monthly: import.meta.env.VITE_STRIPE_PRICE_PRO_MONTHLY || import.meta.env.VITE_PRICE_PRO_MONTHLY || '',
-  pro_annual: import.meta.env.VITE_STRIPE_PRICE_PRO_YEARLY || import.meta.env.VITE_PRICE_PRO_ANNUAL || '',
-  proplus_monthly: import.meta.env.VITE_STRIPE_PRICE_PROPLUS_MONTHLY || import.meta.env.VITE_PRICE_PROPLUS_MONTHLY || '',
-  proplus_annual: import.meta.env.VITE_STRIPE_PRICE_PROPLUS_YEARLY || import.meta.env.VITE_PRICE_PROPLUS_ANNUAL || '',
+  // Fallback chain: VITE_STRIPE_PRICE_*_MONTHLY → VITE_STRIPE_PRICE_* (plain, in .env.local) → VITE_PRICE_* (legacy)
+  starter_monthly: import.meta.env.VITE_STRIPE_PRICE_STARTER_MONTHLY || import.meta.env.VITE_STRIPE_PRICE_STARTER || import.meta.env.VITE_PRICE_STARTER_MONTHLY || '',
+  starter_annual: import.meta.env.VITE_STRIPE_PRICE_STARTER_YEARLY || import.meta.env.VITE_STRIPE_PRICE_STARTER_ANNUAL || import.meta.env.VITE_PRICE_STARTER_ANNUAL || '',
+  core_monthly: import.meta.env.VITE_STRIPE_PRICE_CORE_MONTHLY || import.meta.env.VITE_STRIPE_PRICE_CORE || import.meta.env.VITE_PRICE_CORE_MONTHLY || '',
+  core_annual: import.meta.env.VITE_STRIPE_PRICE_CORE_YEARLY || import.meta.env.VITE_STRIPE_PRICE_CORE_ANNUAL || import.meta.env.VITE_PRICE_CORE_ANNUAL || '',
+  pro_monthly: import.meta.env.VITE_STRIPE_PRICE_PRO_MONTHLY || import.meta.env.VITE_STRIPE_PRICE_PRO || import.meta.env.VITE_PRICE_PRO_MONTHLY || '',
+  pro_annual: import.meta.env.VITE_STRIPE_PRICE_PRO_YEARLY || import.meta.env.VITE_STRIPE_PRICE_PRO_ANNUAL || import.meta.env.VITE_PRICE_PRO_ANNUAL || '',
+  proplus_monthly: import.meta.env.VITE_STRIPE_PRICE_PROPLUS_MONTHLY || import.meta.env.VITE_STRIPE_PRICE_PROPLUS || import.meta.env.VITE_PRICE_PROPLUS_MONTHLY || '',
+  proplus_annual: import.meta.env.VITE_STRIPE_PRICE_PROPLUS_YEARLY || import.meta.env.VITE_STRIPE_PRICE_PROPLUS_ANNUAL || import.meta.env.VITE_PRICE_PROPLUS_ANNUAL || '',
   // Visit prices
   initial_consult: import.meta.env.VITE_PRICE_INITIAL_CONSULT || '',
   followup: import.meta.env.VITE_PRICE_FOLLOWUP || '',

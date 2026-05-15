@@ -59,6 +59,7 @@ import { useWorkflowSyncState } from '../lib/core-workflow-sync';
 // Supporting components
 import { OutcomesDashboardWidget } from './OutcomesDashboardWidget';
 import { WellnessScoreWidget } from './WellnessScoreWidget';
+import { AISparkleButton } from './AISparkleButton';
 import { calculateWellnessScore } from '../lib/developmental-wellness-score';
 import { QuickShareButton } from './ShareWinFlow';
 import { ProactiveNudgeSystem } from './ProactiveNudgeSystem';
@@ -225,8 +226,7 @@ export function Dashboard10({
       .limit(5)
       .then(({ data, error }) => {
         if (error) {
-          console.error('[Dashboard] session_notes query error:', error);
-          return;
+          return; // table may not exist yet — handled by empty state
         }
         if (data && data.length > 0) {
           setPendingReviews(data.map(d => ({
@@ -809,11 +809,19 @@ export function Dashboard10({
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 py-6 space-y-3 sm:space-y-4 sm:space-y-6">
         {shouldShowWellnessScore && (
-          <WellnessScoreWidget
-            score={wellnessScore}
-            childName={child.name}
-            onViewDetails={() => onNavigate?.('analytics-charts')}
-          />
+          <div className="relative">
+            <WellnessScoreWidget
+              score={wellnessScore}
+              childName={child.name}
+              onViewDetails={() => onNavigate?.('analytics-charts')}
+            />
+            <div className="absolute top-3 right-3">
+              <AISparkleButton
+                prompt={`My child ${child.name} has a developmental wellness score of ${wellnessScore.total}/100. Confidence is ${wellnessScore.confidence}%. What does this score mean, what's driving it, and what are the most impactful things I can do this week to improve it?`}
+                label="Explain score"
+              />
+            </div>
+          </div>
         )}
 
         {/* Pending Session Reviews — parent needs to approve */}
@@ -992,7 +1000,13 @@ export function Dashboard10({
           </div>
         ) : (
           <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-gray-100 dark:border-slate-700 shadow-sm">
-            <h3 className="text-sm font-semibold mb-3">This Week</h3>
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-sm font-semibold">This Week</h3>
+              <AISparkleButton
+                prompt={`Summarize this week's progress for ${child?.name || 'my child'}: ${dashboardData.routineAdherence}% routine adherence, ${dashboardData.streak || streakDays} day streak, ${dashboardData.activeGoals?.filter(g => g.progress >= 100).length || 0} of ${dashboardData.activeGoals?.length || 0} goals met. What does this mean and what should I focus on next?`}
+                label="Explain"
+              />
+            </div>
             <div className="grid grid-cols-3 gap-3 text-center">
               <div>
                 <p className="text-2xl font-bold text-teal-600">{dashboardData.routineAdherence}%</p>
@@ -1139,10 +1153,16 @@ export function Dashboard10({
             Shows real value that makes subscription essential
             ======================================== */}
         {shouldShowOutcomesCard && (
-          <section>
+          <section className="relative">
             <OutcomesDashboardWidget
               onViewDetails={() => onNavigate?.('weekly-insights')}
             />
+            <div className="absolute top-3 right-3">
+              <AISparkleButton
+                prompt={`Based on ${child.name}'s outcomes data, what's going well, what needs attention, and what should I prioritize this week with their therapy team?`}
+                label="Analyze"
+              />
+            </div>
           </section>
         )}
 

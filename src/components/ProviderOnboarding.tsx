@@ -74,6 +74,7 @@ interface ProviderFormData {
   npiNumber: string;
   primaryCredentialNumber: string;
   licensedStates: string[];
+  billingTrack: 'aact-partner' | 'independent' | 'cash-only';
   offersConsult: boolean;
   offersDeepReview: boolean;
   consultPrice: number;
@@ -88,6 +89,7 @@ const DEFAULT_FORM: ProviderFormData = {
   lastName: '',
   email: '',
   phone: '',
+  billingTrack: 'aact-partner',
   credentials: '',
   role: 'bcba',
   bio: '',
@@ -152,6 +154,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
   const [form, setForm] = useState<ProviderFormData>(DEFAULT_FORM);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [nonSolicitationAck, setNonSolicitationAck] = useState(false);
 
   const stepIndex = STEPS.findIndex(s => s.id === currentStep);
   const fieldId = (field: string) => `${formId}-${field}`;
@@ -256,7 +259,10 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
           verification_status: 'pending',
           is_active: false,
           offers_telehealth: true,
-          organization: 'independent',
+          organization: form.billingTrack === 'aact-partner' ? 'aact' : 'independent',
+          billing_track: form.billingTrack,
+          non_solicitation_ack: true,
+          non_solicitation_ack_at: new Date().toISOString(),
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
         })
@@ -597,6 +603,62 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
 
         {currentStep === 'services' && (
           <div className="space-y-6">
+
+            {/* Billing Track Selection */}
+            <div className="bg-white rounded-xl border border-gray-200 p-6">
+              <h2 className="text-lg font-semibold text-gray-900 mb-1">Choose Your Practice Track</h2>
+              <p className="text-sm text-gray-500 mb-5">This determines how you get credentialed and paid. You can change tracks later.</p>
+              <div className="space-y-3">
+                {([
+                  {
+                    id: 'aact-partner' as const,
+                    title: 'Aminy Network (Recommended)',
+                    badge: 'Fastest Path to Insurance',
+                    badgeClass: 'bg-teal-100 text-teal-700',
+                    description: 'Credential under Aminy\'s group NPI and access our full payer network across AZ, MT, FL, NV, and TX from day one — AHCCCS/Medicaid, Mercy Care, Health Choice, BCBS, Aetna, UHC, Cigna, Magellan, and state Medicaid plans in all supported states. No individual credentialing wait. Aminy handles all billing, claims, and prior auths. Guaranteed biweekly pay. Aminy fee: 10% of insured sessions.',
+                    highlight: true,
+                  },
+                  {
+                    id: 'independent' as const,
+                    title: 'Independent (Bring Your Own Contracts)',
+                    badge: null,
+                    badgeClass: '',
+                    description: 'Use your own existing payer contracts. Aminy handles scheduling, telehealth, family discovery, and documentation. You bill payers directly. Aminy fee: $149/month flat.',
+                    highlight: false,
+                  },
+                  {
+                    id: 'cash-only' as const,
+                    title: 'Cash Pay Only',
+                    badge: 'Fastest Start',
+                    badgeClass: 'bg-blue-100 text-blue-700',
+                    description: 'No insurance billing. Accept cash-pay families only. Go live in your licensed states immediately. Aminy takes 35% of each session booked through the platform.',
+                    highlight: false,
+                  },
+                ] as const).map(track => (
+                  <button
+                    key={track.id}
+                    type="button"
+                    onClick={() => updateForm({ billingTrack: track.id })}
+                    className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
+                      form.billingTrack === track.id
+                        ? 'border-teal-500 bg-teal-50'
+                        : 'border-gray-200 bg-gray-50 hover:border-gray-300'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="font-semibold text-gray-900">{track.title}</span>
+                      {track.badge && (
+                        <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${track.badgeClass}`}>
+                          {track.badge}
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-sm text-gray-600">{track.description}</p>
+                  </button>
+                ))}
+              </div>
+            </div>
+
             <div className="bg-white rounded-xl border border-gray-200 p-6">
               <h2 className="text-lg font-semibold text-gray-900 mb-6">Services & Pricing</h2>
 
@@ -822,6 +884,22 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                 </div>
               </div>
 
+              {/* Non-solicitation acknowledgment */}
+              <div className={`mt-4 rounded-2xl border p-4 transition-colors ${nonSolicitationAck ? 'border-teal-200 bg-teal-50/60' : 'border-neutral-200 bg-neutral-50'}`}>
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={nonSolicitationAck}
+                    onChange={(e) => setNonSolicitationAck(e.target.checked)}
+                    className="mt-0.5 h-4 w-4 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+                  />
+                  <span className="text-sm text-slate-700">
+                    <span className="font-semibold text-slate-900">Non-Solicitation Agreement — </span>
+                    I understand that families I connect with through the Aminy marketplace may not be solicited to continue or initiate services outside of the Aminy platform for a period of 12 months following our last session on Aminy. This protects both the family and the integrity of the Aminy network.
+                  </span>
+                </label>
+              </div>
+
               {submitError && (
                 <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2">
                   <AlertCircle className="w-4 h-4 text-red-500 flex-shrink-0" />
@@ -847,7 +925,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
             <button
               type="button"
               onClick={handleSubmit}
-              disabled={isSubmitting}
+              disabled={isSubmitting || !nonSolicitationAck}
               className="action-button flex min-h-11 items-center gap-2 rounded-lg bg-cyan-600 px-6 py-2.5 font-medium text-white transition-colors hover:bg-cyan-600/90 disabled:opacity-50"
             >
               {isSubmitting ? (

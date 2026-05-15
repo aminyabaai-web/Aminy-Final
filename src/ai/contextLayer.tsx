@@ -8,6 +8,7 @@
  * Provides context-aware memory for personalized AI experiences
  */
 
+import { supabase } from '../utils/supabase/client';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
 
 export interface UserContext {
@@ -15,30 +16,34 @@ export interface UserContext {
   childName?: string;
   childAge?: string;
   childGender?: string;
+  diagnosis?: string;
   priorities?: string[];
-  
+
+  // Active goals this child is working on
+  activeGoals?: string[];
+
   // Recent Activity
   lastJrSession?: {
     timestamp: Date;
     activity: string;
     duration: number;
   };
-  
+
   lastShopPurchase?: {
     timestamp: Date;
     item: string;
   };
-  
+
   lastHubPost?: {
     timestamp: Date;
     topic: string;
   };
-  
+
   lastCoverageQuestion?: {
     timestamp: Date;
     topic: string;
   };
-  
+
   // Memory Insights
   lastCalmCue?: string;
   progressThisWeek?: {
@@ -46,7 +51,7 @@ export interface UserContext {
     calmMoments: number;
     newStrategies: number;
   };
-  
+
   // Behavioral Patterns
   bestTimeOfDay?: 'morning' | 'afternoon' | 'evening';
   strugglingWith?: string[];
@@ -81,35 +86,101 @@ export interface CurrentContext {
 }
 
 /**
- * Fetch comprehensive user context from all modules
+ * Fetch comprehensive user context — Supabase first, KV for AI-generated extras
  */
 export async function fetchUserContext(userId: string): Promise<UserContext> {
   try {
-    // Fetch from KV store (all user data is stored here)
-    const response = await fetch(
-      `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/context/user/${userId}`,
-      {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${publicAnonKey}`,
-          'Content-Type': 'application/json'
+    // Run Supabase queries and KV fetch in parallel
+    const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+    const [childResult, sessionResult, goalsResult, kvResult] = await Promise.allSettled([
+      // Primary child profile
+      supabase
+        .from('children')
+        .select('name, age_years, age, gender, diagnosis, is_primary')
+        .eq('parent_id', userId)
+        .order('is_primary', { ascending: false })
+        .limit(1)
+        .maybeSingle(),
+
+      // Sessions completed this week
+      supabase
+        .from('session_notes')
+        .select('id, session_date, modality')
+        .eq('user_id', userId)
+        .gte('session_date', weekAgo.split('T')[0])
+        .eq('billing_status', 'submitted')
+        .limit(20),
+
+      // Active treatment goals (top 5 names)
+      supabase
+        .from('goals')
+        .select('title, category, is_active')
+        .eq('user_id', userId)
+        .eq('is_active', true)
+        .limit(5),
+
+      // KV-stored AI-generated context (calm cues, wins, etc.)
+      fetch(
+        `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/context/user/${userId}`,
+        {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${publicAnonKey}`,
+            'Content-Type': 'application/json',
+          },
         }
-      }
-    );
+      ).then(r => r.ok ? r.json() : null).catch(() => null),
+    ]);
 
-    if (!response.ok) {
-      return getDefaultContext();
-    }
+    // Build context from Supabase results
+    const child = childResult.status === 'fulfilled' ? childResult.value.data : null;
+    const sessions = sessionResult.status === 'fulfilled' ? sessionResult.value.data : null;
+    const goals = goalsResult.status === 'fulfilled' ? goalsResult.value.data : null;
+    const kvData = kvResult.status === 'fulfilled' ? kvResult.value : null;
+    const kvContext = kvData?.context || {};
 
-    const data = await response.json();
-    return data.context || getDefaultContext();
-  } catch (error) {
+    const sessionsCompleted = sessions?.length ?? 0;
+    const activeGoalNames = goals?.map((g: { title: string }) => g.title).filter(Boolean) ?? [];
+
+    return {
+      // From Supabase children table
+      childName: child?.name || kvContext.childName,
+      childAge: child?.age_years != null
+        ? String(child.age_years)
+        : child?.age != null
+        ? String(child.age)
+        : kvContext.childAge,
+      childGender: child?.gender || kvContext.childGender,
+      diagnosis: child?.diagnosis || kvContext.diagnosis,
+
+      // From goals table
+      activeGoals: activeGoalNames.length > 0 ? activeGoalNames : kvContext.activeGoals,
+
+      // From session_notes this week
+      progressThisWeek: {
+        sessionsCompleted,
+        calmMoments: kvContext.progressThisWeek?.calmMoments ?? 0,
+        newStrategies: kvContext.progressThisWeek?.newStrategies ?? 0,
+      },
+
+      // From KV (AI-generated, persisted)
+      lastCalmCue: kvContext.lastCalmCue,
+      strugglingWith: kvContext.strugglingWith || [],
+      celebratingWins: kvContext.celebratingWins || [],
+      bestTimeOfDay: kvContext.bestTimeOfDay,
+      priorities: kvContext.priorities,
+      lastJrSession: kvContext.lastJrSession,
+      lastShopPurchase: kvContext.lastShopPurchase,
+      lastHubPost: kvContext.lastHubPost,
+      lastCoverageQuestion: kvContext.lastCoverageQuestion,
+    };
+  } catch {
     return getDefaultContext();
   }
 }
 
 /**
- * Update user context with new activity
+ * Update user context with new activity (AI-generated extras stored in KV)
  */
 export async function updateUserContext(
   userId: string,
@@ -123,12 +194,13 @@ export async function updateUserContext(
         headers: {
           'Authorization': `Bearer ${publicAnonKey}`,
           'Content-Type': 'application/json',
-          'X-User-Id': userId
+          'X-User-Id': userId,
         },
-        body: JSON.stringify({ updates })
+        body: JSON.stringify({ updates }),
       }
     );
-  } catch (error) {
+  } catch {
+    // Fire-and-forget — non-blocking
   }
 }
 
@@ -150,15 +222,16 @@ export async function storeMemory(
         headers: {
           'Authorization': `Bearer ${publicAnonKey}`,
           'Content-Type': 'application/json',
-          'X-User-Id': userId
+          'X-User-Id': userId,
         },
         body: JSON.stringify({
           ...memory,
-          expiresAt: expiresAt.toISOString()
-        })
+          expiresAt: expiresAt.toISOString(),
+        }),
       }
     );
-  } catch (error) {
+  } catch {
+    // Fire-and-forget
   }
 }
 
@@ -176,8 +249,8 @@ export async function fetchMemories(
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${publicAnonKey}`,
-          'X-User-Id': userId
-        }
+          'X-User-Id': userId,
+        },
       }
     );
 
@@ -185,7 +258,7 @@ export async function fetchMemories(
 
     const data = await response.json();
     return data.memories || [];
-  } catch (error) {
+  } catch {
     return [];
   }
 }
@@ -197,10 +270,14 @@ export function buildAIContextString(context: UserContext): string {
   const parts: string[] = [];
 
   if (context.childName) {
-    parts.push(`You're supporting the parent of ${context.childName}${context.childAge ? ` (age ${context.childAge})` : ''}.`);
+    const ageStr = context.childAge ? `, age ${context.childAge}` : '';
+    const diagStr = context.diagnosis ? ` (${context.diagnosis})` : '';
+    parts.push(`You're supporting the parent of ${context.childName}${ageStr}${diagStr}.`);
   }
 
-  if (context.priorities && context.priorities.length > 0) {
+  if (context.activeGoals && context.activeGoals.length > 0) {
+    parts.push(`Active therapy goals: ${context.activeGoals.join(', ')}.`);
+  } else if (context.priorities && context.priorities.length > 0) {
     parts.push(`Their top priorities: ${context.priorities.join(', ')}.`);
   }
 
@@ -210,15 +287,18 @@ export function buildAIContextString(context: UserContext): string {
 
   if (context.progressThisWeek) {
     const { sessionsCompleted, calmMoments, newStrategies } = context.progressThisWeek;
-    parts.push(`This week: ${sessionsCompleted} sessions, ${calmMoments} calm moments, ${newStrategies} new strategies.`);
+    const sessionStr = sessionsCompleted === 0
+      ? 'no ABA sessions yet this week'
+      : `${sessionsCompleted} ABA session${sessionsCompleted !== 1 ? 's' : ''} this week`;
+    parts.push(`Progress: ${sessionStr}, ${calmMoments} calm moments, ${newStrategies} new strategies.`);
   }
 
   if (context.strugglingWith && context.strugglingWith.length > 0) {
-    parts.push(`Currently working on: ${context.strugglingWith.join(', ')}.`);
+    parts.push(`Currently working through: ${context.strugglingWith.join(', ')}.`);
   }
 
   if (context.celebratingWins && context.celebratingWins.length > 0) {
-    parts.push(`Recent wins to celebrate: ${context.celebratingWins.join(', ')}.`);
+    parts.push(`Recent wins to build on: ${context.celebratingWins.join(', ')}.`);
   }
 
   if (context.lastJrSession) {
@@ -249,18 +329,20 @@ export function detectModuleContext(pathname: string): string {
  */
 export function getCurrentContext(pathname: string, userContext?: UserContext): CurrentContext {
   const path = pathname.toLowerCase();
-  
-  // Detect module
+  const childName = userContext?.childName;
+
   let module: CurrentContext['module'] = 'dashboard';
   let moduleName = 'Dashboard';
   let placeholder = 'Message Aminy AI...';
   let contextHint = "I'm here to help with anything on your mind.";
-  
-  if (path.includes('/jr')) {
+
+  if (path.includes('/jr') || path.includes('ease') || path.includes('junior')) {
     module = 'jr';
     moduleName = 'Ease';
-    placeholder = 'Ask about calm routines, rewards, transitions, or progress...';
-    contextHint = userContext?.lastJrSession 
+    placeholder = childName
+      ? `Ask about ${childName}'s calm routines, rewards, transitions...`
+      : 'Ask about calm routines, rewards, transitions, or progress...';
+    contextHint = userContext?.lastJrSession
       ? `Last Ease session: ${userContext.lastJrSession.activity}`
       : 'I can help with calm routines, rewards, transitions, and behavioral strategies.';
   } else if (path.includes('/shop')) {
@@ -268,79 +350,76 @@ export function getCurrentContext(pathname: string, userContext?: UserContext): 
     moduleName = 'Shop';
     placeholder = 'Ask about tools, resources, or recommendations...';
     contextHint = 'I can help you find the perfect tools for your family.';
-  } else if (path.includes('/hub')) {
+  } else if (path.includes('/hub') || path.includes('community')) {
     module = 'hub';
     moduleName = 'Parent Hub';
     placeholder = 'Ask about community, stories, or support...';
     contextHint = 'I can help you connect with other parents and share experiences.';
-  } else if (path.includes('/coverage')) {
+  } else if (path.includes('/coverage') || path.includes('insurance') || path.includes('benefits')) {
     module = 'coverage';
     moduleName = 'Coverage';
     placeholder = 'Ask about insurance, benefits, or coverage...';
     contextHint = 'I can help you understand your coverage and benefits.';
-  } else if (path.includes('/plan')) {
+  } else if (path.includes('/plan') || path.includes('routine') || path.includes('home-program')) {
     module = 'plan';
     moduleName = 'Daily Plan';
     placeholder = 'Ask about your plan, routines, or goals...';
     contextHint = 'I can help you build calm, sustainable routines.';
-  } else if (path.includes('/care')) {
+  } else if (path.includes('/care') || path.includes('appointment') || path.includes('session')) {
     module = 'care';
     moduleName = 'Care Team';
     placeholder = 'Ask about your care team or appointments...';
     contextHint = 'I can help you manage your care team and sessions.';
-  } else if (path.includes('/vault')) {
+  } else if (path.includes('/vault') || path.includes('record') || path.includes('document')) {
     module = 'vault';
     moduleName = 'Document Vault';
     placeholder = 'Ask about documents, reports, or records...';
     contextHint = 'I can help you organize and understand your documents.';
-  } else if (path.includes('/settings')) {
+  } else if (path.includes('/settings') || path.includes('profile')) {
     module = 'settings';
     moduleName = 'Settings';
     placeholder = 'Ask about settings, preferences, or account...';
     contextHint = 'I can help you customize your Aminy experience.';
   }
-  
-  // Determine user state
+
   const userState = {
     isActive: true,
     hasRecentActivity: !!(
-      userContext?.lastJrSession || 
-      userContext?.lastShopPurchase || 
+      userContext?.lastJrSession ||
+      userContext?.lastShopPurchase ||
       userContext?.lastHubPost
     ),
-    needsAttention: !!(userContext?.strugglingWith && userContext.strugglingWith.length > 0)
+    needsAttention: !!(userContext?.strugglingWith && userContext.strugglingWith.length > 0),
   };
-  
-  // Recent action
+
   let recentAction: CurrentContext['recentAction'] | undefined;
-  
   if (userContext?.lastJrSession && module === 'jr') {
     recentAction = {
       type: 'jr_session',
       timestamp: userContext.lastJrSession.timestamp,
-      details: userContext.lastJrSession.activity
+      details: userContext.lastJrSession.activity,
     };
   } else if (userContext?.lastShopPurchase && module === 'shop') {
     recentAction = {
       type: 'shop_purchase',
       timestamp: userContext.lastShopPurchase.timestamp,
-      details: userContext.lastShopPurchase.item
+      details: userContext.lastShopPurchase.item,
     };
   } else if (userContext?.lastHubPost && module === 'hub') {
     recentAction = {
       type: 'hub_post',
       timestamp: userContext.lastHubPost.timestamp,
-      details: userContext.lastHubPost.topic
+      details: userContext.lastHubPost.topic,
     };
   }
-  
+
   return {
     module,
     moduleName,
     userState,
     recentAction,
     placeholder,
-    contextHint
+    contextHint,
   };
 }
 
@@ -349,23 +428,19 @@ export function getCurrentContext(pathname: string, userContext?: UserContext): 
  */
 export function generateContextChips(pathname: string, context: UserContext): string[] {
   const chips: string[] = [];
-  
   const module = detectModuleContext(pathname);
   chips.push(module);
 
   if (pathname.includes('/jr') && context.lastJrSession) {
     chips.push('Ease Activity');
   }
-
   if (pathname.includes('/plan')) {
     if (context.bestTimeOfDay === 'morning') chips.push('Morning Routine');
     else if (context.bestTimeOfDay === 'evening') chips.push('Evening Routine');
   }
-
   if (pathname.includes('/coverage')) {
     chips.push('Coverage Question');
   }
-
   if (context.strugglingWith && context.strugglingWith.length > 0) {
     chips.push(context.strugglingWith[0]);
   }
@@ -373,9 +448,6 @@ export function generateContextChips(pathname: string, context: UserContext): st
   return chips.slice(0, 3);
 }
 
-/**
- * Helper: Get time ago string
- */
 function getTimeAgo(date: Date): string {
   const now = new Date();
   const diffMs = now.getTime() - new Date(date).getTime();
@@ -389,17 +461,14 @@ function getTimeAgo(date: Date): string {
   return `${diffDays} days ago`;
 }
 
-/**
- * Default context fallback
- */
 function getDefaultContext(): UserContext {
   return {
     progressThisWeek: {
       sessionsCompleted: 0,
       calmMoments: 0,
-      newStrategies: 0
+      newStrategies: 0,
     },
     strugglingWith: [],
-    celebratingWins: []
+    celebratingWins: [],
   };
 }

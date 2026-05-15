@@ -25,7 +25,9 @@ import {
   Calendar, Star, ChevronRight, Download, Share2, Lock, Unlock,
   RefreshCw, BookOpen, MessageSquare, Shield, Zap, Hand
 } from 'lucide-react';
+import { createEmptyInsightNavigator } from '../lib/child-profiles';
 import type { InsightNavigator, ChildProfile, ConditionType } from '../lib/child-profiles';
+import { supabase } from '../utils/supabase/client';
 
 interface InsightNavigatorReportProps {
   childId: string;
@@ -52,74 +54,36 @@ export function InsightNavigatorReport({
 
   const loadNavigator = async () => {
     setIsLoading(true);
-    await new Promise(resolve => setTimeout(resolve, 800));
-    setNavigator(generateMockNavigator());
-    setIsLoading(false);
+    try {
+      // Try to load stored InsightNavigator from Supabase
+      const { data: stored } = await supabase
+        .from('insight_navigators')
+        .select('*')
+        .eq('child_id', childId)
+        .order('version', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (stored) {
+        setNavigator(stored as InsightNavigator);
+      } else {
+        // No stored navigator — start with empty scaffold from child profile data
+        const empty = createEmptyInsightNavigator(childId);
+        if (childProfile) {
+          empty.currentPresentation.strengths = childProfile.strengths || [];
+          empty.currentPresentation.challenges = childProfile.challenges || [];
+          empty.currentPresentation.interests = childProfile.interests || [];
+          empty.currentPresentation.triggers = childProfile.triggers || [];
+          empty.currentPresentation.calmingStrategies = childProfile.calmingStrategies || [];
+        }
+        setNavigator(empty);
+      }
+    } catch {
+      setNavigator(createEmptyInsightNavigator(childId));
+    } finally {
+      setIsLoading(false);
+    }
   };
-
-  const generateMockNavigator = (): InsightNavigator => ({
-    id: `insight-${childId}`,
-    childId,
-    version: 12,
-    lastUpdated: new Date().toISOString(),
-    lastUpdatedBy: 'ai',
-
-    executiveSummary: `Alex is a 6-year-old with Autism Spectrum Disorder (Level 1) and ADHD-Combined Type. He has made significant progress in morning routines (now 80% independent) and communication (using 3-word phrases consistently). Current focus areas include emotional regulation during transitions and evening routine consistency. Parents are highly engaged and consistently implement strategies. Alex responds well to visual supports, first-then language, and movement breaks.`,
-
-    background: {
-      familyContext: 'Two-parent household with older sibling (Emma, 9). Grandparents nearby and involved. Both parents work full-time with flexible schedules.',
-      developmentalHistory: 'Born full-term, language delay noted at 18 months. Diagnosed ASD at age 4, ADHD at age 5. Started ABA at age 4.5 with good response.',
-      medicalHistory: 'Takes Guanfacine 1mg daily for ADHD. Allergies: seasonal only. Sleep: improving with melatonin.',
-      educationalHistory: 'Inclusive kindergarten with 1:1 aide. Has IEP with speech, OT, and behavioral goals.'
-    },
-
-    currentPresentation: {
-      strengths: ['Strong visual learner', 'Excellent memory', 'Affectionate with family', 'Loves music', 'Good fine motor skills', 'Responds well to routine'],
-      challenges: ['Emotional regulation during transitions', 'Evening routine resistance', 'Peer social interactions', 'New food acceptance'],
-      interests: ['Dinosaurs', 'Trains', 'Building blocks', 'Music', 'Water play'],
-      triggers: ['Unexpected changes', 'Loud environments', 'Being interrupted', 'Homework time'],
-      calmingStrategies: ['Deep pressure', 'Movement breaks', 'Music', 'Quiet space', 'Dinosaur books'],
-      communicationStyle: 'Verbal with 3-4 word phrases. Uses some AAC. Better expressive than receptive. Responds well to visual supports.',
-      sensoryProfile: 'Seeks vestibular and proprioceptive input. Sensitive to loud sounds. Prefers dim lighting.'
-    },
-
-    insights: {
-      whatsWorking: [
-        { id: 'w1', content: 'Visual schedule for morning routine - 80% independence', source: 'provider', sourceDetail: 'BCBA', addedAt: '2024-03-15', category: 'Routine', priority: 'high' },
-        { id: 'w2', content: 'First-Then board reduces transition tantrums', source: 'parent', addedAt: '2024-03-10', category: 'Transitions', priority: 'high' },
-        { id: 'w3', content: 'Token economy motivating task completion', source: 'provider', addedAt: '2024-03-01', category: 'Motivation', priority: 'medium' }
-      ],
-      whatsNotWorking: [
-        { id: 'n1', content: 'Evening routine too many steps', source: 'provider', addedAt: '2024-03-15', category: 'Routine', priority: 'high' },
-        { id: 'n2', content: 'New food introduction causing refusal', source: 'parent', addedAt: '2024-03-14', category: 'Feeding', priority: 'medium' }
-      ],
-      opportunities: [
-        { id: 'o1', content: 'Ready for peer play dates', source: 'provider', addedAt: '2024-03-15', category: 'Social', priority: 'high' },
-        { id: 'o2', content: 'School willing to collaborate on IEP', source: 'parent', addedAt: '2024-03-12', category: 'School', priority: 'medium' }
-      ],
-      recommendations: [
-        { id: 'r1', content: 'Simplify evening routine to 6-8 steps', source: 'provider', addedAt: '2024-03-15', category: 'Routine', priority: 'high' },
-        { id: 'r2', content: 'Use food bridge strategy for new foods', source: 'provider', addedAt: '2024-03-15', category: 'Feeding', priority: 'medium' }
-      ]
-    },
-
-    progressTimeline: [
-      { id: 't1', date: '2024-03-15', area: 'Morning Routine', description: '80% independence - major milestone!', type: 'milestone', addedBy: 'BCBA' },
-      { id: 't2', date: '2024-03-10', area: 'Communication', description: 'Using 3-word phrases consistently', type: 'milestone', addedBy: 'SLP' }
-    ],
-
-    providerQuickStart: {
-      mustKnow: ['Use visual supports', 'Give 2-min warnings before transitions', 'Use dinosaurs as motivators', 'Keep language simple', 'Allow movement breaks'],
-      approachGuidance: ['Start with preferred activity', 'Use First-Then language', 'Praise specific behaviors', 'Model calm voice'],
-      avoidThese: ['Sudden changes without warning', 'Forcing eye contact', 'Time pressure', 'Taking away preferred items as punishment'],
-      familyPreferences: ['Video off for first 5 min', 'Mom usually leads sessions', 'Prefer naturalistic teaching', 'Email summaries appreciated']
-    },
-
-    documentReferences: [
-      { id: 'd1', type: 'evaluation', name: 'Developmental Evaluation', date: '2023-11-15', keyInsights: ['ASD Level 1', 'ADHD-Combined'] },
-      { id: 'd2', type: 'iep', name: 'Current IEP', date: '2024-01-10', keyInsights: ['Speech 2x/week', 'OT 1x/week'] }
-    ]
-  });
 
   if (isLoading) {
     return (

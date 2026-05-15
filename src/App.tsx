@@ -42,6 +42,7 @@ import {
 import { LaunchStateBadge } from "./components/ui/LaunchStateBadge";
 import { handleOnboardingComplete as triggerRetentionFlow } from "./lib/store";
 import { AIProvider } from "./context/AIContext";
+import { AISparkleProvider } from "./lib/ai-sparkle-context";
 import { ConversationProvider } from "./context/ConversationContext";
 import { ThemeProvider } from "./lib/theme-provider";
 import { supabase } from "./utils/supabase/client";
@@ -654,6 +655,11 @@ const StripeRevenueDashboard = lazy(() =>
     default: m.StripeRevenueDashboard,
   })),
 );
+const AACTPayerDashboard = lazy(() =>
+  import("./components/AACTPayerDashboard").then((m) => ({
+    default: m.AACTPayerDashboard,
+  })),
+);
 const WaitingRoom = lazy(() =>
   import("./components/telehealth/WaitingRoom").then((m) => ({
     default: m.WaitingRoom,
@@ -989,6 +995,7 @@ type AppScreen =
   | "video-call-room" // Telehealth video call room
   | "cr-sync" // CentralReach sync dashboard
   | "revenue-dashboard" // Stripe revenue metrics (admin)
+  | "aact-ops-dashboard" // AACT payer scorecard — Finance/Clinical/Operations KPIs
   | "waiting-room" // Telehealth waiting room
   | "data-collection" // DTT/NET/Behavior data collection for BCBAs/RBTs
   | "treatment-plan-editor" // Treatment plan clinical authoring tool for BCBAs
@@ -1141,6 +1148,8 @@ const DEEP_LINKABLE_SCREENS: AppScreen[] = [
   "clinical-reports", "weekly-insights",
   "claims-dashboard", "payer-dashboard", "evv-dashboard",
   "provider-portal", "provider-onboarding", "cr-sync",
+  "share-viewer", "medications", "mchat-screening",
+  "aact-ops-dashboard",
 ];
 
 const CHROMELESS_SCREENS = new Set<AppScreen>([
@@ -1266,6 +1275,7 @@ export default function App() {
 
   const [userData, setUserData] = useState<UserData>(getInitialUserData);
   const [bevelChatOpen, setBevelChatOpen] = useState(false);
+  const [bevelInitialPrompt, setBevelInitialPrompt] = useState<string | undefined>(undefined);
   const showDesktopAppShell = userData.hasCompletedOnboarding && !CHROMELESS_SCREENS.has(currentScreen);
   const pilotAccessContext = buildPilotAccessContext({
     state: userData.state,
@@ -1280,6 +1290,9 @@ export default function App() {
   const [activeTab, setActiveTab] = useState("home");
   const [messagesLeft, setMessagesLeft] = useState(10);
   const [isInitialized, setIsInitialized] = useState(false);
+  // authReady: true once Supabase has determined initial auth state (INITIAL_SESSION fired).
+  // Gates the main UI render so unauthenticated users never briefly see dashboard.
+  const [authReady, setAuthReady] = useState(false);
   const [showHelpModal, setShowHelpModal] = useState(false);
   const [showUnloadMindModal, setShowUnloadMindModal] = useState(false);
   const [showNotificationPrompt, setShowNotificationPrompt] = useState(false);
@@ -1642,6 +1655,8 @@ export default function App() {
         window.setTimeout(() => {
           void (async () => {
         if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && session?.user) {
+          // Auth state determined — unblock UI render
+          if (event === 'INITIAL_SESSION') setAuthReady(true);
           hadSessionRef.current = true;
           // Load user profile and children data from Supabase
           try {
@@ -1792,6 +1807,9 @@ export default function App() {
               navigateToScreen('onboarding');
             }
           }
+        } else if (event === 'INITIAL_SESSION' && !session?.user) {
+          // No active session on startup — unblock UI and let splash/login render
+          setAuthReady(true);
         } else if (event === 'SIGNED_OUT') {
           // Stop the proactive nudge scheduler
           proactiveNudges.stop();
@@ -2334,7 +2352,11 @@ export default function App() {
                     "evv-dashboard", "claims-dashboard", "payer-dashboard", "clinical-reports",
                     "prior-auth", "vision-ai", "caregiver-enrollment", "b2b-partner", "b2b-setup",
                     "outcome-measures", "cr-sync", "revenue-dashboard", "waiting-room",
-                    "referral-dashboard",
+                    "referral-dashboard", "medications", "parent-calm-mode", "mchat-screening",
+                    "account-settings", "token-rewards", "caregiver-timesheet",
+                    "provider-payout-setup", "denial-workbench", "credentialing-support",
+                    "clinical-templates", "bcba-briefing", "fiscal-agent-submission",
+                    "aact-ops-dashboard",
                   ];
                   if (validScreens.includes(resolved as AppScreen)) {
                     navigateToScreen(resolved as AppScreen);
@@ -2466,8 +2488,11 @@ export default function App() {
               <ProviderMarketplace
                 onBack={() => navigateToScreen("dashboard")}
                 onBookSession={(providerId: string) => {
-                  // Navigate to telehealth booking flow
                   navigateToScreen("telehealth");
+                }}
+                onViewProvider={(providerId: string) => {
+                  setViewingProviderId(providerId);
+                  navigateToScreen("provider-reviews");
                 }}
               />
             </Suspense>
@@ -2478,6 +2503,7 @@ export default function App() {
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <ProviderPortal
                 providerId={userData.id ?? ''}
+                onNavigate={(screen) => navigateToScreen(screen as AppScreen)}
               />
             </Suspense>
           );
@@ -3314,6 +3340,15 @@ export default function App() {
             </Suspense>
           );
 
+        case "aact-ops-dashboard":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <AACTPayerDashboard
+                onBack={() => navigateToScreen("dashboard")}
+              />
+            </Suspense>
+          );
+
         case "revenue-dashboard":
           return (
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
@@ -3546,6 +3581,13 @@ export default function App() {
     );
   };
 
+  // Render-blocking auth gate: show skeleton until Supabase determines initial session.
+  // Prevents unauthenticated users from briefly seeing authenticated UI.
+  // authReady is set by the INITIAL_SESSION event in onAuthStateChange (fires ~50-200ms).
+  if (!authReady) {
+    return <LoadingSkeleton screen="splash" />;
+  }
+
   return (
     <ThemeProvider defaultTheme="system">
       <AIProvider>
@@ -3613,6 +3655,9 @@ export default function App() {
                   <Suspense fallback={null}>
                     <PWAInstallPrompt />
                   </Suspense>
+
+                  {/* AI Sparkle context — allows any child screen to open Aminy chat with a pre-filled prompt */}
+                  <AISparkleProvider onOpen={(prompt) => { setBevelInitialPrompt(prompt); setBevelChatOpen(true); }}>
 
                   {/* Desktop layout: sidebar + content; Mobile: content only */}
                   <div className={showDesktopAppShell ? "mx-auto max-w-7xl md:flex" : "mx-auto max-w-7xl"}>
@@ -3686,13 +3731,16 @@ export default function App() {
                     <Suspense fallback={null}>
                       <BevelChatOverlay
                         isOpen={bevelChatOpen}
-                        onClose={() => setBevelChatOpen(false)}
+                        onClose={() => { setBevelChatOpen(false); setBevelInitialPrompt(undefined); }}
                         userId={userData.id}
                         currentPath={currentScreen}
                         childName={userData.childName || undefined}
+                        initialPrompt={bevelInitialPrompt}
                       />
                     </Suspense>
                   )}
+
+                  </AISparkleProvider>
 
                   {/* Investor demo mode overlay — activate with ?demo=investor */}
                   {investorDemoActive && (

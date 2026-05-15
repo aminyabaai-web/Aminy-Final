@@ -766,11 +766,14 @@ export function ProviderMarketplace({
                 </div>
                 <p className="text-sm text-gray-500">{typeInfo.fullTitle}</p>
               </div>
-              <div className="flex items-center gap-1 text-sm">
+              <button
+                onClick={(e) => { e.stopPropagation(); onViewProvider?.(provider.id); }}
+                className="flex items-center gap-1 text-sm hover:underline"
+              >
                 <Star className="w-4 h-4 text-amber-400 fill-current" />
                 <span className="font-medium">{provider.rating}</span>
                 <span className="text-gray-400">({provider.reviewCount})</span>
-              </div>
+              </button>
             </div>
 
             {/* Specialties */}
