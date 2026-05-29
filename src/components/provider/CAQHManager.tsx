@@ -26,6 +26,7 @@ import {
   XCircle,
 } from 'lucide-react';
 import { DEMO_PROVIDERS } from '../../lib/credentialing-orchestrator';
+import { isDemoMode } from '../../lib/demo-seed';
 
 interface CAQHManagerProps {
   providerId?: string;
@@ -63,11 +64,51 @@ function RingChart({ percent, size = 56, label }: { percent: number; size?: numb
 }
 
 export default function CAQHManager({ providerId = 'prov-001', onBack }: CAQHManagerProps) {
-  const provider = DEMO_PROVIDERS.find(p => p.application.providerId === providerId) ?? DEMO_PROVIDERS[0];
-  const { caqhProfile } = provider;
   const [expandedCategory, setExpandedCategory] = useState<string | null>('Personal Information');
   const [syncing, setSyncing] = useState(false);
   const [synced, setSynced] = useState(false);
+
+  // Sample CAQH profiles are presentation-only — never show fabricated
+  // credentialing data (CAQH IDs, attestation dates, document status) to real
+  // providers. Real CAQH data will be loaded from the backend once wired.
+  const provider = isDemoMode()
+    ? (DEMO_PROVIDERS.find(p => p.application.providerId === providerId) ?? DEMO_PROVIDERS[0])
+    : null;
+
+  if (!provider) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <div className="bg-white border-b border-gray-100 px-4 pt-12 pb-4">
+          <div className="flex items-center gap-3">
+            {onBack && (
+              <button onClick={onBack} className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors">
+                <ArrowLeft size={20} className="text-gray-700" />
+              </button>
+            )}
+            <div>
+              <h1 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                <Shield size={18} className="text-blue-600" />
+                CAQH ProView Manager
+              </h1>
+              <p className="text-xs text-gray-500">Universal credentialing profile</p>
+            </div>
+          </div>
+        </div>
+        <div className="flex flex-col items-center justify-center text-center px-6 py-16">
+          <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+            <Shield size={28} className="text-slate-400" />
+          </div>
+          <h2 className="text-base font-semibold text-slate-700">No CAQH profile connected yet</h2>
+          <p className="text-sm text-slate-500 mt-1 max-w-xs">
+            Once your CAQH ProView profile is linked, your documents, attestation status, and
+            re-credentialing reminders will appear here.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  const { caqhProfile } = provider;
 
   const handleSync = () => {
     setSyncing(true);

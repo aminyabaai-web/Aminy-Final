@@ -61,7 +61,7 @@ describe('Tier Utilities', () => {
 
   describe('getTierDisplayName', () => {
     it('returns correct display names', () => {
-      expect(getTierDisplayName('free')).toBe('Free');
+      expect(getTierDisplayName('free')).toBe('Start Free Trial');  // Free tier displays as trial CTA
       expect(getTierDisplayName('starter')).toBe('Core'); // Starter now maps to Core
       expect(getTierDisplayName('core')).toBe('Core');
       expect(getTierDisplayName('pro')).toBe('Pro');
@@ -69,7 +69,7 @@ describe('Tier Utilities', () => {
     });
 
     it('handles undefined input', () => {
-      expect(getTierDisplayName(undefined)).toBe('Free');
+      expect(getTierDisplayName(undefined)).toBe('Start Free Trial');
     });
 
     it('normalizes and returns display name', () => {

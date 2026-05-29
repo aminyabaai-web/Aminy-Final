@@ -104,8 +104,6 @@ export async function logServerAuditEvent(event: Omit<ServerAuditEvent, 'id' | '
 
     if (error) {
       console.error('[SERVER AUDIT] Failed to log event:', error);
-    } else {
-      console.log('[SERVER AUDIT]', auditEvent.action, auditEvent.resource_type, auditEvent.resource_id);
     }
   } catch (err) {
     console.error('[SERVER AUDIT] Exception logging event:', err);

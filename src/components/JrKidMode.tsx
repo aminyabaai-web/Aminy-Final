@@ -47,7 +47,7 @@ interface JrKidModeProps {
 
 export const JrKidMode: React.FC<JrKidModeProps> = ({
   childName,
-  tokens,
+  tokens = 0,
   onTokensChange,
   onExitKidMode,
   onSessionComplete,
@@ -201,7 +201,7 @@ export const JrKidMode: React.FC<JrKidModeProps> = ({
 
         {/* Rewards Content */}
         <div className="max-w-md mx-auto px-4 py-8">
-          <div className="grid grid-cols-1 gap-3 sm:gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 gap-3 sm:gap-6">
             {(() => {
               // Static color classes - Tailwind purges dynamic classes at build time
               const rewardColors: Record<string, { gradient: string; border: string }> = {
@@ -326,10 +326,10 @@ export const JrKidMode: React.FC<JrKidModeProps> = ({
 
       {/* Kid Mode Content - Large Activity Tiles */}
       <div className="max-w-md mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 gap-3 sm:gap-4 sm:gap-6 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-3 sm:gap-6 md:grid-cols-2">
           {/* Speech Tile */}
           <Card 
-            className={`p-8 text-center bg-gradient-to-br from-blue-100 to-blue-200 border-blue-200 cursor-pointer transition-all duration-200 ${!prefersReducedMotion ? 'hover:scale-105' : 'hover:bg-blue-150'}`}
+            className={`p-8 text-center bg-gradient-to-br from-blue-100 to-blue-200 border-blue-200 cursor-pointer transition-all duration-200 ${!prefersReducedMotion ? 'hover:scale-105' : 'hover:bg-blue-200'}`}
             onClick={() => startModule('speech')}
           >
             <div className="p-4 bg-blue-500 rounded-full inline-flex mb-4">
@@ -341,7 +341,7 @@ export const JrKidMode: React.FC<JrKidModeProps> = ({
 
           {/* Social Tile */}
           <Card 
-            className={`p-8 text-center bg-gradient-to-br from-green-100 to-green-200 border-green-200 cursor-pointer transition-all duration-200 ${!prefersReducedMotion ? 'hover:scale-105' : 'hover:bg-green-150'}`}
+            className={`p-8 text-center bg-gradient-to-br from-green-100 to-green-200 border-green-200 cursor-pointer transition-all duration-200 ${!prefersReducedMotion ? 'hover:scale-105' : 'hover:bg-green-200'}`}
             onClick={() => startModule('social')}
           >
             <div className="p-4 bg-green-500 rounded-full inline-flex mb-4">
@@ -353,7 +353,7 @@ export const JrKidMode: React.FC<JrKidModeProps> = ({
 
           {/* Sensory Tile */}
           <Card 
-            className={`p-8 text-center bg-gradient-to-br from-purple-100 to-purple-200 border-purple-200 cursor-pointer transition-all duration-200 ${!prefersReducedMotion ? 'hover:scale-105' : 'hover:bg-purple-150'}`}
+            className={`p-8 text-center bg-gradient-to-br from-purple-100 to-purple-200 border-purple-200 cursor-pointer transition-all duration-200 ${!prefersReducedMotion ? 'hover:scale-105' : 'hover:bg-purple-200'}`}
             onClick={() => startModule('sensory')}
           >
             <div className="p-4 bg-purple-500 rounded-full inline-flex mb-4">
@@ -365,7 +365,7 @@ export const JrKidMode: React.FC<JrKidModeProps> = ({
 
           {/* Routines Tile */}
           <Card 
-            className={`p-8 text-center bg-gradient-to-br from-orange-100 to-orange-200 border-orange-200 cursor-pointer transition-all duration-200 ${!prefersReducedMotion ? 'hover:scale-105' : 'hover:bg-orange-150'}`}
+            className={`p-8 text-center bg-gradient-to-br from-orange-100 to-orange-200 border-orange-200 cursor-pointer transition-all duration-200 ${!prefersReducedMotion ? 'hover:scale-105' : 'hover:bg-orange-200'}`}
             onClick={() => startModule('routines')}
           >
             <div className="p-4 bg-orange-500 rounded-full inline-flex mb-4">
@@ -377,7 +377,7 @@ export const JrKidMode: React.FC<JrKidModeProps> = ({
 
           {/* Rewards Tile */}
           <Card 
-            className={`p-8 text-center bg-gradient-to-br from-pink-100 to-pink-200 border-pink-200 cursor-pointer transition-all duration-200 col-span-1 md:col-span-2 ${!prefersReducedMotion ? 'hover:scale-105' : 'hover:bg-pink-150'}`}
+            className={`p-8 text-center bg-gradient-to-br from-pink-100 to-pink-200 border-pink-200 cursor-pointer transition-all duration-200 col-span-1 md:col-span-2 ${!prefersReducedMotion ? 'hover:scale-105' : 'hover:bg-pink-200'}`}
             onClick={() => setShowRewards(true)}
           >
             <div className="p-4 bg-pink-500 rounded-full inline-flex mb-4">
@@ -473,6 +473,36 @@ const ModuleInterface: React.FC<ModuleInterfaceProps> = ({
     return <div>Module not found</div>;
   }
 
+  // Static color classes — Tailwind v4 JIT only emits complete static strings,
+  // so dynamic class assembly (e.g. `bg-${config.color}-500`) is never generated.
+  const moduleColors: Record<string, { pageBg: string; iconBg: string; button: string; accentText: string }> = {
+    blue: {
+      pageBg: 'bg-gradient-to-br from-blue-50 via-blue-50 to-blue-100',
+      iconBg: 'bg-blue-500',
+      button: 'bg-blue-500 hover:bg-blue-600',
+      accentText: 'text-blue-500',
+    },
+    green: {
+      pageBg: 'bg-gradient-to-br from-green-50 via-green-50 to-green-100',
+      iconBg: 'bg-green-500',
+      button: 'bg-green-500 hover:bg-green-600',
+      accentText: 'text-green-500',
+    },
+    purple: {
+      pageBg: 'bg-gradient-to-br from-purple-50 via-purple-50 to-purple-100',
+      iconBg: 'bg-purple-500',
+      button: 'bg-purple-500 hover:bg-purple-600',
+      accentText: 'text-purple-500',
+    },
+    orange: {
+      pageBg: 'bg-gradient-to-br from-orange-50 via-orange-50 to-orange-100',
+      iconBg: 'bg-orange-500',
+      button: 'bg-orange-500 hover:bg-orange-600',
+      accentText: 'text-orange-500',
+    },
+  };
+  const colors = moduleColors[config.color] ?? moduleColors.blue;
+
   const handleActivityAction = () => {
     if (sessionData) {
       setSessionData({
@@ -531,7 +561,7 @@ const ModuleInterface: React.FC<ModuleInterfaceProps> = ({
   const currentActivityData = config.activities[currentActivity];
 
   return (
-    <div className={`min-h-screen bg-gradient-to-br from-${config.color}-50 via-${config.color}-50 to-${config.color}-100`}>
+    <div className={`min-h-screen ${colors.pageBg}`}>
       {/* Module Header */}
       <div className="bg-white/80 backdrop-blur-sm border-b border-gray-100 px-4 py-4">
         <div className="max-w-md mx-auto flex items-center justify-between">
@@ -561,7 +591,7 @@ const ModuleInterface: React.FC<ModuleInterfaceProps> = ({
 
       {/* Activity Content */}
       <div className="max-w-md mx-auto px-4 py-12 text-center">
-        <div className={`p-6 bg-${config.color}-500 rounded-full inline-flex mb-8`}>
+        <div className={`p-6 ${colors.iconBg} rounded-full inline-flex mb-8`}>
           <config.icon className="w-16 h-16 text-white" />
         </div>
 
@@ -604,7 +634,7 @@ const ModuleInterface: React.FC<ModuleInterfaceProps> = ({
           <Button
             onClick={handleActivityAction}
             size="lg"
-            className={`bg-${config.color}-500 hover:bg-${config.color}-600 text-white px-8 py-4 text-lg`}
+            className={`${colors.button} text-white px-8 py-4 text-lg`}
             disabled={isListening}
           >
             {isListening ? (
@@ -623,7 +653,7 @@ const ModuleInterface: React.FC<ModuleInterfaceProps> = ({
 
         {activityComplete && (
           <div className="animate-bounce">
-            <Sparkles className={`w-12 h-12 text-${config.color}-500 mx-auto`} />
+            <Sparkles className={`w-12 h-12 ${colors.accentText} mx-auto`} />
           </div>
         )}
       </div>

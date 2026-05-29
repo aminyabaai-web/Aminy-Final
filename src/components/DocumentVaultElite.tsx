@@ -33,6 +33,7 @@ import {
   HardDrive,
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { isDemoMode } from '../lib/demo-seed';
 
 interface DocumentVaultEliteProps {
   onBack?: () => void;
@@ -72,9 +73,12 @@ const CATEGORIES: { id: DocCategory; label: string }[] = [
   { id: 'therapy-notes', label: 'Therapy Notes' },
 ];
 
-const CARE_TEAM = ['Dr. Sarah Chen, BCBA', 'Katie Wilson, BCBA', 'Dr. Emily Park, SLP', 'School Case Manager'];
+// Demo-only sample data — surfaced ONLY when isDemoMode() so investor/AACT
+// walkthroughs show a populated vault. Real users start with an empty vault
+// (no fabricated PHI, clinicians, or storage figures).
+const DEMO_CARE_TEAM = ['Dr. Sarah Chen, BCBA', 'Katie Wilson, BCBA', 'Dr. Emily Park, SLP', 'School Case Manager'];
 
-const SEEDED_DOCS: VaultDoc[] = [
+const DEMO_SEEDED_DOCS: VaultDoc[] = [
   {
     id: 'd1',
     name: 'Autism Diagnostic Evaluation Report',
@@ -144,7 +148,7 @@ const FILE_TYPE_COLORS: Record<string, string> = {
   xlsx: 'text-green-600',
 };
 
-const STORAGE_USED_GB = 2.3;
+const DEMO_STORAGE_USED_GB = 2.3;
 
 function formatDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
@@ -158,7 +162,9 @@ function formatSize(kb: number) {
 export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
   const [activeCategory, setActiveCategory] = useState<DocCategory>('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [docs, setDocs] = useState<VaultDoc[]>(SEEDED_DOCS);
+  // Demo walkthroughs start populated; real users start with an empty vault.
+  const [docs, setDocs] = useState<VaultDoc[]>(() => (isDemoMode() ? DEMO_SEEDED_DOCS : []));
+  const careTeam = isDemoMode() ? DEMO_CARE_TEAM : [];
   const [showUpload, setShowUpload] = useState(false);
   const [uploadCategory, setUploadCategory] = useState<Exclude<DocCategory, 'all'>>('evaluations');
   const [uploadName, setUploadName] = useState('');
@@ -174,6 +180,12 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
   }, [docs, activeCategory, searchQuery]);
 
   const expiringDocs = docs.filter((d) => d.isExpiring);
+
+  // Real usage is derived from the user's own docs; demo mode shows a sample figure.
+  const storageUsedGB = isDemoMode()
+    ? DEMO_STORAGE_USED_GB
+    : docs.reduce((sum, d) => sum + d.sizeKB, 0) / (1024 * 1024);
+  const storageLabel = storageUsedGB >= 0.1 ? storageUsedGB.toFixed(1) : '0';
 
   const handleUpload = () => {
     if (!uploadName.trim()) {
@@ -233,7 +245,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
               <h1 className="text-base font-semibold text-slate-900">Document Vault</h1>
               <div className="flex items-center gap-1 text-xs text-slate-400">
                 <Lock className="w-3 h-3" />
-                <span>Encrypted · HIPAA-compliant</span>
+                <span>Encrypted · HIPAA-conscious</span>
               </div>
             </div>
           </div>
@@ -254,7 +266,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
         <div className="flex items-center justify-between text-xs text-slate-500">
           <div className="flex items-center gap-1.5">
             <HardDrive className="w-3.5 h-3.5" />
-            <span>{STORAGE_USED_GB} GB of unlimited storage used</span>
+            <span>{storageLabel} GB of unlimited storage used</span>
           </div>
           <div className="flex items-center gap-1.5 text-green-600">
             <Shield className="w-3.5 h-3.5" />
@@ -526,25 +538,35 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
               <p className="text-xs text-slate-400 mb-4">{shareModal.name}</p>
 
               <div className="space-y-2 mb-4">
-                {CARE_TEAM.map((provider) => (
-                  <button
-                    key={provider}
-                    onClick={() => setSelectedProvider(provider)}
-                    className={`w-full text-left flex items-center gap-3 p-3 rounded-xl border transition-all ${
-                      selectedProvider === provider
-                        ? 'border-teal-400 bg-teal-50'
-                        : 'border-slate-200 hover:border-slate-300'
-                    }`}
-                  >
-                    <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <span className="text-xs font-bold text-teal-700">{provider.charAt(0)}</span>
-                    </div>
-                    <span className="text-sm text-slate-800">{provider}</span>
-                    {selectedProvider === provider && (
-                      <CheckCircle className="w-4 h-4 text-teal-500 ml-auto" />
-                    )}
-                  </button>
-                ))}
+                {careTeam.length === 0 ? (
+                  <div className="text-center py-6">
+                    <Users className="w-8 h-8 mx-auto mb-2 text-slate-300" />
+                    <p className="text-sm text-slate-500">No care team members yet</p>
+                    <p className="text-xs text-slate-400 mt-0.5">
+                      Add a provider to your care team to share documents.
+                    </p>
+                  </div>
+                ) : (
+                  careTeam.map((provider) => (
+                    <button
+                      key={provider}
+                      onClick={() => setSelectedProvider(provider)}
+                      className={`w-full text-left flex items-center gap-3 p-3 rounded-xl border transition-all ${
+                        selectedProvider === provider
+                          ? 'border-teal-400 bg-teal-50'
+                          : 'border-slate-200 hover:border-slate-300'
+                      }`}
+                    >
+                      <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <span className="text-xs font-bold text-teal-700">{provider.charAt(0)}</span>
+                      </div>
+                      <span className="text-sm text-slate-800">{provider}</span>
+                      {selectedProvider === provider && (
+                        <CheckCircle className="w-4 h-4 text-teal-500 ml-auto" />
+                      )}
+                    </button>
+                  ))
+                )}
               </div>
 
               <div className="flex gap-2">

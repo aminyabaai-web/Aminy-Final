@@ -111,7 +111,7 @@ function getInsightsForScreener(screenerId: ScreeningType): AminyInsight[] {
     {
       icon: Shield,
       title: 'Your data stays yours',
-      body: "Everything you share is HIPAA-protected and encrypted. You control who sees it. When you're ready to share with a provider, it happens with one tap — on your terms.",
+      body: "Everything you share is encrypted and handled with HIPAA-conscious privacy practices. You control who sees it. When you're ready to share with a provider, it happens with one tap — on your terms.",
       afterQuestion: 17,
     },
   ];

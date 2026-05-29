@@ -27,6 +27,7 @@ import {
   AlertCircle,
 } from 'lucide-react';
 import { supabase } from '../../utils/supabase/client';
+import { isDemoMode } from '../../lib/demo-seed';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -139,7 +140,7 @@ function generateReferralLetter(form: ReferralFormData): string {
 
   <p>
     I believe Aminy's coordinated approach will greatly benefit your family. Getting started is simple:
-    download the Aminy app or visit <strong>aminy.com</strong> and use the access code below to connect your
+    download the Aminy app or visit <strong>aminy.ai</strong> and use the access code below to connect your
     referral to my practice.
   </p>
 
@@ -273,7 +274,7 @@ export default function PhysicianReferralPortal({ onBack }: PhysicianReferralPor
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const [submittedReferrals, setSubmittedReferrals] = useState<SubmittedReferral[]>(MOCK_SUBMITTED);
+  const [submittedReferrals, setSubmittedReferrals] = useState<SubmittedReferral[]>(isDemoMode() ? MOCK_SUBMITTED : []);
 
   const set = (field: keyof ReferralFormData) => (v: string) =>
     setForm(prev => ({ ...prev, [field]: v }));

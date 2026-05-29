@@ -229,7 +229,7 @@ export class PushNotificationManager {
     this.supported = isPushSupported();
 
     if (!this.supported) {
-      console.log('[PushMgr] Push notifications not supported');
+      if (import.meta.env.DEV) console.log('[PushMgr] Push notifications not supported');
       this.initialized = true;
       return;
     }
@@ -241,7 +241,7 @@ export class PushNotificationManager {
       this.subscription = await this.registration.pushManager.getSubscription();
 
       if (this.subscription) {
-        console.log('[PushMgr] Existing subscription found');
+        if (import.meta.env.DEV) console.log('[PushMgr] Existing subscription found');
       }
     } catch (err) {
       console.warn('[PushMgr] Initialization error:', err);
@@ -299,7 +299,7 @@ export class PushNotificationManager {
         timestamp: new Date().toISOString(),
       });
 
-      console.log('[PushMgr] Subscribed');
+      if (import.meta.env.DEV) console.log('[PushMgr] Subscribed');
       return true;
     } catch (err) {
       console.error('[PushMgr] Subscribe error:', err);

@@ -34,15 +34,14 @@ import {
   Sparkles,
   ArrowLeft,
   Bell,
-  Filter,
   TrendingUp,
-  ExternalLink,
 } from 'lucide-react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { toast } from 'sonner';
 import { supabase } from '../utils/supabase/client';
+import { isDemoMode } from '../lib/demo-seed';
 
 // Types
 interface CommunityPost {
@@ -103,6 +102,7 @@ interface BCBAQASession {
   questionsAnswered: number;
   isLive: boolean;
   isUpcoming: boolean;
+  joinUrl?: string;
 }
 
 // Row types for Supabase query results
@@ -152,6 +152,7 @@ interface BCBAQASessionRow {
   duration?: number;
   questions_answered?: number;
   is_live?: boolean;
+  join_url?: string;
 }
 
 interface CommunityForYouProps {
@@ -199,7 +200,7 @@ const DEFAULT_POSTS: CommunityPost[] = [
 ];
 
 export function CommunityForYou({
-  posts = DEFAULT_POSTS,
+  posts,
   childName = 'your child',
   userLocation = 'Phoenix, AZ',
   onSave,
@@ -207,6 +208,9 @@ export function CommunityForYou({
   onHide,
   onBack,
 }: CommunityForYouProps) {
+  // Sample posts (with fabricated authors/engagement) only render in demo mode.
+  // Real users see the empty state until live content is wired up.
+  const resolvedPosts = posts ?? (isDemoMode() ? DEFAULT_POSTS : []);
   const [activeTab, setActiveTab] = useState<'for-you' | 'groups' | 'events' | 'spotlights' | 'qa'>('for-you');
   const [savedPosts, setSavedPosts] = useState<Set<string>>(new Set());
   const [joinedGroups, setJoinedGroups] = useState<Set<string>>(new Set());
@@ -305,6 +309,7 @@ export function CommunityForYou({
             questionsAnswered: q.questions_answered || 0,
             isLive: q.is_live ?? false,
             isUpcoming: new Date(q.date) > now,
+            joinUrl: q.join_url,
           })));
         }
       } catch {
@@ -403,6 +408,18 @@ export function CommunityForYou({
     });
   };
 
+  const handleJoinSession = (session: BCBAQASession) => {
+    if (session.joinUrl) {
+      window.open(session.joinUrl, '_blank', 'noopener,noreferrer');
+    } else {
+      toast.success('Join link will be sent to you before the session starts.');
+    }
+  };
+
+  const handleBrowseArchive = () => {
+    toast('Session recordings are coming soon.');
+  };
+
   const formatDate = (date: Date) => {
     return date.toLocaleDateString('en-US', {
       weekday: 'short',
@@ -475,7 +492,7 @@ export function CommunityForYou({
   // Render For You posts
   const renderForYou = () => (
     <div className="space-y-4">
-      {posts.length === 0 ? (
+      {resolvedPosts.length === 0 ? (
         <Card className="p-6 sm:p-8 text-center">
           <BookOpen className="w-10 h-10 text-muted-foreground/40 mx-auto mb-3" />
           <h4 className="font-medium text-slate-900 dark:text-white mb-2">
@@ -486,7 +503,7 @@ export function CommunityForYou({
           </p>
         </Card>
       ) : (
-        posts.map((post) => (
+        resolvedPosts.map((post) => (
           <Card key={post.id} className="p-4 hover:shadow-md transition-shadow">
             <div className="flex items-start gap-3 mb-3">
               <div className="p-2 bg-teal-100 dark:bg-teal-900/30 rounded-lg">
@@ -627,10 +644,6 @@ export function CommunityForYou({
         <h3 className="font-semibold text-gray-900 dark:text-white">
           Upcoming Events
         </h3>
-        <Button variant="ghost" size="sm">
-          <Filter className="w-4 h-4 mr-2" />
-          Filter
-        </Button>
       </div>
 
       {liveEvents.length === 0 && !dataLoading && (
@@ -786,10 +799,6 @@ export function CommunityForYou({
                 {spotlight.comments}
               </span>
             </div>
-            <Button variant="ghost" size="sm">
-              <Share2 className="w-4 h-4 mr-2" />
-              Share
-            </Button>
           </div>
         </Card>
       ))}
@@ -850,24 +859,22 @@ export function CommunityForYou({
 
           <div className="flex gap-2">
             {session.isLive ? (
-              <Button className="flex-1 bg-purple-600 hover:bg-purple-700">
+              <Button
+                className="flex-1 bg-purple-600 hover:bg-purple-700"
+                onClick={() => handleJoinSession(session)}
+              >
                 <Video className="w-4 h-4 mr-2" />
                 Join Now
               </Button>
             ) : (
-              <>
-                <Button
-                  variant={remindedQA.has(session.id) ? 'default' : 'outline'}
-                  className="flex-1"
-                  onClick={() => handleSetReminder(session.id)}
-                >
-                  <Bell className="w-4 h-4 mr-2" />
-                  {remindedQA.has(session.id) ? 'Reminder Set' : 'Set Reminder'}
-                </Button>
-                <Button variant="outline">
-                  <ExternalLink className="w-4 h-4" />
-                </Button>
-              </>
+              <Button
+                variant={remindedQA.has(session.id) ? 'default' : 'outline'}
+                className="flex-1"
+                onClick={() => handleSetReminder(session.id)}
+              >
+                <Bell className="w-4 h-4 mr-2" />
+                {remindedQA.has(session.id) ? 'Reminder Set' : 'Set Reminder'}
+              </Button>
             )}
           </div>
         </Card>
@@ -884,7 +891,7 @@ export function CommunityForYou({
               Watch recordings of previous sessions
             </p>
           </div>
-          <Button variant="ghost" size="sm">
+          <Button variant="ghost" size="sm" onClick={handleBrowseArchive}>
             Browse
             <ChevronRight className="w-4 h-4 ml-1" />
           </Button>
@@ -895,11 +902,13 @@ export function CommunityForYou({
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-slate-900 pb-24">
-      {/* Demo Data Banner */}
-      <div className="bg-amber-50 dark:bg-amber-900/20 border-b border-amber-200 dark:border-amber-800 px-4 py-2 flex items-center gap-2">
-        <span className="text-amber-600 dark:text-amber-400 text-xs font-medium">Preview</span>
-        <span className="text-amber-700/70 dark:text-amber-300/70 text-xs">Community features shown with sample data. Groups and events coming soon.</span>
-      </div>
+      {/* Demo Data Banner — only in demo mode (real users see live data / empty states) */}
+      {isDemoMode() && (
+        <div className="bg-amber-50 dark:bg-amber-900/20 border-b border-amber-200 dark:border-amber-800 px-4 py-2 flex items-center gap-2">
+          <span className="text-amber-600 dark:text-amber-400 text-xs font-medium">Preview</span>
+          <span className="text-amber-700/70 dark:text-amber-300/70 text-xs">Community features shown with sample data. Groups and events coming soon.</span>
+        </div>
+      )}
       {/* Header */}
       <div className="sticky top-0 z-10 bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
         <div className="max-w-2xl mx-auto px-4 py-4">
@@ -907,6 +916,7 @@ export function CommunityForYou({
             {onBack && (
               <button
                 onClick={onBack}
+                aria-label="Back"
                 className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
               >
                 <ArrowLeft className="w-5 h-5 text-gray-600 dark:text-gray-400" />

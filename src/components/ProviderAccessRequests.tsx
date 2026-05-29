@@ -29,6 +29,7 @@ import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { logAccessDecision, logAccessRequest } from '../lib/audit-logger';
 import { supabase } from '../utils/supabase/client';
+import { isDemoMode } from '../lib/demo-seed';
 
 // Types
 interface Provider {
@@ -154,8 +155,13 @@ interface ProviderAccessRequestsProps {
 }
 
 export function ProviderAccessRequests({ userId, onClose }: ProviderAccessRequestsProps) {
-  const [requests, setRequests] = useState<AccessRequest[]>(MOCK_REQUESTS);
-  const [activeAccess, setActiveAccess] = useState<ActiveAccess[]>(MOCK_ACTIVE_ACCESS);
+  // The MOCK_* records below describe invented clinicians requesting access to a
+  // child's PHI. They seed the screen ONLY in demo mode (investor / AACT
+  // walkthroughs). Real parents start empty and see live Supabase data — or a
+  // friendly empty state — never a fabricated access request.
+  const demo = isDemoMode();
+  const [requests, setRequests] = useState<AccessRequest[]>(demo ? MOCK_REQUESTS : []);
+  const [activeAccess, setActiveAccess] = useState<ActiveAccess[]>(demo ? MOCK_ACTIVE_ACCESS : []);
   const [selectedRequest, setSelectedRequest] = useState<AccessRequest | null>(null);
   const [showRevokeConfirm, setShowRevokeConfirm] = useState<string | null>(null);
   const [tab, setTab] = useState<'pending' | 'active'>('pending');

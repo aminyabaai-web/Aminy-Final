@@ -47,6 +47,7 @@ import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Progress } from '../ui/progress';
 import { supabase } from '../../utils/supabase/client';
+import { isDemoMode } from '../../lib/demo-seed';
 
 // Types
 interface MetricCard {
@@ -157,6 +158,25 @@ const FALLBACK_DOC_COMPLIANCE: DocComplianceData = {
   progressReports: 100,
   bipReviews: 85,
   overallCompliance: 92,
+};
+
+// Zeroed metric cards shown to real providers before any live data loads (or
+// when a provider genuinely has no caseload yet). The rich FALLBACK_* sample
+// numbers above are DEMO MODE ONLY — a real provider must never see invented
+// caseload, revenue, or patient figures.
+const EMPTY_METRICS: MetricCard[] = [
+  { id: 'caseload', title: 'Active Caseload', value: 0, change: 0, changeLabel: 'from last month', icon: <Users className="w-5 h-5" />, color: 'bg-blue-500' },
+  { id: 'sessions', title: 'Sessions This Month', value: 0, change: 0, changeLabel: 'vs last month', icon: <Calendar className="w-5 h-5" />, color: 'bg-teal-500' },
+  { id: 'revenue', title: 'Monthly Revenue', value: '$0', change: 0, changeLabel: 'vs last month', icon: <DollarSign className="w-5 h-5" />, color: 'bg-green-500' },
+  { id: 'completion', title: 'Session Completion', value: '0%', change: 0, changeLabel: 'improvement', icon: <CheckCircle className="w-5 h-5" />, color: 'bg-violet-500' },
+];
+
+const EMPTY_DOC_COMPLIANCE: DocComplianceData = {
+  sessionNotes: 0,
+  goalUpdates: 0,
+  progressReports: 0,
+  bipReviews: 0,
+  overallCompliance: 0,
 };
 
 // ============================================================================
@@ -501,14 +521,17 @@ export function ProviderAnalytics({
   const [selectedRange, setSelectedRange] = useState(dateRange);
   const [showExport, setShowExport] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [isDemo, setIsDemo] = useState(false);
+  const demo = isDemoMode();
+  const [isDemo, setIsDemo] = useState(demo);
   const [error, setError] = useState<string | null>(null);
 
-  // Live data state
-  const [metrics, setMetrics] = useState<MetricCard[]>(FALLBACK_METRICS);
-  const [patients, setPatients] = useState<PatientMetric[]>(FALLBACK_PATIENTS);
-  const [sessionData, setSessionData] = useState<SessionData[]>(FALLBACK_SESSION_DATA);
-  const [docCompliance, setDocCompliance] = useState<DocComplianceData>(FALLBACK_DOC_COMPLIANCE);
+  // Live data state. Real providers start at zero (then real Supabase data
+  // loads); the rich FALLBACK_* sample figures seed the screen ONLY in demo
+  // mode so investor/AACT walkthroughs look complete.
+  const [metrics, setMetrics] = useState<MetricCard[]>(demo ? FALLBACK_METRICS : EMPTY_METRICS);
+  const [patients, setPatients] = useState<PatientMetric[]>(demo ? FALLBACK_PATIENTS : []);
+  const [sessionData, setSessionData] = useState<SessionData[]>(demo ? FALLBACK_SESSION_DATA : []);
+  const [docCompliance, setDocCompliance] = useState<DocComplianceData>(demo ? FALLBACK_DOC_COMPLIANCE : EMPTY_DOC_COMPLIANCE);
   const [resolvedProviderName, setResolvedProviderName] = useState(providerNameProp || 'Provider');
 
   // Fetch all analytics data from Supabase
@@ -520,8 +543,10 @@ export function ProviderAnalytics({
       // Check if user is authenticated
       const { data: authData } = await supabase.auth.getUser();
       if (!authData?.user) {
-        if (import.meta.env.DEV) console.info('[ProviderAnalytics] No authenticated user, showing demo data');
-        setIsDemo(true);
+        // In demo mode keep the rich sample seed; real (unauthenticated) views
+        // show the zeroed empty state rather than invented metrics.
+        if (import.meta.env.DEV) console.info('[ProviderAnalytics] No authenticated user');
+        setIsDemo(demo);
         setIsLoading(false);
         return;
       }
@@ -545,7 +570,7 @@ export function ProviderAnalytics({
           fetchSessionCompletion(providerId).catch(() => ({ current: 0, previous: 0 })),
           fetchPatientMetrics(providerId).catch(() => []),
           fetchSessionDistribution(providerId).catch(() => []),
-          fetchDocCompliance(providerId).catch(() => FALLBACK_DOC_COMPLIANCE),
+          fetchDocCompliance(providerId).catch(() => (demo ? FALLBACK_DOC_COMPLIANCE : EMPTY_DOC_COMPLIANCE)),
         ]);
 
       // Check if we got any real data at all
@@ -556,8 +581,10 @@ export function ProviderAnalytics({
         patientList.length > 0;
 
       if (!hasRealData) {
-        if (import.meta.env.DEV) console.info('[ProviderAnalytics] No provider data found, showing demo data');
-        setIsDemo(true);
+        // No live data yet. Demo mode keeps the sample seed already in state;
+        // real providers see the zeroed empty state instead of fake metrics.
+        if (import.meta.env.DEV) console.info('[ProviderAnalytics] No provider data found');
+        setIsDemo(demo);
         setIsLoading(false);
         return;
       }
@@ -628,12 +655,16 @@ export function ProviderAnalytics({
       setIsDemo(false);
     } catch (err) {
       console.error('[ProviderAnalytics] Failed to load analytics:', err);
-      setError('Failed to load analytics. Showing sample data.');
-      setIsDemo(true);
+      setError(
+        demo
+          ? 'Failed to load analytics. Showing sample data.'
+          : 'Failed to load analytics. Please try again.'
+      );
+      setIsDemo(demo);
     } finally {
       setIsLoading(false);
     }
-  }, [providerId, providerNameProp]);
+  }, [providerId, providerNameProp, demo]);
 
   useEffect(() => {
     loadAnalytics();
@@ -933,7 +964,19 @@ export function ProviderAnalytics({
           </div>
         </div>
         <div>
-          {patients.map(renderPatientRow)}
+          {patients.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-12 text-center">
+              <div className="w-14 h-14 rounded-full bg-slate-100 flex items-center justify-center mb-3">
+                <Users className="w-6 h-6 text-slate-400" />
+              </div>
+              <p className="text-sm font-medium text-slate-600">No clients yet</p>
+              <p className="text-xs text-slate-400 mt-1 max-w-xs">
+                Your caseload metrics will appear here once clients are assigned and sessions are logged.
+              </p>
+            </div>
+          ) : (
+            patients.map(renderPatientRow)
+          )}
         </div>
       </Card>
 

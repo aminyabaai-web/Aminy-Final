@@ -59,6 +59,7 @@ import {
   DollarSign
 } from 'lucide-react';
 import { ThemeSelector } from '../lib/theme-provider';
+import { CalendarConnectionCard } from './CalendarConnectionCard';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
@@ -70,6 +71,7 @@ import { toast } from 'sonner';
 import { supabase } from '../utils/supabase/client';
 import { TierType, getTierDisplayName } from '../lib/tier-utils';
 import { createPortalSession, openCustomerPortal } from '../lib/stripe-service';
+import { isDemoMode } from '../lib/demo-seed';
 import {
   isPushSupported,
   getNotificationPermission,
@@ -109,6 +111,8 @@ interface NotificationSettings {
   progressUpdates: boolean;
   communityActivity: boolean;
   marketingEmails: boolean;
+  checkInFrequency: 'off' | 'daily' | 'twice-weekly' | 'weekly';
+  checkInTime: 'morning' | 'afternoon' | 'evening';
 }
 
 interface SubscriptionInfo {
@@ -123,8 +127,14 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
-  // Insurance state
-  const [hasInsurance, setHasInsurance] = useState(true);
+  // Insurance state. Real users start with no insurance on file until coverage
+  // is loaded/entered — never show fabricated PHI. Demo mode shows a sample card.
+  const [hasInsurance, setHasInsurance] = useState(isDemoMode());
+  const [insuranceDetails] = useState(
+    isDemoMode()
+      ? { plan: 'Blue Cross Blue Shield', memberId: '••••••6789', group: 'GRP123' }
+      : null,
+  );
   const [showInsuranceDetails, setShowInsuranceDetails] = useState(false);
 
   // Notification settings
@@ -136,7 +146,9 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
     appointmentReminders: true,
     progressUpdates: true,
     communityActivity: true,
-    marketingEmails: false
+    marketingEmails: false,
+    checkInFrequency: 'daily',
+    checkInTime: 'morning',
   });
 
   // Password change
@@ -265,6 +277,18 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
     }
   };
 
+  const scheduleAICheckIns = async (userId: string, freq: NotificationSettings['checkInFrequency'], time: NotificationSettings['checkInTime']) => {
+    if (freq === 'off') return;
+    try {
+      const { projectId: pid, publicAnonKey: key } = await import('../utils/supabase/info');
+      await fetch(`https://${pid}.supabase.co/functions/v1/make-server-8a022548/push-notifications`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
+        body: JSON.stringify({ userId, action: 'schedule-checkins', frequency: freq, timeOfDay: time }),
+      });
+    } catch { /* non-critical — push schedule set in DB, edge fn handles delivery */ }
+  };
+
   const saveNotificationSettings = async (newSettings: NotificationSettings) => {
     setIsSaving(true);
     try {
@@ -283,6 +307,8 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
           progress_updates: newSettings.progressUpdates,
           community_activity: newSettings.communityActivity,
           marketing_emails: newSettings.marketingEmails,
+          check_in_frequency: newSettings.checkInFrequency,
+          check_in_time: newSettings.checkInTime,
           updated_at: new Date().toISOString()
         });
 
@@ -973,6 +999,114 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                     />
                   </div>
 
+                  {/* Google Calendar connection */}
+                  <CalendarConnectionCard />
+
+                  {/* AI Check-ins Schedule */}
+                  <div className="rounded-2xl border border-slate-200 overflow-hidden">
+                    <div className="flex items-center justify-between px-4 py-3 bg-slate-50/60">
+                      <div className="flex items-center gap-3">
+                        <div
+                          className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+                          style={{ background: 'linear-gradient(135deg, #43AA8B22 0%, #57759022 100%)' }}
+                        >
+                          <span className="text-base">✦</span>
+                        </div>
+                        <div>
+                          <p className="font-medium text-slate-900 text-sm">AI Check-ins</p>
+                          <p className="text-xs text-slate-500">Proactive insights from Aminy</p>
+                        </div>
+                      </div>
+                      <Switch
+                        checked={notifications.checkInFrequency !== 'off'}
+                        onCheckedChange={(checked) => {
+                          const newSettings = {
+                            ...notifications,
+                            checkInFrequency: checked ? 'daily' as const : 'off' as const,
+                          };
+                          saveNotificationSettings(newSettings);
+                          if (checked && notifications.pushEnabled) {
+                            supabase.auth.getUser().then(({ data: { user } }) => {
+                              if (user) scheduleAICheckIns(user.id, 'daily', notifications.checkInTime);
+                            });
+                          }
+                        }}
+                      />
+                    </div>
+
+                    {notifications.checkInFrequency !== 'off' && (
+                      <div className="px-4 py-3 space-y-3 border-t border-slate-100 bg-white">
+                        {/* Frequency chips */}
+                        <div>
+                          <p className="text-xs font-medium text-slate-500 mb-2">Frequency</p>
+                          <div className="flex gap-2 flex-wrap">
+                            {([
+                              { id: 'daily', label: 'Daily' },
+                              { id: 'twice-weekly', label: '2x week' },
+                              { id: 'weekly', label: 'Weekly' },
+                            ] as const).map(opt => (
+                              <button
+                                key={opt.id}
+                                onClick={() => {
+                                  const newSettings = { ...notifications, checkInFrequency: opt.id };
+                                  saveNotificationSettings(newSettings);
+                                  supabase.auth.getUser().then(({ data: { user } }) => {
+                                    if (user) scheduleAICheckIns(user.id, opt.id, notifications.checkInTime);
+                                  });
+                                }}
+                                className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+                                  notifications.checkInFrequency === opt.id
+                                    ? 'text-white shadow-sm'
+                                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                }`}
+                                style={notifications.checkInFrequency === opt.id ? {
+                                  background: 'linear-gradient(135deg, #43AA8B 0%, #577590 100%)'
+                                } : {}}
+                              >
+                                {opt.label}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Time chips */}
+                        <div>
+                          <p className="text-xs font-medium text-slate-500 mb-2">Best time</p>
+                          <div className="flex gap-2">
+                            {([
+                              { id: 'morning', label: '☀️ Morning', sub: '7–9 am' },
+                              { id: 'afternoon', label: '🌤 Afternoon', sub: '12–2 pm' },
+                              { id: 'evening', label: '🌙 Evening', sub: '7–9 pm' },
+                            ] as const).map(opt => (
+                              <button
+                                key={opt.id}
+                                onClick={() => {
+                                  const newSettings = { ...notifications, checkInTime: opt.id };
+                                  saveNotificationSettings(newSettings);
+                                  supabase.auth.getUser().then(({ data: { user } }) => {
+                                    if (user) scheduleAICheckIns(user.id, notifications.checkInFrequency as any, opt.id);
+                                  });
+                                }}
+                                className={`flex-1 py-2 px-1 rounded-xl text-center transition-all border ${
+                                  notifications.checkInTime === opt.id
+                                    ? 'border-teal-400 bg-teal-50 text-teal-800'
+                                    : 'border-slate-200 bg-slate-50 text-slate-600 hover:border-slate-300'
+                                }`}
+                              >
+                                <p className="text-xs font-medium">{opt.label}</p>
+                                <p className="text-[10px] text-slate-400 mt-0.5">{opt.sub}</p>
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+
+                        <p className="text-[10px] text-slate-400 leading-relaxed">
+                          Aminy will send a personalized insight based on recent sessions, goals, and behavior patterns — at your chosen time.
+                        </p>
+                      </div>
+                    )}
+                  </div>
+
                   {/* Appointment Reminders */}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -1329,11 +1463,11 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                         </Button>
                       </div>
                     )}
-                    {showInsuranceDetails && hasInsurance && (
+                    {showInsuranceDetails && hasInsurance && insuranceDetails && (
                       <div className="mt-3 p-3 bg-white dark:bg-slate-700 rounded border text-sm space-y-1">
-                        <p><span className="text-muted-foreground">Plan:</span> Blue Cross Blue Shield</p>
-                        <p><span className="text-muted-foreground">Member ID:</span> ••••••6789</p>
-                        <p><span className="text-muted-foreground">Group:</span> GRP123</p>
+                        <p><span className="text-muted-foreground">Plan:</span> {insuranceDetails.plan}</p>
+                        <p><span className="text-muted-foreground">Member ID:</span> {insuranceDetails.memberId}</p>
+                        <p><span className="text-muted-foreground">Group:</span> {insuranceDetails.group}</p>
                       </div>
                     )}
                   </div>

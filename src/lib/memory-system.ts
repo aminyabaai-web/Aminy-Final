@@ -94,42 +94,42 @@ export const TIER_LIMITS: Record<TierType, {
   // Starter: Legacy tier (maps to Core) - $14.99/mo
   // MUST MATCH tier-utils.ts getAIMessageLimit()
   starter: {
-    messagesPerDay: Infinity,     // Unlimited (same as Core - matches tier-utils.ts)
-    memoryDays: 30,               // Short context memory
-    maxDocuments: 5,              // Basic vault
+    messagesPerDay: 50,           // Soft cap protects margin (~$0.05/day worst case at avg cost)
+    memoryDays: 30,
+    maxDocuments: 5,
     maxFacts: 100,
     canLearnFromVault: true,
     contextTokens: 4000,
   },
   // Core: Full Companion - $14.99/mo
-  // MUST MATCH tier-utils.ts getAIMessageLimit()
+  // Bevel-style margin protection: 50/day = ~$0.05 worst case → 33% margin floor at $14.99/mo
   core: {
-    messagesPerDay: Infinity,     // Unlimited (matches tier-utils.ts null)
-    memoryDays: 90,               // Full context (multi-session memory)
-    maxDocuments: 25,             // Full vault access
+    messagesPerDay: 50,           // 50/day = 1500/mo, covers heavy use, protects margin
+    memoryDays: 90,
+    maxDocuments: 25,
     maxFacts: 500,
     canLearnFromVault: true,
     contextTokens: 8000,
   },
   // Pro: Premium Ecosystem - $29.99/mo
-  // MUST MATCH tier-utils.ts getAIMessageLimit()
+  // Heavier users + provider features. 200/day still protects margin.
   pro: {
-    messagesPerDay: Infinity,     // Unlimited (matches tier-utils.ts null)
-    memoryDays: Infinity,         // Unlimited memory
-    maxDocuments: Infinity,       // Unlimited vault
+    messagesPerDay: 200,          // ~$0.20/day worst case → 33%+ margin floor at $29.99/mo
+    memoryDays: Infinity,
+    maxDocuments: Infinity,
     maxFacts: Infinity,
     canLearnFromVault: true,
     contextTokens: 16000,
   },
-  // Pro Plus: Enterprise tier - $49.99/mo
-  // MUST MATCH tier-utils.ts getAIMessageLimit()
+  // Pro Plus / Family: Enterprise tier - $49.99/mo
+  // Highest cap. Power users + multi-child families.
   proplus: {
-    messagesPerDay: Infinity,     // Unlimited (matches tier-utils.ts null)
-    memoryDays: Infinity,         // Unlimited memory
-    maxDocuments: Infinity,       // Unlimited vault
+    messagesPerDay: 500,          // ~$0.50/day worst case → 33%+ margin floor at $49.99/mo
+    memoryDays: Infinity,
+    maxDocuments: Infinity,
     maxFacts: Infinity,
     canLearnFromVault: true,
-    contextTokens: 32000,         // Maximum context for advanced analytics
+    contextTokens: 32000,
   },
 };
 
@@ -321,6 +321,22 @@ class MemoryManager {
 
   getFactsByCategory(childId: string, category: MemoryFact['category'], tier: TierType): MemoryFact[] {
     return this.getFacts(childId, tier).filter(f => f.category === category);
+  }
+
+  /** Delete a specific memory fact. Parents see + control what Aminy remembers. */
+  deleteFact(childId: string, factId: string): boolean {
+    const childFacts = this.facts.get(childId) || [];
+    const next = childFacts.filter(f => f.id !== factId);
+    if (next.length === childFacts.length) return false;
+    this.facts.set(childId, next);
+    this.saveToStorage();
+    return true;
+  }
+
+  /** Clear ALL memories for a child — used in "forget everything" action. */
+  clearFactsForChild(childId: string): void {
+    this.facts.set(childId, []);
+    this.saveToStorage();
   }
 
   // ============================================

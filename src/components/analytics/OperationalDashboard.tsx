@@ -272,33 +272,8 @@ export default function OperationalDashboard({
   const payerKPIs = useMemo(() => buildPayerEVVKPIs(data.payerEVV), [data.payerEVV]);
 
   const handleExport = useCallback(() => {
-    // Log structured summary to console for now
-    console.log('=== Aminy Operational Metrics Export ===');
-    console.log('Date Range:', data.dateRange.label);
-    console.log('Overall Health:', data.overallHealth.composite, '/ 100 -', data.overallHealth.status);
-    console.log('--- Family Retention ---');
-    console.log('  30-day:', data.familyRetention.retention30Day + '%');
-    console.log('  60-day:', data.familyRetention.retention60Day + '%');
-    console.log('  90-day:', data.familyRetention.retention90Day + '%');
-    console.log('  NPS:', data.familyRetention.nps);
-    console.log('--- Telehealth Liquidity ---');
-    console.log('  Active Providers:', data.telehealthLiquidity.activeProviders);
-    console.log('  Fill Rate:', data.telehealthLiquidity.fillRate + '%');
-    console.log('  No-Show Rate:', data.telehealthLiquidity.noShowRate + '%');
-    console.log('--- Provider Launch ---');
-    console.log('  Onboarded:', data.providerLaunch.providersOnboarded);
-    console.log('  Avg Days to First Session:', data.providerLaunch.averageDaysToFirstSession);
-    console.log('  Provider Satisfaction:', data.providerLaunch.providerSatisfaction + '/5');
-    console.log('--- Payer/EVV ---');
-    console.log('  Clean Claim Rate:', data.payerEVV.cleanClaimRate + '%');
-    console.log('  EVV Match Rate:', data.payerEVV.evvMatchRate + '%');
-    console.log('  Fiscal Confidence:', data.payerEVV.fiscalAgentConfidenceScore + '/100');
-    console.log('  Days to Payment:', data.payerEVV.averageDaysToPayment);
-    console.log('Alerts:', data.alerts.length);
-    data.alerts.forEach(a => console.log('  [' + a.severity + ']', a.message));
-    console.log('========================================');
     onExportPDF();
-  }, [data, onExportPDF]);
+  }, [onExportPDF]);
 
   return (
     <div className="min-h-screen bg-gray-50">

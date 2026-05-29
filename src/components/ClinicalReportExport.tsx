@@ -196,7 +196,7 @@ export function ClinicalReportExport({
           <div className="bg-teal-50 border border-teal-200 rounded-lg p-3 flex items-start gap-2.5">
             <Shield className="w-4 h-4 text-teal-700 mt-0.5 flex-shrink-0" />
             <p className="text-xs text-teal-800">
-              This generates a HIPAA-compliant clinical PDF you can share with your child's
+              This generates an encrypted clinical PDF you can share with your child's
               pediatrician, BCBA, or school. All data stays on your device.
             </p>
           </div>

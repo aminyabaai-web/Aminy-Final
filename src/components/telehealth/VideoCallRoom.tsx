@@ -346,7 +346,7 @@ export function VideoCall({
 
     // Save session notes on call end (Supabase integration coming later)
     if (isProvider && sessionNotes.trim()) {
-      console.log('[Session Notes - Call End]', { sessionId, notes: sessionNotes });
+      if (import.meta.env.DEV) console.log('[Session Notes - Call End]', { sessionId });
     }
 
     setCallState('leaving');
@@ -819,7 +819,7 @@ export function VideoCall({
                 className="w-full h-32 p-2 border rounded-lg text-sm resize-none"
               />
               <button
-                onClick={() => { console.log('[Session Notes]', sessionNotes); setShowNotes(false); }}
+                onClick={() => { setShowNotes(false); }}
                 className="mt-2 w-full py-2 bg-teal-600 text-white rounded-lg text-sm font-medium"
               >
                 Save Notes

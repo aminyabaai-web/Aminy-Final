@@ -27,6 +27,7 @@ import {
   RefreshCw,
 } from 'lucide-react';
 import { getRetentionMetrics, getConversionFunnel, type RetentionMetrics, type ConversionFunnel } from '../../lib/analytics-engine';
+import { isDemoMode } from '../../lib/demo-seed';
 
 interface UnitEconomicsViewProps {
   onBack?: () => void;
@@ -205,13 +206,49 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
   const totalPaidUsers = TIER_BREAKDOWN.filter(t => t.tier !== 'Free').reduce((sum, t) => sum + t.users, 0);
   const blendedArpu = totalRevenue / totalPaidUsers;
 
+  // The mock metrics below are investor-grade *sample* numbers. Real users must
+  // never see fabricated CAC/LTV/MRR/cohort figures — only show them in demo
+  // mode (or once real analytics events exist). Otherwise render an empty state.
+  const hasRealData = !!(retentionData && retentionData.cohorts.length > 0);
+  if (!isDemoMode() && !hasRealData) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <div className="bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-lg sm:text-xl font-semibold text-gray-900">Unit Economics</h1>
+              <p className="text-sm text-gray-500 mt-1">Investor-grade metrics dashboard</p>
+            </div>
+            {onBack && (
+              <button onClick={onBack} className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900">
+                ← Back
+              </button>
+            )}
+          </div>
+        </div>
+        <div className="flex flex-col items-center text-center px-6 py-16">
+          <div className="w-12 h-12 rounded-full bg-[#FAF7F2] flex items-center justify-center mb-3">
+            <BarChart3 className="w-6 h-6 text-[#577590]" />
+          </div>
+          <h2 className="text-[15px] font-bold text-[#0D1B2A] mb-1">No analytics data yet</h2>
+          <p className="text-[13px] text-[#577590] max-w-sm">
+            Unit-economics metrics will populate here once the analytics backend is
+            connected and product usage starts flowing in.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Demo Data Banner */}
-      <div className="bg-amber-50 border-b border-amber-200 px-4 py-2.5 flex items-center gap-2">
-        <span className="text-amber-600 text-sm font-medium">Demo Data</span>
-        <span className="text-amber-700/70 text-xs">Sample metrics shown for demonstration. Connect analytics backend for real data.</span>
-      </div>
+      {/* Demo Data Banner — only when showing sample (non-real) metrics */}
+      {!hasRealData && (
+        <div className="bg-amber-50 border-b border-amber-200 px-4 py-2.5 flex items-center gap-2">
+          <span className="text-amber-600 text-sm font-medium">Demo Data</span>
+          <span className="text-amber-700/70 text-xs">Sample metrics shown for demonstration. Connect analytics backend for real data.</span>
+        </div>
+      )}
       {/* Header */}
       <div className="bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4">
         <div className="flex items-center justify-between">

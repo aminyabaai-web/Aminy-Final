@@ -38,9 +38,13 @@ export function initSentry(): void {
     // Integrations
     integrations: [
       Sentry.browserTracingIntegration(),
+      // HIPAA: mask ALL text in session replays so child names, behavior logs,
+      // and medical history never leak to Sentry. Replays still show shape +
+      // interaction patterns for debugging, just with all content redacted.
       Sentry.replayIntegration({
-        maskAllText: false,
-        blockAllMedia: false,
+        maskAllText: true,
+        blockAllMedia: true,
+        maskAllInputs: true,
       }),
     ],
 

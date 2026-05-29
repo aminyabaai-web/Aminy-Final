@@ -1,0 +1,190 @@
+// Copyright (c) 2024-2026 Aminy LLC. All Rights Reserved.
+// CONFIDENTIAL AND PROPRIETARY — Trade Secret of Aminy LLC
+
+/**
+ * ProviderCredentialingWidget — shows the BCBA/therapist a clear path from
+ * "signed up" → "verified, accepting patients."
+ *
+ * 4 checks shown as a progress card:
+ *   1. Identity (Stripe Identity — gov ID + selfie)
+ *   2. Background (Checkr)
+ *   3. License (CMS NPI + state board)
+ *   4. Malpractice (COI upload + admin review)
+ *
+ * Each row has its status pill + action button. Provider can't see patients
+ * until all four are verified — banner makes this crystal clear.
+ *
+ * Drops into ProviderPortal as a top-of-page widget when status !== 'verified'.
+ */
+
+import React, { useEffect, useState } from 'react';
+import { ShieldCheck, ShieldAlert, Clock, AlertCircle, ChevronRight, Loader2, Camera, FileSearch, FileCheck, Award } from 'lucide-react';
+import { toast } from 'sonner';
+import {
+  getCredentialingStatus,
+  startIdentityVerification,
+  type CredentialingStatus,
+  type CheckStatus,
+} from '../lib/provider-credentialing-automation';
+
+interface ProviderCredentialingWidgetProps {
+  providerId: string;
+  /** When all 4 verified, hide the widget. Set false to always show. */
+  hideWhenComplete?: boolean;
+  className?: string;
+}
+
+const CHECK_META = {
+  identity:    { label: 'Identity verified',        icon: Camera,    description: 'Verify with gov ID + selfie · Powered by Stripe Identity · ~3 min' },
+  background:  { label: 'Background check',         icon: FileSearch, description: 'Criminal + identity background · Powered by Checkr · 3-5 days' },
+  license:     { label: 'License verified',         icon: Award,     description: 'NPI + state board check · Auto-verified via CMS · instant if valid' },
+  malpractice: { label: 'Malpractice insurance',    icon: FileCheck, description: 'Upload Certificate of Insurance · 1 business day to approve' },
+} as const;
+
+const STATUS_STYLE: Record<CheckStatus, { bg: string; text: string; label: string; dot: string }> = {
+  not_started:      { bg: 'bg-slate-100',   text: 'text-slate-600',    label: 'Not started',    dot: 'bg-slate-300' },
+  pending:          { bg: 'bg-amber-50',    text: 'text-amber-700',    label: 'In review',      dot: 'bg-amber-400' },
+  in_progress:      { bg: 'bg-blue-50',     text: 'text-blue-700',     label: 'In progress',    dot: 'bg-blue-400' },
+  requires_input:   { bg: 'bg-orange-50',   text: 'text-orange-700',   label: 'Action needed',  dot: 'bg-orange-400' },
+  verified:         { bg: 'bg-teal-50',     text: 'text-teal-700',     label: 'Verified',       dot: 'bg-teal-500' },
+  failed:           { bg: 'bg-red-50',      text: 'text-red-700',      label: 'Failed',         dot: 'bg-red-500' },
+  expired:          { bg: 'bg-orange-50',   text: 'text-orange-700',   label: 'Expired — renew', dot: 'bg-orange-400' },
+};
+
+export function ProviderCredentialingWidget({ providerId, hideWhenComplete = true, className = '' }: ProviderCredentialingWidgetProps) {
+  const [status, setStatus] = useState<CredentialingStatus | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [working, setWorking] = useState<string | null>(null);
+
+  useEffect(() => { refresh(); }, [providerId]);
+
+  async function refresh() {
+    try { setStatus(await getCredentialingStatus(providerId)); }
+    catch { /* ignore — show empty state */ }
+    finally { setIsLoading(false); }
+  }
+
+  async function handleIdentityStart() {
+    setWorking('identity');
+    try {
+      const { url } = await startIdentityVerification(providerId);
+      window.location.href = url;
+    } catch (e: any) {
+      toast.error(e?.message || 'Could not start identity verification');
+      setWorking(null);
+    }
+  }
+
+  if (isLoading) {
+    return (
+      <div className={`rounded-2xl bg-white border border-slate-100 p-4 flex items-center justify-center min-h-[120px] ${className}`}>
+        <Loader2 className="w-5 h-5 text-slate-400 animate-spin" />
+      </div>
+    );
+  }
+
+  if (!status) return null;
+
+  if (hideWhenComplete && status.overallStatus === 'verified') return null;
+
+  // Aggregate first license status for the "License" row
+  const firstLicense = status.licenses[0] || { type: 'license' as const, status: 'not_started' as CheckStatus };
+
+  const rows = [
+    { key: 'identity' as const,    check: status.identity,    onAction: handleIdentityStart, actionLabel: 'Verify identity' },
+    { key: 'background' as const,  check: status.background,  onAction: () => toast.info('Background check starts after identity is verified'), actionLabel: 'Start check' },
+    { key: 'license' as const,     check: firstLicense,       onAction: () => toast.info('Add a state license in your profile to verify'),     actionLabel: 'Add license' },
+    { key: 'malpractice' as const, check: status.malpractice, onAction: () => toast.info('Upload your Certificate of Insurance in your profile'), actionLabel: 'Upload COI' },
+  ];
+
+  return (
+    <div className={`rounded-2xl border border-slate-100 overflow-hidden ${className}`}
+      style={{ background: 'linear-gradient(135deg, #43AA8B08 0%, #57759008 100%)' }}>
+
+      {/* Header */}
+      <div className="px-4 pt-4 pb-3 flex items-start gap-3">
+        <div
+          className="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0"
+          style={{
+            background: status.overallStatus === 'verified'
+              ? 'linear-gradient(135deg, #43AA8B 0%, #577590 100%)'
+              : '#fef3c7'
+          }}
+        >
+          {status.overallStatus === 'verified'
+            ? <ShieldCheck className="w-5 h-5" />
+            : <ShieldAlert className="w-5 h-5 text-amber-700" />
+          }
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-semibold text-slate-900">
+            {status.overallStatus === 'verified'
+              ? 'Fully verified — accepting patients'
+              : status.overallStatus === 'failed'
+                ? 'Verification issue — see below'
+                : `Get verified to accept patients — ${status.completionPercent}% complete`}
+          </p>
+          <p className="text-xs text-slate-500 mt-0.5">
+            Aminy requires all 4 checks before you can be matched with families.
+          </p>
+        </div>
+      </div>
+
+      {/* Progress bar */}
+      <div className="px-4 pb-3">
+        <div className="h-1.5 rounded-full bg-slate-100 overflow-hidden">
+          <div
+            className="h-full transition-all duration-500"
+            style={{
+              width: `${status.completionPercent}%`,
+              background: 'linear-gradient(90deg, #43AA8B 0%, #577590 100%)',
+            }}
+          />
+        </div>
+      </div>
+
+      {/* Checks list */}
+      <div className="px-2 pb-2">
+        {rows.map(row => {
+          const meta = CHECK_META[row.key];
+          const Icon = meta.icon;
+          const statusStyle = STATUS_STYLE[row.check.status];
+          const needsAction = row.check.status === 'not_started' || row.check.status === 'requires_input' || row.check.status === 'failed' || row.check.status === 'expired';
+
+          return (
+            <div
+              key={row.key}
+              className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/50 transition-colors"
+            >
+              <div className="w-9 h-9 rounded-lg bg-white border border-slate-100 flex items-center justify-center shrink-0">
+                <Icon className="w-4 h-4 text-slate-600" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-slate-900">{meta.label}</p>
+                <p className="text-[11px] text-slate-500 truncate">{meta.description}</p>
+                {row.check.failureReason && (
+                  <p className="text-[11px] text-red-600 mt-0.5">{row.check.failureReason}</p>
+                )}
+              </div>
+              <span className={`text-[11px] ${statusStyle.bg} ${statusStyle.text} px-2 py-1 rounded-full font-medium shrink-0 flex items-center gap-1.5 whitespace-nowrap`}>
+                <span className={`w-1.5 h-1.5 rounded-full ${statusStyle.dot}`} />
+                {statusStyle.label}
+              </span>
+              {needsAction && (
+                <button
+                  onClick={row.onAction}
+                  disabled={working === row.key}
+                  className="shrink-0 text-xs font-semibold px-2.5 py-1.5 rounded-lg text-teal-700 hover:bg-teal-50 flex items-center gap-0.5 disabled:opacity-50 whitespace-nowrap"
+                >
+                  {working === row.key ? <Loader2 className="w-3 h-3 animate-spin" /> : <>{row.actionLabel}<ChevronRight className="w-3 h-3" /></>}
+                </button>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+export default ProviderCredentialingWidget;

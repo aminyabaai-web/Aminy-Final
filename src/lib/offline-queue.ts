@@ -209,7 +209,7 @@ export class OfflineQueue {
       this.scheduleProcess(100);
     }
 
-    console.log(
+    if (import.meta.env.DEV) console.log(
       `[OfflineQueue] Enqueued ${action.type} (${priority}) -> ${action.endpoint}`,
     );
 
@@ -303,7 +303,7 @@ export class OfflineQueue {
         durationMs: Date.now() - startTime,
       };
 
-      if (succeeded > 0) {
+      if (succeeded > 0 && import.meta.env.DEV) {
         console.log(
           `[OfflineQueue] Processed ${succeeded} items (${failed} failed, ${remaining} remaining)`,
         );
@@ -543,7 +543,7 @@ export class OfflineQueue {
   }
 
   private handleOnline = (): void => {
-    console.log('[OfflineQueue] Back online — processing queue');
+    if (import.meta.env.DEV) console.log('[OfflineQueue] Back online — processing queue');
     this.scheduleProcess(500);
   };
 

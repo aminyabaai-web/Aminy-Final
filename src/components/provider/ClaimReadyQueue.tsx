@@ -36,6 +36,7 @@ import {
   type ClaimReadyItem,
   type ClaimReadyStatus,
 } from '../../lib/claim-queue';
+import { isDemoMode } from '../../lib/demo-seed';
 
 interface ClaimReadyQueueProps {
   providerId?: string;
@@ -192,7 +193,9 @@ export default function ClaimReadyQueue({ providerId, onBack, onNavigateTo }: Cl
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [claims, setClaims] = useState<ClaimReadyItem[]>(DEMO_CLAIM_QUEUE);
+  // Sample claims are shown only in demo mode (investor/AACT walkthroughs).
+  // Real providers start empty until their submitted claims sync from the billing pipeline.
+  const [claims, setClaims] = useState<ClaimReadyItem[]>(() => (isDemoMode() ? DEMO_CLAIM_QUEUE : []));
 
   const summary = useMemo(() => getQueueSummary(claims), [claims]);
 
@@ -340,7 +343,17 @@ export default function ClaimReadyQueue({ providerId, onBack, onNavigateTo }: Cl
         )}
 
         {/* Claims list */}
-        {filteredClaims.length === 0 ? (
+        {claims.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-16 text-center">
+            <div className="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+              <FileText size={26} className="text-gray-400" />
+            </div>
+            <p className="text-sm font-semibold text-gray-700">No claims yet</p>
+            <p className="text-xs text-gray-500 mt-1 max-w-xs">
+              Submitted claims will appear here once your sessions are billed. Finish and sign a session note to start the queue.
+            </p>
+          </div>
+        ) : filteredClaims.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-10 text-center">
             <CheckCircle size={32} className="text-gray-400 mb-3" />
             <p className="text-sm text-gray-500">No claims in this category</p>

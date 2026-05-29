@@ -102,39 +102,72 @@ export function ProviderDirectory({
   const [providersLoading, setProvidersLoading] = useState(true);
 
   useEffect(() => {
-    supabase
-      .from('providers')
-      .select('id, name, credentials, specialty, rating, review_count, accepting_new_patients, languages, bio, hourly_rate, photo')
-      .eq('accepting_new_patients', true)
-      .order('rating', { ascending: false })
-      .limit(20)
-      .then(({ data, error }) => {
-        if (!error && data && data.length > 0) {
-          setProviders(data.map(p => ({
-            id: p.id,
-            name: `${p.name}, ${p.credentials}`,
-            title: p.credentials,
-            practice: 'Aminy Provider Network',
-            specialty: p.specialty ? [p.specialty] : ['ABA Therapy'],
-            rating: p.rating || 5.0,
-            reviewCount: p.review_count || 0,
-            distance: 'Telehealth',
-            address: 'Available via Telehealth',
-            phone: '',
-            email: 'providers@aminy.ai',
-            acceptingNew: p.accepting_new_patients ?? true,
-            insuranceAccepted: ['AHCCCS/DDD', 'Cash Pay'],
-            languages: p.languages || ['English'],
-            availability: 'Telehealth',
-            experience: '',
-            approach: p.bio || '',
-            isBookmarked: false,
-            badges: ['Telehealth', p.hourly_rate ? `From $${Math.round(p.hourly_rate / 100)}/session` : ''],
-            verificationStatus: 'verified' as const,
-          })));
-        }
+    // Demo mode: seed the marketplace with 5 well-rounded providers so investor
+    // and AACT walk-throughs see a populated screen. Real users still query
+    // the live providers table.
+    (async () => {
+      const { isDemoMode, DEMO_PROVIDERS } = await import('../lib/demo-seed');
+      if (isDemoMode()) {
+        setProviders(DEMO_PROVIDERS.map(p => ({
+          id: p.id,
+          name: `${p.name}, ${p.credentials}`,
+          title: p.title,
+          practice: 'Aminy Provider Network',
+          specialty: [p.specialty],
+          rating: p.rating,
+          reviewCount: p.reviewCount,
+          distance: p.states.join(' · '),
+          address: 'Telehealth + in-person (AZ)',
+          phone: '',
+          email: 'providers@aminy.ai',
+          acceptingNew: p.acceptingNew,
+          insuranceAccepted: p.payers,
+          languages: ['English'],
+          availability: p.nextAvailable,
+          experience: `${p.yearsExperience} yrs`,
+          approach: p.bio,
+          isBookmarked: false,
+          badges: ['Telehealth', `From $${Math.round(p.hourlyRate / 100)}/session`, `${p.yearsExperience}y exp`],
+          verificationStatus: 'verified' as const,
+        })));
         setProvidersLoading(false);
-      });
+        return;
+      }
+
+      // Real query
+      const { data, error } = await supabase
+        .from('providers')
+        .select('id, name, credentials, specialty, rating, review_count, accepting_new_patients, languages, bio, hourly_rate, photo')
+        .eq('accepting_new_patients', true)
+        .order('rating', { ascending: false })
+        .limit(20);
+
+      if (!error && data && data.length > 0) {
+        setProviders(data.map(p => ({
+          id: p.id,
+          name: `${p.name}, ${p.credentials}`,
+          title: p.credentials,
+          practice: 'Aminy Provider Network',
+          specialty: p.specialty ? [p.specialty] : ['ABA Therapy'],
+          rating: p.rating || 5.0,
+          reviewCount: p.review_count || 0,
+          distance: 'Telehealth',
+          address: 'Available via Telehealth',
+          phone: '',
+          email: 'providers@aminy.ai',
+          acceptingNew: p.accepting_new_patients ?? true,
+          insuranceAccepted: ['AHCCCS/DDD', 'Cash Pay'],
+          languages: p.languages || ['English'],
+          availability: 'Telehealth',
+          experience: '',
+          approach: p.bio || '',
+          isBookmarked: false,
+          badges: ['Telehealth', p.hourly_rate ? `From $${Math.round(p.hourly_rate / 100)}/session` : ''],
+          verificationStatus: 'verified' as const,
+        })));
+      }
+      setProvidersLoading(false);
+    })();
   }, []);
 
 

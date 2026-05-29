@@ -68,8 +68,12 @@ import {
 
 const app = new Hono();
 
-// Enable logger
-app.use('*', logger(console.log));
+// Enable logger (dev only — HTTP request paths may include user identifiers)
+const _isDev = Deno.env.get('ENVIRONMENT') === 'development' ||
+               Deno.env.get('DENO_ENV') === 'development';
+if (_isDev) {
+  app.use('*', logger(console.log));
+}
 
 // Enable CORS for all routes and methods
 // SECURITY: Strict origin validation - only allow known domains
@@ -451,7 +455,7 @@ function getAIConfig(): AIConfig | null {
 // Token cost tracking (approximate costs per 1K tokens as of 2025)
 const TOKEN_COSTS = {
   'gpt-4o': { input: 0.0025, output: 0.01 }, // $2.50 / $10 per 1M tokens
-  'claude-sonnet-4-20250514': { input: 0.003, output: 0.015 }, // $3 / $15 per 1M tokens
+  'claude-sonnet-4-6': { input: 0.003, output: 0.015 }, // $3 / $15 per 1M tokens
 };
 
 interface AIUsage {
@@ -554,7 +558,7 @@ async function callAI(config: AIConfig, options: {
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-sonnet-4-6',
         max_tokens: maxTokens,
         temperature,
         system: systemPrompt,
@@ -568,7 +572,7 @@ async function callAI(config: AIConfig, options: {
     }
 
     const data = await response.json();
-    const model = 'claude-sonnet-4-20250514';
+    const model = 'claude-sonnet-4-6';
     const costs = TOKEN_COSTS[model];
     const usage: AIUsage = {
       inputTokens: data.usage?.input_tokens || 0,

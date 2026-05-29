@@ -497,7 +497,7 @@ export function PayerOutcomesDashboard({
                 <div className="text-center py-4">
                   <p className="text-5xl font-bold text-teal-600">{metrics.memberSatisfaction}%</p>
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
-                    Based on quarterly CAHPS surveys
+                    {providedMetrics ? 'Based on quarterly CAHPS surveys' : 'Pilot sample metric — not yet sourced from CAHPS surveys'}
                   </p>
                 </div>
                 <div className="mt-4 pt-4 border-t border-gray-100 dark:border-slate-700">
@@ -574,7 +574,7 @@ export function PayerOutcomesDashboard({
                   showPercentage
                 />
                 <p className="text-sm text-gray-500 dark:text-gray-400 mt-4">
-                  Families using Aminy achieve goals 23% faster than control group.
+                  Tracks the share of documented IEP and treatment goals met across the supported lane.
                 </p>
               </Card>
 
@@ -650,6 +650,17 @@ export function PayerOutcomesDashboard({
                 </div>
 
                 <div className="space-y-4">
+                  {visibleClaimQueue.length === 0 ? (
+                    <div className="rounded-[28px] border border-dashed border-slate-300 bg-slate-50/80 p-8 text-center dark:border-slate-700 dark:bg-slate-900/60">
+                      <FileText className="mx-auto mb-3 h-8 w-8 text-slate-300" />
+                      <p className="text-sm font-medium text-slate-700 dark:text-slate-200">
+                        No claim-ready cases for the {marketLabel} lane yet
+                      </p>
+                      <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                        Validated visit packets will appear here once they are assembled for biller review.
+                      </p>
+                    </div>
+                  ) : null}
                   {visibleClaimQueue.map((item) => {
                     const tone = queueTone(item.queueStatus);
 

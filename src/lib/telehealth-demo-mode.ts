@@ -225,7 +225,7 @@ export class TelehealthDemoMode {
     this.participants.set(id, participant);
     this.notifyParticipantEvent('join', participant);
 
-    console.log(`[TelehealthDemo] ${name} (${role}) joined`);
+    if (import.meta.env.DEV) console.log(`[TelehealthDemo] ${name} (${role}) joined`);
     return participant;
   }
 
@@ -237,7 +237,7 @@ export class TelehealthDemoMode {
     if (participant) {
       this.participants.delete(participantId);
       this.notifyParticipantEvent('leave', participant);
-      console.log(`[TelehealthDemo] ${participant.name} left`);
+      if (import.meta.env.DEV) console.log(`[TelehealthDemo] ${participant.name} left`);
     }
   }
 
@@ -319,7 +319,7 @@ export class TelehealthDemoMode {
       this.resolveConnectionIssue();
     }, duration * 1000);
 
-    console.log(
+    if (import.meta.env.DEV) console.log(
       `[TelehealthDemo] Simulating ${type} (${event.severity}) for ${duration}s`,
     );
 
@@ -394,7 +394,7 @@ export class TelehealthDemoMode {
     this.activeIssue = null;
     this.isActive = false;
 
-    console.log('[TelehealthDemo] Cleaned up all demo resources');
+    if (import.meta.env.DEV) console.log('[TelehealthDemo] Cleaned up all demo resources');
   }
 
   // --------------------------------------------------------------------------
@@ -416,7 +416,7 @@ export class TelehealthDemoMode {
       this.notifyParticipantEvent('update', restored);
     }
 
-    console.log('[TelehealthDemo] Connection issue resolved');
+    if (import.meta.env.DEV) console.log('[TelehealthDemo] Connection issue resolved');
   }
 
   private notifyParticipantEvent(

@@ -130,8 +130,8 @@ export function B2BPartnerPortal({
       {
         icon: Shield,
         title: 'Compliant & Secure',
-        description: 'HIPAA compliant, state-specific waiver integration',
-        metric: 'Full compliance',
+        description: 'HIPAA-conscious, state-specific waiver integration',
+        metric: 'Privacy-first',
       },
     ],
     caseStudy: {
@@ -529,7 +529,7 @@ export function B2BPartnerPortal({
           <div className="flex flex-wrap justify-center gap-8">
             <div className="flex items-center gap-2 text-gray-600">
               <Shield className="w-5 h-5 text-blue-600" />
-              <span>HIPAA Compliant</span>
+              <span>HIPAA-Conscious</span>
             </div>
             <div className="flex items-center gap-2 text-gray-600">
               <Award className="w-5 h-5 text-blue-600" />

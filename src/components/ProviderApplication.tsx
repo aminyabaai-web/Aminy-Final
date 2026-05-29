@@ -48,6 +48,7 @@ import {
   type ProviderApplication as ProviderAppType,
   type AIVerificationResult,
 } from '../lib/auth-roles';
+import { PLATFORM_FEE_RATES } from '../lib/stripe-connect';
 
 interface ProviderApplicationProps {
   onBack: () => void;
@@ -111,6 +112,14 @@ const US_STATES = [
   'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC',
   'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY', 'DC',
 ];
+
+// Platform fee percentages derived from the canonical rail rates
+// (src/lib/stripe-connect.ts PLATFORM_FEE_RATES) so the application never
+// shows a hardcoded/fabricated fee. Cash-pay is the default self-pay rail.
+const CASH_PAY_FEE_PCT = Math.round(PLATFORM_FEE_RATES.cash_pay * 100); // 35
+const INSURED_FEE_PCT = Math.round(PLATFORM_FEE_RATES.insured * 100); // 10
+const AACT_PILOT_FEE_PCT = Math.round(PLATFORM_FEE_RATES.aact_pilot * 100); // 5
+const CASH_PAY_PROVIDER_SHARE = 1 - PLATFORM_FEE_RATES.cash_pay; // 0.65
 
 export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: ProviderApplicationProps) {
   const [step, setStep] = useState(1);
@@ -187,13 +196,15 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
           setError('License number must be at least 5 characters');
           return false;
         }
-        // Validate NPI format if provided (10 digits, required for BCBA/Psychologist/Therapist)
+        // Validate NPI format if provided (10 digits, required for licensed providers).
+        // Assistant-level certificants (bcaba, rbt) bill under a supervising provider
+        // and are not independently NPI-enrolled, so they are intentionally excluded.
         if (formData.npi_number) {
           if (!/^\d{10}$/.test(formData.npi_number)) {
             setError('NPI number must be exactly 10 digits');
             return false;
           }
-        } else if (['bcba', 'psychologist', 'therapist', 'slp', 'ot', 'pt'].includes(formData.provider_type)) {
+        } else if (['bcba', 'psychologist', 'therapist', 'slp', 'ot'].includes(formData.provider_type)) {
           setError('NPI number is required for licensed providers. You can look yours up at npiregistry.cms.hhs.gov');
           return false;
         }
@@ -581,7 +592,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-neutral-700 dark:text-slate-300 mb-1.5">
                       License Number <span className="text-red-500">*</span>
@@ -602,6 +613,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                       State <span className="text-red-500">*</span>
                     </label>
                     <select
+                      aria-label="License state"
                       value={formData.license_state}
                       onChange={(e) => updateField('license_state', e.target.value)}
                       className="w-full h-10 rounded-md border border-neutral-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 text-sm"
@@ -614,7 +626,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-neutral-700 dark:text-slate-300 mb-1.5">
                       License Expiry <span className="text-red-500">*</span>
@@ -938,13 +950,14 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                           type="number"
                           min="50"
                           max="500"
+                          aria-label="Session rate in dollars"
                           value={formData.hourly_rate}
                           onChange={(e) => updateField('hourly_rate', parseInt(e.target.value) || 99)}
                           className="pl-7"
                         />
                       </div>
                       <p className="text-xs text-neutral-500 mt-1">
-                        Aminy takes 15% platform fee. You'll earn ${Math.round(formData.hourly_rate * 0.85)} per session.
+                        On self-pay sessions Aminy takes a {CASH_PAY_FEE_PCT}% platform fee, so you'll earn ${Math.round(formData.hourly_rate * CASH_PAY_PROVIDER_SHARE)} per session. Insured ({INSURED_FEE_PCT}%) and AACT pilot ({AACT_PILOT_FEE_PCT}%) sessions have lower fees.
                       </p>
                     </div>
 
@@ -990,9 +1003,9 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                     <span className="text-sm text-teal-800 dark:text-teal-300">
                       I confirm that all information provided is accurate and I consent to Aminy verifying my credentials.
                       I agree to the{' '}
-                      <a href="#" className="underline font-medium">Provider Terms of Service</a>,{' '}
-                      <a href="#" className="underline font-medium">Privacy Policy</a>, and{' '}
-                      <a href="#" className="underline font-medium">Platform Fee Agreement</a> (15% per session).
+                      <a href="/?screen=terms-of-service" target="_blank" rel="noopener noreferrer" className="underline font-medium">Provider Terms of Service</a>,{' '}
+                      <a href="/?screen=privacy-policy" target="_blank" rel="noopener noreferrer" className="underline font-medium">Privacy Policy</a>, and{' '}
+                      <a href="/?screen=terms-of-service" target="_blank" rel="noopener noreferrer" className="underline font-medium">Platform Fee Agreement</a> (fees vary by payment rail — {CASH_PAY_FEE_PCT}% self-pay, {INSURED_FEE_PCT}% insured, {AACT_PILOT_FEE_PCT}% AACT pilot).
                     </span>
                   </label>
                 </div>
@@ -1001,11 +1014,11 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                 <div className="p-4 bg-neutral-100 dark:bg-slate-700 rounded-lg">
                   <h4 className="font-medium text-neutral-900 dark:text-white mb-2">Key Terms</h4>
                   <ul className="text-sm text-neutral-600 dark:text-slate-400 space-y-1">
-                    <li>• 15% platform fee per completed session</li>
+                    <li>• Platform fee per completed session varies by rail: {CASH_PAY_FEE_PCT}% self-pay, {INSURED_FEE_PCT}% insured, {AACT_PILOT_FEE_PCT}% AACT pilot</li>
                     <li>• Weekly payouts via Stripe Connect</li>
                     <li>• You set your own availability and rates</li>
                     <li>• Cancel anytime with 30 days notice</li>
-                    <li>• HIPAA-compliant telehealth platform included</li>
+                    <li>• Encrypted, secure telehealth platform included</li>
                     <li>• Access to AI patient summaries and tools</li>
                   </ul>
                 </div>
@@ -1053,7 +1066,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
             {[
               { icon: Brain, title: 'AI-Powered Tools', desc: 'Access patient insights and AI summaries' },
               { icon: Star, title: 'Build Your Practice', desc: 'Grow your client base on our marketplace' },
-              { icon: Shield, title: 'HIPAA Compliant', desc: 'Secure, compliant platform for telehealth' },
+              { icon: Shield, title: 'HIPAA-Conscious', desc: 'Encrypted, secure platform for telehealth' },
             ].map(({ icon: Icon, title, desc }) => (
               <Card key={title} className="p-4 text-center">
                 <Icon className="w-8 h-8 text-teal-600 mx-auto mb-2" />

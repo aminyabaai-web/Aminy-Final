@@ -38,6 +38,7 @@ import {
   Trash2
 } from 'lucide-react';
 import { supabase } from '../utils/supabase/client';
+import { isDemoMode } from '../lib/demo-seed';
 
 // ============================================
 // TYPES
@@ -227,41 +228,47 @@ export function HomeProgramTracker({
       }
     } catch (err) {
       console.error('[HomeProgram] Error loading data:', err);
-      // Use mock data for demo
-      setActivities([
-        {
-          id: 'demo-1',
-          childId,
-          assignedBy: 'provider-1',
-          assignedByName: 'Sarah Chen, SLP',
-          title: 'Practice /s/ sound words',
-          description: 'Practice 10 words starting with the /s/ sound using picture cards',
-          frequency: 'daily',
-          durationMinutes: 10,
-          category: 'speech',
-          instructions: '1. Show picture card\n2. Model the word\n3. Have child repeat 3 times',
-          materials: ['Picture cards', 'Mirror'],
-          startDate: new Date().toISOString(),
-          status: 'active',
-          createdAt: new Date().toISOString(),
-        },
-        {
-          id: 'demo-2',
-          childId,
-          assignedBy: 'provider-2',
-          assignedByName: 'Mike Johnson, OT',
-          title: 'Fine motor - bead stringing',
-          description: 'String 10 beads on a lace to improve pincer grasp',
-          frequency: '3x_week',
-          durationMinutes: 15,
-          category: 'motor',
-          instructions: 'Use large beads first, then progress to smaller',
-          materials: ['Beads', 'Lacing string'],
-          startDate: new Date().toISOString(),
-          status: 'active',
-          createdAt: new Date().toISOString(),
-        },
-      ]);
+      // Seed realistic sample activities ONLY in demo mode (investor/AACT walk-throughs).
+      // Real families must never see invented clinical activities or provider names —
+      // on a real load error we leave the list empty and show the empty state.
+      if (isDemoMode()) {
+        setActivities([
+          {
+            id: 'demo-1',
+            childId,
+            assignedBy: 'provider-1',
+            assignedByName: 'Sarah Chen, SLP',
+            title: 'Practice /s/ sound words',
+            description: 'Practice 10 words starting with the /s/ sound using picture cards',
+            frequency: 'daily',
+            durationMinutes: 10,
+            category: 'speech',
+            instructions: '1. Show picture card\n2. Model the word\n3. Have child repeat 3 times',
+            materials: ['Picture cards', 'Mirror'],
+            startDate: new Date().toISOString(),
+            status: 'active',
+            createdAt: new Date().toISOString(),
+          },
+          {
+            id: 'demo-2',
+            childId,
+            assignedBy: 'provider-2',
+            assignedByName: 'Mike Johnson, OT',
+            title: 'Fine motor - bead stringing',
+            description: 'String 10 beads on a lace to improve pincer grasp',
+            frequency: '3x_week',
+            durationMinutes: 15,
+            category: 'motor',
+            instructions: 'Use large beads first, then progress to smaller',
+            materials: ['Beads', 'Lacing string'],
+            startDate: new Date().toISOString(),
+            status: 'active',
+            createdAt: new Date().toISOString(),
+          },
+        ]);
+      } else {
+        setActivities([]);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -395,7 +402,11 @@ export function HomeProgramTracker({
               <Home className="w-5 h-5 text-teal-600" />
               Home Program
             </h2>
-            <AISparkleButton prompt={`How do I make the most of ${childName}'s home program activities? Any tips for practice between ABA sessions?`} label="Ask Aminy" />
+            <AISparkleButton
+              prompt={`Show me how ${childName}'s home program activities have been going. Which activities have been completed most, and where are we behind? What should we focus on this week?`}
+              label="Show progress"
+              visual
+            />
           </div>
           <p className="text-neutral-500 dark:text-neutral-400 text-sm mt-1">
             Practice activities for {childName}

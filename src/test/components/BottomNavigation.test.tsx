@@ -11,31 +11,11 @@ vi.mock('../../lib/feature-flags', () => ({
 }));
 
 // Mock lucide-react icons as simple span elements
-vi.mock('lucide-react', () => {
-  const icon = (name: string) => {
-    const Component = (props: Record<string, unknown>) => <span data-testid={`icon-${name}`} {...props} />;
-    Component.displayName = name;
-    return Component;
-  };
-  return {
-    Home: icon('Home'),
-    MessageCircle: icon('MessageCircle'),
-    ClipboardList: icon('ClipboardList'),
-    TrendingUp: icon('TrendingUp'),
-    Sparkles: icon('Sparkles'),
-    MoreHorizontal: icon('MoreHorizontal'),
-    Lock: icon('Lock'),
-    X: icon('X'),
-    User: icon('User'),
-    Settings: icon('Settings'),
-    ChevronRight: icon('ChevronRight'),
-    FolderOpen: icon('FolderOpen'),
-    Shield: icon('Shield'),
-    Users: icon('Users'),
-    BarChart3: icon('BarChart3'),
-    Baby: icon('Baby'),
-    Heart: icon('Heart'),
-  };
+// Use importOriginal so any new lucide-react icon used by BottomNavigation is
+// automatically available — no more "No X export" errors when icons are added.
+vi.mock('lucide-react', async (importOriginal) => {
+  const actual = await importOriginal<Record<string, unknown>>();
+  return actual;
 });
 
 describe('BottomNavigation', () => {
@@ -59,10 +39,10 @@ describe('BottomNavigation', () => {
     const tabs = screen.getAllByRole('tab');
     expect(tabs).toHaveLength(5);
 
-    // Verify parent tab labels are present
+    // Verify parent tab labels are present (current labels — Aminy AI replaced "Chat" / "Ease")
     expect(screen.getByText('Home')).toBeInTheDocument();
-    expect(screen.getByText('Chat')).toBeInTheDocument();
-    expect(screen.getByText('Ease')).toBeInTheDocument();
+    expect(screen.getByText('My Plan')).toBeInTheDocument();
+    expect(screen.getAllByText('Aminy AI')[0]).toBeInTheDocument();
     expect(screen.getByText('Care')).toBeInTheDocument();
     expect(screen.getByText('More')).toBeInTheDocument();
   });
@@ -72,10 +52,10 @@ describe('BottomNavigation', () => {
     const tabs = screen.getAllByRole('tab');
     expect(tabs).toHaveLength(5);
 
-    // Verify provider tab labels are present
+    // Verify provider tab labels are present (current labels — provider uses Clients/Notes)
     expect(screen.getByText('Dashboard')).toBeInTheDocument();
-    expect(screen.getByText('Patients')).toBeInTheDocument();
-    expect(screen.getByText('Aminy')).toBeInTheDocument();
+    expect(screen.getByText('Clients')).toBeInTheDocument();
+    expect(screen.getAllByText('Aminy AI')[0]).toBeInTheDocument();
     expect(screen.getByText('Notes')).toBeInTheDocument();
     expect(screen.getByText('More')).toBeInTheDocument();
   });
@@ -84,20 +64,21 @@ describe('BottomNavigation', () => {
     const onNavigate = vi.fn();
     render(<BottomNavigation activeTab="home" onNavigate={onNavigate} />);
 
-    const chatTab = screen.getByRole('tab', { name: /chat/i });
-    fireEvent.click(chatTab);
+    // Center tab → opens BevelChatOverlay (App.tsx intercepts and calls setBevelChatOpen)
+    const aiTab = screen.getByRole('tab', { name: /aminy ai/i });
+    fireEvent.click(aiTab);
     expect(onNavigate).toHaveBeenCalledWith('ask-aminy');
 
-    const juniorTab = screen.getByRole('tab', { name: /ease/i });
-    fireEvent.click(juniorTab);
-    expect(onNavigate).toHaveBeenCalledWith('junior');
+    const planTab = screen.getByRole('tab', { name: /my plan/i });
+    fireEvent.click(planTab);
+    expect(onNavigate).toHaveBeenCalledWith('care-plan');
   });
 
   it('highlights the active tab', () => {
     render(<BottomNavigation activeTab="ask-aminy" onNavigate={vi.fn()} />);
 
-    const chatTab = screen.getByRole('tab', { name: /chat/i });
-    expect(chatTab).toHaveAttribute('aria-current', 'page');
+    const aiTab = screen.getByRole('tab', { name: /aminy ai/i });
+    expect(aiTab).toHaveAttribute('aria-current', 'page');
 
     const homeTab = screen.getByRole('tab', { name: /home/i });
     expect(homeTab).not.toHaveAttribute('aria-current');

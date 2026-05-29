@@ -39,6 +39,7 @@ import {
   type EVVRecord,
   type EVVDiscrepancy,
 } from '../../lib/evv-reconciliation';
+import { isDemoMode } from '../../lib/demo-seed';
 
 interface EVVReconciliationEnhancedProps {
   providerId?: string;
@@ -161,7 +162,9 @@ export default function EVVReconciliationEnhanced({ providerId, onBack }: EVVRec
   const [exportLoading, setExportLoading] = useState(false);
   const [exported, setExported] = useState(false);
 
-  const records = DEMO_EVV_RECORDS;
+  // Sample EVV records are shown only in demo mode (investor/AACT walkthroughs).
+  // Real providers see their own visit records once captured/synced.
+  const records = isDemoMode() ? DEMO_EVV_RECORDS : [];
   const report = useMemo(() => generateEVVReport(records, '2026-03'), [records]);
   const discrepancyGroups = useMemo(() => flagDiscrepancies(records), [records]);
   const fiscalExport = useMemo(() => exportFiscalAgentFile(records), [records]);
@@ -183,6 +186,36 @@ export default function EVVReconciliationEnhanced({ providerId, onBack }: EVVRec
   ];
 
   const checklistComplete = CHECKLIST_ITEMS.every(i => i.done);
+
+  // No real records → friendly empty state instead of zeroed metrics and sample trends.
+  if (records.length === 0) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <div style={{ background: '#0D1B2A' }} className="px-4 pt-12 pb-4 text-white">
+          <div className="flex items-center gap-3">
+            {onBack && (
+              <button onClick={onBack} className="p-1.5 rounded-lg hover:bg-white/10 transition-colors">
+                <ArrowLeft size={20} />
+              </button>
+            )}
+            <div>
+              <h1 className="text-lg font-bold">EVV Reconciliation</h1>
+              <p className="text-xs text-white/60">Clean cycles &amp; fiscal agent submission</p>
+            </div>
+          </div>
+        </div>
+        <div className="flex flex-col items-center justify-center px-6 py-20 text-center">
+          <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+            <Shield size={30} className="text-gray-400" />
+          </div>
+          <p className="text-base font-semibold text-gray-700">No EVV records to reconcile</p>
+          <p className="text-sm text-gray-500 mt-1 max-w-xs">
+            Once visits are captured with check-in/check-out, your clean-cycle rate, discrepancies, and fiscal agent export will appear here.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">

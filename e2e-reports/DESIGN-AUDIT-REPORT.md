@@ -1,23 +1,28 @@
 # Aminy Design Audit Report
 
-Generated: 3/14/2026, 6:15:50 AM
+Generated: 5/15/2026, 9:52:46 PM
 
 ## Executive Summary
 
 | Metric | Value |
 |--------|-------|
 | Screens Audited | 25 |
-| Total Issues | 0 |
+| Total Issues | 13 |
 | Critical Issues | 0 |
-| Overall Score | 100/100 |
+| Overall Score | 98/100 |
 
 ## Top Recommendations
 
-
+1. Standardize 11 typography issues: Use consistent font sizes and improve line heights
+2. Improve 2 usability issues: Add clear navigation and CTAs
 
 ## Most Common Issues
 
-
+1. Typography: Smallest font size is 11px (8 screens)
+2. Usability: No clear primary call-to-action found (2 screens)
+3. Typography: Smallest font size is 11.5px (1 screens)
+4. Typography: Found 10 different font sizes (1 screens)
+5. Typography: Found 9 different font sizes (1 screens)
 
 ---
 
@@ -31,17 +36,21 @@ Generated: 3/14/2026, 6:15:50 AM
 - Accessibility: 100/100
 - Performance: 100/100
 - Usability: 100/100
-- Visual Consistency: 100/100
-- **Overall: 100/100**
+- Visual Consistency: 85/100
+- **Overall: 96/100**
 
 **Metrics:**
 - Load Time: 0.00s
-- Elements: 137
-- Interactive Elements: 9
+- Elements: 118
+- Interactive Elements: 11
 - Images: 1
 - Form Fields: 0
 
-**No issues found!** :white_check_mark:
+**Issues Found (1):**
+
+| Severity | Category | Issue | Recommendation |
+|----------|----------|-------|----------------|
+| MAJOR | Typography | Smallest font size is 11.5px | Minimum font size should be 12px for readability, prefer 14-16px for body text |
 
 ---
 
@@ -58,7 +67,7 @@ Generated: 3/14/2026, 6:15:50 AM
 
 **Metrics:**
 - Load Time: 0.00s
-- Elements: 143
+- Elements: 118
 - Interactive Elements: 12
 - Images: 1
 - Form Fields: 2
@@ -80,8 +89,8 @@ Generated: 3/14/2026, 6:15:50 AM
 
 **Metrics:**
 - Load Time: 0.00s
-- Elements: 157
-- Interactive Elements: 16
+- Elements: 133
+- Interactive Elements: 17
 - Images: 1
 - Form Fields: 4
 
@@ -102,7 +111,7 @@ Generated: 3/14/2026, 6:15:50 AM
 
 **Metrics:**
 - Load Time: 0.00s
-- Elements: 126
+- Elements: 96
 - Interactive Elements: 7
 - Images: 1
 - Form Fields: 1
@@ -124,8 +133,8 @@ Generated: 3/14/2026, 6:15:50 AM
 
 **Metrics:**
 - Load Time: 0.00s
-- Elements: 525
-- Interactive Elements: 41
+- Elements: 416
+- Interactive Elements: 35
 - Images: 1
 - Form Fields: 0
 
@@ -146,8 +155,8 @@ Generated: 3/14/2026, 6:15:50 AM
 
 **Metrics:**
 - Load Time: 0.00s
-- Elements: 525
-- Interactive Elements: 41
+- Elements: 416
+- Interactive Elements: 35
 - Images: 1
 - Form Fields: 0
 
@@ -168,8 +177,8 @@ Generated: 3/14/2026, 6:15:50 AM
 
 **Metrics:**
 - Load Time: 0.00s
-- Elements: 525
-- Interactive Elements: 41
+- Elements: 416
+- Interactive Elements: 35
 - Images: 1
 - Form Fields: 0
 
@@ -184,18 +193,23 @@ Generated: 3/14/2026, 6:15:50 AM
 **Scores:**
 - Accessibility: 100/100
 - Performance: 100/100
-- Usability: 100/100
-- Visual Consistency: 100/100
-- **Overall: 100/100**
+- Usability: 95/100
+- Visual Consistency: 85/100
+- **Overall: 95/100**
 
 **Metrics:**
 - Load Time: 0.00s
-- Elements: 386
+- Elements: 356
 - Interactive Elements: 28
 - Images: 1
 - Form Fields: 0
 
-**No issues found!** :white_check_mark:
+**Issues Found (2):**
+
+| Severity | Category | Issue | Recommendation |
+|----------|----------|-------|----------------|
+| MAJOR | Typography | Smallest font size is 11px | Minimum font size should be 12px for readability, prefer 14-16px for body text |
+| MINOR | Usability | No clear primary call-to-action found | Add a prominent CTA to guide users toward the main action |
 
 ---
 
@@ -212,8 +226,8 @@ Generated: 3/14/2026, 6:15:50 AM
 
 **Metrics:**
 - Load Time: 0.00s
-- Elements: 326
-- Interactive Elements: 21
+- Elements: 304
+- Interactive Elements: 22
 - Images: 1
 - Form Fields: 1
 
@@ -234,8 +248,8 @@ Generated: 3/14/2026, 6:15:50 AM
 
 **Metrics:**
 - Load Time: 0.00s
-- Elements: 525
-- Interactive Elements: 41
+- Elements: 416
+- Interactive Elements: 35
 - Images: 1
 - Form Fields: 0
 
@@ -251,17 +265,22 @@ Generated: 3/14/2026, 6:15:50 AM
 - Accessibility: 100/100
 - Performance: 100/100
 - Usability: 100/100
-- Visual Consistency: 100/100
-- **Overall: 100/100**
+- Visual Consistency: 80/100
+- **Overall: 95/100**
 
 **Metrics:**
 - Load Time: 0.00s
-- Elements: 394
-- Interactive Elements: 22
+- Elements: 390
+- Interactive Elements: 25
 - Images: 1
 - Form Fields: 0
 
-**No issues found!** :white_check_mark:
+**Issues Found (2):**
+
+| Severity | Category | Issue | Recommendation |
+|----------|----------|-------|----------------|
+| MINOR | Typography | Found 10 different font sizes | Use a type scale with 5-7 sizes (e.g., 12, 14, 16, 18, 24, 32, 48) |
+| MAJOR | Typography | Smallest font size is 11px | Minimum font size should be 12px for readability, prefer 14-16px for body text |
 
 ---
 
@@ -278,8 +297,8 @@ Generated: 3/14/2026, 6:15:50 AM
 
 **Metrics:**
 - Load Time: 0.00s
-- Elements: 525
-- Interactive Elements: 41
+- Elements: 416
+- Interactive Elements: 35
 - Images: 1
 - Form Fields: 0
 
@@ -300,7 +319,7 @@ Generated: 3/14/2026, 6:15:50 AM
 
 **Metrics:**
 - Load Time: 0.00s
-- Elements: 369
+- Elements: 343
 - Interactive Elements: 22
 - Images: 1
 - Form Fields: 1
@@ -322,8 +341,8 @@ Generated: 3/14/2026, 6:15:50 AM
 
 **Metrics:**
 - Load Time: 0.00s
-- Elements: 525
-- Interactive Elements: 41
+- Elements: 416
+- Interactive Elements: 35
 - Images: 1
 - Form Fields: 0
 
@@ -344,8 +363,8 @@ Generated: 3/14/2026, 6:15:50 AM
 
 **Metrics:**
 - Load Time: 0.00s
-- Elements: 478
-- Interactive Elements: 41
+- Elements: 459
+- Interactive Elements: 42
 - Images: 1
 - Form Fields: 1
 
@@ -366,8 +385,8 @@ Generated: 3/14/2026, 6:15:50 AM
 
 **Metrics:**
 - Load Time: 0.00s
-- Elements: 525
-- Interactive Elements: 41
+- Elements: 416
+- Interactive Elements: 35
 - Images: 1
 - Form Fields: 0
 
@@ -388,8 +407,8 @@ Generated: 3/14/2026, 6:15:50 AM
 
 **Metrics:**
 - Load Time: 0.00s
-- Elements: 525
-- Interactive Elements: 41
+- Elements: 416
+- Interactive Elements: 35
 - Images: 1
 - Form Fields: 0
 
@@ -410,8 +429,8 @@ Generated: 3/14/2026, 6:15:50 AM
 
 **Metrics:**
 - Load Time: 0.00s
-- Elements: 525
-- Interactive Elements: 41
+- Elements: 416
+- Interactive Elements: 35
 - Images: 1
 - Form Fields: 0
 
@@ -427,17 +446,21 @@ Generated: 3/14/2026, 6:15:50 AM
 - Accessibility: 100/100
 - Performance: 100/100
 - Usability: 100/100
-- Visual Consistency: 100/100
-- **Overall: 100/100**
+- Visual Consistency: 85/100
+- **Overall: 96/100**
 
 **Metrics:**
-- Load Time: 0.00s
-- Elements: 509
-- Interactive Elements: 33
+- Load Time: 0.01s
+- Elements: 498
+- Interactive Elements: 38
 - Images: 2
 - Form Fields: 0
 
-**No issues found!** :white_check_mark:
+**Issues Found (1):**
+
+| Severity | Category | Issue | Recommendation |
+|----------|----------|-------|----------------|
+| MAJOR | Typography | Smallest font size is 11px | Minimum font size should be 12px for readability, prefer 14-16px for body text |
 
 ---
 
@@ -449,17 +472,21 @@ Generated: 3/14/2026, 6:15:50 AM
 - Accessibility: 100/100
 - Performance: 100/100
 - Usability: 100/100
-- Visual Consistency: 100/100
-- **Overall: 100/100**
+- Visual Consistency: 85/100
+- **Overall: 96/100**
 
 **Metrics:**
 - Load Time: 0.00s
-- Elements: 355
-- Interactive Elements: 29
+- Elements: 337
+- Interactive Elements: 30
 - Images: 1
 - Form Fields: 7
 
-**No issues found!** :white_check_mark:
+**Issues Found (1):**
+
+| Severity | Category | Issue | Recommendation |
+|----------|----------|-------|----------------|
+| MAJOR | Typography | Smallest font size is 11px | Minimum font size should be 12px for readability, prefer 14-16px for body text |
 
 ---
 
@@ -471,17 +498,21 @@ Generated: 3/14/2026, 6:15:50 AM
 - Accessibility: 100/100
 - Performance: 100/100
 - Usability: 100/100
-- Visual Consistency: 100/100
-- **Overall: 100/100**
+- Visual Consistency: 85/100
+- **Overall: 96/100**
 
 **Metrics:**
 - Load Time: 0.00s
-- Elements: 290
-- Interactive Elements: 18
+- Elements: 272
+- Interactive Elements: 19
 - Images: 1
 - Form Fields: 0
 
-**No issues found!** :white_check_mark:
+**Issues Found (1):**
+
+| Severity | Category | Issue | Recommendation |
+|----------|----------|-------|----------------|
+| MAJOR | Typography | Smallest font size is 11px | Minimum font size should be 12px for readability, prefer 14-16px for body text |
 
 ---
 
@@ -493,17 +524,22 @@ Generated: 3/14/2026, 6:15:50 AM
 - Accessibility: 100/100
 - Performance: 100/100
 - Usability: 100/100
-- Visual Consistency: 100/100
-- **Overall: 100/100**
+- Visual Consistency: 80/100
+- **Overall: 95/100**
 
 **Metrics:**
 - Load Time: 0.00s
-- Elements: 403
-- Interactive Elements: 22
+- Elements: 381
+- Interactive Elements: 23
 - Images: 1
 - Form Fields: 0
 
-**No issues found!** :white_check_mark:
+**Issues Found (2):**
+
+| Severity | Category | Issue | Recommendation |
+|----------|----------|-------|----------------|
+| MINOR | Typography | Found 9 different font sizes | Use a type scale with 5-7 sizes (e.g., 12, 14, 16, 18, 24, 32, 48) |
+| MAJOR | Typography | Smallest font size is 11px | Minimum font size should be 12px for readability, prefer 14-16px for body text |
 
 ---
 
@@ -515,17 +551,21 @@ Generated: 3/14/2026, 6:15:50 AM
 - Accessibility: 100/100
 - Performance: 100/100
 - Usability: 100/100
-- Visual Consistency: 100/100
-- **Overall: 100/100**
+- Visual Consistency: 85/100
+- **Overall: 96/100**
 
 **Metrics:**
 - Load Time: 0.00s
-- Elements: 351
-- Interactive Elements: 20
+- Elements: 357
+- Interactive Elements: 23
 - Images: 1
 - Form Fields: 0
 
-**No issues found!** :white_check_mark:
+**Issues Found (1):**
+
+| Severity | Category | Issue | Recommendation |
+|----------|----------|-------|----------------|
+| MAJOR | Typography | Smallest font size is 11px | Minimum font size should be 12px for readability, prefer 14-16px for body text |
 
 ---
 
@@ -542,8 +582,8 @@ Generated: 3/14/2026, 6:15:50 AM
 
 **Metrics:**
 - Load Time: 0.00s
-- Elements: 525
-- Interactive Elements: 41
+- Elements: 416
+- Interactive Elements: 35
 - Images: 1
 - Form Fields: 0
 
@@ -558,18 +598,23 @@ Generated: 3/14/2026, 6:15:50 AM
 **Scores:**
 - Accessibility: 100/100
 - Performance: 100/100
-- Usability: 100/100
-- Visual Consistency: 100/100
-- **Overall: 100/100**
+- Usability: 95/100
+- Visual Consistency: 85/100
+- **Overall: 95/100**
 
 **Metrics:**
 - Load Time: 0.00s
-- Elements: 591
-- Interactive Elements: 37
+- Elements: 224
+- Interactive Elements: 15
 - Images: 1
 - Form Fields: 0
 
-**No issues found!** :white_check_mark:
+**Issues Found (2):**
+
+| Severity | Category | Issue | Recommendation |
+|----------|----------|-------|----------------|
+| MAJOR | Typography | Smallest font size is 11px | Minimum font size should be 12px for readability, prefer 14-16px for body text |
+| MINOR | Usability | No clear primary call-to-action found | Add a prominent CTA to guide users toward the main action |
 
 ---
 

@@ -27,6 +27,7 @@ import { Button } from '../ui/button';
 import {
   createSessionPayout,
   calculateProviderAmount,
+  getPlatformFeeRate,
   formatCents,
   type SessionPayoutParams,
   type PayoutRecord,
@@ -46,6 +47,8 @@ export interface SessionPayoutTriggerProps {
   stripeConnectAccountId: string;
   /** Total collected from the family in cents */
   sessionAmountCents: number;
+  /** Care rail — determines platform take rate (cash 35%, insured 10%, aact 5%) */
+  rail?: import('../../lib/stripe-connect').PayoutRail;
   /** Human-readable session description */
   sessionDescription?: string;
   /** ISO timestamp when the session occurred */
@@ -68,6 +71,7 @@ export function SessionPayoutTrigger({
   providerName,
   stripeConnectAccountId,
   sessionAmountCents,
+  rail = 'cash_pay',
   sessionDescription,
   sessionDate,
   durationMinutes,
@@ -78,7 +82,8 @@ export function SessionPayoutTrigger({
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [payoutRecord, setPayoutRecord] = useState<PayoutRecord | null>(null);
 
-  const { providerCents, platformFeeCents } = calculateProviderAmount(sessionAmountCents);
+  const { providerCents, platformFeeCents } = calculateProviderAmount(sessionAmountCents, rail);
+  const feePct = Math.round(getPlatformFeeRate(rail) * 100);
 
   const handleRelease = async () => {
     setViewState('loading');
@@ -90,6 +95,7 @@ export function SessionPayoutTrigger({
         providerId,
         stripeConnectAccountId,
         sessionAmountCents,
+        rail,
         sessionDescription: sessionDescription ?? `Session on ${sessionDate ?? sessionId}`,
       };
 
@@ -174,7 +180,7 @@ export function SessionPayoutTrigger({
                 </div>
 
                 <div className="flex justify-between items-center text-sm">
-                  <span className="text-gray-500">Platform fee (10%)</span>
+                  <span className="text-gray-500">Platform fee ({feePct}%)</span>
                   <span className="font-medium text-red-500">−{formatCents(platformFeeCents)}</span>
                 </div>
 

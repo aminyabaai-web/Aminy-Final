@@ -226,12 +226,12 @@ export function logConfigStatus(): void {
 
   console.group('🔧 Aminy Configuration Status');
 
-  console.log('Supabase:', status.supabase ? '✅' : '❌');
-  console.log('Stripe:', status.stripe ? '✅' : '❌');
-  console.log('Daily.co:', status.daily ? '✅' : '❌');
-  console.log('Sentry:', status.sentry ? '✅' : '❌');
-  console.log('Analytics:', status.analytics ? '✅' : '❌');
-  console.log('Production Ready:', status.productionReady ? '✅' : '❌');
+  if (import.meta.env.DEV) console.log('Supabase:', status.supabase ? '✅' : '❌');
+  if (import.meta.env.DEV) console.log('Stripe:', status.stripe ? '✅' : '❌');
+  if (import.meta.env.DEV) console.log('Daily.co:', status.daily ? '✅' : '❌');
+  if (import.meta.env.DEV) console.log('Sentry:', status.sentry ? '✅' : '❌');
+  if (import.meta.env.DEV) console.log('Analytics:', status.analytics ? '✅' : '❌');
+  if (import.meta.env.DEV) console.log('Production Ready:', status.productionReady ? '✅' : '❌');
 
   if (status.issues.length > 0) {
     console.group('⚠️ Issues');

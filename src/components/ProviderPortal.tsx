@@ -21,6 +21,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
+import { ProviderCredentialingWidget } from './ProviderCredentialingWidget';
+import { isDemoMode } from '../lib/demo-seed';
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { Logo } from './Logo';
@@ -145,10 +147,27 @@ interface ProviderProfile {
 interface ProviderPortalProps {
   providerId: string;
   onNavigate?: (screen: string) => void;
+  /** Launches the live telehealth room. App.tsx sets the active session id then routes to video-call-room. */
+  onStartTelehealthSession?: (sessionId: string) => void;
 }
 
-export function ProviderPortal({ providerId, onNavigate }: ProviderPortalProps) {
+export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSession }: ProviderPortalProps) {
   const [activeTab, setActiveTab] = useState<'dashboard' | 'clients' | 'sessions' | 'start-session' | 'earnings' | 'settings' | 'ai-summaries' | 'insights' | 'coordination' | 'my-practice' | 'clinical-notes' | 'supervision' | 'credentialing' | 'claims' | 'performance'>('dashboard');
+  // Partner attribution drives which tabs show. AACT providers don't manage their
+  // own credentialing or claims (the org handles that). Cash-pay providers don't see
+  // insurance/claims tabs. This keeps the EMR surface scoped to what's actually relevant.
+  const [partnerOrg, setPartnerOrg] = useState<'aact' | 'rise' | 'unknown'>('unknown');
+  useEffect(() => {
+    (async () => {
+      const { data } = await supabase
+        .from('profiles')
+        .select('pilot_organization')
+        .eq('id', providerId)
+        .maybeSingle();
+      const org = data?.pilot_organization;
+      if (org === 'aact' || org === 'rise') setPartnerOrg(org);
+    })();
+  }, [providerId]);
   const [patients, setPatients] = useState<Patient[]>([]);
   const [sessions, setSessions] = useState<Session[]>([]);
   const [provider, setProvider] = useState<ProviderProfile | null>(null);
@@ -441,8 +460,9 @@ export function ProviderPortal({ providerId, onNavigate }: ProviderPortalProps) 
         }
       }
 
-      // If no sessions in DB, use demo data
-      if (sessionsList.length === 0) {
+      // Sample sessions — DEMO MODE ONLY. Real providers with no sessions see
+      // the existing empty state, never fabricated patients.
+      if (sessionsList.length === 0 && isDemoMode()) {
         sessionsList.push(
           {
             id: 's1',
@@ -482,6 +502,9 @@ export function ProviderPortal({ providerId, onNavigate }: ProviderPortalProps) 
         .select('net_amount_cents, status, created_at')
         .eq('provider_id', providerId);
 
+      // Hoisted so the provider-stats update below can use the freshly computed
+      // monthly total instead of the not-yet-committed `earnings` state.
+      let computedThisMonth = 0;
       if (earningsData) {
         let thisMonth = 0, lastMonth = 0, pending = 0, ytd = 0;
         earningsData.forEach(e => {
@@ -494,8 +517,9 @@ export function ProviderPortal({ providerId, onNavigate }: ProviderPortalProps) 
           else if (created >= startOfLastMonth) lastMonth += amount;
         });
 
+        computedThisMonth = Math.round(thisMonth / 100);
         setEarnings({
-          thisMonth: Math.round(thisMonth / 100),
+          thisMonth: computedThisMonth,
           lastMonth: Math.round(lastMonth / 100),
           pending: Math.round(pending / 100),
           ytd: Math.round(ytd / 100),
@@ -505,12 +529,12 @@ export function ProviderPortal({ providerId, onNavigate }: ProviderPortalProps) 
         setEarnings({ thisMonth: 0, lastMonth: 0, pending: 0, ytd: 0 });
       }
 
-      // Update provider stats
+      // Update provider stats using the locally-computed monthly total.
       setProvider(prev => prev ? {
         ...prev,
         totalPatients: patientsList.length,
         sessionsThisMonth: sessionsData?.length || sessionsList.length,
-        earningsThisMonth: earnings.thisMonth || 0,
+        earningsThisMonth: computedThisMonth,
       } : null);
 
     } catch (error) {
@@ -825,12 +849,10 @@ export function ProviderPortal({ providerId, onNavigate }: ProviderPortalProps) 
                 variant="outline"
                 size="icon"
                 className="relative border-slate-200 bg-white text-neutral-600 hover:border-teal-200 hover:bg-teal-50 hover:text-teal-700"
-                aria-label="Open notifications"
+                aria-label="Notifications"
+                onClick={() => toast.info("You're all caught up — no new notifications.")}
               >
                 <Bell className="w-5 h-5 text-neutral-600 dark:text-slate-400" />
-                <span className="absolute -top-1 -right-1 w-4 h-4 bg-rose-500 text-white text-xs rounded-full flex items-center justify-center">
-                  3
-                </span>
               </Button>
 
               <div className="flex items-center gap-3">
@@ -870,7 +892,18 @@ export function ProviderPortal({ providerId, onNavigate }: ProviderPortalProps) 
               { id: 'performance', label: 'Performance', icon: TrendingUp },
               { id: 'my-practice', label: 'My Practice', icon: Briefcase },
               { id: 'settings', label: 'Settings', icon: Settings }
-            ].map(tab => (
+            ].filter(tab => {
+              // AACT/Rise providers don't manage their own credentialing or claims
+              // — the partner organization handles those upstream.
+              if (partnerOrg === 'aact' || partnerOrg === 'rise') {
+                return tab.id !== 'credentialing' && tab.id !== 'claims';
+              }
+              // Cash-pay (unknown partner) providers don't deal with insurance claims.
+              if (partnerOrg === 'unknown') {
+                return tab.id !== 'claims';
+              }
+              return true;
+            }).map(tab => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as typeof activeTab)}
@@ -891,7 +924,10 @@ export function ProviderPortal({ providerId, onNavigate }: ProviderPortalProps) 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {activeTab === 'dashboard' && (
-          <div className="space-y-8">
+          <div className="space-y-6">
+            {/* Verification widget — hides when fully verified */}
+            <ProviderCredentialingWidget providerId={providerId} />
+
             {/* Welcome & Next Session */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 sm:gap-6">
               {/* Welcome Card */}
@@ -1306,8 +1342,24 @@ export function ProviderPortal({ providerId, onNavigate }: ProviderPortalProps) 
             }))}
             onBack={() => setActiveTab('sessions')}
             onStartSession={(config) => {
-              // TODO: create Daily.co room with config, navigate to video room
-              setActiveTab('sessions');
+              // Persist the configured session so the video room + AI documentation
+              // layer can pick up modality, CPT codes, and participants on entry.
+              try {
+                sessionStorage.setItem('aminy_pending_session_config', JSON.stringify(config));
+              } catch {
+                // sessionStorage may be unavailable (private mode) — non-fatal.
+              }
+              const sessionId =
+                typeof crypto !== 'undefined' && 'randomUUID' in crypto
+                  ? crypto.randomUUID()
+                  : `sess_${providerId}_${new Date().getTime()}`;
+              if (onStartTelehealthSession) {
+                // VideoCallRoom self-provisions the Daily.co room from this id.
+                onStartTelehealthSession(sessionId);
+              } else {
+                // Fallback when no launcher is wired (e.g. standalone preview).
+                onNavigate?.('video-call-room');
+              }
             }}
           />
         )}
@@ -1403,10 +1455,12 @@ export function ProviderPortal({ providerId, onNavigate }: ProviderPortalProps) 
             {/* Earnings Summary */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-3 sm:gap-4">
               {[
-                { label: 'This Month', value: `$${earnings.thisMonth.toLocaleString()}`, trend: '+12%', color: 'teal' },
-                { label: 'Last Month', value: `$${earnings.lastMonth.toLocaleString()}`, color: 'neutral' },
-                { label: 'Pending', value: `$${earnings.pending.toLocaleString()}`, color: 'amber' },
-                { label: 'YTD Total', value: `$${earnings.ytd.toLocaleString()}`, trend: '+18%', color: 'green' }
+                // Trend chips intentionally omitted until real month-over-month
+                // comparison data exists — never show fabricated growth percentages.
+                { label: 'This Month', value: `$${earnings.thisMonth.toLocaleString()}`, color: 'teal' as const, trend: undefined as string | undefined },
+                { label: 'Last Month', value: `$${earnings.lastMonth.toLocaleString()}`, color: 'neutral' as const, trend: undefined as string | undefined },
+                { label: 'Pending', value: `$${earnings.pending.toLocaleString()}`, color: 'amber' as const, trend: undefined as string | undefined },
+                { label: 'YTD Total', value: `$${earnings.ytd.toLocaleString()}`, color: 'green' as const, trend: undefined as string | undefined }
               ].map((stat, i) => (
                 <Card key={i} className="p-5">
                   <p className="text-sm text-neutral-500 mb-1">{stat.label}</p>
@@ -1423,16 +1477,22 @@ export function ProviderPortal({ providerId, onNavigate }: ProviderPortalProps) 
               ))}
             </div>
 
-            {/* Recent Transactions */}
+            {/* Recent Transactions — sample list shown ONLY in demo mode */}
             <Card className="p-4 sm:p-5 md:p-6">
               <h3 className="font-semibold text-neutral-900 mb-4">Recent Sessions</h3>
+              {!isDemoMode() && (
+                <div className="py-8 text-center">
+                  <DollarSign className="w-10 h-10 text-neutral-300 mx-auto mb-2" />
+                  <p className="text-sm text-neutral-500">No sessions yet. Completed sessions and payouts will appear here.</p>
+                </div>
+              )}
               <div className="space-y-3">
-                {[
+                {(isDemoMode() ? [
                   { patient: 'Emma Thompson', date: 'Today', type: 'Parent Consultation', amount: 99, status: 'pending' },
                   { patient: 'Liam Chen', date: 'Yesterday', type: 'Follow-up Session', amount: 99, status: 'completed' },
                   { patient: 'Noah Williams', date: 'Jan 8', type: 'Parent Consultation', amount: 99, status: 'completed' },
                   { patient: 'Emma Thompson', date: 'Jan 5', type: 'Assessment', amount: 175, status: 'completed' }
-                ].map((tx, i) => (
+                ] : []).map((tx, i) => (
                   <div key={i} className="flex items-center justify-between p-3 bg-neutral-50 rounded-lg">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center">
@@ -2018,7 +2078,7 @@ export function ProviderPortal({ providerId, onNavigate }: ProviderPortalProps) 
                 <div>
                   <h3 className="font-semibold text-neutral-900 dark:text-white">Payout Setup</h3>
                   <p className="text-sm text-neutral-500 dark:text-slate-400 mt-1">
-                    Configure your bank account for guaranteed biweekly payments via Aminy
+                    Configure your bank account for scheduled biweekly payouts via Aminy
                   </p>
                 </div>
                 <Button

@@ -30,7 +30,29 @@ export const productFlags = {
   devModeEnabled: import.meta.env.VITE_DEV_MODE === 'true',
   /** Enable CentralReach integration screens */
   crSyncEnabled: import.meta.env.VITE_CR_SYNC_ENABLED === 'true',
+  /**
+   * DEMO_MODE — when true, surface narrows to the 12 "hero" screens used in
+   * investor/AACT/McKinsey demos. Everything else is feature-flagged off in
+   * navigation so the product feels tight + focused, not 42-screen sprawl.
+   * Set VITE_DEMO_MODE=true to enable.
+   */
+  demoMode: import.meta.env.VITE_DEMO_MODE === 'true',
 } as const;
+
+/**
+ * Demo-mode-only screens (the 12 we want VCs / partners to see):
+ * splash, login/create-account, dashboard, paywall, conversational-booking,
+ * marketplace, care-coordination, ask-bcba, vault, settings, weekly-insights,
+ * memory-settings. Anything else is hidden from nav when demoMode === true.
+ */
+export const DEMO_MODE_SCREENS: readonly string[] = [
+  'splash', 'login', 'create-account', 'onboarding',
+  'dashboard', 'paywall',
+  'conversational-booking', 'marketplace',
+  'care-coordination', 'ask-bcba',
+  'vault', 'settings', 'memory-settings',
+  'weekly-insights',
+];
 
 export type ProductFlagKey = keyof typeof productFlags;
 

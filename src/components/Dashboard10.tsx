@@ -772,7 +772,11 @@ export function Dashboard10({
           </div>
 
           {/* Upcoming Events Carousel */}
-          <div className="flex gap-2 sm:gap-3 mt-4 overflow-x-auto pb-2 -mx-1 px-1 scrollbar-hide">
+          <div className={`flex gap-2 sm:gap-3 mt-4 pb-2 -mx-1 px-1 scrollbar-hide ${
+            upcomingEvents.length <= 1
+              ? 'justify-center'             // single event → center horizontally
+              : 'overflow-x-auto'            // multiple → scroll
+          }`}>
             {upcomingEvents.length > 0 ? (
               upcomingEvents.map((event) => (
                 <button
@@ -784,16 +788,18 @@ export function Dashboard10({
                         : 'care-plan'
                     )
                   }
-                  className="flex-shrink-0 rounded-2xl border border-slate-200 bg-white/85 px-3 py-2.5 shadow-sm transition-colors hover:bg-white"
+                  className="flex items-center gap-3 flex-shrink-0 rounded-2xl border border-slate-200 bg-white/85 px-4 py-3 shadow-sm transition-colors hover:bg-white"
                 >
-                  {event.type === 'telehealth' ? (
-                    <Video className="w-4 h-4 text-teal-600" />
-                  ) : (
-                    <Calendar className="w-4 h-4 text-amber-500" />
-                  )}
+                  <span className="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style={{ background: event.type === 'telehealth' ? '#43AA8B15' : '#F8B40015' }}>
+                    {event.type === 'telehealth' ? (
+                      <Video className="w-4 h-4 text-teal-600" />
+                    ) : (
+                      <Calendar className="w-4 h-4 text-amber-500" />
+                    )}
+                  </span>
                   <div className="text-left">
                     <div className="text-sm font-medium text-slate-900">{event.title}</div>
-                    <div className="text-sm text-slate-500">{event.time}</div>
+                    <div className="text-xs text-slate-500">{event.time}</div>
                   </div>
                 </button>
               ))
@@ -817,8 +823,9 @@ export function Dashboard10({
             />
             <div className="absolute top-3 right-3">
               <AISparkleButton
-                prompt={`My child ${child.name} has a developmental wellness score of ${wellnessScore.total}/100. Confidence is ${wellnessScore.confidence}%. What does this score mean, what's driving it, and what are the most impactful things I can do this week to improve it?`}
+                prompt={`My child ${child.name} has a developmental wellness score of ${wellnessScore.total}/100. Confidence is ${wellnessScore.confidence}%. Break down the score into its component areas with a chart, then tell me what's driving it and the most impactful things I can do this week to improve it.`}
                 label="Explain score"
+                visual
               />
             </div>
           </div>
@@ -1003,8 +1010,9 @@ export function Dashboard10({
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-sm font-semibold">This Week</h3>
               <AISparkleButton
-                prompt={`Summarize this week's progress for ${child?.name || 'my child'}: ${dashboardData.routineAdherence}% routine adherence, ${dashboardData.streak || streakDays} day streak, ${dashboardData.activeGoals?.filter(g => g.progress >= 100).length || 0} of ${dashboardData.activeGoals?.length || 0} goals met. What does this mean and what should I focus on next?`}
+                prompt={`Summarize this week's progress for ${child?.name || 'my child'}: ${dashboardData.routineAdherence}% routine adherence, ${dashboardData.streak || streakDays} day streak, ${dashboardData.activeGoals?.filter(g => g.progress >= 100).length || 0} of ${dashboardData.activeGoals?.length || 0} goals met. Show me a quick visual of the week and tell me what to focus on next.`}
                 label="Explain"
+                visual
               />
             </div>
             <div className="grid grid-cols-3 gap-3 text-center">
@@ -1159,8 +1167,9 @@ export function Dashboard10({
             />
             <div className="absolute top-3 right-3">
               <AISparkleButton
-                prompt={`Based on ${child.name}'s outcomes data, what's going well, what needs attention, and what should I prioritize this week with their therapy team?`}
+                prompt={`Based on ${child.name}'s outcomes data, show me a chart of recent trends, then call out what's going well, what needs attention, and what to prioritize with the therapy team.`}
                 label="Analyze"
+                visual
               />
             </div>
           </section>

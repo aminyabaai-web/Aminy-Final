@@ -422,7 +422,7 @@ function InviteModal({ roomUrl, sessionId, onInvite, onClose }: InviteModalProps
           <div className="flex items-start gap-2 p-3 bg-blue-50 rounded-lg">
             <Shield className="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5" />
             <p className="text-xs text-blue-700">
-              Only invited participants with valid links can join this HIPAA-compliant
+              Only invited participants with valid links can join this encrypted, secure
               session. Links expire when the session ends.
             </p>
           </div>

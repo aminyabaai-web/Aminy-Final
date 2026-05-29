@@ -179,8 +179,28 @@ export async function bookSession(params: BookSessionParams): Promise<ScheduledS
     });
 
     if (error) throw error;
+
+    // Mirror into appointments table so the unified Care Coordination Hub sees it
+    // and the SMS reminder cron picks it up (is_aminy_telehealth = true flips on
+    // the 24h + 1h SMS path — external/chat-captured appointments stay silent).
+    const endIso = new Date(new Date(params.dateTime).getTime() + params.duration * 60_000).toISOString();
+    await supabase.from('appointments').insert({
+      user_id: params.userId,
+      child_id: params.childId,
+      title: `${params.visitType} with ${providerName}`,
+      provider_name: providerName,
+      service_type: 'telehealth',
+      start_at: params.dateTime,
+      end_at: endIso,
+      location: 'Telehealth',
+      status: 'scheduled',
+      source: 'marketplace_booking',
+      is_aminy_telehealth: true,
+    });
   } catch (err) {
-    console.warn('[session-scheduler] Supabase insert failed, saving locally:', err);
+    if (import.meta.env.DEV) {
+      console.warn('[session-scheduler] Supabase insert failed, saving locally:', err);
+    }
     const local = getLocalSessions();
     local.push(session);
     saveLocalSessions(local);
@@ -315,7 +335,7 @@ export async function sendReminder(sessionId: string): Promise<boolean> {
     if (error) throw error;
 
     // In production: trigger push notification via edge function
-    console.log(`[session-scheduler] Reminder sent for session ${sessionId}`);
+    if (import.meta.env.DEV) console.log(`[session-scheduler] Reminder sent for session ${sessionId}`);
     return true;
   } catch (err) {
     console.warn('[session-scheduler] Reminder send failed:', err);

@@ -11,6 +11,10 @@
 
 import React from 'react';
 import type { LucideIcon } from 'lucide-react';
+import {
+  Search, Inbox, MessageCircle, Users, FileText, UserSearch, BarChart3,
+  FolderOpen, Calendar, Target, ListChecks, Mail, ClipboardList,
+} from 'lucide-react';
 import { Button } from './button';
 import { cn } from '../../lib/utils';
 
@@ -129,7 +133,7 @@ export function EmptySearchResults({
 }) {
   return (
     <EmptyState
-      icon={require('lucide-react').Search}
+      icon={Search}
       headline="No results found"
       description={
         searchTerm
@@ -146,7 +150,7 @@ export function EmptySearchResults({
 export function EmptyInbox() {
   return (
     <EmptyState
-      icon={require('lucide-react').Inbox}
+      icon={Inbox}
       headline="All caught up!"
       description="You have no new notifications. Check back later."
     />
@@ -160,7 +164,7 @@ export function EmptyConversations({
 }) {
   return (
     <EmptyState
-      icon={require('lucide-react').MessageCircle}
+      icon={MessageCircle}
       headline="No conversations yet"
       description="Start a conversation with Aminy to get personalized support and guidance."
       actionLabel="Start chatting"
@@ -176,7 +180,7 @@ export function EmptyReferrals({
 }) {
   return (
     <EmptyState
-      icon={require('lucide-react').Users}
+      icon={Users}
       headline="No referrals yet"
       description="Invite friends and family to Aminy. You'll both get rewards when they sign up!"
       actionLabel="Invite a friend"
@@ -194,7 +198,7 @@ export function EmptyCommunityPosts({
 }) {
   return (
     <EmptyState
-      icon={require('lucide-react').FileText}
+      icon={FileText}
       headline={category ? `No ${category} posts yet` : 'No posts yet'}
       description="Be the first to share with the community! Your experience might help another parent."
       actionLabel="Create a post"
@@ -216,7 +220,7 @@ export function EmptyProviders({
 }) {
   return (
     <EmptyState
-      icon={require('lucide-react').UserSearch}
+      icon={UserSearch}
       headline={headline}
       description={description}
       actionLabel={actionLabel}
@@ -235,7 +239,7 @@ export function EmptyData({
 }) {
   return (
     <EmptyState
-      icon={require('lucide-react').BarChart3}
+      icon={BarChart3}
       headline={title}
       description={message}
       variant="compact"
@@ -250,7 +254,7 @@ export function EmptyVault({
 }) {
   return (
     <EmptyState
-      icon={require('lucide-react').FolderOpen}
+      icon={FolderOpen}
       headline="Your vault is empty"
       description="Upload IEPs, evaluations, and medical records. Aminy will read them to give you personalized guidance."
       actionLabel="Upload document"
@@ -266,7 +270,7 @@ export function EmptyAppointments({
 }) {
   return (
     <EmptyState
-      icon={require('lucide-react').Calendar}
+      icon={Calendar}
       headline="No upcoming appointments"
       description="Book a session with a BCBA or specialist from our marketplace."
       actionLabel="Browse providers"
@@ -282,7 +286,7 @@ export function EmptyGoals({
 }) {
   return (
     <EmptyState
-      icon={require('lucide-react').Target}
+      icon={Target}
       headline="No goals set yet"
       description="Set developmental goals to track progress and get personalized activity recommendations."
       actionLabel="Add first goal"
@@ -298,7 +302,7 @@ export function EmptyRoutines({
 }) {
   return (
     <EmptyState
-      icon={require('lucide-react').ListChecks}
+      icon={ListChecks}
       headline="No routines created"
       description="Build visual routines for morning, bedtime, or transitions. Kids thrive with predictability!"
       actionLabel="Create routine"
@@ -314,7 +318,7 @@ export function EmptyMessages({
 }) {
   return (
     <EmptyState
-      icon={require('lucide-react').Mail}
+      icon={Mail}
       headline="No messages"
       description="Your secure messages with providers will appear here."
       actionLabel={onCompose ? "Start a conversation" : undefined}
@@ -326,7 +330,7 @@ export function EmptyMessages({
 export function EmptyActivityLog() {
   return (
     <EmptyState
-      icon={require('lucide-react').ClipboardList}
+      icon={ClipboardList}
       headline="No incidents logged"
       description="Track behaviors and triggers here to identify patterns and share insights with your care team."
       variant="compact"

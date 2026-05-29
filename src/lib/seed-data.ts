@@ -310,9 +310,10 @@ export const getCurrentConnectorStatus = () => {
   };
 };
 
-// Helper to simulate real-time updates
-export const simulateConnectorEvents = () => {
-  const { connectorActions } = require('./connector-hub');
+// Helper to simulate real-time updates (dev-only seeding utility — uses dynamic
+// import because connector-hub has side effects we want to defer until called)
+export const simulateConnectorEvents = async () => {
+  const { connectorActions } = await import('./connector-hub');
   
   // Simulate a Jr session completing in 30 seconds
   setTimeout(() => {

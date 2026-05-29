@@ -55,6 +55,17 @@ const STEPS: { id: OnboardingStep; label: string; icon: React.ElementType }[] = 
   { id: 'review', label: 'Review', icon: FileText },
 ];
 
+// Single source of truth for the launch-state list shown across this flow,
+// derived from SUPPORTED_PROVIDER_STATES so the header subtitle and the
+// Aminy Network track copy can never drift apart.
+function formatStateList(states: readonly string[], conjunction: 'or' | 'and'): string {
+  if (states.length === 0) return '';
+  if (states.length === 1) return states[0];
+  return `${states.slice(0, -1).join(', ')}, ${conjunction} ${states[states.length - 1]}`;
+}
+const SUPPORTED_STATES_OR = formatStateList(SUPPORTED_PROVIDER_STATES, 'or');
+const SUPPORTED_STATES_AND = formatStateList(SUPPORTED_PROVIDER_STATES, 'and');
+
 interface AvailabilitySlot {
   dayOfWeek: number;
   startTime: string;
@@ -393,7 +404,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
           )}
           <div>
             <h1 className="text-lg font-semibold text-gray-900">Join Aminy as a Provider</h1>
-            <p className="text-sm text-gray-500">Join the supported-state provider network in AZ, MT, or TX and start with cash-pay or layered insurance rails.</p>
+            <p className="text-sm text-gray-500">Join the supported-state provider network in {SUPPORTED_STATES_OR} and start with cash-pay or layered insurance rails.</p>
           </div>
           <button
             type="button"
@@ -615,7 +626,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                     title: 'Aminy Network (Recommended)',
                     badge: 'Fastest Path to Insurance',
                     badgeClass: 'bg-teal-100 text-teal-700',
-                    description: 'Credential under Aminy\'s group NPI and access our full payer network across AZ, MT, FL, NV, and TX from day one — AHCCCS/Medicaid, Mercy Care, Health Choice, BCBS, Aetna, UHC, Cigna, Magellan, and state Medicaid plans in all supported states. No individual credentialing wait. Aminy handles all billing, claims, and prior auths. Guaranteed biweekly pay. Aminy fee: 10% of insured sessions.',
+                    description: `Credential under Aminy's group NPI and access our full payer network across ${SUPPORTED_STATES_AND} from day one — AHCCCS/Medicaid, Mercy Care, Health Choice, BCBS, Aetna, UHC, Cigna, Magellan, and state Medicaid plans in all supported states. No individual credentialing wait. Aminy handles all billing, claims, and prior auths. Reliable biweekly payouts. Aminy fee: 10% of insured sessions.`,
                     highlight: true,
                   },
                   {

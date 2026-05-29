@@ -15,6 +15,7 @@ import React from 'react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
+import { isDemoMode } from '../lib/demo-seed';
 import compassImage from "figma:asset/2e39d2a71ccd340d3accf6a7d306e6a6a6781942.png";
 import {
   ArrowRight,
@@ -41,6 +42,9 @@ interface ProviderLandingProps {
 }
 
 export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingProps) {
+  // Testimonials below are illustrative copy, not real attributed quotes, so they
+  // are only shown in demo walkthroughs. Real users never see fabricated endorsements.
+  const showSampleTestimonials = isDemoMode();
   return (
     <div className="min-h-screen min-h-[100dvh] bg-white dark:bg-slate-900">
       {/* Header — compact on mobile */}
@@ -115,9 +119,12 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
               </div>
             </div>
 
-            {/* Provider card — hidden on small mobile, shown on larger screens */}
+            {/* Provider card — illustrative sample, hidden on small mobile */}
             <div className="relative hidden sm:block">
               <Card className="p-5 sm:p-6 bg-white dark:bg-slate-800 shadow-xl">
+                <Badge className="bg-neutral-100 text-neutral-600 dark:bg-slate-700 dark:text-slate-300 mb-3 sm:mb-4 text-[10px] sm:text-xs">
+                  Sample profile — illustrative only
+                </Badge>
                 <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
                   <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center text-white text-lg sm:text-xl font-semibold flex-shrink-0">
                     SM
@@ -218,7 +225,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
               {
                 icon: Video,
                 title: 'Built-in Telehealth',
-                desc: 'HIPAA-compliant video sessions integrated directly into the platform. No third-party tools needed.',
+                desc: 'Encrypted, secure video sessions integrated directly into the platform. No third-party tools needed.',
               },
               {
                 icon: Calendar,
@@ -288,7 +295,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
           </div>
 
           {/* Desktop: horizontal row */}
-          <div className="hidden sm:flex flex-row items-flex-start justify-center max-w-5xl mx-auto">
+          <div className="hidden sm:flex flex-row items-start justify-center max-w-5xl mx-auto">
             {[
               { title: 'Apply Online', desc: 'Complete a simple application with your credentials', icon: FileText },
               { title: 'AI Verification', desc: 'Our AI verifies your license and credentials', icon: Sparkles },
@@ -365,12 +372,16 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
               <p className="text-center text-neutral-500 dark:text-slate-400 text-xs sm:text-sm">
                 = $9,000/month or $108,000/year
               </p>
+              <p className="text-center text-neutral-400 dark:text-slate-500 text-[10px] sm:text-xs italic">
+                Hypothetical illustration. Example only — actual earnings vary by caseload, credential, and availability.
+              </p>
             </div>
           </Card>
         </div>
       </section>
 
-      {/* Testimonials */}
+      {/* Testimonials — sample copy, demo-only (not real attributed quotes) */}
+      {showSampleTestimonials && (
       <section className="py-12 sm:py-16 lg:py-24 bg-white dark:bg-slate-900">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-8 sm:mb-16">
@@ -423,6 +434,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
           </div>
         </div>
       </section>
+      )}
 
       {/* CTA Section */}
       <section className="py-12 sm:py-16 bg-neutral-900 dark:bg-slate-800">

@@ -1,18 +1,25 @@
 {
-  "generatedAt": "2026-03-14T13:15:50.092Z",
+  "generatedAt": "2026-05-16T04:52:46.526Z",
   "totalScreens": 25,
-  "totalIssues": 0,
+  "totalIssues": 13,
   "criticalIssues": 0,
   "screens": [
     {
       "screen": "Splash/Landing",
       "path": "/",
-      "timestamp": "2026-03-14T13:15:53.696Z",
-      "issues": [],
+      "timestamp": "2026-05-16T04:52:49.620Z",
+      "issues": [
+        {
+          "severity": "major",
+          "category": "Typography",
+          "issue": "Smallest font size is 11.5px",
+          "recommendation": "Minimum font size should be 12px for readability, prefer 14-16px for body text"
+        }
+      ],
       "metrics": {
         "loadTime": 0,
-        "elementCount": 137,
-        "interactiveElements": 9,
+        "elementCount": 118,
+        "interactiveElements": 11,
         "imageCount": 1,
         "formFields": 0
       },
@@ -20,18 +27,18 @@
         "accessibility": 100,
         "performance": 100,
         "usability": 100,
-        "visualConsistency": 100,
-        "overall": 100
+        "visualConsistency": 85,
+        "overall": 96
       }
     },
     {
       "screen": "Login",
       "path": "/?screen=login",
-      "timestamp": "2026-03-14T13:15:56.664Z",
+      "timestamp": "2026-05-16T04:52:52.824Z",
       "issues": [],
       "metrics": {
         "loadTime": 0,
-        "elementCount": 143,
+        "elementCount": 118,
         "interactiveElements": 12,
         "imageCount": 1,
         "formFields": 2
@@ -47,12 +54,12 @@
     {
       "screen": "Create Account",
       "path": "/?screen=create-account",
-      "timestamp": "2026-03-14T13:15:59.630Z",
+      "timestamp": "2026-05-16T04:52:56.019Z",
       "issues": [],
       "metrics": {
         "loadTime": 1,
-        "elementCount": 157,
-        "interactiveElements": 16,
+        "elementCount": 133,
+        "interactiveElements": 17,
         "imageCount": 1,
         "formFields": 4
       },
@@ -67,11 +74,11 @@
     {
       "screen": "Forgot Password",
       "path": "/?screen=forgot-password",
-      "timestamp": "2026-03-14T13:16:02.552Z",
+      "timestamp": "2026-05-16T04:52:59.146Z",
       "issues": [],
       "metrics": {
         "loadTime": 0,
-        "elementCount": 126,
+        "elementCount": 96,
         "interactiveElements": 7,
         "imageCount": 1,
         "formFields": 1
@@ -87,12 +94,12 @@
     {
       "screen": "Dashboard",
       "path": "/?screen=dashboard",
-      "timestamp": "2026-03-14T13:16:05.525Z",
+      "timestamp": "2026-05-16T04:53:02.429Z",
       "issues": [],
       "metrics": {
-        "loadTime": 1,
-        "elementCount": 525,
-        "interactiveElements": 41,
+        "loadTime": 2,
+        "elementCount": 416,
+        "interactiveElements": 35,
         "imageCount": 1,
         "formFields": 0
       },
@@ -107,12 +114,12 @@
     {
       "screen": "Settings",
       "path": "/?screen=settings",
-      "timestamp": "2026-03-14T13:16:08.620Z",
+      "timestamp": "2026-05-16T04:53:05.846Z",
       "issues": [],
       "metrics": {
-        "loadTime": 1,
-        "elementCount": 525,
-        "interactiveElements": 41,
+        "loadTime": 0,
+        "elementCount": 416,
+        "interactiveElements": 35,
         "imageCount": 1,
         "formFields": 0
       },
@@ -127,12 +134,12 @@
     {
       "screen": "Profile",
       "path": "/?screen=profile",
-      "timestamp": "2026-03-14T13:16:11.720Z",
+      "timestamp": "2026-05-16T04:53:09.167Z",
       "issues": [],
       "metrics": {
-        "loadTime": 1,
-        "elementCount": 525,
-        "interactiveElements": 41,
+        "loadTime": 0,
+        "elementCount": 416,
+        "interactiveElements": 35,
         "imageCount": 1,
         "formFields": 0
       },
@@ -147,11 +154,24 @@
     {
       "screen": "Telehealth",
       "path": "/?screen=telehealth",
-      "timestamp": "2026-03-14T13:16:16.628Z",
-      "issues": [],
+      "timestamp": "2026-05-16T04:53:13.643Z",
+      "issues": [
+        {
+          "severity": "major",
+          "category": "Typography",
+          "issue": "Smallest font size is 11px",
+          "recommendation": "Minimum font size should be 12px for readability, prefer 14-16px for body text"
+        },
+        {
+          "severity": "minor",
+          "category": "Usability",
+          "issue": "No clear primary call-to-action found",
+          "recommendation": "Add a prominent CTA to guide users toward the main action"
+        }
+      ],
       "metrics": {
-        "loadTime": 0,
-        "elementCount": 386,
+        "loadTime": 1,
+        "elementCount": 356,
         "interactiveElements": 28,
         "imageCount": 1,
         "formFields": 0
@@ -159,20 +179,20 @@
       "scores": {
         "accessibility": 100,
         "performance": 100,
-        "usability": 100,
-        "visualConsistency": 100,
-        "overall": 100
+        "usability": 95,
+        "visualConsistency": 85,
+        "overall": 95
       }
     },
     {
       "screen": "Vault",
       "path": "/?screen=vault",
-      "timestamp": "2026-03-14T13:16:19.679Z",
+      "timestamp": "2026-05-16T04:53:16.967Z",
       "issues": [],
       "metrics": {
-        "loadTime": 0,
-        "elementCount": 326,
-        "interactiveElements": 21,
+        "loadTime": 1,
+        "elementCount": 304,
+        "interactiveElements": 22,
         "imageCount": 1,
         "formFields": 1
       },
@@ -187,12 +207,12 @@
     {
       "screen": "Marketplace",
       "path": "/?screen=marketplace",
-      "timestamp": "2026-03-14T13:16:22.641Z",
+      "timestamp": "2026-05-16T04:53:20.175Z",
       "issues": [],
       "metrics": {
-        "loadTime": 1,
-        "elementCount": 525,
-        "interactiveElements": 41,
+        "loadTime": 0,
+        "elementCount": 416,
+        "interactiveElements": 35,
         "imageCount": 1,
         "formFields": 0
       },
@@ -207,12 +227,25 @@
     {
       "screen": "Junior Mode",
       "path": "/?screen=junior",
-      "timestamp": "2026-03-14T13:16:25.728Z",
-      "issues": [],
+      "timestamp": "2026-05-16T04:53:23.594Z",
+      "issues": [
+        {
+          "severity": "minor",
+          "category": "Typography",
+          "issue": "Found 10 different font sizes",
+          "recommendation": "Use a type scale with 5-7 sizes (e.g., 12, 14, 16, 18, 24, 32, 48)"
+        },
+        {
+          "severity": "major",
+          "category": "Typography",
+          "issue": "Smallest font size is 11px",
+          "recommendation": "Minimum font size should be 12px for readability, prefer 14-16px for body text"
+        }
+      ],
       "metrics": {
         "loadTime": 1,
-        "elementCount": 394,
-        "interactiveElements": 22,
+        "elementCount": 390,
+        "interactiveElements": 25,
         "imageCount": 1,
         "formFields": 0
       },
@@ -220,19 +253,19 @@
         "accessibility": 100,
         "performance": 100,
         "usability": 100,
-        "visualConsistency": 100,
-        "overall": 100
+        "visualConsistency": 80,
+        "overall": 95
       }
     },
     {
       "screen": "Paywall",
       "path": "/?screen=paywall",
-      "timestamp": "2026-03-14T13:16:28.745Z",
+      "timestamp": "2026-05-16T04:53:27.010Z",
       "issues": [],
       "metrics": {
-        "loadTime": 0,
-        "elementCount": 525,
-        "interactiveElements": 41,
+        "loadTime": 1,
+        "elementCount": 416,
+        "interactiveElements": 35,
         "imageCount": 1,
         "formFields": 0
       },
@@ -247,11 +280,11 @@
     {
       "screen": "Benefits Navigator",
       "path": "/?screen=benefits",
-      "timestamp": "2026-03-14T13:16:31.817Z",
+      "timestamp": "2026-05-16T04:53:30.546Z",
       "issues": [],
       "metrics": {
         "loadTime": 1,
-        "elementCount": 369,
+        "elementCount": 343,
         "interactiveElements": 22,
         "imageCount": 1,
         "formFields": 1
@@ -267,12 +300,12 @@
     {
       "screen": "Messages",
       "path": "/?screen=messages",
-      "timestamp": "2026-03-14T13:16:34.836Z",
+      "timestamp": "2026-05-16T04:53:33.832Z",
       "issues": [],
       "metrics": {
         "loadTime": 0,
-        "elementCount": 525,
-        "interactiveElements": 41,
+        "elementCount": 416,
+        "interactiveElements": 35,
         "imageCount": 1,
         "formFields": 0
       },
@@ -287,12 +320,12 @@
     {
       "screen": "Crisis Resources",
       "path": "/?screen=crisis-resources",
-      "timestamp": "2026-03-14T13:16:37.918Z",
+      "timestamp": "2026-05-16T04:53:37.127Z",
       "issues": [],
       "metrics": {
-        "loadTime": 1,
-        "elementCount": 478,
-        "interactiveElements": 41,
+        "loadTime": 0,
+        "elementCount": 459,
+        "interactiveElements": 42,
         "imageCount": 1,
         "formFields": 1
       },
@@ -307,12 +340,12 @@
     {
       "screen": "Outcomes",
       "path": "/?screen=outcomes",
-      "timestamp": "2026-03-14T13:16:41.010Z",
+      "timestamp": "2026-05-16T04:53:40.528Z",
       "issues": [],
       "metrics": {
-        "loadTime": 1,
-        "elementCount": 525,
-        "interactiveElements": 41,
+        "loadTime": 0,
+        "elementCount": 416,
+        "interactiveElements": 35,
         "imageCount": 1,
         "formFields": 0
       },
@@ -327,12 +360,12 @@
     {
       "screen": "Care Plan",
       "path": "/?screen=care-plan",
-      "timestamp": "2026-03-14T13:16:44.113Z",
+      "timestamp": "2026-05-16T04:53:43.905Z",
       "issues": [],
       "metrics": {
         "loadTime": 1,
-        "elementCount": 525,
-        "interactiveElements": 41,
+        "elementCount": 416,
+        "interactiveElements": 35,
         "imageCount": 1,
         "formFields": 0
       },
@@ -347,12 +380,12 @@
     {
       "screen": "Community",
       "path": "/?screen=community",
-      "timestamp": "2026-03-14T13:16:47.188Z",
+      "timestamp": "2026-05-16T04:53:47.364Z",
       "issues": [],
       "metrics": {
         "loadTime": 0,
-        "elementCount": 525,
-        "interactiveElements": 41,
+        "elementCount": 416,
+        "interactiveElements": 35,
         "imageCount": 1,
         "formFields": 0
       },
@@ -367,12 +400,19 @@
     {
       "screen": "Provider Portal",
       "path": "/?screen=provider-portal&pilotState=AZ&pilotRole=provider&pilot=true&pilotOrg=aact",
-      "timestamp": "2026-03-14T13:16:52.442Z",
-      "issues": [],
+      "timestamp": "2026-05-16T04:53:53.086Z",
+      "issues": [
+        {
+          "severity": "major",
+          "category": "Typography",
+          "issue": "Smallest font size is 11px",
+          "recommendation": "Minimum font size should be 12px for readability, prefer 14-16px for body text"
+        }
+      ],
       "metrics": {
-        "loadTime": 1,
-        "elementCount": 509,
-        "interactiveElements": 33,
+        "loadTime": 9,
+        "elementCount": 498,
+        "interactiveElements": 38,
         "imageCount": 2,
         "formFields": 0
       },
@@ -380,19 +420,26 @@
         "accessibility": 100,
         "performance": 100,
         "usability": 100,
-        "visualConsistency": 100,
-        "overall": 100
+        "visualConsistency": 85,
+        "overall": 96
       }
     },
     {
       "screen": "Provider Onboarding",
       "path": "/?screen=provider-onboarding&pilotState=AZ&pilotRole=provider&pilot=true&pilotOrg=aact",
-      "timestamp": "2026-03-14T13:16:56.134Z",
-      "issues": [],
+      "timestamp": "2026-05-16T04:53:57.740Z",
+      "issues": [
+        {
+          "severity": "major",
+          "category": "Typography",
+          "issue": "Smallest font size is 11px",
+          "recommendation": "Minimum font size should be 12px for readability, prefer 14-16px for body text"
+        }
+      ],
       "metrics": {
         "loadTime": 0,
-        "elementCount": 355,
-        "interactiveElements": 29,
+        "elementCount": 337,
+        "interactiveElements": 30,
         "imageCount": 1,
         "formFields": 7
       },
@@ -400,19 +447,26 @@
         "accessibility": 100,
         "performance": 100,
         "usability": 100,
-        "visualConsistency": 100,
-        "overall": 100
+        "visualConsistency": 85,
+        "overall": 96
       }
     },
     {
       "screen": "Claims Dashboard",
       "path": "/?screen=claims-dashboard&pilotState=AZ&pilotRole=admin&pilot=true&pilotOrg=aact&pilotPayers=bcba_of_az,mercycare",
-      "timestamp": "2026-03-14T13:17:00.175Z",
-      "issues": [],
+      "timestamp": "2026-05-16T04:54:02.252Z",
+      "issues": [
+        {
+          "severity": "major",
+          "category": "Typography",
+          "issue": "Smallest font size is 11px",
+          "recommendation": "Minimum font size should be 12px for readability, prefer 14-16px for body text"
+        }
+      ],
       "metrics": {
-        "loadTime": 1,
-        "elementCount": 290,
-        "interactiveElements": 18,
+        "loadTime": 0,
+        "elementCount": 272,
+        "interactiveElements": 19,
         "imageCount": 1,
         "formFields": 0
       },
@@ -420,19 +474,32 @@
         "accessibility": 100,
         "performance": 100,
         "usability": 100,
-        "visualConsistency": 100,
-        "overall": 100
+        "visualConsistency": 85,
+        "overall": 96
       }
     },
     {
       "screen": "Payer Dashboard",
       "path": "/?screen=payer-dashboard&pilotState=AZ&pilotRole=admin&pilot=true&pilotOrg=aact&pilotPayers=bcba_of_az,mercycare",
-      "timestamp": "2026-03-14T13:17:04.065Z",
-      "issues": [],
+      "timestamp": "2026-05-16T04:54:06.411Z",
+      "issues": [
+        {
+          "severity": "minor",
+          "category": "Typography",
+          "issue": "Found 9 different font sizes",
+          "recommendation": "Use a type scale with 5-7 sizes (e.g., 12, 14, 16, 18, 24, 32, 48)"
+        },
+        {
+          "severity": "major",
+          "category": "Typography",
+          "issue": "Smallest font size is 11px",
+          "recommendation": "Minimum font size should be 12px for readability, prefer 14-16px for body text"
+        }
+      ],
       "metrics": {
-        "loadTime": 1,
-        "elementCount": 403,
-        "interactiveElements": 22,
+        "loadTime": 0,
+        "elementCount": 381,
+        "interactiveElements": 23,
         "imageCount": 1,
         "formFields": 0
       },
@@ -440,19 +507,26 @@
         "accessibility": 100,
         "performance": 100,
         "usability": 100,
-        "visualConsistency": 100,
-        "overall": 100
+        "visualConsistency": 80,
+        "overall": 95
       }
     },
     {
       "screen": "EVV Dashboard",
       "path": "/?screen=evv-dashboard&pilotState=AZ&pilotRole=admin&pilot=true&pilotOrg=aact&evvSystem=spokchoice&systemOfRecord=external",
-      "timestamp": "2026-03-14T13:17:07.989Z",
-      "issues": [],
+      "timestamp": "2026-05-16T04:54:10.485Z",
+      "issues": [
+        {
+          "severity": "major",
+          "category": "Typography",
+          "issue": "Smallest font size is 11px",
+          "recommendation": "Minimum font size should be 12px for readability, prefer 14-16px for body text"
+        }
+      ],
       "metrics": {
-        "loadTime": 2,
-        "elementCount": 351,
-        "interactiveElements": 20,
+        "loadTime": 1,
+        "elementCount": 357,
+        "interactiveElements": 23,
         "imageCount": 1,
         "formFields": 0
       },
@@ -460,19 +534,19 @@
         "accessibility": 100,
         "performance": 100,
         "usability": 100,
-        "visualConsistency": 100,
-        "overall": 100
+        "visualConsistency": 85,
+        "overall": 96
       }
     },
     {
       "screen": "Caregiver Timesheet",
       "path": "/?screen=caregiver-timesheet&pilotState=AZ&pilotRole=parent&pilot=true&pilotOrg=aact&evvSystem=spokchoice&systemOfRecord=external",
-      "timestamp": "2026-03-14T13:17:11.078Z",
+      "timestamp": "2026-05-16T04:54:13.836Z",
       "issues": [],
       "metrics": {
-        "loadTime": 0,
-        "elementCount": 525,
-        "interactiveElements": 41,
+        "loadTime": 1,
+        "elementCount": 416,
+        "interactiveElements": 35,
         "imageCount": 1,
         "formFields": 0
       },
@@ -487,27 +561,49 @@
     {
       "screen": "CentralReach Sync",
       "path": "/?screen=cr-sync&pilotState=AZ&pilotRole=admin&pilot=true&pilotOrg=aact",
-      "timestamp": "2026-03-14T13:17:15.530Z",
-      "issues": [],
+      "timestamp": "2026-05-16T04:54:17.983Z",
+      "issues": [
+        {
+          "severity": "major",
+          "category": "Typography",
+          "issue": "Smallest font size is 11px",
+          "recommendation": "Minimum font size should be 12px for readability, prefer 14-16px for body text"
+        },
+        {
+          "severity": "minor",
+          "category": "Usability",
+          "issue": "No clear primary call-to-action found",
+          "recommendation": "Add a prominent CTA to guide users toward the main action"
+        }
+      ],
       "metrics": {
-        "loadTime": 0,
-        "elementCount": 591,
-        "interactiveElements": 37,
+        "loadTime": 1,
+        "elementCount": 224,
+        "interactiveElements": 15,
         "imageCount": 1,
         "formFields": 0
       },
       "scores": {
         "accessibility": 100,
         "performance": 100,
-        "usability": 100,
-        "visualConsistency": 100,
-        "overall": 100
+        "usability": 95,
+        "visualConsistency": 85,
+        "overall": 95
       }
     }
   ],
   "summary": {
-    "topIssues": [],
-    "recommendations": [],
-    "overallScore": 100
+    "topIssues": [
+      "Typography: Smallest font size is 11px (8 screens)",
+      "Usability: No clear primary call-to-action found (2 screens)",
+      "Typography: Smallest font size is 11.5px (1 screens)",
+      "Typography: Found 10 different font sizes (1 screens)",
+      "Typography: Found 9 different font sizes (1 screens)"
+    ],
+    "recommendations": [
+      "Standardize 11 typography issues: Use consistent font sizes and improve line heights",
+      "Improve 2 usability issues: Add clear navigation and CTAs"
+    ],
+    "overallScore": 98
   }
 }

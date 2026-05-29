@@ -131,7 +131,8 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
       const { url } = await createCheckoutSession({
         userId: user.id,
         email: user.email || '',
-        tier: tierId as 'starter' | 'core' | 'pro',
+        // Normalize legacy 'starter' to 'core' (single SKU now)
+        tier: (tierId === 'starter' ? 'core' : tierId) as 'core' | 'pro',
         interval: billingPeriod === 'monthly' ? 'monthly' : 'annual',
       });
 

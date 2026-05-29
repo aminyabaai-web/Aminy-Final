@@ -105,7 +105,6 @@ export function useOfflineSync(): UseOfflineSyncReturn {
 
   const syncNow = useCallback(async () => {
     if (!navigator.onLine) {
-      console.log('Cannot sync while offline');
       return;
     }
 

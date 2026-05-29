@@ -295,14 +295,12 @@ export default function ERAReconciliation({ onNavigateBack }: ERAReconciliationP
     }
   };
 
-  const handleWriteOffAction = (action: string) => {
+  const handleWriteOffAction = (_action: string) => {
     // In production, this would update the payment status in Supabase
-    console.log('Write-off action:', action);
   };
 
   const handleStartAppeal = () => {
     // In production, this would navigate to the appeal form with pre-filled data
-    console.log('Starting appeal process');
   };
 
   return (

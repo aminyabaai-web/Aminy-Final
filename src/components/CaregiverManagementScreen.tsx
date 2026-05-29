@@ -4,12 +4,13 @@
 // See LICENSE file for details.
 
 import React, { useState } from 'react';
-import { ArrowLeft, UserPlus, QrCode, Link as LinkIcon, Mail, MoreVertical, Shield } from 'lucide-react';
+import { ArrowLeft, UserPlus, QrCode, Link as LinkIcon, Mail, MoreVertical, Shield, Users } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
 import { ManageCaregivers } from './ManageCaregivers';
 import { useAuditedAction } from '../hooks/useAuditedAction';
+import { isDemoMode } from '../lib/demo-seed';
 
 interface CaregiverManagementScreenProps {
   onBack?: () => void;
@@ -23,39 +24,25 @@ export function CaregiverManagementScreen({ onBack }: CaregiverManagementScreenP
   type CaregiverRole = 'owner' | 'caregiver' | 'read-only';
   type CaregiverStatus = 'active' | 'pending';
 
-  const [caregivers, setCaregivers] = useState<Array<{
+  type Caregiver = {
     id: string;
     name: string;
     email: string;
     role: CaregiverRole;
     status: CaregiverStatus;
     addedDate: string;
-  }>>([
-    {
-      id: '1',
-      name: 'Parent (You)',
-      email: 'parent@example.com',
-      role: 'owner',
-      status: 'active',
-      addedDate: '2025-09-01'
-    },
-    {
-      id: '2',
-      name: 'Partner',
-      email: 'partner@example.com',
-      role: 'caregiver',
-      status: 'active',
-      addedDate: '2025-09-15'
-    },
-    {
-      id: '3',
-      name: 'Grandparent',
-      email: 'grandparent@example.com',
-      role: 'read-only',
-      status: 'pending',
-      addedDate: '2025-10-18'
-    }
-  ]);
+  };
+  // Real users start with an empty team and invite their own people. Sample
+  // members appear only in demo mode for investor/partner walk-throughs.
+  const [caregivers, setCaregivers] = useState<Caregiver[]>(
+    isDemoMode()
+      ? [
+          { id: '1', name: 'Parent (You)', email: 'you@aminy.ai', role: 'owner', status: 'active', addedDate: '2026-04-01' },
+          { id: '2', name: 'Partner', email: 'partner@aminy.ai', role: 'caregiver', status: 'active', addedDate: '2026-04-15' },
+          { id: '3', name: 'Grandparent', email: 'grandparent@aminy.ai', role: 'read-only', status: 'pending', addedDate: '2026-05-18' },
+        ]
+      : []
+  );
 
   const handleInvite = (email: string, role: CaregiverRole) => {
     const newCaregiver = {
@@ -173,6 +160,15 @@ export function CaregiverManagementScreen({ onBack }: CaregiverManagementScreenP
         {/* Active Caregivers */}
         <div>
           <h2 className="font-semibold mb-4">Team Members</h2>
+          {caregivers.length === 0 && (
+            <Card className="p-8 text-center border-dashed">
+              <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-3">
+                <Users className="w-6 h-6 text-slate-400" />
+              </div>
+              <p className="text-sm font-medium text-slate-700 mb-1">Build your care team</p>
+              <p className="text-xs text-slate-500">Invite your partner, a grandparent, or anyone who helps care for your child. They'll get their own secure access.</p>
+            </Card>
+          )}
           <div className="space-y-3">
             {caregivers.map((caregiver) => (
               <Card key={caregiver.id} className="p-3 sm:p-4">

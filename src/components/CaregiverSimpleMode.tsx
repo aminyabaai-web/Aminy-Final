@@ -23,6 +23,7 @@ import {
   ChevronRight,
   AlertTriangle,
 } from 'lucide-react';
+import { isDemoMode } from '../lib/demo-seed';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -49,15 +50,17 @@ interface CaregiverSimpleModeProps {
 }
 
 // ---------------------------------------------------------------------------
-// Mock data — in production this would come from Supabase / props
+// Demo data — shown ONLY in demo mode so investor/AACT walkthroughs look
+// complete. Real caregivers see live data (props/Supabase) or a friendly
+// empty state — never these placeholder names/records.
 // ---------------------------------------------------------------------------
 
-const MOCK_APPOINTMENTS: Appointment[] = [
+const DEMO_APPOINTMENTS: Appointment[] = [
   { time: 'Today, 2:00 PM', providerName: 'Dr. Sarah Chen', serviceType: 'ABA Therapy' },
   { time: 'Thu, Apr 10 at 10:00 AM', providerName: 'Ms. Lopez', serviceType: 'Speech Therapy' },
 ];
 
-const MOCK_DOCS: Document[] = [
+const DEMO_DOCS: Document[] = [
   { name: 'Treatment Plan', date: 'Apr 1, 2026', type: 'PDF' },
   { name: 'Insurance Card', date: 'Mar 15, 2026', type: 'Image' },
   { name: 'Evaluation Report', date: 'Feb 28, 2026', type: 'PDF' },
@@ -135,6 +138,11 @@ export default function CaregiverSimpleMode({
 }: CaregiverSimpleModeProps) {
   const [showHelpExpanded, setShowHelpExpanded] = useState(false);
 
+  // Real caregivers see live data (none wired yet → empty); demo walkthroughs
+  // get the rich sample content so the screen looks complete.
+  const appointments: Appointment[] = isDemoMode() ? DEMO_APPOINTMENTS : [];
+  const docs: Document[] = isDemoMode() ? DEMO_DOCS : [];
+
   return (
     <div className="min-h-screen bg-amber-50">
       {/* Header */}
@@ -169,10 +177,10 @@ export default function CaregiverSimpleMode({
           title="Today's Schedule"
           color="border-teal-200 bg-white"
         >
-          {MOCK_APPOINTMENTS.length === 0 ? (
+          {appointments.length === 0 ? (
             <p className="text-xl text-gray-500 py-2">No upcoming appointments.</p>
           ) : (
-            MOCK_APPOINTMENTS.map((appt, i) => (
+            appointments.map((appt, i) => (
               <AppointmentRow key={i} appt={appt} />
             ))
           )}
@@ -208,15 +216,25 @@ export default function CaregiverSimpleMode({
             title="Documents"
             color="border-blue-200 bg-white"
           >
-            {MOCK_DOCS.map((doc, i) => (
-              <button
-                key={i}
-                onClick={onNavigateToVault}
-                className="w-full text-left"
-              >
-                <DocRow doc={doc} />
-              </button>
-            ))}
+            {docs.length === 0 ? (
+              <div className="py-6 text-center">
+                <FileText className="w-10 h-10 mx-auto mb-2 text-gray-300" />
+                <p className="text-lg text-gray-500">No documents yet.</p>
+                <p className="text-base text-gray-400 mt-0.5">
+                  Reports and records will show up here.
+                </p>
+              </div>
+            ) : (
+              docs.map((doc, i) => (
+                <button
+                  key={i}
+                  onClick={onNavigateToVault}
+                  className="w-full text-left"
+                >
+                  <DocRow doc={doc} />
+                </button>
+              ))
+            )}
             <button
               onClick={onNavigateToVault}
               className="mt-3 w-full rounded-xl bg-blue-50 py-3 text-base font-semibold text-blue-700 text-center"

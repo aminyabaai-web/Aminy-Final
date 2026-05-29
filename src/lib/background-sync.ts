@@ -190,7 +190,7 @@ export class BackgroundSyncManager {
     }
 
     this.initialized = true;
-    console.log(
+    if (import.meta.env.DEV) console.log(
       `[BackgroundSync] Initialized (Background Sync: ${this.backgroundSyncSupported ? 'supported' : 'fallback mode'})`,
     );
   }
@@ -217,7 +217,7 @@ export class BackgroundSyncManager {
       };
       await reg.sync.register(tag);
       this.syncRegistered = true;
-      console.log(`[BackgroundSync] Registered sync: ${tag}`);
+      if (import.meta.env.DEV) console.log(`[BackgroundSync] Registered sync: ${tag}`);
     } catch (err) {
       console.warn('[BackgroundSync] Failed to register sync:', err);
       // Fallback: try immediate processing
@@ -432,7 +432,7 @@ export class BackgroundSyncManager {
   }
 
   private handleOnline = (): void => {
-    console.log('[BackgroundSync] Back online — triggering sync');
+    if (import.meta.env.DEV) console.log('[BackgroundSync] Back online — triggering sync');
     // Small delay to let network stabilize
     setTimeout(() => {
       this.processQueue().catch((err) => {
@@ -451,7 +451,7 @@ export class BackgroundSyncManager {
     };
 
     if (type === 'SYNC_COMPLETE' && tag) {
-      console.log(`[BackgroundSync] SW sync complete: ${tag}`, result);
+      if (import.meta.env.DEV) console.log(`[BackgroundSync] SW sync complete: ${tag}`, result);
       this.emitEvent({
         type: 'sync-complete',
         detail: { tag, ...result },
@@ -513,14 +513,14 @@ export async function getBackgroundSyncManager(): Promise<BackgroundSyncManager>
  *   });
  */
 export async function handleBackgroundSync(tag: string): Promise<void> {
-  console.log(`[BackgroundSync SW] Processing sync tag: ${tag}`);
+  if (import.meta.env.DEV) console.log(`[BackgroundSync SW] Processing sync tag: ${tag}`);
 
   const queue = new OfflineQueue();
   await queue.open();
 
   try {
     const result = await queue.processQueue();
-    console.log(`[BackgroundSync SW] Sync complete:`, result);
+    if (import.meta.env.DEV) console.log(`[BackgroundSync SW] Sync complete:`, result);
 
     // Notify the client
     if (typeof self !== 'undefined' && 'clients' in self) {

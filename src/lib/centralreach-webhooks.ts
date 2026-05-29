@@ -214,12 +214,12 @@ export class WebhookHandler {
     }
     this.handlers.get(eventType)!.add(callback);
 
-    console.log(`[CRWebhook] Registered handler for ${eventType}`);
+    if (import.meta.env.DEV) console.log(`[CRWebhook] Registered handler for ${eventType}`);
 
     // Return unsubscribe function
     return () => {
       this.handlers.get(eventType)?.delete(callback);
-      console.log(`[CRWebhook] Unregistered handler for ${eventType}`);
+      if (import.meta.env.DEV) console.log(`[CRWebhook] Unregistered handler for ${eventType}`);
     };
   }
 
@@ -240,7 +240,7 @@ export class WebhookHandler {
   async processWebhook(payload: WebhookPayload): Promise<boolean> {
     // Deduplication check
     if (this.processedEventIds.has(payload.eventId)) {
-      console.log(`[CRWebhook] Skipping duplicate event: ${payload.eventId}`);
+      if (import.meta.env.DEV) console.log(`[CRWebhook] Skipping duplicate event: ${payload.eventId}`);
       return false;
     }
 
@@ -273,11 +273,11 @@ export class WebhookHandler {
     // Dispatch to registered handlers
     const handlers = this.handlers.get(payload.eventType);
     if (!handlers || handlers.size === 0) {
-      console.log(`[CRWebhook] No handlers for ${payload.eventType} — event stored but not acted on`);
+      if (import.meta.env.DEV) console.log(`[CRWebhook] No handlers for ${payload.eventType} — event stored but not acted on`);
       return true;
     }
 
-    console.log(
+    if (import.meta.env.DEV) console.log(
       `[CRWebhook] Processing ${payload.eventType} (${payload.eventId}) — ` +
         `${handlers.size} handler(s), priority: ${mapping.priority}`,
     );
@@ -415,13 +415,13 @@ export class WebhookHandler {
         },
       )
       .subscribe((status) => {
-        console.log(`[CRWebhook] Realtime subscription status: ${status}`);
+        if (import.meta.env.DEV) console.log(`[CRWebhook] Realtime subscription status: ${status}`);
       });
 
     // Also process any unprocessed events that arrived while we were offline
     await this.processBacklog();
 
-    console.log(`[CRWebhook] Listening for webhook events (user: ${userId})`);
+    if (import.meta.env.DEV) console.log(`[CRWebhook] Listening for webhook events (user: ${userId})`);
   }
 
   /**
@@ -433,7 +433,7 @@ export class WebhookHandler {
       this.realtimeChannel = null;
     }
     this.isListening = false;
-    console.log('[CRWebhook] Stopped listening');
+    if (import.meta.env.DEV) console.log('[CRWebhook] Stopped listening');
   }
 
   /**
@@ -450,7 +450,7 @@ export class WebhookHandler {
 
       if (error || !events || events.length === 0) return;
 
-      console.log(`[CRWebhook] Processing ${events.length} backlog event(s)`);
+      if (import.meta.env.DEV) console.log(`[CRWebhook] Processing ${events.length} backlog event(s)`);
 
       for (const row of events as StoredWebhookEvent[]) {
         const webhookPayload: WebhookPayload = {

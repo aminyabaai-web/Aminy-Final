@@ -58,7 +58,7 @@ export function enableDemoMode(): void {
     (window as unknown as Record<string, unknown>).__crDemoMode = true;
   }
 
-  console.log('[CRDemo] Demo mode ENABLED — using mock CentralReach data');
+  if (import.meta.env.DEV) console.log('[CRDemo] Demo mode ENABLED — using mock CentralReach data');
 }
 
 /** Disable demo mode — CR API calls will hit real endpoints */
@@ -74,7 +74,7 @@ export function disableDemoMode(): void {
     (window as unknown as Record<string, unknown>).__crDemoMode = false;
   }
 
-  console.log('[CRDemo] Demo mode DISABLED — using live CentralReach API');
+  if (import.meta.env.DEV) console.log('[CRDemo] Demo mode DISABLED — using live CentralReach API');
 }
 
 /** Check if demo mode is currently active */

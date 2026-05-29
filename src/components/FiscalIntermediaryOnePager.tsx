@@ -179,8 +179,8 @@ export function FiscalIntermediaryOnePager({
           <div className="flex items-start gap-2">
             <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
             <div>
-              <p className="font-medium text-gray-900 text-sm">HIPAA Compliant</p>
-              <p className="text-xs text-gray-600">Full BAA available</p>
+              <p className="font-medium text-gray-900 text-sm">HIPAA-Conscious</p>
+              <p className="text-xs text-gray-600">BAA available on request</p>
             </div>
           </div>
           <div className="flex items-start gap-2">
@@ -277,8 +277,8 @@ export function FiscalIntermediaryOnePager({
 
       {/* Footer */}
       <div className="mt-4 sm:mt-6 pt-4 border-t border-gray-200 flex justify-between items-center text-xs text-gray-500">
-        <span>© {new Date().getFullYear()} Aminy, LLC | aminy.com</span>
-        <span>HIPAA Compliant • BCBA Advised • Parent-Founded</span>
+        <span>© {new Date().getFullYear()} Aminy, LLC | aminy.ai</span>
+        <span>HIPAA-Conscious • BCBA Advised • Parent-Founded</span>
       </div>
     </div>
   );

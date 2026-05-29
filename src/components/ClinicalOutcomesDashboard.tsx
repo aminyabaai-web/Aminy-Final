@@ -15,6 +15,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../utils/supabase/client';
 import type { OutcomeCategory } from '../lib/outcome-tracking';
+import { isDemoMode } from '../lib/demo-seed';
 
 // ============================================================================
 // Types
@@ -180,16 +181,18 @@ export default function ClinicalOutcomesDashboard() {
         .gte('created_at', new Date(Date.now() - timeRange * 24 * 60 * 60 * 1000).toISOString());
 
       if (goalsData && goalsData.length > 0) {
-        // Map real data... would transform here
-        setChildren(DEMO_CHILDREN);
-        setAggregate(DEMO_AGGREGATE);
+        // Map real data... would transform here.
+        // Until the real transform lands, only fall back to sample data in
+        // demo mode so real providers never see fabricated client outcomes.
+        setChildren(isDemoMode() ? DEMO_CHILDREN : []);
+        setAggregate(isDemoMode() ? DEMO_AGGREGATE : null);
       } else {
-        setChildren(DEMO_CHILDREN);
-        setAggregate(DEMO_AGGREGATE);
+        setChildren(isDemoMode() ? DEMO_CHILDREN : []);
+        setAggregate(isDemoMode() ? DEMO_AGGREGATE : null);
       }
     } catch {
-      setChildren(DEMO_CHILDREN);
-      setAggregate(DEMO_AGGREGATE);
+      setChildren(isDemoMode() ? DEMO_CHILDREN : []);
+      setAggregate(isDemoMode() ? DEMO_AGGREGATE : null);
     }
     setLoading(false);
   }
@@ -249,6 +252,8 @@ export default function ClinicalOutcomesDashboard() {
 
       {loading ? (
         <LoadingSkeleton />
+      ) : children.length === 0 && !aggregate ? (
+        <OutcomesEmptyState />
       ) : viewMode === 'individual' ? (
         <IndividualView
           children={children}
@@ -256,8 +261,25 @@ export default function ClinicalOutcomesDashboard() {
           onSelectChild={setSelectedChild}
         />
       ) : (
-        <AggregateView aggregate={aggregate} />
+        <AggregateView aggregate={aggregate} children={children} />
       )}
+    </div>
+  );
+}
+
+function OutcomesEmptyState() {
+  return (
+    <div className="bg-white rounded-xl p-8 shadow-sm flex flex-col items-center text-center">
+      <div className="w-12 h-12 rounded-full bg-[#FAF7F2] flex items-center justify-center mb-3">
+        <svg className="w-6 h-6 text-[#577590]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M3 3v18h18M7 14l4-4 3 3 5-6" />
+        </svg>
+      </div>
+      <h3 className="text-[15px] font-bold text-[#0D1B2A] mb-1">No outcome data yet</h3>
+      <p className="text-[13px] text-[#577590] max-w-xs">
+        Once your clients have goals and assessment scores logged, their progress and
+        impact will appear here.
+      </p>
     </div>
   );
 }
@@ -455,7 +477,7 @@ function BehaviorTrendChart({ trend }: { trend: BehaviorTrend }) {
 // Aggregate View
 // ============================================================================
 
-function AggregateView({ aggregate }: { aggregate: AggregateMetrics | null }) {
+function AggregateView({ aggregate, children }: { aggregate: AggregateMetrics | null; children: ChildOutcome[] }) {
   if (!aggregate) return null;
 
   return (
@@ -494,7 +516,7 @@ function AggregateView({ aggregate }: { aggregate: AggregateMetrics | null }) {
         <h3 className="text-[15px] font-bold text-[#0D1B2A] mb-3">
           Client Outcomes Summary
         </h3>
-        {DEMO_CHILDREN.map((child) => (
+        {children.map((child) => (
           <div key={child.childId} className="flex justify-between items-center py-2.5 border-b border-gray-100">
             <div>
               <div className="text-[13px] font-semibold text-[#0D1B2A]">{child.childName}</div>

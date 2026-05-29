@@ -48,6 +48,7 @@ import {
   Sunset,
 } from 'lucide-react';
 import { supabase } from '../utils/supabase/client';
+import { isDemoMode } from '../lib/demo-seed';
 
 interface Medication {
   id: string;
@@ -162,8 +163,9 @@ export function MedicationTracker({ childId, childName, onClose }: MedicationTra
           sideEffects: m.side_effects,
           isActive: m.is_active,
         })));
-      } else {
-        // Demo data
+      } else if (isDemoMode()) {
+        // Sample medications — DEMO MODE ONLY. Never show fabricated prescriptions
+        // (especially controlled substances) to a real user's child.
         setMedications([
           {
             id: '1',
@@ -191,6 +193,9 @@ export function MedicationTracker({ childId, childName, onClose }: MedicationTra
             isActive: true,
           },
         ]);
+      } else {
+        // Real user with no medications on file — render the existing empty state.
+        setMedications([]);
       }
 
       // Generate today's logs based on medications
@@ -218,14 +223,20 @@ export function MedicationTracker({ childId, childName, onClose }: MedicationTra
           date: l.date,
         })));
       } else {
-        // Generate demo logs for today
+        // Build today's medication schedule. Use the user's REAL medications when
+        // present; only fall back to the sample regimen in demo mode. A real user
+        // with no meds gets no logs — never fabricate a controlled-substance schedule.
         const demoLogs: MedicationLog[] = [];
-        const demoMeds = medsData && medsData.length > 0 ? medsData : [
-          { id: '1', name: 'Methylphenidate', times: ['07:30', '12:00'] },
-          { id: '2', name: 'Melatonin', times: ['20:00'] },
-        ];
+        const sourceMeds = medsData && medsData.length > 0
+          ? medsData
+          : (isDemoMode()
+              ? [
+                  { id: '1', name: 'Methylphenidate', times: ['07:30', '12:00'] },
+                  { id: '2', name: 'Melatonin', times: ['20:00'] },
+                ]
+              : []);
 
-        demoMeds.forEach(med => {
+        sourceMeds.forEach(med => {
           (med.times || []).forEach((time: string) => {
             const isPast = time < currentTime;
             demoLogs.push({
@@ -432,7 +443,7 @@ export function MedicationTracker({ childId, childName, onClose }: MedicationTra
             Refresh
           </Button>
           {onClose && (
-            <Button variant="ghost" size="sm" onClick={onClose}>
+            <Button variant="ghost" size="sm" onClick={onClose} aria-label="Close medication tracker">
               <X className="w-4 h-4" />
             </Button>
           )}
@@ -716,6 +727,7 @@ export function MedicationTracker({ childId, childName, onClose }: MedicationTra
                       <Button
                         size="sm"
                         variant="ghost"
+                        aria-label={`Edit ${med.name}`}
                         onClick={() => {
                           setEditingMedication(med);
                           setMedicationForm(med);
@@ -728,6 +740,7 @@ export function MedicationTracker({ childId, childName, onClose }: MedicationTra
                         size="sm"
                         variant="ghost"
                         className="text-red-600 hover:text-red-700"
+                        aria-label={`Delete ${med.name}`}
                         onClick={() => handleDeleteMedication(med.id)}
                       >
                         <Trash2 className="w-4 h-4" />
@@ -748,20 +761,10 @@ export function MedicationTracker({ childId, childName, onClose }: MedicationTra
           <h3 className="font-medium text-neutral-900 dark:text-white mb-2">
             Medication History
           </h3>
-          <p className="text-neutral-500 dark:text-slate-400 mb-4">
-            View past medication logs and track adherence over time.
-            Coming soon with detailed reports and trends.
+          <p className="text-neutral-500 dark:text-slate-400">
+            Your medication logs build here as you track doses. Detailed adherence
+            reports and provider sharing are coming soon.
           </p>
-          <div className="flex justify-center gap-3">
-            <Button variant="outline">
-              <FileText className="w-4 h-4 mr-2" />
-              Export Report
-            </Button>
-            <Button variant="outline">
-              <Share2 className="w-4 h-4 mr-2" />
-              Share with Provider
-            </Button>
-          </div>
         </Card>
       )}
 

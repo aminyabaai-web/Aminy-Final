@@ -24,7 +24,7 @@ export function ReferralShareCard({ referralCode, userName = 'A friend' }: Refer
                     text: shareMessage.body,
                     url: shareMessage.url,
                 });
-                console.log('Successfully shared');
+                // Share succeeded
             } catch (error) {
                 if ((error as Error).name !== 'AbortError') {
                     console.error('Error sharing:', error);
