@@ -326,7 +326,7 @@ export class SyncScheduler {
       this.scheduleSync(config);
     }
 
-    console.log(
+    if (import.meta.env.DEV) console.log(
       '[CRSync] Scheduler started with',
       this.configs.filter((c) => c.enabled).length,
       'active syncs',
@@ -342,7 +342,7 @@ export class SyncScheduler {
       clearTimeout(timer);
     }
     this.timers.clear();
-    console.log('[CRSync] Scheduler stopped');
+    if (import.meta.env.DEV) console.log('[CRSync] Scheduler stopped');
   }
 
   /**
@@ -781,7 +781,7 @@ export class SyncScheduler {
           .then(() => {}); // fire and forget
       }
 
-      console.log(
+      if (import.meta.env.DEV) console.log(
         `[CRSync] ${direction} ${dataType}: ${recordsProcessed} records in ${durationMs}ms`,
       );
     } catch (err) {

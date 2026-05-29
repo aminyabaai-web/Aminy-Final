@@ -37,6 +37,7 @@ import {
   X,
 } from 'lucide-react';
 import { generateProviderReferralCode, type ReferralCode } from '../../lib/referral-engine';
+import { isDemoMode } from '../../lib/demo-seed';
 import { toast } from 'sonner';
 
 // ============================================================================
@@ -59,10 +60,11 @@ interface ProviderReferral {
 }
 
 // ============================================================================
-// Mock Data
+// Demo Data — sample referrals for demo walkthroughs only. Real providers
+// start with an empty list and a friendly empty state until referrals land.
 // ============================================================================
 
-function getMockProviderReferrals(): ProviderReferral[] {
+function getDemoProviderReferrals(): ProviderReferral[] {
   const now = Date.now();
   return [
     {
@@ -127,7 +129,8 @@ export function ProviderReferralProgram({
   useEffect(() => {
     const providerCode = generateProviderReferralCode(providerId);
     setCode(providerCode);
-    setReferrals(getMockProviderReferrals());
+    // Sample referrals are DEMO MODE ONLY — real providers start empty.
+    setReferrals(isDemoMode() ? getDemoProviderReferrals() : []);
   }, [providerId]);
 
   const completedReferrals = referrals.filter(r => r.status === 'completed').length;
@@ -342,6 +345,15 @@ export function ProviderReferralProgram({
       {/* Referral List */}
       <Card className="p-4">
         <h3 className="font-semibold text-gray-900 mb-3">Your Provider Referrals</h3>
+        {referrals.length === 0 && (
+          <div className="text-center py-8">
+            <Users className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+            <p className="text-sm font-medium text-slate-700">No referrals yet</p>
+            <p className="text-xs text-slate-500 mt-1">
+              Share your referral link with colleagues — they'll show up here once they apply.
+            </p>
+          </div>
+        )}
         <div className="space-y-2">
           {referrals.map((referral) => (
             <div key={referral.id} className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">

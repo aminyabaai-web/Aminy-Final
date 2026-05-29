@@ -22,6 +22,7 @@ import aminyLogoCropped from "../assets/aminy-logo-cropped.png";
 import { supabase } from '../utils/supabase/client';
 import { useFormValidation } from '../lib/use-form-validation';
 import { createAccountSchema } from '../lib/schemas';
+import { PasswordStrengthMeter } from './PasswordStrengthMeter';
 
 const fontStack = 'Manrope, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", "Helvetica Neue", Arial, "Noto Sans", sans-serif';
 
@@ -626,6 +627,9 @@ export function CreateAccountScreen({
                   {errors.password}
                 </p>
               )}
+              {password.length > 0 && !errors.password && (
+                <PasswordStrengthMeter password={password} />
+              )}
             </div>
 
             {/* Confirm Password */}
@@ -742,12 +746,12 @@ export function CreateAccountScreen({
                     }}
                     onClick={(e) => {
                       e.stopPropagation();
-                      window.open('https://aminy.com/terms', '_blank');
+                      window.open('https://aminy.ai/terms', '_blank');
                     }}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
                         e.stopPropagation();
-                        window.open('https://aminy.com/terms', '_blank');
+                        window.open('https://aminy.ai/terms', '_blank');
                       }
                     }}
                   >Terms</span>
@@ -765,12 +769,12 @@ export function CreateAccountScreen({
                     }}
                     onClick={(e) => {
                       e.stopPropagation();
-                      window.open('https://aminy.com/privacy', '_blank');
+                      window.open('https://aminy.ai/privacy', '_blank');
                     }}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
                         e.stopPropagation();
-                        window.open('https://aminy.com/privacy', '_blank');
+                        window.open('https://aminy.ai/privacy', '_blank');
                       }
                     }}
                   >Privacy Policy</span>

@@ -18,6 +18,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { logPHIView } from '../lib/security/hipaa-audit';
 import {
   ArrowLeft,
   Camera,
@@ -204,6 +205,7 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
         .single();
 
       if (profileData) {
+        logPHIView(user.id, 'parent', user.email || '', 'profile', user.id, 'profile').catch(() => {});
         const loadedProfile = {
           id: user.id,
           name: profileData.name || user.user_metadata?.full_name || '',

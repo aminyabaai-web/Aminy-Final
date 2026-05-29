@@ -133,32 +133,103 @@ export function AIChart({ spec }: { spec: AIChartSpec }) {
  * Parse AI response text that may contain [CHART:{...}] tokens.
  * Returns an array of text and chart parts for inline rendering.
  */
-export function parseAIResponseParts(text: string): Array<
-  { type: 'text'; content: string } | { type: 'chart'; content: AIChartSpec }
-> {
-  const parts: Array<{ type: 'text'; content: string } | { type: 'chart'; content: AIChartSpec }> = [];
-  const regex = /\[CHART:(\{.*?\})\]/gs;
-  let lastIndex = 0;
-  let match: RegExpExecArray | null;
+export interface CalendarSpec {
+  id?: string;
+  title: string;
+  provider?: string;
+  service_type?: string;
+  start_iso: string;
+  end_iso?: string;
+  location?: string;
+  notes?: string;
+}
 
-  while ((match = regex.exec(text)) !== null) {
-    if (match.index > lastIndex) {
-      const textPart = text.slice(lastIndex, match.index).trim();
+/**
+ * Find all [TAG:{...}] blocks (where TAG is CHART or CALENDAR) in a string.
+ * Counts braces + respects strings so nested arrays/objects work.
+ */
+function findRichBlocks(text: string, tag: string): Array<{ start: number; end: number; json: string }> {
+  const results: Array<{ start: number; end: number; json: string }> = [];
+  const marker = `[${tag}:`;
+  let i = 0;
+  while (i < text.length) {
+    const start = text.indexOf(marker, i);
+    if (start === -1) break;
+    const jsonStart = start + marker.length;
+
+    let depth = 0;
+    let inString = false;
+    let escape = false;
+    let jsonEnd = -1;
+    let closingBracket = -1;
+
+    for (let j = jsonStart; j < text.length; j++) {
+      const c = text[j];
+      if (escape) { escape = false; continue; }
+      if (c === '\\') { escape = true; continue; }
+      if (c === '"') inString = !inString;
+      if (inString) continue;
+
+      if (c === '{') depth++;
+      else if (c === '}') {
+        depth--;
+        if (depth === 0) {
+          jsonEnd = j + 1;
+          let k = jsonEnd;
+          while (k < text.length && (text[k] === ' ' || text[k] === '\n')) k++;
+          if (text[k] === ']') closingBracket = k;
+          break;
+        }
+      }
+    }
+
+    if (jsonEnd > 0 && closingBracket > 0) {
+      results.push({ start, end: closingBracket + 1, json: text.slice(jsonStart, jsonEnd) });
+      i = closingBracket + 1;
+    } else {
+      i = jsonStart;
+    }
+  }
+  return results;
+}
+
+export type AIResponsePart =
+  | { type: 'text'; content: string }
+  | { type: 'chart'; content: AIChartSpec }
+  | { type: 'calendar'; content: CalendarSpec };
+
+export function parseAIResponseParts(text: string): AIResponsePart[] {
+  // Find chart + calendar blocks, sorted by position, then carve text between them.
+  const chartBlocks = findRichBlocks(text, 'CHART').map(b => ({ ...b, kind: 'chart' as const }));
+  const calendarBlocks = findRichBlocks(text, 'CALENDAR').map(b => ({ ...b, kind: 'calendar' as const }));
+  const blocks = [...chartBlocks, ...calendarBlocks].sort((a, b) => a.start - b.start);
+
+  const parts: AIResponsePart[] = [];
+  let cursor = 0;
+
+  for (const block of blocks) {
+    if (block.start > cursor) {
+      const textPart = text.slice(cursor, block.start).trim();
       if (textPart) parts.push({ type: 'text', content: textPart });
     }
     try {
-      const spec = JSON.parse(match[1]) as AIChartSpec;
-      if (spec.data && Array.isArray(spec.data)) {
-        parts.push({ type: 'chart', content: spec });
+      if (block.kind === 'chart') {
+        const spec = JSON.parse(block.json) as AIChartSpec;
+        if (spec.data && Array.isArray(spec.data)) {
+          parts.push({ type: 'chart', content: spec });
+        }
+      } else {
+        const spec = JSON.parse(block.json) as CalendarSpec;
+        if (spec.title && spec.start_iso) {
+          parts.push({ type: 'calendar', content: spec });
+        }
       }
-    } catch {
-      // Malformed JSON — skip the chart token
-    }
-    lastIndex = match.index + match[0].length;
+    } catch { /* skip malformed */ }
+    cursor = block.end;
   }
 
-  if (lastIndex < text.length) {
-    const remaining = text.slice(lastIndex).trim();
+  if (cursor < text.length) {
+    const remaining = text.slice(cursor).trim();
     if (remaining) parts.push({ type: 'text', content: remaining });
   }
 

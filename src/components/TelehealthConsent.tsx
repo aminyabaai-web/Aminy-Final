@@ -157,7 +157,7 @@ export function TelehealthConsent({
           <ul className="space-y-2">
             <li className="flex items-start gap-2">
               <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-              <span>Sessions are conducted over <strong>HIPAA-compliant secure video</strong></span>
+              <span>Sessions are conducted over <strong>encrypted, secure video</strong></span>
             </li>
             <li className="flex items-start gap-2">
               <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />

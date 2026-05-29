@@ -422,7 +422,7 @@ export default function CashPayPricing({
         <div className="flex items-center justify-center gap-6 text-slate-400 text-xs">
           <span className="flex items-center gap-1.5">
             <Shield className="w-4 h-4" />
-            HIPAA Compliant
+            HIPAA-Conscious
           </span>
           <span className="flex items-center gap-1.5">
             <FileText className="w-4 h-4" />

@@ -846,7 +846,7 @@ export async function handlePastDueSubscription(
     throw new Error(`Failed to create grace period: ${error.message}`);
   }
 
-  console.log(
+  if (import.meta.env.DEV) console.log(
     `[Billing] Grace period started for user ${userId} — ends ${endsAt.toISOString()}`
   );
 
@@ -929,7 +929,7 @@ export async function expireGracePeriod(userId: string): Promise<boolean> {
     return false;
   }
 
-  console.log(`[Billing] Grace period expired — user ${userId} downgraded to free`);
+  if (import.meta.env.DEV) console.log(`[Billing] Grace period expired — user ${userId} downgraded to free`);
   return true;
 }
 
@@ -953,7 +953,7 @@ export async function resolveGracePeriod(userId: string): Promise<boolean> {
     return false;
   }
 
-  console.log(`[Billing] Grace period resolved for user ${userId}`);
+  if (import.meta.env.DEV) console.log(`[Billing] Grace period resolved for user ${userId}`);
   return true;
 }
 

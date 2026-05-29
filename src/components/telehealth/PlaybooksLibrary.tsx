@@ -31,6 +31,7 @@ import {
   Info,
   Filter
 } from 'lucide-react';
+import { isDemoMode } from '../../lib/demo-seed';
 
 // ============================================================================
 // Types
@@ -409,7 +410,11 @@ export function PlaybooksLibrary({
   onSelectPlaybook,
   onBookmark
 }: PlaybooksLibraryProps) {
-  const [playbooks, setPlaybooks] = useState<Playbook[]>(MOCK_PLAYBOOKS);
+  // Real users start with an empty library (a friendly empty state renders until
+  // curated content is published). The sample playbooks — with their illustrative
+  // author names and citations — are DEMO MODE ONLY so prospect walkthroughs look
+  // complete. Never present invented authors/citations to a real caregiver as real.
+  const [playbooks, setPlaybooks] = useState<Playbook[]>(isDemoMode() ? MOCK_PLAYBOOKS : []);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<PlaybookCategory | 'all'>('all');
   const [showFilters, setShowFilters] = useState(false);
@@ -521,11 +526,19 @@ export function PlaybooksLibrary({
               onToggleBookmark={() => handleToggleBookmark(playbook.id)}
             />
           ))
+        ) : playbooks.length === 0 ? (
+          <div className="text-center py-12">
+            <BookOpen className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+            <p className="text-slate-500 font-medium">Playbooks are on the way</p>
+            <p className="text-sm text-slate-400 mt-1 max-w-xs mx-auto">
+              Evidence-based guides from our clinical team will appear here. Ask your provider for strategies in the meantime.
+            </p>
+          </div>
         ) : (
           <div className="text-center py-12">
-            <BookOpen className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-500">No playbooks found</p>
-            <p className="text-sm text-gray-400 mt-1">Try adjusting your search or filters</p>
+            <BookOpen className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+            <p className="text-slate-500">No playbooks found</p>
+            <p className="text-sm text-slate-400 mt-1">Try adjusting your search or filters</p>
           </div>
         )}
       </div>

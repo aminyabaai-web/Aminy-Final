@@ -3,63 +3,22 @@
 // Unauthorized use, reproduction, or distribution is strictly prohibited.
 // See LICENSE file for details.
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Sun, Moon, Monitor, Check } from 'lucide-react';
+import { useTheme, type ThemeMode } from '../lib/theme-provider';
 
-type Theme = 'light' | 'dark' | 'system';
+type Theme = ThemeMode;
 
 interface ThemeToggleProps {
   className?: string;
 }
 
 export function ThemeToggle({ className = '' }: ThemeToggleProps) {
-  const [theme, setTheme] = useState<Theme>('system');
+  // Drive off the single source of truth — ThemeProvider context.
+  // The provider handles localStorage persistence and system-pref watching,
+  // so this component is purely UI now.
+  const { theme, setTheme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
-
-  // Initialize theme from localStorage or default to system
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('aminy-theme') as Theme;
-    if (savedTheme && ['light', 'dark', 'system'].includes(savedTheme)) {
-      setTheme(savedTheme);
-    } else {
-      setTheme('system');
-    }
-  }, []);
-
-  // Apply theme to document
-  useEffect(() => {
-    const applyTheme = (themeToApply: Theme) => {
-      const root = document.documentElement;
-      
-      if (themeToApply === 'system') {
-        // Remove explicit theme classes and let CSS media queries handle it
-        root.classList.remove('light', 'dark');
-        // Check system preference
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        if (prefersDark) {
-          root.classList.add('dark');
-        }
-      } else if (themeToApply === 'dark') {
-        root.classList.remove('light');
-        root.classList.add('dark');
-      } else {
-        root.classList.remove('dark');
-        root.classList.add('light');
-      }
-    };
-
-    applyTheme(theme);
-    localStorage.setItem('aminy-theme', theme);
-
-    // Listen for system theme changes when in system mode
-    if (theme === 'system') {
-      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-      const handleChange = () => applyTheme('system');
-      
-      mediaQuery.addListener(handleChange);
-      return () => mediaQuery.removeListener(handleChange);
-    }
-  }, [theme]);
 
   const themes = [
     {

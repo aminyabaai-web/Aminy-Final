@@ -33,6 +33,7 @@ import {
   X
 } from 'lucide-react';
 import { useAminyStore } from '../lib/store';
+import { isDemoMode } from '../lib/demo-seed';
 import {
   orchestratePostSession,
   type SessionCompletionData,
@@ -107,7 +108,15 @@ export function TelehealthSessionManager({
     }
   ]);
 
-  const [scheduledSessions, setScheduledSessions] = useState<ScheduledSession[]>([
+  // Real users start with no session history — the empty states below render until
+  // their own appointments and provider-written notes load from the backend. The
+  // sample completed session (with its fabricated provider name and clinical
+  // observations/progress notes about the child) is DEMO MODE ONLY. Never show a
+  // real family invented clinical notes, and never let fabricated "completed"
+  // sessions trigger the post-session orchestration (superbill/FHIR/notifications).
+  const [scheduledSessions, setScheduledSessions] = useState<ScheduledSession[]>(
+    isDemoMode()
+      ? [
     {
       id: 's1',
       type: '50min',
@@ -155,7 +164,9 @@ export function TelehealthSessionManager({
         ]
       }
     }
-  ]);
+  ]
+      : []
+  );
 
   const [showScheduling, setShowScheduling] = useState(false);
   const [selectedSessionType, setSelectedSessionType] = useState<'50min' | '25min' | null>(null);
@@ -163,13 +174,17 @@ export function TelehealthSessionManager({
   const [selectedTime, setSelectedTime] = useState<string>('');
   const [selectedProvider, setSelectedProvider] = useState<string>('');
 
-  // Available providers
-  const providers = [
-    'Dr. Sarah Chen, BCBA',
-    'Dr. Michael Rodriguez, PhD',
-    'Dr. Emily Thompson, PsyD',
-    'Dr. James Wilson, BCBA-D'
-  ];
+  // Available providers — the named roster is illustrative sample data for demo
+  // walkthroughs only. Real users get the verified roster from the backend (empty
+  // until loaded); never offer a real family a fabricated clinician to book.
+  const providers = isDemoMode()
+    ? [
+        'Dr. Sarah Chen, BCBA',
+        'Dr. Michael Rodriguez, PhD',
+        'Dr. Emily Thompson, PsyD',
+        'Dr. James Wilson, BCBA-D'
+      ]
+    : [];
 
   // Available time slots
   const timeSlots = [

@@ -105,7 +105,7 @@ const HELP_CATEGORIES: HelpCategory[] = [
       },
       {
         question: 'How do telehealth sessions work?',
-        answer: 'Telehealth sessions happen right inside Aminy — no app downloads needed. You\'ll get a "Join Session" button 5 minutes before your scheduled time. Sessions are encrypted, HIPAA-compliant, and recorded only with your consent. Works on iPhone, iPad, or any computer.',
+        answer: 'Telehealth sessions happen right inside Aminy — no app downloads needed. You\'ll get a "Join Session" button 5 minutes before your scheduled time. Sessions are encrypted and private, and recorded only with your consent. Works on iPhone, iPad, or any computer.',
       },
       {
         question: 'What if my provider cancels last-minute?',
@@ -138,7 +138,7 @@ const HELP_CATEGORIES: HelpCategory[] = [
       },
       {
         question: 'Can I communicate with my provider between sessions?',
-        answer: 'Yes — use the Messages tab in Aminy for HIPAA-compliant secure messaging with your provider. Providers typically respond within 24 business hours. For urgent clinical concerns, call your provider\'s direct line. For emergencies, call 988 or 911.',
+        answer: 'Yes — use the Messages tab in Aminy for encrypted, private messaging with your provider. Providers typically respond within 24 business hours. For urgent clinical concerns, call your provider\'s direct line. For emergencies, call 988 or 911.',
       },
       {
         question: 'What happens if my child doesn\'t click with their provider?',
@@ -187,8 +187,8 @@ const HELP_CATEGORIES: HelpCategory[] = [
         answer: 'Your child\'s clinical records are accessible only to: you, your approved caregivers, and your active providers. Insurance companies see claim data (CPT codes, diagnosis codes) as required for reimbursement. Aminy never sells your data. Ever.',
       },
       {
-        question: 'Is Aminy HIPAA-compliant?',
-        answer: 'Yes. Aminy is fully HIPAA-compliant. We use end-to-end encryption for all clinical data, conduct regular security audits, and all staff sign BAAs (Business Associate Agreements). Telehealth sessions use HIPAA-compliant Daily.co infrastructure.',
+        question: 'How does Aminy protect my data?',
+        answer: 'Aminy is HIPAA-conscious and privacy-first. We use end-to-end encryption for all clinical data, follow HIPAA-aligned security practices, and our telehealth runs on Daily.co\'s HIPAA-compliant video infrastructure (covered by a Business Associate Agreement). Your data stays private and you control who can see it.',
       },
       {
         question: 'Can I request a copy of my child\'s records?',

@@ -33,6 +33,7 @@ import {
   CalendarPlus,
   Mail
 } from 'lucide-react';
+import { isDemoMode } from '../../lib/demo-seed';
 
 // ============================================================================
 // Types
@@ -191,7 +192,12 @@ export function QASessionsHub({
   onWatchReplay,
   userEmail
 }: QASessionsHubProps) {
-  const [sessions, setSessions] = useState<QASession[]>(MOCK_SESSIONS);
+  // Real users see only genuinely-scheduled sessions (empty until the live Q&A
+  // program launches and real sessions/replays are published). The sample roster —
+  // with its illustrative host names, registration counts, and replay view totals —
+  // is DEMO MODE ONLY so prospect walkthroughs look complete.
+  const demo = isDemoMode();
+  const [sessions, setSessions] = useState<QASession[]>(demo ? MOCK_SESSIONS : []);
   const [activeTab, setActiveTab] = useState<'upcoming' | 'replays'>('upcoming');
 
   const upcomingSessions = useMemo(
@@ -271,13 +277,15 @@ export function QASessionsHub({
         </div>
       </header>
 
-      {/* Demo Data Banner */}
-      <div className="px-4 py-2 bg-amber-50 border-b border-amber-200">
-        <div className="flex items-center gap-2">
-          <span className="text-amber-600 text-xs font-medium">Preview</span>
-          <span className="text-amber-700/70 text-xs">Sample sessions shown. Live Q&A sessions coming soon.</span>
+      {/* Demo Data Banner — sample sessions only render in demo mode */}
+      {demo && (
+        <div className="px-4 py-2 bg-amber-50 border-b border-amber-200">
+          <div className="flex items-center gap-2">
+            <span className="text-amber-600 text-xs font-medium">Preview</span>
+            <span className="text-amber-700/70 text-xs">Sample sessions shown. Live Q&A sessions coming soon.</span>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Included Badge */}
       <div className="px-4 py-3 bg-gradient-to-r from-amber-50 to-orange-50 border-b border-amber-200">

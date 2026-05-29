@@ -49,6 +49,7 @@ import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Progress } from '../ui/progress';
 import { Input } from '../ui/input';
+import { isDemoMode } from '../../lib/demo-seed';
 
 // ============================================================================
 // Types
@@ -371,9 +372,20 @@ function DenialInbox({
         })}
 
         {filtered.length === 0 && (
-          <div className="text-center py-8">
-            <Inbox className="w-8 h-8 text-slate-400 mx-auto mb-2" />
-            <p className="text-sm text-slate-400">No denials match your filters</p>
+          <div className="text-center py-12">
+            <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-3">
+              <Inbox className="w-6 h-6 text-slate-400" />
+            </div>
+            {denials.length === 0 ? (
+              <>
+                <p className="text-sm font-semibold text-slate-700">No denials to work</p>
+                <p className="text-xs text-slate-500 mt-1 max-w-xs mx-auto">
+                  When a payer denies one of your claims, it will land here with the reason code and a suggested fix.
+                </p>
+              </>
+            ) : (
+              <p className="text-sm text-slate-400">No denials match your filters</p>
+            )}
           </div>
         )}
       </div>
@@ -618,6 +630,22 @@ NPI: [Your NPI]
 // ============================================================================
 
 function AnalyticsPanel({ denials }: { denials: Denial[] }) {
+  // No denials → no analytics. Avoids rendering placeholder rates / divide-by-zero
+  // revenue figures to providers who have no denial history yet.
+  if (denials.length === 0) {
+    return (
+      <Card className="p-8 text-center">
+        <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-3">
+          <BarChart3 className="w-6 h-6 text-slate-400" />
+        </div>
+        <p className="text-sm font-semibold text-slate-700">No denial analytics yet</p>
+        <p className="text-xs text-slate-500 mt-1 max-w-xs mx-auto">
+          Recovery rates, top denial reasons, and revenue-at-risk trends appear once you have denied claims to analyze.
+        </p>
+      </Card>
+    );
+  }
+
   const totalDenied = denials.reduce((s, d) => s + d.deniedAmount, 0);
   const recovered = denials.filter((d) => d.status === 'recovered');
   const totalRecovered = recovered.reduce((s, d) => s + d.deniedAmount, 0);
@@ -812,7 +840,9 @@ export default function DenialWorkbench({
 }: DenialWorkbenchProps) {
   const [viewMode, setViewMode] = useState<ViewMode>('inbox');
   const [selectedDenial, setSelectedDenial] = useState<Denial | null>(null);
-  const denials = MOCK_DENIALS;
+  // Sample denials are shown only in demo mode (investor/AACT walkthroughs).
+  // Real providers see their own payer denials once the claims pipeline syncs them.
+  const denials = isDemoMode() ? MOCK_DENIALS : [];
 
   const newCount = denials.filter((d) => d.status === 'new').length;
   const urgentCount = denials.filter((d) => d.daysUntilDeadline <= 7 && !['recovered', 'written-off', 'corrected'].includes(d.status)).length;

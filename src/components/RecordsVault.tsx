@@ -4,6 +4,7 @@
 // See LICENSE file for details.
 
 import React, { useState, useEffect } from 'react';
+import { logPHIView } from '../lib/security/hipaa-audit';
 import { AISparkleButton } from './AISparkleButton';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
@@ -31,7 +32,6 @@ import {
   Shield,
   X,
   Filter,
-  MoreVertical,
   Share,
   Link,
   Target,
@@ -42,7 +42,6 @@ import {
   Calendar,
   Tag,
   Edit,
-  Archive,
   SortAsc,
   SortDesc,
   Globe,
@@ -53,7 +52,7 @@ import {
 } from 'lucide-react';
 import type { VaultRecord } from '../types/vault';
 import { useStorage } from '../lib/useStorage';
-import { uploadVaultFile, listVaultDocuments, deleteVaultDocument, getVaultDocumentUrl } from '../lib/vault-storage';
+import { uploadVaultFile, listVaultDocuments, deleteVaultDocument } from '../lib/vault-storage';
 import type { VaultRecordType } from '../lib/vault-storage';
 import { supabase } from '../utils/supabase/client';
 import { useAuditedAction } from '../hooks/useAuditedAction';
@@ -94,6 +93,8 @@ interface EnhancedVaultRecord extends Omit<VaultRecord, 'type' | 'source' | 'vis
   };
   status: 'Active' | 'Archived';
   ocrStatus: 'Processing' | 'Complete' | 'Failed' | 'None';
+  filePath?: string;
+  vaultText?: string;
   hasSignatures?: boolean;
   hasImages?: boolean;
   hasAudio?: boolean;
@@ -154,22 +155,20 @@ interface RecordRowProps {
   onSelect: (selected: boolean) => void;
   onView: () => void;
   onShare: () => void;
-  onAction: (action: string) => void;
   userTier: string;
 }
 
-const RecordRow: React.FC<RecordRowProps> = ({ 
-  record, 
-  selected, 
-  onSelect, 
-  onView, 
-  onShare, 
-  onAction,
-  userTier 
+const RecordRow: React.FC<RecordRowProps> = ({
+  record,
+  selected,
+  onSelect,
+  onView,
+  onShare,
+  userTier
 }) => {
   const getFileIcon = (type: string) => {
     if (type.includes('pdf')) return <FileText className="w-4 h-4 text-red-500" />;
-    if (type.includes('image')) return <FileIcon className="w-4 h-4 text-blue-500" />;
+    if (type.includes('image')) return <FileIcon className="w-4 h-4 text-[#577590]" />;
     return <FileIcon className="w-4 h-4 text-gray-500" />;
   };
 
@@ -245,11 +244,6 @@ const RecordRow: React.FC<RecordRowProps> = ({
               </Button>
               <Button variant="ghost" size="sm" onClick={onShare}>
                 <Share className="w-4 h-4" />
-              </Button>
-              <Button variant="ghost" size="sm" onClick={() => {
-                toast.success('More actions: Rename, Move to..., Link to Goal/Session, Download, Delete');
-              }}>
-                <MoreVertical className="w-4 h-4" />
               </Button>
             </div>
           </div>
@@ -422,6 +416,7 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
   const [isLoadingDocs, setIsLoadingDocs] = useState(true);
   const [uploadingFile, setUploadingFile] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     async function loadDocuments() {
@@ -433,6 +428,7 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
           return;
         }
 
+        logPHIView(user.id, 'parent', user.email || '', 'records_vault', user.id, 'records-vault').catch(() => {});
         const { documents, error } = await listVaultDocuments(user.id, { limit: 100 });
         if (error || !documents || documents.length === 0) {
           // No documents yet — show empty state
@@ -443,11 +439,13 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
             id: doc.id,
             title: doc.fileName,
             date: doc.uploadedAt || new Date().toISOString(),
+            createdAt: doc.uploadedAt || new Date().toISOString(),
             type: doc.recordType || 'Other',
             source: doc.source || 'Parent Upload',
             visibility: doc.visibility || 'Private',
             relatedTo: [],
-            files: [{ name: doc.fileName, size: doc.fileSize ? `${(doc.fileSize / 1024).toFixed(0)} KB` : '—', type: doc.mimeType || 'application/pdf' }],
+            vaultText: doc.metadata?.extractedText || '',
+            files: [{ id: doc.id, name: doc.fileName, url: '', size: doc.fileSize || 0, type: doc.mimeType || 'application/pdf', uploadedAt: doc.uploadedAt || new Date().toISOString() }],
             status: 'Active',
             ocrStatus: 'None',
             filePath: doc.filePath,
@@ -489,11 +487,13 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
             id: doc.id,
             title: doc.fileName,
             date: doc.uploadedAt || new Date().toISOString(),
+            createdAt: doc.uploadedAt || new Date().toISOString(),
             type: doc.recordType || 'Other',
             source: doc.source || 'Parent Upload',
             visibility: doc.visibility || 'Private',
             relatedTo: [],
-            files: [{ name: doc.fileName, size: doc.fileSize ? `${(doc.fileSize / 1024).toFixed(0)} KB` : '—', type: doc.mimeType || 'application/pdf' }],
+            vaultText: doc.metadata?.extractedText || '',
+            files: [{ id: doc.id, name: doc.fileName, url: '', size: doc.fileSize || 0, type: doc.mimeType || 'application/pdf', uploadedAt: doc.uploadedAt || new Date().toISOString() }],
             status: 'Active',
             ocrStatus: 'None',
             filePath: doc.filePath,
@@ -522,6 +522,40 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
   const [shareModalRecord, setShareModalRecord] = useState<EnhancedVaultRecord | null>(null);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const [viewRecord, setViewRecord] = useState<EnhancedVaultRecord | null>(null);
+
+  // ─── Real bulk delete handler ───────────────
+  const handleBulkDelete = async () => {
+    if (selectedRecords.length === 0) return;
+    if (!confirm(`Permanently delete ${selectedRecords.length} record${selectedRecords.length !== 1 ? 's' : ''}? This cannot be undone.`)) {
+      return;
+    }
+    setIsDeleting(true);
+    const toDelete = records.filter(r => selectedRecords.includes(r.id));
+    const deletedIds = new Set<string>();
+    let failureCount = 0;
+    for (const record of toDelete) {
+      const { success } = await deleteVaultDocument(record.id, record.filePath || '');
+      if (success) {
+        deletedIds.add(record.id);
+      } else {
+        failureCount++;
+      }
+    }
+    // Remove only the records that were actually deleted from local state
+    if (deletedIds.size > 0) {
+      setRecords(prev => prev.filter(r => !deletedIds.has(r.id)));
+    }
+    setSelectedRecords([]);
+    setIsDeleting(false);
+    const successCount = deletedIds.size;
+    if (failureCount === 0) {
+      toast.success(`${successCount} record${successCount !== 1 ? 's' : ''} deleted`);
+    } else if (successCount === 0) {
+      toast.error('Could not delete records. Please try again.');
+    } else {
+      toast.error(`Deleted ${successCount}, but ${failureCount} could not be removed.`);
+    }
+  };
 
   // Filter and sort records
   const filteredRecords = records.filter(record => {
@@ -777,6 +811,7 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
                 <SelectItem value="newest">Newest</SelectItem>
                 <SelectItem value="oldest">Oldest</SelectItem>
                 <SelectItem value="a-z">A–Z</SelectItem>
+                <SelectItem value="z-a">Z–A</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -835,28 +870,9 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
                 
                 {selectedRecords.length > 0 && (
                   <div className="flex items-center gap-2 ml-4">
-                    <Button variant="outline" size="sm" onClick={() => {
-                      toast.success(`Secure links created for ${selectedRecords.length} records • Expires in 30 days • Watermark on`);
-                      setSelectedRecords([]);
-                    }}>
-                      <Share className="w-4 h-4 mr-1" />
-                      Share…
-                    </Button>
-                    <Button variant="outline" size="sm" onClick={() => {
-                      toast.success(`${selectedRecords.length} records archived`);
-                      setSelectedRecords([]);
-                    }}>
-                      <Archive className="w-4 h-4 mr-1" />
-                      Archive
-                    </Button>
-                    <Button variant="outline" size="sm" onClick={() => {
-                      if (confirm(`Permanently delete ${selectedRecords.length} records? This cannot be undone.`)) {
-                        toast.success(`${selectedRecords.length} records deleted`);
-                        setSelectedRecords([]);
-                      }
-                    }}>
+                    <Button variant="outline" size="sm" disabled={isDeleting} onClick={handleBulkDelete}>
                       <Trash2 className="w-4 h-4 mr-1" />
-                      Delete
+                      {isDeleting ? 'Deleting…' : 'Delete'}
                     </Button>
                   </div>
                 )}
@@ -876,7 +892,6 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
                   }}
                   onView={() => setViewRecord(record)}
                   onShare={() => setShareModalRecord(record)}
-                  onAction={(action) => toast.success(`Action: ${action} on ${record.title}`)}
                   userTier={userTier}
                 />
               ))}

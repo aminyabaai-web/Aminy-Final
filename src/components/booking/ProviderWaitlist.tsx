@@ -30,6 +30,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '../../utils/supabase/client';
+import { isDemoMode } from '../../lib/demo-seed';
 
 interface ProviderWaitlistProps {
   onBack?: () => void;
@@ -95,6 +96,11 @@ export function ProviderWaitlist({
   const [submitted, setSubmitted] = useState(false);
   const [position, setPosition] = useState<number | null>(null);
 
+  // Social-proof metrics ("12 families matched", "3.2 days avg", "4.9/5") are
+  // illustrative figures for investor/AACT walk-throughs only. Real families
+  // must never see fabricated match analytics, so gate them behind demo mode.
+  const demo = isDemoMode();
+
   const toggleDay = (day: string) => {
     setForm((prev) => ({
       ...prev,
@@ -150,9 +156,9 @@ export function ProviderWaitlist({
         localStorage.setItem('aminy_provider_waitlist', JSON.stringify(existing));
       }
 
-      // Simulate position in line
-      const mockPosition = Math.floor(Math.random() * 8) + 2;
-      setPosition(mockPosition);
+      // Queue position is a simulated figure — only show it in demo walk-throughs,
+      // never present a fabricated "#N in line" to a real family.
+      setPosition(demo ? Math.floor(Math.random() * 8) + 2 : null);
       setSubmitted(true);
       toast.success("You're on the list! We'll be in touch within 24–48 hours.");
     } catch (err) {
@@ -211,19 +217,21 @@ export function ProviderWaitlist({
               is available.
             </p>
 
-            {/* Social proof */}
-            <Card className="p-4 bg-white border border-teal-100 mb-6 text-left">
-              <div className="flex items-center gap-2 mb-2">
-                <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
-                <span className="text-sm font-semibold text-slate-700">
-                  12 families found a match last week
-                </span>
-              </div>
-              <p className="text-xs text-slate-500">
-                Our average match time in Phoenix is 3.2 days. We prioritize
-                urgent cases.
-              </p>
-            </Card>
+            {/* Social proof (illustrative — demo walk-throughs only) */}
+            {demo && (
+              <Card className="p-4 bg-white border border-teal-100 mb-6 text-left">
+                <div className="flex items-center gap-2 mb-2">
+                  <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
+                  <span className="text-sm font-semibold text-slate-700">
+                    12 families found a match last week
+                  </span>
+                </div>
+                <p className="text-xs text-slate-500">
+                  Our average match time in Phoenix is 3.2 days. We prioritize
+                  urgent cases.
+                </p>
+              </Card>
+            )}
 
             {/* While you wait */}
             <div className="text-left">
@@ -295,28 +303,39 @@ export function ProviderWaitlist({
             We're actively recruiting providers for your area
           </h2>
           <p className="text-sm text-slate-500">
-            You're not alone — 12 families found a match last week. Join the
-            waitlist and we'll notify you the moment a provider opens up.
+            {demo
+              ? "You're not alone — 12 families found a match last week. Join the waitlist and we'll notify you the moment a provider opens up."
+              : "Join the waitlist and we'll notify you the moment a provider opens up in your area."}
           </p>
         </motion.div>
 
-        {/* Social proof strip */}
-        <div className="flex gap-3 mb-6">
-          {[
-            { icon: Users, label: '12 matches', sub: 'last week' },
-            { icon: Clock, label: '3.2 days', sub: 'avg match time' },
-            { icon: Star, label: '4.9/5', sub: 'match satisfaction' },
-          ].map((stat) => (
-            <div
-              key={stat.label}
-              className="flex-1 bg-white rounded-xl border border-slate-100 p-2.5 text-center"
-            >
-              <stat.icon className="w-4 h-4 text-teal-500 mx-auto mb-1" />
-              <p className="text-xs font-bold text-slate-900">{stat.label}</p>
-              <p className="text-xs text-slate-400">{stat.sub}</p>
-            </div>
-          ))}
-        </div>
+        {/* Social proof strip — illustrative match metrics for demo walk-throughs only */}
+        {demo ? (
+          <div className="flex gap-3 mb-6">
+            {[
+              { icon: Users, label: '12 matches', sub: 'last week' },
+              { icon: Clock, label: '3.2 days', sub: 'avg match time' },
+              { icon: Star, label: '4.9/5', sub: 'match satisfaction' },
+            ].map((stat) => (
+              <div
+                key={stat.label}
+                className="flex-1 bg-white rounded-xl border border-slate-100 p-2.5 text-center"
+              >
+                <stat.icon className="w-4 h-4 text-teal-500 mx-auto mb-1" />
+                <p className="text-xs font-bold text-slate-900">{stat.label}</p>
+                <p className="text-xs text-slate-400">{stat.sub}</p>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="flex items-center gap-2.5 bg-white rounded-xl border border-slate-100 p-3 mb-6">
+            <Heart className="w-4 h-4 text-teal-500 flex-shrink-0" />
+            <p className="text-xs text-slate-500">
+              We match families with vetted providers as soon as availability opens
+              in your area — and prioritize urgent cases.
+            </p>
+          </div>
+        )}
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-5">

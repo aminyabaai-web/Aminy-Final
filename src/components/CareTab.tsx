@@ -8,6 +8,10 @@ import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Textarea } from './ui/textarea';
 import { Badge } from './ui/badge';
+import { DisclaimerFooter } from './DisclaimerFooter';
+import { ScreenHeader } from './ui/ScreenHeader';
+import { AddToCalendarButtons } from './AddToCalendarButtons';
+import { isDemoMode } from '../lib/demo-seed';
 import { toast } from 'sonner';
 import { 
   MessageCircle,
@@ -86,7 +90,7 @@ interface MinutesUsage {
   type: 'session' | 'consultation' | 'review';
 }
 
-export function CareTab({ userTier, childName = 'your child', onNavigate, onPaywallTrigger, onSuccessEvent, returnTo }: CareTabProps) {
+export function CareTab({ userTier, childName = 'your child', onNavigate, onPaywallTrigger, onSuccessEvent, returnTo, onBack }: CareTabProps) {
   const [activeView, setActiveView] = useState<CareTabView>('messages');
   const [selectedMessage, setSelectedMessage] = useState<string | null>(null);
   const [messageInput, setMessageInput] = useState('');
@@ -96,8 +100,13 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
   const [bookingConsent, setBookingConsent] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Mock data
-  const [messages, setMessages] = useState<CoachMessage[]>([
+  // Coaching data. Real users start empty (a friendly empty state renders until
+  // their real coach/sessions/messages load); the fabricated 'Sarah Chen' thread,
+  // session summaries, and minutes history are DEMO MODE ONLY. Never show a real
+  // parent an invented clinician, conversation, or clinical insight.
+  const demo = isDemoMode();
+
+  const [messages, setMessages] = useState<CoachMessage[]>(demo ? [
     {
       id: '1',
       from: 'coach',
@@ -124,9 +133,9 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
       messageType: 'video',
       attachments: ['homework-support-technique.mp4']
     }
-  ]);
+  ] : []);
 
-  const [upcomingSessions] = useState<CoachingSession[]>([
+  const [upcomingSessions] = useState<CoachingSession[]>(demo ? [
     {
       id: '1',
       date: new Date('2024-12-18T10:00:00'),
@@ -136,9 +145,9 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
       status: 'scheduled',
       type: '25min'
     }
-  ]);
+  ] : []);
 
-  const [pastSessions] = useState<CoachingSession[]>([
+  const [pastSessions] = useState<CoachingSession[]>(demo ? [
     {
       id: '1',
       date: new Date('2024-12-10T10:00:00'),
@@ -199,15 +208,19 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
         ]
       }
     }
-  ]);
+  ] : []);
 
-  const [minutesWallet] = useState({
+  const [minutesWallet] = useState(demo ? {
     includedThisMonth: userTier === 'pro' ? 200 : 50,
     usedThisMonth: userTier === 'pro' ? 75 : 25,
     purchased: 0
+  } : {
+    includedThisMonth: 0,
+    usedThisMonth: 0,
+    purchased: 0
   });
 
-  const [minutesUsage] = useState<MinutesUsage[]>([
+  const [minutesUsage] = useState<MinutesUsage[]>(demo ? [
     {
       id: '1',
       date: new Date('2024-12-10T10:00:00'),
@@ -222,7 +235,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
       minutesUsed: 50,
       type: 'session'
     }
-  ]);
+  ] : []);
 
   const remainingMinutes = minutesWallet.includedThisMonth + minutesWallet.purchased - minutesWallet.usedThisMonth;
 
@@ -247,24 +260,28 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
     setMessages(prev => [...prev, newMessage]);
     setMessageInput('');
 
-    // Simulate coach response
-    setTimeout(() => {
-      const coachResponse: CoachMessage = {
-        id: (Date.now() + 1).toString(),
-        from: 'coach',
-        content: 'Thank you for sharing that. I\'ll review what you\'ve said and get back to you with some specific strategies. In the meantime, keep documenting what you\'re observing - that data is really valuable for our work together.',
-        timestamp: new Date(),
-        coachName: 'Sarah Chen',
-        coachCredentials: ['BCBA', 'M.Ed'],
-        messageType: 'text'
-      };
-      setMessages(prev => [...prev, coachResponse]);
-    }, 2000);
+    // Demo mode only: simulate a coach reply so walkthroughs feel alive. Real
+    // users must NEVER receive a fabricated 'coach' message — their note is
+    // delivered to the real coach, who responds within office hours.
+    if (demo) {
+      setTimeout(() => {
+        const coachResponse: CoachMessage = {
+          id: (Date.now() + 1).toString(),
+          from: 'coach',
+          content: 'Thank you for sharing that. I\'ll review what you\'ve said and get back to you with some specific strategies. In the meantime, keep documenting what you\'re observing - that data is really valuable for our work together.',
+          timestamp: new Date(),
+          coachName: 'Sarah Chen',
+          coachCredentials: ['BCBA', 'M.Ed'],
+          messageType: 'text'
+        };
+        setMessages(prev => [...prev, coachResponse]);
+      }, 2000);
+    }
 
-    toast('Message sent to your coach');
-    
-    // Check if this is the first message for return-to-home logic
-    if (messages.length === 3 && onSuccessEvent) { // After coach's initial response
+    toast(demo ? 'Message sent to your coach' : 'Message sent — your coach will respond during office hours');
+
+    // First message sent — return-to-home logic
+    if (onSuccessEvent) {
       onSuccessEvent('first_message_sent', 'care_messages');
     }
   };
@@ -293,7 +310,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
     const session = pastSessions.find(s => s.id === sessionId);
     if (session?.summary) {
       toast('Recommended activities added to your Plan');
-      
+
       // Trigger success event for return-to-home (next steps injected)
       if (onSuccessEvent) {
         onSuccessEvent('next_steps_injected', 'care_past_sessions');
@@ -301,15 +318,45 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
     }
   };
 
+  const handleExportSummary = async (session: CoachingSession) => {
+    if (!session.summary) return;
+    const s = session.summary;
+    const text = [
+      `Session Summary — ${session.date.toLocaleDateString()} (${session.duration} min)`,
+      `Coach: ${session.coachName}${session.coachCredentials.length ? `, ${session.coachCredentials.join(', ')}` : ''}`,
+      '',
+      'What We Practiced:',
+      ...s.whatWePracticed.map(i => `  • ${i}`),
+      '',
+      'Your Next Steps:',
+      ...s.nextSteps.map(i => `  • ${i}`),
+      '',
+      'Key Insights:',
+      `  ${s.keyInsights}`,
+      '',
+      'Recommended Activities:',
+      ...s.recommendedActivities.map(i => `  • ${i}`),
+    ].join('\n');
+
+    try {
+      await navigator.clipboard.writeText(text);
+      toast.success('Summary copied to clipboard');
+    } catch {
+      toast('Unable to copy summary on this device');
+    }
+  };
+
   const handleBuyMinutes = (pack: '25' | '50') => {
     const prices = { '25': 49, '50': 89 };
 
-    // Analytics removed for production
-
-    // Mock Stripe integration
-    toast.success(`Purchasing ${pack}-minute pack for $${prices[pack]}`, {
-      description: 'In production, this would integrate with Stripe for payment processing.',
-    });
+    // Billing for add-on minute packs is not live yet. In demo mode we confirm
+    // the selection for walkthroughs; for real users we keep the affordance
+    // honest rather than implying a charge that does not happen.
+    if (demo) {
+      toast.success(`${pack}-minute pack selected — $${prices[pack]}`);
+      return;
+    }
+    toast('Add-on minute packs are coming soon');
   };
 
   // Handle AMA (Ask Me Anything) submission for non-Pro users
@@ -385,6 +432,15 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
 
       {/* Message Thread */}
       <div className="space-y-3 sm:space-y-4 max-h-80 overflow-y-auto">
+        {messages.length === 0 && (
+          <div className="text-center py-8">
+            <MessageCircle className="w-10 h-10 text-gray-400 mx-auto mb-3" />
+            <p className="text-gray-600">No messages yet</p>
+            <p className="text-sm text-gray-500">
+              Send a note below and your coach will reply during office hours.
+            </p>
+          </div>
+        )}
         {messages.map((message) => (
           <div
             key={message.id}
@@ -456,10 +512,22 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
       {/* Message Composer */}
       <div className="border-t pt-4">
         <div className="flex items-center gap-2 mb-3">
-          <Button variant="ghost" size="sm" className="p-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="p-2"
+            aria-label="Attach photo"
+            onClick={() => toast('Photo attachments are coming soon')}
+          >
             <Camera className="w-4 h-4" />
           </Button>
-          <Button variant="ghost" size="sm" className="p-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="p-2"
+            aria-label="Attach file"
+            onClick={() => toast('File attachments are coming soon')}
+          >
             <Paperclip className="w-4 h-4" />
           </Button>
         </div>
@@ -575,14 +643,34 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
                 <div className="text-sm text-gray-600 mb-3">
                   {session.date.toLocaleDateString()} at {session.date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </div>
+                <AddToCalendarButtons
+                  appointment={{
+                    id: session.id,
+                    title: `${session.duration}-min Behavior Coaching${session.coachName ? ` — ${session.coachName}` : ''}`,
+                    provider: session.coachName,
+                    service_type: 'Behavior Coaching',
+                    start_iso: session.date.toISOString(),
+                    end_iso: new Date(session.date.getTime() + session.duration * 60000).toISOString(),
+                  }}
+                  variant="inline"
+                  label="Add to calendar"
+                  className="mb-3"
+                />
                 <div className="flex gap-2">
-                  <Button size="sm" variant="outline" className="text-xs">
-                    Add to Calendar
-                  </Button>
-                  <Button size="sm" variant="outline" className="text-xs">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="text-xs"
+                    onClick={() => handleSessionAction('reschedule', session.id)}
+                  >
                     Reschedule
                   </Button>
-                  <Button size="sm" variant="outline" className="text-xs">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="text-xs"
+                    onClick={() => handleSessionAction('cancel', session.id)}
+                  >
                     Cancel
                   </Button>
                 </div>
@@ -648,43 +736,47 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
         </div>
       </div>
 
-      {/* Buy Minutes */}
-      <div>
-        <h3 className="font-semibold text-gray-900 mb-3">Buy Additional Minutes</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div className="p-4 bg-white rounded-lg border border-gray-200">
-            <div className="text-center mb-3">
-              <div className="text-xl sm:text-2xl font-bold">25 min</div>
-              <div className="text-lg font-semibold text-accent">$49</div>
-              <div className="text-xs text-gray-500">$1.96 per minute</div>
+      {/* Buy Minutes — billing for add-on packs is not live yet, so this is
+          shown only in demo walkthroughs. Real users see no non-functional
+          Purchase buttons. */}
+      {demo && (
+        <div>
+          <h3 className="font-semibold text-gray-900 mb-3">Buy Additional Minutes</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="p-4 bg-white rounded-lg border border-gray-200">
+              <div className="text-center mb-3">
+                <div className="text-xl sm:text-2xl font-bold">25 min</div>
+                <div className="text-lg font-semibold text-accent">$49</div>
+                <div className="text-xs text-gray-500">$1.96 per minute</div>
+              </div>
+              <Button
+                onClick={() => handleBuyMinutes('25')}
+                size="sm"
+                variant="outline"
+                className="w-full"
+              >
+                Purchase
+              </Button>
             </div>
-            <Button
-              onClick={() => handleBuyMinutes('25')}
-              size="sm"
-              variant="outline"
-              className="w-full"
-            >
-              Purchase
-            </Button>
-          </div>
-          <div className="p-4 bg-white rounded-lg border border-gray-200">
-            <div className="text-center mb-3">
-              <div className="text-xl sm:text-2xl font-bold">50 min</div>
-              <div className="text-lg font-semibold text-accent">$89</div>
-              <div className="text-xs text-gray-500">$1.78 per minute</div>
-              <Badge className="text-xs mt-1">Best Value</Badge>
+            <div className="p-4 bg-white rounded-lg border border-gray-200">
+              <div className="text-center mb-3">
+                <div className="text-xl sm:text-2xl font-bold">50 min</div>
+                <div className="text-lg font-semibold text-accent">$89</div>
+                <div className="text-xs text-gray-500">$1.78 per minute</div>
+                <Badge className="text-xs mt-1">Best Value</Badge>
+              </div>
+              <Button
+                onClick={() => handleBuyMinutes('50')}
+                size="sm"
+                variant="outline"
+                className="w-full"
+              >
+                Purchase
+              </Button>
             </div>
-            <Button
-              onClick={() => handleBuyMinutes('50')}
-              size="sm"
-              variant="outline"
-              className="w-full"
-            >
-              Purchase
-            </Button>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Usage History */}
       <div>
@@ -706,6 +798,13 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
               </div>
             </div>
           ))}
+          {minutesUsage.length === 0 && (
+            <div className="text-center py-6">
+              <Clock className="w-10 h-10 text-gray-400 mx-auto mb-3" />
+              <p className="text-gray-600">No usage yet</p>
+              <p className="text-sm text-gray-500">Your coaching minutes activity will appear here.</p>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -827,6 +926,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
                   Add to Plan
                 </Button>
                 <Button
+                  onClick={() => handleExportSummary(session)}
                   size="sm"
                   variant="outline"
                   className="flex items-center gap-2"
@@ -859,32 +959,21 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
 
   return (
     <div className="min-h-screen bg-gray-50/30 pb-20">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-100 px-4 py-6">
+      {/* Header — shared chrome via ScreenHeader (back control + consistent
+          padding); Pro badge preserved as a trailing action. */}
+      <ScreenHeader
+        title="Care"
+        subtitle="ABA-informed Behavior Coaching"
+        onBack={onBack}
+        icon={<Stethoscope className="w-6 h-6" />}
+        actions={userTier === 'pro' ? (
+          <Badge className="bg-purple-100 text-purple-800 border-purple-200">Pro</Badge>
+        ) : undefined}
+      />
+      {/* Compliance disclaimer — subtle inline (full text on tap) */}
+      <div className="bg-white border-b border-gray-100 px-4 pb-3">
         <div className="max-w-md mx-auto">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="p-2 bg-purple-100 rounded-lg">
-              <Stethoscope className="w-6 h-6 text-purple-600" />
-            </div>
-            <div className="flex-1">
-              <h1 className="text-xl font-medium text-primary">Care</h1>
-              <h2 className="sr-only">Care overview</h2>
-              <h3 className="sr-only">Messages, scheduling, and minutes</h3>
-              <p className="text-sm text-muted-foreground">ABA-informed Behavior Coaching</p>
-            </div>
-            {userTier === 'pro' && (
-              <Badge className="bg-purple-100 text-purple-800 border-purple-200">
-                Pro
-              </Badge>
-            )}
-          </div>
-          
-          {/* Global Disclaimer */}
-          <div className="mt-3 p-2 bg-amber-50 border border-amber-200 rounded text-center">
-            <p className="text-xs text-amber-800">
-              Educational guidance; not medical advice or therapy.
-            </p>
-          </div>
+          <DisclaimerFooter variant="subtle" />
         </div>
       </div>
 

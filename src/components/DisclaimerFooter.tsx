@@ -3,35 +3,39 @@
 // Unauthorized use, reproduction, or distribution is strictly prohibited.
 // See LICENSE file for details.
 
-import React from 'react';
+import React, { useState } from 'react';
+import { Info } from 'lucide-react';
 import { GLOBAL_DISCLAIMER_TEXT } from './GlobalDisclaimer';
 
 interface DisclaimerFooterProps {
   className?: string;
-  variant?: 'default' | 'compact' | 'card';
+  variant?: 'default' | 'compact' | 'card' | 'subtle';
 }
 
-export function DisclaimerFooter({ className = '', variant = 'default' }: DisclaimerFooterProps) {
+export function DisclaimerFooter({ className = '', variant = 'subtle' }: DisclaimerFooterProps) {
   const baseClasses = "text-muted-foreground text-crisp";
-  
+
   const variantClasses = {
     default: "text-xs leading-relaxed",
     compact: "text-xs leading-tight",
-    card: "text-xs leading-relaxed p-3 bg-muted/50 border border-muted rounded-lg"
+    card: "text-xs leading-relaxed p-3 bg-muted/50 border border-muted rounded-lg",
+    subtle: "text-[10px] leading-tight",
   };
 
   const combinedClasses = `${baseClasses} ${variantClasses[variant]} ${className}`;
+
+  // Subtle: tiny "ⓘ Educational guidance" pill with full text revealed on tap.
+  // Compliant (text is one tap away) but doesn't shout in your face.
+  if (variant === 'subtle') {
+    return <SubtleDisclaimer className={className} />;
+  }
 
   if (variant === 'card') {
     return (
       <div className={combinedClasses}>
         <div className="flex items-start gap-2">
-          <div className="w-4 h-4 mt-0.5 text-muted-foreground flex-shrink-0">
-            ⚠️
-          </div>
-          <p className="text-muted-foreground">
-            {GLOBAL_DISCLAIMER_TEXT}
-          </p>
+          <Info className="w-3.5 h-3.5 mt-0.5 text-muted-foreground flex-shrink-0" />
+          <p className="text-muted-foreground">{GLOBAL_DISCLAIMER_TEXT}</p>
         </div>
       </div>
     );
@@ -42,6 +46,22 @@ export function DisclaimerFooter({ className = '', variant = 'default' }: Discla
       {GLOBAL_DISCLAIMER_TEXT.split('.').filter(sentence => sentence.trim()).map((sentence, index) => (
         <div key={index}>{sentence.trim()}{index < GLOBAL_DISCLAIMER_TEXT.split('.').filter(sentence => sentence.trim()).length - 1 ? '.' : ''}</div>
       ))}
+    </div>
+  );
+}
+
+function SubtleDisclaimer({ className }: { className?: string }) {
+  const [expanded, setExpanded] = useState(false);
+  return (
+    <div className={`flex justify-center ${className || ''}`}>
+      <button
+        onClick={() => setExpanded(v => !v)}
+        className="inline-flex items-center gap-1 text-[10px] text-slate-400 hover:text-slate-600 px-2 py-1 rounded-full transition-colors"
+        aria-label="View educational guidance disclaimer"
+      >
+        <Info className="w-2.5 h-2.5" />
+        <span>{expanded ? GLOBAL_DISCLAIMER_TEXT : 'Educational guidance · learn more'}</span>
+      </button>
     </div>
   );
 }

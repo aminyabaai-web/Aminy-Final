@@ -37,6 +37,7 @@ import { Card } from '../ui/card';
 import { EmptyState } from '../EmptyState';
 import { logMessageSent, logMessageRead } from '../../lib/audit-logger';
 import { supabase } from '../../utils/supabase/client';
+import { isDemoMode } from '../../lib/demo-seed';
 
 // Types
 interface Provider {
@@ -262,7 +263,10 @@ interface SecureMessagingProps {
 }
 
 export function SecureMessaging({ userId, userRole, onBack }: SecureMessagingProps) {
-  const [threads, setThreads] = useState<MessageThread[]>(MOCK_THREADS);
+  // Real accounts start empty and load their own threads from Supabase. Demo
+  // mode seeds sample conversations so prospect walkthroughs look complete.
+  const demo = isDemoMode();
+  const [threads, setThreads] = useState<MessageThread[]>(demo ? MOCK_THREADS : []);
   const [selectedThread, setSelectedThread] = useState<MessageThread | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
@@ -276,7 +280,7 @@ export function SecureMessaging({ userId, userRole, onBack }: SecureMessagingPro
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  // Load threads from Supabase on mount, fall back to MOCK_THREADS
+  // Load threads from Supabase on mount; seed MOCK_THREADS only in demo mode
   useEffect(() => {
     async function loadThreads() {
       try {
@@ -352,22 +356,25 @@ export function SecureMessaging({ userId, userRole, onBack }: SecureMessagingPro
             updatedAt: t.updated_at,
           }));
           setThreads(mapped);
-        } else {
-          // No rows returned — fall back to mock data
+        } else if (demo) {
+          // Demo mode only: seed sample threads so walkthroughs look complete.
           setThreads(MOCK_THREADS);
+        } else {
+          // Real accounts with no conversations get an honest empty state.
+          setThreads([]);
         }
       } catch (err) {
-        console.warn('SecureMessaging: Failed to load threads from Supabase, using mock data', err);
-        setThreads(MOCK_THREADS);
+        console.warn('SecureMessaging: Failed to load threads from Supabase', err);
+        setThreads(demo ? MOCK_THREADS : []);
       } finally {
         setThreadsLoading(false);
       }
     }
 
     loadThreads();
-  }, [userId]);
+  }, [userId, demo]);
 
-  // Load messages when thread is selected — try Supabase first, fall back to MOCK_MESSAGES
+  // Load messages when thread is selected — Supabase first; MOCK_MESSAGES only in demo mode
   useEffect(() => {
     if (!selectedThread) return;
 
@@ -397,15 +404,16 @@ export function SecureMessaging({ userId, userRole, onBack }: SecureMessagingPro
               status: (m.status || 'delivered') as Message['status'],
             }))
           );
+        } else if (demo) {
+          // Demo mode only: show the seeded conversation for this sample thread.
+          setMessages(MOCK_MESSAGES[selectedThread!.id] || []);
         } else {
-          // Fall back to mock messages for this thread
-          const threadMessages = MOCK_MESSAGES[selectedThread!.id] || [];
-          setMessages(threadMessages);
+          // Real accounts with no message history start empty.
+          setMessages([]);
         }
       } catch (err) {
-        console.warn('SecureMessaging: Failed to load messages from Supabase, using mock data', err);
-        const threadMessages = MOCK_MESSAGES[selectedThread!.id] || [];
-        setMessages(threadMessages);
+        console.warn('SecureMessaging: Failed to load messages from Supabase', err);
+        setMessages(demo ? (MOCK_MESSAGES[selectedThread!.id] || []) : []);
       } finally {
         setMessagesLoading(false);
       }

@@ -367,7 +367,7 @@ export async function processSessionNotesForCarePlan(
   // 3. Generate home program
   const homeProgram = generateHomeProgram(notes);
 
-  console.log(
+  if (import.meta.env.DEV) console.log(
     `[care-plan-updater] Processed session notes: ${createdItems.length} action items, ${createdGoals.length} new goals, ${homeProgram.items.length} home program items`,
   );
 

@@ -19,6 +19,7 @@ import { ErrorBoundary } from "./components/ErrorBoundary";
 import { usePaymentConfirmation, getPaymentStatusFromUrl, clearPaymentParamsFromUrl } from "./hooks/usePaymentConfirmation";
 import { useGracePeriod } from "./hooks/useGracePeriod";
 import { logger } from "./lib/logger";
+import { isDemoMode } from "./lib/demo-seed";
 
 // Lazy load SplashPage (full landing page)
 const SplashPage = lazy(() =>
@@ -49,8 +50,9 @@ import { supabase } from "./utils/supabase/client";
 import { getMFAState } from "./lib/mfa";
 import { verifyAdminAccess } from "./hooks/useSecureSession";
 import { setupSessionRefresh } from "./lib/security/session";
-import { syncEncryptedStorage } from "./lib/security/encrypted-storage";
+import { initEncryption, syncEncryptedStorage } from "./lib/security/encrypted-storage";
 import { generatePHIAccessReport, getComplianceStatus } from "./lib/hipaa-compliance";
+import { logPHILogin, logPHIAccess } from "./lib/security/hipaa-audit";
 import { setSentryUser, clearSentryUser, addBreadcrumb } from "./lib/sentry";
 import { setCurrentScreenGlobal } from "./lib/screen-state";
 import { proactiveNudges } from "./lib/proactive-nudges";
@@ -159,6 +161,11 @@ const CreateAccountScreen = lazy(() =>
 const PaywallScreen = lazy(() =>
   import("./components/PaywallScreen").then((m) => ({
     default: m.PaywallScreen,
+  })),
+);
+const PricingTiers = lazy(() =>
+  import("./components/PricingTiers").then((m) => ({
+    default: m.PricingTiers,
   })),
 );
 const BenefitsNavigatorScreen = lazy(() =>
@@ -340,6 +347,31 @@ const OutcomesTracking = lazy(() =>
 const AdminPortal = lazy(() =>
   import("./components/AdminPortal").then((m) => ({
     default: m.AdminPortal,
+  })),
+);
+const OrgAdminDashboard = lazy(() =>
+  import("./components/OrgAdminDashboard").then((m) => ({
+    default: m.OrgAdminDashboard,
+  })),
+);
+const AskABCBA = lazy(() =>
+  import("./components/AskABCBA").then((m) => ({
+    default: m.AskABCBA,
+  })),
+);
+const AACTPartnerSetup = lazy(() =>
+  import("./components/AACTPartnerSetup").then((m) => ({
+    default: m.AACTPartnerSetup,
+  })),
+);
+const CareCoordinationHub = lazy(() =>
+  import("./components/CareCoordinationHub").then((m) => ({
+    default: m.CareCoordinationHub,
+  })),
+);
+const MemoryViewer = lazy(() =>
+  import("./components/MemoryViewer").then((m) => ({
+    default: m.MemoryViewer,
   })),
 );
 const PrivacyPolicy = lazy(() =>
@@ -1010,7 +1042,11 @@ type AppScreen =
   | "pre-diagnosis" // Landing for parents with concerns, no diagnosis yet
   | "developmental-screener" // AI developmental screener tool
   | "sensory-fidget" // Calm Corner sensory fidget tool for kids
-  | "grant-navigator"; // Grant & funding finder for families (Pro)
+  | "grant-navigator" // Grant & funding finder for families (Pro)
+  | "org-admin" // B2B org admin dashboard (seats, billing, members)
+  | "ask-bcba" // Ask a BCBA — async messaging with AI draft + BCBA review (vs Answers Now)
+  | "aact-partner-setup" // Partner-org admin onboarding microsite (Cori at AACT)
+  | "care-coordination"; // Unified view across ABA/PT/OT/ST/MH + auth + site of care
 
 const AUTH_REDIRECT_SCREENS: AppScreen[] = [
   "splash",
@@ -1177,6 +1213,37 @@ const getInitialScreen = (): AppScreen => {
   const pathname = window.location.pathname;
   if (pathname === '/auth/callback' || pathname.includes('/auth/callback')) {
     return "auth-callback";
+  }
+
+  // Calendar OAuth callbacks (Google / Outlook) — exchange code in background,
+  // strip query params, toast, route to Settings.
+  const calendarCallbackMatch =
+    pathname.includes('/auth/google-calendar/callback')  ? 'google'  as const :
+    pathname.includes('/auth/outlook-calendar/callback') ? 'outlook' as const :
+    null;
+  if (calendarCallbackMatch) {
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get('code');
+    const state = params.get('state');
+    if (code && state) {
+      import('./lib/calendar-providers').then(({ completeConnect }) => {
+        completeConnect(calendarCallbackMatch, code, state)
+          .then(({ email }) => {
+            window.history.replaceState({}, '', '/');
+            const label = calendarCallbackMatch === 'google' ? 'Google Calendar' : 'Outlook Calendar';
+            import('sonner').then(({ toast }) => {
+              toast.success(email ? `${label} connected — ${email}` : `${label} connected`);
+            });
+          })
+          .catch((err) => {
+            window.history.replaceState({}, '', '/');
+            import('sonner').then(({ toast }) => {
+              toast.error(err?.message || 'Calendar connect failed');
+            });
+          });
+      });
+    }
+    return "settings";
   }
 
   // Check for referral landing page (/join?ref=CODE)
@@ -1658,6 +1725,13 @@ export default function App() {
           // Auth state determined — unblock UI render
           if (event === 'INITIAL_SESSION') setAuthReady(true);
           hadSessionRef.current = true;
+          // Initialize PBKDF2-derived encryption key for this user session.
+          // Must happen before any encrypted localStorage reads below.
+          initEncryption(session.user.id);
+          if (event === 'SIGNED_IN') {
+            logPHILogin(session.user.id, 'parent', session.user.email || '', 'supabase_auth').catch(() => {});
+          }
+          void syncEncryptedStorage.refreshCache();
           // Load user profile and children data from Supabase
           try {
             const { data: profile } = await supabase
@@ -1814,6 +1888,11 @@ export default function App() {
           // Stop the proactive nudge scheduler
           proactiveNudges.stop();
 
+          // Log PHI logout event
+          if (session === null) {
+            logPHIAccess({ eventType: 'LOGOUT', userId: 'unknown', userRole: 'parent', userEmail: '', resourceType: 'user_account', resourceId: 'unknown', screenContext: 'app', actionDescription: 'User signed out' }).catch(() => {});
+          }
+
           // Clear Sentry user context
           clearSentryUser();
 
@@ -1968,6 +2047,13 @@ export default function App() {
             has_completed_onboarding: true,
             updated_at: new Date().toISOString(),
           }, { onConflict: 'id' }).then(null, (err: unknown) => logger.error('Profile upsert error', err));
+
+          // Apply partner org auto-contract (AACT, Rise, etc.) if detected from URL/storage.
+          // Sets pilot_organization, pilot_payers, system_of_record, evv_system on profile.
+          // Fire-and-forget — non-blocking, best-effort attribution.
+          import('./lib/partner-org').then(({ applyPartnerToProfile }) => {
+            applyPartnerToProfile(userId).catch(() => {});
+          });
 
           const { data: children } = await supabase
             .from('children')
@@ -2422,10 +2508,9 @@ export default function App() {
         case "paywall":
           return (
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
-              <PaywallScreen
+              <PricingTiers
                 onSubscribe={handleSubscribe}
                 onClose={() => navigateToScreen("dashboard")}
-                childName={userData.childName}
               />
             </Suspense>
           );
@@ -2504,6 +2589,10 @@ export default function App() {
               <ProviderPortal
                 providerId={userData.id ?? ''}
                 onNavigate={(screen) => navigateToScreen(screen as AppScreen)}
+                onStartTelehealthSession={(sessionId) => {
+                  setActiveSessionId(sessionId);
+                  navigateToScreen("video-call-room");
+                }}
               />
             </Suspense>
           );
@@ -2565,6 +2654,66 @@ export default function App() {
                   toast.error("Admin access denied");
                   navigateToScreen("dashboard");
                 }}
+              />
+            </Suspense>
+          );
+
+        case "org-admin":
+          // B2B org admin — seats, billing, members. Owner-only (RLS-enforced).
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <OrgAdminDashboard onBack={() => navigateToScreen("dashboard")} />
+            </Suspense>
+          );
+
+        case "ask-bcba":
+          // Ask a BCBA — async messaging, AI draft + human BCBA review (Answers Now killer)
+          if (!userData.id) { navigateToScreen('login'); return null; }
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <AskABCBA
+                onBack={() => navigateToScreen("dashboard")}
+                userId={userData.id}
+                childName={userData.childName || undefined}
+                parentName={userData.parentName || undefined}
+              />
+            </Suspense>
+          );
+
+        case "aact-partner-setup":
+          // Partner-org onboarding microsite — Cori at AACT, or any pilot org admin
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <AACTPartnerSetup
+                onBack={() => navigateToScreen("dashboard")}
+                partnerOrg="aact"
+              />
+            </Suspense>
+          );
+
+        case "care-coordination":
+          // Unified Care Coordination — every service, every auth, every site
+          if (!userData.id) { navigateToScreen('login'); return null; }
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <CareCoordinationHub
+                onBack={() => navigateToScreen("dashboard")}
+                onNavigate={(s) => navigateToScreen(s as AppScreen)}
+                userId={userData.id}
+                childName={userData.childName || undefined}
+              />
+            </Suspense>
+          );
+
+        case "memory-settings":
+          // Full-page memory viewer — what Aminy knows, with delete controls
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <MemoryViewer
+                onBack={() => navigateToScreen("settings")}
+                childId={userData.childId || userData.activeChildId || 'no-child'}
+                childName={userData.childName || undefined}
+                tier={effectiveUserTier}
               />
             </Suspense>
           );
@@ -2748,9 +2897,18 @@ export default function App() {
           return (
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <MyAppointments
+                userId={userData.id ?? ''}
                 onBack={() => navigateToScreen("dashboard")}
                 onBookNew={() => navigateToScreen("conversational-booking")}
                 onNavigateToProvider={() => navigateToScreen("marketplace")}
+                onJoinCall={(appt) => {
+                  setActiveSessionId(appt.id);
+                  navigateToScreen("video-call-room");
+                }}
+                onReschedule={() => navigateToScreen("conversational-booking")}
+                onBookAgain={() => navigateToScreen("conversational-booking")}
+                onLeaveReview={() => navigateToScreen("provider-reviews")}
+                onCompleteQuestionnaire={() => navigateToScreen("parent-intake")}
               />
             </Suspense>
           );
@@ -3401,18 +3559,34 @@ export default function App() {
           );
 
         case "session-payout":
-          return (
+          // This admin payout tool needs a concrete session to release. The sample
+          // wiring renders only in demo mode; real users without a selected session
+          // get an honest placeholder instead of a fabricated "Demo Session / $150".
+          return isDemoMode() ? (
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <SessionPayoutTrigger
                 sessionId="demo-session-id"
                 providerId="demo-provider-id"
-                providerName="Provider"
+                providerName="Sample Provider"
                 stripeConnectAccountId=""
                 sessionAmountCents={15000}
-                sessionDescription="Demo Session"
+                sessionDescription="Sample Session (demo)"
                 onCancel={() => navigateToScreen("bcba-portal")}
               />
             </Suspense>
+          ) : (
+            <div className="min-h-screen bg-[#FAF7F2] flex flex-col items-center justify-center px-6 text-center">
+              <p className="text-base font-semibold text-slate-800">No session selected for payout</p>
+              <p className="mt-2 text-sm text-slate-500 max-w-sm">
+                Open a completed session from the provider portal to release its payment.
+              </p>
+              <button
+                onClick={() => navigateToScreen("bcba-portal")}
+                className="mt-5 px-4 py-2 bg-teal-600 text-white text-sm font-medium rounded-lg hover:bg-teal-700 transition-colors"
+              >
+                Back to portal
+              </button>
+            </div>
           );
 
         case "parent-intake":
@@ -3726,7 +3900,9 @@ export default function App() {
                     </div>
                   </div>
 
-                  {/* Bevel-style AI chat overlay — triggered by center nav tab */}
+                  {/* Bevel-style AI chat overlay — triggered by center nav tab.
+                      Gated to authenticated users only (prod-safe). The earlier
+                      DEV bypass was for preview iframe testing — removed for prod. */}
                   {userData.id && (
                     <Suspense fallback={null}>
                       <BevelChatOverlay

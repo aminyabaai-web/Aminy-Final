@@ -49,6 +49,7 @@ import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Textarea } from '../ui/textarea';
 import { Input } from '../ui/input';
+import { isDemoMode } from '../../lib/demo-seed';
 
 interface CareTeamMember {
   id: string;
@@ -120,7 +121,18 @@ export function CareCoordination({
   const loadCareCoordinationData = async () => {
     setIsLoading(true);
 
-    // Simulated data - in production, fetch from Supabase
+    // TODO(production): fetch real care team / notes / plan from Supabase by patientId.
+    // Until that's wired, real providers see clean empty states; the rich sample
+    // below is shown only in demo mode for investor/partner walk-throughs.
+    if (!isDemoMode()) {
+      setCareTeam([]);
+      setSharedNotes([]);
+      setCarePlan([]);
+      setIsLoading(false);
+      return;
+    }
+
+    // Simulated data (demo mode only)
     await new Promise(resolve => setTimeout(resolve, 800));
 
     setCareTeam([

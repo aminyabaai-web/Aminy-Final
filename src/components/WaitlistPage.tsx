@@ -322,7 +322,7 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
           <div className="flex flex-wrap justify-center gap-8">
             <div className="flex items-center gap-2 text-gray-600">
               <Shield className="w-5 h-5 text-teal-600" />
-              <span>HIPAA Compliant</span>
+              <span>HIPAA-Conscious</span>
             </div>
             <div className="flex items-center gap-2 text-gray-600">
               <Users className="w-5 h-5 text-teal-600" />

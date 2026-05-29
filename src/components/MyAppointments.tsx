@@ -11,6 +11,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { AISparkleButton } from './AISparkleButton';
+import { ScreenHeader } from './ui/ScreenHeader';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Calendar,
@@ -33,6 +34,7 @@ import {
   Loader2
 } from 'lucide-react';
 import { supabase } from '../utils/supabase/client';
+import { toast } from 'sonner';
 import { EmptyState } from './EmptyState';
 
 // Types
@@ -68,6 +70,8 @@ export interface Appointment {
 
 interface MyAppointmentsProps {
   appointments?: Appointment[];
+  /** When provided (and no explicit appointments prop), the screen loads this user's bookings itself. */
+  userId?: string;
   onBookNew?: () => void;
   onJoinCall?: (appointment: Appointment) => void;
   onReschedule?: (appointment: Appointment) => void;
@@ -454,7 +458,8 @@ function AppointmentCard({
 
 // Main Component
 export function MyAppointments({
-  appointments = [],
+  appointments,
+  userId,
   onBookNew,
   onJoinCall,
   onReschedule,
@@ -468,42 +473,63 @@ export function MyAppointments({
 }: MyAppointmentsProps & { onBack?: () => void; onNavigateToProvider?: () => void }) {
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
 
-  const upcomingAppointments = appointments
+  // Load this user's real bookings unless the caller passed appointments explicitly.
+  const { appointments: loadedAppointments, refetch } = useAppointments(userId);
+  const appointments_ = appointments ?? loadedAppointments;
+
+  // Real cancel: confirm, update the booking, then refetch. Falls back to a
+  // caller-supplied handler if one was provided.
+  const handleCancel = onCancel ?? (async (appt: Appointment) => {
+    if (typeof window !== 'undefined' &&
+        !window.confirm(`Cancel your ${appt.sessionType} with ${appt.provider.name}? This can't be undone.`)) {
+      return;
+    }
+    const { error } = await supabase
+      .from('marketplace_bookings')
+      .update({ status: 'cancelled' })
+      .eq('id', appt.id);
+    if (error) {
+      toast.error('Could not cancel the appointment. Please try again.');
+      return;
+    }
+    toast.success('Appointment cancelled.');
+    refetch();
+  });
+
+  const upcomingAppointments = appointments_
     .filter(a => a.status === 'upcoming' || a.status === 'in-progress')
     .sort((a, b) => a.scheduledAt.getTime() - b.scheduledAt.getTime());
 
-  const pastAppointments = appointments
+  const pastAppointments = appointments_
     .filter(a => a.status === 'completed' || a.status === 'cancelled' || a.status === 'no-show')
     .sort((a, b) => b.scheduledAt.getTime() - a.scheduledAt.getTime());
 
   const displayedAppointments = activeTab === 'upcoming' ? upcomingAppointments : pastAppointments;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="flex items-center gap-2 flex-wrap">
-                <h1 className="text-xl font-bold text-gray-900">My Appointments</h1>
-                <AISparkleButton prompt={childName ? `Help me prepare for ${childName}'s upcoming ABA appointment — what questions should I ask the provider?` : "What should I bring to and ask at an ABA appointment?"} label="Prepare" />
-              </div>
-              {childName && (
-                <p className="text-sm text-gray-500">for {childName}</p>
-              )}
-            </div>
-            <button
-              onClick={onBookNew}
-              className="flex items-center gap-2 px-4 py-2 bg-teal-600 text-white font-medium rounded-lg hover:bg-teal-700 transition-colors"
-            >
-              <Plus className="w-4 h-4" />
-              Book New
-            </button>
-          </div>
-
+    <div className="min-h-screen bg-[#FAF7F2]">
+      {/* Header — shared chrome with back control */}
+      <div className="bg-white border-b border-slate-100">
+        <ScreenHeader
+          title="My Appointments"
+          subtitle={childName ? `for ${childName}` : undefined}
+          onBack={onBack}
+          actions={
+            <>
+              <AISparkleButton prompt={childName ? `Help me prepare for ${childName}'s upcoming ABA appointment — what questions should I ask the provider?` : "What should I bring to and ask at an ABA appointment?"} label="Prepare" />
+              <button
+                onClick={onBookNew}
+                className="flex items-center gap-1.5 px-3 py-2 bg-teal-600 text-white text-sm font-medium rounded-lg hover:bg-teal-700 transition-colors"
+              >
+                <Plus className="w-4 h-4" />
+                Book New
+              </button>
+            </>
+          }
+        />
+        <div className="px-4 pb-4">
           {/* Tabs */}
-          <div className="flex gap-1 mt-4 bg-gray-100 p-1 rounded-lg">
+          <div className="flex gap-1 bg-gray-100 p-1 rounded-lg">
             <button
               onClick={() => setActiveTab('upcoming')}
               className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
@@ -545,7 +571,7 @@ export function MyAppointments({
                   appointment={appointment}
                   onJoinCall={onJoinCall}
                   onReschedule={onReschedule}
-                  onCancel={onCancel}
+                  onCancel={handleCancel}
                   onLeaveReview={onLeaveReview}
                   onBookAgain={onBookAgain}
                   onCompleteQuestionnaire={onCompleteQuestionnaire}

@@ -41,6 +41,7 @@ import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { isDemoMode } from '../lib/demo-seed';
 
 // Types
 interface DataPoint {
@@ -291,6 +292,7 @@ export function AnalyticsCharts({
   const [selectedRange, setSelectedRange] = useState(dateRange);
   const [isLoading, setIsLoading] = useState(false);
   const [chartData, setChartData] = useState<ChartData | null>(null);
+  const demoMode = isDemoMode();
 
   useEffect(() => {
     loadChartData();
@@ -299,12 +301,19 @@ export function AnalyticsCharts({
   const loadChartData = async () => {
     setIsLoading(true);
 
-    // In production, this would fetch real data
-    // For now, generate mock data based on date range
-    setTimeout(() => {
-      setChartData(generateMockData(selectedRange));
-      setIsLoading(false);
-    }, 500);
+    if (demoMode) {
+      // Demo walkthrough: show the rich sample dataset.
+      setTimeout(() => {
+        setChartData(generateMockData(selectedRange));
+        setIsLoading(false);
+      }, 500);
+      return;
+    }
+
+    // Real users: never fabricate analytics about a real child. Real aggregation
+    // is not wired yet, so render an honest empty state instead of mock charts.
+    setChartData(null);
+    setIsLoading(false);
   };
 
   const generateMockData = (range: string): ChartData => {
@@ -382,7 +391,7 @@ export function AnalyticsCharts({
     }
   };
 
-  if (isLoading || !chartData) {
+  if (isLoading) {
     return (
       <div className="space-y-4">
         {[1, 2, 3].map(i => (
@@ -395,13 +404,29 @@ export function AnalyticsCharts({
     );
   }
 
+  if (!chartData) {
+    return (
+      <Card className="p-8 flex flex-col items-center justify-center text-center">
+        <div className="w-12 h-12 rounded-2xl bg-teal-50 flex items-center justify-center mb-3">
+          <TrendingUp className="w-6 h-6 text-teal-600" aria-hidden="true" />
+        </div>
+        <h3 className="text-base font-semibold text-slate-800 dark:text-white">No analytics yet</h3>
+        <p className="mt-1.5 text-sm text-slate-500 max-w-xs">
+          As you track {childName}&rsquo;s activities, moods, and routines, trends and insights will appear here.
+        </p>
+      </Card>
+    );
+  }
+
   return (
     <div className="space-y-6">
-      {/* Demo Data Banner */}
-      <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-2.5 flex items-center gap-2">
-        <span className="text-amber-600 text-sm font-medium">Sample Data</span>
-        <span className="text-amber-700/70 text-xs">Showing demo analytics. Real data will appear as you track activities.</span>
-      </div>
+      {/* Demo Data Banner — only in demo mode (real users see real data or the empty state) */}
+      {demoMode && (
+        <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-2.5 flex items-center gap-2">
+          <span className="text-amber-600 text-sm font-medium">Sample Data</span>
+          <span className="text-amber-700/70 text-xs">Showing demo analytics. Real data will appear as you track activities.</span>
+        </div>
+      )}
       {/* Date Range Selector */}
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-semibold dark:text-white">Analytics for {childName}</h2>
@@ -430,10 +455,12 @@ export function AnalyticsCharts({
             <LineChart className="w-5 h-5 text-teal-500" />
             Progress Over Time
           </h3>
-          <Badge variant="outline" className="bg-green-50 text-green-700">
-            <TrendingUp className="w-3 h-3 mr-1" />
-            +12% this {selectedRange}
-          </Badge>
+          {demoMode && (
+            <Badge variant="outline" className="bg-green-50 text-green-700">
+              <TrendingUp className="w-3 h-3 mr-1" />
+              +12% this {selectedRange}
+            </Badge>
+          )}
         </div>
         <SimpleLineChart data={chartData.progressOverTime} height={180} />
       </Card>
@@ -514,27 +541,30 @@ export function AnalyticsCharts({
         </div>
       </Card>
 
-      {/* Insights */}
-      <Card className="p-6 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-blue-200 dark:border-blue-800">
-        <h3 className="font-semibold mb-3 flex items-center gap-2 text-blue-700 dark:text-blue-400">
-          <Zap className="w-5 h-5" />
-          Pattern Insights
-        </h3>
-        <ul className="space-y-2 text-sm text-blue-600 dark:text-blue-300">
-          <li className="flex items-start gap-2">
-            <span className="mt-1">•</span>
-            <span>Peak activity occurs between 4-8pm - consider scheduling important tasks during this window</span>
-          </li>
-          <li className="flex items-start gap-2">
-            <span className="mt-1">•</span>
-            <span>Morning transitions have improved 15% over the past 2 weeks</span>
-          </li>
-          <li className="flex items-start gap-2">
-            <span className="mt-1">•</span>
-            <span>Bedtime routine shows consistent improvement - keep up the visual schedule strategy!</span>
-          </li>
-        </ul>
-      </Card>
+      {/* Insights — illustrative narrative tied to the sample dataset; demo-only so real
+          users are never shown fabricated clinical progress about their child. */}
+      {demoMode && (
+        <Card className="p-6 bg-gradient-to-r from-teal-50 to-slate-50 dark:from-teal-900/20 dark:to-slate-900/20 border-teal-200 dark:border-teal-800">
+          <h3 className="font-semibold mb-3 flex items-center gap-2 text-teal-700 dark:text-teal-400">
+            <Zap className="w-5 h-5" />
+            Pattern Insights
+          </h3>
+          <ul className="space-y-2 text-sm text-teal-700 dark:text-teal-300">
+            <li className="flex items-start gap-2">
+              <span className="mt-1">•</span>
+              <span>Peak activity occurs between 4-8pm - consider scheduling important tasks during this window</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="mt-1">•</span>
+              <span>Morning transitions have improved 15% over the past 2 weeks</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="mt-1">•</span>
+              <span>Bedtime routine shows consistent improvement - keep up the visual schedule strategy!</span>
+            </li>
+          </ul>
+        </Card>
+      )}
     </div>
   );
 }

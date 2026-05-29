@@ -25,6 +25,9 @@ interface EmailResult {
   error?: string;
 }
 
+const IS_DEV_ENV = Deno.env.get('ENVIRONMENT') === 'development' ||
+                   Deno.env.get('DENO_ENV') === 'development';
+
 // Email delivery tracking for monitoring
 let emailStats = {
   sent: 0,
@@ -74,7 +77,7 @@ export async function sendEmailWithDetails(options: EmailOptions): Promise<Email
   // If no email providers configured
   if (!RESEND_API_KEY && !SENDGRID_API_KEY) {
     if (isDevelopment) {
-      console.log('[Email] Development mode - would send email:', { to, subject });
+      console.log('[Email] Development mode - would send email:', { subject });
       return { success: true, provider: 'development', messageId: `dev_${Date.now()}` };
     }
     console.error('[Email] No email provider configured (RESEND_API_KEY or SENDGRID_API_KEY required)');
@@ -165,7 +168,7 @@ async function sendViaResend(params: {
     }
 
     const data = await response.json();
-    console.log('[Email] Sent via Resend:', { to, subject, messageId: data.id });
+    if (IS_DEV_ENV) console.log('[Email] Sent via Resend:', { subject, messageId: data.id });
 
     return {
       success: true,
@@ -235,7 +238,7 @@ async function sendViaSendGrid(params: {
 
     // SendGrid doesn't return message ID in response body
     const messageId = response.headers.get('x-message-id') || `sg_${Date.now()}`;
-    console.log('[Email] Sent via SendGrid:', { to, subject, messageId });
+    if (IS_DEV_ENV) console.log('[Email] Sent via SendGrid:', { subject, messageId });
 
     return {
       success: true,

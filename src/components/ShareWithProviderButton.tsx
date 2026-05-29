@@ -481,7 +481,7 @@ function ShareModal({
             {/* Privacy Note */}
             <div className="px-4 pb-4">
               <p className="text-xs text-gray-500 text-center">
-                Reports are encrypted and HIPAA-compliant. You control who sees your data.
+                Reports are encrypted and HIPAA-conscious. You control who sees your data.
               </p>
             </div>
           </Card>

@@ -75,23 +75,11 @@ export function SplashPage({
             width: '100%',
             maxWidth: '920px',
             alignItems: 'center',
-            justifyContent: 'space-between',
+            justifyContent: 'flex-end',  // CTAs only — hero logo below carries the brand
             gap: '12px',
           }}
         >
-          <span
-            style={{
-              color: 'rgba(17, 24, 39, 0.52)',
-              fontFamily: fontStack,
-              fontSize: '12px',
-              fontWeight: 600,
-              letterSpacing: '0.16em',
-              textTransform: 'uppercase',
-              ...fontSmoothing,
-            }}
-          >
-            Aminy
-          </span>
+          {/* No duplicate wordmark: the hero logo image below is the brand mark. */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             {onForProviders && (
               <button
@@ -215,7 +203,7 @@ export function SplashPage({
               ...fontSmoothing,
             }}
           >
-            The AI companion for neurodivergent families.
+            The Family OS for neurodivergent care.
           </motion.h1>
 
           {/* Context line */}
@@ -238,7 +226,7 @@ export function SplashPage({
               ...fontSmoothing,
             }}
           >
-            From finding the right BCBA to tracking your child's progress — Aminy brings together everything families need for ABA therapy and pediatric behavioral health.
+            One place for every kind of care your child needs — ABA, speech, OT, mental health — coordinated by an AI that actually knows your family. From finding the right provider to tracking progress to handling insurance.
           </motion.p>
 
           {/* Primary CTA */}
@@ -521,7 +509,7 @@ export function SplashPage({
             >
               {[
                 { icon: '⚡', text: 'Start Today', subtext: 'No waitlist' },
-                { icon: '🌙', text: '24/7 Support', subtext: 'Always there' },
+                { icon: '🌙', text: 'AI guidance, anytime', subtext: 'Here whenever you need it' },
                 { icon: '✓', text: 'No Diagnosis', subtext: 'Required' },
               ].map((item) => (
                 <div

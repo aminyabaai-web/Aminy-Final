@@ -111,9 +111,9 @@ export function ManageCaregivers({
   const [caregivers, setCaregivers] = useState<Caregiver[]>(
     initialCaregivers || [
       {
-        id: '1',
-        name: 'Current User',
-        email: 'parent@example.com',
+        id: 'owner',
+        name: 'You',
+        email: '',
         role: 'owner',
         status: 'active',
         invitedAt: new Date(),

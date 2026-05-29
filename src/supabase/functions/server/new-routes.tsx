@@ -105,7 +105,7 @@ routes.post("/ai/chat", async (c) => {
           'anthropic-version': '2023-06-01'
         },
         body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
+          model: 'claude-sonnet-4-6',
           max_tokens: 2048,
           temperature: 0.7,
           messages,
@@ -172,7 +172,7 @@ routes.post("/ai/summarize", async (c) => {
           'anthropic-version': '2023-06-01'
         },
         body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
+          model: 'claude-sonnet-4-6',
           max_tokens: 256,
           messages: [{ role: 'user', content: prompt }],
         }),

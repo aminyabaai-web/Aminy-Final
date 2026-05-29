@@ -264,6 +264,47 @@ export function ProviderMarketplace({
   const loadProviders = useCallback(async () => {
     setIsLoading(true);
 
+    // Demo-mode shortcut: hydrate marketplace with 5 well-rounded providers so
+    // investor + AACT walk-throughs see a populated screen.
+    try {
+      const { isDemoMode, DEMO_PROVIDERS } = await import('../lib/demo-seed');
+      if (isDemoMode()) {
+        setProviders(DEMO_PROVIDERS.map(p => ({
+          id: p.id,
+          name: p.name,
+          credentials: p.credentials,
+          type: (p.credentials.toLowerCase().includes('slp') ? 'slp'
+                 : p.credentials.toLowerCase().includes('psy.d') ? 'lcsw'
+                 : p.credentials.toLowerCase().includes('lmft') || p.credentials.toLowerCase().includes('lcsw') ? 'lcsw'
+                 : 'bcba') as ProviderType,
+          photoUrl: '',
+          rating: p.rating,
+          reviewCount: p.reviewCount,
+          yearsExperience: p.yearsExperience,
+          specialties: [p.specialty],
+          conditions: ['Autism', 'ADHD', 'Anxiety'],
+          languages: ['English'],
+          insuranceAccepted: p.payers,
+          sessionRate: p.hourlyRate,
+          statesLicensed: p.states,
+          bio: p.bio,
+          approach: p.specialty,
+          availability: generateAvailability(),
+          nextAvailable: p.nextAvailable,
+          isBookmarked: false,
+          badges: ['Telehealth', `${p.yearsExperience}y experience`],
+          verificationStatus: 'verified' as MarketplaceProvider['verificationStatus'],
+        })));
+        setProviderProvenance(createDataProvenance('live', 'Demo mode — synthetic provider directory', {
+          isVerified: true,
+          lastUpdatedAt: new Date().toISOString(),
+        }));
+        setProviderLoadMessage(null);
+        setIsLoading(false);
+        return;
+      }
+    } catch { /* fall through to real query */ }
+
     try {
       // Build query with server-side filters
       let query = supabase
@@ -433,212 +474,6 @@ export function ProviderMarketplace({
     }, 300);
     return () => clearTimeout(timer);
   }, [loadProviders]);
-
-  const generateMockProviders = (): MarketplaceProvider[] => [
-    // BEHAVIORAL TEAM
-    {
-      id: 'prov-1',
-      name: 'Dr. Sarah Chen',
-      credentials: 'BCBA-D',
-      type: 'bcba',
-      rating: 4.9,
-      reviewCount: 156,
-      yearsExperience: 15,
-      specialties: ['Early Intervention', 'Parent Training', 'Complex Cases'],
-      conditions: ['Autism', 'ADHD', 'Developmental Delay'],
-      languages: ['English', 'Mandarin'],
-      insuranceAccepted: ['Aetna', 'Blue Cross Blue Shield', 'UnitedHealthcare', 'Medicaid'],
-      sessionRate: 149,
-      statesLicensed: ['California', 'New York', 'Texas'],
-      bio: 'Clinical Director with 15+ years specializing in early intervention and family-centered ABA.',
-      approach: 'I believe parents are the experts on their children. My role is to give you the tools and confidence to help your child thrive.',
-      availability: generateAvailability(),
-      nextAvailable: 'Tomorrow 10:00 AM',
-      isBookmarked: false,
-      badges: ['Top Rated', 'Clinical Director'],
-      verificationStatus: 'verified'
-    },
-    {
-      id: 'prov-2',
-      name: 'Marcus Johnson',
-      credentials: 'BCBA',
-      type: 'bcba',
-      rating: 4.8,
-      reviewCount: 98,
-      yearsExperience: 10,
-      specialties: ['Teen Services', 'Social Skills', 'Transition Planning'],
-      conditions: ['Autism', 'ADHD', 'Anxiety'],
-      languages: ['English', 'Spanish'],
-      insuranceAccepted: ['Cigna', 'Anthem', 'Tricare', 'Self-Pay'],
-      sessionRate: 129,
-      statesLicensed: ['Texas', 'Florida', 'Arizona'],
-      bio: 'Specializing in teens and young adults, focusing on independence and life skills.',
-      approach: 'Helping young people find their voice and build the skills they need for adult life.',
-      availability: generateAvailability(),
-      nextAvailable: 'Today 3:00 PM',
-      isBookmarked: true,
-      badges: ['Teen Specialist'],
-      verificationStatus: 'verified'
-    },
-    {
-      id: 'prov-3',
-      name: 'Ashley Thompson',
-      credentials: 'RBT',
-      type: 'rbt',
-      rating: 4.9,
-      reviewCount: 87,
-      yearsExperience: 5,
-      specialties: ['Play-Based Learning', 'Daily Routines', 'Early Childhood'],
-      conditions: ['Autism', 'Developmental Delay'],
-      languages: ['English'],
-      insuranceAccepted: ['Medicaid', 'Blue Cross Blue Shield', 'Self-Pay'],
-      sessionRate: 49,
-      statesLicensed: ['California', 'Oregon'],
-      bio: 'Energetic and creative RBT who makes learning fun through play.',
-      approach: 'I meet kids where they are and build on their interests to teach new skills.',
-      availability: generateAvailability(),
-      nextAvailable: 'Tomorrow 2:00 PM',
-      isBookmarked: false,
-      badges: ['Great with Kids'],
-      verificationStatus: 'verified'
-    },
-
-    // THERAPY TEAM
-    {
-      id: 'prov-4',
-      name: 'Dr. Emily Rodriguez',
-      credentials: 'LPC, NCC',
-      type: 'lpc',
-      rating: 4.9,
-      reviewCount: 134,
-      yearsExperience: 12,
-      specialties: ['Anxiety', 'Emotional Regulation', 'Family Therapy'],
-      conditions: ['Anxiety', 'ADHD', 'Autism', 'Depression'],
-      languages: ['English', 'Spanish'],
-      insuranceAccepted: ['Aetna', 'Cigna', 'Humana', 'UnitedHealthcare'],
-      sessionRate: 129,
-      statesLicensed: ['New York', 'New Jersey', 'Pennsylvania'],
-      bio: 'Helping families navigate the emotional landscape of neurodivergence.',
-      approach: 'I create a safe space for both children and parents to process feelings and build coping skills.',
-      availability: generateAvailability(),
-      nextAvailable: 'Today 5:00 PM',
-      isBookmarked: false,
-      badges: ['Anxiety Specialist', 'Bilingual'],
-      verificationStatus: 'verified'
-    },
-    {
-      id: 'prov-5',
-      name: 'Jessica Kim',
-      credentials: 'LCSW',
-      type: 'lcsw',
-      rating: 4.8,
-      reviewCount: 112,
-      yearsExperience: 8,
-      specialties: ['System Navigation', 'IEP Advocacy', 'Parent Support'],
-      conditions: ['Autism', 'ADHD', 'Learning Disability'],
-      languages: ['English', 'Korean'],
-      insuranceAccepted: ['Blue Cross Blue Shield', 'Medicaid', 'Anthem'],
-      sessionRate: 139,
-      statesLicensed: ['California', 'Washington'],
-      bio: 'Your advocate in navigating schools, insurance, and community resources.',
-      approach: 'I help families understand their rights and get the services they deserve.',
-      availability: generateAvailability(),
-      nextAvailable: 'Thursday 11:00 AM',
-      isBookmarked: false,
-      badges: ['IEP Expert', 'Advocacy Pro'],
-      verificationStatus: 'verified'
-    },
-    {
-      id: 'prov-6',
-      name: 'Dr. Michael Chen',
-      credentials: 'CCC-SLP',
-      type: 'slp',
-      rating: 4.9,
-      reviewCount: 145,
-      yearsExperience: 14,
-      specialties: ['AAC', 'Social Communication', 'Feeding'],
-      conditions: ['Autism', 'Speech Delay', 'Developmental Delay'],
-      languages: ['English', 'Cantonese'],
-      insuranceAccepted: ['Aetna', 'Kaiser Permanente', 'Medicaid', 'Self-Pay'],
-      sessionRate: 129,
-      statesLicensed: ['California', 'New York'],
-      bio: 'Speech-language pathologist specializing in AAC and social communication.',
-      approach: 'Every child has something to say. My job is to help them find their voice.',
-      availability: generateAvailability(),
-      nextAvailable: 'Wednesday 9:00 AM',
-      isBookmarked: false,
-      badges: ['AAC Specialist'],
-      verificationStatus: 'pending'
-    },
-    {
-      id: 'prov-7',
-      name: 'Rachel Martinez',
-      credentials: 'OTR/L',
-      type: 'ot',
-      rating: 4.8,
-      reviewCount: 98,
-      yearsExperience: 9,
-      specialties: ['Sensory Processing', 'Fine Motor', 'Self-Care Skills'],
-      conditions: ['Sensory Processing', 'Autism', 'ADHD'],
-      languages: ['English', 'Spanish'],
-      insuranceAccepted: ['Cigna', 'Tricare', 'UnitedHealthcare'],
-      sessionRate: 129,
-      statesLicensed: ['Texas', 'Florida', 'Georgia'],
-      bio: 'Helping children regulate their sensory systems and master daily skills.',
-      approach: 'I use sensory strategies and play to help kids feel comfortable in their bodies.',
-      availability: generateAvailability(),
-      nextAvailable: 'Friday 10:00 AM',
-      isBookmarked: false,
-      badges: ['Sensory Expert'],
-      verificationStatus: 'verified'
-    },
-
-    // MEDICAL TEAM
-    {
-      id: 'prov-8',
-      name: 'Dr. Amanda Foster',
-      credentials: 'MD, Child Psychiatrist',
-      type: 'psychiatrist',
-      rating: 4.9,
-      reviewCount: 167,
-      yearsExperience: 18,
-      specialties: ['Medication Management', 'Complex Diagnoses', 'ADHD'],
-      conditions: ['ADHD', 'Anxiety', 'Autism', 'Depression', 'OCD'],
-      languages: ['English'],
-      insuranceAccepted: ['Aetna', 'Blue Cross Blue Shield', 'UnitedHealthcare', 'Cigna', 'Humana'],
-      sessionRate: 299,
-      statesLicensed: ['New York', 'Connecticut', 'New Jersey'],
-      bio: 'Board-certified child psychiatrist with expertise in neurodevelopmental conditions.',
-      approach: 'I take a conservative, collaborative approach to medication, always involving families in decisions.',
-      availability: generateAvailability(),
-      nextAvailable: 'Next Week',
-      isBookmarked: false,
-      badges: ['Board Certified', 'Top Rated'],
-      verificationStatus: 'verified'
-    },
-    {
-      id: 'prov-9',
-      name: 'Dr. David Park',
-      credentials: 'MD, Developmental Pediatrician',
-      type: 'pediatrician',
-      rating: 4.9,
-      reviewCount: 189,
-      yearsExperience: 20,
-      specialties: ['Diagnostic Evaluations', 'Developmental Assessments', 'Autism'],
-      conditions: ['Autism', 'ADHD', 'Developmental Delay', 'Learning Disability'],
-      languages: ['English', 'Korean'],
-      insuranceAccepted: ['Blue Cross Blue Shield', 'Medicaid', 'Kaiser Permanente', 'Anthem'],
-      sessionRate: 399,
-      statesLicensed: ['California', 'Oregon', 'Washington'],
-      bio: 'Developmental pediatrician providing comprehensive evaluations and care coordination.',
-      approach: 'I see the whole child and work with families to create a complete picture of their needs.',
-      availability: generateAvailability(),
-      nextAvailable: '2 Weeks',
-      isBookmarked: false,
-      badges: ['Diagnostic Expert', 'Highly Sought'],
-      verificationStatus: 'verified'
-    }
-  ];
 
   const generateAvailability = (): AvailabilitySlot[] => {
     const slots: AvailabilitySlot[] = [];
@@ -1400,7 +1235,7 @@ export function ProviderMarketplace({
           <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 sm:gap-6 text-sm text-gray-500">
             <span className="flex items-center gap-2">
               <Shield className="w-4 h-4 text-green-500" />
-              HIPAA Compliant
+              HIPAA-conscious
             </span>
             <span className="flex items-center gap-2">
               <Check className="w-4 h-4 text-green-500" />

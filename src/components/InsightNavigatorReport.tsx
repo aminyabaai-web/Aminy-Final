@@ -383,7 +383,7 @@ export function InsightNavigatorReport({
         <div className="flex items-center justify-between text-sm text-gray-500">
           <div className="flex items-center gap-2">
             <Shield className="w-4 h-4 text-green-500" />
-            <span>HIPAA-compliant • Encrypted • Parent-controlled</span>
+            <span>HIPAA-conscious • Encrypted • Parent-controlled</span>
           </div>
           <span>Updated: {new Date(navigator.lastUpdated).toLocaleString()}</span>
         </div>

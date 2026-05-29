@@ -289,7 +289,11 @@ export function OutcomesTracking({
           <div>
             <div className="flex items-center gap-2 flex-wrap">
               <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Progress & Outcomes</h2>
-              <AISparkleButton prompt="Analyze our progress and outcomes — what patterns do you see and what should we focus on next?" label="Analyze" />
+              <AISparkleButton
+                prompt="Analyze our progress and outcomes — what patterns do you see and what should we focus on next?"
+                label="Analyze"
+                visual
+              />
             </div>
             <p className="text-gray-600">See how far you've come together</p>
           </div>

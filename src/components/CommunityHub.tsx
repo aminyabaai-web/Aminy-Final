@@ -59,6 +59,7 @@ import { TierType } from '../lib/tier-utils';
 import { getPosts as getSupabasePosts, createPost as createSupabasePost, likePost as likeSupabasePost, unlikePost as unlikeSupabasePost, bookmarkPost as bookmarkSupabasePost, unbookmarkPost as unbookmarkSupabasePost } from '../lib/community-service';
 import { checkAndAwardBadges } from '../lib/badge-service';
 import { supabase } from '../utils/supabase/client';
+import { isDemoMode } from '../lib/demo-seed';
 
 // Types
 interface Post {
@@ -295,10 +296,13 @@ export function CommunityHub({
   onBack,
   onNavigate,
 }: CommunityHubProps) {
+  // Real accounts start empty and fill from their own Supabase data. Demo mode
+  // seeds the sample dataset so prospect/partner walkthroughs look complete.
+  const demo = isDemoMode();
   const [view, setView] = useState<CommunityView>('feed');
   const [posts, setPosts] = useState<Post[]>([]);
-  const [groups, setGroups] = useState<Group[]>(MOCK_GROUPS);
-  const [events, setEvents] = useState<Event[]>(MOCK_EVENTS);
+  const [groups, setGroups] = useState<Group[]>(demo ? MOCK_GROUPS : []);
+  const [events, setEvents] = useState<Event[]>(demo ? MOCK_EVENTS : []);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<PostCategory | 'all'>('all');
   const [showNewPost, setShowNewPost] = useState(false);
@@ -309,7 +313,7 @@ export function CommunityHub({
     isAnonymous: false,
   });
 
-  // Load posts from Supabase (fall back to MOCK_POSTS when empty)
+  // Load posts from Supabase; seed MOCK_POSTS only in demo mode when empty
   useEffect(() => {
     async function loadPosts() {
       if (!userId) return;
@@ -334,15 +338,18 @@ export function CommunityHub({
           createdAt: new Date(p.createdAt),
           isPinned: p.isPinned,
         })));
-      } else {
-        // Fall back to mock data when DB is empty
+      } else if (demo) {
+        // Demo mode only: seed sample posts so walkthroughs look complete.
         setPosts(MOCK_POSTS);
+      } else {
+        // Real accounts with no posts get an honest empty state.
+        setPosts([]);
       }
     }
     loadPosts();
-  }, [userId]);
+  }, [userId, demo]);
 
-  // Load groups from Supabase (fall back to MOCK_GROUPS when empty)
+  // Load groups from Supabase; seed MOCK_GROUPS only in demo mode when empty
   useEffect(() => {
     async function loadGroups() {
       try {
@@ -366,17 +373,19 @@ export function CommunityHub({
             recentActivity: g.recent_activity ? new Date(g.recent_activity) : new Date(),
             icon: g.icon || 'users',
           })));
+        } else if (demo) {
+          setGroups(MOCK_GROUPS);
         }
-        // If no data, MOCK_GROUPS remains as initial state
+        // Real accounts with no groups keep the empty initial state.
       } catch (err) {
-        console.warn('CommunityHub: Failed to load groups from Supabase, using mock data', err);
-        // MOCK_GROUPS remains as initial state
+        console.warn('CommunityHub: Failed to load groups from Supabase', err);
+        if (demo) setGroups(MOCK_GROUPS);
       }
     }
     loadGroups();
-  }, []);
+  }, [demo]);
 
-  // Load events from Supabase (fall back to MOCK_EVENTS when empty)
+  // Load events from Supabase; seed MOCK_EVENTS only in demo mode when empty
   useEffect(() => {
     async function loadEvents() {
       try {
@@ -400,15 +409,17 @@ export function CommunityHub({
             isVirtual: e.is_virtual ?? false,
             isAttending: e.is_attending ?? false,
           })));
+        } else if (demo) {
+          setEvents(MOCK_EVENTS);
         }
-        // If no data, MOCK_EVENTS remains as initial state
+        // Real accounts with no events keep the empty initial state.
       } catch (err) {
-        console.warn('CommunityHub: Failed to load events from Supabase, using mock data', err);
-        // MOCK_EVENTS remains as initial state
+        console.warn('CommunityHub: Failed to load events from Supabase', err);
+        if (demo) setEvents(MOCK_EVENTS);
       }
     }
     loadEvents();
-  }, []);
+  }, [demo]);
 
   // Filter posts
   const filteredPosts = useMemo(() => {
@@ -757,7 +768,14 @@ export function CommunityHub({
             <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">
               Your Groups
             </h2>
-            {groups.map((group) => (
+            {groups.length === 0 ? (
+              <Card className="p-12 text-center">
+                <Users className="w-12 h-12 text-slate-400 mx-auto mb-4" />
+                <h3 className="text-lg font-medium mb-2">No groups yet</h3>
+                <p className="text-slate-500">Parent groups will appear here as communities form. Check back soon.</p>
+              </Card>
+            ) : (
+              groups.map((group) => (
               <Card key={group.id} className="p-4">
                 <div className="flex items-start justify-between">
                   <div className="flex items-start gap-3">
@@ -793,7 +811,8 @@ export function CommunityHub({
                   </Button>
                 </div>
               </Card>
-            ))}
+              ))
+            )}
           </div>
         )}
 
@@ -803,7 +822,14 @@ export function CommunityHub({
             <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">
               Upcoming Events
             </h2>
-            {events.map((event) => (
+            {events.length === 0 ? (
+              <Card className="p-12 text-center">
+                <Calendar className="w-12 h-12 text-slate-400 mx-auto mb-4" />
+                <h3 className="text-lg font-medium mb-2">No upcoming events</h3>
+                <p className="text-slate-500">Local meetups and virtual support circles will show up here when they're scheduled.</p>
+              </Card>
+            ) : (
+              events.map((event) => (
               <Card key={event.id} className="p-4">
                 <div className="flex items-start justify-between">
                   <div>
@@ -838,7 +864,8 @@ export function CommunityHub({
                   </Button>
                 </div>
               </Card>
-            ))}
+              ))
+            )}
           </div>
         )}
 

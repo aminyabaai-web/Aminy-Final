@@ -114,24 +114,34 @@ interface AIConfig {
 }
 
 function getAIConfig(): AIConfig | null {
-  // Check OpenAI first (user preference), then Anthropic
-  const openaiKey = Deno.env.get('OPENAI_API_KEY');
-  if (openaiKey) {
-    return { provider: 'openai', apiKey: openaiKey };
-  }
-
+  // Claude (Anthropic) is the preferred provider. OpenAI is fallback only.
   const anthropicKey = Deno.env.get('ANTHROPIC_API_KEY');
   if (anthropicKey) {
     return { provider: 'anthropic', apiKey: anthropicKey };
   }
 
+  const openaiKey = Deno.env.get('OPENAI_API_KEY');
+  if (openaiKey) {
+    return { provider: 'openai', apiKey: openaiKey };
+  }
+
   return null;
+}
+
+/**
+ * Get the OpenAI fallback config explicitly. Used when Anthropic throws a
+ * billing/auth/rate-limit error (4xx) — we transparently retry the same call
+ * against OpenAI so the parent never sees "AI is down."
+ */
+function getOpenAIFallbackConfig(): AIConfig | null {
+  const openaiKey = Deno.env.get('OPENAI_API_KEY');
+  return openaiKey ? { provider: 'openai', apiKey: openaiKey } : null;
 }
 
 // Token cost tracking (approximate costs per 1K tokens as of 2025)
 const TOKEN_COSTS = {
   'gpt-4o': { input: 0.0025, output: 0.01 }, // $2.50 / $10 per 1M tokens
-  'claude-sonnet-4-20250514': { input: 0.003, output: 0.015 }, // $3 / $15 per 1M tokens
+  'claude-sonnet-4-6': { input: 0.003, output: 0.015 }, // $3 / $15 per 1M tokens
 };
 
 interface AIUsage {
@@ -234,7 +244,7 @@ async function callAI(config: AIConfig, options: {
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-sonnet-4-6',
         max_tokens: maxTokens,
         temperature,
         system: systemPrompt,
@@ -244,11 +254,11 @@ async function callAI(config: AIConfig, options: {
 
     if (!response.ok) {
       const errorText = await response.text();
-      throw new Error(`Claude API error: ${response.status}`);
+      throw new Error(`Claude API error: ${response.status} — ${errorText.slice(0, 300)}`);
     }
 
     const data = await response.json();
-    const model = 'claude-sonnet-4-20250514';
+    const model = 'claude-sonnet-4-6';
     const costs = TOKEN_COSTS[model];
     const usage: AIUsage = {
       inputTokens: data.usage?.input_tokens || 0,
@@ -485,26 +495,77 @@ app.post("/make-server-8a022548/ai/brain", async (c) => {
       return c.json({ error: 'AI service not configured. Set OPENAI_API_KEY or ANTHROPIC_API_KEY.' }, 500);
     }
 
+    // Detect vision payload: userMessage may be a string OR an Anthropic-format
+    // content array with image blocks (frontend sends this when parent attaches a photo)
+    const isVisionPayload = Array.isArray(userMessage) &&
+      userMessage.some((b: any) => b?.type === 'image');
+
+    // For OpenAI fallback, convert Anthropic image blocks to OpenAI format
+    let normalizedUserMessage = userMessage;
+    if (isVisionPayload && aiConfig.provider === 'openai') {
+      normalizedUserMessage = (userMessage as any[]).map(b => {
+        if (b.type === 'image' && b.source?.type === 'base64') {
+          return { type: 'image_url', image_url: { url: `data:${b.source.media_type};base64,${b.source.data}` } };
+        }
+        return b;
+      });
+    }
 
     // Prepare messages
     const conversationMessages = (conversationHistory || []).filter(m => m.role !== 'system');
     const messages = [
       ...conversationMessages,
-      { role: 'user', content: userMessage }
+      { role: 'user', content: normalizedUserMessage }
     ];
 
-    const result = await callAI(aiConfig, {
-      systemPrompt: systemPrompt || 'You are Aminy, a helpful AI assistant for parents.',
-      messages,
-      maxTokens: 500,
-      temperature: 0.8
-    });
+    // Try the preferred provider (Anthropic) first. If it fails with a billing,
+    // auth, or rate-limit error, transparently retry against OpenAI so the
+    // parent's chat never visibly breaks just because Claude credits ran out.
+    let result;
+    let activeProvider = aiConfig.provider;
+    try {
+      result = await callAI(aiConfig, {
+        systemPrompt: systemPrompt || 'You are Aminy, a helpful AI assistant for parents.',
+        messages,
+        maxTokens: isVisionPayload ? 1500 : 500,
+        temperature: 0.8
+      });
+    } catch (primaryError) {
+      const errMsg = primaryError instanceof Error ? primaryError.message : '';
+      const is4xx = /API error: 4\d\d/.test(errMsg);
+      const fallback = aiConfig.provider === 'anthropic' ? getOpenAIFallbackConfig() : null;
+
+      if (is4xx && fallback) {
+        // Vision payloads converted to Anthropic format need re-conversion for OpenAI
+        const fallbackUserMsg = isVisionPayload && Array.isArray(userMessage)
+          ? (userMessage as any[]).map(b => {
+              if (b.type === 'image' && b.source?.type === 'base64') {
+                return { type: 'image_url', image_url: { url: `data:${b.source.media_type};base64,${b.source.data}` } };
+              }
+              return b;
+            })
+          : userMessage;
+        const fallbackMessages = [
+          ...conversationMessages,
+          { role: 'user', content: fallbackUserMsg }
+        ];
+        result = await callAI(fallback, {
+          systemPrompt: systemPrompt || 'You are Aminy, a helpful AI assistant for parents.',
+          messages: fallbackMessages,
+          maxTokens: isVisionPayload ? 1500 : 500,
+          temperature: 0.8
+        });
+        activeProvider = fallback.provider;
+      } else {
+        throw primaryError;
+      }
+    }
 
 
     return c.json({
       message: result.text,
       usage: result.usage,
-      provider: aiConfig.provider
+      provider: activeProvider
     });
   } catch (error) {
     // SECURITY: Scrub PII from error messages before returning to client
@@ -1718,6 +1779,265 @@ app.post("/make-server-8a022548/payments/validate-promo", async (c) => {
 // Create Stripe customer portal session - REAL STRIPE INTEGRATION
 app.post("/make-server-8a022548/payments/portal", async (c) => {
   return createPortalSession(c.req.raw);
+});
+
+// ─── Ask BCBA — AI draft endpoint ───────────────────────────────────────────
+// Parent submits a question → row inserted with status='pending' → this fires
+// async to generate an AI draft response using Claude with full family context.
+// BCBA then reviews + edits + signs within 24h.
+app.post("/make-server-8a022548/ai/draft-bcba-response", async (c) => {
+  try {
+    const { threadId } = await c.req.json();
+    if (!threadId) return c.json({ error: 'threadId required' }, 400);
+
+    const { createClient } = await import('jsr:@supabase/supabase-js@2');
+    const sb = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+    );
+
+    // Load thread + child context
+    const { data: thread } = await sb
+      .from('ask_bcba_threads')
+      .select('*')
+      .eq('id', threadId)
+      .single();
+
+    if (!thread) return c.json({ error: 'Thread not found' }, 404);
+
+    // Pull related child profile for richer context
+    let childCtx = '';
+    if (thread.child_id) {
+      const { data: child } = await sb
+        .from('children')
+        .select('name, age_years, diagnosis, priorities')
+        .eq('id', thread.child_id)
+        .maybeSingle();
+      if (child) {
+        childCtx = `Child: ${child.name}, age ${child.age_years}${child.diagnosis ? `, ${child.diagnosis}` : ''}.`;
+      }
+    }
+    if (!childCtx && thread.child_name) {
+      childCtx = `Child: ${thread.child_name}.`;
+    }
+
+    const aiConfig = getAIConfig();
+    if (!aiConfig) {
+      return c.json({ error: 'AI not configured' }, 500);
+    }
+
+    const systemPrompt = `You are a BCBA (Board Certified Behavior Analyst) responding to a parent's question. Be warm, specific, and actionable.
+
+${childCtx}
+
+RESPONSE REQUIREMENTS:
+- Acknowledge the parent's experience first (1 sentence)
+- Identify the likely behavioral FUNCTION if relevant
+- Give 1 specific, evidence-based strategy with implementation steps
+- 4-6 sentences total — concise but complete
+- End with one focused follow-up question OR a clear next action
+- Never say "consult a BCBA" — you ARE the BCBA
+- This is a DRAFT — a human BCBA will review before sending to the parent
+- Sign with "— AI draft, pending BCBA review"`;
+
+    const result = await callAI(aiConfig, {
+      systemPrompt,
+      messages: [{ role: 'user', content: thread.question }],
+      maxTokens: 800,
+      temperature: 0.6,  // Lower temp for clinical responses
+    });
+
+    // Update the thread with the AI draft
+    await sb
+      .from('ask_bcba_threads')
+      .update({
+        ai_draft: result.text,
+        ai_drafted_at: new Date().toISOString(),
+        ai_model: result.usage?.model || 'claude-sonnet-4-6',
+        status: 'awaiting_bcba',  // AI drafted → now awaiting human review
+      })
+      .eq('id', threadId);
+
+    return c.json({ success: true, draft: result.text });
+  } catch (error) {
+    const msg = error instanceof Error ? error.message : 'Draft failed';
+    return c.json({ error: msg.slice(0, 200) }, 500);
+  }
+});
+
+// ─── Voice transcription (Whisper) ──────────────────────────────────────────
+// Parent records audio in BevelChatOverlay (hands-busy moments mid-meltdown,
+// driving, holding a baby, etc.). We send to OpenAI Whisper for STT and
+// return the transcript. Parent reviews + sends as normal message.
+// ─── Twilio SMS sender ──────────────────────────────────────────────────────
+// Used for appointment reminders, magic-link backup, urgent provider messages.
+// Requires Supabase secrets: TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_FROM_NUMBER.
+app.post("/make-server-8a022548/notifications/sms", async (c) => {
+  try {
+    const { phoneNumber, message } = await c.req.json();
+    if (!phoneNumber || !message) {
+      return c.json({ success: false, error: 'phoneNumber and message required' }, 400);
+    }
+
+    const sid = Deno.env.get('TWILIO_ACCOUNT_SID');
+    const token = Deno.env.get('TWILIO_AUTH_TOKEN');
+    const from = Deno.env.get('TWILIO_FROM_NUMBER');
+    if (!sid || !token || !from) {
+      return c.json({ success: false, error: 'Twilio not configured' }, 503);
+    }
+
+    // Twilio REST API — Form-encoded body, basic auth (sid:token)
+    const auth = btoa(`${sid}:${token}`);
+    const body = new URLSearchParams();
+    body.set('To', phoneNumber);
+    body.set('From', from);
+    body.set('Body', message.slice(0, 1500));  // hard cap to avoid runaway costs
+
+    const resp = await fetch(`https://api.twilio.com/2010-04-01/Accounts/${sid}/Messages.json`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Basic ${auth}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: body.toString(),
+    });
+
+    if (!resp.ok) {
+      const errText = await resp.text();
+      return c.json({ success: false, error: `Twilio: ${errText.slice(0, 200)}` }, 502);
+    }
+
+    const data = await resp.json();
+    return c.json({ success: true, messageId: data.sid });
+  } catch (error) {
+    const msg = error instanceof Error ? error.message : 'SMS failed';
+    return c.json({ success: false, error: msg.slice(0, 200) }, 500);
+  }
+});
+
+app.post("/make-server-8a022548/ai/transcribe", async (c) => {
+  try {
+    const { audioBase64, mimeType } = await c.req.json();
+    if (!audioBase64) {
+      return c.json({ error: 'audioBase64 is required' }, 400);
+    }
+
+    // Whisper needs OpenAI key — separate from the chat key (which prefers Claude).
+    // OPENAI_API_KEY may be set as a Supabase secret specifically for Whisper.
+    const openaiKey = Deno.env.get('OPENAI_API_KEY');
+    if (!openaiKey) {
+      return c.json({ error: 'Voice transcription not configured' }, 503);
+    }
+
+    // Convert base64 → binary blob for multipart upload to OpenAI
+    const binary = atob(audioBase64);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+
+    const ext = (mimeType || 'audio/webm').includes('mp4') ? 'mp4' : 'webm';
+    const blob = new Blob([bytes], { type: mimeType || 'audio/webm' });
+
+    const formData = new FormData();
+    formData.append('file', blob, `audio.${ext}`);
+    formData.append('model', 'whisper-1');
+    formData.append('response_format', 'json');
+
+    const whisperResp = await fetch('https://api.openai.com/v1/audio/transcriptions', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${openaiKey}` },
+      body: formData,
+    });
+
+    if (!whisperResp.ok) {
+      const errText = await whisperResp.text();
+      return c.json({ error: `Whisper error: ${whisperResp.status}`, detail: errText.slice(0, 200) }, 500);
+    }
+
+    const data = await whisperResp.json();
+    return c.json({ text: data.text || '' });
+  } catch (error) {
+    const msg = error instanceof Error ? error.message : 'Transcription failed';
+    return c.json({ error: msg.slice(0, 200) }, 500);
+  }
+});
+
+// ─── B2B Org Subscription Checkout ──────────────────────────────────────────
+// Per-seat billing for AACT pilots, clinics, schools, agencies, enterprise.
+// Default $99/seat/mo, 10% off annual.
+app.post("/make-server-8a022548/org/checkout", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    if (!accessToken) return c.json({ error: 'Unauthorized' }, 401);
+
+    const { createClient } = await import('jsr:@supabase/supabase-js@2');
+    const sb = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+    );
+
+    const { data: { user } } = await sb.auth.getUser(accessToken);
+    if (!user?.id) return c.json({ error: 'Unauthorized' }, 401);
+
+    const { orgId, interval, successUrl, cancelUrl } = await c.req.json();
+    if (!orgId || !interval) return c.json({ error: 'Missing orgId or interval' }, 400);
+
+    // Verify caller is the org owner (security gate)
+    const { data: org } = await sb
+      .from('organizations')
+      .select('id, name, seat_count, price_per_seat_cents, owner_id, stripe_customer_id')
+      .eq('id', orgId)
+      .single();
+
+    if (!org || org.owner_id !== user.id) {
+      return c.json({ error: 'Not the org owner' }, 403);
+    }
+
+    const stripeKey = Deno.env.get('STRIPE_SECRET_KEY');
+    if (!stripeKey) return c.json({ error: 'Stripe not configured' }, 500);
+
+    // Calculate amount: seats × price/seat × (12 if annual with 10% off, 1 if monthly)
+    const seatPriceCents = org.price_per_seat_cents || 9900;
+    const seats = org.seat_count;
+    const unitAmount = interval === 'year'
+      ? Math.round(seatPriceCents * 12 * 0.9)  // 10% annual discount
+      : seatPriceCents;
+
+    // Build Stripe checkout URL — using `price_data` for dynamic per-seat pricing
+    const params = new URLSearchParams();
+    params.set('mode', 'subscription');
+    params.set('success_url', successUrl);
+    params.set('cancel_url', cancelUrl);
+    params.set('client_reference_id', orgId);
+    params.set('line_items[0][price_data][currency]', 'usd');
+    params.set('line_items[0][price_data][product_data][name]', `Aminy for Organizations — ${org.name}`);
+    params.set('line_items[0][price_data][product_data][description]', `${seats} seats — ${interval === 'year' ? 'Annual (10% off)' : 'Monthly'}`);
+    params.set('line_items[0][price_data][unit_amount]', String(unitAmount));
+    params.set('line_items[0][price_data][recurring][interval]', interval === 'year' ? 'year' : 'month');
+    params.set('line_items[0][quantity]', String(seats));
+    params.set('customer_email', user.email || '');
+    params.set('subscription_data[metadata][org_id]', orgId);
+    params.set('subscription_data[metadata][owner_id]', user.id);
+
+    const stripeResp = await fetch('https://api.stripe.com/v1/checkout/sessions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${stripeKey}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: params.toString(),
+    });
+
+    if (!stripeResp.ok) {
+      const errText = await stripeResp.text();
+      return c.json({ error: `Stripe error: ${errText.slice(0, 200)}` }, 500);
+    }
+
+    const session = await stripeResp.json();
+    return c.json({ url: session.url, sessionId: session.id });
+  } catch (error) {
+    const msg = error instanceof Error ? error.message : 'Org checkout failed';
+    return c.json({ error: msg.slice(0, 200) }, 500);
+  }
 });
 
 // Alternate endpoint for frontend compatibility

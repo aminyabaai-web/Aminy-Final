@@ -33,6 +33,8 @@ import {
   DEMO_CLINICAL_GOALS,
   generateParentSummary,
 } from '../../lib/treatment-plan-translator';
+import { isDemoMode } from '../../lib/demo-seed';
+import { FileText } from 'lucide-react';
 
 interface TreatmentPlanSummaryProps {
   onBack?: () => void;
@@ -224,26 +226,60 @@ function GoalCard({ goal }: { goal: ParentFriendlyGoal }) {
 }
 
 export function TreatmentPlanSummary({ onBack, childName = 'Your Child' }: TreatmentPlanSummaryProps) {
-  // Generate demo plan
-  const plan: TreatmentPlanSummaryData = generateParentSummary(
-    DEMO_CLINICAL_GOALS,
-    'monthly',
-    childName,
-    'Great month of progress! Tommy is showing real momentum on communication goals — he\'s been spontaneously requesting more often during sessions. Keep practicing at home with the "pause and wait" strategy. We\'re adjusting the social skills goal to include more peer interactions.',
-    '2026-04-08',
-    [
-      {
-        date: '2026-04-01',
-        provider: 'Dr. Sarah Chen',
-        note: 'Updated communication goal — increasing target from 3 to 5 mands per session based on recent progress.',
-      },
-      {
-        date: '2026-03-28',
-        provider: 'Katie Wilson',
-        note: 'Added peer play component to social skills goal following IEP meeting.',
-      },
-    ]
-  );
+  // The rich clinical plan (goals, provider notes, named clinicians) is sample
+  // data shown ONLY in demo mode (investor / AACT walk-throughs). A real parent
+  // must never see an invented treatment plan or provider name. Until this screen
+  // is wired to a real plan source, real users get a friendly empty state.
+  const plan: TreatmentPlanSummaryData | null = isDemoMode()
+    ? generateParentSummary(
+        DEMO_CLINICAL_GOALS,
+        'monthly',
+        childName,
+        'Great month of progress! Tommy is showing real momentum on communication goals — he\'s been spontaneously requesting more often during sessions. Keep practicing at home with the "pause and wait" strategy. We\'re adjusting the social skills goal to include more peer interactions.',
+        '2026-04-08',
+        [
+          {
+            date: '2026-04-01',
+            provider: 'Dr. Sarah Chen',
+            note: 'Updated communication goal — increasing target from 3 to 5 mands per session based on recent progress.',
+          },
+          {
+            date: '2026-03-28',
+            provider: 'Katie Wilson',
+            note: 'Added peer play component to social skills goal following IEP meeting.',
+          },
+        ]
+      )
+    : null;
+
+  if (!plan) {
+    return (
+      <div className="min-h-screen bg-slate-50" style={{ overflowX: 'hidden', overflowY: 'auto' }}>
+        <div className="sticky top-0 z-10 bg-white/90 backdrop-blur-md border-b border-slate-100">
+          <div className="max-w-lg mx-auto px-4 py-3 flex items-center gap-3">
+            {onBack && (
+              <button onClick={onBack} className="p-1.5 rounded-lg hover:bg-slate-100 transition-colors">
+                <ArrowLeft className="w-5 h-5 text-slate-600" />
+              </button>
+            )}
+            <div>
+              <h1 className="text-base font-semibold text-slate-900">{childName}&apos;s Plan</h1>
+              <p className="text-xs text-slate-400">Treatment plan summary</p>
+            </div>
+          </div>
+        </div>
+        <div className="max-w-lg mx-auto px-4 py-16 flex flex-col items-center text-center">
+          <div className="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center mb-4">
+            <FileText className="w-7 h-7 text-slate-400" />
+          </div>
+          <h2 className="text-base font-semibold text-slate-700 mb-1">No treatment plan yet</h2>
+          <p className="text-sm text-slate-500 leading-relaxed max-w-xs">
+            When your provider publishes a plan, you&apos;ll see {childName}&apos;s goals and progress here in plain English.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-50" style={{ overflowX: 'hidden', overflowY: 'auto' }}>

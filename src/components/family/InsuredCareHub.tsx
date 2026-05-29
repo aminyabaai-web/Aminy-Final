@@ -37,6 +37,7 @@ import {
   type BenefitsVerification,
   type EOBRecord,
 } from '../../lib/insured-care-lane';
+import { isDemoMode } from '../../lib/demo-seed';
 
 // ============================================================================
 // Props
@@ -372,16 +373,25 @@ function Check({ className }: { className?: string }) {
 }
 
 export function InsuredCareHub({ memberId = 'BCBS123456', planId = 'BCBS-AZ', childName = 'Alex', onBack, onGetHelp }: InsuredCareHubProps) {
+  const demo = isDemoMode();
   const [benefits, setBenefits] = useState<BenefitsVerification | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(demo);
   const [activeTab, setActiveTab] = useState<'coverage' | 'auth' | 'sessions' | 'eob'>('coverage');
 
   useEffect(() => {
+    // verifyBenefits returns sample/mock data — it is NOT a real eligibility check.
+    // Only populate it in demo mode (investor / AACT walk-throughs). A real family
+    // must never see invented coverage, copays, auth numbers, or claim payments.
+    if (!demo) {
+      setBenefits(null);
+      setLoading(false);
+      return;
+    }
     verifyBenefits(memberId, planId).then((b) => {
       setBenefits(b);
       setLoading(false);
     });
-  }, [memberId, planId]);
+  }, [memberId, planId, demo]);
 
   const TABS = [
     { id: 'coverage' as const, label: 'Coverage', icon: Shield },
@@ -411,7 +421,10 @@ export function InsuredCareHub({ memberId = 'BCBS123456', planId = 'BCBS-AZ', ch
           )}
         </div>
 
-        {/* Tab bar */}
+        {/* Tab bar — only when there is coverage data to back the tabs.
+            The auth/sessions/payments tabs render sample data, so they are
+            hidden for real users until real benefits are on file. */}
+        {benefits && (
         <div className="flex border-t border-slate-100 overflow-x-auto">
           {TABS.map((tab) => {
             const Icon = tab.icon;
@@ -431,6 +444,7 @@ export function InsuredCareHub({ memberId = 'BCBS123456', planId = 'BCBS-AZ', ch
             );
           })}
         </div>
+        )}
       </div>
 
       <div className="p-4 space-y-4 max-w-lg mx-auto pb-8">
@@ -438,6 +452,16 @@ export function InsuredCareHub({ memberId = 'BCBS123456', planId = 'BCBS-AZ', ch
           <div className="flex flex-col items-center justify-center py-20 gap-4">
             <Loader2 className="w-8 h-8 text-teal-500 animate-spin" />
             <p className="text-sm text-slate-500">Checking your benefits with {planId.replace('-', ' ')}...</p>
+          </div>
+        ) : !benefits ? (
+          <div className="flex flex-col items-center text-center py-20">
+            <div className="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center mb-4">
+              <Shield className="w-7 h-7 text-slate-400" />
+            </div>
+            <h2 className="text-base font-semibold text-slate-700 mb-1">No coverage on file yet</h2>
+            <p className="text-sm text-slate-500 leading-relaxed max-w-xs">
+              Once we verify {childName}&apos;s insurance, your coverage, prior authorizations, and claim payments will appear here in plain English.
+            </p>
           </div>
         ) : (
           <AnimatePresence mode="wait">

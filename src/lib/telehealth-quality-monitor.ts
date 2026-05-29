@@ -130,7 +130,7 @@ export class ConnectionQualityMonitor {
     // Start polling
     this.pollTimer = setInterval(() => this.pollStats(), POLL_INTERVAL_MS);
 
-    console.log('[QualityMonitor] Started monitoring connection');
+    if (import.meta.env.DEV) console.log('[QualityMonitor] Started monitoring connection');
   }
 
   /**
@@ -144,7 +144,7 @@ export class ConnectionQualityMonitor {
     this.isMonitoring = false;
     this.peerConnection = null;
     this.scoreHistory = [];
-    console.log('[QualityMonitor] Stopped monitoring');
+    if (import.meta.env.DEV) console.log('[QualityMonitor] Stopped monitoring');
   }
 
   /**
@@ -428,7 +428,7 @@ export class ReconnectionManager {
    * @param reason - Why the disconnect occurred
    */
   handleDisconnect(reason: DisconnectReason): void {
-    console.log(`[Reconnection] Disconnect detected: ${reason}`);
+    if (import.meta.env.DEV) console.log(`[Reconnection] Disconnect detected: ${reason}`);
 
     // Don't reconnect if the peer intentionally left
     if (reason === 'peer_left') {
@@ -467,14 +467,14 @@ export class ReconnectionManager {
       this.attempt++;
       this.notifyListeners();
 
-      console.log(
+      if (import.meta.env.DEV) console.log(
         `[Reconnection] Attempt ${this.attempt}/${this.maxRetries}`,
       );
 
       try {
         const success = await this.reconnectFn();
         if (success) {
-          console.log('[Reconnection] Reconnected successfully');
+          if (import.meta.env.DEV) console.log('[Reconnection] Reconnected successfully');
           this.setState('connected');
           this.attempt = 0;
           return true;
@@ -490,7 +490,7 @@ export class ReconnectionManager {
             Math.random() * 1000,
           MAX_DELAY_MS,
         );
-        console.log(`[Reconnection] Waiting ${Math.round(delay)}ms before next attempt`);
+        if (import.meta.env.DEV) console.log(`[Reconnection] Waiting ${Math.round(delay)}ms before next attempt`);
         await new Promise((resolve) => setTimeout(resolve, delay));
       }
     }

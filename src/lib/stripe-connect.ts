@@ -24,11 +24,20 @@ export interface ConnectAccountStatus {
   status: 'not_connected' | 'pending' | 'active' | 'restricted';
 }
 
+/**
+ * Care rail determines platform take rate.
+ * - cash_pay: 35% to Aminy (covers marketplace, AI, compliance, support, processing)
+ * - insured/partner: 10% (lighter touch — payer does the heavy lifting)
+ * - aact_pilot: 5% (partner discount for AACT-affiliated providers)
+ */
+export type PayoutRail = 'cash_pay' | 'insured' | 'aact_pilot';
+
 export interface SessionPayoutParams {
   sessionId: string;
   providerId: string;
   stripeConnectAccountId: string;
   sessionAmountCents: number; // Total collected from family (in cents)
+  rail: PayoutRail;            // Determines take rate
   sessionDescription?: string;
 }
 
@@ -61,7 +70,21 @@ export interface OnboardingLinkResult {
 // Constants
 // ============================================================================
 
-const PLATFORM_FEE_RATE = 0.10; // 10% platform fee
+/**
+ * Take-rate by rail. Single source of truth — change here, propagates everywhere.
+ * Cash-pay 35% matches the implicit rate baked into CASH_PAY_VISITS.providerPayoutCents
+ * in src/lib/telehealth-economics.ts.
+ */
+export const PLATFORM_FEE_RATES: Record<PayoutRail, number> = {
+  cash_pay: 0.35,
+  insured: 0.10,
+  aact_pilot: 0.05,
+};
+
+export function getPlatformFeeRate(rail: PayoutRail): number {
+  return PLATFORM_FEE_RATES[rail];
+}
+
 const EDGE_FN_BASE = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1`;
 
 // ============================================================================
@@ -186,10 +209,11 @@ export async function createSessionPayout(
     providerId,
     stripeConnectAccountId,
     sessionAmountCents,
+    rail,
     sessionDescription,
   } = params;
 
-  const platformFeeCents = Math.round(sessionAmountCents * PLATFORM_FEE_RATE);
+  const platformFeeCents = Math.round(sessionAmountCents * getPlatformFeeRate(rail));
   const providerAmountCents = sessionAmountCents - platformFeeCents;
 
   const token = await getSessionToken();
@@ -307,11 +331,11 @@ export function formatCents(cents: number, currency = 'USD'): string {
   }).format(cents / 100);
 }
 
-/** Returns provider net amount given total (applies 10% platform fee) */
-export function calculateProviderAmount(totalCents: number): {
+/** Returns provider net amount given total + rail (cash 35%, insured 10%, aact 5%) */
+export function calculateProviderAmount(totalCents: number, rail: PayoutRail = 'cash_pay'): {
   providerCents: number;
   platformFeeCents: number;
 } {
-  const platformFeeCents = Math.round(totalCents * PLATFORM_FEE_RATE);
+  const platformFeeCents = Math.round(totalCents * getPlatformFeeRate(rail));
   return { providerCents: totalCents - platformFeeCents, platformFeeCents };
 }

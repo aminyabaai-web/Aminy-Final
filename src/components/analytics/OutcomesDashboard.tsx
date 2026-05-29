@@ -1,18 +1,23 @@
 /**
- * OutcomesDashboard — VC-ready outcomes & metrics dashboard
- * Shows platform-wide (or per-provider) clinical outcomes
+ * OutcomesDashboard — outcomes & metrics dashboard
+ * Shows platform-wide (or per-provider) clinical outcomes.
  *
- * Loads real data from Supabase: treatment_goals, jr_sessions, provider_sessions
- * Falls back to realistic mock data when tables are empty
+ * Loads real data from Supabase: treatment_goals, jr_sessions.
+ * Real users only ever see metrics derived from their own data — sections with
+ * no data render honest empty states. The seeded sample dataset is shown ONLY in
+ * demo mode (?demo=…), so prospects/execs get an impressive walkthrough without
+ * ever presenting fabricated numbers to a real account.
  */
 
 import React, { useState, useEffect, useRef } from 'react';
 import {
   TrendingUp, TrendingDown, Minus,
   Users, Calendar, Target, Clock,
-  ArrowLeft, RefreshCw,
+  RefreshCw, BarChart3,
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase-compat';
+import { isDemoMode } from '../../lib/demo-seed';
+import { ScreenHeader } from '../ui/ScreenHeader';
 
 // ============================================================================
 // Types
@@ -292,12 +297,26 @@ function TrendArrow({ trend }: { trend: 'up' | 'down' | 'flat' }) {
 // Main Component
 // ============================================================================
 
+const EMPTY_KPI: KPIData = { activeClients: 0, sessionsThisMonth: 0, goalsAtMastery: 0, avgWeeksToFirstMastery: 0 };
+
+function EmptyPanel({ message }: { message: string }) {
+  return (
+    <div className="flex flex-col items-center justify-center py-8 text-center">
+      <BarChart3 className="w-7 h-7 text-slate-300 mb-2" aria-hidden="true" />
+      <p className="text-xs text-slate-400 max-w-[16rem]">{message}</p>
+    </div>
+  );
+}
+
 export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps) {
-  const [kpi, setKpi]           = useState<KPIData>(MOCK_KPI);
-  const [weekly, setWeekly]     = useState<WeeklyPoint[]>(MOCK_WEEKLY);
-  const [frequency, setFreq]    = useState<FrequencyBucket[]>(MOCK_FREQUENCY);
-  const [programs, setPrograms] = useState<ProgramRow[]>(MOCK_PROGRAMS);
-  const [providers, setProviders] = useState<ProviderRow[]>(MOCK_PROVIDERS);
+  const demo = isDemoMode();
+  // Real accounts start empty and fill from their own Supabase data. Demo mode
+  // seeds the sample dataset so prospect walkthroughs look complete.
+  const [kpi, setKpi]           = useState<KPIData>(demo ? MOCK_KPI : EMPTY_KPI);
+  const [weekly, setWeekly]     = useState<WeeklyPoint[]>(demo ? MOCK_WEEKLY : []);
+  const [frequency, setFreq]    = useState<FrequencyBucket[]>(demo ? MOCK_FREQUENCY : []);
+  const [programs, setPrograms] = useState<ProgramRow[]>(demo ? MOCK_PROGRAMS : []);
+  const [providers, setProviders] = useState<ProviderRow[]>(demo ? MOCK_PROVIDERS : []);
   const [loading, setLoading]   = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
   const mountedRef = useRef(true);
@@ -310,9 +329,13 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
   }, [providerId]);
 
   async function fetchData() {
+    // Demo mode shows the seeded sample dataset already in state — never hit the DB.
+    if (demo) {
+      setLastUpdated(new Date());
+      return;
+    }
     setLoading(true);
     try {
-      // Try to load from Supabase — fall back to mock if tables are empty or error
       const [goalsRes, sessionsRes] = await Promise.allSettled([
         supabase
           .from('treatment_goals')
@@ -332,23 +355,51 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
         ? sessionsRes.value.data ?? []
         : [];
 
-      if (mountedRef.current) {
-        if (goalsData.length > 0 || sessionsData.length > 0) {
-          // Build real KPI from data
-          const masteredGoals = goalsData.filter((g: { status: string }) => g.status === 'mastered');
-          const masteryRate = goalsData.length > 0 ? Math.round((masteredGoals.length / goalsData.length) * 100) : MOCK_KPI.goalsAtMastery;
-          setKpi({
-            activeClients: MOCK_KPI.activeClients,
-            sessionsThisMonth: sessionsData.length > 0 ? sessionsData.length : MOCK_KPI.sessionsThisMonth,
-            goalsAtMastery: masteryRate,
-            avgWeeksToFirstMastery: MOCK_KPI.avgWeeksToFirstMastery,
-          });
-        }
-        // Always keep mock data for charts when real data is sparse
-        setLastUpdated(new Date());
-      }
+      if (!mountedRef.current) return;
+
+      // ── KPI tiles — derived only from this account's data (no fabricated fills) ──
+      const masteredGoals = goalsData.filter((g: { status: string }) => g.status === 'mastered');
+      const goalsAtMastery = goalsData.length > 0
+        ? Math.round((masteredGoals.length / goalsData.length) * 100)
+        : 0;
+      setKpi({
+        activeClients: 0,            // not derivable from current query — shown as 0 until wired
+        sessionsThisMonth: sessionsData.length,
+        goalsAtMastery,
+        avgWeeksToFirstMastery: 0,   // not derivable from current query
+      });
+
+      // ── Top Programs — grouped from real treatment_goals ──
+      const progMap = new Map<string, { trials: number; masterySum: number; n: number }>();
+      goalsData.forEach((g: { program_name?: string; total_trials?: number; mastery_pct?: number }) => {
+        const name = g.program_name || 'Unnamed program';
+        const e = progMap.get(name) ?? { trials: 0, masterySum: 0, n: 0 };
+        e.trials += g.total_trials || 0;
+        e.masterySum += g.mastery_pct || 0;
+        e.n += 1;
+        progMap.set(name, e);
+      });
+      const realPrograms: ProgramRow[] = [...progMap.entries()]
+        .map(([name, e]) => ({
+          name,
+          totalTrials: e.trials,
+          masteryPct: Math.round(e.masterySum / Math.max(e.n, 1)),
+          trend: 'flat' as const,
+        }))
+        .sort((a, b) => b.masteryPct - a.masteryPct)
+        .slice(0, 10);
+      setPrograms(realPrograms);
+
+      // Weekly trend, session-frequency distribution, and per-provider names are
+      // not reliably derivable from the current queries — leave empty so those
+      // sections show honest empty states rather than fabricated curves.
+      setWeekly([]);
+      setFreq([]);
+      setProviders([]);
+
+      setLastUpdated(new Date());
     } catch (e) {
-      console.warn('OutcomesDashboard: Supabase fetch failed, using mock data', e);
+      console.warn('OutcomesDashboard: Supabase fetch failed', e);
     } finally {
       if (mountedRef.current) setLoading(false);
     }
@@ -357,26 +408,22 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
   return (
     <div className="min-h-screen bg-[#F8F8F6]">
       {/* Header */}
-      <div className="bg-white border-b border-slate-100 px-4 py-4 flex items-center justify-between sticky top-0 z-10">
-        <button
-          onClick={onBack}
-          className="flex items-center gap-1 text-slate-500 hover:text-slate-700 text-sm font-medium transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back
-        </button>
-        <h1 className="text-sm font-bold text-slate-800">
-          {providerId ? 'Provider Outcomes' : 'Platform Outcomes'}
-        </h1>
-        <button
-          onClick={fetchData}
-          disabled={loading}
-          className="flex items-center gap-1 text-slate-400 hover:text-slate-600 text-xs transition-colors"
-        >
-          <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
-          Refresh
-        </button>
-      </div>
+      <ScreenHeader
+        title={providerId ? 'Provider Outcomes' : 'Platform Outcomes'}
+        onBack={onBack}
+        variant="flat"
+        sticky
+        actions={
+          <button
+            onClick={fetchData}
+            disabled={loading}
+            className="flex items-center gap-1 text-slate-400 hover:text-slate-600 text-xs transition-colors"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
+            Refresh
+          </button>
+        }
+      />
 
       <div className="px-4 py-5 max-w-2xl mx-auto space-y-6">
 
@@ -425,29 +472,45 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
               <h2 className="text-sm font-bold text-slate-800">Goal Mastery Trend</h2>
               <p className="text-xs text-slate-400 mt-0.5">% goals at mastery over 12 weeks</p>
             </div>
-            <span className="flex items-center gap-1 text-xs font-semibold text-emerald-600 bg-emerald-50 border border-emerald-200 rounded-full px-2.5 py-1">
-              <TrendingUp className="w-3 h-3" />
-              +50pp
-            </span>
+            {weekly.length > 1 && (
+              <span className="flex items-center gap-1 text-xs font-semibold text-emerald-600 bg-emerald-50 border border-emerald-200 rounded-full px-2.5 py-1">
+                <TrendingUp className="w-3 h-3" />
+                +{Math.max(0, weekly[weekly.length - 1].masteryPct - weekly[0].masteryPct)}pp
+              </span>
+            )}
           </div>
-          <LineChart points={weekly} />
+          {weekly.length > 0
+            ? <LineChart points={weekly} />
+            : <EmptyPanel message="Goal mastery trend appears once a few weeks of sessions and goal data are logged." />}
         </section>
 
         {/* ── Section 3: Session Frequency ─────────────────── */}
         <section className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
           <div className="mb-4">
             <h2 className="text-sm font-bold text-slate-800">Session Frequency Distribution</h2>
-            <p className="text-xs text-slate-400 mt-0.5">Sessions per week across {kpi.activeClients} active clients</p>
+            <p className="text-xs text-slate-400 mt-0.5">
+              {frequency.length > 0 && kpi.activeClients > 0
+                ? `Sessions per week across ${kpi.activeClients} active clients`
+                : 'Sessions per week across active clients'}
+            </p>
           </div>
-          <BarChart buckets={frequency} />
-          <div className="flex justify-around mt-3">
-            {frequency.map(b => (
-              <div key={b.label} className="text-center">
-                <p className="text-xs font-medium text-slate-600">{b.label}</p>
-                <p className="text-xs text-slate-400">{Math.round((b.count / kpi.activeClients) * 100)}%</p>
+          {frequency.length > 0 ? (
+            <>
+              <BarChart buckets={frequency} />
+              <div className="flex justify-around mt-3">
+                {frequency.map(b => (
+                  <div key={b.label} className="text-center">
+                    <p className="text-xs font-medium text-slate-600">{b.label}</p>
+                    <p className="text-xs text-slate-400">
+                      {kpi.activeClients > 0 ? `${Math.round((b.count / kpi.activeClients) * 100)}%` : '—'}
+                    </p>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </>
+          ) : (
+            <EmptyPanel message="Session frequency fills in as visits are completed and logged." />
+          )}
         </section>
 
         {/* ── Section 4: Top Programs ───────────────────────── */}
@@ -456,34 +519,38 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
             <h2 className="text-sm font-bold text-slate-800">Top Programs by Mastery Rate</h2>
             <p className="text-xs text-slate-400 mt-0.5">Across all active treatment plans</p>
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="bg-slate-50">
-                  <th className="text-left px-5 py-2.5 text-xs font-semibold text-slate-500 uppercase tracking-wide">Program</th>
-                  <th className="text-right px-4 py-2.5 text-xs font-semibold text-slate-500 uppercase tracking-wide">Trials</th>
-                  <th className="text-right px-4 py-2.5 text-xs font-semibold text-slate-500 uppercase tracking-wide">Mastery</th>
-                  <th className="px-4 py-2.5 text-xs font-semibold text-slate-500 uppercase tracking-wide">Trend</th>
-                </tr>
-              </thead>
-              <tbody>
-                {programs.map((row, i) => (
-                  <tr key={row.name} className={i % 2 === 0 ? '' : 'bg-slate-50/50'}>
-                    <td className="px-5 py-3 font-medium text-slate-700">{row.name}</td>
-                    <td className="px-4 py-3 text-right text-slate-500">{row.totalTrials.toLocaleString()}</td>
-                    <td className="px-4 py-3 text-right">
-                      <span className={`font-bold ${row.masteryPct >= 70 ? 'text-emerald-600' : row.masteryPct >= 50 ? 'text-amber-600' : 'text-red-500'}`}>
-                        {row.masteryPct}%
-                      </span>
-                    </td>
-                    <td className="px-4 py-3">
-                      <TrendArrow trend={row.trend} />
-                    </td>
+          {programs.length > 0 ? (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="bg-slate-50">
+                    <th className="text-left px-5 py-2.5 text-xs font-semibold text-slate-500 uppercase tracking-wide">Program</th>
+                    <th className="text-right px-4 py-2.5 text-xs font-semibold text-slate-500 uppercase tracking-wide">Trials</th>
+                    <th className="text-right px-4 py-2.5 text-xs font-semibold text-slate-500 uppercase tracking-wide">Mastery</th>
+                    <th className="px-4 py-2.5 text-xs font-semibold text-slate-500 uppercase tracking-wide">Trend</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {programs.map((row, i) => (
+                    <tr key={row.name} className={i % 2 === 0 ? '' : 'bg-slate-50/50'}>
+                      <td className="px-5 py-3 font-medium text-slate-700">{row.name}</td>
+                      <td className="px-4 py-3 text-right text-slate-500">{row.totalTrials.toLocaleString()}</td>
+                      <td className="px-4 py-3 text-right">
+                        <span className={`font-bold ${row.masteryPct >= 70 ? 'text-emerald-600' : row.masteryPct >= 50 ? 'text-amber-600' : 'text-red-500'}`}>
+                          {row.masteryPct}%
+                        </span>
+                      </td>
+                      <td className="px-4 py-3">
+                        <TrendArrow trend={row.trend} />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <EmptyPanel message="Program mastery rates appear once treatment goals and trial data are recorded." />
+          )}
         </section>
 
         {/* ── Section 5: Provider Performance ─────────────── */}
@@ -493,42 +560,48 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
               <h2 className="text-sm font-bold text-slate-800">Provider Performance</h2>
               <p className="text-xs text-slate-400 mt-0.5">Outcomes score based on mastery rates and session consistency</p>
             </div>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="bg-slate-50">
-                    <th className="text-left px-5 py-2.5 text-xs font-semibold text-slate-500 uppercase tracking-wide">Provider</th>
-                    <th className="text-right px-4 py-2.5 text-xs font-semibold text-slate-500 uppercase tracking-wide">Clients</th>
-                    <th className="text-right px-4 py-2.5 text-xs font-semibold text-slate-500 uppercase tracking-wide">Avg Sess/Wk</th>
-                    <th className="text-right px-4 py-2.5 text-xs font-semibold text-slate-500 uppercase tracking-wide">Score</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {providers.map((row, i) => (
-                    <tr key={row.name} className={i % 2 === 0 ? '' : 'bg-slate-50/50'}>
-                      <td className="px-5 py-3">
-                        <p className="font-medium text-slate-700">{row.name}</p>
-                      </td>
-                      <td className="px-4 py-3 text-right text-slate-500">{row.clients}</td>
-                      <td className="px-4 py-3 text-right text-slate-500">{row.avgSessionsPerWeek.toFixed(1)}</td>
-                      <td className="px-4 py-3 text-right">
-                        <span className={`font-bold ${row.outcomesScore >= 9 ? 'text-emerald-600' : 'text-amber-600'}`}>
-                          {row.outcomesScore.toFixed(1)}
-                        </span>
-                        <span className="text-xs text-slate-400">/10</span>
-                      </td>
+            {providers.length > 0 ? (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="bg-slate-50">
+                      <th className="text-left px-5 py-2.5 text-xs font-semibold text-slate-500 uppercase tracking-wide">Provider</th>
+                      <th className="text-right px-4 py-2.5 text-xs font-semibold text-slate-500 uppercase tracking-wide">Clients</th>
+                      <th className="text-right px-4 py-2.5 text-xs font-semibold text-slate-500 uppercase tracking-wide">Avg Sess/Wk</th>
+                      <th className="text-right px-4 py-2.5 text-xs font-semibold text-slate-500 uppercase tracking-wide">Score</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody>
+                    {providers.map((row, i) => (
+                      <tr key={row.name} className={i % 2 === 0 ? '' : 'bg-slate-50/50'}>
+                        <td className="px-5 py-3">
+                          <p className="font-medium text-slate-700">{row.name}</p>
+                        </td>
+                        <td className="px-4 py-3 text-right text-slate-500">{row.clients}</td>
+                        <td className="px-4 py-3 text-right text-slate-500">{row.avgSessionsPerWeek.toFixed(1)}</td>
+                        <td className="px-4 py-3 text-right">
+                          <span className={`font-bold ${row.outcomesScore >= 9 ? 'text-emerald-600' : 'text-amber-600'}`}>
+                            {row.outcomesScore.toFixed(1)}
+                          </span>
+                          <span className="text-xs text-slate-400">/10</span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <EmptyPanel message="Provider performance ranks appear as your team logs sessions and outcomes." />
+            )}
           </section>
         )}
 
         {/* Footer */}
         <div className="text-center pb-6">
           <p className="text-xs text-slate-400">
-            Data reflects {kpi.activeClients} active clients · {kpi.sessionsThisMonth} sessions this month
+            {kpi.sessionsThisMonth > 0
+              ? `Data reflects ${kpi.sessionsThisMonth} sessions in the last 30 days`
+              : 'Outcomes update automatically as sessions and goals are logged'}
           </p>
         </div>
       </div>

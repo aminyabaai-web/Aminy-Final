@@ -214,7 +214,7 @@ export function usePWAInstall(): UsePWAInstallReturn {
       markInstalled();
       deferredPromptRef.current = null;
 
-      console.log('[usePWAInstall] App installed successfully');
+      if (import.meta.env.DEV) console.log('[usePWAInstall] App installed successfully');
     }
 
     window.addEventListener('appinstalled', handleAppInstalled);
@@ -288,13 +288,13 @@ export function usePWAInstall(): UsePWAInstallReturn {
         setShowBanner(false);
         markInstalled();
         deferredPromptRef.current = null;
-        console.log('[usePWAInstall] User accepted install prompt');
+        if (import.meta.env.DEV) console.log('[usePWAInstall] User accepted install prompt');
       } else {
         // User dismissed — don't show banner again this session
         sessionDismissedRef.current = true;
         setShowBanner(false);
         markDismissed();
-        console.log('[usePWAInstall] User dismissed install prompt');
+        if (import.meta.env.DEV) console.log('[usePWAInstall] User dismissed install prompt');
       }
 
       return outcome;

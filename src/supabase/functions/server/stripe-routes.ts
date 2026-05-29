@@ -980,7 +980,6 @@ export async function handleWebhook(req: Request): Promise<Response> {
             const tier = getTierFromPriceId(priceId);
             if (tier) {
               await updateUserTier(userId, tier);
-              console.log(`Updated user ${userId} to tier ${tier}`);
 
               // AUDIT: Log payment success and subscription creation
               await logPaymentSucceededServer(
@@ -1032,8 +1031,6 @@ export async function handleWebhook(req: Request): Promise<Response> {
               .eq('id', session.metadata.booking_id);
             if (bookingError) {
               console.error('Failed to mark booking paid:', bookingError);
-            } else {
-              console.log(`Marked booking ${session.metadata.booking_id} as paid`);
             }
           } catch (err) {
             console.error('Booking payment update error:', err);
@@ -1101,7 +1098,6 @@ export async function handleWebhook(req: Request): Promise<Response> {
 
           if (customerData?.user_id) {
             await updateUserTier(customerData.user_id, 'free');
-            console.log(`Downgraded user ${customerData.user_id} to free tier`);
           }
         } catch (err) {
           console.error('Failed to downgrade user tier:', err);

@@ -234,7 +234,7 @@ export function ALaCarteMenu({ onBookSession, userTier = 'free', isProUser = fal
       <div className="text-xs text-gray-400 text-center space-y-2 pt-2">
         <p>
           Cash-pay sessions are parent coaching and wellness support, not medical treatment or therapy.
-          Sessions are conducted by independently licensed providers via HIPAA-compliant secure video.
+          Sessions are conducted by independently licensed providers via encrypted, secure video.
         </p>
         <p>
           By booking, you agree to our <button className="underline hover:text-gray-600">Terms of Service</button> and <button className="underline hover:text-gray-600">Telehealth Consent</button>.

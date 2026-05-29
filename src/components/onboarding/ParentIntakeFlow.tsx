@@ -15,6 +15,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { CheckCircle, ArrowRight, ArrowLeft, User, Shield, Settings, Users, Star } from 'lucide-react';
 import InsuranceEligibilityCheck from '../family/InsuranceEligibilityCheck';
 import { supabase } from '../../lib/supabase-compat';
+import { isDemoMode } from '../../lib/demo-seed';
 
 // ============================================================================
 // Types
@@ -78,8 +79,9 @@ interface MatchProvider {
   reviewCount: number;
 }
 
-// Fallback providers if Supabase unavailable
-const FALLBACK_PROVIDERS: MatchProvider[] = [
+// Sample providers for DEMO MODE ONLY. Real users never see these invented
+// clinicians — when Supabase has no matches they get a friendly empty state.
+const DEMO_PROVIDERS: MatchProvider[] = [
   {
     id: 'prov-fallback-1',
     name: 'Sarah Kim, BCBA',
@@ -204,8 +206,10 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Real providers from Supabase
-  const [providers, setProviders] = useState<MatchProvider[]>(FALLBACK_PROVIDERS);
+  // Real providers from Supabase. Demo mode pre-seeds sample matches so
+  // walkthroughs look complete; real users start empty until the DB responds.
+  const demo = isDemoMode();
+  const [providers, setProviders] = useState<MatchProvider[]>(demo ? DEMO_PROVIDERS : []);
   const [loadingProviders, setLoadingProviders] = useState(false);
 
   // Fetch real providers when reaching step 4
@@ -220,7 +224,8 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
       .limit(6)
       .then(({ data, error: err }) => {
         if (err || !data || data.length === 0) {
-          setProviders(FALLBACK_PROVIDERS);
+          // No real matches: demo gets sample providers, real users get an empty state.
+          setProviders(demo ? DEMO_PROVIDERS : []);
         } else {
           setProviders(data.map(p => ({
             id: p.id,
@@ -235,7 +240,7 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
         }
         setLoadingProviders(false);
       });
-  }, [step]);
+  }, [step, demo]);
 
   // Step 1
   const [childName, setChildName] = useState(draft.childName ?? '');
@@ -528,6 +533,23 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
               <div className="flex items-center justify-center py-8 text-slate-400 text-sm gap-2">
                 <div className="w-4 h-4 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" />
                 Finding providers near you…
+              </div>
+            )}
+
+            {!loadingProviders && providers.length === 0 && (
+              <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 text-center">
+                <Users className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+                <p className="text-sm font-medium text-slate-700">No matches just yet</p>
+                <p className="text-xs text-slate-500 mt-1">
+                  We're still building our provider network in your area. You can finish setup now and we'll reach out as soon as a match is available.
+                </p>
+                <button
+                  onClick={() => setStep(5)}
+                  className="mt-4 inline-flex items-center justify-center gap-2 bg-emerald-500 hover:bg-[#3a967a] text-white font-semibold rounded-xl px-4 py-2.5 text-sm transition-colors"
+                >
+                  Continue
+                  <ArrowRight className="w-4 h-4" />
+                </button>
               </div>
             )}
 

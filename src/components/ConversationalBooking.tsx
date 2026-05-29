@@ -32,6 +32,7 @@ import {
 } from 'lucide-react';
 import { AvailabilityPicker, TimeSlot } from './AvailabilityPicker';
 import { supabase } from '../utils/supabase/client';
+import { isDemoMode } from '../lib/demo-seed';
 import { toast } from 'sonner';
 import { SESSION_PRICING } from '../lib/pricing';
 import { checkEligibility, type EligibilityResult } from '../lib/benefits-service';
@@ -131,7 +132,9 @@ const CONCERN_OPTIONS: ConcernType[] = [
 
 const LIVE_TELEHEALTH_STATES = new Set(['AZ', 'MT', 'TX']);
 
-// Fallback providers (only used if database is empty)
+// Sample providers — shown ONLY in demo mode (investor/partner walk-throughs).
+// In production an empty/error result yields [] + a real empty state so a fake
+// provider id can never reach Stripe checkout.
 const FALLBACK_PROVIDERS: Provider[] = [
   {
     id: 'bcba-1',
@@ -375,7 +378,7 @@ export function ConversationalBooking({
 
         if (error) {
           console.error('Error loading providers:', error.message);
-          setProviders(FALLBACK_PROVIDERS);
+          setProviders(isDemoMode() ? FALLBACK_PROVIDERS : []);
         } else if (data && data.length > 0) {
           const supportedProviders = data
             .filter((provider: { license_state?: string | null; state?: string | null }) => {
@@ -404,13 +407,13 @@ export function ConversationalBooking({
               isAssigned: false,
             }));
 
-          setProviders(supportedProviders.length > 0 ? supportedProviders : FALLBACK_PROVIDERS);
+          setProviders(supportedProviders.length > 0 ? supportedProviders : (isDemoMode() ? FALLBACK_PROVIDERS : []));
         } else {
-          setProviders(FALLBACK_PROVIDERS);
+          setProviders(isDemoMode() ? FALLBACK_PROVIDERS : []);
         }
       } catch (e) {
         console.error('Failed to load providers:', e);
-        setProviders(FALLBACK_PROVIDERS);
+        setProviders(isDemoMode() ? FALLBACK_PROVIDERS : []);
       } finally {
         setIsLoading(false);
       }
@@ -635,7 +638,7 @@ export function ConversationalBooking({
   };
 
   const recommendedProviders = getRecommendedProviders();
-  const featuredProvider = assignedProvider || recommendedProviders[0] || providers[0] || FALLBACK_PROVIDERS[0];
+  const featuredProvider = assignedProvider || recommendedProviders[0] || providers[0] || (isDemoMode() ? FALLBACK_PROVIDERS[0] : undefined);
   const hasAssignedProvider = Boolean(assignedProvider?.isAssigned);
   const stepOrder: BookingStep[] = ['concern', 'history', 'provider-pref', 'insurance-check', 'time-select', 'details', 'confirm'];
   const currentStepIndex = stepOrder.indexOf(state.step);
@@ -745,7 +748,16 @@ export function ConversationalBooking({
 
         {/* Step 3: Provider Preference */}
         <AnimatePresence>
-          {(state.isNewConcern !== undefined || state.relatedGoal) && state.step !== 'concern' && state.step !== 'history' && (
+          {(state.isNewConcern !== undefined || state.relatedGoal) && state.step !== 'concern' && state.step !== 'history' && !featuredProvider && (
+            <ChatMessage isAI>
+              <p>
+                We don't have providers available in your area just yet. Aminy is in active expansion —
+                we'll notify you the moment a verified provider opens availability near you. In the meantime,
+                your AI companion is here 24/7 and you can keep building your child's plan.
+              </p>
+            </ChatMessage>
+          )}
+          {(state.isNewConcern !== undefined || state.relatedGoal) && state.step !== 'concern' && state.step !== 'history' && featuredProvider && (
             <>
               <ChatMessage isAI={false}>
                 <p>{state.isNewConcern ? 'This is new' : `Follow-up on: ${childGoals.find(g => g.id === state.relatedGoal)?.title}`}</p>
