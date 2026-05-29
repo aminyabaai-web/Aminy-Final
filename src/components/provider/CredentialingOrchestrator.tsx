@@ -42,6 +42,7 @@ import {
   type PanelApplicationStatus,
   type EnrollmentPlaybook,
 } from '../../lib/credentialing-orchestrator';
+import { isDemoMode } from '../../lib/demo-seed';
 
 // ============================================================================
 // Types
@@ -158,9 +159,55 @@ export default function CredentialingOrchestrator({
   const [expandedStep, setExpandedStep] = useState<number | null>(null);
   const [checkedSteps, setCheckedSteps] = useState<Set<string>>(new Set());
 
-  const provider = DEMO_PROVIDERS.find(p => p.application.providerId === providerId) ?? DEMO_PROVIDERS[0];
-  const readiness = useMemo(() => assessCredentialingReadiness(providerId), [providerId]);
-  const risks = useMemo(() => flagCredentialingRisks(providerId), [providerId]);
+  // Sample credentialing records (DEMO_PROVIDERS — CAQH IDs, payer panels,
+  // attestation dates, risk flags) are presentation-only. Never show fabricated
+  // credentialing data to real providers; gate behind demo mode until the live
+  // backend is wired. In demo mode, the full rich walkthrough still renders.
+  const demoMode = isDemoMode();
+  const provider = demoMode
+    ? (DEMO_PROVIDERS.find(p => p.application.providerId === providerId) ?? DEMO_PROVIDERS[0])
+    : null;
+  const readiness = useMemo(
+    () => (demoMode ? assessCredentialingReadiness(providerId) : null),
+    [providerId, demoMode],
+  );
+  const risks = useMemo(
+    () => (demoMode ? flagCredentialingRisks(providerId) : []),
+    [providerId, demoMode],
+  );
+
+  // No real credentialing data yet — show a friendly empty state instead of
+  // fabricated CAQH/payer records. (Hooks above run unconditionally first.)
+  if (!provider || !readiness) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <div className="bg-navy-dark text-white px-4 pt-12 pb-4" style={{ background: '#0D1B2A' }}>
+          <div className="flex items-center gap-3">
+            {onBack && (
+              <button onClick={onBack} className="p-1.5 rounded-lg hover:bg-white/10 transition-colors">
+                <ArrowLeft size={20} />
+              </button>
+            )}
+            <div>
+              <h1 className="text-lg font-bold">Credentialing Orchestrator</h1>
+              <p className="text-xs text-white/60">AI-powered payer enrollment engine</p>
+            </div>
+          </div>
+        </div>
+        <div className="flex flex-col items-center justify-center text-center px-6 py-20">
+          <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+            <Shield size={28} className="text-slate-400" />
+          </div>
+          <h2 className="text-base font-semibold text-slate-700">No credentialing data yet</h2>
+          <p className="text-sm text-slate-500 mt-1 max-w-xs">
+            Once you start enrolling with payers, your readiness score, payer status board, and
+            CAQH attestation timeline will appear here.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   const { caqhProfile, panelApplications } = provider;
 
   const kanbanColumns: PanelApplicationStatus[] = ['not-started', 'submitted', 'pending', 'credentialed'];

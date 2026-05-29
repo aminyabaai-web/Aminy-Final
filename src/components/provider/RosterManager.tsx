@@ -29,6 +29,7 @@ import {
   XCircle,
 } from 'lucide-react';
 import { DEMO_PROVIDERS } from '../../lib/credentialing-orchestrator';
+import { isDemoMode } from '../../lib/demo-seed';
 
 interface RosterManagerProps {
   providerId?: string;
@@ -91,8 +92,16 @@ const DEMO_UPDATE_REQUESTS: RosterUpdateRequest[] = [
 ];
 
 export default function RosterManager({ providerId = 'prov-001', onBack }: RosterManagerProps) {
-  const provider = DEMO_PROVIDERS.find(p => p.application.providerId === providerId) ?? DEMO_PROVIDERS[0];
-  const { rosterEntries, panelApplications } = provider;
+  // The DEMO_PROVIDERS seed (fake contracted CPT rates, payer panels) and the
+  // DEMO_UPDATE_REQUESTS below (fake "Dr. Sarah Chen" PHI) are sample data for
+  // investor / AACT walkthroughs ONLY. A real provider must never see invented
+  // roster entries, rates, or update requests — they start empty until live
+  // credentialing data exists.
+  const demo = isDemoMode();
+  const seedProvider = DEMO_PROVIDERS.find(p => p.application.providerId === providerId) ?? DEMO_PROVIDERS[0];
+  const rosterEntries = demo ? seedProvider.rosterEntries : [];
+  const panelApplications = demo ? seedProvider.panelApplications : [];
+  const updateRequests = demo ? DEMO_UPDATE_REQUESTS : [];
   const [showAddFlow, setShowAddFlow] = useState(false);
   const [selectedPayer, setSelectedPayer] = useState('');
   const [addStep, setAddStep] = useState(1);
@@ -193,13 +202,13 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
         {/* Update Requests */}
         <div>
           <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Roster Update Requests</h2>
-          {DEMO_UPDATE_REQUESTS.length === 0 ? (
+          {updateRequests.length === 0 ? (
             <div className="bg-white rounded-2xl p-4 text-center border border-gray-100">
               <p className="text-sm text-gray-400">No pending update requests</p>
             </div>
           ) : (
             <div className="space-y-2">
-              {DEMO_UPDATE_REQUESTS.map(req => {
+              {updateRequests.map(req => {
                 const statusCfg = UPDATE_STATUS_CONFIG[req.status];
                 const typeLabels: Record<UpdateType, string> = {
                   'service-location': 'New Service Location',

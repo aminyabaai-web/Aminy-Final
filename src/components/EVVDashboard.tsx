@@ -37,6 +37,7 @@ import {
   exportTimesheetToPDF,
 } from '../lib/fiscal-agent-integration';
 import { listEVVReconciliationRuns, summarizeEVVCutoverRuns, type EVVReconciliationRun } from '../lib/evv-cutover';
+import { isDemoMode } from '../lib/demo-seed';
 
 // ============================================
 // TYPES
@@ -58,12 +59,12 @@ type TabType = 'clock' | 'records' | 'budget' | 'timesheets';
 // ============================================
 
 /**
- * Demo authorizations used ONLY in development mode.
- * In production, the component initializes with empty arrays and
- * fetches real data from Supabase via getAuthorizations().
+ * Sample authorizations used ONLY in demo mode (investor/AACT walkthroughs)
+ * or local development. Real production users start with empty arrays and
+ * fetch their own data from Supabase via getAuthorizations().
  */
 function getDemoAuthorizations(): ServiceAuthorization[] {
-  if (!import.meta.env.DEV) return [];
+  if (!isDemoMode() && !import.meta.env.DEV) return [];
   return [
     {
       id: 'auth-1',
@@ -104,12 +105,12 @@ function getDemoAuthorizations(): ServiceAuthorization[] {
 }
 
 /**
- * Demo EVV records used ONLY in development mode.
- * In production, the component initializes with empty arrays and
- * fetches real data from Supabase via getEVVRecords().
+ * Sample EVV records used ONLY in demo mode (investor/AACT walkthroughs)
+ * or local development. Real production users start with empty arrays and
+ * fetch their own data from Supabase via getEVVRecords().
  */
 function getDemoEVVRecords(): EVVRecord[] {
-  if (!import.meta.env.DEV) return [];
+  if (!isDemoMode() && !import.meta.env.DEV) return [];
   return [
     {
       id: 'evv-1',

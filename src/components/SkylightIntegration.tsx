@@ -31,6 +31,7 @@ import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { toast } from 'sonner';
+import { isDemoMode } from '../lib/demo-seed';
 
 interface RoutineStep {
   id: string;
@@ -59,7 +60,9 @@ interface SkylightIntegrationProps {
   onSyncRoutines?: (routines: Routine[]) => void;
 }
 
-// Sample routines for display
+// Demo-only sample routines — surfaced ONLY in demo mode (or when a caller
+// explicitly passes routines) so investor/AACT walkthroughs show populated
+// visual schedules. Real users see their own routines or a friendly empty state.
 const SAMPLE_ROUTINES: Routine[] = [
   {
     id: 'morning',
@@ -105,18 +108,26 @@ const SAMPLE_ROUTINES: Routine[] = [
 
 export function SkylightIntegration({
   userId,
-  routines = SAMPLE_ROUTINES,
+  routines: routinesProp,
   isConnected = false,
   onConnect,
   onDisconnect,
   onSyncRoutines,
 }: SkylightIntegrationProps) {
+  // Real users see their own routines (or an empty state). Demo walkthroughs
+  // fall back to the rich sample set so the screen looks complete.
+  const routines: Routine[] = routinesProp ?? (isDemoMode() ? SAMPLE_ROUTINES : []);
   const [connected, setConnected] = useState(isConnected);
   const [syncing, setSyncing] = useState(false);
   const [selectedRoutines, setSelectedRoutines] = useState<string[]>(
     routines.map((r) => r.id)
   );
   const [displayMode, setDisplayMode] = useState<'list' | 'preview'>('list');
+
+  // The routine shown in the display preview: first selected, else first
+  // available. Null when the user has no routines (real users with no data).
+  const previewRoutine: Routine | null =
+    routines.find((r) => selectedRoutines.includes(r.id)) ?? routines[0] ?? null;
 
   const handleConnect = async () => {
     // This would open OAuth flow to Skylight/Google Calendar
@@ -281,7 +292,16 @@ export function SkylightIntegration({
           <h3 className="font-semibold text-gray-900">
             Select Routines to Display
           </h3>
-          {routines.map((routine) => (
+          {routines.length === 0 ? (
+            <Card className="p-8 text-center bg-white border-slate-200">
+              <Calendar className="w-10 h-10 mx-auto mb-2 text-slate-300" />
+              <p className="text-sm font-medium text-slate-600">No routines yet</p>
+              <p className="text-xs text-slate-400 mt-0.5">
+                Create a visual routine to display it on your smart screen.
+              </p>
+            </Card>
+          ) : (
+            routines.map((routine) => (
             <Card
               key={routine.id}
               className={`p-4 cursor-pointer transition-all ${
@@ -336,7 +356,8 @@ export function SkylightIntegration({
                 ))}
               </div>
             </Card>
-          ))}
+            ))
+          )}
 
           <Button
             onClick={handleSyncRoutines}
@@ -391,41 +412,50 @@ export function SkylightIntegration({
               </div>
 
               {/* Current Routine Display */}
-              <div className="bg-white/10 backdrop-blur-md rounded-xl p-4">
-                <div className="flex items-center gap-2 mb-3">
-                  <Sun className="w-5 h-5 text-amber-400" />
-                  <span className="text-white font-medium">Morning Routine</span>
-                  <Badge className="bg-amber-500/20 text-amber-300 text-xs">
-                    In Progress
-                  </Badge>
-                </div>
+              {previewRoutine ? (
+                <div className="bg-white/10 backdrop-blur-md rounded-xl p-4">
+                  <div className="flex items-center gap-2 mb-3">
+                    {getTimeOfDayIcon(previewRoutine.timeOfDay)}
+                    <span className="text-white font-medium">{previewRoutine.name}</span>
+                    <Badge className="bg-amber-500/20 text-amber-300 text-xs">
+                      In Progress
+                    </Badge>
+                  </div>
 
-                <div className="grid grid-cols-7 gap-2">
-                  {SAMPLE_ROUTINES[0].steps.map((step, index) => (
-                    <motion.div
-                      key={step.id}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.1 }}
-                      className={`p-3 rounded-lg text-center ${
-                        index < 3
-                          ? 'bg-green-500/30'
-                          : index === 3
-                          ? 'bg-white/20 ring-2 ring-white/50'
-                          : 'bg-white/10'
-                      }`}
-                    >
-                      <span className="text-2xl">{step.icon}</span>
-                      <p className="text-white/80 text-xs mt-1 truncate">
-                        {step.name}
-                      </p>
-                      {index < 3 && (
-                        <CheckCircle className="w-4 h-4 text-green-400 mx-auto mt-1" />
-                      )}
-                    </motion.div>
-                  ))}
+                  <div className="grid grid-cols-7 gap-2">
+                    {previewRoutine.steps.map((step, index) => (
+                      <motion.div
+                        key={step.id}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                        className={`p-3 rounded-lg text-center ${
+                          index < 3
+                            ? 'bg-green-500/30'
+                            : index === 3
+                            ? 'bg-white/20 ring-2 ring-white/50'
+                            : 'bg-white/10'
+                        }`}
+                      >
+                        <span className="text-2xl">{step.icon}</span>
+                        <p className="text-white/80 text-xs mt-1 truncate">
+                          {step.name}
+                        </p>
+                        {index < 3 && (
+                          <CheckCircle className="w-4 h-4 text-green-400 mx-auto mt-1" />
+                        )}
+                      </motion.div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 text-center">
+                  <p className="text-white/80 text-sm font-medium">No routines to display yet</p>
+                  <p className="text-white/50 text-xs mt-1">
+                    Create a routine and it will appear here.
+                  </p>
+                </div>
+              )}
 
               {/* Aminy branding */}
               <div className="absolute bottom-4 right-4 flex items-center gap-2 text-white/40 text-xs">

@@ -91,22 +91,46 @@ export function TelehealthSessionManager({
   onSessionScheduled,
   onNotesComplete
 }: TelehealthSessionManagerProps) {
-  const [sessionCredits, setSessionCredits] = useState<SessionCredit[]>([
-    {
-      type: '50min',
-      available: 1,
-      used: 0,
-      total: 1,
-      resetDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days from now
-    },
-    {
-      type: '25min',
-      available: 1,
-      used: 0,
-      total: 1,
-      resetDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
-    }
-  ]);
+  // Monthly session-credit entitlements. The 1+1 prepaid credits are illustrative
+  // sample data for demo walkthroughs only — a real family must never be shown
+  // prepaid credits they have not actually purchased. Real users start zeroed
+  // (the card renders a graceful "No Credits" state) until their real plan
+  // entitlement loads from the backend.
+  const [sessionCredits, setSessionCredits] = useState<SessionCredit[]>(
+    isDemoMode()
+      ? [
+          {
+            type: '50min',
+            available: 1,
+            used: 0,
+            total: 1,
+            resetDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days from now
+          },
+          {
+            type: '25min',
+            available: 1,
+            used: 0,
+            total: 1,
+            resetDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+          }
+        ]
+      : [
+          {
+            type: '50min',
+            available: 0,
+            used: 0,
+            total: 0,
+            resetDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+          },
+          {
+            type: '25min',
+            available: 0,
+            used: 0,
+            total: 0,
+            resetDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+          }
+        ]
+  );
 
   // Real users start with no session history — the empty states below render until
   // their own appointments and provider-written notes load from the backend. The

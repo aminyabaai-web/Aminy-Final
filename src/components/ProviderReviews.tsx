@@ -341,6 +341,37 @@ export function ProviderReviews({
     ? filteredReviews
     : filteredReviews.slice(0, 5);
 
+  // No real reviews yet — show a friendly empty state instead of a hollow
+  // "0.0 / 0 reviews / 0% would recommend" header that reads like fabricated
+  // analytics. Sample reviews only flow in demo mode (callers pass MOCK_REVIEWS).
+  if (reviews.length === 0 && stats.totalReviews === 0) {
+    return (
+      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+        <div className="py-10 px-4 sm:px-6 text-center">
+          <div className="flex items-center justify-center w-12 h-12 rounded-full bg-slate-100 mx-auto mb-3">
+            <MessageSquare className="w-6 h-6 text-slate-400" />
+          </div>
+          <h3 className="text-base font-semibold text-slate-700 mb-1">
+            No reviews yet
+          </h3>
+          <p className="text-sm text-slate-500 max-w-xs mx-auto">
+            {providerName
+              ? `Be the first to share your experience with ${providerName}.`
+              : 'Be the first to share your experience with this provider.'}
+          </p>
+          {onWriteReview && (
+            <button
+              onClick={onWriteReview}
+              className="mt-4 px-4 py-2 bg-teal-600 text-white text-sm font-medium rounded-lg hover:bg-teal-700 transition-colors"
+            >
+              Write a Review
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
       {/* Header with Stats */}
@@ -456,7 +487,7 @@ export function ProviderReviews({
 
       {/* Show More Button */}
       {!compact && filteredReviews.length > 5 && !showAllReviews && (
-        <div className="px-4 sm:px-4 sm:px-6 py-3 sm:py-4 border-t border-gray-100">
+        <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-gray-100">
           <button
             onClick={() => setShowAllReviews(true)}
             className="w-full py-2 text-teal-600 font-medium hover:bg-teal-50 rounded-lg transition-colors"

@@ -27,6 +27,7 @@ import {
   BookingState,
   MOCK_PROVIDERS
 } from '../../types/telehealth';
+import { isDemoMode } from '../../lib/demo-seed';
 
 import { BrowseTopConcerns } from './BrowseTopConcerns';
 import { getCashPayVisitEconomics } from '../../lib/telehealth-economics';
@@ -589,10 +590,39 @@ export function TelehealthFlow({
         updatedAt: new Date().toISOString()
       };
 
+      // The named MOCK_PROVIDERS roster is illustrative sample data for demo
+      // walkthroughs only. A real family must never see a fabricated clinician
+      // ("Sarah Chen") on their own visit summary — use the provider they actually
+      // selected during booking, or a neutral placeholder until the real provider
+      // record loads from the backend.
+      const summaryProvider: Provider =
+        selectedProvider ??
+        (isDemoMode()
+          ? MOCK_PROVIDERS[0]
+          : {
+              id: visitSummary.providerId || 'pending',
+              firstName: 'Your',
+              lastName: 'provider',
+              credentials: '',
+              role: 'bcba',
+              roleDisplayName: 'Healthcare Provider',
+              bio: '',
+              licensedStates: [],
+              offersConsult: false,
+              offersDeepReview: false,
+              consultPrice: 0,
+              deepReviewPrice: 0,
+              organization: 'independent',
+              isActive: true,
+              acceptingNewPatients: false,
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+            });
+
       return (
         <VisitSummaryDetailScreen
           summary={visitSummary}
-          provider={MOCK_PROVIDERS[0]}
+          provider={summaryProvider}
           onBack={handleBack}
           onBookFollowUp={handleBookFollowUp}
           onShare={() => trackEvent('visit_summary_shared', { summaryId: viewingSummaryId })}

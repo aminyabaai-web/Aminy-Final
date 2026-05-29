@@ -32,6 +32,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '../utils/supabase/client';
+import { isDemoMode } from '../lib/demo-seed';
 
 interface PayerPartnerLandingProps {
   onBack?: () => void;
@@ -58,7 +59,7 @@ const VALUE_PROPS = [
   {
     icon: Shield,
     headline: 'EVV compliance built in',
-    body: 'Every visit electronically verified. Every claim submitted clean. 89% first-pass clean claim rate — less rework, less admin overhead.',
+    body: 'Every visit electronically verified and every claim scrubbed before submission — designed to maximize first-pass clean rates and cut rework and admin overhead.',
   },
   {
     icon: BarChart2,
@@ -201,23 +202,26 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
           </div>
         </motion.div>
 
-        {/* Stats */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45, delay: 0.1 }}
-          className="grid grid-cols-3 gap-3 mb-10"
-        >
-          {STATS.map((stat) => (
-            <Card key={stat.label} className="p-4 text-center border border-slate-100">
-              <p className="text-2xl font-bold text-teal-600 mb-0.5">{stat.value}</p>
-              <p className="text-xs text-slate-600 font-medium mb-1">{stat.label}</p>
-              <Badge className="bg-amber-50 text-amber-600 border-amber-200 text-xs">
-                {stat.note}
-              </Badge>
-            </Card>
-          ))}
-        </motion.div>
+        {/* Stats — illustrative projections, shown in demo walkthroughs only.
+            Real payer prospects never see fabricated outcome figures. */}
+        {isDemoMode() && (
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: 0.1 }}
+            className="grid grid-cols-3 gap-3 mb-10"
+          >
+            {STATS.map((stat) => (
+              <Card key={stat.label} className="p-4 text-center border border-slate-100">
+                <p className="text-2xl font-bold text-teal-600 mb-0.5">{stat.value}</p>
+                <p className="text-xs text-slate-600 font-medium mb-1">{stat.label}</p>
+                <Badge className="bg-amber-50 text-amber-600 border-amber-200 text-xs">
+                  {stat.note}
+                </Badge>
+              </Card>
+            ))}
+          </motion.div>
+        )}
 
         {/* Value props */}
         <motion.div

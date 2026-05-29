@@ -54,6 +54,7 @@ import { Card } from '../ui/card';
 import { Button } from '../ui/button';
 import { Progress } from '../ui/progress';
 import { Input } from '../ui/input';
+import { isDemoMode } from '../../lib/demo-seed';
 
 // ============================================================================
 // Types
@@ -983,17 +984,45 @@ function statusBadge(status: string) {
   );
 }
 
+// Shared on-brand empty state for tabs that have no real data yet.
+function CredentialingEmptyState({ icon, title, body }: { icon: React.ReactNode; title: string; body: string }) {
+  return (
+    <Card className="p-8">
+      <div className="flex flex-col items-center text-center">
+        <div className="w-14 h-14 rounded-full bg-slate-100 flex items-center justify-center mb-3">
+          {icon}
+        </div>
+        <h3 className="text-sm font-semibold text-slate-700">{title}</h3>
+        <p className="text-xs text-slate-500 mt-1 max-w-xs">{body}</p>
+      </div>
+    </Card>
+  );
+}
+
 // ============================================================================
 // CAQH Tab
 // ============================================================================
 
 function CAQHTab() {
-  const docs = MOCK_CAQH_DOCS;
+  // Sample CAQH documents + QA checklist are presentation-only — real providers
+  // must never see fabricated NPI/EIN/license/DEA records. Gate behind demo mode.
+  const docs = isDemoMode() ? MOCK_CAQH_DOCS : [];
+  const qaChecklist = isDemoMode() ? MOCK_QA_CHECKLIST : [];
   const requiredDocs = docs.filter((d) => d.required);
   const uploadedRequired = requiredDocs.filter((d) => d.uploaded).length;
-  const completionPct = Math.round((uploadedRequired / requiredDocs.length) * 100);
+  const completionPct = requiredDocs.length > 0 ? Math.round((uploadedRequired / requiredDocs.length) * 100) : 0;
   const expiringDocs = docs.filter((d) => d.status === 'expiring');
   const missingDocs = docs.filter((d) => d.status === 'missing' && d.required);
+
+  if (docs.length === 0) {
+    return (
+      <CredentialingEmptyState
+        icon={<Shield className="w-6 h-6 text-slate-400" />}
+        title="No CAQH profile connected yet"
+        body="Once your CAQH ProView profile is linked, your documents, completion status, and re-attestation reminders will appear here."
+      />
+    );
+  }
 
   return (
     <div className="space-y-4">
@@ -1019,7 +1048,7 @@ function CAQHTab() {
           <h3 className="text-sm font-semibold text-violet-800">AI QA Pre-Submission Checklist</h3>
         </div>
         <div className="space-y-2">
-          {MOCK_QA_CHECKLIST.map((item) => (
+          {qaChecklist.map((item) => (
             <div key={item.id} className="flex items-start gap-2 py-1.5">
               {statusIcon(item.status)}
               <div className="flex-1 min-w-0">
@@ -1037,7 +1066,7 @@ function CAQHTab() {
         </div>
         <div className="mt-3 pt-3 border-t border-violet-200 flex items-center justify-between">
           <div className="text-xs text-violet-700">
-            {MOCK_QA_CHECKLIST.filter(i => i.status === 'pass').length}/{MOCK_QA_CHECKLIST.length} checks passing
+            {qaChecklist.filter(i => i.status === 'pass').length}/{qaChecklist.length} checks passing
           </div>
           <Button variant="outline" size="sm" className="h-7 text-xs border-violet-300 text-violet-700">
             Re-run QA Check
@@ -1127,7 +1156,10 @@ function CAQHTab() {
 const ENROLLMENT_STAGES = ['application', 'processing', 'credentialing', 'active'] as const;
 
 function EnrollmentTab() {
-  const enrollments = MOCK_ENROLLMENTS;
+  // Sample payer enrollments are presentation-only; real providers see only
+  // their own enrollments (empty until they start one). Workflow wizards below
+  // are generic reference content and always available.
+  const enrollments = isDemoMode() ? MOCK_ENROLLMENTS : [];
   const [wizardPayer, setWizardPayer] = useState<string | null>(null);
 
   function stageIndex(stage: string): number {
@@ -1239,6 +1271,14 @@ function EnrollmentTab() {
         </div>
       </Card>
 
+      {enrollments.length === 0 && (
+        <Card className="p-6">
+          <p className="text-xs text-slate-500 text-center">
+            You have no active payer enrollments yet. Pick a payer above to start an AI-guided application.
+          </p>
+        </Card>
+      )}
+
       {enrollments.map((enrollment) => {
         const currentStage = stageIndex(enrollment.stage);
         const isDenied = enrollment.stage === 'denied';
@@ -1319,7 +1359,19 @@ function EnrollmentTab() {
 // ============================================================================
 
 function RosterTab() {
-  const roster = MOCK_ROSTER;
+  // Sample roster entries are presentation-only; real providers see only their
+  // own active payer contracts (empty until credentialed).
+  const roster = isDemoMode() ? MOCK_ROSTER : [];
+
+  if (roster.length === 0) {
+    return (
+      <CredentialingEmptyState
+        icon={<Users className="w-6 h-6 text-slate-400" />}
+        title="No active payer contracts yet"
+        body="Once you are credentialed and in-network, each payer contract and its re-credentialing date will show up here."
+      />
+    );
+  }
 
   return (
     <div className="space-y-4">
@@ -1676,12 +1728,24 @@ function AIPlaybooksTab() {
 // ============================================================================
 
 function ClaimQueueTab() {
-  const claims = MOCK_CLAIM_QUEUE;
+  // Sample claim queue is presentation-only — never show fabricated patient
+  // names, dates of service, or dollar amounts to real providers.
+  const claims = isDemoMode() ? MOCK_CLAIM_QUEUE : [];
   const readyCount = claims.filter((c) => c.validationStatus === 'ready').length;
   const warningCount = claims.filter((c) => c.validationStatus === 'warning').length;
   const errorCount = claims.filter((c) => c.validationStatus === 'error').length;
   const totalAmount = claims.reduce((s, c) => s + c.amount, 0);
   const [selectedClaims, setSelectedClaims] = useState<Set<string>>(new Set());
+
+  if (claims.length === 0) {
+    return (
+      <CredentialingEmptyState
+        icon={<Receipt className="w-6 h-6 text-slate-400" />}
+        title="No claims ready to submit"
+        body="As you complete billable sessions, claims will be validated and queued here for submission."
+      />
+    );
+  }
 
   function toggleClaim(id: string) {
     setSelectedClaims((prev) => {
@@ -1781,7 +1845,9 @@ function ClaimQueueTab() {
 // ============================================================================
 
 function DenialOpsTab() {
-  const denials = MOCK_DENIALS;
+  // Sample denial records are presentation-only — never show fabricated patient
+  // names, claim IDs, or dollar amounts to real providers.
+  const denials = isDemoMode() ? MOCK_DENIALS : [];
   const [expandedDenial, setExpandedDenial] = useState<string | null>(null);
 
   const totalDenied = denials.reduce((s, d) => s + d.amount, 0);
@@ -1800,7 +1866,17 @@ function DenialOpsTab() {
       groups[d.denialCategory].amount += d.amount;
     }
     return groups;
-  }, []);
+  }, [denials]);
+
+  if (denials.length === 0) {
+    return (
+      <CredentialingEmptyState
+        icon={<BarChart3 className="w-6 h-6 text-slate-400" />}
+        title="No denials to work"
+        body="When a claim is denied, it will appear here with an AI appeal estimate, deadline tracking, and a draft appeal letter."
+      />
+    );
+  }
 
   return (
     <div className="space-y-4">
@@ -1976,13 +2052,25 @@ function DenialOpsTab() {
 // ============================================================================
 
 function StatusDashboardTab() {
-  const entries = MOCK_STATUS_ENTRIES;
+  // Sample status entries are presentation-only; real providers see only their
+  // own per-payer enrollment status (empty until they begin enrolling).
+  const entries = isDemoMode() ? MOCK_STATUS_ENTRIES : [];
 
   const approved = entries.filter(e => e.enrollmentStatus === 'approved').length;
   const pending = entries.filter(e => e.enrollmentStatus === 'pending').length;
   const rejected = entries.filter(e => e.enrollmentStatus === 'rejected').length;
   const reCredDue = entries.filter(e => e.enrollmentStatus === 're-credentialing-due').length;
   const totalMissing = entries.reduce((s, e) => s + e.missingDocuments.length, 0);
+
+  if (entries.length === 0) {
+    return (
+      <CredentialingEmptyState
+        icon={<Gauge className="w-6 h-6 text-slate-400" />}
+        title="No enrollment activity yet"
+        body="Start a payer enrollment to track status, days since submission, missing documents, and re-credentialing dates here."
+      />
+    );
+  }
 
   return (
     <div className="space-y-4">
@@ -2220,17 +2308,19 @@ export default function CredentialingSupportCenter({
 }: CredentialingSupportCenterProps) {
   const [activeTab, setActiveTab] = useState<TabId>('caqh');
 
-  // Badge counts
-  const caqhAlerts = MOCK_CAQH_DOCS.filter(
+  // Badge counts — derived from sample data only in demo mode so real providers
+  // never see fabricated alert counts on the tab bar.
+  const demoMode = isDemoMode();
+  const caqhAlerts = demoMode ? MOCK_CAQH_DOCS.filter(
     (d) => d.required && (d.status === 'expiring' || d.status === 'missing')
-  ).length;
-  const enrollmentPending = MOCK_ENROLLMENTS.filter(
+  ).length : 0;
+  const enrollmentPending = demoMode ? MOCK_ENROLLMENTS.filter(
     (e) => e.stage !== 'active' && e.stage !== 'denied'
-  ).length;
-  const rosterExpiring = MOCK_ROSTER.filter((r) => r.status === 'expiring').length;
-  const claimErrors = MOCK_CLAIM_QUEUE.filter((c) => c.validationStatus === 'error').length;
-  const denialCount = MOCK_DENIALS.filter(d => d.status === 'new').length;
-  const reCredCount = MOCK_STATUS_ENTRIES.filter(e => e.enrollmentStatus === 're-credentialing-due').length;
+  ).length : 0;
+  const rosterExpiring = demoMode ? MOCK_ROSTER.filter((r) => r.status === 'expiring').length : 0;
+  const claimErrors = demoMode ? MOCK_CLAIM_QUEUE.filter((c) => c.validationStatus === 'error').length : 0;
+  const denialCount = demoMode ? MOCK_DENIALS.filter(d => d.status === 'new').length : 0;
+  const reCredCount = demoMode ? MOCK_STATUS_ENTRIES.filter(e => e.enrollmentStatus === 're-credentialing-due').length : 0;
 
   const tabBadges: Partial<Record<TabId, number>> = {
     caqh: caqhAlerts || undefined,

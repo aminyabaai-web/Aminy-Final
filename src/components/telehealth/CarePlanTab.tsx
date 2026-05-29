@@ -51,6 +51,7 @@ import {
   Provider,
   MOCK_PROVIDERS,
 } from '../../types/telehealth';
+import { isDemoMode } from '../../lib/demo-seed';
 
 interface CarePlanTabProps {
   userId?: string;
@@ -110,9 +111,13 @@ export function CarePlanTabScreen({
     return formatDate(isoString);
   };
 
-  // Helper to get a default provider when not joined from database
+  // Helper to get a default provider when not joined from database.
+  // The named MOCK_PROVIDERS roster is illustrative sample data — only resolve
+  // real visit summaries against it in demo mode. Real families must never see a
+  // fabricated clinician name attached to their own visit; fall back to a neutral
+  // placeholder until the real provider record loads from the backend.
   const getDefaultProvider = (providerId?: string): Provider => {
-    const found = MOCK_PROVIDERS.find(p => p.id === providerId);
+    const found = isDemoMode() ? MOCK_PROVIDERS.find(p => p.id === providerId) : undefined;
     return found || ({
       id: providerId || 'unknown',
       firstName: 'Provider',

@@ -39,6 +39,7 @@ import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { toast } from 'sonner';
 import { ProviderClinicalTemplates } from './provider/ProviderClinicalTemplates';
+import { isDemoMode } from '../lib/demo-seed';
 
 const fontStack = 'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", "Helvetica Neue", Arial, "Noto Sans", sans-serif';
 
@@ -67,7 +68,7 @@ interface ProviderCaseloadViewProps {
     role?: 'BCBA' | 'Therapist';
 }
 
-export function ProviderCaseloadView({ onBack, providerName = "Dr. Sarah", role = 'BCBA' }: ProviderCaseloadViewProps) {
+export function ProviderCaseloadView({ onBack, providerName = "Provider", role = 'BCBA' }: ProviderCaseloadViewProps) {
     const [activeView, setActiveView] = useState<'roster' | 'patient_detail'>('roster');
     const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
@@ -79,8 +80,12 @@ export function ProviderCaseloadView({ onBack, providerName = "Dr. Sarah", role 
     const [isSoapLocked, setIsSoapLocked] = useState(false);
     const [signatureHash, setSignatureHash] = useState('');
 
-    // Mock Data
-    const patients: Patient[] = [
+    // Demo caseload — invented children (Emma Johnson, Liam Chen, Sophia
+    // Martinez) with fabricated PHI, progress scores, and AI insights. This is
+    // sample data for investor / AACT walkthroughs ONLY. A real BCBA must never
+    // see a fabricated client roster, so non-demo users start with an empty
+    // caseload (the "Your Caseload is Empty" state renders below).
+    const DEMO_PATIENTS: Patient[] = [
         {
             id: '1',
             name: 'Emma Johnson',
@@ -115,6 +120,7 @@ export function ProviderCaseloadView({ onBack, providerName = "Dr. Sarah", role 
             aiInsight: 'Awaiting initial assessment completion by BCBA.'
         }
     ];
+    const patients: Patient[] = isDemoMode() ? DEMO_PATIENTS : [];
 
     const filteredPatients = patients.filter(p =>
         p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||

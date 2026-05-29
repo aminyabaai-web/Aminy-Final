@@ -228,7 +228,7 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
             };
           }));
         }
-        // If no data, MOCK_REQUESTS remains as initial state
+        // If no data, [] (the non-demo initial state) remains. MOCK_* is the initial state ONLY in demo mode — do not remove the demo-conditional initializer.
 
         // Fetch active access grants
         const { data: accessData, error: accessErr } = await supabase
@@ -281,7 +281,7 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
             };
           }));
         }
-        // If no data, MOCK_ACTIVE_ACCESS remains as initial state
+        // If no data, [] (the non-demo initial state) remains. MOCK_* is the initial state ONLY in demo mode — do not remove the demo-conditional initializer.
       } catch (err) {
         console.warn('ProviderAccessRequests: Failed to load from Supabase, using mock data', err);
         // Mocks remain as initial values
