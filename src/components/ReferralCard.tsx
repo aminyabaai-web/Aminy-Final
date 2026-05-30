@@ -82,7 +82,7 @@ export function ReferralCard({
               <p className="text-sm text-gray-600">
                 {referralCount > 0
                   ? `${referralCount} friends joined • $${rewardEarned} earned`
-                  : 'Give friends 1 month free'}
+                  : 'Give friends a 14-day Pro trial'}
               </p>
             </div>
           </div>
