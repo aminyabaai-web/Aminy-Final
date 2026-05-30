@@ -51,6 +51,7 @@ import { Input } from './ui/input';
 import { toast } from 'sonner';
 import { TierType } from '../lib/tier-utils';
 import { supabase } from '../utils/supabase/client';
+import { isDemoMode } from '../lib/demo-seed';
 
 // Types
 interface Product {
@@ -863,8 +864,11 @@ export function StoreMarketplace({
   const [selectedCategory, setSelectedCategory] = useState<ProductCategory | 'all'>('all');
   const [showFilters, setShowFilters] = useState(false);
   const [favorites, setFavorites] = useState<Set<string>>(() => loadWishlist());
-  const [products, setProducts] = useState<Product[]>(CURATED_PRODUCTS);
-  const [usingCuratedFallback, setUsingCuratedFallback] = useState(true);
+  // Curated catalog carries illustrative ratings/review counts/affiliate links,
+  // so real users only ever see it in demo mode. Production users get real
+  // store_products from Supabase, or an honest empty state.
+  const [products, setProducts] = useState<Product[]>(() => (isDemoMode() ? CURATED_PRODUCTS : []));
+  const [usingCuratedFallback, setUsingCuratedFallback] = useState(() => isDemoMode());
   const [showWishlistOnly, setShowWishlistOnly] = useState(false);
   const [filters, setFilters] = useState({
     freeOnly: false,
@@ -887,10 +891,25 @@ export function StoreMarketplace({
         if (!error && data && data.length > 0) {
           setProducts(data as Product[]);
           setUsingCuratedFallback(false);
+        } else if (isDemoMode()) {
+          // Demo walk-throughs show the rich curated catalog
+          setProducts(CURATED_PRODUCTS);
+          setUsingCuratedFallback(true);
+        } else {
+          // Real users with no store_products see an honest empty state,
+          // never illustrative ratings or placeholder affiliate links.
+          setProducts([]);
+          setUsingCuratedFallback(false);
         }
-        // On error or empty, keep CURATED_PRODUCTS (already set as default state)
       } catch {
-        // Silent fallback — curated catalog already loaded
+        // On failure, only demo mode falls back to the curated catalog
+        if (isDemoMode()) {
+          setProducts(CURATED_PRODUCTS);
+          setUsingCuratedFallback(true);
+        } else {
+          setProducts([]);
+          setUsingCuratedFallback(false);
+        }
       }
     }
     loadProducts();
@@ -1060,7 +1079,7 @@ export function StoreMarketplace({
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
               {onBack && (
-                <Button variant="ghost" size="sm" onClick={onBack}>
+                <Button variant="ghost" size="sm" onClick={onBack} aria-label="Go back">
                   <ArrowLeft className="w-4 h-4" />
                 </Button>
               )}
@@ -1077,6 +1096,8 @@ export function StoreMarketplace({
                 size="sm"
                 onClick={() => setShowWishlistOnly(!showWishlistOnly)}
                 className="flex items-center gap-1.5"
+                aria-label={showWishlistOnly ? 'Show all resources' : 'Show wishlist only'}
+                aria-pressed={showWishlistOnly}
               >
                 <Heart className={`w-4 h-4 ${showWishlistOnly ? 'fill-white' : ''}`} />
                 {favorites.size > 0 && (
@@ -1219,7 +1240,7 @@ export function StoreMarketplace({
                   className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer border-teal-200 dark:border-teal-800"
                   onClick={() => handleProductAction(product)}
                 >
-                  <div className="aspect-video bg-teal-50 dark:bg-teal-900/20 relative">
+                  <div className="aspect-video bg-teal-50 dark:bg-teal-900/30 relative">
                     <div className="absolute inset-0 flex items-center justify-center text-teal-300">
                       {CATEGORIES.find(c => c.id === product.category)?.icon}
                     </div>
@@ -1239,6 +1260,8 @@ export function StoreMarketplace({
                         toggleFavorite(product.id);
                       }}
                       className="absolute top-2 right-2 p-2 bg-white/90 rounded-full hover:bg-white transition-colors"
+                      aria-label={favorites.has(product.id) ? `Remove ${product.name} from wishlist` : `Add ${product.name} to wishlist`}
+                      aria-pressed={favorites.has(product.id)}
                     >
                       <Heart
                         className={`w-4 h-4 ${
@@ -1328,26 +1351,38 @@ export function StoreMarketplace({
           </div>
 
           {filteredProducts.length === 0 ? (
-            <Card className="p-12 text-center">
-              <Package className="w-12 h-12 text-slate-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2">
-                No resources found
-              </h3>
-              <p className="text-slate-500 mb-4">
-                Try adjusting your filters or search terms.
-              </p>
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setSearchQuery('');
-                  setSelectedCategory('all');
-                  setShowWishlistOnly(false);
-                  setFilters({ freeOnly: false, bcbaRecommended: false, digitalOnly: false, newOnly: false, hsaFsaOnly: false });
-                }}
-              >
-                Clear all filters
-              </Button>
-            </Card>
+            products.length === 0 ? (
+              <Card className="p-12 text-center">
+                <Package className="w-12 h-12 text-slate-400 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2">
+                  No resources yet
+                </h3>
+                <p className="text-slate-500">
+                  Our team is curating BCBA-reviewed tools and resources. Check back soon.
+                </p>
+              </Card>
+            ) : (
+              <Card className="p-12 text-center">
+                <Package className="w-12 h-12 text-slate-400 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2">
+                  No resources found
+                </h3>
+                <p className="text-slate-500 mb-4">
+                  Try adjusting your filters or search terms.
+                </p>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setSearchQuery('');
+                    setSelectedCategory('all');
+                    setShowWishlistOnly(false);
+                    setFilters({ freeOnly: false, bcbaRecommended: false, digitalOnly: false, newOnly: false, hsaFsaOnly: false });
+                  }}
+                >
+                  Clear all filters
+                </Button>
+              </Card>
+            )
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {filteredProducts.map((product) => (
@@ -1363,7 +1398,7 @@ export function StoreMarketplace({
                       <Badge className="absolute top-2 left-2 bg-blue-500 text-white">New</Badge>
                     )}
                     {product.isPremium && !hasPremiumAccess && (
-                      <div className="absolute inset-0 bg-slate-900/60 flex items-center justify-center">
+                      <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
                         <Badge className="bg-amber-500 text-white">
                           <Crown className="w-3 h-3 mr-1" />
                           Premium
@@ -1376,6 +1411,8 @@ export function StoreMarketplace({
                         toggleFavorite(product.id);
                       }}
                       className="absolute top-2 right-2 p-2 bg-white/90 rounded-full hover:bg-white transition-colors"
+                      aria-label={favorites.has(product.id) ? `Remove ${product.name} from wishlist` : `Add ${product.name} to wishlist`}
+                      aria-pressed={favorites.has(product.id)}
                     >
                       <Heart
                         className={`w-4 h-4 ${

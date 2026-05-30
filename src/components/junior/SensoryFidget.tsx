@@ -488,12 +488,13 @@ function CalmSpinner() {
 
 function ColorTap() {
   const [glowing, setGlowing] = useState<Record<number, boolean>>({});
-  const [pattern, setPattern] = useState<number[]>([]);
+  const [pattern, setPattern] = useState<{ key: number; idx: number }[]>([]);
+  const patternKey = useRef(0);
 
   const handleTap = (idx: number) => {
     if (navigator.vibrate) navigator.vibrate(20);
     setGlowing(prev => ({ ...prev, [idx]: true }));
-    setPattern(prev => [...prev.slice(-5), idx]);
+    setPattern(prev => [...prev.slice(-5), { key: ++patternKey.current, idx }]);
     setTimeout(() => setGlowing(prev => ({ ...prev, [idx]: false })), 500);
   };
 
@@ -538,9 +539,9 @@ function ColorTap() {
       {/* Pattern indicator */}
       <div className="flex gap-2 h-6 items-center">
         <AnimatePresence>
-          {pattern.map((idx, i) => (
+          {pattern.map(({ key, idx }) => (
             <motion.div
-              key={i}
+              key={key}
               initial={{ scale: 0, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0, opacity: 0 }}
@@ -596,7 +597,7 @@ export function SensoryFidget({ onBack, childName }: SensoryFidgetProps) {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className="flex-1 py-3 flex flex-col items-center gap-0.5 transition-all"
+            className="flex-1 py-3 flex flex-col items-center gap-1 transition-all"
             style={{
               background: activeTab === tab.id ? '#43AA8B33' : 'transparent',
               borderBottom: activeTab === tab.id ? '2px solid #43AA8B' : '2px solid transparent',

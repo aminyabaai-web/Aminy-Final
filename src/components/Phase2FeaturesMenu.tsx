@@ -24,7 +24,7 @@ interface Phase2FeaturesMenuProps {
 export function Phase2FeaturesMenu({ onNavigate, userRole = 'parent' }: Phase2FeaturesMenuProps) {
   const features = [
     {
-      id: 'coach',
+      id: 'bcba-portal',
       title: 'BCBA Coach Portal',
       description: 'Manage families, track goals, and add clinical notes',
       icon: Users,
@@ -46,7 +46,7 @@ export function Phase2FeaturesMenu({ onNavigate, userRole = 'parent' }: Phase2Fe
       visible: true
     },
     {
-      id: 'launch',
+      id: 'launch-status',
       title: 'Launch Status',
       description: 'View beta readiness and Phase 2 completion',
       icon: Rocket,
@@ -102,7 +102,7 @@ export function Phase2FeaturesMenu({ onNavigate, userRole = 'parent' }: Phase2Fe
         <div className="flex items-start gap-3">
           <Shield className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
           <div>
-            <h4 className="text-slate-900 mb-1">HIPAA-Lite Mode</h4>
+            <h4 className="text-slate-900 mb-1">HIPAA-Conscious Privacy</h4>
             <p className="text-sm text-slate-700 mb-2">
               Enhanced privacy protections are now available in Settings → Privacy & Security
             </p>
@@ -110,7 +110,7 @@ export function Phase2FeaturesMenu({ onNavigate, userRole = 'parent' }: Phase2Fe
               onClick={() => onNavigate('settings')}
               className="text-sm text-green-700 hover:text-green-800 underline underline-offset-2"
             >
-              Configure HIPAA Settings →
+              Configure privacy settings →
             </button>
           </div>
         </div>

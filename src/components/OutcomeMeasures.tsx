@@ -35,6 +35,7 @@ import {
   saveAssessmentResult,
   getAssessmentHistory,
 } from '../lib/outcome-measures';
+import { isDemoMode } from '../lib/demo-seed';
 
 // ---------------------------------------------------------------------------
 // Props
@@ -89,7 +90,14 @@ function formatDate(iso: string): string {
 // Component
 // ---------------------------------------------------------------------------
 
-export function OutcomeMeasures({ userId = 'demo', childId = 'child1', childName = 'Your Child', onBack }: OutcomeMeasuresProps) {
+export function OutcomeMeasures({ userId, childId, childName = 'Your Child', onBack }: OutcomeMeasuresProps) {
+  // In demo mode, use placeholder ids so the screen is fully explorable.
+  // For real users, never fabricate ids — fall back to empty and guard persistence
+  // so a fake child_id can't be written to the database.
+  const effectiveUserId = userId ?? (isDemoMode() ? 'demo' : '');
+  const effectiveChildId = childId ?? (isDemoMode() ? 'child1' : '');
+  const canPersist = effectiveUserId.length > 0 && effectiveChildId.length > 0;
+
   const [view, setView] = useState<ViewState>('selection');
   const [selectedType, setSelectedType] = useState<AssessmentType | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -133,8 +141,8 @@ export function OutcomeMeasures({ userId = 'demo', childId = 'child1', childName
       const scored = scoreAssessment(selectedType, answers);
       const newResult: AssessmentResult = {
         type: selectedType,
-        userId,
-        childId,
+        userId: effectiveUserId,
+        childId: effectiveChildId,
         completedAt: new Date().toISOString(),
         answers,
         domainScores: scored.domainScores,
@@ -144,7 +152,7 @@ export function OutcomeMeasures({ userId = 'demo', childId = 'child1', childName
       setResult(newResult);
       setView('results');
     }
-  }, [currentIndex, questions.length, selectedType, answers, userId, childId]);
+  }, [currentIndex, questions.length, selectedType, answers, effectiveUserId, effectiveChildId]);
 
   const handlePrevious = useCallback(() => {
     if (currentIndex > 0) setCurrentIndex((i) => i - 1);
@@ -152,16 +160,24 @@ export function OutcomeMeasures({ userId = 'demo', childId = 'child1', childName
 
   const handleSave = useCallback(async () => {
     if (!result) return;
+    if (!canPersist) {
+      toast.error('Sign in and select a child to save assessment results.');
+      return;
+    }
     setSaving(true);
     try {
-      await saveAssessmentResult(result);
-      toast.success('Assessment saved successfully');
+      const outcome = await saveAssessmentResult(result);
+      if (outcome.persisted === 'server') {
+        toast.success('Assessment saved');
+      } else {
+        toast.warning('Saved on this device — will sync when you reconnect');
+      }
     } catch {
-      toast.error('Failed to save assessment');
+      toast.error("Couldn't save — please try again");
     } finally {
       setSaving(false);
     }
-  }, [result]);
+  }, [result, canPersist]);
 
   const handleShare = useCallback(() => {
     if (!result) return;
@@ -174,9 +190,14 @@ export function OutcomeMeasures({ userId = 'demo', childId = 'child1', childName
   }, [result, childName]);
 
   const handleShowHistory = useCallback(async () => {
+    if (!canPersist) {
+      setHistoryData([]);
+      setView('history');
+      return;
+    }
     setHistoryLoading(true);
     try {
-      const data = await getAssessmentHistory(userId, childId);
+      const data = await getAssessmentHistory(effectiveUserId, effectiveChildId);
       setHistoryData(data);
     } catch {
       setHistoryData([]);
@@ -184,7 +205,7 @@ export function OutcomeMeasures({ userId = 'demo', childId = 'child1', childName
       setHistoryLoading(false);
       setView('history');
     }
-  }, [userId, childId]);
+  }, [effectiveUserId, effectiveChildId, canPersist]);
 
   const handleBackToSelection = useCallback(() => {
     setView('selection');
@@ -735,11 +756,12 @@ export function OutcomeMeasures({ userId = 'demo', childId = 'child1', childName
                               padding: '0 4px',
                             }}
                           >
-                            {scores.map((score, idx) => {
+                            {group.items.map((item, idx) => {
+                              const score = item.compositeScore;
                               const barH = Math.max(4, (score / maxScore) * chartHeight);
                               return (
                                 <div
-                                  key={idx}
+                                  key={`${item.type}-${item.completedAt}`}
                                   style={{
                                     flex: 1,
                                     display: 'flex',
@@ -767,8 +789,8 @@ export function OutcomeMeasures({ userId = 'demo', childId = 'child1', childName
 
                           {/* Date labels */}
                           <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 6, padding: '0 4px' }}>
-                            {group.items.map((item, idx) => (
-                              <span key={idx} style={{ fontSize: 10, color: '#9ca3af', flex: 1, textAlign: 'center' }}>
+                            {group.items.map((item) => (
+                              <span key={`${item.type}-${item.completedAt}`} style={{ fontSize: 10, color: '#9ca3af', flex: 1, textAlign: 'center' }}>
                                 {formatDate(item.completedAt)}
                               </span>
                             ))}
@@ -780,11 +802,11 @@ export function OutcomeMeasures({ userId = 'demo', childId = 'child1', childName
 
                   {/* History list */}
                   <h4 style={{ fontSize: 14, fontWeight: 700, color: '#111827', margin: '4px 0 0 0' }}>All Assessments</h4>
-                  {historyData.map((item, idx) => {
+                  {historyData.map((item) => {
                     const meta = ASSESSMENT_META[item.type];
                     return (
                       <div
-                        key={idx}
+                        key={`${item.type}-${item.completedAt}`}
                         style={{
                           background: '#ffffff',
                           borderRadius: 14,

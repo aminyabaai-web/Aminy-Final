@@ -342,7 +342,7 @@ export function TreatmentPlanSummary({ onBack, childName = 'Your Child' }: Treat
           <Card className="p-3 bg-white border-slate-200">
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 bg-teal-50 rounded-lg flex items-center justify-center flex-shrink-0">
-                <Calendar className="w-4.5 h-4.5 text-teal-600" style={{ width: 18, height: 18 }} />
+                <Calendar className="w-5 h-5 text-teal-600" style={{ width: 18, height: 18 }} />
               </div>
               <div>
                 <p className="text-xs text-slate-400">Next session</p>

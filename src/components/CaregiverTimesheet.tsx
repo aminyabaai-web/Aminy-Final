@@ -31,6 +31,7 @@ import {
 import { Button } from './ui/button';
 import { toast } from 'sonner';
 import { NotificationService } from '../lib/notification-service';
+import { isDemoMode } from '../lib/demo-seed';
 
 const fontStack = 'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", "Helvetica Neue", Arial, "Noto Sans", sans-serif';
 
@@ -57,7 +58,10 @@ interface CaregiverTimesheetProps {
     caregiverName?: string;
 }
 
-export function CaregiverTimesheet({ onBack, caregiverName = "Michael T." }: CaregiverTimesheetProps): React.ReactNode {
+export function CaregiverTimesheet({ onBack, caregiverName }: CaregiverTimesheetProps): React.ReactNode {
+    const demo = isDemoMode();
+    // Never invent a caregiver name for a real user; fall back to a neutral label.
+    const displayName = caregiverName || (demo ? 'Michael T.' : 'Caregiver');
     const [activeTab, setActiveTab] = useState<'clock' | 'history'>('clock');
     const [isClockedIn, setIsClockedIn] = useState(false);
     const [isProcessing, setIsProcessing] = useState(false);
@@ -156,7 +160,7 @@ export function CaregiverTimesheet({ onBack, caregiverName = "Michael T." }: Car
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
-            NotificationService.sendEVVTimesheetSubmitted('payroll@acumen.com', caregiverName);
+            NotificationService.sendEVVTimesheetSubmitted('payroll@acumen.com', displayName);
             toast.success('Timesheet export complete.');
         }, 1000);
     };
@@ -172,6 +176,7 @@ export function CaregiverTimesheet({ onBack, caregiverName = "Michael T." }: Car
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                         <button
                             onClick={onBack}
+                            aria-label="Go back"
                             style={{
                                 width: '36px', height: '36px', borderRadius: '18px', border: 'none', backgroundColor: '#FFFFFF',
                                 boxShadow: '0 1px 3px rgba(0,0,0,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer'
@@ -186,7 +191,7 @@ export function CaregiverTimesheet({ onBack, caregiverName = "Michael T." }: Car
                         <h3 className="sr-only">Shift capture, exports, and reconciliation status</h3>
                     </div>
                     <div style={{ fontSize: '13px', color: 'rgba(17, 24, 39, 0.5)', fontWeight: 500 }}>
-                        {caregiverName}
+                        {displayName}
                     </div>
                 </div>
             </div>
@@ -320,16 +325,16 @@ export function CaregiverTimesheet({ onBack, caregiverName = "Michael T." }: Car
                                 </div>
                             </div>
 
-                            {/* Patient Info Card */}
+                            {/* Patient Info Card — sample client only in demo mode */}
                             <div style={{ backgroundColor: '#FFFFFF', borderRadius: '24px', padding: '24px', boxShadow: '0 2px 10px rgba(0,0,0,0.02)' }}>
                                 <h3 style={{ fontSize: '16px', fontWeight: 600, color: '#111827', marginBottom: '16px' }}>Session Details</h3>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '16px', borderBottom: '1px solid #F3F4F6' }}>
                                     <span style={{ fontSize: '14px', color: '#6B7280' }}>Client</span>
-                                    <span style={{ fontSize: '14px', fontWeight: 500, color: '#111827' }}>Emma Johnson</span>
+                                    <span style={{ fontSize: '14px', fontWeight: 500, color: '#111827' }}>{demo ? 'Emma Johnson' : 'Not linked yet'}</span>
                                 </div>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '16px' }}>
                                     <span style={{ fontSize: '14px', color: '#6B7280' }}>Service Code</span>
-                                    <span style={{ fontSize: '14px', fontWeight: 500, color: '#111827' }}>H2014 (Skills Training)</span>
+                                    <span style={{ fontSize: '14px', fontWeight: 500, color: '#111827' }}>{demo ? 'H2014 (Skills Training)' : '—'}</span>
                                 </div>
                             </div>
                         </motion.div>

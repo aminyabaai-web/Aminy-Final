@@ -322,6 +322,7 @@ export default function PriorAuthFlow({ onBack, onComplete, childName: initialCh
               <select
                 value={insuranceCompany}
                 onChange={e => setInsuranceCompany(e.target.value)}
+                aria-label="Insurance Company"
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
               >
                 <option value="">Select insurer...</option>
@@ -390,7 +391,8 @@ export default function PriorAuthFlow({ onBack, onComplete, childName: initialCh
             <div>
               <Label>Additional Notes</Label>
               <textarea
-                className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                style={{ minHeight: 80 }}
                 placeholder="Any additional context for the authorization request..."
                 value={notes}
                 onChange={e => setNotes(e.target.value)}

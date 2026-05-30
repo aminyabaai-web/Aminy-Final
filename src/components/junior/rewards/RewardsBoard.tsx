@@ -248,7 +248,7 @@ function StarEarner({ onEarn }: { onEarn: (stars: StarValue) => void }) {
     setTimeout(() => setFlashing(null), 600);
   };
   return (
-    <div className="bg-white/70 backdrop-blur rounded-2xl p-4">
+    <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4">
       <p className="text-xs font-bold text-gray-600 mb-3 text-center uppercase tracking-wide">Earn Stars</p>
       <div className="grid grid-cols-3 gap-2">
         {STAR_VALUES.map(val => (
@@ -286,7 +286,7 @@ function WeeklyStarChart({ weeklyData }: { weeklyData: { date: string; stars: nu
   const todayIdx = today === 0 ? 6 : today - 1;
 
   return (
-    <div className="bg-white/60 backdrop-blur rounded-2xl p-4">
+    <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4">
       <h3 className="text-sm font-bold text-gray-700 mb-3 flex items-center gap-2">
         <Trophy className="w-4 h-4 text-amber-500" />
         This Week
@@ -302,7 +302,7 @@ function WeeklyStarChart({ weeklyData }: { weeklyData: { date: string; stars: nu
                 initial={{ height: 4 }}
                 animate={{ height }}
                 transition={{ duration: 0.5, delay: i * 0.05 }}
-                className="w-full rounded-t-md"
+                className="w-full rounded-md"
                 style={{
                   background: isToday
                     ? 'linear-gradient(180deg, #F59E0B, #D97706)'
@@ -346,14 +346,14 @@ function HistoryTab({ weeklyData, totalStars }: { weeklyData: { date: string; st
       </div>
 
       <div className="grid grid-cols-2 gap-3">
-        <div className="bg-white/60 rounded-2xl p-3 text-center">
+        <div className="bg-white/70 rounded-2xl p-3 text-center">
           <p className="text-xs text-gray-500 mb-1">Daily avg</p>
           <div className="flex items-center justify-center gap-1">
             <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
             <span className="text-xl font-bold text-gray-700">{dailyAvg}</span>
           </div>
         </div>
-        <div className="bg-white/60 rounded-2xl p-3 text-center">
+        <div className="bg-white/70 rounded-2xl p-3 text-center">
           <p className="text-xs text-gray-500 mb-1">This week</p>
           <div className="flex items-center justify-center gap-1">
             <Flame className="w-4 h-4 text-orange-400" />
@@ -408,7 +408,11 @@ export function RewardsBoard({ onBack, onNavigateToActivity, dailyMissionSteps =
 
   const handleRedeem = useCallback((rewardId: string) => {
     const reward = photoRewards.find(r => r.id === rewardId);
+    // Guard: can't redeem a missing/already-redeemed reward, or one the child can't afford.
     if (!reward || reward.redeemed || rewards.totalStars < reward.starCost) return;
+
+    // Spend the stars: deduct the reward's cost (does NOT advance the daily streak — redeeming isn't an earning activity).
+    rewards.spendStars(reward.starCost, `redeem:${rewardId}`);
 
     playUnlockFanfare();
     haptic([60, 30, 60, 30, 120]);
@@ -421,7 +425,7 @@ export function RewardsBoard({ onBack, onNavigateToActivity, dailyMissionSteps =
     );
 
     setTimeout(() => setCelebrating(null), 4000);
-  }, [photoRewards, rewards.totalStars]);
+  }, [photoRewards, rewards]);
 
   const handleLabelChange = useCallback((rewardId: string, label: string) => {
     setPhotoRewards(prev => prev.map(r => r.id === rewardId ? { ...r, label } : r));
@@ -476,7 +480,8 @@ export function RewardsBoard({ onBack, onNavigateToActivity, dailyMissionSteps =
           <motion.button
             whileTap={{ scale: 0.9 }}
             onClick={onBack}
-            className="w-10 h-10 bg-white/60 backdrop-blur rounded-full flex items-center justify-center"
+            aria-label="Back"
+            className="w-10 h-10 bg-white/70 backdrop-blur-sm rounded-full flex items-center justify-center"
           >
             <ArrowLeft className="w-5 h-5 text-amber-700" />
           </motion.button>
@@ -587,7 +592,7 @@ export function RewardsBoard({ onBack, onNavigateToActivity, dailyMissionSteps =
                               {/* Progress overlay text */}
                               {!reward.redeemed && (
                                 <div className="absolute inset-0 flex items-end justify-center pb-2">
-                                  <div className="bg-black/40 rounded-full px-2 py-0.5">
+                                  <div className="rounded-full px-2 py-0.5" style={{ background: 'rgba(0,0,0,0.4)' }}>
                                     <span className="text-white text-[10px] font-bold">
                                       {Math.round(progress * 100)}%
                                     </span>
@@ -670,19 +675,21 @@ export function RewardsBoard({ onBack, onNavigateToActivity, dailyMissionSteps =
                           )}
 
                           <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-0.5">
+                            <div className="flex items-center gap-1">
                               <Star className="w-3 h-3 text-amber-500 fill-amber-500" />
                               <span className="text-[11px] font-bold text-amber-700">{rewards.totalStars}/{reward.starCost}</span>
                             </div>
                             <div className="flex items-center gap-1">
                               {/* Star cost adjustment */}
                               {!reward.redeemed && !canRedeem && (
-                                <div className="flex items-center gap-0.5">
+                                <div className="flex items-center gap-1">
                                   <button onClick={() => handleCostChange(reward.id, -5)}
+                                    aria-label="Lower star goal"
                                     className="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center">
                                     <Minus className="w-2.5 h-2.5 text-gray-500" />
                                   </button>
                                   <button onClick={() => handleCostChange(reward.id, 5)}
+                                    aria-label="Raise star goal"
                                     className="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center">
                                     <Plus className="w-2.5 h-2.5 text-gray-500" />
                                   </button>
@@ -706,6 +713,7 @@ export function RewardsBoard({ onBack, onNavigateToActivity, dailyMissionSteps =
                         {reward.photoUrl && !reward.redeemed && (
                           <button
                             onClick={() => { setEditingReward(reward.id); fileInputRef.current?.click(); }}
+                            aria-label="Change reward photo"
                             className="absolute top-1.5 right-1.5 w-6 h-6 bg-white/80 rounded-full flex items-center justify-center shadow-sm"
                           >
                             <Camera className="w-3 h-3 text-gray-500" />

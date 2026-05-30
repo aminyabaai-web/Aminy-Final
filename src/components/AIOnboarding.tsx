@@ -341,6 +341,7 @@ export function AIOnboarding({ onComplete, parentName = '' }: AIOnboardingProps)
               <button
                 onClick={handleSend}
                 disabled={!input.trim() || isTyping}
+                aria-label="Send answer"
                 className="w-11 h-11 rounded-xl bg-[#6B9080] text-white flex items-center justify-center disabled:opacity-30 active:scale-95 transition-all"
               >
                 <Send className="w-4 h-4" />

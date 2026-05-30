@@ -6,6 +6,7 @@
 import React from 'react';
 import { Clock, User, FileText, MessageSquare, Calendar, Check } from 'lucide-react';
 import { Card } from './ui/card';
+import { ScreenHeader } from './ui/ScreenHeader';
 
 interface Activity {
   id: string;
@@ -60,8 +61,10 @@ export function ActivityLog({ activities = [], maxItems = 10, onBack }: Activity
   };
 
   const formatTime = (date: Date) => {
+    const ts = date instanceof Date ? date.getTime() : new Date(date).getTime();
+    if (isNaN(ts)) return '';
     const now = new Date();
-    const diff = now.getTime() - date.getTime();
+    const diff = now.getTime() - ts;
     const minutes = Math.floor(diff / 60000);
     const hours = Math.floor(diff / 3600000);
     const days = Math.floor(diff / 86400000);
@@ -70,16 +73,13 @@ export function ActivityLog({ activities = [], maxItems = 10, onBack }: Activity
     if (minutes < 60) return `${minutes}m ago`;
     if (hours < 24) return `${hours}h ago`;
     if (days < 7) return `${days}d ago`;
-    return date.toLocaleDateString();
+    return new Date(ts).toLocaleDateString();
   };
 
   return (
     <div>
       {onBack && (
-        <div className="flex items-center gap-2 p-4 border-b">
-          <button onClick={onBack} className="p-2 hover:bg-gray-100 rounded-lg">←</button>
-          <h1 className="text-xl font-semibold">Activity Log</h1>
-        </div>
+        <ScreenHeader title="Activity Log" onBack={onBack} />
       )}
     <Card className="p-3 sm:p-4 m-4">
       <h3 className="font-semibold mb-4">Recent Activity</h3>

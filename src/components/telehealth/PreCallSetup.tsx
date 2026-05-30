@@ -446,6 +446,7 @@ export function PreCallSetup({
               <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex items-center space-x-3">
                 <button
                   onClick={toggleAudio}
+                  aria-label={audioEnabled ? 'Mute microphone' : 'Unmute microphone'}
                   className={`w-12 h-12 rounded-full flex items-center justify-center transition-colors ${
                     audioEnabled
                       ? 'bg-gray-800/80 hover:bg-gray-700/80 text-white'
@@ -457,6 +458,7 @@ export function PreCallSetup({
 
                 <button
                   onClick={toggleVideo}
+                  aria-label={videoEnabled ? 'Turn off camera' : 'Turn on camera'}
                   className={`w-12 h-12 rounded-full flex items-center justify-center transition-colors ${
                     videoEnabled
                       ? 'bg-gray-800/80 hover:bg-gray-700/80 text-white'
@@ -616,6 +618,7 @@ export function PreCallSetup({
                   <select
                     value={selectedDevices.camera}
                     onChange={(e) => setSelectedDevices(prev => ({ ...prev, camera: e.target.value }))}
+                    aria-label="Select camera"
                     className="w-full p-2 rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
                   >
                     {devices.cameras.map(device => (
@@ -634,6 +637,7 @@ export function PreCallSetup({
                   <select
                     value={selectedDevices.microphone}
                     onChange={(e) => setSelectedDevices(prev => ({ ...prev, microphone: e.target.value }))}
+                    aria-label="Select microphone"
                     className="w-full p-2 rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
                   >
                     {devices.microphones.map(device => (
@@ -653,6 +657,7 @@ export function PreCallSetup({
                     <select
                       value={selectedDevices.speaker}
                       onChange={(e) => setSelectedDevices(prev => ({ ...prev, speaker: e.target.value }))}
+                      aria-label="Select speaker"
                       className="w-full p-2 rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
                     >
                       {devices.speakers.map(device => (

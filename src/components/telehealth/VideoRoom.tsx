@@ -25,9 +25,6 @@ import {
   Phone,
   Monitor,
   MonitorOff,
-  MessageCircle,
-  MoreVertical,
-  Clock,
   AlertTriangle,
   X,
   Users,
@@ -95,7 +92,6 @@ export function VideoRoom({
 }: VideoRoomProps) {
   const [callState, setCallState] = useState<VideoCallState>(initialVideoCallState);
   const [showEndConfirm, setShowEndConfirm] = useState(false);
-  const [showChat, setShowChat] = useState(false);
   const [elapsedTime, setElapsedTime] = useState(0);
 
   // Recording state
@@ -234,6 +230,70 @@ export function VideoRoom({
 
     return () => clearInterval(interval);
   }, [callState.state]);
+
+  // True once the remote participant's video track is actually playable and
+  // attached. Until then we show an honest "Connecting video…" state rather
+  // than a permanently blank black box.
+  const [remoteVideoReady, setRemoteVideoReady] = useState(false);
+
+  // Attach the live Daily MediaStream tracks to the <video> elements.
+  // The refs alone never receive a stream — Daily hands us tracks via the
+  // call object, so we read them off participants() and wire them here.
+  // Re-runs whenever join state or participant video flags change.
+  const syncVideoStreams = useCallback(() => {
+    const callObject = callObjectRef.current;
+    if (!callObject) return;
+
+    const all = callObject.participants();
+    const local = all['local'];
+    const remote = Object.values(all).find(p => p && !p.local);
+
+    // Local PIP
+    if (localVideoRef.current) {
+      const localTrack = local?.tracks?.video?.persistentTrack;
+      if (localTrack) {
+        const existing = localVideoRef.current.srcObject as MediaStream | null;
+        if (!existing || existing.getVideoTracks()[0]?.id !== localTrack.id) {
+          localVideoRef.current.srcObject = new MediaStream([localTrack]);
+          localVideoRef.current.play().catch(() => { /* autoplay may be blocked */ });
+        }
+      } else if (localVideoRef.current.srcObject) {
+        localVideoRef.current.srcObject = null;
+      }
+    }
+
+    // Remote main
+    if (remoteVideoRef.current) {
+      const remoteVideo = remote?.tracks?.video;
+      const remoteTrack = remoteVideo?.persistentTrack;
+      const playable = remoteVideo?.state === 'playable' && !!remoteTrack;
+      if (playable && remoteTrack) {
+        const existing = remoteVideoRef.current.srcObject as MediaStream | null;
+        if (!existing || existing.getVideoTracks()[0]?.id !== remoteTrack.id) {
+          remoteVideoRef.current.srcObject = new MediaStream([remoteTrack]);
+          remoteVideoRef.current.play().catch(() => { /* autoplay may be blocked */ });
+        }
+        setRemoteVideoReady(true);
+      } else {
+        if (remoteVideoRef.current.srcObject) remoteVideoRef.current.srcObject = null;
+        setRemoteVideoReady(false);
+      }
+    } else {
+      setRemoteVideoReady(false);
+    }
+  }, []);
+
+  // Wire/re-wire streams when the call connects or participant video changes.
+  useEffect(() => {
+    if (callState.state !== 'joined') return;
+    syncVideoStreams();
+  }, [
+    callState.state,
+    callState.isVideoOff,
+    callState.participants,
+    callState.localParticipant,
+    syncVideoStreams,
+  ]);
 
   // Format elapsed time
   const formatElapsedTime = (seconds: number): string => {
@@ -463,15 +523,6 @@ export function VideoRoom({
               stats={connectionStats}
               variant="pill"
             />
-            <button
-              onClick={() => setShowChat(!showChat)}
-              className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
-            >
-              <MessageCircle className="w-5 h-5 text-white" />
-            </button>
-            <button className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors">
-              <MoreVertical className="w-5 h-5 text-white" />
-            </button>
           </div>
         </div>
       </header>
@@ -482,12 +533,22 @@ export function VideoRoom({
         <div className="absolute inset-0 bg-gray-800">
           {remoteParticipant ? (
             remoteParticipant.video ? (
-              <video
-                ref={remoteVideoRef}
-                autoPlay
-                playsInline
-                className="w-full h-full object-cover"
-              />
+              <>
+                <video
+                  ref={remoteVideoRef}
+                  autoPlay
+                  playsInline
+                  className="w-full h-full object-cover"
+                />
+                {!remoteVideoReady && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-gray-800">
+                    <div className="text-center">
+                      <div className="w-12 h-12 border-4 border-white/20 border-t-white rounded-full animate-spin mx-auto mb-3" />
+                      <p className="text-white/80 text-sm">Connecting video…</p>
+                    </div>
+                  </div>
+                )}
+              </>
             ) : (
               <div className="w-full h-full flex items-center justify-center">
                 <div className="text-center">
@@ -554,6 +615,7 @@ export function VideoRoom({
           {/* Mute */}
           <button
             onClick={handleToggleAudio}
+            aria-label={callState.isMuted ? 'Unmute microphone' : 'Mute microphone'}
             className={`p-4 rounded-full transition-colors ${
               callState.isMuted
                 ? 'bg-red-500 hover:bg-red-600'
@@ -570,6 +632,7 @@ export function VideoRoom({
           {/* Video */}
           <button
             onClick={handleToggleVideo}
+            aria-label={callState.isVideoOff ? 'Turn on camera' : 'Turn off camera'}
             className={`p-4 rounded-full transition-colors ${
               callState.isVideoOff
                 ? 'bg-red-500 hover:bg-red-600'
@@ -586,6 +649,7 @@ export function VideoRoom({
           {/* Screen Share */}
           <button
             onClick={handleToggleScreenShare}
+            aria-label={callState.isScreenSharing ? 'Stop screen sharing' : 'Share screen'}
             className={`p-4 rounded-full transition-colors ${
               callState.isScreenSharing
                 ? 'bg-blue-500 hover:bg-blue-600'
@@ -608,6 +672,7 @@ export function VideoRoom({
                   ? 'bg-red-500 hover:bg-red-600 ring-2 ring-red-300 ring-offset-2 ring-offset-gray-900'
                   : 'bg-white/20 hover:bg-white/30'
               }`}
+              aria-label={isRecording ? 'Stop recording' : 'Start recording'}
               title={isRecording ? 'Stop recording' : 'Start recording'}
             >
               <Circle className={`w-6 h-6 text-white ${isRecording ? 'fill-white' : ''}`} />
@@ -617,20 +682,21 @@ export function VideoRoom({
           {/* End Call */}
           <button
             onClick={() => setShowEndConfirm(true)}
+            aria-label="End call"
             className="p-4 rounded-full bg-red-500 hover:bg-red-600 transition-colors"
           >
-            <Phone className="w-6 h-6 text-white transform rotate-135" />
+            <Phone className="w-6 h-6 text-white" style={{ transform: 'rotate(135deg)' }} />
           </button>
         </div>
       </div>
 
       {/* End Call Confirmation Modal */}
       {showEndConfirm && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-60 p-4">
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[60] p-4">
           <div className="bg-white rounded-2xl p-6 max-w-sm w-full">
             <div className="text-center">
               <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Phone className="w-6 h-6 text-red-500 transform rotate-135" />
+                <Phone className="w-6 h-6 text-red-500" style={{ transform: 'rotate(135deg)' }} />
               </div>
               <h3 className="text-lg font-semibold text-gray-900">End Session?</h3>
               <p className="text-sm text-gray-500 mt-2">
@@ -658,7 +724,7 @@ export function VideoRoom({
 
       {/* HIPAA Recording Consent Modal */}
       {showRecordingConsent && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-60 p-4">
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-[60] p-4">
           <div className="bg-white rounded-2xl p-6 max-w-md w-full max-h-[90vh] overflow-y-auto">
             {/* Header with HIPAA shield */}
             <div className="flex items-center gap-3 mb-4">
@@ -687,7 +753,7 @@ export function VideoRoom({
               <div className="flex items-start gap-2">
                 <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
                 <p className="text-sm text-gray-700">
-                  Recording stored securely with end-to-end encryption
+                  Recordings are encrypted in transit and at rest
                 </p>
               </div>
               <div className="flex items-start gap-2">
@@ -749,9 +815,9 @@ export function VideoRoom({
         </div>
       )}
 
-      {/* Auto-Reconnect Overlay */}
-      {reconnect.state === 'reconnecting' && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-60 p-4">
+      {/* Auto-Reconnect Overlay (suppressed once the user intentionally ends) */}
+      {!sessionEndedNaturally && reconnect.state === 'reconnecting' && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-[60] p-4">
           <div className="bg-gray-900/95 backdrop-blur-sm border border-white/10 rounded-2xl p-6 max-w-sm w-full text-center">
             <div className="w-16 h-16 border-4 border-yellow-400/30 border-t-yellow-400 rounded-full animate-spin mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-white">Reconnecting...</h3>
@@ -771,9 +837,9 @@ export function VideoRoom({
         </div>
       )}
 
-      {/* Connection Lost Overlay */}
-      {reconnect.state === 'connection-lost' && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-60 p-4">
+      {/* Connection Lost Overlay (suppressed once the user intentionally ends) */}
+      {!sessionEndedNaturally && reconnect.state === 'connection-lost' && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-[60] p-4">
           <div className="bg-gray-900/95 backdrop-blur-sm border border-white/10 rounded-2xl p-6 max-w-sm w-full text-center">
             <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
               <WifiOff className="w-8 h-8 text-red-400" />

@@ -45,6 +45,7 @@ import {
   type ShareMessage,
   type ReferralChain,
 } from '../../lib/referral-engine';
+import { isDemoMode } from '../../lib/demo-seed';
 import { toast } from 'sonner';
 
 // ============================================================================
@@ -100,9 +101,8 @@ export function EnhancedReferralDashboard({
   useEffect(() => {
     const referralCode = generateReferralCode(userId);
     setCode(referralCode);
-    // Use mock stats for demo
-    const mockStats = generateMockStats(userId);
-    setStats(mockStats);
+    // Rich sample stats only in demo mode; real users see their actual data.
+    setStats(isDemoMode() ? generateMockStats(userId) : getReferralStats(userId));
   }, [userId]);
 
   const shareMessages = useMemo(() => {
@@ -110,7 +110,11 @@ export function EnhancedReferralDashboard({
     return getShareMessages(code.code, childName);
   }, [code, childName]);
 
-  const leaderboard = useMemo(() => getMockLeaderboard(userName), [userName]);
+  // Leaderboard requires a real cross-user ranking backend; show sample only in demo.
+  const leaderboard = useMemo(
+    () => (isDemoMode() ? getMockLeaderboard(userName) : []),
+    [userName],
+  );
 
   const shareUrl = code ? `https://aminy.ai/join?ref=${code.code}` : '';
 
@@ -141,9 +145,9 @@ export function EnhancedReferralDashboard({
         break;
       case 'copy':
         handleCopy(fullText);
-        break;
+        return; // handleCopy already shows its own toast
     }
-    toast.success('Share message sent!');
+    toast.success('Opening share…');
   };
 
   if (!code || !stats) {
@@ -544,38 +548,47 @@ export function EnhancedReferralDashboard({
                 Top 3 earn a free BCBA consultation
               </p>
 
-              <div className="space-y-2">
-                {leaderboard.map((entry) => (
-                  <div
-                    key={entry.rank}
-                    className={`flex items-center gap-3 p-3 rounded-xl ${
-                      entry.isCurrentUser ? 'bg-teal-50 border border-teal-200' : 'bg-gray-50'
-                    }`}
-                  >
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
-                      entry.rank === 1 ? 'bg-amber-100 text-amber-700' :
-                      entry.rank === 2 ? 'bg-gray-200 text-gray-700' :
-                      entry.rank === 3 ? 'bg-orange-100 text-orange-700' :
-                      'bg-gray-100 text-gray-500'
-                    }`}>
-                      {entry.rank <= 3 ? (
-                        entry.rank === 1 ? <Crown className="w-4 h-4" /> :
-                        entry.rank === 2 ? <Star className="w-4 h-4" /> :
-                        <Trophy className="w-4 h-4" />
-                      ) : entry.rank}
+              {leaderboard.length === 0 ? (
+                <div className="text-center py-6">
+                  <Trophy className="w-10 h-10 mx-auto mb-3 text-gray-300" />
+                  <p className="text-sm text-gray-500">
+                    The leaderboard is coming soon. Share your code to be among the first.
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  {leaderboard.map((entry) => (
+                    <div
+                      key={entry.rank}
+                      className={`flex items-center gap-3 p-3 rounded-xl ${
+                        entry.isCurrentUser ? 'bg-teal-50 border border-teal-200' : 'bg-gray-50'
+                      }`}
+                    >
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
+                        entry.rank === 1 ? 'bg-amber-100 text-amber-700' :
+                        entry.rank === 2 ? 'bg-gray-200 text-gray-700' :
+                        entry.rank === 3 ? 'bg-orange-100 text-orange-700' :
+                        'bg-gray-100 text-gray-500'
+                      }`}>
+                        {entry.rank <= 3 ? (
+                          entry.rank === 1 ? <Crown className="w-4 h-4" /> :
+                          entry.rank === 2 ? <Star className="w-4 h-4" /> :
+                          <Trophy className="w-4 h-4" />
+                        ) : entry.rank}
+                      </div>
+                      <div className="flex-1">
+                        <p className={`text-sm font-medium ${entry.isCurrentUser ? 'text-teal-900' : 'text-gray-900'}`}>
+                          {entry.name}
+                          {entry.isCurrentUser && <span className="text-teal-600 ml-1">(You)</span>}
+                        </p>
+                      </div>
+                      <div className="text-sm font-semibold text-gray-700">
+                        {entry.referrals} referrals
+                      </div>
                     </div>
-                    <div className="flex-1">
-                      <p className={`text-sm font-medium ${entry.isCurrentUser ? 'text-teal-900' : 'text-gray-900'}`}>
-                        {entry.name}
-                        {entry.isCurrentUser && <span className="text-teal-600 ml-1">(You)</span>}
-                      </p>
-                    </div>
-                    <div className="text-sm font-semibold text-gray-700">
-                      {entry.referrals} referrals
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </Card>
 
             {/* Motivational CTA */}
@@ -584,15 +597,16 @@ export function EnhancedReferralDashboard({
                 <Sparkles className="w-8 h-8 text-teal-600 flex-shrink-0" />
                 <div>
                   <p className="font-medium text-teal-900 text-sm">
-                    Just {Math.max(0, 7 - stats.totalConverted)} more referrals to reach #3!
+                    Share your code to climb the leaderboard
                   </p>
                   <p className="text-xs text-teal-700">
-                    Share your code to climb the leaderboard
+                    Every family you help find care moves you up
                   </p>
                 </div>
                 <Button
                   variant="ghost"
                   className="text-teal-700 hover:bg-teal-100 flex-shrink-0"
+                  aria-label="Share your referral code"
                   onClick={() => {
                     setShowShareOptions(true);
                     setActiveTab('overview');

@@ -26,10 +26,7 @@ import {
   ChevronRight,
   Search,
   Star,
-  Clock,
-  Users,
   BookOpen,
-  Sparkles,
   AlertTriangle
 } from 'lucide-react';
 import { TelehealthFlow } from './TelehealthFlow';
@@ -202,11 +199,11 @@ export function TelehealthHome({
 
   return (
     <div
-      className="min-h-screen"
-      style={{ background: '#FAF7F2 #f6faf8 40%, #eef4f8 100%)' }}
+      className="min-h-screen bg-[#FAF7F2]"
+      style={{ background: 'linear-gradient(180deg, #FAF7F2 0%, #f6faf8 40%, #eef4f8 100%)' }}
     >
       {/* Header */}
-      <header className="sticky top-0 z-10 border-b border-teal-100/80 bg-white/92 px-4 py-3 backdrop-blur-xl">
+      <header className="sticky top-0 z-10 border-b border-teal-100/80 bg-white/90 px-4 py-3 backdrop-blur-xl">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <button
@@ -225,9 +222,12 @@ export function TelehealthHome({
       </header>
 
       {/* Content */}
-      <div className="px-4 py-6 pb-24 space-y-3 sm:space-y-4 sm:space-y-6">
+      <div className="px-4 py-6 pb-24 space-y-3 sm:space-y-6">
         {/* Greeting */}
-        <div className="rounded-2xl border border-white/80 bg-[linear-gradient(135deg,rgba(255,255,255,0.96),rgba(240,249,249,0.95),rgba(235,246,250,0.96))] p-5 shadow-md">
+        <div
+          className="rounded-2xl border border-white/80 p-5 shadow-md"
+          style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.96), rgba(240,249,249,0.95), rgba(235,246,250,0.96))' }}
+        >
           <div className="inline-flex rounded-full bg-teal-50 px-3 py-1.5 text-xs font-medium tracking-[0.02em] text-teal-700">
             Supported in {userState.toUpperCase()}
           </div>
@@ -252,7 +252,7 @@ export function TelehealthHome({
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <button
             onClick={() => startFlow('choose-path')}
-            className="bg-white/92 rounded-2xl border border-slate-200 p-4 text-left shadow-sm hover:shadow-md hover:border-[#6B9080]/30 transition-all"
+            className="bg-white/90 rounded-2xl border border-slate-200 p-4 text-left shadow-sm hover:shadow-md hover:border-[#6B9080] transition-all"
           >
             <div className="w-12 h-12 bg-[#6B9080]/10 rounded-full flex items-center justify-center mb-3">
               <Calendar className="w-6 h-6 text-[#6B9080]" />
@@ -263,7 +263,7 @@ export function TelehealthHome({
 
           <button
             onClick={() => onNavigate?.('messages')}
-            className="bg-white/92 rounded-2xl border border-slate-200 p-4 text-left shadow-sm hover:shadow-md hover:border-[#6B9080]/30 transition-all"
+            className="bg-white/90 rounded-2xl border border-slate-200 p-4 text-left shadow-sm hover:shadow-md hover:border-[#6B9080] transition-all"
           >
             <div className="w-12 h-12 bg-[#6B9080]/10 rounded-full flex items-center justify-center mb-3">
               <MessageCircle className="w-6 h-6 text-[#6B9080]" />

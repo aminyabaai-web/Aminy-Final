@@ -52,7 +52,6 @@ import {
   getMeetingToken,
   loadDailySDK,
   createCallObject,
-  formatRemainingTime,
   type DailyRoom,
 } from '../lib/daily-video';
 import type { DailyEvent, DailyCallObject, DailyParticipant, DailyEventObjectAppMessage, DailyEventHandler } from '../types/video';
@@ -526,6 +525,15 @@ export function VideoCall({
     };
   }, []);
 
+  // Apply the speaker toggle to actual audio output. Remote audio plays through
+  // the remote <video> element, so muting the speaker = muting that element.
+  // Re-applied when participants change (a new remote stream resets the element).
+  useEffect(() => {
+    if (remoteVideoRef.current) {
+      remoteVideoRef.current.muted = !speakerEnabled;
+    }
+  }, [speakerEnabled, participants]);
+
   // Pre-call screen
   if (callState === 'idle') {
     return (
@@ -641,7 +649,14 @@ export function VideoCall({
 
         <div className="flex items-center gap-3 sm:gap-4">
           {/* Connection quality */}
-          <div className="flex items-center gap-1" title={`Connection: ${connectionQuality}`}>
+          <div
+            className="flex items-center gap-1"
+            title={[
+              `Connection: ${connectionQuality}`,
+              networkStats.bitrate != null ? `${Math.round(networkStats.bitrate / 1000)} kbps` : null,
+              networkStats.packetLoss != null ? `${networkStats.packetLoss.toFixed(1)}% packet loss` : null,
+            ].filter(Boolean).join(' · ')}
+          >
             {getConnectionQualityIcon()}
             <span className="text-xs text-slate-400 hidden sm:inline capitalize">{connectionQuality}</span>
           </div>
@@ -721,6 +736,7 @@ export function VideoCall({
               <button
                 onClick={toggleChat}
                 className="p-2 hover:bg-slate-700 rounded-full transition-colors"
+                aria-label="Close chat"
               >
                 <X className="w-5 h-5 text-slate-400" />
               </button>

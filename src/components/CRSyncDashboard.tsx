@@ -695,7 +695,7 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
               <div>
                 <p className="text-sm font-semibold text-gray-900">Clinic Workflow Proof</p>
                 <p className="text-xs text-gray-500 mt-1">
-                  This is the operational read on whether AACT or Rise can trust the current CentralReach pull/export workflow in daily clinic use.
+                  This is the operational read on whether your clinic can trust the current CentralReach pull/export workflow in daily use.
                 </p>
               </div>
               <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${

@@ -49,7 +49,7 @@ export function FeedbackCollector({
     setIsSubmitting(true);
 
     try {
-      await fetch(
+      const response = await fetch(
         `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/feedback/submit`,
         {
           method: 'POST',
@@ -68,6 +68,12 @@ export function FeedbackCollector({
         }
       );
 
+      // Only show the thank-you confirmation if the server actually accepted it —
+      // otherwise we'd be telling the user their feedback landed when it didn't.
+      if (!response.ok) {
+        throw new Error(`Feedback submit failed with status ${response.status}`);
+      }
+
       setStep('thanks');
       setTimeout(() => {
         onClose();
@@ -75,8 +81,8 @@ export function FeedbackCollector({
       }, 2500);
 
     } catch (error) {
-      toast.error("Couldn't send feedback right now. Your input is saved locally.");
-      // Could store locally and retry later
+      console.error('Failed to submit feedback:', error);
+      toast.error("Couldn't send feedback right now. Please try again in a moment.");
     } finally {
       setIsSubmitting(false);
     }

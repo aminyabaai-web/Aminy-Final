@@ -409,7 +409,7 @@ export function RecordingPlayback({
         <div className="flex items-center justify-between p-4 border-b border-gray-100">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 bg-teal-50 rounded-full flex items-center justify-center flex-shrink-0">
-              <Video className="w-4.5 h-4.5 text-teal-600" />
+              <Video className="w-5 h-5 text-teal-600" />
             </div>
             <div>
               <h2 className="text-base font-semibold text-gray-900">Session Recordings</h2>

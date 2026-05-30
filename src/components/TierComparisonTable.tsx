@@ -7,6 +7,7 @@ import React from 'react';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
 import { Check, X, Minus } from 'lucide-react';
+import { tierPricing } from '../lib/tier-utils';
 
 interface TierComparisonTableProps {
   compact?: boolean;
@@ -17,47 +18,65 @@ export function TierComparisonTable({ compact = false }: TierComparisonTableProp
     {
       category: 'Daily Plans & Activities',
       items: [
-        { name: 'Personalized daily activities', starter: '3 per day', core: 'Adaptive plans', pro: 'Adaptive plans' },
-        { name: 'Basic progress tracking', starter: true, core: true, pro: true },
-        { name: 'Streak counts & celebrations', starter: true, core: true, pro: true },
-        { name: 'AI adapts plan automatically', starter: false, core: true, pro: true },
-        { name: 'Three plan options per day', starter: false, core: true, pro: true },
+        { name: 'Personalized daily activities', core: 'Adaptive plans', pro: 'Adaptive plans', family: 'Adaptive plans' },
+        { name: 'Basic progress tracking', core: true, pro: true, family: true },
+        { name: 'Streak counts & celebrations', core: true, pro: true, family: true },
+        { name: 'AI adapts plan automatically', core: true, pro: true, family: true },
+        { name: 'Three plan options per day', core: true, pro: true, family: true },
       ]
     },
     {
       category: 'Aminy Jr (Child Mode)',
       items: [
-        { name: 'Calming exercises', starter: '1 exercise', core: 'Unlimited', pro: 'Unlimited' },
-        { name: 'Speech activities', starter: false, core: true, pro: true },
-        { name: 'Full activity suite', starter: false, core: true, pro: true },
+        { name: 'Calming exercises', core: 'Unlimited', pro: 'Unlimited', family: 'Unlimited' },
+        { name: 'Speech activities', core: true, pro: true, family: true },
+        { name: 'Full activity suite', core: true, pro: true, family: true },
+      ]
+    },
+    {
+      category: 'Profiles & Caregivers',
+      items: [
+        { name: 'Child profiles', core: 'Up to 2', pro: 'Up to 3', family: 'Unlimited' },
+        { name: 'Caregiver accounts', core: false, pro: false, family: '4 accounts' },
       ]
     },
     {
       category: 'AI Support',
       items: [
-        { name: 'Aminy chat access', starter: 'Limited', core: 'Unlimited', pro: 'Unlimited' },
-        { name: 'Text & voice conversations', starter: false, core: true, pro: true },
-        { name: 'Advanced AI reasoning', starter: false, core: true, pro: true },
-        { name: 'Live AI video support', starter: false, core: false, pro: true },
-        { name: 'Priority AI responses', starter: false, core: false, pro: true },
+        { name: 'Aminy chat access', core: 'Unlimited', pro: 'Unlimited', family: 'Unlimited' },
+        { name: 'Text & voice conversations', core: true, pro: true, family: true },
+        { name: 'Advanced AI reasoning', core: true, pro: true, family: true },
+        { name: 'Live AI video support', core: false, pro: true, family: true },
+        { name: 'Priority AI responses', core: false, pro: true, family: true },
+      ]
+    },
+    {
+      category: 'Documents & Records',
+      items: [
+        { name: 'Document vault', core: true, pro: true, family: true },
+        { name: 'AI document analysis (IEPs, records)', core: true, pro: true, family: true },
+        { name: 'Caregiver reports', core: true, pro: true, family: true },
       ]
     },
     {
       category: 'Professional Support',
       items: [
-        { name: 'Add-on telehealth/RBT sessions', starter: false, core: 'À la carte', pro: 'Discounted' },
-        { name: 'Monthly BCBA consultation', starter: false, core: false, pro: true },
-        { name: 'Clinical reports (IEPs, progress)', starter: false, core: false, pro: true },
-        { name: 'Provider-ready packets', starter: false, core: false, pro: true },
+        { name: 'Marketplace session booking', core: true, pro: true, family: true },
+        { name: 'Session discount', core: false, pro: '20% off', family: '30% off' },
+        { name: 'Priority booking', core: false, pro: true, family: true },
+        { name: 'Monthly BCBA consultation', core: false, pro: false, family: true },
+        { name: 'Clinical reports (IEPs, progress)', core: false, pro: true, family: true },
+        { name: 'Provider sharing portal', core: false, pro: true, family: true },
       ]
     },
     {
       category: 'Support & Features',
       items: [
-        { name: 'Community access', starter: 'Read-only', core: 'Full access', pro: 'Full access' },
-        { name: 'Early access to beta features', starter: false, core: false, pro: true },
-        { name: 'Priority support', starter: false, core: false, pro: true },
-        { name: 'White-glove assistance', starter: false, core: false, pro: true },
+        { name: 'Community access', core: 'Full access', pro: 'Full access', family: 'Full access' },
+        { name: 'Care coordinator (async)', core: false, pro: false, family: true },
+        { name: 'Advanced analytics dashboard', core: false, pro: false, family: true },
+        { name: 'Priority support', core: false, pro: true, family: true },
+        { name: 'Dedicated support channel', core: false, pro: false, family: true },
       ]
     }
   ];
@@ -82,34 +101,34 @@ export function TierComparisonTable({ compact = false }: TierComparisonTableProp
           <thead>
             <tr className="border-b border-gray-200">
               <th className="text-left py-2 font-medium text-muted-foreground">Feature</th>
-              <th className="text-center py-2 font-medium text-gray-700">Starter</th>
-              <th className="text-center py-2 font-medium text-teal-700">Core</th>
-              <th className="text-center py-2 font-medium text-gray-700">Pro Plus</th>
+              <th className="text-center py-2 font-medium text-gray-700">Core</th>
+              <th className="text-center py-2 font-medium text-teal-700">Pro</th>
+              <th className="text-center py-2 font-medium text-gray-700">Family</th>
             </tr>
           </thead>
           <tbody>
             <tr className="border-b border-gray-100">
               <td className="py-2 text-muted-foreground">Daily activities</td>
-              <td className="text-center">3</td>
+              <td className="text-center font-medium">Adaptive</td>
               <td className="text-center font-medium">Adaptive</td>
               <td className="text-center font-medium">Adaptive</td>
             </tr>
             <tr className="border-b border-gray-100">
               <td className="py-2 text-muted-foreground">Jr activities</td>
-              <td className="text-center">1</td>
+              <td className="text-center font-medium">All</td>
               <td className="text-center font-medium">All</td>
               <td className="text-center font-medium">All</td>
             </tr>
             <tr className="border-b border-gray-100">
               <td className="py-2 text-muted-foreground">AI chat</td>
-              <td className="text-center">Limited</td>
+              <td className="text-center font-medium">Unlimited</td>
               <td className="text-center font-medium">Unlimited</td>
               <td className="text-center font-medium">Unlimited</td>
             </tr>
             <tr className="border-b border-gray-100">
               <td className="py-2 text-muted-foreground">Video AI</td>
               <td className="text-center"><X className="w-3 h-3 text-gray-400 mx-auto" /></td>
-              <td className="text-center"><X className="w-3 h-3 text-gray-400 mx-auto" /></td>
+              <td className="text-center"><Check className="w-3 h-3 text-green-600 mx-auto" /></td>
               <td className="text-center"><Check className="w-3 h-3 text-green-600 mx-auto" /></td>
             </tr>
             <tr>
@@ -139,21 +158,21 @@ export function TierComparisonTable({ compact = false }: TierComparisonTableProp
             <tr className="border-b-2 border-gray-200">
               <th className="text-left py-4 px-4 font-medium text-muted-foreground">Features</th>
               <th className="text-center py-4 px-4">
-                <div className="font-semibold text-primary">Starter</div>
-                <div className="text-xl sm:text-2xl font-bold text-primary mt-1">$19</div>
+                <div className="font-semibold text-primary">Core</div>
+                <div className="text-xl sm:text-2xl font-bold text-primary mt-1">${tierPricing.core.monthly}</div>
                 <div className="text-xs text-muted-foreground">/month</div>
               </th>
               <th className="text-center py-4 px-4 bg-teal-50/50 relative">
                 <Badge className="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-teal-600 text-white text-xs">
                   Most Popular
                 </Badge>
-                <div className="font-semibold text-teal-700 mt-2">Core</div>
-                <div className="text-xl sm:text-2xl font-bold text-teal-700 mt-1">$69</div>
+                <div className="font-semibold text-teal-700 mt-2">Pro</div>
+                <div className="text-xl sm:text-2xl font-bold text-teal-700 mt-1">${tierPricing.pro.monthly}</div>
                 <div className="text-xs text-teal-600">/month</div>
               </th>
               <th className="text-center py-4 px-4">
-                <div className="font-semibold text-primary">Pro Plus</div>
-                <div className="text-xl sm:text-2xl font-bold text-primary mt-1">$229</div>
+                <div className="font-semibold text-primary">Family</div>
+                <div className="text-xl sm:text-2xl font-bold text-primary mt-1">${tierPricing.proplus.monthly}</div>
                 <div className="text-xs text-muted-foreground">/month</div>
               </th>
             </tr>
@@ -169,9 +188,9 @@ export function TierComparisonTable({ compact = false }: TierComparisonTableProp
                 {category.items.map((item, itemIndex) => (
                   <tr key={itemIndex} className="border-b border-gray-100 hover:bg-gray-50/50">
                     <td className="py-3 px-4 text-sm text-muted-foreground">{item.name}</td>
-                    <td className="py-3 px-4 text-center">{renderCell(item.starter)}</td>
-                    <td className="py-3 px-4 text-center bg-teal-50/30">{renderCell(item.core)}</td>
-                    <td className="py-3 px-4 text-center">{renderCell(item.pro)}</td>
+                    <td className="py-3 px-4 text-center">{renderCell(item.core)}</td>
+                    <td className="py-3 px-4 text-center bg-teal-50/30">{renderCell(item.pro)}</td>
+                    <td className="py-3 px-4 text-center">{renderCell(item.family)}</td>
                   </tr>
                 ))}
               </React.Fragment>
@@ -182,7 +201,7 @@ export function TierComparisonTable({ compact = false }: TierComparisonTableProp
 
       <div className="mt-4 sm:mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg text-center">
         <p className="text-sm text-blue-800">
-          <strong>All plans include:</strong> 14-day free trial • No credit card required • Cancel anytime • No diagnosis required
+          <strong>All plans include:</strong> 7-day free trial • No credit card required • Cancel anytime • No diagnosis required
         </p>
       </div>
     </div>

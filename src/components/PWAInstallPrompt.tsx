@@ -212,7 +212,7 @@ export function PWAInstallPrompt() {
 
   return (
     <div
-      className="fixed bottom-4 left-4 right-4 z-50 mx-auto max-w-md animate-slide-up"
+      className="fixed bottom-4 left-4 right-4 z-50 mx-auto max-w-md animate-in slide-in-from-bottom-4"
       role="dialog"
       aria-label="Install Aminy app"
     >

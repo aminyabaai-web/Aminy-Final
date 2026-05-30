@@ -15,7 +15,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
-    ArrowLeft,
     Video,
     Mic,
     MicOff,
@@ -23,20 +22,19 @@ import {
     PhoneOff,
     MessageSquare,
     Users,
-    Settings,
     Shield,
     FileText,
     Activity,
-    Maximize2,
     CheckCircle2,
     AlertCircle,
     FileSignature,
+    Send,
     Sparkles
 } from 'lucide-react';
-import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { toast } from 'sonner';
+import { isDemoMode } from '../lib/demo-seed';
 
 const fontStack = 'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", "Helvetica Neue", Arial, "Noto Sans", sans-serif';
 
@@ -53,16 +51,24 @@ interface MultiRoleTelehealthRoomProps {
     patientName?: string;
 }
 
-export function MultiRoleTelehealthRoom({ onLeave, role, patientName = "Emma J." }: MultiRoleTelehealthRoomProps) {
+export function MultiRoleTelehealthRoom({ onLeave, role, patientName = "Patient" }: MultiRoleTelehealthRoomProps) {
     const [isMicMuted, setIsMicMuted] = useState(false);
     const [isVideoOff, setIsVideoOff] = useState(false);
     const [activePanel, setActivePanel] = useState<'chat' | 'clinical' | 'none'>('none');
     const [chatMessage, setChatMessage] = useState('');
+    const [chatMessages, setChatMessages] = useState<{ id: string; text: string }[]>([]);
     const [clinicalNotes, setClinicalNotes] = useState('');
     const [isSupervising, setIsSupervising] = useState(false);
 
-    // Simulated live data for RBT and BCBA
-    const [engagementScore, setEngagementScore] = useState(85);
+    const sendChatMessage = () => {
+        const text = chatMessage.trim();
+        if (!text) return;
+        setChatMessages(prev => [...prev, { id: `${Date.now()}-${prev.length}`, text }]);
+        setChatMessage('');
+    };
+
+    // Live session telemetry — accumulated as the provider taps the data buttons
+    const [engagementScore, setEngagementScore] = useState(0);
     const [targetBehaviors, setTargetBehaviors] = useState(0);
 
     // Time tracking
@@ -182,7 +188,13 @@ export function MultiRoleTelehealthRoom({ onLeave, role, patientName = "Emma J."
                     {isSupervising ? 'End Supervision (Stop Timer)' : 'Start CPT 97155 Supervision'}
                 </button>
 
-                <button style={{ marginTop: '12px', padding: '12px', backgroundColor: '#111827', color: '#FFF', borderRadius: '12px', fontWeight: 500, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                <button
+                    onClick={() => {
+                        toast.success('Observations saved to chart.');
+                        setClinicalNotes('');
+                    }}
+                    style={{ marginTop: '12px', padding: '12px', backgroundColor: '#111827', color: '#FFF', borderRadius: '12px', fontWeight: 500, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+                >
                     <FileSignature size={16} /> Save to Chart
                 </button>
             </div>
@@ -325,24 +337,35 @@ export function MultiRoleTelehealthRoom({ onLeave, role, patientName = "Emma J."
 
                                     <div style={{ flex: 1, backgroundColor: '#F9FAFB', borderRadius: '16px', padding: '16px', overflowY: 'auto' }}>
                                         <p style={{ textAlign: 'center', fontSize: '12px', color: '#9CA3AF', marginBottom: '16px' }}>Private channel established.</p>
-                                        {/* Mock Chat Bubble */}
-                                        {(role === 'rbt' || role === 'bcba') && (
+                                        {/* Sample peer message — demo mode only */}
+                                        {isDemoMode() && (role === 'rbt' || role === 'bcba') && (
                                             <div style={{ alignSelf: 'flex-start', backgroundColor: '#E0F2FE', padding: '10px 14px', borderRadius: '16px', borderBottomLeftRadius: '4px', maxWidth: '85%', marginBottom: '12px' }}>
                                                 <p style={{ fontSize: '13px', color: '#0369A1' }}>Should we move on to the next target?</p>
-                                                <span style={{ fontSize: '10px', color: '#38BDF8', marginTop: '4px', display: 'block' }}>10:14 AM • Peer</span>
+                                                <span style={{ fontSize: '10px', color: '#38BDF8', marginTop: '4px', display: 'block' }}>Peer</span>
                                             </div>
                                         )}
+                                        {chatMessages.map(msg => (
+                                            <div key={msg.id} style={{ alignSelf: 'flex-end', backgroundColor: '#111827', padding: '10px 14px', borderRadius: '16px', borderBottomRightRadius: '4px', maxWidth: '85%', marginBottom: '12px', marginLeft: 'auto' }}>
+                                                <p style={{ fontSize: '13px', color: '#FFF' }}>{msg.text}</p>
+                                            </div>
+                                        ))}
                                     </div>
 
                                     <div style={{ marginTop: '16px', display: 'flex', gap: '8px' }}>
                                         <Input
                                             value={chatMessage}
                                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setChatMessage(e.target.value)}
+                                            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => { if (e.key === 'Enter') sendChatMessage(); }}
                                             placeholder="Type a message..."
+                                            aria-label="Chat message"
                                             style={{ borderRadius: '100px', backgroundColor: '#F3F4F6', border: 'none' }}
                                         />
-                                        <button style={{ width: '40px', height: '40px', borderRadius: '20px', backgroundColor: '#111827', color: '#FFF', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}>
-                                            <ArrowLeft size={16} style={{ transform: 'rotate(180deg)' }} />
+                                        <button
+                                            onClick={sendChatMessage}
+                                            aria-label="Send message"
+                                            style={{ width: '40px', height: '40px', borderRadius: '20px', backgroundColor: '#111827', color: '#FFF', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}
+                                        >
+                                            <Send size={16} />
                                         </button>
                                     </div>
                                 </div>

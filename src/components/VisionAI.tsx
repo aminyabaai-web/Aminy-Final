@@ -146,13 +146,18 @@ export function VisionAI({ tier, userId, onClose, onBack, onAnalysisComplete, in
     if (!img) return;
 
     setIsAnalyzing(true);
-    const result = await analyzePhoto(img, customPrompt || undefined, effectiveUserId);
-    setPhotoResult(result);
-    if (result && onAnalysisComplete) {
-      onAnalysisComplete({ type: 'photo', analysis: result.analysis });
+    try {
+      const result = await analyzePhoto(img, customPrompt || undefined, effectiveUserId, dontStore);
+      setPhotoResult(result);
+      if (result && onAnalysisComplete) {
+        onAnalysisComplete({ type: 'photo', analysis: result.analysis });
+      }
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Couldn't analyze the image right now — please try again.");
+    } finally {
+      setIsAnalyzing(false);
     }
-    setIsAnalyzing(false);
-  }, [capturedImage, customPrompt, effectiveUserId, onAnalysisComplete]);
+  }, [capturedImage, customPrompt, effectiveUserId, dontStore, onAnalysisComplete]);
 
   const resetPhoto = () => {
     setCapturedImage(null);
@@ -169,7 +174,7 @@ export function VisionAI({ tier, userId, onClose, onBack, onAnalysisComplete, in
     }
 
     await startCamera('environment');
-    const session = startVideoSession(effectiveUserId, tier);
+    const session = startVideoSession(effectiveUserId, tier, dontStore);
     setVideoSession(session);
     setIsRecording(true);
     setFrameResults([]);
@@ -194,7 +199,7 @@ export function VisionAI({ tier, userId, onClose, onBack, onAnalysisComplete, in
         setFrameResults(prev => [...prev, result]);
       }
     }, 3000);
-  }, [videoAllowed, effectiveUserId, tier, maxFrames, startCamera, captureFrame]);
+  }, [videoAllowed, effectiveUserId, tier, maxFrames, dontStore, startCamera, captureFrame]);
 
   const stopRecording = useCallback(async (sessionId?: string) => {
     if (frameIntervalRef.current) {
@@ -222,7 +227,7 @@ export function VisionAI({ tier, userId, onClose, onBack, onAnalysisComplete, in
       {/* Header */}
       <div className="bg-gradient-to-r from-violet-600 to-purple-600 px-4 py-3 flex items-center gap-3">
         {(onClose || onBack) && (
-          <button onClick={handleClose} className="p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center text-white/80 hover:text-white rounded-lg hover:bg-white/10">
+          <button onClick={handleClose} aria-label="Close Vision AI" className="p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center text-white/80 hover:text-white rounded-lg hover:bg-white/10">
             <X className="w-5 h-5" />
           </button>
         )}
@@ -279,9 +284,10 @@ export function VisionAI({ tier, userId, onClose, onBack, onAnalysisComplete, in
 
               {capturedImage && (
                 <div className="relative rounded-xl overflow-hidden bg-black">
-                  <img src={capturedImage} alt="Captured" className="w-full rounded-xl" />
+                  <img src={capturedImage} alt="Captured for analysis" className="w-full rounded-xl" />
                   <button
                     onClick={resetPhoto}
+                    aria-label="Remove photo"
                     className="absolute top-2 right-2 p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center bg-black/50 text-white rounded-full"
                   >
                     <X className="w-4 h-4" />
@@ -369,13 +375,14 @@ export function VisionAI({ tier, userId, onClose, onBack, onAnalysisComplete, in
           {/* ── Video Mode ─────────────────────────────── */}
           {mode === 'video' && (
             <motion.div key="video" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
-              {/* Privacy toggle */}
-              <label className="flex items-center gap-2 text-sm text-gray-600">
+              {/* Privacy toggle — locked once a session is recording */}
+              <label className={`flex items-center gap-2 text-sm text-gray-600 ${isRecording ? 'opacity-60' : ''}`}>
                 <input
                   type="checkbox"
                   checked={dontStore}
+                  disabled={isRecording}
                   onChange={(e) => setDontStore(e.target.checked)}
-                  className="w-4 h-4 text-violet-600 rounded border-gray-300"
+                  className="w-4 h-4 text-violet-600 rounded border-gray-300 disabled:cursor-not-allowed"
                 />
                 Don't store frames (process and discard immediately)
               </label>
@@ -392,7 +399,7 @@ export function VisionAI({ tier, userId, onClose, onBack, onAnalysisComplete, in
                     </div>
                     {/* Frame counter */}
                     <div className="absolute top-3 right-3 bg-black/60 text-white px-3 py-1 rounded-full text-xs">
-                      {videoSession ? `${videoSession.totalFrames}/${maxFrames} frames` : ''}
+                      {videoSession ? `${frameResults.length}/${maxFrames} frames` : ''}
                     </div>
                   </div>
 

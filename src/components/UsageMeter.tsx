@@ -217,14 +217,14 @@ export function UsageMeter({
           <div className="flex items-center justify-between mb-1.5">
             <div className="flex items-center gap-2">
               <Brain className="w-4 h-4 text-muted-foreground" />
-              <span className="text-sm text-muted-foreground">Memory Window</span>
+              <span className="text-sm text-muted-foreground">Memory</span>
             </div>
             <span className="text-sm font-medium text-primary">
               {limits.memoryFacts === Infinity
-                ? 'Unlimited'
+                ? `${memoryFactsStored.toLocaleString()} facts · Unlimited`
                 : limits.memoryFacts === 0
                   ? 'None'
-                  : `${limits.memoryFacts} days`}
+                  : `${memoryFactsStored.toLocaleString()} / ${limits.memoryFacts.toLocaleString()} facts`}
             </span>
           </div>
         </div>

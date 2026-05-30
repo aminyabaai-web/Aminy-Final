@@ -3,10 +3,10 @@
 // Unauthorized use, reproduction, or distribution is strictly prohibited.
 // See LICENSE file for details.
 
-import React, { useEffect, useMemo, useRef } from 'react';
-import DailyIframe from '@daily-co/daily-js';
+import React, { useEffect, useRef } from 'react';
 import {
     DailyProvider,
+    useDaily,
     useVideoTrack,
     useAudioTrack,
     useLocalSessionId,
@@ -58,10 +58,24 @@ const DailyParticipant = ({ sessionId, isLocal }: { sessionId: string, isLocal?:
     );
 };
 
-const DailyGrid = () => {
+const DailyGrid = ({ roomUrl }: { roomUrl: string }) => {
+    const daily = useDaily();
     const localSessionId = useLocalSessionId();
     const remoteParticipantIds = useParticipantIds({ filter: 'remote' });
     const callState = useMeetingState();
+
+    // Join/leave the room using the provider-owned call object. Leaving (not
+    // destroying) keeps the instance valid across React StrictMode's
+    // double-mount cycle, so we never re-join a destroyed object.
+    useEffect(() => {
+        if (!daily || !roomUrl) return;
+
+        daily.join({ url: roomUrl });
+
+        return () => {
+            daily.leave();
+        };
+    }, [daily, roomUrl]);
 
     if (callState === 'joining-meeting') {
         return (
@@ -106,28 +120,16 @@ const DailyGrid = () => {
 };
 
 export const DailyVideoRoom = ({ roomUrl }: { roomUrl: string }) => {
-    const callObject = useMemo(() => {
-        return DailyIframe.createCallObject({
-            dailyConfig: {
-                experimentalChromeVideoMuteLightOff: true,
-                useDevicePreferenceCookies: true
-            }
-        });
-    }, []);
-
-    useEffect(() => {
-        if (!roomUrl) return;
-
-        callObject.join({ url: roomUrl });
-
-        return () => {
-            callObject.leave().then(() => callObject.destroy());
-        };
-    }, [callObject, roomUrl]);
-
+    // Let DailyProvider own the call-object lifecycle. It recreates the
+    // instance if a previous one was destroyed and does not destroy on
+    // cleanup, which avoids the StrictMode "call object destroyed" race.
     return (
-        <DailyProvider callObject={callObject}>
-            <DailyGrid />
+        <DailyProvider
+            dailyConfig={{
+                useDevicePreferenceCookies: true,
+            }}
+        >
+            <DailyGrid roomUrl={roomUrl} />
         </DailyProvider>
     );
 };

@@ -628,7 +628,7 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
         <div className="bg-white/80 backdrop-blur-sm border-b border-gray-200 px-4 py-4 sticky top-0 z-10">
           <div className="max-w-4xl mx-auto flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Button variant="ghost" size="sm" onClick={onBack}>
+              <Button variant="ghost" size="sm" onClick={onBack} aria-label="Go back">
                 <ArrowLeft className="w-5 h-5" />
               </Button>
               <div>
@@ -640,13 +640,14 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
               variant="ghost"
               size="sm"
               onClick={() => setShowSettings(!showSettings)}
+              aria-label="Accessibility settings"
             >
               <Settings className="w-5 h-5" />
             </Button>
           </div>
         </div>
 
-        <div className="max-w-4xl mx-auto px-4 py-6 space-y-3 sm:space-y-4 sm:space-y-6">
+        <div className="max-w-4xl mx-auto px-4 py-6 space-y-3 sm:space-y-6">
           {/* Settings Panel */}
           {showSettings && (
             <motion.div
@@ -758,6 +759,7 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
               size="sm"
               onClick={() => handleCompleteSession()}
               className="text-white hover:bg-white/20"
+              aria-label="End session"
             >
               <X className="w-5 h-5" />
             </Button>
@@ -1081,7 +1083,7 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
                 {/* Pulsing ring during hold phase */}
                 {breathePhase === 'hold' && (
                   <motion.div
-                    className="absolute inset-0 rounded-full border-2 border-white/30"
+                    className="absolute inset-0 rounded-full border-2 border-white/20"
                     animate={{ scale: [1, 1.1, 1], opacity: [0.5, 0.2, 0.5] }}
                     transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
                   />

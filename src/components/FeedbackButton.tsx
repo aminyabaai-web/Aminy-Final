@@ -64,7 +64,7 @@ export function FeedbackButton() {
         aria-label="Send feedback"
         title="Send feedback"
       >
-        <MessageCircle className="w-4.5 h-4.5 text-teal-600 group-hover:scale-110 transition-transform" />
+        <MessageCircle className="w-5 h-5 text-teal-600 group-hover:scale-110 transition-transform" />
         <span className="hidden text-sm font-medium sm:inline">Feedback</span>
       </button>
 
@@ -82,6 +82,7 @@ export function FeedbackButton() {
               <h3 className="text-lg font-semibold text-gray-900">Share Feedback</h3>
               <button
                 onClick={handleClose}
+                aria-label="Close feedback"
                 className="h-11 w-11 hover:bg-gray-100 rounded-full transition-colors flex items-center justify-center"
               >
                 <X className="w-5 h-5 text-gray-500" />

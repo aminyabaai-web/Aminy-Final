@@ -21,12 +21,9 @@ import {
   TrendingUp,
   TrendingDown,
   Minus,
-  Calendar,
   Target,
   Lightbulb,
-  ArrowRight,
   Share2,
-  Download,
   ChevronRight,
   Loader2,
   RefreshCw,
@@ -62,48 +59,6 @@ interface WeeklySummary {
   streakDays: number;
   activitiesCompleted: number;
   conversationsCount: number;
-}
-
-interface BehaviorLogRow {
-  behavior_type: string | null;
-  intensity: number | null;
-  trigger: string | null;
-  is_positive: boolean;
-  logged_at: string | null;
-  notes: string | null;
-}
-
-interface RoutineCompletionRow {
-  routine_id: string;
-  completion_status: string;
-  scheduled_date: string;
-  completed_steps: number | null;
-  total_steps: number | null;
-}
-
-interface GoalRow {
-  id: string;
-  title: string | null;
-  area: string | null;
-  progress: number | null;
-  completed: boolean;
-  target_date: string | null;
-}
-
-interface ConversationRow {
-  id: string;
-  created_at: string;
-  topic: string | null;
-}
-
-interface InsightRow {
-  content: string;
-  created_at: string;
-}
-
-interface CachedSummaryRow {
-  summary_data: WeeklySummary;
-  [key: string]: unknown;
 }
 
 interface WeeklyAISummaryProps {
@@ -155,204 +110,6 @@ export function WeeklyAISummary({
     }
   };
 
-  /**
-   * Fetch the past 7 days of user data from Supabase for the AI to analyze.
-   */
-  const fetchWeeklyData = async (userId: string) => {
-    const weekAgo = new Date();
-    weekAgo.setDate(weekAgo.getDate() - 7);
-    const weekAgoISO = weekAgo.toISOString();
-    const weekAgoDate = weekAgoISO.split('T')[0];
-
-    // Fetch all relevant data in parallel
-    const [
-      behaviorRes,
-      routineRes,
-      goalsRes,
-      conversationRes,
-      streakRes,
-      insightsRes,
-    ] = await Promise.all([
-      supabase
-        .from('behavior_logs')
-        .select('behavior_type, intensity, trigger, is_positive, logged_at, notes')
-        .eq('user_id', userId)
-        .gte('logged_at', weekAgoISO)
-        .order('logged_at', { ascending: true })
-        .limit(200),
-      supabase
-        .from('routine_completions')
-        .select('routine_id, completion_status, scheduled_date, completed_steps, total_steps')
-        .eq('user_id', userId)
-        .gte('scheduled_date', weekAgoDate)
-        .limit(200),
-      supabase
-        .from('goals')
-        .select('id, title, area, progress, completed, target_date')
-        .eq('user_id', userId)
-        .limit(50),
-      supabase
-        .from('conversations')
-        .select('id, created_at, topic')
-        .eq('user_id', userId)
-        .gte('created_at', weekAgoISO)
-        .limit(100),
-      supabase
-        .from('user_streaks')
-        .select('current_streak')
-        .eq('user_id', userId)
-        .single(),
-      supabase
-        .from('ai_insights')
-        .select('content, created_at')
-        .eq('user_id', userId)
-        .gte('created_at', weekAgoISO)
-        .order('created_at', { ascending: false })
-        .limit(10),
-    ]);
-
-    return {
-      behaviors: (behaviorRes.data || []) as BehaviorLogRow[],
-      routines: (routineRes.data || []) as RoutineCompletionRow[],
-      goals: (goalsRes.data || []) as GoalRow[],
-      conversations: (conversationRes.data || []) as ConversationRow[],
-      streak: (streakRes.data?.current_streak || 0) as number,
-      insights: ((insightsRes.data || []) as InsightRow[]).map((i) => i.content),
-    };
-  };
-
-  /**
-   * Call the AI Edge Function with the weekly data to generate a real summary.
-   */
-  const callAIForSummary = async (
-    weeklyData: Awaited<ReturnType<typeof fetchWeeklyData>>
-  ): Promise<WeeklySummary> => {
-    const systemPrompt = `You are Aminy, an AI wellness companion for neurodivergent families.
-
-You are generating a WEEKLY PROGRESS SUMMARY for a parent about their child "${childName}".
-
-Analyze the data provided and return a JSON object with EXACTLY this structure (no markdown, no code fences, just raw JSON):
-{
-  "weekOf": "<YYYY-MM-DD of this week's Monday>",
-  "overallProgress": <number 0-100>,
-  "progressTrend": "<up|down|stable>",
-  "highlights": ["<string>", "<string>", "<string>"],
-  "challenges": ["<string>", "<string>"],
-  "recommendations": ["<string>", "<string>", "<string>"],
-  "goalsProgress": [
-    {"name": "<goal name>", "progress": <number 0-100>, "trend": "<up|down|stable>"}
-  ],
-  "moodPattern": "<positive|neutral|challenging>",
-  "streakDays": <number>,
-  "activitiesCompleted": <number>,
-  "conversationsCount": <number>
-}
-
-Rules:
-- highlights: 2-4 specific positive observations from the data. Reference actual behaviors or routines.
-- challenges: 1-3 areas that need attention. Be compassionate, not critical.
-- recommendations: 2-4 actionable, specific strategies for the coming week.
-- goalsProgress: Map the user's goals to progress entries. If no goals exist, create 2-3 inferred focus areas from the behavior data.
-- overallProgress: A holistic score considering routine adherence, positive behaviors, and goal progress.
-- progressTrend: Compare this week's data pattern to infer direction.
-- moodPattern: Infer from behavior log sentiment (is_positive flags, intensity levels).
-- streakDays: Use the provided streak value.
-- activitiesCompleted: Count of completed routines + positive behavior entries.
-- conversationsCount: Number of AI conversations this week.
-
-Be warm, encouraging, and specific. Use the child's name "${childName}" in highlights and recommendations.`;
-
-    const userMessage = `Here is ${childName}'s data from the past 7 days:
-
-BEHAVIOR LOGS (${weeklyData.behaviors.length} entries):
-${weeklyData.behaviors.length > 0
-  ? weeklyData.behaviors.map(b =>
-      `- ${b.behavior_type || 'behavior'} | intensity: ${b.intensity ?? 'n/a'} | positive: ${b.is_positive ? 'yes' : 'no'} | trigger: ${b.trigger || 'none'} | ${b.logged_at?.split('T')[0] || ''}${b.notes ? ' | notes: ' + b.notes : ''}`
-    ).join('\n')
-  : 'No behavior logs recorded this week.'}
-
-ROUTINE COMPLETIONS (${weeklyData.routines.length} entries):
-${weeklyData.routines.length > 0
-  ? weeklyData.routines.map(r =>
-      `- routine ${r.routine_id} | status: ${r.completion_status} | steps: ${r.completed_steps ?? '?'}/${r.total_steps ?? '?'} | date: ${r.scheduled_date}`
-    ).join('\n')
-  : 'No routine completions recorded this week.'}
-
-ACTIVE GOALS (${weeklyData.goals.length}):
-${weeklyData.goals.length > 0
-  ? weeklyData.goals.map(g =>
-      `- ${g.title || g.area || 'Goal'} | area: ${g.area || 'general'} | progress: ${g.progress ?? 0}% | completed: ${g.completed ? 'yes' : 'no'}`
-    ).join('\n')
-  : 'No goals configured yet.'}
-
-AI CONVERSATIONS THIS WEEK: ${weeklyData.conversations.length}
-CURRENT STREAK: ${weeklyData.streak} days
-
-RECENT AI INSIGHTS:
-${weeklyData.insights.length > 0 ? weeklyData.insights.join('\n') : 'None yet.'}
-
-Please generate the weekly summary JSON now.`;
-
-    const response = await fetch(
-      `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/ai/brain`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${publicAnonKey}`,
-        },
-        body: JSON.stringify({
-          userMessage,
-          conversationHistory: [],
-          systemPrompt,
-        }),
-      }
-    );
-
-    if (!response.ok) {
-      let errorMessage = `Server returned ${response.status}`;
-      try {
-        const errorData: Record<string, unknown> = await response.json();
-        errorMessage = (typeof errorData.error === 'string' ? errorData.error : null) || errorMessage;
-      } catch {
-        const errorText = await response.text();
-        errorMessage = errorText || errorMessage;
-      }
-      throw new Error(errorMessage);
-    }
-
-    const data: Record<string, unknown> = await response.json();
-    const aiMessage: string = (data.message as string) || '';
-
-    // Parse the JSON from the AI response — strip markdown fences if present
-    const cleaned = aiMessage.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
-    const parsed: Record<string, unknown> = JSON.parse(cleaned);
-
-    // Validate and ensure correct shape
-    const progressTrendValue = parsed.progressTrend as string;
-    const moodPatternValue = parsed.moodPattern as string;
-
-    return {
-      weekOf: (typeof parsed.weekOf === 'string' ? parsed.weekOf : getWeekStart()),
-      overallProgress: typeof parsed.overallProgress === 'number' ? parsed.overallProgress : 50,
-      progressTrend: (['up', 'down', 'stable'].includes(progressTrendValue) ? progressTrendValue : 'stable') as 'up' | 'down' | 'stable',
-      highlights: Array.isArray(parsed.highlights) ? (parsed.highlights as string[]) : [],
-      challenges: Array.isArray(parsed.challenges) ? (parsed.challenges as string[]) : [],
-      recommendations: Array.isArray(parsed.recommendations) ? (parsed.recommendations as string[]) : [],
-      goalsProgress: Array.isArray(parsed.goalsProgress)
-        ? (parsed.goalsProgress as Record<string, unknown>[]).map((g) => ({
-            name: typeof g.name === 'string' ? g.name : 'Goal',
-            progress: typeof g.progress === 'number' ? g.progress : 0,
-            trend: (['up', 'down', 'stable'].includes(g.trend as string) ? (g.trend as string) : 'stable') as 'up' | 'down' | 'stable',
-          }))
-        : [],
-      moodPattern: (['positive', 'neutral', 'challenging'].includes(moodPatternValue) ? moodPatternValue : 'neutral') as 'positive' | 'neutral' | 'challenging',
-      streakDays: typeof parsed.streakDays === 'number' ? parsed.streakDays : 0,
-      activitiesCompleted: typeof parsed.activitiesCompleted === 'number' ? parsed.activitiesCompleted : 0,
-      conversationsCount: typeof parsed.conversationsCount === 'number' ? parsed.conversationsCount : 0,
-    };
-  };
-
   const generateSummary = async () => {
     setIsGenerating(true);
     setError(null);
@@ -382,103 +139,6 @@ Please generate the weekly summary JSON now.`;
     }
   };
 
-  /**
-   * Data-driven fallback when the AI Edge Function is unreachable.
-   * Produces a summary derived from the actual Supabase data instead of hardcoded mock values.
-   */
-  const buildFallbackSummary = (
-    weeklyData: Awaited<ReturnType<typeof fetchWeeklyData>>
-  ): WeeklySummary => {
-    const completedRoutines = weeklyData.routines.filter(
-      (r) => r.completion_status === 'completed'
-    ).length;
-    const totalRoutines = weeklyData.routines.length;
-    const adherence = totalRoutines > 0
-      ? Math.round((completedRoutines / totalRoutines) * 100)
-      : 0;
-
-    const positiveBehaviors = weeklyData.behaviors.filter((b) => b.is_positive).length;
-    const challengingBehaviors = weeklyData.behaviors.filter((b) => !b.is_positive).length;
-
-    const overallProgress = Math.min(
-      100,
-      Math.round(
-        (adherence * 0.4) +
-        (positiveBehaviors > 0 ? Math.min(positiveBehaviors * 5, 30) : 0) +
-        (weeklyData.streak * 3) +
-        (weeklyData.conversations.length > 0 ? 10 : 0)
-      )
-    );
-
-    const progressTrend: 'up' | 'down' | 'stable' =
-      positiveBehaviors > challengingBehaviors ? 'up'
-      : challengingBehaviors > positiveBehaviors ? 'down'
-      : 'stable';
-
-    const moodPattern: 'positive' | 'neutral' | 'challenging' =
-      positiveBehaviors > challengingBehaviors * 2 ? 'positive'
-      : challengingBehaviors > positiveBehaviors ? 'challenging'
-      : 'neutral';
-
-    const highlights: string[] = [];
-    if (completedRoutines > 0)
-      highlights.push(`${childName} completed ${completedRoutines} routine${completedRoutines > 1 ? 's' : ''} this week`);
-    if (positiveBehaviors > 0)
-      highlights.push(`${positiveBehaviors} positive behavior${positiveBehaviors > 1 ? 's' : ''} logged`);
-    if (weeklyData.streak > 0)
-      highlights.push(`${weeklyData.streak}-day app usage streak`);
-    if (highlights.length === 0)
-      highlights.push('Keep logging to unlock personalized insights!');
-
-    const challenges: string[] = [];
-    if (challengingBehaviors > 0) {
-      const triggers = weeklyData.behaviors
-        .filter((b) => !b.is_positive && b.trigger)
-        .map((b) => b.trigger);
-      const uniqueTriggers = [...new Set(triggers)].slice(0, 2);
-      challenges.push(
-        `${challengingBehaviors} challenging behavior${challengingBehaviors > 1 ? 's' : ''} recorded` +
-        (uniqueTriggers.length > 0 ? ` (common triggers: ${uniqueTriggers.join(', ')})` : '')
-      );
-    }
-    if (totalRoutines === 0)
-      challenges.push('No routines tracked this week — setting up routines can help build consistency');
-
-    const recommendations: string[] = [
-      adherence < 50
-        ? 'Try to complete at least one routine each day to build momentum'
-        : 'Great routine consistency! Consider adding a new routine to stretch skills',
-      challengingBehaviors > 0
-        ? 'Review the behavior triggers and try a calm-down strategy before those situations'
-        : 'Keep up the positive trend — celebrate the wins with your child',
-    ];
-
-    const goalsProgress = weeklyData.goals.length > 0
-      ? weeklyData.goals.slice(0, 4).map((g) => ({
-          name: g.title || g.area || 'Goal',
-          progress: g.progress ?? 0,
-          trend: (g.completed ? 'up' : 'stable') as 'up' | 'down' | 'stable',
-        }))
-      : [
-          { name: 'Daily Routines', progress: adherence, trend: progressTrend },
-          { name: 'Positive Behaviors', progress: Math.min(100, positiveBehaviors * 10), trend: progressTrend },
-        ];
-
-    return {
-      weekOf: getWeekStart(),
-      overallProgress,
-      progressTrend,
-      highlights,
-      challenges,
-      recommendations,
-      goalsProgress,
-      moodPattern,
-      streakDays: weeklyData.streak,
-      activitiesCompleted: completedRoutines + positiveBehaviors,
-      conversationsCount: weeklyData.conversations.length,
-    };
-  };
-
   const getWeekStart = (): string => {
     const now = new Date();
     const dayOfWeek = now.getDay();
@@ -486,11 +146,6 @@ Please generate the weekly summary JSON now.`;
     const weekStart = new Date(now.setDate(diff));
     return weekStart.toISOString().split('T')[0];
   };
-
-  const parseSummary = (data: CachedSummaryRow): WeeklySummary => {
-    return data.summary_data;
-  };
-
 
   const getTrendIcon = (trend: 'up' | 'down' | 'stable') => {
     switch (trend) {
@@ -776,7 +431,7 @@ Generated by Aminy
           <ul className="space-y-3">
             {summary.highlights.map((highlight, index) => (
               <motion.li
-                key={index}
+                key={`${index}-${highlight}`}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
@@ -798,7 +453,7 @@ Generated by Aminy
           <ul className="space-y-3">
             {summary.challenges.map((challenge, index) => (
               <motion.li
-                key={index}
+                key={`${index}-${challenge}`}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
@@ -821,7 +476,7 @@ Generated by Aminy
         <ul className="space-y-3">
           {summary.recommendations.map((rec, index) => (
             <motion.li
-              key={index}
+              key={`${index}-${rec}`}
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: index * 0.15 }}

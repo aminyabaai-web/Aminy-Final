@@ -109,7 +109,7 @@ export function CookieConsent({ onAccept, onDecline }: CookieConsentProps) {
               </div>
               {item.locked
                 ? <span className="text-[10px] font-medium text-green-400 bg-green-900/40 px-2 py-0.5 rounded-full">Required</span>
-                : <input type="checkbox" checked={item.value} onChange={e => item.set!(e.target.checked)} className="h-3.5 w-3.5 rounded border-slate-600 text-teal-600" />
+                : <input type="checkbox" checked={item.value} onChange={e => item.set!(e.target.checked)} aria-label={`${item.label} cookies`} className="h-3.5 w-3.5 rounded border-slate-600 text-teal-600" />
               }
             </div>
           ))}

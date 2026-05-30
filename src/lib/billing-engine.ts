@@ -17,7 +17,56 @@
 
 import { supabase } from '../utils/supabase/client';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
-import { tierPricing, tierDisplayNames, getTierFeatureDescriptions, type TierType } from './tier-utils';
+import {
+  tierPricing,
+  tierDisplayNames,
+  getTierFeatureDescriptions,
+  getMaxChildren,
+  getMarketplaceDiscount,
+  getAIMessageLimit,
+  FAIR_USE_AI_DAILY_CAP,
+  type TierType,
+} from './tier-utils';
+
+// ----------------------------------------------------------------------------
+// Tier-config sourcing helpers (SINGLE SOURCE OF TRUTH = src/lib/tier-utils.ts)
+//
+// PRICING_TIERS below MUST NOT hardcode per-tier scalar facts. These adapters
+// translate tier-utils' canonical accessors into the shapes PRICING_TIERS uses
+// (numbers, or the literal 'unlimited' string for null/uncapped values), so the
+// numbers can only ever come from tier-utils. Drift is caught by
+// src/lib/tier-config-consistency.test.ts.
+//
+// billing-engine's PricingTier.id ('pro_plus') differs from tier-utils' TierType
+// ('proplus'); map it here so accessors receive the canonical key.
+// ----------------------------------------------------------------------------
+
+/** Map a billing-engine SubscriptionTier id to the canonical tier-utils TierType. */
+function toTierType(id: SubscriptionTier): TierType {
+  return id === 'pro_plus' ? 'proplus' : id;
+}
+
+/** DISPLAY children limit from tier-utils (null → 'unlimited'). */
+function childrenLimitFor(id: SubscriptionTier): number | 'unlimited' {
+  const max = getMaxChildren(toTierType(id));
+  return max === null ? 'unlimited' : max;
+}
+
+/**
+ * DISPLAY AI/day limit from tier-utils (null → 'unlimited').
+ * Paid tiers stay 'unlimited' for the pricing UI; the fair-use ceiling
+ * (FAIR_USE_AI_DAILY_CAP) is applied only on the enforcement path in
+ * checkMessageLimit() — display and enforcement are intentionally distinct.
+ */
+function aiPerDayDisplayFor(id: SubscriptionTier): number | 'unlimited' {
+  const limit = getAIMessageLimit(toTierType(id));
+  return limit === null ? 'unlimited' : limit;
+}
+
+/** Marketplace discount (whole-number percent) from tier-utils. */
+function discountFor(id: SubscriptionTier): number {
+  return getMarketplaceDiscount(toTierType(id));
+}
 
 // ============================================================================
 // Types
@@ -122,16 +171,18 @@ export const PRICING_TIERS: PricingTier[] = [
     yearlyPrice: tierPricing.free.yearly,
     yearlyMonthlyEquivalent: 0,
     features: [
-      '5 AI messages per day',
+      '1 child profile',
+      'Book telehealth & marketplace visits',
+      '3 AI messages per day',
       'Basic routine tracking',
       '3 calm tools',
       'Community access (read-only)',
     ],
     limits: {
-      aiMessagesPerDay: 5,
-      children: 1,
+      aiMessagesPerDay: aiPerDayDisplayFor('free'),
+      children: childrenLimitFor('free'),
       vaultDocuments: 0,
-      marketplaceDiscount: 0,
+      marketplaceDiscount: discountFor('free'),
     },
     stripePriceIds: {
       monthly: '',
@@ -152,14 +203,14 @@ export const PRICING_TIERS: PricingTier[] = [
       'Document vault (25 docs)',
       'All calm tools',
       'Full community access',
-      '10% marketplace discount',
+      'Book marketplace sessions',
       'Progress reports',
     ],
     limits: {
-      aiMessagesPerDay: 'unlimited',
-      children: 2,
+      aiMessagesPerDay: aiPerDayDisplayFor('core'),
+      children: childrenLimitFor('core'),
       vaultDocuments: 25,
-      marketplaceDiscount: 10,
+      marketplaceDiscount: discountFor('core'),
     },
     stripePriceIds: {
       monthly: import.meta.env.VITE_PRICE_CORE_MONTHLY || '',
@@ -186,10 +237,10 @@ export const PRICING_TIERS: PricingTier[] = [
       'IEP goal tracking',
     ],
     limits: {
-      aiMessagesPerDay: 'unlimited',
-      children: 3,
+      aiMessagesPerDay: aiPerDayDisplayFor('pro'),
+      children: childrenLimitFor('pro'),
       vaultDocuments: 'unlimited',
-      marketplaceDiscount: 20,
+      marketplaceDiscount: discountFor('pro'),
     },
     stripePriceIds: {
       monthly: import.meta.env.VITE_PRICE_PRO_MONTHLY || '',
@@ -214,10 +265,10 @@ export const PRICING_TIERS: PricingTier[] = [
       'Early feature access',
     ],
     limits: {
-      aiMessagesPerDay: 'unlimited',
-      children: 'unlimited',
+      aiMessagesPerDay: aiPerDayDisplayFor('pro_plus'),
+      children: childrenLimitFor('pro_plus'),
       vaultDocuments: 'unlimited',
-      marketplaceDiscount: 30,
+      marketplaceDiscount: discountFor('pro_plus'),
     },
     stripePriceIds: {
       monthly: import.meta.env.VITE_PRICE_PROPLUS_MONTHLY || '',
@@ -654,7 +705,7 @@ Sincerely,
 export async function startTrial(userId: string): Promise<boolean> {
   try {
     const trialEnd = new Date();
-    trialEnd.setDate(trialEnd.getDate() + 14); // 14-day trial
+    trialEnd.setDate(trialEnd.getDate() + 7); // 7-day trial
 
     await supabase.from('trial_tracking').upsert({
       user_id: userId,
@@ -735,13 +786,30 @@ export async function markPaywallShown(
 // ============================================================================
 
 /**
- * Check if user has reached their daily AI message limit
+ * Check if user has reached their daily AI message limit.
+ *
+ * DISPLAY vs ENFORCEMENT (intentionally distinct):
+ * - DISPLAY: paid tiers (core/pro/pro_plus) are marketed as "Unlimited" — that is
+ *   why PRICING_TIERS[*].limits.aiMessagesPerDay stays 'unlimited'. The pricing UI
+ *   keeps showing "Unlimited" off that config; do NOT change it.
+ * - ENFORCEMENT: this send-path check still applies a fair-use ceiling
+ *   (FAIR_USE_AI_DAILY_CAP = 100/day) to "unlimited" tiers as anti-abuse / COGS
+ *   protection. Beyond the cap we return allowed:false with a friendly `reason`
+ *   ('fair_use_daily_limit') rather than a hard paywall message.
+ * - Free tier keeps its hard 3/day limit (reason 'free_daily_limit' when hit).
+ *
+ * `limit` in the return is the ENFORCED number actually applied (3 for free,
+ * 100 for paid), so callers showing "X of N used" reflect the real ceiling.
  */
 export async function checkMessageLimit(userId: string): Promise<{
   allowed: boolean;
   used: number;
   limit: number | 'unlimited';
   resetAt: string;
+  /** Present only when allowed === false. Distinguishes hard paywall vs fair-use. */
+  reason?: 'free_daily_limit' | 'fair_use_daily_limit';
+  /** Friendly, copy-ready message for the blocked state. */
+  message?: string;
 }> {
   // Get user's tier
   const { data: profile } = await supabase
@@ -752,13 +820,14 @@ export async function checkMessageLimit(userId: string): Promise<{
 
   const tier = profile?.tier || 'free';
   const tierConfig = PRICING_TIERS.find(t => t.id === tier);
-  const limit = tierConfig?.limits.aiMessagesPerDay || 5;
+  const displayLimit = tierConfig?.limits.aiMessagesPerDay ?? 3;
 
-  if (limit === 'unlimited') {
-    return { allowed: true, used: 0, limit: 'unlimited', resetAt: '' };
-  }
+  // Resolve the ENFORCED limit. Paid tiers display "unlimited" but enforce the
+  // fair-use cap; free (or any numeric config) enforces its hard number.
+  const isPaidUnlimited = displayLimit === 'unlimited';
+  const enforcedLimit = isPaidUnlimited ? FAIR_USE_AI_DAILY_CAP : displayLimit;
 
-  // Get today's usage
+  // Get today's usage (needed for both free and fair-use enforcement)
   const today = new Date().toISOString().split('T')[0];
   const { data: usage } = await supabase
     .from('usage_tracking')
@@ -771,12 +840,24 @@ export async function checkMessageLimit(userId: string): Promise<{
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
   tomorrow.setHours(0, 0, 0, 0);
+  const resetAt = tomorrow.toISOString();
 
+  const allowed = used < enforcedLimit;
+
+  if (allowed) {
+    return { allowed: true, used, limit: enforcedLimit, resetAt };
+  }
+
+  // Blocked — pick the right friendly reason/copy for display vs enforcement.
   return {
-    allowed: used < limit,
+    allowed: false,
     used,
-    limit,
-    resetAt: tomorrow.toISOString(),
+    limit: enforcedLimit,
+    resetAt,
+    reason: isPaidUnlimited ? 'fair_use_daily_limit' : 'free_daily_limit',
+    message: isPaidUnlimited
+      ? `You've reached today's fair-use limit (${FAIR_USE_AI_DAILY_CAP} messages) — resets tomorrow.`
+      : `You've reached your daily limit of ${enforcedLimit} messages — upgrade for more or try again tomorrow.`,
   };
 }
 

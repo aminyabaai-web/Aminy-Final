@@ -359,7 +359,7 @@ export function PreCallSetup({
           )}
         </CardHeader>
 
-        <CardContent className="space-y-3 sm:space-y-4 sm:space-y-6">
+        <CardContent className="space-y-3 sm:space-y-6">
           {/* Error Alert */}
           {error && (
             <Alert variant="destructive">
@@ -487,7 +487,7 @@ export function PreCallSetup({
             <div className="space-y-2">
               <label className="text-sm font-medium">Camera</label>
               <Select value={selectedCamera} onValueChange={setSelectedCamera}>
-                <SelectTrigger>
+                <SelectTrigger aria-label="Camera">
                   <SelectValue placeholder="Select camera" />
                 </SelectTrigger>
                 <SelectContent>
@@ -503,7 +503,7 @@ export function PreCallSetup({
             <div className="space-y-2">
               <label className="text-sm font-medium">Microphone</label>
               <Select value={selectedMicrophone} onValueChange={setSelectedMicrophone}>
-                <SelectTrigger>
+                <SelectTrigger aria-label="Microphone">
                   <SelectValue placeholder="Select microphone" />
                 </SelectTrigger>
                 <SelectContent>

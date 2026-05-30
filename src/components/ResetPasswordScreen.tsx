@@ -124,7 +124,7 @@ export function ResetPasswordScreen({ onSuccess, onBack }: ResetPasswordScreenPr
               Your password has been successfully changed. Redirecting you to sign in...
             </p>
 
-            <div className="w-8 h-8 border-2 border-accent/30 border-t-accent rounded-full animate-spin mx-auto" />
+            <div className="w-8 h-8 border-2 border-accent/20 border-t-accent rounded-full animate-spin mx-auto" />
           </div>
         </div>
       </div>
@@ -206,6 +206,7 @@ export function ResetPasswordScreen({ onSuccess, onBack }: ResetPasswordScreenPr
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                   disabled={isLoading}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
@@ -244,6 +245,7 @@ export function ResetPasswordScreen({ onSuccess, onBack }: ResetPasswordScreenPr
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                   disabled={isLoading}
+                  aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
                 >
                   {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
@@ -269,7 +271,7 @@ export function ResetPasswordScreen({ onSuccess, onBack }: ResetPasswordScreenPr
             >
               {isLoading ? (
                 <span className="flex items-center gap-2">
-                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
                   Updating password...
                 </span>
               ) : (

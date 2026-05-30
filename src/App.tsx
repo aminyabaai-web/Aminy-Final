@@ -20,6 +20,7 @@ import { usePaymentConfirmation, getPaymentStatusFromUrl, clearPaymentParamsFrom
 import { useGracePeriod } from "./hooks/useGracePeriod";
 import { logger } from "./lib/logger";
 import { isDemoMode } from "./lib/demo-seed";
+import { getMonetizationMode } from "./lib/monetization-mode";
 
 // Lazy load SplashPage (full landing page)
 const SplashPage = lazy(() =>
@@ -2511,6 +2512,8 @@ export default function App() {
               <PricingTiers
                 onSubscribe={handleSubscribe}
                 onClose={() => navigateToScreen("dashboard")}
+                monetizationMode={getMonetizationMode(userData)}
+                onCheckCoverage={() => navigateToScreen("benefits")}
               />
             </Suspense>
           );

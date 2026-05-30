@@ -288,7 +288,7 @@ export function OnboardingQuickStart({
             {/* Privacy note */}
             <div className="mt-6 flex items-center justify-center gap-1.5 text-xs text-gray-400">
               <Shield size={12} />
-              <span>HIPAA-encrypted • No data shared without consent</span>
+              <span>HIPAA-conscious • No data shared without consent</span>
             </div>
 
             {/* Back button */}

@@ -176,6 +176,7 @@ export function NotificationPrompt({
             </Button>
             <button
               onClick={handleDismiss}
+              aria-label="Dismiss notification prompt"
               className="h-12 w-12 p-2.5 hover:bg-white/20 rounded flex items-center justify-center"
             >
               <X className="w-4 h-4" />

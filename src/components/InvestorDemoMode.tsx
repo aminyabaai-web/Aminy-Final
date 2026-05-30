@@ -192,6 +192,7 @@ export function InvestorDemoMode({ onNavigate, onClose, currentScreen }: Investo
               onClick={() => setMinimized(true)}
               className="p-1.5 hover:bg-white/10 rounded-lg transition-colors text-xs"
               title="Minimize"
+              aria-label="Minimize investor demo"
             >
               _
             </button>
@@ -199,6 +200,7 @@ export function InvestorDemoMode({ onNavigate, onClose, currentScreen }: Investo
               onClick={onClose}
               className="p-1.5 hover:bg-white/10 rounded-lg transition-colors"
               title="Exit demo"
+              aria-label="Exit investor demo"
             >
               <X className="w-4 h-4" />
             </button>

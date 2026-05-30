@@ -140,6 +140,7 @@ export function NPSSurveyModal({
               </div>
               <button
                 onClick={onClose}
+                aria-label="Close survey"
                 className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
               >
                 <X className="w-5 h-5 text-gray-400" />

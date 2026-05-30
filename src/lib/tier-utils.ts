@@ -47,11 +47,11 @@ export const tierDisplayNames: Record<TierType, string> = {
 
 // Trial configuration
 export const TRIAL_CONFIG = {
-  durationDays: 14,
+  durationDays: 7,
   trialTier: 'core' as TierType,
   requiresCreditCard: false,
   features: [
-    'Full Core tier access for 14 days',
+    'Full Core tier access for 7 days',
     'Unlimited AI chat with Aminy',
     'Adaptive daily plans for your child',
     'Document vault & analysis',
@@ -104,11 +104,12 @@ export const tierPricing: Record<TierType, { monthly: number; yearly: number; sa
 };
 
 export const tierEntitlements: Record<CanonicalTierName, TierEntitlements> = {
-  // free = hard paywall. No features. Use getEffectiveTier() to give trial users core access.
+  // free = discovery tier: 1 child, 3 AI messages/day, telehealth/marketplace booking allowed.
+  // Use getEffectiveTier() to give active-trial users full core access.
   free: {
-    aiMessagesPerDay: 0,
+    aiMessagesPerDay: 3,
     juniorAccess: false,
-    maxChildren: 0,
+    maxChildren: 1,
     reportExports: 'none',
     providerFeatures: false,
   },
@@ -953,11 +954,12 @@ export function getTierYearlySavings(tier: TierType): number {
 // Feature definitions for each tier
 const tierFeatureMap: Record<TierType, string[]> = {
   free: [
-    'limited-ai-chat',        // 5 messages/day
+    'limited-ai-chat',        // 3 messages/day
     'basic-daily-plan',       // Pre-set activities only
     'basic-calm-tools',       // 3 core tools: Breathe Glow, Visual Timer, Bubble Pop
     'basic-tracking',         // Simple completion tracking
     'community-read-only',    // View community, can't post
+    'marketplace-access',     // Free can book telehealth/marketplace visits (pay per use)
   ],
   starter: [
     'unlimited-ai-chat',      // Legacy: same as Core
@@ -1076,14 +1078,15 @@ export function getTierLevel(tier: TierType | undefined): number {
 export function getTierFeatureDescriptions(tier: TierType): string[] {
   const descriptions: Record<TierType, string[]> = {
     free: [
-      'Daily plan with curated activities',
-      '5 AI chat messages per day',
+      '1 child profile',
+      'Book telehealth & marketplace visits',
+      '3 AI chat messages per day',
       'Core calm tools (breathing, timer, bubbles)',
       'Track daily progress',
-      '14-day free trial of Core included',
+      '7-day free trial of Core included',
     ],
     starter: [ // Legacy: Same as Core
-      '14-day free trial included',
+      '7-day free trial included',
       'Unlimited AI chat (text & voice)',
       'AI reads your IEPs & medical records',
       'Adaptive plans that learn what works',
@@ -1093,7 +1096,7 @@ export function getTierFeatureDescriptions(tier: TierType): string[] {
       'HSA/FSA eligible',
     ],
     core: [
-      '14-day free trial included',
+      '7-day free trial included',
       'Unlimited AI chat (text & voice)',
       'AI reads your IEPs & medical records',
       'Adaptive plans that learn what works',
@@ -1147,16 +1150,49 @@ export function getHSAFSANote(): string {
   return HSA_FSA_CONFIG.eligibilityNote;
 }
 
-// Get AI message limits per tier
+/**
+ * FAIR-USE AI DAILY CAP (anti-abuse / COGS protection).
+ *
+ * Paid tiers (core/pro/proplus) are MARKETED as "Unlimited" AI and the UI MUST
+ * keep displaying "Unlimited" (see getAIMessageLimit / getTierLimits, which still
+ * return null = unlimited for paid tiers). This cap is the ENFORCEMENT-side
+ * fair-use ceiling only — the actual send path blocks beyond this many messages
+ * per day to protect against scripted abuse and runaway model spend. It is NOT a
+ * marketing/display number. Keep DISPLAY (Unlimited) and ENFORCEMENT (this cap)
+ * strictly separate. Free tier keeps its hard 3/day limit, unaffected by this.
+ */
+export const FAIR_USE_AI_DAILY_CAP = 100;
+
+/**
+ * DISPLAY AI message limit per tier (marketing-facing).
+ *
+ * Returns null for paid tiers = "Unlimited" in the UI. Do NOT use this for
+ * send-path enforcement — use getEnforcedAIMessageLimit() for that, which applies
+ * the FAIR_USE_AI_DAILY_CAP to paid tiers. (display vs enforcement are distinct.)
+ */
 export function getAIMessageLimit(tier: TierType | undefined): number | null {
   const limits: Record<TierType, number | null> = {
-    free: 5,
-    starter: null,  // Legacy: same as Core (unlimited)
-    core: null,    // unlimited
-    pro: null,     // unlimited
-    proplus: null, // unlimited
+    free: 3,
+    starter: null,  // Legacy: same as Core (unlimited — display only)
+    core: null,    // unlimited (display only)
+    pro: null,     // unlimited (display only)
+    proplus: null, // unlimited (display only)
   };
-  return tier ? limits[tier] : 5;
+  return tier ? limits[tier] : 3;
+}
+
+/**
+ * ENFORCEMENT AI message limit per tier (send-path / anti-abuse).
+ *
+ * Free → 3 (hard limit). Paid (starter/core/pro/proplus) → FAIR_USE_AI_DAILY_CAP
+ * (100) fair-use ceiling. This is the number the send path should compare daily
+ * usage against. The marketed/displayed limit for paid tiers remains "Unlimited"
+ * (see getAIMessageLimit) — these two concepts are intentionally distinct.
+ */
+export function getEnforcedAIMessageLimit(tier: TierType | undefined): number {
+  if (!tier || tier === 'free') return 3;
+  // All paid tiers share the same fair-use ceiling.
+  return FAIR_USE_AI_DAILY_CAP;
 }
 
 // Check if tier has unlimited AI
@@ -1198,14 +1234,30 @@ export function getUpgradePath(currentTier: TierType): TierType | null {
   return upgradePaths[currentTier];
 }
 
-// Get marketplace discount percentage by tier
+/**
+ * Marketplace per-session discount by tier.
+ *
+ * UNIT: whole-number PERCENT (e.g. 20 means 20%, NOT 0.20). This matches the
+ * existing callers (tier-utils.test.ts, PRICING_TIERS.limits.marketplaceDiscount
+ * in billing-engine.ts, and the marketing copy). Consumers that need a fraction
+ * must divide by 100 — see telehealth-economics.computeVisitEconomics /
+ * calculateAppointmentFinancials, which converts via `rate / 100`.
+ *
+ * Per-tier rates: Free 0% · Core 10% · Pro 20% · Family (proplus) 30%.
+ * Legacy 'starter' === core === 10%.
+ *
+ * IMPORTANT (revenue rule): this discount applies ONLY to cash-pay visits and is
+ * absorbed by the PLATFORM take (provider payout stays fixed), with a margin clamp
+ * so the platform never drops below its floor. The clamp lives in the economics
+ * calc, not here — this function only reports the headline rate.
+ */
 export function getMarketplaceDiscount(tier: TierType | undefined): number {
   const discounts: Record<TierType, number> = {
-    free: 0,
+    free: 0,      // 0% — no member discount
     starter: 10,  // Legacy: same as Core
     core: 10,     // 10% off
     pro: 20,      // 20% off
-    proplus: 30,  // 30% off
+    proplus: 30,  // 30% off (Family Plan)
   };
   return tier ? discounts[tier] : 0;
 }
@@ -1285,10 +1337,19 @@ export function getTierLimits(tier: TierType | undefined): {
 } {
   const messageLimit = getAIMessageLimit(tier);
   const childrenLimit = getMaxChildren(tier);
+  // Memory-fact caps. Legacy 'starter' keeps its historical 200 cap; canonical
+  // core/pro get the revised caps; family (proplus) is unlimited (null).
+  const canonical = getCanonicalTierName(tier);
+  const memoryFacts =
+    tier === 'free' ? 50 :
+    tier === 'starter' ? 200 :
+    canonical === 'core' ? 5000 :
+    canonical === 'pro' ? 15000 :
+    null; // family / proplus = unlimited
   return {
     messagesPerDay: messageLimit,
     documents: tier === 'free' ? 5 : tier === 'starter' ? 20 : null,
-    memoryFacts: tier === 'free' ? 50 : tier === 'starter' ? 200 : null,
+    memoryFacts,
     children: childrenLimit,
   };
 }

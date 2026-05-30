@@ -351,7 +351,7 @@ export function SoftNudgeModal({ childName, insightsCount, onUpgrade, onDismiss 
             className="w-full py-3 bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 text-white font-semibold"
           >
             <Crown className="w-5 h-5 mr-2" />
-            Upgrade Now - 14 Days Free
+            Upgrade Now - 7 Days Free
           </Button>
 
           <button

@@ -99,7 +99,7 @@ function NavGroup({
                     : 'bg-white text-slate-500 shadow-sm group-hover:bg-teal-50 group-hover:text-teal-700',
                 ].join(' ')}
               >
-                <Icon className="h-4.5 w-4.5" strokeWidth={active ? 2.1 : 1.9} />
+                <Icon className="h-5 w-5" strokeWidth={active ? 2.1 : 1.9} />
               </div>
 
               <div className="min-w-0 flex-1">

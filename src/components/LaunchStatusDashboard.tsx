@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
-import { Button } from './ui/button';
 import { Progress } from './ui/progress';
 import {
   CheckCircle,
@@ -14,8 +13,7 @@ import {
   BarChart3,
   Zap,
   Globe,
-  FileText,
-  Download
+  FileText
 } from 'lucide-react';
 
 interface LaunchStatusDashboardProps {
@@ -298,10 +296,6 @@ export function LaunchStatusDashboard({ onBack }: LaunchStatusDashboardProps) {
               <span className="text-slate-700">Final QA testing across devices</span>
             </div>
           </div>
-          <Button className="bg-blue-600 hover:bg-blue-700 text-white">
-            <Download className="w-4 h-4 mr-2" />
-            Export Launch Report
-          </Button>
         </Card>
       </div>
     </div>

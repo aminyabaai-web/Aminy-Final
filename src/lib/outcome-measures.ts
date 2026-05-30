@@ -361,7 +361,15 @@ function scoreCars2(answers: Record<string, number>) {
 // saveAssessmentResult — Supabase with localStorage fallback
 // ---------------------------------------------------------------------------
 
-export async function saveAssessmentResult(result: AssessmentResult): Promise<void> {
+// Signals where the result actually persisted so the UI can be honest:
+//   'server' — written to Supabase (durable, syncs across devices)
+//   'local'  — Supabase failed/unavailable; only on this device's localStorage
+export interface SaveAssessmentOutcome {
+  persisted: 'server' | 'local';
+  error?: string;
+}
+
+export async function saveAssessmentResult(result: AssessmentResult): Promise<SaveAssessmentOutcome> {
   // Always save to localStorage first as a backup
   const storageKey = `aminy_assessments_${result.userId}_${result.childId}`;
   try {
@@ -388,9 +396,12 @@ export async function saveAssessmentResult(result: AssessmentResult): Promise<vo
 
     if (error) {
       console.warn('[outcome-measures] Supabase save failed, localStorage fallback used:', error.message);
+      return { persisted: 'local', error: error.message };
     }
+    return { persisted: 'server' };
   } catch (err) {
     console.warn('[outcome-measures] Supabase unavailable, localStorage fallback used:', err);
+    return { persisted: 'local', error: err instanceof Error ? err.message : String(err) };
   }
 }
 
