@@ -172,6 +172,9 @@ test.describe('Golden Path — Aminy demo gate', () => {
       !e.includes('sourcemap') &&
       !e.includes('Failed to load resource') &&
       !e.includes('Download the React DevTools') &&
+      // Benign WebKit/Safari engine warning about a Chrome-only viewport meta key
+      !e.toLowerCase().includes('interactive-widget') &&
+      !e.toLowerCase().includes('viewport argument') &&
       !e.toLowerCase().includes('warning'),
     );
 
