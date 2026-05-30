@@ -1150,16 +1150,49 @@ export function getHSAFSANote(): string {
   return HSA_FSA_CONFIG.eligibilityNote;
 }
 
-// Get AI message limits per tier
+/**
+ * FAIR-USE AI DAILY CAP (anti-abuse / COGS protection).
+ *
+ * Paid tiers (core/pro/proplus) are MARKETED as "Unlimited" AI and the UI MUST
+ * keep displaying "Unlimited" (see getAIMessageLimit / getTierLimits, which still
+ * return null = unlimited for paid tiers). This cap is the ENFORCEMENT-side
+ * fair-use ceiling only — the actual send path blocks beyond this many messages
+ * per day to protect against scripted abuse and runaway model spend. It is NOT a
+ * marketing/display number. Keep DISPLAY (Unlimited) and ENFORCEMENT (this cap)
+ * strictly separate. Free tier keeps its hard 3/day limit, unaffected by this.
+ */
+export const FAIR_USE_AI_DAILY_CAP = 100;
+
+/**
+ * DISPLAY AI message limit per tier (marketing-facing).
+ *
+ * Returns null for paid tiers = "Unlimited" in the UI. Do NOT use this for
+ * send-path enforcement — use getEnforcedAIMessageLimit() for that, which applies
+ * the FAIR_USE_AI_DAILY_CAP to paid tiers. (display vs enforcement are distinct.)
+ */
 export function getAIMessageLimit(tier: TierType | undefined): number | null {
   const limits: Record<TierType, number | null> = {
     free: 3,
-    starter: null,  // Legacy: same as Core (unlimited)
-    core: null,    // unlimited
-    pro: null,     // unlimited
-    proplus: null, // unlimited
+    starter: null,  // Legacy: same as Core (unlimited — display only)
+    core: null,    // unlimited (display only)
+    pro: null,     // unlimited (display only)
+    proplus: null, // unlimited (display only)
   };
   return tier ? limits[tier] : 3;
+}
+
+/**
+ * ENFORCEMENT AI message limit per tier (send-path / anti-abuse).
+ *
+ * Free → 3 (hard limit). Paid (starter/core/pro/proplus) → FAIR_USE_AI_DAILY_CAP
+ * (100) fair-use ceiling. This is the number the send path should compare daily
+ * usage against. The marketed/displayed limit for paid tiers remains "Unlimited"
+ * (see getAIMessageLimit) — these two concepts are intentionally distinct.
+ */
+export function getEnforcedAIMessageLimit(tier: TierType | undefined): number {
+  if (!tier || tier === 'free') return 3;
+  // All paid tiers share the same fair-use ceiling.
+  return FAIR_USE_AI_DAILY_CAP;
 }
 
 // Check if tier has unlimited AI
@@ -1201,14 +1234,30 @@ export function getUpgradePath(currentTier: TierType): TierType | null {
   return upgradePaths[currentTier];
 }
 
-// Get marketplace discount percentage by tier
+/**
+ * Marketplace per-session discount by tier.
+ *
+ * UNIT: whole-number PERCENT (e.g. 20 means 20%, NOT 0.20). This matches the
+ * existing callers (tier-utils.test.ts, PRICING_TIERS.limits.marketplaceDiscount
+ * in billing-engine.ts, and the marketing copy). Consumers that need a fraction
+ * must divide by 100 — see telehealth-economics.computeVisitEconomics /
+ * calculateAppointmentFinancials, which converts via `rate / 100`.
+ *
+ * Per-tier rates: Free 0% · Core 10% · Pro 20% · Family (proplus) 30%.
+ * Legacy 'starter' === core === 10%.
+ *
+ * IMPORTANT (revenue rule): this discount applies ONLY to cash-pay visits and is
+ * absorbed by the PLATFORM take (provider payout stays fixed), with a margin clamp
+ * so the platform never drops below its floor. The clamp lives in the economics
+ * calc, not here — this function only reports the headline rate.
+ */
 export function getMarketplaceDiscount(tier: TierType | undefined): number {
   const discounts: Record<TierType, number> = {
-    free: 0,
+    free: 0,      // 0% — no member discount
     starter: 10,  // Legacy: same as Core
     core: 10,     // 10% off
     pro: 20,      // 20% off
-    proplus: 30,  // 30% off
+    proplus: 30,  // 30% off (Family Plan)
   };
   return tier ? discounts[tier] : 0;
 }

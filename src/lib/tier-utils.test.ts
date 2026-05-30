@@ -11,6 +11,8 @@ import {
   compareTiers,
   getTierLevel,
   getAIMessageLimit,
+  getEnforcedAIMessageLimit,
+  FAIR_USE_AI_DAILY_CAP,
   hasUnlimitedAI,
   getRecommendedTier,
   getUpgradePath,
@@ -179,16 +181,40 @@ describe('Tier Utilities', () => {
   });
 
   describe('getAIMessageLimit', () => {
-    it('returns correct limits', () => {
-      expect(getAIMessageLimit('free')).toBe(5);
+    it('returns correct DISPLAY limits (free hard 3; paid null = Unlimited)', () => {
+      // DISPLAY limit. Free is a hard 3/day; paid tiers show "Unlimited" (null).
+      // Enforcement fair-use cap is separate — see getEnforcedAIMessageLimit.
+      expect(getAIMessageLimit('free')).toBe(3);
       expect(getAIMessageLimit('starter')).toBeNull(); // Legacy: same as Core (unlimited)
       expect(getAIMessageLimit('core')).toBeNull(); // unlimited
       expect(getAIMessageLimit('pro')).toBeNull(); // unlimited
       expect(getAIMessageLimit('proplus')).toBeNull(); // unlimited
     });
 
-    it('returns 5 for undefined', () => {
-      expect(getAIMessageLimit(undefined)).toBe(5);
+    it('returns 3 for undefined (defaults to free hard limit)', () => {
+      expect(getAIMessageLimit(undefined)).toBe(3);
+    });
+  });
+
+  describe('getEnforcedAIMessageLimit (fair-use enforcement vs display)', () => {
+    it('keeps free at a hard 3/day', () => {
+      expect(getEnforcedAIMessageLimit('free')).toBe(3);
+      expect(getEnforcedAIMessageLimit(undefined)).toBe(3);
+    });
+
+    it('enforces the 100/day fair-use cap on paid tiers (still displayed as Unlimited)', () => {
+      expect(getEnforcedAIMessageLimit('core')).toBe(FAIR_USE_AI_DAILY_CAP);
+      expect(getEnforcedAIMessageLimit('pro')).toBe(FAIR_USE_AI_DAILY_CAP);
+      expect(getEnforcedAIMessageLimit('proplus')).toBe(FAIR_USE_AI_DAILY_CAP);
+      expect(getEnforcedAIMessageLimit('starter')).toBe(FAIR_USE_AI_DAILY_CAP); // legacy = core
+      expect(FAIR_USE_AI_DAILY_CAP).toBe(100);
+    });
+
+    it('keeps DISPLAY limit unlimited (null) for paid even though enforcement caps at 100', () => {
+      // Display path stays "Unlimited" — distinct from enforcement.
+      expect(getAIMessageLimit('core')).toBeNull();
+      expect(getAIMessageLimit('pro')).toBeNull();
+      expect(getAIMessageLimit('proplus')).toBeNull();
     });
   });
 

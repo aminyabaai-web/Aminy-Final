@@ -3,7 +3,60 @@
 // Unauthorized use, reproduction, or distribution is strictly prohibited.
 // See LICENSE file for details.
 
+import { getMarketplaceDiscount, type TierType } from './tier-utils';
+
 export type CareRail = 'cash_pay_direct' | 'insured_partner_billed' | 'insured_aminy_billed';
+
+/**
+ * Cash-pay rail predicate. The tiered marketplace discount is absorbed by the
+ * PLATFORM take, so it may ONLY apply on cash-pay visits — on insured rails the
+ * platform take is just 5–10%, so any % discount there is a guaranteed loss.
+ */
+export function isCashPayRail(rail: CareRail): boolean {
+  return rail === 'cash_pay_direct';
+}
+
+/**
+ * Platform-margin FLOOR in cents the platform must retain after any cash-pay
+ * member discount: at least $5 (500c) AND at least 8% of the base price.
+ * floor = max(500, round(0.08 * basePriceCents)).
+ */
+export function platformMarginFloorCents(basePriceCents: number): number {
+  return Math.max(500, Math.round(0.08 * basePriceCents));
+}
+
+/**
+ * Compute the platform-absorbed, margin-clamped member discount for a cash-pay
+ * visit.
+ *
+ * Rules (revenue logic):
+ * - Provider payout is FIXED — the discount comes entirely out of the platform take.
+ * - The combined requested discount (tier % of base + any flat/promo cents) is
+ *   clamped so the platform always keeps >= floor and the discount never goes
+ *   negative:
+ *     cap = max(0, basePriceCents - providerPayoutCents - floor)
+ *     effectiveDiscountCents = min(requestedDiscountCents, cap)
+ * - Returns the effective discount plus the resulting total & platform fee so the
+ *   platform fee is guaranteed >= floor (when base - payout >= floor) and >= 0.
+ *
+ * @param requestedDiscountCents combined discount the caller wants to apply
+ *        (e.g. round(base * tierRate) + promo + legacy flat), pre-clamp.
+ */
+export function applyCashPayMemberDiscount(options: {
+  basePriceCents: number;
+  providerPayoutCents: number;
+  requestedDiscountCents: number;
+}): { effectiveDiscountCents: number; totalCents: number; platformFeeCents: number; floorCents: number } {
+  const { basePriceCents, providerPayoutCents } = options;
+  const floorCents = platformMarginFloorCents(basePriceCents);
+  // Most the platform can give away while still keeping payout + floor covered.
+  const cap = Math.max(0, basePriceCents - providerPayoutCents - floorCents);
+  const requested = Math.max(0, Math.round(options.requestedDiscountCents));
+  const effectiveDiscountCents = Math.min(requested, cap);
+  const totalCents = Math.max(0, basePriceCents - effectiveDiscountCents);
+  const platformFeeCents = Math.max(0, totalCents - providerPayoutCents);
+  return { effectiveDiscountCents, totalCents, platformFeeCents, floorCents };
+}
 export type TelehealthVisitType = 'consult' | 'deep-review';
 export type TelehealthProviderOrganization = 'independent' | 'aact' | 'rise' | 'sensato';
 export type TelehealthVisitClass = 'quick_consult' | 'standard_session' | 'diagnostic_deep_review' | 'follow_up';
@@ -210,11 +263,36 @@ export function calculateAppointmentFinancials(options: {
   rail: CareRail;
   visitClass: TelehealthVisitClass;
   promoDiscountCents?: number;
+  /**
+   * LEGACY flat member discount toggle. Only consulted as a fallback when no
+   * tier info (tierDiscountRate / userTier) is provided. The percentage path
+   * below is authoritative when tier info is present.
+   */
   applyMemberDiscount?: boolean;
+  /**
+   * Tier marketplace discount as a whole-number PERCENT (e.g. 20 = 20%), matching
+   * getMarketplaceDiscount()'s unit. Cash-pay ONLY; absorbed by the platform take
+   * and margin-clamped. Takes precedence over userTier when both are supplied.
+   */
+  tierDiscountRate?: number;
+  /**
+   * Convenience: pass the user's tier and the rate is resolved via
+   * getMarketplaceDiscount(). Cash-pay ONLY. Ignored if tierDiscountRate is set.
+   */
+  userTier?: TierType;
 }): AppointmentFinancials {
   const visit = getCashPayVisitEconomics(options.visitClass);
-  const memberDiscountCents = options.applyMemberDiscount ? visit.memberDiscountCents : 0;
   const promoDiscountCents = options.promoDiscountCents || 0;
+
+  // Resolve the tier discount RATE (whole-number percent). tierDiscountRate wins;
+  // otherwise derive from userTier. undefined => no percentage path requested.
+  const tierRatePercent =
+    options.tierDiscountRate !== undefined
+      ? options.tierDiscountRate
+      : options.userTier !== undefined
+        ? getMarketplaceDiscount(options.userTier)
+        : undefined;
+  const hasTierInfo = tierRatePercent !== undefined;
 
   if (options.rail === 'insured_partner_billed') {
     const partnerVisitFeeCents = PARTNER_VISIT_FEES_CENTS[options.visitClass];
@@ -250,16 +328,52 @@ export function calculateAppointmentFinancials(options: {
     };
   }
 
+  // ── Cash-pay rail (the only rail where a member discount may apply) ──────────
   const subtotalCents = visit.basePriceCents;
-  const totalCents = Math.max(0, subtotalCents - memberDiscountCents - promoDiscountCents);
-  const platformFeeCents = Math.max(0, totalCents - visit.providerPayoutCents);
+
+  // The discount applies ONLY to cash-pay. On any non-cash rail we force 0 (a %
+  // discount there is a guaranteed loss given the 5–10% platform take).
+  const cashPay = isCashPayRail(options.rail);
+
+  // Determine the requested MEMBER discount (excludes promo) in cents.
+  //  - If tier info was supplied, the PERCENTAGE path is authoritative:
+  //      round(base * ratePercent / 100).
+  //  - Else fall back to the LEGACY flat member discount when applyMemberDiscount.
+  let requestedMemberDiscountCents = 0;
+  if (cashPay) {
+    if (hasTierInfo) {
+      requestedMemberDiscountCents = Math.round((subtotalCents * (tierRatePercent as number)) / 100);
+    } else if (options.applyMemberDiscount) {
+      requestedMemberDiscountCents = visit.memberDiscountCents;
+    }
+  }
+
+  // Promo codes still STACK on top of the member discount. The margin clamp is
+  // applied to the COMBINED discount so the platform never drops below its floor.
+  const requestedPromoCents = cashPay ? promoDiscountCents : 0;
+  const requestedCombinedCents = requestedMemberDiscountCents + requestedPromoCents;
+
+  const clamp = applyCashPayMemberDiscount({
+    basePriceCents: subtotalCents,
+    providerPayoutCents: visit.providerPayoutCents,
+    requestedDiscountCents: requestedCombinedCents,
+  });
+
+  // Split the clamped (effective) discount back into member vs promo for the
+  // breakdown. Member discount is honored first; promo absorbs whatever clamp
+  // headroom remains. This keeps platformFee = total - payout exact.
+  const effectiveMemberDiscountCents = Math.min(requestedMemberDiscountCents, clamp.effectiveDiscountCents);
+  const effectivePromoDiscountCents = clamp.effectiveDiscountCents - effectiveMemberDiscountCents;
+
+  const totalCents = clamp.totalCents;
+  const platformFeeCents = clamp.platformFeeCents;
 
   return {
     rail: options.rail,
     visitClass: options.visitClass,
     subtotalCents,
-    memberDiscountCents,
-    promoDiscountCents,
+    memberDiscountCents: effectiveMemberDiscountCents,
+    promoDiscountCents: effectivePromoDiscountCents,
     totalCents,
     providerPayoutCents: visit.providerPayoutCents,
     platformFeeCents,

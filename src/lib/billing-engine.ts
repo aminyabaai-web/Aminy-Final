@@ -17,7 +17,7 @@
 
 import { supabase } from '../utils/supabase/client';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
-import { tierPricing, tierDisplayNames, getTierFeatureDescriptions, type TierType } from './tier-utils';
+import { tierPricing, tierDisplayNames, getTierFeatureDescriptions, FAIR_USE_AI_DAILY_CAP, type TierType } from './tier-utils';
 
 // ============================================================================
 // Types
@@ -737,13 +737,30 @@ export async function markPaywallShown(
 // ============================================================================
 
 /**
- * Check if user has reached their daily AI message limit
+ * Check if user has reached their daily AI message limit.
+ *
+ * DISPLAY vs ENFORCEMENT (intentionally distinct):
+ * - DISPLAY: paid tiers (core/pro/pro_plus) are marketed as "Unlimited" — that is
+ *   why PRICING_TIERS[*].limits.aiMessagesPerDay stays 'unlimited'. The pricing UI
+ *   keeps showing "Unlimited" off that config; do NOT change it.
+ * - ENFORCEMENT: this send-path check still applies a fair-use ceiling
+ *   (FAIR_USE_AI_DAILY_CAP = 100/day) to "unlimited" tiers as anti-abuse / COGS
+ *   protection. Beyond the cap we return allowed:false with a friendly `reason`
+ *   ('fair_use_daily_limit') rather than a hard paywall message.
+ * - Free tier keeps its hard 3/day limit (reason 'free_daily_limit' when hit).
+ *
+ * `limit` in the return is the ENFORCED number actually applied (3 for free,
+ * 100 for paid), so callers showing "X of N used" reflect the real ceiling.
  */
 export async function checkMessageLimit(userId: string): Promise<{
   allowed: boolean;
   used: number;
   limit: number | 'unlimited';
   resetAt: string;
+  /** Present only when allowed === false. Distinguishes hard paywall vs fair-use. */
+  reason?: 'free_daily_limit' | 'fair_use_daily_limit';
+  /** Friendly, copy-ready message for the blocked state. */
+  message?: string;
 }> {
   // Get user's tier
   const { data: profile } = await supabase
@@ -754,13 +771,14 @@ export async function checkMessageLimit(userId: string): Promise<{
 
   const tier = profile?.tier || 'free';
   const tierConfig = PRICING_TIERS.find(t => t.id === tier);
-  const limit = tierConfig?.limits.aiMessagesPerDay ?? 3;
+  const displayLimit = tierConfig?.limits.aiMessagesPerDay ?? 3;
 
-  if (limit === 'unlimited') {
-    return { allowed: true, used: 0, limit: 'unlimited', resetAt: '' };
-  }
+  // Resolve the ENFORCED limit. Paid tiers display "unlimited" but enforce the
+  // fair-use cap; free (or any numeric config) enforces its hard number.
+  const isPaidUnlimited = displayLimit === 'unlimited';
+  const enforcedLimit = isPaidUnlimited ? FAIR_USE_AI_DAILY_CAP : displayLimit;
 
-  // Get today's usage
+  // Get today's usage (needed for both free and fair-use enforcement)
   const today = new Date().toISOString().split('T')[0];
   const { data: usage } = await supabase
     .from('usage_tracking')
@@ -773,12 +791,24 @@ export async function checkMessageLimit(userId: string): Promise<{
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
   tomorrow.setHours(0, 0, 0, 0);
+  const resetAt = tomorrow.toISOString();
 
+  const allowed = used < enforcedLimit;
+
+  if (allowed) {
+    return { allowed: true, used, limit: enforcedLimit, resetAt };
+  }
+
+  // Blocked — pick the right friendly reason/copy for display vs enforcement.
   return {
-    allowed: used < limit,
+    allowed: false,
     used,
-    limit,
-    resetAt: tomorrow.toISOString(),
+    limit: enforcedLimit,
+    resetAt,
+    reason: isPaidUnlimited ? 'fair_use_daily_limit' : 'free_daily_limit',
+    message: isPaidUnlimited
+      ? `You've reached today's fair-use limit (${FAIR_USE_AI_DAILY_CAP} messages) — resets tomorrow.`
+      : `You've reached your daily limit of ${enforcedLimit} messages — upgrade for more or try again tomorrow.`,
   };
 }
 
