@@ -29,11 +29,16 @@ import {
   XCircle,
 } from 'lucide-react';
 import { DEMO_PROVIDERS } from '../../lib/credentialing-orchestrator';
+import { isDemoMode } from '../../lib/demo-seed';
 
 interface RosterManagerProps {
   providerId?: string;
   onBack?: () => void;
 }
+
+// Empty shells for real (non-demo) BCBAs — no fabricated payers, rates, or requests.
+const EMPTY_ROSTER: typeof DEMO_PROVIDERS[number]['rosterEntries'] = [];
+const EMPTY_PANEL_APPLICATIONS: typeof DEMO_PROVIDERS[number]['panelApplications'] = [];
 
 type UpdateType = 'service-location' | 'add-supervisor' | 'remove-rbt' | 'rate-change';
 type UpdateStatus = 'submitted' | 'acknowledged' | 'confirmed';
@@ -91,8 +96,13 @@ const DEMO_UPDATE_REQUESTS: RosterUpdateRequest[] = [
 ];
 
 export default function RosterManager({ providerId = 'prov-001', onBack }: RosterManagerProps) {
-  const provider = DEMO_PROVIDERS.find(p => p.application.providerId === providerId) ?? DEMO_PROVIDERS[0];
-  const { rosterEntries, panelApplications } = provider;
+  // Demo mode shows a realistic, populated roster for investor/AACT walk-throughs.
+  // Real BCBAs start with empty roster + update queues — never fabricated payers or rates.
+  const demo = isDemoMode();
+  const demoProvider = DEMO_PROVIDERS.find(p => p.application.providerId === providerId) ?? DEMO_PROVIDERS[0];
+  const rosterEntries = demo ? demoProvider.rosterEntries : EMPTY_ROSTER;
+  const panelApplications = demo ? demoProvider.panelApplications : EMPTY_PANEL_APPLICATIONS;
+  const updateRequests = demo ? DEMO_UPDATE_REQUESTS : [];
   const [showAddFlow, setShowAddFlow] = useState(false);
   const [selectedPayer, setSelectedPayer] = useState('');
   const [addStep, setAddStep] = useState(1);
@@ -193,13 +203,13 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
         {/* Update Requests */}
         <div>
           <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Roster Update Requests</h2>
-          {DEMO_UPDATE_REQUESTS.length === 0 ? (
+          {updateRequests.length === 0 ? (
             <div className="bg-white rounded-2xl p-4 text-center border border-gray-100">
               <p className="text-sm text-gray-400">No pending update requests</p>
             </div>
           ) : (
             <div className="space-y-2">
-              {DEMO_UPDATE_REQUESTS.map(req => {
+              {updateRequests.map(req => {
                 const statusCfg = UPDATE_STATUS_CONFIG[req.status];
                 const typeLabels: Record<UpdateType, string> = {
                   'service-location': 'New Service Location',

@@ -26,6 +26,7 @@ import {
   type SessionGoal,
   type DataCollectionEntry,
 } from '../../lib/rbt-supervision';
+import { isDemoMode } from '../../lib/demo-seed';
 
 interface RBTSessionLogProps {
   onBack: () => void;
@@ -39,12 +40,22 @@ export function RBTSessionLog({ onBack, rbtId = 'rbt-001' }: RBTSessionLogProps)
   const [showNewSession, setShowNewSession] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
 
+  // Real BCBAs/RBTs see only what they've actually logged. The rbt-supervision
+  // store seeds fabricated direct-hour totals + supervision history for demo
+  // walk-throughs, so those seeded figures are gated behind demo mode here.
+  const demo = isDemoMode();
   const sessions = useMemo(() => getRBTDirectSessions(rbtId), [rbtId, refreshKey]);
   const now = new Date();
   const thisMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
   const monthSessions = sessions.filter((s) => s.date.startsWith(thisMonth));
-  const monthHours = useMemo(() => getDirectServiceHours(rbtId, thisMonth), [rbtId, thisMonth, refreshKey]);
-  const compliance = useMemo(() => calculateSupervisionCompliance(rbtId, thisMonth), [rbtId, thisMonth, refreshKey]);
+  // Outside demo mode, derive hours from logged sessions only (never the seeded totals).
+  const loggedMonthHours = monthSessions.reduce((sum, s) => sum + s.durationMinutes, 0) / 60;
+  const monthHours = useMemo(
+    () => (demo ? getDirectServiceHours(rbtId, thisMonth) : loggedMonthHours),
+    [demo, rbtId, thisMonth, refreshKey, loggedMonthHours],
+  );
+  const seededCompliance = useMemo(() => calculateSupervisionCompliance(rbtId, thisMonth), [rbtId, thisMonth, refreshKey]);
+  const compliance = demo ? seededCompliance : { ...seededCompliance, compliancePercent: 0 };
   const pendingReview = sessions.filter((s) => s.bcbaReviewStatus === 'pending');
   const flaggedSessions = sessions.filter((s) => s.bcbaReviewStatus === 'flagged');
 
@@ -129,7 +140,7 @@ export function RBTSessionLog({ onBack, rbtId = 'rbt-001' }: RBTSessionLogProps)
           )}
           {viewMode === 'hours' && (
             <motion.div key="hours" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-              <HoursView rbtId={rbtId} sessions={sessions} />
+              <HoursView rbtId={rbtId} sessions={sessions} demo={demo} />
             </motion.div>
           )}
         </AnimatePresence>
@@ -297,7 +308,7 @@ function ReviewQueue({
 
 // ── Hours View ──────────────────────────────────────────────────────
 
-function HoursView({ rbtId, sessions }: { rbtId: string; sessions: RBTDirectSession[] }) {
+function HoursView({ rbtId, sessions, demo }: { rbtId: string; sessions: RBTDirectSession[]; demo: boolean }) {
   const now = new Date();
 
   // Group by month
@@ -314,7 +325,10 @@ function HoursView({ rbtId, sessions }: { rbtId: string; sessions: RBTDirectSess
 
   const months = Object.keys(byMonth).sort().reverse();
   const thisMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
-  const directHours = getDirectServiceHours(rbtId, thisMonth);
+  // Seeded direct-hour totals are demo-only; real users see hours from logged sessions.
+  const directHours = demo
+    ? getDirectServiceHours(rbtId, thisMonth)
+    : (byMonth[thisMonth]?.minutes ?? 0) / 60;
 
   return (
     <div className="space-y-4">

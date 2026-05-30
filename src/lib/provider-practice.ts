@@ -9,10 +9,35 @@ import { isSupportedProviderState } from './insurance/state-market-coverage';
 export type ProviderBusinessModel = 'independent_network' | 'partner_clinic' | 'hybrid';
 export type ProviderGoLiveStatus = 'pending_verification' | 'verified_not_live' | 'verified_live';
 
+/**
+ * How the BCBA runs their practice on Aminy.
+ *  - 'independent': the clinician owns the practice — their roster, their RBTs,
+ *    their families. Supervision/roster UI is framed as "Your practice / Your RBTs".
+ *  - 'org': the clinician works a caseload under an organization (e.g. AACT/Rise).
+ *    Roster/supervision is framed as "Organization caseload" and the org owns
+ *    credentialing + billing upstream.
+ * Defaults to 'independent' — the practice-in-a-box wedge is the primary motion.
+ */
+export type ProviderPracticeMode = 'independent' | 'org';
+
+export const DEFAULT_PRACTICE_MODE: ProviderPracticeMode = 'independent';
+
+/** Normalizes any stored value (or a known org affiliation) into a practice mode. */
+export function resolvePracticeMode(
+  raw?: string | null,
+  opts?: { affiliatedOrg?: boolean },
+): ProviderPracticeMode {
+  if (raw === 'org' || raw === 'independent') return raw;
+  if (opts?.affiliatedOrg) return 'org';
+  return DEFAULT_PRACTICE_MODE;
+}
+
 export interface ProviderPracticeProfile {
   providerId: string;
   providerName: string;
   businessModel: ProviderBusinessModel;
+  /** Owner-facing practice posture: own independent practice vs. org caseload. */
+  practiceMode?: ProviderPracticeMode;
   organization: string;
   licensedStates: string[];
   careRails: CareRail[];
@@ -113,8 +138,11 @@ export function summarizePractice(
   const low = weeklySessions * avgVisitValue * 4;
   const high = Math.round(low * 1.8);
 
-  const supportsIndependentPractice =
-    profile.businessModel === 'independent_network' || profile.businessModel === 'hybrid';
+  // Practice posture drives the framing. An explicit 'org' practiceMode always
+  // reads as an organization caseload, even on a hybrid business model.
+  const isOrgCaseload =
+    profile.practiceMode === 'org' || profile.businessModel === 'partner_clinic';
+  const supportsIndependentPractice = !isOrgCaseload;
 
   const goLiveStatus: ProviderGoLiveStatus = profile.verificationStatus === 'verified'
     ? (liveMarketStates.length > 0 ? 'verified_live' : 'verified_not_live')

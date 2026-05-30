@@ -151,6 +151,8 @@ export const RATING_LABELS: Record<number, string> = {
 
 // ── localStorage Keys ───────────────────────────────────────────────
 
+import { isDemoMode } from './demo-seed';
+
 const STORAGE_KEYS = {
   rbtProfiles: 'aminy_rbt_profiles',
   supervisionSessions: 'aminy_supervision_sessions',
@@ -194,6 +196,12 @@ function getOrInitDemoData(): {
       assessments: loadFromStorage<CompetencyAssessment[]>(STORAGE_KEYS.competencyAssessments, []),
       directHours: loadFromStorage<Record<string, Record<string, number>>>(STORAGE_KEYS.directServiceHours, {}),
     };
+  }
+
+  // Real BCBAs start with an empty roster — never seed fabricated RBTs
+  // (Lisa Park, etc.). The sample supervision dataset is demo-mode only.
+  if (!isDemoMode()) {
+    return { profiles: [], sessions: [], assessments: [], directHours: {} };
   }
 
   const now = new Date();

@@ -66,7 +66,8 @@ import {
   X,
   Briefcase,
   Download,
-  Printer
+  Printer,
+  CreditCard
 } from 'lucide-react';
 import type { ProviderType } from '../lib/child-profiles';
 import { brandColors } from '../lib/brand-system';
@@ -76,12 +77,15 @@ import { getBranding, saveBranding, type ProviderBranding } from '../lib/provide
 import { CPT_CODES, getCPTByCode, suggestCPTCodes, validateNoteForCPT, type CPTCode } from '../lib/cpt-codes';
 import { PatientAISummary } from './provider/PatientAISummary';
 import { CRSyncStatus } from './CRSyncStatus';
-import { summarizePractice } from '../lib/provider-practice';
+import { summarizePractice, resolvePracticeMode, type ProviderPracticeMode } from '../lib/provider-practice';
+import { getPlatformFeeRate } from '../lib/stripe-connect';
 import { listClaimReadyCases, summarizeClaimReadyQueue, type ClaimReadyCase } from '../lib/claim-ready-queue';
 import { getStateMarketCoverage, isSupportedProviderState } from '../lib/insurance/state-market-coverage';
 import { ProviderInsightsDashboard } from './provider/ProviderInsightsDashboard';
 import { CareCoordination } from './provider/CareCoordination';
 import { RBTManagement } from './provider/RBTManagement';
+import RosterManager from './provider/RosterManager';
+import { RBTSessionLog } from './provider/RBTSessionLog';
 import { SupervisionDashboard } from './provider/SupervisionDashboard';
 import { ProviderPerformanceTab } from './provider/ProviderPerformanceTab';
 import { TelehealthSessionEngine } from './provider/TelehealthSessionEngine';
@@ -157,17 +161,42 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
   // own credentialing or claims (the org handles that). Cash-pay providers don't see
   // insurance/claims tabs. This keeps the EMR surface scoped to what's actually relevant.
   const [partnerOrg, setPartnerOrg] = useState<'aact' | 'rise' | 'unknown'>('unknown');
+  // Owner-facing practice posture: own independent practice vs. org caseload.
+  // Defaults to 'independent' (the practice-in-a-box wedge); org-affiliated
+  // providers (AACT/Rise) fall back to 'org' framing when no explicit choice is stored.
+  const [practiceMode, setPracticeMode] = useState<ProviderPracticeMode>('independent');
   useEffect(() => {
     (async () => {
+      // pilot_organization is a known column (Arizona pilot migration). practice_mode
+      // may not exist in every deployed schema yet, so query it separately and tolerate
+      // its absence — a failed practice_mode read must not drop partner attribution.
       const { data } = await supabase
         .from('profiles')
         .select('pilot_organization')
         .eq('id', providerId)
         .maybeSingle();
       const org = data?.pilot_organization;
+      const affiliatedOrg = org === 'aact' || org === 'rise';
       if (org === 'aact' || org === 'rise') setPartnerOrg(org);
+
+      let storedMode: string | null = null;
+      try {
+        const { data: modeRow } = await supabase
+          .from('profiles')
+          .select('practice_mode')
+          .eq('id', providerId)
+          .maybeSingle();
+        storedMode = (modeRow as { practice_mode?: string } | null)?.practice_mode ?? null;
+      } catch {
+        // practice_mode column not present — fall back to affiliation-based default.
+      }
+      setPracticeMode(resolvePracticeMode(storedMode, { affiliatedOrg }));
     })();
   }, [providerId]);
+  // Sub-view within the "My Practice" hub so the BCBA can move coherently
+  // through: practice overview → their roster → their RBTs → review RBT sessions.
+  const [practiceView, setPracticeView] = useState<'overview' | 'roster' | 'rbts' | 'sessions'>('overview');
+  const isOrgCaseload = practiceMode === 'org';
   const [patients, setPatients] = useState<Patient[]>([]);
   const [sessions, setSessions] = useState<Session[]>([]);
   const [provider, setProvider] = useState<ProviderProfile | null>(null);
@@ -283,6 +312,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
       : provider.acceptsInsurance
         ? 'hybrid'
         : 'independent_network',
+    practiceMode,
     organization: branding?.orgName || provider.organization || 'Independent Provider',
     licensedStates: provider.licensedStates,
     careRails: provider.acceptsInsurance ? ['cash_pay_direct', 'insured_partner_billed'] : ['cash_pay_direct'],
@@ -2061,7 +2091,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
         {activeTab === 'supervision' && (
           <SupervisionDashboard
             onBack={() => setActiveTab('dashboard')}
-            onNavigateToRBTLog={() => setActiveTab('my-practice')}
+            onNavigateToRBTLog={() => { setPracticeView('sessions'); setActiveTab('my-practice'); }}
             onNavigateToAssessment={() => onNavigate?.('credentialing-support')}
           />
         )}
@@ -2135,12 +2165,83 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
         {activeTab === 'my-practice' && (
           <div className="space-y-6">
             <div>
-              <h2 className="text-xl font-semibold text-neutral-900 dark:text-white">My Practice</h2>
+              <h2 className="text-xl font-semibold text-neutral-900 dark:text-white">
+                {isOrgCaseload ? 'Organization Caseload' : 'My Practice'}
+              </h2>
               <p className="text-neutral-500 dark:text-slate-400 mt-1">
-                Build an independent or partner-backed telehealth practice through Aminy, then layer on RBT supervision and billing workflows.
+                {isOrgCaseload
+                  ? 'Manage your organization caseload through Aminy — your RBT roster, their session documentation, and supervision compliance in one place.'
+                  : 'Run your own independent practice through Aminy: your RBT roster, their session documentation, supervision compliance, and how you get paid — all in one place.'}
               </p>
             </div>
-            {practiceSummary && (
+
+            {/* Practice loop navigator — moves coherently through the BCBA → RBT → families flow */}
+            <div className="flex flex-wrap gap-2">
+              {([
+                { id: 'overview' as const, label: 'Overview', icon: Briefcase },
+                { id: 'rbts' as const, label: isOrgCaseload ? 'Caseload RBTs' : 'Your RBTs', icon: Users },
+                { id: 'sessions' as const, label: 'RBT Sessions', icon: ClipboardList },
+                { id: 'roster' as const, label: 'Payer Roster', icon: ShieldCheck },
+              ]).map((view) => (
+                <button
+                  key={view.id}
+                  onClick={() => setPracticeView(view.id)}
+                  className={`flex items-center gap-2 whitespace-nowrap rounded-2xl border px-4 py-2 text-sm font-medium transition-colors ${
+                    practiceView === view.id
+                      ? 'border-teal-500 bg-teal-50 text-teal-700 dark:bg-teal-900/20 dark:text-teal-300'
+                      : 'border-slate-200 bg-white text-neutral-600 hover:border-teal-200 hover:text-neutral-800 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300'
+                  }`}
+                >
+                  <view.icon className="w-4 h-4" />
+                  {view.label}
+                </button>
+              ))}
+            </div>
+
+            {/* ── Your RBTs (BCBA manages their RBT roster) ──────────────── */}
+            {practiceView === 'rbts' && (
+              <div className="space-y-4">
+                <Card className="p-4 rounded-2xl border border-neutral-200 dark:border-slate-700 bg-white dark:bg-slate-900/60">
+                  <div className="flex items-center justify-between gap-3">
+                    <div>
+                      <h3 className="font-semibold text-neutral-900 dark:text-white">
+                        {isOrgCaseload ? 'Caseload RBTs' : 'Your RBTs'}
+                      </h3>
+                      <p className="text-sm text-neutral-500 dark:text-slate-400 mt-0.5">
+                        Invite RBTs, track BACB 5% supervision, then review their logged sessions.
+                      </p>
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setPracticeView('sessions')}
+                      className="flex items-center gap-1.5 shrink-0"
+                    >
+                      Review sessions
+                      <ChevronRight className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </Card>
+                <RBTManagement providerId={providerId} />
+              </div>
+            )}
+
+            {/* ── RBT Sessions (review / log RBT direct-service sessions) ── */}
+            {practiceView === 'sessions' && (
+              <div className="overflow-hidden rounded-2xl border border-neutral-200 dark:border-slate-700">
+                <RBTSessionLog onBack={() => setPracticeView('rbts')} />
+              </div>
+            )}
+
+            {/* ── Payer Roster (per-payer roster + update requests) ──────── */}
+            {practiceView === 'roster' && (
+              <div className="overflow-hidden rounded-2xl border border-neutral-200 dark:border-slate-700">
+                <RosterManager providerId={providerId} onBack={() => setPracticeView('overview')} />
+              </div>
+            )}
+
+            {/* ── Overview (practice launch score + billing rails) ──────── */}
+            {practiceView === 'overview' && practiceSummary && (
               <Card className="p-5 rounded-2xl border border-neutral-200 dark:border-slate-700 bg-white dark:bg-slate-900/60">
                 <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
                   <div>
@@ -2223,7 +2324,82 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                 </div>
               </Card>
             )}
-            <RBTManagement providerId={providerId} />
+
+            {/* ── Billing rails (overview only) — honest live vs. roadmap ── */}
+            {practiceView === 'overview' && (
+              <Card className="p-5 rounded-2xl border border-neutral-200 dark:border-slate-700 bg-white dark:bg-slate-900/60">
+                <div className="flex items-center gap-2 mb-1">
+                  <DollarSign className="w-5 h-5 text-teal-600" />
+                  <h3 className="font-semibold text-neutral-900 dark:text-white">How you get paid</h3>
+                </div>
+                <p className="text-sm text-neutral-500 dark:text-slate-400 mb-4">
+                  Choose how sessions are billed. You can run cash-pay today and layer in payer-network billing as it becomes available.
+                </p>
+                <div className="grid gap-3 md:grid-cols-2">
+                  {/* Cash-pay — LIVE */}
+                  <div className="rounded-2xl border border-teal-200 dark:border-teal-800 bg-teal-50/60 dark:bg-teal-900/20 p-4 flex flex-col">
+                    <div className="flex items-center justify-between gap-2">
+                      <h4 className="font-semibold text-neutral-900 dark:text-white">Cash-pay sessions</h4>
+                      <Badge className="bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300">Live</Badge>
+                    </div>
+                    <p className="text-sm text-neutral-600 dark:text-slate-300 mt-2 flex-1">
+                      Families pay directly through the Aminy marketplace. Funds settle to your bank via Stripe Connect.
+                      Aminy retains {Math.round(getPlatformFeeRate('cash_pay') * 100)}% of each cash-pay session; you keep the rest.
+                    </p>
+                    <Button
+                      onClick={() => onNavigate?.('provider-payout-setup')}
+                      className="mt-3 bg-teal-600 hover:bg-teal-700 text-white"
+                    >
+                      <CreditCard className="w-4 h-4 mr-2" />
+                      Set up cash-pay payouts
+                    </Button>
+                  </div>
+
+                  {/* Payer-network billing — ROADMAP, gated */}
+                  <div className="rounded-2xl border border-neutral-200 dark:border-slate-700 bg-neutral-50 dark:bg-slate-800/40 p-4 flex flex-col">
+                    <div className="flex items-center justify-between gap-2">
+                      <h4 className="font-semibold text-neutral-900 dark:text-white">Bill under AACT's payer network</h4>
+                      <Badge className="bg-neutral-200 text-neutral-600 dark:bg-slate-700 dark:text-slate-300">Coming soon</Badge>
+                    </div>
+                    <p className="text-sm text-neutral-600 dark:text-slate-300 mt-2 flex-1">
+                      Lease an established payer network so insured families can book you without your own contracts.
+                      Available pending payer-network access — not yet enabled.
+                    </p>
+                    <Button
+                      variant="outline"
+                      disabled
+                      className="mt-3 cursor-not-allowed opacity-60"
+                    >
+                      <Lock className="w-4 h-4 mr-2" />
+                      Coming soon — pending payer-network access
+                    </Button>
+                  </div>
+                </div>
+              </Card>
+            )}
+
+            {/* Next step into the practice loop (overview only) */}
+            {practiceView === 'overview' && (
+              <Card className="p-5 rounded-2xl border border-neutral-200 dark:border-slate-700 bg-white dark:bg-slate-900/60">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                  <div>
+                    <h3 className="font-semibold text-neutral-900 dark:text-white">
+                      {isOrgCaseload ? 'Manage your caseload RBTs' : 'Build out your RBT team'}
+                    </h3>
+                    <p className="text-sm text-neutral-500 dark:text-slate-400 mt-0.5">
+                      Invite RBTs, review their logged sessions, and stay BACB-compliant on supervision.
+                    </p>
+                  </div>
+                  <Button
+                    onClick={() => setPracticeView('rbts')}
+                    className="bg-teal-600 hover:bg-teal-700 text-white shrink-0"
+                  >
+                    <Users className="w-4 h-4 mr-2" />
+                    {isOrgCaseload ? 'Open caseload RBTs' : 'Manage your RBTs'}
+                  </Button>
+                </div>
+              </Card>
+            )}
           </div>
         )}
 
