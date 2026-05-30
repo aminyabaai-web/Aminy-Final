@@ -453,7 +453,7 @@ export function TreatmentPlanEditor({
       />
 
       <main className="max-w-5xl mx-auto px-4 py-6">
-        <div className="flex gap-3 sm:gap-4 sm:gap-6">
+        <div className="flex gap-3 sm:gap-6">
           {/* Plan List Sidebar */}
           <div className="w-64 flex-shrink-0">
             <div className="space-y-2">
@@ -508,7 +508,7 @@ export function TreatmentPlanEditor({
           {/* Plan Detail */}
           <div className="flex-1">
             {selectedPlan ? (
-              <div className="space-y-3 sm:space-y-4 sm:space-y-6">
+              <div className="space-y-3 sm:space-y-6">
                 {/* Plan Header */}
                 <Card className="p-4 sm:p-5 md:p-6">
                   <div className="flex items-start justify-between mb-4">

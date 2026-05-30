@@ -262,7 +262,7 @@ export async function analyzeFrame(
     const result: VisionAnalysisResult = {
       id: `frame-${Date.now()}`,
       type: 'video_frame',
-      analysis: JSON.stringify({ engagement: 'captured', notes: 'Frame captured for analysis' }),
+      analysis: JSON.stringify({ engagement: 'unknown', notes: 'This frame could not be analyzed — check your connection.' }),
       timestamp: new Date().toISOString(),
       frameIndex: session.totalFrames - 1,
     };

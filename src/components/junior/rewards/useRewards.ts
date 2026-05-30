@@ -110,6 +110,19 @@ export function useRewards() {
     });
   }, []);
 
+  // Spend stars on a reward redemption. Deducts the balance WITHOUT touching the
+  // streak / lastActivityDate (redeeming is not an earning activity — it must not
+  // advance the daily streak) and without re-triggering earned-milestone celebrations.
+  const spendStars = useCallback((count: number, reason: string) => {
+    const cost = Math.abs(count);
+    setState(prev => {
+      const today = new Date().toISOString().slice(0, 10);
+      const newTotal = Math.max(0, prev.totalStars - cost);
+      const weeklyLog = [...prev.weeklyLog, { date: today, stars: -cost, activityId: reason }].slice(-50);
+      return { ...prev, totalStars: newTotal, weeklyLog };
+    });
+  }, []);
+
   const dismissMilestone = useCallback(() => {
     if (pendingMilestone !== null) {
       setState(prev => ({
@@ -156,6 +169,7 @@ export function useRewards() {
     ...state,
     pendingMilestone,
     earnStars,
+    spendStars,
     dismissMilestone,
     setCustomReward,
     getStarsToday,

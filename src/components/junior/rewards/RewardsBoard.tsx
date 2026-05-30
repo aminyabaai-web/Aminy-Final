@@ -411,8 +411,8 @@ export function RewardsBoard({ onBack, onNavigateToActivity, dailyMissionSteps =
     // Guard: can't redeem a missing/already-redeemed reward, or one the child can't afford.
     if (!reward || reward.redeemed || rewards.totalStars < reward.starCost) return;
 
-    // Spend the stars: deduct the reward's cost from the balance so the economy is real.
-    rewards.earnStars(-reward.starCost, `redeem:${rewardId}`);
+    // Spend the stars: deduct the reward's cost (does NOT advance the daily streak — redeeming isn't an earning activity).
+    rewards.spendStars(reward.starCost, `redeem:${rewardId}`);
 
     playUnlockFanfare();
     haptic([60, 30, 60, 30, 120]);
