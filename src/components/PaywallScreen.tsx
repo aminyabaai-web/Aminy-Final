@@ -14,13 +14,15 @@ import {
   Sparkles,
   Heart,
   ArrowLeft,
+  ArrowRight,
   Target,
   Shield,
   Gift,
   Zap,
   Crown,
   Users,
-  Share2
+  Share2,
+  ClipboardCheck
 } from 'lucide-react';
 import {
   TierType,
@@ -28,6 +30,7 @@ import {
   getTierFeatureDescriptions,
   getRecommendedTier
 } from '../lib/tier-utils';
+import type { MonetizationMode } from '../lib/monetization-mode';
 import { createCheckoutSession, isStripeConfigured } from '../lib/stripe-service';
 import { supabase } from '../utils/supabase/client';
 import { addBreadcrumb, captureError } from '../lib/sentry';
@@ -38,13 +41,39 @@ interface PaywallScreenProps {
   currentTier?: TierType;
   childName?: string; // For personalized messaging
   isPostOnboarding?: boolean; // True when shown right after onboarding
+  /**
+   * Payer-type-aware funnel mode. 'cash' (default) keeps the normal
+   * subscription paywall UNCHANGED. 'insured' softens the wall: the primary
+   * CTA routes to the coverage/benefits tools and subscribe becomes secondary.
+   * Defaults to 'cash' so callers that don't pass it are unaffected.
+   */
+  monetizationMode?: MonetizationMode;
+  /**
+   * Routes the insured user to the existing coverage/benefits screen
+   * (App.tsx "benefits" → BenefitsNavigatorScreen). Only used when
+   * monetizationMode === 'insured'. Falls back to onClose if not provided.
+   */
+  onCheckCoverage?: () => void;
 }
 
-export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', childName, isPostOnboarding = false }: PaywallScreenProps) {
+export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', childName, isPostOnboarding = false, monetizationMode = 'cash', onCheckCoverage }: PaywallScreenProps) {
   const [showCloseConfirm, setShowCloseConfirm] = useState(false);
   // Default to yearly for higher ARPU — users can switch to monthly
   const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'yearly'>('yearly');
   const [isLoading, setIsLoading] = useState<string | null>(null);
+
+  // Insured families are NOT hard-paywalled. We soften the wall and lead with
+  // the existing coverage tools using honest "may cover / check" language —
+  // never a guarantee, and never a "book a covered visit" promise (not live).
+  const isInsured = monetizationMode === 'insured';
+  const handleCheckCoverage = () => {
+    if (onCheckCoverage) {
+      onCheckCoverage();
+    } else {
+      // No coverage route wired — at least don't trap the user behind the wall.
+      onClose?.();
+    }
+  };
 
   const pricingTiers: Array<{
     id: TierType;
@@ -229,6 +258,46 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
       </div>
 
       <div className="max-w-2xl mx-auto px-4 py-8">
+        {/* Insured families — softened wall: lead with coverage tools, honest "may/check" language */}
+        {isInsured && (
+          <Card className="p-5 mb-6 bg-gradient-to-r from-blue-50 to-cyan-50 border-blue-200">
+            <div className="flex items-start gap-3">
+              <div className="p-2.5 bg-blue-100 rounded-full flex-shrink-0">
+                <ClipboardCheck className="w-6 h-6 text-blue-600" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <h2 className="text-lg font-semibold text-blue-900 mb-1">
+                  You may already be covered
+                </h2>
+                <p className="text-sm text-blue-800 leading-relaxed mb-4">
+                  Your plan may cover therapy and assessments for{' '}
+                  {childName ? childName : 'your child'}. Coverage varies by plan —
+                  check your benefits to see what applies. We can't guarantee
+                  coverage, but our tools help you find out.
+                </p>
+                <Button
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold"
+                  onClick={handleCheckCoverage}
+                >
+                  Check your insurance coverage
+                  <ArrowRight className="w-4 h-4 ml-1" />
+                </Button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    document
+                      .getElementById('paywall-pricing')
+                      ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }}
+                  className="w-full mt-2 text-sm text-blue-700 hover:text-blue-900 underline-offset-2 hover:underline"
+                >
+                  Or subscribe to Aminy instead
+                </button>
+              </div>
+            </div>
+          </Card>
+        )}
+
         {/* Value Proposition - Personalized */}
         <div className="text-center mb-8">
           {isPostOnboarding && childName ? (
@@ -349,7 +418,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
         </div>
 
         {/* Pricing Cards */}
-        <div className="space-y-3 sm:space-y-4">
+        <div id="paywall-pricing" className="space-y-3 sm:space-y-4">
           {pricingTiers.map((tier) => {
             const IconComponent = tier.icon;
             const price = getPrice(tier.id);

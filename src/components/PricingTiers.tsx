@@ -21,12 +21,17 @@ import { supabase } from '../utils/supabase/client';
 import { toast } from 'sonner';
 import type { TierType } from '../lib/tier-utils';
 import { tierPricing } from '../lib/tier-utils';
+import type { MonetizationMode } from '../lib/monetization-mode';
 
 interface PricingTiersProps {
   onClose?: () => void;
   onSubscribe?: (tier: TierType) => void;
   /** True when launched right after onboarding — slightly different copy + dismissal */
   isPostOnboarding?: boolean;
+  /** Payer-type funnel: 'insured' softens the wall + leads with a coverage-check CTA. Default 'cash'. */
+  monetizationMode?: MonetizationMode;
+  /** Routes an insured user to the existing coverage/eligibility tools. */
+  onCheckCoverage?: () => void;
 }
 
 type Audience = 'personal' | 'organization';
@@ -124,7 +129,12 @@ const TIERS: TierCard[] = [
   },
 ];
 
-export function PricingTiers({ onClose, onSubscribe, isPostOnboarding = false }: PricingTiersProps) {
+export function PricingTiers({ onClose, onSubscribe, isPostOnboarding = false, monetizationMode = 'cash', onCheckCoverage }: PricingTiersProps) {
+  const isInsured = monetizationMode === 'insured';
+  const handleCheckCoverage = () => {
+    if (onCheckCoverage) onCheckCoverage();
+    else onClose?.();
+  };
   const [audience, setAudience] = useState<Audience>('personal');
   const [billing, setBilling] = useState<'monthly' | 'annual'>('annual');
   const [loadingTier, setLoadingTier] = useState<string | null>(null);
@@ -180,7 +190,7 @@ export function PricingTiers({ onClose, onSubscribe, isPostOnboarding = false }:
         )}
         <div className="max-w-2xl mx-auto text-center pt-8 sm:pt-12 pb-4 sm:pb-6">
           <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight">
-            {isPostOnboarding ? 'Pick the plan that fits your family' : 'Try Aminy free for 1 month'}
+            {isPostOnboarding ? 'Pick the plan that fits your family' : 'Try Aminy free for 7 days'}
           </h1>
           {!isPostOnboarding && (
             <p className="text-sm text-slate-500 mt-3 max-w-md mx-auto">
@@ -188,6 +198,31 @@ export function PricingTiers({ onClose, onSubscribe, isPostOnboarding = false }:
             </p>
           )}
         </div>
+
+        {/* Insured users: soften the wall, lead with a coverage check (booking covered care isn't live yet — link only to existing coverage tools, no guarantees) */}
+        {isInsured && (
+          <div className="max-w-2xl mx-auto mb-5 rounded-2xl p-5 bg-gradient-to-r from-blue-50 to-cyan-50 border border-blue-200">
+            <div className="flex items-start gap-3">
+              <div className="p-2.5 bg-blue-100 rounded-full flex-shrink-0">
+                <Check className="w-5 h-5 text-blue-600" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <h2 className="text-lg font-semibold text-blue-900 mb-1">You may already be covered</h2>
+                <p className="text-sm text-blue-800 leading-relaxed mb-4">
+                  Your plan may cover therapy and assessments for your child. Coverage varies by plan — check your benefits to see what applies. We can&rsquo;t guarantee coverage, but our tools help you find out.
+                </p>
+                <button
+                  onClick={handleCheckCoverage}
+                  className="w-full flex items-center justify-center gap-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl py-2.5 transition-colors"
+                >
+                  Check your insurance coverage
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+                <p className="text-center text-sm text-blue-700 mt-2">Or see subscription plans below</p>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Audience toggle */}
         <div className="flex justify-center mb-4">
