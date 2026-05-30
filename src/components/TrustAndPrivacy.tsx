@@ -242,7 +242,7 @@ export function TrustAndPrivacy({ userId }: { userId: string }) {
                   <ul className="text-slate-700 space-y-1 ml-4 list-disc">
                     <li>All data stored on your device</li>
                     <li>AI conversations not used for training</li>
-                    <li>End-to-end encryption for synced data</li>
+                    <li>Strong client-side encryption (AES-256) for synced data</li>
                     <li>No third-party analytics</li>
                   </ul>
                 </div>

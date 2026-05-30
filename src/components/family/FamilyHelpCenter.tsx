@@ -188,7 +188,7 @@ const HELP_CATEGORIES: HelpCategory[] = [
       },
       {
         question: 'How does Aminy protect my data?',
-        answer: 'Aminy is HIPAA-conscious and privacy-first. We use end-to-end encryption for all clinical data, follow HIPAA-aligned security practices, and our telehealth runs on Daily.co\'s HIPAA-compliant video infrastructure (covered by a Business Associate Agreement). Your data stays private and you control who can see it.',
+        answer: 'Aminy is HIPAA-conscious and privacy-first. We use strong encryption (AES-256) for clinical data, follow HIPAA-aligned security practices, and our telehealth runs on Daily.co\'s HIPAA-compliant video infrastructure (covered by a Business Associate Agreement). Your data stays private and you control who can see it.',
       },
       {
         question: 'Can I request a copy of my child\'s records?',
