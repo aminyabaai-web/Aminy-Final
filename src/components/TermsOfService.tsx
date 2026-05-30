@@ -25,7 +25,7 @@ export function TermsOfService({ onBack }: TermsOfServiceProps) {
       {/* Header */}
       <header className="bg-white border-b sticky top-0 z-10">
         <div className="max-w-3xl mx-auto px-4 py-4 flex items-center gap-3 sm:gap-4">
-          <Button variant="ghost" size="icon" onClick={onBack}>
+          <Button variant="ghost" size="icon" onClick={onBack} aria-label="Go back">
             <ArrowLeft className="w-5 h-5" />
           </Button>
           <div>
@@ -226,7 +226,7 @@ export function TermsOfService({ onBack }: TermsOfServiceProps) {
               <li>Binding arbitration in accordance with applicable rules</li>
             </ol>
             <p className="text-gray-600 leading-relaxed mt-4">
-              These Terms shall be governed by the laws of the State of [State], without regard
+              These Terms shall be governed by the laws of the State of Arizona, without regard
               to its conflict of law provisions.
             </p>
           </section>

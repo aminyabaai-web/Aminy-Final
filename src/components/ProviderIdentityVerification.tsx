@@ -91,7 +91,7 @@ export function ProviderIdentityVerification({
       setTimeout(() => {
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
-          videoRef.current.play();
+          videoRef.current.play().catch(() => { /* autoplay may be blocked; user can still capture */ });
         }
       }, 100);
     } catch {
@@ -225,7 +225,7 @@ export function ProviderIdentityVerification({
       {/* Header */}
       <div className="bg-white border-b border-gray-200 px-4 py-4">
         <div className="max-w-2xl mx-auto flex items-center gap-3">
-          <button onClick={onBack} className="p-2 hover:bg-gray-100 rounded-lg">
+          <button onClick={onBack} aria-label="Go back" className="p-2 hover:bg-gray-100 rounded-lg">
             <ArrowLeft className="w-5 h-5 text-gray-600" />
           </button>
           <div className="flex-1">
@@ -301,7 +301,7 @@ export function ProviderIdentityVerification({
               className="fixed inset-0 z-50 bg-black flex flex-col"
             >
               <div className="flex items-center justify-between p-4">
-                <button onClick={stopCamera} className="text-white p-2">
+                <button onClick={stopCamera} aria-label="Close camera" className="text-white p-2">
                   <XCircle className="w-6 h-6" />
                 </button>
                 <p className="text-white font-medium">
@@ -318,14 +318,13 @@ export function ProviderIdentityVerification({
                   autoPlay
                   playsInline
                   muted
-                  className={`max-h-full max-w-full ${
-                    activeCapture === 'selfie' ? 'scale-x-[-1]' : ''
-                  }`}
+                  className="max-h-full max-w-full"
+                  style={activeCapture === 'selfie' ? { transform: 'scaleX(-1)' } : undefined}
                 />
                 {/* Overlay guide */}
                 {activeCapture !== 'selfie' && (
                   <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                    <div className="w-[80%] aspect-[1.585/1] border-2 border-white/50 rounded-xl" />
+                    <div className="w-[80%] border-2 border-white/50 rounded-xl" style={{ aspectRatio: '1.585 / 1' }} />
                   </div>
                 )}
                 {activeCapture === 'selfie' && (
@@ -339,6 +338,7 @@ export function ProviderIdentityVerification({
                 <button
                   onClick={capturePhoto}
                   disabled={captureLoading}
+                  aria-label="Capture photo"
                   className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg active:scale-95 transition-transform"
                 >
                   {captureLoading ? (
@@ -455,10 +455,13 @@ export function ProviderIdentityVerification({
                             }}
                             placeholder="••••"
                             maxLength={4}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-center text-lg tracking-widest font-mono focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+                            aria-label="Last 4 digits of SSN"
+                            style={{ letterSpacing: '0.25em' }}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-center text-lg font-mono focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
                           />
                           <button
                             onClick={() => setShowSsn(!showSsn)}
+                            aria-label={showSsn ? 'Hide SSN digits' : 'Show SSN digits'}
                             className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400"
                           >
                             {showSsn ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}

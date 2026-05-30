@@ -62,7 +62,7 @@ interface TokenRewardsBoardProps {
     isParentView?: boolean; // set true when parent is viewing to show approval controls
 }
 
-export function TokenRewardsBoard({ onBack, availableTokens, onSpendTokens, childName = "Emma", isParentView = false }: TokenRewardsBoardProps) {
+export function TokenRewardsBoard({ onBack, availableTokens, onSpendTokens, childName = "your child", isParentView = false }: TokenRewardsBoardProps) {
     const [selectedReward, setSelectedReward] = useState<RewardItem | null>(null);
     const [isProcessing, setIsProcessing] = useState(false);
     const [redeemedReward, setRedeemedReward] = useState<RewardItem | null>(null);
@@ -198,6 +198,7 @@ export function TokenRewardsBoard({ onBack, availableTokens, onSpendTokens, chil
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                         <button
                             onClick={onBack}
+                            aria-label="Go back"
                             style={{
                                 width: '36px', height: '36px', borderRadius: '18px', border: 'none', backgroundColor: '#FFFFFF',
                                 boxShadow: '0 1px 3px rgba(0,0,0,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer'
@@ -350,7 +351,7 @@ export function TokenRewardsBoard({ onBack, availableTokens, onSpendTokens, chil
                         >
                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
                                 <h2 style={{ fontSize: '18px', fontWeight: 700, color: '#111827' }}>Add Custom Reward</h2>
-                                <button onClick={() => setShowAddReward(false)} style={{ padding: '6px', borderRadius: '8px', border: 'none', backgroundColor: '#F3F4F6', cursor: 'pointer' }}>
+                                <button onClick={() => setShowAddReward(false)} aria-label="Close" style={{ padding: '6px', borderRadius: '8px', border: 'none', backgroundColor: '#F3F4F6', cursor: 'pointer' }}>
                                     <X size={16} color="#6B7280" />
                                 </button>
                             </div>

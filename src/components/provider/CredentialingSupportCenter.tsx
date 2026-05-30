@@ -54,6 +54,8 @@ import { Card } from '../ui/card';
 import { Button } from '../ui/button';
 import { Progress } from '../ui/progress';
 import { Input } from '../ui/input';
+import { ScreenHeader } from '../ui/ScreenHeader';
+import { isDemoMode } from '../../lib/demo-seed';
 
 // ============================================================================
 // Types
@@ -891,6 +893,16 @@ const PAYER_WORKFLOWS: PayerEnrollmentWorkflow[] = [
 // Denial Category Metadata
 // ============================================================================
 
+// Hex values for category dot colors — inline style avoids dynamic Tailwind
+// classes (e.g. bg-slate-500 / bg-violet-500 are not in the precompiled CSS).
+const CATEGORY_DOT_HEX: Record<string, string> = {
+  amber: '#f59e0b',
+  blue: '#3b82f6',
+  red: '#ef4444',
+  violet: '#8b5cf6',
+  slate: '#64748b',
+};
+
 const DENIAL_CATEGORY_META: Record<DenialCategory, { label: string; icon: string; color: string; avgSuccessRate: number }> = {
   'auth-expired': { label: 'Authorization Expired', icon: 'clock', color: 'amber', avgSuccessRate: 70 },
   'wrong-cpt': { label: 'Wrong CPT Code', icon: 'code', color: 'blue', avgSuccessRate: 75 },
@@ -988,12 +1000,27 @@ function statusBadge(status: string) {
 // ============================================================================
 
 function CAQHTab() {
-  const docs = MOCK_CAQH_DOCS;
+  const docs = isDemoMode() ? MOCK_CAQH_DOCS : [];
+  const qaChecklist = isDemoMode() ? MOCK_QA_CHECKLIST : [];
   const requiredDocs = docs.filter((d) => d.required);
   const uploadedRequired = requiredDocs.filter((d) => d.uploaded).length;
-  const completionPct = Math.round((uploadedRequired / requiredDocs.length) * 100);
+  const completionPct = requiredDocs.length > 0
+    ? Math.round((uploadedRequired / requiredDocs.length) * 100)
+    : 0;
   const expiringDocs = docs.filter((d) => d.status === 'expiring');
   const missingDocs = docs.filter((d) => d.status === 'missing' && d.required);
+
+  if (docs.length === 0) {
+    return (
+      <Card className="p-6 text-center">
+        <Shield className="w-8 h-8 text-slate-300 mx-auto mb-2" />
+        <p className="text-sm font-medium text-slate-700">No CAQH documents yet</p>
+        <p className="text-xs text-slate-500 mt-1">
+          Connect your CAQH ProView profile to track documents, expirations, and re-attestation here.
+        </p>
+      </Card>
+    );
+  }
 
   return (
     <div className="space-y-4">
@@ -1019,7 +1046,7 @@ function CAQHTab() {
           <h3 className="text-sm font-semibold text-violet-800">AI QA Pre-Submission Checklist</h3>
         </div>
         <div className="space-y-2">
-          {MOCK_QA_CHECKLIST.map((item) => (
+          {qaChecklist.map((item) => (
             <div key={item.id} className="flex items-start gap-2 py-1.5">
               {statusIcon(item.status)}
               <div className="flex-1 min-w-0">
@@ -1037,7 +1064,7 @@ function CAQHTab() {
         </div>
         <div className="mt-3 pt-3 border-t border-violet-200 flex items-center justify-between">
           <div className="text-xs text-violet-700">
-            {MOCK_QA_CHECKLIST.filter(i => i.status === 'pass').length}/{MOCK_QA_CHECKLIST.length} checks passing
+            {qaChecklist.filter(i => i.status === 'pass').length}/{qaChecklist.length} checks passing
           </div>
           <Button variant="outline" size="sm" className="h-7 text-xs border-violet-300 text-violet-700">
             Re-run QA Check
@@ -1127,7 +1154,7 @@ function CAQHTab() {
 const ENROLLMENT_STAGES = ['application', 'processing', 'credentialing', 'active'] as const;
 
 function EnrollmentTab() {
-  const enrollments = MOCK_ENROLLMENTS;
+  const enrollments = isDemoMode() ? MOCK_ENROLLMENTS : [];
   const [wizardPayer, setWizardPayer] = useState<string | null>(null);
 
   function stageIndex(stage: string): number {
@@ -1239,6 +1266,16 @@ function EnrollmentTab() {
         </div>
       </Card>
 
+      {enrollments.length === 0 && (
+        <Card className="p-6 text-center">
+          <Building2 className="w-8 h-8 text-slate-300 mx-auto mb-2" />
+          <p className="text-sm font-medium text-slate-700">No active enrollments</p>
+          <p className="text-xs text-slate-500 mt-1">
+            Start a payer application above and Aminy will track it through completion here.
+          </p>
+        </Card>
+      )}
+
       {enrollments.map((enrollment) => {
         const currentStage = stageIndex(enrollment.stage);
         const isDenied = enrollment.stage === 'denied';
@@ -1319,7 +1356,7 @@ function EnrollmentTab() {
 // ============================================================================
 
 function RosterTab() {
-  const roster = MOCK_ROSTER;
+  const roster = isDemoMode() ? MOCK_ROSTER : [];
 
   return (
     <div className="space-y-4">
@@ -1343,15 +1380,23 @@ function RosterTab() {
               </tr>
             </thead>
             <tbody>
-              {roster.map((entry) => (
-                <tr key={entry.id} className="border-b border-slate-100 last:border-0">
-                  <td className="py-2.5 px-3 font-medium text-slate-700">{entry.payerName}</td>
-                  <td className="py-2.5 px-3 text-slate-500">{entry.contractType}</td>
-                  <td className="py-2.5 px-3 text-slate-500">{entry.effectiveDate}</td>
-                  <td className="py-2.5 px-3 text-slate-500">{entry.recredentialingDate}</td>
-                  <td className="py-2.5 px-3">{statusBadge(entry.status)}</td>
+              {roster.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="py-6 px-3 text-center text-slate-500">
+                    No active payer contracts yet. Add a payer to build your roster.
+                  </td>
                 </tr>
-              ))}
+              ) : (
+                roster.map((entry) => (
+                  <tr key={entry.id} className="border-b border-slate-100 last:border-0">
+                    <td className="py-2.5 px-3 font-medium text-slate-700">{entry.payerName}</td>
+                    <td className="py-2.5 px-3 text-slate-500">{entry.contractType}</td>
+                    <td className="py-2.5 px-3 text-slate-500">{entry.effectiveDate}</td>
+                    <td className="py-2.5 px-3 text-slate-500">{entry.recredentialingDate}</td>
+                    <td className="py-2.5 px-3">{statusBadge(entry.status)}</td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
@@ -1676,7 +1721,7 @@ function AIPlaybooksTab() {
 // ============================================================================
 
 function ClaimQueueTab() {
-  const claims = MOCK_CLAIM_QUEUE;
+  const claims = isDemoMode() ? MOCK_CLAIM_QUEUE : [];
   const readyCount = claims.filter((c) => c.validationStatus === 'ready').length;
   const warningCount = claims.filter((c) => c.validationStatus === 'warning').length;
   const errorCount = claims.filter((c) => c.validationStatus === 'error').length;
@@ -1736,6 +1781,15 @@ function ClaimQueueTab() {
 
       {/* Claims List */}
       <div className="space-y-2">
+        {claims.length === 0 && (
+          <Card className="p-6 text-center">
+            <Receipt className="w-8 h-8 text-slate-300 mx-auto mb-2" />
+            <p className="text-sm font-medium text-slate-700">No claims in the queue</p>
+            <p className="text-xs text-slate-500 mt-1">
+              Completed sessions ready for billing will appear here for validation and submission.
+            </p>
+          </Card>
+        )}
         {claims.map((claim) => (
           <Card
             key={claim.id}
@@ -1781,7 +1835,7 @@ function ClaimQueueTab() {
 // ============================================================================
 
 function DenialOpsTab() {
-  const denials = MOCK_DENIALS;
+  const denials = isDemoMode() ? MOCK_DENIALS : [];
   const [expandedDenial, setExpandedDenial] = useState<string | null>(null);
 
   const totalDenied = denials.reduce((s, d) => s + d.amount, 0);
@@ -1800,7 +1854,19 @@ function DenialOpsTab() {
       groups[d.denialCategory].amount += d.amount;
     }
     return groups;
-  }, []);
+  }, [denials]);
+
+  if (denials.length === 0) {
+    return (
+      <Card className="p-6 text-center">
+        <BarChart3 className="w-8 h-8 text-slate-300 mx-auto mb-2" />
+        <p className="text-sm font-medium text-slate-700">No denials to work</p>
+        <p className="text-xs text-slate-500 mt-1">
+          When a claim is denied, Aminy categorizes it here and helps you appeal before the deadline.
+        </p>
+      </Card>
+    );
+  }
 
   return (
     <div className="space-y-4">
@@ -1832,7 +1898,10 @@ function DenialOpsTab() {
             return (
               <div key={cat} className="flex items-center justify-between py-1.5">
                 <div className="flex items-center gap-2">
-                  <span className={`w-2 h-2 rounded-full bg-${meta.color}-500`} />
+                  <span
+                    className="w-2 h-2 rounded-full"
+                    style={{ backgroundColor: CATEGORY_DOT_HEX[meta.color] || '#64748b' }}
+                  />
                   <span className="text-xs text-slate-700">{meta.label}</span>
                   <span className="text-xs text-slate-400">({data.count})</span>
                 </div>
@@ -1976,7 +2045,7 @@ function DenialOpsTab() {
 // ============================================================================
 
 function StatusDashboardTab() {
-  const entries = MOCK_STATUS_ENTRIES;
+  const entries = isDemoMode() ? MOCK_STATUS_ENTRIES : [];
 
   const approved = entries.filter(e => e.enrollmentStatus === 'approved').length;
   const pending = entries.filter(e => e.enrollmentStatus === 'pending').length;
@@ -2031,6 +2100,15 @@ function StatusDashboardTab() {
       {/* Per-Payer Status */}
       <div className="space-y-2">
         <h3 className="text-sm font-semibold text-slate-800">Enrollment Status by Payer</h3>
+        {entries.length === 0 && (
+          <Card className="p-6 text-center">
+            <Gauge className="w-8 h-8 text-slate-300 mx-auto mb-2" />
+            <p className="text-sm font-medium text-slate-700">No enrollments to track yet</p>
+            <p className="text-xs text-slate-500 mt-1">
+              Once you submit payer applications, their status and re-credentialing dates show up here.
+            </p>
+          </Card>
+        )}
         {entries.map((entry) => (
           <Card key={entry.id} className="p-3">
             <div className="flex items-center justify-between mb-2">
@@ -2219,18 +2297,19 @@ export default function CredentialingSupportCenter({
   onBack,
 }: CredentialingSupportCenterProps) {
   const [activeTab, setActiveTab] = useState<TabId>('caqh');
+  const demo = isDemoMode();
 
-  // Badge counts
-  const caqhAlerts = MOCK_CAQH_DOCS.filter(
+  // Badge counts — sample-driven in demo; real providers start with no alerts.
+  const caqhAlerts = demo ? MOCK_CAQH_DOCS.filter(
     (d) => d.required && (d.status === 'expiring' || d.status === 'missing')
-  ).length;
-  const enrollmentPending = MOCK_ENROLLMENTS.filter(
+  ).length : 0;
+  const enrollmentPending = demo ? MOCK_ENROLLMENTS.filter(
     (e) => e.stage !== 'active' && e.stage !== 'denied'
-  ).length;
-  const rosterExpiring = MOCK_ROSTER.filter((r) => r.status === 'expiring').length;
-  const claimErrors = MOCK_CLAIM_QUEUE.filter((c) => c.validationStatus === 'error').length;
-  const denialCount = MOCK_DENIALS.filter(d => d.status === 'new').length;
-  const reCredCount = MOCK_STATUS_ENTRIES.filter(e => e.enrollmentStatus === 're-credentialing-due').length;
+  ).length : 0;
+  const rosterExpiring = demo ? MOCK_ROSTER.filter((r) => r.status === 'expiring').length : 0;
+  const claimErrors = demo ? MOCK_CLAIM_QUEUE.filter((c) => c.validationStatus === 'error').length : 0;
+  const denialCount = demo ? MOCK_DENIALS.filter(d => d.status === 'new').length : 0;
+  const reCredCount = demo ? MOCK_STATUS_ENTRIES.filter(e => e.enrollmentStatus === 're-credentialing-due').length : 0;
 
   const tabBadges: Partial<Record<TabId, number>> = {
     caqh: caqhAlerts || undefined,
@@ -2248,20 +2327,15 @@ export default function CredentialingSupportCenter({
   return (
     <div className="min-h-screen bg-slate-50 pb-20">
       {/* Header */}
-      <div className="bg-white border-b border-slate-200 px-4 pt-12 pb-4">
-        <div className="flex items-center gap-3 mb-3">
-          {onBack && (
-            <button onClick={onBack} className="text-slate-500">
-              <ArrowLeft className="w-5 h-5" />
-            </button>
-          )}
-          <div>
-            <h1 className="text-lg font-bold text-slate-900">Credentialing Center</h1>
-            <p className="text-xs text-slate-500">Manage enrollments, credentials, denials, and claims</p>
-          </div>
-        </div>
+      <ScreenHeader
+        title="Credentialing Center"
+        subtitle="Manage enrollments, credentials, denials, and claims"
+        icon={<Shield className="w-5 h-5" />}
+        onBack={onBack}
+      />
 
-        {/* Tab Bar */}
+      {/* Tab Bar */}
+      <div className="bg-white border-b border-slate-200 px-4 pb-3">
         <div className="flex overflow-x-auto gap-1 -mx-1 px-1 pb-1 scrollbar-hide">
           {TABS.map((tab) => {
             const badge = tabBadges[tab.id];

@@ -41,8 +41,12 @@ export function UnloadMindButton({ onClick }: UnloadMindButtonProps) {
           </span>
         </div>
 
-        {/* Pulse Animation (subtle) */}
-        <div className="absolute inset-0 rounded-2xl border-2 border-accent/40 animate-ping-slow opacity-0 group-hover:opacity-100 transition-opacity" />
+        {/* Pulse Animation (subtle) — inline animation: `animate-ping-slow` has no
+            utility class in the precompiled stylesheet, only the keyframe exists */}
+        <div
+          className="absolute inset-0 rounded-2xl border-2 border-accent/40 opacity-0 group-hover:opacity-100 transition-opacity"
+          style={{ animation: 'ping-slow 2s cubic-bezier(0, 0, 0.2, 1) infinite' }}
+        />
       </div>
     </button>
   );

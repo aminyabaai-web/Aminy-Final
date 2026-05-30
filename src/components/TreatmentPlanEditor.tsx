@@ -38,13 +38,12 @@ import {
   Loader2,
   Edit2,
   Trash2,
-  ArrowLeft,
-  AlertCircle,
   Pause,
   Play,
   Archive
 } from 'lucide-react';
 import { supabase } from '../utils/supabase/client';
+import { ScreenHeader } from './ui/ScreenHeader';
 
 // Types
 interface TreatmentPlan {
@@ -430,31 +429,21 @@ export function TreatmentPlanEditor({
   return (
     <div className="min-h-screen bg-gradient-to-b from-neutral-50 to-white">
       {/* Header */}
-      <header className="bg-white border-b border-neutral-200 sticky top-0 z-10">
-        <div className="max-w-5xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              {onBack && (
-                <button onClick={onBack} className="p-2 hover:bg-neutral-100 rounded-lg">
-                  <ArrowLeft className="w-5 h-5 text-neutral-600" />
-                </button>
-              )}
-              <div>
-                <h1 className="text-lg font-semibold text-neutral-900">Treatment Plans</h1>
-                <p className="text-sm text-neutral-500">{childName}</p>
-              </div>
-            </div>
-
-            <Button
-              className="bg-teal-600 hover:bg-teal-700"
-              onClick={() => setShowPlanForm(true)}
-            >
-              <Plus className="w-4 h-4 mr-1" />
-              New Plan
-            </Button>
-          </div>
-        </div>
-      </header>
+      <ScreenHeader
+        title="Treatment Plans"
+        subtitle={childName}
+        onBack={onBack}
+        sticky
+        actions={
+          <Button
+            className="bg-teal-600 hover:bg-teal-700"
+            onClick={() => setShowPlanForm(true)}
+          >
+            <Plus className="w-4 h-4 mr-1" />
+            New Plan
+          </Button>
+        }
+      />
 
       <main className="max-w-5xl mx-auto px-4 py-6">
         <div className="flex gap-3 sm:gap-4 sm:gap-6">
@@ -541,7 +530,7 @@ export function TreatmentPlanEditor({
                           Resume
                         </Button>
                       )}
-                      <Button size="sm" variant="outline" onClick={() => handleUpdatePlanStatus('archived')}>
+                      <Button size="sm" variant="outline" onClick={() => handleUpdatePlanStatus('archived')} aria-label="Archive plan">
                         <Archive className="w-4 h-4" />
                       </Button>
                     </div>
@@ -797,6 +786,7 @@ export function TreatmentPlanEditor({
                                 size="sm"
                                 variant="outline"
                                 className="text-red-600 hover:text-red-700"
+                                aria-label="Delete goal"
                                 onClick={() => {
                                   if (confirm('Delete this goal?')) handleDeleteGoal(goal.id);
                                 }}
@@ -835,7 +825,7 @@ export function TreatmentPlanEditor({
             <div className="p-6 border-b border-neutral-100">
               <div className="flex items-center justify-between">
                 <h2 className="text-lg font-semibold text-neutral-900">New Treatment Plan</h2>
-                <button onClick={() => setShowPlanForm(false)} className="p-2 hover:bg-neutral-100 rounded-lg">
+                <button onClick={() => setShowPlanForm(false)} aria-label="Close" className="p-2 hover:bg-neutral-100 rounded-lg">
                   <X className="w-5 h-5 text-neutral-500" />
                 </button>
               </div>
@@ -932,6 +922,7 @@ export function TreatmentPlanEditor({
                     setEditingGoal(null);
                     setGoalForm({ title: '', description: '', domain: 'behavior', baseline: '', target: '', measurementMethod: '', priority: 'medium' });
                   }}
+                  aria-label="Close"
                   className="p-2 hover:bg-neutral-100 rounded-lg"
                 >
                   <X className="w-5 h-5 text-neutral-500" />

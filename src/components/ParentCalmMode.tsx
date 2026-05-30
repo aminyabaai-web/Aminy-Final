@@ -248,7 +248,7 @@ function BreathStep({
   }
 
   return (
-    <motion.div {...ANIMATIONS.fadeIn} className="text-center p-6 min-h-[400px] flex flex-col items-center justify-center">
+    <motion.div {...ANIMATIONS.fadeIn} className="text-center p-6 flex flex-col items-center justify-center" style={{ minHeight: 400 }}>
       <BreathingCircle phase={breathPhase as 'inhale' | 'hold' | 'exhale'} />
 
       <div className="mt-8">

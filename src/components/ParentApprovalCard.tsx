@@ -120,6 +120,7 @@ export function ParentApprovalCard({ suggestion, onAccept, onReject, onUndo }: P
             
             <button
               onClick={() => setShowDetails(true)}
+              aria-label="View suggestion details"
               className="text-blue-600 hover:text-blue-700"
             >
               <Info className="w-5 h-5" />
@@ -247,10 +248,12 @@ function SuggestionPreview({ suggestion }: { suggestion: ProviderSuggestion }) {
 }
 
 function RoutineChangePreview({ payload }: { payload: RoutineChangePayload }) {
+  const changes = payload?.changes ?? [];
+  if (changes.length === 0) return null;
   return (
     <div className="space-y-2">
-      {payload.changes.map((change, idx) => (
-        <div key={idx} className="bg-white rounded p-2 border border-gray-200 text-xs">
+      {changes.map((change, idx) => (
+        <div key={`${change.field}-${idx}`} className="bg-white rounded p-2 border border-gray-200 text-xs">
           <div className="text-gray-600 mb-1 capitalize">{change.field.replace('_', ' ')}:</div>
           <div className="grid grid-cols-2 gap-2">
             <div>
@@ -293,7 +296,7 @@ function PromptScriptPreview({ payload }: { payload: PromptScriptPayload }) {
         <span className="text-gray-900 font-medium">{payload.situation}</span>
       </div>
       <div className="bg-blue-50 rounded p-2 text-sm text-gray-700">
-        "{payload.script}"
+        "{payload.script ?? ''}"
       </div>
       {payload.whenToUse && (
         <div className="mt-2 text-xs text-gray-600">
@@ -316,7 +319,7 @@ function ReinforcementPreview({ payload }: { payload: ReinforcementPayload }) {
         <span className="text-green-600 font-medium">{payload.reinforcer}</span>
       </div>
       <div className="text-xs text-gray-600">
-        Schedule: {payload.schedule.replace('_', ' ')}
+        Schedule: {(payload.schedule ?? '').replace('_', ' ')}
       </div>
     </div>
   );
@@ -359,18 +362,22 @@ function SuggestionDetailsView({ suggestion }: { suggestion: ProviderSuggestion 
 
 function getSuggestionTitle(suggestion: ProviderSuggestion): string {
   switch (suggestion.type) {
-    case 'routine_change':
+    case 'routine_change': {
       const routinePayload = suggestion.payload as unknown as RoutineChangePayload;
-      return `Adjust "${routinePayload.routineName}" routine`;
-    case 'goal_adjustment':
+      return routinePayload?.routineName ? `Adjust "${routinePayload.routineName}" routine` : 'Routine adjustment';
+    }
+    case 'goal_adjustment': {
       const goalPayload = suggestion.payload as unknown as GoalAdjustmentPayload;
-      return `Update goal: ${goalPayload.goalName}`;
-    case 'prompt_script':
+      return goalPayload?.goalName ? `Update goal: ${goalPayload.goalName}` : 'Goal update';
+    }
+    case 'prompt_script': {
       const promptPayload = suggestion.payload as unknown as PromptScriptPayload;
-      return `New prompting strategy for ${promptPayload.situation}`;
-    case 'reinforcement':
+      return promptPayload?.situation ? `New prompting strategy for ${promptPayload.situation}` : 'New prompting strategy';
+    }
+    case 'reinforcement': {
       const reinforcementPayload = suggestion.payload as unknown as ReinforcementPayload;
-      return `Reinforce ${reinforcementPayload.behavior}`;
+      return reinforcementPayload?.behavior ? `Reinforce ${reinforcementPayload.behavior}` : 'Reinforcement plan';
+    }
     case 'environment_change':
       return 'Environment modification suggestion';
     case 'coverage_note':

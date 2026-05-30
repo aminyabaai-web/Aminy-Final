@@ -721,6 +721,7 @@ export function VideoCall({
               <button
                 onClick={toggleChat}
                 className="p-2 hover:bg-slate-700 rounded-full transition-colors"
+                aria-label="Close chat"
               >
                 <X className="w-5 h-5 text-slate-400" />
               </button>

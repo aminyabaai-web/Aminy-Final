@@ -5,12 +5,10 @@
 
 import React, { useEffect } from 'react';
 import { Button } from './ui/button';
-import { CrisisResources, UrgentHelpDisclaimer } from './GlobalDisclaimer';
-import { 
-  X, 
-  HelpCircle,
-  AlertTriangle,
-  Phone
+import { CrisisResources } from './GlobalDisclaimer';
+import {
+  X,
+  AlertTriangle
 } from 'lucide-react';
 
 export interface UrgentHelpModalProps {
@@ -96,22 +94,6 @@ export function UrgentHelpModal({ isOpen = true, onClose, onAnalytics = () => {}
         {/* Content */}
         <div className="p-4 sm:p-5 md:p-6">
           <CrisisResources />
-          
-          <div className="mt-4 sm:mt-6 pt-4 border-t border-gray-200">
-            <Button
-              onClick={() => {
-                onAnalytics('urgent_help_full_help_opened', {});
-                handleClose();
-                // This would trigger opening the full Help Center
-                // Implementation depends on parent component structure
-              }}
-              variant="outline"
-              className="w-full justify-center"
-            >
-              <HelpCircle className="w-4 h-4 mr-2" />
-              Open Full Help Center
-            </Button>
-          </div>
         </div>
       </div>
     </div>

@@ -9,7 +9,7 @@
  */
 
 import React, { useState, useRef, useEffect } from 'react';
-import { X, Brain, Sparkles, CheckCircle2, Loader2, Mic, Camera } from 'lucide-react';
+import { X, Brain, Sparkles, CheckCircle2, Loader2 } from 'lucide-react';
 import { Button } from './ui/button';
 import { FocusTrap } from './FocusTrap';
 import { categorizeUserInput } from '../lib/aiOrchestrator';
@@ -195,28 +195,6 @@ export function UnloadMindModal({ isOpen, onClose, onTasksCreated }: UnloadMindM
                 />
               </div>
               
-              {/* Voice and Photo Input Buttons */}
-              <div className="flex gap-3">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  disabled={isProcessing}
-                  className="flex-1 min-h-[44px]"
-                >
-                  <Mic className="w-4 h-4 mr-2" />
-                  {CONTENT.UNLOAD_MIND.VOICE_BUTTON}
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  disabled={isProcessing}
-                  className="flex-1 min-h-[44px]"
-                >
-                  <Camera className="w-4 h-4 mr-2" />
-                  {CONTENT.UNLOAD_MIND.PHOTO_BUTTON}
-                </Button>
-              </div>
-
               <div className="flex items-center gap-2 p-3 bg-accent/5 rounded-lg border border-accent/10">
                 <Sparkles className="w-4 h-4 text-accent flex-shrink-0" />
                 <p className="text-sm text-slate-700">
@@ -269,7 +247,7 @@ export function UnloadMindModal({ isOpen, onClose, onTasksCreated }: UnloadMindM
                 <div className="space-y-2">
                   {categorizedTasks.map((task, index) => (
                     <div
-                      key={index}
+                      key={`${task.category}-${task.title}-${index}`}
                       className={`p-4 rounded-xl border ${
                         index === 0
                           ? 'border-accent bg-accent/5 ring-2 ring-accent/20'

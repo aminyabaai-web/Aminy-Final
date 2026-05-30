@@ -83,6 +83,14 @@ interface ShareViewerProps {
   onStartTrial: () => void;
 }
 
+// Safely format an ISO date string; returns '' for missing/invalid values
+// (shared content is untrusted, so guard against "Invalid Date").
+function safeFormatDate(value?: string): string {
+  if (!value) return '';
+  const d = new Date(value);
+  return isNaN(d.getTime()) ? '' : d.toLocaleDateString();
+}
+
 export function ShareViewer({ token, onStartTrial }: ShareViewerProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -193,7 +201,7 @@ export function ShareViewer({ token, onStartTrial }: ShareViewerProps) {
       {/* Fixed CTA */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg">
         <div className="max-w-4xl mx-auto p-4">
-          <Card className="bg-gradient-to-br from-accent/10 to-teal-50 border-accent/30 p-5">
+          <Card className="bg-gradient-to-br from-accent/5 to-teal-50 border-accent/20 p-5">
             <div className="flex items-start gap-4">
               <div className="w-12 h-12 rounded-full bg-accent flex items-center justify-center flex-shrink-0">
                 <Sparkles className="w-6 h-6 text-white" />
@@ -239,7 +247,7 @@ function WeeklySnapshotView({ data, childName }: { data: WeeklySnapshotData; chi
               {childName}'s Weekly Progress
             </h2>
             <p className="text-sm text-gray-600">
-              Week of {new Date(data.weekOf).toLocaleDateString()}
+              Week of {safeFormatDate(data.weekOf) || 'this week'}
             </p>
           </div>
           <Badge className="bg-blue-600 text-white">
@@ -290,7 +298,7 @@ function WeeklySnapshotView({ data, childName }: { data: WeeklySnapshotData; chi
           </h3>
           <div className="space-y-3">
             {data.goals.map((goal: WeeklySnapshotGoal, idx: number) => (
-              <div key={idx}>
+              <div key={`${goal.name}-${idx}`}>
                 <div className="flex justify-between text-xs mb-1">
                   <span className="text-gray-700">{goal.name}</span>
                   <span className="text-gray-500">{goal.progress}%</span>
@@ -316,7 +324,7 @@ function WeeklySnapshotView({ data, childName }: { data: WeeklySnapshotData; chi
         <p className="text-xs text-gray-600 mb-3">
           Unlock detailed behavior analytics, AI coaching insights, and personalized recommendations.
         </p>
-        <Button size="sm" variant="outline" className="w-full">
+        <Button size="sm" variant="outline" className="w-full" onClick={onStartTrial}>
           See All Features
         </Button>
       </Card>
@@ -352,7 +360,7 @@ function PlanSummaryView({ data, childName }: { data: PlanSummaryData; childName
           <div className="space-y-3">
             <h3 className="text-sm text-gray-900">Active Routines</h3>
             {data.routines.map((routine: PlanRoutine, idx: number) => (
-              <Card key={idx} className="p-4 bg-gray-50">
+              <Card key={`${routine.name}-${idx}`} className="p-4 bg-gray-50">
                 <div className="flex items-center gap-2 mb-2">
                   <Calendar className="w-4 h-4 text-accent" />
                   <span className="text-sm text-gray-900">{routine.name}</span>
@@ -409,13 +417,13 @@ function StreakCardView({ data, childName }: { data: StreakCardData; childName: 
             <div className="grid grid-cols-7 gap-2">
               {data.streakDays.slice(-14).map((day: StreakDay, idx: number) => (
                 <div
-                  key={idx}
+                  key={day.date || idx}
                   className={`aspect-square rounded ${
-                    day.completed 
-                      ? 'bg-accent' 
+                    day.completed
+                      ? 'bg-accent'
                       : 'bg-gray-200'
                   }`}
-                  title={new Date(day.date).toLocaleDateString()}
+                  title={safeFormatDate(day.date)}
                 />
               ))}
             </div>

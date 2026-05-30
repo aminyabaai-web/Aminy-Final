@@ -184,6 +184,7 @@ export function OnDemandTelehealth({
   const launchConfig = getSurfaceLaunchConfig('on-demand-telehealth');
   const [session, setSession] = useState<OnDemandSession | null>(null);
   const [sessionNotes, setSessionNotes] = useState('');
+  const [sessionRating, setSessionRating] = useState(0);
   const [hasConsent, setHasConsent] = useState(() => readStoredTelehealthConsent());
   const [connectionProgress, setConnectionProgress] = useState(0);
 
@@ -197,34 +198,34 @@ export function OnDemandTelehealth({
   const videoFrameRef = useRef<DailyVideoFrameRef>(null);
 
   // Load available providers from Supabase.
+  const loadProviders = useCallback(async () => {
+    setLoading(true);
+
+    const allProviders = await fetchProviders();
+
+    if (allProviders.length > 0) {
+      setProviderProvenance(createDataProvenance('live', 'Verified real-time provider availability', {
+        isVerified: true,
+        lastUpdatedAt: new Date().toISOString(),
+      }));
+    } else {
+      setProviderProvenance(null);
+    }
+
+    // Sort by availability, then wait time
+    const sorted = allProviders.sort((a, b) => {
+      if (a.availabilityStatus === 'available' && b.availabilityStatus !== 'available') return -1;
+      if (b.availabilityStatus === 'available' && a.availabilityStatus !== 'available') return 1;
+      return a.estimatedWait - b.estimatedWait;
+    });
+
+    setProviders(sorted);
+    setLoading(false);
+  }, []);
+
   useEffect(() => {
-    const loadProviders = async () => {
-      setLoading(true);
-
-      const allProviders = await fetchProviders();
-
-      if (allProviders.length > 0) {
-        setProviderProvenance(createDataProvenance('live', 'Verified real-time provider availability', {
-          isVerified: true,
-          lastUpdatedAt: new Date().toISOString(),
-        }));
-      } else {
-        setProviderProvenance(null);
-      }
-
-      // Sort by availability, then wait time
-      const sorted = allProviders.sort((a, b) => {
-        if (a.availabilityStatus === 'available' && b.availabilityStatus !== 'available') return -1;
-        if (b.availabilityStatus === 'available' && a.availabilityStatus !== 'available') return 1;
-        return a.estimatedWait - b.estimatedWait;
-      });
-
-      setProviders(sorted);
-      setLoading(false);
-    };
-
     loadProviders();
-  }, [crisisType]);
+  }, [crisisType, loadProviders]);
 
   // Session elapsed timer
   useEffect(() => {
@@ -452,7 +453,7 @@ export function OnDemandTelehealth({
           <div className="max-w-2xl mx-auto flex items-center gap-3">
             <Shield className="w-5 h-5 text-green-600" />
             <div>
-              <p className="text-sm font-medium text-green-900">HIPAA-Compliant Video Sessions</p>
+              <p className="text-sm font-medium text-green-900">HIPAA-Conscious Video Sessions</p>
               <p className="text-xs text-green-700/70">Secure, encrypted video calls with licensed professionals. Your session is private and protected.</p>
             </div>
           </div>
@@ -484,8 +485,9 @@ export function OnDemandTelehealth({
                 Aminy only shows real-time expert availability during limited launch. If no provider appears here, we do not substitute demo coverage.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <Button variant="outline">
-                  Notify me when verified slots open
+                <Button variant="outline" onClick={() => loadProviders()}>
+                  <RefreshCw className="w-4 h-4 mr-2" />
+                  Check again
                 </Button>
                 <Button onClick={onBack}>
                   <Brain className="w-4 h-4 mr-2" />
@@ -498,7 +500,7 @@ export function OnDemandTelehealth({
             <div className="space-y-3 sm:space-y-4">
               <div className="flex items-center justify-between">
                 <h2 className="font-medium text-gray-900">Available Now</h2>
-                <Button variant="ghost" size="sm" onClick={() => setLoading(true)}>
+                <Button variant="ghost" size="sm" onClick={() => loadProviders()}>
                   <RefreshCw className="w-4 h-4 mr-1" />
                   Refresh
                 </Button>
@@ -588,7 +590,7 @@ export function OnDemandTelehealth({
                 <p className="text-sm text-blue-700 mt-1">
                   Try our AI-guided {crisisType === 'meltdown' ? 'meltdown support' : 'calming strategies'} while you wait or instead of a session.
                 </p>
-                <Button variant="outline" size="sm" className="mt-3 border-blue-300 text-blue-700 hover:bg-blue-100">
+                <Button variant="outline" size="sm" onClick={onBack} className="mt-3 border-blue-300 text-blue-700 hover:bg-blue-100">
                   <MessageSquare className="w-4 h-4 mr-1" />
                   Get AI Support Now
                 </Button>
@@ -990,9 +992,16 @@ export function OnDemandTelehealth({
               {[1, 2, 3, 4, 5].map((rating) => (
                 <button
                   key={rating}
-                  className="w-10 h-10 rounded-full border-2 border-gray-200 hover:border-yellow-400 hover:bg-yellow-50 transition-colors flex items-center justify-center"
+                  onClick={() => setSessionRating(rating)}
+                  aria-label={`Rate ${rating} star${rating !== 1 ? 's' : ''}`}
+                  aria-pressed={sessionRating === rating}
+                  className={`w-10 h-10 rounded-full border-2 transition-colors flex items-center justify-center ${
+                    rating <= sessionRating
+                      ? 'border-yellow-400 bg-yellow-50'
+                      : 'border-gray-200 hover:border-yellow-400 hover:bg-yellow-50'
+                  }`}
                 >
-                  <Star className="w-5 h-5 text-gray-400 hover:text-yellow-400" />
+                  <Star className={`w-5 h-5 ${rating <= sessionRating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-400'}`} />
                 </button>
               ))}
             </div>
@@ -1000,7 +1009,19 @@ export function OnDemandTelehealth({
 
           {/* Action buttons */}
           <div className="flex gap-3">
-            <Button variant="outline" className="flex-1">
+            <Button
+              variant="outline"
+              className="flex-1"
+              onClick={() => {
+                if (session) onSessionEnd?.(session, sessionNotes);
+                setSession(null);
+                setSelectedProvider(null);
+                setSessionNotes('');
+                setSessionRating(0);
+                setStep('browse');
+                loadProviders();
+              }}
+            >
               Book Follow-up
             </Button>
             <Button onClick={handleCompleteSummary} className="flex-1 bg-accent hover:bg-accent/90">

@@ -11,7 +11,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Gift, ArrowRight, Sparkles, Heart, Bot, BarChart3, UserCircle, ClipboardList } from 'lucide-react';
-import { trackReferral } from '../lib/referral-program';
+import { trackReferral, REFERRAL_PROGRAM_CONFIG } from '../lib/referral-program';
 
 interface ReferralLandingProps {
   onNavigateToSignup: () => void;
@@ -88,6 +88,7 @@ export function ReferralLanding({ onNavigateToSignup, onNavigateToLogin }: Refer
   const [referralCode, setReferralCode] = useState<string | null>(null);
   const [referrerName, setReferrerName] = useState<string>('A friend');
   const [isProcessing, setIsProcessing] = useState(true);
+  const referredCredit = `$${REFERRAL_PROGRAM_CONFIG.referredReward.value} Credit`;
 
   useEffect(() => {
     // Parse referral code from URL
@@ -143,7 +144,7 @@ export function ReferralLanding({ onNavigateToSignup, onNavigateToLogin }: Refer
               <Sparkles className="w-6 h-6" />
               <span className="text-lg font-semibold">Your Welcome Gift</span>
             </div>
-            <div className="text-2xl sm:text-3xl font-bold mb-1">$25 Credit</div>
+            <div className="text-2xl sm:text-3xl font-bold mb-1">{referredCredit}</div>
             <p className="text-white/80 text-sm">
               Toward your first expert session
             </p>
@@ -218,7 +219,7 @@ export function ReferralLanding({ onNavigateToSignup, onNavigateToLogin }: Refer
           onClick={onNavigateToSignup}
           className="w-full bg-gradient-to-r from-emerald-500 to-cyan-600 text-white py-4 rounded-xl font-semibold flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all"
         >
-          Claim Your $25 Credit
+          Claim Your {referredCredit}
           <ArrowRight className="w-5 h-5" />
         </button>
 

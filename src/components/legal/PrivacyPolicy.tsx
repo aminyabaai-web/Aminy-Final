@@ -157,8 +157,8 @@ export default function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
             <li>Honoring patient rights to access, amend, and receive an accounting of disclosures</li>
           </ul>
           <p>
-            Telehealth sessions are conducted over HIPAA-compliant infrastructure with end-to-end
-            encryption. Session recordings are encrypted and stored in HIPAA-compliant cloud storage
+            Telehealth sessions are conducted over HIPAA-conscious infrastructure with end-to-end
+            encryption. Session recordings are encrypted and stored in HIPAA-conscious cloud storage
             accessible only to authorized parties.
           </p>
         </Section>
@@ -181,7 +181,7 @@ export default function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
             <li>Child-facing features (Junior Mode) are designed to minimize data collection</li>
             <li>We do not serve behavioral advertising to children</li>
             <li>Parents may review, update, or delete their child&apos;s information at any time by contacting{' '}
-              <a href="mailto:privacy@aminy.com" className="text-teal-700 underline">privacy@aminy.com</a>
+              <a href="mailto:privacy@aminy.app" className="text-teal-700 underline">privacy@aminy.app</a>
             </li>
             <li>We do not condition a child&apos;s participation on providing more information than reasonably necessary</li>
             <li>Parents may withdraw consent at any time from Account Settings &rsaquo; Children&apos;s Data</li>
@@ -193,7 +193,7 @@ export default function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
           <p>
             If you believe we have inadvertently collected information from a child under 13 without
             proper parental consent, please contact us immediately at{' '}
-            <a href="mailto:privacy@aminy.com" className="text-teal-700 underline">privacy@aminy.com</a>{' '}
+            <a href="mailto:privacy@aminy.app" className="text-teal-700 underline">privacy@aminy.app</a>{' '}
             and we will promptly delete that information.
           </p>
         </Section>
@@ -203,7 +203,7 @@ export default function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
           <ul className="ml-4 list-disc space-y-1">
             <li><strong>Healthcare Providers:</strong> PHI shared for treatment, payment, and healthcare operations as permitted under HIPAA</li>
             <li><strong>Insurance Payers:</strong> Claims data, EVV records, and authorization requests as required for reimbursement</li>
-            <li><strong>Practice Management Systems:</strong> Integration with CentralReach and similar platforms via secure APIs under BAAs</li>
+            <li><strong>Practice Management Systems:</strong> Integration with Rethink and similar platforms via secure APIs under BAAs</li>
             <li><strong>Payment Processors:</strong> Stripe processes payments under PCI DSS compliance; we share only necessary transaction data</li>
             <li><strong>Cloud Infrastructure:</strong> Supabase (database), Daily.co (telehealth), Vercel (hosting) — all under BAAs</li>
             <li><strong>Legal & Regulatory:</strong> When required by law, subpoena, court order, or to protect rights and safety</li>
@@ -357,7 +357,7 @@ export default function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
           <ul className="ml-4 list-disc space-y-1">
             <li>Telehealth sessions may be recorded for clinical documentation purposes only with your explicit, prior consent</li>
             <li>You will be prompted to provide or decline recording consent before each session</li>
-            <li>Recordings are encrypted, stored in HIPAA-compliant infrastructure, and accessible only to authorized clinical staff</li>
+            <li>Recordings are encrypted, stored in HIPAA-conscious infrastructure, and accessible only to authorized clinical staff</li>
             <li>You may request deletion of any recording by contacting privacy@aminy.app</li>
             <li>If you decline recording, the session will proceed without recording and no penalty will apply</li>
           </ul>

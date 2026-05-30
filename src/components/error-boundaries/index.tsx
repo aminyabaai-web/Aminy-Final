@@ -247,7 +247,7 @@ function PaymentErrorFallback({ error, retry, errorId }: FallbackProps) {
 
       <div className="bg-red-50 border border-red-100 rounded-lg p-4 mb-4">
         <p className="text-sm text-red-800">
-          <strong>Don't worry!</strong> Your card has not been charged.
+          <strong>We hit a snag.</strong> Your payment may not have gone through.
           {isCircuitOpen
             ? " Our payment system is temporarily unavailable."
             : " We encountered a temporary issue."}
@@ -255,8 +255,8 @@ function PaymentErrorFallback({ error, retry, errorId }: FallbackProps) {
       </div>
 
       <p className="text-gray-600 text-sm mb-4">
-        Please try again or use a different payment method. If the problem persists,
-        contact our support team.
+        Please check your billing history before retrying, or use a different payment
+        method. If you were charged or the problem persists, contact our support team.
       </p>
 
       <div className="flex flex-col gap-2">
@@ -524,7 +524,7 @@ function CriticalSectionErrorFallback({ error, retry, errorId }: FallbackProps) 
 
         <p className="text-gray-600 mb-6">
           We've encountered an unexpected issue with this section.
-          Our team has been automatically notified.
+          Please try again, and let us know if it keeps happening.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-3 justify-center">

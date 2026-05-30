@@ -202,7 +202,7 @@ export function ReferralDashboard({
       <Card className="p-5 bg-gradient-to-br from-teal-500 to-blue-600 text-white">
         <div className="text-center mb-4">
           <p className="text-teal-100 text-sm mb-2">Your Referral Code</p>
-          <div className="font-mono text-xl sm:text-2xl font-bold tracking-wider">
+          <div className="font-mono text-xl sm:text-2xl font-bold tracking-wide">
             {referralCode}
           </div>
         </div>
@@ -363,11 +363,13 @@ export function ReferralDashboard({
           {summary.nextTier && (
             <>
               <Progress
-                value={
-                  ((summary.qualifiedReferrals - (summary.currentTier?.minReferrals || 0)) /
-                    (summary.nextTier.minReferrals - (summary.currentTier?.minReferrals || 0))) *
-                  100
-                }
+                value={(() => {
+                  const base = summary.currentTier?.minReferrals || 0;
+                  const span = summary.nextTier.minReferrals - base;
+                  if (span <= 0) return 0;
+                  const pct = ((summary.qualifiedReferrals - base) / span) * 100;
+                  return Math.max(0, Math.min(100, pct));
+                })()}
                 className="h-2 mb-3"
               />
               <div className="flex justify-between text-xs text-gray-500">

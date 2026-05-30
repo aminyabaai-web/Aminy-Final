@@ -9,6 +9,7 @@ import { FileText, Save, CheckCircle2, ChevronRight, AlertCircle, TrendingUp, Ta
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Textarea } from '../ui/textarea';
+import { isDemoMode } from '../../lib/demo-seed';
 import { toast } from 'sonner';
 
 interface TemplateProps {
@@ -16,57 +17,81 @@ interface TemplateProps {
     patientName: string;
 }
 
+// Sample clinical content for investor/AACT demos only. Real providers start
+// with blank templates so no fabricated diagnoses/findings reach a chart.
+const DEMO = isDemoMode();
+
 export function ProviderClinicalTemplates({ patientId, patientName }: TemplateProps) {
     const [activeTemplate, setActiveTemplate] = useState<'bip' | 'milestones' | 'slp' | 'mh_treatment' | 'psych_eval' | null>(null);
 
     // Focus: Behavior Intervention Plan (BIP)
-    const [bipForm, setBipForm] = useState({
+    const [bipForm, setBipForm] = useState(DEMO ? {
         targetBehaviors: '1. Elopement (leaving assigned area without permission)\n2. Non-compliance (refusal to follow instructions)',
         antecedentStrategies: '1. Visual schedules\n2. First-Then language\n3. High-probability request sequence',
         replacementBehaviors: '1. Functional Communication Training (FCT): Requesting a break\n2. Asking for help verbally or using AAC',
         consequenceStrategies: '1. Differential Reinforcement of Alternative behavior (DRA)\n2. Extinction for escape-maintained behavior',
+    } : {
+        targetBehaviors: '',
+        antecedentStrategies: '',
+        replacementBehaviors: '',
+        consequenceStrategies: '',
     });
 
     // Focus: Pediatric Milestones Tracker
     const [milestones, setMilestones] = useState({
         communication: [
-            { id: 'c1', label: 'Uses 2-word phrases', met: true },
+            { id: 'c1', label: 'Uses 2-word phrases', met: DEMO },
             { id: 'c2', label: 'Answers simple Wh- questions', met: false },
-            { id: 'c3', label: 'Follows 2-step directions', met: true },
+            { id: 'c3', label: 'Follows 2-step directions', met: DEMO },
         ],
         social: [
             { id: 's1', label: 'Initiates play with peers', met: false },
             { id: 's2', label: 'Maintains eye contact during conversation', met: false },
-            { id: 's3', label: 'Shares toys willingly', met: true },
+            { id: 's3', label: 'Shares toys willingly', met: DEMO },
         ],
         motor: [
-            { id: 'm1', label: 'Jumps with both feet', met: true },
+            { id: 'm1', label: 'Jumps with both feet', met: DEMO },
             { id: 'm2', label: 'Holds crayon with pincer grasp', met: false },
         ]
     });
 
     // Focus: SLP Evaluation
-    const [slpForm, setSlpForm] = useState({
+    const [slpForm, setSlpForm] = useState(DEMO ? {
         expressiveLanguage: 'Patient currently uses 1-2 word utterances to request basic needs. Vocabulary estimated at 40 words.',
         receptiveLanguage: 'Follows routine 1-step directions (e.g., "Give me the ball"). Struggles with 2-step novel directions.',
         articulation: 'Substitutes /w/ for /r/ and /l/ (gliding). Intelligibility is approximately 60% to unfamiliar listeners.',
         speechGoals: '1. Increase expressive vocabulary to 100 words.\n2. Follow 2-step related directions with 80% accuracy.'
+    } : {
+        expressiveLanguage: '',
+        receptiveLanguage: '',
+        articulation: '',
+        speechGoals: '',
     });
 
     // Focus: Mental Health Treatment Plan
-    const [mhForm, setMhForm] = useState({
+    const [mhForm, setMhForm] = useState(DEMO ? {
         presentingProblem: 'Patient presents with severe anxiety related to school transitions and social interactions.',
         evidenceBasedIntervention: 'Cognitive Behavioral Therapy (CBT) focusing on emotion regulation and cognitive restructuring.',
         shortTermGoals: '1. Patient will identify 3 physical signs of anxiety.\n2. Patient will use deep breathing when feeling overwhelmed.',
         longTermGoals: '1. Reduce school refusal behaviors to <1 occurrence per month.\n2. Increase participation in peer group activities.'
+    } : {
+        presentingProblem: '',
+        evidenceBasedIntervention: '',
+        shortTermGoals: '',
+        longTermGoals: '',
     });
 
     // Focus: Diagnostic Psychological Evaluation
-    const [psychForm, setPsychForm] = useState({
+    const [psychForm, setPsychForm] = useState(DEMO ? {
         referralReason: 'Evaluation for Autism Spectrum Disorder (ASD) and ADHD due to social deficits and hyperactivity.',
         assessmentTools: 'Autism Diagnostic Observation Schedule, Second Edition (ADOS-2), Vineland-3, Conners 4.',
         clinicalImpressions: 'Patient meets DSM-5 diagnostic criteria for ASD, Level 1, without accompanying intellectual impairment.',
         recommendations: '1. Initiate comprehensive ABA therapy (20 hrs/week).\n2. Speech therapy for pragmatic language.\n3. Implement visual schedules at home and school.'
+    } : {
+        referralReason: '',
+        assessmentTools: '',
+        clinicalImpressions: '',
+        recommendations: '',
     });
 
     const handleSaveBip = () => {
@@ -74,7 +99,7 @@ export function ProviderClinicalTemplates({ patientId, patientName }: TemplatePr
             new Promise(resolve => setTimeout(resolve, 800)),
             {
                 loading: 'Saving Behavior Intervention Plan...',
-                success: 'BIP cryptographically signed and saved successfully.',
+                success: 'Behavior Intervention Plan saved.',
                 error: 'Failed to save BIP.'
             }
         );
@@ -240,7 +265,7 @@ export function ProviderClinicalTemplates({ patientId, patientName }: TemplatePr
                         <AlertCircle size={18} color="#0d9488" style={{ marginTop: '2px', flexShrink: 0 }} />
                         <div>
                             <p style={{ fontSize: '13px', color: 'rgba(17, 24, 39, 0.8)', lineHeight: 1.5 }}>
-                                <strong>Note:</strong> Behavior Intervention Plans created here are cryptographically signed upon saving and cannot be altered without appending a formal addendum.
+                                <strong>Note:</strong> Behavior Intervention Plans are versioned on save. Edits after finalizing are tracked as addenda so the original record stays intact.
                             </p>
                         </div>
                     </div>
@@ -273,7 +298,7 @@ export function ProviderClinicalTemplates({ patientId, patientName }: TemplatePr
                                 boxShadow: '0 2px 8px rgba(13, 148, 136, 0.3)'
                             }}
                         >
-                            <Save size={16} /> Sign & Finalize BIP
+                            <Save size={16} /> Save BIP
                         </button>
                     </div>
                 </div>
@@ -327,10 +352,9 @@ export function ProviderClinicalTemplates({ patientId, patientName }: TemplatePr
                         </div>
                     ))}
 
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px', backgroundColor: '#FAFAFA', borderRadius: '16px', marginTop: '8px' }}>
-                        <p style={{ fontSize: '13px', color: 'rgba(17, 24, 39, 0.6)' }}>Last updated: Just now</p>
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', padding: '16px', backgroundColor: '#FAFAFA', borderRadius: '16px', marginTop: '8px' }}>
                         <button
-                            onClick={() => toast.success('Milestone progress saved to patient record.')}
+                            onClick={() => toast.success('Milestone progress saved.')}
                             style={{ padding: '8px 16px', borderRadius: '10px', backgroundColor: '#111827', color: '#FFF', fontSize: '13px', fontWeight: 500, border: 'none', cursor: 'pointer' }}
                         >
                             Update Tracker
@@ -362,10 +386,10 @@ export function ProviderClinicalTemplates({ patientId, patientName }: TemplatePr
                     ))}
                     <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '8px' }}>
                         <button
-                            onClick={() => toast.success('SLP Evaluation saved to patient chart.')}
+                            onClick={() => toast.success('Speech-language evaluation saved.')}
                             style={{ padding: '10px 24px', borderRadius: '12px', backgroundColor: '#3b82f6', border: 'none', color: '#FFF', fontSize: '14px', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 2px 8px rgba(59, 130, 246, 0.3)' }}
                         >
-                            <Save size={16} /> Sign & Finalize Eval
+                            <Save size={16} /> Save Evaluation
                         </button>
                     </div>
                 </div>
@@ -394,10 +418,10 @@ export function ProviderClinicalTemplates({ patientId, patientName }: TemplatePr
                     ))}
                     <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '8px' }}>
                         <button
-                            onClick={() => toast.success('Mental Health Treatment Plan signed and activated.')}
+                            onClick={() => toast.success('Mental health treatment plan saved.')}
                             style={{ padding: '10px 24px', borderRadius: '12px', backgroundColor: '#8b5cf6', border: 'none', color: '#FFF', fontSize: '14px', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 2px 8px rgba(139, 92, 246, 0.3)' }}
                         >
-                            <Save size={16} /> Sign & Activate Plan
+                            <Save size={16} /> Save Plan
                         </button>
                     </div>
                 </div>
@@ -435,10 +459,10 @@ export function ProviderClinicalTemplates({ patientId, patientName }: TemplatePr
                     ))}
                     <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '8px' }}>
                         <button
-                            onClick={() => toast.success('Diagnostic Evaluation finalized and transmitted to payer.')}
+                            onClick={() => toast.success('Diagnostic evaluation saved.')}
                             style={{ padding: '10px 24px', borderRadius: '12px', backgroundColor: '#f59e0b', border: 'none', color: '#FFF', fontSize: '14px', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 2px 8px rgba(245, 158, 11, 0.3)' }}
                         >
-                            <Save size={16} /> Finalize Diagnostic Report
+                            <Save size={16} /> Save Diagnostic Report
                         </button>
                     </div>
                 </div>

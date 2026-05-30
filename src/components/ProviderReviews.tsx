@@ -240,7 +240,7 @@ function ReviewCard({
       </div>
 
       {/* Content */}
-      <p className={`text-gray-700 text-sm ${!expanded && 'line-clamp-3'}`}>
+      <p className={`text-gray-700 text-sm ${!expanded ? 'line-clamp-2' : ''}`}>
         {review.content}
       </p>
 
@@ -312,11 +312,14 @@ export function ProviderReviews({
   stats,
   onMarkHelpful,
   onWriteReview,
-  compact = false,
+  compact: compactProp = false,
 }: ProviderReviewsProps) {
   const [sortBy, setSortBy] = useState<'recent' | 'helpful' | 'rating'>('helpful');
   const [filterRating, setFilterRating] = useState<number | null>(null);
   const [showAllReviews, setShowAllReviews] = useState(false);
+  // Allow the compact "See all" affordance to expand the full list inline
+  const [expandedFromCompact, setExpandedFromCompact] = useState(false);
+  const compact = compactProp && !expandedFromCompact;
 
   // Sort reviews
   const sortedReviews = [...reviews].sort((a, b) => {
@@ -340,6 +343,31 @@ export function ProviderReviews({
     : showAllReviews
     ? filteredReviews
     : filteredReviews.slice(0, 5);
+
+  // No reviews yet — show an honest empty state instead of zero-filled stats
+  if (reviews.length === 0) {
+    return (
+      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+        <div className="px-4 sm:px-6 py-8 text-center">
+          <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-gray-100 flex items-center justify-center">
+            <Star className="w-6 h-6 text-gray-300" />
+          </div>
+          <p className="font-medium text-gray-900">No reviews yet</p>
+          <p className="text-sm text-gray-500 mt-1">
+            {providerName} hasn't received any reviews yet. Be the first to share your experience.
+          </p>
+          {onWriteReview && (
+            <button
+              onClick={onWriteReview}
+              className="mt-4 px-4 py-2 bg-teal-600 text-white text-sm font-medium rounded-lg hover:bg-teal-700 transition-colors"
+            >
+              Write a Review
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
@@ -421,6 +449,7 @@ export function ProviderReviews({
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
+              aria-label="Sort reviews"
               className="text-sm text-gray-600 bg-transparent border-none focus:ring-0 cursor-pointer"
             >
               <option value="helpful">Most Helpful</option>
@@ -470,7 +499,7 @@ export function ProviderReviews({
       {compact && reviews.length > 2 && (
         <div className="px-4 sm:px-6 py-3 border-t border-gray-100">
           <button
-            onClick={() => {/* Navigate to full reviews */}}
+            onClick={() => setExpandedFromCompact(true)}
             className="text-teal-600 text-sm font-medium hover:underline"
           >
             See all {stats.totalReviews} reviews
