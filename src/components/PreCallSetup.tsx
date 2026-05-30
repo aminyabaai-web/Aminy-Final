@@ -359,7 +359,7 @@ export function PreCallSetup({
           )}
         </CardHeader>
 
-        <CardContent className="space-y-3 sm:space-y-4 sm:space-y-6">
+        <CardContent className="space-y-3 sm:space-y-6">
           {/* Error Alert */}
           {error && (
             <Alert variant="destructive">

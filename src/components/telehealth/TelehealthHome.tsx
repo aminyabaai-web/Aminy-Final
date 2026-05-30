@@ -26,10 +26,7 @@ import {
   ChevronRight,
   Search,
   Star,
-  Clock,
-  Users,
   BookOpen,
-  Sparkles,
   AlertTriangle
 } from 'lucide-react';
 import { TelehealthFlow } from './TelehealthFlow';
@@ -225,7 +222,7 @@ export function TelehealthHome({
       </header>
 
       {/* Content */}
-      <div className="px-4 py-6 pb-24 space-y-3 sm:space-y-4 sm:space-y-6">
+      <div className="px-4 py-6 pb-24 space-y-3 sm:space-y-6">
         {/* Greeting */}
         <div
           className="rounded-2xl border border-white/80 p-5 shadow-md"

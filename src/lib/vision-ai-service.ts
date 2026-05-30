@@ -11,6 +11,7 @@
 
 import { projectId, publicAnonKey } from '../utils/supabase/info';
 import { supabase } from '../utils/supabase/client';
+import { isDemoMode } from './demo-seed';
 
 const EDGE_FUNCTION_BASE = `https://${projectId}.supabase.co/functions/v1/make-server-8a022548`;
 
@@ -34,6 +35,8 @@ export interface VideoSession {
   summary?: string;
   totalFrames: number;
   maxFrames: number;
+  /** When true, frames are processed but never retained in the session (privacy: "don't store frames"). */
+  ephemeral?: boolean;
 }
 
 export type VisionTier = 'core' | 'pro' | 'pro_plus' | 'b2b';
@@ -130,7 +133,9 @@ export function canUseVideoAI(tier: VisionTier): boolean {
 export async function analyzePhoto(
   imageBase64: string,
   customPrompt?: string,
-  userId?: string
+  userId?: string,
+  /** When true, process the image but persist nothing (no usage tracking, no frame storage). */
+  ephemeral?: boolean
 ): Promise<VisionAnalysisResult> {
   const prompt = customPrompt || BEHAVIORAL_PHOTO_PROMPT;
 
@@ -157,22 +162,32 @@ export async function analyzePhoto(
 
     const data = await response.json();
 
-    if (userId) trackUsage(userId, 'photo');
+    // Ephemeral ("don't store") requests must not be persisted in usage tracking.
+    if (userId && !ephemeral) trackUsage(userId, 'photo');
+
+    const analysisText = data?.result || data?.message;
+    if (!analysisText) {
+      // No usable result came back — be honest rather than imply analysis succeeded.
+      throw new Error('Empty vision response');
+    }
 
     return {
       id: `photo-${Date.now()}`,
       type: 'photo',
-      analysis: data?.result || data?.message || 'Analysis complete. The image shows content that may be relevant to your child\'s care. For specific medical concerns, please consult your healthcare provider.',
+      analysis: analysisText,
       timestamp: new Date().toISOString(),
     };
   } catch (error) {
-    // Fallback for demo/offline
-    return {
-      id: `photo-${Date.now()}`,
-      type: 'photo',
-      analysis: 'Vision AI analysis is currently processing. In production, this would provide detailed behavioral insights from GPT-4o Vision. The image has been received and would be analyzed for engagement patterns, sensory responses, and communication indicators.',
-      timestamp: new Date().toISOString(),
-    };
+    // In demo mode, return illustrative sample text. For real users, surface an honest error.
+    if (isDemoMode()) {
+      return {
+        id: `photo-${Date.now()}`,
+        type: 'photo',
+        analysis: 'Sample analysis (demo mode): the image would be analyzed for engagement patterns, sensory responses, and communication indicators. Connect a live AI key to see real GPT-4o Vision results.',
+        timestamp: new Date().toISOString(),
+      };
+    }
+    throw new Error("Couldn't analyze the image right now — please try again.");
   }
 }
 
@@ -180,7 +195,7 @@ export async function analyzePhoto(
 
 const activeSessions: Map<string, VideoSession> = new Map();
 
-export function startVideoSession(userId: string, tier: VisionTier): VideoSession {
+export function startVideoSession(userId: string, tier: VisionTier, ephemeral = false): VideoSession {
   const session: VideoSession = {
     id: `session-${Date.now()}`,
     userId,
@@ -188,6 +203,7 @@ export function startVideoSession(userId: string, tier: VisionTier): VideoSessio
     frames: [],
     totalFrames: 0,
     maxFrames: getFrameLimit(tier),
+    ephemeral,
   };
   activeSessions.set(session.id, session);
   return session;
@@ -223,7 +239,8 @@ export async function analyzeFrame(
     });
 
     const data = await response.json();
-    trackUsage(session.userId, 'video_frame');
+    // Ephemeral sessions: process the frame but never persist usage.
+    if (!session.ephemeral) trackUsage(session.userId, 'video_frame');
 
     const result: VisionAnalysisResult = {
       id: `frame-${Date.now()}`,
@@ -233,13 +250,14 @@ export async function analyzeFrame(
       frameIndex: session.totalFrames,
     };
 
-    session.frames.push(result);
+    // Honor the privacy flag: don't retain the frame's analysis in the session.
+    if (!session.ephemeral) session.frames.push(result);
     session.totalFrames++;
     activeSessions.set(sessionId, session);
 
     return result;
   } catch {
-    // Still count the frame
+    // Still count the frame so limits/counters stay accurate.
     session.totalFrames++;
     const result: VisionAnalysisResult = {
       id: `frame-${Date.now()}`,
@@ -248,7 +266,7 @@ export async function analyzeFrame(
       timestamp: new Date().toISOString(),
       frameIndex: session.totalFrames - 1,
     };
-    session.frames.push(result);
+    if (!session.ephemeral) session.frames.push(result);
     activeSessions.set(sessionId, session);
     return result;
   }
@@ -256,8 +274,13 @@ export async function analyzeFrame(
 
 export async function getSessionSummary(sessionId: string): Promise<string> {
   const session = activeSessions.get(sessionId);
-  if (!session || session.frames.length === 0) {
+  if (!session) {
     return 'No frames were captured during this session.';
+  }
+  if (session.frames.length === 0) {
+    return session.ephemeral
+      ? `Privacy mode was on, so frames were analyzed and discarded immediately — no data was retained, and no summary can be generated. ${session.totalFrames} frame(s) were processed this session. Turn off "Don't store frames" to get a session summary.`
+      : 'No frames were captured during this session.';
   }
 
   session.endedAt = new Date().toISOString();
@@ -305,7 +328,14 @@ function generateLocalSummary(session: VideoSession): string {
   const duration = session.endedAt
     ? Math.round((new Date(session.endedAt).getTime() - new Date(session.startedAt).getTime()) / 1000)
     : 0;
-  return `Behavioral observation session completed. Duration: ${Math.floor(duration / 60)} minutes. ${session.frames.length} frames captured and analyzed. In production with an active AI connection, this would provide a comprehensive behavioral summary including engagement patterns, sensory regulation trends, communication attempts, and personalized recommendations.`;
+  const facts = `Behavioral observation session completed. Duration: ${Math.floor(duration / 60)} minutes. ${session.frames.length} frames captured.`;
+
+  if (isDemoMode()) {
+    return `${facts} In production with an active AI connection, this would provide a comprehensive behavioral summary including engagement patterns, sensory regulation trends, communication attempts, and personalized recommendations.`;
+  }
+
+  // Real users: state plainly that the AI summary could not be generated, without fabricating insights.
+  return `${facts} We couldn't generate the AI behavioral summary right now — please try again. Your individual frame analyses are still available above.`;
 }
 
 export function endVideoSession(sessionId: string): VideoSession | null {

@@ -408,7 +408,11 @@ export function RewardsBoard({ onBack, onNavigateToActivity, dailyMissionSteps =
 
   const handleRedeem = useCallback((rewardId: string) => {
     const reward = photoRewards.find(r => r.id === rewardId);
+    // Guard: can't redeem a missing/already-redeemed reward, or one the child can't afford.
     if (!reward || reward.redeemed || rewards.totalStars < reward.starCost) return;
+
+    // Spend the stars: deduct the reward's cost from the balance so the economy is real.
+    rewards.earnStars(-reward.starCost, `redeem:${rewardId}`);
 
     playUnlockFanfare();
     haptic([60, 30, 60, 30, 120]);
@@ -421,7 +425,7 @@ export function RewardsBoard({ onBack, onNavigateToActivity, dailyMissionSteps =
     );
 
     setTimeout(() => setCelebrating(null), 4000);
-  }, [photoRewards, rewards.totalStars]);
+  }, [photoRewards, rewards]);
 
   const handleLabelChange = useCallback((rewardId: string, label: string) => {
     setPhotoRewards(prev => prev.map(r => r.id === rewardId ? { ...r, label } : r));

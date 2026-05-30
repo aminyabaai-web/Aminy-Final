@@ -44,6 +44,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '../utils/supabase/client';
 import { ScreenHeader } from './ui/ScreenHeader';
+import { toast } from 'sonner';
 
 // Types
 interface TreatmentPlan {
@@ -280,6 +281,7 @@ export function TreatmentPlanEditor({
       loadPlans();
     } catch (err) {
       console.error('[TreatmentPlan] Error saving plan:', err);
+      toast.error("Couldn't save — please try again");
     } finally {
       setIsSaving(false);
     }
@@ -329,6 +331,7 @@ export function TreatmentPlanEditor({
       loadPlans();
     } catch (err) {
       console.error('[TreatmentPlan] Error saving goal:', err);
+      toast.error("Couldn't save — please try again");
     } finally {
       setIsSaving(false);
     }
@@ -345,6 +348,7 @@ export function TreatmentPlanEditor({
       loadPlans();
     } catch (err) {
       console.error('[TreatmentPlan] Error updating goal status:', err);
+      toast.error("Couldn't save — please try again");
     }
   };
 
@@ -368,6 +372,7 @@ export function TreatmentPlanEditor({
       loadPlans();
     } catch (err) {
       console.error('[TreatmentPlan] Error saving progress:', err);
+      toast.error("Couldn't save — please try again");
     } finally {
       setIsSaving(false);
     }
@@ -386,6 +391,7 @@ export function TreatmentPlanEditor({
       loadPlans();
     } catch (err) {
       console.error('[TreatmentPlan] Error updating plan status:', err);
+      toast.error("Couldn't save — please try again");
     }
   };
 
@@ -397,6 +403,7 @@ export function TreatmentPlanEditor({
       loadPlans();
     } catch (err) {
       console.error('[TreatmentPlan] Error deleting goal:', err);
+      toast.error("Couldn't delete — please try again");
     }
   };
 

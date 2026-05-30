@@ -10,11 +10,27 @@ import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Textarea } from '../ui/textarea';
 import { isDemoMode } from '../../lib/demo-seed';
+import { syncEncryptedStorage } from '../../lib/security/encrypted-storage';
 import { toast } from 'sonner';
 
 interface TemplateProps {
     patientId: string;
     patientName: string;
+}
+
+// No server-side clinical-template store exists yet, so saves are persisted
+// locally (encrypted-at-rest) on this device only. Returns whether the draft
+// actually persisted, so the UI never claims a save it didn't make.
+function saveTemplateDraft(patientId: string, template: string, data: unknown): boolean {
+    try {
+        syncEncryptedStorage.setItem(
+            `aminy_clinical_template_${patientId}_${template}`,
+            JSON.stringify({ data, savedAt: new Date().toISOString() }),
+        );
+        return true;
+    } catch {
+        return false;
+    }
 }
 
 // Sample clinical content for investor/AACT demos only. Real providers start
@@ -95,14 +111,11 @@ export function ProviderClinicalTemplates({ patientId, patientName }: TemplatePr
     });
 
     const handleSaveBip = () => {
-        toast.promise(
-            new Promise(resolve => setTimeout(resolve, 800)),
-            {
-                loading: 'Saving Behavior Intervention Plan...',
-                success: 'Behavior Intervention Plan saved.',
-                error: 'Failed to save BIP.'
-            }
-        );
+        if (saveTemplateDraft(patientId, 'bip', bipForm)) {
+            toast.success('Behavior Intervention Plan draft saved on this device');
+        } else {
+            toast.error("Couldn't save — please try again");
+        }
     };
 
     const handleToggleMilestone = (category: keyof typeof milestones, id: string) => {
@@ -265,7 +278,7 @@ export function ProviderClinicalTemplates({ patientId, patientName }: TemplatePr
                         <AlertCircle size={18} color="#0d9488" style={{ marginTop: '2px', flexShrink: 0 }} />
                         <div>
                             <p style={{ fontSize: '13px', color: 'rgba(17, 24, 39, 0.8)', lineHeight: 1.5 }}>
-                                <strong>Note:</strong> Behavior Intervention Plans are versioned on save. Edits after finalizing are tracked as addenda so the original record stays intact.
+                                <strong>Note:</strong> Saving stores a draft on this device. Drafts are not yet synced to a shared chart — export or copy the finalized plan into the patient record.
                             </p>
                         </div>
                     </div>
@@ -354,7 +367,13 @@ export function ProviderClinicalTemplates({ patientId, patientName }: TemplatePr
 
                     <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', padding: '16px', backgroundColor: '#FAFAFA', borderRadius: '16px', marginTop: '8px' }}>
                         <button
-                            onClick={() => toast.success('Milestone progress saved.')}
+                            onClick={() => {
+                                if (saveTemplateDraft(patientId, 'milestones', milestones)) {
+                                    toast.success('Milestone progress saved on this device');
+                                } else {
+                                    toast.error("Couldn't save — please try again");
+                                }
+                            }}
                             style={{ padding: '8px 16px', borderRadius: '10px', backgroundColor: '#111827', color: '#FFF', fontSize: '13px', fontWeight: 500, border: 'none', cursor: 'pointer' }}
                         >
                             Update Tracker
@@ -386,7 +405,13 @@ export function ProviderClinicalTemplates({ patientId, patientName }: TemplatePr
                     ))}
                     <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '8px' }}>
                         <button
-                            onClick={() => toast.success('Speech-language evaluation saved.')}
+                            onClick={() => {
+                                if (saveTemplateDraft(patientId, 'slp', slpForm)) {
+                                    toast.success('Speech-language evaluation draft saved on this device');
+                                } else {
+                                    toast.error("Couldn't save — please try again");
+                                }
+                            }}
                             style={{ padding: '10px 24px', borderRadius: '12px', backgroundColor: '#3b82f6', border: 'none', color: '#FFF', fontSize: '14px', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 2px 8px rgba(59, 130, 246, 0.3)' }}
                         >
                             <Save size={16} /> Save Evaluation
@@ -418,7 +443,13 @@ export function ProviderClinicalTemplates({ patientId, patientName }: TemplatePr
                     ))}
                     <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '8px' }}>
                         <button
-                            onClick={() => toast.success('Mental health treatment plan saved.')}
+                            onClick={() => {
+                                if (saveTemplateDraft(patientId, 'mh_treatment', mhForm)) {
+                                    toast.success('Mental health treatment plan draft saved on this device');
+                                } else {
+                                    toast.error("Couldn't save — please try again");
+                                }
+                            }}
                             style={{ padding: '10px 24px', borderRadius: '12px', backgroundColor: '#8b5cf6', border: 'none', color: '#FFF', fontSize: '14px', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 2px 8px rgba(139, 92, 246, 0.3)' }}
                         >
                             <Save size={16} /> Save Plan
@@ -459,7 +490,13 @@ export function ProviderClinicalTemplates({ patientId, patientName }: TemplatePr
                     ))}
                     <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '8px' }}>
                         <button
-                            onClick={() => toast.success('Diagnostic evaluation saved.')}
+                            onClick={() => {
+                                if (saveTemplateDraft(patientId, 'psych_eval', psychForm)) {
+                                    toast.success('Diagnostic evaluation draft saved on this device');
+                                } else {
+                                    toast.error("Couldn't save — please try again");
+                                }
+                            }}
                             style={{ padding: '10px 24px', borderRadius: '12px', backgroundColor: '#f59e0b', border: 'none', color: '#FFF', fontSize: '14px', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 2px 8px rgba(245, 158, 11, 0.3)' }}
                         >
                             <Save size={16} /> Save Diagnostic Report

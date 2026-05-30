@@ -485,7 +485,7 @@ export function ProviderReviews({
 
       {/* Show More Button */}
       {!compact && filteredReviews.length > 5 && !showAllReviews && (
-        <div className="px-4 sm:px-4 sm:px-6 py-3 sm:py-4 border-t border-gray-100">
+        <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-gray-100">
           <button
             onClick={() => setShowAllReviews(true)}
             className="w-full py-2 text-teal-600 font-medium hover:bg-teal-50 rounded-lg transition-colors"

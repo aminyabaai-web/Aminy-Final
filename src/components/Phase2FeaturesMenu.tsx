@@ -24,7 +24,7 @@ interface Phase2FeaturesMenuProps {
 export function Phase2FeaturesMenu({ onNavigate, userRole = 'parent' }: Phase2FeaturesMenuProps) {
   const features = [
     {
-      id: 'coach',
+      id: 'bcba-portal',
       title: 'BCBA Coach Portal',
       description: 'Manage families, track goals, and add clinical notes',
       icon: Users,
@@ -46,7 +46,7 @@ export function Phase2FeaturesMenu({ onNavigate, userRole = 'parent' }: Phase2Fe
       visible: true
     },
     {
-      id: 'launch',
+      id: 'launch-status',
       title: 'Launch Status',
       description: 'View beta readiness and Phase 2 completion',
       icon: Rocket,

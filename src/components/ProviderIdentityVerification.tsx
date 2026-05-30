@@ -129,32 +129,53 @@ export function ProviderIdentityVerification({
 
     const imageData = canvas.toDataURL('image/jpeg', 0.85);
 
+    const stepId = activeCapture === 'selfie' ? 'selfie'
+      : activeCapture === 'id_front' ? 'id_front' : 'id_back';
+    const stepLabel = stepId === 'selfie' ? 'Selfie' : 'ID photo';
+
     try {
-      const { success } = await uploadVerificationImage(
+      const { success, url, error } = await uploadVerificationImage(
         providerId, activeCapture, imageData
       );
 
       if (success) {
-        // Update step status
-        const stepId = activeCapture === 'selfie' ? 'selfie'
-          : activeCapture === 'id_front' ? 'id_front' : 'id_back';
-
+        // Image durably uploaded (or a clearly-flagged demo stub). Persist the
+        // real returned reference — never a fabricated 'uploaded' placeholder.
         setState(prev => ({
           ...prev,
           steps: prev.steps.map(s =>
             s.id === stepId ? { ...s, status: 'complete' as const } : s
           ),
-          ...(activeCapture === 'id_front' ? { idFrontUrl: 'uploaded' } : {}),
-          ...(activeCapture === 'id_back' ? { idBackUrl: 'uploaded' } : {}),
-          ...(activeCapture === 'selfie' ? { selfieUrl: 'uploaded' } : {}),
+          ...(activeCapture === 'id_front' ? { idFrontUrl: url } : {}),
+          ...(activeCapture === 'id_back' ? { idBackUrl: url } : {}),
+          ...(activeCapture === 'selfie' ? { selfieUrl: url } : {}),
           status: prev.status === 'not_started' ? 'id_uploaded' as const : prev.status,
         }));
 
-        toast.success(`${stepId === 'selfie' ? 'Selfie' : 'ID photo'} captured!`);
+        toast.success(`${stepLabel} captured!`);
         stopCamera();
+      } else {
+        // Upload did NOT durably persist — mark the step failed, clear any
+        // stale url, and keep submit blocked. Do not show a false success.
+        setState(prev => ({
+          ...prev,
+          steps: prev.steps.map(s =>
+            s.id === stepId ? { ...s, status: 'failed' as const } : s
+          ),
+          ...(activeCapture === 'id_front' ? { idFrontUrl: undefined } : {}),
+          ...(activeCapture === 'id_back' ? { idBackUrl: undefined } : {}),
+          ...(activeCapture === 'selfie' ? { selfieUrl: undefined } : {}),
+        }));
+        toast.error(error ? `Upload failed — please retry (${error})` : 'Upload failed — please retry');
       }
-    } catch {
-      toast.error('Upload failed. Please try again.');
+    } catch (e) {
+      setState(prev => ({
+        ...prev,
+        steps: prev.steps.map(s =>
+          s.id === stepId ? { ...s, status: 'failed' as const } : s
+        ),
+      }));
+      toast.error('Upload failed — please retry');
     } finally {
       setCaptureLoading(false);
     }
@@ -381,12 +402,19 @@ export function ProviderIdentityVerification({
 
                     {/* ID Front capture button */}
                     {step.id === 'id_front' && step.status !== 'complete' && (
-                      <button
-                        onClick={() => startCamera('id_front')}
-                        className="mt-3 flex items-center gap-2 px-4 py-2 bg-cyan-600 text-white text-sm font-medium rounded-lg hover:bg-cyan-700"
-                      >
-                        <Camera className="w-4 h-4" /> Take Photo
-                      </button>
+                      <>
+                        {step.status === 'failed' && (
+                          <p className="mt-2 text-sm text-red-600 font-medium flex items-center gap-1">
+                            <AlertTriangle className="w-3.5 h-3.5" /> Upload failed — please retry
+                          </p>
+                        )}
+                        <button
+                          onClick={() => startCamera('id_front')}
+                          className="mt-3 flex items-center gap-2 px-4 py-2 bg-cyan-600 text-white text-sm font-medium rounded-lg hover:bg-cyan-700"
+                        >
+                          <Camera className="w-4 h-4" /> {step.status === 'failed' ? 'Retake Photo' : 'Take Photo'}
+                        </button>
+                      </>
                     )}
                     {step.id === 'id_front' && step.status === 'complete' && (
                       <div className="mt-2 flex items-center gap-2">
@@ -402,12 +430,19 @@ export function ProviderIdentityVerification({
 
                     {/* ID Back capture button */}
                     {step.id === 'id_back' && step.status !== 'complete' && (
-                      <button
-                        onClick={() => startCamera('id_back')}
-                        className="mt-3 flex items-center gap-2 px-4 py-2 bg-cyan-600 text-white text-sm font-medium rounded-lg hover:bg-cyan-700"
-                      >
-                        <Camera className="w-4 h-4" /> Take Photo
-                      </button>
+                      <>
+                        {step.status === 'failed' && (
+                          <p className="mt-2 text-sm text-red-600 font-medium flex items-center gap-1">
+                            <AlertTriangle className="w-3.5 h-3.5" /> Upload failed — please retry
+                          </p>
+                        )}
+                        <button
+                          onClick={() => startCamera('id_back')}
+                          className="mt-3 flex items-center gap-2 px-4 py-2 bg-cyan-600 text-white text-sm font-medium rounded-lg hover:bg-cyan-700"
+                        >
+                          <Camera className="w-4 h-4" /> {step.status === 'failed' ? 'Retake Photo' : 'Take Photo'}
+                        </button>
+                      </>
                     )}
                     {step.id === 'id_back' && step.status === 'complete' && (
                       <div className="mt-2 flex items-center gap-2">
@@ -423,12 +458,19 @@ export function ProviderIdentityVerification({
 
                     {/* Selfie capture button */}
                     {step.id === 'selfie' && step.status !== 'complete' && (
-                      <button
-                        onClick={() => startCamera('selfie')}
-                        className="mt-3 flex items-center gap-2 px-4 py-2 bg-cyan-600 text-white text-sm font-medium rounded-lg hover:bg-cyan-700"
-                      >
-                        <Camera className="w-4 h-4" /> Take Selfie
-                      </button>
+                      <>
+                        {step.status === 'failed' && (
+                          <p className="mt-2 text-sm text-red-600 font-medium flex items-center gap-1">
+                            <AlertTriangle className="w-3.5 h-3.5" /> Upload failed — please retry
+                          </p>
+                        )}
+                        <button
+                          onClick={() => startCamera('selfie')}
+                          className="mt-3 flex items-center gap-2 px-4 py-2 bg-cyan-600 text-white text-sm font-medium rounded-lg hover:bg-cyan-700"
+                        >
+                          <Camera className="w-4 h-4" /> {step.status === 'failed' ? 'Retake Selfie' : 'Take Selfie'}
+                        </button>
+                      </>
                     )}
                     {step.id === 'selfie' && step.status === 'complete' && (
                       <div className="mt-2 flex items-center gap-2">

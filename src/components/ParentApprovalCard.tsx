@@ -14,9 +14,8 @@ import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Check, X, Info, Undo, Sparkles } from 'lucide-react';
-import { 
-  ProviderSuggestion, 
-  ProviderSuggestionEngine,
+import {
+  ProviderSuggestion,
   type RoutineChangePayload,
   type GoalAdjustmentPayload,
   type PromptScriptPayload,
@@ -385,77 +384,4 @@ function getSuggestionTitle(suggestion: ProviderSuggestion): string {
     default:
       return 'Provider suggestion';
   }
-}
-
-// ===================================
-// PENDING SUGGESTIONS LIST
-// ===================================
-
-export function PendingSuggestionsList({ 
-  childId, 
-  childName 
-}: { 
-  childId: string;
-  childName: string;
-}) {
-  const [suggestions, setSuggestions] = useState<ProviderSuggestion[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  // Mock - would use actual provider suggestion engine
-  const engine = new ProviderSuggestionEngine('provider-1', 'Dr. Smith', 'BCBA');
-
-  React.useEffect(() => {
-    loadSuggestions();
-  }, [childId]);
-
-  const loadSuggestions = async () => {
-    setLoading(true);
-    const pending = await engine.getPendingSuggestions(childId);
-    setSuggestions(pending);
-    setLoading(false);
-  };
-
-  const handleAccept = async (suggestionId: string) => {
-    const result = await engine.acceptSuggestion(suggestionId);
-    if (result.success) {
-      loadSuggestions(); // Refresh
-    }
-  };
-
-  const handleReject = async (suggestionId: string) => {
-    await engine.rejectSuggestion(suggestionId);
-    loadSuggestions(); // Refresh
-  };
-
-  const handleUndo = async (suggestionId: string) => {
-    const success = await engine.undoAcceptance(suggestionId);
-    if (success) {
-      loadSuggestions(); // Refresh
-    }
-  };
-
-  if (loading) {
-    return <div className="text-sm text-gray-500">Loading suggestions...</div>;
-  }
-
-  if (suggestions.length === 0) {
-    return null;
-  }
-
-  return (
-    <div className="space-y-3">
-      <h3 className="text-sm font-medium text-gray-900">
-        Provider Suggestions ({suggestions.length})
-      </h3>
-      {suggestions.map(suggestion => (
-        <ParentApprovalCard
-          key={suggestion.id}
-          suggestion={suggestion}
-          onAccept={() => handleAccept(suggestion.id)}
-          onReject={() => handleReject(suggestion.id)}
-          onUndo={() => handleUndo(suggestion.id)}
-        />
-      ))}
-    </div>
-  );
 }

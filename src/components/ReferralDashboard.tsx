@@ -66,6 +66,7 @@ export function ReferralDashboard({
   const referralCode = referralCodeData?.code || '';
   const [copied, setCopied] = useState(false);
   const [showShareOptions, setShowShareOptions] = useState(false);
+  const [showAllReferrals, setShowAllReferrals] = useState(false);
 
   // Auto-create referral code on mount if not present
   useEffect(() => {
@@ -161,6 +162,25 @@ export function ReferralDashboard({
     }
   };
 
+  // Share via QR. App.tsx does not pass onShare, so when no QR handler is
+  // wired we fall back to copying the link instead of silently doing nothing.
+  const handleQrShare = async () => {
+    if (onShare) {
+      onShare('qr');
+      return;
+    }
+    try {
+      const { url } = getReferralShareMessage(referralCode, userName);
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      toast.success('Referral link copied — paste it into any QR generator to share');
+      setTimeout(() => setCopied(false), 2000);
+    } catch (error) {
+      console.error('Error copying link:', error);
+      toast.error('Failed to copy link');
+    }
+  };
+
   if (loading) {
     return (
       <Card className="p-6 animate-pulse">
@@ -184,7 +204,7 @@ export function ReferralDashboard({
   };
 
   return (
-    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
+    <div className="space-y-3 sm:space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -271,7 +291,7 @@ export function ReferralDashboard({
                 <span className="text-xs">Facebook</span>
               </button>
               <button
-                onClick={() => onShare?.('qr')}
+                onClick={handleQrShare}
                 className="flex flex-col items-center p-3 bg-white/10 rounded-lg hover:bg-white/20 transition-colors"
               >
                 <QrCode className="w-5 h-5 mb-1" />
@@ -448,10 +468,16 @@ export function ReferralDashboard({
       <Card className="p-3 sm:p-4">
         <div className="flex items-center justify-between mb-3">
           <h3 className="font-semibold text-gray-900">Recent Referrals</h3>
-          <Button variant="ghost" size="sm">
-            View All
-            <ChevronRight className="w-4 h-4 ml-1" />
-          </Button>
+          {referrals.length > 5 && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowAllReferrals((prev) => !prev)}
+            >
+              {showAllReferrals ? 'Show Less' : 'View All'}
+              <ChevronRight className="w-4 h-4 ml-1" />
+            </Button>
+          )}
         </div>
 
         {referrals.length === 0 ? (
@@ -460,7 +486,7 @@ export function ReferralDashboard({
           />
         ) : (
           <div className="space-y-2">
-            {referrals.slice(0, 5).map((referral) => {
+            {(showAllReferrals ? referrals : referrals.slice(0, 5)).map((referral) => {
               const daysRemaining = getReferralQualificationDays(referral);
 
               return (

@@ -11,6 +11,7 @@
 
 import { supabase } from '../utils/supabase/client';
 import { syncEncryptedStorage } from './security/encrypted-storage';
+import { isDemoMode } from './demo-seed';
 
 // ── Types ────────────────────────────────────────────────────────────
 
@@ -119,14 +120,21 @@ export function saveBackgroundCheckState(state: BackgroundCheckState): void {
 // ── Image Upload ─────────────────────────────────────────────────────
 
 /**
- * Upload verification image to Supabase Storage (private bucket)
- * Falls back to base64 localStorage storage for demo mode
+ * Upload verification image to Supabase Storage (private bucket).
+ *
+ * Durable upload to Supabase is the only path that counts as a real success.
+ * If Storage is unavailable:
+ *   - In demo mode, we return a clearly-flagged local stub (`local: true`) so
+ *     the demo flow can proceed without a backend.
+ *   - For real users, we return `{ success: false }` with the error so the
+ *     caller does NOT mark the step complete on a silently-lost image.
  */
 export async function uploadVerificationImage(
   providerId: string,
   imageType: 'id_front' | 'id_back' | 'selfie',
   imageData: string // base64
-): Promise<{ url: string; success: boolean }> {
+): Promise<{ url: string; success: boolean; local?: boolean; error?: string }> {
+  let failureReason = 'Storage unavailable';
   try {
     // Try Supabase Storage first
     const fileName = `verification/${providerId}/${imageType}_${Date.now()}.jpg`;
@@ -143,14 +151,21 @@ export async function uploadVerificationImage(
     if (!error && data) {
       return { url: data.path, success: true };
     }
-  } catch {
-    // Supabase Storage not available
+    if (error) failureReason = error.message;
+  } catch (e) {
+    failureReason = e instanceof Error ? e.message : 'Storage upload threw';
   }
 
-  // Fallback: store reference in localStorage
-  const localKey = `aminy-verification-${providerId}-${imageType}`;
-  syncEncryptedStorage.setItem(localKey, 'uploaded');
-  return { url: `local://${imageType}`, success: true };
+  // Demo mode only: store a flagged local stub so the demo flow can proceed.
+  if (isDemoMode()) {
+    const localKey = `aminy-verification-${providerId}-${imageType}`;
+    syncEncryptedStorage.setItem(localKey, 'uploaded');
+    return { url: `local://${imageType}`, success: true, local: true };
+  }
+
+  // Real user + real storage failure: report honest failure. The image did
+  // NOT durably upload, so the caller must not mark this step complete.
+  return { url: '', success: false, error: failureReason };
 }
 
 // ── Checkr API Types ─────────────────────────────────────────────────

@@ -166,10 +166,14 @@ export function OutcomeMeasures({ userId, childId, childName = 'Your Child', onB
     }
     setSaving(true);
     try {
-      await saveAssessmentResult(result);
-      toast.success('Assessment saved successfully');
+      const outcome = await saveAssessmentResult(result);
+      if (outcome.persisted === 'server') {
+        toast.success('Assessment saved');
+      } else {
+        toast.warning('Saved on this device — will sync when you reconnect');
+      }
     } catch {
-      toast.error('Failed to save assessment');
+      toast.error("Couldn't save — please try again");
     } finally {
       setSaving(false);
     }

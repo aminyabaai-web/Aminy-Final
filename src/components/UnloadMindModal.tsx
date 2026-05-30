@@ -233,7 +233,7 @@ export function UnloadMindModal({ isOpen, onClose, onTasksCreated }: UnloadMindM
           )}
 
           {step === 'results' && (
-            <div className="space-y-3 sm:space-y-4 sm:space-y-6">
+            <div className="space-y-3 sm:space-y-6">
               {/* Encouragement */}
               {encouragement && (
                 <div className="p-4 bg-accent/5 rounded-xl border border-accent/10">

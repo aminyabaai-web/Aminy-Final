@@ -647,7 +647,7 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
           </div>
         </div>
 
-        <div className="max-w-4xl mx-auto px-4 py-6 space-y-3 sm:space-y-4 sm:space-y-6">
+        <div className="max-w-4xl mx-auto px-4 py-6 space-y-3 sm:space-y-6">
           {/* Settings Panel */}
           {showSettings && (
             <motion.div

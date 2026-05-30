@@ -25,7 +25,6 @@ import {
   Phone,
   Monitor,
   MonitorOff,
-  Clock,
   AlertTriangle,
   X,
   Users,
@@ -231,6 +230,70 @@ export function VideoRoom({
 
     return () => clearInterval(interval);
   }, [callState.state]);
+
+  // True once the remote participant's video track is actually playable and
+  // attached. Until then we show an honest "Connecting video…" state rather
+  // than a permanently blank black box.
+  const [remoteVideoReady, setRemoteVideoReady] = useState(false);
+
+  // Attach the live Daily MediaStream tracks to the <video> elements.
+  // The refs alone never receive a stream — Daily hands us tracks via the
+  // call object, so we read them off participants() and wire them here.
+  // Re-runs whenever join state or participant video flags change.
+  const syncVideoStreams = useCallback(() => {
+    const callObject = callObjectRef.current;
+    if (!callObject) return;
+
+    const all = callObject.participants();
+    const local = all['local'];
+    const remote = Object.values(all).find(p => p && !p.local);
+
+    // Local PIP
+    if (localVideoRef.current) {
+      const localTrack = local?.tracks?.video?.persistentTrack;
+      if (localTrack) {
+        const existing = localVideoRef.current.srcObject as MediaStream | null;
+        if (!existing || existing.getVideoTracks()[0]?.id !== localTrack.id) {
+          localVideoRef.current.srcObject = new MediaStream([localTrack]);
+          localVideoRef.current.play().catch(() => { /* autoplay may be blocked */ });
+        }
+      } else if (localVideoRef.current.srcObject) {
+        localVideoRef.current.srcObject = null;
+      }
+    }
+
+    // Remote main
+    if (remoteVideoRef.current) {
+      const remoteVideo = remote?.tracks?.video;
+      const remoteTrack = remoteVideo?.persistentTrack;
+      const playable = remoteVideo?.state === 'playable' && !!remoteTrack;
+      if (playable && remoteTrack) {
+        const existing = remoteVideoRef.current.srcObject as MediaStream | null;
+        if (!existing || existing.getVideoTracks()[0]?.id !== remoteTrack.id) {
+          remoteVideoRef.current.srcObject = new MediaStream([remoteTrack]);
+          remoteVideoRef.current.play().catch(() => { /* autoplay may be blocked */ });
+        }
+        setRemoteVideoReady(true);
+      } else {
+        if (remoteVideoRef.current.srcObject) remoteVideoRef.current.srcObject = null;
+        setRemoteVideoReady(false);
+      }
+    } else {
+      setRemoteVideoReady(false);
+    }
+  }, []);
+
+  // Wire/re-wire streams when the call connects or participant video changes.
+  useEffect(() => {
+    if (callState.state !== 'joined') return;
+    syncVideoStreams();
+  }, [
+    callState.state,
+    callState.isVideoOff,
+    callState.participants,
+    callState.localParticipant,
+    syncVideoStreams,
+  ]);
 
   // Format elapsed time
   const formatElapsedTime = (seconds: number): string => {
@@ -470,12 +533,22 @@ export function VideoRoom({
         <div className="absolute inset-0 bg-gray-800">
           {remoteParticipant ? (
             remoteParticipant.video ? (
-              <video
-                ref={remoteVideoRef}
-                autoPlay
-                playsInline
-                className="w-full h-full object-cover"
-              />
+              <>
+                <video
+                  ref={remoteVideoRef}
+                  autoPlay
+                  playsInline
+                  className="w-full h-full object-cover"
+                />
+                {!remoteVideoReady && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-gray-800">
+                    <div className="text-center">
+                      <div className="w-12 h-12 border-4 border-white/20 border-t-white rounded-full animate-spin mx-auto mb-3" />
+                      <p className="text-white/80 text-sm">Connecting video…</p>
+                    </div>
+                  </div>
+                )}
+              </>
             ) : (
               <div className="w-full h-full flex items-center justify-center">
                 <div className="text-center">
@@ -680,7 +753,7 @@ export function VideoRoom({
               <div className="flex items-start gap-2">
                 <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
                 <p className="text-sm text-gray-700">
-                  Recording stored securely with end-to-end encryption
+                  Recordings are encrypted in transit and at rest
                 </p>
               </div>
               <div className="flex items-start gap-2">
@@ -742,8 +815,8 @@ export function VideoRoom({
         </div>
       )}
 
-      {/* Auto-Reconnect Overlay */}
-      {reconnect.state === 'reconnecting' && (
+      {/* Auto-Reconnect Overlay (suppressed once the user intentionally ends) */}
+      {!sessionEndedNaturally && reconnect.state === 'reconnecting' && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-[60] p-4">
           <div className="bg-gray-900/95 backdrop-blur-sm border border-white/10 rounded-2xl p-6 max-w-sm w-full text-center">
             <div className="w-16 h-16 border-4 border-yellow-400/30 border-t-yellow-400 rounded-full animate-spin mx-auto mb-4" />
@@ -764,8 +837,8 @@ export function VideoRoom({
         </div>
       )}
 
-      {/* Connection Lost Overlay */}
-      {reconnect.state === 'connection-lost' && (
+      {/* Connection Lost Overlay (suppressed once the user intentionally ends) */}
+      {!sessionEndedNaturally && reconnect.state === 'connection-lost' && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-[60] p-4">
           <div className="bg-gray-900/95 backdrop-blur-sm border border-white/10 rounded-2xl p-6 max-w-sm w-full text-center">
             <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
