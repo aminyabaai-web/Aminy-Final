@@ -4,7 +4,7 @@
 // See LICENSE file for details.
 
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, CheckCircle, Clock, AlertCircle, FileText, Send, Download, RefreshCw, Edit, MapPin, ExternalLink, ChevronRight } from 'lucide-react';
+import { ArrowLeft, CheckCircle, Clock, AlertCircle, FileText, Send, RefreshCw, Edit, MapPin, ExternalLink, ChevronRight } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';

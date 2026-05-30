@@ -10,7 +10,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import {
   MapPin, ClipboardCheck, Building2, FileText, GraduationCap,
   Send, CheckCircle2, ArrowRight, ArrowLeft, Loader2,
-  Camera, Upload, Shield, Heart, DollarSign, AlertTriangle,
+  Shield, Heart, DollarSign, AlertTriangle,
   ChevronDown, Info,
 } from 'lucide-react';
 import { toast } from 'sonner';

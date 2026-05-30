@@ -27,6 +27,7 @@ import {
 } from 'lucide-react';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
 import { isDemoMode } from '../lib/demo-seed';
+import { toast } from 'sonner';
 
 interface Family {
   id: string;
@@ -235,8 +236,8 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
         const savedNote = await response.json();
         setNotes([savedNote, ...notes]);
         setNewNote('');
-      } else {
-        // Mock save
+      } else if (isDemoMode()) {
+        // Demo-only optimistic save — never persisted server-side
         const note: Note = {
           id: Date.now().toString(),
           date: new Date().toISOString().split('T')[0],
@@ -245,9 +246,15 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
         };
         setNotes([note, ...notes]);
         setNewNote('');
+      } else {
+        // Real user, save failed — do NOT show a fake-saved note
+        toast.error("Couldn't save your note — please try again.");
       }
     } catch (error) {
       console.error('Error saving note:', error);
+      if (!isDemoMode()) {
+        toast.error("Couldn't save your note — please try again.");
+      }
     }
   };
 

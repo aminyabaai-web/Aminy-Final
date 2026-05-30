@@ -61,7 +61,10 @@ export function AskAminyChatScreen({
   return (
     <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
       {/* Header — minimal, Claude-style, warm palette */}
-      <div className="sticky top-0 z-10 bg-[#FAF7F2]/90 backdrop-blur-md border-b border-[#F0EDE8]">
+      <div
+        className="sticky top-0 z-10 backdrop-blur-md border-b"
+        style={{ backgroundColor: 'rgba(250,247,242,0.9)', borderColor: '#F0EDE8' }}
+      >
         <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
             {onBack && (
@@ -159,6 +162,19 @@ export function AskAminyChatScreen({
           />
         </div>
       </div>
+
+      {/* Chat history sidebar — opened by the PanelLeftOpen button */}
+      <ChatSidebarDrawer
+        isOpen={showSidebar}
+        onClose={() => setShowSidebar(false)}
+        onSelectConversation={() => setShowSidebar(false)}
+        onNewChat={() => {
+          if (typeof window !== 'undefined') {
+            localStorage.removeItem('aminy_conversation_history');
+            window.location.reload();
+          }
+        }}
+      />
     </div>
   );
 }

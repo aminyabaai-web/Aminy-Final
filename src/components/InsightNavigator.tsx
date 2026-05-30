@@ -17,6 +17,7 @@ import { useDisplayNames } from '../lib/name-store';
 import { isDemoMode } from '../lib/demo-seed';
 import {
   Bell,
+  HelpCircle,
   Brain,
   TrendingUp,
   TrendingDown,
@@ -234,6 +235,15 @@ export function InsightNavigator({
               className="text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100"
             >
               <Bell className="w-4 h-4" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowHelpCenter(true)}
+              aria-label="Help center"
+              className="text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100"
+            >
+              <HelpCircle className="w-4 h-4" />
             </Button>
             <ChildProfileChip
               child={{
