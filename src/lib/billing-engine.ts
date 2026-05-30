@@ -122,13 +122,15 @@ export const PRICING_TIERS: PricingTier[] = [
     yearlyPrice: tierPricing.free.yearly,
     yearlyMonthlyEquivalent: 0,
     features: [
-      '5 AI messages per day',
+      '1 child profile',
+      'Book telehealth & marketplace visits',
+      '3 AI messages per day',
       'Basic routine tracking',
       '3 calm tools',
       'Community access (read-only)',
     ],
     limits: {
-      aiMessagesPerDay: 5,
+      aiMessagesPerDay: 3,
       children: 1,
       vaultDocuments: 0,
       marketplaceDiscount: 0,
@@ -152,14 +154,14 @@ export const PRICING_TIERS: PricingTier[] = [
       'Document vault (25 docs)',
       'All calm tools',
       'Full community access',
-      '10% marketplace discount',
+      'Book marketplace sessions',
       'Progress reports',
     ],
     limits: {
       aiMessagesPerDay: 'unlimited',
       children: 2,
       vaultDocuments: 25,
-      marketplaceDiscount: 10,
+      marketplaceDiscount: 0,
     },
     stripePriceIds: {
       monthly: import.meta.env.VITE_PRICE_CORE_MONTHLY || '',
@@ -752,7 +754,7 @@ export async function checkMessageLimit(userId: string): Promise<{
 
   const tier = profile?.tier || 'free';
   const tierConfig = PRICING_TIERS.find(t => t.id === tier);
-  const limit = tierConfig?.limits.aiMessagesPerDay || 5;
+  const limit = tierConfig?.limits.aiMessagesPerDay ?? 3;
 
   if (limit === 'unlimited') {
     return { allowed: true, used: 0, limit: 'unlimited', resetAt: '' };

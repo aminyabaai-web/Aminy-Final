@@ -7,6 +7,7 @@ import React from 'react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
+import { tierPricing } from '../lib/tier-utils';
 import { 
   Sparkles, 
   MessageCircle,
@@ -36,33 +37,33 @@ export function AIPaywallMessage({
   
   const messages = {
     full_jr_request: {
-      message: `I can see ${childName} would really benefit from the full Aminy Jr suite! Right now you're on the Starter plan which includes just 1 calming exercise, but Core gives you access to all our speech and calming activities.`,
+      message: `I can see ${childName} would really benefit from the full Aminy Jr suite! Right now you're on the Free plan which includes just 1 calming exercise, but Core gives you access to all our speech and calming activities.`,
       feature: 'Full Aminy Jr suite with unlimited activities',
-      tier: 'Core ($69/mo)',
+      tier: `Core ($${tierPricing.core.monthly}/mo)`,
       icon: Sparkles
     },
     advanced_feature: {
       message: `Great question! I have deep insights about ${childName} that I'd love to share, but that level of analysis is available with the Core plan. With unlimited AI chat, I can dive much deeper into personalized strategies.`,
       feature: 'Unlimited AI chat with advanced reasoning',
-      tier: 'Core ($69/mo)',
+      tier: `Core ($${tierPricing.core.monthly}/mo)`,
       icon: MessageCircle
     },
     frequent_use: {
-      message: `I notice you're finding a lot of value in our conversations! You're currently on Starter which has basic AI responses. With Core, you get unlimited chat access and I can provide much more detailed, personalized guidance.`,
+      message: `I notice you're finding a lot of value in our conversations! You're currently on Free which has basic AI responses. With Core, you get unlimited chat access and I can provide much more detailed, personalized guidance.`,
       feature: 'Unlimited conversations with deeper insights',
-      tier: 'Core ($69/mo)',
+      tier: `Core ($${tierPricing.core.monthly}/mo)`,
       icon: TrendingUp
     },
     quality_question: {
       message: `That's exactly the kind of nuanced question where I can really help! The Core plan lets me give you detailed, personalized strategies that adapt as ${childName} grows. No limits, just continuous support.`,
       feature: 'Advanced AI analysis and adaptive plans',
-      tier: 'Core ($69/mo)',
+      tier: `Core ($${tierPricing.core.monthly}/mo)`,
       icon: MessageCircle
     },
     video_request: {
-      message: `Live video AI support is available with Pro Plus! I can analyze what's happening in real-time and give you immediate guidance. Plus you get monthly BCBA consults to review ${childName}'s progress.`,
+      message: `Live video AI support is available with Family! I can analyze what's happening in real-time and give you immediate guidance. Plus you get monthly BCBA consults to review ${childName}'s progress.`,
       feature: 'Live AI video + monthly BCBA consultation',
-      tier: 'Pro Plus ($229/mo)',
+      tier: `Family ($${tierPricing.proplus.monthly}/mo)`,
       icon: Video
     }
   };

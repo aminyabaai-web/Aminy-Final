@@ -41,11 +41,12 @@ export interface AuthResult {
  */
 const TIER_FEATURES: Record<TierType, Set<string>> = {
   free: new Set([
-    'limited-ai-chat',        // 5 messages/day
+    'limited-ai-chat',        // 3 messages/day
     'basic-daily-plan',       // Pre-set activities only
     'basic-calm-tools',       // 3 core calm tools
     'basic-tracking',         // Simple completion tracking
     'community-read-only',    // View community, can't post
+    'marketplace-access',     // Free can book telehealth/marketplace visits (pay per use)
   ]),
   starter: new Set([
     // Legacy: Starter maps to Core - same features

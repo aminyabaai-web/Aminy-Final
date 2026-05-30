@@ -104,11 +104,12 @@ export const tierPricing: Record<TierType, { monthly: number; yearly: number; sa
 };
 
 export const tierEntitlements: Record<CanonicalTierName, TierEntitlements> = {
-  // free = hard paywall. No features. Use getEffectiveTier() to give trial users core access.
+  // free = discovery tier: 1 child, 3 AI messages/day, telehealth/marketplace booking allowed.
+  // Use getEffectiveTier() to give active-trial users full core access.
   free: {
-    aiMessagesPerDay: 0,
+    aiMessagesPerDay: 3,
     juniorAccess: false,
-    maxChildren: 0,
+    maxChildren: 1,
     reportExports: 'none',
     providerFeatures: false,
   },
@@ -953,11 +954,12 @@ export function getTierYearlySavings(tier: TierType): number {
 // Feature definitions for each tier
 const tierFeatureMap: Record<TierType, string[]> = {
   free: [
-    'limited-ai-chat',        // 5 messages/day
+    'limited-ai-chat',        // 3 messages/day
     'basic-daily-plan',       // Pre-set activities only
     'basic-calm-tools',       // 3 core tools: Breathe Glow, Visual Timer, Bubble Pop
     'basic-tracking',         // Simple completion tracking
     'community-read-only',    // View community, can't post
+    'marketplace-access',     // Free can book telehealth/marketplace visits (pay per use)
   ],
   starter: [
     'unlimited-ai-chat',      // Legacy: same as Core
@@ -1076,8 +1078,9 @@ export function getTierLevel(tier: TierType | undefined): number {
 export function getTierFeatureDescriptions(tier: TierType): string[] {
   const descriptions: Record<TierType, string[]> = {
     free: [
-      'Daily plan with curated activities',
-      '5 AI chat messages per day',
+      '1 child profile',
+      'Book telehealth & marketplace visits',
+      '3 AI chat messages per day',
       'Core calm tools (breathing, timer, bubbles)',
       'Track daily progress',
       '7-day free trial of Core included',
@@ -1150,13 +1153,13 @@ export function getHSAFSANote(): string {
 // Get AI message limits per tier
 export function getAIMessageLimit(tier: TierType | undefined): number | null {
   const limits: Record<TierType, number | null> = {
-    free: 5,
+    free: 3,
     starter: null,  // Legacy: same as Core (unlimited)
     core: null,    // unlimited
     pro: null,     // unlimited
     proplus: null, // unlimited
   };
-  return tier ? limits[tier] : 5;
+  return tier ? limits[tier] : 3;
 }
 
 // Check if tier has unlimited AI
@@ -1285,10 +1288,19 @@ export function getTierLimits(tier: TierType | undefined): {
 } {
   const messageLimit = getAIMessageLimit(tier);
   const childrenLimit = getMaxChildren(tier);
+  // Memory-fact caps. Legacy 'starter' keeps its historical 200 cap; canonical
+  // core/pro get the revised caps; family (proplus) is unlimited (null).
+  const canonical = getCanonicalTierName(tier);
+  const memoryFacts =
+    tier === 'free' ? 50 :
+    tier === 'starter' ? 200 :
+    canonical === 'core' ? 5000 :
+    canonical === 'pro' ? 15000 :
+    null; // family / proplus = unlimited
   return {
     messagesPerDay: messageLimit,
     documents: tier === 'free' ? 5 : tier === 'starter' ? 20 : null,
-    memoryFacts: tier === 'free' ? 50 : tier === 'starter' ? 200 : null,
+    memoryFacts,
     children: childrenLimit,
   };
 }
