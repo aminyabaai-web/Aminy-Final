@@ -12,7 +12,9 @@ import { DisclaimerFooter } from './DisclaimerFooter';
 import { UrgentHelpModal } from './UrgentHelpModal';
 import { HelpCenter } from './HelpCenter';
 import { ChildProfileChip } from './ChildProfileChip';
+import { ScreenHeader } from './ui/ScreenHeader';
 import { useDisplayNames } from '../lib/name-store';
+import { isDemoMode } from '../lib/demo-seed';
 import {
   Bell,
   Brain,
@@ -70,8 +72,11 @@ export function InsightNavigator({
   const safeChildName = safeUserData.childName || childShort || 'Child';
   const safeCaregiverName = safeUserData.parentName || caregiverShort || 'Parent';
 
-  // Mock insight data - would come from real analytics
-  const [insights] = useState<InsightData[]>([
+  // Insight data. Real users start empty (a friendly empty state renders until
+  // the analytics pipeline produces results). Demo mode shows a rich sample set
+  // for investor / AACT walk-throughs — see src/lib/demo-seed.
+  const demo = isDemoMode();
+  const [insights] = useState<InsightData[]>(demo ? [
     {
       category: 'behavior',
       title: 'Meltdown Frequency',
@@ -128,7 +133,8 @@ export function InsightNavigator({
       ],
       lastUpdated: '1 day ago'
     }
-  ]);
+  ] : []);
+  const hasInsights = insights.length > 0;
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
@@ -212,86 +218,100 @@ export function InsightNavigator({
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
-      {/* Header */}
-      <div className="bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
-        <div className="px-4 py-4 sm:px-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
-                <Brain className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-              </div>
-              <div>
-                <h1 className="text-xl text-slate-900 dark:text-slate-100">AI Insights</h1>
-                <p className="text-sm text-slate-600 dark:text-slate-400">Data-driven insights for {safeChildName}</p>
-              </div>
-            </div>
-            <div className="flex items-center space-x-3">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowUrgentHelp(true)}
-                className="text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100"
-              >
-                <Bell className="w-4 h-4" />
-              </Button>
-              <ChildProfileChip 
-                child={{
-                  name: safeChildName,
-                  profileImage: undefined
-                }}
-                size="sm"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* Header — shared chrome via ScreenHeader; urgent-help bell + child chip
+          preserved as trailing actions. */}
+      <ScreenHeader
+        title="AI Insights"
+        subtitle={`Progress insights for ${safeChildName}`}
+        icon={<Brain className="w-6 h-6" />}
+        actions={
+          <>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowUrgentHelp(true)}
+              aria-label="Get urgent help"
+              className="text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100"
+            >
+              <Bell className="w-4 h-4" />
+            </Button>
+            <ChildProfileChip
+              child={{
+                name: safeChildName,
+                profileImage: undefined
+              }}
+              size="sm"
+            />
+          </>
+        }
+      />
 
       <div className="px-4 py-6 sm:px-6 max-w-7xl mx-auto">
-        {/* Action Bar */}
-        <div className="flex flex-wrap items-center justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
-          <div className="flex items-center gap-2">
-            <Badge variant="secondary" className="bg-blue-50 text-blue-700 border-blue-200">
-              <Sparkles className="w-3 h-3 mr-1" />
-              AI-Powered
-            </Badge>
-            <Badge variant="outline">
-              Last updated: 2 hours ago
-            </Badge>
+        {/* Action Bar — only when there are insights to act on */}
+        {hasInsights && (
+          <div className="flex flex-wrap items-center justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
+            <div className="flex items-center gap-2">
+              <Badge variant="secondary" className="bg-blue-50 text-blue-700 border-blue-200">
+                <Sparkles className="w-3 h-3 mr-1" />
+                AI-Powered
+              </Badge>
+              <Badge variant="outline">
+                Updated {insights[0].lastUpdated}
+              </Badge>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleRefreshData}
+                className="flex items-center gap-2"
+              >
+                <RefreshCw className="w-4 h-4" />
+                Refresh
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleShareInsights}
+                className="flex items-center gap-2"
+              >
+                <Share className="w-4 h-4" />
+                Share
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleExportInsights}
+                className="flex items-center gap-2"
+              >
+                <Download className="w-4 h-4" />
+                Export
+              </Button>
+            </div>
           </div>
-          
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleRefreshData}
-              className="flex items-center gap-2"
-            >
-              <RefreshCw className="w-4 h-4" />
-              Refresh
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleShareInsights}
-              className="flex items-center gap-2"
-            >
-              <Share className="w-4 h-4" />
-              Share
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleExportInsights}
-              className="flex items-center gap-2"
-            >
-              <Download className="w-4 h-4" />
-              Export
-            </Button>
-          </div>
-        </div>
+        )}
+
+        {/* Empty state — real users with no analytics yet */}
+        {!hasInsights && (
+          <Card className="mb-4 sm:mb-6">
+            <div className="p-8 sm:p-12 text-center">
+              <div className="w-14 h-14 bg-blue-50 dark:bg-blue-900/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <Brain className="w-7 h-7 text-blue-600 dark:text-blue-400" />
+              </div>
+              <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-2">
+                No insights yet
+              </h2>
+              <p className="text-sm text-slate-600 dark:text-slate-400 max-w-md mx-auto">
+                As you log behaviors, sessions, and progress for {safeChildName}, trends and
+                personalized recommendations will appear here. Keep tracking to unlock your first insights.
+              </p>
+            </div>
+          </Card>
+        )}
 
         {/* Tier Notice for Starter Users */}
-        {userTier === 'starter' && (
+        {hasInsights && userTier === 'starter' && (
           <Card className="mb-4 sm:mb-6 border-amber-200 bg-amber-50 dark:bg-amber-900/20">
             <div className="p-3 sm:p-4">
               <div className="flex items-center gap-3">
@@ -318,8 +338,8 @@ export function InsightNavigator({
 
         {/* Insights Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 sm:gap-6 mb-8">
-          {insights.map((insight, index) => (
-            <Card key={index} className="reports-card hover:shadow-lg transition-all duration-300">
+          {insights.map((insight) => (
+            <Card key={insight.category} className="reports-card hover:shadow-lg transition-all duration-300">
               <div className="p-4 sm:p-5 md:p-6">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
@@ -380,10 +400,6 @@ export function InsightNavigator({
 
                   <div className="flex items-center justify-between pt-3 text-xs text-slate-500 dark:text-slate-400">
                     <span>Updated {insight.lastUpdated}</span>
-                    <Button variant="ghost" size="sm" className="h-auto p-0 text-xs">
-                      View Details
-                      <ArrowRight className="w-3 h-3 ml-1" />
-                    </Button>
                   </div>
                 </div>
               </div>
@@ -391,86 +407,90 @@ export function InsightNavigator({
           ))}
         </div>
 
-        {/* Summary Analytics */}
-        <Card className="mb-4 sm:mb-6">
-          <div className="p-4 sm:p-5 md:p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <BarChart3 className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-              <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
-                Weekly Summary
-              </h2>
-            </div>
-            
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
-              <div className="text-center">
-                <div className="text-xl sm:text-2xl font-bold text-green-600 dark:text-green-400">87%</div>
-                <div className="text-sm text-slate-600 dark:text-slate-400">Overall Progress</div>
-              </div>
-              <div className="text-center">
-                <div className="text-xl sm:text-2xl font-bold text-blue-600 dark:text-blue-400">23</div>
-                <div className="text-sm text-slate-600 dark:text-slate-400">Data Points</div>
-              </div>
-              <div className="text-center">
-                <div className="text-xl sm:text-2xl font-bold text-purple-600 dark:text-purple-400">3</div>
-                <div className="text-sm text-slate-600 dark:text-slate-400">Areas Improving</div>
-              </div>
-              <div className="text-center">
-                <div className="text-xl sm:text-2xl font-bold text-amber-600 dark:text-amber-400">1</div>
-                <div className="text-sm text-slate-600 dark:text-slate-400">Areas to Monitor</div>
-              </div>
-            </div>
-          </div>
-        </Card>
+        {/* Summary Analytics + Next Steps — derived from the sample set above,
+            so only render when insights are present (demo mode). */}
+        {hasInsights && (
+          <>
+            <Card className="mb-4 sm:mb-6">
+              <div className="p-4 sm:p-5 md:p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <BarChart3 className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                  <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+                    Weekly Summary
+                  </h2>
+                </div>
 
-        {/* Next Steps */}
-        <Card>
-          <div className="p-4 sm:p-5 md:p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <Target className="w-5 h-5 text-green-600 dark:text-green-400" />
-              <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
-                Recommended Next Steps
-              </h2>
-            </div>
-            
-            <div className="space-y-3">
-              <div className="flex items-start gap-3 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400 mt-0.5" />
-                <div className="flex-1">
-                  <h3 className="font-medium text-slate-900 dark:text-slate-100">
-                    Continue Sensory Schedule
-                  </h3>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">
-                    The current sensory break routine is showing excellent results in reducing meltdowns.
-                  </p>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+                  <div className="text-center">
+                    <div className="text-xl sm:text-2xl font-bold text-green-600 dark:text-green-400">87%</div>
+                    <div className="text-sm text-slate-600 dark:text-slate-400">Overall Progress</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-xl sm:text-2xl font-bold text-blue-600 dark:text-blue-400">23</div>
+                    <div className="text-sm text-slate-600 dark:text-slate-400">Data Points</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-xl sm:text-2xl font-bold text-purple-600 dark:text-purple-400">3</div>
+                    <div className="text-sm text-slate-600 dark:text-slate-400">Areas Improving</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-xl sm:text-2xl font-bold text-amber-600 dark:text-amber-400">1</div>
+                    <div className="text-sm text-slate-600 dark:text-slate-400">Areas to Monitor</div>
+                  </div>
                 </div>
               </div>
-              
-              <div className="flex items-start gap-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                <Brain className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5" />
-                <div className="flex-1">
-                  <h3 className="font-medium text-slate-900 dark:text-slate-100">
-                    Expand Communication Practice
-                  </h3>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">
-                    With verbal requests increasing, now is a great time to introduce more complex language.
-                  </p>
-                </div>
-              </div>
+            </Card>
 
-              <div className="flex items-start gap-3 p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg">
-                <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400 mt-0.5" />
-                <div className="flex-1">
-                  <h3 className="font-medium text-slate-900 dark:text-slate-100">
-                    Monitor Sensory Needs
-                  </h3>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">
-                    Sensory seeking behaviors are stable but watch for any changes in preferences.
-                  </p>
+            <Card>
+              <div className="p-4 sm:p-5 md:p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <Target className="w-5 h-5 text-green-600 dark:text-green-400" />
+                  <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+                    Recommended Next Steps
+                  </h2>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="flex items-start gap-3 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                    <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400 mt-0.5" />
+                    <div className="flex-1">
+                      <h3 className="font-medium text-slate-900 dark:text-slate-100">
+                        Continue Sensory Schedule
+                      </h3>
+                      <p className="text-sm text-slate-600 dark:text-slate-400">
+                        The current sensory break routine is showing excellent results in reducing meltdowns.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                    <Brain className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5" />
+                    <div className="flex-1">
+                      <h3 className="font-medium text-slate-900 dark:text-slate-100">
+                        Expand Communication Practice
+                      </h3>
+                      <p className="text-sm text-slate-600 dark:text-slate-400">
+                        With verbal requests increasing, now is a great time to introduce more complex language.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3 p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg">
+                    <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400 mt-0.5" />
+                    <div className="flex-1">
+                      <h3 className="font-medium text-slate-900 dark:text-slate-100">
+                        Monitor Sensory Needs
+                      </h3>
+                      <p className="text-sm text-slate-600 dark:text-slate-400">
+                        Sensory seeking behaviors are stable but watch for any changes in preferences.
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </Card>
+            </Card>
+          </>
+        )}
       </div>
 
       {/* Modals */}

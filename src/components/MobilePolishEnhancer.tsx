@@ -18,7 +18,13 @@ export const MobilePolishEnhancer: React.FC<MobilePolishEnhancerProps> = ({
   const [isMobile, setIsMobile] = useState(false);
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
   const [viewportHeight, setViewportHeight] = useState(0);
-  const [isOnline, setIsOnline] = useState(true);
+
+  // Wire up automatic haptic feedback once on mount when enabled
+  useEffect(() => {
+    if (enableHapticsOption) {
+      enableAutoHaptics();
+    }
+  }, [enableHapticsOption]);
 
   useEffect(() => {
     // Detect mobile environment

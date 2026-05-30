@@ -313,6 +313,7 @@ export const MemorySettingsPage: React.FC<MemorySettingsPageProps> = ({ userId, 
               <Button
                 variant="ghost"
                 size="sm"
+                aria-label="Edit memory"
                 onClick={(e) => {
                   e.stopPropagation();
                   startEdit(memory);
@@ -324,6 +325,7 @@ export const MemorySettingsPage: React.FC<MemorySettingsPageProps> = ({ userId, 
               <Button
                 variant="ghost"
                 size="sm"
+                aria-label="Delete memory"
                 onClick={(e) => {
                   e.stopPropagation();
                   if (confirm('Delete this memory? This cannot be undone.')) {

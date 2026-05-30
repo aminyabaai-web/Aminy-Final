@@ -1912,6 +1912,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                         tts.stop();
                         setActiveView('home');
                       }}
+                      aria-label="Back to home"
                       className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center"
                     >
                       <ArrowLeft className="w-5 h-5 text-white" />
@@ -2101,6 +2102,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                       whileTap={{ scale: 0.95 }}
                       onClick={handleAdvancedSpeechPractice}
                       disabled={isRecording || audioProcessing}
+                      aria-label={isRecording ? 'Stop recording' : audioProcessing ? 'Processing' : 'Start recording'}
                       className={`w-20 h-20 rounded-full flex items-center justify-center text-white shadow-lg ${
                         isRecording
                           ? 'bg-red-500 animate-pulse'
@@ -2139,6 +2141,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                           });
                         }
                       }}
+                      aria-label="Get a hint"
                       className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center"
                     >
                       <HelpCircle className="w-6 h-6 text-gray-600" />
@@ -2148,6 +2151,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       onClick={() => setActiveView('calm-corner')}
+                      aria-label="Take a calm break"
                       className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center"
                     >
                       <Brain className="w-6 h-6 text-purple-600" />
@@ -2246,16 +2250,18 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                 <motion.button
                   whileHover={{ scale: 1.1 }}
                   onClick={() => setActiveView('home')}
+                  aria-label="Back to home"
                   className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center"
                 >
                   <ArrowLeft className="w-5 h-5" />
                 </motion.button>
-                
+
                 <h2 className="text-xl">🎯 Choose Activity</h2>
                 
                 <motion.button
                   whileHover={{ scale: 1.1 }}
                   onClick={() => setActiveView('buddy-select')}
+                  aria-label="Change buddy voice"
                   className={`w-10 h-10 rounded-full flex items-center justify-center ${buddyVoices.find(b => b.id === selectedBuddy)?.color}`}
                 >
                   {buddyVoices.find(b => b.id === selectedBuddy)?.icon}
@@ -2376,11 +2382,12 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                 <motion.button
                   whileHover={{ scale: 1.1 }}
                   onClick={() => setActiveView('activity-select')}
+                  aria-label="Back to activities"
                   className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center"
                 >
                   <ArrowLeft className="w-5 h-5" />
                 </motion.button>
-                
+
                 <h2 className="text-xl">🎭 Choose Your Buddy</h2>
                 
                 <div className="w-10 h-10" />

@@ -114,7 +114,7 @@ export function B2BOrgSetup({
       {/* Header */}
       <div className="bg-white border-b border-gray-200 px-4 py-4">
         <div className="max-w-2xl mx-auto flex items-center gap-3">
-          <button onClick={onBack} className="p-2 hover:bg-gray-100 rounded-lg">
+          <button onClick={onBack} className="p-2 hover:bg-gray-100 rounded-lg" aria-label="Back">
             <ArrowLeft className="w-5 h-5 text-gray-600" />
           </button>
           <div className="flex-1">
@@ -226,6 +226,7 @@ export function B2BOrgSetup({
                   value={newRole}
                   onChange={(e) => setNewRole(e.target.value as 'admin' | 'provider' | 'staff')}
                   className="px-3 py-3 border border-gray-300 rounded-xl bg-white text-sm"
+                  aria-label="Team member role"
                 >
                   <option value="provider">Provider</option>
                   <option value="admin">Admin</option>
@@ -234,6 +235,7 @@ export function B2BOrgSetup({
                 <button
                   onClick={addTeamMember}
                   className="px-4 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700"
+                  aria-label="Add team member"
                 >
                   <Plus className="w-5 h-5" />
                 </button>
@@ -265,6 +267,7 @@ export function B2BOrgSetup({
                     <button
                       onClick={() => removeTeamMember(member.email)}
                       className="p-1.5 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg"
+                      aria-label={`Remove ${member.email}`}
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>

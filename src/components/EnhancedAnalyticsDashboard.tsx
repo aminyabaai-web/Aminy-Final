@@ -36,6 +36,7 @@ import {
 } from '../lib/analytics-engine';
 import { createDataProvenance, getSurfaceLaunchConfig } from '../lib/product-truth';
 import { getAggregatedMetrics } from '../lib/outcomes-tracking';
+import { isDemoMode } from '../lib/demo-seed';
 
 interface AnalyticsDashboardProps {
   onBack: () => void;
@@ -107,16 +108,19 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
   const hasAdvancedAccess = userRole === 'admin' || userRole === 'investor' || userTier === 'pro+';
 
   useEffect(() => {
-    // Load analytics data
+    // Load analytics data (re-runs when the demo/live source toggle flips so the
+    // metric cards stay consistent with the sample/empty tab panels).
     loadAnalytics();
-  }, [timeRange]);
+  }, [timeRange, useMockData]);
 
   useEffect(() => {
-    // Load funnel and retention data when switching to those tabs
+    // Load funnel and retention data when switching to those tabs, or when the
+    // data source (real vs. demo) changes. Including `useMockData` here avoids a
+    // stale-closure read in the toggle handler below.
     if (activeTab === 'funnel' || activeTab === 'retention') {
       loadFunnelAndRetention();
     }
-  }, [activeTab, timeRange]);
+  }, [activeTab, timeRange, useMockData]);
 
   const loadAnalytics = async () => {
     if (useMockData) {
@@ -167,7 +171,29 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
     }
   };
 
+  const handleExport = () => {
+    const snapshot = {
+      exportedAt: new Date().toISOString(),
+      timeRange,
+      source: useMockData || isDemoMode() ? 'sample' : 'live',
+      summary: data,
+      funnel: funnelData,
+      retention: retentionData,
+    };
+    const blob = new Blob([JSON.stringify(snapshot, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `aminy-analytics-${timeRange}-${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   const hasRealData = !useMockData && (data.totalSessions > 0 || data.activeUsers > 0);
+  // Static illustrative figures in the Overview/Engagement/AI/Outcomes tabs are
+  // sample content. Only surface them in demo mode (or when the viewer has
+  // explicitly flipped the Demo Mode toggle); real viewers get honest empty states.
+  const showSamples = useMockData || isDemoMode();
   const metrics = [
     {
       label: 'Behavior Logs',
@@ -258,7 +284,7 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
               <p className="mt-2 text-xs text-slate-500">Internal dashboard only. Do not use these metrics in customer-facing claims until they are live-data backed.</p>
             </div>
             <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" onClick={handleExport}>
                 <Download className="w-4 h-4 mr-2" />
                 Export
               </Button>
@@ -299,10 +325,10 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
 
         {/* Metrics Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
-          {metrics.map((metric, idx) => {
+          {metrics.map((metric) => {
             const Icon = metric.icon;
             return (
-              <Card key={idx} className="p-4 sm:p-5 md:p-6">
+              <Card key={metric.label} className="p-4 sm:p-5 md:p-6">
                 <div className="flex items-start justify-between mb-3">
                   <div className="w-10 h-10 bg-accent/10 rounded-lg flex items-center justify-center">
                     <Icon className="w-5 h-5 text-accent" />
@@ -348,77 +374,61 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
                 <BarChart3 className="w-5 h-5 text-accent" />
                 Usage Overview
               </h3>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-slate-600">Peak usage time</span>
-                  <span className="text-sm text-slate-900">7-9 AM, 8-10 PM</span>
+              {showSamples ? (
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-slate-600">Peak usage time</span>
+                    <span className="text-sm text-slate-900">7-9 AM, 8-10 PM</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-slate-600">Most active day</span>
+                    <span className="text-sm text-slate-900">Monday</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-slate-600">Avg sessions per user</span>
+                    <span className="text-sm text-slate-900">2.9</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-slate-600">Retention rate (7d)</span>
+                    <span className="text-sm text-slate-900">68%</span>
+                  </div>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-slate-600">Most active day</span>
-                  <span className="text-sm text-slate-900">Monday</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-slate-600">Avg sessions per user</span>
-                  <span className="text-sm text-slate-900">2.9</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-slate-600">Retention rate (7d)</span>
-                  <span className="text-sm text-slate-900">68%</span>
-                </div>
-              </div>
+              ) : (
+                <p className="text-sm text-slate-500 py-4">
+                  Usage breakdowns appear here once enough live activity has been recorded.
+                </p>
+              )}
             </Card>
           </TabsContent>
 
           <TabsContent value="engagement" className="space-y-3 sm:space-y-4">
             <Card className="p-4 sm:p-5 md:p-6">
               <h3 className="text-slate-900 mb-4">Feature Usage</h3>
-              <div className="space-y-3 sm:space-y-4">
-                <div>
-                  <div className="flex justify-between text-sm mb-2">
-                    <span className="text-slate-600">Aminy (AI Chat)</span>
-                    <span className="text-slate-900">92%</span>
-                  </div>
-                  <div className="w-full bg-slate-200 rounded-full h-2">
-                    <div className="bg-accent h-2 rounded-full" style={{ width: '92%' }} />
-                  </div>
+              {showSamples ? (
+                <div className="space-y-3 sm:space-y-4">
+                  {[
+                    { label: 'Aminy (AI Chat)', pct: 92 },
+                    { label: 'Care Plan', pct: 85 },
+                    { label: 'Goal Tracking', pct: 78 },
+                    { label: 'Ease', pct: 64 },
+                    { label: 'Reports', pct: 45 },
+                  ].map((row) => (
+                    <div key={row.label}>
+                      <div className="flex justify-between text-sm mb-2">
+                        <span className="text-slate-600">{row.label}</span>
+                        <span className="text-slate-900">{row.pct}%</span>
+                      </div>
+                      <div className="w-full bg-slate-200 rounded-full h-2">
+                        <div className="bg-accent h-2 rounded-full" style={{ width: `${row.pct}%` }} />
+                      </div>
+                    </div>
+                  ))}
                 </div>
-                <div>
-                  <div className="flex justify-between text-sm mb-2">
-                    <span className="text-slate-600">Care Plan</span>
-                    <span className="text-slate-900">85%</span>
-                  </div>
-                  <div className="w-full bg-slate-200 rounded-full h-2">
-                    <div className="bg-accent h-2 rounded-full" style={{ width: '85%' }} />
-                  </div>
-                </div>
-                <div>
-                  <div className="flex justify-between text-sm mb-2">
-                    <span className="text-slate-600">Goal Tracking</span>
-                    <span className="text-slate-900">78%</span>
-                  </div>
-                  <div className="w-full bg-slate-200 rounded-full h-2">
-                    <div className="bg-accent h-2 rounded-full" style={{ width: '78%' }} />
-                  </div>
-                </div>
-                <div>
-                  <div className="flex justify-between text-sm mb-2">
-                    <span className="text-slate-600">Ease</span>
-                    <span className="text-slate-900">64%</span>
-                  </div>
-                  <div className="w-full bg-slate-200 rounded-full h-2">
-                    <div className="bg-accent h-2 rounded-full" style={{ width: '64%' }} />
-                  </div>
-                </div>
-                <div>
-                  <div className="flex justify-between text-sm mb-2">
-                    <span className="text-slate-600">Reports</span>
-                    <span className="text-slate-900">45%</span>
-                  </div>
-                  <div className="w-full bg-slate-200 rounded-full h-2">
-                    <div className="bg-accent h-2 rounded-full" style={{ width: '45%' }} />
-                  </div>
-                </div>
-              </div>
+              ) : (
+                <p className="text-sm text-slate-500 py-4">
+                  Feature-usage breakdowns appear here once enough live activity has been recorded.
+                </p>
+              )}
             </Card>
           </TabsContent>
 
@@ -428,43 +438,51 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
                 <Sparkles className="w-5 h-5 text-accent" />
                 AI Interaction Insights
               </h3>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-slate-600">Total AI messages</span>
-                  <span className="text-sm text-slate-900">3,891</span>
+              {showSamples ? (
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-slate-600">Total AI messages</span>
+                    <span className="text-sm text-slate-900">3,891</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-slate-600">Avg conversation length</span>
+                    <span className="text-sm text-slate-900">5.2 messages</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-slate-600">Positive feedback rate</span>
+                    <span className="text-sm text-slate-900">94%</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-slate-600">Response time (avg)</span>
+                    <span className="text-sm text-slate-900">1.8s</span>
+                  </div>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-slate-600">Avg conversation length</span>
-                  <span className="text-sm text-slate-900">5.2 messages</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-slate-600">Positive feedback rate</span>
-                  <span className="text-sm text-slate-900">94%</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-slate-600">Response time (avg)</span>
-                  <span className="text-sm text-slate-900">1.8s</span>
-                </div>
-              </div>
+              ) : (
+                <p className="text-sm text-slate-500 py-4">
+                  AI interaction insights appear here once enough live activity has been recorded.
+                </p>
+              )}
             </Card>
 
-            <Card className="p-4 sm:p-5 md:p-6">
-              <h4 className="text-slate-900 mb-3">Top AI Queries</h4>
-              <div className="space-y-2">
-                {[
-                  'Morning routine help',
-                  'Bedtime transitions',
-                  'Managing meltdowns',
-                  'Communication strategies',
-                  'Social skills support'
-                ].map((query, idx) => (
-                  <div key={idx} className="flex items-center justify-between text-sm">
-                    <span className="text-slate-700">{query}</span>
-                    <Badge variant="outline">{Math.floor(Math.random() * 200 + 100)}</Badge>
-                  </div>
-                ))}
-              </div>
-            </Card>
+            {showSamples && (
+              <Card className="p-4 sm:p-5 md:p-6">
+                <h4 className="text-slate-900 mb-3">Top AI Queries</h4>
+                <div className="space-y-2">
+                  {[
+                    { query: 'Morning routine help', count: 248 },
+                    { query: 'Bedtime transitions', count: 211 },
+                    { query: 'Managing meltdowns', count: 187 },
+                    { query: 'Communication strategies', count: 156 },
+                    { query: 'Social skills support', count: 132 },
+                  ].map(({ query, count }) => (
+                    <div key={query} className="flex items-center justify-between text-sm">
+                      <span className="text-slate-700">{query}</span>
+                      <Badge variant="outline">{count}</Badge>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            )}
           </TabsContent>
 
           <TabsContent value="outcomes" className="space-y-3 sm:space-y-4">
@@ -473,55 +491,64 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
                 <Target className="w-5 h-5 text-accent" />
                 Goal & Progress Metrics
               </h3>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-slate-600">Total goals set</span>
-                  <span className="text-sm text-slate-900">834</span>
+              {showSamples ? (
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-slate-600">Total goals set</span>
+                    <span className="text-sm text-slate-900">834</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-slate-600">Goals completed</span>
+                    <span className="text-sm text-slate-900">189 (23%)</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-slate-600">Avg progress rate</span>
+                    <span className="text-sm text-slate-900">+12% weekly</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-slate-600">Parent satisfaction</span>
+                    <span className="text-sm text-slate-900">4.8/5.0</span>
+                  </div>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-slate-600">Goals completed</span>
-                  <span className="text-sm text-slate-900">189 (23%)</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-slate-600">Avg progress rate</span>
-                  <span className="text-sm text-slate-900">+12% weekly</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-slate-600">Parent satisfaction</span>
-                  <span className="text-sm text-slate-900">4.8/5.0</span>
-                </div>
-              </div>
+              ) : (
+                <p className="text-sm text-slate-500 py-4">
+                  Goal and progress metrics appear here once enough live activity has been recorded.
+                </p>
+              )}
             </Card>
 
-            <Card className="p-6 bg-green-50 border-green-200">
-              <h4 className="text-slate-900 mb-3">Success Stories</h4>
-              <div className="space-y-3 text-sm">
-                <div className="flex items-start gap-2">
-                  <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-green-600">✓</span>
+            {showSamples && (
+              <Card className="p-6 bg-green-50 border-green-200">
+                <h4 className="text-slate-900 mb-1">Sample Success Stories</h4>
+                <p className="text-xs text-slate-500 mb-3">Illustrative examples for demos — not live customer data.</p>
+                <div className="space-y-3 text-sm">
+                  <div className="flex items-start gap-2">
+                    <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                      <span className="text-green-600">✓</span>
+                    </div>
+                    <p className="text-slate-700">
+                      78% of families report improved morning routines within 2 weeks
+                    </p>
                   </div>
-                  <p className="text-slate-700">
-                    78% of families report improved morning routines within 2 weeks
-                  </p>
-                </div>
-                <div className="flex items-start gap-2">
-                  <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-green-600">✓</span>
+                  <div className="flex items-start gap-2">
+                    <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                      <span className="text-green-600">✓</span>
+                    </div>
+                    <p className="text-slate-700">
+                      85% of parents feel more confident in managing challenging behaviors
+                    </p>
                   </div>
-                  <p className="text-slate-700">
-                    85% of parents feel more confident in managing challenging behaviors
-                  </p>
-                </div>
-                <div className="flex items-start gap-2">
-                  <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-green-600">✓</span>
+                  <div className="flex items-start gap-2">
+                    <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                      <span className="text-green-600">✓</span>
+                    </div>
+                    <p className="text-slate-700">
+                      Average goal progress increased by 34% with consistent AI coaching
+                    </p>
                   </div>
-                  <p className="text-slate-700">
-                    Average goal progress increased by 34% with consistent AI coaching
-                  </p>
                 </div>
-              </div>
-            </Card>
+              </Card>
+            )}
           </TabsContent>
 
           {/* Conversion Funnel Tab - Admin/Investor Only */}
@@ -541,10 +568,8 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
                       <input
                         type="checkbox"
                         checked={useMockData}
-                        onChange={(e) => {
-                          setUseMockData(e.target.checked);
-                          loadFunnelAndRetention();
-                        }}
+                        onChange={(e) => setUseMockData(e.target.checked)}
+                        aria-label="Use demo sample data instead of live data"
                         className="rounded"
                       />
                       Demo Mode
@@ -554,6 +579,7 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
                       size="sm"
                       onClick={loadFunnelAndRetention}
                       disabled={isLoadingFunnel}
+                      aria-label="Refresh funnel and retention data"
                     >
                       <RefreshCw className={`w-4 h-4 ${isLoadingFunnel ? 'animate-spin' : ''}`} />
                     </Button>

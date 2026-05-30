@@ -37,6 +37,7 @@ import {
   exportTimesheetToPDF,
 } from '../lib/fiscal-agent-integration';
 import { listEVVReconciliationRuns, summarizeEVVCutoverRuns, type EVVReconciliationRun } from '../lib/evv-cutover';
+import { isDemoMode } from '../lib/demo-seed';
 
 // ============================================
 // TYPES
@@ -54,16 +55,16 @@ interface EVVDashboardProps {
 type TabType = 'clock' | 'records' | 'budget' | 'timesheets';
 
 // ============================================
-// DEMO DATA (development-only fallback)
+// DEMO DATA (demo-mode-only sample content)
 // ============================================
 
 /**
- * Demo authorizations used ONLY in development mode.
- * In production, the component initializes with empty arrays and
- * fetches real data from Supabase via getAuthorizations().
+ * Demo authorizations used ONLY in demo mode (`?demo=…` / VITE_DEMO_MODE).
+ * Real users start with empty arrays and the component fetches their
+ * actual data from Supabase via getAuthorizations().
  */
 function getDemoAuthorizations(): ServiceAuthorization[] {
-  if (!import.meta.env.DEV) return [];
+  if (!isDemoMode()) return [];
   return [
     {
       id: 'auth-1',
@@ -104,12 +105,12 @@ function getDemoAuthorizations(): ServiceAuthorization[] {
 }
 
 /**
- * Demo EVV records used ONLY in development mode.
- * In production, the component initializes with empty arrays and
- * fetches real data from Supabase via getEVVRecords().
+ * Demo EVV records used ONLY in demo mode (`?demo=…` / VITE_DEMO_MODE).
+ * Real users start with empty arrays and the component fetches their
+ * actual data from Supabase via getEVVRecords().
  */
 function getDemoEVVRecords(): EVVRecord[] {
-  if (!import.meta.env.DEV) return [];
+  if (!isDemoMode()) return [];
   return [
     {
       id: 'evv-1',
@@ -210,9 +211,10 @@ export default function EVVDashboard({
     return demo[0]?.id || '';
   });
 
-  // Load data from Supabase (falls back to demo)
+  // Load data from Supabase. In demo mode we keep the seeded samples
+  // and skip the fetch so the walkthrough stays populated.
   useEffect(() => {
-    if (childId === 'child-1') {
+    if (isDemoMode() || !childId || childId === 'child-1') {
       return;
     }
 
@@ -373,14 +375,17 @@ export default function EVVDashboard({
       if (record) {
         setEvvRecords(prev => [record, ...prev]);
       } else {
-        // Demo fallback
+        // No backend record was returned. In demo mode we present a fully
+        // "verified" record so the walkthrough looks complete; for real users
+        // we only have a locally-captured session that has not been verified
+        // server-side, so it stays 'pending' rather than overstating its status.
         const completed: EVVRecord = {
           ...activeSession,
           clockOutTime: new Date().toISOString(),
           clockOutLocation: location,
           durationMinutes: Math.round(elapsedSeconds / 60),
           units: Math.ceil(elapsedSeconds / 900), // 15-min units
-          status: 'verified',
+          status: isDemoMode() ? 'verified' : 'pending',
         };
         setEvvRecords(prev => [completed, ...prev]);
       }
@@ -923,17 +928,29 @@ function TimesheetsTab({
     return groups;
   }, {});
 
-  const handleGenerateTimesheet = async (weekKey: string) => {
+  const handleGenerateTimesheet = async (weekKey: string, asPdf = false) => {
     setGenerating(true);
     try {
       const weekStart = new Date(weekKey);
       const weekEnd = new Date(weekKey);
       weekEnd.setDate(weekEnd.getDate() + 6);
 
-      // In production this calls Supabase
-      await generateTimesheet(childId, 'provider-1', weekStart, weekEnd);
+      const timesheet = await generateTimesheet(childId, 'provider-1', weekStart, weekEnd);
+
+      if (asPdf && timesheet) {
+        // exportTimesheetToPDF returns a structured payload; download it so the
+        // action produces a real, verifiable artifact rather than a no-op.
+        const payload = exportTimesheetToPDF(timesheet);
+        const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `timesheet-${weekKey}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+      }
     } catch {
-      // Demo mode
+      // No verified records for this week yet — nothing to export.
     }
     setGenerating(false);
   };
@@ -989,7 +1006,10 @@ function TimesheetsTab({
               </button>
               <button
                 type="button"
-                className="flex min-h-11 items-center justify-center gap-1.5 rounded-lg border border-gray-200 px-3 py-2 text-xs font-medium text-gray-600 transition-colors hover:bg-gray-50"
+                onClick={() => handleGenerateTimesheet(weekKey, true)}
+                disabled={generating}
+                aria-label="Download timesheet"
+                className="flex min-h-11 items-center justify-center gap-1.5 rounded-lg border border-gray-200 px-3 py-2 text-xs font-medium text-gray-600 transition-colors hover:bg-gray-50 disabled:opacity-50"
               >
                 <Download className="w-3.5 h-3.5" />
                 PDF

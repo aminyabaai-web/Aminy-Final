@@ -193,13 +193,14 @@ function KPICard({
                 <input
                   autoFocus
                   type="number"
+                  aria-label={`${metric.label} value`}
                   value={draft}
                   onChange={e => setDraft(e.target.value)}
                   onKeyDown={e => { if (e.key === 'Enter') handleSave(); if (e.key === 'Escape') setEditing(false); }}
                   className="w-20 border border-teal-400 rounded px-1.5 py-0.5 text-sm font-semibold focus:outline-none"
                 />
-                <button onClick={handleSave} className="text-teal-600 hover:text-teal-700"><Save className="w-3.5 h-3.5" /></button>
-                <button onClick={() => setEditing(false)} className="text-gray-400 hover:text-gray-600"><X className="w-3.5 h-3.5" /></button>
+                <button onClick={handleSave} aria-label="Save value" className="text-teal-600 hover:text-teal-700"><Save className="w-3.5 h-3.5" /></button>
+                <button onClick={() => setEditing(false)} aria-label="Cancel edit" className="text-gray-400 hover:text-gray-600"><X className="w-3.5 h-3.5" /></button>
               </div>
             ) : (
               <>
@@ -224,6 +225,7 @@ function KPICard({
           <button
             onClick={() => { setDraft(String(metric.value ?? '')); setEditing(true); }}
             className="flex-shrink-0 text-gray-300 hover:text-teal-500 transition-colors mt-0.5"
+            aria-label={`Update ${metric.label}`}
             title="Update value"
           >
             <Edit3 className="w-3.5 h-3.5" />
@@ -377,7 +379,7 @@ export function AACTPayerDashboard({ onBack }: AACTPayerDashboardProps) {
         <div className="max-w-5xl mx-auto px-4 py-6">
           <div className="flex items-center gap-3 mb-4">
             {onBack && (
-              <button onClick={onBack} className="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition-colors">
+              <button onClick={onBack} aria-label="Go back" className="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition-colors">
                 <ArrowLeft className="w-5 h-5" />
               </button>
             )}

@@ -446,14 +446,16 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
   const requiredUploaded = requiredDocs.filter(d => d.uploaded).length;
 
   const handleDocCapture = (docId: string) => {
-    // Simulated camera capture → in production this would use navigator.mediaDevices
+    // Marks the document as ready to provide. Actual file capture/upload happens
+    // during enrollment with your fiscal agent — this step records which documents
+    // you have on hand so the application can be submitted.
     update({
       documents: {
         ...data.documents,
         [docId]: { ...data.documents[docId], uploaded: true, capturedAt: new Date().toISOString() },
       },
     });
-    toast.success(`${data.documents[docId].label} captured`);
+    toast.success(`${data.documents[docId].label} marked ready`);
   };
 
   const handleSubmit = async () => {
@@ -495,7 +497,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
       {/* Header */}
       <div className="bg-white border-b border-gray-200 px-4 py-4">
         <div className="max-w-2xl mx-auto flex items-center gap-3">
-          <button onClick={onBack} className="p-2 hover:bg-gray-100 rounded-lg">
+          <button onClick={onBack} aria-label="Go back" className="p-2 hover:bg-gray-100 rounded-lg">
             <ArrowLeft className="w-5 h-5 text-gray-600" />
           </button>
           <div className="flex-1">
@@ -531,6 +533,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
               <select
                 value={data.state}
                 onChange={(e) => update({ state: e.target.value, selectedProgram: '', fiscalAgent: '' })}
+                aria-label="Select your state"
                 className="w-full px-4 py-3 border border-gray-300 rounded-xl text-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
               >
                 <option value="">Select your state...</option>
@@ -570,8 +573,9 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Child's Age</label>
+                <label htmlFor="enroll-child-age" className="block text-sm font-medium text-gray-700 mb-1">Child's Age</label>
                 <input
+                  id="enroll-child-age"
                   type="number"
                   value={data.childAge || ''}
                   onChange={(e) => update({ childAge: parseInt(e.target.value) || 0 })}
@@ -582,8 +586,9 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Child's Diagnosis</label>
+                <label htmlFor="enroll-diagnosis" className="block text-sm font-medium text-gray-700 mb-1">Child's Diagnosis</label>
                 <select
+                  id="enroll-diagnosis"
                   value={data.childDiagnosis}
                   onChange={(e) => update({ childDiagnosis: e.target.value })}
                   className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500"
@@ -814,7 +819,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
                           )}
                           {doc.uploaded && doc.capturedAt && (
                             <span className="text-xs text-green-600">
-                              Captured {new Date(doc.capturedAt).toLocaleDateString()}
+                              Marked ready {new Date(doc.capturedAt).toLocaleDateString()}
                             </span>
                           )}
                         </div>
@@ -824,15 +829,10 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
                           onClick={() => handleDocCapture(id)}
                           className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 text-white text-xs font-medium rounded-lg hover:bg-emerald-700"
                         >
-                          <Camera className="w-3.5 h-3.5" /> Capture
+                          <CheckCircle2 className="w-3.5 h-3.5" /> Mark ready
                         </button>
                       ) : (
-                        <button
-                          onClick={() => handleDocCapture(id)}
-                          className="text-xs text-emerald-600 hover:text-emerald-700"
-                        >
-                          Retake
-                        </button>
+                        <span className="text-xs font-medium text-emerald-600">Ready</span>
                       )}
                     </div>
                   </div>

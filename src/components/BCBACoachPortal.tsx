@@ -26,6 +26,7 @@ import {
   Activity
 } from 'lucide-react';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
+import { isDemoMode } from '../lib/demo-seed';
 
 interface Family {
   id: string;
@@ -98,8 +99,9 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
       if (response.ok) {
         const data = await response.json();
         setFamilies(data.families || []);
-      } else {
-        // Mock data for demonstration
+      } else if (isDemoMode()) {
+        // Sample caseload — DEMO MODE ONLY. Real coaches with no families see
+        // the existing empty state, never fabricated patients.
         setFamilies([
           {
             id: '1',
@@ -132,9 +134,12 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
             progress: 42
           }
         ]);
+      } else {
+        setFamilies([]);
       }
     } catch (error) {
       console.error('Error loading families:', error);
+      setFamilies([]);
     } finally {
       setIsLoading(false);
     }
@@ -156,8 +161,8 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
         const data = await response.json();
         setGoals(data.goals || []);
         setNotes(data.notes || []);
-      } else {
-        // Mock data
+      } else if (isDemoMode()) {
+        // Sample goals/notes — DEMO MODE ONLY.
         setGoals([
           {
             id: '1',
@@ -195,9 +200,14 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
             tags: ['recommendation', 'communication']
           }
         ]);
+      } else {
+        setGoals([]);
+        setNotes([]);
       }
     } catch (error) {
       console.error('Error loading family data:', error);
+      setGoals([]);
+      setNotes([]);
     }
   };
 
@@ -367,6 +377,12 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
             </TabsContent>
 
             <TabsContent value="goals" className="space-y-3 sm:space-y-4">
+              {goals.length === 0 && (
+                <Card className="p-6 text-center">
+                  <Target className="w-12 h-12 text-slate-400 mx-auto mb-3" />
+                  <p className="text-slate-600">No goals yet for this family</p>
+                </Card>
+              )}
               {goals.map(goal => (
                 <Card key={goal.id} className="p-4 sm:p-5 md:p-6">
                   <div className="flex items-start justify-between mb-3">
@@ -406,11 +422,10 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
             <TabsContent value="reports" className="space-y-3 sm:space-y-4">
               <Card className="p-6 text-center">
                 <FileText className="w-12 h-12 text-slate-400 mx-auto mb-3" />
-                <p className="text-slate-600 mb-4">Reports integration coming soon</p>
-                <Button variant="outline">
-                  <Plus className="w-4 h-4 mr-2" />
-                  Generate Report
-                </Button>
+                <p className="text-slate-600 mb-1">Reports coming soon</p>
+                <p className="text-sm text-slate-500">
+                  Progress reports and export are on the way.
+                </p>
               </Card>
             </TabsContent>
 
@@ -500,7 +515,9 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
           </Card>
           <Card className="p-3 sm:p-4">
             <div className="text-2xl text-slate-900 mb-1">
-              {Math.round(families.reduce((sum, f) => sum + f.progress, 0) / families.length)}%
+              {families.length > 0
+                ? Math.round(families.reduce((sum, f) => sum + f.progress, 0) / families.length)
+                : 0}%
             </div>
             <div className="text-sm text-slate-600">Avg Progress</div>
           </Card>

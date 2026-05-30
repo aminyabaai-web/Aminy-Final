@@ -46,7 +46,7 @@ export function AppBreadcrumbs({ items, onNavigate, className = '' }: AppBreadcr
           const isClickable = !!item.screen && !isLast;
 
           return (
-            <li key={index} className="flex items-center gap-1.5">
+            <li key={`${item.screen ?? 'leaf'}-${item.label}`} className="flex items-center gap-1.5">
               {index > 0 && (
                 <ChevronRight className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" aria-hidden="true" />
               )}

@@ -22,10 +22,10 @@ import {
   MessageSquare,
   ChevronDown,
   ChevronUp,
-  RefreshCw,
   Calendar,
   Brain
 } from 'lucide-react';
+import { isDemoMode } from '../lib/demo-seed';
 
 interface BCBASessionBriefingProps {
   familyId: string;
@@ -76,7 +76,17 @@ export function BCBASessionBriefing({
     // Simulate API call - in production, this would call the AI brain
     await new Promise(resolve => setTimeout(resolve, 1500));
 
-    // Mock briefing data - in production, this comes from the AI analyzing all family data
+    // Real users never see fabricated clinical insights about their child.
+    // Until the AI briefing pipeline is wired, only demo mode shows sample data;
+    // real coaches get an honest "not available yet" state.
+    if (!isDemoMode()) {
+      setBriefing(null);
+      setIsLoading(false);
+      return;
+    }
+
+    // Sample briefing data — DEMO MODE ONLY. In production this comes from the
+    // AI analyzing real family data.
     setBriefing({
       summary: `${childName} is a ${getAge()} year-old working on communication and daily living skills. Recent focus has been on morning routines and emotional regulation. ${parentName} has been consistently implementing visual schedules with good results, but reports increased anxiety around transitions. The family is motivated and engaged.`,
 
@@ -213,12 +223,18 @@ export function BCBASessionBriefing({
   if (!briefing) {
     return (
       <Card className="p-8 text-center">
-        <AlertTriangle className="w-12 h-12 text-amber-500 mx-auto mb-4" />
-        <h3 className="font-medium text-gray-900 mb-2">Could not load briefing</h3>
-        <Button onClick={loadBriefing} variant="outline">
-          <RefreshCw className="w-4 h-4 mr-2" />
-          Try Again
-        </Button>
+        <Brain className="w-12 h-12 text-slate-400 mx-auto mb-4" />
+        <h3 className="font-medium text-gray-900 mb-2">Briefing not available yet</h3>
+        <p className="text-sm text-gray-500 mb-4">
+          AI session briefings for {childName} will appear here once enough
+          session and progress data has been recorded.
+        </p>
+        {onStartSession && (
+          <Button onClick={onStartSession} variant="outline">
+            <Clock className="w-4 h-4 mr-2" />
+            Start Session with {parentName}
+          </Button>
+        )}
       </Card>
     );
   }
@@ -294,9 +310,9 @@ export function BCBASessionBriefing({
           Recent Progress
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {briefing.recentProgress.map((item, idx) => (
+          {briefing.recentProgress.map((item) => (
             <div
-              key={idx}
+              key={item.area}
               className={`p-3 rounded-lg border ${
                 item.trend === 'up' ? 'bg-green-50 border-green-200' :
                 item.trend === 'down' ? 'bg-red-50 border-red-200' :
@@ -327,8 +343,8 @@ export function BCBASessionBriefing({
         {expandedSections.has('working') && (
           <div className="px-4 pb-4">
             <ul className="space-y-2">
-              {briefing.whatsWorking.map((item, idx) => (
-                <li key={idx} className="flex items-start gap-2 text-sm text-gray-700">
+              {briefing.whatsWorking.map((item) => (
+                <li key={item} className="flex items-start gap-2 text-sm text-gray-700">
                   <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
                   {item}
                 </li>
@@ -350,8 +366,8 @@ export function BCBASessionBriefing({
         {expandedSections.has('notWorking') && (
           <div className="px-4 pb-4">
             <ul className="space-y-2">
-              {briefing.whatsNotWorking.map((item, idx) => (
-                <li key={idx} className="flex items-start gap-2 text-sm text-gray-700">
+              {briefing.whatsNotWorking.map((item) => (
+                <li key={item} className="flex items-start gap-2 text-sm text-gray-700">
                   <AlertTriangle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
                   {item}
                 </li>
@@ -373,8 +389,8 @@ export function BCBASessionBriefing({
         {expandedSections.has('opportunities') && (
           <div className="px-4 pb-4">
             <ul className="space-y-2">
-              {briefing.opportunities.map((item, idx) => (
-                <li key={idx} className="flex items-start gap-2 text-sm text-gray-700">
+              {briefing.opportunities.map((item) => (
+                <li key={item} className="flex items-start gap-2 text-sm text-gray-700">
                   <Lightbulb className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
                   {item}
                 </li>
@@ -396,8 +412,8 @@ export function BCBASessionBriefing({
         {expandedSections.has('guidance') && (
           <div className="px-4 pb-4">
             <ul className="space-y-2">
-              {briefing.recommendedGuidance.map((item, idx) => (
-                <li key={idx} className="flex items-start gap-2 text-sm text-gray-700">
+              {briefing.recommendedGuidance.map((item) => (
+                <li key={item} className="flex items-start gap-2 text-sm text-gray-700">
                   <Target className="w-4 h-4 text-teal-600 mt-0.5 flex-shrink-0" />
                   {item}
                 </li>
@@ -419,8 +435,8 @@ export function BCBASessionBriefing({
         {expandedSections.has('concerns') && (
           <div className="px-4 pb-4">
             <ul className="space-y-2">
-              {briefing.recentConcerns.map((item, idx) => (
-                <li key={idx} className="flex items-start gap-2 text-sm text-gray-700">
+              {briefing.recentConcerns.map((item) => (
+                <li key={item} className="flex items-start gap-2 text-sm text-gray-700">
                   <MessageSquare className="w-4 h-4 text-violet-500 mt-0.5 flex-shrink-0" />
                   {item}
                 </li>
@@ -442,8 +458,8 @@ export function BCBASessionBriefing({
         {expandedSections.has('vault') && (
           <div className="px-4 pb-4">
             <ul className="space-y-2">
-              {briefing.vaultInsights.map((item, idx) => (
-                <li key={idx} className="flex items-start gap-2 text-sm text-gray-700">
+              {briefing.vaultInsights.map((item) => (
+                <li key={item} className="flex items-start gap-2 text-sm text-gray-700">
                   <FileText className="w-4 h-4 text-gray-500 mt-0.5 flex-shrink-0" />
                   {item}
                 </li>
@@ -460,9 +476,9 @@ export function BCBASessionBriefing({
           Suggested Session Topics
         </h3>
         <div className="flex flex-wrap gap-2">
-          {briefing.suggestedTopics.map((topic, idx) => (
+          {briefing.suggestedTopics.map((topic) => (
             <Badge
-              key={idx}
+              key={topic}
               className="bg-white border border-violet-200 text-violet-700 hover:bg-violet-50 cursor-pointer"
             >
               {topic}

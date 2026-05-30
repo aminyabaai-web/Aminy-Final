@@ -146,10 +146,12 @@ export function BenefitsNavigatorScreen({ onBack, onNavigate, userTier = 'core' 
         coverage: s.coverageNotes,
       }))
     : [
-        { id: 'aba', name: 'ABA Therapy', status: 'covered' as const, coverage: 'Select your state to see coverage details' },
-        { id: 'speech', name: 'Speech Therapy', status: 'covered' as const, coverage: 'Select your state to see coverage details' },
-        { id: 'ot', name: 'Occupational Therapy', status: 'covered' as const, coverage: 'Select your state to see coverage details' },
-        { id: 'eval', name: 'Diagnostic Evaluation', status: 'covered' as const, coverage: 'Select your state to see coverage details' },
+        // No state selected yet — don't assert coverage. Show services as
+        // "Check Eligibility" until the user picks a state and we have real data.
+        { id: 'aba', name: 'ABA Therapy', status: 'pending' as const, coverage: 'Select your state to see coverage details' },
+        { id: 'speech', name: 'Speech Therapy', status: 'pending' as const, coverage: 'Select your state to see coverage details' },
+        { id: 'ot', name: 'Occupational Therapy', status: 'pending' as const, coverage: 'Select your state to see coverage details' },
+        { id: 'eval', name: 'Diagnostic Evaluation', status: 'pending' as const, coverage: 'Select your state to see coverage details' },
         { id: 'respite', name: 'Respite Care', status: 'pending' as const, coverage: 'Select your state to see coverage details' },
       ];
 
@@ -475,15 +477,9 @@ export function BenefitsNavigatorScreen({ onBack, onNavigate, userTier = 'core' 
                        req.status === 'pending' ? 'In Review' : 'Submitted'}
                     </Badge>
                   </div>
-                  <p className="text-sm text-muted-foreground mb-3">
-                    Submitted: {new Date(req.date).toLocaleDateString()}
+                  <p className="text-sm text-muted-foreground">
+                    Submitted: {req.date ? new Date(req.date).toLocaleDateString() : 'Recently'}
                   </p>
-                  <div className="flex gap-2">
-                    <Button size="sm" variant="outline">
-                      <Download className="w-4 h-4 mr-2" />
-                      Download
-                    </Button>
-                  </div>
                 </div>
               ))}
             </div>

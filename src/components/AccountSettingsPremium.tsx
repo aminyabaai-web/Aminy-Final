@@ -126,11 +126,11 @@ export function AccountSettingsPremium({ onBack, onLogout, onNavigate, userTier 
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
     const [deleteConfirmText, setDeleteConfirmText] = useState('');
 
-    // Subscription
-    const [subscription, setSubscription] = useState<SubscriptionInfo>({
+    // Subscription — tier comes from props; period/status hydrate from billing when available
+    const [subscription] = useState<SubscriptionInfo>({
         tier: userTier,
         status: 'active',
-        currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+        currentPeriodEnd: undefined,
         cancelAtPeriodEnd: false
     });
 
@@ -413,9 +413,11 @@ export function AccountSettingsPremium({ onBack, onLogout, onNavigate, userTier 
                                     {subscription.status.toUpperCase()}
                                 </span>
                             </div>
-                            <p className="text-[13px] text-gray-900/45">
-                                {subscription.cancelAtPeriodEnd ? 'Cancels on' : 'Renews on'} {new Date(subscription.currentPeriodEnd || '').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
-                            </p>
+                            {subscription.currentPeriodEnd && !isNaN(new Date(subscription.currentPeriodEnd).getTime()) && (
+                                <p className="text-[13px] text-gray-900/45">
+                                    {subscription.cancelAtPeriodEnd ? 'Cancels on' : 'Renews on'} {new Date(subscription.currentPeriodEnd).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                                </p>
+                            )}
                         </div>
                     </div>
                     <button
@@ -450,9 +452,11 @@ export function AccountSettingsPremium({ onBack, onLogout, onNavigate, userTier 
                                     <div className="flex justify-between items-center">
                                         <div>
                                             <p className="text-sm font-medium text-gray-900/90">HIPAA Data Privacy</p>
-                                            <p className="text-[13px] text-gray-900/50 mt-0.5">Your data is encrypted and covered under our policy.</p>
+                                            <p className="text-[13px] text-gray-900/50 mt-0.5">Your data is encrypted and handled under our HIPAA-conscious privacy program.</p>
                                         </div>
-                                        <Switch checked={hipaaConsentSigned} onCheckedChange={setHipaaConsentSigned} />
+                                        <span className="px-2.5 py-1 rounded-lg text-[11px] font-medium bg-teal-600/10 text-teal-600 flex items-center gap-1">
+                                            <Check size={12} /> Active
+                                        </span>
                                     </div>
 
                                     {/* BAA Document */}
@@ -461,7 +465,10 @@ export function AccountSettingsPremium({ onBack, onLogout, onNavigate, userTier 
                                             <p className="text-sm font-medium text-gray-900/90">Business Associate Agreement</p>
                                             <p className="text-[13px] text-gray-900/50 mt-0.5">For clinical providers & agencies.</p>
                                         </div>
-                                        <button className="px-3 py-1.5 rounded-lg border border-gray-900/10 bg-white text-[12px] font-medium text-gray-900/80 cursor-pointer flex items-center gap-1">
+                                        <button
+                                            onClick={() => toast.info('Business Associate Agreements are issued during provider/agency onboarding. Contact support@aminy.ai to request a copy.')}
+                                            className="px-3 py-1.5 rounded-lg border border-gray-900/10 bg-white text-[12px] font-medium text-gray-900/80 cursor-pointer flex items-center gap-1"
+                                        >
                                             <FileSignature size={14} /> View BAA
                                         </button>
                                     </div>
@@ -569,7 +576,7 @@ export function AccountSettingsPremium({ onBack, onLogout, onNavigate, userTier 
                                                 <p className="text-[13px] text-gray-900/50">{mfaEnabled ? 'Extra security active' : 'Add extra security'}</p>
                                             </div>
                                         </div>
-                                        <Switch checked={mfaEnabled} onCheckedChange={(checked) => checked ? setShowMfaSetup(true) : handleDisableMfa()} />
+                                        <Switch checked={mfaEnabled} onCheckedChange={(checked) => checked ? toast.info('Authenticator-app two-factor setup is coming soon. We will notify you when it is available.') : handleDisableMfa()} />
                                     </div>
                                 </div>
                             </motion.div>
@@ -634,7 +641,50 @@ export function AccountSettingsPremium({ onBack, onLogout, onNavigate, userTier 
                 </DialogContent>
             </Dialog>
 
-            {/* Add Password / MFA / Delete Dialogs as needed for parity, keeping them clean */}
+            {/* Change Password Dialog */}
+            <Dialog open={showPasswordDialog} onOpenChange={setShowPasswordDialog}>
+                <DialogContent className="rounded-[24px] p-6 font-sans antialiased">
+                    <DialogHeader>
+                        <DialogTitle>Change Password</DialogTitle>
+                        <DialogDescription>Use at least 8 characters with an uppercase letter and a number.</DialogDescription>
+                    </DialogHeader>
+                    <div className="py-4 flex flex-col gap-3">
+                        <div className="relative">
+                            <Input
+                                type={showNewPassword ? 'text' : 'password'}
+                                placeholder="New password"
+                                value={passwordForm.newPassword}
+                                onChange={(e) => setPasswordForm({ ...passwordForm, newPassword: e.target.value })}
+                                className="rounded-[12px] pr-10"
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowNewPassword(v => !v)}
+                                aria-label={showNewPassword ? 'Hide password' : 'Show password'}
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
+                            >
+                                {showNewPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                            </button>
+                        </div>
+                        <Input
+                            type={showNewPassword ? 'text' : 'password'}
+                            placeholder="Confirm new password"
+                            value={passwordForm.confirmPassword}
+                            onChange={(e) => setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })}
+                            className="rounded-[12px]"
+                        />
+                        {passwordError && (
+                            <p className="text-[13px] text-red-600 flex items-center gap-1"><AlertCircle size={14} /> {passwordError}</p>
+                        )}
+                    </div>
+                    <DialogFooter>
+                        <Button variant="outline" onClick={() => setShowPasswordDialog(false)} className="rounded-[12px]">Cancel</Button>
+                        <Button onClick={handlePasswordChange} disabled={isSaving} className="bg-[#5a7380] rounded-[12px] text-white">
+                            {isSaving ? 'Updating…' : 'Update Password'}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 }

@@ -364,11 +364,11 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
         npsScore = Math.round(((promoters - detractors) / total) * 100);
         npsResponseRate = totalFamilies > 0 ? Math.round((total / totalFamilies) * 100) : 0;
       } else {
-        // Use estimates if no NPS data yet
-        npsScore = 72;
-        promoters = Math.floor(totalFamilies * 0.7);
-        passives = Math.floor(totalFamilies * 0.25);
-        detractors = Math.floor(totalFamilies * 0.05);
+        // No NPS responses yet — report zeros rather than fabricating a score
+        npsScore = 0;
+        promoters = 0;
+        passives = 0;
+        detractors = 0;
         npsResponseRate = 0;
       }
 
@@ -378,7 +378,7 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
         .select('rating')
         .not('rating', 'is', null);
 
-      let avgSatisfaction = 4.5; // Default
+      let avgSatisfaction = 0; // 0 until real feedback exists (avoids fabricated rating)
       if (feedbackRatings && feedbackRatings.length > 0) {
         const sum = feedbackRatings.reduce((acc: number, f: { rating: number | null }) => acc + (f.rating || 0), 0);
         avgSatisfaction = Math.round((sum / feedbackRatings.length) * 10) / 10;
@@ -539,7 +539,7 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
         clinical: {
           therapyPlanAdherence: Math.round(routineCompletionRate * 10) / 10,
           routineCompletionRate: Math.round(routineCompletionRate * 10) / 10,
-          goalProgressRate: 45.3, // Would need goal tracking
+          goalProgressRate: 0, // No goal-tracking source yet — 0 until wired
           insightReportsGenerated: communityPosts.length, // Using posts as proxy
           outcomeTrackingEntries: stressLogs.length,
         },
@@ -632,6 +632,7 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
                   <select
                     value={selectedOrg}
                     onChange={(e) => setSelectedOrg(e.target.value)}
+                    aria-label="Select partner organization"
                     className="text-sm bg-gray-100 dark:bg-slate-700 border-0 rounded-lg px-2 py-1 text-gray-700 dark:text-gray-200 font-medium"
                   >
                     {PARTNER_ORGS.map(org => (
@@ -649,7 +650,7 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
                 </p>
                 {/* Data quality note for transparency */}
                 <p className="text-xs text-amber-600 dark:text-amber-400 mt-0.5">
-                  ℹ️ Some metrics use estimates where data is unavailable (NPS, goal progress)
+                  ℹ️ Live metrics come from the database. Sections tagged "Illustrative" are placeholder examples, not live data.
                 </p>
               </div>
             </div>
@@ -660,6 +661,7 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
                 <select
                   value={dateRange}
                   onChange={(e) => setDateRange(e.target.value as '7d' | '30d' | 'all')}
+                  aria-label="Select date range"
                   className="appearance-none bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg px-3 py-2 pr-8 text-sm dark:text-white focus:outline-none focus:ring-2 focus:ring-accent"
                 >
                   <option value="7d">Last 7 days</option>
@@ -763,7 +765,6 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
                 value={pilotData.overview.activeFamilies}
                 total={pilotData.overview.totalFamilies}
                 icon={Users}
-                trend="+8 this week"
               />
               <MetricCard
                 label="Onboarding Rate"
@@ -787,7 +788,6 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
                 target={50}
                 current={pilotData.nps.score}
                 icon={Star}
-                subtitle="Excellent"
               />
             </div>
 
@@ -800,7 +800,7 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
                     <div className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">{count}</div>
                     <div className="text-sm text-gray-500 dark:text-gray-400 capitalize">{tier}</div>
                     <div className="text-xs text-gray-400">
-                      {((count / pilotData.overview.totalFamilies) * 100).toFixed(1)}%
+                      {pilotData.overview.totalFamilies > 0 ? ((count / pilotData.overview.totalFamilies) * 100).toFixed(1) : '0.0'}%
                     </div>
                   </div>
                 ))}
@@ -837,11 +837,11 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
               <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">KPIs vs Targets</h3>
                 <div className="space-y-3 sm:space-y-4">
-                  <KPIRow label="Onboarding" value={84.7} target={70} />
-                  <KPIRow label="7-Day Activation" value={58.3} target={55} />
-                  <KPIRow label="DAU/WAU" value={37.2} target={35} />
-                  <KPIRow label="Weekly Retention" value={72.4} target={70} />
-                  <KPIRow label="Therapy Adherence" value={73.2} target={70} />
+                  <KPIRow label="Onboarding" value={pilotData.engagement.onboardingCompletionRate} target={70} />
+                  <KPIRow label="7-Day Activation" value={pilotData.engagement.sevenDayActivation} target={55} />
+                  <KPIRow label="DAU/WAU" value={pilotData.engagement.dauWau} target={35} />
+                  <KPIRow label="Weekly Retention" value={pilotData.engagement.weeklyRetention} target={70} />
+                  <KPIRow label="Therapy Adherence" value={pilotData.clinical.therapyPlanAdherence} target={70} />
                 </div>
               </div>
 
@@ -855,9 +855,16 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
                   </div>
                 </div>
                 <div className="space-y-3">
-                  <NPSBar label="Promoters (9-10)" count={pilotData.nps.promoters} total={127} color="bg-green-500" />
-                  <NPSBar label="Passives (7-8)" count={pilotData.nps.passives} total={127} color="bg-yellow-400" />
-                  <NPSBar label="Detractors (0-6)" count={pilotData.nps.detractors} total={127} color="bg-red-400" />
+                  {(() => {
+                    const npsTotal = pilotData.nps.promoters + pilotData.nps.passives + pilotData.nps.detractors;
+                    return (
+                      <>
+                        <NPSBar label="Promoters (9-10)" count={pilotData.nps.promoters} total={npsTotal} color="bg-green-500" />
+                        <NPSBar label="Passives (7-8)" count={pilotData.nps.passives} total={npsTotal} color="bg-yellow-400" />
+                        <NPSBar label="Detractors (0-6)" count={pilotData.nps.detractors} total={npsTotal} color="bg-red-400" />
+                      </>
+                    );
+                  })()}
                 </div>
                 <p className="text-xs text-gray-500 mt-4 text-center">
                   Response rate: {pilotData.nps.responseRate}% ({pilotData.nps.promoters + pilotData.nps.passives + pilotData.nps.detractors} responses)
@@ -896,7 +903,7 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
               />
               <MetricCard
                 label="Avg Session Length"
-                value="4.2 min"
+                value="—"
                 icon={Clock}
                 subtitle="Target: 3+ min"
               />
@@ -904,7 +911,7 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
 
             {/* Engagement Funnel */}
             <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Engagement Funnel</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Engagement Funnel <span className="text-xs font-normal text-amber-600 dark:text-amber-400">(Illustrative)</span></h3>
               <div className="space-y-3 sm:space-y-4">
                 <FunnelStep step="1" label="Signed Up" value={150} percentage={100} />
                 <FunnelStep step="2" label="Completed Onboarding" value={127} percentage={84.7} />
@@ -930,7 +937,6 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
                 label="Total Conversations"
                 value={pilotData.aiUsage.totalConversations.toLocaleString()}
                 icon={MessageSquare}
-                trend="+342 this week"
               />
               <MetricCard
                 label="Avg Msgs/Week"
@@ -944,13 +950,12 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
                 label="Satisfaction"
                 value={`${pilotData.aiUsage.avgResponseSatisfaction}/5`}
                 icon={Star}
-                subtitle="Excellent"
               />
               <MetricCard
                 label="Peak Usage"
-                value="7-9 PM"
+                value={pilotData.aiUsage.peakUsageHours.length > 0 ? `${pilotData.aiUsage.peakUsageHours[0]}:00` : '—'}
                 icon={Clock}
-                subtitle="After dinner"
+                subtitle="Top message hour"
               />
             </div>
 
@@ -969,7 +974,7 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
                       <div className="h-2 bg-gray-100 dark:bg-slate-800 rounded-full overflow-hidden">
                         <div
                           className="h-full bg-accent/70 rounded-full"
-                          style={{ width: `${(intent.count / pilotData.aiUsage.topIntents[0].count) * 100}%` }}
+                          style={{ width: `${pilotData.aiUsage.topIntents[0]?.count > 0 ? (intent.count / pilotData.aiUsage.topIntents[0].count) * 100 : 0}%` }}
                         />
                       </div>
                     </div>
@@ -980,7 +985,7 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
 
             {/* Memory System Stats */}
             <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">AI Memory System</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">AI Memory System <span className="text-xs font-normal text-amber-600 dark:text-amber-400">(Illustrative)</span></h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 text-center">
                 <div>
                   <div className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">2,847</div>
@@ -1036,7 +1041,7 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
 
             {/* Outcomes Tracking */}
             <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Outcomes Tracking</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Outcomes Tracking <span className="text-xs font-normal text-amber-600 dark:text-amber-400">(Illustrative)</span></h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 sm:gap-6 text-center">
                 <div>
                   <div className="text-2xl sm:text-3xl font-bold text-accent dark:text-accent">{pilotData.clinical.outcomeTrackingEntries.toLocaleString()}</div>
@@ -1059,7 +1064,7 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
 
             {/* Condition Breakdown */}
             <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">By Primary Condition</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">By Primary Condition <span className="text-xs font-normal text-amber-600 dark:text-amber-400">(Illustrative)</span></h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
                 <ConditionCard condition="Autism" families={78} adherence={75.2} improvement={4.3} />
                 <ConditionCard condition="ADHD" families={52} adherence={71.8} improvement={4.1} />
@@ -1076,7 +1081,6 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
                 label="Total Bookings"
                 value={pilotData.marketplace.totalBookings}
                 icon={Calendar}
-                trend="+28 this week"
               />
               <MetricCard
                 label="Sessions/Family"
@@ -1088,13 +1092,11 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
                 label="Completion Rate"
                 value={`${pilotData.marketplace.sessionCompletionRate}%`}
                 icon={CheckCircle}
-                subtitle="Excellent"
               />
               <MetricCard
                 label="Revenue"
                 value={`$${pilotData.marketplace.revenue.toLocaleString()}`}
                 icon={DollarSign}
-                trend="+$2,400 this week"
               />
             </div>
 
@@ -1122,7 +1124,7 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
 
             {/* Revenue Breakdown */}
             <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Revenue Breakdown</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Revenue Breakdown <span className="text-xs font-normal text-amber-600 dark:text-amber-400">(Illustrative)</span></h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 sm:gap-6 text-center">
                 <div>
                   <div className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">$100</div>
@@ -1133,8 +1135,8 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
                   <div className="text-sm text-gray-500">Revenue/Active Family</div>
                 </div>
                 <div>
-                  <div className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">15%</div>
-                  <div className="text-sm text-gray-500">Platform Fee</div>
+                  <div className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">35 / 10 / 5%</div>
+                  <div className="text-sm text-gray-500">Platform Fee (cash / insured / AACT)</div>
                 </div>
               </div>
             </div>
@@ -1154,7 +1156,6 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
                 label="Providers Onboarded"
                 value={pilotData.b2bMetrics.providersOnboarded}
                 icon={Users}
-                trend="+6 this month"
               />
               <MetricCard
                 label="Reports Shared"
@@ -1166,13 +1167,12 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
                 label="Provider NPS"
                 value={`${pilotData.b2bMetrics.providerSatisfaction}/5`}
                 icon={Star}
-                subtitle="Excellent"
               />
             </div>
 
             {/* B2B Trojan Horse Metrics */}
             <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">B2B "Trojan Horse" Strategy</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">B2B "Trojan Horse" Strategy <span className="text-xs font-normal text-amber-600 dark:text-amber-400">(Illustrative)</span></h3>
               <p className="text-sm text-gray-500 mb-4 sm:mb-6">Families bringing Aminy into their clinics</p>
 
               <div className="grid md:grid-cols-3 gap-3 sm:gap-4 sm:gap-6">
@@ -1193,7 +1193,7 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
 
             {/* Clinic Pipeline */}
             <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Clinic Pipeline</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Clinic Pipeline <span className="text-xs font-normal text-amber-600 dark:text-amber-400">(Illustrative)</span></h3>
               <div className="space-y-3">
                 <PipelineRow stage="Awareness" count={24} />
                 <PipelineRow stage="Interest" count={12} />
@@ -1297,7 +1297,7 @@ function KPIRow({ label, value, target }: { label: string; value: number; target
 
 // NPS Bar Component
 function NPSBar({ label, count, total, color }: { label: string; count: number; total: number; color: string }) {
-  const percentage = (count / total) * 100;
+  const percentage = total > 0 ? (count / total) * 100 : 0;
 
   return (
     <div>

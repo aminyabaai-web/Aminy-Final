@@ -62,10 +62,6 @@ import {
 } from '../lib/caregiver-db';
 import { WAIVER_SERVICE_CODES, FISCAL_AGENTS } from '../lib/tier-utils';
 import {
-  submitInsuranceClaim,
-  isClearinghouseConfigured,
-  formatHCBSClaim,
-  ClaimSubmission,
   ClaimResponse,
 } from '../lib/clearinghouse-integration';
 
@@ -208,79 +204,25 @@ export function FiscalAgentSubmissionFlow({
     setIsSubmitting(false);
   };
 
-  // Handle electronic submission via clearinghouse
+  // Handle electronic submission via clearinghouse.
+  //
+  // A valid EDI 837P claim requires the billing provider's real NPI / Tax ID and
+  // the participant's real identity. This flow only receives a participant ID — it
+  // has no verified NPI or subscriber record — so we must NOT fabricate those
+  // identifiers and transmit them to a live clearinghouse. Until that real data is
+  // wired in, route users to the PDF / portal-upload paths instead of submitting
+  // placeholder identity data on their behalf.
   const handleClearinghouseSubmission = async (): Promise<ClaimResponse | null> => {
-    try {
-      // Build claim from selected entries
-      const services = selectedEntryList.map((entry, index) => {
-        const service = WAIVER_SERVICE_CODES[entry.serviceCode] || { code: 'T2025' };
-        const hours = entry.clockOut
-          ? (new Date(entry.clockOut).getTime() - new Date(entry.clockIn).getTime()) / (1000 * 60 * 60)
-          : 0;
-
-        return {
-          serviceDate: new Date(entry.clockIn).toISOString().split('T')[0],
-          procedureCode: service.code || entry.serviceCode,
-          modifiers: entry.serviceCode.includes('telehealth') ? ['95'] : undefined,
-          units: Math.ceil(hours * 4), // Convert to 15-min units
-          chargeAmount: hours * (service.hourlyRange?.[0] || 15), // Use low end of rate
-          placeOfService: '12', // Home
-          diagnosisPointers: [1],
-        };
-      });
-
-      const totalCharges = services.reduce((sum, s) => sum + s.chargeAmount, 0);
-
-      // Use HCBS-specific claim formatting
-      const state = fiscalAgent?.states?.[0] || 'AZ'; // Would come from waiver profile
-      const claim = formatHCBSClaim(
-        {
-          billingProvider: {
-            npi: '1234567890', // Aminy's NPI
-            taxId: '12-3456789',
-            name: 'Aminy Care Services',
-            address: {
-              line1: '123 Care Street',
-              city: 'Phoenix',
-              state: 'AZ',
-              zip: '85001',
-            },
-            phone: '555-123-4567',
-          },
-          subscriber: {
-            memberId: participantId,
-            firstName: 'Participant', // Would come from profile
-            lastName: 'Name',
-            dob: '2018-01-15',
-            gender: 'M',
-            address: {
-              line1: '456 Home Ave',
-              city: 'Phoenix',
-              state: 'AZ',
-              zip: '85002',
-            },
-          },
-          services,
-          totalCharges,
-        },
-        'self-directed', // Waiver type
-        state
-      );
-
-      // Submit via clearinghouse
-      const response = await submitInsuranceClaim(claim);
-      return response;
-    } catch (error) {
-      console.error('Clearinghouse submission error:', error);
-      return null;
-    }
+    toast.info('Direct electronic submission isn’t available yet', {
+      description: 'Use Download PDF or open your fiscal agent portal to submit this week’s hours. Direct EDI submission is coming soon.',
+    });
+    return null;
   };
 
-  // Generate PDF (mock)
+  // Generate PDF
   const handleDownloadPdf = () => {
-    // In production, this would generate a real PDF
-    toast.success('PDF download started', {
-      description: 'In production, this generates a formatted PDF with all service notes and hours summary.',
+    toast.info('PDF export is coming soon', {
+      description: 'For now, use your fiscal agent portal to upload this week’s hours.',
     });
   };
 
@@ -406,6 +348,7 @@ export function FiscalAgentSubmissionFlow({
                             type="checkbox"
                             checked={selectedEntries.has(entry.id)}
                             onChange={() => {}}
+                            aria-label={`Select ${service.description} entry`}
                             className="w-4 h-4 text-teal-600"
                           />
                           <div className="flex-1">
@@ -426,6 +369,8 @@ export function FiscalAgentSubmissionFlow({
                             </div>
                           </div>
                           <button
+                            type="button"
+                            aria-label={isExpanded ? 'Collapse entry details' : 'Expand entry details'}
                             onClick={(e) => {
                               e.stopPropagation();
                               setExpandedEntry(isExpanded ? null : entry.id);
@@ -518,7 +463,7 @@ export function FiscalAgentSubmissionFlow({
                       return map;
                     }, new Map<string, { hours: number; count: number }>())
                   ).map(([code, data]) => {
-                    const service = WAIVER_SERVICE_CODES[code] || { description: 'Unknown', hourlyRange: [0, 0] };
+                    const service = WAIVER_SERVICE_CODES[code] || { code: '—', description: 'Unknown', hourlyRange: [0, 0] as [number, number] };
                     const minPay = data.hours * service.hourlyRange[0];
                     const maxPay = data.hours * service.hourlyRange[1];
 
@@ -557,24 +502,22 @@ export function FiscalAgentSubmissionFlow({
               <Card className="p-3 sm:p-4">
                 <h3 className="font-semibold text-gray-900 mb-3">How do you want to submit?</h3>
                 <div className="space-y-2">
-                  {/* Clearinghouse submission - NEW & RECOMMENDED */}
+                  {/* Clearinghouse submission - not yet available (no live billing/subscriber data wired) */}
                   <button
-                    onClick={() => setSubmissionMethod('clearinghouse')}
-                    className={`w-full p-3 text-left border rounded-lg transition-colors ${
-                      submissionMethod === 'clearinghouse'
-                        ? 'border-teal-500 bg-teal-50'
-                        : 'border-gray-200 hover:border-gray-300'
-                    }`}
+                    type="button"
+                    disabled
+                    aria-disabled="true"
+                    className="w-full p-3 text-left border rounded-lg border-gray-200 opacity-60 cursor-not-allowed"
                   >
                     <div className="flex items-center gap-3">
-                      <Zap className="w-5 h-5 text-amber-500" />
+                      <Zap className="w-5 h-5 text-gray-400" />
                       <div className="flex-1">
-                        <div className="font-medium flex items-center gap-2">
+                        <div className="font-medium flex items-center gap-2 text-gray-500">
                           Direct Electronic Submission
-                          <Badge className="bg-amber-100 text-amber-700 text-xs">Recommended</Badge>
+                          <Badge className="bg-gray-100 text-gray-600 text-xs">Coming soon</Badge>
                         </div>
                         <div className="text-sm text-gray-500">
-                          Submit via Availity clearinghouse (EDI 837P) - fastest processing
+                          Submit via Availity clearinghouse (EDI 837P). In the meantime, use a PDF or your fiscal agent portal.
                         </div>
                       </div>
                     </div>
@@ -618,24 +561,6 @@ export function FiscalAgentSubmissionFlow({
                     </div>
                   </button>
                 </div>
-
-                {/* Clearinghouse info */}
-                {submissionMethod === 'clearinghouse' && (
-                  <div className="mt-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
-                    <div className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-blue-600 mt-0.5" />
-                      <div className="text-sm text-blue-800">
-                        <strong>Electronic submission</strong> sends your hours directly to your fiscal agent
-                        via the Availity clearinghouse using industry-standard EDI 837P format.
-                        {!isClearinghouseConfigured() && (
-                          <span className="block mt-1 text-blue-600">
-                            Note: Currently in demo mode. Configure clearinghouse secrets in Supabase for live submission.
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                )}
               </Card>
 
               {/* Signature */}
@@ -770,7 +695,15 @@ export function FiscalAgentSubmissionFlow({
                         </div>
                       </div>
                     </div>
-                    <Button variant="outline" size="sm">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() =>
+                        toast.info('Open your fiscal agent portal', {
+                          description: `Log in to your ${fiscalAgent?.name || 'fiscal agent'} portal and upload the documents above to complete your submission.`,
+                        })
+                      }
+                    >
                       Open Portal
                       <ExternalLink className="w-4 h-4 ml-1" />
                     </Button>

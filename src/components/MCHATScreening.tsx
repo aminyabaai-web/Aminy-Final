@@ -9,7 +9,6 @@ import { Card } from './ui/card';
 import { Progress } from './ui/progress';
 import { ChevronLeft, ChevronRight, Activity, AlertCircle, CheckCircle, Info } from 'lucide-react';
 import { motion } from 'motion/react';
-import { NotificationService } from '../lib/notification-service';
 
 interface Question {
     id: number;
@@ -80,21 +79,7 @@ export function MCHATScreening({ onComplete, onBack, childName = "your child" }:
     };
 
     const finishScreening = () => {
-        let score = 0;
-        MCH_QUESTIONS.forEach(q => {
-            const answer = answers[q.id];
-            // If it's reverse scored, YES (true) = 1 point. If normally scored, NO (false) = 1 point.
-            if (q.isReverseScored) {
-                if (answer === true) score++;
-            } else {
-                if (answer === false) score++;
-            }
-        });
-
-        let riskLevel: 'low' | 'medium' | 'high' = 'low';
-        if (score >= 8) riskLevel = 'high';
-        else if (score >= 3) riskLevel = 'medium';
-
+        // Scoring is derived in getScoreInfo() for the end screen; just advance.
         setCurrentStep(MCH_QUESTIONS.length); // End screen
     };
 
@@ -223,7 +208,6 @@ export function MCHATScreening({ onComplete, onBack, childName = "your child" }:
                     <Button
                         className="w-full bg-accent hover:bg-accent/90 text-lg py-6"
                         onClick={() => {
-                            NotificationService.sendScreenerResultsEmail('parent@email.com', childName);
                             onComplete(score, riskLevel.toLowerCase() as 'low' | 'medium' | 'high');
                         }}
                     >

@@ -37,6 +37,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '../utils/supabase/client';
 import { useAuditedAction } from '../hooks/useAuditedAction';
+import { isDemoMode } from '../lib/demo-seed';
 import {
   getDenialRecordsForPatient,
   type DenialRecord,
@@ -517,36 +518,46 @@ function SpendingTab({ expenses, childName, loading, denials = [], loadingDenial
 // ============================================================================
 
 function CoverageTab({ benefits }: { benefits: CoverageBenefit[] }) {
+  const demo = isDemoMode();
   return (
     <div className="space-y-4">
-      {/* Deductible Tracker */}
+      {/* Deductible Tracker — real plan figures only shown in demo; real users
+          must connect their plan before we can show dollar amounts. */}
       <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
         <h3 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
           <Shield className="w-4 h-4 text-teal-600" />
           Deductible &amp; Out-of-Pocket Max
         </h3>
-        <div className="space-y-3">
-          <div>
-            <div className="flex justify-between text-xs mb-1">
-              <span className="text-gray-600">Individual Deductible</span>
-              <span className="font-medium text-gray-900">$450 / $1,500</span>
+        {demo ? (
+          <div className="space-y-3">
+            <div>
+              <div className="flex justify-between text-xs mb-1">
+                <span className="text-gray-600">Individual Deductible</span>
+                <span className="font-medium text-gray-900">$450 / $1,500</span>
+              </div>
+              <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden">
+                <div className="h-full bg-teal-500 rounded-full" style={{ width: '30%' }} />
+              </div>
+              <p className="text-xs text-gray-400 mt-0.5">$1,050 remaining until deductible is met</p>
             </div>
-            <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden">
-              <div className="h-full bg-teal-500 rounded-full" style={{ width: '30%' }} />
+            <div>
+              <div className="flex justify-between text-xs mb-1">
+                <span className="text-gray-600">Out-of-Pocket Maximum</span>
+                <span className="font-medium text-gray-900">$470 / $6,000</span>
+              </div>
+              <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden">
+                <div className="h-full bg-emerald-500 rounded-full" style={{ width: '8%' }} />
+              </div>
+              <p className="text-xs text-gray-400 mt-0.5">After this, insurance covers 100%</p>
             </div>
-            <p className="text-xs text-gray-400 mt-0.5">$1,050 remaining until deductible is met</p>
           </div>
-          <div>
-            <div className="flex justify-between text-xs mb-1">
-              <span className="text-gray-600">Out-of-Pocket Maximum</span>
-              <span className="font-medium text-gray-900">$470 / $6,000</span>
-            </div>
-            <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden">
-              <div className="h-full bg-emerald-500 rounded-full" style={{ width: '8%' }} />
-            </div>
-            <p className="text-xs text-gray-400 mt-0.5">After this, insurance covers 100%</p>
-          </div>
-        </div>
+        ) : (
+          <p className="text-xs text-gray-500 leading-relaxed">
+            Connect your insurance plan to track your deductible and out-of-pocket
+            maximum here. Ask Aminy AI to help you read your plan summary, or enter
+            your details in Settings.
+          </p>
+        )}
       </div>
 
       {/* Benefits */}
@@ -556,13 +567,13 @@ function CoverageTab({ benefits }: { benefits: CoverageBenefit[] }) {
           Your Benefits
         </h3>
         <div className="space-y-4">
-          {benefits.map((b, i) => {
+          {benefits.map((b) => {
             const total = b.used + b.remaining;
             const usedPercent = total > 0 ? Math.round((b.used / total) * 100) : 0;
             const isLow = b.remaining < (total * 0.2);
 
             return (
-              <div key={i} className="border border-gray-100 rounded-lg p-3">
+              <div key={b.category} className="border border-gray-100 rounded-lg p-3">
                 <div className="flex items-start justify-between mb-2">
                   <div>
                     <p className="text-sm font-medium text-gray-900">{b.category}</p>
