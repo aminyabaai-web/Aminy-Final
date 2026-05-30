@@ -421,7 +421,8 @@ export async function sendTrialExpirationEmail(
     `}
     
     <div class="highlight">
-      <strong>What you get with Core ($69/month):</strong>
+      <!-- Price SOURCE OF TRUTH: src/lib/tier-utils.ts tierPricing.core.monthly ($14.99). Edge runtime can't import it; keep in sync. -->
+      <strong>What you get with Core ($14.99/month):</strong>
       <ul>
         <li>✨ Unlimited AI chat (text & voice)</li>
         <li>🎯 Full Aminy Jr suite</li>

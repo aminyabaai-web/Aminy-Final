@@ -7,14 +7,17 @@ import React from 'react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
-import { 
-  Sparkles, 
+import {
+  Sparkles,
   Target,
   Heart,
   Check,
   Shield,
   ArrowRight
 } from 'lucide-react';
+// Prices SOURCE OF TRUTH: src/lib/tier-utils.ts (tierPricing). Never hardcode
+// per-tier prices here — they drift (this file previously showed $19/$69/$229).
+import { tierPricing } from '../lib/tier-utils';
 
 interface InlinePaywallPromoProps {
   childName: string;
@@ -32,24 +35,26 @@ export function InlinePaywallPromo({
   compact = false 
 }: InlinePaywallPromoProps) {
   
+  // Prices derived from tier-utils (single source of truth). 'starter' is a
+  // legacy alias that maps to Core, so it carries Core's price.
   const tiers = {
     starter: {
       name: 'Starter',
-      price: 19,
+      price: tierPricing.starter.monthly,
       icon: Heart,
       color: 'gray',
       benefits: ['3 daily activities', 'Basic tracking', '1 Jr calming exercise']
     },
     core: {
       name: 'Core',
-      price: 69,
+      price: tierPricing.core.monthly,
       icon: Target,
       color: 'teal',
       benefits: ['Unlimited AI chat', 'Full Jr suite', 'Adaptive plans']
     },
     pro: {
       name: 'Pro Plus',
-      price: 229,
+      price: tierPricing.proplus.monthly,
       icon: Sparkles,
       color: 'gray',
       benefits: ['Live video AI', 'Monthly BCBA consult', 'Priority support']
@@ -71,7 +76,7 @@ export function InlinePaywallPromo({
               {reason || `Ready to unlock more for ${childName}?`}
             </p>
             <p className="text-xs text-teal-700">
-              Plans start at just $19/mo • No credit card required
+              Plans start at just ${tierPricing.core.monthly}/mo • No credit card required
             </p>
           </div>
           <Button 
@@ -168,7 +173,7 @@ export function InlinePaywallPromo({
       </Button>
 
       <p className="text-xs text-center text-muted-foreground mt-3">
-        Plans start at $19/mo • Try any tier free for 7 days
+        Plans start at ${tierPricing.core.monthly}/mo • Try any tier free for 7 days
       </p>
     </Card>
   );

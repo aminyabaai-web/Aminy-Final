@@ -17,7 +17,56 @@
 
 import { supabase } from '../utils/supabase/client';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
-import { tierPricing, tierDisplayNames, getTierFeatureDescriptions, FAIR_USE_AI_DAILY_CAP, type TierType } from './tier-utils';
+import {
+  tierPricing,
+  tierDisplayNames,
+  getTierFeatureDescriptions,
+  getMaxChildren,
+  getMarketplaceDiscount,
+  getAIMessageLimit,
+  FAIR_USE_AI_DAILY_CAP,
+  type TierType,
+} from './tier-utils';
+
+// ----------------------------------------------------------------------------
+// Tier-config sourcing helpers (SINGLE SOURCE OF TRUTH = src/lib/tier-utils.ts)
+//
+// PRICING_TIERS below MUST NOT hardcode per-tier scalar facts. These adapters
+// translate tier-utils' canonical accessors into the shapes PRICING_TIERS uses
+// (numbers, or the literal 'unlimited' string for null/uncapped values), so the
+// numbers can only ever come from tier-utils. Drift is caught by
+// src/lib/tier-config-consistency.test.ts.
+//
+// billing-engine's PricingTier.id ('pro_plus') differs from tier-utils' TierType
+// ('proplus'); map it here so accessors receive the canonical key.
+// ----------------------------------------------------------------------------
+
+/** Map a billing-engine SubscriptionTier id to the canonical tier-utils TierType. */
+function toTierType(id: SubscriptionTier): TierType {
+  return id === 'pro_plus' ? 'proplus' : id;
+}
+
+/** DISPLAY children limit from tier-utils (null → 'unlimited'). */
+function childrenLimitFor(id: SubscriptionTier): number | 'unlimited' {
+  const max = getMaxChildren(toTierType(id));
+  return max === null ? 'unlimited' : max;
+}
+
+/**
+ * DISPLAY AI/day limit from tier-utils (null → 'unlimited').
+ * Paid tiers stay 'unlimited' for the pricing UI; the fair-use ceiling
+ * (FAIR_USE_AI_DAILY_CAP) is applied only on the enforcement path in
+ * checkMessageLimit() — display and enforcement are intentionally distinct.
+ */
+function aiPerDayDisplayFor(id: SubscriptionTier): number | 'unlimited' {
+  const limit = getAIMessageLimit(toTierType(id));
+  return limit === null ? 'unlimited' : limit;
+}
+
+/** Marketplace discount (whole-number percent) from tier-utils. */
+function discountFor(id: SubscriptionTier): number {
+  return getMarketplaceDiscount(toTierType(id));
+}
 
 // ============================================================================
 // Types
@@ -130,10 +179,10 @@ export const PRICING_TIERS: PricingTier[] = [
       'Community access (read-only)',
     ],
     limits: {
-      aiMessagesPerDay: 3,
-      children: 1,
+      aiMessagesPerDay: aiPerDayDisplayFor('free'),
+      children: childrenLimitFor('free'),
       vaultDocuments: 0,
-      marketplaceDiscount: 0,
+      marketplaceDiscount: discountFor('free'),
     },
     stripePriceIds: {
       monthly: '',
@@ -158,10 +207,10 @@ export const PRICING_TIERS: PricingTier[] = [
       'Progress reports',
     ],
     limits: {
-      aiMessagesPerDay: 'unlimited',
-      children: 2,
+      aiMessagesPerDay: aiPerDayDisplayFor('core'),
+      children: childrenLimitFor('core'),
       vaultDocuments: 25,
-      marketplaceDiscount: 0,
+      marketplaceDiscount: discountFor('core'),
     },
     stripePriceIds: {
       monthly: import.meta.env.VITE_PRICE_CORE_MONTHLY || '',
@@ -188,10 +237,10 @@ export const PRICING_TIERS: PricingTier[] = [
       'IEP goal tracking',
     ],
     limits: {
-      aiMessagesPerDay: 'unlimited',
-      children: 3,
+      aiMessagesPerDay: aiPerDayDisplayFor('pro'),
+      children: childrenLimitFor('pro'),
       vaultDocuments: 'unlimited',
-      marketplaceDiscount: 20,
+      marketplaceDiscount: discountFor('pro'),
     },
     stripePriceIds: {
       monthly: import.meta.env.VITE_PRICE_PRO_MONTHLY || '',
@@ -216,10 +265,10 @@ export const PRICING_TIERS: PricingTier[] = [
       'Early feature access',
     ],
     limits: {
-      aiMessagesPerDay: 'unlimited',
-      children: 'unlimited',
+      aiMessagesPerDay: aiPerDayDisplayFor('pro_plus'),
+      children: childrenLimitFor('pro_plus'),
       vaultDocuments: 'unlimited',
-      marketplaceDiscount: 30,
+      marketplaceDiscount: discountFor('pro_plus'),
     },
     stripePriceIds: {
       monthly: import.meta.env.VITE_PRICE_PROPLUS_MONTHLY || '',

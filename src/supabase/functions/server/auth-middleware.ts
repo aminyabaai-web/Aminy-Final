@@ -36,8 +36,14 @@ export interface AuthResult {
 }
 
 /**
- * Feature definitions for each tier - server-side source of truth
- * This MUST match the client-side tier-utils.ts
+ * Feature definitions for each tier - server-side feature gate.
+ *
+ * SOURCE OF TRUTH: src/lib/tier-utils.ts — keep in sync; covered by
+ * tier-config-consistency.test.ts. The Deno edge runtime cannot cleanly import
+ * the client tier-utils module, so these feature sets are intentionally
+ * duplicated here. Any per-tier scalar facts (price, AI/day, max children,
+ * marketplace discount, memory facts, trial length) MUST match tier-utils.ts.
+ * Do NOT diverge these values — the consistency test will fail CI if you do.
  */
 const TIER_FEATURES: Record<TierType, Set<string>> = {
   free: new Set([
