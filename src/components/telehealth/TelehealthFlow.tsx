@@ -29,7 +29,7 @@ import {
 } from '../../types/telehealth';
 
 import { BrowseTopConcerns } from './BrowseTopConcerns';
-import { getCashPayVisitEconomics } from '../../lib/telehealth-economics';
+import { getCashPayVisitEconomics, type TelehealthVisitClass } from '../../lib/telehealth-economics';
 import { GetCareIntakeScreen } from './GetCareIntake';
 import { BookVisitScreen } from './BookVisit';
 import { AppointmentConfirmationScreen } from './AppointmentConfirmation';
@@ -52,11 +52,19 @@ type TelehealthStep =
 
 type BookingPath = 'quick-consult' | 'start-services' | null;
 
-const quickConsultEconomics = getCashPayVisitEconomics('quick_consult');
-const standardSessionEconomics = getCashPayVisitEconomics('standard_session');
-const deepReviewEconomics = getCashPayVisitEconomics('diagnostic_deep_review');
-const publicCashPayRange = `$${quickConsultEconomics.basePriceCents / 100}–$${deepReviewEconomics.basePriceCents / 100}`;
-const cashPayMenuSummary = `${quickConsultEconomics.publicLabel}, ${standardSessionEconomics.publicLabel}, and ${deepReviewEconomics.publicLabel}`;
+// Derive the public cash-pay menu from the economics config's isPublicMenu flag
+// so deferred/non-self-serve visits (e.g. diagnostic_deep_review) never surface here.
+const PUBLIC_CASH_PAY_CLASSES: TelehealthVisitClass[] = ['quick_consult', 'standard_session', 'diagnostic_deep_review', 'follow_up'];
+const publicCashPayVisits = PUBLIC_CASH_PAY_CLASSES
+  .map(getCashPayVisitEconomics)
+  .filter((v) => v.isPublicMenu);
+const publicCashPayPrices = publicCashPayVisits.map((v) => v.basePriceCents / 100);
+const publicCashPayRange = `$${Math.min(...publicCashPayPrices)}–$${Math.max(...publicCashPayPrices)}`;
+const publicCashPayLabels = publicCashPayVisits.map((v) => v.publicLabel);
+const cashPayMenuSummary =
+  publicCashPayLabels.length > 1
+    ? `${publicCashPayLabels.slice(0, -1).join(', ')} and ${publicCashPayLabels[publicCashPayLabels.length - 1]}`
+    : publicCashPayLabels[0] ?? '';
 
 // Pre-call check component (inline in TelehealthFlow)
 function PreCallCheck({ onReady, onBack }: { onReady: () => void; onBack: () => void }) {

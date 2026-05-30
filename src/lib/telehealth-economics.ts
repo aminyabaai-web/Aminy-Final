@@ -170,7 +170,8 @@ const CASH_PAY_VISITS: Record<TelehealthVisitClass, TelehealthVisitEconomics> = 
     providerPayoutCents: 15500,
     billingOwner: 'aminy',
     settlementTerms: 'weekly_arrears',
-    isPublicMenu: true,
+    // Deferred 2026-05: real dx requires scarce diagnosticians (~$1,500+); not offered as a self-serve cash visit yet. Re-enable when diagnostician supply exists.
+    isPublicMenu: false,
   },
   follow_up: {
     visitClass: 'follow_up',
