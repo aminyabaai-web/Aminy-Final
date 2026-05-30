@@ -409,12 +409,12 @@ export async function sendTrialExpirationEmail(
     <p>Hi ${userName},</p>
     
     ${daysLeft === 0 ? `
-      <p>Your 14-day free trial of Aminy has ended. We hope it's been helpful!</p>
+      <p>Your 7-day free trial of Aminy has ended. We hope it's been helpful!</p>
       
       <p>To continue using all of Aminy's features, including unlimited AI chat, full Aminy Jr access, 
       and adaptive daily plans, you'll need to upgrade to a paid plan.</p>
     ` : `
-      <p>Just a friendly reminder that your 14-day free trial ends in <strong>${daysLeft} ${daysLeft === 1 ? 'day' : 'days'}</strong>.</p>
+      <p>Just a friendly reminder that your 7-day free trial ends in <strong>${daysLeft} ${daysLeft === 1 ? 'day' : 'days'}</strong>.</p>
       
       <p>We hope Aminy has been helping make your days easier. To keep the support going, 
       make sure to upgrade before your trial ends.</p>

@@ -654,7 +654,7 @@ Sincerely,
 export async function startTrial(userId: string): Promise<boolean> {
   try {
     const trialEnd = new Date();
-    trialEnd.setDate(trialEnd.getDate() + 14); // 14-day trial
+    trialEnd.setDate(trialEnd.getDate() + 7); // 7-day trial
 
     await supabase.from('trial_tracking').upsert({
       user_id: userId,

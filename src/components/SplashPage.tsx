@@ -290,7 +290,7 @@ export function SplashPage({
               ...fontSmoothing,
             }}
           >
-            14-day free trial · No credit card required
+            7-day free trial · No credit card required
           </motion.p>
 
           {/* Provider secondary CTA */}

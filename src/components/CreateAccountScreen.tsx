@@ -355,7 +355,7 @@ export function CreateAccountScreen({
               ...fontSmoothing,
             }}
           >
-            Start your 14-day free trial
+            Start your 7-day free trial
           </motion.p>
 
           <h2 className="sr-only">Create your Aminy account</h2>

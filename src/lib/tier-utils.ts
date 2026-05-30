@@ -47,11 +47,11 @@ export const tierDisplayNames: Record<TierType, string> = {
 
 // Trial configuration
 export const TRIAL_CONFIG = {
-  durationDays: 14,
+  durationDays: 7,
   trialTier: 'core' as TierType,
   requiresCreditCard: false,
   features: [
-    'Full Core tier access for 14 days',
+    'Full Core tier access for 7 days',
     'Unlimited AI chat with Aminy',
     'Adaptive daily plans for your child',
     'Document vault & analysis',
@@ -1080,10 +1080,10 @@ export function getTierFeatureDescriptions(tier: TierType): string[] {
       '5 AI chat messages per day',
       'Core calm tools (breathing, timer, bubbles)',
       'Track daily progress',
-      '14-day free trial of Core included',
+      '7-day free trial of Core included',
     ],
     starter: [ // Legacy: Same as Core
-      '14-day free trial included',
+      '7-day free trial included',
       'Unlimited AI chat (text & voice)',
       'AI reads your IEPs & medical records',
       'Adaptive plans that learn what works',
@@ -1093,7 +1093,7 @@ export function getTierFeatureDescriptions(tier: TierType): string[] {
       'HSA/FSA eligible',
     ],
     core: [
-      '14-day free trial included',
+      '7-day free trial included',
       'Unlimited AI chat (text & voice)',
       'AI reads your IEPs & medical records',
       'Adaptive plans that learn what works',

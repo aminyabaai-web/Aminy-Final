@@ -75,7 +75,7 @@ export function HelpCenter({ onClose, onAnalytics }: HelpCenterProps) {
       { 
         title: "Trials & refunds", 
         bullets: [
-          "Free 14-day Core trial.",
+          "Free 7-day Core trial.",
           "Cancel anytime during trial to avoid charges.",
           "Refund policy link in Billing."
         ]

@@ -108,7 +108,7 @@ export function AIPaywallMessage({
           <div className="space-y-2 mb-4">
             <div className="flex items-center gap-2">
               <Check className="w-3 h-3 text-green-600 flex-shrink-0" />
-              <span className="text-xs text-muted-foreground">14-day free trial, no credit card required</span>
+              <span className="text-xs text-muted-foreground">7-day free trial, no credit card required</span>
             </div>
             <div className="flex items-center gap-2">
               <Check className="w-3 h-3 text-green-600 flex-shrink-0" />

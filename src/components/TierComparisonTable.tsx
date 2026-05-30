@@ -182,7 +182,7 @@ export function TierComparisonTable({ compact = false }: TierComparisonTableProp
 
       <div className="mt-4 sm:mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg text-center">
         <p className="text-sm text-blue-800">
-          <strong>All plans include:</strong> 14-day free trial • No credit card required • Cancel anytime • No diagnosis required
+          <strong>All plans include:</strong> 7-day free trial • No credit card required • Cancel anytime • No diagnosis required
         </p>
       </div>
     </div>
