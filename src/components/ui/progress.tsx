@@ -13,11 +13,16 @@ import { cn } from "./utils";
 function Progress({
   className,
   value,
+  "aria-label": ariaLabel,
   ...props
 }: React.ComponentProps<typeof ProgressPrimitive.Root>) {
   return (
     <ProgressPrimitive.Root
       data-slot="progress"
+      // a11y: Radix progressbar needs an accessible name (axe: aria-progressbar-name).
+      // Default to "Progress" when a caller doesn't supply one; expose the % to SRs.
+      aria-label={ariaLabel ?? "Progress"}
+      aria-valuetext={value != null ? `${Math.round(value)}%` : undefined}
       className={cn(
         "bg-primary/20 relative h-2 w-full overflow-hidden rounded-full",
         className,

@@ -29,7 +29,7 @@ export function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
           </Button>
           <div>
             <h1 className="text-lg sm:text-xl font-semibold text-gray-900">Privacy Policy</h1>
-            <p className="text-sm text-gray-500">Last updated: {lastUpdated}</p>
+            <p className="text-sm text-gray-600">Last updated: {lastUpdated}</p>
           </div>
         </div>
       </header>
@@ -41,7 +41,7 @@ export function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
           <section>
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center">
-                <Shield className="w-5 h-5 text-teal-600" />
+                <Shield className="w-5 h-5 text-teal-700" />
               </div>
               <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Introduction</h2>
             </div>
@@ -60,7 +60,7 @@ export function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
           <section>
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                <Database className="w-5 h-5 text-blue-600" />
+                <Database className="w-5 h-5 text-blue-700" />
               </div>
               <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Information We Collect</h2>
             </div>
@@ -157,7 +157,7 @@ export function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
             </ul>
             <p className="text-gray-600 leading-relaxed mt-4">
               To exercise these rights, please contact us at{' '}
-              <a href="mailto:privacy@aminy.ai" className="text-teal-600 hover:underline">
+              <a href="mailto:privacy@aminy.ai" className="text-teal-700 hover:underline">
                 privacy@aminy.ai
               </a>
             </p>
@@ -200,11 +200,11 @@ export function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
             <div className="mt-4 p-4 bg-gray-50 rounded-lg">
               <p className="text-gray-700">
                 <strong>Email:</strong>{' '}
-                <a href="mailto:privacy@aminy.ai" className="text-teal-600 hover:underline">
+                <a href="mailto:privacy@aminy.ai" className="text-teal-700 hover:underline">
                   privacy@aminy.ai
                 </a>
               </p>
-              <p className="text-gray-500 text-sm mt-2">
+              <p className="text-gray-600 text-sm mt-2">
                 Aminy, LLC
               </p>
             </div>
