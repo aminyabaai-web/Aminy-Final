@@ -1,5 +1,5 @@
 # Aminy — Claude Project Instructions
-Updated: 2026-05-15
+Updated: 2026-05-30 (see STRATEGY.md + HANDOFF.md for current state)
 
 ## What is Aminy?
 Behavioral wellness PWA for neurodivergent families. React 19 + TypeScript + Vite + Tailwind CSS v4.
@@ -45,14 +45,13 @@ Behavioral wellness PWA for neurodivergent families. React 19 + TypeScript + Vit
 3. `index.css` — 8 hex color utilities, 174 gradient stops, oklch fallbacks, scroll fix, opacity hack
 4. `LoginScreen.tsx` — No `overflow:hidden` or `transform:scale(1.25)` on logo
 
-## Testing
-- Preview: `aminy-dev` on port 3001 (`~/.claude/launch.json`)
-- Viewport: 375x812 (mobile-first)
-- Unit tests: `npm run test:run` — 339/339 passing (May 15)
-- Golden-path E2E: `npx playwright test e2e/golden-path.spec.ts` — 10/10 passing
-- 45-screen smoke: `npx playwright test e2e/screen-smoke.spec.ts` — 45/45 passing
-- Provider journey: `npx playwright test e2e/provider-full-journey.spec.ts`
-- Total: **394 tests green** across unit + E2E
+## Testing (verified 2026-05-30)
+- Preview: `aminy-dev` on port 3001 (`~/.claude/launch.json`); viewport 375x812 (mobile-first)
+- Unit: `npm run test:run` — **332 passing** (incl. tier-config-consistency drift guard + monetization + economics)
+- E2E (`npx playwright install chromium firefox webkit` first): **375 Chromium** screen-coverage + core · **65/65** journeys/acceptance/onboarding/navigation · **165/165** Mobile Chrome + Mobile Safari + Tablet · WebKit + Firefox core green
+- 375px **visual baseline** established: `e2e/__snapshots__/visual-regression.spec.ts-snapshots/` (88 PNGs)
+- **Prod AI smoke**: `npm run smoke:ai` — asserts the deployed `chat` fn returns Claude (catches silent OpenAI-fallback). CONFIRMED live: `claude-sonnet-4-6`.
+- Screen-smoke/golden-path error filters ignore the benign WebKit `interactive-widget` viewport warning.
 
 ## GitHub
 - **Repo:** `aminyabaai-web/Aminy-Final` (private; transfer from `edgarstaren` complete)
@@ -85,7 +84,7 @@ Behavioral wellness PWA for neurodivergent families. React 19 + TypeScript + Vit
 
 ### Partner attribution
 - `src/lib/partner-org.ts` — detects `?org=aact` URL param, persists to localStorage, applies partner config to profile post-signup
-- `PARTNER_CONFIGS.aact` auto-sets: pilot_organization, pilot_payers (AHCCCS + 9), system_of_record=centralreach, evv_system=sandata
+- `PARTNER_CONFIGS.aact` auto-sets: pilot_organization, pilot_payers (AHCCCS + 9), **system_of_record=`rethink`** (AACT/Rise use **Rethink**, NOT CentralReach — the CentralReach lib/`cr-sync` screen are dormant, retire when the Rethink integration goes live), evv_system=sandata
 - `AACTPartnerSetup.tsx` is the partner-admin microsite (one-click invite URL + bulk CSV import)
 - `ProviderPortal.tsx` hides Credentialing/Claims tabs for AACT/Rise providers (org handles those)
 
@@ -113,5 +112,8 @@ Behavioral wellness PWA for neurodivergent families. React 19 + TypeScript + Vit
 - **Stripe price IDs** for Org SKU — needs setup in Stripe dashboard then `VITE_STRIPE_PRICE_ORG_MONTHLY` / `_YEARLY` env vars
 - **Branch protection on `main`** — GitHub → Settings → Branches
 - **Sentry DSN** — VITE_SENTRY_DSN env var needs real DSN
-- Production cleanup: remove debug hooks (`window.__navigateToScreen`), opacity hack (`* { opacity: 1 !important }`), restore animations once motion/react WAAPI bug is fixed
-- **Dev-only bypass at `App.tsx:3743`** — `(userData.id || import.meta.env.DEV)` allows BevelChatOverlay to render with dummy userId in preview. Production-safe but should be removed before final deploy
+- Debug hooks (`window.__navigateToScreen`) + the `App.tsx` dummy-userId bypass are **already `import.meta.env.DEV`-gated** (not in prod; the hooks are needed by E2E which runs on the dev server). The opacity hack (`* { opacity: 1 !important }`) is **load-bearing** (motion/react WAAPI bug) — do NOT remove until that's fixed.
+
+## Current state & strategy (2026-05-30) — see STRATEGY.md + HANDOFF.md
+- Active branch `phase-b-all-component-audit` → **PR #199**. Revenue model v2 live (tiers/discount/fair-use/trial all drift-guarded by `tier-config-consistency.test.ts`); Claude confirmed primary in prod; independent-BCBA practice-in-a-box wedge built (`ProviderPortal` my-practice hub + `provider-practice.ts` practiceMode + honest billing rails); payer-type funnel (insured→coverage tools, cash→full funnel).
+- **Blocked on owner:** Rethink sandbox creds (to *prove* EMR sync — today scaffolded), `supabase db push` the pending migrations (incl. `20260530000000_provider_practice_mode.sql`), set the Rethink/remaining secrets, rotate the Twilio token, Stripe Org price IDs, Sentry DSN, branch protection, staff/cold-eye validation.
