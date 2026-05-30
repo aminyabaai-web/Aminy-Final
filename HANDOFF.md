@@ -1,106 +1,50 @@
 # Aminy — Production-Perfection Handoff
+_Read with `STRATEGY.md` (revenue/strategy) and `CLAUDE.md` (architecture). Updated 2026-05-29._
 
-**Read this first in any new session, alongside `CLAUDE.md` and `AUDIT-FINDINGS.md`.**
+## Where things are
+Active branch: **`phase-b-all-component-audit`** → **PR #199** (open against `main`). PR #198 already merged (the first hardening pass + first fabrication sweep).
+Gate is green on the branch: `npm run build` ✓ · `npx tsc --noEmit` **0 errors** · `npm run test:run` **332 unit** ✓ · plus drift-guard + economics + monetization tests.
 
-## The Mission (verbatim, still in force)
-> Finish this app. Make it perfect. Production-level ready. Every screen pixel-perfect — everything in the right place. Parents, providers, VCs, strategists should think it's flawless. Set to drive massive revenue and be a true unicorn.
-> **ALL screens and ALL components perfect — not just high-visibility ones.** Significant testing + simulated test-user testing. PERFECT / FLAWLESS.
+## The mission (still in force)
+Production-perfect, ALL screens/components, revenue-optimized, flawless. Lead with an honest grade; never claim "perfect" until the full gate (build+tsc+unit+multi-browser E2E) is green AND every component is covered.
 
-Honest framing for the next session: do **not** claim "perfect" until the verification gate below is fully green AND every component (not a sample) has been audited. Lead with the grade, name gaps with specifics.
-
----
-
-## The dominant defect class + the fix recipe
-The #1 production blocker is **fabricated clinical / PHI / financial / provider / testimonial / analytics data shown to REAL (non-demo) users.** The canonical fix everywhere:
-
+## The dominant defect class + fix recipe
+Fabricated clinical/PHI/financial/provider/analytics data shown to REAL (non-demo) users. Recipe:
 ```ts
-import { isDemoMode } from '../lib/demo-seed';   // ../../ from nested dirs
-// state init:  useState(isDemoMode() ? SAMPLE : [] /* or null/0 */)
-// fetch fallback:  if (rows.length === 0 && isDemoMode()) setX(SAMPLE); else setX([]);
-// render:  data.length ? <list/> : <EmptyState/>   // friendly, on-brand
+import { isDemoMode } from '../lib/demo-seed';      // ../../ from nested dirs
+useState(isDemoMode() ? SAMPLE : [] /* or null/0 */)
+data.length ? <list/> : <EmptyState/>
 ```
-Demo mode (`?demo=true|investor|aact` or `VITE_DEMO_MODE`) must still show rich sample data so prospect/VC walkthroughs look complete. Real users see real data or a proper empty state. **Never** let a fake provider id / fake amount reach Stripe or a "binding" terms checkbox.
+Demo (`?demo=…`) shows rich samples; real users see real data or an empty state. Never let fake ids/amounts reach Stripe or a binding terms checkbox.
 
-### Hard rules (from CLAUDE.md — do not violate)
-- Navigation is `currentScreen` state in `App.tsx`. **NEVER add react-router.**
-- **Tailwind v4 JIT emits only COMPLETE STATIC class strings.** No `bg-${x}-500` interpolation — use a lookup object whose values are full literal classes (see `JrKidMode.tsx` `moduleColors` for the pattern). No invalid shades (`-150` doesn't exist).
+### Hard rules (do not violate)
+- State-nav via `currentScreen` in App.tsx — **NEVER add react-router**.
+- **Tailwind v4 is PRECOMPILED (`src/index.css`, no JIT)** — any class/variant not literally present (arbitrary `bg-[#hex]`, `/90` opacity, `h-4.5`, interpolated `bg-${x}`) does NOT render. Use defined classes or inline style.
 - Brand: teal `#43AA8B`, slate `#577590`, cream `#FAF7F2`, peach `#E07A5F`.
-- Shared header: `<ScreenHeader>` (`src/components/ui/ScreenHeader.tsx`; props `title/subtitle/icon/actions/onBack/variant/sticky`). Chrome = `px-4 pt-3 pb-4`.
-- Copy: "HIPAA-conscious" (never absolute "HIPAA-compliant"). No unconditional payment "guarantees".
-- Platform fees: `PLATFORM_FEE_RATES` in `src/lib/stripe-connect.ts` = cash_pay 0.35 / insured 0.10 / aact_pilot 0.05. **No 15% rail exists.** Use `getPlatformFeeRate(rail)`.
-- Cori is NOT involved at AACT. AACT/Rise use **Rethink** (not CentralReach) as system-of-record.
+- Shared `<ScreenHeader>` (`src/components/ui/ScreenHeader.tsx`, chrome px-4 pt-3 pb-4).
+- Copy: "HIPAA-conscious" (never assert Aminy is "HIPAA-compliant"; vendor/infra HIPAA statements w/ BAA are OK). No unconditional payment guarantees.
+- **Tier/price/trial facts come from ONE source: `src/lib/tier-utils.ts`.** Do not hardcode prices/limits/trial elsewhere — `src/lib/tier-config-consistency.test.ts` fails CI on drift.
+- **No live AACT deal** — never present a live AACT partnership as real (`PARTNER_CONFIGS.aact` etc. are aspirational/demo).
 
----
+## DONE this session (on the branch / PR #199)
+- **Component hardening:** Wave 1 (48 routed screens, 54 fixes, fully adversarially verified) + Wave 2 (37 routed screens, fix pass — re-verify in progress) + WeeklyAISummary −346 lines dead code.
+- **Revenue model v2** (see STRATEGY.md): Free=funnel (3 AI/day, 1 child, can book telehealth); kids 1/2/3/∞; memory 50/5k/15k/∞; **discount 0/10/20/30 cash-pay-only, platform-absorbed, margin-clamped**; AI **fair-use 100/day** (displays Unlimited); **trial truthfully 7 days** (fixed 14-day/"1-month" false claims); fixed live stale prices ($19/$69/$229→real); **$229 diagnostic visit deferred**.
+- **Payer-type funnel:** insured users → soft wall + "check coverage" (existing tools; no fake covered-booking); cash → full funnel. Live on `PricingTiers`.
+- **Tier config consolidated** to tier-utils + 24-test drift guard (Task #13). 
+- **`STRATEGY.md`** created (Headway research + recommendation, B2B lanes, economics).
 
-## Verification gate (run after every batch; all must be green before "done")
-```bash
-npm run build          # vite/esbuild — expect "✓ built"
-npx tsc --noEmit       # MUST be 0 errors (ignore the 1 'baseUrl deprecated' warning)
-npm run test:run       # unit — currently 322 passing
-npx playwright install chromium firefox webkit   # browsers are NOT preinstalled here
-npx playwright test e2e/golden-path.spec.ts e2e/screen-smoke.spec.ts e2e/mobile-viewports.spec.ts --project=chromium
-# full suite (831): npx playwright test   (needs all 3 browsers installed)
-```
-Current status (this session): build ✓, tsc ✓ 0 errors, unit ✓ **322**, E2E core ✓ **64/64 chromium**. WebKit/Firefox NOT yet run (binaries were absent; I installed chromium only).
+## REMAINING to truly "done"
+1. **Wave 2 re-verify** (running, read-only, task `w3n2p1e6w`) — fix any regressions it confirms in the 37 files.
+2. **Unrouted components** — triaged (357 candidates → 52 marker-hits → almost all noise/false-positive/already-judged; the real ones fixed: ReferralCard, InlinePaywallPromo, email-service). Considered substantially clean; a deeper per-file pass is optional.
+3. **Multi-browser E2E** — install all 3 browsers (`npx playwright install chromium firefox webkit`), run full 831-test suite + simulated parent/provider/AACT/VC journeys. Only Chromium has been run (64/64 core green).
+4. **Task #11** (reframed) — demand/engagement/utilization layer for ABA orgs; gated on a real AACT deal + capital. Roadmap.
+5. Optional cleanup: 2 orphaned paywall components (PaywallScreen, AIPaywallMessage — unmounted; harmless funnel code added; decide delete vs keep).
 
----
+## NON-CODE / infra (owner — I'm blocked from prod)
+- `supabase functions deploy` for the **free-booking gate** (auth-middleware) + the AACT/edge changes.
+- Push 5 pending DB migrations (`denial_records`, org-billing, etc.).
+- **Rotate the Twilio token** pasted in chat earlier.
+- Stripe Org price IDs; branch protection on main; real Sentry DSN.
 
-## DONE this session (committed)
-1. **Critical PHI/clinical gating:** ProviderPortal (7 findings), OutcomesDashboard (mock KPI/providers/charts → real-or-empty), MedicationTracker (+ bonus ungated logs path), SettingsScreen insurance PHI, ConversationalBooking fallback providers.
-2. **Money/legal:** SessionPayoutTrigger `(10%)`→rail %; ProviderApplication `15%`→35/10/5 + real legal links + drop unreachable `'pt'`; ProviderPayoutSetup `provider_id`→`id` (billing fields now save) + blue→teal.
-3. **Dead/empty flows:** MyAppointments self-loads real bookings (`userId` prop) + wired join/cancel(confirm)/reschedule/review/questionnaire; App.tsx `session-payout` demo-gated.
-4. **Workflow 1 (9 clusters, fix→adversarial-verify, all passed):** CareTab, RecordsVault (NaN/key/bulk bugs), JrKidMode (dynamic-Tailwind→lookup), ProviderLanding, PayerOutcomesDashboard, ProviderOnboarding/PricingTiers/SplashPage/FreeScreeningFlow, CommunityForYou/AskABCBA, ProviderMarketplace (deleted `generateMockProviders`) + AnalyticsCharts (mock→demo-gated + empty state).
-5. **Consistency:** ScreenHeader adopted on AACTPartnerSetup (+ `rethink`→`Rethink` label), CareCoordinationHub, OrgAdminDashboard, OutcomesDashboard, MyAppointments. Deleted orphan `SplashScreen.tsx` + its test (removed from `package.json` test:run list).
-
-## IN-FLIGHT — finish this first in the new session
-**Workflow 2 "fabrication-sweep" was STOPPED mid-run to allow this commit.** ~21 of 34 components got gated; the rest are pending AND the stopped clusters were not all adversarially re-verified.
-- Script saved at: `.claude/.../workflows/scripts/aminy-fabrication-sweep-wf_233a737a-7c8.js` (resume-by-runId is same-session-only, so **re-launch it fresh** — already-gated files will be marked already-fixed).
-- **Still pending (no gate yet):** `telehealth/CarePlanTab`, `telehealth/TelehealthFlow`, `provider/CredentialingOrchestrator`, `provider/CredentialingSupportCenter`, `EVVDashboard`, `provider/RosterManager`, `ProviderCaseloadView`, `ReportsHub`, `community/ViralMechanics`, `SkylightIntegration`, `ProviderReviews`, `PayerPartnerLanding`. (`InvestorDemoMode`, `DeveloperModePanel` are intentional demo/dev — confirm they're demo/dev-only and leave.)
-- **Re-verify the gated-but-unverified ones** (build passed, but logic not all checked): InsuredCareHub, TreatmentPlanSummary, HomeProgramTracker, PlaybooksLibrary, QASessionsHub, TelehealthSessionManager, CAQHManager, ClaimReadyQueue, DenialWorkbench, EVVReconciliation2, ProviderAnalytics, ProviderAccessRequests, ClinicalOutcomesDashboard, UnitEconomicsView, CommunityHub, SecureMessaging, CaregiverSimpleMode, DocumentVaultElite, ProviderDirectory, ProviderWaitlist, ProviderReferralProgram, ParentIntakeFlow.
-
----
-
-## THE REMAINING PLAN to "ALL components perfect + flawless" (do in order)
-
-### Phase A — Finish fabrication gating (re-run workflow 2; ~1 workflow)
-Re-launch the sweep, complete the pending files, re-verify. Confirm with:
-`grep -rlE "MOCK_[A-Z]|DEMO_[A-Z]|FALLBACK_[A-Z]|Sarah Chen|Emma Thompson" src/components --include=*.tsx | grep -v demo-seed` → every hit must be demo-gated or a verified demo/dev-only screen.
-
-### Phase B — ALL-COMPONENT audit (the user's explicit ask: not just high-vis)
-There are **377 components**; only ~110 have been touched. Enumerate the rest and audit every one. Recommended: a workflow that fans out over `src/components/**/*.tsx` in batches of ~6 files/agent, each checking the SAME dimensions used so far:
-1. fabricated data ungated to real users
-2. dead handlers / `href="#"` / no-onClick buttons / `TODO`/placeholder copy shown to users
-3. dynamic-Tailwind classes (won't render) + invalid shades
-4. header/padding drift vs ScreenHeader; missing back control
-5. a11y: icon-only buttons need `aria-label`; selects need labels
-6. risky/false copy (absolute HIPAA, "guaranteed" payments, fabricated %/stats)
-7. runtime risks (NaN dates/sizes, array-index keys, stale-closure state, optional props undefined in render)
-Adversarially verify each finding before fixing. Track in a regenerated `AUDIT-FINDINGS.md`.
-- Generate the full list: `find src/components -name '*.tsx' | sort > /tmp/all-components.txt` (377 files).
-
-### Phase C — Significant testing + simulated test-users
-- Install all browsers; run the **full 831-test** Playwright suite across chromium/firefox/webkit + Mobile Chrome/Safari/Tablet.
-- Add E2E for every newly-gated screen: assert **real-user mode shows the empty state**, **demo mode shows sample data**. (New screens need entries in `e2e/screen-smoke.spec.ts`.)
-- **Simulated test-user journeys** (write as new specs): (a) Parent: splash→screening→signup→onboarding→AI chat→book→pay(test)→appointments; (b) Provider: apply→approve→Stripe Connect→listed→booked→session→payout; (c) AACT exec: `?demo=aact` dashboards; (d) VC: `?demo=investor` walkthrough. Each must complete with **zero console errors** and correct empty/real states.
-- Visual: screenshot every screen at 375×812 + tablet; check no overflow/wrap, consistent chrome. Lighthouse mobile (target ≥90 perf, ≥95 a11y).
-- Cold-eye pass: have a real person (Amy / a CCV parent) try signup→first AI convo.
-
-### Phase D — Final polish & VC/McKinsey readiness
-Reconcile pricing copy, confirm all 3 revenue lanes have working Stripe SKUs + an E2E, update CLAUDE.md "What Still Needs Work", remove dev-only hooks (`window.__navigateToScreen`, the `* {opacity:1!important}` hack) once motion bug is confirmed fixed.
-
----
-
-## NON-CODE TODOs (owner must do; I'm blocked from prod infra)
-- `supabase db push` 5 pending migrations (`denial_records`, `superbills`/expenses, org-billing, ask_bcba, provider_partner_org) — currently cause benign console warnings + empty states.
-- Stripe price IDs for Org SKU → `VITE_STRIPE_PRICE_ORG_MONTHLY` / `_YEARLY`.
-- **Rotate the Twilio credentials** that were pasted in chat earlier. Set Supabase secrets via the Dashboard (CLI write to prod is blocked).
-- GitHub branch protection on `main`; real `VITE_SENTRY_DSN`.
-
-## Key locations
-- Audit findings (authoritative, 75): `AUDIT-FINDINGS.md`
-- Demo gate + sample data: `src/lib/demo-seed.ts` (`isDemoMode`, `DEMO_PROVIDERS`, `demoAppointments`, …)
-- Fees: `src/lib/stripe-connect.ts`. Telehealth economics: `src/lib/telehealth-economics.ts`.
-- Workflow scripts (this session): under `.claude/projects/.../workflows/scripts/aminy-audit-fixes-*.js` and `aminy-fabrication-sweep-*.js`.
-
-## How to resume (paste as the first message of the new session)
-> Read HANDOFF.md, CLAUDE.md, and AUDIT-FINDINGS.md. Continue the Aminy production-perfection work. Start at Phase A (re-run the fabrication sweep to finish the pending files + re-verify), then Phase B (audit ALL 377 components, not just high-visibility), then Phase C (full multi-browser E2E + simulated parent/provider/AACT/VC test-user journeys). Use multi-agent workflows. Run the full verification gate after each phase and report an honest grade with specific gaps. Keep going until build+tsc+unit+full-E2E are all green and every component is audited.
+## Resume prompt (paste first in a new session)
+> Read HANDOFF.md, STRATEGY.md, CLAUDE.md. Continue Aminy on branch `phase-b-all-component-audit` (PR #199). Finish: (1) act on the Wave 2 re-verify regressions, (2) full multi-browser E2E + simulated test-user journeys, (3) optional deeper unrouted-component pass. Run the full gate after each step, report an honest grade. Use orphan-safe (short) workflows. Keep everything committed.
