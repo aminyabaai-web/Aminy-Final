@@ -266,11 +266,8 @@ test.describe('AI Report Generation', () => {
 
     // Check for report/summary content
     const reportContent = page.locator(
-      '[class*="summary"], ' +
-      '[class*="insight"], ' +
-      '[class*="report"], ' +
-      'text=/week|progress|summary/i'
-    );
+      '[class*="summary"], [class*="insight"], [class*="report"]'
+    ).or(page.getByText(/week|progress|summary/i));
 
     const hasReport = await reportContent.count() > 0;
     console.log(`Has weekly summary content: ${hasReport}`);
@@ -336,12 +333,8 @@ test.describe('AI Recommendations', () => {
 
     // Look for recommendation elements
     const recommendations = page.locator(
-      '[class*="recommendation"], ' +
-      '[class*="suggest"], ' +
-      '[class*="tip"], ' +
-      '[class*="nudge"], ' +
-      'text=/recommend|try|consider/i'
-    );
+      '[class*="recommendation"], [class*="suggest"], [class*="tip"], [class*="nudge"]'
+    ).or(page.getByText(/recommend|try|consider/i));
 
     const count = await recommendations.count();
     console.log(`Recommendation elements: ${count}`);
@@ -357,11 +350,8 @@ test.describe('AI Recommendations', () => {
 
     // Look for booster/activity cards
     const boosters = page.locator(
-      '[class*="booster"], ' +
-      '[class*="activity"], ' +
-      '[class*="exercise"], ' +
-      'text=/booster|activity|try this/i'
-    );
+      '[class*="booster"], [class*="activity"], [class*="exercise"]'
+    ).or(page.getByText(/booster|activity|try this/i));
 
     const count = await boosters.count();
     console.log(`Booster elements: ${count}`);
@@ -380,11 +370,8 @@ test.describe('AI Recommendations', () => {
 
     // Check for AI-generated care plan elements
     const carePlan = page.locator(
-      '[class*="goal"], ' +
-      '[class*="plan"], ' +
-      '[class*="strategy"], ' +
-      'text=/goal|plan|strategy/i'
-    );
+      '[class*="goal"], [class*="plan"], [class*="strategy"]'
+    ).or(page.getByText(/goal|plan|strategy/i));
 
     const count = await carePlan.count();
     console.log(`Care plan elements: ${count}`);
@@ -408,19 +395,16 @@ test.describe('Bevel Chat Integration', () => {
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(1000);
 
-    // Look for Bevel chat trigger
-    const bevelTrigger = page.locator(
-      '[class*="bevel"], ' +
-      '[class*="chat-fab"], ' +
-      '[class*="floating-action"], ' +
-      'button[aria-label*="chat" i]'
-    );
+    // Look for the chat trigger by its accessible name (the real FAB is a
+    // <button aria-label="Open chat with Aminy">). .first() avoids strict-mode
+    // matches against the (hidden) overlay container.
+    const bevelTrigger = page.getByRole('button', { name: /chat/i }).first();
 
     const hasBevel = await bevelTrigger.isVisible().catch(() => false);
     console.log(`Bevel trigger visible: ${hasBevel}`);
 
     if (hasBevel) {
-      await bevelTrigger.click();
+      await bevelTrigger.click().catch(() => {});
       await page.waitForTimeout(500);
 
       // Check if overlay opened
@@ -598,10 +582,8 @@ test.describe('AI Analytics', () => {
 
     // Look for AI insights
     const insights = page.locator(
-      '[class*="insight"], ' +
-      '[class*="ai"], ' +
-      'text=/insight|trend|pattern/i'
-    );
+      '[class*="insight"], [class*="ai"]'
+    ).or(page.getByText(/insight|trend|pattern/i));
 
     const count = await insights.count();
     console.log(`AI insight elements: ${count}`);

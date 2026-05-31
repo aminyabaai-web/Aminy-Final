@@ -413,10 +413,8 @@ test.describe('API Error Handling', () => {
 
     // Look for error handling UI
     const errorUI = page.locator(
-      '[class*="error"], ' +
-      '[class*="offline"], ' +
-      'text=/error|offline|connection/i'
-    );
+      '[class*="error"], [class*="offline"]'
+    ).or(page.getByText(/error|offline|connection/i));
 
     const hasErrorUI = await errorUI.count() > 0;
     console.log(`Shows error UI: ${hasErrorUI}`);
@@ -465,10 +463,8 @@ test.describe('API Error Handling', () => {
 
     // Should show error message
     const errorMessage = page.locator(
-      '[role="alert"], ' +
-      '[class*="error"], ' +
-      'text=/error|something went wrong/i'
-    );
+      '[role="alert"], [class*="error"]'
+    ).or(page.getByText(/error|something went wrong/i));
 
     const hasError = await errorMessage.count() > 0;
     console.log(`Shows server error: ${hasError}`);
@@ -520,7 +516,7 @@ test.describe('Offline Functionality', () => {
     await expect(body).toBeVisible();
 
     // Check for offline indicator
-    const offlineIndicator = page.locator('[class*="offline"], text=/offline/i');
+    const offlineIndicator = page.locator('[class*="offline"]').or(page.getByText(/offline/i));
     const hasOfflineIndicator = await offlineIndicator.count() > 0;
     console.log(`Shows offline indicator: ${hasOfflineIndicator}`);
 
@@ -551,7 +547,7 @@ test.describe('Offline Functionality', () => {
     await page.waitForTimeout(2000);
 
     // Check for sync indicator
-    const syncIndicator = page.locator('[class*="sync"], text=/syncing|synced/i');
+    const syncIndicator = page.locator('[class*="sync"]').or(page.getByText(/syncing|synced/i));
     const hasSyncIndicator = await syncIndicator.count() > 0;
     console.log(`Shows sync indicator: ${hasSyncIndicator}`);
 
