@@ -42,10 +42,12 @@ export function CLSOptimizer({ children }: { children: React.ReactNode }) {
     document.documentElement.style.scrollbarGutter = 'stable';
     document.documentElement.style.overflowY = 'scroll';
 
-    // CRITICAL: Force hardware acceleration
-    document.documentElement.style.transform = 'translateZ(0)';
+    // Smoothing only. DO NOT set transform/perspective on <html> here: either one
+    // makes <html> the containing block for EVERY position:fixed descendant (bottom
+    // nav, floating chat FABs, modal overlays), un-pinning them from the viewport so
+    // they render below the fold on short screens. This was the bottom-nav-cutoff bug
+    // caught by e2e/visual-audit.spec.ts. backface-visibility is safe (no containing block).
     document.documentElement.style.backfaceVisibility = 'hidden';
-    document.documentElement.style.perspective = '1000px';
 
     // CRITICAL: Prevent font loading shifts with font-display block
     const style = document.createElement('style');
@@ -102,10 +104,11 @@ export function CLSOptimizer({ children }: { children: React.ReactNode }) {
         word-wrap: break-word;
       }
       
-      /* Critical: Reserve space for Suspense boundaries */
+      /* Critical: Reserve space for Suspense boundaries.
+         NOTE: no layout/paint containment here — this element wraps the whole app,
+         and that containment would make it the containing block for all fixed UI. */
       [data-suspense-boundary] {
         min-height: 100vh;
-        contain: layout;
       }
     `;
     document.head.appendChild(style);
@@ -122,11 +125,15 @@ export function CLSOptimizer({ children }: { children: React.ReactNode }) {
       data-suspense-boundary="true"
       style={{
         minHeight: '100vh',
-        contain: 'layout style',
+        // NOTE: deliberately NO `contain: layout/paint` and NO `transform` here.
+        // This div wraps the entire app; either property would make it the
+        // containing block for every position:fixed descendant (bottom nav, chat
+        // FABs, modal overlays) — pinning them to this tall wrapper instead of the
+        // viewport, so they fall below the fold on short screens (iPhone SE, etc.).
+        // `isolation: isolate` gives a stable stacking context for CLS layering
+        // WITHOUT establishing a containing block. (e2e/visual-audit guards this.)
         isolation: 'isolate',
-        transform: 'translateZ(0)',
         backfaceVisibility: 'hidden',
-        willChange: 'auto',
       }}
     >
       {children}

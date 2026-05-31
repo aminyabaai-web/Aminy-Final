@@ -712,6 +712,28 @@
     bottom: calc(var(--spacing) * 20);
   }
 
+  /* Tailwind v4 is precompiled here (no JIT) — these bottom-/top- offsets are USED
+     by fixed/absolute elements across the app (chat FABs at bottom-24, banners,
+     pills) but were never compiled in, so those elements got position:fixed with
+     no offset and rendered at their static-flow location (far down a tall page).
+     Caught by e2e/visual-audit bottom-nav tests. Keep in sync with usage. */
+  .bottom-1 { bottom: calc(var(--spacing) * 1); }
+  .bottom-2 { bottom: calc(var(--spacing) * 2); }
+  .bottom-3 { bottom: calc(var(--spacing) * 3); }
+  .bottom-4 { bottom: calc(var(--spacing) * 4); }
+  .bottom-5 { bottom: calc(var(--spacing) * 5); }
+  .bottom-6 { bottom: calc(var(--spacing) * 6); }
+  .bottom-8 { bottom: calc(var(--spacing) * 8); }
+  .bottom-16 { bottom: calc(var(--spacing) * 16); }
+  .bottom-24 { bottom: calc(var(--spacing) * 24); }
+  .bottom-32 { bottom: calc(var(--spacing) * 32); }
+  .bottom-36 { bottom: calc(var(--spacing) * 36); }
+  .top-3 { top: calc(var(--spacing) * 3); }
+  .top-5 { top: calc(var(--spacing) * 5); }
+  .top-6 { top: calc(var(--spacing) * 6); }
+  .top-8 { top: calc(var(--spacing) * 8); }
+  .top-20 { top: calc(var(--spacing) * 20); }
+
   .left-0 {
     left: calc(var(--spacing) * 0);
   }
@@ -5903,7 +5925,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
   backface-visibility: hidden;
   font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, Segoe UI, Manrope, Inter, Roboto, Helvetica, Arial, sans-serif;
-  transform: translateZ(0);
+  /* NOTE: do NOT add transform/translateZ here. A transform on <body> makes it the
+     containing block for EVERY position:fixed descendant — un-pinning the bottom nav,
+     FABs, and modal overlays from the viewport (they pin to the tall body instead).
+     This was the root cause of the bottom-nav-cutoff bug on small viewports. */
 }
 
 *, :before, :after {
@@ -5914,7 +5939,7 @@ html {
   scrollbar-gutter: stable both-edges;
   backface-visibility: hidden;
   overflow: hidden scroll;
-  transform: translateZ(0);
+  /* NOTE: no transform/translateZ here either — same containing-block trap as <body>. */
 }
 
 .aminy-card, .aminy-ai-card, .plan-populate-animation, .reports-card, .medical-card {
@@ -15213,8 +15238,12 @@ body.mobile-optimized {
 }
 
 .mobile-polish-wrapper.is-mobile * {
+  /* CRITICAL: do NOT add `transform` (e.g. translateZ(0)) to this universal
+     selector. It applied a transform to EVERY descendant on mobile, making each
+     one a containing block for position:fixed — which un-pinned the bottom nav
+     and chat FABs from the viewport so they fell below the fold on short screens.
+     backface-visibility alone is safe (it does not establish a containing block). */
   backface-visibility: hidden;
-  transform: translateZ(0);
 }
 
 @media (width <= 640px) {
@@ -16588,3 +16617,39 @@ button[class*="bg-primary"] {
 .from-\[\#FAF7F2\] { --tw-gradient-from: #FAF7F2; }
 .ring-\[\#6B9080\] { --tw-ring-color: #6B9080; }
 .focus\:ring-\[\#6B9080\]:focus { --tw-ring-color: #6B9080; }
+
+/* ============================================================================
+   FIXED-POSITIONING CONTAINING-BLOCK RESTORATION  (load-bearing — do not remove)
+   ----------------------------------------------------------------------------
+   This file accumulated ~20 "GPU optimization" rules that set
+   transform: translateZ(0), contain: layout|paint|strict, perspective, or
+   will-change: transform on html, body, #root, <main>, scroll wrappers, and
+   screen roots (some with !important). Per CSS spec, ANY of those on an ancestor
+   makes it the containing block for position:fixed descendants. The result: the
+   bottom nav, floating chat FABs, and even position:fixed modal overlays were
+   pinned to the (tall) scroll body instead of the viewport, so on short screens
+   (iPhone SE 375x667, small mobile 320x568) they rendered far below the fold —
+   "cut off." Caught by e2e/visual-audit.spec.ts (bottom-nav-visible tests).
+
+   Structural layout containers must NEVER establish a containing block for fixed
+   UI. Appended last so it wins the cascade; neutralizes the hacks on those
+   containers only. GPU compositing remains available on leaf nodes (cards, chat
+   bubbles) that opt in explicitly via their own classes.
+   ============================================================================ */
+html,
+body,
+#root,
+#root > div,
+.relative.h-full.w-full,
+.relative.h-full.overflow-y-auto,
+.mx-auto.max-w-7xl,
+.flex-1.min-w-0,
+main,
+main#main,
+.min-h-screen {
+  transform: none !important;
+  perspective: none !important;
+  filter: none !important;
+  contain: none !important;
+  will-change: auto !important;
+}
