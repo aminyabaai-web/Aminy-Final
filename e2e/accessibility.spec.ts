@@ -82,7 +82,7 @@ test.describe('Automated Accessibility Audit (axe-core)', () => {
           accessibilityScanResults.violations.forEach((violation) => {
             console.log(`  - ${violation.impact}: ${violation.id} - ${violation.description}`);
             console.log(`    Help: ${violation.helpUrl}`);
-            console.log(`    Nodes: ${violation.nodes.length}`);
+            console.log(`    Nodes: ${violation.nodes.length} — ${violation.nodes.map((n) => n.target).join(', ')}`);
           });
         }
 

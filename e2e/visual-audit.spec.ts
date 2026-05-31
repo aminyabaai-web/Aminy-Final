@@ -125,12 +125,17 @@ async function checkForVerticalCutoff(page: Page): Promise<{hasCutoff: boolean, 
     let hasCutoff = false;
     let details = '';
 
-    // Check if bottom navigation is properly visible
+    // Check if bottom navigation is properly visible.
+    // A fixed-bottom element whose rect.bottom exceeds the viewport means it is NOT
+    // pinned to the viewport — typically because a transform/filter/contain on an
+    // ancestor turned it into a containing block (see CLSOptimizer + the
+    // .mobile-polish-wrapper rules; guarded by the EOF reset in index.css).
     fixedBottomElements.forEach((el) => {
       const rect = el.getBoundingClientRect();
-      if (rect.bottom > viewportHeight) {
+      // Allow a small sub-pixel/rounding tolerance (sibling tests use 10px).
+      if (rect.bottom > viewportHeight + 2) {
         hasCutoff = true;
-        details += `Fixed element cut off at bottom. `;
+        details += `Fixed bottom element not pinned to viewport: "${(el.className || '').toString().slice(0, 50)}" rect.bottom=${Math.round(rect.bottom)} > viewport=${viewportHeight}. `;
       }
     });
 
@@ -507,7 +512,7 @@ test.describe('Mobile Bottom Navigation', () => {
     await takeScreenshot(page, 'dashboard-bottomnav', 'iphone-se');
 
     const cutoff = await checkForVerticalCutoff(page);
-    expect(cutoff.hasCutoff).toBe(false);
+    expect(cutoff.hasCutoff, cutoff.details).toBe(false);
   });
 
   test('bottom nav visible on small mobile', async ({ page }) => {
@@ -520,7 +525,7 @@ test.describe('Mobile Bottom Navigation', () => {
     await takeScreenshot(page, 'dashboard-bottomnav', 'mobile-small');
 
     const cutoff = await checkForVerticalCutoff(page);
-    expect(cutoff.hasCutoff).toBe(false);
+    expect(cutoff.hasCutoff, cutoff.details).toBe(false);
   });
 });
 

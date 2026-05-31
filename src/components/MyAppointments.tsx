@@ -111,6 +111,16 @@ export function useAppointments(userId?: string): {
       userId = user.id;
     }
 
+    // Guard: user_id is a UUID column. A malformed/demo id (e.g. a preview/test
+    // session) would make Postgres throw 22P02; skip the query and show the empty
+    // state instead of logging an error.
+    const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (!userId || !UUID_RE.test(userId)) {
+      setAppointments([]);
+      setIsLoading(false);
+      return;
+    }
+
     setIsLoading(true);
     setError(null);
 
@@ -132,7 +142,7 @@ export function useAppointments(userId?: string): {
             id,
             full_name,
             credentials,
-            specialty
+            specialties
           )
         `)
         .eq('user_id', userId)
@@ -164,7 +174,9 @@ export function useAppointments(userId?: string): {
               id: (providerObj?.id as string) || 'unknown',
               name: (providerObj?.full_name as string) || 'Provider',
               title: (providerObj?.credentials as string) || '',
-              specialty: (providerObj?.specialty as string) || '',
+              specialty: Array.isArray(providerObj?.specialties)
+                ? (providerObj?.specialties as string[]).join(', ')
+                : ((providerObj?.specialties as string) || ''),
             },
             scheduledAt,
             duration: (booking.session_duration_minutes as number) || 60,

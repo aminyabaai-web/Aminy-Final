@@ -526,7 +526,7 @@ export function WaitingRoom({
           </div>
           <div className="flex items-center gap-1.5">
             <Shield size={12} />
-            <span>End-to-end encrypted</span>
+            <span>Encrypted in transit</span>
           </div>
           <div className="flex items-center gap-1.5">
             <Phone size={12} />

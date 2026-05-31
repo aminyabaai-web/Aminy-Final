@@ -120,6 +120,9 @@ test.describe('42-Screen Smoke', () => {
       const realErrors = errors.filter(e =>
         !e.includes('favicon') &&
         !e.includes('sourcemap') &&
+        // Benign WebKit/Safari engine warning about a Chrome-only viewport meta key — not an app error
+        !e.toLowerCase().includes('interactive-widget') &&
+        !e.toLowerCase().includes('viewport argument') &&
         !e.includes('Failed to load resource') &&
         !e.includes('Download the React DevTools') &&
         !e.toLowerCase().includes('warning') &&

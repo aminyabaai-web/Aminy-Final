@@ -79,6 +79,8 @@ interface ProviderFormData {
   lastName: string;
   email: string;
   phone: string;
+  /** Run your own independent practice vs. join under an organization. */
+  practiceMode: 'independent' | 'org';
   credentials: string;
   role: ProviderRole;
   bio: string;
@@ -100,6 +102,7 @@ const DEFAULT_FORM: ProviderFormData = {
   lastName: '',
   email: '',
   phone: '',
+  practiceMode: 'independent',
   billingTrack: 'aact-partner',
   credentials: '',
   role: 'bcba',
@@ -284,6 +287,22 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
 
       const providerId = providerData.id;
 
+      // Persist the owner-facing practice posture on the auth-user profile, where
+      // ProviderPortal reads it (alongside pilot_organization). Best-effort: the
+      // practice_mode column may not exist in every deployed schema yet, so a
+      // failure here must never block onboarding completion.
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          await supabase
+            .from('profiles')
+            .update({ practice_mode: form.practiceMode })
+            .eq('id', user.id);
+        }
+      } catch (practiceModeError) {
+        console.warn('Could not persist practice_mode to profile:', practiceModeError);
+      }
+
       if (form.availability.length > 0) {
         const availRows = form.availability.map(slot => ({
           provider_id: providerId,
@@ -460,6 +479,44 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
       <div className="max-w-2xl mx-auto px-4 py-6">
         {currentStep === 'basics' && (
           <div className="space-y-6">
+            {/* Practice mode — own independent practice vs. join under an organization */}
+            <div className="bg-white rounded-xl border border-gray-200 p-6">
+              <h2 className="text-lg font-semibold text-gray-900 mb-1">How do you want to practice?</h2>
+              <p className="text-sm text-gray-500 mb-5">This shapes your portal. You can change it later.</p>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {([
+                  {
+                    id: 'independent' as const,
+                    title: 'Run your own independent practice',
+                    description: 'You own the practice — your families, your RBT roster, your supervision, and how you get paid. Aminy is your practice-in-a-box.',
+                  },
+                  {
+                    id: 'org' as const,
+                    title: 'Join under an organization',
+                    description: "Work a caseload under an organization (e.g. AACT/Rise). The org handles credentialing and billing; you focus on clients and supervision.",
+                  },
+                ]).map((opt) => (
+                  <button
+                    key={opt.id}
+                    type="button"
+                    onClick={() => updateForm({ practiceMode: opt.id })}
+                    aria-pressed={form.practiceMode === opt.id}
+                    className={`text-left p-4 rounded-xl border-2 transition-all ${
+                      form.practiceMode === opt.id
+                        ? 'border-teal-500 bg-teal-50'
+                        : 'border-gray-200 bg-gray-50 hover:border-gray-300'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2 mb-1">
+                      {form.practiceMode === opt.id && <CheckCircle className="w-4 h-4 text-teal-600 shrink-0" />}
+                      <span className="font-semibold text-gray-900">{opt.title}</span>
+                    </div>
+                    <p className="text-sm text-gray-600">{opt.description}</p>
+                  </button>
+                ))}
+              </div>
+            </div>
+
             <div className="bg-white rounded-xl border border-gray-200 p-6">
               <h2 className="text-lg font-semibold text-gray-900 mb-6">Basic Information</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -623,10 +680,10 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                 {([
                   {
                     id: 'aact-partner' as const,
-                    title: 'Aminy Network (Recommended)',
-                    badge: 'Fastest Path to Insurance',
+                    title: 'Aminy Network',
+                    badge: 'Insurance — Rolling Out',
                     badgeClass: 'bg-teal-100 text-teal-700',
-                    description: `Credential under Aminy's group NPI and access our full payer network across ${SUPPORTED_STATES_AND} from day one — AHCCCS/Medicaid, Mercy Care, Health Choice, BCBS, Aetna, UHC, Cigna, Magellan, and state Medicaid plans in all supported states. No individual credentialing wait. Aminy handles all billing, claims, and prior auths. Reliable biweekly payouts. Aminy fee: 10% of insured sessions.`,
+                    description: `Bill insured sessions under a group payer network — rolling out, pending payer-network access in your state. When live: AHCCCS/Medicaid, Mercy Care, Health Choice, BCBS, Aetna, UHC, Cigna, Magellan, and state Medicaid plans across ${SUPPORTED_STATES_AND}, with billing, claims, and prior-auths handled for you and ~biweekly payouts. Aminy fee: 10% of insured sessions.`,
                     highlight: true,
                   },
                   {

@@ -137,6 +137,7 @@
     "db:reset": "./scripts/setup-database.sh reset",
     "db:validate": "./scripts/setup-database.sh validate",
     "check:release": "node scripts/release-guard.mjs",
+    "smoke:ai": "node scripts/ai-smoke.mjs",
     "build:prod-safe": "VITE_USE_MOCK_DATA=false npm run check:release && vite build",
     "lint:app": "eslint \"src/**/*.{ts,tsx}\" --ignore-pattern \"src/test/**\" --ignore-pattern \"src/supabase/**\" --quiet",
     "test:all": "vitest run",

@@ -28,8 +28,9 @@ export interface PartnerConfig {
   payers: string[];
   /** System of record for clinical data — what EMR/practice management to sync to */
   systemOfRecord: 'centralreach' | 'rethink' | 'aminy_native' | null;
-  /** EVV system for Medicaid compliance */
-  evvSystem: 'sandata' | 'tellus' | 'acumen' | null;
+  /** EVV vendor the partner uses for Medicaid compliance (feeds the state aggregator).
+   *  Per-partner configurable — extensible union so new partners' vendors are valid. */
+  evvSystem: 'dci' | 'sandata' | 'tellus' | 'acumen' | 'spokchoice' | 'ppl' | 'conduent' | null;
   /** Bypass cash-pay onboarding for providers (all visits insured) */
   insuredOnly: boolean;
   /** Welcome message shown after partner-attributed signup */
@@ -43,9 +44,9 @@ export const PARTNER_CONFIGS: Record<PartnerOrgId, PartnerConfig> = {
     payoutRail: 'aact_pilot',  // 5% take rate — partner discount
     payers: ['AHCCCS', 'Aetna', 'BCBS AZ', 'Cigna', 'United Healthcare', 'Health Net', 'Mercy Care', 'Banner Health', 'Magellan', 'Optum'],
     systemOfRecord: 'rethink',   // CORRECTED: AACT uses Rethink, NOT CentralReach
-    evvSystem: 'sandata',
+    evvSystem: 'dci',            // CORRECTED: AACT uses DCI for EVV, NOT Sandata
     insuredOnly: true,
-    welcomeMessage: "Welcome — you're enrolled through AACT Arizona. Your contract terms, payer mix, and Rethink integration are pre-configured. You can start seeing patients today.",
+    welcomeMessage: "Welcome — you're enrolled through AACT Arizona. Your contract terms, payer mix, Rethink integration, and DCI EVV are pre-configured. You can start seeing patients today.",
   },
   rise: {
     id: 'rise',
@@ -53,7 +54,7 @@ export const PARTNER_CONFIGS: Record<PartnerOrgId, PartnerConfig> = {
     payoutRail: 'insured',
     payers: ['AHCCCS', 'BCBS', 'Cigna', 'United Healthcare'],
     systemOfRecord: 'rethink',   // Rise also uses Rethink
-    evvSystem: 'sandata',
+    evvSystem: 'dci',            // Rise also uses DCI for EVV
     insuredOnly: true,
     welcomeMessage: "Welcome — you're enrolled through Rise Services. Your Rethink integration is pre-configured.",
   },
