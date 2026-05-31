@@ -84,7 +84,7 @@ Behavioral wellness PWA for neurodivergent families. React 19 + TypeScript + Vit
 
 ### Partner attribution
 - `src/lib/partner-org.ts` — detects `?org=aact` URL param, persists to localStorage, applies partner config to profile post-signup
-- `PARTNER_CONFIGS.aact` auto-sets: pilot_organization, pilot_payers (AHCCCS + 9), **system_of_record=`rethink`** (AACT/Rise use **Rethink**, NOT CentralReach — the CentralReach lib/`cr-sync` screen are dormant, retire when the Rethink integration goes live), evv_system=sandata
+- `PARTNER_CONFIGS.aact` auto-sets: pilot_organization, pilot_payers (AHCCCS + 9), **system_of_record=`rethink`** (AACT/Rise use **Rethink**, NOT CentralReach — the CentralReach lib/`cr-sync` screen are dormant, retire when the Rethink integration goes live), evv_system=`dci` (AACT/Rise use DCI; per-partner configurable)
 - `AACTPartnerSetup.tsx` is the partner-admin microsite (one-click invite URL + bulk CSV import)
 - `ProviderPortal.tsx` hides Credentialing/Claims tabs for AACT/Rise providers (org handles those)
 
