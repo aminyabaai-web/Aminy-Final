@@ -31,6 +31,11 @@ Behavioral wellness PWA for neurodivergent families. React 19 + TypeScript + Vit
 - `body.mobile-optimized` uses `overflow-x:hidden; overflow-y:auto`
 - NEVER change to `position:fixed; overflow:hidden` — it breaks login scroll
 
+### Fixed positioning — NEVER put a containing-block trigger on a layout ancestor
+- Per CSS spec, `transform` (incl. `translateZ(0)`), `filter`, `perspective`, `will-change: transform`, and `contain: layout|paint|strict|content` on ANY ancestor make it the containing block for `position:fixed` descendants — re-pinning them to that ancestor instead of the viewport.
+- A "GPU/CLS optimization" layer had sprinkled these on `html`, `body`, `#root`, `<main>`, scroll wrappers, `.mobile-polish-wrapper.is-mobile *` (universal!), and the `CLSOptimizer` app wrapper — silently un-pinning the bottom nav, chat FABs, and fixed modal overlays (they fell below the fold on short screens). Fixed + guarded by the EOF reset in `src/index.css` and `e2e/visual-audit` bottom-nav tests. Do NOT reintroduce these on structural containers; use `isolation: isolate` for a stacking context without a containing block.
+- Tailwind v4 is **precompiled** here (no JIT): a `bottom-24`/`top-N` offset class only works if it's literally in `src/index.css`. A `position:fixed` element with a missing offset class silently falls to its static-flow position. Add missing offsets to `src/index.css`.
+
 ## Key Files
 | File | What It Contains |
 |------|-----------------|
@@ -48,8 +53,8 @@ Behavioral wellness PWA for neurodivergent families. React 19 + TypeScript + Vit
 ## Testing (verified 2026-05-30)
 - Preview: `aminy-dev` on port 3001 (`~/.claude/launch.json`); viewport 375x812 (mobile-first)
 - Unit: `npm run test:run` — **332 passing** (incl. tier-config-consistency drift guard + monetization + economics)
-- E2E (`npx playwright install chromium firefox webkit` first): **375 Chromium** screen-coverage + core · **65/65** journeys/acceptance/onboarding/navigation · **165/165** Mobile Chrome + Mobile Safari + Tablet · WebKit + Firefox core green
-- 375px **visual baseline** established: `e2e/__snapshots__/visual-regression.spec.ts-snapshots/` (88 PNGs)
+- E2E (`npx playwright install chromium firefox webkit` first): **full chromium suite 877 passed / 2 skipped / 0 failed** (all 28 specs) · **165/165** Mobile Chrome + Mobile Safari + Tablet · WebKit + Firefox core green
+- 375px **visual baseline**: `e2e/__snapshots__/visual-regression.spec.ts-snapshots/` — `visual-regression.spec.ts` stable 42/42 (fonts-ready settle + fullPage-dashboard tolerance for motion/react animation-frame variance)
 - **Prod AI smoke**: `npm run smoke:ai` — asserts the deployed `chat` fn returns Claude (catches silent OpenAI-fallback). CONFIRMED live: `claude-sonnet-4-6`.
 - Screen-smoke/golden-path error filters ignore the benign WebKit `interactive-widget` viewport warning.
 
