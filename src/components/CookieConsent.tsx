@@ -37,6 +37,10 @@ export function CookieConsent({ onAccept, onDecline }: CookieConsentProps) {
   const [showDetails, setShowDetails] = useState(false);
   const [analytics, setAnalytics] = useState(true);
   const [marketing, setMarketing] = useState(false);
+  // Offset the banner above the bottom nav when present, so the two fixed-bottom
+  // elements never overlap (the nav tabs would otherwise be covered by this z-9999
+  // banner if a nav screen renders before consent is given).
+  const [navBottomOffset, setNavBottomOffset] = useState(0);
 
   useEffect(() => {
     const prefs = getStoredPreferences();
@@ -47,6 +51,18 @@ export function CookieConsent({ onAccept, onDecline }: CookieConsentProps) {
     }, 1500);
     return () => clearTimeout(timer);
   }, []);
+
+  // Measure the bottom nav (if any) so the banner sits just above it.
+  useEffect(() => {
+    if (!mounted) return;
+    const measure = () => {
+      const nav = document.querySelector('nav[aria-label="Main navigation"]') as HTMLElement | null;
+      setNavBottomOffset(nav ? Math.round(nav.getBoundingClientRect().height) : 0);
+    };
+    measure();
+    window.addEventListener('resize', measure);
+    return () => window.removeEventListener('resize', measure);
+  }, [mounted]);
 
   const dismiss = (prefs: CookiePreferences) => {
     setVisible(false);
@@ -80,7 +96,7 @@ export function CookieConsent({ onAccept, onDecline }: CookieConsentProps) {
         position: 'fixed',
         left: 0,
         right: 0,
-        bottom: 0,
+        bottom: navBottomOffset,
         zIndex: 9999,
         transform: visible ? 'translateY(0)' : 'translateY(100%)',
         opacity: visible ? 1 : 0,
