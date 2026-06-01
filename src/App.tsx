@@ -42,7 +42,7 @@ import {
   type SystemOfRecord,
 } from "./lib/product-truth";
 import { LaunchStateBadge } from "./components/ui/LaunchStateBadge";
-import { handleOnboardingComplete as triggerRetentionFlow } from "./lib/store";
+import { store, handleOnboardingComplete as triggerRetentionFlow } from "./lib/store";
 import { AIProvider } from "./context/AIContext";
 import { AISparkleProvider } from "./lib/ai-sparkle-context";
 import { ConversationProvider } from "./context/ConversationContext";
@@ -1832,6 +1832,24 @@ export default function App() {
                 });
               });
 
+              // Hydrate the shared lib/store user from the Supabase session.
+              // The AI chat (StreamingAIChat reads store.getState().user?.id)
+              // uses THIS store, not App's userData — without hydration it stays
+              // null and the chat throws "User not authenticated" for signed-in
+              // users (the dashboard works because it reads userData instead).
+              const storeTier = (['starter', 'core', 'complete'] as string[]).includes(String(profile.tier))
+                ? (String(profile.tier) as 'starter' | 'core' | 'complete')
+                : 'core';
+              store.getState().setUser({
+                id: session.user.id,
+                caregiverName: profile.parent_name || metadataParentName || '',
+                childName: primaryChild?.name || profile.child_name || '',
+                childAge: primaryChild?.age_years || primaryChild?.age || undefined,
+                tier: storeTier,
+                onboardingComplete: profile.has_completed_onboarding || false,
+                preferences: { notifications: true, proactiveNudges: true, voiceInput: false },
+              });
+
               // Set Sentry user context for error tracking
               setSentryUser({
                 id: session.user.id,
@@ -1904,6 +1922,16 @@ export default function App() {
                 ...prev,
                 email: session.user.email || '',
               }));
+              // Hydrate store user pre-profile so the chat has a userId even
+              // during onboarding (else it throws "User not authenticated").
+              store.getState().setUser({
+                id: session.user.id,
+                caregiverName: '',
+                childName: '',
+                tier: 'core',
+                onboardingComplete: false,
+                preferences: { notifications: true, proactiveNudges: true, voiceInput: false },
+              });
               const screen = currentScreenRef.current;
               if (shouldRedirectAfterAuth(screen)) {
                 navigateToScreen('onboarding');
@@ -1947,6 +1975,9 @@ export default function App() {
 
           // Clear Sentry user context
           clearSentryUser();
+
+          // Clear the shared store user on sign-out (mirrors the userData reset).
+          store.getState().setUser(null);
 
           // Detect session expiry vs. intentional logout
           const wasIntentional = intentionalLogoutRef.current;
