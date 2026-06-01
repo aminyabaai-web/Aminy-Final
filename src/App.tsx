@@ -1290,6 +1290,17 @@ const getInitialScreen = (): AppScreen => {
     return "provider-apply";
   }
 
+  // Legal pages — the signup consent row opens these as /terms and /privacy in a
+  // new tab (window.open). Without routing them here they fall through to splash,
+  // so users can't read the Terms/Privacy they're being asked to accept. Map the
+  // paths (and their long-form aliases) to the real legal screens.
+  if (pathname === '/terms' || pathname.includes('/terms')) {
+    return "terms-of-service";
+  }
+  if (pathname === '/privacy' || pathname.includes('/privacy')) {
+    return "privacy-policy";
+  }
+
   // Check URL params
   const params = new URLSearchParams(window.location.search);
   const urlScreen = params.get("screen");
