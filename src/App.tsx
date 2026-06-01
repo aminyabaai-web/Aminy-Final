@@ -57,7 +57,7 @@ import { logPHILogin, logPHIAccess } from "./lib/security/hipaa-audit";
 import { setSentryUser, clearSentryUser, addBreadcrumb } from "./lib/sentry";
 import { setCurrentScreenGlobal } from "./lib/screen-state";
 import { proactiveNudges } from "./lib/proactive-nudges";
-import { generateDailyPlan } from "./lib/caregiver-workflow";
+import { generateDailyPlan, saveChildProfile } from "./lib/caregiver-workflow";
 import { initAnalytics } from "./lib/analytics-engine"; // Deferred in useEffect
 import { checkAndAwardBadges } from "./lib/badge-service";
 import { initPerformanceMonitoring } from "./lib/performance-monitor";
@@ -2012,7 +2012,10 @@ export default function App() {
     navigateToScreen("onboarding");
   };
 
-  const handleOnboardingComplete = async (data: Partial<UserData>) => {
+  const handleOnboardingComplete = async (
+    data: Partial<UserData>,
+    childDetails?: { concerns?: string[]; diagnoses?: string[]; currentServices?: string[] }
+  ) => {
     const updatedData = {
       ...userData,
       ...data,
@@ -2055,6 +2058,27 @@ export default function App() {
           import('./lib/partner-org').then(({ applyPartnerToProfile }) => {
             applyPartnerToProfile(userId).catch(() => {});
           });
+
+          // Persist the child profile captured during onboarding (age, concerns,
+          // diagnoses, services). Without this the child row was never created, so
+          // age_years stayed null (dashboard fell back to the age=5 default) and the
+          // parent's concerns/diagnoses were silently lost. Awaited so the read-back
+          // below finds the freshly-created primary child.
+          if (updatedData.childName) {
+            try {
+              await saveChildProfile({
+                userId,
+                childName: updatedData.childName,
+                childAge: updatedData.childAge ?? undefined,
+                concerns: childDetails?.concerns ?? [],
+                diagnoses: childDetails?.diagnoses ?? [],
+                therapies: childDetails?.currentServices ?? [],
+                isPrimary: true,
+              });
+            } catch (err) {
+              logger.error('Onboarding child profile save failed', err);
+            }
+          }
 
           const { data: children } = await supabase
             .from('children')
@@ -2386,10 +2410,17 @@ export default function App() {
               <AIOnboarding
                 parentName={userData.parentName || ""}
                 onComplete={(profile) =>
-                  handleOnboardingComplete({
-                    childName: profile.childName,
-                    childAge: profile.childAge ?? undefined,
-                  })
+                  handleOnboardingComplete(
+                    {
+                      childName: profile.childName,
+                      childAge: profile.childAge ?? undefined,
+                    },
+                    {
+                      concerns: profile.concerns,
+                      diagnoses: profile.diagnoses,
+                      currentServices: profile.currentServices,
+                    }
+                  )
                 }
               />
             </Suspense>

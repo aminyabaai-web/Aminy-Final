@@ -393,7 +393,7 @@ export function Dashboard10({
   const child: ChildProfile = dashboardData.childProfile || childProfile || {
     id: `child-${userId?.substring(0, 8) || 'temp'}`,
     name: userData.childName || 'Your Child',
-    age: 5,
+    age: userData.childAge || 5,
     goals: getDefaultGoals(userData.childName).map(g => ({
       name: g.name,
       percentMet: g.progress,
@@ -735,8 +735,33 @@ export function Dashboard10({
 
           {/* Child Profile Snapshot */}
           <div className="flex items-center gap-3 rounded-[22px] border border-white/80 bg-white/80 p-4 shadow-[0_18px_40px_rgba(15,23,42,0.06)] sm:gap-4">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] flex items-center justify-center text-xl font-bold text-white shadow-sm">
-              {child.name[0]}
+            <div className="relative" style={{ flexShrink: 0 }}>
+              <button
+                type="button"
+                onClick={() => onNavigate?.('profile')}
+                aria-label={child.photoUrl ? `${child.name}'s photo — edit profile` : `Add a photo for ${child.name}`}
+                className="w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold text-white shadow-sm overflow-hidden"
+                style={{ background: 'linear-gradient(135deg, #6B9080, #7BA7BC)', border: 'none', cursor: 'pointer' }}
+              >
+                {child.photoUrl ? (
+                  <img src={child.photoUrl} alt={child.name} className="w-full h-full object-cover" />
+                ) : (
+                  <span>{child.name?.trim()?.[0]?.toUpperCase() || '🙂'}</span>
+                )}
+              </button>
+              {!child.photoUrl && (
+                <span
+                  aria-hidden
+                  style={{
+                    position: 'absolute', bottom: -2, right: -2,
+                    width: 16, height: 16, borderRadius: 9999,
+                    background: '#fff', color: '#6B9080',
+                    fontSize: 12, lineHeight: '14px', fontWeight: 700,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    boxShadow: '0 1px 2px rgba(15,23,42,0.2)',
+                  }}
+                >+</span>
+              )}
             </div>
             <div className="flex-1">
               <div className="flex items-center gap-2">
