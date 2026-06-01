@@ -29,50 +29,7 @@ import { AddToCalendarButtons } from './AddToCalendarButtons';
 import { supabase } from '../utils/supabase/client';
 import { updateUserContext } from '../ai/contextLayer';
 
-// ─── Lightweight inline markdown renderer ────────────────────────────────────
-// Handles **bold**, `code`, and [label](url) links — the three patterns the AI
-// uses in confirmation messages and short replies. Full markdown libs are
-// overkill for our use case and bloat the chat bundle.
-
-function renderInlineMarkdown(text: string): React.ReactNode[] {
-  const out: React.ReactNode[] = [];
-  // Combined regex: link OR bold OR code
-  const pattern = /\[([^\]]+)\]\(([^)]+)\)|\*\*([^*]+)\*\*|`([^`]+)`/g;
-  let lastIndex = 0;
-  let match: RegExpExecArray | null;
-  let key = 0;
-
-  while ((match = pattern.exec(text)) !== null) {
-    if (match.index > lastIndex) {
-      out.push(text.slice(lastIndex, match.index));
-    }
-    if (match[1] && match[2]) {
-      // Markdown link
-      const href = match[2];
-      const isExternal = /^https?:\/\//.test(href);
-      out.push(
-        <a
-          key={`md-${key++}`}
-          href={href}
-          target={isExternal ? '_blank' : undefined}
-          rel={isExternal ? 'noopener noreferrer' : undefined}
-          className="text-teal-700 font-medium underline underline-offset-2 break-words"
-        >
-          {match[1]}
-        </a>
-      );
-    } else if (match[3]) {
-      // Bold
-      out.push(<strong key={`md-${key++}`} className="font-semibold">{match[3]}</strong>);
-    } else if (match[4]) {
-      // Inline code
-      out.push(<code key={`md-${key++}`} className="bg-slate-100 px-1 py-0.5 rounded text-xs font-mono">{match[4]}</code>);
-    }
-    lastIndex = match.index + match[0].length;
-  }
-  if (lastIndex < text.length) out.push(text.slice(lastIndex));
-  return out.length > 0 ? out : [text];
-}
+import { renderRichMarkdown } from '../lib/chat-markdown';
 
 // ─── Smart Action execution ──────────────────────────────────────────────────
 
@@ -529,6 +486,15 @@ RESPONSE RULES:
 9. Never say "I'm just an AI" — you are Aminy
 10. If you notice a pattern, name it
 
+RICH FORMATTING (write markdown — it renders as real tables, headings, and lists):
+• When you compare data across time, options, or categories (before/after, week-over-week, option A vs B, progress across multiple goals), present it as a GFM markdown TABLE:
+  | Metric | Before | Since |
+  |--------|--------|-------|
+  | Sleep | 6.2 hrs | 7.8 hrs |
+• Lead key takeaways with a **bold** phrase, then the detail — e.g. "**Sleep improved:** up ~1.5 hrs/night since the new routine."
+• For multi-part analysis, use a short "## Heading" plus bullet (-) or numbered (1.) lists to stay scannable.
+• Reserve this rich format for analytical / data / comparison answers. For a quick question or an emotional check-in, stay conversational (rule 6) — don't force a table.
+
 CHART CAPABILITY: When showing data trends, you MAY embed a chart inline:
 [CHART:{"type":"bar","title":"Sessions This Month","data":[{"week":"Wk1","sessions":3},{"week":"Wk2","sessions":5}],"xKey":"week","yKey":"sessions"}]
 Types: "bar", "line", or "pie". Use sparingly — only when data genuinely clarifies your point.
@@ -839,17 +805,12 @@ ${customBlock}${liveScreenContext}`;
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
             transition={{ type: 'spring', damping: 28, stiffness: 320 }}
-            className="fixed bottom-0 left-0 right-0 z-[101] flex flex-col bg-white rounded-t-3xl overflow-hidden"
-            style={{ height: '82vh', maxHeight: '82vh', boxShadow: '0 -8px 40px rgba(0,0,0,0.18)' }}
+            className="fixed inset-0 z-[101] flex flex-col bg-white overflow-hidden"
+            style={{ paddingTop: 'env(safe-area-inset-top)' }}
             onClick={e => e.stopPropagation()}
           >
-            {/* Drag handle */}
-            <div className="flex justify-center pt-3 pb-1 shrink-0">
-              <div className="w-10 h-1 rounded-full bg-slate-200" />
-            </div>
-
             {/* Header */}
-            <div className="shrink-0 px-3 py-2 flex items-center gap-2">
+            <div className="shrink-0 px-3 py-2.5 flex items-center gap-2 border-b border-slate-100">
               {/* Hamburger — opens history */}
               <button
                 onClick={() => setShowHistory(v => !v)}
@@ -1238,7 +1199,7 @@ ${customBlock}${liveScreenContext}`;
                                   <AddToCalendarButtons appointment={part.content} variant="inline" label="Add to your calendar" />
                                 </div>
                               );
-                              return <p key={pi} className="whitespace-pre-wrap leading-snug">{renderInlineMarkdown(part.content)}</p>;
+                              return <div key={pi} className="leading-snug">{renderRichMarkdown(part.content)}</div>;
                             })
                           ) : (
                             <p className="whitespace-pre-wrap">{msg.content}</p>
