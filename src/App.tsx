@@ -1075,6 +1075,34 @@ function shouldRedirectAfterAuth(screen: AppScreen): boolean {
   return AUTH_REDIRECT_SCREENS.includes(screen);
 }
 
+// Screens allowed to render WITHOUT an authenticated Supabase session.
+// Everything NOT in this set requires a live session. If the app boots onto a
+// non-public screen (e.g. getInitialScreen() optimistically routes a returning
+// user straight to 'dashboard' from the cached local aminy-user) but Supabase
+// reports no session, we bounce to login — otherwise the authed UI is hollow and
+// every data/AI call fails with "User must be authenticated". This is an explicit
+// allow-list (not derived from CHROMELESS_SCREENS) so the auth boundary can't be
+// silently widened by adding an unrelated chromeless screen later.
+const SESSIONLESS_OK_SCREENS = new Set<AppScreen>([
+  "splash",
+  "login",
+  "create-account",
+  "forgot-password",
+  "reset-password",
+  "auth-callback",
+  "onboarding",
+  "paywall",
+  "join",
+  "provider-landing",
+  "provider-apply",
+  "terms-of-service",
+  "privacy-policy",
+  "free-screening",
+  "mchat-screening",
+  "pre-diagnosis",
+  "developmental-screener",
+]);
+
 const LOCAL_LAUNCH_BADGE_SCREENS = new Set<AppScreen>([
   'telehealth',
   'marketplace',
@@ -1885,6 +1913,18 @@ export default function App() {
         } else if (event === 'INITIAL_SESSION' && !session?.user) {
           // No active session on startup — unblock UI and let splash/login render
           setAuthReady(true);
+          // SECURITY: getInitialScreen() optimistically routes returning users
+          // straight to an authenticated screen (e.g. 'dashboard') from the cached
+          // local aminy-user, before Supabase has confirmed a session. If there is
+          // no real session, that authed UI is hollow — every data/AI call fails
+          // with "User must be authenticated". Bounce to login. The !authReady gate
+          // above means the user only ever sees the loading skeleton → login, never
+          // a flash of the dashboard.
+          const screen = currentScreenRef.current;
+          if (!SESSIONLESS_OK_SCREENS.has(screen)) {
+            logger.dev('INITIAL_SESSION with no session on a protected screen — redirecting to login', { screen });
+            navigateToScreen('login');
+          }
         } else if (event === 'SIGNED_OUT') {
           // Stop the proactive nudge scheduler
           proactiveNudges.stop();

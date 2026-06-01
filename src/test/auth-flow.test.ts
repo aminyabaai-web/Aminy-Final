@@ -630,3 +630,66 @@ describe('OAuth Flow', () => {
     expect(result.error).toContain('Missing access token');
   });
 });
+
+// =============================================================================
+// INITIAL SESSION AUTH GATE (no-session redirect)
+// Guards the App.tsx onAuthStateChange INITIAL_SESSION branch: a cold load with
+// NO Supabase session that lands on a protected screen (e.g. 'dashboard',
+// optimistically routed by getInitialScreen() from a stale local aminy-user)
+// MUST bounce to login, while genuinely public/pre-auth screens must NOT.
+// SESSIONLESS_OK_SCREENS below mirrors the allow-list in src/App.tsx — keep in
+// sync. This is the regression guard for the "authed UI visible with no session"
+// bug (every data/AI call fails with "User must be authenticated").
+// =============================================================================
+
+describe('Initial Session Auth Gate', () => {
+  const SESSIONLESS_OK_SCREENS = new Set<string>([
+    'splash', 'login', 'create-account', 'forgot-password', 'reset-password',
+    'auth-callback', 'onboarding', 'paywall', 'join', 'provider-landing',
+    'provider-apply', 'terms-of-service', 'privacy-policy', 'free-screening',
+    'mchat-screening', 'pre-diagnosis', 'developmental-screener',
+  ]);
+
+  // Mirror of the decision in the App.tsx INITIAL_SESSION branch.
+  function shouldRedirectToLogin(
+    event: string,
+    session: Session | null,
+    currentScreen: string,
+  ): boolean {
+    if (event !== 'INITIAL_SESSION') return false; // only the cold-start gate
+    if (session?.user) return false;               // a real session never bounces
+    return !SESSIONLESS_OK_SCREENS.has(currentScreen);
+  }
+
+  const realSession: Session = {
+    access_token: 't',
+    refresh_token: 'r',
+    expires_at: Math.floor(Date.now() / 1000) + 3600,
+    user: { id: 'u1', email: 'parent@example.com' },
+  };
+
+  it('bounces a session-less cold load off the dashboard to login', () => {
+    expect(shouldRedirectToLogin('INITIAL_SESSION', null, 'dashboard')).toBe(true);
+  });
+
+  it('bounces every protected screen when there is no session', () => {
+    for (const s of ['dashboard', 'provider-portal', 'medications', 'care-coordination', 'settings', 'claims-dashboard']) {
+      expect(shouldRedirectToLogin('INITIAL_SESSION', null, s)).toBe(true);
+    }
+  });
+
+  it('does NOT bounce public / pre-auth screens (no false redirects)', () => {
+    for (const s of ['splash', 'login', 'create-account', 'free-screening', 'mchat-screening', 'onboarding', 'provider-landing', 'privacy-policy', 'paywall']) {
+      expect(shouldRedirectToLogin('INITIAL_SESSION', null, s)).toBe(false);
+    }
+  });
+
+  it('does NOT bounce when a real session exists (optimistic dashboard stays)', () => {
+    expect(shouldRedirectToLogin('INITIAL_SESSION', realSession, 'dashboard')).toBe(false);
+  });
+
+  it('only gates INITIAL_SESSION — not SIGNED_IN / TOKEN_REFRESHED', () => {
+    expect(shouldRedirectToLogin('SIGNED_IN', null, 'dashboard')).toBe(false);
+    expect(shouldRedirectToLogin('TOKEN_REFRESHED', null, 'dashboard')).toBe(false);
+  });
+});
