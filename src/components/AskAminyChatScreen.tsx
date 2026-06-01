@@ -59,7 +59,11 @@ export function AskAminyChatScreen({
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
+    // Definite viewport height (not min-h-screen) so the messages area's flex-1
+    // actually caps and scrolls INTERNALLY, pinning the input bar to the bottom.
+    // 100dvh excludes mobile browser chrome; overflow-hidden keeps the page from
+    // scrolling (only the messages list does).
+    <div className="bg-[#FAF7F2] flex flex-col overflow-hidden" style={{ height: '100dvh' }}>
       {/* Header — minimal, Claude-style, warm palette */}
       <div
         className="sticky top-0 z-10 backdrop-blur-md border-b"
@@ -154,7 +158,7 @@ export function AskAminyChatScreen({
 
       {/* Chat area — full page, scrollable */}
       <div className="flex-1 flex flex-col min-h-0">
-        <div className="max-w-3xl w-full mx-auto flex-1 flex flex-col">
+        <div className="max-w-3xl w-full mx-auto flex-1 flex flex-col min-h-0">
           <StreamingAIChat
             context={context}
             placeholder={`Message Aminy about ${childName}...`}
