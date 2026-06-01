@@ -77,8 +77,16 @@ export default defineConfig(({ mode }) => ({
         // Import custom SW extensions (push notifications, background sync)
         // This file lives in public/ and is copied to the build output
         importScripts: ['sw-custom.js'],
-        // Show offline page for uncached navigation requests
-        navigateFallback: '/offline.html',
+        // SPA navigation fallback: serve the app shell for ALL client-routed
+        // navigations (deep links, ?screen= routes, query params). MUST be
+        // index.html, not offline.html — otherwise workbox serves the static
+        // offline page for any navigation that isn't an exact precache hit,
+        // even when fully online (the false "You're Offline" bug). index.html is
+        // precached, so it also loads offline; the app's own offline handling +
+        // CacheFirst-cached /crisis resources cover genuine offline.
+        navigateFallback: '/index.html',
+        // Don't serve the SPA shell for these — fonts and the offline page itself.
+        navigateFallbackDenylist: [/^https:\/\/fonts\./, /^\/offline\.html$/],
         // Skip external domains to avoid CSP violations with service worker fetch
         // Google Fonts are cached natively by browsers with long cache headers
         navigateFallbackDenylist: [/^https:\/\/fonts\./],
