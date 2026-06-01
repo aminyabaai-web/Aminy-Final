@@ -693,7 +693,7 @@ export function CreateAccountScreen({
               <div
                 style={{
                   display: 'flex',
-                  alignItems: 'center',
+                  alignItems: 'flex-start',
                   gap: '10px',
                   cursor: 'pointer',
                   userSelect: 'none',
@@ -710,6 +710,7 @@ export function CreateAccountScreen({
                     width: '18px',
                     height: '18px',
                     minWidth: '18px',
+                    marginTop: '1px',
                     borderRadius: '4px',
                     border: `1.5px solid ${errors.terms ? 'rgba(180, 90, 90, 0.4)' : acceptedTerms ? '#5a7380' : 'rgba(17, 24, 39, 0.2)'}`,
                     backgroundColor: acceptedTerms ? '#5a7380' : '#FFFFFF',
@@ -737,12 +738,12 @@ export function CreateAccountScreen({
                     role="button"
                     tabIndex={0}
                     style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      minHeight: '24px',
                       color: '#5a7380',
                       textDecoration: 'underline',
+                      textUnderlineOffset: '2px',
+                      fontWeight: 500,
                       cursor: 'pointer',
+                      whiteSpace: 'nowrap',
                     }}
                     onClick={(e) => {
                       e.stopPropagation();
@@ -760,12 +761,12 @@ export function CreateAccountScreen({
                     role="button"
                     tabIndex={0}
                     style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      minHeight: '24px',
                       color: '#5a7380',
                       textDecoration: 'underline',
+                      textUnderlineOffset: '2px',
+                      fontWeight: 500,
                       cursor: 'pointer',
+                      whiteSpace: 'nowrap',
                     }}
                     onClick={(e) => {
                       e.stopPropagation();

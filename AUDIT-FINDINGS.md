@@ -280,3 +280,24 @@
 - **[LOW] L584** (layout-drift)
   - PROBLEM: On Step 2 the License Number/State fields are forced into 'grid-cols-2' with no responsive breakdown (also License Expiry/NPI at 617). At 375px the two inputs plus their left icon padding (pl-10) are cramped; the date and NPI inputs clip/overflow within a ~165px column. The rest of the form uses responsive 'grid-cols-2 sm:grid-cols-3', so these fixed 2-col rows drift.
   - FIX: Make these rows stack on mobile, e.g. 'grid grid-cols-1 sm:grid-cols-2 gap-4', so the date and NPI fields are not clipped at 375px.
+
+---
+
+# Live aminy.ai Chrome walkthrough — 2026-06-01
+
+Running punch list from the in-browser walkthrough. Status: 🔴 open · 🟡 fixed-not-deployed · ✅ live.
+
+## Signup / Create Account
+- 🟡 **Consent row looks sloppy** (FIXED — flex-start align + inline links) — `src/components/CreateAccountScreen.tsx` ("I am 18+ and the
+  parent/legal guardian… I accept the Terms and Privacy Policy"). Checkbox is vertically centered
+  against a 2-line wrapped label, so it reads misaligned; "Terms"/"Privacy Policy" links sit awkwardly
+  on the 2nd line. Fix: `items-start` so the box aligns to line 1, tighten label leading, links inline +
+  clearly styled, make whole label clickable to toggle.
+
+## Fixed this session (committed; pending redeploy to go live)
+- 🟡 Provider Portal tab bar collapsed/overlapped on mobile → `shrink-0` (df24739)
+- 🟡 Cookie-consent banner overlapped bottom nav → offset above nav (cd77bb4)
+- 🟡 CSP blocked Daily.co telehealth video → added `*.daily.co` to netlify.toml CSP (9b229fd)
+
+## Notes
+- Transient: "You're Offline" right after Chrome restart; recovered on reload (not a code bug).
