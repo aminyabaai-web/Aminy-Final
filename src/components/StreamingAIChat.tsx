@@ -255,8 +255,7 @@ export function StreamingAIChat({
       {/* Chat messages */}
       <div
         ref={chatContainerRef}
-        className="flex-1 overflow-y-auto px-4 py-6 space-y-3 sm:space-y-4"
-        style={{ maxHeight: 'calc(100vh - 200px)' }}
+        className="flex-1 min-h-0 overflow-y-auto px-4 py-6 space-y-3 sm:space-y-4"
         role="log"
         aria-live="polite"
         aria-label="Chat messages"
