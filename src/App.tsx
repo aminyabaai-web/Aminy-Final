@@ -2122,8 +2122,14 @@ export default function App() {
         const userId = authData?.user?.id;
 
         if (userId) {
-          // Upsert profile - non-blocking (only use columns that exist in profiles table)
-          supabase.from('profiles').upsert({
+          // Upsert profile. NOTE: supabase-js RESOLVES (never rejects) with an
+          // { error } object on RLS/constraint failures — the old
+          // `.then(null, errHandler)` only caught rejections, so the error was
+          // silently swallowed and has_completed_onboarding never persisted,
+          // sending users back through onboarding on every reload. Await it,
+          // surface the real error, and retry just the critical flag (a minimal
+          // payload that can't trip whatever column/constraint failed the upsert).
+          const { error: profileErr } = await supabase.from('profiles').upsert({
             id: userId,
             parent_name: updatedData.parentName,
             child_name: updatedData.childName,
@@ -2132,7 +2138,15 @@ export default function App() {
             tier: 'free',
             has_completed_onboarding: true,
             updated_at: new Date().toISOString(),
-          }, { onConflict: 'id' }).then(null, (err: unknown) => logger.error('Profile upsert error', err));
+          }, { onConflict: 'id' });
+          if (profileErr) {
+            logger.error('Profile upsert failed during onboarding-complete', profileErr);
+            const { error: flagErr } = await supabase
+              .from('profiles')
+              .update({ has_completed_onboarding: true })
+              .eq('id', userId);
+            if (flagErr) logger.error('has_completed_onboarding flag retry also failed', flagErr);
+          }
 
           // Apply partner org auto-contract (AACT, Rise, etc.) if detected from URL/storage.
           // Sets pilot_organization, pilot_payers, system_of_record, evv_system on profile.

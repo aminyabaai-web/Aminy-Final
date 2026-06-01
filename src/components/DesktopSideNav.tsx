@@ -22,8 +22,8 @@ import {
   ChevronRight,
   Activity,
   Video,
+  Compass,
 } from 'lucide-react';
-import aminyLogoCropped from '../assets/aminy-logo-cropped.png';
 
 interface DesktopSideNavProps {
   currentScreen: string;
@@ -142,11 +142,7 @@ export function DesktopSideNav({ currentScreen, onNavigate, userName }: DesktopS
             </div>
             <div className="mt-4 flex items-center gap-3">
               <div className="flex h-14 w-14 items-center justify-center rounded-[20px] bg-gradient-to-br from-teal-500 to-cyan-500 shadow-[0_12px_28px_rgba(45,212,191,0.2)]">
-                <img
-                  src={aminyLogoCropped}
-                  alt="Aminy"
-                  style={{ width: 34, height: 34, objectFit: 'contain', filter: 'brightness(0) invert(1)' }}
-                />
+                <Compass className="h-7 w-7 text-white" strokeWidth={2} aria-label="Aminy" />
               </div>
               <div className="min-w-0">
                 <div className="text-[1.75rem] font-semibold tracking-[-0.05em] text-slate-950">Aminy</div>
