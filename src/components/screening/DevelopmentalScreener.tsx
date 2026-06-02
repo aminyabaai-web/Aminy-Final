@@ -582,7 +582,7 @@ export function DevelopmentalScreener({
                 <ArrowRight style={{ width: '15px', height: '15px' }} />
               </button>
               <button
-                onClick={() => onNavigate('chat')}
+                onClick={() => onNavigate('ask-aminy')}
                 style={{
                   backgroundColor: '#ffffff',
                   color: 'rgba(17,24,39,0.78)',

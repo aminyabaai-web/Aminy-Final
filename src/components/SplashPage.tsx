@@ -299,35 +299,11 @@ export function SplashPage({
              onForProviders handler — it was the third provider entry and cluttered
              the secondary stack. */}
 
-          {/* Pre-diagnosis entry — families with concerns, no label yet */}
-          {onPreDiagnosis && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1, delay: 0.74 }}
-              style={{ textAlign: 'center', marginBottom: '20px' }}
-            >
-              <button
-                onClick={onPreDiagnosis}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: 'rgba(100, 116, 139, 0.7)',
-                  fontFamily: fontStack,
-                  fontSize: '13px',
-                  fontWeight: 500,
-                  cursor: 'pointer',
-                  padding: '4px 8px',
-                  transition: 'color 0.2s ease',
-                  ...fontSmoothing,
-                }}
-                onMouseEnter={(e) => e.currentTarget.style.color = 'rgba(100, 116, 139, 1)'}
-                onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(100, 116, 139, 0.7)'}
-              >
-                No diagnosis yet? You belong here too →
-              </button>
-            </motion.div>
-          )}
+          {/* "No diagnosis yet? You belong here too" standalone CTA removed to
+             declutter the secondary stack — the boxed "Concerned about your child?
+             Free screening" CTA below serves the same concerned/undiagnosed-parent
+             audience. onPreDiagnosis remains wired and can be re-surfaced if a
+             distinct pre-diagnosis entry point is wanted later. */}
 
           {/* Free Screening CTA — the acquisition hook */}
           {onFreeScreening && (
