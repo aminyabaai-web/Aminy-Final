@@ -52,7 +52,7 @@ import {
 } from 'lucide-react';
 import type { VaultRecord } from '../types/vault';
 import { useStorage } from '../lib/useStorage';
-import { uploadVaultFile, listVaultDocuments, deleteVaultDocument } from '../lib/vault-storage';
+import { uploadVaultFile, listVaultDocuments, deleteVaultDocument, getVaultDocumentUrl } from '../lib/vault-storage';
 import type { VaultRecordType } from '../lib/vault-storage';
 import { supabase } from '../utils/supabase/client';
 import { useAuditedAction } from '../hooks/useAuditedAction';
@@ -404,15 +404,17 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
   userTier = 'core'
 }) => {
   // HIPAA audit: log vault file access view on mount
-  const { logAction, logExport } = useAuditedAction('vault_file');
+  const { logAction } = useAuditedAction('vault_file');
 
   // Use onClose if provided, otherwise fall back to onBack
   const handleClose = onClose || onBack;
-  // Use storage hook for unified storage information
-  const { usedBytes, quotaBytes, planTier, capabilities } = useStorage();
 
   // ─── Real data from Supabase ───────────
   const [records, setRecords] = useState<EnhancedVaultRecord[]>([]);
+  // Use storage hook for unified storage information.
+  // Pass the real records so usedBytes is computed from actual files —
+  // an empty vault reads "0.0 GB used" instead of a fabricated mock value.
+  const { usedBytes, quotaBytes, planTier, capabilities } = useStorage(records);
   const [isLoadingDocs, setIsLoadingDocs] = useState(true);
   const [uploadingFile, setUploadingFile] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -522,6 +524,31 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
   const [shareModalRecord, setShareModalRecord] = useState<EnhancedVaultRecord | null>(null);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const [viewRecord, setViewRecord] = useState<EnhancedVaultRecord | null>(null);
+  const [downloadingFileId, setDownloadingFileId] = useState<string | null>(null);
+
+  // ─── Real file download handler ───────────────
+  // Resolves a short-lived signed URL from the record's storage path and opens it.
+  // The button is disabled when no filePath exists (nothing to resolve).
+  const handleDownloadFile = async (record: EnhancedVaultRecord, fileId: string) => {
+    if (!record.filePath) {
+      toast.error('This document is not available to download.');
+      return;
+    }
+    setDownloadingFileId(fileId);
+    try {
+      logAction('download', { recordId: record.id, fileName: record.title }).catch(() => {});
+      const { url, error } = await getVaultDocumentUrl(record.filePath);
+      if (error || !url) {
+        toast.error('Could not prepare the download. Please try again.');
+        return;
+      }
+      window.open(url, '_blank', 'noopener,noreferrer');
+    } catch {
+      toast.error('Could not prepare the download. Please try again.');
+    } finally {
+      setDownloadingFileId(null);
+    }
+  };
 
   // ─── Real bulk delete handler ───────────────
   const handleBulkDelete = async () => {
@@ -602,7 +629,7 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
       {/* Header */}
       <div className="sticky top-0 z-10 bg-background border-b">
         <div className="p-4 sm:p-5 md:p-6">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4">
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <Button
@@ -632,14 +659,14 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
             </div>
             
             <div className="flex items-center gap-2">
-              <div className="relative">
+              <div className="relative flex-1 sm:w-96">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
                   aria-label="Search records vault"
                   placeholder="Search titles, tags, or text inside docs…"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-9 w-80"
+                  className="pl-9 w-full"
                 />
               </div>
               <Sheet open={showAddRecord} onOpenChange={setShowAddRecord}>
@@ -776,9 +803,9 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
       </div>
 
       {/* Storage and Capabilities */}
-      <div className="px-6 py-3 bg-muted/30">
+      <div className="px-4 sm:px-6 py-3 bg-muted/30">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3 sm:gap-4">
+          <div className="flex flex-wrap items-center gap-3 sm:gap-4">
             <div className="flex items-center gap-2">
               <Progress value={(usedGB / totalGB) * 100} className="w-32 h-2" />
               <span className="text-sm text-muted-foreground">
@@ -799,8 +826,8 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
       </div>
 
       {/* Filters */}
-      <div className="px-6 py-3 border-b">
-        <div className="flex items-center gap-3 sm:gap-4">
+      <div className="px-4 sm:px-6 py-3 border-b">
+        <div className="flex flex-wrap items-center gap-3 sm:gap-4">
           <div className="flex items-center gap-2">
             <Label className="text-sm">Sort:</Label>
             <Select value={sortBy} onValueChange={(value: string) => setSortBy(value as 'newest' | 'oldest' | 'a-z' | 'z-a')}>
@@ -978,7 +1005,14 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
                     <div key={file.id} className="flex items-center gap-2 p-2 border rounded">
                       <FileText className="w-4 h-4" />
                       <span className="flex-1 text-sm">{file.name}</span>
-                      <Button size="sm" variant="outline">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleDownloadFile(viewRecord, file.id)}
+                        disabled={!viewRecord.filePath || downloadingFileId === file.id}
+                        aria-label={`Download ${file.name}`}
+                        title={viewRecord.filePath ? `Download ${file.name}` : 'Download unavailable'}
+                      >
                         <Download className="w-4 h-4" />
                       </Button>
                     </div>

@@ -57,6 +57,16 @@ export interface SessionPayoutTriggerProps {
   durationMinutes?: number;
   onSuccess?: (payout: PayoutRecord) => void;
   onCancel?: () => void;
+  /**
+   * When true, wraps the card in a full-screen shell (background + centering + padding)
+   * so it can render as a standalone screen. Defaults to false for embedded use.
+   */
+  fullScreen?: boolean;
+  /**
+   * When true, marks this as illustrative demo data: the dollar figures and any
+   * Transfer ID are clearly labeled as a sample and no real funds move.
+   */
+  isSample?: boolean;
 }
 
 // ============================================================================
@@ -77,6 +87,8 @@ export function SessionPayoutTrigger({
   durationMinutes,
   onSuccess,
   onCancel,
+  fullScreen = false,
+  isSample = false,
 }: SessionPayoutTriggerProps) {
   const [viewState, setViewState] = useState<ViewState>('confirm');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -118,7 +130,7 @@ export function SessionPayoutTrigger({
     ? new Date(sessionDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
     : null;
 
-  return (
+  const content = (
     <AnimatePresence mode="wait">
       {/* ---- Confirm State ---- */}
       {viewState === 'confirm' && (
@@ -142,6 +154,16 @@ export function SessionPayoutTrigger({
                 </button>
               )}
             </div>
+
+            {isSample && (
+              <div
+                className="px-5 py-2 flex items-center justify-center gap-1.5 text-xs font-semibold"
+                style={{ backgroundColor: '#92400E', color: '#FFFBEB' }}
+              >
+                <AlertCircle className="w-3.5 h-3.5" />
+                Illustrative sample — no funds will move
+              </div>
+            )}
 
             <div className="p-5 space-y-4">
               {/* Session info */}
@@ -308,6 +330,16 @@ export function SessionPayoutTrigger({
       )}
     </AnimatePresence>
   );
+
+  if (fullScreen) {
+    return (
+      <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center px-6">
+        <div className="w-full max-w-md">{content}</div>
+      </div>
+    );
+  }
+
+  return content;
 }
 
 export default SessionPayoutTrigger;

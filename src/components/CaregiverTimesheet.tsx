@@ -49,6 +49,10 @@ interface TimesheetRecord {
     endTime: string;
     totalTime: string;
     status: 'approved' | 'pending' | 'draft';
+    // Whether a real device location was actually captured for this entry.
+    // When false/undefined, the location label is an honest "not captured"
+    // placeholder and must NOT be rendered as verified EVV evidence.
+    locationCaptured?: boolean;
     locationStart: string;
     locationEnd: string;
 }
@@ -127,7 +131,12 @@ export function CaregiverTimesheet({ onBack, caregiverName }: CaregiverTimesheet
                 setElapsedTime(0);
                 resetPilotChecks();
 
-                // Add to history
+                // Add to history.
+                // We do not capture a real device coordinate in this pilot build, so we must
+                // not assert a specific "Verified" GPS location for a real clock-out. In demo
+                // mode we show an illustrative verified label; for real users we store an honest
+                // "not captured" placeholder (rendered without the green verified pin below).
+                const pilotLocationLabel = demo ? 'Verified (GPS Block 4A)' : 'Location not captured (pilot)';
                 const newRecord: TimesheetRecord = {
                     id: 'ts_' + Date.now(),
                     date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
@@ -135,8 +144,9 @@ export function CaregiverTimesheet({ onBack, caregiverName }: CaregiverTimesheet
                     endTime: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
                     totalTime: (elapsedTime / 3600).toFixed(1) + ' hrs',
                     status: 'pending',
-                    locationStart: 'Verified (GPS Block 4A)',
-                    locationEnd: 'Verified (GPS Block 4A)'
+                    locationCaptured: demo,
+                    locationStart: pilotLocationLabel,
+                    locationEnd: pilotLocationLabel
                 };
                 setTimesheets([newRecord, ...timesheets]);
                 toast.success('Successfully clocked out. EVV Data Captured.');
@@ -398,15 +408,15 @@ export function CaregiverTimesheet({ onBack, caregiverName }: CaregiverTimesheet
                                         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', backgroundColor: '#F9FAFB', padding: '12px', borderRadius: '12px' }}>
                                             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px' }}>
                                                 <span style={{ color: '#6B7280' }}>Clock In: {ts.startTime}</span>
-                                                <span style={{ color: '#111827', fontWeight: 500, display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                                    <MapPin size={12} color="#10B981" /> {ts.locationStart}
+                                                <span style={{ color: ts.locationCaptured ? '#111827' : '#9CA3AF', fontWeight: 500, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                                    {ts.locationCaptured && <MapPin size={12} color="#10B981" />} {ts.locationStart}
                                                 </span>
                                             </div>
                                             <div style={{ width: '100%', height: '1px', backgroundColor: '#E5E7EB' }} />
                                             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px' }}>
                                                 <span style={{ color: '#6B7280' }}>Clock Out: {ts.endTime}</span>
-                                                <span style={{ color: '#111827', fontWeight: 500, display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                                    <MapPin size={12} color="#10B981" /> {ts.locationEnd}
+                                                <span style={{ color: ts.locationCaptured ? '#111827' : '#9CA3AF', fontWeight: 500, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                                    {ts.locationCaptured && <MapPin size={12} color="#10B981" />} {ts.locationEnd}
                                                 </span>
                                             </div>
                                         </div>

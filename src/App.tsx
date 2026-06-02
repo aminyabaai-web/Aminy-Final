@@ -2935,6 +2935,8 @@ export default function App() {
               <CommunityForYou
                 childName={userData.childName}
                 onBack={() => navigateToScreen("dashboard")}
+                title="Resources"
+                subtitle="Guides, events, and parent stories"
               />
             </Suspense>
           );
@@ -3064,6 +3066,7 @@ export default function App() {
                 userId={userData.id || "parent-1"}
                 userRole="parent"
                 onBack={() => navigateToScreen("dashboard")}
+                onNavigate={(s) => navigateToScreen(s as AppScreen)}
               />
             </Suspense>
           );
@@ -3203,6 +3206,7 @@ export default function App() {
                 userName={userData.parentName || 'Parent'}
                 userId={userData.userId || ''}
                 onUpgrade={() => navigateToScreen("paywall")}
+                onNavigate={(s) => navigateToScreen(s as AppScreen)}
               />
             </Suspense>
           );
@@ -3430,6 +3434,7 @@ export default function App() {
                 parentName={userData.name || 'Parent'}
                 sessionType="bcba-45"
                 onStartSession={() => navigateToScreen("pre-call-setup")}
+                onBack={() => navigateToScreen("provider-portal")}
               />
             </Suspense>
           );
@@ -3442,6 +3447,7 @@ export default function App() {
                 providerName={viewingProviderName || 'Provider'}
                 reviews={[]}
                 stats={{ averageRating: 0, totalReviews: 0, ratingBreakdown: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 }, recommendRate: 0 }}
+                onBack={() => navigateToScreen("marketplace")}
               />
             </Suspense>
           );
@@ -3532,7 +3538,7 @@ export default function App() {
         case "caregiver-credentialing":
           return (
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
-              <CaregiverCredentialingWizard />
+              <CaregiverCredentialingWizard onBack={() => navigateToScreen("dashboard")} />
             </Suspense>
           );
 
@@ -3542,6 +3548,7 @@ export default function App() {
               <ProviderClinicalTemplates
                 patientId={activePatientId || ''}
                 patientName={userData.childName || 'Patient'}
+                onBack={() => navigateToScreen("provider-portal")}
               />
             </Suspense>
           );
@@ -3551,6 +3558,7 @@ export default function App() {
             <Suspense fallback={<LoadingSkeleton screen="telehealth" />}>
               <DailyVideoRoom
                 roomUrl={dailyRoomUrl || ''}
+                onBack={() => navigateToScreen("telehealth")}
               />
             </Suspense>
           );
@@ -3589,6 +3597,8 @@ export default function App() {
                 }}
                 onAccept={() => navigateToScreen("dashboard")}
                 onReject={() => navigateToScreen("dashboard")}
+                onBack={() => navigateToScreen("dashboard")}
+                asFullScreen
               />
             </Suspense>
           );
@@ -3791,7 +3801,7 @@ export default function App() {
         case "credentialing-support":
           return (
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
-              <CredentialingSupportCenter />
+              <CredentialingSupportCenter onBack={() => navigateToScreen("provider-portal")} />
             </Suspense>
           );
 

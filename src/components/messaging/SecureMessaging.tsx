@@ -32,6 +32,7 @@ import {
   Trash2,
   Archive
 } from 'lucide-react';
+import { toast } from 'sonner';
 import { Button } from '../ui/button';
 import { Card } from '../ui/card';
 import { EmptyState } from '../EmptyState';
@@ -260,9 +261,12 @@ interface SecureMessagingProps {
   userId: string;
   userRole: 'parent' | 'provider';
   onBack?: () => void;
+  /** Navigate to another screen (e.g. the provider marketplace). Optional so the
+   *  component still renders standalone; falls back to a Coming-soon toast. */
+  onNavigate?: (screen: string) => void;
 }
 
-export function SecureMessaging({ userId, userRole, onBack }: SecureMessagingProps) {
+export function SecureMessaging({ userId, userRole, onBack, onNavigate }: SecureMessagingProps) {
   // Real accounts start empty and load their own threads from Supabase. Demo
   // mode seeds sample conversations so prospect walkthroughs look complete.
   const demo = isDemoMode();
@@ -522,6 +526,28 @@ export function SecureMessaging({ userId, userRole, onBack }: SecureMessagingPro
     setShowThreadMenu(false);
   };
 
+  // Navigate to the provider marketplace to start a new conversation
+  const handleFindProvider = () => {
+    if (onNavigate) {
+      onNavigate('marketplace');
+    } else {
+      toast('Starting a new conversation is coming soon.');
+    }
+  };
+
+  // Archive the selected thread (hides it from the active list via filteredThreads)
+  const archiveThread = () => {
+    if (!selectedThread) return;
+    setThreads(prev =>
+      prev.map(t =>
+        t.id === selectedThread.id ? { ...t, isArchived: true } : t
+      )
+    );
+    setShowThreadMenu(false);
+    setSelectedThread(null);
+    toast('Conversation archived.');
+  };
+
   // Filter threads
   const filteredThreads = threads.filter(t => {
     if (t.isArchived) return false;
@@ -570,7 +596,11 @@ export function SecureMessaging({ userId, userRole, onBack }: SecureMessagingPro
                 >
                   <Search className="w-5 h-5 text-gray-500" />
                 </button>
-                <button className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center">
+                <button
+                  onClick={handleFindProvider}
+                  aria-label="New conversation"
+                  className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center"
+                >
                   <Plus className="w-5 h-5 text-gray-500" />
                 </button>
               </div>
@@ -593,21 +623,21 @@ export function SecureMessaging({ userId, userRole, onBack }: SecureMessagingPro
         </div>
 
         {/* Thread List */}
-        <div className="max-w-2xl mx-auto divide-y divide-gray-100 dark:divide-slate-700">
+        <div className="max-w-2xl mx-auto">
           {filteredThreads.length === 0 ? (
             <EmptyState
               IconComponent={MessageCircle}
               title="No messages yet"
               description="Messages from your providers will appear here. Book a session to get started."
               actionText="Find a Provider"
-              onAction={() => {/* navigate to provider marketplace */}}
+              onAction={handleFindProvider}
             />
           ) : (
             filteredThreads.map(thread => (
               <button
                 key={thread.id}
                 onClick={() => setSelectedThread(thread)}
-                className="w-full p-4 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors flex items-start gap-3 text-left min-h-[72px]"
+                className="w-full p-4 border-b border-gray-100 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors flex items-start gap-3 text-left min-h-[72px]"
               >
                 {/* Avatar */}
                 <div className="relative flex-shrink-0">
@@ -729,7 +759,10 @@ export function SecureMessaging({ userId, userRole, onBack }: SecureMessagingPro
                         </>
                       )}
                     </button>
-                    <button className="w-full px-4 py-2.5 flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-slate-700 text-left">
+                    <button
+                      onClick={archiveThread}
+                      className="w-full px-4 py-2.5 flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-slate-700 text-left"
+                    >
                       <Archive className="w-4 h-4 text-gray-500" />
                       <span className="text-sm">Archive</span>
                     </button>
@@ -818,7 +851,11 @@ export function SecureMessaging({ userId, userRole, onBack }: SecureMessagingPro
         <div className="max-w-2xl mx-auto px-4 py-3" style={{ paddingBottom: 'max(12px, env(safe-area-inset-bottom))' }}>
           <div className="flex items-end gap-2">
             {/* Attachment Button */}
-            <button className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center flex-shrink-0">
+            <button
+              onClick={() => toast('Attachments are coming soon.')}
+              aria-label="Attach a file"
+              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center flex-shrink-0"
+            >
               <Paperclip className="w-5 h-5 text-gray-500" />
             </button>
 

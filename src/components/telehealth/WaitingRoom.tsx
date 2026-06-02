@@ -44,6 +44,7 @@ import {
   Target,
   X,
 } from 'lucide-react';
+import { useAuditedAction } from '../../hooks/useAuditedAction';
 
 type WaitingStatus = 'connecting' | 'waiting' | 'admitted' | 'error' | 'provider-offline';
 
@@ -110,7 +111,7 @@ const WAITING_TIPS: WaitingTip[] = [
   {
     icon: <Shield size={18} />,
     title: 'Privacy Protected',
-    text: 'Your session is HIPAA-encrypted end-to-end. Only you and your provider can see and hear the call.',
+    text: 'Your session is encrypted in transit and kept private between you and your provider.',
   },
   {
     icon: <Lightbulb size={18} />,
@@ -148,6 +149,12 @@ export function WaitingRoom({
   const videoRef = useRef<HTMLVideoElement>(null);
   const timerRef = useRef<ReturnType<typeof setInterval>>(undefined);
   const admittedRef = useRef(false);
+
+  // HIPAA audit logging -- record a view event for this telehealth waiting room.
+  // Mirrors VideoCallRoom; logs the patient (userId) entering the appointment surface.
+  useAuditedAction('appointment', appointmentId, {
+    details: { context: 'waiting_room', patientId: userId },
+  });
 
   // Resolved provider display info
   const displayName = providerInfo?.name || providerName;
@@ -312,11 +319,11 @@ export function WaitingRoom({
   // Render
   // -----------------------------------------------------------------------
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-teal-900 flex flex-col items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-teal-900 flex flex-col items-center overflow-y-auto z-50 p-4">
       {/* HIPAA indicator */}
       <div className="absolute top-4 left-4 flex items-center gap-2 text-xs text-white/60">
         <Shield size={14} />
-        <span>HIPAA-encrypted session</span>
+        <span>HIPAA-conscious, encrypted in transit</span>
       </div>
 
       {/* Cancel button */}
@@ -328,7 +335,7 @@ export function WaitingRoom({
         Leave Waiting Room
       </button>
 
-      <div className="max-w-lg w-full space-y-5">
+      <div className="max-w-lg w-full space-y-5" style={{ margin: 'auto', paddingTop: '2.5rem', paddingBottom: '1rem' }}>
         {/* Provider card -- photo + name + appointment time */}
         {(status === 'waiting' || status === 'provider-offline') && (
           <div className="flex items-center gap-4 bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10">
@@ -425,7 +432,7 @@ export function WaitingRoom({
         <div className="text-center space-y-3">
           {status === 'connecting' && (
             <>
-              <Loader2 className="w-8 h-8 text-teal-400 animate-spin mx-auto" />
+              <Loader2 className="w-8 h-8 animate-spin mx-auto" style={{ color: '#2dd4bf' }} />
               <h2 className="text-xl font-semibold text-white">Connecting...</h2>
               <p className="text-white/60 text-sm">Setting up your secure session</p>
             </>
@@ -435,9 +442,9 @@ export function WaitingRoom({
             <>
               {/* Animated pulsing dots indicator */}
               <div className="flex items-center justify-center gap-2 mb-1">
-                <div className="w-2.5 h-2.5 bg-teal-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                <div className="w-2.5 h-2.5 bg-teal-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                <div className="w-2.5 h-2.5 bg-teal-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                <div className="w-2.5 h-2.5 rounded-full animate-bounce" style={{ animationDelay: '0ms', backgroundColor: '#2dd4bf' }} />
+                <div className="w-2.5 h-2.5 rounded-full animate-bounce" style={{ animationDelay: '150ms', backgroundColor: '#2dd4bf' }} />
+                <div className="w-2.5 h-2.5 rounded-full animate-bounce" style={{ animationDelay: '300ms', backgroundColor: '#2dd4bf' }} />
               </div>
               <h2 className="text-xl font-semibold text-white">
                 Your provider will admit you shortly
@@ -492,11 +499,11 @@ export function WaitingRoom({
                 tipFading ? 'opacity-0' : 'opacity-100'
               }`}
             >
-              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-teal-500/20 flex items-center justify-center text-teal-300 mt-0.5">
+              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-teal-500/20 flex items-center justify-center mt-0.5" style={{ color: '#5eead4' }}>
                 {currentTip.icon}
               </div>
               <div className="flex-1">
-                <p className="text-xs font-semibold text-teal-300 uppercase tracking-wider mb-1">
+                <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: '#5eead4' }}>
                   {currentTip.title}
                 </p>
                 <p className="text-sm text-white/80 leading-relaxed">
@@ -510,8 +517,9 @@ export function WaitingRoom({
                 <div
                   key={i}
                   className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
-                    i === tipIndex ? 'bg-teal-400 w-4' : 'bg-white/20'
+                    i === tipIndex ? 'w-4' : 'bg-white/20'
                   }`}
+                  style={i === tipIndex ? { backgroundColor: '#2dd4bf' } : undefined}
                 />
               ))}
             </div>

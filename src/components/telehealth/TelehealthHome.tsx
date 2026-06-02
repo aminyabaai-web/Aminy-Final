@@ -342,10 +342,10 @@ export function TelehealthHome({
               <p className="text-sm text-gray-600 mt-1">
                 Join live sessions with BCBAs, therapists, and parent coaches. Ask questions, get answers.
               </p>
-              <button className="mt-3 text-sm font-medium text-amber-700 hover:underline flex items-center gap-1">
+              <span className="mt-3 text-sm font-medium text-amber-700 hover:underline flex items-center gap-1">
                 View Schedule & Replays
                 <ChevronRight className="w-4 h-4" />
-              </button>
+              </span>
             </div>
           </div>
         </section>
@@ -365,10 +365,10 @@ export function TelehealthHome({
               <p className="text-sm text-gray-600 mt-1">
                 Expert strategies for meltdowns, communication, sensory needs, and more. Research-backed.
               </p>
-              <button className="mt-3 text-sm font-medium text-green-700 hover:underline flex items-center gap-1">
+              <span className="mt-3 text-sm font-medium text-green-700 hover:underline flex items-center gap-1">
                 Browse Library
                 <ChevronRight className="w-4 h-4" />
-              </button>
+              </span>
             </div>
           </div>
         </section>

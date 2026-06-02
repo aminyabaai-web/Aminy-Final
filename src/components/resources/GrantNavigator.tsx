@@ -4,7 +4,7 @@
  * Pro-tier feature. Sections:
  * 1. Quick Finder    — state + need + insurance status form
  * 2. Results         — 5-6 funding categories tailored to input
- * 3. Appeal Letter   — AI-generated appeal letter (beta/placeholder)
+ * 3. Appeal Letter   — care-team-assisted appeal (AI auto-draft is beta/coming soon)
  */
 
 import React, { useState } from 'react';
@@ -336,7 +336,7 @@ function AppealLetterSection() {
     >
       <div className="flex items-center gap-2">
         <Sparkles className="w-5 h-5" style={{ color: '#9B8EC4' }} />
-        <h3 className="font-semibold text-white">Appeal Letter Generator</h3>
+        <h3 className="font-semibold text-white">Appeal Letter Help</h3>
         <span
           className="ml-auto text-xs font-medium px-2 py-0.5 rounded-full"
           style={{ background: '#9B8EC433', color: '#9B8EC4' }}
@@ -346,7 +346,8 @@ function AppealLetterSection() {
       </div>
 
       <p className="text-sm text-slate-400 leading-relaxed">
-        Generate a customized insurance appeal letter for your specific denial situation.
+        Tell us about your denial and we'll connect you with our care team to help draft a
+        customized insurance appeal letter. AI-generated drafts are coming soon.
       </p>
 
       {!submitted ? (
@@ -388,7 +389,7 @@ function AppealLetterSection() {
             style={{ background: 'linear-gradient(135deg, #9B8EC4, #77B5D9)' }}
           >
             <Sparkles className="w-4 h-4" />
-            Generate Letter (Beta)
+            Request Appeal-Letter Help
           </button>
         </div>
       ) : (
@@ -401,18 +402,20 @@ function AppealLetterSection() {
           <div className="flex items-start gap-2">
             <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#9B8EC4' }} />
             <div>
-              <p className="font-semibold text-white text-sm">Coming in the next update</p>
+              <p className="font-semibold text-white text-sm">Let's get your appeal started</p>
               <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                AI-generated appeal letters are in beta review. In the meantime, Aminy's care team
-                can help you draft a letter — contact{' '}
+                Fully automated AI drafts are still in beta review. For now, Aminy's care team
+                will help you draft your appeal — email{' '}
                 <a
-                  href="mailto:support@aminy.ai"
+                  href={`mailto:support@aminy.ai?subject=${encodeURIComponent('Appeal letter help')}&body=${encodeURIComponent(
+                    `Insurance company: ${insurerName}\nService denied: ${deniedService}\nDiagnosis/concern: ${diagnosis || '(not provided)'}`,
+                  )}`}
                   className="underline"
                   style={{ color: '#9B8EC4' }}
                 >
                   support@aminy.ai
                 </a>{' '}
-                with your denial details.
+                and we'll send a customized letter back, usually within one business day.
               </p>
             </div>
           </div>

@@ -119,17 +119,50 @@ const DailyGrid = ({ roomUrl }: { roomUrl: string }) => {
     );
 };
 
-export const DailyVideoRoom = ({ roomUrl }: { roomUrl: string }) => {
-    // Let DailyProvider own the call-object lifecycle. It recreates the
-    // instance if a previous one was destroyed and does not destroy on
-    // cleanup, which avoids the StrictMode "call object destroyed" race.
+export const DailyVideoRoom = ({
+    roomUrl,
+    onBack,
+}: {
+    roomUrl: string;
+    /** Optional: renders a back control on the empty state when provided. */
+    onBack?: () => void;
+}) => {
+    // Establish a real full-viewport, positioned container. The DailyGrid
+    // states are position:absolute inset-0, so without a positioned ancestor
+    // of known height they would either collapse to zero height or pin to an
+    // arbitrary ancestor. `relative min-h-screen` gives them a concrete box.
     return (
-        <DailyProvider
-            dailyConfig={{
-                useDevicePreferenceCookies: true,
-            }}
-        >
-            <DailyGrid roomUrl={roomUrl} />
-        </DailyProvider>
+        <div className="relative min-h-screen" style={{ backgroundColor: '#0f172a' }}>
+            {/* No room link → render an honest empty state rather than letting
+                the join effect silently no-op into a perpetual "Waiting..." */}
+            {!roomUrl ? (
+                <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center">
+                    <Users className="w-12 h-12 text-slate-600 mb-4" />
+                    <p className="text-slate-100 font-semibold">No room link provided</p>
+                    <p className="mt-2 text-sm text-slate-400 max-w-sm">
+                        Start or open a telehealth session to generate a secure room link.
+                    </p>
+                    {onBack && (
+                        <button
+                            onClick={onBack}
+                            className="mt-5 px-4 py-2 bg-teal-600 text-white text-sm font-medium rounded-lg hover:bg-teal-700 transition-colors"
+                        >
+                            Back
+                        </button>
+                    )}
+                </div>
+            ) : (
+                // Let DailyProvider own the call-object lifecycle. It recreates the
+                // instance if a previous one was destroyed and does not destroy on
+                // cleanup, which avoids the StrictMode "call object destroyed" race.
+                <DailyProvider
+                    dailyConfig={{
+                        useDevicePreferenceCookies: true,
+                    }}
+                >
+                    <DailyGrid roomUrl={roomUrl} />
+                </DailyProvider>
+            )}
+        </div>
     );
 };

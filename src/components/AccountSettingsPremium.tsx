@@ -608,9 +608,9 @@ export function AccountSettingsPremium({ onBack, onLogout, onNavigate, userTier 
                     )}
                 </div>
 
-                {/* App Version */}
+                {/* App Version — kept consistent with SettingsScreen; derived from VITE_APP_VERSION (same source as production.config / env-config), default 1.0.0 */}
                 <p className="text-center text-[12px] text-gray-900/30 mt-2">
-                    Aminy v1.1.0 • Built for families
+                    Aminy v{import.meta.env.VITE_APP_VERSION || '1.0.0'} • Made with care
                 </p>
 
             </div>

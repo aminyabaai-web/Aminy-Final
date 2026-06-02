@@ -17,7 +17,6 @@ import {
   ArrowLeft,
   Star,
   Volume2,
-  VolumeX,
   Settings,
   Wind,
   Droplet,
@@ -28,9 +27,6 @@ import {
   Moon,
   Sun,
   Waves,
-  Music,
-  CloudRain,
-  Flame,
   X
 } from 'lucide-react';
 import { connectorActions } from '../lib/connector-hub';
@@ -50,7 +46,6 @@ interface SensoryToolsProps {
 }
 
 type ToolType = 'fluid-swirl' | 'bubble-pop' | 'fidget-spinner' | 'breathe-glow' | null;
-type AmbientSound = 'none' | 'rain' | 'ocean' | 'campfire' | 'forest';
 
 interface Bubble {
   id: string;
@@ -89,8 +84,6 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
   // Settings
   const [visualIntensity, setVisualIntensity] = useState(50);
   const [hapticEnabled, setHapticEnabled] = useState(true);
-  const [ambientSound, setAmbientSound] = useState<AmbientSound>('none');
-  const [soundVolume, setSoundVolume] = useState(30);
   
   // Tool-specific state
   const [bubbles, setBubbles] = useState<Bubble[]>([]);
@@ -104,7 +97,6 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
   const [touchPoint, setTouchPoint] = useState<{ x: number; y: number } | null>(null);
   
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const audioRef = useRef<HTMLAudioElement>(null);
   const animationFrameRef = useRef<number>(undefined);
 
   // Timer for session duration
@@ -138,17 +130,6 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
       navigator.vibrate(patterns[intensity]);
     }
   }, [hapticEnabled]);
-
-  // Ambient sound management
-  useEffect(() => {
-    if (ambientSound !== 'none' && audioRef.current) {
-      // In production, these would be actual audio files
-      // For now, we simulate
-      if (audioRef.current.volume !== soundVolume / 100) {
-        audioRef.current.volume = soundVolume / 100;
-      }
-    }
-  }, [ambientSound, soundVolume]);
 
   // ========== FLUID SWIRL ==========
   useEffect(() => {
@@ -544,8 +525,7 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
         duration,
         completed,
         visualIntensity,
-        hapticEnabled,
-        ambientSound
+        hapticEnabled
       }
     });
 
@@ -610,14 +590,6 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
       icon: <Wind className="w-8 h-8" />,
       color: 'from-green-400 to-teal-500'
     }
-  ];
-
-  const ambientSounds = [
-    { id: 'none' as AmbientSound, name: 'No sound', icon: <VolumeX className="w-4 h-4" /> },
-    { id: 'rain' as AmbientSound, name: 'Rain', icon: <CloudRain className="w-4 h-4" /> },
-    { id: 'ocean' as AmbientSound, name: 'Ocean waves', icon: <Waves className="w-4 h-4" /> },
-    { id: 'campfire' as AmbientSound, name: 'Campfire', icon: <Flame className="w-4 h-4" /> },
-    { id: 'forest' as AmbientSound, name: 'Forest', icon: <Music className="w-4 h-4" /> }
   ];
 
   // Tool selection view
@@ -738,8 +710,6 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
           </div>
         </div>
 
-        {/* Hidden audio element for ambient sounds */}
-        <audio ref={audioRef} loop />
       </div>
     );
   }

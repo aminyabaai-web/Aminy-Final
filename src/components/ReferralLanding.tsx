@@ -190,13 +190,13 @@ export function ReferralLanding({ onNavigateToSignup, onNavigateToLogin }: Refer
             {
               Icon: UserCircle,
               title: 'Expert Access',
-              desc: 'Connect with BCBAs, SLPs, and more',
+              desc: 'Connect with BCBAs and therapists where available',
               color: 'text-purple-500',
             },
             {
               Icon: ClipboardList,
-              title: 'Clinical Reports',
-              desc: 'Share with schools and providers',
+              title: 'Progress Reports',
+              desc: 'Summaries you can share with schools and providers',
               color: 'text-amber-500',
             },
           ].map((item, i) => (

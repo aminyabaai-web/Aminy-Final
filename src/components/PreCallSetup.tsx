@@ -62,6 +62,8 @@ export function PreCallSetup({
   const audioContextRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
   const mediaStreamRef = useRef<MediaStream | null>(null);
+  const speakerTestTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isMountedRef = useRef(true);
 
   // Device lists
   const [cameras, setCameras] = useState<MediaDevice[]>([]);
@@ -139,6 +141,13 @@ export function PreCallSetup({
   useEffect(() => {
     getDevices();
     return () => {
+      // Mark unmounted so async callbacks don't setState after teardown
+      isMountedRef.current = false;
+      // Clear any pending speaker-test timer
+      if (speakerTestTimeoutRef.current) {
+        clearTimeout(speakerTestTimeoutRef.current);
+        speakerTestTimeoutRef.current = null;
+      }
       // Cleanup media stream
       if (mediaStreamRef.current) {
         mediaStreamRef.current.getTracks().forEach(track => track.stop());
@@ -235,9 +244,12 @@ export function PreCallSetup({
       gainNode.gain.value = 0.3;
 
       oscillator.start();
-      setTimeout(() => {
+      speakerTestTimeoutRef.current = setTimeout(() => {
+        speakerTestTimeoutRef.current = null;
         oscillator.stop();
         audioContext.close();
+        // Guard against setState after unmount
+        if (!isMountedRef.current) return;
         setDeviceStatus(prev => ({ ...prev, speaker: 'success' }));
       }, 500);
     } catch (err) {
@@ -346,7 +358,7 @@ export function PreCallSetup({
 
   return (
     <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
-      <Card className="w-full max-w-2xl bg-white">
+      <Card className="w-full max-w-2xl bg-white max-h-[90vh] overflow-y-auto">
         <CardHeader className="pb-4">
           <CardTitle className="flex items-center gap-2">
             <Settings className="w-5 h-5" />

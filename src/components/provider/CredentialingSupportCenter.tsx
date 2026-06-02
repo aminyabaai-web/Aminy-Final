@@ -56,6 +56,7 @@ import { Progress } from '../ui/progress';
 import { Input } from '../ui/input';
 import { ScreenHeader } from '../ui/ScreenHeader';
 import { isDemoMode } from '../../lib/demo-seed';
+import { useOpenAI } from '../../lib/ai-sparkle-context';
 
 // ============================================================================
 // Types
@@ -285,7 +286,7 @@ const MOCK_STATUS_ENTRIES: CredentialingStatusEntry[] = [
 const FAQS: FAQ[] = [
   { question: 'How long does credentialing typically take?', answer: 'Initial credentialing with most commercial payers takes 60-120 days from application submission. Medicare can take 60-90 days. Medicaid varies by state but typically 30-90 days. Aminy tracks each timeline and alerts you to delays.' },
   { question: 'What is CAQH and do I need it?', answer: 'CAQH ProView is a universal credentialing database used by most payers. Keeping your CAQH profile current (re-attested every 120 days) dramatically speeds up enrollment with new payers. Aminy monitors your attestation status automatically.' },
-  { question: 'How do I add a new insurance payer?', answer: 'Go to the Enrollment tab and click "Start New Enrollment." Aminy will guide you through the application, pre-fill from your CAQH profile, and track the application through completion.' },
+  { question: 'How do I add a new insurance payer?', answer: 'Open the AI Playbooks tab and choose "I need a new payer," or ask the AI Credentialing Assistant. Aminy walks you through the payer-specific steps, what to verify on your CAQH profile, and the documents each payer requires.' },
   { question: 'What happens when my credentials expire?', answer: 'Aminy sends alerts at 90, 60, and 30 days before expiration. Expired credentials can result in claim denials and payer disenrollment. Use the CAQH tab to see all upcoming expirations.' },
   { question: 'Can Aminy help with claim denials?', answer: 'Yes. The Denial Ops tab auto-categorizes denials, suggests corrections, generates payer-specific appeal letters, and tracks appeal deadlines with success probability estimates.' },
   { question: 'How do I submit claims through Aminy?', answer: 'The Claim Queue tab shows all sessions ready for billing. Aminy validates claims before submission, checking for missing info, expired auths, and coding issues. You can submit individually or batch-submit.' },
@@ -1066,8 +1067,8 @@ function CAQHTab() {
           <div className="text-xs text-violet-700">
             {qaChecklist.filter(i => i.status === 'pass').length}/{qaChecklist.length} checks passing
           </div>
-          <Button variant="outline" size="sm" className="h-7 text-xs border-violet-300 text-violet-700">
-            Re-run QA Check
+          <Button variant="outline" size="sm" className="h-7 text-xs border-violet-300 text-violet-700 opacity-60" disabled title="Coming soon">
+            Re-run QA Check <span className="ml-1 text-[10px] text-slate-400 font-normal">Soon</span>
           </Button>
         </div>
       </Card>
@@ -1083,7 +1084,7 @@ function CAQHTab() {
             {expiringDocs.map((d) => (
               <div key={d.id} className="flex items-center justify-between text-xs">
                 <span className="text-amber-700">{d.name} expires {d.expiresAt}</span>
-                <Button variant="ghost" size="sm" className="h-6 text-xs text-amber-700">
+                <Button variant="ghost" size="sm" className="h-6 text-xs text-amber-700 opacity-60" disabled title="Coming soon">
                   Renew <ArrowRight className="w-3 h-3 ml-1" />
                 </Button>
               </div>
@@ -1091,7 +1092,7 @@ function CAQHTab() {
             {missingDocs.map((d) => (
               <div key={d.id} className="flex items-center justify-between text-xs">
                 <span className="text-amber-700">{d.name} — required, not uploaded</span>
-                <Button variant="ghost" size="sm" className="h-6 text-xs text-amber-700">
+                <Button variant="ghost" size="sm" className="h-6 text-xs text-amber-700 opacity-60" disabled title="Coming soon">
                   Upload <Upload className="w-3 h-3 ml-1" />
                 </Button>
               </div>
@@ -1154,6 +1155,7 @@ function CAQHTab() {
 const ENROLLMENT_STAGES = ['application', 'processing', 'credentialing', 'active'] as const;
 
 function EnrollmentTab() {
+  const openAI = useOpenAI();
   const enrollments = isDemoMode() ? MOCK_ENROLLMENTS : [];
   const [wizardPayer, setWizardPayer] = useState<string | null>(null);
 
@@ -1231,8 +1233,9 @@ function EnrollmentTab() {
             ))}
           </div>
 
-          <Button size="sm" className="mt-4 w-full">
+          <Button size="sm" className="mt-4 w-full opacity-60" disabled title="Coming soon">
             <Plus className="w-3 h-3 mr-1" /> Begin {activeWorkflow.payerName} Application
+            <span className="ml-auto text-[10px] text-white/80 font-normal">Coming soon</span>
           </Button>
         </Card>
       </div>
@@ -1243,7 +1246,7 @@ function EnrollmentTab() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold text-slate-800">Payer Enrollment Pipeline</h3>
-        <Button variant="outline" size="sm" className="h-7 text-xs">
+        <Button variant="outline" size="sm" className="h-7 text-xs opacity-60" disabled title="Coming soon">
           <Plus className="w-3 h-3 mr-1" /> Start New Enrollment
         </Button>
       </div>
@@ -1340,7 +1343,18 @@ function EnrollmentTab() {
               <p className="text-xs text-slate-500 mt-1 italic">{enrollment.notes}</p>
             )}
             {isDenied && (
-              <Button variant="outline" size="sm" className="mt-2 h-7 text-xs text-red-700 border-red-300">
+              <Button
+                variant="outline"
+                size="sm"
+                className="mt-2 h-7 text-xs text-red-700 border-red-300"
+                onClick={() =>
+                  openAI(
+                    `My ${enrollment.payerName} provider enrollment was denied` +
+                    `${enrollment.notes ? ` (reason: ${enrollment.notes})` : ''}. ` +
+                    `Help me draft an appeal and outline the next steps.`
+                  )
+                }
+              >
                 File Appeal <ArrowRight className="w-3 h-3 ml-1" />
               </Button>
             )}
@@ -1362,7 +1376,7 @@ function RosterTab() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold text-slate-800">Active Payer Roster</h3>
-        <Button variant="outline" size="sm" className="h-7 text-xs">
+        <Button variant="outline" size="sm" className="h-7 text-xs opacity-60" disabled title="Coming soon">
           <Plus className="w-3 h-3 mr-1" /> Add Payer
         </Button>
       </div>
@@ -1423,7 +1437,7 @@ function RosterTab() {
                     <p className="text-xs text-amber-600">Due: {entry.recredentialingDate}</p>
                   </div>
                 </div>
-                <Button variant="outline" size="sm" className="h-7 text-xs border-amber-300 text-amber-700">
+                <Button variant="outline" size="sm" className="h-7 text-xs border-amber-300 text-amber-700 opacity-60" disabled title="Coming soon">
                   Start Renewal
                 </Button>
               </div>
@@ -1507,6 +1521,7 @@ const DENIAL_PLAYBOOK: PlaybookNode[] = [
 ];
 
 function AIPlaybooksTab() {
+  const openAI = useOpenAI();
   const [activePlaybook, setActivePlaybook] = useState<string | null>(null);
   const [currentNode, setCurrentNode] = useState<string>('start');
   const [denialCode, setDenialCode] = useState('');
@@ -1577,14 +1592,35 @@ function AIPlaybooksTab() {
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDenialCode(e.target.value)}
                   className="text-sm"
                 />
-                <Button size="sm" className="shrink-0">
+                <Button
+                  size="sm"
+                  className="shrink-0"
+                  onClick={() =>
+                    openAI(
+                      `Explain insurance denial code ${denialCode.trim() || '[code]'} ` +
+                      `and give me the specific next steps to resolve or appeal it.`
+                    )
+                  }
+                  disabled={!denialCode.trim()}
+                >
                   <Search className="w-3 h-3 mr-1" /> Look Up
                 </Button>
               </div>
             )}
 
             {node.action && (
-              <Button variant="outline" size="sm" className="mt-3 text-xs">
+              <Button
+                variant="outline"
+                size="sm"
+                className="mt-3 text-xs"
+                onClick={() =>
+                  openAI(
+                    `Help me with this credentialing/billing scenario: ${node.text}. ` +
+                    `${node.guidance ? `Context: ${node.guidance} ` : ''}` +
+                    `Specifically, I want to: ${node.action}.`
+                  )
+                }
+              >
                 <Zap className="w-3 h-3 mr-1" /> {node.action}
               </Button>
             )}
@@ -1631,8 +1667,17 @@ function AIPlaybooksTab() {
               </div>
             ))}
           </div>
-          <Button size="sm" className="mt-4 w-full">
-            <Plus className="w-3 h-3 mr-1" /> Start Enrollment Application
+          <Button
+            size="sm"
+            className="mt-4 w-full"
+            onClick={() =>
+              openAI(
+                'Walk me through enrolling with a new insurance payer step by step, ' +
+                'starting with what I need to verify on my CAQH profile.'
+              )
+            }
+          >
+            <Sparkles className="w-3 h-3 mr-1" /> Start with AI Assistant
           </Button>
         </Card>
       </div>
@@ -1771,8 +1816,9 @@ function ClaimQueueTab() {
           </Button>
           <Button
             size="sm"
-            className="h-7 text-xs"
-            disabled={selectedClaims.size === 0}
+            className="h-7 text-xs opacity-60"
+            disabled
+            title="Claim submission coming soon"
           >
             <Send className="w-3 h-3 mr-1" /> Submit ({selectedClaims.size})
           </Button>
@@ -1835,8 +1881,20 @@ function ClaimQueueTab() {
 // ============================================================================
 
 function DenialOpsTab() {
+  const openAI = useOpenAI();
   const denials = isDemoMode() ? MOCK_DENIALS : [];
   const [expandedDenial, setExpandedDenial] = useState<string | null>(null);
+  const [copiedCode, setCopiedCode] = useState<string | null>(null);
+
+  function copyDenialCode(code: string) {
+    void navigator.clipboard?.writeText(code).then(
+      () => {
+        setCopiedCode(code);
+        setTimeout(() => setCopiedCode((c) => (c === code ? null : c)), 1500);
+      },
+      () => {}
+    );
+  }
 
   const totalDenied = denials.reduce((s, d) => s + d.amount, 0);
   const recoverable = denials.filter(d => d.status !== 'lost' && d.status !== 'expired');
@@ -2013,18 +2071,45 @@ function DenialOpsTab() {
                       {/* Actions */}
                       <div className="flex gap-2">
                         {denial.status === 'new' && (
-                          <Button size="sm" className="h-7 text-xs flex-1">
+                          <Button
+                            size="sm"
+                            className="h-7 text-xs flex-1"
+                            onClick={() =>
+                              openAI(
+                                `Draft an insurance appeal letter for a denied behavioral health claim. ` +
+                                `Payer: ${denial.payer}. Denial code: ${denial.denialCode} (${meta.label}). ` +
+                                `Claim ID: ${denial.claimId}. Date of service: ${denial.dateOfService}. ` +
+                                `Billed amount: $${denial.amount}. Write a professional, payer-ready appeal.`
+                              )
+                            }
+                          >
                             <Sparkles className="w-3 h-3 mr-1" /> Generate Appeal Letter
                           </Button>
                         )}
                         {denial.status === 'new' && (
-                          <Button variant="outline" size="sm" className="h-7 text-xs">
-                            <Copy className="w-3 h-3 mr-1" /> Copy Denial Code
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-7 text-xs"
+                            onClick={() => copyDenialCode(denial.denialCode)}
+                          >
+                            {copiedCode === denial.denialCode ? (
+                              <><CheckCircle className="w-3 h-3 mr-1" /> Copied</>
+                            ) : (
+                              <><Copy className="w-3 h-3 mr-1" /> Copy Denial Code</>
+                            )}
                           </Button>
                         )}
                         {denial.status === 'appealing' && (
-                          <Button variant="outline" size="sm" className="h-7 text-xs flex-1">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-7 text-xs flex-1 opacity-60"
+                            disabled
+                            title="Coming soon"
+                          >
                             <TrendingUp className="w-3 h-3 mr-1" /> Check Appeal Status
+                            <span className="ml-auto text-[10px] text-slate-400 font-normal">Soon</span>
                           </Button>
                         )}
                       </div>
@@ -2088,7 +2173,7 @@ function StatusDashboardTab() {
               .map(e => (
                 <div key={e.id} className="flex items-center justify-between text-xs">
                   <span className="text-amber-700">{e.payerName}: {e.missingDocuments.join(', ')}</span>
-                  <Button variant="ghost" size="sm" className="h-5 text-xs text-amber-700 px-2">
+                  <Button variant="ghost" size="sm" className="h-5 text-xs text-amber-700 px-2 opacity-60" disabled title="Coming soon">
                     Fix
                   </Button>
                 </div>
@@ -2181,7 +2266,7 @@ function StatusDashboardTab() {
                   </div>
                 </div>
                 {entry.enrollmentStatus === 're-credentialing-due' && (
-                  <Button variant="outline" size="sm" className="h-7 text-xs border-amber-300 text-amber-700">
+                  <Button variant="outline" size="sm" className="h-7 text-xs border-amber-300 text-amber-700 opacity-60" disabled title="Coming soon">
                     Start Renewal
                   </Button>
                 )}
@@ -2198,20 +2283,31 @@ function StatusDashboardTab() {
 // ============================================================================
 
 function HelpTab() {
+  const openAI = useOpenAI();
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [aiQuestion, setAiQuestion] = useState('');
+  const [faqSearch, setFaqSearch] = useState('');
 
-  const filteredFaqs = searchQuery
+  function askAI() {
+    const q = aiQuestion.trim();
+    if (!q) return;
+    openAI(
+      `I'm a provider with a credentialing, billing, or enrollment question: ${q}`
+    );
+    setAiQuestion('');
+  }
+
+  const filteredFaqs = faqSearch
     ? FAQS.filter(
         (f) =>
-          f.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          f.answer.toLowerCase().includes(searchQuery.toLowerCase())
+          f.question.toLowerCase().includes(faqSearch.toLowerCase()) ||
+          f.answer.toLowerCase().includes(faqSearch.toLowerCase())
       )
     : FAQS;
 
   return (
     <div className="space-y-4">
-      {/* AI Search */}
+      {/* AI Assistant — opens the live Aminy AI chat seeded with the question */}
       <Card className="p-4">
         <div className="flex items-center gap-2 mb-2">
           <Sparkles className="w-4 h-4 text-violet-500" />
@@ -2220,19 +2316,36 @@ function HelpTab() {
         <div className="flex gap-2">
           <Input
             placeholder="Ask anything about credentialing, billing, or enrollment..."
-            value={searchQuery}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
+            value={aiQuestion}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAiQuestion(e.target.value)}
+            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+              if (e.key === 'Enter') askAI();
+            }}
             className="text-sm"
           />
-          <Button size="sm" className="shrink-0">
-            <Search className="w-3 h-3" />
+          <Button size="sm" className="shrink-0" onClick={askAI} disabled={!aiQuestion.trim()}>
+            <Send className="w-3 h-3" />
           </Button>
         </div>
+        <p className="text-xs text-slate-400 mt-2">
+          Opens the Aminy AI chat with your question — answers in real time.
+        </p>
       </Card>
 
       {/* FAQ */}
       <div className="space-y-2">
-        <h3 className="text-sm font-semibold text-slate-800 px-1">Frequently Asked Questions</h3>
+        <div className="flex items-center justify-between gap-2 px-1">
+          <h3 className="text-sm font-semibold text-slate-800">Frequently Asked Questions</h3>
+        </div>
+        <div className="relative">
+          <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <Input
+            placeholder="Search FAQs..."
+            value={faqSearch}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFaqSearch(e.target.value)}
+            className="text-sm pl-9"
+          />
+        </div>
         {filteredFaqs.map((faq, i) => (
           <Card key={i} className="overflow-hidden">
             <button
@@ -2264,7 +2377,21 @@ function HelpTab() {
           </Card>
         ))}
         {filteredFaqs.length === 0 && (
-          <p className="text-xs text-slate-400 text-center py-4">No matching FAQs found. Try a different search.</p>
+          <div className="text-center py-4">
+            <p className="text-xs text-slate-400">No matching FAQs found.</p>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="mt-1 h-7 text-xs text-violet-600"
+              onClick={() => {
+                openAI(
+                  `I'm a provider with a credentialing, billing, or enrollment question: ${faqSearch}`
+                );
+              }}
+            >
+              <Sparkles className="w-3 h-3 mr-1" /> Ask the AI assistant
+            </Button>
+          </div>
         )}
       </div>
 
@@ -2272,14 +2399,37 @@ function HelpTab() {
       <Card className="p-4 bg-slate-50">
         <h3 className="text-sm font-semibold text-slate-800 mb-2">Need More Help?</h3>
         <div className="space-y-2">
-          <Button variant="outline" size="sm" className="w-full justify-start text-xs h-8">
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full justify-start text-xs h-8"
+            onClick={() =>
+              openAI(
+                'I need help from the Aminy credentialing support team. Can you assist or connect me?'
+              )
+            }
+          >
             <MessageSquare className="w-3 h-3 mr-2" /> Chat with Support Team
           </Button>
-          <Button variant="outline" size="sm" className="w-full justify-start text-xs h-8">
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full justify-start text-xs h-8 opacity-60"
+            disabled
+            title="Coming soon"
+          >
             <BookOpen className="w-3 h-3 mr-2" /> Credentialing Knowledge Base
+            <span className="ml-auto text-[10px] text-slate-400 font-normal">Coming soon</span>
           </Button>
-          <Button variant="outline" size="sm" className="w-full justify-start text-xs h-8">
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full justify-start text-xs h-8 opacity-60"
+            disabled
+            title="Coming soon"
+          >
             <FileText className="w-3 h-3 mr-2" /> Download Payer Requirements Guide
+            <span className="ml-auto text-[10px] text-slate-400 font-normal">Coming soon</span>
           </Button>
         </div>
       </Card>

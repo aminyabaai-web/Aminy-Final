@@ -55,8 +55,8 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
               <img
                 src={compassImage}
                 alt=""
-                className="w-[130%] h-[130%] object-contain"
-                style={{ transform: 'scale(1.15)' }}
+                className="object-contain"
+                style={{ width: '130%', height: '130%', transform: 'scale(1.15)' }}
               />
             </div>
             <span className="text-xl sm:text-2xl font-bold text-neutral-900 dark:text-white tracking-tight">aminy</span>
@@ -469,8 +469,8 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
                 <img
                   src={compassImage}
                   alt="Aminy"
-                  className="w-[130%] h-[130%] object-contain"
-                  style={{ transform: 'scale(1.15)' }}
+                  className="object-contain"
+                  style={{ width: '130%', height: '130%', transform: 'scale(1.15)' }}
                 />
               </div>
               <span className="text-neutral-400 text-sm">Aminy for Providers</span>

@@ -63,9 +63,11 @@ interface CaregiverMetrics {
     }>;
   };
   parentWellbeing: {
-    stressLevel: 'low' | 'moderate' | 'high';
-    stressTrend: 'improving' | 'stable' | 'worsening';
-    confidenceScore: number;
+    // Stress + confidence require a wellbeing input source that isn't wired yet.
+    // Left null until derivable so we never show a fabricated value.
+    stressLevel: 'low' | 'moderate' | 'high' | null;
+    stressTrend: 'improving' | 'stable' | 'worsening' | null;
+    confidenceScore: number | null;
     supportSessions: number;
   };
   engagement: {
@@ -226,9 +228,11 @@ export function OutcomesTracking({
         improvementAreas,
       },
       parentWellbeing: {
-        stressLevel: 'moderate',
-        stressTrend: 'stable',
-        confidenceScore: 0,
+        // No wellbeing-check input source wired yet — keep null so the UI hides
+        // these rather than showing a fabricated/zero value as if it were real.
+        stressLevel: null,
+        stressTrend: null,
+        confidenceScore: null,
         supportSessions: sessions.length,
       },
       engagement: {
@@ -333,7 +337,6 @@ export function OutcomesTracking({
             icon={Target}
             label="Goals Achieved"
             value={`${caregiverMetrics.childProgress.goalsAchieved}/${caregiverMetrics.childProgress.totalGoals}`}
-            trend={+15}
             color="teal"
           />
           <MetricCard
@@ -341,17 +344,17 @@ export function OutcomesTracking({
             label="Day Streak"
             value={caregiverMetrics.childProgress.currentStreakDays}
             suffix="days"
-            trend={+3}
             color="violet"
           />
-          <MetricCard
-            icon={Heart}
-            label="Confidence"
-            value={caregiverMetrics.parentWellbeing.confidenceScore}
-            suffix="%"
-            trend={+12}
-            color="pink"
-          />
+          {caregiverMetrics.parentWellbeing.confidenceScore !== null && (
+            <MetricCard
+              icon={Heart}
+              label="Confidence"
+              value={caregiverMetrics.parentWellbeing.confidenceScore}
+              suffix="%"
+              color="pink"
+            />
+          )}
           <MetricCard
             icon={Brain}
             label="AI Chats"
@@ -398,29 +401,33 @@ export function OutcomesTracking({
             Your Wellbeing
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
-            <div className="text-center p-4 bg-gray-50 rounded-lg">
-              <div className={`text-xl sm:text-2xl font-bold ${
-                caregiverMetrics.parentWellbeing.stressLevel === 'low' ? 'text-green-600' :
-                caregiverMetrics.parentWellbeing.stressLevel === 'moderate' ? 'text-amber-600' :
-                'text-red-600'
-              }`}>
-                {caregiverMetrics.parentWellbeing.stressLevel.charAt(0).toUpperCase() +
-                 caregiverMetrics.parentWellbeing.stressLevel.slice(1)}
+            {caregiverMetrics.parentWellbeing.stressLevel !== null && (
+              <div className="text-center p-4 bg-gray-50 rounded-lg">
+                <div className={`text-xl sm:text-2xl font-bold ${
+                  caregiverMetrics.parentWellbeing.stressLevel === 'low' ? 'text-green-600' :
+                  caregiverMetrics.parentWellbeing.stressLevel === 'moderate' ? 'text-amber-600' :
+                  'text-red-600'
+                }`}>
+                  {caregiverMetrics.parentWellbeing.stressLevel.charAt(0).toUpperCase() +
+                   caregiverMetrics.parentWellbeing.stressLevel.slice(1)}
+                </div>
+                <div className="text-sm text-gray-600">Stress Level</div>
+                {caregiverMetrics.parentWellbeing.stressTrend === 'improving' && (
+                  <Badge className="mt-2 bg-green-100 text-green-700">
+                    <TrendingDown className="w-3 h-3 mr-1" />
+                    Improving
+                  </Badge>
+                )}
               </div>
-              <div className="text-sm text-gray-600">Stress Level</div>
-              {caregiverMetrics.parentWellbeing.stressTrend === 'improving' && (
-                <Badge className="mt-2 bg-green-100 text-green-700">
-                  <TrendingDown className="w-3 h-3 mr-1" />
-                  Improving
-                </Badge>
-              )}
-            </div>
-            <div className="text-center p-4 bg-gray-50 rounded-lg">
-              <div className="text-xl sm:text-2xl font-bold text-teal-600">
-                {caregiverMetrics.parentWellbeing.confidenceScore}%
+            )}
+            {caregiverMetrics.parentWellbeing.confidenceScore !== null && (
+              <div className="text-center p-4 bg-gray-50 rounded-lg">
+                <div className="text-xl sm:text-2xl font-bold text-teal-600">
+                  {caregiverMetrics.parentWellbeing.confidenceScore}%
+                </div>
+                <div className="text-sm text-gray-600">Confidence Score</div>
               </div>
-              <div className="text-sm text-gray-600">Confidence Score</div>
-            </div>
+            )}
             <div className="text-center p-4 bg-gray-50 rounded-lg">
               <div className="text-xl sm:text-2xl font-bold text-violet-600">
                 {caregiverMetrics.parentWellbeing.supportSessions}

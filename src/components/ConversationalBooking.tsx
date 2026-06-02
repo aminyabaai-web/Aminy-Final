@@ -644,7 +644,13 @@ export function ConversationalBooking({
   const currentStepIndex = stepOrder.indexOf(state.step);
 
   return (
-    <div className="flex h-full flex-col bg-[radial-gradient(circle_at_top,_rgba(153,246,228,0.22),_transparent_42%),linear-gradient(180deg,_#f5fbfa_0%,_#ffffff_38%,_#f8fafc_100%)]">
+    <div
+      className="flex h-full flex-col"
+      style={{
+        background:
+          'radial-gradient(circle at top, rgba(153,246,228,0.22), transparent 42%), linear-gradient(180deg,#f5fbfa 0%,#ffffff 38%,#f8fafc 100%)',
+      }}
+    >
       {/* Header */}
       <div className="border-b border-teal-100/80 bg-white/90 px-4 py-4 backdrop-blur">
         <div className="mx-auto flex max-w-5xl items-start gap-3">

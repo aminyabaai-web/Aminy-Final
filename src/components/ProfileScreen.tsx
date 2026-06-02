@@ -60,6 +60,32 @@ import { toast } from 'sonner';
 import { supabase } from '../utils/supabase/client';
 import { TierType, getTierDisplayName } from '../lib/tier-utils';
 import { useAuditedAction } from '../hooks/useAuditedAction';
+import { isDemoMode } from '../lib/demo-seed';
+
+// Derive an honest label for the current device from the browser user-agent.
+// No fabricated IP/location — we only know what the client tells us.
+function describeCurrentDevice(): { device: string; browser: string } {
+  if (typeof navigator === 'undefined' || !navigator.userAgent) {
+    return { device: 'This device', browser: 'Current browser' };
+  }
+  const ua = navigator.userAgent;
+  let device = 'This device';
+  if (/iPad/i.test(ua)) device = 'iPad';
+  else if (/iPhone/i.test(ua)) device = 'iPhone';
+  else if (/Android/i.test(ua)) device = 'Android device';
+  else if (/Macintosh|Mac OS X/i.test(ua)) device = 'Mac';
+  else if (/Windows/i.test(ua)) device = 'Windows PC';
+  else if (/Linux/i.test(ua)) device = 'Linux device';
+
+  let browser = 'Browser';
+  if (/Edg\//i.test(ua)) browser = 'Edge';
+  else if (/OPR\/|Opera/i.test(ua)) browser = 'Opera';
+  else if (/Chrome\//i.test(ua) && !/Chromium/i.test(ua)) browser = 'Chrome';
+  else if (/Firefox\//i.test(ua)) browser = 'Firefox';
+  else if (/Safari\//i.test(ua) && !/Chrome\//i.test(ua)) browser = 'Safari';
+
+  return { device, browser };
+}
 
 // Types
 interface ParentProfile {
@@ -260,18 +286,38 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
       }
       setConnectedAccounts(accounts);
 
-      // Mock sessions (would come from session tracking in production)
-      setSessions([
-        {
-          id: '1',
-          device: 'iPhone 15 Pro',
-          browser: 'Safari',
-          location: 'San Francisco, CA',
-          ipAddress: '192.168.1.xxx',
-          lastActive: new Date().toISOString(),
-          isCurrent: true
-        }
-      ]);
+      // Active sessions: a dedicated session-tracking table is not yet wired, so
+      // we do NOT fabricate sessions. Real users see an honest "this device"
+      // entry derived from the browser (no fake IP/location). Investor/partner
+      // demo walk-throughs show a representative sample session, clearly the
+      // only populated state and never presented to a live user as their own.
+      if (isDemoMode()) {
+        setSessions([
+          {
+            id: 'sample-1',
+            device: 'iPhone 15 Pro',
+            browser: 'Safari',
+            location: 'Sample location',
+            ipAddress: '—',
+            lastActive: new Date().toISOString(),
+            isCurrent: true
+          }
+        ]);
+      } else {
+        const { device, browser } = describeCurrentDevice();
+        setSessions([
+          {
+            id: 'current',
+            device,
+            browser,
+            // Location/IP are not tracked yet — leave blank rather than invent one.
+            location: '',
+            ipAddress: '',
+            lastActive: new Date().toISOString(),
+            isCurrent: true
+          }
+        ]);
+      }
 
     } catch (error) {
       console.error('Error loading profile:', error);
@@ -957,7 +1003,7 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
                           )}
                         </div>
                         <p className="text-sm text-muted-foreground">
-                          {session.browser} • {session.location}
+                          {[session.browser, session.location].filter(Boolean).join(' • ')}
                         </p>
                         <p className="text-xs text-muted-foreground">
                           Last active: {new Date(session.lastActive).toLocaleString()}

@@ -978,28 +978,95 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
       </div>
 
       <div className="max-w-md mx-auto px-4 py-6">
-        {/* Pro Gate Check */}
+        {/* Non-Pro: the 'Plan' nav entry lands here, so the screen must match its
+            name. Show a real (non-coaching) care-plan summary first — goals,
+            routines, progress — then offer 1-on-1 coaching as the Pro add-on.
+            Honesty: the snapshot numbers below are illustrative and only render
+            in demo mode; real non-Pro users get an honest description + a link
+            to where their live plan lives (home dashboard), never invented stats. */}
         {userTier !== 'pro' ? (
-          <div className="text-center py-12">
-            <Stethoscope className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <h2 className="text-lg font-semibold text-gray-900 mb-2">Upgrade to Pro</h2>
-            <p className="text-gray-600 mb-4 sm:mb-6 max-w-xs mx-auto">
-              Access 1-on-1 coaching with certified developmental specialists
-            </p>
-            <Button onClick={onPaywallTrigger} className="mx-auto">
-              View Pro Features
-            </Button>
-            <div className="mt-4 sm:mt-6 p-4 bg-purple-50 rounded-lg">
-              <div className="flex items-center gap-2 mb-2">
-                <Award className="w-4 h-4 text-purple-600" />
-                <span className="font-medium text-purple-900">What's Included</span>
+          <div className="space-y-4 sm:space-y-6">
+            {/* Care Plan summary */}
+            <div className="p-5 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg border border-purple-200">
+              <div className="flex items-center gap-2 mb-1">
+                <Target className="w-5 h-5 text-purple-600" />
+                <h2 className="text-lg font-semibold text-gray-900">Your Care Plan</h2>
+                {demo && (
+                  <Badge variant="outline" className="text-xs bg-white/60 text-gray-600 border-gray-300">
+                    Sample
+                  </Badge>
+                )}
               </div>
-              <ul className="text-sm text-purple-700 space-y-1 text-left">
+              <p className="text-sm text-gray-600">
+                {childName ? `${childName}'s` : 'Your'} goals, daily routines, and progress — all in one place.
+              </p>
+
+              {demo ? (
+                <div className="grid grid-cols-3 gap-2 mt-4">
+                  <div className="text-center bg-white/70 rounded-lg py-3">
+                    <div className="text-xl font-bold text-purple-600">3</div>
+                    <div className="text-xs text-gray-600">Active goals</div>
+                  </div>
+                  <div className="text-center bg-white/70 rounded-lg py-3">
+                    <div className="text-xl font-bold text-blue-600">5</div>
+                    <div className="text-xs text-gray-600">Daily routines</div>
+                  </div>
+                  <div className="text-center bg-white/70 rounded-lg py-3">
+                    <div className="text-xl font-bold text-green-600">68%</div>
+                    <div className="text-xs text-gray-600">On track</div>
+                  </div>
+                </div>
+              ) : (
+                <ul className="text-sm text-gray-700 space-y-2 mt-4">
+                  <li className="flex items-start gap-2">
+                    <Target className="w-4 h-4 text-purple-600 mt-0.5 flex-shrink-0" />
+                    Goals tailored to {childName || 'your child'} from your screening and check-ins
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <Calendar className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                    Daily routines and activities you can do at home
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <TrendingUp className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    Progress you log over time, summarized for you
+                  </li>
+                </ul>
+              )}
+
+              {onNavigate && (
+                <Button
+                  variant="outline"
+                  className="w-full mt-4 bg-white"
+                  onClick={() => onNavigate('dashboard')}
+                >
+                  View goals &amp; routines
+                  <ChevronRight className="w-4 h-4 ml-1" />
+                </Button>
+              )}
+            </div>
+
+            {/* Coaching add-on (Pro) */}
+            <div className="p-4 bg-purple-50 rounded-lg border border-purple-200 text-center">
+              <Stethoscope className="w-10 h-10 text-purple-400 mx-auto mb-3" />
+              <h3 className="font-semibold text-gray-900 mb-1">Add 1-on-1 coaching</h3>
+              <p className="text-sm text-gray-600 mb-4 max-w-xs mx-auto">
+                Work directly with certified developmental specialists on {childName || 'your child'}'s plan
+              </p>
+              <ul className="text-sm text-purple-700 space-y-1 text-left mb-4">
                 <li>• Direct messaging with BCBA-certified coaches</li>
-                <li>• 25 & 50-minute video coaching sessions</li>
+                <li>• 25 &amp; 50-minute video coaching sessions</li>
                 <li>• Personalized strategy development</li>
                 <li>• Session summaries with actionable next steps</li>
               </ul>
+              {onPaywallTrigger ? (
+                <Button onClick={onPaywallTrigger} className="w-full">
+                  Upgrade to Pro
+                </Button>
+              ) : (
+                <Button variant="outline" className="w-full" disabled>
+                  Available on Pro
+                </Button>
+              )}
             </div>
           </div>
         ) : (

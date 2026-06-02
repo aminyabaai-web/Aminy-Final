@@ -316,7 +316,13 @@ function TierCardView({
     ? Math.round((tier.priceAnnual / 12) * 100) / 100
     : tier.priceMonthly;
 
-  const hasPromo = !!tier.promoFromMonthly && tier.featured && billing === 'monthly';
+  // The featured tier's free-offer ($0) framing is tied to the 7-day free trial,
+  // which applies regardless of billing interval — so it must render on initial
+  // load (default billing is 'annual'), not only when the user toggles to Monthly.
+  const hasPromo = !!tier.promoFromMonthly && !!tier.featured;
+  // Strike through the actual per-month price for the selected interval so the
+  // crossed-out reference stays accurate in both monthly and annual views.
+  const promoStrikePrice = displayPrice;
 
   return (
     <div
@@ -344,7 +350,7 @@ function TierCardView({
       <div className="mb-4">
         {hasPromo && tier.promoFromMonthly ? (
           <div className="flex items-baseline gap-2">
-            <span className="text-3xl sm:text-4xl font-bold text-slate-300 line-through">${tier.promoFromMonthly}</span>
+            <span className="text-3xl sm:text-4xl font-bold text-slate-300 line-through">${promoStrikePrice % 1 === 0 ? promoStrikePrice : promoStrikePrice.toFixed(2)}</span>
             <span className="text-4xl sm:text-5xl font-bold text-slate-900">$0</span>
           </div>
         ) : (
@@ -357,7 +363,9 @@ function TierCardView({
         )}
         <p className="text-xs text-slate-400 mt-1">
           {hasPromo
-            ? 'USD for the first month'
+            ? billing === 'annual'
+              ? 'free to start, then billed annually'
+              : 'free to start, then per month'
             : displayPrice === 0
               ? 'USD / month'
               : billing === 'annual'

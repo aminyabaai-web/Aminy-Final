@@ -117,6 +117,12 @@ const DEMO_PROVIDERS: MatchProvider[] = [
 const STORAGE_KEY = 'aminy_intake_progress';
 const TOTAL_STEPS = 5;
 
+// Brand emerald (Tailwind emerald-500). The solid `bg/text/border-emerald-500`
+// utilities are NOT emitted in this precompiled Tailwind v4 build, so anything
+// that needs the solid color is applied via inline style to guarantee it renders.
+const EMERALD = '#10b981';
+const EMERALD_HOVER = '#0d9d6f';
+
 const STEP_META = [
   { icon: User,    label: 'Welcome'  },
   { icon: Shield,  label: 'Insurance' },
@@ -165,10 +171,17 @@ function StepIndicator({ current, total }: { current: number; total: number }) {
               <div
                 className={[
                   'w-9 h-9 rounded-full flex items-center justify-center border-2 transition-all duration-300',
-                  done   ? 'bg-emerald-500 border-emerald-500 text-white' : '',
-                  active ? 'bg-white border-emerald-500 text-emerald-500' : '',
+                  done   ? 'text-white' : '',
+                  active ? 'bg-white' : '',
                   !done && !active ? 'bg-white border-slate-200 text-slate-400' : '',
                 ].join(' ')}
+                style={
+                  done
+                    ? { backgroundColor: EMERALD, borderColor: EMERALD }
+                    : active
+                      ? { borderColor: EMERALD, color: EMERALD }
+                      : undefined
+                }
               >
                 {done ? (
                   <CheckCircle className="w-4 h-4" />
@@ -176,17 +189,55 @@ function StepIndicator({ current, total }: { current: number; total: number }) {
                   <IconComp className="w-4 h-4" />
                 )}
               </div>
-              <span className={`text-[10px] font-medium hidden sm:block ${active ? 'text-emerald-500' : 'text-slate-400'}`}>
+              <span
+                className={`text-[10px] font-medium hidden sm:block ${active ? '' : 'text-slate-400'}`}
+                style={active ? { color: EMERALD } : undefined}
+              >
                 {step.label}
               </span>
             </div>
             {idx < total - 1 && (
-              <div className={`h-0.5 w-8 sm:w-12 mx-1 mt-[-14px] transition-all duration-300 ${done ? 'bg-emerald-500' : 'bg-slate-200'}`} />
+              <div
+                className={`h-0.5 w-8 sm:w-12 mx-1 mt-[-14px] transition-all duration-300 ${done ? '' : 'bg-slate-200'}`}
+                style={done ? { backgroundColor: EMERALD } : undefined}
+              />
             )}
           </React.Fragment>
         );
       })}
     </div>
+  );
+}
+
+/**
+ * Primary call-to-action button. The solid `bg-emerald-500` utility and the
+ * `hover:bg-[#3a967a]` variant are not emitted in this precompiled Tailwind v4
+ * build, so the brand fill + hover are applied via inline style (which always
+ * renders). Disabled state falls back to the emitted slate utilities.
+ */
+function PrimaryButton({
+  onClick,
+  disabled = false,
+  className = '',
+  children,
+}: {
+  onClick: () => void;
+  disabled?: boolean;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  const [hover, setHover] = useState(false);
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      className={`text-white font-semibold transition-colors disabled:bg-slate-200 disabled:text-slate-400 ${className}`}
+      style={disabled ? undefined : { backgroundColor: hover ? EMERALD_HOVER : EMERALD }}
+    >
+      {children}
+    </button>
   );
 }
 
@@ -211,6 +262,10 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
   const demo = isDemoMode();
   const [providers, setProviders] = useState<MatchProvider[]>(demo ? DEMO_PROVIDERS : []);
   const [loadingProviders, setLoadingProviders] = useState(false);
+  // True only while the list shown IS the DEMO_PROVIDERS fallback (never for real
+  // Supabase matches). Drives a visible "Sample matches" label so a stakeholder
+  // walkthrough can't mistake the seeded clinicians for live network data.
+  const [usingSampleProviders, setUsingSampleProviders] = useState(demo);
 
   // Fetch real providers when reaching step 4
   useEffect(() => {
@@ -226,7 +281,9 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
         if (err || !data || data.length === 0) {
           // No real matches: demo gets sample providers, real users get an empty state.
           setProviders(demo ? DEMO_PROVIDERS : []);
+          setUsingSampleProviders(demo);
         } else {
+          setUsingSampleProviders(false);
           setProviders(data.map(p => ({
             id: p.id,
             name: `${p.name}, ${p.credentials}`,
@@ -405,14 +462,14 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
               </div>
             </div>
 
-            <button
+            <PrimaryButton
               onClick={() => setStep(2)}
               disabled={!canAdvanceStep1}
-              className="w-full bg-emerald-500 hover:bg-[#3a967a] disabled:bg-slate-200 disabled:text-slate-400 text-white font-semibold rounded-xl py-3.5 flex items-center justify-center gap-2 transition-colors"
+              className="w-full rounded-xl py-3.5 flex items-center justify-center gap-2"
             >
               Continue
               <ArrowRight className="w-4 h-4" />
-            </button>
+            </PrimaryButton>
           </div>
         )}
 
@@ -439,13 +496,13 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
             )}
 
             <div className="space-y-3">
-              <button
+              <PrimaryButton
                 onClick={() => setStep(3)}
-                className="w-full bg-emerald-500 hover:bg-[#3a967a] text-white font-semibold rounded-xl py-3.5 flex items-center justify-center gap-2 transition-colors"
+                className="w-full rounded-xl py-3.5 flex items-center justify-center gap-2"
               >
                 Continue
                 <ArrowRight className="w-4 h-4" />
-              </button>
+              </PrimaryButton>
 
               {!insuranceSkipped && (
                 <button
@@ -471,53 +528,61 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
               <div>
                 <label className={labelCls}>Session setting</label>
                 <div className="grid grid-cols-2 gap-2 mt-2">
-                  {SERVICE_SETTINGS.map(opt => (
-                    <button
-                      key={opt.value}
-                      onClick={() => toggleSetting(opt.value)}
-                      className={[
-                        'rounded-xl px-3 py-2.5 text-sm font-medium border-2 transition-all text-left',
-                        serviceSettings.includes(opt.value)
-                          ? 'border-emerald-500 bg-emerald-500/10 text-emerald-500'
-                          : 'border-slate-200 text-slate-600 hover:border-slate-300',
-                      ].join(' ')}
-                    >
-                      {serviceSettings.includes(opt.value) && <span className="mr-1">✓</span>}
-                      {opt.label}
-                    </button>
-                  ))}
+                  {SERVICE_SETTINGS.map(opt => {
+                    const isSel = serviceSettings.includes(opt.value);
+                    return (
+                      <button
+                        key={opt.value}
+                        onClick={() => toggleSetting(opt.value)}
+                        className={[
+                          'rounded-xl px-3 py-2.5 text-sm font-medium border-2 transition-all text-left',
+                          isSel
+                            ? 'bg-emerald-500/10'
+                            : 'border-slate-200 text-slate-600 hover:border-slate-300',
+                        ].join(' ')}
+                        style={isSel ? { borderColor: EMERALD, color: EMERALD } : undefined}
+                      >
+                        {isSel && <span className="mr-1">✓</span>}
+                        {opt.label}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
               <div>
                 <label className={labelCls}>Session frequency</label>
                 <div className="grid grid-cols-2 gap-2 mt-2">
-                  {FREQUENCIES.map(opt => (
-                    <button
-                      key={opt.value}
-                      onClick={() => setSessionFrequency(opt.value)}
-                      className={[
-                        'rounded-xl px-3 py-2.5 text-sm font-medium border-2 transition-all',
-                        sessionFrequency === opt.value
-                          ? 'border-emerald-500 bg-emerald-500/10 text-emerald-500'
-                          : 'border-slate-200 text-slate-600 hover:border-slate-300',
-                      ].join(' ')}
-                    >
-                      {opt.label}
-                    </button>
-                  ))}
+                  {FREQUENCIES.map(opt => {
+                    const isSel = sessionFrequency === opt.value;
+                    return (
+                      <button
+                        key={opt.value}
+                        onClick={() => setSessionFrequency(opt.value)}
+                        className={[
+                          'rounded-xl px-3 py-2.5 text-sm font-medium border-2 transition-all',
+                          isSel
+                            ? 'bg-emerald-500/10'
+                            : 'border-slate-200 text-slate-600 hover:border-slate-300',
+                        ].join(' ')}
+                        style={isSel ? { borderColor: EMERALD, color: EMERALD } : undefined}
+                      >
+                        {opt.label}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             </div>
 
-            <button
+            <PrimaryButton
               onClick={() => setStep(4)}
               disabled={!canAdvanceStep3}
-              className="w-full bg-emerald-500 hover:bg-[#3a967a] disabled:bg-slate-200 disabled:text-slate-400 text-white font-semibold rounded-xl py-3.5 flex items-center justify-center gap-2 transition-colors"
+              className="w-full rounded-xl py-3.5 flex items-center justify-center gap-2"
             >
               Find Providers
               <ArrowRight className="w-4 h-4" />
-            </button>
+            </PrimaryButton>
           </div>
         )}
 
@@ -531,7 +596,10 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
 
             {loadingProviders && (
               <div className="flex items-center justify-center py-8 text-slate-400 text-sm gap-2">
-                <div className="w-4 h-4 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" />
+                <div
+                  className="w-4 h-4 border-2 rounded-full animate-spin"
+                  style={{ borderColor: EMERALD, borderTopColor: 'transparent' }}
+                />
                 Finding providers near you…
               </div>
             )}
@@ -543,27 +611,45 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
                 <p className="text-xs text-slate-500 mt-1">
                   We're still building our provider network in your area. You can finish setup now and we'll reach out as soon as a match is available.
                 </p>
-                <button
+                <PrimaryButton
                   onClick={() => setStep(5)}
-                  className="mt-4 inline-flex items-center justify-center gap-2 bg-emerald-500 hover:bg-[#3a967a] text-white font-semibold rounded-xl px-4 py-2.5 text-sm transition-colors"
+                  className="mt-4 inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm"
                 >
                   Continue
                   <ArrowRight className="w-4 h-4" />
-                </button>
+                </PrimaryButton>
+              </div>
+            )}
+
+            {usingSampleProviders && providers.length > 0 && (
+              <div
+                className="flex items-center gap-2 rounded-xl border px-3 py-2 text-xs font-medium"
+                style={{ backgroundColor: '#FEF9C3', borderColor: '#FDE68A', color: '#92400E' }}
+              >
+                <span
+                  className="text-[10px] font-bold uppercase tracking-wide rounded-full px-2 py-0.5"
+                  style={{ backgroundColor: '#FDE68A', color: '#92400E' }}
+                >
+                  Sample
+                </span>
+                Illustrative matches — not live network data.
               </div>
             )}
 
             <div className="space-y-3">
-              {providers.map(prov => (
+              {providers.map(prov => {
+                const isSel = selectedProviderId === prov.id;
+                return (
                 <button
                   key={prov.id}
                   onClick={() => { setSelectedProviderId(prov.id); setSelectedProviderName(prov.name.split(',')[0]); }}
                   className={[
                     'w-full bg-white rounded-2xl p-4 shadow-sm border-2 text-left transition-all',
-                    selectedProviderId === prov.id
-                      ? 'border-emerald-500 ring-2 ring-emerald-500/20'
+                    isSel
+                      ? 'ring-2 ring-emerald-500/20'
                       : 'border-slate-100 hover:border-slate-200',
                   ].join(' ')}
+                  style={isSel ? { borderColor: EMERALD } : undefined}
                 >
                   <div className="flex items-start justify-between mb-2">
                     <div>
@@ -571,7 +657,10 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
                       <p className="text-xs text-slate-500">{prov.credentials}</p>
                     </div>
                     {prov.accepting && (
-                      <span className="text-[10px] font-bold bg-emerald-50 text-emerald-600 border border-emerald-200 rounded-full px-2 py-0.5 ml-2 shrink-0">
+                      <span
+                        className="text-[10px] font-bold text-emerald-600 border rounded-full px-2 py-0.5 ml-2 shrink-0"
+                        style={{ backgroundColor: '#ecfdf5', borderColor: '#a7f3d0' }}
+                      >
                         Accepting
                       </span>
                     )}
@@ -592,26 +681,30 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
                     ))}
                   </div>
 
-                  {selectedProviderId === prov.id && (
+                  {isSel && (
                     <div className="mt-3 pt-3 border-t border-emerald-500/20">
-                      <span className="text-xs font-semibold text-emerald-500 flex items-center gap-1">
+                      <span
+                        className="text-xs font-semibold flex items-center gap-1"
+                        style={{ color: EMERALD }}
+                      >
                         <CheckCircle className="w-3 h-3" />
                         Selected — Request This Provider
                       </span>
                     </div>
                   )}
                 </button>
-              ))}
+                );
+              })}
             </div>
 
-            <button
+            <PrimaryButton
               onClick={() => setStep(5)}
               disabled={!canAdvanceStep4}
-              className="w-full bg-emerald-500 hover:bg-[#3a967a] disabled:bg-slate-200 disabled:text-slate-400 text-white font-semibold rounded-xl py-3.5 flex items-center justify-center gap-2 transition-colors"
+              className="w-full rounded-xl py-3.5 flex items-center justify-center gap-2"
             >
               Continue
               <ArrowRight className="w-4 h-4" />
-            </button>
+            </PrimaryButton>
 
             <button
               onClick={() => setStep(5)}
@@ -627,7 +720,7 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
           <div className="space-y-6">
             <div className="text-center mb-6">
               <div className="w-16 h-16 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <CheckCircle className="w-8 h-8 text-emerald-500" />
+                <CheckCircle className="w-8 h-8" style={{ color: EMERALD }} />
               </div>
               <h1 className="text-2xl font-bold text-slate-800 mb-2">You're all set!</h1>
               <p className="text-sm text-slate-500">Here's a summary of your profile. We'll match {childName || 'your child'} with the best care team.</p>
@@ -678,10 +771,10 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
               </div>
             )}
 
-            <button
+            <PrimaryButton
               onClick={handleComplete}
               disabled={saving}
-              className="w-full bg-emerald-500 hover:bg-[#3a967a] disabled:bg-slate-200 disabled:text-slate-400 text-white font-semibold rounded-xl py-3.5 flex items-center justify-center gap-2 transition-colors"
+              className="w-full rounded-xl py-3.5 flex items-center justify-center gap-2"
             >
               {saving ? (
                 <span className="flex items-center gap-2">
@@ -694,7 +787,7 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
                   <ArrowRight className="w-4 h-4" />
                 </>
               )}
-            </button>
+            </PrimaryButton>
 
             <p className="text-center text-xs text-slate-400">
               Your provider will reach out within 1–2 business days.

@@ -242,10 +242,14 @@ export function OnDemandTelehealth({
     return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
   };
 
+  // Base session price (before same-day fee), rounded to a whole dollar so the
+  // button, card, and breakdown always show the same integer.
+  const sessionBasePrice = (provider: OnDemandProvider, duration: number) =>
+    duration === 15 ? Math.round(provider.baseRate * 0.6) : provider.baseRate;
+
   // Calculate total cost
   const calculateCost = (provider: OnDemandProvider, duration: number) => {
-    const baseForDuration = duration === 15 ? provider.baseRate * 0.6 : provider.baseRate;
-    return baseForDuration + URGENT_FEE;
+    return sessionBasePrice(provider, duration) + URGENT_FEE;
   };
 
   // Handle provider selection
@@ -678,7 +682,7 @@ export function OnDemandTelehealth({
               <div className="flex justify-between">
                 <span className="text-gray-600">Session ({selectedDuration} min)</span>
                 <span className="text-gray-900">
-                  ${selectedDuration === 15 ? (selectedProvider.baseRate * 0.6).toFixed(0) : selectedProvider.baseRate}
+                  ${sessionBasePrice(selectedProvider, selectedDuration)}
                 </span>
               </div>
               <div className="flex justify-between">

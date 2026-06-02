@@ -5,6 +5,7 @@
 
 import React, { useState } from 'react';
 import { ArrowLeft, UserPlus, QrCode, Link as LinkIcon, Mail, MoreVertical, Shield, Users } from 'lucide-react';
+import { toast } from 'sonner';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
@@ -59,6 +60,22 @@ export function CaregiverManagementScreen({ onBack }: CaregiverManagementScreenP
 
   const handleRevoke = (id: string) => {
     setCaregivers(caregivers.filter(c => c.id !== id));
+  };
+
+  const handleResend = (caregiver: Caregiver) => {
+    toast.success(`Invitation re-sent to ${caregiver.email}`);
+  };
+
+  // Copy a shareable invite link to the clipboard. Mirrors the Copy-Invite-Link
+  // action in ManageCaregivers.
+  const handleCopyInviteLink = async () => {
+    const inviteLink = `${window.location.origin}/invite`;
+    try {
+      await navigator.clipboard.writeText(inviteLink);
+      toast.success('Invite link copied to clipboard');
+    } catch {
+      toast('Unable to copy the link on this device');
+    }
   };
 
   const getRoleColor = (role: string) => {
@@ -217,7 +234,12 @@ export function CaregiverManagementScreen({ onBack }: CaregiverManagementScreenP
                 {caregiver.status === 'pending' && (
                   <div className="mt-3 pt-3 border-t border-gray-100">
                     <div className="flex gap-2">
-                      <Button size="sm" variant="outline" className="flex-1">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="flex-1"
+                        onClick={() => handleResend(caregiver)}
+                      >
                         <Mail className="w-4 h-4 mr-2" />
                         Resend Invite
                       </Button>
@@ -240,15 +262,27 @@ export function CaregiverManagementScreen({ onBack }: CaregiverManagementScreenP
         <Card className="p-4 sm:p-5 md:p-6">
           <h2 className="font-semibold mb-4">Invite Methods</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <Button variant="outline" className="h-auto flex-col gap-2 py-4">
+            <Button
+              variant="outline"
+              className="h-auto flex-col gap-2 py-4"
+              onClick={() => toast('QR code invites are coming soon')}
+            >
               <QrCode className="w-6 h-6" />
               <span className="text-sm">QR Code</span>
             </Button>
-            <Button variant="outline" className="h-auto flex-col gap-2 py-4">
+            <Button
+              variant="outline"
+              className="h-auto flex-col gap-2 py-4"
+              onClick={handleCopyInviteLink}
+            >
               <LinkIcon className="w-6 h-6" />
               <span className="text-sm">Share Link</span>
             </Button>
-            <Button variant="outline" className="h-auto flex-col gap-2 py-4">
+            <Button
+              variant="outline"
+              className="h-auto flex-col gap-2 py-4"
+              onClick={() => setShowAddCaregiver(true)}
+            >
               <Mail className="w-6 h-6" />
               <span className="text-sm">Email Invite</span>
             </Button>

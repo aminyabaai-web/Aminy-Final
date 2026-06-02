@@ -13,7 +13,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
-import { Check, X, Info, Undo, Sparkles } from 'lucide-react';
+import { Check, X, Info, Undo, Sparkles, ArrowLeft } from 'lucide-react';
 import {
   ProviderSuggestion,
   type RoutineChangePayload,
@@ -29,12 +29,23 @@ interface ParentApprovalCardProps {
   onAccept: () => void;
   onReject: () => void;
   onUndo?: () => void;
+  /** When true, the card renders inside its own full-screen page wrapper (header + padding + background). Defaults to false for embedded card usage. */
+  asFullScreen?: boolean;
+  /** Optional back handler; a back button only renders when this is provided (typically alongside asFullScreen). */
+  onBack?: () => void;
 }
 
-export function ParentApprovalCard({ suggestion, onAccept, onReject, onUndo }: ParentApprovalCardProps) {
+export function ParentApprovalCard({ suggestion, onAccept, onReject, onUndo, asFullScreen = false, onBack }: ParentApprovalCardProps) {
   const [showDetails, setShowDetails] = useState(false);
   const [isAccepting, setIsAccepting] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
+
+  // Data-honesty guard: a suggestion with no provider and no rationale is an
+  // un-hydrated placeholder (e.g. rendered before a real pending review loads).
+  // Never show blank "Suggested by ____" / empty rationale to a real parent.
+  const isHydrated = Boolean(
+    suggestion && (suggestion.providerName?.trim() || suggestion.rationale?.trim())
+  );
 
   const canUndo = suggestion.status === 'accepted' && suggestion.reviewedAt && 
     (Date.now() - new Date(suggestion.reviewedAt).getTime()) < (24 * 60 * 60 * 1000);
@@ -86,12 +97,51 @@ export function ParentApprovalCard({ suggestion, onAccept, onReject, onUndo }: P
     coverage_note: 'bg-gray-100 text-gray-700 border-gray-200'
   };
 
-  return (
+  // When rendered as a standalone screen, wrap content in a full-screen page
+  // container (background + padding + centered column + optional back button)
+  // so it matches the other full screens instead of floating top-left.
+  const wrapScreen = (children: React.ReactNode) =>
+    asFullScreen ? (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 px-4 py-6">
+        <div className="max-w-2xl mx-auto">
+          {onBack && (
+            <button
+              onClick={onBack}
+              aria-label="Go back"
+              className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 mb-4"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back
+            </button>
+          )}
+          {children}
+        </div>
+      </div>
+    ) : (
+      <>{children}</>
+    );
+
+  // Honest empty/loading state when no real suggestion has been provided.
+  if (!isHydrated) {
+    return wrapScreen(
+      <motion.div {...ANIMATIONS.fadeIn}>
+        <Card className="p-6 border-2 border-gray-200 bg-white text-center">
+          <Sparkles className="w-8 h-8 text-blue-400 mx-auto mb-3" />
+          <h4 className="text-sm font-medium text-gray-900 mb-1">No suggestions to review</h4>
+          <p className="text-sm text-gray-600">
+            When your care team shares a suggestion for you to review, it will appear here.
+          </p>
+        </Card>
+      </motion.div>
+    );
+  }
+
+  return wrapScreen(
     <>
       <motion.div {...ANIMATIONS.fadeIn}>
         <Card className={`p-4 border-2 ${
-          suggestion.status === 'accepted' 
-            ? 'bg-green-50 border-green-200' 
+          suggestion.status === 'accepted'
+            ? 'bg-green-50 border-green-200'
             : 'bg-blue-50 border-blue-200'
         }`}>
           {/* Header */}
@@ -348,7 +398,7 @@ function SuggestionDetailsView({ suggestion }: { suggestion: ProviderSuggestion 
 
       <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
         <p className="text-xs text-yellow-900">
-          <strong>Remember:</strong> You're always the final decision-maker. Accept this suggestion only if it feels right for {suggestion.childName}. You can undo within 24 hours if needed.
+          <strong>Remember:</strong> You're always the final decision-maker. Accept this suggestion only if it feels right for {suggestion.childName ?? 'your child'}. You can undo within 24 hours if needed.
         </p>
       </div>
     </div>

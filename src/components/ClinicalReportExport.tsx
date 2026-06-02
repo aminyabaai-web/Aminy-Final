@@ -172,7 +172,10 @@ export function ClinicalReportExport({
     return (
       <div className="min-h-screen bg-gray-50">
         {/* Header */}
-        <div className="bg-gradient-to-r from-teal-600 to-emerald-600 text-white px-4 pt-12 pb-6">
+        <div
+          className="bg-gradient-to-r from-teal-600 to-emerald-600 text-white px-4 pb-6"
+          style={{ paddingTop: 'calc(3rem + env(safe-area-inset-top))' }}
+        >
           <button
             onClick={onBack}
             className="flex items-center gap-1 text-white/80 hover:text-white text-sm mb-3"
@@ -271,9 +274,10 @@ export function ClinicalReportExport({
                   <div className={`w-9 h-5 rounded-full flex items-center transition-colors ${
                     sections[toggle.key] ? 'bg-teal-600' : 'bg-gray-200'
                   } ${toggle.locked ? 'opacity-50' : ''}`}>
-                    <div className={`w-4 h-4 rounded-full bg-white shadow-sm transition-transform ${
-                      sections[toggle.key] ? 'translate-x-4.5 ml-auto mr-0.5' : 'ml-0.5'
-                    }`} />
+                    <div
+                      className="w-4 h-4 rounded-full bg-white shadow-sm ml-0.5 transition-transform"
+                      style={{ transform: sections[toggle.key] ? 'translateX(16px)' : 'translateX(0)' }}
+                    />
                   </div>
                 </button>
               ))}
@@ -304,7 +308,10 @@ export function ClinicalReportExport({
     return (
       <div className="min-h-screen bg-gray-50">
         {/* Header */}
-        <div className="bg-gradient-to-r from-teal-600 to-emerald-600 text-white px-4 pt-12 pb-6">
+        <div
+          className="bg-gradient-to-r from-teal-600 to-emerald-600 text-white px-4 pb-6"
+          style={{ paddingTop: 'calc(3rem + env(safe-area-inset-top))' }}
+        >
           <button
             onClick={() => setStep('configure')}
             className="flex items-center gap-1 text-white/80 hover:text-white text-sm mb-3"
@@ -416,7 +423,10 @@ export function ClinicalReportExport({
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      <div className="bg-gradient-to-r from-teal-600 to-emerald-600 text-white px-4 pt-12 pb-6">
+      <div
+        className="bg-gradient-to-r from-teal-600 to-emerald-600 text-white px-4 pb-6"
+        style={{ paddingTop: 'calc(3rem + env(safe-area-inset-top))' }}
+      >
         <h1 className="text-lg font-bold">Report Downloaded</h1>
       </div>
 

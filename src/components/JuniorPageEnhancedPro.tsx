@@ -1457,6 +1457,53 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
 
   const motivationProgress = Math.round((motivationGoal.current / motivationGoal.target) * 100);
 
+  // Derive the home "Transition support" first/then steps from the child's REAL
+  // visual schedule (same `schedule-${childName}` localStorage key the
+  // VisualSchedule screen reads/writes). Mirrors VisualSchedule's first/then
+  // logic: the current item is "First" and the following item is "Then";
+  // otherwise fall back to the first two scheduled items. When the child has no
+  // schedule yet we show clearly-labeled example copy instead of presenting
+  // placeholder steps as if they were this child's real routine.
+  type HomeTransitionStep = { emoji?: string; label: string };
+  const homeTransition: {
+    first: HomeTransitionStep;
+    then: HomeTransitionStep;
+    isExample: boolean;
+  } = (() => {
+    try {
+      const stored = localStorage.getItem(`schedule-${childName}`);
+      if (stored) {
+        const items = JSON.parse(stored) as Array<{
+          emoji?: string;
+          label?: string;
+          status?: string;
+        }>;
+        if (Array.isArray(items) && items.length > 0) {
+          const currentIdx = items.findIndex((i) => i.status === 'current');
+          const firstIdx = currentIdx >= 0 ? currentIdx : 0;
+          const first = items[firstIdx];
+          const then = items[firstIdx + 1];
+          if (first?.label) {
+            return {
+              first: { emoji: first.emoji, label: first.label },
+              then: then?.label
+                ? { emoji: then.emoji, label: then.label }
+                : { label: 'All done — nice work!' },
+              isExample: false,
+            };
+          }
+        }
+      }
+    } catch {
+      /* ignore malformed schedule — fall through to example */
+    }
+    return {
+      first: { label: 'Bathroom and dry check' },
+      then: { label: 'Play with the puzzle toy countdown' },
+      isExample: true,
+    };
+  })();
+
   const handleRewardGoalProgress = () => {
     if (motivationGoal.current >= motivationGoal.target) {
       toast.success(`${childName} already earned ${motivationGoal.title}. Pick the next reward in the shop!`);
@@ -1514,7 +1561,13 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
   // Main Kid Mode Interface
   if (isKidMode) {
     return (
-      <div className="flex h-screen flex-col bg-[radial-gradient(circle_at_top,_rgba(45,212,191,0.18),_transparent_28%),linear-gradient(180deg,_#f7fbfb_0%,_#eef7f8_56%,_#eef2f8_100%)]">
+      <div
+        className="flex h-screen flex-col"
+        style={{
+          background:
+            'radial-gradient(circle at top, rgba(45,212,191,0.18), transparent 28%), linear-gradient(180deg,#f7fbfb 0%,#eef7f8 56%,#eef2f8 100%)',
+        }}
+      >
         {/* Kid-Safe Header */}
         <div className="flex items-center justify-between border-b border-white/70 bg-white/90 p-4 backdrop-blur">
           <div className="flex items-center space-x-3">
@@ -1566,7 +1619,13 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
           {activeView === 'home' && (
             <div className="p-4 sm:p-6 md:p-8">
               <div className="mx-auto max-w-5xl space-y-5">
-                <div className="overflow-hidden rounded-[32px] border border-white/70 bg-[radial-gradient(circle_at_top_left,_rgba(45,212,191,0.26),_transparent_32%),linear-gradient(180deg,_#f7fbfb_0%,_#eef7f8_100%)] p-6 shadow-[0_24px_80px_rgba(15,23,42,0.10)]">
+                <div
+                  className="overflow-hidden rounded-[32px] border border-white/70 p-6 shadow-[0_24px_80px_rgba(15,23,42,0.10)]"
+                  style={{
+                    background:
+                      'radial-gradient(circle at top left, rgba(45,212,191,0.26), transparent 32%), linear-gradient(180deg,#f7fbfb 0%,#eef7f8 100%)',
+                  }}
+                >
                   <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
                     <div className="max-w-2xl">
                       <Badge variant="outline" className="border-cyan-200 bg-white/70 text-slate-600">
@@ -1748,16 +1807,27 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
 
                   <Card className="overflow-hidden rounded-[28px] border-white/80 bg-[linear-gradient(180deg,_#ffffff_0%,_#f6f8fb_100%)] shadow-[0_16px_50px_rgba(15,23,42,0.08)]">
                     <div className="p-6">
-                      <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Transition support</div>
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Transition support</div>
+                        {homeTransition.isExample && (
+                          <Badge variant="outline" className="border-slate-200 bg-slate-50 text-slate-500">
+                            Example
+                          </Badge>
+                        )}
+                      </div>
                       <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-slate-950">Make the next step obvious</h3>
                       <div className="mt-4 space-y-3">
                         <div className="rounded-2xl border border-slate-200 bg-white px-4 py-3">
                           <div className="text-xs uppercase tracking-[0.18em] text-slate-400">First</div>
-                          <div className="mt-1 text-sm font-medium text-slate-900">Bathroom and dry check</div>
+                          <div className="mt-1 text-sm font-medium text-slate-900">
+                            {homeTransition.first.emoji ? `${homeTransition.first.emoji} ` : ''}{homeTransition.first.label}
+                          </div>
                         </div>
                         <div className="rounded-2xl border border-cyan-100 bg-cyan-50 px-4 py-3">
                           <div className="text-xs uppercase tracking-[0.18em] text-cyan-700">Then</div>
-                          <div className="mt-1 text-sm font-medium text-cyan-900">Play with the puzzle toy countdown</div>
+                          <div className="mt-1 text-sm font-medium text-cyan-900">
+                            {homeTransition.then.emoji ? `${homeTransition.then.emoji} ` : ''}{homeTransition.then.label}
+                          </div>
                         </div>
                       </div>
 

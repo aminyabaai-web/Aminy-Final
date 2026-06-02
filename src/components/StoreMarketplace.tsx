@@ -1084,7 +1084,18 @@ export function StoreMarketplace({
                 </Button>
               )}
               <div>
-                <h1 className="text-xl font-bold text-slate-900 dark:text-white">Resource Store</h1>
+                <div className="flex items-center gap-2">
+                  <h1 className="text-xl font-bold text-slate-900 dark:text-white">Resource Store</h1>
+                  {usingCuratedFallback && (
+                    <span
+                      className="inline-flex items-center rounded-full bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300/70 font-medium px-2 py-0.5 shrink-0"
+                      style={{ fontSize: '10px' }}
+                      title="Ratings, review counts, and prices shown here are illustrative sample data"
+                    >
+                      Sample catalog
+                    </span>
+                  )}
+                </div>
                 <p className="text-sm text-slate-500">
                   {usingCuratedFallback ? 'Curated affiliate recommendations' : 'BCBA-curated tools and resources'}
                 </p>

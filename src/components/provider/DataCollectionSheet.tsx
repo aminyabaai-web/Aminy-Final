@@ -153,8 +153,8 @@ function ResponseButton({
   return (
     <button
       onClick={() => onPress(type)}
-      className={`flex-1 min-h-[64px] rounded-xl border-2 font-bold text-lg transition-all select-none ${cfg.bgColor} ${cfg.color}`}
-      style={{ WebkitTapHighlightColor: 'transparent' }}
+      className={`flex-1 rounded-xl border-2 font-bold text-lg transition-all select-none ${cfg.bgColor} ${cfg.color}`}
+      style={{ WebkitTapHighlightColor: 'transparent', minHeight: 64 }}
     >
       {cfg.shortLabel}
     </button>
