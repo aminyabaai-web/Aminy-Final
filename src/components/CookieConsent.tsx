@@ -146,13 +146,15 @@ export function CookieConsent({ onAccept, onDecline }: CookieConsentProps) {
           </button>
           <button
             onClick={handleDecline}
-            className="px-2.5 py-1 rounded-md text-[11px] font-medium text-slate-300 border border-slate-700 hover:border-slate-500 transition-colors"
+            style={{ padding: '7px 16px', whiteSpace: 'nowrap' }}
+            className="rounded-md text-[11px] font-medium text-slate-300 border border-slate-700 hover:border-slate-500 transition-colors"
           >
             Essential only
           </button>
           <button
             onClick={showDetails ? handleAcceptSelected : handleAcceptAll}
-            className="px-2.5 py-1 rounded-md text-[11px] font-medium bg-teal-600 text-white hover:bg-teal-500 transition-colors"
+            style={{ padding: '7px 16px', whiteSpace: 'nowrap' }}
+            className="rounded-md text-[11px] font-medium bg-teal-600 text-white hover:bg-teal-500 transition-colors"
           >
             {showDetails ? 'Save' : 'Accept all'}
           </button>
