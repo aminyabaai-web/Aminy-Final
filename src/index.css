@@ -6034,7 +6034,10 @@ img {
 }
 
 img:not([width]):not([height]) {
-  background: #0891b20d;
+  /* CLS reservation only. The cyan placeholder tint (background:#0891b20d)
+     was removed: it never cleared after load, so it permanently tinted the
+     transparent areas of every attr-less PNG — most visibly a blue-gray box
+     behind the transparent Aminy logo on the splash/login screens. */
   min-height: 100px;
 }
 
