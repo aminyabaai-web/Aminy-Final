@@ -15,6 +15,7 @@
 
 import { store } from './store';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
+import { supabase } from '../utils/supabase/client';
 import { extractAndStoreFacts, ConversationMessage as MemoryMessage } from './ai-engine/conversation-memory';
 
 /**
@@ -160,6 +161,18 @@ let currentConversationId: string | null = null;
 /**
  * Get or create a conversation for the user
  */
+// The /conversations/* routes are JWT-gated (server calls supabase.auth.getUser).
+// Send the signed-in user's access token so conversation history actually persists;
+// fall back to the anon key when there's no session (calls then degrade gracefully).
+async function getConvAuthToken(): Promise<string> {
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+    return session?.access_token || publicAnonKey;
+  } catch {
+    return publicAnonKey;
+  }
+}
+
 async function getOrCreateConversation(userId: string): Promise<string | null> {
   // Return cached ID if available
   if (currentConversationId) {
@@ -174,7 +187,8 @@ async function getOrCreateConversation(userId: string): Promise<string | null> {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${publicAnonKey}`,
+          'Authorization': `Bearer ${await getConvAuthToken()}`,
+          'apikey': publicAnonKey,
           'X-User-Id': userId,
         },
       },
@@ -197,7 +211,8 @@ async function getOrCreateConversation(userId: string): Promise<string | null> {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${publicAnonKey}`,
+          'Authorization': `Bearer ${await getConvAuthToken()}`,
+          'apikey': publicAnonKey,
           'X-User-Id': userId,
         },
         body: JSON.stringify({
@@ -238,7 +253,8 @@ export async function loadConversationHistory(userId: string): Promise<Conversat
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${publicAnonKey}`,
+          'Authorization': `Bearer ${await getConvAuthToken()}`,
+          'apikey': publicAnonKey,
           'X-User-Id': userId,
         },
       },
@@ -286,7 +302,8 @@ export async function saveMessageToHistory(
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${publicAnonKey}`,
+          'Authorization': `Bearer ${await getConvAuthToken()}`,
+          'apikey': publicAnonKey,
           'X-User-Id': userId,
         },
         body: JSON.stringify({
