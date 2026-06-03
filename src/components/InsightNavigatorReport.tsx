@@ -28,6 +28,7 @@ import {
 import { createEmptyInsightNavigator } from '../lib/child-profiles';
 import type { InsightNavigator, ChildProfile, ConditionType } from '../lib/child-profiles';
 import { supabase } from '../utils/supabase/client';
+import { toast } from 'sonner';
 
 interface InsightNavigatorReportProps {
   childId: string;
@@ -35,6 +36,8 @@ interface InsightNavigatorReportProps {
   mode: 'parent' | 'provider';
   onShare?: () => void;
   onExport?: () => void;
+  /** Optional CTA from the empty state. Falls back to the global nav hook, then a toast. */
+  onStartLogging?: () => void;
 }
 
 export function InsightNavigatorReport({
@@ -42,7 +45,8 @@ export function InsightNavigatorReport({
   childProfile,
   mode,
   onShare,
-  onExport
+  onExport,
+  onStartLogging
 }: InsightNavigatorReportProps) {
   const [navigator, setNavigator] = useState<InsightNavigator | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -99,6 +103,105 @@ export function InsightNavigatorReport({
 
   if (!navigator) return null;
 
+  const handleShare = () => {
+    if (onShare) {
+      onShare();
+    } else {
+      toast.info('Sharing this profile with a provider is coming soon.');
+    }
+  };
+
+  const handleExport = () => {
+    if (onExport) {
+      onExport();
+    } else {
+      toast.info('PDF export is coming soon.');
+    }
+  };
+
+  // An untouched profile has no executive summary, no insights, and no
+  // current-presentation detail. Showing the full chromed report in that
+  // case looks broken/half-loaded, so render an honest onboarding state.
+  const cp = navigator.currentPresentation;
+  const ins = navigator.insights;
+  const hasContent =
+    navigator.executiveSummary.trim().length > 0 ||
+    cp.strengths.length > 0 ||
+    cp.challenges.length > 0 ||
+    cp.interests.length > 0 ||
+    cp.calmingStrategies.length > 0 ||
+    cp.communicationStyle.trim().length > 0 ||
+    cp.sensoryProfile.trim().length > 0 ||
+    ins.whatsWorking.length > 0 ||
+    ins.whatsNotWorking.length > 0 ||
+    ins.recommendations.length > 0 ||
+    navigator.progressTimeline.length > 0;
+
+  if (!hasContent) {
+    return (
+      <div className="max-w-4xl mx-auto space-y-3 sm:space-y-4 sm:space-y-6">
+        <Card className="p-6 bg-gradient-to-br from-teal-600 to-cyan-600 text-white border-0">
+          <div className="flex items-center gap-3 sm:gap-4">
+            <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center">
+              <Brain className="w-8 h-8" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <h1 className="text-xl sm:text-2xl font-bold">Insight Navigator</h1>
+                <Badge className="bg-white/20 text-white border-0">
+                  <Sparkles className="w-3 h-3 mr-1" />
+                  Living Intake Document
+                </Badge>
+              </div>
+              <p className="text-teal-100">
+                {childProfile?.firstName || 'Your child'}'s Profile
+              </p>
+            </div>
+          </div>
+        </Card>
+
+        <Card className="p-8 text-center">
+          <div className="w-14 h-14 rounded-2xl bg-teal-50 flex items-center justify-center mx-auto mb-4">
+            <BookOpen className="w-7 h-7 text-teal-600" />
+          </div>
+          <h2 className="text-lg font-semibold text-gray-900 mb-2">
+            {childProfile?.firstName ? `${childProfile.firstName}'s` : "Your child's"} Insight Navigator builds as you use Aminy
+          </h2>
+          <p className="text-sm text-gray-600 max-w-md mx-auto leading-relaxed">
+            As you log behaviors, track what helps, and chat with Aminy AI, we
+            assemble a living intake document — strengths, challenges, calming
+            strategies, and a provider-ready summary. There's nothing to show
+            yet, but it fills in automatically over time.
+          </p>
+          <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
+            <Button
+              onClick={() => {
+                if (onStartLogging) {
+                  onStartLogging();
+                } else if (typeof window !== 'undefined' && window.__navigateToScreen) {
+                  window.__navigateToScreen('log-behavior');
+                } else {
+                  toast.info('Log a behavior or chat with Aminy AI to start building this profile.');
+                }
+              }}
+              className="bg-teal-600 text-white hover:bg-teal-700"
+            >
+              <Sparkles className="w-4 h-4 mr-2" />
+              Start logging
+            </Button>
+          </div>
+        </Card>
+
+        <Card className="p-4 bg-gray-50">
+          <div className="flex items-center gap-2 text-sm text-gray-500">
+            <Shield className="w-4 h-4 text-green-500" />
+            <span>HIPAA-conscious • Encrypted • Parent-controlled</span>
+          </div>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-4xl mx-auto space-y-3 sm:space-y-4 sm:space-y-6">
       {/* Header */}
@@ -122,18 +225,14 @@ export function InsightNavigatorReport({
             </div>
           </div>
           <div className="flex gap-2">
-            {onShare && (
-              <Button variant="outline" size="sm" onClick={onShare} className="bg-white/10 border-white/20 text-white hover:bg-white/20">
-                <Share2 className="w-4 h-4 mr-2" />
-                Share
-              </Button>
-            )}
-            {onExport && (
-              <Button variant="outline" size="sm" onClick={onExport} className="bg-white/10 border-white/20 text-white hover:bg-white/20">
-                <Download className="w-4 h-4 mr-2" />
-                PDF
-              </Button>
-            )}
+            <Button variant="outline" size="sm" onClick={handleShare} className="bg-white/10 border-white/20 text-white hover:bg-white/20">
+              <Share2 className="w-4 h-4 mr-2" />
+              Share
+            </Button>
+            <Button variant="outline" size="sm" onClick={handleExport} className="bg-white/10 border-white/20 text-white hover:bg-white/20">
+              <Download className="w-4 h-4 mr-2" />
+              PDF
+            </Button>
           </div>
         </div>
         <div className="flex items-center gap-3 sm:gap-4 text-sm text-teal-100">

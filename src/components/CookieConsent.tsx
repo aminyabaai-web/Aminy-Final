@@ -132,24 +132,29 @@ export function CookieConsent({ onAccept, onDecline }: CookieConsentProps) {
         </div>
       )}
 
-      <div className="bg-slate-900/95 backdrop-blur-md px-4 py-2.5 flex items-center gap-3" style={{ boxShadow: '0 -2px 12px rgba(0,0,0,0.3)' }}>
+      <div className="bg-slate-900/95 backdrop-blur-md px-4 py-2.5 flex items-center gap-3" style={{ boxShadow: '0 -2px 12px rgba(0,0,0,0.3)', flexWrap: 'wrap', rowGap: '8px' }}>
         <Cookie className="w-3.5 h-3.5 flex-shrink-0 text-teal-400" />
-        <p className="flex-1 text-[11px] leading-4 text-slate-300">
-          We use cookies for functionality &amp; analytics.{' '}
-          <button onClick={() => setShowDetails(d => !d)} className="text-teal-400 underline">
+        <p className="flex-1 text-[11px] leading-4 text-slate-300" style={{ minWidth: '150px' }}>
+          We use cookies for functionality &amp; analytics.
+        </p>
+        <div className="flex items-center gap-1.5 flex-shrink-0" style={{ marginLeft: 'auto' }}>
+          <button
+            onClick={() => setShowDetails(d => !d)}
+            className="px-2.5 py-1 text-[11px] font-medium text-teal-400 underline"
+          >
             {showDetails ? 'Hide' : 'Customize'}
           </button>
-        </p>
-        <div className="flex items-center gap-1.5 flex-shrink-0">
           <button
             onClick={handleDecline}
-            className="px-2.5 py-1 rounded-md text-[11px] font-medium text-slate-400 border border-slate-700 hover:border-slate-500 transition-colors"
+            style={{ padding: '7px 16px', whiteSpace: 'nowrap' }}
+            className="rounded-md text-[11px] font-medium text-slate-300 border border-slate-700 hover:border-slate-500 transition-colors"
           >
             Essential only
           </button>
           <button
             onClick={showDetails ? handleAcceptSelected : handleAcceptAll}
-            className="px-2.5 py-1 rounded-md text-[11px] font-medium bg-teal-600 text-white hover:bg-teal-500 transition-colors"
+            style={{ padding: '7px 16px', whiteSpace: 'nowrap' }}
+            className="rounded-md text-[11px] font-medium bg-teal-600 text-white hover:bg-teal-500 transition-colors"
           >
             {showDetails ? 'Save' : 'Accept all'}
           </button>

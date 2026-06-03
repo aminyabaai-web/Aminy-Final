@@ -21,7 +21,8 @@ import {
   CheckCircle2,
   User,
   Calendar,
-  ArrowUpDown
+  ArrowUpDown,
+  ArrowLeft
 } from 'lucide-react';
 
 // Types
@@ -65,6 +66,8 @@ interface ProviderReviewsProps {
   stats: ReviewStats;
   onMarkHelpful?: (reviewId: string) => void;
   onWriteReview?: () => void;
+  /** When provided (standalone screen use), renders a back button in the header. Omitted when embedded in a provider profile. */
+  onBack?: () => void;
   compact?: boolean;
 }
 
@@ -312,6 +315,7 @@ export function ProviderReviews({
   stats,
   onMarkHelpful,
   onWriteReview,
+  onBack,
   compact: compactProp = false,
 }: ProviderReviewsProps) {
   const [sortBy, setSortBy] = useState<'recent' | 'helpful' | 'rating'>('helpful');
@@ -344,10 +348,29 @@ export function ProviderReviews({
     ? filteredReviews
     : filteredReviews.slice(0, 5);
 
+  // Back button header — only when used as a standalone screen (onBack provided).
+  // When embedded inside a provider profile, onBack is omitted and no header renders.
+  const backHeader = onBack ? (
+    <div className="flex items-center gap-2 mb-3">
+      <button
+        onClick={onBack}
+        aria-label="Go back"
+        className="flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-gray-900 px-1 py-1 rounded-lg hover:bg-gray-100 transition-colors"
+        style={{ minHeight: '40px', marginLeft: '-4px' }}
+      >
+        <ArrowLeft className="w-5 h-5" />
+        Back
+      </button>
+      <h2 className="text-base font-semibold text-gray-900 truncate">{providerName} reviews</h2>
+    </div>
+  ) : null;
+
   // No reviews yet — show an honest empty state instead of zero-filled stats
   if (reviews.length === 0) {
     return (
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+      <div>
+        {backHeader}
+        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
         <div className="px-4 sm:px-6 py-8 text-center">
           <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-gray-100 flex items-center justify-center">
             <Star className="w-6 h-6 text-gray-300" />
@@ -365,12 +388,15 @@ export function ProviderReviews({
             </button>
           )}
         </div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+    <div>
+      {backHeader}
+      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
       {/* Header with Stats */}
       <div className="p-4 sm:p-6 bg-gradient-to-r from-gray-50 to-white">
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 sm:gap-4">
@@ -506,6 +532,7 @@ export function ProviderReviews({
           </button>
         </div>
       )}
+      </div>
     </div>
   );
 }

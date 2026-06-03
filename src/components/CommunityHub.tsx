@@ -56,7 +56,7 @@ import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { toast } from 'sonner';
 import { TierType } from '../lib/tier-utils';
-import { getPosts as getSupabasePosts, createPost as createSupabasePost, likePost as likeSupabasePost, unlikePost as unlikeSupabasePost, bookmarkPost as bookmarkSupabasePost, unbookmarkPost as unbookmarkSupabasePost } from '../lib/community-service';
+import { getPosts as getSupabasePosts, createPost as createSupabasePost, likePost as likeSupabasePost, unlikePost as unlikeSupabasePost, bookmarkPost as bookmarkSupabasePost, unbookmarkPost as unbookmarkSupabasePost, getComments as getSupabaseComments, addComment as addSupabaseComment, type CommunityComment } from '../lib/community-service';
 import { checkAndAwardBadges } from '../lib/badge-service';
 import { supabase } from '../utils/supabase/client';
 import { isDemoMode } from '../lib/demo-seed';
@@ -312,6 +312,12 @@ export function CommunityHub({
     category: 'questions' as PostCategory,
     isAnonymous: false,
   });
+  // Comment thread state — opening a post loads its comments and lets the user add one.
+  const [activeThread, setActiveThread] = useState<Post | null>(null);
+  const [threadComments, setThreadComments] = useState<CommunityComment[]>([]);
+  const [threadLoading, setThreadLoading] = useState(false);
+  const [newComment, setNewComment] = useState('');
+  const [postingComment, setPostingComment] = useState(false);
 
   // Load posts from Supabase; seed MOCK_POSTS only in demo mode when empty
   useEffect(() => {
@@ -362,14 +368,23 @@ export function CommunityHub({
         if (error) throw error;
 
         if (data && data.length > 0) {
-          setGroups(data.map((g: { id: string; name: string; description?: string; member_count?: number; category?: string; is_private?: boolean; is_joined?: boolean; recent_activity?: string; icon?: string }) => ({
+          // Hydrate which groups this user has joined (persisted membership).
+          let joinedIds = new Set<string>();
+          if (userId) {
+            const { data: memberships } = await supabase
+              .from('group_members')
+              .select('group_id')
+              .eq('user_id', userId);
+            joinedIds = new Set((memberships || []).map((m: { group_id: string }) => m.group_id));
+          }
+          setGroups(data.map((g: { id: string; name: string; description?: string; member_count?: number; category?: string; is_private?: boolean; recent_activity?: string; icon?: string }) => ({
             id: g.id,
             name: g.name,
             description: g.description || '',
             memberCount: g.member_count || 0,
             category: (g.category || 'topic') as GroupCategory,
             isPrivate: g.is_private ?? false,
-            isJoined: g.is_joined ?? false,
+            isJoined: joinedIds.has(g.id),
             recentActivity: g.recent_activity ? new Date(g.recent_activity) : new Date(),
             icon: g.icon || 'users',
           })));
@@ -383,7 +398,7 @@ export function CommunityHub({
       }
     }
     loadGroups();
-  }, [demo]);
+  }, [demo, userId]);
 
   // Load events from Supabase; seed MOCK_EVENTS only in demo mode when empty
   useEffect(() => {
@@ -399,7 +414,16 @@ export function CommunityHub({
         if (error) throw error;
 
         if (data && data.length > 0) {
-          setEvents(data.map((e: { id: string; title: string; description?: string; location?: string; event_date: string; attendee_count?: number; is_virtual?: boolean; is_attending?: boolean }) => ({
+          // Hydrate which events this user has RSVP'd to (persisted attendance).
+          let attendingIds = new Set<string>();
+          if (userId) {
+            const { data: attendance } = await supabase
+              .from('event_attendees')
+              .select('event_id')
+              .eq('user_id', userId);
+            attendingIds = new Set((attendance || []).map((a: { event_id: string }) => a.event_id));
+          }
+          setEvents(data.map((e: { id: string; title: string; description?: string; location?: string; event_date: string; attendee_count?: number; is_virtual?: boolean }) => ({
             id: e.id,
             title: e.title,
             description: e.description || '',
@@ -407,7 +431,7 @@ export function CommunityHub({
             date: new Date(e.event_date),
             attendeeCount: e.attendee_count || 0,
             isVirtual: e.is_virtual ?? false,
-            isAttending: e.is_attending ?? false,
+            isAttending: attendingIds.has(e.id),
           })));
         } else if (demo) {
           setEvents(MOCK_EVENTS);
@@ -419,7 +443,7 @@ export function CommunityHub({
       }
     }
     loadEvents();
-  }, [demo]);
+  }, [demo, userId]);
 
   // Filter posts
   const filteredPosts = useMemo(() => {
@@ -483,29 +507,65 @@ export function CommunityHub({
     toast.success(post?.isBookmarked ? 'Bookmark removed' : 'Post bookmarked');
   }, [posts, userId]);
 
-  // Handle join group
+  // Handle join group — optimistic local update + non-blocking Supabase persistence
+  // (mirrors the like/bookmark pattern so membership survives reload).
   const handleJoinGroup = useCallback((groupId: string) => {
+    const group = groups.find(g => g.id === groupId);
+    const willJoin = !group?.isJoined;
     setGroups(prev =>
-      prev.map(group =>
-        group.id === groupId
-          ? { ...group, isJoined: !group.isJoined, memberCount: group.isJoined ? group.memberCount - 1 : group.memberCount + 1 }
-          : group
+      prev.map(g =>
+        g.id === groupId
+          ? { ...g, isJoined: !g.isJoined, memberCount: g.isJoined ? g.memberCount - 1 : g.memberCount + 1 }
+          : g
       )
     );
-    toast.success('Group joined!');
-  }, []);
+    toast.success(willJoin ? 'Group joined!' : 'Left group');
+    // Only persist real (UUID) groups; demo/sample groups have no Supabase rows.
+    const isPersistedGroup = /^[0-9a-f]{8}-[0-9a-f]{4}-/i.test(groupId);
+    if (userId && isPersistedGroup) {
+      if (willJoin) {
+        Promise.resolve(
+          supabase.from('group_members').upsert(
+            { group_id: groupId, user_id: userId },
+            { onConflict: 'group_id,user_id' }
+          )
+        ).then(() => {}).catch(() => {});
+      } else {
+        Promise.resolve(
+          supabase.from('group_members').delete().eq('group_id', groupId).eq('user_id', userId)
+        ).then(() => {}).catch(() => {});
+      }
+    }
+  }, [groups, userId]);
 
-  // Handle attend event
+  // Handle attend event — optimistic local update + non-blocking Supabase persistence.
   const handleAttendEvent = useCallback((eventId: string) => {
+    const event = events.find(e => e.id === eventId);
+    const willAttend = !event?.isAttending;
     setEvents(prev =>
-      prev.map(event =>
-        event.id === eventId
-          ? { ...event, isAttending: !event.isAttending, attendeeCount: event.isAttending ? event.attendeeCount - 1 : event.attendeeCount + 1 }
-          : event
+      prev.map(e =>
+        e.id === eventId
+          ? { ...e, isAttending: !e.isAttending, attendeeCount: e.isAttending ? e.attendeeCount - 1 : e.attendeeCount + 1 }
+          : e
       )
     );
-    toast.success('RSVP updated!');
-  }, []);
+    toast.success(willAttend ? "You're going!" : 'RSVP cancelled');
+    const isPersistedEvent = /^[0-9a-f]{8}-[0-9a-f]{4}-/i.test(eventId);
+    if (userId && isPersistedEvent) {
+      if (willAttend) {
+        Promise.resolve(
+          supabase.from('event_attendees').upsert(
+            { event_id: eventId, user_id: userId, rsvp_status: 'attending' },
+            { onConflict: 'event_id,user_id' }
+          )
+        ).then(() => {}).catch(() => {});
+      } else {
+        Promise.resolve(
+          supabase.from('event_attendees').delete().eq('event_id', eventId).eq('user_id', userId)
+        ).then(() => {}).catch(() => {});
+      }
+    }
+  }, [events, userId]);
 
   // Submit new post
   const handleSubmitPost = useCallback(() => {
@@ -552,6 +612,78 @@ export function CommunityHub({
       checkAndAwardBadges(userId, 'community_post').catch(() => {});
     }
   }, [newPost, userId, userName]);
+
+  // Open a post's comment thread and load its comments from Supabase.
+  const handleOpenThread = useCallback(async (post: Post) => {
+    setActiveThread(post);
+    setThreadComments([]);
+    setNewComment('');
+    // Demo/sample posts use non-UUID ids and have no rows in Supabase — skip the fetch.
+    const isPersistedPost = /^[0-9a-f]{8}-[0-9a-f]{4}-/i.test(post.id);
+    if (!isPersistedPost) return;
+    setThreadLoading(true);
+    try {
+      const comments = await getSupabaseComments(post.id);
+      setThreadComments(comments);
+    } catch {
+      // Non-fatal — thread still opens with an empty state.
+    } finally {
+      setThreadLoading(false);
+    }
+  }, []);
+
+  // Add a comment to the open thread; persists to Supabase and bumps the post's count.
+  const handleAddComment = useCallback(async () => {
+    const body = newComment.trim();
+    if (!activeThread || !body) return;
+    if (!userId) {
+      toast.error('Sign in to comment');
+      return;
+    }
+    setPostingComment(true);
+    const optimistic: CommunityComment = {
+      id: `temp-${Date.now()}`,
+      postId: activeThread.id,
+      userId,
+      displayName: userName || 'You',
+      body,
+      createdAt: new Date().toISOString(),
+    };
+    setThreadComments(prev => [...prev, optimistic]);
+    setNewComment('');
+    // Reflect the new count on the post card immediately.
+    setPosts(prev => prev.map(p => p.id === activeThread.id ? { ...p, comments: p.comments + 1 } : p));
+    setActiveThread(prev => prev ? { ...prev, comments: prev.comments + 1 } : prev);
+    try {
+      const saved = await addSupabaseComment(userId, activeThread.id, body, userName || 'Parent');
+      if (saved) {
+        setThreadComments(prev => prev.map(c => c.id === optimistic.id ? saved : c));
+      }
+    } catch {
+      // Keep the optimistic comment visible; surfacing an error mid-demo is worse than a silent retry-later.
+    } finally {
+      setPostingComment(false);
+    }
+  }, [activeThread, newComment, userId, userName]);
+
+  // Share a post via the Web Share API, falling back to clipboard.
+  const handleShare = useCallback(async (post: Post) => {
+    const shareText = `${post.title}\n\n${post.content}`;
+    try {
+      if (typeof navigator !== 'undefined' && navigator.share) {
+        await navigator.share({ title: post.title, text: shareText, url: 'https://aminy.ai' });
+        setPosts(prev => prev.map(p => p.id === post.id ? { ...p, shares: p.shares + 1 } : p));
+      } else if (typeof navigator !== 'undefined' && navigator.clipboard) {
+        await navigator.clipboard.writeText(shareText);
+        toast.success('Post copied to clipboard');
+        setPosts(prev => prev.map(p => p.id === post.id ? { ...p, shares: p.shares + 1 } : p));
+      } else {
+        toast('Sharing is not supported on this device');
+      }
+    } catch {
+      // User cancelled the share sheet, or permission denied — no-op.
+    }
+  }, []);
 
   // Format relative time
   const formatRelativeTime = (date: Date) => {
@@ -606,7 +738,16 @@ export function CommunityHub({
 
       {/* Post Content */}
       <h3 className="font-semibold text-slate-900 dark:text-white mb-2">{post.title}</h3>
-      <p className="text-slate-600 dark:text-slate-300 text-sm line-clamp-3 mb-4">
+      {/* line-clamp-3 is not in the precompiled Tailwind build, so clamp via inline style */}
+      <p
+        className="text-slate-600 dark:text-slate-300 text-sm mb-4"
+        style={{
+          display: '-webkit-box',
+          WebkitLineClamp: 3,
+          WebkitBoxOrient: 'vertical',
+          overflow: 'hidden',
+        }}
+      >
         {post.content}
       </p>
 
@@ -633,11 +774,19 @@ export function CommunityHub({
             <Heart className={`w-4 h-4 ${post.isLiked ? 'fill-current' : ''}`} />
             {post.likes}
           </button>
-          <button className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-teal-600">
+          <button
+            onClick={() => handleOpenThread(post)}
+            className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-teal-600"
+            aria-label={`View ${post.comments} comments`}
+          >
             <MessageSquare className="w-4 h-4" />
             {post.comments}
           </button>
-          <button className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-teal-600">
+          <button
+            onClick={() => handleShare(post)}
+            className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-teal-600"
+            aria-label="Share post"
+          >
             <Share2 className="w-4 h-4" />
             {post.shares}
           </button>
@@ -873,16 +1022,30 @@ export function CommunityHub({
         {view === 'bcba-qa' && (
           <div className="space-y-4">
             <Card className="p-4 bg-teal-50 dark:bg-teal-900/20 border-teal-200">
-              <div className="flex items-start gap-3">
-                <Award className="w-6 h-6 text-teal-600" />
-                <div>
-                  <h3 className="font-semibold text-teal-900 dark:text-teal-100">
-                    Ask a BCBA
-                  </h3>
-                  <p className="text-sm text-teal-700 dark:text-teal-200 mt-1">
-                    Get answers from Board Certified Behavior Analysts. Questions are answered within 48-72 hours.
-                  </p>
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-start gap-3">
+                  <Award className="w-6 h-6 text-teal-600 shrink-0" />
+                  <div>
+                    <h3 className="font-semibold text-teal-900 dark:text-teal-100">
+                      Ask a BCBA
+                    </h3>
+                    <p className="text-sm text-teal-700 dark:text-teal-200 mt-1">
+                      {onNavigate
+                        ? 'Send a question to a Board Certified Behavior Analyst and get a written reply, typically within 48-72 hours.'
+                        : 'Read answers to questions other parents have asked Board Certified Behavior Analysts below.'}
+                    </p>
+                  </div>
                 </div>
+                {onNavigate && (
+                  <Button
+                    size="sm"
+                    onClick={() => onNavigate('ask-bcba')}
+                    className="shrink-0 flex items-center gap-1.5"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    Ask
+                  </Button>
+                )}
               </div>
             </Card>
             {filteredPosts
@@ -968,6 +1131,88 @@ export function CommunityHub({
                 <Button onClick={handleSubmitPost}>
                   <Send className="w-4 h-4 mr-2" />
                   Post
+                </Button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Comment Thread Modal */}
+      <AnimatePresence>
+        {activeThread && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+            onClick={() => setActiveThread(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="bg-white dark:bg-slate-800 rounded-xl max-w-lg w-full max-h-[90vh] flex flex-col"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="p-4 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
+                <h2 className="text-lg font-semibold truncate pr-2">{activeThread.title}</h2>
+                <button onClick={() => setActiveThread(null)} aria-label="Close comments">
+                  <X className="w-5 h-5 text-slate-400" />
+                </button>
+              </div>
+              <div className="p-4 overflow-y-auto flex-1 space-y-4">
+                <p className="text-sm text-slate-600 dark:text-slate-300">{activeThread.content}</p>
+                <div className="border-t border-slate-100 dark:border-slate-700 pt-4">
+                  <h3 className="text-sm font-medium text-slate-700 dark:text-slate-200 mb-3">
+                    Comments {threadComments.length > 0 && `(${threadComments.length})`}
+                  </h3>
+                  {threadLoading ? (
+                    <p className="text-sm text-slate-400 text-center py-6">Loading comments…</p>
+                  ) : threadComments.length === 0 ? (
+                    <p className="text-sm text-slate-400 text-center py-6">
+                      No comments yet. Be the first to reply.
+                    </p>
+                  ) : (
+                    <div className="space-y-3">
+                      {threadComments.map((c) => (
+                        <div key={c.id} className="flex items-start gap-2.5">
+                          <div className="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center shrink-0">
+                            <span className="text-xs font-medium text-slate-600">{c.displayName.charAt(0)}</span>
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm font-medium text-slate-900 dark:text-white">{c.displayName}</span>
+                              <span className="text-xs text-slate-400">{formatRelativeTime(new Date(c.createdAt))}</span>
+                            </div>
+                            <p className="text-sm text-slate-600 dark:text-slate-300 break-words">{c.body}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="p-4 border-t border-slate-200 dark:border-slate-700 flex items-center gap-2">
+                <Input
+                  placeholder="Add a comment…"
+                  value={newComment}
+                  onChange={(e) => setNewComment(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      handleAddComment();
+                    }
+                  }}
+                />
+                <Button
+                  onClick={handleAddComment}
+                  disabled={postingComment || !newComment.trim()}
+                  size="sm"
+                  className="shrink-0"
+                  aria-label="Send comment"
+                >
+                  <Send className="w-4 h-4" />
                 </Button>
               </div>
             </motion.div>

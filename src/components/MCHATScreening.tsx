@@ -24,11 +24,11 @@ const MCH_QUESTIONS: Question[] = [
     { id: 3, text: "Does your child play pretend or make-believe?", isReverseScored: false, example: "(FOR EXAMPLE, pretend to drink from an empty cup, pretend to talk on a phone, or pretend to feed a doll or stuffed animal?)" },
     { id: 4, text: "Does your child like climbing on things?", isReverseScored: false, example: "(FOR EXAMPLE, furniture, playground equipment, or stairs)" },
     { id: 5, text: "Does your child make unusual finger movements near their eyes?", isReverseScored: true, example: "(FOR EXAMPLE, does your child wiggle their fingers close to their eyes?)" },
-    { id: 6, text: "Does your child point with one finger to ask for something or to get help?", isReverseScored: false, example: "(FOR EXAMPLE, pointing to a snack or toy that is out of reach)", insight: "Communicating needs is a huge milestone. Aminy's AI coach provides exact scripts for 'Functional Communication Training' (FCT) to rapidly help your child replace frustration with clear requests." },
+    { id: 6, text: "Does your child point with one finger to ask for something or to get help?", isReverseScored: false, example: "(FOR EXAMPLE, pointing to a snack or toy that is out of reach)", insight: "Communicating needs is an important milestone. Aminy includes guided 'Functional Communication Training' (FCT) routines you can practice at home to support how your child expresses requests." },
     { id: 7, text: "Does your child point with one finger to show you something interesting?", isReverseScored: false, example: "(FOR EXAMPLE, pointing to an airplane in the sky or a big truck in the road)" },
     { id: 8, text: "Is your child interested in other children?", isReverseScored: false, example: "(FOR EXAMPLE, does your child watch other children, smile at them, or go to them?)" },
     { id: 9, text: "Does your child show you things by bringing them to you or holding them up for you to see?", isReverseScored: false, example: "Not to get help, but just to share." },
-    { id: 10, text: "Does your child respond when you call their name?", isReverseScored: false, example: "(FOR EXAMPLE, does your child look up, talk or babble, or stop what they are doing when you call their name?)", insight: "Not responding to their name can be worrying, but it is highly treatable. Aminy offers step-by-step 'Name Game' routines that use positive reinforcement to build this critical habit in just days." },
+    { id: 10, text: "Does your child respond when you call their name?", isReverseScored: false, example: "(FOR EXAMPLE, does your child look up, talk or babble, or stop what they are doing when you call their name?)", insight: "Name response is a common area families work on. Aminy offers step-by-step 'Name Game' routines, built on positive reinforcement, that you can practice together at home." },
     { id: 11, text: "When you smile at your child, does your child smile back at you?", isReverseScored: false },
     { id: 12, text: "Does your child get upset by everyday noises?", isReverseScored: true, example: "(FOR EXAMPLE, does your child scream or cry to noise such as a vacuum cleaner or loud music?)", insight: "Sensory overwhelm is tough on the whole family. Aminy includes tailored 'Desensitization' routines and a digital 'Calm Corner' to help your child process sensory input peacefully." },
     { id: 13, text: "Does your child walk?", isReverseScored: false },
@@ -240,7 +240,7 @@ export function MCHATScreening({ onComplete, onBack, childName = "your child" }:
             </div>
 
             <div className="max-w-xl mx-auto px-4 py-12">
-                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 leading-tight">
+                <h2 className="text-xl font-bold text-gray-900 mb-6 leading-tight">
                     {question.text}
                 </h2>
 
@@ -254,14 +254,14 @@ export function MCHATScreening({ onComplete, onBack, childName = "your child" }:
                     <div className="flex flex-col gap-4 mt-8">
                         <Button
                             variant="outline"
-                            className="py-8 text-xl font-semibold border-2 hover:bg-accent/5 hover:border-accent transition-all justify-start px-6"
+                            className="py-6 text-xl font-semibold border-2 hover:bg-accent/5 hover:border-accent transition-all justify-start px-6"
                             onClick={() => handleAnswer(true)}
                         >
                             Yes
                         </Button>
                         <Button
                             variant="outline"
-                            className="py-8 text-xl font-semibold border-2 hover:bg-accent/5 hover:border-accent transition-all justify-start px-6"
+                            className="py-6 text-xl font-semibold border-2 hover:bg-accent/5 hover:border-accent transition-all justify-start px-6"
                             onClick={() => handleAnswer(false)}
                         >
                             No

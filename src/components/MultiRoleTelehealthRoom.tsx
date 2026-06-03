@@ -29,7 +29,9 @@ import {
     AlertCircle,
     FileSignature,
     Send,
-    Sparkles
+    Sparkles,
+    ArrowLeft,
+    VideoOff as VideoOffIcon
 } from 'lucide-react';
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
@@ -59,6 +61,25 @@ export function MultiRoleTelehealthRoom({ onLeave, role, patientName = "Patient"
     const [chatMessages, setChatMessages] = useState<{ id: string; text: string }[]>([]);
     const [clinicalNotes, setClinicalNotes] = useState('');
     const [isSupervising, setIsSupervising] = useState(false);
+
+    // This room shows a guided, illustrative walkthrough of the multi-role
+    // telehealth experience (protocol steps, RBT/BCBA telemetry, parent education).
+    // Its content is hardcoded sample copy, not a live session — so it is gated to
+    // demo mode. Live users are routed to the real Daily.co flow (OnDemandTelehealth)
+    // instead of being shown fabricated clinical content / billing capture.
+    const demo = isDemoMode();
+
+    // Stack the layout (and render the side panel as a full-width bottom sheet)
+    // on narrow viewports so the 340px panel never overflows next to the video.
+    const [isNarrow, setIsNarrow] = useState(() =>
+        typeof window !== 'undefined' ? window.innerWidth < 768 : false
+    );
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+        const onResize = () => setIsNarrow(window.innerWidth < 768);
+        window.addEventListener('resize', onResize);
+        return () => window.removeEventListener('resize', onResize);
+    }, []);
 
     const sendChatMessage = () => {
         const text = chatMessage.trim();
@@ -169,10 +190,10 @@ export function MultiRoleTelehealthRoom({ onLeave, role, patientName = "Patient"
                     onClick={() => {
                         if (isSupervising) {
                             const minutes = Math.max(1, Math.floor(sessionTime / 60));
-                            toast.success(`Supervision logged: CPT 97155 - ${minutes} minutes recorded for billing.`);
+                            toast.info(`Demo: CPT 97155 supervision timer stopped at ${minutes} min. No billing was captured.`);
                             setIsSupervising(false);
                         } else {
-                            toast.success('CPT 97155 Auditable Supervision Timer Started.');
+                            toast.info('Demo: CPT 97155 supervision timer started (illustrative — nothing is billed).');
                             setIsSupervising(true);
                         }
                     }}
@@ -223,8 +244,38 @@ export function MultiRoleTelehealthRoom({ onLeave, role, patientName = "Patient"
         </div>
     );
 
+    // Live (non-demo) users must never be shown the fabricated protocol/telemetry/
+    // education content or the simulated CPT billing capture. Until this room is
+    // wired to a real Daily.co call + real clinical data, show an honest screen
+    // that points them to the working telehealth flow.
+    if (!demo) {
+        return (
+            <div style={{ width: '100%', minHeight: '100vh', backgroundColor: '#111827', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px', textAlign: 'center', ...fontSmoothing }}>
+                <div style={{ width: '64px', height: '64px', borderRadius: '32px', backgroundColor: 'rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
+                    <Video size={28} color="rgba(255,255,255,0.6)" />
+                </div>
+                <h2 style={{ color: '#FFF', fontSize: '20px', fontWeight: 600, marginBottom: '8px' }}>Multi-role session room is in limited launch</h2>
+                <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: '15px', lineHeight: 1.5, maxWidth: '420px', marginBottom: '24px' }}>
+                    The collaborative RBT / BCBA / parent room isn't live yet. To start a secure video session with a verified provider, use on-demand telehealth.
+                </p>
+                <button
+                    onClick={onLeave}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', minHeight: '44px', padding: '12px 20px', borderRadius: '12px', border: 'none', backgroundColor: '#43AA8B', color: '#FFF', fontSize: '15px', fontWeight: 600, cursor: 'pointer' }}
+                >
+                    <ArrowLeft size={18} /> Back to telehealth
+                </button>
+            </div>
+        );
+    }
+
     return (
-        <div style={{ width: '100vw', height: '100vh', backgroundColor: '#111827', display: 'flex', flexDirection: 'column', overflow: 'hidden', ...fontSmoothing }}>
+        <div style={{ width: '100%', height: '100vh', backgroundColor: '#111827', display: 'flex', flexDirection: 'column', overflow: 'hidden', ...fontSmoothing }}>
+            {/* Illustrative-demo banner — this is NOT a live session and no billing is captured */}
+            <div style={{ backgroundColor: '#92400E', color: '#FFFBEB', fontSize: '12px', fontWeight: 600, textAlign: 'center', padding: '6px 12px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', flexShrink: 0 }}>
+                <AlertCircle size={13} />
+                Illustrative demo — not a live session. No video is connected and no billing is recorded.
+            </div>
+
             {/* Top Header */}
             <div style={{ height: '64px', backgroundColor: 'rgba(17, 24, 39, 0.8)', backdropFilter: 'blur(10px)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 24px', position: 'relative', zIndex: 10 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
@@ -243,18 +294,26 @@ export function MultiRoleTelehealthRoom({ onLeave, role, patientName = "Patient"
             </div>
 
             {/* Main Video Area & Side Panel Matrix */}
-            <div style={{ display: 'flex', flex: 1, padding: '24px', gap: '24px', marginTop: '-64px', paddingTop: '88px', overflow: 'hidden' }}>
+            <div style={{ position: 'relative', display: 'flex', flexDirection: isNarrow ? 'column' : 'row', flex: 1, padding: isNarrow ? '16px' : '24px', gap: isNarrow ? '16px' : '24px', overflow: 'hidden', minHeight: 0 }}>
 
                 {/* Primary Video Feed Container */}
-                <div style={{ flex: 1, backgroundColor: '#1F2937', borderRadius: '24px', overflow: 'hidden', position: 'relative', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5)', border: '1px solid rgba(255,255,255,0.05)' }}>
-                    {/* Mock Video Placeholder */}
-                    <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundImage: 'linear-gradient(to bottom right, #374151, #111827)' }}>
+                <div style={{ flex: 1, minHeight: 0, backgroundColor: '#1F2937', borderRadius: '24px', overflow: 'hidden', position: 'relative', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5)', border: '1px solid rgba(255,255,255,0.05)' }}>
+                    {/* Mock Video Placeholder — labeled illustrative, not a real feed */}
+                    <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'center', justifyContent: 'center', backgroundImage: 'linear-gradient(to bottom right, #374151, #111827)' }}>
                         <Users size={64} color="rgba(255,255,255,0.1)" />
+                        <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: '12px', fontWeight: 500, letterSpacing: '0.04em' }}>Sample video — no live feed connected</span>
                     </div>
 
                     {/* Self View PIP */}
-                    <div style={{ position: 'absolute', bottom: '24px', left: '24px', width: '160px', height: '220px', backgroundColor: '#000', borderRadius: '16px', border: '2px solid rgba(255,255,255,0.1)', overflow: 'hidden', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.5)' }}>
+                    <div style={{ position: 'absolute', bottom: '24px', left: '24px', width: '160px', height: '220px', maxWidth: '40%', backgroundColor: '#000', borderRadius: '16px', border: '2px solid rgba(255,255,255,0.1)', overflow: 'hidden', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.5)' }}>
                         <div style={{ width: '100%', height: '100%', backgroundImage: 'linear-gradient(to top right, #4B5563, #1F2937)' }} />
+                        {/* Camera-off overlay so the video toggle has a visible effect on the self-view */}
+                        {isVideoOff && (
+                            <div style={{ position: 'absolute', inset: 0, backgroundColor: '#111827', display: 'flex', flexDirection: 'column', gap: '6px', alignItems: 'center', justifyContent: 'center' }}>
+                                <VideoOffIcon size={28} color="rgba(255,255,255,0.5)" />
+                                <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '11px', fontWeight: 500 }}>Camera off</span>
+                            </div>
+                        )}
                         <div style={{ position: 'absolute', bottom: '8px', left: '8px', backgroundColor: 'rgba(0,0,0,0.6)', padding: '4px 8px', borderRadius: '8px', color: '#FFF', fontSize: '11px', fontWeight: 500 }}>
                             You ({role})
                         </div>
@@ -315,16 +374,29 @@ export function MultiRoleTelehealthRoom({ onLeave, role, patientName = "Patient"
                     </div>
                 </div>
 
-                {/* Dynamic Side Panel */}
+                {/* Dynamic Side Panel — full-width bottom sheet on narrow viewports,
+                    340px sibling column on wide. The bottom sheet caps its height and
+                    scrolls so it never forces horizontal overflow at 375px. */}
                 <AnimatePresence>
                     {activePanel !== 'none' && (
                         <motion.div
-                            initial={{ width: 0, opacity: 0 }}
-                            animate={{ width: 340, opacity: 1 }}
-                            exit={{ width: 0, opacity: 0 }}
+                            initial={isNarrow ? { y: '100%', opacity: 0 } : { width: 0, opacity: 0 }}
+                            animate={isNarrow ? { y: 0, opacity: 1 } : { width: 340, opacity: 1 }}
+                            exit={isNarrow ? { y: '100%', opacity: 0 } : { width: 0, opacity: 0 }}
                             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                            style={{ backgroundColor: '#FFFFFF', borderRadius: '24px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}
+                            style={isNarrow
+                                ? { position: 'absolute', left: 0, right: 0, bottom: 0, maxHeight: '65vh', backgroundColor: '#FFFFFF', borderTopLeftRadius: '24px', borderTopRightRadius: '24px', overflowY: 'auto', display: 'flex', flexDirection: 'column', zIndex: 20, boxShadow: '0 -10px 30px rgba(0,0,0,0.4)' }
+                                : { backgroundColor: '#FFFFFF', borderRadius: '24px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }
+                            }
                         >
+                            {/* Close affordance for the bottom sheet on mobile */}
+                            {isNarrow && (
+                                <button
+                                    onClick={() => setActivePanel('none')}
+                                    aria-label="Close panel"
+                                    style={{ alignSelf: 'center', marginTop: '8px', width: '40px', height: '5px', borderRadius: '3px', border: 'none', backgroundColor: '#D1D5DB', cursor: 'pointer', flexShrink: 0 }}
+                                />
+                            )}
                             {activePanel === 'clinical' && role === 'bcba' && <BCBAClinicalPanel />}
                             {activePanel === 'clinical' && role === 'rbt' && <RBTClinicalPanel />}
                             {activePanel === 'clinical' && role === 'parent' && <ParentEducationPanel />}

@@ -5,7 +5,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { FileText, Save, CheckCircle2, ChevronRight, AlertCircle, TrendingUp, Target, BrainCircuit, Users, Activity, MessageSquare, Heart, Stethoscope } from 'lucide-react';
+import { FileText, Save, CheckCircle2, ChevronRight, ArrowLeft, AlertCircle, TrendingUp, Target, BrainCircuit, Users, Activity, MessageSquare, Heart, Stethoscope } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Textarea } from '../ui/textarea';
@@ -16,6 +16,11 @@ import { toast } from 'sonner';
 interface TemplateProps {
     patientId: string;
     patientName: string;
+    // Optional exit handler — when this component is mounted as the full
+    // 'clinical-templates' screen, App.tsx passes this so the provider has an
+    // in-app route back to the dashboard. Safe-defaulted, so embedded uses
+    // (inside a tabbed portal that already has its own chrome) can omit it.
+    onBack?: () => void;
 }
 
 // No server-side clinical-template store exists yet, so saves are persisted
@@ -37,7 +42,7 @@ function saveTemplateDraft(patientId: string, template: string, data: unknown): 
 // with blank templates so no fabricated diagnoses/findings reach a chart.
 const DEMO = isDemoMode();
 
-export function ProviderClinicalTemplates({ patientId, patientName }: TemplateProps) {
+export function ProviderClinicalTemplates({ patientId, patientName, onBack }: TemplateProps) {
     const [activeTemplate, setActiveTemplate] = useState<'bip' | 'milestones' | 'slp' | 'mh_treatment' | 'psych_eval' | null>(null);
 
     // Focus: Behavior Intervention Plan (BIP)
@@ -134,7 +139,18 @@ export function ProviderClinicalTemplates({ patientId, patientName }: TemplatePr
     if (!activeTemplate) {
         return (
             <div style={{ backgroundColor: '#FFFFFF', borderRadius: '20px', padding: '24px', boxShadow: '0 2px 10px rgba(0,0,0,0.02)' }}>
-                <h3 style={{ fontSize: '18px', fontWeight: 600, color: 'rgba(17, 24, 39, 0.9)', letterSpacing: '-0.01em', marginBottom: '8px' }}>Clinical Templates</h3>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+                    {onBack && (
+                        <button
+                            onClick={onBack}
+                            aria-label="Back to dashboard"
+                            style={{ padding: '8px', borderRadius: '50%', border: 'none', backgroundColor: '#FAFAFA', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, minWidth: '40px', minHeight: '40px' }}
+                        >
+                            <ArrowLeft size={18} color="rgba(17, 24, 39, 0.6)" />
+                        </button>
+                    )}
+                    <h3 style={{ fontSize: '18px', fontWeight: 600, color: 'rgba(17, 24, 39, 0.9)', letterSpacing: '-0.01em' }}>Clinical Templates</h3>
+                </div>
                 <p style={{ fontSize: '14px', color: 'rgba(17, 24, 39, 0.6)', marginBottom: '24px' }}>
                     Select a template to generate structured clinical documentation for {patientName}.
                 </p>

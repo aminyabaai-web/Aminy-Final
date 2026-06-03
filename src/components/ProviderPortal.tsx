@@ -892,7 +892,9 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                 <div className="hidden sm:block">
                   <div className="flex items-center gap-2">
                     <p className="text-sm font-medium text-neutral-900 dark:text-white">{provider.name}</p>
-                    <VerifiedBadge status="verified" />
+                    {provider.verificationStatus && (
+                      <VerifiedBadge status={provider.verificationStatus} />
+                    )}
                   </div>
                   <p className="text-xs text-neutral-500 dark:text-slate-400">{provider.credentials}</p>
                 </div>
@@ -1015,12 +1017,32 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                     </div>
 
                     <div className="flex gap-3 mt-4">
-                      <Button className="flex-1 bg-teal-600 hover:bg-teal-700">
+                      <Button
+                        className="flex-1 bg-teal-600 hover:bg-teal-700"
+                        onClick={() => {
+                          if (onStartTelehealthSession) {
+                            onStartTelehealthSession(nextSession.id);
+                          } else {
+                            setActiveTab('start-session');
+                          }
+                        }}
+                      >
                         <Video className="w-4 h-4 mr-2" />
                         Start Session
                       </Button>
                       {nextSession.hasInsightAccess && (
-                        <Button variant="outline" className="flex-1">
+                        <Button
+                          variant="outline"
+                          className="flex-1"
+                          onClick={() => {
+                            const patient = patients.find(p => p.id === nextSession.patientId);
+                            if (patient) {
+                              setSelectedPatient(patient);
+                            } else {
+                              onNavigate?.('insight-report');
+                            }
+                          }}
+                        >
                           <Eye className="w-4 h-4 mr-2" />
                           View Insight Navigator
                         </Button>
@@ -2481,7 +2503,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
       {/* Patient Detail Modal */}
       {selectedPatient && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <Card className="max-w-2xl w-full max-h-[85vh] overflow-y-auto">
+          <Card className="max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6 border-b border-neutral-100 sticky top-0 bg-white">
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3 sm:gap-4">
@@ -2583,16 +2605,37 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
               {/* Actions */}
               <div className="flex gap-3 pt-4 border-t border-neutral-100">
                 {selectedPatient.profileAccess === 'granted' && (
-                  <Button className="flex-1 bg-teal-600 hover:bg-teal-700">
+                  <Button
+                    className="flex-1 bg-teal-600 hover:bg-teal-700"
+                    onClick={() => onNavigate?.('insight-report')}
+                  >
                     <Eye className="w-4 h-4 mr-2" />
                     Open Insight Navigator
                   </Button>
                 )}
-                <Button variant="outline" className="flex-1">
+                <Button
+                  variant="outline"
+                  className="flex-1"
+                  onClick={() => {
+                    setEditingNote({
+                      noteType: 'soap',
+                      patientId: selectedPatient.id,
+                      patientName: selectedPatient.childName,
+                      content: {},
+                    });
+                    setShowNoteEditor(true);
+                    setSelectedPatient(null);
+                    setActiveTab('clinical-notes');
+                  }}
+                >
                   <FileText className="w-4 h-4 mr-2" />
                   Session Notes
                 </Button>
-                <Button variant="outline">
+                <Button
+                  variant="outline"
+                  onClick={() => onNavigate?.('messages')}
+                  aria-label={`Message ${selectedPatient.parentName}`}
+                >
                   <MessageSquare className="w-4 h-4" />
                 </Button>
               </div>

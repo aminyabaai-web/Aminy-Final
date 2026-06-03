@@ -71,7 +71,7 @@ export function PreDiagnosisEntry({ onNavigate, childName, childAge }: PreDiagno
       title: 'Talk to Aminy AI about your concerns',
       description: 'Describe what you\'re noticing. Aminy can help you make sense of it and know what questions to ask.',
       cta: 'Start a conversation',
-      action: () => onNavigate('chat'),
+      action: () => onNavigate('ask-aminy'),
       primary: false,
     },
     {

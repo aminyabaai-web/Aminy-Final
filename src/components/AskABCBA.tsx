@@ -250,7 +250,39 @@ export function AskABCBA({ onBack, userId, childName, parentName }: AskABCBAProp
   );
 }
 
-function ThreadDetail({ thread, onBack }: { thread: Thread; onBack: () => void }) {
+function ThreadDetail({ thread: initialThread, onBack }: { thread: Thread; onBack: () => void }) {
+  // Keep a live copy of the thread. The parent passes a static snapshot taken at
+  // open time — but a freshly-submitted question has `ai_draft === null` because
+  // the AI-draft edge function runs in the background. Poll the single row so the
+  // instant AI draft (and later the BCBA response) appears without leaving the screen.
+  const [thread, setThread] = useState<Thread>(initialThread);
+
+  // Re-sync if the parent hands us a different thread.
+  useEffect(() => {
+    setThread(initialThread);
+  }, [initialThread]);
+
+  // Poll the row while the response is still being produced — `pending` means the
+  // AI is still drafting; `ai_drafted`/`awaiting_bcba` means we're waiting on the
+  // BCBA. Stop once the thread is completed/closed (nothing left to arrive).
+  const isLive = thread.status === 'pending' || thread.status === 'ai_drafted' || thread.status === 'awaiting_bcba';
+  useEffect(() => {
+    if (!isLive) return;
+    const interval = setInterval(async () => {
+      const { data } = await supabase
+        .from('ask_bcba_threads')
+        .select('*')
+        .eq('id', thread.id)
+        .single();
+      if (data) setThread(data as Thread);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [isLive, thread.id]);
+
+  // The AI draft is the core promise ("instant"), so show an explicit drafting
+  // state until it lands instead of a blank gap.
+  const aiDrafting = !thread.ai_draft && thread.status === 'pending';
+
   return (
     <div className="min-h-screen bg-[#FAF7F2] pb-20">
       <ScreenHeader
@@ -273,8 +305,8 @@ function ThreadDetail({ thread, onBack }: { thread: Thread; onBack: () => void }
         <p className="text-sm text-slate-800 whitespace-pre-wrap">{thread.question}</p>
       </div>
 
-      {/* AI draft */}
-      {thread.ai_draft && (
+      {/* AI draft — show the live draft, or a drafting indicator while it's being generated */}
+      {thread.ai_draft ? (
         <div className="mx-4 mt-3 rounded-2xl p-4" style={{ background: 'linear-gradient(135deg, #43AA8B12 0%, #57759012 100%)', border: '1px solid #43AA8B30' }}>
           <div className="flex items-center gap-2 mb-2">
             <Sparkles className="w-4 h-4 text-teal-600" />
@@ -282,7 +314,15 @@ function ThreadDetail({ thread, onBack }: { thread: Thread; onBack: () => void }
           </div>
           <p className="text-sm text-slate-800 whitespace-pre-wrap">{thread.ai_draft}</p>
         </div>
-      )}
+      ) : aiDrafting ? (
+        <div className="mx-4 mt-3 rounded-2xl p-4" style={{ background: 'linear-gradient(135deg, #43AA8B12 0%, #57759012 100%)', border: '1px solid #43AA8B30' }}>
+          <div className="flex items-center gap-2 mb-2">
+            <Loader2 className="w-4 h-4 text-teal-600 animate-spin" />
+            <p className="text-xs font-semibold text-teal-700 uppercase tracking-wide">AI Draft — instant response</p>
+          </div>
+          <p className="text-sm text-slate-700">Aminy is drafting an instant response…</p>
+        </div>
+      ) : null}
 
       {/* BCBA response */}
       {thread.bcba_response ? (

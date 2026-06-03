@@ -159,6 +159,10 @@ interface CommunityForYouProps {
   posts?: CommunityPost[];
   childName?: string;
   userLocation?: string;
+  /** Header title — defaults to "Community". Pass "Resources" when used on the resources route. */
+  title?: string;
+  /** Header subtitle shown under the title. */
+  subtitle?: string;
   onSave?: (postId: string) => void;
   onShare?: (postId: string) => void;
   onHide?: (postId: string) => void;
@@ -202,7 +206,9 @@ const DEFAULT_POSTS: CommunityPost[] = [
 export function CommunityForYou({
   posts,
   childName = 'your child',
-  userLocation = 'Phoenix, AZ',
+  userLocation,
+  title = 'Community',
+  subtitle = 'Connect, learn, and grow together',
   onSave,
   onShare,
   onHide,
@@ -214,9 +220,15 @@ export function CommunityForYou({
   const [activeTab, setActiveTab] = useState<'for-you' | 'groups' | 'events' | 'spotlights' | 'qa'>('for-you');
   const [savedPosts, setSavedPosts] = useState<Set<string>>(new Set());
   const [joinedGroups, setJoinedGroups] = useState<Set<string>>(new Set());
-  const [registeredEvents, setRegisteredEvents] = useState<Set<string>>(new Set(['event-2']));
+  const [registeredEvents, setRegisteredEvents] = useState<Set<string>>(new Set());
   const [likedSpotlights, setLikedSpotlights] = useState<Set<string>>(new Set());
   const [remindedQA, setRemindedQA] = useState<Set<string>>(new Set());
+
+  // Resolve the user's location honestly: prefer an explicit prop, otherwise
+  // derive from the signed-in profile (same source as BenefitsNavigatorScreen).
+  // Never hardcode a city — an unknown location stays empty so we don't tell
+  // every user their groups are "near" somewhere they don't live.
+  const [resolvedLocation, setResolvedLocation] = useState<string>(userLocation ?? '');
 
   // Live data state — empty until Supabase responds
   const [liveGroups, setLiveGroups] = useState<LocalGroup[]>([]);
@@ -256,7 +268,7 @@ export function CommunityForYou({
           .order('event_date', { ascending: true })
           .limit(10);
         if (!eventsErr && eventsData && eventsData.length > 0) {
-          setLiveEvents((eventsData as CommunityEventRow[]).map((e) => ({
+          const mappedEvents = (eventsData as CommunityEventRow[]).map((e) => ({
             id: e.id,
             title: e.title,
             host: e.host || 'Aminy Team',
@@ -268,7 +280,13 @@ export function CommunityForYou({
             type: e.event_type || 'webinar',
             topics: e.topics || [],
             isRegistered: e.is_registered ?? false,
-          })));
+          }));
+          setLiveEvents(mappedEvents);
+          // Hydrate registration state from each event's own flag (real ids),
+          // never a hardcoded id that may not exist in the live data set.
+          setRegisteredEvents(
+            new Set(mappedEvents.filter((e) => e.isRegistered).map((e) => e.id))
+          );
         }
 
         // Fetch parent spotlights
@@ -322,12 +340,40 @@ export function CommunityForYou({
     fetchCommunityData();
   }, []);
 
-  // Filter groups by location
+  // Derive the user's location from their profile when no explicit prop was
+  // passed. Mirrors BenefitsNavigatorScreen's profiles.state lookup so we show
+  // a real location or none at all — never a hardcoded city.
+  useEffect(() => {
+    if (userLocation) return; // explicit prop wins
+    let cancelled = false;
+    async function loadLocation() {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+        // Select only `state` — the column BenefitsNavigatorScreen relies on and
+        // that's known to exist in the deployed schema. Querying a column that
+        // isn't there would fail the whole request and resolve nothing.
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('state')
+          .eq('id', user.id)
+          .single();
+        if (cancelled || !profile?.state) return;
+        setResolvedLocation(String(profile.state).toUpperCase());
+      } catch { /* leave location unknown — chip stays hidden */ }
+    }
+    loadLocation();
+    return () => { cancelled = true; };
+  }, [userLocation]);
+
+  // Filter groups by location. Virtual groups always show. When we know the
+  // user's location, also surface local in-person groups that match it.
   const localGroups = useMemo(() => {
+    const locale = resolvedLocation.split(',')[0].trim();
     return liveGroups.filter(
-      (group) => group.isVirtual || group.location.includes(userLocation.split(',')[0])
+      (group) => group.isVirtual || (locale.length > 0 && group.location.includes(locale))
     );
-  }, [userLocation, liveGroups]);
+  }, [resolvedLocation, liveGroups]);
 
   const handleSave = (postId: string) => {
     setSavedPosts((prev) => {
@@ -337,7 +383,9 @@ export function CommunityForYou({
         toast.success('Removed from saved');
       } else {
         next.add(postId);
-        toast.success('Saved for later');
+        // Session-only unless a parent persists it via onSave. Be honest:
+        // without a persistence handler this does not survive a reload.
+        toast.success(onSave ? 'Saved for later' : 'Saved for this session');
       }
       return next;
     });
@@ -345,12 +393,19 @@ export function CommunityForYou({
   };
 
   const handleShare = (postId: string) => {
-    toast.success('Share link copied!');
-    onShare?.(postId);
+    // No share target is wired here; a parent can implement real sharing via
+    // onShare. Don't claim a link was copied when nothing was.
+    if (onShare) {
+      onShare(postId);
+      toast.success('Share link copied!');
+    } else {
+      toast('Sharing is coming soon.');
+    }
   };
 
   const handleHide = (postId: string) => {
-    toast.success('We\'ll show you less like this');
+    // Session-only unless a parent persists the preference via onHide.
+    toast.success(onHide ? 'We\'ll show you less like this' : 'Hidden for this session');
     onHide?.(postId);
   };
 
@@ -574,12 +629,14 @@ export function CommunityForYou({
     <div className="space-y-4">
       <div className="flex items-center justify-between mb-2">
         <h3 className="font-semibold text-gray-900 dark:text-white">
-          Parent Groups Near You
+          {resolvedLocation ? 'Parent Groups Near You' : 'Parent Groups'}
         </h3>
-        <div className="flex items-center gap-1 text-sm text-gray-500">
-          <MapPin className="w-4 h-4" />
-          {userLocation}
-        </div>
+        {resolvedLocation && (
+          <div className="flex items-center gap-1 text-sm text-gray-500">
+            <MapPin className="w-4 h-4" />
+            {resolvedLocation}
+          </div>
+        )}
       </div>
 
       {localGroups.length === 0 && !dataLoading && (
@@ -924,12 +981,12 @@ export function CommunityForYou({
             )}
             <div>
               <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
-                Community
+                {title}
               </h1>
-              <h2 className="sr-only">Community overview</h2>
+              <h2 className="sr-only">{title} overview</h2>
               <h3 className="sr-only">Groups, events, and stories</h3>
               <p className="text-sm text-gray-500 dark:text-gray-400">
-                Connect, learn, and grow together
+                {subtitle}
               </p>
             </div>
           </div>

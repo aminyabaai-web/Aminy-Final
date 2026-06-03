@@ -109,6 +109,8 @@ export function VideoCall({
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const remoteVideoRef = useRef<HTMLVideoElement>(null);
   const callObjectRef = useRef<DailyCallObject | null>(null);
+  // Guards onCallEnd against double-firing (left-meeting event + explicit leaveCall teardown)
+  const callEndedRef = useRef(false);
 
   // State
   const [callState, setCallState] = useState<CallState>('idle');
@@ -236,7 +238,10 @@ export function VideoCall({
     if (timerRef.current) {
       clearInterval(timerRef.current);
     }
-    onCallEnd?.();
+    if (!callEndedRef.current) {
+      callEndedRef.current = true;
+      onCallEnd?.();
+    }
   }, [onCallEnd]);
 
   // Handle participant joined
@@ -353,7 +358,19 @@ export function VideoCall({
     await callObject.leave();
     await callObject.destroy();
     callObjectRef.current = null;
-  }, [isProvider, sessionNotes, sessionId]);
+
+    // Destroying synchronously after leave() can suppress the 'left-meeting'
+    // event, so run teardown + onCallEnd directly here. The callEndedRef guard
+    // prevents a double-fire if the event does still dispatch.
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+    }
+    setCallState('idle');
+    if (!callEndedRef.current) {
+      callEndedRef.current = true;
+      onCallEnd?.();
+    }
+  }, [isProvider, sessionNotes, sessionId, onCallEnd]);
 
   // Toggle fullscreen
   const toggleFullscreen = useCallback(() => {
@@ -471,7 +488,7 @@ export function VideoCall({
       case 'excellent':
         return <SignalHigh className="w-4 h-4 text-green-500" />;
       case 'good':
-        return <SignalMedium className="w-4 h-4 text-green-400" />;
+        return <SignalMedium className="w-4 h-4 text-green-500" />;
       case 'fair':
         return <SignalLow className="w-4 h-4 text-yellow-500" />;
       case 'poor':
@@ -540,7 +557,7 @@ export function VideoCall({
   // Pre-call screen
   if (callState === 'idle') {
     return (
-      <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
         <Card className="max-w-md w-full p-8 text-center">
           <div className="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <Video className="w-8 h-8 text-teal-600" />
@@ -584,9 +601,9 @@ export function VideoCall({
   // Loading/joining screen
   if (callState === 'loading' || callState === 'joining') {
     return (
-      <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-12 h-12 text-teal-500 animate-spin mx-auto mb-4" />
+          <Loader2 className="w-12 h-12 text-teal-600 animate-spin mx-auto mb-4" />
           <p className="text-white text-lg">
             {callState === 'loading' ? 'Setting up your call...' : 'Joining session...'}
           </p>
@@ -598,7 +615,7 @@ export function VideoCall({
   // Error screen
   if (callState === 'error') {
     return (
-      <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
         <Card className="max-w-md w-full p-8 text-center">
           <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <AlertCircle className="w-8 h-8 text-red-600" />
@@ -631,9 +648,9 @@ export function VideoCall({
 
   // Active call screen
   return (
-    <div className="min-h-screen bg-slate-900 flex flex-col">
+    <div className="min-h-screen bg-gray-900 flex flex-col">
       {/* Header */}
-      <div className="bg-slate-800 px-4 py-3 flex items-center justify-between">
+      <div className="bg-gray-800 px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Badge className="bg-green-500 text-white">
             <CheckCircle className="w-3 h-3 mr-1" />
@@ -658,9 +675,12 @@ export function VideoCall({
           </div>
 
           {/* Timer */}
-          <div className={`flex items-center gap-2 px-3 py-1 rounded-full ${
-            elapsedSeconds > sessionDuration * 0.9 ? 'bg-red-500' : 'bg-slate-700'
-          }`}>
+          <div
+            className={`flex items-center gap-2 px-3 py-1 rounded-full ${
+              elapsedSeconds > sessionDuration * 0.9 ? 'bg-red-500' : ''
+            }`}
+            style={elapsedSeconds > sessionDuration * 0.9 ? undefined : { backgroundColor: '#374151' }}
+          >
             <Clock className="w-4 h-4 text-white" />
             <span className="text-white font-mono text-sm">
               {formatTime(elapsedSeconds)} / {formatTime(sessionDuration)}
@@ -677,7 +697,7 @@ export function VideoCall({
 
       {/* Video grid */}
       <div className="flex-1 p-4 flex items-center justify-center">
-        <div className="relative w-full max-w-6xl aspect-video bg-slate-800 rounded-xl overflow-hidden">
+        <div className="relative w-full max-w-6xl aspect-video bg-gray-800 rounded-xl overflow-hidden">
           {/* Remote video (main) */}
           <video
             ref={remoteVideoRef}
@@ -687,7 +707,10 @@ export function VideoCall({
           />
 
           {/* Local video (picture-in-picture) */}
-          <div className="absolute bottom-4 right-4 w-48 aspect-video bg-slate-700 rounded-lg overflow-hidden shadow-lg border-2 border-slate-600">
+          <div
+            className="absolute bottom-4 right-4 w-48 aspect-video rounded-lg overflow-hidden shadow-lg border-2"
+            style={{ backgroundColor: '#374151', borderColor: '#475569' }}
+          >
             <video
               ref={localVideoRef}
               autoPlay
@@ -696,7 +719,7 @@ export function VideoCall({
               className="w-full h-full object-cover"
             />
             {!videoEnabled && (
-              <div className="absolute inset-0 bg-slate-800 flex items-center justify-center">
+              <div className="absolute inset-0 bg-gray-800 flex items-center justify-center">
                 <VideoOff className="w-8 h-8 text-slate-500" />
               </div>
             )}
@@ -704,9 +727,9 @@ export function VideoCall({
 
           {/* Waiting for participant */}
           {participants.filter(p => !p.isLocal).length === 0 && (
-            <div className="absolute inset-0 flex items-center justify-center bg-slate-800">
+            <div className="absolute inset-0 flex items-center justify-center bg-gray-800">
               <div className="text-center">
-                <Loader2 className="w-12 h-12 text-teal-500 animate-spin mx-auto mb-4" />
+                <Loader2 className="w-12 h-12 text-teal-600 animate-spin mx-auto mb-4" />
                 <p className="text-white text-lg">
                   Waiting for {isProvider ? 'parent' : 'provider'} to join...
                 </p>
@@ -724,14 +747,17 @@ export function VideoCall({
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="fixed right-0 top-0 bottom-0 w-80 bg-slate-800 border-l border-slate-700 flex flex-col z-50"
+            className="fixed right-0 top-0 bottom-0 w-80 bg-gray-800 border-l border-gray-700 flex flex-col z-50"
           >
             {/* Chat header */}
-            <div className="flex items-center justify-between p-4 border-b border-slate-700">
+            <div className="flex items-center justify-between p-4 border-b border-gray-700">
               <h3 className="text-white font-medium">Chat</h3>
               <button
                 onClick={toggleChat}
-                className="p-2 hover:bg-slate-700 rounded-full transition-colors"
+                className="p-2 rounded-full transition-colors"
+                style={{ backgroundColor: 'transparent' }}
+                onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#374151'; }}
+                onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; }}
               >
                 <X className="w-5 h-5 text-slate-400" />
               </button>
@@ -750,11 +776,10 @@ export function VideoCall({
                     className={`flex flex-col ${msg.isLocal ? 'items-end' : 'items-start'}`}
                   >
                     <div
-                      className={`max-w-[80%] rounded-lg px-3 py-2 ${
-                        msg.isLocal
-                          ? 'bg-teal-600 text-white'
-                          : 'bg-slate-700 text-white'
+                      className={`max-w-[80%] rounded-lg px-3 py-2 text-white ${
+                        msg.isLocal ? 'bg-teal-600' : ''
                       }`}
+                      style={msg.isLocal ? undefined : { backgroundColor: '#374151' }}
                     >
                       {!msg.isLocal && (
                         <p className="text-xs text-slate-300 mb-1">{msg.senderName}</p>
@@ -771,7 +796,7 @@ export function VideoCall({
             </div>
 
             {/* Chat input */}
-            <div className="p-4 border-t border-slate-700">
+            <div className="p-4 border-t border-gray-700">
               <div className="flex items-center gap-2">
                 <input
                   type="text"
@@ -784,7 +809,8 @@ export function VideoCall({
                     }
                   }}
                   placeholder="Type a message..."
-                  className="flex-1 bg-slate-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  className="flex-1 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  style={{ backgroundColor: '#374151' }}
                 />
                 <Button
                   onClick={sendChatMessage}
@@ -810,7 +836,7 @@ export function VideoCall({
             <span aria-hidden="true">&#x1F4DD;</span>
           </button>
           {showNotes && (
-            <div className="absolute bottom-14 right-0 w-80 bg-white rounded-xl shadow-2xl border p-4">
+            <div className="absolute bottom-16 right-0 w-80 bg-white rounded-xl shadow-2xl border p-4">
               <h4 className="font-semibold mb-2">Session Notes</h4>
               <textarea
                 value={sessionNotes}
@@ -818,11 +844,14 @@ export function VideoCall({
                 placeholder="Type session notes here..."
                 className="w-full h-32 p-2 border rounded-lg text-sm resize-none"
               />
+              <p className="mt-2 text-xs text-slate-500">
+                Notes stay with this session and are saved when the call ends.
+              </p>
               <button
                 onClick={() => { setShowNotes(false); }}
                 className="mt-2 w-full py-2 bg-teal-600 text-white rounded-lg text-sm font-medium"
               >
-                Save Notes
+                Done
               </button>
             </div>
           )}
@@ -830,7 +859,7 @@ export function VideoCall({
       )}
 
       {/* Controls */}
-      <div className="bg-slate-800 px-4 py-4">
+      <div className="bg-gray-800 px-4 py-4">
         <div className="max-w-2xl mx-auto flex items-center justify-center gap-2 sm:gap-3">
           {/* Mic toggle */}
           <Button

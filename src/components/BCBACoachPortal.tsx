@@ -38,6 +38,10 @@ interface Family {
   lastVisit: string;
   status: 'active' | 'review' | 'inactive';
   progress: number;
+  // Optional — only rendered when the backing data provides them. Never fabricated
+  // for real coaches; the demo seed below supplies sample values for demo mode.
+  sessionsCount?: number;
+  weeksInProgram?: number;
 }
 
 interface Goal {
@@ -112,7 +116,9 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
             activeGoals: 4,
             lastVisit: '2 days ago',
             status: 'active',
-            progress: 78
+            progress: 78,
+            sessionsCount: 12,
+            weeksInProgram: 8
           },
           {
             id: '2',
@@ -122,7 +128,9 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
             activeGoals: 3,
             lastVisit: '1 week ago',
             status: 'active',
-            progress: 65
+            progress: 65,
+            sessionsCount: 9,
+            weeksInProgram: 6
           },
           {
             id: '3',
@@ -132,7 +140,9 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
             activeGoals: 5,
             lastVisit: '3 weeks ago',
             status: 'review',
-            progress: 42
+            progress: 42,
+            sessionsCount: 5,
+            weeksInProgram: 4
           }
         ]);
       } else {
@@ -370,14 +380,20 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
                       <div className="text-2xl text-slate-900 mb-1">{selectedFamily.activeGoals}</div>
                       <div className="text-xs text-slate-600">Active Goals</div>
                     </div>
-                    <div className="text-center">
-                      <div className="text-2xl text-slate-900 mb-1">12</div>
-                      <div className="text-xs text-slate-600">Sessions</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-2xl text-slate-900 mb-1">8</div>
-                      <div className="text-xs text-slate-600">Weeks</div>
-                    </div>
+                    {/* Sessions/Weeks render only when the backing data provides them —
+                        never fabricated for a real coach. */}
+                    {typeof selectedFamily.sessionsCount === 'number' && (
+                      <div className="text-center">
+                        <div className="text-2xl text-slate-900 mb-1">{selectedFamily.sessionsCount}</div>
+                        <div className="text-xs text-slate-600">Sessions</div>
+                      </div>
+                    )}
+                    {typeof selectedFamily.weeksInProgram === 'number' && (
+                      <div className="text-center">
+                        <div className="text-2xl text-slate-900 mb-1">{selectedFamily.weeksInProgram}</div>
+                        <div className="text-xs text-slate-600">Weeks</div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </Card>
@@ -429,10 +445,28 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
             <TabsContent value="reports" className="space-y-3 sm:space-y-4">
               <Card className="p-6 text-center">
                 <FileText className="w-12 h-12 text-slate-400 mx-auto mb-3" />
-                <p className="text-slate-600 mb-1">Reports coming soon</p>
-                <p className="text-sm text-slate-500">
-                  Progress reports and export are on the way.
-                </p>
+                {onNavigate ? (
+                  <>
+                    <p className="text-slate-900 mb-1">Clinical Reports</p>
+                    <p className="text-sm text-slate-500 mb-4">
+                      Build a progress report and export a clinician-ready PDF.
+                    </p>
+                    <Button
+                      onClick={() => onNavigate('clinical-reports')}
+                      className="bg-accent hover:bg-accent/90"
+                    >
+                      <FileText className="w-4 h-4 mr-2" />
+                      Open Report Export
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-slate-600 mb-1">Reports coming soon</p>
+                    <p className="text-sm text-slate-500">
+                      Progress reports and export are on the way.
+                    </p>
+                  </>
+                )}
               </Card>
             </TabsContent>
 

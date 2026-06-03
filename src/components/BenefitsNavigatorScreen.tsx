@@ -31,6 +31,10 @@ export function BenefitsNavigatorScreen({ onBack, onNavigate, userTier = 'core' 
   const [activeView, setActiveView] = useState<'overview' | 'letters' | 'tracking'>('overview');
   const [userState, setUserState] = useState<string>('');
   const [childAge, setChildAge] = useState<number>(5);
+  // Tracks whether childAge came from a real profile DOB. When false, age 5 is a
+  // default assumption — eligibility (esp. age-capped mandates) must NOT be
+  // presented as definitive, so we surface an "update age" affordance.
+  const [childAgeKnown, setChildAgeKnown] = useState<boolean>(false);
   const [childName, setChildName] = useState<string>('');
   const [eligibility, setEligibility] = useState<EligibilityResult | null>(null);
   const [isChecking, setIsChecking] = useState(false);
@@ -67,10 +71,13 @@ export function BenefitsNavigatorScreen({ onBack, onNavigate, userTier = 'core' 
           if (children[0].date_of_birth) {
             const dob = new Date(children[0].date_of_birth);
             const age = Math.floor((Date.now() - dob.getTime()) / (365.25 * 24 * 60 * 60 * 1000));
-            setChildAge(age > 0 ? age : 5);
+            if (age > 0) {
+              setChildAge(age);
+              setChildAgeKnown(true); // real DOB → eligibility is age-accurate
+            }
           }
         }
-      } catch { /* fallback to defaults */ }
+      } catch { /* fallback to defaults; childAgeKnown stays false */ }
     }
     loadProfile();
 
@@ -234,6 +241,46 @@ export function BenefitsNavigatorScreen({ onBack, onNavigate, userTier = 'core' 
               </Button>
             )}
           </div>
+
+          {/* Age confirmation — when we don't have the child's DOB on file, eligibility
+              (esp. age-capped mandates) is computed against a default age. Surface it
+              honestly and let the parent correct it rather than assuming silently. */}
+          {userState && !childAgeKnown && (
+            <div className="mt-3 flex flex-col sm:flex-row sm:items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2">
+              <AlertCircle className="w-4 h-4 text-amber-700 flex-shrink-0" />
+              <p className="text-xs text-amber-800 flex-1">
+                Based on age {childAge} (we don't have your child's birthdate on file).
+                Some programs have age limits — confirm the age for accurate results.
+              </p>
+              <div className="flex items-center gap-2">
+                <label htmlFor="benefits-child-age" className="text-xs font-medium text-amber-800">
+                  Child's age:
+                </label>
+                <input
+                  id="benefits-child-age"
+                  type="number"
+                  inputMode="numeric"
+                  min={0}
+                  max={21}
+                  value={childAge}
+                  onChange={(e) => {
+                    const next = parseInt(e.target.value, 10);
+                    if (!Number.isNaN(next) && next >= 0 && next <= 21) setChildAge(next);
+                  }}
+                  aria-label="Confirm your child's age in years"
+                  className="h-9 w-16 rounded-md border border-amber-200 bg-white px-2 py-1 text-sm"
+                />
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-9"
+                  onClick={() => setChildAgeKnown(true)}
+                >
+                  Confirm
+                </Button>
+              </div>
+            </div>
+          )}
         </Card>
 
         {/* Eligibility Results */}

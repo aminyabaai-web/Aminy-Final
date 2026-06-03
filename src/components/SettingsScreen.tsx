@@ -72,6 +72,7 @@ import { supabase } from '../utils/supabase/client';
 import { TierType, getTierDisplayName } from '../lib/tier-utils';
 import { createPortalSession, openCustomerPortal } from '../lib/stripe-service';
 import { isDemoMode } from '../lib/demo-seed';
+import { app as appConfig } from '../lib/env-config';
 import {
   isPushSupported,
   getNotificationPermission,
@@ -1603,9 +1604,9 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
           </Button>
         )}
 
-        {/* App Version */}
+        {/* App Version — sourced from the shared app config so it stays in sync across screens */}
         <p className="text-center text-xs text-muted-foreground">
-          Aminy v1.0.0 • Made with care
+          Aminy v{appConfig.version} • Made with care
         </p>
         </div>{/* end settings content cards wrapper */}
       </div>

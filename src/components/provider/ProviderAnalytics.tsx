@@ -37,6 +37,7 @@ import {
   ArrowUp,
   ArrowDown,
   ArrowRight,
+  ArrowLeft,
   Download,
   Filter,
   ChevronDown,
@@ -517,9 +518,10 @@ export function ProviderAnalytics({
   providerName: providerNameProp,
   dateRange = 'month',
   onDateRangeChange,
+  onBack,
 }: ProviderAnalyticsProps) {
   const [selectedRange, setSelectedRange] = useState(dateRange);
-  const [showExport, setShowExport] = useState(false);
+  const [showRangeMenu, setShowRangeMenu] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const demo = isDemoMode();
   const [isDemo, setIsDemo] = useState(demo);
@@ -670,6 +672,64 @@ export function ProviderAnalytics({
     loadAnalytics();
   }, [loadAnalytics]);
 
+  // Change the date-range filter. Updates local state, notifies the parent via
+  // onDateRangeChange (if wired), and re-runs the Supabase fetch so the numbers
+  // reflect the chosen window.
+  const handleRangeChange = useCallback(
+    (range: 'week' | 'month' | 'quarter' | 'year') => {
+      setSelectedRange(range);
+      setShowRangeMenu(false);
+      onDateRangeChange?.(range);
+      loadAnalytics();
+    },
+    [onDateRangeChange, loadAnalytics]
+  );
+
+  // Export the metrics, weekly session distribution, and patient overview that
+  // are currently on screen to a CSV. Uses real in-state values only (demo seed
+  // in demo mode, live Supabase data otherwise) — nothing is fabricated here.
+  const handleExport = useCallback(() => {
+    const escape = (v: string | number) => {
+      const s = String(v);
+      return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+    };
+    const lines: string[] = [];
+    lines.push('Aminy Provider Analytics Export');
+    lines.push(`Provider,${escape(resolvedProviderName)}`);
+    lines.push(`Range,${escape(selectedRange)}`);
+    lines.push(`Generated,${escape(new Date().toISOString())}`);
+    if (isDemo) lines.push('Note,Sample data (demo mode)');
+    lines.push('');
+    lines.push('Metric,Value,Change %');
+    metrics.forEach((m) => lines.push(`${escape(m.title)},${escape(m.value)},${escape(m.change)}`));
+    lines.push('');
+    lines.push('Session Distribution (This Week)');
+    lines.push('Day,Completed,Cancelled,No-show');
+    sessionData.forEach((d) =>
+      lines.push(`${escape(d.date)},${escape(d.completed)},${escape(d.cancelled)},${escape(d.noShow)}`)
+    );
+    lines.push('');
+    lines.push('Patient Overview');
+    lines.push('Name,Sessions Completed,Total Sessions,Goals Progress %,Status,Last Session');
+    patients.forEach((p) =>
+      lines.push(
+        `${escape(p.name)},${escape(p.sessionsCompleted)},${escape(p.totalSessions)},${escape(
+          p.goalsProgress
+        )},${escape(p.status)},${escape(p.lastSession.toLocaleDateString())}`
+      )
+    );
+
+    const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `aminy-analytics-${selectedRange}-${new Date().toISOString().split('T')[0]}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }, [metrics, patients, sessionData, resolvedProviderName, selectedRange, isDemo]);
+
   // Calculate summary stats from current sessionData
   const summaryStats = useMemo(() => {
     const totalSessions = sessionData.reduce((sum, d) => sum + d.completed + d.cancelled + d.noShow, 0);
@@ -767,7 +827,17 @@ export function ProviderAnalytics({
   // Loading state
   if (isLoading) {
     return (
-      <div className="space-y-6">
+      <div className="min-h-screen px-4 py-6 max-w-7xl mx-auto space-y-6">
+        {onBack && (
+          <button
+            onClick={onBack}
+            className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300"
+            aria-label="Back"
+          >
+            <ArrowLeft className="w-5 h-5" />
+            <span>Back</span>
+          </button>
+        )}
         <div className="flex items-center justify-center py-20">
           <div className="text-center">
             <Loader2 className="w-8 h-8 animate-spin text-teal-500 mx-auto mb-3" />
@@ -779,7 +849,7 @@ export function ProviderAnalytics({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="min-h-screen px-4 py-6 max-w-7xl mx-auto space-y-6">
       {/* Demo Data Banner -- shown when using fallback data */}
       {isDemo && (
         <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-2.5 flex items-center gap-2">
@@ -800,20 +870,72 @@ export function ProviderAnalytics({
       )}
 
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Analytics Dashboard</h2>
-          <p className="text-slate-500">Performance overview for {resolvedProviderName}</p>
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
+          {onBack && (
+            <button
+              onClick={onBack}
+              className="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 transition-colors"
+              aria-label="Back"
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </button>
+          )}
+          <div>
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Analytics Dashboard</h2>
+            <p className="text-slate-500">Performance overview for {resolvedProviderName}</p>
+          </div>
         </div>
         <div className="flex items-center gap-2">
           <div className="relative">
-            <Button variant="outline" size="sm" className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              className="flex items-center gap-2"
+              onClick={() => setShowRangeMenu((v) => !v)}
+              aria-haspopup="menu"
+              aria-expanded={showRangeMenu}
+            >
               <Calendar className="w-4 h-4" />
               {selectedRange.charAt(0).toUpperCase() + selectedRange.slice(1)}
               <ChevronDown className="w-4 h-4" />
             </Button>
+            {showRangeMenu && (
+              <>
+                {/* Click-away backdrop */}
+                <button
+                  className="fixed inset-0 z-20"
+                  aria-label="Close menu"
+                  onClick={() => setShowRangeMenu(false)}
+                />
+                <div
+                  role="menu"
+                  className="absolute right-0 mt-2 w-48 z-40 bg-white dark:bg-slate-800 border border-slate-200 rounded-lg shadow-lg overflow-hidden"
+                >
+                  {(['week', 'month', 'quarter', 'year'] as const).map((range) => (
+                    <button
+                      key={range}
+                      role="menuitem"
+                      onClick={() => handleRangeChange(range)}
+                      className={`block w-full text-left px-4 py-2 text-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors ${
+                        selectedRange === range
+                          ? 'text-teal-600 font-medium'
+                          : 'text-slate-700 dark:text-slate-200'
+                      }`}
+                    >
+                      {range.charAt(0).toUpperCase() + range.slice(1)}
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
-          <Button variant="outline" size="sm" className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            className="flex items-center gap-2"
+            onClick={handleExport}
+          >
             <Download className="w-4 h-4" />
             Export
           </Button>
@@ -885,7 +1007,7 @@ export function ProviderAnalytics({
         <Card className="p-6">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Patient Status</h3>
-            <Button variant="ghost" size="sm">View All</Button>
+            <Button variant="ghost" size="sm" disabled title="Coming soon">View All</Button>
           </div>
 
           {/* Status Summary */}
@@ -957,7 +1079,13 @@ export function ProviderAnalytics({
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Patient Overview</h3>
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              className="flex items-center gap-2"
+              disabled
+              title="Coming soon"
+            >
               <Filter className="w-4 h-4" />
               Filter
             </Button>

@@ -1391,14 +1391,14 @@ export function Dashboard10({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
-            className={`fixed bg-white dark:bg-slate-800 shadow-2xl z-50 overflow-hidden border border-gray-200 dark:border-slate-700 transition-all duration-300 ease-out ${
+            className={`fixed flex flex-col bg-white dark:bg-slate-800 shadow-2xl z-50 overflow-hidden border border-gray-200 dark:border-slate-700 transition-all duration-300 ease-out ${
               isFullScreenChat
                 ? 'inset-0 rounded-none'
-                : 'bottom-20 right-4 w-[calc(100%-2rem)] max-w-sm sm:w-96 rounded-2xl'
+                : 'bottom-20 right-4 w-[calc(100%-2rem)] max-w-sm sm:w-96 max-h-[80vh] rounded-2xl'
             }`}
           >
             {/* Chat Header - Branded with Full-Screen Toggle */}
-            <div className="p-4 bg-gradient-to-r from-[#1B2733] to-[#2D3F4F] text-white">
+            <div className="flex-shrink-0 p-4 bg-gradient-to-r from-[#1B2733] to-[#2D3F4F] text-white">
               <div className="flex items-center justify-between">
                 <h3 className="font-semibold flex items-center gap-2 text-lg">
                   <Sparkles className="w-5 h-5 text-[#E07A5F]" />
@@ -1434,8 +1434,8 @@ export function Dashboard10({
               <p className="text-sm text-gray-300 mt-1">Your always-on parenting support</p>
             </div>
 
-            {/* Chat Messages - Responsive Height */}
-            <div className={`p-4 overflow-y-auto space-y-3 ${isFullScreenChat ? 'h-[calc(100vh-180px)]' : 'max-h-80'}`}>
+            {/* Chat Messages - flex-grow scroll region (header + input stay pinned) */}
+            <div className="flex-1 min-h-0 p-4 overflow-y-auto space-y-3">
               {/* Welcome message if no chat history */}
               {chatMessages.length === 0 && (
                 <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-700 dark:to-slate-600 rounded-xl p-4 text-sm shadow-sm">
@@ -1494,7 +1494,7 @@ export function Dashboard10({
             </div>
 
             {/* Chat Input - Enhanced */}
-            <div className="p-4 border-t dark:border-slate-700 bg-gray-50 dark:bg-slate-750">
+            <div className="flex-shrink-0 p-4 border-t dark:border-slate-700 bg-gray-50 dark:bg-slate-750">
               <div className="flex gap-2">
                 <button
                   onClick={() => onNavigate?.('vision-ai')}

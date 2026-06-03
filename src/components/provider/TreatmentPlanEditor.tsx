@@ -274,10 +274,10 @@ function Section({
 }) {
   const [open, setOpen] = useState(defaultOpen);
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden print:break-inside-avoid">
+    <div className="tpe-section bg-white rounded-2xl border border-slate-200 overflow-hidden">
       <button
         onClick={() => setOpen(o => !o)}
-        className="w-full flex items-center justify-between px-5 py-4 text-left print:hidden"
+        className="w-full flex items-center justify-between px-5 py-4 text-left no-print"
       >
         <div className="flex items-center gap-3">
           {icon && <span className="text-emerald-500">{icon}</span>}
@@ -285,8 +285,13 @@ function Section({
         </div>
         {open ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
       </button>
-      <div className={`print:block ${open ? 'block' : 'hidden'}`}>
-        <div className="px-5 pb-5 space-y-3">{children}</div>
+      {/* tpe-section-body: print stylesheet forces this open so collapsed sections still appear in PDF/print */}
+      <div className={`tpe-section-body ${open ? 'block' : 'hidden'}`}>
+        <div className="px-5 pb-5 space-y-3">
+          {/* Print-only section title (the interactive toggle header is no-print) */}
+          <p className="tpe-print-title hidden font-bold text-slate-900 text-base">{title}</p>
+          {children}
+        </div>
       </div>
     </div>
   );
@@ -375,7 +380,11 @@ function GoalCard({
           </select>
         </div>
         {!isFinalized && (
-          <button onClick={onRemove} className="text-red-400 hover:text-red-600 p-1 min-h-[44px] min-w-[44px] flex items-center justify-center">
+          <button
+            onClick={onRemove}
+            style={{ minWidth: 44, minHeight: 44 }}
+            className="text-red-400 hover:text-red-600 p-1 flex items-center justify-center"
+          >
             <Trash2 className="w-4 h-4" />
           </button>
         )}
@@ -540,7 +549,11 @@ function BehaviorPlanCard({
           </select>
         </div>
         {!isFinalized && (
-          <button onClick={onRemove} className="text-red-400 hover:text-red-600 p-1 min-h-[44px] min-w-[44px] flex items-center justify-center">
+          <button
+            onClick={onRemove}
+            style={{ minWidth: 44, minHeight: 44 }}
+            className="text-red-400 hover:text-red-600 p-1 flex items-center justify-center"
+          >
             <Trash2 className="w-4 h-4" />
           </button>
         )}
@@ -846,12 +859,21 @@ export function TreatmentPlanEditor({
 
   return (
     <>
-      {/* Print styles */}
+      {/* Print styles.
+          NOTE: Tailwind `print:` variants are NOT compiled into index.css here, so
+          all print behavior is driven by these explicit rules. Critically, collapsed
+          sections must be forced open so they still appear in the printed/exported PDF. */}
       <style>{`
         @media print {
           .no-print { display: none !important; }
           body { font-size: 12px; }
           .print-break { page-break-before: always; }
+          /* Force every collapsible section body open in print/PDF, even when collapsed on screen */
+          .tpe-section-body { display: block !important; }
+          /* The interactive toggle header is no-print; show a static title in its place */
+          .tpe-print-title { display: block !important; }
+          /* Keep each section from splitting across pages */
+          .tpe-section { break-inside: avoid; page-break-inside: avoid; }
         }
       `}</style>
 

@@ -7,6 +7,7 @@ import React from 'react';
 import { Clock, User, FileText, MessageSquare, Calendar, Check } from 'lucide-react';
 import { Card } from './ui/card';
 import { ScreenHeader } from './ui/ScreenHeader';
+import { isDemoMode } from '../lib/demo-seed';
 
 interface Activity {
   id: string;
@@ -23,8 +24,26 @@ interface ActivityLogProps {
   onBack?: () => void;
 }
 
+// In-memory sample timeline shown ONLY in demo mode (?demo=...). Never written
+// to the DB; real users see real `activities` or the honest empty state below.
+function demoActivities(): Activity[] {
+  const now = Date.now();
+  return [
+    { id: 'demo-act-1', type: 'session', title: 'ABA session completed', description: 'Focus on transitions — 4 of 5 targets met', timestamp: new Date(now - 35 * 60_000), user: 'Dr. Sarah Lee, BCBA-D' },
+    { id: 'demo-act-2', type: 'goal', title: 'Goal updated', description: 'Functional communication moved to "mastered"', timestamp: new Date(now - 3 * 3600_000), user: 'Dr. Sarah Lee, BCBA-D' },
+    { id: 'demo-act-3', type: 'note', title: 'Caregiver note added', description: 'Bedtime routine went smoothly two nights in a row', timestamp: new Date(now - 22 * 3600_000), user: 'You' },
+    { id: 'demo-act-4', type: 'message', title: 'Message from your BCBA', description: 'Great progress this week — let’s review at our next check-in', timestamp: new Date(now - 2 * 86_400_000), user: 'Priya Patel, BCBA' },
+    { id: 'demo-act-5', type: 'plan', title: 'Care plan reviewed', description: 'Quarterly plan reviewed and re-authorized', timestamp: new Date(now - 5 * 86_400_000), user: 'Marcus Johnson, BCBA' },
+  ];
+}
+
 export function ActivityLog({ activities = [], maxItems = 10, onBack }: ActivityLogProps) {
-  const displayedActivities = activities.slice(0, maxItems);
+  // Real data via props takes precedence. With no data source wired, fall back
+  // to in-memory sample data in demo mode so the screen isn't permanently empty
+  // for investor walk-throughs; real users still get the honest empty state.
+  const sourceActivities = activities.length > 0 ? activities : (isDemoMode() ? demoActivities() : []);
+  const displayedActivities = sourceActivities.slice(0, maxItems);
+  const showSampleBanner = activities.length === 0 && isDemoMode();
 
   const getIcon = (type: Activity['type']) => {
     switch (type) {
@@ -79,10 +98,20 @@ export function ActivityLog({ activities = [], maxItems = 10, onBack }: Activity
   return (
     <div>
       {onBack && (
-        <ScreenHeader title="Activity Log" onBack={onBack} />
+        <ScreenHeader title="Incident Log" onBack={onBack} />
       )}
     <Card className="p-3 sm:p-4 m-4">
-      <h3 className="font-semibold mb-4">Recent Activity</h3>
+      <div className="flex items-center justify-between mb-4 gap-2">
+        <h3 className="font-semibold">Recent Incidents</h3>
+        {showSampleBanner && (
+          <span
+            className="flex-shrink-0 inline-flex items-center rounded-full bg-amber-50 text-amber-700 font-medium"
+            style={{ fontSize: '10px', paddingTop: '2px', paddingBottom: '2px', paddingLeft: '8px', paddingRight: '8px' }}
+          >
+            Sample data
+          </span>
+        )}
+      </div>
       <div className="space-y-3 sm:space-y-4">
         {displayedActivities.map((activity) => {
           const Icon = getIcon(activity.type);
@@ -110,10 +139,13 @@ export function ActivityLog({ activities = [], maxItems = 10, onBack }: Activity
           );
         })}
 
-        {activities.length === 0 && (
+        {displayedActivities.length === 0 && (
           <div className="text-center py-8">
             <Clock className="w-12 h-12 mx-auto mb-3 text-gray-400" />
-            <p className="text-sm text-muted-foreground">No recent activity</p>
+            <p className="text-sm text-muted-foreground">No recent incidents</p>
+            <p className="text-xs text-muted-foreground mt-1">
+              Incidents logged during sessions and check-ins will appear here.
+            </p>
           </div>
         )}
       </div>

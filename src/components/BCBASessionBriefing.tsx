@@ -25,6 +25,7 @@ import {
   Calendar,
   Brain
 } from 'lucide-react';
+import { ScreenHeader } from './ui/ScreenHeader';
 import { isDemoMode } from '../lib/demo-seed';
 
 interface BCBASessionBriefingProps {
@@ -34,6 +35,8 @@ interface BCBASessionBriefingProps {
   sessionType: 'bcba-30' | 'bcba-45' | 'bcba-d-45' | 'rbt-30' | 'rbt-45';
   scheduledTime?: string;
   onStartSession?: () => void;
+  /** Back/exit affordance — renders a back button in the header when provided */
+  onBack?: () => void;
 }
 
 interface BriefingData {
@@ -60,7 +63,8 @@ export function BCBASessionBriefing({
   parentName,
   sessionType,
   scheduledTime,
-  onStartSession
+  onStartSession,
+  onBack
 }: BCBASessionBriefingProps) {
   const [briefing, setBriefing] = useState<BriefingData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -206,41 +210,65 @@ export function BCBASessionBriefing({
     </button>
   );
 
+  // Shared page chrome so the briefing screen matches every other provider
+  // screen (background, header, back affordance, bottom padding).
+  const PageHeader = (
+    <ScreenHeader
+      title="Session Briefing"
+      subtitle={`Prep for your session with ${parentName}`}
+      icon={<Brain className="w-6 h-6" />}
+      onBack={onBack}
+      variant="flat"
+    />
+  );
+
   if (isLoading) {
     return (
-      <Card className="p-8">
-        <div className="flex flex-col items-center justify-center text-center">
-          <div className="w-12 h-12 border-3 border-teal-500 border-t-transparent rounded-full animate-spin mb-4" />
-          <h3 className="font-medium text-gray-900 mb-2">Preparing Your Briefing</h3>
-          <p className="text-sm text-gray-500">
-            Analyzing {childName}'s data, progress, and recent activity...
-          </p>
+      <div className="min-h-screen bg-[#FAF7F2] pb-24">
+        {PageHeader}
+        <div className="px-4 mt-4">
+          <Card className="p-8">
+            <div className="flex flex-col items-center justify-center text-center">
+              <div className="w-12 h-12 border-3 border-teal-500 border-t-transparent rounded-full animate-spin mb-4" />
+              <h3 className="font-medium text-gray-900 mb-2">Preparing Your Briefing</h3>
+              <p className="text-sm text-gray-500">
+                Analyzing {childName}'s data, progress, and recent activity...
+              </p>
+            </div>
+          </Card>
         </div>
-      </Card>
+      </div>
     );
   }
 
   if (!briefing) {
     return (
-      <Card className="p-8 text-center">
-        <Brain className="w-12 h-12 text-slate-400 mx-auto mb-4" />
-        <h3 className="font-medium text-gray-900 mb-2">Briefing not available yet</h3>
-        <p className="text-sm text-gray-500 mb-4">
-          AI session briefings for {childName} will appear here once enough
-          session and progress data has been recorded.
-        </p>
-        {onStartSession && (
-          <Button onClick={onStartSession} variant="outline">
-            <Clock className="w-4 h-4 mr-2" />
-            Start Session with {parentName}
-          </Button>
-        )}
-      </Card>
+      <div className="min-h-screen bg-[#FAF7F2] pb-24">
+        {PageHeader}
+        <div className="px-4 mt-4">
+          <Card className="p-8 text-center">
+            <Brain className="w-12 h-12 text-slate-400 mx-auto mb-4" />
+            <h3 className="font-medium text-gray-900 mb-2">Briefing not available yet</h3>
+            <p className="text-sm text-gray-500 mb-4">
+              AI session briefings for {childName} will appear here once enough
+              session and progress data has been recorded.
+            </p>
+            {onStartSession && (
+              <Button onClick={onStartSession} variant="outline">
+                <Clock className="w-4 h-4 mr-2" />
+                Start Session with {parentName}
+              </Button>
+            )}
+          </Card>
+        </div>
+      </div>
     );
   }
 
   return (
-    <div className="space-y-3 sm:space-y-4 sm:space-y-6">
+    <div className="min-h-screen bg-[#FAF7F2] pb-24">
+      {PageHeader}
+      <div className="space-y-3 sm:space-y-4 sm:space-y-6 px-4 mt-4">
       {/* Header */}
       <Card className="p-6 bg-gradient-to-br from-teal-50 to-cyan-50 border-teal-200">
         <div className="flex items-start justify-between mb-4">
@@ -498,6 +526,7 @@ export function BCBASessionBriefing({
           Start Session with {parentName}
         </Button>
       )}
+      </div>
     </div>
   );
 }

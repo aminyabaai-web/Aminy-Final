@@ -271,9 +271,17 @@ export function VisionAI({ tier, userId, onClose, onBack, onAnalysisComplete, in
               {cameraActive && !capturedImage && (
                 <div className="relative rounded-xl overflow-hidden bg-black aspect-[4/3]">
                   <video ref={videoRef} autoPlay playsInline muted className="w-full h-full object-cover" />
+                  <button
+                    onClick={stopCamera}
+                    aria-label="Close camera"
+                    className="absolute top-2 right-2 p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center bg-black/50 text-white rounded-full"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
                   <div className="absolute bottom-4 inset-x-0 flex justify-center">
                     <button
                       onClick={handleCapturePhoto}
+                      aria-label="Capture photo"
                       className="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-lg active:scale-95 transition-transform"
                     >
                       <Camera className="w-7 h-7 text-gray-700" />
@@ -437,7 +445,8 @@ export function VisionAI({ tier, userId, onClose, onBack, onAnalysisComplete, in
                   <p className="text-xs text-gray-400 mb-6">
                     {tier === 'pro' ? '10 frames per session (Pro)' :
                      tier === 'pro_plus' ? '20 frames per session (Pro+)' :
-                     'Unlimited frames (Enterprise)'}
+                     tier === 'b2b' ? `${maxFrames} frames per session (Organization)` :
+                     `${maxFrames} frames per session`}
                   </p>
                   <button
                     onClick={startRecording}

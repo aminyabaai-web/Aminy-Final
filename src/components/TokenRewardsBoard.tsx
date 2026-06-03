@@ -60,9 +60,48 @@ interface TokenRewardsBoardProps {
     onSpendTokens: (amount: number) => void;
     childName?: string;
     isParentView?: boolean; // set true when parent is viewing to show approval controls
+    /**
+     * localStorage key used to persist the child's star balance when the parent
+     * does not supply a positive `availableTokens` value. This keeps the rewards
+     * economy functional (redeemable + decrementing) when the screen is mounted
+     * standalone, while always deferring to a real `availableTokens` when one is
+     * passed (e.g. from the Junior page). Defaults to 'aminy-star-balance'.
+     */
+    persistKey?: string;
 }
 
-export function TokenRewardsBoard({ onBack, availableTokens, onSpendTokens, childName = "your child", isParentView = false }: TokenRewardsBoardProps) {
+/**
+ * Starter balance for the self-persisted fallback. Only used the very first time
+ * the standalone screen renders without a real `availableTokens` source, so the
+ * reward economy is explorable instead of permanently stuck at 0.
+ */
+const FALLBACK_STARTER_BALANCE = 30;
+
+export function TokenRewardsBoard({ onBack, availableTokens, onSpendTokens, childName = "your child", isParentView = false, persistKey = 'aminy-star-balance' }: TokenRewardsBoardProps) {
+    // When a real token source is supplied, it always wins. Otherwise fall back
+    // to a locally-persisted balance so redemptions actually work and survive
+    // reloads instead of being permanently disabled at 0.
+    //
+    // We latch ownership: once a positive `availableTokens` has ever been seen,
+    // the parent is treated as the authoritative owner for the rest of this mount
+    // — so a child spending down to exactly 0 (e.g. on the Junior page) keeps
+    // showing the real 0 rather than snapping back to the local fallback.
+    const ownedByParentRef = useRef(typeof availableTokens === 'number' && availableTokens > 0);
+    if (typeof availableTokens === 'number' && availableTokens > 0) {
+        ownedByParentRef.current = true;
+    }
+    const hasExternalBalance = ownedByParentRef.current;
+    const [localBalance, setLocalBalance] = useState<number>(() => {
+        try {
+            const stored = localStorage.getItem(persistKey);
+            if (stored !== null) {
+                const parsed = parseInt(stored, 10);
+                if (!Number.isNaN(parsed) && parsed >= 0) return parsed;
+            }
+        } catch { /* ignore storage errors */ }
+        return FALLBACK_STARTER_BALANCE;
+    });
+    const effectiveTokens = hasExternalBalance ? availableTokens : localBalance;
     const [selectedReward, setSelectedReward] = useState<RewardItem | null>(null);
     const [isProcessing, setIsProcessing] = useState(false);
     const [redeemedReward, setRedeemedReward] = useState<RewardItem | null>(null);
@@ -84,7 +123,7 @@ export function TokenRewardsBoard({ onBack, availableTokens, onSpendTokens, chil
 
     const rewards: RewardItem[] = [
         { id: 'screen_time', name: '15 Min Extra Play', cost: 10, icon: <Gamepad2 size={32} />, color: 'from-blue-400 to-indigo-500' },
-        { id: 'movie_pick', name: 'Choose Movie Night', cost: 25, icon: <Tv size={32} />, color: 'from-purple-400 to-fuchsia-500' },
+        { id: 'movie_pick', name: 'Choose Movie Night', cost: 25, icon: <Tv size={32} />, color: 'from-purple-400 to-pink-500' },
         { id: 'dance_party', name: 'Dance Party', cost: 5, icon: <Music size={32} />, color: 'from-emerald-400 to-teal-500' },
         { id: 'special_treat', name: 'Special Treat', cost: 15, icon: <IceCream size={32} />, color: 'from-pink-400 to-rose-500' },
     ];
@@ -123,7 +162,7 @@ export function TokenRewardsBoard({ onBack, availableTokens, onSpendTokens, chil
     };
 
     const handleRedeem = (reward: RewardItem) => {
-        if (availableTokens < reward.cost) {
+        if (effectiveTokens < reward.cost) {
             toast.error("Not enough stars yet! Keep practicing.");
             if (window.navigator && window.navigator.vibrate) {
                 window.navigator.vibrate([50, 50, 50]);
@@ -134,7 +173,17 @@ export function TokenRewardsBoard({ onBack, availableTokens, onSpendTokens, chil
         setIsProcessing(true);
 
         setTimeout(() => {
+            // Always notify the owner (e.g. the Junior page) so a real balance
+            // updates. When no external balance is supplied, also decrement and
+            // persist the local fallback so the spend actually sticks.
             onSpendTokens(reward.cost);
+            if (!hasExternalBalance) {
+                setLocalBalance((prev) => {
+                    const next = Math.max(0, prev - reward.cost);
+                    try { localStorage.setItem(persistKey, String(next)); } catch { /* ignore */ }
+                    return next;
+                });
+            }
 
             if (reward.needsApproval) {
                 // Custom reward — needs parent sign-off before delivery
@@ -228,7 +277,7 @@ export function TokenRewardsBoard({ onBack, availableTokens, onSpendTokens, chil
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px', zIndex: 1 }}>
                         <Star size={40} fill="#FCD34D" color="#FCD34D" />
                         <span style={{ fontSize: '64px', fontWeight: 700, color: '#FFFFFF', fontVariantNumeric: 'tabular-nums', letterSpacing: '-0.03em' }}>
-                            {availableTokens}
+                            {effectiveTokens}
                         </span>
                     </div>
                     <p style={{ fontSize: '14px', color: '#6B7280', marginTop: '8px', zIndex: 1, textAlign: 'center' }}>
@@ -252,7 +301,7 @@ export function TokenRewardsBoard({ onBack, availableTokens, onSpendTokens, chil
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: '16px' }}>
                     {[...rewards, ...customRewards.map(r => ({ ...r, icon: r.icon || <Gift size={32} /> }))].map(reward => {
-                        const canAfford = availableTokens >= reward.cost;
+                        const canAfford = effectiveTokens >= reward.cost;
                         return (
                             <motion.button
                                 key={reward.id}
@@ -430,14 +479,14 @@ export function TokenRewardsBoard({ onBack, availableTokens, onSpendTokens, chil
                             )}
                             <h2 style={{ fontSize: '20px', fontWeight: 600, color: '#111827', marginBottom: '8px' }}>Get {selectedReward.name}?</h2>
                             <p style={{ fontSize: '15px', color: '#6B7280', marginBottom: '24px' }}>
-                                This will cost <strong style={{ color: '#111827' }}>{selectedReward.cost}</strong> stars. You have <strong style={{ color: '#059669' }}>{availableTokens}</strong> stars right now.
+                                This will cost <strong style={{ color: '#111827' }}>{selectedReward.cost}</strong> stars. You have <strong style={{ color: '#059669' }}>{effectiveTokens}</strong> stars right now.
                             </p>
 
                             <div style={{ width: '100%', display: 'flex', gap: '12px' }}>
                                 <Button variant="outline" onClick={() => setSelectedReward(null)} style={{ flex: 1, borderRadius: '16px' }} disabled={isProcessing}>
                                     Cancel
                                 </Button>
-                                <Button onClick={() => handleRedeem(selectedReward)} style={{ flex: 1, borderRadius: '16px', backgroundColor: '#3B82F6' }} disabled={isProcessing || availableTokens < selectedReward.cost}>
+                                <Button onClick={() => handleRedeem(selectedReward)} style={{ flex: 1, borderRadius: '16px', backgroundColor: '#3B82F6' }} disabled={isProcessing || effectiveTokens < selectedReward.cost}>
                                     {isProcessing ? 'Processing...' : 'Yes, Let\'s go!'}
                                 </Button>
                             </div>
