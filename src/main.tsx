@@ -3,7 +3,6 @@
 // Unauthorized use, reproduction, or distribution is strictly prohibited.
 // See LICENSE file for details.
 
-// @ts-expect-error - @types/react-dom not installed
 import { createRoot } from "react-dom/client";
 import { StrictMode } from "react";
 import App from "./App.tsx";

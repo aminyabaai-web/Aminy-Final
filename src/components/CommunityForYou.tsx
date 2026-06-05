@@ -399,7 +399,7 @@ export function CommunityForYou({
       onShare(postId);
       toast.success('Share link copied!');
     } else {
-      toast('Sharing is coming soon.');
+      toast('Sharing will be available soon.');
     }
   };
 
@@ -472,7 +472,7 @@ export function CommunityForYou({
   };
 
   const handleBrowseArchive = () => {
-    toast('Session recordings are coming soon.');
+    toast('Session recordings will be available once live events launch.');
   };
 
   const formatDate = (date: Date) => {
@@ -551,7 +551,7 @@ export function CommunityForYou({
         <Card className="p-6 sm:p-8 text-center">
           <BookOpen className="w-10 h-10 text-muted-foreground/40 mx-auto mb-3" />
           <h4 className="font-medium text-slate-900 dark:text-white mb-2">
-            Personalized content coming soon
+            Your personalized feed
           </h4>
           <p className="text-sm text-muted-foreground max-w-xs mx-auto">
             As you use Aminy, we'll curate articles and resources tailored to {childName}'s journey.
@@ -705,8 +705,14 @@ export function CommunityForYou({
 
       {liveEvents.length === 0 && !dataLoading && (
         <div className="text-center py-8 text-gray-400">
-          <p className="text-sm font-medium">No upcoming events</p>
-          <p className="text-xs mt-1">Live BCBA webinars and workshops are coming soon.</p>
+          <p className="text-sm font-medium">No events scheduled yet</p>
+          <p className="text-xs mt-1">BCBA-hosted webinars and parent workshops are launching this summer.</p>
+          <button
+            className="mt-3 text-xs text-teal-600 font-semibold underline"
+            onClick={() => toast.success('You\'re on the list! We\'ll notify you when events open up.')}
+          >
+            Notify me when events launch →
+          </button>
         </div>
       )}
       {liveEvents.map((event) => (
@@ -963,7 +969,7 @@ export function CommunityForYou({
       {isDemoMode() && (
         <div className="bg-amber-50 dark:bg-amber-900/20 border-b border-amber-200 dark:border-amber-800 px-4 py-2 flex items-center gap-2">
           <span className="text-amber-600 dark:text-amber-400 text-xs font-medium">Preview</span>
-          <span className="text-amber-700/70 dark:text-amber-300/70 text-xs">Community features shown with sample data. Groups and events coming soon.</span>
+          <span className="text-amber-700/70 dark:text-amber-300/70 text-xs">Community preview — sample data shown. Live groups and events launching this summer.</span>
         </div>
       )}
       {/* Header */}

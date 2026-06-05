@@ -74,11 +74,12 @@ export function InsightNavigatorReport({
         // No stored navigator — start with empty scaffold from child profile data
         const empty = createEmptyInsightNavigator(childId);
         if (childProfile) {
-          empty.currentPresentation.strengths = childProfile.strengths || [];
-          empty.currentPresentation.challenges = childProfile.challenges || [];
-          empty.currentPresentation.interests = childProfile.interests || [];
-          empty.currentPresentation.triggers = childProfile.triggers || [];
-          empty.currentPresentation.calmingStrategies = childProfile.calmingStrategies || [];
+          const cp = childProfile as ChildProfile & { strengths?: string[]; challenges?: string[]; interests?: string[]; triggers?: string[]; calmingStrategies?: string[] };
+          empty.currentPresentation.strengths = cp.strengths || [];
+          empty.currentPresentation.challenges = cp.challenges || [];
+          empty.currentPresentation.interests = cp.interests || [];
+          empty.currentPresentation.triggers = cp.triggers || [];
+          empty.currentPresentation.calmingStrategies = cp.calmingStrategies || [];
         }
         setNavigator(empty);
       }

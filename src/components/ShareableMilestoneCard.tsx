@@ -22,7 +22,7 @@ import {
   Calendar,
   CheckCircle,
   Copy,
-  Instagram,
+  Camera,
   MessageCircle,
 } from 'lucide-react';
 import { Button } from './ui/button';
@@ -390,7 +390,7 @@ export function ShareableMilestoneCard({
                       className="flex flex-col items-center gap-1 p-3 rounded-xl hover:bg-gray-100 transition-colors"
                     >
                       <div className="w-10 h-10 bg-gradient-to-br from-purple-500 via-pink-500 to-orange-500 rounded-full flex items-center justify-center">
-                        <Instagram className="w-5 h-5 text-white" />
+                        <Camera className="w-5 h-5 text-white" />
                       </div>
                       <span className="text-xs text-muted-foreground">Instagram</span>
                     </a>

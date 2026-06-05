@@ -63,7 +63,7 @@ export async function getSharedContent(token: string): Promise<{
     return { success: false, error: 'This link has expired' };
   }
 
-  const doc = link.vault_documents as Record<string, unknown> | null;
+  const doc = link.vault_documents as unknown as Record<string, unknown> | null;
   const profile = doc?.profiles as Record<string, string> | null;
 
   return {

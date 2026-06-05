@@ -13,7 +13,7 @@ import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Share2,
-  Instagram,
+  Camera,
   Copy,
   Check,
   Download,
@@ -21,7 +21,6 @@ import {
   Heart,
   Star,
   X,
-  Camera,
 } from 'lucide-react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';

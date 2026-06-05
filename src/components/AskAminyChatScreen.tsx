@@ -54,7 +54,7 @@ export function AskAminyChatScreen({
   useEffect(() => {
     // Build conversation context from current user data
     const ctx = getCurrentContext();
-    setContext(ctx);
+    setContext(ctx as unknown as StreamingChatContext);
   }, []);
 
   if (!context) {

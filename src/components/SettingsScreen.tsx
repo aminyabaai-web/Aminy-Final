@@ -257,7 +257,9 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
           appointmentReminders: prefs.appointment_reminders ?? true,
           progressUpdates: prefs.progress_updates ?? true,
           communityActivity: prefs.community_activity ?? true,
-          marketingEmails: prefs.marketing_emails ?? false
+          marketingEmails: prefs.marketing_emails ?? false,
+          checkInFrequency: prefs.check_in_frequency || 'daily',
+          checkInTime: prefs.check_in_time || 'morning',
         });
       }
 

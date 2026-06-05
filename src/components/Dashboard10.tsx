@@ -358,7 +358,7 @@ export function Dashboard10({
         });
       }
     } catch (err) {
-      console.error('Failed to send message:', err);
+      if (import.meta.env.DEV) console.error('Failed to send message:', err);
       setChatInput(messageText); // Restore input on error
     } finally {
       setIsSendingChat(false);
@@ -393,7 +393,7 @@ export function Dashboard10({
   const child: ChildProfile = dashboardData.childProfile || childProfile || {
     id: `child-${userId?.substring(0, 8) || 'temp'}`,
     name: userData.childName || 'Your Child',
-    age: userData.childAge || 5,
+    age: 5,
     goals: getDefaultGoals(userData.childName).map(g => ({
       name: g.name,
       percentMet: g.progress,
@@ -848,7 +848,7 @@ export function Dashboard10({
             />
             <div className="absolute top-3 right-3">
               <AISparkleButton
-                prompt={`My child ${child.name} has a developmental wellness score of ${wellnessScore.total}/100. Confidence is ${wellnessScore.confidence}%. Break down the score into its component areas with a chart, then tell me what's driving it and the most impactful things I can do this week to improve it.`}
+                prompt={`My child ${child.name} has a developmental wellness score of ${wellnessScore.composite}/100. Confidence is ${wellnessScore.confidence}%. Break down the score into its component areas with a chart, then tell me what's driving it and the most impactful things I can do this week to improve it.`}
                 label="Explain score"
                 visual
               />

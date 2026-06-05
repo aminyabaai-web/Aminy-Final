@@ -173,7 +173,7 @@ export function PartnerOutcomesWidget({ partnerOrgId, showTrendChart = true, cla
                 spec={{
                   type: 'line',
                   title: '8-week trend (avg score across families)',
-                  data: trend.map(t => ({ week: t.week, 'PHQ-9': t.phq9, 'GAD-7': t.gad7, 'ABC-I': t.abc })),
+                  data: trend.map(t => ({ week: t.week, 'PHQ-9': t.phq9 ?? 0, 'GAD-7': t.gad7 ?? 0, 'ABC-I': t.abc ?? 0 })),
                   xKey: 'week',
                   yKeys: ['PHQ-9', 'GAD-7', 'ABC-I'],
                   colors: ['#577590', '#43AA8B', '#E07A5F'],

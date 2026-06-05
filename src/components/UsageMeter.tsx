@@ -224,7 +224,7 @@ export function UsageMeter({
                 ? `${memoryFactsStored.toLocaleString()} facts · Unlimited`
                 : limits.memoryFacts === 0
                   ? 'None'
-                  : `${memoryFactsStored.toLocaleString()} / ${limits.memoryFacts.toLocaleString()} facts`}
+                  : `${memoryFactsStored.toLocaleString()} / ${(limits.memoryFacts ?? 0).toLocaleString()} facts`}
             </span>
           </div>
         </div>

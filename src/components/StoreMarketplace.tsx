@@ -858,8 +858,8 @@ export function StoreMarketplace({
   userTier = 'free',
   onBack,
   onNavigate,
-  childProfile = null,
-}: StoreMarketplaceProps & { childProfile?: ChildProfile | null }) {
+  childProfile,
+}: StoreMarketplaceProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<ProductCategory | 'all'>('all');
   const [showFilters, setShowFilters] = useState(false);

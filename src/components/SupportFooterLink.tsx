@@ -4,7 +4,6 @@
 // See LICENSE file for details.
 
 import React, { useEffect, useState, useRef } from 'react';
-// @ts-expect-error - @types/react-dom not installed
 import { createPortal } from 'react-dom';
 import { HelpCircle } from 'lucide-react';
 

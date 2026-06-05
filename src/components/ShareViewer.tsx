@@ -179,6 +179,7 @@ export function ShareViewer({ token, onStartTrial }: ShareViewerProps) {
             <WeeklySnapshotView
               data={content.data as unknown as WeeklySnapshotData}
               childName={shareToken.metadata.childFirstName}
+              onStartTrial={onStartTrial}
             />
           )}
 
@@ -236,7 +237,7 @@ export function ShareViewer({ token, onStartTrial }: ShareViewerProps) {
 // Weekly Snapshot View
 // ===================================
 
-function WeeklySnapshotView({ data, childName }: { data: WeeklySnapshotData; childName: string }) {
+function WeeklySnapshotView({ data, childName, onStartTrial }: { data: WeeklySnapshotData; childName: string; onStartTrial?: () => void }) {
   return (
     <div className="space-y-4">
       {/* Header */}

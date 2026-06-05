@@ -9,7 +9,7 @@
  * Category tabs, upload flow, share, expiry alerts, search, seeded demo docs
  */
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
@@ -34,6 +34,8 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { isDemoMode } from '../lib/demo-seed';
+import { uploadVaultFile, validateFile } from '../lib/vault-storage';
+import { supabase } from '../utils/supabase/client';
 
 interface DocumentVaultEliteProps {
   onBack?: () => void;
@@ -168,8 +170,12 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
   const [showUpload, setShowUpload] = useState(false);
   const [uploadCategory, setUploadCategory] = useState<Exclude<DocCategory, 'all'>>('evaluations');
   const [uploadName, setUploadName] = useState('');
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
   const [shareModal, setShareModal] = useState<VaultDoc | null>(null);
   const [selectedProvider, setSelectedProvider] = useState('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
 
   const filteredDocs = useMemo(() => {
     return docs.filter((doc) => {
@@ -187,24 +193,63 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
     : docs.reduce((sum, d) => sum + d.sizeKB, 0) / (1024 * 1024);
   const storageLabel = storageUsedGB >= 0.1 ? storageUsedGB.toFixed(1) : '0';
 
-  const handleUpload = () => {
+  const handleFileSelect = (file: File) => {
+    const validation = validateFile(file);
+    if (!validation.valid) {
+      toast.error(validation.error || 'Invalid file');
+      return;
+    }
+    setSelectedFile(file);
+    if (!uploadName.trim()) {
+      setUploadName(file.name.replace(/\.[^/.]+$/, ''));
+    }
+  };
+
+  const handleUpload = async () => {
     if (!uploadName.trim()) {
       toast.error('Please enter a document name');
       return;
     }
-    const newDoc: VaultDoc = {
-      id: `d${Date.now()}`,
-      name: uploadName,
-      category: uploadCategory,
-      dateUploaded: new Date().toISOString().split('T')[0],
-      source: 'Uploaded by parent',
-      fileType: 'pdf',
-      sizeKB: Math.floor(Math.random() * 500) + 100,
-    };
-    setDocs((prev) => [newDoc, ...prev]);
-    setUploadName('');
-    setShowUpload(false);
-    toast.success('Document uploaded successfully!');
+    if (!selectedFile) {
+      toast.error('Please select a file to upload');
+      return;
+    }
+
+    setIsUploading(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        toast.error('Please sign in to upload documents');
+        return;
+      }
+      const result = await uploadVaultFile(selectedFile, user.id, {
+        recordType: 'uploaded',
+        source: 'parent-upload',
+      });
+      if (!result.success) {
+        toast.error(result.error || 'Upload failed. Please try again.');
+        return;
+      }
+      const ext = selectedFile.name.split('.').pop()?.toLowerCase() as VaultDoc['fileType'] || 'pdf';
+      const newDoc: VaultDoc = {
+        id: result.fileId || `d${Date.now()}`,
+        name: uploadName,
+        category: uploadCategory,
+        dateUploaded: new Date().toISOString().split('T')[0],
+        source: 'Uploaded by parent',
+        fileType: ['pdf', 'image', 'docx', 'xlsx'].includes(ext) ? ext as VaultDoc['fileType'] : 'pdf',
+        sizeKB: Math.round(selectedFile.size / 1024),
+      };
+      setDocs((prev) => [newDoc, ...prev]);
+      setUploadName('');
+      setSelectedFile(null);
+      setShowUpload(false);
+      toast.success('Document uploaded successfully!');
+    } catch {
+      toast.error('Upload failed. Please try again.');
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   const handleShare = () => {
@@ -302,9 +347,20 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
           <p className="text-xs text-blue-700">
             <strong>Scan your insurance card</strong> and we'll read it and pre-fill your coverage info automatically.
           </p>
+          <input
+            ref={cameraInputRef}
+            type="file"
+            accept="image/*"
+            capture="environment"
+            className="hidden"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) { setShowUpload(true); handleFileSelect(file); }
+            }}
+          />
           <button
             className="ml-auto text-xs text-blue-600 font-semibold shrink-0"
-            onClick={() => toast.info('Camera scanner coming soon')}
+            onClick={() => cameraInputRef.current?.click()}
           >
             Scan →
           </button>
@@ -491,22 +547,45 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
                 </div>
 
                 {/* File drop zone */}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".pdf,.jpg,.jpeg,.png,.heic,.doc,.docx"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) handleFileSelect(file);
+                  }}
+                />
                 <div
                   className="border-2 border-dashed border-slate-200 rounded-xl p-6 text-center cursor-pointer hover:border-teal-300 hover:bg-teal-50/30 transition-all"
-                  onClick={() => toast.info('File picker coming soon')}
+                  onClick={() => fileInputRef.current?.click()}
                 >
                   <Upload className="w-6 h-6 text-slate-400 mx-auto mb-2" />
-                  <p className="text-sm text-slate-500">Tap to select file</p>
-                  <p className="text-xs text-slate-400 mt-0.5">PDF, images, Word documents</p>
+                  {selectedFile ? (
+                    <>
+                      <p className="text-sm text-teal-700 font-medium">{selectedFile.name}</p>
+                      <p className="text-xs text-slate-400 mt-0.5">{(selectedFile.size / 1024).toFixed(0)} KB — tap to change</p>
+                    </>
+                  ) : (
+                    <>
+                      <p className="text-sm text-slate-500">Tap to select file</p>
+                      <p className="text-xs text-slate-400 mt-0.5">PDF, images, Word documents</p>
+                    </>
+                  )}
                 </div>
               </div>
 
               <div className="flex gap-2">
-                <Button variant="outline" className="flex-1" onClick={() => setShowUpload(false)}>
+                <Button variant="outline" className="flex-1" onClick={() => { setShowUpload(false); setSelectedFile(null); }}>
                   Cancel
                 </Button>
-                <Button className="flex-1 bg-teal-600 hover:bg-teal-700 text-white" onClick={handleUpload}>
-                  Upload
+                <Button
+                  className="flex-1 bg-teal-600 hover:bg-teal-700 text-white"
+                  onClick={handleUpload}
+                  disabled={isUploading}
+                >
+                  {isUploading ? 'Uploading…' : 'Upload'}
                 </Button>
               </div>
             </motion.div>

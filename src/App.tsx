@@ -3821,8 +3821,8 @@ export default function App() {
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <FiscalAgentSubmissionFlow
                 userId={userData.id}
-                waiverProfileId={(userData as Record<string, unknown>).waiverProfileId as string || ''}
-                fiscalAgentId={(userData as Record<string, unknown>).fiscalAgentId as string || 'acumen'}
+                waiverProfileId={((userData as unknown) as Record<string, unknown>).waiverProfileId as string || ''}
+                fiscalAgentId={((userData as unknown) as Record<string, unknown>).fiscalAgentId as string || 'acumen'}
                 participantId={userData.activeChildId || userData.childId || ''}
                 onComplete={() => navigateToScreen("evv-dashboard")}
                 onCancel={() => navigateToScreen("evv-dashboard")}

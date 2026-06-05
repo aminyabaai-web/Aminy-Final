@@ -26,7 +26,8 @@ const SYSTEM_OF_RECORD_LABELS: Record<string, string> = {
   centralreach: 'CentralReach',
   aminy_native: 'Aminy',
 };
-function systemOfRecordLabel(sor: string): string {
+function systemOfRecordLabel(sor: string | null): string {
+  if (!sor) return 'Native';
   return SYSTEM_OF_RECORD_LABELS[sor] ?? sor;
 }
 

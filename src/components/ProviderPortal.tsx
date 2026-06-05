@@ -18,6 +18,7 @@
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
+import { toast } from 'sonner';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
@@ -2377,23 +2378,22 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                     </Button>
                   </div>
 
-                  {/* Payer-network billing — ROADMAP, gated */}
-                  <div className="rounded-2xl border border-neutral-200 dark:border-slate-700 bg-neutral-50 dark:bg-slate-800/40 p-4 flex flex-col">
+                  {/* Payer-network billing — ROADMAP, interest capture */}
+                  <div className="rounded-2xl border border-teal-100 dark:border-teal-900/40 bg-teal-50/60 dark:bg-teal-900/10 p-4 flex flex-col">
                     <div className="flex items-center justify-between gap-2">
-                      <h4 className="font-semibold text-neutral-900 dark:text-white">Bill under AACT's payer network</h4>
-                      <Badge className="bg-neutral-200 text-neutral-600 dark:bg-slate-700 dark:text-slate-300">Coming soon</Badge>
+                      <h4 className="font-semibold text-neutral-900 dark:text-white">Payer-network billing</h4>
+                      <Badge className="bg-teal-100 text-teal-700 dark:bg-teal-900/40 dark:text-teal-300">Early access</Badge>
                     </div>
                     <p className="text-sm text-neutral-600 dark:text-slate-300 mt-2 flex-1">
                       Lease an established payer network so insured families can book you without your own contracts.
-                      Available pending payer-network access — not yet enabled.
+                      We're onboarding our first cohort of providers — join the list to get early access.
                     </p>
                     <Button
                       variant="outline"
-                      disabled
-                      className="mt-3 cursor-not-allowed opacity-60"
+                      className="mt-3 border-teal-300 text-teal-700 hover:bg-teal-50"
+                      onClick={() => { toast.success('You\'re on the early access list! We\'ll reach out when payer-network billing opens in your area.'); }}
                     >
-                      <Lock className="w-4 h-4 mr-2" />
-                      Coming soon — pending payer-network access
+                      Get early access
                     </Button>
                   </div>
                 </div>
