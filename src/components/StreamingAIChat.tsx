@@ -244,7 +244,7 @@ export function StreamingAIChat({
       <div className="flex items-center justify-center h-64">
         <div className="flex flex-col items-center gap-3">
           <Loader2 className="w-6 h-6 animate-spin text-accent" />
-          <p className="text-sm text-slate-600">Loading conversation...</p>
+          <p className="text-sm text-[#5A6B7A]">Loading conversation...</p>
         </div>
       </div>
     );
@@ -273,7 +273,7 @@ export function StreamingAIChat({
               <h3 className="text-xl font-semibold text-[#1B2733]">
                 {(() => {
                   const hour = new Date().getHours();
-                  const name = context.childName ? `about ${context.childName}` : '';
+                  const name = context.childProfile?.name ? `about ${context.childProfile.name}` : '';
                   if (hour < 12) return `Good morning! What's on your mind ${name}?`;
                   if (hour < 17) return `Good afternoon! How can I help ${name}?`;
                   return `Good evening! What's going on ${name}?`;
@@ -285,9 +285,9 @@ export function StreamingAIChat({
             <div className="overflow-x-auto -mx-4 px-4 pb-4" style={{ scrollbarWidth: 'none' }}>
               <div className="flex gap-3" style={{ minWidth: 'max-content' }}>
                 {[
-                  { icon: '\u{1F4CB}', title: 'Create a care plan', subtitle: 'Personalized for your child', prompt: `Create a weekly care plan for ${context.childName || 'my child'}` },
+                  { icon: '\u{1F4CB}', title: 'Create a care plan', subtitle: 'Personalized for your child', prompt: `Create a weekly care plan for ${context.childProfile?.name || 'my child'}` },
                   { icon: '\u{1F4DD}', title: 'Log an incident', subtitle: 'Track what happened', prompt: 'I need to log a behavioral incident' },
-                  { icon: '\u{1F319}', title: 'Bedtime help', subtitle: 'Calmer nights start here', prompt: `${context.childName || 'My child'} won't go to sleep. Help.` },
+                  { icon: '\u{1F319}', title: 'Bedtime help', subtitle: 'Calmer nights start here', prompt: `${context.childProfile?.name || 'My child'} won't go to sleep. Help.` },
                   { icon: '\u{1F3EB}', title: 'School email', subtitle: 'Write to the teacher', prompt: "Help me write an email to my child's teacher" },
                   { icon: '\u{1F4CA}', title: 'Weekly progress', subtitle: 'See how things are going', prompt: 'How is my child doing this week?' },
                   { icon: '\u{1F6E1}️', title: 'Insurance help', subtitle: 'Coverage questions', prompt: 'Help me understand my ABA coverage' },
@@ -308,7 +308,7 @@ export function StreamingAIChat({
             {/* Quick text prompts below cards */}
             <div className="mt-4 space-y-2 max-w-md mx-auto">
               {[
-                `What should I work on with ${context.childName || 'my child'} this week?`,
+                `What should I work on with ${context.childProfile?.name || 'my child'} this week?`,
                 "My child won't follow directions — what do I do?",
                 'Translate this IEP jargon for me',
               ].map((prompt) => (
@@ -336,7 +336,7 @@ export function StreamingAIChat({
               className={`max-w-[80%] rounded-2xl px-4 py-3 ${
                 message.role === 'user'
                   ? 'bg-accent text-white'
-                  : 'bg-slate-100 text-slate-900'
+                  : 'bg-[#F0EDE8] text-[#1B2733]'
               }`}
             >
               <div className="text-sm leading-relaxed whitespace-pre-wrap">
@@ -344,7 +344,7 @@ export function StreamingAIChat({
               </div>
               <div
                 className={`text-xs mt-1 ${
-                  message.role === 'user' ? 'text-white/70' : 'text-slate-500'
+                  message.role === 'user' ? 'text-white/70' : 'text-[#5A6B7A]'
                 }`}
               >
                 {new Date(message.timestamp).toLocaleTimeString([], {
@@ -424,7 +424,7 @@ export function StreamingAIChat({
       )}
 
       {/* Enhanced Input area with mic/camera/upload */}
-      <div className="border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-4">
+      <div className="border-t border-[#E8E4DF] dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-4">
         <div className="max-w-4xl mx-auto">
           <EnhancedChatInput
             onSend={handleSend}

@@ -119,7 +119,7 @@ export function ShareViewer({ token, onStartTrial }: ShareViewerProps) {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-[#FAF7F2]">
         <motion.div {...ANIMATIONS.pulse}>
           <Sparkles className="w-12 h-12 text-accent" />
         </motion.div>
@@ -129,12 +129,12 @@ export function ShareViewer({ token, onStartTrial }: ShareViewerProps) {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+      <div className="min-h-screen flex items-center justify-center bg-[#FAF7F2] p-4">
         <motion.div {...ANIMATIONS.pageEnter}>
           <Card className="max-w-md p-8 text-center">
             <AlertCircle className="w-16 h-16 text-orange-500 mx-auto mb-4" />
-            <h2 className="text-xl text-gray-900 mb-2">Unable to Load Share</h2>
-            <p className="text-sm text-gray-600 mb-6">{error}</p>
+            <h2 className="text-xl text-[#1B2733] mb-2">Unable to Load Share</h2>
+            <p className="text-sm text-[#5A6B7A] mb-6">{error}</p>
             <Button onClick={onStartTrial} className="w-full bg-accent text-white">
               Start Your Free Trial
             </Button>
@@ -156,10 +156,10 @@ export function ShareViewer({ token, onStartTrial }: ShareViewerProps) {
               <span className="text-xl">{getContentIcon(content.type)}</span>
             </div>
             <div>
-              <h1 className="text-sm text-gray-900">
+              <h1 className="text-sm text-[#1B2733]">
                 {shareToken.metadata.parentFirstName}'s Share
               </h1>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-[#5A6B7A]">
                 {getContentTypeDisplayName(content.type)}
               </p>
             </div>
@@ -179,6 +179,7 @@ export function ShareViewer({ token, onStartTrial }: ShareViewerProps) {
             <WeeklySnapshotView
               data={content.data as unknown as WeeklySnapshotData}
               childName={shareToken.metadata.childFirstName}
+              onStartTrial={onStartTrial}
             />
           )}
 
@@ -207,10 +208,10 @@ export function ShareViewer({ token, onStartTrial }: ShareViewerProps) {
                 <Sparkles className="w-6 h-6 text-white" />
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="text-sm text-gray-900 mb-1">
+                <h3 className="text-sm text-[#1B2733] mb-1">
                   Create Your Own Progress Snapshots
                 </h3>
-                <p className="text-xs text-gray-600 mb-3">
+                <p className="text-xs text-[#5A6B7A] mb-3">
                   Get personalized daily plans, AI coaching, and beautiful progress reports for your family.
                 </p>
                 <Button 
@@ -220,7 +221,7 @@ export function ShareViewer({ token, onStartTrial }: ShareViewerProps) {
                   Start Free 7-Day Trial
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
-                <p className="text-xs text-gray-500 mt-2 text-center">
+                <p className="text-xs text-[#5A6B7A] mt-2 text-center">
                   No credit card required • Full access during trial
                 </p>
               </div>
@@ -236,17 +237,17 @@ export function ShareViewer({ token, onStartTrial }: ShareViewerProps) {
 // Weekly Snapshot View
 // ===================================
 
-function WeeklySnapshotView({ data, childName }: { data: WeeklySnapshotData; childName: string }) {
+function WeeklySnapshotView({ data, childName, onStartTrial }: { data: WeeklySnapshotData; childName: string; onStartTrial?: () => void }) {
   return (
     <div className="space-y-4">
       {/* Header */}
       <Card className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50">
         <div className="flex items-start justify-between mb-4">
           <div>
-            <h2 className="text-lg text-gray-900 mb-1">
+            <h2 className="text-lg text-[#1B2733] mb-1">
               {childName}'s Weekly Progress
             </h2>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-[#5A6B7A]">
               Week of {safeFormatDate(data.weekOf) || 'this week'}
             </p>
           </div>
@@ -260,28 +261,28 @@ function WeeklySnapshotView({ data, childName }: { data: WeeklySnapshotData; chi
         <div className="grid grid-cols-3 gap-3">
           <div className="bg-white rounded-lg p-3 text-center">
             <div className="text-2xl text-blue-600 mb-1">{data.activitiesCompleted || 0}</div>
-            <div className="text-xs text-gray-600">Activities</div>
+            <div className="text-xs text-[#5A6B7A]">Activities</div>
           </div>
           <div className="bg-white rounded-lg p-3 text-center">
             <div className="text-2xl text-green-600 mb-1">{data.streakDays || 0}</div>
-            <div className="text-xs text-gray-600">Day Streak</div>
+            <div className="text-xs text-[#5A6B7A]">Day Streak</div>
           </div>
           <div className="bg-white rounded-lg p-3 text-center">
             <div className="text-2xl text-purple-600 mb-1">{data.goalsProgress || 0}%</div>
-            <div className="text-xs text-gray-600">Goals</div>
+            <div className="text-xs text-[#5A6B7A]">Goals</div>
           </div>
         </div>
       </Card>
 
       {/* Highlights */}
       <Card className="p-5">
-        <h3 className="text-sm text-gray-900 mb-3 flex items-center gap-2">
+        <h3 className="text-sm text-[#1B2733] mb-3 flex items-center gap-2">
           <Sparkles className="w-4 h-4 text-accent" />
           Week Highlights
         </h3>
         <div className="space-y-2">
           {(data.highlights || []).map((highlight: string, idx: number) => (
-            <div key={idx} className="flex items-start gap-2 text-sm text-gray-700">
+            <div key={idx} className="flex items-start gap-2 text-sm text-[#3A4A57]">
               <CheckCircle2 className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
               <span>{highlight}</span>
             </div>
@@ -292,7 +293,7 @@ function WeeklySnapshotView({ data, childName }: { data: WeeklySnapshotData; chi
       {/* Goals Progress */}
       {data.goals && data.goals.length > 0 && (
         <Card className="p-5">
-          <h3 className="text-sm text-gray-900 mb-3 flex items-center gap-2">
+          <h3 className="text-sm text-[#1B2733] mb-3 flex items-center gap-2">
             <Target className="w-4 h-4 text-accent" />
             Goals Progress
           </h3>
@@ -300,10 +301,10 @@ function WeeklySnapshotView({ data, childName }: { data: WeeklySnapshotData; chi
             {data.goals.map((goal: WeeklySnapshotGoal, idx: number) => (
               <div key={`${goal.name}-${idx}`}>
                 <div className="flex justify-between text-xs mb-1">
-                  <span className="text-gray-700">{goal.name}</span>
-                  <span className="text-gray-500">{goal.progress}%</span>
+                  <span className="text-[#3A4A57]">{goal.name}</span>
+                  <span className="text-[#5A6B7A]">{goal.progress}%</span>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
+                <div className="w-full bg-[#E8E4DF] rounded-full h-2">
                   <div
                     className="bg-accent rounded-full h-2 transition-all"
                     style={{ width: `${goal.progress}%` }}
@@ -316,12 +317,12 @@ function WeeklySnapshotView({ data, childName }: { data: WeeklySnapshotData; chi
       )}
 
       {/* Locked Features Teaser */}
-      <Card className="p-5 bg-gray-50 border-dashed">
+      <Card className="p-5 bg-[#FAF7F2] border-dashed">
         <div className="flex items-center gap-3 mb-3">
-          <Lock className="w-5 h-5 text-gray-400" />
-          <h3 className="text-sm text-gray-700">More Insights Available</h3>
+          <Lock className="w-5 h-5 text-[#8A9BA8]" />
+          <h3 className="text-sm text-[#3A4A57]">More Insights Available</h3>
         </div>
-        <p className="text-xs text-gray-600 mb-3">
+        <p className="text-xs text-[#5A6B7A] mb-3">
           Unlock detailed behavior analytics, AI coaching insights, and personalized recommendations.
         </p>
         <Button size="sm" variant="outline" className="w-full" onClick={onStartTrial}>
@@ -340,10 +341,10 @@ function PlanSummaryView({ data, childName }: { data: PlanSummaryData; childName
   return (
     <div className="space-y-4">
       <Card className="p-6">
-        <h2 className="text-lg text-gray-900 mb-2">
+        <h2 className="text-lg text-[#1B2733] mb-2">
           {childName}'s Care Plan
         </h2>
-        <p className="text-sm text-gray-600 mb-4">
+        <p className="text-sm text-[#5A6B7A] mb-4">
           {data.description || 'Personalized daily activities and routines'}
         </p>
 
@@ -351,29 +352,29 @@ function PlanSummaryView({ data, childName }: { data: PlanSummaryData; childName
         {data.todaysFocus && (
           <div className="bg-accent/10 rounded-lg p-4 mb-4">
             <h3 className="text-sm text-accent mb-2">Today's Focus</h3>
-            <p className="text-sm text-gray-700">{data.todaysFocus}</p>
+            <p className="text-sm text-[#3A4A57]">{data.todaysFocus}</p>
           </div>
         )}
 
         {/* Routines */}
         {data.routines && data.routines.length > 0 && (
           <div className="space-y-3">
-            <h3 className="text-sm text-gray-900">Active Routines</h3>
+            <h3 className="text-sm text-[#1B2733]">Active Routines</h3>
             {data.routines.map((routine: PlanRoutine, idx: number) => (
-              <Card key={`${routine.name}-${idx}`} className="p-4 bg-gray-50">
+              <Card key={`${routine.name}-${idx}`} className="p-4 bg-[#FAF7F2]">
                 <div className="flex items-center gap-2 mb-2">
                   <Calendar className="w-4 h-4 text-accent" />
-                  <span className="text-sm text-gray-900">{routine.name}</span>
+                  <span className="text-sm text-[#1B2733]">{routine.name}</span>
                 </div>
                 <div className="space-y-1">
                   {routine.steps?.slice(0, 3).map((step: string, sIdx: number) => (
-                    <div key={sIdx} className="flex items-start gap-2 text-xs text-gray-600">
-                      <span className="text-gray-400">{sIdx + 1}.</span>
+                    <div key={sIdx} className="flex items-start gap-2 text-xs text-[#5A6B7A]">
+                      <span className="text-[#8A9BA8]">{sIdx + 1}.</span>
                       <span>{step}</span>
                     </div>
                   ))}
                   {(routine.steps?.length ?? 0) > 3 && (
-                    <p className="text-xs text-gray-400 pl-4">
+                    <p className="text-xs text-[#8A9BA8] pl-4">
                       +{(routine.steps?.length ?? 0) - 3} more steps
                     </p>
                   )}
@@ -385,10 +386,10 @@ function PlanSummaryView({ data, childName }: { data: PlanSummaryData; childName
       </Card>
 
       {/* Locked Features */}
-      <Card className="p-5 bg-gray-50 border-dashed">
-        <Lock className="w-5 h-5 text-gray-400 mb-2" />
-        <h3 className="text-sm text-gray-700 mb-2">Create Your Own Plans</h3>
-        <p className="text-xs text-gray-600">
+      <Card className="p-5 bg-[#FAF7F2] border-dashed">
+        <Lock className="w-5 h-5 text-[#8A9BA8] mb-2" />
+        <h3 className="text-sm text-[#3A4A57] mb-2">Create Your Own Plans</h3>
+        <p className="text-xs text-[#5A6B7A]">
           Get AI-powered daily plans tailored to your child's unique needs and goals.
         </p>
       </Card>
@@ -406,14 +407,14 @@ function StreakCardView({ data, childName }: { data: StreakCardData; childName: 
       <Card className="p-6 bg-gradient-to-br from-orange-50 to-red-50">
         <div className="text-center mb-6">
           <div className="text-6xl mb-2">🔥</div>
-          <h2 className="text-3xl text-gray-900 mb-1">{data.streakCount || 0} Days</h2>
-          <p className="text-sm text-gray-600">{childName}'s Current Streak</p>
+          <h2 className="text-3xl text-[#1B2733] mb-1">{data.streakCount || 0} Days</h2>
+          <p className="text-sm text-[#5A6B7A]">{childName}'s Current Streak</p>
         </div>
 
         {/* Streak Calendar */}
         {data.streakDays && (
           <div className="bg-white rounded-lg p-4">
-            <h3 className="text-sm text-gray-900 mb-3">Recent Activity</h3>
+            <h3 className="text-sm text-[#1B2733] mb-3">Recent Activity</h3>
             <div className="grid grid-cols-7 gap-2">
               {data.streakDays.slice(-14).map((day: StreakDay, idx: number) => (
                 <div
@@ -421,7 +422,7 @@ function StreakCardView({ data, childName }: { data: StreakCardData; childName: 
                   className={`aspect-square rounded ${
                     day.completed
                       ? 'bg-accent'
-                      : 'bg-gray-200'
+                      : 'bg-[#E8E4DF]'
                   }`}
                   title={safeFormatDate(day.date)}
                 />
@@ -433,11 +434,11 @@ function StreakCardView({ data, childName }: { data: StreakCardData; childName: 
         {/* Achievements */}
         {data.milestones && data.milestones.length > 0 && (
           <div className="mt-4 space-y-2">
-            <h3 className="text-sm text-gray-900">Milestones</h3>
+            <h3 className="text-sm text-[#1B2733]">Milestones</h3>
             {data.milestones.map((milestone: string, idx: number) => (
               <div key={idx} className="flex items-center gap-2 bg-white rounded-lg p-3">
                 <CheckCircle2 className="w-4 h-4 text-green-600" />
-                <span className="text-sm text-gray-700">{milestone}</span>
+                <span className="text-sm text-[#3A4A57]">{milestone}</span>
               </div>
             ))}
           </div>
@@ -445,10 +446,10 @@ function StreakCardView({ data, childName }: { data: StreakCardData; childName: 
       </Card>
 
       {/* Locked Features */}
-      <Card className="p-5 bg-gray-50 border-dashed">
-        <Lock className="w-5 h-5 text-gray-400 mb-2" />
-        <h3 className="text-sm text-gray-700 mb-2">Build Your Own Streaks</h3>
-        <p className="text-xs text-gray-600">
+      <Card className="p-5 bg-[#FAF7F2] border-dashed">
+        <Lock className="w-5 h-5 text-[#8A9BA8] mb-2" />
+        <h3 className="text-sm text-[#3A4A57] mb-2">Build Your Own Streaks</h3>
+        <p className="text-xs text-[#5A6B7A]">
           Track daily progress, celebrate wins, and build lasting habits with your child.
         </p>
       </Card>

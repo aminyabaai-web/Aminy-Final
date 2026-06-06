@@ -858,8 +858,8 @@ export function StoreMarketplace({
   userTier = 'free',
   onBack,
   onNavigate,
-  childProfile = null,
-}: StoreMarketplaceProps & { childProfile?: ChildProfile | null }) {
+  childProfile,
+}: StoreMarketplaceProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<ProductCategory | 'all'>('all');
   const [showFilters, setShowFilters] = useState(false);
@@ -1045,7 +1045,7 @@ export function StoreMarketplace({
     }
     if (product.price === 'included') {
       return (
-        <Badge className="bg-teal-100 text-teal-700">
+        <Badge className="bg-[#6B9080]/10 text-[#6B9080]">
           <Crown className="w-3 h-3 mr-1" />
           Included
         </Badge>
@@ -1055,7 +1055,7 @@ export function StoreMarketplace({
     return (
       <div className="flex flex-col">
         <div className="flex items-center gap-2">
-          <span className="font-bold text-slate-900">
+          <span className="font-bold text-[#1B2733]">
             ${discounted ?? product.price}
           </span>
           {(discounted || product.originalPrice) && (
@@ -1065,16 +1065,16 @@ export function StoreMarketplace({
           )}
         </div>
         {discounted && tierLabel && (
-          <span className="text-xs text-teal-600 font-medium">{tierLabel}</span>
+          <span className="text-xs text-[#6B9080] font-medium">{tierLabel}</span>
         )}
       </div>
     );
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
+    <div className="min-h-screen bg-[#FAF7F2] dark:bg-slate-900">
       {/* Header */}
-      <div className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-40">
+      <div className="bg-white dark:bg-slate-800 border-b border-[#E8E4DF] dark:border-slate-700 sticky top-0 z-40">
         <div className="max-w-6xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
@@ -1085,7 +1085,7 @@ export function StoreMarketplace({
               )}
               <div>
                 <div className="flex items-center gap-2">
-                  <h1 className="text-xl font-bold text-slate-900 dark:text-white">Resource Store</h1>
+                  <h1 className="text-xl font-bold text-[#1B2733] dark:text-white">Resource Store</h1>
                   {usingCuratedFallback && (
                     <span
                       className="inline-flex items-center rounded-full bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300/70 font-medium px-2 py-0.5 shrink-0"
@@ -1096,7 +1096,7 @@ export function StoreMarketplace({
                     </span>
                   )}
                 </div>
-                <p className="text-sm text-slate-500">
+                <p className="text-sm text-[#5A6B7A]">
                   {usingCuratedFallback ? 'Curated affiliate recommendations' : 'BCBA-curated tools and resources'}
                 </p>
               </div>
@@ -1124,7 +1124,7 @@ export function StoreMarketplace({
                 <Filter className="w-4 h-4" />
                 Filters
                 {Object.values(filters).some(Boolean) && (
-                  <Badge className="bg-teal-500 text-white text-xs px-1.5">
+                  <Badge className="bg-primary text-white text-xs px-1.5">
                     {Object.values(filters).filter(Boolean).length}
                   </Badge>
                 )}
@@ -1176,7 +1176,7 @@ export function StoreMarketplace({
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              className="border-t border-slate-200 dark:border-slate-700 overflow-hidden"
+              className="border-t border-[#E8E4DF] dark:border-slate-700 overflow-hidden"
             >
               <div className="max-w-6xl mx-auto px-4 py-4">
                 <div className="flex flex-wrap gap-4">
@@ -1237,25 +1237,25 @@ export function StoreMarketplace({
         {/* AI-Recommended Section (when child profile is available) */}
         {selectedCategory === 'all' && !searchQuery && !showWishlistOnly && aiRecommendedProducts.length > 0 && (
           <div className="mb-8">
-            <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
-              <Zap className="w-5 h-5 text-teal-500" />
+            <h2 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-2 flex items-center gap-2">
+              <Zap className="w-5 h-5 text-primary" />
               Recommended for {childProfile?.name || 'Your Child'}
             </h2>
-            <p className="text-sm text-slate-500 mb-4">
+            <p className="text-sm text-[#5A6B7A] mb-4">
               Based on {childProfile?.diagnoses?.join(', ')} profile, age {childProfile?.age}
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {aiRecommendedProducts.map((product) => (
                 <Card
                   key={`ai-${product.id}`}
-                  className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer border-teal-200 dark:border-teal-800"
+                  className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer border-[#6B9080]/20 dark:border-[#6B9080]/30"
                   onClick={() => handleProductAction(product)}
                 >
-                  <div className="aspect-video bg-teal-50 dark:bg-teal-900/30 relative">
-                    <div className="absolute inset-0 flex items-center justify-center text-teal-300">
+                  <div className="aspect-video bg-[#6B9080]/10 dark:bg-[#6B9080]/15 relative">
+                    <div className="absolute inset-0 flex items-center justify-center text-[#7BA7BC]">
                       {CATEGORIES.find(c => c.id === product.category)?.icon}
                     </div>
-                    <Badge className="absolute top-2 left-2 bg-teal-500 text-white">
+                    <Badge className="absolute top-2 left-2 bg-primary text-white">
                       <Zap className="w-3 h-3 mr-1" />
                       AI Pick
                     </Badge>
@@ -1284,14 +1284,14 @@ export function StoreMarketplace({
                     </button>
                   </div>
                   <div className="p-4">
-                    <h3 className="font-medium text-slate-900 dark:text-white line-clamp-1">
+                    <h3 className="font-medium text-[#1B2733] dark:text-white line-clamp-1">
                       {product.name}
                     </h3>
-                    <p className="text-xs text-slate-500 line-clamp-2 mt-1">{product.description}</p>
+                    <p className="text-xs text-[#5A6B7A] line-clamp-2 mt-1">{product.description}</p>
                     <div className="flex items-center gap-2 mt-2">
                       <div className="flex items-center gap-1">
                         <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-                        <span className="text-xs text-slate-500">{product.rating}</span>
+                        <span className="text-xs text-[#5A6B7A]">{product.rating}</span>
                       </div>
                       {product.recommendedAgeRange && (
                         <span className="text-xs text-slate-400">Ages {product.recommendedAgeRange}</span>
@@ -1308,7 +1308,7 @@ export function StoreMarketplace({
         {/* Featured Section (only on "all" category) */}
         {selectedCategory === 'all' && !searchQuery && !showWishlistOnly && (
           <div className="mb-8">
-            <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+            <h2 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-4 flex items-center gap-2">
               <Sparkles className="w-5 h-5 text-amber-500" />
               Featured Resources
             </h2>
@@ -1319,7 +1319,7 @@ export function StoreMarketplace({
                   className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
                   onClick={() => handleProductAction(product)}
                 >
-                  <div className="aspect-video bg-slate-100 dark:bg-slate-700 relative">
+                  <div className="aspect-video bg-[#F0EDE8] dark:bg-slate-700 relative">
                     <div className="absolute inset-0 flex items-center justify-center text-slate-400">
                       {CATEGORIES.find(c => c.id === product.category)?.icon}
                     </div>
@@ -1334,12 +1334,12 @@ export function StoreMarketplace({
                     )}
                   </div>
                   <div className="p-4">
-                    <h3 className="font-medium text-slate-900 dark:text-white line-clamp-1">
+                    <h3 className="font-medium text-[#1B2733] dark:text-white line-clamp-1">
                       {product.name}
                     </h3>
                     <div className="flex items-center gap-1 mt-1">
                       <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-                      <span className="text-xs text-slate-500">{product.rating}</span>
+                      <span className="text-xs text-[#5A6B7A]">{product.rating}</span>
                       <span className="text-xs text-slate-400">({product.reviewCount})</span>
                     </div>
                     <div className="mt-2">{renderPrice(product)}</div>
@@ -1353,10 +1353,10 @@ export function StoreMarketplace({
         {/* Product Grid */}
         <div>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
+            <h2 className="text-lg font-semibold text-[#1B2733] dark:text-white">
               {selectedCategory === 'all' ? 'All Resources' : CATEGORIES.find(c => c.id === selectedCategory)?.name}
             </h2>
-            <span className="text-sm text-slate-500">
+            <span className="text-sm text-[#5A6B7A]">
               {filteredProducts.length} {filteredProducts.length === 1 ? 'item' : 'items'}
             </span>
           </div>
@@ -1365,20 +1365,20 @@ export function StoreMarketplace({
             products.length === 0 ? (
               <Card className="p-12 text-center">
                 <Package className="w-12 h-12 text-slate-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2">
+                <h3 className="text-lg font-medium text-[#1B2733] dark:text-white mb-2">
                   No resources yet
                 </h3>
-                <p className="text-slate-500">
+                <p className="text-[#5A6B7A]">
                   Our team is curating BCBA-reviewed tools and resources. Check back soon.
                 </p>
               </Card>
             ) : (
               <Card className="p-12 text-center">
                 <Package className="w-12 h-12 text-slate-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2">
+                <h3 className="text-lg font-medium text-[#1B2733] dark:text-white mb-2">
                   No resources found
                 </h3>
-                <p className="text-slate-500 mb-4">
+                <p className="text-[#5A6B7A] mb-4">
                   Try adjusting your filters or search terms.
                 </p>
                 <Button
@@ -1401,7 +1401,7 @@ export function StoreMarketplace({
                   key={product.id}
                   className="overflow-hidden hover:shadow-lg transition-shadow"
                 >
-                  <div className="aspect-video bg-slate-100 dark:bg-slate-700 relative">
+                  <div className="aspect-video bg-[#F0EDE8] dark:bg-slate-700 relative">
                     <div className="absolute inset-0 flex items-center justify-center text-slate-400">
                       {CATEGORIES.find(c => c.id === product.category)?.icon}
                     </div>
@@ -1436,7 +1436,7 @@ export function StoreMarketplace({
                   </div>
                   <div className="p-4">
                     <div className="flex items-start justify-between gap-2 mb-2">
-                      <h3 className="font-medium text-slate-900 dark:text-white line-clamp-2">
+                      <h3 className="font-medium text-[#1B2733] dark:text-white line-clamp-2">
                         {product.name}
                       </h3>
                       {product.bcbaRecommended && (
@@ -1445,7 +1445,7 @@ export function StoreMarketplace({
                         </Badge>
                       )}
                     </div>
-                    <p className="text-sm text-slate-500 line-clamp-2 mb-2">
+                    <p className="text-sm text-[#5A6B7A] line-clamp-2 mb-2">
                       {product.description}
                     </p>
                     <div className="flex flex-wrap items-center gap-1.5 mb-2">
@@ -1456,12 +1456,12 @@ export function StoreMarketplace({
                         </Badge>
                       )}
                       {product.recommendedAgeRange && (
-                        <Badge className="bg-slate-100 text-slate-600 text-xs">
+                        <Badge className="bg-[#F0EDE8] text-[#5A6B7A] text-xs">
                           Ages {product.recommendedAgeRange}
                         </Badge>
                       )}
                       {product.matchesChildNeeds && (
-                        <Badge className="bg-teal-100 text-teal-700 text-xs">
+                        <Badge className="bg-[#6B9080]/10 text-[#6B9080] text-xs">
                           <Zap className="w-3 h-3 mr-0.5" />
                           Matches needs
                         </Badge>
@@ -1469,7 +1469,7 @@ export function StoreMarketplace({
                     </div>
                     <div className="flex items-center gap-1 mb-3">
                       <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-                      <span className="text-xs text-slate-500">{product.rating}</span>
+                      <span className="text-xs text-[#5A6B7A]">{product.rating}</span>
                       <span className="text-xs text-slate-400">({product.reviewCount} reviews)</span>
                     </div>
                     <div className="flex items-center justify-between">

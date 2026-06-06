@@ -180,7 +180,7 @@ export function CareCoordinationHub({ onBack, onNavigate, userId, childName }: C
       {/* Active services */}
       {activeServices.length > 0 && (
         <div className="mt-5">
-          <p className="px-4 text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Active care</p>
+          <p className="px-4 text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide mb-2">Active care</p>
           <div className="space-y-2 px-4">
             {activeServices.map(row => (
               <ServiceCard key={row.service} row={row} onNavigate={onNavigate} childName={childName} />
@@ -192,7 +192,7 @@ export function CareCoordinationHub({ onBack, onNavigate, userId, childName }: C
       {/* Inactive (add new service) */}
       {inactiveServices.length > 0 && (
         <div className="mt-5">
-          <p className="px-4 text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Add a service</p>
+          <p className="px-4 text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide mb-2">Add a service</p>
           <div className="space-y-2 px-4">
             {inactiveServices.map(row => {
               const meta = SERVICE_META[row.service];
@@ -201,14 +201,14 @@ export function CareCoordinationHub({ onBack, onNavigate, userId, childName }: C
                 <button
                   key={row.service}
                   onClick={() => onNavigate?.('marketplace')}
-                  className="w-full flex items-center gap-3 p-3 rounded-2xl bg-white border border-dashed border-slate-200 hover:border-teal-300 transition-colors text-left"
+                  className="w-full flex items-center gap-3 p-3 rounded-2xl bg-white border border-dashed border-[#E8E4DF] hover:border-[#6B9080]/30 transition-colors text-left"
                 >
                   <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: `${meta.color}15` }}>
                     <Icon className="w-5 h-5" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-slate-800">{meta.label}</p>
-                    <p className="text-xs text-slate-500 truncate">{meta.description}</p>
+                    <p className="text-sm font-medium text-[#1B2733]">{meta.label}</p>
+                    <p className="text-xs text-[#5A6B7A] truncate">{meta.description}</p>
                   </div>
                   <Plus className="w-4 h-4 text-slate-400 shrink-0" />
                 </button>
@@ -219,20 +219,20 @@ export function CareCoordinationHub({ onBack, onNavigate, userId, childName }: C
       )}
 
       {/* Site of care education */}
-      <div className="mx-4 mt-5 rounded-2xl bg-white border border-slate-100 p-4">
+      <div className="mx-4 mt-5 rounded-2xl bg-white border border-[#E8E4DF] p-4">
         <div className="flex items-center gap-2 mb-3">
           <MapPin className="w-4 h-4 text-slate-400" />
-          <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Site of Care Guide</p>
+          <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">Site of Care Guide</p>
         </div>
-        <p className="text-sm text-slate-700 mb-3">Where care happens shapes what your child actually learns. Aminy will recommend the right setting per service.</p>
+        <p className="text-sm text-[#3A4A57] mb-3">Where care happens shapes what your child actually learns. Aminy will recommend the right setting per service.</p>
         <div className="grid grid-cols-2 gap-2">
           {(Object.keys(SITE_META) as SiteOfCare[]).map(site => {
             const meta = SITE_META[site];
             const Icon = meta.icon;
             return (
-              <div key={site} className="flex items-center gap-2 p-2 rounded-xl bg-slate-50">
-                <Icon className="w-4 h-4 text-slate-500 shrink-0" />
-                <span className="text-xs text-slate-700">{meta.label}</span>
+              <div key={site} className="flex items-center gap-2 p-2 rounded-xl bg-[#FAF7F2]">
+                <Icon className="w-4 h-4 text-[#5A6B7A] shrink-0" />
+                <span className="text-xs text-[#3A4A57]">{meta.label}</span>
               </div>
             );
           })}
@@ -247,8 +247,8 @@ export function CareCoordinationHub({ onBack, onNavigate, userId, childName }: C
       {/* Loading shimmer */}
       {isLoading && activeServices.length === 0 && (
         <div className="px-4 mt-4 space-y-2">
-          <div className="h-20 rounded-2xl bg-slate-100 animate-pulse" />
-          <div className="h-20 rounded-2xl bg-slate-100 animate-pulse" />
+          <div className="h-20 rounded-2xl bg-[#F0EDE8] animate-pulse" />
+          <div className="h-20 rounded-2xl bg-[#F0EDE8] animate-pulse" />
         </div>
       )}
     </div>
@@ -261,19 +261,19 @@ function Stat({ label, value, accent }: { label: string; value: string; accent?:
   return (
     <div className="text-center">
       <p className="text-2xl font-bold" style={{ color: accent ? '#E07A5F' : '#0D1B2A' }}>{value}</p>
-      <p className="text-[10px] text-slate-500 uppercase tracking-wide">{label}</p>
+      <p className="text-[10px] text-[#5A6B7A] uppercase tracking-wide">{label}</p>
     </div>
   );
 }
 
 function AuthBadge({ status, expiresAt }: { status: AuthStatus; expiresAt?: string }) {
   const styles: Record<AuthStatus, { bg: string; text: string; label: string; icon: React.ReactNode }> = {
-    none:         { bg: 'bg-slate-100',   text: 'text-slate-600',   label: 'No auth on file', icon: <ShieldAlert className="w-3 h-3" /> },
+    none:         { bg: 'bg-[#F0EDE8]',   text: 'text-[#5A6B7A]',   label: 'No auth on file', icon: <ShieldAlert className="w-3 h-3" /> },
     pending:      { bg: 'bg-amber-50',    text: 'text-amber-700',   label: 'Pending',          icon: <Clock className="w-3 h-3" /> },
-    approved:     { bg: 'bg-teal-50',     text: 'text-teal-700',    label: 'Approved',         icon: <ShieldCheck className="w-3 h-3" /> },
+    approved:     { bg: 'bg-[#6B9080]/10',     text: 'text-[#6B9080]',    label: 'Approved',         icon: <ShieldCheck className="w-3 h-3" /> },
     expiring:     { bg: 'bg-orange-50',   text: 'text-orange-700',  label: 'Expiring soon',    icon: <AlertTriangle className="w-3 h-3" /> },
     denied:       { bg: 'bg-red-50',      text: 'text-red-700',     label: 'Denied — appeal',  icon: <AlertTriangle className="w-3 h-3" /> },
-    not_required: { bg: 'bg-slate-50',    text: 'text-slate-500',   label: 'No auth needed',   icon: <ShieldCheck className="w-3 h-3" /> },
+    not_required: { bg: 'bg-[#FAF7F2]',    text: 'text-[#5A6B7A]',   label: 'No auth needed',   icon: <ShieldCheck className="w-3 h-3" /> },
   };
   const s = styles[status];
   let labelText = s.label;
@@ -294,7 +294,7 @@ function ServiceCard({ row, onNavigate, childName }: { row: ServiceRow; onNaviga
   const SiteIcon = row.siteOfCare ? SITE_META[row.siteOfCare].icon : null;
 
   return (
-    <div className="rounded-2xl bg-white border border-slate-100 overflow-hidden">
+    <div className="rounded-2xl bg-white border border-[#E8E4DF] overflow-hidden">
       <div className="p-3">
         <div className="flex items-start gap-3">
           <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: `${meta.color}15` }}>
@@ -302,20 +302,20 @@ function ServiceCard({ row, onNavigate, childName }: { row: ServiceRow; onNaviga
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-2">
-              <p className="text-sm font-semibold text-slate-900">{meta.label}</p>
+              <p className="text-sm font-semibold text-[#1B2733]">{meta.label}</p>
               <AuthBadge status={row.authStatus} expiresAt={row.authExpiresAt} />
             </div>
             {row.providerName && (
-              <p className="text-xs text-slate-500 truncate mt-0.5">{row.providerName}</p>
+              <p className="text-xs text-[#5A6B7A] truncate mt-0.5">{row.providerName}</p>
             )}
             <div className="flex items-center gap-3 mt-1.5 flex-wrap">
               {row.siteOfCare && SiteIcon && (
-                <span className="flex items-center gap-1 text-[11px] text-slate-500">
+                <span className="flex items-center gap-1 text-[11px] text-[#5A6B7A]">
                   <SiteIcon className="w-3 h-3" />{SITE_META[row.siteOfCare].label}
                 </span>
               )}
               {typeof row.sessionsThisMonth === 'number' && row.sessionsThisMonth > 0 && (
-                <span className="text-[11px] text-slate-500">{row.sessionsThisMonth} sessions this month</span>
+                <span className="text-[11px] text-[#5A6B7A]">{row.sessionsThisMonth} sessions this month</span>
               )}
             </div>
           </div>
@@ -349,7 +349,7 @@ function ServiceCard({ row, onNavigate, childName }: { row: ServiceRow; onNaviga
         <div className="mt-3 flex gap-2">
           <button
             onClick={() => onNavigate?.('marketplace')}
-            className="flex-1 text-xs font-medium px-3 py-2 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50"
+            className="flex-1 text-xs font-medium px-3 py-2 rounded-xl border border-[#E8E4DF] text-[#3A4A57] hover:bg-[#FAF7F2]"
           >
             Book
           </button>

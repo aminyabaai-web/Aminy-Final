@@ -78,20 +78,20 @@ export function TelehealthPreferences({ onBack }: TelehealthPreferencesProps) {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F5F5]">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-white border-b border-gray-100 px-4 py-3">
+      <header className="sticky top-0 z-10 bg-white border-b border-[#E8E4DF] px-4 py-3">
         <div className="flex items-center gap-3">
           <button
             onClick={onBack}
-            className="p-2 -ml-2 rounded-full hover:bg-gray-100 transition-colors"
+            className="p-2 -ml-2 rounded-full hover:bg-[#F0EDE8] transition-colors"
             aria-label="Go back"
           >
-            <ArrowLeft className="w-5 h-5 text-gray-700" />
+            <ArrowLeft className="w-5 h-5 text-[#3A4A57]" />
           </button>
           <div>
-            <h1 className="text-lg font-semibold text-gray-900">Preferences</h1>
-            <p className="text-sm text-gray-500">Manage your care settings</p>
+            <h1 className="text-lg font-semibold text-[#1B2733]">Preferences</h1>
+            <p className="text-sm text-[#5A6B7A]">Manage your care settings</p>
           </div>
         </div>
       </header>
@@ -99,11 +99,11 @@ export function TelehealthPreferences({ onBack }: TelehealthPreferencesProps) {
       {/* Content */}
       <div className="px-4 py-6 space-y-3 sm:space-y-4 sm:space-y-6">
         {/* Communication Preferences */}
-        <section className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-          <div className="px-4 py-3 bg-gray-50 border-b border-gray-100">
+        <section className="bg-white rounded-2xl border border-[#E8E4DF] overflow-hidden">
+          <div className="px-4 py-3 bg-[#FAF7F2] border-b border-[#E8E4DF]">
             <div className="flex items-center gap-2">
-              <Bell className="w-4 h-4 text-gray-500" />
-              <h2 className="font-medium text-gray-900">Communication Preferences</h2>
+              <Bell className="w-4 h-4 text-[#5A6B7A]" />
+              <h2 className="font-medium text-[#1B2733]">Communication Preferences</h2>
             </div>
           </div>
 
@@ -113,21 +113,21 @@ export function TelehealthPreferences({ onBack }: TelehealthPreferencesProps) {
                 <label className="flex items-start justify-between cursor-pointer">
                   <div className="flex-1 pr-4">
                     <div className="flex items-center gap-2">
-                      <p className="font-medium text-gray-900">{pref.label}</p>
+                      <p className="font-medium text-[#1B2733]">{pref.label}</p>
                       {pref.comingSoon && (
-                        <span className="px-2 py-0.5 bg-gray-100 text-gray-500 text-xs font-medium rounded-full">
+                        <span className="px-2 py-0.5 bg-[#F0EDE8] text-[#5A6B7A] text-xs font-medium rounded-full">
                           Coming Soon
                         </span>
                       )}
                     </div>
-                    <p className="text-sm text-gray-500 mt-1">{pref.description}</p>
+                    <p className="text-sm text-[#5A6B7A] mt-1">{pref.description}</p>
                   </div>
                   <div className="flex-shrink-0">
                     <button
                       onClick={() => togglePreference(pref.id)}
                       disabled={pref.comingSoon}
                       className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                        pref.enabled ? 'bg-cyan-600' : 'bg-gray-200'
+                        pref.enabled ? 'bg-[#6B9080]' : 'bg-[#E8E4DF]'
                       } ${pref.comingSoon ? 'opacity-50 cursor-not-allowed' : ''}`}
                     >
                       <span
@@ -144,7 +144,7 @@ export function TelehealthPreferences({ onBack }: TelehealthPreferencesProps) {
         </section>
 
         {/* Privacy Note */}
-        <div className="bg-blue-50 rounded-xl p-4 border border-blue-100">
+        <div className="bg-[#EEF4F8] rounded-xl p-4 border border-blue-100">
           <div className="flex gap-3">
             <Lock className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
             <div>
@@ -158,39 +158,39 @@ export function TelehealthPreferences({ onBack }: TelehealthPreferencesProps) {
         </div>
 
         {/* Legal Links */}
-        <section className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-          <div className="px-4 py-3 bg-gray-50 border-b border-gray-100">
+        <section className="bg-white rounded-2xl border border-[#E8E4DF] overflow-hidden">
+          <div className="px-4 py-3 bg-[#FAF7F2] border-b border-[#E8E4DF]">
             <div className="flex items-center gap-2">
-              <FileText className="w-4 h-4 text-gray-500" />
-              <h2 className="font-medium text-gray-900">Legal</h2>
+              <FileText className="w-4 h-4 text-[#5A6B7A]" />
+              <h2 className="font-medium text-[#1B2733]">Legal</h2>
             </div>
           </div>
 
           <div className="divide-y divide-gray-100">
-            <button className="w-full px-4 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
-              <span className="font-medium text-gray-900">Privacy Policy</span>
-              <div className="flex items-center gap-2 text-gray-400">
+            <button className="w-full px-4 py-4 flex items-center justify-between hover:bg-[#FAF7F2] transition-colors">
+              <span className="font-medium text-[#1B2733]">Privacy Policy</span>
+              <div className="flex items-center gap-2 text-[#8A9BA8]">
                 <ExternalLink className="w-4 h-4" />
               </div>
             </button>
 
-            <button className="w-full px-4 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
-              <span className="font-medium text-gray-900">Telehealth Terms of Service</span>
-              <div className="flex items-center gap-2 text-gray-400">
+            <button className="w-full px-4 py-4 flex items-center justify-between hover:bg-[#FAF7F2] transition-colors">
+              <span className="font-medium text-[#1B2733]">Telehealth Terms of Service</span>
+              <div className="flex items-center gap-2 text-[#8A9BA8]">
                 <ExternalLink className="w-4 h-4" />
               </div>
             </button>
 
-            <button className="w-full px-4 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
-              <span className="font-medium text-gray-900">Membership Terms</span>
-              <div className="flex items-center gap-2 text-gray-400">
+            <button className="w-full px-4 py-4 flex items-center justify-between hover:bg-[#FAF7F2] transition-colors">
+              <span className="font-medium text-[#1B2733]">Membership Terms</span>
+              <div className="flex items-center gap-2 text-[#8A9BA8]">
                 <ExternalLink className="w-4 h-4" />
               </div>
             </button>
 
-            <button className="w-full px-4 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
-              <span className="font-medium text-gray-900">Notice of Privacy Practices</span>
-              <div className="flex items-center gap-2 text-gray-400">
+            <button className="w-full px-4 py-4 flex items-center justify-between hover:bg-[#FAF7F2] transition-colors">
+              <span className="font-medium text-[#1B2733]">Notice of Privacy Practices</span>
+              <div className="flex items-center gap-2 text-[#8A9BA8]">
                 <ExternalLink className="w-4 h-4" />
               </div>
             </button>
@@ -198,8 +198,8 @@ export function TelehealthPreferences({ onBack }: TelehealthPreferencesProps) {
         </section>
 
         {/* Emergency Services Disclaimer */}
-        <div className="p-4 bg-gray-50 rounded-xl text-sm text-gray-600">
-          <p className="font-medium text-gray-700 mb-2">Important Notice</p>
+        <div className="p-4 bg-[#FAF7F2] rounded-xl text-sm text-[#5A6B7A]">
+          <p className="font-medium text-[#3A4A57] mb-2">Important Notice</p>
           <p>
             Aminy does not provide emergency services. If you are experiencing a medical emergency,
             please call 911 or go to your nearest emergency room. For mental health crises,

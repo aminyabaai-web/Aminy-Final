@@ -78,8 +78,8 @@ export function ReferralCard({
               <Gift className="w-5 h-5 text-pink-600" />
             </div>
             <div>
-              <p className="font-medium text-gray-900">Share Aminy, Get Rewards</p>
-              <p className="text-sm text-gray-600">
+              <p className="font-medium text-[#1B2733]">Share Aminy, Get Rewards</p>
+              <p className="text-sm text-[#5A6B7A]">
                 {referralCount > 0
                   ? `${referralCount} friends joined • $${rewardEarned} earned`
                   : 'Give friends a 14-day Pro trial'}
@@ -121,21 +121,21 @@ export function ReferralCard({
         <div className="p-6 space-y-6">
           {/* Stats */}
           <div className="grid grid-cols-2 gap-4">
-            <div className="text-center p-4 bg-gray-50 rounded-xl">
-              <Users className="w-6 h-6 text-gray-400 mx-auto mb-2" />
-              <p className="text-2xl font-bold text-gray-900">{referralCount}</p>
-              <p className="text-sm text-gray-500">Friends joined</p>
+            <div className="text-center p-4 bg-[#FAF7F2] rounded-xl">
+              <Users className="w-6 h-6 text-[#8A9BA8] mx-auto mb-2" />
+              <p className="text-2xl font-bold text-[#1B2733]">{referralCount}</p>
+              <p className="text-sm text-[#5A6B7A]">Friends joined</p>
             </div>
-            <div className="text-center p-4 bg-gray-50 rounded-xl">
-              <Heart className="w-6 h-6 text-gray-400 mx-auto mb-2" />
-              <p className="text-2xl font-bold text-gray-900">${rewardEarned}</p>
-              <p className="text-sm text-gray-500">Credits earned</p>
+            <div className="text-center p-4 bg-[#FAF7F2] rounded-xl">
+              <Heart className="w-6 h-6 text-[#8A9BA8] mx-auto mb-2" />
+              <p className="text-2xl font-bold text-[#1B2733]">${rewardEarned}</p>
+              <p className="text-sm text-[#5A6B7A]">Credits earned</p>
             </div>
           </div>
 
           {/* Referral link */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-[#3A4A57] mb-2">
               Your referral link
             </label>
             <div className="flex gap-2">
@@ -143,7 +143,7 @@ export function ReferralCard({
                 type="text"
                 readOnly
                 value={referralLink}
-                className="flex-1 px-3 py-2 text-sm bg-gray-100 border border-gray-200 rounded-lg text-gray-600"
+                className="flex-1 px-3 py-2 text-sm bg-[#F0EDE8] border border-[#E8E4DF] rounded-lg text-[#5A6B7A]"
               />
               <Button
                 onClick={handleCopy}
@@ -162,25 +162,25 @@ export function ReferralCard({
 
           {/* How it works */}
           <div className="space-y-3">
-            <h3 className="font-medium text-gray-900">How it works</h3>
+            <h3 className="font-medium text-[#1B2733]">How it works</h3>
             <div className="space-y-2 text-sm">
               <div className="flex items-start gap-3">
                 <div className="w-6 h-6 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 text-xs font-bold shrink-0">
                   1
                 </div>
-                <p className="text-gray-600">Share your link with other parents</p>
+                <p className="text-[#5A6B7A]">Share your link with other parents</p>
               </div>
               <div className="flex items-start gap-3">
                 <div className="w-6 h-6 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 text-xs font-bold shrink-0">
                   2
                 </div>
-                <p className="text-gray-600">They get their first month free</p>
+                <p className="text-[#5A6B7A]">They get their first month free</p>
               </div>
               <div className="flex items-start gap-3">
                 <div className="w-6 h-6 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 text-xs font-bold shrink-0">
                   3
                 </div>
-                <p className="text-gray-600">You get $10 credit when they subscribe</p>
+                <p className="text-[#5A6B7A]">You get $10 credit when they subscribe</p>
               </div>
             </div>
           </div>

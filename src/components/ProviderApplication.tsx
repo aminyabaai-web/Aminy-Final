@@ -291,12 +291,12 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
   // Show existing application status
   if (existingApplication) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-teal-50 to-white dark:from-slate-900 dark:to-slate-800">
+      <div className="min-h-screen bg-gradient-to-b from-[#FAF7F2] to-white dark:from-slate-900 dark:to-slate-800">
         <header className="bg-white dark:bg-slate-900 border-b border-neutral-200 dark:border-slate-700 sticky top-0 z-50">
           <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <Logo size="sm" showText={false} />
-              <span className="text-lg font-semibold text-neutral-900 dark:text-white">Provider Application</span>
+              <span className="text-lg font-semibold text-[#1B2733] dark:text-white">Provider Application</span>
             </div>
             <Button variant="ghost" onClick={onBack}>
               <ArrowLeft className="w-4 h-4 mr-2" />
@@ -312,13 +312,13 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                 <div className="w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mx-auto mb-4">
                   <CheckCircle className="w-8 h-8 text-green-600" />
                 </div>
-                <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-2">
+                <h2 className="text-2xl font-bold text-[#1B2733] dark:text-white mb-2">
                   Application Approved!
                 </h2>
                 <p className="text-neutral-600 dark:text-slate-400 mb-6">
                   Welcome to Aminy! Your provider account is active and you're now listed in our marketplace.
                 </p>
-                <Button className="bg-teal-600 hover:bg-teal-700" onClick={onBack}>
+                <Button className="bg-primary hover:bg-[#6B9080]" onClick={onBack}>
                   Go to Provider Dashboard
                 </Button>
               </>
@@ -327,13 +327,13 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                 <div className="w-16 h-16 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center mx-auto mb-4">
                   <X className="w-8 h-8 text-red-600" />
                 </div>
-                <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-2">
+                <h2 className="text-2xl font-bold text-[#1B2733] dark:text-white mb-2">
                   Application Not Approved
                 </h2>
                 <p className="text-neutral-600 dark:text-slate-400 mb-4">
                   {existingApplication.rejection_reason || 'Your application could not be approved at this time.'}
                 </p>
-                <p className="text-sm text-neutral-500 dark:text-slate-500 mb-6">
+                <p className="text-sm text-[#5A6B7A] dark:text-[#5A6B7A] mb-6">
                   If you believe this is an error, please contact support@aminy.ai
                 </p>
                 <Button variant="outline" onClick={onBack}>
@@ -345,7 +345,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                 <div className="w-16 h-16 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center mx-auto mb-4">
                   <Clock className="w-8 h-8 text-amber-600" />
                 </div>
-                <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-2">
+                <h2 className="text-2xl font-bold text-[#1B2733] dark:text-white mb-2">
                   Application {existingApplication.status === 'under_review' ? 'Under Review' : 'Pending'}
                 </h2>
                 <p className="text-neutral-600 dark:text-slate-400 mb-6">
@@ -355,7 +355,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
 
                 {existingApplication.ai_verification_result && (
                   <div className="bg-neutral-50 dark:bg-slate-800 rounded-lg p-4 text-left mb-6">
-                    <h3 className="font-medium text-neutral-900 dark:text-white mb-2 flex items-center gap-2">
+                    <h3 className="font-medium text-[#1B2733] dark:text-white mb-2 flex items-center gap-2">
                       <Sparkles className="w-4 h-4 text-violet-600" />
                       AI Verification Status
                     </h3>
@@ -372,7 +372,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-neutral-600 dark:text-slate-400">Confidence Score</span>
-                        <span className="font-medium text-neutral-900 dark:text-white">
+                        <span className="font-medium text-[#1B2733] dark:text-white">
                           {Math.round(existingApplication.ai_verification_result.confidence_score * 100)}%
                         </span>
                       </div>
@@ -394,20 +394,20 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
   // Show success screen
   if (submitSuccess) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-teal-50 to-white dark:from-slate-900 dark:to-slate-800">
+      <div className="min-h-screen bg-gradient-to-b from-[#FAF7F2] to-white dark:from-slate-900 dark:to-slate-800">
         <header className="bg-white dark:bg-slate-900 border-b border-neutral-200 dark:border-slate-700 sticky top-0 z-50">
           <div className="max-w-4xl mx-auto px-4 py-4 flex items-center">
             <Logo size="sm" showText={false} />
-            <span className="text-lg font-semibold text-neutral-900 dark:text-white ml-3">Provider Application</span>
+            <span className="text-lg font-semibold text-[#1B2733] dark:text-white ml-3">Provider Application</span>
           </div>
         </header>
 
         <main className="max-w-2xl mx-auto px-4 py-12">
           <Card className="p-8 text-center">
             <div className="w-20 h-20 rounded-full bg-gradient-to-br from-teal-100 to-cyan-100 dark:from-teal-900/30 dark:to-cyan-900/30 flex items-center justify-center mx-auto mb-6">
-              <CheckCircle className="w-10 h-10 text-teal-600" />
+              <CheckCircle className="w-10 h-10 text-[#6B9080]" />
             </div>
-            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-2">
+            <h2 className="text-2xl font-bold text-[#1B2733] dark:text-white mb-2">
               Application Submitted!
             </h2>
             <p className="text-neutral-600 dark:text-slate-400 mb-6 max-w-md mx-auto">
@@ -416,12 +416,12 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
             </p>
 
             {verificationResult && (
-              <div className="bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 rounded-lg p-4 mb-6">
-                <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
+              <div className="bg-[#FAF7F2] dark:bg-slate-800/40 border border-[#E8E4DF] dark:border-slate-700 rounded-lg p-4 mb-6">
+                <div className="flex items-center gap-2 text-[#3A4A57] dark:text-slate-300">
                   <Sparkles className="w-5 h-5" />
                   <span className="font-medium">Application received</span>
                 </div>
-                <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+                <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mt-1">
                   Your information has been submitted for manual review. We verify all licenses, certifications, and credentials before network approval.
                 </p>
               </div>
@@ -439,13 +439,13 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-teal-50 to-white dark:from-slate-900 dark:to-slate-800">
+    <div className="min-h-screen bg-gradient-to-b from-[#FAF7F2] to-white dark:from-slate-900 dark:to-slate-800">
       {/* Header */}
       <header className="bg-white dark:bg-slate-900 border-b border-neutral-200 dark:border-slate-700 sticky top-0 z-50">
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Logo size="sm" showText={false} />
-            <span className="text-lg font-semibold text-neutral-900 dark:text-white">Provider Application</span>
+            <span className="text-lg font-semibold text-[#1B2733] dark:text-white">Provider Application</span>
           </div>
           <Button variant="ghost" onClick={onBack}>
             <ArrowLeft className="w-4 h-4 mr-2" />
@@ -462,8 +462,8 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
               <div
                 className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-colors ${
                   step >= s
-                    ? 'bg-teal-600 text-white'
-                    : 'bg-neutral-200 dark:bg-slate-700 text-neutral-500 dark:text-slate-400'
+                    ? 'bg-primary text-white'
+                    : 'bg-neutral-200 dark:bg-slate-700 text-[#5A6B7A] dark:text-slate-400'
                 }`}
               >
                 {step > s ? <Check className="w-5 h-5" /> : s}
@@ -471,7 +471,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
               {s < 4 && (
                 <div
                   className={`w-12 sm:w-20 h-1 mx-1 rounded transition-colors ${
-                    step > s ? 'bg-teal-600' : 'bg-neutral-200 dark:bg-slate-700'
+                    step > s ? 'bg-primary' : 'bg-neutral-200 dark:bg-slate-700'
                   }`}
                 />
               )}
@@ -484,8 +484,8 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
           {step === 1 && (
             <div className="space-y-6">
               <div>
-                <h2 className="text-xl font-bold text-neutral-900 dark:text-white">Personal Information</h2>
-                <p className="text-neutral-500 dark:text-slate-400 mt-1">Tell us about yourself</p>
+                <h2 className="text-xl font-bold text-[#1B2733] dark:text-white">Personal Information</h2>
+                <p className="text-[#5A6B7A] dark:text-slate-400 mt-1">Tell us about yourself</p>
               </div>
 
               <div className="space-y-4">
@@ -502,7 +502,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                       className="pl-10"
                     />
                   </div>
-                  <p className="text-xs text-neutral-500 mt-1">As it appears on your license</p>
+                  <p className="text-xs text-[#5A6B7A] mt-1">As it appears on your license</p>
                 </div>
 
                 <div>
@@ -550,7 +550,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
               <div className="flex justify-end">
                 <Button
                   onClick={() => { if (validateStep(1)) setStep(2); }}
-                  className="bg-teal-600 hover:bg-teal-700"
+                  className="bg-primary hover:bg-[#6B9080]"
                 >
                   Continue
                   <ArrowRight className="w-4 h-4 ml-2" />
@@ -563,8 +563,8 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
           {step === 2 && (
             <div className="space-y-6">
               <div>
-                <h2 className="text-xl font-bold text-neutral-900 dark:text-white">Professional Credentials</h2>
-                <p className="text-neutral-500 dark:text-slate-400 mt-1">
+                <h2 className="text-xl font-bold text-[#1B2733] dark:text-white">Professional Credentials</h2>
+                <p className="text-[#5A6B7A] dark:text-slate-400 mt-1">
                   We'll verify your credentials using AI-powered verification
                 </p>
               </div>
@@ -581,12 +581,12 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                         onClick={() => updateField('provider_type', type.value)}
                         className={`p-3 rounded-lg border-2 text-left transition-colors ${
                           formData.provider_type === type.value
-                            ? 'border-teal-500 bg-teal-50 dark:bg-teal-900/20'
+                            ? 'border-[#6B9080] bg-[#6B9080]/10 dark:bg-[#6B9080]/10'
                             : 'border-neutral-200 dark:border-slate-700 hover:border-neutral-300'
                         }`}
                       >
-                        <p className="font-medium text-neutral-900 dark:text-white">{type.label}</p>
-                        <p className="text-xs text-neutral-500 dark:text-slate-400 mt-0.5">{type.description}</p>
+                        <p className="font-medium text-[#1B2733] dark:text-white">{type.label}</p>
+                        <p className="text-xs text-[#5A6B7A] dark:text-slate-400 mt-0.5">{type.description}</p>
                       </button>
                     ))}
                   </div>
@@ -727,7 +727,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                 {verificationResult?.license_valid ? (
                   <Button
                     onClick={() => setStep(3)}
-                    className="bg-teal-600 hover:bg-teal-700"
+                    className="bg-primary hover:bg-[#6B9080]"
                   >
                     Continue
                     <ArrowRight className="w-4 h-4 ml-2" />
@@ -759,8 +759,8 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
           {step === 3 && (
             <div className="space-y-6">
               <div>
-                <h2 className="text-xl font-bold text-neutral-900 dark:text-white">Specialties & Experience</h2>
-                <p className="text-neutral-500 dark:text-slate-400 mt-1">
+                <h2 className="text-xl font-bold text-[#1B2733] dark:text-white">Specialties & Experience</h2>
+                <p className="text-[#5A6B7A] dark:text-slate-400 mt-1">
                   Help families find you based on their needs
                 </p>
               </div>
@@ -770,7 +770,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                   <label className="block text-sm font-medium text-neutral-700 dark:text-slate-300 mb-2">
                     Areas of Specialty <span className="text-red-500">*</span>
                   </label>
-                  <p className="text-xs text-neutral-500 dark:text-slate-400 mb-3">Select all that apply</p>
+                  <p className="text-xs text-[#5A6B7A] dark:text-slate-400 mb-3">Select all that apply</p>
                   <div className="flex flex-wrap gap-2">
                     {SPECIALTIES.map((specialty) => (
                       <button
@@ -778,7 +778,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                         onClick={() => toggleSpecialty(specialty)}
                         className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
                           formData.specialties.includes(specialty)
-                            ? 'bg-teal-600 text-white'
+                            ? 'bg-primary text-white'
                             : 'bg-neutral-100 dark:bg-slate-700 text-neutral-700 dark:text-slate-300 hover:bg-neutral-200 dark:hover:bg-slate-600'
                         }`}
                       >
@@ -815,7 +815,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                     placeholder="Tell families about your approach, experience, and what makes you passionate about working with children..."
                     rows={4}
                   />
-                  <p className="text-xs text-neutral-500 mt-1">
+                  <p className="text-xs text-[#5A6B7A] mt-1">
                     This will be displayed on your marketplace profile
                   </p>
                 </div>
@@ -837,7 +837,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                 </Button>
                 <Button
                   onClick={() => { if (validateStep(3)) setStep(4); }}
-                  className="bg-teal-600 hover:bg-teal-700"
+                  className="bg-primary hover:bg-[#6B9080]"
                 >
                   Review Application
                   <ArrowRight className="w-4 h-4 ml-2" />
@@ -850,8 +850,8 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
           {step === 4 && (
             <div className="space-y-6">
               <div>
-                <h2 className="text-xl font-bold text-neutral-900 dark:text-white">Review Your Application</h2>
-                <p className="text-neutral-500 dark:text-slate-400 mt-1">
+                <h2 className="text-xl font-bold text-[#1B2733] dark:text-white">Review Your Application</h2>
+                <p className="text-[#5A6B7A] dark:text-slate-400 mt-1">
                   Please confirm all information is correct
                 </p>
               </div>
@@ -859,30 +859,30 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
               <div className="space-y-4">
                 {/* Personal Info Summary */}
                 <div className="p-4 bg-neutral-50 dark:bg-slate-800 rounded-lg">
-                  <h3 className="font-medium text-neutral-900 dark:text-white mb-3 flex items-center gap-2">
-                    <User className="w-4 h-4 text-teal-600" />
+                  <h3 className="font-medium text-[#1B2733] dark:text-white mb-3 flex items-center gap-2">
+                    <User className="w-4 h-4 text-[#6B9080]" />
                     Personal Information
                   </h3>
                   <div className="grid grid-cols-2 gap-3 text-sm">
                     <div>
-                      <p className="text-neutral-500 dark:text-slate-400">Name</p>
-                      <p className="text-neutral-900 dark:text-white">{formData.full_name}</p>
+                      <p className="text-[#5A6B7A] dark:text-slate-400">Name</p>
+                      <p className="text-[#1B2733] dark:text-white">{formData.full_name}</p>
                     </div>
                     <div>
-                      <p className="text-neutral-500 dark:text-slate-400">Email</p>
-                      <p className="text-neutral-900 dark:text-white">{formData.email}</p>
+                      <p className="text-[#5A6B7A] dark:text-slate-400">Email</p>
+                      <p className="text-[#1B2733] dark:text-white">{formData.email}</p>
                     </div>
                     <div>
-                      <p className="text-neutral-500 dark:text-slate-400">Phone</p>
-                      <p className="text-neutral-900 dark:text-white">{formData.phone}</p>
+                      <p className="text-[#5A6B7A] dark:text-slate-400">Phone</p>
+                      <p className="text-[#1B2733] dark:text-white">{formData.phone}</p>
                     </div>
                   </div>
                 </div>
 
                 {/* Credentials Summary */}
                 <div className="p-4 bg-neutral-50 dark:bg-slate-800 rounded-lg">
-                  <h3 className="font-medium text-neutral-900 dark:text-white mb-3 flex items-center gap-2">
-                    <Award className="w-4 h-4 text-teal-600" />
+                  <h3 className="font-medium text-[#1B2733] dark:text-white mb-3 flex items-center gap-2">
+                    <Award className="w-4 h-4 text-[#6B9080]" />
                     Credentials
                     {verificationResult?.license_valid && (
                       <Badge className="bg-green-100 text-green-700">
@@ -893,25 +893,25 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                   </h3>
                   <div className="grid grid-cols-2 gap-3 text-sm">
                     <div>
-                      <p className="text-neutral-500 dark:text-slate-400">Provider Type</p>
-                      <p className="text-neutral-900 dark:text-white">
+                      <p className="text-[#5A6B7A] dark:text-slate-400">Provider Type</p>
+                      <p className="text-[#1B2733] dark:text-white">
                         {PROVIDER_TYPES.find(t => t.value === formData.provider_type)?.label}
                       </p>
                     </div>
                     <div>
-                      <p className="text-neutral-500 dark:text-slate-400">License</p>
-                      <p className="text-neutral-900 dark:text-white">
+                      <p className="text-[#5A6B7A] dark:text-slate-400">License</p>
+                      <p className="text-[#1B2733] dark:text-white">
                         {formData.license_number} ({formData.license_state})
                       </p>
                     </div>
                     <div>
-                      <p className="text-neutral-500 dark:text-slate-400">Expires</p>
-                      <p className="text-neutral-900 dark:text-white">{formData.license_expiry}</p>
+                      <p className="text-[#5A6B7A] dark:text-slate-400">Expires</p>
+                      <p className="text-[#1B2733] dark:text-white">{formData.license_expiry}</p>
                     </div>
                     {formData.npi_number && (
                       <div>
-                        <p className="text-neutral-500 dark:text-slate-400">NPI</p>
-                        <p className="text-neutral-900 dark:text-white">{formData.npi_number}</p>
+                        <p className="text-[#5A6B7A] dark:text-slate-400">NPI</p>
+                        <p className="text-[#1B2733] dark:text-white">{formData.npi_number}</p>
                       </div>
                     )}
                   </div>
@@ -919,13 +919,13 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
 
                 {/* Specialties Summary */}
                 <div className="p-4 bg-neutral-50 dark:bg-slate-800 rounded-lg">
-                  <h3 className="font-medium text-neutral-900 dark:text-white mb-3 flex items-center gap-2">
-                    <Heart className="w-4 h-4 text-teal-600" />
+                  <h3 className="font-medium text-[#1B2733] dark:text-white mb-3 flex items-center gap-2">
+                    <Heart className="w-4 h-4 text-[#6B9080]" />
                     Specialties
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     {formData.specialties.map((s) => (
-                      <Badge key={s} className="bg-teal-100 text-teal-700">{s}</Badge>
+                      <Badge key={s} className="bg-[#6B9080]/10 text-[#6B9080]">{s}</Badge>
                     ))}
                   </div>
                   <p className="text-sm text-neutral-600 dark:text-slate-400 mt-3">
@@ -935,8 +935,8 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
 
                 {/* Rates & Payment Setup */}
                 <div className="p-4 bg-neutral-50 dark:bg-slate-800 rounded-lg">
-                  <h3 className="font-medium text-neutral-900 dark:text-white mb-3 flex items-center gap-2">
-                    <Briefcase className="w-4 h-4 text-teal-600" />
+                  <h3 className="font-medium text-[#1B2733] dark:text-white mb-3 flex items-center gap-2">
+                    <Briefcase className="w-4 h-4 text-[#6B9080]" />
                     Rates & Payment
                   </h3>
                   <div className="space-y-4">
@@ -945,7 +945,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                         Session Rate (per 50-minute session)
                       </label>
                       <div className="relative w-40">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500">$</span>
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#5A6B7A]">$</span>
                         <Input
                           type="number"
                           min="50"
@@ -956,7 +956,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                           className="pl-7"
                         />
                       </div>
-                      <p className="text-xs text-neutral-500 mt-1">
+                      <p className="text-xs text-[#5A6B7A] mt-1">
                         On self-pay sessions Aminy takes a {CASH_PAY_FEE_PCT}% platform fee, so you'll earn ${Math.round(formData.hourly_rate * CASH_PAY_PROVIDER_SHARE)} per session. Insured ({INSURED_FEE_PCT}%) and AACT pilot ({AACT_PILOT_FEE_PCT}%) sessions have lower fees.
                       </p>
                     </div>
@@ -984,7 +984,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                           placeholder="Tax ID (optional)"
                         />
                       </div>
-                      <p className="text-xs text-neutral-500 mt-1">
+                      <p className="text-xs text-[#5A6B7A] mt-1">
                         Groups can set up centralized billing after individual providers are approved.
                       </p>
                     </div>
@@ -992,15 +992,15 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                 </div>
 
                 {/* Terms Agreement */}
-                <div className="p-4 bg-teal-50 dark:bg-teal-900/20 rounded-lg border border-teal-200 dark:border-teal-800">
+                <div className="p-4 bg-[#6B9080]/10 dark:bg-[#6B9080]/10 rounded-lg border border-[#6B9080]/20 dark:border-[#6B9080]/30">
                   <label className="flex items-start gap-3 cursor-pointer">
                     <input
                       type="checkbox"
                       checked={formData.accepts_terms}
                       onChange={(e) => updateField('accepts_terms', e.target.checked)}
-                      className="mt-1 w-5 h-5 rounded border-teal-300 text-teal-600 focus:ring-teal-500"
+                      className="mt-1 w-5 h-5 rounded border-[#6B9080]/30 text-[#6B9080] focus:ring-teal-500"
                     />
-                    <span className="text-sm text-teal-800 dark:text-teal-300">
+                    <span className="text-sm text-[#6B9080] dark:text-[#7BA7BC]">
                       I confirm that all information provided is accurate and I consent to Aminy verifying my credentials.
                       I agree to the{' '}
                       <a href="/?screen=terms-of-service" target="_blank" rel="noopener noreferrer" className="underline font-medium">Provider Terms of Service</a>,{' '}
@@ -1012,7 +1012,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
 
                 {/* Key Terms Summary */}
                 <div className="p-4 bg-neutral-100 dark:bg-slate-700 rounded-lg">
-                  <h4 className="font-medium text-neutral-900 dark:text-white mb-2">Key Terms</h4>
+                  <h4 className="font-medium text-[#1B2733] dark:text-white mb-2">Key Terms</h4>
                   <ul className="text-sm text-neutral-600 dark:text-slate-400 space-y-1">
                     <li>• Platform fee per completed session varies by rail: {CASH_PAY_FEE_PCT}% self-pay, {INSURED_FEE_PCT}% insured, {AACT_PILOT_FEE_PCT}% AACT pilot</li>
                     <li>• Weekly payouts via Stripe Connect</li>
@@ -1041,7 +1041,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                 <Button
                   onClick={handleSubmit}
                   disabled={isSubmitting || !formData.accepts_terms}
-                  className="bg-teal-600 hover:bg-teal-700 disabled:opacity-50"
+                  className="bg-primary hover:bg-[#6B9080] disabled:opacity-50"
                 >
                   {isSubmitting ? (
                     <>
@@ -1069,9 +1069,9 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
               { icon: Shield, title: 'HIPAA-Conscious', desc: 'Encrypted, secure platform for telehealth' },
             ].map(({ icon: Icon, title, desc }) => (
               <Card key={title} className="p-4 text-center">
-                <Icon className="w-8 h-8 text-teal-600 mx-auto mb-2" />
-                <h4 className="font-medium text-neutral-900 dark:text-white">{title}</h4>
-                <p className="text-sm text-neutral-500 dark:text-slate-400">{desc}</p>
+                <Icon className="w-8 h-8 text-[#6B9080] mx-auto mb-2" />
+                <h4 className="font-medium text-[#1B2733] dark:text-white">{title}</h4>
+                <p className="text-sm text-[#5A6B7A] dark:text-slate-400">{desc}</p>
               </Card>
             ))}
           </div>

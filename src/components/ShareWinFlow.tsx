@@ -13,7 +13,7 @@ import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Share2,
-  Instagram,
+  Camera,
   Copy,
   Check,
   Download,
@@ -21,7 +21,6 @@ import {
   Heart,
   Star,
   X,
-  Camera,
 } from 'lucide-react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
@@ -57,13 +56,13 @@ const WIN_TEMPLATES = {
   },
   goal: {
     emoji: '🎯',
-    color: 'from-teal-500 to-cyan-500',
-    bgColor: 'bg-teal-50',
+    color: 'from-[#6B9080] to-[#7BA7BC]',
+    bgColor: 'bg-[#6B9080]/10',
   },
   calm_moment: {
     emoji: '🧘',
     color: 'from-blue-500 to-indigo-500',
-    bgColor: 'bg-blue-50',
+    bgColor: 'bg-[#EEF4F8]',
   },
   routine: {
     emoji: '✅',
@@ -176,13 +175,13 @@ export function ShareWinFlow({ win, onClose, isOpen = true }: ShareWinFlowProps)
             <div className="p-3 sm:p-4">
               <div
                 ref={cardRef}
-                className={`p-6 rounded-xl ${template.bgColor} border-2 border-gray-100`}
+                className={`p-6 rounded-xl ${template.bgColor} border-2 border-[#E8E4DF]`}
               >
                 {/* Branding */}
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-2">
-                    <Heart className="w-5 h-5 text-teal-600" />
-                    <span className="font-semibold text-gray-900">Aminy</span>
+                    <Heart className="w-5 h-5 text-[#6B9080]" />
+                    <span className="font-semibold text-[#1B2733]">Aminy</span>
                   </div>
                   <Badge variant="outline" className="text-xs">
                     {new Date(win.date).toLocaleDateString()}
@@ -192,21 +191,21 @@ export function ShareWinFlow({ win, onClose, isOpen = true }: ShareWinFlowProps)
                 {/* Win Content */}
                 <div className="text-center py-4">
                   <span className="text-5xl mb-4 block">{template.emoji}</span>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">
+                  <h3 className="text-xl font-bold text-[#1B2733] mb-2">
                     {win.title}
                   </h3>
                   {win.metric && (
-                    <p className="text-xl sm:text-2xl font-bold text-teal-600 mb-2">
+                    <p className="text-xl sm:text-2xl font-bold text-[#6B9080] mb-2">
                       {win.metric}
                     </p>
                   )}
-                  <p className="text-gray-600">{win.description}</p>
+                  <p className="text-[#5A6B7A]">{win.description}</p>
                 </div>
 
                 {/* Footer */}
-                <div className="flex items-center justify-center gap-2 pt-4 border-t border-gray-200">
+                <div className="flex items-center justify-center gap-2 pt-4 border-t border-[#E8E4DF]">
                   <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
-                  <span className="text-sm text-gray-500">
+                  <span className="text-sm text-[#5A6B7A]">
                     Tracked with Aminy
                   </span>
                 </div>
@@ -214,8 +213,8 @@ export function ShareWinFlow({ win, onClose, isOpen = true }: ShareWinFlowProps)
             </div>
 
             {/* Share Options */}
-            <div className="p-4 bg-gray-50 border-t">
-              <p className="text-sm text-gray-500 mb-3 text-center">
+            <div className="p-4 bg-[#FAF7F2] border-t">
+              <p className="text-sm text-[#5A6B7A] mb-3 text-center">
                 Share your progress and inspire other parents
               </p>
 
@@ -225,7 +224,7 @@ export function ShareWinFlow({ win, onClose, isOpen = true }: ShareWinFlowProps)
                   className="flex flex-col items-center gap-1 h-auto py-3"
                   onClick={handleShareTwitter}
                 >
-                  <X className="w-5 h-5 text-gray-900" />
+                  <X className="w-5 h-5 text-[#1B2733]" />
                   <span className="text-xs">X</span>
                 </Button>
 
@@ -245,7 +244,7 @@ export function ShareWinFlow({ win, onClose, isOpen = true }: ShareWinFlowProps)
                   disabled={generating}
                 >
                   {generating ? (
-                    <div className="w-5 h-5 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
+                    <div className="w-5 h-5 border-2 border-[#E8E4DF] border-t-gray-600 rounded-full animate-spin" />
                   ) : (
                     <Camera className="w-5 h-5 text-pink-500" />
                   )}
@@ -260,14 +259,14 @@ export function ShareWinFlow({ win, onClose, isOpen = true }: ShareWinFlowProps)
                   {copied ? (
                     <Check className="w-5 h-5 text-green-500" />
                   ) : (
-                    <Copy className="w-5 h-5 text-gray-500" />
+                    <Copy className="w-5 h-5 text-[#5A6B7A]" />
                   )}
                   <span className="text-xs">Copy</span>
                 </Button>
               </div>
 
               {/* Text Preview */}
-              <div className="p-3 bg-white rounded-lg border text-sm text-gray-600">
+              <div className="p-3 bg-white rounded-lg border text-sm text-[#5A6B7A]">
                 {getShareText()}
               </div>
             </div>

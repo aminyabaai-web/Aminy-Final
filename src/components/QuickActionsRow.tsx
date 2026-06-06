@@ -28,7 +28,7 @@ export function QuickActionsRow({
   ];
 
   return (
-    <div className="bg-white border-t border-gray-100 px-4 py-3">
+    <div className="bg-white border-t border-[#E8E4DF] px-4 py-3">
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
         {actions.map((action) => {
           const Icon = action.icon;

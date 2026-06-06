@@ -229,8 +229,8 @@ export function FiscalAgentSubmissionFlow({
   if (loading) {
     return (
       <div className="p-6 text-center">
-        <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-teal-600" />
-        <p className="text-gray-600">Loading your hours...</p>
+        <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-[#6B9080]" />
+        <p className="text-[#5A6B7A]">Loading your hours...</p>
       </div>
     );
   }
@@ -240,18 +240,18 @@ export function FiscalAgentSubmissionFlow({
       {/* Header */}
       <div className="sticky top-0 bg-white p-4 border-b z-10">
         <div className="flex items-center gap-3 mb-3">
-          <div className="p-2 bg-teal-100 rounded-lg">
-            <Building2 className="w-5 h-5 text-teal-600" />
+          <div className="p-2 bg-[#6B9080]/10 rounded-lg">
+            <Building2 className="w-5 h-5 text-[#6B9080]" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-gray-900">Submit Hours</h2>
-            <p className="text-sm text-gray-600">
+            <h2 className="text-lg font-bold text-[#1B2733]">Submit Hours</h2>
+            <p className="text-sm text-[#5A6B7A]">
               to {fiscalAgent?.name || 'Fiscal Agent'}
             </p>
           </div>
         </div>
         <Progress value={(step / 4) * 100} className="h-2" />
-        <div className="flex justify-between text-xs text-gray-500 mt-1">
+        <div className="flex justify-between text-xs text-[#5A6B7A] mt-1">
           <span>Select Hours</span>
           <span>Review</span>
           <span>Submit</span>
@@ -270,16 +270,16 @@ export function FiscalAgentSubmissionFlow({
               className="space-y-3 sm:space-y-4"
             >
               {/* Summary Card */}
-              <Card className="p-4 bg-gradient-to-r from-teal-50 to-blue-50 border-teal-200">
+              <Card className="p-4 bg-gradient-to-r from-[#FAF7F2] to-blue-50 border-[#6B9080]/20">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-teal-800">
+                  <span className="text-sm font-medium text-[#6B9080]">
                     Week of {summary ? new Date(summary.weekStart).toLocaleDateString() : '...'}
                   </span>
-                  <Badge className="bg-teal-100 text-teal-800">
+                  <Badge className="bg-[#6B9080]/10 text-[#6B9080]">
                     {formatDuration(totalSelectedHours)} selected
                   </Badge>
                 </div>
-                <p className="text-sm text-teal-700">
+                <p className="text-sm text-[#6B9080]">
                   {entries.length} completed entries ready for submission
                 </p>
               </Card>
@@ -287,16 +287,16 @@ export function FiscalAgentSubmissionFlow({
               {/* Entries List */}
               {entries.length === 0 ? (
                 <Card className="p-6 text-center">
-                  <Clock className="w-12 h-12 mx-auto mb-3 text-gray-400" />
-                  <h3 className="font-medium text-gray-900 mb-1">No Hours to Submit</h3>
-                  <p className="text-sm text-gray-600">
+                  <Clock className="w-12 h-12 mx-auto mb-3 text-[#8A9BA8]" />
+                  <h3 className="font-medium text-[#1B2733] mb-1">No Hours to Submit</h3>
+                  <p className="text-sm text-[#5A6B7A]">
                     Complete your shifts by clocking out to see them here.
                   </p>
                 </Card>
               ) : (
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-gray-700">
+                    <span className="text-sm font-medium text-[#3A4A57]">
                       Select entries to submit:
                     </span>
                     <button
@@ -307,7 +307,7 @@ export function FiscalAgentSubmissionFlow({
                           setSelectedEntries(new Set(entries.map((e) => e.id)));
                         }
                       }}
-                      className="text-sm text-teal-600 hover:underline"
+                      className="text-sm text-[#6B9080] hover:underline"
                     >
                       {selectedEntries.size === entries.length ? 'Deselect All' : 'Select All'}
                     </button>
@@ -328,8 +328,8 @@ export function FiscalAgentSubmissionFlow({
                         key={entry.id}
                         className={`p-3 cursor-pointer transition-all ${
                           selectedEntries.has(entry.id)
-                            ? 'border-teal-500 bg-teal-50'
-                            : 'border-gray-200'
+                            ? 'border-[#6B9080] bg-[#6B9080]/10'
+                            : 'border-[#E8E4DF]'
                         }`}
                       >
                         <div
@@ -349,18 +349,18 @@ export function FiscalAgentSubmissionFlow({
                             checked={selectedEntries.has(entry.id)}
                             onChange={() => {}}
                             aria-label={`Select ${service.description} entry`}
-                            className="w-4 h-4 text-teal-600"
+                            className="w-4 h-4 text-[#6B9080]"
                           />
                           <div className="flex-1">
                             <div className="flex items-center justify-between">
-                              <span className="font-medium text-gray-900">
+                              <span className="font-medium text-[#1B2733]">
                                 {service.description}
                               </span>
                               <Badge variant="outline" className="text-xs">
                                 {formatDuration(hours)}
                               </Badge>
                             </div>
-                            <div className="text-xs text-gray-500">
+                            <div className="text-xs text-[#5A6B7A]">
                               {new Date(entry.clockIn).toLocaleDateString()} •{' '}
                               {new Date(entry.clockIn).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} -{' '}
                               {entry.clockOut
@@ -377,9 +377,9 @@ export function FiscalAgentSubmissionFlow({
                             }}
                           >
                             {isExpanded ? (
-                              <ChevronUp className="w-4 h-4 text-gray-400" />
+                              <ChevronUp className="w-4 h-4 text-[#8A9BA8]" />
                             ) : (
-                              <ChevronDown className="w-4 h-4 text-gray-400" />
+                              <ChevronDown className="w-4 h-4 text-[#8A9BA8]" />
                             )}
                           </button>
                         </div>
@@ -393,18 +393,18 @@ export function FiscalAgentSubmissionFlow({
                           >
                             <div className="text-sm space-y-2">
                               <div>
-                                <span className="text-gray-500">Service Code: </span>
+                                <span className="text-[#5A6B7A]">Service Code: </span>
                                 <span className="font-mono">{service.code}</span>
                               </div>
                               {entry.activitiesCompleted.length > 0 && (
                                 <div>
-                                  <span className="text-gray-500">Activities: </span>
+                                  <span className="text-[#5A6B7A]">Activities: </span>
                                   <span>{entry.activitiesCompleted.join(', ')}</span>
                                 </div>
                               )}
                               {entry.notes && (
                                 <div>
-                                  <span className="text-gray-500">Notes: </span>
+                                  <span className="text-[#5A6B7A]">Notes: </span>
                                   <span>{entry.notes}</span>
                                 </div>
                               )}
@@ -425,7 +425,7 @@ export function FiscalAgentSubmissionFlow({
                 <Button
                   onClick={() => setStep(2)}
                   disabled={selectedEntries.size === 0}
-                  className="flex-1 bg-teal-600 hover:bg-teal-700"
+                  className="flex-1 bg-primary hover:bg-[#6B9080]"
                 >
                   Continue
                   <ArrowRight className="w-4 h-4 ml-2" />
@@ -443,8 +443,8 @@ export function FiscalAgentSubmissionFlow({
               className="space-y-3 sm:space-y-4"
             >
               <Card className="p-3 sm:p-4">
-                <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                  <ClipboardCheck className="w-5 h-5 text-teal-600" />
+                <h3 className="font-semibold text-[#1B2733] mb-3 flex items-center gap-2">
+                  <ClipboardCheck className="w-5 h-5 text-[#6B9080]" />
                   Hours Summary
                 </h3>
 
@@ -468,15 +468,15 @@ export function FiscalAgentSubmissionFlow({
                     const maxPay = data.hours * service.hourlyRange[1];
 
                     return (
-                      <div key={code} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <div key={code} className="flex items-center justify-between p-3 bg-[#FAF7F2] rounded-lg">
                         <div>
-                          <div className="font-medium text-gray-900">{service.description}</div>
-                          <div className="text-xs text-gray-500">
+                          <div className="font-medium text-[#1B2733]">{service.description}</div>
+                          <div className="text-xs text-[#5A6B7A]">
                             Code: {service.code} • {data.count} entries
                           </div>
                         </div>
                         <div className="text-right">
-                          <div className="font-bold text-gray-900">{formatDuration(data.hours)}</div>
+                          <div className="font-bold text-[#1B2733]">{formatDuration(data.hours)}</div>
                           <div className="text-xs text-green-600">
                             ${minPay.toFixed(0)} - ${maxPay.toFixed(0)}
                           </div>
@@ -486,11 +486,11 @@ export function FiscalAgentSubmissionFlow({
                   })}
 
                   {/* Total */}
-                  <div className="flex items-center justify-between p-3 bg-teal-50 rounded-lg border border-teal-200">
-                    <div className="font-semibold text-teal-900">Total</div>
+                  <div className="flex items-center justify-between p-3 bg-[#6B9080]/10 rounded-lg border border-[#6B9080]/20">
+                    <div className="font-semibold text-[#6B9080]">Total</div>
                     <div className="text-right">
-                      <div className="font-bold text-teal-900">{formatDuration(totalSelectedHours)}</div>
-                      <div className="text-xs text-teal-700">
+                      <div className="font-bold text-[#6B9080]">{formatDuration(totalSelectedHours)}</div>
+                      <div className="text-xs text-[#6B9080]">
                         {selectedEntries.size} entries
                       </div>
                     </div>
@@ -500,23 +500,23 @@ export function FiscalAgentSubmissionFlow({
 
               {/* Submission Method */}
               <Card className="p-3 sm:p-4">
-                <h3 className="font-semibold text-gray-900 mb-3">How do you want to submit?</h3>
+                <h3 className="font-semibold text-[#1B2733] mb-3">How do you want to submit?</h3>
                 <div className="space-y-2">
                   {/* Clearinghouse submission - not yet available (no live billing/subscriber data wired) */}
                   <button
                     type="button"
                     disabled
                     aria-disabled="true"
-                    className="w-full p-3 text-left border rounded-lg border-gray-200 opacity-60 cursor-not-allowed"
+                    className="w-full p-3 text-left border rounded-lg border-[#E8E4DF] opacity-60 cursor-not-allowed"
                   >
                     <div className="flex items-center gap-3">
-                      <Zap className="w-5 h-5 text-gray-400" />
+                      <Zap className="w-5 h-5 text-[#8A9BA8]" />
                       <div className="flex-1">
-                        <div className="font-medium flex items-center gap-2 text-gray-500">
+                        <div className="font-medium flex items-center gap-2 text-[#5A6B7A]">
                           Direct Electronic Submission
-                          <Badge className="bg-gray-100 text-gray-600 text-xs">Coming soon</Badge>
+                          <Badge className="bg-[#F0EDE8] text-[#5A6B7A] text-xs">Coming soon</Badge>
                         </div>
-                        <div className="text-sm text-gray-500">
+                        <div className="text-sm text-[#5A6B7A]">
                           Submit via Availity clearinghouse (EDI 837P). In the meantime, use a PDF or your fiscal agent portal.
                         </div>
                       </div>
@@ -527,15 +527,15 @@ export function FiscalAgentSubmissionFlow({
                     onClick={() => setSubmissionMethod('pdf_download')}
                     className={`w-full p-3 text-left border rounded-lg transition-colors ${
                       submissionMethod === 'pdf_download'
-                        ? 'border-teal-500 bg-teal-50'
-                        : 'border-gray-200 hover:border-gray-300'
+                        ? 'border-[#6B9080] bg-[#6B9080]/10'
+                        : 'border-[#E8E4DF] hover:border-[#E8E4DF]'
                     }`}
                   >
                     <div className="flex items-center gap-3">
-                      <Download className="w-5 h-5 text-teal-600" />
+                      <Download className="w-5 h-5 text-[#6B9080]" />
                       <div>
                         <div className="font-medium">Download PDF</div>
-                        <div className="text-sm text-gray-500">
+                        <div className="text-sm text-[#5A6B7A]">
                           Generate documents to upload to your fiscal agent portal
                         </div>
                       </div>
@@ -546,15 +546,15 @@ export function FiscalAgentSubmissionFlow({
                     onClick={() => setSubmissionMethod('portal_upload')}
                     className={`w-full p-3 text-left border rounded-lg transition-colors ${
                       submissionMethod === 'portal_upload'
-                        ? 'border-teal-500 bg-teal-50'
-                        : 'border-gray-200 hover:border-gray-300'
+                        ? 'border-[#6B9080] bg-[#6B9080]/10'
+                        : 'border-[#E8E4DF] hover:border-[#E8E4DF]'
                     }`}
                   >
                     <div className="flex items-center gap-3">
                       <Upload className="w-5 h-5 text-blue-600" />
                       <div>
                         <div className="font-medium">Open {fiscalAgent?.name.split(' ')[0] || 'FMS'} Portal</div>
-                        <div className="text-sm text-gray-500">
+                        <div className="text-sm text-[#5A6B7A]">
                           We'll generate documents and open your portal
                         </div>
                       </div>
@@ -588,7 +588,7 @@ export function FiscalAgentSubmissionFlow({
                 <Button
                   onClick={handleGenerateNotes}
                   disabled={isSigning}
-                  className="flex-1 bg-teal-600 hover:bg-teal-700"
+                  className="flex-1 bg-primary hover:bg-[#6B9080]"
                 >
                   {isSigning ? (
                     <>
@@ -628,61 +628,61 @@ export function FiscalAgentSubmissionFlow({
 
               {/* Generated Documents */}
               <Card className="p-3 sm:p-4">
-                <h3 className="font-semibold text-gray-900 mb-3">Generated Documents</h3>
+                <h3 className="font-semibold text-[#1B2733] mb-3">Generated Documents</h3>
                 <div className="space-y-2">
                   <button
                     onClick={handleDownloadPdf}
-                    className="w-full p-3 flex items-center justify-between border rounded-lg hover:bg-gray-50"
+                    className="w-full p-3 flex items-center justify-between border rounded-lg hover:bg-[#FAF7F2]"
                   >
                     <div className="flex items-center gap-3">
                       <FileText className="w-5 h-5 text-red-500" />
                       <div className="text-left">
                         <div className="font-medium">Weekly Summary</div>
-                        <div className="text-xs text-gray-500">
+                        <div className="text-xs text-[#5A6B7A]">
                           {formatDuration(totalSelectedHours)} • {selectedEntries.size} entries
                         </div>
                       </div>
                     </div>
-                    <Download className="w-5 h-5 text-gray-400" />
+                    <Download className="w-5 h-5 text-[#8A9BA8]" />
                   </button>
 
                   <button
                     onClick={handleDownloadPdf}
-                    className="w-full p-3 flex items-center justify-between border rounded-lg hover:bg-gray-50"
+                    className="w-full p-3 flex items-center justify-between border rounded-lg hover:bg-[#FAF7F2]"
                   >
                     <div className="flex items-center gap-3">
                       <FileText className="w-5 h-5 text-blue-500" />
                       <div className="text-left">
                         <div className="font-medium">Service Notes</div>
-                        <div className="text-xs text-gray-500">
+                        <div className="text-xs text-[#5A6B7A]">
                           {serviceNotes.length} notes with caregiver signature
                         </div>
                       </div>
                     </div>
-                    <Download className="w-5 h-5 text-gray-400" />
+                    <Download className="w-5 h-5 text-[#8A9BA8]" />
                   </button>
 
                   <button
                     onClick={handleDownloadPdf}
-                    className="w-full p-3 flex items-center justify-between border rounded-lg hover:bg-gray-50"
+                    className="w-full p-3 flex items-center justify-between border rounded-lg hover:bg-[#FAF7F2]"
                   >
                     <div className="flex items-center gap-3">
                       <DollarSign className="w-5 h-5 text-green-500" />
                       <div className="text-left">
                         <div className="font-medium">Superbill (HSA/FSA)</div>
-                        <div className="text-xs text-gray-500">
+                        <div className="text-xs text-[#5A6B7A]">
                           For reimbursement submissions
                         </div>
                       </div>
                     </div>
-                    <Download className="w-5 h-5 text-gray-400" />
+                    <Download className="w-5 h-5 text-[#8A9BA8]" />
                   </button>
                 </div>
               </Card>
 
               {/* Portal Link */}
               {submissionMethod === 'portal_upload' && (
-                <Card className="p-4 bg-blue-50 border-blue-200">
+                <Card className="p-4 bg-[#EEF4F8] border-[#C8DDE8]">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <Building2 className="w-5 h-5 text-blue-600" />
@@ -719,7 +719,7 @@ export function FiscalAgentSubmissionFlow({
                 <Button
                   onClick={handleSubmit}
                   disabled={isSubmitting}
-                  className="flex-1 bg-teal-600 hover:bg-teal-700"
+                  className="flex-1 bg-primary hover:bg-[#6B9080]"
                 >
                   {isSubmitting ? (
                     <>
@@ -748,48 +748,48 @@ export function FiscalAgentSubmissionFlow({
                 <CheckCircle className="w-8 h-8 text-green-600" />
               </div>
 
-              <h3 className="text-xl font-bold text-gray-900 mb-2">
+              <h3 className="text-xl font-bold text-[#1B2733] mb-2">
                 Hours Submitted!
               </h3>
-              <p className="text-gray-600 mb-4 sm:mb-6">
+              <p className="text-[#5A6B7A] mb-4 sm:mb-6">
                 Your {formatDuration(submission.totalHours)} have been marked as submitted
                 to {fiscalAgent?.name || 'your fiscal agent'}.
               </p>
 
-              <Card className="p-4 bg-gray-50 text-left mb-4 sm:mb-6">
+              <Card className="p-4 bg-[#FAF7F2] text-left mb-4 sm:mb-6">
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-gray-500">Submission ID:</span>
+                    <span className="text-[#5A6B7A]">Submission ID:</span>
                     <span className="font-mono">{submission.id}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-500">Period:</span>
+                    <span className="text-[#5A6B7A]">Period:</span>
                     <span>
                       {new Date(submission.periodStart).toLocaleDateString()} -{' '}
                       {new Date(submission.periodEnd).toLocaleDateString()}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-500">Total Hours:</span>
+                    <span className="text-[#5A6B7A]">Total Hours:</span>
                     <span className="font-medium">{formatDuration(submission.totalHours)}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-500">Entries:</span>
+                    <span className="text-[#5A6B7A]">Entries:</span>
                     <span>{submission.totalEntries}</span>
                   </div>
                   {clearinghouseResponse && (
                     <>
                       <div className="border-t pt-2 mt-2">
                         <div className="flex justify-between">
-                          <span className="text-gray-500">Clearinghouse:</span>
+                          <span className="text-[#5A6B7A]">Clearinghouse:</span>
                           <span className="font-medium text-green-600">Availity</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-gray-500">Claim Control #:</span>
+                          <span className="text-[#5A6B7A]">Claim Control #:</span>
                           <span className="font-mono text-xs">{clearinghouseResponse.claimControlNumber}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-gray-500">Status:</span>
+                          <span className="text-[#5A6B7A]">Status:</span>
                           <Badge className={
                             clearinghouseResponse.status === 'accepted'
                               ? 'bg-green-100 text-green-700'
@@ -811,7 +811,7 @@ export function FiscalAgentSubmissionFlow({
                   <Printer className="w-4 h-4 mr-2" />
                   Print Receipt
                 </Button>
-                <Button onClick={() => onComplete(submission)} className="flex-1 bg-teal-600 hover:bg-teal-700">
+                <Button onClick={() => onComplete(submission)} className="flex-1 bg-primary hover:bg-[#6B9080]">
                   Done
                 </Button>
               </div>

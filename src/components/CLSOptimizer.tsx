@@ -153,7 +153,7 @@ export function SkeletonLoader({
 }) {
   return (
     <div
-      className={`animate-pulse bg-gray-200 rounded-[8px] ${className}`}
+      className={`animate-pulse bg-[#E8E4DF] rounded-[8px] ${className}`}
       style={{
         height,
         contain: 'strict',

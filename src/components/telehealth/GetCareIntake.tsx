@@ -70,20 +70,20 @@ export function GetCareIntakeScreen({
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F5F5]">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-white border-b border-gray-100 px-4 py-3">
+      <header className="sticky top-0 z-10 bg-white border-b border-[#E8E4DF] px-4 py-3">
         <div className="flex items-center gap-3">
           <button
             onClick={onBack}
-            className="p-2 -ml-2 rounded-full hover:bg-gray-100 transition-colors"
+            className="p-2 -ml-2 rounded-full hover:bg-[#F0EDE8] transition-colors"
             aria-label="Go back"
           >
-            <ArrowLeft className="w-5 h-5 text-gray-700" />
+            <ArrowLeft className="w-5 h-5 text-[#3A4A57]" />
           </button>
           <div>
-            <h1 className="text-lg font-semibold text-gray-900">Get Care</h1>
-            <p className="text-sm text-gray-500">Find a provider for your needs</p>
+            <h1 className="text-lg font-semibold text-[#1B2733]">Get Care</h1>
+            <p className="text-sm text-[#5A6B7A]">Find a provider for your needs</p>
           </div>
         </div>
       </header>
@@ -91,12 +91,12 @@ export function GetCareIntakeScreen({
       {/* Form */}
       <div className="px-4 py-6 space-y-3 sm:space-y-4 sm:space-y-6">
         {/* Step 1: Visit Reason */}
-        <section className="bg-white rounded-2xl p-4 border border-gray-100">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+        <section className="bg-white rounded-2xl p-4 border border-[#E8E4DF]">
+          <label className="block text-sm font-medium text-[#3A4A57] mb-2">
             What would you like help with?
           </label>
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8A9BA8]" />
             <input
               type="text"
               placeholder="e.g., Meltdowns, Sleep issues, Parent burnout"
@@ -107,20 +107,20 @@ export function GetCareIntakeScreen({
                   setConcernId(undefined);
                 }
               }}
-              className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600 transition-all"
+              className="w-full pl-10 pr-4 py-3 bg-[#FAF7F2] border border-[#E8E4DF] rounded-xl text-[#1B2733] placeholder:text-[#5A6B7A] focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600 transition-all"
             />
           </div>
           {preselectedConcern && concernId === preselectedConcern.id && (
             <div className="mt-2 flex items-center gap-2">
               <span className="text-2xl">{preselectedConcern.icon}</span>
-              <span className="text-sm text-gray-600">{preselectedConcern.description}</span>
+              <span className="text-sm text-[#5A6B7A]">{preselectedConcern.description}</span>
             </div>
           )}
         </section>
 
         {/* Step 2: Who is this for */}
-        <section className="bg-white rounded-2xl p-4 border border-gray-100">
-          <label className="block text-sm font-medium text-gray-700 mb-3">
+        <section className="bg-white rounded-2xl p-4 border border-[#E8E4DF]">
+          <label className="block text-sm font-medium text-[#3A4A57] mb-3">
             Who is this for?
           </label>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
@@ -146,33 +146,33 @@ export function GetCareIntakeScreen({
         </section>
 
         {/* Step 3: Location */}
-        <section className="bg-white rounded-2xl p-4 border border-gray-100">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+        <section className="bg-white rounded-2xl p-4 border border-[#E8E4DF]">
+          <label className="block text-sm font-medium text-[#3A4A57] mb-2">
             Where are you located?
-            <span className="text-gray-400 font-normal"> (required for provider matching)</span>
+            <span className="text-[#8A9BA8] font-normal"> (required for provider matching)</span>
           </label>
 
           {/* State Selector */}
           <div className="relative">
-            <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8A9BA8]" />
             <button
               onClick={() => setShowStateDropdown(!showStateDropdown)}
-              className="w-full pl-10 pr-10 py-3 bg-gray-50 border border-gray-200 rounded-xl text-left text-gray-900 focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600 transition-all"
+              className="w-full pl-10 pr-10 py-3 bg-[#FAF7F2] border border-[#E8E4DF] rounded-xl text-left text-[#1B2733] focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600 transition-all"
             >
               {userState ? getStateName(userState) : 'Select your state'}
             </button>
-            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8A9BA8]" />
 
             {/* State Dropdown */}
             {showStateDropdown && (
-              <div className="absolute z-20 top-full left-0 right-0 mt-2 bg-white rounded-xl border border-gray-200 shadow-lg max-h-64 overflow-hidden">
-                <div className="p-2 border-b border-gray-100">
+              <div className="absolute z-20 top-full left-0 right-0 mt-2 bg-white rounded-xl border border-[#E8E4DF] shadow-lg max-h-64 overflow-hidden">
+                <div className="p-2 border-b border-[#E8E4DF]">
                   <input
                     type="text"
                     placeholder="Search states..."
                     value={stateSearch}
                     onChange={(e) => setStateSearch(e.target.value)}
-                    className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-cyan-600/20"
+                    className="w-full px-3 py-2 bg-[#FAF7F2] border border-[#E8E4DF] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-cyan-600/20"
                     autoFocus
                   />
                 </div>
@@ -185,8 +185,8 @@ export function GetCareIntakeScreen({
                         setShowStateDropdown(false);
                         setStateSearch('');
                       }}
-                      className={`w-full px-4 py-2 text-left text-sm hover:bg-gray-50 transition-colors ${
-                        userState === state.code ? 'bg-cyan-600/10 text-cyan-600 font-medium' : 'text-gray-700'
+                      className={`w-full px-4 py-2 text-left text-sm hover:bg-[#FAF7F2] transition-colors ${
+                        userState === state.code ? 'bg-[#6B9080]/10 text-[#6B9080] font-medium' : 'text-[#3A4A57]'
                       }`}
                     >
                       {state.name}
@@ -204,14 +204,14 @@ export function GetCareIntakeScreen({
               placeholder="City (optional)"
               value={userCity}
               onChange={(e) => setUserCity(e.target.value)}
-              className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600 transition-all"
+              className="w-full px-4 py-3 bg-[#FAF7F2] border border-[#E8E4DF] rounded-xl text-[#1B2733] placeholder:text-[#5A6B7A] focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600 transition-all"
             />
           </div>
         </section>
 
         {/* Step 4: Visit Type */}
-        <section className="bg-white rounded-2xl p-4 border border-gray-100">
-          <label className="block text-sm font-medium text-gray-700 mb-3">
+        <section className="bg-white rounded-2xl p-4 border border-[#E8E4DF]">
+          <label className="block text-sm font-medium text-[#3A4A57] mb-3">
             Visit type
           </label>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -251,14 +251,14 @@ export function GetCareIntakeScreen({
       </div>
 
       {/* Footer CTA */}
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-100 safe-area-bottom">
+      <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-[#E8E4DF] safe-area-bottom">
         <button
           onClick={handleSubmit}
           disabled={!isValid}
           className={`w-full py-4 rounded-xl font-semibold text-lg transition-all ${
             isValid
-              ? 'bg-cyan-600 text-white hover:bg-[#466379] active:scale-[0.98]'
-              : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+              ? 'bg-[#6B9080] text-white hover:bg-[#466379] active:scale-[0.98]'
+              : 'bg-[#E8E4DF] text-[#8A9BA8] cursor-not-allowed'
           }`}
         >
           See Available Times
@@ -293,8 +293,8 @@ function WhoButton({ icon, label, selected, onClick }: WhoButtonProps) {
       onClick={onClick}
       className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all ${
         selected
-          ? 'bg-cyan-600/10 border-cyan-600 text-cyan-600'
-          : 'bg-gray-50 border-gray-200 text-gray-600 hover:border-gray-300'
+          ? 'bg-[#6B9080]/10 border-cyan-600 text-[#6B9080]'
+          : 'bg-[#FAF7F2] border-[#E8E4DF] text-[#5A6B7A] hover:border-[#E8E4DF]'
       }`}
     >
       {icon}
@@ -326,10 +326,10 @@ function VisitTypeButton({
       disabled={disabled}
       className={`flex items-center gap-3 p-4 rounded-xl border-2 transition-all ${
         disabled
-          ? 'bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed opacity-60'
+          ? 'bg-[#F0EDE8] border-[#E8E4DF] text-[#8A9BA8] cursor-not-allowed opacity-60'
           : selected
-          ? 'bg-cyan-600/10 border-cyan-600 text-cyan-600'
-          : 'bg-gray-50 border-gray-200 text-gray-600 hover:border-gray-300'
+          ? 'bg-[#6B9080]/10 border-cyan-600 text-[#6B9080]'
+          : 'bg-[#FAF7F2] border-[#E8E4DF] text-[#5A6B7A] hover:border-[#E8E4DF]'
       }`}
     >
       {icon}

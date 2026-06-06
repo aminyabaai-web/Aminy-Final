@@ -225,14 +225,14 @@ export const AccessibilityToolbar: React.FC = () => {
         <div className="space-y-3 sm:space-y-4">
           {/* Visual Preferences */}
           <div>
-            <h3 className="font-medium text-gray-900 mb-2">Visual</h3>
+            <h3 className="font-medium text-[#1B2733] mb-2">Visual</h3>
             <div className="space-y-2">
               <label className="flex items-center gap-3">
                 <input
                   type="checkbox"
                   checked={preferences.highContrast}
                   onChange={() => togglePreference('highContrast')}
-                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  className="rounded border-[#E8E4DF] text-blue-600 focus:ring-blue-500"
                 />
                 <span className="text-sm">High contrast</span>
               </label>
@@ -242,7 +242,7 @@ export const AccessibilityToolbar: React.FC = () => {
                   type="checkbox"
                   checked={preferences.largeText}
                   onChange={() => togglePreference('largeText')}
-                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  className="rounded border-[#E8E4DF] text-blue-600 focus:ring-blue-500"
                 />
                 <span className="text-sm">Large text</span>
               </label>
@@ -251,13 +251,13 @@ export const AccessibilityToolbar: React.FC = () => {
 
           {/* Motion Preferences */}
           <div>
-            <h3 className="font-medium text-gray-900 mb-2">Motion</h3>
+            <h3 className="font-medium text-[#1B2733] mb-2">Motion</h3>
             <label className="flex items-center gap-3">
               <input
                 type="checkbox"
                 checked={preferences.reducedMotion}
                 onChange={() => togglePreference('reducedMotion')}
-                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                className="rounded border-[#E8E4DF] text-blue-600 focus:ring-blue-500"
               />
               <span className="text-sm">Reduce motion</span>
             </label>
@@ -265,7 +265,7 @@ export const AccessibilityToolbar: React.FC = () => {
 
           {/* Theme Selection */}
           <div>
-            <h3 className="font-medium text-gray-900 mb-2">Theme</h3>
+            <h3 className="font-medium text-[#1B2733] mb-2">Theme</h3>
             <div className="flex gap-2">
               <Button
                 variant={preferences.darkMode === 'light' ? 'default' : 'outline'}
@@ -299,13 +299,13 @@ export const AccessibilityToolbar: React.FC = () => {
 
           {/* Audio Preferences */}
           <div>
-            <h3 className="font-medium text-gray-900 mb-2">Audio</h3>
+            <h3 className="font-medium text-[#1B2733] mb-2">Audio</h3>
             <label className="flex items-center gap-3">
               <input
                 type="checkbox"
                 checked={preferences.soundEffects}
                 onChange={() => togglePreference('soundEffects')}
-                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                className="rounded border-[#E8E4DF] text-blue-600 focus:ring-blue-500"
               />
               <Volume2 className="w-4 h-4" />
               <span className="text-sm">Sound effects</span>
@@ -314,13 +314,13 @@ export const AccessibilityToolbar: React.FC = () => {
 
           {/* Navigation Preferences */}
           <div>
-            <h3 className="font-medium text-gray-900 mb-2">Navigation</h3>
+            <h3 className="font-medium text-[#1B2733] mb-2">Navigation</h3>
             <label className="flex items-center gap-3">
               <input
                 type="checkbox"
                 checked={preferences.keyboardNavigation}
                 onChange={() => togglePreference('keyboardNavigation')}
-                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                className="rounded border-[#E8E4DF] text-blue-600 focus:ring-blue-500"
               />
               <span className="text-sm">Enhanced keyboard navigation</span>
             </label>
@@ -520,8 +520,8 @@ export const KeyboardNavigationHelper: React.FC = () => {
         
         <div className="space-y-3 sm:space-y-4">
           <div>
-            <h3 className="font-medium text-gray-900 mb-2">Navigation</h3>
-            <ul className="text-sm text-gray-600 space-y-1">
+            <h3 className="font-medium text-[#1B2733] mb-2">Navigation</h3>
+            <ul className="text-sm text-[#5A6B7A] space-y-1">
               <li><kbd>Tab</kbd> - Move to next element</li>
               <li><kbd>Shift + Tab</kbd> - Move to previous element</li>
               <li><kbd>Enter</kbd> or <kbd>Space</kbd> - Activate button/link</li>
@@ -530,8 +530,8 @@ export const KeyboardNavigationHelper: React.FC = () => {
           </div>
           
           <div>
-            <h3 className="font-medium text-gray-900 mb-2">Shortcuts</h3>
-            <ul className="text-sm text-gray-600 space-y-1">
+            <h3 className="font-medium text-[#1B2733] mb-2">Shortcuts</h3>
+            <ul className="text-sm text-[#5A6B7A] space-y-1">
               <li><kbd>Alt + H</kbd> - Go to Home</li>
               <li><kbd>Alt + C</kbd> - Go to Care</li>
               <li><kbd>Alt + P</kbd> - Go to Plan</li>
@@ -542,8 +542,8 @@ export const KeyboardNavigationHelper: React.FC = () => {
           </div>
           
           <div>
-            <h3 className="font-medium text-gray-900 mb-2">Forms</h3>
-            <ul className="text-sm text-gray-600 space-y-1">
+            <h3 className="font-medium text-[#1B2733] mb-2">Forms</h3>
+            <ul className="text-sm text-[#5A6B7A] space-y-1">
               <li><kbd>Arrow Keys</kbd> - Navigate options</li>
               <li><kbd>Space</kbd> - Select checkbox/radio</li>
               <li><kbd>Enter</kbd> - Submit form</li>

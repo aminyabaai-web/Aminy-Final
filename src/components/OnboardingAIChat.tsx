@@ -249,12 +249,12 @@ Generate a personalized summary for this parent.`,
       <div className="p-3 sm:p-4 border-b bg-white/80 backdrop-blur-sm sticky top-0 z-10">
         <div className="flex items-center justify-between max-w-lg mx-auto px-1 sm:px-0">
           <div className="flex items-center gap-2 sm:gap-3">
-            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-teal-100 rounded-full flex items-center justify-center">
-              <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-teal-600" />
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-[#6B9080]/10 rounded-full flex items-center justify-center">
+              <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-[#6B9080]" />
             </div>
             <div>
-              <p className="font-medium text-sm sm:text-base text-gray-900">Aminy</p>
-              <p className="text-xs text-gray-500">Getting to know you</p>
+              <p className="font-medium text-sm sm:text-base text-[#1B2733]">Aminy</p>
+              <p className="text-xs text-[#5A6B7A]">Getting to know you</p>
             </div>
           </div>
           <Button variant="ghost" size="sm" onClick={onSkip} className="text-xs sm:text-sm">
@@ -277,7 +277,7 @@ Generate a personalized summary for this parent.`,
               <div
                 className={`max-w-[90%] sm:max-w-[85%] md:max-w-[80%] rounded-2xl px-3 sm:px-4 py-2.5 sm:py-3 ${
                   message.role === 'user'
-                    ? 'bg-teal-600 text-white rounded-br-md'
+                    ? 'bg-primary text-white rounded-br-md'
                     : 'bg-white border shadow-sm rounded-bl-md'
                 }`}
               >
@@ -340,7 +340,7 @@ Generate a personalized summary for this parent.`,
               <Button
                 onClick={handleSend}
                 disabled={!input.trim() || isTyping}
-                className="bg-teal-600 hover:bg-teal-700 h-11 w-11 sm:h-auto sm:w-auto sm:px-4"
+                className="bg-primary hover:bg-[#6B9080] h-11 w-11 sm:h-auto sm:w-auto sm:px-4"
               >
                 <Send className="w-4 h-4 sm:w-5 sm:h-5" />
               </Button>
@@ -353,7 +353,7 @@ Generate a personalized summary for this parent.`,
               <Button
                 onClick={handleComplete}
                 disabled={isTyping || isGeneratingSummary}
-                className="w-full bg-teal-600 hover:bg-teal-700 py-4 sm:py-5 md:py-6 text-sm sm:text-base"
+                className="w-full bg-primary hover:bg-[#6B9080] py-4 sm:py-5 md:py-6 text-sm sm:text-base"
               >
                 {isGeneratingSummary ? (
                   <>
@@ -376,7 +376,7 @@ Generate a personalized summary for this parent.`,
               <div
                 key={i}
                 className={`w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full transition-colors ${
-                  i <= conversationStep ? 'bg-teal-600' : 'bg-gray-200'
+                  i <= conversationStep ? 'bg-primary' : 'bg-[#E8E4DF]'
                 }`}
               />
             ))}

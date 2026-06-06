@@ -50,7 +50,7 @@ export function AskAminyFeaturedCard({
           </div>
         </div>
         <div>
-          <h3 className="text-lg sm:text-xl font-semibold text-gray-900">Talk to Aminy</h3>
+          <h3 className="text-lg sm:text-xl font-semibold text-[#1B2733]">Talk to Aminy</h3>
           <div className="flex items-center gap-2">
             <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
               <Zap className="w-3 h-3 mr-1" />
@@ -67,7 +67,7 @@ export function AskAminyFeaturedCard({
       </div>
 
       {/* Description */}
-      <p className="text-gray-600 mb-4 aminy-ai-subtitle">
+      <p className="text-[#5A6B7A] mb-4 aminy-ai-subtitle">
         Get personalized, evidence-based guidance for {userData.childName}'s development. 
         Ask about routines, behaviors, milestones, or any concerns.
       </p>
@@ -91,7 +91,7 @@ export function AskAminyFeaturedCard({
       {/* Quick Actions */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
         <button 
-          className="text-left p-2 bg-gray-50 hover:bg-accent/5 hover:border-accent/30 rounded-lg text-sm transition-colors border border-transparent"
+          className="text-left p-2 bg-[#FAF7F2] hover:bg-accent/5 hover:border-accent/30 rounded-lg text-sm transition-colors border border-transparent"
           onClick={(e) => {
             e.stopPropagation();
             onAskAminyClick();
@@ -100,7 +100,7 @@ export function AskAminyFeaturedCard({
           Help with {userData.childName}'s routine
         </button>
         <button 
-          className="text-left p-2 bg-gray-50 hover:bg-accent/5 hover:border-accent/30 rounded-lg text-sm transition-colors border border-transparent"
+          className="text-left p-2 bg-[#FAF7F2] hover:bg-accent/5 hover:border-accent/30 rounded-lg text-sm transition-colors border border-transparent"
           onClick={(e) => {
             e.stopPropagation();
             onAskAminyClick();

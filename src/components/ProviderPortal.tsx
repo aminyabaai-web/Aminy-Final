@@ -18,6 +18,7 @@
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
+import { toast } from 'sonner';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
@@ -229,7 +230,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
       ],
     },
     'slp-session': {
-      label: 'SLP Session Note', badge: 'SLP', badgeClass: 'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-300',
+      label: 'SLP Session Note', badge: 'SLP', badgeClass: 'bg-[#6B9080]/10 text-[#6B9080] dark:bg-[#6B9080]/15 dark:text-[#7BA7BC]',
       fields: [
         { key: 'articulation', label: 'Articulation / Phonology', placeholder: 'Phoneme targets (e.g., /r/, /s/ blends), % accuracy, error patterns...' },
         { key: 'language', label: 'Receptive / Expressive Language', placeholder: 'Language sample, MLU, following directions, vocabulary targets...' },
@@ -795,7 +796,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
   };
 
   const getConditionColor = (condition: string) => {
-    if (condition.includes('Autism')) return 'bg-teal-100 text-teal-700';
+    if (condition.includes('Autism')) return 'bg-[#6B9080]/10 text-[#6B9080]';
     if (condition.includes('ADHD')) return 'bg-violet-100 text-violet-700';
     if (condition.includes('Anxiety')) return 'bg-blue-100 text-blue-700';
     if (condition.includes('Sensory')) return 'bg-orange-100 text-orange-700';
@@ -807,7 +808,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
     return (
       <div className="min-h-screen bg-gradient-to-b from-neutral-50 to-white dark:from-slate-900 dark:to-slate-800 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-12 h-12 border-4 border-teal-200 border-t-teal-600 rounded-full animate-spin mx-auto mb-4" />
+          <div className="w-12 h-12 border-4 border-[#6B9080]/20 border-t-[#6B9080] rounded-full animate-spin mx-auto mb-4" />
           <p className="text-neutral-600 dark:text-slate-400">Loading your portal...</p>
         </div>
       </div>
@@ -837,26 +838,26 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                   {branding.logoUrl ? (
                     <img src={branding.logoUrl} alt={branding.orgName} className="w-8 h-8 rounded-lg object-contain" />
                   ) : (
-                    <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-sm" style={{ backgroundColor: branding.primaryColor || '#0891b2' }}>
+                    <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-sm" style={{ backgroundColor: branding.primaryColor || '#6B9080' }}>
                       {branding.orgName.slice(0, 2).toUpperCase()}
                     </div>
                   )}
                   <div className="flex flex-col">
                     <div className="flex items-center gap-2">
-                      <span className="text-lg font-semibold text-neutral-900 dark:text-white">{branding.orgName}</span>
-                      <Badge className="bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400 font-medium">
+                      <span className="text-lg font-semibold text-[#1B2733] dark:text-white">{branding.orgName}</span>
+                      <Badge className="bg-[#6B9080]/10 text-[#6B9080] dark:bg-[#6B9080]/15 dark:text-primary font-medium">
                         {provider.credentials}
                       </Badge>
                     </div>
-                    <span className="text-xs text-neutral-400 dark:text-slate-500 -mt-0.5">powered by Aminy</span>
+                    <span className="text-xs text-neutral-400 dark:text-[#5A6B7A] -mt-0.5">powered by Aminy</span>
                   </div>
                 </>
               ) : (
                 <>
                   <Logo size="sm" showText={false} />
                   <div className="flex items-center gap-2">
-                    <span className="text-lg font-semibold text-neutral-900 dark:text-white">Provider Portal</span>
-                    <Badge className="bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400 font-medium">
+                    <span className="text-lg font-semibold text-[#1B2733] dark:text-white">Provider Portal</span>
+                    <Badge className="bg-[#6B9080]/10 text-[#6B9080] dark:bg-[#6B9080]/15 dark:text-primary font-medium">
                       {provider.credentials}
                     </Badge>
                   </div>
@@ -871,14 +872,14 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                 onClick={() => loadProviderData()}
                 disabled={isRefreshing}
                 aria-label="Refresh provider dashboard"
-                className="border-slate-200 bg-white text-neutral-600 hover:border-teal-200 hover:bg-teal-50 hover:text-teal-700"
+                className="border-[#E8E4DF] bg-white text-neutral-600 hover:border-[#6B9080]/20 hover:bg-[#6B9080]/10 hover:text-[#6B9080]"
               >
                 <RefreshCw className={`w-5 h-5 text-neutral-600 dark:text-slate-400 ${isRefreshing ? 'animate-spin' : ''}`} />
               </Button>
               <Button
                 variant="outline"
                 size="icon"
-                className="relative border-slate-200 bg-white text-neutral-600 hover:border-teal-200 hover:bg-teal-50 hover:text-teal-700"
+                className="relative border-[#E8E4DF] bg-white text-neutral-600 hover:border-[#6B9080]/20 hover:bg-[#6B9080]/10 hover:text-[#6B9080]"
                 aria-label="Notifications"
                 onClick={() => toast.info("You're all caught up — no new notifications.")}
               >
@@ -886,17 +887,17 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
               </Button>
 
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center text-white font-semibold">
+                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] flex items-center justify-center text-white font-semibold">
                   {provider.name.split(' ').map(n => n[0]).join('')}
                 </div>
                 <div className="hidden sm:block">
                   <div className="flex items-center gap-2">
-                    <p className="text-sm font-medium text-neutral-900 dark:text-white">{provider.name}</p>
+                    <p className="text-sm font-medium text-[#1B2733] dark:text-white">{provider.name}</p>
                     {provider.verificationStatus && (
                       <VerifiedBadge status={provider.verificationStatus} />
                     )}
                   </div>
-                  <p className="text-xs text-neutral-500 dark:text-slate-400">{provider.credentials}</p>
+                  <p className="text-xs text-[#5A6B7A] dark:text-slate-400">{provider.credentials}</p>
                 </div>
               </div>
             </div>
@@ -941,8 +942,8 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                 onClick={() => setActiveTab(tab.id as typeof activeTab)}
                 className={`flex shrink-0 items-center gap-2 whitespace-nowrap rounded-2xl border px-4 py-2.5 text-sm font-medium transition-colors ${
                   activeTab === tab.id
-                    ? 'border-teal-500 bg-white text-teal-700 shadow-sm'
-                    : 'border-slate-200 bg-transparent text-neutral-600 hover:border-teal-200 hover:bg-white hover:text-neutral-800'
+                    ? 'border-[#6B9080] bg-white text-[#6B9080] shadow-sm'
+                    : 'border-[#E8E4DF] bg-transparent text-neutral-600 hover:border-[#6B9080]/20 hover:bg-white hover:text-neutral-800'
                 }`}
               >
                 <tab.icon className="w-4 h-4" />
@@ -963,13 +964,13 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
             {/* Welcome & Next Session */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 sm:gap-6">
               {/* Welcome Card */}
-              <Card className="lg:col-span-2 overflow-hidden border-teal-200/60 bg-gradient-to-br from-teal-50 via-white to-cyan-50 p-6 shadow-sm">
+              <Card className="lg:col-span-2 overflow-hidden border-[#6B9080]/20/60 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FAF7F2] p-6 shadow-sm">
                 <div className="flex items-start justify-between">
                   <div>
-                    <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-teal-600">
+                    <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#6B9080]">
                       Independent practice cockpit
                     </p>
-                    <h1 className="text-xl sm:text-2xl font-bold text-neutral-900">
+                    <h1 className="text-xl sm:text-2xl font-bold text-[#1B2733]">
                       Welcome back, {provider.name.split(' ')[0]}
                     </h1>
                     <h2 className="sr-only">Practice overview</h2>
@@ -980,13 +981,13 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                   </div>
                   <div className="flex items-center gap-1 bg-white/80 rounded-lg px-3 py-1.5">
                     <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
-                    <span className="font-semibold text-neutral-900">{provider.rating}</span>
-                    <span className="text-neutral-500 text-sm">({provider.reviewCount})</span>
+                    <span className="font-semibold text-[#1B2733]">{provider.rating}</span>
+                    <span className="text-[#5A6B7A] text-sm">({provider.reviewCount})</span>
                   </div>
                 </div>
 
                 {nextSession && (
-                  <div className="mt-4 sm:mt-6 rounded-2xl border border-teal-200/60 bg-white/95 p-4 shadow-sm">
+                  <div className="mt-4 sm:mt-6 rounded-2xl border border-[#6B9080]/20/60 bg-white/95 p-4 shadow-sm">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3 sm:gap-4">
                         <div className="w-12 h-12 rounded-full bg-gradient-to-br from-violet-100 to-purple-100 flex items-center justify-center">
@@ -995,22 +996,22 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                           </span>
                         </div>
                         <div>
-                          <p className="font-semibold text-neutral-900">
+                          <p className="font-semibold text-[#1B2733]">
                             {nextSession.patientName}
                           </p>
-                          <p className="text-sm text-neutral-500">
+                          <p className="text-sm text-[#5A6B7A]">
                             {nextSession.type} with {nextSession.parentName}
                           </p>
                         </div>
                       </div>
                       <div className="text-right">
-                        <div className="flex items-center gap-2 text-teal-600">
+                        <div className="flex items-center gap-2 text-[#6B9080]">
                           <Clock className="w-4 h-4" />
                           <span className="font-medium">
                             in {formatTimeUntil(nextSession.scheduledAt)}
                           </span>
                         </div>
-                        <p className="text-sm text-neutral-500">
+                        <p className="text-sm text-[#5A6B7A]">
                           {nextSession.duration} min session
                         </p>
                       </div>
@@ -1018,7 +1019,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
 
                     <div className="flex gap-3 mt-4">
                       <Button
-                        className="flex-1 bg-teal-600 hover:bg-teal-700"
+                        className="flex-1 bg-primary hover:bg-[#6B9080]"
                         onClick={() => {
                           if (onStartTelehealthSession) {
                             onStartTelehealthSession(nextSession.id);
@@ -1054,7 +1055,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
 
               {/* Stats Card */}
               <Card className="p-4 sm:p-5 md:p-6">
-                <h3 className="font-semibold text-neutral-900 mb-4">This Month</h3>
+                <h3 className="font-semibold text-[#1B2733] mb-4">This Month</h3>
                 <div className="space-y-3 sm:space-y-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -1063,7 +1064,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                       </div>
                       <span className="text-neutral-600">Active Clients</span>
                     </div>
-                    <span className="text-xl font-bold text-neutral-900">{provider.totalPatients}</span>
+                    <span className="text-xl font-bold text-[#1B2733]">{provider.totalPatients}</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -1072,7 +1073,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                       </div>
                       <span className="text-neutral-600">Sessions</span>
                     </div>
-                    <span className="text-xl font-bold text-neutral-900">{provider.sessionsThisMonth}</span>
+                    <span className="text-xl font-bold text-[#1B2733]">{provider.sessionsThisMonth}</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -1081,7 +1082,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                       </div>
                       <span className="text-neutral-600">Earnings</span>
                     </div>
-                    <span className="text-xl font-bold text-neutral-900">
+                    <span className="text-xl font-bold text-[#1B2733]">
                       ${provider.earningsThisMonth.toLocaleString()}
                     </span>
                   </div>
@@ -1097,7 +1098,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
               {/* Pending Profile Access */}
               <Card className="p-4 sm:p-5 md:p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-semibold text-neutral-900">Pending Profile Access</h3>
+                  <h3 className="font-semibold text-[#1B2733]">Pending Profile Access</h3>
                   <Badge className="bg-amber-100 text-amber-700">
                     {patients.filter(p => p.profileAccess === 'pending').length} pending
                   </Badge>
@@ -1112,8 +1113,8 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                             <Lock className="w-4 h-4 text-amber-600" />
                           </div>
                           <div>
-                            <p className="font-medium text-neutral-900">{patient.childName}</p>
-                            <p className="text-sm text-neutral-500">
+                            <p className="font-medium text-[#1B2733]">{patient.childName}</p>
+                            <p className="text-sm text-[#5A6B7A]">
                               Awaiting {patient.parentName}'s approval
                             </p>
                           </div>
@@ -1125,7 +1126,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                       </div>
                     ))}
                   {patients.filter(p => p.profileAccess === 'pending').length === 0 && (
-                    <div className="text-center py-6 text-neutral-500">
+                    <div className="text-center py-6 text-[#5A6B7A]">
                       <CheckCircle className="w-8 h-8 mx-auto mb-2 text-green-500" />
                       <p>All access requests approved</p>
                     </div>
@@ -1136,7 +1137,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
               {/* Upcoming Sessions This Week */}
               <Card className="p-4 sm:p-5 md:p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-semibold text-neutral-900">This Week's Sessions</h3>
+                  <h3 className="font-semibold text-[#1B2733]">This Week's Sessions</h3>
                   <Button variant="ghost" size="sm" onClick={() => setActiveTab('sessions')}>
                     View All
                     <ChevronRight className="w-4 h-4 ml-1" />
@@ -1147,20 +1148,20 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                     <div key={session.id} className="flex items-center justify-between p-3 bg-neutral-50 rounded-lg">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-full bg-gradient-to-br from-teal-100 to-cyan-100 flex items-center justify-center">
-                          <span className="text-sm font-semibold text-teal-700">
+                          <span className="text-sm font-semibold text-[#6B9080]">
                             {session.patientName.split(' ').map(n => n[0]).join('')}
                           </span>
                         </div>
                         <div>
-                          <p className="font-medium text-neutral-900">{session.patientName}</p>
-                          <p className="text-sm text-neutral-500">{formatDate(session.scheduledAt)}</p>
+                          <p className="font-medium text-[#1B2733]">{session.patientName}</p>
+                          <p className="text-sm text-[#5A6B7A]">{formatDate(session.scheduledAt)}</p>
                         </div>
                       </div>
                       {session.hasInsightAccess ? (
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="text-teal-600"
+                          className="text-[#6B9080]"
                           aria-label={`View insight profile for ${session.patientName}`}
                         >
                           <Eye className="w-4 h-4" />
@@ -1182,7 +1183,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                     <Brain className="w-7 h-7 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-neutral-900">
+                    <h3 className="text-lg font-semibold text-[#1B2733]">
                       Insight Navigator
                     </h3>
                     <p className="text-neutral-600">
@@ -1191,7 +1192,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                     </p>
                   </div>
                 </div>
-                <Button className="bg-teal-600 hover:bg-teal-700">
+                <Button className="bg-primary hover:bg-[#6B9080]">
                   <Sparkles className="w-4 h-4 mr-2" />
                   View Patients
                 </Button>
@@ -1223,16 +1224,16 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
             {filteredPatients.length === 0 ? (
               <Card className="p-8 sm:p-12 text-center">
                 <Users className="w-12 h-12 text-neutral-300 mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-neutral-900 mb-2">
+                <h3 className="text-lg font-semibold text-[#1B2733] mb-2">
                   {searchQuery ? 'No patients found' : 'No patients yet'}
                 </h3>
-                <p className="text-neutral-500 max-w-md mx-auto mb-6">
+                <p className="text-[#5A6B7A] max-w-md mx-auto mb-6">
                   {searchQuery
                     ? 'Try adjusting your search terms'
                     : 'Share your provider link with families to start building your patient roster. Parents can connect and grant you access to their Insight Navigator profiles.'}
                 </p>
                 {!searchQuery && (
-                  <Button className="bg-teal-600 hover:bg-teal-700">
+                  <Button className="bg-primary hover:bg-[#6B9080]">
                     <Plus className="w-4 h-4 mr-2" />
                     Get Your Provider Link
                   </Button>
@@ -1245,7 +1246,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                   key={patient.id}
                   className={`p-5 hover:shadow-md transition-all cursor-pointer ${
                     patient.profileAccess === 'granted'
-                      ? 'border-teal-200/60 hover:border-teal-300/60'
+                      ? 'border-[#6B9080]/20/60 hover:border-[#6B9080]/30/60'
                       : 'border-neutral-200'
                   }`}
                   onClick={() => setSelectedPatient(patient)}
@@ -1258,8 +1259,8 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                         </span>
                       </div>
                       <div>
-                        <h4 className="font-semibold text-neutral-900">{patient.childName}</h4>
-                        <p className="text-sm text-neutral-500">
+                        <h4 className="font-semibold text-[#1B2733]">{patient.childName}</h4>
+                        <p className="text-sm text-[#5A6B7A]">
                           {patient.age} years old • Parent: {patient.parentName}
                         </p>
                         <div className="flex flex-wrap gap-1.5 mt-2">
@@ -1291,16 +1292,16 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                   </div>
 
                   <div className="mt-4 pt-4 border-t border-neutral-100 flex items-center justify-between">
-                    <div className="text-sm text-neutral-500">
+                    <div className="text-sm text-[#5A6B7A]">
                       {patient.totalSessions} total sessions
                       {patient.nextSession && (
-                        <span className="text-teal-600 ml-2">
+                        <span className="text-[#6B9080] ml-2">
                           • Next: {formatDate(patient.nextSession)}
                         </span>
                       )}
                     </div>
                     {patient.profileAccess === 'granted' && (
-                      <Button size="sm" variant="ghost" className="text-teal-600">
+                      <Button size="sm" variant="ghost" className="text-[#6B9080]">
                         <Eye className="w-4 h-4 mr-1" />
                         Insight Navigator
                       </Button>
@@ -1316,8 +1317,8 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
         {activeTab === 'sessions' && (
           <div className="space-y-3 sm:space-y-4 sm:space-y-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-lg sm:text-xl font-semibold text-neutral-900">Upcoming Sessions</h2>
-              <Button className="bg-teal-600 hover:bg-teal-700">
+              <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733]">Upcoming Sessions</h2>
+              <Button className="bg-primary hover:bg-[#6B9080]">
                 <Calendar className="w-4 h-4 mr-2" />
                 Manage Availability
               </Button>
@@ -1329,13 +1330,13 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3 sm:gap-4">
                       <div className="w-14 h-14 rounded-full bg-gradient-to-br from-teal-100 to-cyan-100 flex items-center justify-center">
-                        <span className="text-lg font-semibold text-teal-700">
+                        <span className="text-lg font-semibold text-[#6B9080]">
                           {session.patientName.split(' ').map(n => n[0]).join('')}
                         </span>
                       </div>
                       <div>
-                        <h4 className="font-semibold text-neutral-900">{session.patientName}</h4>
-                        <p className="text-sm text-neutral-500">
+                        <h4 className="font-semibold text-[#1B2733]">{session.patientName}</h4>
+                        <p className="text-sm text-[#5A6B7A]">
                           {session.type} • {session.duration} min
                         </p>
                         <div className="flex items-center gap-2 mt-1 text-sm">
@@ -1347,8 +1348,8 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
 
                     <div className="flex items-center gap-3">
                       <div className="text-right mr-4">
-                        <p className="text-sm text-neutral-500">Starts in</p>
-                        <p className="font-semibold text-teal-600">
+                        <p className="text-sm text-[#5A6B7A]">Starts in</p>
+                        <p className="font-semibold text-[#6B9080]">
                           {formatTimeUntil(session.scheduledAt)}
                         </p>
                       </div>
@@ -1359,7 +1360,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                           Insight
                         </Button>
                       )}
-                      <Button size="sm" className="bg-teal-600 hover:bg-teal-700">
+                      <Button size="sm" className="bg-primary hover:bg-[#6B9080]">
                         <Video className="w-4 h-4 mr-1" />
                         Join
                       </Button>
@@ -1371,10 +1372,10 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
               {upcomingSessions.length === 0 && (
                 <Card className="p-12 text-center">
                   <Calendar className="w-12 h-12 mx-auto mb-4 text-neutral-300" />
-                  <h3 className="text-lg font-medium text-neutral-900 mb-2">
+                  <h3 className="text-lg font-medium text-[#1B2733] mb-2">
                     No upcoming sessions
                   </h3>
-                  <p className="text-neutral-500">
+                  <p className="text-[#5A6B7A]">
                     Your schedule is clear. New bookings will appear here.
                   </p>
                 </Card>
@@ -1420,8 +1421,8 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-xl font-semibold text-neutral-900 dark:text-white">AI Patient Summaries</h2>
-                <p className="text-neutral-500 dark:text-slate-400 mt-1">
+                <h2 className="text-xl font-semibold text-[#1B2733] dark:text-white">AI Patient Summaries</h2>
+                <p className="text-[#5A6B7A] dark:text-slate-400 mt-1">
                   AI-generated insights for your patients. Submit care plan suggestions that parents can approve.
                 </p>
               </div>
@@ -1431,7 +1432,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Patient list sidebar */}
               <Card className="p-4 lg:col-span-1">
-                <h3 className="font-semibold text-neutral-900 dark:text-white mb-4">Select Client</h3>
+                <h3 className="font-semibold text-[#1B2733] dark:text-white mb-4">Select Client</h3>
                 <div className="space-y-2">
                   {patients
                     .filter(p => p.profileAccess === 'granted')
@@ -1441,7 +1442,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                         onClick={() => setSelectedPatient(patient)}
                         className={`w-full text-left p-3 rounded-lg transition-colors ${
                           selectedPatient?.id === patient.id
-                            ? 'bg-teal-100 border-teal-300 dark:bg-teal-900/30'
+                            ? 'bg-[#6B9080]/10 border-[#6B9080]/30 dark:bg-[#6B9080]/15'
                             : 'bg-neutral-50 hover:bg-neutral-100 dark:bg-slate-800 dark:hover:bg-slate-700'
                         }`}
                       >
@@ -1452,14 +1453,14 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                             </span>
                           </div>
                           <div>
-                            <p className="font-medium text-neutral-900 dark:text-white">{patient.childName}</p>
-                            <p className="text-sm text-neutral-500 dark:text-slate-400">{patient.age} years old</p>
+                            <p className="font-medium text-[#1B2733] dark:text-white">{patient.childName}</p>
+                            <p className="text-sm text-[#5A6B7A] dark:text-slate-400">{patient.age} years old</p>
                           </div>
                         </div>
                       </button>
                     ))}
                   {patients.filter(p => p.profileAccess === 'granted').length === 0 && (
-                    <div className="text-center py-8 text-neutral-500">
+                    <div className="text-center py-8 text-[#5A6B7A]">
                       <Lock className="w-8 h-8 mx-auto mb-2 text-neutral-300" />
                       <p>No patients with granted access</p>
                       <p className="text-sm mt-1">Request access from patients' parents first</p>
@@ -1479,11 +1480,11 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                   />
                 ) : (
                   <Card className="p-12 text-center">
-                    <Brain className="w-16 h-16 mx-auto mb-4 text-neutral-200 dark:text-slate-600" />
-                    <h3 className="text-lg font-medium text-neutral-900 dark:text-white mb-2">
+                    <Brain className="w-16 h-16 mx-auto mb-4 text-neutral-200 dark:text-[#5A6B7A]" />
+                    <h3 className="text-lg font-medium text-[#1B2733] dark:text-white mb-2">
                       Select a Patient
                     </h3>
-                    <p className="text-neutral-500 dark:text-slate-400 max-w-md mx-auto">
+                    <p className="text-[#5A6B7A] dark:text-slate-400 max-w-md mx-auto">
                       Choose a patient from the list to view their AI-generated summary,
                       behavior patterns, progress highlights, and submit care plan suggestions.
                     </p>
@@ -1497,7 +1498,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
         {activeTab === 'earnings' && (
           <div className="space-y-3 sm:space-y-4 sm:space-y-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-lg sm:text-xl font-semibold text-neutral-900">Earnings Overview</h2>
+              <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733]">Earnings Overview</h2>
               <Button variant="outline">
                 <DollarSign className="w-4 h-4 mr-2" />
                 Request Payout
@@ -1515,11 +1516,11 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                 { label: 'YTD Total', value: `$${earnings.ytd.toLocaleString()}`, color: 'green' as const, trend: undefined as string | undefined }
               ].map((stat, i) => (
                 <Card key={i} className="p-5">
-                  <p className="text-sm text-neutral-500 mb-1">{stat.label}</p>
+                  <p className="text-sm text-[#5A6B7A] mb-1">{stat.label}</p>
                   <div className="flex items-end justify-between">
-                    <p className="text-xl sm:text-2xl font-bold text-neutral-900">{stat.value}</p>
+                    <p className="text-xl sm:text-2xl font-bold text-[#1B2733]">{stat.value}</p>
                     {stat.trend && (
-                      <span className={`text-sm font-medium ${stat.color === 'teal' ? 'text-teal-600' : 'text-green-600'}`}>
+                      <span className={`text-sm font-medium ${stat.color === 'teal' ? 'text-[#6B9080]' : 'text-green-600'}`}>
                         <TrendingUp className="w-3.5 h-3.5 inline mr-1" />
                         {stat.trend}
                       </span>
@@ -1531,11 +1532,11 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
 
             {/* Recent Transactions — sample list shown ONLY in demo mode */}
             <Card className="p-4 sm:p-5 md:p-6">
-              <h3 className="font-semibold text-neutral-900 mb-4">Recent Sessions</h3>
+              <h3 className="font-semibold text-[#1B2733] mb-4">Recent Sessions</h3>
               {!isDemoMode() && (
                 <div className="py-8 text-center">
                   <DollarSign className="w-10 h-10 text-neutral-300 mx-auto mb-2" />
-                  <p className="text-sm text-neutral-500">No sessions yet. Completed sessions and payouts will appear here.</p>
+                  <p className="text-sm text-[#5A6B7A]">No sessions yet. Completed sessions and payouts will appear here.</p>
                 </div>
               )}
               <div className="space-y-3">
@@ -1547,18 +1548,18 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                 ] : []).map((tx, i) => (
                   <div key={i} className="flex items-center justify-between p-3 bg-neutral-50 rounded-lg">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center">
-                        <span className="text-sm font-medium text-teal-700">
+                      <div className="w-10 h-10 rounded-full bg-[#6B9080]/10 flex items-center justify-center">
+                        <span className="text-sm font-medium text-[#6B9080]">
                           {tx.patient.split(' ').map(n => n[0]).join('')}
                         </span>
                       </div>
                       <div>
-                        <p className="font-medium text-neutral-900">{tx.patient}</p>
-                        <p className="text-sm text-neutral-500">{tx.type} • {tx.date}</p>
+                        <p className="font-medium text-[#1B2733]">{tx.patient}</p>
+                        <p className="text-sm text-[#5A6B7A]">{tx.type} • {tx.date}</p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="font-semibold text-neutral-900">${tx.amount}</p>
+                      <p className="font-semibold text-[#1B2733]">${tx.amount}</p>
                       <Badge className={tx.status === 'completed' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}>
                         {tx.status}
                       </Badge>
@@ -1572,18 +1573,18 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
 
         {activeTab === 'settings' && (
           <div className="max-w-2xl space-y-3 sm:space-y-4 sm:space-y-6">
-            <h2 className="text-lg sm:text-xl font-semibold text-neutral-900">Settings</h2>
+            <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733]">Settings</h2>
 
             <Card className="p-4 sm:p-5 md:p-6">
-              <h3 className="font-semibold text-neutral-900 mb-4">Profile</h3>
+              <h3 className="font-semibold text-[#1B2733] mb-4">Profile</h3>
               <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
-                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center text-white text-2xl font-semibold">
+                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] flex items-center justify-center text-white text-2xl font-semibold">
                   {provider.name.split(' ').map(n => n[0]).join('')}
                 </div>
                 <div>
-                  <p className="font-semibold text-neutral-900">{provider.name}</p>
-                  <p className="text-neutral-500">{provider.credentials}</p>
-                  <Button variant="ghost" size="sm" className="mt-1 text-teal-600 -ml-2">
+                  <p className="font-semibold text-[#1B2733]">{provider.name}</p>
+                  <p className="text-[#5A6B7A]">{provider.credentials}</p>
+                  <Button variant="ghost" size="sm" className="mt-1 text-[#6B9080] -ml-2">
                     Change photo
                   </Button>
                 </div>
@@ -1596,9 +1597,9 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                   </label>
                   <div className="flex flex-wrap gap-2">
                     {provider.specialties.map(s => (
-                      <Badge key={s} className="bg-teal-100 text-teal-700">{s}</Badge>
+                      <Badge key={s} className="bg-[#6B9080]/10 text-[#6B9080]">{s}</Badge>
                     ))}
-                    <Button variant="ghost" size="sm" className="text-teal-600">
+                    <Button variant="ghost" size="sm" className="text-[#6B9080]">
                       + Add
                     </Button>
                   </div>
@@ -1614,7 +1615,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
             </Card>
 
             <Card className="p-4 sm:p-5 md:p-6">
-              <h3 className="font-semibold text-neutral-900 dark:text-white mb-4">Credentials & Verification</h3>
+              <h3 className="font-semibold text-[#1B2733] dark:text-white mb-4">Credentials & Verification</h3>
               <p className="text-neutral-600 dark:text-slate-400 mb-4 text-sm">
                 Verified credentials build trust with families and enable insurance billing
               </p>
@@ -1622,8 +1623,8 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
             </Card>
 
             <Card className="p-4 sm:p-5 md:p-6">
-              <h3 className="font-semibold text-neutral-900 dark:text-white mb-2">Practice Branding</h3>
-              <p className="text-neutral-500 dark:text-slate-400 text-sm mb-4">
+              <h3 className="font-semibold text-[#1B2733] dark:text-white mb-2">Practice Branding</h3>
+              <p className="text-[#5A6B7A] dark:text-slate-400 text-sm mb-4">
                 Customize how your practice appears to families. Your logo and name will display in the header with "powered by Aminy."
               </p>
               <div className="space-y-3">
@@ -1649,14 +1650,14 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                   <div className="flex items-center gap-2">
                     <input
                       type="color"
-                      value={brandingForm.primaryColor || '#0891b2'}
+                      value={brandingForm.primaryColor || '#6B9080'}
                       onChange={e => setBrandingForm(prev => ({ ...prev, primaryColor: e.target.value }))}
                       className="w-10 h-10 rounded-lg border border-neutral-200 cursor-pointer"
                     />
                     <Input
                       value={brandingForm.primaryColor}
                       onChange={e => setBrandingForm(prev => ({ ...prev, primaryColor: e.target.value }))}
-                      placeholder="#0891b2"
+                      placeholder="#6B9080"
                       className="flex-1"
                     />
                   </div>
@@ -1673,7 +1674,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                       });
                       setBranding(getBranding());
                     }}
-                    className="bg-teal-600 hover:bg-teal-700 text-white"
+                    className="bg-primary hover:bg-[#6B9080] text-white"
                   >
                     <Save className="w-4 h-4 mr-1" /> Save Branding
                   </Button>
@@ -1692,17 +1693,17 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                 </div>
                 {branding?.orgName && (
                   <div className="mt-3 p-3 bg-neutral-50 dark:bg-slate-800 rounded-lg">
-                    <p className="text-xs text-neutral-500 dark:text-slate-400 mb-2">Preview:</p>
+                    <p className="text-xs text-[#5A6B7A] dark:text-slate-400 mb-2">Preview:</p>
                     <div className="flex items-center gap-2">
                       {branding.logoUrl ? (
                         <img src={branding.logoUrl} alt="Provider branding logo" className="w-6 h-6 rounded object-contain" />
                       ) : (
-                        <div className="w-6 h-6 rounded flex items-center justify-center text-white text-[10px] font-bold" style={{ backgroundColor: branding.primaryColor || '#0891b2' }}>
+                        <div className="w-6 h-6 rounded flex items-center justify-center text-white text-[10px] font-bold" style={{ backgroundColor: branding.primaryColor || '#6B9080' }}>
                           {branding.orgName.slice(0, 2).toUpperCase()}
                         </div>
                       )}
                       <div>
-                        <span className="text-sm font-semibold text-neutral-900 dark:text-white">{branding.orgName}</span>
+                        <span className="text-sm font-semibold text-[#1B2733] dark:text-white">{branding.orgName}</span>
                         <span className="block text-[9px] text-neutral-400">powered by Aminy</span>
                       </div>
                     </div>
@@ -1712,7 +1713,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
             </Card>
 
             <Card className="p-4 sm:p-5 md:p-6">
-              <h3 className="font-semibold text-neutral-900 mb-4">Availability</h3>
+              <h3 className="font-semibold text-[#1B2733] mb-4">Availability</h3>
               <p className="text-neutral-600 mb-4">
                 Set your available hours for patient bookings
               </p>
@@ -1723,7 +1724,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
             </Card>
 
             <Card className="p-4 sm:p-5 md:p-6">
-              <h3 className="font-semibold text-neutral-900 mb-4">Notifications</h3>
+              <h3 className="font-semibold text-[#1B2733] mb-4">Notifications</h3>
               <div className="space-y-3">
                 {[
                   'New booking notifications',
@@ -1733,7 +1734,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                 ].map((pref, i) => (
                   <label key={i} className="flex items-center justify-between">
                     <span className="text-neutral-700">{pref}</span>
-                    <input type="checkbox" defaultChecked className="w-5 h-5 rounded text-teal-600 focus:ring-teal-500" />
+                    <input type="checkbox" defaultChecked className="w-5 h-5 rounded text-[#6B9080] focus:ring-teal-500" />
                   </label>
                 ))}
               </div>
@@ -1765,8 +1766,8 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
         ) : activeTab === 'coordination' && (
           <div className="space-y-6">
             <div>
-              <h2 className="text-xl font-semibold text-neutral-900 dark:text-white">Care Coordination</h2>
-              <p className="text-neutral-500 dark:text-slate-400 mt-1">
+              <h2 className="text-xl font-semibold text-[#1B2733] dark:text-white">Care Coordination</h2>
+              <p className="text-[#5A6B7A] dark:text-slate-400 mt-1">
                 Select a patient with granted access to view their care team
               </p>
             </div>
@@ -1778,7 +1779,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                   <Card
                     key={patient.id}
                     onClick={() => setSelectedPatient(patient)}
-                    className="p-4 cursor-pointer hover:shadow-md transition-all hover:border-teal-300 dark:hover:border-teal-700"
+                    className="p-4 cursor-pointer hover:shadow-md transition-all hover:border-[#6B9080]/30 dark:hover:border-teal-700"
                   >
                     <div className="flex items-center gap-3">
                       <div className="w-12 h-12 rounded-full bg-gradient-to-br from-violet-100 to-purple-100 dark:from-violet-900/30 dark:to-purple-900/30 flex items-center justify-center">
@@ -1787,11 +1788,11 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                         </span>
                       </div>
                       <div>
-                        <h4 className="font-medium text-neutral-900 dark:text-white">{patient.childName}</h4>
-                        <p className="text-sm text-neutral-500 dark:text-slate-400">{patient.parentName}</p>
+                        <h4 className="font-medium text-[#1B2733] dark:text-white">{patient.childName}</h4>
+                        <p className="text-sm text-[#5A6B7A] dark:text-slate-400">{patient.parentName}</p>
                       </div>
                     </div>
-                    <Button size="sm" className="w-full mt-4 bg-teal-600 hover:bg-teal-700">
+                    <Button size="sm" className="w-full mt-4 bg-primary hover:bg-[#6B9080]">
                       View Care Team
                     </Button>
                   </Card>
@@ -1800,11 +1801,11 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
 
             {patients.filter(p => p.profileAccess === 'granted').length === 0 && (
               <Card className="p-12 text-center">
-                <Heart className="w-12 h-12 mx-auto mb-4 text-neutral-300 dark:text-slate-600" />
-                <h3 className="text-lg font-medium text-neutral-900 dark:text-white mb-2">
+                <Heart className="w-12 h-12 mx-auto mb-4 text-neutral-300 dark:text-[#5A6B7A]" />
+                <h3 className="text-lg font-medium text-[#1B2733] dark:text-white mb-2">
                   No Patients with Access
                 </h3>
-                <p className="text-neutral-500 dark:text-slate-400 max-w-md mx-auto">
+                <p className="text-[#5A6B7A] dark:text-slate-400 max-w-md mx-auto">
                   Request access from patient families to collaborate with their care team.
                 </p>
               </Card>
@@ -1817,8 +1818,8 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-xl font-semibold text-neutral-900 dark:text-white">Clinical Notes</h2>
-                <p className="text-neutral-500 dark:text-slate-400 mt-1">
+                <h2 className="text-xl font-semibold text-[#1B2733] dark:text-white">Clinical Notes</h2>
+                <p className="text-[#5A6B7A] dark:text-slate-400 mt-1">
                   SOAP notes, ABA session notes, and progress documentation
                 </p>
               </div>
@@ -1832,7 +1833,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                   });
                   setShowNoteEditor(true);
                 }}
-                className="bg-teal-600 hover:bg-teal-700 text-white"
+                className="bg-primary hover:bg-[#6B9080] text-white"
               >
                 <Plus className="w-4 h-4 mr-1" /> New Note
               </Button>
@@ -1840,10 +1841,10 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
 
             {/* Note Editor */}
             {showNoteEditor && editingNote && (
-              <Card className="p-5 border-2 border-teal-200 dark:border-teal-800 bg-white dark:bg-slate-900">
+              <Card className="p-5 border-2 border-[#6B9080]/20 dark:border-[#6B9080]/30 bg-white dark:bg-slate-900">
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <h3 className="font-semibold text-neutral-900 dark:text-white">New Clinical Note</h3>
+                    <h3 className="font-semibold text-[#1B2733] dark:text-white">New Clinical Note</h3>
                     <button
                       type="button"
                       onClick={() => { setShowNoteEditor(false); setEditingNote(null); }}
@@ -1861,7 +1862,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                         <Sparkles className="w-3.5 h-3.5 inline mr-1 text-amber-500" />CPT Code
                       </label>
                       <select
-                        className="w-full px-3 py-2 border border-neutral-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-neutral-900 dark:text-white text-sm"
+                        className="w-full px-3 py-2 border border-neutral-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-[#1B2733] dark:text-white text-sm"
                         value={editingNote.cptCode || ''}
                         onChange={e => {
                           const code = e.target.value;
@@ -1906,7 +1907,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                     <div>
                       <label className="text-sm font-medium text-neutral-700 dark:text-slate-300 mb-1 block">Client</label>
                       <select
-                        className="w-full px-3 py-2 border border-neutral-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-neutral-900 dark:text-white text-sm"
+                        className="w-full px-3 py-2 border border-neutral-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-[#1B2733] dark:text-white text-sm"
                         value={editingNote.patientName}
                         onChange={e => setEditingNote(prev => prev ? { ...prev, patientName: e.target.value } : prev)}
                       >
@@ -1938,10 +1939,10 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                   {/* Note Type (auto-selected by CPT, but can be overridden) */}
                   <div>
                     <label className="text-sm font-medium text-neutral-700 dark:text-slate-300 mb-1 block">
-                      Note Template {editingNote.cptCode ? <span className="text-xs text-teal-600 font-normal">(auto-selected by CPT)</span> : ''}
+                      Note Template {editingNote.cptCode ? <span className="text-xs text-[#6B9080] font-normal">(auto-selected by CPT)</span> : ''}
                     </label>
                     <select
-                      className="w-full px-3 py-2 border border-neutral-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-neutral-900 dark:text-white text-sm"
+                      className="w-full px-3 py-2 border border-neutral-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-[#1B2733] dark:text-white text-sm"
                       value={editingNote.noteType}
                       onChange={e => setEditingNote(prev => prev ? { ...prev, noteType: e.target.value as NoteType, content: {} } : prev)}
                     >
@@ -2001,7 +2002,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                     <Button
                       onClick={handleSaveClinicalNote}
                       disabled={isSavingNotes}
-                      className="bg-teal-600 hover:bg-teal-700 text-white"
+                      className="bg-primary hover:bg-[#6B9080] text-white"
                     >
                       {isSavingNotes ? <Loader2 className="w-4 h-4 animate-spin mr-1" /> : <Save className="w-4 h-4 mr-1" />}
                       Save Note
@@ -2014,9 +2015,9 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
             {/* Existing Notes List */}
             {clinicalNotes.length === 0 && !showNoteEditor && (
               <Card className="p-8 text-center">
-                <ClipboardList className="w-12 h-12 mx-auto text-neutral-300 dark:text-slate-600 mb-3" />
-                <p className="text-neutral-500 dark:text-slate-400 font-medium">No clinical notes yet</p>
-                <p className="text-neutral-400 dark:text-slate-500 text-sm mt-1">Create your first note to start documenting sessions</p>
+                <ClipboardList className="w-12 h-12 mx-auto text-neutral-300 dark:text-[#5A6B7A] mb-3" />
+                <p className="text-[#5A6B7A] dark:text-slate-400 font-medium">No clinical notes yet</p>
+                <p className="text-neutral-400 dark:text-[#5A6B7A] text-sm mt-1">Create your first note to start documenting sessions</p>
               </Card>
             )}
 
@@ -2028,7 +2029,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                   <div className="flex items-start justify-between mb-3">
                     <div>
                       <div className="flex items-center gap-2 flex-wrap">
-                        <h3 className="font-semibold text-neutral-900 dark:text-white">{note.patientName}</h3>
+                        <h3 className="font-semibold text-[#1B2733] dark:text-white">{note.patientName}</h3>
                         <Badge className={tmpl.badgeClass}>{tmpl.badge}</Badge>
                         {note.cptCode && (
                           <Badge className="bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 font-mono text-xs">
@@ -2041,7 +2042,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                           </Badge>
                         )}
                       </div>
-                      <p className="text-sm text-neutral-500 dark:text-slate-400 mt-0.5">{note.date}</p>
+                      <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mt-0.5">{note.date}</p>
                     </div>
                     <div className="flex gap-1">
                       <Button
@@ -2050,7 +2051,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                         onClick={() => handleGenerateSuperbill(note.id)}
                         aria-label={`Generate superbill for note from ${note.patientName}`}
                         title="Generate Superbill"
-                        className="text-teal-600 hover:text-teal-700 hover:bg-teal-50"
+                        className="text-[#6B9080] hover:text-[#6B9080] hover:bg-[#6B9080]/10"
                       >
                         <Printer className="w-4 h-4" />
                       </Button>
@@ -2072,7 +2073,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                         aria-label={`Export note for ${note.patientName}`}
                         title="Export"
                       >
-                        <Download className="w-4 h-4 text-neutral-500" />
+                        <Download className="w-4 h-4 text-[#5A6B7A]" />
                       </Button>
                     </div>
                   </div>
@@ -2096,7 +2097,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                     <div className="mt-3 pt-3 border-t border-neutral-100 dark:border-slate-700">
                       <Button
                         onClick={() => handleGenerateSuperbill(note.id)}
-                        className="w-full bg-teal-600 hover:bg-teal-700 text-white"
+                        className="w-full bg-primary hover:bg-[#6B9080] text-white"
                       >
                         <FileText className="w-4 h-4 mr-2" />
                         Generate Superbill for This Session
@@ -2128,8 +2129,8 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
             <Card className="p-5 rounded-2xl border border-neutral-200 dark:border-slate-700">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="font-semibold text-neutral-900 dark:text-white">Payout Setup</h3>
-                  <p className="text-sm text-neutral-500 dark:text-slate-400 mt-1">
+                  <h3 className="font-semibold text-[#1B2733] dark:text-white">Payout Setup</h3>
+                  <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mt-1">
                     Configure your bank account for scheduled biweekly payouts via Aminy
                   </p>
                 </div>
@@ -2151,8 +2152,8 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
         {activeTab === 'claims' && (
           <div className="space-y-6">
             <div>
-              <h2 className="text-xl font-semibold text-neutral-900 dark:text-white">Claims & Billing</h2>
-              <p className="text-neutral-500 dark:text-slate-400 mt-1">
+              <h2 className="text-xl font-semibold text-[#1B2733] dark:text-white">Claims & Billing</h2>
+              <p className="text-[#5A6B7A] dark:text-slate-400 mt-1">
                 Aminy submits all claims under the Aminy Network group NPI. You get paid biweekly regardless of payer timing.
               </p>
             </div>
@@ -2164,8 +2165,8 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
             <Card className="p-5 rounded-2xl border border-neutral-200 dark:border-slate-700">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="font-semibold text-neutral-900 dark:text-white">Denial Workbench</h3>
-                  <p className="text-sm text-neutral-500 dark:text-slate-400 mt-1">
+                  <h3 className="font-semibold text-[#1B2733] dark:text-white">Denial Workbench</h3>
+                  <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mt-1">
                     Review and appeal denied claims with AI-assisted justifications
                   </p>
                 </div>
@@ -2187,10 +2188,10 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
         {activeTab === 'my-practice' && (
           <div className="space-y-6">
             <div>
-              <h2 className="text-xl font-semibold text-neutral-900 dark:text-white">
+              <h2 className="text-xl font-semibold text-[#1B2733] dark:text-white">
                 {isOrgCaseload ? 'Organization Caseload' : 'My Practice'}
               </h2>
-              <p className="text-neutral-500 dark:text-slate-400 mt-1">
+              <p className="text-[#5A6B7A] dark:text-slate-400 mt-1">
                 {isOrgCaseload
                   ? 'Manage your organization caseload through Aminy — your RBT roster, their session documentation, and supervision compliance in one place.'
                   : 'Run your own independent practice through Aminy: your RBT roster, their session documentation, supervision compliance, and how you get paid — all in one place.'}
@@ -2210,8 +2211,8 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                   onClick={() => setPracticeView(view.id)}
                   className={`flex items-center gap-2 whitespace-nowrap rounded-2xl border px-4 py-2 text-sm font-medium transition-colors ${
                     practiceView === view.id
-                      ? 'border-teal-500 bg-teal-50 text-teal-700 dark:bg-teal-900/20 dark:text-teal-300'
-                      : 'border-slate-200 bg-white text-neutral-600 hover:border-teal-200 hover:text-neutral-800 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300'
+                      ? 'border-[#6B9080] bg-[#6B9080]/10 text-[#6B9080] dark:bg-[#6B9080]/10 dark:text-[#7BA7BC]'
+                      : 'border-[#E8E4DF] bg-white text-neutral-600 hover:border-[#6B9080]/20 hover:text-neutral-800 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300'
                   }`}
                 >
                   <view.icon className="w-4 h-4" />
@@ -2226,10 +2227,10 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                 <Card className="p-4 rounded-2xl border border-neutral-200 dark:border-slate-700 bg-white dark:bg-slate-900/60">
                   <div className="flex items-center justify-between gap-3">
                     <div>
-                      <h3 className="font-semibold text-neutral-900 dark:text-white">
+                      <h3 className="font-semibold text-[#1B2733] dark:text-white">
                         {isOrgCaseload ? 'Caseload RBTs' : 'Your RBTs'}
                       </h3>
-                      <p className="text-sm text-neutral-500 dark:text-slate-400 mt-0.5">
+                      <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mt-0.5">
                         Invite RBTs, track BACB 5% supervision, then review their logged sessions.
                       </p>
                     </div>
@@ -2267,8 +2268,8 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
               <Card className="p-5 rounded-2xl border border-neutral-200 dark:border-slate-700 bg-white dark:bg-slate-900/60">
                 <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
                   <div>
-                    <p className="text-xs uppercase tracking-[0.18em] text-neutral-500 dark:text-slate-400">Practice Launch Score</p>
-                    <h3 className="text-lg font-semibold text-neutral-900 dark:text-white mt-1">{practiceSummary.headline}</h3>
+                    <p className="text-xs uppercase tracking-[0.18em] text-[#5A6B7A] dark:text-slate-400">Practice Launch Score</p>
+                    <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white mt-1">{practiceSummary.headline}</h3>
                     <p className="text-sm text-neutral-600 dark:text-slate-300 mt-2 max-w-2xl">{practiceSummary.supportingCopy}</p>
                     <div className="mt-3 flex flex-wrap gap-2">
                       {(provider?.licensedStates || []).slice(0, 4).map((state) => (
@@ -2280,9 +2281,9 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                     </div>
                   </div>
                   <div className="grid grid-cols-2 gap-3 min-w-[220px]">
-                    <div className="rounded-xl bg-teal-50 dark:bg-teal-900/20 p-3">
-                      <p className="text-xs text-teal-700 dark:text-teal-300">Readiness</p>
-                      <p className="text-2xl font-semibold text-teal-700 dark:text-teal-300">{practiceSummary.readinessScore}%</p>
+                    <div className="rounded-xl bg-[#6B9080]/10 dark:bg-[#6B9080]/10 p-3">
+                      <p className="text-xs text-[#6B9080] dark:text-[#7BA7BC]">Readiness</p>
+                      <p className="text-2xl font-semibold text-[#6B9080] dark:text-[#7BA7BC]">{practiceSummary.readinessScore}%</p>
                     </div>
                     <div className="rounded-xl bg-violet-50 dark:bg-violet-900/20 p-3">
                       <p className="text-xs text-violet-700 dark:text-violet-300">Monthly range</p>
@@ -2298,7 +2299,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                           {item.completed ? <CheckCircle className="w-4 h-4" /> : <AlertCircle className="w-4 h-4" />}
                         </div>
                         <div>
-                          <p className="font-medium text-neutral-900 dark:text-white">{item.label}</p>
+                          <p className="font-medium text-[#1B2733] dark:text-white">{item.label}</p>
                           <p className="text-sm text-neutral-600 dark:text-slate-300 mt-1">{item.description}</p>
                         </div>
                       </div>
@@ -2307,8 +2308,8 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                 </div>
                 <div className="mt-5 grid gap-3 lg:grid-cols-2">
                   <div className="rounded-2xl border border-neutral-200 dark:border-slate-700 p-4">
-                    <p className="text-xs uppercase tracking-[0.18em] text-neutral-500 dark:text-slate-400">Supported Market</p>
-                    <h4 className="mt-2 text-base font-semibold text-neutral-900 dark:text-white">
+                    <p className="text-xs uppercase tracking-[0.18em] text-[#5A6B7A] dark:text-slate-400">Supported Market</p>
+                    <h4 className="mt-2 text-base font-semibold text-[#1B2733] dark:text-white">
                       {practiceMarketCoverage ? practiceMarketCoverage.label : 'Expand to a supported state'}
                     </h4>
                     <p className="mt-2 text-sm text-neutral-600 dark:text-slate-300">
@@ -2323,8 +2324,8 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                     ) : null}
                   </div>
                   <div className="rounded-2xl border border-neutral-200 dark:border-slate-700 p-4">
-                    <p className="text-xs uppercase tracking-[0.18em] text-neutral-500 dark:text-slate-400">Claim-Ready Queue</p>
-                    <h4 className="mt-2 text-base font-semibold text-neutral-900 dark:text-white">{practiceClaimQueueSummary.readyForBiller} ready · {practiceClaimQueueSummary.blocked} blocked</h4>
+                    <p className="text-xs uppercase tracking-[0.18em] text-[#5A6B7A] dark:text-slate-400">Claim-Ready Queue</p>
+                    <h4 className="mt-2 text-base font-semibold text-[#1B2733] dark:text-white">{practiceClaimQueueSummary.readyForBiller} ready · {practiceClaimQueueSummary.blocked} blocked</h4>
                     <p className="mt-2 text-sm text-neutral-600 dark:text-slate-300">
                       Aminy assembles claim-ready visit packets for supported-state payer rails. Biller review stays explicit before any submission lane runs.
                     </p>
@@ -2337,7 +2338,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                         <p className="text-xs text-amber-700 dark:text-amber-300">Blocked</p>
                         <p className="font-semibold text-amber-700 dark:text-amber-300">{practiceClaimQueueSummary.blocked}</p>
                       </div>
-                      <div className="rounded-xl bg-blue-50 dark:bg-blue-900/20 p-2">
+                      <div className="rounded-xl bg-[#EEF4F8] dark:bg-blue-900/20 p-2">
                         <p className="text-xs text-blue-700 dark:text-blue-300">Submitted</p>
                         <p className="font-semibold text-blue-700 dark:text-blue-300">{practiceClaimQueueSummary.submitted}</p>
                       </div>
@@ -2351,17 +2352,17 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
             {practiceView === 'overview' && (
               <Card className="p-5 rounded-2xl border border-neutral-200 dark:border-slate-700 bg-white dark:bg-slate-900/60">
                 <div className="flex items-center gap-2 mb-1">
-                  <DollarSign className="w-5 h-5 text-teal-600" />
-                  <h3 className="font-semibold text-neutral-900 dark:text-white">How you get paid</h3>
+                  <DollarSign className="w-5 h-5 text-[#6B9080]" />
+                  <h3 className="font-semibold text-[#1B2733] dark:text-white">How you get paid</h3>
                 </div>
-                <p className="text-sm text-neutral-500 dark:text-slate-400 mb-4">
+                <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mb-4">
                   Choose how sessions are billed. You can run cash-pay today and layer in payer-network billing as it becomes available.
                 </p>
                 <div className="grid gap-3 md:grid-cols-2">
                   {/* Cash-pay — LIVE */}
-                  <div className="rounded-2xl border border-teal-200 dark:border-teal-800 bg-teal-50/60 dark:bg-teal-900/20 p-4 flex flex-col">
+                  <div className="rounded-2xl border border-[#6B9080]/20 dark:border-[#6B9080]/30 bg-[#6B9080]/10/60 dark:bg-[#6B9080]/10 p-4 flex flex-col">
                     <div className="flex items-center justify-between gap-2">
-                      <h4 className="font-semibold text-neutral-900 dark:text-white">Cash-pay sessions</h4>
+                      <h4 className="font-semibold text-[#1B2733] dark:text-white">Cash-pay sessions</h4>
                       <Badge className="bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300">Live</Badge>
                     </div>
                     <p className="text-sm text-neutral-600 dark:text-slate-300 mt-2 flex-1">
@@ -2370,30 +2371,29 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                     </p>
                     <Button
                       onClick={() => onNavigate?.('provider-payout-setup')}
-                      className="mt-3 bg-teal-600 hover:bg-teal-700 text-white"
+                      className="mt-3 bg-primary hover:bg-[#6B9080] text-white"
                     >
                       <CreditCard className="w-4 h-4 mr-2" />
                       Set up cash-pay payouts
                     </Button>
                   </div>
 
-                  {/* Payer-network billing — ROADMAP, gated */}
-                  <div className="rounded-2xl border border-neutral-200 dark:border-slate-700 bg-neutral-50 dark:bg-slate-800/40 p-4 flex flex-col">
+                  {/* Payer-network billing — ROADMAP, interest capture */}
+                  <div className="rounded-2xl border border-[#E8E4DF] dark:border-teal-900/40 bg-[#6B9080]/10/60 dark:bg-[#1a3a5c]/10 p-4 flex flex-col">
                     <div className="flex items-center justify-between gap-2">
-                      <h4 className="font-semibold text-neutral-900 dark:text-white">Bill under AACT's payer network</h4>
-                      <Badge className="bg-neutral-200 text-neutral-600 dark:bg-slate-700 dark:text-slate-300">Coming soon</Badge>
+                      <h4 className="font-semibold text-[#1B2733] dark:text-white">Payer-network billing</h4>
+                      <Badge className="bg-[#6B9080]/10 text-[#6B9080] dark:bg-[#1a3a5c]/40 dark:text-[#7BA7BC]">Early access</Badge>
                     </div>
                     <p className="text-sm text-neutral-600 dark:text-slate-300 mt-2 flex-1">
                       Lease an established payer network so insured families can book you without your own contracts.
-                      Available pending payer-network access — not yet enabled.
+                      We're onboarding our first cohort of providers — join the list to get early access.
                     </p>
                     <Button
                       variant="outline"
-                      disabled
-                      className="mt-3 cursor-not-allowed opacity-60"
+                      className="mt-3 border-[#6B9080]/30 text-[#6B9080] hover:bg-[#6B9080]/10"
+                      onClick={() => { toast.success('You\'re on the early access list! We\'ll reach out when payer-network billing opens in your area.'); }}
                     >
-                      <Lock className="w-4 h-4 mr-2" />
-                      Coming soon — pending payer-network access
+                      Get early access
                     </Button>
                   </div>
                 </div>
@@ -2405,16 +2405,16 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
               <Card className="p-5 rounded-2xl border border-neutral-200 dark:border-slate-700 bg-white dark:bg-slate-900/60">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                   <div>
-                    <h3 className="font-semibold text-neutral-900 dark:text-white">
+                    <h3 className="font-semibold text-[#1B2733] dark:text-white">
                       {isOrgCaseload ? 'Manage your caseload RBTs' : 'Build out your RBT team'}
                     </h3>
-                    <p className="text-sm text-neutral-500 dark:text-slate-400 mt-0.5">
+                    <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mt-0.5">
                       Invite RBTs, review their logged sessions, and stay BACB-compliant on supervision.
                     </p>
                   </div>
                   <Button
                     onClick={() => setPracticeView('rbts')}
-                    className="bg-teal-600 hover:bg-teal-700 text-white shrink-0"
+                    className="bg-primary hover:bg-[#6B9080] text-white shrink-0"
                   >
                     <Users className="w-4 h-4 mr-2" />
                     {isOrgCaseload ? 'Open caseload RBTs' : 'Manage your RBTs'}
@@ -2436,11 +2436,11 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
           <Card className="max-w-4xl w-full max-h-[90vh] overflow-y-auto bg-white dark:bg-slate-900">
             <div className="p-4 border-b border-neutral-100 dark:border-slate-700 sticky top-0 bg-white dark:bg-slate-900 z-10 flex items-center justify-between">
               <div>
-                <h2 className="text-lg font-semibold text-neutral-900 dark:text-white flex items-center gap-2">
-                  <FileText className="w-5 h-5 text-teal-600" />
+                <h2 className="text-lg font-semibold text-[#1B2733] dark:text-white flex items-center gap-2">
+                  <FileText className="w-5 h-5 text-[#6B9080]" />
                   Superbill — {generatedSuperbill.patientName}
                 </h2>
-                <p className="text-sm text-neutral-500 dark:text-slate-400">
+                <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
                   Pre-filled from session data. Review and download.
                 </p>
               </div>
@@ -2458,8 +2458,8 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
             <div className="p-0">
               <React.Suspense fallback={
                 <div className="p-12 text-center">
-                  <div className="animate-spin w-8 h-8 border-2 border-teal-600 border-t-transparent rounded-full mx-auto mb-3" />
-                  <p className="text-sm text-neutral-500">Loading superbill generator...</p>
+                  <div className="animate-spin w-8 h-8 border-2 border-[#6B9080] border-t-transparent rounded-full mx-auto mb-3" />
+                  <p className="text-sm text-[#5A6B7A]">Loading superbill generator...</p>
                 </div>
               }>
                 <SuperbillGenerator
@@ -2485,7 +2485,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
       {/* Superbill Toast Notification */}
       {superbillToast && (
         <div className="fixed bottom-6 right-6 z-50 animate-in slide-in-from-bottom-5 fade-in duration-300">
-          <div className="bg-teal-600 text-white px-5 py-3 rounded-xl shadow-lg flex items-center gap-3">
+          <div className="bg-primary text-white px-5 py-3 rounded-xl shadow-lg flex items-center gap-3">
             <CheckCircle className="w-5 h-5 flex-shrink-0" />
             <span className="text-sm font-medium">{superbillToast}</span>
             <button
@@ -2513,10 +2513,10 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                     </span>
                   </div>
                   <div>
-                    <h2 className="text-lg sm:text-xl font-semibold text-neutral-900">
+                    <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733]">
                       {selectedPatient.childName}
                     </h2>
-                    <p className="text-neutral-500">
+                    <p className="text-[#5A6B7A]">
                       {selectedPatient.age} years old • {selectedPatient.totalSessions} sessions
                     </p>
                   </div>
@@ -2565,7 +2565,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
 
               {/* Conditions */}
               <div>
-                <h3 className="font-medium text-neutral-900 mb-2">Conditions</h3>
+                <h3 className="font-medium text-[#1B2733] mb-2">Conditions</h3>
                 <div className="flex flex-wrap gap-2">
                   {selectedPatient.conditions.map(condition => (
                     <Badge key={condition} className={getConditionColor(condition)}>
@@ -2577,13 +2577,13 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
 
               {/* Session History */}
               <div>
-                <h3 className="font-medium text-neutral-900 mb-2">Session History</h3>
+                <h3 className="font-medium text-[#1B2733] mb-2">Session History</h3>
                 <p className="text-neutral-600">
                   {selectedPatient.totalSessions} sessions completed
                 </p>
                 {selectedPatient.lastSessionNotes && (
                   <div className="mt-3 p-3 bg-neutral-50 rounded-lg">
-                    <p className="text-sm text-neutral-500 mb-1">Last session notes:</p>
+                    <p className="text-sm text-[#5A6B7A] mb-1">Last session notes:</p>
                     <p className="text-neutral-700">{selectedPatient.lastSessionNotes}</p>
                   </div>
                 )}
@@ -2592,10 +2592,10 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
               {/* Next Session */}
               {selectedPatient.nextSession && (
                 <div>
-                  <h3 className="font-medium text-neutral-900 mb-2">Next Session</h3>
-                  <div className="flex items-center gap-3 p-3 bg-teal-50 rounded-lg">
-                    <Calendar className="w-5 h-5 text-teal-600" />
-                    <span className="text-teal-800">
+                  <h3 className="font-medium text-[#1B2733] mb-2">Next Session</h3>
+                  <div className="flex items-center gap-3 p-3 bg-[#6B9080]/10 rounded-lg">
+                    <Calendar className="w-5 h-5 text-[#6B9080]" />
+                    <span className="text-[#6B9080]">
                       {formatDate(selectedPatient.nextSession)}
                     </span>
                   </div>
@@ -2606,7 +2606,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
               <div className="flex gap-3 pt-4 border-t border-neutral-100">
                 {selectedPatient.profileAccess === 'granted' && (
                   <Button
-                    className="flex-1 bg-teal-600 hover:bg-teal-700"
+                    className="flex-1 bg-primary hover:bg-[#6B9080]"
                     onClick={() => onNavigate?.('insight-report')}
                   >
                     <Eye className="w-4 h-4 mr-2" />

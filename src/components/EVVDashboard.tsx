@@ -421,7 +421,7 @@ export default function EVVDashboard({
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(45,212,191,0.12),transparent_32%),linear-gradient(180deg,#f7fffd_0%,#f4f7f8_100%)]">
       {/* Header */}
-      <div className="sticky top-0 z-10 border-b border-teal-100/80 bg-white/88 backdrop-blur supports-[backdrop-filter]:bg-white/78">
+      <div className="sticky top-0 z-10 border-b border-[#E8E4DF]/80 bg-white/88 backdrop-blur supports-[backdrop-filter]:bg-white/78">
         <div className="max-w-2xl mx-auto px-4 py-4">
           <nav aria-label="EVV navigation" className="flex items-center gap-3">
             {onBack && (
@@ -429,24 +429,24 @@ export default function EVVDashboard({
                 type="button"
                 onClick={onBack}
                 aria-label="Go back"
-                className="min-h-11 min-w-11 rounded-xl p-2 text-slate-600 transition-colors hover:bg-teal-50"
+                className="min-h-11 min-w-11 rounded-xl p-2 text-[#5A6B7A] transition-colors hover:bg-[#6B9080]/10"
               >
                 <ArrowLeft className="w-5 h-5" />
               </button>
             )}
             <div className="flex-1">
-              <h1 className="flex items-center gap-2 text-lg font-semibold text-slate-900">
-                <Shield className="w-5 h-5 text-teal-500" />
+              <h1 className="flex items-center gap-2 text-lg font-semibold text-[#1B2733]">
+                <Shield className="w-5 h-5 text-primary" />
                 Visit Verification
               </h1>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-[#5A6B7A]">
                 Arizona DDD Pilot &bull; Shadow EVV Export &bull; {childName}
               </p>
             </div>
             <button
               type="button"
               onClick={() => setActiveTab('clock')}
-              className="action-button min-h-11 rounded-xl bg-teal-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-teal-700"
+              className="action-button min-h-11 rounded-xl bg-primary px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#6B9080]"
             >
               Open live clock
             </button>
@@ -473,32 +473,32 @@ export default function EVVDashboard({
       </div>
 
       <div className="max-w-2xl mx-auto px-4 pt-3">
-        <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+        <div className="bg-white rounded-xl border border-[#E8E4DF] p-4 shadow-sm">
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
             <div>
-              <p className="text-xs uppercase tracking-wide text-gray-500">EVV Cutover Readiness</p>
-              <h2 className="text-lg font-semibold text-gray-900 mt-1">
+              <p className="text-xs uppercase tracking-wide text-[#5A6B7A]">EVV Cutover Readiness</p>
+              <h2 className="text-lg font-semibold text-[#1B2733] mt-1">
                 {cutoverSummary.state === 'cutover_ready' ? 'Ready for primary EVV cutover' : 'Parallel run still required'}
               </h2>
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="text-sm text-[#5A6B7A] mt-1">
                 Aminy should not become system of record until the three most recent payroll cycles are clean at 99.5% reconciliation accuracy, include the DCI transition lane, and have no critical exceptions.
               </p>
             </div>
             <div className="grid grid-cols-2 gap-3 min-w-[220px]">
               <div>
-                <p className="text-xs text-gray-500">Cycles</p>
-                <p className="text-2xl font-semibold text-gray-900">{cutoverSummary.cyclesCompleted}</p>
+                <p className="text-xs text-[#5A6B7A]">Cycles</p>
+                <p className="text-2xl font-semibold text-[#1B2733]">{cutoverSummary.cyclesCompleted}</p>
               </div>
               <div>
-                <p className="text-xs text-gray-500">Clean streak</p>
+                <p className="text-xs text-[#5A6B7A]">Clean streak</p>
                 <p className="text-2xl font-semibold text-emerald-600">{cutoverSummary.consecutiveCleanCycles}</p>
               </div>
               <div>
-                <p className="text-xs text-gray-500">Recent accuracy</p>
+                <p className="text-xs text-[#5A6B7A]">Recent accuracy</p>
                 <p className="text-2xl font-semibold text-blue-600">{cutoverSummary.trailingWindowAccuracy}%</p>
               </div>
               <div>
-                <p className="text-xs text-gray-500">Critical exceptions</p>
+                <p className="text-xs text-[#5A6B7A]">Critical exceptions</p>
                 <p className="text-2xl font-semibold text-rose-600">{cutoverSummary.unresolvedCriticalExceptions}</p>
               </div>
             </div>
@@ -509,13 +509,13 @@ export default function EVVDashboard({
               cutoverSummary.systemsValidated.map((system) => (
                 <span
                   key={system}
-                  className="inline-flex items-center rounded-full border border-teal-200 bg-teal-50 px-3 py-1 text-xs font-medium text-teal-700"
+                  className="inline-flex items-center rounded-full border border-[#6B9080]/20 bg-[#6B9080]/10 px-3 py-1 text-xs font-medium text-[#6B9080]"
                 >
                   {system === 'spokchoice' ? 'SpokChoice' : 'DCI'}
                 </span>
               ))
             ) : (
-              <span className="inline-flex items-center rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-medium text-slate-500">
+              <span className="inline-flex items-center rounded-full border border-[#E8E4DF] bg-[#FAF7F2] px-3 py-1 text-xs font-medium text-[#5A6B7A]">
                 No validated cycles yet
               </span>
             )}
@@ -535,7 +535,7 @@ export default function EVVDashboard({
 
       {/* Tabs */}
       <div className="max-w-2xl mx-auto px-4 pt-3">
-        <div className="flex gap-1 rounded-2xl border border-teal-100 bg-white/92 p-1.5 shadow-sm">
+        <div className="flex gap-1 rounded-2xl border border-[#E8E4DF] bg-white/92 p-1.5 shadow-sm">
           {tabs.map(tab => (
             <button
               type="button"
@@ -543,8 +543,8 @@ export default function EVVDashboard({
               onClick={() => setActiveTab(tab.id)}
               className={`min-h-11 flex-1 flex items-center justify-center gap-1.5 rounded-xl px-2 py-2.5 text-xs font-medium transition-all ${
                 activeTab === tab.id
-                  ? 'bg-teal-600 text-white shadow-sm'
-                  : 'text-slate-500 hover:text-slate-700 hover:bg-teal-50'
+                  ? 'bg-primary text-white shadow-sm'
+                  : 'text-[#5A6B7A] hover:text-[#3A4A57] hover:bg-[#6B9080]/10'
               }`}
             >
               {tab.icon}
@@ -621,8 +621,8 @@ function ClockTab({
     >
       {/* Service Authorization Selector */}
       {!activeSession && (
-        <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+        <div className="bg-white rounded-2xl border border-[#E8E4DF]/80 p-4 shadow-sm">
+          <label className="block text-sm font-medium text-[#3A4A57] mb-2">
             Service Authorization
           </label>
           <div className="space-y-2">
@@ -632,22 +632,22 @@ function ClockTab({
                 onClick={() => onSelectAuth(auth.id)}
                 className={`w-full text-left p-3 rounded-lg border-2 transition-all ${
                   selectedAuth === auth.id
-                    ? 'border-teal-500 bg-teal-50'
-                    : 'border-slate-200 hover:border-teal-200 hover:bg-teal-50/40'
+                    ? 'border-[#6B9080] bg-[#6B9080]/10'
+                    : 'border-[#E8E4DF] hover:border-[#6B9080]/20 hover:bg-[#6B9080]/10/40'
                 }`}
               >
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-medium text-sm text-gray-900">{auth.serviceName}</p>
-                    <p className="text-xs text-gray-500 mt-0.5">
+                    <p className="font-medium text-sm text-[#1B2733]">{auth.serviceName}</p>
+                    <p className="text-xs text-[#5A6B7A] mt-0.5">
                       {auth.serviceCode} &bull; Auth #{auth.authorizationNumber}
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="text-xs font-medium text-teal-700">
+                    <p className="text-xs font-medium text-[#6B9080]">
                       {auth.remainingUnits} units left
                     </p>
-                    <p className="text-xs text-gray-400">
+                    <p className="text-xs text-[#8A9BA8]">
                       of {auth.authorizedUnits}
                     </p>
                   </div>
@@ -659,15 +659,15 @@ function ClockTab({
       )}
 
       {/* Clock In/Out Button */}
-      <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm text-center">
+      <div className="bg-white rounded-2xl border border-[#E8E4DF]/80 p-6 shadow-sm text-center">
         {activeSession ? (
           <>
             <div className="mb-4">
-              <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Session in progress</p>
-              <p className="text-5xl font-mono font-bold text-slate-800 tabular-nums">
+              <p className="text-xs text-[#5A6B7A] uppercase tracking-wide mb-1">Session in progress</p>
+              <p className="text-5xl font-mono font-bold text-[#1B2733] tabular-nums">
                 {formatElapsed(elapsedSeconds)}
               </p>
-              <p className="text-sm text-gray-500 mt-2">
+              <p className="text-sm text-[#5A6B7A] mt-2">
                 <MapPin className="w-3.5 h-3.5 inline mr-1" />
                 {activeSession.clockInLocation.address || 'GPS verified'}
               </p>
@@ -679,7 +679,7 @@ function ClockTab({
               <Square className="w-5 h-5" />
               Clock Out
             </button>
-            <p className="text-xs text-gray-400 mt-3">
+            <p className="text-xs text-[#8A9BA8] mt-3">
               Service: {activeSession.serviceCode} &bull; {
                 Math.ceil(elapsedSeconds / 900)
               } units so far
@@ -687,16 +687,16 @@ function ClockTab({
           </>
         ) : (
           <>
-            <div className="w-20 h-20 mx-auto mb-4 bg-teal-50 rounded-full flex items-center justify-center">
-              <Timer className="w-10 h-10 text-teal-600" />
+            <div className="w-20 h-20 mx-auto mb-4 bg-[#6B9080]/10 rounded-full flex items-center justify-center">
+              <Timer className="w-10 h-10 text-[#6B9080]" />
             </div>
-            <p className="text-gray-600 mb-4 text-sm">
+            <p className="text-[#5A6B7A] mb-4 text-sm">
               Select an authorization above and clock in to start tracking your visit.
             </p>
             <button
               onClick={onClockIn}
               disabled={isClockingIn || !selectedAuth}
-              className="w-full py-4 bg-teal-600 hover:bg-teal-700 disabled:bg-slate-300 text-white rounded-2xl font-semibold text-lg flex items-center justify-center gap-2 transition-colors shadow-lg shadow-teal-100"
+              className="w-full py-4 bg-primary hover:bg-[#6B9080] disabled:bg-[#E8E4DF] disabled:text-[#8A9BA8] text-white rounded-2xl font-semibold text-lg flex items-center justify-center gap-2 transition-colors shadow-lg shadow-[rgba(107,144,128,0.12)]"
             >
               {isClockingIn ? (
                 <>
@@ -710,7 +710,7 @@ function ClockTab({
                 </>
               )}
             </button>
-            <p className="text-xs text-gray-400 mt-3 flex items-center justify-center gap-1">
+            <p className="text-xs text-[#8A9BA8] mt-3 flex items-center justify-center gap-1">
               <MapPin className="w-3.5 h-3.5" />
               GPS location will be recorded for EVV compliance
             </p>
@@ -728,12 +728,12 @@ function ClockTab({
 function RecordsTab({ records }: { records: EVVRecord[] }) {
   const getStatusBadge = (status: EVVRecord['status']) => {
     const styles = {
-      pending: 'bg-yellow-100 text-yellow-800',
+      pending: 'bg-yellow-100 text-[#3A4A57]',
       verified: 'bg-green-100 text-green-800',
       rejected: 'bg-red-100 text-red-800',
-      submitted: 'bg-blue-100 text-blue-800',
+      submitted: 'bg-blue-100 text-[#4A6478]',
     };
-    return styles[status] || 'bg-gray-100 text-gray-800';
+    return styles[status] || 'bg-[#F0EDE8] text-[#1B2733]';
   };
 
   return (
@@ -744,23 +744,23 @@ function RecordsTab({ records }: { records: EVVRecord[] }) {
       className="space-y-3"
     >
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-semibold text-gray-700">Visit Records</h2>
-        <span className="text-xs text-gray-500">{records.length} total</span>
+        <h2 className="text-sm font-semibold text-[#3A4A57]">Visit Records</h2>
+        <span className="text-xs text-[#5A6B7A]">{records.length} total</span>
       </div>
 
       {records.length === 0 ? (
-        <div className="bg-white rounded-xl border border-gray-200 p-8 text-center">
-          <ClipboardList className="w-10 h-10 mx-auto text-gray-400 mb-3" />
-          <p className="text-gray-500 text-sm">No EVV records yet</p>
-          <p className="text-gray-400 text-xs mt-1">Clock in to start your first visit</p>
+        <div className="bg-white rounded-xl border border-[#E8E4DF] p-8 text-center">
+          <ClipboardList className="w-10 h-10 mx-auto text-[#8A9BA8] mb-3" />
+          <p className="text-[#5A6B7A] text-sm">No EVV records yet</p>
+          <p className="text-[#8A9BA8] text-xs mt-1">Clock in to start your first visit</p>
         </div>
       ) : (
         records.map(record => (
-          <div key={record.id} className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+          <div key={record.id} className="bg-white rounded-xl border border-[#E8E4DF] p-4 shadow-sm">
             <div className="flex items-start justify-between mb-2">
               <div>
-                <p className="font-medium text-sm text-gray-900">{record.providerName}</p>
-                <p className="text-xs text-gray-500">
+                <p className="font-medium text-sm text-[#1B2733]">{record.providerName}</p>
+                <p className="text-xs text-[#5A6B7A]">
                   {new Date(record.serviceDate).toLocaleDateString('en-US', {
                     weekday: 'short', month: 'short', day: 'numeric'
                   })}
@@ -773,22 +773,22 @@ function RecordsTab({ records }: { records: EVVRecord[] }) {
 
             <div className="grid grid-cols-3 gap-3 text-xs">
               <div>
-                <p className="text-gray-400">Clock In</p>
-                <p className="font-medium text-gray-700">
+                <p className="text-[#8A9BA8]">Clock In</p>
+                <p className="font-medium text-[#3A4A57]">
                   {new Date(record.clockInTime).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
                 </p>
               </div>
               <div>
-                <p className="text-gray-400">Clock Out</p>
-                <p className="font-medium text-gray-700">
+                <p className="text-[#8A9BA8]">Clock Out</p>
+                <p className="font-medium text-[#3A4A57]">
                   {record.clockOutTime
                     ? new Date(record.clockOutTime).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
                     : '—'}
                 </p>
               </div>
               <div>
-                <p className="text-gray-400">Duration</p>
-                <p className="font-medium text-gray-700">
+                <p className="text-[#8A9BA8]">Duration</p>
+                <p className="font-medium text-[#3A4A57]">
                   {record.durationMinutes > 0
                     ? `${Math.floor(record.durationMinutes / 60)}h ${record.durationMinutes % 60}m`
                     : '—'}
@@ -796,12 +796,12 @@ function RecordsTab({ records }: { records: EVVRecord[] }) {
               </div>
             </div>
 
-            <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
-              <div className="flex items-center gap-2 text-xs text-gray-500">
+            <div className="flex items-center justify-between mt-3 pt-3 border-t border-[#E8E4DF]">
+              <div className="flex items-center gap-2 text-xs text-[#5A6B7A]">
                 <MapPin className="w-3 h-3" />
                 {record.clockInLocation.address || 'GPS verified'}
               </div>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-[#5A6B7A]">
                 {record.units} units &bull; {record.serviceCode}
               </p>
             </div>
@@ -830,7 +830,7 @@ function BudgetTab({
       exit={{ opacity: 0, y: -10 }}
       className="space-y-4"
     >
-      <h2 className="text-sm font-semibold text-gray-700">Authorization Budget</h2>
+      <h2 className="text-sm font-semibold text-[#3A4A57]">Authorization Budget</h2>
 
       {summaries.map(summary => {
         const auth = authorizations.find(a => a.id === summary.authorizationId);
@@ -838,14 +838,14 @@ function BudgetTab({
           ? 'bg-red-500'
           : summary.percentUsed > 70
             ? 'bg-amber-500'
-            : 'bg-teal-500';
+            : 'bg-primary';
 
         return (
-          <div key={summary.authorizationId} className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+          <div key={summary.authorizationId} className="bg-white rounded-xl border border-[#E8E4DF] p-4 shadow-sm">
             <div className="flex items-start justify-between mb-3">
               <div>
-                <p className="font-medium text-sm text-gray-900">{summary.serviceName}</p>
-                <p className="text-xs text-gray-500">Auth #{auth?.authorizationNumber}</p>
+                <p className="font-medium text-sm text-[#1B2733]">{summary.serviceName}</p>
+                <p className="text-xs text-[#5A6B7A]">Auth #{auth?.authorizationNumber}</p>
               </div>
               <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
                 summary.onTrack ? 'bg-green-100 text-green-800' : 'bg-amber-100 text-amber-800'
@@ -856,38 +856,38 @@ function BudgetTab({
 
             {/* Progress bar */}
             <div className="mb-3">
-              <div className="flex justify-between text-xs text-gray-500 mb-1">
+              <div className="flex justify-between text-xs text-[#5A6B7A] mb-1">
                 <span>{summary.totalUsed} used</span>
                 <span>{summary.remaining} remaining</span>
               </div>
-              <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
+              <div className="h-3 bg-[#F0EDE8] rounded-full overflow-hidden">
                 <div
                   className={`h-full rounded-full transition-all ${progressColor}`}
                   style={{ width: `${Math.min(100, summary.percentUsed)}%` }}
                 />
               </div>
-              <p className="text-xs text-gray-400 mt-1 text-right">
+              <p className="text-xs text-[#8A9BA8] mt-1 text-right">
                 {summary.percentUsed}% of {summary.totalAuthorized} units
               </p>
             </div>
 
             {/* Stats grid */}
-            <div className="grid grid-cols-3 gap-3 pt-3 border-t border-gray-100">
+            <div className="grid grid-cols-3 gap-3 pt-3 border-t border-[#E8E4DF]">
               <div className="text-center">
-                <p className="text-lg font-bold text-gray-800">{summary.daysRemaining}</p>
-                <p className="text-xs text-gray-400">Days Left</p>
+                <p className="text-lg font-bold text-[#1B2733]">{summary.daysRemaining}</p>
+                <p className="text-xs text-[#8A9BA8]">Days Left</p>
               </div>
               <div className="text-center">
-                <p className="text-lg font-bold text-gray-800">{summary.burnRate}</p>
-                <p className="text-xs text-gray-400">Units/Week</p>
+                <p className="text-lg font-bold text-[#1B2733]">{summary.burnRate}</p>
+                <p className="text-xs text-[#8A9BA8]">Units/Week</p>
               </div>
               <div className="text-center">
-                <p className="text-lg font-bold text-gray-800">
+                <p className="text-lg font-bold text-[#1B2733]">
                   {summary.projectedExhaustion
                     ? new Date(summary.projectedExhaustion).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
                     : '—'}
                 </p>
-                <p className="text-xs text-gray-400">Projected End</p>
+                <p className="text-xs text-[#8A9BA8]">Projected End</p>
               </div>
             </div>
           </div>
@@ -895,10 +895,10 @@ function BudgetTab({
       })}
 
       {summaries.length === 0 && (
-        <div className="bg-white rounded-xl border border-gray-200 p-8 text-center">
-          <DollarSign className="w-10 h-10 mx-auto text-gray-400 mb-3" />
-          <p className="text-gray-500 text-sm">No active authorizations</p>
-          <p className="text-gray-400 text-xs mt-1">Confirm authorizations in your external EVV system while the Arizona pilot workflow is being validated.</p>
+        <div className="bg-white rounded-xl border border-[#E8E4DF] p-8 text-center">
+          <DollarSign className="w-10 h-10 mx-auto text-[#8A9BA8] mb-3" />
+          <p className="text-[#5A6B7A] text-sm">No active authorizations</p>
+          <p className="text-[#8A9BA8] text-xs mt-1">Confirm authorizations in your external EVV system while the Arizona pilot workflow is being validated.</p>
         </div>
       )}
     </motion.div>
@@ -962,7 +962,7 @@ function TimesheetsTab({
       exit={{ opacity: 0, y: -10 }}
       className="space-y-4"
     >
-      <h2 className="text-sm font-semibold text-gray-700">Timesheet Submission</h2>
+      <h2 className="text-sm font-semibold text-[#3A4A57]">Timesheet Submission</h2>
 
       {Object.entries(weeklyGroups).map(([weekKey, weekRecords]) => {
         const weekStart = new Date(weekKey);
@@ -973,13 +973,13 @@ function TimesheetsTab({
         const allVerified = weekRecords.every(r => r.status === 'verified');
 
         return (
-          <div key={weekKey} className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+          <div key={weekKey} className="bg-white rounded-xl border border-[#E8E4DF] p-4 shadow-sm">
             <div className="flex items-center justify-between mb-3">
               <div>
-                <p className="font-medium text-sm text-gray-900">
+                <p className="font-medium text-sm text-[#1B2733]">
                   Week of {weekStart.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                 </p>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-[#5A6B7A]">
                   {weekRecords.length} visits &bull; {Math.floor(totalMinutes / 60)}h {totalMinutes % 60}m &bull; {totalUnits} units
                 </p>
               </div>
@@ -995,7 +995,7 @@ function TimesheetsTab({
                 type="button"
                 onClick={() => handleGenerateTimesheet(weekKey)}
                 disabled={generating}
-                className="flex min-h-11 flex-1 items-center justify-center gap-1.5 rounded-lg bg-slate-800 py-2 text-xs font-medium text-white transition-colors hover:bg-slate-900"
+                className="flex min-h-11 flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#1B2733] py-2 text-xs font-medium text-white transition-colors hover:bg-[#0D1B2A]"
               >
                 {generating ? (
                   <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -1009,7 +1009,7 @@ function TimesheetsTab({
                 onClick={() => handleGenerateTimesheet(weekKey, true)}
                 disabled={generating}
                 aria-label="Download timesheet"
-                className="flex min-h-11 items-center justify-center gap-1.5 rounded-lg border border-gray-200 px-3 py-2 text-xs font-medium text-gray-600 transition-colors hover:bg-gray-50 disabled:opacity-50"
+                className="flex min-h-11 items-center justify-center gap-1.5 rounded-lg border border-[#E8E4DF] px-3 py-2 text-xs font-medium text-[#5A6B7A] transition-colors hover:bg-[#FAF7F2] disabled:opacity-50"
               >
                 <Download className="w-3.5 h-3.5" />
                 PDF
@@ -1020,10 +1020,10 @@ function TimesheetsTab({
       })}
 
       {Object.keys(weeklyGroups).length === 0 && (
-        <div className="bg-white rounded-xl border border-gray-200 p-8 text-center">
-          <FileText className="w-10 h-10 mx-auto text-gray-400 mb-3" />
-          <p className="text-gray-500 text-sm">No visits to submit</p>
-          <p className="text-gray-400 text-xs mt-1">Complete some visits first to generate timesheets</p>
+        <div className="bg-white rounded-xl border border-[#E8E4DF] p-8 text-center">
+          <FileText className="w-10 h-10 mx-auto text-[#8A9BA8] mb-3" />
+          <p className="text-[#5A6B7A] text-sm">No visits to submit</p>
+          <p className="text-[#8A9BA8] text-xs mt-1">Complete some visits first to generate timesheets</p>
         </div>
       )}
     </motion.div>

@@ -346,15 +346,15 @@ export function CoverageChatFlow({
   return (
     <div className="flex flex-col h-full max-h-screen bg-white">
       {/* Header */}
-      <div className="flex-shrink-0 border-b border-slate-200 bg-gradient-to-r from-teal-50 to-white p-4">
+      <div className="flex-shrink-0 border-b border-[#E8E4DF] bg-gradient-to-r from-[#FAF7F2] to-white p-4">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-teal-500 rounded-full flex items-center justify-center">
+            <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
               <Shield className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h2 className="font-semibold text-slate-900">Coverage Chat</h2>
-              <p className="text-sm text-slate-600">Question {Math.min(currentQuestionIndex + 1, questions.length)} of {questions.length}</p>
+              <h2 className="font-semibold text-[#1B2733]">Coverage Chat</h2>
+              <p className="text-sm text-[#5A6B7A]">Question {Math.min(currentQuestionIndex + 1, questions.length)} of {questions.length}</p>
             </div>
           </div>
           {onCancel && (
@@ -379,16 +379,16 @@ export function CoverageChatFlow({
           >
             {message.type === 'aminy' && (
               <div className="flex items-start gap-2 max-w-[80%]">
-                <div className="w-8 h-8 bg-teal-500 rounded-full flex items-center justify-center flex-shrink-0">
+                <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
                   <Sparkles className="w-4 h-4 text-white" />
                 </div>
-                <div className="bg-slate-100 rounded-2xl rounded-tl-none px-4 py-3">
-                  <p className="text-sm text-slate-900 leading-relaxed">{message.content}</p>
+                <div className="bg-[#F0EDE8] rounded-2xl rounded-tl-none px-4 py-3">
+                  <p className="text-sm text-[#1B2733] leading-relaxed">{message.content}</p>
                 </div>
               </div>
             )}
             {message.type === 'user' && (
-              <div className="bg-teal-500 rounded-2xl rounded-tr-none px-4 py-3 max-w-[80%]">
+              <div className="bg-primary rounded-2xl rounded-tr-none px-4 py-3 max-w-[80%]">
                 <p className="text-sm text-white leading-relaxed">{message.content}</p>
               </div>
             )}
@@ -397,13 +397,13 @@ export function CoverageChatFlow({
         {isProcessing && (
           <div className="flex justify-start">
             <div className="flex items-start gap-2 max-w-[80%]">
-              <div className="w-8 h-8 bg-teal-500 rounded-full flex items-center justify-center flex-shrink-0">
+              <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
                 <Sparkles className="w-4 h-4 text-white" />
               </div>
-              <div className="bg-slate-100 rounded-2xl rounded-tl-none px-4 py-3">
+              <div className="bg-[#F0EDE8] rounded-2xl rounded-tl-none px-4 py-3">
                 <div className="flex items-center gap-2">
                   <Loader2 className="w-4 h-4 animate-spin text-slate-400" />
-                  <span className="text-sm text-slate-500">Thinking...</span>
+                  <span className="text-sm text-[#5A6B7A]">Thinking...</span>
                 </div>
               </div>
             </div>
@@ -414,7 +414,7 @@ export function CoverageChatFlow({
 
       {/* Input Area */}
       {currentQuestion && !isProcessing && currentQuestionIndex < questions.length && (
-        <div className="flex-shrink-0 border-t border-slate-200 p-4 bg-white">
+        <div className="flex-shrink-0 border-t border-[#E8E4DF] p-4 bg-white">
           {currentQuestion.inputType === 'text' && (
             <div className="flex gap-2">
               <Input
@@ -452,11 +452,11 @@ export function CoverageChatFlow({
                 <button
                   key={option.value}
                   onClick={() => handleRadioSelect(option.value)}
-                  className="w-full text-left p-4 rounded-lg border-2 border-slate-200 hover:border-teal-500 hover:bg-teal-50 transition-all"
+                  className="w-full text-left p-4 rounded-lg border-2 border-[#E8E4DF] hover:border-[#6B9080] hover:bg-[#6B9080]/10 transition-all"
                 >
-                  <div className="font-medium text-slate-900">{option.label}</div>
+                  <div className="font-medium text-[#1B2733]">{option.label}</div>
                   {option.description && (
-                    <div className="text-sm text-slate-600 mt-1">{option.description}</div>
+                    <div className="text-sm text-[#5A6B7A] mt-1">{option.description}</div>
                   )}
                 </button>
               ))}
@@ -471,8 +471,8 @@ export function CoverageChatFlow({
                     key={option.value}
                     className={`flex items-start gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all ${
                       selectedOptions.includes(option.value)
-                        ? 'border-teal-500 bg-teal-50'
-                        : 'border-slate-200 hover:border-teal-300'
+                        ? 'border-[#6B9080] bg-[#6B9080]/10'
+                        : 'border-[#E8E4DF] hover:border-[#6B9080]/30'
                     }`}
                   >
                     <input
@@ -488,9 +488,9 @@ export function CoverageChatFlow({
                       className="mt-1"
                     />
                     <div className="flex-1">
-                      <div className="font-medium text-slate-900">{option.label}</div>
+                      <div className="font-medium text-[#1B2733]">{option.label}</div>
                       {option.description && (
-                        <div className="text-sm text-slate-600 mt-1">{option.description}</div>
+                        <div className="text-sm text-[#5A6B7A] mt-1">{option.description}</div>
                       )}
                     </div>
                   </label>

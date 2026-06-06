@@ -71,34 +71,34 @@ export function BrowseTopConcerns({
   const categoryOrder: ConcernCategory[] = ['most-common', 'autism-neurodivergence', 'caregiver-family'];
 
   return (
-    <div className="min-h-screen bg-[#F5F5F5]">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-white border-b border-gray-100 px-4 py-3">
+      <header className="sticky top-0 z-10 bg-white border-b border-[#E8E4DF] px-4 py-3">
         <div className="flex items-center gap-3">
           <button
             onClick={onBack}
-            className="p-2 -ml-2 rounded-full hover:bg-gray-100 transition-colors"
+            className="p-2 -ml-2 rounded-full hover:bg-[#F0EDE8] transition-colors"
             aria-label="Go back"
           >
-            <ArrowLeft className="w-5 h-5 text-gray-700" />
+            <ArrowLeft className="w-5 h-5 text-[#3A4A57]" />
           </button>
           <div>
-            <h1 className="text-lg font-semibold text-gray-900">Browse Top Concerns</h1>
-            <p className="text-sm text-gray-500">Find the right support for your needs</p>
+            <h1 className="text-lg font-semibold text-[#1B2733]">Browse Top Concerns</h1>
+            <p className="text-sm text-[#5A6B7A]">Find the right support for your needs</p>
           </div>
         </div>
       </header>
 
       {/* Search */}
-      <div className="px-4 py-4 bg-white border-b border-gray-100">
+      <div className="px-4 py-4 bg-white border-b border-[#E8E4DF]">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8A9BA8]" />
           <input
             type="text"
             placeholder="Search concerns..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600 transition-all"
+            className="w-full pl-10 pr-4 py-3 bg-[#FAF7F2] border border-[#E8E4DF] rounded-xl text-[#1B2733] placeholder:text-[#5A6B7A] focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600 transition-all"
           />
         </div>
       </div>
@@ -108,7 +108,7 @@ export function BrowseTopConcerns({
         {/* Search Results */}
         {filteredConcerns ? (
           <div>
-            <h2 className="text-sm font-medium text-gray-500 mb-3">
+            <h2 className="text-sm font-medium text-[#5A6B7A] mb-3">
               {filteredConcerns.length} result{filteredConcerns.length !== 1 ? 's' : ''} for "{searchQuery}"
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -122,10 +122,10 @@ export function BrowseTopConcerns({
             </div>
             {filteredConcerns.length === 0 && (
               <div className="text-center py-12">
-                <p className="text-gray-500 mb-2">No concerns match your search</p>
+                <p className="text-[#5A6B7A] mb-2">No concerns match your search</p>
                 <button
                   onClick={() => setSearchQuery('')}
-                  className="text-cyan-600 font-medium hover:underline"
+                  className="text-[#6B9080] font-medium hover:underline"
                 >
                   Clear search
                 </button>
@@ -144,10 +144,10 @@ export function BrowseTopConcerns({
               return (
                 <section key={category}>
                   <div className="mb-4">
-                    <h2 className="text-lg font-semibold text-gray-900">
+                    <h2 className="text-lg font-semibold text-[#1B2733]">
                       {categoryInfo.title}
                     </h2>
-                    <p className="text-sm text-gray-500">{categoryInfo.description}</p>
+                    <p className="text-sm text-[#5A6B7A]">{categoryInfo.description}</p>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {concerns.map((concern) => (
@@ -165,9 +165,9 @@ export function BrowseTopConcerns({
         )}
 
         {/* Not seeing what you need */}
-        <div className="mt-8 p-4 bg-white rounded-2xl border border-gray-100">
-          <h3 className="font-medium text-gray-900 mb-1">Not seeing what you need?</h3>
-          <p className="text-sm text-gray-500 mb-3">
+        <div className="mt-8 p-4 bg-white rounded-2xl border border-[#E8E4DF]">
+          <h3 className="font-medium text-[#1B2733] mb-1">Not seeing what you need?</h3>
+          <p className="text-sm text-[#5A6B7A] mb-3">
             Describe your concern and we'll match you with the right support.
           </p>
           <button
@@ -180,7 +180,7 @@ export function BrowseTopConcerns({
               recommendedVisitType: 'consult',
               urgencyLevel: 'routine'
             })}
-            className="flex items-center gap-2 text-cyan-600 font-medium text-sm hover:underline"
+            className="flex items-center gap-2 text-[#6B9080] font-medium text-sm hover:underline"
           >
             Describe a different concern
             <ChevronRight className="w-4 h-4" />
@@ -211,10 +211,10 @@ export function BrowseTopConcerns({
                 <AlertTriangle className="w-6 h-6 text-amber-600" />
               </div>
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 text-center mb-2">
+            <h3 className="text-lg font-semibold text-[#1B2733] text-center mb-2">
               Safety First
             </h3>
-            <p className="text-gray-600 text-center text-sm mb-4">
+            <p className="text-[#5A6B7A] text-center text-sm mb-4">
               {pendingSafetyConcern.safetyMessage}
             </p>
             <div className="space-y-3">
@@ -232,7 +232,7 @@ export function BrowseTopConcerns({
               </a>
               <button
                 onClick={handleSafetyAcknowledge}
-                className="block w-full py-3 px-4 bg-cyan-600 text-white font-medium text-center rounded-xl hover:bg-[#466379] transition-colors"
+                className="block w-full py-3 px-4 bg-[#6B9080] text-white font-medium text-center rounded-xl hover:bg-[#466379] transition-colors"
               >
                 Continue to Book Support
               </button>
@@ -241,7 +241,7 @@ export function BrowseTopConcerns({
                   setShowSafetyModal(false);
                   setPendingSafetyConcern(null);
                 }}
-                className="block w-full py-2 text-gray-500 font-medium text-center text-sm hover:text-gray-700"
+                className="block w-full py-2 text-[#5A6B7A] font-medium text-center text-sm hover:text-[#3A4A57]"
               >
                 Cancel
               </button>
@@ -272,22 +272,22 @@ function ConcernTile({ concern, onClick }: ConcernTileProps) {
         relative p-4 bg-white rounded-2xl border text-left
         hover:shadow-md hover:border-cyan-600/30 transition-all
         focus:outline-none focus:ring-2 focus:ring-cyan-600/20
-        ${isUrgent ? 'border-amber-200' : 'border-gray-100'}
+        ${isUrgent ? 'border-amber-200' : 'border-[#E8E4DF]'}
       `}
     >
       {/* Icon */}
       <div className={`
         w-12 h-12 rounded-full flex items-center justify-center text-2xl mb-3
-        ${isUrgent ? 'bg-amber-50' : 'bg-gray-50'}
+        ${isUrgent ? 'bg-amber-50' : 'bg-[#FAF7F2]'}
       `}>
         {concern.icon || '💭'}
       </div>
 
       {/* Content */}
-      <h3 className="font-medium text-gray-900 text-sm leading-tight mb-1">
+      <h3 className="font-medium text-[#1B2733] text-sm leading-tight mb-1">
         {concern.name}
       </h3>
-      <p className="text-xs text-gray-500 line-clamp-2">
+      <p className="text-xs text-[#5A6B7A] line-clamp-2">
         {concern.description}
       </p>
 

@@ -139,7 +139,7 @@ export function MFASettings({ onClose }: MFASettingsProps) {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center p-8">
-        <div className="w-6 h-6 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
+        <div className="w-6 h-6 border-2 border-[#E8E4DF] border-t-gray-600 rounded-full animate-spin" />
       </div>
     );
   }
@@ -160,7 +160,7 @@ export function MFASettings({ onClose }: MFASettingsProps) {
             {status?.isEnrolled ? (
               <ShieldCheck className="w-6 h-6" style={{ color: '#4CAF50' }} />
             ) : (
-              <Shield className="w-6 h-6" style={{ color: '#0891b2' }} />
+              <Shield className="w-6 h-6" style={{ color: '#6B9080' }} />
             )}
           </div>
           <div>
@@ -230,7 +230,7 @@ export function MFASettings({ onClose }: MFASettingsProps) {
           {status?.isEnrolled ? (
             <>
               <div className="flex items-center gap-3 mb-4">
-                <Smartphone className="w-5 h-5" style={{ color: '#0891b2' }} />
+                <Smartphone className="w-5 h-5" style={{ color: '#6B9080' }} />
                 <div>
                   <p className="font-medium text-sm" style={{ color: '#0D1B2A' }}>
                     Authenticator App
@@ -272,7 +272,7 @@ export function MFASettings({ onClose }: MFASettingsProps) {
               <Button
                 onClick={() => setShowEnrollment(true)}
                 className="w-full h-12 rounded-xl font-medium text-white"
-                style={{ backgroundColor: '#0891b2' }}
+                style={{ backgroundColor: '#6B9080' }}
               >
                 <Shield className="w-4 h-4 mr-2" />
                 Enable Two-Factor Authentication
@@ -425,7 +425,7 @@ export function MFASettings({ onClose }: MFASettingsProps) {
                 <Button
                   onClick={() => setShowBackupCodes(false)}
                   className="w-full h-10 rounded-lg font-medium text-white"
-                  style={{ backgroundColor: '#0891b2' }}
+                  style={{ backgroundColor: '#6B9080' }}
                 >
                   Done
                 </Button>

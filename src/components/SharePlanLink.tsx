@@ -68,7 +68,7 @@ export function SharePlanLink({ tier, onGenerateLink }: SharePlanLinkProps) {
             </select>
           </div>
 
-          <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+          <div className="p-3 bg-[#EEF4F8] border border-[#C8DDE8] rounded-lg">
             <div className="flex items-center gap-2 mb-2">
               <Clock className="w-4 h-4 text-blue-600" />
               <p className="text-sm font-semibold text-blue-900">Time-Limited Access</p>

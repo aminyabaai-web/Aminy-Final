@@ -127,7 +127,7 @@ export function ReferralAnalytics({
         {
           label: 'Signed Up',
           value: userStats.pending + userStats.converted,
-          color: 'bg-teal-500',
+          color: 'bg-primary',
           icon: <BarChart3 className="w-4 h-4" />,
         },
         {
@@ -150,15 +150,15 @@ export function ReferralAnalytics({
 
   if (loading) {
     return (
-      <div className="bg-white rounded-2xl border border-gray-200 p-6">
+      <div className="bg-white rounded-2xl border border-[#E8E4DF] p-6">
         <div className="animate-pulse space-y-4">
-          <div className="h-5 bg-gray-200 rounded w-40" />
+          <div className="h-5 bg-[#E8E4DF] rounded w-40" />
           <div className="grid grid-cols-3 gap-3">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-20 bg-gray-100 rounded-xl" />
+              <div key={i} className="h-20 bg-[#F0EDE8] rounded-xl" />
             ))}
           </div>
-          <div className="h-32 bg-gray-100 rounded-xl" />
+          <div className="h-32 bg-[#F0EDE8] rounded-xl" />
         </div>
       </div>
     );
@@ -176,18 +176,18 @@ export function ReferralAnalytics({
     ) : viralMetrics?.kFactorTrend === 'down' ? (
       <TrendingDown className="w-4 h-4 text-red-500" />
     ) : (
-      <Minus className="w-4 h-4 text-gray-400" />
+      <Minus className="w-4 h-4 text-[#8A9BA8]" />
     );
 
   return (
     <div className="space-y-5">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-bold text-gray-900">Referral Performance</h3>
+        <h3 className="text-lg font-bold text-[#1B2733]">Referral Performance</h3>
         <button
           onClick={handleRefresh}
           disabled={refreshing}
-          className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
+          className="p-2 text-[#8A9BA8] hover:text-[#5A6B7A] hover:bg-[#F0EDE8] rounded-full transition-colors"
           aria-label="Refresh"
         >
           <RefreshCw
@@ -198,15 +198,15 @@ export function ReferralAnalytics({
 
       {/* KPI cards */}
       <div className="grid grid-cols-3 gap-3">
-        <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl p-3.5 border border-blue-100">
+        <div className="bg-gradient-to-br from-[#FAF7F2] to-[#F0EDE8] rounded-xl p-3.5 border border-blue-100">
           <p className="text-xs text-blue-600 font-medium">Invites</p>
           <p className="text-2xl font-bold text-blue-900 mt-0.5">
             {userStats?.totalInvites ?? 0}
           </p>
         </div>
-        <div className="bg-gradient-to-br from-teal-50 to-emerald-50 rounded-xl p-3.5 border border-teal-100">
-          <p className="text-xs text-teal-600 font-medium">Conversions</p>
-          <p className="text-2xl font-bold text-teal-900 mt-0.5">
+        <div className="bg-gradient-to-br from-[#FAF7F2] to-emerald-50 rounded-xl p-3.5 border border-[#E8E4DF]">
+          <p className="text-xs text-[#6B9080] font-medium">Conversions</p>
+          <p className="text-2xl font-bold text-[#6B9080] mt-0.5">
             {userStats?.converted ?? 0}
           </p>
         </div>
@@ -221,8 +221,8 @@ export function ReferralAnalytics({
 
       {/* Conversion funnel */}
       {funnel.length > 0 && (
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
-          <h4 className="text-sm font-semibold text-gray-700 mb-3">
+        <div className="bg-white rounded-xl border border-[#E8E4DF] p-4">
+          <h4 className="text-sm font-semibold text-[#3A4A57] mb-3">
             Conversion Funnel
           </h4>
           <div className="space-y-2.5">
@@ -234,13 +234,13 @@ export function ReferralAnalytics({
               return (
                 <div key={stage.label}>
                   <div className="flex items-center justify-between text-xs mb-1">
-                    <span className="flex items-center gap-1.5 text-gray-600 font-medium">
+                    <span className="flex items-center gap-1.5 text-[#5A6B7A] font-medium">
                       {stage.icon}
                       {stage.label}
                     </span>
-                    <span className="font-bold text-gray-900">{stage.value}</span>
+                    <span className="font-bold text-[#1B2733]">{stage.value}</span>
                   </div>
-                  <div className="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden">
+                  <div className="w-full bg-[#F0EDE8] rounded-full h-2.5 overflow-hidden">
                     <div
                       className={`${stage.color} h-2.5 rounded-full transition-all duration-700 ease-out`}
                       style={{ width: `${widthPct}%` }}
@@ -248,7 +248,7 @@ export function ReferralAnalytics({
                   </div>
                   {i < funnel.length - 1 && (
                     <div className="flex justify-center my-0.5">
-                      <ArrowRight className="w-3 h-3 text-gray-400 rotate-90" />
+                      <ArrowRight className="w-3 h-3 text-[#8A9BA8] rotate-90" />
                     </div>
                   )}
                 </div>
@@ -258,9 +258,9 @@ export function ReferralAnalytics({
 
           {/* Conversion rate */}
           {userStats && userStats.totalInvites > 0 && (
-            <div className="mt-3 pt-3 border-t border-gray-100 flex items-center justify-between">
-              <span className="text-xs text-gray-500">Overall conversion</span>
-              <span className="text-sm font-bold text-teal-600">
+            <div className="mt-3 pt-3 border-t border-[#E8E4DF] flex items-center justify-between">
+              <span className="text-xs text-[#5A6B7A]">Overall conversion</span>
+              <span className="text-sm font-bold text-[#6B9080]">
                 {Math.round(
                   (userStats.converted / userStats.totalInvites) * 100
                 )}
@@ -273,15 +273,15 @@ export function ReferralAnalytics({
 
       {/* K-Factor gauge */}
       {viralMetrics && (
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
+        <div className="bg-white rounded-xl border border-[#E8E4DF] p-4">
           <div className="flex items-center justify-between mb-2">
-            <h4 className="text-sm font-semibold text-gray-700">
+            <h4 className="text-sm font-semibold text-[#3A4A57]">
               Viral Coefficient (K-Factor)
             </h4>
             {trendIcon}
           </div>
           <div className="flex items-end gap-2 mb-2">
-            <span className="text-3xl font-bold text-gray-900">
+            <span className="text-3xl font-bold text-[#1B2733]">
               {viralMetrics.kFactor.toFixed(2)}
             </span>
             {viralMetrics.weekOverWeekGrowth !== 0 && (
@@ -302,7 +302,7 @@ export function ReferralAnalytics({
           )}
           {/* K-factor bar */}
           <div className="mt-3 relative">
-            <div className="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
+            <div className="w-full bg-[#F0EDE8] rounded-full h-3 overflow-hidden">
               <div
                 className={`h-3 rounded-full transition-all duration-700 ${
                   viralMetrics.kFactor >= 1
@@ -323,9 +323,9 @@ export function ReferralAnalytics({
               className="absolute top-0 w-0.5 h-3 bg-gray-400"
               style={{ left: '100%', transform: 'translateX(-1px)' }}
             />
-            <div className="flex justify-between text-xs text-gray-400 mt-1">
+            <div className="flex justify-between text-xs text-[#8A9BA8] mt-1">
               <span>0</span>
-              <span className="text-gray-600 font-medium">1.0 = Viral</span>
+              <span className="text-[#5A6B7A] font-medium">1.0 = Viral</span>
             </div>
           </div>
         </div>
@@ -333,8 +333,8 @@ export function ReferralAnalytics({
 
       {/* Referral tier progress */}
       {summary && (
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
-          <h4 className="text-sm font-semibold text-gray-700 mb-3">
+        <div className="bg-white rounded-xl border border-[#E8E4DF] p-4">
+          <h4 className="text-sm font-semibold text-[#3A4A57] mb-3">
             Referral Tier
           </h4>
           {currentTier ? (
@@ -346,17 +346,17 @@ export function ReferralAnalytics({
                 {currentTier.badgeIcon}
               </div>
               <div>
-                <p className="text-sm font-bold text-gray-900">
+                <p className="text-sm font-bold text-[#1B2733]">
                   {currentTier.name}
                 </p>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-[#5A6B7A]">
                   {summary.qualifiedReferrals} qualified referral
                   {summary.qualifiedReferrals !== 1 ? 's' : ''}
                 </p>
               </div>
             </div>
           ) : (
-            <p className="text-sm text-gray-500 mb-3">
+            <p className="text-sm text-[#5A6B7A] mb-3">
               Refer your first friend to unlock rewards
             </p>
           )}
@@ -365,15 +365,15 @@ export function ReferralAnalytics({
           {nextTier && (
             <div>
               <div className="flex items-center justify-between text-xs mb-1">
-                <span className="text-gray-500">
+                <span className="text-[#5A6B7A]">
                   {summary.referralsToNextTier} more to{' '}
                   <span className="font-semibold">{nextTier.name}</span>
                 </span>
-                <span className="text-gray-400">
+                <span className="text-[#8A9BA8]">
                   {nextTier.badgeIcon}
                 </span>
               </div>
-              <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
+              <div className="w-full bg-[#F0EDE8] rounded-full h-2 overflow-hidden">
                 <div
                   className="h-2 rounded-full transition-all duration-500"
                   style={{
@@ -390,7 +390,7 @@ export function ReferralAnalytics({
                 {nextTier.perks.map((perk) => (
                   <span
                     key={perk}
-                    className="text-xs bg-gray-50 text-gray-600 px-2 py-0.5 rounded-full border border-gray-200"
+                    className="text-xs bg-[#FAF7F2] text-[#5A6B7A] px-2 py-0.5 rounded-full border border-[#E8E4DF]"
                   >
                     {perk}
                   </span>
@@ -416,7 +416,7 @@ export function ReferralAnalytics({
       {onInvitePress && (
         <button
           onClick={onInvitePress}
-          className="w-full py-3 bg-teal-600 hover:bg-teal-700 text-white rounded-xl text-sm font-semibold transition-colors flex items-center justify-center gap-2"
+          className="w-full py-3 bg-primary hover:bg-[#6B9080] text-white rounded-xl text-sm font-semibold transition-colors flex items-center justify-center gap-2"
         >
           <Gift className="w-4 h-4" />
           Invite More Friends

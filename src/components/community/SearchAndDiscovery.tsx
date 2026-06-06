@@ -411,12 +411,12 @@ export function SearchAndDiscovery({
           <Button
             variant={showFilters ? 'default' : 'outline'}
             onClick={() => setShowFilters(!showFilters)}
-            className={showFilters ? 'bg-teal-600' : ''}
+            className={showFilters ? 'bg-primary' : ''}
           >
             <Filter className="w-4 h-4 mr-2" />
             Filters
             {hasActiveFilters && (
-              <span className="ml-1 w-2 h-2 bg-teal-500 rounded-full" />
+              <span className="ml-1 w-2 h-2 bg-primary rounded-full" />
             )}
           </Button>
         </div>
@@ -488,7 +488,7 @@ export function SearchAndDiscovery({
                   type="checkbox"
                   checked={filters.expertOnly}
                   onChange={e => setFilters(prev => ({ ...prev, expertOnly: e.target.checked }))}
-                  className="w-4 h-4 rounded text-teal-600"
+                  className="w-4 h-4 rounded text-[#6B9080]"
                 />
                 <span className="text-sm text-neutral-700 dark:text-slate-300">Expert posts only</span>
               </label>
@@ -507,20 +507,20 @@ export function SearchAndDiscovery({
         // Search Results
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <p className="text-sm text-neutral-500">
+            <p className="text-sm text-[#5A6B7A]">
               {isSearching ? 'Searching...' : `${results.length} results for "${query}"`}
             </p>
           </div>
 
           {isSearching ? (
             <Card className="p-12 flex items-center justify-center">
-              <Loader2 className="w-8 h-8 animate-spin text-teal-600" />
+              <Loader2 className="w-8 h-8 animate-spin text-[#6B9080]" />
             </Card>
           ) : results.length === 0 ? (
             <Card className="p-12 text-center">
               <Search className="w-12 h-12 mx-auto text-neutral-300 mb-3" />
               <p className="text-neutral-600 dark:text-slate-400 mb-2">No results found</p>
-              <p className="text-sm text-neutral-500">Try different keywords or broaden your filters</p>
+              <p className="text-sm text-[#5A6B7A]">Try different keywords or broaden your filters</p>
             </Card>
           ) : (
             <div className="space-y-3">
@@ -531,26 +531,26 @@ export function SearchAndDiscovery({
                   onClick={() => onSelectPost?.(result.id)}
                 >
                   <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center text-white font-medium flex-shrink-0">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] flex items-center justify-center text-white font-medium flex-shrink-0">
                       {result.authorName.charAt(0)}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="font-medium text-neutral-900 dark:text-white">
+                        <span className="font-medium text-[#1B2733] dark:text-white">
                           {result.authorName}
                         </span>
                         {result.isExpert && (
                           <Badge className="bg-purple-100 text-purple-700 text-xs">Expert</Badge>
                         )}
-                        <span className="text-xs text-neutral-500">
+                        <span className="text-xs text-[#5A6B7A]">
                           {formatTimeAgo(result.createdAt)}
                         </span>
                       </div>
-                      <p className="text-neutral-900 dark:text-white mb-2">{result.content}</p>
+                      <p className="text-[#1B2733] dark:text-white mb-2">{result.content}</p>
                       {result.excerpt && (
-                        <p className="text-sm text-neutral-500 mb-2 line-clamp-2">{result.excerpt}</p>
+                        <p className="text-sm text-[#5A6B7A] mb-2 line-clamp-2">{result.excerpt}</p>
                       )}
-                      <div className="flex items-center gap-4 text-sm text-neutral-500">
+                      <div className="flex items-center gap-4 text-sm text-[#5A6B7A]">
                         <span className="flex items-center gap-1">
                           <Heart className="w-4 h-4" />
                           {result.likes}
@@ -587,8 +587,8 @@ export function SearchAndDiscovery({
           {/* Trending Topics */}
           <Card className="p-4 lg:col-span-1">
             <div className="flex items-center gap-2 mb-4">
-              <TrendingUp className="w-5 h-5 text-teal-600" />
-              <h3 className="font-semibold text-neutral-900 dark:text-white">Trending Topics</h3>
+              <TrendingUp className="w-5 h-5 text-[#6B9080]" />
+              <h3 className="font-semibold text-[#1B2733] dark:text-white">Trending Topics</h3>
             </div>
             <div className="space-y-3">
               {trending.map((topic, idx) => (
@@ -600,8 +600,8 @@ export function SearchAndDiscovery({
                   <div className="flex items-center gap-3">
                     <span className="text-neutral-400 text-sm">{idx + 1}</span>
                     <div>
-                      <p className="font-medium text-neutral-900 dark:text-white">#{topic.tag}</p>
-                      <p className="text-xs text-neutral-500">{topic.postCount} posts</p>
+                      <p className="font-medium text-[#1B2733] dark:text-white">#{topic.tag}</p>
+                      <p className="text-xs text-[#5A6B7A]">{topic.postCount} posts</p>
                     </div>
                   </div>
                   {topic.trend === 'up' && (
@@ -621,7 +621,7 @@ export function SearchAndDiscovery({
           <Card className="p-4 lg:col-span-2">
             <div className="flex items-center gap-2 mb-4">
               <Sparkles className="w-5 h-5 text-amber-500" />
-              <h3 className="font-semibold text-neutral-900 dark:text-white">Recommended for You</h3>
+              <h3 className="font-semibold text-[#1B2733] dark:text-white">Recommended for You</h3>
             </div>
             <div className="space-y-4">
               {recommended.map(post => (
@@ -630,12 +630,12 @@ export function SearchAndDiscovery({
                   onClick={() => onSelectPost?.(post.id)}
                   className="flex items-start gap-3 p-3 rounded-lg hover:bg-neutral-50 dark:hover:bg-slate-800 cursor-pointer transition-colors"
                 >
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center text-white font-medium flex-shrink-0">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] flex items-center justify-center text-white font-medium flex-shrink-0">
                     {post.authorName.charAt(0)}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="font-medium text-neutral-900 dark:text-white text-sm">
+                      <span className="font-medium text-[#1B2733] dark:text-white text-sm">
                         {post.authorName}
                       </span>
                       {post.isExpert && (
@@ -645,7 +645,7 @@ export function SearchAndDiscovery({
                     <p className="text-neutral-700 dark:text-slate-300 text-sm line-clamp-2">
                       {post.content}
                     </p>
-                    <div className="flex items-center gap-3 mt-2 text-xs text-neutral-500">
+                    <div className="flex items-center gap-3 mt-2 text-xs text-[#5A6B7A]">
                       <span className="flex items-center gap-1">
                         <Heart className="w-3 h-3" />
                         {post.likes}
@@ -691,7 +691,7 @@ export function SearchAndDiscovery({
                     setSearchHistory([]);
                     localStorage.removeItem('aminy_search_history');
                   }}
-                  className="text-neutral-500 text-xs"
+                  className="text-[#5A6B7A] text-xs"
                 >
                   Clear history
                 </Button>

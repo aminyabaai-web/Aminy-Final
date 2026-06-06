@@ -104,7 +104,7 @@ export function PersistentChatFAB({ userData, isAuthenticated = false }: Persist
           <div className="absolute bottom-16 right-0 bg-white border border-accent/20 rounded-lg shadow-lg p-3 max-w-[200px] animate-in slide-in-from-bottom-2 fade-in">
             <div className="flex items-start gap-2">
               <Sparkles className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" />
-              <p className="text-xs text-slate-700">
+              <p className="text-xs text-[#3A4A57]">
                 <strong>Tip:</strong> Ask me anything about your calm plan!
               </p>
             </div>
@@ -119,7 +119,7 @@ export function PersistentChatFAB({ userData, isAuthenticated = false }: Persist
           side="bottom" 
           className="h-[85vh] sm:h-full sm:max-w-md p-0 rounded-t-2xl sm:rounded-none"
         >
-          <SheetHeader className="px-6 pt-6 pb-4 border-b border-slate-200">
+          <SheetHeader className="px-6 pt-6 pb-4 border-b border-[#E8E4DF]">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-gradient-to-br from-accent to-teal-500 rounded-full flex items-center justify-center">
@@ -127,7 +127,7 @@ export function PersistentChatFAB({ userData, isAuthenticated = false }: Persist
                 </div>
                 <div>
                   <SheetTitle className="text-lg">Aminy</SheetTitle>
-                  <p className="text-xs text-slate-500 mt-0.5">
+                  <p className="text-xs text-[#5A6B7A] mt-0.5">
                     Powered by AI and ABA behavioral science
                   </p>
                 </div>
@@ -145,12 +145,12 @@ export function PersistentChatFAB({ userData, isAuthenticated = false }: Persist
             {/* Starter Prompts */}
             {!isAuthenticated && (
               <div className="mt-4 space-y-2">
-                <p className="text-xs text-slate-600 font-medium">Try asking:</p>
+                <p className="text-xs text-[#5A6B7A] font-medium">Try asking:</p>
                 <div className="grid gap-2">
                   {starterPrompts.slice(0, 2).map((prompt, idx) => (
                     <button
                       key={idx}
-                      className="text-left px-3 py-2 bg-accent/5 hover:bg-accent/10 border border-accent/20 rounded-lg text-sm text-slate-700 transition-colors"
+                      className="text-left px-3 py-2 bg-accent/5 hover:bg-accent/10 border border-accent/20 rounded-lg text-sm text-[#3A4A57] transition-colors"
                     >
                       {prompt}
                     </button>
@@ -173,10 +173,10 @@ export function PersistentChatFAB({ userData, isAuthenticated = false }: Persist
                 <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center mb-4">
                   <MessageCircle className="w-8 h-8 text-accent" />
                 </div>
-                <h3 className="text-lg font-semibold text-slate-900 mb-2">
+                <h3 className="text-lg font-semibold text-[#1B2733] mb-2">
                   Sign in to chat with Aminy
                 </h3>
-                <p className="text-sm text-slate-600 mb-4 sm:mb-6 max-w-sm">
+                <p className="text-sm text-[#5A6B7A] mb-4 sm:mb-6 max-w-sm">
                   Get personalized guidance based on your family's progress and goals.
                 </p>
                 <Button className="bg-accent hover:bg-accent/90">

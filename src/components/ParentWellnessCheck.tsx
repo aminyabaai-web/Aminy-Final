@@ -332,7 +332,7 @@ export function ParentWellnessCheck({
                       <X className="w-5 h-5" />
                     </button>
                   </div>
-                  <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                  <div className="h-2 bg-[#F0EDE8] rounded-full overflow-hidden">
                     <motion.div
                       className="h-full bg-gradient-to-r from-rose-400 to-pink-400"
                       initial={{ width: 0 }}
@@ -361,7 +361,7 @@ export function ParentWellnessCheck({
                           "w-full p-4 rounded-xl border-2 text-left transition-all",
                           responses[currentQ.id] === option.value
                             ? "border-rose-400 bg-rose-50"
-                            : "border-gray-200 hover:border-rose-200 hover:bg-rose-50/50"
+                            : "border-[#E8E4DF] hover:border-rose-200 hover:bg-rose-50/50"
                         )}
                       >
                         <div className="flex items-center justify-between">
@@ -652,11 +652,11 @@ export function WellnessCheckWidget({
       <div className="flex items-center gap-3 sm:gap-4">
         <div className={cn(
           "p-3 rounded-xl",
-          shouldPrompt ? "bg-rose-100" : "bg-gray-100"
+          shouldPrompt ? "bg-rose-100" : "bg-[#F0EDE8]"
         )}>
           <HandHeart className={cn(
             "w-6 h-6",
-            shouldPrompt ? "text-rose-500" : "text-gray-500"
+            shouldPrompt ? "text-rose-500" : "text-[#5A6B7A]"
           )} />
         </div>
         <div className="flex-1">

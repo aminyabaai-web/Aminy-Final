@@ -16,6 +16,7 @@
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { toast } from 'sonner';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
@@ -358,7 +359,7 @@ export function Dashboard10({
         });
       }
     } catch (err) {
-      console.error('Failed to send message:', err);
+      if (import.meta.env.DEV) console.error('Failed to send message:', err);
       setChatInput(messageText); // Restore input on error
     } finally {
       setIsSendingChat(false);
@@ -393,7 +394,7 @@ export function Dashboard10({
   const child: ChildProfile = dashboardData.childProfile || childProfile || {
     id: `child-${userId?.substring(0, 8) || 'temp'}`,
     name: userData.childName || 'Your Child',
-    age: userData.childAge || 5,
+    age: 5,
     goals: getDefaultGoals(userData.childName).map(g => ({
       name: g.name,
       percentMet: g.progress,
@@ -550,8 +551,8 @@ export function Dashboard10({
     {
       id: 'plan',
       label: 'My Plan',
-      icon: <FileText className="w-5 h-5 text-teal-700 dark:text-teal-300" />,
-      accent: 'bg-teal-100 dark:bg-teal-900/30',
+      icon: <FileText className="w-5 h-5 text-[#6B9080] dark:text-[#7BA7BC]" />,
+      accent: 'bg-[#6B9080]/10 dark:bg-[#6B9080]/15',
     },
     {
       id: 'calm',
@@ -665,12 +666,30 @@ export function Dashboard10({
               <p className="text-sm text-amber-200 mt-2">
                 {child.name} is building great habits thanks to you.
               </p>
-              <button
-                onClick={() => setShowStreakCelebration(false)}
-                className="mt-4 px-6 py-2 bg-white/20 hover:bg-white/30 rounded-full text-sm transition-colors"
-              >
-                Keep Going! 💪
-              </button>
+              <div className="mt-4 flex flex-col gap-2">
+                <button
+                  onClick={() => {
+                    const shareText = `${child.name} just hit a ${streakDays}-day streak on Aminy — building amazing habits day by day! 🎉 app.aminy.ai`;
+                    if (navigator.share) {
+                      navigator.share({ title: `${streakDays}-Day Streak!`, text: shareText }).catch(() => {});
+                    } else {
+                      navigator.clipboard?.writeText(shareText).then(() => {
+                        toast.success('Copied to clipboard!');
+                      }).catch(() => {});
+                    }
+                    setShowStreakCelebration(false);
+                  }}
+                  className="px-6 py-2 bg-white text-amber-600 rounded-full text-sm font-semibold transition-colors hover:bg-amber-50"
+                >
+                  Share your win 🎉
+                </button>
+                <button
+                  onClick={() => setShowStreakCelebration(false)}
+                  className="px-6 py-2 bg-white/20 hover:bg-white/30 rounded-full text-sm transition-colors"
+                >
+                  Keep Going! 💪
+                </button>
+              </div>
             </div>
           </motion.div>
         </div>
@@ -680,7 +699,7 @@ export function Dashboard10({
           1. HEADER & TOP NAVIGATION (20%)
           ======================================== */}
       <header
-        className="sticky top-0 z-20 border-b border-teal-100/80 backdrop-blur-xl"
+        className="sticky top-0 z-20 border-b border-[#E8E4DF]/80 backdrop-blur-xl"
         style={{ background: 'linear-gradient(135deg, rgba(247,252,252,0.95) 0%, rgba(240,249,249,0.96) 48%, rgba(238,246,250,0.97) 100%)' }}
       >
         <div className="max-w-4xl mx-auto px-4 py-4">
@@ -691,7 +710,7 @@ export function Dashboard10({
             </h1>
             <h2 className="sr-only">Daily overview</h2>
             <h3 className="sr-only">Primary actions and support</h3>
-            <p className="mt-1 max-w-2xl text-sm italic text-slate-600">{dailyTip}</p>
+            <p className="mt-1 max-w-2xl text-sm italic text-[#5A6B7A]">{dailyTip}</p>
           </div>
 
           {/* Multi-Child Switcher */}
@@ -703,8 +722,8 @@ export function Dashboard10({
                   onClick={() => setActiveChildId(c.id === activeChildId ? undefined : c.id)}
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm transition-colors flex-shrink-0 ${
                     (activeChildId === c.id || (!activeChildId && c.isPrimary))
-                      ? 'border border-teal-200 bg-teal-600 text-white shadow-sm'
-                      : 'border border-slate-200 bg-white/85 text-slate-600 hover:bg-white'
+                      ? 'border border-[#6B9080]/20 bg-primary text-white shadow-sm'
+                      : 'border border-[#E8E4DF] bg-white/85 text-[#5A6B7A] hover:bg-white'
                   }`}
                 >
                   <span className="w-5 h-5 rounded-full bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] flex items-center justify-center text-sm font-bold text-white">
@@ -719,14 +738,14 @@ export function Dashboard10({
           {(aiMemorySync || juniorProgressSync) && (
             <div className="mb-3 flex flex-wrap items-center gap-2">
               {aiMemorySync ? (
-                <div className="flex items-center gap-2 rounded-full border border-slate-200 bg-white/80 px-3 py-1.5 text-sm text-slate-600 shadow-sm">
-                  <span className="font-medium text-slate-900">AI memory</span>
+                <div className="flex items-center gap-2 rounded-full border border-[#E8E4DF] bg-white/80 px-3 py-1.5 text-sm text-[#5A6B7A] shadow-sm">
+                  <span className="font-medium text-[#1B2733]">AI memory</span>
                   <SyncStatusBadge status={aiMemorySync.status} />
                 </div>
               ) : null}
               {juniorProgressSync ? (
-                <div className="flex items-center gap-2 rounded-full border border-slate-200 bg-white/80 px-3 py-1.5 text-sm text-slate-600 shadow-sm">
-                  <span className="font-medium text-slate-900">Ease progress</span>
+                <div className="flex items-center gap-2 rounded-full border border-[#E8E4DF] bg-white/80 px-3 py-1.5 text-sm text-[#5A6B7A] shadow-sm">
+                  <span className="font-medium text-[#1B2733]">Ease progress</span>
                   <SyncStatusBadge status={juniorProgressSync.status} />
                 </div>
               ) : null}
@@ -766,7 +785,7 @@ export function Dashboard10({
             <div className="flex-1">
               <div className="flex items-center gap-2">
                 <span className="font-medium text-slate-950">{child.name}</span>
-                <Badge variant="outline" className="border-teal-100 bg-white/85 text-sm text-slate-700">
+                <Badge variant="outline" className="border-[#E8E4DF] bg-white/85 text-sm text-[#3A4A57]">
                   Age {child.age}
                 </Badge>
               </div>
@@ -775,19 +794,19 @@ export function Dashboard10({
                   hasGoalMomentum ? (
                     <div className="flex gap-3">
                       {child.goals.slice(0, 2).map((goal) => (
-                        <div key={goal.name} className="text-sm text-slate-600">
-                          {goal.name}: <span className={goal.trend === 'up' ? 'text-teal-700' : 'text-slate-500'}>{goal.percentMet}%</span>
+                        <div key={goal.name} className="text-sm text-[#5A6B7A]">
+                          {goal.name}: <span className={goal.trend === 'up' ? 'text-[#6B9080]' : 'text-[#5A6B7A]'}>{goal.percentMet}%</span>
                           {goal.trend === 'up' && ' ↑'}
                         </div>
                       ))}
                     </div>
                   ) : (
-                    <div className="text-sm text-slate-600">
+                    <div className="text-sm text-[#5A6B7A]">
                       Starting focus areas: {child.goals.slice(0, 2).map((goal) => goal.name).join(' • ')}
                     </div>
                   )
                 ) : (
-                  <div className="text-sm text-slate-500">
+                  <div className="text-sm text-[#5A6B7A]">
                     No goals set yet • Tap to add
                   </div>
                 )}
@@ -813,23 +832,23 @@ export function Dashboard10({
                         : 'care-plan'
                     )
                   }
-                  className="flex items-center gap-3 flex-shrink-0 rounded-2xl border border-slate-200 bg-white/85 px-4 py-3 shadow-sm transition-colors hover:bg-white"
+                  className="flex items-center gap-3 flex-shrink-0 rounded-2xl border border-[#E8E4DF] bg-white/85 px-4 py-3 shadow-sm transition-colors hover:bg-white"
                 >
                   <span className="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style={{ background: event.type === 'telehealth' ? '#43AA8B15' : '#F8B40015' }}>
                     {event.type === 'telehealth' ? (
-                      <Video className="w-4 h-4 text-teal-600" />
+                      <Video className="w-4 h-4 text-[#6B9080]" />
                     ) : (
                       <Calendar className="w-4 h-4 text-amber-500" />
                     )}
                   </span>
                   <div className="text-left">
-                    <div className="text-sm font-medium text-slate-900">{event.title}</div>
-                    <div className="text-xs text-slate-500">{event.time}</div>
+                    <div className="text-sm font-medium text-[#1B2733]">{event.title}</div>
+                    <div className="text-xs text-[#5A6B7A]">{event.time}</div>
                   </div>
                 </button>
               ))
             ) : (
-              <div className="py-2 text-sm text-slate-500">
+              <div className="py-2 text-sm text-[#5A6B7A]">
                 You're all caught up! No upcoming events.
               </div>
             )}
@@ -848,7 +867,7 @@ export function Dashboard10({
             />
             <div className="absolute top-3 right-3">
               <AISparkleButton
-                prompt={`My child ${child.name} has a developmental wellness score of ${wellnessScore.total}/100. Confidence is ${wellnessScore.confidence}%. Break down the score into its component areas with a chart, then tell me what's driving it and the most impactful things I can do this week to improve it.`}
+                prompt={`My child ${child.name} has a developmental wellness score of ${wellnessScore.composite}/100. Confidence is ${wellnessScore.confidence}%. Break down the score into its component areas with a chart, then tell me what's driving it and the most impactful things I can do this week to improve it.`}
                 label="Explain score"
                 visual
               />
@@ -926,14 +945,14 @@ export function Dashboard10({
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="bg-gradient-to-r from-teal-50 to-cyan-50 dark:from-teal-900/20 dark:to-cyan-900/20 border border-teal-200 dark:border-teal-700 rounded-xl p-3"
+            className="bg-gradient-to-r from-[#FAF7F2] to-cyan-50 dark:from-teal-900/20 dark:to-cyan-900/20 border border-[#6B9080]/20 dark:border-teal-700 rounded-xl p-3"
           >
             <div className="flex items-start gap-2">
-              <Sparkles className="w-4 h-4 text-teal-600 dark:text-teal-400 mt-0.5 flex-shrink-0" />
-              <p className="text-sm text-teal-800 dark:text-teal-200 flex-1">{activeTip}</p>
+              <Sparkles className="w-4 h-4 text-[#6B9080] dark:text-primary mt-0.5 flex-shrink-0" />
+              <p className="text-sm text-[#6B9080] dark:text-teal-200 flex-1">{activeTip}</p>
               <button
                 onClick={() => setShowTip(false)}
-                className="h-11 w-11 text-teal-400 hover:text-teal-600 flex-shrink-0 rounded-lg flex items-center justify-center"
+                className="h-11 w-11 text-primary hover:text-[#6B9080] flex-shrink-0 rounded-lg flex items-center justify-center"
                 aria-label="Dismiss personalized tip"
               >
                 <X className="w-3.5 h-3.5" />
@@ -948,11 +967,11 @@ export function Dashboard10({
             {badges.slice(0, 8).map(badge => (
               <div
                 key={badge.id}
-                className="flex-shrink-0 flex items-center gap-1.5 bg-white dark:bg-slate-800 rounded-full px-3 py-1.5 border border-gray-100 dark:border-slate-700 shadow-sm"
+                className="flex-shrink-0 flex items-center gap-1.5 bg-white dark:bg-slate-800 rounded-full px-3 py-1.5 border border-[#E8E4DF] dark:border-slate-700 shadow-sm"
                 title={badge.description}
               >
                 <span className="text-base">{badge.emoji}</span>
-                <span className="text-sm font-medium text-slate-600 dark:text-slate-300 whitespace-nowrap">{badge.name}</span>
+                <span className="text-sm font-medium text-[#5A6B7A] dark:text-slate-300 whitespace-nowrap">{badge.name}</span>
               </div>
             ))}
           </div>
@@ -960,11 +979,11 @@ export function Dashboard10({
 
         {/* Next Appointment Card */}
         {dashboardData.nextAppointment && (
-          <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-gray-100 dark:border-slate-700 shadow-sm">
+          <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-[#E8E4DF] dark:border-slate-700 shadow-sm">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center">
-                  <Video className="w-5 h-5 text-teal-600" />
+                <div className="w-10 h-10 rounded-full bg-[#6B9080]/10 flex items-center justify-center">
+                  <Video className="w-5 h-5 text-[#6B9080]" />
                 </div>
                 <div>
                   <p className="text-sm font-medium">Next: {dashboardData.nextAppointment.providerName}</p>
@@ -997,16 +1016,16 @@ export function Dashboard10({
 
         {/* Weekly Summary / Starter Card */}
         {shouldShowStarterSummary ? (
-          <div className="rounded-2xl border border-teal-100 bg-gradient-to-br from-white via-teal-50/60 to-sky-50/70 p-5 shadow-sm dark:border-teal-900/40 dark:from-slate-800 dark:via-teal-950/20 dark:to-slate-900">
+          <div className="rounded-2xl border border-[#E8E4DF] bg-gradient-to-br from-white via-transparent/60 to-sky-50/70 p-5 shadow-sm dark:border-teal-900/40 dark:from-slate-800 dark:via-teal-950/20 dark:to-slate-900">
             <div className="flex items-start gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-300">
+              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#6B9080]/10 text-[#6B9080] dark:bg-[#6B9080]/15 dark:text-[#7BA7BC]">
                 <Wind className="h-5 w-5" />
               </div>
               <div className="flex-1">
-                <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                <h3 className="text-sm font-semibold text-[#1B2733] dark:text-slate-100">
                   Start gently today
                 </h3>
-                <p className="mt-1 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                <p className="mt-1 text-sm leading-6 text-[#5A6B7A] dark:text-slate-300">
                   You do not need a perfect week to begin. Pick one calm step, one small routine, or one quick note.
                   Aminy will build the rest around what works for your family.
                 </p>
@@ -1023,7 +1042,7 @@ export function Dashboard10({
               <Button
                 size="sm"
                 variant="outline"
-                className="rounded-full border-slate-200 bg-white text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
+                className="rounded-full border-[#E8E4DF] bg-white text-[#3A4A57] hover:bg-[#FAF7F2] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
                 onClick={() => onNavigate?.('calm-tools')}
               >
                 Calm Corner
@@ -1031,7 +1050,7 @@ export function Dashboard10({
             </div>
           </div>
         ) : (
-          <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-gray-100 dark:border-slate-700 shadow-sm">
+          <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-[#E8E4DF] dark:border-slate-700 shadow-sm">
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-sm font-semibold">This Week</h3>
               <AISparkleButton
@@ -1042,7 +1061,7 @@ export function Dashboard10({
             </div>
             <div className="grid grid-cols-3 gap-3 text-center">
               <div>
-                <p className="text-2xl font-bold text-teal-600">{dashboardData.routineAdherence}%</p>
+                <p className="text-2xl font-bold text-[#6B9080]">{dashboardData.routineAdherence}%</p>
                 <p className="text-sm text-muted-foreground">Routine</p>
               </div>
               <div>
@@ -1061,7 +1080,7 @@ export function Dashboard10({
 
         {/* Empty State CTAs */}
         {(!dashboardData.activeGoals || dashboardData.activeGoals.length === 0) && (
-          <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-dashed border-gray-200 dark:border-slate-700 text-center">
+          <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-dashed border-[#E8E4DF] dark:border-slate-700 text-center">
             <p className="text-sm text-muted-foreground mb-2">Set goals to track {child.name}'s progress</p>
             <Button size="sm" variant="outline" onClick={() => onNavigate?.('care-plan')}>
               Set First Goal
@@ -1103,7 +1122,7 @@ export function Dashboard10({
                 className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${
                   activeRoutine === routine.timeOfDay
                     ? 'bg-[#6B9080] text-white shadow-md'
-                    : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700'
+                    : 'bg-white dark:bg-slate-800 text-[#5A6B7A] dark:text-gray-300 hover:bg-[#F0EDE8] dark:hover:bg-slate-700'
                 }`}
               >
                 {routine.icon}
@@ -1124,11 +1143,11 @@ export function Dashboard10({
             data-plan-snapshot-id={activePlanSnapshotId || ''}
           >
             <div className="flex items-center justify-between mb-4">
-              <h2 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+              <h2 className="font-semibold text-[#1B2733] dark:text-white flex items-center gap-2">
                 {currentRoutine.icon}
                 {currentRoutine.label}
               </h2>
-              <span className="text-sm text-gray-500 dark:text-gray-400">
+              <span className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">
                 {completedTasks}/{totalTasks} complete
               </span>
             </div>
@@ -1147,22 +1166,22 @@ export function Dashboard10({
                   className={`w-full flex items-center gap-3 p-3 rounded-lg transition-all ${
                     task.completed
                       ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800'
-                      : 'bg-gray-50 dark:bg-slate-700/50 hover:bg-gray-100 dark:hover:bg-slate-700'
+                      : 'bg-[#FAF7F2] dark:bg-slate-700/50 hover:bg-[#F0EDE8] dark:hover:bg-slate-700'
                   }`}
                 >
                   <span className="text-2xl">{getRoutineTaskIcon(task)}</span>
                   <div className="flex-1 text-left">
-                    <div className={`font-medium ${task.completed ? 'text-green-700 dark:text-green-300' : 'text-gray-900 dark:text-white'}`}>
+                    <div className={`font-medium ${task.completed ? 'text-green-700 dark:text-green-300' : 'text-[#1B2733] dark:text-white'}`}>
                       {task.title}
                     </div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">{task.description}</div>
+                    <div className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">{task.description}</div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-sm text-gray-400">{task.timeEstimate}</span>
+                    <span className="text-sm text-[#8A9BA8]">{task.timeEstimate}</span>
                     {task.completed ? (
                       <CheckCircle2 className="w-6 h-6 text-green-500" />
                     ) : (
-                      <div className="w-6 h-6 rounded-full border-2 border-gray-300 dark:border-gray-600" />
+                      <div className="w-6 h-6 rounded-full border-2 border-[#E8E4DF] dark:border-gray-600" />
                     )}
                   </div>
                 </button>
@@ -1171,8 +1190,8 @@ export function Dashboard10({
 
             {/* AI Nudge */}
             {completedTasks > 0 && completedTasks < totalTasks && (
-              <div className="mt-4 p-3 bg-teal-50 dark:bg-teal-900/20 rounded-lg border border-teal-200 dark:border-teal-800">
-                <p className="text-sm text-teal-800 dark:text-teal-200 flex items-center gap-2">
+              <div className="mt-4 p-3 bg-[#6B9080]/10 dark:bg-[#6B9080]/10 rounded-lg border border-[#6B9080]/20 dark:border-[#6B9080]/30">
+                <p className="text-sm text-[#6B9080] dark:text-teal-200 flex items-center gap-2">
                   <Sparkles className="w-4 h-4" />
                   One task away from completing {currentRoutine.label.toLowerCase()}!
                 </p>
@@ -1280,7 +1299,7 @@ export function Dashboard10({
             5. QUICK ACTION GRID (15%)
             ======================================== */}
         <section>
-          <h2 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+          <h2 className="font-semibold text-[#1B2733] dark:text-white mb-4 flex items-center gap-2">
             <Zap className="w-5 h-5 text-[#6B9080]" />
             Quick Actions
           </h2>
@@ -1290,7 +1309,7 @@ export function Dashboard10({
               <button
                 key={action.id}
                 onClick={() => handleQuickAction(action.id)}
-                className="flex min-h-[108px] flex-col items-center gap-2 rounded-xl border border-slate-200 bg-white p-4 text-slate-700 shadow-sm transition-all hover:-translate-y-0.5 hover:border-teal-200 hover:bg-slate-50 hover:shadow-md active:scale-[0.98] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700/70"
+                className="flex min-h-[108px] flex-col items-center gap-2 rounded-xl border border-[#E8E4DF] bg-white p-4 text-[#3A4A57] shadow-sm transition-all hover:-translate-y-0.5 hover:border-[#6B9080]/20 hover:bg-[#FAF7F2] hover:shadow-md active:scale-[0.98] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700/70"
               >
                 <span className={`flex h-11 w-11 items-center justify-center rounded-2xl ${action.accent}`}>
                   {action.icon}
@@ -1303,20 +1322,20 @@ export function Dashboard10({
           {/* Provider Reports Card */}
           {shouldShowProviderReportsCard ? (
             <div
-              className="mt-3 p-3.5 rounded-xl bg-gradient-to-r from-teal-50 to-emerald-50 dark:from-teal-900/20 dark:to-emerald-900/20 border border-teal-200 dark:border-teal-800 flex items-center gap-3 cursor-pointer hover:shadow-sm transition-shadow"
+              className="mt-3 p-3.5 rounded-xl bg-gradient-to-r from-[#FAF7F2] to-emerald-50 dark:from-teal-900/20 dark:to-emerald-900/20 border border-[#6B9080]/20 dark:border-[#6B9080]/30 flex items-center gap-3 cursor-pointer hover:shadow-sm transition-shadow"
               onClick={() => onNavigate?.('clinical-reports')}
               role="button"
               tabIndex={0}
               onKeyDown={(e) => e.key === 'Enter' && onNavigate?.('clinical-reports')}
             >
-              <div className="w-10 h-10 rounded-lg bg-teal-100 dark:bg-teal-800/50 flex items-center justify-center flex-shrink-0">
-                <Stethoscope className="w-5 h-5 text-teal-700 dark:text-teal-300" />
+              <div className="w-10 h-10 rounded-lg bg-[#6B9080]/10 dark:bg-teal-800/50 flex items-center justify-center flex-shrink-0">
+                <Stethoscope className="w-5 h-5 text-[#6B9080] dark:text-[#7BA7BC]" />
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="font-medium text-sm text-teal-900 dark:text-teal-100">Provider Reports</h3>
-                <p className="text-sm text-teal-700 dark:text-teal-300">Generate clinical PDFs for your child's care team</p>
+                <h3 className="font-medium text-sm text-[#6B9080] dark:text-teal-100">Provider Reports</h3>
+                <p className="text-sm text-[#6B9080] dark:text-[#7BA7BC]">Generate clinical PDFs for your child's care team</p>
               </div>
-              <ChevronRight className="w-4 h-4 text-teal-400 flex-shrink-0" />
+              <ChevronRight className="w-4 h-4 text-primary flex-shrink-0" />
             </div>
           ) : null}
         </section>
@@ -1391,7 +1410,7 @@ export function Dashboard10({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
-            className={`fixed flex flex-col bg-white dark:bg-slate-800 shadow-2xl z-50 overflow-hidden border border-gray-200 dark:border-slate-700 transition-all duration-300 ease-out ${
+            className={`fixed flex flex-col bg-white dark:bg-slate-800 shadow-2xl z-50 overflow-hidden border border-[#E8E4DF] dark:border-slate-700 transition-all duration-300 ease-out ${
               isFullScreenChat
                 ? 'inset-0 rounded-none'
                 : 'bottom-20 right-4 w-[calc(100%-2rem)] max-w-sm sm:w-96 max-h-[80vh] rounded-2xl'
@@ -1439,7 +1458,7 @@ export function Dashboard10({
               {/* Welcome message if no chat history */}
               {chatMessages.length === 0 && (
                 <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-700 dark:to-slate-600 rounded-xl p-4 text-sm shadow-sm">
-                  <p className="text-gray-700 dark:text-gray-200 leading-relaxed">
+                  <p className="text-[#3A4A57] dark:text-gray-200 leading-relaxed">
                     Hi {userData.parentName}! 👋 I'm here to help with {child.name}'s day.
                     {activeRoutine === 'morning' && " Ready to start the morning routine? I can suggest activities that work for this time of day."}
                     {activeRoutine === 'afternoon' && " How's the afternoon going? Need help with any activities or transitions?"}
@@ -1456,7 +1475,7 @@ export function Dashboard10({
                   className={`rounded-xl p-3 text-sm shadow-sm ${
                     msg.role === 'user'
                       ? 'bg-[#6B9080] text-white ml-8'
-                      : 'bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-700 dark:to-slate-600 text-gray-700 dark:text-gray-200 mr-8'
+                      : 'bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-700 dark:to-slate-600 text-[#3A4A57] dark:text-gray-200 mr-8'
                   }`}
                 >
                   <p className="leading-relaxed whitespace-pre-wrap">{msg.content}</p>
@@ -1468,7 +1487,7 @@ export function Dashboard10({
                 <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-700 dark:to-slate-600 rounded-xl p-3 text-sm shadow-sm mr-8">
                   <div className="flex items-center gap-2">
                     <Loader2 className="w-4 h-4 animate-spin text-[#6B9080]" />
-                    <span className="text-gray-500 dark:text-gray-400">Aminy is thinking...</span>
+                    <span className="text-[#5A6B7A] dark:text-[#8A9BA8]">Aminy is thinking...</span>
                   </div>
                 </div>
               )}
@@ -1494,7 +1513,7 @@ export function Dashboard10({
             </div>
 
             {/* Chat Input - Enhanced */}
-            <div className="flex-shrink-0 p-4 border-t dark:border-slate-700 bg-gray-50 dark:bg-slate-750">
+            <div className="flex-shrink-0 p-4 border-t dark:border-slate-700 bg-[#FAF7F2] dark:bg-slate-750">
               <div className="flex gap-2">
                 <button
                   onClick={() => onNavigate?.('vision-ai')}
@@ -1510,7 +1529,7 @@ export function Dashboard10({
                   onChange={(e) => setChatInput(e.target.value)}
                   onKeyDown={handleChatKeyDown}
                   placeholder="Message Aminy AI..."
-                  className="flex-1 px-4 py-3 text-sm rounded-xl border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:border-[#6B9080] focus:ring-2 focus:ring-[#6B9080]/20 transition-all"
+                  className="flex-1 px-4 py-3 text-sm rounded-xl border-2 border-[#E8E4DF] dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:border-[#6B9080] focus:ring-2 focus:ring-[#6B9080]/20 transition-all"
                   aria-label="Chat message input"
                   disabled={isSendingChat}
                 />

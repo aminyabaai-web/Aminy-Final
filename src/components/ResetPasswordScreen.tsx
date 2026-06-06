@@ -89,7 +89,7 @@ export function ResetPasswordScreen({ onSuccess, onBack }: ResetPasswordScreenPr
   if (isSuccess) {
     return (
       <div className="min-h-screen bg-white dark:bg-slate-900 flex flex-col relative overflow-hidden">
-        <div className="flex items-center justify-between p-6 border-b border-gray-100">
+        <div className="flex items-center justify-between p-6 border-b border-[#E8E4DF]">
           <div className="w-16"></div>
           <Logo size="sm" showText={false} showTagline={false} />
           <div className="w-16"></div>
@@ -133,7 +133,7 @@ export function ResetPasswordScreen({ onSuccess, onBack }: ResetPasswordScreenPr
 
   return (
     <div className="min-h-screen bg-white dark:bg-slate-900 flex flex-col relative overflow-hidden">
-      <div className="flex items-center justify-between p-6 border-b border-gray-100">
+      <div className="flex items-center justify-between p-6 border-b border-[#E8E4DF]">
         <button
           onClick={onBack}
           className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 rounded-lg px-2 py-1"

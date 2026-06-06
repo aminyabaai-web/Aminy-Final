@@ -139,7 +139,7 @@ export function VoiceInputButton({
             sizeClasses[size],
             isListening
               ? 'bg-red-500 hover:bg-red-600 text-white'
-              : 'bg-gradient-to-br from-teal-500 to-blue-500 hover:from-teal-600 hover:to-blue-600 text-white',
+              : 'bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] hover:from-teal-600 hover:to-blue-600 text-white',
             disabled && 'opacity-50 cursor-not-allowed',
             !isSupported && 'bg-gray-300 cursor-not-allowed'
           )}
@@ -192,12 +192,12 @@ export function VoiceInputButton({
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="max-w-xs text-center p-3 bg-white/80 backdrop-blur-sm rounded-lg shadow-sm border border-gray-100"
+            className="max-w-xs text-center p-3 bg-white/80 backdrop-blur-sm rounded-lg shadow-sm border border-[#E8E4DF]"
           >
-            <p className="text-sm text-gray-700">
+            <p className="text-sm text-[#3A4A57]">
               {interimTranscript || transcript}
               {interimTranscript && (
-                <span className="inline-block w-1 h-4 ml-1 bg-teal-500 animate-pulse" />
+                <span className="inline-block w-1 h-4 ml-1 bg-primary animate-pulse" />
               )}
             </p>
             {confidence > 0 && (
@@ -324,7 +324,7 @@ export function VoiceTextInput({
         placeholder={placeholder}
         rows={rows}
         disabled={disabled}
-        className="w-full px-4 py-3 pr-14 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 resize-none"
+        className="w-full px-4 py-3 pr-14 border border-[#E8E4DF] rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-[#6B9080] resize-none"
       />
       <div className="absolute right-2 bottom-2">
         <VoiceInputButton
@@ -380,7 +380,7 @@ export function VoicePrompt({
     <div className={cn('flex flex-col items-center text-center space-y-3 sm:space-y-4 sm:space-y-6', className)}>
       {/* Prompt */}
       <div>
-        <h2 className="text-lg sm:text-xl font-semibold text-gray-900">{prompt}</h2>
+        <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733]">{prompt}</h2>
         {subtext && <p className="text-muted-foreground mt-2">{subtext}</p>}
       </div>
 
@@ -397,7 +397,7 @@ export function VoicePrompt({
           {onSkip && (
             <button
               onClick={() => setShowTextInput(true)}
-              className="text-sm text-teal-600 hover:text-teal-700 underline"
+              className="text-sm text-[#6B9080] hover:text-[#6B9080] underline"
             >
               {skipLabel}
             </button>

@@ -171,8 +171,8 @@ export function ProviderReferralProgram({
   if (!code) {
     return (
       <div className="p-6 space-y-4 animate-pulse">
-        <div className="h-8 bg-gray-200 rounded w-1/2" />
-        <div className="h-40 bg-gray-200 rounded" />
+        <div className="h-8 bg-[#E8E4DF] rounded w-1/2" />
+        <div className="h-40 bg-[#E8E4DF] rounded" />
       </div>
     );
   }
@@ -181,11 +181,11 @@ export function ProviderReferralProgram({
     <div className="space-y-4 pb-8">
       {/* Header */}
       <div>
-        <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-          <Users className="w-6 h-6 text-teal-600" />
+        <h2 className="text-xl font-bold text-[#1B2733] flex items-center gap-2">
+          <Users className="w-6 h-6 text-[#6B9080]" />
           Provider Referral Program
         </h2>
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-[#5A6B7A]">
           Refer colleagues and earn credits
         </p>
       </div>
@@ -252,15 +252,15 @@ export function ProviderReferralProgram({
           >
             <Card className="p-4">
               <div className="flex items-center justify-between mb-3">
-                <h3 className="font-semibold text-gray-900 text-sm">Share with Colleagues</h3>
-                <button onClick={() => setShowSharePanel(false)} className="text-gray-400 hover:text-gray-600">
+                <h3 className="font-semibold text-[#1B2733] text-sm">Share with Colleagues</h3>
+                <button onClick={() => setShowSharePanel(false)} className="text-[#8A9BA8] hover:text-[#5A6B7A]">
                   <X className="w-4 h-4" />
                 </button>
               </div>
               <div className="grid grid-cols-3 gap-2">
                 <button
                   onClick={() => handleShare('email')}
-                  className="flex flex-col items-center p-3 bg-blue-50 rounded-xl hover:bg-blue-100 transition-colors"
+                  className="flex flex-col items-center p-3 bg-[#EEF4F8] rounded-xl hover:bg-blue-100 transition-colors"
                 >
                   <Mail className="w-5 h-5 text-blue-600 mb-1" />
                   <span className="text-xs text-blue-700">Email</span>
@@ -274,10 +274,10 @@ export function ProviderReferralProgram({
                 </button>
                 <button
                   onClick={() => handleShare('copy')}
-                  className="flex flex-col items-center p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
+                  className="flex flex-col items-center p-3 bg-[#FAF7F2] rounded-xl hover:bg-[#F0EDE8] transition-colors"
                 >
-                  <Link2 className="w-5 h-5 text-gray-600 mb-1" />
-                  <span className="text-xs text-gray-700">Copy Link</span>
+                  <Link2 className="w-5 h-5 text-[#5A6B7A] mb-1" />
+                  <span className="text-xs text-[#3A4A57]">Copy Link</span>
                 </button>
               </div>
             </Card>
@@ -289,18 +289,18 @@ export function ProviderReferralProgram({
       <div className="grid grid-cols-3 gap-3">
         <Card className="p-3 text-center">
           <Users className="w-5 h-5 mx-auto mb-1 text-indigo-500" />
-          <div className="text-2xl font-bold text-gray-900">{referrals.length}</div>
-          <div className="text-xs text-gray-500">Referred</div>
+          <div className="text-2xl font-bold text-[#1B2733]">{referrals.length}</div>
+          <div className="text-xs text-[#5A6B7A]">Referred</div>
         </Card>
         <Card className="p-3 text-center">
           <CheckCircle className="w-5 h-5 mx-auto mb-1 text-green-500" />
-          <div className="text-2xl font-bold text-gray-900">{completedReferrals}</div>
-          <div className="text-xs text-gray-500">Onboarded</div>
+          <div className="text-2xl font-bold text-[#1B2733]">{completedReferrals}</div>
+          <div className="text-xs text-[#5A6B7A]">Onboarded</div>
         </Card>
         <Card className="p-3 text-center">
           <DollarSign className="w-5 h-5 mx-auto mb-1 text-emerald-500" />
-          <div className="text-2xl font-bold text-gray-900">${totalCreditsEarned}</div>
-          <div className="text-xs text-gray-500">Earned</div>
+          <div className="text-2xl font-bold text-[#1B2733]">${totalCreditsEarned}</div>
+          <div className="text-xs text-[#5A6B7A]">Earned</div>
         </Card>
       </div>
 
@@ -308,8 +308,8 @@ export function ProviderReferralProgram({
       <Card className="p-4">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
-            <Award className={`w-5 h-5 ${hasFeaturedBadge ? 'text-amber-500' : 'text-gray-400'}`} />
-            <span className="font-semibold text-gray-900 text-sm">
+            <Award className={`w-5 h-5 ${hasFeaturedBadge ? 'text-amber-500' : 'text-[#8A9BA8]'}`} />
+            <span className="font-semibold text-[#1B2733] text-sm">
               {hasFeaturedBadge ? 'Featured Provider Badge Earned!' : 'Featured Provider Badge'}
             </span>
           </div>
@@ -326,7 +326,7 @@ export function ProviderReferralProgram({
               value={(completedReferrals / FEATURED_BADGE_THRESHOLD) * 100}
               className="h-2 mb-2"
             />
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-[#5A6B7A]">
               {referralsToFeatured} more successful referral{referralsToFeatured !== 1 ? 's' : ''} to earn the Featured Provider badge
             </p>
           </>
@@ -344,24 +344,24 @@ export function ProviderReferralProgram({
 
       {/* Referral List */}
       <Card className="p-4">
-        <h3 className="font-semibold text-gray-900 mb-3">Your Provider Referrals</h3>
+        <h3 className="font-semibold text-[#1B2733] mb-3">Your Provider Referrals</h3>
         {referrals.length === 0 && (
           <div className="text-center py-8">
             <Users className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-            <p className="text-sm font-medium text-slate-700">No referrals yet</p>
-            <p className="text-xs text-slate-500 mt-1">
+            <p className="text-sm font-medium text-[#3A4A57]">No referrals yet</p>
+            <p className="text-xs text-[#5A6B7A] mt-1">
               Share your referral link with colleagues — they'll show up here once they apply.
             </p>
           </div>
         )}
         <div className="space-y-2">
           {referrals.map((referral) => (
-            <div key={referral.id} className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
+            <div key={referral.id} className="flex items-center gap-3 p-3 bg-[#FAF7F2] rounded-xl">
               <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
                 referral.status === 'completed' ? 'bg-green-100' :
                 referral.status === 'onboarding' ? 'bg-blue-100' :
                 referral.status === 'applied' ? 'bg-purple-100' :
-                'bg-gray-200'
+                'bg-[#E8E4DF]'
               }`}>
                 {referral.status === 'completed' ? (
                   <CheckCircle className="w-5 h-5 text-green-600" />
@@ -370,13 +370,13 @@ export function ProviderReferralProgram({
                 ) : referral.status === 'applied' ? (
                   <Clock className="w-5 h-5 text-purple-600" />
                 ) : (
-                  <Mail className="w-5 h-5 text-gray-400" />
+                  <Mail className="w-5 h-5 text-[#8A9BA8]" />
                 )}
               </div>
 
               <div className="flex-1 min-w-0">
-                <p className="font-medium text-sm text-gray-900">{referral.name}</p>
-                <p className="text-xs text-gray-500">{referral.specialty}</p>
+                <p className="font-medium text-sm text-[#1B2733]">{referral.name}</p>
+                <p className="text-xs text-[#5A6B7A]">{referral.specialty}</p>
               </div>
 
               <div className="text-right">
@@ -387,9 +387,9 @@ export function ProviderReferralProgram({
                   </div>
                 ) : (
                   <Badge className={
-                    referral.status === 'onboarding' ? 'bg-blue-100 text-blue-700 border-blue-200' :
+                    referral.status === 'onboarding' ? 'bg-blue-100 text-blue-700 border-[#C8DDE8]' :
                     referral.status === 'applied' ? 'bg-purple-100 text-purple-700 border-purple-200' :
-                    'bg-gray-100 text-gray-600 border-gray-200'
+                    'bg-[#F0EDE8] text-[#5A6B7A] border-[#E8E4DF]'
                   }>
                     {referral.status === 'onboarding' ? 'Onboarding' :
                      referral.status === 'applied' ? 'Applied' : 'Invited'}
@@ -402,7 +402,7 @@ export function ProviderReferralProgram({
       </Card>
 
       {/* How It Works */}
-      <Card className="p-4 bg-indigo-50 border-indigo-200">
+      <Card className="p-4 bg-indigo-50 border-[#6B9080]/20">
         <h3 className="font-semibold text-indigo-900 mb-3">How Provider Referrals Work</h3>
         <div className="space-y-3">
           {[
@@ -411,7 +411,7 @@ export function ProviderReferralProgram({
             { step: '3', title: 'You earn $100 credit', desc: `Credit applied after onboarding. Earn Featured badge at ${FEATURED_BADGE_THRESHOLD} referrals.` },
           ].map((item) => (
             <div key={item.step} className="flex items-start gap-3">
-              <div className="w-6 h-6 rounded-full bg-indigo-600 text-white flex items-center justify-center text-sm flex-shrink-0">
+              <div className="w-6 h-6 rounded-full bg-[#6B9080] text-white flex items-center justify-center text-sm flex-shrink-0">
                 {item.step}
               </div>
               <div>

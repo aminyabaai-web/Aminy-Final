@@ -201,7 +201,7 @@ export function CelebrationPrompt({
 
         {/* Body */}
         <div className="p-6 text-center">
-          <p className="text-slate-600 mb-4 sm:mb-6 leading-relaxed">
+          <p className="text-[#5A6B7A] mb-4 sm:mb-6 leading-relaxed">
             {celebration.message}
           </p>
 
@@ -218,7 +218,7 @@ export function CelebrationPrompt({
               <Button
                 variant="ghost"
                 onClick={onClose}
-                className="w-full text-slate-500"
+                className="w-full text-[#5A6B7A]"
               >
                 Keep it private
               </Button>

@@ -271,18 +271,18 @@ export function VoiceInput({
             </div>
 
             {/* Title */}
-            <h3 className="text-lg font-semibold text-center text-gray-900 dark:text-white mb-2">
+            <h3 className="text-lg font-semibold text-center text-[#1B2733] dark:text-white mb-2">
               "Aminy" would like to access the Microphone
             </h3>
 
             {/* Description */}
-            <p className="text-sm text-gray-500 dark:text-gray-400 text-center mb-2">
+            <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8] text-center mb-2">
               Your microphone is used to record or transmit your speech when needed.
             </p>
 
             {/* Privacy note */}
-            <div className="bg-gray-50 dark:bg-slate-800 rounded-lg p-3 mb-4 sm:mb-6">
-              <p className="text-xs text-gray-600 dark:text-gray-300">
+            <div className="bg-[#FAF7F2] dark:bg-slate-800 rounded-lg p-3 mb-4 sm:mb-6">
+              <p className="text-xs text-[#5A6B7A] dark:text-gray-300">
                 <strong>From Aminy:</strong> For this app, your voice and speech data will not be sent to external servers. We will convert your speech to text directly on your device to protect your information.
               </p>
             </div>
@@ -313,11 +313,11 @@ export function VoiceInput({
           <Card className="px-4 py-3 bg-white dark:bg-slate-900 shadow-lg rounded-full flex items-center gap-3">
             {/* Recording indicator */}
             <div className="w-3 h-3 rounded-full bg-red-500 animate-pulse" />
-            <span className="text-sm font-medium text-gray-900 dark:text-white">
+            <span className="text-sm font-medium text-[#1B2733] dark:text-white">
               Listening...
             </span>
             {transcript && (
-              <span className="text-sm text-gray-500 dark:text-gray-400 max-w-[200px] truncate">
+              <span className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8] max-w-[200px] truncate">
                 {transcript}
               </span>
             )}

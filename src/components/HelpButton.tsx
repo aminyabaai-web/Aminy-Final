@@ -107,7 +107,7 @@ export function HelpButton({
         onBlur={handleBlur}
         className={`
           w-11 h-11 p-0 rounded-lg 
-          text-muted-foreground hover:text-foreground hover:bg-gray-100
+          text-muted-foreground hover:text-foreground hover:bg-[#F0EDE8]
           transition-colors duration-200
           focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2
           ${className}

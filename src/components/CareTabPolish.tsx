@@ -274,7 +274,7 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
 
       {/* Available appointment slots */}
       <div className="space-y-3">
-        <h4 className="font-medium text-slate-900">Available Times</h4>
+        <h4 className="font-medium text-[#1B2733]">Available Times</h4>
         {['2024-12-18', '2024-12-19', '2024-12-20'].map((date) => (
           <div key={date} className="border rounded-lg p-4">
             <h5 className="font-medium mb-2">{new Date(date).toLocaleDateString('en-US', { 
@@ -307,7 +307,7 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
       <DialogContent className="sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <CheckCircle2 className="h-5 w-5 text-teal-600" />
+            <CheckCircle2 className="h-5 w-5 text-[#6B9080]" />
             Session Preparation
           </DialogTitle>
           <DialogDescription>
@@ -317,14 +317,14 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
 
         <div className="space-y-3 sm:space-y-4 sm:space-y-6">
           {/* Completion progress */}
-          <div className="bg-slate-50 p-4 rounded-lg">
+          <div className="bg-[#FAF7F2] p-4 rounded-lg">
             <div className="flex items-center justify-between mb-2">
               <span className="font-medium">Preparation Progress</span>
-              <span className="text-sm text-slate-600">{sessionPrep.completionRate}% Complete</span>
+              <span className="text-sm text-[#5A6B7A]">{sessionPrep.completionRate}% Complete</span>
             </div>
-            <div className="w-full bg-slate-200 rounded-full h-2">
+            <div className="w-full bg-[#E8E4DF] rounded-full h-2">
               <div 
-                className="bg-teal-600 h-2 rounded-full transition-all duration-300"
+                className="bg-primary h-2 rounded-full transition-all duration-300"
                 style={{ width: `${sessionPrep.completionRate}%` }}
               />
             </div>
@@ -337,7 +337,7 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
 
             return (
               <div key={category} className="space-y-3">
-                <h4 className="font-medium text-slate-900 capitalize">
+                <h4 className="font-medium text-[#1B2733] capitalize">
                   {category === 'preparation' ? 'Session Preparation' : category}
                 </h4>
                 <div className="space-y-2">
@@ -349,7 +349,7 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
                         className="mt-1"
                       />
                       <div className="flex-1">
-                        <span className={`${item.completed ? 'line-through text-slate-500' : 'text-slate-900'} ${item.required ? 'font-medium' : ''}`}>
+                        <span className={`${item.completed ? 'line-through text-[#5A6B7A]' : 'text-[#1B2733]'} ${item.required ? 'font-medium' : ''}`}>
                           {item.text}
                         </span>
                         {item.required && (
@@ -364,7 +364,7 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
           })}
 
           {/* Estimated time */}
-          <div className="flex items-center gap-2 text-sm text-slate-600">
+          <div className="flex items-center gap-2 text-sm text-[#5A6B7A]">
             <Clock className="h-4 w-4" />
             <span>Estimated preparation time: ~{sessionPrep.estimatedTime} minutes</span>
           </div>
@@ -414,7 +414,7 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
                   className={`p-2 rounded-lg transition-colors ${
                     sessionRating >= rating
                       ? 'bg-amber-100 text-amber-600'
-                      : 'bg-slate-100 text-slate-400 hover:bg-slate-200'
+                      : 'bg-[#F0EDE8] text-slate-400 hover:bg-[#E8E4DF]'
                   }`}
                 >
                   <Star className={`h-5 w-5 ${sessionRating >= rating ? 'fill-current' : ''}`} />
@@ -448,8 +448,8 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
               />
               <label htmlFor="session-file-upload" className="cursor-pointer">
                 <Upload className="h-8 w-8 text-slate-400 mx-auto mb-2" />
-                <p className="text-sm text-slate-600 mb-1">Upload photos, videos, or documents</p>
-                <p className="text-xs text-slate-500">PDF, DOC, JPG, PNG, MP4 up to 50MB</p>
+                <p className="text-sm text-[#5A6B7A] mb-1">Upload photos, videos, or documents</p>
+                <p className="text-xs text-[#5A6B7A]">PDF, DOC, JPG, PNG, MP4 up to 50MB</p>
               </label>
             </div>
             
@@ -457,14 +457,14 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
             {uploadedFiles.length > 0 && (
               <div className="mt-3 space-y-2">
                 {uploadedFiles.map((file, index) => (
-                  <div key={index} className="flex items-center gap-2 p-2 bg-slate-50 rounded">
-                    <FileText className="h-4 w-4 text-slate-500" />
-                    <span className="text-sm text-slate-700 flex-1">{file.name}</span>
+                  <div key={index} className="flex items-center gap-2 p-2 bg-[#FAF7F2] rounded">
+                    <FileText className="h-4 w-4 text-[#5A6B7A]" />
+                    <span className="text-sm text-[#3A4A57] flex-1">{file.name}</span>
                     <button
                       onClick={() => {
                         setUploadedFiles(prev => prev.filter((_, i) => i !== index));
                       }}
-                      className="text-slate-400 hover:text-slate-600"
+                      className="text-slate-400 hover:text-[#5A6B7A]"
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>
@@ -489,14 +489,14 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
 
   // Render enhanced provider info card
   const renderProviderInfoCard = () => (
-    <Card className="p-4 mb-4 bg-gradient-to-r from-teal-50 to-cyan-50 border-teal-200">
+    <Card className="p-4 mb-4 bg-gradient-to-r from-[#FAF7F2] to-cyan-50 border-[#6B9080]/20">
       <div className="flex items-start justify-between">
         <div className="flex items-start gap-3">
-          <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center">
-            <User className="h-6 w-6 text-teal-600" />
+          <div className="w-12 h-12 bg-[#6B9080]/10 rounded-full flex items-center justify-center">
+            <User className="h-6 w-6 text-[#6B9080]" />
           </div>
           <div>
-            <h3 className="font-semibold text-teal-900">{currentProvider?.name || 'Sarah Miller'}</h3>
+            <h3 className="font-semibold text-[#6B9080]">{currentProvider?.name || 'Sarah Miller'}</h3>
             <div className="flex items-center gap-2 mb-1">
               {(currentProvider?.credentials || ['RBT']).map((credential) => (
                 <Badge key={credential} variant="secondary" className="text-xs">
@@ -504,8 +504,8 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
                 </Badge>
               ))}
             </div>
-            <p className="text-sm text-teal-700">{currentProvider?.specialty || 'Registered Behavior Technician'}</p>
-            <div className="flex items-center gap-3 sm:gap-4 mt-2 text-xs text-teal-600">
+            <p className="text-sm text-[#6B9080]">{currentProvider?.specialty || 'Registered Behavior Technician'}</p>
+            <div className="flex items-center gap-3 sm:gap-4 mt-2 text-xs text-[#6B9080]">
               <span className="flex items-center gap-1">
                 <div className="w-2 h-2 bg-green-500 rounded-full" />
                 Available today
@@ -531,7 +531,7 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
 
   // Render enhanced message composer
   const renderEnhancedComposer = () => (
-    <div className="border-t border-slate-200 p-4 bg-white">
+    <div className="border-t border-[#E8E4DF] p-4 bg-white">
       {/* Quick reply suggestions */}
       <div className="mb-3 flex flex-wrap gap-2">
         {quickReplies.map((reply, index) => (
@@ -561,12 +561,12 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
           {uploadedFiles.length > 0 && (
             <div className="mt-2 flex flex-wrap gap-2">
               {uploadedFiles.map((file, index) => (
-                <div key={index} className="flex items-center gap-1 px-2 py-1 bg-slate-100 rounded text-xs">
+                <div key={index} className="flex items-center gap-1 px-2 py-1 bg-[#F0EDE8] rounded text-xs">
                   <Paperclip className="h-3 w-3" />
                   <span>{file.name}</span>
                   <button
                     onClick={() => setUploadedFiles(prev => prev.filter((_, i) => i !== index))}
-                    className="text-slate-400 hover:text-slate-600"
+                    className="text-slate-400 hover:text-[#5A6B7A]"
                   >
                     ×
                   </button>
@@ -619,7 +619,7 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
       
       <div className="space-y-3 sm:space-y-4">
         {/* Next appointment */}
-        <div className="border rounded-lg p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+        <div className="border rounded-lg p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-[#C8DDE8]">
           <div className="flex items-start justify-between">
             <div>
               <h4 className="font-medium text-blue-900">50-min Comprehensive Session</h4>
@@ -652,7 +652,7 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
         </div>
 
         {/* Session preparation status */}
-        <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+        <div className="flex items-center justify-between p-3 bg-[#FAF7F2] rounded-lg">
           <div className="flex items-center gap-2">
             <CheckCircle2 className={`h-5 w-5 ${sessionPrep.completionRate === 100 ? 'text-green-500' : 'text-slate-400'}`} />
             <span className="text-sm font-medium">
@@ -701,7 +701,7 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-3 sm:space-y-4">
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-[#5A6B7A]">
               Current appointment: Thursday, Dec 18 at 2:00 PM
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

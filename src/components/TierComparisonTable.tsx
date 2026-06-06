@@ -86,7 +86,7 @@ export function TierComparisonTable({ compact = false }: TierComparisonTableProp
       return <Check className="w-4 h-4 text-green-600 mx-auto" />;
     }
     if (value === false) {
-      return <X className="w-4 h-4 text-gray-400 mx-auto" />;
+      return <X className="w-4 h-4 text-[#8A9BA8] mx-auto" />;
     }
     return <span className="text-xs text-center text-primary font-medium">{value}</span>;
   };
@@ -99,42 +99,42 @@ export function TierComparisonTable({ compact = false }: TierComparisonTableProp
         </div>
         <table className="w-full text-xs">
           <thead>
-            <tr className="border-b border-gray-200">
+            <tr className="border-b border-[#E8E4DF]">
               <th className="text-left py-2 font-medium text-muted-foreground">Feature</th>
-              <th className="text-center py-2 font-medium text-gray-700">Core</th>
-              <th className="text-center py-2 font-medium text-teal-700">Pro</th>
-              <th className="text-center py-2 font-medium text-gray-700">Family</th>
+              <th className="text-center py-2 font-medium text-[#3A4A57]">Core</th>
+              <th className="text-center py-2 font-medium text-[#6B9080]">Pro</th>
+              <th className="text-center py-2 font-medium text-[#3A4A57]">Family</th>
             </tr>
           </thead>
           <tbody>
-            <tr className="border-b border-gray-100">
+            <tr className="border-b border-[#E8E4DF]">
               <td className="py-2 text-muted-foreground">Daily activities</td>
               <td className="text-center font-medium">Adaptive</td>
               <td className="text-center font-medium">Adaptive</td>
               <td className="text-center font-medium">Adaptive</td>
             </tr>
-            <tr className="border-b border-gray-100">
+            <tr className="border-b border-[#E8E4DF]">
               <td className="py-2 text-muted-foreground">Jr activities</td>
               <td className="text-center font-medium">All</td>
               <td className="text-center font-medium">All</td>
               <td className="text-center font-medium">All</td>
             </tr>
-            <tr className="border-b border-gray-100">
+            <tr className="border-b border-[#E8E4DF]">
               <td className="py-2 text-muted-foreground">AI chat</td>
               <td className="text-center font-medium">Unlimited</td>
               <td className="text-center font-medium">Unlimited</td>
               <td className="text-center font-medium">Unlimited</td>
             </tr>
-            <tr className="border-b border-gray-100">
+            <tr className="border-b border-[#E8E4DF]">
               <td className="py-2 text-muted-foreground">Video AI</td>
-              <td className="text-center"><X className="w-3 h-3 text-gray-400 mx-auto" /></td>
+              <td className="text-center"><X className="w-3 h-3 text-[#8A9BA8] mx-auto" /></td>
               <td className="text-center"><Check className="w-3 h-3 text-green-600 mx-auto" /></td>
               <td className="text-center"><Check className="w-3 h-3 text-green-600 mx-auto" /></td>
             </tr>
             <tr>
               <td className="py-2 text-muted-foreground">BCBA consult</td>
-              <td className="text-center"><X className="w-3 h-3 text-gray-400 mx-auto" /></td>
-              <td className="text-center"><X className="w-3 h-3 text-gray-400 mx-auto" /></td>
+              <td className="text-center"><X className="w-3 h-3 text-[#8A9BA8] mx-auto" /></td>
+              <td className="text-center"><X className="w-3 h-3 text-[#8A9BA8] mx-auto" /></td>
               <td className="text-center"><Check className="w-3 h-3 text-green-600 mx-auto" /></td>
             </tr>
           </tbody>
@@ -155,20 +155,20 @@ export function TierComparisonTable({ compact = false }: TierComparisonTableProp
       <div className="overflow-x-auto">
         <table className="w-full border-collapse">
           <thead>
-            <tr className="border-b-2 border-gray-200">
+            <tr className="border-b-2 border-[#E8E4DF]">
               <th className="text-left py-4 px-4 font-medium text-muted-foreground">Features</th>
               <th className="text-center py-4 px-4">
                 <div className="font-semibold text-primary">Core</div>
                 <div className="text-xl sm:text-2xl font-bold text-primary mt-1">${tierPricing.core.monthly}</div>
                 <div className="text-xs text-muted-foreground">/month</div>
               </th>
-              <th className="text-center py-4 px-4 bg-teal-50/50 relative">
-                <Badge className="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-teal-600 text-white text-xs">
+              <th className="text-center py-4 px-4 bg-[#6B9080]/10/50 relative">
+                <Badge className="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-primary text-white text-xs">
                   Most Popular
                 </Badge>
-                <div className="font-semibold text-teal-700 mt-2">Pro</div>
-                <div className="text-xl sm:text-2xl font-bold text-teal-700 mt-1">${tierPricing.pro.monthly}</div>
-                <div className="text-xs text-teal-600">/month</div>
+                <div className="font-semibold text-[#6B9080] mt-2">Pro</div>
+                <div className="text-xl sm:text-2xl font-bold text-[#6B9080] mt-1">${tierPricing.pro.monthly}</div>
+                <div className="text-xs text-[#6B9080]">/month</div>
               </th>
               <th className="text-center py-4 px-4">
                 <div className="font-semibold text-primary">Family</div>
@@ -180,16 +180,16 @@ export function TierComparisonTable({ compact = false }: TierComparisonTableProp
           <tbody>
             {features.map((category, catIndex) => (
               <React.Fragment key={catIndex}>
-                <tr className="bg-gray-50">
+                <tr className="bg-[#FAF7F2]">
                   <td colSpan={4} className="py-3 px-4 font-semibold text-sm text-primary">
                     {category.category}
                   </td>
                 </tr>
                 {category.items.map((item, itemIndex) => (
-                  <tr key={itemIndex} className="border-b border-gray-100 hover:bg-gray-50/50">
+                  <tr key={itemIndex} className="border-b border-[#E8E4DF] hover:bg-[#FAF7F2]/50">
                     <td className="py-3 px-4 text-sm text-muted-foreground">{item.name}</td>
                     <td className="py-3 px-4 text-center">{renderCell(item.core)}</td>
-                    <td className="py-3 px-4 text-center bg-teal-50/30">{renderCell(item.pro)}</td>
+                    <td className="py-3 px-4 text-center bg-[#6B9080]/10/30">{renderCell(item.pro)}</td>
                     <td className="py-3 px-4 text-center">{renderCell(item.family)}</td>
                   </tr>
                 ))}
@@ -199,8 +199,8 @@ export function TierComparisonTable({ compact = false }: TierComparisonTableProp
         </table>
       </div>
 
-      <div className="mt-4 sm:mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg text-center">
-        <p className="text-sm text-blue-800">
+      <div className="mt-4 sm:mt-6 p-4 bg-[#EEF4F8] border border-[#C8DDE8] rounded-lg text-center">
+        <p className="text-sm text-[#4A6478]">
           <strong>All plans include:</strong> 7-day free trial • No credit card required • Cancel anytime • No diagnosis required
         </p>
       </div>

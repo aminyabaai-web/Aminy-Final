@@ -26,24 +26,24 @@ export const MemoryConsentScreen: React.FC<MemoryConsentScreenProps> = ({
         {/* Header - Simple & Centered */}
         <div className="text-center mb-12">
           <h1 className="text-2xl font-medium mb-2">Help Aminy remember</h1>
-          <p className="text-slate-600">
+          <p className="text-[#5A6B7A]">
             Aminy works better when it remembers your family's unique needs.
           </p>
         </div>
 
         {/* Main Toggle - Clean & Minimal */}
-        <div className="border border-slate-200 rounded-xl p-5 mb-8">
+        <div className="border border-[#E8E4DF] rounded-xl p-5 mb-8">
           <label className="flex flex-row items-center justify-between cursor-pointer">
             <div className="space-y-1 pr-4">
-              <h3 className="font-medium leading-none text-slate-900">Save helpful memories</h3>
-              <p className="text-sm text-slate-600 pt-1">
+              <h3 className="font-medium leading-none text-[#1B2733]">Save helpful memories</h3>
+              <p className="text-sm text-[#5A6B7A] pt-1">
                 Remembers important details like your child's name, preferences, and routines.
               </p>
             </div>
             <Switch
               checked={memoryEnabled}
               onCheckedChange={setMemoryEnabled}
-              className="data-[state=checked]:bg-indigo-600"
+              className="data-[state=checked]:bg-[#6B9080]"
               id="memory-consent"
             />
           </label>
@@ -51,30 +51,30 @@ export const MemoryConsentScreen: React.FC<MemoryConsentScreenProps> = ({
 
         {/* What's Saved */}
         <div className="mb-8">
-          <h3 className="font-medium text-sm mb-4 flex items-center gap-2 text-slate-700">
+          <h3 className="font-medium text-sm mb-4 flex items-center gap-2 text-[#3A4A57]">
             <Eye className="w-4 h-4" />
             What Aminy remembers
           </h3>
 
-          <div className="space-y-3 text-sm text-slate-600">
+          <div className="space-y-3 text-sm text-[#5A6B7A]">
             <div className="flex gap-3">
               <span>•</span>
               <div>
-                <span className="font-medium text-slate-900">Essential info:</span> Child's name, age, activities
+                <span className="font-medium text-[#1B2733]">Essential info:</span> Child's name, age, activities
               </div>
             </div>
 
             <div className="flex gap-3">
               <span>•</span>
               <div>
-                <span className="font-medium text-slate-900">Patterns:</span> What calms your child, successful routines
+                <span className="font-medium text-[#1B2733]">Patterns:</span> What calms your child, successful routines
               </div>
             </div>
 
             <div className="flex gap-3">
               <span>•</span>
               <div>
-                <span className="font-medium text-slate-900">Goals:</span> Family priorities, therapy goals
+                <span className="font-medium text-[#1B2733]">Goals:</span> Family priorities, therapy goals
               </div>
             </div>
           </div>
@@ -82,23 +82,23 @@ export const MemoryConsentScreen: React.FC<MemoryConsentScreenProps> = ({
 
         {/* Privacy */}
         <div className="mb-8">
-          <h3 className="font-medium text-sm mb-4 flex items-center gap-2 text-slate-700">
+          <h3 className="font-medium text-sm mb-4 flex items-center gap-2 text-[#3A4A57]">
             <Shield className="w-4 h-4" />
             Privacy & safety
           </h3>
 
-          <div className="space-y-3 text-sm text-slate-600">
+          <div className="space-y-3 text-sm text-[#5A6B7A]">
             <div className="flex gap-3">
               <span>•</span>
               <div>
-                <span className="font-medium text-slate-900">Never stored:</span> Medical diagnoses, addresses, payment info
+                <span className="font-medium text-[#1B2733]">Never stored:</span> Medical diagnoses, addresses, payment info
               </div>
             </div>
 
             <div className="flex gap-3">
               <span>•</span>
               <div>
-                <span className="font-medium text-slate-900">Full control:</span> View, edit, or delete memories anytime
+                <span className="font-medium text-[#1B2733]">Full control:</span> View, edit, or delete memories anytime
               </div>
             </div>
           </div>
@@ -113,10 +113,10 @@ export const MemoryConsentScreen: React.FC<MemoryConsentScreenProps> = ({
         </Button>
 
         {/* Fine Print */}
-        <p className="text-xs text-center text-slate-500 mt-6">
-          <a href="/privacy" className="hover:text-slate-900">Privacy Policy</a>
+        <p className="text-xs text-center text-[#5A6B7A] mt-6">
+          <a href="/privacy" className="hover:text-[#1B2733]">Privacy Policy</a>
           {' · '}
-          <a href="/terms" className="hover:text-slate-900">Terms</a>
+          <a href="/terms" className="hover:text-[#1B2733]">Terms</a>
         </p>
       </div>
     </div>

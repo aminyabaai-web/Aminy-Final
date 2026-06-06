@@ -216,7 +216,7 @@ function StreakFlame({ streak }: { streak: number }) {
           style={{ color: intensity > 0.7 ? '#EF4444' : intensity > 0.4 ? '#F97316' : '#F59E0B' }}>
           {streak}
         </span>
-        <span className="text-xs font-semibold text-gray-500">day streak</span>
+        <span className="text-xs font-semibold text-[#5A6B7A]">day streak</span>
       </div>
       {milestone && (
         <motion.div
@@ -249,7 +249,7 @@ function StarEarner({ onEarn }: { onEarn: (stars: StarValue) => void }) {
   };
   return (
     <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4">
-      <p className="text-xs font-bold text-gray-600 mb-3 text-center uppercase tracking-wide">Earn Stars</p>
+      <p className="text-xs font-bold text-[#5A6B7A] mb-3 text-center uppercase tracking-wide">Earn Stars</p>
       <div className="grid grid-cols-3 gap-2">
         {STAR_VALUES.map(val => (
           <motion.button
@@ -287,7 +287,7 @@ function WeeklyStarChart({ weeklyData }: { weeklyData: { date: string; stars: nu
 
   return (
     <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4">
-      <h3 className="text-sm font-bold text-gray-700 mb-3 flex items-center gap-2">
+      <h3 className="text-sm font-bold text-[#3A4A57] mb-3 flex items-center gap-2">
         <Trophy className="w-4 h-4 text-amber-500" />
         This Week
       </h3>
@@ -297,7 +297,7 @@ function WeeklyStarChart({ weeklyData }: { weeklyData: { date: string; stars: nu
           const isToday = i === todayIdx;
           return (
             <div key={i} className="flex flex-col items-center flex-1 gap-1">
-              {day.stars > 0 && <span className="text-[10px] font-bold text-gray-500">{day.stars}</span>}
+              {day.stars > 0 && <span className="text-[10px] font-bold text-[#5A6B7A]">{day.stars}</span>}
               <motion.div
                 initial={{ height: 4 }}
                 animate={{ height }}
@@ -312,7 +312,7 @@ function WeeklyStarChart({ weeklyData }: { weeklyData: { date: string; stars: nu
                   minHeight: 4,
                 }}
               />
-              <span className={`text-[10px] font-semibold ${isToday ? 'text-amber-600' : 'text-gray-400'}`}>
+              <span className={`text-[10px] font-semibold ${isToday ? 'text-amber-600' : 'text-[#8A9BA8]'}`}>
                 {dayLabels[i]}
               </span>
             </div>
@@ -337,7 +337,7 @@ function HistoryTab({ weeklyData, totalStars }: { weeklyData: { date: string; st
   return (
     <div className="space-y-3">
       <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-4 text-center border border-amber-100">
-        <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">All-time stars</p>
+        <p className="text-xs text-[#5A6B7A] uppercase tracking-wide mb-1">All-time stars</p>
         <div className="flex items-center justify-center gap-2">
           <Star className="w-7 h-7 text-amber-500 fill-amber-500" />
           <span className="text-4xl font-black text-amber-700">{monthTotal}</span>
@@ -347,17 +347,17 @@ function HistoryTab({ weeklyData, totalStars }: { weeklyData: { date: string; st
 
       <div className="grid grid-cols-2 gap-3">
         <div className="bg-white/70 rounded-2xl p-3 text-center">
-          <p className="text-xs text-gray-500 mb-1">Daily avg</p>
+          <p className="text-xs text-[#5A6B7A] mb-1">Daily avg</p>
           <div className="flex items-center justify-center gap-1">
             <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
-            <span className="text-xl font-bold text-gray-700">{dailyAvg}</span>
+            <span className="text-xl font-bold text-[#3A4A57]">{dailyAvg}</span>
           </div>
         </div>
         <div className="bg-white/70 rounded-2xl p-3 text-center">
-          <p className="text-xs text-gray-500 mb-1">This week</p>
+          <p className="text-xs text-[#5A6B7A] mb-1">This week</p>
           <div className="flex items-center justify-center gap-1">
             <Flame className="w-4 h-4 text-orange-400" />
-            <span className="text-xl font-bold text-gray-700">
+            <span className="text-xl font-bold text-[#3A4A57]">
               {weeklyData.reduce((s, d) => s + d.stars, 0)}
             </span>
           </div>
@@ -366,7 +366,7 @@ function HistoryTab({ weeklyData, totalStars }: { weeklyData: { date: string; st
 
       <WeeklyStarChart weeklyData={weeklyData} />
 
-      <p className="text-center text-xs text-gray-400">Stars are earned by completing activities and missions</p>
+      <p className="text-center text-xs text-[#8A9BA8]">Stars are earned by completing activities and missions</p>
     </div>
   );
 }
@@ -547,7 +547,7 @@ export function RewardsBoard({ onBack, onNavigateToActivity, dailyMissionSteps =
 
               {/* Photo Rewards Grid */}
               <div>
-                <h2 className="text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
+                <h2 className="text-sm font-bold text-[#3A4A57] mb-2 flex items-center gap-2">
                   <Gift className="w-4 h-4 text-purple-500" />
                   My Goals
                 </h2>
@@ -569,7 +569,7 @@ export function RewardsBoard({ onBack, onNavigateToActivity, dailyMissionSteps =
                       >
                         {/* Photo/unlock area */}
                         <div
-                          className="relative aspect-square flex items-center justify-center bg-gray-50 cursor-pointer"
+                          className="relative aspect-square flex items-center justify-center bg-[#FAF7F2] cursor-pointer"
                           onClick={() => {
                             if (!reward.photoUrl && !reward.redeemed) {
                               setEditingReward(reward.id);
@@ -601,7 +601,7 @@ export function RewardsBoard({ onBack, onNavigateToActivity, dailyMissionSteps =
                               )}
                             </>
                           ) : (
-                            <div className="flex flex-col items-center gap-2 text-gray-400">
+                            <div className="flex flex-col items-center gap-2 text-[#8A9BA8]">
                               <Camera className="w-8 h-8" />
                               <span className="text-[10px] font-medium text-center px-2">Tap to add reward photo</span>
                             </div>
@@ -655,11 +655,11 @@ export function RewardsBoard({ onBack, onNavigateToActivity, dailyMissionSteps =
 
                         {/* Reward info */}
                         <div className="p-2.5">
-                          <p className="text-xs font-bold text-gray-700 truncate">{reward.label}</p>
+                          <p className="text-xs font-bold text-[#3A4A57] truncate">{reward.label}</p>
 
                           {/* Progress bar toward photo */}
                           {!reward.redeemed && (
-                            <div className="mt-1.5 mb-1.5 h-2 bg-gray-100 rounded-full overflow-hidden">
+                            <div className="mt-1.5 mb-1.5 h-2 bg-[#F0EDE8] rounded-full overflow-hidden">
                               <motion.div
                                 initial={{ width: 0 }}
                                 animate={{ width: `${progress * 100}%` }}
@@ -685,13 +685,13 @@ export function RewardsBoard({ onBack, onNavigateToActivity, dailyMissionSteps =
                                 <div className="flex items-center gap-1">
                                   <button onClick={() => handleCostChange(reward.id, -5)}
                                     aria-label="Lower star goal"
-                                    className="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center">
-                                    <Minus className="w-2.5 h-2.5 text-gray-500" />
+                                    className="w-5 h-5 rounded-full bg-[#F0EDE8] flex items-center justify-center">
+                                    <Minus className="w-2.5 h-2.5 text-[#5A6B7A]" />
                                   </button>
                                   <button onClick={() => handleCostChange(reward.id, 5)}
                                     aria-label="Raise star goal"
-                                    className="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center">
-                                    <Plus className="w-2.5 h-2.5 text-gray-500" />
+                                    className="w-5 h-5 rounded-full bg-[#F0EDE8] flex items-center justify-center">
+                                    <Plus className="w-2.5 h-2.5 text-[#5A6B7A]" />
                                   </button>
                                 </div>
                               )}
@@ -716,7 +716,7 @@ export function RewardsBoard({ onBack, onNavigateToActivity, dailyMissionSteps =
                             aria-label="Change reward photo"
                             className="absolute top-1.5 right-1.5 w-6 h-6 bg-white/80 rounded-full flex items-center justify-center shadow-sm"
                           >
-                            <Camera className="w-3 h-3 text-gray-500" />
+                            <Camera className="w-3 h-3 text-[#5A6B7A]" />
                           </button>
                         )}
                       </motion.div>

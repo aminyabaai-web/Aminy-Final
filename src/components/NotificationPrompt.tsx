@@ -170,7 +170,7 @@ export function NotificationPrompt({
               onClick={handleEnable}
               disabled={isEnabling}
               size="sm"
-              className="bg-white text-teal-700 hover:bg-teal-50"
+              className="bg-white text-[#6B9080] hover:bg-[#6B9080]/10"
             >
               {isEnabling ? 'Enabling...' : 'Enable'}
             </Button>
@@ -222,7 +222,7 @@ export function NotificationPrompt({
                   <div className="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center">
                     <item.icon className="w-4 h-4 text-purple-600" />
                   </div>
-                  <span className="text-gray-700">{item.text}</span>
+                  <span className="text-[#3A4A57]">{item.text}</span>
                 </div>
               ))}
             </div>
@@ -237,7 +237,7 @@ export function NotificationPrompt({
 
             <button
               onClick={handleDismiss}
-              className="w-full py-2 text-sm text-gray-500 hover:text-gray-700"
+              className="w-full py-2 text-sm text-[#5A6B7A] hover:text-[#3A4A57]"
             >
               Maybe later
             </button>
@@ -255,10 +255,10 @@ export function NotificationPrompt({
           <ValueIcon className="w-6 h-6 text-purple-600" />
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-gray-900 mb-1">
+          <h3 className="font-semibold text-[#1B2733] mb-1">
             Never miss a moment
           </h3>
-          <p className="text-sm text-gray-600 mb-3">
+          <p className="text-sm text-[#5A6B7A] mb-3">
             {valueProposition.text}
           </p>
           <div className="flex items-center gap-2">
@@ -266,14 +266,14 @@ export function NotificationPrompt({
               onClick={handleEnable}
               disabled={isEnabling}
               size="sm"
-              className="bg-teal-600 hover:bg-teal-700 text-white"
+              className="bg-primary hover:bg-[#6B9080] text-white"
             >
               <Bell className="w-4 h-4 mr-1" />
               {isEnabling ? 'Enabling...' : 'Enable'}
             </Button>
             <button
               onClick={handleDismiss}
-              className="text-sm text-gray-500 hover:text-gray-700"
+              className="text-sm text-[#5A6B7A] hover:text-[#3A4A57]"
             >
               Not now
             </button>

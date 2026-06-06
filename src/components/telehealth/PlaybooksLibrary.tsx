@@ -446,35 +446,35 @@ export function PlaybooksLibrary({
   const bookmarkedCount = playbooks.filter(pb => pb.isBookmarked).length;
 
   return (
-    <div className="min-h-screen bg-[#F5F5F5]">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-white border-b border-gray-100 px-4 py-3">
+      <header className="sticky top-0 z-10 bg-white border-b border-[#E8E4DF] px-4 py-3">
         <div className="flex items-center gap-3">
           <button
             onClick={onBack}
-            className="p-2 -ml-2 rounded-full hover:bg-gray-100 transition-colors"
+            className="p-2 -ml-2 rounded-full hover:bg-[#F0EDE8] transition-colors"
             aria-label="Go back"
           >
-            <ArrowLeft className="w-5 h-5 text-gray-700" />
+            <ArrowLeft className="w-5 h-5 text-[#3A4A57]" />
           </button>
           <div>
-            <h1 className="text-lg font-semibold text-gray-900">Evidence-Based Playbooks</h1>
-            <p className="text-sm text-gray-500">Strategies & guidance from experts</p>
+            <h1 className="text-lg font-semibold text-[#1B2733]">Evidence-Based Playbooks</h1>
+            <p className="text-sm text-[#5A6B7A]">Strategies & guidance from experts</p>
           </div>
         </div>
       </header>
 
       {/* Search & Filter */}
-      <div className="bg-white border-b border-gray-100 px-4 py-3 space-y-3">
+      <div className="bg-white border-b border-[#E8E4DF] px-4 py-3 space-y-3">
         {/* Search */}
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[#8A9BA8]" />
           <input
             type="text"
             placeholder="Search playbooks..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600"
+            className="w-full pl-10 pr-4 py-2 border border-[#E8E4DF] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600"
           />
         </div>
 
@@ -484,8 +484,8 @@ export function PlaybooksLibrary({
             onClick={() => setSelectedCategory('all')}
             className={`flex-shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
               selectedCategory === 'all'
-                ? 'bg-cyan-600 text-white'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                ? 'bg-[#6B9080] text-white'
+                : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
             }`}
           >
             All
@@ -496,8 +496,8 @@ export function PlaybooksLibrary({
               onClick={() => setSelectedCategory(cat)}
               className={`flex-shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-all flex items-center gap-1 ${
                 selectedCategory === cat
-                  ? 'bg-cyan-600 text-white'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  ? 'bg-[#6B9080] text-white'
+                  : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
               }`}
             >
               <span>{CATEGORY_ICONS[cat]}</span>
@@ -508,7 +508,7 @@ export function PlaybooksLibrary({
 
         {/* Bookmarked Quick Access */}
         {bookmarkedCount > 0 && (
-          <button className="flex items-center gap-2 text-sm text-cyan-600 hover:underline">
+          <button className="flex items-center gap-2 text-sm text-[#6B9080] hover:underline">
             <BookmarkCheck className="w-4 h-4" />
             {bookmarkedCount} bookmarked
           </button>
@@ -529,7 +529,7 @@ export function PlaybooksLibrary({
         ) : playbooks.length === 0 ? (
           <div className="text-center py-12">
             <BookOpen className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-            <p className="text-slate-500 font-medium">Playbooks are on the way</p>
+            <p className="text-[#5A6B7A] font-medium">Playbooks are on the way</p>
             <p className="text-sm text-slate-400 mt-1 max-w-xs mx-auto">
               Evidence-based guides from our clinical team will appear here. Ask your provider for strategies in the meantime.
             </p>
@@ -537,7 +537,7 @@ export function PlaybooksLibrary({
         ) : (
           <div className="text-center py-12">
             <BookOpen className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-            <p className="text-slate-500">No playbooks found</p>
+            <p className="text-[#5A6B7A]">No playbooks found</p>
             <p className="text-sm text-slate-400 mt-1">Try adjusting your search or filters</p>
           </div>
         )}
@@ -570,31 +570,31 @@ function PlaybookCard({ playbook, onSelect, onToggleBookmark }: PlaybookCardProp
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+    <div className="bg-white rounded-2xl border border-[#E8E4DF] overflow-hidden">
       <button
         onClick={onSelect}
-        className="w-full p-4 text-left hover:bg-gray-50 transition-colors"
+        className="w-full p-4 text-left hover:bg-[#FAF7F2] transition-colors"
       >
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 min-w-0">
             {/* Category & Evidence */}
             <div className="flex items-center gap-2 mb-2">
               <span className="text-lg">{CATEGORY_ICONS[playbook.category]}</span>
-              <span className="text-xs text-gray-500">{CATEGORY_LABELS[playbook.category]}</span>
+              <span className="text-xs text-[#5A6B7A]">{CATEGORY_LABELS[playbook.category]}</span>
               <span className={`text-xs px-2 py-0.5 rounded-full ${evidenceBadgeColors[playbook.evidenceLevel]}`}>
                 {evidenceLabels[playbook.evidenceLevel]}
               </span>
             </div>
 
             {/* Title & Subtitle */}
-            <h3 className="font-semibold text-gray-900 mb-1">{playbook.title}</h3>
-            <p className="text-sm text-cyan-600 mb-2">{playbook.subtitle}</p>
+            <h3 className="font-semibold text-[#1B2733] mb-1">{playbook.title}</h3>
+            <p className="text-sm text-[#6B9080] mb-2">{playbook.subtitle}</p>
 
             {/* Description */}
-            <p className="text-sm text-gray-600 line-clamp-2 mb-3">{playbook.description}</p>
+            <p className="text-sm text-[#5A6B7A] line-clamp-2 mb-3">{playbook.description}</p>
 
             {/* Meta */}
-            <div className="flex items-center gap-3 sm:gap-4 text-xs text-gray-500">
+            <div className="flex items-center gap-3 sm:gap-4 text-xs text-[#5A6B7A]">
               <div className="flex items-center gap-1">
                 <Clock className="w-3 h-3" />
                 {playbook.readTimeMinutes} min read
@@ -608,12 +608,12 @@ function PlaybookCard({ playbook, onSelect, onToggleBookmark }: PlaybookCardProp
             {playbook.progress !== undefined && playbook.progress > 0 && !playbook.isCompleted && (
               <div className="mt-3">
                 <div className="flex items-center justify-between text-xs mb-1">
-                  <span className="text-gray-500">Progress</span>
-                  <span className="text-cyan-600 font-medium">{playbook.progress}%</span>
+                  <span className="text-[#5A6B7A]">Progress</span>
+                  <span className="text-[#6B9080] font-medium">{playbook.progress}%</span>
                 </div>
-                <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                <div className="h-1.5 bg-[#F0EDE8] rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-cyan-600 rounded-full transition-all"
+                    className="h-full bg-[#6B9080] rounded-full transition-all"
                     style={{ width: `${playbook.progress}%` }}
                   />
                 </div>
@@ -629,19 +629,19 @@ function PlaybookCard({ playbook, onSelect, onToggleBookmark }: PlaybookCardProp
             )}
           </div>
 
-          <ChevronRight className="w-5 h-5 text-gray-400 flex-shrink-0" />
+          <ChevronRight className="w-5 h-5 text-[#8A9BA8] flex-shrink-0" />
         </div>
       </button>
 
       {/* Bookmark Button */}
-      <div className="px-4 pb-4 flex items-center justify-between border-t border-gray-100 pt-3">
+      <div className="px-4 pb-4 flex items-center justify-between border-t border-[#E8E4DF] pt-3">
         <button
           onClick={(e) => {
             e.stopPropagation();
             onToggleBookmark();
           }}
           className={`flex items-center gap-2 text-sm ${
-            playbook.isBookmarked ? 'text-cyan-600' : 'text-gray-500 hover:text-gray-700'
+            playbook.isBookmarked ? 'text-[#6B9080]' : 'text-[#5A6B7A] hover:text-[#3A4A57]'
           }`}
         >
           {playbook.isBookmarked ? (
@@ -653,7 +653,7 @@ function PlaybookCard({ playbook, onSelect, onToggleBookmark }: PlaybookCardProp
         </button>
 
         {playbook.citations && playbook.citations.length > 0 && (
-          <span className="text-xs text-gray-400 flex items-center gap-1">
+          <span className="text-xs text-[#8A9BA8] flex items-center gap-1">
             <ExternalLink className="w-3 h-3" />
             {playbook.citations.length} citations
           </span>

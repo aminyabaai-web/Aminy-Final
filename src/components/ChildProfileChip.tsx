@@ -51,7 +51,7 @@ export function ChildProfileChip({
       {/* Profile Avatar */}
       <div className={`
         ${sizes.container} 
-        bg-gradient-to-br from-teal-400 to-teal-600 
+        bg-gradient-to-br from-[#6B9080] to-[#43AA8B] 
         rounded-full 
         flex items-center justify-center 
         text-white 
@@ -59,7 +59,7 @@ export function ChildProfileChip({
         ${sizes.text}
         shadow-sm
         border-2 border-white/20
-        ring-1 ring-teal-200/50
+        ring-1 ring-[#6B9080]/20
       `}>
         {photoUrl ? (
           <img 
@@ -78,7 +78,7 @@ export function ChildProfileChip({
       {showName && (
         <span className={`
           font-medium 
-          text-slate-700 dark:text-slate-200
+          text-[#3A4A57] dark:text-slate-200
           ${sizes.nameText}
         `}>
           {childShort}

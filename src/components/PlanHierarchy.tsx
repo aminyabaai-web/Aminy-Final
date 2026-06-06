@@ -296,8 +296,8 @@ export function PlanHierarchy({
     switch (confidence) {
       case 'high': return 'bg-green-100 text-green-700 border-green-200';
       case 'medium': return 'bg-amber-100 text-amber-700 border-amber-200';
-      case 'low': return 'bg-slate-100 text-slate-700 border-slate-200';
-      default: return 'bg-slate-100 text-slate-700 border-slate-200';
+      case 'low': return 'bg-[#F0EDE8] text-[#3A4A57] border-[#E8E4DF]';
+      default: return 'bg-[#F0EDE8] text-[#3A4A57] border-[#E8E4DF]';
     }
   };
 
@@ -307,20 +307,20 @@ export function PlanHierarchy({
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-20">
+    <div className="min-h-screen bg-[#FAF7F2] pb-20">
       {/* Header */}
-      <div className="bg-white border-b border-slate-200 p-4 sticky top-0 z-10">
+      <div className="bg-white border-b border-[#E8E4DF] p-4 sticky top-0 z-10">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-2xl font-semibold text-slate-900">Your Plan</h1>
-          <p className="text-slate-600 mt-1">
+          <h1 className="text-2xl font-semibold text-[#1B2733]">Your Plan</h1>
+          <p className="text-[#5A6B7A] mt-1">
             {parentName} — here's {safeChildName}'s path forward
           </p>
           
           {/* Overall Progress */}
           <div className="mt-4">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-slate-700">Overall Progress</span>
-              <span className="text-sm font-semibold text-teal-600">{calculateOverallProgress()}%</span>
+              <span className="text-sm font-medium text-[#3A4A57]">Overall Progress</span>
+              <span className="text-sm font-semibold text-[#6B9080]">{calculateOverallProgress()}%</span>
             </div>
             <Progress value={calculateOverallProgress()} className="h-2" />
           </div>
@@ -330,19 +330,19 @@ export function PlanHierarchy({
       <div className="max-w-4xl mx-auto px-4 py-6 space-y-3 sm:space-y-4 sm:space-y-6">
         {/* AI Goal Recommender */}
         {aiRecommendations.length > 0 && showAIRecommendations && (
-          <Card className="p-5 bg-gradient-to-br from-teal-50 to-white border-2 border-teal-200">
+          <Card className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white border-2 border-[#6B9080]/20">
             <div className="flex items-start gap-3 mb-4">
-              <div className="w-10 h-10 bg-teal-500 rounded-full flex items-center justify-center flex-shrink-0">
+              <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
                 <Brain className="w-5 h-5 text-white" />
               </div>
               <div className="flex-1">
-                <h3 className="font-semibold text-slate-900 flex items-center gap-2">
+                <h3 className="font-semibold text-[#1B2733] flex items-center gap-2">
                   AI Recommendations
                   <Badge variant="secondary" className="text-xs">
                     {aiRecommendations.length} suggestions
                   </Badge>
                 </h3>
-                <p className="text-sm text-slate-600 mt-1">
+                <p className="text-sm text-[#5A6B7A] mt-1">
                   Based on {safeChildName}'s progress, here's what I'm thinking...
                 </p>
               </div>
@@ -359,22 +359,22 @@ export function PlanHierarchy({
               {aiRecommendations.map((rec) => (
                 <div
                   key={rec.id}
-                  className="p-4 bg-white rounded-lg border border-teal-200"
+                  className="p-4 bg-white rounded-lg border border-[#6B9080]/20"
                 >
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex items-center gap-2">
-                      <Sparkles className="w-4 h-4 text-teal-500" />
-                      <h4 className="font-medium text-slate-900">{rec.title}</h4>
+                      <Sparkles className="w-4 h-4 text-primary" />
+                      <h4 className="font-medium text-[#1B2733]">{rec.title}</h4>
                     </div>
                     <Badge className={getConfidenceColor(rec.confidence)}>
                       {rec.confidence} confidence
                     </Badge>
                   </div>
                   
-                  <p className="text-sm text-slate-700 mb-2">{rec.reason}</p>
+                  <p className="text-sm text-[#3A4A57] mb-2">{rec.reason}</p>
                   
-                  <div className="p-3 bg-teal-50 rounded-md mb-3">
-                    <p className="text-sm text-teal-900">
+                  <div className="p-3 bg-[#6B9080]/10 rounded-md mb-3">
+                    <p className="text-sm text-[#6B9080]">
                       <strong>Suggestion:</strong> {rec.suggestion}
                     </p>
                   </div>
@@ -383,7 +383,7 @@ export function PlanHierarchy({
                     <Button
                       size="sm"
                       onClick={() => handleAcceptRecommendation(rec.id)}
-                      className="bg-teal-500 hover:bg-teal-600"
+                      className="bg-primary hover:bg-primary"
                     >
                       <CheckCircle className="w-4 h-4 mr-2" />
                       Use This
@@ -406,19 +406,19 @@ export function PlanHierarchy({
         <Collapsible open={visionOpen} onOpenChange={setVisionOpen}>
           <Card className="overflow-hidden">
             <CollapsibleTrigger className="w-full">
-              <div className="p-5 flex items-center justify-between hover:bg-slate-50 transition-colors cursor-pointer">
+              <div className="p-5 flex items-center justify-between hover:bg-[#FAF7F2] transition-colors cursor-pointer">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
                     <Eye className="w-6 h-6 text-purple-600" />
                   </div>
                   <div className="text-left">
                     <div className="flex items-center gap-2">
-                      <h2 className="font-semibold text-lg text-slate-900">Vision</h2>
+                      <h2 className="font-semibold text-lg text-[#1B2733]">Vision</h2>
                       <Badge variant="secondary" className="text-xs">
                         {vision.timeframe}
                       </Badge>
                     </div>
-                    <p className="text-sm text-slate-600">The big picture</p>
+                    <p className="text-sm text-[#5A6B7A]">The big picture</p>
                   </div>
                 </div>
                 {visionOpen ? (
@@ -434,8 +434,8 @@ export function PlanHierarchy({
                 <Separator className="mb-4" />
                 <div className="space-y-3">
                   <div>
-                    <h3 className="font-medium text-slate-900 mb-2">{vision.title}</h3>
-                    <p className="text-slate-700">{vision.description}</p>
+                    <h3 className="font-medium text-[#1B2733] mb-2">{vision.title}</h3>
+                    <p className="text-[#3A4A57]">{vision.description}</p>
                   </div>
                   <div className="p-4 bg-purple-50 rounded-lg border border-purple-200">
                     <p className="text-sm text-purple-900 leading-relaxed">
@@ -456,19 +456,19 @@ export function PlanHierarchy({
         <Collapsible open={monthOpen} onOpenChange={setMonthOpen}>
           <Card className="overflow-hidden">
             <CollapsibleTrigger className="w-full">
-              <div className="p-5 flex items-center justify-between hover:bg-slate-50 transition-colors cursor-pointer">
+              <div className="p-5 flex items-center justify-between hover:bg-[#FAF7F2] transition-colors cursor-pointer">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
                     <Calendar className="w-6 h-6 text-blue-600" />
                   </div>
                   <div className="text-left">
                     <div className="flex items-center gap-2">
-                      <h2 className="font-semibold text-lg text-slate-900">This Month</h2>
+                      <h2 className="font-semibold text-lg text-[#1B2733]">This Month</h2>
                       <Badge variant="secondary" className="text-xs">
                         {monthlyGoals.length} goals
                       </Badge>
                     </div>
-                    <p className="text-sm text-slate-600">Focused milestones</p>
+                    <p className="text-sm text-[#5A6B7A]">Focused milestones</p>
                   </div>
                 </div>
                 {monthOpen ? (
@@ -486,27 +486,27 @@ export function PlanHierarchy({
                   {monthlyGoals.map((goal) => (
                     <div
                       key={goal.id}
-                      className="p-4 bg-slate-50 rounded-lg border border-slate-200"
+                      className="p-4 bg-[#FAF7F2] rounded-lg border border-[#E8E4DF]"
                     >
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex-1">
-                          <h3 className="font-medium text-slate-900 mb-1">{goal.title}</h3>
-                          <p className="text-sm text-slate-600">{goal.description}</p>
+                          <h3 className="font-medium text-[#1B2733] mb-1">{goal.title}</h3>
+                          <p className="text-sm text-[#5A6B7A]">{goal.description}</p>
                         </div>
-                        <Badge className="bg-blue-100 text-blue-700 border-blue-200">
+                        <Badge className="bg-blue-100 text-blue-700 border-[#C8DDE8]">
                           {goal.targetDate}
                         </Badge>
                       </div>
                       
                       <div className="mb-3">
                         <div className="flex items-center justify-between mb-2">
-                          <span className="text-sm font-medium text-slate-700">Progress</span>
+                          <span className="text-sm font-medium text-[#3A4A57]">Progress</span>
                           <span className="text-sm font-semibold text-blue-600">{goal.progress}%</span>
                         </div>
                         <Progress value={goal.progress} className="h-2" />
                       </div>
 
-                      <div className="flex items-center gap-2 text-sm text-slate-600">
+                      <div className="flex items-center gap-2 text-sm text-[#5A6B7A]">
                         <Target className="w-4 h-4" />
                         <span>{goal.weeklyGoals.length} weekly focus areas</span>
                       </div>
@@ -527,19 +527,19 @@ export function PlanHierarchy({
         <Collapsible open={weekOpen} onOpenChange={setWeekOpen}>
           <Card className="overflow-hidden">
             <CollapsibleTrigger className="w-full">
-              <div className="p-5 flex items-center justify-between hover:bg-slate-50 transition-colors cursor-pointer">
+              <div className="p-5 flex items-center justify-between hover:bg-[#FAF7F2] transition-colors cursor-pointer">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center">
-                    <CalendarDays className="w-6 h-6 text-teal-600" />
+                  <div className="w-12 h-12 bg-[#6B9080]/10 rounded-lg flex items-center justify-center">
+                    <CalendarDays className="w-6 h-6 text-[#6B9080]" />
                   </div>
                   <div className="text-left">
                     <div className="flex items-center gap-2">
-                      <h2 className="font-semibold text-lg text-slate-900">This Week</h2>
+                      <h2 className="font-semibold text-lg text-[#1B2733]">This Week</h2>
                       <Badge variant="secondary" className="text-xs">
                         {weeklyFocus.length} focus areas
                       </Badge>
                     </div>
-                    <p className="text-sm text-slate-600">Daily actions that matter</p>
+                    <p className="text-sm text-[#5A6B7A]">Daily actions that matter</p>
                   </div>
                 </div>
                 {weekOpen ? (
@@ -560,7 +560,7 @@ export function PlanHierarchy({
                       className={`p-4 rounded-lg border-2 ${
                         week.completed
                           ? 'bg-green-50 border-green-300'
-                          : 'bg-white border-slate-200'
+                          : 'bg-white border-[#E8E4DF]'
                       }`}
                     >
                       <div className="flex items-start justify-between mb-3">
@@ -571,9 +571,9 @@ export function PlanHierarchy({
                             ) : (
                               <Circle className="w-5 h-5 text-slate-400" />
                             )}
-                            <h3 className="font-medium text-slate-900">{week.title}</h3>
+                            <h3 className="font-medium text-[#1B2733]">{week.title}</h3>
                           </div>
-                          <p className="text-sm text-slate-600 ml-7">{week.description}</p>
+                          <p className="text-sm text-[#5A6B7A] ml-7">{week.description}</p>
                         </div>
                         <Badge variant="secondary" className="text-xs">
                           {week.weekOf}
@@ -582,33 +582,33 @@ export function PlanHierarchy({
 
                       <div className="mb-3 ml-7">
                         <div className="flex items-center justify-between mb-2">
-                          <span className="text-sm font-medium text-slate-700">Week Progress</span>
-                          <span className="text-sm font-semibold text-teal-600">{week.progress}%</span>
+                          <span className="text-sm font-medium text-[#3A4A57]">Week Progress</span>
+                          <span className="text-sm font-semibold text-[#6B9080]">{week.progress}%</span>
                         </div>
                         <Progress value={week.progress} className="h-2" />
                       </div>
 
                       {/* Daily Actions */}
                       <div className="ml-7 space-y-2">
-                        <h4 className="text-sm font-medium text-slate-700 mb-2">Daily Actions:</h4>
+                        <h4 className="text-sm font-medium text-[#3A4A57] mb-2">Daily Actions:</h4>
                         {week.dailyActions.map((action) => (
                           <button
                             key={action.id}
                             onClick={() => handleToggleDailyAction(week.id, action.id)}
                             className={`w-full flex items-center gap-3 p-3 rounded-md border transition-all ${
                               action.completed
-                                ? 'bg-teal-50 border-teal-200'
-                                : 'bg-white border-slate-200 hover:border-teal-300'
+                                ? 'bg-[#6B9080]/10 border-[#6B9080]/20'
+                                : 'bg-white border-[#E8E4DF] hover:border-[#6B9080]/30'
                             }`}
                           >
                             {action.completed ? (
-                              <CheckCircle className="w-4 h-4 text-teal-600 flex-shrink-0" />
+                              <CheckCircle className="w-4 h-4 text-[#6B9080] flex-shrink-0" />
                             ) : (
                               <Circle className="w-4 h-4 text-slate-400 flex-shrink-0" />
                             )}
                             <div className="flex-1 text-left">
                               <span className={`text-sm ${
-                                action.completed ? 'text-teal-900 line-through' : 'text-slate-700'
+                                action.completed ? 'text-[#6B9080] line-through' : 'text-[#3A4A57]'
                               }`}>
                                 {action.action}
                               </span>
@@ -629,7 +629,7 @@ export function PlanHierarchy({
 
         {/* Quick Actions */}
         <Card className="p-3 sm:p-4">
-          <h3 className="font-medium text-slate-900 mb-3">Quick Actions</h3>
+          <h3 className="font-medium text-[#1B2733] mb-3">Quick Actions</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <Button variant="outline" className="justify-start gap-2">
               <Copy className="w-4 h-4" />

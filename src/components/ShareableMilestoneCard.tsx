@@ -22,7 +22,7 @@ import {
   Calendar,
   CheckCircle,
   Copy,
-  Instagram,
+  Camera,
   MessageCircle,
 } from 'lucide-react';
 import { Button } from './ui/button';
@@ -376,10 +376,10 @@ export function ShareableMilestoneCard({
                         handleCopyLink();
                         setShowShareOptions(false);
                       }}
-                      className="flex flex-col items-center gap-1 p-3 rounded-xl hover:bg-gray-100 transition-colors"
+                      className="flex flex-col items-center gap-1 p-3 rounded-xl hover:bg-[#F0EDE8] transition-colors"
                     >
-                      <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
-                        <Copy className="w-5 h-5 text-gray-600" />
+                      <div className="w-10 h-10 bg-[#E8E4DF] rounded-full flex items-center justify-center">
+                        <Copy className="w-5 h-5 text-[#5A6B7A]" />
                       </div>
                       <span className="text-xs text-muted-foreground">Copy</span>
                     </button>
@@ -387,10 +387,10 @@ export function ShareableMilestoneCard({
                       href={`https://www.instagram.com/`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex flex-col items-center gap-1 p-3 rounded-xl hover:bg-gray-100 transition-colors"
+                      className="flex flex-col items-center gap-1 p-3 rounded-xl hover:bg-[#F0EDE8] transition-colors"
                     >
                       <div className="w-10 h-10 bg-gradient-to-br from-purple-500 via-pink-500 to-orange-500 rounded-full flex items-center justify-center">
-                        <Instagram className="w-5 h-5 text-white" />
+                        <Camera className="w-5 h-5 text-white" />
                       </div>
                       <span className="text-xs text-muted-foreground">Instagram</span>
                     </a>
@@ -398,7 +398,7 @@ export function ShareableMilestoneCard({
                       href={`https://www.facebook.com/sharer/sharer.php?quote=${encodeURIComponent(`${displayEmoji} ${displayTitle} - ${description}`)}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex flex-col items-center gap-1 p-3 rounded-xl hover:bg-gray-100 transition-colors"
+                      className="flex flex-col items-center gap-1 p-3 rounded-xl hover:bg-[#F0EDE8] transition-colors"
                     >
                       <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
                         <Share2 className="w-5 h-5 text-white" />
@@ -409,7 +409,7 @@ export function ShareableMilestoneCard({
                       href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`${displayEmoji} ${displayTitle}\n\n${description}\n\nTracked with @AminyApp`)}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex flex-col items-center gap-1 p-3 rounded-xl hover:bg-gray-100 transition-colors"
+                      className="flex flex-col items-center gap-1 p-3 rounded-xl hover:bg-[#F0EDE8] transition-colors"
                     >
                       <div className="w-10 h-10 bg-black rounded-full flex items-center justify-center">
                         <X className="w-5 h-5 text-white" />
@@ -451,7 +451,7 @@ export function ShareMilestoneButton({
           setIsOpen(true);
         }}
         className={cn(
-          "p-2 rounded-full hover:bg-gray-100 transition-colors",
+          "p-2 rounded-full hover:bg-[#F0EDE8] transition-colors",
           className
         )}
       >

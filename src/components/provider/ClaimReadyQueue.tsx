@@ -76,10 +76,10 @@ function ClaimCard({
   return (
     <div
       className={`bg-white rounded-2xl border transition-all shadow-sm overflow-hidden ${
-        selected ? 'border-teal-400 ring-2 ring-teal-100' :
+        selected ? 'border-[#6B9080] ring-2 ring-teal-100' :
         item.status === 'blocked' ? 'border-red-200' :
-        item.status === 'submitted' ? 'border-blue-200' :
-        'border-gray-100'
+        item.status === 'submitted' ? 'border-[#C8DDE8]' :
+        'border-[#E8E4DF]'
       }`}
     >
       <div className="p-4">
@@ -88,7 +88,7 @@ function ClaimCard({
             <button
               onClick={onToggle}
               className={`w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 mt-0.5 transition-colors ${
-                selected ? 'bg-teal-500 border-teal-500' : 'border-gray-300 bg-white'
+                selected ? 'bg-primary border-[#6B9080]' : 'border-[#E8E4DF] bg-white'
               }`}
             >
               {selected && <Check size={11} className="text-white" />}
@@ -104,18 +104,18 @@ function ClaimCard({
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-2">
               <div>
-                <p className="text-sm font-semibold text-gray-800">{item.clientName}</p>
-                <p className="text-xs text-gray-500">{item.dateOfService} · {PLACE_OF_SERVICE_LABELS[item.placeOfService] ?? item.placeOfService}</p>
+                <p className="text-sm font-semibold text-[#1B2733]">{item.clientName}</p>
+                <p className="text-xs text-[#5A6B7A]">{item.dateOfService} · {PLACE_OF_SERVICE_LABELS[item.placeOfService] ?? item.placeOfService}</p>
               </div>
               <div className="text-right shrink-0">
-                <p className="text-sm font-bold text-gray-800">${item.billedAmount.toFixed(2)}</p>
-                <p className="text-xs text-gray-400">{item.units} units</p>
+                <p className="text-sm font-bold text-[#1B2733]">${item.billedAmount.toFixed(2)}</p>
+                <p className="text-xs text-[#8A9BA8]">{item.units} units</p>
               </div>
             </div>
 
             <div className="flex items-center gap-2 mt-2">
-              <span className="text-xs bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded font-mono">{item.cptCode}</span>
-              <span className="text-xs text-gray-500">{item.payerName}</span>
+              <span className="text-xs bg-[#F0EDE8] text-[#5A6B7A] px-1.5 py-0.5 rounded font-mono">{item.cptCode}</span>
+              <span className="text-xs text-[#5A6B7A]">{item.payerName}</span>
             </div>
 
             {/* Block reasons */}
@@ -136,7 +136,7 @@ function ClaimCard({
         <div className="flex items-center gap-2 mt-3 pt-3 border-t border-gray-50">
           <button
             onClick={() => setExpanded(!expanded)}
-            className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-700 transition-colors"
+            className="flex items-center gap-1.5 text-xs text-[#5A6B7A] hover:text-[#3A4A57] transition-colors"
           >
             <FileText size={12} />
             {failedChecks.length > 0 ? `${failedChecks.length} issue${failedChecks.length > 1 ? 's' : ''}` : 'All checks passed'}
@@ -151,7 +151,7 @@ function ClaimCard({
             </button>
           )}
           {item.submittedAt && (
-            <span className="ml-auto text-xs text-gray-400">
+            <span className="ml-auto text-xs text-[#8A9BA8]">
               Submitted {new Date(item.submittedAt).toLocaleDateString()}
             </span>
           )}
@@ -174,7 +174,7 @@ function ClaimCard({
                     ) : (
                       <XCircle size={12} className={v.severity === 'error' ? 'text-red-500 shrink-0' : 'text-amber-400 shrink-0'} />
                     )}
-                    <span className={`text-xs ${v.passed ? 'text-gray-500' : v.severity === 'error' ? 'text-red-600' : 'text-amber-600'}`}>
+                    <span className={`text-xs ${v.passed ? 'text-[#5A6B7A]' : v.severity === 'error' ? 'text-red-600' : 'text-amber-600'}`}>
                       {v.message}
                     </span>
                   </div>
@@ -242,7 +242,7 @@ export default function ClaimReadyQueue({ providerId, onBack, onNavigateTo }: Cl
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header */}
       <div style={{ background: '#0D1B2A' }} className="px-4 pt-12 pb-4 text-white">
         <div className="flex items-center gap-3 mb-4">
@@ -290,7 +290,7 @@ export default function ClaimReadyQueue({ providerId, onBack, onNavigateTo }: Cl
       </AnimatePresence>
 
       {/* Tabs */}
-      <div className="flex bg-white border-b border-gray-100 px-4">
+      <div className="flex bg-white border-b border-[#E8E4DF] px-4">
         {TAB_CONFIG.map(t => {
           const count = claims.filter(c => t.status.includes(c.status)).length;
           return (
@@ -299,13 +299,13 @@ export default function ClaimReadyQueue({ providerId, onBack, onNavigateTo }: Cl
               onClick={() => setTab(t.id)}
               className={`flex items-center gap-1.5 px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
                 tab === t.id
-                  ? 'border-teal-500 text-teal-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
+                  ? 'border-[#6B9080] text-[#6B9080]'
+                  : 'border-transparent text-[#5A6B7A] hover:text-[#3A4A57]'
               }`}
             >
               {t.label}
               <span className={`text-xs px-1.5 py-0.5 rounded-full ${
-                tab === t.id ? 'bg-teal-100 text-teal-700' : 'bg-gray-100 text-gray-500'
+                tab === t.id ? 'bg-[#6B9080]/10 text-[#6B9080]' : 'bg-[#F0EDE8] text-[#5A6B7A]'
               }`}>
                 {count}
               </span>
@@ -320,12 +320,12 @@ export default function ClaimReadyQueue({ providerId, onBack, onNavigateTo }: Cl
           <div className="flex items-center justify-between">
             <button
               onClick={handleSelectAll}
-              className="text-xs text-teal-600 font-medium flex items-center gap-1.5"
+              className="text-xs text-[#6B9080] font-medium flex items-center gap-1.5"
             >
               <Layers size={13} />
               {selectedIds.size === filteredClaims.length ? 'Deselect all' : 'Select all'}
             </button>
-            <span className="text-xs text-gray-400">{filteredClaims.length} claims</span>
+            <span className="text-xs text-[#8A9BA8]">{filteredClaims.length} claims</span>
           </div>
         )}
 
@@ -345,18 +345,18 @@ export default function ClaimReadyQueue({ providerId, onBack, onNavigateTo }: Cl
         {/* Claims list */}
         {claims.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-center">
-            <div className="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center mb-4">
-              <FileText size={26} className="text-gray-400" />
+            <div className="w-14 h-14 rounded-full bg-[#F0EDE8] flex items-center justify-center mb-4">
+              <FileText size={26} className="text-[#8A9BA8]" />
             </div>
-            <p className="text-sm font-semibold text-gray-700">No claims yet</p>
-            <p className="text-xs text-gray-500 mt-1 max-w-xs">
+            <p className="text-sm font-semibold text-[#3A4A57]">No claims yet</p>
+            <p className="text-xs text-[#5A6B7A] mt-1 max-w-xs">
               Submitted claims will appear here once your sessions are billed. Finish and sign a session note to start the queue.
             </p>
           </div>
         ) : filteredClaims.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-10 text-center">
-            <CheckCircle size={32} className="text-gray-400 mb-3" />
-            <p className="text-sm text-gray-500">No claims in this category</p>
+            <CheckCircle size={32} className="text-[#8A9BA8] mb-3" />
+            <p className="text-sm text-[#5A6B7A]">No claims in this category</p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -376,18 +376,18 @@ export default function ClaimReadyQueue({ providerId, onBack, onNavigateTo }: Cl
       {/* Batch Submit Sticky Footer */}
       {tab === 'ready' && selectedIds.size > 0 && (
         <motion.div
-          className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 pb-8"
+          className="fixed bottom-0 left-0 right-0 bg-white border-t border-[#E8E4DF] p-4 pb-8"
           initial={{ y: 100 }}
           animate={{ y: 0 }}
         >
           <div className="flex items-center justify-between mb-3">
             <div>
-              <p className="text-sm font-semibold text-gray-800">{selectedIds.size} claims selected</p>
-              <p className="text-xs text-gray-500">Total billed: ${totalSelected.toFixed(2)}</p>
+              <p className="text-sm font-semibold text-[#1B2733]">{selectedIds.size} claims selected</p>
+              <p className="text-xs text-[#5A6B7A]">Total billed: ${totalSelected.toFixed(2)}</p>
             </div>
             <button
               onClick={() => setShowConfirmModal(true)}
-              className="flex items-center gap-2 bg-teal-600 text-white font-semibold text-sm px-5 py-3 rounded-xl hover:bg-teal-700 transition-colors"
+              className="flex items-center gap-2 bg-primary text-white font-semibold text-sm px-5 py-3 rounded-xl hover:bg-[#6B9080] transition-colors"
             >
               <Send size={15} />
               Submit Batch
@@ -411,18 +411,18 @@ export default function ClaimReadyQueue({ providerId, onBack, onNavigateTo }: Cl
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
             >
-              <h2 className="text-base font-bold text-gray-900 mb-1">Confirm Batch Submission</h2>
-              <p className="text-sm text-gray-500 mb-4">
+              <h2 className="text-base font-bold text-[#1B2733] mb-1">Confirm Batch Submission</h2>
+              <p className="text-sm text-[#5A6B7A] mb-4">
                 You're submitting {selectedIds.size} claims totaling{' '}
-                <strong className="text-gray-800">${totalSelected.toFixed(2)}</strong> to{' '}
+                <strong className="text-[#1B2733]">${totalSelected.toFixed(2)}</strong> to{' '}
                 {Array.from(new Set(selectedClaims.map(c => c.payerName))).join(', ')}.
               </p>
 
-              <div className="bg-gray-50 rounded-xl p-3 mb-4 space-y-1">
+              <div className="bg-[#FAF7F2] rounded-xl p-3 mb-4 space-y-1">
                 {selectedClaims.map(c => (
                   <div key={c.id} className="flex items-center justify-between text-xs">
-                    <span className="text-gray-600">{c.clientName} · {c.cptCode}</span>
-                    <span className="font-medium text-gray-800">${c.billedAmount.toFixed(2)}</span>
+                    <span className="text-[#5A6B7A]">{c.clientName} · {c.cptCode}</span>
+                    <span className="font-medium text-[#1B2733]">${c.billedAmount.toFixed(2)}</span>
                   </div>
                 ))}
               </div>
@@ -436,13 +436,13 @@ export default function ClaimReadyQueue({ providerId, onBack, onNavigateTo }: Cl
               <div className="flex gap-3">
                 <button
                   onClick={() => setShowConfirmModal(false)}
-                  className="flex-1 py-3 border border-gray-200 rounded-xl font-medium text-sm text-gray-600"
+                  className="flex-1 py-3 border border-[#E8E4DF] rounded-xl font-medium text-sm text-[#5A6B7A]"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleBatchSubmit}
-                  className="flex-1 py-3 bg-teal-600 text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2"
+                  className="flex-1 py-3 bg-primary text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2"
                 >
                   <Send size={15} />
                   Submit {selectedIds.size} Claims

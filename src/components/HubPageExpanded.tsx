@@ -220,10 +220,10 @@ export function HubPageExpanded({ userData, weekProgress = [] }: HubPageExpanded
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-slate-50 pb-20">
       {/* Header */}
-      <div className="bg-white border-b border-slate-200 px-4 sm:px-6 py-4 sm:py-6">
+      <div className="bg-white border-b border-[#E8E4DF] px-4 sm:px-6 py-4 sm:py-6">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-3xl font-semibold text-slate-900 mb-2">Hub</h1>
-          <p className="text-slate-600">Connect, learn, and grow together</p>
+          <h1 className="text-3xl font-semibold text-[#1B2733] mb-2">Hub</h1>
+          <p className="text-[#5A6B7A]">Connect, learn, and grow together</p>
         </div>
       </div>
 
@@ -234,10 +234,10 @@ export function HubPageExpanded({ userData, weekProgress = [] }: HubPageExpanded
             <div className="flex items-start gap-3">
               <Sparkles className="w-5 h-5 text-accent mt-0.5" />
               <div>
-                <p className="font-medium text-slate-900 mb-1">
+                <p className="font-medium text-[#1B2733] mb-1">
                   New tip based on your week's progress
                 </p>
-                <p className="text-sm text-slate-600">
+                <p className="text-sm text-[#5A6B7A]">
                   We noticed you're working on {weekProgress[0]}. Check out today's tip for personalized guidance.
                 </p>
               </div>
@@ -266,7 +266,7 @@ export function HubPageExpanded({ userData, weekProgress = [] }: HubPageExpanded
           </div>
 
           {showFilters && (
-            <div className="flex flex-wrap gap-2 p-4 bg-slate-50 rounded-lg border border-slate-200">
+            <div className="flex flex-wrap gap-2 p-4 bg-[#FAF7F2] rounded-lg border border-[#E8E4DF]">
               {filters.map(filter => (
                 <Badge
                   key={filter}
@@ -274,7 +274,7 @@ export function HubPageExpanded({ userData, weekProgress = [] }: HubPageExpanded
                   className={`cursor-pointer ${
                     selectedFilter === filter
                       ? 'bg-accent text-white'
-                      : 'bg-white text-slate-700 hover:bg-slate-100'
+                      : 'bg-white text-[#3A4A57] hover:bg-[#F0EDE8]'
                   }`}
                 >
                   {filter}
@@ -295,7 +295,7 @@ export function HubPageExpanded({ userData, weekProgress = [] }: HubPageExpanded
           {/* Daily Tips Tab */}
           <TabsContent value="tips" className="space-y-3 sm:space-y-4">
             <div className="flex items-center justify-between mb-4">
-              <p className="text-sm text-slate-600">
+              <p className="text-sm text-[#5A6B7A]">
                 {dailyTips.length} micro-lessons available
               </p>
               <Badge variant="outline">Updated daily</Badge>
@@ -309,17 +309,17 @@ export function HubPageExpanded({ userData, weekProgress = [] }: HubPageExpanded
                       <Badge className="bg-accent/10 text-accent border-accent/20">
                         {tip.category}
                       </Badge>
-                      <div className="flex items-center gap-1 text-xs text-slate-500">
+                      <div className="flex items-center gap-1 text-xs text-[#5A6B7A]">
                         <Clock className="w-3 h-3" />
                         {tip.readTime}
                       </div>
                     </div>
-                    <h3 className="font-semibold text-slate-900 mb-2">{tip.title}</h3>
-                    <p className="text-sm text-slate-700 leading-relaxed">{tip.content}</p>
+                    <h3 className="font-semibold text-[#1B2733] mb-2">{tip.title}</h3>
+                    <p className="text-sm text-[#3A4A57] leading-relaxed">{tip.content}</p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 pt-3 border-t border-slate-200">
+                <div className="flex items-center gap-2 pt-3 border-t border-[#E8E4DF]">
                   <Button variant="ghost" size="sm" className="gap-2">
                     <Heart className="w-4 h-4" />
                     Helpful
@@ -336,7 +336,7 @@ export function HubPageExpanded({ userData, weekProgress = [] }: HubPageExpanded
           {/* Parent Stories Tab */}
           <TabsContent value="stories" className="space-y-3 sm:space-y-4">
             <div className="flex items-center justify-between mb-4">
-              <p className="text-sm text-slate-600">
+              <p className="text-sm text-[#5A6B7A]">
                 Join a supportive community of parents
               </p>
               <Button size="sm" className="bg-accent hover:bg-accent/90">
@@ -345,7 +345,7 @@ export function HubPageExpanded({ userData, weekProgress = [] }: HubPageExpanded
             </div>
 
             {/* Community Guidelines */}
-            <Card className="p-4 bg-blue-50 border-blue-200">
+            <Card className="p-4 bg-[#EEF4F8] border-[#C8DDE8]">
               <div className="flex items-start gap-3">
                 <Heart className="w-5 h-5 text-blue-600 mt-0.5" />
                 <div>
@@ -367,10 +367,10 @@ export function HubPageExpanded({ userData, weekProgress = [] }: HubPageExpanded
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="font-medium text-slate-900">{story.author}</span>
-                      <span className="text-xs text-slate-500">{story.timestamp}</span>
+                      <span className="font-medium text-[#1B2733]">{story.author}</span>
+                      <span className="text-xs text-[#5A6B7A]">{story.timestamp}</span>
                     </div>
-                    <p className="text-sm text-slate-700 leading-relaxed mb-3">
+                    <p className="text-sm text-[#3A4A57] leading-relaxed mb-3">
                       {story.content}
                     </p>
                     
@@ -415,7 +415,7 @@ export function HubPageExpanded({ userData, weekProgress = [] }: HubPageExpanded
               <div className="mb-4 sm:mb-6">
                 <div className="flex items-center gap-2 mb-4">
                   <Sparkles className="w-5 h-5 text-accent" />
-                  <h3 className="font-semibold text-slate-900">Suggested for You</h3>
+                  <h3 className="font-semibold text-[#1B2733]">Suggested for You</h3>
                   <Badge className="bg-accent/10 text-accent border-accent/20">
                     AI Powered
                   </Badge>
@@ -431,7 +431,7 @@ export function HubPageExpanded({ userData, weekProgress = [] }: HubPageExpanded
 
             {/* All Resources */}
             <div>
-              <h3 className="font-semibold text-slate-900 mb-4">All Resources</h3>
+              <h3 className="font-semibold text-[#1B2733] mb-4">All Resources</h3>
               <div className="space-y-3">
                 {resources.filter(r => !r.aiSuggested).map(resource => (
                   <ResourceCard key={resource.id} resource={resource} onShare={handleShare} />
@@ -467,7 +467,7 @@ function ResourceCard({
   const getTypeColor = () => {
     switch (resource.type) {
       case 'article':
-        return 'bg-blue-50 border-blue-200';
+        return 'bg-[#EEF4F8] border-[#C8DDE8]';
       case 'video':
         return 'bg-purple-50 border-purple-200';
       case 'printable':
@@ -485,13 +485,13 @@ function ResourceCard({
         <div className="flex-1">
           <div className="flex items-start justify-between mb-2">
             <div>
-              <h4 className="font-semibold text-slate-900 mb-1">{resource.title}</h4>
-              <p className="text-sm text-slate-600">{resource.description}</p>
+              <h4 className="font-semibold text-[#1B2733] mb-1">{resource.title}</h4>
+              <p className="text-sm text-[#5A6B7A]">{resource.description}</p>
             </div>
           </div>
 
           <div className="flex items-center justify-between mt-3">
-            <div className="flex items-center gap-3 text-xs text-slate-500">
+            <div className="flex items-center gap-3 text-xs text-[#5A6B7A]">
               <Badge variant="outline" className="capitalize">
                 {resource.type}
               </Badge>

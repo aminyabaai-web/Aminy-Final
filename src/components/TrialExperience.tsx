@@ -241,14 +241,14 @@ export function TrialProgressBanner({ onUpgrade }: TrialProgressBannerProps) {
   const remaining = trialState.conversationsRemaining;
 
   return (
-    <Card className="border border-slate-200 bg-[linear-gradient(180deg,_rgba(255,255,255,0.96)_0%,_rgba(249,247,255,0.98)_100%)] p-4 shadow-sm">
+    <Card className="border border-[#E8E4DF] bg-[linear-gradient(180deg,_rgba(255,255,255,0.96)_0%,_rgba(249,247,255,0.98)_100%)] p-4 shadow-sm">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-start gap-3">
           <div className="mt-0.5 flex h-10 w-10 items-center justify-center rounded-full bg-violet-100 text-violet-600">
             <Gift className="h-5 w-5" />
           </div>
           <div className="min-w-0 flex-1">
-            <p className="font-medium text-slate-900">
+            <p className="font-medium text-[#1B2733]">
               {remaining > 0 ? (
                 <>
                   Calm start plan: <span className="text-violet-700">{remaining} guided chats left</span>
@@ -257,7 +257,7 @@ export function TrialProgressBanner({ onUpgrade }: TrialProgressBannerProps) {
                 <span className="text-violet-700">Trial complete</span>
               )}
             </p>
-            <p className="mt-1 text-sm text-slate-600">
+            <p className="mt-1 text-sm text-[#5A6B7A]">
               Upgrade only when you need deeper support, more conversations, and premium care tools.
             </p>
             <div className="mt-2 h-1.5 w-40 rounded-full bg-violet-100">
@@ -307,7 +307,7 @@ export function SoftNudgeModal({ childName, insightsCount, onUpgrade, onDismiss 
         className="max-w-sm w-full bg-white rounded-2xl overflow-hidden shadow-2xl"
       >
         {/* Header */}
-        <div className="bg-gradient-to-r from-teal-500 to-cyan-500 p-6 text-white text-center relative">
+        <div className="bg-gradient-to-r from-[#6B9080] to-[#7BA7BC] p-6 text-white text-center relative">
           <button
             onClick={onDismiss}
             className="absolute top-3 right-3 p-1 hover:bg-white/20 rounded-full transition-colors"
@@ -330,8 +330,8 @@ export function SoftNudgeModal({ childName, insightsCount, onUpgrade, onDismiss 
                 <Heart className="w-4 h-4 text-green-600" />
               </div>
               <div>
-                <p className="font-medium text-gray-900">I'm learning about {childName}</p>
-                <p className="text-sm text-gray-600">Every conversation helps me give better advice</p>
+                <p className="font-medium text-[#1B2733]">I'm learning about {childName}</p>
+                <p className="text-sm text-[#5A6B7A]">Every conversation helps me give better advice</p>
               </div>
             </div>
 
@@ -340,15 +340,15 @@ export function SoftNudgeModal({ childName, insightsCount, onUpgrade, onDismiss 
                 <TrendingUp className="w-4 h-4 text-amber-600" />
               </div>
               <div>
-                <p className="font-medium text-gray-900">Premium unlocks everything</p>
-                <p className="text-sm text-gray-600">Unlimited chats, telehealth access, care team</p>
+                <p className="font-medium text-[#1B2733]">Premium unlocks everything</p>
+                <p className="text-sm text-[#5A6B7A]">Unlimited chats, telehealth access, care team</p>
               </div>
             </div>
           </div>
 
           <Button
             onClick={onUpgrade}
-            className="w-full py-3 bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 text-white font-semibold"
+            className="w-full py-3 bg-gradient-to-r from-[#6B9080] to-[#7BA7BC] hover:from-teal-600 hover:to-cyan-600 text-white font-semibold"
           >
             <Crown className="w-5 h-5 mr-2" />
             Upgrade Now - 7 Days Free
@@ -356,7 +356,7 @@ export function SoftNudgeModal({ childName, insightsCount, onUpgrade, onDismiss 
 
           <button
             onClick={onDismiss}
-            className="w-full py-2 text-sm text-gray-500 hover:text-gray-700"
+            className="w-full py-2 text-sm text-[#5A6B7A] hover:text-[#3A4A57]"
           >
             I'll keep exploring first
           </button>
@@ -423,7 +423,7 @@ export function HardPaywallModal({ childName, onUpgrade }: HardPaywallModalProps
 
         <Button
           onClick={onUpgrade}
-          className="w-full py-4 text-lg font-semibold bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 text-slate-900"
+          className="w-full py-4 text-lg font-semibold bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 text-[#1B2733]"
         >
           Start 7-Day Free Trial
         </Button>

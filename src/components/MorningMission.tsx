@@ -103,7 +103,7 @@ const MISSION_TEMPLATES = {
     theme: 'Prep & Reflect',
     greeting: 'Rest and prepare for the week ahead.',
     icon: Coffee,
-    badge: 'border-indigo-200 bg-indigo-50 text-indigo-700',
+    badge: 'border-[#6B9080]/20 bg-indigo-50 text-indigo-700',
     iconSurface: 'bg-indigo-100 text-indigo-700',
     progress: 'bg-indigo-500',
   },
@@ -216,22 +216,22 @@ export function MorningMission({
         animate={{ opacity: 1, scale: 1 }}
         className={className}
       >
-        <Card className="overflow-hidden border border-teal-100 bg-white shadow-[0_18px_50px_rgba(15,23,42,0.10)]">
-          <div className="border-b border-teal-100 bg-[linear-gradient(180deg,#f8fffe_0%,#eefbf8_100%)] p-6 text-center">
+        <Card className="overflow-hidden border border-[#E8E4DF] bg-white shadow-[0_18px_50px_rgba(15,23,42,0.10)]">
+          <div className="border-b border-[#E8E4DF] bg-[linear-gradient(180deg,#f8fffe_0%,#eefbf8_100%)] p-6 text-center">
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.2, type: 'spring' }}
-              className="mb-4 inline-flex rounded-full bg-teal-100 p-4 text-teal-700"
+              className="mb-4 inline-flex rounded-full bg-[#6B9080]/10 p-4 text-[#6B9080]"
             >
               <CheckCircle2 className="w-10 h-10" />
             </motion.div>
-            <h3 className="mb-2 text-xl font-bold text-slate-900">Morning Mission Complete!</h3>
-            <p className="text-sm text-slate-600">
+            <h3 className="mb-2 text-xl font-bold text-[#1B2733]">Morning Mission Complete!</h3>
+            <p className="text-sm text-[#5A6B7A]">
               You're set for a great day with {childName}
             </p>
             {streakDays > 0 && (
-              <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-teal-200 bg-white px-3 py-1.5 text-teal-700">
+              <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-[#6B9080]/20 bg-white px-3 py-1.5 text-[#6B9080]">
                 <Star className="w-4 h-4" />
                 <span className="text-sm font-medium">{streakDays} day streak!</span>
               </div>
@@ -248,9 +248,9 @@ export function MorningMission({
       animate={{ opacity: 1, y: 0 }}
       className={className}
     >
-      <Card className="overflow-hidden border border-slate-200/80 bg-white shadow-[0_18px_50px_rgba(15,23,42,0.10)]">
+      <Card className="overflow-hidden border border-[#E8E4DF]/80 bg-white shadow-[0_18px_50px_rgba(15,23,42,0.10)]">
         {/* Header */}
-        <div className="border-b border-slate-200/70 bg-[linear-gradient(180deg,#fbfdff_0%,#f4f7fb_100%)] p-5">
+        <div className="border-b border-[#E8E4DF]/70 bg-[linear-gradient(180deg,#fbfdff_0%,#f4f7fb_100%)] p-5">
           <div className="mb-4 flex items-start gap-3">
             <div className={cn('rounded-2xl p-2.5 shadow-sm', template.iconSurface)}>
               <ThemeIcon className="w-5 h-5" />
@@ -259,20 +259,20 @@ export function MorningMission({
               <div className={cn('inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.16em]', template.badge)}>
                 {template.theme}
               </div>
-              <h3 className="mt-3 text-lg font-semibold tracking-[-0.02em] text-slate-900">
+              <h3 className="mt-3 text-lg font-semibold tracking-[-0.02em] text-[#1B2733]">
                 {getTimeOfDayGreeting()}, {parentName.split(' ')[0]}!
               </h3>
-              <p className="mt-1 text-sm leading-6 text-slate-600">{template.greeting}</p>
+              <p className="mt-1 text-sm leading-6 text-[#5A6B7A]">{template.greeting}</p>
             </div>
           </div>
 
           {/* Progress bar */}
-          <div className="rounded-2xl border border-slate-200 bg-white/90 p-3 shadow-[0_8px_24px_rgba(15,23,42,0.05)]">
-            <div className="mb-2 flex justify-between text-sm text-slate-500">
-              <span className="font-medium text-slate-700">Morning Mission</span>
+          <div className="rounded-2xl border border-[#E8E4DF] bg-white/90 p-3 shadow-[0_8px_24px_rgba(15,23,42,0.05)]">
+            <div className="mb-2 flex justify-between text-sm text-[#5A6B7A]">
+              <span className="font-medium text-[#3A4A57]">Morning Mission</span>
               <span>{completedSteps.size}/{missionSteps.length} complete</span>
             </div>
-            <div className="h-2 overflow-hidden rounded-full bg-slate-100">
+            <div className="h-2 overflow-hidden rounded-full bg-[#F0EDE8]">
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: `${progress}%` }}
@@ -297,30 +297,30 @@ export function MorningMission({
                   'flex items-center gap-3 rounded-2xl p-3 transition-all',
                   step.completed
                     ? 'border border-emerald-200 bg-emerald-50/80'
-                    : 'border border-slate-200 bg-slate-50/90 hover:border-slate-300 hover:bg-white'
+                    : 'border border-[#E8E4DF] bg-[#FAF7F2]/90 hover:border-slate-300 hover:bg-white'
                 )}
               >
                 <div className={cn(
                   'rounded-xl p-2',
                   step.completed
                     ? 'bg-emerald-100'
-                    : 'border border-slate-200 bg-white'
+                    : 'border border-[#E8E4DF] bg-white'
                 )}>
                   {step.completed ? (
                     <CheckCircle2 className="w-5 h-5 text-emerald-600" />
                   ) : (
-                    <StepIcon className="w-5 h-5 text-slate-600" />
+                    <StepIcon className="w-5 h-5 text-[#5A6B7A]" />
                   )}
                 </div>
 
                 <div className="flex-1 min-w-0">
                   <p className={cn(
                     'font-medium text-sm',
-                    step.completed ? 'text-emerald-700' : 'text-slate-900'
+                    step.completed ? 'text-emerald-700' : 'text-[#1B2733]'
                   )}>
                     {step.title}
                   </p>
-                  <p className="truncate text-sm text-slate-500">
+                  <p className="truncate text-sm text-[#5A6B7A]">
                     {step.description}
                   </p>
                 </div>
@@ -339,7 +339,7 @@ export function MorningMission({
                       size="icon"
                       variant="ghost"
                       onClick={() => handleStepAction(step)}
-                      className="h-11 w-11 text-gray-600"
+                      className="h-11 w-11 text-[#5A6B7A]"
                       aria-label={`Open ${step.title}`}
                     >
                       <ChevronRight className="w-4 h-4" />

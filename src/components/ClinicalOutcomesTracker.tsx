@@ -183,7 +183,7 @@ const ASSESSMENT_CONFIGS: {
     name: 'Goal Attainment',
     description: 'Measure progress toward treatment goals',
     icon: CheckCircle,
-    color: 'text-teal-600 bg-teal-100',
+    color: 'text-[#6B9080] bg-[#6B9080]/10',
     scales: [
       {
         name: 'Goal Progress',
@@ -382,14 +382,14 @@ export function ClinicalOutcomesTracker({
 
     if (trend === 'up') return isInverted ? 'text-red-600' : 'text-green-600';
     if (trend === 'down') return isInverted ? 'text-green-600' : 'text-red-600';
-    return 'text-neutral-500';
+    return 'text-[#5A6B7A]';
   };
 
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-neutral-50 to-white flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 text-teal-600 animate-spin mx-auto mb-3" />
+          <Loader2 className="w-8 h-8 text-[#6B9080] animate-spin mx-auto mb-3" />
           <p className="text-neutral-600">Loading clinical outcomes...</p>
         </div>
       </div>
@@ -409,8 +409,8 @@ export function ClinicalOutcomesTracker({
                 </button>
               )}
               <div>
-                <h1 className="text-lg font-semibold text-neutral-900">Clinical Outcomes</h1>
-                <p className="text-sm text-neutral-500">{childName}</p>
+                <h1 className="text-lg font-semibold text-[#1B2733]">Clinical Outcomes</h1>
+                <p className="text-sm text-[#5A6B7A]">{childName}</p>
               </div>
             </div>
 
@@ -421,7 +421,7 @@ export function ClinicalOutcomesTracker({
               </Button>
               <Button
                 size="sm"
-                className="bg-teal-600 hover:bg-teal-700"
+                className="bg-primary hover:bg-[#6B9080]"
                 onClick={() => setShowNewAssessment(true)}
               >
                 <Plus className="w-4 h-4 mr-1" />
@@ -440,7 +440,7 @@ export function ClinicalOutcomesTracker({
               onClick={() => setSelectedType('all')}
               className={`px-4 py-2 text-sm font-medium rounded-lg whitespace-nowrap transition-colors ${
                 selectedType === 'all'
-                  ? 'bg-teal-100 text-teal-700'
+                  ? 'bg-[#6B9080]/10 text-[#6B9080]'
                   : 'text-neutral-600 hover:bg-neutral-100'
               }`}
             >
@@ -454,7 +454,7 @@ export function ClinicalOutcomesTracker({
                   onClick={() => setSelectedType(config.type)}
                   className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg whitespace-nowrap transition-colors ${
                     selectedType === config.type
-                      ? 'bg-teal-100 text-teal-700'
+                      ? 'bg-[#6B9080]/10 text-[#6B9080]'
                       : 'text-neutral-600 hover:bg-neutral-100'
                   }`}
                 >
@@ -472,8 +472,8 @@ export function ClinicalOutcomesTracker({
         {/* Summary Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
           <Card className="p-4 text-center">
-            <p className="text-2xl sm:text-3xl font-bold text-neutral-900">{outcomes.length}</p>
-            <p className="text-sm text-neutral-500">Total Assessments</p>
+            <p className="text-2xl sm:text-3xl font-bold text-[#1B2733]">{outcomes.length}</p>
+            <p className="text-sm text-[#5A6B7A]">Total Assessments</p>
           </Card>
           <Card className="p-4 text-center">
             <p className="text-2xl sm:text-3xl font-bold text-green-600">
@@ -482,13 +482,13 @@ export function ClinicalOutcomesTracker({
                 return isInverted ? t.trend === 'down' : t.trend === 'up';
               }).length}
             </p>
-            <p className="text-sm text-neutral-500">Improving</p>
+            <p className="text-sm text-[#5A6B7A]">Improving</p>
           </Card>
           <Card className="p-4 text-center">
             <p className="text-2xl sm:text-3xl font-bold text-amber-600">
               {trendsByType.filter(t => t.trend === 'stable').length}
             </p>
-            <p className="text-sm text-neutral-500">Stable</p>
+            <p className="text-sm text-[#5A6B7A]">Stable</p>
           </Card>
           <Card className="p-4 text-center">
             <p className="text-2xl sm:text-3xl font-bold text-red-600">
@@ -497,14 +497,14 @@ export function ClinicalOutcomesTracker({
                 return isInverted ? t.trend === 'up' : t.trend === 'down';
               }).length}
             </p>
-            <p className="text-sm text-neutral-500">Needs Attention</p>
+            <p className="text-sm text-[#5A6B7A]">Needs Attention</p>
           </Card>
         </div>
 
         {/* Trend Cards */}
         {trendsByType.length > 0 && (
           <div>
-            <h3 className="font-semibold text-neutral-900 mb-3">Trends</h3>
+            <h3 className="font-semibold text-[#1B2733] mb-3">Trends</h3>
             <div className="grid md:grid-cols-2 gap-3 sm:gap-4">
               {trendsByType.map((trend, i) => {
                 const config = ASSESSMENT_CONFIGS.find(c => c.type === trend.type);
@@ -518,8 +518,8 @@ export function ClinicalOutcomesTracker({
                           <Icon className="w-5 h-5" />
                         </div>
                         <div>
-                          <p className="font-medium text-neutral-900">{trend.name || config?.name}</p>
-                          <p className="text-sm text-neutral-500">{trend.items.length} assessments</p>
+                          <p className="font-medium text-[#1B2733]">{trend.name || config?.name}</p>
+                          <p className="text-sm text-[#5A6B7A]">{trend.items.length} assessments</p>
                         </div>
                       </div>
                       <div className="text-right">
@@ -529,7 +529,7 @@ export function ClinicalOutcomesTracker({
                             {trend.change > 0 ? '+' : ''}{trend.change}
                           </span>
                         </div>
-                        <p className="text-sm text-neutral-500">
+                        <p className="text-sm text-[#5A6B7A]">
                           Current: {trend.latest?.rawScore}
                         </p>
                       </div>
@@ -543,7 +543,7 @@ export function ClinicalOutcomesTracker({
                         return (
                           <div
                             key={j}
-                            className="flex-1 bg-teal-200 rounded-t"
+                            className="flex-1 bg-[#6B9080]/20 rounded-t"
                             style={{ height: `${Math.max(10, height)}%` }}
                             title={`${item.rawScore} - ${new Date(item.createdAt).toLocaleDateString()}`}
                           />
@@ -559,15 +559,15 @@ export function ClinicalOutcomesTracker({
 
         {/* Recent Assessments */}
         <div>
-          <h3 className="font-semibold text-neutral-900 mb-3">Recent Assessments</h3>
+          <h3 className="font-semibold text-[#1B2733] mb-3">Recent Assessments</h3>
           {filteredOutcomes.length === 0 ? (
             <Card className="p-12 text-center">
               <BarChart3 className="w-12 h-12 mx-auto mb-4 text-neutral-300" />
-              <h3 className="text-lg font-medium text-neutral-900 mb-2">No assessments yet</h3>
-              <p className="text-neutral-500 mb-4">
+              <h3 className="text-lg font-medium text-[#1B2733] mb-2">No assessments yet</h3>
+              <p className="text-[#5A6B7A] mb-4">
                 Start tracking clinical outcomes to measure progress
               </p>
-              <Button onClick={() => setShowNewAssessment(true)} className="bg-teal-600 hover:bg-teal-700">
+              <Button onClick={() => setShowNewAssessment(true)} className="bg-primary hover:bg-[#6B9080]">
                 <Plus className="w-4 h-4 mr-1" />
                 Add First Assessment
               </Button>
@@ -586,10 +586,10 @@ export function ClinicalOutcomesTracker({
                           <Icon className="w-5 h-5" />
                         </div>
                         <div>
-                          <p className="font-medium text-neutral-900">
+                          <p className="font-medium text-[#1B2733]">
                             {outcome.assessmentName || config?.name}
                           </p>
-                          <p className="text-sm text-neutral-500">
+                          <p className="text-sm text-[#5A6B7A]">
                             <Clock className="w-3 h-3 inline mr-1" />
                             {new Date(outcome.createdAt).toLocaleDateString()}
                           </p>
@@ -597,7 +597,7 @@ export function ClinicalOutcomesTracker({
                       </div>
                       <div className="text-right">
                         <div className="flex items-center gap-2">
-                          <span className="text-xl sm:text-2xl font-bold text-neutral-900">
+                          <span className="text-xl sm:text-2xl font-bold text-[#1B2733]">
                             {outcome.rawScore}
                           </span>
                           {outcome.changeFromPrevious !== null && outcome.changeFromPrevious !== undefined && (
@@ -613,7 +613,7 @@ export function ClinicalOutcomesTracker({
                           )}
                         </div>
                         {outcome.interpretation && (
-                          <p className="text-sm text-neutral-500">{outcome.interpretation}</p>
+                          <p className="text-sm text-[#5A6B7A]">{outcome.interpretation}</p>
                         )}
                         {outcome.severityLevel && (
                           <Badge className={
@@ -641,9 +641,9 @@ export function ClinicalOutcomesTracker({
           <Card className="max-w-lg w-full">
             <div className="p-6 border-b border-neutral-100">
               <div className="flex items-center justify-between">
-                <h2 className="text-lg font-semibold text-neutral-900">New Assessment</h2>
+                <h2 className="text-lg font-semibold text-[#1B2733]">New Assessment</h2>
                 <button onClick={() => setShowNewAssessment(false)} className="p-2 hover:bg-neutral-100 rounded-lg">
-                  <ChevronDown className="w-5 h-5 text-neutral-500 rotate-45" />
+                  <ChevronDown className="w-5 h-5 text-[#5A6B7A] rotate-45" />
                 </button>
               </div>
             </div>
@@ -665,16 +665,16 @@ export function ClinicalOutcomesTracker({
                         })}
                         className={`flex items-center gap-2 p-3 rounded-lg border transition-colors text-left ${
                           newAssessment.type === config.type
-                            ? 'bg-teal-50 border-teal-300'
-                            : 'bg-white border-neutral-200 hover:border-teal-200'
+                            ? 'bg-[#6B9080]/10 border-[#6B9080]/30'
+                            : 'bg-white border-neutral-200 hover:border-[#6B9080]/20'
                         }`}
                       >
                         <div className={`p-1.5 rounded ${config.color}`}>
                           <Icon className="w-4 h-4" />
                         </div>
                         <div>
-                          <p className="text-sm font-medium text-neutral-900">{config.name}</p>
-                          <p className="text-xs text-neutral-500 line-clamp-1">{config.description}</p>
+                          <p className="text-sm font-medium text-[#1B2733]">{config.name}</p>
+                          <p className="text-xs text-[#5A6B7A] line-clamp-1">{config.description}</p>
                         </div>
                       </button>
                     );
@@ -715,7 +715,7 @@ export function ClinicalOutcomesTracker({
                     className="flex-1"
                   />
                 </div>
-                <p className="text-sm text-neutral-500 mt-2">
+                <p className="text-sm text-[#5A6B7A] mt-2">
                   <Info className="w-3.5 h-3.5 inline mr-1" />
                   {ASSESSMENT_CONFIGS.find(c => c.type === newAssessment.type)?.scales[0]?.interpretation(newAssessment.score)}
                 </p>
@@ -739,7 +739,7 @@ export function ClinicalOutcomesTracker({
                 Cancel
               </Button>
               <Button
-                className="flex-1 bg-teal-600 hover:bg-teal-700"
+                className="flex-1 bg-primary hover:bg-[#6B9080]"
                 onClick={handleSaveAssessment}
                 disabled={isSaving || !newAssessment.name}
               >

@@ -49,7 +49,7 @@ export function PostVisitSummary({
           {keyTakeaways.map((takeaway, index) => (
             <li key={index} className="flex items-start gap-2">
               <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
-              <span className="text-sm text-slate-700">{takeaway}</span>
+              <span className="text-sm text-[#3A4A57]">{takeaway}</span>
             </li>
           ))}
         </ul>
@@ -60,7 +60,7 @@ export function PostVisitSummary({
         <h4 className="text-sm font-medium mb-2">Action Items</h4>
         <div className="space-y-2">
           {actionItems.map((item, index) => (
-            <div key={index} className="flex items-center gap-2 p-2 bg-gray-50 rounded">
+            <div key={index} className="flex items-center gap-2 p-2 bg-[#FAF7F2] rounded">
               <input 
                 type="checkbox" 
                 checked={item.completed}

@@ -35,7 +35,7 @@ export function LiveAIVideoBadge({ tier, variant = 'default' }: LiveAIVideoBadge
     return (
       <Badge
         variant="outline"
-        className="bg-gray-50 border-gray-200 text-gray-500 inline-flex items-center gap-1 font-medium"
+        className="bg-[#FAF7F2] border-[#E8E4DF] text-[#5A6B7A] inline-flex items-center gap-1 font-medium"
       >
         <Video className="w-3 h-3" />
         Upgrade to Pro for Live AI Video
@@ -48,7 +48,7 @@ export function LiveAIVideoBadge({ tier, variant = 'default' }: LiveAIVideoBadge
     return (
       <Badge
         variant="outline"
-        className="bg-blue-50 border-blue-200 text-blue-700 inline-flex items-center gap-1 font-medium"
+        className="bg-[#EEF4F8] border-[#C8DDE8] text-blue-700 inline-flex items-center gap-1 font-medium"
       >
         <Video className="w-3 h-3" />
         {variant === 'minimal' || variant === 'compact'
@@ -169,7 +169,7 @@ export function VideoAccessStatus({
       {!hasAccess && showUpgrade && onUpgradeClick && (
         <button
           onClick={onUpgradeClick}
-          className="text-sm text-cyan-600 hover:text-[#4a6478] font-medium transition-colors"
+          className="text-sm text-[#6B9080] hover:text-[#4a6478] font-medium transition-colors"
         >
           Upgrade to {getTierDisplayName('pro')} for Live AI Video coaching →
         </button>

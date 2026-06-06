@@ -72,7 +72,7 @@ const SimpleLineChart: React.FC<{
   height?: number;
   color?: string;
   showArea?: boolean;
-}> = ({ data, height = 150, color = '#14b8a6', showArea = true }) => {
+}> = ({ data, height = 150, color = '#6B9080', showArea = true }) => {
   if (data.length === 0) return null;
 
   const padding = { top: 20, right: 20, bottom: 30, left: 40 };
@@ -180,7 +180,7 @@ const SimpleBarChart: React.FC<{
         const barHeight = (d.count / maxValue) * 100;
         return (
           <div key={i} className="flex flex-col items-center gap-2" style={{ width: `${barWidth}%` }}>
-            <span className="text-xs font-medium text-gray-600">{d.count}</span>
+            <span className="text-xs font-medium text-[#5A6B7A]">{d.count}</span>
             <motion.div
               initial={{ height: 0 }}
               animate={{ height: `${barHeight}%` }}
@@ -188,7 +188,7 @@ const SimpleBarChart: React.FC<{
               className="w-8 rounded-t-lg"
               style={{ backgroundColor: d.color, maxHeight: height - 40 }}
             />
-            <span className="text-xs text-gray-500 truncate max-w-full">{d.category}</span>
+            <span className="text-xs text-[#5A6B7A] truncate max-w-full">{d.category}</span>
           </div>
         );
       })}
@@ -247,8 +247,8 @@ const SimplePieChart: React.FC<{
         {data.map((d, i) => (
           <div key={i} className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full" style={{ backgroundColor: d.color }} />
-            <span className="text-sm text-gray-600">{d.mood}</span>
-            <span className="text-sm font-medium text-gray-900">{d.percentage}%</span>
+            <span className="text-sm text-[#5A6B7A]">{d.mood}</span>
+            <span className="text-sm font-medium text-[#1B2733]">{d.percentage}%</span>
           </div>
         ))}
       </div>
@@ -265,7 +265,7 @@ const ActivityHeatmap: React.FC<{
     <div className="flex items-end gap-1 h-20">
       {data.map((d, i) => {
         const intensity = d.count / maxCount;
-        const bgColor = `rgba(20, 184, 166, ${Math.max(0.1, intensity)})`;
+        const bgColor = `rgba(107, 144, 128, ${Math.max(0.1, intensity)})`;
 
         return (
           <div
@@ -336,7 +336,7 @@ export function AnalyticsCharts({
     return {
       progressOverTime,
       activitiesByCategory: [
-        { category: 'Routines', count: 42, color: '#14b8a6' },
+        { category: 'Routines', count: 42, color: '#6B9080' },
         { category: 'Communication', count: 28, color: '#8b5cf6' },
         { category: 'Behavior', count: 18, color: '#f59e0b' },
         { category: 'Social', count: 15, color: '#ec4899' },
@@ -344,7 +344,7 @@ export function AnalyticsCharts({
       ],
       moodDistribution: [
         { mood: 'Happy', percentage: 45, color: '#22c55e' },
-        { mood: 'Calm', percentage: 30, color: '#14b8a6' },
+        { mood: 'Calm', percentage: 30, color: '#6B9080' },
         { mood: 'Frustrated', percentage: 15, color: '#f59e0b' },
         { mood: 'Overwhelmed', percentage: 10, color: '#ef4444' }
       ],
@@ -387,7 +387,7 @@ export function AnalyticsCharts({
       case 'down':
         return <TrendingDown className="w-4 h-4 text-red-500" />;
       default:
-        return <Minus className="w-4 h-4 text-gray-400" />;
+        return <Minus className="w-4 h-4 text-[#8A9BA8]" />;
     }
   };
 
@@ -396,8 +396,8 @@ export function AnalyticsCharts({
       <div className="space-y-4">
         {[1, 2, 3].map(i => (
           <Card key={i} className="p-6 animate-pulse">
-            <div className="h-4 bg-gray-200 rounded w-1/4 mb-4" />
-            <div className="h-40 bg-gray-100 rounded" />
+            <div className="h-4 bg-[#E8E4DF] rounded w-1/4 mb-4" />
+            <div className="h-40 bg-[#F0EDE8] rounded" />
           </Card>
         ))}
       </div>
@@ -407,11 +407,11 @@ export function AnalyticsCharts({
   if (!chartData) {
     return (
       <Card className="p-8 flex flex-col items-center justify-center text-center">
-        <div className="w-12 h-12 rounded-2xl bg-teal-50 flex items-center justify-center mb-3">
-          <TrendingUp className="w-6 h-6 text-teal-600" aria-hidden="true" />
+        <div className="w-12 h-12 rounded-2xl bg-[#6B9080]/10 flex items-center justify-center mb-3">
+          <TrendingUp className="w-6 h-6 text-[#6B9080]" aria-hidden="true" />
         </div>
-        <h3 className="text-base font-semibold text-slate-800 dark:text-white">No analytics yet</h3>
-        <p className="mt-1.5 text-sm text-slate-500 max-w-xs">
+        <h3 className="text-base font-semibold text-[#1B2733] dark:text-white">No analytics yet</h3>
+        <p className="mt-1.5 text-sm text-[#5A6B7A] max-w-xs">
           As you track {childName}&rsquo;s activities, moods, and routines, trends and insights will appear here.
         </p>
       </Card>
@@ -452,7 +452,7 @@ export function AnalyticsCharts({
       <Card className="p-6">
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-semibold flex items-center gap-2 dark:text-white">
-            <LineChart className="w-5 h-5 text-teal-500" />
+            <LineChart className="w-5 h-5 text-primary" />
             Progress Over Time
           </h3>
           {demoMode && (
@@ -494,13 +494,13 @@ export function AnalyticsCharts({
         </h3>
         <div className="flex items-center gap-2 mb-2">
           <Sun className="w-4 h-4 text-amber-500" />
-          <span className="text-sm text-gray-500 flex-1">Morning</span>
-          <span className="text-sm text-gray-500 flex-1 text-center">Afternoon</span>
-          <span className="text-sm text-gray-500 flex-1 text-right">Evening</span>
+          <span className="text-sm text-[#5A6B7A] flex-1">Morning</span>
+          <span className="text-sm text-[#5A6B7A] flex-1 text-center">Afternoon</span>
+          <span className="text-sm text-[#5A6B7A] flex-1 text-right">Evening</span>
           <Moon className="w-4 h-4 text-indigo-500" />
         </div>
         <ActivityHeatmap data={chartData.timeOfDayActivity} />
-        <div className="flex justify-between mt-2 text-xs text-gray-400">
+        <div className="flex justify-between mt-2 text-xs text-[#8A9BA8]">
           {chartData.timeOfDayActivity.map((d, i) => (
             <span key={i}>{d.hour}</span>
           ))}
@@ -528,7 +528,7 @@ export function AnalyticsCharts({
                   {getTrendIcon(pattern.trend)}
                 </div>
               </div>
-              <div className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2">
+              <div className="w-full bg-[#E8E4DF] dark:bg-slate-700 rounded-full h-2">
                 <motion.div
                   className="h-2 rounded-full bg-gradient-to-r from-amber-400 to-orange-500"
                   initial={{ width: 0 }}
@@ -544,12 +544,12 @@ export function AnalyticsCharts({
       {/* Insights — illustrative narrative tied to the sample dataset; demo-only so real
           users are never shown fabricated clinical progress about their child. */}
       {demoMode && (
-        <Card className="p-6 bg-gradient-to-r from-teal-50 to-slate-50 dark:from-teal-900/20 dark:to-slate-900/20 border-teal-200 dark:border-teal-800">
-          <h3 className="font-semibold mb-3 flex items-center gap-2 text-teal-700 dark:text-teal-400">
+        <Card className="p-6 bg-gradient-to-r from-[#FAF7F2] to-slate-50 dark:from-teal-900/20 dark:to-slate-900/20 border-[#6B9080]/20 dark:border-[#6B9080]/30">
+          <h3 className="font-semibold mb-3 flex items-center gap-2 text-[#6B9080] dark:text-primary">
             <Zap className="w-5 h-5" />
             Pattern Insights
           </h3>
-          <ul className="space-y-2 text-sm text-teal-700 dark:text-teal-300">
+          <ul className="space-y-2 text-sm text-[#6B9080] dark:text-[#7BA7BC]">
             <li className="flex items-start gap-2">
               <span className="mt-1">•</span>
               <span>Peak activity occurs between 4-8pm - consider scheduling important tasks during this window</span>

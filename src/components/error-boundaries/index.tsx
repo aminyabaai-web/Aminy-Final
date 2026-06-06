@@ -158,11 +158,11 @@ function VideoCallErrorFallback({ error, retry, errorId }: FallbackProps) {
         </svg>
       </div>
 
-      <h2 className="text-xl font-semibold text-gray-900 mb-2">
+      <h2 className="text-xl font-semibold text-[#1B2733] mb-2">
         Video Connection Lost
       </h2>
 
-      <p className="text-gray-600 mb-4">
+      <p className="text-[#5A6B7A] mb-4">
         {isCircuitOpen
           ? "Video service is temporarily unavailable. Please try again later."
           : "We're trying to reconnect you automatically."}
@@ -171,7 +171,7 @@ function VideoCallErrorFallback({ error, retry, errorId }: FallbackProps) {
       {!isCircuitOpen && (
         <div className="mb-4">
           <div className="text-3xl font-bold text-blue-600 mb-1">{countdown}</div>
-          <p className="text-sm text-gray-500">seconds until auto-reconnect</p>
+          <p className="text-sm text-[#5A6B7A]">seconds until auto-reconnect</p>
         </div>
       )}
 
@@ -185,13 +185,13 @@ function VideoCallErrorFallback({ error, retry, errorId }: FallbackProps) {
 
         <button
           onClick={() => window.location.reload()}
-          className="w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+          className="w-full px-4 py-2 bg-[#F0EDE8] text-[#3A4A57] rounded-lg hover:bg-[#E8E4DF] focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
         >
           Refresh Page
         </button>
       </div>
 
-      <p className="mt-4 text-xs text-gray-400">
+      <p className="mt-4 text-xs text-[#8A9BA8]">
         Error ID: {errorId}
       </p>
     </div>
@@ -240,7 +240,7 @@ function PaymentErrorFallback({ error, retry, errorId }: FallbackProps) {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
           </svg>
         </div>
-        <h2 className="text-lg font-semibold text-gray-900">
+        <h2 className="text-lg font-semibold text-[#1B2733]">
           Payment Processing Issue
         </h2>
       </div>
@@ -254,7 +254,7 @@ function PaymentErrorFallback({ error, retry, errorId }: FallbackProps) {
         </p>
       </div>
 
-      <p className="text-gray-600 text-sm mb-4">
+      <p className="text-[#5A6B7A] text-sm mb-4">
         Please check your billing history before retrying, or use a different payment
         method. If you were charged or the problem persists, contact our support team.
       </p>
@@ -276,7 +276,7 @@ function PaymentErrorFallback({ error, retry, errorId }: FallbackProps) {
         </a>
       </div>
 
-      <p className="mt-4 text-xs text-gray-400 text-center">
+      <p className="mt-4 text-xs text-[#8A9BA8] text-center">
         Reference: {errorId}
       </p>
     </div>
@@ -311,10 +311,10 @@ export function PaymentErrorBoundary({ children }: { children: React.ReactNode }
 function FeatureCardErrorFallback({ retry }: FallbackProps) {
   return (
     <div
-      className="bg-gray-50 rounded-lg p-4 text-center min-h-[120px] flex flex-col items-center justify-center"
+      className="bg-[#FAF7F2] rounded-lg p-4 text-center min-h-[120px] flex flex-col items-center justify-center"
       role="alert"
     >
-      <p className="text-gray-500 text-sm mb-2">Unable to load this section</p>
+      <p className="text-[#5A6B7A] text-sm mb-2">Unable to load this section</p>
       <button
         onClick={retry}
         className="text-blue-600 text-sm hover:text-blue-700 focus:outline-none focus:underline"
@@ -354,7 +354,7 @@ function FormErrorFallback({ error, retry, errorId }: FallbackProps) {
 
   return (
     <div
-      className="bg-yellow-50 border border-yellow-200 rounded-lg p-4"
+      className="bg-[#FDF9F0] border border-[#F0EDE8] rounded-lg p-4"
       role="alert"
       aria-live="polite"
     >
@@ -363,7 +363,7 @@ function FormErrorFallback({ error, retry, errorId }: FallbackProps) {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
         </svg>
         <div>
-          <h3 className="font-medium text-yellow-800">Form submission error</h3>
+          <h3 className="font-medium text-[#3A4A57]">Form submission error</h3>
           <p className="text-sm text-yellow-700 mt-1">
             {error?.message || "Something went wrong. Your data has been saved locally."}
           </p>
@@ -374,7 +374,7 @@ function FormErrorFallback({ error, retry, errorId }: FallbackProps) {
           )}
           <button
             onClick={retry}
-            className="mt-3 px-3 py-1.5 bg-yellow-100 text-yellow-800 rounded text-sm font-medium hover:bg-yellow-200 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2"
+            className="mt-3 px-3 py-1.5 bg-yellow-100 text-[#3A4A57] rounded text-sm font-medium hover:bg-yellow-200 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2"
           >
             Try Again
           </button>
@@ -399,7 +399,7 @@ export function FormErrorBoundary({ children }: { children: React.ReactNode }) {
 function NavigationErrorFallback({ retry }: FallbackProps) {
   return (
     <nav
-      className="bg-white border-b border-gray-200 px-4 py-3"
+      className="bg-white border-b border-[#E8E4DF] px-4 py-3"
       role="navigation"
       aria-label="Main navigation (error state)"
     >
@@ -407,7 +407,7 @@ function NavigationErrorFallback({ retry }: FallbackProps) {
         <a href="/" className="font-semibold text-blue-600">Aminy</a>
         <button
           onClick={retry}
-          className="text-sm text-gray-500 hover:text-gray-700 focus:outline-none focus:underline"
+          className="text-sm text-[#5A6B7A] hover:text-[#3A4A57] focus:outline-none focus:underline"
         >
           Reload Navigation
         </button>
@@ -443,27 +443,27 @@ function DataLoadingErrorFallback({
 
   return (
     <div
-      className="bg-gray-50 rounded-lg p-6 text-center"
+      className="bg-[#FAF7F2] rounded-lg p-6 text-center"
       role="alert"
       aria-live="polite"
     >
-      <div className="w-12 h-12 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+      <div className="w-12 h-12 mx-auto mb-4 bg-[#F0EDE8] rounded-full flex items-center justify-center">
         {isNetworkError ? (
-          <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-6 h-6 text-[#8A9BA8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-2.83m-1.414 5.658a9 9 0 01-2.167-9.238m7.824 2.167a1 1 0 111.414 1.414m-1.414-1.414L3 3m8.293 8.293l1.414 1.414" />
           </svg>
         ) : (
-          <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-6 h-6 text-[#8A9BA8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" />
           </svg>
         )}
       </div>
 
-      <h3 className="text-gray-900 font-medium mb-1">
+      <h3 className="text-[#1B2733] font-medium mb-1">
         {isNetworkError ? "Connection issue" : `Couldn't load ${resourceName}`}
       </h3>
 
-      <p className="text-gray-500 text-sm mb-4">
+      <p className="text-[#5A6B7A] text-sm mb-4">
         {isNetworkError
           ? "Check your internet connection and try again."
           : "We're having trouble loading this content."}
@@ -507,7 +507,7 @@ export function DataLoadingErrorBoundary({
 function CriticalSectionErrorFallback({ error, retry, errorId }: FallbackProps) {
   return (
     <div
-      className="min-h-[50vh] flex items-center justify-center bg-gray-50 p-4"
+      className="min-h-[50vh] flex items-center justify-center bg-[#FAF7F2] p-4"
       role="alert"
       aria-live="assertive"
     >
@@ -518,11 +518,11 @@ function CriticalSectionErrorFallback({ error, retry, errorId }: FallbackProps) 
           </svg>
         </div>
 
-        <h2 className="text-2xl font-semibold text-gray-900 mb-3">
+        <h2 className="text-2xl font-semibold text-[#1B2733] mb-3">
           Something's not quite right
         </h2>
 
-        <p className="text-gray-600 mb-6">
+        <p className="text-[#5A6B7A] mb-6">
           We've encountered an unexpected issue with this section.
           Please try again, and let us know if it keeps happening.
         </p>
@@ -536,13 +536,13 @@ function CriticalSectionErrorFallback({ error, retry, errorId }: FallbackProps) 
           </button>
           <a
             href="/"
-            className="px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 font-medium"
+            className="px-6 py-3 bg-[#F0EDE8] text-[#3A4A57] rounded-lg hover:bg-[#E8E4DF] focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 font-medium"
           >
             Go to Home
           </a>
         </div>
 
-        <p className="mt-6 text-xs text-gray-400">
+        <p className="mt-6 text-xs text-[#8A9BA8]">
           Error reference: {errorId}
         </p>
       </div>

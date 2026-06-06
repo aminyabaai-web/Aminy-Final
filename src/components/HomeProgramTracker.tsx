@@ -102,7 +102,7 @@ const CATEGORY_INFO: Record<string, { label: string; color: string; icon: string
   motor: { label: 'Motor Skills', color: 'bg-green-100 text-green-700', icon: '✋' },
   behavior: { label: 'Behavior', color: 'bg-amber-100 text-amber-700', icon: '🧠' },
   social: { label: 'Social Skills', color: 'bg-purple-100 text-purple-700', icon: '👥' },
-  academic: { label: 'Academic', color: 'bg-cyan-100 text-cyan-700', icon: '📚' },
+  academic: { label: 'Academic', color: 'bg-[#6B9080]/10 text-cyan-700', icon: '📚' },
   self_care: { label: 'Self-Care', color: 'bg-pink-100 text-pink-700', icon: '🪥' },
 };
 
@@ -387,7 +387,7 @@ export function HomeProgramTracker({
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <Loader2 className="w-8 h-8 text-teal-600 animate-spin" />
+        <Loader2 className="w-8 h-8 text-[#6B9080] animate-spin" />
       </div>
     );
   }
@@ -398,8 +398,8 @@ export function HomeProgramTracker({
       <div className="flex items-center justify-between">
         <div>
           <div className="flex items-center gap-2 flex-wrap">
-            <h2 className="text-xl font-semibold text-neutral-900 dark:text-white flex items-center gap-2">
-              <Home className="w-5 h-5 text-teal-600" />
+            <h2 className="text-xl font-semibold text-[#1B2733] dark:text-white flex items-center gap-2">
+              <Home className="w-5 h-5 text-[#6B9080]" />
               Home Program
             </h2>
             <AISparkleButton
@@ -408,12 +408,12 @@ export function HomeProgramTracker({
               visual
             />
           </div>
-          <p className="text-neutral-500 dark:text-neutral-400 text-sm mt-1">
+          <p className="text-[#5A6B7A] dark:text-neutral-400 text-sm mt-1">
             Practice activities for {childName}
           </p>
         </div>
         {isProvider && (
-          <Button onClick={() => setShowAddForm(true)} className="bg-teal-600 hover:bg-teal-700">
+          <Button onClick={() => setShowAddForm(true)} className="bg-primary hover:bg-[#6B9080]">
             <Plus className="w-4 h-4 mr-2" />
             Assign Activity
           </Button>
@@ -423,16 +423,16 @@ export function HomeProgramTracker({
       {/* Stats Overview */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <Card className="p-4 text-center">
-          <p className="text-2xl font-bold text-neutral-900 dark:text-white">{stats.totalActivities}</p>
-          <p className="text-xs text-neutral-500 dark:text-neutral-400">Active Activities</p>
+          <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{stats.totalActivities}</p>
+          <p className="text-xs text-[#5A6B7A] dark:text-neutral-400">Active Activities</p>
         </Card>
         <Card className="p-4 text-center">
-          <p className="text-2xl font-bold text-teal-600">{stats.sessionsThisWeek}</p>
-          <p className="text-xs text-neutral-500 dark:text-neutral-400">Sessions This Week</p>
+          <p className="text-2xl font-bold text-[#6B9080]">{stats.sessionsThisWeek}</p>
+          <p className="text-xs text-[#5A6B7A] dark:text-neutral-400">Sessions This Week</p>
         </Card>
         <Card className="p-4 text-center">
           <p className="text-2xl font-bold text-blue-600">{stats.minutesThisWeek}m</p>
-          <p className="text-xs text-neutral-500 dark:text-neutral-400">Practice Time</p>
+          <p className="text-xs text-[#5A6B7A] dark:text-neutral-400">Practice Time</p>
         </Card>
         <Card className="p-4 text-center">
           <p className={`text-2xl font-bold ${
@@ -441,7 +441,7 @@ export function HomeProgramTracker({
           }`}>
             {stats.avgCompletion}%
           </p>
-          <p className="text-xs text-neutral-500 dark:text-neutral-400">Completion Rate</p>
+          <p className="text-xs text-[#5A6B7A] dark:text-neutral-400">Completion Rate</p>
         </Card>
       </div>
 
@@ -480,14 +480,14 @@ export function HomeProgramTracker({
                   {/* Content */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <h3 className="font-medium text-neutral-900 dark:text-white truncate">
+                      <h3 className="font-medium text-[#1B2733] dark:text-white truncate">
                         {activity.title}
                       </h3>
                       <Badge className={categoryInfo.color}>
                         {categoryInfo.icon} {categoryInfo.label}
                       </Badge>
                     </div>
-                    <div className="flex items-center gap-3 mt-1 text-sm text-neutral-500 dark:text-neutral-400">
+                    <div className="flex items-center gap-3 mt-1 text-sm text-[#5A6B7A] dark:text-neutral-400">
                       <span className="flex items-center gap-1">
                         <Clock className="w-3.5 h-3.5" />
                         {activity.durationMinutes}m
@@ -523,12 +523,12 @@ export function HomeProgramTracker({
                   {/* Description & Instructions */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <p className="text-xs font-medium text-neutral-500 uppercase mb-1">Description</p>
+                      <p className="text-xs font-medium text-[#5A6B7A] uppercase mb-1">Description</p>
                       <p className="text-sm text-neutral-700 dark:text-neutral-300">{activity.description}</p>
                     </div>
                     {activity.instructions && (
                       <div>
-                        <p className="text-xs font-medium text-neutral-500 uppercase mb-1">Instructions</p>
+                        <p className="text-xs font-medium text-[#5A6B7A] uppercase mb-1">Instructions</p>
                         <p className="text-sm text-neutral-700 dark:text-neutral-300 whitespace-pre-line">
                           {activity.instructions}
                         </p>
@@ -539,7 +539,7 @@ export function HomeProgramTracker({
                   {/* Materials */}
                   {activity.materials && activity.materials.length > 0 && (
                     <div>
-                      <p className="text-xs font-medium text-neutral-500 uppercase mb-1">Materials Needed</p>
+                      <p className="text-xs font-medium text-[#5A6B7A] uppercase mb-1">Materials Needed</p>
                       <div className="flex flex-wrap gap-1">
                         {activity.materials.map((m, i) => (
                           <Badge key={i} variant="outline">{m}</Badge>
@@ -551,7 +551,7 @@ export function HomeProgramTracker({
                   {/* Recent Logs */}
                   {activityLogs.length > 0 && (
                     <div>
-                      <p className="text-xs font-medium text-neutral-500 uppercase mb-2">Recent Practice</p>
+                      <p className="text-xs font-medium text-[#5A6B7A] uppercase mb-2">Recent Practice</p>
                       <div className="space-y-2">
                         {activityLogs.map(log => (
                           <div
@@ -562,7 +562,7 @@ export function HomeProgramTracker({
                             <span className="text-neutral-700 dark:text-neutral-300">
                               {new Date(log.completedAt).toLocaleDateString()}
                             </span>
-                            <span className="text-neutral-500">{log.durationMinutes}m</span>
+                            <span className="text-[#5A6B7A]">{log.durationMinutes}m</span>
                             <span>
                               {DIFFICULTY_OPTIONS.find(d => d.value === log.difficulty)?.emoji}
                             </span>
@@ -577,7 +577,7 @@ export function HomeProgramTracker({
                               ))}
                             </div>
                             {log.notes && (
-                              <span className="text-neutral-500 truncate">{log.notes}</span>
+                              <span className="text-[#5A6B7A] truncate">{log.notes}</span>
                             )}
                           </div>
                         ))}
@@ -589,12 +589,12 @@ export function HomeProgramTracker({
                   {!isProvider && (
                     <>
                       {loggingActivity === activity.id ? (
-                        <div className="bg-teal-50 dark:bg-teal-900/20 rounded-lg p-4 space-y-3">
-                          <p className="font-medium text-teal-800 dark:text-teal-200">Log Today's Practice</p>
+                        <div className="bg-[#6B9080]/10 dark:bg-[#6B9080]/10 rounded-lg p-4 space-y-3">
+                          <p className="font-medium text-[#6B9080] dark:text-teal-200">Log Today's Practice</p>
 
                           <div className="grid grid-cols-2 gap-3">
                             <div>
-                              <label className="text-xs text-neutral-500 mb-1 block">Duration</label>
+                              <label className="text-xs text-[#5A6B7A] mb-1 block">Duration</label>
                               <Input
                                 type="number"
                                 value={practiceLog.durationMinutes}
@@ -604,7 +604,7 @@ export function HomeProgramTracker({
                               />
                             </div>
                             <div>
-                              <label className="text-xs text-neutral-500 mb-1 block">Difficulty</label>
+                              <label className="text-xs text-[#5A6B7A] mb-1 block">Difficulty</label>
                               <select
                                 value={practiceLog.difficulty}
                                 onChange={(e) => setPracticeLog({ ...practiceLog, difficulty: e.target.value as PracticeLog['difficulty'] })}
@@ -620,7 +620,7 @@ export function HomeProgramTracker({
                           </div>
 
                           <div>
-                            <label className="text-xs text-neutral-500 mb-1 block">Child Engagement (1-5 stars)</label>
+                            <label className="text-xs text-[#5A6B7A] mb-1 block">Child Engagement (1-5 stars)</label>
                             <div className="flex gap-1">
                               {[1, 2, 3, 4, 5].map(star => (
                                 <button
@@ -641,7 +641,7 @@ export function HomeProgramTracker({
                           </div>
 
                           <div>
-                            <label className="text-xs text-neutral-500 mb-1 block">Notes (optional)</label>
+                            <label className="text-xs text-[#5A6B7A] mb-1 block">Notes (optional)</label>
                             <Textarea
                               placeholder="How did it go? Any observations?"
                               value={practiceLog.notes}
@@ -653,7 +653,7 @@ export function HomeProgramTracker({
                           <div className="flex gap-2">
                             <Button
                               onClick={() => handleLogPractice(activity.id)}
-                              className="bg-teal-600 hover:bg-teal-700"
+                              className="bg-primary hover:bg-[#6B9080]"
                             >
                               <CheckCircle className="w-4 h-4 mr-2" />
                               Save Practice Log
@@ -669,7 +669,7 @@ export function HomeProgramTracker({
                       ) : (
                         <Button
                           onClick={() => setLoggingActivity(activity.id)}
-                          className={todayLogged ? 'bg-green-600 hover:bg-green-700' : 'bg-teal-600 hover:bg-teal-700'}
+                          className={todayLogged ? 'bg-green-600 hover:bg-green-700' : 'bg-primary hover:bg-[#6B9080]'}
                           disabled={todayLogged}
                         >
                           {todayLogged ? (
@@ -698,16 +698,16 @@ export function HomeProgramTracker({
       {activities.length === 0 && (
         <Card className="p-12 text-center">
           <Home className="w-12 h-12 mx-auto mb-4 text-neutral-300" />
-          <h3 className="text-lg font-medium text-neutral-900 dark:text-white mb-2">
+          <h3 className="text-lg font-medium text-[#1B2733] dark:text-white mb-2">
             No home activities yet
           </h3>
-          <p className="text-neutral-500 dark:text-neutral-400 mb-4">
+          <p className="text-[#5A6B7A] dark:text-neutral-400 mb-4">
             {isProvider
               ? 'Assign activities for the family to practice at home'
               : 'Your therapist will assign practice activities here'}
           </p>
           {isProvider && (
-            <Button onClick={() => setShowAddForm(true)} className="bg-teal-600 hover:bg-teal-700">
+            <Button onClick={() => setShowAddForm(true)} className="bg-primary hover:bg-[#6B9080]">
               <Plus className="w-4 h-4 mr-2" />
               Assign First Activity
             </Button>
@@ -720,7 +720,7 @@ export function HomeProgramTracker({
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
           <Card className="max-w-lg w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6 border-b border-neutral-100 dark:border-slate-800">
-              <h3 className="text-lg font-semibold text-neutral-900 dark:text-white">
+              <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white">
                 Assign Home Activity
               </h3>
             </div>
@@ -808,7 +808,7 @@ export function HomeProgramTracker({
               </div>
 
               <div className="flex gap-2 pt-4">
-                <Button onClick={handleAddActivity} className="flex-1 bg-teal-600 hover:bg-teal-700">
+                <Button onClick={handleAddActivity} className="flex-1 bg-primary hover:bg-[#6B9080]">
                   <Plus className="w-4 h-4 mr-2" />
                   Assign Activity
                 </Button>

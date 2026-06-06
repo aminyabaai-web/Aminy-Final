@@ -181,7 +181,7 @@ export function JrMode({ childName, onExit, userTier }: JrModeProps) {
 
   if (showCalmBreak) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-blue-50 to-purple-50 flex flex-col items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-b from-[#FAF7F2] to-[#F0EDE8] flex flex-col items-center justify-center p-4">
         <div className="max-w-md mx-auto text-center">
           <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
             <Heart className="w-12 h-12 text-blue-500 animate-pulse" />
@@ -262,7 +262,7 @@ export function JrMode({ childName, onExit, userTier }: JrModeProps) {
 
         {/* Current Activity */}
         {isActive && currentActivity && (
-          <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 mb-4 sm:mb-6 border border-blue-200">
+          <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 mb-4 sm:mb-6 border border-[#C8DDE8]">
             <div className="text-center mb-4">
               <h2 className="text-lg sm:text-xl font-semibold text-primary mb-2">
                 {currentActivity.title}
@@ -334,7 +334,7 @@ export function JrMode({ childName, onExit, userTier }: JrModeProps) {
 
         {/* Session Stats Preview */}
         {!isActive && sessionTargets.length > 0 && (
-          <div className="mt-4 sm:mt-6 bg-white/70 backdrop-blur-sm rounded-2xl p-4 border border-gray-200">
+          <div className="mt-4 sm:mt-6 bg-white/70 backdrop-blur-sm rounded-2xl p-4 border border-[#E8E4DF]">
             <h3 className="text-sm font-semibold text-primary mb-2">Last Session</h3>
             <div className="flex items-center justify-between text-sm">
               <span className="text-muted-foreground">Activities completed</span>

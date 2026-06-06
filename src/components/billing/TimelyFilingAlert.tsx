@@ -111,11 +111,11 @@ function ClaimRow({
     <div className={`flex items-center gap-3 ${compact ? 'py-2' : 'py-3'} px-3 rounded-xl ${cfg.bg} border ${cfg.border} mb-2`}>
       <Icon className={`w-4 h-4 shrink-0 ${cfg.iconColor}`} />
       <div className="flex-1 min-w-0">
-        <p className="text-xs font-semibold text-gray-800 truncate">
+        <p className="text-xs font-semibold text-[#1B2733] truncate">
           {filing.claimId.length > 12 ? `…${filing.claimId.slice(-10)}` : filing.claimId}
         </p>
         {!compact && (
-          <p className="text-xs text-gray-500 mt-0.5">
+          <p className="text-xs text-[#5A6B7A] mt-0.5">
             DOS: {formatDate(filing.serviceDate)} · Deadline: {formatDate(filing.deadlineDate)}
           </p>
         )}
@@ -124,7 +124,7 @@ function ClaimRow({
       {onFileClaim && (
         <button
           onClick={() => onFileClaim(filing.claimId)}
-          className="shrink-0 text-xs font-semibold px-3 py-1.5 rounded-lg bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 active:bg-gray-100 transition-colors shadow-sm"
+          className="shrink-0 text-xs font-semibold px-3 py-1.5 rounded-lg bg-white border border-[#E8E4DF] text-[#3A4A57] hover:bg-[#FAF7F2] active:bg-[#F0EDE8] transition-colors shadow-sm"
         >
           File Now
         </button>
@@ -160,15 +160,15 @@ function StatusGroup({
       >
         <div className="flex items-center gap-1.5">
           <Icon className={`w-3.5 h-3.5 ${cfg.iconColor}`} />
-          <span className="text-xs font-semibold text-gray-700">{cfg.label}</span>
+          <span className="text-xs font-semibold text-[#3A4A57]">{cfg.label}</span>
           <span className={`text-xs px-1.5 py-0.5 rounded-full font-medium ${cfg.badgeBg}`}>
             {filings.length}
           </span>
         </div>
         {expanded ? (
-          <ChevronUp className="w-3.5 h-3.5 text-gray-400" />
+          <ChevronUp className="w-3.5 h-3.5 text-[#8A9BA8]" />
         ) : (
-          <ChevronDown className="w-3.5 h-3.5 text-gray-400" />
+          <ChevronDown className="w-3.5 h-3.5 text-[#8A9BA8]" />
         )}
       </button>
       {expanded && (
@@ -217,11 +217,11 @@ export function TimelyFilingAlert({ claims, onFileClaim, compact = false }: Time
             <AlertTriangle className="w-4 h-4 text-red-500" />
           </div>
           <div>
-            <h3 className={`font-semibold text-gray-800 ${compact ? 'text-xs' : 'text-sm'}`}>
+            <h3 className={`font-semibold text-[#1B2733] ${compact ? 'text-xs' : 'text-sm'}`}>
               Timely Filing Risk
             </h3>
             {!compact && (
-              <p className="text-xs text-gray-400">{riskCount} claim{riskCount !== 1 ? 's' : ''} need attention</p>
+              <p className="text-xs text-[#8A9BA8]">{riskCount} claim{riskCount !== 1 ? 's' : ''} need attention</p>
             )}
           </div>
         </div>
@@ -245,7 +245,7 @@ export function TimelyFilingAlert({ claims, onFileClaim, compact = false }: Time
 
       {/* Footer count */}
       {!compact && claims.length > riskCount && (
-        <p className="text-xs text-gray-400 text-center mt-2">
+        <p className="text-xs text-[#8A9BA8] text-center mt-2">
           {claims.length - riskCount} other claim{claims.length - riskCount !== 1 ? 's' : ''} on track
         </p>
       )}

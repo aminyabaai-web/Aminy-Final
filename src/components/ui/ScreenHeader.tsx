@@ -41,7 +41,7 @@ export function ScreenHeader({
 }: ScreenHeaderProps) {
   const baseClasses = 'px-4 pt-3 pb-4 z-10';
   const variantClasses = {
-    flat:     'bg-white border-b border-slate-100',
+    flat:     'bg-white border-b border-[#E8E4DF]',
     gradient: 'bg-gradient-to-b from-white to-slate-50',
     overlay:  '',
   }[variant];
@@ -52,7 +52,7 @@ export function ScreenHeader({
       {onBack && (
         <button
           onClick={onBack}
-          className="flex items-center gap-1 text-sm text-slate-600 mb-3 hover:text-slate-900 transition-colors min-h-[36px]"
+          className="flex items-center gap-1 text-sm text-[#5A6B7A] mb-3 hover:text-[#1B2733] transition-colors min-h-[36px]"
         >
           <ChevronLeft className="w-4 h-4" />
           {backLabel}
@@ -65,9 +65,9 @@ export function ScreenHeader({
           </div>
         )}
         <div className="flex-1 min-w-0">
-          <h1 className="text-lg font-bold text-slate-900 truncate">{title}</h1>
+          <h1 className="text-lg font-bold text-[#1B2733] truncate">{title}</h1>
           {subtitle && (
-            <p className="text-xs text-slate-500 mt-0.5 truncate">{subtitle}</p>
+            <p className="text-xs text-[#5A6B7A] mt-0.5 truncate">{subtitle}</p>
           )}
         </div>
         {actions && (

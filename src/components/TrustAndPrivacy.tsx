@@ -222,7 +222,7 @@ export function TrustAndPrivacy({ userId }: { userId: string }) {
               <Label htmlFor="enhanced-privacy" className="text-base font-semibold">
                 Enable Enhanced Privacy
               </Label>
-              <p className="text-sm text-slate-600 mt-1">
+              <p className="text-sm text-[#5A6B7A] mt-1">
                 Stores data locally, disables AI model training, and adds extra encryption
               </p>
             </div>
@@ -238,8 +238,8 @@ export function TrustAndPrivacy({ userId }: { userId: string }) {
               <div className="flex items-start gap-3">
                 <CheckCircle className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" />
                 <div className="text-sm space-y-1">
-                  <p className="font-semibold text-slate-900">Enhanced Privacy Active</p>
-                  <ul className="text-slate-700 space-y-1 ml-4 list-disc">
+                  <p className="font-semibold text-[#1B2733]">Enhanced Privacy Active</p>
+                  <ul className="text-[#3A4A57] space-y-1 ml-4 list-disc">
                     <li>All data stored on your device</li>
                     <li>AI conversations not used for training</li>
                     <li>Strong client-side encryption (AES-256) for synced data</li>
@@ -266,7 +266,7 @@ export function TrustAndPrivacy({ userId }: { userId: string }) {
               <Label htmlFor="model-training" className="text-base">
                 Allow AI Model Improvement
               </Label>
-              <p className="text-sm text-slate-600 mt-1">
+              <p className="text-sm text-[#5A6B7A] mt-1">
                 Help improve Aminy by anonymously training AI models
               </p>
             </div>
@@ -285,7 +285,7 @@ export function TrustAndPrivacy({ userId }: { userId: string }) {
               <Label htmlFor="anonymized-data" className="text-base">
                 Share Anonymized Usage Data
               </Label>
-              <p className="text-sm text-slate-600 mt-1">
+              <p className="text-sm text-[#5A6B7A] mt-1">
                 Help us understand how Aminy is used (no personal info)
               </p>
             </div>
@@ -304,7 +304,7 @@ export function TrustAndPrivacy({ userId }: { userId: string }) {
               <Label htmlFor="local-only" className="text-base">
                 Local Storage Only
               </Label>
-              <p className="text-sm text-slate-600 mt-1">
+              <p className="text-sm text-[#5A6B7A] mt-1">
                 Never sync data to cloud (may limit features)
               </p>
             </div>
@@ -329,24 +329,24 @@ export function TrustAndPrivacy({ userId }: { userId: string }) {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-3 sm:space-y-4">
-          <div className="text-sm text-slate-700 space-y-3">
+          <div className="text-sm text-[#3A4A57] space-y-3">
             <div>
-              <h4 className="font-semibold text-slate-900 mb-1">What We Collect</h4>
+              <h4 className="font-semibold text-[#1B2733] mb-1">What We Collect</h4>
               <p>We collect only what's needed: your child's development goals, routine data, and progress notes. No selling, no sharing with third parties.</p>
             </div>
 
             <div>
-              <h4 className="font-semibold text-slate-900 mb-1">How We Use It</h4>
+              <h4 className="font-semibold text-[#1B2733] mb-1">How We Use It</h4>
               <p>Your data powers personalized AI guidance and progress tracking. With Enhanced Privacy Mode, data never leaves your device.</p>
             </div>
 
             <div>
-              <h4 className="font-semibold text-slate-900 mb-1">Your Rights</h4>
+              <h4 className="font-semibold text-[#1B2733] mb-1">Your Rights</h4>
               <p>You can export or delete all your data anytime. We're HIPAA-conscious and follow strict security protocols.</p>
             </div>
 
             <div>
-              <h4 className="font-semibold text-slate-900 mb-1">Security</h4>
+              <h4 className="font-semibold text-[#1B2733] mb-1">Security</h4>
               <p>All data encrypted in transit (TLS) and at rest (AES-256). Regular security audits and penetration testing.</p>
             </div>
           </div>
@@ -419,7 +419,7 @@ export function TrustAndPrivacy({ userId }: { userId: string }) {
         </CardHeader>
         <CardContent>
           {auditLogs.length === 0 ? (
-            <p className="text-sm text-slate-600 text-center py-8">
+            <p className="text-sm text-[#5A6B7A] text-center py-8">
               No activity logged yet
             </p>
           ) : (
@@ -427,13 +427,13 @@ export function TrustAndPrivacy({ userId }: { userId: string }) {
               {auditLogs.slice(0, 10).map((log) => (
                 <div
                   key={log.id}
-                  className="flex items-start justify-between p-3 bg-slate-50 rounded-lg text-sm"
+                  className="flex items-start justify-between p-3 bg-[#FAF7F2] rounded-lg text-sm"
                 >
                   <div>
-                    <p className="font-medium text-slate-900">{log.action}</p>
-                    <p className="text-slate-600">{log.description}</p>
+                    <p className="font-medium text-[#1B2733]">{log.action}</p>
+                    <p className="text-[#5A6B7A]">{log.description}</p>
                   </div>
-                  <span className="text-xs text-slate-500 whitespace-nowrap ml-4">
+                  <span className="text-xs text-[#5A6B7A] whitespace-nowrap ml-4">
                     {new Date(log.timestamp).toLocaleString()}
                   </span>
                 </div>

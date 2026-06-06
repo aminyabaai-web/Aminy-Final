@@ -242,11 +242,11 @@ function DefaultErrorFallback({
           </svg>
         </div>
         
-        <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3">
+        <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733] mb-3">
           We hit an unexpected bump
         </h2>
 
-        <p className="text-gray-600 mb-4 sm:mb-6 leading-relaxed">
+        <p className="text-[#5A6B7A] mb-4 sm:mb-6 leading-relaxed">
           Don't worry — this happens sometimes and it's not your fault.
           We've been notified and are looking into it. Let's try again together.
         </p>
@@ -261,7 +261,7 @@ function DefaultErrorFallback({
           </button>
           
           {showDetails && (
-            <div className="bg-gray-50 p-4 rounded-lg text-left text-sm font-mono text-gray-700 max-h-32 overflow-y-auto">
+            <div className="bg-[#FAF7F2] p-4 rounded-lg text-left text-sm font-mono text-[#3A4A57] max-h-32 overflow-y-auto">
               <div className="mb-2"><strong>Error:</strong> {error?.name}</div>
               <div className="mb-2"><strong>Message:</strong> {error?.message}</div>
               <div><strong>Error ID:</strong> {errorId}</div>
@@ -280,18 +280,18 @@ function DefaultErrorFallback({
           
           <button
             onClick={reloadPage}
-            className="bg-gray-100 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-200 transition-colors font-medium"
+            className="bg-[#F0EDE8] text-[#3A4A57] px-6 py-3 rounded-lg hover:bg-[#E8E4DF] transition-colors font-medium"
           >
             Reload page
           </button>
         </div>
 
         {/* Error reporting */}
-        <div className="mt-4 sm:mt-6 pt-6 border-t border-gray-200">
+        <div className="mt-4 sm:mt-6 pt-6 border-t border-[#E8E4DF]">
           {!reportSent ? (
             <button
               onClick={sendErrorReport}
-              className="text-sm text-gray-500 hover:text-gray-700"
+              className="text-sm text-[#5A6B7A] hover:text-[#3A4A57]"
             >
               Send error report to help us improve
             </button>
@@ -302,7 +302,7 @@ function DefaultErrorFallback({
 
         {/* Support link */}
         <div className="mt-4">
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-[#8A9BA8]">
             If this problem persists, please{' '}
             <a 
               href="mailto:support@aminy.ai" 
@@ -465,7 +465,7 @@ export function AsyncBoundary({
 function DefaultLoadingFallback() {
   return (
     <div className="flex items-center justify-center p-8">
-      <div className="w-8 h-8 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin" />
+      <div className="w-8 h-8 border-4 border-[#6B9080]/20 border-t-indigo-600 rounded-full animate-spin" />
     </div>
   );
 }

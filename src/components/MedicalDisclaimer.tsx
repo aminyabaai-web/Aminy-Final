@@ -21,7 +21,7 @@ interface MedicalDisclaimerProps {
 export function MedicalDisclaimer({ variant = 'footer', className = '' }: MedicalDisclaimerProps) {
   if (variant === 'inline') {
     return (
-      <p className={`text-xs text-gray-500 dark:text-gray-400 ${className}`}>
+      <p className={`text-xs text-[#5A6B7A] dark:text-[#8A9BA8] ${className}`}>
         Aminy™ provides educational support and is not a substitute for professional medical advice,
         diagnosis, or treatment from qualified healthcare providers.
       </p>
@@ -53,13 +53,13 @@ export function MedicalDisclaimer({ variant = 'footer', className = '' }: Medica
   // Footer variant (default)
   return (
     <div className={`text-center py-4 px-4 ${className}`}>
-      <p className="text-xs text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
+      <p className="text-xs text-[#5A6B7A] dark:text-[#8A9BA8] max-w-2xl mx-auto">
         <strong>Medical Disclaimer:</strong> Aminy™ is an AI-powered educational tool and is not intended
         to provide medical advice, diagnosis, or treatment. The information provided should not be used
         as a substitute for professional advice from a qualified healthcare provider, BCBA, or therapist.
         Always consult with appropriate professionals regarding your child's specific needs.
       </p>
-      <p className="text-xs text-gray-400 dark:text-gray-500 mt-2">
+      <p className="text-xs text-[#8A9BA8] dark:text-[#5A6B7A] mt-2">
         © {new Date().getFullYear()} Aminy, LLC All rights reserved. Aminy™ is a trademark of Aminy, LLC
       </p>
     </div>

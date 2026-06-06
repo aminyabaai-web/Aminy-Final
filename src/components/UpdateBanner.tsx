@@ -102,7 +102,7 @@ export function UpdateBanner() {
 
   return (
     <div
-      className="fixed top-0 left-0 right-0 z-50 bg-blue-50 border-b border-blue-200 px-4 py-3"
+      className="fixed top-0 left-0 right-0 z-50 bg-[#EEF4F8] border-b border-[#C8DDE8] px-4 py-3"
       role="alert"
       aria-live="polite"
     >

@@ -210,8 +210,8 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
           onClick={() => setActiveTab('share')}
           className={`flex-1 py-3 text-sm font-medium transition-colors ${
             activeTab === 'share'
-              ? 'text-teal-600 border-b-2 border-teal-600'
-              : 'text-gray-500 hover:text-gray-700'
+              ? 'text-[#6B9080] border-b-2 border-[#6B9080]'
+              : 'text-[#5A6B7A] hover:text-[#3A4A57]'
           }`}
         >
           <Link className="w-4 h-4 inline mr-1.5" />
@@ -221,8 +221,8 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
           onClick={() => setActiveTab('links')}
           className={`flex-1 py-3 text-sm font-medium transition-colors ${
             activeTab === 'links'
-              ? 'text-teal-600 border-b-2 border-teal-600'
-              : 'text-gray-500 hover:text-gray-700'
+              ? 'text-[#6B9080] border-b-2 border-[#6B9080]'
+              : 'text-[#5A6B7A] hover:text-[#3A4A57]'
           }`}
         >
           <Users className="w-4 h-4 inline mr-1.5" />
@@ -232,8 +232,8 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
           onClick={() => setActiveTab('export')}
           className={`flex-1 py-3 text-sm font-medium transition-colors ${
             activeTab === 'export'
-              ? 'text-teal-600 border-b-2 border-teal-600'
-              : 'text-gray-500 hover:text-gray-700'
+              ? 'text-[#6B9080] border-b-2 border-[#6B9080]'
+              : 'text-[#5A6B7A] hover:text-[#3A4A57]'
           }`}
         >
           <FileJson className="w-4 h-4 inline mr-1.5" />
@@ -278,7 +278,7 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
 
             {/* Access Level */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-[#3A4A57] mb-2">
                 Access Level
               </label>
               <div className="space-y-2">
@@ -287,8 +287,8 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
                     key={level}
                     className={`flex items-start gap-3 p-3 border rounded-lg cursor-pointer transition-colors ${
                       accessLevel === level
-                        ? 'border-teal-500 bg-teal-50'
-                        : 'border-gray-200 hover:border-gray-300'
+                        ? 'border-[#6B9080] bg-[#6B9080]/10'
+                        : 'border-[#E8E4DF] hover:border-[#E8E4DF]'
                     }`}
                   >
                     <input
@@ -301,7 +301,7 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
                     />
                     <div>
                       <span className="font-medium capitalize">{level}</span>
-                      <p className="text-sm text-gray-500">{accessLevelDescriptions[level]}</p>
+                      <p className="text-sm text-[#5A6B7A]">{accessLevelDescriptions[level]}</p>
                     </div>
                   </label>
                 ))}
@@ -310,7 +310,7 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
 
             {/* Data to Include */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-[#3A4A57] mb-2">
                 Include Data
               </label>
               <div className="space-y-2">
@@ -331,11 +331,11 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
                           [key]: e.target.checked,
                         }))
                       }
-                      className="rounded text-teal-600"
+                      className="rounded text-[#6B9080]"
                     />
                     <div>
                       <span className="font-medium">{label}</span>
-                      <span className="text-sm text-gray-500 ml-2">{desc}</span>
+                      <span className="text-sm text-[#5A6B7A] ml-2">{desc}</span>
                     </div>
                   </label>
                 ))}
@@ -344,7 +344,7 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
 
             {/* Expiration */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-[#3A4A57] mb-2">
                 Link Expiration
               </label>
               <select
@@ -362,7 +362,7 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
 
             {/* Max Views */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-[#3A4A57] mb-2">
                 Maximum Views
               </label>
               <select
@@ -385,7 +385,7 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
                   type="checkbox"
                   checked={useAccessCode}
                   onChange={(e) => setUseAccessCode(e.target.checked)}
-                  className="rounded text-teal-600"
+                  className="rounded text-[#6B9080]"
                 />
                 <span className="font-medium">Add PIN protection</span>
               </label>
@@ -403,7 +403,7 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
 
             {/* Provider Email (optional) */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-[#3A4A57] mb-2">
                 Provider Email (optional)
               </label>
               <input
@@ -413,7 +413,7 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
                 placeholder="provider@clinic.com"
                 className="w-full border rounded-lg px-3 py-2"
               />
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-[#5A6B7A] mt-1">
                 We'll send them a notification when you create the link
               </p>
             </div>
@@ -422,7 +422,7 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
             <button
               onClick={handleCreateLink}
               disabled={useAccessCode && accessCode.length < 4}
-              className="w-full py-3 bg-teal-600 text-white rounded-xl font-medium hover:bg-teal-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full py-3 bg-primary text-white rounded-xl font-medium hover:bg-[#6B9080] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               <Link className="w-5 h-5" />
               Create Share Link
@@ -434,12 +434,12 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
         {activeTab === 'links' && (
           <div className="space-y-3 sm:space-y-4">
             {existingLinks.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">
+              <div className="text-center py-8 text-[#5A6B7A]">
                 <Link className="w-12 h-12 mx-auto mb-3 opacity-50" />
                 <p>No active share links</p>
                 <button
                   onClick={() => setActiveTab('share')}
-                  className="mt-2 text-teal-600 hover:underline"
+                  className="mt-2 text-[#6B9080] hover:underline"
                 >
                   Create your first link
                 </button>
@@ -450,7 +450,7 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
                 return (
                   <div
                     key={link.id}
-                    className="border rounded-xl p-4 hover:border-gray-300 transition-colors"
+                    className="border rounded-xl p-4 hover:border-[#E8E4DF] transition-colors"
                   >
                     <div className="flex items-start justify-between">
                       <div>
@@ -463,14 +463,14 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
                             </span>
                           )}
                         </div>
-                        <p className="text-sm text-gray-500 mt-1">
+                        <p className="text-sm text-[#5A6B7A] mt-1">
                           {link.viewCount} of {link.maxViews} views used
                         </p>
                       </div>
                       <div className="flex items-center gap-2">
                         <button
                           onClick={() => copyToClipboard(getShareUrl(link.id))}
-                          className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                          className="p-2 text-[#5A6B7A] hover:text-[#3A4A57] hover:bg-[#F0EDE8] rounded-lg transition-colors"
                           title="Copy link"
                         >
                           <Copy className="w-4 h-4" />
@@ -484,7 +484,7 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
                         </button>
                       </div>
                     </div>
-                    <div className="mt-2 flex items-center gap-3 sm:gap-4 text-xs text-gray-500">
+                    <div className="mt-2 flex items-center gap-3 sm:gap-4 text-xs text-[#5A6B7A]">
                       <span className="flex items-center gap-1">
                         <Clock className="w-3 h-3" />
                         Expires in {formatExpiry(link.expiresAt)}
@@ -497,7 +497,7 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
                       )}
                     </div>
                     {link.lastAccessedAt && (
-                      <p className="text-xs text-gray-400 mt-1">
+                      <p className="text-xs text-[#8A9BA8] mt-1">
                         Last accessed: {new Date(link.lastAccessedAt).toLocaleDateString()}
                       </p>
                     )}
@@ -513,7 +513,7 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
           <div className="space-y-3 sm:space-y-4 sm:space-y-6">
             {/* Format Selection */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-[#3A4A57] mb-2">
                 Export Format
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -521,32 +521,32 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
                   onClick={() => setExportFormat('fhir')}
                   className={`p-4 border rounded-xl text-left transition-colors ${
                     exportFormat === 'fhir'
-                      ? 'border-teal-500 bg-teal-50'
-                      : 'border-gray-200 hover:border-gray-300'
+                      ? 'border-[#6B9080] bg-[#6B9080]/10'
+                      : 'border-[#E8E4DF] hover:border-[#E8E4DF]'
                   }`}
                 >
-                  <FileJson className="w-6 h-6 text-teal-600 mb-2" />
+                  <FileJson className="w-6 h-6 text-[#6B9080] mb-2" />
                   <p className="font-medium">FHIR R4 Bundle</p>
-                  <p className="text-sm text-gray-500">Healthcare interoperability standard</p>
+                  <p className="text-sm text-[#5A6B7A]">Healthcare interoperability standard</p>
                 </button>
                 <button
                   onClick={() => setExportFormat('summary')}
                   className={`p-4 border rounded-xl text-left transition-colors ${
                     exportFormat === 'summary'
-                      ? 'border-teal-500 bg-teal-50'
-                      : 'border-gray-200 hover:border-gray-300'
+                      ? 'border-[#6B9080] bg-[#6B9080]/10'
+                      : 'border-[#E8E4DF] hover:border-[#E8E4DF]'
                   }`}
                 >
-                  <Users className="w-6 h-6 text-teal-600 mb-2" />
+                  <Users className="w-6 h-6 text-[#6B9080] mb-2" />
                   <p className="font-medium">Provider Summary</p>
-                  <p className="text-sm text-gray-500">Human-readable quick start guide</p>
+                  <p className="text-sm text-[#5A6B7A]">Human-readable quick start guide</p>
                 </button>
               </div>
             </div>
 
             {/* Data to Include (reuse from share) */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-[#3A4A57] mb-2">
                 Include Data
               </label>
               <div className="space-y-2">
@@ -566,7 +566,7 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
                           [key]: e.target.checked,
                         }))
                       }
-                      className="rounded text-teal-600"
+                      className="rounded text-[#6B9080]"
                     />
                     <span>{label}</span>
                   </label>
@@ -577,7 +577,7 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
             {/* Generate Button */}
             <button
               onClick={handleExport}
-              className="w-full py-3 bg-teal-600 text-white rounded-xl font-medium hover:bg-teal-700 transition-colors flex items-center justify-center gap-2"
+              className="w-full py-3 bg-primary text-white rounded-xl font-medium hover:bg-[#6B9080] transition-colors flex items-center justify-center gap-2"
             >
               <FileJson className="w-5 h-5" />
               Generate Export
@@ -587,16 +587,16 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
             {exportPreview && (
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <h4 className="font-medium text-gray-700">Export Preview</h4>
+                  <h4 className="font-medium text-[#3A4A57]">Export Preview</h4>
                   <button
                     onClick={downloadExport}
-                    className="flex items-center gap-1 text-sm text-teal-600 hover:text-teal-700"
+                    className="flex items-center gap-1 text-sm text-[#6B9080] hover:text-[#6B9080]"
                   >
                     <Download className="w-4 h-4" />
                     Download
                   </button>
                 </div>
-                <pre className="bg-gray-50 border rounded-lg p-4 text-xs overflow-auto max-h-64 font-mono">
+                <pre className="bg-[#FAF7F2] border rounded-lg p-4 text-xs overflow-auto max-h-64 font-mono">
                   {exportPreview.slice(0, 2000)}
                   {exportPreview.length > 2000 && '\n\n... (truncated for preview)'}
                 </pre>
@@ -604,8 +604,8 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
             )}
 
             {/* FHIR Info */}
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <h4 className="font-medium text-blue-800 flex items-center gap-2">
+            <div className="bg-[#EEF4F8] border border-[#C8DDE8] rounded-lg p-4">
+              <h4 className="font-medium text-[#4A6478] flex items-center gap-2">
                 <Shield className="w-4 h-4" />
                 About FHIR Exports
               </h4>
@@ -620,8 +620,8 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
       </div>
 
       {/* Footer */}
-      <div className="border-t px-4 sm:px-6 py-3 sm:py-4 bg-gray-50">
-        <div className="flex items-center gap-2 text-xs text-gray-500">
+      <div className="border-t px-4 sm:px-6 py-3 sm:py-4 bg-[#FAF7F2]">
+        <div className="flex items-center gap-2 text-xs text-[#5A6B7A]">
           <Shield className="w-4 h-4" />
           <span>
             All shared data is encrypted and access is logged. You can revoke access at any time.

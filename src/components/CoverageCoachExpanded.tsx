@@ -244,8 +244,8 @@ export function CoverageCoachExpanded({ userData, onSaveReport }: CoverageCoachE
               <Shield className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="text-3xl font-semibold text-slate-900 mb-2">Coverage Coach</h1>
-              <p className="text-slate-600">Know what your plan covers in 2 minutes</p>
+              <h1 className="text-3xl font-semibold text-[#1B2733] mb-2">Coverage Coach</h1>
+              <p className="text-[#5A6B7A]">Know what your plan covers in 2 minutes</p>
             </div>
           </div>
 
@@ -253,10 +253,10 @@ export function CoverageCoachExpanded({ userData, onSaveReport }: CoverageCoachE
             <div className="flex items-start gap-3">
               <Heart className="w-5 h-5 text-accent mt-0.5" />
               <div>
-                <p className="text-sm font-medium text-slate-900 mb-1">
+                <p className="text-sm font-medium text-[#1B2733] mb-1">
                   Reassuring & Expert, Non-Bureaucratic
                 </p>
-                <p className="text-xs text-slate-600">
+                <p className="text-xs text-[#5A6B7A]">
                   I'll walk you through this step-by-step. No complicated insurance jargon — just clear answers.
                 </p>
               </div>
@@ -268,16 +268,16 @@ export function CoverageCoachExpanded({ userData, onSaveReport }: CoverageCoachE
       <div className="max-w-3xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
         {/* Progress Indicator */}
         {currentStep !== 'welcome' && currentStep !== 'report' && (
-          <Card className="p-4 mb-4 sm:mb-6 bg-slate-50">
+          <Card className="p-4 mb-4 sm:mb-6 bg-[#FAF7F2]">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-slate-700">
+              <span className="text-sm font-medium text-[#3A4A57]">
                 {currentStep === 'provider' && 'Step 1 of 4: Insurance Provider'}
                 {currentStep === 'plan-type' && 'Step 2 of 4: Plan Type'}
                 {currentStep === 'state' && 'Step 3 of 4: Your State'}
                 {currentStep === 'needs' && 'Step 4 of 4: Support Needs'}
                 {currentStep === 'confirmation' && 'Review & Confirm'}
               </span>
-              <span className="text-xs text-slate-500">
+              <span className="text-xs text-[#5A6B7A]">
                 {currentStep === 'provider' && '25%'}
                 {currentStep === 'plan-type' && '50%'}
                 {currentStep === 'state' && '75%'}
@@ -336,7 +336,7 @@ export function CoverageCoachExpanded({ userData, onSaveReport }: CoverageCoachE
           ))}
 
           {isGenerating && (
-            <div className="flex items-center gap-2 text-sm text-slate-600">
+            <div className="flex items-center gap-2 text-sm text-[#5A6B7A]">
               <div className="w-2 h-2 bg-accent rounded-full animate-bounce"></div>
               <div className="w-2 h-2 bg-accent rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
               <div className="w-2 h-2 bg-accent rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
@@ -350,61 +350,61 @@ export function CoverageCoachExpanded({ userData, onSaveReport }: CoverageCoachE
           <Card className="p-6 mb-4 sm:mb-6 border-2 border-accent/30 bg-gradient-to-br from-accent/5 to-teal-50">
             <div className="flex items-center gap-3 mb-4">
               <FileText className="w-6 h-6 text-accent" />
-              <h2 className="text-lg sm:text-xl font-semibold text-slate-900">Coverage Clarity Report</h2>
+              <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733]">Coverage Clarity Report</h2>
             </div>
 
             {/* Insurance Summary */}
             <div className="bg-white rounded-lg p-4 mb-4">
-              <h3 className="font-medium text-slate-900 mb-3">Your Plan</h3>
+              <h3 className="font-medium text-[#1B2733] mb-3">Your Plan</h3>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-slate-600">Provider:</span>
-                  <span className="font-medium text-slate-900">{generatedReport.insuranceProvider}</span>
+                  <span className="text-[#5A6B7A]">Provider:</span>
+                  <span className="font-medium text-[#1B2733]">{generatedReport.insuranceProvider}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-600">Plan Type:</span>
-                  <span className="font-medium text-slate-900">{generatedReport.planType}</span>
+                  <span className="text-[#5A6B7A]">Plan Type:</span>
+                  <span className="font-medium text-[#1B2733]">{generatedReport.planType}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-600">State:</span>
-                  <span className="font-medium text-slate-900">{generatedReport.state}</span>
+                  <span className="text-[#5A6B7A]">State:</span>
+                  <span className="font-medium text-[#1B2733]">{generatedReport.state}</span>
                 </div>
               </div>
             </div>
 
             {/* Coverage Summary */}
             <div className="bg-white rounded-lg p-4 mb-4">
-              <h3 className="font-medium text-slate-900 mb-3">What's Likely Covered</h3>
+              <h3 className="font-medium text-[#1B2733] mb-3">What's Likely Covered</h3>
               <div className="space-y-3 sm:space-y-4 text-sm">
                 <div>
-                  <p className="font-medium text-slate-800 mb-1">ABA Services</p>
-                  <p className="text-slate-600 leading-relaxed">{generatedReport.coverageSummary.abaServices}</p>
+                  <p className="font-medium text-[#1B2733] mb-1">ABA Services</p>
+                  <p className="text-[#5A6B7A] leading-relaxed">{generatedReport.coverageSummary.abaServices}</p>
                 </div>
                 <div>
-                  <p className="font-medium text-slate-800 mb-1">Speech Therapy</p>
-                  <p className="text-slate-600 leading-relaxed">{generatedReport.coverageSummary.speechTherapy}</p>
+                  <p className="font-medium text-[#1B2733] mb-1">Speech Therapy</p>
+                  <p className="text-[#5A6B7A] leading-relaxed">{generatedReport.coverageSummary.speechTherapy}</p>
                 </div>
                 <div>
-                  <p className="font-medium text-slate-800 mb-1">Occupational Therapy</p>
-                  <p className="text-slate-600 leading-relaxed">{generatedReport.coverageSummary.occupationalTherapy}</p>
+                  <p className="font-medium text-[#1B2733] mb-1">Occupational Therapy</p>
+                  <p className="text-[#5A6B7A] leading-relaxed">{generatedReport.coverageSummary.occupationalTherapy}</p>
                 </div>
                 <div>
-                  <p className="font-medium text-slate-800 mb-1">Assessments</p>
-                  <p className="text-slate-600 leading-relaxed">{generatedReport.coverageSummary.assessments}</p>
+                  <p className="font-medium text-[#1B2733] mb-1">Assessments</p>
+                  <p className="text-[#5A6B7A] leading-relaxed">{generatedReport.coverageSummary.assessments}</p>
                 </div>
               </div>
             </div>
 
             {/* Next Steps */}
             <div className="bg-white rounded-lg p-4 mb-4">
-              <h3 className="font-medium text-slate-900 mb-3">Your Next Steps</h3>
+              <h3 className="font-medium text-[#1B2733] mb-3">Your Next Steps</h3>
               <ol className="space-y-2 text-sm">
                 {generatedReport.nextSteps.map((step, idx) => (
                   <li key={idx} className="flex items-start gap-2">
                     <span className="flex-shrink-0 w-5 h-5 bg-accent text-white rounded-full flex items-center justify-center text-xs font-medium">
                       {idx + 1}
                     </span>
-                    <span className="text-slate-700">{step}</span>
+                    <span className="text-[#3A4A57]">{step}</span>
                   </li>
                 ))}
               </ol>
@@ -433,7 +433,7 @@ export function CoverageCoachExpanded({ userData, onSaveReport }: CoverageCoachE
 
         {/* Educational Sidebar */}
         {currentStep !== 'welcome' && currentStep !== 'report' && (
-          <Card className="p-4 bg-blue-50 border-blue-200">
+          <Card className="p-4 bg-[#EEF4F8] border-[#C8DDE8]">
             <div className="flex items-start gap-3">
               <Info className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
               <div>
@@ -482,7 +482,7 @@ function AIMessage({ children }: { children: React.ReactNode }) {
         <Sparkles className="w-4 h-4 text-white" />
       </div>
       <Card className="p-4 bg-white max-w-[80%]">
-        <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-line">{children}</p>
+        <p className="text-sm text-[#3A4A57] leading-relaxed whitespace-pre-line">{children}</p>
       </Card>
     </div>
   );
@@ -494,8 +494,8 @@ function UserMessage({ children }: { children: React.ReactNode }) {
       <Card className="p-4 bg-accent text-white max-w-[80%]">
         <p className="text-sm leading-relaxed">{children}</p>
       </Card>
-      <div className="w-8 h-8 bg-slate-200 rounded-full flex items-center justify-center flex-shrink-0">
-        <span className="text-sm font-medium text-slate-700">You</span>
+      <div className="w-8 h-8 bg-[#E8E4DF] rounded-full flex items-center justify-center flex-shrink-0">
+        <span className="text-sm font-medium text-[#3A4A57]">You</span>
       </div>
     </div>
   );

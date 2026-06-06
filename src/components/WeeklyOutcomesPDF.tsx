@@ -54,7 +54,7 @@ interface WeeklyOutcomesPDFProps {
 // PDF Generation
 // ============================================================================
 
-const AMINY_BLUE = '#0891b2';
+const AMINY_BLUE = '#6B9080';
 const AMINY_GREEN = '#43AA8B';
 const GRAY_600 = '#4B5563';
 const GRAY_400 = '#9CA3AF';
@@ -342,7 +342,7 @@ export function WeeklyOutcomesPDF({ data, tier = 'free', onUpgrade }: WeeklyOutc
     const diff = reportData.stressLevelAvg - reportData.stressLevelPrevWeek;
     if (diff < -0.5) return { icon: TrendingDown, color: 'text-green-600', label: 'Improving' };
     if (diff > 0.5) return { icon: TrendingUp, color: 'text-red-600', label: 'Rising' };
-    return { icon: Minus, color: 'text-gray-600', label: 'Stable' };
+    return { icon: Minus, color: 'text-[#5A6B7A]', label: 'Stable' };
   };
 
   const stressTrend = getStressTrend();
@@ -353,7 +353,7 @@ export function WeeklyOutcomesPDF({ data, tier = 'free', onUpgrade }: WeeklyOutc
         <div>
           <div className="flex items-center gap-2 mb-2">
             <h3 className="text-lg font-semibold">Weekly Outcomes PDF</h3>
-            <Badge variant="outline" className="bg-blue-50 border-blue-200 text-blue-700">
+            <Badge variant="outline" className="bg-[#EEF4F8] border-[#C8DDE8] text-blue-700">
               Core Tier
             </Badge>
           </div>

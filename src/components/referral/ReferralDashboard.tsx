@@ -153,9 +153,9 @@ export function EnhancedReferralDashboard({
   if (!code || !stats) {
     return (
       <div className="p-6 space-y-4 animate-pulse">
-        <div className="h-8 bg-gray-200 rounded w-1/2" />
-        <div className="h-40 bg-gray-200 rounded" />
-        <div className="h-24 bg-gray-200 rounded" />
+        <div className="h-8 bg-[#E8E4DF] rounded w-1/2" />
+        <div className="h-40 bg-[#E8E4DF] rounded" />
+        <div className="h-24 bg-[#E8E4DF] rounded" />
       </div>
     );
   }
@@ -165,11 +165,11 @@ export function EnhancedReferralDashboard({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-            <Gift className="w-6 h-6 text-teal-600" />
+          <h2 className="text-xl font-bold text-[#1B2733] flex items-center gap-2">
+            <Gift className="w-6 h-6 text-[#6B9080]" />
             Refer & Earn
           </h2>
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-[#5A6B7A]">
             Help families find care. Earn rewards.
           </p>
         </div>
@@ -244,26 +244,26 @@ export function EnhancedReferralDashboard({
           >
             <Card className="p-4">
               <div className="flex items-center justify-between mb-3">
-                <h3 className="font-semibold text-gray-900 text-sm">Pre-written Messages</h3>
-                <button onClick={() => setShowShareOptions(false)} className="text-gray-400 hover:text-gray-600">
+                <h3 className="font-semibold text-[#1B2733] text-sm">Pre-written Messages</h3>
+                <button onClick={() => setShowShareOptions(false)} className="text-[#8A9BA8] hover:text-[#5A6B7A]">
                   <X className="w-4 h-4" />
                 </button>
               </div>
 
               <div className="space-y-3">
                 {shareMessages.map((msg) => (
-                  <div key={msg.id} className="border border-gray-100 rounded-xl overflow-hidden">
+                  <div key={msg.id} className="border border-[#E8E4DF] rounded-xl overflow-hidden">
                     <button
                       onClick={() => setActiveShareTemplate(activeShareTemplate === msg.id ? null : msg.id)}
-                      className="w-full p-3 text-left hover:bg-gray-50 transition-colors flex items-center justify-between"
+                      className="w-full p-3 text-left hover:bg-[#FAF7F2] transition-colors flex items-center justify-between"
                     >
                       <div>
                         <Badge variant="secondary" className="mb-1 text-xs">
                           {msg.label}
                         </Badge>
-                        <p className="text-sm text-gray-600 line-clamp-2">{msg.body.slice(0, 80)}...</p>
+                        <p className="text-sm text-[#5A6B7A] line-clamp-2">{msg.body.slice(0, 80)}...</p>
                       </div>
-                      <ChevronRight className={`w-4 h-4 text-gray-400 flex-shrink-0 transition-transform ${activeShareTemplate === msg.id ? 'rotate-90' : ''}`} />
+                      <ChevronRight className={`w-4 h-4 text-[#8A9BA8] flex-shrink-0 transition-transform ${activeShareTemplate === msg.id ? 'rotate-90' : ''}`} />
                     </button>
 
                     <AnimatePresence>
@@ -274,8 +274,8 @@ export function EnhancedReferralDashboard({
                           exit={{ height: 0, opacity: 0 }}
                           className="overflow-hidden"
                         >
-                          <div className="p-3 pt-0 border-t border-gray-100">
-                            <p className="text-xs text-gray-500 mb-3 whitespace-pre-line bg-gray-50 p-2 rounded-lg">
+                          <div className="p-3 pt-0 border-t border-[#E8E4DF]">
+                            <p className="text-xs text-[#5A6B7A] mb-3 whitespace-pre-line bg-[#FAF7F2] p-2 rounded-lg">
                               {msg.body}
                             </p>
                             <div className="grid grid-cols-4 gap-2">
@@ -288,7 +288,7 @@ export function EnhancedReferralDashboard({
                               </button>
                               <button
                                 onClick={() => handleShareTemplate(msg, 'email')}
-                                className="flex flex-col items-center p-2 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
+                                className="flex flex-col items-center p-2 bg-[#EEF4F8] rounded-lg hover:bg-blue-100 transition-colors"
                               >
                                 <Mail className="w-4 h-4 text-blue-600 mb-0.5" />
                                 <span className="text-xs text-blue-700">Email</span>
@@ -302,10 +302,10 @@ export function EnhancedReferralDashboard({
                               </button>
                               <button
                                 onClick={() => handleShareTemplate(msg, 'copy')}
-                                className="flex flex-col items-center p-2 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                                className="flex flex-col items-center p-2 bg-[#FAF7F2] rounded-lg hover:bg-[#F0EDE8] transition-colors"
                               >
-                                <Copy className="w-4 h-4 text-gray-600 mb-0.5" />
-                                <span className="text-xs text-gray-700">Copy</span>
+                                <Copy className="w-4 h-4 text-[#5A6B7A] mb-0.5" />
+                                <span className="text-xs text-[#3A4A57]">Copy</span>
                               </button>
                             </div>
                           </div>
@@ -321,15 +321,15 @@ export function EnhancedReferralDashboard({
       </AnimatePresence>
 
       {/* Tabs */}
-      <div className="flex gap-1 bg-gray-100 rounded-xl p-1">
+      <div className="flex gap-1 bg-[#F0EDE8] rounded-xl p-1">
         {(['overview', 'referrals', 'leaderboard'] as const).map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
             className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${
               activeTab === tab
-                ? 'bg-white text-gray-900 shadow-sm'
-                : 'text-gray-500 hover:text-gray-700'
+                ? 'bg-white text-[#1B2733] shadow-sm'
+                : 'text-[#5A6B7A] hover:text-[#3A4A57]'
             }`}
           >
             {tab === 'overview' ? 'Overview' : tab === 'referrals' ? 'My Referrals' : 'Leaderboard'}
@@ -351,42 +351,42 @@ export function EnhancedReferralDashboard({
             <div className="grid grid-cols-2 gap-3">
               <Card className="p-3 text-center">
                 <Users className="w-5 h-5 mx-auto mb-1 text-blue-500" />
-                <div className="text-2xl font-bold text-gray-900">{stats.totalShares}</div>
-                <div className="text-xs text-gray-500">Shared</div>
+                <div className="text-2xl font-bold text-[#1B2733]">{stats.totalShares}</div>
+                <div className="text-xs text-[#5A6B7A]">Shared</div>
               </Card>
               <Card className="p-3 text-center">
-                <TrendingUp className="w-5 h-5 mx-auto mb-1 text-teal-500" />
-                <div className="text-2xl font-bold text-gray-900">{stats.totalSignups}</div>
-                <div className="text-xs text-gray-500">Signed Up</div>
+                <TrendingUp className="w-5 h-5 mx-auto mb-1 text-primary" />
+                <div className="text-2xl font-bold text-[#1B2733]">{stats.totalSignups}</div>
+                <div className="text-xs text-[#5A6B7A]">Signed Up</div>
               </Card>
               <Card className="p-3 text-center">
                 <CheckCircle className="w-5 h-5 mx-auto mb-1 text-green-500" />
-                <div className="text-2xl font-bold text-gray-900">{stats.totalConverted}</div>
-                <div className="text-xs text-gray-500">Converted</div>
+                <div className="text-2xl font-bold text-[#1B2733]">{stats.totalConverted}</div>
+                <div className="text-xs text-[#5A6B7A]">Converted</div>
               </Card>
               <Card className="p-3 text-center">
                 <Gift className="w-5 h-5 mx-auto mb-1 text-purple-500" />
-                <div className="text-2xl font-bold text-gray-900">{stats.rewardsEarned.length}</div>
-                <div className="text-xs text-gray-500">Rewards Earned</div>
+                <div className="text-2xl font-bold text-[#1B2733]">{stats.rewardsEarned.length}</div>
+                <div className="text-xs text-[#5A6B7A]">Rewards Earned</div>
               </Card>
             </div>
 
             {/* Conversion Funnel */}
             <Card className="p-4">
-              <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-teal-600" />
+              <h3 className="font-semibold text-[#1B2733] mb-3 flex items-center gap-2">
+                <TrendingUp className="w-5 h-5 text-[#6B9080]" />
                 Your Funnel
               </h3>
               <div className="space-y-2">
                 {[
                   { label: 'Codes Shared', value: stats.totalShares, color: 'bg-blue-500' },
                   { label: 'Links Clicked', value: stats.totalClicks, color: 'bg-indigo-500' },
-                  { label: 'Accounts Created', value: stats.totalSignups, color: 'bg-teal-500' },
+                  { label: 'Accounts Created', value: stats.totalSignups, color: 'bg-primary' },
                   { label: 'Sessions Booked', value: stats.totalSessionsBooked, color: 'bg-green-500' },
                 ].map((step, i) => (
                   <div key={step.label} className="flex items-center gap-3">
-                    <div className="w-24 text-xs text-gray-500 text-right">{step.label}</div>
-                    <div className="flex-1 h-6 bg-gray-100 rounded-full overflow-hidden">
+                    <div className="w-24 text-xs text-[#5A6B7A] text-right">{step.label}</div>
+                    <div className="flex-1 h-6 bg-[#F0EDE8] rounded-full overflow-hidden">
                       <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: `${Math.max((step.value / Math.max(stats.totalShares, 1)) * 100, 5)}%` }}
@@ -399,7 +399,7 @@ export function EnhancedReferralDashboard({
                   </div>
                 ))}
               </div>
-              <p className="text-xs text-gray-400 mt-2 text-right">
+              <p className="text-xs text-[#8A9BA8] mt-2 text-right">
                 {stats.conversionRate.toFixed(0)}% conversion rate
               </p>
             </Card>
@@ -433,7 +433,7 @@ export function EnhancedReferralDashboard({
             {/* Pending Rewards */}
             {stats.pendingRewards.length > 0 && (
               <Card className="p-4">
-                <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                <h3 className="font-semibold text-[#1B2733] mb-3 flex items-center gap-2">
                   <Clock className="w-5 h-5 text-amber-500" />
                   Pending Rewards
                 </h3>
@@ -442,7 +442,7 @@ export function EnhancedReferralDashboard({
                     <div key={reward.id} className="flex items-center justify-between p-3 bg-amber-50 rounded-xl">
                       <div className="flex items-center gap-2">
                         <Sparkles className="w-4 h-4 text-amber-500" />
-                        <span className="text-sm text-gray-700">{reward.description}</span>
+                        <span className="text-sm text-[#3A4A57]">{reward.description}</span>
                       </div>
                       <Badge className="bg-amber-100 text-amber-700 border-amber-200">Pending</Badge>
                     </div>
@@ -463,12 +463,12 @@ export function EnhancedReferralDashboard({
           >
             {stats.chain.length === 0 ? (
               <Card className="p-6 text-center">
-                <Users className="w-10 h-10 mx-auto mb-3 text-gray-400" />
-                <h3 className="font-medium text-gray-700 mb-1">No referrals yet</h3>
-                <p className="text-sm text-gray-500 mb-4">Share your code to start earning rewards</p>
+                <Users className="w-10 h-10 mx-auto mb-3 text-[#8A9BA8]" />
+                <h3 className="font-medium text-[#3A4A57] mb-1">No referrals yet</h3>
+                <p className="text-sm text-[#5A6B7A] mb-4">Share your code to start earning rewards</p>
                 <Button
                   onClick={() => setShowShareOptions(true)}
-                  className="bg-teal-600 hover:bg-teal-700 text-white"
+                  className="bg-primary hover:bg-[#6B9080] text-white"
                 >
                   <Share2 className="w-4 h-4 mr-2" />
                   Share Now
@@ -481,28 +481,28 @@ export function EnhancedReferralDashboard({
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
                       chain.status === 'converted' ? 'bg-green-100' :
                       chain.status === 'first_session' ? 'bg-blue-100' :
-                      'bg-gray-100'
+                      'bg-[#F0EDE8]'
                     }`}>
                       {chain.status === 'converted' ? (
                         <CheckCircle className="w-5 h-5 text-green-600" />
                       ) : chain.status === 'first_session' ? (
                         <Star className="w-5 h-5 text-blue-600" />
                       ) : (
-                        <Clock className="w-5 h-5 text-gray-400" />
+                        <Clock className="w-5 h-5 text-[#8A9BA8]" />
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="font-medium text-sm text-gray-900">{chain.refereeName}</p>
-                      <p className="text-xs text-gray-500">
+                      <p className="font-medium text-sm text-[#1B2733]">{chain.refereeName}</p>
+                      <p className="text-xs text-[#5A6B7A]">
                         Joined {new Date(chain.createdAt).toLocaleDateString()}
                       </p>
                     </div>
                     <div className="text-right">
                       <Badge className={
                         chain.status === 'converted' ? 'bg-green-100 text-green-700 border-green-200' :
-                        chain.status === 'first_session' ? 'bg-blue-100 text-blue-700 border-blue-200' :
+                        chain.status === 'first_session' ? 'bg-blue-100 text-blue-700 border-[#C8DDE8]' :
                         chain.status === 'trial_started' ? 'bg-purple-100 text-purple-700 border-purple-200' :
-                        'bg-gray-100 text-gray-600 border-gray-200'
+                        'bg-[#F0EDE8] text-[#5A6B7A] border-[#E8E4DF]'
                       }>
                         {chain.status === 'converted' ? 'Converted' :
                          chain.status === 'first_session' ? 'Booked Session' :
@@ -519,8 +519,8 @@ export function EnhancedReferralDashboard({
                       const isComplete = i <= Math.max(stepIndex, 1);
                       return (
                         <React.Fragment key={step}>
-                          <div className={`w-2 h-2 rounded-full ${isComplete ? 'bg-teal-500' : 'bg-gray-200'}`} />
-                          {i < 4 && <div className={`flex-1 h-0.5 ${isComplete ? 'bg-teal-500' : 'bg-gray-200'}`} />}
+                          <div className={`w-2 h-2 rounded-full ${isComplete ? 'bg-primary' : 'bg-[#E8E4DF]'}`} />
+                          {i < 4 && <div className={`flex-1 h-0.5 ${isComplete ? 'bg-primary' : 'bg-[#E8E4DF]'}`} />}
                         </React.Fragment>
                       );
                     })}
@@ -540,18 +540,18 @@ export function EnhancedReferralDashboard({
             className="space-y-3"
           >
             <Card className="p-4">
-              <h3 className="font-semibold text-gray-900 mb-1 flex items-center gap-2">
+              <h3 className="font-semibold text-[#1B2733] mb-1 flex items-center gap-2">
                 <Trophy className="w-5 h-5 text-amber-500" />
                 Top Referrers This Month
               </h3>
-              <p className="text-xs text-gray-500 mb-4">
+              <p className="text-xs text-[#5A6B7A] mb-4">
                 Top 3 earn a free BCBA consultation
               </p>
 
               {leaderboard.length === 0 ? (
                 <div className="text-center py-6">
                   <Trophy className="w-10 h-10 mx-auto mb-3 text-gray-300" />
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-[#5A6B7A]">
                     The leaderboard is coming soon. Share your code to be among the first.
                   </p>
                 </div>
@@ -561,14 +561,14 @@ export function EnhancedReferralDashboard({
                     <div
                       key={entry.rank}
                       className={`flex items-center gap-3 p-3 rounded-xl ${
-                        entry.isCurrentUser ? 'bg-teal-50 border border-teal-200' : 'bg-gray-50'
+                        entry.isCurrentUser ? 'bg-[#6B9080]/10 border border-[#6B9080]/20' : 'bg-[#FAF7F2]'
                       }`}
                     >
                       <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
                         entry.rank === 1 ? 'bg-amber-100 text-amber-700' :
-                        entry.rank === 2 ? 'bg-gray-200 text-gray-700' :
+                        entry.rank === 2 ? 'bg-[#E8E4DF] text-[#3A4A57]' :
                         entry.rank === 3 ? 'bg-orange-100 text-orange-700' :
-                        'bg-gray-100 text-gray-500'
+                        'bg-[#F0EDE8] text-[#5A6B7A]'
                       }`}>
                         {entry.rank <= 3 ? (
                           entry.rank === 1 ? <Crown className="w-4 h-4" /> :
@@ -577,12 +577,12 @@ export function EnhancedReferralDashboard({
                         ) : entry.rank}
                       </div>
                       <div className="flex-1">
-                        <p className={`text-sm font-medium ${entry.isCurrentUser ? 'text-teal-900' : 'text-gray-900'}`}>
+                        <p className={`text-sm font-medium ${entry.isCurrentUser ? 'text-[#6B9080]' : 'text-[#1B2733]'}`}>
                           {entry.name}
-                          {entry.isCurrentUser && <span className="text-teal-600 ml-1">(You)</span>}
+                          {entry.isCurrentUser && <span className="text-[#6B9080] ml-1">(You)</span>}
                         </p>
                       </div>
-                      <div className="text-sm font-semibold text-gray-700">
+                      <div className="text-sm font-semibold text-[#3A4A57]">
                         {entry.referrals} referrals
                       </div>
                     </div>
@@ -592,20 +592,20 @@ export function EnhancedReferralDashboard({
             </Card>
 
             {/* Motivational CTA */}
-            <Card className="p-4 bg-gradient-to-r from-teal-50 to-blue-50 border-teal-200">
+            <Card className="p-4 bg-gradient-to-r from-[#FAF7F2] to-blue-50 border-[#6B9080]/20">
               <div className="flex items-center gap-3">
-                <Sparkles className="w-8 h-8 text-teal-600 flex-shrink-0" />
+                <Sparkles className="w-8 h-8 text-[#6B9080] flex-shrink-0" />
                 <div>
-                  <p className="font-medium text-teal-900 text-sm">
+                  <p className="font-medium text-[#6B9080] text-sm">
                     Share your code to climb the leaderboard
                   </p>
-                  <p className="text-xs text-teal-700">
+                  <p className="text-xs text-[#6B9080]">
                     Every family you help find care moves you up
                   </p>
                 </div>
                 <Button
                   variant="ghost"
-                  className="text-teal-700 hover:bg-teal-100 flex-shrink-0"
+                  className="text-[#6B9080] hover:bg-[#6B9080]/10 flex-shrink-0"
                   aria-label="Share your referral code"
                   onClick={() => {
                     setShowShareOptions(true);
@@ -621,7 +621,7 @@ export function EnhancedReferralDashboard({
       </AnimatePresence>
 
       {/* How It Works */}
-      <Card className="p-4 bg-blue-50 border-blue-200">
+      <Card className="p-4 bg-[#EEF4F8] border-[#C8DDE8]">
         <h3 className="font-semibold text-blue-900 mb-3">How Referrals Work</h3>
         <div className="space-y-3">
           {[

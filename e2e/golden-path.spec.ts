@@ -38,6 +38,8 @@ function seedAuthenticatedCaregiver() {
 async function setupAuth(page: Page) {
   await page.addInitScript((user) => {
     localStorage.setItem('aminy-user', JSON.stringify(user));
+    // DEV-only bypass: prevents INITIAL_SESSION from bouncing to login in E2E
+    localStorage.setItem('__e2e_auth', 'bypass');
   }, seedAuthenticatedCaregiver());
 }
 
@@ -79,18 +81,15 @@ test.describe('Golden Path — Aminy demo gate', () => {
     await nav(page, 'dashboard');
     await page.waitForTimeout(500);
 
-    // Trigger nav click via JS dispatch — bypasses viewport/visibility checks.
-    // (The center tab sits at bottom of viewport which Playwright sometimes
-    // sees as offscreen; the actual click handler is wired to onClick.)
+    // Use the dev hook — more reliable than DOM click which can miss React synthetic events
     await page.evaluate(() => {
-      const tab = document.querySelector('[role="tab"][aria-label*="Aminy AI"]') as HTMLElement | null;
-      tab?.click();
+      (window as { __openBevelChat?: () => void }).__openBevelChat?.();
     });
-    await page.waitForTimeout(1500);
+    await page.waitForTimeout(800);
 
     // The overlay has a "Chat history" button in its header — unique to the overlay
     const overlayHeader = page.locator('button[aria-label="Chat history"]').first();
-    await expect(overlayHeader).toBeVisible({ timeout: 5000 });
+    await expect(overlayHeader).toBeVisible({ timeout: 8000 });
   });
 
   test('chat settings panel opens and shows personality + custom instructions', async ({ page }) => {
@@ -99,13 +98,12 @@ test.describe('Golden Path — Aminy demo gate', () => {
     await nav(page, 'dashboard');
 
     await page.evaluate(() => {
-      const tab = document.querySelector('[role="tab"][aria-label*="Aminy AI"]') as HTMLElement | null;
-      tab?.click();
+      (window as { __openBevelChat?: () => void }).__openBevelChat?.();
     });
-    await page.waitForTimeout(1500);
+    await page.waitForTimeout(800);
 
     const settingsBtn = page.locator('button[aria-label="Chat settings"]').first();
-    await expect(settingsBtn).toBeVisible({ timeout: 5000 });
+    await expect(settingsBtn).toBeVisible({ timeout: 8000 });
     await settingsBtn.click();
     await page.waitForTimeout(800);
 

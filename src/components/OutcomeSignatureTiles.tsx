@@ -29,7 +29,7 @@ export function OutcomeSignatureTiles({
       {/* Minutes Saved Tile */}
       <Card className="p-4 sm:p-5 md:p-6">
         <div className="flex items-start justify-between mb-2">
-          <div className="p-2 bg-blue-50 rounded-lg">
+          <div className="p-2 bg-[#EEF4F8] rounded-lg">
             <Clock className="w-5 h-5 text-blue-600" />
           </div>
           <TooltipProvider>
@@ -46,7 +46,7 @@ export function OutcomeSignatureTiles({
           </TooltipProvider>
         </div>
 
-        <p className="text-2xl sm:text-3xl font-bold text-slate-900 mb-1">
+        <p className="text-2xl sm:text-3xl font-bold text-[#1B2733] mb-1">
           {minutesSaved}
           <span className="text-lg text-muted-foreground ml-1">min</span>
         </p>
@@ -77,7 +77,7 @@ export function OutcomeSignatureTiles({
           </TooltipProvider>
         </div>
 
-        <p className="text-2xl sm:text-3xl font-bold text-slate-900 mb-1">
+        <p className="text-2xl sm:text-3xl font-bold text-[#1B2733] mb-1">
           -{deescalationsShortened}
           <span className="text-lg text-muted-foreground ml-1">min</span>
         </p>

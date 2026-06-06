@@ -44,8 +44,8 @@ const statusConfig = {
     iconColor: 'text-amber-600'
   },
   pending: {
-    bg: 'bg-blue-50',
-    border: 'border-blue-200',
+    bg: 'bg-[#EEF4F8]',
+    border: 'border-[#C8DDE8]',
     badge: 'bg-blue-100 text-blue-700',
     icon: Clock,
     iconColor: 'text-blue-600'
@@ -79,16 +79,16 @@ export function ActionableConnectorCards({ cards = [] }: ActionableConnectorCard
           >
             <div className="flex items-start gap-3">
               <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center flex-shrink-0 shadow-sm">
-                <Icon className="w-5 h-5 text-slate-700" />
+                <Icon className="w-5 h-5 text-[#3A4A57]" />
               </div>
 
               <div className="flex-1 min-w-0">
                 <div className="flex items-start justify-between gap-2 mb-1">
-                  <h3 className="font-semibold text-slate-900">{card.title}</h3>
+                  <h3 className="font-semibold text-[#1B2733]">{card.title}</h3>
                   <StatusIcon className={`w-4 h-4 ${config.iconColor} flex-shrink-0 mt-0.5`} />
                 </div>
 
-                <p className="text-sm text-slate-600 mb-3">{card.description}</p>
+                <p className="text-sm text-[#5A6B7A] mb-3">{card.description}</p>
 
                 <div className="flex items-center justify-between">
                   <Badge variant="secondary" className={`text-xs ${config.badge}`}>

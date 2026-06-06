@@ -128,14 +128,14 @@ export function SessionBundles({
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="font-medium text-gray-900">{bundle.name}</div>
-                  <div className="text-sm text-gray-500">
+                  <div className="font-medium text-[#1B2733]">{bundle.name}</div>
+                  <div className="text-sm text-[#5A6B7A]">
                     Save {bundle.savingsPercent}%
                   </div>
                 </div>
                 <div className="text-right">
                   <div className="font-bold text-purple-600">${bundle.bundlePrice}</div>
-                  <div className="text-xs text-gray-400 line-through">
+                  <div className="text-xs text-[#8A9BA8] line-through">
                     ${bundle.regularPrice}
                   </div>
                 </div>
@@ -160,10 +160,10 @@ export function SessionBundles({
           <Sparkles className="w-3 h-3 mr-1" />
           Save with Bundles
         </Badge>
-        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
+        <h2 className="text-xl sm:text-2xl font-bold text-[#1B2733] mb-2">
           Session Packages
         </h2>
-        <p className="text-gray-600 max-w-xl mx-auto">
+        <p className="text-[#5A6B7A] max-w-xl mx-auto">
           Get more support at a better price. All bundles include flexible scheduling
           with any of our expert providers.
         </p>
@@ -186,8 +186,8 @@ export function SessionBundles({
                   bundle.recommended
                     ? 'border-purple-500 bg-gradient-to-br from-purple-50 to-indigo-50'
                     : isSelected
-                    ? 'border-teal-500 bg-teal-50'
-                    : 'hover:border-gray-300'
+                    ? 'border-[#6B9080] bg-[#6B9080]/10'
+                    : 'hover:border-[#E8E4DF]'
                 }`}
                 onClick={() => handleSelect(bundle)}
               >
@@ -203,10 +203,10 @@ export function SessionBundles({
 
                 {/* Bundle header */}
                 <div className="mb-4">
-                  <h3 className="font-bold text-lg text-gray-900 mb-1">
+                  <h3 className="font-bold text-lg text-[#1B2733] mb-1">
                     {bundle.name}
                   </h3>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-[#5A6B7A]">
                     {bundle.description}
                   </p>
                 </div>
@@ -214,13 +214,13 @@ export function SessionBundles({
                 {/* Sessions included */}
                 <div className="flex items-center gap-3 sm:gap-4 mb-4 text-sm">
                   {bundle.consultSessions > 0 && (
-                    <div className="flex items-center gap-1 text-gray-700">
+                    <div className="flex items-center gap-1 text-[#3A4A57]">
                       <Clock className="w-4 h-4 text-blue-500" />
                       <span>{bundle.consultSessions}× 25-min</span>
                     </div>
                   )}
                   {bundle.deepReviewSessions > 0 && (
-                    <div className="flex items-center gap-1 text-gray-700">
+                    <div className="flex items-center gap-1 text-[#3A4A57]">
                       <Users className="w-4 h-4 text-green-500" />
                       <span>{bundle.deepReviewSessions}× 50-min</span>
                     </div>
@@ -229,10 +229,10 @@ export function SessionBundles({
 
                 {/* Pricing */}
                 <div className="flex items-end gap-2 mb-4">
-                  <span className="text-2xl sm:text-3xl font-bold text-gray-900">
+                  <span className="text-2xl sm:text-3xl font-bold text-[#1B2733]">
                     ${bundle.bundlePrice}
                   </span>
-                  <span className="text-sm text-gray-400 line-through mb-1">
+                  <span className="text-sm text-[#8A9BA8] line-through mb-1">
                     ${bundle.regularPrice}
                   </span>
                   <Badge className="bg-green-100 text-green-700 mb-1">
@@ -243,7 +243,7 @@ export function SessionBundles({
                 {/* Features */}
                 <div className="space-y-2 mb-4">
                   {bundle.features.slice(0, 4).map((feature, i) => (
-                    <div key={i} className="flex items-center gap-2 text-sm text-gray-600">
+                    <div key={i} className="flex items-center gap-2 text-sm text-[#5A6B7A]">
                       <Check className="w-4 h-4 text-green-500 flex-shrink-0" />
                       <span>{feature}</span>
                     </div>
@@ -251,7 +251,7 @@ export function SessionBundles({
                 </div>
 
                 {/* Validity */}
-                <div className="flex items-center gap-1 text-xs text-gray-500 mb-4">
+                <div className="flex items-center gap-1 text-xs text-[#5A6B7A] mb-4">
                   <Calendar className="w-3 h-3" />
                   <span>Valid for {bundle.validityDays} days</span>
                 </div>
@@ -266,7 +266,7 @@ export function SessionBundles({
                   className={`w-full ${
                     bundle.recommended
                       ? 'bg-purple-600 hover:bg-purple-700'
-                      : 'bg-teal-600 hover:bg-teal-700'
+                      : 'bg-primary hover:bg-[#6B9080]'
                   }`}
                 >
                   {purchasingBundle === bundle.id ? (
@@ -288,10 +288,10 @@ export function SessionBundles({
       </div>
 
       {/* Single session option */}
-      <div className="text-center text-sm text-gray-500">
+      <div className="text-center text-sm text-[#5A6B7A]">
         <p>
           Not ready for a bundle?{' '}
-          <button className="text-teal-600 hover:underline">
+          <button className="text-[#6B9080] hover:underline">
             Book a single session instead
           </button>
         </p>
@@ -323,13 +323,13 @@ export function BundleCredits({
   const isExpiringSoon = daysUntilExpiry <= 14;
 
   return (
-    <Card className="p-4 bg-gradient-to-r from-teal-50 to-blue-50 border-teal-200">
+    <Card className="p-4 bg-gradient-to-r from-[#FAF7F2] to-blue-50 border-[#6B9080]/20">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <div className="p-2 bg-teal-100 rounded-lg">
-            <Package className="w-5 h-5 text-teal-600" />
+          <div className="p-2 bg-[#6B9080]/10 rounded-lg">
+            <Package className="w-5 h-5 text-[#6B9080]" />
           </div>
-          <h3 className="font-semibold text-teal-900">Your Session Credits</h3>
+          <h3 className="font-semibold text-[#6B9080]">Your Session Credits</h3>
         </div>
         {isExpiringSoon && (
           <Badge className="bg-amber-100 text-amber-700">
@@ -339,17 +339,17 @@ export function BundleCredits({
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
-        <div className="bg-white p-3 rounded-lg border border-teal-200">
+        <div className="bg-white p-3 rounded-lg border border-[#6B9080]/20">
           <div className="flex items-center gap-2 mb-1">
             <Clock className="w-4 h-4 text-blue-500" />
-            <span className="text-sm text-gray-600">25-min Consults</span>
+            <span className="text-sm text-[#5A6B7A]">25-min Consults</span>
           </div>
-          <div className="text-xl sm:text-2xl font-bold text-gray-900">
+          <div className="text-xl sm:text-2xl font-bold text-[#1B2733]">
             {consultCredits}
           </div>
           <Button
             variant="link"
-            className="p-0 h-auto text-sm text-teal-600"
+            className="p-0 h-auto text-sm text-[#6B9080]"
             onClick={() => onBookSession('consult')}
             disabled={consultCredits === 0}
           >
@@ -357,17 +357,17 @@ export function BundleCredits({
           </Button>
         </div>
 
-        <div className="bg-white p-3 rounded-lg border border-teal-200">
+        <div className="bg-white p-3 rounded-lg border border-[#6B9080]/20">
           <div className="flex items-center gap-2 mb-1">
             <Users className="w-4 h-4 text-green-500" />
-            <span className="text-sm text-gray-600">50-min Reviews</span>
+            <span className="text-sm text-[#5A6B7A]">50-min Reviews</span>
           </div>
-          <div className="text-xl sm:text-2xl font-bold text-gray-900">
+          <div className="text-xl sm:text-2xl font-bold text-[#1B2733]">
             {deepReviewCredits}
           </div>
           <Button
             variant="link"
-            className="p-0 h-auto text-sm text-teal-600"
+            className="p-0 h-auto text-sm text-[#6B9080]"
             onClick={() => onBookSession('deep-review')}
             disabled={deepReviewCredits === 0}
           >
@@ -376,7 +376,7 @@ export function BundleCredits({
         </div>
       </div>
 
-      <p className="text-xs text-teal-700">
+      <p className="text-xs text-[#6B9080]">
         Credits expire on {expiryDate.toLocaleDateString()}. Use them with any provider!
       </p>
     </Card>

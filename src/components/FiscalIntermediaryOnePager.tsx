@@ -39,38 +39,38 @@ export function FiscalIntermediaryOnePager({
   return (
     <div className="max-w-4xl mx-auto p-8 bg-white print:p-4" id="fi-one-pager">
       {/* Header */}
-      <div className="flex items-start justify-between mb-8 pb-6 border-b border-gray-200">
+      <div className="flex items-start justify-between mb-8 pb-6 border-b border-[#E8E4DF]">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <div className="w-10 h-10 bg-teal-600 rounded-xl flex items-center justify-center">
+            <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
               <Heart className="w-5 h-5 text-white" />
             </div>
-            <span className="text-xl sm:text-2xl font-bold text-gray-900">Aminy</span>
+            <span className="text-xl sm:text-2xl font-bold text-[#1B2733]">Aminy</span>
           </div>
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-[#5A6B7A]">
             AI-Powered Support for Self-Directed Families
           </p>
         </div>
         <div className="text-right text-sm">
-          <p className="font-medium text-gray-900">{contactName}</p>
-          <p className="text-gray-600">{contactEmail}</p>
-          <p className="text-gray-600">{contactPhone}</p>
+          <p className="font-medium text-[#1B2733]">{contactName}</p>
+          <p className="text-[#5A6B7A]">{contactEmail}</p>
+          <p className="text-[#5A6B7A]">{contactPhone}</p>
         </div>
       </div>
 
       {/* Problem Statement */}
       <section className="mb-8">
-        <h2 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
-          <Target className="w-5 h-5 text-teal-600" />
+        <h2 className="text-lg font-bold text-[#1B2733] mb-3 flex items-center gap-2">
+          <Target className="w-5 h-5 text-[#6B9080]" />
           The Challenge
         </h2>
-        <div className="bg-gray-50 rounded-xl p-4">
-          <p className="text-gray-700 leading-relaxed">
+        <div className="bg-[#FAF7F2] rounded-xl p-4">
+          <p className="text-[#3A4A57] leading-relaxed">
             Self-directed families receive <strong>funding for services</strong> but often lack the{' '}
             <strong>daily guidance</strong> to maximize outcomes. Your care coordinators can't be
             available 24/7, leading to:
           </p>
-          <ul className="mt-3 space-y-2 text-gray-700">
+          <ul className="mt-3 space-y-2 text-[#3A4A57]">
             <li className="flex items-start gap-2">
               <span className="text-red-500 mt-1">•</span>
               Frequent "What should I do?" support calls
@@ -93,32 +93,32 @@ export function FiscalIntermediaryOnePager({
 
       {/* Solution */}
       <section className="mb-8">
-        <h2 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
-          <Zap className="w-5 h-5 text-teal-600" />
+        <h2 className="text-lg font-bold text-[#1B2733] mb-3 flex items-center gap-2">
+          <Zap className="w-5 h-5 text-[#6B9080]" />
           The Aminy Solution
         </h2>
-        <p className="text-gray-700 mb-4">
+        <p className="text-[#3A4A57] mb-4">
           Aminy is an AI companion that provides <strong>24/7 personalized support</strong> for
           autism families—guidance, activities, and documentation help during the 160+ weekly
           hours when your team isn't available.
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-          <div className="bg-teal-50 rounded-lg p-4">
+          <div className="bg-[#6B9080]/10 rounded-lg p-4">
             <div className="flex items-center gap-2 mb-2">
-              <Clock className="w-4 h-4 text-teal-600" />
-              <span className="font-medium text-teal-900">Daily Guidance</span>
+              <Clock className="w-4 h-4 text-[#6B9080]" />
+              <span className="font-medium text-[#6B9080]">Daily Guidance</span>
             </div>
-            <p className="text-sm text-teal-800">
+            <p className="text-sm text-[#6B9080]">
               Personalized activities and strategies tailored to each child's needs and goals
             </p>
           </div>
-          <div className="bg-blue-50 rounded-lg p-4">
+          <div className="bg-[#EEF4F8] rounded-lg p-4">
             <div className="flex items-center gap-2 mb-2">
               <FileText className="w-4 h-4 text-blue-600" />
               <span className="font-medium text-blue-900">Documentation Help</span>
             </div>
-            <p className="text-sm text-blue-800">
+            <p className="text-sm text-[#4A6478]">
               EVV-compatible time logs, service notes, and exportable reports
             </p>
           </div>
@@ -145,77 +145,77 @@ export function FiscalIntermediaryOnePager({
 
       {/* Results */}
       <section className="mb-8">
-        <h2 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
-          <TrendingUp className="w-5 h-5 text-teal-600" />
+        <h2 className="text-lg font-bold text-[#1B2733] mb-3 flex items-center gap-2">
+          <TrendingUp className="w-5 h-5 text-[#6B9080]" />
           Pilot Results
         </h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
-          <div className="text-center p-4 bg-gray-50 rounded-lg">
-            <div className="text-xl sm:text-2xl font-bold text-teal-600">40%</div>
-            <div className="text-xs text-gray-600 mt-1">Fewer support calls</div>
+          <div className="text-center p-4 bg-[#FAF7F2] rounded-lg">
+            <div className="text-xl sm:text-2xl font-bold text-[#6B9080]">40%</div>
+            <div className="text-xs text-[#5A6B7A] mt-1">Fewer support calls</div>
           </div>
-          <div className="text-center p-4 bg-gray-50 rounded-lg">
-            <div className="text-xl sm:text-2xl font-bold text-teal-600">2.5hrs</div>
-            <div className="text-xs text-gray-600 mt-1">Saved/family/week</div>
+          <div className="text-center p-4 bg-[#FAF7F2] rounded-lg">
+            <div className="text-xl sm:text-2xl font-bold text-[#6B9080]">2.5hrs</div>
+            <div className="text-xs text-[#5A6B7A] mt-1">Saved/family/week</div>
           </div>
-          <div className="text-center p-4 bg-gray-50 rounded-lg">
-            <div className="text-xl sm:text-2xl font-bold text-teal-600">94%</div>
-            <div className="text-xs text-gray-600 mt-1">6-month retention</div>
+          <div className="text-center p-4 bg-[#FAF7F2] rounded-lg">
+            <div className="text-xl sm:text-2xl font-bold text-[#6B9080]">94%</div>
+            <div className="text-xs text-[#5A6B7A] mt-1">6-month retention</div>
           </div>
-          <div className="text-center p-4 bg-gray-50 rounded-lg">
-            <div className="text-xl sm:text-2xl font-bold text-teal-600">92%</div>
-            <div className="text-xs text-gray-600 mt-1">Family satisfaction</div>
+          <div className="text-center p-4 bg-[#FAF7F2] rounded-lg">
+            <div className="text-xl sm:text-2xl font-bold text-[#6B9080]">92%</div>
+            <div className="text-xs text-[#5A6B7A] mt-1">Family satisfaction</div>
           </div>
         </div>
       </section>
 
       {/* Integration */}
       <section className="mb-8">
-        <h2 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
-          <Shield className="w-5 h-5 text-teal-600" />
+        <h2 className="text-lg font-bold text-[#1B2733] mb-3 flex items-center gap-2">
+          <Shield className="w-5 h-5 text-[#6B9080]" />
           Enterprise Ready
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
           <div className="flex items-start gap-2">
             <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
             <div>
-              <p className="font-medium text-gray-900 text-sm">HIPAA-Conscious</p>
-              <p className="text-xs text-gray-600">BAA available on request</p>
+              <p className="font-medium text-[#1B2733] text-sm">HIPAA-Conscious</p>
+              <p className="text-xs text-[#5A6B7A]">BAA available on request</p>
             </div>
           </div>
           <div className="flex items-start gap-2">
             <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
             <div>
-              <p className="font-medium text-gray-900 text-sm">White-Label</p>
-              <p className="text-xs text-gray-600">Your branding, our tech</p>
+              <p className="font-medium text-[#1B2733] text-sm">White-Label</p>
+              <p className="text-xs text-[#5A6B7A]">Your branding, our tech</p>
             </div>
           </div>
           <div className="flex items-start gap-2">
             <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
             <div>
-              <p className="font-medium text-gray-900 text-sm">SSO Integration</p>
-              <p className="text-xs text-gray-600">Connect to existing systems</p>
+              <p className="font-medium text-[#1B2733] text-sm">SSO Integration</p>
+              <p className="text-xs text-[#5A6B7A]">Connect to existing systems</p>
             </div>
           </div>
           <div className="flex items-start gap-2">
             <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
             <div>
-              <p className="font-medium text-gray-900 text-sm">API Access</p>
-              <p className="text-xs text-gray-600">Sync data with your platform</p>
+              <p className="font-medium text-[#1B2733] text-sm">API Access</p>
+              <p className="text-xs text-[#5A6B7A]">Sync data with your platform</p>
             </div>
           </div>
           <div className="flex items-start gap-2">
             <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
             <div>
-              <p className="font-medium text-gray-900 text-sm">Bulk Onboarding</p>
-              <p className="text-xs text-gray-600">Easy family import</p>
+              <p className="font-medium text-[#1B2733] text-sm">Bulk Onboarding</p>
+              <p className="text-xs text-[#5A6B7A]">Easy family import</p>
             </div>
           </div>
           <div className="flex items-start gap-2">
             <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
             <div>
-              <p className="font-medium text-gray-900 text-sm">State Compliance</p>
-              <p className="text-xs text-gray-600">Waiver-specific features</p>
+              <p className="font-medium text-[#1B2733] text-sm">State Compliance</p>
+              <p className="text-xs text-[#5A6B7A]">Waiver-specific features</p>
             </div>
           </div>
         </div>
@@ -223,42 +223,42 @@ export function FiscalIntermediaryOnePager({
 
       {/* Pricing */}
       <section className="mb-8">
-        <h2 className="text-lg font-bold text-gray-900 mb-3">Volume Pricing</h2>
-        <div className="overflow-hidden rounded-lg border border-gray-200">
+        <h2 className="text-lg font-bold text-[#1B2733] mb-3">Volume Pricing</h2>
+        <div className="overflow-hidden rounded-lg border border-[#E8E4DF]">
           <table className="w-full text-sm">
-            <thead className="bg-gray-50">
+            <thead className="bg-[#FAF7F2]">
               <tr>
-                <th className="px-4 py-2 text-left font-medium text-gray-900">Family Count</th>
-                <th className="px-4 py-2 text-left font-medium text-gray-900">Per Family/Month</th>
-                <th className="px-4 py-2 text-left font-medium text-gray-900">Includes</th>
+                <th className="px-4 py-2 text-left font-medium text-[#1B2733]">Family Count</th>
+                <th className="px-4 py-2 text-left font-medium text-[#1B2733]">Per Family/Month</th>
+                <th className="px-4 py-2 text-left font-medium text-[#1B2733]">Includes</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
               <tr>
-                <td className="px-4 py-3 text-gray-700">Up to 100</td>
-                <td className="px-4 py-3 text-gray-900 font-medium">$3.00</td>
-                <td className="px-4 py-3 text-gray-600">Core features + support</td>
+                <td className="px-4 py-3 text-[#3A4A57]">Up to 100</td>
+                <td className="px-4 py-3 text-[#1B2733] font-medium">$3.00</td>
+                <td className="px-4 py-3 text-[#5A6B7A]">Core features + support</td>
               </tr>
-              <tr className="bg-teal-50">
-                <td className="px-4 py-3 text-gray-700">100-500</td>
-                <td className="px-4 py-3 text-teal-700 font-medium">$2.50</td>
-                <td className="px-4 py-3 text-gray-600">+ Custom branding + API</td>
+              <tr className="bg-[#6B9080]/10">
+                <td className="px-4 py-3 text-[#3A4A57]">100-500</td>
+                <td className="px-4 py-3 text-[#6B9080] font-medium">$2.50</td>
+                <td className="px-4 py-3 text-[#5A6B7A]">+ Custom branding + API</td>
               </tr>
               <tr>
-                <td className="px-4 py-3 text-gray-700">500+</td>
-                <td className="px-4 py-3 text-gray-900 font-medium">Custom</td>
-                <td className="px-4 py-3 text-gray-600">+ White-label + SSO + Dedicated support</td>
+                <td className="px-4 py-3 text-[#3A4A57]">500+</td>
+                <td className="px-4 py-3 text-[#1B2733] font-medium">Custom</td>
+                <td className="px-4 py-3 text-[#5A6B7A]">+ White-label + SSO + Dedicated support</td>
               </tr>
             </tbody>
           </table>
         </div>
-        <p className="text-xs text-gray-500 mt-2">
+        <p className="text-xs text-[#5A6B7A] mt-2">
           * No setup fees. No long-term contracts. Annual billing available for additional discount.
         </p>
       </section>
 
       {/* CTA */}
-      <section className="bg-teal-600 rounded-xl p-6 text-white text-center">
+      <section className="bg-primary rounded-xl p-6 text-white text-center">
         <h2 className="text-xl font-bold mb-2">Ready to Support More Families?</h2>
         <p className="text-teal-100 mb-4">
           Schedule a demo to see Aminy in action and discuss your specific needs.
@@ -276,7 +276,7 @@ export function FiscalIntermediaryOnePager({
       </section>
 
       {/* Footer */}
-      <div className="mt-4 sm:mt-6 pt-4 border-t border-gray-200 flex justify-between items-center text-xs text-gray-500">
+      <div className="mt-4 sm:mt-6 pt-4 border-t border-[#E8E4DF] flex justify-between items-center text-xs text-[#5A6B7A]">
         <span>© {new Date().getFullYear()} Aminy, LLC | aminy.ai</span>
         <span>HIPAA-Conscious • BCBA Advised • Parent-Founded</span>
       </div>

@@ -234,7 +234,7 @@ export function WowHero({ onGetStarted, variant = 'emotional' }: WowHeroProps) {
  */
 export function TransformationSection() {
   return (
-    <div className="py-16 px-4 bg-gray-50">
+    <div className="py-16 px-4 bg-[#FAF7F2]">
       <div className="max-w-4xl mx-auto">
         <h2 className="text-2xl md:text-2xl sm:text-3xl font-bold text-center text-primary mb-4">
           Life Before vs. After Aminy
@@ -255,7 +255,7 @@ export function TransformationSection() {
             >
               <div className="grid md:grid-cols-2">
                 {/* Before */}
-                <div className="p-6 border-b md:border-b-0 md:border-r border-gray-100">
+                <div className="p-6 border-b md:border-b-0 md:border-r border-[#E8E4DF]">
                   <div className="flex items-center gap-2 text-rose-500 mb-3">
                     <div className="w-6 h-6 rounded-full bg-rose-100 flex items-center justify-center">
                       <span className="text-xs font-bold">X</span>
@@ -351,7 +351,7 @@ export function DemoTeaser({ onTryDemo }: { onTryDemo?: () => void }) {
         </div>
 
         {/* Demo preview */}
-        <div className="bg-gray-50 rounded-2xl p-6 shadow-inner">
+        <div className="bg-[#FAF7F2] rounded-2xl p-6 shadow-inner">
           {!showDemo ? (
             <motion.button
               onClick={() => {
@@ -383,8 +383,8 @@ export function DemoTeaser({ onTryDemo }: { onTryDemo?: () => void }) {
                   animate={{ opacity: 1, y: 0 }}
                   className="flex justify-start"
                 >
-                  <div className="bg-white border border-gray-200 px-4 py-3 rounded-2xl rounded-bl-md max-w-[90%] shadow-sm">
-                    <div className="flex items-center gap-2 mb-2 pb-2 border-b border-gray-100">
+                  <div className="bg-white border border-[#E8E4DF] px-4 py-3 rounded-2xl rounded-bl-md max-w-[90%] shadow-sm">
+                    <div className="flex items-center gap-2 mb-2 pb-2 border-b border-[#E8E4DF]">
                       <Sparkles className="w-4 h-4 text-accent" />
                       <span className="text-xs font-semibold text-accent">Aminy</span>
                     </div>

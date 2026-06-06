@@ -56,7 +56,7 @@ const HELP_CATEGORIES: HelpCategory[] = [
     label: 'Understanding Your Coverage',
     icon: Shield,
     color: 'text-blue-600',
-    bgColor: 'bg-blue-50',
+    bgColor: 'bg-[#EEF4F8]',
     faqs: [
       {
         question: 'Does my insurance cover ABA therapy?',
@@ -179,8 +179,8 @@ const HELP_CATEGORIES: HelpCategory[] = [
     id: 'privacy',
     label: 'Privacy & Records',
     icon: Lock,
-    color: 'text-slate-600',
-    bgColor: 'bg-slate-100',
+    color: 'text-[#5A6B7A]',
+    bgColor: 'bg-[#F0EDE8]',
     faqs: [
       {
         question: 'Who can see my child\'s records?',
@@ -226,10 +226,10 @@ function FAQAccordion({ faqs }: { faqs: FAQItem[] }) {
       {faqs.map((faq, i) => (
         <div key={i}>
           <button
-            className="w-full flex items-start gap-3 p-4 text-left hover:bg-slate-50 transition-colors"
+            className="w-full flex items-start gap-3 p-4 text-left hover:bg-[#FAF7F2] transition-colors"
             onClick={() => setOpenIdx(openIdx === i ? null : i)}
           >
-            <span className="text-sm font-medium text-slate-900 flex-1 leading-relaxed">{faq.question}</span>
+            <span className="text-sm font-medium text-[#1B2733] flex-1 leading-relaxed">{faq.question}</span>
             {openIdx === i ? (
               <ChevronUp className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
             ) : (
@@ -244,7 +244,7 @@ function FAQAccordion({ faqs }: { faqs: FAQItem[] }) {
                 exit={{ height: 0, opacity: 0 }}
                 className="overflow-hidden"
               >
-                <p className="px-4 pb-4 text-sm text-slate-600 leading-relaxed">{faq.answer}</p>
+                <p className="px-4 pb-4 text-sm text-[#5A6B7A] leading-relaxed">{faq.answer}</p>
               </motion.div>
             )}
           </AnimatePresence>
@@ -280,20 +280,20 @@ function ChatInterface({ onClose }: { onClose: () => void }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
-      className="fixed inset-x-0 bottom-0 z-50 bg-white border-t border-slate-200 rounded-t-3xl shadow-2xl max-w-lg mx-auto"
+      className="fixed inset-x-0 bottom-0 z-50 bg-white border-t border-[#E8E4DF] rounded-t-3xl shadow-2xl max-w-lg mx-auto"
       style={{ maxHeight: '70vh' }}
     >
-      <div className="flex items-center justify-between p-4 border-b border-slate-100">
+      <div className="flex items-center justify-between p-4 border-b border-[#E8E4DF]">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#43AA8B' }}>
             <MessageCircle className="w-4 h-4 text-white" />
           </div>
           <div>
-            <p className="font-semibold text-slate-900 text-sm">Aminy Support</p>
+            <p className="font-semibold text-[#1B2733] text-sm">Aminy Support</p>
             <p className="text-xs text-slate-400">Typically replies in under 2 hours</p>
           </div>
         </div>
-        <button onClick={onClose} className="p-2 rounded-xl hover:bg-slate-50 transition-colors">
+        <button onClick={onClose} className="p-2 rounded-xl hover:bg-[#FAF7F2] transition-colors">
           <ChevronDown className="w-5 h-5 text-slate-400" />
         </button>
       </div>
@@ -304,7 +304,7 @@ function ChatInterface({ onClose }: { onClose: () => void }) {
             <div className={`max-w-[80%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${
               msg.from === 'parent'
                 ? 'bg-slate-900 text-white rounded-br-sm'
-                : 'bg-slate-100 text-slate-800 rounded-bl-sm'
+                : 'bg-[#F0EDE8] text-[#1B2733] rounded-bl-sm'
             }`}>
               {msg.text}
             </div>
@@ -312,14 +312,14 @@ function ChatInterface({ onClose }: { onClose: () => void }) {
         ))}
       </div>
 
-      <div className="p-4 border-t border-slate-100 flex items-center gap-2">
+      <div className="p-4 border-t border-[#E8E4DF] flex items-center gap-2">
         <input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && send()}
           placeholder="Type your question..."
-          className="flex-1 px-4 py-2.5 bg-slate-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+          className="flex-1 px-4 py-2.5 bg-[#F0EDE8] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
         />
         <button
           onClick={send}
@@ -371,32 +371,32 @@ export function FamilyHelpCenter({ onBack, childName = 'your child', memberPlan 
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header */}
-      <div className="bg-white border-b border-slate-100 sticky top-0 z-10">
+      <div className="bg-white border-b border-[#E8E4DF] sticky top-0 z-10">
         <div className="flex items-center gap-3 px-4 py-4">
           {onBack && (
-            <button onClick={onBack} className="p-2 rounded-xl hover:bg-slate-50 transition-colors">
-              <ArrowLeft className="w-5 h-5 text-slate-600" />
+            <button onClick={onBack} className="p-2 rounded-xl hover:bg-[#FAF7F2] transition-colors">
+              <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
             </button>
           )}
           {activeCategory ? (
             <>
               <button
                 onClick={() => setActiveCategory(null)}
-                className="p-2 rounded-xl hover:bg-slate-50 transition-colors"
+                className="p-2 rounded-xl hover:bg-[#FAF7F2] transition-colors"
               >
-                <ArrowLeft className="w-5 h-5 text-slate-600" />
+                <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
               </button>
               <div className="flex-1">
-                <h1 className="font-bold text-slate-900">{category?.label}</h1>
-                <p className="text-xs text-slate-500">{category?.faqs.length} topics</p>
+                <h1 className="font-bold text-[#1B2733]">{category?.label}</h1>
+                <p className="text-xs text-[#5A6B7A]">{category?.faqs.length} topics</p>
               </div>
             </>
           ) : (
             <div className="flex-1">
-              <h1 className="font-bold text-slate-900">Help Center</h1>
-              <p className="text-xs text-slate-500">Answers for {childName}'s care</p>
+              <h1 className="font-bold text-[#1B2733]">Help Center</h1>
+              <p className="text-xs text-[#5A6B7A]">Answers for {childName}'s care</p>
             </div>
           )}
         </div>
@@ -413,15 +413,15 @@ export function FamilyHelpCenter({ onBack, childName = 'your child', memberPlan 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search help topics..."
-                className="w-full pl-10 pr-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-3 bg-white border border-[#E8E4DF] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
               />
             </div>
 
             {/* Search results */}
             {searchQuery && (
-              <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+              <div className="bg-white rounded-2xl border border-[#E8E4DF] overflow-hidden">
                 {filteredFAQs.length === 0 ? (
-                  <p className="p-4 text-sm text-slate-500 text-center">No results for "{searchQuery}"</p>
+                  <p className="p-4 text-sm text-[#5A6B7A] text-center">No results for "{searchQuery}"</p>
                 ) : (
                   <>
                     <p className="px-4 pt-3 text-xs text-slate-400 font-medium">{filteredFAQs.length} result{filteredFAQs.length !== 1 ? 's' : ''}</p>
@@ -441,13 +441,13 @@ export function FamilyHelpCenter({ onBack, childName = 'your child', memberPlan 
                       key={cat.id}
                       whileTap={{ scale: 0.97 }}
                       onClick={() => setActiveCategory(cat.id)}
-                      className="bg-white border border-slate-200 rounded-2xl p-4 text-left space-y-3 hover:border-teal-300 transition-colors"
+                      className="bg-white border border-[#E8E4DF] rounded-2xl p-4 text-left space-y-3 hover:border-[#6B9080]/30 transition-colors"
                     >
                       <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${cat.bgColor}`}>
                         <Icon className={`w-5 h-5 ${cat.color}`} />
                       </div>
                       <div>
-                        <p className="font-semibold text-slate-900 text-sm leading-tight">{cat.label}</p>
+                        <p className="font-semibold text-[#1B2733] text-sm leading-tight">{cat.label}</p>
                         <p className="text-xs text-slate-400 mt-0.5">{cat.faqs.length} topics</p>
                       </div>
                       <ChevronRight className="w-4 h-4 text-slate-400" />
@@ -463,13 +463,13 @@ export function FamilyHelpCenter({ onBack, childName = 'your child', memberPlan 
                 <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider px-1">Quick Actions</p>
                 <button
                   onClick={() => setShowChat(true)}
-                  className="w-full bg-white border border-slate-200 rounded-2xl p-4 flex items-center gap-3 hover:border-teal-300 transition-colors"
+                  className="w-full bg-white border border-[#E8E4DF] rounded-2xl p-4 flex items-center gap-3 hover:border-[#6B9080]/30 transition-colors"
                 >
                   <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#43AA8B' }}>
                     <MessageCircle className="w-5 h-5 text-white" />
                   </div>
                   <div className="flex-1 text-left">
-                    <p className="font-semibold text-slate-900 text-sm">Talk to Aminy Support</p>
+                    <p className="font-semibold text-[#1B2733] text-sm">Talk to Aminy Support</p>
                     <p className="text-xs text-slate-400">Typically responds in under 2 hours</p>
                   </div>
                   <ChevronRight className="w-4 h-4 text-slate-400" />
@@ -478,9 +478,9 @@ export function FamilyHelpCenter({ onBack, childName = 'your child', memberPlan 
                 <button
                   onClick={handleGenerateLetter}
                   disabled={generatingLetter}
-                  className="w-full bg-white border border-slate-200 rounded-2xl p-4 flex items-center gap-3 hover:border-teal-300 transition-colors disabled:opacity-60"
+                  className="w-full bg-white border border-[#E8E4DF] rounded-2xl p-4 flex items-center gap-3 hover:border-[#6B9080]/30 transition-colors disabled:opacity-60"
                 >
-                  <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-xl bg-[#EEF4F8] flex items-center justify-center">
                     {generatingLetter ? (
                       <div className="w-4 h-4 border-2 border-blue-300 border-t-blue-600 rounded-full animate-spin" />
                     ) : (
@@ -488,7 +488,7 @@ export function FamilyHelpCenter({ onBack, childName = 'your child', memberPlan 
                     )}
                   </div>
                   <div className="flex-1 text-left">
-                    <p className="font-semibold text-slate-900 text-sm">Get a Benefits Explanation Letter</p>
+                    <p className="font-semibold text-[#1B2733] text-sm">Get a Benefits Explanation Letter</p>
                     <p className="text-xs text-slate-400">Letter explaining {memberPlan} coverage for employers or schools</p>
                   </div>
                   <ChevronRight className="w-4 h-4 text-slate-400" />
@@ -500,7 +500,7 @@ export function FamilyHelpCenter({ onBack, childName = 'your child', memberPlan 
 
         {/* Category FAQ view */}
         {activeCategory && category && (
-          <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-2xl border border-[#E8E4DF] overflow-hidden">
             <FAQAccordion faqs={category.faqs} />
           </div>
         )}
@@ -519,9 +519,9 @@ export function FamilyHelpCenter({ onBack, childName = 'your child', memberPlan 
               <div key={resource.name} className="p-4 flex items-start gap-3">
                 <Phone className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
                 <div className="flex-1">
-                  <p className="font-semibold text-slate-900 text-sm">{resource.name}</p>
+                  <p className="font-semibold text-[#1B2733] text-sm">{resource.name}</p>
                   <p className={`text-sm font-bold ${resource.color}`}>{resource.number}</p>
-                  <p className="text-xs text-slate-500 mt-0.5">{resource.note}</p>
+                  <p className="text-xs text-[#5A6B7A] mt-0.5">{resource.note}</p>
                 </div>
                 <ExternalLink className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
               </div>

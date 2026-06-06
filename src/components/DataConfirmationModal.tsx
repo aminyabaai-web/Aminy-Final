@@ -43,7 +43,7 @@ interface DataConfirmationModalProps {
 
 interface CategoryStyle {
   label: string;
-  icon: React.ComponentType<{ className?: string }>;
+  icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>;
   color: string; // background
   iconColor: string;
 }

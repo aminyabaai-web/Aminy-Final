@@ -74,12 +74,12 @@ export function CoverageCoachEducation({ onBack, userState = 'AZ' }: CoverageCoa
   };
 
   const sections = [
-    { id: 'questions', icon: ClipboardList, label: 'Questions to Ask', color: 'text-blue-600 bg-blue-50' },
+    { id: 'questions', icon: ClipboardList, label: 'Questions to Ask', color: 'text-blue-600 bg-[#EEF4F8]' },
     { id: 'cpt-codes', icon: FileCode, label: 'CPT Codes Explained', color: 'text-purple-600 bg-purple-50' },
     { id: 'appeal', icon: FileText, label: 'Appeal Template', color: 'text-amber-600 bg-amber-50' },
     { id: 'single-case', icon: Handshake, label: 'Single-Case Agreement', color: 'text-green-600 bg-green-50' },
-    { id: 'medicaid', icon: Shield, label: 'Medicaid Waivers', color: 'text-teal-600 bg-teal-50' },
-    { id: 'state-waivers', icon: MapPin, label: 'State-by-State Guide', color: 'text-indigo-600 bg-indigo-50' },
+    { id: 'medicaid', icon: Shield, label: 'Medicaid Waivers', color: 'text-[#6B9080] bg-[#6B9080]/10' },
+    { id: 'state-waivers', icon: MapPin, label: 'State-by-State Guide', color: 'text-[#6B9080] bg-indigo-50' },
   ];
 
   const renderContent = () => {
@@ -104,9 +104,9 @@ export function CoverageCoachEducation({ onBack, userState = 'AZ' }: CoverageCoa
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
+      <div className="bg-white border-b border-[#E8E4DF] sticky top-0 z-10">
         <div className="px-4 py-4 max-w-4xl mx-auto">
           <div className="flex items-center gap-3">
             {activeSection !== 'overview' ? (
@@ -114,7 +114,7 @@ export function CoverageCoachEducation({ onBack, userState = 'AZ' }: CoverageCoa
                 variant="ghost"
                 size="sm"
                 onClick={() => setActiveSection('overview')}
-                className="text-slate-600"
+                className="text-[#5A6B7A]"
               >
                 <ArrowLeft className="w-4 h-4 mr-1" />
                 Back
@@ -124,14 +124,14 @@ export function CoverageCoachEducation({ onBack, userState = 'AZ' }: CoverageCoa
                 variant="ghost"
                 size="sm"
                 onClick={onBack}
-                className="text-slate-600"
+                className="text-[#5A6B7A]"
               >
                 <ArrowLeft className="w-4 h-4 mr-1" />
                 Coverage Coach
               </Button>
             ) : null}
             <div className="flex-1">
-              <h1 className="text-lg font-semibold text-slate-900">
+              <h1 className="text-lg font-semibold text-[#1B2733]">
                 {activeSection === 'overview' ? 'Insurance Education' : sections.find(s => s.id === activeSection)?.label}
               </h1>
             </div>
@@ -155,8 +155,8 @@ function OverviewSection({ sections, onSelectSection }: { sections: { id: string
         <div className="flex items-start gap-3">
           <HelpCircle className="w-6 h-6 text-accent flex-shrink-0 mt-0.5" />
           <div>
-            <h2 className="font-semibold text-slate-900 mb-1">Your Insurance Navigation Guide</h2>
-            <p className="text-sm text-slate-600">
+            <h2 className="font-semibold text-[#1B2733] mb-1">Your Insurance Navigation Guide</h2>
+            <p className="text-sm text-[#5A6B7A]">
               Everything you need to understand your coverage, file appeals, and navigate the system — all in plain language.
             </p>
           </div>
@@ -175,8 +175,8 @@ function OverviewSection({ sections, onSelectSection }: { sections: { id: string
                 <section.icon className="w-6 h-6" />
               </div>
               <div className="flex-1">
-                <h3 className="font-medium text-slate-900">{section.label}</h3>
-                <p className="text-sm text-slate-500">
+                <h3 className="font-medium text-[#1B2733]">{section.label}</h3>
+                <p className="text-sm text-[#5A6B7A]">
                   {section.id === 'questions' && 'Questions to ask your insurance company'}
                   {section.id === 'cpt-codes' && 'What ABA billing codes mean'}
                   {section.id === 'appeal' && 'Ready-to-use appeal letter template'}
@@ -242,8 +242,8 @@ function InsuranceQuestionsSection({ onCopy, copiedItem }: { onCopy: (text: stri
 
   return (
     <div className="space-y-3 sm:space-y-4 sm:space-y-6">
-      <Card className="p-4 bg-blue-50 border-blue-200">
-        <p className="text-sm text-blue-800">
+      <Card className="p-4 bg-[#EEF4F8] border-[#C8DDE8]">
+        <p className="text-sm text-[#4A6478]">
           <strong>Pro tip:</strong> Call the number on the back of your insurance card and ask for the "Behavioral Health Benefits" department. Keep notes of who you spoke with and when.
         </p>
       </Card>
@@ -252,17 +252,17 @@ function InsuranceQuestionsSection({ onCopy, copiedItem }: { onCopy: (text: stri
         <Card key={idx} className="p-3 sm:p-4">
           <div className="flex items-center gap-2 mb-4">
             <category.icon className="w-5 h-5 text-accent" />
-            <h3 className="font-semibold text-slate-900">{category.category}</h3>
+            <h3 className="font-semibold text-[#1B2733]">{category.category}</h3>
           </div>
           <div className="space-y-3">
             {category.items.map((question, qIdx) => {
               const itemId = `q-${idx}-${qIdx}`;
               return (
                 <div key={qIdx} className="flex items-start gap-2 group">
-                  <span className="w-6 h-6 bg-slate-100 rounded-full flex items-center justify-center text-xs font-medium text-slate-600 flex-shrink-0">
+                  <span className="w-6 h-6 bg-[#F0EDE8] rounded-full flex items-center justify-center text-xs font-medium text-[#5A6B7A] flex-shrink-0">
                     {qIdx + 1}
                   </span>
-                  <p className="text-sm text-slate-700 flex-1">{question}</p>
+                  <p className="text-sm text-[#3A4A57] flex-1">{question}</p>
                   <Button
                     variant="ghost"
                     size="sm"
@@ -340,14 +340,14 @@ function CPTCodesSection({ expandedItems, toggleExpand }: { expandedItems: Set<s
           <Card key={cpt.code} className="overflow-hidden">
             <button
               onClick={() => toggleExpand(cpt.code)}
-              className="w-full p-4 flex items-start gap-3 sm:gap-4 text-left hover:bg-slate-50 transition-colors"
+              className="w-full p-4 flex items-start gap-3 sm:gap-4 text-left hover:bg-[#FAF7F2] transition-colors"
             >
               <div className="w-16 h-16 bg-purple-100 rounded-xl flex items-center justify-center flex-shrink-0">
                 <span className="text-lg font-bold text-purple-700">{cpt.code}</span>
               </div>
               <div className="flex-1">
-                <h3 className="font-semibold text-slate-900">{cpt.name}</h3>
-                <p className="text-sm text-slate-600 mt-1">{cpt.description}</p>
+                <h3 className="font-semibold text-[#1B2733]">{cpt.name}</h3>
+                <p className="text-sm text-[#5A6B7A] mt-1">{cpt.description}</p>
               </div>
               {isExpanded ? (
                 <ChevronUp className="w-5 h-5 text-slate-400 flex-shrink-0" />
@@ -357,17 +357,17 @@ function CPTCodesSection({ expandedItems, toggleExpand }: { expandedItems: Set<s
             </button>
 
             {isExpanded && (
-              <div className="px-4 pb-4 border-t border-slate-100">
+              <div className="px-4 pb-4 border-t border-[#E8E4DF]">
                 <div className="mt-4 space-y-3">
-                  <p className="text-sm text-slate-700">{cpt.details}</p>
+                  <p className="text-sm text-[#3A4A57]">{cpt.details}</p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mt-3">
-                    <div className="bg-slate-50 p-3 rounded-lg">
-                      <p className="text-xs font-medium text-slate-500 mb-1">Who Provides</p>
-                      <p className="text-sm text-slate-800">{cpt.whoProvides}</p>
+                    <div className="bg-[#FAF7F2] p-3 rounded-lg">
+                      <p className="text-xs font-medium text-[#5A6B7A] mb-1">Who Provides</p>
+                      <p className="text-sm text-[#1B2733]">{cpt.whoProvides}</p>
                     </div>
-                    <div className="bg-slate-50 p-3 rounded-lg">
-                      <p className="text-xs font-medium text-slate-500 mb-1">Typical Amount</p>
-                      <p className="text-sm text-slate-800">{cpt.typical}</p>
+                    <div className="bg-[#FAF7F2] p-3 rounded-lg">
+                      <p className="text-xs font-medium text-[#5A6B7A] mb-1">Typical Amount</p>
+                      <p className="text-sm text-[#1B2733]">{cpt.typical}</p>
                     </div>
                   </div>
                 </div>
@@ -444,7 +444,7 @@ Enclosures: [List all attachments]`;
 
       <Card className="p-3 sm:p-4">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="font-semibold text-slate-900">Insurance Appeal Letter Template</h3>
+          <h3 className="font-semibold text-[#1B2733]">Insurance Appeal Letter Template</h3>
           <Button
             onClick={() => onCopy(appealTemplate, 'appeal-template')}
             size="sm"
@@ -464,15 +464,15 @@ Enclosures: [List all attachments]`;
           </Button>
         </div>
 
-        <div className="bg-slate-50 rounded-lg p-4 overflow-x-auto">
-          <pre className="text-xs text-slate-700 whitespace-pre-wrap font-mono">
+        <div className="bg-[#FAF7F2] rounded-lg p-4 overflow-x-auto">
+          <pre className="text-xs text-[#3A4A57] whitespace-pre-wrap font-mono">
             {appealTemplate}
           </pre>
         </div>
       </Card>
 
       <Card className="p-3 sm:p-4">
-        <h3 className="font-semibold text-slate-900 mb-3">Appeal Tips</h3>
+        <h3 className="font-semibold text-[#1B2733] mb-3">Appeal Tips</h3>
         <ul className="space-y-2">
           {[
             'File your appeal within the required timeframe (usually 60-180 days)',
@@ -482,7 +482,7 @@ Enclosures: [List all attachments]`;
             'Reference your state\'s autism insurance mandate if applicable',
             'Keep a log of all phone calls with names and reference numbers'
           ].map((tip, idx) => (
-            <li key={idx} className="flex items-start gap-2 text-sm text-slate-700">
+            <li key={idx} className="flex items-start gap-2 text-sm text-[#3A4A57]">
               <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
               {tip}
             </li>
@@ -554,11 +554,11 @@ function SingleCaseAgreementSection() {
                 {idx + 1}
               </span>
               <div className="flex-1">
-                <h3 className="font-semibold text-slate-900 mb-1">{step.title}</h3>
-                <p className="text-sm text-slate-600 mb-3">{step.description}</p>
+                <h3 className="font-semibold text-[#1B2733] mb-1">{step.title}</h3>
+                <p className="text-sm text-[#5A6B7A] mb-3">{step.description}</p>
                 <ul className="space-y-2">
                   {step.tips.map((tip, tipIdx) => (
-                    <li key={tipIdx} className="flex items-start gap-2 text-sm text-slate-700">
+                    <li key={tipIdx} className="flex items-start gap-2 text-sm text-[#3A4A57]">
                       <Check className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
                       {tip}
                     </li>
@@ -604,20 +604,20 @@ function MedicaidWaiverSection() {
 
   return (
     <div className="space-y-3 sm:space-y-4">
-      <Card className="p-4 bg-teal-50 border-teal-200">
-        <p className="text-sm text-teal-800">
+      <Card className="p-4 bg-[#6B9080]/10 border-[#6B9080]/20">
+        <p className="text-sm text-[#6B9080]">
           <strong>What are Medicaid Waivers?</strong> They allow states to provide services not typically covered by Medicaid, enabling care in homes and communities. Wait lists can be long (years in some states), so apply early.
         </p>
       </Card>
 
       {waiverTypes.map((waiver, idx) => (
         <Card key={idx} className="p-3 sm:p-4">
-          <h3 className="font-semibold text-slate-900 mb-2">{waiver.name}</h3>
-          <p className="text-sm text-slate-600 mb-3">{waiver.description}</p>
+          <h3 className="font-semibold text-[#1B2733] mb-2">{waiver.name}</h3>
+          <p className="text-sm text-[#5A6B7A] mb-3">{waiver.description}</p>
 
           <div className="space-y-3">
             <div>
-              <p className="text-xs font-medium text-slate-500 mb-2">Services Covered</p>
+              <p className="text-xs font-medium text-[#5A6B7A] mb-2">Services Covered</p>
               <div className="flex flex-wrap gap-2">
                 {waiver.services.map((service, sIdx) => (
                   <Badge key={sIdx} variant="secondary" className="text-xs">
@@ -627,15 +627,15 @@ function MedicaidWaiverSection() {
               </div>
             </div>
 
-            <div className="bg-slate-50 p-3 rounded-lg">
-              <p className="text-xs font-medium text-slate-500 mb-1">Eligibility</p>
-              <p className="text-sm text-slate-700">{waiver.eligibility}</p>
+            <div className="bg-[#FAF7F2] p-3 rounded-lg">
+              <p className="text-xs font-medium text-[#5A6B7A] mb-1">Eligibility</p>
+              <p className="text-sm text-[#3A4A57]">{waiver.eligibility}</p>
             </div>
           </div>
         </Card>
       ))}
 
-      <Card className="p-4 bg-blue-50 border-blue-200">
+      <Card className="p-4 bg-[#EEF4F8] border-[#C8DDE8]">
         <div className="flex items-start gap-2">
           <Phone className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
           <div>
@@ -700,9 +700,9 @@ function StateWaiversSection({ userState, expandedItems, toggleExpand }: { userS
   return (
     <div className="space-y-3 sm:space-y-4">
       {/* Current State Highlight */}
-      <Card className="p-4 bg-indigo-50 border-indigo-200">
+      <Card className="p-4 bg-indigo-50 border-[#6B9080]/20">
         <div className="flex items-center gap-2 mb-3">
-          <MapPin className="w-5 h-5 text-indigo-600" />
+          <MapPin className="w-5 h-5 text-[#6B9080]" />
           <h3 className="font-semibold text-indigo-900">Your State: {userState}</h3>
         </div>
 
@@ -711,7 +711,7 @@ function StateWaiversSection({ userState, expandedItems, toggleExpand }: { userS
             <p className="text-xs font-medium text-indigo-700 mb-2">Available Waivers</p>
             <div className="flex flex-wrap gap-2">
               {currentStateData.waivers.map((waiver, idx) => (
-                <Badge key={idx} className="bg-indigo-100 text-indigo-800 border-indigo-200">
+                <Badge key={idx} className="bg-indigo-100 text-indigo-800 border-[#6B9080]/20">
                   {waiver}
                 </Badge>
               ))}
@@ -719,8 +719,8 @@ function StateWaiversSection({ userState, expandedItems, toggleExpand }: { userS
           </div>
 
           <div className="bg-white p-3 rounded-lg">
-            <p className="text-xs font-medium text-slate-500 mb-1">Contact</p>
-            <p className="text-sm text-slate-900 font-mono">{currentStateData.contact}</p>
+            <p className="text-xs font-medium text-[#5A6B7A] mb-1">Contact</p>
+            <p className="text-sm text-[#1B2733] font-mono">{currentStateData.contact}</p>
           </div>
 
           <p className="text-sm text-indigo-800">{currentStateData.notes}</p>
@@ -728,25 +728,25 @@ function StateWaiversSection({ userState, expandedItems, toggleExpand }: { userS
       </Card>
 
       {/* Other States */}
-      <h3 className="font-semibold text-slate-900 mt-4 sm:mt-6 mb-3">Other States</h3>
+      <h3 className="font-semibold text-[#1B2733] mt-4 sm:mt-6 mb-3">Other States</h3>
       {Object.entries(stateWaivers).filter(([state]) => state !== userState).map(([state, data]) => {
         const isExpanded = expandedItems.has(state);
         return (
           <Card key={state} className="overflow-hidden">
             <button
               onClick={() => toggleExpand(state)}
-              className="w-full p-4 flex items-center justify-between text-left hover:bg-slate-50 transition-colors"
+              className="w-full p-4 flex items-center justify-between text-left hover:bg-[#FAF7F2] transition-colors"
             >
               <div className="flex items-center gap-2">
                 <MapPin className="w-4 h-4 text-slate-400" />
-                <span className="font-medium text-slate-900">{state}</span>
+                <span className="font-medium text-[#1B2733]">{state}</span>
                 <Badge variant="outline" className="text-xs">{data.waivers.length} waivers</Badge>
               </div>
               {isExpanded ? <ChevronUp className="w-5 h-5 text-slate-400" /> : <ChevronDown className="w-5 h-5 text-slate-400" />}
             </button>
 
             {isExpanded && (
-              <div className="px-4 pb-4 border-t border-slate-100">
+              <div className="px-4 pb-4 border-t border-[#E8E4DF]">
                 <div className="mt-3 space-y-3">
                   <div className="flex flex-wrap gap-2">
                     {data.waivers.map((waiver, idx) => (
@@ -755,8 +755,8 @@ function StateWaiversSection({ userState, expandedItems, toggleExpand }: { userS
                       </Badge>
                     ))}
                   </div>
-                  <p className="text-sm text-slate-600"><strong>Contact:</strong> {data.contact}</p>
-                  <p className="text-sm text-slate-600">{data.notes}</p>
+                  <p className="text-sm text-[#5A6B7A]"><strong>Contact:</strong> {data.contact}</p>
+                  <p className="text-sm text-[#5A6B7A]">{data.notes}</p>
                 </div>
               </div>
             )}

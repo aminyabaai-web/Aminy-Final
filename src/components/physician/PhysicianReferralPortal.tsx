@@ -91,8 +91,8 @@ const MOCK_SUBMITTED: SubmittedReferral[] = [
 
 const STATUS_COLORS: Record<ReferralStatus, string> = {
   Invited: 'bg-amber-100 text-amber-800',
-  Enrolled: 'bg-blue-100 text-blue-800',
-  Active: 'bg-teal-100 text-teal-800',
+  Enrolled: 'bg-blue-100 text-[#4A6478]',
+  Active: 'bg-[#6B9080]/10 text-[#6B9080]',
 };
 
 // ---------------------------------------------------------------------------
@@ -182,21 +182,21 @@ function SelectField({
 }) {
   return (
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-1">
+      <label className="block text-sm font-medium text-[#3A4A57] mb-1">
         {label}{required && <span className="text-red-500 ml-0.5">*</span>}
       </label>
       <div className="relative">
         <select
           value={value}
           onChange={e => onChange(e.target.value)}
-          className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 pr-10 text-sm text-gray-900 focus:border-teal-500 focus:outline-none appearance-none"
+          className="w-full rounded-xl border border-[#E8E4DF] bg-white px-4 py-3 pr-10 text-sm text-[#1B2733] focus:border-[#6B9080] focus:outline-none appearance-none"
         >
           <option value="">Select…</option>
           {options.map(o => (
             <option key={o} value={o}>{o}</option>
           ))}
         </select>
-        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8A9BA8] pointer-events-none" />
       </div>
     </div>
   );
@@ -221,7 +221,7 @@ function TextField({
 }) {
   return (
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-1">
+      <label className="block text-sm font-medium text-[#3A4A57] mb-1">
         {label}{required && <span className="text-red-500 ml-0.5">*</span>}
       </label>
       <input
@@ -229,19 +229,19 @@ function TextField({
         value={value}
         onChange={e => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm text-gray-900 focus:border-teal-500 focus:outline-none"
+        className="w-full rounded-xl border border-[#E8E4DF] px-4 py-3 text-sm text-[#1B2733] focus:border-[#6B9080] focus:outline-none"
       />
-      {hint && <p className="mt-1 text-xs text-gray-500">{hint}</p>}
+      {hint && <p className="mt-1 text-xs text-[#5A6B7A]">{hint}</p>}
     </div>
   );
 }
 
 function ReferralCard({ ref: _ref, referral }: { ref?: React.Ref<HTMLDivElement>; referral: SubmittedReferral }) {
   return (
-    <div className="flex items-center justify-between py-3 border-b border-gray-100 last:border-0">
+    <div className="flex items-center justify-between py-3 border-b border-[#E8E4DF] last:border-0">
       <div>
-        <p className="font-semibold text-gray-900">{referral.patientFirstName}</p>
-        <p className="text-sm text-gray-500">{referral.primaryConcern} · {referral.submittedAt}</p>
+        <p className="font-semibold text-[#1B2733]">{referral.patientFirstName}</p>
+        <p className="text-sm text-[#5A6B7A]">{referral.primaryConcern} · {referral.submittedAt}</p>
       </div>
       <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${STATUS_COLORS[referral.status]}`}>
         {referral.status}
@@ -338,24 +338,24 @@ export default function PhysicianReferralPortal({ onBack }: PhysicianReferralPor
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-4 py-4">
+      <div className="bg-white border-b border-[#E8E4DF] px-4 py-4">
         <div className="max-w-2xl mx-auto flex items-center gap-3">
           {onBack && (
             <button
               onClick={onBack}
-              className="p-2 rounded-full hover:bg-gray-100 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
+              className="p-2 rounded-full hover:bg-[#F0EDE8] transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
             >
-              <ArrowLeft className="w-5 h-5 text-gray-600" />
+              <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
             </button>
           )}
           <div className="flex-1">
             <div className="flex items-center gap-2">
-              <Stethoscope className="w-6 h-6 text-teal-600" />
-              <h1 className="text-xl font-bold text-gray-900">Refer Your Patients to Aminy</h1>
+              <Stethoscope className="w-6 h-6 text-[#6B9080]" />
+              <h1 className="text-xl font-bold text-[#1B2733]">Refer Your Patients to Aminy</h1>
             </div>
-            <p className="text-sm text-gray-500 mt-0.5">
+            <p className="text-sm text-[#5A6B7A] mt-0.5">
               Fast, secure referrals for pediatric behavioral health care
             </p>
           </div>
@@ -374,9 +374,9 @@ export default function PhysicianReferralPortal({ onBack }: PhysicianReferralPor
               className="space-y-5"
             >
               {/* Referral form card */}
-              <div className="bg-white rounded-2xl border border-gray-200 p-5 space-y-4">
-                <h2 className="text-base font-semibold text-gray-900 flex items-center gap-2">
-                  <User className="w-4 h-4 text-gray-500" />
+              <div className="bg-white rounded-2xl border border-[#E8E4DF] p-5 space-y-4">
+                <h2 className="text-base font-semibold text-[#1B2733] flex items-center gap-2">
+                  <User className="w-4 h-4 text-[#5A6B7A]" />
                   Patient Information
                 </h2>
 
@@ -408,7 +408,7 @@ export default function PhysicianReferralPortal({ onBack }: PhysicianReferralPor
                 />
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-[#3A4A57] mb-2">
                     Urgency<span className="text-red-500 ml-0.5">*</span>
                   </label>
                   <div className="flex gap-2">
@@ -422,8 +422,8 @@ export default function PhysicianReferralPortal({ onBack }: PhysicianReferralPor
                               ? 'border-red-500 bg-red-50 text-red-700'
                               : u === 'Soon'
                               ? 'border-amber-500 bg-amber-50 text-amber-700'
-                              : 'border-teal-500 bg-teal-50 text-teal-700'
-                            : 'border-gray-200 text-gray-600'
+                              : 'border-[#6B9080] bg-[#6B9080]/10 text-[#6B9080]'
+                            : 'border-[#E8E4DF] text-[#5A6B7A]'
                         }`}
                       >
                         {u}
@@ -434,9 +434,9 @@ export default function PhysicianReferralPortal({ onBack }: PhysicianReferralPor
               </div>
 
               {/* Guardian info */}
-              <div className="bg-white rounded-2xl border border-gray-200 p-5 space-y-4">
-                <h2 className="text-base font-semibold text-gray-900 flex items-center gap-2">
-                  <Mail className="w-4 h-4 text-gray-500" />
+              <div className="bg-white rounded-2xl border border-[#E8E4DF] p-5 space-y-4">
+                <h2 className="text-base font-semibold text-[#1B2733] flex items-center gap-2">
+                  <Mail className="w-4 h-4 text-[#5A6B7A]" />
                   Parent / Guardian Contact
                 </h2>
                 <TextField
@@ -457,9 +457,9 @@ export default function PhysicianReferralPortal({ onBack }: PhysicianReferralPor
               </div>
 
               {/* Provider info */}
-              <div className="bg-white rounded-2xl border border-gray-200 p-5 space-y-4">
-                <h2 className="text-base font-semibold text-gray-900 flex items-center gap-2">
-                  <Stethoscope className="w-4 h-4 text-gray-500" />
+              <div className="bg-white rounded-2xl border border-[#E8E4DF] p-5 space-y-4">
+                <h2 className="text-base font-semibold text-[#1B2733] flex items-center gap-2">
+                  <Stethoscope className="w-4 h-4 text-[#5A6B7A]" />
                   Referring Provider
                 </h2>
                 <TextField
@@ -477,7 +477,7 @@ export default function PhysicianReferralPortal({ onBack }: PhysicianReferralPor
                   hint="Optional — adds credibility to the referral"
                 />
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-[#3A4A57] mb-1">
                     Notes for Aminy Team
                   </label>
                   <textarea
@@ -485,26 +485,26 @@ export default function PhysicianReferralPortal({ onBack }: PhysicianReferralPor
                     onChange={e => set('notes')(e.target.value)}
                     rows={3}
                     placeholder="Any relevant clinical context, urgency details, or care coordination notes…"
-                    className="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm text-gray-900 focus:border-teal-500 focus:outline-none resize-none"
+                    className="w-full rounded-xl border border-[#E8E4DF] px-4 py-3 text-sm text-[#1B2733] focus:border-[#6B9080] focus:outline-none resize-none"
                   />
                 </div>
               </div>
 
               {/* Letter generator */}
-              <div className="bg-slate-100 rounded-2xl border border-slate-200 p-5">
+              <div className="bg-[#F0EDE8] rounded-2xl border border-[#E8E4DF] p-5">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="font-semibold text-gray-900 flex items-center gap-2">
+                    <h3 className="font-semibold text-[#1B2733] flex items-center gap-2">
                       <FileText className="w-4 h-4" />
                       Generate Referral Letter
                     </h3>
-                    <p className="text-sm text-gray-600 mt-0.5">
+                    <p className="text-sm text-[#5A6B7A] mt-0.5">
                       Download a print-ready referral letter for the family
                     </p>
                   </div>
                   <button
                     onClick={handleDownloadLetter}
-                    className="flex items-center gap-2 bg-white border border-gray-300 rounded-xl px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                    className="flex items-center gap-2 bg-white border border-[#E8E4DF] rounded-xl px-4 py-2.5 text-sm font-medium text-[#3A4A57] hover:bg-[#FAF7F2] transition-colors"
                   >
                     <Download className="w-4 h-4" />
                     Download
@@ -524,8 +524,8 @@ export default function PhysicianReferralPortal({ onBack }: PhysicianReferralPor
                 disabled={!isValid || loading}
                 className={`w-full flex items-center justify-center gap-2 rounded-xl py-4 text-base font-semibold transition-all ${
                   isValid && !loading
-                    ? 'bg-teal-600 text-white hover:bg-teal-700 active:scale-[0.98]'
-                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                    ? 'bg-primary text-white hover:bg-[#6B9080] active:scale-[0.98]'
+                    : 'bg-[#E8E4DF] text-[#8A9BA8] cursor-not-allowed'
                 }`}
                 style={{ minHeight: 56 }}
               >
@@ -538,20 +538,20 @@ export default function PhysicianReferralPortal({ onBack }: PhysicianReferralPor
               key="success"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="bg-white rounded-2xl border border-teal-200 p-8 text-center"
+              className="bg-white rounded-2xl border border-[#6B9080]/20 p-8 text-center"
             >
-              <CheckCircle className="w-16 h-16 text-teal-500 mx-auto mb-4" />
-              <h2 className="text-xl font-bold text-gray-900 mb-2">Referral Submitted</h2>
-              <p className="text-gray-600 mb-1">
+              <CheckCircle className="w-16 h-16 text-primary mx-auto mb-4" />
+              <h2 className="text-xl font-bold text-[#1B2733] mb-2">Referral Submitted</h2>
+              <p className="text-[#5A6B7A] mb-1">
                 <strong>{form.guardianEmail}</strong> will receive an Aminy invitation within 24 hours.
               </p>
-              <p className="text-sm text-gray-500 mb-6">
+              <p className="text-sm text-[#5A6B7A] mb-6">
                 You can track this referral in the section below.
               </p>
               <div className="flex gap-3 justify-center">
                 <button
                   onClick={handleDownloadLetter}
-                  className="flex items-center gap-2 bg-slate-100 text-slate-700 rounded-xl px-4 py-2.5 text-sm font-medium hover:bg-slate-200 transition-colors"
+                  className="flex items-center gap-2 bg-[#F0EDE8] text-[#3A4A57] rounded-xl px-4 py-2.5 text-sm font-medium hover:bg-[#E8E4DF] transition-colors"
                 >
                   <Download className="w-4 h-4" />
                   Download Letter
@@ -571,7 +571,7 @@ export default function PhysicianReferralPortal({ onBack }: PhysicianReferralPor
                       notes: '',
                     });
                   }}
-                  className="bg-teal-600 text-white rounded-xl px-4 py-2.5 text-sm font-medium hover:bg-teal-700 transition-colors"
+                  className="bg-primary text-white rounded-xl px-4 py-2.5 text-sm font-medium hover:bg-[#6B9080] transition-colors"
                 >
                   Refer Another Patient
                 </button>
@@ -581,14 +581,14 @@ export default function PhysicianReferralPortal({ onBack }: PhysicianReferralPor
         </AnimatePresence>
 
         {/* Track referrals */}
-        <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
-          <div className="px-5 py-4 border-b border-gray-100 flex items-center gap-2">
-            <Clock className="w-4 h-4 text-gray-500" />
-            <h2 className="font-semibold text-gray-900">Track Your Referrals</h2>
+        <div className="bg-white rounded-2xl border border-[#E8E4DF] overflow-hidden">
+          <div className="px-5 py-4 border-b border-[#E8E4DF] flex items-center gap-2">
+            <Clock className="w-4 h-4 text-[#5A6B7A]" />
+            <h2 className="font-semibold text-[#1B2733]">Track Your Referrals</h2>
           </div>
           <div className="px-5">
             {submittedReferrals.length === 0 ? (
-              <p className="py-6 text-center text-sm text-gray-500">No referrals yet.</p>
+              <p className="py-6 text-center text-sm text-[#5A6B7A]">No referrals yet.</p>
             ) : (
               submittedReferrals.map(r => (
                 <ReferralCard key={r.id} referral={r} />
@@ -597,7 +597,7 @@ export default function PhysicianReferralPortal({ onBack }: PhysicianReferralPor
           </div>
         </div>
 
-        <p className="text-center text-xs text-gray-400 pb-4">
+        <p className="text-center text-xs text-[#8A9BA8] pb-4">
           Questions? Contact <a href="mailto:providers@aminy.com" className="underline">providers@aminy.com</a>
         </p>
       </div>

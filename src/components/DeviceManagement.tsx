@@ -162,7 +162,7 @@ export function DeviceManagement({
       case 'active': return <CheckCircle className="w-4 h-4 text-green-600" />;
       case 'inactive': return <XCircle className="w-4 h-4 text-red-600" />;
       case 'sleeping': return <Moon className="w-4 h-4 text-blue-600" />;
-      default: return <Clock className="w-4 h-4 text-slate-500" />;
+      default: return <Clock className="w-4 h-4 text-[#5A6B7A]" />;
     }
   };
 
@@ -170,8 +170,8 @@ export function DeviceManagement({
     switch (status) {
       case 'active': return 'bg-green-50 text-green-700 border-green-200';
       case 'inactive': return 'bg-red-50 text-red-700 border-red-200';
-      case 'sleeping': return 'bg-blue-50 text-blue-700 border-blue-200';
-      default: return 'bg-slate-50 text-slate-700 border-slate-200';
+      case 'sleeping': return 'bg-[#EEF4F8] text-blue-700 border-[#C8DDE8]';
+      default: return 'bg-[#FAF7F2] text-[#3A4A57] border-[#E8E4DF]';
     }
   };
 
@@ -239,9 +239,9 @@ export function DeviceManagement({
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
+    <div className="min-h-screen bg-[#FAF7F2] dark:bg-slate-900">
       {/* Header */}
-      <div className="bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
+      <div className="bg-white dark:bg-slate-800 border-b border-[#E8E4DF] dark:border-slate-700">
         <div className="px-4 py-4 sm:px-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
@@ -249,8 +249,8 @@ export function DeviceManagement({
                 <Settings className="w-5 h-5 text-green-600 dark:text-green-400" />
               </div>
               <div>
-                <h1 className="text-xl text-slate-900 dark:text-slate-100">Device Management</h1>
-                <p className="text-sm text-slate-600 dark:text-slate-400">Manage {safeChildName}'s connected devices</p>
+                <h1 className="text-xl text-[#1B2733] dark:text-slate-100">Device Management</h1>
+                <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Manage {safeChildName}'s connected devices</p>
               </div>
             </div>
             <div className="flex items-center space-x-3">
@@ -258,7 +258,7 @@ export function DeviceManagement({
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowUrgentHelp(true)}
-                className="text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100"
+                className="text-[#5A6B7A] hover:text-[#1B2733] dark:text-slate-400 dark:hover:text-slate-100"
               >
                 <Bell className="w-4 h-4" />
               </Button>
@@ -280,7 +280,7 @@ export function DeviceManagement({
           {/* Device List */}
           <div className="lg:col-span-1">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+              <h2 className="text-lg font-semibold text-[#1B2733] dark:text-slate-100">
                 Connected Devices
               </h2>
               <Button size="sm" variant="outline">
@@ -295,19 +295,19 @@ export function DeviceManagement({
                   key={device.id} 
                   className={`p-4 cursor-pointer transition-all duration-200 ${
                     selectedDevice === device.id 
-                      ? 'ring-2 ring-blue-500 border-blue-200 dark:border-blue-800' 
+                      ? 'ring-2 ring-blue-500 border-[#C8DDE8] dark:border-blue-800' 
                       : 'hover:shadow-md'
                   }`}
                   onClick={() => setSelectedDevice(device.id)}
                 >
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-slate-100 dark:bg-slate-700 rounded-lg flex items-center justify-center">
+                      <div className="w-10 h-10 bg-[#F0EDE8] dark:bg-slate-700 rounded-lg flex items-center justify-center">
                         {getDeviceIcon(device.type)}
                       </div>
                       <div>
-                        <h3 className="font-medium text-slate-900 dark:text-slate-100">{device.name}</h3>
-                        <p className="text-sm text-slate-600 dark:text-slate-400">{device.lastSeen}</p>
+                        <h3 className="font-medium text-[#1B2733] dark:text-slate-100">{device.name}</h3>
+                        <p className="text-sm text-[#5A6B7A] dark:text-slate-400">{device.lastSeen}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-1">
@@ -321,11 +321,11 @@ export function DeviceManagement({
                   <div className="flex items-center justify-between text-sm">
                     <div className="flex items-center gap-1">
                       <Battery className={`w-4 h-4 ${getBatteryColor(device.battery)}`} />
-                      <span className="text-slate-600 dark:text-slate-400">{device.battery}%</span>
+                      <span className="text-[#5A6B7A] dark:text-slate-400">{device.battery}%</span>
                     </div>
                     <div className="flex items-center gap-1">
                       {getWifiIcon(device.wifiStrength)}
-                      <span className="text-slate-600 dark:text-slate-400">{device.wifiStrength}%</span>
+                      <span className="text-[#5A6B7A] dark:text-slate-400">{device.wifiStrength}%</span>
                     </div>
                   </div>
                 </Card>
@@ -367,14 +367,14 @@ export function DeviceManagement({
                 <Card className="p-4 sm:p-5 md:p-6">
                   <div className="flex items-center justify-between mb-4 sm:mb-6">
                     <div className="flex items-center gap-3 sm:gap-4">
-                      <div className="w-16 h-16 bg-slate-100 dark:bg-slate-700 rounded-xl flex items-center justify-center">
+                      <div className="w-16 h-16 bg-[#F0EDE8] dark:bg-slate-700 rounded-xl flex items-center justify-center">
                         {getDeviceIcon(selectedDeviceData.type)}
                       </div>
                       <div>
-                        <h2 className="text-lg sm:text-xl font-semibold text-slate-900 dark:text-slate-100">
+                        <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733] dark:text-slate-100">
                           {selectedDeviceData.name}
                         </h2>
-                        <p className="text-slate-600 dark:text-slate-400">
+                        <p className="text-[#5A6B7A] dark:text-slate-400">
                           Version {selectedDeviceData.version} • {selectedDeviceData.screenTime}
                         </p>
                       </div>
@@ -390,28 +390,28 @@ export function DeviceManagement({
                       <div className={`text-xl sm:text-2xl font-bold ${getBatteryColor(selectedDeviceData.battery)}`}>
                         {selectedDeviceData.battery}%
                       </div>
-                      <div className="text-sm text-slate-600 dark:text-slate-400">Battery</div>
+                      <div className="text-sm text-[#5A6B7A] dark:text-slate-400">Battery</div>
                     </div>
                     <div className="text-center">
                       <div className="text-xl sm:text-2xl font-bold text-green-600">{selectedDeviceData.wifiStrength}%</div>
-                      <div className="text-sm text-slate-600 dark:text-slate-400">WiFi Signal</div>
+                      <div className="text-sm text-[#5A6B7A] dark:text-slate-400">WiFi Signal</div>
                     </div>
                     <div className="text-center">
                       <div className="text-xl sm:text-2xl font-bold text-blue-600">{selectedDeviceData.screenTime.split(' ')[0]}</div>
-                      <div className="text-sm text-slate-600 dark:text-slate-400">Screen Time</div>
+                      <div className="text-sm text-[#5A6B7A] dark:text-slate-400">Screen Time</div>
                     </div>
                     <div className="text-center">
                       <div className="text-xl sm:text-2xl font-bold text-purple-600 capitalize">
                         {selectedDeviceData.status}
                       </div>
-                      <div className="text-sm text-slate-600 dark:text-slate-400">Status</div>
+                      <div className="text-sm text-[#5A6B7A] dark:text-slate-400">Status</div>
                     </div>
                   </div>
                 </Card>
 
                 {/* Remote Actions */}
                 <Card className="p-4 sm:p-5 md:p-6">
-                  <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
+                  <h3 className="text-lg font-semibold text-[#1B2733] dark:text-slate-100 mb-4">
                     Remote Actions
                   </h3>
                   
@@ -459,22 +459,22 @@ export function DeviceManagement({
 
                 {/* Device Settings */}
                 <Card className="p-4 sm:p-5 md:p-6">
-                  <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
+                  <h3 className="text-lg font-semibold text-[#1B2733] dark:text-slate-100 mb-4">
                     Device Settings
                   </h3>
                   
                   <div className="space-y-3 sm:space-y-4 sm:space-y-6">
                     <div>
-                      <h4 className="font-medium text-slate-900 dark:text-slate-100 mb-3">General</h4>
+                      <h4 className="font-medium text-[#1B2733] dark:text-slate-100 mb-3">General</h4>
                       <div className="space-y-3">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
                             {selectedDeviceData.settings.soundEnabled ? (
-                              <Volume2 className="w-4 h-4 text-slate-600" />
+                              <Volume2 className="w-4 h-4 text-[#5A6B7A]" />
                             ) : (
-                              <VolumeX className="w-4 h-4 text-slate-600" />
+                              <VolumeX className="w-4 h-4 text-[#5A6B7A]" />
                             )}
-                            <span className="text-slate-900 dark:text-slate-100">Sound Enabled</span>
+                            <span className="text-[#1B2733] dark:text-slate-100">Sound Enabled</span>
                           </div>
                           <Switch
                             checked={selectedDeviceData.settings.soundEnabled}
@@ -486,8 +486,8 @@ export function DeviceManagement({
                         
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
-                            <Bell className="w-4 h-4 text-slate-600" />
-                            <span className="text-slate-900 dark:text-slate-100">Notifications</span>
+                            <Bell className="w-4 h-4 text-[#5A6B7A]" />
+                            <span className="text-[#1B2733] dark:text-slate-100">Notifications</span>
                           </div>
                           <Switch
                             checked={selectedDeviceData.settings.notificationsEnabled}
@@ -500,11 +500,11 @@ export function DeviceManagement({
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
                             {selectedDeviceData.settings.nightMode ? (
-                              <Moon className="w-4 h-4 text-slate-600" />
+                              <Moon className="w-4 h-4 text-[#5A6B7A]" />
                             ) : (
-                              <Sun className="w-4 h-4 text-slate-600" />
+                              <Sun className="w-4 h-4 text-[#5A6B7A]" />
                             )}
-                            <span className="text-slate-900 dark:text-slate-100">Night Mode</span>
+                            <span className="text-[#1B2733] dark:text-slate-100">Night Mode</span>
                           </div>
                           <Switch
                             checked={selectedDeviceData.settings.nightMode}
@@ -516,8 +516,8 @@ export function DeviceManagement({
                         
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
-                            <Upload className="w-4 h-4 text-slate-600" />
-                            <span className="text-slate-900 dark:text-slate-100">Auto Data Sync</span>
+                            <Upload className="w-4 h-4 text-[#5A6B7A]" />
+                            <span className="text-[#1B2733] dark:text-slate-100">Auto Data Sync</span>
                           </div>
                           <Switch
                             checked={selectedDeviceData.settings.dataSync}
@@ -530,12 +530,12 @@ export function DeviceManagement({
                     </div>
 
                     <div>
-                      <h4 className="font-medium text-slate-900 dark:text-slate-100 mb-3">Parental Controls</h4>
+                      <h4 className="font-medium text-[#1B2733] dark:text-slate-100 mb-3">Parental Controls</h4>
                       <div className="space-y-3">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
-                            <Users className="w-4 h-4 text-slate-600" />
-                            <span className="text-slate-900 dark:text-slate-100">App Access Control</span>
+                            <Users className="w-4 h-4 text-[#5A6B7A]" />
+                            <span className="text-[#1B2733] dark:text-slate-100">App Access Control</span>
                             {userTier === 'starter' && <Badge variant="secondary" className="ml-2">Pro</Badge>}
                           </div>
                           <Switch
@@ -549,8 +549,8 @@ export function DeviceManagement({
                         
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
-                            <Wifi className="w-4 h-4 text-slate-600" />
-                            <span className="text-slate-900 dark:text-slate-100">Internet Access</span>
+                            <Wifi className="w-4 h-4 text-[#5A6B7A]" />
+                            <span className="text-[#1B2733] dark:text-slate-100">Internet Access</span>
                             {userTier === 'starter' && <Badge variant="secondary" className="ml-2">Pro</Badge>}
                           </div>
                           <Switch
@@ -564,8 +564,8 @@ export function DeviceManagement({
                         
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
-                            <Clock className="w-4 h-4 text-slate-600" />
-                            <span className="text-slate-900 dark:text-slate-100">Time Restrictions</span>
+                            <Clock className="w-4 h-4 text-[#5A6B7A]" />
+                            <span className="text-[#1B2733] dark:text-slate-100">Time Restrictions</span>
                             {userTier === 'starter' && <Badge variant="secondary" className="ml-2">Core</Badge>}
                           </div>
                           <Switch
@@ -579,8 +579,8 @@ export function DeviceManagement({
                         
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
-                            <Shield className="w-4 h-4 text-slate-600" />
-                            <span className="text-slate-900 dark:text-slate-100">Content Filter</span>
+                            <Shield className="w-4 h-4 text-[#5A6B7A]" />
+                            <span className="text-[#1B2733] dark:text-slate-100">Content Filter</span>
                           </div>
                           <Switch
                             checked={selectedDeviceData.restrictions.contentFilter}

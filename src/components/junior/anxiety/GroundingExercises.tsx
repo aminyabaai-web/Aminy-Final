@@ -33,8 +33,8 @@ const SLATE_200 = '#e2e8f0';
 const SLATE_400 = '#94a3b8';
 /** Tailwind teal-300 (#5eead4) — body part completed fill */
 const TEAL_300 = '#5eead4';
-/** Tailwind teal-600 (#0d9488) — face detail accent */
-const TEAL_600 = '#0d9488';
+/** Tailwind teal-600 (#6B9080) — face detail accent */
+const TEAL_600 = '#6B9080';
 /** Tailwind indigo-100 (#e0e7ff) — inactive corner fill */
 const INDIGO_100 = '#e0e7ff';
 /** Tailwind indigo-200 (#c7d2fe) — square border stroke */
@@ -90,9 +90,9 @@ export function getGroundingStats(): { exercise: string; count: number }[] {
 
 const EXERCISES: { id: ExerciseId; label: string; description: string; emoji: string; bgColor: string; borderColor: string }[] = [
   { id: 'five-senses', label: '5-4-3-2-1 Senses', description: 'Notice what is around you right now', emoji: '👁️', bgColor: 'bg-sky-50', borderColor: 'border-sky-200' },
-  { id: 'body-scan', label: 'Body Scan', description: 'Feel your body from toes to head', emoji: '🧍', bgColor: 'bg-teal-50', borderColor: 'border-teal-200' },
+  { id: 'body-scan', label: 'Body Scan', description: 'Feel your body from toes to head', emoji: '🧍', bgColor: 'bg-[#6B9080]/10', borderColor: 'border-[#6B9080]/20' },
   { id: 'safe-place', label: 'Safe Place', description: 'Imagine your favorite calm place', emoji: '🏖️', bgColor: 'bg-amber-50', borderColor: 'border-amber-200' },
-  { id: 'square-breathing', label: 'Square Breathing', description: 'Breathe along the square path', emoji: '🟦', bgColor: 'bg-indigo-50', borderColor: 'border-indigo-200' },
+  { id: 'square-breathing', label: 'Square Breathing', description: 'Breathe along the square path', emoji: '🟦', bgColor: 'bg-indigo-50', borderColor: 'border-[#6B9080]/20' },
 ];
 
 // ---------------------------------------------------------------------------
@@ -141,7 +141,7 @@ function FiveSenses({ onFinish }: { onFinish: () => void }) {
   return (
     <div className="space-y-5 text-center">
       {/* Progress bar */}
-      <div className="h-2 w-full rounded-full bg-slate-100 overflow-hidden">
+      <div className="h-2 w-full rounded-full bg-[#F0EDE8] overflow-hidden">
         <motion.div
           className="h-full bg-sky-400 rounded-full"
           animate={{ width: `${progress}%` }}
@@ -157,7 +157,7 @@ function FiveSenses({ onFinish }: { onFinish: () => void }) {
         className="space-y-3"
       >
         <div className={`${step.color}`}>{step.icon}</div>
-        <div className="text-lg font-bold text-slate-800">
+        <div className="text-lg font-bold text-[#1B2733]">
           Name <span className="text-2xl">{step.count}</span> {step.prompt}
         </div>
         <div className="text-xs text-slate-400 uppercase tracking-wider">{step.sense}</div>
@@ -187,7 +187,7 @@ function FiveSenses({ onFinish }: { onFinish: () => void }) {
           onChange={e => setCurrentInput(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && addItem()}
           placeholder={`Type what you ${step.sense.toLowerCase()}...`}
-          className="flex-1 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-sky-300"
+          className="flex-1 rounded-2xl border border-[#E8E4DF] bg-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-sky-300"
         />
         <button
           type="button"
@@ -286,16 +286,16 @@ function BodyScan({ onFinish }: { onFinish: () => void }) {
         key={zone.id}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="rounded-[20px] border border-teal-200 bg-teal-50 p-4 text-center"
+        className="rounded-[20px] border border-[#6B9080]/20 bg-[#6B9080]/10 p-4 text-center"
       >
-        <div className="text-sm font-semibold text-teal-800 mb-1">{zone.label}</div>
-        <p className="text-sm text-teal-600">{zone.prompt}</p>
+        <div className="text-sm font-semibold text-[#6B9080] mb-1">{zone.label}</div>
+        <p className="text-sm text-[#6B9080]">{zone.prompt}</p>
       </motion.div>
 
       <button
         type="button"
         onClick={advance}
-        className="mx-auto flex items-center gap-2 rounded-2xl bg-teal-500 px-6 py-3 text-sm font-medium text-white shadow-sm active:scale-95"
+        className="mx-auto flex items-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-medium text-white shadow-sm active:scale-95"
       >
         <Check className="h-4 w-4" />
         {zoneIndex < BODY_ZONES.length - 1 ? 'Next zone' : 'Finish'}
@@ -399,7 +399,7 @@ function SafePlace({ onFinish }: { onFinish: () => void }) {
   if (!selectedPlace) {
     return (
       <div className="space-y-4 text-center">
-        <p className="text-sm text-slate-600">Choose your safe place</p>
+        <p className="text-sm text-[#5A6B7A]">Choose your safe place</p>
         <div className="grid grid-cols-2 gap-3">
           {SAFE_PLACES.map(p => (
             <button
@@ -409,7 +409,7 @@ function SafePlace({ onFinish }: { onFinish: () => void }) {
               className={`rounded-[20px] bg-gradient-to-b ${p.color} p-6 text-center shadow-sm active:scale-95`}
             >
               <div className="text-3xl mb-2">{p.emoji}</div>
-              <div className="text-sm font-semibold text-slate-700">{p.label}</div>
+              <div className="text-sm font-semibold text-[#3A4A57]">{p.label}</div>
             </button>
           ))}
         </div>
@@ -431,15 +431,15 @@ function SafePlace({ onFinish }: { onFinish: () => void }) {
         >
           {place?.emoji}
         </motion.div>
-        <p className="text-sm text-slate-600">Close your eyes and imagine you are here. Breathe slowly.</p>
+        <p className="text-sm text-[#5A6B7A]">Close your eyes and imagine you are here. Breathe slowly.</p>
       </motion.div>
 
       {/* Timer */}
-      <div className="text-2xl font-bold tabular-nums text-slate-700">
+      <div className="text-2xl font-bold tabular-nums text-[#3A4A57]">
         {Math.floor((DURATION - elapsed) / 60)}:{String((DURATION - elapsed) % 60).padStart(2, '0')}
       </div>
 
-      <div className="h-2 w-full rounded-full bg-slate-100 overflow-hidden">
+      <div className="h-2 w-full rounded-full bg-[#F0EDE8] overflow-hidden">
         <motion.div
           className="h-full bg-amber-400 rounded-full"
           animate={{ width: `${(elapsed / DURATION) * 100}%` }}
@@ -456,7 +456,7 @@ function SafePlace({ onFinish }: { onFinish: () => void }) {
           setSelectedPlace(null);
           setElapsed(0);
         }}
-        className="mx-auto flex items-center gap-2 rounded-2xl bg-slate-100 px-4 py-2 text-sm text-slate-600 active:scale-95"
+        className="mx-auto flex items-center gap-2 rounded-2xl bg-[#F0EDE8] px-4 py-2 text-sm text-[#5A6B7A] active:scale-95"
       >
         <RotateCcw className="h-4 w-4" /> Change place
       </button>
@@ -597,7 +597,7 @@ function SquareBreathing({ onFinish }: { onFinish: () => void }) {
         <button
           type="button"
           onClick={() => { playTap(); setRunning(false); }}
-          className="mx-auto rounded-2xl bg-slate-100 px-8 py-3 text-sm font-medium text-slate-600 active:scale-95"
+          className="mx-auto rounded-2xl bg-[#F0EDE8] px-8 py-3 text-sm font-medium text-[#5A6B7A] active:scale-95"
         >
           Stop
         </button>
@@ -630,12 +630,12 @@ function CompletionOverlay({ onDismiss }: { onDismiss: () => void }) {
         >
           🌟
         </motion.div>
-        <h3 className="text-lg font-bold text-slate-800 mb-1">Great job!</h3>
-        <p className="text-sm text-slate-500 mb-5">You did amazing grounding yourself.</p>
+        <h3 className="text-lg font-bold text-[#1B2733] mb-1">Great job!</h3>
+        <p className="text-sm text-[#5A6B7A] mb-5">You did amazing grounding yourself.</p>
         <button
           type="button"
           onClick={onDismiss}
-          className="rounded-2xl bg-teal-500 px-8 py-3 text-sm font-medium text-white shadow-sm active:scale-95"
+          className="rounded-2xl bg-primary px-8 py-3 text-sm font-medium text-white shadow-sm active:scale-95"
         >
           Done
         </button>
@@ -662,15 +662,15 @@ export default function GroundingExercises({ onBack, childName = 'Buddy' }: Grou
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-teal-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-[#FAF7F2] to-white">
       {/* Header */}
-      <div className="sticky top-0 z-20 bg-white/90 backdrop-blur-md border-b border-slate-100">
+      <div className="sticky top-0 z-20 bg-white/90 backdrop-blur-md border-b border-[#E8E4DF]">
         <div className="flex items-center justify-between px-4 py-3">
-          <button type="button" onClick={() => { playTap(); activeExercise ? setActiveExercise(null) : onBack(); }} className="flex items-center gap-2 text-sm font-medium text-slate-600">
+          <button type="button" onClick={() => { playTap(); activeExercise ? setActiveExercise(null) : onBack(); }} className="flex items-center gap-2 text-sm font-medium text-[#5A6B7A]">
             <ArrowLeft className="h-5 w-5" />
             {activeExercise ? 'Exercises' : 'Back'}
           </button>
-          <div className="text-sm font-semibold text-slate-800">
+          <div className="text-sm font-semibold text-[#1B2733]">
             {activeExercise ? EXERCISES.find(e => e.id === activeExercise)?.label : 'Grounding Exercises'}
           </div>
           <div className="w-10" />
@@ -682,8 +682,8 @@ export default function GroundingExercises({ onBack, childName = 'Buddy' }: Grou
           <>
             <div className="mb-5 text-center">
               <div className="text-2xl mb-1">🌿</div>
-              <h2 className="text-lg font-semibold text-slate-800">Feel grounded</h2>
-              <p className="text-sm text-slate-500 mt-1">Pick an exercise to calm your body and mind.</p>
+              <h2 className="text-lg font-semibold text-[#1B2733]">Feel grounded</h2>
+              <p className="text-sm text-[#5A6B7A] mt-1">Pick an exercise to calm your body and mind.</p>
             </div>
 
             <div className="space-y-3">
@@ -697,8 +697,8 @@ export default function GroundingExercises({ onBack, childName = 'Buddy' }: Grou
                 >
                   <div className="text-2xl">{ex.emoji}</div>
                   <div className="flex-1">
-                    <div className="text-sm font-semibold text-slate-800">{ex.label}</div>
-                    <div className="text-xs text-slate-500">{ex.description}</div>
+                    <div className="text-sm font-semibold text-[#1B2733]">{ex.label}</div>
+                    <div className="text-xs text-[#5A6B7A]">{ex.description}</div>
                   </div>
                   <ChevronRight className="h-4 w-4 text-slate-400" />
                 </motion.button>

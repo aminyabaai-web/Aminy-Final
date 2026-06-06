@@ -75,8 +75,8 @@ export function UpgradeNudge({
       <div className={`
         rounded-lg p-4 border
         ${urgency === 'high' ? 'bg-amber-50 border-amber-200' :
-          urgency === 'medium' ? 'bg-blue-50 border-blue-200' :
-          'bg-gray-50 border-gray-200'}
+          urgency === 'medium' ? 'bg-[#EEF4F8] border-[#C8DDE8]' :
+          'bg-[#FAF7F2] border-[#E8E4DF]'}
       `}>
         <div className="flex items-start gap-3">
           <div className={`
@@ -86,12 +86,12 @@ export function UpgradeNudge({
             <MessageSquare className={`w-5 h-5 ${urgency === 'high' ? 'text-amber-600' : 'text-blue-600'}`} />
           </div>
           <div className="flex-1">
-            <p className={`font-medium ${urgency === 'high' ? 'text-amber-900' : 'text-gray-900'}`}>
+            <p className={`font-medium ${urgency === 'high' ? 'text-amber-900' : 'text-[#1B2733]'}`}>
               {remaining <= 0
                 ? "You've reached your daily message limit"
                 : `${remaining} message${remaining !== 1 ? 's' : ''} left today`}
             </p>
-            <p className="text-sm text-gray-600 mt-1">
+            <p className="text-sm text-[#5A6B7A] mt-1">
               {remaining <= 0
                 ? "Upgrade to keep the conversation going - your family's progress matters!"
                 : "Upgrade for unlimited conversations with Aminy. We're here whenever you need support."}
@@ -122,12 +122,12 @@ export function UpgradeNudge({
             <FileText className="w-5 h-5 text-purple-600" />
           </div>
           <div className="flex-1">
-            <p className="font-medium text-gray-900">
+            <p className="font-medium text-[#1B2733]">
               {documentsUsed >= documentsLimit
                 ? "Document vault is full"
                 : `${documentsLimit - documentsUsed} document slots remaining`}
             </p>
-            <p className="text-sm text-gray-600 mt-1">
+            <p className="text-sm text-[#5A6B7A] mt-1">
               Upgrade to store more documents. Aminy learns from each one to give you better, more personalized guidance.
             </p>
             <div className="flex items-center gap-2 mt-3">
@@ -151,10 +151,10 @@ export function UpgradeNudge({
             <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-3">
               <Lock className="w-6 h-6 text-accent" />
             </div>
-            <h3 className="font-semibold text-gray-900 mb-1">
+            <h3 className="font-semibold text-[#1B2733] mb-1">
               {lockedFeature || 'Premium Feature'}
             </h3>
-            <p className="text-sm text-gray-600 mb-4">
+            <p className="text-sm text-[#5A6B7A] mb-4">
               Available on Core and Pro plans
             </p>
             <Button onClick={onUpgrade} className="bg-accent hover:bg-accent/90">
@@ -170,28 +170,28 @@ export function UpgradeNudge({
   // Memory preview - show what AI would remember on higher tier
   if (triggerType === 'memory-preview') {
     return (
-      <Card className="p-4 border-teal-200 bg-gradient-to-br from-teal-50 to-cyan-50">
+      <Card className="p-4 border-[#6B9080]/20 bg-gradient-to-br from-[#FAF7F2] to-cyan-50">
         <div className="flex items-start justify-between">
           <div className="flex items-start gap-3">
-            <div className="p-2 rounded-lg bg-teal-100">
-              <Brain className="w-5 h-5 text-teal-600" />
+            <div className="p-2 rounded-lg bg-[#6B9080]/10">
+              <Brain className="w-5 h-5 text-[#6B9080]" />
             </div>
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <p className="font-medium text-gray-900">AI Memory Preview</p>
-                <Badge className="bg-teal-100 text-teal-700 text-xs">Pro Feature</Badge>
+                <p className="font-medium text-[#1B2733]">AI Memory</p>
+                <Badge className="bg-[#6B9080]/10 text-[#6B9080] text-xs">Core+</Badge>
               </div>
-              <p className="text-sm text-gray-600">
-                With Pro, Aminy remembers everything about your family - triggers, strategies that work, progress milestones, and more.
+              <p className="text-sm text-[#5A6B7A]">
+                Upgrade and Aminy stores up to 5,000 facts about your family — triggers, what strategies work, milestones, and more. Pro stores 15,000; Pro+ Family stores everything, forever.
               </p>
-              <div className="mt-3 p-3 bg-white/60 rounded-lg border border-teal-100">
-                <p className="text-xs text-teal-700 italic">
+              <div className="mt-3 p-3 bg-white/60 rounded-lg border border-[#E8E4DF]">
+                <p className="text-xs text-[#6B9080] italic">
                   "I remember that Alex responds well to visual schedules and needs extra time for transitions.
                   Last week, the morning routine went smoothly when you used the timer.
                   Should we build on that success?"
                 </p>
               </div>
-              <Button size="sm" onClick={onUpgrade} className="mt-3 bg-teal-600 hover:bg-teal-700">
+              <Button size="sm" onClick={onUpgrade} className="mt-3 bg-primary hover:bg-[#6B9080]">
                 <Heart className="w-4 h-4 mr-1" />
                 Get Personalized Memory
               </Button>
@@ -216,7 +216,7 @@ export function UpgradeNudge({
             <Shield className="w-5 h-5 text-accent" />
           </div>
           <div className="flex-1">
-            <p className="text-sm text-gray-700">
+            <p className="text-sm text-[#3A4A57]">
               <span className="font-medium">You're doing amazing!</span> Upgrade for unlimited support,
               AI memory that never forgets, and direct access to BCBAs.
             </p>
@@ -244,26 +244,26 @@ interface TierComparisonProps {
 export function TierComparisonNudge({ currentTier, onSelectTier }: TierComparisonProps) {
   const tiers = [
     {
-      id: 'starter' as TierType,
-      name: 'Starter',
-      price: `$${tierPricing.starter.monthly}/mo`,
-      features: ['50 messages/day', '30-day memory', '5 vault documents', 'Basic AI coaching'],
-      highlight: currentTier === 'free'
-    },
-    {
       id: 'core' as TierType,
       name: 'Core',
       price: `$${tierPricing.core.monthly}/mo`,
-      features: ['200 messages/day', '90-day memory', '25 vault documents', 'Advanced AI coaching', 'Progress reports'],
-      highlight: currentTier === 'starter',
+      features: ['Unlimited AI chat', 'AI memory: 5,000 facts', 'IEP & document scanning', 'Full calm toolkit', '2 children'],
+      highlight: currentTier === 'free',
       popular: true
     },
     {
       id: 'pro' as TierType,
       name: 'Pro',
       price: `$${tierPricing.pro.monthly}/mo`,
-      features: ['Unlimited messages', 'Unlimited memory', 'Unlimited vault', 'BCBA sessions included', 'Priority support'],
-      highlight: currentTier === 'core'
+      features: ['AI memory: 15,000 facts', 'IEP-ready progress reports', 'Provider sharing portal', '3 children', '20% off sessions'],
+      highlight: currentTier === 'core' || currentTier === 'starter'
+    },
+    {
+      id: 'proplus' as TierType,
+      name: 'Pro+ Family',
+      price: `$${tierPricing.proplus.monthly}/mo`,
+      features: ['AI memory: unlimited', 'Ask a BCBA included', 'Unlimited children', 'Care coordinator', 'Priority support'],
+      highlight: currentTier === 'pro'
     }
   ];
 
@@ -279,11 +279,11 @@ export function TierComparisonNudge({ currentTier, onSelectTier }: TierCompariso
               Most Popular
             </Badge>
           )}
-          <h3 className="font-semibold text-lg text-gray-900">{tier.name}</h3>
-          <p className="text-xl sm:text-2xl font-bold text-gray-900 mt-2">{tier.price}</p>
+          <h3 className="font-semibold text-lg text-[#1B2733]">{tier.name}</h3>
+          <p className="text-xl sm:text-2xl font-bold text-[#1B2733] mt-2">{tier.price}</p>
           <ul className="mt-4 space-y-2">
             {tier.features.map((feature, i) => (
-              <li key={i} className="flex items-center gap-2 text-sm text-gray-600">
+              <li key={i} className="flex items-center gap-2 text-sm text-[#5A6B7A]">
                 <Sparkles className="w-4 h-4 text-accent" />
                 {feature}
               </li>

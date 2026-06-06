@@ -67,7 +67,7 @@ export function ALaCarteMenu({ onBookSession, userTier = 'free', isProUser = fal
       description: 'Brief consultation for specific questions or follow-ups with a Board Certified Behavior Analyst.',
       bestFor: 'Quick questions, follow-ups, progress check-ins',
       icon: GraduationCap,
-      color: 'bg-teal-100 text-teal-700',
+      color: 'bg-[#6B9080]/10 text-[#6B9080]',
       popular: false
     },
     {
@@ -80,7 +80,7 @@ export function ALaCarteMenu({ onBookSession, userTier = 'free', isProUser = fal
       description: 'Expert consultation with a Board Certified Behavior Analyst to review progress and adjust strategies.',
       bestFor: 'Care plan review, strategy adjustments, goal setting',
       icon: GraduationCap,
-      color: 'bg-teal-100 text-teal-700',
+      color: 'bg-[#6B9080]/10 text-[#6B9080]',
       popular: true
     },
     {
@@ -117,8 +117,8 @@ export function ALaCarteMenu({ onBookSession, userTier = 'free', isProUser = fal
     <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       {/* Header */}
       <div className="text-center">
-        <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">Book a Session</h2>
-        <p className="text-gray-600 text-sm max-w-md mx-auto">
+        <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733] mb-2">Book a Session</h2>
+        <p className="text-[#5A6B7A] text-sm max-w-md mx-auto">
           Cash-pay telehealth sessions with verified behavioral health experts.
           All sessions include a summary added to your care plan.
         </p>
@@ -141,11 +141,11 @@ export function ALaCarteMenu({ onBookSession, userTier = 'free', isProUser = fal
               key={session.id}
               className={`p-4 transition-all cursor-pointer hover:shadow-md ${
                 isSelected ? 'ring-2 ring-teal-500' : ''
-              } ${session.popular ? 'border-teal-200 bg-teal-50/30' : ''}`}
+              } ${session.popular ? 'border-[#6B9080]/20 bg-[#6B9080]/10/30' : ''}`}
               onClick={() => handleBookSession(session)}
             >
               {session.popular && (
-                <Badge className="mb-3 bg-teal-500 text-white">
+                <Badge className="mb-3 bg-primary text-white">
                   <Star className="w-3 h-3 mr-1" />
                   Most Popular
                 </Badge>
@@ -161,8 +161,8 @@ export function ALaCarteMenu({ onBookSession, userTier = 'free', isProUser = fal
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between mb-1">
                     <div>
-                      <h3 className="font-semibold text-gray-900">{session.title}</h3>
-                      <div className="flex items-center gap-2 text-sm text-gray-500">
+                      <h3 className="font-semibold text-[#1B2733]">{session.title}</h3>
+                      <div className="flex items-center gap-2 text-sm text-[#5A6B7A]">
                         <Clock className="w-3 h-3" />
                         <span>{session.duration} minutes</span>
                         <span className="mx-1">•</span>
@@ -171,22 +171,22 @@ export function ALaCarteMenu({ onBookSession, userTier = 'free', isProUser = fal
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-xl font-bold text-gray-900">
+                      <div className="text-xl font-bold text-[#1B2733]">
                         ${displayPrice}
                       </div>
                       {isProUser && (
-                        <div className="text-xs text-gray-400 line-through">
+                        <div className="text-xs text-[#8A9BA8] line-through">
                           ${session.price}
                         </div>
                       )}
                     </div>
                   </div>
 
-                  <p className="text-sm text-gray-600 mb-2">
+                  <p className="text-sm text-[#5A6B7A] mb-2">
                     {session.description}
                   </p>
 
-                  <div className="flex items-center gap-1 text-xs text-gray-500">
+                  <div className="flex items-center gap-1 text-xs text-[#5A6B7A]">
                     <Check className="w-3 h-3 text-green-500" />
                     <span>Best for: {session.bestFor}</span>
                   </div>
@@ -197,7 +197,7 @@ export function ALaCarteMenu({ onBookSession, userTier = 'free', isProUser = fal
               <div className="mt-4 flex justify-end">
                 <Button
                   size="sm"
-                  className={session.popular ? 'bg-teal-600 hover:bg-teal-700' : ''}
+                  className={session.popular ? 'bg-primary hover:bg-[#6B9080]' : ''}
                   onClick={(e) => {
                     e.stopPropagation();
                     handleBookSession(session);
@@ -213,8 +213,8 @@ export function ALaCarteMenu({ onBookSession, userTier = 'free', isProUser = fal
       </div>
 
       {/* Trust Badge */}
-      <div className="text-center pt-4 border-t border-gray-100">
-        <div className="flex items-center justify-center gap-3 sm:gap-4 text-xs text-gray-500">
+      <div className="text-center pt-4 border-t border-[#E8E4DF]">
+        <div className="flex items-center justify-center gap-3 sm:gap-4 text-xs text-[#5A6B7A]">
           <span className="flex items-center gap-1">
             <Check className="w-3 h-3 text-green-500" />
             BHCOE Accredited
@@ -231,16 +231,16 @@ export function ALaCarteMenu({ onBookSession, userTier = 'free', isProUser = fal
       </div>
 
       {/* Legal Disclaimers */}
-      <div className="text-xs text-gray-400 text-center space-y-2 pt-2">
+      <div className="text-xs text-[#8A9BA8] text-center space-y-2 pt-2">
         <p>
           Cash-pay sessions are parent coaching and wellness support, not medical treatment or therapy.
           Sessions are conducted by independently licensed providers via encrypted, secure video.
         </p>
         <p>
-          By booking, you agree to our <button className="underline hover:text-gray-600">Terms of Service</button> and <button className="underline hover:text-gray-600">Telehealth Consent</button>.
+          By booking, you agree to our <button className="underline hover:text-[#5A6B7A]">Terms of Service</button> and <button className="underline hover:text-[#5A6B7A]">Telehealth Consent</button>.
           Prepaid sessions never expire. Cancellations require 24-hour notice for full refund.
         </p>
-        <p className="text-gray-400">
+        <p className="text-[#8A9BA8]">
           Aminy facilitates connections with providers but is not the provider of clinical services.
           Providers are independently licensed professionals responsible for their own clinical decisions.
         </p>

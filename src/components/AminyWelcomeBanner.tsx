@@ -42,13 +42,13 @@ export function AminyWelcomeBanner({
             </p>
 
             <div className="space-y-2">
-              <p className="text-xs font-medium text-slate-600 mb-2">Try asking:</p>
+              <p className="text-xs font-medium text-[#5A6B7A] mb-2">Try asking:</p>
               <div className="grid gap-2">
                 {suggestedPrompts.map((prompt, index) => (
                   <button
                     key={index}
                     onClick={onStartChat}
-                    className="text-left px-3 py-2 bg-white hover:bg-accent/5 border border-slate-200 hover:border-accent/30 rounded-lg text-sm text-slate-700 transition-all group"
+                    className="text-left px-3 py-2 bg-white hover:bg-accent/5 border border-[#E8E4DF] hover:border-accent/30 rounded-lg text-sm text-[#3A4A57] transition-all group"
                   >
                     <div className="flex items-center justify-between">
                       <span>{prompt}</span>

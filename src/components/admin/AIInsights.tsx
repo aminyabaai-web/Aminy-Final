@@ -211,7 +211,7 @@ export function AIInsights() {
     switch (priority) {
       case 'high': return 'text-rose-600 bg-rose-50 border-rose-200';
       case 'medium': return 'text-amber-600 bg-amber-50 border-amber-200';
-      case 'low': return 'text-blue-600 bg-blue-50 border-blue-200';
+      case 'low': return 'text-blue-600 bg-[#EEF4F8] border-[#C8DDE8]';
       default: return 'text-neutral-600 bg-neutral-50 border-neutral-200';
     }
   };
@@ -241,8 +241,8 @@ export function AIInsights() {
             <Brain className="w-6 h-6 text-violet-600" />
           </div>
           <div>
-            <h2 className="text-xl font-semibold text-neutral-900 dark:text-white">AI Insights</h2>
-            <p className="text-sm text-neutral-500 dark:text-neutral-400">
+            <h2 className="text-xl font-semibold text-[#1B2733] dark:text-white">AI Insights</h2>
+            <p className="text-sm text-[#5A6B7A] dark:text-neutral-400">
               {lastAnalyzed ? `Last analyzed ${lastAnalyzed.toLocaleTimeString()}` : 'Analyzing...'}
             </p>
           </div>
@@ -272,7 +272,7 @@ export function AIInsights() {
             className={`flex items-center gap-2 px-4 py-2 text-sm font-medium border-b-2 -mb-px transition-colors ${
               activeTab === tab.id
                 ? 'border-violet-600 text-violet-600'
-                : 'border-transparent text-neutral-500 hover:text-neutral-700'
+                : 'border-transparent text-[#5A6B7A] hover:text-neutral-700'
             }`}
           >
             <tab.icon className="w-4 h-4" />
@@ -289,7 +289,7 @@ export function AIInsights() {
             <Sparkles className="w-6 h-6 text-violet-600 absolute -top-1 -right-1 animate-pulse" />
           </div>
           <p className="mt-4 text-neutral-600 dark:text-neutral-400">Analyzing user patterns...</p>
-          <p className="text-sm text-neutral-500">This may take a moment</p>
+          <p className="text-sm text-[#5A6B7A]">This may take a moment</p>
         </div>
       ) : (
         <>
@@ -306,11 +306,11 @@ export function AIInsights() {
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <h3 className="font-semibold text-neutral-900 dark:text-white">{insight.title}</h3>
+                        <h3 className="font-semibold text-[#1B2733] dark:text-white">{insight.title}</h3>
                         <span className={`px-2 py-0.5 text-xs font-medium rounded-full border ${getPriorityColor(insight.priority)}`}>
                           {insight.priority}
                         </span>
-                        <span className="text-xs text-neutral-500">
+                        <span className="text-xs text-[#5A6B7A]">
                           {Math.round(insight.confidence * 100)}% confidence
                         </span>
                       </div>
@@ -352,7 +352,7 @@ export function AIInsights() {
                   className="bg-white dark:bg-slate-800 rounded-lg border border-neutral-200 dark:border-slate-700 p-4"
                 >
                   <div className="flex items-center justify-between mb-2">
-                    <span className="font-medium text-neutral-900 dark:text-white">{feature.feature}</span>
+                    <span className="font-medium text-[#1B2733] dark:text-white">{feature.feature}</span>
                     <div className="flex items-center gap-2">
                       <span className={`text-sm font-medium ${
                         feature.usagePercent >= 60 ? 'text-green-600' :
@@ -411,8 +411,8 @@ export function AIInsights() {
                         </span>
                       </div>
                       <div>
-                        <span className="font-medium text-neutral-900 dark:text-white">{user.userName}</span>
-                        <p className="text-xs text-neutral-500">Last active: {user.lastActive}</p>
+                        <span className="font-medium text-[#1B2733] dark:text-white">{user.userName}</span>
+                        <p className="text-xs text-[#5A6B7A]">Last active: {user.lastActive}</p>
                       </div>
                     </div>
                     <span className={`px-2 py-1 text-sm font-medium rounded-lg ${getRiskColor(user.riskScore)}`}>
@@ -427,7 +427,7 @@ export function AIInsights() {
                       <MessageSquare className="w-3 h-3" />
                       Send Email
                     </Button>
-                    <span className="text-sm text-neutral-500 flex items-center gap-1">
+                    <span className="text-sm text-[#5A6B7A] flex items-center gap-1">
                       <Lightbulb className="w-3 h-3 text-amber-500" />
                       {user.suggestedAction}
                     </span>
@@ -460,7 +460,7 @@ export function AIInsights() {
               </div>
 
               <div className="space-y-3">
-                <h4 className="font-medium text-neutral-900 dark:text-white">Top Revenue Actions</h4>
+                <h4 className="font-medium text-[#1B2733] dark:text-white">Top Revenue Actions</h4>
                 {[
                   { action: 'Shift upgrade prompts to 7-9pm', impact: '+$2,400/mo', effort: 'Low', time: '1 day' },
                   { action: 'Add referral prompt after positive AI interactions', impact: '+$5,200/mo', effort: 'Medium', time: '3 days' },
@@ -477,8 +477,8 @@ export function AIInsights() {
                         {i + 1}
                       </div>
                       <div>
-                        <span className="font-medium text-neutral-900 dark:text-white">{item.action}</span>
-                        <div className="flex items-center gap-3 text-xs text-neutral-500 mt-1">
+                        <span className="font-medium text-[#1B2733] dark:text-white">{item.action}</span>
+                        <div className="flex items-center gap-3 text-xs text-[#5A6B7A] mt-1">
                           <span>Effort: {item.effort}</span>
                           <span>Time: {item.time}</span>
                         </div>

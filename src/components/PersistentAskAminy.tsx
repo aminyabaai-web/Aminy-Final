@@ -524,7 +524,7 @@ export function PersistentAskAminy({
         "flex flex-col overflow-hidden"
       )}>
         {/* Enhanced Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+        <div className="flex items-center justify-between p-4 border-b border-[#E8E4DF] dark:border-gray-700 bg-white dark:bg-gray-900">
           <div className="flex items-center gap-3">
             <div className={cn(
               "w-10 h-10 bg-gradient-to-br from-accent/20 to-accent/10 rounded-xl flex items-center justify-center transition-all duration-300",
@@ -534,7 +534,7 @@ export function PersistentAskAminy({
             </div>
             <div className="flex-1">
               <div className="flex items-center gap-2">
-                <h3 className="font-semibold text-gray-900 dark:text-gray-100">Aminy</h3>
+                <h3 className="font-semibold text-[#1B2733] dark:text-gray-100">Aminy</h3>
                 <Badge className="bg-green-100 text-green-800 border-green-200 text-xs">
                   Always Available
                 </Badge>
@@ -546,7 +546,7 @@ export function PersistentAskAminy({
                 )}
               </div>
               {!isMinimized && (
-                <p className="text-sm text-gray-600 dark:text-gray-400 aminy-ai-subtitle">
+                <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8] aminy-ai-subtitle">
                   {conversationTitle || `Your AI guide for ${userData.childName}'s development and care`}
                 </p>
               )}
@@ -620,10 +620,10 @@ export function PersistentAskAminy({
                       <div className="w-16 h-16 bg-gradient-to-br from-accent/20 to-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
                         <Sparkles className="w-8 h-8 text-accent" />
                       </div>
-                      <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                      <h4 className="text-lg font-semibold text-[#1B2733] dark:text-gray-100 mb-2">
                         How can I help with {userData.childName} today?
                       </h4>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 sm:mb-6 max-w-md mx-auto">
+                      <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8] mb-4 sm:mb-6 max-w-md mx-auto">
                         Ask me anything about development, routines, behaviors, school support, or concerns you have.
                       </p>
                       
@@ -662,14 +662,14 @@ export function PersistentAskAminy({
                           "max-w-[85%] rounded-2xl px-4 py-3 text-sm relative",
                           message.role === 'user'
                             ? "bg-accent text-white"
-                            : "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700"
+                            : "bg-[#F0EDE8] dark:bg-gray-800 text-[#1B2733] dark:text-gray-100 border border-[#E8E4DF] dark:border-gray-700"
                         )}>
                           {/* Message Header */}
                           <div className="flex items-center justify-between mb-2">
                             <div className="flex items-center gap-2">
                               <span className={cn(
                                 "text-xs opacity-60",
-                                message.role === 'user' ? "text-white/80" : "text-gray-500 dark:text-gray-400"
+                                message.role === 'user' ? "text-white/80" : "text-[#5A6B7A] dark:text-[#8A9BA8]"
                               )}>
                                 {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                               </span>
@@ -698,7 +698,7 @@ export function PersistentAskAminy({
                                   "h-6 w-6 p-0",
                                   message.role === 'user' 
                                     ? "hover:bg-white/20 text-white/80" 
-                                    : "hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400"
+                                    : "hover:bg-[#E8E4DF] dark:hover:bg-gray-700 text-[#5A6B7A] dark:text-[#8A9BA8]"
                                 )}
                                 title="Copy message"
                               >
@@ -714,8 +714,8 @@ export function PersistentAskAminy({
                           
                           {/* Follow-up Suggestions */}
                           {message.role === 'assistant' && message.suggestions && message.suggestions.length > 0 && !message.isStreaming && (
-                            <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-600">
-                              <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">Continue the conversation:</p>
+                            <div className="mt-3 pt-3 border-t border-[#E8E4DF] dark:border-gray-600">
+                              <p className="text-xs text-[#5A6B7A] dark:text-[#8A9BA8] mb-2">Continue the conversation:</p>
                               <div className="flex flex-wrap gap-2">
                                 {message.suggestions.map((suggestion, suggestionIndex) => (
                                   <Button
@@ -750,14 +750,14 @@ export function PersistentAskAminy({
                       <div className="w-8 h-8 bg-gradient-to-br from-accent/20 to-accent/10 rounded-lg flex items-center justify-center flex-shrink-0">
                         <Sparkles className="w-4 h-4 text-accent animate-pulse" />
                       </div>
-                      <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl px-4 py-3 border border-gray-200 dark:border-gray-700">
+                      <div className="bg-[#F0EDE8] dark:bg-gray-800 rounded-2xl px-4 py-3 border border-[#E8E4DF] dark:border-gray-700">
                         <div className="flex items-center gap-2">
                           <div className="flex space-x-1">
                             <div className="w-2 h-2 bg-accent rounded-full animate-bounce"></div>
                             <div className="w-2 h-2 bg-accent rounded-full animate-bounce [animation-delay:0.1s]"></div>
                             <div className="w-2 h-2 bg-accent rounded-full animate-bounce [animation-delay:0.2s]"></div>
                           </div>
-                          <span className="text-xs text-gray-500 dark:text-gray-400">Aminy is thinking...</span>
+                          <span className="text-xs text-[#5A6B7A] dark:text-[#8A9BA8]">Aminy is thinking...</span>
                         </div>
                       </div>
                     </div>
@@ -768,8 +768,8 @@ export function PersistentAskAminy({
             </div>
 
             {/* Enhanced Input Area */}
-            <div className="border-t border-gray-200 dark:border-gray-700 p-4 bg-white dark:bg-gray-900">
-              <div className="relative bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 focus-within:border-accent focus-within:ring-2 focus-within:ring-accent/20 transition-all aminy-ai-card">
+            <div className="border-t border-[#E8E4DF] dark:border-gray-700 p-4 bg-white dark:bg-gray-900">
+              <div className="relative bg-[#FAF7F2] dark:bg-gray-800 rounded-xl border border-[#E8E4DF] dark:border-gray-700 focus-within:border-accent focus-within:ring-2 focus-within:ring-accent/20 transition-all aminy-ai-card">
                 <textarea
                   ref={textareaRef}
                   value={input}
@@ -780,7 +780,7 @@ export function PersistentAskAminy({
                     : "Upgrade to continue unlimited conversations"
                   }
                   disabled={!canSendMessage || isTyping || isStreaming}
-                  className="aminy-ai-input-field w-full bg-transparent border-none outline-none resize-none px-4 py-3 pr-32 text-sm placeholder-gray-500 dark:placeholder-gray-400 min-h-[52px] text-gray-900 dark:text-gray-100"
+                  className="aminy-ai-input-field w-full bg-transparent border-none outline-none resize-none px-4 py-3 pr-32 text-sm placeholder-gray-500 dark:placeholder-gray-400 min-h-[52px] text-[#1B2733] dark:text-gray-100"
                   rows={1}
                 />
                 
@@ -789,7 +789,7 @@ export function PersistentAskAminy({
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="w-8 h-8 p-0 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-400 transition-all duration-200"
+                    className="w-8 h-8 p-0 text-[#8A9BA8] hover:text-[#5A6B7A] dark:text-[#5A6B7A] dark:hover:text-[#8A9BA8] transition-all duration-200"
                     disabled={!canSendMessage || isTyping || isStreaming}
                     onClick={() => setShowAttachmentPicker(true)}
                     title="Attach file"
@@ -807,7 +807,7 @@ export function PersistentAskAminy({
                       "w-8 h-8 p-0 transition-all duration-200",
                       input.trim() && canSendMessage && !isTyping && !isStreaming
                         ? "bg-accent hover:bg-accent/90 text-white scale-100"
-                        : "bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 scale-95"
+                        : "bg-gray-300 dark:bg-gray-600 text-[#5A6B7A] dark:text-[#8A9BA8] scale-95"
                     )}
                     title="Send message"
                   >
@@ -817,7 +817,7 @@ export function PersistentAskAminy({
               </div>
               
               {/* Helper Text */}
-              <div className="mt-3 flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+              <div className="mt-3 flex items-center justify-between text-xs text-[#5A6B7A] dark:text-[#8A9BA8]">
                 <div className="flex items-center gap-2">
                   <span className="aminy-ai-helper-text">
                     AI responses are for guidance only and don't replace professional medical advice

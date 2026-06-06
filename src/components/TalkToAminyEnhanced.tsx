@@ -814,7 +814,7 @@ export const TalkToAminyEnhanced: React.FC<TalkToAminyEnhancedProps> = ({
       {/* Enhanced Suggested Prompts */}
       {messages.length === 0 && (
         <div className="mb-4">
-          <div className="text-center text-gray-500 mb-3">
+          <div className="text-center text-[#5A6B7A] mb-3">
             <p className="text-sm font-medium">
               {usableRecords.length > 0 && useRecords 
                 ? "Ask about your uploaded records:"
@@ -850,7 +850,7 @@ export const TalkToAminyEnhanced: React.FC<TalkToAminyEnhancedProps> = ({
 
       {/* Enhanced Input Area */}
       <div className="relative">
-        <div className="bg-gray-50 rounded-xl border border-gray-200 focus-within:border-accent transition-all duration-200 focus-within:shadow-sm">
+        <div className="bg-[#FAF7F2] rounded-xl border border-[#E8E4DF] focus-within:border-accent transition-all duration-200 focus-within:shadow-sm">
           <div className="relative">
             <Textarea
               ref={textareaRef}
@@ -868,7 +868,7 @@ export const TalkToAminyEnhanced: React.FC<TalkToAminyEnhancedProps> = ({
             />
             
             {/* Input Actions Row */}
-            <div className="flex items-center justify-between p-3 pt-0 border-t border-gray-100/50">
+            <div className="flex items-center justify-between p-3 pt-0 border-t border-[#E8E4DF]/50">
               <div className="flex items-center gap-1">
                 {/* Enhanced File Attachment */}
                 <Button 
@@ -951,7 +951,7 @@ export const TalkToAminyEnhanced: React.FC<TalkToAminyEnhancedProps> = ({
         
         {/* Enhanced Helper Text with Dynamic Content */}
         <div className="flex items-center justify-center gap-2 mt-2">
-          <p className="text-center text-gray-500 text-xs aminy-ai-helper-text">
+          <p className="text-center text-[#5A6B7A] text-xs aminy-ai-helper-text">
             {isListening ? (
               <span className="text-accent flex items-center gap-1">
                 <div className="w-1 h-1 bg-accent rounded-full animate-pulse" />
@@ -1010,7 +1010,7 @@ export const TalkToAminyEnhanced: React.FC<TalkToAminyEnhancedProps> = ({
       </div>
       
       {/* Enhanced Disclaimer Footer */}
-      <div className="mt-4 pt-3 border-t border-gray-100">
+      <div className="mt-4 pt-3 border-t border-[#E8E4DF]">
         <DisclaimerFooter variant="compact" className="text-center" />
       </div>
     </Card>

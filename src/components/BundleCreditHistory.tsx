@@ -69,10 +69,10 @@ function getBundleName(bundleId: string | null): string {
 function getTransactionIcon(type: CreditTransaction['type']) {
   switch (type) {
     case 'purchase': return { icon: Gift, color: 'text-green-500', bg: 'bg-green-50' };
-    case 'usage': return { icon: MinusCircle, color: 'text-blue-500', bg: 'bg-blue-50' };
+    case 'usage': return { icon: MinusCircle, color: 'text-blue-500', bg: 'bg-[#EEF4F8]' };
     case 'expiry': return { icon: AlertCircle, color: 'text-amber-500', bg: 'bg-amber-50' };
     case 'refund': return { icon: CheckCircle2, color: 'text-purple-500', bg: 'bg-purple-50' };
-    default: return { icon: Package, color: 'text-gray-500', bg: 'bg-gray-50' };
+    default: return { icon: Package, color: 'text-[#5A6B7A]', bg: 'bg-[#FAF7F2]' };
   }
 }
 
@@ -172,8 +172,8 @@ export function BundleCreditHistory({ userId, onBack }: BundleCreditHistoryProps
   if (loading) {
     return (
       <div className="max-w-2xl mx-auto px-4 py-12 flex flex-col items-center gap-3">
-        <Loader2 className="w-8 h-8 text-teal-500 animate-spin" />
-        <p className="text-sm text-gray-500">Loading credit history...</p>
+        <Loader2 className="w-8 h-8 text-primary animate-spin" />
+        <p className="text-sm text-[#5A6B7A]">Loading credit history...</p>
       </div>
     );
   }
@@ -187,19 +187,19 @@ export function BundleCreditHistory({ userId, onBack }: BundleCreditHistoryProps
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           {onBack && (
-            <button onClick={onBack} className="p-1 min-h-[44px] min-w-[44px] flex items-center justify-center text-gray-400 hover:text-gray-600">
+            <button onClick={onBack} className="p-1 min-h-[44px] min-w-[44px] flex items-center justify-center text-[#8A9BA8] hover:text-[#5A6B7A]">
               <ArrowLeft size={18} />
             </button>
           )}
           <div>
-            <h2 className="text-lg font-bold text-gray-900">Bundle Credits</h2>
-            <p className="text-xs text-gray-500">Purchase history and credit usage</p>
+            <h2 className="text-lg font-bold text-[#1B2733]">Bundle Credits</h2>
+            <p className="text-xs text-[#5A6B7A]">Purchase history and credit usage</p>
           </div>
         </div>
         <button
           onClick={handleRefresh}
           disabled={refreshing}
-          className="p-2 text-gray-400 hover:text-gray-600 disabled:text-gray-400"
+          className="p-2 text-[#8A9BA8] hover:text-[#5A6B7A] disabled:text-[#8A9BA8]"
           aria-label="Refresh"
         >
           <RefreshCw size={16} className={refreshing ? 'animate-spin' : ''} />
@@ -214,18 +214,18 @@ export function BundleCreditHistory({ userId, onBack }: BundleCreditHistoryProps
       )}
 
       {/* Current Credit Balance */}
-      <div className="bg-white rounded-2xl border border-gray-200 p-5">
+      <div className="bg-white rounded-2xl border border-[#E8E4DF] p-5">
         <div className="flex items-center gap-2 mb-3">
-          <Package size={16} className="text-teal-500" />
-          <h3 className="text-sm font-semibold text-gray-700">Current Balance</h3>
+          <Package size={16} className="text-primary" />
+          <h3 className="text-sm font-semibold text-[#3A4A57]">Current Balance</h3>
         </div>
 
         <div className="grid grid-cols-2 gap-4 mb-3">
-          <div className="bg-teal-50 rounded-xl p-3 text-center">
-            <p className="text-2xl font-bold text-teal-700">{currentCredits.consultCredits}</p>
-            <p className="text-xs text-teal-600">Consult Credits</p>
+          <div className="bg-[#6B9080]/10 rounded-xl p-3 text-center">
+            <p className="text-2xl font-bold text-[#6B9080]">{currentCredits.consultCredits}</p>
+            <p className="text-xs text-[#6B9080]">Consult Credits</p>
           </div>
-          <div className="bg-blue-50 rounded-xl p-3 text-center">
+          <div className="bg-[#EEF4F8] rounded-xl p-3 text-center">
             <p className="text-2xl font-bold text-blue-700">{currentCredits.deepReviewCredits}</p>
             <p className="text-xs text-blue-600">Deep Review Credits</p>
           </div>
@@ -237,7 +237,7 @@ export function BundleCreditHistory({ userId, onBack }: BundleCreditHistoryProps
               ? 'bg-red-50 text-red-700'
               : (expiryDays ?? 0) <= 30
               ? 'bg-amber-50 text-amber-700'
-              : 'bg-gray-50 text-gray-600'
+              : 'bg-[#FAF7F2] text-[#5A6B7A]'
           }`}>
             <Calendar size={12} />
             <span>
@@ -249,23 +249,23 @@ export function BundleCreditHistory({ userId, onBack }: BundleCreditHistoryProps
         )}
 
         {totalCurrentCredits === 0 && (
-          <p className="text-xs text-gray-400 text-center py-2">
+          <p className="text-xs text-[#8A9BA8] text-center py-2">
             No active credits. Purchase a bundle to get started.
           </p>
         )}
       </div>
 
       {/* Transaction Timeline */}
-      <div className="bg-white rounded-2xl border border-gray-200 p-5">
+      <div className="bg-white rounded-2xl border border-[#E8E4DF] p-5">
         <div className="flex items-center gap-2 mb-4">
-          <Clock size={16} className="text-gray-400" />
-          <h3 className="text-sm font-semibold text-gray-700">Credit History</h3>
+          <Clock size={16} className="text-[#8A9BA8]" />
+          <h3 className="text-sm font-semibold text-[#3A4A57]">Credit History</h3>
         </div>
 
         {transactions.length > 0 ? (
           <div className="relative">
             {/* Timeline line */}
-            <div className="absolute left-[15px] top-0 bottom-0 w-px bg-gray-200" />
+            <div className="absolute left-[15px] top-0 bottom-0 w-px bg-[#E8E4DF]" />
 
             <div className="space-y-4">
               {transactions.map((txn) => {
@@ -283,18 +283,18 @@ export function BundleCreditHistory({ userId, onBack }: BundleCreditHistoryProps
                     <div className="flex-1 min-w-0 pb-1">
                       <div className="flex items-start justify-between gap-2">
                         <div className="min-w-0">
-                          <p className="text-sm font-medium text-gray-900 truncate">
+                          <p className="text-sm font-medium text-[#1B2733] truncate">
                             {txn.type === 'purchase' ? `Purchased ${txn.bundleName}` :
                              txn.type === 'usage' ? 'Credit Used' :
                              txn.type === 'expiry' ? 'Credits Expired' :
                              'Credit Refund'}
                           </p>
-                          <p className="text-xs text-gray-500 mt-0.5">
+                          <p className="text-xs text-[#5A6B7A] mt-0.5">
                             {formatDateFull(txn.createdAt)}
                           </p>
                         </div>
                         {txn.amount > 0 && txn.type === 'purchase' && (
-                          <span className="text-xs font-medium text-gray-600 whitespace-nowrap">
+                          <span className="text-xs font-medium text-[#5A6B7A] whitespace-nowrap">
                             {formatPrice(txn.amount)}
                           </span>
                         )}
@@ -319,13 +319,13 @@ export function BundleCreditHistory({ userId, onBack }: BundleCreditHistoryProps
                       </div>
 
                       {/* Running balance */}
-                      <p className="text-[10px] text-gray-400 mt-1">
+                      <p className="text-[10px] text-[#8A9BA8] mt-1">
                         Balance after: {txn.consultCreditsAfter} consult, {txn.deepReviewCreditsAfter} deep review
                       </p>
 
                       {/* Expiry info for purchases */}
                       {txn.expiresAt && txn.type === 'purchase' && (
-                        <p className="text-[10px] text-gray-400 mt-0.5">
+                        <p className="text-[10px] text-[#8A9BA8] mt-0.5">
                           Expires: {formatDateShort(new Date(txn.expiresAt))}
                         </p>
                       )}
@@ -337,9 +337,9 @@ export function BundleCreditHistory({ userId, onBack }: BundleCreditHistoryProps
           </div>
         ) : (
           <div className="text-center py-6">
-            <Package className="w-10 h-10 text-gray-400 mx-auto mb-2" />
-            <p className="text-sm text-gray-500">No credit history yet</p>
-            <p className="text-xs text-gray-400 mt-1">
+            <Package className="w-10 h-10 text-[#8A9BA8] mx-auto mb-2" />
+            <p className="text-sm text-[#5A6B7A]">No credit history yet</p>
+            <p className="text-xs text-[#8A9BA8] mt-1">
               Purchase a session bundle to see transactions here
             </p>
           </div>
@@ -347,7 +347,7 @@ export function BundleCreditHistory({ userId, onBack }: BundleCreditHistoryProps
       </div>
 
       {/* Footer */}
-      <p className="text-xs text-gray-400 text-center">
+      <p className="text-xs text-[#8A9BA8] text-center">
         Credits are applied at checkout. Unused credits expire per bundle terms.
       </p>
     </div>

@@ -212,15 +212,15 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
   const hasRealData = !!(retentionData && retentionData.cohorts.length > 0);
   if (!isDemoMode() && !hasRealData) {
     return (
-      <div className="min-h-screen bg-gray-50">
-        <div className="bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4">
+      <div className="min-h-screen bg-[#FAF7F2]">
+        <div className="bg-white border-b border-[#E8E4DF] px-4 sm:px-6 py-3 sm:py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-lg sm:text-xl font-semibold text-gray-900">Unit Economics</h1>
-              <p className="text-sm text-gray-500 mt-1">Investor-grade metrics dashboard</p>
+              <h1 className="text-lg sm:text-xl font-semibold text-[#1B2733]">Unit Economics</h1>
+              <p className="text-sm text-[#5A6B7A] mt-1">Investor-grade metrics dashboard</p>
             </div>
             {onBack && (
-              <button onClick={onBack} className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900">
+              <button onClick={onBack} className="px-4 py-2 text-sm text-[#5A6B7A] hover:text-[#1B2733]">
                 ← Back
               </button>
             )}
@@ -241,7 +241,7 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Demo Data Banner — only when showing sample (non-real) metrics */}
       {!hasRealData && (
         <div className="bg-amber-50 border-b border-amber-200 px-4 py-2.5 flex items-center gap-2">
@@ -250,17 +250,17 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
         </div>
       )}
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4">
+      <div className="bg-white border-b border-[#E8E4DF] px-4 sm:px-6 py-3 sm:py-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-lg sm:text-xl font-semibold text-gray-900">Unit Economics</h1>
-            <p className="text-sm text-gray-500 mt-1">Investor-grade metrics dashboard</p>
+            <h1 className="text-lg sm:text-xl font-semibold text-[#1B2733]">Unit Economics</h1>
+            <p className="text-sm text-[#5A6B7A] mt-1">Investor-grade metrics dashboard</p>
           </div>
           <div className="flex items-center gap-3">
             <select
               value={timeframe}
               onChange={(e) => setTimeframe(e.target.value as typeof timeframe)}
-              className="px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white"
+              className="px-3 py-2 border border-[#E8E4DF] rounded-lg text-sm bg-white"
             >
               <option value="30d">Last 30 days</option>
               <option value="90d">Last 90 days</option>
@@ -270,7 +270,7 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
             {onBack && (
               <button
                 onClick={onBack}
-                className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900"
+                className="px-4 py-2 text-sm text-[#5A6B7A] hover:text-[#1B2733]"
               >
                 ← Back
               </button>
@@ -288,7 +288,7 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05 }}
-              className="bg-white rounded-xl border border-gray-200 p-4"
+              className="bg-white rounded-xl border border-[#E8E4DF] p-4"
             >
               <div className="flex items-start justify-between">
                 <div
@@ -298,12 +298,12 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
                   <div style={{ color: metric.color }}>{metric.icon}</div>
                 </div>
                 {metric.target && (
-                  <span className="text-xs text-gray-400">Target: {metric.target}</span>
+                  <span className="text-xs text-[#8A9BA8]">Target: {metric.target}</span>
                 )}
               </div>
               <div className="mt-3">
-                <p className="text-sm text-gray-500">{metric.title}</p>
-                <p className="text-2xl font-semibold text-gray-900 mt-1">{metric.value}</p>
+                <p className="text-sm text-[#5A6B7A]">{metric.title}</p>
+                <p className="text-2xl font-semibold text-[#1B2733] mt-1">{metric.value}</p>
                 <div className="flex items-center gap-1 mt-2">
                   {metric.trend === 'up' ? (
                     <ArrowUpRight className="w-4 h-4 text-green-500" />
@@ -323,7 +323,7 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
                     {metric.change > 0 ? '+' : ''}
                     {metric.change}%
                   </span>
-                  <span className="text-xs text-gray-400">{metric.changeLabel}</span>
+                  <span className="text-xs text-[#8A9BA8]">{metric.changeLabel}</span>
                 </div>
               </div>
             </motion.div>
@@ -331,24 +331,24 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
         </div>
 
         {/* Revenue by Tier */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
+        <div className="bg-white rounded-xl border border-[#E8E4DF] p-6">
           <div className="flex items-center justify-between mb-4 sm:mb-6">
             <div>
-              <h2 className="text-lg font-semibold text-gray-900">Revenue by Tier</h2>
-              <p className="text-sm text-gray-500">Monthly recurring revenue breakdown</p>
+              <h2 className="text-lg font-semibold text-[#1B2733]">Revenue by Tier</h2>
+              <p className="text-sm text-[#5A6B7A]">Monthly recurring revenue breakdown</p>
             </div>
             <div className="text-right">
-              <p className="text-2xl font-semibold text-gray-900">${totalRevenue.toLocaleString()}</p>
-              <p className="text-sm text-gray-500">Total MRR</p>
+              <p className="text-2xl font-semibold text-[#1B2733]">${totalRevenue.toLocaleString()}</p>
+              <p className="text-sm text-[#5A6B7A]">Total MRR</p>
             </div>
           </div>
 
           <div className="space-y-3 sm:space-y-4">
             {TIER_BREAKDOWN.filter(t => t.tier !== 'Free').map((tier) => (
               <div key={tier.tier} className="flex items-center gap-3 sm:gap-4">
-                <div className="w-20 text-sm font-medium text-gray-700">{tier.tier}</div>
+                <div className="w-20 text-sm font-medium text-[#3A4A57]">{tier.tier}</div>
                 <div className="flex-1">
-                  <div className="h-8 bg-gray-100 rounded-lg overflow-hidden relative">
+                  <div className="h-8 bg-[#F0EDE8] rounded-lg overflow-hidden relative">
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: `${(tier.revenue / totalRevenue) * 100}%` }}
@@ -364,67 +364,67 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
                   </div>
                 </div>
                 <div className="w-24 text-right">
-                  <p className="text-sm font-medium text-gray-900">{tier.users.toLocaleString()}</p>
-                  <p className="text-xs text-gray-500">users</p>
+                  <p className="text-sm font-medium text-[#1B2733]">{tier.users.toLocaleString()}</p>
+                  <p className="text-xs text-[#5A6B7A]">users</p>
                 </div>
                 <div className="w-20 text-right">
-                  <p className="text-sm font-medium text-gray-900">${tier.arpu}</p>
-                  <p className="text-xs text-gray-500">ARPU</p>
+                  <p className="text-sm font-medium text-[#1B2733]">${tier.arpu}</p>
+                  <p className="text-xs text-[#5A6B7A]">ARPU</p>
                 </div>
               </div>
             ))}
           </div>
 
-          <div className="mt-4 sm:mt-6 pt-4 border-t border-gray-100 flex items-center justify-between">
+          <div className="mt-4 sm:mt-6 pt-4 border-t border-[#E8E4DF] flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-500">Blended ARPU (Paid Users)</p>
-              <p className="text-lg font-semibold text-gray-900">${blendedArpu.toFixed(2)}/mo</p>
+              <p className="text-sm text-[#5A6B7A]">Blended ARPU (Paid Users)</p>
+              <p className="text-lg font-semibold text-[#1B2733]">${blendedArpu.toFixed(2)}/mo</p>
             </div>
             <div>
-              <p className="text-sm text-gray-500">Free → Paid Conversion</p>
-              <p className="text-lg font-semibold text-gray-900">
+              <p className="text-sm text-[#5A6B7A]">Free → Paid Conversion</p>
+              <p className="text-lg font-semibold text-[#1B2733]">
                 {((totalPaidUsers / (totalPaidUsers + TIER_BREAKDOWN[0].users)) * 100).toFixed(1)}%
               </p>
             </div>
             <div>
-              <p className="text-sm text-gray-500">Upgrade Rate (Starter → Higher)</p>
-              <p className="text-lg font-semibold text-gray-900">42.3%</p>
+              <p className="text-sm text-[#5A6B7A]">Upgrade Rate (Starter → Higher)</p>
+              <p className="text-lg font-semibold text-[#1B2733]">42.3%</p>
             </div>
           </div>
         </div>
 
         {/* Cohort Retention Table */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
+        <div className="bg-white rounded-xl border border-[#E8E4DF] p-6">
           <div className="flex items-center justify-between mb-4 sm:mb-6">
             <div>
-              <h2 className="text-lg font-semibold text-gray-900">Cohort Retention</h2>
-              <p className="text-sm text-gray-500">User retention by signup month</p>
+              <h2 className="text-lg font-semibold text-[#1B2733]">Cohort Retention</h2>
+              <p className="text-sm text-[#5A6B7A]">User retention by signup month</p>
             </div>
-            <BarChart3 className="w-5 h-5 text-gray-400" />
+            <BarChart3 className="w-5 h-5 text-[#8A9BA8]" />
           </div>
 
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-gray-200">
-                  <th className="text-left py-3 px-2 font-medium text-gray-600">Cohort</th>
-                  <th className="text-right py-3 px-2 font-medium text-gray-600">Users</th>
-                  <th className="text-right py-3 px-2 font-medium text-gray-600">D1</th>
-                  <th className="text-right py-3 px-2 font-medium text-gray-600">D7</th>
-                  <th className="text-right py-3 px-2 font-medium text-gray-600">D30</th>
-                  <th className="text-right py-3 px-2 font-medium text-gray-600">D60</th>
-                  <th className="text-right py-3 px-2 font-medium text-gray-600">D90</th>
+                <tr className="border-b border-[#E8E4DF]">
+                  <th className="text-left py-3 px-2 font-medium text-[#5A6B7A]">Cohort</th>
+                  <th className="text-right py-3 px-2 font-medium text-[#5A6B7A]">Users</th>
+                  <th className="text-right py-3 px-2 font-medium text-[#5A6B7A]">D1</th>
+                  <th className="text-right py-3 px-2 font-medium text-[#5A6B7A]">D7</th>
+                  <th className="text-right py-3 px-2 font-medium text-[#5A6B7A]">D30</th>
+                  <th className="text-right py-3 px-2 font-medium text-[#5A6B7A]">D60</th>
+                  <th className="text-right py-3 px-2 font-medium text-[#5A6B7A]">D90</th>
                 </tr>
               </thead>
               <tbody>
                 {cohortData.map((cohort) => (
                   <tr
                     key={cohort.month}
-                    className="border-b border-gray-100 hover:bg-gray-50 cursor-pointer"
+                    className="border-b border-[#E8E4DF] hover:bg-[#FAF7F2] cursor-pointer"
                     onClick={() => setSelectedCohort(selectedCohort === cohort.month ? null : cohort.month)}
                   >
-                    <td className="py-3 px-2 font-medium text-gray-900">{cohort.month}</td>
-                    <td className="py-3 px-2 text-right text-gray-600">{cohort.users.toLocaleString()}</td>
+                    <td className="py-3 px-2 font-medium text-[#1B2733]">{cohort.month}</td>
+                    <td className="py-3 px-2 text-right text-[#5A6B7A]">{cohort.users.toLocaleString()}</td>
                     <td className="py-3 px-2 text-right">
                       <span
                         className="px-2 py-1 rounded text-white text-xs font-medium"
@@ -466,7 +466,7 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
                           {cohort.d90}%
                         </span>
                       ) : (
-                        <span className="text-gray-400">—</span>
+                        <span className="text-[#8A9BA8]">—</span>
                       )}
                     </td>
                   </tr>
@@ -475,7 +475,7 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
             </table>
           </div>
 
-          <div className="mt-4 flex items-center gap-3 sm:gap-4 sm:gap-6 text-xs text-gray-500">
+          <div className="mt-4 flex items-center gap-3 sm:gap-4 sm:gap-6 text-xs text-[#5A6B7A]">
             <span className="flex items-center gap-2">
               <div className="w-3 h-3 rounded" style={{ backgroundColor: getRetentionColor(80) }} />
               Excellent (70%+)
@@ -492,40 +492,40 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
         </div>
 
         {/* Acquisition Channels */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
+        <div className="bg-white rounded-xl border border-[#E8E4DF] p-6">
           <div className="flex items-center justify-between mb-4 sm:mb-6">
             <div>
-              <h2 className="text-lg font-semibold text-gray-900">Acquisition Channels</h2>
-              <p className="text-sm text-gray-500">CAC and LTV by marketing channel</p>
+              <h2 className="text-lg font-semibold text-[#1B2733]">Acquisition Channels</h2>
+              <p className="text-sm text-[#5A6B7A]">CAC and LTV by marketing channel</p>
             </div>
-            <PieChart className="w-5 h-5 text-gray-400" />
+            <PieChart className="w-5 h-5 text-[#8A9BA8]" />
           </div>
 
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-gray-200">
-                  <th className="text-left py-3 px-2 font-medium text-gray-600">Channel</th>
-                  <th className="text-right py-3 px-2 font-medium text-gray-600">Spend</th>
-                  <th className="text-right py-3 px-2 font-medium text-gray-600">Users</th>
-                  <th className="text-right py-3 px-2 font-medium text-gray-600">CAC</th>
-                  <th className="text-right py-3 px-2 font-medium text-gray-600">LTV</th>
-                  <th className="text-right py-3 px-2 font-medium text-gray-600">LTV:CAC</th>
-                  <th className="text-right py-3 px-2 font-medium text-gray-600">Payback</th>
+                <tr className="border-b border-[#E8E4DF]">
+                  <th className="text-left py-3 px-2 font-medium text-[#5A6B7A]">Channel</th>
+                  <th className="text-right py-3 px-2 font-medium text-[#5A6B7A]">Spend</th>
+                  <th className="text-right py-3 px-2 font-medium text-[#5A6B7A]">Users</th>
+                  <th className="text-right py-3 px-2 font-medium text-[#5A6B7A]">CAC</th>
+                  <th className="text-right py-3 px-2 font-medium text-[#5A6B7A]">LTV</th>
+                  <th className="text-right py-3 px-2 font-medium text-[#5A6B7A]">LTV:CAC</th>
+                  <th className="text-right py-3 px-2 font-medium text-[#5A6B7A]">Payback</th>
                 </tr>
               </thead>
               <tbody>
                 {MOCK_CHANNELS.map((channel) => (
-                  <tr key={channel.channel} className="border-b border-gray-100">
-                    <td className="py-3 px-2 font-medium text-gray-900">{channel.channel}</td>
-                    <td className="py-3 px-2 text-right text-gray-600">
+                  <tr key={channel.channel} className="border-b border-[#E8E4DF]">
+                    <td className="py-3 px-2 font-medium text-[#1B2733]">{channel.channel}</td>
+                    <td className="py-3 px-2 text-right text-[#5A6B7A]">
                       {channel.spend === 0 ? '$0' : `$${channel.spend.toLocaleString()}`}
                     </td>
-                    <td className="py-3 px-2 text-right text-gray-600">{channel.acquisitions.toLocaleString()}</td>
-                    <td className="py-3 px-2 text-right text-gray-900 font-medium">
+                    <td className="py-3 px-2 text-right text-[#5A6B7A]">{channel.acquisitions.toLocaleString()}</td>
+                    <td className="py-3 px-2 text-right text-[#1B2733] font-medium">
                       {channel.cac === 0 ? '$0' : `$${channel.cac.toFixed(2)}`}
                     </td>
-                    <td className="py-3 px-2 text-right text-gray-900 font-medium">${channel.ltv}</td>
+                    <td className="py-3 px-2 text-right text-[#1B2733] font-medium">${channel.ltv}</td>
                     <td className="py-3 px-2 text-right">
                       <span
                         className={`font-semibold ${
@@ -541,7 +541,7 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
                         {channel.ltvCacRatio === Infinity ? '∞' : `${channel.ltvCacRatio.toFixed(1)}x`}
                       </span>
                     </td>
-                    <td className="py-3 px-2 text-right text-gray-600">
+                    <td className="py-3 px-2 text-right text-[#5A6B7A]">
                       {channel.paybackDays === 0 ? '0 days' : `${channel.paybackDays} days`}
                     </td>
                   </tr>
@@ -550,8 +550,8 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
             </table>
           </div>
 
-          <div className="mt-4 p-4 bg-blue-50 rounded-lg">
-            <p className="text-sm text-blue-800">
+          <div className="mt-4 p-4 bg-[#EEF4F8] rounded-lg">
+            <p className="text-sm text-[#4A6478]">
               <strong>Key Insight:</strong> Referrals have the highest LTV:CAC ratio (23.1x) with lowest payback period (13 days).
               Consider increasing referral incentives to accelerate growth efficiently.
             </p>

@@ -297,15 +297,15 @@ export function Phase2TestHarness({ onBack, onNavigate }: Phase2TestHarnessProps
         <div className="max-w-4xl mx-auto px-4 py-6">
           <button
             onClick={onBack}
-            className="flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-colors mb-4"
+            className="flex items-center gap-2 text-[#5A6B7A] hover:text-[#1B2733] transition-colors mb-4"
           >
             <ArrowLeft className="w-4 h-4" />
             Back
           </button>
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-slate-900 mb-2">Phase 2 Test Harness</h1>
-              <p className="text-slate-600">Automated testing for all new features</p>
+              <h1 className="text-[#1B2733] mb-2">Phase 2 Test Harness</h1>
+              <p className="text-[#5A6B7A]">Automated testing for all new features</p>
             </div>
             <Button
               onClick={runAllTests}
@@ -325,22 +325,22 @@ export function Phase2TestHarness({ onBack, onNavigate }: Phase2TestHarnessProps
           <Card className="p-6 mb-4 sm:mb-6 border-2 border-accent/20">
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4 text-center">
               <div>
-                <div className="text-2xl text-slate-900 mb-1">{totalTests}</div>
-                <div className="text-sm text-slate-600">Total Tests</div>
+                <div className="text-2xl text-[#1B2733] mb-1">{totalTests}</div>
+                <div className="text-sm text-[#5A6B7A]">Total Tests</div>
               </div>
               <div>
                 <div className="text-2xl text-green-600 mb-1">{passedTests}</div>
-                <div className="text-sm text-slate-600">Passed</div>
+                <div className="text-sm text-[#5A6B7A]">Passed</div>
               </div>
               <div>
                 <div className="text-2xl text-red-600 mb-1">{failedTests}</div>
-                <div className="text-sm text-slate-600">Failed</div>
+                <div className="text-sm text-[#5A6B7A]">Failed</div>
               </div>
               <div>
-                <div className="text-2xl text-slate-900 mb-1">
+                <div className="text-2xl text-[#1B2733] mb-1">
                   {Math.round((passedTests / completedTests) * 100)}%
                 </div>
-                <div className="text-sm text-slate-600">Success Rate</div>
+                <div className="text-sm text-[#5A6B7A]">Success Rate</div>
               </div>
             </div>
           </Card>
@@ -374,7 +374,7 @@ export function Phase2TestHarness({ onBack, onNavigate }: Phase2TestHarnessProps
             return (
               <TabsContent key={suite.id} value={suite.id} className="space-y-3 sm:space-y-4">
                 <Card className="p-4 sm:p-5 md:p-6">
-                  <h3 className="text-slate-900 mb-4 flex items-center gap-2">
+                  <h3 className="text-[#1B2733] mb-4 flex items-center gap-2">
                     <Icon className="w-5 h-5 text-accent" />
                     {suite.name}
                   </h3>
@@ -382,15 +382,15 @@ export function Phase2TestHarness({ onBack, onNavigate }: Phase2TestHarnessProps
                     {suite.tests.map(test => {
                       const result = testResults[test.id];
                       return (
-                        <div key={test.id} className="flex items-start gap-3 p-3 rounded-lg hover:bg-slate-50">
+                        <div key={test.id} className="flex items-start gap-3 p-3 rounded-lg hover:bg-[#FAF7F2]">
                           {getStatusIcon(result?.status || 'pending')}
                           <div className="flex-1">
-                            <div className="text-sm text-slate-900 mb-1">{test.name}</div>
+                            <div className="text-sm text-[#1B2733] mb-1">{test.name}</div>
                             {result?.message && (
                               <div className={`text-xs ${
                                 result.status === 'pass' ? 'text-green-600' :
                                 result.status === 'fail' ? 'text-red-600' :
-                                'text-slate-600'
+                                'text-[#5A6B7A]'
                               }`}>
                                 {result.message}
                               </div>
@@ -416,8 +416,8 @@ export function Phase2TestHarness({ onBack, onNavigate }: Phase2TestHarnessProps
         </Tabs>
 
         {/* Quick Navigation */}
-        <Card className="p-6 mt-4 sm:mt-6 bg-blue-50 border-blue-200">
-          <h4 className="text-slate-900 mb-3">Quick Feature Access</h4>
+        <Card className="p-6 mt-4 sm:mt-6 bg-[#EEF4F8] border-[#C8DDE8]">
+          <h4 className="text-[#1B2733] mb-3">Quick Feature Access</h4>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             <Button
               variant="outline"

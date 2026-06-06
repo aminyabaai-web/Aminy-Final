@@ -39,7 +39,7 @@ interface OperationalDashboardProps {
 
 // ─── Sparkline SVG ───────────────────────────────────────────────────
 
-function Sparkline({ points, color = '#14b8a6' }: { points: TimeSeriesPoint[]; color?: string }) {
+function Sparkline({ points, color = '#6B9080' }: { points: TimeSeriesPoint[]; color?: string }) {
   const normalized = normalizeSparkline(points);
   if (normalized.length < 2) return null;
 
@@ -69,10 +69,10 @@ function MiniBarChart({ items, colorClass }: { items: Array<{ label: string; val
       {items.map(item => (
         <div key={item.label}>
           <div className="flex items-center justify-between text-xs mb-0.5">
-            <span className="text-gray-600">{item.label}</span>
-            <span className="text-gray-800 font-medium">{item.value}{item.unit || '%'}</span>
+            <span className="text-[#5A6B7A]">{item.label}</span>
+            <span className="text-[#1B2733] font-medium">{item.value}{item.unit || '%'}</span>
           </div>
-          <div className="h-2 rounded-full bg-gray-100 overflow-hidden">
+          <div className="h-2 rounded-full bg-[#F0EDE8] overflow-hidden">
             <div
               className={`h-full rounded-full ${colorClass}`}
               style={{ width: `${(item.value / maxVal) * 100}%` }}
@@ -91,13 +91,13 @@ function KPICardView({ kpi, sparkData }: { kpi: KPICard; sparkData?: TimeSeriesP
     good: 'border-green-200 bg-green-50/50',
     warning: 'border-amber-200 bg-amber-50/50',
     critical: 'border-red-200 bg-red-50/50',
-    neutral: 'border-gray-200 bg-white',
+    neutral: 'border-[#E8E4DF] bg-white',
   };
 
   const trendColors = {
     up: 'text-green-600',
     down: 'text-red-600',
-    flat: 'text-gray-500',
+    flat: 'text-[#5A6B7A]',
   };
 
   // For metrics where "up" is bad (like churn, denial rate, wait time)
@@ -112,13 +112,13 @@ function KPICardView({ kpi, sparkData }: { kpi: KPICard; sparkData?: TimeSeriesP
       animate={{ opacity: 1, y: 0 }}
       className={`rounded-xl border p-3 ${statusColors[kpi.status]}`}
     >
-      <p className="text-xs font-medium text-gray-500 truncate">{kpi.label}</p>
+      <p className="text-xs font-medium text-[#5A6B7A] truncate">{kpi.label}</p>
       <div className="mt-1 flex items-end justify-between">
         <div className="flex items-baseline gap-0.5">
-          <span className="text-xl font-bold text-gray-900">
+          <span className="text-xl font-bold text-[#1B2733]">
             {typeof kpi.value === 'number' ? kpi.value.toLocaleString() : kpi.value}
           </span>
-          {kpi.unit && <span className="text-xs text-gray-500">{kpi.unit}</span>}
+          {kpi.unit && <span className="text-xs text-[#5A6B7A]">{kpi.unit}</span>}
         </div>
         <div className={`flex items-center gap-0.5 text-xs font-medium ${trendColors[trendColorKey]}`}>
           {kpi.trend === 'up' && <TrendingUp className="h-3.5 w-3.5" />}
@@ -133,7 +133,7 @@ function KPICardView({ kpi, sparkData }: { kpi: KPICard; sparkData?: TimeSeriesP
         <div className="mt-2">
           <Sparkline
             points={sparkData}
-            color={kpi.status === 'good' ? '#22c55e' : kpi.status === 'warning' ? '#f59e0b' : kpi.status === 'critical' ? '#ef4444' : '#14b8a6'}
+            color={kpi.status === 'good' ? '#22c55e' : kpi.status === 'warning' ? '#f59e0b' : kpi.status === 'critical' ? '#ef4444' : '#6B9080'}
           />
         </div>
       )}
@@ -147,7 +147,7 @@ function SectionHeader({ icon, title }: { icon: React.ReactNode; title: string }
   return (
     <div className="flex items-center gap-2 mt-6 mb-3">
       {icon}
-      <h2 className="text-sm font-bold text-gray-900 uppercase tracking-wide">{title}</h2>
+      <h2 className="text-sm font-bold text-[#1B2733] uppercase tracking-wide">{title}</h2>
     </div>
   );
 }
@@ -162,7 +162,7 @@ function HealthScoreBanner({ health }: { health: OverallHealthScore }) {
   };
 
   const trendLabels = { improving: 'Improving', stable: 'Stable', declining: 'Declining' };
-  const trendColors = { improving: 'text-green-600', stable: 'text-gray-500', declining: 'text-red-600' };
+  const trendColors = { improving: 'text-green-600', stable: 'text-[#5A6B7A]', declining: 'text-red-600' };
 
   const config = statusConfig[health.status];
   const categories = [
@@ -182,26 +182,26 @@ function HealthScoreBanner({ health }: { health: OverallHealthScore }) {
         <div className="flex items-center gap-2">
           {config.icon}
           <div>
-            <h3 className="text-sm font-bold text-gray-900">Platform Health</h3>
+            <h3 className="text-sm font-bold text-[#1B2733]">Platform Health</h3>
             <p className={`text-xs font-medium ${trendColors[health.trend]}`}>{trendLabels[health.trend]}</p>
           </div>
         </div>
         <div className="text-right">
           <span className={`text-3xl font-bold ${config.text}`}>{health.composite}</span>
-          <span className="text-sm text-gray-500">/100</span>
+          <span className="text-sm text-[#5A6B7A]">/100</span>
         </div>
       </div>
       <div className="grid grid-cols-4 gap-2">
         {categories.map(cat => (
           <div key={cat.label} className="text-center">
-            <div className="h-1.5 rounded-full bg-gray-200 overflow-hidden mb-1">
+            <div className="h-1.5 rounded-full bg-[#E8E4DF] overflow-hidden mb-1">
               <div
                 className={`h-full rounded-full ${cat.score >= 80 ? 'bg-green-500' : cat.score >= 60 ? 'bg-amber-500' : 'bg-red-500'}`}
                 style={{ width: `${cat.score}%` }}
               />
             </div>
-            <p className="text-xs text-gray-600">{cat.label}</p>
-            <p className="text-xs font-bold text-gray-800">{cat.score}</p>
+            <p className="text-xs text-[#5A6B7A]">{cat.label}</p>
+            <p className="text-xs font-bold text-[#1B2733]">{cat.score}</p>
           </div>
         ))}
       </div>
@@ -228,7 +228,7 @@ function AlertsPanel({ alerts }: { alerts: OperationalAlert[] }) {
     <div className="mt-4 space-y-2">
       <div className="flex items-center gap-1.5">
         <AlertTriangle className="h-3.5 w-3.5 text-amber-600" />
-        <p className="text-xs font-bold text-gray-700 uppercase tracking-wide">Alerts ({alerts.length})</p>
+        <p className="text-xs font-bold text-[#3A4A57] uppercase tracking-wide">Alerts ({alerts.length})</p>
       </div>
       {sorted.map(alert => (
         <div
@@ -238,12 +238,12 @@ function AlertsPanel({ alerts }: { alerts: OperationalAlert[] }) {
               ? 'border-red-200 bg-red-50/60 text-red-800'
               : alert.severity === 'warning'
               ? 'border-amber-200 bg-amber-50/60 text-amber-800'
-              : 'border-blue-200 bg-blue-50/60 text-blue-800'
+              : 'border-[#C8DDE8] bg-[#EEF4F8]/60 text-[#4A6478]'
           }`}
         >
           <div className="flex items-start gap-2">
             <span className="font-medium capitalize flex-shrink-0">{alert.category}</span>
-            <span className="text-gray-600">{alert.message}</span>
+            <span className="text-[#5A6B7A]">{alert.message}</span>
           </div>
         </div>
       ))}
@@ -276,18 +276,18 @@ export default function OperationalDashboard({
   }, [onExportPDF]);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header */}
-      <div className="sticky top-0 z-10 border-b border-gray-200 bg-white px-4 py-3">
+      <div className="sticky top-0 z-10 border-b border-[#E8E4DF] bg-white px-4 py-3">
         <div className="flex items-center gap-3">
           {onBack && (
-            <button onClick={onBack} className="rounded-full p-1 hover:bg-gray-100">
-              <ArrowLeft className="h-5 w-5 text-gray-600" />
+            <button onClick={onBack} className="rounded-full p-1 hover:bg-[#F0EDE8]">
+              <ArrowLeft className="h-5 w-5 text-[#5A6B7A]" />
             </button>
           )}
           <div className="flex-1">
             <div className="flex items-center gap-2">
-              <h1 className="text-lg font-bold text-gray-900">Operational Metrics</h1>
+              <h1 className="text-lg font-bold text-[#1B2733]">Operational Metrics</h1>
               {/* Live vs Demo badge */}
               <span
                 className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${
@@ -298,9 +298,9 @@ export default function OperationalDashboard({
                 {isLiveData ? 'Live' : 'Demo'}
               </span>
             </div>
-            <p className="text-xs text-gray-500">{data.dateRange.label}</p>
+            <p className="text-xs text-[#5A6B7A]">{data.dateRange.label}</p>
             {lastUpdatedAt && (
-              <p className="text-[10px] text-gray-400 mt-0.5">
+              <p className="text-[10px] text-[#8A9BA8] mt-0.5">
                 Last updated: {new Date(lastUpdatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
               </p>
             )}
@@ -310,16 +310,16 @@ export default function OperationalDashboard({
               <button
                 onClick={onRefresh}
                 disabled={isRefreshing}
-                className="flex items-center justify-center rounded-full p-2 hover:bg-gray-100 disabled:opacity-50"
+                className="flex items-center justify-center rounded-full p-2 hover:bg-[#F0EDE8] disabled:opacity-50"
                 aria-label="Refresh metrics"
                 title="Refresh metrics"
               >
-                <RefreshCw className={`h-4 w-4 text-gray-600 ${isRefreshing ? 'animate-spin' : ''}`} />
+                <RefreshCw className={`h-4 w-4 text-[#5A6B7A] ${isRefreshing ? 'animate-spin' : ''}`} />
               </button>
             )}
             <button
               onClick={handleExport}
-              className="flex items-center gap-1.5 rounded-lg border border-gray-300 px-3 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50"
+              className="flex items-center gap-1.5 rounded-lg border border-[#E8E4DF] px-3 py-2 text-xs font-medium text-[#3A4A57] hover:bg-[#FAF7F2]"
             >
               <Download className="h-3.5 w-3.5" />
               Export
@@ -331,23 +331,23 @@ export default function OperationalDashboard({
         <div className="mt-3 relative">
           <button
             onClick={() => setShowDatePicker(!showDatePicker)}
-            className="flex w-full items-center justify-between rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700"
+            className="flex w-full items-center justify-between rounded-lg border border-[#E8E4DF] bg-white px-3 py-2 text-sm text-[#3A4A57]"
           >
             <div className="flex items-center gap-2">
-              <Calendar className="h-4 w-4 text-gray-400" />
+              <Calendar className="h-4 w-4 text-[#8A9BA8]" />
               <span>{data.dateRange.label}</span>
             </div>
-            <ChevronDown className={`h-4 w-4 text-gray-400 transition-transform ${showDatePicker ? 'rotate-180' : ''}`} />
+            <ChevronDown className={`h-4 w-4 text-[#8A9BA8] transition-transform ${showDatePicker ? 'rotate-180' : ''}`} />
           </button>
 
           {showDatePicker && (
-            <div className="absolute left-0 right-0 top-full mt-1 rounded-lg border border-gray-200 bg-white p-2 shadow-lg z-20">
+            <div className="absolute left-0 right-0 top-full mt-1 rounded-lg border border-[#E8E4DF] bg-white p-2 shadow-lg z-20">
               {presets.map(preset => (
                 <button
                   key={preset.label}
                   onClick={() => { onDateRangeChange(preset); setShowDatePicker(false); }}
-                  className={`w-full rounded-lg px-3 py-2 text-left text-sm hover:bg-gray-50 ${
-                    data.dateRange.label === preset.label ? 'bg-teal-50 text-teal-700 font-medium' : 'text-gray-700'
+                  className={`w-full rounded-lg px-3 py-2 text-left text-sm hover:bg-[#FAF7F2] ${
+                    data.dateRange.label === preset.label ? 'bg-[#6B9080]/10 text-[#6B9080] font-medium' : 'text-[#3A4A57]'
                   }`}
                 >
                   {preset.label}
@@ -367,7 +367,7 @@ export default function OperationalDashboard({
 
         {/* ─── Family Retention ─────────────────────────────────── */}
         <SectionHeader
-          icon={<Users className="h-4 w-4 text-teal-600" />}
+          icon={<Users className="h-4 w-4 text-[#6B9080]" />}
           title="Family Retention"
         />
         <div className="grid grid-cols-2 gap-3">
@@ -381,25 +381,25 @@ export default function OperationalDashboard({
         </div>
 
         {/* Retention by Period */}
-        <div className="mt-3 rounded-xl border border-gray-200 bg-white p-3">
-          <p className="text-xs font-semibold text-gray-700 mb-2">Retention by Period</p>
+        <div className="mt-3 rounded-xl border border-[#E8E4DF] bg-white p-3">
+          <p className="text-xs font-semibold text-[#3A4A57] mb-2">Retention by Period</p>
           <div className="grid grid-cols-3 gap-3 text-center">
             {[
               { label: '30-Day', value: data.familyRetention.retention30Day },
               { label: '60-Day', value: data.familyRetention.retention60Day },
               { label: '90-Day', value: data.familyRetention.retention90Day },
             ].map(p => (
-              <div key={p.label} className="rounded-lg bg-gray-50 p-2">
-                <p className="text-lg font-bold text-gray-900">{p.value}%</p>
-                <p className="text-xs text-gray-500">{p.label}</p>
+              <div key={p.label} className="rounded-lg bg-[#FAF7F2] p-2">
+                <p className="text-lg font-bold text-[#1B2733]">{p.value}%</p>
+                <p className="text-xs text-[#5A6B7A]">{p.label}</p>
               </div>
             ))}
           </div>
         </div>
 
         {/* Retention by Tier */}
-        <div className="mt-3 rounded-xl border border-gray-200 bg-white p-3">
-          <p className="text-xs font-semibold text-gray-700 mb-2">Retention by Tier</p>
+        <div className="mt-3 rounded-xl border border-[#E8E4DF] bg-white p-3">
+          <p className="text-xs font-semibold text-[#3A4A57] mb-2">Retention by Tier</p>
           <MiniBarChart
             colorClass="bg-teal-400"
             items={[
@@ -412,17 +412,17 @@ export default function OperationalDashboard({
 
         {/* Churn Reasons */}
         {data.familyRetention.churnReasons.length > 0 && (
-          <div className="mt-3 rounded-xl border border-gray-200 bg-white p-3">
-            <p className="text-xs font-semibold text-gray-700 mb-2">Churn Reasons</p>
+          <div className="mt-3 rounded-xl border border-[#E8E4DF] bg-white p-3">
+            <p className="text-xs font-semibold text-[#3A4A57] mb-2">Churn Reasons</p>
             <div className="space-y-1.5">
               {data.familyRetention.churnReasons.map(r => (
                 <div key={r.reason} className="flex items-center justify-between text-xs">
-                  <span className="text-gray-700 flex-1 truncate">{r.reason}</span>
+                  <span className="text-[#3A4A57] flex-1 truncate">{r.reason}</span>
                   <div className="flex items-center gap-2 ml-2">
-                    <div className="w-16 h-2 rounded-full bg-gray-100 overflow-hidden">
+                    <div className="w-16 h-2 rounded-full bg-[#F0EDE8] overflow-hidden">
                       <div className="h-full rounded-full bg-rose-400" style={{ width: `${r.percentage}%` }} />
                     </div>
-                    <span className="text-gray-500 w-8 text-right">{r.percentage}%</span>
+                    <span className="text-[#5A6B7A] w-8 text-right">{r.percentage}%</span>
                   </div>
                 </div>
               ))}
@@ -432,11 +432,11 @@ export default function OperationalDashboard({
 
         {/* Cohort Preview */}
         {data.familyRetention.cohortAnalysis.length > 0 && (
-          <div className="mt-3 rounded-xl border border-gray-200 bg-white p-3 overflow-x-auto">
-            <p className="text-xs font-semibold text-gray-700 mb-2">Cohort Retention</p>
+          <div className="mt-3 rounded-xl border border-[#E8E4DF] bg-white p-3 overflow-x-auto">
+            <p className="text-xs font-semibold text-[#3A4A57] mb-2">Cohort Retention</p>
             <table className="w-full text-xs">
               <thead>
-                <tr className="text-gray-500">
+                <tr className="text-[#5A6B7A]">
                   <th className="text-left py-1 pr-2">Cohort</th>
                   <th className="text-right px-1">M1</th>
                   <th className="text-right px-1">M2</th>
@@ -446,8 +446,8 @@ export default function OperationalDashboard({
               </thead>
               <tbody>
                 {data.familyRetention.cohortAnalysis.slice(0, 4).map(c => (
-                  <tr key={c.cohortMonth} className="border-t border-gray-100">
-                    <td className="py-1 pr-2 font-medium text-gray-700">{c.cohortMonth}</td>
+                  <tr key={c.cohortMonth} className="border-t border-[#E8E4DF]">
+                    <td className="py-1 pr-2 font-medium text-[#3A4A57]">{c.cohortMonth}</td>
                     {[0, 1, 2, 5].map(idx => (
                       <td key={idx} className="text-right px-1">
                         {c.retentionRateByMonth[idx] !== undefined ? (
@@ -483,18 +483,18 @@ export default function OperationalDashboard({
         </div>
 
         {/* Hours Summary */}
-        <div className="mt-3 rounded-xl border border-gray-200 bg-white p-3">
-          <p className="text-xs font-semibold text-gray-700 mb-2">Weekly Hours</p>
+        <div className="mt-3 rounded-xl border border-[#E8E4DF] bg-white p-3">
+          <p className="text-xs font-semibold text-[#3A4A57] mb-2">Weekly Hours</p>
           <div className="grid grid-cols-3 gap-3 text-center">
-            <div className="rounded-lg bg-blue-50 p-2">
+            <div className="rounded-lg bg-[#EEF4F8] p-2">
               <p className="text-lg font-bold text-blue-900">{data.telehealthLiquidity.availableHoursThisWeek}</p>
               <p className="text-xs text-blue-600">Available</p>
             </div>
-            <div className="rounded-lg bg-blue-50 p-2">
+            <div className="rounded-lg bg-[#EEF4F8] p-2">
               <p className="text-lg font-bold text-blue-900">{data.telehealthLiquidity.bookedHoursThisWeek}</p>
               <p className="text-xs text-blue-600">Booked</p>
             </div>
-            <div className="rounded-lg bg-blue-50 p-2">
+            <div className="rounded-lg bg-[#EEF4F8] p-2">
               <p className="text-lg font-bold text-blue-900">{data.telehealthLiquidity.averageWaitTimeDays}d</p>
               <p className="text-xs text-blue-600">Avg Wait</p>
             </div>
@@ -502,8 +502,8 @@ export default function OperationalDashboard({
         </div>
 
         {/* Fill Rate by Service Type */}
-        <div className="mt-3 rounded-xl border border-gray-200 bg-white p-3">
-          <p className="text-xs font-semibold text-gray-700 mb-2">Fill Rate by Service</p>
+        <div className="mt-3 rounded-xl border border-[#E8E4DF] bg-white p-3">
+          <p className="text-xs font-semibold text-[#3A4A57] mb-2">Fill Rate by Service</p>
           <MiniBarChart
             colorClass="bg-blue-400"
             items={[
@@ -512,7 +512,7 @@ export default function OperationalDashboard({
               { label: 'Speech', value: data.telehealthLiquidity.byServiceType.speech },
             ]}
           />
-          <p className="text-xs text-gray-400 mt-2">Peak hours: {data.telehealthLiquidity.peakHoursDescription}</p>
+          <p className="text-xs text-[#8A9BA8] mt-2">Peak hours: {data.telehealthLiquidity.peakHoursDescription}</p>
         </div>
 
         {/* ─── Provider Launch ─────────────────────────────────── */}
@@ -531,8 +531,8 @@ export default function OperationalDashboard({
         </div>
 
         {/* Provider Summary Stats */}
-        <div className="mt-3 rounded-xl border border-gray-200 bg-white p-3">
-          <p className="text-xs font-semibold text-gray-700 mb-2">Provider Breakdown</p>
+        <div className="mt-3 rounded-xl border border-[#E8E4DF] bg-white p-3">
+          <p className="text-xs font-semibold text-[#3A4A57] mb-2">Provider Breakdown</p>
           <div className="grid grid-cols-3 gap-3 text-center mb-3">
             <div className="rounded-lg bg-purple-50 p-2">
               <p className="text-lg font-bold text-purple-900">{data.providerLaunch.byType.bcba}</p>
@@ -547,14 +547,14 @@ export default function OperationalDashboard({
               <p className="text-xs text-purple-600">SLPs</p>
             </div>
           </div>
-          <div className="text-xs text-gray-600 space-y-1">
+          <div className="text-xs text-[#5A6B7A] space-y-1">
             <div className="flex justify-between">
               <span>Avg days to 1st session</span>
-              <span className="font-medium text-gray-800">{data.providerLaunch.averageDaysToFirstSession} days</span>
+              <span className="font-medium text-[#1B2733]">{data.providerLaunch.averageDaysToFirstSession} days</span>
             </div>
             <div className="flex justify-between">
               <span>Avg days to 10th session</span>
-              <span className="font-medium text-gray-800">{data.providerLaunch.averageDaysTo10thSession} days</span>
+              <span className="font-medium text-[#1B2733]">{data.providerLaunch.averageDaysTo10thSession} days</span>
             </div>
             <div className="flex justify-between">
               <span>Top complaint</span>
@@ -565,8 +565,8 @@ export default function OperationalDashboard({
 
         {/* Provider Funnel */}
         {data.providerLaunch.funnel.length > 0 && (
-          <div className="mt-3 rounded-xl border border-gray-200 bg-white p-3">
-            <p className="text-xs font-semibold text-gray-700 mb-2">Onboarding Funnel</p>
+          <div className="mt-3 rounded-xl border border-[#E8E4DF] bg-white p-3">
+            <p className="text-xs font-semibold text-[#3A4A57] mb-2">Onboarding Funnel</p>
             <div className="space-y-2">
               {data.providerLaunch.funnel.map((stage, i) => {
                 const widthPct = data.providerLaunch.funnel[0].count > 0
@@ -576,10 +576,10 @@ export default function OperationalDashboard({
                 return (
                   <div key={stage.stage}>
                     <div className="flex items-center justify-between text-xs mb-0.5">
-                      <span className="text-gray-700">{stage.stage}</span>
-                      <span className="text-gray-500">{stage.count} ({stage.conversionRate}%)</span>
+                      <span className="text-[#3A4A57]">{stage.stage}</span>
+                      <span className="text-[#5A6B7A]">{stage.count} ({stage.conversionRate}%)</span>
                     </div>
-                    <div className="h-4 rounded-full bg-gray-100 overflow-hidden">
+                    <div className="h-4 rounded-full bg-[#F0EDE8] overflow-hidden">
                       <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: `${widthPct}%` }}
@@ -610,8 +610,8 @@ export default function OperationalDashboard({
         </div>
 
         {/* EVV / Compliance Stats */}
-        <div className="mt-3 rounded-xl border border-gray-200 bg-white p-3">
-          <p className="text-xs font-semibold text-gray-700 mb-2">Compliance Snapshot</p>
+        <div className="mt-3 rounded-xl border border-[#E8E4DF] bg-white p-3">
+          <p className="text-xs font-semibold text-[#3A4A57] mb-2">Compliance Snapshot</p>
           <div className="grid grid-cols-3 gap-3 text-center">
             <div className="rounded-lg bg-green-50 p-2">
               <p className="text-lg font-bold text-green-900">{data.payerEVV.evvMatchRate}%</p>
@@ -630,20 +630,20 @@ export default function OperationalDashboard({
 
         {/* Top Denial Reasons */}
         {data.payerEVV.topDenialReasons.length > 0 && (
-          <div className="mt-3 rounded-xl border border-gray-200 bg-white p-3">
-            <p className="text-xs font-semibold text-gray-700 mb-2">Top Denial Reasons</p>
+          <div className="mt-3 rounded-xl border border-[#E8E4DF] bg-white p-3">
+            <p className="text-xs font-semibold text-[#3A4A57] mb-2">Top Denial Reasons</p>
             <div className="space-y-1.5">
               {data.payerEVV.topDenialReasons.slice(0, 5).map(reason => (
                 <div key={reason.reason} className="flex items-center justify-between text-xs">
-                  <span className="text-gray-700 truncate flex-1">{reason.reason}</span>
+                  <span className="text-[#3A4A57] truncate flex-1">{reason.reason}</span>
                   <div className="flex items-center gap-2 ml-2">
-                    <div className="w-20 h-2 rounded-full bg-gray-100 overflow-hidden">
+                    <div className="w-20 h-2 rounded-full bg-[#F0EDE8] overflow-hidden">
                       <div
                         className="h-full rounded-full bg-red-400"
                         style={{ width: `${reason.percentage}%` }}
                       />
                     </div>
-                    <span className="text-gray-500 w-8 text-right">{reason.percentage}%</span>
+                    <span className="text-[#5A6B7A] w-8 text-right">{reason.percentage}%</span>
                   </div>
                 </div>
               ))}
@@ -653,11 +653,11 @@ export default function OperationalDashboard({
 
         {/* Payer Breakdown */}
         {data.payerEVV.payerBreakdown.length > 0 && (
-          <div className="mt-3 rounded-xl border border-gray-200 bg-white p-3 overflow-x-auto">
-            <p className="text-xs font-semibold text-gray-700 mb-2">Payer Breakdown</p>
+          <div className="mt-3 rounded-xl border border-[#E8E4DF] bg-white p-3 overflow-x-auto">
+            <p className="text-xs font-semibold text-[#3A4A57] mb-2">Payer Breakdown</p>
             <table className="w-full text-xs">
               <thead>
-                <tr className="text-gray-500 border-b border-gray-100">
+                <tr className="text-[#5A6B7A] border-b border-[#E8E4DF]">
                   <th className="text-left py-1">Payer</th>
                   <th className="text-right py-1">Claims</th>
                   <th className="text-right py-1">Clean %</th>
@@ -667,14 +667,14 @@ export default function OperationalDashboard({
               <tbody>
                 {data.payerEVV.payerBreakdown.map(p => (
                   <tr key={p.payer} className="border-t border-gray-50">
-                    <td className="py-1 font-medium text-gray-700">{p.payer}</td>
-                    <td className="py-1 text-right text-gray-600">{p.claimCount}</td>
+                    <td className="py-1 font-medium text-[#3A4A57]">{p.payer}</td>
+                    <td className="py-1 text-right text-[#5A6B7A]">{p.claimCount}</td>
                     <td className={`py-1 text-right font-medium ${
                       p.cleanRate >= 95 ? 'text-green-700' : p.cleanRate >= 85 ? 'text-amber-700' : 'text-red-700'
                     }`}>
                       {p.cleanRate}%
                     </td>
-                    <td className="py-1 text-right text-gray-600">{p.avgDays}</td>
+                    <td className="py-1 text-right text-[#5A6B7A]">{p.avgDays}</td>
                   </tr>
                 ))}
               </tbody>

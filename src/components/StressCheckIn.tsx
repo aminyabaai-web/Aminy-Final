@@ -173,13 +173,13 @@ export function StressCheckIn({
               {context === 'morning' ? (
                 <Sun className="w-6 h-6 text-amber-600" />
               ) : (
-                <Moon className="w-6 h-6 text-indigo-600" />
+                <Moon className="w-6 h-6 text-[#6B9080]" />
               )}
               <div>
-                <h2 className="text-lg font-semibold text-slate-900">
+                <h2 className="text-lg font-semibold text-[#1B2733]">
                   {context === 'morning' ? 'Good Morning' : 'Evening Reflection'}
                 </h2>
-                <p className="text-sm text-slate-600">
+                <p className="text-sm text-[#5A6B7A]">
                   {context === 'morning' ? 'How are you feeling today?' : 'How was your day?'}
                 </p>
               </div>
@@ -192,7 +192,7 @@ export function StressCheckIn({
 
         {/* Stress Scale */}
         <div className="p-4 sm:p-5 md:p-6">
-          <p className="text-center text-slate-600 mb-4 sm:mb-6">
+          <p className="text-center text-[#5A6B7A] mb-4 sm:mb-6">
             On a scale of 1-10, how stressed are you feeling?
           </p>
 
@@ -205,7 +205,7 @@ export function StressCheckIn({
                   w-9 h-9 rounded-full font-medium text-sm transition-all
                   ${stressLevel === level
                     ? `${getStressColor(level)} text-white scale-110 shadow-lg`
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
                   }
                 `}
               >
@@ -223,7 +223,7 @@ export function StressCheckIn({
           )}
 
           {/* Scale Labels */}
-          <div className="flex justify-between text-xs text-slate-500 mb-4 sm:mb-6">
+          <div className="flex justify-between text-xs text-[#5A6B7A] mb-4 sm:mb-6">
             <span>Calm & peaceful</span>
             <span>Overwhelmed</span>
           </div>
@@ -232,10 +232,10 @@ export function StressCheckIn({
           {recentLogs.length > 0 && (
             <button
               onClick={() => setShowTrend(!showTrend)}
-              className="w-full p-3 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors mb-4"
+              className="w-full p-3 bg-[#FAF7F2] rounded-lg hover:bg-[#F0EDE8] transition-colors mb-4"
             >
               <div className="flex items-center justify-between">
-                <span className="text-sm text-slate-600">Your recent trend</span>
+                <span className="text-sm text-[#5A6B7A]">Your recent trend</span>
                 <div className="flex items-center gap-2">
                   {trend === 'improving' && (
                     <>
@@ -251,25 +251,25 @@ export function StressCheckIn({
                   )}
                   {trend === 'stable' && (
                     <>
-                      <Minus className="w-4 h-4 text-slate-500" />
-                      <span className="text-sm font-medium text-slate-600">Stable</span>
+                      <Minus className="w-4 h-4 text-[#5A6B7A]" />
+                      <span className="text-sm font-medium text-[#5A6B7A]">Stable</span>
                     </>
                   )}
                   {trend === null && (
-                    <span className="text-sm text-slate-500">Need more data</span>
+                    <span className="text-sm text-[#5A6B7A]">Need more data</span>
                   )}
                 </div>
               </div>
 
               {showTrend && (
-                <div className="mt-3 pt-3 border-t border-slate-200">
+                <div className="mt-3 pt-3 border-t border-[#E8E4DF]">
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-slate-500">7-day average:</span>
-                    <span className="font-medium text-slate-700">{average.toFixed(1)}/10</span>
+                    <span className="text-[#5A6B7A]">7-day average:</span>
+                    <span className="font-medium text-[#3A4A57]">{average.toFixed(1)}/10</span>
                   </div>
                   <div className="flex items-center justify-between text-sm mt-1">
-                    <span className="text-slate-500">Check-ins this week:</span>
-                    <span className="font-medium text-slate-700">{Math.min(recentLogs.length, 14)}</span>
+                    <span className="text-[#5A6B7A]">Check-ins this week:</span>
+                    <span className="font-medium text-[#3A4A57]">{Math.min(recentLogs.length, 14)}</span>
                   </div>
                 </div>
               )}
@@ -294,8 +294,8 @@ export function StressCheckIn({
 
           {/* Encouragement */}
           {stressLevel !== null && stressLevel >= 7 && (
-            <div className="mt-4 p-3 bg-blue-50 rounded-lg">
-              <p className="text-sm text-blue-800 flex items-start gap-2">
+            <div className="mt-4 p-3 bg-[#EEF4F8] rounded-lg">
+              <p className="text-sm text-[#4A6478] flex items-start gap-2">
                 <Sparkles className="w-4 h-4 flex-shrink-0 mt-0.5" />
                 Remember: Asking for help is strength, not weakness. Would you like to talk to Aminy about what's on your mind?
               </p>

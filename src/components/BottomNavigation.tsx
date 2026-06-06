@@ -258,7 +258,7 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                   </div>
                   <span
                     className={`text-xs font-semibold mt-1 transition-colors ${
-                      isActive ? 'text-[#43AA8B] dark:text-[#6B9080]' : 'text-gray-600 dark:text-slate-400'
+                      isActive ? 'text-[#43AA8B] dark:text-[#6B9080]' : 'text-[#5A6B7A] dark:text-slate-400'
                     }`}
                   >
                     {tab.label}
@@ -287,10 +287,10 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                 className={`
                   flex flex-col items-center justify-center space-y-1 py-2 px-2 rounded-xl relative group transition-all duration-200
                   ${isDisabled
-                    ? 'text-gray-300 dark:text-slate-600 cursor-not-allowed'
+                    ? 'text-gray-300 dark:text-[#5A6B7A] cursor-not-allowed'
                     : isActive
                       ? 'text-[#6B9080] dark:text-[#7BA7BC]'
-                      : 'text-gray-500 hover:text-gray-700 dark:text-slate-400 dark:hover:text-slate-200'
+                      : 'text-[#5A6B7A] hover:text-[#3A4A57] dark:text-slate-400 dark:hover:text-slate-200'
                   }
                 `}
                 style={{
@@ -304,15 +304,24 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                 role="tab"
                 disabled={isDisabled}
               >
-                {/* Active indicator — One Medical style top bar */}
+                {/* Active indicator — top bar with spring entrance */}
                 {isActive && (
-                  <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-8 h-0.5 bg-[#6B9080] dark:bg-teal-400 rounded-full" />
+                  <div
+                    className="absolute top-0 left-1/2 rounded-full"
+                    style={{
+                      width: 28,
+                      height: 3,
+                      background: 'linear-gradient(90deg, #6B9080, #7BA7BC)',
+                      transform: 'translateX(-50%)',
+                      animation: 'navIndicatorIn 0.25s cubic-bezier(0.34,1.56,0.64,1) forwards',
+                    }}
+                  />
                 )}
 
                 {/* Disabled lock icon */}
                 {isDisabled && (
                   <div className="absolute top-1 right-1 z-10">
-                    <Lock className="w-3 h-3 text-gray-400 dark:text-slate-600" />
+                    <Lock className="w-3 h-3 text-[#8A9BA8] dark:text-[#5A6B7A]" />
                   </div>
                 )}
 
@@ -320,6 +329,7 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                 <Icon
                   className={`w-5 h-5 ${isDisabled ? 'opacity-40' : 'opacity-100'} transition-all duration-200`}
                   strokeWidth={isActive ? 2 : 1.5}
+                  style={isActive ? { animation: 'navIconPop 0.25s cubic-bezier(0.34,1.56,0.64,1) forwards' } : undefined}
                 />
 
                 {/* Label */}
@@ -346,7 +356,7 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
 
           {/* Menu Sheet */}
           <div
-            className="fixed bottom-0 left-0 right-0 z-[70] bg-white dark:bg-slate-800 rounded-t-2xl border-t border-gray-200 dark:border-slate-600 max-h-[70vh] overflow-y-auto"
+            className="fixed bottom-0 left-0 right-0 z-[70] bg-white dark:bg-slate-800 rounded-t-2xl border-t border-[#E8E4DF] dark:border-slate-600 max-h-[70vh] overflow-y-auto"
             role="dialog"
             aria-modal="true"
             aria-labelledby="more-menu-title"
@@ -358,14 +368,14 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
               </div>
 
               {/* Header */}
-              <div className="flex items-center justify-between px-4 pb-3 border-b border-gray-100 dark:border-slate-700">
-                <h2 id="more-menu-title" className="text-lg font-semibold text-gray-900 dark:text-gray-100">More</h2>
+              <div className="flex items-center justify-between px-4 pb-3 border-b border-[#E8E4DF] dark:border-slate-700">
+                <h2 id="more-menu-title" className="text-lg font-semibold text-[#1B2733] dark:text-gray-100">More</h2>
                 <button
                   onClick={() => setShowMoreMenu(false)}
-                  className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+                  className="p-2 rounded-full hover:bg-[#F0EDE8] dark:hover:bg-slate-700 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                   aria-label="Close menu"
                 >
-                  <X className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                  <X className="w-5 h-5 text-[#5A6B7A] dark:text-[#8A9BA8]" />
                 </button>
               </div>
 
@@ -384,8 +394,8 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                       className={`
                         w-full flex items-center justify-between p-3 rounded-xl transition-colors group min-h-[56px]
                         ${isItemActive
-                          ? 'bg-teal-50 dark:bg-teal-900/20'
-                          : 'hover:bg-gray-50 dark:hover:bg-slate-700'
+                          ? 'bg-[#6B9080]/10 dark:bg-[#6B9080]/10'
+                          : 'hover:bg-[#FAF7F2] dark:hover:bg-slate-700'
                         }
                       `}
                       role="menuitem"
@@ -396,25 +406,25 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                         <div className={`
                           w-10 h-10 rounded-xl flex items-center justify-center
                           ${isItemActive
-                            ? 'bg-teal-100 dark:bg-teal-800'
-                            : 'bg-gray-100 dark:bg-slate-600'
+                            ? 'bg-[#6B9080]/10 dark:bg-teal-800'
+                            : 'bg-[#F0EDE8] dark:bg-slate-600'
                           }
                         `}>
                           <Icon
-                            className={`w-5 h-5 ${isItemActive ? 'text-[#6B9080] dark:text-teal-300' : 'text-gray-600 dark:text-gray-300'}`}
+                            className={`w-5 h-5 ${isItemActive ? 'text-[#6B9080] dark:text-[#7BA7BC]' : 'text-[#5A6B7A] dark:text-gray-300'}`}
                             strokeWidth={1.5}
                           />
                         </div>
 
                         <div className="text-left">
-                          <div className={`text-sm font-medium ${isItemActive ? 'text-teal-700 dark:text-teal-300' : 'text-gray-900 dark:text-gray-100'}`}>
+                          <div className={`text-sm font-medium ${isItemActive ? 'text-[#6B9080] dark:text-[#7BA7BC]' : 'text-[#1B2733] dark:text-gray-100'}`}>
                             {item.label}
                           </div>
-                          <div className="text-xs text-gray-500 dark:text-gray-400">{item.description}</div>
+                          <div className="text-xs text-[#5A6B7A] dark:text-[#8A9BA8]">{item.description}</div>
                         </div>
                       </div>
 
-                      <ChevronRight className={`w-4 h-4 ${isItemActive ? 'text-teal-500' : 'text-gray-400 dark:text-gray-500'} group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors`} />
+                      <ChevronRight className={`w-4 h-4 ${isItemActive ? 'text-primary' : 'text-[#8A9BA8] dark:text-[#5A6B7A]'} group-hover:text-[#5A6B7A] dark:group-hover:text-gray-300 transition-colors`} />
                     </button>
                   );
                 })}

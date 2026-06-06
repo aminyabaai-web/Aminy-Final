@@ -148,7 +148,7 @@ export function UsageMeter({
           "text-xs font-medium px-2 py-1 rounded-full",
           normalizedTier === 'pro' ? "bg-purple-100 text-purple-700" :
           normalizedTier === 'core' ? "bg-accent/10 text-accent" :
-          "bg-gray-100 text-gray-600"
+          "bg-[#F0EDE8] text-[#5A6B7A]"
         )}>
           {tierName}
         </span>
@@ -224,7 +224,7 @@ export function UsageMeter({
                 ? `${memoryFactsStored.toLocaleString()} facts · Unlimited`
                 : limits.memoryFacts === 0
                   ? 'None'
-                  : `${memoryFactsStored.toLocaleString()} / ${limits.memoryFacts.toLocaleString()} facts`}
+                  : `${memoryFactsStored.toLocaleString()} / ${(limits.memoryFacts ?? 0).toLocaleString()} facts`}
             </span>
           </div>
         </div>

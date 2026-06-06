@@ -344,12 +344,12 @@ export function DeveloperModePanel({ onNavigate, onTierChange }: DeveloperModePa
         </div>
 
         {/* Phase 2 Features Section */}
-        <div className="mt-4 pt-4 border-t border-slate-200">
+        <div className="mt-4 pt-4 border-t border-[#E8E4DF]">
           <div className="flex items-center gap-2 mb-3">
             <Badge variant="default" className="bg-purple-600 hover:bg-purple-700">
               Phase 2
             </Badge>
-            <span className="text-xs text-slate-500">BCBA Coach Portal & Analytics</span>
+            <span className="text-xs text-[#5A6B7A]">BCBA Coach Portal & Analytics</span>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <Button 
@@ -535,7 +535,7 @@ export function DeveloperModePanel({ onNavigate, onTierChange }: DeveloperModePa
               max="999"
               value={chatMessagesLeft}
               onChange={(e) => setChatMessagesLeft(parseInt(e.target.value))}
-              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+              className="w-full h-2 bg-[#E8E4DF] rounded-lg appearance-none cursor-pointer accent-blue-600"
             />
           </div>
 
@@ -550,7 +550,7 @@ export function DeveloperModePanel({ onNavigate, onTierChange }: DeveloperModePa
               max="999"
               value={jrMinutesLeft}
               onChange={(e) => setJrMinutesLeft(parseInt(e.target.value))}
-              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-green-600"
+              className="w-full h-2 bg-[#E8E4DF] rounded-lg appearance-none cursor-pointer accent-green-600"
             />
           </div>
 
@@ -565,7 +565,7 @@ export function DeveloperModePanel({ onNavigate, onTierChange }: DeveloperModePa
               max="999"
               value={videoMinutesLeft}
               onChange={(e) => setVideoMinutesLeft(parseInt(e.target.value))}
-              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-red-600"
+              className="w-full h-2 bg-[#E8E4DF] rounded-lg appearance-none cursor-pointer accent-red-600"
             />
           </div>
         </div>
@@ -665,21 +665,21 @@ export function DeveloperModePanel({ onNavigate, onTierChange }: DeveloperModePa
           Performance Metrics
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-          <div className="p-3 bg-gray-50 rounded-lg">
+          <div className="p-3 bg-[#FAF7F2] rounded-lg">
             <p className="text-xs text-muted-foreground mb-1">Screen Size</p>
             <p className="text-sm font-bold">{window.innerWidth}x{window.innerHeight}</p>
           </div>
-          <div className="p-3 bg-gray-50 rounded-lg">
+          <div className="p-3 bg-[#FAF7F2] rounded-lg">
             <p className="text-xs text-muted-foreground mb-1">User Agent</p>
             <p className="text-sm font-bold truncate" title={navigator.userAgent}>
               {navigator.userAgent.split(' ')[0]}
             </p>
           </div>
-          <div className="p-3 bg-gray-50 rounded-lg">
+          <div className="p-3 bg-[#FAF7F2] rounded-lg">
             <p className="text-xs text-muted-foreground mb-1">Tier</p>
             <p className="text-sm font-bold">{currentTier.toUpperCase()}</p>
           </div>
-          <div className="p-3 bg-gray-50 rounded-lg">
+          <div className="p-3 bg-[#FAF7F2] rounded-lg">
             <p className="text-xs text-muted-foreground mb-1">Entitlements</p>
             <p className="text-sm font-bold">
               {[chatUnlimited, reportsEnabled, jrUnlocked, liveVideoEnabled].filter(Boolean).length}/4
@@ -691,37 +691,37 @@ export function DeveloperModePanel({ onNavigate, onTierChange }: DeveloperModePa
       {/* Feature Flags */}
       <Card className="p-3 sm:p-4">
         <h3 className="font-semibold mb-4 flex items-center gap-2">
-          <FileText className="w-4 h-4 text-indigo-600" />
+          <FileText className="w-4 h-4 text-[#6B9080]" />
           Feature Flags
         </h3>
         <div className="space-y-3">
-          <div className="flex items-center justify-between p-2 bg-gray-50 rounded">
+          <div className="flex items-center justify-between p-2 bg-[#FAF7F2] rounded">
             <span className="text-sm">Aminy (Front & Center)</span>
             <Badge className="bg-green-100 text-green-700 border-green-200">Enabled</Badge>
           </div>
-          <div className="flex items-center justify-between p-2 bg-gray-50 rounded">
+          <div className="flex items-center justify-between p-2 bg-[#FAF7F2] rounded">
             <span className="text-sm">Live AI Video</span>
             <Badge className="bg-green-100 text-green-700 border-green-200">Enabled</Badge>
           </div>
-          <div className="flex items-center justify-between p-2 bg-gray-50 rounded">
+          <div className="flex items-center justify-between p-2 bg-[#FAF7F2] rounded">
             <span className="text-sm">Benefits Navigator</span>
             <Badge className="bg-green-100 text-green-700 border-green-200">Enabled</Badge>
           </div>
-          <div className="flex items-center justify-between p-2 bg-gray-50 rounded">
+          <div className="flex items-center justify-between p-2 bg-[#FAF7F2] rounded">
             <span className="text-sm">Telehealth</span>
             <Badge className="bg-green-100 text-green-700 border-green-200">Enabled</Badge>
           </div>
-          <div className="flex items-center justify-between p-2 bg-gray-50 rounded">
+          <div className="flex items-center justify-between p-2 bg-[#FAF7F2] rounded">
             <span className="text-sm">Multi-Child Support</span>
-            <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">Beta</Badge>
+            <Badge variant="outline" className="bg-[#EEF4F8] text-blue-700 border-[#C8DDE8]">Beta</Badge>
           </div>
-          <div className="flex items-center justify-between p-2 bg-gray-50 rounded">
+          <div className="flex items-center justify-between p-2 bg-[#FAF7F2] rounded">
             <span className="text-sm">Connector Hub</span>
             <Badge className="bg-green-100 text-green-700 border-green-200">Enabled</Badge>
           </div>
-          <div className="flex items-center justify-between p-2 bg-gray-50 rounded">
+          <div className="flex items-center justify-between p-2 bg-[#FAF7F2] rounded">
             <span className="text-sm">B2B2C Portal</span>
-            <Badge variant="outline" className="bg-gray-100 text-gray-600 border-gray-300">Coming Soon</Badge>
+            <Badge variant="outline" className="bg-[#F0EDE8] text-[#5A6B7A] border-[#E8E4DF]">Coming Soon</Badge>
           </div>
         </div>
       </Card>

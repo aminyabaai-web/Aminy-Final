@@ -282,7 +282,7 @@ export function B2BPartnerPortal({
       {/* Back Navigation */}
       {onBack && (
         <div className="px-4 pt-4">
-          <Button variant="ghost" onClick={onBack} className="text-slate-600 hover:text-slate-900">
+          <Button variant="ghost" onClick={onBack} className="text-[#5A6B7A] hover:text-[#1B2733]">
             <ChevronLeft className="w-4 h-4 mr-1" />
             Back
           </Button>
@@ -291,13 +291,13 @@ export function B2BPartnerPortal({
       {/* Hero */}
       <section className="py-16 px-4">
         <div className="max-w-4xl mx-auto text-center">
-          <Badge className="bg-blue-100 text-blue-800 mb-4">
+          <Badge className="bg-blue-100 text-[#4A6478] mb-4">
             Partner Program
           </Badge>
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl font-bold text-[#1B2733] mb-4">
             {content.headline}
           </h1>
-          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+          <p className="text-xl text-[#5A6B7A] mb-8 max-w-2xl mx-auto">
             {content.subheadline}
           </p>
           <div className="flex flex-wrap gap-3 sm:gap-4 justify-center">
@@ -319,7 +319,7 @@ export function B2BPartnerPortal({
       {/* Benefits Grid */}
       <section className="py-16 px-4 bg-white">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-xl sm:text-2xl font-bold text-center text-gray-900 mb-12">
+          <h2 className="text-xl sm:text-2xl font-bold text-center text-[#1B2733] mb-12">
             Why Partner With Aminy
           </h2>
           <div className="grid md:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
@@ -337,14 +337,14 @@ export function B2BPartnerPortal({
                     </div>
                     <div className="flex-1">
                       <div className="flex items-start justify-between mb-2">
-                        <h3 className="font-semibold text-gray-900">
+                        <h3 className="font-semibold text-[#1B2733]">
                           {benefit.title}
                         </h3>
                         <Badge variant="outline" className="text-xs">
                           {benefit.metric}
                         </Badge>
                       </div>
-                      <p className="text-gray-600 text-sm">
+                      <p className="text-[#5A6B7A] text-sm">
                         {benefit.description}
                       </p>
                     </div>
@@ -364,7 +364,7 @@ export function B2BPartnerPortal({
               <Badge className="bg-green-100 text-green-800 mb-4">
                 Case Study
               </Badge>
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
+              <h2 className="text-xl sm:text-2xl font-bold text-[#1B2733]">
                 {fiscalIntermediaryContent.caseStudy.title}
               </h2>
             </div>
@@ -375,10 +375,10 @@ export function B2BPartnerPortal({
                   <div className="text-2xl sm:text-3xl font-bold text-blue-600 mb-1">
                     {stat.value}
                   </div>
-                  <div className="text-sm font-medium text-gray-900 mb-1">
+                  <div className="text-sm font-medium text-[#1B2733] mb-1">
                     {stat.label}
                   </div>
-                  <div className="text-xs text-gray-500">
+                  <div className="text-xs text-[#5A6B7A]">
                     {stat.detail}
                   </div>
                 </Card>
@@ -386,10 +386,10 @@ export function B2BPartnerPortal({
             </div>
 
             <Card className="p-6 bg-white">
-              <blockquote className="text-lg text-gray-700 italic mb-4">
+              <blockquote className="text-lg text-[#3A4A57] italic mb-4">
                 "{fiscalIntermediaryContent.caseStudy.quote}"
               </blockquote>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-[#5A6B7A]">
                 — {fiscalIntermediaryContent.caseStudy.attribution}
               </p>
             </Card>
@@ -400,7 +400,7 @@ export function B2BPartnerPortal({
       {/* Integration Features */}
       <section className="py-16 px-4 bg-white">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-xl sm:text-2xl font-bold text-center text-gray-900 mb-12">
+          <h2 className="text-xl sm:text-2xl font-bold text-center text-[#1B2733] mb-12">
             Enterprise-Ready Integration
           </h2>
 
@@ -408,12 +408,12 @@ export function B2BPartnerPortal({
             {integrationFeatures.map((feature, index) => (
               <div
                 key={index}
-                className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg"
+                className="flex items-start gap-3 p-4 bg-[#FAF7F2] rounded-lg"
               >
                 <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="font-medium text-gray-900">{feature.title}</p>
-                  <p className="text-sm text-gray-600">{feature.description}</p>
+                  <p className="font-medium text-[#1B2733]">{feature.title}</p>
+                  <p className="text-sm text-[#5A6B7A]">{feature.description}</p>
                 </div>
               </div>
             ))}
@@ -422,25 +422,25 @@ export function B2BPartnerPortal({
       </section>
 
       {/* Pricing */}
-      <section className="py-16 px-4 bg-gray-50">
+      <section className="py-16 px-4 bg-[#FAF7F2]">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-xl sm:text-2xl font-bold text-center text-gray-900 mb-4">
+          <h2 className="text-xl sm:text-2xl font-bold text-center text-[#1B2733] mb-4">
             Simple, Scalable Pricing
           </h2>
-          <p className="text-center text-gray-600 mb-6 max-w-xl mx-auto">
+          <p className="text-center text-[#5A6B7A] mb-6 max-w-xl mx-auto">
             Volume discounts that grow with you. No setup fees. No long-term contracts required.
           </p>
 
           {/* Billing Period Toggle */}
           <div className="flex items-center justify-center gap-3 mb-10">
-            <span className={`text-sm font-medium ${billingPeriod === 'monthly' ? 'text-gray-900' : 'text-gray-500'}`}>Monthly</span>
+            <span className={`text-sm font-medium ${billingPeriod === 'monthly' ? 'text-[#1B2733]' : 'text-[#5A6B7A]'}`}>Monthly</span>
             <button
               onClick={() => setBillingPeriod(prev => prev === 'monthly' ? 'annual' : 'monthly')}
               className={`relative w-14 h-7 rounded-full transition-colors ${billingPeriod === 'annual' ? 'bg-blue-600' : 'bg-gray-300'}`}
             >
               <div className={`absolute top-0.5 left-0.5 w-6 h-6 bg-white rounded-full shadow transition-transform ${billingPeriod === 'annual' ? 'translate-x-7' : ''}`} />
             </button>
-            <span className={`text-sm font-medium ${billingPeriod === 'annual' ? 'text-gray-900' : 'text-gray-500'}`}>Annual</span>
+            <span className={`text-sm font-medium ${billingPeriod === 'annual' ? 'text-[#1B2733]' : 'text-[#5A6B7A]'}`}>Annual</span>
             {billingPeriod === 'annual' && (
               <Badge className="bg-green-100 text-green-800 text-xs">Save up to 30%</Badge>
             )}
@@ -457,16 +457,16 @@ export function B2BPartnerPortal({
                     Most Popular
                   </Badge>
                 )}
-                <h3 className="text-lg font-bold text-gray-900 mb-1">
+                <h3 className="text-lg font-bold text-[#1B2733] mb-1">
                   {tier.name}
                 </h3>
-                <p className="text-xs text-gray-500 mb-3">
+                <p className="text-xs text-[#5A6B7A] mb-3">
                   {tier.description}
                 </p>
-                <div className="text-2xl font-bold text-gray-900 mb-1">
+                <div className="text-2xl font-bold text-[#1B2733] mb-1">
                   {tier.price}
                 </div>
-                <p className="text-xs text-gray-500 mb-3">{tier.total}</p>
+                <p className="text-xs text-[#5A6B7A] mb-3">{tier.total}</p>
 
                 {tier.savings > 0 && (
                   <p className="text-xs text-green-600 font-medium mb-3">
@@ -476,10 +476,10 @@ export function B2BPartnerPortal({
 
                 {/* Seat Selector (not for enterprise) */}
                 {tier.key !== 'enterprise' && (
-                  <div className="flex items-center justify-between bg-gray-50 rounded-lg p-2 mb-4">
+                  <div className="flex items-center justify-between bg-[#FAF7F2] rounded-lg p-2 mb-4">
                     <button
                       onClick={() => handleSeatChange(tier.key, -1)}
-                      className="w-7 h-7 flex items-center justify-center rounded-md bg-white border border-gray-200 text-gray-600 hover:bg-gray-100"
+                      className="w-7 h-7 flex items-center justify-center rounded-md bg-white border border-[#E8E4DF] text-[#5A6B7A] hover:bg-[#F0EDE8]"
                     >
                       <Minus className="w-3 h-3" />
                     </button>
@@ -488,7 +488,7 @@ export function B2BPartnerPortal({
                     </span>
                     <button
                       onClick={() => handleSeatChange(tier.key, 1)}
-                      className="w-7 h-7 flex items-center justify-center rounded-md bg-white border border-gray-200 text-gray-600 hover:bg-gray-100"
+                      className="w-7 h-7 flex items-center justify-center rounded-md bg-white border border-[#E8E4DF] text-[#5A6B7A] hover:bg-[#F0EDE8]"
                     >
                       <Plus className="w-3 h-3" />
                     </button>
@@ -499,7 +499,7 @@ export function B2BPartnerPortal({
                   {tier.features.slice(0, 5).map((feature, i) => (
                     <li key={i} className="flex items-center gap-2 text-xs">
                       <CheckCircle className="w-3.5 h-3.5 text-green-600 flex-shrink-0" />
-                      <span className="text-gray-700">{feature}</span>
+                      <span className="text-[#3A4A57]">{feature}</span>
                     </li>
                   ))}
                   {tier.features.length > 5 && (
@@ -527,19 +527,19 @@ export function B2BPartnerPortal({
       <section className="py-12 px-4 bg-white">
         <div className="max-w-4xl mx-auto">
           <div className="flex flex-wrap justify-center gap-8">
-            <div className="flex items-center gap-2 text-gray-600">
+            <div className="flex items-center gap-2 text-[#5A6B7A]">
               <Shield className="w-5 h-5 text-blue-600" />
               <span>HIPAA-Conscious</span>
             </div>
-            <div className="flex items-center gap-2 text-gray-600">
+            <div className="flex items-center gap-2 text-[#5A6B7A]">
               <Award className="w-5 h-5 text-blue-600" />
               <span>SOC 2 Type II</span>
             </div>
-            <div className="flex items-center gap-2 text-gray-600">
+            <div className="flex items-center gap-2 text-[#5A6B7A]">
               <Zap className="w-5 h-5 text-blue-600" />
               <span>99.9% Uptime SLA</span>
             </div>
-            <div className="flex items-center gap-2 text-gray-600">
+            <div className="flex items-center gap-2 text-[#5A6B7A]">
               <Users className="w-5 h-5 text-blue-600" />
               <span>10,000+ Families Served</span>
             </div>
@@ -559,7 +559,7 @@ export function B2BPartnerPortal({
           </p>
           <div className="flex flex-wrap gap-3 sm:gap-4 justify-center">
             <Button
-              className="bg-white text-blue-700 hover:bg-blue-50"
+              className="bg-white text-blue-700 hover:bg-[#EEF4F8]"
               onClick={onContactSales}
             >
               <Phone className="w-4 h-4 mr-2" />
@@ -577,7 +577,7 @@ export function B2BPartnerPortal({
       </section>
 
       {/* Footer */}
-      <footer className="py-8 px-4 bg-gray-900 text-gray-400">
+      <footer className="py-8 px-4 bg-gray-900 text-[#8A9BA8]">
         <div className="max-w-4xl mx-auto text-center text-sm">
           <p>© {new Date().getFullYear()} Aminy, LLC All rights reserved.</p>
         </div>

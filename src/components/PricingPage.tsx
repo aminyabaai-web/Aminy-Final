@@ -70,8 +70,8 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
       cta: 'Start Free with 7-Day Trial',
       trialNote: `Includes ${TRIAL_CONFIG.durationDays}-day Core trial`,
       gradient: 'from-slate-50 to-slate-100',
-      borderColor: 'border-slate-200',
-      accentColor: 'text-slate-600',
+      borderColor: 'border-[#E8E4DF]',
+      accentColor: 'text-[#5A6B7A]',
       buttonClass: 'bg-slate-600 hover:bg-slate-700'
     },
     {
@@ -88,7 +88,7 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
       cta: `Start Free ${TRIAL_CONFIG.durationDays}-Day Trial`,
       trialNote: 'No credit card needed',
       recommended: recommendedTier === 'core',
-      gradient: 'from-accent/10 to-teal-100',
+      gradient: 'from-accent/10 to-[#F0EDE8]',
       borderColor: 'border-accent',
       accentColor: 'text-accent',
       buttonClass: 'bg-accent hover:bg-accent/90'
@@ -142,54 +142,54 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
             <span className="text-sm font-medium text-accent">Powered by AI and ABA Science</span>
           </div>
           
-          <h1 className="text-4xl sm:text-5xl font-semibold text-slate-900 dark:text-white mb-4">
+          <h1 className="text-4xl sm:text-5xl font-semibold text-[#1B2733] dark:text-white mb-4">
             Choose Your Calm Plan
           </h1>
           
-          <p className="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto mb-2">
+          <p className="text-lg text-[#5A6B7A] dark:text-slate-300 max-w-2xl mx-auto mb-2">
             Start with a 7-day free trial of Core or Plus — no credit card needed.
           </p>
           
-          <p className="text-sm text-slate-500 dark:text-slate-400 max-w-xl mx-auto">
+          <p className="text-sm text-[#5A6B7A] dark:text-slate-400 max-w-xl mx-auto">
             Using proven ABA principles, Aminy creates calm you can feel.
           </p>
         </div>
 
         {/* Forta Differentiator Banner - VC-informed positioning */}
-        <div className="bg-gradient-to-r from-teal-50 to-emerald-50 dark:from-teal-900/40 dark:to-emerald-900/30 border border-teal-200 dark:border-teal-800/60 rounded-xl p-6 mb-8 max-w-4xl mx-auto">
+        <div className="bg-gradient-to-r from-[#FAF7F2] to-emerald-50 dark:from-teal-900/40 dark:to-emerald-900/30 border border-[#6B9080]/20 dark:border-[#6B9080]/30/60 rounded-xl p-6 mb-8 max-w-4xl mx-auto">
           <div className="flex items-start gap-3 sm:gap-4">
-            <div className="w-12 h-12 bg-teal-100 dark:bg-teal-900/60 rounded-full flex items-center justify-center flex-shrink-0">
-              <Sparkles className="w-6 h-6 text-teal-600 dark:text-teal-300" />
+            <div className="w-12 h-12 bg-[#6B9080]/10 dark:bg-[#1a3a5c]/60 rounded-full flex items-center justify-center flex-shrink-0">
+              <Sparkles className="w-6 h-6 text-[#6B9080] dark:text-[#7BA7BC]" />
             </div>
             <div className="flex-1">
-              <h3 className="font-semibold text-teal-900 dark:text-teal-100 mb-2">Start Today, Not in 90 Days</h3>
-              <p className="text-sm text-teal-800 dark:text-teal-200 mb-3">
+              <h3 className="font-semibold text-[#6B9080] dark:text-teal-100 mb-2">Start Today, Not in 90 Days</h3>
+              <p className="text-sm text-[#6B9080] dark:text-teal-200 mb-3">
                 Unlike traditional ABA services with long waitlists and diagnosis requirements, Aminy gives you immediate support.
               </p>
               <div className="grid sm:grid-cols-2 gap-3">
                 <div className="flex items-center gap-2">
-                  <div className="w-5 h-5 bg-teal-200 dark:bg-teal-800 rounded-full flex items-center justify-center">
-                    <Check className="w-3 h-3 text-teal-700 dark:text-teal-200" />
+                  <div className="w-5 h-5 bg-[#6B9080]/20 dark:bg-teal-800 rounded-full flex items-center justify-center">
+                    <Check className="w-3 h-3 text-[#6B9080] dark:text-teal-200" />
                   </div>
-                  <span className="text-sm text-teal-700 dark:text-teal-200">No waitlist — instant AI access</span>
+                  <span className="text-sm text-[#6B9080] dark:text-teal-200">No waitlist — instant AI access</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-5 h-5 bg-teal-200 dark:bg-teal-800 rounded-full flex items-center justify-center">
-                    <Check className="w-3 h-3 text-teal-700 dark:text-teal-200" />
+                  <div className="w-5 h-5 bg-[#6B9080]/20 dark:bg-teal-800 rounded-full flex items-center justify-center">
+                    <Check className="w-3 h-3 text-[#6B9080] dark:text-teal-200" />
                   </div>
-                  <span className="text-sm text-teal-700 dark:text-teal-200">No diagnosis required</span>
+                  <span className="text-sm text-[#6B9080] dark:text-teal-200">No diagnosis required</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-5 h-5 bg-teal-200 dark:bg-teal-800 rounded-full flex items-center justify-center">
-                    <Check className="w-3 h-3 text-teal-700 dark:text-teal-200" />
+                  <div className="w-5 h-5 bg-[#6B9080]/20 dark:bg-teal-800 rounded-full flex items-center justify-center">
+                    <Check className="w-3 h-3 text-[#6B9080] dark:text-teal-200" />
                   </div>
-                  <span className="text-sm text-teal-700 dark:text-teal-200">Works for any family, any child</span>
+                  <span className="text-sm text-[#6B9080] dark:text-teal-200">Works for any family, any child</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-5 h-5 bg-teal-200 dark:bg-teal-800 rounded-full flex items-center justify-center">
-                    <Check className="w-3 h-3 text-teal-700 dark:text-teal-200" />
+                  <div className="w-5 h-5 bg-[#6B9080]/20 dark:bg-teal-800 rounded-full flex items-center justify-center">
+                    <Check className="w-3 h-3 text-[#6B9080] dark:text-teal-200" />
                   </div>
-                  <span className="text-sm text-teal-700 dark:text-teal-200">Expert sessions available within days</span>
+                  <span className="text-sm text-[#6B9080] dark:text-teal-200">Expert sessions available within days</span>
                 </div>
               </div>
             </div>
@@ -197,29 +197,29 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
         </div>
 
         {/* Trial Clarity */}
-        <div className="bg-white/90 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 mb-10 max-w-4xl mx-auto">
+        <div className="bg-white/90 dark:bg-slate-900/70 border border-[#E8E4DF] dark:border-slate-800 rounded-2xl p-6 mb-10 max-w-4xl mx-auto">
           <div className="flex items-start gap-4">
             <div className="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
               <CreditCard className="w-6 h-6 text-accent" />
             </div>
             <div className="flex-1 space-y-2">
-              <h3 className="text-lg font-semibold text-slate-900 dark:text-white">What happens after your trial?</h3>
-              <p className="text-sm text-slate-600 dark:text-slate-300">
+              <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white">What happens after your trial?</h3>
+              <p className="text-sm text-[#5A6B7A] dark:text-slate-300">
                 Your {TRIAL_CONFIG.durationDays}-day trial includes full {getTierDisplayName(TRIAL_CONFIG.trialTier)} access.
                 When it ends, you can pick any plan or stay on Free — no surprises.
               </p>
               <div className="grid gap-3 sm:grid-cols-3 text-sm">
-                <div className="rounded-xl border border-slate-200 dark:border-slate-700 p-3">
-                  <p className="font-semibold text-slate-900 dark:text-white">Choose Core</p>
-                  <p className="text-slate-600 dark:text-slate-300">${tierPricing.core.monthly}/mo after trial</p>
+                <div className="rounded-xl border border-[#E8E4DF] dark:border-slate-700 p-3">
+                  <p className="font-semibold text-[#1B2733] dark:text-white">Choose Core</p>
+                  <p className="text-[#5A6B7A] dark:text-slate-300">${tierPricing.core.monthly}/mo after trial</p>
                 </div>
-                <div className="rounded-xl border border-slate-200 dark:border-slate-700 p-3">
-                  <p className="font-semibold text-slate-900 dark:text-white">Upgrade to Pro</p>
-                  <p className="text-slate-600 dark:text-slate-300">${tierPricing.pro.monthly}/mo with BCBA support</p>
+                <div className="rounded-xl border border-[#E8E4DF] dark:border-slate-700 p-3">
+                  <p className="font-semibold text-[#1B2733] dark:text-white">Upgrade to Pro</p>
+                  <p className="text-[#5A6B7A] dark:text-slate-300">${tierPricing.pro.monthly}/mo with BCBA support</p>
                 </div>
-                <div className="rounded-xl border border-slate-200 dark:border-slate-700 p-3">
-                  <p className="font-semibold text-slate-900 dark:text-white">Stay on Free</p>
-                  <p className="text-slate-600 dark:text-slate-300">Limited features, always $0</p>
+                <div className="rounded-xl border border-[#E8E4DF] dark:border-slate-700 p-3">
+                  <p className="font-semibold text-[#1B2733] dark:text-white">Stay on Free</p>
+                  <p className="text-[#5A6B7A] dark:text-slate-300">Limited features, always $0</p>
                 </div>
               </div>
             </div>
@@ -266,25 +266,25 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
                     <div className={`w-8 h-8 rounded-full bg-white flex items-center justify-center`}>
                       <Icon className={`w-4 h-4 ${tier.accentColor}`} />
                     </div>
-                    <h3 className="text-lg sm:text-xl font-semibold text-slate-900">{tier.name}</h3>
+                    <h3 className="text-lg sm:text-xl font-semibold text-[#1B2733]">{tier.name}</h3>
                   </div>
 
-                  <p className="text-xs text-slate-600 mb-3">{tier.description}</p>
+                  <p className="text-xs text-[#5A6B7A] mb-3">{tier.description}</p>
 
                   <div className="flex items-baseline gap-1">
                     {tier.price === 0 ? (
-                      <span className="text-2xl sm:text-3xl font-bold text-slate-900">Free</span>
+                      <span className="text-2xl sm:text-3xl font-bold text-[#1B2733]">Free</span>
                     ) : (
                       <>
-                        <span className="text-2xl sm:text-3xl font-bold text-slate-900">${tier.price}</span>
-                        <span className="text-slate-500 text-sm">/{tier.period}</span>
+                        <span className="text-2xl sm:text-3xl font-bold text-[#1B2733]">${tier.price}</span>
+                        <span className="text-[#5A6B7A] text-sm">/{tier.period}</span>
                       </>
                     )}
                   </div>
 
                   {/* Yearly savings */}
                   {tier.savings && tier.savings > 0 && (
-                    <p className="text-xs text-slate-500 mt-1">
+                    <p className="text-xs text-[#5A6B7A] mt-1">
                       or ${tier.yearlyPrice}/year (save {tier.savings}%)
                     </p>
                   )}
@@ -298,7 +298,7 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
                   )}
 
                   {tier.trialNote && tier.price > 0 && (
-                    <p className="text-xs text-slate-500 mt-2">
+                    <p className="text-xs text-[#5A6B7A] mt-2">
                       Then ${tier.price}/mo • Cancel anytime
                     </p>
                   )}
@@ -309,7 +309,7 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
                   {tier.features.map((feature, idx) => (
                     <li key={idx} className="flex items-start gap-2">
                       <Check className={`w-3 h-3 ${tier.accentColor} mt-1 flex-shrink-0`} />
-                      <span className="text-xs text-slate-700">{feature}</span>
+                      <span className="text-xs text-[#3A4A57]">{feature}</span>
                     </li>
                   ))}
                 </ul>
@@ -342,7 +342,7 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
                 </Button>
 
                 {tier.trialNote && !isCurrent && (
-                  <p className="text-xs text-center text-slate-500 mt-2">
+                  <p className="text-xs text-center text-[#5A6B7A] mt-2">
                     {tier.trialNote}
                   </p>
                 )}
@@ -354,11 +354,11 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
         {/* Why Aminy Works Section */}
         <div className="mb-12">
           <div className="text-center mb-4 sm:mb-6">
-            <Badge className="bg-teal-100 text-teal-800 mb-3">Why Aminy Works</Badge>
-            <h2 className="text-2xl font-semibold text-slate-900 mb-2">
+            <Badge className="bg-[#6B9080]/10 text-[#6B9080] mb-3">Why Aminy Works</Badge>
+            <h2 className="text-2xl font-semibold text-[#1B2733] mb-2">
               Built specifically for your family's journey
             </h2>
-            <p className="text-slate-600">
+            <p className="text-[#5A6B7A]">
               Aminy isn't just AI chat—it's a complete support system designed for families navigating neurodivergence.
             </p>
           </div>
@@ -369,12 +369,12 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
               return (
                 <Card key={index} className="p-4 hover:shadow-md transition-shadow">
                   <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <Icon className="w-5 h-5 text-teal-600" />
+                    <div className="w-10 h-10 bg-[#6B9080]/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Icon className="w-5 h-5 text-[#6B9080]" />
                     </div>
                     <div>
-                      <h3 className="font-medium text-slate-900 text-sm">{item.feature}</h3>
-                      <p className="text-xs text-slate-500 mt-1">{item.description}</p>
+                      <h3 className="font-medium text-[#1B2733] text-sm">{item.feature}</h3>
+                      <p className="text-xs text-[#5A6B7A] mt-1">{item.description}</p>
                     </div>
                   </div>
                 </Card>
@@ -382,7 +382,7 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
             })}
           </div>
 
-          <p className="text-center text-sm text-slate-500 mt-4 sm:mt-6 max-w-xl mx-auto">
+          <p className="text-center text-sm text-[#5A6B7A] mt-4 sm:mt-6 max-w-xl mx-auto">
             The companion is the hook. The clinical utility is the moat. We're building the system of record that clinics and payers want to integrate with.
           </p>
         </div>
@@ -394,11 +394,11 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
               <Shield className="w-6 h-6 text-accent" />
             </div>
             <div>
-              <h3 className="font-semibold text-slate-900 mb-2">Our Calm Guarantee</h3>
-              <p className="text-slate-700 mb-4">
+              <h3 className="font-semibold text-[#1B2733] mb-2">Our Calm Guarantee</h3>
+              <p className="text-[#3A4A57] mb-4">
                 <strong>Noticeably calmer routines in 7 days — or cancel anytime.</strong>
               </p>
-              <p className="text-sm text-slate-600">
+              <p className="text-sm text-[#5A6B7A]">
                 We're confident that Aminy's ABA-based approach will bring measurable calm to your family. 
                 If you don't see progress in your first week, cancel with one click — no questions asked.
               </p>
@@ -410,42 +410,42 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
         <div className="grid sm:grid-cols-3 gap-3 sm:gap-4 sm:gap-6 mb-8">
           <div className="text-center">
             <div className="text-2xl sm:text-3xl font-bold text-accent mb-1">7 days</div>
-            <p className="text-sm text-slate-600">Free trial period</p>
+            <p className="text-sm text-[#5A6B7A]">Free trial period</p>
           </div>
           <div className="text-center">
             <div className="text-2xl sm:text-3xl font-bold text-accent mb-1">No card</div>
-            <p className="text-sm text-slate-600">Required to start</p>
+            <p className="text-sm text-[#5A6B7A]">Required to start</p>
           </div>
           <div className="text-center">
             <div className="text-2xl sm:text-3xl font-bold text-accent mb-1">Cancel</div>
-            <p className="text-sm text-slate-600">Anytime, 1-click</p>
+            <p className="text-sm text-[#5A6B7A]">Anytime, 1-click</p>
           </div>
         </div>
 
         {/* FAQ Section */}
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-2xl font-semibold text-slate-900 mb-4 sm:mb-6 text-center">Common Questions</h2>
+          <h2 className="text-2xl font-semibold text-[#1B2733] mb-4 sm:mb-6 text-center">Common Questions</h2>
           
           <div className="space-y-3 sm:space-y-4">
             <Card className="p-3 sm:p-4">
-              <h4 className="font-semibold text-slate-900 mb-2">What happens after my free trial?</h4>
-              <p className="text-sm text-slate-600">
+              <h4 className="font-semibold text-[#1B2733] mb-2">What happens after my free trial?</h4>
+              <p className="text-sm text-[#5A6B7A]">
                 After your 7-day trial, you'll continue on your chosen plan (Core ${tierPricing.core.monthly}/mo, Pro ${tierPricing.pro.monthly}/mo, or Pro+ ${tierPricing.proplus.monthly}/mo).
                 You'll receive reminder emails at days 4 and 6, and can cancel anytime before the trial ends.
               </p>
             </Card>
 
             <Card className="p-3 sm:p-4">
-              <h4 className="font-semibold text-slate-900 mb-2">Can I switch plans later?</h4>
-              <p className="text-sm text-slate-600">
+              <h4 className="font-semibold text-[#1B2733] mb-2">Can I switch plans later?</h4>
+              <p className="text-sm text-[#5A6B7A]">
                 Absolutely! You can upgrade or downgrade anytime from your account settings. 
                 Changes take effect immediately.
               </p>
             </Card>
 
             <Card className="p-3 sm:p-4">
-              <h4 className="font-semibold text-slate-900 mb-2">Is my insurance accepted?</h4>
-              <p className="text-sm text-slate-600">
+              <h4 className="font-semibold text-[#1B2733] mb-2">Is my insurance accepted?</h4>
+              <p className="text-sm text-[#5A6B7A]">
                 Most plans cover ABA services under behavioral health. Plus tier includes insurance
                 authorization letters and BCBA documentation to maximize your benefits.
               </p>
@@ -457,12 +457,12 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
                   <Wallet className="w-4 h-4 text-green-700" />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-slate-900 mb-2">Can I use my HSA or FSA?</h4>
-                  <p className="text-sm text-slate-600 mb-2">
+                  <h4 className="font-semibold text-[#1B2733] mb-2">Can I use my HSA or FSA?</h4>
+                  <p className="text-sm text-[#5A6B7A] mb-2">
                     <strong className="text-green-700">Yes!</strong> All Aminy plans are eligible for HSA/FSA reimbursement.
                     Aminy qualifies as a behavioral health and wellness expense under IRS guidelines.
                   </p>
-                  <ul className="text-xs text-slate-500 space-y-1">
+                  <ul className="text-xs text-[#5A6B7A] space-y-1">
                     <li>• Pay directly with your HSA/FSA debit card</li>
                     <li>• Or submit receipts for reimbursement</li>
                     <li>• We provide itemized receipts for all payments</li>
@@ -472,8 +472,8 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
             </Card>
 
             <Card className="p-3 sm:p-4">
-              <h4 className="font-semibold text-slate-900 mb-2">What's included in "ABA principles"?</h4>
-              <p className="text-sm text-slate-600">
+              <h4 className="font-semibold text-[#1B2733] mb-2">What's included in "ABA principles"?</h4>
+              <p className="text-sm text-[#5A6B7A]">
                 Applied Behavior Analysis (ABA) includes positive reinforcement, visual cues, 
                 predictable routines, and data-driven progress tracking — all simplified for everyday family life.
               </p>
@@ -482,8 +482,8 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
         </div>
 
         {/* Footer CTA */}
-        <div className="text-center mt-12 pt-8 border-t border-slate-200">
-          <p className="text-sm text-slate-600 mb-4">
+        <div className="text-center mt-12 pt-8 border-t border-[#E8E4DF]">
+          <p className="text-sm text-[#5A6B7A] mb-4">
             Have questions? We're here to help.
           </p>
           <Button variant="outline" size="sm">

@@ -153,13 +153,13 @@ export function ProviderReadyPacket({
       </div>
 
       {/* Consent Checkbox */}
-      <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg mb-4">
+      <div className="p-4 bg-[#EEF4F8] border border-[#C8DDE8] rounded-lg mb-4">
         <label className="flex items-start gap-3 cursor-pointer">
           <input
             type="checkbox"
             checked={consentChecked}
             onChange={(e) => handleConsentChange(e.target.checked)}
-            className="mt-1 w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+            className="mt-1 w-4 h-4 text-blue-600 rounded border-[#E8E4DF] focus:ring-blue-500"
           />
           <div>
             <p className="text-sm font-medium text-blue-900">
@@ -222,7 +222,7 @@ export function ProviderReadyPacket({
       )}
 
       {/* Watermark Notice */}
-      <div className="p-3 bg-gray-50 rounded-lg mb-3">
+      <div className="p-3 bg-[#FAF7F2] rounded-lg mb-3">
         <div className="flex items-center gap-2">
           <Shield className="w-4 h-4 text-muted-foreground" />
           <p className="text-xs text-muted-foreground">
@@ -245,8 +245,8 @@ export function ProviderReadyPacket({
 
       {/* What's Included */}
       <div className="mt-4 pt-4 border-t">
-        <p className="text-xs font-medium text-gray-700 mb-2">Packet includes:</p>
-        <ul className="text-xs text-gray-600 space-y-1">
+        <p className="text-xs font-medium text-[#3A4A57] mb-2">Packet includes:</p>
+        <ul className="text-xs text-[#5A6B7A] space-y-1">
           <li className="flex items-center gap-2">
             <Check className="w-3 h-3 text-green-600" />
             Child & family overview

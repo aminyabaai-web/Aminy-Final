@@ -123,7 +123,7 @@ export function UpdatedPricingCards({ onSubscribe, currentTier }: UpdatedPricing
             key={tier.id}
             className={`
               relative p-6 transition-all hover:shadow-xl
-              ${tier.popular ? 'border-accent border-2 shadow-lg' : 'border-gray-200'}
+              ${tier.popular ? 'border-accent border-2 shadow-lg' : 'border-[#E8E4DF]'}
             `}
           >
             {tier.popular && (

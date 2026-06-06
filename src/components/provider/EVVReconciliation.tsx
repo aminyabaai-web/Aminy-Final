@@ -140,24 +140,24 @@ export default function EVVReconciliation({
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header */}
-      <div className="sticky top-0 z-10 border-b border-gray-200 bg-white px-4 py-3">
+      <div className="sticky top-0 z-10 border-b border-[#E8E4DF] bg-white px-4 py-3">
         <div className="flex items-center gap-3">
           {onBack && (
-            <button onClick={onBack} className="rounded-full p-1 hover:bg-gray-100">
-              <ArrowLeft className="h-5 w-5 text-gray-600" />
+            <button onClick={onBack} className="rounded-full p-1 hover:bg-[#F0EDE8]">
+              <ArrowLeft className="h-5 w-5 text-[#5A6B7A]" />
             </button>
           )}
           <div className="flex-1">
-            <h1 className="text-lg font-bold text-gray-900">EVV Reconciliation</h1>
-            <p className="text-xs text-gray-500">Electronic Visit Verification</p>
+            <h1 className="text-lg font-bold text-[#1B2733]">EVV Reconciliation</h1>
+            <p className="text-xs text-[#5A6B7A]">Electronic Visit Verification</p>
           </div>
           <button
             onClick={onRefresh}
-            className="rounded-lg border border-gray-300 p-2 hover:bg-gray-50"
+            className="rounded-lg border border-[#E8E4DF] p-2 hover:bg-[#FAF7F2]"
           >
-            <RefreshCw className="h-4 w-4 text-gray-600" />
+            <RefreshCw className="h-4 w-4 text-[#5A6B7A]" />
           </button>
         </div>
       </div>
@@ -176,23 +176,23 @@ export default function EVVReconciliation({
                 className={`flex-shrink-0 rounded-xl border-2 p-3 text-left transition-all ${
                   isSelected
                     ? `${colors.border} ${colors.bg}`
-                    : 'border-gray-200 bg-white hover:border-gray-300'
+                    : 'border-[#E8E4DF] bg-white hover:border-[#E8E4DF]'
                 }`}
                 style={{ minWidth: '160px' }}
               >
                 <div className="flex items-center gap-2 mb-1">
                   <div className={`h-2.5 w-2.5 rounded-full ${colors.dot}`} />
-                  <span className="text-xs font-semibold text-gray-900">{cycle.label}</span>
+                  <span className="text-xs font-semibold text-[#1B2733]">{cycle.label}</span>
                 </div>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-[#5A6B7A]">
                   {new Date(cycle.startDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })} -{' '}
                   {new Date(cycle.endDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                 </p>
                 <div className="mt-2 flex items-baseline gap-1">
-                  <span className="text-lg font-bold text-gray-900">{cycle.cleanRate}%</span>
-                  <span className="text-xs text-gray-500">clean</span>
+                  <span className="text-lg font-bold text-[#1B2733]">{cycle.cleanRate}%</span>
+                  <span className="text-xs text-[#5A6B7A]">clean</span>
                 </div>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-[#5A6B7A]">
                   {cycle.reconciled}/{cycle.totalVisits} visits | {cycle.discrepancies} issues
                 </p>
               </button>
@@ -203,22 +203,22 @@ export default function EVVReconciliation({
         {/* Summary Stats */}
         {currentCycle && (
           <div className="grid grid-cols-3 gap-3">
-            <div className="rounded-xl border border-gray-200 bg-white p-3 text-center">
+            <div className="rounded-xl border border-[#E8E4DF] bg-white p-3 text-center">
               <CheckCircle className="mx-auto h-5 w-5 text-green-500 mb-1" />
-              <p className="text-lg font-bold text-gray-900">{currentCycle.reconciled}</p>
-              <p className="text-xs text-gray-500">Verified</p>
+              <p className="text-lg font-bold text-[#1B2733]">{currentCycle.reconciled}</p>
+              <p className="text-xs text-[#5A6B7A]">Verified</p>
             </div>
-            <div className="rounded-xl border border-gray-200 bg-white p-3 text-center">
+            <div className="rounded-xl border border-[#E8E4DF] bg-white p-3 text-center">
               <AlertTriangle className="mx-auto h-5 w-5 text-amber-500 mb-1" />
-              <p className="text-lg font-bold text-gray-900">{discrepancyCount}</p>
-              <p className="text-xs text-gray-500">Discrepancies</p>
+              <p className="text-lg font-bold text-[#1B2733]">{discrepancyCount}</p>
+              <p className="text-xs text-[#5A6B7A]">Discrepancies</p>
             </div>
-            <div className="rounded-xl border border-gray-200 bg-white p-3 text-center">
+            <div className="rounded-xl border border-[#E8E4DF] bg-white p-3 text-center">
               <Clock className="mx-auto h-5 w-5 text-blue-500 mb-1" />
-              <p className="text-lg font-bold text-gray-900">
+              <p className="text-lg font-bold text-[#1B2733]">
                 {currentCycle.totalVisits - currentCycle.reconciled - discrepancyCount}
               </p>
-              <p className="text-xs text-gray-500">Pending</p>
+              <p className="text-xs text-[#5A6B7A]">Pending</p>
             </div>
           </div>
         )}
@@ -231,8 +231,8 @@ export default function EVVReconciliation({
               onClick={() => setFilterStatus(status)}
               className={`flex-shrink-0 rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
                 filterStatus === status
-                  ? 'bg-teal-600 text-white'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  ? 'bg-primary text-white'
+                  : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
               }`}
             >
               {status === 'all' ? 'All' : status.charAt(0).toUpperCase() + status.slice(1)}
@@ -266,7 +266,7 @@ export default function EVVReconciliation({
                       ? 'border-red-200'
                       : visit.reconciliationStatus === 'verified'
                         ? 'border-green-200'
-                        : 'border-gray-200'
+                        : 'border-[#E8E4DF]'
                   }`}
                 >
                   <button
@@ -278,11 +278,11 @@ export default function EVVReconciliation({
                         <div className="flex items-center gap-2">
                           {visit.reconciliationStatus === 'verified' && <CheckCircle className="h-4 w-4 text-green-500" />}
                           {visit.reconciliationStatus === 'discrepancy' && <XCircle className="h-4 w-4 text-red-500" />}
-                          {visit.reconciliationStatus === 'pending' && <Clock className="h-4 w-4 text-gray-400" />}
+                          {visit.reconciliationStatus === 'pending' && <Clock className="h-4 w-4 text-[#8A9BA8]" />}
                           {visit.reconciliationStatus === 'resolved' && <CheckCircle className="h-4 w-4 text-blue-500" />}
-                          <span className="text-sm font-semibold text-gray-900 truncate">{visit.clientName}</span>
+                          <span className="text-sm font-semibold text-[#1B2733] truncate">{visit.clientName}</span>
                         </div>
-                        <p className="text-xs text-gray-500 mt-0.5">
+                        <p className="text-xs text-[#5A6B7A] mt-0.5">
                           {new Date(visit.serviceDate).toLocaleDateString()} | {visit.serviceCode} | {visit.providerName}
                         </p>
                         {visit.discrepancyType && (
@@ -295,7 +295,7 @@ export default function EVVReconciliation({
                         <span className={`text-xs font-bold ${confidenceColor}`}>
                           {visit.fiscalAgentConfidence}%
                         </span>
-                        {isExpanded ? <ChevronUp className="h-4 w-4 text-gray-400" /> : <ChevronDown className="h-4 w-4 text-gray-400" />}
+                        {isExpanded ? <ChevronUp className="h-4 w-4 text-[#8A9BA8]" /> : <ChevronDown className="h-4 w-4 text-[#8A9BA8]" />}
                       </div>
                     </div>
                   </button>
@@ -308,16 +308,16 @@ export default function EVVReconciliation({
                         exit={{ height: 0 }}
                         className="overflow-hidden"
                       >
-                        <div className="border-t border-gray-100 p-3 space-y-3">
+                        <div className="border-t border-[#E8E4DF] p-3 space-y-3">
                           {/* Time Comparison */}
                           <div className="grid grid-cols-2 gap-3">
                             <div>
-                              <p className="text-xs font-medium text-gray-500">Scheduled</p>
-                              <p className="text-sm text-gray-900">{visit.scheduledStart} - {visit.scheduledEnd}</p>
+                              <p className="text-xs font-medium text-[#5A6B7A]">Scheduled</p>
+                              <p className="text-sm text-[#1B2733]">{visit.scheduledStart} - {visit.scheduledEnd}</p>
                             </div>
                             <div>
-                              <p className="text-xs font-medium text-gray-500">Actual</p>
-                              <p className="text-sm text-gray-900">
+                              <p className="text-xs font-medium text-[#5A6B7A]">Actual</p>
+                              <p className="text-sm text-[#1B2733]">
                                 {visit.actualStart ?? '—'} - {visit.actualEnd ?? '—'}
                               </p>
                             </div>
@@ -326,7 +326,7 @@ export default function EVVReconciliation({
                           {/* GPS */}
                           <div className="grid grid-cols-2 gap-3">
                             <div>
-                              <p className="text-xs font-medium text-gray-500">GPS Check-In</p>
+                              <p className="text-xs font-medium text-[#5A6B7A]">GPS Check-In</p>
                               {visit.gpsCheckIn ? (
                                 <div className="flex items-center gap-1 text-sm">
                                   <MapPin className={`h-3.5 w-3.5 ${visit.gpsCheckIn.matchesServiceLocation ? 'text-green-500' : 'text-red-500'}`} />
@@ -339,7 +339,7 @@ export default function EVVReconciliation({
                               )}
                             </div>
                             <div>
-                              <p className="text-xs font-medium text-gray-500">GPS Check-Out</p>
+                              <p className="text-xs font-medium text-[#5A6B7A]">GPS Check-Out</p>
                               {visit.gpsCheckOut ? (
                                 <div className="flex items-center gap-1 text-sm">
                                   <MapPin className={`h-3.5 w-3.5 ${visit.gpsCheckOut.matchesServiceLocation ? 'text-green-500' : 'text-red-500'}`} />
@@ -355,11 +355,11 @@ export default function EVVReconciliation({
 
                           {/* Timesheet Match */}
                           <div>
-                            <p className="text-xs font-medium text-gray-500">Timesheet</p>
+                            <p className="text-xs font-medium text-[#5A6B7A]">Timesheet</p>
                             <span className={`inline-flex items-center gap-1 text-sm ${
                               visit.timesheetMatch === 'match' ? 'text-green-700' :
                               visit.timesheetMatch === 'minor-variance' ? 'text-amber-700' :
-                              visit.timesheetMatch === 'mismatch' ? 'text-red-700' : 'text-gray-500'
+                              visit.timesheetMatch === 'mismatch' ? 'text-red-700' : 'text-[#5A6B7A]'
                             }`}>
                               {visit.timesheetMatch === 'match' && <><CheckCircle className="h-3.5 w-3.5" /> Matches</>}
                               {visit.timesheetMatch === 'minor-variance' && <><AlertTriangle className="h-3.5 w-3.5" /> Minor Variance</>}
@@ -370,9 +370,9 @@ export default function EVVReconciliation({
 
                           {/* Fiscal Agent Confidence */}
                           <div>
-                            <p className="text-xs font-medium text-gray-500 mb-1">Fiscal Agent Confidence</p>
+                            <p className="text-xs font-medium text-[#5A6B7A] mb-1">Fiscal Agent Confidence</p>
                             <div className="flex items-center gap-2">
-                              <div className="flex-1 h-2 rounded-full bg-gray-100 overflow-hidden">
+                              <div className="flex-1 h-2 rounded-full bg-[#F0EDE8] overflow-hidden">
                                 <div
                                   className={`h-full rounded-full ${
                                     visit.fiscalAgentConfidence >= 90 ? 'bg-green-500' :
@@ -399,12 +399,12 @@ export default function EVVReconciliation({
                                 onChange={e => setResolutionNote(e.target.value)}
                                 placeholder="Describe resolution action taken..."
                                 rows={2}
-                                className="w-full rounded-lg border border-red-200 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none"
+                                className="w-full rounded-lg border border-red-200 px-3 py-2 text-sm focus:border-[#6B9080] focus:outline-none"
                               />
                               <button
                                 onClick={() => handleResolve(visit.id)}
                                 disabled={!resolutionNote.trim()}
-                                className="mt-2 w-full rounded-lg bg-teal-600 px-4 py-2 text-sm font-semibold text-white hover:bg-teal-700 disabled:opacity-40"
+                                className="mt-2 w-full rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-[#6B9080] disabled:opacity-40"
                               >
                                 Resolve Discrepancy
                               </button>
@@ -421,8 +421,8 @@ export default function EVVReconciliation({
 
           {cycleVisits.length === 0 && (
             <div className="text-center py-12">
-              <FileText className="mx-auto h-12 w-12 text-gray-400" />
-              <p className="mt-3 text-sm text-gray-500">No visits found for this filter.</p>
+              <FileText className="mx-auto h-12 w-12 text-[#8A9BA8]" />
+              <p className="mt-3 text-sm text-[#5A6B7A]">No visits found for this filter.</p>
             </div>
           )}
         </div>
@@ -431,7 +431,7 @@ export default function EVVReconciliation({
         {currentCycle && (
           <button
             onClick={() => onExportProofPacket(currentCycle.id)}
-            className="w-full flex items-center justify-center gap-2 rounded-xl bg-teal-600 px-4 py-3 text-sm font-semibold text-white hover:bg-teal-700"
+            className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-white hover:bg-[#6B9080]"
           >
             <Download className="h-4 w-4" />
             Export Proof Packet — {currentCycle.label}

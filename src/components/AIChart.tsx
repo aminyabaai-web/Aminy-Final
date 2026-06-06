@@ -93,7 +93,7 @@ function PieChartView({ spec }: { spec: AIChartSpec }) {
           cx="50%"
           cy="50%"
           outerRadius={70}
-          label={({ name, percent }: { name: string; percent: number }) => `${name} ${Math.round((percent || 0) * 100)}%`}
+          label={({ name, percent }: { name?: string; percent?: number }) => `${name ?? ''} ${Math.round((percent || 0) * 100)}%`}
           labelLine={false}
         >
           {spec.data.map((_, i) => (
@@ -113,11 +113,11 @@ export function AIChart({ spec }: { spec: AIChartSpec }) {
 
   return (
     <div
-      className="my-2 p-3 bg-white border border-slate-100 rounded-2xl"
+      className="my-2 p-3 bg-white border border-[#E8E4DF] rounded-2xl"
       style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}
     >
       {spec.title && (
-        <p className="text-xs font-semibold text-slate-700 mb-0.5">{spec.title}</p>
+        <p className="text-xs font-semibold text-[#3A4A57] mb-0.5">{spec.title}</p>
       )}
       {spec.subtitle && (
         <p className="text-xs text-slate-400 mb-2">{spec.subtitle}</p>

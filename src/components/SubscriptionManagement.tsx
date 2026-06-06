@@ -204,10 +204,10 @@ function CancelFlowButton({ onCancel, tierName }: CancelFlowButtonProps) {
                   </div>
                 </Card>
 
-                <Card className="p-4 border border-gray-200">
+                <Card className="p-4 border border-[#E8E4DF]">
                   <div className="flex items-start gap-3">
-                    <div className="p-2 bg-gray-100 rounded-lg">
-                      <Calendar className="w-5 h-5 text-gray-600" />
+                    <div className="p-2 bg-[#F0EDE8] rounded-lg">
+                      <Calendar className="w-5 h-5 text-[#5A6B7A]" />
                     </div>
                     <div>
                       <h4 className="font-semibold text-primary">Pause for 1 Month</h4>
@@ -352,7 +352,7 @@ export function SubscriptionManagement({ accessToken }: SubscriptionManagementPr
 
   // Use consistent tier colors from design system
   const tierColors: Record<TierType, string> = {
-    free: 'bg-gray-100 text-gray-700',
+    free: 'bg-[#F0EDE8] text-[#3A4A57]',
     starter: 'bg-blue-100 text-blue-700',
     core: 'bg-accent/10 text-accent',
     pro: 'bg-gradient-to-r from-purple-600 to-pink-600 text-white',
@@ -362,7 +362,7 @@ export function SubscriptionManagement({ accessToken }: SubscriptionManagementPr
   return (
     <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       {/* Current Plan Card */}
-      <Card className="p-6 bg-gradient-to-br from-white via-teal-50/20 to-white border-accent/20">
+      <Card className="p-6 bg-gradient-to-br from-white via-transparent/20 to-white border-accent/20">
         <div className="flex items-start justify-between mb-4">
           <div>
             <div className="flex items-center gap-3 mb-2">
@@ -405,7 +405,7 @@ export function SubscriptionManagement({ accessToken }: SubscriptionManagementPr
         {/* Subscription Details */}
         <div className="space-y-3 text-sm">
           {subscription?.currentPeriodEnd && (
-            <div className="flex items-center justify-between py-2 border-t border-gray-100">
+            <div className="flex items-center justify-between py-2 border-t border-[#E8E4DF]">
               <div className="flex items-center gap-2 text-muted-foreground">
                 <Calendar className="w-4 h-4" />
                 <span>Next billing date</span>
@@ -417,7 +417,7 @@ export function SubscriptionManagement({ accessToken }: SubscriptionManagementPr
           )}
           
           {hasCredits && (
-            <div className="flex items-center justify-between py-2 border-t border-gray-100">
+            <div className="flex items-center justify-between py-2 border-t border-[#E8E4DF]">
               <div className="flex items-center gap-2 text-muted-foreground">
                 <DollarSign className="w-4 h-4" />
                 <span>Available credits</span>

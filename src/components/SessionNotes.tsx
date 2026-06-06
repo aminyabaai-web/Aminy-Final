@@ -304,7 +304,7 @@ export function SessionNotes({
       <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
         <Card className="max-w-4xl w-full p-8">
           <div className="flex items-center justify-center gap-3">
-            <Loader2 className="w-6 h-6 text-teal-600 animate-spin" />
+            <Loader2 className="w-6 h-6 text-[#6B9080] animate-spin" />
             <span className="text-neutral-600">Loading session notes...</span>
           </div>
         </Card>
@@ -320,10 +320,10 @@ export function SessionNotes({
           <div className="flex items-start justify-between">
             <div>
               <div className="flex items-center gap-2 flex-wrap">
-                <h2 className="text-lg font-semibold text-neutral-900">Session Notes</h2>
+                <h2 className="text-lg font-semibold text-[#1B2733]">Session Notes</h2>
                 <AISparkleButton prompt={`Based on this session with ${patientName} (${sessionType}), what are the most important things for the family to follow up on at home?`} label="Summarize for family" />
               </div>
-              <p className="text-sm text-neutral-500 mt-1">
+              <p className="text-sm text-[#5A6B7A] mt-1">
                 <User className="w-3.5 h-3.5 inline mr-1" />
                 {patientName} • {sessionType}
                 <Clock className="w-3.5 h-3.5 inline ml-3 mr-1" />
@@ -338,7 +338,7 @@ export function SessionNotes({
                 </Badge>
               )}
               <button onClick={onClose} className="p-2 hover:bg-neutral-100 rounded-lg">
-                <X className="w-5 h-5 text-neutral-500" />
+                <X className="w-5 h-5 text-[#5A6B7A]" />
               </button>
             </div>
           </div>
@@ -348,7 +348,7 @@ export function SessionNotes({
         <div className="px-4 sm:px-6 py-3 sm:py-4 bg-neutral-50 border-b border-neutral-100">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Sparkles className="w-5 h-5 text-teal-600" />
+              <Sparkles className="w-5 h-5 text-[#6B9080]" />
               <span className="text-sm font-medium text-neutral-700">Use a template:</span>
             </div>
             <Button
@@ -372,12 +372,12 @@ export function SessionNotes({
                   onClick={() => applyTemplate(template.id)}
                   className={`p-3 text-left rounded-lg border transition-colors ${
                     selectedTemplate === template.id
-                      ? 'bg-teal-50 border-teal-300'
-                      : 'bg-white border-neutral-200 hover:border-teal-200 hover:bg-teal-50/50'
+                      ? 'bg-[#6B9080]/10 border-[#6B9080]/30'
+                      : 'bg-white border-neutral-200 hover:border-[#6B9080]/20 hover:bg-[#6B9080]/10/50'
                   }`}
                 >
-                  <p className="font-medium text-neutral-900 text-sm">{template.name}</p>
-                  <p className="text-xs text-neutral-500 mt-0.5">{template.description}</p>
+                  <p className="font-medium text-[#1B2733] text-sm">{template.name}</p>
+                  <p className="text-xs text-[#5A6B7A] mt-0.5">{template.description}</p>
                 </button>
               ))}
             </div>
@@ -451,11 +451,11 @@ export function SessionNotes({
           </div>
 
           {/* Home Recommendations (for parent sharing) */}
-          <div className="p-4 bg-teal-50 rounded-lg border border-teal-200">
-            <label className="flex items-center gap-2 text-sm font-medium text-teal-800 mb-2">
+          <div className="p-4 bg-[#6B9080]/10 rounded-lg border border-[#6B9080]/20">
+            <label className="flex items-center gap-2 text-sm font-medium text-[#6B9080] mb-2">
               <Target className="w-4 h-4" />
               Home Practice Recommendations
-              <span className="text-xs font-normal text-teal-600">- Will be shared with parent if enabled</span>
+              <span className="text-xs font-normal text-[#6B9080]">- Will be shared with parent if enabled</span>
             </label>
             <Textarea
               value={noteData.homeRecommendations}
@@ -474,7 +474,7 @@ export function SessionNotes({
               onClick={() => setShareWithParent(!shareWithParent)}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-colors ${
                 shareWithParent
-                  ? 'bg-teal-50 border-teal-300 text-teal-700'
+                  ? 'bg-[#6B9080]/10 border-[#6B9080]/30 text-[#6B9080]'
                   : 'bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50'
               }`}
             >
@@ -496,7 +496,7 @@ export function SessionNotes({
                 Cancel
               </Button>
               <Button
-                className="bg-teal-600 hover:bg-teal-700"
+                className="bg-primary hover:bg-[#6B9080]"
                 onClick={handleSave}
                 disabled={isSaving}
               >

@@ -197,50 +197,50 @@ function WeeklyReport({ sessions }: { sessions: EaseSessionEntry[] }) {
 
   return (
     <div className="space-y-3">
-      <h3 className="font-bold text-gray-800 text-sm flex items-center gap-2">
+      <h3 className="font-bold text-[#1B2733] text-sm flex items-center gap-2">
         <BarChart3 className="w-4 h-4 text-indigo-500" />
         Weekly Ease Report
       </h3>
 
       {weekSessions.length === 0 ? (
-        <p className="text-xs text-gray-400 text-center py-4">No sessions logged this week yet</p>
+        <p className="text-xs text-[#8A9BA8] text-center py-4">No sessions logged this week yet</p>
       ) : (
         <>
           {/* Summary stats */}
           <div className="grid grid-cols-3 gap-2">
             <div className="bg-indigo-50 rounded-xl p-3 text-center">
-              <p className="text-xs text-gray-500">Sessions</p>
+              <p className="text-xs text-[#5A6B7A]">Sessions</p>
               <p className="text-xl font-black text-indigo-700">{weekSessions.length}</p>
             </div>
-            <div className="bg-teal-50 rounded-xl p-3 text-center">
-              <p className="text-xs text-gray-500">Total time</p>
-              <p className="text-xl font-black text-teal-700">{totalMinutes}m</p>
+            <div className="bg-[#6B9080]/10 rounded-xl p-3 text-center">
+              <p className="text-xs text-[#5A6B7A]">Total time</p>
+              <p className="text-xl font-black text-[#6B9080]">{totalMinutes}m</p>
             </div>
             <div className="bg-amber-50 rounded-xl p-3 text-center">
-              <p className="text-xs text-gray-500">Avg/day</p>
+              <p className="text-xs text-[#5A6B7A]">Avg/day</p>
               <p className="text-xl font-black text-amber-700">{Math.round(totalMinutes / 7)}m</p>
             </div>
           </div>
 
           {/* Parent ratings */}
           {(greatCount + okCount + roughCount) > 0 && (
-            <div className="bg-gray-50 rounded-xl p-3">
-              <p className="text-xs font-semibold text-gray-600 mb-2">Session ratings</p>
+            <div className="bg-[#FAF7F2] rounded-xl p-3">
+              <p className="text-xs font-semibold text-[#5A6B7A] mb-2">Session ratings</p>
               <div className="flex gap-3">
                 <div className="flex items-center gap-1">
                   <ThumbsUp className="w-3.5 h-3.5 text-green-500" />
                   <span className="text-sm font-bold text-green-600">{greatCount}</span>
-                  <span className="text-xs text-gray-400">great</span>
+                  <span className="text-xs text-[#8A9BA8]">great</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <Minus className="w-3.5 h-3.5 text-amber-500" />
                   <span className="text-sm font-bold text-amber-600">{okCount}</span>
-                  <span className="text-xs text-gray-400">ok</span>
+                  <span className="text-xs text-[#8A9BA8]">ok</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <ThumbsDown className="w-3.5 h-3.5 text-red-500" />
                   <span className="text-sm font-bold text-red-600">{roughCount}</span>
-                  <span className="text-xs text-gray-400">rough</span>
+                  <span className="text-xs text-[#8A9BA8]">rough</span>
                 </div>
               </div>
             </div>
@@ -249,13 +249,13 @@ function WeeklyReport({ sessions }: { sessions: EaseSessionEntry[] }) {
           {/* Top tools */}
           {topTools.length > 0 && (
             <div>
-              <p className="text-xs font-semibold text-gray-600 mb-2">Most used tools</p>
+              <p className="text-xs font-semibold text-[#5A6B7A] mb-2">Most used tools</p>
               <div className="space-y-1.5">
                 {topTools.map(([tool, data]) => (
                   <div key={tool} className="flex items-center gap-2 bg-white rounded-xl px-3 py-2 shadow-sm">
                     <span className="text-xl">{data.emoji}</span>
-                    <span className="text-sm font-medium text-gray-700 flex-1 capitalize">{tool}</span>
-                    <span className="text-xs text-gray-400">{data.count}x · {data.minutes}m</span>
+                    <span className="text-sm font-medium text-[#3A4A57] flex-1 capitalize">{tool}</span>
+                    <span className="text-xs text-[#8A9BA8]">{data.count}x · {data.minutes}m</span>
                   </div>
                 ))}
               </div>
@@ -306,12 +306,12 @@ export function PostSessionRatingPrompt({
           <div className="flex items-center gap-2">
             <span className="text-2xl">{toolEmoji}</span>
             <div>
-              <p className="font-bold text-gray-800 text-sm">How did that go?</p>
-              <p className="text-xs text-gray-400 capitalize">{tool} session</p>
+              <p className="font-bold text-[#1B2733] text-sm">How did that go?</p>
+              <p className="text-xs text-[#8A9BA8] capitalize">{tool} session</p>
             </div>
           </div>
-          <button onClick={onDismiss} className="p-1.5 rounded-full bg-gray-100">
-            <X className="w-4 h-4 text-gray-400" />
+          <button onClick={onDismiss} className="p-1.5 rounded-full bg-[#F0EDE8]">
+            <X className="w-4 h-4 text-[#8A9BA8]" />
           </button>
         </div>
 
@@ -341,7 +341,7 @@ export function PostSessionRatingPrompt({
                 value={note}
                 onChange={e => setNote(e.target.value)}
                 placeholder="I noticed... (optional)"
-                className="flex-1 text-sm px-3 py-2 rounded-xl border border-gray-200 focus:outline-none focus:border-indigo-300"
+                className="flex-1 text-sm px-3 py-2 rounded-xl border border-[#E8E4DF] focus:outline-none focus:border-indigo-300"
               />
             </div>
           </>
@@ -352,7 +352,7 @@ export function PostSessionRatingPrompt({
             className="text-center py-4"
           >
             <CheckCircle className="w-10 h-10 text-green-500 mx-auto mb-2" />
-            <p className="font-semibold text-gray-700">Saved! Thanks for the note.</p>
+            <p className="font-semibold text-[#3A4A57]">Saved! Thanks for the note.</p>
           </motion.div>
         )}
       </div>
@@ -441,8 +441,8 @@ export function EaseParentView({
                 <div className="mt-3 flex items-center gap-2 bg-white/60 rounded-2xl px-3 py-2">
                   <span className="text-2xl">{lastToolEmoji}</span>
                   <div>
-                    <p className="text-xs font-bold text-gray-700 capitalize">{lastToolUsed}</p>
-                    <p className="text-[10px] text-gray-400">Last used</p>
+                    <p className="text-xs font-bold text-[#3A4A57] capitalize">{lastToolUsed}</p>
+                    <p className="text-[10px] text-[#8A9BA8]">Last used</p>
                   </div>
                 </div>
               )}
@@ -458,9 +458,9 @@ export function EaseParentView({
               >
                 <div className="flex items-center gap-2">
                   <Target className="w-4 h-4 text-indigo-500" />
-                  <span className="text-sm font-semibold text-gray-700">Therapeutic Goal</span>
+                  <span className="text-sm font-semibold text-[#3A4A57]">Therapeutic Goal</span>
                 </div>
-                {activeSection === 'goals' ? <ChevronUp className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
+                {activeSection === 'goals' ? <ChevronUp className="w-4 h-4 text-[#8A9BA8]" /> : <ChevronDown className="w-4 h-4 text-[#8A9BA8]" />}
               </button>
               <AnimatePresence>
                 {activeSection === 'goals' && (
@@ -478,12 +478,12 @@ export function EaseParentView({
                         </div>
                         <p className="text-xs text-indigo-700 ml-6">{goalInfo.goal}</p>
                       </div>
-                      <div className="bg-teal-50 rounded-2xl p-3">
+                      <div className="bg-[#6B9080]/10 rounded-2xl p-3">
                         <div className="flex items-start gap-2 mb-1">
-                          <Eye className="w-4 h-4 text-teal-600 mt-0.5 flex-shrink-0" />
-                          <p className="text-xs font-bold text-teal-800">What to observe</p>
+                          <Eye className="w-4 h-4 text-[#6B9080] mt-0.5 flex-shrink-0" />
+                          <p className="text-xs font-bold text-[#6B9080]">What to observe</p>
                         </div>
-                        <p className="text-xs text-teal-700 ml-6">{goalInfo.whatToObserve}</p>
+                        <p className="text-xs text-[#6B9080] ml-6">{goalInfo.whatToObserve}</p>
                       </div>
                       <div className="bg-amber-50 rounded-2xl p-3">
                         <div className="flex items-start gap-2 mb-1">
@@ -504,9 +504,9 @@ export function EaseParentView({
               >
                 <div className="flex items-center gap-2">
                   <MessageSquare className="w-4 h-4 text-purple-500" />
-                  <span className="text-sm font-semibold text-gray-700">I noticed...</span>
+                  <span className="text-sm font-semibold text-[#3A4A57]">I noticed...</span>
                 </div>
-                {activeSection === 'notes' ? <ChevronUp className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
+                {activeSection === 'notes' ? <ChevronUp className="w-4 h-4 text-[#8A9BA8]" /> : <ChevronDown className="w-4 h-4 text-[#8A9BA8]" />}
               </button>
               <AnimatePresence>
                 {activeSection === 'notes' && (
@@ -522,7 +522,7 @@ export function EaseParentView({
                         onChange={e => setNoteText(e.target.value)}
                         placeholder={`What did you observe during ${childName}'s session?`}
                         rows={3}
-                        className="w-full text-sm p-3 rounded-2xl border border-gray-200 focus:outline-none focus:border-indigo-300 resize-none"
+                        className="w-full text-sm p-3 rounded-2xl border border-[#E8E4DF] focus:outline-none focus:border-indigo-300 resize-none"
                       />
                       <motion.button
                         whileTap={{ scale: 0.96 }}
@@ -544,9 +544,9 @@ export function EaseParentView({
               >
                 <div className="flex items-center gap-2">
                   <BarChart3 className="w-4 h-4 text-emerald-500" />
-                  <span className="text-sm font-semibold text-gray-700">Weekly Report</span>
+                  <span className="text-sm font-semibold text-[#3A4A57]">Weekly Report</span>
                 </div>
-                {activeSection === 'report' ? <ChevronUp className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
+                {activeSection === 'report' ? <ChevronUp className="w-4 h-4 text-[#8A9BA8]" /> : <ChevronDown className="w-4 h-4 text-[#8A9BA8]" />}
               </button>
               <AnimatePresence>
                 {activeSection === 'report' && (

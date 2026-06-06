@@ -135,7 +135,7 @@ export function ConversationalBehaviorLog({ userId, childName, onLogged }: Conve
           value={description}
           onChange={e => setDescription(e.target.value)}
           placeholder={`Describe what happened with ${name} — in your own words. E.g., "He had a meltdown at the grocery store after I said no to candy, lasted about 10 minutes, eventually calmed down with music"`}
-          className="w-full px-4 py-3 pr-12 bg-slate-50 border border-slate-200 rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent text-sm placeholder:text-slate-400"
+          className="w-full px-4 py-3 pr-12 bg-[#FAF7F2] border border-[#E8E4DF] rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent text-sm placeholder:text-slate-400"
           style={{ minHeight: '80px', maxHeight: '140px' }}
           rows={3}
           onKeyDown={e => {
@@ -143,7 +143,7 @@ export function ConversationalBehaviorLog({ userId, childName, onLogged }: Conve
           }}
         />
         <button
-          className="absolute right-3 bottom-3 w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:text-teal-600 transition-colors"
+          className="absolute right-3 bottom-3 w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:text-[#6B9080] transition-colors"
           title="Voice input (coming soon)"
         >
           <Mic className="w-4 h-4" />
@@ -153,7 +153,7 @@ export function ConversationalBehaviorLog({ userId, childName, onLogged }: Conve
       <Button
         onClick={parseDescription}
         disabled={!description.trim() || isParsing}
-        className="w-full bg-teal-600 hover:bg-teal-700"
+        className="w-full bg-primary hover:bg-[#6B9080]"
         size="sm"
       >
         {isParsing ? (
@@ -165,42 +165,42 @@ export function ConversationalBehaviorLog({ userId, childName, onLogged }: Conve
 
       {/* Parsed preview card */}
       {parsed && (
-        <div className={`rounded-2xl border-2 p-4 space-y-2 ${parsed.is_positive ? 'border-green-300 bg-green-50' : 'border-teal-300 bg-teal-50'}`}>
-          <p className="text-sm font-semibold text-slate-800">
+        <div className={`rounded-2xl border-2 p-4 space-y-2 ${parsed.is_positive ? 'border-green-300 bg-green-50' : 'border-[#6B9080]/30 bg-[#6B9080]/10'}`}>
+          <p className="text-sm font-semibold text-[#1B2733]">
             {parsed.is_positive ? '🎉' : '📋'} {parsed.behavior_type}
           </p>
 
-          <p className="text-xs text-slate-600 leading-relaxed">{parsed.notes}</p>
+          <p className="text-xs text-[#5A6B7A] leading-relaxed">{parsed.notes}</p>
 
           <div className="grid grid-cols-2 gap-1.5 pt-1">
             {parsed.trigger && (
               <div className="bg-white rounded-lg px-2.5 py-1.5">
                 <p className="text-[10px] text-slate-400 uppercase tracking-wide">Trigger</p>
-                <p className="text-xs font-medium text-slate-700">{parsed.trigger}</p>
+                <p className="text-xs font-medium text-[#3A4A57]">{parsed.trigger}</p>
               </div>
             )}
             {parsed.intensity && (
               <div className="bg-white rounded-lg px-2.5 py-1.5">
                 <p className="text-[10px] text-slate-400 uppercase tracking-wide">Intensity</p>
-                <p className="text-xs font-medium text-slate-700">{parsed.intensity}/5 · {intensityLabel(parsed.intensity)}</p>
+                <p className="text-xs font-medium text-[#3A4A57]">{parsed.intensity}/5 · {intensityLabel(parsed.intensity)}</p>
               </div>
             )}
             {parsed.duration_minutes && (
               <div className="bg-white rounded-lg px-2.5 py-1.5">
                 <p className="text-[10px] text-slate-400 uppercase tracking-wide">Duration</p>
-                <p className="text-xs font-medium text-slate-700">{parsed.duration_minutes}m</p>
+                <p className="text-xs font-medium text-[#3A4A57]">{parsed.duration_minutes}m</p>
               </div>
             )}
             {parsed.location && (
               <div className="bg-white rounded-lg px-2.5 py-1.5">
                 <p className="text-[10px] text-slate-400 uppercase tracking-wide">Location</p>
-                <p className="text-xs font-medium text-slate-700">{parsed.location}</p>
+                <p className="text-xs font-medium text-[#3A4A57]">{parsed.location}</p>
               </div>
             )}
             {parsed.antecedent && (
               <div className="bg-white rounded-lg px-2.5 py-1.5 col-span-2">
                 <p className="text-[10px] text-slate-400 uppercase tracking-wide">Antecedent</p>
-                <p className="text-xs font-medium text-slate-700">{parsed.antecedent}</p>
+                <p className="text-xs font-medium text-[#3A4A57]">{parsed.antecedent}</p>
               </div>
             )}
           </div>
@@ -210,7 +210,7 @@ export function ConversationalBehaviorLog({ userId, childName, onLogged }: Conve
               onClick={confirmAndLog}
               disabled={isSaving}
               size="sm"
-              className="flex-1 bg-teal-600 hover:bg-teal-700"
+              className="flex-1 bg-primary hover:bg-[#6B9080]"
             >
               {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <><Check className="w-4 h-4 mr-1" />Confirm & Log</>}
             </Button>

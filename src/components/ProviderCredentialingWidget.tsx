@@ -42,11 +42,11 @@ const CHECK_META = {
 } as const;
 
 const STATUS_STYLE: Record<CheckStatus, { bg: string; text: string; label: string; dot: string }> = {
-  not_started:      { bg: 'bg-slate-100',   text: 'text-slate-600',    label: 'Not started',    dot: 'bg-slate-300' },
+  not_started:      { bg: 'bg-[#F0EDE8]',   text: 'text-[#5A6B7A]',    label: 'Not started',    dot: 'bg-slate-300' },
   pending:          { bg: 'bg-amber-50',    text: 'text-amber-700',    label: 'In review',      dot: 'bg-amber-400' },
-  in_progress:      { bg: 'bg-blue-50',     text: 'text-blue-700',     label: 'In progress',    dot: 'bg-blue-400' },
+  in_progress:      { bg: 'bg-[#EEF4F8]',     text: 'text-blue-700',     label: 'In progress',    dot: 'bg-blue-400' },
   requires_input:   { bg: 'bg-orange-50',   text: 'text-orange-700',   label: 'Action needed',  dot: 'bg-orange-400' },
-  verified:         { bg: 'bg-teal-50',     text: 'text-teal-700',     label: 'Verified',       dot: 'bg-teal-500' },
+  verified:         { bg: 'bg-[#6B9080]/10',     text: 'text-[#6B9080]',     label: 'Verified',       dot: 'bg-primary' },
   failed:           { bg: 'bg-red-50',      text: 'text-red-700',      label: 'Failed',         dot: 'bg-red-500' },
   expired:          { bg: 'bg-orange-50',   text: 'text-orange-700',   label: 'Expired — renew', dot: 'bg-orange-400' },
 };
@@ -77,7 +77,7 @@ export function ProviderCredentialingWidget({ providerId, hideWhenComplete = tru
 
   if (isLoading) {
     return (
-      <div className={`rounded-2xl bg-white border border-slate-100 p-4 flex items-center justify-center min-h-[120px] ${className}`}>
+      <div className={`rounded-2xl bg-white border border-[#E8E4DF] p-4 flex items-center justify-center min-h-[120px] ${className}`}>
         <Loader2 className="w-5 h-5 text-slate-400 animate-spin" />
       </div>
     );
@@ -98,7 +98,7 @@ export function ProviderCredentialingWidget({ providerId, hideWhenComplete = tru
   ];
 
   return (
-    <div className={`rounded-2xl border border-slate-100 overflow-hidden ${className}`}
+    <div className={`rounded-2xl border border-[#E8E4DF] overflow-hidden ${className}`}
       style={{ background: 'linear-gradient(135deg, #43AA8B08 0%, #57759008 100%)' }}>
 
       {/* Header */}
@@ -117,14 +117,14 @@ export function ProviderCredentialingWidget({ providerId, hideWhenComplete = tru
           }
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-slate-900">
+          <p className="text-sm font-semibold text-[#1B2733]">
             {status.overallStatus === 'verified'
               ? 'Fully verified — accepting patients'
               : status.overallStatus === 'failed'
                 ? 'Verification issue — see below'
                 : `Get verified to accept patients — ${status.completionPercent}% complete`}
           </p>
-          <p className="text-xs text-slate-500 mt-0.5">
+          <p className="text-xs text-[#5A6B7A] mt-0.5">
             Aminy requires all 4 checks before you can be matched with families.
           </p>
         </div>
@@ -132,7 +132,7 @@ export function ProviderCredentialingWidget({ providerId, hideWhenComplete = tru
 
       {/* Progress bar */}
       <div className="px-4 pb-3">
-        <div className="h-1.5 rounded-full bg-slate-100 overflow-hidden">
+        <div className="h-1.5 rounded-full bg-[#F0EDE8] overflow-hidden">
           <div
             className="h-full transition-all duration-500"
             style={{
@@ -156,12 +156,12 @@ export function ProviderCredentialingWidget({ providerId, hideWhenComplete = tru
               key={row.key}
               className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/50 transition-colors"
             >
-              <div className="w-9 h-9 rounded-lg bg-white border border-slate-100 flex items-center justify-center shrink-0">
-                <Icon className="w-4 h-4 text-slate-600" />
+              <div className="w-9 h-9 rounded-lg bg-white border border-[#E8E4DF] flex items-center justify-center shrink-0">
+                <Icon className="w-4 h-4 text-[#5A6B7A]" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-slate-900">{meta.label}</p>
-                <p className="text-[11px] text-slate-500 truncate">{meta.description}</p>
+                <p className="text-sm font-medium text-[#1B2733]">{meta.label}</p>
+                <p className="text-[11px] text-[#5A6B7A] truncate">{meta.description}</p>
                 {row.check.failureReason && (
                   <p className="text-[11px] text-red-600 mt-0.5">{row.check.failureReason}</p>
                 )}
@@ -174,7 +174,7 @@ export function ProviderCredentialingWidget({ providerId, hideWhenComplete = tru
                 <button
                   onClick={row.onAction}
                   disabled={working === row.key}
-                  className="shrink-0 text-xs font-semibold px-2.5 py-1.5 rounded-lg text-teal-700 hover:bg-teal-50 flex items-center gap-0.5 disabled:opacity-50 whitespace-nowrap"
+                  className="shrink-0 text-xs font-semibold px-2.5 py-1.5 rounded-lg text-[#6B9080] hover:bg-[#6B9080]/10 flex items-center gap-0.5 disabled:opacity-50 whitespace-nowrap"
                 >
                   {working === row.key ? <Loader2 className="w-3 h-3 animate-spin" /> : <>{row.actionLabel}<ChevronRight className="w-3 h-3" /></>}
                 </button>

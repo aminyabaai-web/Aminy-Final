@@ -58,7 +58,7 @@ function MiniBarChart({ data }: { data: { period: string; rate: number }[] }) {
             className={`w-full rounded-t transition-all ${d.rate >= 90 ? 'bg-green-500' : d.rate >= 80 ? 'bg-amber-400' : 'bg-red-400'}`}
             style={{ height: `${(d.rate / max) * 48}px` }}
           />
-          <span className="text-xs text-gray-400 leading-none" style={{ fontSize: '9px' }}>
+          <span className="text-xs text-[#8A9BA8] leading-none" style={{ fontSize: '9px' }}>
             {d.period.split(' ')[0]}
           </span>
         </div>
@@ -84,7 +84,7 @@ function DiscrepancyRow({ record, discrepancies }: { record: EVVRecord; discrepa
     ? 'text-red-600 bg-red-50 border-red-200'
     : discrepancies.some(d => d.severity === 'high')
     ? 'text-amber-600 bg-amber-50 border-amber-200'
-    : 'text-yellow-600 bg-yellow-50 border-yellow-200';
+    : 'text-yellow-600 bg-[#FDF9F0] border-[#F0EDE8]';
 
   return (
     <div className={`border rounded-2xl overflow-hidden ${severityColor.split(' ').slice(1).join(' ')}`}>
@@ -94,8 +94,8 @@ function DiscrepancyRow({ record, discrepancies }: { record: EVVRecord; discrepa
       >
         <AlertTriangle size={16} className={`shrink-0 mt-0.5 ${severityColor.split(' ')[0]}`} />
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-gray-800">{record.clientName}</p>
-          <p className="text-xs text-gray-500">{record.serviceCode} · {record.serviceDescription} · {record.scheduledStart.split('T')[0]}</p>
+          <p className="text-sm font-semibold text-[#1B2733]">{record.clientName}</p>
+          <p className="text-xs text-[#5A6B7A]">{record.serviceCode} · {record.serviceDescription} · {record.scheduledStart.split('T')[0]}</p>
           <div className="flex flex-wrap gap-1.5 mt-1.5">
             {discrepancies.map(d => (
               <span
@@ -109,7 +109,7 @@ function DiscrepancyRow({ record, discrepancies }: { record: EVVRecord; discrepa
         </div>
         <ChevronDown
           size={16}
-          className={`text-gray-400 shrink-0 transition-transform mt-1 ${expanded ? 'rotate-180' : ''}`}
+          className={`text-[#8A9BA8] shrink-0 transition-transform mt-1 ${expanded ? 'rotate-180' : ''}`}
         />
       </button>
 
@@ -128,19 +128,19 @@ function DiscrepancyRow({ record, discrepancies }: { record: EVVRecord; discrepa
                     <span className={`text-xs font-bold uppercase tracking-wide ${severityColor.split(' ')[0]}`}>
                       {d.severity}
                     </span>
-                    <span className="text-xs text-gray-600">{d.description}</span>
+                    <span className="text-xs text-[#5A6B7A]">{d.description}</span>
                   </div>
                   <div className="grid grid-cols-2 gap-2 mb-2">
                     <div className="bg-white rounded-lg p-2">
-                      <p className="text-xs text-gray-400 mb-0.5">Scheduled</p>
-                      <p className="text-xs font-medium text-gray-700 break-all">{d.scheduledValue}</p>
+                      <p className="text-xs text-[#8A9BA8] mb-0.5">Scheduled</p>
+                      <p className="text-xs font-medium text-[#3A4A57] break-all">{d.scheduledValue}</p>
                     </div>
                     <div className="bg-white rounded-lg p-2">
-                      <p className="text-xs text-gray-400 mb-0.5">Actual</p>
-                      <p className="text-xs font-medium text-gray-700 break-all">{d.actualValue}</p>
+                      <p className="text-xs text-[#8A9BA8] mb-0.5">Actual</p>
+                      <p className="text-xs font-medium text-[#3A4A57] break-all">{d.actualValue}</p>
                     </div>
                   </div>
-                  <p className="text-xs text-gray-600 italic">{d.correctionNote}</p>
+                  <p className="text-xs text-[#5A6B7A] italic">{d.correctionNote}</p>
                   {d.requiresCorrection && (
                     <button className="mt-2 flex items-center gap-1.5 text-xs font-medium text-white bg-red-500 hover:bg-red-600 px-3 py-1.5 rounded-lg transition-colors">
                       <RefreshCw size={11} />
@@ -190,7 +190,7 @@ export default function EVVReconciliationEnhanced({ providerId, onBack }: EVVRec
   // No real records → friendly empty state instead of zeroed metrics and sample trends.
   if (records.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-[#FAF7F2]">
         <div style={{ background: '#0D1B2A' }} className="px-4 pt-12 pb-4 text-white">
           <div className="flex items-center gap-3">
             {onBack && (
@@ -205,11 +205,11 @@ export default function EVVReconciliationEnhanced({ providerId, onBack }: EVVRec
           </div>
         </div>
         <div className="flex flex-col items-center justify-center px-6 py-20 text-center">
-          <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
-            <Shield size={30} className="text-gray-400" />
+          <div className="w-16 h-16 rounded-full bg-[#F0EDE8] flex items-center justify-center mb-4">
+            <Shield size={30} className="text-[#8A9BA8]" />
           </div>
-          <p className="text-base font-semibold text-gray-700">No EVV records to reconcile</p>
-          <p className="text-sm text-gray-500 mt-1 max-w-xs">
+          <p className="text-base font-semibold text-[#3A4A57]">No EVV records to reconcile</p>
+          <p className="text-sm text-[#5A6B7A] mt-1 max-w-xs">
             Once visits are captured with check-in/check-out, your clean-cycle rate, discrepancies, and fiscal agent export will appear here.
           </p>
         </div>
@@ -218,7 +218,7 @@ export default function EVVReconciliationEnhanced({ providerId, onBack }: EVVRec
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header */}
       <div style={{ background: '#0D1B2A' }} className="px-4 pt-12 pb-4 text-white">
         <div className="flex items-center gap-3 mb-4">
@@ -263,7 +263,7 @@ export default function EVVReconciliationEnhanced({ providerId, onBack }: EVVRec
       </div>
 
       {/* Tabs */}
-      <div className="flex bg-white border-b border-gray-100 px-4">
+      <div className="flex bg-white border-b border-[#E8E4DF] px-4">
         {([
           { id: 'overview' as const, label: 'Overview', icon: <BarChart3 size={13} /> },
           { id: 'discrepancies' as const, label: 'Discrepancies', icon: <AlertTriangle size={13} />, count: discrepancyGroups.length },
@@ -273,7 +273,7 @@ export default function EVVReconciliationEnhanced({ providerId, onBack }: EVVRec
             key={t.id}
             onClick={() => setTab(t.id)}
             className={`flex items-center gap-1.5 px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
-              tab === t.id ? 'border-teal-500 text-teal-600' : 'border-transparent text-gray-500'
+              tab === t.id ? 'border-[#6B9080] text-[#6B9080]' : 'border-transparent text-[#5A6B7A]'
             }`}
           >
             {t.icon}
@@ -290,13 +290,13 @@ export default function EVVReconciliationEnhanced({ providerId, onBack }: EVVRec
           {tab === 'overview' && (
             <motion.div key="overview" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-4">
               {/* Historical trend */}
-              <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
-                <h2 className="text-sm font-semibold text-gray-800 mb-3 flex items-center gap-2">
-                  <BarChart3 size={15} className="text-teal-600" />
+              <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#E8E4DF]">
+                <h2 className="text-sm font-semibold text-[#1B2733] mb-3 flex items-center gap-2">
+                  <BarChart3 size={15} className="text-[#6B9080]" />
                   Historical Clean Rate Trend
                 </h2>
                 <MiniBarChart data={report.historicalCleanRates} />
-                <div className="flex items-center gap-3 mt-3 text-xs text-gray-400">
+                <div className="flex items-center gap-3 mt-3 text-xs text-[#8A9BA8]">
                   <div className="flex items-center gap-1.5"><div className="w-3 h-3 bg-green-500 rounded" /> ≥90%</div>
                   <div className="flex items-center gap-1.5"><div className="w-3 h-3 bg-amber-400 rounded" /> 80-89%</div>
                   <div className="flex items-center gap-1.5"><div className="w-3 h-3 bg-red-400 rounded" /> &lt;80%</div>
@@ -306,14 +306,14 @@ export default function EVVReconciliationEnhanced({ providerId, onBack }: EVVRec
               {/* Stats grid */}
               <div className="grid grid-cols-2 gap-3">
                 {[
-                  { label: 'Total Records', value: report.totalRecords, color: 'text-gray-800' },
+                  { label: 'Total Records', value: report.totalRecords, color: 'text-[#1B2733]' },
                   { label: 'Clean Cycles', value: report.cleanCycles, color: 'text-green-600' },
                   { label: 'Discrepancies', value: discrepancyGroups.length, color: 'text-red-600' },
                   { label: 'Discrepancy Rate', value: `${report.discrepancyRate}%`, color: report.discrepancyRate > 15 ? 'text-red-600' : 'text-amber-600' },
                 ].map(stat => (
-                  <div key={stat.label} className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm text-center">
+                  <div key={stat.label} className="bg-white rounded-2xl p-4 border border-[#E8E4DF] shadow-sm text-center">
                     <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
-                    <p className="text-xs text-gray-500 mt-0.5">{stat.label}</p>
+                    <p className="text-xs text-[#5A6B7A] mt-0.5">{stat.label}</p>
                   </div>
                 ))}
               </div>
@@ -325,12 +325,12 @@ export default function EVVReconciliationEnhanced({ providerId, onBack }: EVVRec
               {discrepancyGroups.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-12 text-center">
                   <CheckCircle size={36} className="text-green-400 mb-3" />
-                  <p className="text-base font-semibold text-gray-700">All clean!</p>
-                  <p className="text-sm text-gray-400 mt-1">No discrepancies found in this billing period</p>
+                  <p className="text-base font-semibold text-[#3A4A57]">All clean!</p>
+                  <p className="text-sm text-[#8A9BA8] mt-1">No discrepancies found in this billing period</p>
                 </div>
               ) : (
                 <>
-                  <p className="text-xs text-gray-500">{discrepancyGroups.length} records need attention before fiscal agent submission</p>
+                  <p className="text-xs text-[#5A6B7A]">{discrepancyGroups.length} records need attention before fiscal agent submission</p>
                   {discrepancyGroups.map(({ record, discrepancies }) => (
                     <DiscrepancyRow key={record.id} record={record} discrepancies={discrepancies} />
                   ))}
@@ -342,9 +342,9 @@ export default function EVVReconciliationEnhanced({ providerId, onBack }: EVVRec
           {tab === 'fiscal' && (
             <motion.div key="fiscal" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-4">
               {/* Readiness checklist */}
-              <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
-                <h2 className="text-sm font-semibold text-gray-800 mb-3 flex items-center gap-2">
-                  <ClipboardList size={15} className="text-teal-600" />
+              <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#E8E4DF]">
+                <h2 className="text-sm font-semibold text-[#1B2733] mb-3 flex items-center gap-2">
+                  <ClipboardList size={15} className="text-[#6B9080]" />
                   Fiscal Agent Submission Readiness
                 </h2>
                 <div className="space-y-2">
@@ -355,7 +355,7 @@ export default function EVVReconciliationEnhanced({ providerId, onBack }: EVVRec
                       ) : (
                         <XCircle size={16} className="text-red-500 shrink-0" />
                       )}
-                      <span className={`text-sm ${item.done ? 'text-gray-600' : 'text-gray-800 font-medium'}`}>
+                      <span className={`text-sm ${item.done ? 'text-[#5A6B7A]' : 'text-[#1B2733] font-medium'}`}>
                         {item.label}
                       </span>
                     </div>
@@ -382,9 +382,9 @@ export default function EVVReconciliationEnhanced({ providerId, onBack }: EVVRec
               </div>
 
               {/* Export stats */}
-              <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
-                <h2 className="text-sm font-semibold text-gray-800 mb-3 flex items-center gap-2">
-                  <FileText size={15} className="text-gray-600" />
+              <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#E8E4DF]">
+                <h2 className="text-sm font-semibold text-[#1B2733] mb-3 flex items-center gap-2">
+                  <FileText size={15} className="text-[#5A6B7A]" />
                   Export Summary
                 </h2>
                 <div className="space-y-2 text-sm">
@@ -397,8 +397,8 @@ export default function EVVReconciliationEnhanced({ providerId, onBack }: EVVRec
                     { label: 'Filename', value: fiscalExport.filename },
                   ].map(row => (
                     <div key={row.label} className="flex items-center justify-between py-1 border-b border-gray-50">
-                      <span className="text-gray-500">{row.label}</span>
-                      <span className="font-medium text-gray-800 text-xs">{row.value}</span>
+                      <span className="text-[#5A6B7A]">{row.label}</span>
+                      <span className="font-medium text-[#1B2733] text-xs">{row.value}</span>
                     </div>
                   ))}
                 </div>
@@ -412,8 +412,8 @@ export default function EVVReconciliationEnhanced({ providerId, onBack }: EVVRec
                   exported
                     ? 'bg-green-100 text-green-700 border border-green-200'
                     : fiscalExport.readyForSubmission
-                    ? 'bg-teal-600 text-white hover:bg-teal-700'
-                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                    ? 'bg-primary text-white hover:bg-[#6B9080]'
+                    : 'bg-[#E8E4DF] text-[#8A9BA8] cursor-not-allowed'
                 }`}
               >
                 {exportLoading ? (

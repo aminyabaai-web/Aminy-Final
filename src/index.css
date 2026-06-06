@@ -6570,7 +6570,7 @@ img[fetchpriority="high"], img[loading="eager"] {
   --shadow-lg: 0 10px 15px -3px #0000001a, 0 4px 6px -2px #0000000d;
   --shadow-xl: 0 20px 25px -5px #0000001a, 0 10px 10px -5px #0000000a;
   --shadow-ai-glow: 0 0 20px #c9ead94d, 0 0 40px #ffe2b633;
-  --shadow-accent-glow: 0 0 15px #0891b233;
+  --shadow-accent-glow: 0 0 15px rgba(107,144,128,0.22);
   --z-base: 0;
   --z-dropdown: 1000;
   --z-sticky: 1100;
@@ -6750,52 +6750,61 @@ img {
 }
 
 body {
-  font-family: Manrope, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif;
+  font-family: 'Manrope', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  color: var(--foreground);
+  background-color: var(--background);
 }
 
 :root {
   --font-size: 16px;
-  --background: #fff;
-  --background-soft: #f8fafc;
+  /* ── Aminy brand palette ─────────────────────────────────────── */
+  --background: #FAF7F2;
+  --background-soft: #F5F2EC;
   --lcp-image-size: 400px;
   --gpu-accel: translateZ(0);
-  --foreground: #1e293b;
-  --foreground-deep: #0f172a;
-  --card: #fff;
-  --card-foreground: #1e293b;
-  --popover: #fff;
-  --popover-foreground: #1e293b;
-  --primary: #0891b2;
-  --primary-foreground: #fff;
-  --secondary: #f8fafc;
-  --secondary-foreground: #1e293b;
-  --muted: #f1f5f9;
-  --muted-foreground: #64748b;
-  --accent: #0891b2;
-  --accent-foreground: #fff;
-  --destructive: #dc2626;
-  --destructive-foreground: #fff;
-  --border: #e2e8f0;
+  --foreground: #1B2733;
+  --foreground-deep: #0D1B2A;
+  --card: #ffffff;
+  --card-foreground: #1B2733;
+  --popover: #ffffff;
+  --popover-foreground: #1B2733;
+  /* Sage green — Aminy primary brand color */
+  --primary: #6B9080;
+  --primary-foreground: #ffffff;
+  --secondary: #F5F2EC;
+  --secondary-foreground: #1B2733;
+  --muted: #F0EDE8;
+  --muted-foreground: #7A8C99;
+  /* Sage green accent (consistent with primary) */
+  --accent: #6B9080;
+  --accent-foreground: #ffffff;
+  --destructive: #E07A5F;
+  --destructive-foreground: #ffffff;
+  --border: #E8E4DF;
   --input: transparent;
-  --input-background: #f8fafc;
-  --switch-background: #cbd5e1;
+  --input-background: #FDFAF7;
+  --switch-background: #c5bdb4;
   --font-weight-medium: 500;
   --font-weight-normal: 400;
-  --ring: #0891b2;
-  --chart-1: #0891b2;
-  --chart-2: #1e293b;
-  --chart-3: #06b6d4;
-  --chart-4: #0ea5e9;
-  --chart-5: #3b82f6;
+  --ring: #6B9080;
+  /* Chart palette — brand-aligned */
+  --chart-1: #6B9080;
+  --chart-2: #7BA7BC;
+  --chart-3: #43AA8B;
+  --chart-4: #E07A5F;
+  --chart-5: #D4A373;
   --radius: .75rem;
-  --sidebar: #fff;
-  --sidebar-foreground: #1e293b;
-  --sidebar-primary: #1e293b;
-  --sidebar-primary-foreground: #fff;
-  --sidebar-accent: #f8fafc;
-  --sidebar-accent-foreground: #1e293b;
-  --sidebar-border: #e2e8f0;
-  --sidebar-ring: #0891b2;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #1B2733;
+  --sidebar-primary: #6B9080;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #F5F2EC;
+  --sidebar-accent-foreground: #1B2733;
+  --sidebar-border: #E8E4DF;
+  --sidebar-ring: #6B9080;
   --nav-height: 56px;
   --chip-spacing: 12px;
   --shadow: 0 6px 20px #10182814;
@@ -6804,7 +6813,7 @@ body {
   --bevel-shadow-sm: 0 1px 3px #78787814;
   --bevel-shadow: 0 4px 12px #7878781a;
   --bevel-shadow-lg: 0 8px 24px #7878781f;
-  --bevel-glow: 0 2px 8px #06b6d44d;
+  --bevel-glow: 0 2px 8px rgba(107,144,128,0.32);
   --warm-white: #fafafa;
   --spring-damping: 25;
   --segmented-control-font-size: 12px;
@@ -6831,34 +6840,35 @@ body {
   --card-foreground: #f1f5f9;
   --popover: #1e293b;
   --popover-foreground: #f1f5f9;
-  --primary: #0891b2;
-  --primary-foreground: #fff;
+  /* Steel blue primary in dark mode for better contrast on dark bg */
+  --primary: #7BA7BC;
+  --primary-foreground: #ffffff;
   --secondary: #334155;
   --secondary-foreground: #f1f5f9;
   --muted: #334155;
   --muted-foreground: #94a3b8;
-  --accent: #0891b2;
-  --accent-foreground: #fff;
-  --destructive: #dc2626;
-  --destructive-foreground: #fff;
+  --accent: #7BA7BC;
+  --accent-foreground: #ffffff;
+  --destructive: #E07A5F;
+  --destructive-foreground: #ffffff;
   --border: #334155;
-  --input: #334155;
-  --ring: #0891b2;
+  --input: #1e293b;
+  --ring: #7BA7BC;
   --font-weight-medium: 500;
   --font-weight-normal: 400;
-  --chart-1: #0891b2;
-  --chart-2: #06b6d4;
-  --chart-3: #0ea5e9;
-  --chart-4: #3b82f6;
-  --chart-5: #6366f1;
+  --chart-1: #7BA7BC;
+  --chart-2: #6B9080;
+  --chart-3: #43AA8B;
+  --chart-4: #E07A5F;
+  --chart-5: #D4A373;
   --sidebar: #1e293b;
   --sidebar-foreground: #f1f5f9;
-  --sidebar-primary: #0891b2;
-  --sidebar-primary-foreground: #fff;
+  --sidebar-primary: #7BA7BC;
+  --sidebar-primary-foreground: #ffffff;
   --sidebar-accent: #334155;
   --sidebar-accent-foreground: #f1f5f9;
   --sidebar-border: #334155;
-  --sidebar-ring: #0891b2;
+  --sidebar-ring: #7BA7BC;
 }
 
 .z-tooltip {
@@ -17075,3 +17085,332 @@ main#main,
 .border-emerald-500\/20 { border-color: color-mix(in oklab, var(--color-emerald-500) 20%, transparent); }
 .bg-red-50\/60 { background-color: color-mix(in oklab, var(--color-red-50) 60%, transparent); }
 .bg-amber-50\/60 { background-color: color-mix(in oklab, var(--color-amber-50) 60%, transparent); }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   AMINY PREMIUM GLOBAL DESIGN SYSTEM
+   Applied after all Tailwind utilities — highest specificity.
+   These rules elevate EVERY screen simultaneously.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── Typography: Apple/Calm-style tight heading tracking ───────────── */
+h1, h2, h3 {
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  font-weight: 600;
+}
+h4, h5, h6 {
+  letter-spacing: -0.015em;
+  line-height: 1.3;
+}
+
+/* ── Text selection: brand sage green ──────────────────────────────── */
+::selection {
+  background-color: rgba(107, 144, 128, 0.18);
+  color: #0D1B2A;
+}
+::-moz-selection {
+  background-color: rgba(107, 144, 128, 0.18);
+  color: #0D1B2A;
+}
+
+/* ── Focus ring: sage green instead of default blue ────────────────── */
+:focus-visible {
+  outline: 2px solid #6B9080;
+  outline-offset: 2px;
+}
+
+/* ── Premium webkit scrollbar (thin, brand-tinted) ─────────────────── */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgba(107, 144, 128, 0.22);
+  border-radius: 100px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(107, 144, 128, 0.45);
+}
+
+/* ── Smooth tap highlight removal (mobile) ─────────────────────────── */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ── Input / textarea: consistent warm background in light mode ─────── */
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+textarea,
+select {
+  background-color: var(--input-background, #FDFAF7);
+}
+.dark input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+.dark textarea,
+.dark select {
+  background-color: var(--input, #1e293b);
+}
+
+/* ── Buttons: ensure Manrope font + prevent flash of wrong font ─────── */
+button {
+  font-family: inherit;
+}
+
+/* ── Link default color: brand primary ─────────────────────────────── */
+a:not([class]) {
+  color: var(--primary);
+}
+a:not([class]):hover {
+  color: var(--primary);
+  opacity: 0.8;
+}
+
+/* ── Transition: all interactive elements get a smooth default ─────── */
+button, a, [role="button"] {
+  transition-property: color, background-color, border-color, opacity, box-shadow, transform;
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Card elevation variant: elevated ──────────────────────────────── */
+.card-elevated {
+  box-shadow: 0 4px 16px rgba(27, 39, 51, 0.08), 0 1px 3px rgba(27, 39, 51, 0.05);
+}
+.dark .card-elevated {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* ── Screen entry animation ─────────────────────────────────────────── */
+@keyframes screenFadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.screen-enter {
+  animation: screenFadeIn 0.22s ease-out forwards;
+}
+
+/* ── Premium bottom nav: Glassmorphism-style backdrop ───────────────── */
+#main-navigation {
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  background-color: rgba(250, 247, 242, 0.92) !important;
+}
+.dark #main-navigation {
+  background-color: rgba(15, 23, 42, 0.92) !important;
+}
+
+/* ── Toaster: warm pill style ───────────────────────────────────────── */
+[data-sonner-toast] {
+  font-family: 'Manrope', ui-sans-serif, system-ui, sans-serif !important;
+  letter-spacing: -0.01em;
+}
+
+/* ── Skeleton shimmer: warm instead of gray ────────────────────────── */
+@keyframes aminyShimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+.skeleton-warm {
+  background: linear-gradient(90deg, #F0EDE8 25%, #FAF7F2 50%, #F0EDE8 75%);
+  background-size: 800px 100%;
+  animation: aminyShimmer 1.5s ease-in-out infinite;
+}
+
+/* ── Missing utility classes needed by components ───────────────────── */
+/* #5A6B7A — secondary text (used in DataConfirmationModal, chat prompts, etc.) */
+.text-\[\#5A6B7A\] { color: #5A6B7A; }
+.hover\:text-\[\#5A6B7A\]:hover { color: #5A6B7A; }
+/* #1B2733 — deep text  */
+.bg-\[\#1B2733\] { background-color: #1B2733; }
+.text-\[\#1B2733\] { color: #1B2733; }
+/* #7BA7BC — steel blue accent */
+.bg-\[\#7BA7BC\] { background-color: #7BA7BC; }
+.text-\[\#7BA7BC\] { color: #7BA7BC; }
+.border-\[\#7BA7BC\] { border-color: #7BA7BC; }
+.from-\[\#7BA7BC\] { --tw-gradient-from: #7BA7BC; --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+/* #43AA8B — emerald (success, milestones) */
+.bg-\[\#43AA8B\] { background-color: #43AA8B; }
+.text-\[\#43AA8B\] { color: #43AA8B; }
+.border-\[\#43AA8B\] { border-color: #43AA8B; }
+.from-\[\#43AA8B\] { --tw-gradient-from: #43AA8B; --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.to-\[\#43AA8B\] { --tw-gradient-to: #43AA8B; }
+/* #D4A373 — warm tan (Calm Coins, milestones) */
+.bg-\[\#D4A373\] { background-color: #D4A373; }
+.text-\[\#D4A373\] { color: #D4A373; }
+/* #8E9BAA — muted hint text */
+.text-\[\#8E9BAA\] { color: #8E9BAA; }
+/* #577590 — provider slate-blue */
+.bg-\[\#577590\] { background-color: #577590; }
+.text-\[\#577590\] { color: #577590; }
+.from-\[\#577590\] { --tw-gradient-from: #577590; --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.to-\[\#577590\] { --tw-gradient-to: #577590; }
+/* #E07A5F — coral / destructive */
+.bg-\[\#E07A5F\] { background-color: #E07A5F; }
+.text-\[\#E07A5F\] { color: #E07A5F; }
+.border-\[\#E07A5F\] { border-color: #E07A5F; }
+.from-\[\#E07A5F\] { --tw-gradient-from: #E07A5F; --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+/* #F0EDE8 — warm border/divider */
+.bg-\[\#F0EDE8\] { background-color: #F0EDE8; }
+.border-\[\#F0EDE8\] { border-color: #F0EDE8; }
+.hover\:bg-\[\#F0EDE8\]:hover { background-color: #F0EDE8; }
+/* #FAF7F2 — warm cream background */
+.bg-\[\#FAF7F2\] { background-color: #FAF7F2; }
+/* #6B9080 utilities already defined above, but hover/active states */
+.hover\:bg-\[\#6B9080\]:hover { background-color: #6B9080; }
+.active\:bg-\[\#6B9080\]:active { background-color: #6B9080; }
+.border-\[\#6B9080\] { border-color: #6B9080; }
+/* opacity utilities for brand colors */
+.bg-\[\#6B9080\]\/10 { background-color: rgba(107,144,128,0.10); }
+.bg-\[\#6B9080\]\/20 { background-color: rgba(107,144,128,0.20); }
+.border-\[\#6B9080\]\/20 { border-color: rgba(107,144,128,0.20); }
+.text-\[\#6B9080\]\/50 { color: rgba(107,144,128,0.50); }
+/* extra brand utilities for component-level use */
+.hover\:bg-\[\#FAF7F2\]:hover { background-color: #FAF7F2; }
+.border-\[\#E8E4DF\] { border-color: #E8E4DF; }
+.divide-\[\#E8E4DF\] > :not([hidden]) ~ :not([hidden]) { border-color: #E8E4DF; }
+.bg-\[\#F5F2EC\] { background-color: #F5F2EC; }
+.hover\:bg-\[\#F5F2EC\]:hover { background-color: #F5F2EC; }
+.text-\[\#43AA8B\] { color: #43AA8B; }
+.bg-\[\#43AA8B\]\/10 { background-color: rgba(67,170,139,0.10); }
+.bg-\[\#E07A5F\]\/10 { background-color: rgba(224,122,95,0.10); }
+.text-\[\#E07A5F\] { color: #E07A5F; }
+.border-\[\#43AA8B\]\/20 { border-color: rgba(67,170,139,0.20); }
+.bg-\[\#7BA7BC\]\/10 { background-color: rgba(123,167,188,0.10); }
+.text-\[\#7BA7BC\] { color: #7BA7BC; }
+
+/* ── Premium Interaction Polish ─────────────────────────────────────── */
+
+/* Card interactive lift — subtle shadow elevation on hover */
+[data-slot="card"]:not([data-no-lift]) {
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+[data-slot="card"]:not([data-no-lift]):hover {
+  box-shadow: 0 4px 20px rgba(27, 39, 51, 0.08), 0 1px 6px rgba(27, 39, 51, 0.04);
+  transform: translateY(-1px);
+}
+
+/* Button press feedback already in button.tsx (active:scale-[0.97]);
+   add consistent focus ring glow for brand */
+[data-slot="button"]:focus-visible {
+  box-shadow: 0 0 0 3px rgba(107, 144, 128, 0.25);
+}
+
+/* Input premium feel: warm background tint on focus */
+[data-slot="input"]:focus {
+  background-color: #FDFAF7;
+  border-color: #6B9080;
+  box-shadow: 0 0 0 3px rgba(107, 144, 128, 0.12);
+}
+
+/* Badge refinement: pill shape for secondary badges */
+[data-slot="badge"] {
+  font-size: 11px;
+  letter-spacing: 0.01em;
+}
+
+/* Dialog premium backdrop */
+[data-radix-popper-content-wrapper] {
+  filter: drop-shadow(0 20px 60px rgba(0, 0, 0, 0.15));
+}
+
+/* Progress bar brand animation */
+[data-slot="progress-indicator"] {
+  background: linear-gradient(90deg, #6B9080, #7BA7BC);
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Smooth page transitions for screens */
+.screen-enter {
+  opacity: 0;
+  transform: translateY(8px);
+}
+.screen-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+/* Premium divider between list items */
+.divide-warm > :not([hidden]) ~ :not([hidden]) {
+  border-color: #E8E4DF;
+}
+
+/* Ensure avatars always have brand gradient fallback when empty */
+[data-radix-avatar-fallback] {
+  background: linear-gradient(135deg, #6B9080, #7BA7BC);
+  color: white;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* Table/list row hover warmth */
+tr:hover td, .hover-row:hover {
+  background-color: rgba(250, 247, 242, 0.8);
+}
+
+/* Placeholder text: softer, warmer */
+::placeholder {
+  color: rgba(122, 140, 153, 0.65);
+  font-weight: 400;
+}
+
+/* Tag/chip elements */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 500;
+  background-color: rgba(107, 144, 128, 0.10);
+  color: #6B9080;
+  border: 1px solid rgba(107, 144, 128, 0.18);
+}
+
+/* Gradient text utility for headlines */
+.text-gradient-brand {
+  background: linear-gradient(135deg, #6B9080, #7BA7BC);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Empty state illustration containers */
+.empty-state-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(107,144,128,0.1), rgba(123,167,188,0.1));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+
+/* Missing utility extras */
+.border-\[\#6B9080\]\/30 { border-color: rgba(107,144,128,0.30); }
+.bg-\[\#6B9080\]\/5 { background-color: rgba(107,144,128,0.05); }
+.bg-\[\#FAF7F2\]\/80 { background-color: rgba(250,247,242,0.80); }
+.from-\[\#6B9080\] { --tw-gradient-from: #6B9080; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(107,144,128,0)); }
+.to-\[\#7BA7BC\] { --tw-gradient-to: #7BA7BC; }
+.from-\[\#FAF7F2\] { --tw-gradient-from: #FAF7F2; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(250,247,242,0)); }
+.to-\[\#F5F2EC\] { --tw-gradient-to: #F5F2EC; }
+
+/* ── END Aminy Premium Global Design System ─────────────────────────── */
+
+/* ── Bottom nav spring animations ───────────────────────────────────── */
+@keyframes navIndicatorIn {
+  0%   { transform: translateX(-50%) scaleX(0); opacity: 0; }
+  100% { transform: translateX(-50%) scaleX(1); opacity: 1; }
+}
+@keyframes navIconPop {
+  0%   { transform: scale(0.85); }
+  60%  { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+
+/* ── Dark mode: remaining teal/cyan → brand ─────────────────────────── */
+.dark .dark\:bg-teal-400 { background-color: #7BA7BC !important; }
+.dark .dark\:text-teal-400 { color: #7BA7BC !important; }

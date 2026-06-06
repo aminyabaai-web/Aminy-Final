@@ -149,7 +149,7 @@ export function ROICalculator() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-slate-900 dark:to-slate-800">
       {/* Header */}
-      <div className="bg-teal-600 dark:bg-teal-700 py-12 px-4">
+      <div className="bg-primary dark:bg-teal-700 py-12 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/20 rounded-full text-white/90 text-sm mb-4">
             <Calculator className="w-4 h-4" />
@@ -169,7 +169,7 @@ export function ROICalculator() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Input Section */}
           <Card className="p-6 lg:col-span-2">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
+            <h2 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-6">
               Your Organization
             </h2>
 
@@ -177,10 +177,10 @@ export function ROICalculator() {
               {/* Member Count */}
               <div>
                 <div className="flex justify-between mb-2">
-                  <Label className="text-gray-700 dark:text-gray-300">
+                  <Label className="text-[#3A4A57] dark:text-gray-300">
                     Number of Members with ASD/ADHD
                   </Label>
-                  <span className="font-semibold text-teal-600">
+                  <span className="font-semibold text-[#6B9080]">
                     {inputs.memberCount.toLocaleString()}
                   </span>
                 </div>
@@ -192,7 +192,7 @@ export function ROICalculator() {
                   step={50}
                   className="py-4"
                 />
-                <div className="flex justify-between text-xs text-gray-400">
+                <div className="flex justify-between text-xs text-[#8A9BA8]">
                   <span>50</span>
                   <span>10,000</span>
                 </div>
@@ -201,10 +201,10 @@ export function ROICalculator() {
               {/* Current ER Visits */}
               <div>
                 <div className="flex justify-between mb-2">
-                  <Label className="text-gray-700 dark:text-gray-300">
+                  <Label className="text-[#3A4A57] dark:text-gray-300">
                     ER Visits per Year (behavioral/crisis)
                   </Label>
-                  <span className="font-semibold text-teal-600">
+                  <span className="font-semibold text-[#6B9080]">
                     {inputs.currentERVisitsPerYear}
                   </span>
                 </div>
@@ -216,7 +216,7 @@ export function ROICalculator() {
                   step={5}
                   className="py-4"
                 />
-                <p className="text-xs text-gray-400">
+                <p className="text-xs text-[#8A9BA8]">
                   Industry avg: ~30 per 100 members/year
                 </p>
               </div>
@@ -224,10 +224,10 @@ export function ROICalculator() {
               {/* Crisis Interventions */}
               <div>
                 <div className="flex justify-between mb-2">
-                  <Label className="text-gray-700 dark:text-gray-300">
+                  <Label className="text-[#3A4A57] dark:text-gray-300">
                     Crisis Interventions per Year
                   </Label>
-                  <span className="font-semibold text-teal-600">
+                  <span className="font-semibold text-[#6B9080]">
                     {inputs.currentCrisisInterventions}
                   </span>
                 </div>
@@ -239,7 +239,7 @@ export function ROICalculator() {
                   step={5}
                   className="py-4"
                 />
-                <p className="text-xs text-gray-400">
+                <p className="text-xs text-[#8A9BA8]">
                   Mobile crisis, in-home stabilization, etc.
                 </p>
               </div>
@@ -247,10 +247,10 @@ export function ROICalculator() {
               {/* Care Coordinator Calls */}
               <div>
                 <div className="flex justify-between mb-2">
-                  <Label className="text-gray-700 dark:text-gray-300">
+                  <Label className="text-[#3A4A57] dark:text-gray-300">
                     Care Coordinator Calls per Year
                   </Label>
-                  <span className="font-semibold text-teal-600">
+                  <span className="font-semibold text-[#6B9080]">
                     {inputs.careCoordinatorCalls.toLocaleString()}
                   </span>
                 </div>
@@ -262,7 +262,7 @@ export function ROICalculator() {
                   step={100}
                   className="py-4"
                 />
-                <p className="text-xs text-gray-400">
+                <p className="text-xs text-[#8A9BA8]">
                   Support calls, questions, guidance requests
                 </p>
               </div>
@@ -270,10 +270,10 @@ export function ROICalculator() {
               {/* ABA Hours */}
               <div>
                 <div className="flex justify-between mb-2">
-                  <Label className="text-gray-700 dark:text-gray-300">
+                  <Label className="text-[#3A4A57] dark:text-gray-300">
                     Avg ABA Hours per Member/Week
                   </Label>
-                  <span className="font-semibold text-teal-600">
+                  <span className="font-semibold text-[#6B9080]">
                     {inputs.avgABAHoursPerWeek} hours
                   </span>
                 </div>
@@ -285,7 +285,7 @@ export function ROICalculator() {
                   step={1}
                   className="py-4"
                 />
-                <p className="text-xs text-gray-400">
+                <p className="text-xs text-[#8A9BA8]">
                   Aminy helps skills generalize = fewer hours needed
                 </p>
               </div>
@@ -302,7 +302,7 @@ export function ROICalculator() {
               <p className="text-4xl font-bold mb-4">
                 {formatCurrency(results.netSavings)}
               </p>
-              <div className="grid grid-cols-2 gap-4 pt-4 border-t border-teal-400/30">
+              <div className="grid grid-cols-2 gap-4 pt-4 border-t border-[#6B9080]/30">
                 <div>
                   <p className="text-teal-100 text-sm">ROI</p>
                   <p className="text-2xl font-bold">
@@ -319,7 +319,7 @@ export function ROICalculator() {
 
             {/* Savings Breakdown */}
             <Card className="p-6">
-              <h3 className="font-semibold text-gray-900 dark:text-white mb-4">
+              <h3 className="font-semibold text-[#1B2733] dark:text-white mb-4">
                 Savings Breakdown
               </h3>
               <div className="space-y-3">
@@ -343,17 +343,17 @@ export function ROICalculator() {
                   value={results.abaSavings}
                   detail="Better skill generalization"
                 />
-                <div className="pt-3 border-t border-gray-200 dark:border-slate-700">
+                <div className="pt-3 border-t border-[#E8E4DF] dark:border-slate-700">
                   <div className="flex justify-between font-semibold">
-                    <span className="text-gray-900 dark:text-white">Total Savings</span>
+                    <span className="text-[#1B2733] dark:text-white">Total Savings</span>
                     <span className="text-green-600">
                       {formatCurrency(results.totalSavings)}
                     </span>
                   </div>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-500">Aminy Investment</span>
-                  <span className="text-gray-700 dark:text-gray-300">
+                  <span className="text-[#5A6B7A]">Aminy Investment</span>
+                  <span className="text-[#3A4A57] dark:text-gray-300">
                     -{formatCurrency(results.annualInvestment)}
                   </span>
                 </div>
@@ -362,10 +362,10 @@ export function ROICalculator() {
 
             {/* CTA */}
             <Card className="p-6">
-              <h3 className="font-semibold text-gray-900 dark:text-white mb-3">
+              <h3 className="font-semibold text-[#1B2733] dark:text-white mb-3">
                 Ready to Get Started?
               </h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+              <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8] mb-4">
                 Download a detailed report or schedule a call with our team.
               </p>
               <div className="space-y-2">
@@ -384,7 +384,7 @@ export function ROICalculator() {
 
         {/* Assumptions & Methodology */}
         <Card className="mt-8 p-6">
-          <h3 className="font-semibold text-gray-900 dark:text-white mb-4">
+          <h3 className="font-semibold text-[#1B2733] dark:text-white mb-4">
             Methodology & Assumptions
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
@@ -413,7 +413,7 @@ export function ROICalculator() {
               source="Enterprise pricing (volume discounts available)"
             />
           </div>
-          <p className="text-xs text-gray-400 mt-4">
+          <p className="text-xs text-[#8A9BA8] mt-4">
             * Results are estimates based on industry benchmarks and Aminy pilot data.
             Actual results may vary based on population characteristics and implementation.
           </p>
@@ -428,10 +428,10 @@ export function ROICalculator() {
             animate={{ opacity: 1, scale: 1 }}
             className="bg-white dark:bg-slate-800 rounded-xl p-6 max-w-md w-full shadow-xl"
           >
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+            <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-2">
               Get Your Personalized Report
             </h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+            <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8] mb-4">
               Enter your email to receive a detailed PDF report with your custom ROI analysis.
             </p>
             <div className="space-y-4">
@@ -486,8 +486,8 @@ function SavingsLine({
   return (
     <div className="flex justify-between items-center">
       <div>
-        <p className="text-sm text-gray-700 dark:text-gray-300">{label}</p>
-        <p className="text-xs text-gray-400">{detail}</p>
+        <p className="text-sm text-[#3A4A57] dark:text-gray-300">{label}</p>
+        <p className="text-xs text-[#8A9BA8]">{detail}</p>
       </div>
       <span className="font-medium text-green-600">{formatCurrency(value)}</span>
     </div>
@@ -506,13 +506,13 @@ function AssumptionCard({
   source: string;
 }) {
   return (
-    <div className="p-4 bg-gray-50 dark:bg-slate-800/50 rounded-lg">
+    <div className="p-4 bg-[#FAF7F2] dark:bg-slate-800/50 rounded-lg">
       <div className="flex items-center gap-2 mb-2">
-        <Icon className="w-4 h-4 text-teal-600" />
-        <span className="font-medium text-gray-900 dark:text-white">{title}</span>
+        <Icon className="w-4 h-4 text-[#6B9080]" />
+        <span className="font-medium text-[#1B2733] dark:text-white">{title}</span>
       </div>
-      <p className="text-lg font-semibold text-teal-600">{value}</p>
-      <p className="text-xs text-gray-400 mt-1">{source}</p>
+      <p className="text-lg font-semibold text-[#6B9080]">{value}</p>
+      <p className="text-xs text-[#8A9BA8] mt-1">{source}</p>
     </div>
   );
 }

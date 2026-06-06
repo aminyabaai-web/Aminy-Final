@@ -89,12 +89,12 @@ export function ParentApprovalCard({ suggestion, onAccept, onReject, onUndo, asF
   };
 
   const typeColors = {
-    routine_change: 'bg-blue-100 text-blue-700 border-blue-200',
+    routine_change: 'bg-blue-100 text-blue-700 border-[#C8DDE8]',
     goal_adjustment: 'bg-purple-100 text-purple-700 border-purple-200',
     prompt_script: 'bg-green-100 text-green-700 border-green-200',
-    reinforcement: 'bg-yellow-100 text-yellow-700 border-yellow-200',
+    reinforcement: 'bg-yellow-100 text-yellow-700 border-[#F0EDE8]',
     environment_change: 'bg-orange-100 text-orange-700 border-orange-200',
-    coverage_note: 'bg-gray-100 text-gray-700 border-gray-200'
+    coverage_note: 'bg-[#F0EDE8] text-[#3A4A57] border-[#E8E4DF]'
   };
 
   // When rendered as a standalone screen, wrap content in a full-screen page
@@ -102,13 +102,13 @@ export function ParentApprovalCard({ suggestion, onAccept, onReject, onUndo, asF
   // so it matches the other full screens instead of floating top-left.
   const wrapScreen = (children: React.ReactNode) =>
     asFullScreen ? (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 px-4 py-6">
+      <div className="min-h-screen bg-[#FAF7F2] dark:bg-slate-900 px-4 py-6">
         <div className="max-w-2xl mx-auto">
           {onBack && (
             <button
               onClick={onBack}
               aria-label="Go back"
-              className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 mb-4"
+              className="flex items-center gap-2 text-sm text-[#5A6B7A] hover:text-[#1B2733] mb-4"
             >
               <ArrowLeft className="w-4 h-4" />
               Back
@@ -125,10 +125,10 @@ export function ParentApprovalCard({ suggestion, onAccept, onReject, onUndo, asF
   if (!isHydrated) {
     return wrapScreen(
       <motion.div {...ANIMATIONS.fadeIn}>
-        <Card className="p-6 border-2 border-gray-200 bg-white text-center">
+        <Card className="p-6 border-2 border-[#E8E4DF] bg-white text-center">
           <Sparkles className="w-8 h-8 text-blue-400 mx-auto mb-3" />
-          <h4 className="text-sm font-medium text-gray-900 mb-1">No suggestions to review</h4>
-          <p className="text-sm text-gray-600">
+          <h4 className="text-sm font-medium text-[#1B2733] mb-1">No suggestions to review</h4>
+          <p className="text-sm text-[#5A6B7A]">
             When your care team shares a suggestion for you to review, it will appear here.
           </p>
         </Card>
@@ -142,7 +142,7 @@ export function ParentApprovalCard({ suggestion, onAccept, onReject, onUndo, asF
         <Card className={`p-4 border-2 ${
           suggestion.status === 'accepted'
             ? 'bg-green-50 border-green-200'
-            : 'bg-blue-50 border-blue-200'
+            : 'bg-[#EEF4F8] border-[#C8DDE8]'
         }`}>
           {/* Header */}
           <div className="flex items-start justify-between mb-3">
@@ -158,11 +158,11 @@ export function ParentApprovalCard({ suggestion, onAccept, onReject, onUndo, asF
                   </Badge>
                 )}
               </div>
-              <p className="text-sm text-gray-900">
+              <p className="text-sm text-[#1B2733]">
                 Suggested by <strong>{suggestion.providerName}</strong>
-                <span className="text-gray-500 ml-1">({suggestion.providerRole})</span>
+                <span className="text-[#5A6B7A] ml-1">({suggestion.providerRole})</span>
               </p>
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-[#5A6B7A] mt-1">
                 {new Date(suggestion.createdAt).toLocaleDateString()}
               </p>
             </div>
@@ -178,15 +178,15 @@ export function ParentApprovalCard({ suggestion, onAccept, onReject, onUndo, asF
 
           {/* Summary */}
           <div className="mb-4">
-            <h4 className="text-sm font-medium text-gray-900 mb-2">
+            <h4 className="text-sm font-medium text-[#1B2733] mb-2">
               {getSuggestionTitle(suggestion)}
             </h4>
-            <p className="text-sm text-gray-700 mb-2">
+            <p className="text-sm text-[#3A4A57] mb-2">
               {suggestion.rationale}
             </p>
-            <div className="bg-white rounded-lg p-3 border border-gray-200">
-              <p className="text-xs text-gray-600 mb-1">Expected outcome:</p>
-              <p className="text-sm text-gray-900">{suggestion.expectedOutcome}</p>
+            <div className="bg-white rounded-lg p-3 border border-[#E8E4DF]">
+              <p className="text-xs text-[#5A6B7A] mb-1">Expected outcome:</p>
+              <p className="text-sm text-[#1B2733]">{suggestion.expectedOutcome}</p>
             </div>
           </div>
 
@@ -302,16 +302,16 @@ function RoutineChangePreview({ payload }: { payload: RoutineChangePayload }) {
   return (
     <div className="space-y-2">
       {changes.map((change, idx) => (
-        <div key={`${change.field}-${idx}`} className="bg-white rounded p-2 border border-gray-200 text-xs">
-          <div className="text-gray-600 mb-1 capitalize">{change.field.replace('_', ' ')}:</div>
+        <div key={`${change.field}-${idx}`} className="bg-white rounded p-2 border border-[#E8E4DF] text-xs">
+          <div className="text-[#5A6B7A] mb-1 capitalize">{change.field.replace('_', ' ')}:</div>
           <div className="grid grid-cols-2 gap-2">
             <div>
-              <div className="text-gray-500 mb-1">Before:</div>
-              <div className="text-gray-700 line-through">{change.before}</div>
+              <div className="text-[#5A6B7A] mb-1">Before:</div>
+              <div className="text-[#3A4A57] line-through">{change.before}</div>
             </div>
             <div>
               <div className="text-green-600 mb-1">After:</div>
-              <div className="text-gray-900 font-medium">{change.after}</div>
+              <div className="text-[#1B2733] font-medium">{change.after}</div>
             </div>
           </div>
         </div>
@@ -322,15 +322,15 @@ function RoutineChangePreview({ payload }: { payload: RoutineChangePayload }) {
 
 function GoalAdjustmentPreview({ payload }: { payload: GoalAdjustmentPayload }) {
   return (
-    <div className="bg-white rounded p-3 border border-gray-200 text-sm">
+    <div className="bg-white rounded p-3 border border-[#E8E4DF] text-sm">
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <div className="text-gray-500 mb-1 text-xs">Current:</div>
-          <div className="text-gray-700 line-through">{payload.before}</div>
+          <div className="text-[#5A6B7A] mb-1 text-xs">Current:</div>
+          <div className="text-[#3A4A57] line-through">{payload.before}</div>
         </div>
         <div>
           <div className="text-green-600 mb-1 text-xs">New:</div>
-          <div className="text-gray-900 font-medium">{payload.after}</div>
+          <div className="text-[#1B2733] font-medium">{payload.after}</div>
         </div>
       </div>
     </div>
@@ -339,16 +339,16 @@ function GoalAdjustmentPreview({ payload }: { payload: GoalAdjustmentPayload }) 
 
 function PromptScriptPreview({ payload }: { payload: PromptScriptPayload }) {
   return (
-    <div className="bg-white rounded p-3 border border-gray-200 text-sm">
+    <div className="bg-white rounded p-3 border border-[#E8E4DF] text-sm">
       <div className="mb-2">
-        <span className="text-gray-600">For: </span>
-        <span className="text-gray-900 font-medium">{payload.situation}</span>
+        <span className="text-[#5A6B7A]">For: </span>
+        <span className="text-[#1B2733] font-medium">{payload.situation}</span>
       </div>
-      <div className="bg-blue-50 rounded p-2 text-sm text-gray-700">
+      <div className="bg-[#EEF4F8] rounded p-2 text-sm text-[#3A4A57]">
         "{payload.script ?? ''}"
       </div>
       {payload.whenToUse && (
-        <div className="mt-2 text-xs text-gray-600">
+        <div className="mt-2 text-xs text-[#5A6B7A]">
           Use when: {payload.whenToUse}
         </div>
       )}
@@ -358,16 +358,16 @@ function PromptScriptPreview({ payload }: { payload: PromptScriptPayload }) {
 
 function ReinforcementPreview({ payload }: { payload: ReinforcementPayload }) {
   return (
-    <div className="bg-white rounded p-3 border border-gray-200 text-sm">
+    <div className="bg-white rounded p-3 border border-[#E8E4DF] text-sm">
       <div className="mb-2">
-        <span className="text-gray-600">Reinforce: </span>
-        <span className="text-gray-900 font-medium">{payload.behavior}</span>
+        <span className="text-[#5A6B7A]">Reinforce: </span>
+        <span className="text-[#1B2733] font-medium">{payload.behavior}</span>
       </div>
       <div className="mb-2">
-        <span className="text-gray-600">With: </span>
+        <span className="text-[#5A6B7A]">With: </span>
         <span className="text-green-600 font-medium">{payload.reinforcer}</span>
       </div>
-      <div className="text-xs text-gray-600">
+      <div className="text-xs text-[#5A6B7A]">
         Schedule: {(payload.schedule ?? '').replace('_', ' ')}
       </div>
     </div>
@@ -382,21 +382,21 @@ function SuggestionDetailsView({ suggestion }: { suggestion: ProviderSuggestion 
   return (
     <div className="space-y-4">
       <div>
-        <h4 className="text-sm font-medium text-gray-900 mb-2">Rationale</h4>
-        <p className="text-sm text-gray-700">{suggestion.rationale}</p>
+        <h4 className="text-sm font-medium text-[#1B2733] mb-2">Rationale</h4>
+        <p className="text-sm text-[#3A4A57]">{suggestion.rationale}</p>
       </div>
 
       <div>
-        <h4 className="text-sm font-medium text-gray-900 mb-2">Expected Outcome</h4>
-        <p className="text-sm text-gray-700">{suggestion.expectedOutcome}</p>
+        <h4 className="text-sm font-medium text-[#1B2733] mb-2">Expected Outcome</h4>
+        <p className="text-sm text-[#3A4A57]">{suggestion.expectedOutcome}</p>
       </div>
 
       <div>
-        <h4 className="text-sm font-medium text-gray-900 mb-2">Changes</h4>
+        <h4 className="text-sm font-medium text-[#1B2733] mb-2">Changes</h4>
         <SuggestionPreview suggestion={suggestion} />
       </div>
 
-      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+      <div className="bg-[#FDF9F0] border border-[#F0EDE8] rounded-lg p-3">
         <p className="text-xs text-yellow-900">
           <strong>Remember:</strong> You're always the final decision-maker. Accept this suggestion only if it feels right for {suggestion.childName ?? 'your child'}. You can undo within 24 hours if needed.
         </p>

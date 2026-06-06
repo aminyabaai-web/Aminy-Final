@@ -97,7 +97,7 @@ function StatusChip({ status }: { status: MetricStatus }) {
     green: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300',
     yellow: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300',
     red: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300',
-    info: 'bg-gray-100 text-gray-500 dark:bg-slate-800 dark:text-slate-400',
+    info: 'bg-[#F0EDE8] text-[#5A6B7A] dark:bg-slate-800 dark:text-slate-400',
   };
   const icons: Record<MetricStatus, React.ReactNode> = {
     green: <CheckCircle className="w-3.5 h-3.5" />,
@@ -305,7 +305,7 @@ export function ProviderPerformanceTab({ providerId }: ProviderPerformanceTabPro
   if (loading) {
     return (
       <div className="flex items-center justify-center py-16">
-        <div className="animate-spin rounded-full h-8 w-8 border-2 border-teal-500 border-t-transparent" />
+        <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#6B9080] border-t-transparent" />
       </div>
     );
   }
@@ -313,8 +313,8 @@ export function ProviderPerformanceTab({ providerId }: ProviderPerformanceTabPro
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-semibold text-neutral-900 dark:text-white">My Performance</h2>
-        <p className="text-sm text-neutral-500 dark:text-slate-400 mt-1">
+        <h2 className="text-xl font-semibold text-[#1B2733] dark:text-white">My Performance</h2>
+        <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mt-1">
           Your network scorecard. Aminy uses these metrics to evaluate provider quality and referral eligibility.
         </p>
       </div>
@@ -347,11 +347,11 @@ export function ProviderPerformanceTab({ providerId }: ProviderPerformanceTabPro
               return (
                 <div key={a.id} className="flex items-center justify-between rounded-xl bg-white dark:bg-slate-900/50 px-3 py-2 text-sm">
                   <div>
-                    <span className="font-medium text-neutral-900 dark:text-white">{a.clientName}</span>
-                    <span className="ml-2 text-neutral-500 dark:text-slate-400">{a.cptCode} · {a.payer}</span>
+                    <span className="font-medium text-[#1B2733] dark:text-white">{a.clientName}</span>
+                    <span className="ml-2 text-[#5A6B7A] dark:text-slate-400">{a.cptCode} · {a.payer}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs text-neutral-500 dark:text-slate-400">
+                    <span className="text-xs text-[#5A6B7A] dark:text-slate-400">
                       {a.hoursUsed}/{a.hoursApproved} hrs used
                     </span>
                     <Badge className={days <= 7 ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700'}>
@@ -383,18 +383,18 @@ export function ProviderPerformanceTab({ providerId }: ProviderPerformanceTabPro
             >
               <div className="flex items-center gap-2 mb-2">
                 <IconEl className="w-4 h-4 text-neutral-400" />
-                <p className="text-xs text-neutral-500 dark:text-slate-400 leading-tight line-clamp-2">{m.label}</p>
+                <p className="text-xs text-[#5A6B7A] dark:text-slate-400 leading-tight line-clamp-2">{m.label}</p>
               </div>
-              <p className="text-2xl font-bold text-neutral-900 dark:text-white">
+              <p className="text-2xl font-bold text-[#1B2733] dark:text-white">
                 {formatVal(m)}
               </p>
               <div className="mt-1 flex items-center justify-between">
-                <p className="text-xs text-neutral-400 dark:text-slate-500">
+                <p className="text-xs text-neutral-400 dark:text-[#5A6B7A]">
                   Target: {m.higherIsBetter ? '≥' : '≤'}{m.target}{m.unit === '%' ? '%' : m.unit === 'hrs' ? ' h' : m.unit === 'pts' ? ' pts' : ''}
                 </p>
                 <StatusChip status={status} />
               </div>
-              <p className="mt-2 text-xs text-neutral-500 dark:text-slate-400 leading-snug">{m.description}</p>
+              <p className="mt-2 text-xs text-[#5A6B7A] dark:text-slate-400 leading-snug">{m.description}</p>
             </Card>
           );
         })}
@@ -405,20 +405,20 @@ export function ProviderPerformanceTab({ providerId }: ProviderPerformanceTabPro
         <Card className="rounded-2xl border border-neutral-200 dark:border-slate-700 overflow-hidden">
           <div className="px-4 py-3 border-b border-neutral-100 dark:border-slate-700 flex items-center gap-2">
             <AlertCircle className="w-4 h-4 text-red-500" />
-            <h3 className="font-semibold text-neutral-900 dark:text-white">Open Denials ({denials.length})</h3>
+            <h3 className="font-semibold text-[#1B2733] dark:text-white">Open Denials ({denials.length})</h3>
           </div>
           <div className="divide-y divide-neutral-100 dark:divide-slate-700">
             {denials.map((d) => (
               <div key={d.id} className="px-4 py-3 flex items-center justify-between gap-4">
                 <div className="min-w-0">
-                  <p className="text-sm font-medium text-neutral-900 dark:text-white">{d.clientName}</p>
-                  <p className="text-xs text-neutral-500 dark:text-slate-400 mt-0.5">
+                  <p className="text-sm font-medium text-[#1B2733] dark:text-white">{d.clientName}</p>
+                  <p className="text-xs text-[#5A6B7A] dark:text-slate-400 mt-0.5">
                     {d.cptCode} · {d.payer} · DOS {d.dateOfService}
                   </p>
                   <p className="text-xs text-red-600 dark:text-red-400 mt-0.5">{d.reason}</p>
                 </div>
                 <div className="text-right flex-shrink-0">
-                  <p className="text-sm font-semibold text-neutral-900 dark:text-white">${d.amount.toLocaleString()}</p>
+                  <p className="text-sm font-semibold text-[#1B2733] dark:text-white">${d.amount.toLocaleString()}</p>
                 </div>
               </div>
             ))}
@@ -430,8 +430,8 @@ export function ProviderPerformanceTab({ providerId }: ProviderPerformanceTabPro
       {denials.length === 0 && (
         <Card className="rounded-2xl border border-neutral-200 dark:border-slate-700 p-6 text-center">
           <CheckCircle className="w-8 h-8 text-emerald-500 mx-auto mb-2" />
-          <p className="font-medium text-neutral-900 dark:text-white">No open denials</p>
-          <p className="text-sm text-neutral-500 dark:text-slate-400 mt-1">Your claims are processing cleanly.</p>
+          <p className="font-medium text-[#1B2733] dark:text-white">No open denials</p>
+          <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mt-1">Your claims are processing cleanly.</p>
         </Card>
       )}
 

@@ -215,23 +215,23 @@ export function TelehealthSessionEngine({
   const allChecked = PRE_SESSION_CHECKLIST.every(item => checkedItems.has(item.id));
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-8">
+    <div className="min-h-screen bg-[#FAF7F2] pb-8">
       {/* Header */}
-      <div className="bg-white border-b border-slate-100 px-4 py-4 flex items-center gap-3 sticky top-0 z-10">
+      <div className="bg-white border-b border-[#E8E4DF] px-4 py-4 flex items-center gap-3 sticky top-0 z-10">
         <button
           onClick={step === 1 ? onBack : () => setStep(prev => (prev - 1) as 1 | 2 | 3)}
-          className="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200 transition-colors"
+          className="w-9 h-9 rounded-full bg-[#F0EDE8] flex items-center justify-center hover:bg-[#E8E4DF] transition-colors"
         >
-          <ArrowLeft className="w-4 h-4 text-slate-600" />
+          <ArrowLeft className="w-4 h-4 text-[#5A6B7A]" />
         </button>
         <div className="flex-1">
-          <h1 className="text-base font-semibold text-slate-900">Start Telehealth Session</h1>
+          <h1 className="text-base font-semibold text-[#1B2733]">Start Telehealth Session</h1>
           <div className="flex items-center gap-1 mt-0.5">
             {[1, 2, 3].map(n => (
               <div
                 key={n}
                 className={`h-1 rounded-full transition-all ${
-                  n <= step ? 'bg-teal-500' : 'bg-slate-200'
+                  n <= step ? 'bg-primary' : 'bg-[#E8E4DF]'
                 } ${n === step ? 'w-6' : 'w-3'}`}
               />
             ))}
@@ -246,8 +246,8 @@ export function TelehealthSessionEngine({
         {step === 1 && (
           <>
             <div>
-              <h2 className="text-lg font-bold text-slate-900">Select Session Type</h2>
-              <p className="text-sm text-slate-500 mt-0.5">Choose the telehealth modality for this session.</p>
+              <h2 className="text-lg font-bold text-[#1B2733]">Select Session Type</h2>
+              <p className="text-sm text-[#5A6B7A] mt-0.5">Choose the telehealth modality for this session.</p>
             </div>
 
             <div className="space-y-3">
@@ -257,23 +257,23 @@ export function TelehealthSessionEngine({
                   onClick={() => { setSelectedModality(modality); setStep(2); }}
                   className="w-full text-left"
                 >
-                  <Card className={`p-4 border-2 transition-all hover:border-teal-400 hover:shadow-md active:scale-[0.99] ${
+                  <Card className={`p-4 border-2 transition-all hover:border-[#6B9080] hover:shadow-md active:scale-[0.99] ${
                     selectedModality?.id === modality.id
-                      ? 'border-teal-500 bg-teal-50/50'
-                      : 'border-slate-200 bg-white'
+                      ? 'border-[#6B9080] bg-[#6B9080]/10/50'
+                      : 'border-[#E8E4DF] bg-white'
                   }`}>
                     <div className="flex items-start gap-3">
                       {/* Icon */}
-                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500/10 to-violet-500/10 flex items-center justify-center text-teal-600 shrink-0">
+                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500/10 to-violet-500/10 flex items-center justify-center text-[#6B9080] shrink-0">
                         {modality.icon}
                       </div>
 
                       <div className="flex-1 min-w-0">
                         {/* Title row */}
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="font-semibold text-slate-900 text-sm">{modality.label}</span>
+                          <span className="font-semibold text-[#1B2733] text-sm">{modality.label}</span>
                           {modality.cptCodes.map(code => (
-                            <Badge key={code} variant="outline" className="text-xs font-mono border-teal-200 text-teal-700 bg-teal-50">
+                            <Badge key={code} variant="outline" className="text-xs font-mono border-[#6B9080]/20 text-[#6B9080] bg-[#6B9080]/10">
                               CPT {code}
                             </Badge>
                           ))}
@@ -291,13 +291,13 @@ export function TelehealthSessionEngine({
                         </div>
 
                         {/* Description */}
-                        <p className="text-xs text-slate-600 mt-1 leading-relaxed">{modality.description}</p>
+                        <p className="text-xs text-[#5A6B7A] mt-1 leading-relaxed">{modality.description}</p>
 
                         {/* Participants */}
                         <div className="flex items-center gap-1.5 mt-2 flex-wrap">
                           <Users className="w-3 h-3 text-slate-400 shrink-0" />
                           {modality.participants.map((p, i) => (
-                            <span key={i} className="text-xs text-slate-500">{p}{i < modality.participants.length - 1 ? ' ·' : ''}</span>
+                            <span key={i} className="text-xs text-[#5A6B7A]">{p}{i < modality.participants.length - 1 ? ' ·' : ''}</span>
                           ))}
                         </div>
 
@@ -310,8 +310,8 @@ export function TelehealthSessionEngine({
 
                         {/* Billing note */}
                         <div className="mt-2 flex items-start gap-1.5">
-                          <CheckCircle2 className="w-3 h-3 text-teal-500 mt-0.5 shrink-0" />
-                          <p className="text-xs text-slate-500">{modality.billingNote}</p>
+                          <CheckCircle2 className="w-3 h-3 text-primary mt-0.5 shrink-0" />
+                          <p className="text-xs text-[#5A6B7A]">{modality.billingNote}</p>
                         </div>
 
                         {/* AI doc targets */}
@@ -319,7 +319,7 @@ export function TelehealthSessionEngine({
                           <Sparkles className="w-3 h-3 text-violet-400 shrink-0" />
                           <span className="text-xs text-violet-600 font-medium">AI will capture:</span>
                           {modality.aiDocTargets.map(target => (
-                            <span key={target} className="text-xs text-slate-500 bg-slate-100 rounded px-1.5 py-0.5">
+                            <span key={target} className="text-xs text-[#5A6B7A] bg-[#F0EDE8] rounded px-1.5 py-0.5">
                               {target.replace(/_/g, ' ')}
                             </span>
                           ))}
@@ -339,27 +339,27 @@ export function TelehealthSessionEngine({
         {step === 2 && selectedModality && (
           <>
             <div>
-              <h2 className="text-lg font-bold text-slate-900">Select Client</h2>
-              <p className="text-sm text-slate-500 mt-0.5">
+              <h2 className="text-lg font-bold text-[#1B2733]">Select Client</h2>
+              <p className="text-sm text-[#5A6B7A] mt-0.5">
                 Who is this session with?
               </p>
             </div>
 
             {/* Selected modality summary */}
-            <Card className="p-3 bg-teal-50 border border-teal-200 flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-teal-500/10 flex items-center justify-center text-teal-600">
+            <Card className="p-3 bg-[#6B9080]/10 border border-[#6B9080]/20 flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-[#6B9080]">
                 {selectedModality.icon}
               </div>
               <div className="flex-1">
-                <span className="text-sm font-semibold text-teal-900">{selectedModality.label}</span>
+                <span className="text-sm font-semibold text-[#6B9080]">{selectedModality.label}</span>
                 <div className="flex gap-1 mt-0.5">
                   {selectedModality.cptCodes.map(code => (
-                    <span key={code} className="text-xs font-mono text-teal-600">CPT {code}</span>
+                    <span key={code} className="text-xs font-mono text-[#6B9080]">CPT {code}</span>
                   ))}
                 </div>
               </div>
-              <Clock className="w-4 h-4 text-teal-400" />
-              <span className="text-xs text-teal-600">{selectedModality.estimatedMinutes} min</span>
+              <Clock className="w-4 h-4 text-primary" />
+              <span className="text-xs text-[#6B9080]">{selectedModality.estimatedMinutes} min</span>
             </Card>
 
             <div className="space-y-2">
@@ -369,21 +369,21 @@ export function TelehealthSessionEngine({
                   onClick={() => setSelectedClientId(patient.id)}
                   className="w-full text-left"
                 >
-                  <Card className={`p-4 border-2 transition-all hover:border-teal-400 ${
+                  <Card className={`p-4 border-2 transition-all hover:border-[#6B9080] ${
                     selectedClientId === patient.id
-                      ? 'border-teal-500 bg-teal-50/50'
-                      : 'border-slate-200 bg-white'
+                      ? 'border-[#6B9080] bg-[#6B9080]/10/50'
+                      : 'border-[#E8E4DF] bg-white'
                   }`}>
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full bg-gradient-to-br from-teal-400 to-violet-500 flex items-center justify-center text-white font-bold text-sm">
                         {patient.name.charAt(0).toUpperCase()}
                       </div>
                       <div className="flex-1">
-                        <p className="font-semibold text-slate-900 text-sm">{patient.name}</p>
-                        <p className="text-xs text-slate-500">{patient.insurancePayer}</p>
+                        <p className="font-semibold text-[#1B2733] text-sm">{patient.name}</p>
+                        <p className="text-xs text-[#5A6B7A]">{patient.insurancePayer}</p>
                       </div>
                       {selectedClientId === patient.id && (
-                        <CheckCircle2 className="w-5 h-5 text-teal-500" />
+                        <CheckCircle2 className="w-5 h-5 text-primary" />
                       )}
                     </div>
                   </Card>
@@ -395,21 +395,21 @@ export function TelehealthSessionEngine({
                 onClick={() => setSelectedClientId('new')}
                 className="w-full text-left"
               >
-                <Card className={`p-4 border-2 border-dashed transition-all hover:border-teal-400 ${
+                <Card className={`p-4 border-2 border-dashed transition-all hover:border-[#6B9080] ${
                   selectedClientId === 'new'
-                    ? 'border-teal-500 bg-teal-50/50'
+                    ? 'border-[#6B9080] bg-[#6B9080]/10/50'
                     : 'border-slate-300 bg-white'
                 }`}>
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-400">
+                    <div className="w-10 h-10 rounded-full bg-[#F0EDE8] flex items-center justify-center text-slate-400">
                       <Users className="w-5 h-5" />
                     </div>
                     <div className="flex-1">
-                      <p className="font-medium text-slate-700 text-sm">New Client</p>
+                      <p className="font-medium text-[#3A4A57] text-sm">New Client</p>
                       <p className="text-xs text-slate-400">Add client details before starting</p>
                     </div>
                     {selectedClientId === 'new' && (
-                      <CheckCircle2 className="w-5 h-5 text-teal-500" />
+                      <CheckCircle2 className="w-5 h-5 text-primary" />
                     )}
                   </div>
                 </Card>
@@ -431,21 +431,21 @@ export function TelehealthSessionEngine({
         {step === 3 && selectedModality && (
           <>
             <div>
-              <h2 className="text-lg font-bold text-slate-900">Ready to Start</h2>
-              <p className="text-sm text-slate-500 mt-0.5">Review your session config and confirm pre-session checklist.</p>
+              <h2 className="text-lg font-bold text-[#1B2733]">Ready to Start</h2>
+              <p className="text-sm text-[#5A6B7A] mt-0.5">Review your session config and confirm pre-session checklist.</p>
             </div>
 
             {/* Session summary card */}
-            <Card className="p-4 border border-slate-200 bg-white space-y-4">
+            <Card className="p-4 border border-[#E8E4DF] bg-white space-y-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500/10 to-violet-500/10 flex items-center justify-center text-teal-600">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500/10 to-violet-500/10 flex items-center justify-center text-[#6B9080]">
                   {selectedModality.icon}
                 </div>
                 <div>
-                  <p className="font-bold text-slate-900">{selectedModality.label}</p>
+                  <p className="font-bold text-[#1B2733]">{selectedModality.label}</p>
                   <div className="flex gap-1.5 mt-0.5">
                     {selectedModality.cptCodes.map(code => (
-                      <Badge key={code} variant="outline" className="text-xs font-mono border-teal-200 text-teal-700 bg-teal-50">
+                      <Badge key={code} variant="outline" className="text-xs font-mono border-[#6B9080]/20 text-[#6B9080] bg-[#6B9080]/10">
                         CPT {code}
                       </Badge>
                     ))}
@@ -456,20 +456,20 @@ export function TelehealthSessionEngine({
               <div className="grid grid-cols-2 gap-3 text-sm">
                 <div>
                   <p className="text-xs text-slate-400 font-medium uppercase tracking-wide">Client</p>
-                  <p className="text-slate-900 font-medium mt-0.5">
+                  <p className="text-[#1B2733] font-medium mt-0.5">
                     {selectedClientId === 'new' ? 'New Client' : selectedClient?.name || '—'}
                   </p>
                   {selectedClient && <p className="text-xs text-slate-400">{selectedClient.insurancePayer}</p>}
                 </div>
                 <div>
                   <p className="text-xs text-slate-400 font-medium uppercase tracking-wide">Duration</p>
-                  <p className="text-slate-900 font-medium mt-0.5">{selectedModality.estimatedMinutes} min</p>
+                  <p className="text-[#1B2733] font-medium mt-0.5">{selectedModality.estimatedMinutes} min</p>
                 </div>
                 <div>
                   <p className="text-xs text-slate-400 font-medium uppercase tracking-wide">Participants</p>
                   <div className="mt-0.5 space-y-0.5">
                     {selectedModality.participants.map((p, i) => (
-                      <p key={i} className="text-xs text-slate-600">{p}</p>
+                      <p key={i} className="text-xs text-[#5A6B7A]">{p}</p>
                     ))}
                   </div>
                 </div>
@@ -495,14 +495,14 @@ export function TelehealthSessionEngine({
               </div>
 
               {/* AI doc targets */}
-              <div className="border-t border-slate-100 pt-3">
+              <div className="border-t border-[#E8E4DF] pt-3">
                 <div className="flex items-center gap-1.5 mb-2">
                   <Sparkles className="w-3.5 h-3.5 text-violet-500" />
                   <p className="text-xs font-semibold text-violet-700">AI will auto-generate</p>
                 </div>
                 <div className="flex flex-wrap gap-1.5">
                   {selectedModality.aiDocTargets.map(target => (
-                    <span key={target} className="text-xs text-slate-600 bg-violet-50 border border-violet-100 rounded-full px-2.5 py-0.5">
+                    <span key={target} className="text-xs text-[#5A6B7A] bg-violet-50 border border-violet-100 rounded-full px-2.5 py-0.5">
                       {target.replace(/_/g, ' ')}
                     </span>
                   ))}
@@ -512,7 +512,7 @@ export function TelehealthSessionEngine({
 
             {/* Pre-session checklist */}
             <div>
-              <h3 className="text-sm font-semibold text-slate-800 mb-3">Pre-Session Checklist</h3>
+              <h3 className="text-sm font-semibold text-[#1B2733] mb-3">Pre-Session Checklist</h3>
               <div className="space-y-2">
                 {PRE_SESSION_CHECKLIST.map(item => (
                   <button
@@ -522,23 +522,23 @@ export function TelehealthSessionEngine({
                   >
                     <Card className={`px-4 py-3 border transition-all flex items-center gap-3 ${
                       checkedItems.has(item.id)
-                        ? 'border-teal-300 bg-teal-50'
-                        : 'border-slate-200 bg-white hover:border-slate-300'
+                        ? 'border-[#6B9080]/30 bg-[#6B9080]/10'
+                        : 'border-[#E8E4DF] bg-white hover:border-slate-300'
                     }`}>
                       <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all shrink-0 ${
                         checkedItems.has(item.id)
-                          ? 'border-teal-500 bg-teal-500'
+                          ? 'border-[#6B9080] bg-primary'
                           : 'border-slate-300'
                       }`}>
                         {checkedItems.has(item.id) && (
                           <CheckCircle2 className="w-3 h-3 text-white fill-white" />
                         )}
                       </div>
-                      <div className={`text-slate-500 shrink-0 ${checkedItems.has(item.id) ? 'text-teal-600' : ''}`}>
+                      <div className={`text-[#5A6B7A] shrink-0 ${checkedItems.has(item.id) ? 'text-[#6B9080]' : ''}`}>
                         {item.icon}
                       </div>
                       <span className={`text-sm text-left ${
-                        checkedItems.has(item.id) ? 'text-teal-800 font-medium' : 'text-slate-700'
+                        checkedItems.has(item.id) ? 'text-[#6B9080] font-medium' : 'text-[#3A4A57]'
                       }`}>
                         {item.label}
                       </span>

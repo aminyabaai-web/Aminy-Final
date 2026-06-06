@@ -194,7 +194,7 @@ export function CohortAnalytics({ organizationId }: CohortAnalyticsProps) {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <RefreshCw className="w-8 h-8 animate-spin text-teal-600" />
+        <RefreshCw className="w-8 h-8 animate-spin text-[#6B9080]" />
       </div>
     );
   }
@@ -204,10 +204,10 @@ export function CohortAnalytics({ organizationId }: CohortAnalyticsProps) {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+          <h2 className="text-2xl font-bold text-[#1B2733] dark:text-white">
             Cohort Analytics
           </h2>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
+          <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">
             Track retention, conversion, and revenue by signup cohort
           </p>
         </div>
@@ -268,12 +268,12 @@ export function CohortAnalytics({ organizationId }: CohortAnalyticsProps) {
         {/* Retention Matrix */}
         <TabsContent value="retention">
           <Card className="p-6 overflow-x-auto">
-            <h3 className="font-semibold text-gray-900 dark:text-white mb-4">
+            <h3 className="font-semibold text-[#1B2733] dark:text-white mb-4">
               Retention by Cohort
             </h3>
             <table className="min-w-full">
               <thead>
-                <tr className="text-left text-sm text-gray-500 dark:text-gray-400">
+                <tr className="text-left text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">
                   <th className="pb-3 pr-4 font-medium">Cohort</th>
                   <th className="pb-3 px-4 font-medium text-center">Signups</th>
                   <th className="pb-3 px-4 font-medium text-center">D1</th>
@@ -288,19 +288,19 @@ export function CohortAnalytics({ organizationId }: CohortAnalyticsProps) {
                 {cohortData.map((cohort, idx) => (
                   <tr
                     key={cohort.cohortWeek}
-                    className={`border-t border-gray-100 dark:border-slate-700 ${
+                    className={`border-t border-[#E8E4DF] dark:border-slate-700 ${
                       selectedCohort === cohort.cohortWeek
-                        ? 'bg-teal-50 dark:bg-teal-900/20'
+                        ? 'bg-[#6B9080]/10 dark:bg-[#6B9080]/10'
                         : ''
                     }`}
                     onClick={() => setSelectedCohort(
                       selectedCohort === cohort.cohortWeek ? null : cohort.cohortWeek
                     )}
                   >
-                    <td className="py-3 pr-4 font-medium text-gray-900 dark:text-white cursor-pointer">
+                    <td className="py-3 pr-4 font-medium text-[#1B2733] dark:text-white cursor-pointer">
                       {cohort.cohortWeek}
                     </td>
-                    <td className="py-3 px-4 text-center text-gray-600 dark:text-gray-400">
+                    <td className="py-3 px-4 text-center text-[#5A6B7A] dark:text-[#8A9BA8]">
                       {cohort.signups}
                     </td>
                     <td className="py-3 px-4 text-center">
@@ -316,7 +316,7 @@ export function CohortAnalytics({ organizationId }: CohortAnalyticsProps) {
                       {cohort.d90Retention > 0 ? (
                         <RetentionCell value={cohort.d90Retention} />
                       ) : (
-                        <span className="text-gray-400 dark:text-gray-600">—</span>
+                        <span className="text-[#8A9BA8] dark:text-[#5A6B7A]">—</span>
                       )}
                     </td>
                     <td className="py-3 px-4 text-center">
@@ -328,7 +328,7 @@ export function CohortAnalytics({ organizationId }: CohortAnalyticsProps) {
                         {cohort.conversionRate}%
                       </span>
                     </td>
-                    <td className="py-3 pl-4 text-right font-medium text-gray-900 dark:text-white">
+                    <td className="py-3 pl-4 text-right font-medium text-[#1B2733] dark:text-white">
                       ${cohort.ltv.toFixed(0)}
                     </td>
                   </tr>
@@ -341,7 +341,7 @@ export function CohortAnalytics({ organizationId }: CohortAnalyticsProps) {
         {/* Conversion Funnel */}
         <TabsContent value="funnel">
           <Card className="p-6">
-            <h3 className="font-semibold text-gray-900 dark:text-white mb-6">
+            <h3 className="font-semibold text-[#1B2733] dark:text-white mb-6">
               Signup to Subscription Funnel
             </h3>
             <div className="space-y-4">
@@ -349,25 +349,25 @@ export function CohortAnalytics({ organizationId }: CohortAnalyticsProps) {
                 <div key={stage.stage} className="relative">
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-3">
-                      <span className="w-6 h-6 rounded-full bg-teal-100 dark:bg-teal-900 text-teal-700 dark:text-teal-300 text-xs font-bold flex items-center justify-center">
+                      <span className="w-6 h-6 rounded-full bg-[#6B9080]/10 dark:bg-[#1a3a5c] text-[#6B9080] dark:text-[#7BA7BC] text-xs font-bold flex items-center justify-center">
                         {idx + 1}
                       </span>
-                      <span className="font-medium text-gray-900 dark:text-white">
+                      <span className="font-medium text-[#1B2733] dark:text-white">
                         {stage.stage}
                       </span>
                     </div>
                     <div className="text-right">
-                      <span className="font-semibold text-gray-900 dark:text-white">
+                      <span className="font-semibold text-[#1B2733] dark:text-white">
                         {stage.count.toLocaleString()}
                       </span>
                       {idx > 0 && (
-                        <span className="text-sm text-gray-500 dark:text-gray-400 ml-2">
+                        <span className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8] ml-2">
                           ({stage.rate}% of prev)
                         </span>
                       )}
                     </div>
                   </div>
-                  <div className="h-8 bg-gray-100 dark:bg-slate-700 rounded-lg overflow-hidden">
+                  <div className="h-8 bg-[#F0EDE8] dark:bg-slate-700 rounded-lg overflow-hidden">
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: `${(stage.count / funnelData[0].count) * 100}%` }}
@@ -377,7 +377,7 @@ export function CohortAnalytics({ organizationId }: CohortAnalyticsProps) {
                   </div>
                   {idx < funnelData.length - 1 && (
                     <div className="flex justify-center my-2">
-                      <ArrowRight className="w-4 h-4 text-gray-400 dark:text-gray-600 transform rotate-90" />
+                      <ArrowRight className="w-4 h-4 text-[#8A9BA8] dark:text-[#5A6B7A] transform rotate-90" />
                     </div>
                   )}
                 </div>
@@ -400,7 +400,7 @@ export function CohortAnalytics({ organizationId }: CohortAnalyticsProps) {
         {/* Feature Adoption */}
         <TabsContent value="features">
           <Card className="p-6">
-            <h3 className="font-semibold text-gray-900 dark:text-white mb-6">
+            <h3 className="font-semibold text-[#1B2733] dark:text-white mb-6">
               Feature Adoption & Retention Correlation
             </h3>
             <div className="space-y-6">
@@ -409,11 +409,11 @@ export function CohortAnalytics({ organizationId }: CohortAnalyticsProps) {
                 .map((feature) => (
                   <div key={feature.feature}>
                     <div className="flex items-center justify-between mb-2">
-                      <span className="font-medium text-gray-900 dark:text-white">
+                      <span className="font-medium text-[#1B2733] dark:text-white">
                         {feature.feature}
                       </span>
                       <div className="flex items-center gap-4">
-                        <span className="text-sm text-gray-500 dark:text-gray-400">
+                        <span className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">
                           {feature.avgUsagePerUser.toFixed(1)} uses/user
                         </span>
                         <Badge
@@ -422,8 +422,8 @@ export function CohortAnalytics({ organizationId }: CohortAnalyticsProps) {
                             feature.correlationWithRetention >= 0.85
                               ? 'border-green-500 text-green-700 bg-green-50'
                               : feature.correlationWithRetention >= 0.7
-                              ? 'border-yellow-500 text-yellow-700 bg-yellow-50'
-                              : 'border-gray-300 text-gray-600'
+                              ? 'border-yellow-500 text-yellow-700 bg-[#FDF9F0]'
+                              : 'border-[#E8E4DF] text-[#5A6B7A]'
                           }`}
                         >
                           r={feature.correlationWithRetention.toFixed(2)}
@@ -431,14 +431,14 @@ export function CohortAnalytics({ organizationId }: CohortAnalyticsProps) {
                       </div>
                     </div>
                     <div className="flex items-center gap-4">
-                      <div className="flex-1 h-3 bg-gray-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                      <div className="flex-1 h-3 bg-[#F0EDE8] dark:bg-slate-700 rounded-full overflow-hidden">
                         <motion.div
                           initial={{ width: 0 }}
                           animate={{ width: `${feature.adoptionRate}%` }}
-                          className="h-full bg-teal-500 rounded-full"
+                          className="h-full bg-primary rounded-full"
                         />
                       </div>
-                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300 w-12 text-right">
+                      <span className="text-sm font-medium text-[#3A4A57] dark:text-gray-300 w-12 text-right">
                         {feature.adoptionRate}%
                       </span>
                     </div>
@@ -446,11 +446,11 @@ export function CohortAnalytics({ organizationId }: CohortAnalyticsProps) {
                 ))}
             </div>
 
-            <div className="mt-8 p-4 bg-teal-50 dark:bg-teal-900/20 rounded-lg">
-              <h4 className="font-medium text-teal-800 dark:text-teal-300 mb-2">
+            <div className="mt-8 p-4 bg-[#6B9080]/10 dark:bg-[#6B9080]/10 rounded-lg">
+              <h4 className="font-medium text-[#6B9080] dark:text-[#7BA7BC] mb-2">
                 Retention Drivers
               </h4>
-              <ul className="text-sm text-teal-700 dark:text-teal-400 space-y-1">
+              <ul className="text-sm text-[#6B9080] dark:text-primary space-y-1">
                 <li>• <strong>Morning Mission</strong> has highest retention correlation (r=0.91)</li>
                 <li>• <strong>Telehealth</strong> users retain exceptionally well (r=0.88)</li>
                 <li>• Focus on increasing Routine Tracking adoption (52% → 70% target)</li>
@@ -479,8 +479,8 @@ function SummaryCard({
   return (
     <Card className="p-4">
       <div className="flex items-start justify-between">
-        <div className="p-2 bg-teal-50 dark:bg-teal-900/30 rounded-lg">
-          <Icon className="w-5 h-5 text-teal-600" />
+        <div className="p-2 bg-[#6B9080]/10 dark:bg-[#6B9080]/15 rounded-lg">
+          <Icon className="w-5 h-5 text-[#6B9080]" />
         </div>
         <div className={`flex items-center gap-1 text-sm ${
           positive ? 'text-green-600' : 'text-red-600'
@@ -493,10 +493,10 @@ function SummaryCard({
           {Math.abs(change).toFixed(1)}%
         </div>
       </div>
-      <p className="text-2xl font-bold text-gray-900 dark:text-white mt-3">
+      <p className="text-2xl font-bold text-[#1B2733] dark:text-white mt-3">
         {value}
       </p>
-      <p className="text-sm text-gray-500 dark:text-gray-400">{label}</p>
+      <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">{label}</p>
     </Card>
   );
 }

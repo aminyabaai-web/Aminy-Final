@@ -123,7 +123,7 @@ export function BenefitsLetterGenerator({ onGenerate, userState = '', childName 
         </div>
 
         <Card className="p-4">
-          <pre className="whitespace-pre-wrap text-sm text-slate-700 font-sans leading-relaxed">
+          <pre className="whitespace-pre-wrap text-sm text-[#3A4A57] font-sans leading-relaxed">
             {generatedLetter}
           </pre>
         </Card>

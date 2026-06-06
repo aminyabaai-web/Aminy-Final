@@ -92,7 +92,7 @@ const milestoneConfig: Record<MilestoneType, {
   'calm-champion': {
     icon: <Heart className="w-8 h-8" />,
     gradient: 'from-teal-500 to-green-500',
-    bgGradient: 'from-teal-50 to-green-50',
+    bgGradient: 'from-[#FAF7F2] to-green-50',
     getTitle: (m) => 'Calm Champion!',
     getMessage: (m) => `${m.childInitial}. completed ${m.value} calm-down activities in CalmCorner! Building real self-regulation skills.`,
     emoji: '💚',
@@ -210,9 +210,9 @@ export function JuniorMilestoneShare({
             <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br ${config.gradient} text-white shadow-lg mb-3`}>
               {config.icon}
             </div>
-            <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
+            <h2 className="text-2xl font-bold text-[#1B2733]">{title}</h2>
             <div className="flex items-center justify-center gap-2 mt-1">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-teal-400 to-cyan-500 flex items-center justify-center text-white text-sm font-bold">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] flex items-center justify-center text-white text-sm font-bold">
                 {milestone.childInitial}
               </div>
               <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
@@ -220,12 +220,12 @@ export function JuniorMilestoneShare({
           </div>
 
           {/* Message */}
-          <p className="text-sm text-gray-600 text-center leading-relaxed mb-4">
+          <p className="text-sm text-[#5A6B7A] text-center leading-relaxed mb-4">
             {message}
           </p>
 
           {/* Privacy note */}
-          <p className="text-xs text-gray-400 text-center italic">
+          <p className="text-xs text-[#8A9BA8] text-center italic">
             Privacy-first: Uses initials only. No personal details shared.
           </p>
         </div>
@@ -237,7 +237,7 @@ export function JuniorMilestoneShare({
             <button
               onClick={handleNativeShare}
               disabled={sharing}
-              className="w-full flex items-center justify-center gap-2 py-3 bg-teal-600 hover:bg-teal-700 text-white rounded-xl font-medium transition-colors disabled:opacity-50"
+              className="w-full flex items-center justify-center gap-2 py-3 bg-primary hover:bg-[#6B9080] text-white rounded-xl font-medium transition-colors disabled:opacity-50"
             >
               <Share2 size={18} />
               {sharing ? 'Sharing...' : 'Share Milestone'}
@@ -245,7 +245,7 @@ export function JuniorMilestoneShare({
           ) : (
             <button
               onClick={handleCopy}
-              className="w-full flex items-center justify-center gap-2 py-3 bg-teal-600 hover:bg-teal-700 text-white rounded-xl font-medium transition-colors"
+              className="w-full flex items-center justify-center gap-2 py-3 bg-primary hover:bg-[#6B9080] text-white rounded-xl font-medium transition-colors"
             >
               {copied ? <Check size={18} /> : <Copy size={18} />}
               {copied ? 'Copied!' : 'Copy to Share'}
@@ -256,14 +256,14 @@ export function JuniorMilestoneShare({
           <div className="flex gap-2">
             <button
               onClick={handleSMS}
-              className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-white/80 hover:bg-white text-gray-700 rounded-xl text-sm transition-colors border border-gray-200"
+              className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-white/80 hover:bg-white text-[#3A4A57] rounded-xl text-sm transition-colors border border-[#E8E4DF]"
             >
               <MessageCircle size={16} />
               Text
             </button>
             <button
               onClick={() => handleSocialShare('twitter')}
-              className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-white/80 hover:bg-white text-gray-700 rounded-xl text-sm transition-colors border border-gray-200"
+              className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-white/80 hover:bg-white text-[#3A4A57] rounded-xl text-sm transition-colors border border-[#E8E4DF]"
             >
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
@@ -272,7 +272,7 @@ export function JuniorMilestoneShare({
             </button>
             <button
               onClick={() => handleSocialShare('facebook')}
-              className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-white/80 hover:bg-white text-gray-700 rounded-xl text-sm transition-colors border border-gray-200"
+              className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-white/80 hover:bg-white text-[#3A4A57] rounded-xl text-sm transition-colors border border-[#E8E4DF]"
             >
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
@@ -285,7 +285,7 @@ export function JuniorMilestoneShare({
           {canNativeShare && (
             <button
               onClick={handleCopy}
-              className="w-full flex items-center justify-center gap-2 py-2 text-gray-500 hover:text-gray-700 text-sm transition-colors"
+              className="w-full flex items-center justify-center gap-2 py-2 text-[#5A6B7A] hover:text-[#3A4A57] text-sm transition-colors"
             >
               {copied ? <Check size={14} /> : <Copy size={14} />}
               {copied ? 'Copied!' : 'Or copy text'}

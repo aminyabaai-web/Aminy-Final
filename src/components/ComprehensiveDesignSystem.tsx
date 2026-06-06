@@ -15,7 +15,7 @@ import {
  * COMPREHENSIVE DESIGN SYSTEM FOR AMINY
  * 
  * A complete, production-ready design system built for Aminy's AI-first experience.
- * Features Apple-clean design with teal accents (#0891b2), white backgrounds, 
+ * Features Apple-clean design with teal accents (#6B9080), white backgrounds, 
  * navy fonts, and minimal styling.
  * 
  * Created for: Figma Make deliverables - Phase 1 Component Library
@@ -97,9 +97,9 @@ export function ComprehensiveDesignSystem() {
         <input
           type="text"
           placeholder="Enter text here..."
-          className="w-full min-h-[44px] px-3 py-2 border border-gray-300 rounded-lg focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all"
+          className="w-full min-h-[44px] px-3 py-2 border border-[#E8E4DF] rounded-lg focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all"
         />
-        <p className="text-xs text-gray-600">Helper text goes here</p>
+        <p className="text-xs text-[#5A6B7A]">Helper text goes here</p>
       </div>
 
       {/* Text Input with Validation */}
@@ -123,7 +123,7 @@ export function ComprehensiveDesignSystem() {
         <label className="block text-sm font-medium text-primary">
           Select Dropdown
         </label>
-        <select className="w-full min-h-[44px] px-3 py-2 border border-gray-300 rounded-lg focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all bg-white">
+        <select className="w-full min-h-[44px] px-3 py-2 border border-[#E8E4DF] rounded-lg focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all bg-white">
           <option>Choose an option</option>
           <option>Option 1</option>
           <option>Option 2</option>
@@ -148,7 +148,7 @@ export function ComprehensiveDesignSystem() {
           {['Books', 'Nature'].map((item) => (
             <button
               key={item}
-              className="px-3 py-2 border-2 border-gray-300 bg-white text-gray-700 rounded-full text-sm font-medium hover:border-accent/50 transition-all"
+              className="px-3 py-2 border-2 border-[#E8E4DF] bg-white text-[#3A4A57] rounded-full text-sm font-medium hover:border-accent/50 transition-all"
             >
               {item}
             </button>
@@ -165,7 +165,7 @@ export function ComprehensiveDesignSystem() {
           <button className="relative w-12 h-6 bg-accent rounded-full transition-all">
             <div className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 bg-white rounded-full shadow-md transition-all"></div>
           </button>
-          <span className="text-sm text-gray-600">Enabled</span>
+          <span className="text-sm text-[#5A6B7A]">Enabled</span>
         </div>
       </div>
 
@@ -177,10 +177,10 @@ export function ComprehensiveDesignSystem() {
         <div className="space-y-2">
           {['Option A', 'Option B', 'Option C'].map((option, idx) => (
             <label key={option} className="flex items-center gap-3 cursor-pointer">
-              <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${idx === 0 ? 'border-accent' : 'border-gray-300'}`}>
+              <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${idx === 0 ? 'border-accent' : 'border-[#E8E4DF]'}`}>
                 {idx === 0 && <div className="w-3 h-3 rounded-full bg-accent"></div>}
               </div>
-              <span className="text-sm text-gray-700">{option}</span>
+              <span className="text-sm text-[#3A4A57]">{option}</span>
             </label>
           ))}
         </div>
@@ -194,13 +194,13 @@ export function ComprehensiveDesignSystem() {
       <h3 className="text-lg sm:text-xl font-semibold text-primary">Cards</h3>
       
       {/* Activity Card */}
-      <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+      <div className="bg-white border border-[#E8E4DF] rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
         <div className="flex items-start justify-between mb-3">
           <h4 className="text-lg font-semibold">Morning Visual Schedule</h4>
           <span className="bg-accent text-white text-xs font-medium px-2 py-1 rounded-full">5 min</span>
         </div>
-        <p className="text-sm text-gray-600 mb-3">Create a simple picture schedule for the day</p>
-        <div className="flex items-center gap-2 text-xs text-gray-500 mb-4">
+        <p className="text-sm text-[#5A6B7A] mb-3">Create a simple picture schedule for the day</p>
+        <div className="flex items-center gap-2 text-xs text-[#5A6B7A] mb-4">
           <Sparkles className="w-4 h-4" />
           <span>Materials: Paper & markers</span>
         </div>
@@ -210,24 +210,24 @@ export function ComprehensiveDesignSystem() {
       </div>
 
       {/* Report Card */}
-      <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+      <div className="bg-white border border-[#E8E4DF] rounded-lg p-4 shadow-sm">
         <div className="flex items-center gap-3 mb-4">
           <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
             <BarChart3 className="w-5 h-5 text-blue-600" />
           </div>
           <div>
             <h4 className="text-base font-semibold">Weekly Progress</h4>
-            <p className="text-xs text-gray-500">Last 7 days</p>
+            <p className="text-xs text-[#5A6B7A]">Last 7 days</p>
           </div>
         </div>
         
         {/* Chart Placeholder */}
-        <div className="h-32 bg-gray-50 rounded-lg mb-3 flex items-center justify-center">
-          <span className="text-xs text-gray-400">Chart visualization</span>
+        <div className="h-32 bg-[#FAF7F2] rounded-lg mb-3 flex items-center justify-center">
+          <span className="text-xs text-[#8A9BA8]">Chart visualization</span>
         </div>
         
         {/* AI Narrative */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 flex gap-2">
+        <div className="bg-[#EEF4F8] border border-[#C8DDE8] rounded-lg p-3 flex gap-2">
           <Info className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
           <p className="text-xs text-blue-900">
             This week, Eddie tried 3 new activities. They seemed most engaged with turn-taking games.
@@ -236,13 +236,13 @@ export function ComprehensiveDesignSystem() {
       </div>
 
       {/* Plan Card (Compact) */}
-      <div className="bg-white border border-gray-200 rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow">
+      <div className="bg-white border border-[#E8E4DF] rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Clock className="w-5 h-5 text-gray-400" />
+            <Clock className="w-5 h-5 text-[#8A9BA8]" />
             <div>
               <p className="text-sm font-medium">Turn-Taking Game</p>
-              <p className="text-xs text-gray-500">10 min • Any toy</p>
+              <p className="text-xs text-[#5A6B7A]">10 min • Any toy</p>
             </div>
           </div>
           <button className="text-accent text-sm font-medium hover:underline">
@@ -262,7 +262,7 @@ export function ComprehensiveDesignSystem() {
       <div className="space-y-3">
         <h4 className="text-sm font-medium text-muted-foreground">Trust Badges</h4>
         <div className="flex flex-wrap gap-3">
-          <div className="flex items-center gap-2 px-3 py-2 bg-blue-50 border border-blue-200 rounded-lg">
+          <div className="flex items-center gap-2 px-3 py-2 bg-[#EEF4F8] border border-[#C8DDE8] rounded-lg">
             <Users className="w-4 h-4 text-blue-600" />
             <span className="text-sm font-medium text-blue-900">Parent-tested</span>
           </div>
@@ -274,9 +274,9 @@ export function ComprehensiveDesignSystem() {
             <GraduationCap className="w-4 h-4 text-purple-600" />
             <span className="text-sm font-medium text-purple-900">Designed with BCBAs</span>
           </div>
-          <div className="flex items-center gap-2 px-3 py-2 bg-teal-50 border border-teal-200 rounded-lg">
-            <Sparkles className="w-4 h-4 text-teal-600" />
-            <span className="text-sm font-medium text-teal-900">AI-powered</span>
+          <div className="flex items-center gap-2 px-3 py-2 bg-[#6B9080]/10 border border-[#6B9080]/20 rounded-lg">
+            <Sparkles className="w-4 h-4 text-[#6B9080]" />
+            <span className="text-sm font-medium text-[#6B9080]">AI-powered</span>
           </div>
         </div>
       </div>
@@ -289,7 +289,7 @@ export function ComprehensiveDesignSystem() {
             <CheckCircle className="w-3 h-3" />
             Success
           </span>
-          <span className="inline-flex items-center gap-1 px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full">
+          <span className="inline-flex items-center gap-1 px-2 py-1 bg-yellow-100 text-[#3A4A57] text-xs font-medium rounded-full">
             <AlertTriangle className="w-3 h-3" />
             Warning
           </span>
@@ -297,7 +297,7 @@ export function ComprehensiveDesignSystem() {
             <AlertCircle className="w-3 h-3" />
             Error
           </span>
-          <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
+          <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-[#4A6478] text-xs font-medium rounded-full">
             <Info className="w-3 h-3" />
             Info
           </span>
@@ -314,7 +314,7 @@ export function ComprehensiveDesignSystem() {
       {/* Bottom Nav */}
       <div className="space-y-3">
         <h4 className="text-sm font-medium text-muted-foreground">Bottom Navigation</h4>
-        <div className="bg-white border border-gray-200 rounded-lg p-2 flex justify-around">
+        <div className="bg-white border border-[#E8E4DF] rounded-lg p-2 flex justify-around">
           {[
             { icon: Home, label: 'Home', active: true },
             { icon: Calendar, label: 'Plan', active: false },
@@ -325,7 +325,7 @@ export function ComprehensiveDesignSystem() {
             <button
               key={item.label}
               className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-colors ${
-                item.active ? 'text-accent' : 'text-gray-400'
+                item.active ? 'text-accent' : 'text-[#8A9BA8]'
               }`}
             >
               <item.icon className="w-5 h-5" />
@@ -338,14 +338,14 @@ export function ComprehensiveDesignSystem() {
       {/* Tabs */}
       <div className="space-y-3">
         <h4 className="text-sm font-medium text-muted-foreground">Tabs (Underline Style)</h4>
-        <div className="flex gap-3 sm:gap-4 sm:gap-6 border-b border-gray-200">
+        <div className="flex gap-3 sm:gap-4 sm:gap-6 border-b border-[#E8E4DF]">
           <button className="pb-2 text-sm font-medium text-accent border-b-2 border-accent">
             Active Tab
           </button>
-          <button className="pb-2 text-sm font-medium text-gray-500 hover:text-gray-700">
+          <button className="pb-2 text-sm font-medium text-[#5A6B7A] hover:text-[#3A4A57]">
             Inactive Tab
           </button>
-          <button className="pb-2 text-sm font-medium text-gray-500 hover:text-gray-700">
+          <button className="pb-2 text-sm font-medium text-[#5A6B7A] hover:text-[#3A4A57]">
             Another Tab
           </button>
         </div>
@@ -358,13 +358,13 @@ export function ComprehensiveDesignSystem() {
           {[1, 2, 3, 4, 5].map((step, idx) => (
             <React.Fragment key={step}>
               <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                idx < 2 ? 'bg-accent text-white' : 'bg-gray-200 text-gray-600'
+                idx < 2 ? 'bg-accent text-white' : 'bg-[#E8E4DF] text-[#5A6B7A]'
               }`}>
                 {idx < 2 ? <Check className="w-4 h-4" /> : step}
               </div>
               {idx < 4 && (
                 <div className={`flex-1 h-0.5 mx-2 ${
-                  idx < 2 ? 'bg-accent' : 'bg-gray-200'
+                  idx < 2 ? 'bg-accent' : 'bg-[#E8E4DF]'
                 }`}></div>
               )}
             </React.Fragment>
@@ -407,11 +407,11 @@ export function ComprehensiveDesignSystem() {
       {/* Skeleton Loader */}
       <div className="space-y-3">
         <h4 className="text-sm font-medium text-muted-foreground">Skeleton Loader</h4>
-        <div className="bg-white border border-gray-200 rounded-lg p-4">
+        <div className="bg-white border border-[#E8E4DF] rounded-lg p-4">
           <div className="animate-pulse space-y-3">
-            <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-            <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-            <div className="h-4 bg-gray-200 rounded w-5/6"></div>
+            <div className="h-4 bg-[#E8E4DF] rounded w-3/4"></div>
+            <div className="h-4 bg-[#E8E4DF] rounded w-1/2"></div>
+            <div className="h-4 bg-[#E8E4DF] rounded w-5/6"></div>
           </div>
         </div>
       </div>
@@ -428,7 +428,7 @@ export function ComprehensiveDesignSystem() {
         <h4 className="text-sm font-medium text-muted-foreground">Colors</h4>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
           {[
-            { name: 'Primary Teal', value: '#0891b2', class: 'bg-cyan-600' },
+            { name: 'Primary Teal', value: '#6B9080', class: 'bg-[#6B9080]' },
             { name: 'White', value: '#FFFFFF', class: 'bg-white border' },
             { name: 'Navy', value: '#111827', class: 'bg-[#111827]' },
             { name: 'Gray 50', value: '#F9FAFB', class: 'bg-[#F9FAFB] border' },
@@ -439,7 +439,7 @@ export function ComprehensiveDesignSystem() {
               <div className={`h-16 rounded-lg ${color.class}`}></div>
               <div>
                 <p className="text-xs font-medium">{color.name}</p>
-                <p className="text-xs text-gray-500">{color.value}</p>
+                <p className="text-xs text-[#5A6B7A]">{color.value}</p>
               </div>
             </div>
           ))}
@@ -452,23 +452,23 @@ export function ComprehensiveDesignSystem() {
         <div className="space-y-3 sm:space-y-4">
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold mb-1">H1: 28-32px / Bold</h1>
-            <p className="text-xs text-gray-500">Large headings</p>
+            <p className="text-xs text-[#5A6B7A]">Large headings</p>
           </div>
           <div>
             <h2 className="text-2xl font-semibold mb-1">H2: 22-24px / Semibold</h2>
-            <p className="text-xs text-gray-500">Section headings</p>
+            <p className="text-xs text-[#5A6B7A]">Section headings</p>
           </div>
           <div>
             <h3 className="text-lg sm:text-xl font-semibold mb-1">H3: 18-20px / Semibold</h3>
-            <p className="text-xs text-gray-500">Subsection headings</p>
+            <p className="text-xs text-[#5A6B7A]">Subsection headings</p>
           </div>
           <div>
             <p className="text-base mb-1">Body: 16px / Regular</p>
-            <p className="text-xs text-gray-500">Body text</p>
+            <p className="text-xs text-[#5A6B7A]">Body text</p>
           </div>
           <div>
             <p className="text-sm mb-1">Caption: 14px / Regular</p>
-            <p className="text-xs text-gray-500">Helper text</p>
+            <p className="text-xs text-[#5A6B7A]">Helper text</p>
           </div>
         </div>
       </div>
@@ -487,7 +487,7 @@ export function ComprehensiveDesignSystem() {
           ].map((space) => (
             <div key={space.name} className="flex items-center gap-3">
               <div className={`${space.size} h-4 bg-accent rounded`}></div>
-              <span className="text-xs text-gray-600">{space.name}</span>
+              <span className="text-xs text-[#5A6B7A]">{space.name}</span>
             </div>
           ))}
         </div>
@@ -505,7 +505,7 @@ export function ComprehensiveDesignSystem() {
           ].map((radius) => (
             <div key={radius.name} className="text-center">
               <div className={`w-16 h-16 bg-accent/20 border-2 border-accent ${radius.class} mb-1`}></div>
-              <p className="text-xs text-gray-600">{radius.name}</p>
+              <p className="text-xs text-[#5A6B7A]">{radius.name}</p>
             </div>
           ))}
         </div>
@@ -515,7 +515,7 @@ export function ComprehensiveDesignSystem() {
       <div className="space-y-3">
         <h4 className="text-sm font-medium text-muted-foreground">Shadows</h4>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-[#E8E4DF]">
             <p className="text-xs font-medium">Small</p>
           </div>
           <div className="bg-white p-4 rounded-lg shadow-md">
@@ -542,9 +542,9 @@ export function ComprehensiveDesignSystem() {
   const ActiveComponent = tabs.find(tab => tab.id === activeTab)?.component || ButtonShowcase;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-50">
+      <div className="bg-white border-b border-[#E8E4DF] sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-3">
@@ -555,7 +555,7 @@ export function ComprehensiveDesignSystem() {
                 <h1 className="text-lg sm:text-xl font-semibold text-primary">
                   Aminy Design System
                 </h1>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-[#5A6B7A]">
                   Complete Component Library v1.0
                 </p>
               </div>
@@ -565,7 +565,7 @@ export function ComprehensiveDesignSystem() {
       </div>
 
       {/* Tab Navigation */}
-      <div className="bg-white border-b border-gray-200">
+      <div className="bg-white border-b border-[#E8E4DF]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex gap-3 sm:gap-4 sm:gap-6 overflow-x-auto">
             {tabs.map((tab) => (
@@ -575,7 +575,7 @@ export function ComprehensiveDesignSystem() {
                 className={`py-4 text-sm font-medium border-b-2 whitespace-nowrap transition-colors ${
                   activeTab === tab.id
                     ? 'border-accent text-accent'
-                    : 'border-transparent text-gray-500 hover:text-gray-700'
+                    : 'border-transparent text-[#5A6B7A] hover:text-[#3A4A57]'
                 }`}
               >
                 {tab.label}
@@ -587,7 +587,7 @@ export function ComprehensiveDesignSystem() {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-white border border-gray-200 rounded-lg p-6">
+        <div className="bg-white border border-[#E8E4DF] rounded-lg p-6">
           <ActiveComponent />
         </div>
       </div>
@@ -600,12 +600,12 @@ export function ComprehensiveDesignSystem() {
               <h3 className="text-lg sm:text-xl font-semibold text-primary">Modal Example</h3>
               <button
                 onClick={() => setShowModal(false)}
-                className="p-1 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-1 hover:bg-[#F0EDE8] rounded-lg transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <p className="text-gray-600 mb-4 sm:mb-6">
+            <p className="text-[#5A6B7A] mb-4 sm:mb-6">
               This is a centered overlay modal with a backdrop blur effect.
             </p>
             <div className="flex gap-3">
@@ -628,11 +628,11 @@ export function ComprehensiveDesignSystem() {
 
       {/* Toast */}
       {showToast && (
-        <div className="fixed top-4 right-4 bg-white border border-gray-200 rounded-lg p-4 shadow-lg z-50 flex items-start gap-3 max-w-md animate-in slide-in-from-top">
+        <div className="fixed top-4 right-4 bg-white border border-[#E8E4DF] rounded-lg p-4 shadow-lg z-50 flex items-start gap-3 max-w-md animate-in slide-in-from-top">
           <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
           <div>
             <p className="font-semibold text-sm">Success!</p>
-            <p className="text-sm text-gray-600">Your changes have been saved.</p>
+            <p className="text-sm text-[#5A6B7A]">Your changes have been saved.</p>
           </div>
         </div>
       )}

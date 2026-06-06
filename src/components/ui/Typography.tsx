@@ -31,7 +31,7 @@ export function DisplayHeading({ className, children, ...props }: HeadingProps) 
     <h1
       className={cn(
         'text-4xl md:text-5xl font-bold tracking-tight',
-        'text-slate-900 dark:text-slate-50',
+        'text-[#1B2733] dark:text-slate-50',
         'leading-[1.1]',
         className
       )}
@@ -47,7 +47,7 @@ export function PageTitle({ className, children, as: Tag = 'h1', ...props }: Hea
     <Tag
       className={cn(
         'text-2xl md:text-3xl font-semibold tracking-tight',
-        'text-slate-900 dark:text-slate-50',
+        'text-[#1B2733] dark:text-slate-50',
         'leading-tight',
         className
       )}
@@ -63,7 +63,7 @@ export function SectionTitle({ className, children, as: Tag = 'h2', ...props }: 
     <Tag
       className={cn(
         'text-xl md:text-2xl font-semibold tracking-tight',
-        'text-slate-800 dark:text-slate-100',
+        'text-[#1B2733] dark:text-slate-100',
         'leading-snug',
         className
       )}
@@ -79,7 +79,7 @@ export function CardTitle({ className, children, as: Tag = 'h3', ...props }: Hea
     <Tag
       className={cn(
         'text-lg font-semibold',
-        'text-slate-800 dark:text-slate-100',
+        'text-[#1B2733] dark:text-slate-100',
         'leading-snug',
         className
       )}
@@ -95,7 +95,7 @@ export function Subheading({ className, children, as: Tag = 'h4', ...props }: He
     <Tag
       className={cn(
         'text-base font-medium',
-        'text-slate-700 dark:text-slate-200',
+        'text-[#3A4A57] dark:text-slate-200',
         'leading-normal',
         className
       )}
@@ -143,8 +143,8 @@ export function Text({
         sizeClasses[size],
         weightClasses[weight],
         muted
-          ? 'text-slate-500 dark:text-slate-400'
-          : 'text-slate-700 dark:text-slate-300',
+          ? 'text-[#5A6B7A] dark:text-slate-400'
+          : 'text-[#3A4A57] dark:text-slate-300',
         className
       )}
       {...props}
@@ -159,7 +159,7 @@ export function Lead({ className, children, ...props }: Omit<TextProps, 'size'>)
     <p
       className={cn(
         'text-lg md:text-xl font-normal',
-        'text-slate-600 dark:text-slate-300',
+        'text-[#5A6B7A] dark:text-slate-300',
         'leading-relaxed',
         className
       )}
@@ -176,8 +176,8 @@ export function SmallText({ className, children, muted = false, ...props }: Omit
       className={cn(
         'text-sm leading-normal',
         muted
-          ? 'text-slate-500 dark:text-slate-400'
-          : 'text-slate-600 dark:text-slate-300',
+          ? 'text-[#5A6B7A] dark:text-slate-400'
+          : 'text-[#5A6B7A] dark:text-slate-300',
         className
       )}
       {...props}
@@ -192,7 +192,7 @@ export function Caption({ className, children, ...props }: Omit<TextProps, 'size
     <p
       className={cn(
         'text-xs font-medium leading-normal',
-        'text-slate-500 dark:text-slate-400',
+        'text-[#5A6B7A] dark:text-slate-400',
         className
       )}
       {...props}
@@ -222,7 +222,7 @@ export function Label({
       htmlFor={htmlFor}
       className={cn(
         'text-sm font-medium leading-none',
-        'text-slate-700 dark:text-slate-200',
+        'text-[#3A4A57] dark:text-slate-200',
         'peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
         className
       )}
@@ -270,7 +270,7 @@ export function HelperText({ className, children, ...props }: Omit<TextProps, 's
     <p
       className={cn(
         'text-sm leading-normal',
-        'text-slate-500 dark:text-slate-400',
+        'text-[#5A6B7A] dark:text-slate-400',
         className
       )}
       {...props}
@@ -291,9 +291,9 @@ interface LinkTextProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
 
 export function LinkText({ className, variant = 'default', children, ...props }: LinkTextProps) {
   const variantClasses = {
-    default: 'text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 underline-offset-2 hover:underline',
-    subtle: 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 hover:underline',
-    bold: 'text-teal-600 dark:text-teal-400 font-semibold hover:text-teal-700 dark:hover:text-teal-300'
+    default: 'text-[#6B9080] dark:text-primary hover:text-[#6B9080] dark:hover:text-[#7BA7BC] underline-offset-2 hover:underline',
+    subtle: 'text-[#5A6B7A] dark:text-slate-300 hover:text-[#1B2733] dark:hover:text-slate-100 hover:underline',
+    bold: 'text-[#6B9080] dark:text-primary font-semibold hover:text-[#6B9080] dark:hover:text-[#7BA7BC]'
   };
 
   return (
@@ -317,7 +317,7 @@ export function LinkText({ className, variant = 'default', children, ...props }:
 
 export function Strong({ className, children }: { className?: string; children: React.ReactNode }) {
   return (
-    <strong className={cn('font-semibold text-slate-900 dark:text-slate-100', className)}>
+    <strong className={cn('font-semibold text-[#1B2733] dark:text-slate-100', className)}>
       {children}
     </strong>
   );
@@ -335,9 +335,9 @@ export function Code({ className, children }: { className?: string; children: Re
   return (
     <code
       className={cn(
-        'px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800',
+        'px-1.5 py-0.5 rounded bg-[#F0EDE8] dark:bg-slate-800',
         'font-mono text-sm',
-        'text-slate-800 dark:text-slate-200',
+        'text-[#1B2733] dark:text-slate-200',
         className
       )}
     >
@@ -352,7 +352,7 @@ export function Highlight({ className, children, color = 'teal' }: {
   color?: 'teal' | 'amber' | 'green' | 'purple';
 }) {
   const colorClasses = {
-    teal: 'bg-teal-100 dark:bg-teal-900/30 text-teal-800 dark:text-teal-200',
+    teal: 'bg-[#6B9080]/10 dark:bg-[#6B9080]/15 text-[#6B9080] dark:text-teal-200',
     amber: 'bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200',
     green: 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200',
     purple: 'bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-200'
@@ -371,7 +371,7 @@ export function Highlight({ className, children, color = 'teal' }: {
 
 export function UnorderedList({ className, children }: { className?: string; children: React.ReactNode }) {
   return (
-    <ul className={cn('list-disc list-inside space-y-1 text-slate-700 dark:text-slate-300', className)}>
+    <ul className={cn('list-disc list-inside space-y-1 text-[#3A4A57] dark:text-slate-300', className)}>
       {children}
     </ul>
   );
@@ -379,7 +379,7 @@ export function UnorderedList({ className, children }: { className?: string; chi
 
 export function OrderedList({ className, children }: { className?: string; children: React.ReactNode }) {
   return (
-    <ol className={cn('list-decimal list-inside space-y-1 text-slate-700 dark:text-slate-300', className)}>
+    <ol className={cn('list-decimal list-inside space-y-1 text-[#3A4A57] dark:text-slate-300', className)}>
       {children}
     </ol>
   );
@@ -405,14 +405,14 @@ export function Blockquote({ className, children, cite }: {
   return (
     <blockquote
       className={cn(
-        'pl-4 border-l-4 border-teal-500',
-        'italic text-slate-600 dark:text-slate-300',
+        'pl-4 border-l-4 border-[#6B9080]',
+        'italic text-[#5A6B7A] dark:text-slate-300',
         className
       )}
     >
       {children}
       {cite && (
-        <footer className="mt-2 text-sm text-slate-500 not-italic">
+        <footer className="mt-2 text-sm text-[#5A6B7A] not-italic">
           — {cite}
         </footer>
       )}
@@ -426,16 +426,16 @@ export function Blockquote({ className, children, cite }: {
 
 export function Divider({ className, children }: { className?: string; children?: React.ReactNode }) {
   if (!children) {
-    return <hr className={cn('border-slate-200 dark:border-slate-700 my-4', className)} />;
+    return <hr className={cn('border-[#E8E4DF] dark:border-slate-700 my-4', className)} />;
   }
 
   return (
     <div className={cn('relative flex items-center my-4', className)}>
-      <div className="flex-grow border-t border-slate-200 dark:border-slate-700" />
-      <span className="px-3 text-sm text-slate-500 dark:text-slate-400">
+      <div className="flex-grow border-t border-[#E8E4DF] dark:border-slate-700" />
+      <span className="px-3 text-sm text-[#5A6B7A] dark:text-slate-400">
         {children}
       </span>
-      <div className="flex-grow border-t border-slate-200 dark:border-slate-700" />
+      <div className="flex-grow border-t border-[#E8E4DF] dark:border-slate-700" />
     </div>
   );
 }
@@ -449,7 +449,7 @@ export function StatNumber({ className, children }: { className?: string; childr
     <span
       className={cn(
         'text-3xl md:text-4xl font-bold tracking-tight',
-        'text-slate-900 dark:text-slate-50',
+        'text-[#1B2733] dark:text-slate-50',
         className
       )}
     >
@@ -463,7 +463,7 @@ export function StatLabel({ className, children }: { className?: string; childre
     <span
       className={cn(
         'text-sm font-medium uppercase tracking-wide',
-        'text-slate-500 dark:text-slate-400',
+        'text-[#5A6B7A] dark:text-slate-400',
         className
       )}
     >

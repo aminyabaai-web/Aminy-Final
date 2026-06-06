@@ -87,7 +87,7 @@ interface UserModerationHistory {
 const AI_CONFIDENCE_CONFIG = {
   high: { min: 0.85, color: 'text-rose-600 bg-rose-50', label: 'High Confidence' },
   medium: { min: 0.6, color: 'text-amber-600 bg-amber-50', label: 'Medium Confidence' },
-  low: { min: 0, color: 'text-blue-600 bg-blue-50', label: 'Low Confidence' },
+  low: { min: 0, color: 'text-blue-600 bg-[#EEF4F8]', label: 'Low Confidence' },
 };
 
 const getConfidenceLevel = (confidence: number) => {
@@ -396,8 +396,8 @@ export function ModerationDashboard() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className="text-xl font-semibold text-neutral-900 dark:text-white">Content Moderation</h2>
-          <p className="text-sm text-neutral-500 dark:text-slate-400">
+          <h2 className="text-xl font-semibold text-[#1B2733] dark:text-white">Content Moderation</h2>
+          <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
             {stats.pending} items awaiting review
           </p>
         </div>
@@ -420,8 +420,8 @@ export function ModerationDashboard() {
               <Clock className="w-5 h-5 text-amber-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-neutral-900 dark:text-white">{stats.pending}</p>
-              <p className="text-xs text-neutral-500">Pending</p>
+              <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{stats.pending}</p>
+              <p className="text-xs text-[#5A6B7A]">Pending</p>
             </div>
           </div>
         </Card>
@@ -431,8 +431,8 @@ export function ModerationDashboard() {
               <CheckCircle className="w-5 h-5 text-emerald-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-neutral-900 dark:text-white">{stats.approvedToday}</p>
-              <p className="text-xs text-neutral-500">Approved Today</p>
+              <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{stats.approvedToday}</p>
+              <p className="text-xs text-[#5A6B7A]">Approved Today</p>
             </div>
           </div>
         </Card>
@@ -442,8 +442,8 @@ export function ModerationDashboard() {
               <XCircle className="w-5 h-5 text-rose-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-neutral-900 dark:text-white">{stats.rejectedToday}</p>
-              <p className="text-xs text-neutral-500">Rejected Today</p>
+              <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{stats.rejectedToday}</p>
+              <p className="text-xs text-[#5A6B7A]">Rejected Today</p>
             </div>
           </div>
         </Card>
@@ -453,8 +453,8 @@ export function ModerationDashboard() {
               <AlertTriangle className="w-5 h-5 text-purple-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-neutral-900 dark:text-white">{stats.escalatedToday}</p>
-              <p className="text-xs text-neutral-500">Escalated</p>
+              <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{stats.escalatedToday}</p>
+              <p className="text-xs text-[#5A6B7A]">Escalated</p>
             </div>
           </div>
         </Card>
@@ -464,8 +464,8 @@ export function ModerationDashboard() {
               <Clock className="w-5 h-5 text-blue-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-neutral-900 dark:text-white">{stats.avgResponseTime}m</p>
-              <p className="text-xs text-neutral-500">Avg Response</p>
+              <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{stats.avgResponseTime}m</p>
+              <p className="text-xs text-[#5A6B7A]">Avg Response</p>
             </div>
           </div>
         </Card>
@@ -479,7 +479,7 @@ export function ModerationDashboard() {
             variant={filter === f ? 'default' : 'outline'}
             size="sm"
             onClick={() => setFilter(f)}
-            className={filter === f ? 'bg-teal-600 hover:bg-teal-700' : ''}
+            className={filter === f ? 'bg-primary hover:bg-[#6B9080]' : ''}
           >
             {f === 'pending' && <Clock className="w-4 h-4 mr-1" />}
             {f === 'escalated' && <AlertTriangle className="w-4 h-4 mr-1" />}
@@ -495,7 +495,7 @@ export function ModerationDashboard() {
       <div className="space-y-3">
         {isLoading ? (
           <Card className="p-12 flex items-center justify-center">
-            <Loader2 className="w-8 h-8 animate-spin text-teal-600" />
+            <Loader2 className="w-8 h-8 animate-spin text-[#6B9080]" />
           </Card>
         ) : filteredQueue.length === 0 ? (
           <Card className="p-12 text-center">
@@ -537,19 +537,19 @@ export function ModerationDashboard() {
                           {item.reportCount} reports
                         </Badge>
                       )}
-                      <span className="text-xs text-neutral-500">
+                      <span className="text-xs text-[#5A6B7A]">
                         {item.contentType} • {formatTimeAgo(item.flaggedAt)}
                       </span>
                     </div>
 
-                    <p className="text-neutral-900 dark:text-white mb-3 line-clamp-3">
+                    <p className="text-[#1B2733] dark:text-white mb-3 line-clamp-3">
                       "{item.content}"
                     </p>
 
                     <div className="flex items-center gap-4 text-sm">
                       <button
                         onClick={() => loadUserHistory(item.authorId)}
-                        className="flex items-center gap-1 text-neutral-500 hover:text-neutral-700"
+                        className="flex items-center gap-1 text-[#5A6B7A] hover:text-neutral-700"
                       >
                         <User className="w-4 h-4" />
                         {item.authorName}
@@ -652,8 +652,8 @@ export function ModerationDashboard() {
                     {userHistory.userName.split(' ').map(n => n[0]).join('')}
                   </div>
                   <div>
-                    <h3 className="font-semibold text-neutral-900 dark:text-white">{userHistory.userName}</h3>
-                    <p className="text-sm text-neutral-500">Moderation History</p>
+                    <h3 className="font-semibold text-[#1B2733] dark:text-white">{userHistory.userName}</h3>
+                    <p className="text-sm text-[#5A6B7A]">Moderation History</p>
                   </div>
                 </div>
                 <Button variant="ghost" size="sm" onClick={() => setShowUserHistory(null)}>
@@ -663,16 +663,16 @@ export function ModerationDashboard() {
 
               <div className="grid grid-cols-3 gap-3 mb-4">
                 <div className="text-center p-3 bg-neutral-50 dark:bg-slate-800 rounded-lg">
-                  <p className="text-2xl font-bold text-neutral-900 dark:text-white">{userHistory.totalFlags}</p>
-                  <p className="text-xs text-neutral-500">Total Flags</p>
+                  <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{userHistory.totalFlags}</p>
+                  <p className="text-xs text-[#5A6B7A]">Total Flags</p>
                 </div>
                 <div className="text-center p-3 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg">
                   <p className="text-2xl font-bold text-emerald-600">{userHistory.approvedFlags}</p>
-                  <p className="text-xs text-neutral-500">Approved</p>
+                  <p className="text-xs text-[#5A6B7A]">Approved</p>
                 </div>
                 <div className="text-center p-3 bg-rose-50 dark:bg-rose-900/20 rounded-lg">
                   <p className="text-2xl font-bold text-rose-600">{userHistory.rejectedFlags}</p>
-                  <p className="text-xs text-neutral-500">Rejected</p>
+                  <p className="text-xs text-[#5A6B7A]">Rejected</p>
                 </div>
               </div>
 

@@ -396,7 +396,7 @@ export const MobileBottomSheet: React.FC<MobileBottomSheetProps> = ({
             {/* Title */}
             {title && (
               <div className="px-4 pt-2 pb-1">
-                <h2 className="text-lg font-semibold text-gray-900 text-center">
+                <h2 className="text-lg font-semibold text-[#1B2733] text-center">
                   {title}
                 </h2>
               </div>

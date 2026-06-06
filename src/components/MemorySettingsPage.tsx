@@ -230,10 +230,10 @@ export const MemorySettingsPage: React.FC<MemorySettingsPageProps> = ({ userId, 
 
   const getScopeColor = (scope: string) => {
     switch (scope) {
-      case 'child': return 'bg-blue-100 text-blue-700 border-blue-200';
+      case 'child': return 'bg-blue-100 text-blue-700 border-[#C8DDE8]';
       case 'parent': return 'bg-purple-100 text-purple-700 border-purple-200';
       case 'family': return 'bg-green-100 text-green-700 border-green-200';
-      default: return 'bg-gray-100 text-gray-700 border-gray-200';
+      default: return 'bg-[#F0EDE8] text-[#3A4A57] border-[#E8E4DF]';
     }
   };
 
@@ -265,7 +265,7 @@ export const MemorySettingsPage: React.FC<MemorySettingsPageProps> = ({ userId, 
     return (
       <div 
         key={memory.id}
-        className="border border-slate-200 rounded-lg bg-white hover:shadow-md transition-shadow"
+        className="border border-[#E8E4DF] rounded-lg bg-white hover:shadow-md transition-shadow"
       >
         {/* Memory Header */}
         <div 
@@ -342,7 +342,7 @@ export const MemorySettingsPage: React.FC<MemorySettingsPageProps> = ({ userId, 
 
         {/* Expanded Details */}
         {isExpanded && (
-          <div className="border-t border-slate-200 p-4 bg-slate-50 space-y-3">
+          <div className="border-t border-[#E8E4DF] p-4 bg-[#FAF7F2] space-y-3">
             {/* Why Saved */}
             <div>
               <p className="text-xs font-medium text-muted-foreground mb-1 flex items-center gap-1">
@@ -385,7 +385,7 @@ export const MemorySettingsPage: React.FC<MemorySettingsPageProps> = ({ userId, 
             ) : (
               <div>
                 <p className="text-xs font-medium text-muted-foreground mb-1">Full value</p>
-                <div className="bg-white border border-slate-200 rounded p-2">
+                <div className="bg-white border border-[#E8E4DF] rounded p-2">
                   <pre className="text-xs whitespace-pre-wrap">
                     {typeof memory.value === 'string' 
                       ? memory.value 
@@ -422,9 +422,9 @@ export const MemorySettingsPage: React.FC<MemorySettingsPageProps> = ({ userId, 
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header */}
-      <div className="bg-white border-b border-slate-200 sticky top-0 z-10">
+      <div className="bg-white border-b border-[#E8E4DF] sticky top-0 z-10">
         <div className="max-w-6xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
@@ -529,7 +529,7 @@ export const MemorySettingsPage: React.FC<MemorySettingsPageProps> = ({ userId, 
             {groupedMemories.child.length > 0 && (scopeFilter === 'all' || scopeFilter === 'child') && (
               <div>
                 <h3 className="font-semibold mb-3 flex items-center gap-2">
-                  <Badge variant="outline" className="bg-blue-100 text-blue-700 border-blue-200">
+                  <Badge variant="outline" className="bg-blue-100 text-blue-700 border-[#C8DDE8]">
                     Child
                   </Badge>
                   <span className="text-sm text-muted-foreground">
@@ -579,7 +579,7 @@ export const MemorySettingsPage: React.FC<MemorySettingsPageProps> = ({ userId, 
         )}
 
         {/* Privacy Notice */}
-        <div className="mt-8 bg-white border border-slate-200 rounded-lg p-6">
+        <div className="mt-8 bg-white border border-[#E8E4DF] rounded-lg p-6">
           <div className="flex items-start gap-3">
             <Shield className="w-5 h-5 text-purple-600 mt-0.5 flex-shrink-0" />
             <div className="flex-1">

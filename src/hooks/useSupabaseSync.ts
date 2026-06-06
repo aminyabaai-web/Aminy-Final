@@ -249,7 +249,8 @@ export function useSupabaseSync<T>(
 
           const { error: upsertError } = await supabase
             .from(table)
-            .upsert(payload, { onConflict: userIdColumn });
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            .upsert(payload as any, { onConflict: userIdColumn });
 
           if (upsertError) throw upsertError;
         } else {

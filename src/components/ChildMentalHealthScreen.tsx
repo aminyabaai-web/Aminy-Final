@@ -638,8 +638,8 @@ export function ChildMentalHealthScreen({
                 result.overallRisk === 'critical' || result.overallRisk === 'high'
                   ? "bg-rose-50 border border-rose-200"
                   : result.overallRisk === 'moderate'
-                    ? "bg-yellow-50 border border-yellow-200"
-                    : "bg-blue-50 border border-blue-200"
+                    ? "bg-[#FDF9F0] border border-[#F0EDE8]"
+                    : "bg-[#EEF4F8] border border-[#C8DDE8]"
               )}>
                 <h4 className="font-semibold text-primary mb-2 flex items-center gap-2">
                   <Info className="w-4 h-4" />
@@ -692,14 +692,14 @@ export function ChildMentalHealthScreen({
           {onBack && currentQuestion === 0 ? (
             <button
               onClick={onBack}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              className="p-2 hover:bg-[#F0EDE8] rounded-lg transition-colors"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
           ) : currentQuestion > 0 ? (
             <button
               onClick={() => setCurrentQuestion(prev => prev - 1)}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              className="p-2 hover:bg-[#F0EDE8] rounded-lg transition-colors"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
@@ -720,7 +720,7 @@ export function ChildMentalHealthScreen({
         </div>
 
         {/* Progress */}
-        <div className="h-2 bg-gray-100 rounded-full overflow-hidden mb-8">
+        <div className="h-2 bg-[#F0EDE8] rounded-full overflow-hidden mb-8">
           <motion.div
             className="h-full bg-accent"
             initial={{ width: 0 }}
@@ -781,7 +781,7 @@ export function ChildMentalHealthScreen({
                       "hover:border-accent hover:bg-accent/5",
                       responses[currentQ.id] === option.value
                         ? "border-accent bg-accent/5"
-                        : "border-gray-200"
+                        : "border-[#E8E4DF]"
                     )}
                   >
                     <div className="flex items-center justify-between">

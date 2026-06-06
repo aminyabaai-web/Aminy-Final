@@ -95,7 +95,7 @@ export function SupportPageSimple({ onNavigate, userTier = 'core' }: SupportPage
     <div className="space-y-8">
       {/* Hero Search */}
       <div className="text-center space-y-3 sm:space-y-4">
-        <h1 className="text-2xl font-semibold text-slate-900">How can we help you?</h1>
+        <h1 className="text-2xl font-semibold text-[#1B2733]">How can we help you?</h1>
         <div className="relative max-w-lg mx-auto">
           <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
           <Input
@@ -117,12 +117,12 @@ export function SupportPageSimple({ onNavigate, userTier = 'core' }: SupportPage
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
-                  <h3 className="font-semibold text-slate-900">{tile.title}</h3>
+                  <h3 className="font-semibold text-[#1B2733]">{tile.title}</h3>
                   {tile.popular && (
                     <Badge className="bg-orange-100 text-orange-700 text-xs">Popular</Badge>
                   )}
                 </div>
-                <p className="text-sm text-slate-600">{tile.description}</p>
+                <p className="text-sm text-[#5A6B7A]">{tile.description}</p>
               </div>
               <ChevronRight className="w-4 h-4 text-slate-400" />
             </div>
@@ -131,7 +131,7 @@ export function SupportPageSimple({ onNavigate, userTier = 'core' }: SupportPage
       </div>
 
       {/* Support SLA Notice */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+      <div className="bg-[#EEF4F8] border border-[#C8DDE8] rounded-lg p-4">
         <div className="flex items-start gap-3">
           <Clock className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
           <div className="text-sm text-blue-900">
@@ -145,13 +145,13 @@ export function SupportPageSimple({ onNavigate, userTier = 'core' }: SupportPage
 
   const renderContact = () => (
     <div className="space-y-3 sm:space-y-4 sm:space-y-6">
-      <h1 className="text-2xl font-semibold text-slate-900">Contact Us</h1>
+      <h1 className="text-2xl font-semibold text-[#1B2733]">Contact Us</h1>
       
       <Card className="p-4 sm:p-5 md:p-6">
         <div className="space-y-3 sm:space-y-4 sm:space-y-6">
           {/* Triage Form */}
           <div>
-            <label className="text-sm font-medium text-slate-700 block mb-3">What do you need help with?</label>
+            <label className="text-sm font-medium text-[#3A4A57] block mb-3">What do you need help with?</label>
             <div className="grid gap-2 md:grid-cols-2">
               {contactTopics.map((topic) => (
                 <button
@@ -160,7 +160,7 @@ export function SupportPageSimple({ onNavigate, userTier = 'core' }: SupportPage
                   className={`p-3 rounded-lg border text-left transition-colors ${
                     selectedTopic === topic.id
                       ? 'border-accent bg-accent/5 text-accent'
-                      : 'border-gray-200 hover:border-gray-300 text-slate-700'
+                      : 'border-[#E8E4DF] hover:border-[#E8E4DF] text-[#3A4A57]'
                   }`}
                 >
                   <div className="font-medium">{topic.label}</div>
@@ -171,7 +171,7 @@ export function SupportPageSimple({ onNavigate, userTier = 'core' }: SupportPage
 
           {/* Message Field */}
           <div>
-            <label className="text-sm font-medium text-slate-700 block mb-2">Describe your issue</label>
+            <label className="text-sm font-medium text-[#3A4A57] block mb-2">Describe your issue</label>
             <Textarea
               placeholder="Please provide as much detail as possible about what you're experiencing..."
               value={contactMessage}
@@ -182,7 +182,7 @@ export function SupportPageSimple({ onNavigate, userTier = 'core' }: SupportPage
 
           {/* Submit */}
           <div className="flex items-center justify-between pt-4 border-t">
-            <div className="text-xs text-slate-500">
+            <div className="text-xs text-[#5A6B7A]">
               Expected response: {userTier === 'pro' ? '4-8 hours' : '24-48 hours'}
             </div>
             <Button
@@ -201,7 +201,7 @@ export function SupportPageSimple({ onNavigate, userTier = 'core' }: SupportPage
 
   const renderSafety = () => (
     <div className="space-y-3 sm:space-y-4 sm:space-y-6">
-      <h1 className="text-2xl font-semibold text-slate-900">Safety & Urgent Guidance</h1>
+      <h1 className="text-2xl font-semibold text-[#1B2733]">Safety & Urgent Guidance</h1>
       
       {/* Emergency Notice */}
       <div className="bg-red-50 border-2 border-red-200 rounded-lg p-6">
@@ -231,9 +231,9 @@ export function SupportPageSimple({ onNavigate, userTier = 'core' }: SupportPage
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
+      <div className="bg-white border-b border-[#E8E4DF] sticky top-0 z-10">
         <div className="px-4 py-4 sm:px-6">
           <div className="max-w-6xl mx-auto">
             <div className="flex items-center justify-between">
@@ -242,7 +242,7 @@ export function SupportPageSimple({ onNavigate, userTier = 'core' }: SupportPage
                   variant="ghost"
                   size="sm"
                   onClick={() => onNavigate?.('more')}
-                  className="text-slate-600 hover:text-slate-900"
+                  className="text-[#5A6B7A] hover:text-[#1B2733]"
                 >
                   <ArrowLeft className="w-4 h-4" />
                 </Button>
@@ -251,8 +251,8 @@ export function SupportPageSimple({ onNavigate, userTier = 'core' }: SupportPage
                     <HelpCircle className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <h1 className="text-lg sm:text-xl font-semibold text-slate-900">Support</h1>
-                    <p className="text-sm text-slate-600">Frictionless help, fast resolution</p>
+                    <h1 className="text-lg sm:text-xl font-semibold text-[#1B2733]">Support</h1>
+                    <p className="text-sm text-[#5A6B7A]">Frictionless help, fast resolution</p>
                   </div>
                 </div>
               </div>
@@ -286,8 +286,8 @@ export function SupportPageSimple({ onNavigate, userTier = 'core' }: SupportPage
                 <Button variant="ghost" size="sm">
                   <Bell className="w-4 h-4" />
                 </Button>
-                <div className="w-8 h-8 bg-slate-100 rounded-full flex items-center justify-center">
-                  <User className="w-4 h-4 text-slate-600" />
+                <div className="w-8 h-8 bg-[#F0EDE8] rounded-full flex items-center justify-center">
+                  <User className="w-4 h-4 text-[#5A6B7A]" />
                 </div>
               </div>
             </div>
@@ -296,7 +296,7 @@ export function SupportPageSimple({ onNavigate, userTier = 'core' }: SupportPage
       </div>
 
       {/* Mobile Navigation */}
-      <div className="md:hidden bg-white border-b border-gray-200">
+      <div className="md:hidden bg-white border-b border-[#E8E4DF]">
         <div className="px-4 py-2">
           <div className="flex space-x-1 overflow-x-auto">
             {[

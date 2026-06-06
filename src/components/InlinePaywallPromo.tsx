@@ -66,23 +66,23 @@ export function InlinePaywallPromo({
 
   if (compact) {
     return (
-      <Card className="p-4 bg-gradient-to-br from-teal-50 to-cyan-50 border-teal-300 shadow-sm">
+      <Card className="p-4 bg-gradient-to-br from-[#FAF7F2] to-cyan-50 border-[#6B9080]/30 shadow-sm">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-teal-100 rounded-full flex-shrink-0">
-            <Sparkles className="w-5 h-5 text-teal-600" />
+          <div className="p-2 bg-[#6B9080]/10 rounded-full flex-shrink-0">
+            <Sparkles className="w-5 h-5 text-[#6B9080]" />
           </div>
           <div className="flex-1">
-            <p className="text-sm font-medium text-teal-900 mb-1">
+            <p className="text-sm font-medium text-[#6B9080] mb-1">
               {reason || `Ready to unlock more for ${childName}?`}
             </p>
-            <p className="text-xs text-teal-700">
+            <p className="text-xs text-[#6B9080]">
               Plans start at just ${tierPricing.core.monthly}/mo • No credit card required
             </p>
           </div>
           <Button 
             onClick={onViewPlans}
             size="sm"
-            className="bg-teal-600 hover:bg-teal-700 text-white flex-shrink-0"
+            className="bg-primary hover:bg-[#6B9080] text-white flex-shrink-0"
           >
             View Plans
           </Button>
@@ -92,7 +92,7 @@ export function InlinePaywallPromo({
   }
 
   return (
-    <Card className="p-6 bg-gradient-to-br from-white via-teal-50/30 to-white border-teal-200 shadow-md">
+    <Card className="p-6 bg-gradient-to-br from-white via-transparent/30 to-white border-[#6B9080]/20 shadow-md">
       <div className="text-center mb-5">
         <div className="inline-flex items-center gap-2 mb-3">
           <div className={`p-2 bg-${highlighted.color === 'teal' ? 'teal' : 'gray'}-100 rounded-full`}>
@@ -121,13 +121,13 @@ export function InlinePaywallPromo({
               key={key}
               className={`p-3 rounded-xl border-2 transition-all ${
                 isHighlighted 
-                  ? 'border-teal-400 bg-teal-50 shadow-md' 
-                  : 'border-gray-200 bg-white'
+                  ? 'border-[#6B9080] bg-[#6B9080]/10 shadow-md' 
+                  : 'border-[#E8E4DF] bg-white'
               }`}
             >
               <div className="flex flex-col items-center text-center">
-                <div className={`p-2 ${isHighlighted ? 'bg-teal-100' : 'bg-gray-100'} rounded-full mb-2`}>
-                  <TierIcon className={`w-4 h-4 ${isHighlighted ? 'text-teal-600' : 'text-gray-600'}`} />
+                <div className={`p-2 ${isHighlighted ? 'bg-[#6B9080]/10' : 'bg-[#F0EDE8]'} rounded-full mb-2`}>
+                  <TierIcon className={`w-4 h-4 ${isHighlighted ? 'text-[#6B9080]' : 'text-[#5A6B7A]'}`} />
                 </div>
                 <div className="font-semibold text-xs text-primary mb-0.5">{tier.name}</div>
                 <div className="font-bold text-sm text-primary">${tier.price}<span className="text-xs text-muted-foreground">/mo</span></div>
@@ -138,7 +138,7 @@ export function InlinePaywallPromo({
       </div>
 
       {/* Highlighted Tier Benefits */}
-      <div className="bg-white/70 rounded-xl p-4 mb-5 border border-teal-200">
+      <div className="bg-white/70 rounded-xl p-4 mb-5 border border-[#6B9080]/20">
         <div className="font-semibold text-sm text-primary mb-3 text-center">
           With {highlighted.name}, you get:
         </div>
@@ -165,7 +165,7 @@ export function InlinePaywallPromo({
       {/* CTA */}
       <Button 
         onClick={onViewPlans}
-        className="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold shadow-md"
+        className="w-full bg-primary hover:bg-[#6B9080] text-white font-semibold shadow-md"
         size="lg"
       >
         View All Plans & Start Free Trial

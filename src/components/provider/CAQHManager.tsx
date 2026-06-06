@@ -58,7 +58,7 @@ function RingChart({ percent, size = 56, label }: { percent: number; size?: numb
           {percent}%
         </text>
       </svg>
-      <p className="text-xs text-gray-500 text-center leading-tight max-w-[64px]">{label}</p>
+      <p className="text-xs text-[#5A6B7A] text-center leading-tight max-w-[64px]">{label}</p>
     </div>
   );
 }
@@ -77,29 +77,29 @@ export default function CAQHManager({ providerId = 'prov-001', onBack }: CAQHMan
 
   if (!provider) {
     return (
-      <div className="min-h-screen bg-gray-50">
-        <div className="bg-white border-b border-gray-100 px-4 pt-12 pb-4">
+      <div className="min-h-screen bg-[#FAF7F2]">
+        <div className="bg-white border-b border-[#E8E4DF] px-4 pt-12 pb-4">
           <div className="flex items-center gap-3">
             {onBack && (
-              <button onClick={onBack} className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors">
-                <ArrowLeft size={20} className="text-gray-700" />
+              <button onClick={onBack} className="p-1.5 rounded-lg hover:bg-[#F0EDE8] transition-colors">
+                <ArrowLeft size={20} className="text-[#3A4A57]" />
               </button>
             )}
             <div>
-              <h1 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+              <h1 className="text-lg font-bold text-[#1B2733] flex items-center gap-2">
                 <Shield size={18} className="text-blue-600" />
                 CAQH ProView Manager
               </h1>
-              <p className="text-xs text-gray-500">Universal credentialing profile</p>
+              <p className="text-xs text-[#5A6B7A]">Universal credentialing profile</p>
             </div>
           </div>
         </div>
         <div className="flex flex-col items-center justify-center text-center px-6 py-16">
-          <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+          <div className="w-16 h-16 rounded-full bg-[#F0EDE8] flex items-center justify-center mb-4">
             <Shield size={28} className="text-slate-400" />
           </div>
-          <h2 className="text-base font-semibold text-slate-700">No CAQH profile connected yet</h2>
-          <p className="text-sm text-slate-500 mt-1 max-w-xs">
+          <h2 className="text-base font-semibold text-[#3A4A57]">No CAQH profile connected yet</h2>
+          <p className="text-sm text-[#5A6B7A] mt-1 max-w-xs">
             Once your CAQH ProView profile is linked, your documents, attestation status, and
             re-credentialing reminders will appear here.
           </p>
@@ -122,21 +122,21 @@ export default function CAQHManager({ providerId = 'prov-001', onBack }: CAQHMan
   const isDueSoon = caqhProfile.daysUntilReAttestation >= 0 && caqhProfile.daysUntilReAttestation < 30;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header */}
-      <div className="bg-white border-b border-gray-100 px-4 pt-12 pb-4">
+      <div className="bg-white border-b border-[#E8E4DF] px-4 pt-12 pb-4">
         <div className="flex items-center gap-3">
           {onBack && (
-            <button onClick={onBack} className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors">
-              <ArrowLeft size={20} className="text-gray-700" />
+            <button onClick={onBack} className="p-1.5 rounded-lg hover:bg-[#F0EDE8] transition-colors">
+              <ArrowLeft size={20} className="text-[#3A4A57]" />
             </button>
           )}
           <div>
-            <h1 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+            <h1 className="text-lg font-bold text-[#1B2733] flex items-center gap-2">
               <Shield size={18} className="text-blue-600" />
               CAQH ProView Manager
             </h1>
-            <p className="text-xs text-gray-500">ID: {caqhProfile.caqhId} · Last attested {caqhProfile.lastAttestedDate}</p>
+            <p className="text-xs text-[#5A6B7A]">ID: {caqhProfile.caqhId} · Last attested {caqhProfile.lastAttestedDate}</p>
           </div>
         </div>
       </div>
@@ -173,7 +173,7 @@ export default function CAQHManager({ providerId = 'prov-001', onBack }: CAQHMan
               >
                 Re-attest now <ExternalLink size={11} />
               </a>
-              <button className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg border border-gray-200 bg-white text-gray-700">
+              <button className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg border border-[#E8E4DF] bg-white text-[#3A4A57]">
                 <Bell size={11} />
                 Set reminder
               </button>
@@ -182,28 +182,28 @@ export default function CAQHManager({ providerId = 'prov-001', onBack }: CAQHMan
         )}
 
         {/* Overall Completion */}
-        <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+        <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#E8E4DF]">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <p className="text-2xl font-bold text-gray-900">{caqhProfile.completionPercent}%</p>
-              <p className="text-xs text-gray-500">Overall Completion</p>
+              <p className="text-2xl font-bold text-[#1B2733]">{caqhProfile.completionPercent}%</p>
+              <p className="text-xs text-[#5A6B7A]">Overall Completion</p>
             </div>
-            <div className="h-16 w-px bg-gray-100 mx-2" />
+            <div className="h-16 w-px bg-[#F0EDE8] mx-2" />
             <div className="text-center">
-              <p className="text-lg font-bold text-gray-900">{caqhProfile.nextAttestationDue}</p>
-              <p className="text-xs text-gray-500">Next Due Date</p>
+              <p className="text-lg font-bold text-[#1B2733]">{caqhProfile.nextAttestationDue}</p>
+              <p className="text-xs text-[#5A6B7A]">Next Due Date</p>
             </div>
-            <div className="h-16 w-px bg-gray-100 mx-2" />
+            <div className="h-16 w-px bg-[#F0EDE8] mx-2" />
             <div className="text-center">
               <p className={`text-lg font-bold ${isOverdue ? 'text-red-600' : isDueSoon ? 'text-amber-600' : 'text-green-600'}`}>
                 {Math.abs(caqhProfile.daysUntilReAttestation)}d
               </p>
-              <p className="text-xs text-gray-500">{isOverdue ? 'Overdue' : 'Remaining'}</p>
+              <p className="text-xs text-[#5A6B7A]">{isOverdue ? 'Overdue' : 'Remaining'}</p>
             </div>
           </div>
 
           {/* Overall progress bar */}
-          <div className="h-2 bg-gray-100 rounded-full overflow-hidden mb-4">
+          <div className="h-2 bg-[#F0EDE8] rounded-full overflow-hidden mb-4">
             <div
               className={`h-full rounded-full ${
                 caqhProfile.completionPercent >= 90 ? 'bg-green-500' :
@@ -265,7 +265,7 @@ export default function CAQHManager({ providerId = 'prov-001', onBack }: CAQHMan
         </button>
 
         {/* Tip */}
-        <div className="flex items-start gap-2 bg-blue-50 rounded-xl p-3 border border-blue-100">
+        <div className="flex items-start gap-2 bg-[#EEF4F8] rounded-xl p-3 border border-blue-100">
           <Info size={14} className="text-blue-600 shrink-0 mt-0.5" />
           <p className="text-xs text-blue-700">
             <strong>Tip:</strong> Syncing imports your CAQH data to pre-fill your Aminy provider profile, saving 20+ hours of manual data entry per payer application.
@@ -280,7 +280,7 @@ export default function CAQHManager({ providerId = 'prov-001', onBack }: CAQHMan
             const missingRequired = categoryFields.filter(f => !f.completed && f.required);
 
             return (
-              <div key={cat.name} className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+              <div key={cat.name} className="bg-white rounded-2xl border border-[#E8E4DF] shadow-sm overflow-hidden">
                 <button
                   className="w-full flex items-center justify-between px-4 py-3"
                   onClick={() => setExpandedCategory(isExpanded ? null : cat.name)}
@@ -293,8 +293,8 @@ export default function CAQHManager({ providerId = 'prov-001', onBack }: CAQHMan
                       {cat.percent}%
                     </div>
                     <div className="text-left">
-                      <p className="text-sm font-medium text-gray-800">{cat.name}</p>
-                      <p className="text-xs text-gray-400">{cat.completedFields}/{cat.totalFields} fields</p>
+                      <p className="text-sm font-medium text-[#1B2733]">{cat.name}</p>
+                      <p className="text-xs text-[#8A9BA8]">{cat.completedFields}/{cat.totalFields} fields</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
@@ -305,7 +305,7 @@ export default function CAQHManager({ providerId = 'prov-001', onBack }: CAQHMan
                     )}
                     <ChevronDown
                       size={16}
-                      className={`text-gray-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
+                      className={`text-[#8A9BA8] transition-transform ${isExpanded ? 'rotate-180' : ''}`}
                     />
                   </div>
                 </button>
@@ -325,10 +325,10 @@ export default function CAQHManager({ providerId = 'prov-001', onBack }: CAQHMan
                               <CheckCircle size={14} className="text-green-500 shrink-0" />
                             ) : (
                               <div className={`w-3.5 h-3.5 rounded-full border-2 shrink-0 ${
-                                field.required ? 'border-red-400 bg-red-50' : 'border-gray-300'
+                                field.required ? 'border-red-400 bg-red-50' : 'border-[#E8E4DF]'
                               }`} />
                             )}
-                            <span className={`text-sm flex-1 ${field.completed ? 'text-gray-500' : 'text-gray-800'}`}>
+                            <span className={`text-sm flex-1 ${field.completed ? 'text-[#5A6B7A]' : 'text-[#1B2733]'}`}>
                               {field.name}
                             </span>
                             {!field.completed && (
@@ -336,8 +336,8 @@ export default function CAQHManager({ providerId = 'prov-001', onBack }: CAQHMan
                                 {field.required && (
                                   <span className="text-xs text-red-500 font-medium">Required</span>
                                 )}
-                                <button className="p-1 min-h-[44px] min-w-[44px] flex items-center justify-center rounded hover:bg-gray-100">
-                                  <Upload size={12} className="text-gray-400" />
+                                <button className="p-1 min-h-[44px] min-w-[44px] flex items-center justify-center rounded hover:bg-[#F0EDE8]">
+                                  <Upload size={12} className="text-[#8A9BA8]" />
                                 </button>
                               </div>
                             )}

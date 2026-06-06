@@ -257,7 +257,7 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
       case 'down':
         return 'text-red-600';
       default:
-        return 'text-slate-600';
+        return 'text-[#5A6B7A]';
     }
   };
 
@@ -268,20 +268,20 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
         <div className="max-w-6xl mx-auto px-4 py-6">
           <button
             onClick={onBack}
-            className="flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-colors mb-4"
+            className="flex items-center gap-2 text-[#5A6B7A] hover:text-[#1B2733] transition-colors mb-4"
           >
             <ArrowLeft className="w-4 h-4" />
             Back
           </button>
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-slate-900 mb-2">Analytics Dashboard</h1>
-              <p className="text-slate-600">Track engagement, usage, and outcomes</p>
+              <h1 className="text-[#1B2733] mb-2">Analytics Dashboard</h1>
+              <p className="text-[#5A6B7A]">Track engagement, usage, and outcomes</p>
               <div className="mt-3 flex flex-wrap items-center gap-2">
                 <LaunchStateBadge state={launchConfig.state} label={launchConfig.badgeLabel} />
                 <DataProvenanceBadge provenance={analyticsProvenance} />
               </div>
-              <p className="mt-2 text-xs text-slate-500">Internal dashboard only. Do not use these metrics in customer-facing claims until they are live-data backed.</p>
+              <p className="mt-2 text-xs text-[#5A6B7A]">Internal dashboard only. Do not use these metrics in customer-facing claims until they are live-data backed.</p>
             </div>
             <div className="flex items-center gap-2">
               <Button variant="outline" size="sm" onClick={handleExport}>
@@ -296,7 +296,7 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
       <div className="max-w-6xl mx-auto px-4 py-6">
         {/* Time Range Selector */}
         <div className="flex items-center gap-2 mb-4 sm:mb-6">
-          <span className="text-sm text-slate-600 mr-2">Time Range:</span>
+          <span className="text-sm text-[#5A6B7A] mr-2">Time Range:</span>
           <Button
             variant={timeRange === '7d' ? 'default' : 'outline'}
             size="sm"
@@ -340,8 +340,8 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
                     </span>
                   </div>
                 </div>
-                <div className="text-2xl text-slate-900 mb-1">{metric.value}</div>
-                <div className="text-sm text-slate-600">{metric.label}</div>
+                <div className="text-2xl text-[#1B2733] mb-1">{metric.value}</div>
+                <div className="text-sm text-[#5A6B7A]">{metric.label}</div>
               </Card>
             );
           })}
@@ -370,31 +370,31 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
 
           <TabsContent value="overview" className="space-y-3 sm:space-y-4">
             <Card className="p-4 sm:p-5 md:p-6">
-              <h3 className="text-slate-900 mb-4 flex items-center gap-2">
+              <h3 className="text-[#1B2733] mb-4 flex items-center gap-2">
                 <BarChart3 className="w-5 h-5 text-accent" />
                 Usage Overview
               </h3>
               {showSamples ? (
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-slate-600">Peak usage time</span>
-                    <span className="text-sm text-slate-900">7-9 AM, 8-10 PM</span>
+                    <span className="text-sm text-[#5A6B7A]">Peak usage time</span>
+                    <span className="text-sm text-[#1B2733]">7-9 AM, 8-10 PM</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-slate-600">Most active day</span>
-                    <span className="text-sm text-slate-900">Monday</span>
+                    <span className="text-sm text-[#5A6B7A]">Most active day</span>
+                    <span className="text-sm text-[#1B2733]">Monday</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-slate-600">Avg sessions per user</span>
-                    <span className="text-sm text-slate-900">2.9</span>
+                    <span className="text-sm text-[#5A6B7A]">Avg sessions per user</span>
+                    <span className="text-sm text-[#1B2733]">2.9</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-slate-600">Retention rate (7d)</span>
-                    <span className="text-sm text-slate-900">68%</span>
+                    <span className="text-sm text-[#5A6B7A]">Retention rate (7d)</span>
+                    <span className="text-sm text-[#1B2733]">68%</span>
                   </div>
                 </div>
               ) : (
-                <p className="text-sm text-slate-500 py-4">
+                <p className="text-sm text-[#5A6B7A] py-4">
                   Usage breakdowns appear here once enough live activity has been recorded.
                 </p>
               )}
@@ -403,7 +403,7 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
 
           <TabsContent value="engagement" className="space-y-3 sm:space-y-4">
             <Card className="p-4 sm:p-5 md:p-6">
-              <h3 className="text-slate-900 mb-4">Feature Usage</h3>
+              <h3 className="text-[#1B2733] mb-4">Feature Usage</h3>
               {showSamples ? (
                 <div className="space-y-3 sm:space-y-4">
                   {[
@@ -415,17 +415,17 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
                   ].map((row) => (
                     <div key={row.label}>
                       <div className="flex justify-between text-sm mb-2">
-                        <span className="text-slate-600">{row.label}</span>
-                        <span className="text-slate-900">{row.pct}%</span>
+                        <span className="text-[#5A6B7A]">{row.label}</span>
+                        <span className="text-[#1B2733]">{row.pct}%</span>
                       </div>
-                      <div className="w-full bg-slate-200 rounded-full h-2">
+                      <div className="w-full bg-[#E8E4DF] rounded-full h-2">
                         <div className="bg-accent h-2 rounded-full" style={{ width: `${row.pct}%` }} />
                       </div>
                     </div>
                   ))}
                 </div>
               ) : (
-                <p className="text-sm text-slate-500 py-4">
+                <p className="text-sm text-[#5A6B7A] py-4">
                   Feature-usage breakdowns appear here once enough live activity has been recorded.
                 </p>
               )}
@@ -434,31 +434,31 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
 
           <TabsContent value="ai" className="space-y-3 sm:space-y-4">
             <Card className="p-4 sm:p-5 md:p-6">
-              <h3 className="text-slate-900 mb-4 flex items-center gap-2">
+              <h3 className="text-[#1B2733] mb-4 flex items-center gap-2">
                 <Sparkles className="w-5 h-5 text-accent" />
                 AI Interaction Insights
               </h3>
               {showSamples ? (
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-slate-600">Total AI messages</span>
-                    <span className="text-sm text-slate-900">3,891</span>
+                    <span className="text-sm text-[#5A6B7A]">Total AI messages</span>
+                    <span className="text-sm text-[#1B2733]">3,891</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-slate-600">Avg conversation length</span>
-                    <span className="text-sm text-slate-900">5.2 messages</span>
+                    <span className="text-sm text-[#5A6B7A]">Avg conversation length</span>
+                    <span className="text-sm text-[#1B2733]">5.2 messages</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-slate-600">Positive feedback rate</span>
-                    <span className="text-sm text-slate-900">94%</span>
+                    <span className="text-sm text-[#5A6B7A]">Positive feedback rate</span>
+                    <span className="text-sm text-[#1B2733]">94%</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-slate-600">Response time (avg)</span>
-                    <span className="text-sm text-slate-900">1.8s</span>
+                    <span className="text-sm text-[#5A6B7A]">Response time (avg)</span>
+                    <span className="text-sm text-[#1B2733]">1.8s</span>
                   </div>
                 </div>
               ) : (
-                <p className="text-sm text-slate-500 py-4">
+                <p className="text-sm text-[#5A6B7A] py-4">
                   AI interaction insights appear here once enough live activity has been recorded.
                 </p>
               )}
@@ -466,7 +466,7 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
 
             {showSamples && (
               <Card className="p-4 sm:p-5 md:p-6">
-                <h4 className="text-slate-900 mb-3">Top AI Queries</h4>
+                <h4 className="text-[#1B2733] mb-3">Top AI Queries</h4>
                 <div className="space-y-2">
                   {[
                     { query: 'Morning routine help', count: 248 },
@@ -476,7 +476,7 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
                     { query: 'Social skills support', count: 132 },
                   ].map(({ query, count }) => (
                     <div key={query} className="flex items-center justify-between text-sm">
-                      <span className="text-slate-700">{query}</span>
+                      <span className="text-[#3A4A57]">{query}</span>
                       <Badge variant="outline">{count}</Badge>
                     </div>
                   ))}
@@ -487,31 +487,31 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
 
           <TabsContent value="outcomes" className="space-y-3 sm:space-y-4">
             <Card className="p-4 sm:p-5 md:p-6">
-              <h3 className="text-slate-900 mb-4 flex items-center gap-2">
+              <h3 className="text-[#1B2733] mb-4 flex items-center gap-2">
                 <Target className="w-5 h-5 text-accent" />
                 Goal & Progress Metrics
               </h3>
               {showSamples ? (
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-slate-600">Total goals set</span>
-                    <span className="text-sm text-slate-900">834</span>
+                    <span className="text-sm text-[#5A6B7A]">Total goals set</span>
+                    <span className="text-sm text-[#1B2733]">834</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-slate-600">Goals completed</span>
-                    <span className="text-sm text-slate-900">189 (23%)</span>
+                    <span className="text-sm text-[#5A6B7A]">Goals completed</span>
+                    <span className="text-sm text-[#1B2733]">189 (23%)</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-slate-600">Avg progress rate</span>
-                    <span className="text-sm text-slate-900">+12% weekly</span>
+                    <span className="text-sm text-[#5A6B7A]">Avg progress rate</span>
+                    <span className="text-sm text-[#1B2733]">+12% weekly</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-slate-600">Parent satisfaction</span>
-                    <span className="text-sm text-slate-900">4.8/5.0</span>
+                    <span className="text-sm text-[#5A6B7A]">Parent satisfaction</span>
+                    <span className="text-sm text-[#1B2733]">4.8/5.0</span>
                   </div>
                 </div>
               ) : (
-                <p className="text-sm text-slate-500 py-4">
+                <p className="text-sm text-[#5A6B7A] py-4">
                   Goal and progress metrics appear here once enough live activity has been recorded.
                 </p>
               )}
@@ -519,14 +519,14 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
 
             {showSamples && (
               <Card className="p-6 bg-green-50 border-green-200">
-                <h4 className="text-slate-900 mb-1">Sample Success Stories</h4>
-                <p className="text-xs text-slate-500 mb-3">Illustrative examples for demos — not live customer data.</p>
+                <h4 className="text-[#1B2733] mb-1">Sample Success Stories</h4>
+                <p className="text-xs text-[#5A6B7A] mb-3">Illustrative examples for demos — not live customer data.</p>
                 <div className="space-y-3 text-sm">
                   <div className="flex items-start gap-2">
                     <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
                       <span className="text-green-600">✓</span>
                     </div>
-                    <p className="text-slate-700">
+                    <p className="text-[#3A4A57]">
                       78% of families report improved morning routines within 2 weeks
                     </p>
                   </div>
@@ -534,7 +534,7 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
                     <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
                       <span className="text-green-600">✓</span>
                     </div>
-                    <p className="text-slate-700">
+                    <p className="text-[#3A4A57]">
                       85% of parents feel more confident in managing challenging behaviors
                     </p>
                   </div>
@@ -542,7 +542,7 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
                     <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
                       <span className="text-green-600">✓</span>
                     </div>
-                    <p className="text-slate-700">
+                    <p className="text-[#3A4A57]">
                       Average goal progress increased by 34% with consistent AI coaching
                     </p>
                   </div>
@@ -557,14 +557,14 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
               <Card className="p-4 sm:p-5 md:p-6">
                 <div className="flex items-center justify-between mb-4 sm:mb-6">
                   <div>
-                    <h3 className="text-slate-900 flex items-center gap-2">
+                    <h3 className="text-[#1B2733] flex items-center gap-2">
                       <Filter className="w-5 h-5 text-accent" />
                       Conversion Funnel
                     </h3>
-                    <p className="text-sm text-slate-500 mt-1">User journey from app open to subscription</p>
+                    <p className="text-sm text-[#5A6B7A] mt-1">User journey from app open to subscription</p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <label className="flex items-center gap-2 text-sm text-slate-600">
+                    <label className="flex items-center gap-2 text-sm text-[#5A6B7A]">
                       <input
                         type="checkbox"
                         checked={useMockData}
@@ -602,9 +602,9 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
                         return (
                           <div key={stage.id} className="mb-3">
                             <div className="flex items-center justify-between text-sm mb-1">
-                              <span className="text-slate-700 font-medium">{stage.name}</span>
+                              <span className="text-[#3A4A57] font-medium">{stage.name}</span>
                               <div className="flex items-center gap-3">
-                                <span className="text-slate-600">{stage.count.toLocaleString()} users</span>
+                                <span className="text-[#5A6B7A]">{stage.count.toLocaleString()} users</span>
                                 <Badge
                                   variant={widthPercent >= 50 ? 'default' : 'outline'}
                                   className={widthPercent >= 50 ? 'bg-green-100 text-green-800' : ''}
@@ -613,7 +613,7 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
                                 </Badge>
                               </div>
                             </div>
-                            <div className="w-full bg-slate-100 rounded-full h-8 overflow-hidden">
+                            <div className="w-full bg-[#F0EDE8] rounded-full h-8 overflow-hidden">
                               <div
                                 className={`h-8 rounded-full transition-all duration-500 flex items-center justify-end pr-2 ${
                                   idx === 0 ? 'bg-accent' :
@@ -648,29 +648,29 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
                     </div>
 
                     {/* Summary Stats */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 pt-4 border-t border-slate-200">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 pt-4 border-t border-[#E8E4DF]">
                       <div className="text-center">
-                        <div className="text-xl sm:text-2xl font-bold text-slate-900">
+                        <div className="text-xl sm:text-2xl font-bold text-[#1B2733]">
                           {funnelData.totalUsers.toLocaleString()}
                         </div>
-                        <div className="text-xs text-slate-500">Total Users</div>
+                        <div className="text-xs text-[#5A6B7A]">Total Users</div>
                       </div>
                       <div className="text-center">
                         <div className="text-xl sm:text-2xl font-bold text-green-600">
                           {funnelData.overallConversionRate.toFixed(1)}%
                         </div>
-                        <div className="text-xs text-slate-500">Overall Conversion</div>
+                        <div className="text-xs text-[#5A6B7A]">Overall Conversion</div>
                       </div>
                       <div className="text-center">
-                        <div className="text-xl sm:text-2xl font-bold text-slate-900">
+                        <div className="text-xl sm:text-2xl font-bold text-[#1B2733]">
                           {funnelData.stages[funnelData.stages.length - 1]?.count || 0}
                         </div>
-                        <div className="text-xs text-slate-500">Subscribers</div>
+                        <div className="text-xs text-[#5A6B7A]">Subscribers</div>
                       </div>
                     </div>
                   </div>
                 ) : (
-                  <div className="text-center py-12 text-slate-500">
+                  <div className="text-center py-12 text-[#5A6B7A]">
                     No funnel data available
                   </div>
                 )}
@@ -679,7 +679,7 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
               {/* Drop-off Analysis */}
               {funnelData && (
                 <Card className="p-4 sm:p-5 md:p-6">
-                  <h4 className="text-slate-900 font-medium mb-4">Drop-off Analysis</h4>
+                  <h4 className="text-[#1B2733] font-medium mb-4">Drop-off Analysis</h4>
                   <div className="space-y-3">
                     {funnelData.stages
                       .filter(s => s.dropOffRate > 20)
@@ -713,11 +713,11 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
               <Card className="p-4 sm:p-5 md:p-6">
                 <div className="flex items-center justify-between mb-4 sm:mb-6">
                   <div>
-                    <h3 className="text-slate-900 flex items-center gap-2">
+                    <h3 className="text-[#1B2733] flex items-center gap-2">
                       <RefreshCw className="w-5 h-5 text-accent" />
                       Retention Metrics
                     </h3>
-                    <p className="text-sm text-slate-500 mt-1">User retention by cohort</p>
+                    <p className="text-sm text-[#5A6B7A] mt-1">User retention by cohort</p>
                   </div>
                 </div>
 
@@ -725,76 +725,76 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
                   <div className="space-y-3 sm:space-y-4 sm:space-y-6">
                     {/* Summary Cards */}
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
-                      <Card className="p-4 bg-slate-50">
-                        <div className="text-xl sm:text-2xl font-bold text-slate-900">
+                      <Card className="p-4 bg-[#FAF7F2]">
+                        <div className="text-xl sm:text-2xl font-bold text-[#1B2733]">
                           {retentionData.averageD1.toFixed(1)}%
                         </div>
-                        <div className="text-xs text-slate-500">D1 Retention</div>
+                        <div className="text-xs text-[#5A6B7A]">D1 Retention</div>
                       </Card>
-                      <Card className="p-4 bg-slate-50">
-                        <div className="text-xl sm:text-2xl font-bold text-slate-900">
+                      <Card className="p-4 bg-[#FAF7F2]">
+                        <div className="text-xl sm:text-2xl font-bold text-[#1B2733]">
                           {retentionData.averageD7.toFixed(1)}%
                         </div>
-                        <div className="text-xs text-slate-500">D7 Retention</div>
+                        <div className="text-xs text-[#5A6B7A]">D7 Retention</div>
                       </Card>
-                      <Card className="p-4 bg-slate-50">
-                        <div className="text-xl sm:text-2xl font-bold text-slate-900">
+                      <Card className="p-4 bg-[#FAF7F2]">
+                        <div className="text-xl sm:text-2xl font-bold text-[#1B2733]">
                           {retentionData.averageD30.toFixed(1)}%
                         </div>
-                        <div className="text-xs text-slate-500">D30 Retention</div>
+                        <div className="text-xs text-[#5A6B7A]">D30 Retention</div>
                       </Card>
                       <Card className="p-4 bg-red-50">
                         <div className="text-xl sm:text-2xl font-bold text-red-600">
                           {retentionData.churnRate.toFixed(1)}%
                         </div>
-                        <div className="text-xs text-slate-500">Monthly Churn</div>
+                        <div className="text-xs text-[#5A6B7A]">Monthly Churn</div>
                       </Card>
                     </div>
 
                     {/* Active Users */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
                       <Card className="p-4 border-l-4 border-l-green-500">
-                        <div className="text-xl font-bold text-slate-900">
+                        <div className="text-xl font-bold text-[#1B2733]">
                           {retentionData.rollingActiveUsers.daily.toLocaleString()}
                         </div>
-                        <div className="text-xs text-slate-500">Daily Active Users (DAU)</div>
+                        <div className="text-xs text-[#5A6B7A]">Daily Active Users (DAU)</div>
                       </Card>
                       <Card className="p-4 border-l-4 border-l-blue-500">
-                        <div className="text-xl font-bold text-slate-900">
+                        <div className="text-xl font-bold text-[#1B2733]">
                           {retentionData.rollingActiveUsers.weekly.toLocaleString()}
                         </div>
-                        <div className="text-xs text-slate-500">Weekly Active Users (WAU)</div>
+                        <div className="text-xs text-[#5A6B7A]">Weekly Active Users (WAU)</div>
                       </Card>
                       <Card className="p-4 border-l-4 border-l-purple-500">
-                        <div className="text-xl font-bold text-slate-900">
+                        <div className="text-xl font-bold text-[#1B2733]">
                           {retentionData.rollingActiveUsers.monthly.toLocaleString()}
                         </div>
-                        <div className="text-xs text-slate-500">Monthly Active Users (MAU)</div>
+                        <div className="text-xs text-[#5A6B7A]">Monthly Active Users (MAU)</div>
                       </Card>
                     </div>
 
                     {/* Cohort Table */}
                     <div>
-                      <h4 className="text-slate-900 font-medium mb-3">Cohort Retention Table</h4>
+                      <h4 className="text-[#1B2733] font-medium mb-3">Cohort Retention Table</h4>
                       <div className="overflow-x-auto">
                         <table className="w-full text-sm">
                           <thead>
-                            <tr className="border-b border-slate-200">
-                              <th className="text-left py-2 pr-4 text-slate-500 font-medium">Cohort</th>
-                              <th className="text-center py-2 px-2 text-slate-500 font-medium">Size</th>
-                              <th className="text-center py-2 px-2 text-slate-500 font-medium">D1</th>
-                              <th className="text-center py-2 px-2 text-slate-500 font-medium">D7</th>
-                              <th className="text-center py-2 px-2 text-slate-500 font-medium">D14</th>
-                              <th className="text-center py-2 px-2 text-slate-500 font-medium">D30</th>
-                              <th className="text-center py-2 px-2 text-slate-500 font-medium">D60</th>
-                              <th className="text-center py-2 px-2 text-slate-500 font-medium">D90</th>
+                            <tr className="border-b border-[#E8E4DF]">
+                              <th className="text-left py-2 pr-4 text-[#5A6B7A] font-medium">Cohort</th>
+                              <th className="text-center py-2 px-2 text-[#5A6B7A] font-medium">Size</th>
+                              <th className="text-center py-2 px-2 text-[#5A6B7A] font-medium">D1</th>
+                              <th className="text-center py-2 px-2 text-[#5A6B7A] font-medium">D7</th>
+                              <th className="text-center py-2 px-2 text-[#5A6B7A] font-medium">D14</th>
+                              <th className="text-center py-2 px-2 text-[#5A6B7A] font-medium">D30</th>
+                              <th className="text-center py-2 px-2 text-[#5A6B7A] font-medium">D60</th>
+                              <th className="text-center py-2 px-2 text-[#5A6B7A] font-medium">D90</th>
                             </tr>
                           </thead>
                           <tbody>
                             {retentionData.cohorts.map((cohort, idx) => (
-                              <tr key={cohort.cohortDate} className="border-b border-slate-100">
-                                <td className="py-2 pr-4 text-slate-900">{formatCohortDate(cohort.cohortDate)}</td>
-                                <td className="text-center py-2 px-2 text-slate-600">{cohort.cohortSize}</td>
+                              <tr key={cohort.cohortDate} className="border-b border-[#E8E4DF]">
+                                <td className="py-2 pr-4 text-[#1B2733]">{formatCohortDate(cohort.cohortDate)}</td>
+                                <td className="text-center py-2 px-2 text-[#5A6B7A]">{cohort.cohortSize}</td>
                                 <td className={`text-center py-2 px-2 ${getRetentionColor(cohort.d1)}`}>
                                   {cohort.d1.toFixed(0)}%
                                 </td>
@@ -821,19 +821,19 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
                     </div>
 
                     {/* Industry Benchmarks */}
-                    <Card className="p-4 bg-blue-50 border-blue-200">
-                      <h4 className="text-slate-900 font-medium mb-2">Industry Benchmarks</h4>
+                    <Card className="p-4 bg-[#EEF4F8] border-[#C8DDE8]">
+                      <h4 className="text-[#1B2733] font-medium mb-2">Industry Benchmarks</h4>
                       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 text-sm">
                         <div>
-                          <span className="text-slate-600">D1 (Industry):</span>
+                          <span className="text-[#5A6B7A]">D1 (Industry):</span>
                           <span className="ml-2 font-medium">40-60%</span>
                         </div>
                         <div>
-                          <span className="text-slate-600">D7 (Industry):</span>
+                          <span className="text-[#5A6B7A]">D7 (Industry):</span>
                           <span className="ml-2 font-medium">20-35%</span>
                         </div>
                         <div>
-                          <span className="text-slate-600">D30 (Industry):</span>
+                          <span className="text-[#5A6B7A]">D30 (Industry):</span>
                           <span className="ml-2 font-medium">10-20%</span>
                         </div>
                       </div>
@@ -844,7 +844,7 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
                     </Card>
                   </div>
                 ) : (
-                  <div className="text-center py-12 text-slate-500">
+                  <div className="text-center py-12 text-[#5A6B7A]">
                     No retention data available
                   </div>
                 )}

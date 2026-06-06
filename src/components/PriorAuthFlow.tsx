@@ -165,7 +165,7 @@ export default function PriorAuthFlow({ onBack, onComplete, childName: initialCh
   return (
     <div className="min-h-screen bg-white dark:bg-slate-900 pb-24">
       {/* Header */}
-      <div className="sticky top-0 z-10 bg-white border-b border-gray-200">
+      <div className="sticky top-0 z-10 bg-white border-b border-[#E8E4DF]">
         <div className="max-w-2xl mx-auto px-4 py-4">
           <div className="flex items-center gap-3 mb-4">
             <Button variant="ghost" size="sm" onClick={handleBack}>
@@ -185,7 +185,7 @@ export default function PriorAuthFlow({ onBack, onComplete, childName: initialCh
               <div
                 key={s}
                 className={`h-1.5 flex-1 rounded-full transition-colors ${
-                  s <= step ? 'bg-blue-600' : 'bg-gray-200'
+                  s <= step ? 'bg-blue-600' : 'bg-[#E8E4DF]'
                 }`}
               />
             ))}
@@ -265,8 +265,8 @@ export default function PriorAuthFlow({ onBack, onComplete, childName: initialCh
                   key={code}
                   className={`flex items-center gap-3 p-3 border rounded-lg cursor-pointer transition-colors ${
                     selectedCodes.includes(code)
-                      ? 'border-blue-500 bg-blue-50'
-                      : 'border-gray-200 hover:border-gray-300'
+                      ? 'border-blue-500 bg-[#EEF4F8]'
+                      : 'border-[#E8E4DF] hover:border-[#E8E4DF]'
                   }`}
                 >
                   <input
@@ -277,7 +277,7 @@ export default function PriorAuthFlow({ onBack, onComplete, childName: initialCh
                   />
                   <div>
                     <span className="font-mono text-sm font-medium">{code}</span>
-                    <span className="text-sm text-slate-600 ml-2">— {label}</span>
+                    <span className="text-sm text-[#5A6B7A] ml-2">— {label}</span>
                   </div>
                 </label>
               ))}
@@ -363,8 +363,8 @@ export default function PriorAuthFlow({ onBack, onComplete, childName: initialCh
                     key={doc.id}
                     className={`flex items-center gap-3 p-3 border rounded-lg cursor-pointer transition-colors ${
                       attachedDocs.includes(doc.name)
-                        ? 'border-blue-500 bg-blue-50'
-                        : 'border-gray-200 hover:border-gray-300'
+                        ? 'border-blue-500 bg-[#EEF4F8]'
+                        : 'border-[#E8E4DF] hover:border-[#E8E4DF]'
                     }`}
                   >
                     <input
@@ -380,7 +380,7 @@ export default function PriorAuthFlow({ onBack, onComplete, childName: initialCh
               </div>
             ) : (
               <Card className="p-6 text-center">
-                <FileText className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                <FileText className="w-8 h-8 text-[#8A9BA8] mx-auto mb-2" />
                 <p className="text-sm text-muted-foreground">No documents in your vault yet</p>
                 <p className="text-xs text-muted-foreground mt-1">
                   You can still proceed — documents can be added later
@@ -414,7 +414,7 @@ export default function PriorAuthFlow({ onBack, onComplete, childName: initialCh
               <div>
                 <p className="text-xs text-muted-foreground">Service</p>
                 <p className="font-medium">{serviceType}</p>
-                <p className="text-sm text-slate-600">{frequency} for {duration || '6 months'}</p>
+                <p className="text-sm text-[#5A6B7A]">{frequency} for {duration || '6 months'}</p>
               </div>
               <div>
                 <p className="text-xs text-muted-foreground">Diagnosis Codes</p>
@@ -427,31 +427,31 @@ export default function PriorAuthFlow({ onBack, onComplete, childName: initialCh
               <div>
                 <p className="text-xs text-muted-foreground">Provider</p>
                 <p className="font-medium">{providerName}</p>
-                {providerCredentials && <p className="text-sm text-slate-600">{providerCredentials}</p>}
+                {providerCredentials && <p className="text-sm text-[#5A6B7A]">{providerCredentials}</p>}
               </div>
               <div>
                 <p className="text-xs text-muted-foreground">Insurance</p>
                 <p className="font-medium">{insuranceCompany}</p>
-                {memberId && <p className="text-sm text-slate-600">Member ID: {memberId}</p>}
+                {memberId && <p className="text-sm text-[#5A6B7A]">Member ID: {memberId}</p>}
               </div>
               {attachedDocs.length > 0 && (
                 <div>
                   <p className="text-xs text-muted-foreground">Attached Documents ({attachedDocs.length})</p>
                   {attachedDocs.map(d => (
-                    <p key={d} className="text-sm text-slate-600">• {d}</p>
+                    <p key={d} className="text-sm text-[#5A6B7A]">• {d}</p>
                   ))}
                 </div>
               )}
               {notes && (
                 <div>
                   <p className="text-xs text-muted-foreground">Notes</p>
-                  <p className="text-sm text-slate-600">{notes}</p>
+                  <p className="text-sm text-[#5A6B7A]">{notes}</p>
                 </div>
               )}
             </Card>
 
-            <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
-              <p className="text-xs text-blue-800">
+            <div className="p-3 bg-[#EEF4F8] border border-[#C8DDE8] rounded-lg">
+              <p className="text-xs text-[#4A6478]">
                 <strong>Next:</strong> We'll generate a PDF you can submit to {insuranceCompany}. You can also fax it directly from the next screen.
               </p>
             </div>

@@ -108,7 +108,7 @@ function playTimerDing() {
 type ToolId = 'chunker' | 'timer' | 'priority' | 'impulse';
 
 const TOOLS: { id: ToolId; label: string; description: string; icon: React.ReactNode; color: string }[] = [
-  { id: 'chunker', label: 'Task Chunker', description: 'Break big tasks into small steps', icon: <ListChecks className="h-6 w-6" />, color: 'bg-blue-50 border-blue-200 text-blue-700' },
+  { id: 'chunker', label: 'Task Chunker', description: 'Break big tasks into small steps', icon: <ListChecks className="h-6 w-6" />, color: 'bg-[#EEF4F8] border-[#C8DDE8] text-blue-700' },
   { id: 'timer', label: 'Focus Timer', description: 'Stay focused with a fun timer', icon: <Timer className="h-6 w-6" />, color: 'bg-green-50 border-green-200 text-green-700' },
   { id: 'priority', label: 'Priority Picker', description: 'Sort tasks: Now, Later, Done', icon: <LayoutGrid className="h-6 w-6" />, color: 'bg-purple-50 border-purple-200 text-purple-700' },
   { id: 'impulse', label: 'Impulse Pause', description: 'Stop and count to 5 first', icon: <Hand className="h-6 w-6" />, color: 'bg-red-50 border-red-200 text-red-700' },
@@ -173,13 +173,13 @@ function TaskChunker({ onComplete }: { onComplete: () => void }) {
     <div className="space-y-4">
       {/* Big task input */}
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">What is your big task?</label>
+        <label className="block text-sm font-medium text-[#3A4A57] mb-1">What is your big task?</label>
         <input
           type="text"
           value={bigTask}
           onChange={e => setBigTask(e.target.value)}
           placeholder="e.g., Clean my room"
-          className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+          className="w-full rounded-2xl border border-[#E8E4DF] bg-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
         />
       </div>
 
@@ -191,7 +191,7 @@ function TaskChunker({ onComplete }: { onComplete: () => void }) {
           onChange={e => setNewStep(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && addStep()}
           placeholder="Add a small step..."
-          className="flex-1 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+          className="flex-1 rounded-2xl border border-[#E8E4DF] bg-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
         />
         <button
           type="button"
@@ -218,7 +218,7 @@ function TaskChunker({ onComplete }: { onComplete: () => void }) {
               onDragEnd={handleDragEnd}
               onDragOver={e => e.preventDefault()}
               className={`flex items-center gap-3 rounded-2xl border p-3 shadow-sm transition-colors ${
-                step.done ? 'border-green-200 bg-green-50' : 'border-slate-200 bg-white'
+                step.done ? 'border-green-200 bg-green-50' : 'border-[#E8E4DF] bg-white'
               }`}
             >
               <GripVertical className="h-4 w-4 cursor-grab text-slate-400" />
@@ -229,7 +229,7 @@ function TaskChunker({ onComplete }: { onComplete: () => void }) {
                   {step.done && <Check className="h-4 w-4" />}
                 </div>
               </button>
-              <span className={`flex-1 text-sm ${step.done ? 'text-slate-400 line-through' : 'text-slate-800'}`}>
+              <span className={`flex-1 text-sm ${step.done ? 'text-slate-400 line-through' : 'text-[#1B2733]'}`}>
                 {step.text}
               </span>
               <button type="button" onClick={() => removeStep(step.id)} className="text-slate-400 hover:text-red-400">
@@ -241,7 +241,7 @@ function TaskChunker({ onComplete }: { onComplete: () => void }) {
       </div>
 
       {steps.length > 0 && (
-        <div className="text-center text-xs text-slate-500">
+        <div className="text-center text-xs text-[#5A6B7A]">
           {steps.filter(s => s.done).length} / {steps.length} steps done
         </div>
       )}
@@ -313,7 +313,7 @@ function FocusTimer({ onComplete }: { onComplete: () => void }) {
             className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
               duration === m
                 ? 'bg-green-500 text-white shadow-sm'
-                : 'bg-slate-100 text-slate-600'
+                : 'bg-[#F0EDE8] text-[#5A6B7A]'
             }`}
           >
             {m}m
@@ -342,7 +342,7 @@ function FocusTimer({ onComplete }: { onComplete: () => void }) {
       </div>
 
       {/* Time display */}
-      <div className="text-4xl font-bold tabular-nums text-slate-800">
+      <div className="text-4xl font-bold tabular-nums text-[#1B2733]">
         {String(mins).padStart(2, '0')}:{String(secs).padStart(2, '0')}
       </div>
 
@@ -368,7 +368,7 @@ function FocusTimer({ onComplete }: { onComplete: () => void }) {
         <button
           type="button"
           onClick={() => { playTap(); reset(); }}
-          className="flex h-14 w-14 items-center justify-center rounded-full bg-slate-100 text-slate-600 active:scale-95"
+          className="flex h-14 w-14 items-center justify-center rounded-full bg-[#F0EDE8] text-[#5A6B7A] active:scale-95"
         >
           <RotateCcw className="h-5 w-5" />
         </button>
@@ -419,7 +419,7 @@ function PriorityPicker({ onComplete }: { onComplete: () => void }) {
           onChange={e => setNewCard(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && addCard()}
           placeholder="Add a task..."
-          className="flex-1 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-300"
+          className="flex-1 rounded-2xl border border-[#E8E4DF] bg-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-300"
         />
         <button
           type="button"
@@ -434,7 +434,7 @@ function PriorityPicker({ onComplete }: { onComplete: () => void }) {
       <div className="grid grid-cols-3 gap-2">
         {columns.map(col => (
           <div key={col.key} className={`rounded-2xl border ${col.borderColor} ${col.bgColor} p-2`}>
-            <div className="mb-2 text-center text-xs font-semibold text-slate-700">
+            <div className="mb-2 text-center text-xs font-semibold text-[#3A4A57]">
               {col.emoji} {col.label}
             </div>
             <div className="min-h-[80px] space-y-2">
@@ -446,7 +446,7 @@ function PriorityPicker({ onComplete }: { onComplete: () => void }) {
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.8 }}
-                    className="rounded-xl bg-white p-2 text-xs text-slate-700 shadow-sm"
+                    className="rounded-xl bg-white p-2 text-xs text-[#3A4A57] shadow-sm"
                   >
                     <div className="mb-1 break-words">{card.text}</div>
                     <div className="flex gap-1">
@@ -455,7 +455,7 @@ function PriorityPicker({ onComplete }: { onComplete: () => void }) {
                           key={target.key}
                           type="button"
                           onClick={() => moveCard(card.id, target.key)}
-                          className="rounded-lg bg-slate-100 px-2 py-0.5 text-[10px] text-slate-500 active:scale-95"
+                          className="rounded-lg bg-[#F0EDE8] px-2 py-0.5 text-[10px] text-[#5A6B7A] active:scale-95"
                         >
                           {target.emoji}
                         </button>
@@ -532,7 +532,7 @@ function ImpulsePause({ onComplete }: { onComplete: () => void }) {
       {/* Counting phase */}
       {counting && (
         <div className="flex flex-col items-center space-y-6">
-          <div className="text-sm font-medium text-slate-600">Count with me...</div>
+          <div className="text-sm font-medium text-[#5A6B7A]">Count with me...</div>
           <div className="flex gap-3">
             {[1, 2, 3, 4, 5].map(n => (
               <motion.div
@@ -540,7 +540,7 @@ function ImpulsePause({ onComplete }: { onComplete: () => void }) {
                 initial={{ scale: 0.5, opacity: 0.3 }}
                 animate={count >= n ? { scale: 1, opacity: 1 } : { scale: 0.5, opacity: 0.3 }}
                 className={`flex h-14 w-14 items-center justify-center rounded-full text-xl font-bold shadow-sm ${
-                  count >= n ? 'bg-blue-500 text-white' : 'bg-slate-100 text-slate-400'
+                  count >= n ? 'bg-blue-500 text-white' : 'bg-[#F0EDE8] text-slate-400'
                 }`}
               >
                 {n}
@@ -569,11 +569,11 @@ function ImpulsePause({ onComplete }: { onComplete: () => void }) {
             <Check className="h-16 w-16 text-green-600" />
           </div>
           <div className="text-lg font-semibold text-green-700">Great job pausing!</div>
-          <div className="text-sm text-slate-600">Now you can think about what to do next.</div>
+          <div className="text-sm text-[#5A6B7A]">Now you can think about what to do next.</div>
           <button
             type="button"
             onClick={startCount}
-            className="mt-2 rounded-2xl bg-slate-100 px-6 py-3 text-sm font-medium text-slate-600 active:scale-95"
+            className="mt-2 rounded-2xl bg-[#F0EDE8] px-6 py-3 text-sm font-medium text-[#5A6B7A] active:scale-95"
           >
             Try again
           </button>
@@ -581,7 +581,7 @@ function ImpulsePause({ onComplete }: { onComplete: () => void }) {
       )}
 
       {!counting && !finished && (
-        <p className="text-center text-sm text-slate-500 px-4">
+        <p className="text-center text-sm text-[#5A6B7A] px-4">
           Feeling a big urge? Press the STOP button and count to 5 before you act.
         </p>
       )}
@@ -604,13 +604,13 @@ export default function ExecutiveFunctionCoach({ onBack, childName = 'Buddy' }: 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
       {/* Header */}
-      <div className="sticky top-0 z-20 bg-white/90 backdrop-blur-md border-b border-slate-100">
+      <div className="sticky top-0 z-20 bg-white/90 backdrop-blur-md border-b border-[#E8E4DF]">
         <div className="flex items-center justify-between px-4 py-3">
-          <button type="button" onClick={() => { playTap(); activeTool ? setActiveTool(null) : onBack(); }} className="flex items-center gap-2 text-sm font-medium text-slate-600">
+          <button type="button" onClick={() => { playTap(); activeTool ? setActiveTool(null) : onBack(); }} className="flex items-center gap-2 text-sm font-medium text-[#5A6B7A]">
             <ArrowLeft className="h-5 w-5" />
             {activeTool ? 'Tools' : 'Back'}
           </button>
-          <div className="text-sm font-semibold text-slate-800">
+          <div className="text-sm font-semibold text-[#1B2733]">
             {activeTool ? TOOLS.find(t => t.id === activeTool)?.label : 'Executive Function Coach'}
           </div>
           <div className="flex items-center gap-1 text-sm font-medium text-amber-600">
@@ -626,8 +626,8 @@ export default function ExecutiveFunctionCoach({ onBack, childName = 'Buddy' }: 
             {/* Welcome */}
             <div className="mb-5 text-center">
               <div className="text-2xl mb-1">🧠</div>
-              <h2 className="text-lg font-semibold text-slate-800">Hey {childName}!</h2>
-              <p className="text-sm text-slate-500 mt-1">Pick a tool to help you get stuff done.</p>
+              <h2 className="text-lg font-semibold text-[#1B2733]">Hey {childName}!</h2>
+              <p className="text-sm text-[#5A6B7A] mt-1">Pick a tool to help you get stuff done.</p>
             </div>
 
             {/* Tool grid */}

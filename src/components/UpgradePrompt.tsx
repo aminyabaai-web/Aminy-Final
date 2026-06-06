@@ -82,14 +82,14 @@ export function UpgradePrompt({
       <Card className={`p-4 border-2 ${
         prompt.urgency === 'high'
           ? 'border-amber-300 bg-amber-50 dark:border-amber-700 dark:bg-amber-900/20'
-          : 'border-teal-200 bg-teal-50 dark:border-teal-800 dark:bg-teal-900/20'
+          : 'border-[#6B9080]/20 bg-[#6B9080]/10 dark:border-[#6B9080]/30 dark:bg-[#6B9080]/10'
       }`}>
         <div className="flex items-start gap-4">
           <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${TIER_COLORS[recTier]} flex items-center justify-center flex-shrink-0`}>
             <Crown className="w-5 h-5 text-white" />
           </div>
           <div className="flex-1 min-w-0">
-            <h4 className="font-semibold text-neutral-900 dark:text-white mb-1">
+            <h4 className="font-semibold text-[#1B2733] dark:text-white mb-1">
               {prompt.title}
             </h4>
             <p className="text-sm text-neutral-600 dark:text-slate-400 mb-3">
@@ -99,7 +99,7 @@ export function UpgradePrompt({
               <Button
                 size="sm"
                 onClick={handleUpgrade}
-                className="bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-700 hover:to-cyan-700"
+                className="bg-gradient-to-r from-[#6B9080] to-[#7BA7BC] hover:from-teal-700 hover:to-cyan-700"
               >
                 <Zap className="w-4 h-4 mr-1" />
                 {prompt.ctaText}
@@ -115,7 +115,7 @@ export function UpgradePrompt({
                   variant="ghost"
                   size="sm"
                   onClick={handleDismiss}
-                  className="text-neutral-500"
+                  className="text-[#5A6B7A]"
                 >
                   Maybe later
                 </Button>
@@ -138,7 +138,7 @@ export function UpgradePrompt({
           className={`relative overflow-hidden ${
             prompt.urgency === 'high'
               ? 'bg-gradient-to-r from-amber-500 to-orange-500'
-              : 'bg-gradient-to-r from-teal-600 to-cyan-600'
+              : 'bg-gradient-to-r from-[#6B9080] to-[#7BA7BC]'
           }`}
         >
           <div className="max-w-7xl mx-auto px-4 py-3">
@@ -161,7 +161,7 @@ export function UpgradePrompt({
                 <Button
                   size="sm"
                   onClick={handleUpgrade}
-                  className="bg-white text-teal-700 hover:bg-white/90"
+                  className="bg-white text-[#6B9080] hover:bg-white/90"
                 >
                   {prompt.ctaText}
                   <ChevronRight className="w-4 h-4 ml-1" />
@@ -219,10 +219,10 @@ export function UpgradePrompt({
 
                 {/* Price */}
                 <div className="text-center mb-6">
-                  <span className="text-3xl font-bold text-neutral-900 dark:text-white">
+                  <span className="text-3xl font-bold text-[#1B2733] dark:text-white">
                     {TIER_PRICES[recTier]}
                   </span>
-                  <span className="text-neutral-500">/month</span>
+                  <span className="text-[#5A6B7A]">/month</span>
                 </div>
 
                 {/* Free trial badge */}
@@ -248,7 +248,7 @@ export function UpgradePrompt({
                 {prompt.dismissable && (
                   <button
                     onClick={handleDismiss}
-                    className="w-full mt-3 text-sm text-neutral-500 hover:text-neutral-700"
+                    className="w-full mt-3 text-sm text-[#5A6B7A] hover:text-neutral-700"
                   >
                     Maybe later
                   </button>
@@ -276,13 +276,13 @@ export function UpgradePrompt({
               <Crown className="w-4 h-4 text-white" />
             </div>
             <div className="flex-1">
-              <h4 className="font-medium text-neutral-900 dark:text-white text-sm">
+              <h4 className="font-medium text-[#1B2733] dark:text-white text-sm">
                 {prompt.title}
               </h4>
               <Button
                 size="sm"
                 onClick={handleUpgrade}
-                className="mt-2 h-8 text-xs bg-teal-600 hover:bg-teal-700"
+                className="mt-2 h-8 text-xs bg-primary hover:bg-[#6B9080]"
               >
                 {prompt.ctaText}
               </Button>

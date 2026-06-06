@@ -68,7 +68,7 @@ const shortcutCategories: ShortcutCategory[] = [
 
 function KeyboardKey({ children }: { children: React.ReactNode }) {
   return (
-    <kbd className="inline-flex items-center justify-center min-w-[28px] h-7 px-2 bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded text-xs font-mono font-medium text-gray-700 dark:text-gray-300 shadow-sm">
+    <kbd className="inline-flex items-center justify-center min-w-[28px] h-7 px-2 bg-[#F0EDE8] dark:bg-slate-700 border border-[#E8E4DF] dark:border-slate-600 rounded text-xs font-mono font-medium text-[#3A4A57] dark:text-gray-300 shadow-sm">
       {children}
     </kbd>
   );
@@ -118,14 +118,14 @@ export function KeyboardHelpModal() {
         className="relative bg-white dark:bg-slate-800 rounded-xl shadow-xl max-w-2xl w-full mx-4 max-h-[85vh] overflow-hidden flex flex-col"
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-slate-700">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[#E8E4DF] dark:border-slate-700">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-cyan-50 dark:bg-cyan-900/20 rounded-lg">
-              <Keyboard className="w-5 h-5 text-cyan-600 dark:text-cyan-400" />
+            <div className="p-2 bg-[#6B9080]/10 dark:bg-cyan-900/20 rounded-lg">
+              <Keyboard className="w-5 h-5 text-[#6B9080] dark:text-cyan-400" />
             </div>
             <h2
               id="keyboard-help-title"
-              className="text-lg font-semibold text-gray-900 dark:text-gray-100"
+              className="text-lg font-semibold text-[#1B2733] dark:text-gray-100"
             >
               Keyboard Shortcuts
             </h2>
@@ -145,7 +145,7 @@ export function KeyboardHelpModal() {
           <div className="grid gap-6 sm:grid-cols-2">
             {shortcutCategories.map((category) => (
               <div key={category.title}>
-                <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
+                <h3 className="text-sm font-semibold text-[#3A4A57] dark:text-gray-300 mb-3">
                   {category.title}
                 </h3>
                 <ul className="space-y-2">
@@ -154,7 +154,7 @@ export function KeyboardHelpModal() {
                       key={index}
                       className="flex items-center justify-between gap-4 py-1"
                     >
-                      <span className="text-sm text-gray-600 dark:text-gray-400">
+                      <span className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">
                         {shortcut.description}
                       </span>
                       <div className="flex items-center gap-1 flex-shrink-0">
@@ -162,7 +162,7 @@ export function KeyboardHelpModal() {
                           <React.Fragment key={keyIndex}>
                             <KeyboardKey>{key}</KeyboardKey>
                             {keyIndex < shortcut.keys.length - 1 && (
-                              <span className="text-gray-400 dark:text-gray-500 text-xs">
+                              <span className="text-[#8A9BA8] dark:text-[#5A6B7A] text-xs">
                                 +
                               </span>
                             )}
@@ -177,7 +177,7 @@ export function KeyboardHelpModal() {
           </div>
 
           {/* Tips */}
-          <div className="mt-6 p-4 bg-cyan-50 dark:bg-cyan-900/20 rounded-lg">
+          <div className="mt-6 p-4 bg-[#6B9080]/10 dark:bg-cyan-900/20 rounded-lg">
             <h3 className="text-sm font-semibold text-cyan-800 dark:text-cyan-300 mb-2">
               Tips for keyboard navigation
             </h3>
@@ -191,8 +191,8 @@ export function KeyboardHelpModal() {
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-4 border-t border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-900">
-          <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
+        <div className="px-6 py-4 border-t border-[#E8E4DF] dark:border-slate-700 bg-[#FAF7F2] dark:bg-slate-900">
+          <p className="text-xs text-[#5A6B7A] dark:text-[#8A9BA8] text-center">
             Press <KeyboardKey>Esc</KeyboardKey> to close this dialog
           </p>
         </div>

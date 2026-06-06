@@ -98,7 +98,7 @@ export function OutcomesDashboardWidget({
             trend: change < 0 ? 'down' : change > 0 ? 'up' : 'stable',
             isPositive: change <= 0, // Lower screening scores generally mean lower risk
             icon: Target,
-            color: 'text-teal-500',
+            color: 'text-primary',
           });
         } else if (screenings.length === 1) {
           builtMetrics.push({
@@ -109,7 +109,7 @@ export function OutcomesDashboardWidget({
             trend: 'stable',
             isPositive: true,
             icon: Target,
-            color: 'text-teal-500',
+            color: 'text-primary',
           });
         }
 
@@ -183,11 +183,11 @@ export function OutcomesDashboardWidget({
     return (
       <Card className="p-4 sm:p-5 md:p-6">
         <div className="animate-pulse space-y-3 sm:space-y-4">
-          <div className="h-6 bg-gray-200 rounded w-1/3"></div>
+          <div className="h-6 bg-[#E8E4DF] rounded w-1/3"></div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
-            <div className="h-24 bg-gray-200 rounded"></div>
-            <div className="h-24 bg-gray-200 rounded"></div>
-            <div className="h-24 bg-gray-200 rounded"></div>
+            <div className="h-24 bg-[#E8E4DF] rounded"></div>
+            <div className="h-24 bg-[#E8E4DF] rounded"></div>
+            <div className="h-24 bg-[#E8E4DF] rounded"></div>
           </div>
         </div>
       </Card>
@@ -204,17 +204,17 @@ export function OutcomesDashboardWidget({
       : 'Complete screenings or set goals to start';
 
     return (
-      <Card className="p-4 bg-gradient-to-r from-teal-50 to-blue-50 border-teal-200">
+      <Card className="p-4 bg-gradient-to-r from-[#FAF7F2] to-blue-50 border-[#6B9080]/20">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-teal-100 rounded-full">
+            <div className="p-2 bg-[#6B9080]/10 rounded-full">
               {topMetric?.trend === 'up' && topMetric.isPositive
-                ? <TrendingUp className="w-5 h-5 text-teal-600" />
-                : <Activity className="w-5 h-5 text-teal-600" />}
+                ? <TrendingUp className="w-5 h-5 text-[#6B9080]" />
+                : <Activity className="w-5 h-5 text-[#6B9080]" />}
             </div>
             <div>
-              <p className="font-medium text-teal-900">{summaryText}</p>
-              <p className="text-sm text-teal-700">{subText}</p>
+              <p className="font-medium text-[#6B9080]">{summaryText}</p>
+              <p className="text-sm text-[#6B9080]">{subText}</p>
             </div>
           </div>
           <Button variant="ghost" size="sm" onClick={onViewDetails}>
@@ -230,12 +230,12 @@ export function OutcomesDashboardWidget({
       <Card className="border border-white/80 bg-[linear-gradient(180deg,_rgba(255,255,255,0.96)_0%,_rgba(244,249,250,0.98)_100%)] shadow-[0_12px_40px_rgba(15,23,42,0.06)]">
         <div className="p-4 sm:p-5">
           <div className="flex items-start gap-3">
-            <div className="rounded-2xl bg-slate-100/90 p-2.5 text-slate-500">
+            <div className="rounded-2xl bg-[#F0EDE8]/90 p-2.5 text-[#5A6B7A]">
               <Activity className="h-5 w-5" />
             </div>
             <div className="min-w-0 flex-1">
-              <h3 className="text-sm font-semibold text-slate-900">Progress will feel clearer soon</h3>
-              <p className="mt-1 text-sm leading-6 text-slate-600">
+              <h3 className="text-sm font-semibold text-[#1B2733]">Progress will feel clearer soon</h3>
+              <p className="mt-1 text-sm leading-6 text-[#5A6B7A]">
                 Once you log a few moments, complete a screening, or start a goal, Aminy will turn
                 those patterns into a calmer weekly view instead of pushing noisy charts too early.
               </p>
@@ -249,7 +249,7 @@ export function OutcomesDashboardWidget({
   return (
     <Card className="overflow-hidden">
       {/* Header */}
-      <div className="p-4 bg-gradient-to-r from-teal-500 to-blue-500 text-white">
+      <div className="p-4 bg-gradient-to-r from-[#6B9080] to-[#7BA7BC] text-white">
         <div className="flex items-center justify-between">
           <div>
             <h3 className="font-semibold flex items-center gap-2">
@@ -278,18 +278,18 @@ export function OutcomesDashboardWidget({
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="p-4 bg-gray-50 rounded-xl"
+                className="p-4 bg-[#FAF7F2] rounded-xl"
               >
                 <div className="flex items-center gap-2 mb-2">
                   <Icon className={`w-4 h-4 ${metric.color}`} />
-                  <span className="text-sm text-gray-600">{metric.label}</span>
+                  <span className="text-sm text-[#5A6B7A]">{metric.label}</span>
                 </div>
 
                 <div className="flex items-baseline gap-1">
-                  <span className="text-xl sm:text-2xl font-bold text-gray-900">
+                  <span className="text-xl sm:text-2xl font-bold text-[#1B2733]">
                     {metric.value}
                   </span>
-                  <span className="text-sm text-gray-500">{metric.unit}</span>
+                  <span className="text-sm text-[#5A6B7A]">{metric.unit}</span>
                   {getTrendIcon(metric)}
                 </div>
 

@@ -169,7 +169,7 @@ const RecordRow: React.FC<RecordRowProps> = ({
   const getFileIcon = (type: string) => {
     if (type.includes('pdf')) return <FileText className="w-4 h-4 text-red-500" />;
     if (type.includes('image')) return <FileIcon className="w-4 h-4 text-[#577590]" />;
-    return <FileIcon className="w-4 h-4 text-gray-500" />;
+    return <FileIcon className="w-4 h-4 text-[#5A6B7A]" />;
   };
 
   const formatFileSize = (bytes: number) => {

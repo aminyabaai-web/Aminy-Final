@@ -166,7 +166,7 @@ export function SkylightIntegration({
       case 'evening':
         return <Moon className="w-4 h-4 text-indigo-500" />;
       default:
-        return <Clock className="w-4 h-4 text-gray-500" />;
+        return <Clock className="w-4 h-4 text-[#5A6B7A]" />;
     }
   };
 
@@ -175,11 +175,11 @@ export function SkylightIntegration({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 flex items-center gap-2">
-            <Smartphone className="w-5 h-5 text-teal-600" />
+          <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733] flex items-center gap-2">
+            <Smartphone className="w-5 h-5 text-[#6B9080]" />
             Skylight Display
           </h2>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-[#5A6B7A] mt-1">
             Show visual schedules on your smart display
           </p>
         </div>
@@ -198,13 +198,13 @@ export function SkylightIntegration({
       >
         {!connected ? (
           <div className="text-center">
-            <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
-              <Link className="w-8 h-8 text-gray-400" />
+            <div className="w-16 h-16 mx-auto mb-4 bg-[#F0EDE8] rounded-full flex items-center justify-center">
+              <Link className="w-8 h-8 text-[#8A9BA8]" />
             </div>
-            <h3 className="font-semibold text-gray-900 mb-2">
+            <h3 className="font-semibold text-[#1B2733] mb-2">
               Connect to Skylight
             </h3>
-            <p className="text-sm text-gray-600 mb-4 max-w-sm mx-auto">
+            <p className="text-sm text-[#5A6B7A] mb-4 max-w-sm mx-auto">
               Display your child's visual schedules on Skylight Calendar or any
               smart display that supports Google Calendar.
             </p>
@@ -225,8 +225,8 @@ export function SkylightIntegration({
                   <CheckCircle className="w-5 h-5 text-green-600" />
                 </div>
                 <div>
-                  <p className="font-medium text-gray-900">Skylight Connected</p>
-                  <p className="text-sm text-gray-500">
+                  <p className="font-medium text-[#1B2733]">Skylight Connected</p>
+                  <p className="text-sm text-[#5A6B7A]">
                     {selectedRoutines.length} routines synced
                   </p>
                 </div>
@@ -278,7 +278,7 @@ export function SkylightIntegration({
       {/* Routines List */}
       {connected && displayMode === 'list' && (
         <div className="space-y-3 sm:space-y-4">
-          <h3 className="font-semibold text-gray-900">
+          <h3 className="font-semibold text-[#1B2733]">
             Select Routines to Display
           </h3>
           {routines.map((routine) => (
@@ -286,8 +286,8 @@ export function SkylightIntegration({
               key={routine.id}
               className={`p-4 cursor-pointer transition-all ${
                 selectedRoutines.includes(routine.id)
-                  ? 'ring-2 ring-teal-500 bg-teal-50/50'
-                  : 'hover:bg-gray-50'
+                  ? 'ring-2 ring-teal-500 bg-[#6B9080]/10/50'
+                  : 'hover:bg-[#FAF7F2]'
               }`}
               onClick={() => toggleRoutineSelection(routine.id)}
             >
@@ -305,8 +305,8 @@ export function SkylightIntegration({
                     {getTimeOfDayIcon(routine.timeOfDay)}
                   </div>
                   <div>
-                    <p className="font-medium text-gray-900">{routine.name}</p>
-                    <p className="text-sm text-gray-500">
+                    <p className="font-medium text-[#1B2733]">{routine.name}</p>
+                    <p className="text-sm text-[#5A6B7A]">
                       {routine.scheduledTime} • {routine.steps.length} steps
                     </p>
                   </div>
@@ -314,8 +314,8 @@ export function SkylightIntegration({
                 <div
                   className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
                     selectedRoutines.includes(routine.id)
-                      ? 'bg-teal-600 border-teal-600'
-                      : 'border-gray-300'
+                      ? 'bg-primary border-[#6B9080]'
+                      : 'border-[#E8E4DF]'
                   }`}
                 >
                   {selectedRoutines.includes(routine.id) && (
@@ -362,8 +362,8 @@ export function SkylightIntegration({
       {/* Display Preview */}
       {connected && displayMode === 'preview' && (
         <div className="space-y-3 sm:space-y-4">
-          <h3 className="font-semibold text-gray-900">Display Preview</h3>
-          <p className="text-sm text-gray-500">
+          <h3 className="font-semibold text-[#1B2733]">Display Preview</h3>
+          <p className="text-sm text-[#5A6B7A]">
             This is how your routines will appear on the Skylight display
           </p>
 
@@ -438,7 +438,7 @@ export function SkylightIntegration({
       )}
 
       {/* Help Section */}
-      <Card className="p-4 bg-blue-50 border-blue-200">
+      <Card className="p-4 bg-[#EEF4F8] border-[#C8DDE8]">
         <div className="flex items-start gap-3">
           <div className="p-2 bg-blue-100 rounded-full">
             <Settings className="w-4 h-4 text-blue-600" />

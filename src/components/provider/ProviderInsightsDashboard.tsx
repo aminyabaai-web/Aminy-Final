@@ -192,7 +192,7 @@ export function ProviderInsightsDashboard({
     return (
       <div className="flex items-center justify-center p-12">
         <div className="text-center">
-          <RefreshCw className="w-8 h-8 text-teal-600 animate-spin mx-auto mb-3" />
+          <RefreshCw className="w-8 h-8 text-[#6B9080] animate-spin mx-auto mb-3" />
           <p className="text-neutral-600 dark:text-slate-400">Loading insights...</p>
         </div>
       </div>
@@ -204,10 +204,10 @@ export function ProviderInsightsDashboard({
       {/* Header with Period Selector */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-semibold text-neutral-900 dark:text-white">
+          <h2 className="text-xl font-semibold text-[#1B2733] dark:text-white">
             Practice Insights
           </h2>
-          <p className="text-neutral-500 dark:text-slate-400 text-sm">
+          <p className="text-[#5A6B7A] dark:text-slate-400 text-sm">
             Aggregate outcomes and progress across your patients
           </p>
         </div>
@@ -220,8 +220,8 @@ export function ProviderInsightsDashboard({
                 onClick={() => setSelectedPeriod(period as typeof selectedPeriod)}
                 className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
                   selectedPeriod === period
-                    ? 'bg-white dark:bg-slate-700 text-teal-600 shadow-sm'
-                    : 'text-neutral-600 dark:text-slate-400 hover:text-neutral-900'
+                    ? 'bg-white dark:bg-slate-700 text-[#6B9080] shadow-sm'
+                    : 'text-neutral-600 dark:text-slate-400 hover:text-[#1B2733]'
                 }`}
               >
                 {period.charAt(0).toUpperCase() + period.slice(1)}
@@ -240,17 +240,17 @@ export function ProviderInsightsDashboard({
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card className="p-4">
           <div className="flex items-center justify-between">
-            <div className="w-10 h-10 rounded-lg bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center">
-              <Users className="w-5 h-5 text-teal-600" />
+            <div className="w-10 h-10 rounded-lg bg-[#6B9080]/10 dark:bg-[#6B9080]/15 flex items-center justify-center">
+              <Users className="w-5 h-5 text-[#6B9080]" />
             </div>
             <Badge className="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
               +2 this {selectedPeriod}
             </Badge>
           </div>
-          <p className="text-2xl font-bold text-neutral-900 dark:text-white mt-3">
+          <p className="text-2xl font-bold text-[#1B2733] dark:text-white mt-3">
             {aggregateData?.totalPatients || 0}
           </p>
-          <p className="text-sm text-neutral-500 dark:text-slate-400">Active Clients</p>
+          <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Active Clients</p>
         </Card>
 
         <Card className="p-4">
@@ -258,14 +258,14 @@ export function ProviderInsightsDashboard({
             <div className="w-10 h-10 rounded-lg bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center">
               <Target className="w-5 h-5 text-violet-600" />
             </div>
-            <span className="text-xs text-neutral-500">
+            <span className="text-xs text-[#5A6B7A]">
               {aggregateData?.completedGoals || 0} completed
             </span>
           </div>
-          <p className="text-2xl font-bold text-neutral-900 dark:text-white mt-3">
+          <p className="text-2xl font-bold text-[#1B2733] dark:text-white mt-3">
             {aggregateData?.activeGoals || 0}
           </p>
-          <p className="text-sm text-neutral-500 dark:text-slate-400">Active Goals</p>
+          <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Active Goals</p>
         </Card>
 
         <Card className="p-4">
@@ -278,10 +278,10 @@ export function ProviderInsightsDashboard({
               +5%
             </Badge>
           </div>
-          <p className="text-2xl font-bold text-neutral-900 dark:text-white mt-3">
+          <p className="text-2xl font-bold text-[#1B2733] dark:text-white mt-3">
             {aggregateData?.averageProgressPercent || 0}%
           </p>
-          <p className="text-sm text-neutral-500 dark:text-slate-400">Avg Goal Progress</p>
+          <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Avg Goal Progress</p>
         </Card>
 
         <Card className="p-4">
@@ -291,17 +291,17 @@ export function ProviderInsightsDashboard({
             </div>
             <Sparkles className="w-4 h-4 text-amber-500" />
           </div>
-          <p className="text-2xl font-bold text-neutral-900 dark:text-white mt-3">
+          <p className="text-2xl font-bold text-[#1B2733] dark:text-white mt-3">
             {aggregateData?.patientImprovementRate || 0}%
           </p>
-          <p className="text-sm text-neutral-500 dark:text-slate-400">Patient Improvement Rate</p>
+          <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Patient Improvement Rate</p>
         </Card>
       </div>
 
       {/* Category Breakdown */}
       <Card className="p-6">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="font-semibold text-neutral-900 dark:text-white">
+          <h3 className="font-semibold text-[#1B2733] dark:text-white">
             Progress by Category
           </h3>
           <Button variant="ghost" size="sm">
@@ -327,19 +327,19 @@ export function ProviderInsightsDashboard({
                     <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${colorClass} flex items-center justify-center`}>
                       <Icon className="w-4 h-4 text-white" />
                     </div>
-                    <span className="font-medium text-neutral-900 dark:text-white capitalize text-sm">
+                    <span className="font-medium text-[#1B2733] dark:text-white capitalize text-sm">
                       {category.replace('-', ' ')}
                     </span>
                   </div>
 
                   <div className="space-y-2">
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-neutral-500 dark:text-slate-400">Goals</span>
-                      <span className="font-medium text-neutral-900 dark:text-white">{data.goals}</span>
+                      <span className="text-[#5A6B7A] dark:text-slate-400">Goals</span>
+                      <span className="font-medium text-[#1B2733] dark:text-white">{data.goals}</span>
                     </div>
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-neutral-500 dark:text-slate-400">Avg Progress</span>
-                      <span className="font-medium text-neutral-900 dark:text-white">{data.avgProgress}%</span>
+                      <span className="text-[#5A6B7A] dark:text-slate-400">Avg Progress</span>
+                      <span className="font-medium text-[#1B2733] dark:text-white">{data.avgProgress}%</span>
                     </div>
                     <div className="w-full h-2 bg-neutral-200 dark:bg-slate-600 rounded-full overflow-hidden">
                       <div
@@ -354,8 +354,8 @@ export function ProviderInsightsDashboard({
         </div>
 
         {aggregateData && Object.values(aggregateData.categoryBreakdown).every(d => d.goals === 0) && (
-          <div className="text-center py-8 text-neutral-500 dark:text-slate-400">
-            <Target className="w-12 h-12 mx-auto mb-3 text-neutral-300 dark:text-slate-600" />
+          <div className="text-center py-8 text-[#5A6B7A] dark:text-slate-400">
+            <Target className="w-12 h-12 mx-auto mb-3 text-neutral-300 dark:text-[#5A6B7A]" />
             <p>No goals tracked yet</p>
             <p className="text-sm">Create goals for your patients to see category insights</p>
           </div>
@@ -365,7 +365,7 @@ export function ProviderInsightsDashboard({
       {/* Patient Progress List */}
       <Card className="p-6">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="font-semibold text-neutral-900 dark:text-white">
+          <h3 className="font-semibold text-[#1B2733] dark:text-white">
             Patient Progress
           </h3>
           <Button variant="ghost" size="sm">
@@ -376,8 +376,8 @@ export function ProviderInsightsDashboard({
 
         <div className="space-y-3">
           {patientOutcomes.length === 0 ? (
-            <div className="text-center py-8 text-neutral-500 dark:text-slate-400">
-              <Users className="w-12 h-12 mx-auto mb-3 text-neutral-300 dark:text-slate-600" />
+            <div className="text-center py-8 text-[#5A6B7A] dark:text-slate-400">
+              <Users className="w-12 h-12 mx-auto mb-3 text-neutral-300 dark:text-[#5A6B7A]" />
               <p>No patients with granted access</p>
               <p className="text-sm">Request access from patient families to track outcomes</p>
             </div>
@@ -394,10 +394,10 @@ export function ProviderInsightsDashboard({
                     </span>
                   </div>
                   <div>
-                    <p className="font-medium text-neutral-900 dark:text-white">
+                    <p className="font-medium text-[#1B2733] dark:text-white">
                       {outcome.patientName}
                     </p>
-                    <p className="text-sm text-neutral-500 dark:text-slate-400">
+                    <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
                       {outcome.activeGoals} active goals • {outcome.completedGoals} completed
                     </p>
                   </div>
@@ -414,7 +414,7 @@ export function ProviderInsightsDashboard({
                         {outcome.avgProgress}%
                       </span>
                     </div>
-                    <p className="text-xs text-neutral-500 dark:text-slate-400">
+                    <p className="text-xs text-[#5A6B7A] dark:text-slate-400">
                       Updated {new Date(outcome.lastUpdate).toLocaleDateString()}
                     </p>
                   </div>
@@ -435,14 +435,14 @@ export function ProviderInsightsDashboard({
               <FileText className="w-6 h-6 text-white" />
             </div>
             <div className="flex-1">
-              <h4 className="font-medium text-neutral-900 dark:text-white group-hover:text-teal-600 transition-colors">
+              <h4 className="font-medium text-[#1B2733] dark:text-white group-hover:text-[#6B9080] transition-colors">
                 Generate Report
               </h4>
-              <p className="text-sm text-neutral-500 dark:text-slate-400">
+              <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
                 Create outcome report for insurance
               </p>
             </div>
-            <ArrowRight className="w-5 h-5 text-neutral-400 group-hover:text-teal-600 transition-colors" />
+            <ArrowRight className="w-5 h-5 text-neutral-400 group-hover:text-[#6B9080] transition-colors" />
           </div>
         </Card>
 
@@ -452,10 +452,10 @@ export function ProviderInsightsDashboard({
               <Target className="w-6 h-6 text-white" />
             </div>
             <div className="flex-1">
-              <h4 className="font-medium text-neutral-900 dark:text-white group-hover:text-violet-600 transition-colors">
+              <h4 className="font-medium text-[#1B2733] dark:text-white group-hover:text-violet-600 transition-colors">
                 Add New Goal
               </h4>
-              <p className="text-sm text-neutral-500 dark:text-slate-400">
+              <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
                 Set goals from templates or custom
               </p>
             </div>
@@ -469,10 +469,10 @@ export function ProviderInsightsDashboard({
               <Brain className="w-6 h-6 text-white" />
             </div>
             <div className="flex-1">
-              <h4 className="font-medium text-neutral-900 dark:text-white group-hover:text-amber-600 transition-colors">
+              <h4 className="font-medium text-[#1B2733] dark:text-white group-hover:text-amber-600 transition-colors">
                 AI Recommendations
               </h4>
-              <p className="text-sm text-neutral-500 dark:text-slate-400">
+              <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
                 Get AI-suggested interventions
               </p>
             </div>

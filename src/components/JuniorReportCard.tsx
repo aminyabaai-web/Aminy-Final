@@ -72,7 +72,7 @@ function trendIcon(trend: 'improving' | 'stable' | 'declining') {
     case 'declining':
       return <TrendingDown className="w-4 h-4 text-red-400" />;
     default:
-      return <Minus className="w-4 h-4 text-gray-400" />;
+      return <Minus className="w-4 h-4 text-[#8A9BA8]" />;
   }
 }
 
@@ -88,7 +88,7 @@ function trendColor(trend: 'improving' | 'stable' | 'declining') {
   switch (trend) {
     case 'improving': return 'text-green-600';
     case 'declining': return 'text-red-500';
-    default: return 'text-gray-500';
+    default: return 'text-[#5A6B7A]';
   }
 }
 
@@ -296,16 +296,16 @@ export function JuniorReportCard({
         {/* Report Card */}
         <div
           ref={cardRef}
-          className="rounded-2xl bg-white p-5 shadow-xl border border-gray-100"
+          className="rounded-2xl bg-white p-5 shadow-xl border border-[#E8E4DF]"
         >
           {/* Header */}
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-teal-400 to-cyan-500 flex items-center justify-center text-white text-lg font-bold">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] flex items-center justify-center text-white text-lg font-bold">
               {data.childInitial}
             </div>
             <div className="flex-1">
-              <h2 className="text-lg font-bold text-gray-900">Weekly Report Card</h2>
-              <div className="flex items-center gap-1 text-xs text-gray-500">
+              <h2 className="text-lg font-bold text-[#1B2733]">Weekly Report Card</h2>
+              <div className="flex items-center gap-1 text-xs text-[#5A6B7A]">
                 <Calendar className="w-3 h-3" />
                 {data.weekLabel}
               </div>
@@ -320,7 +320,7 @@ export function JuniorReportCard({
 
           {/* Quick stats row */}
           <div className="grid grid-cols-4 gap-2 mb-4">
-            <div className="text-center p-2 rounded-xl bg-blue-50">
+            <div className="text-center p-2 rounded-xl bg-[#EEF4F8]">
               <div className="text-lg font-bold text-blue-700">{data.sessionsCompleted}</div>
               <div className="text-[10px] text-blue-500">Sessions</div>
             </div>
@@ -350,16 +350,16 @@ export function JuniorReportCard({
           {data.domainBreakdown.filter(d => d.sessions > 0).length > 0 && (
             <div className="mb-4">
               <div className="flex items-center gap-1.5 mb-2">
-                <Target className="w-4 h-4 text-gray-500" />
-                <span className="text-xs font-semibold text-gray-700 uppercase tracking-wide">Skills Practiced</span>
+                <Target className="w-4 h-4 text-[#5A6B7A]" />
+                <span className="text-xs font-semibold text-[#3A4A57] uppercase tracking-wide">Skills Practiced</span>
               </div>
               <div className="space-y-1.5">
                 {data.domainBreakdown
                   .filter(d => d.sessions > 0)
                   .map(d => (
                     <div key={d.domain} className="flex items-center gap-2">
-                      <span className="text-xs text-gray-600 w-16 truncate capitalize">{d.domain}</span>
-                      <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                      <span className="text-xs text-[#5A6B7A] w-16 truncate capitalize">{d.domain}</span>
+                      <div className="flex-1 h-2 bg-[#F0EDE8] rounded-full overflow-hidden">
                         <div
                           className={`h-full rounded-full transition-all ${
                             d.accuracy >= 80 ? 'bg-green-400' :
@@ -383,7 +383,7 @@ export function JuniorReportCard({
             <div className="mb-4">
               <div className="flex items-center gap-1.5 mb-2">
                 <Trophy className="w-4 h-4 text-amber-500" />
-                <span className="text-xs font-semibold text-gray-700 uppercase tracking-wide">Achievements</span>
+                <span className="text-xs font-semibold text-[#3A4A57] uppercase tracking-wide">Achievements</span>
               </div>
               <div className="flex flex-wrap gap-1.5">
                 {data.topAchievements.map((a, i) => (
@@ -400,7 +400,7 @@ export function JuniorReportCard({
           )}
 
           {/* Extra stats */}
-          <div className="flex items-center gap-3 text-xs text-gray-400 pt-2 border-t border-gray-100">
+          <div className="flex items-center gap-3 text-xs text-[#8A9BA8] pt-2 border-t border-[#E8E4DF]">
             <span>{data.tokensEarned} tokens earned</span>
             {data.calmCornerCount > 0 && (
               <span>Calm Corner {data.calmCornerCount}x</span>
@@ -408,7 +408,7 @@ export function JuniorReportCard({
           </div>
 
           {/* Privacy note */}
-          <p className="text-[10px] text-gray-400 text-center mt-3">
+          <p className="text-[10px] text-[#8A9BA8] text-center mt-3">
             Aminy Ease | Privacy-first: initials only, no PII shared
           </p>
         </div>
@@ -419,7 +419,7 @@ export function JuniorReportCard({
           {onShareTherapist && (
             <button
               onClick={handleShareTherapist}
-              className="w-full flex items-center justify-center gap-2 py-3 bg-teal-600 hover:bg-teal-700 text-white rounded-xl font-medium transition-colors"
+              className="w-full flex items-center justify-center gap-2 py-3 bg-primary hover:bg-[#6B9080] text-white rounded-xl font-medium transition-colors"
             >
               <Send size={18} />
               Share with Therapist
@@ -431,21 +431,21 @@ export function JuniorReportCard({
             <button
               onClick={handleShareImage}
               disabled={sharing}
-              className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-white/90 hover:bg-white text-gray-700 rounded-xl text-sm transition-colors border border-gray-200 disabled:opacity-50"
+              className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-white/90 hover:bg-white text-[#3A4A57] rounded-xl text-sm transition-colors border border-[#E8E4DF] disabled:opacity-50"
             >
               <Share2 size={16} />
               {sharing ? 'Sharing...' : 'Share'}
             </button>
             <button
               onClick={handleDownload}
-              className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-white/90 hover:bg-white text-gray-700 rounded-xl text-sm transition-colors border border-gray-200"
+              className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-white/90 hover:bg-white text-[#3A4A57] rounded-xl text-sm transition-colors border border-[#E8E4DF]"
             >
               <Download size={16} />
               Save Image
             </button>
             <button
               onClick={handleCopyText}
-              className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-white/90 hover:bg-white text-gray-700 rounded-xl text-sm transition-colors border border-gray-200"
+              className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-white/90 hover:bg-white text-[#3A4A57] rounded-xl text-sm transition-colors border border-[#E8E4DF]"
             >
               {copied ? <Check size={16} /> : <Copy size={16} />}
               {copied ? 'Copied!' : 'Copy'}

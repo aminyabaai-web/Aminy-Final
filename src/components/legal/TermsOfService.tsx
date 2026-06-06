@@ -19,15 +19,15 @@ interface SectionProps {
 function Section({ title, id, children }: SectionProps) {
   const [open, setOpen] = useState(true);
   return (
-    <div id={id} className="border-b border-gray-200 py-4">
+    <div id={id} className="border-b border-[#E8E4DF] py-4">
       <button
         onClick={() => setOpen(!open)}
         className="flex w-full items-center justify-between text-left"
       >
-        <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
-        {open ? <ChevronUp className="h-5 w-5 text-gray-500" /> : <ChevronDown className="h-5 w-5 text-gray-500" />}
+        <h2 className="text-lg font-semibold text-[#1B2733]">{title}</h2>
+        {open ? <ChevronUp className="h-5 w-5 text-[#5A6B7A]" /> : <ChevronDown className="h-5 w-5 text-[#5A6B7A]" />}
       </button>
-      {open && <div className="mt-3 space-y-3 text-sm leading-relaxed text-gray-700">{children}</div>}
+      {open && <div className="mt-3 space-y-3 text-sm leading-relaxed text-[#3A4A57]">{children}</div>}
     </div>
   );
 }
@@ -37,21 +37,21 @@ export default function TermsOfService({ onBack }: TermsOfServiceProps) {
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="sticky top-0 z-10 border-b border-gray-200 bg-white px-4 py-3">
+      <div className="sticky top-0 z-10 border-b border-[#E8E4DF] bg-white px-4 py-3">
         <div className="flex items-center gap-3">
           {onBack && (
-            <button onClick={onBack} className="rounded-full p-1 hover:bg-gray-100">
-              <ArrowLeft className="h-5 w-5 text-gray-600" />
+            <button onClick={onBack} className="rounded-full p-1 hover:bg-[#F0EDE8]">
+              <ArrowLeft className="h-5 w-5 text-[#5A6B7A]" />
             </button>
           )}
-          <FileText className="h-6 w-6 text-teal-600" />
-          <h1 className="text-xl font-bold text-gray-900">Terms of Service</h1>
+          <FileText className="h-6 w-6 text-[#6B9080]" />
+          <h1 className="text-xl font-bold text-[#1B2733]">Terms of Service</h1>
         </div>
       </div>
 
       <div className="mx-auto max-w-2xl px-4 py-6">
-        <p className="mb-2 text-xs text-gray-500">Effective Date: {effectiveDate}</p>
-        <p className="mb-6 text-sm text-gray-700">
+        <p className="mb-2 text-xs text-[#5A6B7A]">Effective Date: {effectiveDate}</p>
+        <p className="mb-6 text-sm text-[#3A4A57]">
           Welcome to Aminy. These Terms of Service (&quot;Terms&quot;) govern your access to and use
           of the Aminy platform, including our website, mobile application, telehealth services,
           and related features (collectively, the &quot;Platform&quot;). By creating an account or
@@ -433,7 +433,7 @@ export default function TermsOfService({ onBack }: TermsOfServiceProps) {
         </Section>
 
         <Section title="17. Contact" id="contact">
-          <div className="rounded-lg bg-gray-50 p-4 text-sm">
+          <div className="rounded-lg bg-[#FAF7F2] p-4 text-sm">
             <p><strong>Aminy Inc.</strong></p>
             <p>5070 N. 40th Street, Suite 105</p>
             <p>Phoenix, AZ 85018</p>

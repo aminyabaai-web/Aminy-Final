@@ -215,7 +215,7 @@ export function ParentCapacityCheck({
             <Card className={cn(
               "p-4",
               stressLevel <= 3 ? "bg-green-50 border-green-200" :
-              stressLevel <= 6 ? "bg-yellow-50 border-yellow-200" :
+              stressLevel <= 6 ? "bg-[#FDF9F0] border-[#F0EDE8]" :
               "bg-rose-50 border-rose-200"
             )}>
               <p className={cn(
@@ -271,17 +271,17 @@ export function ParentCapacityCheck({
                     "hover:border-accent hover:bg-accent/5",
                     availableMinutes === option.value
                       ? "border-accent bg-accent/5"
-                      : "border-gray-200"
+                      : "border-[#E8E4DF]"
                   )}
                 >
                   <div className="flex items-center gap-3 sm:gap-4">
                     <div className={cn(
                       "p-2 rounded-lg",
-                      availableMinutes === option.value ? "bg-accent/20" : "bg-gray-100"
+                      availableMinutes === option.value ? "bg-accent/20" : "bg-[#F0EDE8]"
                     )}>
                       <option.icon className={cn(
                         "w-5 h-5",
-                        availableMinutes === option.value ? "text-accent" : "text-gray-500"
+                        availableMinutes === option.value ? "text-accent" : "text-[#5A6B7A]"
                       )} />
                     </div>
                     <div className="flex-1">
@@ -360,17 +360,17 @@ export function ParentCapacityCheck({
                     "hover:border-accent hover:bg-accent/5",
                     supportLevel === option.value
                       ? "border-accent bg-accent/5"
-                      : "border-gray-200"
+                      : "border-[#E8E4DF]"
                   )}
                 >
                   <div className="flex items-center gap-3 sm:gap-4">
                     <div className={cn(
                       "p-2 rounded-lg",
-                      supportLevel === option.value ? "bg-accent/20" : "bg-gray-100"
+                      supportLevel === option.value ? "bg-accent/20" : "bg-[#F0EDE8]"
                     )}>
                       <option.icon className={cn(
                         "w-5 h-5",
-                        supportLevel === option.value ? "text-accent" : "text-gray-500"
+                        supportLevel === option.value ? "text-accent" : "text-[#5A6B7A]"
                       )} />
                     </div>
                     <div className="flex-1">
@@ -418,7 +418,7 @@ export function ParentCapacityCheck({
               className="min-h-32 text-base"
             />
 
-            <Card className="mt-4 p-4 bg-blue-50 border-blue-200">
+            <Card className="mt-4 p-4 bg-[#EEF4F8] border-[#C8DDE8]">
               <div className="flex items-start gap-3">
                 <MessageCircle className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
                 <p className="text-sm text-blue-700">
@@ -496,7 +496,7 @@ export function ParentCapacityCheck({
         <div className="flex items-center justify-between mb-4 sm:mb-6">
           <button
             onClick={prevStep}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-2 hover:bg-[#F0EDE8] rounded-lg transition-colors"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
@@ -507,7 +507,7 @@ export function ParentCapacityCheck({
         </div>
 
         {/* Progress */}
-        <div className="h-2 bg-gray-100 rounded-full overflow-hidden mb-8">
+        <div className="h-2 bg-[#F0EDE8] rounded-full overflow-hidden mb-8">
           <motion.div
             className="h-full bg-gradient-to-r from-rose-400 to-pink-400"
             initial={{ width: 0 }}

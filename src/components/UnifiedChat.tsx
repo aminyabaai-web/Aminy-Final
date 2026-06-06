@@ -151,15 +151,15 @@ export function UnifiedChat({
   const getAuthorColors = (author: string) => {
     switch (author) {
       case 'parent':
-        return { bg: 'bg-blue-50', text: 'text-blue-900', border: 'border-blue-100' };
+        return { bg: 'bg-[#EEF4F8]', text: 'text-blue-900', border: 'border-blue-100' };
       case 'ai':
-        return { bg: 'bg-teal-50', text: 'text-teal-900', border: 'border-teal-100' };
+        return { bg: 'bg-[#6B9080]/10', text: 'text-[#6B9080]', border: 'border-[#E8E4DF]' };
       case 'coach':
         return { bg: 'bg-purple-50', text: 'text-purple-900', border: 'border-purple-100' };
       case 'provider':
         return { bg: 'bg-green-50', text: 'text-green-900', border: 'border-green-100' };
       default:
-        return { bg: 'bg-gray-50', text: 'text-gray-900', border: 'border-gray-100' };
+        return { bg: 'bg-[#FAF7F2]', text: 'text-[#1B2733]', border: 'border-[#E8E4DF]' };
     }
   };
 
@@ -167,7 +167,7 @@ export function UnifiedChat({
     <div className={`flex flex-col ${embedded ? 'h-full' : 'h-screen max-w-4xl mx-auto'}`}>
       {/* Header */}
       {!embedded && (
-        <div className="bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4">
+        <div className="bg-white border-b border-[#E8E4DF] px-4 sm:px-6 py-3 sm:py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-accent/10 rounded-lg">
@@ -194,7 +194,7 @@ export function UnifiedChat({
         <div className="space-y-3 sm:space-y-4">
           {messages.length === 0 && !loading && (
             <div className="text-center py-12">
-              <div className="p-4 bg-teal-50 rounded-full inline-block mb-4">
+              <div className="p-4 bg-[#6B9080]/10 rounded-full inline-block mb-4">
                 <Sparkles className="w-8 h-8 text-accent" />
               </div>
               <h3 className="text-lg font-semibold text-primary mb-2">
@@ -271,7 +271,7 @@ export function UnifiedChat({
 
           {(loading || isSending) && (
             <div className="flex justify-start">
-              <div className="bg-teal-50 rounded-2xl px-4 py-3 flex items-center gap-2">
+              <div className="bg-[#6B9080]/10 rounded-2xl px-4 py-3 flex items-center gap-2">
                 <Loader2 className="w-4 h-4 animate-spin text-accent" />
                 <span className="text-sm text-muted-foreground">
                   Aminy is thinking...
@@ -291,7 +291,7 @@ export function UnifiedChat({
       </ScrollArea>
 
       {/* Input */}
-      <div className="bg-white border-t border-gray-200 px-4 sm:px-6 py-3 sm:py-4">
+      <div className="bg-white border-t border-[#E8E4DF] px-4 sm:px-6 py-3 sm:py-4">
         <div className="flex gap-3">
           <Textarea
             value={input}

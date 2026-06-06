@@ -36,7 +36,7 @@ export function JuniorSettings({ onBack, childName }: JuniorSettingsProps) {
   return (
     <div className="min-h-screen bg-white dark:bg-slate-900 pb-24">
       {/* Header */}
-      <div className="sticky top-0 z-10 bg-white border-b border-gray-200">
+      <div className="sticky top-0 z-10 bg-white border-b border-[#E8E4DF]">
         <div className="flex items-center gap-3 sm:gap-4 px-4 py-4">
           <Button
             variant="ghost"
@@ -79,7 +79,7 @@ export function JuniorSettings({ onBack, childName }: JuniorSettingsProps) {
         </div>
 
         {/* Activity Notifications */}
-        <div className="bg-white rounded-xl p-6 border border-gray-200">
+        <div className="bg-white rounded-xl p-6 border border-[#E8E4DF]">
           <div className="flex items-start justify-between gap-3 sm:gap-4 mb-4">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
@@ -102,10 +102,10 @@ export function JuniorSettings({ onBack, childName }: JuniorSettingsProps) {
         </div>
 
         {/* Time Limits */}
-        <div className="bg-white rounded-xl p-6 border border-gray-200">
+        <div className="bg-white rounded-xl p-6 border border-[#E8E4DF]">
           <div className="mb-4 sm:mb-6">
             <div className="flex items-center gap-2 mb-2">
-              <Clock className="w-5 h-5 text-teal-600" />
+              <Clock className="w-5 h-5 text-[#6B9080]" />
               <Label className="font-semibold">Daily Time Limit</Label>
             </div>
             <p className="text-sm text-muted-foreground mb-4">
@@ -136,7 +136,7 @@ export function JuniorSettings({ onBack, childName }: JuniorSettingsProps) {
         </div>
 
         {/* Content Restrictions */}
-        <div className="bg-white rounded-xl p-6 border border-gray-200">
+        <div className="bg-white rounded-xl p-6 border border-[#E8E4DF]">
           <div className="space-y-3 sm:space-y-4">
             <div className="flex items-start justify-between gap-3 sm:gap-4">
               <div className="flex-1">
@@ -158,7 +158,7 @@ export function JuniorSettings({ onBack, childName }: JuniorSettingsProps) {
               />
             </div>
 
-            <div className="h-px bg-gray-200" />
+            <div className="h-px bg-[#E8E4DF]" />
 
             <div className="flex items-start justify-between gap-3 sm:gap-4">
               <div className="flex-1">
@@ -183,7 +183,7 @@ export function JuniorSettings({ onBack, childName }: JuniorSettingsProps) {
         </div>
 
         {/* Activity Tracking */}
-        <div className="bg-blue-50 rounded-xl p-6 border border-blue-100">
+        <div className="bg-[#EEF4F8] rounded-xl p-6 border border-blue-100">
           <div className="flex items-start justify-between gap-3 sm:gap-4">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
@@ -206,7 +206,7 @@ export function JuniorSettings({ onBack, childName }: JuniorSettingsProps) {
         </div>
 
         {/* Info Card */}
-        <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
+        <div className="bg-[#FAF7F2] rounded-xl p-4 border border-[#E8E4DF]">
           <p className="text-xs text-muted-foreground text-center">
             Calm tools, rewards, and transition supports are designed to lower stress quickly and make daily routines easier for {childName}.
           </p>

@@ -37,7 +37,7 @@ interface PullToRefreshProps {
 function RefreshSpinner({
   progress,
   isRefreshing,
-  color = 'text-indigo-600',
+  color = 'text-[#6B9080]',
 }: {
   progress: number;
   isRefreshing: boolean;
@@ -54,7 +54,7 @@ function RefreshSpinner({
       {/* Background circle */}
       <svg className="absolute inset-0" width={size} height={size}>
         <circle
-          className="text-gray-200 dark:text-gray-700"
+          className="text-gray-200 dark:text-[#3A4A57]"
           strokeWidth={strokeWidth}
           stroke="currentColor"
           fill="transparent"
@@ -96,7 +96,7 @@ function RefreshSpinner({
 function ArrowIcon({ rotation }: { rotation: number }) {
   return (
     <svg
-      className="w-5 h-5 text-gray-500 transition-transform duration-200"
+      className="w-5 h-5 text-[#5A6B7A] transition-transform duration-200"
       style={{ transform: `rotate(${rotation}deg)` }}
       fill="none"
       viewBox="0 0 24 24"
@@ -118,8 +118,8 @@ export function PullToRefresh({
   threshold = 80,
   maxPull = 120,
   disabled = false,
-  indicatorColor = 'text-indigo-600',
-  backgroundColor = 'bg-gray-50 dark:bg-slate-900',
+  indicatorColor = 'text-[#6B9080]',
+  backgroundColor = 'bg-[#FAF7F2] dark:bg-slate-900',
 }: PullToRefreshProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -160,7 +160,7 @@ export function PullToRefresh({
               )}
             </>
           )}
-          <span className="text-xs text-gray-500 dark:text-gray-400">
+          <span className="text-xs text-[#5A6B7A] dark:text-[#8A9BA8]">
             {isRefreshing
               ? 'Refreshing...'
               : canRefresh

@@ -370,39 +370,39 @@ export function VisualSchedule({ childName, onBack }: VisualScheduleProps) {
   // ---- Render ----
 
   return (
-    <div className="h-full flex flex-col bg-gray-50">
+    <div className="h-full flex flex-col bg-[#FAF7F2]">
       {/* Header */}
       <div className="bg-white shadow-sm px-4 py-3 flex items-center justify-between flex-shrink-0">
         <button
           onClick={onBack}
-          className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center"
+          className="w-10 h-10 rounded-full bg-[#F0EDE8] flex items-center justify-center"
           aria-label="Go back"
         >
-          <ArrowLeft className="w-5 h-5 text-gray-600" />
+          <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
         </button>
-        <h2 className="text-lg font-semibold text-gray-800">
+        <h2 className="text-lg font-semibold text-[#1B2733]">
           {childName}&apos;s Schedule
         </h2>
         <div className="flex gap-1.5">
           <button
             onClick={handleResetSchedule}
-            className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center"
+            className="w-10 h-10 rounded-full bg-[#F0EDE8] flex items-center justify-center"
             aria-label="Reset schedule"
           >
-            <RotateCcw className="w-4 h-4 text-gray-600" />
+            <RotateCcw className="w-4 h-4 text-[#5A6B7A]" />
           </button>
         </div>
       </div>
 
       {/* View Tabs */}
-      <div className="bg-white border-b border-gray-200 flex-shrink-0">
+      <div className="bg-white border-b border-[#E8E4DF] flex-shrink-0">
         <div className="flex px-3 py-2 gap-2">
           <button
             onClick={() => setView('schedule')}
             className={`flex-1 py-2 rounded-xl text-sm font-medium transition-colors ${
               view === 'schedule'
                 ? 'bg-blue-500 text-white'
-                : 'bg-gray-100 text-gray-600'
+                : 'bg-[#F0EDE8] text-[#5A6B7A]'
             }`}
           >
             <Clock className="w-4 h-4 inline mr-1" />
@@ -413,7 +413,7 @@ export function VisualSchedule({ childName, onBack }: VisualScheduleProps) {
             className={`flex-1 py-2 rounded-xl text-sm font-medium transition-colors ${
               view === 'first-then'
                 ? 'bg-purple-500 text-white'
-                : 'bg-gray-100 text-gray-600'
+                : 'bg-[#F0EDE8] text-[#5A6B7A]'
             }`}
           >
             <ChevronRight className="w-4 h-4 inline mr-1" />
@@ -424,7 +424,7 @@ export function VisualSchedule({ childName, onBack }: VisualScheduleProps) {
             className={`flex-1 py-2 rounded-xl text-sm font-medium transition-colors ${
               view === 'templates'
                 ? 'bg-green-500 text-white'
-                : 'bg-gray-100 text-gray-600'
+                : 'bg-[#F0EDE8] text-[#5A6B7A]'
             }`}
           >
             <Sparkles className="w-4 h-4 inline mr-1" />
@@ -435,15 +435,15 @@ export function VisualSchedule({ childName, onBack }: VisualScheduleProps) {
 
       {/* ---- Timer Bar (when current activity) ---- */}
       {view === 'schedule' && currentItem && currentItem.durationMinutes && currentItem.durationMinutes > 0 && (
-        <div className="bg-blue-50 border-b border-blue-200 px-4 py-2.5 flex items-center justify-between flex-shrink-0">
+        <div className="bg-[#EEF4F8] border-b border-[#C8DDE8] px-4 py-2.5 flex items-center justify-between flex-shrink-0">
           <div className="flex items-center gap-2">
             <span className="text-xl">{currentItem.emoji}</span>
-            <span className="text-sm font-medium text-blue-800">
+            <span className="text-sm font-medium text-[#4A6478]">
               {currentItem.label}
             </span>
           </div>
           <div className="flex items-center gap-2">
-            <span className={`text-lg font-mono font-bold ${remaining <= 60 ? 'text-red-600' : 'text-blue-800'}`}>
+            <span className={`text-lg font-mono font-bold ${remaining <= 60 ? 'text-red-600' : 'text-[#4A6478]'}`}>
               {formatTime(remaining)}
             </span>
             <button
@@ -463,9 +463,9 @@ export function VisualSchedule({ childName, onBack }: VisualScheduleProps) {
                 resetTimer();
                 setTimerRunning(false);
               }}
-              className="w-9 h-9 rounded-full bg-gray-200 flex items-center justify-center"
+              className="w-9 h-9 rounded-full bg-[#E8E4DF] flex items-center justify-center"
             >
-              <RotateCcw className="w-4 h-4 text-gray-600" />
+              <RotateCcw className="w-4 h-4 text-[#5A6B7A]" />
             </button>
           </div>
         </div>
@@ -478,9 +478,9 @@ export function VisualSchedule({ childName, onBack }: VisualScheduleProps) {
           <div className="p-4">
             {items.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-16 text-center">
-                <Clock className="w-14 h-14 text-gray-400 mb-4" />
-                <p className="text-gray-500 font-medium mb-1">No schedule yet</p>
-                <p className="text-gray-400 text-sm mb-4">
+                <Clock className="w-14 h-14 text-[#8A9BA8] mb-4" />
+                <p className="text-[#5A6B7A] font-medium mb-1">No schedule yet</p>
+                <p className="text-[#8A9BA8] text-sm mb-4">
                   Create a schedule or pick a template
                 </p>
                 <div className="flex gap-2">
@@ -524,9 +524,9 @@ export function VisualSchedule({ childName, onBack }: VisualScheduleProps) {
                       onDragEnd={handleDragEnd}
                       className={`
                         flex items-center gap-3 p-3 rounded-2xl border-2 transition-all
-                        ${isDone ? 'bg-gray-50 border-gray-200 opacity-60' : ''}
-                        ${isCurrent ? 'bg-blue-50 border-blue-400 vs-current-pulse' : ''}
-                        ${!isDone && !isCurrent ? 'bg-white border-gray-200' : ''}
+                        ${isDone ? 'bg-[#FAF7F2] border-[#E8E4DF] opacity-60' : ''}
+                        ${isCurrent ? 'bg-[#EEF4F8] border-blue-400 vs-current-pulse' : ''}
+                        ${!isDone && !isCurrent ? 'bg-white border-[#E8E4DF]' : ''}
                         ${isDragging ? 'opacity-50 scale-95' : ''}
                         ${isDragOver ? 'border-blue-500 border-dashed' : ''}
                         ${isJustCompleted ? 'vs-check-animate' : ''}
@@ -537,14 +537,14 @@ export function VisualSchedule({ childName, onBack }: VisualScheduleProps) {
                         className="flex-shrink-0 cursor-grab active:cursor-grabbing touch-none"
                         onTouchStart={(e) => handleTouchDragStart(index, e)}
                       >
-                        <GripVertical className="w-5 h-5 text-gray-400" />
+                        <GripVertical className="w-5 h-5 text-[#8A9BA8]" />
                       </div>
 
                       {/* Timeline dot */}
                       <div className="flex-shrink-0 relative">
                         {/* Connecting line */}
                         {index < items.length - 1 && (
-                          <div className="absolute top-full left-1/2 -translate-x-1/2 w-0.5 h-4 bg-gray-200" />
+                          <div className="absolute top-full left-1/2 -translate-x-1/2 w-0.5 h-4 bg-[#E8E4DF]" />
                         )}
                         <div
                           className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl ${
@@ -552,7 +552,7 @@ export function VisualSchedule({ childName, onBack }: VisualScheduleProps) {
                               ? 'bg-green-100'
                               : isCurrent
                               ? 'bg-blue-100'
-                              : 'bg-gray-100'
+                              : 'bg-[#F0EDE8]'
                           }`}
                         >
                           {isDone ? (
@@ -567,17 +567,17 @@ export function VisualSchedule({ childName, onBack }: VisualScheduleProps) {
                       <div className="flex-1 min-w-0">
                         <p
                           className={`font-medium text-sm ${
-                            isDone ? 'line-through text-gray-400' : 'text-gray-800'
+                            isDone ? 'line-through text-[#8A9BA8]' : 'text-[#1B2733]'
                           }`}
                         >
                           {item.label}
                         </p>
                         <div className="flex items-center gap-2 mt-0.5">
                           {item.time && (
-                            <span className="text-xs text-gray-500">{item.time}</span>
+                            <span className="text-xs text-[#5A6B7A]">{item.time}</span>
                           )}
                           {item.durationMinutes && item.durationMinutes > 0 && (
-                            <span className="text-xs text-gray-400">
+                            <span className="text-xs text-[#8A9BA8]">
                               {item.durationMinutes} min
                             </span>
                           )}
@@ -592,7 +592,7 @@ export function VisualSchedule({ childName, onBack }: VisualScheduleProps) {
                             className={`w-10 h-10 rounded-full flex items-center justify-center ${
                               isCurrent
                                 ? 'bg-green-500 text-white'
-                                : 'bg-gray-100 text-gray-500'
+                                : 'bg-[#F0EDE8] text-[#5A6B7A]'
                             }`}
                             aria-label={`Mark ${item.label} as done`}
                           >
@@ -601,17 +601,17 @@ export function VisualSchedule({ childName, onBack }: VisualScheduleProps) {
                         )}
                         <button
                           onClick={() => startEditItem(item)}
-                          className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
+                          className="w-8 h-8 rounded-full bg-[#F0EDE8] flex items-center justify-center"
                           aria-label={`Edit ${item.label}`}
                         >
-                          <Edit3 className="w-3.5 h-3.5 text-gray-400" />
+                          <Edit3 className="w-3.5 h-3.5 text-[#8A9BA8]" />
                         </button>
                         <button
                           onClick={() => handleDeleteItem(item.id)}
-                          className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
+                          className="w-8 h-8 rounded-full bg-[#F0EDE8] flex items-center justify-center"
                           aria-label={`Delete ${item.label}`}
                         >
-                          <Trash2 className="w-3.5 h-3.5 text-gray-400" />
+                          <Trash2 className="w-3.5 h-3.5 text-[#8A9BA8]" />
                         </button>
                       </div>
                     </div>
@@ -621,7 +621,7 @@ export function VisualSchedule({ childName, onBack }: VisualScheduleProps) {
                 {/* Add button at bottom */}
                 <button
                   onClick={() => setShowAddItem(true)}
-                  className="w-full py-3 rounded-2xl border-2 border-dashed border-gray-300 text-gray-400 flex items-center justify-center gap-2 text-sm"
+                  className="w-full py-3 rounded-2xl border-2 border-dashed border-[#E8E4DF] text-[#8A9BA8] flex items-center justify-center gap-2 text-sm"
                 >
                   <Plus className="w-4 h-4" />
                   Add Activity
@@ -634,19 +634,19 @@ export function VisualSchedule({ childName, onBack }: VisualScheduleProps) {
         {/* ---- First / Then View ---- */}
         {view === 'first-then' && (
           <div className="p-4 flex flex-col gap-4 h-full">
-            <p className="text-center text-sm text-gray-500">
+            <p className="text-center text-sm text-[#5A6B7A]">
               Simplified view for younger children
             </p>
 
             {/* First panel */}
-            <div className="flex-1 bg-blue-50 border-3 border-blue-400 rounded-3xl p-6 flex flex-col items-center justify-center text-center">
+            <div className="flex-1 bg-[#EEF4F8] border-3 border-blue-400 rounded-3xl p-6 flex flex-col items-center justify-center text-center">
               <span className="text-sm font-bold text-blue-600 uppercase tracking-wider mb-3">
                 First
               </span>
               {firstItem ? (
                 <>
                   <span className="text-6xl mb-3">{firstItem.emoji}</span>
-                  <span className="text-xl font-bold text-blue-800">
+                  <span className="text-xl font-bold text-[#4A6478]">
                     {firstItem.label}
                   </span>
                   {firstItem.durationMinutes && firstItem.durationMinutes > 0 && (
@@ -656,14 +656,14 @@ export function VisualSchedule({ childName, onBack }: VisualScheduleProps) {
                   )}
                 </>
               ) : (
-                <span className="text-gray-400">No current activity</span>
+                <span className="text-[#8A9BA8]">No current activity</span>
               )}
             </div>
 
             {/* Arrow */}
             <div className="flex items-center justify-center">
-              <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center">
-                <ChevronRight className="w-6 h-6 text-gray-500 rotate-90" />
+              <div className="w-12 h-12 rounded-full bg-[#E8E4DF] flex items-center justify-center">
+                <ChevronRight className="w-6 h-6 text-[#5A6B7A] rotate-90" />
               </div>
             </div>
 
@@ -685,7 +685,7 @@ export function VisualSchedule({ childName, onBack }: VisualScheduleProps) {
                   )}
                 </>
               ) : (
-                <span className="text-gray-400">All done after this!</span>
+                <span className="text-[#8A9BA8]">All done after this!</span>
               )}
             </div>
 
@@ -705,22 +705,22 @@ export function VisualSchedule({ childName, onBack }: VisualScheduleProps) {
         {/* ---- Templates View ---- */}
         {view === 'templates' && (
           <div className="p-4 space-y-3">
-            <p className="text-sm text-gray-500 text-center mb-2">
+            <p className="text-sm text-[#5A6B7A] text-center mb-2">
               Choose a pre-built schedule to get started
             </p>
             {TEMPLATES.map((template) => (
               <button
                 key={template.name}
                 onClick={() => handleLoadTemplate(template)}
-                className="w-full bg-white rounded-2xl border-2 border-gray-200 p-4 text-left hover:border-blue-400 transition-colors"
+                className="w-full bg-white rounded-2xl border-2 border-[#E8E4DF] p-4 text-left hover:border-blue-400 transition-colors"
               >
                 <div className="flex items-center gap-3 mb-3">
                   <span className="text-3xl">{template.emoji}</span>
                   <div>
-                    <h3 className="font-semibold text-gray-800">
+                    <h3 className="font-semibold text-[#1B2733]">
                       {template.name}
                     </h3>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-[#5A6B7A]">
                       {template.items.length} activities
                     </p>
                   </div>
@@ -729,7 +729,7 @@ export function VisualSchedule({ childName, onBack }: VisualScheduleProps) {
                   {template.items.map((item, i) => (
                     <span
                       key={i}
-                      className="bg-gray-100 px-2 py-1 rounded-lg text-xs text-gray-600"
+                      className="bg-[#F0EDE8] px-2 py-1 rounded-lg text-xs text-[#5A6B7A]"
                     >
                       {item.emoji} {item.label}
                     </span>
@@ -763,7 +763,7 @@ export function VisualSchedule({ childName, onBack }: VisualScheduleProps) {
                   setShowAddItem(false);
                   setEditingItem(null);
                 }}
-                className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
+                className="w-8 h-8 rounded-full bg-[#F0EDE8] flex items-center justify-center"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -771,47 +771,47 @@ export function VisualSchedule({ childName, onBack }: VisualScheduleProps) {
 
             <div className="space-y-3">
               <div>
-                <label className="text-sm font-medium text-gray-700 block mb-1">Emoji</label>
+                <label className="text-sm font-medium text-[#3A4A57] block mb-1">Emoji</label>
                 <input
                   type="text"
                   value={formEmoji}
                   onChange={(e) => setFormEmoji(e.target.value)}
                   placeholder="🎨"
-                  className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-center text-2xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  className="w-full px-3 py-2.5 border border-[#E8E4DF] rounded-xl text-center text-2xl focus:outline-none focus:ring-2 focus:ring-blue-400"
                   maxLength={4}
                 />
               </div>
               <div>
-                <label className="text-sm font-medium text-gray-700 block mb-1">Activity Name</label>
+                <label className="text-sm font-medium text-[#3A4A57] block mb-1">Activity Name</label>
                 <input
                   type="text"
                   value={formLabel}
                   onChange={(e) => setFormLabel(e.target.value)}
                   placeholder="e.g. Speech Therapy"
-                  className="w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  className="w-full px-3 py-2.5 border border-[#E8E4DF] rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
                   maxLength={30}
                 />
               </div>
               <div className="flex gap-3">
                 <div className="flex-1">
-                  <label className="text-sm font-medium text-gray-700 block mb-1">Time (optional)</label>
+                  <label className="text-sm font-medium text-[#3A4A57] block mb-1">Time (optional)</label>
                   <input
                     type="text"
                     value={formTime}
                     onChange={(e) => setFormTime(e.target.value)}
                     placeholder="9:00 AM"
-                    className="w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    className="w-full px-3 py-2.5 border border-[#E8E4DF] rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
                     maxLength={10}
                   />
                 </div>
                 <div className="flex-1">
-                  <label className="text-sm font-medium text-gray-700 block mb-1">Duration (min)</label>
+                  <label className="text-sm font-medium text-[#3A4A57] block mb-1">Duration (min)</label>
                   <input
                     type="number"
                     value={formDuration}
                     onChange={(e) => setFormDuration(e.target.value)}
                     placeholder="15"
-                    className="w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    className="w-full px-3 py-2.5 border border-[#E8E4DF] rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
                     min={0}
                     max={480}
                   />

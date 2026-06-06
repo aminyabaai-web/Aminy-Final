@@ -58,20 +58,20 @@ export function EmptyState({
       className={cn(
         'flex flex-col items-center justify-center text-center',
         isCompact ? 'py-8 px-4' : 'py-12 px-6',
-        isCard && 'bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700',
+        isCard && 'bg-white dark:bg-slate-900 rounded-xl border border-[#E8E4DF] dark:border-slate-700',
         className
       )}
     >
       {/* Icon */}
       <div
         className={cn(
-          'rounded-full bg-gray-100 dark:bg-slate-800 flex items-center justify-center mb-4',
+          'rounded-full bg-[#F0EDE8] dark:bg-slate-800 flex items-center justify-center mb-4',
           isCompact ? 'w-12 h-12' : 'w-16 h-16'
         )}
       >
         <Icon
           className={cn(
-            'text-gray-400 dark:text-slate-500',
+            'text-[#8A9BA8] dark:text-[#5A6B7A]',
             isCompact ? 'w-6 h-6' : 'w-8 h-8'
           )}
         />
@@ -80,7 +80,7 @@ export function EmptyState({
       {/* Headline */}
       <h3
         className={cn(
-          'font-semibold text-gray-900 dark:text-white mb-2',
+          'font-semibold text-[#1B2733] dark:text-white mb-2',
           isCompact ? 'text-base' : 'text-lg'
         )}
       >
@@ -90,7 +90,7 @@ export function EmptyState({
       {/* Description */}
       <p
         className={cn(
-          'text-gray-500 dark:text-slate-400 max-w-sm mb-4 sm:mb-6',
+          'text-[#5A6B7A] dark:text-slate-400 max-w-sm mb-4 sm:mb-6',
           isCompact ? 'text-sm' : 'text-base'
         )}
       >

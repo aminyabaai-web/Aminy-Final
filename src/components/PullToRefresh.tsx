@@ -141,7 +141,7 @@ export function PullToRefresh({
             className={`p-2 rounded-full transition-all duration-200 ${
               canRefresh
                 ? 'bg-accent text-white scale-110'
-                : 'bg-gray-100 text-gray-400'
+                : 'bg-[#F0EDE8] text-[#8A9BA8]'
             }`}
             style={{
               transform: `rotate(${rotation}deg)`,
@@ -155,12 +155,12 @@ export function PullToRefresh({
             />
           </div>
           {canRefresh && (
-            <p className="text-xs font-medium text-gray-600">
+            <p className="text-xs font-medium text-[#5A6B7A]">
               Release to refresh
             </p>
           )}
           {!canRefresh && pullDistance > 20 && (
-            <p className="text-xs font-medium text-gray-400">
+            <p className="text-xs font-medium text-[#8A9BA8]">
               Pull to refresh
             </p>
           )}

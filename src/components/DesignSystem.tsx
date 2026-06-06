@@ -25,9 +25,9 @@ export function DesignSystem() {
   // Design Tokens
   const colorTokens = {
     primary: {
-      'color.bg.primary': { value: '#0891b2', description: 'Primary teal brand color' },
+      'color.bg.primary': { value: '#6B9080', description: 'Primary teal brand color' },
       'color.text.primary-contrast': { value: '#ffffff', description: 'Text on primary backgrounds' },
-      'color.border.primary': { value: '#0891b2', description: 'Primary borders and dividers' },
+      'color.border.primary': { value: '#6B9080', description: 'Primary borders and dividers' },
     },
     surface: {
       'color.bg.surface': { value: '#ffffff', description: 'Main surface background' },
@@ -91,54 +91,54 @@ export function DesignSystem() {
   ];
 
   const renderTokenCard = (tokenName: string, token: { value: string; description: string }, category: string) => (
-    <div key={tokenName} className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-4 hover:shadow-md transition-shadow">
+    <div key={tokenName} className="bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 rounded-lg p-4 hover:shadow-md transition-shadow">
       <div className="flex items-start justify-between mb-2">
-        <code className="text-sm font-mono text-slate-900 dark:text-slate-100 bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">
+        <code className="text-sm font-mono text-[#1B2733] dark:text-slate-100 bg-[#F0EDE8] dark:bg-slate-700 px-2 py-1 rounded">
           {tokenName}
         </code>
         <button
           onClick={() => copyToClipboard(token.value, tokenName)}
-          className="p-1 hover:bg-slate-100 dark:hover:bg-slate-700 rounded transition-colors"
+          className="p-1 hover:bg-[#F0EDE8] dark:hover:bg-slate-700 rounded transition-colors"
         >
           {copiedToken === tokenName ? (
             <Check className="w-4 h-4 text-green-600" />
           ) : (
-            <Copy className="w-4 h-4 text-slate-500" />
+            <Copy className="w-4 h-4 text-[#5A6B7A]" />
           )}
         </button>
       </div>
       
       {category === 'colors' && (
         <div 
-          className="w-full h-12 rounded-md mb-2 border border-slate-200"
+          className="w-full h-12 rounded-md mb-2 border border-[#E8E4DF]"
           style={{ backgroundColor: token.value }}
         />
       )}
       
-      <div className="text-sm text-slate-600 dark:text-slate-400 mb-1">
+      <div className="text-sm text-[#5A6B7A] dark:text-slate-400 mb-1">
         {token.value}
       </div>
-      <div className="text-xs text-slate-500 dark:text-slate-500">
+      <div className="text-xs text-[#5A6B7A] dark:text-[#5A6B7A]">
         {token.description}
       </div>
     </div>
   );
 
   return (
-    <div className={`min-h-screen bg-slate-50 dark:bg-slate-900 ${isDarkMode ? 'dark' : ''}`}>
+    <div className={`min-h-screen bg-[#FAF7F2] dark:bg-slate-900 ${isDarkMode ? 'dark' : ''}`}>
       {/* Header */}
-      <div className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-50">
+      <div className="bg-white dark:bg-slate-800 border-b border-[#E8E4DF] dark:border-slate-700 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-teal-600 rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                 <Heart className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h1 className="text-lg sm:text-xl font-semibold text-slate-900 dark:text-white">
+                <h1 className="text-lg sm:text-xl font-semibold text-[#1B2733] dark:text-white">
                   Aminy Design System
                 </h1>
-                <p className="text-sm text-slate-500 dark:text-slate-400">
+                <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
                   Mobile-first design for caregivers and children
                 </p>
               </div>
@@ -147,12 +147,12 @@ export function DesignSystem() {
             <div className="flex items-center gap-3">
               <button
                 onClick={toggleDarkMode}
-                className="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
+                className="p-2 hover:bg-[#F0EDE8] dark:hover:bg-slate-700 rounded-lg transition-colors"
               >
                 {isDarkMode ? (
-                  <Sun className="w-5 h-5 text-slate-600 dark:text-slate-400" />
+                  <Sun className="w-5 h-5 text-[#5A6B7A] dark:text-slate-400" />
                 ) : (
-                  <Moon className="w-5 h-5 text-slate-600 dark:text-slate-400" />
+                  <Moon className="w-5 h-5 text-[#5A6B7A] dark:text-slate-400" />
                 )}
               </button>
             </div>
@@ -173,8 +173,8 @@ export function DesignSystem() {
                     onClick={() => setSelectedSection(section.id)}
                     className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-colors ${
                       selectedSection === section.id
-                        ? 'bg-teal-100 dark:bg-teal-900 text-teal-900 dark:text-teal-100'
-                        : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+                        ? 'bg-[#6B9080]/10 dark:bg-[#1a3a5c] text-[#6B9080] dark:text-teal-100'
+                        : 'text-[#3A4A57] dark:text-slate-300 hover:bg-[#F0EDE8] dark:hover:bg-slate-800'
                     }`}
                   >
                     <Icon className="w-5 h-5" />
@@ -190,64 +190,64 @@ export function DesignSystem() {
             {selectedSection === 'overview' && (
               <div className="space-y-8">
                 <div>
-                  <h2 className="text-2xl font-semibold text-slate-900 dark:text-white mb-4">
+                  <h2 className="text-2xl font-semibold text-[#1B2733] dark:text-white mb-4">
                     Design System Overview
                   </h2>
-                  <p className="text-slate-600 dark:text-slate-400 mb-4 sm:mb-6">
+                  <p className="text-[#5A6B7A] dark:text-slate-400 mb-4 sm:mb-6">
                     A comprehensive design system built for stressed caregivers supporting children with developmental needs. 
                     Featuring calm, accessible colors and intuitive components optimized for mobile-first experiences.
                   </p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 sm:gap-6">
-                  <div className="bg-white dark:bg-slate-800 p-6 rounded-lg border border-slate-200 dark:border-slate-700">
-                    <div className="w-12 h-12 bg-teal-100 dark:bg-teal-900 rounded-lg flex items-center justify-center mb-4">
-                      <Palette className="w-6 h-6 text-teal-600 dark:text-teal-400" />
+                  <div className="bg-white dark:bg-slate-800 p-6 rounded-lg border border-[#E8E4DF] dark:border-slate-700">
+                    <div className="w-12 h-12 bg-[#6B9080]/10 dark:bg-[#1a3a5c] rounded-lg flex items-center justify-center mb-4">
+                      <Palette className="w-6 h-6 text-[#6B9080] dark:text-primary" />
                     </div>
-                    <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
+                    <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-2">
                       Calm Color Palette
                     </h3>
-                    <p className="text-slate-600 dark:text-slate-400 text-sm">
+                    <p className="text-[#5A6B7A] dark:text-slate-400 text-sm">
                       Soothing teal and coral colors designed to reduce stress and create trust for caregivers.
                     </p>
                   </div>
 
-                  <div className="bg-white dark:bg-slate-800 p-6 rounded-lg border border-slate-200 dark:border-slate-700">
+                  <div className="bg-white dark:bg-slate-800 p-6 rounded-lg border border-[#E8E4DF] dark:border-slate-700">
                     <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center mb-4">
                       <Type className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                     </div>
-                    <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
+                    <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-2">
                       Clear Typography
                     </h3>
-                    <p className="text-slate-600 dark:text-slate-400 text-sm">
+                    <p className="text-[#5A6B7A] dark:text-slate-400 text-sm">
                       Mobile-optimized type scale (28/34 to 14/20) for easy reading in stressful situations.
                     </p>
                   </div>
 
-                  <div className="bg-white dark:bg-slate-800 p-6 rounded-lg border border-slate-200 dark:border-slate-700">
+                  <div className="bg-white dark:bg-slate-800 p-6 rounded-lg border border-[#E8E4DF] dark:border-slate-700">
                     <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center mb-4">
                       <Shield className="w-6 h-6 text-purple-600 dark:text-purple-400" />
                     </div>
-                    <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
+                    <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-2">
                       AA+ Accessibility
                     </h3>
-                    <p className="text-slate-600 dark:text-slate-400 text-sm">
+                    <p className="text-[#5A6B7A] dark:text-slate-400 text-sm">
                       All color combinations exceed WCAG AA standards for accessibility and readability.
                     </p>
                   </div>
                 </div>
 
-                <div className="bg-gradient-to-r from-teal-50 to-orange-50 dark:from-teal-950 dark:to-orange-950 p-6 rounded-lg border border-teal-200 dark:border-teal-800">
-                  <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
+                <div className="bg-gradient-to-r from-[#FAF7F2] to-orange-50 dark:from-teal-950 dark:to-orange-950 p-6 rounded-lg border border-[#6B9080]/20 dark:border-[#6B9080]/30">
+                  <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-2">
                     Mobile-First Grid System
                   </h3>
-                  <p className="text-slate-600 dark:text-slate-400 mb-4">
+                  <p className="text-[#5A6B7A] dark:text-slate-400 mb-4">
                     390×844 mobile viewport with 16pt margins and 4-column grid system, optimized for one-handed use.
                   </p>
                   
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 max-w-sm">
                     {Array.from({ length: 4 }).map((_, i) => (
-                      <div key={i} className="bg-teal-200 dark:bg-teal-700 h-8 rounded flex items-center justify-center text-xs font-medium text-teal-800 dark:text-teal-200">
+                      <div key={i} className="bg-[#6B9080]/20 dark:bg-teal-700 h-8 rounded flex items-center justify-center text-xs font-medium text-[#6B9080] dark:text-teal-200">
                         {i + 1}
                       </div>
                     ))}
@@ -259,17 +259,17 @@ export function DesignSystem() {
             {selectedSection === 'colors' && (
               <div className="space-y-8">
                 <div>
-                  <h2 className="text-2xl font-semibold text-slate-900 dark:text-white mb-4">
+                  <h2 className="text-2xl font-semibold text-[#1B2733] dark:text-white mb-4">
                     Color Tokens
                   </h2>
-                  <p className="text-slate-600 dark:text-slate-400 mb-4 sm:mb-6">
+                  <p className="text-[#5A6B7A] dark:text-slate-400 mb-4 sm:mb-6">
                     Carefully chosen colors that prioritize accessibility and emotional well-being for stressed caregivers.
                   </p>
                 </div>
 
                 {Object.entries(colorTokens).map(([category, tokens]) => (
                   <div key={category}>
-                    <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 capitalize">
+                    <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-4 capitalize">
                       {category} Colors
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
@@ -285,35 +285,35 @@ export function DesignSystem() {
             {selectedSection === 'typography' && (
               <div className="space-y-8">
                 <div>
-                  <h2 className="text-2xl font-semibold text-slate-900 dark:text-white mb-4">
+                  <h2 className="text-2xl font-semibold text-[#1B2733] dark:text-white mb-4">
                     Typography Scale
                   </h2>
-                  <p className="text-slate-600 dark:text-slate-400 mb-4 sm:mb-6">
+                  <p className="text-[#5A6B7A] dark:text-slate-400 mb-4 sm:mb-6">
                     Mobile-first typography designed for clarity and readability in stressful moments.
                   </p>
                 </div>
 
                 <div className="space-y-3 sm:space-y-4 sm:space-y-6">
                   {Object.entries(typeTokens).map(([tokenName, token]) => (
-                    <div key={tokenName} className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-6">
+                    <div key={tokenName} className="bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 rounded-lg p-6">
                       <div className="flex items-start justify-between mb-4">
-                        <code className="text-sm font-mono text-slate-900 dark:text-slate-100 bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">
+                        <code className="text-sm font-mono text-[#1B2733] dark:text-slate-100 bg-[#F0EDE8] dark:bg-slate-700 px-2 py-1 rounded">
                           {tokenName}
                         </code>
                         <button
                           onClick={() => copyToClipboard(`font-size: ${token.value.split('/')[0]}; line-height: ${token.value.split('/')[1]}; font-weight: ${token.weight};`, tokenName)}
-                          className="p-1 hover:bg-slate-100 dark:hover:bg-slate-700 rounded transition-colors"
+                          className="p-1 hover:bg-[#F0EDE8] dark:hover:bg-slate-700 rounded transition-colors"
                         >
                           {copiedToken === tokenName ? (
                             <Check className="w-4 h-4 text-green-600" />
                           ) : (
-                            <Copy className="w-4 h-4 text-slate-500" />
+                            <Copy className="w-4 h-4 text-[#5A6B7A]" />
                           )}
                         </button>
                       </div>
                       
                       <div 
-                        className="text-slate-900 dark:text-white mb-2"
+                        className="text-[#1B2733] dark:text-white mb-2"
                         style={{ 
                           fontSize: token.value.split('/')[0], 
                           lineHeight: token.value.split('/')[1],
@@ -323,10 +323,10 @@ export function DesignSystem() {
                         The quick brown fox jumps over the lazy dog
                       </div>
                       
-                      <div className="text-sm text-slate-600 dark:text-slate-400 mb-1">
+                      <div className="text-sm text-[#5A6B7A] dark:text-slate-400 mb-1">
                         Size: {token.value.split('/')[0]} / Line Height: {token.value.split('/')[1]} / Weight: {token.weight}
                       </div>
-                      <div className="text-xs text-slate-500">
+                      <div className="text-xs text-[#5A6B7A]">
                         {token.description}
                       </div>
                     </div>
@@ -338,44 +338,44 @@ export function DesignSystem() {
             {selectedSection === 'spacing' && (
               <div className="space-y-8">
                 <div>
-                  <h2 className="text-2xl font-semibold text-slate-900 dark:text-white mb-4">
+                  <h2 className="text-2xl font-semibold text-[#1B2733] dark:text-white mb-4">
                     Spacing System
                   </h2>
-                  <p className="text-slate-600 dark:text-slate-400 mb-4 sm:mb-6">
+                  <p className="text-[#5A6B7A] dark:text-slate-400 mb-4 sm:mb-6">
                     8pt-based spacing system for consistent, harmonious layouts across all screen sizes.
                   </p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
                   {Object.entries(spacingTokens).map(([tokenName, token]) => (
-                    <div key={tokenName} className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-6">
+                    <div key={tokenName} className="bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 rounded-lg p-6">
                       <div className="flex items-start justify-between mb-4">
-                        <code className="text-sm font-mono text-slate-900 dark:text-slate-100 bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">
+                        <code className="text-sm font-mono text-[#1B2733] dark:text-slate-100 bg-[#F0EDE8] dark:bg-slate-700 px-2 py-1 rounded">
                           {tokenName}
                         </code>
                         <button
                           onClick={() => copyToClipboard(token.value, tokenName)}
-                          className="p-1 hover:bg-slate-100 dark:hover:bg-slate-700 rounded transition-colors"
+                          className="p-1 hover:bg-[#F0EDE8] dark:hover:bg-slate-700 rounded transition-colors"
                         >
                           {copiedToken === tokenName ? (
                             <Check className="w-4 h-4 text-green-600" />
                           ) : (
-                            <Copy className="w-4 h-4 text-slate-500" />
+                            <Copy className="w-4 h-4 text-[#5A6B7A]" />
                           )}
                         </button>
                       </div>
                       
                       <div className="flex items-center gap-3 sm:gap-4 mb-3">
                         <div 
-                          className="bg-teal-200 dark:bg-teal-700 h-8 rounded"
+                          className="bg-[#6B9080]/20 dark:bg-teal-700 h-8 rounded"
                           style={{ width: token.value }}
                         />
-                        <span className="text-sm text-slate-600 dark:text-slate-400">
+                        <span className="text-sm text-[#5A6B7A] dark:text-slate-400">
                           {token.value}
                         </span>
                       </div>
                       
-                      <div className="text-xs text-slate-500">
+                      <div className="text-xs text-[#5A6B7A]">
                         {token.description}
                       </div>
                     </div>
@@ -384,34 +384,34 @@ export function DesignSystem() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
                   {Object.entries(radiusTokens).map(([tokenName, token]) => (
-                    <div key={tokenName} className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-6">
+                    <div key={tokenName} className="bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 rounded-lg p-6">
                       <div className="flex items-start justify-between mb-4">
-                        <code className="text-sm font-mono text-slate-900 dark:text-slate-100 bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">
+                        <code className="text-sm font-mono text-[#1B2733] dark:text-slate-100 bg-[#F0EDE8] dark:bg-slate-700 px-2 py-1 rounded">
                           {tokenName}
                         </code>
                         <button
                           onClick={() => copyToClipboard(token.value, tokenName)}
-                          className="p-1 hover:bg-slate-100 dark:hover:bg-slate-700 rounded transition-colors"
+                          className="p-1 hover:bg-[#F0EDE8] dark:hover:bg-slate-700 rounded transition-colors"
                         >
                           {copiedToken === tokenName ? (
                             <Check className="w-4 h-4 text-green-600" />
                           ) : (
-                            <Copy className="w-4 h-4 text-slate-500" />
+                            <Copy className="w-4 h-4 text-[#5A6B7A]" />
                           )}
                         </button>
                       </div>
                       
                       <div className="flex items-center gap-3 sm:gap-4 mb-3">
                         <div 
-                          className="bg-teal-200 dark:bg-teal-700 w-16 h-16"
+                          className="bg-[#6B9080]/20 dark:bg-teal-700 w-16 h-16"
                           style={{ borderRadius: token.value }}
                         />
-                        <span className="text-sm text-slate-600 dark:text-slate-400">
+                        <span className="text-sm text-[#5A6B7A] dark:text-slate-400">
                           {token.value}
                         </span>
                       </div>
                       
-                      <div className="text-xs text-slate-500">
+                      <div className="text-xs text-[#5A6B7A]">
                         {token.description}
                       </div>
                     </div>
@@ -423,46 +423,46 @@ export function DesignSystem() {
             {selectedSection === 'components' && (
               <div className="space-y-8">
                 <div>
-                  <h2 className="text-2xl font-semibold text-slate-900 dark:text-white mb-4">
+                  <h2 className="text-2xl font-semibold text-[#1B2733] dark:text-white mb-4">
                     Component Library
                   </h2>
-                  <p className="text-slate-600 dark:text-slate-400 mb-4 sm:mb-6">
+                  <p className="text-[#5A6B7A] dark:text-slate-400 mb-4 sm:mb-6">
                     Touch-friendly components designed for stressed caregivers with enhanced accessibility and child-safe interactions.
                   </p>
                 </div>
 
                 {/* Buttons */}
                 <div className="space-y-3 sm:space-y-4">
-                  <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Buttons</h3>
-                  <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-6">
+                  <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white">Buttons</h3>
+                  <div className="bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 rounded-lg p-6">
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
                       <div className="space-y-3">
-                        <h4 className="text-sm font-medium text-slate-700 dark:text-slate-300">Primary</h4>
-                        <button className="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200">
+                        <h4 className="text-sm font-medium text-[#3A4A57] dark:text-slate-300">Primary</h4>
+                        <button className="w-full bg-primary hover:bg-[#6B9080] text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200">
                           Primary Button
                         </button>
-                        <button className="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
+                        <button className="w-full bg-primary hover:bg-[#6B9080] text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
                           <Heart className="w-4 h-4" />
                           With Icon
                         </button>
                       </div>
                       
                       <div className="space-y-3">
-                        <h4 className="text-sm font-medium text-slate-700 dark:text-slate-300">Secondary</h4>
-                        <button className="w-full bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-900 dark:text-slate-100 font-semibold py-3 px-4 rounded-lg transition-colors duration-200">
+                        <h4 className="text-sm font-medium text-[#3A4A57] dark:text-slate-300">Secondary</h4>
+                        <button className="w-full bg-[#F0EDE8] dark:bg-slate-700 hover:bg-[#E8E4DF] dark:hover:bg-slate-600 text-[#1B2733] dark:text-slate-100 font-semibold py-3 px-4 rounded-lg transition-colors duration-200">
                           Secondary Button
                         </button>
-                        <button className="w-full border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold py-3 px-4 rounded-lg transition-colors duration-200">
+                        <button className="w-full border border-slate-300 dark:border-slate-600 hover:bg-[#FAF7F2] dark:hover:bg-slate-800 text-[#3A4A57] dark:text-slate-300 font-semibold py-3 px-4 rounded-lg transition-colors duration-200">
                           Outline Button
                         </button>
                       </div>
                       
                       <div className="space-y-3">
-                        <h4 className="text-sm font-medium text-slate-700 dark:text-slate-300">Quiet</h4>
-                        <button className="w-full text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium py-3 px-4 rounded-lg transition-colors duration-200">
+                        <h4 className="text-sm font-medium text-[#3A4A57] dark:text-slate-300">Quiet</h4>
+                        <button className="w-full text-[#5A6B7A] dark:text-slate-400 hover:text-[#1B2733] dark:hover:text-slate-100 hover:bg-[#F0EDE8] dark:hover:bg-slate-800 font-medium py-3 px-4 rounded-lg transition-colors duration-200">
                           Quiet Button
                         </button>
-                        <button className="w-full text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 hover:bg-teal-50 dark:hover:bg-teal-950 font-medium py-3 px-4 rounded-lg transition-colors duration-200">
+                        <button className="w-full text-[#6B9080] dark:text-primary hover:text-[#6B9080] dark:hover:text-[#7BA7BC] hover:bg-[#6B9080]/10 dark:hover:bg-teal-950 font-medium py-3 px-4 rounded-lg transition-colors duration-200">
                           Link Button
                         </button>
                       </div>
@@ -472,39 +472,39 @@ export function DesignSystem() {
 
                 {/* Inputs */}
                 <div className="space-y-3 sm:space-y-4">
-                  <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Form Elements</h3>
-                  <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-6">
+                  <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white">Form Elements</h3>
+                  <div className="bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 rounded-lg p-6">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
                       <div className="space-y-3 sm:space-y-4">
                         <div>
-                          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                          <label className="block text-sm font-medium text-[#3A4A57] dark:text-slate-300 mb-2">
                             Text Input
                           </label>
                           <input 
                             type="text" 
                             placeholder="Enter text here..."
-                            className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                            className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-[#1B2733] dark:text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
                           />
                         </div>
                         
                         <div>
-                          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                          <label className="block text-sm font-medium text-[#3A4A57] dark:text-slate-300 mb-2">
                             Textarea
                           </label>
                           <textarea 
                             placeholder="Enter longer text here..."
                             rows={3}
-                            className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent resize-none"
+                            className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-[#1B2733] dark:text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent resize-none"
                           />
                         </div>
                       </div>
                       
                       <div className="space-y-3 sm:space-y-4">
                         <div>
-                          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                          <label className="block text-sm font-medium text-[#3A4A57] dark:text-slate-300 mb-2">
                             Select
                           </label>
-                          <select className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
+                          <select className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-[#1B2733] dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
                             <option>Choose an option</option>
                             <option>Option 1</option>
                             <option>Option 2</option>
@@ -513,16 +513,16 @@ export function DesignSystem() {
                         </div>
                         
                         <div className="space-y-3">
-                          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+                          <label className="block text-sm font-medium text-[#3A4A57] dark:text-slate-300">
                             Checkbox
                           </label>
                           <div className="flex items-center space-x-3">
-                            <input type="checkbox" id="check1" className="w-4 h-4 text-teal-600 border-slate-300 rounded focus:ring-teal-500" />
-                            <label htmlFor="check1" className="text-sm text-slate-700 dark:text-slate-300">Enable notifications</label>
+                            <input type="checkbox" id="check1" className="w-4 h-4 text-[#6B9080] border-slate-300 rounded focus:ring-teal-500" />
+                            <label htmlFor="check1" className="text-sm text-[#3A4A57] dark:text-slate-300">Enable notifications</label>
                           </div>
                           <div className="flex items-center space-x-3">
-                            <input type="checkbox" id="check2" className="w-4 h-4 text-teal-600 border-slate-300 rounded focus:ring-teal-500" />
-                            <label htmlFor="check2" className="text-sm text-slate-700 dark:text-slate-300">Accept terms</label>
+                            <input type="checkbox" id="check2" className="w-4 h-4 text-[#6B9080] border-slate-300 rounded focus:ring-teal-500" />
+                            <label htmlFor="check2" className="text-sm text-[#3A4A57] dark:text-slate-300">Accept terms</label>
                           </div>
                         </div>
                       </div>
@@ -532,33 +532,33 @@ export function DesignSystem() {
 
                 {/* Cards */}
                 <div className="space-y-3 sm:space-y-4">
-                  <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Cards</h3>
+                  <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white">Cards</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 sm:gap-6">
-                    <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-6 hover:shadow-lg transition-shadow">
-                      <div className="w-12 h-12 bg-teal-100 dark:bg-teal-900 rounded-lg flex items-center justify-center mb-4">
-                        <Heart className="w-6 h-6 text-teal-600 dark:text-teal-400" />
+                    <div className="bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 rounded-lg p-6 hover:shadow-lg transition-shadow">
+                      <div className="w-12 h-12 bg-[#6B9080]/10 dark:bg-[#1a3a5c] rounded-lg flex items-center justify-center mb-4">
+                        <Heart className="w-6 h-6 text-[#6B9080] dark:text-primary" />
                       </div>
-                      <h4 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">Basic Card</h4>
-                      <p className="text-slate-600 dark:text-slate-400 text-sm">
+                      <h4 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-2">Basic Card</h4>
+                      <p className="text-[#5A6B7A] dark:text-slate-400 text-sm">
                         A simple card component with icon, title, and description.
                       </p>
                     </div>
                     
-                    <div className="bg-gradient-to-br from-teal-50 to-blue-50 dark:from-teal-950 dark:to-blue-950 border border-teal-200 dark:border-teal-800 rounded-lg p-6">
-                      <div className="w-12 h-12 bg-teal-600 rounded-lg flex items-center justify-center mb-4">
+                    <div className="bg-gradient-to-br from-[#FAF7F2] to-blue-50 dark:from-teal-950 dark:to-blue-950 border border-[#6B9080]/20 dark:border-[#6B9080]/30 rounded-lg p-6">
+                      <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center mb-4">
                         <Star className="w-6 h-6 text-white" />
                       </div>
-                      <h4 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">Featured Card</h4>
-                      <p className="text-slate-700 dark:text-slate-300 text-sm">
+                      <h4 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-2">Featured Card</h4>
+                      <p className="text-[#3A4A57] dark:text-slate-300 text-sm">
                         A highlighted card with gradient background for important content.
                       </p>
                     </div>
                     
-                    <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden">
+                    <div className="bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 rounded-lg overflow-hidden">
                       <div className="h-32 bg-gradient-to-r from-teal-400 to-blue-500"></div>
                       <div className="p-4 sm:p-5 md:p-6">
-                        <h4 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">Media Card</h4>
-                        <p className="text-slate-600 dark:text-slate-400 text-sm">
+                        <h4 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-2">Media Card</h4>
+                        <p className="text-[#5A6B7A] dark:text-slate-400 text-sm">
                           Card with image header and content section.
                         </p>
                       </div>
@@ -568,11 +568,11 @@ export function DesignSystem() {
 
                 {/* Status Badges */}
                 <div className="space-y-3 sm:space-y-4">
-                  <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Status Badges</h3>
-                  <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-6">
+                  <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white">Status Badges</h3>
+                  <div className="bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 rounded-lg p-6">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
                       <div className="space-y-3">
-                        <h4 className="text-sm font-medium text-slate-700 dark:text-slate-300">Success</h4>
+                        <h4 className="text-sm font-medium text-[#3A4A57] dark:text-slate-300">Success</h4>
                         <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs font-medium rounded-full">
                           <CheckCircle className="w-3 h-3" />
                           Completed
@@ -580,15 +580,15 @@ export function DesignSystem() {
                       </div>
                       
                       <div className="space-y-3">
-                        <h4 className="text-sm font-medium text-slate-700 dark:text-slate-300">Warning</h4>
-                        <span className="inline-flex items-center gap-1 px-2 py-1 bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 text-xs font-medium rounded-full">
+                        <h4 className="text-sm font-medium text-[#3A4A57] dark:text-slate-300">Warning</h4>
+                        <span className="inline-flex items-center gap-1 px-2 py-1 bg-yellow-100 dark:bg-yellow-900 text-[#3A4A57] dark:text-yellow-200 text-xs font-medium rounded-full">
                           <AlertTriangle className="w-3 h-3" />
                           Pending
                         </span>
                       </div>
                       
                       <div className="space-y-3">
-                        <h4 className="text-sm font-medium text-slate-700 dark:text-slate-300">Error</h4>
+                        <h4 className="text-sm font-medium text-[#3A4A57] dark:text-slate-300">Error</h4>
                         <span className="inline-flex items-center gap-1 px-2 py-1 bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 text-xs font-medium rounded-full">
                           <AlertCircle className="w-3 h-3" />
                           Failed
@@ -596,8 +596,8 @@ export function DesignSystem() {
                       </div>
                       
                       <div className="space-y-3">
-                        <h4 className="text-sm font-medium text-slate-700 dark:text-slate-300">Info</h4>
-                        <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs font-medium rounded-full">
+                        <h4 className="text-sm font-medium text-[#3A4A57] dark:text-slate-300">Info</h4>
+                        <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 dark:bg-blue-900 text-[#4A6478] dark:text-blue-200 text-xs font-medium rounded-full">
                           <Info className="w-3 h-3" />
                           New
                         </span>
@@ -608,41 +608,41 @@ export function DesignSystem() {
 
                 {/* Navigation */}
                 <div className="space-y-3 sm:space-y-4">
-                  <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Navigation</h3>
-                  <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-6">
+                  <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white">Navigation</h3>
+                  <div className="bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 rounded-lg p-6">
                     <div className="space-y-3 sm:space-y-4 sm:space-y-6">
                       <div>
-                        <h4 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Tab Navigation</h4>
-                        <div className="flex space-x-1 bg-slate-100 dark:bg-slate-700 p-1 rounded-lg">
-                          <button className="flex-1 py-2 px-3 text-sm font-medium text-white bg-teal-600 rounded-md transition-colors">
+                        <h4 className="text-sm font-medium text-[#3A4A57] dark:text-slate-300 mb-3">Tab Navigation</h4>
+                        <div className="flex space-x-1 bg-[#F0EDE8] dark:bg-slate-700 p-1 rounded-lg">
+                          <button className="flex-1 py-2 px-3 text-sm font-medium text-white bg-primary rounded-md transition-colors">
                             Active
                           </button>
-                          <button className="flex-1 py-2 px-3 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors">
+                          <button className="flex-1 py-2 px-3 text-sm font-medium text-[#5A6B7A] dark:text-slate-400 hover:text-[#1B2733] dark:hover:text-slate-100 transition-colors">
                             Inactive
                           </button>
-                          <button className="flex-1 py-2 px-3 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors">
+                          <button className="flex-1 py-2 px-3 text-sm font-medium text-[#5A6B7A] dark:text-slate-400 hover:text-[#1B2733] dark:hover:text-slate-100 transition-colors">
                             Inactive
                           </button>
                         </div>
                       </div>
                       
                       <div>
-                        <h4 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Bottom Navigation</h4>
-                        <div className="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-2">
+                        <h4 className="text-sm font-medium text-[#3A4A57] dark:text-slate-300 mb-3">Bottom Navigation</h4>
+                        <div className="bg-[#FAF7F2] dark:bg-slate-900 border border-[#E8E4DF] dark:border-slate-700 rounded-lg p-2">
                           <div className="flex justify-around">
-                            <button className="flex flex-col items-center p-2 text-teal-600 dark:text-teal-400">
+                            <button className="flex flex-col items-center p-2 text-[#6B9080] dark:text-primary">
                               <Home className="w-5 h-5 mb-1" />
                               <span className="text-xs font-medium">Home</span>
                             </button>
-                            <button className="flex flex-col items-center p-2 text-slate-400 dark:text-slate-500">
+                            <button className="flex flex-col items-center p-2 text-slate-400 dark:text-[#5A6B7A]">
                               <Calendar className="w-5 h-5 mb-1" />
                               <span className="text-xs font-medium">Plan</span>
                             </button>
-                            <button className="flex flex-col items-center p-2 text-slate-400 dark:text-slate-500">
+                            <button className="flex flex-col items-center p-2 text-slate-400 dark:text-[#5A6B7A]">
                               <BarChart3 className="w-5 h-5 mb-1" />
                               <span className="text-xs font-medium">Reports</span>
                             </button>
-                            <button className="flex flex-col items-center p-2 text-slate-400 dark:text-slate-500">
+                            <button className="flex flex-col items-center p-2 text-slate-400 dark:text-[#5A6B7A]">
                               <User className="w-5 h-5 mb-1" />
                               <span className="text-xs font-medium">More</span>
                             </button>
@@ -655,37 +655,37 @@ export function DesignSystem() {
 
                 {/* Chips */}
                 <div className="space-y-3 sm:space-y-4">
-                  <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Chips</h3>
-                  <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-6">
+                  <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white">Chips</h3>
+                  <div className="bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 rounded-lg p-6">
                     <div className="space-y-3 sm:space-y-4">
                       <div>
-                        <h4 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Filter Chips</h4>
+                        <h4 className="text-sm font-medium text-[#3A4A57] dark:text-slate-300 mb-3">Filter Chips</h4>
                         <div className="flex flex-wrap gap-2">
-                          <button className="inline-flex items-center gap-1 px-3 py-1 bg-teal-100 dark:bg-teal-900 text-teal-800 dark:text-teal-200 text-sm font-medium rounded-full border border-teal-200 dark:border-teal-700">
+                          <button className="inline-flex items-center gap-1 px-3 py-1 bg-[#6B9080]/10 dark:bg-[#1a3a5c] text-[#6B9080] dark:text-teal-200 text-sm font-medium rounded-full border border-[#6B9080]/20 dark:border-teal-700">
                             <Check className="w-3 h-3" />
                             Selected
                           </button>
-                          <button className="inline-flex items-center gap-1 px-3 py-1 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 text-sm font-medium rounded-full border border-slate-200 dark:border-slate-600 hover:bg-slate-200 dark:hover:bg-slate-600">
+                          <button className="inline-flex items-center gap-1 px-3 py-1 bg-[#F0EDE8] dark:bg-slate-700 text-[#3A4A57] dark:text-slate-300 text-sm font-medium rounded-full border border-[#E8E4DF] dark:border-slate-600 hover:bg-[#E8E4DF] dark:hover:bg-slate-600">
                             Unselected
                           </button>
-                          <button className="inline-flex items-center gap-1 px-3 py-1 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 text-sm font-medium rounded-full border border-slate-200 dark:border-slate-600 hover:bg-slate-200 dark:hover:bg-slate-600">
+                          <button className="inline-flex items-center gap-1 px-3 py-1 bg-[#F0EDE8] dark:bg-slate-700 text-[#3A4A57] dark:text-slate-300 text-sm font-medium rounded-full border border-[#E8E4DF] dark:border-slate-600 hover:bg-[#E8E4DF] dark:hover:bg-slate-600">
                             Another Option
                           </button>
                         </div>
                       </div>
                       
                       <div>
-                        <h4 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Action Chips</h4>
+                        <h4 className="text-sm font-medium text-[#3A4A57] dark:text-slate-300 mb-3">Action Chips</h4>
                         <div className="flex flex-wrap gap-2">
-                          <button className="inline-flex items-center gap-1 px-3 py-1 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm font-medium rounded-full border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700">
+                          <button className="inline-flex items-center gap-1 px-3 py-1 bg-white dark:bg-slate-800 text-[#3A4A57] dark:text-slate-300 text-sm font-medium rounded-full border border-slate-300 dark:border-slate-600 hover:bg-[#FAF7F2] dark:hover:bg-slate-700">
                             <Plus className="w-3 h-3" />
                             Add Item
                           </button>
-                          <button className="inline-flex items-center gap-1 px-3 py-1 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm font-medium rounded-full border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700">
+                          <button className="inline-flex items-center gap-1 px-3 py-1 bg-white dark:bg-slate-800 text-[#3A4A57] dark:text-slate-300 text-sm font-medium rounded-full border border-slate-300 dark:border-slate-600 hover:bg-[#FAF7F2] dark:hover:bg-slate-700">
                             <Filter className="w-3 h-3" />
                             Filter
                           </button>
-                          <button className="inline-flex items-center gap-1 px-3 py-1 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm font-medium rounded-full border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700">
+                          <button className="inline-flex items-center gap-1 px-3 py-1 bg-white dark:bg-slate-800 text-[#3A4A57] dark:text-slate-300 text-sm font-medium rounded-full border border-slate-300 dark:border-slate-600 hover:bg-[#FAF7F2] dark:hover:bg-slate-700">
                             <Download className="w-3 h-3" />
                             Export
                           </button>

@@ -340,11 +340,11 @@ export function CommunityComposer({ onPost, onCancel, userId }: CommunityCompose
   return (
     <div className="max-w-2xl mx-auto space-y-3 sm:space-y-4 sm:space-y-6">
       <Card className="p-4 sm:p-5 md:p-6">
-        <h2 className="text-lg sm:text-xl font-semibold text-slate-900 mb-4">Share with the Community</h2>
+        <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733] mb-4">Share with the Community</h2>
         
         {/* Draft notification */}
         {hasDraft && (
-          <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg flex items-center justify-between">
+          <div className="mb-4 p-3 bg-[#EEF4F8] border border-[#C8DDE8] rounded-lg flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Save className="w-4 h-4 text-blue-600" />
               <span className="text-sm text-blue-900">You have a saved draft</span>
@@ -373,7 +373,7 @@ export function CommunityComposer({ onPost, onCancel, userId }: CommunityCompose
         <div className="space-y-3 sm:space-y-4">
           {/* Title (optional) */}
           <div>
-            <Label htmlFor="post-title" className="text-sm font-medium text-slate-700 mb-2 block">
+            <Label htmlFor="post-title" className="text-sm font-medium text-[#3A4A57] mb-2 block">
               Title (optional but encouraged for questions)
             </Label>
             <Input 
@@ -387,7 +387,7 @@ export function CommunityComposer({ onPost, onCancel, userId }: CommunityCompose
 
           {/* Post body */}
           <div>
-            <Label htmlFor="post-body" className="text-sm font-medium text-slate-700 mb-2 block">
+            <Label htmlFor="post-body" className="text-sm font-medium text-[#3A4A57] mb-2 block">
               Your post
             </Label>
             <Textarea 
@@ -399,13 +399,13 @@ export function CommunityComposer({ onPost, onCancel, userId }: CommunityCompose
               maxLength={CHARACTER_LIMIT}
             />
             <div className="flex items-center justify-between mt-1">
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-[#5A6B7A]">
                 Add context: age, setting, what you tried
               </p>
               <p className={`text-xs font-medium ${
                 isOverLimit ? 'text-red-600' : 
                 charactersRemaining < 50 ? 'text-amber-600' : 
-                'text-slate-500'
+                'text-[#5A6B7A]'
               }`}>
                 {charactersRemaining} characters remaining
               </p>
@@ -414,7 +414,7 @@ export function CommunityComposer({ onPost, onCancel, userId }: CommunityCompose
 
           {/* Tags */}
           <div>
-            <Label className="text-sm font-medium text-slate-700 mb-2 block">
+            <Label className="text-sm font-medium text-[#3A4A57] mb-2 block">
               Tags (1-3 required)
             </Label>
             <div className="flex flex-wrap gap-2">
@@ -435,21 +435,21 @@ export function CommunityComposer({ onPost, onCancel, userId }: CommunityCompose
               ))}
             </div>
             {selectedTags.length > 0 && (
-              <p className="text-xs text-slate-500 mt-2">
+              <p className="text-xs text-[#5A6B7A] mt-2">
                 {selectedTags.length}/3 tags selected
               </p>
             )}
           </div>
 
           {/* PHI Toggle - ON by default as per spec */}
-          <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <div className="p-4 bg-[#EEF4F8] border border-[#C8DDE8] rounded-lg">
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
                   <Label htmlFor="remove-names" className="text-sm font-medium text-blue-900 cursor-pointer">
                     Remove names/PHI
                   </Label>
-                  <Badge variant="secondary" className="text-xs bg-blue-100 text-blue-800">
+                  <Badge variant="secondary" className="text-xs bg-blue-100 text-[#4A6478]">
                     Recommended
                   </Badge>
                 </div>
@@ -467,7 +467,7 @@ export function CommunityComposer({ onPost, onCancel, userId }: CommunityCompose
           </div>
 
           {/* Additional options */}
-          <div className="space-y-3 border-t border-gray-200 pt-4">
+          <div className="space-y-3 border-t border-[#E8E4DF] pt-4">
             <div className="flex items-center justify-between">
               <Label htmlFor="anonymous" className="text-sm cursor-pointer">
                 Post anonymously
@@ -503,14 +503,14 @@ export function CommunityComposer({ onPost, onCancel, userId }: CommunityCompose
           {/* Image Previews */}
           {images.length > 0 && (
             <div className="space-y-2">
-              <Label className="text-sm font-medium text-slate-700 block">
+              <Label className="text-sm font-medium text-[#3A4A57] block">
                 Images ({images.length}/{MAX_IMAGES})
               </Label>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 {images.map((image) => (
                   <div
                     key={image.id}
-                    className="relative aspect-square rounded-lg overflow-hidden border border-gray-200 bg-gray-50"
+                    className="relative aspect-square rounded-lg overflow-hidden border border-[#E8E4DF] bg-[#FAF7F2]"
                   >
                     <img
                       src={image.url}
@@ -539,7 +539,7 @@ export function CommunityComposer({ onPost, onCancel, userId }: CommunityCompose
           )}
 
           {/* Action buttons */}
-          <div className="flex items-center justify-between pt-4 border-t border-gray-200">
+          <div className="flex items-center justify-between pt-4 border-t border-[#E8E4DF]">
             <div className="flex gap-2">
               <input
                 ref={fileInputRef}
@@ -560,7 +560,7 @@ export function CommunityComposer({ onPost, onCancel, userId }: CommunityCompose
                 {images.length > 0 ? 'Add more' : 'Add images'}
               </Button>
               {images.length > 0 && (
-                <span className="text-xs text-slate-500 self-center">
+                <span className="text-xs text-[#5A6B7A] self-center">
                   {MAX_IMAGES - images.length} remaining
                 </span>
               )}

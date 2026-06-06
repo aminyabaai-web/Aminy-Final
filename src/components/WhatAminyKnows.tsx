@@ -88,7 +88,7 @@ const categories: Record<string, CategoryInfo> = {
     label: 'Strengths',
     description: 'What they excel at',
     color: 'text-yellow-600',
-    bgColor: 'bg-yellow-50',
+    bgColor: 'bg-[#FDF9F0]',
   },
   challenge: {
     icon: Target,
@@ -109,7 +109,7 @@ const categories: Record<string, CategoryInfo> = {
     label: 'What Works',
     description: 'Effective strategies',
     color: 'text-blue-600',
-    bgColor: 'bg-blue-50',
+    bgColor: 'bg-[#EEF4F8]',
   },
   medical: {
     icon: Shield,
@@ -122,7 +122,7 @@ const categories: Record<string, CategoryInfo> = {
     icon: FileText,
     label: 'Educational',
     description: 'School and learning',
-    color: 'text-indigo-600',
+    color: 'text-[#6B9080]',
     bgColor: 'bg-indigo-50',
   },
 };
@@ -438,7 +438,7 @@ export function WhatAminyKnows({ onBack, childId }: WhatAminyKnowsProps) {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: index * 0.05 }}
-                            className="p-4 hover:bg-gray-50/50 transition-colors group"
+                            className="p-4 hover:bg-[#FAF7F2]/50 transition-colors group"
                           >
                             <div className="flex items-start gap-3">
                               <div className="flex-1">
@@ -500,7 +500,7 @@ export function WhatAminyKnows({ onBack, childId }: WhatAminyKnowsProps) {
           transition={{ delay: 0.5 }}
           className="mt-8 text-center"
         >
-          <div className="inline-flex items-center gap-2 text-sm text-muted-foreground bg-gray-50 px-4 py-2 rounded-full">
+          <div className="inline-flex items-center gap-2 text-sm text-muted-foreground bg-[#FAF7F2] px-4 py-2 rounded-full">
             <Shield className="w-4 h-4 text-green-600" />
             This data is private and encrypted
           </div>
@@ -537,7 +537,7 @@ export function WhatAminyKnows({ onBack, childId }: WhatAminyKnowsProps) {
                         "flex items-center gap-2 p-3 rounded-lg border transition-all text-left",
                         newFact.category === key
                           ? "border-accent bg-accent/5"
-                          : "border-gray-200 hover:border-gray-300"
+                          : "border-[#E8E4DF] hover:border-[#E8E4DF]"
                       )}
                     >
                       <Icon className={cn("w-4 h-4", cat.color)} />

@@ -124,9 +124,9 @@ function AACGoalTracker() {
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-2 gap-3">
-        <div className="bg-teal-50 border border-teal-200 rounded-xl p-4 text-center">
-          <p className="text-3xl font-bold text-teal-700">{totalUses}</p>
-          <p className="text-sm text-teal-600 mt-1">Total symbol uses (session)</p>
+        <div className="bg-[#6B9080]/10 border border-[#6B9080]/20 rounded-xl p-4 text-center">
+          <p className="text-3xl font-bold text-[#6B9080]">{totalUses}</p>
+          <p className="text-sm text-[#6B9080] mt-1">Total symbol uses (session)</p>
         </div>
         <div className="bg-violet-50 border border-violet-200 rounded-xl p-4 text-center">
           <p className="text-3xl font-bold text-violet-700">{usages.length}</p>
@@ -134,27 +134,27 @@ function AACGoalTracker() {
         </div>
       </div>
 
-      <div className="bg-white border border-gray-200 rounded-xl p-4">
+      <div className="bg-white border border-[#E8E4DF] rounded-xl p-4">
         <div className="flex items-center justify-between mb-3">
-          <h4 className="font-medium text-gray-800">Spontaneous Communication Goal</h4>
+          <h4 className="font-medium text-[#1B2733]">Spontaneous Communication Goal</h4>
           <div className="flex items-center gap-2">
-            <button onClick={() => setSpontTarget(t => Math.max(1, t - 1))} className="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200">
+            <button onClick={() => setSpontTarget(t => Math.max(1, t - 1))} className="w-7 h-7 rounded-full bg-[#F0EDE8] flex items-center justify-center hover:bg-[#E8E4DF]">
               <Minus className="w-3 h-3" />
             </button>
-            <span className="font-bold text-gray-900 w-8 text-center">{spontTarget}</span>
-            <button onClick={() => setSpontTarget(t => t + 1)} className="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200">
+            <span className="font-bold text-[#1B2733] w-8 text-center">{spontTarget}</span>
+            <button onClick={() => setSpontTarget(t => t + 1)} className="w-7 h-7 rounded-full bg-[#F0EDE8] flex items-center justify-center hover:bg-[#E8E4DF]">
               <Plus className="w-3 h-3" />
             </button>
-            <span className="text-sm text-gray-500">/ session</span>
+            <span className="text-sm text-[#5A6B7A]">/ session</span>
           </div>
         </div>
-        <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden">
+        <div className="h-2.5 bg-[#F0EDE8] rounded-full overflow-hidden">
           <div
-            className="h-full bg-teal-500 rounded-full transition-all"
+            className="h-full bg-primary rounded-full transition-all"
             style={{ width: `${Math.min(100, (totalUses / spontTarget) * 100)}%` }}
           />
         </div>
-        <p className="text-xs text-gray-500 mt-1.5">
+        <p className="text-xs text-[#5A6B7A] mt-1.5">
           {totalUses >= spontTarget
             ? `Goal met! ${totalUses}/${spontTarget} communications`
             : `${totalUses}/${spontTarget} — ${spontTarget - totalUses} more to goal`}
@@ -162,18 +162,18 @@ function AACGoalTracker() {
       </div>
 
       <div>
-        <h4 className="font-medium text-gray-800 mb-2">Most Used Symbols</h4>
+        <h4 className="font-medium text-[#1B2733] mb-2">Most Used Symbols</h4>
         <div className="space-y-2">
           {topSymbols.map((u) => (
             <div key={u.symbol} className="flex items-center gap-3">
-              <span className="w-16 text-sm font-medium text-gray-700 capitalize">{u.symbol}</span>
-              <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+              <span className="w-16 text-sm font-medium text-[#3A4A57] capitalize">{u.symbol}</span>
+              <div className="flex-1 h-2 bg-[#F0EDE8] rounded-full overflow-hidden">
                 <div
                   className="h-full bg-teal-400 rounded-full"
                   style={{ width: `${(u.count / (topSymbols[0]?.count || 1)) * 100}%` }}
                 />
               </div>
-              <span className="w-6 text-sm text-gray-500 text-right">{u.count}</span>
+              <span className="w-6 text-sm text-[#5A6B7A] text-right">{u.count}</span>
             </div>
           ))}
         </div>
@@ -217,17 +217,17 @@ function LanguageSampleAnalysis() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <p className="text-sm text-gray-600">Mean Length of Utterance (morphemes)</p>
+        <p className="text-sm text-[#5A6B7A]">Mean Length of Utterance (morphemes)</p>
         <button
           onClick={() => setShowForm(f => !f)}
-          className="text-sm text-teal-600 font-medium flex items-center gap-1"
+          className="text-sm text-[#6B9080] font-medium flex items-center gap-1"
         >
           <Plus className="w-3.5 h-3.5" /> Log session
         </button>
       </div>
 
       {/* Simple CSS line chart */}
-      <div className="bg-gray-50 rounded-xl p-4">
+      <div className="bg-[#FAF7F2] rounded-xl p-4">
         <div className="flex items-end gap-2 h-24">
           {chartData.map((entry, i) => (
             <div key={i} className="flex-1 flex flex-col items-center gap-1">
@@ -236,13 +236,13 @@ function LanguageSampleAnalysis() {
                 style={{ height: `${(entry.mlu / chartMax) * 88}px` }}
                 title={`MLU: ${entry.mlu}`}
               />
-              <span className="text-xs text-gray-400" style={{ fontSize: '9px' }}>
+              <span className="text-xs text-[#8A9BA8]" style={{ fontSize: '9px' }}>
                 {entry.date.slice(5)}
               </span>
             </div>
           ))}
         </div>
-        <div className="flex justify-between text-xs text-gray-500 mt-2">
+        <div className="flex justify-between text-xs text-[#5A6B7A] mt-2">
           <span>Baseline</span>
           <span>Current MLU: <strong className="text-violet-700">{history[0]?.mlu ?? '—'}</strong></span>
         </div>
@@ -258,34 +258,34 @@ function LanguageSampleAnalysis() {
           >
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-xs font-medium text-gray-600">MLU</label>
+                <label className="text-xs font-medium text-[#5A6B7A]">MLU</label>
                 <input
                   type="number"
                   step="0.1"
                   value={newMlu}
                   onChange={e => setNewMlu(e.target.value)}
                   placeholder="e.g. 2.4"
-                  className="w-full mt-1 rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-violet-400 focus:outline-none"
+                  className="w-full mt-1 rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:border-violet-400 focus:outline-none"
                 />
               </div>
               <div>
-                <label className="text-xs font-medium text-gray-600">Utterances sampled</label>
+                <label className="text-xs font-medium text-[#5A6B7A]">Utterances sampled</label>
                 <input
                   type="number"
                   value={newUtterances}
                   onChange={e => setNewUtterances(e.target.value)}
                   placeholder="e.g. 50"
-                  className="w-full mt-1 rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-violet-400 focus:outline-none"
+                  className="w-full mt-1 rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:border-violet-400 focus:outline-none"
                 />
               </div>
             </div>
             <div>
-              <label className="text-xs font-medium text-gray-600">Notes</label>
+              <label className="text-xs font-medium text-[#5A6B7A]">Notes</label>
               <input
                 value={newNotes}
                 onChange={e => setNewNotes(e.target.value)}
                 placeholder="Emerging structures, contexts..."
-                className="w-full mt-1 rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-violet-400 focus:outline-none"
+                className="w-full mt-1 rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:border-violet-400 focus:outline-none"
               />
             </div>
             <button
@@ -301,14 +301,14 @@ function LanguageSampleAnalysis() {
 
       <div className="space-y-2 max-h-48 overflow-y-auto">
         {history.map((entry, i) => (
-          <div key={i} className="flex items-center justify-between py-2 border-b border-gray-100 last:border-0">
+          <div key={i} className="flex items-center justify-between py-2 border-b border-[#E8E4DF] last:border-0">
             <div>
-              <span className="text-sm font-medium text-gray-800">MLU {entry.mlu}</span>
-              <span className="text-xs text-gray-400 ml-2">({entry.utteranceCount} utterances)</span>
+              <span className="text-sm font-medium text-[#1B2733]">MLU {entry.mlu}</span>
+              <span className="text-xs text-[#8A9BA8] ml-2">({entry.utteranceCount} utterances)</span>
             </div>
             <div className="text-right">
-              <p className="text-xs text-gray-500">{entry.date}</p>
-              {entry.notes && <p className="text-xs text-gray-400">{entry.notes}</p>}
+              <p className="text-xs text-[#5A6B7A]">{entry.date}</p>
+              {entry.notes && <p className="text-xs text-[#8A9BA8]">{entry.notes}</p>}
             </div>
           </div>
         ))}
@@ -338,12 +338,12 @@ function ArticulationProgress() {
     if (pct >= 80) return { label: 'Mastered', cls: 'bg-green-100 text-green-700' };
     if (pct >= 50) return { label: 'Emerging', cls: 'bg-yellow-100 text-yellow-700' };
     if (pct > 0) return { label: 'Developing', cls: 'bg-orange-100 text-orange-700' };
-    return { label: 'Not started', cls: 'bg-gray-100 text-gray-500' };
+    return { label: 'Not started', cls: 'bg-[#F0EDE8] text-[#5A6B7A]' };
   };
 
   return (
     <div className="space-y-3">
-      <p className="text-sm text-gray-600">Tap a sound to log today&apos;s % correct. Mastery = 80%.</p>
+      <p className="text-sm text-[#5A6B7A]">Tap a sound to log today&apos;s % correct. Mastery = 80%.</p>
       <div className="grid grid-cols-3 gap-2">
         {ARTICULATION_SOUNDS.map((sound) => {
           const pct = targets[sound] ?? 0;
@@ -352,10 +352,10 @@ function ArticulationProgress() {
             <button
               key={sound}
               onClick={() => { setEditingSound(sound); setPctInput(String(pct)); }}
-              className="bg-white border border-gray-200 rounded-xl p-3 text-center hover:border-teal-300 transition-colors"
+              className="bg-white border border-[#E8E4DF] rounded-xl p-3 text-center hover:border-[#6B9080]/30 transition-colors"
             >
-              <p className="text-xl font-bold text-gray-800">/{sound}/</p>
-              <p className="text-sm font-medium text-gray-700 mt-1">{pct}%</p>
+              <p className="text-xl font-bold text-[#1B2733]">/{sound}/</p>
+              <p className="text-sm font-medium text-[#3A4A57] mt-1">{pct}%</p>
               <span className={`text-xs px-1.5 py-0.5 rounded-full ${cls}`}>{label}</span>
             </button>
           );
@@ -368,9 +368,9 @@ function ArticulationProgress() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 8 }}
-            className="bg-teal-50 border border-teal-200 rounded-xl p-4"
+            className="bg-[#6B9080]/10 border border-[#6B9080]/20 rounded-xl p-4"
           >
-            <p className="font-medium text-gray-800 mb-2">/{editingSound}/ — % correct today</p>
+            <p className="font-medium text-[#1B2733] mb-2">/{editingSound}/ — % correct today</p>
             <div className="flex items-center gap-2">
               <input
                 type="number"
@@ -378,17 +378,17 @@ function ArticulationProgress() {
                 max={100}
                 value={pctInput}
                 onChange={e => setPctInput(e.target.value)}
-                className="flex-1 rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-teal-400 focus:outline-none"
+                className="flex-1 rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:border-[#6B9080] focus:outline-none"
               />
               <button
                 onClick={() => updateTarget(editingSound, parseInt(pctInput) || 0)}
-                className="px-4 py-2 bg-teal-600 text-white rounded-lg text-sm font-medium"
+                className="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium"
               >
                 <Check className="w-4 h-4" />
               </button>
               <button
                 onClick={() => setEditingSound(null)}
-                className="px-3 py-2 bg-gray-100 text-gray-600 rounded-lg text-sm"
+                className="px-3 py-2 bg-[#F0EDE8] text-[#5A6B7A] rounded-lg text-sm"
               >
                 Cancel
               </button>
@@ -434,7 +434,7 @@ function FluencyTracker() {
     <div className="space-y-4">
       {latest && (
         <div className="grid grid-cols-2 gap-3">
-          <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 text-center">
+          <div className="bg-[#EEF4F8] border border-[#C8DDE8] rounded-xl p-4 text-center">
             <p className="text-3xl font-bold text-blue-700">{latest.wpm}</p>
             <p className="text-sm text-blue-600 mt-1">Words per minute</p>
             {prev && (
@@ -468,7 +468,7 @@ function FluencyTracker() {
 
       <button
         onClick={() => setShowForm(f => !f)}
-        className="w-full py-2.5 border border-dashed border-blue-300 text-blue-600 rounded-xl text-sm font-medium hover:bg-blue-50 transition-colors"
+        className="w-full py-2.5 border border-dashed border-blue-300 text-blue-600 rounded-xl text-sm font-medium hover:bg-[#EEF4F8] transition-colors"
       >
         <Plus className="w-4 h-4 inline mr-1" /> Log fluency session
       </button>
@@ -479,25 +479,25 @@ function FluencyTracker() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="bg-blue-50 border border-blue-200 rounded-xl p-4 space-y-3"
+            className="bg-[#EEF4F8] border border-[#C8DDE8] rounded-xl p-4 space-y-3"
           >
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-xs font-medium text-gray-600">WPM</label>
-                <input type="number" value={form.wpm} onChange={e => setForm(f => ({ ...f, wpm: e.target.value }))} className="w-full mt-1 rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none" />
+                <label className="text-xs font-medium text-[#5A6B7A]">WPM</label>
+                <input type="number" value={form.wpm} onChange={e => setForm(f => ({ ...f, wpm: e.target.value }))} className="w-full mt-1 rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:outline-none" />
               </div>
               <div>
-                <label className="text-xs font-medium text-gray-600">Stutter % </label>
-                <input type="number" step="0.5" value={form.stutter} onChange={e => setForm(f => ({ ...f, stutter: e.target.value }))} className="w-full mt-1 rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none" />
+                <label className="text-xs font-medium text-[#5A6B7A]">Stutter % </label>
+                <input type="number" step="0.5" value={form.stutter} onChange={e => setForm(f => ({ ...f, stutter: e.target.value }))} className="w-full mt-1 rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:outline-none" />
               </div>
             </div>
             <div>
-              <label className="text-xs font-medium text-gray-600">Avoidance behaviors (comma-separated)</label>
-              <input value={form.avoidance} onChange={e => setForm(f => ({ ...f, avoidance: e.target.value }))} placeholder="word substitution, circumlocution..." className="w-full mt-1 rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none" />
+              <label className="text-xs font-medium text-[#5A6B7A]">Avoidance behaviors (comma-separated)</label>
+              <input value={form.avoidance} onChange={e => setForm(f => ({ ...f, avoidance: e.target.value }))} placeholder="word substitution, circumlocution..." className="w-full mt-1 rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:outline-none" />
             </div>
             <div>
-              <label className="text-xs font-medium text-gray-600">Notes</label>
-              <input value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} className="w-full mt-1 rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none" />
+              <label className="text-xs font-medium text-[#5A6B7A]">Notes</label>
+              <input value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} className="w-full mt-1 rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:outline-none" />
             </div>
             <button onClick={addEntry} disabled={!form.wpm} className="w-full py-2 bg-blue-600 text-white rounded-lg text-sm font-medium disabled:opacity-50">Save</button>
           </motion.div>
@@ -552,7 +552,7 @@ ${note.caregiverProgram}
 
   const Field = ({ label, children }: { label: string; children: React.ReactNode }) => (
     <div>
-      <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">{label}</label>
+      <label className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">{label}</label>
       <div className="mt-1">{children}</div>
     </div>
   );
@@ -560,40 +560,40 @@ ${note.caregiverProgram}
   return (
     <div className="space-y-4">
       <Field label="Articulation Targets">
-        <input value={note.articulationTargets ?? ''} onChange={e => setNote(n => ({ ...n, articulationTargets: e.target.value }))} className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-teal-400 focus:outline-none" />
+        <input value={note.articulationTargets ?? ''} onChange={e => setNote(n => ({ ...n, articulationTargets: e.target.value }))} className="w-full rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:border-[#6B9080] focus:outline-none" />
       </Field>
       <Field label="% Correct This Session">
         <div className="flex items-center gap-3">
-          <input type="number" min={0} max={100} value={note.articulationPct ?? ''} onChange={e => setNote(n => ({ ...n, articulationPct: parseInt(e.target.value) || 0 }))} className="w-24 rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-teal-400 focus:outline-none" />
-          <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
-            <div className="h-full bg-teal-500 rounded-full" style={{ width: `${note.articulationPct ?? 0}%` }} />
+          <input type="number" min={0} max={100} value={note.articulationPct ?? ''} onChange={e => setNote(n => ({ ...n, articulationPct: parseInt(e.target.value) || 0 }))} className="w-24 rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:border-[#6B9080] focus:outline-none" />
+          <div className="flex-1 h-2 bg-[#F0EDE8] rounded-full overflow-hidden">
+            <div className="h-full bg-primary rounded-full" style={{ width: `${note.articulationPct ?? 0}%` }} />
           </div>
-          <span className="text-sm font-medium text-teal-700">{note.articulationPct}%</span>
+          <span className="text-sm font-medium text-[#6B9080]">{note.articulationPct}%</span>
         </div>
       </Field>
       <Field label="Language Goals & Data">
-        <textarea value={note.languageGoals ?? ''} onChange={e => setNote(n => ({ ...n, languageGoals: e.target.value }))} rows={2} className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-teal-400 focus:outline-none resize-none" />
+        <textarea value={note.languageGoals ?? ''} onChange={e => setNote(n => ({ ...n, languageGoals: e.target.value }))} rows={2} className="w-full rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:border-[#6B9080] focus:outline-none resize-none" />
       </Field>
       <div className="grid grid-cols-2 gap-3">
         <Field label="Fluency WPM">
-          <input type="number" value={note.fluencyWpm ?? ''} onChange={e => setNote(n => ({ ...n, fluencyWpm: parseInt(e.target.value) || 0 }))} className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none" />
+          <input type="number" value={note.fluencyWpm ?? ''} onChange={e => setNote(n => ({ ...n, fluencyWpm: parseInt(e.target.value) || 0 }))} className="w-full rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:outline-none" />
         </Field>
         <Field label="Stutter %">
-          <input type="number" step="0.5" value={note.fluencyStutterPct ?? ''} onChange={e => setNote(n => ({ ...n, fluencyStutterPct: parseFloat(e.target.value) || 0 }))} className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none" />
+          <input type="number" step="0.5" value={note.fluencyStutterPct ?? ''} onChange={e => setNote(n => ({ ...n, fluencyStutterPct: parseFloat(e.target.value) || 0 }))} className="w-full rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:outline-none" />
         </Field>
       </div>
       <Field label="AAC Symbol Set Used (count)">
-        <input type="number" value={note.aacSymbolsUsed ?? ''} onChange={e => setNote(n => ({ ...n, aacSymbolsUsed: parseInt(e.target.value) || 0 }))} className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none" />
+        <input type="number" value={note.aacSymbolsUsed ?? ''} onChange={e => setNote(n => ({ ...n, aacSymbolsUsed: parseInt(e.target.value) || 0 }))} className="w-full rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:outline-none" />
       </Field>
       <Field label="Caregiver Home Program Recommendations">
-        <textarea value={note.caregiverProgram ?? ''} onChange={e => setNote(n => ({ ...n, caregiverProgram: e.target.value }))} rows={3} className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-teal-400 focus:outline-none resize-none" />
+        <textarea value={note.caregiverProgram ?? ''} onChange={e => setNote(n => ({ ...n, caregiverProgram: e.target.value }))} rows={3} className="w-full rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:border-[#6B9080] focus:outline-none resize-none" />
       </Field>
 
       <div className="flex gap-2">
-        <button onClick={handleSave} className={`flex-1 py-3 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-2 ${saved ? 'bg-green-500 text-white' : 'bg-teal-600 text-white hover:bg-teal-700'}`}>
+        <button onClick={handleSave} className={`flex-1 py-3 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-2 ${saved ? 'bg-green-500 text-white' : 'bg-primary text-white hover:bg-[#6B9080]'}`}>
           {saved ? <><Check className="w-4 h-4" /> Saved!</> : <><Save className="w-4 h-4" /> Save Note</>}
         </button>
-        <button onClick={handleCopy} className="px-4 py-3 border border-gray-200 rounded-xl text-sm text-gray-600 hover:bg-gray-50 flex items-center gap-1.5">
+        <button onClick={handleCopy} className="px-4 py-3 border border-[#E8E4DF] rounded-xl text-sm text-[#5A6B7A] hover:bg-[#FAF7F2] flex items-center gap-1.5">
           <Download className="w-4 h-4" /> Copy
         </button>
       </div>
@@ -633,34 +633,34 @@ export default function SLPProviderTools({ onBack }: SLPProviderToolsProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-8">
+    <div className="min-h-screen bg-[#FAF7F2] pb-8">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
+      <div className="bg-white border-b border-[#E8E4DF] sticky top-0 z-10">
         <div className="flex items-center gap-3 px-4 py-3">
           {onBack && (
-            <button onClick={onBack} className="p-2 rounded-lg hover:bg-gray-100 text-gray-600">
+            <button onClick={onBack} className="p-2 rounded-lg hover:bg-[#F0EDE8] text-[#5A6B7A]">
               <ArrowLeft className="w-5 h-5" />
             </button>
           )}
           <div>
-            <h1 className="text-lg font-bold text-gray-900">SLP Clinical Tools</h1>
-            <p className="text-xs text-gray-500">Speech-Language Pathology</p>
+            <h1 className="text-lg font-bold text-[#1B2733]">SLP Clinical Tools</h1>
+            <p className="text-xs text-[#5A6B7A]">Speech-Language Pathology</p>
           </div>
-          <div className="ml-auto px-2 py-1 bg-teal-100 text-teal-700 text-xs font-medium rounded-full">
+          <div className="ml-auto px-2 py-1 bg-[#6B9080]/10 text-[#6B9080] text-xs font-medium rounded-full">
             CCC-SLP
           </div>
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-0 overflow-x-auto border-t border-gray-100">
+        <div className="flex gap-0 overflow-x-auto border-t border-[#E8E4DF]">
           {TABS.map(tab => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`flex items-center gap-1.5 px-3 py-2.5 text-xs font-medium whitespace-nowrap border-b-2 transition-colors ${
                 activeTab === tab.id
-                  ? 'border-teal-600 text-teal-700 bg-teal-50/50'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
+                  ? 'border-[#6B9080] text-[#6B9080] bg-[#6B9080]/10/50'
+                  : 'border-transparent text-[#5A6B7A] hover:text-[#3A4A57]'
               }`}
             >
               {tab.icon}

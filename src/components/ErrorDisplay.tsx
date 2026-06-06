@@ -52,13 +52,13 @@ const ERROR_ICONS: Record<ApiErrorType, React.ElementType> = {
 // Color mapping for error types
 const ERROR_COLORS: Record<ApiErrorType, { bg: string; border: string; icon: string; text: string }> = {
   network: { bg: 'bg-amber-50', border: 'border-amber-200', icon: 'text-amber-600', text: 'text-amber-900' },
-  timeout: { bg: 'bg-blue-50', border: 'border-blue-200', icon: 'text-blue-600', text: 'text-blue-900' },
+  timeout: { bg: 'bg-[#EEF4F8]', border: 'border-[#C8DDE8]', icon: 'text-blue-600', text: 'text-blue-900' },
   auth: { bg: 'bg-purple-50', border: 'border-purple-200', icon: 'text-purple-600', text: 'text-purple-900' },
   'rate-limit': { bg: 'bg-orange-50', border: 'border-orange-200', icon: 'text-orange-600', text: 'text-orange-900' },
   validation: { bg: 'bg-red-50', border: 'border-red-200', icon: 'text-red-600', text: 'text-red-900' },
-  'not-found': { bg: 'bg-gray-50', border: 'border-gray-200', icon: 'text-gray-600', text: 'text-gray-900' },
+  'not-found': { bg: 'bg-[#FAF7F2]', border: 'border-[#E8E4DF]', icon: 'text-[#5A6B7A]', text: 'text-[#1B2733]' },
   server: { bg: 'bg-red-50', border: 'border-red-200', icon: 'text-red-600', text: 'text-red-900' },
-  unknown: { bg: 'bg-gray-50', border: 'border-gray-200', icon: 'text-gray-600', text: 'text-gray-900' }
+  unknown: { bg: 'bg-[#FAF7F2]', border: 'border-[#E8E4DF]', icon: 'text-[#5A6B7A]', text: 'text-[#1B2733]' }
 };
 
 export function ErrorDisplay({
@@ -91,11 +91,11 @@ export function ErrorDisplay({
         <div className="flex-1 min-w-0">
           <p className={`text-sm font-medium ${colors.text}`}>{displayTitle}</p>
           {displaySecondary && (
-            <p className="text-sm text-gray-600 mt-0.5">{displaySecondary}</p>
+            <p className="text-sm text-[#5A6B7A] mt-0.5">{displaySecondary}</p>
           )}
         </div>
         {onDismiss && (
-          <button onClick={onDismiss} className="min-h-[44px] min-w-[44px] flex items-center justify-center text-gray-400 hover:text-gray-600">
+          <button onClick={onDismiss} className="min-h-[44px] min-w-[44px] flex items-center justify-center text-[#8A9BA8] hover:text-[#5A6B7A]">
             <X className="w-4 h-4" />
           </button>
         )}
@@ -114,7 +114,7 @@ export function ErrorDisplay({
           <div className="flex-1">
             <h4 className={`font-medium ${colors.text} mb-1`}>{displayTitle}</h4>
             {displaySecondary && (
-              <p className="text-sm text-gray-600">{displaySecondary}</p>
+              <p className="text-sm text-[#5A6B7A]">{displaySecondary}</p>
             )}
 
             {/* Retry button */}
@@ -135,12 +135,12 @@ export function ErrorDisplay({
               <div className="mt-3">
                 <button
                   onClick={() => setShowDetails(!showDetails)}
-                  className="text-xs text-gray-500 hover:text-gray-700"
+                  className="text-xs text-[#5A6B7A] hover:text-[#3A4A57]"
                 >
                   {showDetails ? 'Hide' : 'Show'} details
                 </button>
                 {showDetails && (
-                  <div className="mt-2 p-2 bg-white/50 rounded text-xs font-mono text-gray-600">
+                  <div className="mt-2 p-2 bg-white/50 rounded text-xs font-mono text-[#5A6B7A]">
                     {error.technicalMessage}
                     {error.code && <span className="ml-2">({error.code})</span>}
                   </div>
@@ -149,7 +149,7 @@ export function ErrorDisplay({
             )}
           </div>
           {onDismiss && (
-            <button onClick={onDismiss} className="text-gray-400 hover:text-gray-600">
+            <button onClick={onDismiss} className="text-[#8A9BA8] hover:text-[#5A6B7A]">
               <X className="w-5 h-5" />
             </button>
           )}
@@ -161,16 +161,16 @@ export function ErrorDisplay({
   // Fullscreen variant - for critical errors
   if (variant === 'fullscreen') {
     return (
-      <div className={`min-h-screen bg-gray-50 flex items-center justify-center p-4 ${className}`}>
+      <div className={`min-h-screen bg-[#FAF7F2] flex items-center justify-center p-4 ${className}`}>
         <div className="text-center max-w-md">
           <div className={`w-16 h-16 mx-auto mb-4 sm:mb-6 ${colors.bg} rounded-full flex items-center justify-center`}>
             <Icon className={`w-8 h-8 ${colors.icon}`} />
           </div>
 
-          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3">{displayTitle}</h2>
+          <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733] mb-3">{displayTitle}</h2>
 
           {displaySecondary && (
-            <p className="text-gray-600 mb-4 sm:mb-6">{displaySecondary}</p>
+            <p className="text-[#5A6B7A] mb-4 sm:mb-6">{displaySecondary}</p>
           )}
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -180,7 +180,7 @@ export function ErrorDisplay({
                   if (onRetry) onRetry();
                   else window.location.reload();
                 }}
-                className="bg-teal-500 hover:bg-teal-600 text-white"
+                className="bg-primary hover:bg-primary text-white"
               >
                 <RefreshCw className="w-4 h-4 mr-2" />
                 Try again
@@ -190,7 +190,7 @@ export function ErrorDisplay({
             <Button
               variant="outline"
               onClick={() => window.location.replace('/')}
-              className="border-gray-300"
+              className="border-[#E8E4DF]"
             >
               Go to Home
               <ChevronRight className="w-4 h-4 ml-1" />
@@ -198,8 +198,8 @@ export function ErrorDisplay({
           </div>
 
           {/* Support link */}
-          <div className="mt-4 sm:mt-6 pt-6 border-t border-gray-200">
-            <p className="text-sm text-gray-500">
+          <div className="mt-4 sm:mt-6 pt-6 border-t border-[#E8E4DF]">
+            <p className="text-sm text-[#5A6B7A]">
               Need help?{' '}
               <a href="mailto:support@aminy.ai" className="text-accent hover:underline">
                 Contact support
@@ -212,12 +212,12 @@ export function ErrorDisplay({
             <div className="mt-4">
               <button
                 onClick={() => setShowDetails(!showDetails)}
-                className="text-xs text-gray-400 hover:text-gray-600"
+                className="text-xs text-[#8A9BA8] hover:text-[#5A6B7A]"
               >
                 {showDetails ? 'Hide' : 'Show'} technical details
               </button>
               {showDetails && (
-                <div className="mt-2 p-3 bg-gray-100 rounded-lg text-left text-xs font-mono text-gray-600">
+                <div className="mt-2 p-3 bg-[#F0EDE8] rounded-lg text-left text-xs font-mono text-[#5A6B7A]">
                   <p><strong>Type:</strong> {error.type}</p>
                   <p><strong>Message:</strong> {error.technicalMessage}</p>
                   {error.code && <p><strong>Code:</strong> {error.code}</p>}
@@ -243,7 +243,7 @@ export function ErrorDisplay({
         <div className="flex-1 min-w-0">
           <p className={`font-medium ${colors.text}`}>{displayTitle}</p>
           {displaySecondary && (
-            <p className="text-sm text-gray-600 mt-0.5">{displaySecondary}</p>
+            <p className="text-sm text-[#5A6B7A] mt-0.5">{displaySecondary}</p>
           )}
           {onRetry && error?.retryable !== false && (
             <button
@@ -256,7 +256,7 @@ export function ErrorDisplay({
           )}
         </div>
         {onDismiss && (
-          <button onClick={onDismiss} className="text-gray-400 hover:text-gray-600">
+          <button onClick={onDismiss} className="text-[#8A9BA8] hover:text-[#5A6B7A]">
             <X className="w-5 h-5" />
           </button>
         )}
@@ -303,12 +303,12 @@ export function EmptyState({
 }: EmptyStateProps) {
   return (
     <div className={`text-center py-12 px-4 ${className}`}>
-      <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
-        <Icon className="w-8 h-8 text-gray-400" />
+      <div className="w-16 h-16 mx-auto mb-4 bg-[#F0EDE8] rounded-full flex items-center justify-center">
+        <Icon className="w-8 h-8 text-[#8A9BA8]" />
       </div>
-      <h3 className="text-lg font-medium text-gray-900 mb-1">{title}</h3>
+      <h3 className="text-lg font-medium text-[#1B2733] mb-1">{title}</h3>
       {description && (
-        <p className="text-gray-600 mb-4 max-w-sm mx-auto">{description}</p>
+        <p className="text-[#5A6B7A] mb-4 max-w-sm mx-auto">{description}</p>
       )}
       {action && (
         <Button onClick={action.onClick}>
@@ -334,7 +334,7 @@ export function LoadingSkeleton({ lines = 3, className = '' }: LoadingSkeletonPr
       {Array.from({ length: lines }).map((_, i) => (
         <div
           key={i}
-          className="h-4 bg-gray-200 rounded"
+          className="h-4 bg-[#E8E4DF] rounded"
           style={{ width: `${Math.random() * 40 + 60}%` }}
         />
       ))}

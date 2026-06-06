@@ -61,11 +61,11 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
       <div className={`relative ${className}`}>
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="p-2 rounded-lg hover:bg-gray-100 transition-colors flex items-center gap-1"
+          className="p-2 rounded-lg hover:bg-[#F0EDE8] transition-colors flex items-center gap-1"
           aria-label={t('settings.language')}
         >
           <span className="text-lg">{currentLanguageInfo?.flag || '🌐'}</span>
-          <ChevronDown className="w-3 h-3 text-gray-500" />
+          <ChevronDown className="w-3 h-3 text-[#5A6B7A]" />
         </button>
 
         {isOpen && (
@@ -80,16 +80,16 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
                   key={lang.code}
                   onClick={() => handleLanguageChange(lang.code)}
                   disabled={isChanging}
-                  className={`w-full px-3 py-2 text-left flex items-center gap-2 hover:bg-gray-50 transition-colors ${
+                  className={`w-full px-3 py-2 text-left flex items-center gap-2 hover:bg-[#FAF7F2] transition-colors ${
                     lang.code === currentLang
-                      ? 'bg-teal-50 text-teal-700'
-                      : 'text-gray-700'
+                      ? 'bg-[#6B9080]/10 text-[#6B9080]'
+                      : 'text-[#3A4A57]'
                   }`}
                 >
                   <span>{lang.flag}</span>
                   <span className="flex-1">{lang.nativeName}</span>
                   {lang.code === currentLang && (
-                    <Check className="w-4 h-4 text-teal-600" />
+                    <Check className="w-4 h-4 text-[#6B9080]" />
                   )}
                 </button>
               ))}
@@ -104,7 +104,7 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
   if (variant === 'inline') {
     return (
       <div className={`flex items-center gap-2 ${className}`}>
-        <Globe className="w-4 h-4 text-gray-500" />
+        <Globe className="w-4 h-4 text-[#5A6B7A]" />
         <div className="flex gap-1">
           {SUPPORTED_LANGUAGES.map((lang) => (
             <button
@@ -113,8 +113,8 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
               disabled={isChanging}
               className={`p-1.5 rounded transition-colors ${
                 lang.code === currentLang
-                  ? 'bg-teal-100 ring-2 ring-teal-500'
-                  : 'hover:bg-gray-100'
+                  ? 'bg-[#6B9080]/10 ring-2 ring-teal-500'
+                  : 'hover:bg-[#F0EDE8]'
               }`}
               title={lang.nativeName}
             >
@@ -134,9 +134,9 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
         className="w-full px-4 py-3 border rounded-xl flex items-center justify-between hover:border-gray-400 transition-colors"
       >
         <div className="flex items-center gap-3">
-          <Globe className="w-5 h-5 text-gray-500" />
+          <Globe className="w-5 h-5 text-[#5A6B7A]" />
           <div className="text-left">
-            <div className="text-sm text-gray-500">{t('settings.language')}</div>
+            <div className="text-sm text-[#5A6B7A]">{t('settings.language')}</div>
             <div className="font-medium flex items-center gap-2">
               <span>{currentLanguageInfo?.flag}</span>
               <span>{currentLanguageInfo?.nativeName}</span>
@@ -144,7 +144,7 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
           </div>
         </div>
         <ChevronDown
-          className={`w-5 h-5 text-gray-400 transition-transform ${
+          className={`w-5 h-5 text-[#8A9BA8] transition-transform ${
             isOpen ? 'rotate-180' : ''
           }`}
         />
@@ -162,19 +162,19 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
                 key={lang.code}
                 onClick={() => handleLanguageChange(lang.code)}
                 disabled={isChanging}
-                className={`w-full px-4 py-3 text-left flex items-center gap-3 hover:bg-gray-50 transition-colors ${
+                className={`w-full px-4 py-3 text-left flex items-center gap-3 hover:bg-[#FAF7F2] transition-colors ${
                   lang.code === currentLang
-                    ? 'bg-teal-50'
+                    ? 'bg-[#6B9080]/10'
                     : ''
                 }`}
               >
                 <span className="text-xl">{lang.flag}</span>
                 <div className="flex-1">
                   <div className="font-medium">{lang.nativeName}</div>
-                  <div className="text-sm text-gray-500">{lang.name}</div>
+                  <div className="text-sm text-[#5A6B7A]">{lang.name}</div>
                 </div>
                 {lang.code === currentLang && (
-                  <Check className="w-5 h-5 text-teal-600" />
+                  <Check className="w-5 h-5 text-[#6B9080]" />
                 )}
               </button>
             ))}

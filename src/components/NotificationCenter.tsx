@@ -153,7 +153,7 @@ export function NotificationCenter({ onNotificationClick }: NotificationCenterPr
           <SheetTitle className="flex items-center justify-between">
             <span>Notifications</span>
             {unreadCount > 0 && (
-              <span className="text-sm font-normal text-slate-600">
+              <span className="text-sm font-normal text-[#5A6B7A]">
                 {unreadCount} unread
               </span>
             )}
@@ -165,18 +165,18 @@ export function NotificationCenter({ onNotificationClick }: NotificationCenterPr
             <div className="flex items-center justify-center py-12">
               <div className="text-center">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent mx-auto mb-3" />
-                <p className="text-sm text-slate-600">Loading notifications...</p>
+                <p className="text-sm text-[#5A6B7A]">Loading notifications...</p>
               </div>
             </div>
           ) : notifications.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 px-6 text-center">
-              <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
+              <div className="w-16 h-16 bg-[#F0EDE8] rounded-full flex items-center justify-center mb-4">
                 <Bell className="w-8 h-8 text-slate-400" />
               </div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-2">
+              <h3 className="text-lg font-semibold text-[#1B2733] mb-2">
                 No notifications yet
               </h3>
-              <p className="text-sm text-slate-600">
+              <p className="text-sm text-[#5A6B7A]">
                 We'll notify you about progress updates, achievements, and important reminders.
               </p>
             </div>
@@ -185,7 +185,7 @@ export function NotificationCenter({ onNotificationClick }: NotificationCenterPr
               {notifications.map((notification) => (
                 <div
                   key={notification.id}
-                  className={`p-4 hover:bg-slate-50 transition-colors cursor-pointer ${
+                  className={`p-4 hover:bg-[#FAF7F2] transition-colors cursor-pointer ${
                     !notification.read ? 'bg-accent/5' : ''
                   }`}
                   onClick={() => handleNotificationItemClick(notification)}
@@ -199,7 +199,7 @@ export function NotificationCenter({ onNotificationClick }: NotificationCenterPr
                     {/* Content */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-2 mb-1">
-                        <h4 className="font-semibold text-slate-900 text-sm">
+                        <h4 className="font-semibold text-[#1B2733] text-sm">
                           {notification.title}
                         </h4>
                         {!notification.read && (
@@ -207,12 +207,12 @@ export function NotificationCenter({ onNotificationClick }: NotificationCenterPr
                         )}
                       </div>
 
-                      <p className="text-sm text-slate-600 mb-2">
+                      <p className="text-sm text-[#5A6B7A] mb-2">
                         {notification.body}
                       </p>
 
                       <div className="flex items-center justify-between">
-                        <span className="text-xs text-slate-500">
+                        <span className="text-xs text-[#5A6B7A]">
                           {getRelativeTime(notification.timestamp)}
                         </span>
 

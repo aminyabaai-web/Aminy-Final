@@ -354,9 +354,9 @@ export function CaregiverDocumentation({
   const fiInfo = FISCAL_INTERMEDIARIES.find(fi => fi.id === selectedFI);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
+      <div className="bg-white border-b border-[#E8E4DF] sticky top-0 z-10">
         <div className="px-4 py-4 max-w-4xl mx-auto">
           <div className="flex items-center gap-3">
             {onBack && (
@@ -365,8 +365,8 @@ export function CaregiverDocumentation({
               </Button>
             )}
             <div className="flex-1">
-              <h1 className="text-lg font-semibold text-slate-900">Caregiver Timesheet</h1>
-              <p className="text-sm text-slate-500">For {clientName}</p>
+              <h1 className="text-lg font-semibold text-[#1B2733]">Caregiver Timesheet</h1>
+              <p className="text-sm text-[#5A6B7A]">For {clientName}</p>
             </div>
             <Badge variant="outline" className="gap-1">
               <Building2 className="w-3 h-3" />
@@ -380,11 +380,11 @@ export function CaregiverDocumentation({
         {/* Timer Card */}
         <Card className="p-6 bg-gradient-to-r from-accent/10 to-teal-50 border-accent/20">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-semibold text-slate-900 flex items-center gap-2">
+            <h2 className="font-semibold text-[#1B2733] flex items-center gap-2">
               <Clock className="w-5 h-5 text-accent" />
               Quick Timer
             </h2>
-            <div className="text-3xl font-mono font-bold text-slate-900">
+            <div className="text-3xl font-mono font-bold text-[#1B2733]">
               {formatTimerDisplay(timerElapsed)}
             </div>
           </div>
@@ -414,17 +414,17 @@ export function CaregiverDocumentation({
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
           <Card className="p-4 text-center">
             <p className="text-xl sm:text-2xl font-bold text-accent">{getTotalHours().toFixed(1)}</p>
-            <p className="text-sm text-slate-500">Total Hours</p>
+            <p className="text-sm text-[#5A6B7A]">Total Hours</p>
           </Card>
           <Card className="p-4 text-center">
-            <p className="text-xl sm:text-2xl font-bold text-slate-900">{entries.length}</p>
-            <p className="text-sm text-slate-500">Entries</p>
+            <p className="text-xl sm:text-2xl font-bold text-[#1B2733]">{entries.length}</p>
+            <p className="text-sm text-[#5A6B7A]">Entries</p>
           </Card>
           <Card className="p-4 text-center">
             <p className="text-xl sm:text-2xl font-bold text-green-600">
               {entries.filter(e => e.verified).length}
             </p>
-            <p className="text-sm text-slate-500">Verified</p>
+            <p className="text-sm text-[#5A6B7A]">Verified</p>
           </Card>
         </div>
 
@@ -460,10 +460,10 @@ export function CaregiverDocumentation({
         {/* Add Entry Form */}
         {showAddEntry && (
           <Card className="p-3 sm:p-4">
-            <h3 className="font-medium text-slate-900 mb-4">Add Time Entry</h3>
+            <h3 className="font-medium text-[#1B2733] mb-4">Add Time Entry</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4">
               <div>
-                <label className="text-sm text-slate-600 mb-1 block">Date</label>
+                <label className="text-sm text-[#5A6B7A] mb-1 block">Date</label>
                 <Input
                   type="date"
                   value={newEntry.date}
@@ -471,7 +471,7 @@ export function CaregiverDocumentation({
                 />
               </div>
               <div>
-                <label className="text-sm text-slate-600 mb-1 block">Activity Type</label>
+                <label className="text-sm text-[#5A6B7A] mb-1 block">Activity Type</label>
                 <select
                   className="w-full px-3 py-2 border rounded-lg"
                   value={newEntry.activity_type}
@@ -483,7 +483,7 @@ export function CaregiverDocumentation({
                 </select>
               </div>
               <div>
-                <label className="text-sm text-slate-600 mb-1 block">Start Time</label>
+                <label className="text-sm text-[#5A6B7A] mb-1 block">Start Time</label>
                 <Input
                   type="time"
                   value={newEntry.start_time}
@@ -491,7 +491,7 @@ export function CaregiverDocumentation({
                 />
               </div>
               <div>
-                <label className="text-sm text-slate-600 mb-1 block">End Time</label>
+                <label className="text-sm text-[#5A6B7A] mb-1 block">End Time</label>
                 <Input
                   type="time"
                   value={newEntry.end_time}
@@ -500,7 +500,7 @@ export function CaregiverDocumentation({
               </div>
             </div>
             <div className="mb-4">
-              <label className="text-sm text-slate-600 mb-1 block">Description</label>
+              <label className="text-sm text-[#5A6B7A] mb-1 block">Description</label>
               <textarea
                 className="w-full px-3 py-2 border rounded-lg resize-none"
                 rows={2}
@@ -525,12 +525,12 @@ export function CaregiverDocumentation({
 
         {/* Time Entries */}
         <div className="space-y-3">
-          <h3 className="font-medium text-slate-900">Time Entries</h3>
+          <h3 className="font-medium text-[#1B2733]">Time Entries</h3>
 
           {entries.length === 0 ? (
             <Card className="p-8 text-center">
               <Clock className="w-12 h-12 text-slate-400 mx-auto mb-4" />
-              <p className="text-slate-500">No entries for this period</p>
+              <p className="text-[#5A6B7A]">No entries for this period</p>
             </Card>
           ) : (
             entries.map((entry) => (
@@ -538,7 +538,7 @@ export function CaregiverDocumentation({
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="font-medium text-slate-900">{entry.date}</span>
+                      <span className="font-medium text-[#1B2733]">{entry.date}</span>
                       <Badge variant="secondary" className="text-xs">
                         {ACTIVITY_TYPES.find(a => a.id === entry.activity_type)?.label}
                       </Badge>
@@ -549,11 +549,11 @@ export function CaregiverDocumentation({
                         </Badge>
                       )}
                     </div>
-                    <p className="text-sm text-slate-600">
+                    <p className="text-sm text-[#5A6B7A]">
                       {entry.start_time} - {entry.end_time} ({formatDuration(entry.duration_minutes)})
                     </p>
                     {entry.description && (
-                      <p className="text-sm text-slate-500 mt-1">{entry.description}</p>
+                      <p className="text-sm text-[#5A6B7A] mt-1">{entry.description}</p>
                     )}
                   </div>
                   <Button
@@ -571,7 +571,7 @@ export function CaregiverDocumentation({
         </div>
 
         {/* Fiscal Intermediary Info */}
-        <Card className="p-4 bg-blue-50 border-blue-200">
+        <Card className="p-4 bg-[#EEF4F8] border-[#C8DDE8]">
           <div className="flex items-start gap-3">
             <AlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
             <div>

@@ -119,11 +119,11 @@ export function UnloadMindModal({ isOpen, onClose, onTasksCreated }: UnloadMindM
       case 'important':
         return 'bg-orange-50 text-orange-700 border-orange-200';
       case 'routine':
-        return 'bg-blue-50 text-blue-700 border-blue-200';
+        return 'bg-[#EEF4F8] text-blue-700 border-[#C8DDE8]';
       case 'someday':
-        return 'bg-slate-50 text-slate-600 border-slate-200';
+        return 'bg-[#FAF7F2] text-[#5A6B7A] border-[#E8E4DF]';
       default:
-        return 'bg-slate-50 text-slate-600 border-slate-200';
+        return 'bg-[#FAF7F2] text-[#5A6B7A] border-[#E8E4DF]';
     }
   };
 
@@ -150,24 +150,24 @@ export function UnloadMindModal({ isOpen, onClose, onTasksCreated }: UnloadMindM
           onClick={(e) => e.stopPropagation()}
         >
         {/* Header */}
-        <div className="sticky top-0 bg-white border-b border-slate-200 p-6 rounded-t-2xl z-10">
+        <div className="sticky top-0 bg-white border-b border-[#E8E4DF] p-6 rounded-t-2xl z-10">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-accent/10 rounded-xl flex items-center justify-center">
                 <Brain className="w-5 h-5 text-accent" />
               </div>
               <div>
-                <h2 id="unload-mind-title" className="text-slate-900">
+                <h2 id="unload-mind-title" className="text-[#1B2733]">
                   {CONTENT.UNLOAD_MIND.TITLE}
                 </h2>
-                <p className="text-sm text-slate-600">
+                <p className="text-sm text-[#5A6B7A]">
                   {step === 'input' ? CONTENT.UNLOAD_MIND.SUBTITLE : 'Here\'s what I found'}
                 </p>
               </div>
             </div>
             <button
               onClick={handleClose}
-              className="p-2 text-slate-400 hover:text-slate-600 transition-colors rounded-lg"
+              className="p-2 text-slate-400 hover:text-[#5A6B7A] transition-colors rounded-lg"
               aria-label="Close modal"
             >
               <X className="w-5 h-5" />
@@ -180,7 +180,7 @@ export function UnloadMindModal({ isOpen, onClose, onTasksCreated }: UnloadMindM
           {step === 'input' && (
             <div className="space-y-3 sm:space-y-4">
               <div>
-                <label htmlFor="mind-dump" className="block text-sm text-slate-700 mb-2">
+                <label htmlFor="mind-dump" className="block text-sm text-[#3A4A57] mb-2">
                   What's on your mind? (No filters, just type)
                 </label>
                 <textarea
@@ -189,7 +189,7 @@ export function UnloadMindModal({ isOpen, onClose, onTasksCreated }: UnloadMindM
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder={CONTENT.UNLOAD_MIND.PLACEHOLDER}
-                  className="w-full min-h-[200px] p-4 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent resize-none"
+                  className="w-full min-h-[200px] p-4 border border-[#E8E4DF] rounded-xl focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent resize-none"
                   style={{ fontSize: '16px' }}
                   disabled={isProcessing}
                 />
@@ -197,7 +197,7 @@ export function UnloadMindModal({ isOpen, onClose, onTasksCreated }: UnloadMindM
               
               <div className="flex items-center gap-2 p-3 bg-accent/5 rounded-lg border border-accent/10">
                 <Sparkles className="w-4 h-4 text-accent flex-shrink-0" />
-                <p className="text-sm text-slate-700">
+                <p className="text-sm text-[#3A4A57]">
                   I'll help you break this down into clear, actionable steps and identify what to focus on first.
                 </p>
               </div>
@@ -237,13 +237,13 @@ export function UnloadMindModal({ isOpen, onClose, onTasksCreated }: UnloadMindM
               {/* Encouragement */}
               {encouragement && (
                 <div className="p-4 bg-accent/5 rounded-xl border border-accent/10">
-                  <p className="text-slate-700">{encouragement}</p>
+                  <p className="text-[#3A4A57]">{encouragement}</p>
                 </div>
               )}
 
               {/* Tasks */}
               <div>
-                <h3 className="text-slate-900 mb-3">Your tasks</h3>
+                <h3 className="text-[#1B2733] mb-3">Your tasks</h3>
                 <div className="space-y-2">
                   {categorizedTasks.map((task, index) => (
                     <div
@@ -251,7 +251,7 @@ export function UnloadMindModal({ isOpen, onClose, onTasksCreated }: UnloadMindM
                       className={`p-4 rounded-xl border ${
                         index === 0
                           ? 'border-accent bg-accent/5 ring-2 ring-accent/20'
-                          : 'border-slate-200 bg-white'
+                          : 'border-[#E8E4DF] bg-white'
                       }`}
                     >
                       <div className="flex items-start gap-3">
@@ -266,11 +266,11 @@ export function UnloadMindModal({ isOpen, onClose, onTasksCreated }: UnloadMindM
                             <span className={`text-xs px-2 py-0.5 rounded-full border ${getCategoryColor(task.category)}`}>
                               {task.category}
                             </span>
-                            <span className="text-xs text-slate-500">{task.estimatedTime}</span>
+                            <span className="text-xs text-[#5A6B7A]">{task.estimatedTime}</span>
                           </div>
-                          <p className="text-slate-900">{task.title}</p>
+                          <p className="text-[#1B2733]">{task.title}</p>
                           {task.reason && (
-                            <p className="text-sm text-slate-600 mt-1 italic">💡 {task.reason}</p>
+                            <p className="text-sm text-[#5A6B7A] mt-1 italic">💡 {task.reason}</p>
                           )}
                         </div>
                       </div>

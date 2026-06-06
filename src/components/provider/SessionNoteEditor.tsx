@@ -56,10 +56,10 @@ interface SessionNoteEditorProps {
 // ============================================================================
 
 const STATUS_CONFIG: Record<NoteStatus, { label: string; color: string; icon: React.ReactNode }> = {
-  draft: { label: 'Draft', color: 'bg-slate-100 text-slate-700', icon: <FileText className="w-3 h-3" /> },
+  draft: { label: 'Draft', color: 'bg-[#F0EDE8] text-[#3A4A57]', icon: <FileText className="w-3 h-3" /> },
   provider_review: { label: 'Under Review', color: 'bg-amber-100 text-amber-800', icon: <Eye className="w-3 h-3" /> },
   approved: { label: 'Approved', color: 'bg-green-100 text-green-800', icon: <CheckCircle className="w-3 h-3" /> },
-  sent_to_parent: { label: 'Sent to Parent', color: 'bg-blue-100 text-blue-800', icon: <Send className="w-3 h-3" /> },
+  sent_to_parent: { label: 'Sent to Parent', color: 'bg-blue-100 text-[#4A6478]', icon: <Send className="w-3 h-3" /> },
   parent_acknowledged: { label: 'Parent Acknowledged', color: 'bg-emerald-100 text-emerald-800', icon: <CheckCircle className="w-3 h-3" /> },
 };
 
@@ -81,7 +81,7 @@ function computeDiff(original: string, edited: string): React.ReactNode {
 
   if (changedLines.length === 0 && origWords.length !== editWords.length) {
     return (
-      <p className="text-xs text-slate-500">
+      <p className="text-xs text-[#5A6B7A]">
         {editWords.length > origWords.length
           ? `+${editWords.length - origWords.length} words added`
           : `${origWords.length - editWords.length} words removed`}
@@ -196,13 +196,13 @@ export function SessionNoteEditor({
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
           <div className="flex items-center gap-2">
-            <h2 className="text-xl font-semibold text-slate-900">Session Note</h2>
+            <h2 className="text-xl font-semibold text-[#1B2733]">Session Note</h2>
             <Badge className="bg-violet-100 text-violet-800 flex items-center gap-1 px-2 py-0.5">
               <Sparkles className="w-3 h-3" />
               AI Draft
             </Badge>
           </div>
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-[#5A6B7A]">
             {childName} {sessionDate ? `— ${sessionDate}` : ''}
           </p>
         </div>
@@ -230,7 +230,7 @@ export function SessionNoteEditor({
       </div>
 
       {/* Status Lifecycle */}
-      <Card className="p-3 bg-slate-50">
+      <Card className="p-3 bg-[#FAF7F2]">
         <div className="flex items-center justify-between gap-1 text-xs">
           {Object.entries(STATUS_CONFIG).map(([key, cfg], idx) => {
             const isActive = key === status;
@@ -240,12 +240,12 @@ export function SessionNoteEditor({
             return (
               <React.Fragment key={key}>
                 {idx > 0 && (
-                  <div className={`flex-1 h-0.5 ${isPast ? 'bg-green-400' : 'bg-slate-200'}`} />
+                  <div className={`flex-1 h-0.5 ${isPast ? 'bg-green-400' : 'bg-[#E8E4DF]'}`} />
                 )}
                 <div
                   className={`flex items-center gap-1 px-2 py-1 rounded-full whitespace-nowrap ${
                     isActive
-                      ? 'bg-white shadow-sm font-medium text-slate-900'
+                      ? 'bg-white shadow-sm font-medium text-[#1B2733]'
                       : isPast
                       ? 'text-green-700'
                       : 'text-slate-400'
@@ -311,13 +311,13 @@ export function SessionNoteEditor({
       </AnimatePresence>
 
       {/* Panel toggle (mobile) */}
-      <div className="flex rounded-xl border border-slate-200 overflow-hidden bg-white md:hidden">
+      <div className="flex rounded-xl border border-[#E8E4DF] overflow-hidden bg-white md:hidden">
         {(['edit', 'meta'] as const).map((panel) => (
           <button
             key={panel}
             onClick={() => setActivePanel(panel)}
             className={`flex-1 py-2.5 text-sm font-medium transition-colors ${
-              activePanel === panel ? 'bg-slate-900 text-white' : 'text-slate-500'
+              activePanel === panel ? 'bg-slate-900 text-white' : 'text-[#5A6B7A]'
             }`}
           >
             {panel === 'edit' ? 'SOAP Note' : 'Session Data'}
@@ -371,8 +371,8 @@ export function SessionNoteEditor({
         <div className={`md:col-span-2 space-y-4 ${activePanel !== 'meta' ? 'hidden md:block' : ''}`}>
           {/* CPT Codes */}
           <Card className="p-4">
-            <h3 className="font-medium text-slate-900 mb-3 flex items-center gap-2 text-sm">
-              <FileText className="w-4 h-4 text-slate-600" />
+            <h3 className="font-medium text-[#1B2733] mb-3 flex items-center gap-2 text-sm">
+              <FileText className="w-4 h-4 text-[#5A6B7A]" />
               CPT Code Suggestions
             </h3>
             <div className="space-y-2">
@@ -394,8 +394,8 @@ export function SessionNoteEditor({
               onClick={() => setShowMetrics(!showMetrics)}
               className="flex items-center justify-between w-full text-left"
             >
-              <h3 className="font-medium text-slate-900 flex items-center gap-2 text-sm">
-                <AlertCircle className="w-4 h-4 text-slate-600" />
+              <h3 className="font-medium text-[#1B2733] flex items-center gap-2 text-sm">
+                <AlertCircle className="w-4 h-4 text-[#5A6B7A]" />
                 Session Metrics
               </h3>
               {showMetrics ? (
@@ -415,7 +415,7 @@ export function SessionNoteEditor({
 
           {/* Parent approval preview */}
           {!isLocked && (
-            <Card className="p-4 bg-blue-50 border-blue-200">
+            <Card className="p-4 bg-[#EEF4F8] border-[#C8DDE8]">
               <div className="flex items-start gap-3">
                 <User className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
                 <div>
@@ -514,8 +514,8 @@ function SOAPSection({
     <Card className={`p-4 border-l-4 ${borderColors[color] || 'border-l-slate-300'}`}>
       <div className="mb-2 flex items-start justify-between gap-2">
         <div>
-          <h3 className="font-medium text-slate-900 text-sm">{label}</h3>
-          <p className="text-xs text-slate-500">{sublabel}</p>
+          <h3 className="font-medium text-[#1B2733] text-sm">{label}</h3>
+          <p className="text-xs text-[#5A6B7A]">{sublabel}</p>
         </div>
         {isEdited && (
           <Badge className="bg-amber-100 text-amber-700 text-xs px-2 py-0.5 shrink-0">
@@ -528,7 +528,7 @@ function SOAPSection({
         onChange={e => onChange(e.target.value)}
         disabled={disabled}
         rows={4}
-        className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-y disabled:opacity-60 disabled:cursor-not-allowed"
+        className="w-full rounded-md border border-[#E8E4DF] bg-white px-3 py-2 text-sm text-[#1B2733] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-y disabled:opacity-60 disabled:cursor-not-allowed"
         placeholder={`Enter ${label.toLowerCase()}...`}
       />
     </Card>
@@ -551,13 +551,13 @@ function CPTRow({
       ? 'text-green-700 bg-green-50'
       : cpt.confidence >= 0.7
       ? 'text-amber-700 bg-amber-50'
-      : 'text-slate-600 bg-slate-50';
+      : 'text-[#5A6B7A] bg-[#FAF7F2]';
 
   return (
     <label
       className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${
-        selected ? 'border-blue-300 bg-blue-50/50' : 'border-slate-200 bg-white'
-      } ${disabled ? 'opacity-60 pointer-events-none' : 'hover:border-blue-200'}`}
+        selected ? 'border-blue-300 bg-[#EEF4F8]/50' : 'border-[#E8E4DF] bg-white'
+      } ${disabled ? 'opacity-60 pointer-events-none' : 'hover:border-[#C8DDE8]'}`}
     >
       <input
         type="checkbox"
@@ -568,10 +568,10 @@ function CPTRow({
       />
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="font-mono text-sm font-medium text-slate-900">{cpt.code}</span>
-          <span className="text-xs text-slate-500 truncate">{cpt.description}</span>
+          <span className="font-mono text-sm font-medium text-[#1B2733]">{cpt.code}</span>
+          <span className="text-xs text-[#5A6B7A] truncate">{cpt.description}</span>
         </div>
-        <span className="text-xs text-slate-500">{cpt.units} unit{cpt.units !== 1 ? 's' : ''}</span>
+        <span className="text-xs text-[#5A6B7A]">{cpt.units} unit{cpt.units !== 1 ? 's' : ''}</span>
       </div>
       <Badge className={`text-xs ${confidenceColor}`}>
         {Math.round(cpt.confidence * 100)}%
@@ -587,10 +587,10 @@ function MetricBar({ label, value }: { label: string; value: number }) {
   return (
     <div>
       <div className="flex items-center justify-between text-sm mb-1">
-        <span className="text-slate-700">{label}</span>
-        <span className="font-medium text-slate-900">{value}%</span>
+        <span className="text-[#3A4A57]">{label}</span>
+        <span className="font-medium text-[#1B2733]">{value}%</span>
       </div>
-      <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+      <div className="h-2 bg-[#F0EDE8] rounded-full overflow-hidden">
         <div
           className={`h-full rounded-full transition-all ${barColor}`}
           style={{ width: `${Math.min(100, Math.max(0, value))}%` }}

@@ -63,8 +63,8 @@ function CategoryTab({ category, active, onSelect }: CategoryTabProps) {
       onClick={onSelect}
       className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium transition-all ${
         active
-          ? 'bg-teal-600 text-white shadow-md'
-          : 'bg-white text-slate-600 hover:bg-slate-50 border border-slate-200'
+          ? 'bg-primary text-white shadow-md'
+          : 'bg-white text-[#5A6B7A] hover:bg-[#FAF7F2] border border-[#E8E4DF]'
       }`}
     >
       {CATEGORY_ICONS[category]}
@@ -84,8 +84,8 @@ function MembershipBadge({ tier }: MembershipBadgeProps) {
     tier === 'pro'
       ? 'bg-amber-50 text-amber-700 border-amber-200'
       : tier === 'core'
-        ? 'bg-teal-50 text-teal-700 border-teal-200'
-        : 'bg-slate-50 text-slate-600 border-slate-200';
+        ? 'bg-[#6B9080]/10 text-[#6B9080] border-[#6B9080]/20'
+        : 'bg-[#FAF7F2] text-[#5A6B7A] border-[#E8E4DF]';
 
   const discount = MEMBERSHIP_DISCOUNTS.find((m) => m.tier === tier);
 
@@ -115,28 +115,28 @@ function ServiceCard({ service, tier, onBook, onViewPackages }: ServiceCardProps
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       className={`bg-white rounded-2xl border p-5 shadow-sm hover:shadow-md transition-shadow ${
-        service.popular ? 'border-teal-300 ring-1 ring-teal-100' : 'border-slate-200'
+        service.popular ? 'border-[#6B9080]/30 ring-1 ring-teal-100' : 'border-[#E8E4DF]'
       }`}
     >
       {/* Popular badge */}
       {service.popular && (
         <div className="flex items-center gap-1 mb-2">
-          <Sparkles className="w-3.5 h-3.5 text-teal-500" />
-          <span className="text-xs font-semibold text-teal-600 uppercase tracking-wide">Most Popular</span>
+          <Sparkles className="w-3.5 h-3.5 text-primary" />
+          <span className="text-xs font-semibold text-[#6B9080] uppercase tracking-wide">Most Popular</span>
         </div>
       )}
 
       {/* Header */}
       <div className="flex items-start justify-between mb-3">
         <div className="flex-1">
-          <h3 className="font-semibold text-slate-900 text-base">{service.name}</h3>
+          <h3 className="font-semibold text-[#1B2733] text-base">{service.name}</h3>
           <div className="flex items-center gap-2 mt-1 flex-wrap">
             <span className="text-xs text-slate-400 font-mono">CPT {service.cptCode}</span>
             <span className="text-xs text-slate-400 flex items-center gap-1">
               <Clock className="w-3 h-3" />
               {service.durationMinutes} min
             </span>
-            <span className="text-xs text-teal-600 font-medium">{service.providerType}</span>
+            <span className="text-xs text-[#6B9080] font-medium">{service.providerType}</span>
           </div>
         </div>
 
@@ -145,12 +145,12 @@ function ServiceCard({ service, tier, onBook, onViewPackages }: ServiceCardProps
           {hasDiscount && (
             <span className="text-sm text-slate-400 line-through block">${service.familyPays.toLocaleString()}</span>
           )}
-          <span className="text-2xl font-bold text-slate-900">${price.finalPrice.toLocaleString()}</span>
+          <span className="text-2xl font-bold text-[#1B2733]">${price.finalPrice.toLocaleString()}</span>
         </div>
       </div>
 
       {/* Description */}
-      <p className="text-sm text-slate-500 leading-relaxed mb-4">{service.description}</p>
+      <p className="text-sm text-[#5A6B7A] leading-relaxed mb-4">{service.description}</p>
 
       {/* Market context */}
       <div className="text-xs text-slate-400 mb-3">
@@ -159,7 +159,7 @@ function ServiceCard({ service, tier, onBook, onViewPackages }: ServiceCardProps
 
       {/* Discount badge */}
       {hasDiscount && (
-        <div className="flex items-center gap-1.5 mb-4 text-teal-600 text-sm font-medium">
+        <div className="flex items-center gap-1.5 mb-4 text-[#6B9080] text-sm font-medium">
           <BadgePercent className="w-4 h-4" />
           You save ${price.totalDiscount.toFixed(2)} as a {getTierLabel(tier)} member
         </div>
@@ -169,14 +169,14 @@ function ServiceCard({ service, tier, onBook, onViewPackages }: ServiceCardProps
       <div className="flex items-center gap-2">
         <button
           onClick={() => onBook(service.id)}
-          className="flex-1 bg-teal-600 hover:bg-teal-700 text-white font-medium py-2.5 px-4 rounded-xl text-sm transition-colors flex items-center justify-center gap-2"
+          className="flex-1 bg-primary hover:bg-[#6B9080] text-white font-medium py-2.5 px-4 rounded-xl text-sm transition-colors flex items-center justify-center gap-2"
         >
           Book Now
           <ArrowRight className="w-4 h-4" />
         </button>
         <button
           onClick={() => onViewPackages(service.id)}
-          className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-teal-600 font-medium py-2.5 px-3 rounded-xl hover:bg-slate-50 transition-colors"
+          className="flex items-center gap-1.5 text-sm text-[#5A6B7A] hover:text-[#6B9080] font-medium py-2.5 px-3 rounded-xl hover:bg-[#FAF7F2] transition-colors"
         >
           <Package className="w-4 h-4" />
           Packages
@@ -217,27 +217,27 @@ function PackageModal({ serviceId, tier, onClose, onBook }: PackageModalProps) {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center gap-2 mb-1">
-          <Package className="w-5 h-5 text-teal-600" />
-          <h3 className="font-semibold text-lg text-slate-900">Session Packages</h3>
+          <Package className="w-5 h-5 text-[#6B9080]" />
+          <h3 className="font-semibold text-lg text-[#1B2733]">Session Packages</h3>
         </div>
-        <p className="text-sm text-slate-500 mb-5">{service.name} — Buy more, save more</p>
+        <p className="text-sm text-[#5A6B7A] mb-5">{service.name} — Buy more, save more</p>
 
         <div className="space-y-3">
           {options.map((opt) => (
             <button
               key={opt.sessions}
               onClick={() => onBook(serviceId, opt.sessions)}
-              className="w-full flex items-center justify-between p-4 rounded-xl border border-slate-200 hover:border-teal-300 hover:bg-teal-50/50 transition-all text-left"
+              className="w-full flex items-center justify-between p-4 rounded-xl border border-[#E8E4DF] hover:border-[#6B9080]/30 hover:bg-[#6B9080]/10/50 transition-all text-left"
             >
               <div>
-                <div className="font-medium text-slate-900">{opt.label}</div>
-                <div className="text-sm text-slate-500">
+                <div className="font-medium text-[#1B2733]">{opt.label}</div>
+                <div className="text-sm text-[#5A6B7A]">
                   ${opt.pricePerSession}/session
                 </div>
               </div>
               <div className="text-right">
-                <div className="font-bold text-slate-900">${opt.totalPrice.toFixed(2)}</div>
-                <div className="text-xs text-teal-600 font-medium">Save ${opt.savings.toFixed(2)}</div>
+                <div className="font-bold text-[#1B2733]">${opt.totalPrice.toFixed(2)}</div>
+                <div className="text-xs text-[#6B9080] font-medium">Save ${opt.savings.toFixed(2)}</div>
               </div>
             </button>
           ))}
@@ -249,7 +249,7 @@ function PackageModal({ serviceId, tier, onClose, onBook }: PackageModalProps) {
 
         <button
           onClick={onClose}
-          className="w-full mt-4 py-2.5 text-sm text-slate-500 hover:text-slate-700 font-medium"
+          className="w-full mt-4 py-2.5 text-sm text-[#5A6B7A] hover:text-[#3A4A57] font-medium"
         >
           Close
         </button>
@@ -279,14 +279,14 @@ function SavingsBanner({ tier, category }: SavingsBannerProps) {
     <motion.div
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-teal-50 border border-teal-200 rounded-2xl p-4 flex items-start gap-3"
+      className="bg-[#6B9080]/10 border border-[#6B9080]/20 rounded-2xl p-4 flex items-start gap-3"
     >
-      <Sparkles className="w-5 h-5 text-teal-600 mt-0.5 shrink-0" />
+      <Sparkles className="w-5 h-5 text-[#6B9080] mt-0.5 shrink-0" />
       <div>
-        <p className="text-sm font-semibold text-teal-800">
+        <p className="text-sm font-semibold text-[#6B9080]">
           As a {getTierLabel(tier)} member, you save ${savings.monthlySavings.toFixed(2)}/month
         </p>
-        <p className="text-xs text-teal-600 mt-0.5">
+        <p className="text-xs text-[#6B9080] mt-0.5">
           Based on {savings.sessionsPerMonth} sessions of {primaryService.name} per month.
           That is ${savings.annualSavings.toFixed(2)} saved per year.
         </p>
@@ -304,15 +304,15 @@ interface TierSelectorProps {
 
 function TierSelector({ tier, onSelect }: TierSelectorProps) {
   return (
-    <div className="flex items-center gap-2 bg-slate-100 rounded-xl p-1">
+    <div className="flex items-center gap-2 bg-[#F0EDE8] rounded-xl p-1">
       {MEMBERSHIP_DISCOUNTS.map((m) => (
         <button
           key={m.tier}
           onClick={() => onSelect(m.tier)}
           className={`flex-1 text-center py-2 px-3 rounded-lg text-sm font-medium transition-all ${
             tier === m.tier
-              ? 'bg-white text-slate-900 shadow-sm'
-              : 'text-slate-500 hover:text-slate-700'
+              ? 'bg-white text-[#1B2733] shadow-sm'
+              : 'text-[#5A6B7A] hover:text-[#3A4A57]'
           }`}
         >
           <div>{getTierLabel(m.tier)}</div>
@@ -355,11 +355,11 @@ export default function CashPayPricing({
     <div className="max-w-lg mx-auto pb-8">
       {/* Header */}
       <div className="px-5 pt-6 pb-4">
-        <h1 className="text-2xl font-bold text-slate-900">Transparent Pricing</h1>
-        <p className="text-sm text-slate-500 mt-1">
+        <h1 className="text-2xl font-bold text-[#1B2733]">Transparent Pricing</h1>
+        <p className="text-sm text-[#5A6B7A] mt-1">
           No insurance needed. No surprise bills. Just clear, honest pricing for your family.
         </p>
-        <p className="text-xs text-teal-600 mt-2 font-medium">
+        <p className="text-xs text-[#6B9080] mt-2 font-medium">
           All prices include telehealth platform, Ease activities, and superbill for out-of-network reimbursement.
         </p>
       </div>

@@ -104,8 +104,8 @@ async function withTimeout<T>(promise: Promise<T>, fallback: T, timeoutMs = 5000
 }
 
 const STATUS_CONFIG = {
-  idle: { color: 'text-gray-500', bg: 'bg-gray-50', label: 'Idle', icon: Clock },
-  syncing: { color: 'text-blue-600', bg: 'bg-blue-50', label: 'Syncing...', icon: Loader2 },
+  idle: { color: 'text-[#5A6B7A]', bg: 'bg-[#FAF7F2]', label: 'Idle', icon: Clock },
+  syncing: { color: 'text-blue-600', bg: 'bg-[#EEF4F8]', label: 'Syncing...', icon: Loader2 },
   success: { color: 'text-green-600', bg: 'bg-green-50', label: 'Success', icon: CheckCircle2 },
   error: { color: 'text-red-600', bg: 'bg-red-50', label: 'Error', icon: XCircle },
   backoff: { color: 'text-amber-600', bg: 'bg-amber-50', label: 'Backed Off', icon: AlertTriangle },
@@ -152,25 +152,25 @@ function SyncRecordCard({
   const [expanded, setExpanded] = useState(false);
   const DirectionIcon = record.direction === 'pull' ? ArrowDown : ArrowUp;
   const directionColor =
-    record.direction === 'pull' ? 'text-blue-500' : 'text-teal-500';
+    record.direction === 'pull' ? 'text-blue-500' : 'text-primary';
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+    <div className="bg-white rounded-lg border border-[#E8E4DF] overflow-hidden">
       <button
         onClick={() => setExpanded(!expanded)}
         aria-label={`${expanded ? 'Collapse' : 'Expand'} sync record for ${DATA_TYPE_LABELS[record.dataType] || record.dataType}`}
-        className="w-full flex items-center justify-between p-3 text-left hover:bg-gray-50 transition-colors"
+        className="w-full flex items-center justify-between p-3 text-left hover:bg-[#FAF7F2] transition-colors"
       >
         <div className="flex items-center gap-3 flex-1 min-w-0">
           <DirectionIcon size={14} className={directionColor} />
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
-              <p className="text-sm font-medium text-gray-900 truncate">
+              <p className="text-sm font-medium text-[#1B2733] truncate">
                 {DATA_TYPE_LABELS[record.dataType] || record.dataType}
               </p>
               <StatusBadge status={record.status} />
             </div>
-            <p className="text-xs text-gray-500 mt-0.5">
+            <p className="text-xs text-[#5A6B7A] mt-0.5">
               {record.recordsSynced > 0
                 ? `${record.recordsSynced} records synced`
                 : 'No data synced yet'}
@@ -186,7 +186,7 @@ function SyncRecordCard({
             }}
             disabled={syncing || record.status === 'syncing'}
             aria-label={`Sync ${DATA_TYPE_LABELS[record.dataType] || record.dataType} now`}
-            className="flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-xl bg-teal-50 p-2 text-teal-700 transition-colors hover:bg-teal-100 disabled:opacity-50"
+            className="flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-xl bg-[#6B9080]/10 p-2 text-[#6B9080] transition-colors hover:bg-[#6B9080]/10 disabled:opacity-50"
             title="Sync now"
           >
             {syncing ? (
@@ -196,31 +196,31 @@ function SyncRecordCard({
             )}
           </button>
           {expanded ? (
-            <ChevronDown size={14} className="text-gray-400" />
+            <ChevronDown size={14} className="text-[#8A9BA8]" />
           ) : (
-            <ChevronRight size={14} className="text-gray-400" />
+            <ChevronRight size={14} className="text-[#8A9BA8]" />
           )}
         </div>
       </button>
 
       {expanded && (
-        <div className="px-3 pb-3 border-t border-gray-100 pt-2 space-y-2">
+        <div className="px-3 pb-3 border-t border-[#E8E4DF] pt-2 space-y-2">
           <div className="grid grid-cols-2 gap-2">
-            <div className="text-xs bg-gray-50 rounded p-2">
-              <span className="text-gray-500">Direction</span>
-              <p className="font-medium text-gray-900 capitalize">{record.direction}</p>
+            <div className="text-xs bg-[#FAF7F2] rounded p-2">
+              <span className="text-[#5A6B7A]">Direction</span>
+              <p className="font-medium text-[#1B2733] capitalize">{record.direction}</p>
             </div>
-            <div className="text-xs bg-gray-50 rounded p-2">
-              <span className="text-gray-500">Records</span>
-              <p className="font-medium text-gray-900">{record.recordsSynced}</p>
+            <div className="text-xs bg-[#FAF7F2] rounded p-2">
+              <span className="text-[#5A6B7A]">Records</span>
+              <p className="font-medium text-[#1B2733]">{record.recordsSynced}</p>
             </div>
-            <div className="text-xs bg-gray-50 rounded p-2">
-              <span className="text-gray-500">Last Sync</span>
-              <p className="font-medium text-gray-900">{timeAgo(record.lastSyncAt)}</p>
+            <div className="text-xs bg-[#FAF7F2] rounded p-2">
+              <span className="text-[#5A6B7A]">Last Sync</span>
+              <p className="font-medium text-[#1B2733]">{timeAgo(record.lastSyncAt)}</p>
             </div>
-            <div className="text-xs bg-gray-50 rounded p-2">
-              <span className="text-gray-500">Next Sync</span>
-              <p className="font-medium text-gray-900">{timeAgo(record.nextSyncAt)}</p>
+            <div className="text-xs bg-[#FAF7F2] rounded p-2">
+              <span className="text-[#5A6B7A]">Next Sync</span>
+              <p className="font-medium text-[#1B2733]">{timeAgo(record.nextSyncAt)}</p>
             </div>
           </div>
 
@@ -263,7 +263,7 @@ function ErrorCard({
         <div className="flex items-center gap-3 flex-1 min-w-0">
           <AlertOctagon size={14} className="text-red-500 flex-shrink-0" />
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-gray-900 truncate">
+            <p className="text-sm font-medium text-[#1B2733] truncate">
               {DATA_TYPE_LABELS[error.data_type] || error.data_type} ({error.direction})
             </p>
             <p className="text-xs text-red-600 mt-0.5 truncate">
@@ -287,9 +287,9 @@ function ErrorCard({
             )}
           </button>
           {expanded ? (
-            <ChevronDown size={14} className="text-gray-400" />
+            <ChevronDown size={14} className="text-[#8A9BA8]" />
           ) : (
-            <ChevronRight size={14} className="text-gray-400" />
+            <ChevronRight size={14} className="text-[#8A9BA8]" />
           )}
         </div>
       </button>
@@ -298,28 +298,28 @@ function ErrorCard({
         <div className="px-3 pb-3 border-t border-red-100 pt-2 space-y-2">
           <div className="grid grid-cols-2 gap-2">
             {error.error_code && (
-              <div className="text-xs bg-gray-50 rounded p-2">
-                <span className="text-gray-500">Error Code</span>
-                <p className="font-mono font-medium text-gray-900">{error.error_code}</p>
+              <div className="text-xs bg-[#FAF7F2] rounded p-2">
+                <span className="text-[#5A6B7A]">Error Code</span>
+                <p className="font-mono font-medium text-[#1B2733]">{error.error_code}</p>
               </div>
             )}
             {error.record_id && (
-              <div className="text-xs bg-gray-50 rounded p-2">
-                <span className="text-gray-500">Record ID</span>
-                <p className="font-mono font-medium text-gray-900 truncate">
+              <div className="text-xs bg-[#FAF7F2] rounded p-2">
+                <span className="text-[#5A6B7A]">Record ID</span>
+                <p className="font-mono font-medium text-[#1B2733] truncate">
                   {error.record_id}
                 </p>
               </div>
             )}
-            <div className="text-xs bg-gray-50 rounded p-2">
-              <span className="text-gray-500">Retries</span>
-              <p className="font-medium text-gray-900">
+            <div className="text-xs bg-[#FAF7F2] rounded p-2">
+              <span className="text-[#5A6B7A]">Retries</span>
+              <p className="font-medium text-[#1B2733]">
                 {error.retry_count} / {error.max_retries}
               </p>
             </div>
-            <div className="text-xs bg-gray-50 rounded p-2">
-              <span className="text-gray-500">Created</span>
-              <p className="font-medium text-gray-900">
+            <div className="text-xs bg-[#FAF7F2] rounded p-2">
+              <span className="text-[#5A6B7A]">Created</span>
+              <p className="font-medium text-[#1B2733]">
                 {formatDate(error.created_at)}
               </p>
             </div>
@@ -331,7 +331,7 @@ function ErrorCard({
           </div>
 
           {error.next_retry_at && (
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-[#5A6B7A]">
               Next automatic retry: {formatDate(error.next_retry_at)}
             </p>
           )}
@@ -345,8 +345,8 @@ function HistoryTimeline({ entries }: { entries: SyncLogEntry[] }) {
   if (entries.length === 0) {
     return (
       <div className="text-center py-8">
-        <Calendar className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-        <p className="text-sm text-gray-500">No sync history yet</p>
+        <Calendar className="w-8 h-8 text-[#8A9BA8] mx-auto mb-2" />
+        <p className="text-sm text-[#5A6B7A]">No sync history yet</p>
       </div>
     );
   }
@@ -366,24 +366,24 @@ function HistoryTimeline({ entries }: { entries: SyncLogEntry[] }) {
         return (
           <div
             key={entry.id}
-            className="flex items-start gap-3 bg-white rounded-lg border border-gray-100 p-3"
+            className="flex items-start gap-3 bg-white rounded-lg border border-[#E8E4DF] p-3"
           >
             <div className={`w-2 h-2 rounded-full mt-1.5 flex-shrink-0 ${statusColor}`} />
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between">
-                <p className="text-sm font-medium text-gray-900">
+                <p className="text-sm font-medium text-[#1B2733]">
                   {DATA_TYPE_LABELS[entry.data_type] || entry.data_type}
                 </p>
-                <span className="text-xs text-gray-400">
+                <span className="text-xs text-[#8A9BA8]">
                   {formatDate(entry.started_at)}
                 </span>
               </div>
-              <div className="flex items-center gap-3 mt-1 text-xs text-gray-500">
+              <div className="flex items-center gap-3 mt-1 text-xs text-[#5A6B7A]">
                 <span className="flex items-center gap-1">
                   {entry.direction === 'pull' ? (
                     <ArrowDown size={10} className="text-blue-500" />
                   ) : (
-                    <ArrowUp size={10} className="text-teal-500" />
+                    <ArrowUp size={10} className="text-primary" />
                   )}
                   {entry.direction}
                 </span>
@@ -578,7 +578,7 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 className="w-6 h-6 text-teal-500 animate-spin" />
+        <Loader2 className="w-6 h-6 text-primary animate-spin" />
       </div>
     );
   }
@@ -593,14 +593,14 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
   return (
     <div className="mx-auto max-w-5xl px-4 py-6 space-y-5 bg-[radial-gradient(circle_at_top,_rgba(45,212,191,0.10),transparent_30%)]">
       {/* Header */}
-      <div className="rounded-3xl border border-teal-100 bg-white/92 px-5 py-5 shadow-sm">
+      <div className="rounded-3xl border border-[#E8E4DF] bg-white/92 px-5 py-5 shadow-sm">
         <nav aria-label="CentralReach navigation" className="flex items-center justify-between gap-4">
           <div>
-            <p className="text-xs uppercase tracking-[0.18em] text-teal-700">CentralReach operator lane</p>
-            <h1 className="mt-1 text-xl font-bold tracking-tight text-slate-900">Sync Dashboard</h1>
+            <p className="text-xs uppercase tracking-[0.18em] text-[#6B9080]">CentralReach operator lane</p>
+            <h1 className="mt-1 text-xl font-bold tracking-tight text-[#1B2733]">Sync Dashboard</h1>
             <h2 className="sr-only">CentralReach sync overview</h2>
             <h3 className="sr-only">Import, export, and reconciliation status</h3>
-            <p className="mt-1 text-sm text-slate-500">
+            <p className="mt-1 text-sm text-[#5A6B7A]">
               Pull, export, and reconciliation health for the clinic workflow. This is an operator queue, not a hidden background job screen.
             </p>
           </div>
@@ -608,14 +608,14 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
             <button
               type="button"
               onClick={() => setActiveTab('status')}
-              className="action-button min-h-11 rounded-xl bg-teal-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-teal-700"
+              className="action-button min-h-11 rounded-xl bg-primary px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#6B9080]"
             >
               Review sync health
             </button>
             <button
               onClick={loadData}
               aria-label="Refresh CentralReach sync dashboard"
-              className="flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-xl bg-teal-50 p-2 text-teal-700 transition-colors hover:bg-teal-100"
+              className="flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-xl bg-[#6B9080]/10 p-2 text-[#6B9080] transition-colors hover:bg-[#6B9080]/10"
               title="Refresh dashboard"
             >
               <RefreshCw size={16} />
@@ -623,7 +623,7 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
             {onBack && (
               <button
                 onClick={onBack}
-                className="min-h-11 rounded-xl border border-slate-200 px-3 py-2 text-sm text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-700"
+                className="min-h-11 rounded-xl border border-[#E8E4DF] px-3 py-2 text-sm text-[#5A6B7A] transition-colors hover:bg-[#FAF7F2] hover:text-[#3A4A57]"
               >
                 &larr; Back
               </button>
@@ -636,36 +636,36 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
       {history && (
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
           <div className="rounded-2xl border border-white/80 bg-white/92 p-4 text-center shadow-sm">
-            <Activity size={16} className="text-teal-500 mx-auto mb-1" />
-            <p className="text-lg font-bold text-gray-900">
+            <Activity size={16} className="text-primary mx-auto mb-1" />
+            <p className="text-lg font-bold text-[#1B2733]">
               {history.totalSyncs}
             </p>
-            <p className="text-xs text-gray-500">Total Syncs</p>
+            <p className="text-xs text-[#5A6B7A]">Total Syncs</p>
           </div>
           <div className="rounded-2xl border border-white/80 bg-white/92 p-4 text-center shadow-sm">
             <Zap size={16} className="text-green-500 mx-auto mb-1" />
-            <p className="text-lg font-bold text-gray-900">
+            <p className="text-lg font-bold text-[#1B2733]">
               {history.totalRecordsProcessed}
             </p>
-            <p className="text-xs text-gray-500">Records</p>
+            <p className="text-xs text-[#5A6B7A]">Records</p>
           </div>
           <div className="rounded-2xl border border-white/80 bg-white/92 p-4 text-center shadow-sm">
             <XCircle
               size={16}
-              className={`mx-auto mb-1 ${errorCount > 0 ? 'text-red-500' : 'text-gray-400'}`}
+              className={`mx-auto mb-1 ${errorCount > 0 ? 'text-red-500' : 'text-[#8A9BA8]'}`}
             />
             <p
-              className={`text-lg font-bold ${errorCount > 0 ? 'text-red-600' : 'text-gray-900'}`}
+              className={`text-lg font-bold ${errorCount > 0 ? 'text-red-600' : 'text-[#1B2733]'}`}
             >
               {errorCount}
             </p>
-            <p className="text-xs text-gray-500">Open Errors</p>
+            <p className="text-xs text-[#5A6B7A]">Open Errors</p>
           </div>
         </div>
       )}
 
       {/* Tab Bar */}
-      <div className="flex rounded-2xl border border-teal-100 bg-white/92 p-1.5 shadow-sm">
+      <div className="flex rounded-2xl border border-[#E8E4DF] bg-white/92 p-1.5 shadow-sm">
         {(
           [
             { id: 'status', label: 'Status' },
@@ -678,8 +678,8 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
             onClick={() => setActiveTab(tab.id)}
             className={`min-h-11 flex-1 rounded-xl px-3 py-2 text-sm font-medium transition-colors ${
               activeTab === tab.id
-                ? 'bg-teal-600 text-white shadow-sm'
-                : 'text-slate-500 hover:bg-teal-50 hover:text-slate-700'
+                ? 'bg-primary text-white shadow-sm'
+                : 'text-[#5A6B7A] hover:bg-[#6B9080]/10 hover:text-[#3A4A57]'
             }`}
           >
             {tab.label}
@@ -693,8 +693,8 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
           <div className="rounded-3xl border border-white/80 bg-white/92 p-5 shadow-sm">
             <div className="flex items-center justify-between gap-3">
               <div>
-                <p className="text-sm font-semibold text-gray-900">Clinic Workflow Proof</p>
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-sm font-semibold text-[#1B2733]">Clinic Workflow Proof</p>
+                <p className="text-xs text-[#5A6B7A] mt-1">
                   This is the operational read on whether your clinic can trust the current CentralReach pull/export workflow in daily use.
                 </p>
               </div>
@@ -732,11 +732,11 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
             </div>
             <div className="mt-4 grid gap-2">
               {clinicWorkflow.lanes.map((lane) => (
-                <div key={`${lane.lane}:${lane.direction}`} className="rounded-2xl border border-slate-100 bg-slate-50/80 px-3 py-3">
+                <div key={`${lane.lane}:${lane.direction}`} className="rounded-2xl border border-[#E8E4DF] bg-[#FAF7F2]/80 px-3 py-3">
                   <div className="flex items-center justify-between gap-3">
                     <div>
-                      <p className="text-sm font-medium text-gray-900">{lane.label}</p>
-                      <p className="mt-0.5 text-xs text-gray-500">{lane.operatorMessage}</p>
+                      <p className="text-sm font-medium text-[#1B2733]">{lane.label}</p>
+                      <p className="mt-0.5 text-xs text-[#5A6B7A]">{lane.operatorMessage}</p>
                     </div>
                     <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium ${
                       lane.state === 'healthy'
@@ -765,8 +765,8 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
           <div className="rounded-3xl border border-white/80 bg-white/92 p-5 shadow-sm">
             <div className="flex items-center justify-between gap-3">
               <div>
-                <p className="text-sm font-semibold text-gray-900">Operator Reconciliation Queue</p>
-                <p className="text-xs text-gray-500 mt-1">Pull and export jobs stay visible until retries are exhausted or the latest sync is healthy.</p>
+                <p className="text-sm font-semibold text-[#1B2733]">Operator Reconciliation Queue</p>
+                <p className="text-xs text-[#5A6B7A] mt-1">Pull and export jobs stay visible until retries are exhausted or the latest sync is healthy.</p>
               </div>
               <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${attentionJobs.length > 0 ? 'bg-amber-50 text-amber-700' : 'bg-emerald-50 text-emerald-700'}`}>
                 {attentionJobs.length > 0 ? `${attentionJobs.length} jobs need review` : 'All tracked jobs healthy'}
@@ -775,17 +775,17 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
             {syncJobs.length > 0 ? (
               <div className="mt-3 grid gap-2">
                 {syncJobs.slice(0, 6).map((job) => (
-                  <div key={`${job.dataType}:${job.direction}`} className="rounded-2xl border border-slate-100 bg-slate-50/80 px-3 py-3">
+                  <div key={`${job.dataType}:${job.direction}`} className="rounded-2xl border border-[#E8E4DF] bg-[#FAF7F2]/80 px-3 py-3">
                     <div className="flex items-center justify-between gap-3">
                       <div>
-                        <p className="text-sm font-medium text-gray-900">{DATA_TYPE_LABELS[job.dataType] || job.dataType}</p>
-                        <p className="text-xs text-gray-500 mt-0.5">{job.direction === 'pull' ? 'CentralReach to Aminy' : 'Aminy to CentralReach'} • {job.operatorMessage}</p>
+                        <p className="text-sm font-medium text-[#1B2733]">{DATA_TYPE_LABELS[job.dataType] || job.dataType}</p>
+                        <p className="text-xs text-[#5A6B7A] mt-0.5">{job.direction === 'pull' ? 'CentralReach to Aminy' : 'Aminy to CentralReach'} • {job.operatorMessage}</p>
                       </div>
                       <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${job.reconciliationState === 'healthy' ? 'bg-emerald-50 text-emerald-700' : job.reconciliationState === 'retry_required' ? 'bg-amber-50 text-amber-700' : 'bg-rose-50 text-rose-700'}`}>
                         {job.reconciliationState === 'healthy' ? 'Healthy' : job.reconciliationState === 'retry_required' ? 'Retry required' : 'Attention needed'}
                       </span>
                     </div>
-                    <div className="mt-2 flex flex-wrap gap-3 text-xs text-gray-500">
+                    <div className="mt-2 flex flex-wrap gap-3 text-xs text-[#5A6B7A]">
                       <span>{job.recordsProcessed} processed</span>
                       <span>{job.recordsFailed} failed</span>
                       <span>{job.lastAttemptAt ? `${timeAgo(job.lastAttemptAt)} last attempt` : 'No completed attempt yet'}</span>
@@ -795,12 +795,12 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
                 ))}
               </div>
             ) : (
-              <p className="mt-3 text-sm text-gray-500">No sync jobs are available yet. Connect roster and goals pulls before relying on CentralReach operationally.</p>
+              <p className="mt-3 text-sm text-[#5A6B7A]">No sync jobs are available yet. Connect roster and goals pulls before relying on CentralReach operationally.</p>
             )}
           </div>
           {/* Pull Data */}
           <div>
-            <h3 className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
+            <h3 className="flex items-center gap-2 text-sm font-semibold text-[#3A4A57] mb-2">
               <ArrowDown size={14} className="text-blue-500" />
               Pull (CentralReach &rarr; Aminy)
             </h3>
@@ -820,8 +820,8 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
 
           {/* Push Data */}
           <div>
-            <h3 className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
-              <ArrowUp size={14} className="text-teal-500" />
+            <h3 className="flex items-center gap-2 text-sm font-semibold text-[#3A4A57] mb-2">
+              <ArrowUp size={14} className="text-primary" />
               Push (Aminy &rarr; CentralReach)
             </h3>
             <div className="space-y-2">
@@ -845,7 +845,7 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
         <div className="space-y-3">
           {errors.length > 0 && (
             <div className="flex items-center justify-between">
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-[#5A6B7A]">
                 {errors.length} unresolved error{errors.length !== 1 ? 's' : ''}
               </p>
               <button
@@ -866,8 +866,8 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
           {errors.length === 0 ? (
             <div className="text-center py-8">
               <CheckCircle2 className="w-8 h-8 text-green-400 mx-auto mb-2" />
-              <p className="text-sm text-gray-500">No sync errors</p>
-              <p className="text-xs text-gray-400 mt-1">
+              <p className="text-sm text-[#5A6B7A]">No sync errors</p>
+              <p className="text-xs text-[#8A9BA8] mt-1">
                 All data is syncing successfully
               </p>
             </div>
@@ -909,16 +909,16 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
                 </p>
                 <p className="text-xs text-amber-600">Partial</p>
               </div>
-              <div className="text-center bg-gray-50 rounded-lg p-2">
-                <p className="text-sm font-bold text-gray-700">
+              <div className="text-center bg-[#FAF7F2] rounded-lg p-2">
+                <p className="text-sm font-bold text-[#3A4A57]">
                   {formatDuration(history.avgDurationMs)}
                 </p>
-                <p className="text-xs text-gray-500">Avg Time</p>
+                <p className="text-xs text-[#5A6B7A]">Avg Time</p>
               </div>
             </div>
           )}
 
-          <h3 className="text-sm font-semibold text-gray-700">
+          <h3 className="text-sm font-semibold text-[#3A4A57]">
             Last 30 Days
           </h3>
 

@@ -230,17 +230,17 @@ export function EmptyState({
   return (
     <div className={`flex flex-col items-center justify-center text-center ${sizeClasses.container} ${className}`}>
       {icon && (
-        <div className={`${sizeClasses.icon} text-gray-400 dark:text-gray-600 mb-4`}>
+        <div className={`${sizeClasses.icon} text-[#8A9BA8] dark:text-[#5A6B7A] mb-4`}>
           {icon}
         </div>
       )}
 
-      <h3 className={`font-semibold text-gray-900 dark:text-white ${sizeClasses.title} mb-2`}>
+      <h3 className={`font-semibold text-[#1B2733] dark:text-white ${sizeClasses.title} mb-2`}>
         {title}
       </h3>
 
       {description && (
-        <p className={`text-gray-500 dark:text-gray-400 ${sizeClasses.description} max-w-sm mb-6`}>
+        <p className={`text-[#5A6B7A] dark:text-[#8A9BA8] ${sizeClasses.description} max-w-sm mb-6`}>
           {description}
         </p>
       )}
@@ -251,8 +251,8 @@ export function EmptyState({
             <button
               onClick={action.onClick}
               className={`
-                bg-indigo-600 text-white rounded-lg font-medium
-                hover:bg-indigo-700 transition-colors
+                bg-[#6B9080] text-white rounded-lg font-medium
+                hover:bg-[#5A7A6E] transition-colors
                 ${sizeClasses.button}
               `}
             >
@@ -263,8 +263,8 @@ export function EmptyState({
             <button
               onClick={secondaryAction.onClick}
               className={`
-                bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300
-                rounded-lg font-medium hover:bg-gray-200 dark:hover:bg-slate-700
+                bg-[#F0EDE8] dark:bg-slate-800 text-[#3A4A57] dark:text-gray-300
+                rounded-lg font-medium hover:bg-[#E8E4DF] dark:hover:bg-slate-700
                 transition-colors
                 ${sizeClasses.button}
               `}

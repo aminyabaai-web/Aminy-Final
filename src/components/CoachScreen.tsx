@@ -28,8 +28,8 @@ interface CoachScreenProps {
 
 export function CoachScreen({ title, subtitle, userTier, onBookSession, onStartChat }: CoachScreenProps) {
   return (
-    <div className="min-h-screen bg-gray-50/30 pb-20">
-      <div className="bg-white border-b border-gray-100 px-4 py-6">
+    <div className="min-h-screen bg-[#FAF7F2]/30 pb-20">
+      <div className="bg-white border-b border-[#E8E4DF] px-4 py-6">
         <div className="max-w-md mx-auto">
           <div className="flex items-center gap-3">
             <div className="text-2xl" role="img" aria-hidden="true">
@@ -78,7 +78,7 @@ export function CoachScreen({ title, subtitle, userTier, onBookSession, onStartC
                 </div>
               </div>
               
-              <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg">
+              <div className="flex items-center gap-3 p-3 bg-[#EEF4F8] rounded-lg">
                 <MessageCircle className="w-5 h-5 text-blue-600" />
                 <div className="flex-1">
                   <div className="font-medium text-sm">Coach Chats</div>

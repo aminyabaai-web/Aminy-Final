@@ -242,7 +242,7 @@ export function PWAInstallPrompt() {
               <button
                 onClick={handleInstall}
                 disabled={installing}
-                className="flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-medium text-cyan-700 shadow-sm transition-all hover:bg-cyan-50 active:scale-95 disabled:opacity-50"
+                className="flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-medium text-cyan-700 shadow-sm transition-all hover:bg-[#6B9080]/10 active:scale-95 disabled:opacity-50"
               >
                 <Download size={14} />
                 {installing ? 'Installing...' : 'Install'}

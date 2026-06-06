@@ -153,23 +153,23 @@ export function DocumentVaultPage({ userTier, onNavigate }: DocumentVaultPagePro
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
+    <div className="min-h-screen bg-[#FAF7F2] dark:bg-slate-900">
       {/* Header */}
-      <div className="bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
+      <div className="bg-white dark:bg-slate-800 border-b border-[#E8E4DF] dark:border-slate-700">
         <div className="px-4 py-4 sm:px-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               {getTimeIcon()}
               <div>
-                <h1 className="text-xl text-slate-900 dark:text-slate-100">Good {getTimeOfDay()}, {caregiverShort}</h1>
-                <p className="text-sm text-slate-600 dark:text-slate-400">Your digital medical binder for {childShort}</p>
+                <h1 className="text-xl text-[#1B2733] dark:text-slate-100">Good {getTimeOfDay()}, {caregiverShort}</h1>
+                <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Your digital medical binder for {childShort}</p>
               </div>
             </div>
             <div className="flex items-center space-x-3">
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100"
+                className="text-[#5A6B7A] hover:text-[#1B2733] dark:text-slate-400 dark:hover:text-slate-100"
                 aria-label="Open vault notifications"
               >
                 <Bell className="w-4 h-4" />
@@ -189,26 +189,26 @@ export function DocumentVaultPage({ userTier, onNavigate }: DocumentVaultPagePro
             {/* Storage Stats Card */}
             <Card className="p-4 border-0 shadow-sm dark:bg-slate-800 dark:border-slate-700">
               <div className="flex items-center space-x-3 mb-4">
-                <div className="w-8 h-8 bg-teal-100 dark:bg-teal-900/30 rounded-lg flex items-center justify-center">
-                  <FolderOpen className="w-4 h-4 text-teal-600 dark:text-teal-400" />
+                <div className="w-8 h-8 bg-[#6B9080]/10 dark:bg-[#6B9080]/15 rounded-lg flex items-center justify-center">
+                  <FolderOpen className="w-4 h-4 text-[#6B9080] dark:text-primary" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-medium text-slate-900 dark:text-slate-100">Vault Storage</h3>
-                  <p className="text-xs text-slate-500">{userTier || 'Starter'} Plan</p>
+                  <h3 className="text-sm font-medium text-[#1B2733] dark:text-slate-100">Vault Storage</h3>
+                  <p className="text-xs text-[#5A6B7A]">{userTier || 'Starter'} Plan</p>
                 </div>
               </div>
               
               <div className="space-y-3">
                 <div>
                   <div className="flex justify-between text-sm mb-1">
-                    <span className="text-slate-600 dark:text-slate-400">Storage</span>
-                    <span className="text-slate-900 dark:text-slate-100">
+                    <span className="text-[#5A6B7A] dark:text-slate-400">Storage</span>
+                    <span className="text-[#1B2733] dark:text-slate-100">
                       {stats.storageUsed} MB / {stats.storageLimit} MB
                     </span>
                   </div>
-                  <div className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2">
+                  <div className="w-full bg-[#E8E4DF] dark:bg-slate-700 rounded-full h-2">
                     <div 
-                      className="bg-teal-600 h-2 rounded-full" 
+                      className="bg-primary h-2 rounded-full" 
                       style={{ width: `${Math.min((stats.storageUsed / stats.storageLimit) * 100, 100)}%` }}
                     />
                   </div>
@@ -216,12 +216,12 @@ export function DocumentVaultPage({ userTier, onNavigate }: DocumentVaultPagePro
                 
                 <div>
                   <div className="flex justify-between text-sm mb-1">
-                    <span className="text-slate-600 dark:text-slate-400">Files</span>
-                    <span className="text-slate-900 dark:text-slate-100">
+                    <span className="text-[#5A6B7A] dark:text-slate-400">Files</span>
+                    <span className="text-[#1B2733] dark:text-slate-100">
                       {stats.filesCount} / {stats.filesLimit}
                     </span>
                   </div>
-                  <div className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2">
+                  <div className="w-full bg-[#E8E4DF] dark:bg-slate-700 rounded-full h-2">
                     <div 
                       className="bg-blue-600 h-2 rounded-full" 
                       style={{ width: `${Math.min((stats.filesCount / stats.filesLimit) * 100, 100)}%` }}
@@ -231,7 +231,7 @@ export function DocumentVaultPage({ userTier, onNavigate }: DocumentVaultPagePro
               </div>
               
               {userTier === 'starter' && (
-                <div className="mt-4 pt-4 border-t border-gray-200 dark:border-slate-600">
+                <div className="mt-4 pt-4 border-t border-[#E8E4DF] dark:border-slate-600">
                   <Button size="sm" className="w-full">
                     <TrendingUp className="w-3 h-3 mr-1" />
                     Upgrade for More
@@ -242,7 +242,7 @@ export function DocumentVaultPage({ userTier, onNavigate }: DocumentVaultPagePro
 
             {/* Quick Actions */}
             <Card className="p-4 border-0 shadow-sm dark:bg-slate-800 dark:border-slate-700">
-              <h3 className="text-sm font-medium text-slate-900 dark:text-slate-100 mb-3">Quick Actions</h3>
+              <h3 className="text-sm font-medium text-[#1B2733] dark:text-slate-100 mb-3">Quick Actions</h3>
               <div className="space-y-2">
                 <Button variant="outline" size="sm" className="w-full justify-start">
                   <Upload className="w-3 h-3 mr-2" />
@@ -266,12 +266,12 @@ export function DocumentVaultPage({ userTier, onNavigate }: DocumentVaultPagePro
                   <CompassIcon className="w-4 h-4" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-medium text-slate-900 dark:text-slate-100">Aminy</h3>
-                  <p className="text-xs text-slate-500">Search your records</p>
+                  <h3 className="text-sm font-medium text-[#1B2733] dark:text-slate-100">Aminy</h3>
+                  <p className="text-xs text-[#5A6B7A]">Search your records</p>
                 </div>
               </div>
               
-              <p className="text-xs text-slate-600 dark:text-slate-400 mb-3">
+              <p className="text-xs text-[#5A6B7A] dark:text-slate-400 mb-3">
                 {stats.aiSearchEnabled 
                   ? "Ask questions about your uploaded documents"
                   : "Upgrade to Pro for AI-powered document search"

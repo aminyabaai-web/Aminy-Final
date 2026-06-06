@@ -36,10 +36,10 @@ export const MemoryReviewBanner: React.FC<MemoryReviewBannerProps> = ({
 
   const getScopeColor = (scope: string) => {
     switch (scope) {
-      case 'child': return 'bg-blue-100 text-blue-700 border-blue-200';
+      case 'child': return 'bg-blue-100 text-blue-700 border-[#C8DDE8]';
       case 'parent': return 'bg-purple-100 text-purple-700 border-purple-200';
       case 'family': return 'bg-green-100 text-green-700 border-green-200';
-      default: return 'bg-gray-100 text-gray-700 border-gray-200';
+      default: return 'bg-[#F0EDE8] text-[#3A4A57] border-[#E8E4DF]';
     }
   };
 
@@ -69,7 +69,7 @@ export const MemoryReviewBanner: React.FC<MemoryReviewBannerProps> = ({
       </div>
 
       {/* Memory Content */}
-      <div className="bg-white border border-slate-200 rounded-lg p-3 mb-3">
+      <div className="bg-white border border-[#E8E4DF] rounded-lg p-3 mb-3">
         <p className="text-xs font-medium text-muted-foreground mb-1">
           {memoryItem.key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
         </p>
@@ -92,7 +92,7 @@ export const MemoryReviewBanner: React.FC<MemoryReviewBannerProps> = ({
 
       {/* Details (collapsible) */}
       {showDetails && (
-        <div className="bg-white border border-slate-200 rounded-lg p-3 mb-3 text-xs">
+        <div className="bg-white border border-[#E8E4DF] rounded-lg p-3 mb-3 text-xs">
           <p className="text-muted-foreground mb-1">Why this is being saved:</p>
           <p>{memoryItem.why_saved || 'Helps personalize Aminy\'s guidance'}</p>
           <p className="text-muted-foreground mt-2 mb-1">Confidence:</p>

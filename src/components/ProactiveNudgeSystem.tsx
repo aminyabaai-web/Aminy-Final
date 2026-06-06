@@ -149,7 +149,7 @@ function generateContextualNudges(props: ProactiveNudgeSystemProps): Nudge[] {
       message: `Your stress has been elevated. Taking care of yourself isn't selfish—it makes you a better parent.`,
       action: { label: 'Breathing exercise', target: 'calm_tools' },
       icon: Coffee,
-      gradient: 'from-teal-400 to-cyan-500',
+      gradient: 'from-[#6B9080] to-[#7BA7BC]',
       dismissable: false, // Important - don't let them dismiss self-care
     });
   }
@@ -330,7 +330,7 @@ export function NotificationPermissionRequest({
   }
 
   return (
-    <Card className="p-4 bg-gradient-to-r from-blue-50 to-teal-50 border-blue-200">
+    <Card className="p-4 bg-gradient-to-r from-[#FAF7F2] to-[#F5F2EC] border-[#C8DDE8]">
       <div className="flex items-start gap-3">
         <div className="p-2 bg-blue-100 rounded-full">
           <Bell className="w-5 h-5 text-blue-600" />

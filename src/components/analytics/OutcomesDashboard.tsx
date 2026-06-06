@@ -272,11 +272,11 @@ function KPITile({
   color?: string;
 }) {
   return (
-    <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
-      <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">{label}</p>
-      <p className={`text-3xl font-bold ${color ?? 'text-slate-800'}`}>
+    <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#E8E4DF]">
+      <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide mb-1">{label}</p>
+      <p className={`text-3xl font-bold ${color ?? 'text-[#1B2733]'}`}>
         {value}
-        {unit && <span className="text-base font-medium text-slate-500 ml-1">{unit}</span>}
+        {unit && <span className="text-base font-medium text-[#5A6B7A] ml-1">{unit}</span>}
       </p>
       {sub && <p className="text-xs text-slate-400 mt-1">{sub}</p>}
     </div>
@@ -417,7 +417,7 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
           <button
             onClick={fetchData}
             disabled={loading}
-            className="flex items-center gap-1 text-slate-400 hover:text-slate-600 text-xs transition-colors"
+            className="flex items-center gap-1 text-slate-400 hover:text-[#5A6B7A] text-xs transition-colors"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
             Refresh
@@ -434,19 +434,19 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
 
         {/* ── Section 1: KPI Tiles ─────────────────────────── */}
         <section>
-          <h2 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Platform Summary</h2>
+          <h2 className="text-xs font-bold text-[#5A6B7A] uppercase tracking-widest mb-3">Platform Summary</h2>
           <div className="grid grid-cols-2 gap-3">
             <KPITile
               label="Active Clients"
               value={kpi.activeClients}
               sub="enrolled families"
-              color="text-slate-900"
+              color="text-[#1B2733]"
             />
             <KPITile
               label="Sessions This Month"
               value={kpi.sessionsThisMonth}
               sub="completed sessions"
-              color="text-slate-900"
+              color="text-[#1B2733]"
             />
             <KPITile
               label="Goals at Mastery"
@@ -460,16 +460,16 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
               value={kpi.avgWeeksToFirstMastery}
               unit="wks"
               sub="from program start"
-              color="text-slate-900"
+              color="text-[#1B2733]"
             />
           </div>
         </section>
 
         {/* ── Section 2: Goal Mastery Trend ────────────────── */}
-        <section className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
+        <section className="bg-white rounded-2xl p-5 shadow-sm border border-[#E8E4DF]">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h2 className="text-sm font-bold text-slate-800">Goal Mastery Trend</h2>
+              <h2 className="text-sm font-bold text-[#1B2733]">Goal Mastery Trend</h2>
               <p className="text-xs text-slate-400 mt-0.5">% goals at mastery over 12 weeks</p>
             </div>
             {weekly.length > 1 && (
@@ -485,9 +485,9 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
         </section>
 
         {/* ── Section 3: Session Frequency ─────────────────── */}
-        <section className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
+        <section className="bg-white rounded-2xl p-5 shadow-sm border border-[#E8E4DF]">
           <div className="mb-4">
-            <h2 className="text-sm font-bold text-slate-800">Session Frequency Distribution</h2>
+            <h2 className="text-sm font-bold text-[#1B2733]">Session Frequency Distribution</h2>
             <p className="text-xs text-slate-400 mt-0.5">
               {frequency.length > 0 && kpi.activeClients > 0
                 ? `Sessions per week across ${kpi.activeClients} active clients`
@@ -500,7 +500,7 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
               <div className="flex justify-around mt-3">
                 {frequency.map(b => (
                   <div key={b.label} className="text-center">
-                    <p className="text-xs font-medium text-slate-600">{b.label}</p>
+                    <p className="text-xs font-medium text-[#5A6B7A]">{b.label}</p>
                     <p className="text-xs text-slate-400">
                       {kpi.activeClients > 0 ? `${Math.round((b.count / kpi.activeClients) * 100)}%` : '—'}
                     </p>
@@ -514,27 +514,27 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
         </section>
 
         {/* ── Section 4: Top Programs ───────────────────────── */}
-        <section className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-          <div className="px-5 py-4 border-b border-slate-100">
-            <h2 className="text-sm font-bold text-slate-800">Top Programs by Mastery Rate</h2>
+        <section className="bg-white rounded-2xl shadow-sm border border-[#E8E4DF] overflow-hidden">
+          <div className="px-5 py-4 border-b border-[#E8E4DF]">
+            <h2 className="text-sm font-bold text-[#1B2733]">Top Programs by Mastery Rate</h2>
             <p className="text-xs text-slate-400 mt-0.5">Across all active treatment plans</p>
           </div>
           {programs.length > 0 ? (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="bg-slate-50">
-                    <th className="text-left px-5 py-2.5 text-xs font-semibold text-slate-500 uppercase tracking-wide">Program</th>
-                    <th className="text-right px-4 py-2.5 text-xs font-semibold text-slate-500 uppercase tracking-wide">Trials</th>
-                    <th className="text-right px-4 py-2.5 text-xs font-semibold text-slate-500 uppercase tracking-wide">Mastery</th>
-                    <th className="px-4 py-2.5 text-xs font-semibold text-slate-500 uppercase tracking-wide">Trend</th>
+                  <tr className="bg-[#FAF7F2]">
+                    <th className="text-left px-5 py-2.5 text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">Program</th>
+                    <th className="text-right px-4 py-2.5 text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">Trials</th>
+                    <th className="text-right px-4 py-2.5 text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">Mastery</th>
+                    <th className="px-4 py-2.5 text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">Trend</th>
                   </tr>
                 </thead>
                 <tbody>
                   {programs.map((row, i) => (
-                    <tr key={row.name} className={i % 2 === 0 ? '' : 'bg-slate-50/50'}>
-                      <td className="px-5 py-3 font-medium text-slate-700">{row.name}</td>
-                      <td className="px-4 py-3 text-right text-slate-500">{row.totalTrials.toLocaleString()}</td>
+                    <tr key={row.name} className={i % 2 === 0 ? '' : 'bg-[#FAF7F2]/50'}>
+                      <td className="px-5 py-3 font-medium text-[#3A4A57]">{row.name}</td>
+                      <td className="px-4 py-3 text-right text-[#5A6B7A]">{row.totalTrials.toLocaleString()}</td>
                       <td className="px-4 py-3 text-right">
                         <span className={`font-bold ${row.masteryPct >= 70 ? 'text-emerald-600' : row.masteryPct >= 50 ? 'text-amber-600' : 'text-red-500'}`}>
                           {row.masteryPct}%
@@ -555,30 +555,30 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
 
         {/* ── Section 5: Provider Performance ─────────────── */}
         {!providerId && (
-          <section className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-            <div className="px-5 py-4 border-b border-slate-100">
-              <h2 className="text-sm font-bold text-slate-800">Provider Performance</h2>
+          <section className="bg-white rounded-2xl shadow-sm border border-[#E8E4DF] overflow-hidden">
+            <div className="px-5 py-4 border-b border-[#E8E4DF]">
+              <h2 className="text-sm font-bold text-[#1B2733]">Provider Performance</h2>
               <p className="text-xs text-slate-400 mt-0.5">Outcomes score based on mastery rates and session consistency</p>
             </div>
             {providers.length > 0 ? (
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="bg-slate-50">
-                      <th className="text-left px-5 py-2.5 text-xs font-semibold text-slate-500 uppercase tracking-wide">Provider</th>
-                      <th className="text-right px-4 py-2.5 text-xs font-semibold text-slate-500 uppercase tracking-wide">Clients</th>
-                      <th className="text-right px-4 py-2.5 text-xs font-semibold text-slate-500 uppercase tracking-wide">Avg Sess/Wk</th>
-                      <th className="text-right px-4 py-2.5 text-xs font-semibold text-slate-500 uppercase tracking-wide">Score</th>
+                    <tr className="bg-[#FAF7F2]">
+                      <th className="text-left px-5 py-2.5 text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">Provider</th>
+                      <th className="text-right px-4 py-2.5 text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">Clients</th>
+                      <th className="text-right px-4 py-2.5 text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">Avg Sess/Wk</th>
+                      <th className="text-right px-4 py-2.5 text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">Score</th>
                     </tr>
                   </thead>
                   <tbody>
                     {providers.map((row, i) => (
-                      <tr key={row.name} className={i % 2 === 0 ? '' : 'bg-slate-50/50'}>
+                      <tr key={row.name} className={i % 2 === 0 ? '' : 'bg-[#FAF7F2]/50'}>
                         <td className="px-5 py-3">
-                          <p className="font-medium text-slate-700">{row.name}</p>
+                          <p className="font-medium text-[#3A4A57]">{row.name}</p>
                         </td>
-                        <td className="px-4 py-3 text-right text-slate-500">{row.clients}</td>
-                        <td className="px-4 py-3 text-right text-slate-500">{row.avgSessionsPerWeek.toFixed(1)}</td>
+                        <td className="px-4 py-3 text-right text-[#5A6B7A]">{row.clients}</td>
+                        <td className="px-4 py-3 text-right text-[#5A6B7A]">{row.avgSessionsPerWeek.toFixed(1)}</td>
                         <td className="px-4 py-3 text-right">
                           <span className={`font-bold ${row.outcomesScore >= 9 ? 'text-emerald-600' : 'text-amber-600'}`}>
                             {row.outcomesScore.toFixed(1)}

@@ -44,7 +44,7 @@ export function LiveAIVideoSheet({
           <div className="mt-4 sm:mt-6 space-y-3 sm:space-y-4">
             {/* Video Preview */}
             <div className="aspect-video bg-gray-900 rounded-lg flex items-center justify-center">
-              <Video className="w-12 h-12 text-gray-400" />
+              <Video className="w-12 h-12 text-[#8A9BA8]" />
             </div>
 
             {/* Controls */}
@@ -61,7 +61,7 @@ export function LiveAIVideoSheet({
             </div>
 
             {/* Session Info */}
-            <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <div className="p-4 bg-[#EEF4F8] border border-[#C8DDE8] rounded-lg">
               <div className="flex items-start gap-3">
                 <Info className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
                 <p className="text-sm text-blue-700">

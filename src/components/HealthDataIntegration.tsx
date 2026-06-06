@@ -276,11 +276,11 @@ export function HealthDataIntegration({
         <div className="p-4 bg-gradient-to-r from-indigo-50 to-purple-50 border-b border-indigo-100">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center">
-              <Moon className="w-5 h-5 text-indigo-600" />
+              <Moon className="w-5 h-5 text-[#6B9080]" />
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900">Sleep Insights</h3>
-              <p className="text-sm text-gray-600">Connect to see how sleep affects behavior</p>
+              <h3 className="font-semibold text-[#1B2733]">Sleep Insights</h3>
+              <p className="text-sm text-[#5A6B7A]">Connect to see how sleep affects behavior</p>
             </div>
           </div>
         </div>
@@ -288,7 +288,7 @@ export function HealthDataIntegration({
         <div className="p-4 space-y-4">
           <div className="flex items-start gap-3 text-sm">
             <Zap className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
-            <p className="text-gray-600">
+            <p className="text-[#5A6B7A]">
               <strong>Did you know?</strong> Sleep quality directly impacts meltdowns,
               focus, and regulation. We'll show you the patterns.
             </p>
@@ -297,7 +297,7 @@ export function HealthDataIntegration({
           <Button
             onClick={handleConnect}
             disabled={isConnecting}
-            className="w-full bg-indigo-500 hover:bg-indigo-600 text-white"
+            className="w-full bg-indigo-500 hover:bg-[#6B9080] text-white"
           >
             {isConnecting ? (
               <span className="flex items-center gap-2">
@@ -326,7 +326,7 @@ export function HealthDataIntegration({
             )}
           </Button>
 
-          <div className="flex items-center gap-2 text-xs text-gray-500 justify-center">
+          <div className="flex items-center gap-2 text-xs text-[#5A6B7A] justify-center">
             <Shield className="w-3 h-3" />
             <span>We only read sleep data. Never shared.</span>
           </div>
@@ -345,15 +345,15 @@ export function HealthDataIntegration({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center">
-              <Moon className="w-5 h-5 text-indigo-600" />
+              <Moon className="w-5 h-5 text-[#6B9080]" />
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900">Last Night's Sleep</h3>
+              <h3 className="font-semibold text-[#1B2733]">Last Night's Sleep</h3>
               {recentSleep ? (
                 <div className="flex items-center gap-2 mt-0.5">
                   <span className={`text-lg font-bold ${
                     recentSleep.quality === 'excellent' ? 'text-green-600' :
-                    recentSleep.quality === 'good' ? 'text-teal-600' :
+                    recentSleep.quality === 'good' ? 'text-[#6B9080]' :
                     recentSleep.quality === 'fair' ? 'text-amber-600' :
                     'text-red-600'
                   }`}>
@@ -361,7 +361,7 @@ export function HealthDataIntegration({
                   </span>
                   <span className={`text-xs px-2 py-0.5 rounded-full ${
                     recentSleep.quality === 'excellent' ? 'bg-green-100 text-green-700' :
-                    recentSleep.quality === 'good' ? 'bg-teal-100 text-teal-700' :
+                    recentSleep.quality === 'good' ? 'bg-[#6B9080]/10 text-[#6B9080]' :
                     recentSleep.quality === 'fair' ? 'bg-amber-100 text-amber-700' :
                     'bg-red-100 text-red-700'
                   }`}>
@@ -369,7 +369,7 @@ export function HealthDataIntegration({
                   </span>
                 </div>
               ) : (
-                <p className="text-sm text-gray-500">Loading...</p>
+                <p className="text-sm text-[#5A6B7A]">Loading...</p>
               )}
             </div>
           </div>
@@ -383,7 +383,7 @@ export function HealthDataIntegration({
                 <span>{trend === 'up' ? 'Improving' : 'Declining'}</span>
               </div>
             )}
-            <ChevronRight className={`w-5 h-5 text-gray-400 transition-transform ${showDetails ? 'rotate-90' : ''}`} />
+            <ChevronRight className={`w-5 h-5 text-[#8A9BA8] transition-transform ${showDetails ? 'rotate-90' : ''}`} />
           </div>
         </div>
       </button>
@@ -396,7 +396,7 @@ export function HealthDataIntegration({
             exit={{ height: 0, opacity: 0 }}
             className="overflow-hidden"
           >
-            <div className="p-4 space-y-4 border-t border-gray-100">
+            <div className="p-4 space-y-4 border-t border-[#E8E4DF]">
               {/* Sleep insight */}
               {recentSleep && (
                 <div className="p-3 bg-indigo-50 rounded-xl">
@@ -408,40 +408,40 @@ export function HealthDataIntegration({
 
               {/* Stats grid */}
               <div className="grid grid-cols-3 gap-3">
-                <div className="text-center p-3 bg-gray-50 rounded-xl">
-                  <Clock className="w-4 h-4 text-gray-400 mx-auto mb-1" />
-                  <p className="text-xs text-gray-500">Bedtime</p>
-                  <p className="font-semibold text-gray-900">{recentSleep?.bedtime || '--'}</p>
+                <div className="text-center p-3 bg-[#FAF7F2] rounded-xl">
+                  <Clock className="w-4 h-4 text-[#8A9BA8] mx-auto mb-1" />
+                  <p className="text-xs text-[#5A6B7A]">Bedtime</p>
+                  <p className="font-semibold text-[#1B2733]">{recentSleep?.bedtime || '--'}</p>
                 </div>
-                <div className="text-center p-3 bg-gray-50 rounded-xl">
-                  <Sun className="w-4 h-4 text-gray-400 mx-auto mb-1" />
-                  <p className="text-xs text-gray-500">Wake</p>
-                  <p className="font-semibold text-gray-900">{recentSleep?.wakeTime || '--'}</p>
+                <div className="text-center p-3 bg-[#FAF7F2] rounded-xl">
+                  <Sun className="w-4 h-4 text-[#8A9BA8] mx-auto mb-1" />
+                  <p className="text-xs text-[#5A6B7A]">Wake</p>
+                  <p className="font-semibold text-[#1B2733]">{recentSleep?.wakeTime || '--'}</p>
                 </div>
-                <div className="text-center p-3 bg-gray-50 rounded-xl">
-                  <AlertTriangle className="w-4 h-4 text-gray-400 mx-auto mb-1" />
-                  <p className="text-xs text-gray-500">Wakeups</p>
-                  <p className="font-semibold text-gray-900">{recentSleep?.interruptions ?? '--'}</p>
+                <div className="text-center p-3 bg-[#FAF7F2] rounded-xl">
+                  <AlertTriangle className="w-4 h-4 text-[#8A9BA8] mx-auto mb-1" />
+                  <p className="text-xs text-[#5A6B7A]">Wakeups</p>
+                  <p className="font-semibold text-[#1B2733]">{recentSleep?.interruptions ?? '--'}</p>
                 </div>
               </div>
 
               {/* Weekly average */}
               {weeklyAverage && (
-                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
-                  <span className="text-sm text-gray-600">7-Day Average</span>
-                  <span className="font-semibold text-gray-900">{weeklyAverage.toFixed(1)} hours</span>
+                <div className="flex items-center justify-between p-3 bg-[#FAF7F2] rounded-xl">
+                  <span className="text-sm text-[#5A6B7A]">7-Day Average</span>
+                  <span className="font-semibold text-[#1B2733]">{weeklyAverage.toFixed(1)} hours</span>
                 </div>
               )}
 
               {/* Sync button */}
               <div className="flex items-center justify-between pt-2">
-                <span className="text-xs text-gray-500">
+                <span className="text-xs text-[#5A6B7A]">
                   Last sync: {lastSync?.toLocaleTimeString() || 'Never'}
                 </span>
                 <button
                   onClick={handleSync}
                   disabled={isConnecting}
-                  className="flex items-center gap-1 text-xs text-indigo-600 hover:text-indigo-700"
+                  className="flex items-center gap-1 text-xs text-[#6B9080] hover:text-indigo-700"
                 >
                   <RefreshCw className={`w-3 h-3 ${isConnecting ? 'animate-spin' : ''}`} />
                   Sync now
@@ -460,7 +460,7 @@ export function HealthDataIntegration({
  */
 export function SleepBadge({ hours, quality }: { hours: number; quality: SleepData['quality'] }) {
   const color = quality === 'excellent' ? 'bg-green-100 text-green-700' :
-                quality === 'good' ? 'bg-teal-100 text-teal-700' :
+                quality === 'good' ? 'bg-[#6B9080]/10 text-[#6B9080]' :
                 quality === 'fair' ? 'bg-amber-100 text-amber-700' :
                 'bg-red-100 text-red-700';
 

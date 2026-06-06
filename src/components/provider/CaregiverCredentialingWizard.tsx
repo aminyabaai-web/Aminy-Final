@@ -66,16 +66,16 @@ export function CaregiverCredentialingWizard({ onBack }: CaregiverCredentialingW
                 return (
                     <div className="text-center space-y-6 animate-in fade-in zoom-in duration-500">
                         <div className="bg-indigo-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
-                            <ShieldCheck className="w-10 h-10 text-indigo-600" />
+                            <ShieldCheck className="w-10 h-10 text-[#6B9080]" />
                         </div>
-                        <h2 className="text-3xl font-bold tracking-tight text-slate-900">Fast-Track Credentialing</h2>
-                        <p className="text-lg text-slate-500 max-w-lg mx-auto leading-relaxed">
+                        <h2 className="text-3xl font-bold tracking-tight text-[#1B2733]">Fast-Track Credentialing</h2>
+                        <p className="text-lg text-[#5A6B7A] max-w-lg mx-auto leading-relaxed">
                             Aminy helps you assemble the paperwork required by state Medicaid and insurance networks — guiding you through identity verification, NPI validation, and waiver assembly.
                         </p>
                         <div className="pt-8">
                             <Button
                                 onClick={() => handleNext('identity')}
-                                className="w-full sm:w-auto px-8 py-6 text-lg font-semibold bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow-lg transition-transform hover:scale-105"
+                                className="w-full sm:w-auto px-8 py-6 text-lg font-semibold bg-[#6B9080] hover:bg-[#5A7A6E] text-white rounded-xl shadow-lg transition-transform hover:scale-105"
                             >
                                 Let's Get Started
                             </Button>
@@ -89,9 +89,9 @@ export function CaregiverCredentialingWizard({ onBack }: CaregiverCredentialingW
                         <div>
                             <div className="flex items-center gap-3 mb-2">
                                 <Badge className="bg-indigo-100 text-indigo-700">Step 1 of 4</Badge>
-                                <h2 className="text-2xl font-bold text-slate-900">Identity Verification</h2>
+                                <h2 className="text-2xl font-bold text-[#1B2733]">Identity Verification</h2>
                             </div>
-                            <p className="text-slate-500 text-lg">
+                            <p className="text-[#5A6B7A] text-lg">
                                 Please upload a photo of your valid government ID. Your documents are uploaded over an encrypted connection.
                             </p>
                         </div>
@@ -117,16 +117,16 @@ export function CaregiverCredentialingWizard({ onBack }: CaregiverCredentialingW
                             <button
                                 type="button"
                                 onClick={() => frontInputRef.current?.click()}
-                                className={`border-2 border-dashed rounded-2xl p-8 text-center transition-colors cursor-pointer group w-full ${idFront ? '' : 'border-slate-300 hover:bg-slate-50'}`}
+                                className={`border-2 border-dashed rounded-2xl p-8 text-center transition-colors cursor-pointer group w-full ${idFront ? '' : 'border-slate-300 hover:bg-[#FAF7F2]'}`}
                                 style={idFront ? { borderColor: '#34d399', backgroundColor: '#ecfdf5' } : undefined}
                             >
-                                <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 transition-colors ${idFront ? 'bg-emerald-100' : 'bg-slate-100 group-hover:bg-indigo-100'}`}>
+                                <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 transition-colors ${idFront ? 'bg-emerald-100' : 'bg-[#F0EDE8] group-hover:bg-indigo-100'}`}>
                                     {idFront
                                         ? <CheckCircle2 className="w-8 h-8 text-emerald-600" />
-                                        : <Camera className="w-8 h-8 text-slate-500 group-hover:text-indigo-600" />}
+                                        : <Camera className="w-8 h-8 text-[#5A6B7A] group-hover:text-[#6B9080]" />}
                                 </div>
-                                <h3 className="font-semibold text-slate-900">Front of ID</h3>
-                                <p className="text-sm text-slate-500 mt-1 truncate">
+                                <h3 className="font-semibold text-[#1B2733]">Front of ID</h3>
+                                <p className="text-sm text-[#5A6B7A] mt-1 truncate">
                                     {idFront ? idFront.name : 'Tap to capture'}
                                 </p>
                             </button>
@@ -134,16 +134,16 @@ export function CaregiverCredentialingWizard({ onBack }: CaregiverCredentialingW
                             <button
                                 type="button"
                                 onClick={() => backInputRef.current?.click()}
-                                className={`border-2 border-dashed rounded-2xl p-8 text-center transition-colors cursor-pointer group w-full ${idBack ? '' : 'border-slate-300 hover:bg-slate-50'}`}
+                                className={`border-2 border-dashed rounded-2xl p-8 text-center transition-colors cursor-pointer group w-full ${idBack ? '' : 'border-slate-300 hover:bg-[#FAF7F2]'}`}
                                 style={idBack ? { borderColor: '#34d399', backgroundColor: '#ecfdf5' } : undefined}
                             >
-                                <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 transition-colors ${idBack ? 'bg-emerald-100' : 'bg-slate-100 group-hover:bg-indigo-100'}`}>
+                                <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 transition-colors ${idBack ? 'bg-emerald-100' : 'bg-[#F0EDE8] group-hover:bg-indigo-100'}`}>
                                     {idBack
                                         ? <CheckCircle2 className="w-8 h-8 text-emerald-600" />
-                                        : <UploadCloud className="w-8 h-8 text-slate-500 group-hover:text-indigo-600" />}
+                                        : <UploadCloud className="w-8 h-8 text-[#5A6B7A] group-hover:text-[#6B9080]" />}
                                 </div>
-                                <h3 className="font-semibold text-slate-900">Back of ID</h3>
-                                <p className="text-sm text-slate-500 mt-1 truncate">
+                                <h3 className="font-semibold text-[#1B2733]">Back of ID</h3>
+                                <p className="text-sm text-[#5A6B7A] mt-1 truncate">
                                     {idBack ? idBack.name : 'Tap to select file'}
                                 </p>
                             </button>
@@ -167,14 +167,14 @@ export function CaregiverCredentialingWizard({ onBack }: CaregiverCredentialingW
                         <div>
                             <div className="flex items-center gap-3 mb-2">
                                 <Badge className="bg-indigo-100 text-indigo-700">Step 2 of 4</Badge>
-                                <h2 className="text-2xl font-bold text-slate-900">Clinical Credentials</h2>
+                                <h2 className="text-2xl font-bold text-[#1B2733]">Clinical Credentials</h2>
                             </div>
-                            <p className="text-slate-500 text-lg">
+                            <p className="text-[#5A6B7A] text-lg">
                                 If you are a BCBA or RBT, enter your 10-digit National Provider Identifier (NPI).
                             </p>
                         </div>
 
-                        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden">
+                        <div className="bg-white p-6 rounded-2xl border border-[#E8E4DF] shadow-sm relative overflow-hidden">
                             {npiStatus === 'verified' && (
                                 <div
                                     className="absolute inset-0 z-10 flex items-center justify-center animate-in fade-in"
@@ -200,7 +200,7 @@ export function CaregiverCredentialingWizard({ onBack }: CaregiverCredentialingW
                                     </div>
                                 </div>
                             )}
-                            <label className="block text-sm font-semibold text-slate-700 mb-2">NPI Number</label>
+                            <label className="block text-sm font-semibold text-[#3A4A57] mb-2">NPI Number</label>
                             <input
                                 type="text"
                                 inputMode="numeric"
@@ -215,14 +215,14 @@ export function CaregiverCredentialingWizard({ onBack }: CaregiverCredentialingW
                             <Button
                                 onClick={() => handleNext('background')}
                                 variant="outline"
-                                className="flex-1 py-6 text-lg font-semibold rounded-xl border-slate-300 text-slate-700"
+                                className="flex-1 py-6 text-lg font-semibold rounded-xl border-slate-300 text-[#3A4A57]"
                             >
                                 Skip (Parent Caregiver)
                             </Button>
                             <Button
                                 onClick={verifyNPI}
                                 disabled={isProcessing || npiNumber.length !== 10}
-                                className="flex-1 py-6 text-lg font-semibold rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50"
+                                className="flex-1 py-6 text-lg font-semibold rounded-xl bg-[#6B9080] text-white hover:bg-[#5A7A6E] disabled:opacity-50"
                             >
                                 {isProcessing && npiSubmitted ? 'Checking...' : 'Validate NPI'}
                             </Button>
@@ -236,31 +236,31 @@ export function CaregiverCredentialingWizard({ onBack }: CaregiverCredentialingW
                         <div>
                             <div className="flex items-center gap-3 mb-2">
                                 <Badge className="bg-indigo-100 text-indigo-700">Step 3 of 4</Badge>
-                                <h2 className="text-2xl font-bold text-slate-900">Background Clearances</h2>
+                                <h2 className="text-2xl font-bold text-[#1B2733]">Background Clearances</h2>
                             </div>
-                            <p className="text-slate-500 text-lg">
+                            <p className="text-[#5A6B7A] text-lg">
                                 State Medicaid programs require Tier 2 background checks. Aminy helps coordinate these.
                             </p>
                         </div>
 
                         <div className="space-y-4">
-                            <div className="bg-white border-2 border-slate-200 rounded-2xl p-6 flex items-center justify-between">
+                            <div className="bg-white border-2 border-[#E8E4DF] rounded-2xl p-6 flex items-center justify-between">
                                 <div>
-                                    <h3 className="font-bold text-slate-900">National Criminal DB</h3>
-                                    <p className="text-sm text-slate-500">Automated check via SSN</p>
+                                    <h3 className="font-bold text-[#1B2733]">National Criminal DB</h3>
+                                    <p className="text-sm text-[#5A6B7A]">Automated check via SSN</p>
                                 </div>
                                 {demo ? (
                                     <Badge className="bg-emerald-100 text-emerald-700 px-3 py-1">Cleared</Badge>
                                 ) : (
-                                    <Badge className="bg-slate-100 text-slate-600 px-3 py-1">Not started</Badge>
+                                    <Badge className="bg-[#F0EDE8] text-[#5A6B7A] px-3 py-1">Not started</Badge>
                                 )}
                             </div>
 
                             <div className="bg-white border-2 border-indigo-600 ring-2 ring-indigo-600/20 rounded-2xl p-6">
                                 <div className="flex items-center justify-between mb-4">
                                     <div>
-                                        <h3 className="font-bold text-slate-900">State Fingerprinting (Livescan)</h3>
-                                        <p className="text-sm text-slate-500">Requires physical visit</p>
+                                        <h3 className="font-bold text-[#1B2733]">State Fingerprinting (Livescan)</h3>
+                                        <p className="text-sm text-[#5A6B7A]">Requires physical visit</p>
                                     </div>
                                     <Badge className="bg-amber-100 text-amber-700 px-3 py-1">Action Required</Badge>
                                 </div>
@@ -296,21 +296,21 @@ export function CaregiverCredentialingWizard({ onBack }: CaregiverCredentialingW
                         <div className="bg-emerald-100 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6">
                             <FileText className="w-12 h-12 text-emerald-600" />
                         </div>
-                        <h2 className="text-3xl font-bold tracking-tight text-slate-900">Ready to Assemble</h2>
-                        <p className="text-lg text-slate-500 max-w-lg mx-auto leading-relaxed">
+                        <h2 className="text-3xl font-bold tracking-tight text-[#1B2733]">Ready to Assemble</h2>
+                        <p className="text-lg text-[#5A6B7A] max-w-lg mx-auto leading-relaxed">
                             Aminy maps your information into the official state Medicaid waiver packets and CAQH provider roster forms.
                         </p>
 
-                        <div className="bg-white border border-slate-200 rounded-2xl p-6 max-w-md mx-auto text-left shadow-sm">
-                            <h3 className="font-bold text-slate-900 mb-4 border-b pb-2">Forms to Prepare</h3>
+                        <div className="bg-white border border-[#E8E4DF] rounded-2xl p-6 max-w-md mx-auto text-left shadow-sm">
+                            <h3 className="font-bold text-[#1B2733] mb-4 border-b pb-2">Forms to Prepare</h3>
                             <ul className="space-y-3">
-                                <li className="flex items-center gap-3 text-sm text-slate-700">
+                                <li className="flex items-center gap-3 text-sm text-[#3A4A57]">
                                     <CheckCircle2 className="w-5 h-5 text-emerald-500" /> CAQH ProView Initial Roster
                                 </li>
-                                <li className="flex items-center gap-3 text-sm text-slate-700">
+                                <li className="flex items-center gap-3 text-sm text-[#3A4A57]">
                                     <CheckCircle2 className="w-5 h-5 text-emerald-500" /> DCI/Acumen Timesheet Enrollment
                                 </li>
-                                <li className="flex items-center gap-3 text-sm text-slate-700">
+                                <li className="flex items-center gap-3 text-sm text-[#3A4A57]">
                                     <CheckCircle2 className="w-5 h-5 text-emerald-500" /> Medicaid 837P Billing Authority
                                 </li>
                             </ul>
@@ -338,13 +338,13 @@ export function CaregiverCredentialingWizard({ onBack }: CaregiverCredentialingW
                         <div className="bg-emerald-100 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6">
                             <CheckCircle2 className="w-12 h-12 text-emerald-600" />
                         </div>
-                        <h2 className="text-3xl font-bold tracking-tight text-slate-900">Application Submitted</h2>
-                        <p className="text-lg text-slate-500 max-w-lg mx-auto leading-relaxed">
+                        <h2 className="text-3xl font-bold tracking-tight text-[#1B2733]">Application Submitted</h2>
+                        <p className="text-lg text-[#5A6B7A] max-w-lg mx-auto leading-relaxed">
                             Your credentialing packet is queued for review. We'll email you the next steps, including any background-check actions and required signatures.
                         </p>
 
-                        <div className="bg-white border border-slate-200 rounded-2xl p-6 max-w-md mx-auto text-left shadow-sm">
-                            <div className="flex items-center gap-3 text-sm text-slate-700">
+                        <div className="bg-white border border-[#E8E4DF] rounded-2xl p-6 max-w-md mx-auto text-left shadow-sm">
+                            <div className="flex items-center gap-3 text-sm text-[#3A4A57]">
                                 <Clock className="w-5 h-5 text-slate-400 flex-shrink-0" />
                                 <span>Typical review begins within 1&ndash;2 business days. You can track status from your provider dashboard.</span>
                             </div>
@@ -366,12 +366,12 @@ export function CaregiverCredentialingWizard({ onBack }: CaregiverCredentialingW
     };
 
     return (
-        <div className="min-h-screen bg-slate-50 py-12 px-4 sm:px-6 lg:px-8 flex flex-col justify-center">
+        <div className="min-h-screen bg-[#FAF7F2] py-12 px-4 sm:px-6 lg:px-8 flex flex-col justify-center">
             <div className="max-w-2xl w-full mx-auto">
                 {onBack && (
                     <button
                         onClick={onBack}
-                        className="flex items-center gap-1 text-sm text-slate-600 mb-6 hover:text-slate-900 transition-colors min-h-[44px]"
+                        className="flex items-center gap-1 text-sm text-[#5A6B7A] mb-6 hover:text-[#1B2733] transition-colors min-h-[44px]"
                     >
                         <ChevronLeft className="w-4 h-4" />
                         Back
@@ -394,8 +394,8 @@ export function CaregiverCredentialingWizard({ onBack }: CaregiverCredentialingW
                         const isPast = currentIndex > idx;
                         return (
                             <div key={step} className="flex items-center">
-                                <div className={`w-3 h-3 rounded-full transition-colors ${isActive ? 'bg-indigo-600 scale-125' : isPast ? 'bg-indigo-300' : 'bg-slate-200'}`} />
-                                {idx < 4 && <div className={`w-8 h-1 ${isPast ? 'bg-indigo-300' : 'bg-slate-200'} mx-1 rounded`} />}
+                                <div className={`w-3 h-3 rounded-full transition-colors ${isActive ? 'bg-[#6B9080] scale-125' : isPast ? 'bg-indigo-300' : 'bg-[#E8E4DF]'}`} />
+                                {idx < 4 && <div className={`w-8 h-1 ${isPast ? 'bg-indigo-300' : 'bg-[#E8E4DF]'} mx-1 rounded`} />}
                             </div>
                         );
                     })}

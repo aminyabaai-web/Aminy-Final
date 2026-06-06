@@ -274,10 +274,10 @@ export function ProviderPortalNew({ providerId, onLogout }: ProviderPortalProps)
   // Loading state
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 text-cyan-600 animate-spin mx-auto mb-3" />
-          <p className="text-gray-600">Loading your portal...</p>
+          <Loader2 className="w-8 h-8 text-[#6B9080] animate-spin mx-auto mb-3" />
+          <p className="text-[#5A6B7A]">Loading your portal...</p>
         </div>
       </div>
     );
@@ -286,14 +286,14 @@ export function ProviderPortalNew({ providerId, onLogout }: ProviderPortalProps)
   // Error state
   if (loadError) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center p-4">
         <div className="bg-white rounded-xl shadow-sm p-6 max-w-md text-center">
           <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-          <h2 className="text-lg font-semibold text-gray-900 mb-2">Unable to Load Portal</h2>
-          <p className="text-gray-600 mb-4">{loadError}</p>
+          <h2 className="text-lg font-semibold text-[#1B2733] mb-2">Unable to Load Portal</h2>
+          <p className="text-[#5A6B7A] mb-4">{loadError}</p>
           <button
             onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-cyan-600 text-white font-medium rounded-lg hover:bg-[#466379]"
+            className="px-4 py-2 bg-[#6B9080] text-white font-medium rounded-lg hover:bg-[#466379]"
           >
             Try Again
           </button>
@@ -303,17 +303,17 @@ export function ProviderPortalNew({ providerId, onLogout }: ProviderPortalProps)
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Top Bar */}
-      <header className="bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4">
+      <header className="bg-white border-b border-[#E8E4DF] px-4 sm:px-6 py-3 sm:py-4">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-gradient-to-br from-cyan-600 to-[#466379] rounded-full flex items-center justify-center text-white font-semibold">
               {provider.firstName[0]}{provider.lastName[0]}
             </div>
             <div>
-              <h1 className="font-semibold text-gray-900">Provider Portal</h1>
-              <p className="text-sm text-gray-500">{provider.firstName} {provider.lastName}</p>
+              <h1 className="font-semibold text-[#1B2733]">Provider Portal</h1>
+              <p className="text-sm text-[#5A6B7A]">{provider.firstName} {provider.lastName}</p>
             </div>
           </div>
 
@@ -327,7 +327,7 @@ export function ProviderPortalNew({ providerId, onLogout }: ProviderPortalProps)
             <button
               onClick={handleSave}
               disabled={isSaving}
-              className="flex items-center gap-2 px-4 py-2 bg-cyan-600 text-white font-medium rounded-lg hover:bg-[#466379] disabled:opacity-50 transition-all"
+              className="flex items-center gap-2 px-4 py-2 bg-[#6B9080] text-white font-medium rounded-lg hover:bg-[#466379] disabled:opacity-50 transition-all"
             >
               {isSaving ? (
                 <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -339,7 +339,7 @@ export function ProviderPortalNew({ providerId, onLogout }: ProviderPortalProps)
             {onLogout && (
               <button
                 onClick={onLogout}
-                className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-2 text-[#5A6B7A] hover:text-[#3A4A57] hover:bg-[#F0EDE8] rounded-lg transition-colors"
               >
                 <LogOut className="w-5 h-5" />
               </button>
@@ -352,7 +352,7 @@ export function ProviderPortalNew({ providerId, onLogout }: ProviderPortalProps)
         <div className="flex gap-8">
           {/* Sidebar */}
           <nav className="w-64 flex-shrink-0">
-            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <div className="bg-white rounded-xl border border-[#E8E4DF] overflow-hidden">
               {[
                 { id: 'profile', label: 'Profile', icon: User },
                 { id: 'availability', label: 'Availability', icon: Calendar },
@@ -364,14 +364,14 @@ export function ProviderPortalNew({ providerId, onLogout }: ProviderPortalProps)
                   onClick={() => setActiveTab(id as PortalTab)}
                   className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors ${
                     activeTab === id
-                      ? 'bg-cyan-600/10 text-cyan-600 border-l-4 border-cyan-600'
-                      : 'text-gray-600 hover:bg-gray-50 border-l-4 border-transparent'
+                      ? 'bg-[#6B9080]/10 text-[#6B9080] border-l-4 border-cyan-600'
+                      : 'text-[#5A6B7A] hover:bg-[#FAF7F2] border-l-4 border-transparent'
                   }`}
                 >
                   <Icon className="w-5 h-5" />
                   <span className="font-medium">{label}</span>
                   {id === 'appointments' && appointments.length > 0 && (
-                    <span className="ml-auto px-2 py-0.5 bg-cyan-600 text-white text-xs rounded-full">
+                    <span className="ml-auto px-2 py-0.5 bg-[#6B9080] text-white text-xs rounded-full">
                       {appointments.length}
                     </span>
                   )}
@@ -429,40 +429,40 @@ function ProfileTab({
 
   return (
     <div className="space-y-3 sm:space-y-4 sm:space-y-6">
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4 sm:mb-6">Profile Information</h2>
+      <div className="bg-white rounded-xl border border-[#E8E4DF] p-6">
+        <h2 className="text-lg font-semibold text-[#1B2733] mb-4 sm:mb-6">Profile Information</h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">First Name</label>
+            <label className="block text-sm font-medium text-[#3A4A57] mb-2">First Name</label>
             <input
               type="text"
               value={provider.firstName}
               onChange={(e) => onUpdate({ ...provider, firstName: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600"
+              className="w-full px-4 py-2 border border-[#E8E4DF] rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
+            <label className="block text-sm font-medium text-[#3A4A57] mb-2">Last Name</label>
             <input
               type="text"
               value={provider.lastName}
               onChange={(e) => onUpdate({ ...provider, lastName: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600"
+              className="w-full px-4 py-2 border border-[#E8E4DF] rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Credentials</label>
+            <label className="block text-sm font-medium text-[#3A4A57] mb-2">Credentials</label>
             <input
               type="text"
               value={provider.credentials}
               onChange={(e) => onUpdate({ ...provider, credentials: e.target.value })}
               placeholder="e.g., BCBA, LCSW, PhD"
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600"
+              className="w-full px-4 py-2 border border-[#E8E4DF] rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Role</label>
+            <label className="block text-sm font-medium text-[#3A4A57] mb-2">Role</label>
             <select
               value={provider.role}
               onChange={(e) => onUpdate({
@@ -470,7 +470,7 @@ function ProfileTab({
                 role: e.target.value as ProviderRole,
                 roleDisplayName: PROVIDER_ROLE_DISPLAY[e.target.value as ProviderRole]
               })}
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600"
+              className="w-full px-4 py-2 border border-[#E8E4DF] rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600"
             >
               {Object.entries(PROVIDER_ROLE_DISPLAY).map(([value, label]) => (
                 <option key={value} value={value}>{label}</option>
@@ -478,27 +478,27 @@ function ProfileTab({
             </select>
           </div>
           <div className="col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Bio</label>
+            <label className="block text-sm font-medium text-[#3A4A57] mb-2">Bio</label>
             <textarea
               value={provider.bio}
               onChange={(e) => onUpdate({ ...provider, bio: e.target.value })}
               rows={3}
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600 resize-none"
+              className="w-full px-4 py-2 border border-[#E8E4DF] rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600 resize-none"
             />
           </div>
         </div>
       </div>
 
       {/* Licensed States */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
+      <div className="bg-white rounded-xl border border-[#E8E4DF] p-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-lg font-semibold text-gray-900">Licensed States</h2>
-            <p className="text-sm text-gray-500">Select states where you are licensed to practice</p>
+            <h2 className="text-lg font-semibold text-[#1B2733]">Licensed States</h2>
+            <p className="text-sm text-[#5A6B7A]">Select states where you are licensed to practice</p>
           </div>
           <button
             onClick={() => setShowStateSelector(!showStateSelector)}
-            className="text-sm text-cyan-600 font-medium hover:underline"
+            className="text-sm text-[#6B9080] font-medium hover:underline"
           >
             {showStateSelector ? 'Done' : 'Edit States'}
           </button>
@@ -511,15 +511,15 @@ function ProfileTab({
                 key={state.code}
                 className={`flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-colors ${
                   provider.licensedStates.includes(state.code)
-                    ? 'bg-cyan-600/10 text-cyan-600'
-                    : 'hover:bg-gray-50'
+                    ? 'bg-[#6B9080]/10 text-[#6B9080]'
+                    : 'hover:bg-[#FAF7F2]'
                 }`}
               >
                 <input
                   type="checkbox"
                   checked={provider.licensedStates.includes(state.code)}
                   onChange={() => toggleState(state.code)}
-                  className="rounded border-gray-300 text-cyan-600 focus:ring-cyan-600"
+                  className="rounded border-[#E8E4DF] text-[#6B9080] focus:ring-cyan-600"
                 />
                 <span className="text-sm">{state.code}</span>
               </label>
@@ -531,67 +531,67 @@ function ProfileTab({
               provider.licensedStates.map((code) => (
                 <span
                   key={code}
-                  className="px-3 py-1 bg-cyan-600/10 text-cyan-600 text-sm font-medium rounded-full"
+                  className="px-3 py-1 bg-[#6B9080]/10 text-[#6B9080] text-sm font-medium rounded-full"
                 >
                   {code}
                 </span>
               ))
             ) : (
-              <p className="text-gray-500 text-sm">No states selected</p>
+              <p className="text-[#5A6B7A] text-sm">No states selected</p>
             )}
           </div>
         )}
       </div>
 
       {/* Pricing & Services */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4 sm:mb-6">Pricing & Services</h2>
+      <div className="bg-white rounded-xl border border-[#E8E4DF] p-6">
+        <h2 className="text-lg font-semibold text-[#1B2733] mb-4 sm:mb-6">Pricing & Services</h2>
 
         <div className="space-y-3 sm:space-y-4">
-          <label className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+          <label className="flex items-center justify-between p-4 bg-[#FAF7F2] rounded-lg">
             <div className="flex items-center gap-3">
               <input
                 type="checkbox"
                 checked={provider.offersConsult}
                 onChange={(e) => onUpdate({ ...provider, offersConsult: e.target.checked })}
-                className="rounded border-gray-300 text-cyan-600 focus:ring-cyan-600"
+                className="rounded border-[#E8E4DF] text-[#6B9080] focus:ring-cyan-600"
               />
               <div>
-                <p className="font-medium text-gray-900">25-min Consult</p>
-                <p className="text-sm text-gray-500">Quick guidance session</p>
+                <p className="font-medium text-[#1B2733]">25-min Consult</p>
+                <p className="text-sm text-[#5A6B7A]">Quick guidance session</p>
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-gray-500">$</span>
+              <span className="text-[#5A6B7A]">$</span>
               <input
                 type="number"
                 value={provider.consultPrice}
                 onChange={(e) => onUpdate({ ...provider, consultPrice: Number(e.target.value) })}
-                className="w-20 px-3 py-1 border border-gray-200 rounded-lg text-right"
+                className="w-20 px-3 py-1 border border-[#E8E4DF] rounded-lg text-right"
               />
             </div>
           </label>
 
-          <label className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+          <label className="flex items-center justify-between p-4 bg-[#FAF7F2] rounded-lg">
             <div className="flex items-center gap-3">
               <input
                 type="checkbox"
                 checked={provider.offersDeepReview}
                 onChange={(e) => onUpdate({ ...provider, offersDeepReview: e.target.checked })}
-                className="rounded border-gray-300 text-cyan-600 focus:ring-cyan-600"
+                className="rounded border-[#E8E4DF] text-[#6B9080] focus:ring-cyan-600"
               />
               <div>
-                <p className="font-medium text-gray-900">50-min Deep Review</p>
-                <p className="text-sm text-gray-500">Comprehensive session</p>
+                <p className="font-medium text-[#1B2733]">50-min Deep Review</p>
+                <p className="text-sm text-[#5A6B7A]">Comprehensive session</p>
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-gray-500">$</span>
+              <span className="text-[#5A6B7A]">$</span>
               <input
                 type="number"
                 value={provider.deepReviewPrice}
                 onChange={(e) => onUpdate({ ...provider, deepReviewPrice: Number(e.target.value) })}
-                className="w-20 px-3 py-1 border border-gray-200 rounded-lg text-right"
+                className="w-20 px-3 py-1 border border-[#E8E4DF] rounded-lg text-right"
               />
             </div>
           </label>
@@ -644,15 +644,15 @@ function AvailabilityTab({
 
   return (
     <div className="space-y-3 sm:space-y-4 sm:space-y-6">
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
+      <div className="bg-white rounded-xl border border-[#E8E4DF] p-6">
         <div className="flex items-center justify-between mb-4 sm:mb-6">
           <div>
-            <h2 className="text-lg font-semibold text-gray-900">Weekly Availability</h2>
-            <p className="text-sm text-gray-500">Set your recurring weekly schedule</p>
+            <h2 className="text-lg font-semibold text-[#1B2733]">Weekly Availability</h2>
+            <p className="text-sm text-[#5A6B7A]">Set your recurring weekly schedule</p>
           </div>
           <button
             onClick={addBlock}
-            className="flex items-center gap-2 px-4 py-2 bg-cyan-600 text-white font-medium rounded-lg hover:bg-[#466379] transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-[#6B9080] text-white font-medium rounded-lg hover:bg-[#466379] transition-colors"
           >
             <Plus className="w-4 h-4" />
             Add Time Block
@@ -664,9 +664,9 @@ function AvailabilityTab({
             const dayBlocks = byDay[value] || [];
 
             return (
-              <div key={value} className="flex items-start gap-3 sm:gap-4 p-4 bg-gray-50 rounded-lg">
+              <div key={value} className="flex items-start gap-3 sm:gap-4 p-4 bg-[#FAF7F2] rounded-lg">
                 <div className="w-28 flex-shrink-0">
-                  <p className="font-medium text-gray-900">{label}</p>
+                  <p className="font-medium text-[#1B2733]">{label}</p>
                 </div>
                 <div className="flex-1 space-y-2">
                   {dayBlocks.length > 0 ? (
@@ -676,25 +676,25 @@ function AvailabilityTab({
                           type="time"
                           value={block.startTime}
                           onChange={(e) => updateBlock(block.id, { startTime: e.target.value })}
-                          className="px-3 py-1.5 border border-gray-200 rounded-lg text-sm"
+                          className="px-3 py-1.5 border border-[#E8E4DF] rounded-lg text-sm"
                         />
-                        <span className="text-gray-400">to</span>
+                        <span className="text-[#8A9BA8]">to</span>
                         <input
                           type="time"
                           value={block.endTime}
                           onChange={(e) => updateBlock(block.id, { endTime: e.target.value })}
-                          className="px-3 py-1.5 border border-gray-200 rounded-lg text-sm"
+                          className="px-3 py-1.5 border border-[#E8E4DF] rounded-lg text-sm"
                         />
                         <button
                           onClick={() => removeBlock(block.id)}
-                          className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded transition-colors"
+                          className="p-1.5 text-[#8A9BA8] hover:text-red-500 hover:bg-red-50 rounded transition-colors"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
                       </div>
                     ))
                   ) : (
-                    <p className="text-sm text-gray-400">Not available</p>
+                    <p className="text-sm text-[#8A9BA8]">Not available</p>
                   )}
                 </div>
               </div>
@@ -704,19 +704,19 @@ function AvailabilityTab({
       </div>
 
       {/* Time Off */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
+      <div className="bg-white rounded-xl border border-[#E8E4DF] p-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-lg font-semibold text-gray-900">Time Off</h2>
-            <p className="text-sm text-gray-500">Block dates when you're unavailable</p>
+            <h2 className="text-lg font-semibold text-[#1B2733]">Time Off</h2>
+            <p className="text-sm text-[#5A6B7A]">Block dates when you're unavailable</p>
           </div>
-          <button className="flex items-center gap-2 px-4 py-2 border border-gray-200 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors">
+          <button className="flex items-center gap-2 px-4 py-2 border border-[#E8E4DF] text-[#3A4A57] font-medium rounded-lg hover:bg-[#FAF7F2] transition-colors">
             <Plus className="w-4 h-4" />
             Add Time Off
           </button>
         </div>
 
-        <p className="text-gray-500 text-sm">No time off scheduled</p>
+        <p className="text-[#5A6B7A] text-sm">No time off scheduled</p>
       </div>
     </div>
   );
@@ -739,20 +739,20 @@ function AppointmentsTab({ appointments }: { appointments: Appointment[] }) {
   };
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6">
-      <h2 className="text-lg font-semibold text-gray-900 mb-4 sm:mb-6">Upcoming Appointments</h2>
+    <div className="bg-white rounded-xl border border-[#E8E4DF] p-6">
+      <h2 className="text-lg font-semibold text-[#1B2733] mb-4 sm:mb-6">Upcoming Appointments</h2>
 
       {appointments.length > 0 ? (
         <div className="space-y-3 sm:space-y-4">
           {appointments.map((apt) => (
-            <div key={apt.id} className="flex items-center gap-3 sm:gap-4 p-4 bg-gray-50 rounded-lg">
-              <div className="w-12 h-12 bg-cyan-600/10 rounded-full flex items-center justify-center">
-                <Video className="w-6 h-6 text-cyan-600" />
+            <div key={apt.id} className="flex items-center gap-3 sm:gap-4 p-4 bg-[#FAF7F2] rounded-lg">
+              <div className="w-12 h-12 bg-[#6B9080]/10 rounded-full flex items-center justify-center">
+                <Video className="w-6 h-6 text-[#6B9080]" />
               </div>
               <div className="flex-1">
-                <p className="font-medium text-gray-900">{apt.visitReason}</p>
-                <p className="text-sm text-gray-500">{formatDateTime(apt.scheduledAt)}</p>
-                <p className="text-xs text-gray-400 mt-1">
+                <p className="font-medium text-[#1B2733]">{apt.visitReason}</p>
+                <p className="text-sm text-[#5A6B7A]">{formatDateTime(apt.scheduledAt)}</p>
+                <p className="text-xs text-[#8A9BA8] mt-1">
                   {apt.visitType === 'consult' ? '25-min Consult' : '50-min Deep Review'} • ${apt.price}
                 </p>
               </div>
@@ -762,7 +762,7 @@ function AppointmentsTab({ appointments }: { appointments: Appointment[] }) {
                 }`}>
                   {apt.status}
                 </span>
-                <button className="p-2 text-cyan-600 hover:bg-cyan-600/10 rounded-lg transition-colors">
+                <button className="p-2 text-[#6B9080] hover:bg-[#6B9080]/10 rounded-lg transition-colors">
                   <ChevronRight className="w-5 h-5" />
                 </button>
               </div>
@@ -770,7 +770,7 @@ function AppointmentsTab({ appointments }: { appointments: Appointment[] }) {
           ))}
         </div>
       ) : (
-        <p className="text-gray-500 text-center py-8">No upcoming appointments</p>
+        <p className="text-[#5A6B7A] text-center py-8">No upcoming appointments</p>
       )}
     </div>
   );
@@ -782,8 +782,8 @@ function AppointmentsTab({ appointments }: { appointments: Appointment[] }) {
 
 function SummariesTab({ appointments }: { appointments: Appointment[] }) {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6">
-      <h2 className="text-lg font-semibold text-gray-900 mb-4 sm:mb-6">Visit Summaries to Complete</h2>
+    <div className="bg-white rounded-xl border border-[#E8E4DF] p-6">
+      <h2 className="text-lg font-semibold text-[#1B2733] mb-4 sm:mb-6">Visit Summaries to Complete</h2>
 
       {appointments.length > 0 ? (
         <div className="space-y-3 sm:space-y-4">
@@ -793,7 +793,7 @@ function SummariesTab({ appointments }: { appointments: Appointment[] }) {
                 <FileText className="w-6 h-6 text-amber-600" />
               </div>
               <div className="flex-1">
-                <p className="font-medium text-gray-900">{apt.visitReason}</p>
+                <p className="font-medium text-[#1B2733]">{apt.visitReason}</p>
                 <p className="text-sm text-amber-700">Summary pending</p>
               </div>
               <button className="px-4 py-2 bg-amber-500 text-white font-medium rounded-lg hover:bg-amber-600 transition-colors">
@@ -805,7 +805,7 @@ function SummariesTab({ appointments }: { appointments: Appointment[] }) {
       ) : (
         <div className="text-center py-8">
           <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-4" />
-          <p className="text-gray-500">All visit summaries complete!</p>
+          <p className="text-[#5A6B7A]">All visit summaries complete!</p>
         </div>
       )}
     </div>

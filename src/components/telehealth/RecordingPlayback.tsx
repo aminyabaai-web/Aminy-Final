@@ -406,20 +406,20 @@ export function RecordingPlayback({
     <div className="fixed inset-0 bg-gray-900/70 flex items-start justify-center z-50 overflow-y-auto p-4 pt-6 pb-6">
       <div className="bg-white rounded-2xl shadow-xl max-w-2xl w-full overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-100">
+        <div className="flex items-center justify-between p-4 border-b border-[#E8E4DF]">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-teal-50 rounded-full flex items-center justify-center flex-shrink-0">
-              <Video className="w-5 h-5 text-teal-600" />
+            <div className="w-9 h-9 bg-[#6B9080]/10 rounded-full flex items-center justify-center flex-shrink-0">
+              <Video className="w-5 h-5 text-[#6B9080]" />
             </div>
             <div>
-              <h2 className="text-base font-semibold text-gray-900">Session Recordings</h2>
-              <p className="text-xs text-gray-500">{recordings.length} recording{recordings.length !== 1 ? 's' : ''} available</p>
+              <h2 className="text-base font-semibold text-[#1B2733]">Session Recordings</h2>
+              <p className="text-xs text-[#5A6B7A]">{recordings.length} recording{recordings.length !== 1 ? 's' : ''} available</p>
             </div>
           </div>
           {onClose && (
             <button
               onClick={onClose}
-              className="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100 transition-colors"
+              className="p-2 text-[#8A9BA8] hover:text-[#5A6B7A] rounded-full hover:bg-[#F0EDE8] transition-colors"
               aria-label="Close"
             >
               <X size={18} />
@@ -429,15 +429,15 @@ export function RecordingPlayback({
 
         {/* Recording list (if multiple) */}
         {recordings.length > 1 && (
-          <div className="px-4 py-3 border-b border-gray-100 flex gap-2 overflow-x-auto">
+          <div className="px-4 py-3 border-b border-[#E8E4DF] flex gap-2 overflow-x-auto">
             {recordings.map(rec => (
               <button
                 key={rec.id}
                 onClick={() => setSelectedRecording(rec)}
                 className={`flex-shrink-0 px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
                   selectedRecording?.id === rec.id
-                    ? 'bg-teal-50 text-teal-700 border border-teal-200'
-                    : 'bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100'
+                    ? 'bg-[#6B9080]/10 text-[#6B9080] border border-[#6B9080]/20'
+                    : 'bg-[#FAF7F2] text-[#5A6B7A] border border-[#E8E4DF] hover:bg-[#F0EDE8]'
                 }`}
               >
                 <span className="flex items-center gap-1.5">
@@ -445,7 +445,7 @@ export function RecordingPlayback({
                   {formatDate(rec.createdAt)}
                 </span>
                 {rec.durationSeconds && (
-                  <span className="block text-[10px] text-gray-400 mt-0.5">
+                  <span className="block text-[10px] text-[#8A9BA8] mt-0.5">
                     {formatDuration(rec.durationSeconds)}
                   </span>
                 )}
@@ -457,8 +457,8 @@ export function RecordingPlayback({
         {/* Loading */}
         {(loadingList || loadingUrl || consentChecking) && (
           <div className="p-12 flex flex-col items-center gap-3">
-            <Loader2 className="w-8 h-8 text-teal-500 animate-spin" />
-            <p className="text-sm text-gray-500">
+            <Loader2 className="w-8 h-8 text-primary animate-spin" />
+            <p className="text-sm text-[#5A6B7A]">
               {consentChecking ? 'Verifying consent...' : loadingUrl ? 'Loading recording...' : 'Loading recordings...'}
             </p>
           </div>
@@ -508,9 +508,9 @@ export function RecordingPlayback({
                 step={0.1}
                 value={currentTime}
                 onChange={handleSeek}
-                className="w-full h-1.5 bg-gray-200 rounded-full appearance-none cursor-pointer accent-teal-600"
+                className="w-full h-1.5 bg-[#E8E4DF] rounded-full appearance-none cursor-pointer accent-teal-600"
               />
-              <div className="flex justify-between text-[10px] text-gray-400">
+              <div className="flex justify-between text-[10px] text-[#8A9BA8]">
                 <span>{formatDuration(currentTime)}</span>
                 <span>{formatDuration(duration)}</span>
               </div>
@@ -522,7 +522,7 @@ export function RecordingPlayback({
                 {/* Skip back 15s */}
                 <button
                   onClick={skipBack}
-                  className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors"
+                  className="p-2 text-[#5A6B7A] hover:text-[#3A4A57] hover:bg-[#F0EDE8] rounded-full transition-colors"
                   aria-label="Skip back 15 seconds"
                 >
                   <SkipBack size={18} />
@@ -531,7 +531,7 @@ export function RecordingPlayback({
                 {/* Play/Pause */}
                 <button
                   onClick={togglePlayPause}
-                  className="p-3 bg-teal-600 hover:bg-teal-700 text-white rounded-full transition-colors"
+                  className="p-3 bg-primary hover:bg-[#6B9080] text-white rounded-full transition-colors"
                   aria-label={playing ? 'Pause' : 'Play'}
                 >
                   {playing ? <Pause size={20} /> : <Play size={20} className="ml-0.5" />}
@@ -540,7 +540,7 @@ export function RecordingPlayback({
                 {/* Skip forward 15s */}
                 <button
                   onClick={skipForward}
-                  className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors"
+                  className="p-2 text-[#5A6B7A] hover:text-[#3A4A57] hover:bg-[#F0EDE8] rounded-full transition-colors"
                   aria-label="Skip forward 15 seconds"
                 >
                   <SkipForward size={18} />
@@ -549,7 +549,7 @@ export function RecordingPlayback({
                 {/* Speed control */}
                 <button
                   onClick={cycleSpeed}
-                  className="px-2.5 py-1 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors flex items-center gap-1"
+                  className="px-2.5 py-1 text-xs font-medium text-[#5A6B7A] bg-[#F0EDE8] hover:bg-[#E8E4DF] rounded-full transition-colors flex items-center gap-1"
                   aria-label={`Playback speed: ${speed}x`}
                 >
                   <Gauge size={12} />
@@ -562,7 +562,7 @@ export function RecordingPlayback({
                 <button
                   onClick={() => setShowBookmarks(!showBookmarks)}
                   className={`p-2 rounded-full transition-colors ${
-                    showBookmarks ? 'text-teal-600 bg-teal-50' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
+                    showBookmarks ? 'text-[#6B9080] bg-[#6B9080]/10' : 'text-[#5A6B7A] hover:text-[#3A4A57] hover:bg-[#F0EDE8]'
                   }`}
                   aria-label="Bookmarks"
                 >
@@ -573,7 +573,7 @@ export function RecordingPlayback({
                 <button
                   onClick={() => setShowMetadata(!showMetadata)}
                   className={`p-2 rounded-full transition-colors ${
-                    showMetadata ? 'text-teal-600 bg-teal-50' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
+                    showMetadata ? 'text-[#6B9080] bg-[#6B9080]/10' : 'text-[#5A6B7A] hover:text-[#3A4A57] hover:bg-[#F0EDE8]'
                   }`}
                   aria-label="Recording details"
                 >
@@ -583,7 +583,7 @@ export function RecordingPlayback({
                 {/* Download */}
                 <button
                   onClick={handleDownload}
-                  className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors"
+                  className="p-2 text-[#5A6B7A] hover:text-[#3A4A57] hover:bg-[#F0EDE8] rounded-full transition-colors"
                   aria-label="Download recording"
                 >
                   <Download size={16} />
@@ -593,8 +593,8 @@ export function RecordingPlayback({
 
             {/* Bookmarks panel */}
             {showBookmarks && (
-              <div className="bg-gray-50 border border-gray-200 rounded-xl p-3 space-y-2">
-                <h4 className="text-xs font-semibold text-gray-700 flex items-center gap-1.5">
+              <div className="bg-[#FAF7F2] border border-[#E8E4DF] rounded-xl p-3 space-y-2">
+                <h4 className="text-xs font-semibold text-[#3A4A57] flex items-center gap-1.5">
                   <BookmarkCheck size={13} />
                   Bookmarks ({bookmarks.length})
                 </h4>
@@ -607,11 +607,11 @@ export function RecordingPlayback({
                     onChange={e => setBookmarkLabel(e.target.value)}
                     onKeyDown={e => e.key === 'Enter' && addBookmark()}
                     placeholder={`Bookmark at ${formatDuration(currentTime)}...`}
-                    className="flex-1 px-2.5 py-1.5 text-xs bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-400"
+                    className="flex-1 px-2.5 py-1.5 text-xs bg-white border border-[#E8E4DF] rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-[#6B9080]"
                   />
                   <button
                     onClick={addBookmark}
-                    className="px-3 py-1.5 text-xs font-medium bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors"
+                    className="px-3 py-1.5 text-xs font-medium bg-primary text-white rounded-lg hover:bg-[#6B9080] transition-colors"
                   >
                     Add
                   </button>
@@ -629,14 +629,14 @@ export function RecordingPlayback({
                           onClick={() => seekToTimestamp(bm.timestamp)}
                           className="flex-1 flex items-center gap-2 px-2 py-1.5 text-xs text-left rounded-lg hover:bg-white transition-colors"
                         >
-                          <span className="text-teal-600 font-mono font-medium w-12">
+                          <span className="text-[#6B9080] font-mono font-medium w-12">
                             {formatDuration(bm.timestamp)}
                           </span>
-                          <span className="text-gray-700 truncate">{bm.label}</span>
+                          <span className="text-[#3A4A57] truncate">{bm.label}</span>
                         </button>
                         <button
                           onClick={() => removeBookmark(bm.id)}
-                          className="p-1 text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all"
+                          className="p-1 text-[#8A9BA8] hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all"
                           aria-label="Remove bookmark"
                         >
                           <X size={12} />
@@ -645,7 +645,7 @@ export function RecordingPlayback({
                     ))}
                   </div>
                 ) : (
-                  <p className="text-[10px] text-gray-400 text-center py-2">
+                  <p className="text-[10px] text-[#8A9BA8] text-center py-2">
                     No bookmarks yet. Add one to mark a key moment.
                   </p>
                 )}
@@ -654,34 +654,34 @@ export function RecordingPlayback({
 
             {/* Metadata panel */}
             {showMetadata && selectedRecording && (
-              <div className="bg-gray-50 border border-gray-200 rounded-xl p-3 space-y-2">
-                <h4 className="text-xs font-semibold text-gray-700">Recording Details</h4>
+              <div className="bg-[#FAF7F2] border border-[#E8E4DF] rounded-xl p-3 space-y-2">
+                <h4 className="text-xs font-semibold text-[#3A4A57]">Recording Details</h4>
                 <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
                   <div>
-                    <span className="text-gray-400">Date</span>
-                    <p className="text-gray-700 font-medium">{formatDate(selectedRecording.createdAt)}</p>
+                    <span className="text-[#8A9BA8]">Date</span>
+                    <p className="text-[#3A4A57] font-medium">{formatDate(selectedRecording.createdAt)}</p>
                   </div>
                   {selectedRecording.durationSeconds && (
                     <div>
-                      <span className="text-gray-400">Duration</span>
-                      <p className="text-gray-700 font-medium">{formatDuration(selectedRecording.durationSeconds)}</p>
+                      <span className="text-[#8A9BA8]">Duration</span>
+                      <p className="text-[#3A4A57] font-medium">{formatDuration(selectedRecording.durationSeconds)}</p>
                     </div>
                   )}
                   {selectedRecording.fileSizeBytes && (
                     <div>
-                      <span className="text-gray-400">File Size</span>
-                      <p className="text-gray-700 font-medium">{formatFileSize(selectedRecording.fileSizeBytes)}</p>
+                      <span className="text-[#8A9BA8]">File Size</span>
+                      <p className="text-[#3A4A57] font-medium">{formatFileSize(selectedRecording.fileSizeBytes)}</p>
                     </div>
                   )}
                   <div>
-                    <span className="text-gray-400">Session ID</span>
-                    <p className="text-gray-700 font-mono text-[10px]">{selectedRecording.sessionId.slice(0, 12)}...</p>
+                    <span className="text-[#8A9BA8]">Session ID</span>
+                    <p className="text-[#3A4A57] font-mono text-[10px]">{selectedRecording.sessionId.slice(0, 12)}...</p>
                   </div>
                 </div>
                 {providerNotes && (
-                  <div className="mt-2 pt-2 border-t border-gray-200">
-                    <span className="text-gray-400 text-xs">Provider Notes</span>
-                    <p className="text-gray-700 text-xs mt-1 leading-relaxed">{providerNotes}</p>
+                  <div className="mt-2 pt-2 border-t border-[#E8E4DF]">
+                    <span className="text-[#8A9BA8] text-xs">Provider Notes</span>
+                    <p className="text-[#3A4A57] text-xs mt-1 leading-relaxed">{providerNotes}</p>
                   </div>
                 )}
               </div>
@@ -692,9 +692,9 @@ export function RecordingPlayback({
         {/* No recordings */}
         {!loadingList && recordings.length === 0 && !error && (
           <div className="p-12 text-center">
-            <Video className="w-10 h-10 text-gray-400 mx-auto mb-3" />
-            <p className="text-sm text-gray-500">No recordings available.</p>
-            <p className="text-xs text-gray-400 mt-1">
+            <Video className="w-10 h-10 text-[#8A9BA8] mx-auto mb-3" />
+            <p className="text-sm text-[#5A6B7A]">No recordings available.</p>
+            <p className="text-xs text-[#8A9BA8] mt-1">
               Recordings appear here after a session with recording consent enabled.
             </p>
           </div>

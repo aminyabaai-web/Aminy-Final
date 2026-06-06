@@ -131,7 +131,7 @@ export function AIContextViewer() {
         <div className="space-y-2">
           {context.child.currentGoals.length > 0 ? (
             context.child.currentGoals.map((goal, idx) => (
-              <div key={idx} className="p-3 bg-slate-50 rounded-lg text-sm">
+              <div key={idx} className="p-3 bg-[#FAF7F2] rounded-lg text-sm">
                 <div className="flex items-center justify-between mb-1">
                   <Badge variant="outline" className="text-[10px]">
                     {goal.area}
@@ -139,7 +139,7 @@ export function AIContextViewer() {
                   <span className="text-xs text-muted-foreground">{goal.progress}% complete</span>
                 </div>
                 <p>{goal.description}</p>
-                <div className="w-full bg-slate-200 rounded-full h-1.5 mt-2">
+                <div className="w-full bg-[#E8E4DF] rounded-full h-1.5 mt-2">
                   <div 
                     className="bg-accent h-1.5 rounded-full transition-all"
                     style={{ width: `${goal.progress}%` }}
@@ -161,19 +161,19 @@ export function AIContextViewer() {
       content: (
         <div className="space-y-2 text-sm">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            <div className="flex items-center justify-between p-2 bg-slate-50 rounded">
+            <div className="flex items-center justify-between p-2 bg-[#FAF7F2] rounded">
               <span className="text-muted-foreground">Evaluations:</span>
               <Badge>{context.vault.evaluations.length}</Badge>
             </div>
-            <div className="flex items-center justify-between p-2 bg-slate-50 rounded">
+            <div className="flex items-center justify-between p-2 bg-[#FAF7F2] rounded">
               <span className="text-muted-foreground">IEPs:</span>
               <Badge>{context.vault.iepDocuments.length}</Badge>
             </div>
-            <div className="flex items-center justify-between p-2 bg-slate-50 rounded">
+            <div className="flex items-center justify-between p-2 bg-[#FAF7F2] rounded">
               <span className="text-muted-foreground">Progress Reports:</span>
               <Badge>{context.vault.progressReports.length}</Badge>
             </div>
-            <div className="flex items-center justify-between p-2 bg-slate-50 rounded">
+            <div className="flex items-center justify-between p-2 bg-[#FAF7F2] rounded">
               <span className="text-muted-foreground">BCBA Notes:</span>
               <Badge>{context.vault.bcbaNotes.length}</Badge>
             </div>
@@ -225,15 +225,15 @@ export function AIContextViewer() {
       count: context.memory.conversations.length,
       content: (
         <div className="space-y-2 text-sm">
-          <div className="flex items-center justify-between p-2 bg-slate-50 rounded">
+          <div className="flex items-center justify-between p-2 bg-[#FAF7F2] rounded">
             <span className="text-muted-foreground">Past conversations:</span>
             <Badge>{context.memory.conversations.length}</Badge>
           </div>
-          <div className="flex items-center justify-between p-2 bg-slate-50 rounded">
+          <div className="flex items-center justify-between p-2 bg-[#FAF7F2] rounded">
             <span className="text-muted-foreground">Successful strategies:</span>
             <Badge>{context.memory.successfulStrategies.length}</Badge>
           </div>
-          <div className="flex items-center justify-between p-2 bg-slate-50 rounded">
+          <div className="flex items-center justify-between p-2 bg-[#FAF7F2] rounded">
             <span className="text-muted-foreground">Common questions:</span>
             <Badge>{context.memory.commonQuestions.length}</Badge>
           </div>
@@ -260,11 +260,11 @@ export function AIContextViewer() {
       content: (
         <div className="space-y-2 text-sm">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            <div className="flex items-center justify-between p-2 bg-slate-50 rounded">
+            <div className="flex items-center justify-between p-2 bg-[#FAF7F2] rounded">
               <span className="text-muted-foreground">Sessions:</span>
               <Badge>{context.juniorMode.gamesPlayed.length}</Badge>
             </div>
-            <div className="flex items-center justify-between p-2 bg-slate-50 rounded">
+            <div className="flex items-center justify-between p-2 bg-[#FAF7F2] rounded">
               <span className="text-muted-foreground">Skills practiced:</span>
               <Badge>{context.juniorMode.skillsPracticed.length}</Badge>
             </div>
@@ -315,7 +315,7 @@ export function AIContextViewer() {
               <CollapsibleTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="w-full p-4 h-auto justify-between hover:bg-slate-50"
+                  className="w-full p-4 h-auto justify-between hover:bg-[#FAF7F2]"
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 bg-accent/10 rounded-lg flex items-center justify-center text-accent">

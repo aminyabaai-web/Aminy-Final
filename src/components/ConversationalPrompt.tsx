@@ -41,7 +41,7 @@ export function ConversationalPrompt({
         <div className="inline-flex items-center justify-center w-12 h-12 bg-accent/10 rounded-full mb-4">
           <Mic className="w-6 h-6 text-accent" />
         </div>
-        <p className="text-lg font-medium text-slate-700">{prompt}</p>
+        <p className="text-lg font-medium text-[#3A4A57]">{prompt}</p>
       </div>
 
       {/* Input Mode Toggle */}

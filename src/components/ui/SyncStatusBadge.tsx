@@ -26,7 +26,7 @@ const META = {
   },
   local_only: {
     label: 'Local only',
-    className: 'border-slate-200 bg-slate-100 text-slate-700',
+    className: 'border-[#E8E4DF] bg-[#F0EDE8] text-[#3A4A57]',
     icon: Laptop,
   },
   sync_failed: {

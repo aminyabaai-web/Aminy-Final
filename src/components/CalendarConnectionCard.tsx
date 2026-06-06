@@ -70,7 +70,7 @@ export function CalendarConnectionCard() {
 
   if (isLoading) {
     return (
-      <div className="rounded-2xl bg-white border border-slate-100 p-4 flex items-center justify-center min-h-[88px]">
+      <div className="rounded-2xl bg-white border border-[#E8E4DF] p-4 flex items-center justify-center min-h-[88px]">
         <Loader2 className="w-4 h-4 text-slate-400 animate-spin" />
       </div>
     );
@@ -80,22 +80,22 @@ export function CalendarConnectionCard() {
   const activeProvider = isConnected ? connection?.provider as 'google' | 'outlook' : null;
 
   return (
-    <div className="rounded-2xl bg-white border border-slate-100 p-4 space-y-4">
+    <div className="rounded-2xl bg-white border border-[#E8E4DF] p-4 space-y-4">
       {/* Header */}
       <div className="flex items-start gap-3">
         <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: activeProvider ? '#43AA8B15' : '#f1f5f9' }}>
           <Calendar className="w-5 h-5" style={{ color: activeProvider ? '#43AA8B' : '#64748b' }} />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-slate-900">Calendar</p>
-          <p className="text-xs text-slate-500 mt-0.5">
+          <p className="text-sm font-semibold text-[#1B2733]">Calendar</p>
+          <p className="text-xs text-[#5A6B7A] mt-0.5">
             {activeProvider
               ? `Connected to ${PROVIDER_META[activeProvider].label}`
               : 'Push Aminy appointments to your calendar of choice'}
           </p>
         </div>
         {activeProvider && (
-          <span className="text-[11px] bg-teal-50 text-teal-700 px-2 py-0.5 rounded-full flex items-center gap-1 font-medium shrink-0">
+          <span className="text-[11px] bg-[#6B9080]/10 text-[#6B9080] px-2 py-0.5 rounded-full flex items-center gap-1 font-medium shrink-0">
             <Check className="w-3 h-3" />Active
           </span>
         )}
@@ -108,16 +108,16 @@ export function CalendarConnectionCard() {
 
       {/* Active connection details */}
       {activeProvider && (
-        <div className="rounded-xl bg-slate-50 px-3 py-2.5">
-          <p className="text-xs font-medium text-slate-700">{connection?.email || 'Connected'}</p>
-          <p className="text-[11px] text-slate-500 mt-0.5">
+        <div className="rounded-xl bg-[#FAF7F2] px-3 py-2.5">
+          <p className="text-xs font-medium text-[#3A4A57]">{connection?.email || 'Connected'}</p>
+          <p className="text-[11px] text-[#5A6B7A] mt-0.5">
             New appointments auto-push to your {PROVIDER_META[activeProvider].label}
             {connection?.lastSyncedAt ? ` · last synced ${new Date(connection.lastSyncedAt).toLocaleString()}` : ''}
           </p>
           <button
             onClick={handleDisconnect}
             disabled={working === 'disconnect'}
-            className="mt-2 flex items-center gap-1.5 text-xs text-slate-500 hover:text-red-500 font-medium"
+            className="mt-2 flex items-center gap-1.5 text-xs text-[#5A6B7A] hover:text-red-500 font-medium"
           >
             {working === 'disconnect' ? <Loader2 className="w-3 h-3 animate-spin" /> : <Unlink className="w-3 h-3" />}
             Disconnect
@@ -148,7 +148,7 @@ export function CalendarConnectionCard() {
           />
         )}
         <ProviderButton
-          icon={<Apple className="w-5 h-5 text-slate-700" />}
+          icon={<Apple className="w-5 h-5 text-[#3A4A57]" />}
           title={PROVIDER_META.apple.label}
           hint={PROVIDER_META.apple.hint}
           working={false}
@@ -181,18 +181,18 @@ function ProviderButton({
       disabled={working || isPassive}
       className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border transition-colors text-left ${
         isPassive
-          ? 'border-slate-100 bg-slate-50 cursor-default'
-          : 'border-slate-200 hover:border-teal-300 hover:bg-teal-50/30'
+          ? 'border-[#E8E4DF] bg-[#FAF7F2] cursor-default'
+          : 'border-[#E8E4DF] hover:border-[#6B9080]/30 hover:bg-[#6B9080]/10/30'
       } ${working ? 'opacity-50' : ''}`}
     >
-      <div className="w-9 h-9 rounded-lg bg-white border border-slate-200 flex items-center justify-center shrink-0">
+      <div className="w-9 h-9 rounded-lg bg-white border border-[#E8E4DF] flex items-center justify-center shrink-0">
         {working ? <Loader2 className="w-4 h-4 text-slate-400 animate-spin" /> : icon}
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-slate-800">{title}</p>
-        <p className="text-[11px] text-slate-500 truncate">{hint}</p>
+        <p className="text-sm font-medium text-[#1B2733]">{title}</p>
+        <p className="text-[11px] text-[#5A6B7A] truncate">{hint}</p>
       </div>
-      <span className={`text-xs font-semibold shrink-0 ${isPassive ? 'text-slate-400' : 'text-teal-600'}`}>
+      <span className={`text-xs font-semibold shrink-0 ${isPassive ? 'text-slate-400' : 'text-[#6B9080]'}`}>
         {isPassive ? <FileDown className="w-3.5 h-3.5 inline" /> : null} {cta}
       </span>
     </button>

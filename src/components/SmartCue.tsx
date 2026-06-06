@@ -56,7 +56,7 @@ export function SmartCue({ userContext, currentPath, onAction }: SmartCueProps) 
           className="fixed bottom-36 right-4 md:bottom-24 md:right-6 z-40 max-w-xs"
         >
           <div 
-            className="bg-white rounded-2xl px-4 py-3 pr-10 border border-slate-200"
+            className="bg-white rounded-2xl px-4 py-3 pr-10 border border-[#E8E4DF]"
             style={{
               boxShadow: '0 4px 12px rgba(120, 120, 120, 0.12)'
             }}
@@ -74,11 +74,11 @@ export function SmartCue({ userContext, currentPath, onAction }: SmartCueProps) 
                 }}
                 className="shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-cyan-50 to-violet-50 flex items-center justify-center mt-0.5"
               >
-                <Sparkles className="w-4 h-4 text-cyan-600" />
+                <Sparkles className="w-4 h-4 text-[#6B9080]" />
               </motion.div>
 
               <div className="flex-1 min-w-0">
-                <p className="text-sm text-slate-900 leading-relaxed">
+                <p className="text-sm text-[#1B2733] leading-relaxed">
                   {currentCue}
                 </p>
               </div>
@@ -87,7 +87,7 @@ export function SmartCue({ userContext, currentPath, onAction }: SmartCueProps) 
             {/* Close Button */}
             <button
               onClick={() => setIsVisible(false)}
-              className="absolute top-2 right-2 w-6 h-6 rounded-full hover:bg-slate-100 flex items-center justify-center transition-colors"
+              className="absolute top-2 right-2 w-6 h-6 rounded-full hover:bg-[#F0EDE8] flex items-center justify-center transition-colors"
             >
               <X className="w-3.5 h-3.5 text-slate-400" />
             </button>
@@ -96,7 +96,7 @@ export function SmartCue({ userContext, currentPath, onAction }: SmartCueProps) 
           {/* Pointer */}
           <div className="absolute -bottom-2 right-8">
             <div 
-              className="w-4 h-4 bg-white border-r border-b border-slate-200 transform rotate-45"
+              className="w-4 h-4 bg-white border-r border-b border-[#E8E4DF] transform rotate-45"
               style={{
                 boxShadow: '2px 2px 4px rgba(120, 120, 120, 0.08)'
               }}

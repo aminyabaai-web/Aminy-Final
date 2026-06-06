@@ -60,11 +60,11 @@ export function AppReviewPrompt() {
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/40 p-4">
-      <div className="rounded-2xl bg-white shadow-2xl border border-gray-100 p-5 relative max-w-sm w-full">
+      <div className="rounded-2xl bg-white shadow-2xl border border-[#E8E4DF] p-5 relative max-w-sm w-full">
         {/* Close button */}
         <button
           onClick={dismissPrompt}
-          className="absolute right-3 top-3 p-1.5 rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+          className="absolute right-3 top-3 p-1.5 rounded-full text-[#8A9BA8] hover:text-[#5A6B7A] hover:bg-[#F0EDE8] transition-colors"
           aria-label="Dismiss"
         >
           <X size={16} />
@@ -76,10 +76,10 @@ export function AppReviewPrompt() {
             <Heart className="w-6 h-6 text-pink-500 fill-pink-500" />
           </div>
 
-          <h3 className="text-base font-semibold text-gray-900 mb-1">
+          <h3 className="text-base font-semibold text-[#1B2733] mb-1">
             Enjoying Aminy?
           </h3>
-          <p className="text-sm text-gray-500 mb-4">
+          <p className="text-sm text-[#5A6B7A] mb-4">
             Your review helps other autism families discover us
           </p>
 
@@ -99,7 +99,7 @@ export function AppReviewPrompt() {
                   className={`transition-colors ${
                     rating <= (hoveredRating || selectedRating)
                       ? 'text-amber-400 fill-amber-400'
-                      : 'text-gray-400'
+                      : 'text-[#8A9BA8]'
                   }`}
                 />
               </button>
@@ -108,13 +108,13 @@ export function AppReviewPrompt() {
 
           {/* Selected feedback */}
           {selectedRating > 0 && selectedRating < 4 && (
-            <p className="text-xs text-gray-500 mb-3 animate-in fade-in">
+            <p className="text-xs text-[#5A6B7A] mb-3 animate-in fade-in">
               Thank you for your feedback. We&apos;ll use it to improve!
             </p>
           )}
           {selectedRating >= 4 && (
             <div className="flex flex-col items-center gap-2 mb-3 animate-in fade-in">
-              <div className="flex items-center gap-1.5 text-xs text-teal-600">
+              <div className="flex items-center gap-1.5 text-xs text-[#6B9080]">
                 <ExternalLink size={12} />
                 <span>Taking you to leave a review...</span>
               </div>
@@ -122,7 +122,7 @@ export function AppReviewPrompt() {
                 href={store.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-xs text-teal-700 underline"
+                className="text-xs text-[#6B9080] underline"
               >
                 Leave a review on {store.label}
               </a>
@@ -132,7 +132,7 @@ export function AppReviewPrompt() {
           {/* Don't ask again */}
           <button
             onClick={neverAskAgain}
-            className="text-xs text-gray-400 hover:text-gray-500 transition-colors"
+            className="text-xs text-[#8A9BA8] hover:text-[#5A6B7A] transition-colors"
           >
             Don&apos;t ask me again
           </button>

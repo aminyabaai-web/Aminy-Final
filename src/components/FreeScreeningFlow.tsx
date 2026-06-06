@@ -68,6 +68,7 @@ interface FreeScreeningFlowProps {
   onBack: () => void;
   onSignUp: () => void;
   onBookEvaluation?: () => void;
+  onJustDiagnosed?: () => void;
   initialConcern?: string;
 }
 
@@ -171,57 +172,57 @@ const AGE_PRESETS = [
 const S = {
   // Layout
   // Use min-height + relative positioning — position:fixed breaks when parents have transform
-  fullScreen: { minHeight: '100dvh', backgroundColor: '#fff', display: 'flex', flexDirection: 'column' as const },
-  topBar: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', borderBottom: '1px solid #f3f4f6' },
+  fullScreen: { minHeight: '100dvh', backgroundColor: '#FAF7F2', display: 'flex', flexDirection: 'column' as const },
+  topBar: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', borderBottom: '1px solid #F0EDE8' },
   topBarBtn: { width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 22, border: 'none', background: 'none', cursor: 'pointer' },
   contentArea: { flex: 1, overflowY: 'auto' as const, overflowX: 'hidden' as const },
-  padded: { padding: '24px 20px' },
+  padded: { padding: '28px 20px' },
 
   // Typography
-  h1: { fontSize: 24, fontWeight: 700, color: '#111827', lineHeight: 1.3, margin: 0 },
-  h2: { fontSize: 18, fontWeight: 700, color: '#111827', lineHeight: 1.4, margin: 0 },
-  h3: { fontSize: 14, fontWeight: 600, color: '#111827', margin: '0 0 12px 0' },
-  body: { fontSize: 14, color: '#6b7280', lineHeight: 1.6, margin: '8px 0 0' },
-  caption: { fontSize: 12, color: '#9ca3af', lineHeight: 1.5 },
-  label: { fontSize: 14, fontWeight: 500, color: '#374151', marginBottom: 8, display: 'block' as const },
+  h1: { fontSize: 26, fontWeight: 700, color: '#0D1B2A', lineHeight: 1.25, letterSpacing: '-0.025em', margin: 0 },
+  h2: { fontSize: 20, fontWeight: 700, color: '#0D1B2A', lineHeight: 1.3, letterSpacing: '-0.02em', margin: 0 },
+  h3: { fontSize: 14, fontWeight: 600, color: '#1B2733', margin: '0 0 12px 0' },
+  body: { fontSize: 15, color: '#5A6B7A', lineHeight: 1.65, margin: '10px 0 0' },
+  caption: { fontSize: 12, color: '#8E9BAA', lineHeight: 1.5 },
+  label: { fontSize: 14, fontWeight: 500, color: '#1B2733', marginBottom: 8, display: 'block' as const },
 
   // Cards / Buttons
-  concernCard: { display: 'flex', alignItems: 'center', gap: 16, padding: 16, borderRadius: 16, border: '1px solid #f3f4f6', backgroundColor: '#fff', cursor: 'pointer', width: '100%', textAlign: 'left' as const, transition: 'border-color 0.15s', marginBottom: 12 },
-  iconBox: (color: string) => ({ width: 48, height: 48, borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, backgroundColor: `${color}15` }),
-  primaryBtn: (enabled: boolean) => ({ width: '100%', padding: '14px 24px', borderRadius: 12, border: 'none', backgroundColor: enabled ? '#0d9488' : '#e5e7eb', color: enabled ? '#fff' : '#9ca3af', fontSize: 14, fontWeight: 600, cursor: enabled ? 'pointer' : 'not-allowed', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, transition: 'background-color 0.15s' }),
-  ageBtn: (selected: boolean) => ({ padding: '12px 16px', borderRadius: 12, border: selected ? '2px solid #0d9488' : '1px solid #e5e7eb', backgroundColor: selected ? 'rgba(13,148,136,0.06)' : '#fff', color: selected ? '#0f766e' : '#374151', fontSize: 14, fontWeight: 500, cursor: 'pointer', transition: 'all 0.15s' }),
-  yesNoBtn: (variant: 'yes' | 'no') => ({ flex: 1, padding: '16px 24px', borderRadius: 16, border: variant === 'yes' ? '2px solid #99f6e4' : '2px solid #e5e7eb', backgroundColor: variant === 'yes' ? 'rgba(13,148,136,0.04)' : 'rgba(249,250,251,0.5)', color: variant === 'yes' ? '#0f766e' : '#374151', fontSize: 16, fontWeight: 600, cursor: 'pointer', transition: 'all 0.15s' }),
+  concernCard: { display: 'flex', alignItems: 'center', gap: 16, padding: '16px', borderRadius: 18, border: '1px solid #E8E4DF', backgroundColor: '#ffffff', cursor: 'pointer', width: '100%', textAlign: 'left' as const, transition: 'border-color 0.15s, box-shadow 0.15s', marginBottom: 10, boxShadow: '0 1px 3px rgba(27,39,51,0.04)' },
+  iconBox: (color: string) => ({ width: 48, height: 48, borderRadius: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, backgroundColor: `${color}18` }),
+  primaryBtn: (enabled: boolean) => ({ width: '100%', padding: '15px 24px', borderRadius: 14, border: 'none', backgroundColor: enabled ? '#6B9080' : '#E8E4DF', color: enabled ? '#fff' : '#8E9BAA', fontSize: 15, fontWeight: 600, cursor: enabled ? 'pointer' : 'not-allowed', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, transition: 'background-color 0.15s, opacity 0.15s', boxShadow: enabled ? '0 4px 14px rgba(107,144,128,0.3)' : 'none' }),
+  ageBtn: (selected: boolean) => ({ padding: '12px 16px', borderRadius: 12, border: selected ? '2px solid #6B9080' : '1px solid #E8E4DF', backgroundColor: selected ? 'rgba(107,144,128,0.08)' : '#ffffff', color: selected ? '#4A7A6A' : '#1B2733', fontSize: 14, fontWeight: 500, cursor: 'pointer', transition: 'all 0.15s' }),
+  yesNoBtn: (variant: 'yes' | 'no') => ({ flex: 1, padding: '16px 24px', borderRadius: 18, border: variant === 'yes' ? '2px solid rgba(107,144,128,0.5)' : '2px solid #E8E4DF', backgroundColor: variant === 'yes' ? 'rgba(107,144,128,0.06)' : '#ffffff', color: variant === 'yes' ? '#4A7A6A' : '#1B2733', fontSize: 16, fontWeight: 600, cursor: 'pointer', transition: 'all 0.15s' }),
 
   // Progress
-  progressTrack: { height: 4, backgroundColor: '#f3f4f6' },
-  progressBar: (pct: number) => ({ height: '100%', width: `${pct}%`, background: 'linear-gradient(to right, #2dd4bf, #06b6d4)', transition: 'width 0.5s ease' }),
+  progressTrack: { height: 4, backgroundColor: '#E8E4DF' },
+  progressBar: (pct: number) => ({ height: '100%', width: `${pct}%`, background: 'linear-gradient(to right, #6B9080, #7BA7BC)', transition: 'width 0.5s ease', borderRadius: 4 }),
 
   // Results
   riskBadge: (level: RiskLevel) => {
-    const colors = { low: { bg: '#f0fdf4', border: '#bbf7d0', text: '#15803d' }, moderate: { bg: '#fffbeb', border: '#fde68a', text: '#b45309' }, high: { bg: '#fef2f2', border: '#fecaca', text: '#dc2626' } };
+    const colors = { low: { bg: '#F0F8F5', border: '#C5DDD6', text: '#3A7A65' }, moderate: { bg: '#FFFBF0', border: '#F5E0A0', text: '#8A6820' }, high: { bg: '#FDF2F0', border: '#F2C4BB', text: '#C05A3E' } };
     const c = colors[level];
-    return { padding: 16, borderRadius: 12, backgroundColor: c.bg, border: `1px solid ${c.border}`, color: c.text };
+    return { padding: 16, borderRadius: 14, backgroundColor: c.bg, border: `1px solid ${c.border}`, color: c.text };
   },
-  stepItem: { display: 'flex', alignItems: 'flex-start', gap: 12, padding: 12, borderRadius: 12, backgroundColor: '#f9fafb' },
-  stepNum: { width: 20, height: 20, borderRadius: 10, backgroundColor: '#ccfbf1', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 2 },
-  providerTag: { display: 'inline-block', padding: '6px 12px', borderRadius: 8, backgroundColor: 'rgba(13,148,136,0.06)', color: '#0f766e', fontSize: 12, fontWeight: 500, border: '1px solid rgba(13,148,136,0.15)' },
-  lureBanner: { padding: 16, borderRadius: 16, background: 'linear-gradient(135deg, rgba(13,148,136,0.06), rgba(6,182,212,0.06))', border: '1px solid rgba(13,148,136,0.12)' },
+  stepItem: { display: 'flex', alignItems: 'flex-start', gap: 12, padding: 14, borderRadius: 14, backgroundColor: '#ffffff', border: '1px solid #F0EDE8' },
+  stepNum: { width: 22, height: 22, borderRadius: 11, backgroundColor: 'rgba(107,144,128,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 2 },
+  providerTag: { display: 'inline-block', padding: '6px 12px', borderRadius: 10, backgroundColor: 'rgba(107,144,128,0.08)', color: '#4A7A6A', fontSize: 12, fontWeight: 500, border: '1px solid rgba(107,144,128,0.18)' },
+  lureBanner: { padding: 18, borderRadius: 18, background: 'linear-gradient(135deg, rgba(107,144,128,0.06), rgba(123,167,188,0.06))', border: '1px solid rgba(107,144,128,0.14)' },
   lureItem: { display: 'flex', alignItems: 'flex-start', gap: 8, marginTop: 8 },
 
   // Insight interlude
-  insightWrap: { flex: 1, display: 'flex', flexDirection: 'column' as const, alignItems: 'center', justifyContent: 'center', padding: '32px 24px' },
-  insightIcon: { width: 64, height: 64, borderRadius: 16, backgroundColor: 'rgba(13,148,136,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 24 },
+  insightWrap: { flex: 1, display: 'flex', flexDirection: 'column' as const, alignItems: 'center', justifyContent: 'center', padding: '40px 24px' },
+  insightIcon: { width: 72, height: 72, borderRadius: 20, backgroundColor: 'rgba(107,144,128,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 28 },
 
   // Reassurance
-  reassurance: { display: 'flex', alignItems: 'flex-start', gap: 12, padding: '12px 16px', marginTop: 16, borderRadius: 12, backgroundColor: 'rgba(13,148,136,0.04)' },
-  disclaimer: { marginTop: 24, padding: 12, borderRadius: 12, backgroundColor: '#f9fafb', border: '1px solid #f3f4f6' },
+  reassurance: { display: 'flex', alignItems: 'flex-start', gap: 12, padding: '14px 16px', marginTop: 18, borderRadius: 14, backgroundColor: 'rgba(107,144,128,0.06)', border: '1px solid rgba(107,144,128,0.12)' },
+  disclaimer: { marginTop: 24, padding: 14, borderRadius: 12, backgroundColor: '#F5F2EC', border: '1px solid #E8E4DF' },
 };
 
 // ============================================
 // COMPONENT
 // ============================================
 
-export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, initialConcern }: FreeScreeningFlowProps) {
+export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, onJustDiagnosed, initialConcern }: FreeScreeningFlowProps) {
   const [phase, setPhase] = useState<FlowPhase>(initialConcern ? 'child-info' : 'concern');
   const [selectedConcern, setSelectedConcern] = useState<string | null>(initialConcern || null);
   const [childInfo, setChildInfo] = useState<ChildInfo>({ name: '', ageMonths: 0 });
@@ -322,8 +323,8 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, initialC
           const Icon = c.icon;
           return (
             <button key={c.id} onClick={() => handleConcernSelect(c.id)} style={S.concernCard}
-              onMouseEnter={e => (e.currentTarget.style.borderColor = '#99f6e4')}
-              onMouseLeave={e => (e.currentTarget.style.borderColor = '#f3f4f6')}
+              onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(107,144,128,0.4)')}
+              onMouseLeave={e => (e.currentTarget.style.borderColor = '#E8E4DF')}
             >
               <div style={S.iconBox(c.color)}>
                 <Icon style={{ width: 24, height: 24, color: c.color }} strokeWidth={1.5} />
@@ -337,8 +338,8 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, initialC
           );
         })}
         <div style={S.reassurance}>
-          <Shield style={{ width: 16, height: 16, color: '#0d9488', flexShrink: 0, marginTop: 2 }} />
-          <p style={{ fontSize: 12, color: '#0f766e', lineHeight: 1.6, margin: 0 }}>
+          <Shield style={{ width: 16, height: 16, color: '#6B9080', flexShrink: 0, marginTop: 2 }} />
+          <p style={{ fontSize: 12, color: '#5A6B7A', lineHeight: 1.6, margin: 0 }}>
             This screening is <strong>free</strong>, <strong>private</strong>, and based on the same validated tools your pediatrician uses. No account required.
           </p>
         </div>
@@ -381,10 +382,10 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, initialC
           </div>
           {/* Instrument preview */}
           {selectedInstrument && childInfo.ageMonths > 0 && (
-            <div style={{ padding: 16, borderRadius: 12, backgroundColor: '#f9fafb', border: '1px solid #f3f4f6', marginBottom: 24 }}>
+            <div style={{ padding: 16, borderRadius: 12, backgroundColor: '#F5F2EC', border: '1px solid #E8E4DF', marginBottom: 24 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-                <CheckCircle style={{ width: 16, height: 16, color: '#0d9488' }} />
-                <span style={{ fontSize: 14, fontWeight: 600, color: '#111827' }}>{selectedInstrument.shortName}</span>
+                <CheckCircle style={{ width: 16, height: 16, color: '#6B9080' }} />
+                <span style={{ fontSize: 14, fontWeight: 600, color: '#1B2733' }}>{selectedInstrument.shortName}</span>
               </div>
               <p style={{ fontSize: 12, color: '#6b7280', margin: 0, lineHeight: 1.5 }}>
                 {selectedInstrument.questions.length} questions · About {selectedInstrument.estimatedMinutes} minutes · Used by pediatricians worldwide
@@ -410,7 +411,7 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, initialC
           <div style={S.progressTrack}><div style={S.progressBar(progress)} /></div>
           <div style={S.insightWrap}>
             <div style={S.insightIcon}>
-              <IIcon style={{ width: 32, height: 32, color: '#0d9488' }} />
+              <IIcon style={{ width: 32, height: 32, color: '#6B9080' }} />
             </div>
             <div style={{ textAlign: 'center', marginBottom: 32 }}>
               <h2 style={{ ...S.h2, marginBottom: 12 }}>{showInsight.title}</h2>
@@ -485,7 +486,7 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, initialC
             {result.nextSteps.map((step, i) => (
               <div key={i} style={{ ...S.stepItem, marginBottom: 8 }}>
                 <div style={S.stepNum}>
-                  <span style={{ fontSize: 11, fontWeight: 700, color: '#0f766e' }}>{i + 1}</span>
+                  <span style={{ fontSize: 11, fontWeight: 700, color: '#6B9080' }}>{i + 1}</span>
                 </div>
                 <p style={{ fontSize: 14, color: '#374151', lineHeight: 1.6, margin: 0 }}>{step}</p>
               </div>
@@ -501,6 +502,35 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, initialC
                   <span key={i} style={S.providerTag}>{p}</span>
                 ))}
               </div>
+            </div>
+          )}
+
+          {/* Just Diagnosed bridge — for moderate/high risk families who have a diagnosis */}
+          {result.riskLevel !== 'low' && onJustDiagnosed && (
+            <div style={{
+              padding: 16, borderRadius: 12, marginBottom: 16,
+              background: 'linear-gradient(135deg, rgba(107,144,128,0.10), rgba(123,167,188,0.10))',
+              border: '1.5px solid rgba(107,144,128,0.25)',
+            }}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: '#6B9080', letterSpacing: '0.04em', marginBottom: 6 }}>
+                IF YOUR CHILD ALREADY HAS A DIAGNOSIS
+              </div>
+              <p style={{ fontSize: 13, color: '#5A6B7A', lineHeight: 1.55, margin: '0 0 12px' }}>
+                Get your personalized First 30 Days plan — state-specific steps for DD agencies,
+                Medicaid waivers, IEP requests, and therapy access.
+              </p>
+              <button
+                onClick={onJustDiagnosed}
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 6,
+                  background: 'linear-gradient(135deg, #6B9080, #7BA7BC)',
+                  color: '#fff', border: 'none', borderRadius: 10,
+                  padding: '10px 16px', fontSize: 13, fontWeight: 700, cursor: 'pointer',
+                  boxShadow: '0 3px 12px rgba(107,144,128,0.25)',
+                }}
+              >
+                Get my First 30 Days plan →
+              </button>
             </div>
           )}
 
@@ -527,8 +557,8 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, initialC
           {/* THE LURE */}
           <div style={S.lureBanner}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-              <Sparkles style={{ width: 16, height: 16, color: '#0d9488' }} />
-              <span style={{ fontSize: 14, fontWeight: 600, color: '#115e59' }}>What Aminy does next</span>
+              <Sparkles style={{ width: 16, height: 16, color: '#6B9080' }} />
+              <span style={{ fontSize: 14, fontWeight: 600, color: '#1B2733' }}>What Aminy does next</span>
             </div>
             {[
               result.riskLevel !== 'low' && `Match you with ${result.recommendedProviders[0]?.toLowerCase() || 'specialist'}s who accept your insurance`,
@@ -538,8 +568,8 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, initialC
               result.riskLevel === 'low' && 'Monitor milestones and re-screen when it\'s time',
             ].filter(Boolean).map((item, i) => (
               <div key={i} style={S.lureItem}>
-                <CheckCircle style={{ width: 14, height: 14, color: '#0d9488', flexShrink: 0, marginTop: 3 }} />
-                <span style={{ fontSize: 14, color: '#0f766e', lineHeight: 1.5 }}>{item}</span>
+                <CheckCircle style={{ width: 14, height: 14, color: '#6B9080', flexShrink: 0, marginTop: 3 }} />
+                <span style={{ fontSize: 14, color: '#5A6B7A', lineHeight: 1.5 }}>{item}</span>
               </div>
             ))}
           </div>
@@ -580,8 +610,8 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, initialC
         ) : <div style={{ width: 44 }} />}
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <Sparkles style={{ width: 16, height: 16, color: '#0d9488' }} />
-          <span style={{ fontSize: 14, fontWeight: 600, color: '#111827' }}>
+          <Sparkles style={{ width: 16, height: 16, color: '#6B9080' }} />
+          <span style={{ fontSize: 14, fontWeight: 600, color: '#1B2733' }}>
             {phase === 'results' ? 'Screening Results' : 'Free Screening'}
           </span>
         </div>

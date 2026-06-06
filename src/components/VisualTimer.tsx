@@ -52,7 +52,7 @@ const THEMES = {
   default: {
     primary: 'rgb(20, 184, 166)', // teal
     secondary: 'rgb(20, 184, 166, 0.1)',
-    background: 'from-teal-50 to-teal-100',
+    background: 'from-[#FAF7F2] to-[#F0EDE8]',
   },
   calm: {
     primary: 'rgb(139, 92, 246)', // purple
@@ -123,7 +123,7 @@ export function VisualTimer({
         particleCount: 100,
         spread: 70,
         origin: { y: 0.6 },
-        colors: ['#14b8a6', '#8b5cf6', '#ec4899', '#f59e0b'],
+        colors: ['#6B9080', '#8b5cf6', '#ec4899', '#f59e0b'],
       });
     }
 
@@ -203,7 +203,7 @@ export function VisualTimer({
         <div className="w-24 h-24 mx-auto mb-4 sm:mb-6 bg-green-100 rounded-full flex items-center justify-center">
           <Check className="w-12 h-12 text-green-600" />
         </div>
-        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
+        <h2 className="text-xl sm:text-2xl font-bold text-[#1B2733] mb-2">
           {childFriendly ? 'Amazing job! 🎉' : 'Time complete!'}
         </h2>
         {rewardCoins > 0 && (
@@ -212,7 +212,7 @@ export function VisualTimer({
             <span className="font-medium">+{rewardCoins} Calm Coins earned!</span>
           </div>
         )}
-        <p className="text-gray-600 mb-4 sm:mb-6">
+        <p className="text-[#5A6B7A] mb-4 sm:mb-6">
           {childFriendly
             ? "You did it! That wasn't so hard, was it?"
             : 'Timer finished successfully.'}
@@ -243,16 +243,16 @@ export function VisualTimer({
 
       {/* Header */}
       <div className="flex items-center justify-between mb-4 sm:mb-6">
-        <h2 className="text-lg font-semibold text-gray-900">{label}</h2>
+        <h2 className="text-lg font-semibold text-[#1B2733]">{label}</h2>
         <div className="flex items-center gap-2">
           <button
             onClick={() => setSoundEnabled(!soundEnabled)}
             className="p-2 rounded-full hover:bg-white/50 transition-colors"
           >
             {soundEnabled ? (
-              <Volume2 className="w-5 h-5 text-gray-600" />
+              <Volume2 className="w-5 h-5 text-[#5A6B7A]" />
             ) : (
-              <VolumeX className="w-5 h-5 text-gray-400" />
+              <VolumeX className="w-5 h-5 text-[#8A9BA8]" />
             )}
           </button>
           {onCancel && (
@@ -260,7 +260,7 @@ export function VisualTimer({
               onClick={handleCancel}
               className="p-2 rounded-full hover:bg-white/50 transition-colors"
             >
-              <X className="w-5 h-5 text-gray-600" />
+              <X className="w-5 h-5 text-[#5A6B7A]" />
             </button>
           )}
         </div>
@@ -298,7 +298,7 @@ export function VisualTimer({
         {/* Time display */}
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <motion.span
-            className="text-5xl font-bold text-gray-900"
+            className="text-5xl font-bold text-[#1B2733]"
             key={remainingSeconds}
             initial={{ scale: 1.1 }}
             animate={{ scale: 1 }}
@@ -307,7 +307,7 @@ export function VisualTimer({
             {formatTime(remainingSeconds)}
           </motion.span>
           {childFriendly && remainingSeconds > 0 && (
-            <span className="text-sm text-gray-500 mt-2">
+            <span className="text-sm text-[#5A6B7A] mt-2">
               {remainingSeconds <= 10
                 ? 'Almost there! 🌟'
                 : remainingSeconds <= 30
@@ -327,8 +327,8 @@ export function VisualTimer({
               onClick={() => handleSetTime(preset.minutes)}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                 totalSeconds === preset.minutes * 60
-                  ? 'bg-white shadow-md text-gray-900'
-                  : 'bg-white/50 text-gray-600 hover:bg-white/80'
+                  ? 'bg-white shadow-md text-[#1B2733]'
+                  : 'bg-white/50 text-[#5A6B7A] hover:bg-white/80'
               }`}
             >
               {childFriendly && <span className="mr-1">{preset.icon}</span>}
@@ -365,7 +365,7 @@ export function VisualTimer({
       {/* Encouragement for kids */}
       {childFriendly && !isRunning && remainingSeconds === totalSeconds && (
         <div className="mt-4 sm:mt-6 text-center">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-[#5A6B7A]">
             Ready to wait? You'll earn{' '}
             <span className="font-medium text-amber-600">
               {rewardCoins} Calm {rewardCoins === 1 ? 'Coin' : 'Coins'}

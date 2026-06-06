@@ -71,7 +71,7 @@ const inputCls =
   'w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-emerald-500 transition-colors';
 const selectCls =
   'w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-emerald-500 bg-white transition-colors';
-const labelCls = 'block text-xs font-medium text-slate-600 mb-1';
+const labelCls = 'block text-xs font-medium text-[#5A6B7A] mb-1';
 
 function fmt(n: number) {
   return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(n);
@@ -83,7 +83,7 @@ function fmt(n: number) {
 
 function ResultCard({ result }: { result: EligibilityResult }) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-sm">
+    <div className="rounded-2xl border border-[#E8E4DF] bg-white overflow-hidden shadow-sm">
       {/* Header row */}
       <div
         className={`flex items-center gap-3 px-4 py-3 ${
@@ -99,7 +99,7 @@ function ResultCard({ result }: { result: EligibilityResult }) {
           <p className={`font-semibold text-sm ${result.active ? 'text-green-800' : 'text-red-700'}`}>
             {result.active ? 'Active Coverage' : 'Inactive / Not Found'}
           </p>
-          <p className="text-xs text-slate-500 truncate">{result.planName}</p>
+          <p className="text-xs text-[#5A6B7A] truncate">{result.planName}</p>
         </div>
         {/* Auth required badge */}
         {result.authRequired && (
@@ -119,17 +119,17 @@ function ResultCard({ result }: { result: EligibilityResult }) {
       {/* Body */}
       <div className="px-4 py-3 space-y-3">
         {result.groupNumber && (
-          <p className="text-xs text-slate-500">Group #: <span className="text-slate-700 font-medium">{result.groupNumber}</span></p>
+          <p className="text-xs text-[#5A6B7A]">Group #: <span className="text-[#3A4A57] font-medium">{result.groupNumber}</span></p>
         )}
 
         {/* Deductible */}
         {result.deductible && (
           <div>
-            <p className="text-xs font-semibold text-slate-600 flex items-center gap-1 mb-1">
+            <p className="text-xs font-semibold text-[#5A6B7A] flex items-center gap-1 mb-1">
               <DollarSign className="w-3 h-3" /> Deductible
             </p>
             <div className="flex items-center gap-2">
-              <div className="flex-1 bg-slate-100 rounded-full h-2 overflow-hidden">
+              <div className="flex-1 bg-[#F0EDE8] rounded-full h-2 overflow-hidden">
                 <div
                   className="h-full bg-emerald-500 rounded-full transition-all"
                   style={{
@@ -137,22 +137,22 @@ function ResultCard({ result }: { result: EligibilityResult }) {
                   }}
                 />
               </div>
-              <span className="text-xs text-slate-600 whitespace-nowrap">
+              <span className="text-xs text-[#5A6B7A] whitespace-nowrap">
                 {fmt(result.deductible.met)} / {fmt(result.deductible.individual)} met
               </span>
             </div>
-            <p className="text-xs text-slate-500 mt-0.5">{fmt(result.deductible.remaining)} remaining</p>
+            <p className="text-xs text-[#5A6B7A] mt-0.5">{fmt(result.deductible.remaining)} remaining</p>
           </div>
         )}
 
         {/* Out-of-pocket max */}
         {result.outOfPocketMax && (
           <div>
-            <p className="text-xs font-semibold text-slate-600 flex items-center gap-1 mb-1">
+            <p className="text-xs font-semibold text-[#5A6B7A] flex items-center gap-1 mb-1">
               <DollarSign className="w-3 h-3" /> Out-of-Pocket Max
             </p>
             <div className="flex items-center gap-2">
-              <div className="flex-1 bg-slate-100 rounded-full h-2 overflow-hidden">
+              <div className="flex-1 bg-[#F0EDE8] rounded-full h-2 overflow-hidden">
                 <div
                   className="h-full bg-blue-400 rounded-full transition-all"
                   style={{
@@ -160,24 +160,24 @@ function ResultCard({ result }: { result: EligibilityResult }) {
                   }}
                 />
               </div>
-              <span className="text-xs text-slate-600 whitespace-nowrap">
+              <span className="text-xs text-[#5A6B7A] whitespace-nowrap">
                 {fmt(result.outOfPocketMax.met)} / {fmt(result.outOfPocketMax.individual)} met
               </span>
             </div>
-            <p className="text-xs text-slate-500 mt-0.5">{fmt(result.outOfPocketMax.remaining)} remaining</p>
+            <p className="text-xs text-[#5A6B7A] mt-0.5">{fmt(result.outOfPocketMax.remaining)} remaining</p>
           </div>
         )}
 
         {/* Cost-share row */}
         {(result.copay !== undefined || result.coinsurance !== undefined) && (
-          <div className="flex items-center gap-3 text-xs text-slate-600">
+          <div className="flex items-center gap-3 text-xs text-[#5A6B7A]">
             {result.copay !== undefined && (
-              <span className="bg-slate-50 border border-slate-200 rounded-lg px-2 py-1">
+              <span className="bg-[#FAF7F2] border border-[#E8E4DF] rounded-lg px-2 py-1">
                 Copay: <strong>{fmt(result.copay)}</strong>
               </span>
             )}
             {result.coinsurance !== undefined && (
-              <span className="bg-slate-50 border border-slate-200 rounded-lg px-2 py-1">
+              <span className="bg-[#FAF7F2] border border-[#E8E4DF] rounded-lg px-2 py-1">
                 Coinsurance: <strong>{Math.round(result.coinsurance * 100)}%</strong>
               </span>
             )}
@@ -187,10 +187,10 @@ function ResultCard({ result }: { result: EligibilityResult }) {
         {/* Covered services */}
         {result.coveredServices.length > 0 && (
           <div>
-            <p className="text-xs font-semibold text-slate-600 mb-1">Covered Services</p>
+            <p className="text-xs font-semibold text-[#5A6B7A] mb-1">Covered Services</p>
             <div className="flex flex-wrap gap-1">
               {result.coveredServices.map(s => (
-                <span key={s} className="bg-slate-100 text-slate-600 text-xs px-2 py-0.5 rounded-full">{s}</span>
+                <span key={s} className="bg-[#F0EDE8] text-[#5A6B7A] text-xs px-2 py-0.5 rounded-full">{s}</span>
               ))}
             </div>
           </div>

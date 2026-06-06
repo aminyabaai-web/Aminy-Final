@@ -21,6 +21,7 @@ interface SplashPageProps {
   onForProviders?: () => void;
   onFreeScreening?: () => void;
   onPreDiagnosis?: () => void;
+  onJustDiagnosed?: () => void;
 }
 
 const fontStack = 'Manrope, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", "Helvetica Neue", Arial, "Noto Sans", sans-serif';
@@ -37,6 +38,7 @@ export function SplashPage({
   onForProviders,
   onFreeScreening,
   onPreDiagnosis,
+  onJustDiagnosed,
 }: SplashPageProps) {
 
   useEffect(() => {
@@ -305,47 +307,96 @@ export function SplashPage({
              audience. onPreDiagnosis remains wired and can be re-surfaced if a
              distinct pre-diagnosis entry point is wanted later. */}
 
-          {/* Free Screening CTA — the acquisition hook */}
-          {onFreeScreening && (
+          {/* Secondary acquisition CTAs — two chips in a clean row */}
+          {(onFreeScreening || onJustDiagnosed) && (
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.75 }}
               style={{
                 display: 'flex',
-                justifyContent: 'center',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '10px',
                 marginBottom: '20px',
+                padding: '0 20px',
               }}
             >
-              <button
-                onClick={onFreeScreening}
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  background: 'none',
-                  border: '1px solid rgba(13, 148, 136, 0.25)',
-                  borderRadius: '12px',
-                  color: 'rgba(13, 148, 136, 0.85)',
-                  fontFamily: fontStack,
-                  fontSize: '13px',
-                  fontWeight: 500,
-                  cursor: 'pointer',
-                  padding: '10px 20px',
-                  transition: 'all 0.2s ease',
-                  ...fontSmoothing,
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = 'rgba(13, 148, 136, 0.06)';
-                  e.currentTarget.style.borderColor = 'rgba(13, 148, 136, 0.4)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = 'transparent';
-                  e.currentTarget.style.borderColor = 'rgba(13, 148, 136, 0.25)';
-                }}
-              >
-                Concerned about your child? Free screening →
-              </button>
+              {/* Divider label */}
+              <div style={{
+                fontSize: '11px',
+                fontWeight: 600,
+                color: 'rgba(17,24,39,0.30)',
+                letterSpacing: '0.08em',
+                ...fontSmoothing,
+              }}>
+                OR
+              </div>
+              {/* Chip row */}
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'center' }}>
+                {onFreeScreening && (
+                  <button
+                    onClick={onFreeScreening}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '5px',
+                      background: 'rgba(107,144,128,0.07)',
+                      border: '1px solid rgba(107,144,128,0.22)',
+                      borderRadius: '100px',
+                      color: '#6B9080',
+                      fontFamily: fontStack,
+                      fontSize: '13px',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      padding: '9px 16px',
+                      transition: 'all 0.18s ease',
+                      ...fontSmoothing,
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = 'rgba(107,144,128,0.12)';
+                      e.currentTarget.style.borderColor = 'rgba(107,144,128,0.40)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'rgba(107,144,128,0.07)';
+                      e.currentTarget.style.borderColor = 'rgba(107,144,128,0.22)';
+                    }}
+                  >
+                    Concerned? Free screening →
+                  </button>
+                )}
+                {onJustDiagnosed && (
+                  <button
+                    onClick={onJustDiagnosed}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '5px',
+                      background: 'rgba(123,167,188,0.07)',
+                      border: '1px solid rgba(123,167,188,0.25)',
+                      borderRadius: '100px',
+                      color: '#4A8A9C',
+                      fontFamily: fontStack,
+                      fontSize: '13px',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      padding: '9px 16px',
+                      transition: 'all 0.18s ease',
+                      ...fontSmoothing,
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = 'rgba(123,167,188,0.12)';
+                      e.currentTarget.style.borderColor = 'rgba(123,167,188,0.45)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'rgba(123,167,188,0.07)';
+                      e.currentTarget.style.borderColor = 'rgba(123,167,188,0.25)';
+                    }}
+                  >
+                    Just diagnosed? First 30 Days plan →
+                  </button>
+                )}
+              </div>
             </motion.div>
           )}
 
@@ -388,7 +439,7 @@ export function SplashPage({
                   style={{
                     background: 'none',
                     border: 'none',
-                    color: 'rgba(13, 148, 136, 0.7)',
+                    color: 'rgba(107, 144, 128, 0.75)',
                     fontFamily: fontStack,
                     fontSize: '12px',
                     fontWeight: 500,
@@ -397,8 +448,8 @@ export function SplashPage({
                     transition: 'color 0.2s ease',
                     ...fontSmoothing,
                   }}
-                  onMouseEnter={(e) => e.currentTarget.style.color = 'rgba(13, 148, 136, 1)'}
-                  onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(13, 148, 136, 0.7)'}
+                  onMouseEnter={(e) => e.currentTarget.style.color = 'rgba(107, 144, 128, 1)'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(107, 144, 128, 0.75)'}
                 >
                   Provider pilot by invitation →
                 </button>

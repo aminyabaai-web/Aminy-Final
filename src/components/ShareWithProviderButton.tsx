@@ -229,7 +229,7 @@ www.aminy.ai
       <>
         <button
           onClick={() => setIsOpen(true)}
-          className="flex items-center gap-2 text-sm text-teal-600 hover:text-teal-700"
+          className="flex items-center gap-2 text-sm text-[#6B9080] hover:text-[#6B9080]"
         >
           <FileText className="w-4 h-4" />
           Share Report
@@ -255,7 +255,7 @@ www.aminy.ai
 
   return (
     <>
-      <Card className="p-4 bg-gradient-to-r from-blue-50 to-teal-50 border-blue-200">
+      <Card className="p-4 bg-gradient-to-r from-[#FAF7F2] to-[#F5F2EC] border-[#C8DDE8]">
         <div className="flex items-start gap-3 sm:gap-4">
           <div className="p-2 bg-blue-100 rounded-full">
             <Stethoscope className="w-5 h-5 text-blue-600" />
@@ -265,7 +265,7 @@ www.aminy.ai
             <p className="text-sm text-blue-700 mt-1">
               Generate a provider-ready report to share with your BCBA, therapist, or doctor.
             </p>
-            <Badge className="mt-2 bg-teal-100 text-teal-700">
+            <Badge className="mt-2 bg-[#6B9080]/10 text-[#6B9080]">
               Only with Aminy
             </Badge>
           </div>
@@ -356,14 +356,14 @@ function ShareModal({
             </div>
 
             {/* Report Preview */}
-            <div className="p-4 bg-gray-50 border-b">
+            <div className="p-4 bg-[#FAF7F2] border-b">
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 bg-teal-100 rounded-full flex items-center justify-center">
-                  <User className="w-5 h-5 text-teal-600" />
+                <div className="w-10 h-10 bg-[#6B9080]/10 rounded-full flex items-center justify-center">
+                  <User className="w-5 h-5 text-[#6B9080]" />
                 </div>
                 <div>
-                  <p className="font-medium text-gray-900">{report.childName}'s Progress Report</p>
-                  <p className="text-sm text-gray-500">
+                  <p className="font-medium text-[#1B2733]">{report.childName}'s Progress Report</p>
+                  <p className="text-sm text-[#5A6B7A]">
                     {report.dateRange.start.toLocaleDateString()} - {report.dateRange.end.toLocaleDateString()}
                   </p>
                 </div>
@@ -371,14 +371,14 @@ function ShareModal({
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
                 <div className="p-2 bg-white rounded border">
-                  <span className="text-gray-500">Stress Level</span>
-                  <p className="font-medium text-gray-900">
+                  <span className="text-[#5A6B7A]">Stress Level</span>
+                  <p className="font-medium text-[#1B2733]">
                     {report.metrics.stressLevel.current}/10
                   </p>
                 </div>
                 <div className="p-2 bg-white rounded border">
-                  <span className="text-gray-500">Routine Adherence</span>
-                  <p className="font-medium text-gray-900">
+                  <span className="text-[#5A6B7A]">Routine Adherence</span>
+                  <p className="font-medium text-[#1B2733]">
                     {report.metrics.routineAdherence.current}%
                   </p>
                 </div>
@@ -387,7 +387,7 @@ function ShareModal({
 
             {/* Share Options */}
             <div className="p-4 space-y-3">
-              <p className="text-sm text-gray-600 mb-4">
+              <p className="text-sm text-[#5A6B7A] mb-4">
                 Choose how you'd like to share this report:
               </p>
 
@@ -398,17 +398,17 @@ function ShareModal({
                   onDownload();
                 }}
                 disabled={generating}
-                className="w-full flex items-center gap-3 sm:gap-4 p-3 border rounded-lg hover:bg-gray-50 transition-colors text-left"
+                className="w-full flex items-center gap-3 sm:gap-4 p-3 border rounded-lg hover:bg-[#FAF7F2] transition-colors text-left"
               >
                 <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
                   <Download className="w-5 h-5 text-green-600" />
                 </div>
                 <div className="flex-1">
-                  <p className="font-medium text-gray-900">Download PDF</p>
-                  <p className="text-sm text-gray-500">Save to your device</p>
+                  <p className="font-medium text-[#1B2733]">Download PDF</p>
+                  <p className="text-sm text-[#5A6B7A]">Save to your device</p>
                 </div>
                 {generating && shareMethod === 'download' && (
-                  <Loader2 className="w-5 h-5 animate-spin text-gray-400" />
+                  <Loader2 className="w-5 h-5 animate-spin text-[#8A9BA8]" />
                 )}
               </button>
 
@@ -422,8 +422,8 @@ function ShareModal({
                     <Mail className="w-5 h-5 text-blue-600" />
                   </div>
                   <div className="flex-1">
-                    <p className="font-medium text-gray-900">Email to Provider</p>
-                    <p className="text-sm text-gray-500">Send directly via email</p>
+                    <p className="font-medium text-[#1B2733]">Email to Provider</p>
+                    <p className="text-sm text-[#5A6B7A]">Send directly via email</p>
                   </div>
                 </button>
 
@@ -457,7 +457,7 @@ function ShareModal({
               <button
                 onClick={onCopyLink}
                 disabled={generating}
-                className="w-full flex items-center gap-3 sm:gap-4 p-3 border rounded-lg hover:bg-gray-50 transition-colors text-left"
+                className="w-full flex items-center gap-3 sm:gap-4 p-3 border rounded-lg hover:bg-[#FAF7F2] transition-colors text-left"
               >
                 <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
                   {linkCopied ? (
@@ -467,20 +467,20 @@ function ShareModal({
                   )}
                 </div>
                 <div className="flex-1">
-                  <p className="font-medium text-gray-900">
+                  <p className="font-medium text-[#1B2733]">
                     {linkCopied ? 'Link Copied!' : 'Copy Shareable Link'}
                   </p>
-                  <p className="text-sm text-gray-500">Valid for 7 days, view-only access</p>
+                  <p className="text-sm text-[#5A6B7A]">Valid for 7 days, view-only access</p>
                 </div>
                 {generating && shareMethod === 'link' && (
-                  <Loader2 className="w-5 h-5 animate-spin text-gray-400" />
+                  <Loader2 className="w-5 h-5 animate-spin text-[#8A9BA8]" />
                 )}
               </button>
             </div>
 
             {/* Privacy Note */}
             <div className="px-4 pb-4">
-              <p className="text-xs text-gray-500 text-center">
+              <p className="text-xs text-[#5A6B7A] text-center">
                 Reports are encrypted and HIPAA-conscious. You control who sees your data.
               </p>
             </div>

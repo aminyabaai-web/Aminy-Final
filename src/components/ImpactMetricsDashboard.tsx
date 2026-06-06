@@ -233,7 +233,7 @@ export function ImpactMetricsDashboard({
       case 'down':
         return <ArrowDownRight className="w-4 h-4 text-red-500" />;
       default:
-        return <Minus className="w-4 h-4 text-gray-400" />;
+        return <Minus className="w-4 h-4 text-[#8A9BA8]" />;
     }
   };
 
@@ -261,10 +261,10 @@ export function ImpactMetricsDashboard({
   if (loading || !metrics) {
     return (
       <div className="p-6 space-y-3 sm:space-y-4 animate-pulse">
-        <div className="h-8 bg-gray-200 dark:bg-slate-700 rounded w-1/3" />
+        <div className="h-8 bg-[#E8E4DF] dark:bg-slate-700 rounded w-1/3" />
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
           {[1, 2, 3].map(i => (
-            <div key={i} className="h-32 bg-gray-200 dark:bg-slate-700 rounded-xl" />
+            <div key={i} className="h-32 bg-[#E8E4DF] dark:bg-slate-700 rounded-xl" />
           ))}
         </div>
       </div>
@@ -272,15 +272,15 @@ export function ImpactMetricsDashboard({
   }
 
   return (
-    <div className="p-6 space-y-3 sm:space-y-4 sm:space-y-6 bg-gray-50 dark:bg-slate-900 min-h-screen">
+    <div className="p-6 space-y-3 sm:space-y-4 sm:space-y-6 bg-[#FAF7F2] dark:bg-slate-900 min-h-screen">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 sm:gap-4">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-            <Target className="w-7 h-7 text-teal-600" />
+          <h1 className="text-xl sm:text-2xl font-bold text-[#1B2733] dark:text-white flex items-center gap-2">
+            <Target className="w-7 h-7 text-[#6B9080]" />
             Impact Dashboard
           </h1>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+          <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">
             IRIS+ aligned metrics for {reportingPeriod}
           </p>
           <div className="mt-3 flex flex-wrap items-center gap-2">
@@ -302,7 +302,7 @@ export function ImpactMetricsDashboard({
       </div>
 
       {/* View Toggle */}
-      <div className="flex gap-2 border-b border-gray-200 dark:border-slate-700">
+      <div className="flex gap-2 border-b border-[#E8E4DF] dark:border-slate-700">
         {[
           { id: 'dashboard', label: 'Overview' },
           { id: 'toc', label: 'Theory of Change' },
@@ -313,8 +313,8 @@ export function ImpactMetricsDashboard({
             onClick={() => setActiveView(view.id as typeof activeView)}
             className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
               activeView === view.id
-                ? 'border-teal-500 text-teal-600 dark:text-teal-400'
-                : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                ? 'border-[#6B9080] text-[#6B9080] dark:text-primary'
+                : 'border-transparent text-[#5A6B7A] dark:text-[#8A9BA8] hover:text-[#1B2733] dark:hover:text-white'
             }`}
           >
             {view.label}
@@ -327,7 +327,7 @@ export function ImpactMetricsDashboard({
           {/* Key Impact Indicators */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-              <Card className="p-4 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-slate-800 dark:to-slate-800 border-blue-200 dark:border-slate-700">
+              <Card className="p-4 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-slate-800 dark:to-slate-800 border-[#C8DDE8] dark:border-slate-700">
                 <div className="flex items-center justify-between mb-2">
                   <Users className="w-5 h-5 text-blue-600" />
                   {getTrendIcon(metrics.trends.beneficiaryGrowth)}
@@ -336,7 +336,7 @@ export function ImpactMetricsDashboard({
                   {metrics.beneficiaries.total.toLocaleString()}
                 </div>
                 <div className="text-xs text-blue-600 dark:text-blue-500">Families Served</div>
-                <div className="text-xs text-gray-500 dark:text-slate-400 mt-1">
+                <div className="text-xs text-[#5A6B7A] dark:text-slate-400 mt-1">
                   +{metrics.beneficiaries.newThisMonth} this month
                 </div>
               </Card>
@@ -352,7 +352,7 @@ export function ImpactMetricsDashboard({
                   {metrics.outcomes.behaviorImprovements}%
                 </div>
                 <div className="text-xs text-green-600 dark:text-green-500">Behavior Improvement</div>
-                <div className="text-xs text-gray-500 dark:text-slate-400 mt-1">
+                <div className="text-xs text-[#5A6B7A] dark:text-slate-400 mt-1">
                   Target: 70%
                 </div>
               </Card>
@@ -368,7 +368,7 @@ export function ImpactMetricsDashboard({
                   {metrics.outcomes.stressReduction}%
                 </div>
                 <div className="text-xs text-purple-600 dark:text-purple-500">Stress Reduction</div>
-                <div className="text-xs text-gray-500 dark:text-slate-400 mt-1">
+                <div className="text-xs text-[#5A6B7A] dark:text-slate-400 mt-1">
                   Caregiver reported
                 </div>
               </Card>
@@ -383,7 +383,7 @@ export function ImpactMetricsDashboard({
                   {metrics.outcomes.familyQualityOfLife}/10
                 </div>
                 <div className="text-xs text-amber-600 dark:text-amber-500">Quality of Life</div>
-                <div className="text-xs text-gray-500 dark:text-slate-400 mt-1">
+                <div className="text-xs text-[#5A6B7A] dark:text-slate-400 mt-1">
                   Family average score
                 </div>
               </Card>
@@ -394,34 +394,34 @@ export function ImpactMetricsDashboard({
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
             {/* Beneficiary Demographics */}
             <Card className="p-5 dark:bg-slate-800 dark:border-slate-700">
-              <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                <Users className="w-5 h-5 text-teal-600" />
+              <h3 className="font-semibold text-[#1B2733] dark:text-white mb-4 flex items-center gap-2">
+                <Users className="w-5 h-5 text-[#6B9080]" />
                 Beneficiary Breakdown
               </h3>
               <div className="space-y-3 sm:space-y-4">
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">Children Served</span>
+                  <span className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">Children Served</span>
                   <span className="font-semibold dark:text-white">{metrics.beneficiaries.children}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">Caregivers Engaged</span>
+                  <span className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">Caregivers Engaged</span>
                   <span className="font-semibold dark:text-white">{metrics.beneficiaries.caregivers}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">30-Day Retention</span>
+                  <span className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">30-Day Retention</span>
                   <span className="font-semibold dark:text-white">{metrics.beneficiaries.retentionRate}%</span>
                 </div>
                 <hr className="dark:border-slate-700" />
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">Low-Income Families</span>
+                  <span className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">Low-Income Families</span>
                   <Badge variant="outline">{metrics.equity.lowIncomeServed}%</Badge>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">Rural Areas</span>
+                  <span className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">Rural Areas</span>
                   <Badge variant="outline">{metrics.equity.ruralServed}%</Badge>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">First-Time Parents</span>
+                  <span className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">First-Time Parents</span>
                   <Badge variant="outline">{metrics.equity.firstTimeParentsServed}%</Badge>
                 </div>
               </div>
@@ -429,8 +429,8 @@ export function ImpactMetricsDashboard({
 
             {/* Outcomes */}
             <Card className="p-5 dark:bg-slate-800 dark:border-slate-700">
-              <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                <Target className="w-5 h-5 text-teal-600" />
+              <h3 className="font-semibold text-[#1B2733] dark:text-white mb-4 flex items-center gap-2">
+                <Target className="w-5 h-5 text-[#6B9080]" />
                 Outcome Metrics
               </h3>
               <div className="space-y-3 sm:space-y-4">
@@ -442,10 +442,10 @@ export function ImpactMetricsDashboard({
                 ].map((metric) => (
                   <div key={metric.label}>
                     <div className="flex justify-between text-sm mb-1">
-                      <span className="text-gray-600 dark:text-gray-400">{metric.label}</span>
+                      <span className="text-[#5A6B7A] dark:text-[#8A9BA8]">{metric.label}</span>
                       <span className="font-medium dark:text-white">{metric.value}%</span>
                     </div>
-                    <div className="relative h-2 bg-gray-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                    <div className="relative h-2 bg-[#E8E4DF] dark:bg-slate-700 rounded-full overflow-hidden">
                       <div
                         className={`absolute left-0 top-0 h-full ${metric.color} rounded-full transition-all duration-500`}
                         style={{ width: `${metric.value}%` }}
@@ -457,7 +457,7 @@ export function ImpactMetricsDashboard({
                         title={`Target: ${metric.target}%`}
                       />
                     </div>
-                    <div className="text-xs text-gray-400 mt-0.5">
+                    <div className="text-xs text-[#8A9BA8] mt-0.5">
                       Target: {metric.target}%
                     </div>
                   </div>
@@ -467,66 +467,66 @@ export function ImpactMetricsDashboard({
 
             {/* Operations */}
             <Card className="p-5 dark:bg-slate-800 dark:border-slate-700">
-              <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                <Activity className="w-5 h-5 text-teal-600" />
+              <h3 className="font-semibold text-[#1B2733] dark:text-white mb-4 flex items-center gap-2">
+                <Activity className="w-5 h-5 text-[#6B9080]" />
                 Operational Metrics
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                <div className="text-center p-3 bg-gray-50 dark:bg-slate-900 rounded-lg">
-                  <div className="text-xl font-bold text-gray-900 dark:text-white">
+                <div className="text-center p-3 bg-[#FAF7F2] dark:bg-slate-900 rounded-lg">
+                  <div className="text-xl font-bold text-[#1B2733] dark:text-white">
                     {metrics.operations.sessionsDelivered.toLocaleString()}
                   </div>
-                  <div className="text-xs text-gray-500 dark:text-gray-400">Sessions Delivered</div>
+                  <div className="text-xs text-[#5A6B7A] dark:text-[#8A9BA8]">Sessions Delivered</div>
                 </div>
-                <div className="text-center p-3 bg-gray-50 dark:bg-slate-900 rounded-lg">
-                  <div className="text-xl font-bold text-gray-900 dark:text-white">
+                <div className="text-center p-3 bg-[#FAF7F2] dark:bg-slate-900 rounded-lg">
+                  <div className="text-xl font-bold text-[#1B2733] dark:text-white">
                     {metrics.operations.aiInteractions.toLocaleString()}
                   </div>
-                  <div className="text-xs text-gray-500 dark:text-gray-400">AI Interactions</div>
+                  <div className="text-xs text-[#5A6B7A] dark:text-[#8A9BA8]">AI Interactions</div>
                 </div>
-                <div className="text-center p-3 bg-gray-50 dark:bg-slate-900 rounded-lg">
-                  <div className="text-xl font-bold text-gray-900 dark:text-white">
+                <div className="text-center p-3 bg-[#FAF7F2] dark:bg-slate-900 rounded-lg">
+                  <div className="text-xl font-bold text-[#1B2733] dark:text-white">
                     {metrics.operations.averageSessionLength}min
                   </div>
-                  <div className="text-xs text-gray-500 dark:text-gray-400">Avg Session</div>
+                  <div className="text-xs text-[#5A6B7A] dark:text-[#8A9BA8]">Avg Session</div>
                 </div>
-                <div className="text-center p-3 bg-gray-50 dark:bg-slate-900 rounded-lg">
-                  <div className="text-xl font-bold text-gray-900 dark:text-white">
+                <div className="text-center p-3 bg-[#FAF7F2] dark:bg-slate-900 rounded-lg">
+                  <div className="text-xl font-bold text-[#1B2733] dark:text-white">
                     {metrics.operations.contentEngagement}%
                   </div>
-                  <div className="text-xs text-gray-500 dark:text-gray-400">Engagement</div>
+                  <div className="text-xs text-[#5A6B7A] dark:text-[#8A9BA8]">Engagement</div>
                 </div>
               </div>
             </Card>
 
             {/* Financial Sustainability */}
             <Card className="p-5 dark:bg-slate-800 dark:border-slate-700">
-              <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                <DollarSign className="w-5 h-5 text-teal-600" />
+              <h3 className="font-semibold text-[#1B2733] dark:text-white mb-4 flex items-center gap-2">
+                <DollarSign className="w-5 h-5 text-[#6B9080]" />
                 Unit Economics
               </h3>
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">Cost per Beneficiary</span>
+                  <span className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">Cost per Beneficiary</span>
                   <span className="font-semibold dark:text-white">${metrics.financial.costPerBeneficiary}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">Revenue per Beneficiary</span>
+                  <span className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">Revenue per Beneficiary</span>
                   <span className="font-semibold dark:text-white">${metrics.financial.revenuePerBeneficiary}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">LTV:CAC Ratio</span>
+                  <span className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">LTV:CAC Ratio</span>
                   <span className="font-semibold text-green-600 dark:text-green-400">
                     {(metrics.financial.ltv / metrics.financial.cac).toFixed(1)}x
                   </span>
                 </div>
                 <hr className="dark:border-slate-700" />
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">Monthly Burn</span>
+                  <span className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">Monthly Burn</span>
                   <span className="font-semibold dark:text-white">${(metrics.financial.monthlyBurnRate / 1000).toFixed(0)}k</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">Runway</span>
+                  <span className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">Runway</span>
                   <Badge variant={metrics.financial.runwayMonths > 12 ? 'default' : 'destructive'}>
                     {metrics.financial.runwayMonths} months
                   </Badge>
@@ -539,33 +539,33 @@ export function ImpactMetricsDashboard({
 
       {activeView === 'toc' && (
         <Card className="p-6 dark:bg-slate-800 dark:border-slate-700">
-          <h3 className="font-semibold text-gray-900 dark:text-white mb-4 sm:mb-6 text-lg">
+          <h3 className="font-semibold text-[#1B2733] dark:text-white mb-4 sm:mb-6 text-lg">
             Theory of Change
           </h3>
           <div className="overflow-x-auto">
             <div className="flex gap-3 sm:gap-4 min-w-[800px]">
               {/* Inputs */}
               <div className="flex-1">
-                <div className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase mb-3">Inputs</div>
+                <div className="text-xs font-semibold text-[#5A6B7A] dark:text-[#8A9BA8] uppercase mb-3">Inputs</div>
                 <div className="space-y-2">
                   {THEORY_OF_CHANGE.inputs.map((input) => (
-                    <div key={input.id} className="flex items-center gap-2 p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg text-sm">
+                    <div key={input.id} className="flex items-center gap-2 p-2 bg-[#EEF4F8] dark:bg-blue-900/20 rounded-lg text-sm">
                       <input.icon className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0" />
-                      <span className="text-gray-700 dark:text-gray-300">{input.label}</span>
+                      <span className="text-[#3A4A57] dark:text-gray-300">{input.label}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
               {/* Arrow */}
-              <div className="flex items-center text-gray-400">→</div>
+              <div className="flex items-center text-[#8A9BA8]">→</div>
 
               {/* Activities */}
               <div className="flex-1">
-                <div className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase mb-3">Activities</div>
+                <div className="text-xs font-semibold text-[#5A6B7A] dark:text-[#8A9BA8] uppercase mb-3">Activities</div>
                 <div className="space-y-2">
                   {THEORY_OF_CHANGE.activities.map((activity) => (
-                    <div key={activity.id} className="p-2 bg-purple-50 dark:bg-purple-900/20 rounded-lg text-sm text-gray-700 dark:text-gray-300">
+                    <div key={activity.id} className="p-2 bg-purple-50 dark:bg-purple-900/20 rounded-lg text-sm text-[#3A4A57] dark:text-gray-300">
                       {activity.label}
                     </div>
                   ))}
@@ -573,14 +573,14 @@ export function ImpactMetricsDashboard({
               </div>
 
               {/* Arrow */}
-              <div className="flex items-center text-gray-400">→</div>
+              <div className="flex items-center text-[#8A9BA8]">→</div>
 
               {/* Outputs */}
               <div className="flex-1">
-                <div className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase mb-3">Outputs</div>
+                <div className="text-xs font-semibold text-[#5A6B7A] dark:text-[#8A9BA8] uppercase mb-3">Outputs</div>
                 <div className="space-y-2">
                   {THEORY_OF_CHANGE.outputs.map((output) => (
-                    <div key={output.id} className="p-2 bg-teal-50 dark:bg-teal-900/20 rounded-lg text-sm text-gray-700 dark:text-gray-300">
+                    <div key={output.id} className="p-2 bg-[#6B9080]/10 dark:bg-[#6B9080]/10 rounded-lg text-sm text-[#3A4A57] dark:text-gray-300">
                       {output.label}
                     </div>
                   ))}
@@ -588,30 +588,30 @@ export function ImpactMetricsDashboard({
               </div>
 
               {/* Arrow */}
-              <div className="flex items-center text-gray-400">→</div>
+              <div className="flex items-center text-[#8A9BA8]">→</div>
 
               {/* Outcomes */}
               <div className="flex-1">
-                <div className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase mb-3">Outcomes</div>
+                <div className="text-xs font-semibold text-[#5A6B7A] dark:text-[#8A9BA8] uppercase mb-3">Outcomes</div>
                 <div className="space-y-2">
                   {THEORY_OF_CHANGE.outcomes.map((outcome) => (
                     <div key={outcome.id} className="p-2 bg-green-50 dark:bg-green-900/20 rounded-lg text-sm">
-                      <div className="text-gray-700 dark:text-gray-300">{outcome.label}</div>
-                      <div className="text-xs text-gray-500 dark:text-gray-400">Target: {outcome.target}%</div>
+                      <div className="text-[#3A4A57] dark:text-gray-300">{outcome.label}</div>
+                      <div className="text-xs text-[#5A6B7A] dark:text-[#8A9BA8]">Target: {outcome.target}%</div>
                     </div>
                   ))}
                 </div>
               </div>
 
               {/* Arrow */}
-              <div className="flex items-center text-gray-400">→</div>
+              <div className="flex items-center text-[#8A9BA8]">→</div>
 
               {/* Impact */}
               <div className="flex-1">
-                <div className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase mb-3">Impact</div>
+                <div className="text-xs font-semibold text-[#5A6B7A] dark:text-[#8A9BA8] uppercase mb-3">Impact</div>
                 <div className="space-y-2">
                   {THEORY_OF_CHANGE.impact.map((impact) => (
-                    <div key={impact.id} className="p-2 bg-amber-50 dark:bg-amber-900/20 rounded-lg text-sm text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                    <div key={impact.id} className="p-2 bg-amber-50 dark:bg-amber-900/20 rounded-lg text-sm text-[#3A4A57] dark:text-gray-300 flex items-center gap-2">
                       <CheckCircle2 className="w-4 h-4 text-amber-600 dark:text-amber-400 flex-shrink-0" />
                       {impact.label}
                     </div>
@@ -625,11 +625,11 @@ export function ImpactMetricsDashboard({
 
       {activeView === 'iris' && (
         <Card className="p-6 dark:bg-slate-800 dark:border-slate-700">
-          <h3 className="font-semibold text-gray-900 dark:text-white mb-4 text-lg flex items-center gap-2">
-            <Globe className="w-5 h-5 text-teal-600" />
+          <h3 className="font-semibold text-[#1B2733] dark:text-white mb-4 text-lg flex items-center gap-2">
+            <Globe className="w-5 h-5 text-[#6B9080]" />
             IRIS+ Catalog Alignment
           </h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 sm:mb-6">
+          <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8] mb-4 sm:mb-6">
             Our metrics are aligned with the Global Impact Investing Network (GIIN) IRIS+ system
             for standardized impact measurement and reporting.
           </p>
@@ -637,16 +637,16 @@ export function ImpactMetricsDashboard({
             {IRIS_METRICS.map((metric) => (
               <div
                 key={metric.code}
-                className="flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-900 rounded-lg"
+                className="flex items-center justify-between p-4 bg-[#FAF7F2] dark:bg-slate-900 rounded-lg"
               >
                 <div>
                   <div className="flex items-center gap-2">
                     <Badge variant="outline" className="text-xs font-mono">
                       {metric.code}
                     </Badge>
-                    <span className="font-medium text-gray-900 dark:text-white">{metric.name}</span>
+                    <span className="font-medium text-[#1B2733] dark:text-white">{metric.name}</span>
                   </div>
-                  <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  <div className="text-xs text-[#5A6B7A] dark:text-[#8A9BA8] mt-1">
                     Category: {metric.category}
                   </div>
                 </div>
@@ -654,10 +654,10 @@ export function ImpactMetricsDashboard({
               </div>
             ))}
           </div>
-          <div className="mt-4 sm:mt-6 p-4 bg-teal-50 dark:bg-teal-900/20 rounded-lg">
+          <div className="mt-4 sm:mt-6 p-4 bg-[#6B9080]/10 dark:bg-[#6B9080]/10 rounded-lg">
             <div className="flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 text-teal-600 dark:text-teal-400 flex-shrink-0 mt-0.5" />
-              <div className="text-sm text-teal-800 dark:text-teal-300">
+              <AlertCircle className="w-5 h-5 text-[#6B9080] dark:text-primary flex-shrink-0 mt-0.5" />
+              <div className="text-sm text-[#6B9080] dark:text-[#7BA7BC]">
                 <strong>SDG Alignment:</strong> Our work primarily contributes to SDG 3 (Good Health and Well-being),
                 SDG 4 (Quality Education), and SDG 10 (Reduced Inequalities) through improved access to
                 developmental support for neurodivergent children and their families.

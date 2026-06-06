@@ -110,16 +110,16 @@ export function ReferralSystem({ referral, onInviteSMS, onInviteEmail, onBack }:
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="sticky top-0 z-10 border-b border-gray-200 bg-white px-4 py-3">
+    <div className="min-h-screen bg-[#FAF7F2]">
+      <div className="sticky top-0 z-10 border-b border-[#E8E4DF] bg-white px-4 py-3">
         <div className="flex items-center gap-3">
           {onBack && (
-            <button onClick={onBack} className="rounded-full p-1 hover:bg-gray-100">
-              <ArrowLeft className="h-5 w-5 text-gray-600" />
+            <button onClick={onBack} className="rounded-full p-1 hover:bg-[#F0EDE8]">
+              <ArrowLeft className="h-5 w-5 text-[#5A6B7A]" />
             </button>
           )}
-          <Gift className="h-6 w-6 text-teal-600" />
-          <h1 className="text-lg font-bold text-gray-900">Invite & Earn</h1>
+          <Gift className="h-6 w-6 text-[#6B9080]" />
+          <h1 className="text-lg font-bold text-[#1B2733]">Invite & Earn</h1>
         </div>
       </div>
 
@@ -151,42 +151,42 @@ export function ReferralSystem({ referral, onInviteSMS, onInviteEmail, onBack }:
         </div>
 
         {/* Referral Code */}
-        <div className="rounded-xl border border-gray-200 bg-white p-4">
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Your Referral Link</p>
+        <div className="rounded-xl border border-[#E8E4DF] bg-white p-4">
+          <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide mb-2">Your Referral Link</p>
           <div className="flex items-center gap-2">
-            <div className="flex-1 overflow-hidden rounded-lg bg-gray-100 px-3 py-2 text-sm text-gray-700 truncate">
+            <div className="flex-1 overflow-hidden rounded-lg bg-[#F0EDE8] px-3 py-2 text-sm text-[#3A4A57] truncate">
               {referral.shareUrl}
             </div>
             <button
               onClick={handleCopy}
-              className="flex items-center gap-1.5 rounded-lg bg-teal-600 px-3 py-2 text-sm font-semibold text-white hover:bg-teal-700"
+              className="flex items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-white hover:bg-[#6B9080]"
             >
               {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
               {copied ? 'Copied' : 'Copy'}
             </button>
           </div>
-          <p className="mt-2 text-xs text-gray-500">Code: <span className="font-mono font-bold">{referral.code}</span></p>
+          <p className="mt-2 text-xs text-[#5A6B7A]">Code: <span className="font-mono font-bold">{referral.code}</span></p>
         </div>
 
         {/* Invite Methods */}
         <div className="flex gap-3">
           <button
             onClick={() => setInviteMode('sms')}
-            className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white p-3 text-sm font-medium text-gray-700 hover:bg-gray-50"
+            className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-[#E8E4DF] bg-white p-3 text-sm font-medium text-[#3A4A57] hover:bg-[#FAF7F2]"
           >
             <MessageSquare className="h-4 w-4 text-green-600" />
             Text
           </button>
           <button
             onClick={() => setInviteMode('email')}
-            className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white p-3 text-sm font-medium text-gray-700 hover:bg-gray-50"
+            className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-[#E8E4DF] bg-white p-3 text-sm font-medium text-[#3A4A57] hover:bg-[#FAF7F2]"
           >
             <Mail className="h-4 w-4 text-blue-600" />
             Email
           </button>
           <button
             onClick={handleCopy}
-            className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white p-3 text-sm font-medium text-gray-700 hover:bg-gray-50"
+            className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-[#E8E4DF] bg-white p-3 text-sm font-medium text-[#3A4A57] hover:bg-[#FAF7F2]"
           >
             <Share2 className="h-4 w-4 text-purple-600" />
             Share
@@ -202,8 +202,8 @@ export function ReferralSystem({ referral, onInviteSMS, onInviteEmail, onBack }:
               exit={{ opacity: 0, height: 0 }}
               className="overflow-hidden"
             >
-              <div className="rounded-xl border border-gray-200 bg-white p-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+              <div className="rounded-xl border border-[#E8E4DF] bg-white p-4">
+                <label className="block text-sm font-medium text-[#3A4A57] mb-2">
                   {inviteMode === 'sms' ? 'Phone Number' : 'Email Address'}
                 </label>
                 <div className="flex gap-2">
@@ -212,12 +212,12 @@ export function ReferralSystem({ referral, onInviteSMS, onInviteEmail, onBack }:
                     value={inviteTarget}
                     onChange={e => setInviteTarget(e.target.value)}
                     placeholder={inviteMode === 'sms' ? '(555) 123-4567' : 'friend@example.com'}
-                    className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none"
+                    className="flex-1 rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:border-[#6B9080] focus:outline-none"
                   />
                   <button
                     onClick={handleInvite}
                     disabled={!inviteTarget.trim()}
-                    className="rounded-lg bg-teal-600 px-4 py-2 text-sm font-semibold text-white hover:bg-teal-700 disabled:opacity-40"
+                    className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-[#6B9080] disabled:opacity-40"
                   >
                     {inviteSent ? 'Sent!' : 'Send'}
                   </button>
@@ -228,24 +228,24 @@ export function ReferralSystem({ referral, onInviteSMS, onInviteEmail, onBack }:
         </AnimatePresence>
 
         {/* Milestones */}
-        <div className="rounded-xl border border-gray-200 bg-white p-4">
-          <h3 className="text-sm font-semibold text-gray-900 mb-3">Reward Milestones</h3>
+        <div className="rounded-xl border border-[#E8E4DF] bg-white p-4">
+          <h3 className="text-sm font-semibold text-[#1B2733] mb-3">Reward Milestones</h3>
           <div className="space-y-3">
             {milestones.map((m, i) => (
               <div key={i} className="flex items-center gap-3">
                 <div className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold ${
-                  m.reached ? 'bg-teal-100 text-teal-700' : 'bg-gray-100 text-gray-400'
+                  m.reached ? 'bg-[#6B9080]/10 text-[#6B9080]' : 'bg-[#F0EDE8] text-[#8A9BA8]'
                 }`}>
                   {m.reached ? <Check className="h-4 w-4" /> : m.count}
                 </div>
                 <div className="flex-1">
-                  <p className={`text-sm font-medium ${m.reached ? 'text-gray-900' : 'text-gray-500'}`}>
+                  <p className={`text-sm font-medium ${m.reached ? 'text-[#1B2733]' : 'text-[#5A6B7A]'}`}>
                     {m.count} referral{m.count > 1 ? 's' : ''}
                   </p>
-                  <p className="text-xs text-gray-500">{m.reward}</p>
+                  <p className="text-xs text-[#5A6B7A]">{m.reward}</p>
                 </div>
                 {m.reached && (
-                  <span className="text-xs font-semibold text-teal-600">Earned</span>
+                  <span className="text-xs font-semibold text-[#6B9080]">Earned</span>
                 )}
               </div>
             ))}
@@ -254,8 +254,8 @@ export function ReferralSystem({ referral, onInviteSMS, onInviteEmail, onBack }:
 
         {/* Rewards Earned */}
         {referral.rewardsEarned.length > 0 && (
-          <div className="rounded-xl border border-gray-200 bg-white p-4">
-            <h3 className="text-sm font-semibold text-gray-900 mb-3">Your Rewards</h3>
+          <div className="rounded-xl border border-[#E8E4DF] bg-white p-4">
+            <h3 className="text-sm font-semibold text-[#1B2733] mb-3">Your Rewards</h3>
             <div className="space-y-2">
               {referral.rewardsEarned.map(reward => (
                 <div key={reward.id} className="flex items-center justify-between rounded-lg bg-amber-50 p-3">
@@ -264,7 +264,7 @@ export function ReferralSystem({ referral, onInviteSMS, onInviteEmail, onBack }:
                     <p className="text-xs text-amber-700">{reward.description}</p>
                   </div>
                   {reward.redeemed ? (
-                    <span className="text-xs text-gray-400">Redeemed</span>
+                    <span className="text-xs text-[#8A9BA8]">Redeemed</span>
                   ) : (
                     <span className="rounded-full bg-amber-200 px-2 py-0.5 text-xs font-semibold text-amber-800">Active</span>
                   )}
@@ -286,24 +286,24 @@ interface SocialProofBannerProps {
 
 export function SocialProofBanner({ proof }: SocialProofBannerProps) {
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-4">
+    <div className="rounded-xl border border-[#E8E4DF] bg-white p-4">
       <div className="flex items-center gap-4 text-center">
         <div className="flex-1">
-          <p className="text-xl font-bold text-gray-900">{proof.totalFamilies.toLocaleString()}</p>
-          <p className="text-xs text-gray-500">Families</p>
+          <p className="text-xl font-bold text-[#1B2733]">{proof.totalFamilies.toLocaleString()}</p>
+          <p className="text-xs text-[#5A6B7A]">Families</p>
         </div>
         <div className="flex-1">
-          <p className="text-xl font-bold text-gray-900">{proof.totalProviders.toLocaleString()}</p>
-          <p className="text-xs text-gray-500">Providers</p>
+          <p className="text-xl font-bold text-[#1B2733]">{proof.totalProviders.toLocaleString()}</p>
+          <p className="text-xs text-[#5A6B7A]">Providers</p>
         </div>
         <div className="flex-1">
-          <p className="text-xl font-bold text-gray-900">{proof.totalSessions.toLocaleString()}</p>
-          <p className="text-xs text-gray-500">Sessions</p>
+          <p className="text-xl font-bold text-[#1B2733]">{proof.totalSessions.toLocaleString()}</p>
+          <p className="text-xs text-[#5A6B7A]">Sessions</p>
         </div>
       </div>
 
       {proof.recentSignups > 0 && (
-        <div className="mt-3 flex items-center justify-center gap-1.5 text-xs text-teal-700">
+        <div className="mt-3 flex items-center justify-center gap-1.5 text-xs text-[#6B9080]">
           <Zap className="h-3.5 w-3.5" />
           <span>{proof.recentSignups} families joined this week</span>
         </div>
@@ -313,10 +313,10 @@ export function SocialProofBanner({ proof }: SocialProofBannerProps) {
         {[1, 2, 3, 4, 5].map(i => (
           <Star
             key={i}
-            className={`h-4 w-4 ${i <= Math.floor(proof.averageRating) ? 'fill-amber-400 text-amber-400' : 'text-gray-400'}`}
+            className={`h-4 w-4 ${i <= Math.floor(proof.averageRating) ? 'fill-amber-400 text-amber-400' : 'text-[#8A9BA8]'}`}
           />
         ))}
-        <span className="ml-1 text-xs text-gray-600">{proof.averageRating.toFixed(1)}</span>
+        <span className="ml-1 text-xs text-[#5A6B7A]">{proof.averageRating.toFixed(1)}</span>
       </div>
     </div>
   );
@@ -342,9 +342,9 @@ export function AchievementCard({ achievement, onShare }: AchievementCardProps) 
             {achievement.icon}
           </div>
           <div>
-            <h3 className="text-sm font-bold text-gray-900">{achievement.title}</h3>
-            <p className="text-xs text-gray-600">{achievement.description}</p>
-            <p className="mt-1 text-xs text-gray-400">
+            <h3 className="text-sm font-bold text-[#1B2733]">{achievement.title}</h3>
+            <p className="text-xs text-[#5A6B7A]">{achievement.description}</p>
+            <p className="mt-1 text-xs text-[#8A9BA8]">
               Earned {new Date(achievement.earnedAt).toLocaleDateString()}
             </p>
           </div>
@@ -379,16 +379,16 @@ export function CommunityChallenges({ challenges, onJoin, onBack }: CommunityCha
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="sticky top-0 z-10 border-b border-gray-200 bg-white px-4 py-3">
+    <div className="min-h-screen bg-[#FAF7F2]">
+      <div className="sticky top-0 z-10 border-b border-[#E8E4DF] bg-white px-4 py-3">
         <div className="flex items-center gap-3">
           {onBack && (
-            <button onClick={onBack} className="rounded-full p-1 hover:bg-gray-100">
-              <ArrowLeft className="h-5 w-5 text-gray-600" />
+            <button onClick={onBack} className="rounded-full p-1 hover:bg-[#F0EDE8]">
+              <ArrowLeft className="h-5 w-5 text-[#5A6B7A]" />
             </button>
           )}
           <Trophy className="h-6 w-6 text-amber-500" />
-          <h1 className="text-lg font-bold text-gray-900">Community Challenges</h1>
+          <h1 className="text-lg font-bold text-[#1B2733]">Community Challenges</h1>
         </div>
       </div>
 
@@ -402,37 +402,37 @@ export function CommunityChallenges({ challenges, onJoin, onBack }: CommunityCha
               key={challenge.id}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="rounded-xl border border-gray-200 bg-white p-4"
+              className="rounded-xl border border-[#E8E4DF] bg-white p-4"
             >
               <div className="flex items-start justify-between mb-2">
                 <div className="flex items-center gap-2">
                   {typeIcons[challenge.type]}
-                  <span className="text-xs font-medium text-gray-500 uppercase">{challenge.type}</span>
+                  <span className="text-xs font-medium text-[#5A6B7A] uppercase">{challenge.type}</span>
                 </div>
-                <span className="text-xs text-gray-400">{daysLeft}d left</span>
+                <span className="text-xs text-[#8A9BA8]">{daysLeft}d left</span>
               </div>
 
-              <h3 className="text-sm font-bold text-gray-900">{challenge.title}</h3>
-              <p className="mt-1 text-xs text-gray-600">{challenge.description}</p>
+              <h3 className="text-sm font-bold text-[#1B2733]">{challenge.title}</h3>
+              <p className="mt-1 text-xs text-[#5A6B7A]">{challenge.description}</p>
 
               {/* Progress Bar */}
               <div className="mt-3">
-                <div className="flex items-center justify-between text-xs text-gray-500 mb-1">
+                <div className="flex items-center justify-between text-xs text-[#5A6B7A] mb-1">
                   <span>{challenge.progress}/{challenge.goal}</span>
                   <span>{progressPct}%</span>
                 </div>
-                <div className="h-2 rounded-full bg-gray-100 overflow-hidden">
+                <div className="h-2 rounded-full bg-[#F0EDE8] overflow-hidden">
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: `${progressPct}%` }}
                     transition={{ duration: 0.8, ease: 'easeOut' }}
-                    className="h-full rounded-full bg-teal-500"
+                    className="h-full rounded-full bg-primary"
                   />
                 </div>
               </div>
 
               <div className="mt-3 flex items-center justify-between">
-                <div className="flex items-center gap-1.5 text-xs text-gray-500">
+                <div className="flex items-center gap-1.5 text-xs text-[#5A6B7A]">
                   <Users className="h-3.5 w-3.5" />
                   <span>{challenge.participants} participants</span>
                 </div>
@@ -442,13 +442,13 @@ export function CommunityChallenges({ challenges, onJoin, onBack }: CommunityCha
                     {challenge.reward}
                   </span>
                   {challenge.joined ? (
-                    <span className="rounded-full bg-teal-100 px-2.5 py-1 text-xs font-semibold text-teal-700">
+                    <span className="rounded-full bg-[#6B9080]/10 px-2.5 py-1 text-xs font-semibold text-[#6B9080]">
                       Joined
                     </span>
                   ) : (
                     <button
                       onClick={() => onJoin(challenge.id)}
-                      className="rounded-full bg-teal-600 px-3 py-1 text-xs font-semibold text-white hover:bg-teal-700"
+                      className="rounded-full bg-primary px-3 py-1 text-xs font-semibold text-white hover:bg-[#6B9080]"
                     >
                       Join
                     </button>
@@ -461,8 +461,8 @@ export function CommunityChallenges({ challenges, onJoin, onBack }: CommunityCha
 
         {challenges.length === 0 && (
           <div className="text-center py-12">
-            <Trophy className="mx-auto h-12 w-12 text-gray-400" />
-            <p className="mt-3 text-sm text-gray-500">No active challenges right now. Check back soon!</p>
+            <Trophy className="mx-auto h-12 w-12 text-[#8A9BA8]" />
+            <p className="mt-3 text-sm text-[#5A6B7A]">No active challenges right now. Check back soon!</p>
           </div>
         )}
       </div>
@@ -481,13 +481,13 @@ export function ShareGateOverlay({ gate, onShare }: ShareGateProps) {
   if (gate.unlocked) return null;
 
   return (
-    <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-teal-300 bg-teal-50/50 p-6 text-center">
-      <Heart className="h-10 w-10 text-teal-400 mb-3" />
-      <h3 className="text-sm font-bold text-gray-900">{gate.feature}</h3>
-      <p className="mt-1 text-xs text-gray-600">{gate.description}</p>
+    <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-[#6B9080]/30 bg-[#6B9080]/10/50 p-6 text-center">
+      <Heart className="h-10 w-10 text-primary mb-3" />
+      <h3 className="text-sm font-bold text-[#1B2733]">{gate.feature}</h3>
+      <p className="mt-1 text-xs text-[#5A6B7A]">{gate.description}</p>
       <button
         onClick={onShare}
-        className="mt-4 flex items-center gap-2 rounded-lg bg-teal-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-teal-700"
+        className="mt-4 flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#6B9080]"
       >
         <Share2 className="h-4 w-4" />
         Share to Unlock

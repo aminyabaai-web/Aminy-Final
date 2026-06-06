@@ -117,7 +117,7 @@ export function AdaptiveReminders({ childName = 'Eddie', onClose }: AdaptiveRemi
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
+    <div className="min-h-screen bg-[#FAF7F2] p-4">
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="mb-4 sm:mb-6">
@@ -130,14 +130,14 @@ export function AdaptiveReminders({ childName = 'Eddie', onClose }: AdaptiveRemi
         </div>
 
         {/* Settings Card */}
-        <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-6 space-y-3 sm:space-y-4 sm:space-y-6">
+        <div className="bg-white rounded-lg border border-[#E8E4DF] shadow-sm p-6 space-y-3 sm:space-y-4 sm:space-y-6">
           {/* Main Toggle */}
-          <div className="flex items-center justify-between pb-6 border-b border-gray-100">
+          <div className="flex items-center justify-between pb-6 border-b border-[#E8E4DF]">
             <div className="flex items-center gap-3">
               {settings.enabled ? (
                 <Bell className="w-5 h-5 text-accent" />
               ) : (
-                <BellOff className="w-5 h-5 text-gray-400" />
+                <BellOff className="w-5 h-5 text-[#8A9BA8]" />
               )}
               <div>
                 <Label className="text-base font-semibold cursor-pointer">
@@ -216,7 +216,7 @@ export function AdaptiveReminders({ childName = 'Eddie', onClose }: AdaptiveRemi
               </div>
 
               {/* Tone Selector */}
-              <div className="pt-4 border-t border-gray-100">
+              <div className="pt-4 border-t border-[#E8E4DF]">
                 <Label className="text-base font-medium mb-3 block">
                   Reminder tone
                 </Label>
@@ -243,14 +243,14 @@ export function AdaptiveReminders({ childName = 'Eddie', onClose }: AdaptiveRemi
               </div>
 
               {/* Preview Section */}
-              <div className="pt-4 border-t border-gray-100">
+              <div className="pt-4 border-t border-[#E8E4DF]">
                 <Label className="text-base font-medium mb-3 block">
                   Preview
                 </Label>
-                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                <div className="bg-[#FAF7F2] border border-[#E8E4DF] rounded-lg p-4">
                   <div className="flex items-start gap-3">
                     <Bell className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
-                    <p className="text-sm text-gray-700 flex-1">
+                    <p className="text-sm text-[#3A4A57] flex-1">
                       {getPreviewMessage()}
                     </p>
                   </div>
@@ -260,7 +260,7 @@ export function AdaptiveReminders({ childName = 'Eddie', onClose }: AdaptiveRemi
           )}
 
           {/* Save Button */}
-          <div className="pt-6 border-t border-gray-100">
+          <div className="pt-6 border-t border-[#E8E4DF]">
             <Button
               onClick={handleSave}
               className="w-full bg-accent hover:bg-accent/90 text-white font-semibold py-4 rounded-lg transition-all focus:ring-2 focus:ring-accent focus:ring-offset-2"
@@ -306,7 +306,7 @@ function TimeInput({ time, onChange }: TimeInputProps) {
       <select
         value={time.hour}
         onChange={(e) => onChange('hour', parseInt(e.target.value))}
-        className="px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all"
+        className="px-3 py-2 border border-[#E8E4DF] rounded-lg bg-white text-[#1B2733] focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all"
       >
         {Array.from({ length: 12 }, (_, i) => i + 1).map((hour) => (
           <option key={hour} value={hour}>
@@ -315,13 +315,13 @@ function TimeInput({ time, onChange }: TimeInputProps) {
         ))}
       </select>
 
-      <span className="text-gray-500">:</span>
+      <span className="text-[#5A6B7A]">:</span>
 
       {/* Minute */}
       <select
         value={time.minute}
         onChange={(e) => onChange('minute', parseInt(e.target.value))}
-        className="px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all"
+        className="px-3 py-2 border border-[#E8E4DF] rounded-lg bg-white text-[#1B2733] focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all"
       >
         {[0, 15, 30, 45].map((minute) => (
           <option key={minute} value={minute}>
@@ -334,7 +334,7 @@ function TimeInput({ time, onChange }: TimeInputProps) {
       <select
         value={time.period}
         onChange={(e) => onChange('period', e.target.value as 'AM' | 'PM')}
-        className="px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all"
+        className="px-3 py-2 border border-[#E8E4DF] rounded-lg bg-white text-[#1B2733] focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all"
       >
         <option value="AM">AM</option>
         <option value="PM">PM</option>
@@ -372,7 +372,7 @@ function ToneButton({ tone, label, selected, onClick }: ToneButtonProps) {
       className={`px-4 py-3 rounded-lg border-2 font-medium transition-all focus:ring-2 focus:ring-accent focus:ring-offset-2 ${
         selected
           ? 'border-accent bg-accent/10 text-accent'
-          : 'border-gray-300 bg-white text-gray-700 hover:border-accent/50'
+          : 'border-[#E8E4DF] bg-white text-[#3A4A57] hover:border-accent/50'
       }`}
     >
       {label}
@@ -436,7 +436,7 @@ function ReminderNotification({ childName, tone, onClose }: ReminderNotification
 
       {/* Notification Card - with safe area for notched devices */}
       <div
-        className="fixed left-1/2 -translate-x-1/2 w-full max-w-md mx-4 bg-white dark:bg-slate-900 rounded-lg shadow-2xl z-50 border border-gray-200 dark:border-slate-700"
+        className="fixed left-1/2 -translate-x-1/2 w-full max-w-md mx-4 bg-white dark:bg-slate-900 rounded-lg shadow-2xl z-50 border border-[#E8E4DF] dark:border-slate-700"
         style={{ top: 'max(16px, env(safe-area-inset-top))' }}
       >
         <div className="p-6 space-y-3 sm:space-y-4">
@@ -446,7 +446,7 @@ function ReminderNotification({ childName, tone, onClose }: ReminderNotification
               <Bell className="w-5 h-5 text-accent" />
             </div>
             <div className="flex-1">
-              <p className="text-base font-medium text-gray-900 leading-relaxed">
+              <p className="text-base font-medium text-[#1B2733] leading-relaxed">
                 {getMessage()}
               </p>
             </div>
@@ -464,19 +464,19 @@ function ReminderNotification({ childName, tone, onClose }: ReminderNotification
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
               <button
                 onClick={() => handleSnooze('30 minutes')}
-                className="px-3 py-3 border-2 border-gray-300 text-gray-700 font-medium rounded-lg hover:border-accent hover:bg-accent/5 transition-all focus:ring-2 focus:ring-accent focus:ring-offset-2"
+                className="px-3 py-3 border-2 border-[#E8E4DF] text-[#3A4A57] font-medium rounded-lg hover:border-accent hover:bg-accent/5 transition-all focus:ring-2 focus:ring-accent focus:ring-offset-2"
               >
                 30 min
               </button>
               <button
                 onClick={() => handleSnooze('1 hour')}
-                className="px-3 py-3 border-2 border-gray-300 text-gray-700 font-medium rounded-lg hover:border-accent hover:bg-accent/5 transition-all focus:ring-2 focus:ring-accent focus:ring-offset-2"
+                className="px-3 py-3 border-2 border-[#E8E4DF] text-[#3A4A57] font-medium rounded-lg hover:border-accent hover:bg-accent/5 transition-all focus:ring-2 focus:ring-accent focus:ring-offset-2"
               >
                 1 hour
               </button>
               <button
                 onClick={() => handleSnooze('tomorrow')}
-                className="px-3 py-3 border-2 border-gray-300 text-gray-700 font-medium rounded-lg hover:border-accent hover:bg-accent/5 transition-all focus:ring-2 focus:ring-accent focus:ring-offset-2"
+                className="px-3 py-3 border-2 border-[#E8E4DF] text-[#3A4A57] font-medium rounded-lg hover:border-accent hover:bg-accent/5 transition-all focus:ring-2 focus:ring-accent focus:ring-offset-2"
               >
                 Tomorrow
               </button>
@@ -517,7 +517,7 @@ export function AdaptiveRemindersExample() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
+    <div className="min-h-screen bg-[#FAF7F2] p-4">
       <div className="max-w-md mx-auto space-y-3 sm:space-y-4">
         <h1 className="text-2xl font-semibold mb-4">Adaptive Reminders Demo</h1>
 
@@ -542,12 +542,12 @@ export function AdaptiveRemindersExample() {
       {showSettings && (
         <div className="fixed inset-0 bg-white dark:bg-slate-900 z-50 overflow-y-auto">
           <div
-            className="sticky top-0 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-700 p-4 flex items-center gap-3"
+            className="sticky top-0 bg-white dark:bg-slate-900 border-b border-[#E8E4DF] dark:border-slate-700 p-4 flex items-center gap-3"
             style={{ paddingTop: 'max(16px, env(safe-area-inset-top))' }}
           >
             <button
               onClick={() => setShowSettings(false)}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+              className="p-2 hover:bg-[#F0EDE8] rounded-lg transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
             >
               ← Back
             </button>

@@ -71,12 +71,12 @@ export function UpcomingSessionsStrip({
           <Card
             key={session.id}
             onClick={() => onSessionClick?.(session.id)}
-            className="p-3 cursor-pointer hover:border-accent/30 transition-colors border-slate-200"
+            className="p-3 cursor-pointer hover:border-accent/30 transition-colors border-[#E8E4DF]"
           >
             <div className="flex items-center gap-3">
               <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
                 session.type === 'telehealth' 
-                  ? 'bg-blue-50' 
+                  ? 'bg-[#EEF4F8]' 
                   : 'bg-purple-50'
               }`}>
                 {session.type === 'telehealth' ? (
@@ -93,7 +93,7 @@ export function UpcomingSessionsStrip({
                     variant="secondary" 
                     className={`text-xs ${
                       session.type === 'telehealth' 
-                        ? 'bg-blue-50 text-blue-700' 
+                        ? 'bg-[#EEF4F8] text-blue-700' 
                         : 'bg-purple-50 text-purple-700'
                     }`}
                   >

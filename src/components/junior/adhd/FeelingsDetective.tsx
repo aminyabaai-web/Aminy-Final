@@ -264,13 +264,13 @@ export default function FeelingsDetective({ onBack, childName = 'Buddy', onNavig
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white">
       {/* Header */}
-      <div className="sticky top-0 z-20 bg-white/90 backdrop-blur-md border-b border-slate-100">
+      <div className="sticky top-0 z-20 bg-white/90 backdrop-blur-md border-b border-[#E8E4DF]">
         <div className="flex items-center justify-between px-4 py-3">
-          <button type="button" onClick={() => { playTap(); onBack(); }} className="flex items-center gap-2 text-sm font-medium text-slate-600">
+          <button type="button" onClick={() => { playTap(); onBack(); }} className="flex items-center gap-2 text-sm font-medium text-[#5A6B7A]">
             <ArrowLeft className="h-5 w-5" />
             Back
           </button>
-          <div className="text-sm font-semibold text-slate-800">Feelings Detective</div>
+          <div className="text-sm font-semibold text-[#1B2733]">Feelings Detective</div>
           <div className="flex items-center gap-1 text-sm font-medium text-amber-600">
             <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
             {totalStars}
@@ -287,8 +287,8 @@ export default function FeelingsDetective({ onBack, childName = 'Buddy', onNavig
             className="space-y-6 text-center"
           >
             <div className="text-2xl mb-1">🔍</div>
-            <h2 className="text-lg font-semibold text-slate-800">Feelings Detective</h2>
-            <p className="text-sm text-slate-500">Read the scenario, then pick a feeling.</p>
+            <h2 className="text-lg font-semibold text-[#1B2733]">Feelings Detective</h2>
+            <p className="text-sm text-[#5A6B7A]">Read the scenario, then pick a feeling.</p>
 
             <motion.div
               key={scenario.id}
@@ -297,7 +297,7 @@ export default function FeelingsDetective({ onBack, childName = 'Buddy', onNavig
               className="rounded-[24px] border border-amber-200 bg-amber-50 p-6 shadow-sm"
             >
               <div className="text-sm font-medium text-amber-800 uppercase tracking-wide mb-2">Scenario</div>
-              <p className="text-base font-semibold text-slate-800">{scenario.text}</p>
+              <p className="text-base font-semibold text-[#1B2733]">{scenario.text}</p>
             </motion.div>
 
             <button
@@ -318,8 +318,8 @@ export default function FeelingsDetective({ onBack, childName = 'Buddy', onNavig
             className="space-y-4"
           >
             <div className="text-center mb-2">
-              <div className="text-sm text-slate-500 italic">"{scenario.text}"</div>
-              <p className="text-sm font-medium text-slate-700 mt-2">How does this make you feel?</p>
+              <div className="text-sm text-[#5A6B7A] italic">"{scenario.text}"</div>
+              <p className="text-sm font-medium text-[#3A4A57] mt-2">How does this make you feel?</p>
             </div>
             <div className="grid grid-cols-3 gap-3">
               {FEELINGS.map(f => (
@@ -346,10 +346,10 @@ export default function FeelingsDetective({ onBack, childName = 'Buddy', onNavig
             className="space-y-6 text-center"
           >
             <div className="text-3xl">{FEELINGS.find(f => f.id === selectedFeeling)?.emoji}</div>
-            <p className="text-sm font-medium text-slate-700">How BIG is this feeling?</p>
+            <p className="text-sm font-medium text-[#3A4A57]">How BIG is this feeling?</p>
 
             {/* Thermometer visual */}
-            <div className="relative mx-auto flex h-56 w-16 flex-col items-center justify-end rounded-full border-2 border-slate-200 bg-slate-50 overflow-hidden">
+            <div className="relative mx-auto flex h-56 w-16 flex-col items-center justify-end rounded-full border-2 border-[#E8E4DF] bg-[#FAF7F2] overflow-hidden">
               <motion.div
                 className={`absolute bottom-0 left-0 right-0 rounded-b-full ${
                   intensity > 7 ? 'bg-red-400' : intensity > 4 ? 'bg-amber-400' : 'bg-green-400'
@@ -395,7 +395,7 @@ export default function FeelingsDetective({ onBack, childName = 'Buddy', onNavig
           >
             <div className="text-center mb-2">
               <div className="text-2xl mb-1">💡</div>
-              <p className="text-sm font-medium text-slate-700">That is a big feeling! Let's try a coping strategy.</p>
+              <p className="text-sm font-medium text-[#3A4A57]">That is a big feeling! Let's try a coping strategy.</p>
             </div>
             <div className="space-y-3">
               {COPING_STRATEGIES.map(strategy => (
@@ -404,14 +404,14 @@ export default function FeelingsDetective({ onBack, childName = 'Buddy', onNavig
                   type="button"
                   onClick={() => pickCoping(strategy)}
                   whileTap={{ scale: 0.97 }}
-                  className="flex w-full items-center gap-4 rounded-[20px] border border-slate-200 bg-white p-4 text-left shadow-sm"
+                  className="flex w-full items-center gap-4 rounded-[20px] border border-[#E8E4DF] bg-white p-4 text-left shadow-sm"
                 >
                   <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-amber-50 text-amber-600">
                     {strategy.icon}
                   </div>
                   <div className="flex-1">
-                    <div className="text-sm font-semibold text-slate-800">{strategy.label}</div>
-                    <div className="text-xs text-slate-500">{strategy.description}</div>
+                    <div className="text-sm font-semibold text-[#1B2733]">{strategy.label}</div>
+                    <div className="text-xs text-[#5A6B7A]">{strategy.description}</div>
                   </div>
                   <ChevronRight className="h-4 w-4 text-slate-400" />
                 </motion.button>
@@ -431,7 +431,7 @@ export default function FeelingsDetective({ onBack, childName = 'Buddy', onNavig
               <div className="space-y-3">
                 <div className="text-center mb-2">
                   <div className="text-2xl mb-1">💬</div>
-                  <p className="text-sm font-medium text-slate-700">Try saying one of these:</p>
+                  <p className="text-sm font-medium text-[#3A4A57]">Try saying one of these:</p>
                 </div>
                 {TALK_PROMPTS.map((prompt, i) => (
                   <motion.div
@@ -439,7 +439,7 @@ export default function FeelingsDetective({ onBack, childName = 'Buddy', onNavig
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.1 }}
-                    className="rounded-[16px] border border-blue-200 bg-blue-50 p-4 text-sm text-blue-800"
+                    className="rounded-[16px] border border-[#C8DDE8] bg-[#EEF4F8] p-4 text-sm text-[#4A6478]"
                   >
                     "{prompt}"
                   </motion.div>
@@ -473,14 +473,14 @@ export default function FeelingsDetective({ onBack, childName = 'Buddy', onNavig
             >
               🌟
             </motion.div>
-            <h3 className="text-lg font-bold text-slate-800">Great detective work!</h3>
-            <p className="text-sm text-slate-500">
+            <h3 className="text-lg font-bold text-[#1B2733]">Great detective work!</h3>
+            <p className="text-sm text-[#5A6B7A]">
               You identified your feeling and{' '}
               {intensity > 7 ? 'used a coping strategy' : 'knew you could handle it'}.
             </p>
 
             {/* Mini stats */}
-            <div className="rounded-[20px] border border-slate-100 bg-slate-50 p-4">
+            <div className="rounded-[20px] border border-[#E8E4DF] bg-[#FAF7F2] p-4">
               <div className="grid grid-cols-2 gap-3 text-center">
                 <div>
                   <div className="text-lg font-bold text-amber-600">{records.length}</div>
@@ -504,7 +504,7 @@ export default function FeelingsDetective({ onBack, childName = 'Buddy', onNavig
               <button
                 type="button"
                 onClick={() => { playTap(); onBack(); }}
-                className="flex items-center gap-2 rounded-2xl bg-slate-100 px-6 py-3 text-sm font-medium text-slate-600 active:scale-95"
+                className="flex items-center gap-2 rounded-2xl bg-[#F0EDE8] px-6 py-3 text-sm font-medium text-[#5A6B7A] active:scale-95"
               >
                 Done
               </button>

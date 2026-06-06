@@ -509,7 +509,7 @@ export function GrantNavigator({
           >
             Upgrade to Pro
           </button>
-          <button onClick={onBack} className="text-sm text-slate-500 underline">
+          <button onClick={onBack} className="text-sm text-[#5A6B7A] underline">
             Not now
           </button>
         </div>
@@ -617,7 +617,7 @@ export function GrantNavigator({
               </div>
 
               {/* Disclaimer */}
-              <p className="text-xs text-slate-500 text-center px-2 leading-relaxed">
+              <p className="text-xs text-[#5A6B7A] text-center px-2 leading-relaxed">
                 Information is for guidance only. Eligibility and availability vary.
                 Consult a benefits specialist for personalized advice.
               </p>
@@ -668,7 +668,7 @@ export function GrantNavigator({
               <AppealLetterSection />
 
               {/* Disclaimer */}
-              <p className="text-xs text-slate-500 text-center px-2 leading-relaxed">
+              <p className="text-xs text-[#5A6B7A] text-center px-2 leading-relaxed">
                 Information is for guidance only. Eligibility and availability vary.
                 Consult a benefits specialist for personalized advice.
               </p>

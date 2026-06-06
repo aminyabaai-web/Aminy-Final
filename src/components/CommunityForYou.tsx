@@ -399,7 +399,7 @@ export function CommunityForYou({
       onShare(postId);
       toast.success('Share link copied!');
     } else {
-      toast('Sharing is coming soon.');
+      toast('Sharing will be available soon.');
     }
   };
 
@@ -472,7 +472,7 @@ export function CommunityForYou({
   };
 
   const handleBrowseArchive = () => {
-    toast('Session recordings are coming soon.');
+    toast('Session recordings will be available once live events launch.');
   };
 
   const formatDate = (date: Date) => {
@@ -533,8 +533,8 @@ export function CommunityForYou({
           onClick={() => setActiveTab(id as typeof activeTab)}
           className={`flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap transition-all ${
             activeTab === id
-              ? 'bg-teal-500 text-white shadow-md'
-              : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700'
+              ? 'bg-primary text-white shadow-md'
+              : 'bg-white dark:bg-slate-800 text-[#5A6B7A] dark:text-gray-300 hover:bg-[#F0EDE8] dark:hover:bg-slate-700'
           }`}
         >
           <Icon className="w-4 h-4" />
@@ -550,8 +550,8 @@ export function CommunityForYou({
       {resolvedPosts.length === 0 ? (
         <Card className="p-6 sm:p-8 text-center">
           <BookOpen className="w-10 h-10 text-muted-foreground/40 mx-auto mb-3" />
-          <h4 className="font-medium text-slate-900 dark:text-white mb-2">
-            Personalized content coming soon
+          <h4 className="font-medium text-[#1B2733] dark:text-white mb-2">
+            Your personalized feed
           </h4>
           <p className="text-sm text-muted-foreground max-w-xs mx-auto">
             As you use Aminy, we'll curate articles and resources tailored to {childName}'s journey.
@@ -561,16 +561,16 @@ export function CommunityForYou({
         resolvedPosts.map((post) => (
           <Card key={post.id} className="p-4 hover:shadow-md transition-shadow">
             <div className="flex items-start gap-3 mb-3">
-              <div className="p-2 bg-teal-100 dark:bg-teal-900/30 rounded-lg">
+              <div className="p-2 bg-[#6B9080]/10 dark:bg-[#6B9080]/15 rounded-lg">
                 {getCategoryIcon(post.category)}
               </div>
               <div className="flex-1">
                 <div className="flex items-start justify-between gap-2">
-                  <h4 className="font-semibold text-slate-900 dark:text-white mb-1">
+                  <h4 className="font-semibold text-[#1B2733] dark:text-white mb-1">
                     {post.title}
                   </h4>
                   {post.likes && (
-                    <div className="flex items-center gap-1 text-sm text-gray-500">
+                    <div className="flex items-center gap-1 text-sm text-[#5A6B7A]">
                       <Heart className="w-3 h-3" />
                       {post.likes}
                     </div>
@@ -578,7 +578,7 @@ export function CommunityForYou({
                 </div>
                 <p className="text-sm text-muted-foreground mb-2">{post.summary}</p>
                 <div className="flex items-center gap-3 text-xs">
-                  <span className="text-teal-600 dark:text-teal-400 italic">
+                  <span className="text-[#6B9080] dark:text-primary italic">
                     Why this for you: {post.whyForYou}
                   </span>
                 </div>
@@ -628,11 +628,11 @@ export function CommunityForYou({
   const renderGroups = () => (
     <div className="space-y-4">
       <div className="flex items-center justify-between mb-2">
-        <h3 className="font-semibold text-gray-900 dark:text-white">
+        <h3 className="font-semibold text-[#1B2733] dark:text-white">
           {resolvedLocation ? 'Parent Groups Near You' : 'Parent Groups'}
         </h3>
         {resolvedLocation && (
-          <div className="flex items-center gap-1 text-sm text-gray-500">
+          <div className="flex items-center gap-1 text-sm text-[#5A6B7A]">
             <MapPin className="w-4 h-4" />
             {resolvedLocation}
           </div>
@@ -640,7 +640,7 @@ export function CommunityForYou({
       </div>
 
       {localGroups.length === 0 && !dataLoading && (
-        <div className="text-center py-8 text-gray-400">
+        <div className="text-center py-8 text-[#8A9BA8]">
           <p className="text-sm font-medium">No local groups yet</p>
           <p className="text-xs mt-1">We're building your community — check back soon.</p>
         </div>
@@ -650,7 +650,7 @@ export function CommunityForYou({
           <div className="flex items-start justify-between gap-3">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-1">
-                <h4 className="font-semibold text-gray-900 dark:text-white">
+                <h4 className="font-semibold text-[#1B2733] dark:text-white">
                   {group.name}
                 </h4>
                 {group.isVirtual && (
@@ -660,7 +660,7 @@ export function CommunityForYou({
                   </Badge>
                 )}
               </div>
-              <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
+              <div className="flex items-center gap-2 text-sm text-[#5A6B7A] mb-2">
                 <MapPin className="w-4 h-4" />
                 {group.location}
                 <span className="mx-1">•</span>
@@ -675,7 +675,7 @@ export function CommunityForYou({
                 ))}
               </div>
               {group.nextMeeting && (
-                <div className="flex items-center gap-2 text-sm text-teal-600 dark:text-teal-400">
+                <div className="flex items-center gap-2 text-sm text-[#6B9080] dark:text-primary">
                   <Calendar className="w-4 h-4" />
                   Next meeting: {formatDate(group.nextMeeting)}
                 </div>
@@ -698,15 +698,21 @@ export function CommunityForYou({
   const renderEvents = () => (
     <div className="space-y-4">
       <div className="flex items-center justify-between mb-2">
-        <h3 className="font-semibold text-gray-900 dark:text-white">
+        <h3 className="font-semibold text-[#1B2733] dark:text-white">
           Upcoming Events
         </h3>
       </div>
 
       {liveEvents.length === 0 && !dataLoading && (
-        <div className="text-center py-8 text-gray-400">
-          <p className="text-sm font-medium">No upcoming events</p>
-          <p className="text-xs mt-1">Live BCBA webinars and workshops are coming soon.</p>
+        <div className="text-center py-8 text-[#8A9BA8]">
+          <p className="text-sm font-medium">No events scheduled yet</p>
+          <p className="text-xs mt-1">BCBA-hosted webinars and parent workshops are launching this summer.</p>
+          <button
+            className="mt-3 text-xs text-[#6B9080] font-semibold underline"
+            onClick={() => toast.success('You\'re on the list! We\'ll notify you when events open up.')}
+          >
+            Notify me when events launch →
+          </button>
         </div>
       )}
       {liveEvents.map((event) => (
@@ -716,13 +722,13 @@ export function CommunityForYou({
               <div className="flex items-center gap-2 mb-1">
                 {getEventTypeBadge(event.type)}
               </div>
-              <h4 className="font-semibold text-gray-900 dark:text-white mb-1">
+              <h4 className="font-semibold text-[#1B2733] dark:text-white mb-1">
                 {event.title}
               </h4>
-              <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+              <div className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8] mb-2">
                 Hosted by <span className="font-medium">{event.host}</span>
                 {event.hostCredentials && (
-                  <span className="text-teal-600 dark:text-teal-400">
+                  <span className="text-[#6B9080] dark:text-primary">
                     {' '}• {event.hostCredentials}
                   </span>
                 )}
@@ -730,7 +736,7 @@ export function CommunityForYou({
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 mb-3">
+          <div className="flex flex-wrap items-center gap-4 text-sm text-[#5A6B7A] mb-3">
             <div className="flex items-center gap-1">
               <Calendar className="w-4 h-4" />
               {formatDate(event.date)}
@@ -781,16 +787,16 @@ export function CommunityForYou({
     <div className="space-y-4">
       <div className="flex items-center gap-2 mb-2">
         <Award className="w-5 h-5 text-amber-500" />
-        <h3 className="font-semibold text-gray-900 dark:text-white">
+        <h3 className="font-semibold text-[#1B2733] dark:text-white">
           Parent Spotlights
         </h3>
       </div>
-      <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+      <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8] mb-4">
         Real wins from parents like you. Get inspired by their journeys.
       </p>
 
       {liveSpotlights.length === 0 && !dataLoading && (
-        <div className="text-center py-8 text-gray-400">
+        <div className="text-center py-8 text-[#8A9BA8]">
           <p className="text-sm font-medium">No spotlights yet</p>
           <p className="text-xs mt-1">Parent success stories will appear here as our community grows.</p>
         </div>
@@ -804,10 +810,10 @@ export function CommunityForYou({
             <div className="flex-1">
               <div className="flex items-center justify-between">
                 <div>
-                  <h4 className="font-semibold text-gray-900 dark:text-white">
+                  <h4 className="font-semibold text-[#1B2733] dark:text-white">
                     {spotlight.parentName}
                   </h4>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-[#5A6B7A]">
                     Child age: {spotlight.childAge}
                   </p>
                 </div>
@@ -823,7 +829,7 @@ export function CommunityForYou({
             <p className="font-medium text-amber-800 dark:text-amber-200 mb-2">
               "{spotlight.achievement}"
             </p>
-            <p className="text-sm text-gray-700 dark:text-gray-300">
+            <p className="text-sm text-[#3A4A57] dark:text-gray-300">
               {spotlight.story}
             </p>
           </div>
@@ -835,7 +841,7 @@ export function CommunityForYou({
           </div>
 
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4 text-sm text-gray-500">
+            <div className="flex items-center gap-4 text-sm text-[#5A6B7A]">
               <button
                 onClick={() => handleLikeSpotlight(spotlight.id)}
                 className={`flex items-center gap-1 transition-colors ${
@@ -867,16 +873,16 @@ export function CommunityForYou({
     <div className="space-y-4">
       <div className="flex items-center gap-2 mb-2">
         <Sparkles className="w-5 h-5 text-purple-500" />
-        <h3 className="font-semibold text-gray-900 dark:text-white">
+        <h3 className="font-semibold text-[#1B2733] dark:text-white">
           Weekly BCBA Q&A Sessions
         </h3>
       </div>
-      <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+      <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8] mb-4">
         Free live sessions with certified BCBAs. Ask your questions, get expert answers.
       </p>
 
       {liveQASessions.length === 0 && !dataLoading && (
-        <div className="text-center py-8 text-gray-400">
+        <div className="text-center py-8 text-[#8A9BA8]">
           <p className="text-sm font-medium">No Q&A sessions scheduled</p>
           <p className="text-xs mt-1">Live BCBA Q&A sessions are coming. You'll be notified when one is booked.</p>
         </div>
@@ -891,10 +897,10 @@ export function CommunityForYou({
                   LIVE NOW
                 </Badge>
               )}
-              <h4 className="font-semibold text-gray-900 dark:text-white mb-1">
+              <h4 className="font-semibold text-[#1B2733] dark:text-white mb-1">
                 {session.topic}
               </h4>
-              <div className="text-sm text-gray-600 dark:text-gray-400">
+              <div className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">
                 <span className="font-medium">{session.host}</span>
                 <span className="text-purple-600 dark:text-purple-400">
                   {' '}• {session.hostCredentials}
@@ -903,7 +909,7 @@ export function CommunityForYou({
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 mb-4">
+          <div className="flex flex-wrap items-center gap-4 text-sm text-[#5A6B7A] mb-4">
             <div className="flex items-center gap-1">
               <Calendar className="w-4 h-4" />
               {formatDate(session.date)}
@@ -938,13 +944,13 @@ export function CommunityForYou({
       ))}
 
       {/* Past Q&A Archive */}
-      <Card className="p-4 bg-gray-50 dark:bg-slate-800/50">
+      <Card className="p-4 bg-[#FAF7F2] dark:bg-slate-800/50">
         <div className="flex items-center justify-between">
           <div>
-            <h4 className="font-medium text-gray-900 dark:text-white">
+            <h4 className="font-medium text-[#1B2733] dark:text-white">
               Past Q&A Archive
             </h4>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-[#5A6B7A]">
               Watch recordings of previous sessions
             </p>
           </div>
@@ -958,34 +964,34 @@ export function CommunityForYou({
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 pb-24">
+    <div className="min-h-screen bg-[#FAF7F2] dark:bg-slate-900 pb-24">
       {/* Demo Data Banner — only in demo mode (real users see live data / empty states) */}
       {isDemoMode() && (
         <div className="bg-amber-50 dark:bg-amber-900/20 border-b border-amber-200 dark:border-amber-800 px-4 py-2 flex items-center gap-2">
           <span className="text-amber-600 dark:text-amber-400 text-xs font-medium">Preview</span>
-          <span className="text-amber-700/70 dark:text-amber-300/70 text-xs">Community features shown with sample data. Groups and events coming soon.</span>
+          <span className="text-amber-700/70 dark:text-amber-300/70 text-xs">Community preview — sample data shown. Live groups and events launching this summer.</span>
         </div>
       )}
       {/* Header */}
-      <div className="sticky top-0 z-10 bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
+      <div className="sticky top-0 z-10 bg-white dark:bg-slate-800 border-b border-[#E8E4DF] dark:border-slate-700">
         <div className="max-w-2xl mx-auto px-4 py-4">
           <div className="flex items-center gap-3 mb-4">
             {onBack && (
               <button
                 onClick={onBack}
                 aria-label="Back"
-                className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
+                className="p-2 hover:bg-[#F0EDE8] dark:hover:bg-slate-700 rounded-lg transition-colors"
               >
-                <ArrowLeft className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                <ArrowLeft className="w-5 h-5 text-[#5A6B7A] dark:text-[#8A9BA8]" />
               </button>
             )}
             <div>
-              <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
+              <h1 className="text-xl font-semibold text-[#1B2733] dark:text-white">
                 {title}
               </h1>
               <h2 className="sr-only">{title} overview</h2>
               <h3 className="sr-only">Groups, events, and stories</h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
+              <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">
                 {subtitle}
               </p>
             </div>

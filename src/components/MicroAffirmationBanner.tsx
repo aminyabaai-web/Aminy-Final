@@ -59,23 +59,23 @@ export function MicroAffirmationBanner({ parentName }: MicroAffirmationBannerPro
   if (dismissed || !currentAffirmation) return null;
 
   return (
-    <Card className="relative overflow-hidden border-teal-100 bg-gradient-to-r from-teal-50/50 to-white">
+    <Card className="relative overflow-hidden border-[#E8E4DF] bg-gradient-to-r from-[#FAF7F2]/50 to-white">
       <div className="p-3 sm:p-4">
         <button
           onClick={() => setDismissed(true)}
-          className="absolute top-2 right-2 p-1 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full hover:bg-teal-100 transition-colors"
+          className="absolute top-2 right-2 p-1 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full hover:bg-[#6B9080]/10 transition-colors"
           aria-label="Dismiss affirmation"
         >
           <X className="w-4 h-4 text-slate-400" />
         </button>
         
         <div className="flex items-start gap-3 pr-8">
-          <div className="flex-shrink-0 w-8 h-8 bg-teal-500 rounded-full flex items-center justify-center">
+          <div className="flex-shrink-0 w-8 h-8 bg-primary rounded-full flex items-center justify-center">
             <Sparkles className="w-4 h-4 text-white" />
           </div>
           
           <div className="flex-1 min-w-0 pt-0.5">
-            <p className="text-sm text-slate-700 leading-relaxed">
+            <p className="text-sm text-[#3A4A57] leading-relaxed">
               {currentAffirmation}
             </p>
           </div>

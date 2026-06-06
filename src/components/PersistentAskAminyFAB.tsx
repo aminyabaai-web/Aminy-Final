@@ -60,8 +60,8 @@ const CTA_ICONS: Record<string, React.ReactNode> = {
 };
 
 const CTA_COLORS: Record<string, string> = {
-  book: 'bg-teal-50 text-teal-700 border-teal-200 hover:bg-teal-100',
-  coverage: 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100',
+  book: 'bg-[#6B9080]/10 text-[#6B9080] border-[#6B9080]/20 hover:bg-[#6B9080]/10',
+  coverage: 'bg-[#EEF4F8] text-blue-700 border-[#C8DDE8] hover:bg-blue-100',
   outcomes: 'bg-purple-50 text-purple-700 border-purple-200 hover:bg-purple-100',
   crisis: 'bg-red-50 text-red-700 border-red-200 hover:bg-red-100',
 };
@@ -296,7 +296,7 @@ export function PersistentAskAminyFAB({
           className={`fixed bottom-20 sm:bottom-6 ${positionClasses} z-50 w-[90vw] sm:w-96 max-h-[70vh] flex flex-col shadow-2xl`}
         >
           {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-slate-700">
+          <div className="flex items-center justify-between p-4 border-b border-[#E8E4DF] dark:border-slate-700">
             <div className="flex items-center gap-2">
               <div className="p-2 bg-accent/10 rounded-lg">
                 <Brain className="w-4 h-4 text-accent" />
@@ -358,7 +358,7 @@ export function PersistentAskAminyFAB({
                   className={`max-w-[80%] px-4 py-2 rounded-2xl ${
                     message.isUser
                       ? 'bg-accent text-white'
-                      : 'bg-gray-100 dark:bg-slate-800 text-gray-900 dark:text-white'
+                      : 'bg-[#F0EDE8] dark:bg-slate-800 text-[#1B2733] dark:text-white'
                   }`}
                 >
                   <p className="text-sm">{message.text}</p>
@@ -384,7 +384,7 @@ export function PersistentAskAminyFAB({
 
             {isReplying && (
               <div className="flex justify-start">
-                <div className="bg-gray-100 px-4 py-2 rounded-2xl">
+                <div className="bg-[#F0EDE8] px-4 py-2 rounded-2xl">
                   <div className="flex space-x-1">
                     <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
                     <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
@@ -398,7 +398,7 @@ export function PersistentAskAminyFAB({
           </div>
 
           {/* Input */}
-          <div className="p-4 border-t border-gray-200">
+          <div className="p-4 border-t border-[#E8E4DF]">
             <div className="flex gap-2">
               <div className="flex-1 relative">
                 <Textarea

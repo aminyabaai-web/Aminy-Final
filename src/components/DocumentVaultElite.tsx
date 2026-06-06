@@ -9,7 +9,7 @@
  * Category tabs, upload flow, share, expiry alerts, search, seeded demo docs
  */
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
@@ -34,6 +34,8 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { isDemoMode } from '../lib/demo-seed';
+import { uploadVaultFile, validateFile } from '../lib/vault-storage';
+import { supabase } from '../utils/supabase/client';
 
 interface DocumentVaultEliteProps {
   onBack?: () => void;
@@ -168,8 +170,12 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
   const [showUpload, setShowUpload] = useState(false);
   const [uploadCategory, setUploadCategory] = useState<Exclude<DocCategory, 'all'>>('evaluations');
   const [uploadName, setUploadName] = useState('');
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
   const [shareModal, setShareModal] = useState<VaultDoc | null>(null);
   const [selectedProvider, setSelectedProvider] = useState('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
 
   const filteredDocs = useMemo(() => {
     return docs.filter((doc) => {
@@ -187,24 +193,63 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
     : docs.reduce((sum, d) => sum + d.sizeKB, 0) / (1024 * 1024);
   const storageLabel = storageUsedGB >= 0.1 ? storageUsedGB.toFixed(1) : '0';
 
-  const handleUpload = () => {
+  const handleFileSelect = (file: File) => {
+    const validation = validateFile(file);
+    if (!validation.valid) {
+      toast.error(validation.error || 'Invalid file');
+      return;
+    }
+    setSelectedFile(file);
+    if (!uploadName.trim()) {
+      setUploadName(file.name.replace(/\.[^/.]+$/, ''));
+    }
+  };
+
+  const handleUpload = async () => {
     if (!uploadName.trim()) {
       toast.error('Please enter a document name');
       return;
     }
-    const newDoc: VaultDoc = {
-      id: `d${Date.now()}`,
-      name: uploadName,
-      category: uploadCategory,
-      dateUploaded: new Date().toISOString().split('T')[0],
-      source: 'Uploaded by parent',
-      fileType: 'pdf',
-      sizeKB: Math.floor(Math.random() * 500) + 100,
-    };
-    setDocs((prev) => [newDoc, ...prev]);
-    setUploadName('');
-    setShowUpload(false);
-    toast.success('Document uploaded successfully!');
+    if (!selectedFile) {
+      toast.error('Please select a file to upload');
+      return;
+    }
+
+    setIsUploading(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        toast.error('Please sign in to upload documents');
+        return;
+      }
+      const result = await uploadVaultFile(selectedFile, user.id, {
+        recordType: 'uploaded',
+        source: 'parent-upload',
+      });
+      if (!result.success) {
+        toast.error(result.error || 'Upload failed. Please try again.');
+        return;
+      }
+      const ext = selectedFile.name.split('.').pop()?.toLowerCase() as VaultDoc['fileType'] || 'pdf';
+      const newDoc: VaultDoc = {
+        id: result.fileId || `d${Date.now()}`,
+        name: uploadName,
+        category: uploadCategory,
+        dateUploaded: new Date().toISOString().split('T')[0],
+        source: 'Uploaded by parent',
+        fileType: ['pdf', 'image', 'docx', 'xlsx'].includes(ext) ? ext as VaultDoc['fileType'] : 'pdf',
+        sizeKB: Math.round(selectedFile.size / 1024),
+      };
+      setDocs((prev) => [newDoc, ...prev]);
+      setUploadName('');
+      setSelectedFile(null);
+      setShowUpload(false);
+      toast.success('Document uploaded successfully!');
+    } catch {
+      toast.error('Upload failed. Please try again.');
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   const handleShare = () => {
@@ -231,18 +276,18 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50" style={{ overflowX: 'hidden', overflowY: 'auto' }}>
+    <div className="min-h-screen bg-[#FAF7F2]" style={{ overflowX: 'hidden', overflowY: 'auto' }}>
       {/* Header */}
-      <div className="sticky top-0 z-10 bg-white/90 backdrop-blur-md border-b border-slate-100">
+      <div className="sticky top-0 z-10 bg-white/90 backdrop-blur-md border-b border-[#E8E4DF]">
         <div className="max-w-lg mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             {onBack && (
-              <button onClick={onBack} className="p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors">
-                <ArrowLeft className="w-5 h-5 text-slate-600" />
+              <button onClick={onBack} className="p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg hover:bg-[#F0EDE8] transition-colors">
+                <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
               </button>
             )}
             <div>
-              <h1 className="text-base font-semibold text-slate-900">Document Vault</h1>
+              <h1 className="text-base font-semibold text-[#1B2733]">Document Vault</h1>
               <div className="flex items-center gap-1 text-xs text-slate-400">
                 <Lock className="w-3 h-3" />
                 <span>Encrypted · HIPAA-conscious</span>
@@ -251,7 +296,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
           </div>
           <Button
             size="sm"
-            className="bg-teal-600 hover:bg-teal-700 text-white"
+            className="bg-primary hover:bg-[#6B9080] text-white"
             onClick={() => setShowUpload(true)}
           >
             <Plus className="w-3.5 h-3.5 mr-1" />
@@ -263,7 +308,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
       <div className="max-w-lg mx-auto px-4 py-5 pb-16 space-y-4">
 
         {/* Storage indicator */}
-        <div className="flex items-center justify-between text-xs text-slate-500">
+        <div className="flex items-center justify-between text-xs text-[#5A6B7A]">
           <div className="flex items-center gap-1.5">
             <HardDrive className="w-3.5 h-3.5" />
             <span>{storageLabel} GB of unlimited storage used</span>
@@ -297,14 +342,25 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
         )}
 
         {/* OCR hint */}
-        <div className="flex items-center gap-3 p-3 bg-blue-50 border border-blue-100 rounded-xl">
+        <div className="flex items-center gap-3 p-3 bg-[#EEF4F8] border border-blue-100 rounded-xl">
           <Camera className="w-4 h-4 text-blue-600 flex-shrink-0" />
           <p className="text-xs text-blue-700">
             <strong>Scan your insurance card</strong> and we'll read it and pre-fill your coverage info automatically.
           </p>
+          <input
+            ref={cameraInputRef}
+            type="file"
+            accept="image/*"
+            capture="environment"
+            className="hidden"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) { setShowUpload(true); handleFileSelect(file); }
+            }}
+          />
           <button
             className="ml-auto text-xs text-blue-600 font-semibold shrink-0"
-            onClick={() => toast.info('Camera scanner coming soon')}
+            onClick={() => cameraInputRef.current?.click()}
           >
             Scan →
           </button>
@@ -318,7 +374,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
             placeholder="Search by name or source..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-4 py-2.5 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-300 bg-white"
+            className="w-full pl-9 pr-4 py-2.5 text-sm border border-[#E8E4DF] rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-300 bg-white"
           />
           {searchQuery && (
             <button
@@ -339,7 +395,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
               className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
                 activeCategory === cat.id
                   ? 'bg-slate-900 text-white'
-                  : 'bg-white border border-slate-200 text-slate-600 hover:border-slate-300'
+                  : 'bg-white border border-[#E8E4DF] text-[#5A6B7A] hover:border-slate-300'
               }`}
             >
               {cat.label}
@@ -362,10 +418,10 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: i * 0.04 }}
               >
-                <Card className="p-3 bg-white border-slate-200 hover:shadow-md transition-all">
+                <Card className="p-3 bg-white border-[#E8E4DF] hover:shadow-md transition-all">
                   <div className="flex items-start gap-3">
                     {/* File type icon */}
-                    <div className="w-10 h-10 bg-slate-50 rounded-lg flex items-center justify-center flex-shrink-0 border border-slate-100">
+                    <div className="w-10 h-10 bg-[#FAF7F2] rounded-lg flex items-center justify-center flex-shrink-0 border border-[#E8E4DF]">
                       <FileText className={`w-5 h-5 ${FILE_TYPE_COLORS[doc.fileType]}`} />
                     </div>
 
@@ -373,13 +429,13 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-2">
                         <div className="min-w-0">
-                          <p className="text-sm font-semibold text-slate-900 leading-snug truncate">{doc.name}</p>
+                          <p className="text-sm font-semibold text-[#1B2733] leading-snug truncate">{doc.name}</p>
                           <p className="text-xs text-slate-400 mt-0.5">{doc.source}</p>
                           <div className="flex items-center gap-2 mt-1">
                             <span className="text-xs text-slate-400">{formatDate(doc.dateUploaded)}</span>
                             <span className="text-xs text-slate-400">·</span>
                             <span className="text-xs text-slate-400">{formatSize(doc.sizeKB)}</span>
-                            <span className="text-xs font-medium text-slate-500 uppercase">{doc.fileType}</span>
+                            <span className="text-xs font-medium text-[#5A6B7A] uppercase">{doc.fileType}</span>
                           </div>
                         </div>
 
@@ -403,21 +459,21 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
                       <div className="flex items-center gap-1.5 mt-2.5">
                         <button
                           onClick={() => toast.info('Opening document preview...')}
-                          className="flex items-center gap-1 px-2 py-1 text-xs text-slate-600 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors"
+                          className="flex items-center gap-1 px-2 py-1 text-xs text-[#5A6B7A] bg-[#F0EDE8] rounded-lg hover:bg-[#E8E4DF] transition-colors"
                         >
                           <Eye className="w-3 h-3" />
                           Preview
                         </button>
                         <button
                           onClick={() => setShareModal(doc)}
-                          className="flex items-center gap-1 px-2 py-1 text-xs text-teal-600 bg-teal-50 rounded-lg hover:bg-teal-100 transition-colors"
+                          className="flex items-center gap-1 px-2 py-1 text-xs text-[#6B9080] bg-[#6B9080]/10 rounded-lg hover:bg-[#6B9080]/10 transition-colors"
                         >
                           <Share2 className="w-3 h-3" />
                           Share
                         </button>
                         <button
                           onClick={() => toast.success('Download started!')}
-                          className="flex items-center gap-1 px-2 py-1 text-xs text-slate-600 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors"
+                          className="flex items-center gap-1 px-2 py-1 text-xs text-[#5A6B7A] bg-[#F0EDE8] rounded-lg hover:bg-[#E8E4DF] transition-colors"
                         >
                           <Download className="w-3 h-3" />
                           Download
@@ -457,7 +513,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
               className="bg-white rounded-2xl p-6 w-full max-w-lg shadow-2xl"
             >
               <div className="flex items-center justify-between mb-4">
-                <h3 className="font-semibold text-slate-900">Upload Document</h3>
+                <h3 className="font-semibold text-[#1B2733]">Upload Document</h3>
                 <button onClick={() => setShowUpload(false)}>
                   <X className="w-5 h-5 text-slate-400" />
                 </button>
@@ -465,21 +521,21 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
 
               <div className="space-y-3 mb-4">
                 <div>
-                  <label className="text-xs font-medium text-slate-500 block mb-1">Document name</label>
+                  <label className="text-xs font-medium text-[#5A6B7A] block mb-1">Document name</label>
                   <input
                     type="text"
                     placeholder="e.g. Behavioral Assessment Report"
                     value={uploadName}
                     onChange={(e) => setUploadName(e.target.value)}
-                    className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-300"
+                    className="w-full text-sm border border-[#E8E4DF] rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-300"
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-medium text-slate-500 block mb-1">Category</label>
+                  <label className="text-xs font-medium text-[#5A6B7A] block mb-1">Category</label>
                   <select
                     value={uploadCategory}
                     onChange={(e) => setUploadCategory(e.target.value as Exclude<DocCategory, 'all'>)}
-                    className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-300 bg-white"
+                    className="w-full text-sm border border-[#E8E4DF] rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-300 bg-white"
                   >
                     <option value="evaluations">Evaluations & Reports</option>
                     <option value="school">School Records</option>
@@ -491,22 +547,45 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
                 </div>
 
                 {/* File drop zone */}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".pdf,.jpg,.jpeg,.png,.heic,.doc,.docx"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) handleFileSelect(file);
+                  }}
+                />
                 <div
-                  className="border-2 border-dashed border-slate-200 rounded-xl p-6 text-center cursor-pointer hover:border-teal-300 hover:bg-teal-50/30 transition-all"
-                  onClick={() => toast.info('File picker coming soon')}
+                  className="border-2 border-dashed border-[#E8E4DF] rounded-xl p-6 text-center cursor-pointer hover:border-[#6B9080]/30 hover:bg-[#6B9080]/10/30 transition-all"
+                  onClick={() => fileInputRef.current?.click()}
                 >
                   <Upload className="w-6 h-6 text-slate-400 mx-auto mb-2" />
-                  <p className="text-sm text-slate-500">Tap to select file</p>
-                  <p className="text-xs text-slate-400 mt-0.5">PDF, images, Word documents</p>
+                  {selectedFile ? (
+                    <>
+                      <p className="text-sm text-[#6B9080] font-medium">{selectedFile.name}</p>
+                      <p className="text-xs text-slate-400 mt-0.5">{(selectedFile.size / 1024).toFixed(0)} KB — tap to change</p>
+                    </>
+                  ) : (
+                    <>
+                      <p className="text-sm text-[#5A6B7A]">Tap to select file</p>
+                      <p className="text-xs text-slate-400 mt-0.5">PDF, images, Word documents</p>
+                    </>
+                  )}
                 </div>
               </div>
 
               <div className="flex gap-2">
-                <Button variant="outline" className="flex-1" onClick={() => setShowUpload(false)}>
+                <Button variant="outline" className="flex-1" onClick={() => { setShowUpload(false); setSelectedFile(null); }}>
                   Cancel
                 </Button>
-                <Button className="flex-1 bg-teal-600 hover:bg-teal-700 text-white" onClick={handleUpload}>
-                  Upload
+                <Button
+                  className="flex-1 bg-primary hover:bg-[#6B9080] text-white"
+                  onClick={handleUpload}
+                  disabled={isUploading}
+                >
+                  {isUploading ? 'Uploading…' : 'Upload'}
                 </Button>
               </div>
             </motion.div>
@@ -530,7 +609,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
               className="bg-white rounded-2xl p-6 w-full max-w-lg shadow-2xl"
             >
               <div className="flex items-center justify-between mb-1">
-                <h3 className="font-semibold text-slate-900">Share with provider</h3>
+                <h3 className="font-semibold text-[#1B2733]">Share with provider</h3>
                 <button onClick={() => setShareModal(null)}>
                   <X className="w-5 h-5 text-slate-400" />
                 </button>
@@ -541,7 +620,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
                 {careTeam.length === 0 ? (
                   <div className="text-center py-6">
                     <Users className="w-8 h-8 mx-auto mb-2 text-slate-300" />
-                    <p className="text-sm text-slate-500">No care team members yet</p>
+                    <p className="text-sm text-[#5A6B7A]">No care team members yet</p>
                     <p className="text-xs text-slate-400 mt-0.5">
                       Add a provider to your care team to share documents.
                     </p>
@@ -553,16 +632,16 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
                       onClick={() => setSelectedProvider(provider)}
                       className={`w-full text-left flex items-center gap-3 p-3 rounded-xl border transition-all ${
                         selectedProvider === provider
-                          ? 'border-teal-400 bg-teal-50'
-                          : 'border-slate-200 hover:border-slate-300'
+                          ? 'border-[#6B9080] bg-[#6B9080]/10'
+                          : 'border-[#E8E4DF] hover:border-slate-300'
                       }`}
                     >
-                      <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center flex-shrink-0">
-                        <span className="text-xs font-bold text-teal-700">{provider.charAt(0)}</span>
+                      <div className="w-8 h-8 bg-[#6B9080]/10 rounded-full flex items-center justify-center flex-shrink-0">
+                        <span className="text-xs font-bold text-[#6B9080]">{provider.charAt(0)}</span>
                       </div>
-                      <span className="text-sm text-slate-800">{provider}</span>
+                      <span className="text-sm text-[#1B2733]">{provider}</span>
                       {selectedProvider === provider && (
-                        <CheckCircle className="w-4 h-4 text-teal-500 ml-auto" />
+                        <CheckCircle className="w-4 h-4 text-primary ml-auto" />
                       )}
                     </button>
                   ))
@@ -573,7 +652,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
                 <Button variant="outline" className="flex-1" onClick={() => setShareModal(null)}>
                   Cancel
                 </Button>
-                <Button className="flex-1 bg-teal-600 hover:bg-teal-700 text-white" onClick={handleShare}>
+                <Button className="flex-1 bg-primary hover:bg-[#6B9080] text-white" onClick={handleShare}>
                   <Share2 className="w-3.5 h-3.5 mr-1.5" />
                   Share Document
                 </Button>

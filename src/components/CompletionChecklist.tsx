@@ -104,14 +104,14 @@ export function CompletionChecklist({ onNavigate, onBack }: CompletionChecklistP
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200">
+      <div className="bg-white border-b border-[#E8E4DF]">
         <div className="max-w-4xl mx-auto px-4 py-6">
           {onBack && (
             <button
               onClick={onBack}
-              className="flex items-center gap-2 text-sm text-gray-600 hover:text-accent mb-4 transition-colors"
+              className="flex items-center gap-2 text-sm text-[#5A6B7A] hover:text-accent mb-4 transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
               Back to Cover
@@ -123,19 +123,19 @@ export function CompletionChecklist({ onNavigate, onBack }: CompletionChecklistP
               <h1 className="text-2xl font-semibold text-primary mb-1">
                 Completion Checklist
               </h1>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-[#5A6B7A]">
                 Track all deliverables for the Aminy Design System
               </p>
             </div>
             <div className="text-right">
               <div className="text-2xl sm:text-3xl font-bold text-accent">{overallProgress}%</div>
-              <p className="text-xs text-gray-500">Overall Progress</p>
+              <p className="text-xs text-[#5A6B7A]">Overall Progress</p>
             </div>
           </div>
 
           {/* Overall Progress Bar */}
           <div className="mt-4">
-            <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+            <div className="h-2 bg-[#E8E4DF] rounded-full overflow-hidden">
               <div 
                 className="h-full bg-accent rounded-full transition-all duration-500"
                 style={{ width: `${overallProgress}%` }}
@@ -153,25 +153,25 @@ export function CompletionChecklist({ onNavigate, onBack }: CompletionChecklistP
             const isExpanded = expandedSection === sectionId;
 
             return (
-              <div key={sectionId} className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+              <div key={sectionId} className="bg-white rounded-lg border border-[#E8E4DF] shadow-sm overflow-hidden">
                 {/* Section Header */}
                 <button
                   onClick={() => setExpandedSection(isExpanded ? null : sectionId)}
-                  className="w-full px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
+                  className="w-full px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between hover:bg-[#FAF7F2] transition-colors"
                 >
                   <div className="flex items-center gap-3">
                     <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                      progress === 100 ? 'bg-green-100' : 'bg-gray-100'
+                      progress === 100 ? 'bg-green-100' : 'bg-[#F0EDE8]'
                     }`}>
                       {progress === 100 ? (
                         <CheckCircle className="w-6 h-6 text-green-600" />
                       ) : (
-                        <Circle className="w-6 h-6 text-gray-400" />
+                        <Circle className="w-6 h-6 text-[#8A9BA8]" />
                       )}
                     </div>
                     <div className="text-left">
                       <h3 className="font-semibold text-primary">{section.title}</h3>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-[#5A6B7A]">
                         {section.items.filter(i => i.complete).length} of {section.items.length} complete
                       </p>
                     </div>
@@ -180,7 +180,7 @@ export function CompletionChecklist({ onNavigate, onBack }: CompletionChecklistP
                     <div className="text-right">
                       <div className="text-lg font-semibold text-accent">{progress}%</div>
                     </div>
-                    <ChevronRight className={`w-5 h-5 text-gray-400 transition-transform ${
+                    <ChevronRight className={`w-5 h-5 text-[#8A9BA8] transition-transform ${
                       isExpanded ? 'rotate-90' : ''
                     }`} />
                   </div>
@@ -188,23 +188,23 @@ export function CompletionChecklist({ onNavigate, onBack }: CompletionChecklistP
 
                 {/* Section Items */}
                 {isExpanded && (
-                  <div className="border-t border-gray-100 px-4 sm:px-6 py-3 sm:py-4 space-y-2">
+                  <div className="border-t border-[#E8E4DF] px-4 sm:px-6 py-3 sm:py-4 space-y-2">
                     {section.items.map((item) => (
                       <div
                         key={item.id}
                         className={`flex items-start gap-3 py-2 ${
-                          item.link ? 'cursor-pointer hover:bg-gray-50 -mx-2 px-2 rounded-lg' : ''
+                          item.link ? 'cursor-pointer hover:bg-[#FAF7F2] -mx-2 px-2 rounded-lg' : ''
                         }`}
                         onClick={() => item.link && onNavigate?.(item.link)}
                       >
                         {item.complete ? (
                           <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
                         ) : (
-                          <Circle className="w-5 h-5 text-gray-400 flex-shrink-0 mt-0.5" />
+                          <Circle className="w-5 h-5 text-[#8A9BA8] flex-shrink-0 mt-0.5" />
                         )}
                         <div className="flex-1">
                           <p className={`text-sm ${
-                            item.complete ? 'text-gray-900' : 'text-gray-500'
+                            item.complete ? 'text-[#1B2733]' : 'text-[#5A6B7A]'
                           }`}>
                             {item.label}
                           </p>
@@ -222,12 +222,12 @@ export function CompletionChecklist({ onNavigate, onBack }: CompletionChecklistP
         </div>
 
         {/* Final Summary Card */}
-        <div className="mt-8 bg-gradient-to-br from-teal-50 to-blue-50 rounded-xl border border-teal-200 p-6 text-center">
+        <div className="mt-8 bg-gradient-to-br from-[#FAF7F2] to-blue-50 rounded-xl border border-[#6B9080]/20 p-6 text-center">
           <FileCheck className="w-12 h-12 text-accent mx-auto mb-4" />
           <h3 className="text-lg sm:text-xl font-semibold text-primary mb-2">
             {overallProgress === 100 ? '🎉 All Complete!' : 'Great Progress!'}
           </h3>
-          <p className="text-gray-700 mb-4">
+          <p className="text-[#3A4A57] mb-4">
             {overallProgress === 100 
               ? 'The Aminy Design System is fully implemented and ready for production.'
               : `${overallProgress}% of deliverables complete. Keep going!`

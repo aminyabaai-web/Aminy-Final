@@ -105,7 +105,7 @@ export function MFAVerification({
               className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center"
               style={{ backgroundColor: 'rgba(87, 117, 144, 0.1)' }}
             >
-              <Shield className="w-8 h-8" style={{ color: '#0891b2' }} />
+              <Shield className="w-8 h-8" style={{ color: '#6B9080' }} />
             </div>
 
             <h1 className="text-2xl font-bold mb-2" style={{ color: '#0D1B2A' }}>
@@ -117,7 +117,7 @@ export function MFAVerification({
             </p>
 
             {email && (
-              <p className="text-sm mt-2" style={{ color: '#0891b2' }}>
+              <p className="text-sm mt-2" style={{ color: '#6B9080' }}>
                 {email}
               </p>
             )}
@@ -166,7 +166,7 @@ export function MFAVerification({
             onClick={handleVerify}
             disabled={isLoading || code.length !== 6 || attempts >= maxAttempts}
             className="w-full h-12 rounded-xl font-medium text-white"
-            style={{ backgroundColor: '#0891b2' }}
+            style={{ backgroundColor: '#6B9080' }}
           >
             {isLoading ? (
               <span className="flex items-center gap-2">
@@ -181,7 +181,7 @@ export function MFAVerification({
           {/* Help Text */}
           <div className="mt-6 pt-6 border-t" style={{ borderColor: 'rgba(13, 27, 42, 0.1)' }}>
             <div className="flex items-start gap-3 p-3 rounded-lg" style={{ backgroundColor: '#F5F5F5' }}>
-              <Lock className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: '#0891b2' }} />
+              <Lock className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: '#6B9080' }} />
               <div>
                 <p className="text-xs" style={{ color: '#0D1B2A', opacity: 0.7 }}>
                   Open your authenticator app (Google Authenticator, Authy, or 1Password)
@@ -196,7 +196,7 @@ export function MFAVerification({
             <button
               onClick={onCancel}
               className="w-full mt-4 text-sm font-medium hover:opacity-70 transition-opacity"
-              style={{ color: '#0891b2' }}
+              style={{ color: '#6B9080' }}
             >
               Sign in with a different account
             </button>

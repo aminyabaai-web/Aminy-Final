@@ -293,15 +293,15 @@ export default function InsuranceCardScanner({
 
   const renderCaptureScreen = (side: 'front' | 'back') => (
     <div className="flex flex-col items-center justify-center p-6 space-y-6">
-      <div className="w-20 h-20 rounded-full bg-blue-50 flex items-center justify-center">
+      <div className="w-20 h-20 rounded-full bg-[#EEF4F8] flex items-center justify-center">
         <CreditCard className="w-10 h-10 text-blue-600" />
       </div>
 
       <div className="text-center space-y-2">
-        <h3 className="text-lg font-semibold text-gray-900">
+        <h3 className="text-lg font-semibold text-[#1B2733]">
           Scan {side === 'front' ? 'Front' : 'Back'} of Card
         </h3>
-        <p className="text-sm text-gray-500 max-w-xs">
+        <p className="text-sm text-[#5A6B7A] max-w-xs">
           {side === 'front'
             ? 'Position the front of your insurance card within the frame. We\'ll extract member ID, group number, and plan details.'
             : 'Now scan the back for pharmacy (Rx) info, claims address, and provider phone numbers.'}
@@ -312,7 +312,7 @@ export default function InsuranceCardScanner({
       <button
         onClick={triggerCapture}
         disabled={isProcessing}
-        className="w-72 h-44 rounded-2xl border-2 border-dashed border-blue-300 bg-blue-50/50 flex flex-col items-center justify-center space-y-3 transition-all active:scale-95 disabled:opacity-50"
+        className="w-72 h-44 rounded-2xl border-2 border-dashed border-blue-300 bg-[#EEF4F8]/50 flex flex-col items-center justify-center space-y-3 transition-all active:scale-95 disabled:opacity-50"
       >
         {isProcessing ? (
           <>
@@ -327,7 +327,7 @@ export default function InsuranceCardScanner({
             <span className="text-sm font-medium text-blue-600">
               Tap to Take Photo
             </span>
-            <span className="text-xs text-gray-400">or upload from gallery</span>
+            <span className="text-xs text-[#8A9BA8]">or upload from gallery</span>
           </>
         )}
       </button>
@@ -353,7 +353,7 @@ export default function InsuranceCardScanner({
       {side === 'back' && (
         <button
           onClick={() => setStep('confirm')}
-          className="text-sm text-gray-500 underline"
+          className="text-sm text-[#5A6B7A] underline"
         >
           Skip — I don't have the back
         </button>
@@ -372,9 +372,9 @@ export default function InsuranceCardScanner({
     return (
       <div
         key={`${side}-${field}`}
-        className="flex items-center justify-between py-2 border-b border-gray-100 last:border-0"
+        className="flex items-center justify-between py-2 border-b border-[#E8E4DF] last:border-0"
       >
-        <span className="text-xs text-gray-500 w-28 flex-shrink-0">{label}</span>
+        <span className="text-xs text-[#5A6B7A] w-28 flex-shrink-0">{label}</span>
         {isEditing ? (
           <input
             type="text"
@@ -383,16 +383,16 @@ export default function InsuranceCardScanner({
             onBlur={() => setEditingField(null)}
             onKeyDown={(e) => e.key === 'Enter' && setEditingField(null)}
             autoFocus
-            className="flex-1 text-sm text-gray-900 border border-blue-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="flex-1 text-sm text-[#1B2733] border border-blue-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500"
           />
         ) : (
           <div className="flex items-center space-x-2 flex-1 justify-end">
-            <span className="text-sm text-gray-900 text-right">
+            <span className="text-sm text-[#1B2733] text-right">
               {value || '—'}
             </span>
             <button
               onClick={() => setEditingField(`${side}-${field}`)}
-              className="text-gray-400 hover:text-blue-600 p-1"
+              className="text-[#8A9BA8] hover:text-blue-600 p-1"
               aria-label={`Edit ${label}`}
             >
               <Edit3 className="w-3.5 h-3.5" />
@@ -432,7 +432,7 @@ export default function InsuranceCardScanner({
       <div className="flex flex-col p-4 space-y-4">
         {/* Card image preview */}
         {image && (
-          <div className="relative rounded-xl overflow-hidden shadow-sm border border-gray-200">
+          <div className="relative rounded-xl overflow-hidden shadow-sm border border-[#E8E4DF]">
             <img
               src={image}
               alt={`Insurance card ${side}`}
@@ -455,12 +455,12 @@ export default function InsuranceCardScanner({
         )}
 
         {/* Extracted fields */}
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
+        <div className="bg-white rounded-xl border border-[#E8E4DF] p-4">
           <div className="flex items-center justify-between mb-3">
-            <h4 className="text-sm font-semibold text-gray-900">
+            <h4 className="text-sm font-semibold text-[#1B2733]">
               {side === 'front' ? 'Card Front Details' : 'Card Back Details'}
             </h4>
-            <Eye className="w-4 h-4 text-gray-400" />
+            <Eye className="w-4 h-4 text-[#8A9BA8]" />
           </div>
           <div className="space-y-0">
             {fields.map(([label, field]) =>
@@ -487,7 +487,7 @@ export default function InsuranceCardScanner({
                 setBackData({});
               }
             }}
-            className="flex-1 flex items-center justify-center space-x-2 py-3 rounded-xl border border-gray-300 text-gray-700 text-sm font-medium"
+            className="flex-1 flex items-center justify-center space-x-2 py-3 rounded-xl border border-[#E8E4DF] text-[#3A4A57] text-sm font-medium"
           >
             <RotateCcw className="w-4 h-4" />
             <span>Retake</span>
@@ -517,18 +517,18 @@ export default function InsuranceCardScanner({
           <CheckCircle className="w-5 h-5 text-green-600" />
         </div>
         <div>
-          <h3 className="text-base font-semibold text-gray-900">
+          <h3 className="text-base font-semibold text-[#1B2733]">
             Review Insurance Details
           </h3>
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-[#5A6B7A]">
             Confirm the information below is correct before saving.
           </p>
         </div>
       </div>
 
       {/* Combined summary */}
-      <div className="bg-white rounded-xl border border-gray-200 p-4 space-y-2">
-        <h4 className="text-sm font-semibold text-gray-700 mb-2">
+      <div className="bg-white rounded-xl border border-[#E8E4DF] p-4 space-y-2">
+        <h4 className="text-sm font-semibold text-[#3A4A57] mb-2">
           {frontData.payerName || 'Insurance Plan'}
         </h4>
         {[
@@ -549,8 +549,8 @@ export default function InsuranceCardScanner({
               key={label}
               className="flex justify-between text-sm py-1 border-b border-gray-50 last:border-0"
             >
-              <span className="text-gray-500">{label}</span>
-              <span className="text-gray-900 font-medium text-right max-w-[55%]">
+              <span className="text-[#5A6B7A]">{label}</span>
+              <span className="text-[#1B2733] font-medium text-right max-w-[55%]">
                 {val}
               </span>
             </div>
@@ -561,7 +561,7 @@ export default function InsuranceCardScanner({
       <div className="flex space-x-3">
         <button
           onClick={() => setStep('review-front')}
-          className="flex-1 flex items-center justify-center space-x-2 py-3 rounded-xl border border-gray-300 text-gray-700 text-sm font-medium"
+          className="flex-1 flex items-center justify-center space-x-2 py-3 rounded-xl border border-[#E8E4DF] text-[#3A4A57] text-sm font-medium"
         >
           <Edit3 className="w-4 h-4" />
           <span>Edit</span>
@@ -582,17 +582,17 @@ export default function InsuranceCardScanner({
   // ------------------------------------------
 
   return (
-    <div className="flex flex-col min-h-0 bg-gray-50">
+    <div className="flex flex-col min-h-0 bg-[#FAF7F2]">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 bg-white border-b border-gray-200">
+      <div className="flex items-center justify-between px-4 py-3 bg-white border-b border-[#E8E4DF]">
         <button
           onClick={onClose}
-          className="p-2 -ml-2 rounded-lg text-gray-500 hover:bg-gray-100"
+          className="p-2 -ml-2 rounded-lg text-[#5A6B7A] hover:bg-[#F0EDE8]"
           aria-label="Close scanner"
         >
           <X className="w-5 h-5" />
         </button>
-        <h2 className="text-base font-semibold text-gray-900">
+        <h2 className="text-base font-semibold text-[#1B2733]">
           Scan Insurance Card
         </h2>
         {/* Step indicator */}

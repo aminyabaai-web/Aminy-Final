@@ -98,23 +98,23 @@ export function SupplementingServicesInfo({
 
   if (variant === 'compact') {
     return (
-      <Card className="p-4 bg-gradient-to-r from-teal-50 to-blue-50 border-teal-200">
+      <Card className="p-4 bg-gradient-to-r from-[#FAF7F2] to-blue-50 border-[#6B9080]/20">
         <div className="flex items-start gap-3">
-          <div className="p-2 bg-teal-100 rounded-full flex-shrink-0">
-            <Sparkles className="w-4 h-4 text-teal-600" />
+          <div className="p-2 bg-[#6B9080]/10 rounded-full flex-shrink-0">
+            <Sparkles className="w-4 h-4 text-[#6B9080]" />
           </div>
           <div className="flex-1">
-            <h3 className="font-semibold text-teal-900 mb-1">
+            <h3 className="font-semibold text-[#6B9080] mb-1">
               Supplementing, Not Replacing
             </h3>
-            <p className="text-sm text-teal-700 mb-3">
+            <p className="text-sm text-[#6B9080] mb-3">
               Aminy works alongside your therapy team to support you during the
               160+ weekly hours when professional help isn&apos;t available.
             </p>
             {onLearnMore && (
               <Button
                 variant="link"
-                className="p-0 h-auto text-teal-600"
+                className="p-0 h-auto text-[#6B9080]"
                 onClick={onLearnMore}
               >
                 Learn more <ArrowRight className="w-3 h-3 ml-1" />
@@ -130,13 +130,13 @@ export function SupplementingServicesInfo({
     return (
       <div className="space-y-3 sm:space-y-4 sm:space-y-6">
         <div className="text-center">
-          <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Users className="w-6 h-6 text-teal-600" />
+          <div className="w-12 h-12 bg-[#6B9080]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Users className="w-6 h-6 text-[#6B9080]" />
           </div>
-          <h2 className="text-xl font-bold text-gray-900 mb-2">
+          <h2 className="text-xl font-bold text-[#1B2733] mb-2">
             Your AI Companion, Not Replacement
           </h2>
-          <p className="text-gray-600">
+          <p className="text-[#5A6B7A]">
             Aminy supplements professional therapy—we're here for the daily moments in between.
           </p>
         </div>
@@ -156,11 +156,11 @@ export function SupplementingServicesInfo({
 
         <div className="space-y-3">
           {supplementAreas.slice(0, 4).map((area, index) => (
-            <div key={index} className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
-              <area.icon className="w-5 h-5 text-teal-600 mt-0.5" />
+            <div key={index} className="flex items-start gap-3 p-3 bg-[#FAF7F2] rounded-lg">
+              <area.icon className="w-5 h-5 text-[#6B9080] mt-0.5" />
               <div>
-                <p className="font-medium text-gray-900">{area.title}</p>
-                <p className="text-sm text-gray-600">{area.description}</p>
+                <p className="font-medium text-[#1B2733]">{area.title}</p>
+                <p className="text-sm text-[#5A6B7A]">{area.description}</p>
               </div>
             </div>
           ))}
@@ -180,15 +180,15 @@ export function SupplementingServicesInfo({
     <div className="space-y-12">
       {/* Hero Section */}
       <section className="text-center max-w-3xl mx-auto">
-        <Badge className="bg-teal-100 text-teal-800 mb-4">
+        <Badge className="bg-[#6B9080]/10 text-[#6B9080] mb-4">
           How Aminy Works
         </Badge>
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        <h1 className="text-3xl md:text-4xl font-bold text-[#1B2733] mb-4">
           Your Companion for the Hours
           <br />
-          <span className="text-teal-600">Between Therapy</span>
+          <span className="text-[#6B9080]">Between Therapy</span>
         </h1>
-        <p className="text-xl text-gray-600">
+        <p className="text-xl text-[#5A6B7A]">
           ABA therapy is powerful. But your child's life happens in all the other hours.
           Aminy helps you make those moments count.
         </p>
@@ -204,13 +204,13 @@ export function SupplementingServicesInfo({
             transition={{ delay: index * 0.1 }}
           >
             <Card className="p-6 text-center">
-              <div className="text-4xl font-bold text-teal-600 mb-1">
+              <div className="text-4xl font-bold text-[#6B9080] mb-1">
                 {item.stat}
               </div>
-              <div className="text-sm font-medium text-gray-900 mb-2">
+              <div className="text-sm font-medium text-[#1B2733] mb-2">
                 {item.label}
               </div>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-[#5A6B7A]">
                 {item.context}
               </p>
             </Card>
@@ -220,7 +220,7 @@ export function SupplementingServicesInfo({
 
       {/* What We Supplement */}
       <section className="max-w-5xl mx-auto">
-        <h2 className="text-xl sm:text-2xl font-bold text-center text-gray-900 mb-8">
+        <h2 className="text-xl sm:text-2xl font-bold text-center text-[#1B2733] mb-8">
           How Aminy Supplements Your Care Team
         </h2>
 
@@ -233,18 +233,18 @@ export function SupplementingServicesInfo({
               transition={{ delay: index * 0.1 }}
             >
               <Card className="p-6 h-full hover:shadow-lg transition-shadow">
-                <div className="w-10 h-10 bg-teal-100 rounded-xl flex items-center justify-center mb-4">
-                  <area.icon className="w-5 h-5 text-teal-600" />
+                <div className="w-10 h-10 bg-[#6B9080]/10 rounded-xl flex items-center justify-center mb-4">
+                  <area.icon className="w-5 h-5 text-[#6B9080]" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">
+                <h3 className="font-semibold text-[#1B2733] mb-2">
                   {area.title}
                 </h3>
-                <p className="text-sm text-gray-600 mb-3">
+                <p className="text-sm text-[#5A6B7A] mb-3">
                   {area.description}
                 </p>
-                <div className="bg-gray-50 rounded-lg p-3">
-                  <p className="text-xs text-gray-500 mb-1">Example:</p>
-                  <p className="text-sm text-gray-700 italic">
+                <div className="bg-[#FAF7F2] rounded-lg p-3">
+                  <p className="text-xs text-[#5A6B7A] mb-1">Example:</p>
+                  <p className="text-sm text-[#3A4A57] italic">
                     "{area.example}"
                   </p>
                 </div>
@@ -296,65 +296,65 @@ export function SupplementingServicesInfo({
 
       {/* How We Work Together */}
       <section className="max-w-4xl mx-auto">
-        <h2 className="text-xl sm:text-2xl font-bold text-center text-gray-900 mb-8">
+        <h2 className="text-xl sm:text-2xl font-bold text-center text-[#1B2733] mb-8">
           Better Together
         </h2>
 
         <div className="grid md:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
           <Card className="p-4 sm:p-5 md:p-6">
-            <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <Users className="w-5 h-5 text-teal-600" />
+            <h3 className="font-semibold text-[#1B2733] mb-4 flex items-center gap-2">
+              <Users className="w-5 h-5 text-[#6B9080]" />
               Your Therapy Team
             </h3>
             <ul className="space-y-3">
               <li className="flex items-start gap-2">
                 <CheckCircle className="w-4 h-4 text-green-600 mt-1" />
-                <span className="text-gray-700">Clinical assessment & diagnosis</span>
+                <span className="text-[#3A4A57]">Clinical assessment & diagnosis</span>
               </li>
               <li className="flex items-start gap-2">
                 <CheckCircle className="w-4 h-4 text-green-600 mt-1" />
-                <span className="text-gray-700">Behavior intervention plans</span>
+                <span className="text-[#3A4A57]">Behavior intervention plans</span>
               </li>
               <li className="flex items-start gap-2">
                 <CheckCircle className="w-4 h-4 text-green-600 mt-1" />
-                <span className="text-gray-700">Direct therapy sessions</span>
+                <span className="text-[#3A4A57]">Direct therapy sessions</span>
               </li>
               <li className="flex items-start gap-2">
                 <CheckCircle className="w-4 h-4 text-green-600 mt-1" />
-                <span className="text-gray-700">Professional supervision</span>
+                <span className="text-[#3A4A57]">Professional supervision</span>
               </li>
               <li className="flex items-start gap-2">
                 <CheckCircle className="w-4 h-4 text-green-600 mt-1" />
-                <span className="text-gray-700">Insurance authorization</span>
+                <span className="text-[#3A4A57]">Insurance authorization</span>
               </li>
             </ul>
           </Card>
 
-          <Card className="p-6 bg-gradient-to-br from-teal-50 to-teal-100 border-teal-200">
-            <h3 className="font-semibold text-teal-900 mb-4 flex items-center gap-2">
-              <Brain className="w-5 h-5 text-teal-600" />
+          <Card className="p-6 bg-gradient-to-br from-[#FAF7F2] to-[#F0EDE8] border-[#6B9080]/20">
+            <h3 className="font-semibold text-[#6B9080] mb-4 flex items-center gap-2">
+              <Brain className="w-5 h-5 text-[#6B9080]" />
               Aminy Supplements With
             </h3>
             <ul className="space-y-3">
               <li className="flex items-start gap-2">
-                <CheckCircle className="w-4 h-4 text-teal-600 mt-1" />
-                <span className="text-teal-800">24/7 guidance between sessions</span>
+                <CheckCircle className="w-4 h-4 text-[#6B9080] mt-1" />
+                <span className="text-[#6B9080]">24/7 guidance between sessions</span>
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle className="w-4 h-4 text-teal-600 mt-1" />
-                <span className="text-teal-800">Daily activity suggestions</span>
+                <CheckCircle className="w-4 h-4 text-[#6B9080] mt-1" />
+                <span className="text-[#6B9080]">Daily activity suggestions</span>
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle className="w-4 h-4 text-teal-600 mt-1" />
-                <span className="text-teal-800">Progress tracking & celebrations</span>
+                <CheckCircle className="w-4 h-4 text-[#6B9080] mt-1" />
+                <span className="text-[#6B9080]">Progress tracking & celebrations</span>
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle className="w-4 h-4 text-teal-600 mt-1" />
-                <span className="text-teal-800">Parent education & support</span>
+                <CheckCircle className="w-4 h-4 text-[#6B9080] mt-1" />
+                <span className="text-[#6B9080]">Parent education & support</span>
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle className="w-4 h-4 text-teal-600 mt-1" />
-                <span className="text-teal-800">Insurance paperwork help</span>
+                <CheckCircle className="w-4 h-4 text-[#6B9080] mt-1" />
+                <span className="text-[#6B9080]">Insurance paperwork help</span>
               </li>
             </ul>
           </Card>
@@ -374,7 +374,7 @@ export function SupplementingServicesInfo({
           {onLearnMore && (
             <Button
               onClick={onLearnMore}
-              className="bg-white text-teal-700 hover:bg-teal-50"
+              className="bg-white text-[#6B9080] hover:bg-[#6B9080]/10"
             >
               Get started
               <ArrowRight className="w-4 h-4 ml-2" />

@@ -22,7 +22,7 @@ export function AskAminyIntentsRow({ onIntentClick }: AskAminyIntentsRowProps) {
 
   return (
     <div className="space-y-3">
-      <h4 className="text-sm font-medium text-slate-700">Quick topics</h4>
+      <h4 className="text-sm font-medium text-[#3A4A57]">Quick topics</h4>
       <div className="flex gap-2 overflow-x-auto scrollbar-hide">
         {intents.map((intent) => {
           const Icon = intent.icon;

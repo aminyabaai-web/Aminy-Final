@@ -83,7 +83,7 @@ export function DifferentiationCallout({
 
   if (variant === 'inline') {
     return (
-      <div className="flex items-center gap-2 text-sm text-gray-600 bg-amber-50 border border-amber-200 rounded-lg p-3">
+      <div className="flex items-center gap-2 text-sm text-[#5A6B7A] bg-amber-50 border border-amber-200 rounded-lg p-3">
         <Zap className="w-4 h-4 text-amber-600 flex-shrink-0" />
         <span>
           <strong>This is tracked automatically.</strong> Only Aminy does this.
@@ -94,19 +94,19 @@ export function DifferentiationCallout({
 
   if (variant === 'compact') {
     return (
-      <Card className="p-4 bg-gradient-to-r from-teal-50 to-blue-50 border-teal-200">
+      <Card className="p-4 bg-gradient-to-r from-[#FAF7F2] to-blue-50 border-[#6B9080]/20">
         <div className="flex items-start gap-3">
-          <div className="p-2 bg-teal-100 rounded-full flex-shrink-0">
-            <Brain className="w-4 h-4 text-teal-600" />
+          <div className="p-2 bg-[#6B9080]/10 rounded-full flex-shrink-0">
+            <Brain className="w-4 h-4 text-[#6B9080]" />
           </div>
           <div>
-            <p className="font-medium text-teal-900 mb-2">
+            <p className="font-medium text-[#6B9080] mb-2">
               More than just AI chat
             </p>
             <div className="space-y-1">
               {DIFFERENTIATORS.slice(0, 3).map((item, index) => (
-                <div key={index} className="flex items-center gap-2 text-sm text-teal-700">
-                  <CheckCircle className="w-3 h-3 text-teal-500" />
+                <div key={index} className="flex items-center gap-2 text-sm text-[#6B9080]">
+                  <CheckCircle className="w-3 h-3 text-primary" />
                   <span>{item.title}</span>
                 </div>
               ))}
@@ -121,13 +121,13 @@ export function DifferentiationCallout({
   return (
     <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <div className="text-center">
-        <Badge className="bg-teal-100 text-teal-800 mb-3">
+        <Badge className="bg-[#6B9080]/10 text-[#6B9080] mb-3">
           Why Aminy Works
         </Badge>
-        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
+        <h2 className="text-xl sm:text-2xl font-bold text-[#1B2733] mb-2">
           {getContextMessage()}
         </h2>
-        <p className="text-gray-600 max-w-xl mx-auto">
+        <p className="text-[#5A6B7A] max-w-xl mx-auto">
           Aminy isn't just another AI chatbot—it's a complete support system
           built specifically for families navigating neurodivergence.
         </p>
@@ -145,16 +145,16 @@ export function DifferentiationCallout({
             >
               <Card className="p-3 sm:p-4">
                 <div className="flex items-start gap-3 sm:gap-4">
-                  <div className="w-10 h-10 bg-teal-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <Icon className="w-5 h-5 text-teal-600" />
+                  <div className="w-10 h-10 bg-[#6B9080]/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <Icon className="w-5 h-5 text-[#6B9080]" />
                   </div>
                   <div className="flex-1">
                     <div className="flex items-start justify-between">
                       <div>
-                        <h3 className="font-semibold text-gray-900">
+                        <h3 className="font-semibold text-[#1B2733]">
                           {item.title}
                         </h3>
-                        <p className="text-sm text-gray-600 mt-1">
+                        <p className="text-sm text-[#5A6B7A] mt-1">
                           {item.description}
                         </p>
                       </div>
@@ -163,9 +163,9 @@ export function DifferentiationCallout({
                       </Badge>
                     </div>
 
-                    <div className="mt-3 flex items-center gap-2 p-2 bg-teal-50 rounded-lg">
-                      <CheckCircle className="w-4 h-4 text-teal-500" />
-                      <span className="text-sm text-teal-700">
+                    <div className="mt-3 flex items-center gap-2 p-2 bg-[#6B9080]/10 rounded-lg">
+                      <CheckCircle className="w-4 h-4 text-primary" />
+                      <span className="text-sm text-[#6B9080]">
                         {item.aminyAdvantage}
                       </span>
                     </div>
@@ -200,7 +200,7 @@ export function DifferentiationCallout({
  */
 export function AminyAdvantageBadge({ feature }: { feature: string }) {
   return (
-    <div className="inline-flex items-center gap-1 px-2 py-1 bg-teal-50 border border-teal-200 rounded text-xs text-teal-700">
+    <div className="inline-flex items-center gap-1 px-2 py-1 bg-[#6B9080]/10 border border-[#6B9080]/20 rounded text-xs text-[#6B9080]">
       <Zap className="w-3 h-3" />
       <span>Aminy {feature}</span>
     </div>

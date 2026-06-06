@@ -409,7 +409,7 @@ export function SecureMessaging({ userId, userType, userName }: SecureMessagingP
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-96">
-        <Loader2 className="w-8 h-8 animate-spin text-teal-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-[#6B9080]" />
       </div>
     );
   }
@@ -421,7 +421,7 @@ export function SecureMessaging({ userId, userType, userName }: SecureMessagingP
         {/* Header */}
         <div className="p-4 border-b border-neutral-200">
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-lg font-semibold text-neutral-900">Messages</h2>
+            <h2 className="text-lg font-semibold text-[#1B2733]">Messages</h2>
             <Button variant="ghost" size="sm">
               <Plus className="w-5 h-5" />
             </Button>
@@ -438,8 +438,8 @@ export function SecureMessaging({ userId, userType, userName }: SecureMessagingP
         </div>
 
         {/* HIPAA Notice */}
-        <div className="px-4 py-2 bg-teal-50 border-b border-teal-100">
-          <div className="flex items-center gap-2 text-xs text-teal-700">
+        <div className="px-4 py-2 bg-[#6B9080]/10 border-b border-[#E8E4DF]">
+          <div className="flex items-center gap-2 text-xs text-[#6B9080]">
             <Shield className="w-3.5 h-3.5" />
             <span>Encrypted, private messaging</span>
           </div>
@@ -450,7 +450,7 @@ export function SecureMessaging({ userId, userType, userName }: SecureMessagingP
           {filteredThreads.length === 0 ? (
             <div className="p-8 text-center">
               <MessageSquare className="w-12 h-12 text-neutral-300 mx-auto mb-3" />
-              <p className="text-neutral-500">No conversations yet</p>
+              <p className="text-[#5A6B7A]">No conversations yet</p>
             </div>
           ) : (
             filteredThreads.map(thread => (
@@ -458,11 +458,11 @@ export function SecureMessaging({ userId, userType, userName }: SecureMessagingP
                 key={thread.id}
                 onClick={() => setSelectedThread(thread)}
                 className={`w-full p-4 text-left hover:bg-neutral-50 transition-colors border-b border-neutral-100 ${
-                  selectedThread?.id === thread.id ? 'bg-teal-50' : ''
+                  selectedThread?.id === thread.id ? 'bg-[#6B9080]/10' : ''
                 }`}
               >
                 <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center flex-shrink-0">
+                  <div className="w-10 h-10 rounded-full bg-[#6B9080]/10 flex items-center justify-center flex-shrink-0">
                     {thread.providerPhoto ? (
                       <img
                         src={thread.providerPhoto}
@@ -470,12 +470,12 @@ export function SecureMessaging({ userId, userType, userName }: SecureMessagingP
                         className="w-10 h-10 rounded-full object-cover"
                       />
                     ) : (
-                      <User className="w-5 h-5 text-teal-600" />
+                      <User className="w-5 h-5 text-[#6B9080]" />
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between mb-1">
-                      <span className="font-medium text-neutral-900 truncate">
+                      <span className="font-medium text-[#1B2733] truncate">
                         {userType === 'parent' ? thread.providerName : thread.parentName}
                       </span>
                       {thread.lastMessage && (
@@ -485,13 +485,13 @@ export function SecureMessaging({ userId, userType, userName }: SecureMessagingP
                       )}
                     </div>
                     <div className="flex items-center justify-between">
-                      <p className="text-sm text-neutral-500 truncate">
+                      <p className="text-sm text-[#5A6B7A] truncate">
                         {userType === 'parent'
                           ? thread.providerCredentials
                           : `Re: ${thread.childName}`}
                       </p>
                       {thread.unreadCount > 0 && (
-                        <Badge className="bg-teal-500 text-white text-xs px-1.5 py-0.5 min-w-[20px] text-center">
+                        <Badge className="bg-primary text-white text-xs px-1.5 py-0.5 min-w-[20px] text-center">
                           {thread.unreadCount}
                         </Badge>
                       )}
@@ -518,14 +518,14 @@ export function SecureMessaging({ userId, userType, userName }: SecureMessagingP
               >
                 <ChevronLeft className="w-5 h-5" />
               </Button>
-              <div className="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center">
-                <User className="w-5 h-5 text-teal-600" />
+              <div className="w-10 h-10 rounded-full bg-[#6B9080]/10 flex items-center justify-center">
+                <User className="w-5 h-5 text-[#6B9080]" />
               </div>
               <div>
-                <h3 className="font-semibold text-neutral-900">
+                <h3 className="font-semibold text-[#1B2733]">
                   {userType === 'parent' ? selectedThread.providerName : selectedThread.parentName}
                 </h3>
-                <p className="text-sm text-neutral-500">
+                <p className="text-sm text-[#5A6B7A]">
                   {userType === 'parent'
                     ? selectedThread.providerCredentials
                     : `Parent of ${selectedThread.childName}`}
@@ -569,8 +569,8 @@ export function SecureMessaging({ userId, userType, userName }: SecureMessagingP
                     <div
                       className={`rounded-2xl px-4 py-2 ${
                         isOwn
-                          ? 'bg-teal-600 text-white rounded-br-md'
-                          : 'bg-white text-neutral-900 border border-neutral-200 rounded-bl-md'
+                          ? 'bg-primary text-white rounded-br-md'
+                          : 'bg-white text-[#1B2733] border border-neutral-200 rounded-bl-md'
                       }`}
                     >
                       <p className="whitespace-pre-wrap">{message.content}</p>
@@ -609,7 +609,7 @@ export function SecureMessaging({ userId, userType, userName }: SecureMessagingP
                       <span>{formatTime(message.createdAt)}</span>
                       {isOwn && (
                         message.readAt ? (
-                          <CheckCheck className="w-3.5 h-3.5 text-teal-500" />
+                          <CheckCheck className="w-3.5 h-3.5 text-primary" />
                         ) : (
                           <Check className="w-3.5 h-3.5" />
                         )
@@ -626,7 +626,7 @@ export function SecureMessaging({ userId, userType, userName }: SecureMessagingP
           {showQuickReplies && (
             <div className="px-4 py-2 bg-neutral-50 border-t border-neutral-200">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-medium text-neutral-500">Quick Replies</span>
+                <span className="text-xs font-medium text-[#5A6B7A]">Quick Replies</span>
                 <Button
                   variant="ghost"
                   size="sm"
@@ -694,7 +694,7 @@ export function SecureMessaging({ userId, userType, userName }: SecureMessagingP
                   size="sm"
                   onClick={() => fileInputRef.current?.click()}
                 >
-                  <Paperclip className="w-5 h-5 text-neutral-500" />
+                  <Paperclip className="w-5 h-5 text-[#5A6B7A]" />
                 </Button>
                 <input
                   ref={fileInputRef}
@@ -709,7 +709,7 @@ export function SecureMessaging({ userId, userType, userName }: SecureMessagingP
                   size="sm"
                   onClick={() => setShowQuickReplies(!showQuickReplies)}
                 >
-                  <MessageSquare className="w-5 h-5 text-neutral-500" />
+                  <MessageSquare className="w-5 h-5 text-[#5A6B7A]" />
                 </Button>
               </div>
               <Textarea
@@ -728,7 +728,7 @@ export function SecureMessaging({ userId, userType, userName }: SecureMessagingP
               <Button
                 onClick={sendMessage}
                 disabled={(!newMessage.trim() && attachments.length === 0) || isSending}
-                className="bg-teal-600 hover:bg-teal-700"
+                className="bg-primary hover:bg-[#6B9080]"
               >
                 {isSending ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
@@ -743,8 +743,8 @@ export function SecureMessaging({ userId, userType, userName }: SecureMessagingP
         <div className="flex-1 hidden md:flex items-center justify-center bg-neutral-50">
           <div className="text-center">
             <MessageSquare className="w-16 h-16 text-neutral-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-neutral-900 mb-1">Select a conversation</h3>
-            <p className="text-neutral-500">Choose a thread to start messaging</p>
+            <h3 className="text-lg font-medium text-[#1B2733] mb-1">Select a conversation</h3>
+            <p className="text-[#5A6B7A]">Choose a thread to start messaging</p>
           </div>
         </div>
       )}

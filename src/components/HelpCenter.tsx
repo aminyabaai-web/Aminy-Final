@@ -199,17 +199,17 @@ export function HelpCenter({ onClose, onAnalytics }: HelpCenterProps) {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="bg-white border-b border-gray-200">
+        <div className="bg-white border-b border-[#E8E4DF]">
           <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-teal-100 rounded-xl flex items-center justify-center">
-                <HelpCircle className="w-5 h-5 text-teal-600" />
+              <div className="w-10 h-10 bg-[#6B9080]/10 rounded-xl flex items-center justify-center">
+                <HelpCircle className="w-5 h-5 text-[#6B9080]" />
               </div>
               <div>
-                <h2 id="help-center-title" className="text-xl text-slate-900">
+                <h2 id="help-center-title" className="text-xl text-[#1B2733]">
                   Help & Support
                 </h2>
-                <p className="text-sm text-slate-600">
+                <p className="text-sm text-[#5A6B7A]">
                   {selectedArticle ? selectedArticle.title : 'Get help with Aminy'}
                 </p>
               </div>
@@ -228,7 +228,7 @@ export function HelpCenter({ onClose, onAnalytics }: HelpCenterProps) {
                 variant="ghost"
                 size="sm"
                 onClick={onClose}
-                className="text-slate-400 hover:text-slate-600"
+                className="text-slate-400 hover:text-[#5A6B7A]"
               >
                 <X className="w-5 h-5" />
               </Button>
@@ -245,7 +245,7 @@ export function HelpCenter({ onClose, onAnalytics }: HelpCenterProps) {
                   placeholder="Search help articles..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                  className="w-full pl-10 pr-4 py-2 border border-[#E8E4DF] rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-[#6B9080]"
                 />
               </div>
             </div>
@@ -254,7 +254,7 @@ export function HelpCenter({ onClose, onAnalytics }: HelpCenterProps) {
 
         <div className="flex h-[calc(90vh-180px)]">
           {/* Sidebar */}
-          <div className="w-80 border-r border-gray-200 overflow-y-auto bg-gray-50">
+          <div className="w-80 border-r border-[#E8E4DF] overflow-y-auto bg-[#FAF7F2]">
             {!selectedArticle ? (
               <div className="p-3 sm:p-4">
                 <nav className="space-y-2">
@@ -264,18 +264,18 @@ export function HelpCenter({ onClose, onAnalytics }: HelpCenterProps) {
                       onClick={() => handleTabChange(tab.id)}
                       className={`w-full flex items-center space-x-3 px-3 py-3 rounded-lg text-left transition-colors ${
                         activeTab === tab.id
-                          ? 'bg-white text-slate-900 shadow-sm'
-                          : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
+                          ? 'bg-white text-[#1B2733] shadow-sm'
+                          : 'text-[#5A6B7A] hover:text-[#1B2733] hover:bg-white/50'
                       }`}
                     >
                       <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                        activeTab === tab.id ? 'bg-teal-100 text-teal-600' : 'bg-slate-100 text-slate-500'
+                        activeTab === tab.id ? 'bg-[#6B9080]/10 text-[#6B9080]' : 'bg-[#F0EDE8] text-[#5A6B7A]'
                       }`}>
                         {tab.icon}
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="text-sm">{tab.label}</div>
-                        <div className="text-xs text-slate-500">{tab.description}</div>
+                        <div className="text-xs text-[#5A6B7A]">{tab.description}</div>
                       </div>
                     </button>
                   ))}
@@ -284,7 +284,7 @@ export function HelpCenter({ onClose, onAnalytics }: HelpCenterProps) {
                 <div className="mt-4 sm:mt-6">
                   <Button
                     onClick={() => setShowContactForm(true)}
-                    className="w-full bg-teal-600 hover:bg-teal-700 text-white"
+                    className="w-full bg-primary hover:bg-[#6B9080] text-white"
                   >
                     <MessageCircle className="w-4 h-4 mr-2" />
                     Contact Support
@@ -296,7 +296,7 @@ export function HelpCenter({ onClose, onAnalytics }: HelpCenterProps) {
                 <Button
                   variant="ghost"
                   onClick={() => setSelectedArticle(null)}
-                  className="flex items-center space-x-2 w-full justify-start mb-4 text-slate-600 hover:text-slate-900"
+                  className="flex items-center space-x-2 w-full justify-start mb-4 text-[#5A6B7A] hover:text-[#1B2733]"
                 >
                   <ChevronRight className="w-4 h-4 rotate-180" />
                   <span>Back to {currentTab?.label}</span>
@@ -311,7 +311,7 @@ export function HelpCenter({ onClose, onAnalytics }: HelpCenterProps) {
               /* Contact Form */
               <div className="p-4 sm:p-5 md:p-6">
                 <div className="max-w-2xl">
-                  <h3 className="text-lg text-slate-900 mb-4">Contact Support</h3>
+                  <h3 className="text-lg text-[#1B2733] mb-4">Contact Support</h3>
                   <form className="space-y-3 sm:space-y-4" onSubmit={(e) => {
                     e.preventDefault();
                     const form = e.currentTarget;
@@ -325,27 +325,27 @@ export function HelpCenter({ onClose, onAnalytics }: HelpCenterProps) {
                     setShowContactForm(false);
                   }}>
                     <div>
-                      <label className="block text-sm text-slate-700 mb-2">Subject</label>
+                      <label className="block text-sm text-[#3A4A57] mb-2">Subject</label>
                       <input
                         name="subject"
                         type="text"
                         required
                         placeholder="Brief description of your issue"
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                        className="w-full px-3 py-2 border border-[#E8E4DF] rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-[#6B9080]"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm text-slate-700 mb-2">Message</label>
+                      <label className="block text-sm text-[#3A4A57] mb-2">Message</label>
                       <textarea
                         name="message"
                         rows={6}
                         required
                         placeholder="Please describe your issue in detail..."
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                        className="w-full px-3 py-2 border border-[#E8E4DF] rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-[#6B9080]"
                       />
                     </div>
                     <div className="flex items-center space-x-3">
-                      <Button type="submit" className="bg-teal-600 hover:bg-teal-700 text-white">
+                      <Button type="submit" className="bg-primary hover:bg-[#6B9080] text-white">
                         <Send className="w-4 h-4 mr-2" />
                         Send Message
                       </Button>
@@ -364,22 +364,22 @@ export function HelpCenter({ onClose, onAnalytics }: HelpCenterProps) {
               /* Article View */
               <div className="p-4 sm:p-5 md:p-6">
                 <div className="max-w-2xl">
-                  <h3 className="text-xl text-slate-900 mb-4">{selectedArticle.title}</h3>
+                  <h3 className="text-xl text-[#1B2733] mb-4">{selectedArticle.title}</h3>
                   <div className="space-y-3">
                     {selectedArticle.bullets.map((bullet: string, index: number) => (
                       <div key={index} className="flex items-start space-x-3">
-                        <div className="w-1.5 h-1.5 bg-teal-600 rounded-full mt-2 flex-shrink-0" />
-                        <p className="text-slate-700 leading-relaxed">{bullet}</p>
+                        <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0" />
+                        <p className="text-[#3A4A57] leading-relaxed">{bullet}</p>
                       </div>
                     ))}
                   </div>
                   
-                  <div className="mt-8 pt-6 border-t border-gray-200">
-                    <p className="text-sm text-slate-600 mb-4">Still need help?</p>
+                  <div className="mt-8 pt-6 border-t border-[#E8E4DF]">
+                    <p className="text-sm text-[#5A6B7A] mb-4">Still need help?</p>
                     <Button
                       onClick={() => setShowContactForm(true)}
                       variant="outline"
-                      className="text-teal-600 border-teal-200 hover:bg-teal-50"
+                      className="text-[#6B9080] border-[#6B9080]/20 hover:bg-[#6B9080]/10"
                     >
                       <MessageCircle className="w-4 h-4 mr-2" />
                       Contact Support
@@ -391,28 +391,28 @@ export function HelpCenter({ onClose, onAnalytics }: HelpCenterProps) {
               /* Articles Grid */
               <div className="p-4 sm:p-5 md:p-6">
                 <div className="mb-4">
-                  <h3 className="text-lg text-slate-900">{currentTab?.label}</h3>
-                  <p className="text-sm text-slate-600">{currentTab?.description}</p>
+                  <h3 className="text-lg text-[#1B2733]">{currentTab?.label}</h3>
+                  <p className="text-sm text-[#5A6B7A]">{currentTab?.description}</p>
                 </div>
                 
                 <div className="grid gap-3 sm:gap-4">
                   {filteredArticles.map((article, index) => (
                     <Card
                       key={index}
-                      className="p-4 hover:shadow-md transition-shadow cursor-pointer border-gray-200"
+                      className="p-4 hover:shadow-md transition-shadow cursor-pointer border-[#E8E4DF]"
                       onClick={() => handleArticleSelect(article)}
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <h4 className="text-slate-900 mb-2">{article.title}</h4>
+                          <h4 className="text-[#1B2733] mb-2">{article.title}</h4>
                           <div className="space-y-1">
                             {article.bullets.slice(0, 2).map((bullet: string, bulletIndex: number) => (
-                              <p key={bulletIndex} className="text-sm text-slate-600 line-clamp-1">
+                              <p key={bulletIndex} className="text-sm text-[#5A6B7A] line-clamp-1">
                                 • {bullet}
                               </p>
                             ))}
                             {article.bullets.length > 2 && (
-                              <p className="text-sm text-slate-500">
+                              <p className="text-sm text-[#5A6B7A]">
                                 +{article.bullets.length - 2} more
                               </p>
                             )}
@@ -426,7 +426,7 @@ export function HelpCenter({ onClose, onAnalytics }: HelpCenterProps) {
 
                 {filteredArticles.length === 0 && searchQuery && (
                   <div className="text-center py-8">
-                    <p className="text-slate-600">No articles found for "{searchQuery}"</p>
+                    <p className="text-[#5A6B7A]">No articles found for "{searchQuery}"</p>
                     <Button
                       onClick={() => setSearchQuery('')}
                       variant="ghost"
@@ -462,8 +462,8 @@ export function HelpCenter({ onClose, onAnalytics }: HelpCenterProps) {
                   <AlertTriangle className="w-5 h-5 text-red-600" />
                 </div>
                 <div>
-                  <h3 className="text-lg text-slate-900">Urgent Help</h3>
-                  <p className="text-sm text-slate-600">Emergency resources & support</p>
+                  <h3 className="text-lg text-[#1B2733]">Urgent Help</h3>
+                  <p className="text-sm text-[#5A6B7A]">Emergency resources & support</p>
                 </div>
               </div>
               

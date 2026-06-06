@@ -30,8 +30,8 @@ export function GlobalDisclaimer({
   const baseClasses = "text-xs leading-relaxed text-muted-foreground";
 
   const variantClasses: Record<string, string> = {
-    footer: "text-center p-3 border-t border-gray-200 bg-gray-50/50",
-    card: "p-3 bg-gray-50/50 border border-gray-200 rounded-lg",
+    footer: "text-center p-3 border-t border-[#E8E4DF] bg-[#FAF7F2]/50",
+    card: "p-3 bg-[#FAF7F2]/50 border border-[#E8E4DF] rounded-lg",
     modal: "p-2 text-center",
     inline: "py-2",
     critical: "p-4 bg-amber-50 border-2 border-amber-300 rounded-xl text-amber-900"
@@ -147,7 +147,7 @@ export function ClinicalScopeDisclaimer({
  */
 export function ChatDisclaimerBanner({ className = '' }: { className?: string }) {
   return (
-    <div className={`flex items-center justify-center gap-2 py-2 px-3 bg-gray-50 border-b border-gray-200 text-xs text-gray-500 ${className}`}>
+    <div className={`flex items-center justify-center gap-2 py-2 px-3 bg-[#FAF7F2] border-b border-[#E8E4DF] text-xs text-[#5A6B7A] ${className}`}>
       <Info className="w-3 h-3 flex-shrink-0" />
       <span>Aminy provides support, not clinical care. For emergencies, call 911 or 988.</span>
     </div>
@@ -160,7 +160,7 @@ export function ChatDisclaimerBanner({ className = '' }: { className?: string })
  */
 export function FirstMessageDisclaimer({ className = '' }: { className?: string }) {
   return (
-    <div className={`mx-4 my-2 p-3 bg-blue-50 border border-blue-200 rounded-xl ${className}`}>
+    <div className={`mx-4 my-2 p-3 bg-[#EEF4F8] border border-[#C8DDE8] rounded-xl ${className}`}>
       <div className="flex items-start gap-2">
         <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
           <Info className="w-3 h-3 text-blue-600" />
@@ -171,11 +171,11 @@ export function FirstMessageDisclaimer({ className = '' }: { className?: string 
             I'm here to support you with strategies, routines, and resources. For clinical therapy or diagnosis, please work with licensed professionals.
           </p>
           <div className="mt-2 flex items-center gap-3 text-blue-600">
-            <a href="tel:911" className="flex items-center gap-1 hover:text-blue-800">
+            <a href="tel:911" className="flex items-center gap-1 hover:text-[#4A6478]">
               <Phone className="w-3 h-3" />
               <span>Emergency: 911</span>
             </a>
-            <a href="tel:988" className="flex items-center gap-1 hover:text-blue-800">
+            <a href="tel:988" className="flex items-center gap-1 hover:text-[#4A6478]">
               <Phone className="w-3 h-3" />
               <span>Crisis: 988</span>
             </a>
@@ -228,11 +228,11 @@ export function CrisisResources() {
     <div className="space-y-3 sm:space-y-4">
       <UrgentHelpDisclaimer />
       
-      <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+      <div className="p-4 bg-[#EEF4F8] border border-[#C8DDE8] rounded-lg">
         <h4 className="font-semibold text-blue-900 mb-2 text-sm">
           Additional Crisis Resources
         </h4>
-        <div className="space-y-3 text-blue-800 text-xs">
+        <div className="space-y-3 text-[#4A6478] text-xs">
           <div>
             <p className="font-medium">National Suicide Prevention Lifeline</p>
             <a href="tel:988" className="underline hover:text-blue-900">Call or text: 988</a>

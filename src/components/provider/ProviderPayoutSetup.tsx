@@ -137,15 +137,15 @@ function PracticeInfoSection({ providerId }: { providerId: string | null }) {
     <Card className="p-5 rounded-2xl border-0 shadow-sm bg-white mb-4">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-full bg-teal-50 flex items-center justify-center">
-            <Building2 className="w-4 h-4 text-teal-600" />
+          <div className="w-8 h-8 rounded-full bg-[#6B9080]/10 flex items-center justify-center">
+            <Building2 className="w-4 h-4 text-[#6B9080]" />
           </div>
-          <span className="font-semibold text-gray-800 text-sm">Practice Information</span>
+          <span className="font-semibold text-[#1B2733] text-sm">Practice Information</span>
         </div>
         {!editing && info.npi && (
           <button
             onClick={() => { setDraft({ ...info }); setEditing(true); setSaveError(null); }}
-            className="flex items-center gap-1 text-xs text-teal-600 hover:text-teal-700 px-2 py-1 rounded-lg hover:bg-teal-50 transition-colors"
+            className="flex items-center gap-1 text-xs text-[#6B9080] hover:text-[#6B9080] px-2 py-1 rounded-lg hover:bg-[#6B9080]/10 transition-colors"
           >
             <Pencil className="w-3 h-3" />
             Edit
@@ -170,8 +170,8 @@ function PracticeInfoSection({ providerId }: { providerId: string | null }) {
             { label: 'Practice Name', value: info.practiceName || '—' },
           ].map(({ label, value }) => (
             <div key={label} className="flex justify-between items-center text-sm py-1 border-b border-gray-50 last:border-0">
-              <span className="text-gray-500 text-xs">{label}</span>
-              <span className="font-medium text-gray-700 text-xs text-right max-w-[60%] truncate">{value}</span>
+              <span className="text-[#5A6B7A] text-xs">{label}</span>
+              <span className="font-medium text-[#3A4A57] text-xs text-right max-w-[60%] truncate">{value}</span>
             </div>
           ))}
         </div>
@@ -180,20 +180,20 @@ function PracticeInfoSection({ providerId }: { providerId: string | null }) {
         <div className="space-y-3">
           {/* Practice Name */}
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">Practice Name</label>
+            <label className="block text-xs font-medium text-[#5A6B7A] mb-1">Practice Name</label>
             <input
               type="text"
               value={draft.practiceName}
               onChange={(e) => setDraft((d) => ({ ...d, practiceName: e.target.value }))}
               placeholder="e.g. Sunshine ABA Therapy"
-              className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent bg-gray-50"
+              className="w-full rounded-xl border border-[#E8E4DF] px-3 py-2.5 text-sm text-[#1B2733] focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent bg-[#FAF7F2]"
             />
           </div>
 
           {/* NPI */}
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">
-              NPI Number <span className="text-gray-400">(10 digits)</span>
+            <label className="block text-xs font-medium text-[#5A6B7A] mb-1">
+              NPI Number <span className="text-[#8A9BA8]">(10 digits)</span>
             </label>
             <input
               type="text"
@@ -202,7 +202,7 @@ function PracticeInfoSection({ providerId }: { providerId: string | null }) {
               onChange={(e) => setDraft((d) => ({ ...d, npi: e.target.value.replace(/[^\d]/g, '').slice(0, 10) }))}
               placeholder="1234567890"
               maxLength={10}
-              className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm font-mono text-gray-800 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent bg-gray-50"
+              className="w-full rounded-xl border border-[#E8E4DF] px-3 py-2.5 text-sm font-mono text-[#1B2733] focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent bg-[#FAF7F2]"
             />
             {draft.npi.length > 0 && draft.npi.length < 10 && (
               <p className="text-xs text-amber-600 mt-1">{10 - draft.npi.length} more digit{10 - draft.npi.length !== 1 ? 's' : ''} needed</p>
@@ -214,11 +214,11 @@ function PracticeInfoSection({ providerId }: { providerId: string | null }) {
 
           {/* Taxonomy */}
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">Taxonomy Code</label>
+            <label className="block text-xs font-medium text-[#5A6B7A] mb-1">Taxonomy Code</label>
             <select
               value={draft.taxonomyCode}
               onChange={(e) => setDraft((d) => ({ ...d, taxonomyCode: e.target.value }))}
-              className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent bg-gray-50"
+              className="w-full rounded-xl border border-[#E8E4DF] px-3 py-2.5 text-sm text-[#1B2733] focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent bg-[#FAF7F2]"
             >
               <option value="">Select taxonomy code…</option>
               {ABA_TAXONOMY_CODES.map((t) => (
@@ -277,14 +277,14 @@ function StatusBadge({ status }: { status: ConnectAccountStatus['status'] }) {
       );
     case 'pending':
       return (
-        <Badge className="bg-yellow-100 text-yellow-700 border-yellow-200">
+        <Badge className="bg-yellow-100 text-yellow-700 border-[#F0EDE8]">
           <Clock className="w-3 h-3 mr-1" />
           Pending Verification
         </Badge>
       );
     default:
       return (
-        <Badge className="bg-gray-100 text-gray-600 border-gray-200">
+        <Badge className="bg-[#F0EDE8] text-[#5A6B7A] border-[#E8E4DF]">
           <AlertCircle className="w-3 h-3 mr-1" />
           Not Connected
         </Badge>
@@ -297,7 +297,7 @@ function payoutStatusLabel(status: PayoutRecord['status']) {
     case 'paid': return { label: 'Paid', cls: 'bg-green-100 text-green-700' };
     case 'pending': return { label: 'Pending', cls: 'bg-yellow-100 text-yellow-700' };
     case 'failed': return { label: 'Failed', cls: 'bg-red-100 text-red-700' };
-    case 'canceled': return { label: 'Canceled', cls: 'bg-gray-100 text-gray-600' };
+    case 'canceled': return { label: 'Canceled', cls: 'bg-[#F0EDE8] text-[#5A6B7A]' };
   }
 }
 
@@ -394,7 +394,7 @@ export function ProviderPayoutSetup({ onBack }: ProviderPayoutSetupProps) {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--color-bg, #f9fafb)' }}>
-        <Loader2 className="w-8 h-8 animate-spin text-teal-500" />
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
       </div>
     );
   }
@@ -457,10 +457,10 @@ export function ProviderPayoutSetup({ onBack }: ProviderPayoutSetupProps) {
         <Card className="p-5 rounded-2xl border-0 shadow-sm bg-white">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-teal-50 flex items-center justify-center">
-                <CreditCard className="w-4 h-4 text-teal-600" />
+              <div className="w-8 h-8 rounded-full bg-[#6B9080]/10 flex items-center justify-center">
+                <CreditCard className="w-4 h-4 text-[#6B9080]" />
               </div>
-              <span className="font-semibold text-gray-800 text-sm">Stripe Connect</span>
+              <span className="font-semibold text-[#1B2733] text-sm">Stripe Connect</span>
             </div>
             {accountStatus && <StatusBadge status={accountStatus.status} />}
           </div>
@@ -468,18 +468,18 @@ export function ProviderPayoutSetup({ onBack }: ProviderPayoutSetupProps) {
           {/* Status description */}
           {!isActive && !isPending && (
             <div className="mb-4">
-              <p className="text-sm text-gray-600 mb-1">
+              <p className="text-sm text-[#5A6B7A] mb-1">
                 Connect your bank account to receive payouts for completed sessions.
               </p>
-              <p className="text-xs text-gray-400">
+              <p className="text-xs text-[#8A9BA8]">
                 Aminy retains a 10% platform fee. You receive 90% of each session.
               </p>
             </div>
           )}
 
           {isPending && (
-            <div className="mb-4 p-3 rounded-lg bg-yellow-50 border border-yellow-100">
-              <p className="text-sm text-yellow-800">
+            <div className="mb-4 p-3 rounded-lg bg-[#FDF9F0] border border-yellow-100">
+              <p className="text-sm text-[#3A4A57]">
                 Your Stripe account is under review. This typically takes 1–2 business days.
                 You can resume onboarding if additional information is needed.
               </p>
@@ -488,13 +488,13 @@ export function ProviderPayoutSetup({ onBack }: ProviderPayoutSetupProps) {
 
           {isActive && balance && (
             <div className="grid grid-cols-2 gap-3 mb-4">
-              <div className="rounded-xl bg-teal-50 p-3 text-center">
-                <p className="text-xs text-teal-600 font-medium mb-1">Available</p>
-                <p className="text-lg font-bold text-teal-700">{formatCents(balance.availableCents)}</p>
+              <div className="rounded-xl bg-[#6B9080]/10 p-3 text-center">
+                <p className="text-xs text-[#6B9080] font-medium mb-1">Available</p>
+                <p className="text-lg font-bold text-[#6B9080]">{formatCents(balance.availableCents)}</p>
               </div>
-              <div className="rounded-xl bg-gray-50 p-3 text-center">
-                <p className="text-xs text-gray-500 font-medium mb-1">Pending</p>
-                <p className="text-lg font-bold text-gray-700">{formatCents(balance.pendingCents)}</p>
+              <div className="rounded-xl bg-[#FAF7F2] p-3 text-center">
+                <p className="text-xs text-[#5A6B7A] font-medium mb-1">Pending</p>
+                <p className="text-lg font-bold text-[#3A4A57]">{formatCents(balance.pendingCents)}</p>
               </div>
             </div>
           )}
@@ -518,7 +518,7 @@ export function ProviderPayoutSetup({ onBack }: ProviderPayoutSetupProps) {
           )}
 
           {isActive && (
-            <div className="flex items-center gap-2 text-xs text-gray-400 mt-1">
+            <div className="flex items-center gap-2 text-xs text-[#8A9BA8] mt-1">
               <Shield className="w-3 h-3" />
               <span>Payouts processed securely via Stripe</span>
             </div>
@@ -528,8 +528,8 @@ export function ProviderPayoutSetup({ onBack }: ProviderPayoutSetupProps) {
         {/* Fee info card */}
         <Card className="p-4 rounded-2xl border-0 shadow-sm bg-white">
           <div className="flex items-center gap-2 mb-3">
-            <TrendingUp className="w-4 h-4 text-teal-500" />
-            <span className="font-semibold text-gray-800 text-sm">Payout Schedule</span>
+            <TrendingUp className="w-4 h-4 text-primary" />
+            <span className="font-semibold text-[#1B2733] text-sm">Payout Schedule</span>
           </div>
           <div className="space-y-2">
             {[
@@ -539,8 +539,8 @@ export function ProviderPayoutSetup({ onBack }: ProviderPayoutSetupProps) {
               { label: 'Minimum payout', value: '$0 (auto)' },
             ].map(({ label, value }) => (
               <div key={label} className="flex justify-between items-center text-sm">
-                <span className="text-gray-500">{label}</span>
-                <span className="font-medium text-gray-700">{value}</span>
+                <span className="text-[#5A6B7A]">{label}</span>
+                <span className="font-medium text-[#3A4A57]">{value}</span>
               </div>
             ))}
           </div>
@@ -553,24 +553,24 @@ export function ProviderPayoutSetup({ onBack }: ProviderPayoutSetupProps) {
             className="w-full flex items-center justify-between px-5 py-4"
           >
             <div className="flex items-center gap-2">
-              <History className="w-4 h-4 text-gray-500" />
-              <span className="font-semibold text-gray-800 text-sm">Payout History</span>
+              <History className="w-4 h-4 text-[#5A6B7A]" />
+              <span className="font-semibold text-[#1B2733] text-sm">Payout History</span>
               {payouts.length > 0 && (
-                <Badge className="bg-teal-50 text-teal-700 border-0 text-xs">
+                <Badge className="bg-[#6B9080]/10 text-[#6B9080] border-0 text-xs">
                   {payouts.length}
                 </Badge>
               )}
             </div>
-            <span className="text-xs text-gray-400">{showHistory ? 'Hide' : 'View'}</span>
+            <span className="text-xs text-[#8A9BA8]">{showHistory ? 'Hide' : 'View'}</span>
           </button>
 
           {showHistory && (
-            <div className="border-t border-gray-100">
+            <div className="border-t border-[#E8E4DF]">
               {payouts.length === 0 ? (
                 <div className="px-5 py-6 text-center">
                   <DollarSign className="w-8 h-8 text-gray-200 mx-auto mb-2" />
-                  <p className="text-sm text-gray-400">No payouts yet</p>
-                  <p className="text-xs text-gray-400 mt-1">Payouts appear here after sessions are completed and paid</p>
+                  <p className="text-sm text-[#8A9BA8]">No payouts yet</p>
+                  <p className="text-xs text-[#8A9BA8] mt-1">Payouts appear here after sessions are completed and paid</p>
                 </div>
               ) : (
                 <div className="divide-y divide-gray-50">
@@ -580,15 +580,15 @@ export function ProviderPayoutSetup({ onBack }: ProviderPayoutSetupProps) {
                     return (
                       <div key={payout.id} className="px-5 py-3 flex items-center justify-between gap-3">
                         <div className="min-w-0 flex-1">
-                          <p className="text-sm font-medium text-gray-700 truncate">
+                          <p className="text-sm font-medium text-[#3A4A57] truncate">
                             {payout.sessionDescription ?? `Session ${payout.sessionId.slice(0, 8)}`}
                           </p>
-                          <p className="text-xs text-gray-400 mt-0.5">
+                          <p className="text-xs text-[#8A9BA8] mt-0.5">
                             {date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                           </p>
                         </div>
                         <div className="flex flex-col items-end gap-1 shrink-0">
-                          <span className="text-sm font-semibold text-gray-800">
+                          <span className="text-sm font-semibold text-[#1B2733]">
                             {formatCents(payout.providerAmountCents)}
                           </span>
                           <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${cls}`}>

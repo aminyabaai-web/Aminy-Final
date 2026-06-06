@@ -417,7 +417,7 @@ export function EnhancedChatInput({
   const hasUploading = attachments.some(a => a.status === 'uploading');
 
   return (
-    <div className={`bg-white dark:bg-slate-800 border-t border-gray-200 dark:border-slate-700 ${className}`}>
+    <div className={`bg-white dark:bg-slate-800 border-t border-[#E8E4DF] dark:border-slate-700 ${className}`}>
       {/* Attachment previews */}
       <AnimatePresence>
         {attachments.length > 0 && (
@@ -437,7 +437,7 @@ export function EnhancedChatInput({
                   className="relative group"
                 >
                   {attachment.type === 'image' ? (
-                    <div className="w-16 h-16 rounded-lg overflow-hidden border border-gray-200 dark:border-slate-600">
+                    <div className="w-16 h-16 rounded-lg overflow-hidden border border-[#E8E4DF] dark:border-slate-600">
                       <img
                         src={attachment.localUrl || attachment.url}
                         alt={attachment.name}
@@ -445,9 +445,9 @@ export function EnhancedChatInput({
                       />
                     </div>
                   ) : (
-                    <div className="w-16 h-16 rounded-lg border border-gray-200 dark:border-slate-600 bg-gray-50 dark:bg-slate-700 flex flex-col items-center justify-center p-1">
-                      <FileText className="w-6 h-6 text-gray-400" />
-                      <span className="text-[10px] text-gray-500 truncate w-full text-center mt-1">
+                    <div className="w-16 h-16 rounded-lg border border-[#E8E4DF] dark:border-slate-600 bg-[#FAF7F2] dark:bg-slate-700 flex flex-col items-center justify-center p-1">
+                      <FileText className="w-6 h-6 text-[#8A9BA8]" />
+                      <span className="text-[10px] text-[#5A6B7A] truncate w-full text-center mt-1">
                         {attachment.name.split('.').pop()?.toUpperCase()}
                       </span>
                     </div>
@@ -495,12 +495,12 @@ export function EnhancedChatInput({
             exit={{ height: 0, opacity: 0 }}
             className="px-4 pt-2"
           >
-            <div className="flex items-center gap-2 p-2 bg-teal-50 dark:bg-teal-900/20 rounded-lg">
+            <div className="flex items-center gap-2 p-2 bg-[#6B9080]/10 dark:bg-[#6B9080]/10 rounded-lg">
               <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-              <span className="text-sm text-teal-700 dark:text-teal-300 flex-1">
+              <span className="text-sm text-[#6B9080] dark:text-[#7BA7BC] flex-1">
                 {transcript || 'Listening...'}
               </span>
-              <span className="text-xs text-teal-600 dark:text-teal-400">
+              <span className="text-xs text-[#6B9080] dark:text-primary">
                 {formatTime(recordingTime)}
               </span>
             </div>
@@ -526,7 +526,7 @@ export function EnhancedChatInput({
             size="icon"
             onClick={() => fileInputRef.current?.click()}
             disabled={disabled || attachments.length >= maxAttachments}
-            className="h-10 w-10 rounded-full text-gray-500 hover:text-teal-600 hover:bg-teal-50"
+            className="h-10 w-10 rounded-full text-[#5A6B7A] hover:text-[#6B9080] hover:bg-[#6B9080]/10"
             title="Attach file"
           >
             <Paperclip className="w-5 h-5" />
@@ -546,7 +546,7 @@ export function EnhancedChatInput({
             size="icon"
             onClick={() => cameraInputRef.current?.click()}
             disabled={disabled || attachments.length >= maxAttachments}
-            className="h-10 w-10 rounded-full text-gray-500 hover:text-teal-600 hover:bg-teal-50"
+            className="h-10 w-10 rounded-full text-[#5A6B7A] hover:text-[#6B9080] hover:bg-[#6B9080]/10"
             title="Take photo"
           >
             <Camera className="w-5 h-5" />
@@ -561,7 +561,7 @@ export function EnhancedChatInput({
             className={`h-10 w-10 rounded-full transition-colors ${
               isRecording
                 ? 'bg-red-100 text-red-600 hover:bg-red-200'
-                : 'text-gray-500 hover:text-teal-600 hover:bg-teal-50'
+                : 'text-[#5A6B7A] hover:text-[#6B9080] hover:bg-[#6B9080]/10'
             }`}
             title={isRecording ? 'Stop recording' : 'Voice input'}
           >
@@ -583,7 +583,7 @@ export function EnhancedChatInput({
             placeholder={isRecording ? 'Speak now or type...' : placeholder}
             disabled={disabled}
             rows={1}
-            className="w-full px-4 py-3 pr-12 rounded-2xl border border-gray-200 dark:border-slate-600 bg-gray-50 dark:bg-slate-700 focus:ring-2 focus:ring-teal-500 focus:border-transparent resize-none text-sm placeholder:text-gray-500 dark:text-white dark:placeholder:text-gray-500 disabled:opacity-50"
+            className="w-full px-4 py-3 pr-12 rounded-2xl border border-[#E8E4DF] dark:border-slate-600 bg-[#FAF7F2] dark:bg-slate-700 focus:ring-2 focus:ring-teal-500 focus:border-transparent resize-none text-sm placeholder:text-[#5A6B7A] dark:text-white dark:placeholder:text-[#5A6B7A] disabled:opacity-50"
             style={{ minHeight: '48px', maxHeight: '150px' }}
           />
         </div>
@@ -594,8 +594,8 @@ export function EnhancedChatInput({
           disabled={!canSend || hasUploading}
           className={`h-10 w-10 rounded-full transition-all ${
             canSend && !hasUploading
-              ? 'bg-teal-500 hover:bg-teal-600 text-white'
-              : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+              ? 'bg-primary hover:bg-primary text-white'
+              : 'bg-[#E8E4DF] text-[#8A9BA8] cursor-not-allowed'
           }`}
         >
           {isLoading || hasUploading ? (
@@ -609,7 +609,7 @@ export function EnhancedChatInput({
       {/* Attachment count hint */}
       {attachments.length > 0 && (
         <div className="px-4 pb-2">
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-[#5A6B7A]">
             {attachments.length} of {maxAttachments} attachments • {formatSize(attachments.reduce((sum, a) => sum + a.size, 0))}
           </p>
         </div>

@@ -182,15 +182,15 @@ export function CohortAnalysis({ period = 'weekly', limit = 8 }: CohortAnalysisP
     const diff = current - previous;
     if (diff > 5) return <TrendingUp className="w-3 h-3 text-green-600" />;
     if (diff < -5) return <TrendingDown className="w-3 h-3 text-red-600" />;
-    return <Minus className="w-3 h-3 text-gray-400" />;
+    return <Minus className="w-3 h-3 text-[#8A9BA8]" />;
   };
 
   if (isLoading) {
     return (
       <Card className="p-4 sm:p-5 md:p-6">
         <div className="flex items-center justify-center py-12">
-          <Loader2 className="w-6 h-6 animate-spin text-teal-600" />
-          <span className="ml-2 text-gray-600 dark:text-slate-400">Loading cohort data...</span>
+          <Loader2 className="w-6 h-6 animate-spin text-[#6B9080]" />
+          <span className="ml-2 text-[#5A6B7A] dark:text-slate-400">Loading cohort data...</span>
         </div>
       </Card>
     );
@@ -209,7 +209,7 @@ export function CohortAnalysis({ period = 'weekly', limit = 8 }: CohortAnalysisP
   if (cohorts.length === 0) {
     return (
       <Card className="p-4 sm:p-5 md:p-6">
-        <div className="text-center py-12 text-gray-500 dark:text-slate-400">
+        <div className="text-center py-12 text-[#5A6B7A] dark:text-slate-400">
           No cohort data available yet. Users will appear here once they sign up.
         </div>
       </Card>
@@ -219,7 +219,7 @@ export function CohortAnalysis({ period = 'weekly', limit = 8 }: CohortAnalysisP
   return (
     <Card className="p-4 sm:p-5 md:p-6">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="font-semibold text-gray-900 dark:text-white">
+        <h3 className="font-semibold text-[#1B2733] dark:text-white">
           Cohort Retention Analysis
         </h3>
         <Badge variant="outline" className="text-xs">
@@ -231,24 +231,24 @@ export function CohortAnalysis({ period = 'weekly', limit = 8 }: CohortAnalysisP
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-gray-200 dark:border-slate-700">
-              <th className="text-left py-3 px-2 font-medium text-gray-500 dark:text-slate-400">Cohort</th>
-              <th className="text-center py-3 px-2 font-medium text-gray-500 dark:text-slate-400">Users</th>
-              <th className="text-center py-3 px-2 font-medium text-gray-500 dark:text-slate-400">D1</th>
-              <th className="text-center py-3 px-2 font-medium text-gray-500 dark:text-slate-400">D7</th>
-              <th className="text-center py-3 px-2 font-medium text-gray-500 dark:text-slate-400">D14</th>
-              <th className="text-center py-3 px-2 font-medium text-gray-500 dark:text-slate-400">D30</th>
+            <tr className="border-b border-[#E8E4DF] dark:border-slate-700">
+              <th className="text-left py-3 px-2 font-medium text-[#5A6B7A] dark:text-slate-400">Cohort</th>
+              <th className="text-center py-3 px-2 font-medium text-[#5A6B7A] dark:text-slate-400">Users</th>
+              <th className="text-center py-3 px-2 font-medium text-[#5A6B7A] dark:text-slate-400">D1</th>
+              <th className="text-center py-3 px-2 font-medium text-[#5A6B7A] dark:text-slate-400">D7</th>
+              <th className="text-center py-3 px-2 font-medium text-[#5A6B7A] dark:text-slate-400">D14</th>
+              <th className="text-center py-3 px-2 font-medium text-[#5A6B7A] dark:text-slate-400">D30</th>
             </tr>
           </thead>
           <tbody>
             {cohorts.map((cohort, index) => {
               const prevCohort = cohorts[index + 1] || null;
               return (
-                <tr key={cohort.cohort} className="border-b border-gray-100 dark:border-slate-800">
-                  <td className="py-3 px-2 font-medium text-gray-900 dark:text-white">
+                <tr key={cohort.cohort} className="border-b border-[#E8E4DF] dark:border-slate-800">
+                  <td className="py-3 px-2 font-medium text-[#1B2733] dark:text-white">
                     {cohort.cohort}
                   </td>
-                  <td className="py-3 px-2 text-center text-gray-600 dark:text-slate-400">
+                  <td className="py-3 px-2 text-center text-[#5A6B7A] dark:text-slate-400">
                     {cohort.totalUsers}
                   </td>
                   <td className="py-3 px-2 text-center">
@@ -283,7 +283,7 @@ export function CohortAnalysis({ period = 'weekly', limit = 8 }: CohortAnalysisP
       </div>
 
       {/* Legend */}
-      <div className="mt-4 flex items-center gap-3 sm:gap-4 text-xs text-gray-500 dark:text-slate-400">
+      <div className="mt-4 flex items-center gap-3 sm:gap-4 text-xs text-[#5A6B7A] dark:text-slate-400">
         <div className="flex items-center gap-1">
           <div className="w-3 h-3 rounded bg-green-100 dark:bg-green-900/30" />
           <span>&gt;60%</span>
