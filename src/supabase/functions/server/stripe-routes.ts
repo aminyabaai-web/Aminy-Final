@@ -39,14 +39,16 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 const PRICE_TO_TIER: Record<string, string> = {
   // Monthly prices
   [Deno.env.get('STRIPE_PRICE_STARTER_MONTHLY') || 'price_starter_monthly']: 'starter',
-  [Deno.env.get('STRIPE_PRICE_CORE_MONTHLY') || 'price_core_monthly']: 'core',
-  [Deno.env.get('STRIPE_PRICE_PRO_MONTHLY') || 'price_pro_monthly']: 'pro',
-  [Deno.env.get('STRIPE_PRICE_PROPLUS_MONTHLY') || 'price_proplus_monthly']: 'proplus',
+  [Deno.env.get('STRIPE_PRICE_CORE_MONTHLY') || 'price_1TfAcvQaCBrUl24BHrxiGHuv']: 'core',
+  [Deno.env.get('STRIPE_PRICE_PRO_MONTHLY') || 'price_1TfAcxQaCBrUl24B539LF2VT']: 'pro',
+  [Deno.env.get('STRIPE_PRICE_PROPLUS_MONTHLY') || 'price_1TfAczQaCBrUl24Bxrsz0tef']: 'proplus',
+  [Deno.env.get('STRIPE_PRICE_ORG_MONTHLY') || 'price_1TfAd0QaCBrUl24BXJdZNpnI']: 'proplus',
   // Annual prices
   [Deno.env.get('STRIPE_PRICE_STARTER_ANNUAL') || 'price_starter_annual']: 'starter',
-  [Deno.env.get('STRIPE_PRICE_CORE_ANNUAL') || 'price_core_annual']: 'core',
-  [Deno.env.get('STRIPE_PRICE_PRO_ANNUAL') || 'price_pro_annual']: 'pro',
-  [Deno.env.get('STRIPE_PRICE_PROPLUS_ANNUAL') || 'price_proplus_annual']: 'proplus',
+  [Deno.env.get('STRIPE_PRICE_CORE_ANNUAL') || 'price_1TfAcwQaCBrUl24BEcw7WT7q']: 'core',
+  [Deno.env.get('STRIPE_PRICE_PRO_ANNUAL') || 'price_1TfAcyQaCBrUl24BzbssMb2c']: 'pro',
+  [Deno.env.get('STRIPE_PRICE_PROPLUS_ANNUAL') || 'price_1TfAczQaCBrUl24BzkqNWx4K']: 'proplus',
+  [Deno.env.get('STRIPE_PRICE_ORG_ANNUAL') || 'price_1TfAd1QaCBrUl24BHLbXTZFx']: 'proplus',
 };
 
 /**
@@ -315,10 +317,14 @@ async function stripeRequest(
 const PRICE_IDS: Record<string, string> = {
   starter_monthly: Deno.env.get('STRIPE_PRICE_STARTER_MONTHLY') || 'price_starter_monthly',
   starter_annual: Deno.env.get('STRIPE_PRICE_STARTER_ANNUAL') || 'price_starter_annual',
-  core_monthly: Deno.env.get('STRIPE_PRICE_CORE_MONTHLY') || 'price_core_monthly',
-  core_annual: Deno.env.get('STRIPE_PRICE_CORE_ANNUAL') || 'price_core_annual',
-  pro_monthly: Deno.env.get('STRIPE_PRICE_PRO_MONTHLY') || 'price_pro_monthly',
-  pro_annual: Deno.env.get('STRIPE_PRICE_PRO_ANNUAL') || 'price_pro_annual',
+  core_monthly: Deno.env.get('STRIPE_PRICE_CORE_MONTHLY') || 'price_1TfAcvQaCBrUl24BHrxiGHuv',
+  core_annual: Deno.env.get('STRIPE_PRICE_CORE_ANNUAL') || 'price_1TfAcwQaCBrUl24BEcw7WT7q',
+  pro_monthly: Deno.env.get('STRIPE_PRICE_PRO_MONTHLY') || 'price_1TfAcxQaCBrUl24B539LF2VT',
+  pro_annual: Deno.env.get('STRIPE_PRICE_PRO_ANNUAL') || 'price_1TfAcyQaCBrUl24BzbssMb2c',
+  proplus_monthly: Deno.env.get('STRIPE_PRICE_PROPLUS_MONTHLY') || 'price_1TfAczQaCBrUl24Bxrsz0tef',
+  proplus_annual: Deno.env.get('STRIPE_PRICE_PROPLUS_ANNUAL') || 'price_1TfAczQaCBrUl24BzkqNWx4K',
+  org_monthly: Deno.env.get('STRIPE_PRICE_ORG_MONTHLY') || 'price_1TfAd0QaCBrUl24BXJdZNpnI',
+  org_annual: Deno.env.get('STRIPE_PRICE_ORG_ANNUAL') || 'price_1TfAd1QaCBrUl24BHLbXTZFx',
 };
 
 // ============================================================================

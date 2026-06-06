@@ -2038,6 +2038,106 @@ app.post("/make-server-8a022548/payments/webhook", async (c) => {
 });
 
 // ============================================================================
+// ORG / B2B CHECKOUT - Seat-based subscription for organizations
+// ============================================================================
+
+app.post("/make-server-8a022548/org/checkout", async (c) => {
+  try {
+    const authHeader = c.req.header('Authorization');
+    const authResult = await verifyAuth(authHeader);
+
+    if (!authResult.authenticated || !authResult.user) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
+    const { orgId, interval, successUrl, cancelUrl } = await c.req.json();
+
+    if (!orgId || !interval || !successUrl || !cancelUrl) {
+      return c.json({ error: 'Missing required fields: orgId, interval, successUrl, cancelUrl' }, 400);
+    }
+
+    const { createClient } = await import('jsr:@supabase/supabase-js@2');
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+    );
+
+    // Look up the org — must be owned by the requesting user
+    const { data: org, error: orgError } = await supabase
+      .from('organizations')
+      .select('id, name, owner_id, seat_count, stripe_customer_id')
+      .eq('id', orgId)
+      .single();
+
+    if (orgError || !org) {
+      return c.json({ error: 'Organization not found' }, 404);
+    }
+
+    if (org.owner_id !== authResult.user.userId) {
+      return c.json({ error: 'Forbidden' }, 403);
+    }
+
+    const priceKey = interval === 'year' ? 'org_annual' : 'org_monthly';
+    const STRIPE_SECRET_KEY = Deno.env.get('STRIPE_SECRET_KEY') || '';
+    const orgPriceId = Deno.env.get('STRIPE_PRICE_ORG_' + (interval === 'year' ? 'ANNUAL' : 'MONTHLY'))
+      || (interval === 'year' ? 'price_1TfAd1QaCBrUl24BHLbXTZFx' : 'price_1TfAd0QaCBrUl24BXJdZNpnI');
+
+    const seatCount = Math.max(org.seat_count || 10, 10);
+
+    // Build Stripe checkout session params
+    const params: Record<string, string> = {
+      'mode': 'subscription',
+      'client_reference_id': authResult.user.userId,
+      'line_items[0][price]': orgPriceId,
+      'line_items[0][quantity]': seatCount.toString(),
+      'success_url': successUrl,
+      'cancel_url': cancelUrl,
+      'allow_promotion_codes': 'true',
+      'billing_address_collection': 'auto',
+      'subscription_data[metadata][userId]': authResult.user.userId,
+      'subscription_data[metadata][orgId]': orgId,
+      'subscription_data[metadata][tier]': 'proplus',
+    };
+
+    // Re-use existing customer if available
+    if (org.stripe_customer_id) {
+      params['customer'] = org.stripe_customer_id;
+    } else {
+      // Pre-fill email from user
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('email')
+        .eq('id', authResult.user.userId)
+        .single();
+      if (profile?.email) {
+        params['customer_email'] = profile.email;
+      }
+    }
+
+    const stripeRes = await fetch('https://api.stripe.com/v1/checkout/sessions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${STRIPE_SECRET_KEY}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams(params).toString(),
+    });
+
+    const session = await stripeRes.json();
+
+    if (!stripeRes.ok) {
+      console.error('Stripe org checkout error:', session.error);
+      return c.json({ error: session.error?.message || 'Stripe error' }, 500);
+    }
+
+    return c.json({ url: session.url, sessionId: session.id });
+  } catch (error) {
+    console.error('Org checkout error:', error);
+    return c.json({ error: 'Failed to create org checkout session' }, 500);
+  }
+});
+
+// ============================================================================
 // VIDEO / DAILY.CO ENDPOINTS - Real telehealth video calls
 // Requires 'marketplace-access' feature (Core tier or higher)
 // ============================================================================

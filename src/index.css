@@ -6829,6 +6829,19 @@ body {
   --z-select: 850;
   --z-popover: 900;
   --z-modal: 1000;
+  /* Semantic dark-mode-aware tokens used by inline-styled components */
+  --color-bg-screen: #FAF7F2;
+  --color-text-deep: #0D1B2A;
+  --color-text-primary: #1B2733;
+  --color-text-secondary: #5A6B7A;
+  --color-text-muted: #8E9BAA;
+  --color-text-body: #374151;
+  --color-text-dim: #6b7280;
+  --color-border-light: #E8E4DF;
+  --color-border-soft: #F0EDE8;
+  --color-surface: #ffffff;
+  --color-surface-soft: #F5F2EC;
+  --color-input-border: #e5e7eb;
 }
 
 .dark {
@@ -6869,6 +6882,19 @@ body {
   --sidebar-accent-foreground: #f1f5f9;
   --sidebar-border: #334155;
   --sidebar-ring: #7BA7BC;
+  /* Semantic tokens — dark equivalents */
+  --color-bg-screen: #0f172a;
+  --color-text-deep: #f8fafc;
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #94a3b8;
+  --color-text-muted: #64748b;
+  --color-text-body: #cbd5e1;
+  --color-text-dim: #94a3b8;
+  --color-border-light: #334155;
+  --color-border-soft: #1e293b;
+  --color-surface: #1e293b;
+  --color-surface-soft: #293548;
+  --color-input-border: #334155;
 }
 
 .z-tooltip {
@@ -17414,3 +17440,40 @@ tr:hover td, .hover-row:hover {
 /* ── Dark mode: remaining teal/cyan → brand ─────────────────────────── */
 .dark .dark\:bg-teal-400 { background-color: #7BA7BC !important; }
 .dark .dark\:text-teal-400 { color: #7BA7BC !important; }
+
+/* ── Dark mode: Tailwind brand hex overrides ─────────────────────────── */
+/* These are the most common hardcoded hex classes used across components  */
+.dark .text-\[\#1B2733\] { color: #f1f5f9 !important; }
+.dark .text-\[\#0D1B2A\] { color: #f8fafc !important; }
+.dark .text-\[\#3A4A57\] { color: #cbd5e1 !important; }
+.dark .text-\[\#5A6B7A\] { color: #94a3b8 !important; }
+.dark .text-\[\#4A5568\] { color: #94a3b8 !important; }
+.dark .text-\[\#8E9BAA\] { color: #64748b !important; }
+.dark .text-\[\#374151\] { color: #cbd5e1 !important; }
+.dark .text-\[\#111827\] { color: #f1f5f9 !important; }
+.dark .text-\[\#6b7280\] { color: #94a3b8 !important; }
+.dark .text-\[\#4b5563\] { color: #94a3b8 !important; }
+.dark .text-\[\#2D3748\] { color: #f1f5f9 !important; }
+.dark .text-\[\#475569\] { color: #94a3b8 !important; }
+.dark .bg-\[\#FAF7F2\] { background-color: #0f172a !important; }
+.dark .bg-\[\#EEF4F8\] { background-color: #1e293b !important; }
+.dark .bg-\[\#F0EDE8\] { background-color: #1e293b !important; }
+.dark .bg-\[\#F5F2EC\] { background-color: #293548 !important; }
+.dark .bg-\[\#F8F8F6\] { background-color: #1e293b !important; }
+.dark .bg-\[\#F9FAFB\] { background-color: #1e293b !important; }
+.dark .border-\[\#E8E4DF\] { border-color: #334155 !important; }
+.dark .border-\[\#F0EDE8\] { border-color: #1e293b !important; }
+.dark .border-\[\#E2E8F0\] { border-color: #334155 !important; }
+
+/* Dark mode inputs/forms */
+.dark input:not([type="checkbox"]):not([type="radio"]),
+.dark textarea,
+.dark select {
+  background-color: #1e293b;
+  color: #f1f5f9;
+  border-color: #334155;
+}
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #64748b;
+}
