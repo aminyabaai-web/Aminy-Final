@@ -977,7 +977,7 @@ ${customBlock}${liveScreenContext}`;
                           </div>
                         </div>
                         {(userContext?.progressThisWeek?.sessionsCompleted ?? 0) > 0 && (
-                          <div className="flex gap-3 mt-3 pt-3 border-t border-teal-100">
+                          <div className="flex gap-3 mt-3 pt-3 border-t border-[#6B9080]/20">
                             <div className="text-center flex-1">
                               <p className="text-lg font-bold text-slate-800">{userContext?.progressThisWeek?.sessionsCompleted}</p>
                               <p className="text-[10px] text-slate-400 uppercase tracking-wide">Sessions</p>
@@ -1062,7 +1062,7 @@ ${customBlock}${liveScreenContext}`;
                                 }
                               }}
                               placeholder="e.g. My son Liam is 7, has ASD level 2, and struggles most with transitions and unexpected changes. He loves dinosaurs and is highly motivated by screen time..."
-                              className="w-full text-sm text-slate-800 placeholder-slate-400 border border-slate-200 rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-2 focus:ring-teal-500/30 focus:border-[#6B9080]"
+                              className="w-full text-sm text-slate-800 placeholder-slate-400 border border-slate-200 rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-2 focus:ring-[#6B9080]/30 focus:border-[#6B9080]"
                               rows={4}
                             />
                           </div>
@@ -1083,7 +1083,7 @@ ${customBlock}${liveScreenContext}`;
                                 }
                               }}
                               placeholder="e.g. Keep responses brief and direct — I'm usually reading this in the middle of a meltdown. Give me 1 thing to try, not a list..."
-                              className="w-full text-sm text-slate-800 placeholder-slate-400 border border-slate-200 rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-2 focus:ring-teal-500/30 focus:border-[#6B9080]"
+                              className="w-full text-sm text-slate-800 placeholder-slate-400 border border-slate-200 rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-2 focus:ring-[#6B9080]/30 focus:border-[#6B9080]"
                               rows={3}
                             />
                           </div>

@@ -265,7 +265,7 @@ const ActivityHeatmap: React.FC<{
     <div className="flex items-end gap-1 h-20">
       {data.map((d, i) => {
         const intensity = d.count / maxCount;
-        const bgColor = `rgba(20, 184, 166, ${Math.max(0.1, intensity)})`;
+        const bgColor = `rgba(107, 144, 128, ${Math.max(0.1, intensity)})`;
 
         return (
           <div

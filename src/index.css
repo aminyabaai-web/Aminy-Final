@@ -17279,4 +17279,123 @@ button, a, [role="button"] {
 .bg-\[\#7BA7BC\]\/10 { background-color: rgba(123,167,188,0.10); }
 .text-\[\#7BA7BC\] { color: #7BA7BC; }
 
+/* ── Premium Interaction Polish ─────────────────────────────────────── */
+
+/* Card interactive lift — subtle shadow elevation on hover */
+[data-slot="card"]:not([data-no-lift]) {
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+[data-slot="card"]:not([data-no-lift]):hover {
+  box-shadow: 0 4px 20px rgba(27, 39, 51, 0.08), 0 1px 6px rgba(27, 39, 51, 0.04);
+  transform: translateY(-1px);
+}
+
+/* Button press feedback already in button.tsx (active:scale-[0.97]);
+   add consistent focus ring glow for brand */
+[data-slot="button"]:focus-visible {
+  box-shadow: 0 0 0 3px rgba(107, 144, 128, 0.25);
+}
+
+/* Input premium feel: warm background tint on focus */
+[data-slot="input"]:focus {
+  background-color: #FDFAF7;
+  border-color: #6B9080;
+  box-shadow: 0 0 0 3px rgba(107, 144, 128, 0.12);
+}
+
+/* Badge refinement: pill shape for secondary badges */
+[data-slot="badge"] {
+  font-size: 11px;
+  letter-spacing: 0.01em;
+}
+
+/* Dialog premium backdrop */
+[data-radix-popper-content-wrapper] {
+  filter: drop-shadow(0 20px 60px rgba(0, 0, 0, 0.15));
+}
+
+/* Progress bar brand animation */
+[data-slot="progress-indicator"] {
+  background: linear-gradient(90deg, #6B9080, #7BA7BC);
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Smooth page transitions for screens */
+.screen-enter {
+  opacity: 0;
+  transform: translateY(8px);
+}
+.screen-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+/* Premium divider between list items */
+.divide-warm > :not([hidden]) ~ :not([hidden]) {
+  border-color: #E8E4DF;
+}
+
+/* Ensure avatars always have brand gradient fallback when empty */
+[data-radix-avatar-fallback] {
+  background: linear-gradient(135deg, #6B9080, #7BA7BC);
+  color: white;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* Table/list row hover warmth */
+tr:hover td, .hover-row:hover {
+  background-color: rgba(250, 247, 242, 0.8);
+}
+
+/* Placeholder text: softer, warmer */
+::placeholder {
+  color: rgba(122, 140, 153, 0.65);
+  font-weight: 400;
+}
+
+/* Tag/chip elements */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 500;
+  background-color: rgba(107, 144, 128, 0.10);
+  color: #6B9080;
+  border: 1px solid rgba(107, 144, 128, 0.18);
+}
+
+/* Gradient text utility for headlines */
+.text-gradient-brand {
+  background: linear-gradient(135deg, #6B9080, #7BA7BC);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Empty state illustration containers */
+.empty-state-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(107,144,128,0.1), rgba(123,167,188,0.1));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+
+/* Missing utility extras */
+.border-\[\#6B9080\]\/30 { border-color: rgba(107,144,128,0.30); }
+.bg-\[\#6B9080\]\/5 { background-color: rgba(107,144,128,0.05); }
+.bg-\[\#FAF7F2\]\/80 { background-color: rgba(250,247,242,0.80); }
+.from-\[\#6B9080\] { --tw-gradient-from: #6B9080; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(107,144,128,0)); }
+.to-\[\#7BA7BC\] { --tw-gradient-to: #7BA7BC; }
+.from-\[\#FAF7F2\] { --tw-gradient-from: #FAF7F2; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(250,247,242,0)); }
+.to-\[\#F5F2EC\] { --tw-gradient-to: #F5F2EC; }
+
 /* ── END Aminy Premium Global Design System ─────────────────────────── */

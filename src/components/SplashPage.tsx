@@ -324,9 +324,9 @@ export function SplashPage({
                   alignItems: 'center',
                   gap: '6px',
                   background: 'none',
-                  border: '1px solid rgba(13, 148, 136, 0.25)',
+                  border: '1px solid rgba(107, 144, 128, 0.30)',
                   borderRadius: '12px',
-                  color: 'rgba(13, 148, 136, 0.85)',
+                  color: 'rgba(107, 144, 128, 0.90)',
                   fontFamily: fontStack,
                   fontSize: '13px',
                   fontWeight: 500,
@@ -336,12 +336,12 @@ export function SplashPage({
                   ...fontSmoothing,
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = 'rgba(13, 148, 136, 0.06)';
-                  e.currentTarget.style.borderColor = 'rgba(13, 148, 136, 0.4)';
+                  e.currentTarget.style.backgroundColor = 'rgba(107, 144, 128, 0.06)';
+                  e.currentTarget.style.borderColor = 'rgba(107, 144, 128, 0.45)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor = 'transparent';
-                  e.currentTarget.style.borderColor = 'rgba(13, 148, 136, 0.25)';
+                  e.currentTarget.style.borderColor = 'rgba(107, 144, 128, 0.30)';
                 }}
               >
                 Concerned about your child? Free screening →
@@ -388,7 +388,7 @@ export function SplashPage({
                   style={{
                     background: 'none',
                     border: 'none',
-                    color: 'rgba(13, 148, 136, 0.7)',
+                    color: 'rgba(107, 144, 128, 0.75)',
                     fontFamily: fontStack,
                     fontSize: '12px',
                     fontWeight: 500,
@@ -397,8 +397,8 @@ export function SplashPage({
                     transition: 'color 0.2s ease',
                     ...fontSmoothing,
                   }}
-                  onMouseEnter={(e) => e.currentTarget.style.color = 'rgba(13, 148, 136, 1)'}
-                  onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(13, 148, 136, 0.7)'}
+                  onMouseEnter={(e) => e.currentTarget.style.color = 'rgba(107, 144, 128, 1)'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(107, 144, 128, 0.75)'}
                 >
                   Provider pilot by invitation →
                 </button>
