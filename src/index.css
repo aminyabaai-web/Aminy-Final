@@ -17477,3 +17477,18 @@ tr:hover td, .hover-row:hover {
 .dark textarea::placeholder {
   color: #64748b;
 }
+
+/* Dark mode: prevent near-white text on un-overridden white backgrounds */
+.dark .bg-white { background-color: #1e293b !important; }
+.dark .bg-white\/90 { background-color: #1e293b !important; }
+.dark .bg-white\/95 { background-color: #1e293b !important; }
+.dark .bg-white\/80 { background-color: #1e293b !important; }
+.dark .bg-white\/70 { background-color: #1e293b !important; }
+
+/* Compiled dark: color variants not in initial precompiled bundle */
+.dark\:text-red-300:is(.dark *) { color: var(--color-red-300) !important; }
+.dark\:text-red-400:is(.dark *) { color: oklch(.704 .191 22.216) !important; }
+.dark\:bg-blue-900:is(.dark *) { background-color: oklch(.282 .091 267.935) !important; }
+.dark\:bg-blue-800:is(.dark *) { background-color: oklch(.357 .115 267.935) !important; }
+.dark\:text-blue-100:is(.dark *) { color: oklch(.932 .032 255.585) !important; }
+.dark\:text-blue-200:is(.dark *) { color: oklch(.882 .059 254.128) !important; }

@@ -102,6 +102,9 @@ declare global {
     __setUser?: (user: unknown) => void;
     __openBevelChat?: () => void;
     __closeBevelChat?: () => void;
+    __setDevUser?: (overrides: Record<string, unknown>) => void;
+    __clearDevUser?: () => void;
+    __startInvestorDemo?: () => void;
     aminy?: { updateChildPrefs?: (prefs: unknown) => void; [key: string]: unknown };
   }
 

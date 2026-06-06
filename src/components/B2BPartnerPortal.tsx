@@ -291,7 +291,7 @@ export function B2BPartnerPortal({
       {/* Hero */}
       <section className="py-16 px-4">
         <div className="max-w-4xl mx-auto text-center">
-          <Badge className="bg-blue-100 text-[#4A6478] mb-4">
+          <Badge className="bg-blue-100 dark:bg-blue-900 text-[#4A6478] dark:text-blue-200 mb-4">
             Partner Program
           </Badge>
           <h1 className="text-4xl font-bold text-[#1B2733] mb-4">

@@ -221,7 +221,7 @@ function BreathStep({
               <button
                 key={num}
                 onClick={() => startBreathing(num)}
-                className="flex-1 h-12 rounded bg-blue-100 hover:bg-blue-200 transition-colors flex items-center justify-center text-[#3A4A57] font-medium"
+                className="flex-1 h-12 rounded bg-blue-100 dark:bg-blue-900 hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors flex items-center justify-center text-[#3A4A57] dark:text-blue-100 font-medium"
               >
                 {num}
               </button>

@@ -541,13 +541,13 @@ export function MyAppointments({
         />
         <div className="px-4 pb-4">
           {/* Tabs */}
-          <div className="flex gap-1 bg-[#F0EDE8] p-1 rounded-lg">
+          <div className="flex gap-1 bg-[#F0EDE8] dark:bg-slate-800 p-1 rounded-lg">
             <button
               onClick={() => setActiveTab('upcoming')}
               className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
                 activeTab === 'upcoming'
-                  ? 'bg-white text-[#1B2733] shadow-sm'
-                  : 'text-[#5A6B7A] hover:text-[#1B2733]'
+                  ? 'bg-white dark:bg-slate-700 text-[#1B2733] dark:text-slate-100 shadow-sm'
+                  : 'text-[#5A6B7A] dark:text-slate-400 hover:text-[#1B2733] dark:hover:text-slate-200'
               }`}
             >
               Upcoming ({upcomingAppointments.length})
@@ -556,8 +556,8 @@ export function MyAppointments({
               onClick={() => setActiveTab('past')}
               className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
                 activeTab === 'past'
-                  ? 'bg-white text-[#1B2733] shadow-sm'
-                  : 'text-[#5A6B7A] hover:text-[#1B2733]'
+                  ? 'bg-white dark:bg-slate-700 text-[#1B2733] dark:text-slate-100 shadow-sm'
+                  : 'text-[#5A6B7A] dark:text-slate-400 hover:text-[#1B2733] dark:hover:text-slate-200'
               }`}
             >
               Past ({pastAppointments.length})
