@@ -24,7 +24,7 @@ export function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
       {/* Header */}
       <header className="bg-white border-b sticky top-0 z-10">
         <div className="max-w-3xl mx-auto px-4 py-4 flex items-center gap-3 sm:gap-4">
-          <Button variant="ghost" size="icon" onClick={onBack}>
+          <Button variant="ghost" size="icon" onClick={onBack} aria-label="Go back">
             <ArrowLeft className="w-5 h-5" />
           </Button>
           <div>
@@ -35,7 +35,7 @@ export function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
       </header>
 
       {/* Content */}
-      <main className="max-w-3xl mx-auto px-4 py-8">
+      <div className="max-w-3xl mx-auto px-4 py-8">
         <div className="bg-white rounded-xl shadow-sm p-6 md:p-8 space-y-8">
           {/* Introduction */}
           <section>
@@ -220,7 +220,7 @@ export function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
             </p>
           </section>
         </div>
-      </main>
+      </div>
     </div>
   );
 }

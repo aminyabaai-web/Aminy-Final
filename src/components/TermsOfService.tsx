@@ -36,7 +36,7 @@ export function TermsOfService({ onBack }: TermsOfServiceProps) {
       </header>
 
       {/* Content */}
-      <main className="max-w-3xl mx-auto px-4 py-8">
+      <div className="max-w-3xl mx-auto px-4 py-8">
         <div className="bg-white rounded-xl shadow-sm p-6 md:p-8 space-y-8">
           {/* Introduction */}
           <section>
@@ -268,7 +268,7 @@ export function TermsOfService({ onBack }: TermsOfServiceProps) {
             </div>
           </section>
         </div>
-      </main>
+      </div>
     </div>
   );
 }
