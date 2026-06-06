@@ -16,6 +16,7 @@
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { toast } from 'sonner';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
@@ -665,12 +666,30 @@ export function Dashboard10({
               <p className="text-sm text-amber-200 mt-2">
                 {child.name} is building great habits thanks to you.
               </p>
-              <button
-                onClick={() => setShowStreakCelebration(false)}
-                className="mt-4 px-6 py-2 bg-white/20 hover:bg-white/30 rounded-full text-sm transition-colors"
-              >
-                Keep Going! 💪
-              </button>
+              <div className="mt-4 flex flex-col gap-2">
+                <button
+                  onClick={() => {
+                    const shareText = `${child.name} just hit a ${streakDays}-day streak on Aminy — building amazing habits day by day! 🎉 app.aminy.ai`;
+                    if (navigator.share) {
+                      navigator.share({ title: `${streakDays}-Day Streak!`, text: shareText }).catch(() => {});
+                    } else {
+                      navigator.clipboard?.writeText(shareText).then(() => {
+                        toast.success('Copied to clipboard!');
+                      }).catch(() => {});
+                    }
+                    setShowStreakCelebration(false);
+                  }}
+                  className="px-6 py-2 bg-white text-amber-600 rounded-full text-sm font-semibold transition-colors hover:bg-amber-50"
+                >
+                  Share your win 🎉
+                </button>
+                <button
+                  onClick={() => setShowStreakCelebration(false)}
+                  className="px-6 py-2 bg-white/20 hover:bg-white/30 rounded-full text-sm transition-colors"
+                >
+                  Keep Going! 💪
+                </button>
+              </div>
             </div>
           </motion.div>
         </div>

@@ -142,6 +142,35 @@ export function AskABCBA({ onBack, userId, childName, parentName }: AskABCBAProp
         variant="flat"
       />
 
+      {/* Value prop — shown before first question is asked */}
+      {!showAsk && !isLoading && threads.length === 0 && (
+        <div className="mx-4 mt-4 rounded-2xl border border-[#E8E4DF] bg-white p-4">
+          <div className="flex items-start gap-3 mb-3">
+            <div className="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style={{ background: 'linear-gradient(135deg, #43AA8B 0%, #577590 100%)' }}>
+              <ShieldCheck className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-[#1B2733]">BCBA expertise, on demand</p>
+              <p className="text-xs text-[#5A6B7A] mt-0.5">$30/mo add-on · Free with Pro+ Family</p>
+            </div>
+          </div>
+          <div className="space-y-2">
+            <div className="flex items-start gap-2">
+              <Sparkles className="w-4 h-4 text-[#6B9080] mt-0.5 shrink-0" />
+              <p className="text-xs text-[#3A4A57]"><span className="font-medium">Instant AI draft</span> — Aminy gives you an answer right away, informed by your family's context</p>
+            </div>
+            <div className="flex items-start gap-2">
+              <ShieldCheck className="w-4 h-4 text-[#6B9080] mt-0.5 shrink-0" />
+              <p className="text-xs text-[#3A4A57]"><span className="font-medium">BCBA-reviewed</span> — a licensed BCBA edits and signs the response, typically within 24 hours</p>
+            </div>
+            <div className="flex items-start gap-2">
+              <MessageCircle className="w-4 h-4 text-[#6B9080] mt-0.5 shrink-0" />
+              <p className="text-xs text-slate-400">Answers Now charges $55/mo for 24h responses only. We give you an instant answer + BCBA sign-off for less.</p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Compose CTA */}
       {!showAsk && (
         <div className="px-4 mt-4">

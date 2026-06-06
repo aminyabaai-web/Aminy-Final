@@ -100,6 +100,8 @@ declare global {
     __setCurrentScreen?: (screen: string) => void;
     __navigateToScreen?: (screen: string) => void;
     __setUser?: (user: unknown) => void;
+    __openBevelChat?: () => void;
+    __closeBevelChat?: () => void;
     aminy?: { updateChildPrefs?: (prefs: unknown) => void; [key: string]: unknown };
   }
 

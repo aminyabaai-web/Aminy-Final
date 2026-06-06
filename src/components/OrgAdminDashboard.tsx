@@ -11,7 +11,7 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { Building2, Users, CreditCard, ChevronLeft, Plus, X, Mail, Crown, Shield, User, ArrowUpRight, AlertCircle, Check, Loader2 } from 'lucide-react';
+import { Building2, Users, CreditCard, ChevronLeft, Plus, X, Mail, Crown, Shield, User, ArrowUpRight, AlertCircle, Check, Loader2, Activity, Clock } from 'lucide-react';
 import { toast } from 'sonner';
 import { PartnerOutcomesWidget } from './PartnerOutcomesWidget';
 import {
@@ -265,6 +265,39 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
           )}
         </div>
       )}
+
+      {/* EVV & Compliance card */}
+      <div className="mx-4 mt-3 rounded-2xl bg-white border border-[#E8E4DF] p-4">
+        <div className="flex items-center gap-2 mb-3">
+          <Activity className="w-4 h-4 text-slate-400" />
+          <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">Compliance & EVV</p>
+        </div>
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-[#1B2733]">EVV sync</p>
+              <p className="text-xs text-slate-400">Electronic Visit Verification (DCI)</p>
+            </div>
+            <span className="flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-[#F0EDE8] text-[#5A6B7A]">
+              Not configured
+            </span>
+          </div>
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-[#1B2733]">BCBA supervision</p>
+              <p className="text-xs text-slate-400">Hours logged this billing period</p>
+            </div>
+            <div className="text-right">
+              <p className="text-sm font-semibold text-[#1B2733]">{usage?.seatsUsed ?? 0} <span className="text-xs font-normal text-slate-400">/ {(usage?.seatsAllocated ?? 0) * 2}h</span></p>
+              <p className="text-xs text-slate-400">2h/seat/mo</p>
+            </div>
+          </div>
+        </div>
+        <div className="mt-3 pt-3 border-t border-[#E8E4DF] flex items-start gap-2">
+          <AlertCircle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
+          <p className="text-xs text-[#5A6B7A]">EVV is required for AHCCCS/Medicaid reimbursement. Contact <a href="mailto:hello@aminy.ai" className="text-[#6B9080] underline">hello@aminy.ai</a> to configure DCI sync for your agency.</p>
+        </div>
+      </div>
 
       {/* Aggregate outcomes — live PHQ-9/GAD-7/ABC trends for enrolled families */}
       <div className="mx-4 mt-3">

@@ -1083,12 +1083,14 @@ export function getTierFeatureDescriptions(tier: TierType): string[] {
       '3 AI chat messages per day',
       'Core calm tools (breathing, timer, bubbles)',
       'Track daily progress',
+      'AI memory: 50 facts about your child',
       '7-day free trial of Core included',
     ],
     starter: [ // Legacy: Same as Core
       '7-day free trial included',
       'Unlimited AI chat (text & voice)',
       'AI reads your IEPs & medical records',
+      'AI memory: 5,000 facts — AI gets smarter every day',
       'Adaptive plans that learn what works',
       '10% off marketplace sessions',
       'Support up to 2 children',
@@ -1099,6 +1101,7 @@ export function getTierFeatureDescriptions(tier: TierType): string[] {
       '7-day free trial included',
       'Unlimited AI chat (text & voice)',
       'AI reads your IEPs & medical records',
+      'AI memory: 5,000 facts — AI gets smarter every day',
       'Adaptive plans that learn what works',
       '10% off marketplace sessions',
       'Support up to 2 children',
@@ -1107,6 +1110,7 @@ export function getTierFeatureDescriptions(tier: TierType): string[] {
     ],
     pro: [
       'Everything in Core, plus:',
+      'AI memory: 15,000 facts — never forgets a strategy',
       'Support up to 3 children',
       'Clinical-grade progress reports (IEP-ready)',
       'Provider sharing portal',
@@ -1116,13 +1120,14 @@ export function getTierFeatureDescriptions(tier: TierType): string[] {
     ],
     proplus: [
       'Everything in Pro, plus:',
+      'AI memory: unlimited — complete family history',
+      'Ask a BCBA included (instant AI + BCBA review)',
       'Unlimited children profiles',
       '30% off all marketplace sessions',
       'Care coordinator (async support)',
       '4 caregiver accounts',
       'Advanced analytics dashboard',
       'Dedicated support channel',
-      'Perfect for families with multiple children',
     ],
   };
 

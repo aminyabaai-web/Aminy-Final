@@ -840,6 +840,16 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                     {subscription.cancelAtPeriodEnd ? 'Cancels' : 'Renews'} {new Date(subscription.currentPeriodEnd).toLocaleDateString()}
                   </p>
                 )}
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  AI memory:{' '}
+                  {subscription.tier === 'free' ? '50 facts' :
+                   subscription.tier === 'core' ? '5,000 facts' :
+                   subscription.tier === 'pro' ? '15,000 facts' :
+                   'unlimited facts'}
+                  {' '}· {subscription.tier === 'free' || subscription.tier === 'core' ? (
+                    <button onClick={() => onNavigate?.('paywall')} className="text-[#6B9080] underline">upgrade for more</button>
+                  ) : 'full history'}
+                </p>
               </div>
             </div>
             <Button variant="outline" size="sm" onClick={handleManageSubscription}>
