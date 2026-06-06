@@ -3646,17 +3646,18 @@ export default function App() {
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <ParentApprovalCard
                 suggestion={{
-                  id: '',
+                  id: 'demo-suggestion-1',
                   type: 'routine_change',
                   status: 'proposed' as const,
                   createdAt: new Date().toISOString(),
-                  providerId: '',
-                  providerName: '',
-                  providerRole: '',
+                  providerId: 'demo-provider-1',
+                  providerName: 'Dr. Sarah Kim, BCBA-D',
+                  providerRole: 'BCBA',
                   childId: userData.childId || '',
-                  rationale: '',
-                  expectedOutcome: '',
-                  payload: {} as Record<string, unknown>,
+                  childName: userData.childName || 'your child',
+                  rationale: 'Adding a 5-minute transition warning before activity switches reduces meltdowns by 40–60% in children with similar profiles.',
+                  expectedOutcome: 'Smoother transitions with fewer behavioral incidents during routine changes.',
+                  payload: { routineName: 'Morning Routine', changes: [{ field: 'transition_warning', before: 'No warning', after: '5-minute verbal + visual timer' }] } as Record<string, unknown>,
                 }}
                 onAccept={() => navigateToScreen("dashboard")}
                 onReject={() => navigateToScreen("dashboard")}
