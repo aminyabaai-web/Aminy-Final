@@ -1693,6 +1693,8 @@ export default function App() {
   if (import.meta.env.DEV) {
     window.__navigateToScreen = (screen: string) => navigateToScreen(screen as AppScreen);
     window.__setCurrentScreen = (screen: string) => setCurrentScreen(screen as AppScreen);
+    window.__openBevelChat = () => setBevelChatOpen(true);
+    window.__closeBevelChat = () => setBevelChatOpen(false);
   }
 
   // Mark as initialized immediately - session is checked synchronously on mount
@@ -1966,8 +1968,11 @@ export default function App() {
           // with "User must be authenticated". Bounce to login. The !authReady gate
           // above means the user only ever sees the loading skeleton → login, never
           // a flash of the dashboard.
+          // DEV-only: E2E tests set __e2e_auth to bypass this redirect.
+          const isE2EBypass = import.meta.env.DEV &&
+            (() => { try { return localStorage.getItem('__e2e_auth') === 'bypass'; } catch { return false; } })();
           const screen = currentScreenRef.current;
-          if (!SESSIONLESS_OK_SCREENS.has(screen)) {
+          if (!SESSIONLESS_OK_SCREENS.has(screen) && !isE2EBypass) {
             logger.dev('INITIAL_SESSION with no session on a protected screen — redirecting to login', { screen });
             navigateToScreen('login');
           }

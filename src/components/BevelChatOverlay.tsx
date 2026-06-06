@@ -4,6 +4,7 @@
 // See LICENSE file for details.
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { logPHIView } from '../lib/security/hipaa-audit';
 import { X, Mic, ArrowUp, ChevronRight, Menu, Plus, ImageIcon, Trash2, MessageSquare, Settings, ChevronDown, Brain, Sparkles, RotateCcw, Check, User, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
@@ -799,7 +800,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
     loadContextAndOpenChat();
   };
 
-  return (
+  return createPortal(
     <AnimatePresence>
       {isOpen && (
         <>
@@ -1358,6 +1359,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
           </motion.div>
         </>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 }
