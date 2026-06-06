@@ -575,7 +575,7 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
     return (
       <div className="min-h-screen bg-white dark:bg-slate-900 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-teal-500 mx-auto mb-4" />
+          <Loader2 className="w-8 h-8 animate-spin text-primary mx-auto mb-4" />
           <p className="text-muted-foreground">Loading profile...</p>
         </div>
       </div>
@@ -583,9 +583,9 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 pb-24">
+    <div className="min-h-screen bg-background dark:bg-slate-900 pb-24">
       {/* Header */}
-      <div className="sticky top-0 z-10 bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
+      <div className="sticky top-0 z-10 bg-card dark:bg-slate-800 border-b border-[#E8E4DF] dark:border-slate-700">
         <div className="max-w-2xl md:max-w-2xl md:mx-auto px-4 py-4">
           <div className="flex items-center gap-3">
             {onBack && (
@@ -602,7 +602,7 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
               </p>
             </div>
             {userTier !== 'free' && (
-              <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0">
+              <Badge className="bg-gradient-to-r from-[#6B9080] to-[#7BA7BC] text-white border-0">
                 <Crown className="w-3 h-3 mr-1" />
                 {getTierDisplayName(userTier)}
               </Badge>
@@ -612,7 +612,7 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
 
         {/* Tabs */}
         <div className="max-w-2xl mx-auto px-4">
-          <div className="flex gap-1 border-b border-gray-200 dark:border-slate-700">
+          <div className="flex gap-1 border-b border-[#E8E4DF] dark:border-slate-700">
             {[
               { id: 'profile', label: 'My Profile', icon: User },
               { id: 'children', label: 'Children', icon: Baby },
@@ -623,8 +623,8 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
                 onClick={() => setActiveTab(tab.id as 'profile' | 'children' | 'security')}
                 className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
                   activeTab === tab.id
-                    ? 'border-teal-500 text-teal-600 dark:text-teal-400'
-                    : 'border-transparent text-muted-foreground hover:text-gray-900 dark:hover:text-white'
+                    ? 'border-[#6B9080] text-[#6B9080] dark:text-[#7BA7BC]'
+                    : 'border-transparent text-muted-foreground hover:text-foreground dark:hover:text-white'
                 }`}
               >
                 <tab.icon className="w-4 h-4" />
@@ -651,14 +651,14 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
                     {profile.photoUrl ? (
                       <AvatarImage src={profile.photoUrl} alt={profile.name} />
                     ) : (
-                      <AvatarFallback className="bg-gradient-to-br from-teal-400 to-cyan-500 text-white text-2xl font-semibold">
+                      <AvatarFallback className="text-white text-2xl font-semibold" style={{ background: 'linear-gradient(135deg, #6B9080, #7BA7BC)' }}>
                         {profile.name?.charAt(0)?.toUpperCase() || 'U'}
                       </AvatarFallback>
                     )}
                   </Avatar>
                   <button
                     onClick={() => fileInputRef.current?.click()}
-                    className="absolute bottom-0 right-0 p-2 bg-teal-500 text-white rounded-full shadow-lg hover:bg-teal-600 transition-colors"
+                    className="absolute bottom-0 right-0 p-2 bg-primary text-white rounded-full shadow-lg hover:bg-[#6B9080] transition-colors"
                   >
                     <Camera className="w-4 h-4" />
                   </button>
@@ -788,7 +788,7 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
               <div className="space-y-3">
                 {connectedAccounts.length > 0 ? (
                   connectedAccounts.map(account => (
-                    <div key={account.provider} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-800 rounded-lg">
+                    <div key={account.provider} className="flex items-center justify-between p-3 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
                       <div className="flex items-center gap-3">
                         {account.provider === 'google' ? (
                           <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow">
@@ -811,7 +811,7 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
                           <p className="text-sm text-muted-foreground">{account.email}</p>
                         </div>
                       </div>
-                      <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                      <Badge variant="outline" className="bg-[#6B9080]/10 text-[#6B9080] border-[#6B9080]/20">
                         Connected
                       </Badge>
                     </div>
@@ -829,13 +829,13 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
             </Card>
 
             {/* Quick Links */}
-            <Card className="divide-y divide-gray-200 dark:divide-slate-700">
+            <Card className="divide-y divide-[#E8E4DF] dark:divide-slate-700">
               <button
                 onClick={() => onNavigate?.('caregivers')}
-                className="w-full p-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
+                className="w-full p-4 flex items-center justify-between hover:bg-[#FAF7F2] dark:hover:bg-slate-800 transition-colors"
               >
                 <div className="flex items-center gap-3">
-                  <Users className="w-5 h-5 text-teal-500" />
+                  <Users className="w-5 h-5 text-primary" />
                   <div className="text-left">
                     <p className="font-medium dark:text-white">Manage Caregivers</p>
                     <p className="text-sm text-muted-foreground">Invite family members and set permissions</p>
@@ -846,10 +846,10 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
 
               <button
                 onClick={() => onNavigate?.('settings')}
-                className="w-full p-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
+                className="w-full p-4 flex items-center justify-between hover:bg-[#FAF7F2] dark:hover:bg-slate-800 transition-colors"
               >
                 <div className="flex items-center gap-3">
-                  <Shield className="w-5 h-5 text-teal-500" />
+                  <Shield className="w-5 h-5 text-primary" />
                   <div className="text-left">
                     <p className="font-medium dark:text-white">Privacy & Settings</p>
                     <p className="text-sm text-muted-foreground">Notifications, data, and preferences</p>
@@ -872,11 +872,11 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
             {children.map(child => (
               <Card key={child.id} className="p-4">
                 <div className="flex items-start gap-4">
-                  <Avatar className="w-16 h-16 border-2 border-gray-200">
+                  <Avatar className="w-16 h-16 border-2 border-[#E8E4DF]">
                     {child.photoUrl ? (
                       <AvatarImage src={child.photoUrl} alt={child.name} />
                     ) : (
-                      <AvatarFallback className="bg-gradient-to-br from-purple-400 to-pink-500 text-white text-xl font-semibold">
+                      <AvatarFallback className="text-white text-xl font-semibold" style={{ background: 'linear-gradient(135deg, #7BA7BC, #6B9080)' }}>
                         {child.name?.charAt(0)?.toUpperCase()}
                       </AvatarFallback>
                     )}
@@ -886,7 +886,7 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
                     <div className="flex items-center gap-2 mb-1">
                       <h3 className="font-semibold text-lg dark:text-white">{child.name}</h3>
                       {child.isPrimary && (
-                        <Badge className="bg-teal-100 text-teal-700 border-teal-200">
+                        <Badge className="bg-[#6B9080]/10 text-[#6B9080] border-[#6B9080]/20">
                           Primary
                         </Badge>
                       )}
@@ -987,17 +987,17 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
                 {sessions.map(session => (
                   <div
                     key={session.id}
-                    className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-800 rounded-lg"
+                    className="flex items-center justify-between p-3 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-teal-100 dark:bg-teal-900 rounded-full flex items-center justify-center">
-                        <Smartphone className="w-5 h-5 text-teal-600 dark:text-teal-400" />
+                      <div className="w-10 h-10 bg-[#6B9080]/10 rounded-full flex items-center justify-center">
+                        <Smartphone className="w-5 h-5 text-primary" />
                       </div>
                       <div>
                         <div className="flex items-center gap-2">
                           <p className="font-medium dark:text-white">{session.device}</p>
                           {session.isCurrent && (
-                            <Badge className="bg-green-100 text-green-700 text-xs">
+                            <Badge className="bg-[#6B9080]/10 text-[#6B9080] text-xs">
                               Current
                             </Badge>
                           )}
@@ -1026,14 +1026,14 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
             </Card>
 
             {/* Security Tips */}
-            <Card className="p-6 bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800">
+            <Card className="p-6 bg-[#6B9080]/10 border-[#6B9080]/20">
               <div className="flex items-start gap-3">
-                <Shield className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5" />
+                <Shield className="w-5 h-5 text-primary mt-0.5" />
                 <div>
-                  <h4 className="font-medium text-blue-900 dark:text-blue-100 mb-1">
+                  <h4 className="font-medium text-[#1B2733] dark:text-white mb-1">
                     Keep your account secure
                   </h4>
-                  <ul className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
+                  <ul className="text-sm text-[#5A6B7A] dark:text-slate-300 space-y-1">
                     <li>• Use a strong, unique password</li>
                     <li>• Enable two-factor authentication in Settings</li>
                     <li>• Review active sessions regularly</li>
@@ -1068,18 +1068,18 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
             {editingChild && (
               <div className="flex justify-center">
                 <div className="relative">
-                  <Avatar className="w-20 h-20 border-2 border-gray-200">
+                  <Avatar className="w-20 h-20 border-2 border-[#E8E4DF]">
                     {editingChild.photoUrl ? (
                       <AvatarImage src={editingChild.photoUrl} alt={editingChild.name} />
                     ) : (
-                      <AvatarFallback className="bg-gradient-to-br from-purple-400 to-pink-500 text-white text-2xl">
+                      <AvatarFallback className="text-white text-2xl" style={{ background: 'linear-gradient(135deg, #7BA7BC, #6B9080)' }}>
                         {editingChild.name?.charAt(0)?.toUpperCase()}
                       </AvatarFallback>
                     )}
                   </Avatar>
                   <button
                     onClick={() => childFileInputRef.current?.click()}
-                    className="absolute bottom-0 right-0 p-1.5 bg-teal-500 text-white rounded-full shadow"
+                    className="absolute bottom-0 right-0 p-1.5 bg-primary text-white rounded-full shadow"
                   >
                     <Camera className="w-3 h-3" />
                   </button>
@@ -1148,7 +1148,7 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
                       key={diagnosis}
                       variant={isSelected ? 'default' : 'outline'}
                       className={`cursor-pointer transition-colors ${
-                        isSelected ? 'bg-teal-500 hover:bg-teal-600' : 'hover:bg-gray-100'
+                        isSelected ? 'bg-primary hover:bg-[#6B9080]' : 'hover:bg-[#F0EDE8]'
                       }`}
                       onClick={() => {
                         if (editingChild) {
@@ -1192,7 +1192,7 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
                       key={concern}
                       variant={isSelected ? 'default' : 'outline'}
                       className={`cursor-pointer transition-colors ${
-                        isSelected ? 'bg-purple-500 hover:bg-purple-600' : 'hover:bg-gray-100'
+                        isSelected ? 'bg-[#7BA7BC] hover:bg-[#7BA7BC]' : 'hover:bg-[#F0EDE8]'
                       }`}
                       onClick={() => {
                         if (editingChild) {

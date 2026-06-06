@@ -107,7 +107,7 @@ export function TelehealthScreen({
   if (consentLoading) {
     return (
       <div className="min-h-screen bg-white dark:bg-slate-900 flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-teal-600 border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-[#6B9080] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -187,7 +187,7 @@ export function TelehealthScreen({
               variant={activeView === 'credits' ? 'default' : 'ghost'}
               size="sm"
               onClick={() => setActiveView('credits')}
-              className={activeView === 'credits' ? 'bg-teal-600 hover:bg-teal-700' : ''}
+              className={activeView === 'credits' ? 'bg-primary hover:bg-[#6B9080]' : ''}
             >
               Sessions & Credits
             </Button>
@@ -195,7 +195,7 @@ export function TelehealthScreen({
               variant={activeView === 'history' ? 'default' : 'ghost'}
               size="sm"
               onClick={() => setActiveView('history')}
-              className={activeView === 'history' ? 'bg-teal-600 hover:bg-teal-700' : ''}
+              className={activeView === 'history' ? 'bg-primary hover:bg-[#6B9080]' : ''}
             >
               History & Notes
             </Button>
@@ -233,8 +233,8 @@ export function TelehealthScreen({
         </Card>
 
         {/* Feature Overview */}
-        <Alert className="bg-teal-50 border-teal-200">
-          <Sparkles className="w-4 h-4 text-teal-600" />
+        <Alert className="bg-[#6B9080]/10 border-[#6B9080]/20">
+          <Sparkles className="w-4 h-4 text-[#6B9080]" />
           <AlertDescription className="text-sm text-teal-900">
             <strong>Professional Support:</strong> Your {userTier === 'pro' ? 'Plus' : 'Premium'} plan includes 
             monthly telehealth sessions with Board Certified Behavior Analysts (BCBAs). Session notes 
@@ -266,25 +266,25 @@ export function TelehealthScreen({
               <h4 className="text-sm text-slate-700 mb-2">What gets included:</h4>
               <ul className="space-y-1 text-sm text-slate-600">
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="w-4 h-4 text-teal-600 mt-0.5 flex-shrink-0" />
+                  <CheckCircle className="w-4 h-4 text-[#6B9080] mt-0.5 flex-shrink-0" />
                   Provider observations and clinical notes
                 </li>
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="w-4 h-4 text-teal-600 mt-0.5 flex-shrink-0" />
+                  <CheckCircle className="w-4 h-4 text-[#6B9080] mt-0.5 flex-shrink-0" />
                   Progress updates across developmental areas
                 </li>
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="w-4 h-4 text-teal-600 mt-0.5 flex-shrink-0" />
+                  <CheckCircle className="w-4 h-4 text-[#6B9080] mt-0.5 flex-shrink-0" />
                   Recommendations and next steps
                 </li>
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="w-4 h-4 text-teal-600 mt-0.5 flex-shrink-0" />
+                  <CheckCircle className="w-4 h-4 text-[#6B9080] mt-0.5 flex-shrink-0" />
                   Parent questions and concerns addressed
                 </li>
               </ul>
             </div>
 
-            <Button className="w-full mt-4 bg-teal-600 hover:bg-teal-700">
+            <Button className="w-full mt-4 bg-primary hover:bg-[#6B9080]">
               <FileText className="w-4 h-4 mr-2" />
               Generate Progress Report with Session Notes
             </Button>

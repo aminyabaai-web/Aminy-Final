@@ -179,14 +179,14 @@ const providerIcons: Record<ProviderType, React.ElementType> = {
 
 // Color classes for provider types
 const providerColorClasses: Record<string, { bg: string; text: string; border: string }> = {
-  teal: { bg: 'bg-teal-100', text: 'text-teal-700', border: 'border-teal-200' },
+  teal: { bg: 'bg-[#6B9080]/10', text: 'text-[#6B9080]', border: 'border-[#6B9080]/20' },
   blue: { bg: 'bg-blue-100', text: 'text-blue-700', border: 'border-blue-200' },
   violet: { bg: 'bg-violet-100', text: 'text-violet-700', border: 'border-violet-200' },
   pink: { bg: 'bg-pink-100', text: 'text-pink-700', border: 'border-pink-200' },
   green: { bg: 'bg-green-100', text: 'text-green-700', border: 'border-green-200' },
   orange: { bg: 'bg-orange-100', text: 'text-orange-700', border: 'border-orange-200' },
   red: { bg: 'bg-red-100', text: 'text-red-700', border: 'border-red-200' },
-  cyan: { bg: 'bg-cyan-100', text: 'text-cyan-700', border: 'border-cyan-200' },
+  cyan: { bg: 'bg-[#6B9080]/10', text: 'text-cyan-700', border: 'border-cyan-200' },
 };
 
 export function ProviderMarketplace({
@@ -592,7 +592,7 @@ export function ProviderMarketplace({
             <div className="flex items-start justify-between mb-1">
               <div>
                 <div className="flex items-center gap-2">
-                  <h3 className="font-semibold text-gray-900 group-hover:text-teal-600 transition-colors">
+                  <h3 className="font-semibold text-gray-900 group-hover:text-[#6B9080] transition-colors">
                     {provider.name}, {provider.credentials}
                   </h3>
                   {provider.verificationStatus && (
@@ -624,7 +624,7 @@ export function ProviderMarketplace({
             {(provider.insuranceAccepted?.length > 0 || provider.sessionRate) && (
               <div className="flex items-center gap-2 mb-2 flex-wrap">
                 {provider.sessionRate && (
-                  <span className="text-xs font-semibold text-teal-700 bg-teal-50 px-2 py-0.5 rounded-full">
+                  <span className="text-xs font-semibold text-[#6B9080] bg-[#6B9080]/10 px-2 py-0.5 rounded-full">
                     From ${provider.sessionRate}
                   </span>
                 )}
@@ -667,7 +667,7 @@ export function ProviderMarketplace({
                   Next: {provider.nextAvailable}
                 </span>
               </div>
-              <Button size="sm" className="bg-teal-600 hover:bg-teal-700 opacity-0 group-hover:opacity-100 transition-opacity">
+              <Button size="sm" className="bg-primary hover:bg-[#6B9080] opacity-0 group-hover:opacity-100 transition-opacity">
                 Book Session
                 <ArrowRight className="w-4 h-4 ml-1" />
               </Button>
@@ -692,9 +692,9 @@ export function ProviderMarketplace({
   const filteredProviders = filterProviders(providers);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header */}
-      <div className="bg-gradient-to-br from-teal-600 to-cyan-600 text-white">
+      <div className="bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] text-white">
         <div className="max-w-4xl mx-auto px-4 py-8">
           <div className="flex items-center gap-3 mb-4">
             <div className="p-2 bg-white/20 rounded-xl">
@@ -747,8 +747,8 @@ export function ProviderMarketplace({
                 onClick={() => setSelectedCategory(cat.id as typeof selectedCategory)}
                 className={`flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium transition-all whitespace-nowrap ${
                   selectedCategory === cat.id
-                    ? 'bg-teal-100 text-teal-700'
-                    : 'text-gray-600 hover:bg-gray-100'
+                    ? 'bg-[#6B9080]/10 text-[#6B9080]'
+                    : 'text-gray-600 hover:bg-[#F0EDE8]'
                 }`}
               >
                 <cat.icon className="w-4 h-4" />
@@ -828,12 +828,12 @@ export function ProviderMarketplace({
             variant="outline"
             size="sm"
             onClick={() => setShowFilters(!showFilters)}
-            className={activeFilterCount > 0 ? 'border-teal-500 text-teal-600' : ''}
+            className={activeFilterCount > 0 ? 'border-[#6B9080] text-[#6B9080]' : ''}
           >
             <SlidersHorizontal className="w-4 h-4 mr-2" />
             Filters
             {activeFilterCount > 0 && (
-              <Badge className="ml-2 bg-teal-500 text-white text-xs px-1.5 py-0.5">
+              <Badge className="ml-2 bg-primary text-white text-xs px-1.5 py-0.5">
                 {activeFilterCount}
               </Badge>
             )}
@@ -847,10 +847,10 @@ export function ProviderMarketplace({
 
         {/* Advanced Filter Panel */}
         {showFilters && (
-          <Card className="p-4 mb-6 border-teal-200 bg-gradient-to-br from-teal-50/50 to-cyan-50/50">
+          <Card className="p-4 mb-6 border-[#6B9080]/20 bg-gradient-to-br from-teal-50/50 to-cyan-50/50">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-semibold text-gray-900 flex items-center gap-2">
-                <Filter className="w-4 h-4 text-teal-600" />
+                <Filter className="w-4 h-4 text-[#6B9080]" />
                 Filter Providers
               </h3>
               {activeFilterCount > 0 && (
@@ -871,7 +871,7 @@ export function ProviderMarketplace({
                 <select
                   value={filters.state}
                   onChange={(e) => setFilters(prev => ({ ...prev, state: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-teal-500 focus:border-[#6B9080]"
                 >
                   <option value="">All States</option>
                   {US_STATES.map(state => (
@@ -889,7 +889,7 @@ export function ProviderMarketplace({
                 <select
                   value={filters.minRating}
                   onChange={(e) => setFilters(prev => ({ ...prev, minRating: Number(e.target.value) }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-teal-500 focus:border-[#6B9080]"
                 >
                   <option value={0}>Any Rating</option>
                   <option value={4.5}>4.5+ Stars</option>
@@ -909,8 +909,8 @@ export function ProviderMarketplace({
                     onClick={() => setFilters(prev => ({ ...prev, availableThisWeek: !prev.availableThisWeek }))}
                     className={`px-3 py-1.5 rounded-lg text-sm border transition-colors ${
                       filters.availableThisWeek
-                        ? 'bg-teal-100 border-teal-300 text-teal-700'
-                        : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
+                        ? 'bg-[#6B9080]/10 border-teal-300 text-[#6B9080]'
+                        : 'bg-white border-gray-300 text-gray-700 hover:bg-[#FAF7F2]'
                     }`}
                   >
                     <Check className={`w-3.5 h-3.5 inline mr-1 ${filters.availableThisWeek ? 'opacity-100' : 'opacity-0'}`} />
@@ -954,8 +954,8 @@ export function ProviderMarketplace({
                     onClick={() => toggleArrayFilter('languages', lang)}
                     className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
                       filters.languages.includes(lang)
-                        ? 'bg-teal-100 border-teal-300 text-teal-700 border'
-                        : 'bg-white border-gray-200 text-gray-600 border hover:bg-gray-50'
+                        ? 'bg-[#6B9080]/10 border-teal-300 text-[#6B9080] border'
+                        : 'bg-white border-gray-200 text-gray-600 border hover:bg-[#FAF7F2]'
                     }`}
                   >
                     {lang}
@@ -978,7 +978,7 @@ export function ProviderMarketplace({
                     className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
                       filters.conditions.includes(cond)
                         ? 'bg-violet-100 border-violet-300 text-violet-700 border'
-                        : 'bg-white border-gray-200 text-gray-600 border hover:bg-gray-50'
+                        : 'bg-white border-gray-200 text-gray-600 border hover:bg-[#FAF7F2]'
                     }`}
                   >
                     {cond}
@@ -1000,8 +1000,8 @@ export function ProviderMarketplace({
                     onClick={() => toggleArrayFilter('specialties', spec)}
                     className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
                       filters.specialties.includes(spec)
-                        ? 'bg-cyan-100 border-cyan-300 text-cyan-700 border'
-                        : 'bg-white border-gray-200 text-gray-600 border hover:bg-gray-50'
+                        ? 'bg-[#6B9080]/10 border-cyan-300 text-cyan-700 border'
+                        : 'bg-white border-gray-200 text-gray-600 border hover:bg-[#FAF7F2]'
                     }`}
                   >
                     {spec}
@@ -1024,7 +1024,7 @@ export function ProviderMarketplace({
                     className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
                       filters.insurances.includes(ins)
                         ? 'bg-green-100 border-green-300 text-green-700 border'
-                        : 'bg-white border-gray-200 text-gray-600 border hover:bg-gray-50'
+                        : 'bg-white border-gray-200 text-gray-600 border hover:bg-[#FAF7F2]'
                     }`}
                   >
                     {ins}
@@ -1035,8 +1035,8 @@ export function ProviderMarketplace({
 
             {/* Active Filters Summary */}
             {activeFilterCount > 0 && (
-              <div className="mt-4 pt-4 border-t border-teal-200">
-                <div className="flex items-center gap-2 text-sm text-teal-700">
+              <div className="mt-4 pt-4 border-t border-[#6B9080]/20">
+                <div className="flex items-center gap-2 text-sm text-[#6B9080]">
                   <Check className="w-4 h-4" />
                   <span>{activeFilterCount} filter{activeFilterCount !== 1 ? 's' : ''} applied</span>
                   <span className="text-gray-400">·</span>
@@ -1097,8 +1097,8 @@ export function ProviderMarketplace({
             {/* Behavioral Support */}
             <div className="bg-white rounded-xl p-4 border border-gray-100">
               <div className="flex items-center gap-2 mb-4">
-                <div className="p-2 bg-teal-100 rounded-lg">
-                  <Brain className="w-4 h-4 text-teal-600" />
+                <div className="p-2 bg-[#6B9080]/10 rounded-lg">
+                  <Brain className="w-4 h-4 text-[#6B9080]" />
                 </div>
                 <h4 className="font-medium text-gray-900">Behavioral Support</h4>
               </div>
@@ -1108,28 +1108,28 @@ export function ProviderMarketplace({
                     <p className="font-medium text-gray-800 text-sm">ABA Specialist Consultation</p>
                     <p className="text-xs text-gray-500">Up to 60 min with a BCBA</p>
                   </div>
-                  <span className="font-semibold text-teal-600">$149</span>
+                  <span className="font-semibold text-[#6B9080]">$149</span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-gray-50">
                   <div>
                     <p className="font-medium text-gray-800 text-sm">ABA Assessment</p>
                     <p className="text-xs text-gray-500">Up to 90 min comprehensive review</p>
                   </div>
-                  <span className="font-semibold text-teal-600">$269</span>
+                  <span className="font-semibold text-[#6B9080]">$269</span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-gray-50">
                   <div>
                     <p className="font-medium text-gray-800 text-sm">ABA Coaching Session</p>
                     <p className="text-xs text-gray-500">Up to 30 min skill-building</p>
                   </div>
-                  <span className="font-semibold text-teal-600">$49</span>
+                  <span className="font-semibold text-[#6B9080]">$49</span>
                 </div>
                 <div className="flex justify-between items-center py-2">
                   <div>
                     <p className="font-medium text-gray-800 text-sm">ABA Extended Coaching</p>
                     <p className="text-xs text-gray-500">Up to 60 min deeper practice</p>
                   </div>
-                  <span className="font-semibold text-teal-600">$89</span>
+                  <span className="font-semibold text-[#6B9080]">$89</span>
                 </div>
               </div>
             </div>
@@ -1267,8 +1267,8 @@ export function ProviderTeamExplainer() {
         Think of your child's care team like building a house:
       </p>
       <div className="space-y-3 sm:space-y-4">
-        <div className="flex items-start gap-3 p-4 bg-teal-50 rounded-xl">
-          <GraduationCap className="w-6 h-6 text-teal-600 mt-1" />
+        <div className="flex items-start gap-3 p-4 bg-[#6B9080]/10 rounded-xl">
+          <GraduationCap className="w-6 h-6 text-[#6B9080] mt-1" />
           <div>
             <h4 className="font-medium text-gray-900">BCBA & RBT - The Architect & Builder</h4>
             <p className="text-sm text-gray-600">

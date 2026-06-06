@@ -17265,5 +17265,18 @@ button, a, [role="button"] {
 .bg-\[\#6B9080\]\/20 { background-color: rgba(107,144,128,0.20); }
 .border-\[\#6B9080\]\/20 { border-color: rgba(107,144,128,0.20); }
 .text-\[\#6B9080\]\/50 { color: rgba(107,144,128,0.50); }
+/* extra brand utilities for component-level use */
+.hover\:bg-\[\#FAF7F2\]:hover { background-color: #FAF7F2; }
+.border-\[\#E8E4DF\] { border-color: #E8E4DF; }
+.divide-\[\#E8E4DF\] > :not([hidden]) ~ :not([hidden]) { border-color: #E8E4DF; }
+.bg-\[\#F5F2EC\] { background-color: #F5F2EC; }
+.hover\:bg-\[\#F5F2EC\]:hover { background-color: #F5F2EC; }
+.text-\[\#43AA8B\] { color: #43AA8B; }
+.bg-\[\#43AA8B\]\/10 { background-color: rgba(67,170,139,0.10); }
+.bg-\[\#E07A5F\]\/10 { background-color: rgba(224,122,95,0.10); }
+.text-\[\#E07A5F\] { color: #E07A5F; }
+.border-\[\#43AA8B\]\/20 { border-color: rgba(67,170,139,0.20); }
+.bg-\[\#7BA7BC\]\/10 { background-color: rgba(123,167,188,0.10); }
+.text-\[\#7BA7BC\] { color: #7BA7BC; }
 
 /* ── END Aminy Premium Global Design System ─────────────────────────── */

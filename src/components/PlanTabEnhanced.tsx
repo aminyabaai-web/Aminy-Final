@@ -435,7 +435,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
       case 'social': return 'text-green-600 bg-green-50 border-green-200 dark:text-green-400 dark:bg-green-900/30 dark:border-green-800';
       case 'sensory': return 'text-purple-600 bg-purple-50 border-purple-200 dark:text-purple-400 dark:bg-purple-900/30 dark:border-purple-800';
       case 'routines': return 'text-orange-600 bg-orange-50 border-orange-200 dark:text-orange-400 dark:bg-orange-900/30 dark:border-orange-800';
-      default: return 'text-gray-600 bg-gray-50 border-gray-200 dark:text-gray-400 dark:bg-gray-900/30 dark:border-gray-800';
+      default: return 'text-gray-600 bg-[#FAF7F2] border-gray-200 dark:text-gray-400 dark:bg-gray-900/30 dark:border-gray-800';
     }
   };
 
@@ -444,7 +444,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
       case 'high': return 'text-red-600 bg-red-50 border-red-200';
       case 'medium': return 'text-amber-600 bg-amber-50 border-amber-200';
       case 'low': return 'text-green-600 bg-green-50 border-green-200';
-      default: return 'text-gray-600 bg-gray-50 border-gray-200';
+      default: return 'text-gray-600 bg-[#FAF7F2] border-gray-200';
     }
   };
 
@@ -453,14 +453,14 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
       {/* Enhanced Plan Header with Progress Portfolio */}
       <div className="text-center">
         <div className="flex items-center justify-center mb-4">
-          <div className="w-12 h-12 bg-gradient-to-r from-teal-500 to-blue-500 rounded-full flex items-center justify-center">
+          <div className="w-12 h-12 bg-gradient-to-r from-[#6B9080] to-[#7BA7BC] rounded-full flex items-center justify-center">
             <Sparkles className="w-6 h-6 text-white" />
           </div>
         </div>
         <h2 className="text-2xl text-slate-900 dark:text-slate-100 mb-2">{childShort}'s Development Plan</h2>
         <p className="text-slate-600 dark:text-slate-400">Personalized support for {childShort}'s unique journey</p>
         <div className="flex items-center justify-center gap-2 mt-4">
-          <Badge variant="secondary" className="bg-teal-50 text-teal-700 border-teal-200">
+          <Badge variant="secondary" className="bg-[#6B9080]/10 text-[#6B9080] border-[#6B9080]/20">
             Active Plan
           </Badge>
           <Badge variant="outline" className="text-slate-600">
@@ -474,7 +474,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
       </div>
 
       {/* Progress Portfolio Timeline */}
-      <Card className="p-6 bg-gradient-to-r from-blue-50 to-teal-50 dark:from-blue-900/20 dark:to-teal-900/20 border-blue-200 dark:border-blue-800">
+      <Card className="p-6 bg-gradient-to-r from-[#FAF7F2] to-[#F5F2EC] dark:from-blue-900/20 dark:to-teal-900/20 border-blue-200 dark:border-blue-800">
         <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-4 flex items-center gap-2">
           <LineChart className="w-5 h-5 text-blue-600" />
           Progress Portfolio
@@ -570,10 +570,10 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
       </Card>
 
       {/* AI-Powered Next Steps with Pattern Recognition */}
-      <Card className="p-6 bg-gradient-to-r from-teal-50 to-blue-50 dark:from-teal-900/20 dark:to-blue-900/20 border-teal-200 dark:border-teal-800">
+      <Card className="p-6 bg-gradient-to-r from-teal-50 to-blue-50 dark:from-teal-900/20 dark:to-blue-900/20 border-[#6B9080]/20 dark:border-teal-800">
         <div className="flex items-start gap-3 sm:gap-4">
-          <div className="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center flex-shrink-0">
-            <Brain className="w-5 h-5 text-teal-600" />
+          <div className="w-10 h-10 bg-[#6B9080]/10 rounded-lg flex items-center justify-center flex-shrink-0">
+            <Brain className="w-5 h-5 text-[#6B9080]" />
           </div>
           <div className="flex-1">
             <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-2">AI-Powered Insights & Next Steps</h3>
@@ -590,11 +590,11 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
               ))}
             </div>
             <div className="flex gap-2 mt-4">
-              <Button size="sm" variant="outline" className="border-teal-200 text-teal-700 hover:bg-teal-50" onClick={() => setActiveSection('insights')}>
+              <Button size="sm" variant="outline" className="border-[#6B9080]/20 text-[#6B9080] hover:bg-[#6B9080]/10" onClick={() => setActiveSection('insights')}>
                 <Brain className="w-4 h-4 mr-2" />
                 View All Insights
               </Button>
-              <Button size="sm" variant="outline" className="border-teal-200 text-teal-700 hover:bg-teal-50" onClick={() => setActiveSection('coaching')}>
+              <Button size="sm" variant="outline" className="border-[#6B9080]/20 text-[#6B9080] hover:bg-[#6B9080]/10" onClick={() => setActiveSection('coaching')}>
                 <UserCheck className="w-4 h-4 mr-2" />
                 Schedule Coach Review
               </Button>
@@ -653,7 +653,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                       </div>
                       <div>
                         <div className="text-xs text-slate-600 dark:text-slate-400 mb-1">Current</div>
-                        <div className="text-lg font-semibold text-teal-600">{goal.progress}%</div>
+                        <div className="text-lg font-semibold text-[#6B9080]">{goal.progress}%</div>
                         <div className="text-xs text-green-600">+{goal.progress - goal.baselineData.startingLevel}% growth</div>
                       </div>
                       <div>
@@ -738,7 +738,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                           <p className="text-sm text-slate-600 italic">"{feedback.notes}"</p>
                         )}
                         {feedback.recommendedAdjustment && (
-                          <p className="text-sm text-teal-700">Recommendation: {feedback.recommendedAdjustment}</p>
+                          <p className="text-sm text-[#6B9080]">Recommendation: {feedback.recommendedAdjustment}</p>
                         )}
                       </div>
                     ))}
@@ -823,7 +823,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
               <div className="flex items-start justify-between mb-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
-                    <Badge variant="outline" className="text-teal-600 border-teal-200 bg-teal-50">
+                    <Badge variant="outline" className="text-[#6B9080] border-[#6B9080]/20 bg-[#6B9080]/10">
                       <UserCheck className="w-3 h-3 mr-1" />
                       {session.sessionType}
                     </Badge>
@@ -863,7 +863,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                       <ul className="space-y-1">
                         {session.recommendedTweaks.map((tweak, index) => (
                           <li key={index} className="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-400">
-                            <div className="w-1.5 h-1.5 bg-teal-500 rounded-full mt-2 flex-shrink-0" />
+                            <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0" />
                             {tweak}
                           </li>
                         ))}
@@ -871,9 +871,9 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                     </div>
 
                     {session.nextSessionDate && (
-                      <div className="flex items-center gap-2 p-3 bg-teal-50 rounded-lg">
-                        <Calendar className="w-4 h-4 text-teal-600" />
-                        <span className="text-sm text-teal-700">
+                      <div className="flex items-center gap-2 p-3 bg-[#6B9080]/10 rounded-lg">
+                        <Calendar className="w-4 h-4 text-[#6B9080]" />
+                        <span className="text-sm text-[#6B9080]">
                           Next session: {session.nextSessionDate.toLocaleDateString()}
                         </span>
                       </div>
@@ -1199,7 +1199,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
             <div className="text-sm text-slate-600">Caregiver Engagement</div>
           </div>
           <div className="text-center">
-            <div className="text-xl sm:text-2xl font-bold text-teal-600">{outcomeMetrics.roi}%</div>
+            <div className="text-xl sm:text-2xl font-bold text-[#6B9080]">{outcomeMetrics.roi}%</div>
             <div className="text-sm text-slate-600">ROI</div>
           </div>
         </div>
@@ -1572,7 +1572,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
 
         <Card className="p-4 sm:p-5 md:p-6">
           <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-2">
-            <PieChart className="w-5 h-5 text-teal-600" />
+            <PieChart className="w-5 h-5 text-[#6B9080]" />
             Insurance Report
           </h3>
           <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
@@ -1674,7 +1674,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                       Active
                     </Badge>
                   )}
-                  <Badge variant="outline" className="text-teal-600 border-teal-200 bg-teal-50">
+                  <Badge variant="outline" className="text-[#6B9080] border-[#6B9080]/20 bg-[#6B9080]/10">
                     {routine.completionRate}% success
                   </Badge>
                 </div>
@@ -1695,8 +1695,8 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                   <h4 className="text-sm text-slate-900 dark:text-slate-100">Steps:</h4>
                   {routine.steps.map((step) => (
                     <div key={step.id} className="flex items-start gap-3 p-2 bg-slate-50 dark:bg-slate-800 rounded-lg">
-                      <div className="w-6 h-6 bg-teal-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <span className="text-xs text-teal-700">{step.order}</span>
+                      <div className="w-6 h-6 bg-[#6B9080]/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span className="text-xs text-[#6B9080]">{step.order}</span>
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="text-sm text-slate-900 dark:text-slate-100 mb-1">{step.title}</div>
@@ -1744,7 +1744,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                           <p className="text-sm text-slate-600 italic">"{feedback.notes}"</p>
                         )}
                         {feedback.recommendedAdjustment && (
-                          <p className="text-sm text-teal-700">Recommendation: {feedback.recommendedAdjustment}</p>
+                          <p className="text-sm text-[#6B9080]">Recommendation: {feedback.recommendedAdjustment}</p>
                         )}
                       </div>
                     ))}
@@ -1894,7 +1894,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                     <ul className="space-y-1">
                       {strategy.tips.map((tip, index) => (
                         <li key={index} className="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-400">
-                          <div className="w-1.5 h-1.5 bg-teal-500 rounded-full mt-2 flex-shrink-0" />
+                          <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0" />
                           {tip}
                         </li>
                       ))}
@@ -2088,7 +2088,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                 <div className="text-sm text-slate-600">Strategies Used</div>
               </div>
               <div className="text-center">
-                <div className="text-xl sm:text-2xl font-bold text-teal-600">92%</div>
+                <div className="text-xl sm:text-2xl font-bold text-[#6B9080]">92%</div>
                 <div className="text-sm text-slate-600">Consistency Rate</div>
               </div>
             </div>
@@ -2109,7 +2109,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                 <div key={index} className="p-4 border border-slate-200 rounded-lg">
                   <div className="flex items-center justify-between mb-3">
                     <h4 className="font-medium text-slate-900">{month.month}</h4>
-                    <Badge variant="outline" className="text-teal-600 border-teal-200 bg-teal-50">
+                    <Badge variant="outline" className="text-[#6B9080] border-[#6B9080]/20 bg-[#6B9080]/10">
                       {month.parentParticipation}% participation
                     </Badge>
                   </div>
@@ -2280,7 +2280,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                     <h4 className="text-sm text-slate-900 dark:text-slate-100 mb-2">Motivates these behaviors:</h4>
                     <div className="flex flex-wrap gap-2">
                       {reward.motivatedBehaviors.map((behavior, index) => (
-                        <Badge key={index} variant="outline" className="text-teal-600 border-teal-200 bg-teal-50">
+                        <Badge key={index} variant="outline" className="text-[#6B9080] border-[#6B9080]/20 bg-[#6B9080]/10">
                           {behavior}
                         </Badge>
                       ))}
@@ -2360,10 +2360,10 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
       </div>
 
       {/* Personalized Recommendations */}
-      <Card className="p-6 bg-gradient-to-r from-teal-50 to-blue-50 border-teal-200">
+      <Card className="p-6 bg-gradient-to-r from-teal-50 to-blue-50 border-[#6B9080]/20">
         <div className="flex items-start gap-3 sm:gap-4">
-          <div className="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center flex-shrink-0">
-            <Brain className="w-5 h-5 text-teal-600" />
+          <div className="w-10 h-10 bg-[#6B9080]/10 rounded-lg flex items-center justify-center flex-shrink-0">
+            <Brain className="w-5 h-5 text-[#6B9080]" />
           </div>
           <div className="flex-1">
             <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-2">AI-Recommended for {childShort}</h3>
@@ -2394,9 +2394,9 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                   difficulty: 'Easy'
                 }
               ].map((activity, index) => (
-                <div key={index} className="p-3 bg-white rounded-lg border border-teal-200">
+                <div key={index} className="p-3 bg-white rounded-lg border border-[#6B9080]/20">
                   <div className="flex items-center gap-2 mb-2">
-                    <Badge variant="outline" className="text-teal-600 border-teal-200 bg-teal-50">
+                    <Badge variant="outline" className="text-[#6B9080] border-[#6B9080]/20 bg-[#6B9080]/10">
                       {activity.category}
                     </Badge>
                     <Badge variant="outline" className={
@@ -2413,7 +2413,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                 </div>
               ))}
             </div>
-            <Button size="sm" variant="outline" className="border-teal-200 text-teal-700 hover:bg-teal-50 mt-3">
+            <Button size="sm" variant="outline" className="border-[#6B9080]/20 text-[#6B9080] hover:bg-[#6B9080]/10 mt-3">
               <ArrowUpCircle className="w-4 h-4 mr-2" />
               View All Recommendations
             </Button>
@@ -2814,7 +2814,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
       {/* Section Navigation */}
       <div className="mb-8">
         <div className="flex items-center gap-2 mb-4 sm:mb-6">
-          <div className="w-8 h-8 bg-gradient-to-r from-teal-500 to-blue-500 rounded-lg flex items-center justify-center">
+          <div className="w-8 h-8 bg-gradient-to-r from-[#6B9080] to-[#7BA7BC] rounded-lg flex items-center justify-center">
             <Sparkles className="w-4 h-4 text-white" />
           </div>
           <div>
@@ -2835,7 +2835,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                 onClick={() => handleSectionChange(section.id)}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-colors ${
                   activeSection === section.id
-                    ? 'bg-teal-100 text-teal-700 border border-teal-200'
+                    ? 'bg-[#6B9080]/10 text-[#6B9080] border border-[#6B9080]/20'
                     : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
                 } ${isLocked ? 'opacity-60' : ''}`}
               >

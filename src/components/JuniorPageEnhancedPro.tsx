@@ -637,7 +637,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
       sessionSize: 'standard',
       unlocked: safeTier === 'core' || safeTier === 'pro',
       tier: 'core',
-      color: 'bg-cyan-100 text-cyan-600',
+      color: 'bg-[#6B9080]/10 text-cyan-600',
       track: 'Prosody',
       voiceReady: true,
       mode: 'rhythm-matching',
@@ -802,7 +802,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
       sessionSize: 'standard',
       unlocked: safeTier === 'core' || safeTier === 'pro',
       tier: 'core',
-      color: 'bg-teal-100 text-teal-600',
+      color: 'bg-[#6B9080]/10 text-[#6B9080]',
       track: 'Narrative Skills',
       voiceReady: true,
       focus: ['sequencing', 'narration', 'comprehension'],
@@ -1598,7 +1598,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
             
             {/* Offline Indicator */}
             {isOfflineMode && (
-              <div className="bg-gray-100 px-2 py-1 rounded-full">
+              <div className="bg-[#F0EDE8] px-2 py-1 rounded-full">
                 <WifiOff className="w-4 h-4 text-gray-600" />
               </div>
             )}
@@ -1736,7 +1736,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                       <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Quick support</div>
                       <div className="mt-2 text-lg font-semibold tracking-[-0.02em] text-slate-950">What helps right now?</div>
                       <div className="mt-3 flex flex-wrap gap-2">
-                        <Badge variant="outline" className="border-cyan-100 bg-cyan-50 text-cyan-700">Waiting room mode</Badge>
+                        <Badge variant="outline" className="border-[#6B9080]/20 bg-[#6B9080]/10 text-cyan-700">Waiting room mode</Badge>
                         <Badge variant="outline" className="border-purple-100 bg-purple-50 text-purple-700">Transition timer</Badge>
                         <Badge variant="outline" className="border-amber-100 bg-amber-50 text-amber-700">Reward ready</Badge>
                       </div>
@@ -1823,7 +1823,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                             {homeTransition.first.emoji ? `${homeTransition.first.emoji} ` : ''}{homeTransition.first.label}
                           </div>
                         </div>
-                        <div className="rounded-2xl border border-cyan-100 bg-cyan-50 px-4 py-3">
+                        <div className="rounded-2xl border border-[#6B9080]/20 bg-[#6B9080]/10 px-4 py-3">
                           <div className="text-xs uppercase tracking-[0.18em] text-cyan-700">Then</div>
                           <div className="mt-1 text-sm font-medium text-cyan-900">
                             {homeTransition.then.emoji ? `${homeTransition.then.emoji} ` : ''}{homeTransition.then.label}
@@ -2212,7 +2212,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                         }
                       }}
                       aria-label="Get a hint"
-                      className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center"
+                      className="w-16 h-16 bg-[#F0EDE8] rounded-full flex items-center justify-center"
                     >
                       <HelpCircle className="w-6 h-6 text-gray-600" />
                     </motion.button>
@@ -2321,7 +2321,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                   whileHover={{ scale: 1.1 }}
                   onClick={() => setActiveView('home')}
                   aria-label="Back to home"
-                  className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center"
+                  className="w-10 h-10 bg-[#F0EDE8] rounded-full flex items-center justify-center"
                 >
                   <ArrowLeft className="w-5 h-5" />
                 </motion.button>
@@ -2348,7 +2348,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                     className={`flex items-center space-x-2 px-4 py-2 rounded-full whitespace-nowrap ${
                       activeTrackFilter === filter.id 
                         ? 'bg-blue-500 text-white' 
-                        : 'bg-gray-100 text-gray-600'
+                        : 'bg-[#F0EDE8] text-gray-600'
                     }`}
                   >
                     <filter.icon className="w-4 h-4" />
@@ -2430,7 +2430,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                           </Badge>
                         )}
                         {activity.prosodyFocus && (
-                          <Badge variant="outline" className="text-xs bg-cyan-50">
+                          <Badge variant="outline" className="text-xs bg-[#6B9080]/10">
                             Prosody
                           </Badge>
                         )}
@@ -2453,7 +2453,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                   whileHover={{ scale: 1.1 }}
                   onClick={() => setActiveView('activity-select')}
                   aria-label="Back to activities"
-                  className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center"
+                  className="w-10 h-10 bg-[#F0EDE8] rounded-full flex items-center justify-center"
                 >
                   <ArrowLeft className="w-5 h-5" />
                 </motion.button>

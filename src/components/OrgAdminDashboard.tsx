@@ -151,12 +151,12 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
         )}
         <div className="flex-1 flex items-center justify-center px-6 text-center">
           <div className="max-w-sm">
-            <div className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #43AA8B 0%, #577590 100%)' }}>
+            <div className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #43AA8B 0%, #7BA7BC 100%)' }}>
               <Building2 className="w-8 h-8 text-white" />
             </div>
             <h1 className="text-lg font-semibold text-slate-900 mb-2">No organization yet</h1>
             <p className="text-sm text-slate-500 mb-4">Organizations are for clinics, schools, agencies, and AACT-style pilots — anyone managing 10+ caregivers under one billing account.</p>
-            <p className="text-xs text-slate-400">Contact <a href="mailto:hello@aminy.ai" className="text-teal-600 underline">hello@aminy.ai</a> to set up your organization.</p>
+            <p className="text-xs text-slate-400">Contact <a href="mailto:hello@aminy.ai" className="text-[#6B9080] underline">hello@aminy.ai</a> to set up your organization.</p>
           </div>
         </div>
       </div>
@@ -173,7 +173,7 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
         variant="flat"
         actions={
           <>
-            <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full capitalize">{org.planType}</span>
+            <span className="text-xs bg-[#F0EDE8] text-slate-600 px-2 py-0.5 rounded-full capitalize">{org.planType}</span>
             <StatusBadge status={org.subscriptionStatus} />
           </>
         }
@@ -197,10 +197,10 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
 
           {org.subscriptionStatus === 'inactive' && (
             <div className="mt-4 pt-4 border-t border-slate-100 flex gap-2">
-              <button onClick={() => handleStartCheckout('month')} className="flex-1 text-sm font-semibold py-2.5 rounded-xl text-white" style={{ background: 'linear-gradient(135deg, #43AA8B 0%, #577590 100%)' }}>
+              <button onClick={() => handleStartCheckout('month')} className="flex-1 text-sm font-semibold py-2.5 rounded-xl text-white" style={{ background: 'linear-gradient(135deg, #43AA8B 0%, #7BA7BC 100%)' }}>
                 Start Monthly
               </button>
-              <button onClick={() => handleStartCheckout('year')} className="flex-1 text-sm font-semibold py-2.5 rounded-xl border border-teal-600 text-teal-700 bg-white">
+              <button onClick={() => handleStartCheckout('year')} className="flex-1 text-sm font-semibold py-2.5 rounded-xl border border-[#6B9080] text-[#6B9080] bg-white">
                 Start Annual (-10%)
               </button>
             </div>
@@ -224,11 +224,11 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
               <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Seats</p>
             </div>
             {!seatEditMode ? (
-              <button onClick={() => setSeatEditMode(true)} className="text-xs text-teal-600 font-semibold">Edit</button>
+              <button onClick={() => setSeatEditMode(true)} className="text-xs text-[#6B9080] font-semibold">Edit</button>
             ) : (
               <div className="flex gap-2">
                 <button onClick={() => { setSeatEditMode(false); setNewSeatCount(org.seatCount); }} className="text-xs text-slate-500 font-medium">Cancel</button>
-                <button onClick={handleSaveSeats} className="text-xs text-teal-600 font-semibold">Save</button>
+                <button onClick={handleSaveSeats} className="text-xs text-[#6B9080] font-semibold">Save</button>
               </div>
             )}
           </div>
@@ -251,12 +251,12 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
             </div>
           )}
 
-          <div className="mt-3 h-2 bg-slate-100 rounded-full overflow-hidden">
+          <div className="mt-3 h-2 bg-[#F0EDE8] rounded-full overflow-hidden">
             <div
               className="h-full rounded-full transition-all"
               style={{
                 width: `${Math.min(100, (usage.seatsUsed / usage.seatsAllocated) * 100)}%`,
-                background: usage.seatsAvailable === 0 ? '#E07A5F' : 'linear-gradient(90deg, #43AA8B 0%, #577590 100%)',
+                background: usage.seatsAvailable === 0 ? '#E07A5F' : 'linear-gradient(90deg, #43AA8B 0%, #7BA7BC 100%)',
               }}
             />
           </div>
@@ -279,14 +279,14 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
             onClick={() => setShowInvite(true)}
             disabled={!!usage && usage.seatsAvailable === 0}
             className="flex items-center gap-1 text-xs font-semibold px-2.5 py-1.5 rounded-full disabled:opacity-50"
-            style={{ background: 'linear-gradient(135deg, #43AA8B 0%, #577590 100%)', color: 'white' }}
+            style={{ background: 'linear-gradient(135deg, #43AA8B 0%, #7BA7BC 100%)', color: 'white' }}
           >
             <Plus className="w-3.5 h-3.5" />Invite
           </button>
         </div>
 
         {showInvite && (
-          <div className="px-4 py-3 bg-slate-50 border-b border-slate-100">
+          <div className="px-4 py-3 bg-[#FAF7F2] border-b border-slate-100">
             <div className="flex gap-2">
               <input
                 type="email"
@@ -300,13 +300,13 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
                 onClick={handleInvite}
                 disabled={isInviting || !inviteEmail.trim()}
                 className="text-sm font-semibold px-4 py-2 rounded-lg text-white disabled:opacity-50"
-                style={{ background: 'linear-gradient(135deg, #43AA8B 0%, #577590 100%)' }}
+                style={{ background: 'linear-gradient(135deg, #43AA8B 0%, #7BA7BC 100%)' }}
               >
                 {isInviting ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Send'}
               </button>
               <button
                 onClick={() => { setShowInvite(false); setInviteEmail(''); }}
-                className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-400 hover:bg-slate-100"
+                className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-400 hover:bg-[#F0EDE8]"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -351,11 +351,11 @@ function Row({ label, value, subtitle }: { label: string; value: string; subtitl
 
 function StatusBadge({ status }: { status: Organization['subscriptionStatus'] }) {
   const styles: Record<string, { bg: string; text: string; label: string }> = {
-    active: { bg: 'bg-teal-50', text: 'text-teal-700', label: 'Active' },
-    trialing: { bg: 'bg-blue-50', text: 'text-blue-700', label: 'Trial' },
+    active: { bg: 'bg-[#6B9080]/10', text: 'text-[#6B9080]', label: 'Active' },
+    trialing: { bg: 'bg-[#7BA7BC]/10', text: 'text-[#7BA7BC]', label: 'Trial' },
     past_due: { bg: 'bg-orange-50', text: 'text-orange-700', label: 'Past due' },
-    canceled: { bg: 'bg-slate-100', text: 'text-slate-600', label: 'Canceled' },
-    inactive: { bg: 'bg-slate-100', text: 'text-slate-600', label: 'Not active' },
+    canceled: { bg: 'bg-[#F0EDE8]', text: 'text-slate-600', label: 'Canceled' },
+    inactive: { bg: 'bg-[#F0EDE8]', text: 'text-slate-600', label: 'Not active' },
     incomplete: { bg: 'bg-amber-50', text: 'text-amber-700', label: 'Incomplete' },
   };
   const s = styles[status] || styles.inactive;
@@ -364,9 +364,9 @@ function StatusBadge({ status }: { status: Organization['subscriptionStatus'] })
 
 function RoleIcon({ role }: { role: OrgMember['role'] }) {
   if (role === 'owner') return <div className="w-9 h-9 rounded-full bg-amber-100 flex items-center justify-center"><Crown className="w-4 h-4 text-amber-700" /></div>;
-  if (role === 'admin') return <div className="w-9 h-9 rounded-full bg-teal-100 flex items-center justify-center"><Shield className="w-4 h-4 text-teal-700" /></div>;
-  if (role === 'manager') return <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center"><Users className="w-4 h-4 text-blue-700" /></div>;
-  return <div className="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center"><User className="w-4 h-4 text-slate-600" /></div>;
+  if (role === 'admin') return <div className="w-9 h-9 rounded-full bg-[#6B9080]/10 flex items-center justify-center"><Shield className="w-4 h-4 text-[#6B9080]" /></div>;
+  if (role === 'manager') return <div className="w-9 h-9 rounded-full bg-[#7BA7BC]/10 flex items-center justify-center"><Users className="w-4 h-4 text-[#7BA7BC]" /></div>;
+  return <div className="w-9 h-9 rounded-full bg-[#F0EDE8] flex items-center justify-center"><User className="w-4 h-4 text-slate-600" /></div>;
 }
 
 export default OrgAdminDashboard;
