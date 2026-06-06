@@ -4,7 +4,7 @@
 // See LICENSE file for details.
 
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, CheckCircle, Clock, AlertCircle, FileText, Send, RefreshCw, Edit, MapPin, ExternalLink, ChevronRight } from 'lucide-react';
+import { ArrowLeft, CheckCircle, Clock, AlertCircle, FileText, Send, RefreshCw, Edit, MapPin, ExternalLink, ChevronRight, Shield } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
@@ -346,14 +346,14 @@ export function BenefitsNavigatorScreen({ onBack, onNavigate, userTier = 'core' 
             {/* Quick Actions */}
             <Card className="p-4 sm:p-5 md:p-6">
               <h2 className="font-semibold mb-4">Quick Actions</h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                 <Button
                   variant="outline"
                   className="h-auto flex-col gap-2 py-4"
                   onClick={() => setActiveView('letters')}
                 >
                   <FileText className="w-5 h-5" />
-                  <span className="text-sm">Generate Appeal Letter</span>
+                  <span className="text-sm">Appeal Letter</span>
                 </Button>
                 <Button
                   variant="outline"
@@ -361,7 +361,7 @@ export function BenefitsNavigatorScreen({ onBack, onNavigate, userTier = 'core' 
                   onClick={() => onNavigate?.('prior-auth')}
                 >
                   <Send className="w-5 h-5" />
-                  <span className="text-sm">Start Prior Auth</span>
+                  <span className="text-sm">Prior Auth</span>
                 </Button>
                 <Button
                   variant="outline"
@@ -370,6 +370,22 @@ export function BenefitsNavigatorScreen({ onBack, onNavigate, userTier = 'core' 
                 >
                   <Clock className="w-5 h-5" />
                   <span className="text-sm">Track Requests</span>
+                </Button>
+                <Button
+                  variant="outline"
+                  className="h-auto flex-col gap-2 py-4 col-span-1"
+                  onClick={() => onNavigate?.('coverage-coach')}
+                >
+                  <Shield className="w-5 h-5" />
+                  <span className="text-sm">Coverage Coach</span>
+                </Button>
+                <Button
+                  variant="outline"
+                  className="h-auto flex-col gap-2 py-4 col-span-1"
+                  onClick={() => onNavigate?.('marketplace')}
+                >
+                  <ExternalLink className="w-5 h-5" />
+                  <span className="text-sm">Cash-Pay Options</span>
                 </Button>
               </div>
             </Card>

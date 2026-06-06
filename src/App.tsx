@@ -174,6 +174,11 @@ const BenefitsNavigatorScreen = lazy(() =>
     default: m.BenefitsNavigatorScreen,
   })),
 );
+const CoverageCoachElite = lazy(() =>
+  import("./components/CoverageCoachElite").then((m) => ({
+    default: m.CoverageCoachElite,
+  })),
+);
 const PriorAuthFlow = lazy(() => import("./components/PriorAuthFlow"));
 const TelehealthHome = lazy(() =>
   import("./components/telehealth/TelehealthHome").then((m) => ({
@@ -979,6 +984,7 @@ type AppScreen =
   | "community"       // Community support
   | "profile"         // User profile settings
   | "benefits"        // Benefits navigator
+  | "coverage-coach"  // Coverage coach (CoverageCoachElite)
   | "junior"          // Kid-friendly Aminy Jr mode
   | "auth-callback"   // OAuth and password reset callback handler
   | "forgot-password" // Password reset request
@@ -2993,6 +2999,16 @@ export default function App() {
               <BenefitsNavigatorScreen
                 onBack={() => navigateToScreen("dashboard")}
                 onNavigate={(screen: string) => navigateToScreen(screen as AppScreen)}
+              />
+            </Suspense>
+          );
+
+        case "coverage-coach":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <CoverageCoachElite
+                onBack={() => navigateToScreen("benefits")}
+                onNavigate={(screen) => navigateToScreen(screen as AppScreen)}
               />
             </Suspense>
           );

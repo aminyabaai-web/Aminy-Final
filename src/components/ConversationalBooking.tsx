@@ -273,7 +273,7 @@ function OptionChip({
       className={`flex items-center gap-3 px-4 py-3 rounded-2xl text-left transition-all shadow-sm ${
         selected
           ? 'border-2 border-[#6B9080] bg-primary text-white'
-          : 'border border-[#E8E4DF] bg-white/95 text-[#3A4A57] hover:border-[#6B9080]/20 hover:bg-[#6B9080]/10/70'
+          : 'border border-[#E8E4DF] bg-[#FAF7F2] text-[#3A4A57] hover:border-[#6B9080]/30 hover:bg-[#6B9080]/10'
       }`}
     >
       {icon && <span className={selected ? 'text-white' : 'text-[#6B9080]'}>{icon}</span>}
@@ -732,7 +732,7 @@ export function ConversationalBooking({
                   This is a new concern
                 </OptionChip>
 
-                {childGoals.length > 0 && (
+                {childGoals.length > 0 ? (
                   <>
                     <p className="text-sm text-[#5A6B7A] ml-1">Or select a current goal:</p>
                     {childGoals.filter(g => g.status === 'active').map((goal) => (
@@ -746,6 +746,13 @@ export function ConversationalBooking({
                       </OptionChip>
                     ))}
                   </>
+                ) : (
+                  <OptionChip
+                    selected={state.isNewConcern === false}
+                    onClick={() => handleHistorySelect(false)}
+                  >
+                    Following up on something ongoing
+                  </OptionChip>
                 )}
               </div>
             </>
